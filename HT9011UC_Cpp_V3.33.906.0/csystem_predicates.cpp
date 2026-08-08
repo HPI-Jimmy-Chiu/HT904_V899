@@ -393,4 +393,22 @@ bool CheckIndexIsNormal()                                                       
 //  (SetSecAndOn) on the auto-clean-at-finish branch.  Single ODR definition
 //  here (no other TU defines the csystem timer globals yet).
 TQPF_Timer hAutoCleanHangUp;                                                    // golden csystem.cpp:157
+//------------------------------------------------------------------------------
+//  AI(W906-PT-W4-integrate) 20260809: ESD_GENERAL -- golden csystem.cpp:155, i.e.
+//  TWO LINES ABOVE hAutoCleanHangUp above, which is why it belongs here: this file
+//  is already the tree's home for golden csystem.cpp's file-scope globals, and the
+//  port's own csystem.cpp never reached that region.
+//  WHY IT IS NEEDED NOW: SECSGEM/uHGemHT9045_EC.cpp landed in wave PT-W4 with 26
+//  ACTIVE registrations that take the address of ESD_GENERAL's members.  csystem.h:367
+//  declares it `extern` (faithfully -- golden declares it there too), and NO .cpp in
+//  this tree defined it, so the unit carried an undefined reference.  That reference
+//  was INVISIBLE while EC.cpp.obj sat unextracted in an archive nobody pulled from --
+//  found with `nm --undefined-only` against every archive, not by a failing build.
+//  SAFE AS A FILE-SCOPE OBJECT: ESD_GENERAL_SET (csystem.h:325-366) is a plain
+//  aggregate -- ints, bools and AnsiStrings, no user ctor and no pointer that anything
+//  must `new` -- so zero-initialisation at static-init time touches nothing else, and
+//  it cannot trip the plan-section-8 NULL-global hazard.  Golden populates it in
+//  csystem.cpp:22424+ (ReadESDSetData), which this port has not reached; until then
+//  every field reads as its zero, exactly as golden reads before that call.
+ESD_GENERAL_SET ESD_GENERAL;                                                    // golden csystem.cpp:155 (kevin 20180907 add ESD Data)
 //==============================================================================

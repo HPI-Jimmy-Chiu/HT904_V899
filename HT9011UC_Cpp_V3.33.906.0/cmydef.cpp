@@ -5813,6 +5813,24 @@ bool bRun2DCheck;                                                               
 //------------------------------------------------------------------------------
 //AI(W0-TAIL) 20260626: TODO(W6) -- InitialMemory/GetTotalYield_* reach state
 //  machines + app globals + TMyStringList bodies. Gated to EOF.
+// AI(W906-PT-W4-integrate) 20260809: THIS GATE IS NOW SPLIT IN SIX PLACES, and the
+//   reason is that its own stated premise only ever covered part of what it encloses.
+//   The premise -- "function bodies depend on untranslated globals/state machines" -- is
+//   true of InitialMemory / GetTotalYield_* at the head of the block, and is true of
+//   NOTHING in the ~93 plain file-scope global DEFINITIONS in its tail: those are pure
+//   storage with no dependency on any state machine.
+//   SECSGEM/uHGemHT9045_EC.cpp (wave PT-W4) binds six of them, so each of those six is
+//   individually un-gated below with an `#endif` / definition / `#if 0` sandwich, which
+//   keeps it exactly where golden put it instead of moving it out of declaration order:
+//       :5936 iBundleDieQty   :5986 sSiteLayoutASECL   :5987 sSiteMapASECL
+//       :5988 sBinMap         :6003 iSECS_HotPlateSeclect   :6004 bSECS_REALTIMECCD
+//   Each was checked for a rival live definition elsewhere in the tree before ungating;
+//   all six are collision-free.  THAT CHECK MATTERS: 16 of the 93 are NOT -- iPortStatus
+//   (:5950), iThisPortNo (:5948), bAskStopPort (:5946) and 13 more already have live
+//   definitions in acatchtray_shims.cpp / canary_support.cpp / asendic_Loader.cpp /
+//   AutoClean.cpp, so ungating the tail wholesale would manufacture 16 duplicate-symbol
+//   errors.  Splitting the remaining 77 out properly (and deciding which of the 16 shim
+//   homes should yield) is its OWN wave, deliberately not done here.
 #if 0 // TODO(W6): function bodies depend on untranslated globals/state machines
 void InitialMemory()                                                            //Steven 20160319 : 初始化數值
 {
@@ -5933,7 +5951,9 @@ AnsiString GetTotalYield_Str()
 //------------------------------------------------------------------------------
 int i2DMAPCHKSTEP;                                                              //JerryYang 20250220 : 2DID硬體順序檢查功能
 
+#endif // AI(W906-PT-W4-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045_EC.cpp binds it; see the note at this block's head
 int iBundleDieQty=0;                                                            //JerryYang 20250224 : add
+#if 0 // ...resume the TODO(W6) gate
 bool bBindChkNG=false;
 bool bUnbindChkNG=false;
 bool bTRAYCHKNG=false;
@@ -5983,9 +6003,15 @@ TQPF_Timer tUNDER_20A_SHT_Delay;                                                
 const int iUNDER_20A_Delay_Sec=30;                                              //Jimmychiu 20220713 for TEMPCTRL_NEED_UNDER_20A delay
 bool bAutoRetryFlag=false;                                                      //JerryYang 20220901 : ASE-CL pick up error時吸取邏輯要改找吸最左上角的
 AnsiString sSiteLayoutSiteMap="";
+#endif // AI(W906-PT-W4-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045_EC.cpp binds it; see the note at this block's head
 AnsiString sSiteLayoutASECL="";
+#if 0 // ...resume the TODO(W6) gate
+#endif // AI(W906-PT-W4-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045_EC.cpp binds it; see the note at this block's head
 AnsiString sSiteMapASECL="";
+#if 0 // ...resume the TODO(W6) gate
+#endif // AI(W906-PT-W4-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045_EC.cpp binds it; see the note at this block's head
 AnsiString sBinMap="";
+#if 0 // ...resume the TODO(W6) gate
 int iWhoTrigerASV=0;
 bool bNeedDoRunCheck;
 int iPauseTime=0;
@@ -6000,8 +6026,12 @@ int iSV_ErrBinCnt=0;
 int iSVByBinCount[TEST_MAX_BIN];
 bool bTrayArmIsPickColor=false;
 bool bNeedBigMsg=false;
+#endif // AI(W906-PT-W4-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045_EC.cpp binds it; see the note at this block's head
 int iSECS_HotPlateSeclect=0;
+#if 0 // ...resume the TODO(W6) gate
+#endif // AI(W906-PT-W4-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045_EC.cpp binds it; see the note at this block's head
 bool bSECS_REALTIMECCD;
+#if 0 // ...resume the TODO(W6) gate
 bool bNeedRestartSW=false;
 bool bInitialCylinderCheck=false;
 int iInitialCylinderCheckTask=1;

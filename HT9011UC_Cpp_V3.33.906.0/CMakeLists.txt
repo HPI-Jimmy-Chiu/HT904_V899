@@ -887,6 +887,17 @@ add_library(ht9045_motor STATIC
     # this only surfaced now.  Requires the global MN200DLL_VB defined at the top
     # of this file.  Delete this entry when a real MotionNet SDK is linked.
     Motor/vendor_offline_motionnet.cpp
+    # AI(W906-PT-W4-integrate) 20260809: wave PT-W4's one motor unit, plus its own
+    # offline vendor layer.  myGALILmotor.cpp is the ONLY unit in the tree that talks
+    # to a Galil DMC-series controller; it funnels every access through 7 DMC32 entry
+    # points which it keeps ACTIVE (most sit under `#ifndef SOFT_SIMULTE`, and this
+    # build does not define SOFT_SIMULTE).  There is no MinGW-usable Galil import
+    # library, so the 7 symbols get an offline layer for exactly the reason the
+    # MotionNet one exists -- see vendor_offline_galil.cpp's banner.  Unlike MN200 it
+    # needs NO global macro: DMCCOM.H declares them extern "C" __stdcall with no
+    # dllimport, so callers already emit direct references.
+    Motor/myGALILmotor.cpp
+    Motor/vendor_offline_galil.cpp
 )
 
 target_include_directories(ht9045_motor PUBLIC
@@ -1088,6 +1099,22 @@ add_library(ht9045_secsgem
     # SystemModularInitial (`new HT9045Gem(...)`). See that header's own
     # file-head note for scope (still zero of golden's 22 overrides).
     SECSGEM/uHGemHT9045.cpp
+    # AI(W906-PT-W4-integrate) 20260809 CORRECTION, second pass: PT-W4's two SECS/GEM
+    # registration tables (uHGemHT9045_SV.cpp / _EC.cpp) were briefly registered HERE
+    # on the reasoning that they are "the data half of the same object" as
+    # uHGemHT9045.cpp.  THAT WAS WRONG, and uHGemHT9045_SV.cpp:333-345 says so in its
+    # own title: "CMakeLists PLACEMENT -- READ BEFORE REGISTERING THIS FILE. It must go
+    # in ht9045_sm, NOT in ht9045_secsgem."  Both units take the address of objects
+    # defined by ht9045_sm members, and ht9045_secsgem deliberately does NOT link
+    # ht9045_sm (that edge is the documented CMake cycle, see :579-616).  Measured, not
+    # taken on trust -- nm --undefined-only on each object against every archive:
+    #     _SV.o : 5 symbols resolved only by libht9045_sm.a (ArmData/ArmHistory 226
+    #             references, iLoadStateATK, sOutputBinCode, iPortStatus)
+    #     _EC.o : 4 symbols resolved only by libht9045_sm.a (iThisPortNo, ...)
+    # Registered in ht9045_sm instead -- see the PT-W4 block in that library.
+    # WHY IT LOOKED FINE: it configured, compiled, and the whole build stayed rc=0,
+    # because nothing referenced either object so neither was ever extracted from the
+    # archive.  The archive-extraction trap again; a placement error here is silent.
 )
 
 target_include_directories(ht9045_secsgem PUBLIC
@@ -1989,6 +2016,29 @@ add_library(ht9045_sm STATIC
     ProductionInfo/TfFTP.cpp
     ProductionInfo/FileInfo.cpp
     ProductionInfo/uSetUpConfiguration.cpp
+    # AI(W906-PT-W4-integrate) 20260809: wave PT-W4's four state-machine / feature
+    # units.  All four reach MOT[]/Sen[]/Cylinder[]/LastSet/IniConfig and nothing
+    # above this archive, same placement test the rest of this list uses.
+    #   aoutarm.cpp / asortarm.cpp -- the OUT-ARM and SORT-ARM engines (63 and 64 free
+    #     functions respectively). Siblings of aoutarm9045.cpp already in this list.
+    #   ProductionInfo/uPAT_Function.cpp -- PAT_Function (102 methods) +
+    #     TMachineTimeManager (8). Joins its ProductionInfo/ siblings three lines up.
+    #   PowerSavingMode.cpp -- TPowerSaving + the TModule family.
+    aoutarm.cpp
+    asortarm.cpp
+    ProductionInfo/uPAT_Function.cpp
+    PowerSavingMode.cpp
+    #   SECSGEM/uHGemHT9045_{SV,EC}.cpp -- MOVED HERE from ht9045_secsgem on the second
+    #     integrate pass.  Each is one enormous HT9045Gem:: method holding golden's SV /
+    #     EC dictionary, and each takes the address of objects that live in THIS archive
+    #     (cSocket.cpp's ArmData/ArmHistory, Automation/AGV_PortScan.cpp's
+    #     iLoadStateATK/sOutputBinCode, acatchtray_shims.cpp:189's iPortStatus -- note
+    #     cmydef.cpp:5950 also defines iPortStatus but inside its `#if 0`, so the shim
+    #     holds the only live one).  ht9045_secsgem cannot see any of that by design.
+    #     ht9045_sm links ht9045_secsgem, so HGem/SecsSvEcRegistration still resolve.
+    #     uHGemHT9045_SV.cpp:333-345 documented this before either file was registered.
+    SECSGEM/uHGemHT9045_SV.cpp
+    SECSGEM/uHGemHT9045_EC.cpp
     Automation/SCK_TUTS.cpp
     Automation/MesWebService.cpp
     Public/HTEditList.cpp
@@ -2061,6 +2111,28 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     # global-header idioms, while still flagging genuine porting mistakes.
     target_compile_options(ht9045_sm PRIVATE
         -Wall -Wextra -Wno-conversion-null -Wno-write-strings -Wno-unused-parameter)
+
+    # AI(W906-PT-W4-integrate) 20260809: SECSGEM/uHGemHT9045_EC.cpp is capped at -O1.
+    # NOT a style choice and NOT a warning carve-out -- without it the RELEASE build
+    # FAILS OUTRIGHT:
+    #     cc1plus.exe: out of memory allocating 65536 bytes
+    # The file is golden's EC (equipment-constant) dictionary: ~1,817 statements in ONE
+    # function (HT9045Gem_AddEC), essentially one straight-line basic block of
+    # SetECDataPointer calls.  GCC's -O2/-O3 pipeline is superlinear in basic-block
+    # size, and MinGW g++ 6.3.0's cc1plus is a 32-bit process, so it exhausts its own
+    # address space on this one translation unit.
+    # MEASURED, not guessed -- the file compiled ALONE, no parallel-build memory
+    # pressure, so this is a genuine per-TU limit rather than a -j artefact:
+    #     -O3  OOM after 50s     -O2  OOM after 45s
+    #     -O1  OK   after 35s    -O0  OK   after  4s
+    # -O1 is therefore the HIGHEST level that works and is what is pinned: the
+    # deviation from the project's Release posture is the smallest one available.
+    # SCOPE IS ONE FILE, also measured: the sibling SECSGEM/uHGemHT9045_SV.cpp (the SV
+    # dictionary, 923 statements) compiles clean at -O3 in 8s, so it is deliberately
+    # NOT capped.  If a future wave splits AddEC into per-section functions, delete
+    # this and let it take the archive's normal flags.
+    # It appends, so ht9045_sm's warning flags above still apply to this file.
+    set_source_files_properties(SECSGEM/uHGemHT9045_EC.cpp PROPERTIES COMPILE_FLAGS "-O1")
 endif()
 
 # W6.6: enable the csystem.cpp tick-sequence ORACLE hook (compiles a tiny

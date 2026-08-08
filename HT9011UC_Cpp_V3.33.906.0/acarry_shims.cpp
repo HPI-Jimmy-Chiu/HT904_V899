@@ -139,7 +139,16 @@ bool Check32siteOnlyEnabled4x4Site(){ return false; }  // golden csystem.cpp
 //   - SendHTTPRequest: offline server OK -> 0 (NOT -1, so no retry loop).
 //   - MoveSortArmToAutoSafe: 9046AU sort-arm -> no-op offline.
 // ---------------------------------------------------------------------------
-bool MoveOutArmXY_ToShuttleAlarmArea() { return true; }    // golden aoutarm
+// AI(W906-PT-W4-integrate) 20260809: 5 STAND-IN DEFINITION(S) RETIRED FROM HERE.
+//   aoutarm.cpp (golden's own home for all of them) landed in wave PT-W4 and is
+//   registered in ht9045_sm, so both definitions were in libht9045_sm.a and every
+//   executable linking it failed with `multiple definition of ...`. The linker named
+//   each one, which is also the proof the signatures match exactly -- a decorated-name
+//   collision cannot happen otherwise.
+//   Retired here: MoveOutArmXY_ToShuttleAlarmArea, MoveOutArmToAutoSafe, bCarryControlOutarm1, bCarryControlOutarm2, bPickShuttleError
+//   BEHAVIOUR: these were offline defaults (return true/false/0/no-op); the real bodies
+//   run golden's actual logic, so out-arm paths that used to short-circuit now execute.
+//   That is the point of the wave, and it is why this wave was measured on its own.
 int  SendHTTPRequest(int /*iSht*/)     { return 0; }       // golden main -- 0 == OK
 void MoveSortArmToAutoSafe()           {}                  // golden 9046AU
 
@@ -158,7 +167,6 @@ void Do_Auto_SHT1AsOutArmIsRotater() {}                    // golden acarry.h de
 //   - SystemNG: false offline (system not in NG -> the SM guards proceed).
 //   - iCloseSiteStep_2x8: 0 offline (2x8 close-site geometry baseline).
 // ---------------------------------------------------------------------------
-bool  MoveOutArmToAutoSafe()                       { return true; }   // golden aoutarm.h:52
 // AI(W906-CommonCompletion) 20260721: MySleepEx/MySleep stand-in DEFINITIONS
 // REMOVED -- common.cpp now provides the real bodies (golden common.h:260-261
 // un-gated this wave), and this file's own header (acarry_shims.h:230-232)
@@ -183,8 +191,5 @@ bool  SystemNG = false;                            // golden main-side global
 //      log; gated #if 0 in cpublic.cpp -> own an offline no-op here).
 //    * LogSoftwareOffTime      -- golden main.cpp (software-off-time logger).
 // ---------------------------------------------------------------------------
-bool bCarryControlOutarm1 = false;                 // golden aoutarm.cpp:67
-bool bCarryControlOutarm2 = false;                 // golden aoutarm.cpp:68
-bool bPickShuttleError    = false;                 // golden aoutarm.cpp:70
 void OutShuttleLog(bool /*bFlag*/)            {}    // golden cpublic.cpp:679 -- offline no-op
 void LogSoftwareOffTime(AnsiString /*Flag*/)  {}    // golden main.cpp -- offline no-op

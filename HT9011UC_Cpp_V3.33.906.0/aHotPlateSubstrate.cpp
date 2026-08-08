@@ -966,9 +966,16 @@ bool bPickFromLoader       = false;     //golden ainarm2.h:54
 //      (`int &Task=iPlaceToAutoTask`) and DoOutArmAfterPlaceToAuto link.
 //      Golden aoutarm.h:49/15/51.
 //==============================================================================
-int iPlaceToAutoTask              = 1;
-int iDoOutArmAfterPlaceToAutoTask = 1;
-int iFix3CanFullTask              = 1;
+// AI(W906-PT-W4-integrate) 20260809: 3 STAND-IN DEFINITION(S) RETIRED FROM HERE.
+//   aoutarm.cpp (golden's own home for all of them) landed in wave PT-W4 and is
+//   registered in ht9045_sm, so both definitions were in libht9045_sm.a and every
+//   executable linking it failed with `multiple definition of ...`. The linker named
+//   each one, which is also the proof the signatures match exactly -- a decorated-name
+//   collision cannot happen otherwise.
+//   Retired here: iPlaceToAutoTask, iDoOutArmAfterPlaceToAutoTask, iFix3CanFullTask
+//   BEHAVIOUR: these were offline defaults (return true/false/0/no-op); the real bodies
+//   run golden's actual logic, so out-arm paths that used to short-circuit now execute.
+//   That is the point of the wave, and it is why this wave was measured on its own.
 
 //==============================================================================
 //  (B) [W6.2b] per-variant close-site selector for 1x4 (golden ainarm9045_1x4_4.h)

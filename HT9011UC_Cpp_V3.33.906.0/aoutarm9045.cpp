@@ -64,6 +64,19 @@
 #include "aHotPlateSubstrate.h"    // OutArmSuck/FRCarryKit/BRCarryKit/OutArm2Suck, cursors, tRotate
 #include "FormsFacade.h"           // fMain/fAGV offline stand-ins
 #include "canary_support.h"        // LastSet / ShowMyMessage / ShowErrorMessage / RecordProcess / WhichAutoNeedTray
+// AI(W906-PT-W4-integrate) 20260809: aoutarm.h is now included DIRECTLY, because the
+//   eight file-scope stand-in DEFINITIONS this TU used to carry (iWhichAuto /
+//   bOutArmXOverLimit / bOverTray / DoPlaceToAutoDelay / CheckOutSuckICFallDown /
+//   SendDataToASE / ErrorBinBoxDetect / PorcessJAM0201OutArmPickUpErrorSkip) were also
+//   serving as this TU's DECLARATIONS -- retiring them (aoutarm.cpp landed in PT-W4 with
+//   golden's real bodies) left the call sites with no declaration in scope.
+//   aoutarm.h declares every one of them (:81 / :87 / :95 / :91 / :153 / :166 / :187 /
+//   :170) and that header shipped with aoutarm.cpp in the same wave.
+//   WHY DIRECTLY, and not by ungating: golden reaches aoutarm.h through aArmHeader.h,
+//   but this tree's aArmHeader.h:61 sits inside the `#if 0` block opened at :23 that
+//   also pulls ~40 per-site arm headers -- ungating it is a W7 decision, not this
+//   integrate step's.  Same include, narrowest possible route.
+#include "aoutarm.h"               // golden reaches this via aArmHeader.h:61 (still gated here)
 
 //==============================================================================
 //  golden file globals (verbatim)  -- golden aoutarm9045.cpp:44/46/251/285/2133-2136/3862/4607
@@ -144,33 +157,56 @@ bool DoPickFromShuttle_9045_2x8_8(int);
 // bodies were ungated by GA-1-B2, exactly the removal this file's own
 // CORRECTION note anticipated. Declarations still come from cprod.h.
 bool CheckOutArmSuckICFallDown()                   { return false; }  // golden csystem.h:84 -- offline: no fall-down
-bool CheckOutSuckICFallDown(bool)                  { return false; }  // golden aoutarm.h:90 -- offline: no IC fall-down (separate from the csystem.h void wrapper)
+// AI(W906-PT-W4-integrate) 20260809: 8 STAND-IN DEFINITION(S) RETIRED FROM HERE.
+//   aoutarm.cpp (golden's own home for all of them) landed in wave PT-W4 and is
+//   registered in ht9045_sm, so both definitions were in libht9045_sm.a and every
+//   executable linking it failed with `multiple definition of ...`. The linker named
+//   each one, which is also the proof the signatures match exactly -- a decorated-name
+//   collision cannot happen otherwise.
+//   Retired here: CheckOutSuckICFallDown, SendDataToASE, ErrorBinBoxDetect, PorcessJAM0201OutArmPickUpErrorSkip, iWhichAuto, bOutArmXOverLimit, bOverTray, DoPlaceToAutoDelay
+//   BEHAVIOUR: these were offline defaults (return true/false/0/no-op); the real bodies
+//   run golden's actual logic, so out-arm paths that used to short-circuit now execute.
+//   That is the point of the wave, and it is why this wave was measured on its own.
 bool DetectAutoTray(int,int*)                      { return true;  }  // golden csystem.h:232 -- offline: tray detected
-void SendDataToASE(AnsiString)                     {}                 // golden csystem.h:245 -- ASE log no-op
 bool MagazineBufferIsEmpty(int)                    { return true;  }  // golden csystem.h:290 -- no magazine present
 int  WhichMagazineBufferIsFull()                   { return -1;    }  // golden csystem.h:289 -- no magazine full
 // -- W6.2c-OUT ADD: out-arm engine cross-module surface the 6 site-variant
 //    DoOutArm/DoPickFromShuttle SMs call (golden aoutarm.h:124 / aoutarm9045.cpp
 //    Steven 20161214).  No translated home yet -> offline-safe non-static defs so
 //    the variant TUs link.  TODO(W7): wire to the real bin-box / JAM0201 skip SMs.
-bool ErrorBinBoxDetect(int)                        { return false; }  // golden aoutarm.h:124 -- offline: no error bin-box detected
-void PorcessJAM0201OutArmPickUpErrorSkip(int,int,int,int,int) {}      // golden aoutarm9045.cpp (Steven 20161214) -- offline: pick-up error skip ErrorLog no-op
 //  (ii) functions with NO target home at all -> file-local static stubs.
-static bool MoveOutArmToAutoSafe()                 { return true;  }  // golden aoutarm.h:52 -- offline: Z reaches safe immediately
+//
+//  AI(W906-PT-W4-integrate) 20260809: NINE OF THESE STATICS ARE RETIRED, and the
+//  compiler is what forced the issue rather than a judgement call. `static` gave them
+//  internal linkage, so while aoutarm.cpp's real bodies were absent they linked
+//  cleanly AND SILENTLY SHADOWED anything with the same name -- the same invisible
+//  defect class as a test defining its own empty copy. The moment this TU started
+//  including aoutarm.h (see the include block above, needed because eight retired
+//  stand-in definitions were also serving as declarations), every one of them became
+//  `declared 'extern' and later 'static'`, a hard error, plus one ambiguous overload.
+//  Retired, with the aoutarm.h declaration that now governs each:
+//      MoveOutArmToAutoSafe          aoutarm.h:115
+//      MoveOutArm2XYToDecayTeach     aoutarm.h:106
+//      MoveOutArmXY_ToFix_Tray_Full  aoutarm.h:104  (no-arg static made the calls at
+//                                    :1253/:1289 ambiguous against the real
+//                                    `bool bMoveY=false` form -- they now reach it)
+//      IfUseOnebyOne                 aoutarm.h:164
+//      InitOutArmTask                aoutarm.h:97
+//      IsCatchTrayReadySupplyNewTray aoutarm.h:127
+//      CheckOutArmCleanOut           aoutarm.h:121
+//      SetOutArmHome                 aoutarm.h:160
+//      CheckUseFixBinBoxFunction     aoutarm.h:183
+//  BEHAVIOUR: all nine were offline defaults (true / false / no-op / echo the Task
+//  argument back). This TU's out-arm SMs now call golden's real bodies in aoutarm.cpp,
+//  so paths that used to short-circuit now execute. That is the wave's whole point.
+//  KEPT (aoutarm.h does not declare them, so no clash and no real body to reach):
+//  MoveOutArmZToPlateSafe / DoOutArmPlaceToAuto / DoFix3FullTray /
+//  InitialDoPickFromMagazineBuffer -- checked name by name, not assumed.
 static bool MoveOutArmZToPlateSafe()               { return true;  }  // golden -- offline: Z reaches plate-safe immediately
-static bool MoveOutArm2XYToDecayTeach()            { return true;  }  // golden aoutarm.h:43 -- offline: decay-teach XY reached
-static bool MoveOutArmXY_ToFix_Tray_Full()         { return true;  }  // golden aoutarm.h:41 -- offline: reached
 //  OutArmContinuousMove_9045 is REAL-declared in Motor/mymotor.h (8 params,
 //  bLoader=false default) + sim-defined in mymotor.cpp (returns false) -> use it.
-static void IfUseOnebyOne(int)                     {}                 // golden aoutarm.h:101 -- one-by-one no-op
-//  out-arm SM helpers declared only in golden aoutarm.h (not in scope this wave):
-static void InitOutArmTask()                       {}                 // golden aoutarm.h:34 -- reset out-arm SM (owned by aoutarm2.cpp)
-static bool IsCatchTrayReadySupplyNewTray()        { return false; }  // golden aoutarm.h:64 -- offline: catch-tray not ready
 static bool DoOutArmPlaceToAuto(int)               { return true;  }  // golden aoutarm9045.cpp dispatch -> offline: placed
-static int  CheckOutArmCleanOut(int Task)          { return Task;   } // golden aoutarm.h:58 -- offline: stay in the requested clean-out task
 static bool DoFix3FullTray()                       { return true;  }  // golden -- offline: full-tray done
-static void SetOutArmHome()                        {}                 // golden aoutarm.h:97 -- alarm-time Z home no-op
-static bool CheckUseFixBinBoxFunction()            { return false; }  // golden aoutarm.h:120 -- offline: fix bin-box off
 static void InitialDoPickFromMagazineBuffer()      {}                 // golden Magazine.h -- no magazine present
 //AI(W906-PT-W1-integrate) 20260807: TODO(W7) -- the REAL engine behind the next
 //  five stubs now exists: SortingBinTray/SortingBinTray.cpp landed in wave PT-W1
@@ -185,10 +221,6 @@ static void SortingBinTray_SetMotorPosData()       {}                 // golden 
 static void SortingBinTray_SetTrayData(int)        {}                 // golden cSortCT.h
 
 //  (iii) golden file globals with NO target home -> offline definitions here.
-int        iWhichAuto=0;                //                      -- golden aoutarm.h:18 (place-target Auto index; iWhichBuff/iWhichMag already in cmydef.h)
-bool       bOutArmXOverLimit=false;     //Steven 20171206 (Wei)  -- golden aoutarm.h:24
-bool       bOverTray=false;             //jou 2012-09-04        -- golden aoutarm.h:32
-TQPF_Timer DoPlaceToAutoDelay;          //                      -- golden aoutarm.h:28
 int        iOutRotateFinish=0;          //kevin 20130524        -- golden (out-rotate handshake)
 
 //==============================================================================

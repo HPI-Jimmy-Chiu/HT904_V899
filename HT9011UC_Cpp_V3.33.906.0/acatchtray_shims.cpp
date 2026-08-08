@@ -211,4 +211,13 @@ void InitialCoverTrayIDTask(int /*iPos*/)  {}                 // golden cTrayMap
 //  MoveOutArmXY_ToFix_Tray_Full(bool): golden aoutarm side has a 0-arg file-local
 //  static; the TrayArm engine calls the 1-arg (bMoveY) form (golden decl :68).
 //  Offline: out-arm reaches the fix-tray-full XY immediately.
-bool MoveOutArmXY_ToFix_Tray_Full(bool /*bMoveY*/) { return true; }   // golden aoutarm (decl acatchtray.cpp:68)
+// AI(W906-PT-W4-integrate) 20260809: 1 STAND-IN DEFINITION(S) RETIRED FROM HERE.
+//   aoutarm.cpp (golden's own home for all of them) landed in wave PT-W4 and is
+//   registered in ht9045_sm, so both definitions were in libht9045_sm.a and every
+//   executable linking it failed with `multiple definition of ...`. The linker named
+//   each one, which is also the proof the signatures match exactly -- a decorated-name
+//   collision cannot happen otherwise.
+//   Retired here: MoveOutArmXY_ToFix_Tray_Full
+//   BEHAVIOUR: these were offline defaults (return true/false/0/no-op); the real bodies
+//   run golden's actual logic, so out-arm paths that used to short-circuit now execute.
+//   That is the point of the wave, and it is why this wave was measured on its own.

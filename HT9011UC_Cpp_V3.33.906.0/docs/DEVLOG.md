@@ -4375,3 +4375,209 @@ CMake cycle，CMakeLists:579-616）。我把它們放進 `ht9045_secsgem` 了。
   稽核其餘 cosmetic findings、表單波（107 檔 217,876 code 行，**這才是真正的大山**）。
 - **執行模式**：使用者 20260808 指示——(1) 優先純翻譯、(2) `.dfm`／UI 相關先不處理、
   (3) 目標是編得起來並能用 console 驅動開啟。20260809 追加：接近運算限制時暫停並記錄。
+
+---
+
+## 2026-08-09（續）— PT-W4 整併完成：修掉三個「靜默」缺陷，並發現 Galil 解閘其實被卡在別的地方
+
+> 接上一節（PT-W4 暫停記錄）。上一節說「那個綠是假的」，本節把它變成真的——**但沒有全部**，
+> 而且最重要的收穫是：**48 個 Galil stub 不能在這一波退役**，原因不是我先前寫的那個。
+
+### 三個修正，全部是「build 綠但東西沒接上」型
+
+**(1) SV/EC 註冊在錯的 target——而且那個檔自己事先警告過。**
+`SECSGEM/uHGemHT9045_SV.cpp:333-345` 標題就寫「**It must go in `ht9045_sm`, NOT in
+`ht9045_secsgem`**」。我上一節照「它們是 uHGemHT9045.cpp 的資料另一半」的理由放進
+`ht9045_secsgem`。自己量過才改，不是照抄稽核：
+
+```
+nm --undefined-only 逐 archive 比對
+  _SV.o : 5 個符號只有 libht9045_sm.a 解得開（ArmData/ArmHistory 共 226 次引用、
+          iLoadStateATK、sOutputBinCode、iPortStatus）
+  _EC.o : 4 個符號只有 libht9045_sm.a 解得開（iThisPortNo …）
+```
+`ht9045_secsgem` **刻意不**連結 `ht9045_sm`（那條邊就是文件化的 CMake cycle，
+CMakeLists:579-616），所以放錯邊等於永遠解不開——而它**會 configure、會編、
+`-fsyntax-only` 也過**，然後靜默。archive-extraction 陷阱的第四種形狀。
+
+順帶查清 SV/EC 目前的真實狀態（誠實記錄，不是「已完成」）：兩個檔的 member 形式
+（`void HT9045Gem::AddSV()`）是 **gated** 的，實際落地的是自由函式
+`HT9045Gem_AddSV(HT9045Gem*)` / `HT9045Gem_AddEC(HT9045Gem*)`——因為本樹的
+`SECSGEM/uHGemHT9045.h` 沒有宣告那兩個 override（golden 在 `:346-347` 有）。
+目前**沒有任何呼叫者**（golden 的呼叫點是 `SECSGEM/UsecegemMainFrom.cpp:202-203`，未翻）。
+啟用它＝在標頭補上 override，屬後續波次；現在位置已經對了，補上就會通。
+
+**(2) `ESD_GENERAL` 全樹沒有定義，而它的缺席也是靜默的。**
+`SECSGEM/uHGemHT9045_EC.cpp` 有 26 個 ACTIVE 註冊取 `ESD_GENERAL` 成員的位址，
+`csystem.h:367` 忠實地宣告它 `extern`（golden 也在那裡宣告），但**沒有任何 .cpp 定義它**。
+一樣是 `nm --undefined-only` 找出來的，不是 build 失敗找出來的。
+golden 的家是 `csystem.cpp:155`，而本樹放 golden csystem.cpp 檔案級全域的地方是
+`csystem_predicates.cpp`——它 `:395` 就放著 golden `csystem.cpp:157` 的
+`hAutoCleanHangUp`，**golden 只差兩行**。所以定義補在那裡，不是新開一個家。
+安全性是查過的：`ESD_GENERAL_SET`（csystem.h:325-366）是純聚合型（int/bool/AnsiString，
+無自訂 ctor、無需要 new 的指標），static-init 期零初始化不碰別人，踩不到計畫書 §8 的坑。
+
+**(3) `cmydef.cpp` 的 `#if 0` 覆蓋範圍大於它自己的理由。**
+那個 gate 寫的是「function bodies depend on untranslated globals/state machines」——
+對開頭的 `InitialMemory` / `GetTotalYield_*` 成立，對它尾巴**~93 行純檔案級全域定義**
+完全不成立，那些只是儲存空間。EC 綁到其中 6 個，所以那 6 個各自用
+`#endif` / 定義 / `#if 0` 夾出來——**留在 golden 原本的位置**，不搬出宣告順序。
+
+**這裡的關鍵是那個「先查再動」**：ungate 前逐一查有沒有別處已有 live 定義。
+6 個都乾淨——但 **93 個裡有 16 個不乾淨**（`iPortStatus`:5950、`iThisPortNo`:5948、
+`bAskStopPort`:5946 等，真定義在 `acatchtray_shims.cpp` / `canary_support.cpp` /
+`asendic_Loader.cpp` / `AutoClean/AutoClean.cpp`）。整段尾巴一次 ungate 會**製造 16 個
+重複符號**。剩下 77 個怎麼分、16 個 shim 家該誰讓位，是**自己的一波**，本次刻意不做。
+
+### 最重要的發現：48 個 Galil stub 現在還不能退役，而理由跟我上一節寫的不同
+
+上一節記的是「退役它們會讓 motor 測試崩（golden 的真本體 unguarded deref
+`MOT[i].Motor`）」。這次真的做到那一步才看清**更根本的耦合**：
+
+- golden 在 `cinitial.cpp:3482-3542` 依 `MOTOR_DRIVER_TYPE` 為每個軸
+  `MOT[i].Motor = new TMyGALILMotor / TMyMN200Motor / TMySYNTEKMotor / …`。
+  **本樹的 cinitial.cpp 從來沒翻到那一段**，所以 `MOT[].Motor` 全部是 NULL，
+  而且多個測試 banner（如 `tests/test_w6_4_tester.cpp:133`）把
+  「offline MOT[].Motor==NULL for every axis」寫成本樹的**既定約定**。
+- 而 `Motor/mymotor.cpp` 那 48 個 stub 裡有三個
+  （`Gali_Two_ZAxis_Move` / `ISNormal` / `GalilTwoY_Move`）回的是 **`(Motor==NULL)`**
+  ——W6.4 刻意這樣寫，好讓 test-head SM 在 Sim HAL 上 pump。
+
+所以「Motor 是 NULL」和「那三個 fast path」是**同一個約定的兩半**：
+- 只掛 Sim driver（不退 stub）→ 那三個從 true 翻成 **false**，測試行為改變。
+- 只退 stub（不掛 driver）→ golden 真本體 unguarded deref NULL，直接 SEGFAULT。
+
+**兩半必須一起搬，而且要單獨量。** 這是一整波（把 `TMySimMotor` 接上 + 退 48 個 stub），
+不是這個 integrate 步驟能夾帶的。**48 個 stub 因此原封不動留著**，
+`Motor/myGALILmotor.cpp` 那 4,694 行目前仍然沒有呼叫者——上一節說的問題**還在**，
+只是現在知道它真正卡在哪。（退役腳本已寫好並 dry-run 通過：48 個定位無誤、
+`Gali_MotHome_HighSpeed`:963 正確被排除。）
+
+### 兩個 SEGFAULT：預測命中，但命中的是另一個函式
+
+第一次 gate 跑出 **8 個失敗＝常駐 6 ＋ `W6_6_Hub` ＋ `W6_6_CSystemCycle` 兩個新 SEGFAULT**。
+不是 Galil，是 out-arm：
+
+```
+main -> DoAllProcess -> DoOutArm -> DoOutArm_9045 -> DoOutArm_9045_1x1_1
+     -> MoveOutArmXY_ToFix_Tray_Full(bool)          <-- SIGSEGV
+```
+
+`aoutarm.cpp:853` 的**第一行**就是 `MOT[MOutArmX].Motor->PSoftLimitN + …`。
+退役 `acatchtray_shims.cpp:214` 的 `return true` stub 讓它變成 live body，於是 NULL deref。
+**同一族的第 17 個**：這兩個新單元共有 17 處 unguarded `MOT[].Motor->`（全樹 292 處）。
+
+處置＝照 PT-W3 對 `elLaser` 的同一先例，在第一次使用處加 `if(MOT[MOutArmX].Motor==NULL)
+return false;`，並在原地寫明：golden 沒有這個 guard（golden 永遠有 driver）、
+回 false 是 golden 自己兩個 early-out 就在用的值（G7 servo-off gate、E90 crash-avoid gate）、
+呼叫端把 false 當「這輪沒移動、下輪重試」——正好就是一台 X 軸沒有 driver 的機器的狀態。
+註解同時警告**不要單獨刪掉這個 guard**，並指向上面那一整波。
+這是本波對翻譯邏輯的**唯一**一處修改。
+
+### 第四個修正，而且只有 Release 建法看得見：`cc1plus: out of memory`
+
+第一次的 Release gate **build 直接失敗**（rc=2，86 個測試 Not Run），Debug 卻是綠的。
+這就是計畫書 §5.3「每波要同時量 unoptimised 與 Release 兩組數字」存在的理由——
+單一建法的綠燈涵蓋不到這一類。
+
+```
+cc1plus.exe: out of memory allocating 65536 bytes
+   CMakeFiles/ht9045_sm.dir/SECSGEM/uHGemHT9045_EC.cpp.obj  Error 1
+```
+
+**先排除誤診**：不是 `-j10` 的記憶體壓力。把那個檔**單獨**編（沒有任何並行）一樣 OOM，
+所以是真正的 per-TU 限制：
+
+| 最佳化等級 | 結果 |
+|---|---|
+| `-O3` | OOM，50s |
+| `-O2` | OOM，45s |
+| `-O1` | **OK**，35s |
+| `-O0` | OK，4s |
+
+成因是檔案形狀：它是 golden 的 EC（equipment-constant）字典——**~1,817 個 statement
+擠在一個函式裡**（`HT9045Gem_AddEC`），基本上一整塊直線基本區塊的 `SetECDataPointer`。
+GCC 的 -O2/-O3 pipeline 對基本區塊大小是超線性的，而 MinGW g++ 6.3.0 的 cc1plus 是
+**32-bit 行程**，在這一個 TU 上就把自己的位址空間用完了。
+
+處置＝`set_source_files_properties(SECSGEM/uHGemHT9045_EC.cpp PROPERTIES COMPILE_FLAGS "-O1")`
+——用本樹已有的機制（CMakeLists:1187 對 `uHGemClass.cpp` 用同一招做警告 carve-out），
+並且**釘在 -O1 而不是 -O0**，因為 -O1 是量出來「還能過的最高等級」，偏離 Release 姿態最小。
+**範圍也是量過的**：姊妹檔 `uHGemHT9045_SV.cpp`（SV 字典，923 個 statement）在 -O3 下
+8 秒編完，所以刻意**不**設限。哪天有人把 `AddEC` 拆成分段函式，這條就可以刪掉。
+
+### 驗證（全新 dir、最終樹、Debug 與 Release）
+
+| build dir（全新） | 建法 | build | ctest | 失敗集合 |
+|---|---|---|---|---|
+| `build_0809_w4c` | 未最佳化 | exit 0、0 error / 0 OOM | **128 / 134** | 計畫書 §7 那 6 個 |
+| `build_0809_w4c_rel` | Release（-O3 + NDEBUG） | exit 0、0 error / 0 OOM | **128 / 134** | **與上列逐項相同** |
+
+**這兩組數字是在 `-O1` carve-out 之後重量的**，不是沿用前一輪。前一輪的 Debug 數字
+（`build_0809_w4b`，也是 128/134）其實**早於最後一次整併**——`set_source_files_properties`
+的 `COMPILE_FLAGS` 是無條件附加的，Debug 也會吃到 `-O1`，所以那個數字量的不是最終樹。
+這正是 PT-W2 犯過的錯（計畫書 §6 那條規則的來源），所以整個 Debug gate 重跑了一次。
+
+PT-W4 交付量（同計畫書 §2 的單位）：**7 檔 / golden 19,315 raw 行 / 16,314 code 行**
+（myGALILmotor 4,694、aoutarm 3,619、asortarm 3,361、uHGemHT9045_EC 1,792、
+uPAT_Function 1,540、uHGemHT9045_SV 935、PowerSavingMode 373）。
+
+### 我自己獨立複驗的部分（不採信 agent 的宣稱）
+
+- 7 個檔各自 `-fsyntax-only` 乾淨（我自己跑）。
+- 編碼衛生：本波碰過的 23 個檔全部 UTF-8、**零 U+FFFD**、EOL 逐檔保持
+  （`cmydef.cpp` / `csystem_predicates.cpp` / `acatchtray_shims.cpp` / `csystem_shims.cpp`
+  是 CRLF，其餘 bare-LF，**沒有一個變成混合**）。
+- **函式覆蓋率逐檔比對 golden：7 個單元全部 0 個函式漏翻**
+  （myGALILmotor 88、aoutarm 67、asortarm 68、uPAT_Function 109、PowerSavingMode 12、
+  SV/EC 各 1）。過程中我自己的檢查腳本誤報 `~TModule`/`~TPowerSaving` 漏翻——
+  是我的 regex 用 `\b~` 這種永遠不成立的邊界，兩個 dtor 其實在 `:537`/`:839`。
+- **結構忠實度深查 `aoutarm.cpp` 最長三個函式**：`Find_OutArm_PickerMaxUseCountOnTime`
+  （533 行）與 `Find_OutArm_Single`（500 行）的「控制關鍵字＋數值常量」序列與 golden
+  **逐 token 相同**（301 / 304 個 token）。第三個 `SetFixTrayMiddleDtata` 顯示差異，
+  查下去是**我的 token 計數器走進了 `#if 0` 與 `#else` 兩個 arm**——GATE G9 本身是忠實的
+  （golden `:1065-1066` 兩個 Scanner-AOI 條件保持 LIVE，只有第三個
+  `FrmAOI->RunTopBottomInspect()`（未翻表單）降成 `false`）。
+
+### 稽核報告存放
+
+14 份 agent 報告（7 翻譯 + 7 對抗性稽核，243,929 bytes）已簽進
+`docs/_ptw4_agent_reports_20260809.txt`。稽核指出約 30 處引用行號錯誤，**尚未逐條複驗**
+——我這一波只坐實並處理了會影響建置與行為的四條（SV/EC target、ESD_GENERAL、
+EC 的 6 個 gated 全域、`IndexZCanMove` 初始值反轉）。其餘屬 cosmetic，
+按計畫書 §6：引用類要逐條開 golden 對字面再改。
+
+### 🔖 RESUME（最新）
+
+- **⚠ 接續第一件事仍是 `git status`，不是讀本 RESUME。**
+- **PT-W4 已完成並已驗證**：全新 dir、最終樹、Debug 與 Release 各 **128/134**，
+  失敗集合＝計畫書 §7 那 6 個常駐項。7 個單元（16,314 golden code 行）已註冊，
+  60 個 stand-in 退役，新增 `Motor/vendor_offline_galil.cpp`（7 個 Galil DMC 進入點）。
+- **本場次共 5 顆 commit**：`3c49b7b` PT-W3 收尾／`ac7ca9a` CosFunction 解閘／
+  `9fee881` SCK_ART gate #8／`7256a57` PT-W4 暫停記錄／本顆 PT-W4 整併。
+- **下一步（照優先序，全部未執行）**：
+  1. **Sim-motor 波（最高優先，因為它擋住已交付的東西生效）**：
+     `MOT[].Motor` 全樹是 NULL（golden 在 `cinitial.cpp:3482-3542` 依 MOTOR_DRIVER_TYPE
+     掛 driver，本樹未翻到），而 `Motor/mymotor.cpp` 48 個 Galil stub 裡有三個回
+     `(Motor==NULL)` 當 offline「完成」答案。**兩半必須一起搬**：只掛 driver 會把那三個
+     從 true 翻成 false；只退 stub 會讓 golden 的 unguarded deref 直接 SEGFAULT
+     （全樹 292 處 `.Motor->`，光 aoutarm/asortarm 就 17 處）。
+     完成前 `Motor/myGALILmotor.cpp` 那 4,694 行**沒有呼叫者**。
+     退役腳本已寫好且 dry-run 通過（48 個定位無誤、`Gali_MotHome_HighSpeed`:963 正確排除）：
+     `scratchpad/retire_gali_stubs.py`。
+  2. **SV/EC 啟用**：`SECSGEM/uHGemHT9045.h` 補上 `AddSV`/`AddEC` 兩個 override
+     （golden `:346-347`），兩個檔目前落地的是 gated-away 的自由函式形式、無呼叫者。
+  3. **`cmydef.cpp` 全域 gate 拆分波**：那個 `#if 0` 尾巴有 93 個純全域，本次只夾出 6 個。
+     剩 77 個可安全 ungate，但**有 16 個與 shim 家衝突**（`iPortStatus`/`iThisPortNo`/
+     `bAskStopPort` 等在 acatchtray_shims / canary_support / asendic_Loader / AutoClean），
+     要決定誰讓位。
+  4. **mykitsuck substrate 回家波**（併 `TInLaserCheck` ODR 債，~30 個 ainarm* 葉子）。
+  5. **census 三支腳本重寫並簽進 repo**；在那之前 §3 的百分比一律不可引用。
+  6. 稽核其餘 ~30 條引用行號錯誤（`docs/_ptw4_agent_reports_20260809.txt`），
+     按 §6 逐條開 golden 對字面再改。
+  7. **PT-W5**（26 個翻一半的檔補完，最大三塊 cContact / csystem / aTester_*）與
+     **表單波**（107 檔 217,876 code 行，真正的大山）。
+- **PT 戰役的非表單缺口現在是 0 檔**：golden `HT9045.bpr` 的 171 個非表單單元全部有鏡射檔
+  （PT-W4 收掉最後 7 個）。剩下的非表單工作全是「翻一半」的補完，不是新檔。
+- **執行模式**：使用者 20260808 指示——(1) 優先純翻譯、(2) `.dfm`／UI 相關先不處理、
+  (3) 目標是編得起來並能用 console 驅動開啟。

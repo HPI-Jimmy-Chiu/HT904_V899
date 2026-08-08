@@ -77,23 +77,18 @@ void DoInArm()
 }
 
 // ===========================================================================
-//  DoOutArm -- golden aoutarm.cpp:1195 (thin wrapper).
-//  Faithful: SetHasNullIcToNullIc on the rear carry kits + the result-tag loop
-//  + SetFixTrayMiddleDtata(), then the translated out-arm engine entry.
+//  DoOutArm -- AI(W906-PT-W4-integrate) 20260809: THIS STAND-IN IS RETIRED.
+//  The wrapper that used to live here was a partial rendering of golden
+//  aoutarm.cpp:1195 -- it skipped golden's kit-prep (FRCarryKit/BRCarryKit
+//  SetHasNullIcToNullIc + the FRCarryKit.Item -> TEST_PASS+bin result-tag loop,
+//  golden :1197-1209) because the substrate's TMyKitSuck did not expose
+//  SetHasNullIcToNullIc, and dispatched straight to DoOutArm_9045().  Its own
+//  banner carried a TODO(W7) to restore the verbatim prep loop.
+//  aoutarm.cpp landed in wave PT-W4 with golden's REAL body (port :1749), so the
+//  two collided in libht9045_sm.a and this partial one goes.  The behaviour delta
+//  is therefore not "no-op becomes real" but "partial becomes whole": whatever
+//  golden does in :1197-1209 now actually happens.
 // ===========================================================================
-void DoOutArm()
-{
-    // golden :1197-1198 -- FRCarryKit/BRCarryKit.SetHasNullIcToNullIc():
-    //   SUBSTRATE GAP -- TMyKitSuck (aHotPlateSubstrate.h) does not yet expose
-    //   SetHasNullIcToNullIc (the HAS_NULL_IC->NULL_IC sweep); the substrate
-    //   provides SetAllToNullIC().  Offline the carry kits start empty, so the
-    //   result-tag pass (golden :1200-1209, FRCarryKit.Item -> TEST_PASS+bin)
-    //   is a no-op anyway.  We skip the kit-prep and dispatch straight to the
-    //   translated out-arm engine (TODO(W7): add SetHasNullIcToNullIc to the kit
-    //   and restore the verbatim prep loop).
-    SetFixTrayMiddleDtata();                                                    // golden :1210 (offline no-op)
-    DoOutArm_9045();                                                           // golden :1211 -- translated engine entry (aoutarm9045.cpp)
-}
 
 // ===========================================================================
 //  DoLoad   -- golden asendic_Loader.cpp:2448 (loader feed SM).  Loader feed is
@@ -110,7 +105,16 @@ void DoSortArm() {}
 //  SetFixTrayMiddleDtata -- golden aoutarm.cpp (Fix-tray middle-data shuffle).
 //  Offline no-op (no Fix tray in the sim feed).
 // ===========================================================================
-void SetFixTrayMiddleDtata() {}
+// AI(W906-PT-W4-integrate) 20260809: 2 STAND-IN DEFINITION(S) RETIRED FROM HERE.
+//   aoutarm.cpp (golden's own home for all of them) landed in wave PT-W4 and is
+//   registered in ht9045_sm, so both definitions were in libht9045_sm.a and every
+//   executable linking it failed with `multiple definition of ...`. The linker named
+//   each one, which is also the proof the signatures match exactly -- a decorated-name
+//   collision cannot happen otherwise.
+//   Retired here: SetFixTrayMiddleDtata, InitOutArmTask
+//   BEHAVIOUR: these were offline defaults (return true/false/0/no-op); the real bodies
+//   run golden's actual logic, so out-arm paths that used to short-circuit now execute.
+//   That is the point of the wave, and it is why this wave was measured on its own.
 
 // ===========================================================================
 //  InitAllProcessTask() leaves with no translated home -- offline cursor/flag
@@ -119,7 +123,6 @@ void SetFixTrayMiddleDtata() {}
 // InitLoadTask: RETIRED BODY (W7-L1 Wave 1 "Loader") -- real body now in
 // asendic_Loader.cpp (golden).  Behaviourally inert: the only ported caller is
 // asendic_Loader.cpp's own case 1400.
-void InitOutArmTask()                {}   // golden aoutarm.h:34 (file-local static in aoutarm9045.cpp; this global is the linkable one InitAllProcessTask calls)
 void InitialDoLockUnloader(int /*iAuto*/) {}  // golden csystem.h:258 -- unloader lock cursor reset (real body W7)
 // Initial_Auto_BinTray_Task: RETIRED BODY (W7-L1 Wave 2 "Auto") -- real body now
 // in asendic_Auto.cpp (golden asendic_Auto.h:6).  Declaration kept in the header.

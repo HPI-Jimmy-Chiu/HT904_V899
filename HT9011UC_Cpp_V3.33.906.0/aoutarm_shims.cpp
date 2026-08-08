@@ -26,12 +26,18 @@
 //  Offline: zero-initialized; the SMs read/advance them.  bOutSuckShtDupErr is
 //  the per-nozzle duplicate-error grid (Steven 20110216).
 //==============================================================================
-int  iPickFromShuttle1Task = 0;                                                // golden aoutarm9045.cpp -- offline SM cursor
-int  iPickFromShuttle2Task = 0;                                                // golden aoutarm9045.cpp -- offline SM cursor
-int  OutArmTask            = 0;                                                // golden aoutarm9045.cpp -- offline SM cursor
+// AI(W906-PT-W4-integrate) 20260809: 32 STAND-IN DEFINITION(S) RETIRED FROM HERE.
+//   aoutarm.cpp (golden's own home for all of them) landed in wave PT-W4 and is
+//   registered in ht9045_sm, so both definitions were in libht9045_sm.a and every
+//   executable linking it failed with `multiple definition of ...`. The linker named
+//   each one, which is also the proof the signatures match exactly -- a decorated-name
+//   collision cannot happen otherwise.
+//   Retired here: iPickFromShuttle1Task, iPickFromShuttle2Task, OutArmTask, bOutArmManualStepPress, TransferOutShuttleRatio, PickFromShuttle, bOutShtwaitPick, ShowOutputShuttleDataMiss, SwapShuttleDataToOutArm, OutArmPickShuttleAlarm, CheckTesterZ, CheckShuttleICPos, CheckDuplicateBarCode, SetOutArmNeedDestory, InitPickFromShuttle1Task, InitPickFromShuttle2Task, InitPlaceToAutoTask, OutArmAddSpeed, OutArmSubSpeed, OutArmAddSpeedDisplay, OutArmSubSpeedDisplay, CheckOutArmInitState, CheckOutArmCleanOut, IsCatchTrayReadySupplyNewTray, SetFixTrayFullIC, SetOutArmHome, iPlaceToSortShtTask, InitPlaceToSortShtTask, AutoCalculateOutArmXClosePitch, AutoCalculateOutArmYClosePitch, dOutArmXPitch_1Step, iOutArmYPosition
+//   BEHAVIOUR: these were offline defaults (return true/false/0/no-op); the real bodies
+//   run golden's actual logic, so out-arm paths that used to short-circuit now execute.
+//   That is the point of the wave, and it is why this wave was measured on its own.
 int  iOutShtRetryCount     = 0;                                                // golden aoutarm9045.cpp -- offline retry counter
 int  iOutArmZTeachTask     = 0;                                                // golden AutoTeach.h:235 -- offline cursor
-bool bOutArmManualStepPress = false;                                           // golden aoutarm9045.cpp -- offline: no manual step
 bool bOutSuckShtDupErr[MAX_ARM_Row][MAX_ARM_Col] = {{false,false,false,false},{false,false,false,false}}; // golden aoutarm9045.cpp (Steven 20110216)
 
 //==============================================================================
@@ -42,19 +48,10 @@ int  GetOutArmToShuttleOffset_9045(int, int, int, bool) { return 0; }          /
 int  GetOutArmYToShuttleOffset_9045(int, int)           { return 0; }          // golden aoutarm9045.cpp -- offline: 0
 int  GetOutArmXToShuttleOffset_9045(int, int)           { return 0; }          // golden aoutarm9045.cpp -- offline: 0
 int  GetVariableYOutShuttleData()                       { return 0; }          // golden aoutarm9045.cpp (ChungHung 20131231) -- offline: 0
-void TransferOutShuttleRatio(int, int*, int*, int, int) {}                     // golden aoutarm9045.cpp -- offline: identity (no transform applied)
 
 //==============================================================================
 //  Shuttle pick / data-swap / alarm surface (golden aoutarm.cpp / aoutarm9045.cpp)
 //==============================================================================
-void PickFromShuttle(int)                          {}                          // golden aoutarm.h:68 -- offline: no-op
-bool bOutShtwaitPick()                             { return false; }           // golden aoutarm.h:131 -- offline: not waiting
-void ShowOutputShuttleDataMiss()                   {}                          // golden aoutarm9045.cpp (Steven 20110527) -- offline: no message
-bool SwapShuttleDataToOutArm(int,int,int,int,int,int*) { return true; }         // golden aoutarm9045.cpp (Steven 20170428) -- offline: swap OK
-int  OutArmPickShuttleAlarm(int, bool, AnsiString) { return 0; }               // golden aoutarm9045.cpp -- offline: no alarm action
-bool CheckTesterZ(int)                             { return true; }            // golden aoutarm9045.cpp -- offline: tester Z safe
-bool CheckShuttleICPos(int)                        { return true; }            // golden aoutarm9045.cpp -- offline: shuttle IC pos OK
-bool CheckDuplicateBarCode()                       { return true; }            // golden aoutarm.h:130 -- offline: barcode OK / not duplicate (so the case-3000 guard `==false` never forces Task=3000); only called by 1x4_4 under CosFunction.bBarcodeDuplicateFileByOutArm (false offline)
 // (W6.2c-OUT batch-3) The temp MoveOutArmToShuttleIncludeZ_9045_2x4_4 stub that lived
 // here is REMOVED -- aoutarm9045_2x4_4.cpp is now translated/added live and DEFINES the
 // real symbol (golden aoutarm9045_2x4_4.cpp:486); keeping the stub = duplicate symbol.
@@ -62,19 +59,10 @@ bool CheckDuplicateBarCode()                       { return true; }            /
 // SetOutArmNeedDestory: 4-arg (golden aoutarm9045.cpp) + 5-arg (RogerYang 20250516
 // 9046AU, default bPlace).  Both overloads referenced across the variant set.
 void SetOutArmNeedDestory(int,int,int,int)         {}                          // golden aoutarm9045.cpp -- offline: destroy map no-op
-void SetOutArmNeedDestory(int,int,int,int,bool)    {}                          // golden aoutarm.h:171 (9046AU) -- offline: destroy map no-op
 
 //==============================================================================
 //  Out-arm task init / speed / state predicates (golden aoutarm9045.cpp / aoutarm.h)
 //==============================================================================
-void InitPickFromShuttle1Task()                    {}                          // golden aoutarm9045.cpp -- offline: no-op
-void InitPickFromShuttle2Task()                    {}                          // golden aoutarm9045.cpp -- offline: no-op
-void InitPlaceToAutoTask()                         {}                          // golden aoutarm9045.cpp -- offline: no-op
-void OutArmAddSpeed()                              {}                          // golden aoutarm9045.cpp (KaiChen 20171225) -- offline: no-op
-void OutArmSubSpeed()                              {}                          // golden aoutarm9045.cpp -- offline: no-op
-void OutArmAddSpeedDisplay()                       {}                          // golden aoutarm9045.cpp -- offline: no-op
-void OutArmSubSpeedDisplay()                       {}                          // golden aoutarm9045.cpp -- offline: no-op
-bool CheckOutArmInitState()                        { return true; }            // golden aoutarm9045.cpp -- offline: init state ready
 bool CheckOutArmToTask50(int)                      { return true; }            // golden aoutarm9045.h:49 -- offline: reached task50
 bool IsOutArmCleanOutFinish()                      { return true; }            // golden aoutarm9045.cpp -- offline: clean-out finished
 
@@ -82,21 +70,17 @@ bool IsOutArmCleanOutFinish()                      { return true; }            /
 // the (int Task=50) overload -> define BOTH non-static.  Offline: stay/continue
 // the normal pick flow (return the no-clean sentinel 1140 / pass-through Task).
 int  CheckOutArmCleanOut()                         { return 1140; }            // golden aoutarm.h:58 -- offline: continue normal pick flow
-int  CheckOutArmCleanOut(int Task)                 { return Task;  }            // golden aoutarm9045.h:58 -- offline: stay in requested task
 
 //==============================================================================
 //  Tray / Magazine / Rotate / catch-tray cross-module surface
 //==============================================================================
-bool IsCatchTrayReadySupplyNewTray()               { return false; }           // golden aoutarm.h:64 / acatchtray.h -- offline: not ready
 bool CheckRotateOutNotFinish()                     { return false; }           // golden aRotateKIT_Out.h (kevin 20130524) -- offline: rotate finished
-void SetFixTrayFullIC()                            {}                          // golden aoutarm9045.cpp -- offline: no-op (returns void; bool-callers ignore)
 bool DoFixTrayFullAlarm()                          { return true; }            // golden aoutarm9045.h:47 -- offline: alarm handled
 int  VerifyTrayStatus()                            { return 3300; }            // golden aoutarm9045.h:39 -- offline: 3300 (proceed to place)
 int  SearchTrayToPlace_Magazine()                  { return 0; }               // golden aoutarm9045.h:63 (int) -- AI(W906-W7-A2) 20260728: fix return-type ODR violation -- this def and 14 of the 27 site-variant TUs (aoutarm9045_{1x2_2,1x2_4,1x4_2,1x4_4,1x4_4S,1x4_4_Back,1x4_8,2x2_4,2x2_4_14,2x2_4_23,2x2_8,2x4_16,2x5_8,S_1x4_4}.cpp) forward-declared this `void`, disagreeing with the other 13 variants' `int` and with golden's `int` (aoutarm9045.h:63, def aoutarm9045.cpp:1420). Harmless today only because the one golden call site that consumes the return value (aoutarm9045.cpp:1369 `return SearchTrayToPlace_Magazine();`) is not yet translated into this tree's aoutarm9045.cpp -- unified to `int`/`return 0` now so that future translation of that call site does not inherit a live ODR trap. AI(W906-A2-followup) 20260728: corrected gloss -- golden's real not-found path returns Prod.iIfErrorT6 (golden aoutarm9045.cpp:1558), NOT 0; golden never returns a literal 0 from this function's real body (paths return 2, iSortTrayIndex[k], OutArmSuck.iWhichAuto[i][j], or Prod.iIfErrorT6 -- golden :1453,1469,1530,1535,1540,1546,1552,1558). `return 0` here is an arbitrary offline placeholder, not golden's not-found value; if ever consumed downstream (currently all 27 ported call sites discard the return value) it would read as Auto1, matching this file's own SearchTrayToPlace_9045 stand-in at aoutarm9045.cpp:1501 (`return 0; // golden :2451 -> iWhichAuto=0 (Auto1)`) -- there is no other Search* stand-in in this file, and the only Verify* stand-in (VerifyTrayStatus, line 94 above) returns 3300, not 0.
 bool CheckPlaceToMagazineTray(int)                 { return true; }            // golden Magazine.h -- offline: place OK
 bool DoPickFromMagazineBuffer()                    { return true; }            // golden Magazine.h -- offline: pick OK
 bool AutoTrayReCheck(int)                          { return true; }            // golden aoutarm9045.cpp (Ifor 20171031) -- offline: re-check OK
-void SetOutArmHome()                               {}                          // golden aoutarm.h:97 -- offline: alarm-time Z home no-op
 
 //==============================================================================
 //  Fix-AI-CCD form stand-in -- RETIRED FROM THIS FILE.
@@ -128,8 +112,6 @@ void SetOutArmHome()                               {}                          /
 //  is never true offline -> these branches are inert; defined here ONCE so
 //  ht9045_sm links.  Faithful offline end-state (no AU sort dispatch).
 //==============================================================================
-int  iPlaceToSortShtTask = 0;                                                  // golden aoutarm.h (9046AU) -- offline SM cursor
-void InitPlaceToSortShtTask()                                  {}              // golden aoutarm9045.h (9046AU) -- offline: no-op
 bool NeedPlaceToSort()                                         { return false; } // golden aoutarm9045.h (9046AU) -- offline: no AU dispatch
 int  GetSortArmToSortShuttleOffset()                           { return 0; }   // golden aoutarm9045.cpp (9046AU) -- offline: 0
 int  GetSortArmPitchX(int /*iMovePitchX*/, int /*iOffsetPos*/) { return 0; }   // golden aoutarm9045.cpp (9046AU) -- offline: 0
@@ -144,10 +126,6 @@ void SetSortShuttleStatus_Place(int /*iShtRow*/, int /*iShtCol*/, int /*iSuckRow
 //  surface).  Used by aoutarm9045_2x8_8 close-site placement; offline returns 0 /
 //  inert so the normal (non-auto-teach) placement path is taken.
 //==============================================================================
-int    AutoCalculateOutArmXClosePitch(int /*iWhichAuto*/, bool /*bUseDeviceDinemsion*/) { return 0; } // golden aoutarm.h -- offline: 0
-int    AutoCalculateOutArmYClosePitch(int /*iWhichAuto*/) { return 0; }        // golden aoutarm.h -- offline: 0
-double dOutArmXPitch_1Step = 0.0;                                              // golden aoutarm.h -- offline: 0
-int    iOutArmYPosition    = 0;                                                // golden aoutarm.h -- offline: 0
 
 //==============================================================================
 //  (W6.2c-OUT batch-3) Out-rotate kit (golden aRotateKIT_Out.h, Ifor 20251215).
