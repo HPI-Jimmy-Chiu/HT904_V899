@@ -4156,3 +4156,67 @@ PASS: CustomerFunctionSelect() populated CosFunction -> the 20260808 ungate is l
   5. **PT-W4**（非表單 deps≥8，~12 檔 ~40k 行）。開波前先讀計畫書 §6 這兩天新增的五條規則。
 - **執行模式**：使用者 20260808 指示——(1) 優先純翻譯、(2) `.dfm`／UI 相關先不處理、
   (3) 目標是編得起來並能用 console 驅動開啟。
+
+---
+
+## 2026-08-08（續）— SCK_ART gate #8：三個過期的 macro，兩個退役、一個**刻意**留著
+
+> 上一節末尾記下的待辦。結論不是「三個都退役」——其中一個如果退役，`ctest` 會覆蓋掉這台
+> 機器的 `D:\HT9045\system\lastdata.dat`。
+
+### 前提確實死了（先量再說）
+
+gate #8 的原文寫著「cprod.cpp 從 184 到 4036 的所有函式本體都被一個 blanket
+`#if 0 // TODO(W6)` 包住 …… 這三個在本樹都還不是可連結的符號」。那個 blanket gate 已經不存在：
+
+```
+nm --defined-only build_0808_w3/libht9045_globals.a
+  T __Z17WriteLastDataFilebb
+  T __Z22CustomerFunctionSelectv
+  T __ZN8RUN_INFO8AddAlarmEN9vclcompat10AnsiStringES1_
+```
+
+三個都是真的、匯出的、可連結的符號。
+
+### 兩個退役
+
+- **`CustomerFunctionSelect()`**（golden SCK_ART.cpp:437）——安全，只寫記憶體旗標。整條
+  dispatch 都讀過了：`CustomerFunctionSelect` → `InitialCosFunction` → `DoCustomerFunction` →
+  一支 `FUNC_CC_*` profile，沒有任何路徑碰檔案 I/O。而且因為同一天剛把那 7 個 gate 解開，
+  **這個呼叫點現在真的會跑到整個客戶碼設定層**，不是空殼。
+- **`RunInfo.AddAlarm(Code, Message)`**（golden :622）——安全，但這個需要看第二眼，因為它
+  *看起來*會寫檔。本體 cprod.cpp:1004-1028 更新記憶體裡的 `vByLotJam` map，然後
+  `if(iToday!=SystemDate) { SaveJamRateByDay(); InitialDailyData(); }`。那條尾巴在這裡不可能
+  寫任何東西，兩個獨立理由：(a) `SaveJamRateByDay` **整個本體本身就是 `#if 0`**
+  （cprod.cpp:1051，卡在沒有 port 的 `ProductionInfo/FileInfo`），(b) `RUN_INFO` 的 ctor
+  在 cprod.cpp:986 就設 `iToday=SystemDate`，所以那個 guard 第一次呼叫就是 false。
+
+### 一個刻意留著——而且理由和原本那個（假的）完全不同
+
+`WriteLastDataFile()` 是可連結的，但**不能**在這裡放行。它的本體（cprod.cpp:1992+）對
+**寫死的絕對路徑**做 `CreateFile("D:\\HT9045\\system\\lastdata.dat", ...)`，沒有任何可注入的
+接縫；而 `tests/test_SCK_ART_Remainder.cpp` 的 **PART 3b 是刻意去驅動
+`SckArtRem_AccessFile(bRead=false)` 的**，golden 第 436 行正是這個呼叫——那個測試自己的
+banner 就寫著它「Safe ONLY because gate #8」把這裡變成 no-op。退役它等於讓 `ctest` 覆寫
+這台機器的 live saved state，而本樹的 DO-NOT-MODIFY-REAL-CONFIG 紀律禁止這件事
+（`test_ga1_readgeneralini.cpp` 與 `test_wb_datalayer.cpp` 都是先複製到 scratch 才動）。
+
+**要退役它，先得有其中一個**：(1) 一個路徑接縫，讓目的地可注入、測試可指到 scratch 檔；
+或 (2) 給 test_SCK_ART_Remainder PART 3b 一個 sandbox。在那之前它是**刻意的** no-op，
+macro 定義處與 `SCK_ART_Remainder.h` 的 gate 清單都改寫成這個真理由，不再是「它連不起來」。
+
+> 這是本場次第二次遇到「gate 的前提死了但不該直接放行」——第一次是 `myMN200motor.cpp` 的
+> GATE (d)（`MyMessageBox` 其實有 port，但那份 port 在 ht9045_sm，而 ht9045_sm 連結
+> ht9045_motor，為一個 bool 反轉相依不值得）。**規則**：前提假掉不代表答案就是退役；
+> 要重新問一次「為什麼它該是 gated」，然後把真答案寫進去。
+
+### 驗證
+
+| build dir（全新） | 建法 | build | ctest | 失敗集合 |
+|---|---|---|---|---|
+| `build_0808_g8` | 未最佳化 | exit 0、0 compile error | **128 / 134** | 計畫書 §7 那 6 個 |
+| `build_0808_g8_rel` | Release（-O3 + NDEBUG） | exit 0、0 compile error | **128 / 134** | **與上列逐項相同** |
+
+**外加一項針對這個決定本身的驗證**：跑 ctest 前後對 `D:\HT9045\system\lastdata.dat`
+做 md5 對帳——`cbc15b39aa0c462fd3f63f1d226a092a`，跑完 **未變**（mtime 仍是 2026-06-29 18:48），
+證明留著那個 no-op 是對的、而且測試真的會走到那條路。

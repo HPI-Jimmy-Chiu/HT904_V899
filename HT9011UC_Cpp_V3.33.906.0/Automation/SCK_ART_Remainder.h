@@ -319,7 +319,19 @@
 //       DEFERRED -- see the file-head "GOLDEN LINE BOUNDARY" comment's own note for why it is NOT under
 //       this gate at all: golden's SaveTestSummary dispatcher never calls it; its only caller is the
 //       not-yet-ported DoTrayFeedProcess.)
-//   #8  WriteLastDataFile() / CustomerFunctionSelect() / RunInfo.AddAlarm() -- DISCOVERED LATE, only
+//   #8  [SUPERSEDED -- AI(W906-PT-W3-ungate) 20260808. The paragraph below is kept for the record but
+//       ITS PREMISE IS FALSE NOW: cprod.cpp's blanket `#if 0` over lines 184-4036 no longer exists, and
+//       `nm --defined-only libht9045_globals.a` shows all three symbols exported. TWO of the three
+//       macros are RETIRED and now call golden's own line (CustomerFunctionSelect: in-memory flags
+//       only; RunInfo.AddAlarm: in-memory map, and its file-writing tail is itself `#if 0` at
+//       cprod.cpp:1051 while `iToday==SystemDate` from the ctor makes that branch unreachable anyway).
+//       The THIRD, WriteLastDataFile(), stays a no-op ON PURPOSE and for a different reason: it does
+//       CreateFile on the hard-coded absolute path D:\HT9045\system\lastdata.dat, and
+//       tests/test_SCK_ART_Remainder.cpp PART 3b drives SckArtRem_AccessFile(bRead=false) on purpose --
+//       so retiring it would have ctest overwrite this machine's live saved state, which the tree's
+//       DO-NOT-MODIFY-REAL-CONFIG discipline forbids. Retiring it needs a path seam or a test sandbox
+//       first. Full account at the macro definition in SCK_ART_Remainder.cpp.]
+//       WriteLastDataFile() / CustomerFunctionSelect() / RunInfo.AddAlarm() -- DISCOVERED LATE, only
 //       by an actual real-link smoke test (not just -fsyntax-only) run for this hand-off: cprod.h
 //       DECLARES all three (WriteLastDataFile:3237, CustomerFunctionSelect:3280, RUN_INFO::AddAlarm:
 //       2755) and cprod.cpp contains their TEXT (1944-2043 / 3686-3831 / 984-1028) verbatim, but

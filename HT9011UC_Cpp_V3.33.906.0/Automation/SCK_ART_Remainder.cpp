@@ -284,23 +284,44 @@ static void W5SckArtRem_FTPUploadStub(AnsiString sSourcesFilePath, AnsiString sT
 }
 #define W5SCKARTREM_FTP_UPLOAD(src,dst,name)   W5SckArtRem_FTPUploadStub(src,dst,name)   // golden FTP_Upload(src,dst,name)
 
-// ---- Gate #8: WriteLastDataFile()/CustomerFunctionSelect()/RunInfo.AddAlarm() -- DISCOVERED LATE,
-//   during this wave's own real link-test (not just -fsyntax-only), see translate report --------------
-//   cprod.h DECLARES these (WriteLastDataFile: cprod.h:3237, CustomerFunctionSelect: cprod.h:3280,
-//   RUN_INFO::AddAlarm: cprod.h:2755) and cprod.cpp contains their TEXT (WriteLastDataFile:1944-2043,
-//   CustomerFunctionSelect:3686-3831, RUN_INFO::AddAlarm:984-1028) -- but ALL of cprod.cpp's function
-//   BODIES from line 184 to 4036 are wrapped in a single blanket `#if 0 // TODO(W6)` (cprod.cpp:184/
-//   4036, see the file's own "AI(W0-TAIL) 20260626: ==== begin gated function bodies" banner) -- i.e.
-//   NONE of these three are actually linkable symbols in this translated tree yet, despite the golden
-//   citations elsewhere in this file's history implying otherwise. A first draft of this file called
-//   all three directly (compiled clean under -fsyntax-only, which does not check link-time symbol
-//   existence) and only failed at an explicit real link+run smoke test performed for this hand-off --
-//   see the translate report for why that extra step mattered. TU-local no-op stand-ins, matching the
-//   FTestIF/fMain treatment (gate #2/#3): RUN_INFO RunInfo itself (the global instance) is real/active
-//   (cprod.cpp:64, outside the gate) -- only its .AddAlarm() METHOD BODY is gated.
-#define W5SCKARTREM_WRITELASTDATAFILE()            do { } while(0)   // golden cprod.cpp:1944 (TODO(W6)-gated)
-#define W5SCKARTREM_CUSTOMERFUNCTIONSELECT()        do { } while(0)   // golden cprod.cpp:3686 (TODO(W6)-gated)
-#define W5SCKARTREM_RUNINFO_ADDALARM(code, message) do { (void)(code); (void)(message); } while(0)  // golden RUN_INFO::AddAlarm, cprod.cpp:984 (TODO(W6)-gated)
+// ---- Gate #8 -- AI(W906-PT-W3-ungate) 20260808: PREMISE EXPIRED, 2 OF 3 RETIRED --------------------
+//   The original text said: "ALL of cprod.cpp's function BODIES from line 184 to 4036 are wrapped in a
+//   single blanket `#if 0 // TODO(W6)` ... NONE of these three are actually linkable symbols in this
+//   translated tree yet." That blanket gate is GONE. Measured, not assumed --
+//     nm --defined-only build_.../libht9045_globals.a  ->
+//        T __Z17WriteLastDataFilebb
+//        T __Z22CustomerFunctionSelectv
+//        T __ZN8RUN_INFO8AddAlarmEN9vclcompat10AnsiStringES1_
+//   -- all three are real, exported, linkable symbols in the archive this TU links against.
+//
+//   TWO ARE NOW RETIRED and call golden's own line:
+//     * CustomerFunctionSelect()  -- SAFE: it only writes in-memory flags. Verified by reading the
+//       whole body (cprod.cpp:3828+) plus everything it dispatches into: InitialCosFunction ->
+//       DoCustomerFunction -> one FUNC_CC_* profile. No file I/O on any path. (This is also the
+//       function whose 7 customer-function calls were ungated the same day -- so this call site now
+//       reaches the entire customer-code configuration layer, not a shell.)
+//     * RunInfo.AddAlarm(Code, Message) -- SAFE, and this one needed a second look because it LOOKS
+//       like it writes a file. Body at cprod.cpp:1004-1028: it updates the in-memory vByLotJam map,
+//       then `if(iToday!=SystemDate) { SaveJamRateByDay(); InitialDailyData(); }`. Both reasons that
+//       tail cannot write anything here: (a) SaveJamRateByDay's ENTIRE body is itself `#if 0`
+//       (cprod.cpp:1051, blocked on ProductionInfo/FileInfo which has no port), and (b) the RUN_INFO
+//       ctor sets `iToday=SystemDate` (cprod.cpp:986), so the guard is false on the first call anyway.
+//
+//   ONE STAYS GATED, FOR A COMPLETELY DIFFERENT REASON THAN THE ORIGINAL (FALSE) ONE:
+//     * WriteLastDataFile() is linkable -- and it must NOT be let loose here. Its body
+//       (cprod.cpp:1992+) does `CreateFile("D:\\HT9045\\system\\lastdata.dat", ...)` on a HARD-CODED
+//       ABSOLUTE PATH with no seam to redirect, i.e. it overwrites this machine's live saved state.
+//       And tests/test_SCK_ART_Remainder.cpp PART 3b deliberately drives
+//       SckArtRem_AccessFile(bRead=false), whose golden line 436 is exactly this call -- that test's
+//       own banner says it is "Safe ONLY because gate #8" makes this a no-op. Retiring it would make
+//       `ctest` rewrite D:\HT9045\system\lastdata.dat, which the tree's DO-NOT-MODIFY-REAL-CONFIG
+//       discipline forbids (same rule tests/test_ga1_readgeneralini.cpp and test_wb_datalayer.cpp
+//       follow by copying to a scratch path first).
+//       TO RETIRE IT, one of these has to land first: (1) a path seam so the destination is
+//       injectable and the test can point it at a scratch file, or (2) a sandbox for
+//       test_SCK_ART_Remainder PART 3b. Until then this stays a no-op ON PURPOSE, and the note above
+//       is the reason -- not "it does not link".
+#define W5SCKARTREM_WRITELASTDATAFILE()            do { } while(0)   // golden cprod.cpp:1944 -> port :1992; DELIBERATE no-op, see gate #8 (writes the LIVE system\lastdata.dat)
 // AI(W906-SaveSummaryTrayFeed) 20260728: gate #8 extended -- a 4th cprod.h-declared/cprod.cpp-gated-body
 // member found (RUN_INFO::SaveJamRateByLot(bool=true), cprod.h:2706/cprod.cpp:1205, same :184-4036
 // blanket gate). Called unconditionally at golden SCK_ART.cpp:3333.
@@ -567,7 +588,7 @@ void SckArtRem_AccessFile(SckArtRemainderState &st, bool bRead, int iAccess)
 
     if(bRead==false)
         W5SCKARTREM_WRITELASTDATAFILE();                                        // golden :436 WriteLastDataFile() -- TODO(W6), see gate #8
-    W5SCKARTREM_CUSTOMERFUNCTIONSELECT();                                        // golden :437 CustomerFunctionSelect() -- TODO(W6), see gate #8
+    CustomerFunctionSelect();                                                    //AI(W906-PT-W3-ungate) 20260808: was W5SCKARTREM_CUSTOMERFUNCTIONSELECT() -- gate #8 macro retired, golden :437
     SckArtRem_UpdateCount(st);                                                   // golden :438 UpdateCount()
 
     if(bRead==false)
@@ -720,7 +741,7 @@ void SckArtRem_AddAlarmCode(AnsiString Code, AnsiString Message, int iDuplicate)
     if(iDuplicate==0 &&
        Code.AnsiPos("JAM")!=0)
     {
-        W5SCKARTREM_RUNINFO_ADDALARM(Code, Message);                            // golden :622 RunInfo.AddAlarm(Code,Message) -- TODO(W6), see gate #8
+        RunInfo.AddAlarm(Code, Message);                                        //AI(W906-PT-W3-ungate) 20260808: was W5SCKARTREM_RUNINFO_ADDALARM() -- gate #8 macro retired, golden :622
     }
 }
 
