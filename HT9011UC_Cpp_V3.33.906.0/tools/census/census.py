@@ -38,6 +38,56 @@ KNOWN DISTORTIONS, stated because a number without them is misleading
     extra definitions in total. So the "done" side of every percentage here is
     optimistic by at most those 72 functions -- material for a per-file decision, not
     enough to move the headline figures.
+  * ONE-LINE DEFINITIONS ARE INVISIBLE (found 20260809 during PT-W5c). `DEFN` ends with
+    `\([^;]*$` -- '(' and no ';' on the line -- so a body written on a single line is not
+    recognised as a definition at all:
+        bool CheckSafeDoorIsClosed() { return true; }        <-- not seen
+        bool InSHT1InLF() { return false; }                   <-- not seen
+    MEASURED SCOPE: the port tree holds 766 such definitions; 110 of them are the port
+    body for a same-named golden function IN THE SAME FILE (Motor/mymotor.cpp 47,
+    ainarm9045.cpp 35, aoutarm9045.cpp 11, mytray.cpp 9, ...), each charged at full
+    golden span.
+    DO NOT "fix" this without thinking: a one-line port body is nearly always a DEGRADED
+    STUB (mymotor.cpp's 47 are the Gali_* offline stubs), so reporting them as NOT
+    translated is arguably the correct answer for wave planning, and this census
+    deliberately keeps that behaviour.
+    WHERE IT IS FLATLY WRONG is a pre-integration COLLISION SCAN: the symbol IS defined
+    and WILL collide. Measured cost on 20260809: a scan for csystem.cpp's 122-function
+    wave-1 scope using this regex found 24 existing definitions; the same scan with
+    one-line bodies included found 46 across 11 files, covering 44 of the 122. The 22
+    missed ones would each have surfaced as an unexpected `multiple definition` at link.
+    Any collision scan MUST use its own definition matcher, not this one.
+  * CROSS-FILE HOMES are counted as MISSING (found 20260809 during PT-W5c). Matching is
+    per RELATIVE PATH, but this port deliberately relocates bodies out of a golden file:
+    golden csystem.cpp's 21-strong HasIC predicate family lives in the port's
+    csystem_predicates.cpp, `XPitchIsStand` in csystem_shims.cpp, golden
+    BarCode/BarCode_Sh1.cpp's scan bodies in BarCode/BarCode_Shuttle1_Scan.cpp. Each is
+    charged at its full golden span, so remaining work is OVERSTATED.
+    MEASURED CEILING, tree-wide: of 5,823 golden functions with no live same-path port
+    body (382,620 golden lines), 268 have a body elsewhere in the port under a name that
+    is defined in EXACTLY ONE golden file -- 23,871 golden lines, 6.2% of the gap; the
+    non-form share is 10,537 lines. A further 564 hits (49,368 lines) were EXCLUDED as
+    unprovable: names like `FormShow` / `ReadFile` / `SaveSetupFile` / `DoIniDataToForm`
+    exist on dozens of distinct VCL form classes, so a port hit does not identify the
+    same function -- which is exactly why the alias rule above refuses bare cross-class
+    matching. Treat 23,871 as a CEILING, not a correction: a same-named body elsewhere
+    may be a DEGRADED STUB rather than a translation. Measured on csystem.cpp's 24 hits:
+    21 faithful (csystem_predicates.cpp), 1 faithful (csystem_shims.cpp XPitchIsStand),
+    1 faithful-but-duplicating-a-golden-defect (aoutarm.cpp SendDataToASE), and 1 a
+    `static` no-op stub (MyLaneIo.cpp:49) -- so ~4% of that file's hits were NOT done.
+  * THE BRACE WALK OVERSHOOTS ON UNBALANCED FILES, inflating spans (found 20260809).
+    `functions()` finds a definition's end by naive `{`/`}` counting, which is wrong when
+    a file's braces do not balance -- `#if`/`#else` arms with asymmetric braces, or a
+    brace inside a string/mojibake byte. When balance is never reached the walk runs to
+    the 4000-line cap or to the next accidental balance point, and the span is fiction:
+    golden Command.cpp (whole-file balance +1) reports `TfMain::PERSITETemperatureStrings`
+    at :945 as spanning 4,002 lines.
+    MEASURED SCOPE: 18 of the 289 in-scope golden files are brace-unbalanced by this
+    naive count (main.cpp +5, cSocket.cpp -7, ainarm9045.cpp -2, cContact.cpp +1,
+    Command.cpp +1, and 13 more at +/-1), together holding 130,159 golden lines. Spans
+    inside those 18 files may be overstated; the other 271 are unaffected. NOTE for wave
+    planning: csystem.cpp balances, so its figures are sound -- cContact.cpp does NOT,
+    so verify its per-function spans by hand before sizing a wave on them.
   * `#if 0` in a port file. Golden code kept inside `#if 0` is NOT translated behaviour.
     Port functions whose body is entirely gated are reported separately as GATED rather
     than counted as translated.
