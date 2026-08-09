@@ -5014,3 +5014,106 @@ append-only 的約定守住了。零 U+FFFD。EOL 逐檔保持（`csystem.cpp` �
   PT-W4 約 30 條 prose/citation findings。
 - **執行模式**：非表單優先、`.dfm`／UI 不處理、每波全新 dir Debug+Release、
   行為變更單獨一顆 commit 單獨量。
+
+### PT-W5c 整併：link 收斂了，但驗收線被第 7 個失敗擋住（根因已查明，不是回歸）
+
+**整併結果（`build_0809_w5c`，增量 dir，非交付數字）**：
+`build exit=0`、**0 個 multiple definition、0 個 undefined reference**，
+起點是 530 條 link 錯誤。
+
+| 階段 | 重複定義 | 未解析 |
+|---|---|---|
+| 翻譯落地後 | 53 個 | 13 個 |
+| 退役本波 43 個 stand-in 後 | 10 | 13 |
+| 退役 10 個既存 stand-in 後 | **0** | 11 |
+| ungate + call-site gate 後 | **0** | **0** |
+
+**ctest（增量 dir，smoke，非交付數字）：127 / 134**，
+失敗集合 = 計畫書 §7 那 6 個 **＋ `W6_1_EmptyCanary`**。**超出驗收線 → 依停止條件不 commit。**
+
+#### 三個整併發現
+
+1. **53 個碰撞裡有 9 個不是本波的**：`asortarm.cpp` / `uHeaterThread.cpp` 的真本體
+   對上長年存在的 no-op shim。它們一直是**潛伏的 ODR 違規**，只因為
+   csystem.cpp 進入連結才把那些 archive 成員抽出來——
+   **archive-extraction 陷阱反向運作：抽出會「暴露」原本休眠的重複定義。**
+2. **一個藏在重複定義後面的回傳型別不一致**：`acarry_shims.h:193` 宣告
+   `void MoveSortArmToAutoSafe()`，golden（`asortarm.h:37`）與真本體是 `bool`。
+   C++ 名稱修飾不含回傳型別，所以兩邊「契約不同卻仍撞成同一個符號」。
+   已改成 golden 的簽章（不是刪掉——`acarry.cpp` 沒 include `asortarm.h`）。
+3. **agent 檢查表有一個我沒寫下來的漏洞**：13 個未解析符號的本體**全都在
+   CMakeLists 已註冊的檔案裡**，但**包在 `#if 0` 內**。
+   agent 驗了註冊（陷阱 2）卻沒驗 gate 狀態。**「已註冊」≠「連得上」。**
+   已把這條補進五個陷阱的第 2 條語意。
+
+#### 我自己犯的錯
+
+退役腳本第一次跑「找到 0 個定義」——`io.open(..., encoding=...)` 會做
+universal-newline 轉換，`
+` 變成 `
+`，於是 `split('
+')` 只切出一個元素，
+**每個 CRLF 檔都靜默回報 0 個命中**。加 `newline=''` 修正。
+12 個被改的檔 EOL 全部逐檔保持原樣（驗證過）。
+
+#### 第 7 個失敗的根因：測試的期望值是照「鷹架版述詞」校準的，不是照 golden
+
+`W6_1_EmptyCanary` 的 `[6]` 段：
+`FAIL: DoAutoEmpty case-1 'nobody needs tray' guard holds Task==1 (golden :702-707)`
+
+- golden `csystem.cpp:12548` 的 `HasICUnderMachine()` 檢查
+  **`MOT[MMTrayZ].fHasTray || MOT[MMTrayY].fHasTray`（盤在不在，不是 IC 在不在）**，
+  外加 `MMPlate1/2.HasIC()`、`InArmSuck/OutArmSuck.HasIC()`、
+  `MInRotateKit/MOutRotateKit.HasIC()`。
+- 鷹架 `csystem_predicates.cpp:204` 只有
+  `ShuttleHasIC() || IndexHasIC() || HasICUnderHotPlate()`——**上面那些項全部漏掉**。
+- 測試 fixture 刻意 `MOT[MMTrayY].SetTray(NULL_IC, ...)`（盤在、無 IC）。
+  舊述詞 → false；**golden 述詞 → true**。
+- golden `acatchtray.cpp:463` 的條件與 port 完全相同
+  （`else if(iCleanOut==1 && HasICUnderMachine()==false)`），
+  所以 golden 在這個 fixture 狀態下**會走 `else` 分支**，
+  而那個分支（port `acatchtray.cpp:598`）第一件事就是
+  **`bAutoNeedTray[iAuto]=false;` 把測試預設的旗標覆寫掉**再重新計算。
+
+**結論：`Task==1` 從來不是 golden 在這個 fixture 下的行為。**
+測試的 (b) 半段前提在 golden 語意下自我矛盾，
+而它之所以一直綠，是因為它依賴的述詞漏了盤在不在那一項。
+**這是忠實度修好之後暴露出來的測試校準問題，不是回歸。**
+
+處置：**不 commit**，照停止條件停在這裡。
+重新校準要動測試，而「改測試讓自己的變更通過」需要單獨、明講的一步。
+
+### 🔖 RESUME（最新）
+
+- **⚠ 第一件事仍是 `git status`。工作樹上有未 commit 的在製工作：**
+  `csystem.cpp` +15,135 行翻譯、`csystem.h` +28、
+  **加上整併已改的 12 個檔**（53 個 stand-in 退役成 `#if 0`、`cmydef.cpp` ungate 6 個全域、
+  `cpublic.cpp` ungate `HeaterLog`、`cprod.cpp` 新增 `bDoRTCLearning`、
+  `acarry_shims.h` 修回傳型別、`csystem.cpp` 7 個 call-site gate）。
+- **PT-W5c 現況：翻譯 ✅ ／ link 收斂 ✅（build exit=0、0 dup、0 undef）／
+  獨立稽核 ❌（session limit）／ 驗收 ❌（127/134，多一個 `W6_1_EmptyCanary`）／ commit ❌。**
+- **接續的第一個動作＝重新校準 `W6_1_EmptyCanary`，根因已查明並寫在上一節**：
+  - 證據鏈：golden `csystem.cpp:12548` 的 `HasICUnderMachine()` 含
+    `MOT[MMTrayY].fHasTray`；鷹架 `csystem_predicates.cpp:204` 漏掉它；
+    測試 fixture 刻意停一盤在 MMTrayY；golden `acatchtray.cpp:463` 條件與 port 相同；
+    走進去的 `else` 分支（port `acatchtray.cpp:598`）會把 `bAutoNeedTray[]` 覆寫。
+  - 要動的是 `tests/test_w6_1_empty_canary.cpp:742` 那個 CHECK（(b) 半段）。
+    **先確認 golden 在該 fixture 下的實際 `iAutoEmptyTask`**（用 printf 探針，
+    注意 heredoc 會吃掉 `
+`——用 Write 工具寫探針，不要用 bash heredoc），
+    再把期望值改成 golden 的值，註解附上上面四個 golden 行號。
+  - 備份在 `scratchpad/canary_backup.cpp`（目前測試已還原成 pristine）。
+- **然後**：全新 dir Debug + Release 驗收（失敗集合 ⊆ §7 那 6 個）→ commit 翻譯＋整併
+  → 行為變更另一顆（task #12 安全門一家）。
+- **獨立稽核仍然欠著**（本波忠實度沒有任何獨立複驗）。最省的補法：
+  `Workflow({scriptPath: '.../pt-w5c-csystem-wave1-wf_9e448e54-b75.js',
+  resumeFromRunId: 'wf_bf8f25d5-59e'})`——5 個翻譯 agent 從 cache 回放，只跑 5 個 verify。
+  **但注意稽核要對「整併後」的樹做，supersede 清單那一項已經變成「已退役」了。**
+- **整併時學到、要寫進 skill 的**：
+  1. 「本體所在 .cpp 有沒有在 CMakeLists 註冊」不夠——**還要驗本體有沒有被 `#if 0` 包住**。
+     13 個未解析符號全部是這種。
+  2. **archive 抽出會暴露休眠的重複定義**：53 個碰撞裡 9 個是既存潛伏 ODR 違規。
+  3. 腳本讀檔一律 `newline=''`，否則 CRLF 檔會靜默回報 0 命中。
+- **仍然待辦**：csystem.cpp wave 2（5,835 行）／GATE (W5a-G) 三部分／
+  `cmydef.cpp` 尾巴其餘全域／mykitsuck substrate 回家波／PT-W4 約 30 條 findings。
+- **執行模式**：非表單優先、每波全新 dir Debug+Release、行為變更單獨一顆 commit 單獨量。
