@@ -13259,11 +13259,14 @@ void ResetHotTime()
 //     IndexMotorBreakerON      :12442  -> part of G05
 //     IndexMotorBreakerOFF     :12448  -> part of G04 / G07 / G10 / G31c
 //     RecordSafeDoorStates     :14498  -> un-gate G11  (RESTORES DOOR AUDIT LOG)
-//  ALREADY UN-GATEABLE -- group g5's block is IN THE FILE as this is appended:
-//     DoMotorPowerOn           csystem.cpp:12915 (golden :19102) -> G31a + G31b can
-//     be un-gated as soon as the integrator confirms g5's block is final.  They are
-//     left GATED here only because this group must not depend on a concurrent
-//     sibling append that could still be re-applied or reverted.
+//  NOT UN-GATEABLE AFTER ALL -- corrected 20260810 (PT-W5c audit finding 4):
+//     DoMotorPowerOn           csystem.cpp:12993 (golden :19102).  The line number above
+//     said :12915, which was wrong, and "ALREADY UN-GATEABLE" was wrong for a substantive
+//     reason: DoMotorPowerOn's OWN GATE G9 (three brake-release calls) is still closed,
+//     and only IndexMotorBreakerOFF (csystem.cpp:17553) of its three symbols exists.
+//     MagazineBreakerOFF / CassetteBreakerOFF arrive in csystem WAVE 2 (golden :24088 /
+//     :24122).  Opening G31a/G31b now would close SW[SwMotorRelay] with the magazine and
+//     cassette brakes still engaged.  ORDER: wave 2 -> G9 -> G31a + G31b.
 //  STILL BLOCKED AFTER THIS WHOLE WAVE (csystem WAVE 2 / other files needed):
 //     MagazineBreakerON/OFF (golden :24083/:24088), InOutArmZBreakerON/OFF
 //     (:24093/:24099), LDCarRotArmZBreakerOn/OFF (:24105/:24110),
@@ -14568,7 +14571,24 @@ void CheckMotorPowerShutDown()
             return ;
         if(flag && DelayMotNo>=100)
         {
-//AI(W906-PT-csystem-g2) 20260809: GATE G31a -- golden csystem.cpp:4116.  DoMotorPowerOn() is DECLARED at csystem.h:151 and
+//AI(ht9045-v906) 20260810: PT-W5c audit finding 4 -- THE ORIGINAL REASON BELOW WAS FALSE,
+// AND THE GATE IS STILL CORRECT. Corrected reason first, original text kept after it:
+//   * DoMotorPowerOn() IS defined in this port, at csystem.cpp:12993 -- a real body landed
+//     by group g5 in this same wave, ~1,580 lines ABOVE this site. So "defined nowhere" was
+//     wrong the moment the wave integrated, and this block's OWN header already said so
+//     ("ALREADY UN-GATEABLE -- group g5's block is IN THE FILE as this is appended").
+//     The note contradicted its own header and I shipped both; an independent audit caught
+//     it. Lesson matching the SEAM NOTE 1 lesson above: when a block header and a site note
+//     disagree, neither is authority -- open the file.
+//   * WHY THE GATE STAYS ANYWAY, measured 20260810: DoMotorPowerOn's own GATE G9 (its three
+//     brake-release calls) is still closed, and only ONE of its three symbols now exists --
+//     IndexMotorBreakerOFF at csystem.cpp:17553 (landed by g1). MagazineBreakerOFF and
+//     CassetteBreakerOFF are still undefined; golden's bodies are csystem.cpp:24088 and
+//     :24122, i.e. csystem WAVE 2. Un-gating this call now would run the sequencer and close
+//     SW[SwMotorRelay] with the magazine/cassette brakes still engaged -- the very hazard
+//     G9's own note spells out in capitals. UN-GATE ORDER IS THEREFORE: wave 2 lands
+//     MagazineBreakerOFF/CassetteBreakerOFF -> open G9 -> then open G31a and G31b.
+// (Original, now-superseded reason:) DoMotorPowerOn() is DECLARED at csystem.h:151 and
 // defined nowhere in the port; golden defines it at csystem.cpp:19102 (csystem WAVE 2).
 // DEFAULT: SW[SwServerON].On() on the next line, MotorPowerOnDelay,
 // bMotorPowerState=true and the flag/MOTPower bookkeeping ALL stay ACTIVE -- only the
@@ -14634,7 +14654,13 @@ void CheckMotorPowerShutDown()
         else if((bMotorPowerState==false && bOn)  || (bOnR && bMotorPowerState==false))
         {
             bMotorPowerState=true;
-//AI(W906-PT-csystem-g2) 20260809: GATE G31b -- golden csystem.cpp:4154.  Same DECLARATION-ONLY DoMotorPowerOn as G31a, on
+//AI(ht9045-v906) 20260810: PT-W5c audit finding 4 -- "DECLARATION-ONLY" IS FALSE HERE TOO.
+// DoMotorPowerOn() is defined at csystem.cpp:12993 (group g5, this wave). The gate still
+// stays, for the reason set out in full at GATE G31a above: DoMotorPowerOn's own G9
+// brake-release block is still closed, and 2 of its 3 symbols (MagazineBreakerOFF,
+// CassetteBreakerOFF -- golden csystem.cpp:24088/:24122) only arrive in csystem wave 2.
+// Un-gate order: wave 2 -> G9 -> G31a + G31b.
+// (Original, now-superseded reason:) Same DECLARATION-ONLY DoMotorPowerOn as G31a, on
 // the [Power On] key-press edge.  SW[SwServerON].Off()/.On() and
 // MotorPowerOnDelay=SERVER_MOTOR_POWER_ON_DELAY below stay ACTIVE.
 // *** DELTA IN CAPITALS: PRESSING [Power On] LATCHES bMotorPowerState AND PULSES SwServerON
