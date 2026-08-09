@@ -129,24 +129,66 @@ bool SortSHTInRT() { return false; }                   // golden csystem.cpp (90
 //AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool DoStepShuttleCheck(int /*iShuttle*/) { return true; }     // golden csystem.cpp
 #endif
+#if 0   // PT-W5f RETIRED (DoCheckShuttle1EmptyIC)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165. *** BEHAVIOUR DELTA, NOT NEUTRAL: the stub answered "no anomaly found, proceed" unconditionally, so retiring it lets the real check actually run and it can now REFUSE. ***
 bool DoCheckShuttle1EmptyIC()             { return true; }     // golden csystem.cpp
+#endif
+#if 0   // PT-W5f RETIRED (DoCheckShuttle2EmptyIC)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165. *** BEHAVIOUR DELTA, NOT NEUTRAL: the stub answered "no anomaly found, proceed" unconditionally, so retiring it lets the real check actually run and it can now REFUSE. ***
 bool DoCheckShuttle2EmptyIC()             { return true; }     // golden csystem.cpp
+#endif
+#if 0   // PT-W5f RETIRED (DoCheckShuttle1MustHasIC)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165. *** BEHAVIOUR DELTA, NOT NEUTRAL: the stub answered "check passed" unconditionally, so retiring it lets the real check actually run and it can now REFUSE. ***
 bool DoCheckShuttle1MustHasIC()           { return true; }     // golden csystem.cpp
+#endif
+#if 0   // PT-W5f RETIRED (DoCheckShuttle2MustHasIC)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165. *** BEHAVIOUR DELTA, NOT NEUTRAL: the stub answered "check passed" unconditionally, so retiring it lets the real check actually run and it can now REFUSE. ***
 bool DoCheckShuttle2MustHasIC()           { return true; }     // golden csystem.cpp
+#endif
+#if 0   // PT-W5f RETIRED (DoCheckShuttle1Prominent)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165. *** BEHAVIOUR DELTA, NOT NEUTRAL: the stub answered "no anomaly found, proceed" unconditionally, so retiring it lets the real check actually run and it can now REFUSE. ***
 bool DoCheckShuttle1Prominent()           { return true; }     // golden csystem.cpp
+#endif
+#if 0   // PT-W5f RETIRED (DoCheckShuttle2Prominent)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165. *** BEHAVIOUR DELTA, NOT NEUTRAL: the stub answered "no anomaly found, proceed" unconditionally, so retiring it lets the real check actually run and it can now REFUSE. ***
 bool DoCheckShuttle2Prominent()           { return true; }     // golden csystem.cpp
+#endif
+#if 0   // PT-W5f RETIRED (InitialCheckShuttle1MustHasICTask)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165.
 void InitialCheckShuttle1MustHasICTask()           {}          // golden csystem.cpp
+#endif
+#if 0   // PT-W5f RETIRED (InitialCheckShuttle2MustHasICTask)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165.
 void InitialCheckShuttle2MustHasICTask()           {}          // golden csystem.cpp
+#endif
+#if 0   // PT-W5f RETIRED (InitialCheckShuttle1ProminentNoHasICTask)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165.
 void InitialCheckShuttle1ProminentNoHasICTask()    {}          // golden csystem.cpp
+#endif
+#if 0   // PT-W5f RETIRED (InitialCheckShuttle2ProminentNoHasICTask)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165.
 void InitialCheckShuttle2ProminentNoHasICTask()    {}          // golden csystem.cpp
+#endif
+#if 0   // PT-W5f RETIRED (InitialCheckShuttle1ProminentTask)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165.
 void InitialCheckShuttle1ProminentTask()           {}          // golden csystem.cpp
+#endif
+#if 0   // PT-W5f RETIRED (InitialCheckShuttle2ProminentTask)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165.
 void InitialCheckShuttle2ProminentTask()           {}          // golden csystem.cpp
+#endif
 
 // ---------------------------------------------------------------------------
 //  32-site enable predicates (golden csystem.cpp) -- offline false.
 // ---------------------------------------------------------------------------
+#if 0   // PT-W5f RETIRED (Check32siteOnlyEnabled24Site)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165.
 bool Check32siteOnlyEnabled24Site() { return false; }  // golden csystem.cpp
+#endif
+#if 0   // PT-W5f RETIRED (Check32siteOnlyEnabled4x4Site)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165.
 bool Check32siteOnlyEnabled4x4Site(){ return false; }  // golden csystem.cpp
+#endif
 
 // ---------------------------------------------------------------------------
 //  out-arm let-shuttle-pass / bottom-2DID HTTP / sort-arm safe-move.

@@ -209,7 +209,10 @@ static void DoStructUnitConvert() {}                            // golden cUnitC
 // NOT `static`: csystem.h already declares it with external linkage (a `static`
 // redefinition here would conflict with that prior declaration) -- this is the
 // SOLE definition anywhere in the linked tree.
+#if 0   // PT-W5f RETIRED (SocketAirCoolingStart)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165.
 void SocketAirCoolingStart() {}                                  // golden csystem.cpp:21360 -- not yet translated
+#endif
 // AI(W906-AutoCleanCluster) 20260722: golden `bool bWaitSECS` (KevinCheng
 // 20250919, Wait-SECS handshake flag) -- cmydef.h:5936 declares it extern, but
 // its cmydef.cpp:6010 definition sits inside a pre-existing `#if 0 // TODO`

@@ -1606,7 +1606,10 @@ void SetMotorSpeed() {}
 
 // DoInArmAutoSiteMapping (declared csystem.h:200): auto-site-map step pump.
 // Offline: not running auto-site-map -> false (DoInArm_9045_1x1_1 falls through).
+#if 0   // PT-W5f RETIRED (DoInArmAutoSiteMapping)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error, measured in build_0810_w5f.
 bool DoInArmAutoSiteMapping() { return false; }
+#endif
 
 // ZAxisNotDown (golden ainarm2.h:43): the "Z stays up" flag passed to
 // MoveInArmXYToWaitTrayArm.  Sibling of ZAxisDown (already defined above).

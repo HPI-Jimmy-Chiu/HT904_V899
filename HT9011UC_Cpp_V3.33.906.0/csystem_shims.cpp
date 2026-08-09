@@ -126,7 +126,10 @@ void DoSortArm() {}
 // InitLoadTask: RETIRED BODY (W7-L1 Wave 1 "Loader") -- real body now in
 // asendic_Loader.cpp (golden).  Behaviourally inert: the only ported caller is
 // asendic_Loader.cpp's own case 1400.
+#if 0   // PT-W5f RETIRED (InitialDoLockUnloader)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165.
 void InitialDoLockUnloader(int /*iAuto*/) {}  // golden csystem.h:258 -- unloader lock cursor reset (real body W7)
+#endif
 // Initial_Auto_BinTray_Task: RETIRED BODY (W7-L1 Wave 2 "Auto") -- real body now
 // in asendic_Auto.cpp (golden asendic_Auto.h:6).  Declaration kept in the header.
 // InitAutoColorTask: RETIRED BODY (W7-L1 Wave 1 "Color") -- real body now in
@@ -253,5 +256,11 @@ bool XPitchIsStand()
 // (site-map check + which-shuttle select).  Offline-safe no-ops -- there is no
 // site-map HW offline and the bRunAutoSiteMapping path is inert (consistent with
 // DoCheckAutoSiteMappingPosition's offline no-op in aHotPlateSubstrate.cpp).
+#if 0   // PT-W5f RETIRED (DoSiteMappingCHK)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error, measured in build_0810_w5f.
 void DoSiteMappingCHK(bool /*bAdd*/) {}
+#endif
+#if 0   // PT-W5f RETIRED (AutoSiteMappingCheckShuttle)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165.
 void AutoSiteMappingCheckShuttle(bool /*bWhich32*/) {}
+#endif

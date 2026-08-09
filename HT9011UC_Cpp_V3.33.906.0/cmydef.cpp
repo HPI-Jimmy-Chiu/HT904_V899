@@ -6011,7 +6011,17 @@ bool bHasTjTemp;                                                                
 int iCheckShuttleSensor=0;                                                      //Ifor 20251204 add:After Home Need Check Shuttle Sensor
 bool bFreezeHandler=false;                                                      //Ifor 20260119 add:Freeze Handler
 bool bChangeModeING=false;
+#endif // AI(W906-PT-W5f-integrate) 20260810: ungate -- DoInArmAutoSiteMapping (csystem.cpp wave 2) reads it. Plain data, no ctor touching a NULL global (PT_CAMPAIGN_PLAN.md section 8).
+//AI(ht9045-v906) 20260810: PT-W5f integrate -- bGPIBError has NO definition in this port:
+// golden defines it at main.cpp:15151 and main.cpp is UNPORTED, so every user carries only
+// a local `extern bool bGPIBError;` (atester.cpp:653 here, golden atester.cpp:608 and
+// aTester_Front.cpp:65). csystem.cpp wave 2 pulled atester.cpp into the link and exposed it.
+// Golden writes `bool bGPIBError=false;` -- zero-initialised, no ctor -- so hosting it beside
+// the other machine globals is byte-for-byte golden behaviour. WHOEVER PORTS main.cpp:
+// delete this line then, or it becomes a duplicate definition.
+bool bGPIBError=false;                                                          // golden main.cpp:15151
 bool bASMFirstTime=false;
+#if 0 // ...resume the TODO(W6) gate
 DWORD startASMTick=0;
 DWORD endASMTick=0;
 TDateTime tASMDateTime=0;
@@ -6069,13 +6079,19 @@ int iSECS_HotPlateSeclect=0;
 bool bSECS_REALTIMECCD;
 #if 0 // ...resume the TODO(W6) gate
 bool bNeedRestartSW=false;
+#endif // AI(W906-PT-W5f-integrate) 20260810: ungate -- DoInitialCylinderCheck (csystem.cpp wave 2) needs this flag. Plain data, no ctor touching a NULL global (PT_CAMPAIGN_PLAN.md section 8).
 bool bInitialCylinderCheck=false;
+#if 0 // ...resume the TODO(W6) gate
+#endif // AI(W906-PT-W5f-integrate) 20260810: ungate -- DoInitialCylinderCheck (csystem.cpp wave 2) needs its task cursor. Plain data, no ctor touching a NULL global (PT_CAMPAIGN_PLAN.md section 8).
 int iInitialCylinderCheckTask=1;
+#if 0 // ...resume the TODO(W6) gate
 int iP65QAReTestCount=0;                                                        //Ifor 20260407 add: [P65] ARM QA Mode ReTest Counter
 bool bP65QAReTest=false;                                                        //Ifor 20260407 add: [P65] QA ReTest flag
 bool bWaitSECS=false;                                                           //KevinCheng 20250919 : Wait SECS
 bool bEject=false;                                                              //JerryYang 20251020 : 渠梁半清機功能
+#endif // AI(W906-PT-W5f-integrate) 20260810: ungate -- csystem.cpp:23652 (CheckAllAutoTrayEjectFinsh, landed this wave) actively reads bNeedEject[i], and this is its ONLY definition, so the link now requires it. Plain bool array, no ctor that touches a NULL global (PT_CAMPAIGN_PLAN.md section 8). NOTE: asendic_Auto.cpp:354/:404 hold a MACRO SEAM (static W7L1A_bNeedEject + #define) that keeps THAT file on its own private copy -- tracked separately, do not assume this ungate reconnects it.
 bool bNeedEject[MAX_AUTO_TRAY];                                                 //JerryYang 20251020 : 渠梁半清機功能
+#if 0 // ...resume the TODO(W6) gate
 bool bPurgeOutAllDevice=false;                                                  //JerryYang 20251020 : 渠梁半清機功能
 
 int iMagBin = 0;                                                                //Eastsun 20260515 F011 整合 (Magazine AMR shared)

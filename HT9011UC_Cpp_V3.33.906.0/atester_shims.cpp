@@ -51,13 +51,22 @@ bool IsInArmCleanOutFinish(int /*iIsOneCycle*/) { return false; }  // golden csy
 //AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool IsInArmOneCycleFinish()                    { return false; }  // golden csystem.h:91
 #endif
+#if 0   // PT-W5f RETIRED (CanYieldAlarmRemainInSHT)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165.
 bool CanYieldAlarmRemainInSHT()                 { return false; }  // golden csystem.h:288
+#endif
+#if 0   // PT-W5f RETIRED (CheckIndexConnect)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165.
 int  CheckIndexConnect()                        { return 0; }      // golden csystem.h:212 (Dell 20111130)
+#endif
 // TODO(W6.4b): real body golden csystem.cpp:23513, remove this stub when translated.
 //   DoTestHeadMotor (atester.cpp:1732) fires the TTL RS232 SOT signal to the dual
 //   TTL board.  Offline: no RS232/TTL board wired -> no-op (the SOT pulse is a
 //   hardware side-effect; the index SM advances regardless of its return).
+#if 0   // PT-W5f RETIRED (SendTTLRS232CSOTsignal)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165.
 void SendTTLRS232CSOTsignal()                   {}                 // golden csystem.h:280 (Isaac 20210309)
+#endif
 
 // AI(W5-Automation-Integrate) 20260710: 3 more csystem.h-declared bodies atester_32Site.cpp
 // needs (golden home csystem.cpp, whole regions not translated this wave -- HeadContactCount/
@@ -72,8 +81,14 @@ void SendTTLRS232CSOTsignal()                   {}                 // golden csy
 //AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool CheckContactOver()                         { return false; }  // golden csystem.h:156
 #endif
+#if 0   // PT-W5f RETIRED (ShowIndexTime)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error, measured in build_0810_w5f.
 void ShowIndexTime(int /*Item*/)                {}                 // golden csystem.h:200
+#endif
+#if 0   // PT-W5f RETIRED (TemperatureStorageLog)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165.
 bool TemperatureStorageLog(int /*iRecord*/)     { return false; }  // golden csystem.h:275
+#endif
 
 // AI(W5-Automation-Integrate) 20260710: atester_32Site.cpp's own local `extern` globals/
 // predicate (golden main.cpp-owned bEcho/bExist/bUnderTest/bEchoStop -- same untranslated-main.cpp

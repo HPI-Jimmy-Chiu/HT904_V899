@@ -386,11 +386,14 @@ bool CheckSafeDoorIsClosed() { return true; }
 //  DoAutoSiteMappingDropError (golden csystem.cpp:23361): only acts when
 //  bRunAutoSiteMapping==true.  Offline ASM is off -> the golden body is a no-op;
 //  keep the guard shape faithful (re-reads bRunAutoSiteMapping at the call).
+#if 0   // PT-W5f RETIRED (DoAutoSiteMappingDropError)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error, measured in build_0810_w5f.
 void DoAutoSiteMappingDropError()
 {
     // TODO(W6.x/W7): full ASM drop-error recovery (InitInArmTask + grid reset)
     // lands with the ainarm core.  Offline ASM is off, so this is a no-op.
 }
+#endif
 //==============================================================================
 //  W7-C1 ADD: csystem.h predicates the end-of-lot CLEAN OUT drain finish-check
 //  (DoCleanOutFinishCheck, csystem.cpp) consults in its ACTIVE path.  These had

@@ -79,7 +79,14 @@ static void check_s(const char* name, const std::string& got, const std::string&
 // note); only `extern`-declare them so this file's reads/writes bind to the
 // real ht9045_sm-owned globals.
 // -----------------------------------------------------------------------
-bool bGPIBError = false;
+//AI(ht9045-v906) 20260810: PT-W5f integrate -- this file's own `bool bGPIBError = false;`
+// definition is REMOVED and replaced by an extern. It was a TU-LOCAL STAND-IN for a symbol
+// the production tree genuinely lacked (golden defines it at main.cpp:15151, and main.cpp is
+// unported), which is trap 5 in the campaign's list. csystem.cpp wave 2 pulled atester.cpp
+// into the link, so the production definition now exists at cmydef.cpp beside the other
+// machine globals -- keeping this one made it a duplicate. The neighbouring comment already
+// describes exactly this pattern for bEcho/bExist/bUnderTest; bGPIBError now follows it.
+extern bool bGPIBError;
 extern bool bEcho, bExist, bUnderTest;
 extern unsigned int iBin[4][8];   // AI(W906-TesterTCPTimer) 20260720: now defined in atester_shims.cpp
 

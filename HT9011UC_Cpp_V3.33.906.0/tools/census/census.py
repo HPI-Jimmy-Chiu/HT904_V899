@@ -136,10 +136,19 @@ def gate_depth_map(lines):
         t = l.strip()
         if re.match(r'^#\s*if\b|^#\s*ifdef\b|^#\s*ifndef\b', t):
             zero = bool(re.match(r'^#\s*if\s+0\b', t))
-            stack.append(zero or (stack and stack[-1]))
+            # BUG FIXED 20260810: this was `stack.append(zero or (stack and stack[-1]))`.
+            # When `stack` is EMPTY, `stack and stack[-1]` short-circuits to `stack` ITSELF,
+            # so appending it made the list SELF-REFERENTIAL. From then on `stack[-1]` was a
+            # non-empty list -- always truthy -- so EVERY line inside any #ifdef / #ifndef /
+            # #if <expr> block was reported as GATED. Effect: functions inside such blocks
+            # counted as NOT translated, understating completion; and the collision scans
+            # built on this helper skipped genuinely LIVE definitions (it hid 3 real stubs at
+            # PT-W5f's integration, which the linker then reported as duplicates).
+            # Non-nested `#if 0` blocks were accidentally correct, which is why this survived.
+            stack.append(bool(zero) or bool(stack[-1] if stack else False))
         elif t.startswith('#endif') and stack:
             stack.pop()
-        out.append(bool(stack and stack[-1]))
+        out.append(bool(stack[-1]) if stack else False)
     return out
 
 

@@ -144,10 +144,13 @@ void ShowMyMessage(AnsiString S1, AnsiString S2, AnsiString /*S3*/,
 //  ReadWriteTrayID -- golden csystem.h:245.  Sim: no-op (no RFID/2D reader).
 //  Declared in csystem.h; defined here for the canary so the SM links.
 // ---------------------------------------------------------------------------
+#if 0   // PT-W5f RETIRED (ReadWriteTrayID)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error, measured in build_0810_w5f.
 void ReadWriteTrayID(bool /*bRead*/)
 {
     // TODO(W6.x): wire to TrayID[][] read/write when the tray-ID subsystem lands.
 }
+#endif
 
 // ---------------------------------------------------------------------------
 //  RespondASECom -- declared in cpublic.h; its golden body (cpublic.cpp:729) is

@@ -174,8 +174,14 @@ bool CheckOutArmSuckICFallDown()                   { return false; }  // golden 
 //AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool DetectAutoTray(int,int*)                      { return true;  }  // golden csystem.h:232 -- offline: tray detected
 #endif
+#if 0   // PT-W5f RETIRED (MagazineBufferIsEmpty)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165. *** BEHAVIOUR DELTA, NOT NEUTRAL: the stub answered "buffer empty" unconditionally, so retiring it lets the real check actually run and it can now REFUSE. ***
 bool MagazineBufferIsEmpty(int)                    { return true;  }  // golden csystem.h:290 -- no magazine present
+#endif
+#if 0   // PT-W5f RETIRED (WhichMagazineBufferIsFull)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165.
 int  WhichMagazineBufferIsFull()                   { return -1;    }  // golden csystem.h:289 -- no magazine full
+#endif
 // -- W6.2c-OUT ADD: out-arm engine cross-module surface the 6 site-variant
 //    DoOutArm/DoPickFromShuttle SMs call (golden aoutarm.h:124 / aoutarm9045.cpp
 //    Steven 20161214).  No translated home yet -> offline-safe non-static defs so

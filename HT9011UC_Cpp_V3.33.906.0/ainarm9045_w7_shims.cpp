@@ -56,8 +56,11 @@ bool bShuttleKnock    = false;              // golden ainarm2.h:85 -- shuttle-kn
 //  suffices: Init is a no-op; DoInShZHome converges immediately (golden case-120
 //  terminal sets bResult=true) -> returns true ("Z home done") on the Sim HAL, which
 //  has no real In-Shuttle Z motor to home.  iInShZHomeTask owned here per golden :24461.
+#if 0   // PT-W5f RETIRED (iInShZHomeTask + InitDoInShZHome + DoInShZHome)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error, measured in build_0810_w5f.
 int  iInShZHomeTask = 1;                                                       // golden csystem.cpp:24461
 void InitDoInShZHome()              { iInShZHomeTask = 1; }                     // golden csystem.cpp:24462-24465
 bool DoInShZHome(int /*iShuttle*/)  { return true; }                           // golden csystem.cpp:24467 (Sim HAL: Z-home done)
+#endif
 
 #endif // HT9045_AINARM_W7_SHIMS_DEFINED

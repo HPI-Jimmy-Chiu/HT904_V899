@@ -206,7 +206,10 @@ int  iLastPortStatus[ePortTotal]     = {0};                    // golden cmydef.
 bool bForceSendLoaderIsEmpty         = false;                   // golden cmydef.cpp:5924 (JerryYang 20250618 : add)
 
 // -- functions (offline-safe) -------------------------------------------------
+#if 0   // PT-W5f RETIRED (DoLockUnloader)
+//AI(ht9045-v906) 20260810: PT-W5f -- RETIRED. csystem.cpp wave 2 landed the real faithful body in its golden home; keeping this stand-in is a multiple-definition error. Same convention as csystem_shims.cpp:165. *** BEHAVIOUR DELTA, NOT NEUTRAL: the stub answered "tray clamped OK" unconditionally, so retiring it lets the real check actually run and it can now REFUSE. ***
 bool DoLockUnloader(int /*iAuto*/)         { return true; }   // golden csystem.h:259 -- offline: unloader locked OK
+#endif
 void InitialTrayIDTask()                   {}                 // golden cTrayMapping -- reset tray-ID SM (no-op)
 void InitialTrayID2Task()                  {}                 // golden cTrayMapping -- reset tray-ID-2 SM (no-op)
 void InitialTrayMapTask(int /*iTrayMap*/)  {}                 // golden cTrayMapping -- reset tray-map SM (no-op)
