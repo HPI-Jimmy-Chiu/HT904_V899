@@ -5408,3 +5408,84 @@ gate 需要多個符號而只到了一部分；本體可達但**現在跑它是�
 打開就會在煞車仍咬住的情況下送馬達電）；或者那個「真本體」本身就是 stub。
 **每一筆命中的意思是「重新推導這個 gate 的前提」，不是「刪掉這個 gate」。**
 兩天內第三次遇到「稽核的診斷對、處方錯」。
+
+### 20260810 — PT-W5f 稽核 5 份全到：h3 拿到滿分，但「翻好了沒人叫」又出現 5 個
+
+3 個因連線錯誤死掉的 verify agent 用 `resumeFromRunId` 重派成功（翻譯 agent 從 cache 回放不重寫檔）。
+10 個 agent 全完成、0 失敗。
+
+**先把時序講清楚，否則會誤讀**：報告 1、2 是**整併之前**跑的，它們的
+「the tree does not link，11 個／5 個重複定義」在當時**是真的**，
+而且正是我整併時退役掉的那批 —— 已由 `8a1ca7b` 解決。
+報告 3、4、5 是重派、對**整併後**的樹跑的。
+
+**h3 拿到這個專案第一份乾淨評價**：
+「No BLOCKING findings. The h3 block is the highest-fidelity slice I have audited in this
+campaign」，golden 21991–23260 逐行重現 1268/1268。
+
+#### 整併後的發現全是同一個形狀：本體落地了，呼叫端不可達
+
+我自己量的（活呼叫點／被 gate 的呼叫點）：
+
+| 符號 | 本體 | 呼叫端 |
+|---|---|---|
+| `DoInitialCylinderCheck`（686 行，本組旗艦） | `csystem.cpp:23888` | **完全沒有呼叫點** |
+| `DoSwCoolingFan` | `:23177` | 0 活／8 被 gate |
+| `bCheckPLCConnet` | `:28195` | 0 活／2 被 gate |
+| `bCheckPLCAllSafedoorAndEMGEnable` | `:28227` | 0 活／1 被 gate（**安全：PLC 安全門＋EMG**） |
+| `MagazineBreakerOFF`／`CassetteBreakerOFF` | `:27829`／`:27863` | 各 0 活／7 被 gate（G9 鏈，**依指示刻意不開**） |
+| `CheckAllAutoTrayEjectFinsh` | `:23646` | 唯一文字呼叫點被**巨集接縫**導向 stub |
+
+`DoInitialCylinderCheck` 是真的功能缺口，不只是 gate：
+golden 唯一的呼叫點在 `DoAllProcess`（golden `csystem.cpp:9524-9528`：
+`if(bInitialCylinderCheck){ DoInitialCylinderCheck(); return; }`），
+而 port 的 `DoAllProcess`（`csystem.cpp:587`）**沒有這段**。
+`bInitialCylinderCheck` 在 `csystem.cpp:8116` 被設成 true，
+而清掉它的唯一地方在 `DoInitialCylinderCheck` 自己裡面 ——
+所以**旗標會永遠 latch 在 true，開機的氣缸 push/pop 檢查永遠不會跑**。
+
+#### 我自己的錯，記下來因為它差點埋掉一條對的發現
+
+我第一次快掃回報「`DoInitialCylinderCheck`: 2 個活呼叫點」，
+差一點就據此駁回稽核。那 2 個是一則註解和字串常數
+`fMain->Pause("DoInitialCylinderCheck")` —— **我的 regex 把字串當成呼叫點**。
+稽核是對的，我的臨時掃描是錯的。
+
+這是同一天內第二次「我的工具和事實不符」：
+上一次是 `census.py` 的 gate map 自我指涉（連結器抓到），這次是我臨時寫的呼叫點掃描。
+**共同教訓：臨時掃描器沒有 oracle 就不可信；連結器與 golden 才是 oracle。**
+
+#### 還有一類是文件缺陷
+
+好幾個 gate register 把上面這些本體標成 `ACTIVE`，而它們其實不可達。
+這和 `bde672b` 修掉的 G31a/G31b 假理由是同一類，要用可達性事實改掉。
+
+#### 處置
+
+全部歸到 task #17，與 #15（25 個巨集接縫）／#16（50 個過期 gate）同一類、按子系統小批處理。
+**本輪不動碼** —— PT-W5f 的翻譯與整併已經以兩組全綠（Debug 128/134、Release 128/134）
+commit 完成（`8a1ca7b`），這些是新工作，不是回歸。
+
+### 🔖 RESUME（最新）
+
+- **⚠ 第一件事仍是 `git status`。** 樹乾淨（只有 `b1d_idempotent_report.json` 測試產物）。
+- **`csystem.cpp` 已完成**：golden 240 個函式全部在 port 有活的本體。兩波、215 個函式、約 21k golden 行。
+  `8a1ca7b`（wave 2，Debug 128/134、Release 128/134，census 非表單 **79.4%**）、
+  `a9bd699`／`bde672b`（wave 1 稽核修正）、`6977fc3`（wave 1）。
+- **稽核已全部收回**（run `wf_2c066649-24e`，5 份，全文在
+  `scratchpad/w5f_reports.txt`）。**h3 拿到本專案第一份 No-BLOCKING 評價。**
+- **接續的第一件事＝task #17**，最重要的一條先做：
+  `DoInitialCylinderCheck`（`csystem.cpp:23888`，686 行）**完全沒有呼叫點**。
+  補 golden `csystem.cpp:9524-9528` 到 port 的 `DoAllProcess`（`csystem.cpp:587`）：
+  `if(bInitialCylinderCheck){ DoInitialCylinderCheck(); return; }`。
+  `bInitialCylinderCheck` 在 `:8116` 被設 true、只在 `DoInitialCylinderCheck` 內部清掉，
+  所以現在旗標永遠 latch true、開機氣缸檢查永遠不跑。**行為變更，單獨一顆 commit 單獨量。**
+- **然後**：#15（25 個巨集接縫）／#16（50 個過期 gate）／#17 其餘／#14（UseFix3Cylinder 解 stub）／
+  #12（安全門一家）／#10（GATE W5a-G）。**這五個是同一類：翻好了但沒接上。**
+- **下一個翻譯標的**（census `--detail` 重算後決定）：`cinitial.cpp` 其餘、
+  `aTester_Rear`／`aTester_Front`。`cContact.cpp`（22,324）最大但括號不平衡（+1）
+  且有同名 `.dfm`，**要不要算非表單需使用者決定**。
+- **工具現況**：`tools/census/census.py`（gate map 自我指涉 bug 已修，兩處）、
+  `tools/census/macro_seam_scan.py`、`tools/census/expired_gate_scan.py`。
+  **臨時掃描器沒有 oracle 不可信**——兩次都是連結器／golden 抓到我的掃描錯，不是反過來。
+- **執行模式**：非表單優先、每波全新 dir Debug+Release、行為變更單獨一顆 commit 單獨量。
