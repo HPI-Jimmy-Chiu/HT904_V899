@@ -24,6 +24,20 @@ KNOWN DISTORTIONS, stated because a number without them is misleading
     `BarCode_DoBarcodeCCDInShuttle_1`). Pure name matching UNDER-counts. An alias rule
     covers `<Prefix>_<GoldenName>` and `<Class>_<GoldenName>`; it is deliberately NOT a
     bare cross-class match, which would mis-pair `HT9045Gem::AddEC` onto a base method.
+  * OVERLOADS COLLAPSE, so overload-only gaps are INVISIBLE (found 20260809 during
+    PT-W5b). `functions()` keys by name, so golden's two
+    `HT9045Gem::S7F6_ProcessProgramData` -- the no-arg one at :5326 and the
+    `(AnsiString FileName)` one at :5605 -- became one entry, and the missing-function
+    list showed only one. If a port defines one overload and not the other, this census
+    reports the function as DONE. Fixing it properly means keying by signature, which
+    needs a real parameter-list parse (BCB6 default arguments and multi-line
+    declarations make the naive split wrong). Until then: for any file whose remaining
+    gap matters, grep golden for repeated definition names before trusting the count.
+    MEASURED SCOPE of this blind spot, so nobody has to guess how bad it is: across the
+    whole golden tree, 29 .cpp files contain a repeated `Class::method` name, hiding 72
+    extra definitions in total. So the "done" side of every percentage here is
+    optimistic by at most those 72 functions -- material for a per-file decision, not
+    enough to move the headline figures.
   * `#if 0` in a port file. Golden code kept inside `#if 0` is NOT translated behaviour.
     Port functions whose body is entirely gated are reported separately as GATED rather
     than counted as translated.

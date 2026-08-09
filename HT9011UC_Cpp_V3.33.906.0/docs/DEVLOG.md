@@ -4749,3 +4749,118 @@ census：非表單 **73.2% → 73.5%**（缺 89,973 → 89,263，正好是 992 �
   6. 稽核 `docs/_ptw4_agent_reports_20260809.txt` 其餘 ~30 條引用行號錯誤。
 - **執行模式**：使用者 20260808/0809 指示——優先純翻譯、`.dfm`／UI 先不處理、
   目標是編得起來；90% 以上信心就繼續執行；行為變更單獨一顆 commit 單獨量。
+
+---
+
+## 2026-08-09（續）— PT-W5b：`uHGemHT9045.cpp` 補完 20 個方法，並抓到一條「沒有 gate 所以看不到」的失效拒絕路徑
+
+> 本波由 `/loop /pt-wave` 自動波次驅動的第一個完整交付。交付
+> `SECSGEM/uHGemHT9045.cpp` 缺的 20 個 `HT9045Gem::` 方法（golden 5,568 code 行），
+> 檔案 334 → 7,689 行。非表單 **73.5% → 74.8%**、全案 43.3% → **44.1%**。
+
+### 為什麼選這個檔（而且不是最大的那個）
+
+RESUME 原本指向 GATE (W5a-G) 解閘。**開工前先量它的第 3 部分，結論是它不屬於翻譯波**：
+`tests/test_w6_4_tester.cpp:31-33` 自己的 banner 就寫著
+「case 9 after `Gali_Two_ZAxis_Move` succeeds (offline `Motor==NULL` -> true)」與
+「case 10 with `MOT.ISNormal()==true` (offline `Motor==NULL`)」——那十個測試是**照 stub 語意寫的**。
+掛一顆 `TMySimMotor` 也救不了：golden 的真 `Gali_Two_ZAxis_Move` 會走 ASCII/`DMCCommand`
+路徑、打到 `vendor_offline_galil.cpp` 的 `DMCERROR_CONTROLLER`，然後**正確地**不回報
+「移動完成」——所以 10 個 SEGFAULT 只是變成 10 個斷言失敗。
+那是**測試重新校準**，不是翻譯；而且它只擋住 myGALILmotor.cpp 有沒有 runtime 呼叫者，
+不擋任何翻譯。→ 記錄理由後改做政策裡另一個指名的提前拉：`uHGemHT9045.cpp`
+（它是 `AddSV`/`AddEC` override 宣告的家，少了它 PT-W4 交付的 SV/EC 字典永遠沒有呼叫者）。
+
+### 整併：又是只有連結器看得見的那一類
+
+補完的檔綁到 **7 個** `cmydef.cpp` 仍在 `#if 0` 裡的純全域
+（`bBindChkNG`／`bUnbindChkNG`／`bTRAYCHKNG`／`bNeedDoRunCheck`／`bSECSPause`／
+`iSV_ErrBinCnt`／`iSVByBinCount`）。`-fsyntax-only` 看不到這種，只有 link 會講。
+七個都先查過沒有 rival live 定義（全乾淨）才用 PT-W4 立下的 sandwich 慣例逐一 ungate。
+**累計 13 個 / ~93 個已 ungate；會撞的那 16 個仍然沒動。**
+
+### 稽核（8 個 agent，0 error）的結論與我先做的事一致
+
+- 它們唯一的 BLOCKING 程式碼發現就是上面那 7 個全域——**我在它們回報前就修掉了**，
+  其中一份還註明「closed by a concurrent edit at 17:35 that is itself unverified」，
+  那次 rc=0 的 build 就是它要的驗證。
+- 另一條 BLOCKING 是**流程**：「this wave shipped with no build at all」——當時屬實，
+  正是計畫書記過的那個陷阱，現已關閉。
+- 四份都**沒有**程式碼層的 BLOCKING。`S2F42` 的 golden :1144-4189 逐行恰好出現一次、
+  48 條 gate 引用全部正確；其中一份稱它是「the most faithful port block I have audited
+  on this tree」。
+
+### 本波最該記住的：一整類「沒有 gate 所以沒人看得到」的行為差異
+
+稽核指出 GATE REGISTER 只涵蓋 `#if 0` 那些，但**還有五個 golden `fMain` 呼叫是 ACTIVE、
+沒有 gate、而且完全無效**——它們落在 `forms/` facade 的 stub 上。其中一個會**殺掉
+golden 的拒絕路徑**：
+
+- `fMain->CanChangeSite(...)` 的 port facade 是 `return W906_CanChangeSite_Sim`，
+  **預設 true**（`forms/fMain.cpp:336`）。golden 的 `return 2`（"Denied. Busy"）因此是
+  **死碼**，於是 host 對 site on/off ECID 的 S2F15 寫入，會在 golden 本來要拒絕的狀態下
+  被接受。**方向是 fail-PERMISSIVE，對一個 authority check 來說是錯的方向。**
+- `fMain->cbSetupFileNameChange(fMain)` 是 offline 計數 stub（`forms/fMain.cpp:326`），
+  所以 `[A2]` 原本寫「the recipe switch itself ... is real」是**錯的**：只有
+  `cbSetupFileName->Text = PPID` 這個欄位寫入是真的，**整個切換都沒發生**，
+  差異不只是少了 S6F11。
+
+這**不是翻譯缺陷**——golden 呼叫它們，我們也呼叫；degraded 的是 facade。
+記進 register 是因為「沒有 gate」會被讀成「沒有差異」，而 CanChangeSite 那條這樣讀很危險。
+兩則都已寫進檔案的 register（`[A2]` 的更正 + 新增的「delta class」段）。
+
+### 兩個量測假象，都沒有被吸收成基準
+
+1. 我把三個函式讀成重複定義，正要當缺陷處理——`-fsyntax-only` 是乾淨的，
+   因為它們是 `#if 0`（golden 逐字）＋ live degraded arm 的**正常 gate 慣例**。
+   我的 grep 看不見 `#if 0`。真去「修」它會刪掉 golden 被保存的原文。
+2. 中途 ctest 出現 8 個失敗（常駐 6 ＋ `WB_Crypto`／`WB_WsProto` 的 **`BAD_COMMAND`**）。
+   那兩個 `.exe` **根本不存在**，而 CMake 卻回報 "Built target"——`build_0808_w3` 是
+   我從 PT-W3 一路重用的增量目錄，累積了 stale 狀態。**全新 dir 裡兩個假象都消失。**
+   這正是「交付數字只在全新 build dir 量」這條規則存在的理由，這次是它自己示範了一遍。
+
+### 我自己犯的錯（值得記，因為它正是我一直在挑 agent 的那一條）
+
+在 `cmydef.cpp` 的說明註解裡，我**憑記憶寫了七個行號，七個全錯**
+（寫 5957/5959/5961/6022/6028/6035/6038，實際是 5970/5973/5976/6035/6041/6048/6051）。
+這就是我整場在退回 agent 報告時說的「fabricated citation」。已重讀檔案更正，
+並把「第一版是猜的、全錯」寫在那則註解裡——一個看起來權威但是錯的引用，
+對下一個讀的人比一個明顯的空白更貴。
+
+### 順帶修好一個量法盲點（census）
+
+`tools/census/census.py` 依**名稱**建索引，所以**overload 會被摺疊**：golden 兩個
+`HT9045Gem::S7F6_ProcessProgramData`（`:5326` 無參數、`:5605` 吃 `AnsiString`）被算成一個，
+port 只翻其中一個也會被判為 DONE。翻譯 agent 自己抓到了那個 overload，但 census 沒有。
+**已量出盲點規模並寫進腳本**：全 golden 樹有 **29 個 .cpp 含重複的 `Class::method` 名稱、
+共藏著 72 個額外定義**。所以本檔每個百分比的「已翻」側最多樂觀 72 個函式——
+夠影響單檔決策，不足以動搖總量。
+
+### 驗證（全新 dir、最終樹、Debug 與 Release）
+
+| build dir（全新） | 建法 | build | ctest | 失敗集合 |
+|---|---|---|---|---|
+| `build_0809_w5b` | 未最佳化 | exit 0、0 error / 0 OOM | **128 / 134** | 計畫書 §7 那 6 個 |
+| `build_0809_w5b_rel` | Release（-O3 + NDEBUG） | exit 0、0 error / 0 OOM | **128 / 134** | **與上列逐項相同** |
+
+census：非表單 **73.5% → 74.8%**（缺 89,263 → 84,897）；全案 43.3% → **44.1%**。
+
+### 🔖 RESUME（最新）
+
+- **⚠ 接續第一件事仍是 `git status`，不是讀本 RESUME。**
+- **PT-W5b 已完成並已驗證**（本顆 commit）。自動波次命令包 `/loop /pt-wave` 運作正常，
+  這是它的第一個完整交付。
+- **下一步（照 census 缺口，政策的提前拉已用完）**：
+  1. `csystem.cpp`（**17,638** 行，204 個函式）——非表單最大塊。建議切 3–4 波，
+     單波 ≤15k 行。
+  2. `cinitial.cpp` 其餘（11,025）／`aTester_Rear`（7,573）／`aTester_Front`（6,353）。
+  3. `cContact.cpp`（22,324）最大，但有同名 `.dfm`——politics 上算表單邊界，
+     內容其實是接觸力計算。**要不要納入非表單範圍，需使用者決定。**
+- **仍然待辦、且都已量清楚**：
+  - GATE (W5a-G) 三部分（見上，第 3 部分是 10 個測試重新校準）
+  - `cmydef.cpp` 尾巴其餘 80 個全域（16 個會撞 shim 家）
+  - mykitsuck substrate 回家波（併 `TInLaserCheck` ODR 債）
+  - 稽核的 prose/citation findings：PT-W4 約 30 條 + PT-W5b 這批（存放於
+    `docs/_ptw4_agent_reports_20260809.txt` 與 workflow journal）
+- **執行模式**：非表單優先、`.dfm`／UI 不處理、每波全新 dir Debug+Release、
+  行為變更單獨一顆 commit 單獨量。

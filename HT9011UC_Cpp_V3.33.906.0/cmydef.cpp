@@ -5813,6 +5813,20 @@ bool bRun2DCheck;                                                               
 //------------------------------------------------------------------------------
 //AI(W0-TAIL) 20260626: TODO(W6) -- InitialMemory/GetTotalYield_* reach state
 //  machines + app globals + TMyStringList bodies. Gated to EOF.
+// AI(W906-PT-W5b-integrate) 20260809 UPDATE: now split in THIRTEEN places, not six.
+//   PT-W5b's completion of SECSGEM/uHGemHT9045.cpp binds SEVEN MORE of this block's plain
+//   globals, and they surfaced the same way the first six did -- as undefined references
+//   at link, not as anything a compile would catch:
+//       :5970 bBindChkNG      :5973 bUnbindChkNG    :5976 bTRAYCHKNG
+//       :6035 bNeedDoRunCheck :6041 bSECSPause      :6048 iSV_ErrBinCnt
+//       :6051 iSVByBinCount
+//   (line numbers as they stand AFTER the sandwiches, re-read from the file rather than
+//   computed -- my first draft of this list guessed them and every one was wrong, which
+//   is the same fabricated-citation failure this project keeps catching in audit agents.)
+//   All seven were checked for a rival live definition first -- all seven clean -- so the
+//   running total is 13 un-gated of the ~93, and the 16 that WOULD collide are still
+//   untouched.  Everything the PT-W4 note below says still applies unchanged.
+//
 // AI(W906-PT-W4-integrate) 20260809: THIS GATE IS NOW SPLIT IN SIX PLACES, and the
 //   reason is that its own stated premise only ever covered part of what it encloses.
 //   The premise -- "function bodies depend on untranslated globals/state machines" -- is
@@ -5954,9 +5968,15 @@ int i2DMAPCHKSTEP;                                                              
 #endif // AI(W906-PT-W4-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045_EC.cpp binds it; see the note at this block's head
 int iBundleDieQty=0;                                                            //JerryYang 20250224 : add
 #if 0 // ...resume the TODO(W6) gate
+#endif // AI(W906-PT-W5b-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045.cpp binds it; see this block's head note
 bool bBindChkNG=false;
+#if 0 // ...resume the TODO(W6) gate
+#endif // AI(W906-PT-W5b-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045.cpp binds it; see this block's head note
 bool bUnbindChkNG=false;
+#if 0 // ...resume the TODO(W6) gate
+#endif // AI(W906-PT-W5b-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045.cpp binds it; see this block's head note
 bool bTRAYCHKNG=false;
+#if 0 // ...resume the TODO(W6) gate
 AnsiString sUnloadBin[MAX_UNLOAD_TRAY];
 bool bNeedReportBundleID[eTrayCount];
 TMyStringList *slHanaTrayMap[eTrayCount];
@@ -6013,17 +6033,25 @@ AnsiString sSiteMapASECL="";
 AnsiString sBinMap="";
 #if 0 // ...resume the TODO(W6) gate
 int iWhoTrigerASV=0;
+#endif // AI(W906-PT-W5b-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045.cpp binds it; see this block's head note
 bool bNeedDoRunCheck;
+#if 0 // ...resume the TODO(W6) gate
 int iPauseTime=0;
 int iNetUPH=0;
 int iGrossUPH=0;
+#endif // AI(W906-PT-W5b-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045.cpp binds it; see this block's head note
 bool bSECSPause=false;
+#if 0 // ...resume the TODO(W6) gate
 bool bHasChangePlate=false;
 bool bDoInZTeach=false;
 bool bDoOutZTeach=false;
 bool bNeedDoRemainCheck=false;
+#endif // AI(W906-PT-W5b-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045.cpp binds it; see this block's head note
 int iSV_ErrBinCnt=0;
+#if 0 // ...resume the TODO(W6) gate
+#endif // AI(W906-PT-W5b-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045.cpp binds it; see this block's head note
 int iSVByBinCount[TEST_MAX_BIN];
+#if 0 // ...resume the TODO(W6) gate
 bool bTrayArmIsPickColor=false;
 bool bNeedBigMsg=false;
 #endif // AI(W906-PT-W4-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045_EC.cpp binds it; see the note at this block's head
