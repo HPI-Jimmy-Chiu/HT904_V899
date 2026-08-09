@@ -38,6 +38,31 @@ KNOWN DISTORTIONS, stated because a number without them is misleading
     extra definitions in total. So the "done" side of every percentage here is
     optimistic by at most those 72 functions -- material for a per-file decision, not
     enough to move the headline figures.
+  * ABBREVIATED BODIES COUNT AS DONE -- the largest distortion found so far, and it goes the
+    OPTIMISTIC way (found 20260810 during PT-W5f's audit). This census asks "does a port
+    function of this name exist and is it not wholly gated". It never compares SIZE. The
+    port's established practice is to preserve golden's body VERBATIM inside `#if 0` and
+    supply a small LIVE no-op beside it with a gate note, e.g. csystem.cpp DoTrayFeedProcess:
+    golden's 1,235 lines sit gated at :6249, and the live body at :7487 is 6 lines of
+    explanation. This census scores that function as fully translated.
+    The extreme case is csystem.cpp's own MainProc: golden 2,390 lines, live port body 26.
+    DoAllProcess is the same shape -- golden 1,141 lines against a 239-line port body whose
+    entire early-return ladder (golden :9165-10047, 883 lines) is a TWELVE-LINE SUMMARY
+    inside one `#if 0`, containing text like `/* ... ~300 lines ... */`.
+    MEASURED with tools/census/body_size_scan.py: of 1,356 comparable port bodies, 74 are
+    under 50% of their golden span. Restricted to golden files whose braces balance (the
+    others have unreliable spans -- see the brace-walk distortion below), 59 remain: 52
+    NON-FORM functions accounting for 14,905 golden lines, plus 7 form functions at 981.
+    EFFECT ON THE HEADLINE, stated because every percentage in this file inherits it:
+        non-form as reported here      done 267,261 / 336,509 = 79.4%
+        non-form adjusted for this     done 252,356 / 336,509 = 75.0%
+    So the non-form figure is optimistic by about 4.4 points. That is a FLOOR on the
+    overstatement, not a ceiling: the scan only catches bodies under half size, so partial
+    translations between 50% and 100% are still counted as complete.
+    NOT FIXED HERE ON PURPOSE. Making span a pass/fail criterion would be wrong -- port
+    bodies are routinely LONGER than golden because of banners and gate notes, and a shorter
+    body can be legitimate when a block was correctly relocated. Use body_size_scan.py as a
+    RANKING of where to look, and quote the adjusted figure alongside the raw one.
   * ONE-LINE DEFINITIONS ARE INVISIBLE (found 20260809 during PT-W5c). `DEFN` ends with
     `\([^;]*$` -- '(' and no ';' on the line -- so a body written on a single line is not
     recognised as a definition at all:
