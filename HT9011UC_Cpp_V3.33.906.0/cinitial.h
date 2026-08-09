@@ -41,4 +41,13 @@ void InitialSensor();
 void InitialSafeDoor();
 void InitialHeaterDoor();
 
+//------------------------------------------------------------------------------
+//  GA-2-IMP  (golden cinitial.cpp:3392-4101)
+//  Declared here because golden cinitial.h:13 declares exactly this.
+//  NOTE: InitialMotorName() (golden cinitial.cpp:3109) is deliberately NOT
+//  declared -- golden declares it in no header either; its only caller is
+//  InitialMotorParameter, same TU, definition-first.
+//------------------------------------------------------------------------------
+void InitialMotorParameter();                   // golden cinitial.h:13
+
 #endif

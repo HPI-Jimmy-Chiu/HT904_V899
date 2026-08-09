@@ -25,6 +25,8 @@
 
 ### 可用斜線指令
 - HT9045：`/ht9045-debug`、`/ht9045-v899-build`、`/ht9045-skill-factory`
+- V906 純翻譯戰役：`/pt-wave`（執行一個完整波次；搭 `/loop /pt-wave` 自動連續推進，
+  政策見 `pt-wave-loop` skill。**範圍只到非表單翻完為止**，表單 facade 策略要使用者先定案）
 - 治理：`/ops-daily-worklog`、`/ops-weekly-review`、`/ops-skill-maintenance`、`/ops-new-project-bootstrap`
 - 週報/案件（Hub，操作 Weekly_AI）：`/update-weekly`、`/weekly-status`、`/weekly-case-intake`、`/weekly-case-integrity`、`/weekly-next-week`、`/weekly-help`
 

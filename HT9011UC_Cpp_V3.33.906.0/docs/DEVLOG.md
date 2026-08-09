@@ -4581,3 +4581,171 @@ EC 的 6 個 gated 全域、`IndexZCanMove` 初始值反轉）。其餘屬 cosme
   （PT-W4 收掉最後 7 個）。剩下的非表單工作全是「翻一半」的補完，不是新檔。
 - **執行模式**：使用者 20260808 指示——(1) 優先純翻譯、(2) `.dfm`／UI 相關先不處理、
   (3) 目標是編得起來並能用 console 驅動開啟。
+
+---
+
+## 2026-08-09（續）— PT-W5a：翻 992 行，然後量到「退役 48 個 stub 會讓 10 個測試 SEGFAULT」
+
+> 本波交付 `cinitial.cpp` 的 `InitialMotorParameter`（golden :3392-4101，710 行）與
+> `InitialMotorName`（golden :3109-3390，282 行）。**但真正的成果是把 Sim-motor 耦合從
+> 「推測」變成「量到的三部分」**，並且沒有讓失敗集合擴大。
+
+### 為什麼先做這兩個函式（重新排序，不照行數大小）
+
+`cContact.cpp`（22,324）與 `csystem.cpp`（17,638）才是最大塊，但這兩個先做，因為
+**它們是 `MOT[].Motor` 唯一的忠實家**。golden 的 `InitialMotorParameter` 依
+`HSys.MotTable[iMot]->CardModel` 為每個軸 `new TMyGALILMotor / TMyMN200Motor /
+TMySYNTEKMotor / TMyEtherCatMotor / TMySMCMotor`。
+
+而且**golden 自己的模擬姿態就寫在裡面**：`#ifdef SOFT_SIMULTE` 分支
+（golden :3483-3484、:3548-3549）**照樣 `new`，只把 `Enable` 設 false**。
+所以 golden 的模擬狀態是「掛好但停用」，**從來不是 NULL**。
+先發明一個 offline attach 接縫再讓這一波拆掉，是白做——這是刻意的排序理由。
+
+前置條件是查過才動的：`HSys.MotTable` 真的存在且**已被填滿**
+（`database.h:320`，`LoadMotData()` 解析 `system/Mot_Table.csv`，
+`tests/test_config_loaders.cpp:186` 已經在斷言 `CardModel=="SMC"`），
+`TMOTDATA`（`database.h:125-160`）帶著這個函式要讀的每一個欄位。
+
+### 兩個新的 vendor 牆，都是同一個陷阱的下一節
+
+**(1) CONTEC SMC —— 46 個符號。** `Motor/mySMCmotor.cpp` 在 archive 裡放了好幾波，
+帶著 46 個未解析的 `SmcW*`，一直沒事——因為**全樹沒有任何東西引用 `TMySMCMotor`**，
+那個 object 從來不被抽出。`InitialMotorParameter` 的 `new TMySMCMotor(iAdder)` 是
+第一個消費者。量法（稽核 agent 先做、我重跑一次確認）：
+`nm --undefined-only` 顯示 `mySMCmotor.cpp.obj` 恰好 46 個 `_SmcW*@N`，
+`nm --defined-only` 掃全部 archive **一個都沒有**。
+→ 新增 `Motor/vendor_offline_smc.cpp`（第三個 offline vendor 層）。
+回傳值語意沒有 vendor 常數可引（CSmc.h 沒有錯誤碼表），所以是**從呼叫端讀出來的**：
+`mySMCmotor.cpp:395-398` 自己寫 `if(ret!=0) return false;`，所以回非零（-1）＝失敗。
+
+**(2) Hontech M4 —— 26 個符號，而且這個更有意思：本體早就翻好了。**
+`_Hon_m4_*` 的實體就在 `Motor/Hontech_M4.cpp:157` 起（已翻譯的單元），
+但 `Motor/Hontech_M4.h:61-64` 讓 `DLLDIR` 預設是 `__declspec(dllimport)`，
+所以 `mySYNTEKmotor.cpp` 發的是 `_imp___Hon_m4_*` thunk 引用，
+而 `Hontech_M4.cpp` 定義的是純 `__Hon_m4_*`——**兩邊從來沒對上**。
+沒爆是因為沒人引用 `TMySYNTEKMotor`。採用前先探針，不是假設：
+
+```
+無 DLLDIR_EX  -> 呼叫端發 _imp___Hon_m4_initial@8   （沒有任何東西定義它）
+有 DLLDIR_EX  -> 呼叫端發   __Hon_m4_initial@8
+Hontech_M4.cpp.obj 定義的是      __Hon_m4_initial@8   <-- 對上
+```
+
+→ 全域 `add_compile_definitions(DLLDIR_EX)`。**這不是加 stub，是把大約 2,000 行
+早就翻好卻連不上的碼接起來。**
+
+### 本波最重要的產出：把 Sim-motor 耦合量成三部分
+
+`new TMyGALILMotor` 是 `TMyGALILMotor` 的第一個消費者，所以它讓連結器抽出
+`myGALILmotor.cpp.obj`，那 48 個真的 `TMyMotor::Gali_*` 就和 `Motor/mymotor.cpp:944-994`
+還站著的 48 個 ACTIVE stub 對撞——**量到剛好 48 個 `multiple definition`，
+和先前用修飾名交集算出來的數字一致。**
+
+於是我**真的把 48 個 stub 退役了，然後量結果**：
+
+| 狀態 | build | ctest |
+|---|---|---|
+| 退役 48 個 stub | rc=0、0 undefined | **19 個失敗**（常駐 6 ＋ **10 個新 SEGFAULT** ＋ 3 個 dfm2rc/Trace） |
+
+十個新 SEGFAULT：`W6_4_Tester`、`W6_4b_FrontRearDestroy`、`W6_5_Shuttle`、`W6_6_Hub`、
+`W6_6_CSystemCycle`、`W7_S0_MotorConvergence`、`W7_C1_CleanOutFinish`、
+`W7_C2_OneCycleFinish`、`W906_DoIndexAutoClean`、`W5_Atester32Site`。
+
+**根因**：golden 的真 Galil 本體**無防護地** deref `MOT[i].Motor`——golden 可以，
+因為 golden 一定先跑 `InitialMotorParameter`——而被退役的 48 個裡有三個
+（`Gali_Two_ZAxis_Move`／`ISNormal`／`GalilTwoY_Move`）回的是 `(Motor==NULL)`
+當 offline 的「完成」答案，那正是這十個測試一直站著的東西。
+
+**所以「Motor 是 NULL」和「那三個 fast path」是同一個約定的兩半**，
+而且**還要加上第三半**：那十個測試必須像 golden 一樣先掛馬達。
+
+### 處置：照自己的停止條件辦——不擴大失敗集合，把阻塞變成一行
+
+失敗集合從 6 變 19 觸發了 `pt-wave-loop` 自己寫的停止條件，所以我**還原了退役**，
+改成把「唯一活的 Galil 建構分支」用一個具名旗標 gate 起來
+（`cinitial.cpp:3732` `W5aG_INDEX_GALIL_BRANCH_ENABLED = false`）。
+
+**注意這裡踩到一個我自己造的坑並修掉**：第一版只 gate 了 `new TMyGALILMotor` 那一行，
+但下面緊接著就是 `MOT[i].Motor->Enable=...`——gate 掉 new 之後那是 NULL deref。
+正確做法是把**整個 index-axis 分支**跳過（旗標放進 `if` 條件），
+讓那四個軸落到 golden 自己的 CardModel 路徑／尾迴圈，
+變成 `TMySYNTEKMotor(-1)` + `Enable=false`——**掛好但停用，非 NULL，可安全 deref**，
+正是 golden `#ifdef SOFT_SIMULTE` 對每個軸的姿態。
+
+**GATE (W5a-G) 的解閘是一波三件事，缺一個就會紅**：
+1. 把 `cinitial.cpp:3732` 的旗標翻成 true
+2. 退役 `Motor/mymotor.cpp:944-994` + `:1043-1045` 全 48 個，
+   **但保留 :963 `Gali_MotHome_HighSpeed`**（myGALILmotor.cpp 沒有它）
+3. 讓那十個測試在 pump 之前掛馬達（golden 的路徑：
+   `InitHontechHardware` → `InitialMotorParameter`）
+
+退役腳本已寫好且 dry-run 乾淨（48 個定位無誤、:963 正確排除）。
+
+### 翻譯品質（我自己複驗的部分）
+
+- 稽核 agent 用「把落地區域的 golden 衍生行抽回來、剝掉 banner 與 4 個 gate 註解、
+  和 cp950 解碼的 golden 對 diff」的方式證明 **710 行逐位元相同**。
+- 我自己驗：`-fsyntax-only` 0 errors、UTF-8、**零 U+FFFD**、EOL 未變（純 LF）、
+  五條 driver 分支都在。
+- 稽核指出的 4 個 gate 我逐條看過，其中兩個值得記：
+  - **GATE 2（382 行）**：`MOTION_CARD_TYPE==0` 的 motor.db 臂與尾巴的 `else`
+    （motor_SMC.db）都 gated。**這台機器的 `Gerneral.ini` 是 `IO_CARD_TYPE=1`／
+    `MOTION_CARD_TYPE=1`，所以它本來會走那個 gated 的 `else`**——真機上會變成
+    「164 軸全部掛好但停用、且不會有 alarm」（golden 的
+    `ShowMyMessage("motor.db does not exist")` early-return 也在 gate 裡）。
+  - **GATE 3 是安全相關且是硬連結阻塞**：`MotorIdleSafeDoorCheck=IdleCheckSafeDoor`
+    取的是**函式位址**，而 `IdleCheckSafeDoor` 全樹零定義（宣告在 `csystem.h:239`，
+    本體是 golden `csystem.cpp:2749`，未翻）。`-fsyntax-only` 抓不到這種。
+    callback 留 NULL 時 `HTMotor::CheckIsSafeDoorOpen()` 退回 `return (Enable==true)`，
+    方向是 fail-safe（擋住動作，不會誤許），而本機所有軸 `Enable=false`，所以目前無影響。
+
+### 驗證（全新 dir、最終樹、Debug 與 Release）
+
+| build dir（全新） | 建法 | build | ctest | 失敗集合 |
+|---|---|---|---|---|
+| `build_0809_w5a` | 未最佳化 | exit 0、0 error / 0 OOM | **128 / 134** | 計畫書 §7 那 6 個 |
+| `build_0809_w5a_rel` | Release（-O3 + NDEBUG） | exit 0、0 error / 0 OOM | **128 / 134** | **與上列逐項相同** |
+
+**Release 第一輪出現第 7 個失敗，追到底才敢說它不是缺陷。** `w7_f1_wall2_probe` SEGFAULT，
+Debug 那輪同一個測試是 Passed（8.65s）。沒有直接當 flake：
+(1) 單獨跑 3/3 過、(2) 透過 ctest 單獨跑也過、(3) **關掉我自己所有並行工作、重跑整套
+Release ctest** → 128/134，第 7 個沒有再出現。所以成因是我自己同時在跑 build/grep 造成的
+資源競爭（這台機器連 32-bit cc1plus 都會 OOM，記憶體是緊的），不是 -O3 缺陷。
+**「重跑就過」本身不是證據**——本專案有真的間歇性缺陷前例（TQPF_Timer 掛鐘 watchdog），
+所以第 3 步那次乾淨重跑才是結論。
+
+（gate 開始之後我只動過一件事：把新檔 `Motor/vendor_offline_smc.cpp` 的 EOL 從混合
+正規化成純 LF 以對齊兩個姊妹 vendor 層。純換行符變更不可能改變 token 串
+（該檔無 raw string literal），所以數字仍然涵蓋最終樹。）
+
+census：非表單 **73.2% → 73.5%**（缺 89,973 → 89,263，正好是 992 行）；全案 43.2% → 43.3%。
+
+census：非表單 **73.2% → 73.5%**（缺 89,973 → 89,263，正好是 992 行）；全案 43.2% → 43.3%。
+
+### 🔖 RESUME（最新）
+
+- **⚠ 接續第一件事仍是 `git status`，不是讀本 RESUME。**
+- **PT-W5a 已完成並已驗證**：全新 dir、Debug 與 Release 各 **128/134**，失敗集合＝§7 那 6 個。
+  交付 `cinitial.cpp` 的 `InitialMotorParameter`（710 行）＋`InitialMotorName`（282 行），
+  非表單 73.2% → **73.5%**。
+- **本場次共 7 顆 commit**：`3c49b7b` PT-W3 收尾／`ac7ca9a` CosFunction 解閘／
+  `9fee881` SCK_ART gate #8／`7256a57` PT-W4 暫停記錄／`558ec79` PT-W4 整併／
+  `e14ed17` census 工具＋更正／本顆 PT-W5a。
+- **自動波次命令包已建好**（使用者 20260809 決定的三個參數都寫進去了）：
+  `.claude/commands/pt-wave.md`、`.claude/skills/pt-wave-loop/SKILL.md`
+  ＋ Copilot 鏡像 `.github/prompts/pt-wave.prompt.md`、`.agents/skills/pt-wave-loop/SKILL.md`。
+  啟動：`/loop /pt-wave`。範圍＝**只做非表單，到表單邊界就停**。
+- **下一步（照優先序）**：
+  1. **GATE (W5a-G) 解閘＝一波三件事**（見上，缺一個就 10 個測試 SEGFAULT）：
+     翻 `cinitial.cpp:3732` 旗標 ＋ 退役 mymotor.cpp 的 48 個 stub（保留 :963）
+     ＋ 讓那十個測試先掛馬達。退役腳本已備好且 dry-run 乾淨。
+  2. **`SECSGEM/uHGemHT9045.cpp`（5,568 行）**：它是 `AddSV`/`AddEC` 兩個 override 宣告的家，
+     少了它 PT-W4 交付的 SV/EC 字典永遠是 gated 的自由函式、沒有呼叫者。
+  3. **`csystem.cpp`（17,638）／`cinitial.cpp` 其餘（11,025）／`aTester_Rear`（7,573）／
+     `aTester_Front`（6,353）** —— 非表單剩餘 89,263 行的主體。
+  4. `cmydef.cpp` 全域 gate 拆分（尾巴 93 個裡 77 個可安全 ungate、16 個與 shim 家衝突）。
+  5. mykitsuck substrate 回家波（併 `TInLaserCheck` ODR 債）。
+  6. 稽核 `docs/_ptw4_agent_reports_20260809.txt` 其餘 ~30 條引用行號錯誤。
+- **執行模式**：使用者 20260808/0809 指示——優先純翻譯、`.dfm`／UI 先不處理、
+  目標是編得起來；90% 以上信心就繼續執行；行為變更單獨一顆 commit 單獨量。

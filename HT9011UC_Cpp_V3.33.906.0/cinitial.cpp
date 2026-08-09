@@ -3234,3 +3234,1304 @@ void InitialHeaterDoor()
 //    //<==
 //    //Alick 20161011 (Steven) : TTL支援8Site
 //}
+//==============================================================================
+//------------------------------------------------------------------------------
+//  InitialMotorName  (golden cinitial.cpp:3109-3390)
+//
+//  The MOT[] identity/name table -- golden's sibling of InitialMotorParameter
+//  (golden :3392-...), and the exact analogue of InitialSuckerName (:314 here) /
+//  InitialSwitchName (:1122) / InitialSensorName (:1740).  274 flat
+//  MOT[<enum>].SetAlias(<literal index>, "<alias>") calls, nothing else: no
+//  control flow, no #ifdef, no golden dead code, no external state.
+//
+//  ZERO GATING -- byte-identical to golden.  Verified before landing
+//  (AI(W906-GA2-IMN) 20260809):
+//    * all 274 MOT[] index symbols (MInArmX .. MMUnloadPort4) are declared
+//      `extern const int` in cmydef.h AND defined in cmydef.cpp
+//      (ht9045_globals).  Values are 0..273, all distinct, all < the
+//      MAX_TRAY_MOTOR (300) bound of MOT[] -- so every subscript here is in
+//      range.  0 missing.
+//    * every one of the 274 port cmydef.cpp values equals the literal index
+//      golden passes as SetAlias's first argument, and equals golden
+//      cmydef.cpp's own value -- i.e. MOT[MInArmX].SetAlias(0,..) is
+//      self-consistent in the port exactly as in golden.  0 divergences.
+//    * MOT[] is `extern class TTrayMotor MOT[MAX_TRAY_MOTOR]` @
+//      Motor/mymotor.h:385, DEFINED at Motor/mymotor.cpp:124 (ht9045_motor);
+//      TTrayMotor is declared in exactly ONE header in the tree
+//      (Motor/mymotor.h:318) -- no second-layout hazard here.
+//      MOT[] is already visible in this TU transitively via
+//      aHotPlateSubstrate.h:68 -> "Motor/mymotor.h", so this unit adds NO
+//      #include (append-only constraint honoured).
+//    * TMyMotor::SetAlias(int,AnsiString) is ACTIVE at Motor/mymotor.cpp:227
+//      and its body matches golden Motor/mymotor.cpp:396-401 statement for
+//      statement (Alias=Name; Mot_Name=iNo; NumberAlias.sprintf("[%02d] %s",
+//      iNo, Name)) -- whitespace-only diff.  So the observable effect of this
+//      function is identical to golden's.
+//
+//  NOT declared in cinitial.h -- deliberately.  Golden's cinitial.h does NOT
+//  declare InitialMotorName either; golden's ONLY caller is
+//  InitialMotorParameter at golden cinitial.cpp:3407, i.e. same TU, later in
+//  the file, relying on definition-before-use.  When InitialMotorParameter
+//  lands in this port file it MUST be appended AFTER this definition (as in
+//  golden) or it will need a forward declaration -- flagged for the
+//  integration step rather than pre-empted here.
+//
+//  Four aliases intentionally DIFFER from their enum spelling and MUST NOT be
+//  "corrected": MInShuttle1->"MInShutte1", MInShuttle2->"MInShutte2"
+//  (golden :3122 carries the warning comment), MInRotateKit->"MInRotate",
+//  MOutRotateKit->"MOutRotate" (:3152).  The alias is the Teaching-file key;
+//  renaming it breaks teach-data lookup on a real machine.  Preserved verbatim,
+//  typo and all.
+//
+//  Translator: AI(W906-GA2-IMN) 20260809
+//------------------------------------------------------------------------------
+void InitialMotorName()                                                         //Steven 20250520 : 變更Mot初始化方式
+{
+    MOT[MInArmX       ].SetAlias(  0, "MInArmX");
+    MOT[MInArmY       ].SetAlias(  1, "MInArmY");
+    MOT[MInArmPitch   ].SetAlias(  2, "MInArmPitch");
+    MOT[MInArmZA      ].SetAlias(  3, "MInArmZA");
+    MOT[MInArmZB      ].SetAlias(  4, "MInArmZB");
+    MOT[MInArmZC      ].SetAlias(  5, "MInArmZC");
+    MOT[MInArmZD      ].SetAlias(  6, "MInArmZD");
+    MOT[MInArmZE      ].SetAlias(  7, "MInArmZE");
+    MOT[MInArmZF      ].SetAlias(  8, "MInArmZF");
+    MOT[MInArmZG      ].SetAlias(  9, "MInArmZG");
+    MOT[MInArmZH      ].SetAlias( 10, "MInArmZH");
+    MOT[MInShuttle1   ].SetAlias( 11, "MInShutte1");                            //不可以改成MInShuttle1, 會造成Teaching異常
+    MOT[MInShuttle2   ].SetAlias( 12, "MInShutte2");
+    MOT[MTestY1       ].SetAlias( 13, "MTestY1");
+    MOT[MTestZ1       ].SetAlias( 14, "MTestZ1");
+    MOT[MTestZ2       ].SetAlias( 15, "MTestZ2");
+    MOT[MTestY2       ].SetAlias( 16, "MTestY2");
+    MOT[MOutShuttle1  ].SetAlias( 17, "MOutShuttle1");
+    MOT[MOutShuttle2  ].SetAlias( 18, "MOutShuttle2");
+    MOT[MOutArmX      ].SetAlias( 19, "MOutArmX");
+    MOT[MOutArmY      ].SetAlias( 20, "MOutArmY");
+    MOT[MOutArmPitch  ].SetAlias( 21, "MOutArmPitch");
+    MOT[MOutArmZA     ].SetAlias( 22, "MOutArmZA");
+    MOT[MOutArmZB     ].SetAlias( 23, "MOutArmZB");
+    MOT[MOutArmZC     ].SetAlias( 24, "MOutArmZC");
+    MOT[MOutArmZD     ].SetAlias( 25, "MOutArmZD");
+    MOT[MOutArmZE     ].SetAlias( 26, "MOutArmZE");
+    MOT[MOutArmZF     ].SetAlias( 27, "MOutArmZF");
+    MOT[MOutArmZG     ].SetAlias( 28, "MOutArmZG");
+    MOT[MOutArmZH     ].SetAlias( 29, "MOutArmZH");
+    MOT[MTrayX        ].SetAlias( 30, "MTrayX");
+    MOT[MInArmPitchY  ].SetAlias( 31, "MInArmPitchY");
+    MOT[MInArmPitchX2 ].SetAlias( 32, "MInArmPitchX2");
+    MOT[MOutArmPitchY ].SetAlias( 33, "MOutArmPitchY");
+    MOT[MOutArmPitchX2].SetAlias( 34, "MOutArmPitchX2");
+    MOT[MLoaderZ      ].SetAlias( 35, "MLoaderZ");
+    MOT[MEmptyZ       ].SetAlias( 36, "MEmptyZ");
+    MOT[MColorZ       ].SetAlias( 37, "MColorZ");
+    MOT[MAuto1Z       ].SetAlias( 38, "MAuto1Z");
+    MOT[MAuto2Z       ].SetAlias( 39, "MAuto2Z");
+    MOT[MAuto3Z       ].SetAlias( 40, "MAuto3Z");
+    MOT[MInRotateKit  ].SetAlias( 41, "MInRotate");                             //不可以改成MInRotateKit, 會造成Teaching異常
+    MOT[MOutRotateKit ].SetAlias( 42, "MOutRotate");
+    MOT[MAOIKit       ].SetAlias( 43, "MAOIKit");
+    MOT[MLoaderY      ].SetAlias( 44, "MLoaderY");
+    MOT[MEmptyY       ].SetAlias( 45, "MEmptyY");
+    MOT[MColorY       ].SetAlias( 46, "MColorY");
+    MOT[MAuto1Y       ].SetAlias( 47, "MAuto1Y");
+    MOT[MAuto2Y       ].SetAlias( 48, "MAuto2Y");
+    MOT[MAuto3Y       ].SetAlias( 49, "MAuto3Y");
+    MOT[MInArmZAe     ].SetAlias( 50, "MInArmZAe");                             //Steven 20230323 : For HT1032
+    MOT[MInArmPitchX3 ].SetAlias( 51, "MInArmPitchX3");
+    MOT[MInArmPitchX4 ].SetAlias( 52, "MInArmPitchX4");
+    MOT[MInArmZAf     ].SetAlias( 53, "MInArmZAf");
+    MOT[MOutArmPitchX3].SetAlias( 54, "MOutArmPitchX3");
+    MOT[MOutArmPitchX4].SetAlias( 55, "MOutArmPitchX4");
+    MOT[MTrayZ        ].SetAlias( 56, "MTrayZ");
+    MOT[MOutSortAa    ].SetAlias( 57, "MOutSortAa");                            //Steven 20240822 : For HT-9046AU
+    MOT[MOutSortAb    ].SetAlias( 58, "MOutSortAb");
+    MOT[MInArmXScale  ].SetAlias( 59, "MInArmXScale");
+    MOT[MInArmYScale  ].SetAlias( 60, "MInArmYScale");
+    MOT[MOutArmXScale ].SetAlias( 61, "MOutArmXScale");
+    MOT[MOutArmYScale ].SetAlias( 62, "MOutArmYScale");
+    MOT[MShuttle1Pitch].SetAlias( 63, "MShuttle1Pitch");
+    MOT[MShuttle2Pitch].SetAlias( 64, "MShuttle2Pitch");
+    MOT[MInRotateB    ].SetAlias( 65, "MInRotateB");
+    MOT[MInRotateC    ].SetAlias( 66, "MInRotateC");
+    MOT[MInRotateD    ].SetAlias( 67, "MInRotateD");
+    MOT[MInRotateE    ].SetAlias( 68, "MInRotateE");
+    MOT[MInRotateF    ].SetAlias( 69, "MInRotateF");
+    MOT[MInRotateG    ].SetAlias( 70, "MInRotateG");
+    MOT[MInRotateH    ].SetAlias( 71, "MInRotateH");
+    MOT[MOutRotateB   ].SetAlias( 72, "MOutRotateB");
+    MOT[MOutRotateC   ].SetAlias( 73, "MOutRotateC");
+    MOT[MOutRotateD   ].SetAlias( 74, "MOutRotateD");
+    MOT[MOutRotateE   ].SetAlias( 75, "MOutRotateE");
+    MOT[MOutRotateF   ].SetAlias( 76, "MOutRotateF");
+    MOT[MOutRotateG   ].SetAlias( 77, "MOutRotateG");
+    MOT[MOutRotateH   ].SetAlias( 78, "MOutRotateH");
+    MOT[MLightScale   ].SetAlias( 79, "MLightScale");
+    MOT[MInArmZAg     ].SetAlias( 80, "MInArmZAg");
+    MOT[MInArmZAh     ].SetAlias( 81, "MInArmZAh");
+    MOT[MArmAlignment ].SetAlias( 82, "MArmAlignment");                         //Steven 20240507 : 只是為了Teaching存檔方便;
+    MOT[MLoadHingeR   ].SetAlias( 83, "MLoadHingeR");
+    MOT[MLoadHingeZ   ].SetAlias( 84, "MLoadHingeZ");
+    MOT[MPreciser     ].SetAlias( 85, "MPreciser");
+    MOT[MInArmZBe     ].SetAlias( 86, "MInArmZBe");
+    MOT[MInArmZBf     ].SetAlias( 87, "MInArmZBf");
+    MOT[MInArmZBg     ].SetAlias( 88, "MInArmZBg");
+    MOT[MInArmZBh     ].SetAlias( 89, "MInArmZBh");
+    MOT[MOutArmZAe    ].SetAlias( 90, "MOutArmZAe");
+    MOT[MOutArmZAf    ].SetAlias( 91, "MOutArmZAf");
+    MOT[MOutArmZAg    ].SetAlias( 92, "MOutArmZAg");
+    MOT[MOutArmZAh    ].SetAlias( 93, "MOutArmZAh");
+    MOT[MOutArmZBe    ].SetAlias( 94, "MOutArmZBe");
+    MOT[MOutArmZBf    ].SetAlias( 95, "MOutArmZBf");
+    MOT[MOutArmZBg    ].SetAlias( 96, "MOutArmZBg");
+    MOT[MOutArmZBh    ].SetAlias( 97, "MOutArmZBh");
+    MOT[MOutSortX     ].SetAlias( 98, "MOutSortX");                             //Steven 20240822 : For HT-9046AU
+    MOT[MCaselevatorZ ].SetAlias( 99, "MCaselevatorZ");
+    MOT[MCasArmX      ].SetAlias(100, "MCasArmX");
+    MOT[MCasArmZ      ].SetAlias(101, "MCasArmZ");
+    MOT[MTrayBracketZ ].SetAlias(102, "MTrayBracketZ");
+    MOT[MStackedTrayX ].SetAlias(103, "MStackedTrayX");
+    MOT[MStackedTrayZ ].SetAlias(104, "MStackedTrayZ");
+    MOT[MUnloadRobotZ ].SetAlias(105, "MUnloadRobotZ");
+    MOT[MOutSortY     ].SetAlias(106, "MOutSortY");                             //Steven 20240822 : For HT-9046AU
+    MOT[MCCDX         ].SetAlias(107, "MCCDX");
+    MOT[MCCDY         ].SetAlias(108, "MCCDY");
+    MOT[MCCDZ         ].SetAlias(109, "MCCDZ");
+    MOT[MInFlipper1   ].SetAlias(110, "MInFlipper1");
+    MOT[MInFlipper2   ].SetAlias(111, "MInFlipper2");
+    MOT[MInFlipper3   ].SetAlias(112, "MInFlipper3");
+    MOT[MOutFlipper1  ].SetAlias(113, "MOutFlipper1");
+    MOT[MOutFlipper2  ].SetAlias(114, "MOutFlipper2");
+    MOT[MOutFlipper3  ].SetAlias(115, "MOutFlipper3");
+    MOT[MLdCarRotArm  ].SetAlias(116, "MLdCarRotArm");
+    MOT[MLoaderY_CCW  ].SetAlias(117, "MLoaderY_CCW");
+    MOT[MAuto1Y_CCW   ].SetAlias(118, "MAuto1Y_CCW");
+    MOT[MAuto2Y_CCW   ].SetAlias(119, "MAuto2Y_CCW");
+    MOT[MAuto3Y_CCW   ].SetAlias(120, "MAuto3Y_CCW");
+    MOT[MAuto4Y_CCW   ].SetAlias(121, "MAuto4Y_CCW");
+    MOT[MAuto5Y_CCW   ].SetAlias(122, "MAuto5Y_CCW");
+    MOT[MAuto6Y_CCW   ].SetAlias(123, "MAuto6Y_CCW");
+    MOT[M1_3R         ].SetAlias(124, "M1_3R");
+    MOT[M1_4X         ].SetAlias(125, "M1_4X");
+    MOT[M1_4Y         ].SetAlias(126, "M1_4Y");
+    MOT[M1_4R         ].SetAlias(127, "M1_4R");
+    MOT[M1_5X         ].SetAlias(128, "M1_5X");
+    MOT[M1_5Y         ].SetAlias(129, "M1_5Y");
+    MOT[M1_5R         ].SetAlias(130, "M1_5R");
+    MOT[M1_6X         ].SetAlias(131, "M1_6X");
+    MOT[M1_6Y         ].SetAlias(132, "M1_6Y");
+    MOT[M1_6R         ].SetAlias(133, "M1_6R");
+    MOT[M1_7X         ].SetAlias(134, "M1_7X");
+    MOT[M1_7Y         ].SetAlias(135, "M1_7Y");
+    MOT[M1_7R         ].SetAlias(136, "M1_7R");
+    MOT[M1_8X         ].SetAlias(137, "M1_8X");
+    MOT[M1_8Y         ].SetAlias(138, "M1_8Y");
+    MOT[M1_8R         ].SetAlias(139, "M1_8R");
+    MOT[MMagazine     ].SetAlias(140, "MMagazine");                             //JerryYang 20221215 : add Magazine
+    MOT[MCatchMgzTray ].SetAlias(141, "MCatchMgzTray");
+    MOT[MMagYTrayOut  ].SetAlias(142, "MMagYTrayOut");
+
+    MOT[MFix3Full     ].SetAlias(143, "MFix3Full");
+    MOT[MAuto4Z       ].SetAlias(144, "MAuto4Z");                               //Steven 20230907 : For HT-9011UC
+    MOT[MAuto5Z       ].SetAlias(145, "MAuto5Z");
+    MOT[MAuto6Z       ].SetAlias(146, "MAuto6Z");
+    MOT[MAuto4Y       ].SetAlias(147, "MAuto4Y");
+    MOT[MAuto5Y       ].SetAlias(148, "MAuto5Y");
+    MOT[MAuto6Y       ].SetAlias(149, "MAuto6Y");
+
+    MOT[MTopAOIArmX   ].SetAlias(150, "MTopAOIArmX");
+    MOT[MTopAOIArmY   ].SetAlias(151, "MTopAOIArmY");
+    MOT[MTopAOIArmR   ].SetAlias(152, "MTopAOIArmR");
+    MOT[MTopAOICCDZ   ].SetAlias(153, "MTopAOICCDZ");
+    MOT[MTopAOIElevZ1 ].SetAlias(154, "MTopAOIElevZ1");
+    MOT[MTopAOIElevZ2 ].SetAlias(155, "MTopAOIElevZ2");
+
+    MOT[MOutSortPitchX].SetAlias(156, "MOutSortPitchX");                        //Steven 20240822 : For HT-9046AU
+    MOT[MOutSortSht   ].SetAlias(157, "MOutSortSht");
+    MOT[MLoad2Z       ].SetAlias(158, "MLoad2Z");
+    MOT[MLoad2Y       ].SetAlias(159, "MLoad2Y");
+
+    MOT[MInSh1LtcSenZ1].SetAlias(160, "MInSh1LtcSenZ1");                        //KenHsieh 20250722 : InSht sensor 改為2顆，並用Latch 判別疊料以及飛料
+    MOT[MInSh1LtcSenZ2].SetAlias(161, "MInSh1LtcSenZ2");
+    MOT[MInSh2LtcSenZ1].SetAlias(162, "MInSh2LtcSenZ1");
+    MOT[MInSh2LtcSenZ2].SetAlias(163, "MInSh2LtcSenZ2");
+    //虛擬Tray------------------------------------------------------------------
+    MOT[MManualTray1            ].SetAlias(164, "MManualTray1");
+    MOT[MManualTray2            ].SetAlias(165, "MManualTray2");
+    MOT[MManualTray3            ].SetAlias(166, "MManualTray3");
+    MOT[MMTrayY                 ].SetAlias(167, "MMTrayY");
+    MOT[MMTrayY_Car             ].SetAlias(168, "MMTrayY_Car");
+    MOT[MMPlate1                ].SetAlias(169, "MMPlate1");
+    MOT[MMPlate2                ].SetAlias(170, "MMPlate2");
+    MOT[MMAuto1                 ].SetAlias(171, "MMAuto1");
+    MOT[MMAuto2                 ].SetAlias(172, "MMAuto2");
+    MOT[MMAuto3                 ].SetAlias(173, "MMAuto3");
+    MOT[MMAuto1_Car             ].SetAlias(174, "MMAuto1_Car");
+    MOT[MMAuto2_Car             ].SetAlias(175, "MMAuto2_Car");
+    MOT[MMAuto3_Car             ].SetAlias(176, "MMAuto3_Car");
+    MOT[MMEmpty                 ].SetAlias(177, "MMEmpty");
+    MOT[MMColor                 ].SetAlias(178, "MMColor");
+    MOT[MMEmpty_Car             ].SetAlias(179, "MMEmpty_Car");
+    MOT[MMColor_Car             ].SetAlias(180, "MMColor_Car");
+    MOT[MMEmpty1                ].SetAlias(181, "MMEmpty1");
+    MOT[MMEmpty1_Car            ].SetAlias(182, "MMEmpty1_Car");
+    MOT[MMHot1RecBuf            ].SetAlias(183, "MMHot1RecBuf");
+    MOT[MMHot2RecBuf            ].SetAlias(184, "MMHot2RecBuf");
+    MOT[MMAutoCleanKit          ].SetAlias(185, "MMAutoCleanKit");
+    MOT[MMOCR                   ].SetAlias(186, "MMOCR");
+    MOT[MMBulkboxKit            ].SetAlias(187, "MMBulkboxKit");
+    MOT[MMCABuffer1             ].SetAlias(188, "MMCABuffer1");
+    MOT[MMCABuffer2             ].SetAlias(189, "MMCABuffer2");
+    MOT[MMCABuffer3             ].SetAlias(190, "MMCABuffer3");
+    MOT[MMCABuffer4             ].SetAlias(191, "MMCABuffer4");
+    MOT[MMCABuffer5             ].SetAlias(192, "MMCABuffer5");
+    MOT[MMCABuffer6             ].SetAlias(193, "MMCABuffer6");
+    MOT[MMCABuffer7             ].SetAlias(194, "MMCABuffer7");
+    MOT[MMCABuffer8             ].SetAlias(195, "MMCABuffer8");
+    MOT[MMCABuffer9             ].SetAlias(196, "MMCABuffer9");
+    MOT[MMCABuffer10            ].SetAlias(197, "MMCABuffer10");
+    MOT[MMLoadPort              ].SetAlias(198, "MMLoadPort");
+    MOT[MMTrayLoader            ].SetAlias(199, "MMTrayLoader");
+    MOT[MMTrayEmpty             ].SetAlias(200, "MMTrayEmpty");
+    MOT[MMTrayConversion        ].SetAlias(201, "MMTrayConversion");
+    MOT[MMTrayAuto1             ].SetAlias(202, "MMTrayAuto1");
+    MOT[MMTrayAuto2             ].SetAlias(203, "MMTrayAuto2");
+    MOT[MMTrayAuto3             ].SetAlias(204, "MMTrayAuto3");
+    MOT[MMFixTray1              ].SetAlias(205, "MMFixTray1");
+    MOT[MMFixTray2              ].SetAlias(206, "MMFixTray2");
+    MOT[MMFixTray3              ].SetAlias(207, "MMFixTray3");
+    MOT[MMScanAOI               ].SetAlias(208, "MMScanAOI");
+    MOT[MMInArmAOATray          ].SetAlias(209, "MMInArmAOATray");
+    MOT[MMOutArmAOATray         ].SetAlias(210, "MMOutArmAOATray");
+    MOT[MMAOASampleTray         ].SetAlias(211, "MMAOASampleTray");
+    MOT[MMAOASamplePlate        ].SetAlias(212, "MMAOASamplePlate");
+    MOT[MInPlacementX           ].SetAlias(213, "MInPlacementX");
+    MOT[MInPlacementY           ].SetAlias(214, "MInPlacementY");
+    MOT[MMMagazineTary1         ].SetAlias(215, "MMMagazineTary1");
+    MOT[MMMagazineTary2         ].SetAlias(216, "MMMagazineTary2");
+    MOT[MMMagazineTary3         ].SetAlias(217, "MMMagazineTary3");
+    MOT[MMMagazineTary4         ].SetAlias(218, "MMMagazineTary4");
+    MOT[MMMagazineTary5         ].SetAlias(219, "MMMagazineTary5");
+    MOT[MMMagazineTary6         ].SetAlias(220, "MMMagazineTary6");
+    MOT[MMMagazineTary7         ].SetAlias(221, "MMMagazineTary7");
+    MOT[MMMagazineTary8         ].SetAlias(222, "MMMagazineTary8");
+    MOT[MMMagazineTary9         ].SetAlias(223, "MMMagazineTary9");
+    MOT[MMMagazineTary10        ].SetAlias(224, "MMMagazineTary10");
+    MOT[MMMagazineTary11        ].SetAlias(225, "MMMagazineTary11");
+    MOT[MMMagazineTary12        ].SetAlias(226, "MMMagazineTary12");
+    MOT[MMMagazineTary13        ].SetAlias(227, "MMMagazineTary13");
+    MOT[MMMagazineTary14        ].SetAlias(228, "MMMagazineTary14");
+    MOT[MMMagazineTaryTop       ].SetAlias(229, "MMMagazineTaryTop");
+    MOT[MMMagazineBuffer        ].SetAlias(230, "MMMagazineBuffer");
+    MOT[MMBackupMagazineTary1   ].SetAlias(231, "MMBackupMagazineTary1");
+    MOT[MMBackupMagazineTary2   ].SetAlias(232, "MMBackupMagazineTary2");
+    MOT[MMBackupMagazineTary3   ].SetAlias(233, "MMBackupMagazineTary3");
+    MOT[MMBackupMagazineTary4   ].SetAlias(234, "MMBackupMagazineTary4");
+    MOT[MMBackupMagazineTary5   ].SetAlias(235, "MMBackupMagazineTary5");
+    MOT[MMBackupMagazineTary6   ].SetAlias(236, "MMBackupMagazineTary6");
+    MOT[MMBackupMagazineTary7   ].SetAlias(237, "MMBackupMagazineTary7");
+    MOT[MMBackupMagazineTary8   ].SetAlias(238, "MMBackupMagazineTary8");
+    MOT[MMBackupMagazineTary9   ].SetAlias(239, "MMBackupMagazineTary9");
+    MOT[MMBackupMagazineTary10  ].SetAlias(240, "MMBackupMagazineTary10");
+    MOT[MMBackupMagazineTary11  ].SetAlias(241, "MMBackupMagazineTary11");
+    MOT[MMBackupMagazineTary12  ].SetAlias(242, "MMBackupMagazineTary12");
+    MOT[MMBackupMagazineTary13  ].SetAlias(243, "MMBackupMagazineTary13");
+    MOT[MMBackupMagazineTary14  ].SetAlias(244, "MMBackupMagazineTary14");
+    MOT[MMTrayZ                 ].SetAlias(245, "MMTrayZ");
+    MOT[MMEmptyZ                ].SetAlias(246, "MMEmptyZ");
+    MOT[MMColorZ                ].SetAlias(247, "MMColorZ");
+    MOT[MMAuto1Z                ].SetAlias(248, "MMAuto1Z");
+    MOT[MMAuto2Z                ].SetAlias(249, "MMAuto2Z");
+    MOT[MMAuto3Z                ].SetAlias(250, "MMAuto3Z");
+    MOT[MMAuto4Z                ].SetAlias(251, "MMAuto4Z");
+    MOT[MMAuto5Z                ].SetAlias(252, "MMAuto5Z");
+    MOT[MMAuto6Z                ].SetAlias(253, "MMAuto6Z");
+    MOT[MManualTray4            ].SetAlias(254, "MManualTray4");
+    MOT[MManualTray5            ].SetAlias(255, "MManualTray5");
+    MOT[MManualTray6            ].SetAlias(256, "MManualTray6");
+    MOT[MMAuto4                 ].SetAlias(257, "MMAuto4");
+    MOT[MMAuto5                 ].SetAlias(258, "MMAuto5");
+    MOT[MMAuto6                 ].SetAlias(259, "MMAuto6");
+    MOT[MMAuto4_Car             ].SetAlias(260, "MMAuto4_Car");
+    MOT[MMAuto5_Car             ].SetAlias(261, "MMAuto5_Car");
+    MOT[MMAuto6_Car             ].SetAlias(262, "MMAuto6_Car");
+    MOT[MMFixTray4              ].SetAlias(263, "MMFixTray4");
+    MOT[MMFixTray5              ].SetAlias(264, "MMFixTray5");
+    MOT[MMFixTray6              ].SetAlias(265, "MMFixTray6");
+    MOT[MMLoadPort1             ].SetAlias(266, "MMLoadPort1");
+    MOT[MMLoadPort2             ].SetAlias(267, "MMLoadPort2");
+    MOT[MMLoadPort3             ].SetAlias(268, "MMLoadPort3");
+    MOT[MMLoadPort4             ].SetAlias(269, "MMLoadPort4");
+    MOT[MMUnloadPort1           ].SetAlias(270, "MMUnloadPort1");
+    MOT[MMUnloadPort2           ].SetAlias(271, "MMUnloadPort2");
+    MOT[MMUnloadPort3           ].SetAlias(272, "MMUnloadPort3");
+    MOT[MMUnloadPort4           ].SetAlias(273, "MMUnloadPort4");
+}
+//==============================================================================
+//------------------------------------------------------------------------------
+//  InitialMotorParameter  (golden cinitial.cpp:3392-4101)
+//
+//  THE MOTOR-DRIVER ATTACH SEAM.  This is golden's ONLY home for
+//  `MOT[i].Motor = new TMy<brand>Motor(iAdder)`.  Until this landed, MOT[].Motor
+//  was NULL tree-wide, so all 292 golden `MOT[i].Motor->` derefs were dead and
+//  Motor/myGALILmotor.cpp had no caller.
+//
+//  Translator: AI(W906-GA2-IMP) 20260809
+//
+//  ---------------------------------------------------------------------------
+//  SIMULATION POSTURE -- THE CRUX, TRANSLATED AS GOLDEN WROTE IT
+//  ---------------------------------------------------------------------------
+//  Golden's own `#ifdef SOFT_SIMULTE` arms (:3483-3484, :3548-3549, :3565-3566,
+//  :3720-3721, :3743-3744, :3900-3901, :3936-3937) STILL `new` a driver and
+//  merely set `Enable=false`.  Golden therefore has NO "MOT[].Motor stays NULL"
+//  state at all -- not in simulation, not on a machine with an empty
+//  Mot_Table.csv row, not on a machine whose IO_CARD_TYPE matches none of the
+//  three arms: the unconditional tail loop at golden :4027-4034 attaches
+//  `new TMySYNTEKMotor(-1)` with `Enable=false, GearRatio=1.0` to every one of
+//  the TOTAL_MOTOR(164) slots that is still NULL.  "Attached but DISABLED" is
+//  golden's simulation state.  Every #ifdef SOFT_SIMULTE block below is kept
+//  VERBATIM (SOFT_SIMULTE is NOT defined in this tree -- MachineType.h has it
+//  commented out -- so the #else arms are what compiles); NO NULL path was
+//  invented.
+//
+//  ---------------------------------------------------------------------------
+//  WHAT IS ACTIVE
+//  ---------------------------------------------------------------------------
+//   * The whole `IO_CARD_TYPE==NewIO_MN200 || IO_CARD_TYPE==PCI_P64C64`
+//     (Mot_Table.csv-driven) arm, golden :3409-3645 -- i.e. the real attach:
+//     HSys.LoadMotData(), the mapMotTable name lookup with golden's
+//     MInShuttle1/MInShuttle2 fallback, sModel=CardModel, and the five
+//     `new TMy<brand>Motor` branches plus every TMOTDATA -> HTMotor field copy.
+//     This mirrors InitialSwitch (:1506) / InitialSensor (:2628) in this same
+//     file, which activate exactly the same IO_CARD_TYPE arm and gate the BDE
+//     arm -- the in-file precedent this unit was written against.
+//   * The unconditional NULL-fallback + InitMotor(0) tail loop (:4027-4054).
+//   * The 18 x 30 x 70 Tray.PordRec allocation loop (:4064-4087).
+//   * The MInArmPitch / MOutArmPitch SetGroup pair (:4090-4099).
+//
+//  ---------------------------------------------------------------------------
+//  GOLDEN DEFECTS PRESERVED, NOT FIXED (per the faithful-port contract)
+//  ---------------------------------------------------------------------------
+//   (A) golden :3510-3517 + :3548-3560 -- NULL DEREF for CardModel=="MC88X1".
+//       Golden's MC88X1 branch computes iAdder but its
+//       `MOT[i].Motor = new HTMC88X1Motor(iAdder);` was COMMENTED OUT by
+//       "Steven 20231218 HT7080B" (:3516), so Motor is still NULL when :3555 /
+//       :3559 write `MOT[i].Motor->Enable`.  A machine whose Mot_Table.csv says
+//       CardModel=MC88X1 crashes here on the first call.  Kept exactly (the
+//       instantiation stays a comment; HTMC88X1Motor has no port either).
+//   (B) golden :3396 + :3643 -- `int iAdder;` is never initialised, and the
+//       Galil index-axis branch (:3464-3496) never assigns it, yet :3643 passes
+//       it to `InitMotor(iAdder)`.  First loop iteration can pass an
+//       indeterminate value; later iterations pass the PREVIOUS axis's adder.
+//       Kept verbatim.
+//   (C) golden :3639-3640 -- `SoftLimit[0]/[1]` are written and never read in
+//       this arm (dead store; the BDE arms are the ones that use them).  Kept.
+//   (D) golden :4064-4087 -- 18 x 2100 `new TMyProductionRecord()` with no
+//       matching delete.  InitialMotorParameter is called again on every
+//       recipe/setup change, so this leaks 37,800 records per call.  Kept.
+//
+//  ---------------------------------------------------------------------------
+//  MID-FILE #include / #undef -- WHY, AND WHY IT IS SAFE
+//  ---------------------------------------------------------------------------
+//  This unit needs COMPLETE types for the five driver classes it instantiates,
+//  and a sibling agent is editing this file concurrently, so the include block
+//  at the top of the file is off-limits (append-only).  The includes therefore
+//  sit here, at file scope, immediately below.  Two collisions had to be
+//  resolved and BOTH are value-identical, so neither changes behaviour:
+//
+//   1. `#undef MAXRing / MAXIP / MAXPort` before Motor/myMN200motor.h.
+//      MyLaneIo.h:52/55/58 (already included at the top of this file) define
+//      them as MACROS aliasing IOBackend.h:50/53/56 (IO_MAXRing=4, IO_MAXIP=64,
+//      IO_MAXPort=4), while Motor/myMN200motor.h:92-94 declares them as
+//      `const int MAXRing=4; MAXIP=64; MAXPort=4;`.  Without the #undef the
+//      macro rewrites the declaration into `const int 4=4` (3 hard errors).
+//      THE VALUES ARE IDENTICAL (4/64/4 both ways, checked in both headers), so
+//      the #undef swaps one spelling of the same three constants for another.
+//      Everything above this point in the file was already preprocessed with
+//      the macro form; nothing below it uses these names.
+//   2. Motor/vendor/CMNet.h is included BEFORE Motor/myEthercatmotor.h.
+//      myEthercatmotor.h:77 does `#ifndef F32 / #define F32 float`; CMNet.h ->
+//      Motor/vendor/Type_def.h:9 does `typedef float F32;`.  In the other order
+//      the macro rewrites the typedef into `typedef float float;`.  Both spell
+//      "F32 is float", so the order is a pure compile-order fix.
+//      CMNet.h is included ONLY for `#define G9004_M204 0xA7` (CMNet.h:20),
+//      which golden :3546 assigns to SYN_TEK_MOTION_MODULE.  NOTE: cmydef.cpp
+//      :3176-3180 still GATES golden's own initialiser
+//      `SYN_TEK_MOTION_MODULE=G9004_M204` down to 0 -- that pre-existing
+//      divergence is NOT touched here; this unit only makes golden :3546's
+//      RUNTIME assignment real, which is what the "Device superfluous at Output
+//      Shuttle" false-alarm fix (jou 2014-10-09) depends on.
+//------------------------------------------------------------------------------
+#undef  MAXRing                 // see note 1 above -- MyLaneIo.h macro vs myMN200motor.h const int (both 4)
+#undef  MAXIP                   // both 64
+#undef  MAXPort                 // both 4
+#include "CMNet.h"              // G9004_M204 (CMNet.h:20) for golden :3546; also brings Type_def.h's `typedef float F32` before note 2
+#include "Motor/myGALILmotor.h" // TMyGALILMotor    -- golden :3482 :3719 :3899
+#include "Motor/myMN200motor.h" // TMyMN200Motor    -- golden :3508 :3922
+#include "Motor/mySYNTEKmotor.h"// TMySYNTEKMotor   -- golden :3524 :3700 :3742 :4031
+#include "Motor/mySMCmotor.h"   // TMySMCMotor      -- golden :3542 :3682 :3861 :3933
+#include "Motor/myEthercatmotor.h" // TMyEtherCatMotor -- golden :3533   (MUST stay after CMNet.h, note 2)
+
+//------------------------------------------------------------------------------
+//  Free functions golden reaches from this unit.
+//
+//  InitialMotorName()  -- golden :3109, declared in NO golden header; golden's
+//  only caller is golden :3407, same TU, definition-first.  Already landed in
+//  THIS file at :3288 by the sibling GA-2-IMN pass, i.e. above this line, so
+//  this declaration is belt-and-braces against append ordering only.
+//
+//  SetMotorAccelSpeed(int,int) -- golden cinitial.h:51, golden body
+//  cinitial.cpp:4997-5017.  Declared here exactly as AutoClean/AutoClean.cpp
+//  :160 already does, rather than by including acatchtray_shims.h.
+//  *** STUB WARNING (link-closure, reported to the integrator): the ONLY body
+//  in this tree is the empty no-op at acatchtray_shims.cpp:167.  Golden's body
+//  clamps ADCSpeed to 1..100, honours IniConfig.bG14UseStartSoundAlarm, and
+//  calls MOT[Index].SetADCRate(ADCSpeed), which is what actually programs
+//  Motor->SetAcc/SetDec from GetAccDataBase()/GetDecDataBase().  With the stub
+//  in place, golden :3616's `SetMotorAccelSpeed(i, 100)` and golden :3988's are
+//  no-ops, so HTMotor::dAcc/dDec stay at their ctor values even though
+//  dAccDataBase/dDecDataBase ARE correctly loaded by :3597-3598 below.  That is
+//  a pre-existing stub, NOT a gate introduced by this unit; retiring it belongs
+//  to the wave that translates golden cinitial.cpp:4997. ***
+//------------------------------------------------------------------------------
+void InitialMotorName();                                                        // golden cinitial.cpp:3109 (no golden header declares it)
+void SetMotorAccelSpeed(int Index, int ADCSpeed);                               // golden cinitial.h:51 -- body is a NO-OP STUB at acatchtray_shims.cpp:167
+//------------------------------------------------------------------------------
+// AI(W906-PT-W5a-integrate) 20260809: GATE (W5a-G) -- golden's line is
+//   `MOT[i].Motor=new TMyGALILMotor(iGalilPort);` and it is gated for ONE reason:
+//   it is the first and only consumer of TMyGALILMotor in this tree, so it makes the
+//   linker extract Motor/myGALILmotor.cpp.obj, whose 48 real `TMyMotor::Gali_*`
+//   bodies then collide with the 48 ACTIVE stubs still standing at
+//   Motor/mymotor.cpp:944-994 / :1043-1045.  MEASURED, not predicted: with this line
+//   live the build reports exactly 48 `multiple definition` errors.
+//
+//   WHY THE STUBS ARE NOT SIMPLY RETIRED HERE -- I TRIED IT AND MEASURED THE RESULT.
+//   Retiring all 48 makes the build link cleanly (rc=0, zero undefined), and then
+//   ctest goes from 6 failures to 19: TEN new SEGFAULTs (W6_4_Tester,
+//   W6_4b_FrontRearDestroy, W6_5_Shuttle, W6_6_Hub, W6_6_CSystemCycle,
+//   W7_S0_MotorConvergence, W7_C1_CleanOutFinish, W7_C2_OneCycleFinish,
+//   W906_DoIndexAutoClean, W5_Atester32Site).  Cause: golden's real Galil bodies
+//   dereference `MOT[i].Motor` UNGUARDED -- golden can, because golden always runs
+//   this function first -- while three of the retired stubs were returning
+//   `(Motor==NULL)` as their offline "completed" answer, which is what those tests
+//   have been standing on.  The NULL-ness and those fast paths are two halves of ONE
+//   convention.
+//
+//   SO THE UN-GATE IS A THREE-PART, SINGLE WAVE, and all three parts must land
+//   together or the suite goes red:
+//     1. delete this gate (restore golden's line),
+//     2. retire Motor/mymotor.cpp:944-994 + :1043-1045 -- all 48, but KEEP :963
+//        `Gali_MotHome_HighSpeed`, which myGALILmotor.cpp does NOT define,
+//     3. make the ten tests above attach motors before they pump, the way golden
+//        does (InitHontechHardware -> InitialMotorParameter).
+//   BEHAVIOUR DELTA UNTIL THEN: the four index axes (MTestY1/Z1/Z2/Y2 = 13..16) get
+//   NO driver from this branch, so they fall through to golden's own tail loop and
+//   end up `new TMySYNTEKMotor(-1)` with `Enable=false` -- attached but disabled,
+//   which is exactly golden's `#ifdef SOFT_SIMULTE` posture for every axis.  They
+//   are therefore non-NULL and safe to dereference; they simply are not Galil.
+static const bool W5aG_INDEX_GALIL_BRANCH_ENABLED = false;   // GATE (W5a-G) -- flip to true ONLY with parts 2 and 3 above
+
+void InitialMotorParameter()
+{
+// ---- GATE 1 --------------------------------------------------------------
+// golden cinitial.cpp:3394 -- `TTable *PT;`
+// GATED because: TTable / DataModule1 (BDE) exist NOWHERE in this tree.
+//   database.h:204-207 keeps `class TDataModule1 ... TTable *MotorTable;` and
+//   `extern PACKAGE TDataModule1 *DataModule1;` commented out as its own
+//   documented "still gated pending the BDE wave".  Same blocker as
+//   InitialSwitch (:1506) / InitialSensor (:2628) in this file.
+// DEFAULT IS FAITHFUL because: PT is read ONLY inside the two BDE arms that
+//   GATE 2 gates as one block (golden :3646-4025).  Nothing in the ACTIVE arm
+//   or in the common tail touches it, so removing the declaration removes no
+//   reachable behaviour.  Golden's other locals that only the BDE arms use
+//   (sDBDir, flag, iLane, iIP, iPort) are deliberately LEFT DECLARED and
+//   ACTIVE below, verbatim, so un-gating GATE 2 is a pure delete of two
+//   preprocessor lines -- no declaration has to be re-derived from golden
+//   (which is the trap the InitialSwitch gate at :1533-1540 warns about).
+//   They cost only -Wunused warnings.
+// BEHAVIOUR DELTA ON A REAL MACHINE: none from this gate alone; see GATE 2.
+#if 0 // GATE 1: blocked by TTable/DataModule1 @database.h:204-207 (BDE unported)
+    TTable *PT;
+#endif
+    AnsiString S, sDBDir;
+    int iAdder, iMot;
+    AnsiString Mot_Name;
+    AnsiString sModel;
+    int SoftLimit[2];
+    int iIP;
+    int iLane;
+    int iPort;
+    double dAcc, dDec;
+    bool flag;
+    bool bHasMotor=false;                                                       //Stevem 20210625 : 修正新的CSV IO表讀檔方式
+
+    InitialMotorName();
+
+    if(IO_CARD_TYPE==NewIO_MN200 ||
+       IO_CARD_TYPE==PCI_P64C64)                                                //Steven 20231218 HT7080B
+    {
+        HSys.LoadMotData();
+        for(int i=0; i<TOTAL_MOTOR; i++)
+        {
+            iMot=-1;
+            bHasMotor=false;
+            Mot_Name.sprintf("M%02d", i);
+            HSys.mapMotTableIter=HSys.mapMotTable.find(Mot_Name);
+            if(HSys.mapMotTableIter!=HSys.mapMotTable.end())
+            {
+                iMot=atoi(HSys.mapMotTable[Mot_Name].c_str());
+                if(iMot<0)                                                      //Steven 20250520 : 變更Mot初始化方式
+                {
+                    if(i==11)
+                    {
+                        iMot=atoi(HSys.mapMotTable["MInShuttle1"].c_str());
+                    }
+                    else if(i==12)
+                    {
+                        iMot=atoi(HSys.mapMotTable["MInShuttle2"].c_str());
+                    }
+
+                    if(iMot<0)                                                  //Steven 20250520 : 變更Mot初始化方式
+                    {
+                        S.sprintf("Can not find motor %s", Mot_Name);
+                    }
+                    else
+                    {
+                        bHasMotor=true;
+                    }
+                }
+                else
+                {
+                    bHasMotor=true;
+                }
+            }
+            else
+            {
+                S.sprintf("Can not find motor %s", Mot_Name);
+            }
+
+            if(bHasMotor)
+            {
+                sModel          =HSys.MotTable[iMot]->CardModel;
+//                MOT[i].Alias    =HSys.MotTable[iMot]->Alias;
+            }
+            else
+            {
+                sModel          ="";
+            }
+            MOT[i].CardType =sModel;                                            //RogerYang 20250411 ECAT Motor need reinitiated when reopencard
+//            MOT[i].NumberAlias  =AnsiString("[")+AnsiString(Mot_Name)+AnsiString("] ")+MOT[i].Alias;
+
+            if(W5aG_INDEX_GALIL_BRANCH_ENABLED &&                               //AI(W906-PT-W5a-integrate) 20260809 GATE (W5a-G): see the note above the flag's definition. golden's condition is just the two lines below.
+               INDEX_MOTION_CARD==0 &&                                          //Steven 20210621 : for HT-502 II
+               (i==MTestZ1 || i==MTestZ2 || i==MTestY1 || i==MTestY2))
+            {
+                int iGalilPort=0;                                               //AI(general) 20260316 (RogerYang) : Use TMyGALILMotor for index axes and map MTestY1/Z1/Z2/Y2 to X/Y/Z/W.
+                if(i==MTestY1)
+                    iGalilPort=0;
+                else if(i==MTestZ1)
+                    iGalilPort=1;
+                else if(i==MTestZ2)
+                    iGalilPort=2;
+                else
+                    iGalilPort=3;
+
+                if(MOT[i].Motor!=NULL)
+                {
+                    delete MOT[i].Motor;
+                    MOT[i].Motor=NULL;
+                }
+                MOT[i].Motor=new TMyGALILMotor(iGalilPort);
+                #ifdef SOFT_SIMULTE
+                    MOT[i].Motor->Enable=false;
+                #else
+                if(USE_INDEX_ARM_AXES==IndexArm_3_Axis &&                       //JimmyChiu 20220708 : add Index Arm Axis
+                   (i==MTestY2))
+                {
+                    MOT[i].Motor->Enable=false;
+                }
+                else
+                {
+                    MOT[i].Motor->Enable=true;
+                }
+                #endif
+            }
+            else
+            {
+                if(MOT[i].Motor==NULL)
+                {
+                    if(sModel=="MN200")                                         //Steven 20150417 : ADD MN200軸控
+                    {
+                        if(bHasMotor && HSys.MotTable[iMot]->iBoardID!=-1 && HSys.MotTable[iMot]->iPort!=-1)
+                            iAdder=HSys.MotTable[iMot]->iBoardID*100+HSys.MotTable[iMot]->iPort;
+                        else
+                            iAdder=-1;
+
+                        MOT[i].Motor=new TMyMN200Motor(iAdder);
+                    }
+                    else if(sModel=="MC88X1")                                   //Jimmychiu 20220926 : ADD MC88X1
+                    {
+                        if(HSys.MotTable[iMot]->iBoardID==-1)
+                            iAdder=HSys.MotTable[iMot]->iPort;
+                        else
+                            iAdder=HSys.MotTable[iMot]->iBoardID*0x10+HSys.MotTable[iMot]->iPort;
+//                         MOT[i].Motor = new HTMC88X1Motor(iAdder);            //Steven 20231218 HT7080B
+                    }
+                    else if(sModel=="SYNTEK")
+                    {
+                        if(bHasMotor && HSys.MotTable[iMot]->iBoardID!=-1 && HSys.MotTable[iMot]->iPort!=-1 && HSys.MotTable[iMot]->iIP!=-1)
+                            iAdder=HSys.MotTable[iMot]->iBoardID*1000+HSys.MotTable[iMot]->iIP*100+HSys.MotTable[iMot]->iPort;
+                        else
+                            iAdder=-1;
+                        MOT[i].Motor=new TMySYNTEKMotor(iAdder);
+                    }
+                    else if(sModel=="PCI1203")                                  //RogerYang 20250326 整合EtherCAT Mot
+                    {
+                        if(bHasMotor && HSys.MotTable[iMot]->iBoardID!=-1 && HSys.MotTable[iMot]->iPort!=-1)
+                            iAdder=HSys.MotTable[iMot]->iBoardID*100+HSys.MotTable[iMot]->iPort;
+                        else
+                            iAdder=-1;
+
+                        MOT[i].Motor= new TMyEtherCatMotor(iAdder);
+                    }
+                    else
+                    {
+                        if(bHasMotor && HSys.MotTable[iMot]->iBoardID!=-1 && HSys.MotTable[iMot]->iPort!=-1)
+                            iAdder=HSys.MotTable[iMot]->iBoardID*10+HSys.MotTable[iMot]->iPort;
+                        else
+                            iAdder=-1;
+
+                        MOT[i].Motor=new TMySMCMotor(iAdder);
+
+                        if(MOT[i].Mot_Name==MInShuttle1 ||                      //jou 2014-10-09 修正Device superfluous at Output Shuttle誤報錯誤
+                           MOT[i].Mot_Name==MInShuttle2)
+                            SYN_TEK_MOTION_MODULE=G9004_M204;
+                    }
+                    #ifdef SOFT_SIMULTE
+                        MOT[i].Motor->Enable=false;
+                    #else
+                        if((sModel=="MC88X1" && iAdder<=0) ||                   //Steven 20240112 : Fixed for HT7080B
+                           (sModel!="MC88X1" && iAdder<0)  ||
+                           bHasMotor==false)
+                        {
+                            MOT[i].Motor->Enable=false;
+                        }
+                        else
+                        {
+                            MOT[i].Motor->Enable=HSys.MotTable[iMot]->iEnable;
+                        }
+                    #endif
+                }
+                else
+                {
+                    #ifdef SOFT_SIMULTE
+                        MOT[i].Motor->Enable=false;
+                    #else
+                        if(bHasMotor)
+                            MOT[i].Motor->Enable=HSys.MotTable[iMot]->iEnable;
+                        else
+                            MOT[i].Motor->Enable=false;
+                    #endif
+                }
+            }
+
+            if(bHasMotor)
+            {
+                MOT[i].Motor->GearRatio         = HSys.MotTable[iMot]->dGearRatio;
+                MOT[i].Motor->Direction         =(HSys.MotTable[iMot]->iDirection==1)?true:false;
+                MOT[i].Motor->HomeDirection     =(HSys.MotTable[iMot]->iHomeDirectior==1)?true:false;
+                dAcc=HSys.MotTable[iMot]->dAcc;
+                dDec=HSys.MotTable[iMot]->dDec;
+                if(sModel=="MN200")                                             //Steven 20230616 : MN200的加減速單位是秒
+                {
+                    if(dAcc>1)
+                        dAcc=HSys.MotTable[iMot]->dAcc/100.0;
+                    if(dDec>1)
+                        dDec=HSys.MotTable[iMot]->dDec/100.0;
+                }
+                else if(sModel=="MC88X1")                                       //Nickliu 20240108 add MCXX8 Set Rate
+                {
+                    dAcc=HSys.MotTable[iMot]->iRate;
+                    dDec=HSys.MotTable[iMot]->iRate;
+                    MOT[i].Motor->SetRate    (HSys.MotTable[iMot]->iRate);      //Nickliu 20230315 add MCXX8 Set Rate
+                }
+
+                MOT[i].Motor->SetAccDataBase     (dAcc);
+                MOT[i].Motor->SetDecDataBase     (dDec);
+                MOT[i].Motor->SetRange           (HSys.MotTable[iMot]->iRange);
+                MOT[i].Motor->PHomeHighSpeed    = HSys.MotTable[iMot]->iHomeHighSpeed;                 //Steven 20231218 HT7080B
+                MOT[i].Motor->PHomeLowSpeed     = HSys.MotTable[iMot]->iHomeLowSpeed;
+                MOT[i].Motor->PJogHighSpeed     = HSys.MotTable[iMot]->iJogHighSpeed;
+                MOT[i].Motor->PJogLowSpeed      = HSys.MotTable[iMot]->iJogLowSpeed;
+                MOT[i].Motor->SetInitSpeed       (HSys.MotTable[iMot]->iInitSpeed);
+                MOT[i].Motor->InitSpeed         = HSys.MotTable[iMot]->iInitSpeed;
+                MOT[i].Motor->PServoAlarmOn     =(HSys.MotTable[iMot]->iServoAlarmOn==1)?true:false;
+                MOT[i].Motor->MotorType         = HSys.MotTable[iMot]->i1P2P;
+                MOT[i].Motor->bSensorType       = HSys.MotTable[iMot]->iSensorType;
+                MOT[i].Motor->bLimitLogic       =(HSys.MotTable[iMot]->iLimitLogic==1)?true:false;
+                MOT[i].Motor->bIn1Logic         =(HSys.MotTable[iMot]->iIn1Logic==1)?true:false;
+                MOT[i].Motor->PSoftLimitN       = HSys.MotTable[iMot]->iSoftLimitN;
+                MOT[i].Motor->PSoftLimitP       = HSys.MotTable[iMot]->iSoftLimitP;
+                MOT[i].SimulateSpeed            = HSys.MotTable[iMot]->iSimulateSpeed;
+            }
+            MOT[i].HomeFlag                 = 0;
+            SetMotorAccelSpeed(i, 100);
+
+            if(MOT[i].Mot_Name==MInShuttle1)                                    //kevin 20110531 旋轉shuttle記錄速度
+            {
+                iInitSpeedSh1=MOT[i].Motor->InitSpeed;
+                iPJogHighSpeedSh1=MOT[i].Motor->PJogHighSpeed;
+            }
+
+            if(MOT[i].Mot_Name==MInShuttle2)                                    //kevin 20110531 旋轉shuttle記錄速度
+            {
+                iInitSpeedSh2=MOT[i].Motor->InitSpeed;
+                iPJogHighSpeedSh2=MOT[i].Motor->PJogHighSpeed;
+            }
+
+            if(bHasMotor && (i==MTestZ1 || i==MTestZ2))                         //Steven 20210623 : Index使用Galil
+                MOT[i].IndexPickLimit=HSys.MotTable[iMot]->iPickLimit;
+
+            if(INDEX_MOTION_CARD==0 &&                                          //Steven 20210623 : Index使用Galil
+               (i==MTestY1 || i==MTestZ1 || i==MTestZ2 || i==MTestY2))
+                ;                                                               //Steven 20090922 需要修改
+            else
+                MOT[i].SetArmMaxSpeed();
+
+            SoftLimit[0]=MOT[i].Motor->PSoftLimitN;
+            SoftLimit[1]=MOT[i].Motor->PSoftLimitP;
+
+            if(MOT[i].Motor->Enable)
+                MOT[i].Motor->InitMotor(iAdder);
+        }
+    }
+// ---- GATE 2 --------------------------------------------------------------
+// golden cinitial.cpp:3646-4025 -- the ENTIRE `else if(MOTION_CARD_TYPE==0)`
+// (system/motor.db) arm AND the trailing `else` (system/motor_SMC.db /
+// motor_SMC_XYPitch.db) arm, kept VERBATIM below.
+// GATED because: both arms are pure BDE code -- `DataModule1->MotorTable`,
+//   `PT->Open()/First()/Next()/Eof/FieldByName()`, and
+//   `CheckMotorValue(TTable*, AnsiString, bool)` (golden :3061-3107, which
+//   itself needs TTable + MessageDlg + asMotorDatabaseErr).  NONE of those
+//   exist in this tree: `grep -rn "class TTable|DataModule1" *.h` finds only
+//   database.h:204-207's commented-out shell, and CheckMotorValue has no
+//   definition anywhere (see ABSENCE CLAIMS in the hand-off report).
+// DEFAULT IS FAITHFUL because: the gate is placed so that the surviving code
+//   is exactly `if(IO_CARD_TYPE==...){...}` with nothing dangling, and
+//   un-gating is a two-line delete that restores golden's if/else-if/else
+//   chain intact (the `else if` still directly follows the closing brace of
+//   the active arm).  No statement was moved, reordered or reindented.
+// BEHAVIOUR DELTA ON A REAL MACHINE: on a machine whose IO_CARD_TYPE is
+//   NEITHER NewIO_MN200(2) NOR PCI_P64C64(3), golden reads motor.db /
+//   motor_SMC.db and attaches per-axis SYNTEK/SMC/MN200/Galil drivers with
+//   real Enable, GearRatio, speeds, Acc/Dec, Range, soft limits and
+//   InitMotor(); this port attaches NOTHING here, so the tail loop at golden
+//   :4027-4034 gives every one of the 164 axes `new TMySYNTEKMotor(-1)` with
+//   Enable=false and GearRatio=1.0 -- i.e. the whole machine is
+//   attached-but-disabled and cannot move, with NO alarm raised (golden's own
+//   `ShowMyMessage("motor.db does not exist")` early-return at :3655-3656 is
+//   inside this gate too).  Machines on the IO_Table.csv path (the active arm)
+//   are unaffected.
+#if 0 // GATE 2: blocked by TTable/DataModule1 @database.h:204-207 + CheckMotorValue (golden :3061) -- BDE unported
+    else if(MOTION_CARD_TYPE==0)                                                //SYN-TEK Motion模組
+    {
+        sDBDir=AnsiString(CurrentDir)+"\\system\\motor.db";                     //JerryYang 20150903 檢查Database檔是否存在
+        if(FileExists(sDBDir))
+        {
+            DataModule1->MotorTable->TableName=sDBDir;
+        }
+        else
+        {
+            ShowMyMessage("motor.db does not exist");
+            return;
+        }
+
+        PT=DataModule1->MotorTable;
+        PT->Open();
+
+        for(int i=0; i<TOTAL_MOTOR; i++)
+        {
+            MOT[i].Mot_Name=i;
+            PT->First();
+            Mot_Name.sprintf("M%02d", i);
+
+            flag=false;
+            while(!PT->Eof)
+            {
+                if(CheckMotorValue(PT, "Motorname", false)==Mot_Name)
+                {
+                    flag=true;
+                    break;
+                }
+                PT->Next();
+            }
+
+            if(flag==false)
+            {
+                if(MOT[i].Motor==NULL)
+                    MOT[i].Motor=new TMySMCMotor(-1);
+                 MOT[i].Motor->Enable=false;
+                S.sprintf("Can not find motor %s", Mot_Name);
+                continue;
+            }
+
+            if(CheckMotorValue(PT, "Motorname", false)==Mot_Name)
+            {
+                MOT[i].Alias=CheckMotorValue(PT, "Alias", false);
+                MOT[i].NumberAlias=AnsiString("[")+Mot_Name+AnsiString("] ")+MOT[i].Alias;
+
+                iLane   =(StrToIntDef(CheckMotorValue(PT, "Lane", true), -1));
+                iIP     =(StrToIntDef(CheckMotorValue(PT, "IP"  , true), -1));
+                iPort   =(StrToIntDef(CheckMotorValue(PT, "Port", true), -1));
+
+                if(iIP==-1 || iLane==-1 || iPort==-1)
+                {
+                    if(MOT[i].Motor==NULL)
+                        MOT[i].Motor=new TMySYNTEKMotor(-1);
+                    if(INDEX_MOTION_CARD==0 &&                                  //Steven 20210623 : Index使用Galil
+                       (i==MTestY1 || i==MTestZ1 || i==MTestZ2 || i==MTestY2))
+                    {
+                        int iGalilPort=0;                                       //AI(general) 20260316 (RogerYang) : Keep Galil axis-port mapping consistent in fallback branch.
+                        if(i==MTestY1)
+                            iGalilPort=0;
+                        else if(i==MTestZ1)
+                            iGalilPort=1;
+                        else if(i==MTestZ2)
+                            iGalilPort=2;
+                        else
+                            iGalilPort=3;
+
+                        if(MOT[i].Motor!=NULL)
+                        {
+                            delete MOT[i].Motor;
+                            MOT[i].Motor=NULL;
+                        }
+                        MOT[i].Motor=new TMyGALILMotor(iGalilPort);
+                        #ifdef SOFT_SIMULTE
+                            MOT[i].Motor->Enable=false;
+                        #else
+                            if(USE_INDEX_ARM_AXES==IndexArm_3_Axis &&           //JimmyChiu 20220708 : add Index Arm Axis
+                               (i==MTestY2))
+                            {
+                                MOT[i].Motor->Enable=false;
+                            }
+                            else
+                            {
+                                MOT[i].Motor->Enable=true;
+                            }
+                        #endif
+                    }
+                    else
+                    {
+                        MOT[i].Motor->Enable=false;
+                    }
+                }
+                else
+                {
+                    if(MOT[i].Motor==NULL)
+                        MOT[i].Motor = new TMySYNTEKMotor((iLane*1000+iIP*10+iPort));
+                    #ifdef SOFT_SIMULTE
+                        MOT[i].Motor->Enable=false;
+                    #else
+                        MOT[i].Motor->Enable=(atoi(CheckMotorValue(PT,"Enable"   ,true).c_str())==1)?true:false;
+                    #endif
+                }
+
+                if(MOT[i].Motor->Enable)
+                {
+                    if(CheckMotorValue(PT,"GearRatio",true)!="" &&
+                       CheckMotorValue(PT,"GearRatio",true)!="0")
+                    {
+                        MOT[i].Motor->GearRatio    = atof(CheckMotorValue(PT,"GearRatio"      ,true).c_str());
+                    }
+                    else
+                    {
+                        MOT[i].Motor->GearRatio=1.0;
+                    }
+
+                    MOT[i].Motor->Direction         =(atoi(CheckMotorValue(PT,"Direction"      ,true).c_str())==1)?true:false;
+                    MOT[i].Motor->HomeDirection     =(atoi(CheckMotorValue(PT,"HomeDirectior"  ,true).c_str())==1)?true:false;
+                    MOT[i].Motor->PHomeHighSpeed    = atoi(CheckMotorValue(PT,"HomeHighSpeed"  ,true).c_str());
+                    MOT[i].Motor->PHomeLowSpeed     = atoi(CheckMotorValue(PT,"HomeLowSpeed"   ,true).c_str());
+                    MOT[i].Motor->PJogHighSpeed     = atoi(CheckMotorValue(PT,"JogHighSpeed"   ,true).c_str());
+//                    MOT[i].Motor->PJogLowSpeed      = atoi(CheckMotorValue(PT,"JogLowSpeed"    ,true).c_str());   //Steven 20200811 : 先達版本沒有JogLowSpeed
+                    MOT[i].Motor->InitSpeed         = atoi(CheckMotorValue(PT,"InitSpeed"      ,true).c_str());
+                    MOT[i].Motor->PServoAlarmOn     =(atoi(CheckMotorValue(PT,"ServoAlarmOn"   ,true).c_str())==1)?true:false;
+                    MOT[i].Motor->MotorType         = atoi(CheckMotorValue(PT,"1P2P"           ,true).c_str());
+                    MOT[i].Motor->bSensorType       = atoi(CheckMotorValue(PT,"HomeSenLogic"   ,true).c_str());
+//                        MOT[i].SimulateSpeed            = atoi(CheckMotorValue(PT,"SimulateSpeed"  )->AsString.c_str());
+                    MOT[i].HomeFlag                 = 0;
+
+                    if(MOT[i].Mot_Name==MInShuttle1)                            //kevin 20110531 旋轉shuttle記錄速度
+                    {
+                        iInitSpeedSh1=MOT[i].Motor->InitSpeed;
+                        iPJogHighSpeedSh1=MOT[i].Motor->PJogHighSpeed;
+                    }
+
+                    if(MOT[i].Mot_Name==MInShuttle2)                            //kevin 20110531 旋轉shuttle記錄速度
+                    {
+                        iInitSpeedSh2=MOT[i].Motor->InitSpeed;
+                        iPJogHighSpeedSh2=MOT[i].Motor->PJogHighSpeed;
+                    }
+
+                    SoftLimit[0]=atoi(CheckMotorValue(PT,"SoftLimitN",true).c_str());
+                    SoftLimit[1]=atoi(CheckMotorValue(PT,"SoftLimitP",true).c_str());
+
+                    if(INDEX_MOTION_CARD==0 &&  (i==MTestZ1 || i==MTestZ2))     //Steven 20210623 : Index使用Galil
+                        MOT[i].IndexPickLimit=atoi(CheckMotorValue(PT, "PickLimit", true).c_str());
+
+                    if(INDEX_MOTION_CARD==0 &&                                  //Steven 20210623 : Index使用Galil
+                       (i==MTestY1 || i==MTestZ1 || i==MTestZ2 || i==MTestY2))
+                        ;                                                       //Steven 20090922 需要修改
+                    else
+                        MOT[i].SetArmMaxSpeed();
+                }
+
+                MOT[i].Motor->PSoftLimitN=atoi(CheckMotorValue(PT,"SoftLimitN",true).c_str());
+                MOT[i].Motor->PSoftLimitP=atoi(CheckMotorValue(PT,"SoftLimitP",true).c_str());
+                SoftLimit[0]=MOT[i].Motor->PSoftLimitN;
+                SoftLimit[1]=MOT[i].Motor->PSoftLimitP;
+
+                //--------------------------------------------------------------
+                //PCI Board
+                MOT[i].Mot_Name=i;
+                dAcc=PT->FieldByName("ADc")->AsFloat;
+                dDec=PT->FieldByName("ADc")->AsFloat;
+                if(sModel=="MN200")                                             //Steven 20230616 : MN200的加減速單位是秒
+                {
+                    if(dAcc>1)
+                        dAcc=dAcc/100.0;
+                    if(dDec>1)
+                        dDec=dDec/100.0;
+                }
+                MOT[i].Motor->SetAccDataBase(dAcc);
+                MOT[i].Motor->SetDecDataBase(dDec);
+
+                if(MOT[i].Motor->Enable)
+                {
+                    if(INDEX_MOTION_CARD==0 &&                                  //Steven 20210623 : Index使用Galil
+                       (i==MTestY1 || i==MTestZ1 || i==MTestZ2 || i==MTestY2))
+                        ;
+                    else
+                        MOT[i].Motor->SetSoftLimit(SoftLimit[0], SoftLimit[1]);
+                }
+            }
+        }
+    }
+    else
+    {
+        if(USE_IN_Y_IS_AUTO_PITCH==true || USE_OUT_Y_IS_AUTO_PITCH==true)                                              //Steven 20170424 (wei) : new XY變距  //JerryYang 20251218 : IN/OUT ARM支援不同模組
+            DataModule1->MotorTable->TableName=CurrentDir+"\\system\\motor_SMC_XYPitch.db";
+        else
+            DataModule1->MotorTable->TableName=CurrentDir+"\\system\\motor_SMC.db";
+
+        PT=DataModule1->MotorTable;
+        PT->Open();
+
+        for(int i=0; i<TOTAL_MOTOR; i++)
+        {
+            PT->First();
+            MOT[i].Mot_Name=i;
+            Mot_Name.sprintf("M%02d", i);
+
+            flag=false;
+            while(!PT->Eof)
+            {
+                if(CheckMotorValue(PT, "Motorname", false)==Mot_Name)
+                {
+                    flag=true;
+                    break;
+                }
+                PT->Next();
+            }
+
+            if(flag==false)
+            {
+                if(MOT[i].Motor==NULL)
+                    MOT[i].Motor = new TMySMCMotor(-1);
+                 MOT[i].Motor->Enable=false;
+                S.sprintf("Can not find motor %s", Mot_Name);
+                continue;
+            }
+
+            S=CheckMotorValue(PT, "Motorname", false);
+            if(CheckMotorValue(PT, "Motorname", false)==Mot_Name)
+            {
+                S=CheckMotorValue(PT, "Port", true);
+                if(PT->FindField("CardModel")!=NULL)
+                {
+                    sModel=CheckMotorValue(PT, "CardModel", false);
+                }
+
+                MOT[i].Alias        =CheckMotorValue(PT,"Alias"          , false);
+                MOT[i].NumberAlias  =AnsiString("[")+Mot_Name+AnsiString("] ")+MOT[i].Alias;
+
+                if(sModel=="SMC" || sModel=="MN200" || sModel=="MC88X1")        //Steven 20150417 : ADD MN200軸控  //Jimmychiu 20220926 : ADD MC88X1
+                {
+                    if(INDEX_MOTION_CARD==0 &&                                  //Steven 20210623 : Index使用Galil
+                       (i==MTestY1 || i==MTestZ1 || i==MTestZ2 || i==MTestY2))
+                    {
+                        int iGalilPort=0;                                       //AI(general) 20260316 (RogerYang) : Instantiate TMyGALILMotor for index Galil axes in SMC/MN200/MC88X1 branch.
+                        if(i==MTestY1)
+                            iGalilPort=0;
+                        else if(i==MTestZ1)
+                            iGalilPort=1;
+                        else if(i==MTestZ2)
+                            iGalilPort=2;
+                        else
+                            iGalilPort=3;
+
+                        if(MOT[i].Motor!=NULL)
+                        {
+                            delete MOT[i].Motor;
+                            MOT[i].Motor=NULL;
+                        }
+                        MOT[i].Motor = new TMyGALILMotor(iGalilPort);
+                        #ifdef SOFT_SIMULTE
+                            MOT[i].Motor->Enable=false;
+                        #else
+                            if(USE_INDEX_ARM_AXES==IndexArm_3_Axis &&
+                               (i==MTestY2))                                    //JimmyChiu 20220708 : add Index Arm Axis
+                            {
+                                MOT[i].Motor->Enable=false;
+                            }
+                            else
+                            {
+                                MOT[i].Motor->Enable=true;
+                            }
+                        #endif
+                    }
+                    else
+                    {
+                        if(MOT[i].Motor==NULL)
+                        {
+                            if(sModel=="MN200")                                 //Steven 20150417 : ADD MN200軸控
+                            {
+                                iAdder=(atoi(CheckMotorValue(PT, "BoardID", true).c_str()))*100;
+                                iAdder+=atoi(CheckMotorValue(PT, "Port", true).c_str());
+                                MOT[i].Motor = new TMyMN200Motor(iAdder);
+                            }
+/*                            else if(sModel=="MC88X1")                         //Jimmychiu 20220926 : ADD MC88X1        //Steven 20231218 HT7080B
+                            {
+                                iAdder=atoi(CheckMotorValue(PT, "Port", true).c_str());
+                                MOT[i].Motor = new HTMC88X1Motor(iAdder);
+                            }*/
+                            else
+                            {
+                                iAdder=(atoi(CheckMotorValue(PT, "BoardID", true).c_str()))*10;
+                                iAdder+=atoi(CheckMotorValue(PT, "Port", true).c_str());
+                                MOT[i].Motor = new TMySMCMotor(iAdder);
+                            }
+                        }
+                        #ifdef SOFT_SIMULTE
+                            MOT[i].Motor->Enable=false;
+                        #else
+                            MOT[i].Motor->Enable=(atoi(CheckMotorValue(PT, "Enable", true).c_str())==1)?true:false;
+                        #endif
+
+                        if(MOT[i].Mot_Name==MInShuttle1 ||                      //jou 2014-10-09 修正Device superfluous at Output Shuttle誤報錯誤
+                           MOT[i].Mot_Name==MInShuttle2)
+                        {
+                            SYN_TEK_MOTION_MODULE=G9004_M204;
+                        }
+                    }
+
+                    if(CheckMotorValue(PT, "GearRatio", true)!="" &&
+                       CheckMotorValue(PT, "GearRatio", true)!="0")
+                    {
+                        MOT[i].Motor->GearRatio    = atof(CheckMotorValue(PT, "GearRatio"      ,true).c_str());
+                    }
+                    else
+                    {
+                        MOT[i].Motor->GearRatio=1.0;
+                    }
+
+                    MOT[i].Motor->Direction         =(atoi(CheckMotorValue(PT,"Direction"      ,true).c_str())==1)?true:false;
+                    MOT[i].Motor->HomeDirection     =(atoi(CheckMotorValue(PT,"HomeDirectior"  ,true).c_str())==1)?true:false;
+                    MOT[i].Motor->PHomeHighSpeed    = atoi(CheckMotorValue(PT,"HomeHighSpeed"  ,true).c_str());
+                    MOT[i].Motor->PHomeLowSpeed     = atoi(CheckMotorValue(PT,"HomeLowSpeed"   ,true).c_str());
+                    MOT[i].Motor->PJogHighSpeed     = atoi(CheckMotorValue(PT,"JogHighSpeed"   ,true).c_str());
+                    MOT[i].Motor->PJogLowSpeed      = atoi(CheckMotorValue(PT,"JogLowSpeed"    ,true).c_str());
+                    MOT[i].Motor->InitSpeed         = atoi(CheckMotorValue(PT,"InitSpeed"      ,true).c_str());
+                    MOT[i].Motor->PServoAlarmOn     =(atoi(CheckMotorValue(PT,"ServoAlarmOn"   ,true).c_str())==1)?true:false;
+                    MOT[i].Motor->MotorType         = atoi(CheckMotorValue(PT,"1P2P"           ,true).c_str()); //
+                    MOT[i].Motor->bSensorType       = atoi(CheckMotorValue(PT,"SensorType"     ,true).c_str()); //
+                    dAcc=atof(CheckMotorValue(PT,"Acc"            ,true).c_str());
+                    dDec=atof(CheckMotorValue(PT,"Dec"            ,true).c_str());
+                    if(sModel=="MN200")                                         //Steven 20230616 : MN200的加減速單位是秒
+                    {
+                        if(dAcc>1)
+                            dAcc=dAcc/100.0;
+                        if(dDec>1)
+                            dDec=dDec/100.0;
+                    }
+                    MOT[i].Motor->SetAccDataBase     (dAcc);
+                    MOT[i].Motor->SetDecDataBase     (dDec);
+                    if(sModel=="MC88X1")                                        //Nickliu 20230315 add MCXX8 Set Rate
+                    {
+                        MOT[i].Motor->SetRate        (atoi(CheckMotorValue(PT,"Rate"           ,true).c_str()));//Nickliu 20230315 add MCXX8 Set Rate
+                    }
+                    MOT[i].Motor->SetRange           (atoi(CheckMotorValue(PT,"Range"          ,true).c_str()));
+                    MOT[i].Motor->bLimitLogic       =(atoi(CheckMotorValue(PT,"LimitLogic"     ,true).c_str())==1)?true:false;
+                    MOT[i].Motor->bIn1Logic         =(atoi(CheckMotorValue(PT,"In1Logic"       ,true).c_str())==1)?true:false;
+                    MOT[i].SimulateSpeed            = atoi(CheckMotorValue(PT,"SimulateSpeed"  ,true).c_str());
+                    SetMotorAccelSpeed(i, 100);
+                    MOT[i].HomeFlag                 = 0;
+
+                    if(MOT[i].Mot_Name==MInShuttle1)                            //kevin 20110531 旋轉shuttle記錄速度
+                    {
+                        iInitSpeedSh1=MOT[i].Motor->InitSpeed;
+                        iPJogHighSpeedSh1=MOT[i].Motor->PJogHighSpeed;
+                    }
+
+                    if(MOT[i].Mot_Name==MInShuttle2)                            //kevin 20110531 旋轉shuttle記錄速度
+                    {
+                        iInitSpeedSh2=MOT[i].Motor->InitSpeed;
+                        iPJogHighSpeedSh2=MOT[i].Motor->PJogHighSpeed;
+                    }
+
+                    SoftLimit[0]=atoi(CheckMotorValue(PT, "SoftLimitN", true).c_str());
+                    SoftLimit[1]=atoi(CheckMotorValue(PT, "SoftLimitP", true).c_str());
+
+                    if(INDEX_MOTION_CARD==0 &&  (i==MTestZ1 || i==MTestZ2))     //Steven 20210623 : Index使用Galil
+                        MOT[i].IndexPickLimit=atoi(CheckMotorValue(PT, "PickLimit", true).c_str());
+
+                    if(INDEX_MOTION_CARD==0 && (i==MTestY1 || i==MTestZ1 || i==MTestZ2 || i==MTestY2))     //Steven 20210623 : Index使用Galil
+                        ;                                                       //Steven 20090922 需要修改
+                    else
+                        MOT[i].SetArmMaxSpeed();
+
+                    MOT[i].Motor->PSoftLimitN=atoi(CheckMotorValue(PT,"SoftLimitN",true).c_str());
+                    MOT[i].Motor->PSoftLimitP=atoi(CheckMotorValue(PT,"SoftLimitP",true).c_str());
+                    SoftLimit[0]=MOT[i].Motor->PSoftLimitN;
+                    SoftLimit[1]=MOT[i].Motor->PSoftLimitP;
+
+                    if(MOT[i].Motor->Enable)
+                        MOT[i].Motor->InitMotor(iAdder);
+                }
+            }
+        }
+        PT->Close();
+    }
+#endif
+
+    for(int i=0; i<TOTAL_MOTOR; i++)
+    {
+        if(MOT[i].Motor==NULL)
+        {
+            MOT[i].Motor=new TMySYNTEKMotor(-1);
+            MOT[i].Motor->Enable=false;
+            MOT[i].Motor->GearRatio=1.0;
+        }
+
+        if(MOT[i].Motor->Enable==true)
+        {
+            // ---- GATE 3 --------------------------------------------------
+            // golden cinitial.cpp:4038 --
+            //   MOT[i].Motor->MotorIdleSafeDoorCheck=IdleCheckSafeDoor;
+            // GATED because: `IdleCheckSafeDoor` is DECLARED (csystem.h:239)
+            //   but has NO DEFINITION anywhere in this tree -- golden's body is
+            //   golden csystem.cpp:2749 and the ported csystem.cpp contains 0
+            //   occurrences of the name.  This is an ADDRESS-OF, not a call, so
+            //   it is a hard undefined reference at link the moment this TU is
+            //   linked -- -fsyntax-only would NOT have caught it.
+            // DEFAULT IS FAITHFUL because: HTMotor::HTMotor() already sets
+            //   MotorIdleSafeDoorCheck=NULL (Motor/HTMotor.cpp:51), which is
+            //   also golden's pre-assignment value, so skipping the assignment
+            //   leaves the field at the only value the tree can produce.
+            // BEHAVIOUR DELTA ON A REAL MACHINE -- SAFETY-RELEVANT, READ THIS:
+            //   HTMotor::CheckIsSafeDoorOpen() (Motor/HTMotor.cpp:111-126) falls
+            //   back to `return (Enable==true)` when the callback is NULL.  So
+            //   with this gate every ENABLED axis reports "safe door OPEN" and
+            //   TMyMotor::JogP/JogN (mymotor.cpp:728-741) and the other
+            //   CheckIsSafeDoorOpen consumers REFUSE TO MOVE.  The failure is
+            //   fail-safe (motion blocked, never wrongly permitted), but it
+            //   means jog/home will look dead on a real machine until the wave
+            //   that translates golden csystem.cpp:2749 lands the body and this
+            //   gate is flipped.  Flipping it needs `#include "csystem.h"`.
+#if 0 // GATE 3: blocked by IdleCheckSafeDoor (declared csystem.h:239, body golden csystem.cpp:2749 -- 0 definitions in this tree)
+            MOT[i].Motor->MotorIdleSafeDoorCheck=IdleCheckSafeDoor;             // 2015.01.15 , Joye , Safe door check
+#endif
+            if(INDEX_MOTION_CARD==0 &&                                          //Steven 20210623 : Index使用Galil
+               (i==MTestY1 || i==MTestZ1 || i==MTestZ2 || i==MTestY2))
+            {
+                ;
+            }
+            else
+            {
+                MOT[i].PCIL132_StopMotor();
+                //2013-03-27    Dell -----------------
+                //InitMotor(0)絕對不可以跟"=new TMySYNTEKMotor((iLane*1000+iIP*10+iPort));"
+                //放在同一個迴圈，會造成送出去的pulse count與command count對不起來．至於"為什麼""我在function抬頭解釋
+                MOT[i].Motor->InitMotor(0);
+                //2013-03-27    Dell -----------------
+            }
+        }
+    }
+//    delete PT;
+    #ifdef DEBUG_AutoHomeLog
+    if(fAllMotorHome==true)
+    {
+        NewRecordProcess("", "fAllMotorHome", "InitialMotorParameter");
+    }
+    #endif
+    fAllMotorHome=false;
+
+    for(int x=0; x<_MAX_COL_ITEM; x++)                                          //Steven 20221005 : Production Log減少記憶體使用量
+    {
+        for(int y=0; y<_MAX_ROW_ITEM; y++)
+        {
+            MOT[MMTrayY         ].Tray.PordRec[x][y]=new TMyProductionRecord();
+            MOT[MMPlate1        ].Tray.PordRec[x][y]=new TMyProductionRecord();
+            MOT[MMPlate2        ].Tray.PordRec[x][y]=new TMyProductionRecord();
+            MOT[MMAuto1         ].Tray.PordRec[x][y]=new TMyProductionRecord();
+            MOT[MMAuto2         ].Tray.PordRec[x][y]=new TMyProductionRecord();
+            MOT[MMAuto3         ].Tray.PordRec[x][y]=new TMyProductionRecord();
+            MOT[MMAuto4         ].Tray.PordRec[x][y]=new TMyProductionRecord();
+            MOT[MMAuto5         ].Tray.PordRec[x][y]=new TMyProductionRecord();
+            MOT[MMAuto6         ].Tray.PordRec[x][y]=new TMyProductionRecord();
+            MOT[MManualTray1    ].Tray.PordRec[x][y]=new TMyProductionRecord();
+            MOT[MManualTray2    ].Tray.PordRec[x][y]=new TMyProductionRecord();
+            MOT[MManualTray3    ].Tray.PordRec[x][y]=new TMyProductionRecord();
+            MOT[MManualTray4    ].Tray.PordRec[x][y]=new TMyProductionRecord();
+            MOT[MManualTray5    ].Tray.PordRec[x][y]=new TMyProductionRecord();
+            MOT[MManualTray6    ].Tray.PordRec[x][y]=new TMyProductionRecord();
+            MOT[MOutRotateKit   ].Tray.PordRec[x][y]=new TMyProductionRecord();
+            MOT[MInRotateKit    ].Tray.PordRec[x][y]=new TMyProductionRecord();
+            MOT[MMBulkboxKit    ].Tray.PordRec[x][y]=new TMyProductionRecord(); //kevin 20221005 add error bin box
+        }
+    }
+
+    // ---- GATE 4 ----------------------------------------------------------
+    // golden cinitial.cpp:4089 -- fHome->InitialHomeClass();
+    // GATED because: the tree's TfHome is the deliberately minimal facade
+    //   forms/fHome.h:54 (iHomeStep / fShow / fAbort only -- its own banner
+    //   states it declares nothing else on purpose so nobody "retires" an
+    //   untranslated uhome.cpp method).  There is no InitialHomeClass anywhere:
+    //   0 hits tree-wide.  Golden's body lives in the unported uhome.cpp.
+    // DEFAULT IS FAITHFUL because: golden's own comment on this line is
+    //   "Steven 20240603 : 修正歸零馬達名稱消失問題" -- it re-publishes MOT[]
+    //   aliases into the Home FORM's widget list.  It is a pure UI refresh; it
+    //   writes nothing this function computed, and no non-UI consumer reads it.
+    //   Skipping it changes no motor state.
+    // BEHAVIOUR DELTA ON A REAL MACHINE: the Home screen's per-axis name
+    //   labels are not refreshed after a re-init, i.e. exactly the
+    //   "歸零馬達名稱消失" symptom Steven fixed on 20240603 comes back --
+    //   cosmetic on the Home dialog, no motion / interlock / alarm effect.
+    //   Un-gate together with uhome.cpp (also needs `#include "forms/fHome.h"`).
+#if 0 // GATE 4: blocked by TfHome::InitialHomeClass (golden uhome.cpp; forms/fHome.h:54 facade has 3 members, 0 methods)
+    fHome->InitialHomeClass();                                                  //Steven 20240603 : 修正歸零馬達名稱消失問題
+#endif
+    BYTE bDevNo_In[4]= {MOT[MInArmPitch  ].Motor->iPortID,
+                        MOT[MInArmPitchX2].Motor->iPortID,
+                        MOT[MInArmPitchX3].Motor->iPortID,
+                        MOT[MInArmPitchX4].Motor->iPortID};
+    BYTE bDevNo_Put[4]={MOT[MOutArmPitch  ].Motor->iPortID,
+                        MOT[MOutArmPitchX2].Motor->iPortID,
+                        MOT[MOutArmPitchX3].Motor->iPortID,
+                        MOT[MOutArmPitchX4].Motor->iPortID};
+
+    MOT[MInArmPitch].Motor->SetGroup(1, 4, bDevNo_In);
+    MOT[MOutArmPitch].Motor->SetGroup(2, 4, bDevNo_Put);
+}
+//==============================================================================

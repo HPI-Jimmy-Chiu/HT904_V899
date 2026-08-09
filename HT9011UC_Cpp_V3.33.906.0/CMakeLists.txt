@@ -71,6 +71,32 @@ add_compile_definitions(_WIN32_WINNT=0x0601 WINVER=0x0601)
 add_compile_definitions(MN200DLL_EXPORTS)
 
 # =============================================================================
+# AI(W906-PT-W5a-integrate) 20260809: DLLDIR_EX -- the SAME LEVER SHAPE as
+# MN200DLL_EXPORTS above, and global for the same reason: every TU must agree on the
+# decorated name.
+#
+# Motor/Hontech_M4.h:61-64 makes DLLDIR `__declspec(dllimport)` unless DLLDIR_EX is
+# defined, so a caller that includes it emits `_imp___Hon_m4_xxx@N` thunk references.
+# But Motor/Hontech_M4.cpp -- a TRANSLATED unit already in this archive -- DEFINES the
+# plain `__Hon_m4_xxx@N` symbols (:157 onwards).  The two never matched.
+#
+# NOTHING BROKE UNTIL NOW, and the reason is the archive-extraction trap again: no TU
+# referenced Motor/mySYNTEKmotor.cpp, so its object was never pulled and its 26
+# `_imp___Hon_m4_*` references were never looked at.  cinitial.cpp's newly translated
+# InitialMotorParameter() has `new TMySYNTEKMotor(iAdder)` in golden's driver ladder,
+# which extracts the member and turns those 26 into hard errors.
+#
+# Probed before adopting, not assumed:
+#   without DLLDIR_EX  -> caller emits _imp___Hon_m4_initial@8   (nothing defines it)
+#   with    DLLDIR_EX  -> caller emits   __Hon_m4_initial@8
+#   Hontech_M4.cpp.obj defines            __Hon_m4_initial@8     <-- match
+# So this does not add a stub; it CONNECTS ~2,000 already-translated lines that had
+# been unreachable.  Motor/Hontech_M4.h is the only file in this tree that reads the
+# macro (grepped), so there is no other blast radius.
+# =============================================================================
+add_compile_definitions(DLLDIR_EX)
+
+# =============================================================================
 # AI(W906-W7-A1) 20260728: MSVC second-oracle enablement block. MUST stay at
 # the TOP of this file (after project(), before any add_library) -- see
 # docs/W7_UI_ARCHITECTURE_PLAN.md SS6 W7-A1 / SS4-V5 / SS4-V8 for the full
@@ -898,6 +924,18 @@ add_library(ht9045_motor STATIC
     # dllimport, so callers already emit direct references.
     Motor/myGALILmotor.cpp
     Motor/vendor_offline_galil.cpp
+    # AI(W906-PT-W5a-integrate) 20260809: the THIRD offline vendor layer -- CONTEC SMC.
+    # Motor/mySMCmotor.cpp has been in this archive for waves carrying 46 unresolved
+    # SmcW* references, and nothing broke because nothing referenced TMySMCMotor, so the
+    # object was never extracted.  cinitial.cpp's newly translated
+    # InitialMotorParameter() contains golden's driver ladder, one arm of which is
+    # `new TMySMCMotor(iAdder)` -- the first consumer -- so the member now gets pulled
+    # and those 46 become hard errors.  Measured with nm on the real archive before
+    # writing the layer: exactly 46 distinct `_SmcW*@N`, zero defined in any of the 16
+    # archives.  See vendor_offline_smc.cpp's banner for the return-value semantics
+    # (non-zero == "the call failed", read off mySMCmotor.cpp:395-398's own `ret!=0`
+    # test, because CSmc.h ships no error-code table to quote).
+    Motor/vendor_offline_smc.cpp
 )
 
 target_include_directories(ht9045_motor PUBLIC
