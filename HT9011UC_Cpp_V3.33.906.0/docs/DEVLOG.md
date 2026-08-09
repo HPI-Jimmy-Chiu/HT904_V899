@@ -5117,3 +5117,75 @@ universal-newline 轉換，`
 - **仍然待辦**：csystem.cpp wave 2（5,835 行）／GATE (W5a-G) 三部分／
   `cmydef.cpp` 尾巴其餘全域／mykitsuck substrate 回家波／PT-W4 約 30 條 findings。
 - **執行模式**：非表單優先、每波全新 dir Debug+Release、行為變更單獨一顆 commit 單獨量。
+
+### PT-W5c 收工：驗收兩組都綠，已 commit `6977fc3`
+
+**驗收（全新 dir，兩組都在最後一次編輯之後量）**
+
+| build dir（全新） | 建法 | build | ctest | 失敗集合 |
+|---|---|---|---|---|
+| `build_0809_w5cg_dbg` | 未最佳化 | exit 0、0 error / 0 OOM | **128 / 134** | 計畫書 §7 那 6 個 |
+| `build_0809_w5cg_rel` | Release（-O3 + NDEBUG） | exit 0、0 error / 0 OOM | **128 / 134** | **與上列逐項相同** |
+
+值得記一筆：Release 這次**沒有 OOM**。`csystem.cpp` 已經 19,984 行，
+而上一波才因為 `uHGemHT9045_EC.cpp` 在 -O3 下 `cc1plus: out of memory` 被迫釘 -O1；
+這支更大的檔在 -O3 下編得過，所以那個 OOM 是該檔自身的形狀問題，不是「檔案大就會 OOM」。
+
+**census（附分母與單位：golden code 行）**
+非表單 **74.8% → 77.7%**（缺 84,897 → 75,022，減 9,875）；
+全案 44.1% → **45.7%**（缺 324,783）。
+`mirrored but INCOMPLETE` 從 43 檔變 44 檔（csystem.cpp 仍在列上——wave 2 還有 5,835 行）。
+
+**這一波的整併數字**：530 條 link 錯誤 → 0。
+53 個重複定義 → 0（本波 43 個 + 既存潛伏 10 個）；13 個未解析 → 0
+（`cmydef.cpp` ungate 6 個全域、`cpublic.cpp` ungate `HeaterLog` 並只 gate 它那一行
+`fMain->slHeaterLog`、`cprod.cpp` 補 `bDoRTCLearning` 定義、`csystem.cpp` 7 個 call-site gate）。
+
+**測試重新校準（`W6_1_EmptyCanary`）已完成，而且是量過才改的**
+探針量到 `HasICUnderMachine()==1`、`WhichAutoNeedTray()==1`、`iAutoEmptyTask==100`。
+所以 (b) 半段的 fixture **從來沒有走到它自己命名的那個 guard**——
+停一盤在 MMTrayY 正好就是讓 `HasICUnderMachine()` 為真的原因，
+於是走進 `else` 分支，而該分支第一件事就是把 fixture 預設的 `bAutoNeedTray[]` 覆寫掉。
+改後的斷言寫 golden 的真實行為，並把**因此失去覆蓋的 guard**
+（golden `acatchtray.cpp:700-709`）明白寫進測試自己的 NOT COVERED 區，不是默默丟掉。
+
+**還欠著的：獨立稽核**
+本波 15,135 行的忠實度**至今沒有任何獨立複驗**（5 個 verify agent 全在 session limit 掛掉）。
+已用 `resumeFromRunId: wf_bf8f25d5-59e` 重新派出——翻譯 agent 從 cache 回放不重寫檔，
+只跑 5 個 verify，而且這次它們看到的是**整併後**的樹。
+稽核結果回來要逐條複驗（記憶：12 條 findings 有 11 條是引用造假或 off-by-N）。
+
+### 🔖 RESUME（最新）
+
+- **⚠ 第一件事仍是 `git status`。** PT-W5c 已收乾淨（commit `6977fc3`），
+  工作樹上除了 `tools/dfm2rc/reports/b1d_idempotent_report.json`（測試產物噪音）
+  沒有在製工作。
+- **PT-W5c 全部完成**：翻譯 ✅ ／ 整併 ✅（530→0）／ 驗收 ✅（Debug 128/134、
+  Release 128/134、逐項相同）／ commit ✅ ／ **獨立稽核 ⏳ 正在跑**。
+- **接續第一件事：收 PT-W5c 的稽核結果並逐條複驗。**
+  run id `wf_bf8f25d5-59e`。稽核在整併後的樹上跑，所以
+  「STUBS I NOW SUPERSEDE」那一項它們會看到已經 `#if 0` 了——那是對的。
+  **複驗規則不變：逐條開 golden 對字面，絕對宣稱預設為偽。**
+- **下一波：csystem.cpp wave 2** —— 剩 **5,835** golden 行。
+  用 `python tools/census/census.py --detail` 重新算一次分組。
+  `csystem.cpp` 括號平衡，所以它的 span 可信。
+- **然後（順序建議）**：
+  1. task #12 安全門一家（**安全關鍵、單獨一顆 commit 單獨量**）：
+     `csystem_predicates.cpp:312` `CheckSafeDoorIsClosed(){return true;}` 已在本波退役，
+     真本體在 `csystem.cpp:19332`——**這一項其實已經隨本波生效了**，
+     所以 task #12 剩下的是 `cinitial.cpp:4452` GATE 3、`myio.cpp:180` GATE (4)、
+     `MyLaneIo.cpp:49` 的 static 影子（4-arg 真本體已在 `csystem.cpp:19656`）。
+     **注意：MyLaneIo.cpp:49 是 static，不會有 link 錯誤，必須明確刪。**
+  2. task #10 GATE (W5a-G) 三部分
+  3. `cmydef.cpp` 尾巴其餘全域（本波已 ungate 6 個）
+  4. `cContact.cpp`（22,324，最大）——**但它括號不平衡（+1），排波前必須手動核 span**；
+     且有同名 `.dfm`，要不要算非表單**需使用者決定**。
+- **本波學到、要寫進 skill 的三條**：
+  1. 「本體所在 .cpp 有沒有在 CMakeLists 註冊」**不夠**，還要驗本體有沒有被 `#if 0` 包住。
+     13 個未解析符號全是這種。**「已註冊」≠「連得上」。**
+  2. **archive 抽出會暴露休眠的重複定義**：53 個碰撞裡 9 個是既存潛伏 ODR 違規
+     （`asortarm.cpp` / `uHeaterThread.cpp` 對上老 shim），本波之前一直沒人發現。
+  3. 腳本讀檔一律 `newline=''`。少了它，universal-newline 轉換會讓
+     **每個 CRLF 檔靜默回報 0 個命中**——我這波就是這樣先錯了一次。
+- **執行模式**：非表單優先、`.dfm`／UI 不處理、每波全新 dir Debug+Release、
+  行為變更單獨一顆 commit 單獨量。
