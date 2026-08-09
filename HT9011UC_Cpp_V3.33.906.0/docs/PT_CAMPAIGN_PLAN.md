@@ -24,8 +24,17 @@
 - 函式層：golden 頂層函式定義名 vs port 同名定義；缺的函式**按 golden span 加總行數**，
   所以「port 檔存在但只翻了 10%」不會被算成翻完。
 
-腳本：`census.py` / `classify.py` / `remaining.py`（本次留在 session scratchpad；
-數字如下，重跑請照本節重建，勿信任何未附量法的百分比）。
+腳本：**`tools/census/census.py`**（20260809 重寫並簽進 repo，取代原本留在 session
+scratchpad 而後遺失的 `census.py`/`classify.py`/`remaining.py`）。直接跑：
+
+```
+python tools/census/census.py --detail          # 摘要 + 每檔剩餘表
+python tools/census/census.py --json out.json   # 機器可讀
+```
+
+golden 樹路徑可用環境變數 `HT9045_GOLDEN` 覆寫，預設
+`D:/HT9045/HT9011UC_Code_V3.33.906.0_20260618`。
+**勿信任何未附量法的百分比**——引用時分母（表單／非表單／全部）與單位要一起講。
 
 **已知失真**：函式名比對是 regex，對 `extract-calc-core` 這種「改名抽核心」的檔會
 **高估缺口**。已人工抽驗兩個最大的：`cContact.cpp`（port 544 行僅 calc core，golden
@@ -34,10 +43,45 @@
 
 ---
 
-## §3 現況（20260807 量測）
+## §3 現況
 
-> **⚠ 20260808 註記：下面整張表是 20260807 的快照，PT-W2（27 檔）與 PT-W3（18 檔）落地之後
+### 20260809 量測（**這是現行數字**；腳本已簽進 repo，可重跑）
+
+```
+python tools/census/census.py --detail
+```
+
+| 分群 | 檔數 | golden code 行 | 尚缺 | 已翻 | 完成度 |
+|---|---:|---:|---:|---:|---:|
+| 非表單 | 171 | 336,509 | 90,255 | 246,254 | **73.2%** |
+| 表單（有同名 .dfm） | 118 | 261,862 | 249,761 | 12,101 | **4.6%** |
+| 合計 | 289 | 598,371 | 340,016 | 258,355 | **43.2%** |
+
+**量法與 §2 相同且是函式層**：golden 每個頂層函式若 port 沒有同名（或 extract-calc-core
+別名）定義，就按它的 golden span 全額計入「尚缺」；port 端整個 body 在 `#if 0` 裡的
+也算尚缺（gated ≠ 已翻行為）。所以「檔案存在但只翻 10%」不會被算成翻完。
+
+**沒有 port 鏡射檔的檔案：非表單 3 個、表單 107 個。**
+那 3 個非表單是 `Command.cpp`（9,445）、`BarCode/BarCode_Sh1.cpp`（5,168）、
+`BarCode/BarCode_Sh2.cpp`（5,180）——PT-W4 查清後刻意排除（Command.cpp 是 164 個
+`TfMain::` 方法即表單碼、只是沒有自己的 .dfm；兩個 BarCode_Sh 的 10 個方法有 7 個
+已用 extract-calc-core 改名翻在 `BarCode/BarCode_Shuttle*.cpp`）。
+> **更正**：PT-W4 的 commit message（`558ec79`）寫「all 171 non-form units now have a port
+> mirror / 非表單缺口 0 檔」——**那句話是錯的**，正確是還有上面這 3 個。排除它們的理由
+> 成立，但「缺口為 0」的說法不成立。
+
+**「尚缺」集中度極高**：43 個有鏡射檔但未翻完的檔共缺 102,347 行，而**前五名就佔 65,905 行**
+（`cContact` 22,324／`csystem` 17,638／`cinitial` 12,017／`aTester_Rear` 7,573／
+`aTester_Front` 6,353）。非表單的完成靠這幾塊，不靠檔數。
+
+---
+
+### 20260807 舊快照（保留備查，**不可引用為現況**）
+
+> **⚠ 下面整張表是 20260807 的快照，PT-W2（27 檔）與 PT-W3（18 檔）落地之後
 > 就已經過期，「39.0% / 66.3% / 4.0%」都不可以再當成現況引用。**
+> （20260809 後記：腳本已重寫並簽進 `tools/census/census.py`，所以上面那張新表可以重跑驗證。
+> 以下這段當時的說明保留備查。）
 > 沒有直接把數字改掉是刻意的：§2 的 `census.py` / `classify.py` / `remaining.py` 當初留在
 > 上一場次的 scratchpad，**已經不存在**，而本表的分母是「函式層、去空行去註解的 code line」——
 > 拿檔案層的行數硬加上去就是把兩種單位混在一起，正是本節下面那段警告在講的事。
@@ -125,9 +169,37 @@ golden .cpp 全部            339 檔   643,130 行
 | **PT-W1** | RotateKit×3、TriTemp、bthermo、AutoRetest、OCRInsp、SortingBinTray、uHeaterThread、MyStringList、EJ1N/TextProcess | 11 | ~18.5k | ✅ 完成（本檔同批 commit） |
 | **PT-W2** | 非表單 deps≤1 整層一次清光 | 27 | ~11.4k | ✅ 完成（commit `8c5e3fb`；但它記的 128/134 是整併前量的，實際 HEAD 是紅的，見 PT-W3 開場） |
 | **PT-W3** | 非表單 deps 2–6（CosFunction、mykitsuck、ATCSystem、ATCInterface、myMN200motor、mySYNTEKmotor、myEthercatmotor、uRENESAS_Server、OmronLaser×3、VacuumUnit×2、MyTempPanel、ScanBtnThread、TfAOILaserScan、cInArmPlacement、handlerlog） | **18**（實際；估 ~14） | **27,689 raw / 23,006 code**（實際；估 ~15k） | ✅ 完成 20260808 |
-| **PT-W4** | 非表單 deps≥8（BarCode_Sh1/Sh2、myGALILmotor、asortarm、aoutarm、Command.cpp、uHGemHT9045_SV/EC） | ~12 | ~40k | 待排 |
-| **PT-W5..** | 26 個翻一半的補完（`cContact` / `csystem` / `aTester_*` 為最大三塊） | 26 | ~75.9k | 待排 |
-| **PT-F1..** | 110 個 VCL 表單單元，經 `forms/` facade | 110 | ~221.7k | 待排；需先定 facade 覆蓋策略 |
+| **PT-W4** | 非表單最後 7 個真缺檔（myGALILmotor、aoutarm、asortarm、uHGemHT9045_SV/EC、uPAT_Function、PowerSavingMode）＋Galil offline vendor 層 | **7**（估 ~12） | **19,315 raw / 16,314 code**（估 ~40k） | ✅ 完成 20260809（commit `558ec79`） |
+| **PT-W5..** | 43 個「有鏡射檔但沒翻完」的補完 | 43 | **102,347**（20260809 函式層量） | 待排——**前五名佔 65,905 行**，見下 |
+| **PT-F1..** | 107 個沒有鏡射檔的 VCL 表單單元 ＋ 11 個只翻一部分的 | 118 | **249,761** | 待排；需先定 facade 覆蓋策略 |
+
+**PT-W4 之後排除在波次之外的 3 個非表單檔**（理由見 §3）：`Command.cpp`（9,445，
+實為 164 個 `TfMain::` 方法 → 歸表單波）、`BarCode/BarCode_Sh1.cpp`＋`_Sh2.cpp`
+（10,348，10 個方法有 7 個已 extract-calc-core 翻在 `BarCode_Shuttle*.cpp`，
+真缺口只有 `InitialSFCAutoTune1`/`DoSFCAutoTune_1`/`Do2DIDCheckSh1` → 歸 PT-W5）。
+
+### PT-W5 的排序（20260809 census，缺口由大到小；前五名＝非表單剩餘的 73%）
+
+| 缺口行 | 缺函式 | 檔案 | 排序理由 |
+|---:|---:|---|---|
+| 22,324 | 102 | `cContact.cpp` | 最大單一塊；有 .dfm 但內容是接觸力計算不是 UI，port 只有 extract-calc-core |
+| 17,638 | 204 | `csystem.cpp` | 第二大；port 只有 MainProc/DoAllProcess spine |
+| 12,017 | 55 | `cinitial.cpp` | **優先**：`InitialMotorParameter()`（golden :3392）在這裡，它是 `MOT[].Motor` 唯一的忠實家 |
+| 7,573 | 17 | `aTester_Rear.cpp` | |
+| 6,353 | 16 | `aTester_Front.cpp` | |
+| 5,568 | 20 | `SECSGEM/uHGemHT9045.cpp` | 也是 SV/EC 兩個 override 宣告的家 |
+| 4,565 | 65 | `ainarm9045.cpp` | |
+| 3,811 | 46 | `Automation/SCK_ART.cpp` | |
+| 3,619 | 82 | `ainarm2.cpp` | |
+| 3,531 | 55 | `Motor/mymotor.cpp` | **優先**：48 個 ACTIVE Gali_ stub 在這裡，擋住已交付的 myGALILmotor.cpp |
+| 2,827 | 40 | `aoutarm9045.cpp` | |
+
+**先做 `cinitial.cpp` + `Motor/mymotor.cpp` 的理由（重新排序，不照行數大小）**：
+這兩個檔一起做，就是 §9「Sim-motor 耦合」的**忠實解法**——不必發明任何 offline
+attach 接縫。golden 的 `InitialMotorParameter()` 本來就會依 `MOTOR_DRIVER_TYPE` 掛 driver，
+而且它的 `#ifdef SOFT_SIMULTE` 分支是「**照樣 new，只把 Enable 設 false**」，
+也就是 **golden 自己的模擬姿態是「掛好但停用」，不是 NULL**。
+先發明一個 offline 接縫再讓 PT-W5 拆掉，是白做。
 
 **表單波的前置決策（尚未做）**：`forms/` 目前是**手寫 facade**（fMain/fLotInfo/fAOI…），
 而 golden 表單單元有 110 個。要嘛把 facade 補到 110 個（工作量大但形狀已知），
