@@ -2836,10 +2836,13 @@ static W7C2_TfSocketCommSeam W7C2_fSocketComm;
 #define W7C2_EVENTREPORT_ARTRTFINISH()     EventReport(SECS_EVENT.ArtRTFinish)    // 61 ART RT finish
 
 // --- absent FREE functions -----------------------------------------------------
-static bool W7C2_InArmSuckState(){ return false; }        // golden -- any in-arm picker vacuum on? offline none
-#define InArmSuckState         W7C2_InArmSuckState
-static bool W7C2_OutArmSuckState(){ return false; }       // golden -- any out-arm picker vacuum on? offline none
-#define OutArmSuckState        W7C2_OutArmSuckState
+//AI(ht9045-v906) 20260810: PT-W5c audit fix (C) -- RETIRED. The `static bool
+// W7C2_InArmSuckState/W7C2_OutArmSuckState(){ return false; }` stand-ins and their
+// `#define`s are DELETED, with the matching `#undef`s further down. PT-W5c landed
+// golden's real bodies, but every call site in this file sat before the `#undef` and so
+// expanded to these stubs: the real bodies had ZERO callers tree-wide and golden's
+// one-cycle "a picker still holds vacuum -> iOneCycleTask=4; return;" hold stayed
+// bypassed. Forward declarations sit just after the #endif of this block.
 //AI(W906-W7-L1-W3fixA) 20260802: RETIRED -- the `static bool W7C2_DoLoaderTrayFeed()
 // { return true; }` stand-in and its `#define` are DELETED.  Wave 3 translated
 // golden's real DoLoaderTrayFeed + InitDoLoaderTrayFeedTask into asendic.cpp
@@ -2863,8 +2866,10 @@ static bool W7C2_OutArmSuckState(){ return false; }       // golden -- any out-a
 // W7-U wave that un-gates that ladder will supply the call.
 static void W7C2_DoInArm_SuckerMap(){}                    // golden -- rebuild in-arm sucker map after site mapping
 #define DoInArm_SuckerMap      W7C2_DoInArm_SuckerMap
-static bool W7C2_CheckNeedToRT(){ return false; }         // golden -- need auto-retest? offline: no
-#define CheckNeedToRT          W7C2_CheckNeedToRT
+//AI(ht9045-v906) 20260810: PT-W5c audit fix (C) -- RETIRED, same reason as the two
+// suck-state seams above: this `#define` made `bNeedRetest=CheckNeedToRT();` at the
+// call site read the stub, so bNeedRetest was hard-false and auto-retest was never
+// requested, while the real body below had no caller at all.
 static int  W7C2_ShowMyMessageBox_YES_NO(AnsiString /*s1*/, AnsiString /*s2*/=""){ return 0; } // golden mymessbox.h -- offline: NO(0)
 #define ShowMyMessageBox_YES_NO W7C2_ShowMyMessageBox_YES_NO
 static void W7C2_DoAutoRetest(bool /*b*/){}               // golden -- kick auto-retest sequence
@@ -2898,10 +2903,43 @@ static bool W7C2_EmptySocketCheckModeBeUse(){ return false; }   // golden csyste
 #define EmptySocketCheckModeBeUse W7C2_EmptySocketCheckModeBeUse
 static bool W7C2_WriteLastDataFile(bool /*BackUp2*/=false, bool /*bNotContact*/=false){ return true; } // golden cprod.cpp:1944 (gated); offline: write ok
 #define WriteLastDataFile      W7C2_WriteLastDataFile
-static int  W7C2_iClearSocketFunctionTask = 0;                  // golden csystem.h:61 (extern int) -- clear-socket sub-task cursor
-#define iClearSocketFunctionTask W7C2_iClearSocketFunctionTask
+//AI(ht9045-v906) 20260810: PT-W5c audit fix (A) -- RETIRED. This `static int` plus its
+// `#define` split ONE golden variable into TWO objects: the writer (DoOneCycleFinishCheck,
+// `iClearSocketFunctionTask=1;`) sits before the `#undef` and hit this static, while
+// DoCleanSocket's `int &Task=iClearSocketFunctionTask;` sits after it and binds the real
+// global. The arming reset never reached the consumer, so an INTERRUPTED Socket Purge
+// would resume from a stale mid-ladder Task (e.g. a MTestZ1/MTestZ2 move) instead of
+// restarting at 1. Golden has one object (csystem.cpp:134).
+// No declaration needed here: csystem.h:61 already declares `extern int
+// iClearSocketFunctionTask;`, matching golden csystem.h:23.
 
 #endif // W7C2_SEAM
+
+// ---------------------------------------------------------------------------
+//AI(ht9045-v906) 20260810: PT-W5c audit fix (C) -- FORWARD DECLARATIONS, and why they
+// are needed here at all.
+//
+// The three W7C2 seams for InArmSuckState / OutArmSuckState / CheckNeedToRT have been
+// DELETED (they used to sit at the top of the W7C2_SEAM block above). They had to go:
+// their `#define`s intercepted every call site in this file, so PT-W5c's freshly landed
+// real bodies (now at the golden-order position further down) had ZERO callers tree-wide
+// and golden's one-cycle vacuum hold stayed bypassed with bNeedRetest hard-false. The
+// link was perfectly clean throughout -- a macro seam is invisible to nm.
+//
+// Deleting the seams alone does NOT compile, which is why this block exists:
+// GOLDEN NEEDS NO DECLARATION because golden's call sites (csystem.cpp:12854, :12862,
+// :14539) all come AFTER its bodies (:12719 / :12732 / :12745). This port's call sites
+// are ~9,000 lines BEFORE its bodies, because the DoOneCycleFinishCheck spine landed in
+// an earlier wave than g5's bodies. So the ordering difference is the port's, not
+// golden's, and a declaration is the mechanical consequence -- no behaviour of its own.
+//
+// Written in golden's own local-extern idiom for cross-position symbols (golden uses it
+// at csystem.cpp:12674 and :12759-12766). Neither golden's csystem.h nor this port's
+// declares these three, so a header declaration would be the less faithful choice.
+// ---------------------------------------------------------------------------
+bool InArmSuckState();                                                          // body below, golden csystem.cpp:12719
+bool OutArmSuckState();                                                         // body below, golden csystem.cpp:12732
+bool CheckNeedToRT();                                                           // body below, golden csystem.cpp:12745
 
 // ===========================================================================
 //  DoOneCycleFinishCheck  -- golden csystem.cpp:12813-14047 (~1235 lines).
@@ -4904,8 +4942,14 @@ bool DoART_AfterCleanOut(int &ret)                                              
 //  neutralised here, deliberately and permanently (NOT restored at the end of
 //  the block -- restoring would re-shadow the real symbols this block lands):
 //
-//   1) iClearSocketFunctionTask  (:2902 -> W7C2_iClearSocketFunctionTask, a
-//      file-local `static int` at :2901).  DoCleanSocket binds its `int &Task`
+//   1) iClearSocketFunctionTask -- **the seam itself is now DELETED (20260810), so this
+//      neutralisation is no longer load-bearing; the text below is kept because its
+//      analysis was right.** What it missed: neutralising the macro HERE fixed the
+//      reader while leaving the writer in DoOneCycleFinishCheck (before the `#undef`)
+//      still bound to the file-local static -- one golden variable, two objects. Only
+//      deleting the seam gives the single object golden has.
+//      (Historic description, seam formerly at :2901-2902:)
+//      DoCleanSocket binds its `int &Task`
 //      to this cursor.  Left mangled, the socket-purge SM would have driven a
 //      PRIVATE cursor that nothing outside this TU can see or reset, while
 //      atester.cpp:1216/:1402 (`iClearSocketFunction=1`) and every external
@@ -4925,7 +4969,8 @@ bool DoART_AfterCleanOut(int &ret)                                              
 //  Everything else stays seam-bound on purpose; the two that this group
 //  actually reaches are listed in the GATE REGISTER as no-ops.
 // ---------------------------------------------------------------------------
-#undef iClearSocketFunctionTask
+//AI(ht9045-v906) 20260810: PT-W5c audit fix (A) -- the `#undef iClearSocketFunctionTask`
+// is DELETED along with its seam; there is now a single object, so nothing to undo.
 #undef DoAutoRetest
 
 // ---------------------------------------------------------------------------
@@ -4942,8 +4987,28 @@ bool DoART_AfterCleanOut(int &ret)                                              
 //  mangled names are identical and there is no default-argument redeclaration.
 // ---------------------------------------------------------------------------
 extern int iStartStep;                                                          // golden csystem.cpp:8341 (definition: atester.cpp:158)
-void InitialFix3CanFullTask();                                                  // golden aoutarm9045.h:79  -- body aoutarm9045.cpp (CMakeLists:1595)
-bool UseFix3Cylinder(int iWhichAuto);                                           // golden aoutarm9045.h:81  -- body aoutarm9045.cpp (CMakeLists:1595)
+//AI(ht9045-v906) 20260810: PT-W5c audit fix (B) -- CORRECTION. These two were described
+// as having real bodies in a CMakeLists-registered .cpp. The .cpp is registered, but the
+// bodies there are OFFLINE STUBS:
+//     aoutarm9045.cpp:1552  bool UseFix3Cylinder(int)     { return true;  }
+//     aoutarm9045.cpp:1555  void InitialFix3CanFullTask() {}
+// *** SAFETY-RELEVANT BEHAVIOUR DELTA, NOT A GATE: golden's UseFix3Cylinder
+// *** (aoutarm9045.cpp:794) IS A STATE MACHINE -- `int &Task=iFix3CanFullTask;`,
+// *** `switch(Task)`, default `bResult=false` -- THAT RETURNS false UNTIL THE FIX3
+// *** CYLINDER SEQUENCE COMPLETES, INCLUDING WAITING FOR MoveOutArmToAutoSafe_9045().
+// *** THE STUB RETURNS true ON THE FIRST TICK, SO EVERY CONSUMER BELOW READS
+// *** "NOT FINISHED YET" AS "FINISHED, PROCEED". ON A MACHINE CONFIGURED
+// *** FIX3_FULL_PLACE==Fix3K_UseCylinder, INITIAL START NEVER RETRACTS THE FIX3
+// *** CYLINDER AND NEVER WAITS FOR THE OUTARM SAFE-POSITION CHECK.
+// Corroborating evidence that this is live, not theoretical: bUseFix3CylinderActive has
+// NO WRITER anywhere in the port (cmydef.cpp:3981 init-false plus two readers,
+// csystem.cpp:1786 and AutoClean/AutoClean.cpp:8269), and golden's own comment at the
+// reader names the hazard: 「UseFix3Cylinder()未完成 導致 Shuttle鎖死Hang up」.
+// This is the gate register's own worst defect class arriving through a STUB instead of a
+// GATE, which is exactly why no gate entry mentions it. Found by two independent auditors.
+// UN-STUB TASK: translate golden aoutarm9045.cpp:794 and :749 into aoutarm9045.cpp.
+void InitialFix3CanFullTask();                                                  // golden aoutarm9045.h:79  -- OFFLINE STUB at aoutarm9045.cpp:1555
+bool UseFix3Cylinder(int iWhichAuto);                                           // golden aoutarm9045.h:81  -- OFFLINE STUB at aoutarm9045.cpp:1552
 bool MoveOutArmToAutoSafe_9045();                                               // golden aoutarm9045.h:51  -- body aoutarm9045.cpp (CMakeLists:1595)
 extern bool DoAutoRetest(bool bReset);                                          // golden AutoRetest.h:60   -- body AutoRetest.cpp:365 (CMakeLists:2018)
 void InitOCRFlow(bool bTrain);                                                  // golden OCRInsp.h:36      -- body OCRInsp.cpp (CMakeLists:2019)
@@ -5074,7 +5139,9 @@ void ProcessStatrDigital()
 //  ACTIVE here: ShowErrorMessage is real (canary_support.h:66) and the
 //  bSenDuplicateErr[2][9] latch that suppresses repeats is reproduced exactly.
 //
-//  Real leaves (no seam): InitialFix3CanFullTask / UseFix3Cylinder
+//  No seam, but NOT real leaves: InitialFix3CanFullTask / UseFix3Cylinder are OFFLINE
+//  STUBS (aoutarm9045.cpp:1555 / :1552). See the CORRECTION above their declarations --
+//  UseFix3Cylinder's stub turns golden's "not finished yet" into "finished, proceed".
 //  (aoutarm9045.cpp), StartDetectMotorSensor / DoInOutARM_SHT_MoveSafe
 //  (acarry.h:49/:53), MOT[] MotorMove/SetSpeed/ReadEncoderPos/fCanMove*
 //  (Motor/mymotor.h), Sen[] (mysensor.h), SetMotorSpeed
@@ -11538,25 +11605,21 @@ bool DoTrayFeed()
 //
 //  SEAM NOTES (not gates -- ACTIVE stand-ins carrying golden's real logic)
 //  ----------------------------------------------------------------------
-//   1. #undef InArmSuckState / OutArmSuckState / CheckNeedToRT.
-//      csystem.cpp ALREADY has three W7C2 offline seams for these, WITH `#define`
-//      redirects still in effect at end-of-file:
-//         :2839 static bool W7C2_InArmSuckState(){ return false; }   :2840 #define
-//         :2841 static bool W7C2_OutArmSuckState(){ return false; }  :2842 #define
-//         :2866 static bool W7C2_CheckNeedToRT(){ return false; }    :2867 #define
-//      Without the #undef, `bool InArmSuckState()` below preprocesses into
-//      `bool W7C2_InArmSuckState()` and REDEFINES the static -- a hard error.
-//      The #undef does NOT touch the three already-expanded call sites (:2968, :2976,
-//      :4676): those were expanded at their own lines and still call the W7C2 seams.
-//      **THEREFORE THE THREE REAL BODIES BELOW ARE, AS OF THIS APPEND, DEAD CODE IN
-//      THIS TU -- THIS IS TRAP #3 IN ITS PUREST FORM.  UNTIL THE MAIN LOOP RETIRES
-//      THE SEAMS AT :2839-2842 / :2866-2867, csystem.cpp's OWN DoOneCycleFinishCheck
-//      STILL SEES InArmSuckState()==OutArmSuckState()==false AT :2968/:2976, SO
-//      GOLDEN'S "A PICKER STILL HAS VACUUM ON" HOLD (iOneCycleTask=4; return) IS
-//      STILL BYPASSED AND ONE CYCLE CAN STILL BE DECLARED FINISHED WHILE ICs ARE
-//      STILL HELD ON THE IN/OUT-ARM PICKERS; AND DoART_AfterCleanOut AT :4676 STILL
-//      READS bNeedRetest=false, SO AUTO-RETEST IS STILL NEVER REQUESTED.**
-//      Appending my bodies does NOT by itself fix either -- the seam retirement does.
+//   1. InArmSuckState / OutArmSuckState / CheckNeedToRT -- **RESOLVED 20260810, and
+//      this note was RIGHT and was missed once.**
+//      As written by g5, this note correctly stated that the three W7C2 `#define`
+//      seams intercepted every call site in this TU, that the real bodies below were
+//      therefore DEAD CODE, that it was "trap #3 in its purest form", and that only
+//      retiring the seams -- not appending bodies -- would fix it. The PT-W5c
+//      integration read this note and still shipped without acting on it; it took an
+//      independent audit (two auditors, separately) to resurface the same conclusion.
+//      The seams and their `#undef`s are now DELETED and forward declarations sit after
+//      the W7C2_SEAM block, so the call sites bind these real bodies. Golden's "a
+//      picker still has vacuum on" hold (iOneCycleTask=4; return) is now reachable, and
+//      DoART_AfterCleanOut's bNeedRetest reads the real CheckNeedToRT().
+//      LESSON, recorded where it happened: a translator's own SEAM NOTE naming a defect
+//      in capitals is worth more than the WAVE SCOPE table three lines above it, which
+//      listed all three as ACTIVE and was simply wrong. Read the notes, not the table.
 //   2. W7G5_CheckFixTraySafeDoor() -- golden csystem.cpp:2581-2594, transcribed
 //      VERBATIM as a file-static because golden's own `CheckFixTraySafeDoor` sits at
 //      golden :2581, outside this group's range, and has no port body yet; a sibling
@@ -11604,9 +11667,10 @@ bool DoTrayFeed()
 // --- SEAM NOTE 1: undo the three W7C2 macro redirects so the real bodies below can
 //     carry golden's own names.  See the banner for why this is REQUIRED and for the
 //     behaviour that does NOT change until the seams themselves are retired.
-#undef InArmSuckState
-#undef OutArmSuckState
-#undef CheckNeedToRT
+//AI(ht9045-v906) 20260810: PT-W5c audit fix (C) -- these three `#undef`s are DELETED
+// together with the seams they undid. SEAM NOTE 1 above was correct that the behaviour
+// did not change "until the seams themselves are retired"; this is that retirement.
+// The WAVE SCOPE table's ACTIVE marking for these three was wrong until now.
 
 // --- cross-unit declarations, in golden's own local-extern idiom (golden
 //     csystem.cpp:12674 / :12759-12766 declare cross-unit symbols exactly this way,
