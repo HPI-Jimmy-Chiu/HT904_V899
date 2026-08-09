@@ -4864,3 +4864,153 @@ census：非表單 **73.5% → 74.8%**（缺 89,263 → 84,897）；全案 43.3%
     `docs/_ptw4_agent_reports_20260809.txt` 與 workflow journal）
 - **執行模式**：非表單優先、`.dfm`／UI 不處理、每波全新 dir Debug+Release、
   行為變更單獨一顆 commit 單獨量。
+
+---
+
+## 2026-08-09（續）— PT-W5c：csystem.cpp 第一波翻譯落地，但**稽核沒跑、尚未整併、尚未 commit**
+
+> **狀態先講清楚，不要被行數騙**：15,135 行翻譯已經在工作樹上、`-fsyntax-only` 乾淨，
+> 但 **5 個對抗性稽核 agent 全部因 session limit 失敗（20:40 重置）**，
+> 所以本波**沒有經過獨立複驗**；46 個既存定義的碰撞**一個都還沒解**；
+> **沒有做建置驗收，也沒有 commit**。工作樹目前是「翻好但沒接上」的狀態。
+
+### 交付（工作樹，未 commit）
+
+| 檔 | 前 | 後 | 差 |
+|---|---|---|---|
+| `csystem.cpp` | 4,849 | **19,984** | +15,135 |
+| `csystem.h` | 369 | 397 | +28（純宣告） |
+
+`git diff --stat` 是 **15,163 insertions / 0 deletions**——純新增，沒有任何既有行被改寫，
+append-only 的約定守住了。零 U+FFFD。EOL 逐檔保持（`csystem.cpp` 純 LF、`csystem.h` 純 CRLF）。
+
+範圍 122 個 golden 函式**全部落地，沒有一個是全 gated**。全檔 118 個 `#if 0`。
+五組 banner 都帶 WAVE SCOPE + GATE REGISTER，安全相關的 delta 用大寫標出。
+
+### 主迴圈自己量的（不是照抄 agent 報告）
+
+記憶裡那條「agent 的論證比程式碼更常錯」在這波仍然適用，所以結構性的事我自己量：
+
+1. **122/122 落地**，用自己寫的定義掃描器（含單行本體）確認。
+2. **6 個看起來重複的名字全部良性**：1 個是宣告（`DoAllProcess:150`）、
+   2 個是 gated `static` overload（`W7C1_WriteIniData`）、
+   3 個是 `#if 0` golden-verbatim + live 配對（`DoTrayFeedProcess`／
+   `CheckContinusStartIsReady`／`InitDoArmZHome`）。
+   **和 PT-W5b 那次「假重複定義」同一個形狀**——只數次數會誤判，必須逐個看 gate 狀態。
+3. **`IdleCheckSafeDoorByCylinder` 兩個 overload 都 live**（`:19614` 2-arg、`:19656` 4-arg）。
+   4-arg 那個是 census **overload 盲點**藏起來的 golden `:2805`，原本排定由我手翻，
+   g1 主動補上並且明講理由（不補就會讓 `MyLaneIo.cpp:49` 的 static 影子永久生效）。
+4. **重跑 g2 的過期 absence claim**（它是對 19:33 的 staging 檔 grep 的）：
+   `InArmpitchCHKPos`／`OutArmpitchCHKPos` 全樹各只有一次
+   （`csystem.cpp:13375-13376`，extern 在 `csystem.h:154-155`），
+   `bHeaterDoorIsOpen` 由 g5 落在 `:12766`——**與 g2 的預測逐項一致**。
+   這是「波次 agent 的不存在宣稱會過期」那條規則第一次複驗結果是「宣稱成立」。
+5. 樹上**沒有** agent 的 staging 檔殘留（`probe_*` 零命中）。
+
+### 開波前就量好的整併成本（`scratchpad/W5C_INTEGRATION_PLAN.md`）
+
+**這是本波真正的方法論收穫**：整併成本在 agent 落地之前就量完了，不是在 link 失敗時才發現。
+
+**46 個既存定義、11 個檔、覆蓋 122 中的 44 個。**
+分三類處置，計畫書裡逐條列了 file:line：
+
+- **A1 保留既有家、丟掉本波的複本（16 個）**：`csystem_predicates.cpp` 是刻意造的
+  frozen-W6-interface 家，`HT9045_KITSUCK_GRID_AVAILABLE` 早就翻 ON，
+  我把 live 分支對 golden `:964-1047` 逐行比過——**忠實**。`csystem_shims.cpp:179`
+  的 `XPitchIsStand` 也忠實。
+- **A2 退役既有 stub、本波真本體贏（26 個）**：一行式／no-op stand-in，
+  散在 `csystem_predicates` / `acarry_shims` / `atester_shims` / `aoutarm9045` /
+  `aoutarm_shims` / `aHotPlateSubstrate` / `acatchtray`。
+- **A3 兩個不是普通碰撞**：
+  - `MyLaneIo.cpp:49` 是 **`static`**，所以**完全不會有 link 錯誤**，
+    真本體落地後 MyLaneIo.cpp 仍然永遠呼叫自己那個 `return false`。
+    這是五個陷阱的第 4 種（static 影子），**link 綠在這裡什麼都不能證明**。
+  - `aoutarm.cpp:3299` `SendDataToASE`：**golden 自己把這個符號定義了兩次**
+    （`aoutarm.cpp:2706` 與 `csystem.cpp:12769`，都 live、都非 static、**本體不同**——
+    前者用 `SubString(1, iLength)` 砍掉最後一個字元，後者原封不動送）。
+    兩個單元都在 golden `<OBJFILES>` 裡（aoutarm.obj 第 129、csystem.obj 第 **58**／289），
+    所以最多只有一個本體會被連上，而 csystem.obj 在前。
+    **這是 golden 自己的缺陷，不是移植產物。** 目前無影響（`ASESendMessage` 未翻，
+    兩邊都 gate 成 no-op），但**不可以加入 csystem 那份**，
+    而且以後 `ASESendMessage` 落地時，忠實於「真機行為」的選擇是 csystem 的**未砍字元**版本。
+- **A4 `tests/test_ga1_cprod.cpp:204-205`** 有 TU-local stand-in
+  （`HasICUnderMachine`／`HasAnyICInMachine`）。它現在能連過，是因為測試自己的定義先滿足了需求、
+  archive 成員從來沒被抽出——**archive-extraction trap 形狀 2**。
+  真本體改成直接編譯的 object 之後，這會變成硬性 multiple definition。
+
+### 安全發現（兩條，都要進行為變更那顆 commit）
+
+1. **`csystem_predicates.cpp:312` `CheckSafeDoorIsClosed() { return true; }`**——
+   對著 golden `:2599-2748` 那個 150 行的互鎖本體（`Enable_PLCSafety_IO`、
+   `DoorDelay.SetSecAndOn(0.5)`、`fTeach->fShow`、逐門 sensor 掃描）硬寫 true，
+   等於**無條件宣稱「安全門已關」**。這是本專案最壞的缺陷類別：
+   **在安全互鎖上 fail-permissive**。
+   值得記的是 **g2 從完全不同的方向獨立走到同一個結論**
+   （`csystem.cpp:13206-13211`：「*** THE SAFE-DOOR REFUSAL IN DoSystem CAN NEVER FIRE
+   UNTIL THAT STUB IS REPLACED BY THE REAL BODY ***」）。
+2. 另外兩條 fail-dangerous latch 被 gate register 記下來（**不是這波造成的**，是被 gate 的
+   未翻依賴）：`:14498` 馬達電源沒真的通、`bMotorPowerState` 卻已經 latch true；
+   `:14543` 面板 Power Off 沒發 Galil servo-off，而那個 servo-off 同時抓 index Z 煞車
+   （Steven 20230712 的修正），所以 index Z 可能掉。
+
+### g1 順手關掉一個真的 undefined reference（archive 陷阱形狀 3 的實例）
+
+`DoCloseHeadterDelay`（golden `:1133`）：`csystem.h:226` 宣告 extern、
+`bthermo.cpp:256` 又自己 extern 一次，**全樹沒有任何定義**。
+`bthermo.cpp` 一直帶著一個未解析引用，看不見的原因是它待在**沒人去抽那個成員的 static archive 裡**。
+本波補上本體才關掉。這正是「build 綠證明不了接上了」那條的第 3 種形狀。
+
+### 刻意沒做的事
+
+- **沒有做整併**：46 個碰撞一個都沒解。理由是稽核 agent 會 grep 那些檔去複驗
+  「STUBS I NOW SUPERSEDE」清單，我在稽核期間改它們會讓稽核結果無法閱讀。
+  結果稽核根本沒跑成（session limit），但當下的判斷仍然是對的。
+- **沒有跑建置驗收、沒有 commit**：46 個碰撞未解，樹幾乎確定連不起來，
+  現在 commit 等於明知紅還 commit，違反驗收線。翻譯本身在工作樹上，不會遺失。
+- **沒有跑 `-fsyntax-only` 去複驗 g1 的「exit 0、零輸出」**：量的時候第 5 個 agent 還在 append，
+  對半寫的檔量出來的數字沒有意義。這條要在整併開始前補做。
+
+### 🔖 RESUME（最新）
+
+- **⚠ 接續第一件事仍是 `git status`，不是讀本 RESUME。** 這次尤其重要：
+  **工作樹上有 15,163 行未 commit 的翻譯**（`csystem.cpp` + `csystem.h`），
+  是「翻好但沒接上」的狀態，不要在上面疊新波。
+- **PT-W5c 進度：翻譯落地 ✅ ／ 獨立稽核 ❌（session limit，5 個 verify agent 全失敗）
+  ／ 整併 ❌ ／ 建置驗收 ❌ ／ commit ❌。**
+- **接續的第一個動作，照這個順序**：
+  1. 先跑一次 `-fsyntax-only` 複驗（第 5 個 agent 收工後還沒量過）：
+     ```
+     C:/MinGW/bin/g++.exe -std=c++17 -fsyntax-only -DMN200DLL_EXPORTS -DDLLDIR_EX        -D_WIN32_WINNT=0x0601 -DWINVER=0x0601        -I. -IMotor -IMotor/vendor -IEtherCAT/vendor -Ithird_party/sqlite3 -ISECSGEM csystem.cpp
+     ```
+  2. **整併照 `scratchpad/W5C_INTEGRATION_PLAN.md` 逐條做**（46 個碰撞、11 個檔，
+     A1 留既有家丟本波複本 16 個／A2 退役既有 stub 26 個／A3 兩個特例／A4 測試 TU-local）。
+     **A3 的 `MyLaneIo.cpp:49` 是 `static`，不會有 link 錯誤，必須明確刪掉**，
+     否則真本體落地也永遠被影子蓋住。
+  3. 確認 `csystem.cpp` 在 `CMakeLists.txt` 的落點，收斂連結。
+  4. 全新 dir Debug + Release 驗收（失敗集合 ⊆ 計畫書 §7 那 6 個，兩種建法逐項相同）。
+  5. commit（翻譯一顆）。**行為變更另一顆單獨量**——見下面 task #12。
+- **獨立稽核欠著**：本波 122 個函式的忠實度**沒有經過任何獨立複驗**，
+  只有我自己量的結構性檢查（落地數／假重複／absence claim 重跑／EOL／U+FFFD）。
+  重派方式：`Workflow({scriptPath: '.../pt-w5c-csystem-wave1-wf_9e448e54-b75.js',
+  resumeFromRunId: 'wf_bf8f25d5-59e'})`——5 個翻譯 agent 會從 cache 回放（不重跑、不重寫檔），
+  只有 5 個 verify agent 會真的跑。**這是最省的補稽核方式，優先用它。**
+- **安全關鍵、必須進「行為變更」那顆 commit（task #12，安全門一家）**：
+  1. `csystem_predicates.cpp:312` `CheckSafeDoorIsClosed() { return true; }`
+     ——安全互鎖上 fail-permissive，對著 golden `:2599-2748` 的 150 行本體。
+  2. `cinitial.cpp:4452` GATE 3（`MotorIdleSafeDoorCheck=IdleCheckSafeDoor`）前提已到期。
+  3. `myio.cpp:180` GATE (4)（2-arg `IdleCheckSafeDoorByCylinder` macro）前提已到期。
+  4. `MyLaneIo.cpp:49` static 影子（4-arg 本體已在 `csystem.cpp:19656`）。
+  這四個是同一家互鎖，一顆 commit、單獨一次全新 Debug+Release。
+  **停止條件：安全關鍵行為變更信心 < 90% 就停下回報，不要自己跨過。**
+- **下一波（csystem.cpp wave 2）**：剩 5,835 golden 行。
+  但**先把 wave 1 收乾淨**再開 wave 2。
+- **census 已知量測缺陷（commit `9a1f7dc` 已記在 `tools/census/census.py`）**：
+  單行定義看不見（766 個／同檔 110 個）、跨檔家算成 missing（上限 268 個函式 23,871 行、
+  6.2%）、brace walk 在 18 個不平衡檔上超走（130,159 行）。
+  **`csystem.cpp` 括號平衡，所以本波數字可信；`cContact.cpp` 不平衡**，
+  要用它排波之前必須手動核 span。
+- **仍然待辦**（順序不變）：GATE (W5a-G) 三部分／`cmydef.cpp` 尾巴 80 個全域（16 個撞 shim 家）／
+  mykitsuck substrate 回家波（併 `TInLaserCheck` ODR 債）／
+  PT-W4 約 30 條 prose/citation findings。
+- **執行模式**：非表單優先、`.dfm`／UI 不處理、每波全新 dir Debug+Release、
+  行為變更單獨一顆 commit 單獨量。
