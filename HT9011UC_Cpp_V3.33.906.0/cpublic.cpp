@@ -691,6 +691,7 @@ void TTLLog(AnsiString Message)                                                 
     }
 }
 //------------------------------------------------------------------------------
+#endif // AI(W906-PT-W5c-integrate) 20260809: ungate HeaterLog ONLY -- csystem.cpp, bthermo.cpp and uHeaterThread.cpp all bind it (~30 call sites), so gating those instead would be churn. Its single fMain-dependent line is gated in-body below. HeaterSVLog just after stays gated: nothing references it.
 void HeaterLog(AnsiString Message, bool bOnOff)                                 //Steven 20151123 : Log for Heater Relay
 {
     static AnsiString OldMessage="";
@@ -700,9 +701,12 @@ void HeaterLog(AnsiString Message, bool bOnOff)                                 
     if(OldMessage!=NewMess)
     {
         OldMessage=NewMess;
+#if 0   // GATE (PT-W5c) -- fMain->slHeaterLog has no facade member (see this file's banner). BEHAVIOUR DELTA: the Heater-Relay on/off log line is NOT written; the de-duplication via OldMessage still runs, so no caller behaviour changes.
         fMain->slHeaterLog->AddTextWithDateTime(NewMess);
+#endif
     }
 }
+#if 0 // ...resume the GA1-B3 gate
 //------------------------------------------------------------------------------
 void HeaterSVLog(int Addr, double dTemp)                                        //Steven 20200121 : Log for Heater SV
 {

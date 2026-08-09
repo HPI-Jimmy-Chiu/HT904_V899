@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""HT9045 V906 translation census -- FUNCTION-LEVEL, re-runnable, version-controlled.
+r"""HT9045 V906 translation census -- FUNCTION-LEVEL, re-runnable, version-controlled.
 
 WHY THIS FILE EXISTS IN THE REPO
 The previous census (`census.py` / `classify.py` / `remaining.py`, 20260807) was left in a

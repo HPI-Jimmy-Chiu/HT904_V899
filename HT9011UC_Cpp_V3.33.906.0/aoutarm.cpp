@@ -3296,6 +3296,8 @@ void OutArmAddBlockPitch(int &nowX, int &nowY, int iRow, int iCol)              
     }
 }
 //------------------------------------------------------------------------------
+#if 0   // PT-W5c RETIRED (SendDataToASE)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED, and note WHY this one is odd: GOLDEN ITSELF defines SendDataToASE twice, live and non-static, with DIFFERENT bodies -- aoutarm.cpp:2706 strips the last character via SubString(1,iLength), csystem.cpp:12769 sends Data whole. Both units are in golden <OBJFILES> (aoutarm.obj 129, csystem.obj 58 of 289), so csystem.obj links first and ITS body is the one reachable on a real machine. That is why csystem.cpp keeps the live copy and this -- the golden-faithful aoutarm variant -- is the one gated. Currently moot: ASESendMessage is untranslated so both gate to a no-op.
 void SendDataToASE(AnsiString Data)                                             //kevin 20161228 add
 {
     int iLength=Data.Length()-1;                                                //kevin 20141023 最後一個site資料不要加 :
@@ -3303,6 +3305,7 @@ void SendDataToASE(AnsiString Data)                                             
     ASESendMessage->SendToASEData(Data.SubString(1, iLength));
 #endif
 }
+#endif
 //------------------------------------------------------------------------------
 void TransferAutoRatio(int iWhichAuto, int *iXPos, int *iYPos)                  //Steven 20141029 : Auto的軟體齒輪比
 {

@@ -99,21 +99,36 @@ TATC_DataShim ATC_Data;
 //  In-shuttle LF/RT (int) overloads (golden csystem.cpp) -- route to the real
 //  (void) predicates already implemented in csystem_predicates.cpp.
 // ---------------------------------------------------------------------------
+#if 0   // PT-W5c RETIRED (InShtInLF)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool InShtInLF(int iSht) { return (iSht==0) ? InSHT1InLF() : InSHT2InLF(); }     // golden csystem.cpp
+#endif
+#if 0   // PT-W5c RETIRED (InShtInRT)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool InShtInRT(int iSht) { return (iSht==0) ? InSHT1InRT() : InSHT2InRT(); }     // golden csystem.cpp
+#endif
 
 // ---------------------------------------------------------------------------
 //  9046AU sort-shuttle position predicates (golden csystem.cpp) -- offline false.
 // ---------------------------------------------------------------------------
+#if 0   // PT-W5c RETIRED (SortSHTInLF)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool SortSHTInLF() { return false; }                   // golden csystem.cpp (9046AU)
+#endif
+#if 0   // PT-W5c RETIRED (SortSHTInRT)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool SortSHTInRT() { return false; }                   // golden csystem.cpp (9046AU)
+#endif
 
 // ---------------------------------------------------------------------------
 //  In-shuttle step / residual / prominent checks (golden csystem.cpp).
 //   - DoStepShuttleCheck: offline no step pending -> true (proceed).
 //   - EmptyIC / MustHasIC / Prominent: offline find no anomaly -> true (OK).
 // ---------------------------------------------------------------------------
+#if 0   // PT-W5c RETIRED (DoStepShuttleCheck)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool DoStepShuttleCheck(int /*iShuttle*/) { return true; }     // golden csystem.cpp
+#endif
 bool DoCheckShuttle1EmptyIC()             { return true; }     // golden csystem.cpp
 bool DoCheckShuttle2EmptyIC()             { return true; }     // golden csystem.cpp
 bool DoCheckShuttle1MustHasIC()           { return true; }     // golden csystem.cpp
@@ -150,7 +165,10 @@ bool Check32siteOnlyEnabled4x4Site(){ return false; }  // golden csystem.cpp
 //   run golden's actual logic, so out-arm paths that used to short-circuit now execute.
 //   That is the point of the wave, and it is why this wave was measured on its own.
 int  SendHTTPRequest(int /*iSht*/)     { return 0; }       // golden main -- 0 == OK
+#if 0   // PT-W5c RETIRED (MoveSortArmToAutoSafe)
+//AI(ht9045-v906) 20260809: PT-W5c phase 2 -- RETIRED. PRE-EXISTING latent ODR violation, not this wave: the real body always existed, but its archive member was never extracted until csystem.cpp entered the link. Real body wins.
 void MoveSortArmToAutoSafe()           {}                  // golden 9046AU
+#endif
 
 // ---------------------------------------------------------------------------
 //  Do_Auto_SHT1AsOutArmIsRotater -- golden acarry.h decl-only (no .cpp body).

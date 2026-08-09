@@ -156,7 +156,10 @@ bool DoPickFromShuttle_9045_2x8_8(int);
 // (EnableFix3UseCylinder / ReversionEmptyPoint) are RETIRED -- cprod.cpp's real
 // bodies were ungated by GA-1-B2, exactly the removal this file's own
 // CORRECTION note anticipated. Declarations still come from cprod.h.
+#if 0   // PT-W5c RETIRED (CheckOutArmSuckICFallDown)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool CheckOutArmSuckICFallDown()                   { return false; }  // golden csystem.h:84 -- offline: no fall-down
+#endif
 // AI(W906-PT-W4-integrate) 20260809: 8 STAND-IN DEFINITION(S) RETIRED FROM HERE.
 //   aoutarm.cpp (golden's own home for all of them) landed in wave PT-W4 and is
 //   registered in ht9045_sm, so both definitions were in libht9045_sm.a and every
@@ -167,7 +170,10 @@ bool CheckOutArmSuckICFallDown()                   { return false; }  // golden 
 //   BEHAVIOUR: these were offline defaults (return true/false/0/no-op); the real bodies
 //   run golden's actual logic, so out-arm paths that used to short-circuit now execute.
 //   That is the point of the wave, and it is why this wave was measured on its own.
+#if 0   // PT-W5c RETIRED (DetectAutoTray)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool DetectAutoTray(int,int*)                      { return true;  }  // golden csystem.h:232 -- offline: tray detected
+#endif
 bool MagazineBufferIsEmpty(int)                    { return true;  }  // golden csystem.h:290 -- no magazine present
 int  WhichMagazineBufferIsFull()                   { return -1;    }  // golden csystem.h:289 -- no magazine full
 // -- W6.2c-OUT ADD: out-arm engine cross-module surface the 6 site-variant

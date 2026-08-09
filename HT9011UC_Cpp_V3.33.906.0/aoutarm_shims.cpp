@@ -64,7 +64,10 @@ void SetOutArmNeedDestory(int,int,int,int)         {}                          /
 //  Out-arm task init / speed / state predicates (golden aoutarm9045.cpp / aoutarm.h)
 //==============================================================================
 bool CheckOutArmToTask50(int)                      { return true; }            // golden aoutarm9045.h:49 -- offline: reached task50
+#if 0   // PT-W5c RETIRED (IsOutArmCleanOutFinish)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool IsOutArmCleanOutFinish()                      { return true; }            // golden aoutarm9045.cpp -- offline: clean-out finished
+#endif
 
 // CheckOutArmCleanOut: variants split between the 0-arg (golden aoutarm.h:58) and
 // the (int Task=50) overload -> define BOTH non-static.  Offline: stay/continue
@@ -80,7 +83,10 @@ int  VerifyTrayStatus()                            { return 3300; }            /
 int  SearchTrayToPlace_Magazine()                  { return 0; }               // golden aoutarm9045.h:63 (int) -- AI(W906-W7-A2) 20260728: fix return-type ODR violation -- this def and 14 of the 27 site-variant TUs (aoutarm9045_{1x2_2,1x2_4,1x4_2,1x4_4,1x4_4S,1x4_4_Back,1x4_8,2x2_4,2x2_4_14,2x2_4_23,2x2_8,2x4_16,2x5_8,S_1x4_4}.cpp) forward-declared this `void`, disagreeing with the other 13 variants' `int` and with golden's `int` (aoutarm9045.h:63, def aoutarm9045.cpp:1420). Harmless today only because the one golden call site that consumes the return value (aoutarm9045.cpp:1369 `return SearchTrayToPlace_Magazine();`) is not yet translated into this tree's aoutarm9045.cpp -- unified to `int`/`return 0` now so that future translation of that call site does not inherit a live ODR trap. AI(W906-A2-followup) 20260728: corrected gloss -- golden's real not-found path returns Prod.iIfErrorT6 (golden aoutarm9045.cpp:1558), NOT 0; golden never returns a literal 0 from this function's real body (paths return 2, iSortTrayIndex[k], OutArmSuck.iWhichAuto[i][j], or Prod.iIfErrorT6 -- golden :1453,1469,1530,1535,1540,1546,1552,1558). `return 0` here is an arbitrary offline placeholder, not golden's not-found value; if ever consumed downstream (currently all 27 ported call sites discard the return value) it would read as Auto1, matching this file's own SearchTrayToPlace_9045 stand-in at aoutarm9045.cpp:1501 (`return 0; // golden :2451 -> iWhichAuto=0 (Auto1)`) -- there is no other Search* stand-in in this file, and the only Verify* stand-in (VerifyTrayStatus, line 94 above) returns 3300, not 0.
 bool CheckPlaceToMagazineTray(int)                 { return true; }            // golden Magazine.h -- offline: place OK
 bool DoPickFromMagazineBuffer()                    { return true; }            // golden Magazine.h -- offline: pick OK
+#if 0   // PT-W5c RETIRED (AutoTrayReCheck)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool AutoTrayReCheck(int)                          { return true; }            // golden aoutarm9045.cpp (Ifor 20171031) -- offline: re-check OK
+#endif
 
 //==============================================================================
 //  Fix-AI-CCD form stand-in -- RETIRED FROM THIS FILE.
@@ -113,12 +119,30 @@ bool AutoTrayReCheck(int)                          { return true; }            /
 //  ht9045_sm links.  Faithful offline end-state (no AU sort dispatch).
 //==============================================================================
 bool NeedPlaceToSort()                                         { return false; } // golden aoutarm9045.h (9046AU) -- offline: no AU dispatch
+#if 0   // PT-W5c RETIRED (GetSortArmToSortShuttleOffset)
+//AI(ht9045-v906) 20260809: PT-W5c phase 2 -- RETIRED. PRE-EXISTING latent ODR violation, not this wave: the real body always existed, but its archive member was never extracted until csystem.cpp entered the link. Real body wins.
 int  GetSortArmToSortShuttleOffset()                           { return 0; }   // golden aoutarm9045.cpp (9046AU) -- offline: 0
+#endif
+#if 0   // PT-W5c RETIRED (GetSortArmPitchX)
+//AI(ht9045-v906) 20260809: PT-W5c phase 2 -- RETIRED. PRE-EXISTING latent ODR violation, not this wave: the real body always existed, but its archive member was never extracted until csystem.cpp entered the link. Real body wins.
 int  GetSortArmPitchX(int /*iMovePitchX*/, int /*iOffsetPos*/) { return 0; }   // golden aoutarm9045.cpp (9046AU) -- offline: 0
+#endif
+#if 0   // PT-W5c RETIRED (GetSortShuttleStatus_Pick)
+//AI(ht9045-v906) 20260809: PT-W5c phase 2 -- RETIRED. PRE-EXISTING latent ODR violation, not this wave: the real body always existed, but its archive member was never extracted until csystem.cpp entered the link. Real body wins.
 void GetSortShuttleStatus_Pick(int /*iZPos*/[][MAX_ARM_Col], bool /*bZDown*/, bool /*bZFlag*/[][MAX_ARM_Col]) {} // golden aoutarm9045.cpp (9046AU) -- offline: leave caller arrays untouched (zeroed by caller)
+#endif
+#if 0   // PT-W5c RETIRED (IsCheckSortArmDestroyActiveFinish)
+//AI(ht9045-v906) 20260809: PT-W5c phase 2 -- RETIRED. PRE-EXISTING latent ODR violation, not this wave: the real body always existed, but its archive member was never extracted until csystem.cpp entered the link. Real body wins.
 bool IsCheckSortArmDestroyActiveFinish(int /*iXPos*/, int /*iYPos*/) { return true; } // golden aoutarm9045.cpp (9046AU) -- offline: finished
+#endif
+#if 0   // PT-W5c RETIRED (DoSortArmSuckPreOn)
+//AI(ht9045-v906) 20260809: PT-W5c phase 2 -- RETIRED. PRE-EXISTING latent ODR violation, not this wave: the real body always existed, but its archive member was never extracted until csystem.cpp entered the link. Real body wins.
 void DoSortArmSuckPreOn(int /*iKit*/, int /*iXPos*/, int /*iYPos*/, bool /*bZDown*/) {} // golden aoutarm9045.cpp (9046AU) -- offline: no-op
+#endif
+#if 0   // PT-W5c RETIRED (CheckSortArmXYPitch_2x4_8)
+//AI(ht9045-v906) 20260809: PT-W5c phase 2 -- RETIRED. PRE-EXISTING latent ODR violation, not this wave: the real body always existed, but its archive member was never extracted until csystem.cpp entered the link. Real body wins.
 bool CheckSortArmXYPitch_2x4_8(int * /*iX*/, int * /*iY*/, int /*iMovePitchX*/) { return true; } // golden aoutarm9045_2x4_8.cpp (9046AU; engine def) -- offline: pitch OK
+#endif
 void SetSortShuttleStatus_Place(int /*iShtRow*/, int /*iShtCol*/, int /*iSuckRow*/, int /*iSuckCol*/) {} // golden aoutarm9045.h:33 (9046AU) -- offline: no-op
 
 //==============================================================================

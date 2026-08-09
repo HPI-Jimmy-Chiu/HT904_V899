@@ -4847,3 +4847,15152 @@ bool DoART_AfterCleanOut(int &ret)                                              
     return true;
 }
 //------------------------------------------------------------------------------
+// =============================================================================
+//  AI(W906-PT-W1-csystem-g4) 20260809  --  GROUP g4 APPEND BLOCK
+//
+//  ROLE
+//  ----
+//  Seven of golden csystem.cpp's top-level functions, in GOLDEN ORDER, covering
+//  golden lines 8342-12362 (2850 golden lines).  csystem.cpp is the machine tick /
+//  state-machine hub; this group carries the Initial-IC-Check / step-shuttle /
+//  socket-purge motion SMs (fully live) plus the Home / TrayFeed / continue-start
+//  rungs of the mode ladder (gated -- see GATE REGISTER).
+//
+//  WAVE SCOPE  (one line per golden function)
+//  -----------------------------------------
+//    ProcessStatrDigital        golden :8342   ACTIVE   (fully faithful, no seam)
+//    DoInitialICCheck           golden :8377   ACTIVE   (2 seams: fYieldMonitoring,
+//                                                        fLtcSensor -- both no-op)
+//    DoStepShuttleCheck         golden :8740   ACTIVE   (fully faithful, no seam)
+//                                        *** SUPERSEDES acarry_shims.cpp:116 ***
+//    DoCleanSocket              golden :8906   ACTIVE   (fully faithful, no seam)
+//    DoHomeProcess              golden :10262  ACTIVE BODY / INERT AT RUNTIME
+//                                              (outer ProcessMotorHome seam is
+//                                               false; ATC+SECS sub-block GATED)
+//    DoTrayFeedProcess          golden :10425  GATED   (whole body #if 0 verbatim)
+//    CheckContinusStartIsReady  golden :11663  GATED   (whole body #if 0 verbatim,
+//                                                       active arm returns false)
+//
+//  GATE REGISTER  (full rationale + behaviour delta at each gate site below)
+//  -----------------------------------------------------------------------
+//    G4-1  golden :10336-10374  DoHomeProcess ATC-restart + SECS remote-start
+//                               ladder.  Default: skipped.
+//    G4-2  golden :10262        DoHomeProcess outer guard ProcessMotorHome(0).
+//                               Seam returns FALSE -> WHOLE BODY INERT.
+//                               *** MAKES SAFETY REFUSALS UNREACHABLE -- see note ***
+//    G4-3  golden :10425-11659  DoTrayFeedProcess -- whole body.  Default: no-op.
+//    G4-4  golden :11663-12362  CheckContinusStartIsReady -- whole body.
+//                               Default: return false (FAIL-CLOSED).
+//
+//  ENCODING: golden is cp950 and was read with encoding="cp950" and NO error
+//  handler, so a single undecodable byte would have aborted generation.  Every
+//  Chinese comment below is TRANSCRIBED VERBATIM from that decode.  ZERO U+FFFD.
+//  Line endings: bare LF, matching the rest of this file.
+//
+//  INTEGER DIVISION: this group contains no int/int quotient that was converted
+//  to a float helper.  Golden has none in these seven bodies (the only division
+//  is inside gated golden text, :10792 `(TestSocket.iShtCnt)/4`, kept as-is).
+// =============================================================================
+
+// ---------------------------------------------------------------------------
+//  MACRO FIREWALL  (READ THIS BEFORE EDITING ANYTHING BELOW)
+//
+//  csystem.cpp carries ~100 live `#define <goldenName> W7C1_/W7C2_<name>` seam
+//  redirects (:1183-:2902).  They are still in force at this point in the
+//  translation unit, so they SILENTLY REWRITE any golden identifier appended
+//  after them.  Two of them would have corrupted this group, so they are
+//  neutralised here, deliberately and permanently (NOT restored at the end of
+//  the block -- restoring would re-shadow the real symbols this block lands):
+//
+//   1) iClearSocketFunctionTask  (:2902 -> W7C2_iClearSocketFunctionTask, a
+//      file-local `static int` at :2901).  DoCleanSocket binds its `int &Task`
+//      to this cursor.  Left mangled, the socket-purge SM would have driven a
+//      PRIVATE cursor that nothing outside this TU can see or reset, while
+//      atester.cpp:1216/:1402 (`iClearSocketFunction=1`) and every external
+//      reader kept looking at the real global.  Golden defines the real object
+//      in csystem.cpp ITSELF (golden csystem.cpp:134 `int
+//      iClearSocketFunctionTask=1;`), i.e. THIS file is its rightful home, so
+//      the real definition is landed below and the seam is retired.
+//
+//   2) DoAutoRetest  (:2871 -> W7C2_DoAutoRetest, a no-op).  The real golden
+//      body EXISTS and IS LINKED: AutoRetest.cpp:365 `bool DoAutoRetest(bool
+//      bReset)`, registered CMakeLists.txt:2018, and that file states "GATE
+//      (#if 0): NONE".  DoHomeProcess golden :10295 calls DoAutoRetest(true)
+//      precisely to RESET the auto-retest task cursor after a home
+//      ("回完Home iTask 要重來").  Bound to the no-op seam that reset would
+//      silently not happen.
+//
+//  Everything else stays seam-bound on purpose; the two that this group
+//  actually reaches are listed in the GATE REGISTER as no-ops.
+// ---------------------------------------------------------------------------
+#undef iClearSocketFunctionTask
+#undef DoAutoRetest
+
+// ---------------------------------------------------------------------------
+//  Declarations this group needs, in golden's own wording.
+//
+//  Forward declarations rather than #include, for two reasons: (a) every seam
+//  #define above is already in force here, so a header pulled in at this point
+//  would have its declarations macro-mangled; (b) aoutarm9045.h cannot enter
+//  this TU at all -- it and aHotPlateSubstrate.h (included at the top) both
+//  declare InArmLeftSideNoIC/HasIC with a default argument, which g++ rejects
+//  when both land in one TU (the same avoidance csystem.cpp:105-110 documents
+//  for ainarm9045.h).  Signatures are byte-for-byte the ones the owning headers
+//  use, minus default arguments (this block always passes the argument), so the
+//  mangled names are identical and there is no default-argument redeclaration.
+// ---------------------------------------------------------------------------
+extern int iStartStep;                                                          // golden csystem.cpp:8341 (definition: atester.cpp:158)
+void InitialFix3CanFullTask();                                                  // golden aoutarm9045.h:79  -- body aoutarm9045.cpp (CMakeLists:1595)
+bool UseFix3Cylinder(int iWhichAuto);                                           // golden aoutarm9045.h:81  -- body aoutarm9045.cpp (CMakeLists:1595)
+bool MoveOutArmToAutoSafe_9045();                                               // golden aoutarm9045.h:51  -- body aoutarm9045.cpp (CMakeLists:1595)
+extern bool DoAutoRetest(bool bReset);                                          // golden AutoRetest.h:60   -- body AutoRetest.cpp:365 (CMakeLists:2018)
+void InitOCRFlow(bool bTrain);                                                  // golden OCRInsp.h:36      -- body OCRInsp.cpp (CMakeLists:2019)
+bool CheckOutArmZ(bool bMessage);                                               // golden aoutarm.h:116     -- body aoutarm.cpp:635 (CMakeLists:2065)
+extern bool bCarryControlOutarm1;                                               // golden aoutarm.h:157     -- definition aoutarm.cpp:607
+extern bool bCarryControlOutarm2;                                               // golden aoutarm.h:158     -- definition aoutarm.cpp:608
+
+// ---------------------------------------------------------------------------
+//  csystem.cpp file globals golden keeps immediately beside these bodies.
+//  Landed here, in golden's own neighbourhood, exactly as golden spells them.
+//  STATIC-INIT SAFETY (PT_CAMPAIGN_PLAN.md section 8): TQPF_Timer's only ctor
+//  (myTimer.cpp:14) calls CalibratePerformanceCounterOverhead(), which touches
+//  nothing but its own members and QueryPerformanceCounter -- it dereferences NO
+//  global pointer, so these four static objects are safe to construct before
+//  main() even with main.cpp unported.
+// ---------------------------------------------------------------------------
+int iClearSocketFunctionTask=1;                                                 // golden csystem.cpp:134  (real global; the :2901 W7C2 static is now superseded)
+TQPF_Timer DoInitialICCheckDelay;                                               // golden csystem.cpp:8375
+TQPF_Timer DoInitialICCheckTimer;                                               // golden csystem.cpp:8376
+TQPF_Timer DoStepShuttleDelay;                                                  // golden csystem.cpp:8739
+TQPF_Timer DoCleanSocketDelay;                                                  // golden csystem.cpp:8904
+
+// ---------------------------------------------------------------------------
+//  g4 SEAMS -- offline stand-ins for leaves this tree has no body for.  Named
+//  W906G4_* so they are trivially greppable when their real owners land.
+//  Each one states the golden expression it replaces and what it returns.
+// ---------------------------------------------------------------------------
+//  fYieldMonitoring->ClearAutoSiteOffStatus() -- golden uYieldMonitoring.h.  The
+//  pointer itself is REAL and non-NULL (ainarm9045_2x4_16_shims.cpp:85 points it
+//  at a file-scope object), but the shim CLASS TfYieldMonitoring_2x4_16
+//  (aHotPlateSubstrate.h:1126) does not carry this member, so the call cannot be
+//  written.  Offline: no-op.  DELTA: after an Initial IC Check the "site turned
+//  off by auto-site-off" status is not cleared, i.e. golden's fix for "cannot
+//  re-open a site after Clear Count" (Steven 20200409) is not reproduced.
+static void W906G4_FYIELD_CLEARAUTOSITEOFF(){}
+
+//  ProcessMotorHome(int) -- golden uhome.cpp:1180 `bool ProcessMotorHome(bool
+//  Flag2)`.  uhome.cpp is NOT translated and NOT registered in CMakeLists.txt,
+//  so this symbol does not exist anywhere in the tree; calling the real one
+//  would be an UNDEFINED REFERENCE that -fsyntax-only cannot see (trap 2).
+//  Offline: false == "the home sequence has not completed this tick", which is
+//  what golden returns on every tick but the last.  SEE GATE G4-2: this makes
+//  the ENTIRE DoHomeProcess body unreachable at runtime.
+static bool W906G4_ProcessMotorHome(int /*Flag2*/){ return false; }
+
+//  ADAM_ReturnValueCheck(bool) -- golden ADAM EP-voltage feedback check (wei
+//  20220309).  No body and no declaration anywhere in this tree.  Offline:
+//  no-op.  DELTA: on an EP_Install==3/5 machine the post-home EP voltage
+//  cross-check, and therefore its "EP Voltage Error" alarm, does not run.
+static void W906G4_ADAM_ReturnValueCheck(bool /*bAlarm*/){}
+
+//  fHome->fShow / fHome->Close() -- golden uhome.h:70 + the VCL TForm::Close.
+//  forms/fHome.h DOES carry fShow, but (a) it is not included in this TU and
+//  (b) its TfHome has no Close() -- golden's Close() is TForm's, and no VCL
+//  form base is ported.  Offline: fShow==false, Close() no-op, i.e. "the Home
+//  dialog is not on screen so there is nothing to close" -- golden's own ctor
+//  value (uhome.cpp:110).
+static bool W906G4_FHOME_FSHOW(){ return false; }
+static void W906G4_FHOME_CLOSE(){}
+
+//  AuthPath -- golden common.h:71 `extern AnsiString AuthPath` (the authorised
+//  config root).  common.h is not included in this TU (csystem.cpp reaches its
+//  ini helpers only through the W7C1_WriteIniData seam at :1319-1321).  Offline:
+//  the empty string, so the composed path degrades to "config.ini".  Harmless
+//  because the only consumer is that same no-op WriteIniData seam.
+static AnsiString W906G4_AuthPath(){ return AnsiString(""); }
+
+//==============================================================================
+// Process Start digittal
+//==============================================================================
+//  ProcessStatrDigital -- golden csystem.cpp:8342-8373.  FULLY ACTIVE, no seam,
+//  no gate.  Every leaf is real in this tree:
+//    bClearSrtart[8] / TTL_StartData[8] / TTL_Dut[8] / MyTTLSOTTimer  cmydef.h
+//        :2735 / :2693 / :2694 / :3083   (definitions cmydef.cpp:2946/:2896/:2897)
+//    DUTPosPluse / DUTPosLevel  cmydef.h:3074-3075 ;  SW[]  myswitch.h
+//    Prod.DIOCfg.iDutType  cprod.h:597 + :24 ;  iStartStep  atester.cpp:158
+//  Golden's misspelt name (ProcessStatrDigital) and misspelt global
+//  (bClearSrtart) are KEPT -- csystem.h:152 already declares the former.
+//
+//  GOLDEN QUIRK PRESERVED (not a port defect): the `if(flag) return;` at :8358
+//  makes the SOT-clear pass and the start-pulse pass mutually exclusive within
+//  one tick, so the DUT start lines are driven on the NEXT tick at the earliest.
+//  The :8360 eight-way OR is then redundant with the loop above it (any
+//  bClearSrtart[i] still set means MyTTLSOTTimer had not expired, so flag was
+//  false and we fall through to this test).  Both kept verbatim.
+//==============================================================================
+void ProcessStatrDigital()
+{
+    bool flag=false;
+    for(int i=0; i<8; i++)                                                      //Alick 20161011 (Steven) : TTL支援8Site
+    {
+        if(bClearSrtart[i])
+        {
+            if(MyTTLSOTTimer.Off())
+            {
+                bClearSrtart[i]=false;
+                SW[TTL_StartData[i]].Off();
+                flag=true;
+            }
+        }
+    }
+
+    if(flag)
+        return;
+    if(bClearSrtart[0] || bClearSrtart[1] || bClearSrtart[2] || bClearSrtart[3] ||
+       bClearSrtart[4] || bClearSrtart[5] || bClearSrtart[6] || bClearSrtart[7])                                        //Alick 20161011 (Steven) : TTL支援8Site
+        return;
+    if(iStartStep!=1)
+        return;
+    iStartStep=0;
+    for(int i=0; i<8; i++)                                                      //Steven 20161011 : TTL支援8Site 4 --> 8
+    {
+        if(Prod.DIOCfg.iDutType==DUTPosPluse || Prod.DIOCfg.iDutType==DUTPosLevel)
+            SW[TTL_Dut[i]].On();                                                // start Test
+        else
+            SW[TTL_Dut[i]].Off();                                               // start Test
+    }
+}
+//------------------------------------------------------------------------------
+
+//==============================================================================
+//  DoInitialICCheck -- golden csystem.cpp:8377-8737.  ACTIVE.
+//
+//  This is the power-on / post-alarm residual-IC sweep: it walks In-Shuttle 1
+//  and 2 backwards through every index column (iStep..0), and at each column
+//  asserts the last In-Shuttle sensor is OFF.  If it is ON there is an IC left
+//  in the shuttle and golden raises WAR0490 (K_RETRY).  That alarm path is
+//  ACTIVE here: ShowErrorMessage is real (canary_support.h:66) and the
+//  bSenDuplicateErr[2][9] latch that suppresses repeats is reproduced exactly.
+//
+//  Real leaves (no seam): InitialFix3CanFullTask / UseFix3Cylinder
+//  (aoutarm9045.cpp), StartDetectMotorSensor / DoInOutARM_SHT_MoveSafe
+//  (acarry.h:49/:53), MOT[] MotorMove/SetSpeed/ReadEncoderPos/fCanMove*
+//  (Motor/mymotor.h), Sen[] (mysensor.h), SetMotorSpeed
+//  (aHotPlateSubstrate.h:1090), MyDBIProcess (aHotPlateSubstrate.h:924),
+//  ShowMyMessage / ShowErrorMessage / K_RETRY (canary_support.h),
+//  Prod.iInSHSen*DetectPos* (cprod.h:688-694), SThreadPara.iInShuttleSen7
+//  (cprod.h:2914), ShuttleSensorName[9] (cmydef.h:3241), FIX3_FULL_PLACE /
+//  Fix3K_UseCylinder (cmydef.h:2964 / MachineType.h:1301), iInitialICCheckTask /
+//  bInitialICCheck (cmydef.cpp:2991 / :2990).
+//
+//  TWO SEAMS, both no-ops, both flagged at their call sites:
+//    :8412 fYieldMonitoring->ClearAutoSiteOffStatus()  -> W906G4_FYIELD_...
+//    :8538/:8539/:8719/:8720 fLtcSensor->ClearLtcSensor(n) -> W7C1_FLTCSENSOR_CLEAR(n),
+//      the seam csystem.cpp:1311 already defines for exactly this call (its own
+//      note at :1309 records that acarry_shims.h, where the real fLtcSensor
+//      lives, is not included in this TU).
+//
+//  GOLDEN DEFECTS PRESERVED (do not "fix"):
+//    * :8467 / :8472 -- the _10Site2X5 and _12Site2X6 arms both read
+//      Prod.iInSHSen9DetectPos2x5[0][i] / 2x6[0][i] into CheckPos[1][i], i.e.
+//      shuttle 2 is given SHUTTLE 1's teach positions (index [0], not [1]).
+//      Every other test mode uses [1].  Kept.
+//    * :8638 -- the case-2200 Fix-3 timeout log is labelled
+//      "DoInitialICCheck_2000", copied from case 2000.  Kept.
+//    * :8529-8532 / :8611-8614 / :8701-8704 -- `if(A && flag3==false) flag3=..;
+//      else flag3=true;` unconditionally forces flag3 true whenever the cylinder
+//      variant is not fitted OR flag3 was already true, so the else arm re-arms
+//      it every tick.  Kept.
+//    * :8727 -- the duplicate-latch clear loop runs i<8 while the array is [9]
+//      and the index actually used is iSensorNo-1, which is 8 on a non-9045.
+//      So on a 9046 the latch at [8] is never cleared here.  Kept.
+//==============================================================================
+void DoInitialICCheck()
+{
+    int &Task=iInitialICCheckTask;
+    AnsiString Str;
+    static int iCount=0;                                                        //Steven 20211111 : 重試一次看看能不能動
+    static bool flag1=false, flag2=false, flag3=false;
+    static bool bSenDuplicateErr[2][9]={{false, false, false, false, false, false, false, false, false},
+                                        {false, false, false, false, false, false, false, false, false}};               //Steven 20091222 : Avoid duplicate message
+    static int CheckPos[2][9];                                                  //Steven 20120528 : 改用Vector
+    static int iStep=3;
+    int iSensorNo;
+    int iSensoePos1;                                                            //Steven 20121015 : Initial IC Check for 9046 修正
+    int iSensoePos2;                                                            //Steven 20121015 : Initial IC Check for 9046 修正
+
+    if(MachineTypeChoice==Type_HT9045)                                          //Steven 20120705 : 更正InitialICCheck Sensor名稱
+    {
+        iSensorNo=7;
+    }
+    else if(MachineTypeChoice==Type_HT9045_12Site)                              //ChungHung 20130507 add HT9045 updata for 12site 517
+    {
+        iSensorNo=7;
+    }
+    else
+    {
+        iSensorNo=9;
+    }
+
+    iSensoePos1=SThreadPara.iInShuttleSen7[0];                                  //Steven 20181203 : In Shuttle最後一個Sensor定義
+    iSensoePos2=SThreadPara.iInShuttleSen7[1];
+
+    switch(Task)
+    {
+        case 1:
+            InitialFix3CanFullTask();
+            iCount=0;                                                           //Steven 20211111 : 重試一次看看能不能動
+            W906G4_FYIELD_CLEARAUTOSITEOFF();                                   // g4 SEAM (no-op) --                         //Steven 20200409 : 修正清除count之後,不能開site的問題
+            StartDetectMotorSensor(0);
+            StartDetectMotorSensor(1);
+            bCheckShuttle1Flag=true;
+            bCheckShuttle2Flag=true;
+            bCheckShuttle3Flag=true;                                            //RogerYang 20250509 Add for 9046AU
+
+            if(TestIF.iTestMode==DualSite || TestIF.iTestMode==QualSite2X2)
+            {
+                iStep=1;
+            }
+            else if(TestIF.iTestMode==_16Site2X8 ||                             //2x8 Eliot 2009_12_28
+                    TestIF.iTestMode==_32Site4X8N)                              //Steven 20140512 : For HT-9047
+            {
+                iStep=7;
+            }
+            else if(TestIF.iTestMode==_10Site2X5)                               //wei 20190614 10 site
+            {
+                iStep=4;
+            }
+            else if(TestIF.iTestMode==_12Site2X6)                               //ChungHung 20130507 add HT9045 updata for 12site 517
+            {
+                iStep=5;
+            }
+            else if(TestIF.iTestMode==_6Site2X3)                                //ChungHung 20140115 add for 2x3_6
+            {
+                iStep=2;
+            }
+            else if(TestIF.iTestMode==SingleSite || TestIF.iTestMode==DualSite2x1)
+            {
+                iStep=0;
+            }
+            else
+            {
+                iStep=3;
+            }
+
+            for(int i=0; i<MAX_Index_Col; i++)
+            {
+                if(i<=iStep)
+                {
+                    if(TestIF.iTestMode==DualSite || TestIF.iTestMode==QualSite2X2)
+                    {                                                           // 1x2 & 2x2
+                        CheckPos[0][i]=Prod.iInSHSen7DetectPos1x2[0][i];
+                        CheckPos[1][i]=Prod.iInSHSen7DetectPos1x2[1][i];
+                    }
+                    else if(TestIF.iTestMode==_16Site2X8 ||                     //2x8 Eliot 2009_12_28
+                            TestIF.iTestMode==_32Site4X8N)                      //Steven 20140512 : For HT-9047
+                    {
+                        CheckPos[0][i]=Prod.iInSHSen9DetectPos2x8[0][i];
+                        CheckPos[1][i]=Prod.iInSHSen9DetectPos2x8[1][i];
+                    }
+                    else if(TestIF.iTestMode==_10Site2X5)                       //wei 20190614 10 site
+                    {
+                        CheckPos[0][i]=Prod.iInSHSen9DetectPos2x5[0][i];
+                        CheckPos[1][i]=Prod.iInSHSen9DetectPos2x5[0][i];
+                    }
+                    else if(TestIF.iTestMode==_12Site2X6)
+                    {
+                        CheckPos[0][i]=Prod.iInSHSen9DetectPos2x6[0][i];
+                        CheckPos[1][i]=Prod.iInSHSen9DetectPos2x6[0][i];
+                    }
+                    else if(TestIF.iTestMode==SingleSite ||
+                            TestIF.iTestMode==DualSite2x1)
+                    {
+                        CheckPos[0][i]=Prod.iInSHSen7DetectPos1x1[0];
+                        CheckPos[1][i]=Prod.iInSHSen7DetectPos1x1[1];
+                    }
+                    else if(TestIF.iTestMode==_6Site2X3 ||                      //ChungHung 20140115 add for 2x3_6
+                            TestIF.iTestMode==TriSite1X3)                       //Frank 20160329 add for 1x3_4
+                    {
+                        CheckPos[0][i]=Prod.iInSHSen7DetectPos2x3[0][i];
+                        CheckPos[1][i]=Prod.iInSHSen7DetectPos2x3[1][i];
+                    }
+                    else
+                    {
+                        CheckPos[0][i]=Prod.iInSHSen7DetectPos1x4[0][i];
+                        CheckPos[1][i]=Prod.iInSHSen7DetectPos1x4[1][i];
+                    }
+                }
+                else
+                {
+                    CheckPos[0][i]=0;
+                    CheckPos[1][i]=0;
+                }
+            }
+            MOT[MInShuttle1].SetSpeed(10);                                      //kevin 20190627 add  shuttle down speed
+            MOT[MInShuttle2].SetSpeed(10);                                      //kevin 20190627 add  shuttle down speed
+            DoInitialICCheckTimer.SetSecAndOn(10);
+            Task=2000;
+            flag1=false;
+            flag2=false;
+            if(FIX3_FULL_PLACE==Fix3K_UseCylinder)                              //Steven 20220418 : 修正氣缸版Fix3在initial時,要縮回去
+                flag3=false;
+            else
+                flag3=true;
+            break;
+        case 2000:
+            if(IniConfig.bF21InOutArmZMotorPrivate)
+            {
+                if(DoInOutARM_SHT_MoveSafe(0))                                  //kevin 20161005 SHUTTLE 1 移動安全保護
+                {
+                    DoInitialICCheckTimer.SetSecAndOn(10);
+                    return;
+                }
+
+                if(DoInOutARM_SHT_MoveSafe(1))                                  //kevin 20161005 SHUTTLE 1 移動安全保護
+                {
+                    DoInitialICCheckTimer.SetSecAndOn(10);
+                    return;
+                }
+            }
+
+            if(flag1==false)
+                flag1=MOT[MInShuttle1].MotorMove(Prod.InSHT[0].iLeft);
+            if(flag2==false)
+                flag2=MOT[MInShuttle2].MotorMove(Prod.InSHT[1].iLeft);
+            if(FIX3_FULL_PLACE==Fix3K_UseCylinder && flag3==false)              //Steven 20220418 : 修正氣缸版Fix3在initial時,要縮回去
+                flag3=UseFix3Cylinder(0);
+            else
+                flag3=true;
+
+            if(flag1 && flag2 && flag3)
+            {
+                StartDetectMotorSensor(0);                                      //Sam 20210409 : 增加保護
+                StartDetectMotorSensor(1);                                      //Sam 20210409 : 增加保護
+                W7C1_FLTCSENSOR_CLEAR(0);                                       // seam csystem.cpp:1311 (no-op) --                                  //Sam 20221101 : Latch 清除都要確認是否清清乾淨
+                W7C1_FLTCSENSOR_CLEAR(1);                                       // seam csystem.cpp:1311 (no-op) --                                  //Sam 20221101 : Latch 清除都要確認是否清清乾淨
+                DoInitialICCheckDelay.SetMSAndOn(200);
+                Task=2100;
+            }
+            else if(DoInitialICCheckTimer.Off())                                //Steven 20210904 : 紀錄為何Shuttle不動作
+            {
+                if(flag1==false)
+                {
+                    Str.sprintf("DoInitialICCheck_2000 Time Out Sht1, pos=%d, target=%d", MOT[MInShuttle1].ReadEncoderPos(), Prod.InSHT[0].iLeft);
+                    MyDBIProcess("Motion", Str);
+                }
+
+                if(flag2==false)
+                {
+                    Str.sprintf("DoInitialICCheck_2000 Time Out Sht2, pos=%d, target=%d", MOT[MInShuttle2].ReadEncoderPos(), Prod.InSHT[1].iLeft);
+                    MyDBIProcess("Motion", Str);
+                }
+
+                if(flag3==false)
+                {
+                    Str.sprintf("DoInitialICCheck_2000 Time Out Fix 3 Cylinder Positioon Error");
+                    MyDBIProcess("Motion", Str);
+                }
+
+                ShowMyMessage("Initial IC check, motor move error!, Please find home to restart.");
+                DoInitialICCheckTimer.SetSecAndOn(10);
+                InitialFix3CanFullTask();
+            }
+            break;
+        case 2100:
+            if(DoInitialICCheckDelay.Off())
+                Task=2250;
+            break;
+        case 2250:
+            if(Sen[iSensoePos1].Enable==false ||
+               Sen[iSensoePos2].Enable==false)                                  //Steven 20121015 : Initial IC Check for 9046 修正
+            {
+                Task=10000;                                                     //Steven 20190703 : Fixed shuttle速度沒有改回來的問題
+            }
+            else
+            {
+                Task=2200;
+            }
+            flag1=false;
+            flag2=false;
+            if(FIX3_FULL_PLACE==Fix3K_UseCylinder)                              //Steven 20220418 : 修正氣缸版Fix3在initial時,要縮回去
+                flag3=false;
+            else
+                flag3=true;
+            InitialFix3CanFullTask();
+            DoInitialICCheckTimer.SetSecAndOn(10);
+            break;
+        case 2200:
+            if(IniConfig.bF21InOutArmZMotorPrivate)
+            {
+                if(DoInOutARM_SHT_MoveSafe(0))                                  //kevin 20161005 SHUTTLE 1 移動安全保護
+                {
+                    Task=2210;                                                  //Steven 20210820 : 判斷是不是卡在這邊
+                    return;
+                }
+
+                if(DoInOutARM_SHT_MoveSafe(1))                                  //kevin 20161005 SHUTTLE 1 移動安全保護
+                {
+                    Task=2220;                                                  //Steven 20210820 : 判斷是不是卡在這邊
+                    return;
+                }
+            }
+
+            if(flag1==false)
+                flag1=MOT[MInShuttle1].MotorMove(CheckPos[0][iStep]);
+            if(flag2==false)
+                flag2=MOT[MInShuttle2].MotorMove(CheckPos[1][iStep]);
+            if(FIX3_FULL_PLACE==Fix3K_UseCylinder && flag3==false)              //Steven 20220418 : 修正氣缸版Fix3在initial時,要縮回去
+                flag3=UseFix3Cylinder(0);
+            else
+                flag3=true;
+            if(flag1 && flag2 && flag3)
+            {
+                iCount=0;
+                DoInitialICCheckDelay.SetMSAndOn(200);
+                Task=2300;
+            }
+            else if(DoInitialICCheckTimer.Off())                                //Steven 20210904 : 紀錄為何Shuttle不動作
+            {
+                iCount++;
+                if(flag1==false)
+                {
+                    Str.sprintf("DoInitialICCheck_2200 Time Out Sht1, step=%d, pos=%d, target=%d, fCanMove=%d, fCanMoveR=%d, fCanMoveM=%d, fCanMoveL=%d", iStep, MOT[MInShuttle1].ReadEncoderPos(), CheckPos[0][iStep], MOT[MInShuttle1].fCanMove, MOT[MInShuttle1].fCanMoveR, MOT[MInShuttle1].fCanMoveM, MOT[MInShuttle1].fCanMoveL);
+                    MyDBIProcess("Motion", Str);
+                }
+
+                if(flag2==false)
+                {
+                    Str.sprintf("DoInitialICCheck_2200 Time Out Sht2, step=%d, pos=%d, target=%d, fCanMove=%d, fCanMoveR=%d, fCanMoveM=%d, fCanMoveL=%d", iStep, MOT[MInShuttle2].ReadEncoderPos(), CheckPos[1][iStep], MOT[MInShuttle2].fCanMove, MOT[MInShuttle2].fCanMoveR, MOT[MInShuttle2].fCanMoveM, MOT[MInShuttle2].fCanMoveL);
+                    MyDBIProcess("Motion", Str);
+                }
+
+                if(flag3==false)
+                {
+                    Str.sprintf("DoInitialICCheck_2000 Time Out Fix 3 Cylinder Positioon Error");
+                    MyDBIProcess("Motion", Str);
+                }
+
+                if(iCount<2)                                                    //Steven 20211111 : 重試一次看看能不能動
+                {
+                    MOT[MInShuttle1].fCanMoveM=true;
+                    MOT[MInShuttle2].fCanMoveM=true;
+                }
+                else
+                {
+                    ShowMyMessage("Initial IC check, motor move error!, Please find home to restart.");
+                }
+                DoInitialICCheckTimer.SetSecAndOn(10);
+                InitialFix3CanFullTask();
+            }
+            break;
+        case 2210:
+            DoInitialICCheckTimer.SetSecAndOn(10);
+            InitialFix3CanFullTask();
+            Task=2200;
+            break;
+        case 2220:
+            DoInitialICCheckTimer.SetSecAndOn(10);
+            InitialFix3CanFullTask();
+            Task=2200;
+            break;
+        case 2300:
+            if(DoInitialICCheckDelay.Off())
+                Task=2310;
+            break;
+        case 2310:
+            if(Sen[iSensoePos1].IsOn()==true)                                   //Steven 20121015 : Initial IC Check for 9046 修正
+            {
+                ShowErrorMessage("WAR0490", K_RETRY, MInShuttle1, bSenDuplicateErr[0][iSensorNo-1], ShuttleSensorName[iSensorNo-1]);                            //Steven 20111114 改
+                bSenDuplicateErr[0][iSensorNo-1]=true;
+            }
+            else if(Sen[iSensoePos2].IsOn()==true)
+            {
+                ShowErrorMessage("WAR0490", K_RETRY, MInShuttle2, bSenDuplicateErr[1][iSensorNo-1], ShuttleSensorName[iSensorNo-1]);                            //Steven 20111114 改
+                bSenDuplicateErr[1][iSensorNo-1]=true;
+            }
+            else
+            {
+                bSenDuplicateErr[0][iSensorNo-1]=false;
+                bSenDuplicateErr[1][iSensorNo-1]=false;
+                Task=2400;
+            }
+            break;
+        case 2400:
+            iStep--;
+            if(iStep<0)
+            {
+                Task=10000;
+            }
+            else
+            {
+                DoInitialICCheckTimer.SetSecAndOn(10);                          //Steven 20210904 : Add
+                Task=2200;
+            }
+            InitialFix3CanFullTask();
+            flag1=false;
+            flag2=false;
+            if(FIX3_FULL_PLACE==Fix3K_UseCylinder)                              //Steven 20220418 : 修正氣缸版Fix3在initial時,要縮回去
+                flag3=false;
+            else
+                flag3=true;
+            break;
+        case 10000:                                                             //Sam 20210409 : 增加保護
+            if(flag1==false)
+                flag1=MOT[MInShuttle1].MotorMove(Prod.InSHT[0].iRight);
+            if(flag2==false)
+                flag2=MOT[MInShuttle2].MotorMove(Prod.InSHT[1].iRight);
+            if(FIX3_FULL_PLACE==Fix3K_UseCylinder && flag3==false)              //Steven 20220418 : 修正氣缸版Fix3在initial時,要縮回去
+                flag3=UseFix3Cylinder(0);
+            else
+                flag3=true;
+            if(flag1 && flag2 && flag3)
+            {
+                StartDetectMotorSensor(0);
+                StartDetectMotorSensor(1);
+                W7C1_FLTCSENSOR_CLEAR(0);                                       // seam csystem.cpp:1311 (no-op) --                                  //Sam 20221101 : Latch 清除都要確認是否清清乾淨
+                W7C1_FLTCSENSOR_CLEAR(1);                                       // seam csystem.cpp:1311 (no-op) --                                  //Sam 20221101 : Latch 清除都要確認是否清清乾淨
+                flag1=false;
+                flag2=false;
+                Task=10100;
+            }
+            break;
+        case 10100:
+            for(int i=0; i<8; i++)
+            {
+                bSenDuplicateErr[0][i]=false;
+                bSenDuplicateErr[1][i]=false;
+            }
+
+            bInitialICCheck=false;
+            SetMotorSpeed();
+            break;
+    }
+}
+//------------------------------------------------------------------------------
+
+//==============================================================================
+//  DoStepShuttleCheck -- golden csystem.cpp:8740-8896.  ACTIVE, no seam, no gate.
+//
+//  *** THIS SUPERSEDES A STAND-IN THAT DEFEATED AN INTERLOCK ***
+//  acarry_shims.cpp:116 currently reads:
+//        bool DoStepShuttleCheck(int /*iShuttle*/) { return true; }
+//  i.e. it reports "step check complete, proceed" on the FIRST call, without
+//  ever stepping the shuttle or reading a sensor.  Its two callers are
+//  acarry.cpp:4157 and acarry.cpp:5983, both of which advance their state
+//  machine on true.  With this real body those callers now actually walk the
+//  columns and can raise WAR0490 (K_RETRY) when the last In-Shuttle sensor is
+//  still ON, which is the residual-IC interlock the shim was silently skipping.
+//  The stand-in and its declaration (acarry_shims.h:170) MUST be retired by the
+//  main loop -- until then this is a DUPLICATE SYMBOL at link time.
+//
+//  GOLDEN DEFECTS PRESERVED (do not "fix"):
+//    * :8743 `bool flag[2]={false,false};` is a NON-static local, re-zeroed on
+//      every call, yet :8850/:8886 treat it as sequence state.  The net effect
+//      is that case 2000 re-issues MotorMove every tick (harmless: MotorMove is
+//      itself the poll) and that :8886's clear is a dead store.  Kept.
+//    * :8747 `static int iStep[2], iMax=0;` -- iStep is per-shuttle but iMax is
+//      SHARED, so whichever shuttle ran case 1 last owns iMax for both.  Since
+//      :8851 indexes CheckPos[iShuttle][iMax-iStep[iShuttle]], interleaved use
+//      of shuttle 0 and 1 in different test modes can index the wrong column.
+//      Kept.
+//    * :8832 -- the _6Site2X3 arm reads iInSHSen7DetectPos2x3[0][i] into
+//      CheckPos[1][i] (shuttle 1's positions for shuttle 2).  DoInitialICCheck
+//      :8484 uses [1][i] for the same mode, so the two functions genuinely
+//      disagree.  Kept.
+//    * :8779-8783 -- _12Site2X6 and _10Site2X5 both set iStep=7, while
+//      DoInitialICCheck sets 5 and 4 respectively.  Kept.
+//    * :8889 -- clears bSenDuplicateErr[iShuttle][0..7] on a [9] array.  Kept.
+//  INTEGER ARITHMETIC: :8851's `iMax-iStep[iShuttle]` is int-int, kept as int.
+//==============================================================================
+bool DoStepShuttleCheck(int iShuttle)
+{
+    int &Task=iStepShuttleTask[iShuttle];
+    bool flag[2]={false, false};
+    static bool bSenDuplicateErr[2][9]={{false, false, false, false, false, false, false, false, false},
+                                        {false, false, false, false, false, false, false, false, false}};               //Steven 20091222 : Avoid duplicate message
+    static int CheckPos[2][9];                                                  //Steven 20120528 : 改用Vector
+    static int iStep[2], iMax=0;
+    int iSensorNo;
+    int iSensoePos[2];
+
+    if(MachineTypeChoice==Type_HT9045)                                          //Steven 20120705 : 更正InitialICCheck Sensor名稱
+    {
+        iSensorNo=7;
+    }
+    else if(MachineTypeChoice==Type_HT9045_12Site)                              //ChungHung 20130507 add HT9045 updata for 12site 517
+    {
+        iSensorNo=7;
+    }
+    else
+    {
+        iSensorNo=9;
+    }
+
+    iSensoePos[0]=SThreadPara.iInShuttleSen7[0];                                //Steven 20181203 : In Shuttle最後一個Sensor定義
+    iSensoePos[1]=SThreadPara.iInShuttleSen7[1];
+
+    switch(Task)
+    {
+        case 1:
+            if(TestIF.iTestMode==DualSite  || TestIF.iTestMode==QualSite2X2)
+            {
+                iStep[iShuttle]=1;
+            }
+            else if(TestIF.iTestMode==_16Site2X8 ||                             //2x8 Eliot 2009_12_28
+                    TestIF.iTestMode==_32Site4X8N)                              //Steven 20140512 : For HT-9047
+            {
+                iStep[iShuttle]=7;
+            }
+            else if(TestIF.iTestMode==_12Site2X6 ||
+                    TestIF.iTestMode==_10Site2X5)                               //wei 20190614 10 site
+            {
+                iStep[iShuttle]=7;
+            }
+            else if(TestIF.iTestMode==_6Site2X3)                                //ChungHung 20140115 add for 2x3_6
+            {
+                iStep[iShuttle]=2;
+            }
+            else if(TestIF.iTestMode==SingleSite || TestIF.iTestMode==DualSite2x1)
+            {
+                iStep[iShuttle]=0;
+            }
+            else
+            {
+                iStep[iShuttle]=3;
+            }
+            iMax=iStep[iShuttle];
+
+            for(int i=0; i<MAX_Index_Col; i++)
+            {
+                if(i<=iStep[iShuttle])
+                {
+                    if(TestIF.iTestMode==DualSite  || TestIF.iTestMode==QualSite2X2)
+                    {                                                           // 1x2 & 2x2
+                        CheckPos[0][i]=Prod.iInSHSen7DetectPos1x2[0][i];
+                        CheckPos[1][i]=Prod.iInSHSen7DetectPos1x2[1][i];
+                    }
+                    else if(TestIF.iTestMode==_16Site2X8 ||                     //2x8 Eliot 2009_12_28
+                            TestIF.iTestMode==_32Site4X8N)                      //Steven 20140512 : For HT-9047
+                    {
+                        CheckPos[0][i]=Prod.iInSHSen9DetectPos2x8[0][i];
+                        CheckPos[1][i]=Prod.iInSHSen9DetectPos2x8[1][i];
+                    }
+                    else if(TestIF.iTestMode==_10Site2X5)                       //wei 20190614 10 site
+                    {
+                        CheckPos[0][i]=Prod.iInSHSen9DetectPos2x5[0][i];
+                        CheckPos[1][i]=Prod.iInSHSen9DetectPos2x5[0][i];
+                    }
+                    else if(TestIF.iTestMode==_12Site2X6)
+                    {
+                        CheckPos[0][i]=Prod.iInSHSen9DetectPos2x6[0][i];
+                        CheckPos[1][i]=Prod.iInSHSen9DetectPos2x6[0][i];
+                    }
+                    else if(TestIF.iTestMode==SingleSite ||
+                            TestIF.iTestMode==DualSite2x1)
+                    {
+                        CheckPos[0][i]=Prod.iInSHSen7DetectPos1x1[0];
+                        CheckPos[1][i]=Prod.iInSHSen7DetectPos1x1[1];
+                    }
+                    else if(TestIF.iTestMode==_6Site2X3)                        //ChungHung 20140115 add for 2x3_6
+                    {
+                        CheckPos[0][i]=Prod.iInSHSen7DetectPos2x3[0][i];
+                        CheckPos[1][i]=Prod.iInSHSen7DetectPos2x3[0][i];
+                    }
+                    else
+                    {
+                        CheckPos[0][i]=Prod.iInSHSen7DetectPos1x4[0][i];
+                        CheckPos[1][i]=Prod.iInSHSen7DetectPos1x4[1][i];
+                    }
+                }
+                else
+                {
+                    CheckPos[0][i]=0;
+                    CheckPos[1][i]=0;
+                }
+            }
+            Task=2000;
+            flag[iShuttle]=false;
+            break;
+        case 2000:
+            if(flag[iShuttle]==false)
+                flag[iShuttle]=MOT[MInShuttle1+iShuttle].MotorMove(CheckPos[iShuttle][iMax-iStep[iShuttle]]);
+
+            if(flag[iShuttle])
+            {
+                DoStepShuttleDelay.SetMSAndOn(200);
+                Task=2100;
+            }
+            break;
+        case 2100:
+            if(DoStepShuttleDelay.Off())
+            {
+                Task=2310;
+            }
+            break;
+        case 2310:
+            if(Sen[iSensoePos[iShuttle]].IsOn()==true)                          //Steven 20121015 : Initial IC Check for 9046 修正
+            {
+                ShowErrorMessage("WAR0490", K_RETRY, MInShuttle1+iShuttle, bSenDuplicateErr[iShuttle][iSensorNo-1], ShuttleSensorName[iSensorNo-1]);            //Steven 20111114 改
+                bSenDuplicateErr[iShuttle][iSensorNo-1]=true;
+            }
+            else
+            {
+                bSenDuplicateErr[iShuttle][iSensorNo-1]=false;
+                Task=2400;
+            }
+            break;
+        case 2400:
+            iStep[iShuttle]--;
+            if(iStep[iShuttle]<0)
+            {
+                Task=10000;
+            }
+            else
+                Task=2000;
+
+            flag[iShuttle]=false;
+            break;
+        case 10000:
+            for(int i=0; i<8; i++)
+            {
+                bSenDuplicateErr[iShuttle][i]=false;
+            }
+            return true;
+    }
+    return false;
+}
+//------------------------------------------------------------------------------
+
+//==============================================================================
+//  DoCleanSocket -- golden csystem.cpp:8906-9111.  ACTIVE, no seam, no gate.
+//
+//  The Socket Purge sequence (IniConfig.iD47SocketPurgeType): type 0 jumps
+//  straight to 11300 (socket-only clean); anything else runs the full
+//  10000..12400 ladder that also purges the In-Shuttle and the Out-Shuttle.
+//  DRIVES REAL MOTION: MTestZ1/MTestZ2 (Gali_MotMove / Gali_Two_ZAxis_Move),
+//  MTestY1 (GalilTwoY_Move), MInShuttle1/2 (MotorMove), plus the SwSocketClean /
+//  SwSocketClean2 air valves.  All real (Motor/mymotor.h:201/:223/:247,
+//  myswitch.h, cmydef.h:1976).  MoveInArmZToPlateSafe aHotPlateSubstrate.h:901;
+//  MoveOutArmToAutoSafe_9045 aoutarm9045.h:51 (forward-declared above).
+//  __FUNC__ is canary_support.h:45.
+//
+//  Its `int &Task` binds to the REAL global iClearSocketFunctionTask defined
+//  above (golden csystem.cpp:134) -- see MACRO FIREWALL item 1 for why that
+//  matters.
+//
+//  GOLDEN DEFECTS PRESERVED (do not "fix"):
+//    * :9076-9078 -- the two arms' log tags are SWAPPED: the MTestZ2 move logs
+//      "DoCleanSocket1_12100" and the MTestZ1 move logs "DoCleanSocket2_12100".
+//    * :9032-9033 / :9041-9042 -- comments read "Arm 1關閉" on `SW[SwSocketClean]
+//      .On()` and "Arm 2吹氣" on `SW[SwSocketClean2].Off()`, i.e. the comments
+//      are inverted relative to the code.  Code kept, comments kept.
+//    * :9004 -- `SW[SwSocketClean2].Off()` carries the comment "Arm 2吹氣" (blow)
+//      although it stops the blow.  Kept.
+//    * :8976-8978 / :9026-9028 add `IniConfig.dD47_6_ShuttleOffset*100` (a double
+//      scaled by 100) to an int teach position, while :9076-9078 add
+//      `IniConfig.dD47_5_ContactOffset` UNSCALED.  The two offsets therefore use
+//      different units.  Kept exactly, including the *100.
+//    * case 10000 has no timeout: if any of the three safe-position moves never
+//      completes the SM waits forever with no alarm.  Kept.
+//==============================================================================
+void DoCleanSocket()
+{
+    int &Task=iClearSocketFunctionTask;
+    static bool bFlag1, bFlag2, bFlag3;
+    switch(Task)
+    {
+        case 1:
+            if(IniConfig.iD47SocketPurgeType==0)                                //Steven 20190703 : Socket Purge include shuttle
+            {
+                Task=11300;
+            }
+            else
+            {
+                Task=10000;
+                bFlag1=false;
+                bFlag2=false;
+                bFlag3=false;
+            }
+            break;
+        case 100:
+            SW[SwSocketClean].On();
+            DoCleanSocketDelay.SetSecAndOn(IniConfig.iD47SocketPurgeTime);
+            Task=200;
+            break;
+        case 200:
+            if(DoCleanSocketDelay.Off())
+            {
+                Task=1;
+                iClearSocketFunction=0;
+                LastSet.iD47SocketTestedCount=0;
+                SW[SwSocketClean].Off();
+                SW[SwSocketClean2].Off();
+            }
+            break;
+        //----Type 2-----
+        case 10000:                                                             //Steven 20190703 : Socket Purge include shuttle
+            if(bFlag1==false)
+                bFlag1=MOT[MTestZ1].Gali_Two_ZAxis_Move(Prod.TestZ1_Safe, iSpeedSlow, "DoCleanSocket 10000");
+            if(bFlag2==false)
+                bFlag2=MoveInArmZToPlateSafe(0);
+            if(bFlag3==false)
+                bFlag3=MoveOutArmToAutoSafe_9045();
+
+            if(bFlag1 && bFlag2 && bFlag3)
+            {
+                bFlag1=false;
+                bFlag2=false;
+                bFlag3=false;
+                Task=10100;
+            }
+            break;
+        case 10100:                                                             //Clean In shuttle
+            if(bFlag1==false)
+                bFlag1=MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Front,Prod.TestY2_Rear, iSpeedSlow, __FUNC__);
+            if(bFlag2==false)
+                bFlag2=MOT[MInShuttle1].MotorMove(Prod.InSHT[0].iRight);
+            if(bFlag3==false)
+                bFlag3=MOT[MInShuttle2].MotorMove(Prod.InSHT[1].iRight);
+
+            if(bFlag1 && bFlag2 && bFlag3)
+            {
+                bFlag1=false;
+                bFlag2=false;
+                bFlag3=false;
+                SW[SwSocketClean].On();                                         //Arm 1吹氣
+                Task=10200;
+            }
+            break;
+        case 10200:
+            if(bFlag1==false)
+                bFlag1=MOT[MTestZ1].Gali_MotMove(Prod.TestZ1_Pick+IniConfig.dD47_6_ShuttleOffset*100, iSpeedSlow, "DoCleanSocket1_10200");
+            if(bFlag2==false)
+                bFlag2=MOT[MTestZ2].Gali_MotMove(Prod.TestZ2_Pick+IniConfig.dD47_6_ShuttleOffset*100, iSpeedSlow, "DoCleanSocket2_10200");
+
+            if(bFlag1 && bFlag2)
+            {
+                DoCleanSocketDelay.SetSecAndOn(IniConfig.iD47SocketPurgeTime);
+                Task=10300;
+            }
+            break;
+        case 10300:
+            if(DoCleanSocketDelay.Off())
+            {
+                SW[SwSocketClean].Off();                                        //Arm 1關閉
+                SW[SwSocketClean2].On();                                        //Arm 2吹氣
+                DoCleanSocketDelay.SetSecAndOn(IniConfig.iD47SocketPurgeTime);
+                Task=10350;
+            }
+            break;
+        case 10350:
+            if(DoCleanSocketDelay.Off())
+            {
+                Task=10400;
+            }
+            break;
+        case 10400:
+            if(MOT[MTestZ1].Gali_Two_ZAxis_Move(Prod.TestZ1_Safe, iSpeedSlow, "DoCleanSocket 10400"))
+            {
+                SW[SwSocketClean2].Off();                                       //Arm 2吹氣
+                bFlag1=false;
+                bFlag2=false;
+                Task=11000;
+            }
+            break;
+        case 11000:                                                             //Clean Out shuttle
+            if(bFlag1==false)
+                bFlag1=MOT[MInShuttle1].MotorMove(Prod.InSHT[0].iLeft);
+            if(bFlag2==false)
+                bFlag2=MOT[MInShuttle2].MotorMove(Prod.InSHT[1].iLeft);
+
+            if(bFlag1 && bFlag2)
+            {
+                DoCleanSocketDelay.SetSecAndOn(IniConfig.iD47SocketPurgeTime);
+                Task=11100;
+                bFlag1=false;
+                bFlag2=false;
+            }
+            break;
+        case 11100:
+            if(bFlag1==false)
+                bFlag1=MOT[MTestZ1].Gali_MotMove(Prod.TestZ1_Place+IniConfig.dD47_6_ShuttleOffset*100, iSpeedSlow, "DoCleanSocket1_11100");
+            if(bFlag2==false)
+                bFlag2=MOT[MTestZ2].Gali_MotMove(Prod.TestZ2_Place+IniConfig.dD47_6_ShuttleOffset*100, iSpeedSlow, "DoCleanSocket2_11100");
+
+            if(bFlag1 && bFlag2)
+            {
+                SW[SwSocketClean].On();                                         //Arm 1關閉
+                SW[SwSocketClean2].Off();                                       //Arm 2吹氣
+                DoCleanSocketDelay.SetSecAndOn(IniConfig.iD47SocketPurgeTime);
+                Task=11200;
+            }
+            break;
+        case 11200:
+            if(DoCleanSocketDelay.Off())
+            {
+                SW[SwSocketClean].Off();                                        //Arm 1關閉
+                SW[SwSocketClean2].On();                                        //Arm 2吹氣
+                DoCleanSocketDelay.SetSecAndOn(IniConfig.iD47SocketPurgeTime);
+                Task=11250;
+            }
+            break;
+        case 11250:
+            if(DoCleanSocketDelay.Off())
+            {
+                Task=11300;
+                SW[SwSocketClean2].Off();                                       //Arm 2關閉
+            }
+            break;
+        case 11300:
+            if(MOT[MTestZ1].Gali_Two_ZAxis_Move(Prod.TestZ1_Safe, iSpeedSlow, "DoCleanSocket 11300"))
+            {
+                bFlag1=false;
+                bFlag2=false;
+                Task=12000;
+            }
+            break;
+        case 12000:                                                             //Clean Socket
+            if(TestIF_File.iShuttleMode==1 && TestIF_File.iShuttle_Sel==1)      //Arm2 only
+                bFlag1=MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Front, Prod.TestY2_Middle, iSpeedSlow, __FUNC__);
+            else
+                bFlag1=MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Middle, Prod.TestY2_Rear, iSpeedSlow, __FUNC__);
+
+            if(bFlag1)
+            {
+                bFlag1=false;
+                Task=12100;
+            }
+            break;
+        case 12100:
+            if(TestIF_File.iShuttleMode==1 && TestIF_File.iShuttle_Sel==1)      //Arm2 only
+                bFlag1=MOT[MTestZ2].Gali_MotMove(Prod.TestZ2_Test+IniConfig.dD47_5_ContactOffset, iSpeedSlow, "DoCleanSocket1_12100");
+            else
+                bFlag1=MOT[MTestZ1].Gali_MotMove(Prod.TestZ1_Test+IniConfig.dD47_5_ContactOffset, iSpeedSlow, "DoCleanSocket2_12100");
+
+            if(bFlag1)
+            {
+                SW[SwSocketClean].On();
+                DoCleanSocketDelay.SetSecAndOn(IniConfig.iD47SocketPurgeTime);
+                Task=12200;
+            }
+            break;
+        case 12200:
+            if(DoCleanSocketDelay.Off())
+            {
+                Task=12300;
+            }
+            break;
+        case 12300:
+            if(MOT[MTestZ1].Gali_Two_ZAxis_Move(Prod.TestZ1_Safe, iSpeedSlow, "DoCleanSocket 12300"))
+            {
+                SW[SwSocketClean].Off();
+                Task=12400;
+            }
+            break;
+        case 12400:
+            if(MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Front, Prod.TestY2_Rear, iSpeedSlow, __FUNC__))
+            {
+                iClearSocketFunction=0;
+                LastSet.iD47SocketTestedCount=0;
+                Task=1;
+                SW[SwSocketClean].Off();
+                SW[SwSocketClean2].Off();
+            }
+            break;
+    }
+}
+//------------------------------------------------------------------------------
+
+//==============================================================================
+//  DoHomeProcess -- golden csystem.cpp:10262-10420.
+//  ACTIVE BODY (compiled, type-checked) but INERT AT RUNTIME.  See GATE G4-2.
+//
+//  ##########################################################################
+//  ###  GATE G4-2 -- golden :10264 `if(ProcessMotorHome(0))`               ###
+//  ###                                                                     ###
+//  ###  ProcessMotorHome IS THE OUTER GUARD OF THE WHOLE FUNCTION.  Its    ###
+//  ###  golden body is uhome.cpp:1180, and uhome.cpp is NEITHER TRANSLATED ###
+//  ###  NOR REGISTERED in CMakeLists.txt -- the symbol exists nowhere in    ###
+//  ###  this tree, so calling it would be an undefined reference that      ###
+//  ###  -fsyntax-only cannot detect.  The seam W906G4_ProcessMotorHome     ###
+//  ###  returns FALSE, which is golden's own value on every tick except    ###
+//  ###  the one where homing finishes.                                     ###
+//  ###                                                                     ###
+//  ###  BEHAVIOUR DELTA ON A REAL MACHINE -- STATED IN CAPITALS BECAUSE    ###
+//  ###  IT REMOVES SAFETY REFUSALS AND ALARMS:                             ###
+//  ###   * THE TWO OPERATOR REFUSALS AT :10272/:10274 AND :10283/:10285    ###
+//  ###     ("HOME before troubleshooting(Test Arm 1/2 Pick up error), need ###
+//  ###     to take In shuttle 1/2 device") BECOME UNREACHABLE, AND SO DO   ###
+//  ###     THE FLCarryKit/BLCarryKit SetAllToNullIC() DATA REPAIRS THAT    ###
+//  ###     FOLLOW THEM.  THIS IS EXACTLY THE "HOME BEFORE CLEARING AN      ###
+//  ###     INDEX PICK-UP ERROR CORRUPTS THE IC MAP AND HANGS UP" CASE      ###
+//  ###     GOLDEN ADDED FOR (Sam 20220209).                                ###
+//  ###   * THE JAM1109 UNLOADER-FLOATING ALARM AT :10330 IS UNREACHABLE.   ###
+//  ###   * THE "Motor not home yet!" REFUSAL AT :10391, AND THE            ###
+//  ###     SystemStart=false / SoftStop=true / SoftStart=false SAFE-STATE  ###
+//  ###     LATCH AROUND IT (:10390-10393), ARE UNREACHABLE.                ###
+//  ###   * THE ZPhase / YPhase "has SKIP, must redo contact height /       ###
+//  ###     recheck index Y teaching" WARNINGS (:10401, :10406) ARE         ###
+//  ###     UNREACHABLE.                                                    ###
+//  ###   * fAllMotorHome IS NEVER SET TRUE HERE, SO NOTHING IN THIS TREE   ###
+//  ###     CAN LEAVE THE not-homed STATE VIA THIS PATH.  Note this is NOT  ###
+//  ###     a regression: DoHomeProcess had no port at all before this      ###
+//  ###     wave, and MainProc's ladder that calls it is itself still gated ###
+//  ###     (csystem.cpp:549), so DoHomeProcess HAS NO CALLER TODAY.        ###
+//  ###                                                                     ###
+//  ###  WHY THIS SHAPE AND NOT `#if 0`: the body is real, compiled,        ###
+//  ###  type-checked C++ against the live globals, so it flips on the day  ###
+//  ###  uhome.cpp lands -- one seam deletion, no re-translation.           ###
+//  ##########################################################################
+//
+//  REAL leaves inside the body (NOT seams -- these genuinely link):
+//    InitOCRFlow(false)              OCRInsp.cpp        (CMakeLists:2019)
+//    DoAutoRetest(true)              AutoRetest.cpp:365 (CMakeLists:2018) --
+//                                    reached only after the #undef above
+//    CheckOutArmZ(false)             aoutarm.cpp        (CMakeLists:2065)
+//    MTrayXCanSafeMove()             acatchtray.cpp     (CMakeLists:1806)
+//    InitialMaxMinValue("...")       Motor/mymotor.cpp  (CMakeLists:867)
+//    CheckMotorHome / InitAllProcessTask   this file (csystem.cpp:471 / :243)
+//    FLCarryKit / BLCarryKit / InArmSuck   aHotPlateSubstrate.h (real objects)
+//    Sen[SnUnLoaderFloating] / ShowErrorMessage("JAM1109",...)  real
+//    UserDefForm[0].ZDepth (cprod.h:1363) / CosFunction.bThickTrayNoNeedCover
+//
+//  SEAM-BOUND leaves inside the body (all no-ops; each flagged at its site):
+//    VerifyNeedDoAlignment(..)  -> csystem.cpp:1271 W7C1 seam.  DELTA: the
+//        post-home CCD auto-alignment request (KenHsieh 20210813) is not made.
+//    fContact->rgHandlerMode->Enabled=true -> csystem.cpp:2790 W7C2 seam.
+//        DELTA: the Handler-Mode radio group stays disabled after a home.
+//    ADAM_ReturnValueCheck(true) -> W906G4 seam.  DELTA: no EP voltage check.
+//    fHome->fShow / fHome->Close() -> W906G4 seams (false / no-op).
+//    AuthPath -> W906G4 seam ("").  WriteIniData -> csystem.cpp:1319-1321 W7C1
+//        seam.  DELTA: bI01TesterFinishThenHome is still set TRUE IN MEMORY
+//        (the load-bearing half of golden :10409-10417, and bFinshTest=true
+//        with it), but it is NOT PERSISTED to config.ini, so the forced I01
+//        enable does not survive a restart.
+//==============================================================================
+extern bool b2ShuttleMoveToLeft;                                                // golden csystem.cpp:10260 (definition: acarry.cpp, declared acarry.h:71)
+
+void DoHomeProcess()
+{
+    if(W906G4_ProcessMotorHome(0))                                                  // GATE G4-2 SEAM -- golden: if(ProcessMotorHome(0))
+    {
+        bCarryControlOutarm1=false;                                             //ChungHung 20110117 add OutArm 讓開若未完成 按下回Home 則 Hangup
+        bCarryControlOutarm2=false;
+        InitOCRFlow(false);                                                     //ChungHung 20120830 add OCR Function add
+        if(FLCarryKit.UseSiteHasIC() && bShuttle1MoveToRight)                   //Sam 20220209 : Index Arm Pickup Error 未排除就 Home，造成資料錯亂而 Hangup
+        {
+            if(IniConfig.bAlarmNeedServoOff)                                    //Steven 20110802
+                ShowMyMessage("HOME before troubleshooting(Test Arm 1 Pick up error), need to take In shuttle 1 device", "未排除 Test Arm 1 吸取錯誤就復歸, 需要拿走 In shuttle 1 device", "", false, true);
+            else
+                ShowMyMessage("HOME before troubleshooting(Test Arm 1 Pick up error), need to take In shuttle 1 device", "未排除 Test Arm 1 吸取錯誤就復歸, 需要拿走 In shuttle 1 device");
+            FLCarryKit.SetAllToNullIC();
+        }
+        bShuttle1MoveToRight=false;                                             //ChungHung 20120717 add Index Drop Error Can Retry and Start
+        bShuttle1MoveToLeft=false;                                              //ChungHung 20120717 add Index Drop Error Can Retry and Start
+
+        if(BLCarryKit.UseSiteHasIC() && bShuttle2MoveToRight)                   //Sam 20220209 : Index Arm Pickup Error 未排除就 Home，造成資料錯亂而 Hangup
+        {
+            if(IniConfig.bAlarmNeedServoOff)                                    //Steven 20110802
+                ShowMyMessage("HOME before troubleshooting(Test Arm 2 Pick up error), need to take In shuttle 2 device", "未排除 Test Arm 2 吸取錯誤就復歸, 需要拿走 In shuttle 2 device", "", false, true);
+            else
+                ShowMyMessage("HOME before troubleshooting(Test Arm 2 Pick up error), need to take In shuttle 2 device", "未排除 Test Arm 2 吸取錯誤就復歸, 需要拿走 In shuttle 2 device");
+            BLCarryKit.SetAllToNullIC();
+        }
+        bShuttle2MoveToRight=false;                                             //ChungHung 20120717 add Index Drop Error Can Retry and Start
+        bShuttle2MoveToLeft=false;                                              //ChungHung 20120717 add Index Drop Error Can Retry and Start
+        bShuttle1HasPickErr=false;                                              //Steven 20220712 : 避免In arm 偷放料
+        bShuttle2HasPickErr=false;
+        bShuttleMoveToLeftforFix3=false;                                        //ChungHung 20140313 add Fix3 can Full Tray
+        bIndexPickUpErrMoveSht1=false;                                          //JerryYang 20180109 (Steven) fix in arm讓位後按home發生的hang up
+        bIndexPickUpErrMoveSht2=false;
+        DoAutoRetest(true);                                                     //ChungHung 20140625 回完Home iTask 要重來
+
+        bCheckShuttle1Flag=false;
+        bCheckShuttle2Flag=false;
+        bBinDispAlarm=false;                                                    //Ifor 20220714 add:Bin Disp 異常報警 每次Onecycle 檢查一次
+        VerifyNeedDoAlignment(AutoAlignmentTray_AfterHome, AutoAlignmentCK_AfterHome);                                  //KenHsieh 20210813 : add CCD AUTO ALIGNMENT
+
+        if(CheckMotorHome())
+        {
+            iHome=0;
+            fAllMotorHome=true;
+            b1ShuttleMoveToLeft=true;                                           //JerryYang 20170315 (wei) 避免out shuttle及index arm上有IC時按home後會hang up
+            b2ShuttleMoveToLeft=true;
+            bSortShtMoveToLeft=true;                                            //RogerYang 20250510 Add for 9046AU
+            if(InArmSuck.HasIC()==false)                                        //RogerYang 20251111 : in arm 沒貨就清除flag
+                bPlaceShuttle=false;
+
+            if(bHomeByStart==true)
+            {
+                bHomeByStart=false;
+                SetMotorSpeed();
+
+                if(LastSet.iRealDummy!=DUMMY)
+                {
+                    if(CheckOutArmZ(false)==false && MTrayXCanSafeMove())       //Out Arm Z在上面,且Tray Arm在上面
+                    {
+                        if(CosFunction.bThickTrayNoNeedCover &&
+                           UserDefForm[0].ZDepth>1500)                          //Steven 20200723 : 太厚的Tray不能蓋蓋子
+                        {
+                        }
+                        else
+                        {
+                            if(Sen[SnUnLoaderFloating].Enable &&
+                               Sen[SnUnLoaderFloating].IsOn())                  //Steven 20110725 : Unloader置偏偵測
+                            {
+                                ShowErrorMessage("JAM1109", K_RETRY, MMAuto1, true);
+                            }
+                        }
+                    }
+                }
+
+#if 0 // GOLDEN VERBATIM -- golden csystem.cpp:10336-10374.  GATE G4-1: the ATC-restart + SECS remote-start ladder.  It needs ATCInterfaceForm->ATC_SYS / ->ATC_SYS_PAL[0]->bATCRunSetting (ATC/ATCSystem.h members not exposed by the ported ATCInterface facade), ATC_InterfaceForm (acarry_shims.h -- NOT included in this TU), fShuttleMove (forms/fShuttleMove.h -- NOT included), and fMain->RunCheckStart() / fMain->Timer6 (no member of either name exists on the FormsFacade TfMain).  DEFAULT: the whole ladder is skipped.  BEHAVIOUR DELTA: after a Start-triggered home, (a) the ATC chiller / ATC-run restart that golden performs because "Alarm之後會暫停ATC, 所以要重新Start" does NOT happen, so a hot/cold lot resumes with the ATC still paused; (b) the ATC7 and New-ATC Run commands are not sent; (c) the SPIL SECS remote-start hand-off (SoftStop=true + fMain->RunCheckStart + bPhysicalStart + Timer6) is not performed, so a Remote Start never completes.  NO ALARM OR INTERLOCK IS LOST IN THIS GATE -- every statement in it is an enable/command, not a refusal.
+                if(ATC_SYSTEM==eATCHonPrecType &&
+                   (TestIF.iTestMode==DualSite ||
+                    TestIF.iTestMode==SingleSite))                              //Steven 20120725 : Alarm之後會暫停ATC, 所以要重新Start
+                {
+                    if(Temperature.bATCActiveCooling==true)
+                    {
+                        if(ATCInterfaceForm->IsOnLine()==false)
+                            ATCInterfaceForm->OnLine();
+                        if(ATCInterfaceForm->ATC_SYS.IsChillerRun()==false)
+                            ATCInterfaceForm->ATCChillerSwitch(true);
+                        if(ATCInterfaceForm->ATC_SYS_PAL[0]->bATCRunSetting==false)
+                            ATCInterfaceForm->SetRunATC(true);
+                        bRunATC=true;                                           //ChungHung 20160118 add for Hisi V102
+                    }
+                }
+
+                if(ATC_SYSTEM==eATCHonPrecType &&
+                   Temperature.bATC70Active==true &&
+                   LastSet.iTemperature==Tempture_Hot)                          //Steven 20151111 : For ATC 7.0
+                {
+                    ATCInterfaceForm->SendCommToATC7(ATC_RUN, "", "");
+                }
+
+                if(ATC_SYSTEM==eNewATCSystem &&
+                   LastSet.iTemperature==Tempture_Hot)                          //Ifor 20151230 :add New ATC Interface Run
+                {
+                    ATC_InterfaceForm->Run();
+                }
+
+                if(IniConfig.bEnable_SECS_GEM==true &&
+                   IniConfig.bRCMDStart==true &&
+                   IniConfig.bSPILFunction==true &&
+                   fShuttleMove->fShow==false)                                  //Steven 20141006 : SECS GEM使用Remote Start功能
+                {
+                    SoftStop=true;
+                    fMain->RunCheckStart();                                     //Ifor 20151208 : Run check 新增判斷
+                    bPhysicalStart=true;
+                    fMain->Timer6->Enabled=true;
+                }
+#endif // golden csystem.cpp:10336-10374
+            }
+            else
+            {
+                SoftStop=true;
+            }
+            InitAllProcessTask();
+            bUnloading=false;                                                   //JerryYang 20240318
+            W7C2_FCONTACT_RGHANDLER_ENABLE();                        // seam csystem.cpp:2790 (no-op) -- golden: fContact->rgHandlerMode->Enabled=true;                              //Eliot
+
+            InitialMaxMinValue("Total Homing");                                 //Isaac 20201012 : 計算Encoder和commandpos/Teaching的差值，歸零
+            if(EP_Install==3 || EP_Install==5)                                  //kevin 20220412 EP 目前只有3 才有回授
+                W906G4_ADAM_ReturnValueCheck(true);                     // g4 SEAM (no-op) -- golden: ADAM_ReturnValueCheck(true);                                    //wei 20220309 Add EP Voltage Error Alarm
+        }
+        else
+        {
+            SystemStart=false;
+            ShowMyMessage("Motor not home yet!", "馬達尚未歸零錯過!", "DoHomeProcess");
+            SoftStop=true;
+            SoftStart=false;
+            bLampHome=true;
+            if(W906G4_FHOME_FSHOW())                                                    // g4 SEAM (false) -- golden: if(fHome->fShow)
+                W906G4_FHOME_CLOSE();                                                   // g4 SEAM (no-op) -- golden: fHome->Close();
+        }
+
+        if(bZ1ModifyDistanceRef==true || bZ2ModifyDistanceRef==true)            //Isaac 20201110 : Index Y find motor phase
+        {
+            ShowMyMessage("ZPhase has SKIP must do auto height again!", "ZPhase有SKIP必須重新contact Hight!", "DoHomeProcess");
+        }
+
+        if(bY1ModifyDistanceRef==true || bY2ModifyDistanceRef==true)
+        {
+            ShowMyMessage("YPhase has SKIP. Please check index Y teaching Position!", "Y Phase有SKIP.請重新確認Idex Y軸教導點位", "DoHomeProcess");
+        }
+
+        if(IniConfig.bI06TurnOnI01AfterHome)                                    //Sam 20220216 : Home 完成後強制開啟 I01 Function。
+        {
+            if(IniConfig.bI01TesterFinishThenHome==false)
+            {
+                AnsiString sPath=W906G4_AuthPath()+"config.ini";        // g4 SEAM ("") -- golden: AuthPath+"config.ini"
+                IniConfig.bI01TesterFinishThenHome=true;
+                bFinshTest=true;                                                //Sam 20221019 : Home 需要強制中斷測試，不然自動打開 I01 會被卡死。
+                WriteIniData(sPath, "Tester", "bI01TesterFinishThenHome", true);
+            }
+        }
+    }
+}
+//------------------------------------------------------------------------------
+
+//==============================================================================
+//  DoTrayFeedProcess -- golden csystem.cpp:10425-11659 (1235 golden lines).
+//  GATE G4-3: WHOLE BODY GATED #if 0 with GOLDEN TEXT VERBATIM.  Active arm is
+//  an empty body.
+//
+//  WHY THE DEFAULT IS FAITHFUL
+//  ---------------------------
+//  Golden's entire body is `if(DoTrayFeed()) { ... }`.  DoTrayFeed() DOES NOT
+//  EXIST IN THIS TREE -- the only `DoTrayFeed` token anywhere is the unrelated
+//  SECS enumerator SecsEventType.h:74 `DoTrayFeed,  //32  按下 Tray Feed`.  With
+//  no guard there is no faithful way to enter the body, and calling it would be
+//  an undefined reference (trap 2).  An empty body is therefore EXACTLY what the
+//  golden does on every tick where DoTrayFeed() is false, which is every tick
+//  except the completion tick.
+//
+//  Beyond the guard, the body reaches ~40 objects that have no port at all:
+//  fLotInfo, fBarCode, fSCKART (the real form, not the SCK_ART seam),
+//  fMesSystem, fProductionInfo, fContactCT, fShowBinSelect, fSocketCommunication,
+//  fTrayMapping, fOCR, fObserver, fFTPClient, fAGV, fYieldMonitoring (these
+//  members), COM2, fSetup, fMain->{BtnStartClick, ShowTestHeadComp,
+//  LoadTestModePicture, CloseGpibProgram, BtnTrayEnd, UpdateMainOperateMode,
+//  cbRunStartMode}, plus DoArmSpeedConvert (cUnitConvert.h:91 states TODO),
+//  IniRecordMonitoringIndexCycleTime, ShowLotEndMessage, ExecZipCommand,
+//  RespondASECom, DoLowYieldAlarm, SaveTestMode, ProcessLastSetIni_InOutArm,
+//  GetRecipePath / GetRecipeFileName / MyForceDirectories, ZeroMemory over
+//  bTestSiteNeedSetErrBin, slDupBundlID / slDupUnloadBundlID, AMR, and the
+//  TStringList/CopyFile/DeleteFile/StringReplace VCL file surface.
+//
+//  BEHAVIOUR DELTA ON A REAL MACHINE
+//  ---------------------------------
+//  Tray Feed completion performs NO end-of-lot work: no ATC LotEnd, no SECS
+//  TrayFeedFinish / ProcessEnd / ATK PortStateUpdated report, no OEE / MES /
+//  summary write, no run-start-mode transition, no counter or flag reset, and no
+//  MES1643/MES1644/MES1648/MES1651 operator notice.  NO SAFETY REFUSAL AND NO
+//  INTERLOCK LIVES IN THIS FUNCTION -- it runs only AFTER the tray-feed motion
+//  has already completed, and every alarm it raises is an information-class
+//  MESxxxx notice or a "count over limit" advisory (:11491/:11510/:11529/:11547),
+//  never a stop.  The one exception worth naming explicitly is :10794-10796,
+//  where golden PAUSES the machine when Low-Yield auto-clean has closed more
+//  than a quarter of the sites; THAT PAUSE IS NOT PERFORMED.  It is unreachable
+//  either way today because DoTrayFeedProcess has no caller (MainProc's ladder
+//  is gated at csystem.cpp:549).
+//==============================================================================
+#if 0 // GOLDEN VERBATIM -- golden csystem.cpp:10425-11659.  GATE G4-3 -- see the banner immediately above for the full rationale and behaviour delta.
+void DoTrayFeedProcess()
+{
+    int ret=0;
+    AnsiString str, strPath, strPath1, sYield2;
+    AnsiString ErrPart="";                                                      //kevin 20141007  //JerryYang 20220923 : add
+    AnsiString szDir="", asPath, asFileName;
+    bool bHasLotEnd=false;                                                      //Ifor 20180426 : add ATC Even Log 上傳
+    bool bHasErr=false, bResult=false, bFail=false;                             //JerryYang 20220923 : add
+
+    if(DoTrayFeed())
+    {
+        if(fMain->hanaART->IsHanaArtAvailable()==true)                          //JimmyChiu 20241023 HANA ART Function
+        {
+            fMain->hanaART->EndOfLot();                                         //Steven 20250415 : HANA ART Function
+        }
+        else if(TestIF_File.bRENESAS_EnableFTCT==true)                          //RogerYang 20251018 : add for lockstart
+        {
+            fMain->RENESAS_Server->bTrayFeedDone=true;
+        }
+
+        if(CosFunction.bUseOpenCloseSiteMapAtAnyTime==true)                     //Steven 20230117 : Tray feed後要取消打勾
+        {
+            fMain->DisableSiteMappingCheck(false, __FUNC__);                    //Steven 20230130 : 加上紀錄
+        }
+        bASMFinishOneCycle=false;                                               //Steven 20230117 : 修正One Cycle之後不執行Auto Site Map的問題
+        fObserver->RecordIndexCycle(true);                                      //Sam 20200916 : Add Index Cycle Time Record
+
+        if(CUSTOMER_CODE==CC_KYEC_LEE)                                          //Ifor 20180426 : add ATC Even Log 上傳移至上方避免抓取資料時ATC尚未寫入檔案
+        {
+            if(Temperature.bATCActiveCooling==true &&
+               fLotInfo->aldATCPower->Value==true)
+            {
+                bHasLotEnd=false;
+                if(ATC_SYSTEM==eATCHonPrecType ||
+                   ATC_SYSTEM==eNewATCSystem)
+                {
+                    if(ATC_SYSTEM==eNewATCSystem)
+                    {
+                        if(ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_31   ||
+                           ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_32   )   //Ifor 20180419 : add 傳送 Lot ID 給 ATC 3.2
+                        {
+                            ATC_InterfaceForm->LotEnd(asATCEvenLotID);          //Ifor 20161118 (Steven) add Lot End Command 送至 ATC3.1 System
+                            bHasLotEnd=true;
+                        }
+                    }
+                    else if(ATC_SYSTEM==eATCHonPrecType)
+                    {
+                        ATCInterfaceForm->LotEnd(asATCEvenLotID);               //Ifor 20161118 (Steven) add Lot End Command 送至 ATC2.0 System
+                        bHasLotEnd=true;
+                    }
+                }
+            }
+        }
+
+        DoArmSpeedConvert();                                                    //ChungHung 20140807 add AutoSpeed after TrayEnd or TrayFeed restore max speed
+        bStopART=false;                                                         //JerryYang 20220923 : add
+        bLoaderNoTrayAutoCleanOut=false;                                        //kevin 20140423 add   避免 LOAD 在下一次生產無法接盤。
+        InitAllProcessTask();
+        if(BAR_CODE_INSTALL!=ebctUninstall && HasICUnderMachine()==false)       //Steven 20160728 : Log by running mode
+            fBarCode->ClearLogName();
+        IniRecordMonitoringIndexCycleTime();                                    //JerryYang 20220831 : add
+
+        if(CosFunction.bUseInitialDelayAsSoakTime &&
+           Temperature.bUseInitialDelayAsSoakTime &&
+           TestIF_File.bEveryFirstDeviceUseInitialDelay)                        //Steven 20170511 (wei) : 使用initial delay當 Soak time
+        {
+            if(MOT[MMPlate1].HasIC()==false &&
+               MOT[MMPlate2].HasIC()==false)
+            {
+                bFirstInput=true;
+                bFirstInputForIndex=true;
+            }
+            else
+            {
+                bFirstInput=false;
+                bFirstInputForIndex=false;
+            }
+        }
+        else
+        {
+            bFirstInput=false;
+            bFirstInputForIndex=false;
+        }
+
+        if(CUSTOMER_CODE==CC_ASE_KaohSiung)                                     //kevin 20141007 紀錄是否使用過autositemap
+        {
+            szDir=GetRecipePath();
+            if(IniConfig.bUseAutoSiteMapping &&
+               LastSet.iRunStartMode==rsmAutoSiteMap)                           //kevin 20150113
+            {
+                MyForceDirectories(szDir, "DoTrayFeedProcess_1");
+                if(LastSet.iRunStartMode==rsmAutoSiteMap &&
+                   bShowAutoSiteMappingError==false)                            //kevin 20141007 紀錄是否使用過autositemap
+                {
+                    szDir=GetRecipeFileName("HANDLERCONDITION.DATA");           //kevin 20150521 修改
+                    WriteIniData(szDir, "Configuration", "Auto Site Mapping Count", 1);
+                    RecordProcess("Auto Site Map Finish.");                     //kevin 20160125  add
+                    bAutoSiteMapHasPickHP=false;                                //Steven 20230210 : Fixed for auto site map
+                }
+
+                #ifdef ASE_KaohSiung                                            //高雄的話    kevin 20150113
+                if(bShowAutoSiteMappingError==false)
+                {
+                    szDir=GetRecipeFileName("HandlerCondition.Data");
+
+                    if(fMain->CheckSiteMapPriority())                           //kevin 20160125 判斷site map 順序是否出現相同Site 編號
+                    {
+                        for(int i=0; i<TestSocket.iMaxRow; i++)
+                        {
+                            for(int j=0; j<TestSocket.iMaxCol; j++)
+                            {
+                                if(iAutoSiteMap[i][j]<=0 && TestIF.iSiteMap[i][j]<=0)
+                                    iAutoSiteMap[i][j]=TestIF.iSiteMap[i][j];
+
+                                WriteIniData(szDir, "Configuration", IndexSuckName[i][j], iAutoSiteMap[i][j]);
+                                iAutoSiteMap[i][j]=0;
+                            }
+                        }
+                        fSetup->ReadFile();
+                        fMain->ShowTestHeadComp(true);                          //變改sitemap
+                    }
+                    else
+                    {
+                        bShowAutoSiteMappingError=true;                         //kevin 20160125
+                    }
+                }
+                #endif
+            }
+        }
+
+        if(bSiteMappingCHKOK==false)                                            //jou 2011-03-24 start : Auto Site Mapping
+        {
+            DoSiteMappingResult();
+        }
+
+        iTrayFeed=0;
+        if(IniConfig.bEnableUnloadTrayFree)                                     //kevin 20180716 add ASE_KH no use  onecycle 釋放所有軌道夾TRAY汽缸
+        {
+            Cylinder[C_TrayY_Fixer].Off();
+            Cylinder[C_LoaderEdgePush].Off();
+            Cylinder[C_LoaderUpPress].Off();                                    //JerryYang 20181120 (Steven) : (Steven) : 獨立控制loader壓tray
+        }
+
+        Cylinder[C_Empty_Middle].Off();                                         //Steven 20140710 : 確保氣缸有降下來
+        Cylinder[C_Empty_Up].Off();
+        Cylinder[C_Color_Middle].Off();
+        Cylinder[C_Color_Up].Off();
+
+        bOneTimeHotPlateCheckAll=false;                                         //ChungHung 20120206 Hotplate check
+
+        //----- by dell ccd realtime-------------
+        if(REAL_TIME_CCD==true && !COM2->bCCDDummyRum)
+        {
+            COM2->SendCommToVision(COM2->rtClear, false);
+        }
+        //---------------------------------------
+
+        if(INSTALL_OCR!=eocrUninstal && TestIF.bOcrFunction)                    //Steven 20120716 : OCR
+        {
+            fOCR->SendOCR(fOCR->ocrClear);
+        }
+
+        if(IniConfig.bEnable_SECS_GEM==true)                                    //Steven 20140528 : Secs Gem
+        {
+#if 0   // GATE G-W5cI-1 (PT-W5c integrate) -- cpublic.cpp:2328's body is gated (TODO GA1-B3: class TLotSummary unported + fNote->edBundleID has no facade member). DEFAULT: the target string keeps its previous value (empty), so the bundle-end / process-end JSON payload is empty rather than wrong. NO ALARM OR INTERLOCK IS IN THIS PATH -- it is a report string.
+            sProcessEndInfo=GetBundleInfo(-1);
+#endif
+            EventReport(SECS_EVENT.TrayFeedFinish);                             //49     Tray Feed Finish
+            if(fAGV->IsATK_AMR())                                               //AI(general) 20260401 (RogerYang) : ATK AMR TrayFeed完成, 主動上報 PortState=ReadyToUnload(3) CEID 284
+            {
+                for(int i=eAuto1; i<=iAutoRight; i++)
+                {
+                    if(Prod.iTrayType[i]!=tNotUse)
+                    {
+                        iThisPortNo=ePortAuto1+i;
+                        iThisPortStatus=3;                                      // eATKReadyToUnload
+                        EventReport(SECS_EVENT.PortStateUpdated);               // CEID 284
+                        iLoadStateATK[etAuto1+i]=3;                             //AI(ht9045-atk-amr-flow) 20260423 (RogerYang) : sync gate, prevent duplicate report from bScanLoadPortState_ATK
+                    }
+                }
+                RecordProcess("ATK AMR TrayFeed done, PortState=ReadyToUnload.");
+            }
+
+            if(IniConfig.bA68_AutoLoadUnload)                                   //JerryYang 20250521 : For AMR
+            {
+            }
+            else
+            {
+                if(fAGV->IsSPIL_AMR())                                          //JerryYang 20250429 : 啟用A65才發報Process end
+                {
+                    EventReport(SECS_EVENT.ProcessEnd);                         //249     ProcessEnd
+                }
+            }
+        }
+
+        if(CUSTOMER_CODE==CC_TSMC_TAINAN)                                       //wei 20160923 Tray Feed後，下一次開始需要Clean Count
+            WriteIniDataGeneral("System", "bInitialCleanCount", 1);
+
+        bQASampleCnt=0;
+        if(iAseTrayFeed!=0)                                                     //kevin 20150925
+        {
+            iAseTrayFeed=0;
+            RespondASECom("@e02113Done");                                       //kevin 20150415 回應 ase TrayFeed finish
+        }
+
+        if(CUSTOMER_CODE==CC_ASE_CL && LastSet.iRealDummy==REALLY)              //JerryYang 20250120 : add
+        {
+            fLotInfo->SaveOEELog(true);
+        }
+
+        if(BAR_CODE_INSTALL!=ebctUninstall &&
+           TestIF_File.bEnableBarCode)                                          //wei 20160413 Tray Feed後記錄Barcode顆數
+            fLotInfo->btClearBarcodeCount->Click();
+
+        if(BAR_CODE_INSTALL==ebctUseCCDMode && TestIF_File.bEnableBarCode)      //Steven 20160607 Tray Feed後記錄Barcode顆數
+            fLotInfo->btClearBarcodeList->Click();
+
+        fTrayMapping->ClearTrayIDByLot();                                       //JerryYang 20250120 : add
+        slDupBundlID->Clear();
+        slDupBundlID->SaveToFile(asDupBundleID);
+
+        slDupUnloadBundlID->Clear();
+        slDupUnloadBundlID->SaveToFile(aslDupUnloadBundlID);
+
+        if(IniConfig.bCleanOutCanTrayEnd &&
+           bCleanOutTrayEnd==true)                                              //jou 2010-11-25 start
+        {
+            if(REAL_TIME_CCD==true)
+            {
+                COM2->SendCommToVision(COM2->rtLightOff, false);                //jou 2012-03-29 Tray Feed做完後自動將RTC燈源關閉
+            }
+
+            if(CosFunction.bOEEFunction)                                        //Steven 20180417 (Jou) : OEE功能
+            {                                                                   //Sam 20170810 (Steven) 移植超豐 OEE 功能 form HT-7045
+                if(IniConfig.bN14_1_EnableOEEFunction==true &&
+                   IniConfig.iN14_1_OEERecordCycleTime>0)
+                {
+                    fProductionInfo->EachCycleSecondDo_SaveAndUpdateOEEFiles(true);
+                    fProductionInfo->bStartNeedSaveAndUpdateOEEFiles=true;
+                    fProductionInfo->bIsPauseTime=false;
+                    fProductionInfo->ShowHaltStatusForm();
+                }
+                fProductionInfo->bNeedLotEndAfterCleanOut=true;
+            }
+
+            if(bPassTrayFeed)                                                   //wei 20150826 ART Pass Bin Tray Feed
+            {
+                ShowErrorMessage("MES1651", 0, MMSystem);                       //[Pass Bin Tray End] OK!!
+                bPassTrayFeed=false;
+            }
+            else
+            {
+                if(CosFunction.bQAModeUseUnloadCnt &&
+                   IniConfig.bQAMode==true &&
+                   LastSet.iRunStartMode==rsmQAMode &&
+                   bQAModeFinishCleanOut)                                       //JerryYang 20221004 : Maxim版本QA mode
+                {
+                    ShowErrorMessage("MES1648", 0, MMSystem);                   //QA Mode finish
+                }
+                else
+                {
+                    ShowErrorMessage("MES1644", 0, MMSystem);                   //[Tray End] OK!!
+                }
+
+                if(CUSTOMER_CODE==CC_VTEST_Shanghai)                            //jou 20211018 : 上海無錫張冬冬要求Tray end後要截斷資料
+                {
+                    fMesSystem->DoRecordReportByTime();                         //marvin 20200424 (Kirin) Added always record report by time.
+                }
+
+                if(CosFunction.bAutoCloseSiteWhenRT &&
+                   TestIF_File.iAutoCloseSiteWhenRT)                            //Steven 20200225 : 切到RT的時候,要關閉Socket (因為不會切到RT_Initial, 所以改到Tray_End
+                {
+                    fYieldMonitoring->DoRTAutoSocketOff();                      //Steven 20230814 : 統一自動關Site Function
+                }
+            }
+
+            if(CUSTOMER_CODE==CC_JCET &&
+               TestIF_File.bSpiroxTesterLotEnd==true)                           //JerryYang 20170706 (Steven) JCET通知測試機lot end功能改為by工作檔
+            {
+                bNeedClearSortCount=true;
+                ret=ShowLotEndMessage("請選擇Lot end/ Skip", "Please select lot end/ skip", false);
+                if(ret==1)                                                      //Lot End
+                {
+                    fMain->SetLotState(11);                                     //JCET通知測試機lot end
+                }
+            }
+            str.sprintf("TRAY End (Loading %d items, Jam %d times.)", LastSet.SendCT[0], LastSet.iJamCount[0]);         //Steven 20091202
+//            bCleanOutTrayEnd=false;                                           //Steven 20250212 : 移到最下面
+            if(bQAModeFinishCleanOut==true)                                     //Steven 20111019
+            {                                                                   //ChungHung 20140408 換位置
+                IniConfig.bQAModeFirstIn    =true;
+                LastSet.iTester             =IniConfig.iBackUpTesterMode;
+                if(LastSet.iTester==ON_LINE)                                    //Steven 20150713 : 整理LastSet.iTester
+                    NewRecordProcess("MES2157", "Change to On_Line", "by TrayEnd bQAModeFinishCleanOut QAMode");        //ChungHung 20140722 add add record
+                else
+                    NewRecordProcess("MES2155", "Change to Off_Line", "by TrayEnd bQAModeFinishCleanOut QAMode");       //ChungHung 20140722 add add record
+                ArmSpeed[InArm].bVariModeFIX=IniConfig.bBackUpInArmMode;
+                TrayForm.bAutoFeed          =IniConfig.bBackUpAutoFeed;
+                bQAModeFinishCleanOut       =false;
+                bQAModeQuickCleanOut=false;
+                bMustCleanAllTray=false;                                        //ChungHung 20140722 fix 第一次QA Mode 後 如果按下TrayEnd 第二次變換到QA mode 會有問題
+            }
+
+            if(CUSTOMER_CODE==CC_ASE_KaohSiung && USE_AUTO_RETEST==eartInstall &&
+               (IniConfig.bA10_AutoReTest || bAutoReTest_ART) &&
+               (LastSet.iRunStartMode==rsmInitial_ART      ||
+                LastSet.iRunStartMode==rsmContinuStart_ART ||
+                LastSet.iRunStartMode==rsmContinuRetest_ART))                   //kevin 20150716  退 fail tray
+            {
+               bQAModeQuickCleanOut=false;
+            }
+            else if(Prod.bQAModeAfterTrayEnd)                                   //Steven 20151125 : QA做完後的TrayEnd要重做QA
+            {
+                SetRunStartMode(rsmQAMode);
+            }
+            else if(IniConfig.bCleanOutCanTrayEnd)
+            {
+                if(CosFunction.bAfterRTChangeToInitialStart)                    //Steven 20140521 : RT後自動切回FT
+                {
+                    if(fMain->cbRunStartMode->Text==StartModeName[rsmContinuStart] ||
+                       fMain->cbRunStartMode->Text==StartModeName[rsmQAMode])   //ChungHung 20130711 add If they are select "TrayEnd" then they can run retest in QAMode.
+                        SetRunStartMode(rsmContinuRetest);
+                }
+                else
+                {
+                    if(IniConfig.bVTESTFunction==true)
+                    {
+                        if(fLotInfo->cbRunMode->Text.Pos("RT")>0)
+                            SetRunStartMode(rsmContinuRetest);
+                        else
+                            SetRunStartMode(rsmContinuStart);
+                    }
+                    else
+                    {
+                        if(IniConfig.iP58RunModeAfterFT==0)                     //JimmyChiu 20250905 : FT模式結束後切換模式
+                        {
+                            SetRunStartMode(rsmContinuStart);
+                        }
+                        else
+                        {
+                            SetRunStartMode(rsmContinuRetest);                  //Steven 20250709 : rsmContinuStart --> rsmContinuRetest
+                        }
+                    }
+                }
+            }
+        }
+        else if(IniConfig.bE53LowYieldAutoClean &&                              //wei 20141201 Low Yield Auto Clean(%) start
+                bLowYieldCleanOut)                                              //kevin 20160802
+        {
+            if(bLowYieldCleanOut)
+            {
+                for(int i=0; i<TestSocket.iShtRow; i++)
+                {
+                    for(int j=0; j<TestSocket.iShtCol; j++)                     //close Site
+                    {
+                        if(bLowYieldCloseSite[0][i][j]==true)
+                        {
+                            LastSet.bUseTestSocket[0][i][j]=false;
+                            bTestSiteUse[0][i][j]=false;
+                            LastSet.bUseTestSocket[1][i][j]=false;
+                            bTestSiteUse[1][i][j]=false;
+                            iLowYieldCloseCount++;
+                            iLowYieldSiteCount[i][j]=0;
+                            fContactCT->rgYieldType->ItemIndex=3;
+                            fContactCT->ClearData(i, j);                        //Steven 20220301 : 修正Clear Yield
+                        }
+                    }
+                }
+                fMain->ShowTestHeadComp(false);
+                if(iLowYieldCloseCount>=(TestSocket.iShtCnt)/4)
+                {
+                    ShowMyMessage("Low Yield close sites over set Site","低良率關Site數超過設定數量");
+                    iLowYieldCloseCount=0;
+                    fMain->Pause("DoTrayFeedProcess");
+                }
+                else
+                {
+                    fMain->BtnStartClick(fMain);
+                }
+//                bLowYieldCleanOut=false;                                      //Steven 20250212 : 移到最下面
+            }
+        }
+        else
+        {
+            if(CosFunction.bGPIBLotEnd)                                         //20181030 : Add GPIBLotEnd Function
+            {
+                if(IniConfig.bE39CheckHotPlateAfterCleanOutAndBeforeTrayFeed==true &&
+                   LastSet.iTemperature==Tempture_Hot)                          //wei 20160624 Hotplate clean out
+                {
+                    bHPCleanout=false;
+                    IniConfig.bE39CheckHotPlateAfterCleanOutAndBeforeTrayFeed=false;
+                    ProcessLastSetIni_InOutArm(false);
+                }
+
+                if(IniConfig.bI31_1GPIBLotEnd &&                                //wei 20160726 TSMC GPIB Lot End
+                   bGPIBLotEndCommand==true)                                    //wei 20160624 GPIB Lot End Command
+                {
+                    fMain->SetLotState(8);                                      //wei 20160726 TSMC GPIB Lot End
+                }
+                RunInfo.bLotStart=false;
+            }
+
+            if(CUSTOMER_CODE==CC_UTAC)
+            {
+                if(LastSet.iRunStartMode==rsmContinuStart ||
+                   LastSet.iRunStartMode==rsmContinuRetest ||
+                   LastSet.iRunStartMode==rsmQAMode)
+                {
+                    fMain->SetLotState(8);
+                    fSCKART->SaveTestSummary(1);
+                    fSCKART->ClearLotInfo();
+                    if(TestIF_File.bSCKART_RunARTWithoutCmd==false)  //JerryYang 20200318 fix選擇RunARTWithoutCmd發生hang up
+                    {
+                        LastSet.bWaitEndLotAutoRetestGPIB=false;
+                    }
+                }
+            }
+            else if(IniConfig.bA37LotStartLotEnd ||
+               IniConfig.bA38_SLT_Summary ||                                    //JerryYang 20220923 : add SPIL ART LOT START/LOT END timeout機制
+               CosFunction.bGPIBLotEnd)                                         //Steven 20250115 : fixed for ART
+            {
+                if(LastSet.iRunStartMode==rsmContinuStart ||
+                   LastSet.iRunStartMode==rsmContinuRetest ||
+                   LastSet.iRunStartMode==rsmQAMode)
+                {
+                    if(CosFunction.bGPIBLotEnd &&
+                       IniConfig.bI31_1GPIBLotEnd &&
+                       bGPIBLotEndCommand==true)                                //Steven 20250115 : fixed for ART
+                    {
+                    }
+                    else
+                    {
+                        fMain->SetLotState(8);
+                    }
+
+                    if(IniConfig.bVTESTFunction==false)
+                    {
+                        if(fSCKART->iInfo_MultiLotCnt>1)
+                        {
+                            fSCKART->SaveMultiLotTestSummary(true);
+                        }
+                        else
+                        {
+                            fSCKART->SaveTestSummary(1);
+                        }
+                        fSCKART->ClearLotInfo();
+                        sTotalLotID="";
+                    }
+
+                    if(TestIF_File.bSCKART_RunARTWithoutCmd==false)             //JerryYang 20200318 fix選擇RunARTWithoutCmd發生hang up
+                    {
+                        LastSet.bWaitEndLotAutoRetestGPIB=false;
+                    }
+                }
+            }
+
+            if(TestIF_File.bEnableBarCode==true &&
+               TestIF_File.b2DIDAllowList==true &&
+               fLotInfo->cbRunMode->Text!="CORR")                               //JerryYang 20241104 : 支援2DID白名單功能
+            {
+                if(fBarCode->JCETUseMakeWhite2DIDList()==true)                  //RogerYang 20251208 : JCET 2D FT1白名單/FT2比對功能
+                {
+                    fBarCode->UpdateWhite2DIDList(fLotInfo->edtSysLotID->Text, fLotInfo->cbRunMode->Text);
+                }
+                else if(DirectoryExists(IniConfig.sN23_5_UploadPath))
+                {
+//                    if(IniConfig.bA38_SLT_Summary && fSCKART->sLotID!="NA" && fSCKART->sLotID!="" && iUnloadCount>0)
+                    {
+                        if(FileExists(as2DWhiteListLog))
+                        {
+                            strPath.sprintf("%s\\%s", IniConfig.sN23_5_UploadPath, as2DWhiteListLogName);
+                            TStringList *sListTemp=new TStringList;
+                            sListTemp->Clear();
+                            sListTemp->LoadFromFile(as2DWhiteListLog);
+                            bFail=false;
+                            for(int i=0; i<sListTemp->Count; i++)
+                            {
+                                if(sListTemp->Strings[i].AnsiPos("_Fail")>0)
+                                {
+                                    bFail=true;
+                                }
+                            }
+                            DeleteFile(as2DWhiteListLog);
+                            if(fBarCode->bNeedCheckWhitleList==true)
+                            {
+                                if(bFail==true)
+                                {
+                                    as2DWhiteListLog=StringReplace(as2DWhiteListLog, "_CheckResult_", "_FAIL_", TReplaceFlags()<<rfReplaceAll);
+                                    as2DWhiteListLogName=StringReplace(as2DWhiteListLogName, "_CheckResult_", "_FAIL_", TReplaceFlags()<<rfReplaceAll);
+                                }
+                                else
+                                {
+                                    as2DWhiteListLog=StringReplace(as2DWhiteListLog, "_CheckResult_", "_PASS_", TReplaceFlags()<<rfReplaceAll);
+                                    as2DWhiteListLogName=StringReplace(as2DWhiteListLogName, "_CheckResult_", "_PASS_", TReplaceFlags()<<rfReplaceAll);
+                                }
+                            }
+                            else
+                            {
+                                as2DWhiteListLog=StringReplace(as2DWhiteListLog, "_CheckResult_", "_NA_", TReplaceFlags()<<rfReplaceAll);
+                                as2DWhiteListLogName=StringReplace(as2DWhiteListLogName, "_CheckResult_", "_NA_", TReplaceFlags()<<rfReplaceAll);
+                            }
+                            strPath.sprintf("%s\\%s", IniConfig.sN23_5_UploadPath, as2DWhiteListLogName);
+                            sListTemp->SaveToFile(as2DWhiteListLog);
+                            sListTemp->Clear();
+                            delete sListTemp;
+                            bResult=CopyFile(as2DWhiteListLog.c_str(), strPath.c_str(), true);
+                            if(bResult==false)
+                            {
+                                ShowMyMessage("Uploaded 2DID white list result error\r\nPlease check the path of N-23.","上傳2DID white list result失敗\r\n請檢查N-23路徑是否存在");
+                            }
+                            else
+                            {
+                                RecordProcess("Uploaded 2DID white list result successfully.");                         //Steven 20190722 : add TSV log
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    ShowMyMessage("Uploaded 2DID white list result error\r\nPlease check the path of N-23.","上傳2DID result失敗\r\n請檢查N-23路徑是否存在");
+                }
+            }
+
+            if(IniConfig.bI43ResetGPIBAfterTrayFeedFinish)                      //Sam 20211107 : 新增 Tray Feed Finish Reset GPIB
+                fMain->CloseGpibProgram(__FUNC__);
+            if(CosFunction.bSpecailLowYeild &&
+               Prod.bFailAlarmLowYieldSpecial &&
+               bLowYeildAlarmSpecial)                                           //Sam 20210505 : PTI 要求的兩段 Low Yeild
+            {
+                DoLowYieldAlarm("WAR0724", "");
+                fCounterClear->LowYieldSpecialInitail();
+            }
+            else
+            {
+                if(CosFunction.bQAModeUseUnloadCnt &&
+                   IniConfig.bQAMode==true &&
+                   LastSet.iRunStartMode==rsmQAMode &&
+                   bQAModeFinishCleanOut)                                       //JerryYang 20221004 : Maxim版本QA mode
+                {
+                    ShowErrorMessage("MES1648", 0, MMSystem);                   //QA Mode finish
+                }
+                else if(IniConfig.bA68_AutoLoadUnload)                          //JerryYang 20250610 : 不要跳ALARM
+                {
+                    fMain->Pause("A68_AutoLoadUnload");
+                }
+                else if(CosFunction.bEnableHandlerResultServer &&
+                        IniConfig.bA60EnableAMR)                                //Sam 20240304 : 新增 AMR 功能
+                {
+                    NewRecordProcess("MES1643", "AMR Tray feed finished", "");  //開啟 AMR 不用提示 Tray Feed 完成，只要紀錄就好
+                }
+                else if(TrayForm.bEnableAMR)                                    //Eastsun 20260514 F010 KYEC AMR tray feed
+                {
+                    NewRecordProcess("MES1643", "KYEC AMR Tray feed finished", "");
+                }
+                else
+                {
+                    ShowErrorMessage("MES1643", 0, MMSystem);                   //[Tray Feed] OK!!
+                }
+            }
+
+            if(bPurgeOutAllDevice)
+            {
+                bPurgeOutAllDevice=false;
+                fShowBinSelect->btnAutoDeviceEjection->Enabled=true;            //JerryYang 20251020 : 渠梁半清機功能
+                fShowBinSelect->btnAutoDeviceEjectionRemove->Enabled=true;      //JerryYang 20251020 : 渠梁半清機功能
+                fMain->ModifyTester(ON_LINE);                               //Steven 20191218 : 整合修改LastSet.iTester
+                fShowBinSelect->ShowBinSel();
+                NewRecordProcess("MES2157", "Change to On_Line", "by TrayFeed finish");  //ChungHung 20140722 add add record
+            }
+
+            if(bRunAutoClean)                                                   //Sam 20240307 : 增加 Auto Clean 保護(實驗中)
+            {
+                ShowMyMessage("Tray feed finished. but auto clean not finished","");
+                bRunAutoClean=false;
+            }
+
+            if(CUSTOMER_CODE==CC_ASE_CL)
+            {
+                if(IniConfig.bN22Enable_EventLog)                               //JerryYang 20240701 : SaveTestSummary重複做會有多餘的summary
+                {
+                    fLotInfo->ASECL_LotEnd();
+                }
+                else
+                {
+                    fSCKART->SaveTestSummary(true);                             //JerryYang 20240423 : add
+                }
+            }
+
+            if(IniConfig.bF33_Check2DHardware)                                  //JerryYang 20250220 : 2DID硬體順序檢查功能
+            {
+                if((BAR_CODE_INSTALL==ebctUseCCDMode     ||
+                  BAR_CODE_INSTALL==ebctInShtIntel     ||
+                  BAR_CODE_INSTALL==ebctEtherNetCCD) &&
+                  TestIF_File.bEnableBarCode)                                   // &&
+//                  TestIF_File.bEnableBottom2D==false)                         //JerryYang 20250220 : Mark掉
+                {
+                    if(InArmSuck.iShtRow==2)
+                    {
+                        bRun2DCheck=true;
+                        fContact->Do2DIDMapCheck(true);
+                    }
+                }
+            }
+            ReadWriteBinCountMode(false);                                       //kevin 20210825 寫 Bin 1  Bin 2...記錄
+            iWhichMag=-1;                                                       //JerryYang 20220909 : add magazine
+            iAuto3MagazineIndex=-1;                                             //tray feed clear
+            iAddInitStartDelayCT=0;                                             //kevin 20180308 add 動作完成
+            bFinishInitStartDelay =false;                                       //kevin 20180308 add 動作完成
+            bCheckGiveWay=false;                                                //Ifor 20200521 Fix:清除RTC旗標
+            bNeedCheckRTCReport=false;                                          //Ifor 20200521 Fix:清除RTC旗標
+            bBinDispAlarm=false;                                                //Ifor 20220714 add:Bin Disp 異常報警 每次Onecycle 檢查一次
+            bAutoSiteMapWaitTestPass=false;                                     //Ifor 20211020 add: 清除SiteMapping旗標
+            bSiteMappingPlaceHotplate=false;                                    //Ifor 20211020 add: 清除SiteMapping旗標
+            bAutoSiteMapHotplateSave=false;
+
+            for(int i=0; i<eTrayCount; i++)                                     //JerryYang 20240111 : add P53 function
+            {
+                sStackBinTemp[i]="";
+            }
+
+            for(int i=0; i<ePortTotal; i++)
+            {
+                asBundleTrayID[i]="";
+            }
+
+            bMustCoverIDTray=false;                                             //JerryYang 20250521 : fix AMR issue
+
+            for(int i=0;i<3;i++)                                                //JerryYang 20250220 : fix AUTO IN OUT
+                iUnloaderTrayCountCal[i]=0;                                     //kevin 20220825 initial data
+
+            for(int i=0; i<MAX_AUTO_TRAY; i++)
+            {
+                bNeed1DCoverTray[i]=false;
+                bNeedCoverTray[i]=false;
+
+                bHasCoverTray[i]=false;
+                bHas1DCoverTray[i]=false;
+            }
+
+            for(int i=0; i<MAX_FIX_TRAY; i++)
+            {
+                sFixBundleID[i]="";
+            }
+
+            for(int i=0; i<MAX_FIX_TRAY; i++)
+            {
+                iFixTrayCountCal[i]=0;
+            }
+
+            if(IniConfig.bD58UseArm1PickPlaceArm2Test==true &&
+               TestIF_File.bArm1PickPlaceArm2Test==true)
+            {
+                if(Prod.TestY2_Middle==Prod.TestY2_Rear ||
+                   Prod.TestZ2_Test==Prod.TestZ2_Safe ||
+                   iBackUpZ2DownPosition==Prod.TestZ2_Safe)
+                {
+                    Prod.TestY2_Middle      =iBackupTestY2_Middle;
+                    Prod.TestZ2_Test        =iBackupTestZ2_Test;
+                    Prod.TestZ2_Drop_Offset =iBackupTestZ2_Drop;
+                    iBackUpZ2DownPosition   =Prod.TestZ2_Test;
+                }
+            }
+
+            if(IniConfig.bVTESTFunction==true)
+            {
+                fMesSystem->DoRecordReportByTime();                             //marvin 20200424 (Kirin) Added always record report by time.
+            }
+
+            if(CosFunction.bOEEFunction)                                        //Steven 20180417 (Jou) : OEE功能
+            {                                                                   //Sam 20171018 (wei) : OEE Bug 修正 Sam 20170810 (Steven) 移植超豐 OEE 功能 form HT-7045
+                if(IniConfig.bN14_1_EnableOEEFunction==true &&
+                   IniConfig.iN14_1_OEERecordCycleTime>0)
+                {
+                    fProductionInfo->EachCycleSecondDo_SaveAndUpdateOEEFiles(true);
+                    fProductionInfo->bStartNeedSaveAndUpdateOEEFiles = true;
+                    fProductionInfo->bIsPauseTime = false;
+                    fProductionInfo->ShowHaltStatusForm();
+                }
+                fProductionInfo->bNeedLotEndAfterCleanOut=true;
+            }
+
+            bAutoSiteMapHotplateReady=false;                                    //Ifor 20171204 : add Tray Feed 需清除Auto Site Mapping Hotplate 旗標
+            if(CUSTOMER_CODE==CC_JCET &&
+               TestIF_File.bSpiroxTesterLotEnd==true)                           //JerryYang 20170706 (Steven) JCET通知測試機lot end功能改為by工作檔
+            {
+                bNeedClearSortCount=true;
+                ret=ShowLotEndMessage("請選擇Lot end/ Full lot end/ Skip", "Please select lot end/ full lot end/ skip", true);
+                if(ret==1)                                                      //Lot End
+                {
+                    fMain->SetLotState(11);                                     //JCET通知測試機lot end
+                }
+                else if(ret==2)                                                 //Full Lot End
+                {
+                    fMain->SetLotState(12);                                     //JCET通知測試機Final lot end
+                }
+            }
+            bInitialATCSelfTest=true;                                           //Ifor 20160908 Feed OK 要重置 ATC Self Test 狀態
+
+            for(int i=0; i<2; i++)                                              //ChungHung 20140716 modify SCK complain count never clear when change add reset count
+            {
+                for(int j=0; j<MAX_SOCKET_ROW; j++)
+                {
+                    for(int k=0;k<MAX_SOCKET_COL;k++)
+                    {
+                        ContinuousFailARMCount[i][j][k]=0;
+                        ContinuousFailARMCount_AutoClean[i][j][k]=0;
+                        ContinuousFailSKTCount[j][k]=0;
+                        ContinuousFailSKTCount_AutoClean[j][k]=0;
+                    }
+                }
+            }
+
+            if(CosFunction.bSmartAutoClean && TestIF.bACSmart)                  //Sam 20230620 : 優化 Smart Auto Clean
+            {
+                //iAdaptiveACInterval=-1;
+                iAutoClean_IndexContactCount=0;
+                fLotInfo->RefreshYieldMonitor();
+            }
+
+            if(CosFunction.bAdaptiveYield)
+            {
+                iAdaptiveLowYieldCntNor=0;                                      //Sam 20240726 : AI Clean
+                iAdaptiveLowYieldCntMin=0;
+                dAdaptiveStardardYield=-0.01;
+                str.sprintf("Adaptive Low Yield : %2.2f%s", Prod.dLowYieldLimit,"%");
+                fLotInfo->lblAdaptiveLowYield->Caption=str;
+            }
+
+            str.sprintf("TRAY FEED (Loading %d items, Jam %d times.)", LastSet.SendCT[0], LastSet.iJamCount[0]);        //Steven 20091202
+            RecordProcess(str);
+            if(USE_AUTO_RETEST==eartInstall &&
+               (bAutoReTest_ART || IniConfig.bA10_AutoReTest))                  //kevin 20150615
+            {
+                str.sprintf("TRAY FEED (ART_Loading %d items, Jam %d times.)", LastSet.SendCT_ART[0], LastSet.iJamCount[0]);                                    //Steven 20091202
+                RecordProcess(str);
+            }
+
+            if(MOT[MMPlate1].HasIC()==false &&
+               MOT[MMPlate2].HasIC()==false)                                    //Steven 20170511 (jou) : 避免生產到一半被按下Tray Feed
+            {
+                if(LastSet.iRunStartMode==rsmQAMode)                            //ChungHung 20120417 add
+                {
+                    IniConfig.bQAModeFirstIn    =true;
+                    LastSet.iTester             =IniConfig.iBackUpTesterMode;
+
+                    if(LastSet.iTester==ON_LINE)                                //Steven 20150713 : 整理LastSet.iTester
+                        NewRecordProcess("MES2157", "Change to On_Line", "by TrayFeed QAMode");                         //ChungHung 20140722 add add record
+                    else
+                        NewRecordProcess("MES2155", "Change to Off_Line", "by TrayFeed QAMode");                        //ChungHung 20140722 add add record
+                    fMain->LoadTestModePicture();                               //Jerryyang 20191206
+                    ArmSpeed[InArm].bVariModeFIX=IniConfig.bBackUpInArmMode;
+                    TrayForm.bAutoFeed          =IniConfig.bBackUpAutoFeed;
+                    bQAModeFinishCleanOut       =false;
+                    bQAModeQuickCleanOut        =false;
+
+                    if(TestIF.bQATrayEndCloseYield100Site)                      //Sam 20231117 : 整合到 QA 模式
+                    {
+                        double dYield=0.0;
+                        for(int i=0; i<TestSocket.iShtRow; i++)
+                        {
+                            for(int j=0; j<TestSocket.iShtCol; j++)
+                            {
+                                dYield=fContactCT->ReturnSiteDataArray(false, i, j);
+                                if(dYield==100.0)                               //良率100%的SITE要關閉
+                                {
+                                    bTestSiteUse[0][i][j]=false;
+                                    bTestSiteUse[1][i][j]=false;
+                                    LastSet.bUseTestSocket[0][i][j]=false;
+                                    LastSet.bUseTestSocket[1][i][j]=false;
+                                }
+                            }
+                        }
+                        fMain->ShowTestHeadComp(false);
+                    }
+                    SaveTestMode();                                             //kevin 20231205 write on line  避免 ON-line => 檔案 OFF-Line
+                    if(Prod.iQAModeRunType==3)                                  //Sam 20240104 : 新增 QA 不計數模式
+                    {
+                        iQAModeLoaderCT=0;
+                        SetRunStartMode(rsmQAMode);
+                    }
+                    else if(Prod.bQAModeAfterTrayEnd &&
+                            iQAModeLoaderCT<Prod.iQAModeCount)                  //Steven 20151125 : QA做完後的TrayEnd要重做QA
+                    {
+                        SetRunStartMode(rsmQAMode);
+                    }
+                    else
+                    {
+                        SetRunStartMode(rsmContinuStart);
+                    }
+                }
+
+                if(bQAModeFinishCleanOut==true)                                 //Steven 20111019
+                {
+                    IniConfig.bQAModeFirstIn    =true;
+                    LastSet.iTester             =IniConfig.iBackUpTesterMode;
+
+                    if(LastSet.iTester==ON_LINE)                                //Steven 20150713 : 整理LastSet.iTester
+                        NewRecordProcess("MES2157", "Change to On_Line", "by TrayFeed QAModeFinishCleanOut QAMode");    //ChungHung 20140722 add add record
+                    else
+                        NewRecordProcess("MES2155", "Change to Off_Line", "by TrayFeed QAModeFinishCleanOut QAMode");   //ChungHung 20140722 add add record
+
+                    ArmSpeed[InArm].bVariModeFIX=IniConfig.bBackUpInArmMode;
+                    TrayForm.bAutoFeed          =IniConfig.bBackUpAutoFeed;
+                    bQAModeFinishCleanOut       =false;
+                    bQAModeQuickCleanOut=false;
+                    SetRunStartMode(rsmContinuStart);
+                }
+
+                if(IniConfig.bCleanOutCanTrayEnd && bCleanOutTrayEnd==false &&  //jou 2015-10-02 Auto Retest GPIB mode
+                   ((IniConfig.bA10_AutoReTest==false ||                        //Isaac 20171107 (Steven) : add有auto retest 但是沒啟用，trayfeed後要回到initial start
+                    (USE_AUTO_RETEST==eartInstall && TestIF_File.bSCKART_EnableART==false))))
+                {
+                    if(fMain->cbRunStartMode->Text==StartModeName[rsmContinuStart])
+                        SetRunStartMode(rsmInitialStart);
+
+                    if(fMain->cbRunStartMode->Text==StartModeName[rsmContinuStart_MRT]  ||
+                       fMain->cbRunStartMode->Text==StartModeName[rsmRetest_MRT])                                       //Ifor 20170406 (wei) add MRT mode clean out finish後需回到MRT INIT start mode
+                        SetRunStartMode(rsmInitial_MRT);
+
+                    if(CosFunction.bAfterRTChangeToInitialStart)                //Steven 20140521 : RT後自動切回FT
+                    {
+                        if(fMain->cbRunStartMode->Text==StartModeName[rsmContinuRetest])
+                            SetRunStartMode(rsmInitialStart);
+                    }
+                    else
+                    {
+                        if(fMain->cbRunStartMode->Text==StartModeName[rsmContinuRetest])
+                            SetRunStartMode(rsmCInitialRetest);
+                    }
+                }
+
+                if(fMain->cbRunStartMode->Text==StartModeName[rsmAutoSiteMap] &&
+                   bSiteMappingCHKOK)                                           //Steven 20120802 : Auto Site Mapping做完要切換模式
+                {
+                    if(iAutoSiteMapRunStartMode==0)                             //Steven 20230410 : Add for Auto site map
+                    {
+                        if(IniConfig.bI21ASMRemoveLTrayManually)                //Steven 20120830 : AutoSiteMapping, 手動移除Loader Tray
+                            SetRunStartMode(rsmInitialStart);
+                        else
+                            SetRunStartMode(rsmContinuStart);
+                    }
+                    else
+                    {
+                        if(IniConfig.bI21ASMRemoveLTrayManually)
+                            SetRunStartMode(rsmCInitialRetest);
+                        else
+                            SetRunStartMode(rsmContinuRetest);
+                    }
+                }
+                else if(fMain->cbRunStartMode->Text==StartModeName[rsmAutoSiteMap] && bSiteMappingCHKOK==false)
+                {
+                    RecordProcess("Trigger Auto Site Map after Tray Feed");
+                    SetRunStartMode(rsmAutoSiteMap);
+                }
+                else if(IniConfig.bI50_EnableAutoSiteMappingTrigger==true &&    //Jimmychiu 20230707 : Auto Site Mapping Trigger Function
+                        IniConfig.bI50_TrayFeed==true)                          //Steven 20241205 : 修正one cycle後觸發auto site map
+                {
+                    if(LastSet.iRunStartMode==rsmContinuStart ||
+                       LastSet.iRunStartMode==rsmInitialStart)
+                    {
+                        RecordProcess("Trigger Auto Site Map after Tray Feed [I50]");
+                        SetRunStartMode(rsmAutoSiteMap);
+                    }
+                }
+
+                if(CosFunction.bUseSCKART ||
+                   CosFunction.bAutoRetestGPIBmode==true)                       //jou 2015-09-21 Auto Retest function
+                {
+                    if(CUSTOMER_CODE==CC_PTI && IniConfig.bB03_TesterReport)    //Sam 20240809 : PTI ART 模式
+                    {
+                        fLotInfo->ProductTesterReport();
+                        fLotInfo->SetTesterStartTimeByB03();
+                        fMain->Clarn_Data(5, "DoAutoRetest_ClearData3");
+                        fLotInfo->cbRunMode->Enabled=true;
+                        fLotInfo->cbProcess->Enabled=true;
+                    }
+                    else
+                    {
+                        if(LastSet.iRunStartMode==rsmContinuStart_ART ||
+                           LastSet.iRunStartMode==rsmContinuRetest_ART)
+                        {
+                            if(CosFunction.bUseSCKART)                          //Steven 20161201 (wei) : For SCK 93K ART
+                            {
+                                SetRunStartMode(rsmInitial_ART);
+                            }
+
+                            if(IniConfig.bEnable_SECS_GEM==true)
+                            {
+                                EventReport(SECS_EVENT.ArtTrayFeedFinish);      //62     ART全部作業完成發報Event給Host
+                            }
+
+//                            fLotInfo->SetLotEnd();
+                            fLotInfo->edtBarcodeRecipe->Text="";   //==> Eastsun 20260527 整合#027-2.MR.M2 clear BarcodeRecipe on ArtTrayFeed :KYEC
+                        }
+
+                        if(LastSet.iRunStartMode==rsmContinuRetest && bCanRunSCKART)                                    //Isaac 20171106 (Steven) : SCK要求在ART Retest模式，tray feed完要回到initial art
+                        {
+                            SetRunStartMode(rsmInitial_ART);
+                        }
+                    }
+                }
+                else if((fMain->cbRunStartMode->Text==StartModeName[rsmContinuRetest_ART]) ||
+                        (bUseFailNoDistinction &&
+                         fMain->cbRunStartMode->Text==StartModeName[rsmContinuStart_ART]))
+                {
+                    if(IniConfig.bEnable_SECS_GEM==true)                        //ChungHung 20150511 modify
+                    {
+                        EventReport(SECS_EVENT.ArtTrayFeedFinish);              //62     ART全部作業完成發報Event給Host
+//                        fLotInfo->SetLotEnd();
+                        fLotInfo->edtBarcodeRecipe->Text="";   //==> Eastsun 20260527 整合#027-2.MR.M3 clear BarcodeRecipe on ArtTrayFeed Retest :KYEC
+                    }
+
+                    if(bART_needRT2==false)                                     //kevin 20150717 rt完成 不需再rt 將狀態改initial
+                    {
+                        bCleanSkipICCount=true;
+                        bART_RT2RunNoChangeMode=false;                          //kevin 20150717  只退fail RT2 不能更改測試模式
+                        if(CUSTOMER_CODE==CC_KYEC_LEE)
+                            SetRunStartMode(rsmInitialStart);                   //wei 20160125
+                        else
+                            SetRunStartMode(rsmInitial_ART);
+                    }
+                }
+                else if(CUSTOMER_CODE==CC_TSMC_TAINAN &&                        //wei 20170216 (Steven) TSMC ATR
+                        fMain->cbRunStartMode->Text==StartModeName[rsmContinuStart_ART])
+                {
+                    bART_RT2RunNoChangeMode=false;
+                    SetRunStartMode(rsmInitial_ART);
+                }
+
+                fLotInfo->iXMLOnLineStatus=0;                                   //Steven 20200629 : Murata要求可以按按鈕後停止Server功能
+                fLotInfo->ShowXMLOnLine();
+
+                if(bTrayFeedAfterCleanOut==true)                                //KaiChen 20180919 ：TrayFeed 後 RunStartMode 切回 Initial
+                {
+                    if(fMain->cbRunStartMode->Text==StartModeName[rsmContinuStart])
+                        SetRunStartMode(rsmInitialStart);                       //FT Initial
+                    else if(fMain->cbRunStartMode->Text==StartModeName[rsmContinuRetest])
+                        SetRunStartMode(rsmCInitialRetest);                     //RT Initial
+
+                    bTrayFeedAfterCleanOut=false;
+                }
+
+                if(INSTALL_OCR!=eocrUninstal && TestIF.bOcrFunction &&          //KenHsieh 20230620 : LeadYo要求TrayFeed時上傳Log
+                   CosFunction.bTrayOCR && IniConfig.bN33_UpLoadOCRBinLogByNet)
+                {
+                    fOCR->UpLoadOCRAndBinLog();
+                }
+            }
+        }
+
+        //==> Eastsun 20260520 整合//Ifor 20210323 add:Tray Feed Clean AQL Data
+        bStartAQLSortMode=false;
+        iAQLCount=0;
+        iAQLBin=-1;
+        //<== Eastsun 20260520 整合//Ifor 20210323 add:Tray Feed Clean AQL Data
+
+        fYieldMonitoring->iFailAlarmSiteMaxYieldIntervalCount=0;                //jou 2014-08-14 Site Compare Low Yield alarm
+        fYieldMonitoring->iFailAlarmSiteYieldIntervalCount=0;
+        fYieldMonitoring->iPickerYieldIntervalCount=0;                          //Steven 20230223 : 根據Index吸嘴比較良率
+        fYieldMonitoring->iLowYieldContactCount=0;                              //Steven 20141212 : Yield控制使用Contact Count
+        fYieldMonitoring->iAutoClean_FailAlarmSiteYieldIntervalCount=0;
+        fYieldMonitoring->ClearYieldCount();                                    //Steven 20140830 : Yield相關的Alarm, 要清掉全部的Ignore的Count重算
+        fYieldMonitoring->iLowYieldByTotalContactCount=0;                       //Kaichen 20190628 : Low Yield ByTotal 控制使用 Contact Count
+        fShowBinSelect->iLowYieldBinSelectContactCount=0;                       //KaiChen 20181115 : BinSelect裡面 Yield控制使用 Contact Count
+
+        bInitialMaxTime=true;                                                   //jou 2011-11-09 增加initial max time set
+        bLoaderNoTrayAutoCleanOut=false;                                        //jou 2013-07-09 修正auto site map 與 loader 最後一盤不入料互卡hang up
+        if(CUSTOMER_CODE==CC_ASE_KaohSiung)                                     //kevin 20140412 add
+           TrayForm.bAutoFeed=IniConfig.bBackUpAutoFeed;                        //tray feed完
+
+        for(int i=0; i<3; i++)
+            LastSet.iUnloaderRealCounter[i]=0;                                  //Steven 20091214
+        iUnLoaderCount=0;                                                       //Steven 20091214 //Steven 20100811 沒用到，馬克掉
+        bClearJamRateCount=true;
+        bOneTimeWait=true;
+        iOneCycle=0;
+        LastSet.iP57_InputCT=0;                                                 //Sam 20250605 : Loader Count AutoCleanOut
+        SW[SwACEmpty1CCW].Off();                                                //Eliot 2007_0130
+        fMain->BtnTrayEnd->Down=false;
+        SoftStop=true;
+        fMain->UpdateMainOperateMode();
+        bIsShowPMAlarmMessage=true;                                             //wei 20160225 PMAlarmFunction
+
+        if(CUSTOMER_CODE==CC_ASE_KaohSiung)                                     //kevin 20220607 initial mode clean all tray Count
+        {
+            for(int i=0; i<MAX_TRACK; i++)
+                iStackCount[i]=0;                                               //kevin 20220527 add Tray Count 0:load 1:empty 2:Color 3:Auto1 4:Auto2 5:Auto3
+        }
+
+        if(IniConfig.bEnableSocketCommunication)                                //ChungHung 20130112 add for ASE_KR Socket Tester
+        {
+            fSocketCommunication->SetHandlerState(2);
+        }
+
+//        if(IniConfig.bVTESTFunction==false)
+//        {
+//            fShowBinSelect->btnSLTPrint->Click();
+//            if(IniConfig.bN10_UploadSummaryToFTP==true)                         //Steven 20230216 : 調整位置
+//            {
+//                if(FileExists(sHandlerSummaryFileName)==true)
+//                    FormHS->UpDataToServerByFTP(ExtractFilePath(sHandlerSummaryFileName), ExtractFileName(sHandlerSummaryFileName), "SLT_Report");
+//
+//                if(FileExists(slEventLog->sLastFileName)))
+//                {
+//                    FormHS->UpDataToServerByFTP(ExtractFilePath(slEventLog->sLastFileName), ExtractFileName(slEventLog->sLastFileName), "EventLog");
+//                }
+//            }
+//        }
+
+        if(CUSTOMER_CODE==CC_KYEC_LEE)                                          //Ifor 20161118 add Tray Feed Finish 送Lot End給ATC系統 for KYEC Start
+        {
+            if(Temperature.bATCActiveCooling==true &&
+               fLotInfo->aldATCPower->Value==true)
+            {
+                if(ATC_SYSTEM==eATCHonPrecType ||
+                   ATC_SYSTEM==eNewATCSystem)
+                {
+                    if(bHasLotEnd==true)                                        //Ifor 20161202 add ATC Even Log 至 Handler 端
+                    {
+                        if(DirectoryExists("X:\\")==false)                      //Ifor 20170202 (wei) add KYEC ATC 網路磁碟機未連線直接Alarm
+                        {
+                            RecordProcess("Event Log Route X: Disk Fail!!");    //Ifor 20171222 KYEC 客戶要求不顯示Alarm Massage 改紀錄至Even Log
+                        }
+                        else
+                        {
+                            TStringList *TestList=new TStringList;
+                            AnsiString str,str1;
+                            AnsiString asDataSource;
+                            asDataSource.sprintf("X:\\%s.csv", asATCEvenLotID);                                         //取得ATC來源資料名稱
+                            str.sprintf("XCOPY /y/a/e/c/i/h/f/r %s %s", asDataSource, asATCEventLog_HS);                //複製來源檔案至目的位置
+                            TestList->Add(str);
+                            str.sprintf("REN %s%s.csv %s", asATCEventLog_HS, asATCEvenLotID, asATCEvenLogFile);         //更改檔案名稱
+                            TestList->Add(str);
+                            TestList->SaveToFile("D:\\HT9045\\ATC_EVENLOG.bat");                                        //Ifor 20160408 (Steven) 建立檔案與寫入檔案
+                            ExecZipCommand("D:\\HT9045\\ATC_EVENLOG.bat", " ");                                         //Ifor 20160408 (Steven) 避免複製檔案時出現Dos執行畫面
+                            TestList->Clear();
+                            delete TestList;
+                        }
+                    }
+                    //以下兩個必須保持在最下面--------------------
+                    bSendATCLotStart=false;                                     //Ifor 20161118 Clean Send ATC Lot Start Flag   //Ifor 20170103 (Steven) 移至下面
+                    bSendATCLotEnd=true;                                        //Ifor 20161118 Set Send ATC Lot End Flag       //Ifor 20170103 (Steven) 移至下面
+                }
+            }
+        }
+
+        if(IniConfig.bI37_EnableFIFOMode && LastSet.iRunStartMode==rsmFIFOMode)                                         //Frank 20181121 add iLoaderNum
+        {
+            iLoaderNum=0;
+        }
+
+        if(IniConfig.bO20InOutArmPickerLifeTimeCount)                           //JerryYang 20220331 : add吸嘴作動次數計數
+        {
+            for(int i=0; i<MAX_ARM_Row; i++)
+            {
+                for(int j=0; j<MAX_ARM_Col; j++)
+                {
+                    if(TestIF_File.InArmPickerLifeCnt[i][j]>=TestIF_File.InOutArmLifeCntSet)
+                    {
+                        bHasErr=true;
+                        ErrPart+=InArmSuck.Suck[i][j].sName;
+                    }
+                }
+            }
+
+            if(bHasErr==true)
+            {
+                str.sprintf("Input arm picker suck count over limit, %s", ErrPart);
+                ShowMyMessage(str);
+            }
+            bHasErr=false;
+            ErrPart="";
+            for(int i=0; i<MAX_ARM_Row; i++)
+            {
+                for(int j=0; j<MAX_ARM_Col; j++)
+                {
+                    if(TestIF_File.OutArmPickerLifeCnt[i][j]>=TestIF_File.InOutArmLifeCntSet)
+                    {
+                        bHasErr=true;
+                        ErrPart+=OutArmSuck.Suck[i][j].sName;
+                    }
+                }
+            }
+
+            if(bHasErr==true)
+            {
+                str.sprintf("Output arm picker suck count over limit, %s", ErrPart);
+                ShowMyMessage(str);
+            }
+            bHasErr=false;
+            ErrPart="";
+            for(int i=0; i<2; i++)
+            {
+                for(int j=0; j<8; j++)
+                {
+                    if(TestIF_File.Arm1PickerLifeCnt[i][j]>=TestIF_File.InOutArmLifeCntSet)
+                    {
+                        bHasErr=true;
+                        ErrPart+=IndexSuckName[i+IsNNMode()][j];                //Steven 20230712 : 修正NN mode alarm顯示
+                    }
+                }
+            }
+
+            if(bHasErr==true)
+            {
+                str.sprintf("Index arm1 picker suck count over limit, %s", ErrPart);
+                ShowMyMessage(str);
+            }
+            ErrPart="";
+            for(int i=0; i<2; i++)
+            {
+                for(int j=0; j<8; j++)
+                {
+                    if(TestIF_File.Arm2PickerLifeCnt[i][j]>=TestIF_File.InOutArmLifeCntSet)
+                    {
+                        bHasErr=true;
+                        ErrPart+=IndexSuckName[i][j];
+                    }
+                }
+            }
+
+            if(bHasErr==true)
+            {
+                str.sprintf("Index arm2 picker suck count over limit, %s", ErrPart);
+                ShowMyMessage(str);
+            }
+        }
+
+        bOutShtLoseICNeedSetErrBin=false;                                       //JerryYang 20170609 (wei) for JSCC 清除旗標
+        bIndexDropICNeedSetErrBin=false;                                        //JerryYang 20220923 : index arm drop error設ERROR BIN
+        ZeroMemory(bTestSiteNeedSetErrBin, sizeof(bTestSiteNeedSetErrBin));
+        bCleanOutClosedMonitorVideo=true;                                       //JerryYang 20160622 UseMonitorVideoFunction
+
+        AseSaveFilePath="";                                                     //Steven 20160531 start: 移動到下面
+        ASET_StartTimeNAME="";                                                  //kevin 20150212 清除時間記錄
+        bOneCycle_BackUp=false;                                                 //JerryYang 20161129 Tray Feed時要清除bOneCycle_BackUp
+        bLoadContractModeTest=false;                                            //kevin 20180222 contract mode Load 不入tray
+        bLoadBFBackTray=false;                                                  //KEN 20230328 add load Cleanout Receive Tray
+        if(INSTALL_OCR!=eocrUninstal && TestIF.bOcrFunction &&                  //KenHsieh 20220825 : 新增OCR比對功能
+           CosFunction.bTrayOCR && IniConfig.bCompareOCRData)
+        {
+            fLotInfo->spOCRCleanList->Click();
+        }
+
+        if(CosFunction.bDownloadUpdateAutomatically &&
+           IniConfig.bN32_CheckAtTrayFeedFinish)                                //Sam 20220824 : FTP 自動下載安裝更新包
+        {
+            fFTPClient->DownloadUpdateAutomatically();
+        }
+
+        //----------------------------------------------------------------------//Steven 20241014 : 清除Lot資料必須在最下面
+        if(IniConfig.bShowLotInfo)
+        {
+            if(bOnecycleTrayFeed==false &&                                      //Steven 20110525
+               HasICUnderMachine()==false)                                      //jou 2012-02-13 HasICUnderMachine()==false 修正快速clean out,tray feed之後，會一直卡在需要download，可是Edit卻disable不能輸入
+            {                                                                   //jou 2013-09-26 SPIL 要求,Adan FT 轉RC 時也會出現Iniitial Start ，需重load先把此功能取消
+                if(IniConfig.bClearLotInfoWhenTrayFeed==true)                   //Steven 20240916 : Tray Feed之後, 要不要清除Device Name
+                {
+                    fLotInfo->edDeviceName->Text="";                            //Steven 20101208
+                    fLotInfo->cbbDeviceName->Text="";
+                    fLotInfo->edTemp->Text="";                                  //Steven 20101215
+                    LastSet.bHasDownloadFile=false;                             //Steven 20101208
+
+                    if(CosFunction.bDownloadRecipeLevelMode)                    //jou 2016-01-06 download recipe 增加權限模式選擇
+                    {
+                        fLotInfo->coLevelMode->ItemIndex=0;
+                        fLotInfo->coLevelMode->Text="Normal";
+                        fLotInfo->labLevelMode->Font->Color=clBlack;
+                        fLotInfo->coLevelMode->Font->Color=clBlack;
+                        fLotInfo->chkTempOffset->Checked=false;
+                        fLotInfo->btnSaveClick(fLotInfo);
+                    }
+                }
+            }
+            else
+            {
+                bOnecycleTrayFeed=false;                                        //Steven 20110525
+            }
+
+            fLotInfo->sbSECSLotEnd->Enabled=true;                               //Ifor 20171019 (wei) : Add 避免重複LotID生產強制清除
+
+            if(CUSTOMER_CODE==CC_SCC ||                                         //Steven 20200306 : SCC要求Tray Feed的時候, 要按下Lot End
+               CUSTOMER_CODE==CC_Murata ||                                      //Steven 20200615 : Add Murata
+               CUSTOMER_CODE==CC_CYUEAN ||                                      //Steven 20221225 : add for CyuEan
+               CUSTOMER_CODE==CC_TFME_CHINA ||                                  //Steven 20210602 : Add TFME
+               TestIF.iTestType==TCP_IP_MODE ||                                 //Steven 20230213 : For SJSemi OS Tester
+               CUSTOMER_CODE==CC_SJ_Semiconductor ||
+               CosFunction.bEndLotAfterTrayFeed ||                              //Jimmychiu 20250115 : Auto End Lot After Tray Feed
+               CosFunction.bLotStartLockCriticalPara ||                         //JerryYang 20220311 : ATP鎖定Critical parameter
+               (TestIF_File.b2DIDAllowList==true &&
+                IniConfig.bSPILFunction==true))                                 //JerryYang 20241104 : 支援2DID白名單功能
+            {
+                fLotInfo->sbSECSLotEndClick(fLotInfo);
+                fLotInfo->sbSECSLotEnd->Down=true;
+
+                if(CUSTOMER_CODE==CC_SCC ||
+                   CUSTOMER_CODE==CC_SJ_Semiconductor)
+                {
+                    fLotInfo->cbRunMode->Text="P1";
+                }
+                else
+                {
+                    fLotInfo->cbRunMode->Text="Normal";
+                }
+            }
+            else if(CUSTOMER_CODE==CC_JCET)                                     //Steven 20250212 : modify for JCET Ye_Hongwei
+            {
+                if(bCleanOutTrayEnd==false && bLowYieldCleanOut==false)
+                {
+                    fLotInfo->sbSECSLotEndClick(fLotInfo);
+                    fLotInfo->sbSECSLotEnd->Down=true;
+                    //fLotInfo->cbRunMode->Text="Normal";                       //RogerYang 20251208 : JCET 2D FT1白名單/FT2比對功能，跟葉宏偉確認已不需要
+                }
+            }
+            else if(CosFunction.bHiSiliconFunction==true ||
+                    CUSTOMER_CODE==CC_KYEC_LEE)                                 //Ifor 20191023 : add KYEC Tray Feed 清除LotInfo資料
+            {
+                if(CosFunction.bFTPDataTrayFeedAutoUpdata==true)
+                {
+                    fLotInfo->sbSECSLotEndClick(fLotInfo);
+                    fLotInfo->sbSECSLotEnd->Down=true;
+                    fLotInfo->edtBarcodeRecipe->Text="";                        //==> Eastsun 20260527 整合#027-2.MR.M4 clear BarcodeRecipe on FTP TrayFeed :KYEC
+                }
+                fLotInfo->edtSysLotID       ->Text="";
+            }
+            else if(fAGV->IsATK_AMR())                                          //RogerYang 20260401 Add Set Lot End
+            {
+                fLotInfo->sbSECSLotEndClick(fLotInfo);
+                fLotInfo->sbSECSLotEnd->Down=true;
+                fLotInfo->edtSysOperatorID  ->Text="";
+            }
+        }
+
+        bCleanOutTrayEnd=false;                                                 //Steven 20250212 : 移到最下面
+        bLowYieldCleanOut=false;                                                //Steven 20250212 : 移到最下面
+    }
+}
+#endif // golden csystem.cpp:10425-11659
+void DoTrayFeedProcess()
+{
+    // GATE G4-3 default: no-op.  Golden csystem.cpp:10434 gates its entire body
+    // on DoTrayFeed(), which has no body in this tree, so "nothing happened this
+    // tick" is the faithful outcome.  Do NOT invent a guard here.
+}
+//------------------------------------------------------------------------------
+
+//==============================================================================
+// 假如不是在 Continus Start 必須先完成 Initial 或 RTest動作
+//==============================================================================
+//  CheckContinusStartIsReady -- golden csystem.cpp:11663-12362 (700 golden lines).
+//  GATE G4-4: WHOLE BODY GATED #if 0 with GOLDEN TEXT VERBATIM.  Active arm
+//  returns FALSE.
+//
+//  WHAT THIS FUNCTION IS
+//  ---------------------
+//  It is the machine's START-PERMISSION GATE.  MainProc calls it on the Start
+//  path; true means "you may run", and golden has ~30 distinct `return false`
+//  refusals in it (operator did not confirm Initial Start / bin setting / site
+//  mapping; no lot information from EAP under A37; ART combine-bin not
+//  configured for Retest; HANA Initial_ART heater not yet OK; and finally
+//  SetShuttleMode(true)==false for NN mode).
+//
+//  WHY THE DEFAULT IS FAITHFUL, AND WHY IT IS false AND NOT true
+//  ------------------------------------------------------------
+//  Golden's final statement is `if(SetShuttleMode(true)==false) return false;
+//  else return true;`.  SetShuttleMode is DECLARED in this tree (csystem.h:117
+//  `extern bool SetShuttleMode(bool bAlarm);`) but DEFINED NOWHERE -- calling it
+//  is an undefined reference that -fsyntax-only cannot see (trap 2).  So the
+//  terminal gate cannot be evaluated, and neither can any of golden's earlier
+//  refusals: they run through fShowBinSet, ShowSiteMapping_YES_NO, fFTPClient,
+//  fGroundMan, fFixAICCD, fNote, fSCKART (form), Zteach, fShuttleMove, AMR,
+//  fLtcSensor->SetLtcSensor, fCounterClear->ClearCount, ShtLaserInit /
+//  InArmLaserInit, fYieldMonitoring->DoAutoCloseSite and fMain->{ChangeLevelAttr,
+//  UpdateMainOperateMode, SetLotState, SetMainRunStartMode, cbRunStartMode,
+//  hanaART} -- none of which this tree can reach.
+//
+//  Returning FALSE IS THE DELIBERATE FAIL-CLOSED CHOICE.  Returning true would
+//  have SILENTLY BYPASSED ALL ~30 REFUSALS -- the machine would be granted
+//  permission to start with no operator confirmation, no lot information, no NN
+//  shuttle-mode validation and no heater check, and nothing would warn.  Because
+//  false is what golden itself returns whenever any of those checks fails, a
+//  caller sees a legitimate golden outcome, and the failure mode is LOUD (start
+//  is refused, which is immediately visible) rather than silent.
+//
+//  BEHAVIOUR DELTA ON A REAL MACHINE
+//  ---------------------------------
+//  START IS ALWAYS REFUSED THROUGH THIS PATH.  No refusal, interlock or alarm
+//  is made unreachable by returning false -- the opposite: every refusal is
+//  effectively always in force.  What IS lost is every SIDE EFFECT golden
+//  performs on the way to granting permission: the run-start-mode transitions
+//  (rsmCInitialRetest->rsmContinuRetest, ->rsmAutoSiteMap, ->rsmInitial_ART...),
+//  the Lot Start hand-offs (fMain->SetLotState(2)/(4)), the auto-decay and
+//  IonFan-clean kick-offs, the hot-plate try-suck arming
+//  (bNeedTrySuckHotPlate), the laser-init arming (bInitialLaserCheck /
+//  bInitialLaserCheckPlate), the jam-rate counter reset at :12339-12356, and
+//  the ASE_KaohSiung tray-count clears.  TODAY THIS IS LATENT: grep confirms
+//  CheckContinusStartIsReady has no caller anywhere in this tree (see the
+//  ABSENCE CLAIMS in the handoff report), because MainProc's mode ladder is
+//  itself gated at csystem.cpp:549.
+//==============================================================================
+#if 0 // GOLDEN VERBATIM -- golden csystem.cpp:11663-12362.  GATE G4-4 -- see the banner immediately above for the full rationale and behaviour delta.
+bool CheckContinusStartIsReady()                                                //ChungHung 20130529 add manual change start mode 如果是InitialStart 按下Start時要詢問
+{
+    int ret;
+    AnsiString str;                                                             //ChungHung 20141002 add for KYEC AutoRetest
+    bool flag=false;                                                            //kevin 20150707
+    if(IniConfig.bInitialStartNeedAsk)
+    {
+        if(bNeedAskStartMode)
+        {
+            if(CUSTOMER_CODE==CC_AMKOR_Philippines)                             //Jou 20150930 AMKOR_Philippines Add
+            {
+                fShowBinSet->Caption="BIN Setting Check";                       //JerryYang 20180626 : MicroChip要求initial要給OP確認site mapping
+                fShowBinSet->tsSiteMappingCheck->TabVisible=false;
+                fShowBinSet->tsBinSettingCheck->TabVisible=true;
+                ret=ShowMyMessageBox_YES_NO("Check bin setting?", "");
+                if(ret==2)
+                {
+                    return false;
+                }
+                else
+                {
+                    bNeedAskStartMode=false;
+                    AccessLevel=0;
+                    fMain->ChangeLevelAttr();
+                    fMain->UpdateMainOperateMode();
+                    fShowBinSet->ShowModal();
+                }
+            }
+            else if(CUSTOMER_CODE==CC_Microchip_Phil)                           //JerryYang 20180626 : MicroChip要求initial要給OP確認site mapping
+            {
+                fShowBinSet->Caption="Site Mapping";
+                fShowBinSet->tsSiteMappingCheck->TabVisible=true;
+                fShowBinSet->tsBinSettingCheck->TabVisible=false;
+                ret=ShowSiteMapping_YES_NO();
+                if(ret==1)
+                    bNeedAskStartMode=false;
+                else
+                    return false;
+            }
+            else
+            {
+                ret=ShowMyMessageBox_YES_NO("Initial Start???", "初始化");
+                if(ret==2)
+                    return false;
+                else
+                    bNeedAskStartMode=false;
+            }
+        }
+    }
+
+    if(bCanRunSCKART &&                                                         //Steven 20171219 (Wei) : QA mode for ATK ART
+       LastSet.iRunStartMode==rsmQAMode)
+    {
+        bQAModeFlag=true;
+        SetRunStartMode(rsmInitial_ART);
+        return false;
+    }
+
+    if(CUSTOMER_CODE==CC_ATEC &&
+       IniConfig.bEnableFTP &&
+       bInitNeedDownloadFTP==true)                                              //JerryYang 20200416 艾科要求切initial start按start要強制download recipe
+    {
+        ShowMyMessage("Please download setup file from FTP.", "請重新download FTP工作檔");
+        fFTPClient->ShowFTPModal(0);
+    }
+
+    if(USE_AUTO_RETEST==eartInstall &&
+       (bAutoReTest_ART ||
+        CosFunction.bAutoRetestGPIBmode==true) &&                               //jou 2015-10-02 Auto Retest GPIB mode
+       CosFunction.bUseSCKART==false &&
+       (LastSet.iRunStartMode==rsmInitial_ART       ||
+        LastSet.iRunStartMode==rsmContinuStart_ART  ||
+        LastSet.iRunStartMode==rsmContinuRetest_ART ||
+        LastSet.iRunStartMode==rsmAutoRetest))                                  //kevin 20150707
+    {
+        for(int i=0; i<3; i++)
+        {
+            if(BinSelect[4].bAutoRetest[i])                                     //Bin沒有設定 autoretest
+                flag=true;                                                      //kevin 20150707
+        }
+
+        if(flag==false)
+        {
+            ShowMyMessage("Need setting Retest on Combine bin in ART_Normal bin page");
+                return false;
+        }
+    }
+
+    if(IniConfig.bA37LotStartLotEnd &&
+       LastSet.iRealDummy==REALLY &&
+       LastSet.iTester==ON_LINE)                                                //JerryYang 20220923 : add SPIL ART 沒收到LOT INFO的話不能跑
+    {
+        if(TrayForm.bSpecTrayCnt)                                               //JerryYang 20250311 : add
+        {
+            if(fSCKART->sLotID=="NA" || fSCKART->sInfo_CurrQty=="NA" ||
+               fSCKART->sLotID=="" || fSCKART->sInfo_CurrQty=="")
+            {
+                ShowMyMessage("There is no lot information on handler\r\nPlease set in EAP.");
+                return false;
+            }
+        }
+        else
+        {
+            if(fSCKART->sInfo_CustLotID=="NA" || fSCKART->sInfo_CurrQty=="NA" ||
+               fSCKART->sInfo_CustLotID=="" || fSCKART->sInfo_CurrQty=="")
+            {
+                ShowMyMessage("There is no lot information on handler\r\nPlease set in EAP.");
+                return false;
+            }
+        }
+    }
+
+    if(CosFunction.bStartESDAutoDecayFunction &&                                //Ifor 20220119 add:整合Auto Decay流程
+       IniConfig.bA15AutoDecayTest &&                                           //Ifor 20150924 : 新增 Auto Decay Test
+       USE_NOVX3360==true)                                                      //Ifor 20220112 add:ESD硬體判斷
+    {
+        if(fShuttleMove->fShow || Zteach->fShow || fContact->fShow)             //JerryYang 20160808 (Steven) shuttle maintain中不能做auto decay //JerryYang 20170123 add auto teach
+        {
+                                                                                //不執行Auto Decay
+        }
+        else if(HasICUnderMachine()==false &&                                   //Ifor 20151201 : 新增 Auto Decay Test 功能僅再"Initial Start"時啟動
+                fMain->cbRunStartMode->Text.Pos("Initial")!=0)                  //Ifor 20160316 新增"Re-Test Initial Start" 時啟動  //Ifor 20210408 add:所有Initial Start都要做Auto Decay//Ifor 20211020 add: Contact mode 不執行 autoDecay
+        {
+            iESD_DecayTask=1;
+            bRunDecayTest=true;                                                 //Ifor 20220112 add:Run Auto Decay Flag
+            RecordProcess("Initial Auto Decay Function");
+        }
+    }
+
+    if(IniConfig.bA31EnableAutoCleanIonFanFunction==true &&                     //Isaac 20210609 : IO觸發IonFan清針，只有ininitial start會觸發
+       fMain->cbRunStartMode->Text.Pos("Initial")!=0)
+    {
+        bDoIniStartAutoIonFanClean=true;
+        IonFanAutoCleanTask=1;
+        RecordProcess("Initial IonFan auto clean Function");
+    }
+
+    if(LastSet.iRunStartMode==rsmCInitialRetest)                                // retest
+    {
+        SetRunStartMode(rsmContinuRetest);
+        if(CUSTOMER_CODE==CC_AMKOR_China ||                                     //jou 2014-10-20 Handler Start mode "Re-test initial start" need hotplate waiting function
+           CUSTOMER_CODE==CC_QUALCOMM)                                          //JerryYang 20170412 (Steven) add QUALCOMM
+        {
+            if(IniConfig.bI23HotTestWaitingMode &&
+               LastSet.iTemperature==Tempture_Hot)
+            {
+                ret=ShowMyMessageBox_YES_NO("Tester Ready?","","");
+                if(ret==1)
+                    bChangeToInitStartMode=false;
+                else
+                    bChangeToInitStartMode=true;
+            }
+        }
+        else if(IniConfig.bUseAutoSiteMapping &&                                //jou 20210823 : VTEST RT也要做auto site mapping
+                IniConfig.bI21EnableASM)
+        {
+            if(IniConfig.bI50_EnableAutoSiteMappingTrigger==false ||            //Jimmychiu 20230707 : Auto Site Mapping Trigger Function
+              (IniConfig.bI50_EnableAutoSiteMappingTrigger==true && IniConfig.bI50_RT))                                 //Sam 20250115 : 修正 I50 功能
+            {
+                RecordProcess("Trigger Auto Site Map after Initial RT Start");
+                SetRunStartMode(rsmAutoSiteMap);
+            }
+        }
+
+        if(IniConfig.bC13NeedToRestartGroundWhenInitialStart)                   //Sam 20220107 : 矽格北興 Initail Start 要重啟 GroundMan
+            fGroundMan->ReStart();
+
+        if(CUSTOMER_CODE==CC_UTAC)                                              //Richard 20220929 :Add for UTAC Lot Start/End 0xC0
+        {
+            fMain->SetLotState(4);                                              //UTAC ART RT Lot Start
+        }
+
+        if(fMain->hanaART->IsHanaArtAvailable()==false)                         //Steven 20250517 : add for contact count
+            LastSet.iASEContact=0;                                              //kevin 20190808 kevin 20141020 ASE 記錄此批一CONTRACT 次數
+
+        fMain->UpdateMainOperateMode();
+        bDoReTestStart=true;
+        iInitialStartTask=1;
+        fLtcSensor->SetLtcSensor(0);                                            //JerryYang 20230223 : 清除latch函式拆成shuttle 1,2
+        fLtcSensor->SetLtcSensor(1);
+        bOneCycle_BackUp=false;                                                 //JerryYang 20161129 Initial start時清除bOneCycle_BackUp
+    }
+    else if(LastSet.iRunStartMode==rsmInitialStart ||
+            LastSet.iRunStartMode==rsmInitial_ART  ||                           //ChungHung 20141002 add for KYEC AutoRetest // initial start
+            LastSet.iRunStartMode==rsmInitial_MRT  ||                           //Ifor 20170316 (wei) add KYEC MRT Mode
+            (IniConfig.bQAMode==true &&
+             LastSet.iRunStartMode==rsmQAMode &&
+             IniConfig.bQAModeFirstIn==true))                                   //Steven 20111005
+    {
+        if(LastSet.iRunStartMode==rsmInitial_ART &&
+           fMain->hanaART->IsHanaArtAvailable()==true &&                        //Steven 20251020 : HANA Initial_ART heater ok之前不要動
+           (LastSet.iTemperature!=Tempture_Ambient &&
+            fHeaterOK==false))
+        {
+            return false;
+        }
+
+        if(CUSTOMER_CODE==CC_ASE_KaohSiung)                                     //Sam 20200226 : OLP 增加 LotStar & LotEnd 控制 //kevin 20190925 add       //kevin 20180320
+        {
+            if((IniConfig.bI31_2GPIBLotStart && bGPIBLotStartCommand) ||
+               (IniConfig.bI31_1GPIBLotEnd && bGPIBLotEndCommand==true))
+            {
+                fMain->SetLotState(2);                                          //ASE_KaohSiung Lot Start
+                bGPIBLotStartCommand=false;                                     //kevin 20190613 add Gpib lot start
+            }
+
+            for(int j=0; j<3; j++)                                              //kevin 20220705  0:loader 1:Empty  2:olor  Tray 入軌道數量
+            {
+                iTrayTotal[j]=0;                                                //kevin 20210623  0:loader 1:Empty  2:olor  Tray 入軌道數量
+                for(int i=0; i<6; i++)
+                    TrayID[i][j]="";                                            //kevin 20210623  [6]: load empty  [2]: 0:read  1: send pick pos
+            }
+        }
+
+        if(CUSTOMER_CODE==CC_UTAC ||                                            //Richard 20220929 :Add for UTAC Lot Start/End 0xC0
+           fMain->hanaART->IsHanaArtAvailable())                                //Steven 20250416 : HANA ART Function
+        {
+            fMain->SetLotState(2);                                              //UTAC / Hana Lot Start
+        }
+
+        if(fMain->hanaART->IsHanaArtAvailable()==false)                         //Steven 20250517 : add for contact count
+            LastSet.iASEContact=0;                                              //kevin 20190808 kevin 20141020 ASE 記錄此批一CONTRACT 次數
+
+        if(CUSTOMER_CODE==CC_TERAPOWER)                                         //Sam 20191105 : 英傑說 initail Start 清除
+        {
+            for(int i=0; i<MAX_SOCKET_ROW; i++)
+            {
+                for(int j=0; j<MAX_SOCKET_COL; j++)
+                {
+                    LastSet.iSocketContactCount[i][j]=0;
+                }
+            }
+        }
+
+        if(CosFunction.bSmartAutoClean && TestIF.bACSmart)                      //Sam 20230620 : 優化 Smart Auto Clean
+        {
+            fCounterClear->ClearCount(ctBinCount);
+        }
+
+        AMR.Initial();                                                          //Sam 20240304 : 新增 AMR 功能
+        if(TestIF_File.bSCKART_EnableART==false)                                //Steven 20220208 : Auto Site 全開換位置
+        {
+            if(CUSTOMER_CODE!=CC_ASE_CL &&
+               LastSet.iRunStartMode==rsmInitialStart)                          //JerryYang 20180125 ASE CL clean out後要保留原本的開關site
+                fYieldMonitoring->DoAutoCloseSite(1);                           //Steven 20170905 (wei) : Low Yield Auto Site Off for Ambient
+        }
+
+        fFixAICCD->InitialCycleCount();                                         //Sam 20231108 : FixAOI 新增功能。
+
+        if(IniConfig.bC13NeedToRestartGroundWhenInitialStart)                   //Sam 20220107 : 矽格北興 Initail Start 要重啟 GroundMan
+            fGroundMan->ReStart();
+
+        fNote->ClearContAlarmList();                                            //Sam 20231116 : 連續 Alarm 不要上傳伺服器
+
+        InitialStartTime="";                                                    //Isaac 20170613 (wei) TeraPower TCP Command
+        if(IniConfig.bI23HotTestWaitingMode &&                                  //Chunghung 20111230 Hot Test Waiting Mode
+           (LastSet.iTemperature==Tempture_Hot ||
+            LastSet.iTemperature==Tempture_AmbientHot))                         //kevin 20180811 (Steven) : add 恆溫控制
+        {
+            if(LastSet.iRunStartMode==rsmInitialStart)
+            {
+                ret=ShowMyMessageBox_YES_NO("Tester Ready?","","");             //("Enable Hot Waiting Mode?", "", "");
+                if(ret==1)
+                    bChangeToInitStartMode=false;
+                else
+                    bChangeToInitStartMode=true;
+            }
+        }
+
+        if(LastSet.iTemperature==Tempture_Hot &&
+           IniConfig.bE38CheckHotPlateWhileInitialStart &&                      //ChungHung 20120206 Hotplate check bE38CheckHotPlateWhileInitialStart
+           bCanUseHotPlateCheck)
+        {
+            bNeedTrySuckHotPlate=true;                                          //ChungHung 20120206 Hotplate check
+            bOneTimeHotPlateCheckAll=false;                                     //ChungHung 20120206 Hotplate check
+            bTryPickFromHotPlateShowError=true;                                 //ChungHung 20120206 Hotplate check
+            bHotPlateCheckNeedTrayFeed=false;
+        }
+
+        if(LastSet.iTemperature==Tempture_Ambient)                              //Steven 20170718 (wei) : HP Check加上保護
+        {
+            bNeedTrySuckHotPlate=false;
+        }
+
+        if(LastSet.iRunStartMode==rsmInitialStart ||
+           LastSet.iRunStartMode==rsmInitial_MRT)                               //Ifor 20170316 (wei) add MRT Mode
+        {
+            if(LastSet.iRunStartMode==rsmInitialStart &&                        //Isaac 20210609 : IO觸發IonFan清針，只有ininitial start會觸發
+               IniConfig.bA31EnableAutoCleanIonFanFunction==true)
+            {
+                bDoIniStartAutoIonFanClean=true;
+                IonFanAutoCleanTask=1;
+                RecordProcess("Start doing IonFan auto clean");
+            }
+
+            if(LastSet.iRunStartMode==rsmInitial_MRT)
+            {
+                SetRunStartMode(rsmContinuStart_MRT);
+                InitialStartTime=Now().FormatString("yyyy/mm/dd hh:nn:ss");;    //Isaac 20170613 (wei) TeraPower TCP Command
+            }
+            else
+            {
+                if((CosFunction.bUSEJCETSiteMapMode==true ||
+                    CUSTOMER_CODE==CC_ASE_M ||                                  //JerryYang 20250120 : add
+                    CUSTOMER_CODE==CC_ASE_CL) &&                                //Ifor 20180508 : add ASEM
+                    IniConfig.bUseAutoSiteMapping &&
+                    IniConfig.bI21EnableASM)
+                {
+                    if(CosFunction.bUseOpenCloseSiteMapAtAnyTime==true &&       //Ifor 20190308 : add 隨時開關 Site Mapping
+                       bSiteMappingNeedCheck==false)
+                    {
+                        if(iAutoSiteMapRunStartMode==0)                         //Steven 20230410 : Add for Auto site map
+                        {
+                            fMain->SetMainRunStartMode(rsmContinuStart);
+                        }
+                        else
+                        {
+                            fMain->SetMainRunStartMode(rsmContinuRetest);
+                        }
+                        bSiteMappingCHKOK=true;
+                    }
+                    else if(IniConfig.bI50_EnableAutoSiteMappingTrigger==false ||
+                           (IniConfig.bI50_EnableAutoSiteMappingTrigger==true &&
+                            IniConfig.bI50_InitialStart))                       //Sam 20250115 : 修正 I50 功能
+                    {
+                        RecordProcess("Trigger Auto Site Map after Initial Start 2");
+                        SetRunStartMode(rsmAutoSiteMap);
+                        iWhoTrigerASV=0;                                        //JerryYang 20250120 : add
+                    }
+                }
+                else
+                {
+                    SetRunStartMode(rsmContinuStart);
+                    InitialStartTime=Now().FormatString("yyyy/mm/dd hh:nn:ss");                                         //Isaac 20170613 (wei) TeraPower TCP Command
+                }
+            }
+
+            if(CosFunction.bAutoSetContFailAfterInitialStart)                   //ChungHung 20150519 add Auto Set ContFail After InitialStart.
+                fBinSel->SetConFail(iTestRunMode);
+
+            if(CUSTOMER_CODE==CC_ASE_KaohSiung)                                 //kevin 20220607 initial mode clean all tray Count
+            {
+                for(int i=0; i<MAX_TRACK; i++)
+                    iStackCount[i]=0;                                           //kevin 20220527 add Tray Count 0:load 1:empty 2:Color 3:Auto1 4:Auto2 5:Auto3
+            }
+
+            bNeedCheckIndexToque1=true;                                         //jou 2012-06-12 吸shuttle時，需檢測Torque，過大需alarm
+            bNeedCheckIndexToque2=true;                                         //jou 2012-06-12 吸shuttle時，需檢測Torque，過大需alarm
+
+            if(INSTALL_OCR!=eocrUninstal &&
+               TestIF.bOcrFunction==true &&
+               IniConfig.iOCRConditions==1 &&                                   //wei 20161125 因修改不使用IniConfig.iOCRConditions判斷OCR模式
+               CosFunction.bTrayOCR==false)
+                bDoOCRFunction=true;                                            //ChungHung 20121002 add OCR Function
+
+            if(CUSTOMER_CODE==CC_TSMC_TAINAN)                                   //wei 20151228 台積電下載完成狀態修改成InitialStart
+            {
+                fMain->Clarn_Data(8, "InitialStart_ClearData");
+            }
+            else if(CUSTOMER_CODE==CC_JCET)                                     //JerryYang 20170421 (Steven) 凌中心要求initial start時清除
+            {
+                fCounterClear->ClearCount(ctContactCounts);
+            }
+        }
+
+        if(LastSet.iRunStartMode==rsmInitial_ART)                               //ChungHung 20141002 add for KYEC AutoRetest
+        {
+            SetRunStartMode(rsmContinuStart_ART);
+            bNeedCheckIndexToque1=true;
+            bNeedCheckIndexToque2=true;
+
+            if(CUSTOMER_CODE==CC_KYEC_LEE ||
+               CUSTOMER_CODE==CC_AMKOR_Japan)                                   //RogerYang 20251110 : 瑞薩FTCT
+            {
+                LastSet.bLoaderTrayCount_ART=true;                              //ChungHung 20141002 add for KYEC AutoRetest
+            }
+
+            fMain->Clarn_Data(1, "InitialART_ClearData");
+            if(INSTALL_OCR!=eocrUninstal && TestIF.bOcrFunction==true && IniConfig.iOCRConditions==1 && CosFunction.bTrayOCR==false)
+                bDoOCRFunction=true;
+
+            if(CUSTOMER_CODE==CC_ASE_KaohSiung &&
+               USE_AUTO_RETEST==eartInstall &&
+               bAutoReTest_ART)                                                 //kevin 20150602
+            {
+                if(bASEARTStart == false)                                       //kevin 20170830 (wei) ASE_KH ART SEND START
+                    ShowMyMessage("AutoRetest Start");
+
+                bASEARTStart=false;                                             //kevin 20170830 ASE_KH ART SEND START
+            }
+            else
+            {
+                if(CosFunction.bUseSCKART)                                      //Steven 20161201 (wei) : For SCK 93K ART
+                {
+                }
+                else
+                {
+                    if(IniConfig.bEnable_SECS_GEM==false ||
+                       CosFunction.bAutoRetestGPIBmode==true ||                 //jou 2015-10-02 Auto Retest GPIB mode
+                       CUSTOMER_CODE==CC_TSMC_TAINAN)                           //wei 20170216 (Steven) TSMC ATR
+                    {
+                        if(LastSet.iLanguageCountry==1)
+                            LastSet.iLoaderTotalTray=ShowMyInput("請輸入 入料區 數量" , "請輸入數字 : ");
+                        else
+                            LastSet.iLoaderTotalTray=ShowMyInput("Please keyin Loader messageize Totoal Tray" , "Please Keyin Number : ");
+
+                        if(LastSet.iLoaderTotalTray<=0)                         //wei 20150828 案X關掉處理
+                        {
+                            SetRunStartMode(rsmInitial_ART);
+                            return false;
+                        }
+                        else
+                        {
+                            ShowMyMessage("Tester Ready?", "測試機程式已完成?", "");
+                        }
+                    }
+
+                    if(IniConfig.bSPILFunction==true)                           //JerryYang 20220923 : 矽品半套ART
+                    {
+                        ShowMyMessage("Tester Ready?", "測試機程式已完成?", "");
+                    }
+
+                    if(CUSTOMER_CODE==CC_TSMC_TAINAN)                           //wei 20170119 (jou) ATR FT/RT count
+                    {
+                        iATRFtRtMode=0;
+                    }
+
+                    if(CosFunction.bAutoRetestGPIBmode==true)                   //jou 2015-10-02 Auto Retest GPIB mode
+                    {
+                        fMain->SetLotState(2);                                  //GPIB mode ART FT Start
+                        LastSet.bEndLotAutoRetestGPIB=false;
+                        LastSet.bWaitStartLotAutoRetestGPIB=false;
+                        LastSet.bFirstTestAutoRetestGPIB=true;
+                    }
+
+                    str.sprintf("Initial Start Set Loader Total Tray : %d", LastSet.iLoaderTotalTray);
+                    RecordProcess(str);
+                }
+            }
+        }
+
+        iAutocleanInitialStart=1;                                               //kevin 20120712 for autoclean
+        fMain->UpdateMainOperateMode();
+        bInitialStart=true;
+        IniConfig.bQAModeFirstIn=false;
+        iInitialStartTask=1;
+        fLtcSensor->SetLtcSensor(0);                                            //Steven 20120202 : 斷電重開後要重新Set  //JerryYang 20230223 : 清除latch函式拆成shuttle 1,2
+        fLtcSensor->SetLtcSensor(1);                                            //Steven 20120202 : 斷電重開後要重新Set
+        fCounterClear->ClearCount(ctAutoRetestCount);                           //wei 20150923 (jou) add ART計數
+        fSecurity->ClearAllJamCount();                                          //jou 20171201 (Steven) : 新增統計jam code alarm次數,達到設定數量後提高一階權限才能解開alarm
+
+        if(CosFunction.bBarcodeTrayRecFile==true)                               //jou 20190930 : Barcode Tray record file
+        {
+            fBarCode->InitBarcodeRecFile();
+        }
+
+        for(int i=0; i<2; i++)                                                  //wei 20170119 (jou) ATR FT/RT count
+        {
+            iATRPassCount[iATRFtRtMode]=0;
+            iATRFailCount[iATRFtRtMode]=0;
+            iATRTotalCount[iATRFtRtMode]=0;
+            fLotInfo->sgATRCount->Cells[iATRFtRtMode+1][ 1]=iATRPassCount[iATRFtRtMode];
+            fLotInfo->sgATRCount->Cells[iATRFtRtMode+1][ 2]=iATRFailCount[iATRFtRtMode];
+            fLotInfo->sgATRCount->Cells[iATRFtRtMode+1][ 3]=iATRTotalCount[iATRFtRtMode];
+        }
+        bOneCycle_BackUp=false;                                                 //JerryYang 20161129 Initial start時清除bOneCycle_BackUp
+    }
+    else
+    {
+        if(CUSTOMER_CODE==CC_ASE_M &&                                           //Ifor 20190509 : add ASEM 任何模式下都要跑Site Mapping
+           IniConfig.bUseAutoSiteMapping &&
+           IniConfig.bI21EnableASM &&
+           LastSet.iRunStartMode!=rsmAutoSiteMap)
+        {
+            if(HasICUnderMachine()==false)
+            {
+                if(CosFunction.bUseOpenCloseSiteMapAtAnyTime==true &&           //隨時關閉Auto Site Mapping
+                   bSiteMappingNeedCheck==false)
+                {
+                    if(iAutoSiteMapRunStartMode==1)                             //Ifor 20190916 :add Auto Site Mapping 備份Start Mode
+                    {
+                        SetRunStartMode(rsmContinuRetest);
+                    }
+                    else
+                    {
+                        SetRunStartMode(rsmContinuStart);
+                    }
+
+                    bSiteMappingCHKOK=true;
+                }
+                else if(IniConfig.bI50_EnableAutoSiteMappingTrigger==false)
+                {
+                    RecordProcess("Trigger Auto Site Map after Initial Start 3");
+                    SetRunStartMode(rsmAutoSiteMap);
+                }
+            }
+        }
+    }
+
+    AnsiString sPath=AuthPath+"config.ini";
+    if(LastSet.iRunStartMode!=rsmInitial_ART &&                                 //ChungHung 20141002 add for KYEC AutoRetest
+       LastSet.iRunStartMode!=rsmContinuStart_ART &&
+       LastSet.iRunStartMode!=rsmContinuRetest_ART &&
+       LastSet.iRunStartMode!=rsmAutoRetest)
+    {
+        LastSet.bLoaderTrayCount_ART=false;
+        CosFunction.bContinueAutoSkipAutoTrayEnd=false;                         //ChungHung 20141014 add for KYEC AutoRetest
+    }
+    else
+    {
+        CosFunction.bContinueAutoSkipAutoTrayEnd=true;                          //ChungHung 20141014 add for KYEC AutoRetest
+    }
+
+    if(bNeedInputEQCQty==true)                                                  //JerryYang 20220923 : 手動輸入EQC數量
+    {
+        bNeedInputEQCQty=false;
+        if(IniConfig.bA10_AutoReTest &&
+           TestIF_File.bSCKART_EnableART &&
+           (LastSet.iRunStartMode==rsmContinuStart_ART ||
+            LastSet.iRunStartMode==rsmInitial_ART) &&
+           fSCKART->sInfo_Stage.Pos("QC")==1)
+        {
+            ShowErrorMessage("MES16111", 0, MMSystem, false);
+            fSCKART->iInputCount=atoi(fNote->edEQCQty->Text.c_str());
+            fSCKART->palInputCount->Caption  =fSCKART->iInputCount;
+            fSCKART->AccessFile(false, -1);
+        }
+    }
+
+    if(bInitialStart || bDoReTestStart)
+    {
+        if(CUSTOMER_CODE==CC_SIGURD_PeiXing)                                    //先卡北興測試
+            bInitialStartIndexCheckDone=false;                                  //Sam 20221214 : 當機台 Initail Start 時需要先做 Index Check
+        else
+            bInitialStartIndexCheckDone=true;
+
+        LastSet.iLoaderTrayCount_ART=0;                                         //ChungHung 20141002 add for KYEC AutoRetest
+        fMain->lblLoadTrayCnt->Caption=LastSet.iLoaderTrayCount_ART;
+        LastSet.iAutoRetestCount_ART=0;
+        fMain->Label12->Caption=LastSet.iAutoRetestCount_ART;
+        for(int i=eAuto1; i<=iAutoRight; i++)
+        {
+            LastSet.iUnloaderTrayCount_ART[i]=0;
+        }
+
+        fMain->lblAuto1TrayCnt->Caption=0;
+        fMain->lblAuto2TrayCnt->Caption=0;
+        fMain->lblAuto3TrayCnt->Caption=0;
+        fMain->lblAuto4TrayCnt->Caption=0;
+        fMain->lblAuto5TrayCnt->Caption=0;
+        fMain->lblAuto6TrayCnt->Caption=0;
+
+        LastSet.iInputLoaderCount=0;
+        LastSet.bCleanOut_ART=false;
+
+        if(TestIF_File.bEnableReadAndCheckTorque)                               //kevin 20210804
+        {
+            bResetArm1Value=true;
+            bResetArm2Value=true;
+            bReadArm1_Torque=false;
+            bReadArm2_Torque=false;
+            iReadTorqueError=0;
+        }
+
+        if(IniConfig.bC24InitialStartCheckCylinder)                             //JerryYang 20250120 : add
+        {
+            bInitialCylinderCheck=true;
+            iInitialCylinderCheckTask=1;
+        }
+
+        if(DoInitialStart())
+        {
+            if(CUSTOMER_CODE==CC_UTAC)                                          //Richard 20220929 :Add for UTAC
+            {
+                if(LastSet.iTester==ON_LINE)
+                {
+                    if(fMain->iFileOkPPSELECT==2)                               //如果檔案不一致，跳alarm重來
+                    {
+                        ShowErrorMessage("WAR16326", K_RETRY, MMSystem);
+                        if(LastSet.iRunStartMode==rsmContinuRetest)
+                        {
+                            SetRunStartMode(rsmCInitialRetest);
+                        }
+                        else
+                        {
+                            SetRunStartMode(rsmInitialStart);
+                        }
+                        return false;
+                    }
+                    else if(fMain->bReceivePPSELECT==false)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        fMain->iFileOkPPSELECT=0;
+                        fMain->bReceivePPSELECT=false;
+                    }
+                }
+            }
+
+            bInitialStart=false;
+            bDoReTestStart=false;
+            iP65QAReTestCount=0;                                                //Ifor 20260407 add: [P65] ARM QA Mode, reset ReTest counter on Lot Start
+            bInitialMaxTime=true;                                               //jou 2011-11-09 增加initial max time set
+            if(IniConfig.bQAMode==true && IniConfig.bQAModeFirstIn==false)      //Steven 20111005
+            {
+                iQAModeLoaderCT=0;                                              //jou 2012-05-03 增加QA mode使用獨立的Loader Count
+                iQAModePassCT=0;                                                //JerryYang 20221004 : Maxim版本QA mode
+                IniConfig.iBackUpTesterMode =LastSet.iTester;
+                IniConfig.bBackUpInArmMode  =ArmSpeed[InArm].bVariModeFIX;
+                IniConfig.bBackUpAutoFeed   =TrayForm.bAutoFeed;
+                bQAModeFinishCleanOut=false;
+                bQAModeQuickCleanOut=false;
+                if(TestIF.bQATrayEndCloseYield100Site)                          //Sam 20231117 : 整合到 QA 模式
+                {
+                    ArmData[0]->ClearALLCT();
+                    ArmData[1]->ClearALLCT();
+                    ArmData[2]->ClearALLCT();
+                }
+            }
+
+            VerifyNeedDoAlignment(AutoAlignmentTray_InitialStart, AutoAlignmentCK_InitialStart);                        //KenHsieh 20210813 : add CCD AUTO ALIGNMENT
+
+            if(IniConfig.bF33_Check2DHardware)                                  //JerryYang 20250220 : 2DID硬體順序檢查功能
+            {
+                if((BAR_CODE_INSTALL==ebctUseCCDMode ||
+                  BAR_CODE_INSTALL==ebctInShtIntel   ||
+                  BAR_CODE_INSTALL==ebctEtherNetCCD) &&
+                  TestIF_File.bEnableBarCode)                                   // &&                              //JerryYang 20250220 : fix AUTO IN OUT
+                {
+                    if(InArmSuck.iShtRow==2)
+                    {
+                        bRun2DCheck=true;
+                        fContact->Do2DIDMapCheck(true);
+                    }
+                }
+            }
+
+            if(USE_LASER_DISTANCE && TestIF_File.bEnableShuttleLaser)           //Steven 20140228 : 雷射測距功能
+            {
+                if(FLCarryKit.UseSiteHasIC()==false &&
+                   BLCarryKit.UseSiteHasIC()==false)
+                {
+                    ShtLaserInit(0, true);
+                    iLaserShuttle=0;
+                    bInitialLaserCheck=true;
+                }
+                else
+                {
+                    bInitialLaserCheck=false;
+                }
+            }
+            else
+            {
+                bInitialLaserCheck=false;
+            }
+
+            if(LastSet.iTemperature==Tempture_Hot &&
+               USE_LASER_DISTANCE &&
+               TestIF_File.bEnableInArmLaser)                                   //Steven 20140228 : 雷射測距功能
+            {
+                if(MOT[MMPlate1].Tray.HasIC()==false && MOT[MMPlate2].Tray.HasIC()==false)
+                {
+                    InArmLaserInit(true);
+                    bInitialLaserCheckPlate=true;
+                }
+            }
+            else
+            {
+                bInitialLaserCheckPlate=false;
+            }
+        }
+        return false;
+    }
+
+    if(bClearJamRateCount==true)                                                //jou 2010-08-13 計數jam rate,改為Tray Feed為一單位
+    {
+        bClearJamRateCount=false;
+        if(IniConfig.bA61DisableCleanMUBA==true)                                //Jeff 20240930 add continustart for not enough IC Jame rate test
+        {
+            ;
+        }
+        else
+        {
+            LastSet.SendCT[1]=0;
+            LastSet.iJamCount[1]=0;
+        }
+
+        if((USE_AUTO_RETEST==eartInstall &&
+           (bAutoReTest_ART || IniConfig.bA10_AutoReTest)) ||
+            CosFunction.bUseARTSortCount)                                       //Ifor 20170315 (wei) add 新增使用ART Sort Count 計數功能
+            LastSet.SendCT_ART[1]=0;
+    }
+
+    if(SetShuttleMode(true)==false)                                             //Steven 20231103 : for NN mode
+        return false;
+    else
+        return true;
+}
+#endif // golden csystem.cpp:11663-12362
+bool CheckContinusStartIsReady()                                                //ChungHung 20130529 add manual change start mode 如果是InitialStart 按下Start時要詢問
+{
+    // GATE G4-4 default: FAIL-CLOSED.  Golden reaches `return true` only through
+    // SetShuttleMode(true), which is declared (csystem.h:117) but defined nowhere
+    // in this tree.  Refusing is a real golden outcome; granting would silently
+    // bypass ~30 golden refusals.  Do NOT flip this to true without landing
+    // SetShuttleMode and the forms this body needs.
+    return false;
+}
+//------------------------------------------------------------------------------
+
+// #############################################################################
+// ##  WAVE PT-W6 GROUP g3  --  csystem.cpp INITIAL-START / AUTO-TRAY-RECEIVE /
+// ##                           TRAY-FEED state machines
+// ##
+// ##  ROLE
+// ##  ----
+// ##  Appends golden csystem.cpp:5612-8337 -- the eleven functions that make up
+// ##  the machine's START and END-OF-LOT spine on the TRAY side: the Index
+// ##  4-axis home helper, the Initial-Start picker-vacuum audit, the RT-Start and
+// ##  Initial-Start cursors, the three Auto-tray presence / cylinder-recheck
+// ##  predicates, the per-Auto tray-receive SM, the ATK-AMR backup+log pair, and
+// ##  DoTrayFeed (the whole-machine unload).  csystem.cpp is a flat free-function
+// ##  TU, so these are free functions exactly as golden has them.
+// ##  Translator: AI(W906-PT-W6-g3) 20260809
+// ##
+// ##  WAVE SCOPE -- one line per golden function
+// ##  -----------------------------------------
+// ##    DoIndex4AxisHome          golden :5612   ACTIVE   (gate G01)
+// ##    CheckInitStartSuckStatus  golden :5740   ACTIVE   (no gate)
+// ##    DoReTesetStart            golden :5858   ACTIVE   (gate G02)
+// ##    CheckAutoHasTray          golden :5932   ACTIVE   (no gate)
+// ##    DetectAutoTray            golden :5996   ACTIVE   (no gate)
+// ##    AutoTrayReCheck           golden :6059   ACTIVE   (no gate)
+// ##    DoInitialStart            golden :6099   ACTIVE   (gates G03-G12)
+// ##    DoReceiveAutoTray         golden :6699   ACTIVE   (gates G13-G17)
+// ##    ClearATKBackup            golden :7421   ACTIVE   (no gate)
+// ##    WriteATKLog               golden :7435   ACTIVE   (no gate)
+// ##    DoTrayFeed                golden :7453   ACTIVE   (gates G18-G23)
+// ##
+// ##  GATE REGISTER  ( ** = safety-relevant; the full why/delta text sits at each
+// ##  gate itself.  There is deliberately no G14 -- see the iAutoTrayData note in
+// ##  g3-A: that statement is ACTIVE because this block DEFINES the global. )
+// ##  ---------------------------------------------------------------------
+// ##    G01 :5690  fMain->MemoIndexPosLog->Lines->Add            log line dropped
+// ##    G02 :5867  fSCKART->ClearAlarmCode (RT Start)
+// ##    G03 :6131  fAGV->bATK_AMR_DoHostLotStart / ..LOTORDER0_Ready
+// ##    G04 :6199  fLotInfo->labLotTrayCount_KYEC->Caption
+// ##    G05 :6241  SCKART/SPIL manual lot-count entry (MES16112 prompt inside)
+// ##    G06 :6281  fSCKART->ClearAlarmCode (Initial Start)
+// ##    G07 :6282  LotSummary.ClearAllData (SCKART branch)
+// ##    G08 :6301  LotSummary.ClearAllData (SPIL / ASE-CL branch)
+// ##    G09 :6342  fTrayMapping->ClearTrayIDByLot
+// ##    G10 :6350  fOmron->ClearOmronLog
+// ##    G11 :6405  ZeroMemory(fYieldMonitoring->iAlarmSiteYieldCmpCnt)      **
+// ##    G12 :6492  the 8 yield / bin-select interval-counter resets         **
+// ##    G13 :6739  HSys.BinDisCtrl->FlashPro
+// ##    G15 :7108  fBarCode->Write_Device_Info_By_Tray (ASE-KH)
+// ##    G16 :7116  fBarCode->Write_Device_Info_By_Tray (tray rec file)
+// ##    G17 :7412  HSys.BinDisCtrl->ClearAutoChangingWarn
+// ##    G18 :7470  fMain->ImpParaCheck->Clear
+// ##    G19 :8181  fYieldMonitoring->ClearAutoSiteOffStatus                 **
+// ##    G20 :8192  fMain->RENESAS_Server->bReturn41Flag
+// ##    G21 :8235  AMR.CheckTrayFeed -- TRAY FEED NO LONGER WAITS FOR AMR   **
+// ##    G22 :8256  fMain->IsStackHasLess16Bin (Auto loop) -- MESxx24 ALARM
+// ##               MADE UNREACHABLE                                         **
+// ##    G23 :8288  fMain->IsStackHasLess16Bin (Fix loop)  -- MESxx24 ALARM
+// ##               MADE UNREACHABLE                                         **
+// ##
+// ##  TWO INHERITED SEAMS THIS BLOCK RIDES ON (defined earlier in this file by
+// ##  wave W7-C1; NOT new gates, but they change what my ACTIVE code does):
+// ##    * HPPlaceLog (csystem.cpp:1306-1308 -> W7C1_THPPlaceLogSeam) -- golden
+// ##      :6136 HPPlaceLog.InitialPosition() therefore NO-OPS.  The REAL object
+// ##      exists (ainarm_SearchPlacePlate.cpp:76, registered) so this is a
+// ##      one-line retirement, not a translation gap.  DELTA: the hot-plate
+// ##      place-position log is not emptied at Initial Start -- stale HP place
+// ##      positions survive into the new lot.  Data only.
+// ##    * MoveInArm2XYToLoaderWait (csystem.cpp:1256-1257 ->
+// ##      W7C1_MoveInArm2XYToLoaderWait, `return true`) -- golden :8045.
+// ##      ** MOTION-COMPLETION FALSE POSITIVE: DoTrayFeed's flag4 goes true on
+// ##      the first tick WITHOUT the in-arm ever moving above the Loader.  On a
+// ##      real machine Tray Feed would then finish with the in-arm parked
+// ##      wherever it was.  rg over the whole ported tree finds NO real body for
+// ##      this function (only csystem.cpp's own two call sites), so this cannot
+// ##      be fixed from inside this wave; flagging it is the deliverable.
+// ##
+// ##  INTEGER DIVISION: golden has NO `/` division operator anywhere in these
+// ##  2726 lines (checked mechanically), so the int/int truncation trap that an
+// ##  earlier wave paid for cannot apply here.  Nothing was converted to float.
+// ##
+// ##  Big5: golden is cp950; every Chinese comment is transcribed VERBATIM as
+// ##  UTF-8.  ZERO U+FFFD.  Line endings: bare LF, matching the rest of this file.
+// ##  BCB6: none of these eleven functions carries __fastcall or __published, so
+// ##  no calling-convention text had to be removed; golden's own misspellings are
+// ##  kept (DoReTesetStart, bClearSrtart, sMES1120, iRecevieLoopCount, ...).
+// #############################################################################
+
+// -----------------------------------------------------------------------------
+//  g3-A  FILE GLOBALS whose golden home is csystem.cpp ITSELF and which nothing
+//  in the ported tree defines yet.  Verified with
+//    rg -n '^(int iAutoTrayData|bool bDoReTestStart|bool bNeedTakeTray|TQPF_Timer hDoInitialStartTim)' --glob '*.cpp'
+//  over D:/HT9045/HT9011UC_Cpp_V3.33.906.0  ->  0 hits (run 2026-08-09).
+//  DEDUPE NOTE FOR THE MAIN LOOP: these four live in golden csystem.cpp:130/139/
+//  154/160 -- the file-global preamble that belongs to NO function, therefore to
+//  no wave group.  If a sibling group also lands any of them, keep ONE copy.
+//  bOldAutoHasTray (golden :131) is deliberately NOT defined here:
+//  acatchtray_shims.cpp:185 already defines it, so it is only DECLARED (g3-B).
+//  iAutoTrayData NOTE: asendic_Auto.cpp:399 currently does
+//  `#define iAutoTrayData W7L1A_iAutoTrayData` -- a TU-LOCAL stand-in array,
+//  because no shared definition existed.  Defining the real one here is what
+//  lets that seam be retired; until it is, asendic_Auto.cpp's tray-map RESTORE
+//  still reads its own private copy, so the snapshot DoReceiveAutoTray writes at
+//  golden :7096-7098 is not yet visible to the restore.  Listed in the report.
+// -----------------------------------------------------------------------------
+int iAutoTrayData[6][MAX_X_ITEM][MAX_Y_ITEM];                                   // golden csystem.cpp:130
+bool bDoReTestStart=false;                                                      // golden csystem.cpp:139
+TQPF_Timer hDoInitialStartTim;                                                  //kevin 20160615     (golden csystem.cpp:154)
+bool bNeedTakeTray[eTrayCount];                                                 // golden csystem.cpp:160
+
+// -----------------------------------------------------------------------------
+//  g3-B  CROSS-UNIT DECLARATIONS.  Every one of these has a REAL body/storage in
+//  a CMakeLists-REGISTERED .cpp (file:line proved in each comment -- that is the
+//  link-closure audit, done per symbol, because -fsyntax-only cannot see it).
+//  They are declared locally rather than by adding #includes because four
+//  sibling agents are appending to this same file concurrently and a new
+//  top-of-file #include is the one edit that cannot be made append-only.
+//  Each declaration is written in golden's own wording (or the ported header's,
+//  where that header is the contract).
+//  DEFAULT ARGUMENTS -- read this before adding an #include to this TU.  Exactly
+//  two declarations below repeat a header's default, because golden's own call
+//  sites here rely on it and keeping those call sites verbatim matters more:
+//    MoveOutArmXY_ToFix_Tray_Full(bool bMoveY=false)   (same form acatchtray.cpp:193 uses)
+//    DoSortingBinTray(int iFlag = 1)                   (golden :7537 calls it with no arg)
+//  If anyone later adds #include "aoutarm.h" or #include "SortingBinTray/
+//  SortingBinTray.h" to csystem.cpp, DELETE the default from the matching line
+//  here in the same edit -- a repeated default argument is a hard g++ error.
+//  Every other declaration below deliberately omits the header's default;
+//  WriteDataToFile is the one whose call site was adjusted instead (see its note).
+// -----------------------------------------------------------------------------
+extern bool IndexZCanMove[2];                                                   // golden ainarm2.h:48         -- def ainarm9045_w7_shims.cpp:47
+extern int  iWhichAuto;                                                         // golden aoutarm.h:18         -- def aoutarm.cpp:586
+extern bool bOldAutoHasTray[MAX_AUTO_TRAY];                                     // golden csystem.cpp:131      -- def acatchtray_shims.cpp:185
+extern bool bAutoEdgePush[MAX_AUTO_TRAY];                                       // golden csystem.cpp:6057     -- def acatchtray.cpp:180
+extern void __fastcall MyDBIProductionData(AnsiString sAction);                  // golden cMyDB.h:63           -- def cMyDB.cpp:642
+extern const unsigned int MSG_CMD_SCKART_RunDummy;                              // ported MessageDef.h:138     -- def MessageDef.cpp:106 (=53), verified ACTIVE (not inside any #if 0)
+extern void EnableAutoclean(bool Manual);                                       // golden AutoClean.h:177      -- def AutoClean/AutoClean.cpp:3615
+extern void SetAutoCleanICCount(bool Work);                                     // golden AutoClean.h:179      -- def AutoClean/AutoClean.cpp:3647
+extern void InitialFix3CanFullTask();                                           // golden aoutarm9045.h:79     -- def aoutarm9045.cpp:1549
+extern bool UseFix3Cylinder(int ct);                                            // golden aoutarm9045.h:81     -- def aoutarm9045.cpp:1546
+extern bool MoveOutArmXY_ToFix_Tray_Full(bool bMoveY=false);                     // golden aoutarm.h:104        -- def aoutarm.cpp:851 (identical form to acatchtray.cpp:193)
+extern void CheckHasErrorBinOnTray(int iPos);                                   // golden asendic_Auto.h:64    -- def asendic_Auto.cpp:2800
+extern bool DoSortingBinTray(int iFlag = 1);                                    // golden SortingBinTray.h:10  -- def SortingBinTray/SortingBinTray.cpp:264
+extern void SaveProductionRecord(class TMyTray *TrayData, AnsiString Name);      // golden SortingBinTray.h:94  -- def SortingBinTray/SortingBinTray.cpp:2699
+extern int  iLoadNewColorTrayToCarTask;                                         // golden asendic_Color.h:15   -- def asendic_Color.cpp:146
+extern bool DoLoadNewColorTrayToCar();                                          // golden asendic_Color.h:46   -- def asendic_Color.cpp:156
+extern void DoAutoColorReceive();                                               // golden asendic_Color.h:48   -- def asendic_Color.cpp:1416
+extern AnsiString asDupBundleID;                                                // golden common.h:178         -- def common.cpp:222
+extern AnsiString aslDupUnloadBundlID;                                          // golden common.h:179         -- def common.cpp (same init block)
+extern void WriteDataToFile(AnsiString cFilePath, AnsiString cData, bool bOverWrite); // golden common.h:256   -- def common.cpp:1740
+//  NOTE on WriteDataToFile: golden's header gives bOverWrite a `=false` default
+//  and WriteATKLog (golden :7448) calls it with two arguments.  Re-stating that
+//  default here would become a hard error the moment any sibling adds
+//  #include "common.h" to this TU, so the default is NOT repeated and the one
+//  call site passes `false` explicitly.  Same value, same behaviour, no gate.
+
+// -----------------------------------------------------------------------------
+//  g3-C  eATkTrayFeed -- golden Automation/AGV.h:212-222, transcribed VERBATIM.
+//  LastSet.iUnloadFixTray (ported LastSet.h) is a plain int and already exists;
+//  only the enumerators were missing, and an enum has no storage, so this is a
+//  complete translation and not a stand-in.
+//  CORRECTED ABSENCE CLAIM -- the first version of this comment claimed "0 hits"
+//  and was WRONG; it came from a grep that only listed eAtkTfInit, not eAtkTf*.
+//  The honest result of
+//    rg -n '\b(eAtkTf[A-Za-z]*|eATkTrayFeed)\b' --glob '*.{cpp,h}'
+//  over D:/HT9045/HT9011UC_Cpp_V3.33.906.0 (re-run 2026-08-09 at hand-off) is:
+//  no WHOLE enum anywhere, but THREE pre-existing TU-LOCAL partial copies --
+//    acatchtray.cpp:125-126        anonymous enum: PutIDTray=3, PutCover=4,
+//                                  PutEmptyTray=5, FeedFix=7, FixToAMR=8
+//    aoutarm.cpp:529               static const int eAtkTfMoveFixIC = 6
+//    aoutarm9045_2x8_8.cpp:326     static const int eAtkTfMoveFixIC = 6
+//  All three are TU-local, so none of them can collide with this one at link or
+//  at compile.  Their ordinals were checked against golden AGV.h one by one and
+//  AGREE with every enumerator below, so no value diverges -- but the ported tree
+//  now carries FOUR partial spellings of one golden enum, and this is the first
+//  complete one.  RECOMMENDED FOLLOW-UP for the main loop: when Automation/AGV.h
+//  is really ported, retire all four.
+//  Kept TU-LOCAL rather than pushed into csystem.h so that the eventual real
+//  Automation/AGV.h port owns the type without colliding across the 100+ TUs
+//  that include csystem.h.
+// -----------------------------------------------------------------------------
+enum eATkTrayFeed{eAtkTfInit        =0,
+                  eAtkTfFeedAuto    =1,
+                  eAtkTfAutoToAMR   =2,
+                  eAtkTfPutIDTray   =3,
+                  eAtkTfPutCover    =4,
+                  eAtkTfPutEmptyTray=5,
+                  eAtkTfMoveFixIC   =6,
+                  eAtkTfFeedFix     =7,
+                  eAtkTfFixToAMR    =8,
+                  eAtkTfNormalFeed  =9,
+                 };
+
+// -----------------------------------------------------------------------------
+//  g3-D  TU-LOCAL SEAMS for the three free functions that have NO ported body
+//  ANYWHERE.  Same idiom, and the same `#define` redirect mechanism, this file
+//  already uses for its W7C1 / W7C2 seam blocks at :1179 and :2595.
+//  ABSENCE CLAIMS -- exact commands, all re-run as the last action of this task,
+//  each over D:/HT9045/HT9011UC_Cpp_V3.33.906.0:
+//    rg -n '\bPrePushLoaderCylinder\b'             --glob '*.{cpp,h}'
+//    rg -n '\bIniRecordMonitoringIndexCycleTime\b' --glob '*.{cpp,h}'
+//    rg -n '\bDoMagazineTrayFeed\b'                --glob '*.{cpp,h}'
+//  Before this block each returned hits ONLY inside csystem.cpp itself (plus, for
+//  the third, csystem_shims.cpp's unrelated InitialDoMagazineTrayFeedTask).  The
+//  golden homes are uhome.cpp:967, cObserver.cpp and Magazine.cpp:3159 -- NONE of
+//  those three units exists in the ported tree at all, which is why these are
+//  seams rather than declarations.
+// -----------------------------------------------------------------------------
+//  PrePushLoaderCylinder (golden uhome.cpp:967, `bool PrePushLoaderCylinder(bool
+//  bReset)`): pre-taps the Loader tray cylinder twice before the first pick.
+//  DEFAULT true = "the two taps finished", so Initial/RT Start walks on.  This is
+//  a mechanical settle helper, NOT an interlock: it reads no safety sensor and
+//  refuses no motion, and golden's callers read a false only as "not yet".
+//  BEHAVIOUR DELTA ON A REAL MACHINE: the Loader tray is not pre-tapped, so a
+//  tray sitting slightly high is never seated before the first InArm pick.
+static bool W7G3_PrePushLoaderCylinder(bool /*bReset*/=false){ return true; }
+#define PrePushLoaderCylinder  W7G3_PrePushLoaderCylinder
+//  IniRecordMonitoringIndexCycleTime (golden cObserver.cpp): arms the Index
+//  cycle-time monitor's record file.  DEFAULT no-op.
+//  BEHAVIOUR DELTA: with bSPILFunction / CC_ASE_CL the per-index cycle-time
+//  monitor is not re-armed at Initial Start, so its first window carries the
+//  previous lot's baseline.  No motion, no interlock, no alarm.
+static void W7G3_IniRecordMonitoringIndexCycleTime(){}
+#define IniRecordMonitoringIndexCycleTime  W7G3_IniRecordMonitoringIndexCycleTime
+//  ** WARNING FOR WHOEVER UN-GATES A SIBLING GROUP'S BLOCK IN THIS SAME FILE:
+//  there is a SECOND call to IniRecordMonitoringIndexCycleTime() at csystem.cpp
+//  :6242, inside a sibling's `#if 0` that opens at :6181 (verified by counting
+//  preprocessor depth, 2026-08-09).  That call sits ABOVE this `#define`, so the
+//  redirect does NOT reach it: un-gating :6181 without also moving this seam
+//  above it -- or giving that block its own -- produces an UNDEFINED REFERENCE,
+//  which -fsyntax-only will not show.  Same shape for the two other seams in
+//  this g3-D block if a sibling ever calls them from above line 8384.
+//  DoMagazineTrayFeed (golden Magazine.cpp:3159, `bool DoMagazineTrayFeed(bool
+//  bSelect=false)`): the magazine-stack variant of the Auto tray unload.
+//  DEFAULT false -- deliberately NOT true.  Returning true would tell DoTrayFeed
+//  "the magazine finished unloading" while no magazine moved, i.e. it would let
+//  the machine leave Tray Feed with material still in the magazine.  false is the
+//  fail-safe direction (DoTrayFeed keeps waiting and the stall is visible).
+//  REACHABILITY: the only call site is guarded by
+//  if(AUTO3_IS_MAGAZINE==1 && i==iMagAtAuto), and AUTO3_IS_MAGAZINE is 0 in every
+//  offline fixture, so this seam is unreachable at the default config.
+//  ** BEHAVIOUR DELTA IF A MACHINE IS CONFIGURED AUTO3_IS_MAGAZINE==1: DoTrayFeed
+//  NEVER COMPLETES (f[iMagAtAuto] stays false forever).  That is a visible stall,
+//  not a silent wrong move -- which is exactly why false was chosen.
+static bool W7G3_DoMagazineTrayFeed(bool /*bSelect*/=false){ return false; }
+#define DoMagazineTrayFeed  W7G3_DoMagazineTrayFeed
+//------------------------------------------------------------------------------
+bool DoIndex4AxisHome(bool bReset)                                              //Isaac 20201012 : index Y超過範圍，做一次Tmode，indexArm四軸先回home
+{
+    static bool IndexY1=false, IndexZ1=false, IndexY2=false, IndexZ2=false;     //kevin 20161214 (Steven) Increase Hone Speed
+
+    if(bReset==true)
+    {
+        MOT[MTestY1].iGali_SingalHomeTask=1;
+        MOT[MTestY2].iGali_SingalHomeTask=1;
+        MOT[MTestZ1].iGali_SingalHomeTask=1;
+        MOT[MTestZ2].iGali_SingalHomeTask=1;
+        IndexY1=false;
+        IndexZ1=false;
+        IndexY2=false;
+        IndexZ2=false;
+
+        //fHome->InitGali_HomeTask();
+        IndexZCanMove[0]=true;
+        IndexZCanMove[1]=true;
+        MOT[MTestY1].MovFlag=false;
+        MOT[MTestY2].MovFlag=false;
+        MOT[MTestZ1].MovFlag=false;
+        MOT[MTestZ2].MovFlag=false;
+        MOT[MTestY1].bScanFlag=false;
+        MOT[MTestY2].bScanFlag=false;
+        MOT[MTestZ1].bScanFlag=false;
+        MOT[MTestZ2].bScanFlag=false;
+        MOT[MTestY1].GaliSofDelayCount=0;
+        MOT[MTestY2].GaliSofDelayCount=0;
+        MOT[MTestZ1].GaliSofDelayCount=0;
+        MOT[MTestZ2].GaliSofDelayCount=0;
+
+        return false;
+    }
+
+    if(IndexY1==false || IndexZ1==false || IndexY2==false || IndexZ2==false)
+    {
+        if(IndexZ1==false)
+        {
+            if(MOT[MTestZ1].Gali_SingalHome())
+            {
+                IndexZ1=true;
+            }
+        }
+
+        if(IndexZ2==false)
+        {
+            if(MOT[MTestZ2].Gali_SingalHome())
+            {
+                IndexZ2=true;
+            }
+        }
+
+        if(IndexZ1==true && IndexZ2==true)
+        {
+            if(IndexY1==false)
+            {
+                if(MOT[MTestY1].Gali_SingalHome())
+                {
+                    IndexY1=true;
+                }
+            }
+
+            if(IndexY2==false)
+            {
+                if(MOT[MTestY2].Gali_SingalHome())
+                {
+                    IndexY2=true;
+                }
+            }
+        }
+    }
+
+    if(IndexY1==true && IndexZ1==true && IndexY2==true && IndexZ2==true)
+    {
+        IndexY1=false;
+        IndexY2=false;
+        IndexZ1=false;
+        IndexZ2=false;
+#if 0   // GATE(g3-G01)  golden csystem.cpp:5690  --  fMain->MemoIndexPosLog->Lines->Add -- the Index-4-axis-home completion log line.
+        fMain->MemoIndexPosLog->Lines->Add("Index 4 axis home finished.");
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : fMain (forms/fMain.h) has no MemoIndexPosLog member; the facade
+//      carries only meShuttle1/meShuttle2 of golden main.h's TMemo family.
+//  BEHAVIOUR DELTA ON A REAL MACHINE : The 'Index 4 axis home finished.' line is not written to
+//      the Index position log. DoIndex4AxisHome still returns true on the same tick, so the
+//      four-axis home sequence itself is unchanged. No motion, no interlock, no alarm.
+#endif  // GATE(g3-G01)
+        return true;
+    }
+    return false;
+}
+//==============================================================================
+//  檢查 Initial Srtart 吸嘴狀況
+//==============================================================================
+int CheckInitStartSuckStatus()                                                  //kevin 20160630 : bool --> int
+{
+    int flagInArm[MAX_ARM_Row][MAX_ARM_Col], flagOutArm[MAX_ARM_Row][MAX_ARM_Col], flagFTest[MAX_Index_Row][MAX_Index_Col], flagBTest[MAX_Index_Row][MAX_Index_Col];  // 2->4 Eliot 2009_12_28
+    bool bHasFailInArm=false, bHasFailOutArm=false, bHasFailFTest=false, bHasFailBTest=false;                           //, bHasFailCatch=false;
+    AnsiString ErrPartInArm="", ErrPartOutArm="", ErrPartFTest="", ErrPartBTest="";
+    #ifndef SOFT_SIMULTE
+    bool bDetectTrayArmCatch=false;                                             //kevin 20150810
+    #endif
+    int iReturn=0;                                                              //kevin 20160616
+
+    for(int i=0; i<InArmSuck.iMaxRow; i++)
+    {
+        for(int j=0; j<InArmSuck.iMaxCol; j++)
+        {
+            flagInArm[i][j] =InArmSuck.Suck[i][j].GetStatus();
+            flagOutArm[i][j]=OutArmSuck.Suck[i][j].GetStatus();
+            if(flagInArm[i][j])
+            {
+                bHasFailInArm=true;
+                ErrPartInArm+=InArmSuck.Suck[i][j].sName;
+                iReturn=1;                                                      //kevin 20160616
+            }
+
+            if(flagOutArm[i][j])
+            {
+                bHasFailOutArm=true;
+                ErrPartOutArm+=OutArmSuck.Suck[i][j].sName;
+                iReturn=2;                                                      //kevin 20160616
+            }
+        }
+    }
+
+    for(int i=0; i<FTestSuck.iShtRow; i++)
+    {
+        for(int j=0; j<FTestSuck.iShtCol; j++)
+        {
+            flagFTest[i][j] =FTestSuck.Suck[i][j].GetStatus();
+            flagBTest[i][j] =BTestSuck.Suck[i][j].GetStatus();
+            if(flagFTest[i][j])
+            {
+                bHasFailFTest=true;
+                ErrPartFTest+=IndexSuckName[i+IsNNMode()][j];                   //Steven 20230712 : 修正NN mode alarm顯示
+                iReturn=3;                                                      //kevin 20160616
+            }
+
+            if(flagBTest[i][j])
+            {
+                bHasFailBTest=true;
+                ErrPartBTest+=IndexSuckName[i][j];
+                iReturn=4;                                                      //kevin 20160616
+            }
+        }
+    }
+
+    #ifndef SOFT_SIMULTE
+    if(USE_CATCH_TRAY_MODEL==2)
+    {
+        if(Cylinder[C_CatchTray_Fix].OnStatus() ||
+           Cylinder[C_CatchTray_FixOff].OnStatus())                             //kevin 20150810 查Tray Arm上有無Tray盤
+            bDetectTrayArmCatch=true;                                           //kevin 20150811
+    }
+
+    if(USE_CATCH_TRAY_MODEL==3)
+    {
+        if(Cylinder[C_CatchTray_Fix].OnStatus() ||
+           Cylinder[C_CatchTray_FixOff].OnStatus() ||                           //kevin 20150810 查Tray Arm上有無Tray盤
+           (Sen[SnCatchTrayFix1On].IsOn()==Sen[SnCatchTrayFix2On].IsOn()))
+            bDetectTrayArmCatch=true;                                           //kevin 20150811
+    }
+
+    if((IniConfig.bC03UseCatchTray==false && CatchTraySuck.Suck[0][0].GetStatus()) ||
+       (IniConfig.bC03UseCatchTray==true  && USE_CATCH_TRAY_MODEL==0 && ((Sen[SnCatchTrayFix1On].IsOn()!=Sen[SnCatchTrayFix2On].IsOn()) || Cylinder[C_CatchTray_Fix].OnStatus())) ||  //Steven 20120925 : 夾Tray有Tray時,不會檢查Tray Arm上有無Tray盤  //wei 20150415 前後夾Alarm
+       (IniConfig.bC03UseCatchTray==true  && USE_CATCH_TRAY_MODEL==1 && (Cylinder[C_CatchTray_Fix].OnStatus() || Cylinder[C_CatchTray_FixOff].OnStatus())) ||
+       (USE_CATCH_TRAY_MODEL==2 && bDetectTrayArmCatch==false) ||               //Steven 20120925 : 夾Tray有Tray時,不會檢查Tray Arm上有無Tray盤  //wei 20150415 前後夾Alarm
+       (USE_CATCH_TRAY_MODEL==3 && bDetectTrayArmCatch==false))                 //Steven 20170623 (wei) : Add for catch tray with cover
+    {                                                                           //kevin 20150810 add
+        iReturn=5;                                                              //kevin 20160616
+        if(USE_CATCH_TRAY_MODEL==2 ||                                           //jou 2011-11-08 retry -> skip字義上比較恰當
+           USE_CATCH_TRAY_MODEL==3)                                             //Steven 20170623 (wei) : Add for catch tray with cover
+            ShowErrorMessage("WAR0615", K_SKIP, MTrayX, false, __FUNC__);       //kevin 20150811 add   'ART_TrayARM ON/OFF cyclinder Sensor error
+        else
+            ShowErrorMessage("WAR0611", K_SKIP, MTrayX, false, __FUNC__);       //CatchSuck
+        CatchTraySuck.iWhichTray=-1;                                            //Steven 20220331 : 紀錄Tray從哪來的
+        CatchTraySuck.SetItemData(0, 0, NULL_IC);
+    }
+    #endif
+    //jou 2011-11-08 retry -> skip字義上比較恰當
+    if(bHasFailInArm)   ShowErrorMessage("WAR0132", K_SKIP, MInArmX,  false, ErrPartInArm);                             //Inarm
+    if(bHasFailFTest)   ShowErrorMessage("WAR0320", K_SKIP, MTestZ1,  false, ErrPartFTest);                             //TestSuck1
+    if(bHasFailBTest)   ShowErrorMessage("WAR0320", K_SKIP, MTestZ2,  false, ErrPartBTest);                             //TestSuck2
+    if(bHasFailOutArm)  ShowErrorMessage("WAR0226", K_SKIP, MOutArmX, false, ErrPartOutArm);                            //OutArm
+
+    for(int i=0; i<InArmSuck.iMaxRow; i++)
+    {
+        for(int j=0; j<InArmSuck.iMaxCol; j++)
+        {
+            if(flagInArm[i][j])  InArmSuck.SetItemData(i, j, NULL_IC);
+            if(flagOutArm[i][j]) OutArmSuck.SetItemData(i, j, NULL_IC);
+        }
+    }
+
+    for(int i=0; i<FTestSuck.iShtRow; i++)
+    {
+        for(int j=0; j<FTestSuck.iShtCol; j++)
+        {
+            if(flagFTest[i][j])
+                FTestSuck.SetItemData(i, j, NULL_IC);
+            if(flagBTest[i][j])
+                BTestSuck.SetItemData(i, j, NULL_IC);
+        }
+    }
+
+    return iReturn;                                                             //kevin 20160616
+}
+//==============================================================================
+//  RTest Start 初使動作
+//==============================================================================
+int iReTestStartTask=1;
+bool DoReTesetStart()
+{
+    int iRet=0;
+    int &Task=iReTestStartTask;
+    switch(Task)
+    {
+        case 1:
+            if(CosFunction.bUseSCKART)                                          //Steven 20161201 (wei) : For SCK 93K ART
+            {
+#if 0   // GATE(g3-G02)  golden csystem.cpp:5867  --  fSCKART->ClearAlarmCode() at RT-Start entry.
+                fSCKART->ClearAlarmCode();
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : forms/fSCKART.h's offline TfSCKART has no ClearAlarmCode; the
+//      golden SCKART alarm-code register lives in the un-ported cSCKART UI. Reached only inside
+//      if(CosFunction.bUseSCKART), false in every offline fixture.
+//  BEHAVIOUR DELTA ON A REAL MACHINE : On a 93K-ART machine the SCKART alarm-code field keeps its
+//      previous value across a Re-Test Start, so a stale ART alarm code can be reported to the
+//      tester. No motion, no interlock; an alarm is NOT suppressed (this statement CLEARS one).
+#endif  // GATE(g3-G02)
+            }
+
+            MyDBIProductionData("Re-Test Start.");                              //Steven 20140816 : Production Data
+            fMain->Clarn_Data(0, "RT Initial Start clear data!!");
+
+            bOutShtLoseICNeedSetErrBin=false;                                   //JerryYang 20170609 (wei) for JSCC 清除旗標
+            bIndexDropICNeedSetErrBin=false;                                    //JerryYang 20220923 : index arm drop error設ERROR BIN
+            ZeroMemory(bTestSiteNeedSetErrBin, sizeof(bTestSiteNeedSetErrBin));
+            Task=50;
+            break;
+        case 50:
+            Task=100;
+            hDoInitialStartTim.SetSecAndOn(10);                                 //kevin 20160616
+            break;
+        case 100:
+            iRet=CheckInitStartSuckStatus();                                    //kevin 20160616
+            if(iRet==0)
+            {
+                Task=200;
+                PrePushLoaderCylinder(true);                                    //Steven 20150429 : 預先打兩下Loader汽缸
+            }
+            else if(hDoInitialStartTim.Off())                                   //kevin 20160616 夾tray機構異常
+            {
+                  if(USE_CATCH_TRAY_MODEL==2 ||
+                     USE_CATCH_TRAY_MODEL==3)                                   //Steven 20170623 (wei) : Add for catch tray with cover
+                      ShowErrorMessage("WAR0615", K_SKIP, MTrayX, false, __FUNC__);                                     //kevin 20150811 add   'ART_TrayARM ON/OFF cyclinder Sensor error
+                  else
+                      ShowErrorMessage("WAR0611", K_SKIP, MTrayX, false, __FUNC__);                                     //CatchSuck
+                Task=50;
+            }
+            break;
+        case 200:
+            MOT[MInShuttle1].EnableMotorMove();
+            MOT[MInShuttle2].EnableMotorMove();
+//#ifdef Carry4
+//            MOT[MOutShuttle1].EnableMotorMove();
+//            MOT[MOutShuttle2].EnableMotorMove();
+//#endif
+            if(MOT[MMTrayY].fHasTray==false)
+            {
+                MOT[MMTrayY].Tray.ClearData();
+            }
+
+            for(int i=0; i<2; i++)
+            {
+                MOT[MMPlate1+i].Tray.ClearData();
+                MOT[MMPlate1+i].fCanMove=true;
+            }
+
+            FLCarryKit.SetAllToNullIC();
+            FRCarryKit.SetAllToNullIC();
+            BLCarryKit.SetAllToNullIC();
+            BRCarryKit.SetAllToNullIC();
+
+            InitAllProcessTask();
+            Task=1;
+            return true;
+    }
+    return false;
+}
+//==============================================================================
+//  Initial Start 初使動作
+//==============================================================================
+//jou 2010-01-25 start : 確認Auto流道上是否有tray盤
+bool CheckAutoHasTray(bool bInitial)
+{
+    if(LastSet.iRunStartMode==rsmAutoRetest)                                    //ChungHung 20140625 AutoRetest 不能鎖
+        return false;
+
+    if(CheckSafeDoorIsClosed()==false)                                          //KevinYang 20210219 : 門沒關不可以夾Tray
+        return true;
+
+    for(int i=eAuto1; i<=iAutoRight; i++)
+    {
+        if(AUTO3_IS_MAGAZINE==1 &&                                              //JerryYang 20220909 : add magazine
+           bChaneMagTrayflag &&
+           i==iMagAtAuto)                                                       //Auto3在換 Mag Tray 不要將側推汽缸 On
+            continue;
+
+        if(bInitial==true && Sen[SnAutoTrayDetect[i]].IsOn())
+        {
+            MOT[iMMAuto[i]].fHasTray=true;
+            MOT[iMMAuto[i]].InitNewTray(NULL_IC, false, __FUNC__);
+            Cylinder[C_AutoSide_Fixer[i]].On();
+            Cylinder[C_AutoEdgePush[i]].On();
+            Cylinder[C_AutoUpPress[i]].On();                                    //JerryYang 20190423 新增unloader壓tray
+        }
+
+        if(Sen[SnAutoTrayDetect[i]].IsOff())
+        {
+            if(bInitial==true)
+            {
+                fProductionInfo->CalTrayICCount(i);
+                MOT[iMMAuto[i]].fHasTray=false;
+                MOT[iMMAuto[i]].ClearTray(__FUNC__);
+            }
+            Cylinder[C_AutoSide_Fixer[i]].Off();
+            Cylinder[C_AutoEdgePush[i]].Off();
+            Cylinder[C_AutoUpPress[i]].Off();                                   //JerryYang 20190423 新增unloader壓tray
+        }
+        else
+        {
+            if(MOT[MMAuto1+i].Tray.FullIC() || bUnloading==true)                //JerryYang 20250227 : 退TRAY到一半汽缸不要打起來
+            {
+            }
+            else
+            {
+                if(CUSTOMER_CODE==CC_AMKOR_Japan &&                             //RogerYang 20250929 : dont push when trayArm down
+                    Cylinder[C_TrayX_UpDown].OffStatus()==false)
+                {
+                }
+                else
+                {
+                    if(MOT[iMMAuto[i]].fHasTray==true)                          //JerryYang 20250120 : add
+                    {
+                        Cylinder[C_AutoSide_Fixer[i]].On();
+                        Cylinder[C_AutoEdgePush[i]].On();
+                        Cylinder[C_AutoUpPress[i]].On();                        //JerryYang 20190423 新增unloader壓tray
+                    }
+                }
+            }
+        }
+    }
+
+    return false;
+}
+//jou 2010-01-25 end
+//------------------------------------------------------------------------------
+bool DetectAutoTray(int Pos, int *iRetryCnt)                                    //JerryYang 20170907 (Steven) Auto Tray偵測 整理為函式
+{
+    bool flag1=false, flag2=false, flag3=false, flag4=false;
+    AnsiString str, Str2;
+    static bool bTrayDuplicateErr[9]={false, false, false, false, false, false, false, false, false};
+
+    flag1=Sen[SnAutoTrayDetect[Pos]].IsOff();
+    #ifndef SOFT_SIMULTE
+    flag2=Sen[SnAutoFixCyPush[Pos]].IsOn();
+    flag3=Cylinder[C_AutoSide_Fixer[Pos]].OffSensor();                          //wei 20241011 新增後勾氣缸off sensor,避免氣缸沒作動
+    #else
+    flag2=false;
+    flag3=false;
+    #endif
+    flag4=Sen[SnAutoEdgePush[Pos]].IsOn();
+
+    if((flag1 || flag2 || flag3 || flag4) && LastSet.iRealDummy!=DUMMY)
+    {
+        *iRetryCnt+=1;
+        if(*iRetryCnt<30)
+            return false;
+        Cylinder[C_AutoSide_Fixer[Pos]].Off();
+        Cylinder[C_AutoEdgePush[Pos]].Off();
+        Cylinder[C_AutoUpPress[Pos]].Off();                                     //JerryYang 20190423 新增unloader壓tray
+
+        if(flag2)
+        {
+            Str2.sprintf("%s must off. (DetectAutoTray)", Sen[SnAutoFixCyPush[Pos]].Name);
+            str=sJAM1103[Pos];
+        }
+        else if(flag3)
+        {
+            Str2.sprintf("%s must off. (DetectAutoTray)", Cylinder[C_AutoSide_Fixer[iWhichAuto]].OffSensorName);
+            str=sJAM1103[Pos];
+        }
+        else if(flag4)
+        {
+            Str2.sprintf("%s must off. (DetectAutoTray)", Sen[SnAutoEdgePush[iWhichAuto]].Name);
+            str=sJAM1102[Pos];
+        }
+        else
+        {
+            Str2.sprintf("%s must on. (DetectAutoTray)", Sen[SnAutoTrayDetect[iWhichAuto]].Name);
+            str=sWAR1130[Pos];
+        }
+
+        ShowErrorMessage(str, K_RETRY, iMMAuto[Pos], bTrayDuplicateErr[Pos], Str2);
+        bTrayDuplicateErr[Pos]=true;
+    }
+    else
+    {
+        *iRetryCnt=0;
+        Cylinder[C_AutoSide_Fixer[Pos]].On();
+        Cylinder[C_AutoEdgePush[Pos]].On();
+        Cylinder[C_AutoUpPress[Pos]].On();                                      //JerryYang 20190423 新增unloader壓tray
+        bTrayDuplicateErr[Pos]=false;
+        return true;
+    }
+    return false;
+}
+//------------------------------------------------------------------------------
+extern bool bAutoEdgePush[MAX_AUTO_TRAY];
+TQPF_Timer DoReCheckDelay;
+bool AutoTrayReCheck(int iWhich)                                                //Ifor 20171031 (Steven) add Auto Tray ReCheck
+{
+    static int iReCheckTask=0;
+    bWaitOutArmCheckCylin=true;                                                 //jou 20240131 : 修正out arm 與 auto tray互卡衝突hang up
+    switch (iReCheckTask)
+    {
+        case 0:
+            iReCheckTask=10;
+            break;
+        case 10:
+            if(Cylinder[C_AutoSide_Fixer[iWhich]].Pop())
+            {
+                Cylinder[C_AutoSide_Fixer[iWhich]].On();
+                iReCheckTask=20;
+            }
+            break;
+        case 20:
+            if(Cylinder[C_AutoSide_Fixer[iWhich]].Push())
+            {
+                Cylinder[C_AutoEdgePush[iWhich]].On();
+                DoReCheckDelay.SetSecAndOn(Ld_UldDelayTime.ULD_FixTrayDely);
+                bAutoEdgePush[iWhich]=true;
+                iReCheckTask=30;
+            }
+            break;
+        case 30:
+            if(DoReCheckDelay.Off())
+            {
+                Cylinder[C_AutoUpPress[iWhich]].On();                           //JerryYang 20190423 新增unloader壓tray
+                iReCheckTask=0;
+                bWaitOutArmCheckCylin=false;                                    //jou 20240131 : 修正out arm 與 auto tray互卡衝突hang up
+                return true;
+            }
+            break;
+    }
+
+    return false;
+}
+//------------------------------------------------------------------------------
+int iInitialStartTask=1;
+bool DoInitialStart()
+{
+    int iRet=0, iAuto;
+    AnsiString Str, str;
+
+    switch(iInitialStartTask)
+    {
+        case 1:
+            if(bDoReTestStart==true)
+            {
+                RecordProcess("RT-Initial Start.");
+                MyDBIProductionData("RT-Initial Start.");
+            }
+            else
+            {
+                RecordProcess("Initial Start.");
+                MyDBIProductionData("Initial Start.");                          //Steven 20140816 : Production Data
+            }
+
+            #ifdef FOR_ASECL_L8
+            if(CUSTOMER_CODE==CC_ASE_CL && IniConfig.bI21EnableASM==false)
+            {
+                ShowErrorMessage("WAR16126", 0, MMSystem, false);  //WAR16118->WAR16126 Steven 20260331
+            }
+            #endif
+
+            if(fAGV->IsATK_AMR())                                               //RogerYang 20260402 : Fix
+            {
+                LastSet.iUnloadFixTray=eAtkTfInit;                                  //Steven 20260202 : for ATK AMR
+                ClearATKBackup();                                               //AI(ht9045-atk-amr-flow) 20260427 (RogerYang) : prevent stale backup
+                 //fSortCT->pnlLoadCID->Caption="";                             //RogerYang 20260401 : 避免二次讀取
+                LastSet.bWaitStartLotAutoRetestGPIB=false;                      //RogerYang 20260401 : aviod start maching not by remote
+#if 0   // GATE(g3-G03)  golden csystem.cpp:6131  --  fAGV->bATK_AMR_DoHostLotStart / bATKAMR_GET_LOTORDER0_Ready reset (ATK-AMR).
+                fAGV->bATK_AMR_DoHostLotStart=false;
+                fAGV->bATKAMR_GET_LOTORDER0_Ready=false;
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : forms/fAGV.h's offline TfAGV carries IsATK_AMR()/IsSPIL_AMR() but
+//      neither of these two ATK-AMR handshake latches.
+//  BEHAVIOUR DELTA ON A REAL MACHINE : On an ATK-AMR machine the two host-lot-start latches are
+//      not cleared at Initial Start, so a lot-start request left over from the previous lot can be
+//      honoured once. Reached only inside if(fAGV->IsATK_AMR()), false offline. No motion, no
+//      interlock, no alarm.
+#endif  // GATE(g3-G03)
+            }
+
+            InitialFix3CanFullTask();
+            HPPlaceLog.InitialPosition();                                       //Steven 20211110 : 記錄放料到加熱盤的位置, initial start的時候要清空
+#if 0   // GATE G-W5cI-2 (PT-W5c integrate) -- golden's body is csystem.cpp:23376, i.e. WAVE 2 of this file -- not yet translated. DEFAULT: the SCK OEE tray counters are not reset. NO ALARM OR INTERLOCK -- LastSet.iTrayCntForSortFunc[] / iTrayICCntForSortFunc[] are production counters. UN-GATE WHEN WAVE 2 LANDS :23376.
+            ResetSCK_OEECount();
+#endif
+            bUnloading=false;                                                   //JerryYang 20250227 : fix
+
+            for(int i=0; i<MAX_AUTO_TRAY; i++)
+            {
+                bNeed1DCoverTray[i]=false;
+                bNeedCoverTray[i]=false;
+
+                bHasCoverTray[i]=false;
+                bHas1DCoverTray[i]=false;
+            }
+
+            for(int i=1; i<ePortTotal; i++)                                     //JerryYang 20250212 : 不要重複報
+            {
+                asBundleTrayID[i]="";
+            }
+
+            bMustCoverIDTray=false;                                             //JerryYang 20250521 : fix AMR issue
+            //==> Eastsun 20260513 F011 整合:KYEC AMR Unloader cleanup
+            if(TrayForm.bEnableAMR)
+            {
+                if(TrayForm.bEnableAMRLoader==false)
+                {
+                    AnsiString asstr[3];
+                    asstr[0]="P1:0,P2:0,P3:0,P4:1,P5:0,P6:0";
+                    asstr[1]="P1:0,P2:0,P3:0,P4:0,P5:1,P6:0";
+                    asstr[2]="P1:0,P2:0,P3:0,P4:0,P5:0,P6:1";
+
+                    for(int i=0; i<3; i++)
+                    {
+                        if(iUnloaderTrayCountCal[i]>0)
+                        {
+                            asSupplementBin=asstr[i];
+                            bUnLoaderActionFlag[i]=true;
+                            iUnloaderTrayCountCal[i]=0;
+
+                            TestIF_File.asAMRBinSetting[i]=AMRUnloadBin(i+1);
+                            TestIF_File.iAMRTrayCount[i+3]-=iAMRCoverTray;
+
+                            EventReport(SECS_EVENT.AGVSupplement);
+                            asSupplementBin="";
+                            TestIF_File.iAMRTrayCount[i+3]=0;
+                            TestIF_File.iAMRDeviceCount[i+3]=0;
+                            TestIF_File.asAMRBinSetting[i]="";
+                        }
+                    }
+
+                    for(int i=0; i<14; i++)
+                    {
+                        TestIF_File.iAMRMagzineDeviceCount[i]=0;
+                    }
+                }
+
+                bNeedCoverTray[0]=false;
+                bNeedCoverTray[1]=false;
+                bNeedCoverTray[2]=false;
+                RunInfo.bLotStart=false;
+                iLoaderTrayCountCal=0;
+                iLoaderTrayCountAMRCal=0;
+                LastSet.iLoaderTotalTray=0;
+                LastSet.iLoaderTrayCount_ART=0;
+                TestIF_File.iAMRLDNowTrayCount=0;
+#if 0   // GATE(g3-G04)  golden csystem.cpp:6199  --  fLotInfo->labLotTrayCount_KYEC->Caption="0" (KYEC AMR tray-count label).
+                fLotInfo->labLotTrayCount_KYEC->Caption="0";
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : forms/fLotInfo.h has LabDiffTrayCount and labNowTrayCount -- both
+//      reset on the two surrounding lines, which stay ACTIVE -- but not labLotTrayCount_KYEC.
+//  BEHAVIOUR DELTA ON A REAL MACHINE : One KYEC-only UI label keeps its stale tray count; the two
+//      neighbouring labels and every counter behind them are still zeroed. Display only.
+#endif  // GATE(g3-G04)
+                fLotInfo->LabDiffTrayCount->Caption="0";
+                fLotInfo->labNowTrayCount->Caption="0";
+                bAMRReceiveLoaderTotalTray=false;
+                bAMRReceiveAGVStart=false;
+                bAMRReceiveStart=false;
+            }
+            //<== Eastsun 20260513 F011
+
+            for(int i=0; i<3; i++)                                              //JerryYang 20250220 : fix AUTO IN OUT
+                iUnloaderTrayCountCal[i]=0;                                     //kevin 20220825 initial data
+
+            for(int i=0; i<MAX_FIX_TRAY; i++)
+            {
+                sFixBundleID[i]="";
+            }
+
+            for(int i=0; i<MAX_FIX_TRAY; i++)
+            {
+                iFixTrayCountCal[i]=0;
+            }
+
+            if(BAR_CODE_INSTALL!=ebctUninstall &&                               //Steven 20190412 : Initial Start時檢查有沒有開啟2DID
+               IniConfig.bI08Check2DIDEnableWhenInitialStart)
+            {
+                if(TestIF_File.bEnableBarCode==false)
+                    ShowErrorMessage("WAR16116", 0, MMSystem, false);
+                if(TestIF_File.bCheckCodeByLot==false)
+                    ShowErrorMessage("WAR16117", 0, MMSystem, false);
+            }
+
+            if(CUSTOMER_CODE==CC_ATEC && IniConfig.bEnableFTP)                  //JerryYang 20200416 艾科要求切initial start按start要強制download recipe
+            {
+                bInitNeedDownloadFTP=true;
+            }
+
+            if(CosFunction.bUseSCKART)                                          //Steven 20161201 (wei) : For SCK 93K ART
+            {
+                if(IniConfig.bA10_AutoReTest &&
+                   TestIF_File.bSCKART_EnableART &&
+                   LastSet.iRunStartMode==rsmContinuStart_ART)                  //JerryYang 20200312 ART模式才跳輸入lot count
+                {
+#if 0   // GATE(g3-G05)  golden csystem.cpp:6241  --  the SCKART / SPIL manual lot-count entry block (GPIB message fill + fNote lot-count/lot-ID edit boxes + fSCKART->AccessFile).
+                    if(TestIF_File.bSCKART_RunARTWithoutCmd)
+                    {
+                        if(CUSTOMER_CODE==CC_PTI &&
+                           IniConfig.bB03_TesterReport)                         //Sam 20240809 : PTI ART 模式
+                        {
+                            HHandler2Gpib.GPIBBin=0;
+                            sprintf(HHandler2Gpib.Message, "%s", "0");
+                        }
+                        else
+                        {
+                            ShowErrorMessage("MES16112", 0, MTrayX, false);
+                            HHandler2Gpib.GPIBBin=atoi(fNote->edtLotCount->Text.c_str());
+                            sprintf(HHandler2Gpib.Message, "%s", fNote->edtLotID->Text.c_str());
+                        }
+                    }
+                    else if(IniConfig.bSPILFunction &&
+                            fSCKART->sInfo_Step=="CORR")                        //JerryYang 20220923 : 手動輸入EQC數量
+                    {
+                        ShowErrorMessage("MES16112", 0, MTrayX, false);
+                        fSCKART->iLotCount  =atoi(fNote->edtLotCount->Text.c_str());
+                        fSCKART->iInputCount=atoi(fNote->edtLotCount->Text.c_str());
+                        fSCKART->AccessFile(false, 1);
+                    }
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : three absent facade surfaces at once: fNote->edtLotCount /
+//      fNote->edtLotID (forms/fNote.h has neither edit box) and fSCKART->sInfo_Step / iLotCount /
+//      iInputCount / AccessFile. HHandler2Gpib itself is REAL (MessageDef.cpp:268) and is named
+//      ONLY inside this block, which is why no declaration for it is added in g3-B. The whole
+//      block sits inside if(CosFunction.bUseSCKART && IniConfig.bA10_AutoReTest &&
+//      TestIF_File.bSCKART_EnableART && LastSet.iRunStartMode==rsmContinuStart_ART) -- four flags,
+//      all false offline.
+//  BEHAVIOUR DELTA ON A REAL MACHINE : On a 93K-ART/SPIL machine the operator is NOT prompted for
+//      the lot count (golden's ShowErrorMessage("MES16112") prompt is inside the gate),
+//      HHandler2Gpib.GPIBBin/Message keep their previous content, and fSCKART's EQC count is not
+//      written to file. THIS SUPPRESSES THE MES16112 OPERATOR PROMPT on those two customer paths
+//      -- it is an operator MESSAGE, not a machine alarm or interlock, and no motion is affected.
+#endif  // GATE(g3-G05)
+                }
+                else
+                {
+                }
+
+                if((CosFunction.iAutoRetestTCPmode!=0 ||                        //RogerYang 20251029 : bool->int   //Sam 20191113 : TCP ART
+                    CosFunction.bART_SECSGEM_93K) &&                            //JerryYang 20220923 : SECS GEM版本ART
+                   TestIF_File.bSCKART_RunARTWithoutCmd==false)
+                {
+                }
+                else
+                {
+//                    if(LastSet.iRunStartMode==rsmContinuStart_ART)              //JerryYang 20200312 ART模式才跳輸入lot count    //Steven 20250222 : Mark
+                    {
+                        fMain->SendMSG_CMD(MSG_CMD_SCKART_RunDummy);
+                    }
+                }
+#if 0   // GATE(g3-G06)  golden csystem.cpp:6281  --  fSCKART->ClearAlarmCode() at Initial-Start entry.
+                fSCKART->ClearAlarmCode();
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : same absent member as G02.
+//  BEHAVIOUR DELTA ON A REAL MACHINE : same as G02, on the Initial Start path instead of the RT
+//      path.
+#endif  // GATE(g3-G06)
+#if 0   // GATE(g3-G07)  golden csystem.cpp:6282  --  LotSummary.ClearAllData() (SCKART branch).
+                LotSummary.ClearAllData();
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : LotSummary is REAL (golden cSocket.h:249, defined
+//      cSocket.cpp:173, registered in CMakeLists) but its class TLotSummary is not in this TU's
+//      include set, and adding #include "cSocket.h" is a top-of-file edit this wave must not make
+//      while four sibling agents append to the same file.
+//  BEHAVIOUR DELTA ON A REAL MACHINE : The per-lot / per-bin summary counters are not cleared, so
+//      the previous lot's totals carry into the new lot on the SCKART path -- a REPORTING defect
+//      only, no motion. One-line un-gate once the include can be added serially.
+#endif  // GATE(g3-G07)
+            }
+
+            if(LastSet.iRealDummy!=DUMMY)                                       //JerryYang 20241021 : Unloader增加第二組Sensor檢查是否有cover tray
+            {
+                for(int i=0; i<MAX_AUTO_TRAY; i++)
+                {
+                    if(Sen[SnAutoHasCoverTray[i]].Enable &&
+                       Sen[SnAutoHasCoverTray[i]].IsOn()==false)
+                    {
+                        str.sprintf("請確認AUTO%d上面有Cover tray", i+1);
+                        ShowMyMessage(str);
+                        return false;
+                    }
+                }
+            }
+
+            if(IniConfig.bSPILFunction==true || CUSTOMER_CODE==CC_ASE_CL)       //JerryYang 20250120 : add                            //JerryYang 20190928 SPIL lot count
+            {
+#if 0   // GATE(g3-G08)  golden csystem.cpp:6301  --  LotSummary.ClearAllData() (SPIL / ASE-CL branch).
+                LotSummary.ClearAllData();
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : same as G07.
+//  BEHAVIOUR DELTA ON A REAL MACHINE : same as G07, on the bSPILFunction / CC_ASE_CL path.
+#endif  // GATE(g3-G08)
+                IniRecordMonitoringIndexCycleTime();                            //JerryYang 20220923 : Index cycle time監控
+            }
+
+            for(int i=0; i<InArmSuck.iMaxRow; i++)                              //JerryYang 20220923 : Index cycle time監控
+            {
+                for(int j=0; j<InArmSuck.iMaxCol; j++)
+                {
+                    if(IniConfig.bO20_1ClearLifeTimeWhenInitialStart ||         //Steven 20240531 : initial start的時候要清除資料
+                       TestIF_File.InArmPickerLifeCnt[i][j]>=10000000)
+                    {
+                        TestIF_File.InArmPickerLifeCnt[i][j]=0;
+                    }
+
+                    if(IniConfig.bO20_1ClearLifeTimeWhenInitialStart ||         //Steven 20240531 : initial start的時候要清除資料
+                       TestIF_File.OutArmPickerLifeCnt[i][j]>=10000000)
+                    {
+                        TestIF_File.OutArmPickerLifeCnt[i][j]=0;
+                    }
+                }
+            }
+
+            for(int i=0; i<MAX_Index_Row; i++)                                  //JerryYang 20220923 : Index cycle time監控
+            {
+                for(int j=0; j<NEW_MAX_Index_Col; j++)
+                {
+                    if(IniConfig.bO20_1ClearLifeTimeWhenInitialStart ||         //Steven 20240531 : initial start的時候要清除資料
+                       TestIF_File.Arm1PickerLifeCnt[i][j]>=10000000)
+                    {
+                        TestIF_File.Arm1PickerLifeCnt[i][j]=0;
+                    }
+
+                    if(IniConfig.bO20_1ClearLifeTimeWhenInitialStart ||         //Steven 20240531 : initial start的時候要清除資料
+                       TestIF_File.Arm2PickerLifeCnt[i][j]>=10000000)
+                    {
+                        TestIF_File.Arm2PickerLifeCnt[i][j]=0;
+                    }
+                }
+            }
+
+            fLotInfo->btClearBarcodeList->Click();                              //Steven 20190214 : 統一清除2DID方式
+#if 0   // GATE(g3-G09)  golden csystem.cpp:6342  --  fTrayMapping->ClearTrayIDByLot().
+            fTrayMapping->ClearTrayIDByLot();                                   //JerryYang 20250120 : add
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : acatchtray_shims.h's TfTrayMapping stand-in has listTrayIDByLot
+//      but no ClearTrayIDByLot. This file already carries the sibling gate for the same object at
+//      csystem.cpp:1327 (W7C1_FTRAYMAP_CHANGETRAY).
+//  BEHAVIOUR DELTA ON A REAL MACHINE : The per-lot tray-ID list is not cleared at Initial Start,
+//      so tray IDs from the previous lot stay in the list and can be reported again. Data only.
+#endif  // GATE(g3-G09)
+
+            slDupBundlID->Clear();
+            slDupBundlID->SaveToFile(asDupBundleID);
+
+            slDupUnloadBundlID->Clear();
+            slDupUnloadBundlID->SaveToFile(aslDupUnloadBundlID);
+
+#if 0   // GATE(g3-G10)  golden csystem.cpp:6350  --  fOmron->ClearOmronLog().
+            fOmron->ClearOmronLog();                                            //JerryYang 20201123 清除非當月份的Omron通訊log
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : fOmron has NO home anywhere in the ported tree --
+//      bthermo.cpp:3915 records the same finding ('whole-tree grep for fOmron returns zero hits
+//      outside generated dfm data') and gates its own fOmron uses for exactly this reason.
+//  BEHAVIOUR DELTA ON A REAL MACHINE : Non-current-month Omron communication logs are not pruned
+//      at Initial Start; that log directory grows without bound. No machine effect.
+#endif  // GATE(g3-G10)
+            bAutoSiteMapHotplateSave=false;                                     //JerryYang 20190524 fix 高溫 auto site map過程中被切為initail時hot plate資料異常
+            bHasChangePlate=false;                                              //JerryYang 20250120 : add
+
+            if(CosFunction.bUseInitialDelayAsSoakTime &&                        //Steven 20170511 (wei) : 使用initial delay當 Soak time
+               Temperature.bUseInitialDelayAsSoakTime &&
+               TestIF_File.bEveryFirstDeviceUseInitialDelay)                    //Steven 20170511 (wei) : 使用initial delay當 Soak time
+            {
+                bFirstInput=true;
+                bFirstInputForIndex=true;
+            }
+            else
+            {
+                bFirstInput=false;
+                bFirstInputForIndex=false;
+            }
+
+            bOutShtLoseICNeedSetErrBin=false;                                   //JerryYang 20170609 (wei) for JSCC 清除旗標
+            bIndexDropICNeedSetErrBin=false;                                    //JerryYang 20220923 : index arm drop error設ERROR BIN
+            ZeroMemory(bTestSiteNeedSetErrBin, sizeof(bTestSiteNeedSetErrBin));
+
+            if(CosFunction.bInitialStartDelayCount_Init)                        //JerryYang 20250120 : add
+            {
+                iInitStartDelayTimeCT=0;                                        //jou 2012-11-30 高溫動作下希望增加顆數記數,在前幾顆下壓到Socket後,都要等待Delay time
+            }
+
+            for(int i=0; i<2; i++)                                              //JerryYang 20170609 (wei) for JSCC 清除旗標
+            {
+                if(Prod.bPlateSelect[0]==true &&                                //Hotplate 2
+                   Prod.bPlateSelect[1]==false)                                 //Hotplate 1
+                {
+                    iPickPlate[i]=0;
+                    iPlacePlate[i]=0;
+                }
+                else if(Prod.bPlateSelect[0]==false &&
+                        Prod.bPlateSelect[1]==true)
+                {
+                    iPickPlate[i]=1;
+                    iPlacePlate[i]=1;
+                }
+                else
+                {
+                    iPickPlate[i]=0;
+                    iPlacePlate[i]=0;
+                }
+                iPickPlateX[i]=0;
+                iPickPlateY[i]=0;
+                iPlacePlateX[i]=0;
+                iPlacePlateY[i]=0;
+            }
+
+            if(bDoReTestStart==true)
+                fMain->Clarn_Data(0, "RT-Initial Start clear data!!");
+            else
+                fMain->Clarn_Data(0, "Initial Start clear data!!");
+#if 0   // GATE(g3-G11)  golden csystem.cpp:6405  --  ZeroMemory(fYieldMonitoring->iAlarmSiteYieldCmpCnt, ...) -- the LowYieldAutoSiteOff 'alarm N times before closing the site' counter.
+            ZeroMemory(fYieldMonitoring->iAlarmSiteYieldCmpCnt, sizeof(fYieldMonitoring->iAlarmSiteYieldCmpCnt));       //Sam 20221207 : LowYieldAutoSiteOff 新增 Alarm 幾次後再來關 Site
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : the ported fYieldMonitoring is TfYieldMonitoring_2x4_16
+//      (aHotPlateSubstrate.h:1125), a one-method stand-in exposing only DoAutoCloseSite(bool);
+//      none of golden's counters exists on it.
+//  BEHAVIOUR DELTA ON A REAL MACHINE : ** SAFETY-RELEVANT: the per-site 'how many low-yield alarms
+//      have I already raised' counter is NOT zeroed at Initial Start. On a machine using
+//      LowYieldAutoSiteOff the carried-over count makes the NEXT low-yield alarm reach the
+//      auto-site-off threshold EARLIER than golden would, i.e. a site can be closed sooner than
+//      designed. It does NOT make an alarm unreachable and it touches no motion and no interlock.
+#endif  // GATE(g3-G11)
+            MOT[MMPlate1].Tray.ClearData();
+            MOT[MMPlate2].Tray.ClearData();
+
+            if(IniConfig.bP20ManualClearFixTrayDataAfterInitialStart==false)    //ChungHung 20130305 add for Amkor Initial Strat後不清Tray盤資料需手動清除後才可Run
+            {
+                Str=(bDoReTestStart==true)?"RT-Initial Start":"Initial Start";
+                ClearFixTray(eFix1, Str, 1);                                    //Steven 20160414 : 整合Fix盤設定
+                ClearFixTray(eFix2, Str, 1);
+                ClearFixTray(eFix3, Str, 1);
+                ClearFixTray(eFix4, Str, 1);
+                ClearFixTray(eFix5, Str, 1);
+                ClearFixTray(eFix6, Str, 1);
+            }
+
+            MOT[MMTrayZ].fHasTray=false;
+            for(int i=0; i<InArmSuck.iMaxRow; i++)
+            {
+                for(int j=0; j<InArmSuck.iMaxCol; j++)
+                {
+                    InArmSuck.SetItemData(i, j, NULL_IC);                       //Steven 20130625 : 改用SetItemData, 這樣Led才會更新
+                    OutArmSuck.SetItemData(i, j, NULL_IC);
+                }
+            }
+
+            for(int i=0; i<FTestSuck.iShtRow; i++)
+            {
+                for(int j=0; j<FTestSuck.iShtCol; j++)
+                {
+                    FLCarryKit.SetItemData(i, j, NULL_IC);                      //Steven 20130625 : 改用SetItemData, 這樣Led才會更新
+                    BLCarryKit.SetItemData(i, j, NULL_IC);
+                    FRCarryKit.SetItemData(i, j, NULL_IC);
+                    BRCarryKit.SetItemData(i, j, NULL_IC);
+                    FTestSuck.SetItemData(i, j, NULL_IC);
+                    BTestSuck.SetItemData(i, j, NULL_IC);
+                }
+            }
+
+            for(int i=0; i<TestSocket.iShtRow; i++)
+            {
+                for(int j=0; j<TestSocket.iShtCol; j++)
+                {
+                    TestSocket.SetItemData(i, j, NULL_IC);
+                }
+            }
+
+            if(IniConfig.bP20_2_ManualClrLoadTrayWhenInitialStart==false)       //Steven 20230117 : add for JSCK InitialStrat後需手動清除Loader Tray後才可Run
+            {
+                if(Sen[SnLoaderCarHasTray].IsOn())
+                {
+                    MOT[MMTrayY_Car].fHasTray=true;
+                    MOT[MMTrayY_Car].InitNewTray(HAS_IC, false, __FUNC__);
+                }
+                else
+                {
+                    MOT[MMTrayY_Car].fHasTray=false;
+                    MOT[MMTrayY_Car].ClearTray(__FUNC__);
+                }
+
+                if(Sen[SnLoaderSureTray].IsOn())
+                {
+                    MOT[MMTrayY].fHasTray=true;
+                    MOT[MMTrayY].InitNewTray(HAS_IC, false, __FUNC__);
+                }
+                else
+                {
+                    MOT[MMTrayY].fHasTray=false;
+                    MOT[MMTrayY].ClearTray(__FUNC__);
+                }
+            }
+
+            if(IniConfig.bP20_1_ManualClrAutoTrayWhenInitialStart==false)       //Steven 20210420 : add for TFME InitialStrat後不清Tray盤資料需手動清除後才可Run
+            {
+                if(LastSet.iRunStartMode!=rsmQAMode)                            //ChungHung 20120417 add
+                {
+                    if(bDoReTestStart &&
+                     (HasAutoICInMachine()==true||                              //AI(ht9045-inarm-flow) 20260515 (RogerYang) : RT且機台有料不清Auto tray避免疊料
+                     HasAnyICInMachine())==true)
+                        CheckAutoHasTray(false);                                //僅更新氣缸狀態不清資料
+                    else
+                        CheckAutoHasTray(true);                                     //jou 2010-01-25 start : 確認Auto流道上是否有tray盤
+                }
+            }
+            CatchTraySuck.iWhichTray=-1;                                        //Steven 20220331 : 紀錄Tray從哪來的
+            CatchTraySuck.SetItemData(0, 0, NULL_IC);
+            MOT[MTrayX].fHasTray=false;
+
+#if 0   // GATE(g3-G12)  golden csystem.cpp:6492  --  the eight yield / bin-select interval-counter resets (fYieldMonitoring x7 + fShowBinSelect x1).
+            fYieldMonitoring->iFailAlarmSiteMaxYieldIntervalCount=0;            //jou 2014-08-14 Site Compare Low Yield alarm
+            fYieldMonitoring->iFailAlarmSiteYieldIntervalCount=0;
+            fYieldMonitoring->iPickerYieldIntervalCount=0;                      //Steven 20230223 : 根據Index吸嘴比較良率
+            fYieldMonitoring->iLowYieldContactCount=0;                          //Steven 20141212 : Yield控制使用Contact Count
+            fYieldMonitoring->iAutoClean_FailAlarmSiteYieldIntervalCount=0;
+            fYieldMonitoring->ClearYieldCount();                                //Steven 20140830 : Yield相關的Alarm, 要清掉全部的Ignore的Count重算
+            fShowBinSelect->iLowYieldBinSelectContactCount=0;                   //KaiChen 20181115 : BinSelect裡面 Yield控制使用 Contact Count
+            fYieldMonitoring->iLowYieldByTotalContactCount=0;                   //Kaichen 20190628 : Low Yield ByTotal 控制使用 Contact Count
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : same absent TfYieldMonitoring_2x4_16 surface as G11;
+//      fShowBinSelect in this TU is already the W7C1_TfShowBinSelectSeam (csystem.cpp:1234), which
+//      carries only UPH_StringGrid.
+//  BEHAVIOUR DELTA ON A REAL MACHINE : ** SAFETY-RELEVANT: NONE of golden's yield-alarm interval
+//      counters (site-compare, picker-compare, low-yield-by-contact-count, auto-clean-fail-site,
+//      low-yield-by-total, and the BinSelect contact count) is reset at Initial Start, and
+//      fYieldMonitoring->ClearYieldCount() does not run. Every one of those counters gates WHEN a
+//      low-yield alarm fires. Carrying them over makes the FIRST low-yield alarm of the new lot
+//      fire at the wrong point -- earlier for counters already part-way to their threshold, and
+//      (for the Ignore counts ClearYieldCount would have cleared) potentially LATER, i.e. A
+//      LOW-YIELD ALARM CAN BE DELAYED PAST ITS DESIGNED TRIGGER POINT. No motion and no interlock
+//      is affected; this is the alarm-timing surface only.
+#endif  // GATE(g3-G12)
+
+            if(CosFunction.bShowHPICCount)                                      //Steven 20221228 : 計算加熱盤IC數量
+            {
+                fSortCT->pnlLoad->Caption=MOT[MMTrayY].Tray.HowManyIC();
+                fSortCT->pnlHP1->Caption=MOT[MMPlate1].Tray.HowManyIC();
+                fSortCT->pnlHP2->Caption=MOT[MMPlate2].Tray.HowManyIC();
+            }
+
+            if(IniConfig.bD33RTCInitStartVerify==true)                          //JerryYang 20240314: fix D33誤發RTC timeout
+            {
+                bSendRealCCDSendVerify=true;
+            }
+
+            iInitialStartTask=50;
+            break;
+        case 50:
+            if(bDoReTestStart==true)
+                RecordProcess("RT-Initial Start Task=50.");
+            else
+                RecordProcess("Initial Start Task=50.");
+
+            if(IniConfig.bEnableAutoCleanFunction &&
+               bACInitialStart &&
+               iAutocleanInitialStart==1)                                       //kevin 20120712 add InitialStart 模式清潔
+            {
+                iAutoClean_IndexContactCount=TestIF.iAutoClean_IntervalContact;
+                fMain->AutoCleanContactCountLabel->Caption=iAutoClean_IndexContactCount;
+                EnableAutoclean(false);                                         //kevin 20120501 啟動autoclean
+                iAutocleanInitialStart=0;
+            }                                                                   //kevin 20120712 add InitialStart 模式清潔
+
+            if(IniConfig.bP20ManualClearFixTrayDataAfterInitialStart==true)     //ChungHung 20130305 add for Amkor Initial Strat後不清Tray盤資料需手動清除後才可Run
+            {
+                for(int i=iFixMin; i<=iFixMax; i++)
+                {
+                    if(MOT[iMMAuto[i]].Tray.HasRealIC())
+                    {
+                        Str.sprintf("Please Take Out %s Tray Manually", s6TrayName[i]);
+                        ShowMyMessage(Str);
+                        return false;
+                    }
+                }
+            }
+
+            if(IniConfig.bP20_1_ManualClrAutoTrayWhenInitialStart==true)        //Steven 20210420 : add for TFME InitialStrat後不清Tray盤資料需手動清除後才可Run
+            {
+                for(int i=eAuto1; i<=iAutoRight; i++)
+                {
+                    iAuto=iAutoIndex[i];
+                    Cylinder[C_AutoSide_Fixer[iAuto]].Off();
+                    Cylinder[C_AutoEdgePush[iAuto]].Off();
+                    Cylinder[C_AutoUpPress[iAuto]].Off();
+                    if(Sen[SnAutoTrayDetect[iAuto]].IsOn())
+                    {
+                        Str.sprintf("Please Take Out %s Tray Manually", s6TrayName[i]);
+                        ShowMyMessage(Str);
+                        return false;
+                    }
+
+                    ClearAllTrayCount();                                        //Steven 20251029 : outputtray 數量
+                }
+            }
+
+            for(int i=eAuto1; i<=iAutoRight; i++)
+            {
+                if(MOT[iMMAuto[i]].fHasTray==false)
+                {
+                    if(LastSet.bLoaderTrayCount_ART==false)
+                    {
+                        LastSet.iUnloaderTrayCount_ART[i]=0;
+                    }
+                }
+            }
+
+            if(IniConfig.bP20_2_ManualClrLoadTrayWhenInitialStart==true)        //Steven 20230117 : add for JSCK InitialStrat後需手動清除Loader Tray後才可Run
+            {
+                if(Sen[SnLoaderSureTray].IsOn())
+                {
+                    Str.sprintf("Please take out Loader Tray (inside handler) manually");
+                    ShowMyMessage(Str);
+                    return false;
+                }
+                else if(Sen[SnLoaderCarHasTray].IsOn())
+                {
+                    Str.sprintf("Please take out Loader Tray (bottom side) manually");
+                    ShowMyMessage(Str);
+                    return false;
+                }
+                else
+                {
+                    MOT[MMTrayY_Car].fHasTray=false;
+                    MOT[MMTrayY_Car].ClearTray(__FUNC__);
+                    MOT[MMTrayY].fHasTray=false;
+                    MOT[MMTrayY].ClearTray(__FUNC__);
+                }
+            }
+            iInitialStartTask=60;
+            break;
+        case 60:
+            if(IniConfig.bP21CheckFixTray==true &&
+               IniConfig.bP21_1_CheckFixTray==true)                             //Steven 20250321 initial start時偵測fix tray需放入
+            {
+                if(ScanFixTrayStatus()==false)
+                {
+                    break;
+                }
+            }
+
+            iInitialStartTask=100;
+            hDoInitialStartTim.SetSecAndOn(10);                                 //kevin 20160616
+            break;
+        case 100:
+            iRet=CheckInitStartSuckStatus();                                    //kevin 20160616
+            if(iRet==0)
+            {
+                if(bDoReTestStart==true)
+                    RecordProcess("RT-Initial Start Task=100.");
+                else
+                    RecordProcess("Initial Start Task=100.");
+                iInitialStartTask=150;
+                PrePushLoaderCylinder(true);                                    //Steven 20150429 : 預先打兩下Loader汽缸
+            }
+            else if(hDoInitialStartTim.Off())                                   //kevin 20160616 夾tray機構異常
+            {
+                if(USE_CATCH_TRAY_MODEL==2 ||
+                   USE_CATCH_TRAY_MODEL==3)                                     //Steven 20170623 (wei) : Add for catch tray with cover
+                      ShowErrorMessage("WAR0615", K_SKIP, MTrayX, false, __FUNC__);                                     //kevin 20150811 add   'ART_TrayARM ON/OFF cyclinder Sensor error
+                  else
+                      ShowErrorMessage("WAR0611", K_SKIP, MTrayX, false, __FUNC__);                                     //CatchSuck
+                iInitialStartTask=50;
+            }
+            break;
+        case 150:                                                               //Steven 20150429 : 預先打兩下Loader汽缸
+            if(PrePushLoaderCylinder())
+            {
+                iInitialStartTask=160;
+            }
+            break;
+        case 160:
+            if(FIX3_FULL_PLACE==Fix3K_UseCylinder)                              //Steven 20220418 : 修正氣缸版Fix3在initial時,要縮回去
+            {
+                if(UseFix3Cylinder(0))
+                {
+                    InitialFix3CanFullTask();
+                    iInitialStartTask=200;
+                }
+            }
+            else
+            {
+                iInitialStartTask=200;
+            }
+            break;
+        case 200:
+            MOT[MInShuttle1].EnableMotorMove();
+            MOT[MInShuttle2].EnableMotorMove();
+//#ifdef Carry4
+//            MOT[MOutShuttle1].EnableMotorMove();
+//            MOT[MOutShuttle2].EnableMotorMove();
+//#endif
+            if(MOT[MMTrayY].fHasTray==false)
+            {
+                MOT[MMTrayY].Tray.ClearData();
+            }
+
+            for(int i=0; i<2; i++)
+            {
+                MOT[MMPlate1+i].fCanMove=true;
+                if(TestIF_File.iAutoClean_Function &&
+                   TestIF_File.iAutoClean_Tray==eCKPos_HP2 && i==0)             //kevin 20130226
+                {
+                    if(bDoReTestStart==true)
+                        RecordProcess("Auto clean : reset data in RT-Initial Start");
+                    else
+                        RecordProcess("Auto clean : reset data in Initial Start");
+                    SetAutoCleanICCount(false);                                 //kevin 20120501
+                }
+                else
+                {
+                    MOT[MMPlate1+i].Tray.ClearData();
+                }
+            }
+
+            FLCarryKit.ClearAll();
+            FRCarryKit.ClearAll();
+            BLCarryKit.ClearAll();
+            BRCarryKit.ClearAll();
+            InitAllProcessTask();
+            return true;
+    }
+    return false;
+}
+//==============================================================================
+// 將 Auto 粹中所有 Tray 收回 Sub function
+//==============================================================================
+int iReceiveAutoTrayTask[MAX_AUTO_TRAY];
+TQPF_Timer DetectAutoReceTime[MAX_AUTO_TRAY];
+TQPF_Timer DoReceiveAutoTrayDelay;
+TQPF_Timer htSwACAutoOffDelay1[MAX_AUTO_TRAY];                                  //Eliot 2007_11_05
+TQPF_Timer hRecevieLoopDelay[MAX_AUTO_TRAY];
+bool DoReceiveAutoTray(int Pos)
+{
+    static bool bAutoDuplicateErr[MAX_AUTO_TRAY]={false, false, false, false, false, false};                            //Steven 20091222 : Avoid duplicate message
+    static bool bRecevieLoop[MAX_AUTO_TRAY]     ={false, false, false, false, false, false};                            // 2010.08.23 , Joye
+    static bool flag[MAX_AUTO_TRAY]             ={false, false, false, false, false, false};                            //ChungHung 20140317 add Auto Retest
+    static int iRecevieLoopCount[MAX_AUTO_TRAY] ={0, 0, 0, 0, 0, 0};            // 2010.08.23 , Joye
+    static bool bHasICFloating[MAX_AUTO_TRAY]   ={false, false, false, false, false, false};                            //Sam 20250415 : Unloader 偵測到置偏 IC 退出後再報警
+
+    int &Task=iReceiveAutoTrayTask[Pos];
+    int ret, x, y;
+    AnsiString str1="";                                                         //kevin 20210604 add
+
+    if(USE_ROTATE_KIT==1 && iRotate_Type==eCynRotate)                           //kevin 20130812  氣缸版在AUTO
+    {
+        if(TrayForm.iRotateKIT_OutputType!=0 && Pos==iRotate_Out_Tray6)
+        {
+            return true;
+        }
+    }
+
+    if(Sen[SnAutoTrackDetect[Pos]].IsOn() &&
+       IniConfig.bP50DisabledAutoTrackSensorDetect==false)                      //Sam 20230221 : 矽格中興國桂要求要能關閉
+    {
+        if(IniConfig.bP59UnloaderICFloattingAlarmAfterExit)                     //Sam 20250415 : Unloader 偵測到置偏 IC 退出後再報警
+        {
+            bHasICFloating[Pos]=true;
+        }
+        else
+        {
+            TrayMoveOut(false, Pos+3);
+            ret=ShowErrorMessage(sJAM1110[Pos], K_SKIP, iMMAuto[Pos], bAutoDuplicateErr[Pos]);                          //JerryYang 20171101 (wei) Retry改成Skip避免誤會
+            bAutoDuplicateErr[Pos]=true;
+            return false;
+        }
+    }
+    else
+    {
+        bAutoDuplicateErr[Pos]=false;
+    }
+
+#if 0   // GATE(g3-G13)  golden csystem.cpp:6739  --  HSys.BinDisCtrl->FlashPro(Pos) -- the colour bin-display 'this Auto is changing' flash.
+    if(HSys.BinDisCtrl!=NULL)
+        HSys.BinDisCtrl->FlashPro(Pos);                                             //Eastsun 20260514
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : acatchtray_shims.h:24-25 already records this exact pair as
+//      GATED-at-the-call-site ('database.h TMyBinDispCtrl is forward-decl-only;
+//      HSys.BinDisCtrl==NULL offline so the calls never run'); THIS is that single call site.
+//      golden's own if(HSys.BinDisCtrl!=NULL) guard makes the call dead whenever the display is
+//      absent, which is every offline run.
+//  BEHAVIOUR DELTA ON A REAL MACHINE : On a machine with a colour bin display fitted, the per-Auto
+//      'changing' lamp does not flash while the tray is being received. Indicator only -- no
+//      motion, no interlock, no alarm.
+#endif  // GATE(g3-G13)
+
+    switch(Task)
+    {
+        case 1:
+            if(Sen[SnAutoTrayCar[Pos]].IsOn() ||
+               (Sen[SnAutoPreDete[Pos]].IsOn() &&
+                IniConfig.bP37bAutoCylinderUP==false &&                         //kevin 20220729 汽缸常態在下
+                bReduceTrayExitTime_TrayFeed[Pos]==false))                      //Ztex 2024.03.25 Add Reduce tray exit time
+            {
+                ret=ShowErrorMessage(sJAM1101[Pos], K_RETRY|K_SKIP, iMMAuto_Car[Pos], bAutoDuplicateErr[Pos], "DoReceiveAutoTray_1");
+                bAutoDuplicateErr[Pos]=true;
+                break;
+            }
+            else
+            {
+                bAutoDuplicateErr[Pos]=false;
+            }
+
+            if(IniConfig.bP53_ForcedScanBinCodeOfUnloader)                      //JerryYang 20240111 : add P53 function
+            {
+                bNeedTakeTray[Pos]=false;
+            }
+
+            if(MOT[iMMAuto_Car[Pos]].fHasTray)
+            {
+                Task=2;
+                if(fAGV->IsATK_AMR())                                           //AI(ht9045-atk-amr-flow) 20260428 (RogerYang) : ATK-AMR wait 5min for AMR pickup
+                    DoReceiveAutoTrayDelay.SetSecAndOn(300);
+                else
+                    DoReceiveAutoTrayDelay.SetSecAndOn(20);                     //Ifor 20200506 add: 加Receive Auto Tray TimeOut
+                break;
+            }
+
+            if(PitchCylinderState[Pos]!=0)
+                break;
+
+            if(bReduceTrayExitTime_TrayFeed[Pos]==true)                         //Ztex 2024.03.25 Add Reduce tray exit time
+                Task=5;
+            else
+                Task=10;
+            break;
+        case 2:
+            if(MOT[iMMAuto_Car[Pos]].fHasTray)
+            {
+                if(DoReceiveAutoTrayDelay.Off())
+                {
+                    ShowMyMessage("Below of Stack has tray not receive, can not tray feed", "軌道前方還有粹，無法進行Tray Feed", "(DoReceiveAutoTray 1)");
+                    return false;                                               //JerryYang 20200421 true -> false, 避免還沒完成流程就跳tray feed
+                }
+            }
+            else
+            {
+                if(PitchCylinderState[Pos]!=0)
+                    break;
+                Task=10;
+            }
+            break;
+        case 5:                                                                 //Ztex 2024.03.25 Add Reduce tray exit time ==>
+            SW[SwAutoCCW[Pos]].On();
+            Cylinder[C_AutoSide_Fixer[Pos]].Off();                              //Wenqi 20240827 Modify Auto1 CleanOut TrayFeed Error
+            Cylinder[C_AutoEdgePush[Pos]].Off();
+            Cylinder[C_AutoTrackFloodgate[Pos]].On();
+            if(Sen[SnAutoTrayCar[Pos]].IsOn()==true &&
+               Sen[SnAutoPreDete[Pos]].IsOn()==true)
+            {
+                bReduceTrayExitTime_TrayFeed[Pos]=false;
+                Task=6;
+            }
+            break;
+        case 6:
+            if(Cylinder[C_Auto_Selector[Pos]].Push())
+            {
+                Task=7;
+            }
+            break;
+        case 7:
+            if(Cylinder[C_Auto_Selector[Pos]].Pop())
+            {
+                if(Cylinder[C_AutoTrackFloodgate[Pos]].Enable)
+                    Cylinder[C_AutoTrackFloodgate[Pos]].Off();
+                Task=10;
+            }
+            break;                                                              //Ztex 2024.03.25 Add Reduce tray exit time <==
+        case 10:                                                                //jou 2011-08-09 Start : 修正未滿盤退出時，敲Tray沒有動作
+            if(IniConfig.bA68_AutoLoadUnload)                                   //JerryYang 20250521 : For AMR
+            {
+                if(Pos==eAuto1)
+                {
+                    bPortIsBusy[ePortAuto1]=true;
+                }
+                else if(Pos==eAuto2)
+                {
+                    bPortIsBusy[ePortAuto2]=true;
+                }
+                else if(Pos==eAuto3)
+                {
+                    bPortIsBusy[ePortAuto3]=true;
+                }
+            }
+
+            if(Cylinder[C_AutoEdgePush[Pos]].Enable==true &&
+               IniConfig.bP14EnableAutoTrayRecevieDelayCount==true &&           //wei 20160309 LastSet-->IniConfig
+               IniConfig.iP14AutoTrayRecevieDelayCount>0)
+            {
+                if(TRAY_VIBRATION!=NonVibration)                                //JerryYang 20170531 (wei) 敲tray方式新增震動馬達
+                {
+                    hRecevieLoopDelay[0].Set0_1SecAndOn(IniConfig.iP14AutoTrayRecevieLoopDelayTime);
+                    iRecevieLoopCount[0]=0;
+                    bRecevieLoop[0]=true;
+                }
+                else
+                {
+                    hRecevieLoopDelay[Pos].Set0_1SecAndOn(IniConfig.iP14AutoTrayRecevieLoopDelayTime);
+                    iRecevieLoopCount[Pos]=0;
+                    bRecevieLoop[Pos]=true;
+                }
+                Task=20;
+            }
+            else
+            {
+                Task=30;
+            }
+
+            if(Cylinder[C_AutoTrackFloodgate[Pos]].Enable)                      //Ztex 2024.03.25 Add Reduce tray exit time
+                Cylinder[C_AutoTrackFloodgate[Pos]].On();
+
+            break;
+        case 20:
+            if(TRAY_VIBRATION!=NonVibration)                                    //JerryYang 20170531 敲tray方式新增震動馬達
+            {
+                if(hRecevieLoopDelay[0].Off())
+                {
+                    bRecevieLoop[0]=!bRecevieLoop[0];
+
+                    if(bRecevieLoop[0])
+                        Cylinder[C_TrayVibration].On();
+                    else
+                        Cylinder[C_TrayVibration].Off();
+
+                    hRecevieLoopDelay[0].Set0_1SecAndOn(IniConfig.iP14AutoTrayRecevieLoopDelayTime);
+
+                    if(bRecevieLoop[0]==false)                                  //KaiChen 20190527 ：Fix 退盤震動不會關閉問題
+                    {
+                        iRecevieLoopCount[0]++;
+                    }
+
+                    if(iRecevieLoopCount[0]>IniConfig.iP14AutoTrayRecevieDelayCount)                                    //KaiChen 20190527 ：Fix 退盤震動不會關閉問題
+                    {
+                        Task=30;
+                    }
+                }
+            }
+            else
+            {
+                if(hRecevieLoopDelay[Pos].Off())
+                {
+                    bRecevieLoop[Pos]=!bRecevieLoop[Pos];
+
+                    if(CUSTOMER_CODE!=CC_TSMC_TAINAN)                           //wei 20170116 (jou) TSMC不使用側推氣缸敲Tray
+                    {
+                        if(bRecevieLoop[Pos])
+                            Cylinder[C_AutoEdgePush[Pos]].On();
+                        else
+                            Cylinder[C_AutoEdgePush[Pos]].Off();
+                    }
+                    hRecevieLoopDelay[Pos].Set0_1SecAndOn(IniConfig.iP14AutoTrayRecevieLoopDelayTime);
+
+                    if(bRecevieLoop[Pos]==true)
+                    {
+                        iRecevieLoopCount[Pos]++;
+                    }
+
+                    if(iRecevieLoopCount[Pos]>=IniConfig.iP14AutoTrayRecevieDelayCount)
+                    {
+                        Task=30;
+                    }
+                }
+            }
+            break;
+         case 30:
+            if(LastSet.iRealDummy!=DUMMY)                                       //JerryYang 20241021 : Unloader增加第二組Sensor檢查是否有cover tray
+            {
+                if(Sen[SnAutoHasCoverTray[Pos]].Enable &&
+                   Sen[SnAutoHasCoverTray[Pos]].IsOn()==false)
+                {
+                    str1.sprintf("請確認AUTO%d上面有Cover tray", Pos+1);
+                    ShowMyMessage(str1);
+                    break;
+                }
+            }
+
+            SW[SwAutoCCW[Pos]].Off();                                           //jimmychiu 20220517 避免中途暫停導致異常
+
+            if(bARTUnloaderUseTwoCylin(Pos))
+            {
+                AutoCylinderLower(Pos, C_Auto_Up[Pos], C_Auto_Selector[Pos], true);
+            }
+            else
+            {
+                AutoCylinderLower(Pos, C_Auto_Selector[Pos], C_Auto_Up[Pos],true);                                      //JerryYang 20250721 : fix non ART 汽缸沒有下降
+            }
+
+            Task=31;
+            break;
+        case 31:
+            if(bARTUnloaderUseTwoCylin(Pos))
+            {
+                if(AutoCylinderLower(Pos, C_Auto_Up[Pos], C_Auto_Selector[Pos]))
+                {
+                    Task=32;
+                    DetectAutoReceTime[Pos].SetMSAndOn(600);
+                }
+            }
+            else
+            {
+                if(AutoCylinderLower(Pos, C_Auto_Selector[Pos], C_Auto_Up[Pos]))                                        //JerryYang 20250721 : fix non ART 汽缸沒有下降
+                {
+                    Task=32;
+                    DetectAutoReceTime[Pos].SetMSAndOn(600);
+                }
+            }
+            break;
+        case 32:
+            if(DetectAutoReceTime[Pos].Off())
+            {
+                Task=40;
+            }
+            break;
+        case 40:
+            Cylinder[C_AutoEdgePush[Pos]].Off();
+            Cylinder[C_Auto_Selector[Pos]].Off();
+            Cylinder[C_AutoUpPress[Pos]].Off();                                 //JerryYang 20190423 新增unloader壓tray
+            if(Cylinder[C_AutoSide_Fixer[Pos]].Pop())
+            {
+                Task=50;
+                if((bUseAuto2Empty && Pos==1)    ||                             //kevin 20120726  Auto2
+                   (USE_AUTO_RETEST==eartInstall &&                             //ChungHung 20140317 add Auto Retest
+                    UNLOADER_ART[Pos]==eartInstall))                            //Steven 20161221 (jou) : for SCK only Auto 2 has ART
+                {
+                    Task=100;
+                    break;
+                }
+            }
+            break;
+        case 50:
+            Cylinder[C_AutoEdgePush[Pos]].Off();
+            if(Cylinder[C_AutoTrackFloodgate[Pos]].Enable)                      //Ztex 2024.03.25 Add Reduce tray exit time
+                Cylinder[C_AutoTrackFloodgate[Pos]].Off();
+
+            if(Cylinder[C_Auto_Selector[Pos]].Pop())
+            {
+                Task=100;
+            }
+            break;
+        case 100:
+            if(MOT[iMMAuto[Pos]].fHasTray ||
+               Sen[SnAutoTrayDetect[Pos]].IsOff()==false)
+            {
+                if(Sen[SnAutoTrayDetect[Pos]].IsOff()==false ||
+                   LastSet.iRealDummy==REALLY)
+                    Task=200;
+                else
+                    Task=210;
+            }
+            else
+            {
+                if(IniConfig.bP53_ForcedScanBinCodeOfUnloader)                  //JerryYang 20240111 : add P53 function
+                {
+                    bNeedTakeTray[Pos]=false;
+                }
+                Task=1;
+                return true;
+            }
+            break;
+        case 200:
+            TrayMoveOut(true, Pos+3);
+            if(TRAY_ARM_MODE==eUnderCoveyor)
+                TrayCylinMoveOut(Pos+3);
+            DetectAutoReceTime[Pos].SetMSAndOn(20000);
+            Task=250;
+            break;
+        case 210:
+            TrayMoveOut(true, Pos+3);
+            if(TRAY_ARM_MODE==eUnderCoveyor)
+                TrayCylinMoveOut(Pos+3);
+            DetectAutoReceTime[Pos].SetMSAndOn(2000);
+            Task=260;
+            break;
+        case 250:
+            if(bHandlerPause)                                                   //Steven 20190123 : 紀錄Handler被暫停, 重置Timer
+            {
+                Task=200;
+                break;
+            }
+
+            TrayMoveOut(true, Pos+3);
+            if(TRAY_ARM_MODE==eUnderCoveyor)
+                TrayCylinMoveOut(Pos+3);
+            if(Sen[SnAutoTrayCar[Pos]].IsOff()==false)
+            {
+                if(Sen[SnAutoTrayCar[Pos]].IsOff()==false)
+                    Task=300;
+                else
+                    Task=270;
+            }
+
+            if(DetectAutoReceTime[Pos].Off())
+            {
+                ret=ShowErrorMessage(sJAM1101[Pos], K_RETRY, iMMAuto[Pos], bAutoDuplicateErr[Pos], "DoReceiveAutoTray_250");
+                bAutoDuplicateErr[Pos]=true;
+                if(ret==K_RETRY)
+                    Task=30;                                                    //kevin 20161219 (Steven) 200 --> 30 確認氣缸放下
+            }
+            else bAutoDuplicateErr[Pos]=false;
+            break;
+        case 260:
+            fProductionInfo->CalTrayICCount(Pos);
+            MOT[iMMAuto_Car[Pos]].InitNewTray(NULL_IC, false, __FUNC__);        //Sam 20240220 : 新增退 Tray 時顯示裡面有多少 Error Bin
+            MOT[iMMAuto_Car[Pos]].MoveTrayAllItem(&MOT[iMMAuto[Pos]]);
+            Task=400;
+            break;
+        case 270:
+            TrayMoveOut(true, Pos+3);
+            if(TRAY_ARM_MODE==eUnderCoveyor)
+                TrayCylinMoveOut(Pos+3);
+            if(Sen[SnAutoTrayCar[Pos]].IsOff())                                 //粹盤尚未到達定位
+            {
+                TrayMoveOut(true, Pos+3);
+                Task=300;
+            }
+            else
+                Task=300;
+            break;
+        case 300:
+            if(bHasICFloating[Pos])                                             //Sam 20250415 : Unloader Tray偵測到有置偏IC退出來再報警。
+            {
+                str1.sprintf("JAM%d10", 11+Pos);                                //JAM1110, JAM1210, JAM1310
+                ret=ShowErrorMessage(str1, K_SKIP, MMAuto1_Car+Pos);
+                bHasICFloating[Pos]=false;
+                break;
+            }
+            DetectAutoReceTime[Pos].SetMSAndOn(20000);
+            Task=310;
+        case 310:
+            if(bHandlerPause)                                                   //Steven 20190123 : 紀錄Handler被暫停, 重置Timer
+            {
+                DetectAutoReceTime[Pos].SetMSAndOn(20000);
+            }
+
+            if(Sen[SnAutoTrayCar[Pos]].IsOff()==false)
+            {
+                DetectAutoReceTime[Pos].SetMSAndOn(2000);
+
+                if(MOT[iMMAuto[Pos]].fHasTray)
+                {
+                    for(x=0; x<MAX_X_ITEM; x++)
+                        for(y=0; y<MAX_Y_ITEM; y++)
+                            iAutoTrayData[Pos][x][y]=MOT[iMMAuto[Pos]].Tray.Data[x][y];
+                    bOldAutoHasTray[Pos]=true;
+                }
+                else
+                {
+                    bOldAutoHasTray[Pos]=false;
+                }
+
+                if(CUSTOMER_CODE==CC_ASE_KaohSiung)                             //kevin 20220325
+                {
+#if 0   // GATE(g3-G15)  golden csystem.cpp:7108  --  fBarCode->Write_Device_Info_By_Tray (CC_ASE_KaohSiung branch).
+                    fBarCode->Write_Device_Info_By_Tray(Pos, LastSet.iDevice_Info_By_Tray[Pos]);
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : aHotPlateSubstrate.h:1017's TfBarCode_Shim has no
+//      Write_Device_Info_By_Tray. Reached only inside if(CUSTOMER_CODE==CC_ASE_KaohSiung).
+//  BEHAVIOUR DELTA ON A REAL MACHINE : The per-tray device-info record file is not written on
+//      ASE-KH. The LastSet.iDevice_Info_By_Tray[Pos]++ on the next line is deliberately LEFT
+//      ACTIVE so the sequence number stays in step with golden -- only the file write is lost.
+//      Record-keeping only.
+#endif  // GATE(g3-G15)
+                    LastSet.iDevice_Info_By_Tray[Pos]++;
+                }
+
+                if( LastSet.iRealDummy==REALLY           &&                     //jou 20190930 : Barcode Tray record file
+                    TestIF_File.bEnableBarCode==true     &&
+                    CosFunction.bBarcodeTrayRecFile==true )
+                {
+#if 0   // GATE(g3-G16)  golden csystem.cpp:7116  --  fBarCode->Write_Device_Info_By_Tray (bBarcodeTrayRecFile branch).
+                    fBarCode->Write_Device_Info_By_Tray(Pos, LastSet.iDevice_Info_By_Tray[Pos]);
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : same absent member as G15. Reached only inside
+//      if(LastSet.iRealDummy==REALLY && TestIF_File.bEnableBarCode &&
+//      CosFunction.bBarcodeTrayRecFile).
+//  BEHAVIOUR DELTA ON A REAL MACHINE : same as G15, on the barcode-tray-record-file path; the
+//      counter increment stays ACTIVE.
+#endif  // GATE(g3-G16)
+                    LastSet.iDevice_Info_By_Tray[Pos]++;
+                }
+
+                fProductionInfo->CalTrayICCount(Pos);
+                MOT[iMMAuto_Car[Pos]].InitNewTray(NULL_IC, false, __FUNC__);    //Sam 20240220 : 新增退 Tray 時顯示裡面有多少 Error Bin
+                MOT[iMMAuto_Car[Pos]].MoveTrayAllItem(&MOT[iMMAuto[Pos]]);
+                bAutoDuplicateErr[Pos]=false;
+                if(TrayForm.bEnableAMR)                                         //Eastsun 20260514 F010 AMR output count
+                {
+                    iUnloaderTrayCountCal[Pos]++;
+                    TestIF_File.iAMRTrayCount[Pos+3]++;
+                }
+                Task=400;
+            }
+            else if(DetectAutoReceTime[Pos].Off())
+            {
+                ret=ShowErrorMessage(sJAM1101[Pos], K_RETRY, iMMAuto[Pos], bAutoDuplicateErr[Pos], "DoReceiveAutoTray_310");
+                bAutoDuplicateErr[Pos]=true;
+                if(ret==K_RETRY)
+                    Task=200;
+            }
+            break;
+        case 400:
+            TrayMoveOut(true, Pos+3);
+
+            if(TRAY_ARM_MODE==eUnderCoveyor)
+                TrayCylinMoveOut(Pos+3);
+            if(DetectAutoReceTime[Pos].Off())
+            {
+                htSwACAutoOffDelay1[Pos].SetMSAndOn(2000);                      //Eliot 2007_11_05 //jou 2014-04-18 修改Auto皮帶停止時間 1000 -> 2000
+                Task=410;
+            }
+            break;
+        case 410:
+            if(htSwACAutoOffDelay1[Pos].Off())                                  //Eliot 2007_11_05
+                TrayMoveOut(false, Pos+3);
+            if(TRAY_ARM_MODE==eUnderCoveyor)
+                TrayCylinMoveIn(Pos+3);
+            if(Cylinder[C_AutoTrackFloodgate[Pos]].Enable)
+                Cylinder[C_AutoTrackFloodgate[Pos]].Off();
+
+            if(bUseAuto2Empty && Pos==1)                                        //kevin 20120726  Auto2
+            {
+                InitUnLoadNewAuto2TrayTask();
+                Task=480;
+                break;
+            }
+
+            if(USE_AUTO_RETEST==eartInstall &&                                  //ChungHung 20140317 add Auto Retest
+               UNLOADER_ART[Pos]==eartInstall)                                  //Steven 20161221 (jou) : for SCK only Auto 2 has ART
+            {
+                flag[Pos]=!(MOT[iMMAuto_Car[Pos]].fHasTray);                    //Steven 20140401 : Fixed
+                InitUnLoadNewAutoTrayTask(Pos);
+                Task=485;
+                break;
+            }
+            else if(LOAD_Z_USE_MOTOR[Pos+3]==true)                              //JerryYang 20210721 : fix Auto Z motor蹺蹺板版本
+            {
+                AutoCylinderUp(Pos, C_Auto_Up[Pos], C_Auto_Selector[Pos], true);
+                Task=490;
+                break;
+            }
+
+            if(Cylinder[C_Auto_Selector[Pos]].Push())
+                Task=500;
+            break;
+        case 480:
+            if(DoUnLoadNewAuto2ToStack())                                       //kevin 20120726 Auto2 Kyec MFT
+                Task=500;
+            break;
+        case 485:
+            if(flag[Pos]==false)
+                flag[Pos]=DoUnLoadNewAutoToStack(Pos);                          //ChungHung 20140317 add Auto Retest
+
+            if(flag[Pos])
+                Task=500;
+
+            break;
+        case 490:
+            if(AutoCylinderUp(Pos, C_Auto_Up[Pos], C_Auto_Selector[Pos]))       //JerryYang 20210721 : fix Auto Z motor蹺蹺板版本
+            {
+                Task=495;
+                AutoCylinderLower(Pos, C_Auto_Up[Pos], C_Auto_Selector[Pos], true);
+            }
+            break;
+        case 495:
+            if(AutoCylinderLower(Pos, C_Auto_Up[Pos], C_Auto_Selector[Pos]))
+            {
+                Task=500;
+                AutoCylinderLower(Pos, C_Auto_Up[Pos], C_Auto_Selector[Pos], true);
+            }
+            break;
+        case 500:
+            TrayMoveOut(false, Pos+3);
+            if(TRAY_ARM_MODE==eUnderCoveyor)
+                TrayCylinMoveIn(Pos+3);
+
+            if(Cylinder[C_AutoTrackFloodgate[Pos]].Enable)
+                Cylinder[C_AutoTrackFloodgate[Pos]].Off();
+
+            if((bUseAuto2Empty && Pos==1)    ||                                 //kevin 20120726  Auto2
+               (USE_AUTO_RETEST==eartInstall &&                                 //ChungHung 20140317 add Auto Retest
+                UNLOADER_ART[Pos]==eartInstall) ||                              //Steven 20161221 (jou) : for SCK only Auto 2 has ART
+                LOAD_Z_USE_MOTOR[Pos+3]==true)                                  //JerryYang 20210721 : fix Auto Z motor蹺蹺板版本
+            {
+                CheckHasErrorBinOnTray(iMMAuto_Car[Pos]);                       //Sam 20240220 : 新增退 Tray 時顯示裡面有多少 Error Bin
+                fFixAICCD->bCheckUnloaderHasAiNG(iMMAuto_Car[Pos]);             //Sam 20240325 : 新增 DamageTrayMapping 功能
+                fProductionInfo->CalTrayICCount(Pos);
+                MOT[iMMAuto_Car[Pos]].fHasTray=false;
+                MOT[iMMAuto_Car[Pos]].ClearTray(__FUNC__);
+                Task=600;
+            }
+            else if(Cylinder[C_Auto_Selector[Pos]].Pop())
+            {
+                CheckHasErrorBinOnTray(iMMAuto_Car[Pos]);                       //Sam 20240220 : 新增退 Tray 時顯示裡面有多少 Error Bin
+                fFixAICCD->bCheckUnloaderHasAiNG(iMMAuto_Car[Pos]);             //Sam 20240325 : 新增 DamageTrayMapping 功能
+                fProductionInfo->CalTrayICCount(Pos);
+                MOT[iMMAuto_Car[Pos]].fHasTray=false;
+                MOT[iMMAuto_Car[Pos]].ClearTray(__FUNC__);
+                Task=600;
+            }
+            break;
+        case 600:
+            if(fAGV->IsSPIL_AMR())                                              //JerryYang 20250521 : For AMR
+            {
+                Task=650;
+                if(IniConfig.bEnable_SECS_GEM==true)                            //Steven 20140528 : Secs Gem
+                {
+                    int iPosUnload=iTo6Unload[Pos];
+
+                    if(TrayForm.bSpecTrayCnt==true && LastSet.BinCT[0][iPosUnload]<=0)
+                    {
+                        Task=700;
+                        break;
+                    }
+                    else
+                    {
+                        if(Pos==eAuto1)
+                        {
+                            EventReport(SECS_EVENT.BundleEnd_Auto1);
+                            InitialCoverTrayIDTask(iKeyenceCoverTrayID_AUTO1);
+                        }
+                        else if(Pos==eAuto2)
+                        {
+                            EventReport(SECS_EVENT.BundleEnd_Auto2);
+                            InitialCoverTrayIDTask(iKeyenceCoverTrayID_AUTO2);
+                        }
+                        else if(Pos==eAuto3)
+                        {
+                            EventReport(SECS_EVENT.BundleEnd_Auto3);
+                            InitialCoverTrayIDTask(iKeyenceCoverTrayID_AUTO3);
+                        }
+                        else if(Pos==eAuto4)                                    //Steven 20230907 : For HT-9011UC
+                        {
+                            EventReport(SECS_EVENT.BundleEnd_Auto4);
+                        }
+                        else if(Pos==eAuto5)
+                        {
+                            EventReport(SECS_EVENT.BundleEnd_Auto5);
+                        }
+                        else if(Pos==eAuto6)
+                        {
+                            EventReport(SECS_EVENT.BundleEnd_Auto6);
+                        }
+                        else
+                        {
+                            Task=700;
+                            break;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if(Sen[SnAutoIsFull[Pos]].IsOn()==true)                         //JerryYang 20250429 : 移到下面, 修正tray feed剛好滿bundle要求人員刷兩次條碼
+                {
+                    if(CosFunction.bAutoTrayFullAlarmCanNotSkip)                //Steven 20210219 : Unloader滿盤alarm不能Skip
+                        ret=ShowErrorMessage(sMES1120[Pos], K_RETRY, iMMAuto_Car[Pos], bAutoDuplicateErr[Pos], "DoReceiveAutoTray_600");                        //Sam 20200630 : Add Log
+                    else
+                        ret=ShowErrorMessage(sMES1120[Pos], K_SKIP|K_RETRY, iMMAuto_Car[Pos], bAutoDuplicateErr[Pos], "DoReceiveAutoTray_600");                 //Sam 20200630 : Add Log
+                    bAutoDuplicateErr[Pos]=true;
+                    if(ret==K_SKIP)
+                        Task=700;
+                }
+                else
+                {
+                    Task=700;
+                }
+            }
+            break;
+        case 650:                                                               //JerryYang 20240318
+            if(fTrayMapping->DoCoverTrayID(iKeyenceCoverTrayID_AUTO1+Pos, true)==true)
+            {
+                if(Pos==eAuto1)
+                {
+                    if(asAutoCoverTrayID1=="ERROR" ||
+                       asAutoCoverTrayID1=="Error" ||
+                       asAutoCoverTrayID1=="NOREAD" ||
+                       asAutoCoverTrayID1.AnsiPos("Pass_")!=0 ||
+                       asAutoCoverTrayID1.AnsiPos("Fail_")!=0)                  //JerryYang 20240821 : 避免誤刷bin label, 開頭pass或fail要卡掉
+                    {
+                        asBundleTrayID[ePortAuto1]="ERROR";
+                        InitialCoverTrayIDTask(iKeyenceCoverTrayID_AUTO1);
+                        break;
+                    }
+                    else
+                    {
+                        asBundleTrayID[ePortAuto1]=asAutoCoverTrayID1;          //這盤是Cover Tray
+                    }
+#if 0   // GATE G-W5cI-3 (PT-W5c integrate) -- cpublic.cpp:2328's body is gated (TODO GA1-B3: class TLotSummary unported + fNote->edBundleID has no facade member). DEFAULT: the target string keeps its previous value (empty), so the bundle-end / process-end JSON payload is empty rather than wrong. NO ALARM OR INTERLOCK IS IN THIS PATH -- it is a report string.
+                    sBundleEndInfo=GetBundleInfo(Pos);
+#endif
+                    sUnloadBundleID=asBundleTrayID[ePortAuto1];
+                    EventReport(SECS_EVENT.BundleEnd_IDREAD_Auto1);
+
+                    if(IniConfig.bA68_AutoLoadUnload)                           //JerryYang 20250521 : For AMR
+                    {
+                        bPortIsBusy[ePortAuto1]=false;
+                        bAskStopPort[ePortAuto1]=true;                          //JerryYang 20250505
+                    }
+
+                    iPortStatus[ePortAuto1+Pos]=eReadyToUnload;
+                    iLastPortStatus[ePortAuto1+Pos]=eReadyToUnload;
+                }
+                else if(Pos==eAuto2)
+                {
+                    if(asAutoCoverTrayID2=="ERROR" ||
+                       asAutoCoverTrayID2=="NOREAD" ||
+                       asAutoCoverTrayID2.AnsiPos("Pass_")!=0 ||
+                       asAutoCoverTrayID2.AnsiPos("Fail_")!=0)                  //JerryYang 20240821 : 避免誤刷bin label, 開頭pass或fail要卡掉
+                    {
+                        asBundleTrayID[ePortAuto2]="ERROR";
+                        InitialCoverTrayIDTask(iKeyenceCoverTrayID_AUTO2);
+                        break;
+                    }
+                    else
+                    {
+                        asBundleTrayID[ePortAuto2]=asAutoCoverTrayID2;          //這盤是Cover Tray
+                    }
+#if 0   // GATE G-W5cI-4 (PT-W5c integrate) -- cpublic.cpp:2328's body is gated (TODO GA1-B3: class TLotSummary unported + fNote->edBundleID has no facade member). DEFAULT: the target string keeps its previous value (empty), so the bundle-end / process-end JSON payload is empty rather than wrong. NO ALARM OR INTERLOCK IS IN THIS PATH -- it is a report string.
+                    sBundleEndInfo=GetBundleInfo(Pos);
+#endif
+                    sUnloadBundleID=asBundleTrayID[ePortAuto2];
+                    EventReport(SECS_EVENT.BundleEnd_IDREAD_Auto2);
+
+                    if(IniConfig.bA68_AutoLoadUnload)                           //JerryYang 20250521 : For AMR
+                    {
+                        bPortIsBusy[ePortAuto2]=false;
+                        bAskStopPort[ePortAuto2]=true;                          //JerryYang 20250505
+                    }
+                    iPortStatus[ePortAuto1+Pos]=eReadyToUnload;
+                    iLastPortStatus[ePortAuto1+Pos]=eReadyToUnload;
+                }
+                else if(Pos==eAuto3)
+                {
+                    if(asAutoCoverTrayID3=="ERROR" ||
+                       asAutoCoverTrayID3=="NOREAD" ||
+                       asAutoCoverTrayID3.AnsiPos("Pass_")!=0 ||
+                       asAutoCoverTrayID3.AnsiPos("Fail_")!=0)                  //JerryYang 20240821 : 避免誤刷bin label, 開頭pass或fail要卡掉
+                    {
+                        asBundleTrayID[ePortAuto3]="ERROR";
+                        InitialCoverTrayIDTask(iKeyenceCoverTrayID_AUTO3);
+                        break;
+                    }
+                    else
+                    {
+                        asBundleTrayID[ePortAuto3]=asAutoCoverTrayID3;          //這盤是Cover Tray
+                    }
+#if 0   // GATE G-W5cI-5 (PT-W5c integrate) -- cpublic.cpp:2328's body is gated (TODO GA1-B3: class TLotSummary unported + fNote->edBundleID has no facade member). DEFAULT: the target string keeps its previous value (empty), so the bundle-end / process-end JSON payload is empty rather than wrong. NO ALARM OR INTERLOCK IS IN THIS PATH -- it is a report string.
+                    sBundleEndInfo=GetBundleInfo(Pos);
+#endif
+                    sUnloadBundleID=asBundleTrayID[ePortAuto3];
+                    EventReport(SECS_EVENT.BundleEnd_IDREAD_Auto3);
+
+                    if(IniConfig.bA68_AutoLoadUnload)                           //JerryYang 20250521 : For AMR
+                    {
+                        bPortIsBusy[ePortAuto3]=false;
+                        bAskStopPort[ePortAuto3]=true;                          //JerryYang 20250505
+                    }
+                    iPortStatus[ePortAuto1+Pos]=eReadyToUnload;
+                    iLastPortStatus[ePortAuto1+Pos]=eReadyToUnload;
+                }
+                Task=700;
+            }
+            break;
+        case 700:
+            if(CUSTOMER_CODE==CC_ASE_KaohSiung && IniConfig.bG11ASEReport)      //kevin 20210810 read tray id tput new tray
+            {
+                TrayID[Pos+3][2]=TrayID[Pos+3][1];                              //kevin 20220218  tray id move Tray Feed
+                str1.sprintf("<AutoMove>Auto Unloader Auto %d move out ICs,%d,%s", Pos+1, iOneTrayPickCount[Pos+1], TrayID[Pos+3][1]);                          //kevin 20210623
+                RecordProcess(str1);                                            //kevin 20210604 add Auto tray receive srart
+                TrayID[Pos+3][2]="";
+                TrayID[Pos+3][1]="";
+                ReadWriteTrayID(false);                                         //kevin 20220705 record unload tray id move stack
+            }
+            bAutoDuplicateErr[Pos]=false;
+            if(IniConfig.bP53_ForcedScanBinCodeOfUnloader && LastSet.iTester==ON_LINE)                                  //JerryYang 20240111 : add P53 function
+            {
+                bNeedTakeTray[Pos]=true;
+            }
+
+#if 0   // GATE(g3-G17)  golden csystem.cpp:7412  --  HSys.BinDisCtrl->ClearAutoChangingWarn(Pos) -- clears the flash G13 would have started.
+            if(HSys.BinDisCtrl!=NULL)
+                HSys.BinDisCtrl->ClearAutoChangingWarn(Pos);                        //Eastsun 20260514 : Clear Flash
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : same as G13 (same object, same documented gate, same golden NULL
+//      guard).
+//  BEHAVIOUR DELTA ON A REAL MACHINE : Paired with G13: nothing is flashed, so nothing needs
+//      clearing. Indicator only.
+#endif  // GATE(g3-G17)
+            return true;
+    }
+    return false;
+}
+//==============================================================================
+//AI(ht9045-atk-amr-flow) 20260427 (RogerYang) : clear ATK backup on abnormal reset
+//==============================================================================
+void ClearATKBackup()
+{
+    for(int ir=0; ir<3; ir++)
+    {
+        LastSet.szBundleTrayID_ATK_Backup[ir][0]=0;
+        LastSet.iUnloaderTrayCount_ART_ATK_Backup[ir]=0;
+        LastSet.iBinCT_ATK_Backup[ir]=0;
+        LastSet.bFixHadIC_ATK_Backup[ir]=false;
+        LastSet.bAutoHadIC_ATK_Backup[ir]=false;
+    }
+}
+//==============================================================================
+//AI(ht9045-atk-amr-flow) 20260427 (RogerYang) : ATK file log for debug
+//==============================================================================
+void WriteATKLog(AnsiString sMsg)
+{
+    GetTimeInfo();
+    AnsiString sDir, sFile, sTime;
+    sDir.sprintf("D:\\HT9045_Log\\ATKDataTxt\\%04d%02d\\%02d%02d",
+        SystemYear, SystemMonth, SystemMonth, SystemDate);
+    if(!DirectoryExists(sDir))
+        ForceDirectories(sDir);
+    sFile.sprintf("%s\\%04d%02d%02d.txt",
+        sDir, SystemYear, SystemMonth, SystemDate);
+    sTime.sprintf("%04d-%02d-%02d %02d:%02d:%02d.%03d",
+        SystemYear, SystemMonth, SystemDate,
+        SystemHour, SystemMin, SystemSec, SystemMSec);
+    WriteDataToFile(sFile, sTime + " " + sMsg, false);                            //AI(W906-PT-W6-g3) 20260809: bOverWrite passed explicitly -- see g3-B note (same value as golden default)
+}
+//==============================================================================
+// 將 Auto 粹中所有 Tray 收回
+//==============================================================================
+bool DoTrayFeed()
+{
+    static bool bLoad=false;
+    static bool flag=false, flag2=false, flag3=false, flag4=false, flag5=false, flag6=false;
+    static bool f[MAX_AUTO_TRAY]={false, false, false, false, false, false};
+    static int iwhichMagazine=-1;//Eastsun 20260513 F011 整合:KYEC AMR DoTrayFeed locals
+    int iBinPos=-1;//Eastsun 20260513 F011 整合:KYEC AMR DoTrayFeed locals
+
+    int &Task=iTrayFeedTask, iFix;
+    bool OutZ=false, InZ=false;
+    bool bFlag=false, ret=false;                                                //kevin 20130408
+    AnsiString ErrPart="", str1, str;
+    QueueTaskList[69].CheckTaskChange();
+
+    switch(Task)
+    {
+        case 1:
+#if 0   // GATE(g3-G18)  golden csystem.cpp:7470  --  fMain->ImpParaCheck->Clear() -- GM work-file parameter-compare list reset.
+            fMain->ImpParaCheck->Clear();                                       //Steven 20220311 : GM Test工作檔比對功能
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : forms/fMain.h has no ImpParaCheck member (golden main.h's
+//      TListBox for the GM Test work-file compare feature).
+//  BEHAVIOUR DELTA ON A REAL MACHINE : The GM work-file parameter-compare list is not emptied when
+//      Tray Feed starts, so entries from the previous compare stay visible. Display only.
+#endif  // GATE(g3-G18)
+            InitOutArmTask();
+
+            if(fAGV->IsATK_AMR())                                               //Steven 20260202 : for ATK AMR
+            {
+                if(LastSet.iUnloadFixTray==eAtkTfInit &&
+                   (MOT[MMPlate1].HasIC() ||
+                    MOT[MMPlate2].HasIC() ||
+                    MOT[MMTrayY].HasIC()))
+                {
+                    LastSet.iUnloadFixTray=eAtkTfNormalFeed;
+                }
+                else
+                {
+                    ret=false;
+                    for(int i=iFixMin; i<=iFixMax; i++)
+                    {
+                        if(MOT[iMMAuto[i]].HasIC())
+                        {
+                            ret=true;
+                        }
+                    }
+
+                    if(ret==true)
+                        LastSet.iUnloadFixTray=eAtkTfFeedAuto;
+                    else
+                        LastSet.iUnloadFixTray=eAtkTfNormalFeed;
+                }
+            }
+            else
+            {
+                LastSet.iUnloadFixTray=eAtkTfNormalFeed;                        //AI(ht9045-atk-amr-flow) 20260427 (RogerYang) : fix == to = (was comparison)
+            }
+
+            for(int i=eAuto1; i<=iAutoRight; i++)
+            {
+                SaveProductionRecord(&MOT[iMMAuto[i]].Tray, s6TrayName[i]);     //Steven 20200330 : production log by unloader tray存檔
+                Initial_Auto_BinTray_Task(i);
+            }
+            ZeroMemory(bNeedReportBundleID, sizeof(bNeedReportBundleID));
+
+            if(fAGV->IsSPIL_AMR() &&
+               TrayForm.bSpecTrayCnt)                                           //JerryYang 20250225 : 中山廠文棋 要求
+            {
+                ShowMyMessage("Please print summary in Tester!!","請先在TESTER結報表!!");
+            }
+
+            if(IniConfig.bA81WaitSECS && bRunAutoClean && bWaitSECS==false)     //KevinCheng 20250919
+            {
+                break;
+            }
+
+            bUnloading=true;                                                    //JerryYang 20151109 add for 力成 Unloading旗標
+            Task++;
+            break;
+        case 2:                                                                 //kevin 20130408 Tray Feed 偵測fix是否取出
+            if(CosFunction.bSortingBinTrayWhenTrayFeed==true &&
+               IniConfig.bP27AutoSortingBinTrayByOutArmwhenCleanOut==true)      //JerryYang 20170911 (Steven) 整盤功能,執行時機由clean out改至tray feed前
+            {
+                DoSortingBinTray(0);                                            //Bin IC排序主流程
+                bSortingAllBinTrayFinish=false;
+                Task=10000;
+                break;
+            }
+            Task=3;
+            break;
+        case 10000:
+            if(DoSortingBinTray()==true)                                        //Bin IC排序主流程  //JerryYang 20170911 (Steven) 整盤功能,執行時機由clean out改至tray feed前
+            {
+                if(bSortingAllBinTrayFinish==true)                              //是否所有的Bin Tray IC都整盤完成
+                {
+                    Task=3;
+                }
+            }
+            break;
+        case 3:
+            flag4=MoveOutArmXY_ToFix_Tray_Full();
+            if(flag4)
+            {
+                Task=4;
+            }
+            else                                                                //kevin 20141213 避免 out arm被鎖死
+            {
+                if(MTrayXCanSafeMove()==false)                                  //kevin 20170612 (Steven) tray arm 是否升起
+                {
+                    Task=3;
+                    break;
+                }
+
+                if(MOT[MOutArmX].fCanMove==false &&
+                   MOT[MOutArmY].fCanMove==false)
+                {
+                    if(IniConfig.bP56TrayArmWaitAtColorTrack ||                 //Steven 20240516 : Tray Arm等待位置改到Color
+                       (INSTALL_OCR!=eocrUninstal && CosFunction.bTrayOCR))     //wei 20150925 待機位置改道 Color
+                    {
+                        if(TrayArmMotorMove(Prod.iXTrayColor))
+                        {
+                            MOT[MOutArmX].fCanMove=true;
+                            MOT[MOutArmY].fCanMove=true;
+                            iCatchTrayControlManual=0;
+                        }
+                    }
+                    else
+                    {
+                        if(TrayArmMotorMove(Prod.iXTrayEmpty))
+                        {
+                            MOT[MOutArmX].fCanMove=true;
+                            MOT[MOutArmY].fCanMove=true;
+                            iCatchTrayControlManual=0;
+                        }
+                    }
+                }
+            }
+            break;
+        case 4:                                                                 //kevin 20130408 Tray Feed 偵測fix是否取出
+            if(IniConfig.bP21CheckFixTray)
+            {
+                ret=false;
+                if(IniConfig.bP53_ForcedScanBinCodeOfUnloader==true &&          //JerryYang 20240111 : add P53 function
+                   fAGV->IsSPIL_AMR()==false &&                                 //JerryYang 20250429 : fix Auto In/Out
+                   LastSet.iTester==ON_LINE)
+                {
+                    Task=100;
+                }
+                else
+                {
+                    for(int i=iFixMin; i<=iFixMax; i++)
+                    {
+                        iFix=iAutoIndex[i];
+                        if(i==eFix1 && MachineTypeChoice==Type_HT9046_LS &&     //kevin 20220915 Rotate 有使用 Fix 1 就不能用
+                           USE_ROTATE_KIT==1  && tRotate.ActiveRotate==1)       //JerryYang 20191029 HT-9046LS 加裝Rotate fix 1不使用
+                        {
+                        }
+                        else
+                        {
+                            if(CUSTOMER_CODE==CC_KYEC_LEE ||                    //wei 20160308 Fix強制拿起，Fix一定要沒Tray
+                               CosFunction.bHiSiliconFunction ||
+                               (fAGV->IsSPIL_AMR() &&
+                                TrayForm.bSpecTrayCnt==false))                  //JerryYang 20250521 : 文棋說中山廠沒IC就不要拿TRAY盤
+                            {
+                                bFlag=Sen[SnFixedTrayDetect[iFix]].IsOff();
+                                if(bFlag==false)
+                                {
+                                    ErrPart+=s6TrayName[i];
+                                    ret=true;
+                                    if(fAGV->IsSPIL_AMR())                      //JerryYang 20250429 : fix Auto In/Out
+                                    {
+                                        bNeedReportBundleID[i]=true;
+                                    }
+
+                                    if(IniConfig.bA68_AutoLoadUnload)           //JerryYang 20250602 : modify
+                                    {
+                                        iPortStatus[ePortFix1+i-iFixMin]=eFixFullTray;                                  //RogerYang 20250603 矽品IT說只需要看eFixFullTray=2
+                                        iLastPortStatus[ePortFix1+i-iFixMin]=eFixFullTray;
+                                        EventReport(SECS_EVENT.Fix1PortStatusChanged+i-iFixMin);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if(MOT[iMMAuto[i]].TrayFeedHasIC())
+                                {
+                                    bFlag=Sen[SnFixedTrayDetect[iFix]].IsOff();
+                                    if(bFlag==false)
+                                    {
+                                        ErrPart+=s6TrayName[i];
+                                        ret=true;
+                                        if(fAGV->IsSPIL_AMR())                  //JerryYang 20250521 : For AMR
+                                        {
+                                            bNeedReportBundleID[i]=true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if(ret)
+                    {
+                        if(fAGV->IsSPIL_AMR())                                  //JerryYang 20250425 : 有開啟A65功能要Pause開門取tray, 直接retry start不合理
+                        {
+                            ret=ShowErrorMessage("WAR16104", 0, MMSystem, false, ErrPart);
+                        }
+                        else
+                        {
+                            ret=ShowErrorMessage("WAR16104", K_RETRY, MMSystem, false, ErrPart);
+                        }
+                        #ifdef SOFT_SIMULTE
+                            Task=100;
+                        #else
+                            if(LastSet.iRealDummy==DUMMY)
+                            {
+                                Task=100;
+                            }
+                            else if(fAGV->IsSPIL_AMR())                         //JerryYang 20250220 : fix AUTO IN OUT
+                            {
+                                Task=100;
+                                for(int i=iFixMin; i<=iFixMax; i++)
+                                {
+                                    if(bNeedReportBundleID[i])
+                                    {
+                                        Task=50;                                //JerryYang 20250225 : 上報Bundle ID後才能繼續流程
+                                    }
+                                }
+                            }
+                        #endif
+                    }
+                    else
+                    {
+                        Task=100;
+                    }
+                }
+            }
+            else
+            {
+                Task=100;
+            }
+#if 0   // GATE G-W5cI-6 (PT-W5c integrate) -- cpublic.cpp:876's body is gated (TODO GA1-B3: blocked by fSCKART->bShow, no facade member). DEFAULT: the production-data log file is not written. NO ALARM OR INTERLOCK -- it is a log.
+            ProductionDataLog();                                                //kevin 20160724 生產資料
+#endif
+            break;
+        case 50:
+            if(fAGV->IsSPIL_AMR())                                              //JerryYang 20250225 : 上報Bundle ID後才能繼續流程
+            {
+                bool bReport=true;
+                for(int i=iFixMin; i<=iFixMax; i++)
+                {
+                    if(bNeedReportBundleID[i])
+                    {
+                        bReport=false;
+                    }
+                }
+
+                if(bReport==true)
+                {
+                    Task=100;
+                }
+                else
+                {
+                    ShowErrorMessage("WAR16104", 0, MMSystem, false, ErrPart);  //JerryYang 20250429 : fix Auto In/Out
+                }
+            }
+            else
+            {
+                Task=100;
+            }
+            break;
+        case 100:
+            OutZ=OutArmZMoveUp(ZSafePos);                                       //Steven 20230816 : 修改吸嘴Z軸移動控制
+            if(OutZ==false)
+                return false;
+
+            if(IniConfig.bP21_2_LoaderTrayFeed)                                 //Steven 20250606 : Tray Feed 包含 loader tray
+            {
+                if(InArmSuck.NoIC()==true)
+                {
+                    InZ=MoveInArm2XYToWait();
+                    if(InZ==false)
+                        return false;
+                }
+                bLoad=false;
+            }
+            else
+            {
+                bLoad=true;
+            }
+
+            for(int i=eAuto1; i<=iAutoRight; i++)
+            {
+                if(IniConfig.bCleanOutCanTrayEnd || bART_needRT2)               //kevin 20150717 退fail tray
+                {
+                    if(bCleanOutTrayEnd==true)
+                    {
+                        if(IniConfig.bP09TrayEndCanSelectTray)                  //Steven 20200317 : CleanOut後,可以選擇Tray End, 且要退的Tray要在工作檔設定
+                        {
+                            if(TrayForm.Auto[i].TrayEndRecv)
+                            {
+                                MOT[iMMAuto[i]].EnableMotorMove();
+                                f[i]=false;
+                                iReceiveAutoTrayTask[i]=1;
+                            }
+                            else
+                            {
+                                f[i]=true;
+                            }
+                        }
+                        else if((CUSTOMER_CODE==CC_KYEC_LEE &&                  //wei 20150821 KYEC在ART模式退Pass Bin
+                                 IniConfig.bA10_AutoReTest  &&
+                                 Prod.iIsPassT6[i]==1     &&                    //Steven 20240105 : Prod.bIsPass --> Prod.iIsPassT6
+                                 (LastSet.iRunStartMode==rsmInitial_ART ||
+                                  LastSet.iRunStartMode==rsmContinuStart_ART ||
+                                  LastSet.iRunStartMode==rsmContinuRetest_ART)) ||
+                                (CUSTOMER_CODE!=CC_KYEC_LEE &&
+                                 Prod.iIsFailT6[i]==1))                         //Steven 20240105 : Prod.bIsPass --> Prod.iIsFailT6
+                        {
+                            MOT[iMMAuto[i]].EnableMotorMove();
+                            f[i]=false;
+                            iReceiveAutoTrayTask[i]=1;
+                        }
+                        else
+                        {
+                            f[i]=true;
+                        }
+                    }
+                    else
+                    {
+                        if(fAGV->IsATK_AMR() &&                                 //AI(ht9045-atk-amr-flow) 20260421 (RogerYang) : Auto空+Fix有IC
+                           LastSet.iUnloadFixTray==eAtkTfFeedAuto &&
+                           MOT[iMMAuto[i]].HasIC()==false &&
+                           MOT[iMMAuto[i+eFix1]].HasIC()==true)
+                        {
+                            f[i]=true;  //保留空位給sorting
+                        }
+                        else
+                        {
+                            f[i]=false; //其他情況一律退盤
+                        }
+                        MOT[iMMAuto[i]].EnableMotorMove();
+                        iReceiveAutoTrayTask[i]=1;
+                    }
+                }
+                else
+                {
+                    if(fAGV->IsATK_AMR() &&                                     //AI(ht9045-atk-amr-flow) 20260421 (RogerYang) : Auto空+Fix有IC
+                       LastSet.iUnloadFixTray==eAtkTfFeedAuto &&
+                       MOT[iMMAuto[i]].HasIC()==false &&
+                       MOT[iMMAuto[i+eFix1]].HasIC()==true)
+                    {
+                        f[i]=true;  //保留空位給sorting
+                    }
+                    else
+                    {
+                        f[i]=false; //其他情況一律退盤
+                    }
+                    MOT[iMMAuto[i]].EnableMotorMove();
+                    iReceiveAutoTrayTask[i]=1;
+                }
+            }
+            flag =false;                                                        //DoReceiveAutoTray
+            flag2=false;                                                        //MoveOutArmXY_ToFix_Tray_Full
+            flag3=false;                                                        //DoAutoEmptyReceive
+            flag4=false;                                                        //MoveInArm2XYToWait
+            flag5=false;                                                        //Gali_Two_ZAxis_Move
+            flag6=false;                                                        //GalilTwoY_Move
+            InitialAuto3MagazineTask();                                         //JerryYang 20220909 : add magazine
+            InitialDoMagazineTrayFeedTask();
+            InitDoLoaderTrayFeedTask();
+
+            //==> Eastsun 20260513 F011 整合:KYEC AMR cover-tray case 150-180 gate
+            if(TrayForm.bEnableAMR)
+            {
+                iwhichMagazine=SearchNeedAMRUnload(true);
+                if(iwhichMagazine!=-1)
+                {
+                    InitialDoMagazineAMRTrayFeed();
+                    Task=150;
+                }
+                else
+                {
+                    Task=200;
+                }
+            }
+            else
+            {
+                Task=200;
+            }
+            //<== Eastsun 20260513 F011
+            break;
+        //==> Eastsun 20260513 F011 整合:KYEC AMR case 150-180
+        case 150:
+            if(DoReceiveAutoTray(0))
+            {
+                EventReport(SECS_EVENT.UnloadComplete);              //Eastsun 20260513 F011 整合
+                str.sprintf("P1:0,P2:0,P3:0,P4:%d,P5:0,P6:0", SearchNeedAMRUnloadCount());
+                asSupplementBin=str;
+                bUnLoaderActionFlag[0]=true;
+                iUnloaderTrayCountCal[0]=0;
+                TestIF_File.asAMRBinSetting[0]=AMRUnloadBin(1);
+                TestIF_File.iAMRTrayCount[3]-=iAMRCoverTray;
+                EventReport(SECS_EVENT.AGVSupplement);
+                asSupplementBin="";
+                TestIF_File.iAMRTrayCount[3]=0;
+                TestIF_File.iAMRDeviceCount[3]=0;
+                TestIF_File.asAMRBinSetting[0]="";
+                InitialCoverTrayTask();
+                Task=160;
+            }
+            break;
+        case 160:
+            if(DoCoverTray(1))
+            {
+                InitialDoMagazineAMRTrayFeed();
+                Task=170;
+            }
+            break;
+        case 170:
+            if(DoMagazineAMRTrayFeed(iwhichMagazine))
+            {
+                iBinPos=BinSelect[iTestRunMode].iCatDataT3Pos[iwhichMagazine];  //Eastsun 20260513 F011 iCategData->iCatDataT3Pos
+                int iWhichTray=iBinPos-e3PosMag1;
+                TestIF_File.iAMRDeviceCount[3]=TestIF_File.iAMRMagzineDeviceCount[iWhichTray];
+                for(int k=iWhichTray; k<(14-iWhichTray); k++)
+                {
+                    if(k==iWhichTray)
+                    {
+                        if(BinSelect[iTestRunMode].bMagazineLink[k]==false)
+                        {
+                            TestIF_File.iAMRMagzineDeviceCount[k]=0;
+                        }
+                    }
+                    else if(BinSelect[iTestRunMode].bMagazineLink[k])
+                    {
+                        TestIF_File.iAMRMagzineDeviceCount[k]=0;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                str.sprintf("P1:0,P2:0,P3:0,P4:%d,P5:0,P6:0", SearchNeedAMRUnloadCount());
+                asSupplementBin=str;
+                str=AMRUnloadBin(iBinPos);
+                bUnLoaderActionFlag[0]=true;
+                iUnloaderTrayCountCal[0]=0;
+                TestIF_File.asAMRBinSetting[0]=str;
+                TestIF_File.iAMRTrayCount[3]-=iAMRCoverTray;
+                EventReport(SECS_EVENT.AGVSupplement);
+                asSupplementBin="";
+                TestIF_File.iAMRTrayCount[3]=0;
+                TestIF_File.iAMRDeviceCount[3]=0;
+                TestIF_File.asAMRBinSetting[0]="";
+                Task=180;
+            }
+            break;
+        case 180:
+            iwhichMagazine=SearchNeedAMRUnload(true);
+            if(iwhichMagazine!=-1)
+            {
+                InitialCoverTrayTask();
+                Task=160;
+            }
+            else
+            {
+            Task=200;
+            }
+            break;
+        //<== Eastsun 20260513 F011
+        case 200:
+            //flag-------------DoReceiveAutoTray-------------
+            flag=true;
+            for(int i=eAuto1; i<=iAutoRight; i++)
+            {
+                if(f[i]==false)
+                {
+                    if(AUTO3_IS_MAGAZINE==1 && i==iMagAtAuto)                   //JerryYang 20220909 : add magazine
+                    {
+                        if(TrayForm.bEnableAMR) //Eastsun 20260514 F010 AMR magazine feed
+                            f[i]=true;
+                        else
+                            f[i]=DoMagazineTrayFeed();
+                    }
+//                    else if(USE_LdUldCassetteMode==1)                         //RogerYang 20260209 _todo trayfeed
+//                        f[i]=DoCassetteTrayFeed();   //TRAYFEED還沒寫
+                    else
+                        f[i]=DoReceiveAutoTray(i);
+                }
+
+                if(f[i]==false)
+                    flag=false;
+            }
+
+            //flag2-------------MoveOutArmXY_ToFix_Tray_Full-------------
+            if(flag2==false)
+            {
+                flag2=MoveOutArmXY_ToFix_Tray_Full();
+                if(flag2==false &&
+                   MOT[MOutArmX].fCanMove==false &&                             //jou 2012-05-02 搬Tray的中途Tray Feed,Hang up,因為Tray Arm還沒回來安全位置,Out arm沒辦法動作
+                   MOT[MOutArmY].fCanMove==false)
+                {
+                    if(IniConfig.bP56TrayArmWaitAtColorTrack ||                 //Steven 20240516 : Tray Arm等待位置改到Color
+                       (INSTALL_OCR!=eocrUninstal && CosFunction.bTrayOCR))     //wei 20150925 待機位置改道 Color
+                    {
+                        if(TrayArmMotorMove(Prod.iXTrayColor))
+                        {
+                            MOT[MOutArmX].fCanMove=true;
+                            MOT[MOutArmY].fCanMove=true;
+                            iCatchTrayControlManual=0;
+                        }
+                    }
+                    else
+                    {
+                        if(TrayArmMotorMove(Prod.iXTrayEmpty))
+                        {
+                            MOT[MOutArmX].fCanMove=true;
+                            MOT[MOutArmY].fCanMove=true;
+                            iCatchTrayControlManual=0;
+                        }
+                    }
+                }
+            }
+
+            //flag3-------------DoAutoEmptyReceive-------------
+            if(AUTO_EMPTY_COLOR!=0)                                             //Eliot 2007_12_10
+            {
+                flag3=true;
+                if(fAGV->IsATK_AMR() &&
+                   LastSet.iUnloadFixTray==eAtkTfFeedAuto)
+                {
+                    //LastSet.iUnloadFixTray=eAtkTfFeedAuto;
+                }
+                else
+                {
+                    if(iReceiveColorTray!=0 && iLoadNewColorTrayToCarTask==1)
+                    {
+                        DoAutoColorReceive();
+                    }
+                    else
+                    {
+                        if(MOT[MMColor].fHasTray ||
+                           MOT[MMColor_Car].fHasTray)
+                        {
+                            iReceiveColorTray=1;
+                            InitAutoColorReceiveTask();
+                        }
+
+                        if(iLoadNewColorTrayToCarTask!=1)
+                        {
+                            DoLoadNewColorTrayToCar();
+                        }
+                    }
+
+                    if(iReceiveEmptyTray!=0 && iLoadNewEmptyTrayToCarTask==1)
+                    {
+                        DoAutoEmptyReceive();
+                    }
+                    else
+                    {
+                        if(MOT[MMEmpty].fHasTray || MOT[MMEmpty_Car].fHasTray)
+                        {
+                            iReceiveEmptyTray=1;
+                            InitAutoEmptyReceiveTask();
+                        }
+
+                        if(iLoadNewEmptyTrayToCarTask!=1)
+                        {
+                            DoLoadNewEmptyTrayToCar();
+                        }
+                    }
+
+                    if(iReceiveColorTray!=0 ||
+                        iReceiveEmptyTray!=0 ||
+                        MOT[MMEmpty].fHasTray ||
+                        MOT[MMEmpty_Car].fHasTray ||
+                        MOT[MMColor].fHasTray ||
+                        MOT[MMColor_Car].fHasTray ||
+                        MOT[MMEmptyZ].fHasTray ||
+                        MOT[MMColorZ].fHasTray )
+                    {
+                        flag3=false;
+                    }
+                }
+            }
+            else
+            {
+                flag3=true;
+            }
+
+            //flag4-------------MoveInArm2XYToWait-------------
+            if(flag4==false)
+            {
+                if(fAGV->IsATK_AMR() &&
+                   LastSet.iUnloadFixTray==eAtkTfFeedAuto)
+                {
+                    flag4=MoveInArm2XYToShuttle2Wait();
+                }
+                else
+                {
+                    flag4=MoveInArm2XYToLoaderWait();                           //JerryYang 20200206 tray feed 移到loader上方
+                }
+            }
+
+            //flag5-------------Gali_Two_ZAxis_Move-------------
+            if(flag5==false)
+            {
+                flag5=MOT[MTestZ1].Gali_Two_ZAxis_Move(Prod.TestZ1_Safe, 60000, "DoTrayFeed");                          //JerryYang 20160905 10 --> Prod.TestZ1_Safe
+            }
+
+            //flag6-------------GalilTwoY_Move-------------
+            if(flag5 && flag6==false)
+            {
+                flag6=MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Front_EndWaitPos, Prod.TestY2_Rear, 60000, __FUNC__);     //981118 jou Y1 +2000 easy change kit
+            }
+
+            if(IniConfig.bP21_2_LoaderTrayFeed)                                 //Steven 20250606 : Tray Feed 包含 loader tray
+            {
+                if(bLoad==false)
+                    bLoad=DoLoaderTrayFeed();
+            }
+            else
+            {
+                bLoad=true;
+            }
+
+            fMain->StringGrid2->Cells[8][1]=int(flag);                          //jou 2013-08-22 clean out hang up add
+            fMain->StringGrid2->Cells[8][2]=int(flag2);                         //jou 2013-08-22 clean out hang up add
+            fMain->StringGrid2->Cells[8][3]=int(flag3);                         //jou 2013-08-22 clean out hang up add
+            fMain->StringGrid2->Cells[8][4]=int(flag4);                         //jou 2013-08-22 clean out hang up add
+            fMain->StringGrid2->Cells[8][5]=int(flag5);                         //jou 2013-08-22 clean out hang up add
+            fMain->StringGrid2->Cells[8][6]=int(flag6);                         //jou 2013-08-22 clean out hang up add
+            if(flag && flag2 && flag3 && flag4 && flag5 && flag6 && bLoad)
+            {
+                if(fAGV->IsATK_AMR() &&
+                   LastSet.iUnloadFixTray==eAtkTfFeedAuto)
+                {
+                    Task=1;
+                    LastSet.iUnloadFixTray=eAtkTfAutoToAMR;                     //Steven 20260202 : for ATK AMR
+                    for(int ib=eAuto1; ib<=eAuto3; ib++)                        //AI(ht9045-atk-amr-flow) 20260421 (RogerYang) : ATK SVID backup
+                    {
+                        strncpy(LastSet.szBundleTrayID_ATK_Backup[ib], asBundleTrayID[ib+ePortAuto1].c_str(), 255);
+                        LastSet.szBundleTrayID_ATK_Backup[ib][255]=0;
+                        LastSet.iUnloaderTrayCount_ART_ATK_Backup[ib]=LastSet.iUnloaderTrayCount_ART[ib];
+                        LastSet.iBinCT_ATK_Backup[ib]=LastSet.BinCT[0][e3Auto1+ib];
+                        LastSet.bFixHadIC_ATK_Backup[ib]=MOT[iMMAuto[ib+eFix1]].HasRealIC();   //AI(ht9045-atk-amr-flow) 20260427 (RogerYang) : use HasRealIC to exclude HAS_NULL_IC
+                        LastSet.bAutoHadIC_ATK_Backup[ib]=MOT[iMMAuto[ib]].HasIC();
+                    }
+                    for(int ib=eAuto1; ib<=eAuto3; ib++)                        //AI(ht9045-atk-amr-flow) 20260427 (RogerYang) : B1 backup log
+                    {
+                        AnsiString s;
+                        s.sprintf("[ATK-Backup] Auto%d: TrayID=%s, TrayCount=%d, BinCT=%u, FixHadIC=%d, AutoHadIC=%d",
+                            ib+1,
+                            LastSet.szBundleTrayID_ATK_Backup[ib],
+                            LastSet.iUnloaderTrayCount_ART_ATK_Backup[ib],
+                            LastSet.iBinCT_ATK_Backup[ib],
+                            (int)LastSet.bFixHadIC_ATK_Backup[ib],
+                            (int)LastSet.bAutoHadIC_ATK_Backup[ib]);
+                        WriteATKLog(s);
+                    }
+                    for(int i=eAuto1; i<=iAutoRight; i++)
+                    {
+                        if(MOT[iMMAuto[i]].fHasTray==false)
+                        {
+                            fSortCT->pnlTrayID[i]->Caption="";                  //waiting AMR
+                        }
+                    }
+
+                    if(LastSet.iUnloadFixTray==eAtkTfAutoToAMR)
+                    {
+                        for(int i=iFixMin; i<=iFixMax; i++)
+                        {
+                            iFix=i-eFix1;
+                            if(MOT[iMMAuto[i]].HasIC())
+                            {
+                                if(fSortCT->pnlTrayID[iFix]->Caption=="")
+                                {
+                                    bNeed1DCoverTray[iFix]=true;
+                                    bHas1DCoverTray[iFix]=false;
+                                    bNeedCoverTray[iFix]=true;
+                                    bHasCoverTray[iFix]=false;
+                                    LastSet.iUnloaderTrayCount_ART[iFix]=0;
+                                }
+                                else
+                                {
+                                    bNeed1DCoverTray[iFix]=false;
+                                    bHas1DCoverTray[iFix]=false;
+                                    bNeedCoverTray[iFix]=false;
+                                    bHasCoverTray[iFix]=false;
+                                }
+                            }
+                            else
+                            {
+                                fSortCT->pnlTrayID[iFix]->Caption="";           //waiting AMR
+                                bNeed1DCoverTray[iFix]=false;
+                                bHas1DCoverTray[iFix]=false;
+                                bNeedCoverTray[iFix]=false;
+                                bHasCoverTray[iFix]=false;
+                            }
+                        }
+                        LastSet.iUnloadFixTray=eAtkTfPutIDTray;
+                    }
+
+                    return false;
+                }
+                else
+                {
+                    for(int i=eAuto1; i<=iAutoRight; i++)
+                    {
+                        if(MOT[iMMAuto[i]].fHasTray==false)
+                        {
+                            fSortCT->pnlTrayID[i]->Caption="";                  //waiting AMR
+                        }
+                    }
+
+                    if(Sen[SenEmptyHasTray].IsOn() &&
+                       Sen[SenEmptyCWDete].IsOn())
+                    {
+                        #ifdef SOFT_SIMULTE
+                        MOT[MMEmpty].fHasTray=false;
+                        #else
+                        MOT[MMEmpty].fHasTray=true;
+                        return false;
+                        #endif
+                    }
+
+                    if(Sen[SenColorHasTray].IsOn() && Sen[SenColorCWDete].IsOn())
+                    {
+                        #ifdef SOFT_SIMULTE
+                        MOT[MMColor].fHasTray=false;
+                        #else
+                        MOT[MMColor].fHasTray=true;
+                        return false;
+                        #endif
+                    }
+                }
+#if 0   // GATE(g3-G19)  golden csystem.cpp:8181  --  fYieldMonitoring->ClearAutoSiteOffStatus().
+                fYieldMonitoring->ClearAutoSiteOffStatus();                     //Steven 20200409 : 修正清除count之後,不能開site的問題
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : same absent TfYieldMonitoring_2x4_16 surface as G11/G12.
+//  BEHAVIOUR DELTA ON A REAL MACHINE : ** SAFETY-RELEVANT: sites that low-yield auto-site-off had
+//      CLOSED are not re-opened at the end of Tray Feed. Golden's comment on this very line says
+//      it fixes 'cannot re-open a site after clearing the count'. The delta is fail-SAFE in
+//      direction (a closed site stays closed; nothing is opened that golden would keep shut) but
+//      the machine keeps running with fewer sites than golden would after a tray feed, and an
+//      operator reads that as a stuck site-off.
+#endif  // GATE(g3-G19)
+
+                bART_RT2RunNoChangeMode=false;                                  //Steven 20170322 (wei) : Fixed for can not change start mode.
+                fSCKART->iCurrent93KARTStep=12;
+                if(CosFunction.bInitialStartDelayCount_Init)                    //JerryYang 20250120 : add
+                {
+                    iInitStartDelayTimeCT=0;                                    //jou 2012-11-30 高溫動作下希望增加顆數記數,在前幾顆下壓到Socket後,都要等待Delay time
+                }
+
+                if(TestIF_File.bRENESAS_EnableFTCT==true)                       //RogerYang 20251002 : RogerYang 瑞薩FT-CT
+                {
+#if 0   // GATE(g3-G20)  golden csystem.cpp:8192  --  the fMain->RENESAS_Server->bReturn41Flag work-complete unlock of the work-file list.
+                    if(fMain->RENESAS_Server->bReturn41Flag==true)              //工作完成，解鎖工作檔列表
+                    {
+                        fMain->EnabledSetupFile(true);
+                    }
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : forms/fMain.h's RENESAS_Server stand-in (TfMainRENESASServer) has
+//      no bReturn41Flag. Reached only inside if(TestIF_File.bRENESAS_EnableFTCT==true).
+//  BEHAVIOUR DELTA ON A REAL MACHINE : On a Renesas FT-CT machine the setup-file list is not
+//      re-enabled when the server reports the job complete, so the operator cannot pick the next
+//      work file until something else unlocks it. UI lock only -- no motion, no interlock, no
+//      alarm.
+#endif  // GATE(g3-G20)
+                }
+
+                iallSitCount=0;
+                iWhichIndexArm=0;                                               //Sam 20231214 : Temp offset use ready temp range //kevin 20180720 (wei) add all site fail count
+                if(IniConfig.bP53_ForcedScanBinCodeOfUnloader &&                //JerryYang 20240111 : add P53 function
+                   LastSet.iTester==ON_LINE)
+                {
+                    Task=300;
+
+                    if(fAGV->IsSPIL_AMR()==false)                               //JerryYang 20250429 : fix Auto In/Out
+                    {
+                        bNeedTakeTray[3]=true;
+                        bNeedTakeTray[4]=true;
+                        bNeedTakeTray[5]=true;
+                    }
+                }
+                else if(IniConfig.bA68_AutoLoadUnload)                          //JerryYang 20250521 : For AMR
+                {
+#if 0   // GATE G-W5cI-7 (PT-W5c integrate) -- cpublic.cpp:2328's body is gated (TODO GA1-B3: class TLotSummary unported + fNote->edBundleID has no facade member). DEFAULT: the target string keeps its previous value (empty), so the bundle-end / process-end JSON payload is empty rather than wrong. NO ALARM OR INTERLOCK IS IN THIS PATH -- it is a report string.
+                    sProcessEndInfo=GetBundleInfo(-1);
+#endif
+                    EventReport(SECS_EVENT.ProcessEnd);                         //249     ProcessEnd
+
+                    if(bAskStopPort[ePortAuto1]==true ||
+                       bAskStopPort[ePortAuto2]==true ||
+                       bAskStopPort[ePortAuto3]==true)
+                    {
+                        Task=400;
+                    }
+                    else
+                    {
+                        bUnloading=false;                                       //JerryYang 20151109 結束Unloading
+                        LastSet.iUnloadFixTray=eAtkTfInit;
+                        if(fAGV->IsATK_AMR())                                   //AI(ht9045-atk-amr-flow) 20260427 (RogerYang) : prevent stale backup
+                            ClearATKBackup();
+                        return true;
+                    }
+                }
+                else if(CosFunction.bEnableHandlerResultServer &&
+                        IniConfig.bA60EnableAMR)                                //Sam 20250701 : AMR Fix Tray Feed
+                {
+#if 0   // GATE(g3-G21)  golden csystem.cpp:8235  --  the AMR.CheckTrayFeed() latch of LastSet.bAMRTrayFeedWait + fLotInfo->RefreshAMR().
+                    if(AMR.CheckTrayFeed())
+                    {
+                        LastSet.bAMRTrayFeedWait=true;
+                        fLotInfo->RefreshAMR();
+                    }
+#else
+//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
+//  WHY THE DEFAULT IS FAITHFUL : AMR is REAL (golden Automation/AMR.h, defined
+//      Automation/AMR.cpp:66, registered) but its class TTeraPowerAMR is not in this TU's include
+//      set -- same append-only constraint as G07. Task=500 and break on the next two lines stay
+//      ACTIVE, so the SM still walks to case 500.
+//  BEHAVIOUR DELTA ON A REAL MACHINE : bAMRTrayFeedWait is never latched, so DoTrayFeed's case 500
+//      sees it false and returns true IMMEDIATELY instead of waiting for the AMR to service the
+//      fix trays. On a machine with bEnableHandlerResultServer && bA60EnableAMR THIS ENDS TRAY
+//      FEED WITHOUT WAITING FOR THE AMR -- the handler declares the unload finished while the AMR
+//      has not taken the trays. Both flags are false in every offline fixture. One-line un-gate
+//      once #include "Automation/AMR.h" can be added serially.
+#endif  // GATE(g3-G21)
+                    Task=500;
+                    break;
+                }
+                else
+                {
+                    bUnloading=false;                                           //JerryYang 20250429 : fix Auto In/Out
+                    LastSet.iUnloadFixTray=eAtkTfInit;
+                    if(fAGV->IsATK_AMR())                                       //AI(ht9045-atk-amr-flow) 20260427 (RogerYang) : prevent stale backup
+                        ClearATKBackup();
+                    return true;
+                }
+            }
+            break;
+        case 300:
+            for(int i=0; i<iAutoCnt; i++)
+            {
+#if 0   // GATE(g3-G22)  golden csystem.cpp:8256  --  the whole Auto-loop 'stack has fewer than 16 bins -> make the operator remove the tray' block (MES1124/1224/1324 + the AUTO-has-tray follow-up message).
+                if(bNeedTakeTray[i] &&
+                   fMain->IsStackHasLess16Bin(i) &&
+                   LastSet.iTester==ON_LINE)
+                {
+                    str.sprintf("MES%d24", i+11);                               //MES1120, MES1220, MES1320
+                    ShowErrorMessage(str, K_RETRY, MMAuto1_Car+i, false, "DoTrayFeed_300");                             //Sam 20200630 : Add Log
+
+                    if(Sen[SnAutoTrayHasTray[i]].Enable==true && Sen[SnAutoTrayHasTray[i]].IsOn())                      //JerryYang 20250521 : For AMR
+                    {
+                        str.sprintf("Please remove the tray from AUTO%d", i+1);                                         //JerryYang 20251020 : modify
+                        ShowMyMessage(str, "請在RETRY後，先將Tray盤取出，再START/PAUSE");
+                        return false;
+                    }
+
+                    bNeedTakeTray[i]=false;
+                }
+                else
+                {
+                    bNeedTakeTray[i]=false;
+                }
+#else
+//  DEFAULT CHOSEN : golden's own else body, reproduced below
+//  WHY THE DEFAULT IS FAITHFUL : fMain->IsStackHasLess16Bin(int) does not exist on forms/fMain.h.
+//      The predicate cannot be defaulted inside the condition without silently choosing a branch,
+//      so golden's whole if/else is gated and golden's OWN else body is used as the default.
+//  BEHAVIOUR DELTA ON A REAL MACHINE : ** THIS GATE MAKES AN ALARM UNREACHABLE: with
+//      bP53_ForcedScanBinCodeOfUnloader on an ON_LINE tester, golden stops Tray Feed and raises
+//      MES1124/MES1224/MES1324 (K_RETRY) to make the operator empty a nearly-full Auto stack, then
+//      re-checks Sen[SnAutoTrayHasTray[i]] and REFUSES to continue while a tray is still there.
+//      NEITHER THE MESxx24 ALARM NOR THAT SENSOR RE-CHECK RUNS. The chosen default is golden's own
+//      else branch (bNeedTakeTray[i]=false), so TRAY FEED COMPLETES WHERE GOLDEN WOULD HAVE HELD.
+//      Reached only when IniConfig.bP53_ForcedScanBinCodeOfUnloader && LastSet.iTester==ON_LINE --
+//      case 300 is only entered from that same guard at golden :8200 -- which is false in every
+//      offline fixture.
+                bNeedTakeTray[i]=false;                                     // GATE(g3-G22) DEFAULT = golden's own else body (golden :8274)
+#endif  // GATE(g3-G22)
+            }
+
+            for(int i=0; i<iFixCnt; i++)
+            {
+                if(i==0 &&
+                   MachineTypeChoice==Type_HT9046_LS &&                         //JerryYang 20191029 HT-9046LS 加裝Rotate fix 1不使用
+                   USE_ROTATE_KIT==1 &&                                         //kevin 20220915 Rotate 有使用 Fix 1 就不能用
+                   tRotate.ActiveRotate==1)
+                {
+                }
+                else
+                {
+#if 0   // GATE(g3-G23)  golden csystem.cpp:8288  --  the matching Fix-loop 'stack has fewer than 16 bins' block (MES1724..MES2224 + the Fix-tray-detect sensor confirmation).
+                    if(bNeedTakeTray[i+3] && fMain->IsStackHasLess16Bin(i+3))
+                    {
+                        str.sprintf("MES%d24", i+17);                           //MES1120, MES1220, MES1320
+                        ShowErrorMessage(str, K_RETRY, MManualTray1+i, false, "DoTrayFeed_300");                        //Sam 20200630 : Add Log
+                        bFlag=Sen[SnFixedTray1Detect+i].IsOff();
+                        if(bFlag==false)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            bNeedTakeTray[i+3]=false;                           //JerryYang 20250923 : fix沒有return false會run check 異常
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        bNeedTakeTray[i+3]=false;
+                    }
+#else
+//  DEFAULT CHOSEN : golden's own else body, reproduced below
+//  WHY THE DEFAULT IS FAITHFUL : same absent fMain->IsStackHasLess16Bin as G22; same reason for
+//      gating the whole statement.
+//  BEHAVIOUR DELTA ON A REAL MACHINE : ** THIS GATE MAKES AN ALARM UNREACHABLE: same shape as G22
+//      on the Fix trays -- the MESxx24 K_RETRY prompt and the Sen[SnFixedTray1Detect+i]
+//      confirmation both disappear, and golden's TWO return-false paths (both branches return
+//      false so the operator must press START again) are replaced by 'fall through and finish'.
+//      DEFAULT is golden's own else body (bNeedTakeTray[i+3]=false). Same bP53 + ON_LINE
+//      reachability as G22.
+                        bNeedTakeTray[i+3]=false;                           // GATE(g3-G23) DEFAULT = golden's own else body (golden :8305)
+#endif  // GATE(g3-G23)
+                }
+            }
+            bUnloading=false;                                                   //JerryYang 20250429 : fix Auto In/Out
+            LastSet.iUnloadFixTray=eAtkTfInit;
+            if(fAGV->IsATK_AMR())                                               //AI(ht9045-atk-amr-flow) 20260427 (RogerYang) : prevent stale backup
+                ClearATKBackup();
+            return true;
+        case 400:                                                               //JerryYang 20250529 : wait AGV here
+            if(bAskStopPort[ePortAuto1]==true ||
+               bAskStopPort[ePortAuto2]==true ||
+               bAskStopPort[ePortAuto3]==true)
+            {
+                break;
+            }
+            bUnloading=false;                                                   //JerryYang 20151109 結束Unloading
+            LastSet.iUnloadFixTray=eAtkTfInit;
+            if(fAGV->IsATK_AMR())                                               //AI(ht9045-atk-amr-flow) 20260427 (RogerYang) : prevent stale backup
+                ClearATKBackup();
+            return true;
+        case 500:
+            if(LastSet.bAMRTrayFeedWait==false)                                 //Sam 20250701 : AMR Fix Tray Feed
+            {
+                LastSet.iUnloadFixTray=eAtkTfInit;
+                if(fAGV->IsATK_AMR())                                           //AI(ht9045-atk-amr-flow) 20260427 (RogerYang) : prevent stale backup
+                    ClearATKBackup();
+                return true;
+            }
+            break;
+    }
+    return false;
+}
+
+// =============================================================================
+//  PT-W5 / GROUP g5 -- csystem.cpp translation block
+//
+//  ROLE
+//  ----
+//  Appends the 32 golden csystem.cpp top-level functions of group g5 to the port's
+//  csystem.cpp.  These are the ONE-CYCLE / CLEAN-OUT finish predicates, the
+//  cross-machine IC-presence surface, the Fix-tray scan/backup family, and the
+//  panel-lamp / heater-door / CCD-light / motor-power actuators.  Golden order is
+//  preserved (12364 -> 19219).
+//  Translator: AI(W906-PT-W5-g5) 20260809
+//
+//  WAVE SCOPE (one line per golden function)
+//  ----------------------------------------
+//    ACTIVE  SetShuttleMode                golden :12364
+//    ACTIVE  IsInArmCleanOutFinish         golden :12430
+//    ACTIVE  IsInArmOneCycleFinish         golden :12479
+//    ACTIVE  IsOutArmCleanOutFinish        golden :12518
+//    ACTIVE  HasICUnderMachine             golden :12545   [SUPERSEDES csystem_predicates.cpp:204]
+//    ACTIVE  sHasICUnderMachine            golden :12559
+//    ACTIVE  HasAnyICInMachine             golden :12614   [SUPERSEDES csystem_predicates.cpp:216]
+//    ACTIVE  sHasAnyICInMachine            golden :12636
+//    ACTIVE  HasAutoICInMachine            golden :12653   [SUPERSEDES csystem_predicates.cpp:210]
+//    ACTIVE  HasICUnderHotPlate            golden :12664   [SUPERSEDES csystem_predicates.cpp:195]
+//    ACTIVE  CheckIndexIsNormal            golden :12676   [SUPERSEDES csystem_predicates.cpp:362]
+//    ACTIVE  InArmSuckState                golden :12719   [needs #undef, see SEAM NOTE 1]
+//    ACTIVE  OutArmSuckState               golden :12732   [needs #undef, see SEAM NOTE 1]
+//    ACTIVE  CheckNeedToRT                 golden :12745   [needs #undef, see SEAM NOTE 1]
+//    ACTIVE  SendDataToASE                 golden :12769   [binds the file-static ASESendMessage seam, :1242]
+//    ACTIVE  CheckPickerLifeNeedOneCycle    golden :12774
+//    ACTIVE  ClosePanelLamp                golden :15841
+//    GATED   ClearFixTray                  golden :15853   [GATE G1]
+//    GATED   InitNewFixTray                golden :15915   [GATE G2]
+//    GATED   ScanTrayStatus                golden :15951   [GATE G2, G3]
+//    ACTIVE  NewScanTrayStatus             golden :16183   [SEAM NOTE 2]
+//    ACTIVE  ScanFixTrayStatus             golden :16302
+//    ACTIVE  ScanColorFixTrayStatus        golden :16335
+//    ACTIVE  BackupFixTrayData             golden :16411
+//    GATED   ReadFixTrayBackupData         golden :16425   [GATE G4]
+//    ACTIVE  ClearFixTrayBackupData        golden :16449
+//    GATED   ShowICFallDownASlarmMessage    golden :16512   [GATE G5]
+//    GATED   HeaterDoorIsOpen              golden :16530   [GATE G6]
+//    GATED   RunStartLowSpeedBuzzer        golden :16608   [GATE G7, SEAM NOTE 3]
+//    ACTIVE  DoMotorPowerOn                golden :19102
+//    GATED   ProcessCCDLight               golden :19128   [GATE G8, SEAM NOTE 4]
+//    ACTIVE  ResetHotTime                  golden :19219
+//
+//  GATE REGISTER
+//  -------------
+//   G1  golden :15875-15881  ClearFixTray iAction==2 barcode-tray-record block.
+//       fBarCode->Write_Device_Info_By_Tray does not exist on the port's
+//       TfBarCode_Shim (verified by compile, not by grep).  Default: skip the whole
+//       block, INCLUDING the LastSet.iDevice_Info_By_Tray[i]++ that pairs with it --
+//       advancing the index without writing the record would desync the file series.
+//       DELTA: the per-Fix-tray barcode device-info record file is not written.
+//       NOT an interlock, NOT an alarm, NOT motion.
+//   G2  golden :15934, :15944  InitNewFixTray SaveUnloaderInfo(i)  (also :16008-ctx
+//       reached through InitNewFixTray).  SaveUnloaderInfo (golden cinitial.cpp:7754)
+//       has NO body anywhere in the port -- the only thing that carries the name is
+//       asendic_Auto.cpp's TU-LOCAL `static void W7L1A_SaveUnloaderInfo(int){}`
+//       (asendic_Auto.cpp:324) behind a TU-local `#define` (:393), which is
+//       unreachable from this TU.  Calling it would be an UNDEFINED REFERENCE that
+//       -fsyntax-only cannot see.  Default: skip.
+//       DELTA: the ATK unloader-info file is not saved on a new Fix tray.
+//       NOT an interlock, NOT an alarm, NOT motion.
+//   G3  golden :16113-16120, :16123-16129, :16138-16142, :16145-16148
+//       ScanTrayStatus's fMain->tESDError duplicate-alarm suppression.
+//       fMain has NO tESDError member on the port facade, and cmydef.h:909-911
+//       already records that it has "no FormsFacade member, no gate, and no
+//       golden-macro precedent at all".  Default: treat the ESD-error queue as EMPTY,
+//       i.e. Find()==false always, and drop the Add().  This is the SAFE direction
+//       (the alarm stays reachable) but it is NOT behaviour-neutral:
+//       **THE DUPLICATE-ALARM SUPPRESSION IS LOST -- MES1712 / MES1713 (Fix bundle
+//       end / non-retestable bin) NOW RE-FIRE ON EVERY ScanTrayStatus PASS INSTEAD
+//       OF ONCE, AND iFixTrayCountCal[] INCREMENTS ONCE PER PASS INSTEAD OF ONCE PER
+//       TRAY.**  The alarm itself is NOT made unreachable -- it is made noisier.
+//   G4  golden :16428-16436, :16444  ReadFixTrayBackupData's pFixTray UI writes.
+//       pFixTray is fMain->mtFix1/mtFix2/mtFix3 (golden main.h TTMyTray*), none of
+//       which exist on the port facade, and TMyTray has no SetCellColorIndex
+//       (verified by compile).  Default: skip the widget writes; the MOT[] Tray data
+//       restore (golden :16437-16443) stays FULLY ACTIVE.
+//       DELTA: the Fix-tray grid on the main form is not repainted after a restore;
+//       the restored DATA is correct.  NOT an interlock, NOT an alarm, NOT motion.
+//       NOTE -- GOLDEN BUG PRESERVED IN THE GATED ARM: golden's `switch(TrayIndex)`
+//       has only cases 0/1/2, so for TrayIndex>2 `pFixTray` is used UNINITIALISED.
+//       Kept verbatim in the #if 0 arm, NOT fixed.  While gated it is unreachable.
+//   G5  golden :16514-16516, :16518-16520  ShowICFallDownASlarmMessage's
+//       MyMessageBox->pnlMain->Color / ->lblMainMsg->Font->Color|Size styling.  The
+//       port's TMyMessageBoxShim (acatchtray_shims.h:319) exposes only
+//       Visible / fShow / Close().  Default: skip the styling.
+//       **THE ALARM ITSELF IS STILL RAISED -- ShowMyMessage(S1, S2,
+//       "ShowICFallDownASlarmMessage") at golden :16517 IS ACTIVE.**  Only the
+//       red-panel / yellow-16pt emphasis is lost, i.e. the IC-fall-down alarm is
+//       still shown but no longer visually escalated.
+//   G6  golden :16585-16604  HeaterDoorIsOpen's 5-second DoorDelay throttle plus the
+//       Tri_Temp_Machine block it guards.  Default: skip.
+//       BEHAVIOUR-NEUTRAL BY INSPECTION: the only payload inside that guard is
+//       golden's own COMMENTED-OUT `// ShowMyMessage("Need Close Heater Door");`
+//       (golden :16603), so the delay + early `return` guard nothing observable.  All
+//       four bHeaterDoorIsOpen[0..3] assignments happen BEFORE it and stay ACTIVE.
+//       Gating it also avoids defining golden's file-scope `TQPF_Timer DoorDelay`
+//       (golden csystem.cpp:2598), which a sibling group covering golden's :2599
+//       CheckSafeDoorIsClosed neighbourhood may define in the same TU this wave.
+//   G7  golden :16655  RunStartLowSpeedBuzzer case 6 `fMain->bStartKeyPressCheck=true`.
+//       No such member on the port facade.  Default: skip that ONE assignment; the
+//       rest of case 6 (SoftStart=true; iTask=7; return true) is ACTIVE.
+//       DELTA: none reachable on the port -- golden's only reader of
+//       bStartKeyPressCheck is main.cpp, which is unported.
+//   G8  golden :19130-19133  ProcessCCDLight's `if(fiosetview->fShow) return;`
+//       IO-test-page guard.  The port's TfiosetviewShim (atester_shims.h:404)
+//       carries only bIndexSuck[][][], no fShow.  Default: fall through, i.e. treat
+//       the IO-Setting-View page as NOT shown -- which is what it always is offline.
+//       DELTA: behaviour-identical offline.  On a real machine with the IO test page
+//       open, the CCD light would now be driven by this function instead of being
+//       left alone by the operator; that is a LAMP, not an interlock.
+//
+//   G9  golden :19116-19118  DoMotorPowerOn's three brake-release calls
+//       IndexMotorBreakerOFF() / MagazineBreakerOFF() / CassetteBreakerOFF().  All
+//       three are DECLARED (csystem.h:143 / :145 / :317) but DEFINED NOWHERE in the
+//       port -- golden's bodies are csystem.cpp:1082 / :24088 / :24122, all outside
+//       this group's range.  Established by `nm -C --undefined-only` on this TU's
+//       object diffed against the defined symbols of every ht9045_*/vclcompat archive
+//       in build/ AND build_0808_w3/ -- NOT by grep, and NOT visible to
+//       -fsyntax-only.  Default: skip all three; SW[SwMotorRelay].On() STAYS ACTIVE.
+//       **THIS IS A MOTION-RELEVANT DELTA: THE MOTOR-POWER RELAY IS CLOSED BUT THE
+//       INDEX / MAGAZINE / CASSETTE MOTOR BRAKES ARE NEVER RELEASED.  ON A REAL
+//       MACHINE THAT MEANS POWER IS APPLIED WITH THE BRAKES STILL ENGAGED, SO THE
+//       FIRST MOVE COMMAND ON THOSE AXES WILL STALL OR RAISE A FOLLOWING-ERROR
+//       ALARM RATHER THAN MOVE.  DO NOT SHIP DoMotorPowerOn WITH G9 STILL GATED.**
+//       IndexMotorBreakerOFF (golden :1082) may land from a sibling group THIS wave;
+//       if it does, that one line can be un-gated on its own.
+//  G10  golden :19206-19210  ProcessCCDLight's CC_SIGURD_HUKOU arm.  CheckSafeDoor_1()
+//       is declared (csystem.h:260) but DEFINED NOWHERE in the port (golden body
+//       csystem.cpp:23223, outside this group's range) -- same nm-based method as G9.
+//       Default: skip the arm, so control falls to golden's final `else` (light OFF).
+//       DELTA: on a SIGURD-Hukou machine with any door open the chamber light no
+//       longer comes on.  A LAMP -- NOT an interlock, NOT an alarm, NOT motion.
+//  G11  golden :16089  ScanTrayStatus's `bNeedReportBundleID[i]==true` term.  The
+//       array IS present at cmydef.cpp:5981 but sits INSIDE a `#if 0 // ...resume the
+//       TODO(W6) gate` block (cmydef.cpp:5979), so it is NOT defined; cmydef.cpp is
+//       outside this agent's two-file boundary so the gate cannot be lifted here.
+//       Default: treat the flag as false, i.e. the condition reduces to
+//       `fAGV->Use_AMR() && MOT[iMMAuto[i]].Tray.HasRealIC()`.
+//       DELTA: a Fix tray pulled with NO real IC but with a pending AMR bundle-ID
+//       report is no longer reported (bneedReport stays false, so the MES1712 path is
+//       skipped for that case only).  The has-real-IC case is unaffected and its
+//       alarm stays reachable.
+//
+//  FILE-SCOPE GLOBALS DEFINED BY THIS BLOCK
+//  ----------------------------------------
+//   * bool bHeaterDoorIsOpen[4]  -- golden csystem.cpp:16528, i.e. TWO LINES ABOVE
+//     HeaterDoorIsOpen (:16530), squarely INSIDE this group's range, so this is its
+//     rightful home.  csystem.h:197 declares it `extern` and NO .cpp in the port
+//     defined it (nm-verified), so uHeaterThread.cpp's gated HeaterDoorIsOpen() call
+//     could never have been un-gated without it.  Plain bool[4] aggregate -> zero
+//     static-init hazard under plan section 8.
+//   * bool bScanColorTray=true;  -- golden csystem.cpp:151.  OUTSIDE this group's
+//     range, but defined here because it is undefined everywhere in the port
+//     (csystem.h:236 declares it extern; nm-verified undefined) and because the only
+//     alternative -- gating ScanColorFixTrayStatus -- WOULD MAKE THE WAR1751 /
+//     WAR1151 COLOR-TRAY SENSOR ALARMS UNREACHABLE, which is not acceptable.
+//     Golden's ONLY users tree-wide are csystem.cpp:151 (this definition), :16340 and
+//     :16407 (both inside ScanColorFixTrayStatus, mine) and :18863 (a plain
+//     assignment in another csystem.cpp function -- assigning does not require
+//     defining).  POSSIBLE-DUPLICATE TO WATCH: if a sibling group ports golden's
+//     file-head globals this wave, this definition and theirs collide.
+//
+//  SEAM NOTES (not gates -- ACTIVE stand-ins carrying golden's real logic)
+//  ----------------------------------------------------------------------
+//   1. #undef InArmSuckState / OutArmSuckState / CheckNeedToRT.
+//      csystem.cpp ALREADY has three W7C2 offline seams for these, WITH `#define`
+//      redirects still in effect at end-of-file:
+//         :2839 static bool W7C2_InArmSuckState(){ return false; }   :2840 #define
+//         :2841 static bool W7C2_OutArmSuckState(){ return false; }  :2842 #define
+//         :2866 static bool W7C2_CheckNeedToRT(){ return false; }    :2867 #define
+//      Without the #undef, `bool InArmSuckState()` below preprocesses into
+//      `bool W7C2_InArmSuckState()` and REDEFINES the static -- a hard error.
+//      The #undef does NOT touch the three already-expanded call sites (:2968, :2976,
+//      :4676): those were expanded at their own lines and still call the W7C2 seams.
+//      **THEREFORE THE THREE REAL BODIES BELOW ARE, AS OF THIS APPEND, DEAD CODE IN
+//      THIS TU -- THIS IS TRAP #3 IN ITS PUREST FORM.  UNTIL THE MAIN LOOP RETIRES
+//      THE SEAMS AT :2839-2842 / :2866-2867, csystem.cpp's OWN DoOneCycleFinishCheck
+//      STILL SEES InArmSuckState()==OutArmSuckState()==false AT :2968/:2976, SO
+//      GOLDEN'S "A PICKER STILL HAS VACUUM ON" HOLD (iOneCycleTask=4; return) IS
+//      STILL BYPASSED AND ONE CYCLE CAN STILL BE DECLARED FINISHED WHILE ICs ARE
+//      STILL HELD ON THE IN/OUT-ARM PICKERS; AND DoART_AfterCleanOut AT :4676 STILL
+//      READS bNeedRetest=false, SO AUTO-RETEST IS STILL NEVER REQUESTED.**
+//      Appending my bodies does NOT by itself fix either -- the seam retirement does.
+//   2. W7G5_CheckFixTraySafeDoor() -- golden csystem.cpp:2581-2594, transcribed
+//      VERBATIM as a file-static because golden's own `CheckFixTraySafeDoor` sits at
+//      golden :2581, outside this group's range, and has no port body yet; a sibling
+//      group may land it in this same TU this wave, so defining the external name
+//      here would race into a duplicate symbol.  The LOGIC IS GOLDEN'S REAL LOGIC
+//      over the real Sen[iSafeDoor[5..7]] inputs -- NOT a stub, NOT a gate, so
+//      NewScanTrayStatus's safe-door branch is behaviourally faithful.  When the real
+//      CheckFixTraySafeDoor lands, the main loop should retire this static.
+//   3. RunStartTimer -- golden csystem.cpp:129 is a FILE-SCOPE `TQPF_Timer
+//      RunStartTimer;`.  It is translated here as a FUNCTION-LOCAL static instead.
+//      This is behaviourally IDENTICAL: golden's entire tree touches RunStartTimer at
+//      exactly 6 places (golden csystem.cpp:16621/:16625/:16635/:16639/:16644/:16648)
+//      and ALL SIX are inside RunStartLowSpeedBuzzer itself -- verified
+//      `grep -rn "RunStartTimer" --include=*.cpp` over the golden tree.  Same single
+//      instance, same lifetime; a function-local static is also SAFER under plan
+//      section 8 (it is constructed on first call, not at static-init).  Chosen over
+//      a file-scope definition because golden :129 is outside this group's range and
+//      a sibling group covering golden's head may define it in this same TU.
+//   4. W7G5_spbLight_Tag / W7G5_spbLight_Caption / W7G5_dtLightOnTime -- file-static
+//      stand-ins for golden's fMain->spbLight->Tag / ->Caption (golden main.h) and
+//      fMain->dtLightOnTime (golden main.h:1222), none of which exist on the port
+//      facade and which I may not add (forms/fMain.h is outside my two-file boundary).
+//      Same idiom the file already uses at :2769-2773 (`static TComboBox
+//      W7C2_fMain_cbRunStartMode; // golden main.h:707`).  These three ARE genuine
+//      state, not decoration: Tag is the light-on latch that selects ProcessCCDLight's
+//      third branch, and dtLightOnTime is the auto-off stopwatch base.  Keeping them
+//      as real file statics makes the WHOLE ladder ACTIVE, so SW[SwCCDLight].On()/
+//      .Off() -- the actual actuator -- is faithfully driven.  In golden they are also
+//      written by main.cpp (:4531-4532 Tag=0/Caption, :10225 and :26061 dtLightOnTime
+//      =Now()); main.cpp is unported, so nothing else in the port writes them and the
+//      stand-ins are complete.  When main.cpp lands they must be re-pointed at fMain.
+//
+//  INTEGER DIVISION: the only division in this block is golden :19188's
+//  `int(double(dtLightOnPeriod-fMain->dtLightOnTime)*(double(24*60)))` -- a DOUBLE
+//  multiply, not an int/int, kept exactly as golden wrote it (no helper substituted).
+//
+//  ODR NOTE: golden :12759-12767 (the extern block + `static bool
+//  bNeedQuickCleanOut`) is NOT reproduced here.  Those are forward declarations for
+//  golden's DoOneCycleFinishCheck / DoCleanOutFinishCheck region, which this port
+//  already carries via the W7C1/W7C2 seams (`#define bNeedQuickCleanOut
+//  W7C1_bNeedQuickCleanOut`, csystem.cpp:1185).  None of this group's 32 functions
+//  reads any of them.
+// =============================================================================
+
+// --- SEAM NOTE 1: undo the three W7C2 macro redirects so the real bodies below can
+//     carry golden's own names.  See the banner for why this is REQUIRED and for the
+//     behaviour that does NOT change until the seams themselves are retired.
+#undef InArmSuckState
+#undef OutArmSuckState
+#undef CheckNeedToRT
+
+// --- cross-unit declarations, in golden's own local-extern idiom (golden
+//     csystem.cpp:12674 / :12759-12766 declare cross-unit symbols exactly this way,
+//     and the port's acarry.cpp:171 already re-uses it for CheckOneCycleAction).
+//     Deliberately NOT #includes: ainarm9045.h cannot enter this TU (it and
+//     aHotPlateSubstrate.h both declare InArmLeftSideNoIC/HasIC with a default arg --
+//     see this file's own note at :105-110).
+//     LINK-CLOSURE (each body verified present in a CMakeLists-registered .cpp):
+//       CheckOneCycleAction          ainarm9045.cpp:2316        (CMakeLists :1501)
+//       CheckHasErrorBinOnTray       asendic_Auto.cpp:2800      (CMakeLists :1446)
+//       SaveProductionRecord         SortingBinTray/SortingBinTray.cpp:2699 (:2020)
+//       ForTERAPOWERCheckColorSensor asendic_Color.cpp:1571     (CMakeLists :1420)
+//       SetAutoCleanICCount          AutoClean/AutoClean.cpp:3647 (CMakeLists :1878)
+//     CAVEAT on CheckOneCycleAction: the registered body is `{ return 0; }`
+//     (ainarm9045.cpp:2316), a PRE-EXISTING stub for golden ainarm9045.cpp:7431.  So
+//     IsInArmOneCycleFinish's `if(iRet!=0) return false;` (golden :12496) never
+//     fires.  That gap is NOT mine and NOT gated by me; it is recorded so the main
+//     loop knows IsInArmOneCycleFinish is only as strong as that stub.
+extern int  CheckOneCycleAction(int iTask);                                      //Steven 20240326 : 判斷one cycle的時候要不要繼續放料
+extern void CheckHasErrorBinOnTray(int Pos);                                    //Sam 20240108 : 新增退 Tray 時顯示裡面有多少 Error Bin
+extern void SaveProductionRecord(TMyTray *TrayData, AnsiString Name);           //Steven 20200330 : production log by unloader tray存檔
+extern bool ForTERAPOWERCheckColorSensor(int iPos);                             //Sam 20180525 (wei) : 晶兆成 Auto1~3 Color sensor detect By FromEmptyColor
+extern void SetAutoCleanICCount(bool Work);                                     //ChungHung 20141027 add for SCK want to record AutoClean_pad count
+
+// --- file-scope globals this block owns (see "FILE-SCOPE GLOBALS DEFINED BY THIS
+//     BLOCK" in the banner for the nm evidence and the duplicate-watch note).
+bool bScanColorTray=true;                                                       //Steven 20141019 : 按下Start才檢查Fix盤上的Color Tray  (golden csystem.cpp:151)
+
+// --- SEAM NOTE 4 statics (golden fMain->spbLight->Tag / ->Caption, fMain->dtLightOnTime)
+static int        W7G5_spbLight_Tag     = 0;                                     // golden main.h (TSpeedButton *spbLight)->Tag  -- light-on latch
+static AnsiString W7G5_spbLight_Caption = "";                                    // golden (spbLight)->Caption -- "Light ON"/"Light OFF"
+static TDateTime  W7G5_dtLightOnTime    = 0;                                     // golden main.h:1222 TDateTime dtLightOnTime -- auto-off stopwatch base
+
+// --- SEAM NOTE 2: golden csystem.cpp:2581-2594 verbatim, as a file-static.
+//==============================================================================
+//V3.27B.521 Ifor 20170426 (wei) add for 補Tray 檢查
+//==============================================================================
+static bool W7G5_CheckFixTraySafeDoor()
+{
+    bool bReturnFlag=false;                                                     //Ifor 20170518 (Steven) Savedoor 名稱修改 出口變更 true --> false
+
+    for(int i=5; i<8; i++)
+    {
+        if(Sen[iSafeDoor[i]].IsOff()==true)                                     //open Safe Door
+        {
+            bReturnFlag=true;                                                   //Ifor 20170518 (Steven) Savedoor 名稱修改 出口變更 false --> true
+        }
+    }
+
+    return bReturnFlag;
+}
+//==============================================================================
+bool SetShuttleMode(bool bAlarm)                                                //Steven 20231103 : for NN mode
+{
+    int ct1=0, ct2=0;                                                           //ChungHung 20130910 alter for SCK can close site by Index
+
+    if(IsNNMode()==NN_2Row)
+    {
+        for(int i=0; i<2; i++)
+        {
+            for(int j=0; j<MAX_SOCKET_COL; j++)
+            {
+                if(LastSet.bUseTestSocket[0][i+2][j])                           //Sam 20250326 : 修正 NN Mode 關Site誤報警
+                    ct1++;
+                if(LastSet.bUseTestSocket[0][i][j])
+                    ct2++;
+            }
+        }
+    }
+    else if(IsNNMode()==NN_1Row)
+    {
+        for(int i=0; i<1; i++)
+        {
+            for(int j=0; j<MAX_SOCKET_COL; j++)
+            {
+                if(LastSet.bUseTestSocket[0][i][j])
+                    ct1++;
+                if(LastSet.bUseTestSocket[1][i][j])
+                    ct2++;
+            }
+        }
+    }
+    else
+    {
+        for(int i=0; i<2; i++)
+        {
+            for(int j=0; j<MAX_SOCKET_COL; j++)
+            {
+                if(LastSet.bUseTestSocket[0][i][j])
+                    ct1++;
+                if(LastSet.bUseTestSocket[1][i][j])
+                    ct2++;
+            }
+        }
+    }
+
+    if(IniConfig.bUseAutoSiteMapping &&                                         //jou 2011-03-24 start : Auto Site Mapping
+       LastSet.iRunStartMode==rsmAutoSiteMap &&
+       bSiteMappingCHKOK==false)
+    {
+        return true;
+    }
+    else                                                                        //if(TestIF_File.iShuttleMode==1)                                      //Sam 20250326 : 修正 AutoSite 可能關 Site 關 Arm 可能還有 IC 而 死雞。
+    {
+        TestIF.iShuttleMode=TestIF_File.iShuttleMode;
+        TestIF.iShuttle_Sel=TestIF_File.iShuttle_Sel;
+    }
+
+    if(bAlarm && ct1==0 && ct2==0)
+    {
+        ShowMyMessage("No Site selected !!!", "請至少開啟一個測試位置", "CheckContinusStartIsReady");
+        return false;
+    }
+    return true;
+}
+//==============================================================================
+// 判決 [One Cycle] 或 [Clean Out] 程序
+//==============================================================================
+bool IsInArmCleanOutFinish(int iIsOneCycle)
+{
+    if(iCleanOut ||
+       iIsOneCycle)                                                             //Steven 20230309 : fixed for NN mode hang up
+    {
+        if(InArmSuck.HasIC())
+            return false;
+
+        if(bPlaceShuttle==true)                                                 //JerryYang 20250310 : 修正One cycle剛好shuttle置偏, 還在震動的時候會跑去讀2D
+            return false;
+
+        if(MOT[MMTrayZ].fHasTray && (TrayForm.bAutoFeed || bMustCleanAllTray))  //Steven 20130613 : 加上判斷,避免快速Clean Out且剛好在檢查Loader時會Alarm
+            return false;
+
+        if(TrayForm.bAutoFeed ||(MOT[MMTrayY].fHasTray==false && MOT[MMTrayY_Car].fHasTray==false) || bMustCleanAllTray)
+        {
+            if(MOT[MMTrayY].HasIC()     ||
+               MOT[MMTrayY].fHasTray    ||
+               MOT[MMTrayY_Car].HasIC() ||
+               MOT[MMTrayY_Car].fHasTray)
+                return false;
+        }
+
+        if(TrayForm.bAutoFeed==false && bQAModeFinishCleanOut &&
+           (MOT[MMTrayY].fHasTray || MOT[MMTrayY_Car].fHasTray))                //Steven 20111005 : QA Mode
+        {
+            if(LastSet.iTemperature==Tempture_Hot)
+            {
+                //AI(W906-PT-W5-g5) 20260809: golden :12458 really is asymmetric --
+                // MMPlate1 uses .HasIC() but MMPlate2 uses .Tray.HasIC().  Kept
+                // VERBATIM (a golden quirk, not corrected); every other MMPlate1/2
+                // pair in this file uses .HasIC() on both sides.
+                if(MOT[MMPlate1].HasIC() || MOT[MMPlate2].Tray.HasIC())         //kevin 20130509 autoclean
+                    return false;
+                else
+                    return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        if(MOT[MMPlate1].HasIC() || MOT[MMPlate2].HasIC())
+            return false;
+
+        if(MOT[MInRotateKit].HasIC())                                           //Sam 20200504 : 解決 Rotate Function Index Position Error
+            return false;
+        return true;
+    }
+    return false;
+}
+//------------------------------------------------------------------------------
+bool IsInArmOneCycleFinish()                                                    //Steven 20131029 : 解決Index Position Error
+{
+    if(iOneCycle)
+    {
+        if(CanYieldAlarmRemainInSHT()==true)                                    //JerryYang 20220923 : yield alarm時觸發half one cycle(shuttle保留IC不測試跳ONE CYCLE FINISH)
+        {
+        }
+        else
+        {
+            if(InArmSuck.HasIC())
+                return false;
+        }
+
+//        if(bPlaceShuttle==true)                                                 //JerryYang 20250310 : 修正One cycle剛好shuttle置偏, 還在震動的時候會跑去讀2D //Ifor 20251203 Mark:One cycle 回Home 後Hang up
+//            return false;
+
+        int iRet=CheckOneCycleAction(0);                                        //Steven 20240326 : 判斷one cycle的時候要不要繼續放料
+        if(iRet!=0)
+            return false;
+                                                                                //kevin 20140918 恆溫控制
+        if((LastSet.iTemperature==Tempture_Ambient ||
+            LastSet.iTemperature==Tempture_AmbientHot) &&
+           iArmTask==100 &&                                                     //ChungHung 20140724 fix index arm up down loop
+           bPickFromLoader==true)                                               //Steven 20240605 : Fix for one cycle hang up
+            return false;
+                                                                                //kevin 20140918 恆溫控制
+        if((LastSet.iTemperature==Tempture_Hot ||
+            LastSet.iTemperature==Tempture_AmbientHot) &&
+           iArmTask==1500  &&                                                   //ChungHung 20140724 fix index arm up down loop
+           bPickFromHotplate==true)                                             //Steven 20240605 : Fix for one cycle hang up
+            return false;
+
+        if(MOT[MInRotateKit].HasIC())                                           //Sam 20200504 : 解決 Rotate Function Index Position Error
+            return false;
+        return true;
+    }
+    return false;
+}
+//------------------------------------------------------------------------------
+bool IsOutArmCleanOutFinish()                                                   //Steven 20230323 : fixed for out arm hang up
+{
+    if(iCleanOut)
+    {
+        if(IsInArmCleanOutFinish()==true &&
+           OutArmSuck.HasIC()==false &&
+           ShuttleHasIC()==false &&
+           IndexHasIC()==false &&
+           MOT[MOutRotateKit].HasIC()==false)
+        {
+            if(USE_OUT_SORT_ARM!=eartUninstall)                                 //RogerYang 20250521 add for 9046AU
+            {
+                if(OutArm2Suck.HasIC()==false &&
+                    SortShuttleHasIC()==false)
+                {
+                    return true;
+                }
+                else
+                    return false;
+            }
+            else
+                return true;
+        }
+    }
+    return false;
+}
+//------------------------------------------------------------------------------
+bool HasICUnderMachine()
+{
+    bool bResult=false;
+    if(MOT[MMTrayZ].fHasTray      || MOT[MMTrayY].fHasTray ||
+       MOT[MMPlate1].HasIC()      || MOT[MMPlate2].HasIC() ||                   //kevin 20120217//MOT[MMPlate1].Tray.HasIC() || MOT[MMPlate2].Tray.HasIC() ||
+       InArmSuck.HasIC()          || OutArmSuck.HasIC()    ||
+       ShuttleHasIC()             || IndexHasIC()          ||
+       MOT[MInRotateKit].HasIC()  || MOT[MOutRotateKit].HasIC())                //2013-04-12    Dell
+    {
+        bResult=true;
+    }
+     return bResult;
+}
+//------------------------------------------------------------------------------
+AnsiString sHasICUnderMachine()                                                 //Steven 20250110 : 顯示哪個位置還有IC
+{
+    AnsiString Str="";
+    if(MOT[MMTrayZ].fHasTray)
+    {
+        Str="Tray Z, ";
+    }
+
+    if(MOT[MMTrayY].fHasTray)
+    {
+        Str=Str+"Tray Y, ";
+    }
+
+    if(MOT[MMPlate1].HasIC())
+    {
+        Str=Str+"Hot Plate 1, ";
+    }
+
+    if(MOT[MMPlate2].HasIC())
+    {
+        Str=Str+"Hot Plate 2, ";
+    }
+
+    if(InArmSuck.HasIC())
+    {
+        Str=Str+"In arm, ";
+    }
+
+    if(OutArmSuck.HasIC())
+    {
+        Str=Str+"Out arm, ";
+    }
+
+    if(ShuttleHasIC())
+    {
+        Str=Str+"Shuttle, ";
+    }
+
+    if(IndexHasIC())
+    {
+        Str=Str+"Index arm, ";
+    }
+
+    if(MOT[MInRotateKit].HasIC())
+    {
+        Str=Str+"In Rotate, ";
+    }
+
+    if(MOT[MOutRotateKit].HasIC())
+    {
+        Str=Str+"Out Rotate, ";
+    }
+    return Str;
+}
+//------------------------------------------------------------------------------
+bool HasAnyICInMachine()                                                        //kevin 20150914 判斷是否還有tray在 機台
+{
+    for(int i=0; i<eTrayCount; i++)
+    {
+        if(Prod.iTrayType[i]!=tNotUse)
+        {
+            if(Prod.iTrayType[i]==tTrayFix)
+            {
+                if(MOT[iMMAuto[i]].TrayFeedHasIC())
+                    return true;
+            }
+            else
+            {
+                if(MOT[iMMAuto[i]].fHasTray ||
+                   MOT[iMMAuto[i]].HasIC())
+                    return true;
+            }
+        }
+    }
+    return false;
+}
+//------------------------------------------------------------------------------
+AnsiString sHasAnyICInMachine()                                                 //Steven 20250110 : 顯示哪個位置還有IC
+{
+    AnsiString Str="";
+    for(int i=0; i<eTrayCount; i++)
+    {
+        if(Prod.iTrayType[i]!=tNotUse)
+        {
+            if(MOT[iMMAuto[i]].fHasTray ||
+               MOT[iMMAuto[i]].HasIC())
+            {
+                Str=Str+s6TrayName[i]+AnsiString(", ");
+            }
+        }
+    }
+    return Str;
+}
+//------------------------------------------------------------------------------
+bool HasAutoICInMachine()
+{
+    for(int i=eAuto1; i<=iAutoRight; i++)
+    {
+        if(MOT[iMMAuto[i]].fHasTray ||
+           MOT[iMMAuto[i]].HasIC())
+            return true;
+    }
+    return false;
+}
+//------------------------------------------------------------------------------
+bool HasICUnderHotPlate()
+{
+    if(MOT[MMPlate1].HasIC() || MOT[MMPlate2].HasIC() ||                        //kevin 20120217  MOT[MMPlate1].Tray.HasIC() || MOT[MMPlate2].Tray.HasIC() ||
+       InArmSuck.HasIC()     || OutArmSuck.HasIC()    ||
+       ShuttleHasIC()        || IndexHasIC()          ||
+       MOT[MInRotateKit].HasIC()  || MOT[MOutRotateKit].HasIC())                //JerryYang 20190812 add
+        return true;
+    return false;
+}
+//------------------------------------------------------------------------------
+bool CheckIndexIsNormal()
+{
+    if(MOT[MTestZ1].Gali_ReadEncoderInRandge(Prod.TestZ1_Safe)==false  ||
+       MOT[MTestZ2].Gali_ReadEncoderInRandge(Prod.TestZ2_Safe)==false)
+    {
+        if(MOT[MTestZ1].Gali_ReadEncoderInRandge(0)==false  ||
+           MOT[MTestZ2].Gali_ReadEncoderInRandge(0)==false)
+        {
+            return false;
+        }
+    }
+
+    if(IniConfig.bD51UseOnecycleCleanOutFinishTestArmAtRear)                    //marc 2007/10/11 start
+    {
+        if(MOT[MTestY1].Gali_ReadEncoderInRandge(Prod.TestY1_Middle)==false)
+        {
+            return false;
+        }
+    }
+
+    //AI(W906-PT-W5-g5) 20260809: golden :12696-12698 tests MTestZ1.MovFlag TWICE and
+    // never tests MTestZ2.MovFlag.  KEPT VERBATIM -- this is a golden bug (an index
+    // motor moving on Z2 alone still reads "Normal"), NOT corrected here.
+    if(MOT[MTestZ1].MovFlag ||
+       MOT[MTestZ1].MovFlag ||
+       MOT[MTestY1].MovFlag)
+    {
+        return false;
+    }
+    return true;
+}
+//------------------------------------------------------------------------------
+bool InArmSuckState()
+{
+    bool bHasIC=false;
+    for(int i=0; i<MAX_ARM_Row; i++)
+    {
+        for(int j=0; j<MAX_ARM_Col; j++)
+        {
+            bHasIC=(bHasIC | InArmSuck.Suck[i][j].GetStatus());
+        }
+    }
+    return bHasIC;
+}
+//------------------------------------------------------------------------------
+bool OutArmSuckState()
+{
+    bool bHasIC=false;
+    for(int i=0; i<MAX_ARM_Row; i++)
+    {
+        for(int j=0; j<MAX_ARM_Col; j++)
+        {
+            bHasIC = bHasIC | OutArmSuck.Suck[i][j].GetStatus();
+        }
+    }
+    return bHasIC;
+}
+//------------------------------------------------------------------------------
+bool CheckNeedToRT()                                                            //Steven 20161127 : change to function
+{
+    bool bResult=false;
+    for(int i=eAuto1; i<=iAutoRight; i++)
+    {
+        if(Prod.bART6Tray[i])
+            if(MOT[iMMAuto[i]].fHasTray)
+                LastSet.iUnloaderTrayCount_ART[i]++;
+        if(LastSet.iUnloaderTrayCount_ART[i]!=0)
+            bResult=true;
+    }
+    return bResult;
+}
+//------------------------------------------------------------------------------
+void SendDataToASE(AnsiString Data)                                             //kevin 20161228 add
+{
+    //AI(W906-PT-W5-g5) 20260809: ACTIVE, NOT gated.  ASESendMessage resolves to the
+    // file-static seam this TU already installs at csystem.cpp:1238-1243
+    // (W7C1_TAseSeam::SendToASEData is an empty body), because golden's real object
+    // is the TASESendMessage VCL form in "ASE_K Socket/aseTest.h":68, untranslated.
+    // So the CALL SHAPE is faithful but NOTHING IS ACTUALLY SENT TO ASE -- exactly
+    // the same posture aoutarm.cpp:3302 documents for its own GATE G12.
+    ASESendMessage->SendToASEData(Data);
+}
+//------------------------------------------------------------------------------
+void CheckPickerLifeNeedOneCycle()                                              //AI(ht9045-config) 20260521 (RogerYang) : SCC吸嘴壽命報警OneCycle優化
+{
+    if(CosFunction.bPickerLifeAlmNeedOneCycle==false) return;
+    if(IniConfig.bO20InOutArmPickerLifeTimeCount==false) return;
+    if(bNeedOneCycleByPickerLifeAlm==true) return;
+    if(TestIF_File.InOutArmLifeCntSet<=0) return;
+
+    bool bOver=false;
+    for(int i=0; i<MAX_ARM_Row && !bOver; i++)
+        for(int j=0; j<MAX_ARM_Col && !bOver; j++)
+            if(TestIF_File.InArmPickerLifeCnt[i][j]>=TestIF_File.InOutArmLifeCntSet)
+                bOver=true;
+
+    for(int i=0; i<MAX_ARM_Row && !bOver; i++)
+        for(int j=0; j<MAX_ARM_Col && !bOver; j++)
+            if(TestIF_File.OutArmPickerLifeCnt[i][j]>=TestIF_File.InOutArmLifeCntSet)
+                bOver=true;
+
+    for(int i=0; i<2 && !bOver; i++)
+        for(int j=0; j<8 && !bOver; j++)
+            if(TestIF_File.Arm1PickerLifeCnt[i][j]>=TestIF_File.InOutArmLifeCntSet)
+                bOver=true;
+
+    for(int i=0; i<2 && !bOver; i++)
+        for(int j=0; j<8 && !bOver; j++)
+            if(TestIF_File.Arm2PickerLifeCnt[i][j]>=TestIF_File.InOutArmLifeCntSet)
+                bOver=true;
+
+    if(bOver)
+    {
+        bNeedOneCycleByPickerLifeAlm=true;
+        MyDBIProcess("Process", "Picker life count over limit, trigger One Cycle");
+        //AI(W906-PT-W5-g5) 20260809: ACTIVE.  fMain->BtnOneCycleClick exists on the
+        // port facade (forms/fMain.h:204) but is a documented offline no-op, so the
+        // ONE CYCLE IS NOT ACTUALLY TRIGGERED on the port -- only the
+        // bNeedOneCycleByPickerLifeAlm latch and the process log happen.  Not gated:
+        // the call shape and the latch are faithful and the latch is what golden's
+        // own re-entry guard (:12778) reads.
+        fMain->BtnOneCycleClick(fMain);
+    }
+}
+//------------------------------------------------------------------------------
+void ClosePanelLamp()
+{
+    SW[SwFKTrayEnd].Off();
+    SW[SwFKAlarmReset].Off();
+    SW[SwFKTrayFeed].Off();
+    SW[SwFKOneCycle].Off();
+    SW[SwRKTrayEnd].Off();
+    SW[SwRKAlarmReset].Off();
+    SW[SwRKTrayFeed].Off();
+    SW[SwRKOneCycle].Off();
+}
+//------------------------------------------------------------------------------
+void ClearFixTray(int i, AnsiString Str, int iAction)                           //Steven 20160414 : 整合Fix盤設定
+{
+    AnsiString s;
+    if(i<eFix1 || i>eFix12)
+        return;
+
+    int iFix=iAutoIndex[i];
+
+    if(iAction==1)
+    {
+        CheckHasErrorBinOnTray(iMMAuto[i]);                                     //Sam 20240108 : 新增退 Tray 時顯示裡面有多少 Error Bin
+        fFixAICCD->bCheckUnloaderHasAiNG(iMMAuto[i]);                           //Sam 20240325 : 新增 DamageTrayMapping 功能
+        fProductionInfo->CalTrayICCount(i);                                     //Sam 20190801 : Bug Fix
+        if(MOT[iMMAuto[i]].Tray.HasRealIC())
+        {
+            SaveProductionRecord(&MOT[iMMAuto[i]].Tray, s6TrayName[i]);         //Steven 20200330 : production log by unloader tray存檔
+        }
+        MOT[iMMAuto[i]].Tray.ClearData();
+        s.sprintf("%s tray data is initialed by %s", s6TrayName[i], Str);
+    }
+    else if(iAction==2)
+    {
+#if 0   // GATE G1 -- golden :15875-15881.  fBacCode->Write_Device_Info_By_Tray does not exist on TfBarCode_Shim (compile-verified). Default: skip the whole block INCLUDING the paired index++ (advancing it without writing the record would desync the file series). DELTA: per-Fix-tray barcode device-info record file not written. NOT an interlock, NOT an alarm, NOT motion.
+        if(LastSet.iRealDummy==REALLY           &&                              //jou 20190930 : Barcode Tray record file
+           TestIF_File.bEnableBarCode==true     &&
+           CosFunction.bBarcodeTrayRecFile==true)
+        {
+            fBarCode->Write_Device_Info_By_Tray(i, LastSet.iDevice_Info_By_Tray[i]);
+            LastSet.iDevice_Info_By_Tray[i]++;
+        }
+#else
+        // GATE G1 default: the barcode-tray record write is skipped.
+#endif
+        CheckHasErrorBinOnTray(iMMAuto[i]);                                     //Sam 20240108 : 新增退 Tray 時顯示裡面有多少 Error Bin
+        fFixAICCD->bCheckUnloaderHasAiNG(iMMAuto[i]);                           //Sam 20240325 : 新增 DamageTrayMapping 功能
+        fProductionInfo->CalTrayICCount(i+3);                                   //Sam 20190801 : Bug Fix
+
+        if(MOT[iMMAuto[i]].Tray.HasRealIC())
+        {
+            SaveProductionRecord(&MOT[iMMAuto[i]].Tray, s6TrayName[i]);         //Steven 20200330 : production log by unloader tray存檔
+        }
+
+        MOT[iMMAuto[i]].ClearTray(__FUNC__);
+        s.sprintf("SnFixedTray%dDetect is off. %s tray data is clear by %s", iFix+1, s6TrayName[i], Str);
+    }
+    else if(iAction==3)
+    {
+        MOT[iMMAuto[i]].SetNullIcToHasIc();                                     //Sam 20240424 : 修正 P54 Fix 分盤功能失效問題。
+        s.sprintf("%s tray data is setted to HAS_IC by %s", s6TrayName[i], Str);
+    }
+    else
+    {
+        if(MOT[iMMAuto[i]].Tray.HasRealIC())
+        {
+            SaveProductionRecord(&MOT[iMMAuto[i]].Tray, s6TrayName[i]);         //Steven 20200330 : production log by unloader tray存檔
+        }
+        CheckHasErrorBinOnTray(iMMAuto[i]);                                     //Sam 20240108 : 新增退 Tray 時顯示裡面有多少 Error Bin
+        fFixAICCD->bCheckUnloaderHasAiNG(iMMAuto[i]);                           //Sam 20240325 : 新增 DamageTrayMapping 功能
+        MOT[iMMAuto[i]].ClearTray(__FUNC__);
+        s.sprintf("%s tray data is clear by %s", s6TrayName[i], Str);
+    }
+
+    if(LastSet.iRealDummy!=DUMMY)
+        RecordProcess(s);
+}
+//------------------------------------------------------------------------------
+void InitNewFixTray(int i, AnsiString Str, int iAction)                         //Steven 20160414 : 整合Fix盤設定
+{
+    AnsiString s;
+    int iFix=iAutoIndex[i];
+
+    #ifndef SOFT_SIMULTE
+        if(Sen[SnFixedTrayDetect[iFix]].IsOff()==true &&
+           LastSet.iRealDummy!=DUMMY)                                           //Sensor滅 且非DUMMY 模式
+            return;
+    #endif
+    CheckHasErrorBinOnTray(iMMAuto[i]);                                         //Sam 20240108 : 新增退 Tray 時顯示裡面有多少 Error Bin
+    fFixAICCD->bCheckUnloaderHasAiNG(iMMAuto[i]);                               //Sam 20240325 : 新增 DamageTrayMapping 功能
+    MOT[iMMAuto[i]].fHasTray=true;
+    MOT[iMMAuto[i]].InitNewTray(NULL_IC, false, __FUNC__);
+
+    MOT[MMBulkboxKit].fHasTray=true;                                            //kevin 20160822 add bulk box
+    if(iAction==0)
+    {
+        s.sprintf("SnFixedTray%dDetect is on. %s tray data is initialed by InitNewTray(NULL_IC) %s", iFix+1, s6TrayName[i], Str);                               //kevin 20151016
+#if 0   // GATE G2 -- golden :15934.  SaveUnloaderInfo (golden cinitial.cpp:7754) has NO body anywhere in the port; the only carrier of the name is asendic_Auto.cpp's TU-LOCAL static stand-in at :324 behind a TU-local #define at :393, unreachable from here. Calling it = UNDEFINED REFERENCE that -fsyntax-only cannot see. Default: skip. DELTA: ATK unloader-info file not saved. NOT an interlock, NOT an alarm, NOT motion.
+        SaveUnloaderInfo(i);                                                    //ChungHung 20150205 add for ATK
+#else
+        // GATE G2 default: the ATK unloader-info file save is skipped.
+#endif
+    }
+    else if(iAction==1)
+    {
+        ReadFixTrayBackupData(i);
+        s.sprintf("SnFixedTray%dDetect is on. %s tray data is initialed by ReadFixTrayBackupData %s", iFix+1, s6TrayName[i], Str);
+    }
+    else if(iAction==2)
+    {
+        s.sprintf("%s tray data is initialed by %s", s6TrayName[i], Str);
+#if 0   // GATE G2 (second site) -- golden :15944.  Same reason as :15934 above.
+        SaveUnloaderInfo(i);                                                    //ChungHung 20150205 add for ATK
+#else
+        // GATE G2 default: the ATK unloader-info file save is skipped.
+#endif
+    }
+
+    if(LastSet.iRealDummy!=DUMMY)
+        RecordProcess(s);
+}
+//------------------------------------------------------------------------------
+void ScanTrayStatus()
+{
+    int ret=0, iTest=0 ,iType=0;                                                //RogerYang 20250626 偉測不可複測bin功能
+    AnsiString str="";
+    bool bFlag=false, bneedReport=false;                                        //20140903 wei colcr Tray
+    bool bCleanTray=false;                                                      //Ifor 20170518 add Clean Fix Tray  Check
+    static bool bRunScanTray=false;                                             //Ifor 20170525 (wei) add 避免重複進入
+    if(iHome==1 || bRunScanTray==true)                                          //kevin 20170330 (Steven) 避免程式一開啟就ALARM
+    {
+        return;
+    }
+    bRunScanTray=true;                                                          //Ifor 20170525 (wei) add 避免重複進入
+    if(Sen[iSafeDoor[5]].IsOff()==false &&
+       Sen[iSafeDoor[6]].IsOff()==false)                                        //kevin 20201125   open Safe Door Fix tray check initial
+    {
+        bRunScanTray=false;
+        return;
+    }
+
+    for(int i=iFixMin; i<=iFixMax; i++)
+    {
+        int iFix=iAutoIndex[i];
+
+        if(FIX3_FULL_PLACE==Fix3K_UseCylinder46LA &&                            //ChungHung 20140730 fix LA fix3 function 中途按Stop 會秀Alarm
+           i==eFix2 &&
+           Cylinder[C_FixTray_FullPlace].OffSensor()==false)
+        {
+            continue;
+        }
+
+        if(FIX3_FULL_PLACE==Fix3K_UseStepperMotor && i==eFix3 &&                //Jimmychiu 20240725 : 移動型FIX3不隨時偵測Tray盤存在並改變資料
+           TMyMotor().CheckArmPosArrival(Tech.iFix3PosR, MOT[MFix3Full].ReadPos(), 1000)==false)
+        {
+            continue;
+        }
+
+        bFlag=Sen[SnFixedTrayDetect[iFix]].IsOff();
+        if(MOT[iMMAuto[i]].fHasTray==false && bFlag==false)                     //kevin 20210430 修改ASEKH initial mode 後生產中，開門清除FIX TRAY
+        {
+            if(IniConfig.bP10FixedTrayProposeTheInitialQuestion)                //Steven 20100205 : Add form HT9080A
+            {
+                if(MOT[iMMAuto[i]].Tray.HasIC())
+                {
+                    ret=ShowErrorMessage(sMES1723[iFix], K_RETRY|K_SKIP, iMMAuto[i],false);                             //MES1723, MES1823, MES1923 //kevin 20170330 (Steven) add diplay fix position
+                    if(ret==K_RETRY)
+                    {
+                        InitNewFixTray(i, "A");                                 //Steven 20160414 : 整合Fix盤設定
+                        ClearFixTrayBackupData(i);
+                    }
+                    else
+                    {
+                        InitNewFixTray(i, "A", 1);                              //Steven 20160414 : 整合Fix盤設定
+                    }
+                }
+                else
+                {
+                    InitNewFixTray(i, "B");                                     //Steven 20160414 : 整合Fix盤設定
+                    AddTrayCount(i);                                            //Steven 20251029 : outputtray 數量
+                    if(IniConfig.bASE_Report)                                   //kevin 20151019 add  20140918 高雄日月光IC履歷記錄
+                    {
+                        if(i==eFix3)
+                            bReceiveSchedule=false;                             //kevin 20141103
+                    }
+                }
+            }
+            else
+            {
+                InitNewFixTray(i, "C");                                         //Steven 20160414 : 整合Fix盤設定
+                AddTrayCount(i);                                                //Steven 20251029 : outputtray 數量
+                if(IniConfig.bASE_Report)                                       //kevin 20140918 高雄日月光IC履歷記錄
+                {
+                    if(i==eFix3)
+                        bReceiveSchedule=false;                                 //kevin 20141103
+                }
+
+                if(IniConfig.bA68_AutoLoadUnload)                               //JerryYang 20250521 : For AMR
+                {
+                    iPortStatus[ePortFix1+i-iFixMin]=eFixFTrayArrived;
+                    iLastPortStatus[ePortFix1+i-iFixMin]=eFixFTrayArrived;
+                    EventReport(SECS_EVENT.Fix1PortStatusChanged+i-iFixMin);
+                }
+            }
+
+            if(IniConfig.bEnableAutoCleanFunction)
+            {
+                if(TestIF.iAutoClean_Tray==eCKPos_Fix3 &&                       //use Fix 3
+                   TestIF.iAutoClean_Function &&
+                   i==eFix3)
+                {
+                    RecordProcess("Auto clean : reset data in Fix3 take out");
+                    SetAutoCleanICCount(false);                                 //ChungHung 20140514 AutoClean use Fix3
+                }
+            }
+        }
+
+        if(CUSTOMER_CODE==CC_KYEC_LEE)                                          //Ifor 20170518 (Steven) add Clean Fix Tray Check
+        {
+            if(NewScanTrayStatus(i))
+            {
+                if(AUTO3_IS_MAGAZINE==1 && TestIF_File.iMagFixTrayType==1)      //JerryYang 20221215 : Magazine把fix區當buffer區功能
+                {
+                }
+                else
+                {
+                    bCleanTray=true;
+                }
+            }
+        }
+        else
+        {
+            if(AUTO3_IS_MAGAZINE==1 && TestIF_File.iMagFixTrayType==1)          //JerryYang 20221215 : Magazine把fix區當buffer區功能
+            {
+            }
+            else
+            {
+                bFlag=Sen[SnFixedTrayDetect[iFix]].IsOff();
+                if(MOT[iMMAuto[i]].fHasTray==true && bFlag==true)
+                {
+                    bCleanTray=true;
+                }
+            }
+        }
+
+        if(bCleanTray==true)
+        {
+            bCleanTray=false;                                                   //Ifor 20170522 (wei) add Fix盤清除資料異常問題修正
+            if(IniConfig.bP10FixedTrayProposeTheInitialQuestion)                //Steven 20100205 : Add form HT9080A
+            {
+                BackupFixTrayData(i);
+
+                if(IniConfig.bSPILFunction==true)                               //Ifor 20160613 add Spil 要求顯示 Retry & Skip
+                    ShowErrorMessage(sMES1723[iFix], K_RETRY|K_SKIP, iMMAuto[i], false);
+                else
+                    ShowErrorMessage(sMES1723[iFix], K_RETRY, iMMAuto[i], false);
+            }
+
+#if 0   // GATE G11 -- golden :16087-16089.  bNeedReportBundleID IS present at cmydef.cpp:5981 but sits INSIDE a `#if 0 // ...resume the TODO(W6) gate` block (cmydef.cpp:5979), so it is NOT defined -- established by nm, not grep.  cmydef.cpp is outside this agent's two-file boundary, so the gate cannot be lifted here.  Default: treat the flag as false.  DELTA: a Fix tray pulled with NO real IC but with a pending AMR bundle-ID report is no longer reported; the has-real-IC case (and its MES1712 alarm) is unaffected.
+            if(fAGV->Use_AMR() &&                                               //Steven 20251216 : for AMR
+               (MOT[iMMAuto[i]].Tray.HasRealIC() ||
+                bNeedReportBundleID[i]==true))                                  //JerryYang 20250429 : fix Auto In/Out
+#else
+            if(fAGV->Use_AMR() &&                                               //Steven 20251216 : for AMR
+               (MOT[iMMAuto[i]].Tray.HasRealIC()))                              // GATE G11 default: bNeedReportBundleID[i] treated as false
+#endif
+            {
+                bneedReport=true;
+                iType=0;
+            }
+            else if(TrayForm.bVTestNoRTBin==true &&                             //RogerYang 20250626 偉測不可複測bin功能
+                    (MOT[iMMAuto[i]].Tray.HasRealIC()==true))
+            {
+                bneedReport=true;
+                iType=1;
+            }
+            else
+            {
+                bneedReport=false;
+            }
+            ClearFixTray(i, "ScanTrayStatus", 2);                               //Steven 20160414 : 整合Fix盤設定
+
+            if(bneedReport)
+            {
+                if(fNote->fShow==true)
+                {
+                    switch(iType)
+                    {
+                        case 0:
+                            if(fNote->edErrorCode->Text==sMES1712[iFix])        //JerryYang 20250425 : 避免重複報Fix bundle end
+                            {
+                            }
+#if 0   // GATE G3 -- golden :16116-16120.  fMain->tESDError has NO port facade member (cmydef.h:909-911 records this explicitly). Default: the ESD-error queue is treated as EMPTY, so Find()==false always and Add() is dropped. SAFE DIRECTION (alarm stays reachable) BUT **THE DUPLICATE-ALARM SUPPRESSION IS LOST: MES1712 RE-FIRES EVERY ScanTrayStatus PASS AND iFixTrayCountCal[] INCREMENTS EVERY PASS INSTEAD OF ONCE PER TRAY.**
+                            else if(fMain->tESDError->Find(sMES1712[iFix], iTest)==false)                               //JerryYang 20250425 : 避免重複報Fix bundle end
+                            {
+                                iFixTrayCountCal[i-iFixMin]++;
+                                fMain->tESDError->Add(sMES1712[iFix]);
+                            }
+#else
+                            else                                               // GATE G3 default: Find()==false (empty queue); Add() dropped
+                            {
+                                iFixTrayCountCal[i-iFixMin]++;
+                            }
+#endif
+                            break;
+                        case 1:
+                            if(fNote->edErrorCode->Text==sMES1713[iFix])
+                            {
+                            }
+#if 0   // GATE G3 (second site) -- golden :16126-16129.  Same reason; MES1713 likewise loses its once-per-tray suppression.
+                            else if(fMain->tESDError->Find(sMES1713[iFix], iTest)==false)                               //RogerYang 20250626 偉測不可複測bin功能
+                            {
+                                fMain->tESDError->Add(sMES1713[iFix]);
+                            }
+#else
+                            else                                               // GATE G3 default: Find()==false (empty queue); Add() dropped
+                            {
+                            }
+#endif
+                            break;
+                    }
+                }
+                else
+                {
+                    switch(iType)
+                    {
+                        case 0:
+#if 0   // GATE G3 (third site) -- golden :16138-16142.  Same reason.  The DEFAULT KEEPS THE ALARM: ShowErrorMessage(sMES1712...) runs unconditionally instead of once.
+                            if(fMain->tESDError->Find(sMES1712[iFix], iTest)==false)
+                            {
+                                iFixTrayCountCal[i-iFixMin]++;
+                                ShowErrorMessage(sMES1712[iFix], K_RETRY, iMMAuto[i], false);
+                            }
+#else
+                            {                                                  // GATE G3 default: Find()==false (empty queue) -> body always runs
+                                iFixTrayCountCal[i-iFixMin]++;
+                                ShowErrorMessage(sMES1712[iFix], K_RETRY, iMMAuto[i], false);
+                            }
+#endif
+                            break;
+                        case 1:
+#if 0   // GATE G3 (fourth site) -- golden :16145-16148.  Same reason.  The DEFAULT KEEPS THE ALARM.
+                            if(fMain->tESDError->Find(sMES1713[iFix], iTest)==false)
+                            {
+                                ShowErrorMessage(sMES1713[iFix], K_RETRY|K_SKIP, iMMAuto[i], false);
+                            }
+#else
+                            {                                                  // GATE G3 default: Find()==false (empty queue) -> body always runs
+                                ShowErrorMessage(sMES1713[iFix], K_RETRY|K_SKIP, iMMAuto[i], false);
+                            }
+#endif
+                            break;
+                    }
+                }
+            }
+
+            if(IniConfig.bA68_AutoLoadUnload)                                   //JerryYang 20250521 : For AMR
+            {
+                iPortStatus[ePortFix1+i-iFixMin]=eFixEmpty;
+                iLastPortStatus[ePortFix1+i-iFixMin]=eFixEmpty;
+                EventReport(SECS_EVENT.Fix1PortStatusChanged+i-iFixMin);
+            }
+
+            if(IniConfig.bBinBox==true &&                                       //jou 2012-12-11 support Bin Box
+               AutoForm[iBinBoxAtFix]->iTrayType==iBinBoxType)
+            {
+                LastSet.iBinBoxCount=0;
+            }
+
+            if(CUSTOMER_CODE==CC_ASE_KaohSiung && IniConfig.bG11ASEReport)      //kevin 20210810 read tray id
+            {
+                 str.sprintf("<AutoMove>Fix Unload %d replacement ICs,%d", iFix, iOneTrayPickCount[4+i]);               //QQQ
+                 RecordProcess(str);
+                 iOneTrayPickCount[4+i]=0;                                      //kevin 20210623 Count 每盤數量
+            }
+        }
+    }
+    bRunScanTray=false;                                                         //Ifor 20170525 (wei) add 避免重複進入
+}
+//------------------------------------------------------------------------------
+// Steven 20170223 (wei) : 新的偵測Fix盤方式
+//------------------------------------------------------------------------------
+TQPF_Timer FixTrayDelay[MAX_FIX_TRAY];
+static bool bFixSensorOff[MAX_FIX_TRAY]={false, false, false, false, false, false};
+static bool bFixTrayDelay[MAX_FIX_TRAY]={false, false, false, false, false, false};
+bool NewScanTrayStatus(int i)
+{
+    static int iTask[MAX_FIX_TRAY]={0, 0, 0, 0, 0, 0};
+    static bool bHasFixTrayErr[MAX_FIX_TRAY]={false, false, false, false, false, false};
+    bool bSafeDoorIsOpen=W7G5_CheckFixTraySafeDoor();                           //Ifor 20170518 (Steven) Savedoor 名稱修改 旗標變更 bSafeDoorIsClose --> bSafeDoorIsOpen  //AI(W906-PT-W5-g5) 20260809: SEAM NOTE 2 -- golden CheckFixTraySafeDoor() (golden :2581), same logic, file-static name to avoid a same-TU duplicate with a sibling group
+
+    if(i<iFixMin || i>iFixMax)
+        return false;
+
+    int iFix=iAutoIndex[i];
+
+    AnsiString str="";
+    if(LastSet.iRealDummy==DUMMY)
+        return false;
+    if(i==eFix1 && MachineTypeChoice==Type_HT9046_LS && USE_ROTATE_KIT==1)      //JerryYang 20191029 HT-9046LS 加裝Rotate fix 1不使用
+        return false;
+    bFixSensorOff[iFix]=Sen[SnFixedTrayDetect[iFix]].IsOff();
+
+    if((MOT[iMMAuto[i]].fHasTray==false && bFixSensorOff[iFix]==true)  ||       //沒Tray, 且Sensor滅
+       (MOT[iMMAuto[i]].fHasTray==true  && bFixSensorOff[iFix]==false))         //有Tray, 且Sensor亮
+    {
+        if(iTask[iFix]==0)                                                      //Tray Status Normal
+            bHasFixTrayErr[iFix]=false;
+    }
+    else if(MOT[iMMAuto[i]].fHasTray==true)                                     //有Tray
+    {
+        if(SystemStart==true)
+        {
+            bFixTrayDelay[iFix]=false;
+            if(bFixSensorOff[iFix]==true)
+            {
+                if(bHasFixTrayErr[iFix]==false)
+                {
+                    bHasFixTrayErr[iFix]=true;
+                    str.sprintf("%s Tray Sensor OnOff might be broken!!", s6TrayName[i]);
+                    RecordProcess(str);
+                }
+                ShowErrorMessage(sWAR1752[iFix], K_RETRY, iMMAuto[i], false);
+            }
+        }
+        else
+        {
+            if(bFixTrayDelay[iFix]==false)
+            {
+                if(bSafeDoorIsOpen==true)                                       //安全門打開
+                {
+                    if(bCheckPCI_MN200StateRun==false)                          //24V斷電
+                    {
+                    }
+                    else
+                    {
+                        //Normal Get Tray
+                        if(bFixSensorOff[iFix]==true)
+                        {
+                            bFixTrayDelay[iFix]=true;
+                            iTask[iFix]=1;
+                        }
+                        else
+                        {
+                            bFixTrayDelay[iFix]=false;
+                            return false;
+                        }
+                    }
+                }
+                else
+                {
+                    if(MOT[iMMAuto[i]].fHasTray==true)
+                    {
+                        if(bFixSensorOff[iFix])                                 //door close sensor alarm
+                        {
+                            if(bHasFixTrayErr[iFix]==false)
+                            {
+                                bHasFixTrayErr[iFix]=true;
+                                str.sprintf("Has fix tray but tray detect sensor off %s tray is off during handler running", s6TrayName[i]);
+                                RecordProcess(str);
+                            }
+                            ShowErrorMessage(sWAR1752[iFix], K_RETRY, iMMAuto[i], false);
+                        }
+                        else
+                        {
+                            bHasFixTrayErr[iFix]=false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    switch(iTask[iFix])                                                         //Ifor 20170518 Mark For 7045 Fix tray Clean 流程
+    {
+        case 1:
+            FixTrayDelay[iFix].SetSecAndOn(dFixTrayDataCleanTime);              //Ifor 20170525 (wei) add Fix Tray Data Clean Time
+            iTask[iFix]=10;
+            break;
+        case 10:
+            if(bFixSensorOff[iFix]==false)
+            {
+                if(bHasFixTrayErr[iFix]==false)
+                {
+                    bHasFixTrayErr[iFix]=true;
+                    str.sprintf("%s tray detect sensor might be broken!!", s6TrayName[i]);
+                    RecordProcess(str);
+                }
+                ShowErrorMessage(sWAR1752[iFix], K_RETRY, iMMAuto[i], false);
+                bFixTrayDelay[iFix]=false;
+                iTask[iFix]=0;
+                return false;
+            }
+            else if(FixTrayDelay[iFix].Off())                                   // Normal Get Tray >3sec Clean Data
+            {
+                bFixTrayDelay[iFix]=false;
+                iTask[iFix]=0;
+                return true;
+            }
+            break;
+    }
+    return false;
+}
+//------------------------------------------------------------------------------
+bool ScanFixTrayStatus()                                                        //kevin 20160310 判斷OPEN 有設定bin fix tray 有無TRAY
+{
+    AnsiString SBuffer="";
+
+    if(fAllMotorHome==false || fContact->fShow || iTrayFeed==1)                 //kevin 20170421 (wei) contract 頁面不偵測 //HOME 完 START 才偵測
+        return false;
+
+    if(LastSet.iRealDummy==HAS_TRAY || LastSet.iRealDummy==REALLY)
+    {
+        for(int i=iFixMin; i<=iFixMax; i++)                                     //kevin 20160309
+        {
+            int iFix=iAutoIndex[i];
+            if(iBinTray[i])                                                     //Ztex 20240408 : iFix --> i
+            {
+                if(Sen[SnFixedTrayDetect[iFix]].IsOff() && LastSet.iRealDummy!=DUMMY)
+                {
+                    if(FIX3_FULL_PLACE==Fix3K_UseCylinder46LA && i==eFix2 &&
+                       Cylinder[C_FixTray_FullPlace].OffSensor()==false)
+                    {
+                        ;
+                    }
+                    else
+                    {
+                        ShowErrorMessage(sMES1721[iFix], K_RETRY, iMMAuto[i], false);
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    return true;
+}
+//----------------------------------------------------------------------------
+void ScanColorFixTrayStatus()                                                   //Steven 20141019 : 按下Start才檢查Fix盤上的Color Tray
+{
+    AnsiString str="";
+    bool bFlag=false, bColorFlag=false;                                         //20140903 wei colcr Tray
+
+    if(bScanColorTray)
+    {
+        for(int i=0; i<eTrayCount; i++)                                         //kevin 20160309
+        {
+            if(USE_COLOR_TRAY_SENSOR==1 &&
+               TrayForm.bColorTray &&
+               LastSet.iRealDummy!=DUMMY)                                       //20140903 wei colcr Tray
+            {
+                if(Prod.iTrayType[i]==tTrayFix)
+                {
+                    int iFix=iAutoIndex[i];
+                    if(MOT[iMMAuto[i]].fHasTray==true &&
+                       Sen[SnFixColorTrayDete[iFix]].Enable)
+                    {
+                        bFlag=Sen[SnFixedTrayDetect[iFix]].IsOff();
+                        if(bFlag==false)
+                        {
+                            if(CUSTOMER_CODE==CC_TERAPOWER)
+                            {
+                                bColorFlag=Sen[SnFixColorTrayDete[iFix]].IsOn();                                        //Sam 20180704 : 晶兆成 color sensor 軟硬體顯示與7系列一樣，亮起是紅色
+                            }
+                            else
+                            {
+                                bColorFlag=Sen[SnFixColorTrayDete[iFix]].IsOff();
+                            }
+
+                            if(bColorFlag==false)                               //Steven 20150427 : For Color Sensor, 滅掉是紅色
+                            {
+                                ShowErrorMessage(sWAR1751[iFix], 0, iMMAuto[i]);                                        //JerryYang 20230720 : RETRY->0, 修正Color sensor alarm後可以繼續跑的問題
+                            }
+                        }
+                    }
+                }
+
+                if(Prod.iTrayType[i]==tTrayAuto)                                //Steven 20230316 : 手動補Auto盤也要檢查Color Sensor
+                {
+                    if(IniConfig.bP18FailAutoTrayManual==true ||                //jou 2012-03-16 Fail Auto Tray手動補Tray
+                       ((iRunStartMode==FT || iRunStartMode==FT_ART) && TrayForm.bFailAutoTrayManual_FT==true) ||
+                       ((iRunStartMode==RT || iRunStartMode==RT_ART) && TrayForm.bFailAutoTrayManual_RT==true))         //Steven 20150116 : 手動移除Auto Fail Bin Tray
+                    {
+                        int iAuto=iAutoIndex[i];
+                        if(Prod.iIsFailT6[i]==1)                                //Steven 20240105 : Prod.bIsPass --> Prod.iIsFailT6
+                        {
+                            if(Sen[SnAutoColorTrayDete[iAuto]].Enable)          //20140903 wei colcr Tray
+                            {
+                                if(CUSTOMER_CODE==CC_TERAPOWER)                 //Sam 20180525 (wei) : 晶兆成 Auto1~3 Color sensor detect By FromEmptyColor
+                                {
+                                    bColorFlag=ForTERAPOWERCheckColorSensor(i);
+                                    if(bColorFlag==true)
+                                    {
+                                        ShowErrorMessage(sWAR1151[iAuto], 0, iMMAuto[i], false, "ScanColorFixTrayStatus");                                      //WAR1151, WAR1251, WAR1351  //JerryYang 20230720 : RETRY->0, 修正Color sensor alarm後可以繼續跑的問題
+                                    }
+                                }
+                                else
+                                {
+                                    bColorFlag=Sen[SnAutoColorTrayDete[iAuto]].IsOff();                                 //Sam 20180704 : color sensor 偵測到異常時，等 Tray Arm 離開後並 unlock tray 再報警。
+                                    if(bColorFlag==true)                        //Steven 20150427 : For Color Sensor, 滅掉是紅色
+                                    {
+                                        ShowErrorMessage(sWAR1151[iAuto], 0, iMMAuto[i], false, "ScanColorFixTrayStatus");                                      //WAR1151, WAR1251, WAR1351  //JerryYang 20230720 : RETRY->0, 修正Color sensor alarm後可以繼續跑的問題
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        bScanColorTray=false;
+    }
+}
+//----------------------------------------------------------------------------
+void BackupFixTrayData(int TrayIndex)                                           //Steven 20160614 : 設定Tray XY Item改用function加上保護
+{
+    int iFix=iAutoIndex[TrayIndex];
+    MOT[iTempFix[iFix]].Tray.SetXYItem(MOT[iMMAuto[TrayIndex]].Tray.XItem, MOT[iMMAuto[TrayIndex]].Tray.YItem);
+
+    for(int x=0; x<MOT[iMMAuto[TrayIndex]].Tray.XItem; x++)
+    {
+        for(int y=0; y<MOT[iMMAuto[TrayIndex]].Tray.YItem; y++)
+        {
+            MOT[iTempFix[iFix]].Tray.Data[x][y]=MOT[iMMAuto[TrayIndex]].Tray.Data[x][y];
+        }
+    }
+}
+//----------------------------------------------------------------------------
+void ReadFixTrayBackupData(int TrayIndex)
+{
+    int iFix=iAutoIndex[TrayIndex];
+#if 0   // GATE G4 -- golden :16428-16436 + :16444.  pFixTray is fMain->mtFix1/mtFix2/mtFix3 (golden main.h TTMyTray*), NONE of which exist on the port facade, and TMyTray has no SetCellColorIndex (compile-verified).  forms/fMain.h is outside this agent's two-file boundary so the members cannot be added here.  Default: skip the widget writes; the MOT[] Tray data restore below stays FULLY ACTIVE.  DELTA: the Fix-tray grid on the main form is not repainted; the restored DATA is correct.  NOT an interlock, NOT an alarm, NOT motion.  GOLDEN BUG PRESERVED VERBATIM IN THIS ARM: the switch has only cases 0/1/2, so for TrayIndex>2 pFixTray is dereferenced UNINITIALISED.  Not fixed; while gated it is unreachable.
+    TTMyTray *pFixTray;
+    switch (TrayIndex)
+    {
+        case 0: pFixTray=fMain->mtFix1; break;
+        case 1: pFixTray=fMain->mtFix2; break;
+        case 2: pFixTray=fMain->mtFix3; break;
+    }
+    pFixTray->XItem=MOT[iTempFix[iFix]].Tray.XItem;
+    pFixTray->YItem=MOT[iTempFix[iFix]].Tray.YItem;
+#else
+    // GATE G4 default: the fMain Fix-tray widget (pFixTray) writes are skipped.
+#endif
+    MOT[iMMAuto[TrayIndex]].Tray.SetXYItem(MOT[iTempFix[iFix]].Tray.XItem, MOT[iTempFix[iFix]].Tray.YItem);             //Steven 20160614 : 設定Tray XY Item改用function加上保護
+
+    for(int x=0; x<MOT[iTempFix[iFix]].Tray.XItem; x++)
+    {
+        for(int y=0; y<MOT[iTempFix[iFix]].Tray.YItem; y++)
+        {
+            MOT[iMMAuto[TrayIndex]].Tray.Data[x][y]=MOT[iTempFix[iFix]].Tray.Data[x][y];
+#if 0       // GATE G4 (paint site) -- golden :16444.  Same reason as above.
+            pFixTray->SetCellColorIndex(x, y, MOT[iTempFix[iFix]].Tray.Data[x][y]);
+#endif
+        }
+    }
+}
+//----------------------------------------------------------------------------
+void ClearFixTrayBackupData(int TrayIndex)
+{
+    int iFix=iAutoIndex[TrayIndex];
+    MOT[iTempFix[iFix]].Tray.ClearData();
+}
+//------------------------------------------------------------------------------
+void ShowICFallDownASlarmMessage(AnsiString S1, AnsiString S2)
+{
+#if 0   // GATE G5 -- golden :16514-16516.  The port's TMyMessageBoxShim (acatchtray_shims.h:319) exposes only Visible / fShow / Close(); there is no pnlMain and no lblMainMsg.  Default: skip the styling.  **THE ALARM ITSELF IS STILL RAISED -- ShowMyMessage BELOW IS ACTIVE.**  Only the red-panel / yellow-16pt escalation of the IC-fall-down alarm is lost.
+    MyMessageBox->pnlMain->Color=clRed;
+    MyMessageBox->lblMainMsg->Font->Color=clYellow;
+    MyMessageBox->lblMainMsg->Font->Size=16;
+#endif
+    ShowMyMessage(S1, S2, "ShowICFallDownASlarmMessage");
+#if 0   // GATE G5 (restore half) -- golden :16518-16520.  Same reason; nothing to restore because nothing was set.
+    MyMessageBox->lblMainMsg->Font->Color=clBlack;
+    MyMessageBox->lblMainMsg->Font->Size=10;
+    MyMessageBox->pnlMain->Color=TColor(0x00DFD9CC);                            //Steven 20151022 : Fixed the color
+#endif
+}
+//------------------------------------------------------------------------------
+//jou 981013 start : unify check heater doop sensor
+bool bHeaterDoorIsOpen[4]={false,false,false,false};                            //wei 20200616 : For ATC3.3 MR, 要第四個加熱門 3 --> 4
+void HeaterDoorIsOpen()
+{
+    #ifdef SOFT_SIMULTE
+    bHeaterDoorIsOpen[0]=false;
+    bHeaterDoorIsOpen[1]=false;
+    bHeaterDoorIsOpen[2]=false;
+    bHeaterDoorIsOpen[3]=false;
+    #else
+    if(Sen[SnHeaterDoor2].IsOff()==true)
+    {
+        if(Prod.bAfterOpenHeatDoorUseInitialDelay)                              //ChungHung 20141210 add for SCK want to add Monitor every first device have delay time
+        {
+            iInitContactCount=0;                                                //Steven 20141117 : 起測時溫度要補Offset
+            bDoAfterOpenHeatDoorUseInitialDelay=true;                           //ChungHung 20140105 add for SCK have order
+        }
+        bHeaterDoorIsOpen[1]=true;
+    }
+    else
+    {
+        bHeaterDoorIsOpen[1]=false;
+    }
+
+    if(Sen[SnHeaterDoor].IsOff()==true)
+    {
+        if(Prod.bAfterOpenHeatDoorUseInitialDelay)                              //ChungHung 20141210 add for SCK want to add Monitor every first device have delay time
+        {
+            iInitContactCount=0;                                                //Steven 20141117 : 起測時溫度要補Offset
+            bDoAfterOpenHeatDoorUseInitialDelay=true;                           //ChungHung 20140105 add for SCK have order
+        }
+        bHeaterDoorIsOpen[0]=true;
+    }
+    else
+    {
+        bHeaterDoorIsOpen[0]=false;
+    }
+
+    if(Sen[SnHeaterDoor3].Enable && Sen[SnHeaterDoor3].IsOff()==true)           //Steven 20191016 : For ATC3.3, 要第三個加熱門
+    {
+        bHeaterDoorIsOpen[2]=true;
+    }
+    else
+    {
+        bHeaterDoorIsOpen[2]=false;
+    }
+
+    if(Sen[SnHeaterDoor4].Enable && Sen[SnHeaterDoor4].IsOff()==true)           //wei 20200616 : For ATC3.3 MR, 要第四個加熱門
+    {
+        bHeaterDoorIsOpen[3]=true;
+    }
+    else
+    {
+        bHeaterDoorIsOpen[3]=false;
+    }
+
+#if 0   // GATE G6 -- golden :16538 + :16585-16604.  BEHAVIOUR-NEUTRAL BY INSPECTION: the ONLY payload inside this 5-second throttle + Tri_Temp_Machine guard is golden's OWN commented-out `// ShowMyMessage("Need Close Heater Door");` (golden :16603), so neither the delay nor its early `return` guards anything observable.  All four bHeaterDoorIsOpen[0..3] writes above happen BEFORE it and are ACTIVE.  Gating also avoids defining golden's file-scope `TQPF_Timer DoorDelay` (golden csystem.cpp:2598), which a sibling group covering golden's :2599 CheckSafeDoorIsClosed neighbourhood may define in this same TU this wave -- that would be a duplicate symbol.
+    static bool bDoorDelay = false;                                             //Ztex 2024.08.24 Add Show Message HeaterDoorIsOpen
+    if(bDoorDelay==false)                                                       //Ztex 2024.08.24 Add Show Message HeaterDoorIsOpen ==>
+    {
+        bDoorDelay=true;
+        DoorDelay.SetSecAndOn(5.0);
+    }
+
+    if(DoorDelay.Off()==true)
+    {
+        bDoorDelay=false;
+    }
+    else
+    {
+        return;
+    }
+
+    if(Tri_Temp_Machine==1 && (bHeaterDoorIsOpen[0] || bHeaterDoorIsOpen[1] ||
+       bHeaterDoorIsOpen[2] || bHeaterDoorIsOpen[3]))
+    {
+//        ShowMyMessage("Need Close Heater Door");
+    }                                                                           //Ztex 2024.08.24 Add Show Message HeaterDoorIsOpen <==
+#endif
+    #endif
+}
+//------------------------------------------------------------------------------
+bool RunStartLowSpeedBuzzer(bool bReset)                                        //kevin 20201116
+{
+    static int iTask=0;
+    //AI(W906-PT-W5-g5) 20260809: SEAM NOTE 3 -- golden csystem.cpp:129 has this as a
+    // FILE-SCOPE `TQPF_Timer RunStartTimer;`.  Made a FUNCTION-LOCAL static here:
+    // behaviourally IDENTICAL (golden's whole tree touches RunStartTimer at exactly
+    // the 6 sites inside THIS function -- golden csystem.cpp:16621/:16625/:16635/
+    // :16639/:16644/:16648, verified by grep over the golden tree), same single
+    // instance and lifetime, and it avoids a duplicate definition with any sibling
+    // group covering golden's file head this wave.  Also safer under plan section 8
+    // (constructed on first call, not at static-init).
+    static TQPF_Timer RunStartTimer;                                            // golden csystem.cpp:129 (kevin 20201116 add)
+    if(bReset)
+    {
+        iTask=1;
+        return false;
+    }
+    switch(iTask)
+    {
+        case 1:
+            RunState=LED_Message;
+            bAlarmBuzzer=1;
+            RunStartTimer.SetSecAndOn(IniConfig.iG14StartWarrTime);
+            iTask=2;
+            break;
+        case 2:
+            if(RunStartTimer.Off())
+            {
+                RunState=LED_Message;
+                bStartOpenDoor=false;
+                bAlarmBuzzer=0;
+                iTask=3;
+            }
+            break;
+        case 3:
+            SoftStart=true;                                                     //run 10 sec 慢速
+            RunStartTimer.SetSecAndOn(10);
+            iTask=4;
+            break;
+        case 4:
+            if(RunStartTimer.Off())
+            {
+                SoftStart=false;
+                SoftStop=true;                                                  // 馬達停止 換為生產速度
+                iTask=5;
+                RunStartTimer.SetSecAndOn(2);
+            }
+            break;
+        case 5:
+            if(RunStartTimer.Off())
+            {
+                SoftStop=false;
+                iTask=6;
+            }
+            break;
+        case 6:
+#if 0       // GATE G7 -- golden :16655.  fMain has no bStartKeyPressCheck member on the port facade and forms/fMain.h is outside this agent's boundary.  Default: skip this ONE assignment; the rest of case 6 is ACTIVE.  DELTA: none reachable on the port -- golden's only reader of bStartKeyPressCheck is main.cpp, which is unported.
+            fMain->bStartKeyPressCheck=true;                                    //Steven 20110309 : for 安全門未關按Start時IndexArm會先動作
+#endif
+            SoftStart=true;                                                     // 馬達停止 換為生產速度
+            iTask=7;
+            return true;
+    }
+    return false;
+}
+//jou 981013 end
+//Steven 20101028 End
+//----------------------------------------------------------------------------
+void DoMotorPowerOn()
+{
+    #ifdef SOFT_SIMULTE
+        SW[SwMotorRelay].On();
+        return;
+    #else
+        TQPF_Timer MotorPowerOnDelay;
+
+        MotorPowerOnDelay.SetSecAndOn(1);
+        while(1)
+        {
+            if(!SW[SwMotorRelay].Status())                                      //Steven 20100225
+            {
+                SW[SwMotorRelay].On();
+#if 0           // GATE G9 -- golden :19116-19118.  IndexMotorBreakerOFF / MagazineBreakerOFF / CassetteBreakerOFF are DECLARED (csystem.h:143/:145/:317) but DEFINED NOWHERE in the port (golden bodies csystem.cpp:1082/:24088/:24122, all outside this group's range).  Proven with `nm -C --undefined-only` on this TU diffed against every ht9045_*/vclcompat archive in build/ and build_0808_w3/ -- NOT grep, and INVISIBLE to -fsyntax-only.  SW[SwMotorRelay].On() above STAYS ACTIVE.
+                // **MOTION-RELEVANT DELTA: MOTOR POWER IS APPLIED BUT THE INDEX /
+                // MAGAZINE / CASSETTE BRAKES ARE NEVER RELEASED, SO ON A REAL MACHINE
+                // THE FIRST MOVE ON THOSE AXES WILL STALL OR RAISE A FOLLOWING-ERROR
+                // ALARM INSTEAD OF MOVING.  DO NOT SHIP WITH G9 STILL GATED.**
+                // IndexMotorBreakerOFF (golden :1082) may land from a sibling group
+                // this wave; if so, that one line can be un-gated on its own.
+                IndexMotorBreakerOFF();
+                MagazineBreakerOFF();                                           //JerryYang 20220909 : add magazine
+                CassetteBreakerOFF();                                           //Ifor 20251216 add:Boat Carrier
+#endif
+            }
+
+            //Application->ProcessMessages();                                   //20111013 test
+            if(MotorPowerOnDelay.Off())
+                break;
+        }
+    #endif
+}
+//------------------------------------------------------------------------------
+void ProcessCCDLight()
+{
+#if 0   // GATE G8 -- golden :19130-19133.  The port's TfiosetviewShim (atester_shims.h:404) carries only bIndexSuck[][][]; there is no fShow.  Default: fall through, i.e. the IO-Setting-View page is treated as NOT shown, which is what it always is offline -- behaviour-identical there.  On a real machine with the IO test page open the CCD chamber LAMP would now be driven by this function instead of being left to the operator.  A LAMP, not an interlock.
+    if(fiosetview->fShow)                                                       //Steven 20090920 : For IO Testing
+    {
+        return;
+    }
+    else if(REAL_TIME_CCD==true && COM2->bCCDDummyRum==false)
+#else
+    if(REAL_TIME_CCD==true && COM2->bCCDDummyRum==false)                        // GATE G8 default: fiosetview->fShow treated as false
+#endif
+    {
+        if((bHeaterDoorIsOpen[0] || bHeaterDoorIsOpen[1]) &&
+           Sen[SnHeaterDoor].Enable==true && Sen[SnHeaterDoor2].Enable==true)
+        {
+            SW[SwCCDLight].On();
+            W7G5_spbLight_Caption="Light ON";                                   //AI(W906-PT-W5-g5): SEAM NOTE 4 -- golden fMain->spbLight->Caption
+        }
+        else
+        {
+            SW[SwCCDLight].Off();
+            W7G5_spbLight_Caption="Light OFF";                                  //AI(W906-PT-W5-g5): SEAM NOTE 4 -- golden fMain->spbLight->Caption
+        }
+    }
+    else if(IniConfig.bEnableCCDUSETCPIP==true &&
+            IniConfig.bC02InstallCCD==true)                                     //Steven 20091009 : When using CCD, light must always on.
+    {
+        SW[SwCCDLight].On();
+        W7G5_spbLight_Tag=1;                                                    //AI(W906-PT-W5-g5): SEAM NOTE 4 -- golden fMain->spbLight->Tag
+        W7G5_spbLight_Caption="Light ON";
+    }
+    else if(W7G5_spbLight_Tag==1)                                               //AI(W906-PT-W5-g5): SEAM NOTE 4 -- golden fMain->spbLight->Tag
+    {
+        //AI(W906-PT-W5-g5) 20260809: golden :19157-19159 mixes || and && WITHOUT
+        // parentheses, so && binds tighter and the condition really reads
+        // (AmbientHot && base<=25.0) || (Ambient && bUseAbitCHK && abit<=25.0 && fan)
+        // -- i.e. the SwDutHeaterCoolFan test guards ONLY the second arm.  KEPT
+        // VERBATIM (golden precedence quirk, NOT parenthesised/corrected).
+        if((LastSet.iTemperature==Tempture_AmbientHot && Temperature.fWorkTemperBase<=25.0) ||                          //Steven 20240606 : SHUTTLE_COOLING for Ambient Control
+           (LastSet.iTemperature==Tempture_Ambient && Temperature.bUseAbitCHK && Temperature.fAbitTemp<=25.0) &&        //jou 2013-04-11 for ATMEL 23.5 deg. need close chamber light
+           SW[SwDutHeaterCoolFan].Status()==true)
+        {
+            IniConfig.bD53CCDLightOn=false;
+            SW[SwCCDLight].Off();
+            W7G5_spbLight_Tag=0;
+            W7G5_spbLight_Caption="Light OFF";
+            return;
+        }
+
+        if(IniConfig.bD53CCDLightOn)                                            //Light always On
+        {
+            SW[SwCCDLight].On();
+            W7G5_spbLight_Tag=1;
+            W7G5_spbLight_Caption="Light ON";
+        }
+        else                                                                    //Light will auto off after on time larger then setting time
+        {
+            //AI(W906-PT-W5-g5) 20260809: golden :19176-19178 likewise mixes && and ||
+            // without parentheses -- && binds tighter, so it reads
+            // ((door0||door1) && En && En2) || (lbCCDStatus->Visible==true).
+            // KEPT VERBATIM.
+            if((bHeaterDoorIsOpen[0] || bHeaterDoorIsOpen[1]) &&
+               Sen[SnHeaterDoor].Enable==true && Sen[SnHeaterDoor2].Enable==true ||
+               fMain->lbCCDStatus->Visible==true)
+            {
+                W7G5_dtLightOnTime=Now();                                       //AI(W906-PT-W5-g5): SEAM NOTE 4 -- golden fMain->dtLightOnTime
+                SW[SwCCDLight].On();
+                W7G5_spbLight_Tag=1;
+                W7G5_spbLight_Caption="Light ON";
+            }
+            else
+            {
+                TDateTime dtLightOnPeriod=Now();
+                int iLightOnTime=int(double(dtLightOnPeriod-W7G5_dtLightOnTime)*(double(24*60)));                       //1/(24*60)約為一分鐘
+                if(iLightOnTime>=IniConfig.iD53LightOnMin)                      //Steven 20090919 Start : For Light on Time
+                {
+                    SW[SwCCDLight].Off();
+                    W7G5_spbLight_Tag=0;
+                    W7G5_spbLight_Caption="Light OFF";
+                }
+            }
+        }
+    }
+    else
+    {
+        if((bHeaterDoorIsOpen[0] || bHeaterDoorIsOpen[1]) &&
+           Sen[SnHeaterDoor].Enable==true && Sen[SnHeaterDoor2].Enable==true)
+        {
+            SW[SwCCDLight].On();
+            W7G5_spbLight_Caption="Light ON";
+        }
+#if 0   // GATE G10 -- golden :19206-19210.  CheckSafeDoor_1() is declared (csystem.h:260) but DEFINED NOWHERE in the port (golden body csystem.cpp:23223, outside this group's range) -- same nm-based proof as G9, invisible to -fsyntax-only.  Default: skip this arm so control falls to golden's final `else` (light OFF).  DELTA: on a SIGURD-Hukou machine with any door open the chamber light no longer comes on.  A LAMP -- NOT an interlock, NOT an alarm, NOT motion.
+        else if(CUSTOMER_CODE==CC_SIGURD_HUKOU && CheckSafeDoor_1()==false)     //KaiChen 20180321 ：矽格-湖口 Chamber Light On By Open Any Door
+        {
+            SW[SwCCDLight].On();
+            W7G5_spbLight_Caption="Light ON";
+        }
+#endif
+        else
+        {
+            SW[SwCCDLight].Off();
+            W7G5_spbLight_Caption="Light OFF";
+        }
+    }
+}
+//------------------------------------------------------------------------------
+void ResetHotTime()
+{
+    for(int ip=0; ip<2; ip++)
+        for(int ix=0; ix<50; ix++)
+            for(int iy=0; iy<50; iy++)
+                HotTime[ip][ix][iy]=0;
+}
+//------------------------------------------------------------------------------
+// #############################################################################
+//  csystem.cpp -- PT csystem WAVE 1, GROUP g2   (golden csystem.cpp:3043-5610)
+//  Translator: AI(W906-PT-csystem-g2) 20260809
+//
+//  ROLE
+//  ----
+//  csystem.cpp is the machine's central tick / state-machine HUB.  This group
+//  lands the SYSTEM-SUPERVISION tier of it: the ESD (ion bar / ion fan) watch,
+//  the door-interlock release latches, the contact-count limits, the low-temp
+//  idle door check, the chamber auto-cool, the per-tick motor-status scan, the
+//  panel power-key handler, the Z1/Z2 free logic, DoSystem() itself (the
+//  supervision tick that ties all of those together) and the arm pitch-check /
+//  arm-Z-home FSMs.  Every body is golden order, golden control flow, golden
+//  magic numbers, golden misspellings ("Waitting", "AutoCoolChambo",
+//  "bCheckPLCConnet") and golden defects (see DEFECTS KEPT below).
+//
+//  WAVE SCOPE  (one line per golden function)
+//  ------------------------------------------
+//   CheckIonBar                 golden :3047   ACTIVE  (no gate)
+//   CheckIonFan                 golden :3159   ACTIVE  (no gate)
+//   CheckSafeDoorForICFallDown  golden :3563   ACTIVE, GATED x2 (G01a G01b)
+//   CheckContactOver            golden :3791   ACTIVE  (no gate)
+//   LowTempIdleCheckSafeDoor    golden :3892   ACTIVE  (no gate)
+//   AutoCoolChambo              golden :3954   ACTIVE, GATED x1 (G02)
+//   ScanAllMotorStatus          golden :3985   ACTIVE, GATED x1 (G03, sub-term)
+//   CheckMotorPowerShutDown     golden :4100   ACTIVE, GATED x5 (G30 G31a G31b G31c G29)
+//   Check_AcMotor               golden :4189   ACTIVE  (no gate)
+//   DoIndexZ1Z2Free             golden :4216   ACTIVE  (no gate)
+//   DoSystem                    golden :4269   ACTIVE, GATED x16
+//                                              (G04 G05 G07 G09 G10 G11 G12 G13
+//                                               G14 G17 G18 G19 G21 G22 G24a/b
+//                                               G25a/b)
+//   initDoInArmPitchCHKTask     golden :4778   ACTIVE  (no gate)
+//   initDoOutArmPitchCHKTask    golden :4784   ACTIVE  (no gate)
+//   DoInArmPitchCHK             golden :4796   ACTIVE  (no gate)
+//   DoOutArmPitchCHK            golden :4826   ACTIVE  (no gate)
+//   DoArmZHome                  golden :4865   ACTIVE, GATED x5
+//                                              (G27a G27b G27c G28 G32)
+//
+//  FILE-SCOPE OBJECTS this group adds (golden order preserved):
+//   hLowTempIdleCheckSafeDoorDelay  golden :3891
+//   iDoInArmPitchCHKTask / iDoOutArmPitchCHKTask  golden :4772-4773
+//     (declared extern csystem.h:58-59 -- these are their FIRST definitions)
+//   iCHKInArmStepCT / iCHKOutArmStepCT            golden :4775-4776
+//   Waitting / Finish / NeedHome / iCHKStep       golden :4791-4794
+//     (file-scope `const int` == internal linkage, exactly as golden; iCHKStep
+//      deliberately shadows nothing -- cprod.h:2884's iCHKStep is a STRUCT
+//      MEMBER of SThreadPara, not a global, so golden's own shadow is faithful)
+//   PitchPos[3][5]                                golden :4864
+//  NOT re-added (already in this TU, golden's own neighbourhood):
+//   iAllArmZHomeTask (csystem.cpp:162), iAllArmZHomeCount (csystem.cpp:178),
+//   InitDoArmZHome (csystem.cpp:179-183)   <- golden :4856-4862
+//  NOT added at all (golden defines them at csystem.cpp:142-143, i.e. inside the
+//  golden 1..3042 range a SIBLING GROUP of this wave owns):
+//   InArmpitchCHKPos[4] / OutArmpitchCHKPos[4]  -- used by DoInArmPitchCHK /
+//   DoOutArmPitchCHK, reached through the csystem.h:154-155 externs.  Nothing in
+//   the port CALLS those two FSMs yet, so they stay un-extracted archive members;
+//   see LINK-CLOSURE AUDIT in the hand-off report.
+//
+//  GATE REGISTER (full text at each site; "*** ... IN CAPITALS" == safety)
+//  ----------------------------------------------------------------------
+//   G01a G01b  fCleaning->btnResetCleanCountClick  not a TfCleaning member
+//   G02        fTemperFrom->TempRunShowAlarmHigh   form has no home in the port
+//   G03        IsIndexMotorOutOfPower()  decl-only (sub-term gate)
+//   G04 *      IsIndexMotorOutOfPower + LockIndexMotorAndDoHomeProcess + 5 x
+//              *BreakerOFF               decl-only  -- SAFETY
+//   G05 *      5 x *BreakerON            decl-only  -- SAFETY
+//   G07 *      5 x *BreakerOFF           decl-only  -- SAFETY
+//   G09        HSys.BinDisCtrl == NULL offline
+//   G10 *      5 x *BreakerOFF           decl-only  -- SAFETY
+//   G11        RecordSafeDoorStates()    decl-only  (logging only)
+//   G12        bCheckPLCConnet()         decl-only
+//   G13 *      IsEMGPressed()            decl-only  -- SAFETY (EMG ladder)
+//   G14 *      bCheckPLCAllSafedoorAndEMGEnable()  decl-only -- SAFETY
+//   G17        fiosetview->ProcessIndexSuckDestroy1/2  not shim members
+//   G18        fMonitor->OpenMonitorVedio  form has no home in the port
+//   G19 *      CheckHotGun / CheckHotGunFlow  decl-only -- SAFETY (flow alarms)
+//   G21 *      CountMotorPowerDelay()    no decl, no body -- SAFETY
+//   G22        ClearAllManualSuckTask (mykitsuck.cpp NOT in CMakeLists) +
+//              fMain->bStartKeyPressCheck not a TfMain member
+//   G24a G24b  ATC_TYPE_60 has no shared-header home (offline-neutral)
+//   G25a G25b* ATCInterfaceForm / ATC_InterfaceForm->Stop -- SAFETY (chiller)
+//   G27a b c   fMain->bShowInOutAlarm / lblInOutAlarm not TfMain members
+//   G28        fHome->MoveIn/OutArmPitch_X not TfHome members (golden dead code)
+//   G29 *      fHome->GaliMotorServoOff not a TfHome member -- SAFETY (Z brake)
+//   G30        fMain->SitePanel not a TfMain member (display only)
+//   G31a b *   DoMotorPowerOn()          decl-only  -- SAFETY
+//   G31c *     5 x *BreakerOFF           decl-only  -- SAFETY
+//   G32        fMain->bShowInOutAlarm again (display only)
+//   G33        golden :4856-4862 already translated at csystem.cpp:162/178/179
+//   G34        iEMGPressDelay -- no decl, no body (golden csystem.cpp:133, g1)
+//   G35        bBackArmZHomeFlag -- no decl, no body (golden csystem.cpp:145, g1)
+//
+//  CROSS-GROUP LINK DEPENDENCIES + UN-GATE ORDER  (measured 20260809)
+//  ----------------------------------------------------------------
+//  Method: csystem.cpp was compiled to an object WITH and WITHOUT this block,
+//  `nm -C --undefined-only` was diffed (175 new undefined symbols), and each was
+//  looked up in all 16 archives of build_0809_w5b/.  Only 3 real misses remained
+//  (the rest were kernel32 / libstdc++ / mingw runtime).  Then the two in-flight
+//  sibling staging files in the project root were grepped for each blocker.
+//
+//   * bHeaterDoorIsOpen[4]  -- used ACTIVE at golden :4254 (DoIndexZ1Z2Free).
+//     Not in any build_0809_w5b archive, but RESOLVED IN-TREE: group g5 landed
+//     `bool bHeaterDoorIsOpen[4]={false,false,false,false};` at csystem.cpp:12766
+//     (golden csystem.cpp:16528) while this block was being written -- re-verified
+//     immediately before this append, 20260809.  csystem.h:197 declares it, so
+//     append order does not matter.  IF g5's BLOCK IS EVER REVERTED, golden
+//     :4252-4258 must be gated.
+//   * InArmpitchCHKPos / OutArmpitchCHKPos -- defined by THIS block, see the long
+//     note at the definitions above.
+//
+//  UN-GATE THE MOMENT GROUP g1 INTEGRATES (its staging file probe_g1_full.cpp
+//  defines all of these; line numbers are in that staging file):
+//     IsEMGPressed             :13025  -> un-gate G13  (RESTORES THE EMG LADDER)
+//     IsIndexMotorOutOfPower   :13131  -> un-gate G03, and the condition of G04
+//     LockIndexMotorAndDoHomeProcess :13145 -> part of G04
+//     CountMotorPowerDelay     :13200  -> un-gate G21  (RESTORES THE SERVO-SETTLE
+//                                        GUARD)
+//     IndexMotorBreakerON      :12442  -> part of G05
+//     IndexMotorBreakerOFF     :12448  -> part of G04 / G07 / G10 / G31c
+//     RecordSafeDoorStates     :14498  -> un-gate G11  (RESTORES DOOR AUDIT LOG)
+//  ALREADY UN-GATEABLE -- group g5's block is IN THE FILE as this is appended:
+//     DoMotorPowerOn           csystem.cpp:12915 (golden :19102) -> G31a + G31b can
+//     be un-gated as soon as the integrator confirms g5's block is final.  They are
+//     left GATED here only because this group must not depend on a concurrent
+//     sibling append that could still be re-applied or reverted.
+//  STILL BLOCKED AFTER THIS WHOLE WAVE (csystem WAVE 2 / other files needed):
+//     MagazineBreakerON/OFF (golden :24083/:24088), InOutArmZBreakerON/OFF
+//     (:24093/:24099), LDCarRotArmZBreakerOn/OFF (:24105/:24110),
+//     CassetteBreakerON/OFF (:24115/:24122)  -> G04 G05 G07 G10 G31c stay gated
+//     CheckHotGun (:22912) / CheckHotGunFlow (:22934)          -> G19
+//     bCheckPLCConnet (:24395)                                 -> G12
+//     bCheckPLCAllSafedoorAndEMGEnable (:24427)                -> G14
+//     ClearAllManualSuckTask -- needs mykitsuck.cpp REGISTERED  -> G22
+//     iEMGPressDelay (:133) / bBackArmZHomeFlag (:145) -- nobody's range; g1's
+//        staging file gates its own iEMGPressDelay use for the same reason
+//        (probe_g1_full.cpp:11446 "G15 :1532-1533 iEMGPressDelay")  -> G34 G35
+//     TfCleaning::btnResetCleanCountClick, TfMain::bShowInOutAlarm /
+//     lblInOutAlarm / SitePanel / bStartKeyPressCheck, TfHome::GaliMotorServoOff /
+//     MoveIn(Out)ArmPitch_X, Tfiosetview::ProcessIndexSuckDestroy1/2, TfMonitor,
+//     TfTemperFrom, ATC_TYPE_60, ATCInterfaceForm reachability from this TU
+//        -> G01a G01b G02 G17 G18 G22 G24a/b G25a/b G27a/b/c G28 G29 G30 G32
+//
+//  PRE-EXISTING STUB THAT NEUTRALISES ONE OF MY ACTIVE INTERLOCKS (not my gate,
+//  but the integrator must know): golden :4409 `if(CheckSafeDoorIsClosed()==false)
+//  { SystemStart=false; StopAllMotor(); }` is translated ACTIVE, but
+//  csystem_predicates.cpp:312 is `bool CheckSafeDoorIsClosed() { return true; }`,
+//  so *** THE SAFE-DOOR REFUSAL IN DoSystem CAN NEVER FIRE UNTIL THAT STUB IS
+//  *** REPLACED BY THE REAL BODY. ***  Likewise StopAllMotor() is
+//  aHotPlateSubstrate.cpp:1070 `void StopAllMotor() {}` and InArmZSafe /
+//  OutArmZSafe / SortArmZSafe are Motor/mymotor.cpp:1414-1416 `{ return -1; }`,
+//  so every `StopAllMotor()` this group emits is a no-op and every
+//  `...ZSafe(DETECT_ALL_FLAG)!=-1` test is permanently false.
+//
+//  DEFECTS KEPT (golden bugs -- deliberately NOT fixed)
+//  ---------------------------------------------------
+//   D1  golden :3107-3110 (CheckIonBar).  `if(SystemStart)` is followed by a
+//       COMMENTED-OUT statement, so its controlled statement silently becomes the
+//       NEXT line, `sErr.sprintf(...)`.  Everything after it -- the iRealIndex
+//       ladder, the ShowErrorMessage and the `return false` -- therefore runs
+//       UNCONDITIONALLY, i.e. the ion-bar JAM is raised even when the machine is
+//       not started.  KEPT VERBATIM.
+//   D2  golden passes AnsiString OBJECTS as sprintf arguments all over this
+//       range (e.g. :3110 :3373 :3808 :3839 :4087 :4088), and at :3437 :3443
+//       :3449 :3468 :3470 :3487 :3503 an AnsiString is matched against a `%d`
+//       conversion.  In BCB6 those were true varargs and printed a raw pointer.
+//       MEASURED, NOT ASSUMED: in this port AnsiString::sprintf is a VARIADIC
+//       TEMPLATE (vclcompat/AnsiString.h:139-157) written for exactly this BCB6
+//       idiom, so no object is passed through `...` and g++ emits NO warning for
+//       any of these lines.  The `%d`-against-AnsiString sites therefore render
+//       whatever that template chooses rather than a pointer -- a MESSAGE-TEXT
+//       delta only.  KEPT VERBATIM.
+//   D3  golden :4322 (DoSystem).
+//       `iProcessCount=(iProcessCount++>=3)?0:iProcessCount;`
+//       KEPT VERBATIM.  NOT claimed as undefined behaviour here: under C++17 the
+//       right operand of `=` is sequenced before the assignment and `?:`
+//       sequences its condition before either arm, so this is well defined in the
+//       port and cycles 0,1,2,3,0,... exactly as the Chinese comment intends
+//       ("split into 4 scans to lower CPU load").  Under BCB6 / C++03 the read in
+//       the else arm was UNSEQUENCED with the `++`, i.e. the same source was
+//       unspecified-order on the machine golden actually ships on.  Confirmed by
+//       measurement: `g++ -std=c++17 -Wall` emits no -Wsequence-point warning for
+//       this line.
+//   D4  golden :5076-5079 (DoArmZHome case 300).  The OUT-arm pitch positions are
+//       latched into PitchPos[0][1] / PitchPos[0][2] -- the IN-arm slots -- so the
+//       out-arm rows PitchPos[1][1] / [1][2] are never filled on this path and the
+//       in-arm ones are read twice.  Compare golden :4903-4906 (case 1), which
+//       writes PitchPos[1][1] / [1][2] correctly.  KEPT VERBATIM.
+//   D5  golden :5300-5301 (DoArmZHome case 400).  The 9046AU sort-arm pitch home
+//       result is stored into fOutPitchMot[0], NOT fSortPitchMot[0].  Two
+//       consequences, both kept: (a) the out-arm pitch-home result is overwritten
+//       by the sort-arm one, and (b) fSortPitchMot[0] is left false -- golden's
+//       case 300 sort block (:5213-5220) ZeroMemory's fSortPitchMot and then sets
+//       only [1]..[4], so with USE_OUT_SORT_ARM!=eartUninstall AND
+//       bSortArmPitchNeedHome the completion AND at :5304-5308 can never be true
+//       and case 400 HANGS.  KEPT VERBATIM (9046AU-only path).
+//   D6  golden :3516-3518 (CheckIonFan).  `if(bFanAlarm) { }` -- an empty body in
+//       the e2IoforOne arm, so an ION-pulse alarm there does NOT make CheckIonFan
+//       return false (unlike the e1IOforOne arm at :3387-3390).  KEPT VERBATIM.
+//   D7  golden :3314-3315 (CheckIonFan).  `if(SystemStart &&
+//       LastSet.iRealDummy!=DUMMY || CUSTOMER_CODE==CC_HONPREC_QC)` -- `&&` binds
+//       tighter than `||`, so this parses as
+//       `(SystemStart && iRealDummy!=DUMMY) || (CUSTOMER_CODE==CC_HONPREC_QC)`.
+//       The Chinese comment ("Dummy Run does not check the ion fans") reads as if
+//       the author wanted `SystemStart && (A || B)`.  As written, on a
+//       CC_HONPREC_QC machine the whole alarm/SECS block runs even while the
+//       machine is STOPPED.  KEPT VERBATIM (g++ -Wall flags it as
+//       -Wparentheses; that warning is EXPECTED).
+//   D8  golden :4108 + :4125 (CheckMotorPowerShutDown).  `MOTPower` is WRITTEN
+//       (=true) and never read -- grepped all 25483 golden lines: the only two
+//       occurrences are its declaration and that write.  KEPT VERBATIM (g++ -Wall
+//       reports -Wunused-but-set-variable; EXPECTED, and it is GOLDEN'S, not a
+//       consequence of any gate here).
+//   D9  golden :4878 + :5596 (DoArmZHome).  `NeedAllHome` likewise: declaration
+//       plus one `=false` write, no read anywhere in golden's 25483 lines.
+//       KEPT VERBATIM; same -Wall warning, also golden's own.
+//
+//  WARNINGS THAT *ARE* CONSEQUENCES OF THIS GROUP'S GATES (not golden's)
+//  --------------------------------------------------------------------
+//   `bKeyPowerOffPressed set but not used` -- golden reads it at :4146, inside
+//        GATE G29.  Goes away when G29 is un-gated.
+//   `bFirstEnter set but not used`         -- golden reads it at :4303, inside
+//        GATE G05.  Goes away when G05 is un-gated.
+//   `iPitch_Move set but not used`         -- golden's only reads are :5251 and
+//        :5264, inside GATE G28 (plus the commented-out :5116).  Goes away when
+//        TfHome grows MoveIn/OutArmPitch_X.
+//
+//  INTEGER DIVISION: this group's golden text contains NO `/` arithmetic at all
+//  (the only slashes are in comments such as "3000/17ms=176"), so there is no
+//  int/int truncation to preserve or to break.
+//
+//  Big5: golden is cp950 and every Chinese comment below is transcribed
+//  verbatim as UTF-8.  ZERO U+FFFD.
+// #############################################################################
+
+// The `#define <golden name> W7C1_/W7C2_<seam>` redirects at csystem.cpp:1183-2902
+// are still in force at this point in the translation unit.  Cross-checked EVERY
+// identifier this group names against that redirect list: the ONLY intersection is
+// MySleep (csystem.cpp:2873), and golden names MySleep exactly once in this range --
+// at golden :4724, inside the block GATE G25a removes.  So no ACTIVE line below is
+// macro-mangled and nothing has to be #undef'd (which would have changed the macro
+// state a later sibling append inherits).
+
+// DoSystemMessage() / ProcessAlarm() are golden ckernel.h:99 / :94 and are REAL in the
+// port (ckernel.cpp:1977 / :2904, ckernel.cpp registered CMakeLists.txt:1980).  They are
+// forward-declared here, in golden's own wording, instead of by appending
+// `#include "ckernel.h"` after the ~90 seam #defines above -- an include placed there
+// could have one of its declarations silently renamed by a redirect macro.
+void ProcessAlarm();                                                            // golden ckernel.h:94
+void DoSystemMessage();                                                         // golden ckernel.h:99
+
+// SetOutArmHome / SetSortArmHome are REAL in the port (aoutarm.cpp:3176 and
+// asortarm.cpp:3101; aoutarm.cpp / asortarm.cpp registered CMakeLists.txt:2065-2066).
+// Forward-declared here rather than by appending #include "aoutarm.h" / "asortarm.h"
+// after the seam #defines, for the same macro-mangling reason as above.  This is the
+// tree's established idiom for exactly these two -- see aoutarm9045S_1x4_4.cpp:120.
+// SetInArmHome needs no declaration: aHotPlateSubstrate.h:906 (already included at the
+// top of this file) declares it.
+void SetOutArmHome();                                                           // golden aoutarm.h:160
+void SetSortArmHome();                                                          //RogerYang 20250510 Add for 9046AU (golden asortarm.h:111)
+// CheckOutArmZ is REAL (aoutarm.cpp:635, aoutarm.cpp registered CMakeLists.txt:2065) and
+// DoSystem calls it at golden :4467.  Declared here so THIS block does not depend on a
+// CONCURRENT SIBLING GROUP's append: group g4 already forward-declares the identical
+// prototype at csystem.cpp:4950, and compiling this block against the pre-g4 base showed
+// CheckOutArmZ was the ONE symbol that dependence would have hidden.  A repeated
+// declaration of the same function with no default argument is legal, so both may stand.
+bool CheckOutArmZ(bool bMessage);                                               // golden aoutarm.h:116
+
+// DoSystem reads fHome->iHomeStep (golden csystem.cpp:4360) -- a real, translated member
+// (forms/fHome.h:76, forms/fHome.cpp:18, registered CMakeLists.txt:747).  Unlike the
+// free functions above, a member access cannot be forward-declared, so the header must be
+// included.  Placing an #include AFTER this file's ~63 `#define <golden name> W7C1_/
+// W7C2_<seam>` redirects is normally the wrong thing to do, so it was CHECKED twice
+// before doing it:
+//   (1) forms/fHome.h contains ZERO #include directives of its own, so it cannot re-open
+//       any other header at this point in the TU.  Verified: `grep -n "#include"
+//       forms/fHome.h` -> no output.
+//   (2) The intersection of the 63 redirect-macro names defined at csystem.cpp:1183-2902
+//       with every identifier appearing in forms/fHome.h is EMPTY, so nothing this header
+//       declares can be silently renamed.  Verified by script over both files.
+// The alternative -- gating golden :4360-4364 -- was rejected because it would make the
+// motor-power-off WAR1602 alarm fire during home steps 1..4 where golden deliberately
+// suppresses it, i.e. it would ADD a spurious alarm rather than lose one.
+#include "forms/fHome.h"                                                        // golden uhome.h -- fHome->iHomeStep (DoSystem golden :4360)
+
+// ---------------------------------------------------------------------------
+//  InArmpitchCHKPos / OutArmpitchCHKPos -- golden csystem.cpp:142-143.
+//
+//  PLACEMENT DEVIATION, DELIBERATE AND MEASURED.  Golden defines these two
+//  arrays in its file preamble (:142-143), i.e. inside the golden 1..3042 range
+//  that group g1 of this same wave owns -- so by the rules of this wave they are
+//  not mine.  They are defined HERE anyway because they are ONLY read by this
+//  group's DoInArmPitchCHK (golden :4805) / DoOutArmPitchCHK (golden :4835), and
+//  leaving them undefined would leave csystem.cpp.o with two unresolvable data
+//  symbols.  That is NOT hypothetical: it was measured.  csystem.cpp was compiled
+//  to an object with and without this block, `nm -C --undefined-only` diffed, and
+//  every one of the 175 newly-undefined symbols was looked up in the 16 archives of
+//  build_0809_w5b/ -- InArmpitchCHKPos and OutArmpitchCHKPos are TWO of only three
+//  real misses (the third, bHeaterDoorIsOpen, group g5 does land).  And group g1's
+//  in-flight work does NOT supply them: grepped its staging file probe_g1_full.cpp
+//  (written 20260809 19:33) for both names -- zero hits, gated or otherwise.
+//
+//  Gating the two MotorMove lines instead was rejected: PitchCHKFlag would then
+//  never become true, so both FSMs would sit on case 1 for ever -- a BROKEN state
+//  machine rather than an honest translation.  Golden zero-initialises these
+//  (no initialiser at file scope), so this is byte-for-byte golden behaviour, and
+//  neither has a constructor, so PT_CAMPAIGN_PLAN.md section 8 (static-init ctor
+//  must not touch a NULL global) does not apply.
+//
+//  *** INTEGRATOR: IF ANY GROUP LATER LANDS GOLDEN csystem.cpp:142-143, DELETE
+//  *** THESE TWO LINES -- THEY WILL OTHERWISE BE A DUPLICATE-DEFINITION ERROR. ***
+// ---------------------------------------------------------------------------
+int InArmpitchCHKPos[4];                                                        // golden csystem.cpp:142
+int OutArmpitchCHKPos[4];                                                       // golden csystem.cpp:143
+
+//==============================================================================
+// 檢查離子棒情形     //Hmy 20161129 add ION Bar Off Over Time To Jam ->
+// return:True->OK False->Error
+//==============================================================================
+bool CheckIonBar()                                                              //RogerYang 20250825 : Unloader新增3支IonBar，取代4 5 8 ion fan  //Hmy 20161129 add ION Bar Off Over Time To Jam
+{
+    if(iUseHTIonBarFunction==0)                                                 //RogerYang 20250827 add
+        return true;
+    static DWORD dwIonAlarm_SignalOffTime[10]={0 ,0 ,0, 0, 0 ,0 , 0, 0, 0, 0};
+    static DWORD dwIonAlarm_SignalOffCompareTime[10]={0 ,0 ,0, 0, 0 ,0 , 0, 0, 0, 0};;
+    static bool  bIonAlarm_SignalOff[10]={false,false,false,false,false,false,false,false,false,false};;
+
+    AnsiString S="", sErr="";
+    int iRealIndex=3;
+
+   /* if(false)                                                                 //不需要Delay 報警                //RogerYang 20250908 : 避免被alarm咬住
+    {
+        for(int i=0; i<3; i++)
+        {
+            if(Sen[iHTIonBar[i]].Enable && Sen[iHTIonBar[i]].IsOff())
+            {
+                sErr.sprintf("%s", Sen[iHTIonBar[i]].Name);
+                if(i==0)
+                    iRealIndex=3;
+                else if(i==1)
+                    iRealIndex=4;
+                else if(i==2)
+                    iRealIndex=7;
+
+                S.sprintf("WAR20%02d", iRealIndex);
+                ShowErrorMessage(S, K_RETRY, MMIonFan01+iRealIndex, false, sErr);
+                return false;
+            }
+        }
+        //<-
+        //Hmy 20180315 Mofify ION BAR Check
+        //pig 2011.12.21 ATC改 start
+//        if((Sen[SnIndexIonGunFrontAlarm].Enable && Sen[SnIndexIonGunFrontAlarm].IsOff()) ||
+//           (Sen[SnIndexIonGunRearAlarm].Enable && Sen[SnIndexIonGunRearAlarm].IsOff()) ||
+//           (Sen[SnIndexIonGunLeftAlarm].Enable && Sen[SnIndexIonGunLeftAlarm].IsOff()) ||
+//           (Sen[SnIndexIonGunRightAlarm].Enable && Sen[SnIndexIonGunRightAlarm].IsOff()) )
+//        {
+//            if(SystemStart)
+//                ShowSystemError(SysErr_IonFanAlarm,K_RETRY);
+//            return false;
+//        }
+        //pig 2011.12.21 ATC改 end
+    }
+    else */
+    {                                                                           ////需要Delay 報警
+        for(int i=0;i<3;i++)
+        {
+            if(Sen[iHTIonBar[i]].Enable && Sen[iHTIonBar[i]].IsOff())
+            {
+                bIonAlarm_SignalOff[i]=true;
+                dwIonAlarm_SignalOffTime[i]=MyTickCount();
+                if(dwIonAlarm_SignalOffCompareTime[i]==0)
+                {
+                    dwIonAlarm_SignalOffCompareTime[i]=dwIonAlarm_SignalOffTime[i];
+                }
+                else if(dwIonAlarm_SignalOffCompareTime[i]<dwIonAlarm_SignalOffTime[i])
+                {
+                    if(dwIonAlarm_SignalOffTime[i]-dwIonAlarm_SignalOffCompareTime[i]>=5000)                            ///sec change ms
+                    {
+                        if(SystemStart)
+                            //ShowSystemError(SysErr_InArm_IonBar1_Alarm+i,K_RETRY);
+
+                        sErr.sprintf("%s", Sen[iHTIonBar[i]].Name);             //RogerYang 20250908 : 避免被alarm咬住
+                        if(i==0)
+                            iRealIndex=3;
+                        else if(i==1)
+                            iRealIndex=4;
+                        else if(i==2)
+                            iRealIndex=7;
+
+                        S.sprintf("WAR20%02d", iRealIndex);
+                        ShowErrorMessage(S, K_RETRY, MMIonFan01+iRealIndex, false, sErr);
+
+                        bIonAlarm_SignalOff[i] = false;
+                        dwIonAlarm_SignalOffCompareTime[i] = 0;
+                        return false;
+                    }
+                }
+                else
+                {
+                    bIonAlarm_SignalOff[i] = false;
+                    dwIonAlarm_SignalOffCompareTime[i] = 0;
+                }
+            }
+            else if(Sen[iHTIonBar[i]].Enable && Sen[iHTIonBar[i]].IsOn() && bIonAlarm_SignalOff[i] ==true)
+            {
+                bIonAlarm_SignalOff[i] = false;
+                dwIonAlarm_SignalOffCompareTime[i] = 0;
+            }
+        }
+        //<-
+        //Hmy 20180315 Mofify ION BAR Check
+        //pig 2011.12.21 ATC改 start
+//        if((Sen[SnIndexIonGunFrontAlarm].Enable && Sen[SnIndexIonGunFrontAlarm].IsOff()) ||
+//           (Sen[SnIndexIonGunRearAlarm].Enable && Sen[SnIndexIonGunRearAlarm].IsOff()) ||
+//           (Sen[SnIndexIonGunLeftAlarm].Enable && Sen[SnIndexIonGunLeftAlarm].IsOff()) ||
+//           (Sen[SnIndexIonGunRightAlarm].Enable && Sen[SnIndexIonGunRightAlarm].IsOff()) )
+//        {
+//            if(SystemStart)
+//                ShowSystemError(SysErr_IonFanAlarm,K_RETRY);
+//            return false;
+//        }
+        //pig 2011.12.21 ATC改 end
+    }
+    return true;
+}
+//******************************************************************************
+//  注意!! CheckIonFan為Handler 離子風扇相關, 修改時要小心!!
+//  檢查離子風扇情形
+//  return:True->OK False->Error
+//******************************************************************************
+bool CheckIonFan()                                                              //Eliot 2007_0312
+{
+    static int iLastTime=::GetTickCount(), iNowTickTime=0;
+    static int iCount[MAX_IONFAN]={0};                                          //Steven 20111004 : 拉長偵測時間
+    static bool bFirstTime=false;
+    static bool bRealAlarm[MAX_IONFAN]={false};
+    static bool bRealPowerAlarm[MAX_IONFAN]={false};
+    static bool bIonFanStatus[MAX_IONFAN]={false};                              //Ion Fan   上一次狀態
+    static bool bIonFanPowerStatus[MAX_IONFAN]={false};                         //Ion Power 上一次狀態
+    static TQPF_Timer tIonFanPulse[MAX_IONFAN];                                 //Sam 20230301 :　USE_PULSE_TYPE 改為用 Timer 方式
+    static TQPF_Timer tIonPowerPulse[MAX_IONFAN];
+
+    int iAlarm=30;
+    int iIonTimer=20000;                                                        //Sam 20230327 : Home 時強制將 ION Timeout 設定 20s
+    bool bFan=false;                                                            //IO 目前狀態
+    bool bFanAlarm=false;                                                       //發生Ion Fan   Alarm
+    AnsiString S="", sErr="";
+
+    static TQPF_Timer tIonGunPulse;
+    static bool bIonGunStatus=false;
+    if(fAllMotorHome)
+        iIonTimer=ION_PULSE_COUNT;
+    else
+        iIonTimer=20000;
+
+    if(ION_FAN_TYPE==e1IOforOne || ION_FAN_TYPE==e2IoforOne)
+    {
+        if(USE_PULSE_TYPE==true ||
+           CHAMBER_USE_PULSE_TYPE==true)
+        {
+            if(bFirstTime==false)
+            {
+                bFirstTime=true;
+
+                for(int i=0; i<MAX_IONFAN; i++)
+                {
+                    if(iUseHTIonBarFunction==2 &&                               //RogerYang 20250825 : Unloader新增3支IonBar，取代4 5 8 ion fan
+                       (i==3 || i==4 || i==7))
+                    {
+                        continue;
+                    }
+                    bIonFanStatus[i]=false;
+                    bRealAlarm[i]=false;                                        //Sam 20230327 : Alarm flag reset
+                    tIonFanPulse[i].SetMSAndOn(iIonTimer);
+                }
+
+                if(ION_FAN_TYPE==e2IoforOne)
+                {
+                    for(int i=0; i<MAX_IONFAN; i++)
+                    {
+                        if(iUseHTIonBarFunction==2 &&                           //RogerYang 20250825 : Unloader新增3支IonBar，取代4 5 8 ion fan
+                           (i==3 || i==4 || i==7))
+                        {
+                            continue;
+                        }
+                        bIonFanPowerStatus[i]=false;
+                        bRealPowerAlarm[i]=false;                               //Sam 20230327 : Alarm flag reset
+                        tIonPowerPulse[i].SetMSAndOn(iIonTimer);
+                    }
+                }
+            }
+
+            iNowTickTime=::GetTickCount();                                      //避免 Lag 誤報警
+            if((iNowTickTime-iLastTime)>1500)                                   //Sam 20230327 : 將時間 Lay Reset 固定為1.5s
+            {
+                bFirstTime=false;
+                iLastTime=iNowTickTime;
+                return true;
+            }
+            else
+            {
+                iLastTime=iNowTickTime;
+            }
+        }
+    }
+
+    if(ION_FAN_TYPE==e1IOforOne || ION_FAN_TYPE==e2IoforOne)
+    {
+        for(int i=0; i<MAX_IONFAN; i++)
+        {
+            if(IniConfig.bCanByPassIonFan && IniConfig.bC06_ByPassIonFan[i]==false)
+                continue;
+
+            if(iUseHTIonBarFunction==2 &&                                       //RogerYang 20250825 : Unloader新增3支IonBar，取代4 5 8 ion fan
+               (i==3 || i==4 || i==7))
+            {
+                continue;
+            }
+
+            if((USE_PULSE_TYPE==true && i<=9) ||
+               (CHAMBER_USE_PULSE_TYPE==true && i==10))
+            {
+                if(Sen[iIonFan[i]].Enable)
+                {
+                    bFan=Sen[iIonFan[i]].IsOn();
+                    if(bIonFanStatus[i]!=bFan)                                  //ION 呼吸燈變化就重新計數
+                    {
+                        bIonFanStatus[i]=bFan;
+                        bRealAlarm[i]=false;
+                        tIonFanPulse[i].SetMSAndOn(iIonTimer);
+                    }
+                    else
+                    {
+                        if(tIonFanPulse[i].Off())
+                        {
+                            bRealAlarm[i]=true;
+                        }
+                    }
+                }
+
+                if(ION_FAN_TYPE==e2IoforOne)
+                {
+                    if(Sen[iIonFanPower[i]].Enable)
+                    {
+                        bFan=Sen[iIonFanPower[i]].IsOn();
+                        if(bIonFanPowerStatus[i]!=bFan)
+                        {
+                            bIonFanPowerStatus[i]=bFan;
+                            bRealPowerAlarm[i]=false;
+                            tIonPowerPulse[i].SetMSAndOn(iIonTimer);
+                        }
+                        else
+                        {
+                            if(tIonPowerPulse[i].Off())
+                            {
+                                bRealPowerAlarm[i]=true;
+                            }
+                        }
+                    }
+
+                    if(i<MAX_IONBAR &&                                          //Steven 20250610 : 修正記憶體溢位
+                       Sen[iIonBar[i]].Enable)                                  //Ztex 2024.12.22 Add For HT1032AT IonBar
+                    {
+                        bFan=Sen[iIonBar[i]].IsOn();
+                        if(bFan==true)
+                        {
+                            bIonFanPowerStatus[i]=bFan;
+                            bRealPowerAlarm[i]=false;
+                            bRealAlarm[i]=false;
+                            tIonPowerPulse[i].SetMSAndOn(iIonTimer);
+                        }
+                        else
+                        {
+                            if(tIonPowerPulse[i].Off())
+                            {
+                                bRealPowerAlarm[i]=true;
+                                bRealAlarm[i]=true;
+                            }
+                        }
+                    }                                                           //Ztex 2024.12.22 Add For HT1032AT IonBar
+                }
+            }
+        }
+    }
+
+    if(SystemStart &&
+       LastSet.iRealDummy!=DUMMY || CUSTOMER_CODE==CC_HONPREC_QC)               //Steven 20180209 : Dummy Run不檢查離子風扇
+    {
+        if(Sen[SnLoadIonGun].Enable)                                            //Ifor 20230427 add:Loader Ionizer Gun
+        {
+            bFan=Sen[SnLoadIonGun].IsOn();
+            if(bIonGunStatus!=bFan)                                             //ION 呼吸燈變化就重新計數
+            {
+                bIonGunStatus=bFan;
+                tIonGunPulse.SetMSAndOn(iIonTimer);
+            }
+            else
+            {
+                if(tIonGunPulse.Off())
+                {
+                    ShowErrorMessage("WAR2098", K_RETRY, MMTrayZ, false);
+                    tIonGunPulse.SetMSAndOn(iIonTimer);
+                }
+            }
+        }
+
+        if(ION_FAN_TYPE==e1IOforOne)                                            //Steven 20100226 : for KEYENCE Ion Fan
+        {
+            bFanAlarm=false;                                                    //Sam 20230301 :　USE_PULSE_TYPE 改為用 Timer 方式
+            for(int i=0; i<MAX_IONFAN; i++)
+            {
+                if(IniConfig.bCanByPassIonFan &&
+                   IniConfig.bC06_ByPassIonFan[i]==false)                       //Steven 20111013
+                    continue;
+
+                if(iUseHTIonBarFunction==2 &&                                   //RogerYang 20250825 : Unloader新增3支IonBar，取代4 5 8 ion fan
+                   (i==3 || i==4 || i==7))
+                {
+                    continue;
+                }
+
+                if((USE_PULSE_TYPE==true && i<=9) ||                            //Ifor 20190412 : add KEYENCE Ion PULSE Type
+                   (CHAMBER_USE_PULSE_TYPE==true && i==10))                     //Ifor 20190422 : add Chamber Use Pulse Type
+                {
+                    if(bRealAlarm[i])                                           //Sam 20230301 :　USE_PULSE_TYPE 改為用 Timer 方式
+                    {
+                        sErr.sprintf("%s", Sen[iIonFan[i]].Name);
+                        S.sprintf("WAR20%02d", i);                              //Steven 20150204 : 重編ESD Alarm到20
+                        ShowErrorMessage(S, K_RETRY, MMIonFan01+i, false, sErr);                                        //Steven 20221116 : Ion Alarm顯示對應位置
+                        bFanAlarm=true;
+                    }
+                }
+                else
+                {
+                    if(Sen[iIonFan[i]].Enable && Sen[iIonFan[i]].IsOff()==true)
+                    {
+                        iCount[i]++;
+                        if(i==10)
+                            iAlarm=352;                                         //Sam 20210826 : 176>352 //jou 2012-09-20 3000/17ms=176
+                        else
+                            iAlarm=30;
+
+                        if(iCount[i]>iAlarm)                                    //jou 2012-05-24 5->30 ION 異常Alarm
+                        {
+                            sErr.sprintf("iCount=%d, Sensor=%s", iCount[i], Sen[iIonFan[i]].Name);
+                            S.sprintf("WAR20%02d", i);                          //Steven 20150204 : 重編ESD Alarm到20
+                            ShowErrorMessage(S, K_RETRY, MMIonFan01+i, false, sErr);                                    //Steven 20221116 : //Steven 20221116 : Ion Alarm顯示對應位置
+                            iCount[i]=0;
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        iCount[i]=0;
+                    }
+                }
+            }
+
+            if(bFanAlarm)                                                       //Sam 20230301 :　USE_PULSE_TYPE 改為用 Timer 方式
+            {
+                return false;
+            }
+        }
+        else if(ION_FAN_TYPE==e5IOforAll || ION_FAN_TYPE==eUnInstallIonFan)     //KGN
+        {
+            for(int i=0; i<5; i++)
+            {
+                if(Sen[iIonFan[i]].Enable && Sen[iIonFan[i]].IsOff()==true)
+                {
+                    if(IniConfig.bCanByPassIonFan &&
+                       IniConfig.bC06_ByPassIonFan[i]==false)                   //Steven 20111013
+                        continue;
+
+                    iCount[i]++;
+                    if(iCount[i]>10)                                            //jou 2012-05-24 5->10 ION 異常Alarm
+                    {
+                        sErr.sprintf("%s", Sen[iIonFan[i]].Name);
+                        ShowErrorMessage("WAR2090", K_RETRY, MMSystem, false, sErr);                                    //Steven 20150204 : 重編ESD Alarm到20
+                        iCount[i]=0;
+                        return false;
+                    }
+                }
+                else
+                {
+                    iCount[i]=0;
+                }
+            }
+        }
+        else if(ION_FAN_TYPE==e2IoforOne)
+        {
+            bFanAlarm=false;                                                    //Sam 20230301 :　USE_PULSE_TYPE 改為用 Timer 方式
+            for(int i=0; i<MAX_IONFAN; i++)
+            {
+                if(IniConfig.bCanByPassIonFan &&
+                   IniConfig.bC06_ByPassIonFan[i]==false)                       //Steven 20111013
+                    continue;
+
+                if(iUseHTIonBarFunction==2 &&                                   //RogerYang 20250825 : Unloader新增3支IonBar，取代4 5 8 ion fan
+                   (i==3 || i==4 || i==7))
+                {
+                    continue;
+                }
+
+                if((USE_PULSE_TYPE==true && i<=9) ||
+                   (CHAMBER_USE_PULSE_TYPE==true && i==10))                     //Ifor 20190422 : add Chamber Use Pulse Type
+                {
+                    if(bRealAlarm[i]==true && bRealPowerAlarm[i]==true)         //Sam 20230301 :　USE_PULSE_TYPE 改為用 Timer 方式
+                    {
+                        sErr.sprintf("%d, %s and %s",  AnsiString(i+1), Sen[iIonFan[i]].Name, Sen[iIonFanPower[i]].Name);
+                        ShowErrorMessage("WAR2095", K_RETRY, MMIonFan01+i, false, sErr);
+                        bFanAlarm=true;
+                    }
+                    else if(bRealPowerAlarm[i]==true)
+                    {
+                        sErr.sprintf("%d, %s",  AnsiString(i+1), Sen[iIonFanPower[i]].Name);
+                        ShowErrorMessage("WAR2096", K_RETRY, MMIonFan01+i, false, sErr);
+                        bFanAlarm=true;
+                    }
+                    else if(bRealAlarm[i]==true)
+                    {
+                        sErr.sprintf("%d, %s",  AnsiString(i+1), Sen[iIonFan[i]].Name);
+                        ShowErrorMessage("WAR2097", K_RETRY, MMIonFan01+i, false, sErr);
+                        bFanAlarm=true;
+                    }
+                }
+                else
+                {
+                    if((Sen[iIonFan     [i]].Enable && Sen[iIonFan     [i]].IsOff()==true) &&
+                       (Sen[iIonFanPower[i]].Enable && Sen[iIonFanPower[i]].IsOff()==true))
+                    {
+                        iCount[i]++;
+                        if(i==10)
+                            iAlarm=176;                                         //jou 2012-09-20 3000/17ms=176
+                        else
+                            iAlarm=30;
+
+                        if(iCount[i]>iAlarm)                                    //jou 2012-05-24 5->30 ION 異常Alarm
+                        {
+                            if(Sen[iIonFan[i]].Enable && Sen[iIonFan[i]].IsOff()==true)
+                                sErr.sprintf("%d, %s",  AnsiString(i+1), Sen[iIonFan[i]].Name);
+                            else
+                                sErr.sprintf("%d, %s",  AnsiString(i+1), Sen[iIonFanPower[i]].Name);
+
+                            ShowErrorMessage("WAR2095", K_RETRY, MMIonFan01+i, false, sErr);                            //Steven 20150204 : 重編ESD Alarm到20
+                            iCount[i]=0;
+                            return false;
+                        }
+                    }
+                    else if((Sen[iIonFan[i]].Enable && Sen[iIonFan[i]].IsOff()==true))
+                    {
+                        iCount[i]++;
+                        if(i==10)
+                            iAlarm=235;                                         //JerryYang 20201123 改4000/17ms=235
+                        else
+                            iAlarm=30;
+
+                        if(iCount[i]>iAlarm)                                    //jou 2012-05-24 5->30 ION 異常Alarm
+                        {
+                            sErr.sprintf("%d, %s",  AnsiString(i+1), Sen[iIonFan[i]].Name);
+                            ShowErrorMessage("WAR2097", K_RETRY, MMIonFan01+i, false, sErr);                            //Steven 20150204 : 重編ESD Alarm到20
+                            iCount[i]=0;
+                            return false;
+                        }
+                    }
+                    else if(Sen[iIonFanPower[i]].Enable && Sen[iIonFanPower[i]].IsOff()==true)
+                    {
+                        iCount[i]++;
+                        if(i==10)
+                            iAlarm=235;                                         //JerryYang 20201123 改4000/17ms=235
+                        else
+                            iAlarm=30;
+
+                        if(iCount[i]>iAlarm)                                    //jou 2012-05-24 5->30 ION 異常Alarm
+                        {
+                            sErr.sprintf("%d, %s",  AnsiString(i+1), Sen[iIonFanPower[i]].Name);
+                            ShowErrorMessage("WAR2096", K_RETRY, MMIonFan01+i, false, sErr);                            //Steven 20150204 : 重編ESD Alarm到20
+                            iCount[i]=0;
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        iCount[i]=0;
+                    }
+                }
+            }
+
+            if(bFanAlarm)
+            {
+            }
+        }
+
+        if(CheckIonBar()==false)                                                //RogerYang 20250825 : Unloader新增3支IonBar，取代4 5 8 ion fan
+        {
+            return false;
+        }
+
+        for(int i=0; i<MAX_IONFAN; i++)                                         //wei 20160506 SECS ION 偵測
+        {
+            if(Sen[iIonFan[i]].Enable==false)
+            {
+                iIONFANStatus_Secs[i]=-1;
+            }
+            else if(Sen[iIonFan[i]].Enable &&
+                    Sen[iIonFan[i]].IsOff()==true)
+            {
+                iIONFANStatus_Secs[i]=0;
+            }
+            else
+            {
+                iIONFANStatus_Secs[i]=1;
+            }
+
+            if(Sen[iIonFanPower[i]].Enable==false)
+            {
+                iIONFANPower_Secs[i]=-1;
+            }
+            else if(Sen[iIonFanPower[i]].Enable &&
+                    Sen[iIonFanPower[i]].IsOff()==true)
+            {
+                iIONFANPower_Secs[i]=0;
+            }
+            else
+            {
+                iIONFANPower_Secs[i]=1;
+            }
+        }
+    }
+    return true;
+}
+//==============================================================================
+// 檢查CCD check function 開啟情形
+// return:True->OK False->Error
+//==============================================================================
+void CheckSafeDoorForICFallDown()
+{
+    if(bChangeCleanPad)                                                         //kevin 20130226 Autoclean start   換CLEAN PAD
+    {
+      #ifdef SOFT_SIMULTE
+        bChangeCleanPad=false;
+        fCleaning->btnResetCleanCountClick(fCleaning);
+      #else
+        if(TestIF_File.iAutoClean_Tray==eCKPos_Fix3)                            //放在FIX 3
+        {
+            if(Sen[SnSafeDoor6].Enable==true &&
+               Sen[SnSafeDoor6].IsOff()==true)
+            {
+                bChangeCleanPad=false;
+//AI(W906-PT-csystem-g2) 20260809: GATE G01a -- golden csystem.cpp:3577.  fCleaning->btnResetCleanCountClick() is NOT a
+// member of the ported TfCleaning (forms/fCleaning.h); golden's body is
+// AutoClean/uCleaning.cpp:2095 (TfCleaning::btnResetCleanCountClick), which the port
+// does not translate.  DEFAULT: bChangeCleanPad is still cleared on the line above, so
+// the Fix3 clean-pad-change WAIT is released exactly as golden does.  BEHAVIOUR DELTA on
+// a real machine: the Clean-Count reset that golden performs at the same instant does NOT
+// happen, so the AutoClean contact counter keeps its pre-change value after a clean-pad
+// swap done through the Fix3 (SnSafeDoor6) route.
+#if 0 // GATE G01a -- golden csystem.cpp:3577 VERBATIM below; see note above
+                fCleaning->btnResetCleanCountClick(fCleaning);
+#endif // GATE G01a
+            }
+        }
+        else
+        {
+            if(Sen[SnSafeDoor3].Enable==true &&
+               Sen[SnSafeDoor3].IsOff()==true)
+            {
+                bChangeCleanPad=false;
+//AI(W906-PT-csystem-g2) 20260809: GATE G01b -- golden csystem.cpp:3586.  Same missing TfCleaning member as G01a, on the
+// SnSafeDoor3 (non-Fix3) route.  DEFAULT: bChangeCleanPad cleared (line above) and
+// bUse_NewAutoCleanForm cleared (line below) stay ACTIVE; only the clean-count reset is
+// dropped.  BEHAVIOUR DELTA: as G01a.
+#if 0 // GATE G01b -- golden csystem.cpp:3586 VERBATIM below; see note above
+                fCleaning->btnResetCleanCountClick(fCleaning);
+#endif // GATE G01b
+                bUse_NewAutoCleanForm=false;                                    //kevin 20201223 add clean pad
+            }
+        }
+      #endif
+    }
+
+    if(IniConfig.bG06HomeinitialCheckZ1 &&                                      //kevin 20190227 add 前檢查是否有CI放在SOCKET 造成機構損壞 按z1 確認
+       (bHomeinitialCheckPushZ1 || bContractModeCheckPushZ1))                   //kevin 20131218 歸hom前檢查是否有tray放在hotplate 造成機構損壞 按z1 確認
+    {
+        SW[SwManualZ1].OnOff(FlushFlag);
+        if(bHomeinitialCheckPushZ1)
+        {
+            if(Sen[SnFMotorDown].Enable==false || Sen[SnFMotorDown].IsOn()==true)
+            {
+                bHomeinitialCheckPushZ1=false;
+                bHomeUnlock=true;
+                NewRecordProcess("MES2127", "HOME Push Z1 pressed");
+            }
+        }
+
+        if(bContractModeCheckPushZ1)                                            //kevin 20190227 add
+        {
+            if(Tri_Temp_Machine==1)                                             //Ztex 2024.11.05 Add Tri_Temp_Machine Not Open Heater Door
+            {
+                if((Sen[SnFMotorDown].Enable==false || Sen[SnFMotorDown].IsOn()==true) &&
+                   (Sen[SnSafeDoor3Hatchway].Enable==true && Sen[SnSafeDoor3Hatchway].IsOff()==true))
+                {
+                    bContractModeCheckPushZ1=false;
+                    bHomeUnlock=true;
+                    NewRecordProcess("MES21110", "Contract Push Z1 pressed and open SnSafeDoor3 Hatchway door.");
+                }
+            }
+            else
+            {
+                if((Sen[SnFMotorDown].Enable==false || Sen[SnFMotorDown].IsOn()==true) &&
+                   ((Sen[SnHeaterDoor2].Enable==true && Sen[SnHeaterDoor2].IsOff()==true) ||
+                    (Sen[SnHeaterDoor].Enable==true && Sen[SnHeaterDoor].IsOff()==true)))
+                {
+                    bContractModeCheckPushZ1=false;
+                    bHomeUnlock=true;
+                    NewRecordProcess("MES2127", "Contract Push Z1 pressed and open chamber door.");
+                }
+            }
+        }
+    }
+
+    if(bIsTestSitICFallDown || bIsContactforce ||
+       IniConfig.bC08_SocketSensor && bIsSocketSensor)                          //kevin 20130504 socket sensor detect error//kevin 20130418
+    {
+        if(Tri_Temp_Machine==1)                                                 //Ztex 2024.11.05 Add Tri_Temp_Machine Not Open Heater Door
+        {
+            if(IniConfig.bD40IndexICFallDownMustPressFMotorDown)
+            {
+                if((Sen[SnFMotorDown].Enable==false || Sen[SnFMotorDown].IsOn()==true) &&
+                   (Sen[SnSafeDoor3Hatchway].Enable==true && Sen[SnSafeDoor3Hatchway].IsOff()==true))
+                {                                                               //kevin 20130906 開啟chambo任一門
+                    if(bIsTestSitICFallDown)                                    //kevin 20130418
+                        bIsTestSitICFallDown=false;
+                    else if(bIsContactforce)                                    //kevin 20130418
+                        bIsContactforce=false;                                  //kevin 20130418 add contact force over error
+                    else if(IniConfig.bC08_SocketSensor  && bIsSocketSensor)    //kevin 20130504 socket sensor detect error
+                        bIsSocketSensor=false;
+                }
+
+                if(bIsTestSitICFallDown || bIsContactforce || IniConfig.bC08_SocketSensor && bIsSocketSensor)           //kevin 20130504 socket sensor detect error   //kevin 20130418
+                    SW[SwManualZ1].OnOff(FlushFlag);
+            }
+            else
+            {
+                if((Sen[SnSafeDoor3Hatchway].Enable==true && Sen[SnSafeDoor3Hatchway].IsOff()==true) &&
+                (Sen[SnFMotorDown].Enable==false || Sen[SnFMotorDown].IsOn()==true))
+                {
+                    if(bIsTestSitICFallDown)                                    //kevin 20130418
+                        bIsTestSitICFallDown=false;
+                    else if(bIsContactforce)                                    //kevin 20130418
+                        bIsContactforce=false;                                  //kevin 20130418 add contact force over error
+                    else if(IniConfig.bC08_SocketSensor && bIsSocketSensor)     //kevin 20130418 socket sensor detect error
+                        bIsSocketSensor=false;
+                }
+            }
+        }
+        else
+        {
+            if(IniConfig.bD40IndexICFallDownMustPressFMotorDown)
+            {
+                if(((Sen[SnHeaterDoor].Enable==true && Sen[SnHeaterDoor].IsOff()==true)||
+                    (Sen[SnHeaterDoor2].Enable==true && Sen[SnHeaterDoor2].IsOff()==true)) &&
+                    (Sen[SnFMotorDown].Enable && Sen[SnFMotorDown].IsOn()==true))                                       //if(Sen[SnFMotorDown].Enable==false || Sen[SnFMotorDown].IsOn()==true)
+                {                                                               //kevin 20130906 開啟chambo任一門
+                    if(bIsTestSitICFallDown)                                    //kevin 20130418
+                        bIsTestSitICFallDown=false;
+                    else if(bIsContactforce)                                    //kevin 20130418
+                        bIsContactforce=false;                                  //kevin 20130418 add contact force over error
+                    else if(IniConfig.bC08_SocketSensor  && bIsSocketSensor)    //kevin 20130504 socket sensor detect error
+                        bIsSocketSensor=false;
+                }
+
+                if(bIsTestSitICFallDown || bIsContactforce || IniConfig.bC08_SocketSensor && bIsSocketSensor)           //kevin 20130504 socket sensor detect error   //kevin 20130418
+                    SW[SwManualZ1].OnOff(FlushFlag);
+            }
+            else
+            {
+                if(Sen[SnHeaterDoor].Enable==true &&
+                   Sen[SnHeaterDoor].IsOff()==true)
+                {
+                    if(bIsTestSitICFallDown)                                    //kevin 20130418
+                        bIsTestSitICFallDown=false;
+                    else if(bIsContactforce)                                    //kevin 20130418
+                        bIsContactforce=false;                                  //kevin 20130418 add contact force over error
+                    else if(IniConfig.bC08_SocketSensor &&
+                            bIsSocketSensor)                                    //kevin 20130418 socket sensor detect error
+                        bIsSocketSensor=false;
+                }
+            }
+        }
+    }
+
+    if(bIsTestSitICFallDownResetHT9045)
+    {
+        if(IniConfig.bD40IndexICFallDownMustPressFMotorDown)
+        {
+            if(bIsTestSitICFallDownResetHT9045)
+                SW[SwManualZ1].OnOff(FlushFlag);
+
+            if(Sen[SnFMotorDown].Enable==false ||
+               Sen[SnFMotorDown].IsOn()==true)
+                bIsTestSitICFallDownResetHT9045=false;
+        }
+        else
+        {
+            if(Sen[SnHeaterDoor].Enable==true &&
+               Sen[SnHeaterDoor].IsOff()==true)
+                bIsTestSitICFallDownResetHT9045=false;
+        }
+    }
+
+    if(bAutoCleanCheckOpenDoor)                                                 //kevin 20121020 add
+    {
+        #ifdef SOFT_SIMULTE
+            bAutoCleanCheckOpenDoor=false;
+
+        #else
+            if(TestIF_File.iAutoClean_Tray==eCKPos_Fix3)                        //放在FIX 3
+            {
+                if(Sen[SnSafeDoor6].Enable==false ||
+                   (Sen[SnSafeDoor6].Enable==true &&
+                    Sen[SnSafeDoor6].IsOff()==true))
+                {
+                    bAutoCleanCheckOpenDoor=false;
+                }
+            }
+            else
+            {
+                if(Sen[SnSafeDoor3].Enable==false ||
+                   (Sen[SnSafeDoor3].Enable==true &&
+                    Sen[SnSafeDoor3].IsOff()==true))
+                {
+                    bAutoCleanCheckOpenDoor=false;
+                }
+            }
+        #endif
+    }
+
+    if(bContactCTOverCHK)
+    {
+        if(Sen[SnHeaterDoor].Enable==true && Sen[SnHeaterDoor].IsOff()==true)
+        {
+            bContactCTOverCHK=false;
+        }
+    }
+
+    if(bFixBinBoxIsFull)                                                        //kevin 20160822
+    {
+        if(Sen[SnSafeDoor6].Enable==true && Sen[SnSafeDoor6].IsOff()==true ||
+           Sen[SnSafeDoor7].Enable==true && Sen[SnSafeDoor7].IsOff()==true)
+        {
+            bFixBinBoxIsFull=false;
+            LastSet.iBinBoxCount=0;
+        }
+        #ifdef SOFT_SIMULTE
+           bFixBinBoxIsFull=false;
+           LastSet.iBinBoxCount=0;
+        #endif
+    }
+
+    if(bContactModeNeedOpenDoor)                                                //JerryYang 20231218 : G22提醒人員取tray功能
+    {
+        if(Sen[SnSafeDoor3].Enable==true && Sen[SnSafeDoor3].IsOff()==true)
+        {
+            bContactModeNeedOpenDoor=false;
+        }
+    }
+
+    if(iMagazineStatus!=0 && bHasOpenMagDoor==false)                            //JerryYang 20241225 : 暫停狀態開Magazine安全門
+    {
+        if(Sen[SnMagazineSafeDoor].IsOff()==true)
+        {
+            bHasOpenMagDoor=true;
+        }
+    }
+}
+//==============================================================================
+// 此為系統檢查Contact次數情形
+//==============================================================================
+bool CheckContactOver()
+{
+    AnsiString str;
+
+    if(CosFunction.bUseHeadContactCount)                                        //Ifor 20160516 京元要求銦片 Life Time 功能
+    {
+        for(int x=0; x<3; x++)
+        {
+            if(IniConfig.bLifeTimeCount[x])
+            {
+                for(int i=0; i<FTestSuck.iShtRow; i++)
+                {
+                    for(int j=0; j<FTestSuck.iShtCol; j++)
+                    {
+                        if(IniConfig.ContactSet[x][i][j]>0 &&
+                           IniConfig.HeadContactCount[x][i][j]>IniConfig.ContactSet[x][i][j])
+                        {
+                            str.sprintf("%s Arm%d Head%d Contact Over Count,#Please Press OneCycle and Check!", IniConfig.ContactConditionName[x], i+1, j+1);
+                            if(IniConfig.bVTESTFunction && x==0)                //AI(ht9045-config) 20260507 (RogerYang) : VTEST銦片超壽命正式報警+密碼解除+歸零
+                            {
+                                ShowErrorMessage("WAR07460", 0, MMSystem, false, str);
+                                IniConfig.HeadContactCount[0][i][j]=0;
+                                SaveLastSetIni();
+                            }
+                            else
+                            {
+                                ShowMyMessage(str);
+                            }
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if(CUSTOMER_CODE==CC_ASE_CL ||                                              //Steven 20200211 : Add socket count for ASE-CL
+       CUSTOMER_CODE==CC_PTI ||                                                 //Sam 20210520 : Add PTI
+       CUSTOMER_CODE==CC_AMD_M )
+    {
+        if(TestIF_File.iContactAlarmCount[3]>0)
+        {
+            for(int i=0; i<TestSocket.iShtRow; i++)                             //JerryYang 20170206
+            {
+                for(int j=0; j<TestSocket.iShtCol; j++)
+                {
+                    if(LastSet.iSocketContactCount[i][j]>TestIF_File.iContactAlarmCount[3])
+                    {
+                        str.sprintf("%s:%s,", IndexSuckName[i][j], LastSet.strSocketID[i][j]);
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+
+    if(CosFunction.bContactAlmNeedOneCycle)                                     //Sam 20241226 : Contact Alarm 需要先做 OneCycle
+    {
+        if(LastSet.ContactSet[0]>0 && LastSet.iContactCT[0]==TestIF_File.iContactWarningCount[0])
+            bNeedOneCycleByContactWar1=true;
+        if(LastSet.ContactSet[1]>0 && LastSet.iContactCT[1]==TestIF_File.iContactWarningCount[1])
+            bNeedOneCycleByContactWar2=true;
+        if(LastSet.ContactSet[0]>0 && LastSet.iContactCT[0]>LastSet.ContactSet[0])
+            bNeedOneCycleByContactAlm1=true;
+        if(LastSet.ContactSet[1]>0 && LastSet.iContactCT[1]>LastSet.ContactSet[1])
+            bNeedOneCycleByContactAlm2=true;
+
+        if(bNeedOneCycleByContactWar1 ||
+           bNeedOneCycleByContactWar2 ||
+           bNeedOneCycleByContactAlm1 ||
+           bNeedOneCycleByContactAlm2)
+        {
+            fMain->BtnOneCycleClick(fMain);
+        }
+    }
+    else
+    {
+        for(int i=0; i<2; i++)
+        {
+            if(LastSet.ContactSet[i]>0 && LastSet.iContactCT[i]>LastSet.ContactSet[i])                                  //jou 2012-06-05
+                return true;
+        }
+    }
+
+    if(CosFunction.bUseSocketContactCount)                                      //Sam 20220720 : 新增一組 Socket Count
+    {
+        for(int i=0; i<TestSocket.iShtRow; i++)
+        {
+            for(int j=0; j<TestSocket.iShtCol; j++)
+            {
+                if(IniConfig.SocketContactSet[i][j]>0 &&
+                   IniConfig.SocketContactCount[i][j]>IniConfig.SocketContactSet[i][j])
+                    return true;
+            }
+        }
+    }
+
+    return false;
+}
+//------------------------------------------------------------------------------
+TQPF_Timer hLowTempIdleCheckSafeDoorDelay;                                      //Isaac 20190313 : 機台idle時，alarm後，3秒再做檢查
+bool LowTempIdleCheckSafeDoor(void)                                             //Steven 20191016 : For ATC3.3
+{
+    #ifndef SOFT_SIMULTE
+    AnsiString str;
+    static bool bStartDelayCount=false;                                         //Isaac 20190313 : 機台idle時，alarm後，3秒再做檢查
+
+    if(InitialOK==false)
+        return false;
+
+    if(bStartDelayCount==true && hLowTempIdleCheckSafeDoorDelay.Off()==false)   //Isaac 20190313 : 機台idle時，alarm後，3秒再做檢查
+    {
+        return false;
+    }
+
+    bStartDelayCount=true;
+    if(Sen[SnHeaterDoor].Enable==true && Sen[SnHeaterDoor].IsOff()==true)
+    {
+        ShowErrorMessage("MES1625", K_RETRY, MMSystem);
+        if(Tri_Temp_Machine==1)                                                 //Ztex 2024.11.27 Add 機台idle時，alarm後，10秒再做檢查
+            hLowTempIdleCheckSafeDoorDelay.SetSecAndOn(10);
+        else
+            hLowTempIdleCheckSafeDoorDelay.SetSecAndOn(3);
+        return true;
+    }
+
+    if(Sen[SnHeaterDoor2].Enable==true && Sen[SnHeaterDoor2].IsOff()==true)
+    {
+        ShowErrorMessage("MES1626", K_RETRY, MMSystem);
+        if(Tri_Temp_Machine==1)                                                 //Ztex 2024.11.27 Add 機台idle時，alarm後，10秒再做檢查
+            hLowTempIdleCheckSafeDoorDelay.SetSecAndOn(10);
+        else
+            hLowTempIdleCheckSafeDoorDelay.SetSecAndOn(3);
+        return true;
+    }
+
+    if(Sen[SnHeaterDoor3].Enable==true && Sen[SnHeaterDoor3].IsOff()==true)
+    {
+        ShowErrorMessage("MES1627", K_RETRY, MMSystem);
+        if(Tri_Temp_Machine==1)                                                 //Ztex 2024.11.27 Add 機台idle時，alarm後，10秒再做檢查
+            hLowTempIdleCheckSafeDoorDelay.SetSecAndOn(10);
+        else
+            hLowTempIdleCheckSafeDoorDelay.SetSecAndOn(3);
+        return true;
+    }
+
+    if(Sen[SnHeaterDoor4].Enable==true && Sen[SnHeaterDoor4].IsOff()==true)     //wei 20200616 : For ATC3.3 MR, 要第四個加熱門
+    {
+        ShowErrorMessage("MES1628", K_RETRY, MMSystem);
+        if(Tri_Temp_Machine==1)                                                 //Ztex 2024.11.27 Add 機台idle時，alarm後，10秒再做檢查
+            hLowTempIdleCheckSafeDoorDelay.SetSecAndOn(10);
+        else
+            hLowTempIdleCheckSafeDoorDelay.SetSecAndOn(3);
+        return true;
+    }
+
+    bStartDelayCount=false;
+    #endif
+    return false;
+}
+//==============================================================================
+// 高溫 轉  常溫 CHAMBO 快速降溫       //kevin 20201223 add
+//==============================================================================
+void AutoCoolChambo()
+{
+    bool bBlower=false;
+    if(LastSet.iTemperature==Tempture_Ambient ||
+       LastSet.iTemperature==Tempture_AmbientHot)                               //kevin 20210108 add
+    {
+        if(MOT[MMTrayZ].fHasTray      || MOT[MMTrayY].fHasTray ||               //kevin 20210223 add MMTrayY  //不能檢查MOT[MMTrayY].fHasTray，因為會跟快速CleanOut衝突                   //不能檢查MOT[MMTrayY].fHasTray，因為會跟快速CleanOut衝突
+           MOT[MMPlate1].HasIC()      || MOT[MMPlate2].HasIC() ||               //kevin 20120217 MOT[MMPlate1].Tray.HasIC() || MOT[MMPlate2].Tray.HasIC() ||
+           InArmSuck.HasIC()          || OutArmSuck.HasIC()    ||
+           ShuttleHasIC()             || IndexHasIC())
+        {
+            SW[SwAutoCoolDown].Off();                                           //kevin 20201223 AutoCool down
+            return;
+        }
+
+//AI(W906-PT-csystem-g2) 20260809: GATE G02 -- golden csystem.cpp:3969-3970.  fTemperFrom (TfTemperFrom, golden
+// cTemperFrom.cpp:1917 TempRunShowAlarmHigh) has NO home in the port: grepped every .h in
+// the tree for `fTemperFrom` and the only hit is PowerSavingMode.cpp:824 USING it, i.e. no
+// declaration and no definition exist.  DEFAULT: bBlower stays false, so the else arm
+// below runs and SW[SwAutoCoolDown].Off() is issued.  BEHAVIOUR DELTA on a real machine:
+// the HOT->AMBIENT fast-cool blower (2x K21 blowers on SwAutoCoolDown) is NEVER switched
+// on, so a Hot->Ambient recipe change cools by natural convection only (slower ramp).
+// This is a THROUGHPUT/temperature delta, not a safety refusal -- the Off() path is the
+// de-energised, safe state.
+#if 0 // GATE G02 -- golden csystem.cpp:3969-3970 VERBATIM below; see note above
+        if(fTemperFrom->TempRunShowAlarmHigh())                                 //kevin 20210112 add  有過溫 起動吹氣功能 高溫降 常溫需搭配 鼓風機 2台 K 21
+            bBlower=true;
+#endif // GATE G02
+
+        if(bBlower)                                                             //kevin 20210112 add            AutoCool down
+            SW[SwAutoCoolDown].On();                                            //kevin 20201223 AutoCool down
+        else
+            SW[SwAutoCoolDown].Off();
+    }
+    else
+    {
+        SW[SwAutoCoolDown].Off();                                               //kevin 20201223 AutoCool down
+    }
+}
+//==============================================================================
+// 此為系統檢查馬達若發生 Alarm 信號就將該軸馬達設成未歸零模式
+//==============================================================================
+void ScanAllMotorStatus(int iProcessCount)
+{
+    int iRef;
+    AnsiString str1, str2;
+    char str[256];
+    for(int i=iProcessCount; i<TOTAL_MOTOR; i+=4)                               //Steven 20110608
+    {
+        if(INDEX_MOTION_CARD==0 &&                                              //Steven 20210623 : Index使用Galil
+           (i==MTestY1 || i==MTestZ1 || i==MTestZ2 || i==MTestY2))
+        {
+            MOT[i].Gali_ScanMotStatus();
+            if(MOT[i].Led[iAlarmLed] && MOT[i].Motor->Enable &&
+               MOT[i].Motor->PServoAlarmOn==1)                                  // check alarm led
+            {
+                MOT[i].HomeFlag=0;
+                fAllMotorHome=false;
+//                SaveGalilLog();                                               //JerryYang 20181130 (Steven) : add galil command log
+//                SaveGalilLogLM();
+                //Ifor 20151208 :矽品新增馬達異常 Show Alarm Message
+//                if(IniConfig.bSPILFunction==true || CUSTOMER_CODE==CC_SIGURD_PeiXing)  //JerryYang 20181130 Mark掉 //JerryYang 20160328 for 矽格北興,觸發回home的地方補上log  //JerryYang 20170328 (Jou) 矽品客戶碼統一用SPILFunction
+//                {
+                if(MOT[i].MovFlag &&                                            //Steven 20230711 : 先變更狀態, 避免不知道Galil有Alarm
+//AI(W906-PT-csystem-g2) 20260809: GATE G03 -- golden csystem.cpp:4007, the sub-term `IsIndexMotorOutOfPower()==false`.
+// IsIndexMotorOutOfPower is DECLARED at csystem.h:121 but has NO definition anywhere in
+// the ported tree; golden defines it at csystem.cpp:1501, i.e. inside the golden range
+// 1..3042 that a SIBLING group of this same wave owns.  Calling it now would be an
+// undefined reference at executable link time.  DEFAULT: the term is dropped, i.e. treated
+// as true == `the index axes DO have servo power`, which is the normal healthy-machine
+// state.  The Galil index-axis alarm body BELOW STAYS REACHABLE -- deliberately gating the
+// guard term rather than the block, so the operator message + SystemStart=false safety stop
+// are NOT lost.  BEHAVIOUR DELTA: while EMG/Servo IO really is out of power golden
+// SUPPRESSES the 'Index MTestYn Position error, Need home' message; this default SHOWS it.
+// UN-GATE the moment IsIndexMotorOutOfPower lands (single line, restore golden text).
+#if 0 // GATE G03 -- golden csystem.cpp:4007 VERBATIM below; see note above
+                   SystemStart==true && IsIndexMotorOutOfPower()==false)
+#else
+                   SystemStart==true)                                       //AI(W906-PT-csystem-g2) 20260809: GATE G03 default -- `&& IsIndexMotorOutOfPower()==false` dropped
+#endif // GATE G03
+                {
+                    QueueGalilCmd.SafeData();                                   //JerryYang 20250826 : fix galil log  //Steven 20231004 : 紀錄Galil命令換位置
+                    if(i==MTestY1)
+                        ShowMyMessage("Index MTestY1 Position error, Need home");                                       //Ifor 20151208 :Add Motor Home Massage
+                    else if(i==MTestY2)
+                        ShowMyMessage("Index MTestY2 Position error, Need home");                                       //Ifor 20151208 :Add Motor Home Massage
+                    else if(i==MTestZ1)
+                        ShowMyMessage("Index MTestZ1 Position error, Need home");                                       //Ifor 20151208 :Add Motor Home Massage
+                    else
+                        ShowMyMessage("Index MTestZ2 Position error, Need home");                                       //Ifor 20151208 :Add Motor Home Massage
+//                }
+                    SystemStart=false;
+                }
+            }
+        }
+        else
+        {
+            if(iHome==1)
+            {
+                MOT[i].ScanMotorStatus();
+            }
+            else
+            {
+                if(i==MInArmX || i==MInArmY || i==MOutArmX || i==MOutArmY || i==MTrayX)
+                {
+                    MOT[i].ScanMotorStatus();
+
+                    if(CUSTOMER_CODE==CC_JCET)                                  //Steven 20200312
+                    {
+                        if(i==MInArmX && (MOT[i].Led[iAlarmLed] ||
+                                          MOT[i].Led[iCcwLed]   ||
+                                          MOT[i].Led[iSoftccwLed]))
+                        {
+                            str1.sprintf("In Arm X CCW alarm, iAlarmLed:%d, iCcwLed%d, Pos:%d",  MOT[i].Led[iAlarmLed]?1:0, MOT[i].Led[iCcwLed]?1:0, MOT[i].ReadEncoderPos());
+                            MyDBIProcessNew("Motion", "WAR240004", str1, "ScanAllMotorStatus");
+                            MOT[i].Led[iAlarmLed]=false;
+                            MOT[i].Led[iCcwLed]=false;
+                            MOT[i].Led[iSoftccwLed]=false;
+                        }
+                    }
+                }
+            }
+
+            if(MOT[i].Motor->Enable &&
+               MOT[i].Motor->PServoAlarmOn==1 &&
+               MOT[i].Led[iAlarmLed])                                           // check alarm led
+            {
+                if(SystemStart==true)
+                {
+                    if(iHome!=1)
+                    {
+                        sprintf(str, "M %02d %s error", i+1, MOT[i].Alias.c_str());
+                        iRef=MOT[i].GetErrorIndex();
+                        if(iRef==9)
+                            iRef=6;
+                        JamCode=MotorIndexToJamCode(i);
+                        ShowMotorErrorMessage(JamCode, iRef+1);
+                        iHome=1;
+                        fAllMotorHome=false;
+                        SystemStart=false;
+                    }
+                }
+                else
+                {
+                    #ifdef DEBUG_AutoHomeLog
+                    if(fAllMotorHome==true)
+                    {
+                        NewRecordProcess("", "fAllMotorHome", "ScanAllMotorStatus");
+                    }
+                    #endif
+                    MOT[i].HomeFlag=0;
+                    fAllMotorHome=false;
+                    SystemStart=false;
+                }
+            }
+            else if(MOT[i].Motor->Enable && MOT[i].Led[iEmgLed])                //William 20210330.01 MOT.Led[iEmgLed] 回傳ture值 異常警報.
+            {
+                if(SystemStart==true)
+                {
+                    str1.sprintf("Motor %s EMG Led is on Error", MOT[i].NumberAlias);
+                    str2.sprintf("馬達%s EMG燈號異常", MOT[i].NumberAlias);
+                    ShowMyMessage(str1, str2);
+                }
+                fAllMotorHome=false;
+                SystemStart=false;
+            }
+        }
+    }
+}
+//==============================================================================
+// 檢查當畫面不在 IOSETVIEW 或暫停時面板 [Power On] [Power Off]情形
+//==============================================================================
+void CheckMotorPowerShutDown()
+{
+    #ifdef SOFT_SIMULTE
+//        fMain->palMain->Enabled=true;
+        return;
+    #else
+
+        static int DelayMotNo=0;
+        static bool MOTPower=false,flag=true;
+        static bool bKeyPowerOffPressed=false;                                  //Steven 20100225 : 防止Relay一直跳!
+        bool bOn=false,bOff=false,bOnR=false,bOffR=false;
+
+        if(IsSafeLockCheck())
+            return ;
+        if(flag && DelayMotNo>=100)
+        {
+//AI(W906-PT-csystem-g2) 20260809: GATE G31a -- golden csystem.cpp:4116.  DoMotorPowerOn() is DECLARED at csystem.h:151 and
+// defined nowhere in the port; golden defines it at csystem.cpp:19102 (csystem WAVE 2).
+// DEFAULT: SW[SwServerON].On() on the next line, MotorPowerOnDelay,
+// bMotorPowerState=true and the flag/MOTPower bookkeeping ALL stay ACTIVE -- only the
+// power-on sequencer body is missing.
+// *** DELTA IN CAPITALS: THE FIRST-ENTRY MOTOR POWER-ON SEQUENCE IS NOT RUN, YET
+// *** bMotorPowerState IS STILL LATCHED TRUE, SO THE PORT *BELIEVES* MOTOR POWER IS ON
+// *** WITHOUT HAVING TURNED IT ON.
+#if 0 // GATE G31a -- golden csystem.cpp:4116 VERBATIM below; see note above
+            DoMotorPowerOn();
+#endif // GATE G31a
+            SW[SwServerON].On();
+            #ifdef SOFT_SIMULTE
+                MotorPowerOnDelay=0;
+            #else
+                MotorPowerOnDelay=SERVER_MOTOR_POWER_ON_DELAY;
+            #endif
+            bMotorPowerState=true;
+            flag=false;
+            MOTPower=true;
+//            fMain->palMain->Enabled=true;
+//AI(W906-PT-csystem-g2) 20260809: GATE G30 -- golden csystem.cpp:4127-4128.  fMain->SitePanel is NOT a member of the
+// ported TfMain (tree-wide grep for `SitePanel` = zero hits).  DEFAULT: nothing.
+// BEHAVIOUR DELTA: the site-panel Visible=false/true repaint kick after the first motor
+// power-on is skipped.  DISPLAY ONLY.
+#if 0 // GATE G30 -- golden csystem.cpp:4127-4128 VERBATIM below; see note above
+            fMain->SitePanel->Visible=false;
+            fMain->SitePanel->Visible=true;
+#endif // GATE G30
+        }
+
+        if(flag && DelayMotNo<100)
+            DelayMotNo++;
+        if(bFrontPadActive)
+        {
+            bOn=Sen[SnFKPowerOn].Status();
+            bOff=Sen[SnFKPowerOff].Status();
+        }
+        else
+        {
+            bOnR=Sen[SnRKPowerOn].Status();
+            bOffR=Sen[SnRKPowerOff].Status();
+        }
+
+        if((bOff && bOn==false) ||(bOffR && bOnR==false))
+        {
+//AI(W906-PT-csystem-g2) 20260809: GATE G29 -- golden csystem.cpp:4146-4149.  fHome->GaliMotorServoOff(AnsiString) is NOT a
+// member of the ported TfHome -- forms/fHome.h:24,:30 says so explicitly ('does NOT declare
+// GaliMotorServoOff'), and csystem.cpp itself already stands the same call in at line 2793
+// (`#define W7C2_FHOME_SERVOOFF(f) do { (void)(f); } while(0)`).  DEFAULT: nothing.
+// *** SAFETY-RELEVANT DELTA, IN CAPITALS: WHEN THE OPERATOR PRESSES THE PANEL [Power Off]
+// *** KEY, THE GALIL SERVO-OFF THAT ALSO GRABS THE INDEX Z BRAKES (Steven 20230712, the fix
+// *** for 'SwServoOn.Off must hold the Z brake') IS NOT ISSUED, SO INDEX Z COULD DROP ON A
+// *** REAL MACHINE.  Note the same call is ALREADY inert in this file's W7C2 region, so this
+// *** gate does not make the tree worse than it already is; it must be un-gated together
+// *** with W7C2_FHOME_SERVOOFF when TfHome grows the method.
+#if 0 // GATE G29 -- golden csystem.cpp:4146-4149 VERBATIM below; see note above
+            if(bKeyPowerOffPressed)
+            {
+                fHome->GaliMotorServoOff("CheckMotorPowerShutDown");            //Steven 20230712 : 修正SwServoOn.Off時, 要抓住Z煞車
+            }
+#endif // GATE G29
+        }
+        else if((bMotorPowerState==false && bOn)  || (bOnR && bMotorPowerState==false))
+        {
+            bMotorPowerState=true;
+//AI(W906-PT-csystem-g2) 20260809: GATE G31b -- golden csystem.cpp:4154.  Same DECLARATION-ONLY DoMotorPowerOn as G31a, on
+// the [Power On] key-press edge.  SW[SwServerON].Off()/.On() and
+// MotorPowerOnDelay=SERVER_MOTOR_POWER_ON_DELAY below stay ACTIVE.
+// *** DELTA IN CAPITALS: PRESSING [Power On] LATCHES bMotorPowerState AND PULSES SwServerON
+// *** BUT DOES NOT RUN THE POWER-ON SEQUENCER.
+#if 0 // GATE G31b -- golden csystem.cpp:4154 VERBATIM below; see note above
+            DoMotorPowerOn();
+#endif // GATE G31b
+            SW[SwServerON].Off();
+            SW[SwServerON].On();
+            MotorPowerOnDelay=SERVER_MOTOR_POWER_ON_DELAY;
+//AI(W906-PT-csystem-g2) 20260809: GATE G31c -- golden csystem.cpp:4158-4162.  The same five DECLARATION-ONLY *BreakerOFF
+// entry points as G04 / G07 / G10.
+// *** DELTA IN CAPITALS: THE [Power On] EDGE NO LONGER DROPS THE INDEX / MAGAZINE /
+// *** IN-OUT-ARM-Z / LOADER-ROTATE-Z / CASSETTE BRAKES BEFORE POWER COMES BACK.
+#if 0 // GATE G31c -- golden csystem.cpp:4158-4162 VERBATIM below; see note above
+            IndexMotorBreakerOFF();
+            MagazineBreakerOFF();                                               //JerryYang 20220909 : add magazine
+            InOutArmZBreakerOFF();                                              //add One sucker with rotate
+            LDCarRotArmZBreakerOFF();                                           //RogerYang 20250828 add for Loader Rotate Arm
+            CassetteBreakerOFF();                                               //Ifor 20251216 add:Boat Carrier
+#endif // GATE G31c
+        }
+
+        if(bMotorPowerState)
+        {
+            bLampPowerOn=true;
+            bLampPowerOff=false;
+            bKeyPowerOffPressed=true;
+        }
+        else
+        {
+            #ifdef DEBUG_AutoHomeLog
+            if(fAllMotorHome==true)
+            {
+                NewRecordProcess("", "fAllMotorHome", "CheckMotorPowerShutDown");
+            }
+            #endif
+            fAllMotorHome=false;
+            bLampPowerOn=FlushFlag;
+            bLampPowerOff=true;
+            bKeyPowerOffPressed=false;
+        }
+    #endif
+}
+//------------------------------------------------------------------------------
+//when system is pause in Ac_Motr Move ,auto break Ac_motor
+//------------------------------------------------------------------------------
+void Check_AcMotor()
+{
+    for(int i=eAuto1; i<=iAutoRight; i++)
+    {
+        if(Sen[SnAutoTrayCar[i]].IsOff()==false)
+            SW[SwAutoCCW[i]].Off();
+    }
+
+    if(Sen[SnLoaderSureTray].IsOff()==false)
+    {
+        if(INSTALL_OCR!=eocrUninstal && CosFunction.bTrayOCR)                   //wei 20150925 待機位置改道 Color
+        {
+            if(INSTALL_OCR_YMot==eocrYMotUninstal)                              //Frank 20250214 add
+            {
+                MOT[MLoaderY].PCIL132_StopMotor();
+                MOT[MLoaderY].PCIL132_SetPos(0);
+            }
+        }
+        else
+        {
+            SW[SwACTrayY].Off();
+        }
+    }
+}
+//==============================================================================
+// 此為系統檢查電力,真空,正壓供應情形,及加熱,門栓
+//==============================================================================
+void DoIndexZ1Z2Free(int type)
+{
+    if((Sen[SnMotorPower].IsOff() && MotorPowerOnDelay>0) || type==0)
+    {
+        if(SystemStart && iHome!=0)
+        {
+            SW[SwManualZ1].Off();
+            SW[SwManualZ2].Off();
+            return;
+        }
+        SW[SwManualZ1].OnOff(FlushFlag);
+        SW[SwManualZ2].OnOff(FlushFlag);
+        if(Sen[SnFMotorDown].IsOn() && IniConfig.bD48PowerOffEmgCanNotUseZ1Z2==false)
+        {
+            SW[SwManualZ1].On();
+            SW[SwFMotorBreaker].On();
+        }
+        else
+        {
+            SW[SwFMotorBreaker].Off();
+        }
+
+        if(Sen[SnBMotorDown].IsOn() && IniConfig.bD48PowerOffEmgCanNotUseZ1Z2==false)
+        {
+            SW[SwManualZ2].On();
+            SW[SwBMotorBreaker].On();
+        }
+        else
+        {
+            SW[SwBMotorBreaker].Off();
+        }
+    }
+    else
+    {
+        if(SystemStart==false)
+        {
+            if(IniConfig.bOpenDoorNotStopFan==true)
+            {
+                if(!((bHeaterDoorIsOpen[0] || bHeaterDoorIsOpen[1]) && bWantToStopChamberFan==false))
+                {
+                    SW[SwManualZ1].Off();
+                }
+                SW[SwManualZ2].Off();
+            }
+            else
+            {
+                SW[SwManualZ1].Off();
+                SW[SwManualZ2].Off();
+            }
+        }
+    }
+}
+//------------------------------------------------------------------------------
+void DoSystem()
+{
+    static int OldSecond=-1;
+    static bool bFirstEnter=true;
+    static bool bDoProcess=true;                                                //Steven 20110608 分段處理
+    static int iProcessCount=0;                                                 //Steven 20110608
+    #ifndef SOFT_SIMULTE
+    bool bIsIndexMotorOutOfPower=false;                                         //Sam 20200924 EMG/Servo 被干擾 Auto Home 增加 Alarm
+    bool bPLCDisconnet=false;                                                   //KenHsieh 20250424 : add PLC EMG異常
+    #endif
+//AI(W906-PT-csystem-g2) 20260809: GATE G04 -- golden csystem.cpp:4279-4294 (the whole out-of-power arm + its `else`).
+// FIVE symbols in it have no definition in the ported tree:
+//   IsIndexMotorOutOfPower  (csystem.h:121 decl only; golden csystem.cpp:1501)
+//   LockIndexMotorAndDoHomeProcess (csystem.h:122 decl only; golden csystem.cpp:1514)
+//   IndexMotorBreakerOFF    (csystem.h:143 decl only; golden csystem.cpp:1082)
+//   MagazineBreakerOFF / InOutArmZBreakerOFF / LDCarRotArmZBreakerOFF /
+//   CassetteBreakerOFF      (csystem.h:145/312/315/317 decl only; golden csystem.cpp
+//                            :24088/:24099/:24110/:24122 -- WAVE 2 of csystem)
+// DEFAULT: the `else` is gated away too, so the healthy-machine arm (the OldSecond/
+// iEMGPressDelay tick + DoIndexZ1Z2Free(1)) runs UNCONDITIONALLY.  That is exactly what a
+// machine with servo power does, because IsIndexMotorOutOfPower() is false there.
+// *** SAFETY-CRITICAL DELTA, IN CAPITALS: WHEN THE INDEX AXES REALLY LOSE SERVO POWER THE
+// *** PORT NO LONGER (a) LATCHES bIsIndexMotorOutOfPower, (b) LOCKS THE INDEX MOTOR AND
+// *** FORCES A HOME, (c) DROPS THE INDEX/MAGAZINE/ARM-Z/CASSETTE BRAKES, OR (d) CALLS
+// *** DoIndexZ1Z2Free(0) TO FREE Z1/Z2 -- IT TAKES THE NORMAL-RUN PATH INSTEAD.  THE
+// *** DOWNSTREAM `IsEMGPressed() || bIsIndexMotorOutOfPower` EMG ALARM (golden :4414, see
+// *** GATE G13) THEREFORE ALSO LOSES ITS SECOND TRIGGER.
+#if 0 // GATE G04 -- golden csystem.cpp:4279-4294 VERBATIM below; see note above
+    if(IsIndexMotorOutOfPower())
+    {
+        #ifndef SOFT_SIMULTE
+        if(fAllMotorHome && SystemStart && iHome==0)                            //Sam 20200924 EMG/Servo 被干擾 Auto Home 增加 Alarm
+            bIsIndexMotorOutOfPower=true;
+        #endif
+
+        LockIndexMotorAndDoHomeProcess();
+        IndexMotorBreakerOFF();
+        MagazineBreakerOFF();                                                   //JerryYang 20220909 : add magazine
+        InOutArmZBreakerOFF();                                                  //add One sucker with rotate
+        LDCarRotArmZBreakerOFF();                                               //RogerYang 20250828 add for Loader Rotate Arm
+        CassetteBreakerOFF();                                                   //Ifor 20251216 add:Boat Carrier
+        DoIndexZ1Z2Free(0);
+    }
+    else
+#endif // GATE G04
+    {
+        if(OldSecond!=SystemSec)
+        {
+            OldSecond=SystemSec;
+//AI(W906-PT-csystem-g2) 20260809: GATE G34 -- golden csystem.cpp:4299-4300 (golden's own mis-indentation of :4300 kept).
+// iEMGPressDelay has NO declaration and NO definition anywhere in the port; golden defines
+// it at csystem.cpp:133 -- inside the golden 1..3042 range a SIBLING GROUP of this same
+// wave owns -- and declares it extern NOWHERE, so it is a csystem.cpp-private global.
+// DEFAULT: the countdown is not decremented.  NET BEHAVIOUR OFFLINE: none, because its only
+// other reader in this range is golden :4303, which GATE G05 already removes.
+// UN-GATE together with G05 the moment the sibling block lands `int iEMGPressDelay=3;`
+// ABOVE this block in this same file.
+#if 0 // GATE G34 -- golden csystem.cpp:4299-4300 VERBATIM below; see note above
+            if(iEMGPressDelay>0)
+            iEMGPressDelay--;
+#endif // GATE G34
+        }
+        DoIndexZ1Z2Free(1);
+//AI(W906-PT-csystem-g2) 20260809: GATE G05 -- golden csystem.cpp:4303-4313.  IndexMotorBreakerON / MagazineBreakerON /
+// InOutArmZBreakerON / LDCarRotArmZBreakerOn / CassetteBreakerON are all DECLARATION-ONLY
+// (csystem.h:142/144/311/314/316; golden csystem.cpp:1076 / :24083 / :24093 / :24105 /
+// :24115 -- the last four are csystem WAVE 2).  DEFAULT: nothing happens.
+// *** SAFETY-RELEVANT DELTA, IN CAPITALS: THE PER-TICK RE-ENGAGE OF THE INDEX / MAGAZINE /
+// *** IN-OUT-ARM-Z / LOADER-ROTATE-Z / CASSETTE MOTOR BRAKES IS UNREACHABLE OFFLINE, SO A
+// *** MACHINE THAT DROPPED THOSE BRAKES NEVER RE-ARMS THEM FROM DoSystem.
+#if 0 // GATE G05 -- golden csystem.cpp:4303-4313 VERBATIM below; see note above
+        if(bFirstEnter==false && iEMGPressDelay<=0 && MotorPowerOnDelay<=0)
+        {
+            if(SystemStart==false || iHome!=1)
+            {
+                IndexMotorBreakerON();
+                MagazineBreakerON();                                            //JerryYang 20220909 : add magazine
+                InOutArmZBreakerON();                                           //add One sucker with rotate
+                LDCarRotArmZBreakerOn();                                        //RogerYang 20250828 add for Loader Rotate Arm
+                CassetteBreakerON();                                            //Ifor 20251216 add:Boat Carrier
+            }
+        }
+#endif // GATE G05
+    }
+    bFirstEnter=false;
+
+//以下
+    if(bDoProcess)
+    {
+        ProcessAlarm();
+        ScanAllMotorStatus(iProcessCount);
+        iProcessCount=(iProcessCount++>=3)?0:iProcessCount;                     //Steven 20110608 : 分成4次Scan, 減低CPU負載
+    }
+
+    if(Sen[SnSystemPower].IsOff()==false)
+        CheckSystemPower=true;
+
+    if(Sen[SnSystemPower].IsOff()==true)                                        // 系統斷電
+    {
+        if(SystemStart)
+        {
+            MOT[MTestY1].Gali_Command("ST", __FUNC__+AnsiString(",SnSystemPowerIsOff"));
+//AI(W906-PT-csystem-g2) 20260809: GATE G07 -- golden csystem.cpp:4333-4337 (system-power-off arm).  Same five
+// DECLARATION-ONLY *BreakerOFF entry points as G04.  The Galil `ST` stop command on the
+// line above and StopAllMotor() below STAY ACTIVE.
+// *** DELTA IN CAPITALS: ON SYSTEM POWER LOSS THE FOUR BRAKE GROUPS ARE NOT DROPPED.
+#if 0 // GATE G07 -- golden csystem.cpp:4333-4337 VERBATIM below; see note above
+            IndexMotorBreakerOFF();
+            MagazineBreakerOFF();                                               //JerryYang 20220909 : add magazine
+            InOutArmZBreakerOFF();                                              //add One sucker with rotate
+            LDCarRotArmZBreakerOFF();                                           //RogerYang 20250828 add for Loader Rotate Arm
+            CassetteBreakerOFF();                                               //Ifor 20251216 add:Boat Carrier
+#endif // GATE G07
+        }
+        StopAllMotor();
+
+        #ifdef DEBUG_AutoHomeLog
+        if(fAllMotorHome==true)
+        {
+            NewRecordProcess("", "fAllMotorHome", "DoSystem_1");
+        }
+        #endif
+
+        fAllMotorHome=false;
+        MotorPowerOnDelay=SERVER_MOTOR_POWER_ON_DELAY;
+        if(CheckSystemPower && SystemStart)
+            if(ShowErrorMessage("WAR1601", K_RETRY|K_SKIP, MMSystem)==K_SKIP)
+                CheckSystemPower=false;
+        SystemStart=false;
+//AI(W906-PT-csystem-g2) 20260809: GATE G09 -- golden csystem.cpp:4354-4355.  HSys.BinDisCtrl is a TMyBinDispCtrl* that is
+// NULL offline (database.h:354 declares HSys; the UI wave that news BinDisCtrl is not
+// ported -- acatchtray.cpp:3951 gates the same pointer for the same reason), and
+// database.h is not even included by this TU, so bFirstInit / ProcessStopStart are not
+// nameable here.  DEFAULT: no bin-display re-init.  BEHAVIOUR DELTA: the external Bin
+// Display box is not re-initialised / stop-started after a system power loss (display only;
+// no motion, no interlock).
+#if 0 // GATE G09 -- golden csystem.cpp:4354-4355 VERBATIM below; see note above
+        HSys.BinDisCtrl-> bFirstInit=true;
+        HSys.BinDisCtrl->ProcessStopStart(true);
+#endif // GATE G09
+        RecordProcess("SnSystemPower Off");                                     //kevin 20180319 add log
+    }
+    else if(Sen[SnMotorPower].IsOff()==true)                                    // 馬達斷電
+    {
+        if(SystemStart && iHome==1 && fHome->iHomeStep<5)
+        {
+            ;
+        }
+        else
+        {
+            if(SystemStart)
+            {
+                MOT[MTestY1].Gali_Command("ST", __FUNC__+AnsiString(",SnMotorPowerIsOff"));
+//AI(W906-PT-csystem-g2) 20260809: GATE G10 -- golden csystem.cpp:4369-4373 (motor-power-off arm).  Same five
+// DECLARATION-ONLY *BreakerOFF entry points as G04/G07.
+// *** DELTA IN CAPITALS: ON MOTOR POWER LOSS THE FOUR BRAKE GROUPS ARE NOT DROPPED.
+#if 0 // GATE G10 -- golden csystem.cpp:4369-4373 VERBATIM below; see note above
+                IndexMotorBreakerOFF();
+                MagazineBreakerOFF();                                           //JerryYang 20220909 : add magazine
+                InOutArmZBreakerOFF();                                          //add One sucker with rotate
+                LDCarRotArmZBreakerOFF();                                       //RogerYang 20250828 add for Loader Rotate Arm
+                CassetteBreakerOFF();                                           //Ifor 20251216 add:Boat Carrier
+#endif // GATE G10
+            }
+
+            if(bDoProcess==false)
+            {
+                #ifdef DEBUG_AutoHomeLog
+                if(fAllMotorHome==true)
+                {
+                    NewRecordProcess("", "fAllMotorHome", "DoSystem_2");
+                }
+                #endif
+                fAllMotorHome=false;
+                MotorPowerOnDelay=SERVER_MOTOR_POWER_ON_DELAY;
+                if(SystemStart)
+                    ShowErrorMessage("WAR1602", K_RETRY, MMSystem);
+                SystemStart=false;
+                StopAllMotor();
+            }
+        }
+    }
+
+//AI(W906-PT-csystem-g2) 20260809: GATE G11 -- golden csystem.cpp:4394.  RecordSafeDoorStates() is DECLARED at
+// csystem.h:243 and defined NOWHERE in the port; golden defines it at csystem.cpp:2833,
+// inside the 1..3042 range a SIBLING group of this wave owns.  DEFAULT: no call.
+// BEHAVIOUR DELTA: the per-tick safe-door open/close AUDIT LOG is not written.  This is a
+// LOGGING loss only -- it is not an interlock; the interlock is CheckSafeDoorIsClosed()
+// below.  UN-GATE as soon as the sibling body lands (single line).
+#if 0 // GATE G11 -- golden csystem.cpp:4394 VERBATIM below; see note above
+    RecordSafeDoorStates();                                                     //Steven 20100116
+#endif // GATE G11
+
+    if(SystemStart)
+    {
+        //**********************************************************************
+        //
+        //  注意!! 安全門、ESD、EMG必須在System Start中優先執行檢查與確認, 修改時要小心!!
+        //
+        //**********************************************************************
+        #ifndef SOFT_SIMULTE
+//AI(W906-PT-csystem-g2) 20260809: GATE G12 -- golden csystem.cpp:4404-4407.  bCheckPLCConnet() is DECLARED at
+// csystem.h:307 and defined nowhere; golden defines it at csystem.cpp:24395 (csystem
+// WAVE 2).  DEFAULT: bPLCDisconnet stays false.  BEHAVIOUR DELTA: on a PLC-safety machine
+// (Enable_PLCSafety_IO) a DISCONNECTED PLC is no longer detected here, so the
+// 'PLC disconnect, please check PLC' message at golden :4427 can never be shown.
+#if 0 // GATE G12 -- golden csystem.cpp:4404-4407 VERBATIM below; see note above
+        if(Enable_PLCSafety_IO && bCheckPLCConnet()==false)
+        {
+            bPLCDisconnet=true;
+        }
+#endif // GATE G12
+
+        if(CheckSafeDoorIsClosed()==false)                                      //jou 20171030 (Steven) : 修正安全門未關按Start時IndexArm會先動作
+        {
+            SystemStart=false;
+            StopAllMotor();
+        }
+//AI(W906-PT-csystem-g2) 20260809: GATE G13 -- golden csystem.cpp:4414, the sub-term `IsEMGPressed() ||`.  IsEMGPressed is
+// DECLARED at csystem.h:147 and defined nowhere in the port; golden defines it at
+// csystem.cpp:1416, inside the 1..3042 range a SIBLING group of this wave owns.
+// DEFAULT: the condition keeps only `bIsIndexMotorOutOfPower`, which GATE G04 has left
+// permanently false -- so the whole EMG arm is compiled but currently unreachable.  It was
+// gated as a sub-term (not as a block) on purpose: the instant either IsEMGPressed lands or
+// G04 is un-gated, the EMG ladder starts working again with no further edit to its body.
+// *** SAFETY-CRITICAL DELTA, IN CAPITALS: EMG-PRESSED DETECTION INSIDE DoSystem IS
+// *** UNREACHABLE.  StopAllMotor(), SystemStart=false AND THE FIVE EMG ALARMS WAR1630 /
+// *** WAR1631 / WAR1632 / WAR1633 / WAR1634 (+ WAR16140 PLC-EMG) CANNOT FIRE FROM HERE.
+// *** UN-GATE THIS ONE LINE AS THE FIRST ACTION AFTER IsEMGPressed LANDS.
+#if 0 // GATE G13 -- golden csystem.cpp:4414 VERBATIM below; see note above
+        else if(IsEMGPressed() || bIsIndexMotorOutOfPower)                      //Sam 20200924 EMG/Servo 被干擾 Auto Home 增加 Alarm
+#else
+        else if(bIsIndexMotorOutOfPower)                                    //AI(W906-PT-csystem-g2) 20260809: GATE G13 default -- `IsEMGPressed() ||` dropped
+#endif // GATE G13
+        {
+            StopAllMotor();
+            if(Sen[SnFrontLeftEMG].IsOff())         ShowErrorMessage("WAR1630", K_RETRY, MMSystem);
+            else if(Sen[SnFrontRightEMG].IsOff())   ShowErrorMessage("WAR1631", K_RETRY, MMSystem);
+            else if(Sen[SnRearLeftEMG].IsOff())     ShowErrorMessage("WAR1632", K_RETRY, MMSystem);
+            else if(Sen[SnRearRightEMG].IsOff())    ShowErrorMessage("WAR1633", K_RETRY, MMSystem);
+            else if(Sen[SnServo].Enable && Sen[SnServo].IsOff())    ShowErrorMessage("WAR1634", K_RETRY, MMSystem);     //kevin 20140121  EMG沒有完全按下去
+            else if(Enable_PLCSafety_IO && Sen[SnAllEMG].IsOff())   ShowErrorMessage("WAR16140", K_RETRY, MMSystem);    //KenHsieh 20250424 : add PLC EMG異常
+            else if(bIsIndexMotorOutOfPower)        ShowMyMessage("EMG/Servo sensor error! Please Check IO module", "EMG/Servo 訊號異常，請檢查 IO 模組");                //Sam 20210922 : 修改顯示訊息   //Sam 20200924 EMG/Servo 被干擾 Auto Home 增加 Alarm
+            SystemStart=false;
+
+            if(Enable_PLCSafety_IO && bPLCDisconnet)                            //KenHsieh 20250424 : add PLC EMG異常
+                ShowMyMessage("PLC disconnect, please check PLC", "PLC斷線，請檢查PLC");
+        }
+
+//AI(W906-PT-csystem-g2) 20260809: GATE G14 -- golden csystem.cpp:4430-4435.  bCheckPLCAllSafedoorAndEMGEnable() is
+// DECLARED at csystem.h:308 and defined nowhere; golden defines it at csystem.cpp:24427
+// (csystem WAVE 2).  DEFAULT: no refusal.
+// *** SAFETY-CRITICAL DELTA, IN CAPITALS: ON A PLC-SAFETY MACHINE WITHOUT PLC SAFE MODE,
+// *** THE CHECK THAT EVERY All-SafeDoor / All-EMG PLC IO POINT IS ACTUALLY *ENABLED* IS
+// *** UNREACHABLE, SO SystemStart=false + StopAllMotor() NO LONGER HAPPEN WHEN THAT IO IS
+// *** MIS-CONFIGURED.
+#if 0 // GATE G14 -- golden csystem.cpp:4430-4435 VERBATIM below; see note above
+        if(Enable_PLCSafety_IO &&
+           bCheckPLCAllSafedoorAndEMGEnable()==false)                           //KenHsieh 20250320 : PLC 無安全模式且有裝All safedoor and EMG IO 需判斷是否Enable
+        {
+            SystemStart=false;
+            StopAllMotor();
+        }
+#endif // GATE G14
+        #endif
+
+        if(bDoProcess==false)
+        {
+            CheckIonFan();
+            #ifndef SOFT_SIMULTE
+            if(CheckIonFan()==false)                                            //Eliot 2007_0517
+            {
+                SystemStart=false;
+                StopAllMotor();
+                fMain->Pause("DoSystem ION Fan");
+            }
+            else if(Sen[SnAirIsEnough].IsOff())
+            {
+                StopAllMotor();
+                ShowErrorMessage("WAR1603", K_RETRY, MMSystem);
+                SystemStart=false;
+            }
+            else if(Sen[SnChamberDryAir].IsOff())
+            {
+                StopAllMotor();
+                ShowErrorMessage("WAR16446", K_RETRY, MMSystem);
+                SystemStart=false;
+            }
+            else if(Sen[SnDryAirIsEnough].IsOff())
+            {
+                StopAllMotor();
+                ShowErrorMessage("WAR1610", K_RETRY, MMSystem);
+                SystemStart=false;
+            }
+            else if((Sen[SnFixFloating1].IsOn() || Sen[SnFixFloating2].IsOn()) &&
+                     CheckOutArmZ(false)==false)                                //Steven 20120131 : Fix Tray置偏偵測
+            {
+                StopAllMotor();
+                ShowErrorMessage("WAR1731", K_RETRY, MManualTrayAll);
+                SystemStart=false;
+            }
+            else if((Sen[SnGroundMan ].Enable && Sen[SnGroundMan ].IsOff()==true) ||                                    //wei 20150424 add SnGroundMan偵測
+                    (Sen[SnGroundMan2].Enable && Sen[SnGroundMan2].IsOff()==true) ||
+                    (Sen[SnGroundMan3].Enable && Sen[SnGroundMan3].IsOff()==true) ||
+                    (Sen[SnGroundMan4].Enable && Sen[SnGroundMan4].IsOff()==true))
+            {
+                StopAllMotor();
+                ShowErrorMessage("WAR1609", K_RETRY, MMSystem);
+                SystemStart=false;
+            }
+            else if(Sen[SnSmokeDetect01].Enable &&
+                    Sen[SnSmokeDetect01].IsOff()==true)                         //Sam 20240112 : 新增煙霧偵測
+            {
+                StopAllMotor();
+                ShowErrorMessage("WAR1669", K_RETRY, MMSystem);
+                SystemStart=false;
+            }
+            else if(bMotorPowerState==false || MotorPowerOnDelay)
+            {
+                SystemStart=false;
+            }
+            #endif
+        }
+        //jou 2010-10-04 start : 負壓sensor檢知
+        if(INDEX_SUCKER_TYPE==1 &&
+           LastSet.iRealDummy!=DUMMY)                                           //Steven 20180209 : Dummy Run不檢查負壓幫浦
+        {
+            if(SW[SwAirOff].Enable==true &&
+               (SW[SwAirOff].Status()==false ||
+                fAllMotorHome==false))                                          //Steven 20230308 : Power saving for vacuum pump
+            {
+            }
+            else
+            {
+                if(Sen[SnNegativePressureAir].IsOff())
+                {
+                    if(bIndexCheck1 || bIndexCheck2)                            //kevin 20170120 (Steven) index vaccuum check 壓力降先不發ALARM
+                    {
+                    }
+                    else
+                    {
+                        StopAllMotor();
+                        ShowErrorMessage("WAR1604", K_RETRY, MMSystem);
+                        SystemStart=false;
+                    }
+                }
+                //Sam 20171110 (Steven) : 新增氣壓 Sensor
+                //==>
+                if(Sen[SnNegativePressureAir2].IsOff())
+                {
+                    if(bIndexCheck1 || bIndexCheck2)                            //kevin 20170120 (Steven) index vaccuum check 壓力降先不發ALARM
+                    {
+                    }
+                    else
+                    {
+                        StopAllMotor();
+                        ShowErrorMessage("WAR1604", K_RETRY, MMSystem);
+                        SystemStart=false;
+                    }
+                }
+                //<==
+                //Sam 20171110 (Steven) : 新增氣壓 Sensor
+            }
+
+//AI(W906-PT-csystem-g2) 20260809: GATE G17 -- golden csystem.cpp:4536-4544.  fiosetview->ProcessIndexSuckDestroy1() /
+// ProcessIndexSuckDestroy2() are NOT members of the offline TfiosetviewShim
+// (atester_shims.h:410 / atester_shims.cpp:298); golden's bodies are
+// iosetview.cpp:1922 / :1881 (Tfiosetview), a form the port does not translate.  Two
+// sibling engines already gate the identical calls the same way (atester.cpp:1562-1563
+// W7T1_FIOSET_PISD1/2, atester_32Site.cpp:993/1011 W5_32S_FIOSET_PISD1/2).
+// DEFAULT: bIndexCheck1 / bIndexCheck2 are not cleared here.  BEHAVIOUR DELTA: the
+// 'help close the index vacuum that the AutoClean flow will not close' courtesy reset
+// (kevin 20170123) does not run; the vacuum-destroy latch is left to its owning engine.
+#if 0 // GATE G17 -- golden csystem.cpp:4536-4544 VERBATIM below; see note above
+            if(bIndexCheck1 && fiosetview->ProcessIndexSuckDestroy1())
+            {
+                bIndexCheck1=false;                                             //kevin 20170123 (Steven) 幫忙關閉真空 AUTOCLEAN 流程不會去關
+            }
+
+            if(bIndexCheck2 && fiosetview->ProcessIndexSuckDestroy2())
+            {
+                bIndexCheck2=false;                                             //kevin 20170123
+            }
+#endif // GATE G17
+        }
+        //jou 2010-10-04 end
+//AI(W906-PT-csystem-g2) 20260809: GATE G18 -- golden csystem.cpp:4547-4552.  fMonitor (TfMonitor, golden
+// Monitor/MonitorInterface.cpp:350 OpenMonitorVedio) has NO home in the port: the only
+// tree-wide hit for `fMonitor` is Automation/auto9045.cpp:1445, which itself stands the
+// form in as W5FA_FMonitor.  DEFAULT: no call.  BEHAVIOUR DELTA: with
+// IniConfig.bC11UseMonitorView on, the DVR channels (Ch0, and Ch3 for CC_Greatek) are not
+// opened from DoSystem, so run video is not recorded.  Video only -- no motion, no
+// interlock, no alarm.
+#if 0 // GATE G18 -- golden csystem.cpp:4547-4552 VERBATIM below; see note above
+        if(IniConfig.bC11UseMonitorView)                                        //JerryYang 20160621 錄影監視功能
+        {
+            fMonitor->OpenMonitorVedio(0);
+            if(CUSTOMER_CODE==CC_Greatek)                                       //AI(ht9045-v899) 20260422: sync Greatek monitor Ch3 open with Ch0
+                fMonitor->OpenMonitorVedio(3);
+        }
+#endif // GATE G18
+
+        if(IniConfig.bG06HomeinitialCheckZ1 &&bContractModeCheckPushZ1)         //kevin 20190227 add 前檢查是否有CI放在COCKET 造成機構損壞 按z1 確認
+        {                                                                       //確認 機台是否有tray 按 z1取消
+            ShowErrorMessage("MES0328", 0, MMSystem, false, "Contract--");
+            SystemStart=false;
+        }
+
+        if(IniConfig.bG22NoticeTakeoutTray && bContactModeNeedOpenDoor)         //JerryYang 20231218 : G22提醒人員取tray功能
+        {
+            ShowMyMessage("Please open SafeDoor3 and ensure there are no foreign objects on the hot plate.", "請打開安全門3確認Hotplate上無異物");
+            SystemStart=false;
+        }
+
+//AI(W906-PT-csystem-g2) 20260809: GATE G19 -- golden csystem.cpp:4566-4605 (the whole hot-gun flow ladder).  CheckHotGun()
+// and CheckHotGunFlow(int) are DECLARED at csystem.h:276-277 and defined nowhere in the
+// port; golden defines them at csystem.cpp:22912 and :22934 (csystem WAVE 2).
+// DEFAULT: no checks, SystemStart untouched.
+// *** SAFETY-RELEVANT DELTA, IN CAPITALS: ON A HOT-GUN MACHINE (Temperature.bActiveHeatGun)
+// *** THE FOUR FLOW ALARMS WAR15195 / WAR15196 (flow too LOW, gun 1 / gun 2) AND WAR15197 /
+// *** WAR15198 (flow too HIGH, gun 1 / gun 2) ARE UNREACHABLE AND THE MATCHING
+// *** SystemStart=false REFUSALS DO NOT HAPPEN, SO THE MACHINE WILL START WITH AN
+// *** UNDER-FLOWING HOT GUN.
+#if 0 // GATE G19 -- golden csystem.cpp:4566-4605 VERBATIM below; see note above
+        if(Temperature.bActiveHeatGun && bUseHotGunCheck)                       //kevin 20190621 hot gun 流量 不足偵測
+        {
+            if(CheckHotGun()==1)
+            {
+                ShowErrorMessage("WAR15195", 0, MMSystem, false, "Hot gun 1 流量過低");
+                SystemStart=false;
+            }
+
+            if(CheckHotGun()==2)
+            {
+                ShowErrorMessage("WAR15196", 0, MMSystem, false, "Hot gun 2 流量過低");
+                SystemStart=false;
+            }
+        }
+        else if(Temperature.bActiveHeatGun && HotGunFlowEnable && bUseHotGunFlowCheck)                                  //KaiChen 20190729 ：Hot Gun Flow
+        {
+            if(CheckHotGunFlow(1)==1)
+            {
+                ShowErrorMessage("WAR15195", 0, MMSystem, false, "Hot gun 1 流量過低");
+                SystemStart=false;
+            }
+
+            if(CheckHotGunFlow(1)==3)
+            {
+                ShowErrorMessage("WAR15197", 0, MMSystem, false, "Hot gun 1 流量過高");
+                SystemStart=false;
+            }
+
+            if(CheckHotGunFlow(2)==2)
+            {
+                ShowErrorMessage("WAR15196", 0, MMSystem, false, "Hot gun 2 流量過低");
+                SystemStart=false;
+            }
+
+            if(CheckHotGunFlow(2)==4)
+            {
+                ShowErrorMessage("WAR15198", 0, MMSystem, false, "Hot gun 2 流量過高");
+                SystemStart=false;
+            }
+        }
+#endif // GATE G19
+        //Ifor 20200115 : add Tester Dry Air Control
+        //==>
+        if(TestIF_File.bUseTesterDry==true)
+        {
+            if(Sen[SnTesterDryAir].Enable==true && Sen[SnTesterDryAir].IsOff()==true)
+            {
+                StopAllMotor();
+                ShowMyMessage("Working temperature is low(<=25).\r\nTester air is not enough!!\r\nPlease check tester air source.");
+                SystemStart=false;
+            }
+        }
+//        if(CosFunction.bFirstTrayCheckOnUnloader==true &&                       //Jimmychiu 20251205 : First Tray Check On Unloader
+//           IniConfig.bP63MachineStopAtIntervalTime==true &&
+//           IniConfig.iP63IntervalTime>0 &&
+//           fAllMotorHome==true &&
+//           tP62MachineStopTimer.Off())
+//        {
+//            ShowMyMessage("Machine stop routine check.\r\n Please call EE on-site confirm.");
+//        }
+    }
+    else                                                                        //Ifor 20180319 add 停機時進入 CheckIonFan 清除count 數
+    {
+        CheckIonFan();
+        #ifndef SOFT_SIMULTE
+        if(CheckIonFan()==false)                                                //Eliot 2007_0517
+        {
+            SystemStart=false;
+            StopAllMotor();
+            fMain->Pause("DoSystem ION Fan 2");
+        }
+        #endif
+    }
+
+    if(SystemStart==false)
+    {
+        if(bDoProcess)
+        {
+            CheckMotorPowerShutDown();
+            Check_AcMotor();
+            CheckSafeDoorForICFallDown();
+        }
+    }
+
+//AI(W906-PT-csystem-g2) 20260809: GATE G21 -- golden csystem.cpp:4649-4655.  CountMotorPowerDelay() has NO declaration
+// AND no definition anywhere in the port (grepped every .cpp/.h: zero hits); golden
+// defines it at csystem.cpp:1543, inside the 1..3042 range a SIBLING group of this wave
+// owns.  DEFAULT: the whole bDoProcess block is dropped, SystemStart is not cleared.
+// *** SAFETY-RELEVANT DELTA, IN CAPITALS: THE SERVO-POWER-ON SETTLING GUARD IS
+// *** UNREACHABLE -- DoSystem NO LONGER FORCES SystemStart=false WHILE MotorPowerOnDelay IS
+// *** STILL COUNTING DOWN, SO THE MACHINE CAN BE ALLOWED TO RUN BEFORE SERVO POWER HAS
+// *** SETTLED.  UN-GATE AS SOON AS THE SIBLING BODY LANDS.
+#if 0 // GATE G21 -- golden csystem.cpp:4649-4655 VERBATIM below; see note above
+    if(bDoProcess)
+    {
+        if(CountMotorPowerDelay()==false)
+        {
+            SystemStart=false;
+        }
+    }
+#endif // GATE G21
+
+//AI(W906-PT-csystem-g2) 20260809: GATE G22 -- golden csystem.cpp:4657-4672.  TWO blockers in one block:
+//   (a) ClearAllManualSuckTask() -- a body DOES exist at mykitsuck.cpp:2701, but
+//       mykitsuck.cpp is NOT REGISTERED in CMakeLists.txt (checked every non-comment line:
+//       neither `mykitsuck.cpp` nor `MyKitSuck.cpp` appears in any source list), so calling
+//       it is an undefined reference at executable link time.  Registering it is a whole
+//       wave of its own -- there are TWO different TMyKitSuck layouts in the tree
+//       (aHotPlateSubstrate.h:365 vs mykitsuck.h:274) plus 14 colliding globals.
+//   (b) fMain->bStartKeyPressCheck is NOT a member of the ported TfMain (forms/fMain.h;
+//       grepped the whole tree for `bStartKeyPressCheck`: zero hits outside golden).
+// DEFAULT: neither runs.  BEHAVIOUR DELTA: (a) manual (IO-page) sucker tasks are not
+// cleared when the machine goes to Start, so a manual vacuum left latched from the IO page
+// stays latched; (b) the one-shot Galil VS/SP speed re-issue on the Start key press
+// (Steven 20110309, the fix for 'IndexArm moves first when the safe door is not closed') is
+// not performed, so the Galil keeps whatever vector/slew speed it last had.
+#if 0 // GATE G22 -- golden csystem.cpp:4657-4672 VERBATIM below; see note above
+    if(SystemStart)
+    {
+        ClearAllManualSuckTask();
+        if(fMain->bStartKeyPressCheck==true)                                    //Steven 20110309 : for 安全門未關按Start時IndexArm會先動作
+        {
+            char str[256];
+            fMain->bStartKeyPressCheck=false;
+            if(iGali_VsSpeed<=0)
+                iGali_VsSpeed=30000;
+            if(iGali_SpSpeed<=0)
+                iGali_SpSpeed=10000;
+
+            sprintf(str,"VS%d;SP%d,%d,%d,%d;",iGali_VsSpeed,iGali_SpSpeed,iGali_SpSpeed,iGali_SpSpeed,iGali_SpSpeed);
+            MOT[MTestY1].Gali_Command(str, __FUNC__+AnsiString(",bStartKeyPressCheck"));
+        }
+    }
+#endif // GATE G22
+
+    //wei 20190617 漏水檢測
+    int iWaterLeakage=0;
+    if(bDoProcess)
+    {
+        if(Sen[SnWaterLeakageUp].Enable && Sen[SnWaterLeakageUp].IsOff()==true)
+        {
+            iWaterLeakage=1;
+            StopAllMotor();
+//            ShowErrorMessage("MES16113", K_RETRY, MMSystem);
+            SystemStart=false;
+        }
+
+        if(Sen[SnWaterLeakageDown].Enable && Sen[SnWaterLeakageDown].IsOff()==true)
+        {
+            iWaterLeakage=2;
+            StopAllMotor();
+//            ShowErrorMessage("MES16114", K_RETRY, MMSystem);
+            SystemStart=false;
+        }
+
+//AI(W906-PT-csystem-g2) 20260809: GATE G24a -- golden csystem.cpp:4694-4698.  ATC_TYPE_60 has no shared-header home in the
+// port: the only definitions are TU-LOCAL ones (TempCtrl/TriTemp.cpp:287 `const int
+// ATC_TYPE_60 = 60;`, uHeaterThread.cpp:282-283 a guarded #define), and this TU includes
+// neither.  A TU-local copy is NOT added here because a sibling group appending to THIS
+// file later could define the same name and collide.  DEFAULT: the ATC-6.0 skip arm and
+// its `else` are gated away, so the SnWaterLeakagePlate check below runs
+// UNCONDITIONALLY.  This is EXACTLY the offline behaviour anyway:
+// ATC_InterfaceForm->iATC_MODE_TYPE is 0 on the offline shim (acarry_shims.cpp:72), so
+// 0==60 is false and golden takes the same else arm.  BEHAVIOUR DELTA on a real ATC 6.0
+// machine: the water-leak plate sensor WOULD be checked where golden deliberately skips it
+// (JerryYang 20260611), i.e. an ATC 6.0 machine could raise a spurious MES16115.
+#if 0 // GATE G24a -- golden csystem.cpp:4694-4698 VERBATIM below; see note above
+        if(ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_60)      //JerryYang 20260611 : ATC 6.0不檢查
+        {
+        }
+        else
+        {
+#endif // GATE G24a
+            if(Sen[SnWaterLeakagePlate].Enable && Sen[SnWaterLeakagePlate].IsOff()==true)
+            {
+                iWaterLeakage=3;
+                StopAllMotor();
+    //            ShowErrorMessage("MES16115", K_RETRY, MMSystem);
+                SystemStart=false;
+            }
+//AI(W906-PT-csystem-g2) 20260809: GATE G24b -- golden csystem.cpp:4706, the closing brace of the `else` gated by G24a.
+// Gated purely to keep the braces balanced; no behaviour of its own.
+#if 0 // GATE G24b -- golden csystem.cpp:4706 VERBATIM below; see note above
+        }
+#endif // GATE G24b
+
+        if(Sen[SnWaterLeakageChiller].Enable &&
+           Sen[SnWaterLeakageChiller].IsOff()==true)                            //jou 20231019 : Water Leakage Chiller
+        {
+            iWaterLeakage=4;
+            StopAllMotor();
+//            ShowErrorMessage("MES16119", K_RETRY, MMSystem);
+            SystemStart=false;
+        }
+
+        if(iWaterLeakage!=0)
+        {
+            bRunATC=false;                                                      //ChungHung 20160118 add for Hisi V102
+//AI(W906-PT-csystem-g2) 20260809: GATE G25a -- golden csystem.cpp:4720-4734.  ATCInterfaceForm->bIsWaterLeakage /
+// SetRunATC / ATCChillerSwitch / ATC_60_SYS.SetATCRun do exist for real
+// (ATC/ATCInterface.h:525 + ATC/ATCInterface.cpp, registered), and ATC_InterfaceForm->Stop()
+// does NOT (TATC_InterfaceFormShim, acarry_shims.h:109-114, has only iATC_MODE_TYPE).
+// The block is gated as a whole rather than split because reaching the real ones would need
+// a NEW #include of ATC/ATCInterface.h appended AFTER this file's ~90 `#define <golden
+// name> W7C1_/W7C2_<seam>` redirects (csystem.cpp:1183-2902) -- any declaration inside that
+// header whose name collides with one of those macros would be silently mangled, which is a
+// far worse failure than a gate.  `bRunATC=false;` on the line ABOVE stays ACTIVE, and so do
+// all four water-leak alarms MES16113 / MES16114 / MES16115 / MES16119 below.
+// *** SAFETY-RELEVANT DELTA, IN CAPITALS: ON A WATER LEAK THE ATC IS NO LONGER TOLD TO STOP
+// *** (SetRunATC(false) / ATCChillerSwitch(false) / ATC_60_SYS.SetATCRun(false) /
+// *** ATC_InterfaceForm->Stop()) AND bIsWaterLeakage IS NOT LATCHED, SO THE CHILLER KEEPS
+// *** PUMPING INTO A LEAKING CIRCUIT.  THE OPERATOR ALARM STILL FIRES.
+#if 0 // GATE G25a -- golden csystem.cpp:4720-4734 VERBATIM below; see note above
+            ATCInterfaceForm->bIsWaterLeakage=true;                             //Steven 20210325 : 漏水檢知
+            if(ATC_SYSTEM==eATCHonPrecType)                                     //Steven 20120410 : Hontech ATC
+            {
+                ATCInterfaceForm->SetRunATC(false);
+                MySleep(100);
+                ATCInterfaceForm->ATCChillerSwitch(false);
+            }
+            else if(ATC_SYSTEM==eATC60 || ATC_SYSTEM==eATC30)                   //20141204 ChungHung add for ATC3.0    //2014-05-30    Dell    for ATC6.0
+            {
+                ATCInterfaceForm->ATC_60_SYS.SetATCRun(false);
+            }
+            else if(ATC_SYSTEM==eNewATCSystem)                                  //Ifor 20151230 :add New ATC Interface
+            {
+                ATC_InterfaceForm->Stop();                                      //Ifot 20151231 :add 停止 ATC 加熱/制冷
+            }
+#endif // GATE G25a
+
+            if(iWaterLeakage==1)
+            {
+                ShowErrorMessage("MES16113", K_RETRY, MMSystem);
+            }
+            else if(iWaterLeakage==2)
+            {
+                ShowErrorMessage("MES16114", K_RETRY, MMSystem);
+            }
+            else if(iWaterLeakage==3)
+            {
+                ShowErrorMessage("MES16115", K_RETRY, MMSystem);
+            }
+            else
+            {
+                ShowErrorMessage("MES16119", K_RETRY, MMSystem);                //jou 20231019 : Water Leakage Chiller
+            }
+        }
+//AI(W906-PT-csystem-g2) 20260809: GATE G25b -- golden csystem.cpp:4753-4756, the no-leak `else` that CLEARS
+// ATCInterfaceForm->bIsWaterLeakage.  Gated for the same include-vs-macro reason as G25a.
+// DEFAULT: nothing.  Behaviour-consistent with G25a (the flag is never set either).
+#if 0 // GATE G25b -- golden csystem.cpp:4753-4756 VERBATIM below; see note above
+        else
+        {
+            ATCInterfaceForm->bIsWaterLeakage=false;                            //Steven 20210325 : 漏水檢知
+        }
+#endif // GATE G25b
+    }
+    //wei 20190617 漏水檢測
+
+    DoSystemMessage();
+
+    if(bDoProcess==false)
+    {
+        bDoProcess=true;
+    }
+    else
+    {
+        bDoProcess=false;
+    }
+}
+//------------------------------------------------------------------------------
+int iDoInArmPitchCHKTask=1;
+int iDoOutArmPitchCHKTask=1;
+
+int iCHKInArmStepCT=1;
+int iCHKOutArmStepCT=1;
+
+void initDoInArmPitchCHKTask()
+{
+    iDoInArmPitchCHKTask=1;
+    iCHKInArmStepCT=0;
+}
+//==============================================================================
+void initDoOutArmPitchCHKTask()
+{
+    iDoOutArmPitchCHKTask=1;
+    iCHKOutArmStepCT=0;
+}
+//------------------------------------------------------------------------------
+//return note
+const int Waitting=0;
+const int Finish=1;
+const int NeedHome=2;
+const int iCHKStep=4;
+//------------------------------------------------------------------------------
+int  DoInArmPitchCHK()
+{
+    int &Task=iDoInArmPitchCHKTask;
+    bool PitchCHKFlag;
+    bool CHKHome2Status[4]={false,true,true,false};
+    MOT[MInArmPitch].SetSpeed(30);
+    switch(Task)
+    {
+        case 1:
+            PitchCHKFlag=MOT[MInArmPitch].MotorMove(InArmpitchCHKPos[iCHKInArmStepCT]);
+            if(PitchCHKFlag)
+                Task=100;
+            break;
+        case 100:
+            MOT[MInArmPitch].ScanMotorStatus();
+            if(MOT[MInArmPitch].Home2Led==CHKHome2Status[iCHKInArmStepCT])
+                Task=200;
+            else                                                                //must pitch Motordo home process
+                return NeedHome;
+            break;
+        case 200:
+            iCHKInArmStepCT++;
+            if(iCHKInArmStepCT>=iCHKStep)
+                return Finish;
+            else
+                Task=1;
+    }
+    return Waitting;
+}
+//------------------------------------------------------------------------------
+int  DoOutArmPitchCHK()
+{
+    int &Task=iDoOutArmPitchCHKTask;
+    bool PitchCHKFlag;
+    bool CHKHome2Status[4]={false, true, true, false};
+    MOT[MOutArmPitch].SetSpeed(30);
+    switch(Task)
+    {
+        case 1:
+            PitchCHKFlag=MOT[MOutArmPitch].MotorMove(OutArmpitchCHKPos[iCHKOutArmStepCT]);
+            if(PitchCHKFlag)
+                Task=100;
+            break;
+        case 100:
+            MOT[MOutArmPitch].ScanMotorStatus();
+            if(MOT[MOutArmPitch].Home2Led==CHKHome2Status[iCHKOutArmStepCT])
+                Task=200;
+            else                                                                //must pitch Motordo home process
+                return NeedHome;
+            break;
+        case 200:
+            iCHKOutArmStepCT++;
+            if(iCHKOutArmStepCT>=iCHKStep)
+                return Finish;
+            else
+                Task=1;
+    }
+    return Waitting;
+}
+//------------------------------------------------------------------------------
+//AI(W906-PT-csystem-g2) 20260809: GATE G33 -- golden csystem.cpp:4856-4862.  These three -- iAllArmZHomeTask,
+// iAllArmZHomeCount and InitDoArmZHome() -- ARE ALREADY TRANSLATED IN THIS FILE, at
+// csystem.cpp:162, :178 and :179-183, landed by AI(W906-W7-L2-substrate) 20260803 in
+// golden's own neighbourhood.  Re-emitting them here would be a redefinition (hard error).
+// The golden text is kept verbatim in the gated arm ONLY as the audit trail that this group
+// did not skip golden lines 4856-4862.  ZERO BEHAVIOUR DELTA -- the live definitions above
+// are byte-identical to golden's.
+#if 0 // GATE G33 -- golden csystem.cpp:4856-4862 VERBATIM below; see note above
+int iAllArmZHomeTask=1;
+int iAllArmZHomeCount=0;                                                        //Steven 20220819 : 針對吸嘴歸零異常做Alarm
+void InitDoArmZHome()
+{
+    iAllArmZHomeTask=1;
+    iAllArmZHomeCount=0;                                                        //Steven 20220819 : 針對吸嘴歸零異常做Alarm
+}
+#endif // GATE G33
+//------------------------------------------------------------------------------
+int PitchPos[3][5]={{-9999, -9999, -9999, -9999, -9999}, {-9999, -9999, -9999, -9999, -9999}, {-9999, -9999, -9999, -9999, -9999}};                             //RogerYang 20250512 Add for 9046AU add row3
+bool DoArmZHome()
+{
+    static bool flag[3][MAX_ARM_Row][MAX_ARM_Col];                              //RogerYang 20250512 Add for 9046AU add row3
+    int &Task=iAllArmZHomeTask;
+    int iMotIn, iMotOut, iMotSort;                                              //RogerYang 20250512 Add for 9046AU
+
+    static bool fInPitchMot[5]={false, false, false, false, false};             //jou 20170512 (Steven) : 宣告異常修正
+    static bool fOutPitchMot[5]={false, false, false, false, false};            //jou 20170512 (Steven) : 宣告異常修正
+    static bool bInArmPitchNeedHome=false, bOutArmPitchNeedHome=false;
+
+    static bool fSortPitchMot[5]={false, false, false, false, false};           //RogerYang 20250512 add for 9046AU
+    static bool bSortArmPitchNeedHome=false;
+
+    static bool NeedAllHome=false;
+//    bool bFlag[2]={false,false};                                                //Ztex 2024.02.23 Add Pitch Y Home After Move Pos Error
+//    static int iPitch_Home=0;                                                   //Ztex 2024.02.23 Add Pitch Y Home After Move Pos Error
+    int iPitch_Move[4]={0,0,0,0};                                               //Ztex 2024.02.23 Add Pitch Y Home After Move Pos Error
+
+    switch(Task)
+    {
+        case 1:
+            if(PitchPos[0][0]==-9999)
+                PitchPos[0][0]=MOT[MInArmPitch].ReadPos();
+            if(PitchPos[1][0]==-9999)
+                PitchPos[1][0]=MOT[MOutArmPitch].ReadPos();
+            if(USE_OUT_SORT_ARM!=eartUninstall &&                               //RogerYang 20250512 add for 9046AU
+                PitchPos[2][0]==-9999)
+            {
+                PitchPos[2][0]=MOT[MOutSortPitchX].ReadPos();
+            }
+
+            if(USE_IN_OUT_ARM_Y_PITCH==iXYPitchVariable ||                      //Steven 20141107 add for AutoYPitch
+               USE_IN_OUT_ARM_Y_PITCH==iXYPitchIn_Bb_Out_Bc)                    //Ztex 2024.02.24 Add HT-1132
+            {
+                if(PitchPos[0][1]==-9999)
+                    PitchPos[0][1]=MOT[MInArmPitchY].ReadPos();
+                if(PitchPos[0][2]==-9999)
+                    PitchPos[0][2]=MOT[MInArmPitchX2].ReadPos();
+                if(PitchPos[1][1]==-9999)
+                    PitchPos[1][1]=MOT[MOutArmPitchY].ReadPos();
+                if(PitchPos[1][2]==-9999)
+                    PitchPos[1][2]=MOT[MOutArmPitchX2].ReadPos();
+            }
+            else if(INOUT_ARM_Y_PITCH==1 ||                                     //Steven for HT1032
+                    USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Bd_Be)                    //Ztex 2024.02.23 Add Pitch Y Home After Move Pos Error
+            {
+                if(PitchPos[0][1]==-9999)
+                    PitchPos[0][1]=MOT[MInArmPitchY].ReadPos();
+                if(PitchPos[0][2]==-9999)
+                    PitchPos[0][2]=MOT[MInArmPitchX2].ReadPos();
+                if(PitchPos[0][3]==-9999)
+                    PitchPos[0][3]=MOT[MInArmPitchX3].ReadPos();
+                if(PitchPos[0][4]==-9999)
+                    PitchPos[0][4]=MOT[MInArmPitchX4].ReadPos();
+                if(PitchPos[1][1]==-9999)
+                    PitchPos[1][1]=MOT[MOutArmPitchY].ReadPos();
+                if(PitchPos[1][2]==-9999)
+                    PitchPos[1][2]=MOT[MOutArmPitchX2].ReadPos();
+                if(PitchPos[1][3]==-9999)
+                    PitchPos[1][3]=MOT[MOutArmPitchX3].ReadPos();
+                if(PitchPos[1][4]==-9999)
+                    PitchPos[1][4]=MOT[MOutArmPitchX4].ReadPos();
+            }
+
+            bInArmPitchNeedHome     =false;
+            bOutArmPitchNeedHome    =false;
+//AI(W906-PT-csystem-g2) 20260809: GATE G35 -- golden csystem.cpp:4931.  bBackArmZHomeFlag has NO declaration and NO
+// definition anywhere in the port; golden defines it at csystem.cpp:145 -- again inside the
+// 1..3042 range a SIBLING GROUP of this wave owns -- and declares it extern nowhere.
+// DEFAULT: the flag is not raised.  BEHAVIOUR DELTA: golden raises it for the whole
+// arm-Z-home sequence so the rest of csystem.cpp can tell 'the arms are re-homing Z right
+// now'; nothing in the CURRENT port reads it, so the delta is latent, not active.
+// UN-GATE the moment the sibling block lands `bool bBackArmZHomeFlag=false;`.
+#if 0 // GATE G35 -- golden csystem.cpp:4931 VERBATIM below; see note above
+            bBackArmZHomeFlag       =true;
+#endif // GATE G35
+//            bPauseInMotor           =true;                                    //Ztex 2024.02.23 Add Pitch Y Home After Move Pos Error
+//            bPauseOutMotor          =true;                                    //Ztex 2024.02.23 Add Pitch Y Home After Move Pos Error
+
+            for(int i=0; i<InArmSuck.iMotRow; i++)
+            {
+                for(int j=0; j<InArmSuck.iMotCol; j++)
+                {
+                    flag[0][i][j]=true;
+                    flag[1][i][j]=true;
+                    flag[2][i][j]=true;                                         //RogerYang 20250510 Add for 9046AU
+                }
+            }
+
+            for(int i=0; i<InArmSuck.iMotRow; i++)
+            {
+                for(int j=0; j<InArmSuck.iMotCol; j++)
+                {
+                    iMotIn =(USE_PICKER_COUNT==ep16Picker && InOutArmPickerUseMotor==eptUseMotCyn)?MInArmZA:InArmSuck.Suck[i][j].iMotNo;
+                    iMotOut=(USE_PICKER_COUNT==ep16Picker && InOutArmPickerUseMotor==eptUseMotCyn)?MOutArmZA:OutArmSuck.Suck[i][j].iMotNo;
+                    if(USE_OUT_SORT_ARM!=eartUninstall)                         //RogerYang 20250512 add for 9046AU
+                        iMotSort=OutArm2Suck.Suck[i][j].iMotNo;
+                    if(bInArmZNeedHome[i][j])
+                    {
+                        flag[0][i][j]=false;
+                        InitProcessSingleMotorTask(iMotIn);
+                        if(bInArmPitchNeedHomeCheck)                            //ChungHung HT9045 2011/12/13 //Input pickup device error時,按"retry"鍵,機台都會自動home start
+                            bInArmPitchNeedHome=true;
+                        else
+                            bInArmPitchNeedHome=false;
+                    }
+
+                    if(bOutArmZNeedHome[i][j])
+                    {
+                        flag[1][i][j]=false;
+                        InitProcessSingleMotorTask(iMotOut);
+                        if(bOutArmPitchNeedHomeCheck)                           //ChungHung HT9045 2011/12/13 //Input pickup device error時,按"retry"鍵,機台都會自動home start
+                            bOutArmPitchNeedHome=true;
+                        else
+                            bOutArmPitchNeedHome=false;
+                    }
+
+                    if(USE_OUT_SORT_ARM!=eartUninstall &&                       //RogerYang 20250512 Add for 9046AU
+                        bSortArmZNeedHome[i][j])
+                    {
+                        flag[2][i][j]=false;
+                        InitProcessSingleMotorTask(iMotSort);
+                        if(bSortArmPitchNeedHomeCheck)
+                            bSortArmPitchNeedHome=true;
+                        else
+                            bSortArmPitchNeedHome=false;
+                    }
+                }
+            }
+
+            if(bInArmPitchNeedHome)
+            {
+//AI(W906-PT-csystem-g2) 20260809: GATE G27a -- golden csystem.cpp:4988-4989.  fMain->bShowInOutAlarm and
+// fMain->lblInOutAlarm are NOT members of the ported TfMain (forms/fMain.h; tree-wide grep
+// for `bShowInOutAlarm` = zero hits, for `lblInOutAlarm` = only language.cpp:274's caption
+// table string).  DEFAULT: the MyDBIProcessNew("Motion","WAR2204",...) log below and
+// iInZHomeCnt++ stay ACTIVE.  BEHAVIOUR DELTA: the on-screen 'In Arm Z Homing' banner is
+// not shown while the in-arm Z axes re-home.  DISPLAY ONLY -- the WAR2204 record and the
+// home itself are unaffected.
+#if 0 // GATE G27a -- golden csystem.cpp:4988-4989 VERBATIM below; see note above
+                fMain->bShowInOutAlarm=true;
+                fMain->lblInOutAlarm->Caption="In Arm Z Homing";
+#endif // GATE G27a
+                MyDBIProcessNew("Motion", "WAR2204", "In Arm Z Homing");
+                iInZHomeCnt++;
+            }
+
+            if(bOutArmPitchNeedHome)
+            {
+//AI(W906-PT-csystem-g2) 20260809: GATE G27b -- golden csystem.cpp:4996-4997.  Same two missing TfMain members as G27a,
+// 'Out Arm Z Homing' banner.  WAR2205 record + iOutZHomeCnt++ stay ACTIVE.  DISPLAY ONLY.
+#if 0 // GATE G27b -- golden csystem.cpp:4996-4997 VERBATIM below; see note above
+                fMain->bShowInOutAlarm=true;
+                fMain->lblInOutAlarm->Caption="Out Arm Z Homing";
+#endif // GATE G27b
+                MyDBIProcessNew("Motion", "WAR2205", "Out Arm Z Homing");
+                iOutZHomeCnt++;
+            }
+
+            if(bSortArmPitchNeedHome)                                           //RogerYang 20250512 Add for 9046AU
+            {
+//AI(W906-PT-csystem-g2) 20260809: GATE G27c -- golden csystem.cpp:5004-5005.  Same two missing TfMain members as G27a,
+// 'Sort Arm Z Homing' banner (9046AU).  WAR2205 record + iOutZHomeCnt++ stay ACTIVE.
+// DISPLAY ONLY.
+#if 0 // GATE G27c -- golden csystem.cpp:5004-5005 VERBATIM below; see note above
+                fMain->bShowInOutAlarm=true;
+                fMain->lblInOutAlarm->Caption="Sort Arm Z Homing";
+#endif // GATE G27c
+                MyDBIProcessNew("Motion", "WAR2205", "Sort Arm Z Homing");
+                iOutZHomeCnt++;
+            }
+
+            Task=100;
+            break;
+        case 100:
+            bInArmPitchNeedHomeCheck=true;                                      //ChungHung HT9045 2011/12/13 //Input pickup device error時,按"retry"鍵,機台都會自動home
+            bOutArmPitchNeedHomeCheck=true;                                     //ChungHung HT9045 2011/12/13 //Input pickup device error時,按"retry"鍵,機台都會自動home
+            bSortArmPitchNeedHomeCheck=true;                                    //RogerYang 20250512 Add for 9046AU
+            for(int i=0; i<InArmSuck.iMotRow; i++)
+            {
+                for(int j=0; j<InArmSuck.iMotCol; j++)
+                {
+                    iMotIn =(USE_PICKER_COUNT==ep16Picker && InOutArmPickerUseMotor==eptUseMotCyn)?MInArmZA:InArmSuck.Suck[i][j].iMotNo;
+                    iMotOut=(USE_PICKER_COUNT==ep16Picker && InOutArmPickerUseMotor==eptUseMotCyn)?MOutArmZA:OutArmSuck.Suck[i][j].iMotNo;
+                    if(flag[0][i][j]==false)
+                        flag[0][i][j]=ProcessSingleMotorHome(iMotIn);
+                    if(flag[1][i][j]==false)
+                        flag[1][i][j]=ProcessSingleMotorHome(iMotOut);
+
+                    if(USE_OUT_SORT_ARM!=eartUninstall)                         //RogerYang 20250512 add for 9046AU
+                    {
+                        iMotSort=OutArm2Suck.Suck[i][j].iMotNo;
+                        if(flag[2][i][j]==false)
+                            flag[2][i][j]=ProcessSingleMotorHome(iMotSort);
+                    }
+                }
+            }
+
+            for(int i=0; i<InArmSuck.iMotRow; i++)
+            {
+                for(int j=0; j<InArmSuck.iMotCol; j++)
+                {
+                    if(flag[0][i][j]==false ||
+                        flag[1][i][j]==false ||
+                        flag[2][i][j]==false)                                   //RogerYang 20250512 Add for 9046AU
+                        return false;
+                }
+            }
+
+            for(int i=0; i<InArmSuck.iMotRow; i++)
+            {
+                for(int j=0; j<InArmSuck.iMotCol; j++)
+                {
+                    bInArmZNeedHome[i][j]=false;
+                    bOutArmZNeedHome[i][j]=false;
+                    bSortArmZNeedHome[i][j]=false;                              //RogerYang 20250512 Add for 9046AU
+                }
+            }
+            Task=300;
+            break;
+        case 300:
+            if(PitchPos[0][0]==-9999)
+                PitchPos[0][0]=MOT[MInArmPitch].ReadPos();
+            if(PitchPos[1][0]==-9999)
+                PitchPos[1][0]=MOT[MOutArmPitch].ReadPos();
+            if(USE_OUT_SORT_ARM!=eartUninstall &&                               //RogerYang 20250512 add for 9046AU
+                PitchPos[2][0]==-9999)
+            {
+                PitchPos[2][0]=MOT[MOutSortPitchX].ReadPos();
+            }
+
+            if(USE_IN_OUT_ARM_Y_PITCH==iXYPitchVariable ||                      //Steven 20141107 add for AutoYPitch
+               USE_IN_OUT_ARM_Y_PITCH==iXYPitchIn_Bb_Out_Bc)                    //Ztex 2024.02.24 Add HT-1132
+            {
+                if(PitchPos[0][1]==-9999)
+                    PitchPos[0][1]=MOT[MInArmPitchY].ReadPos();
+                if(PitchPos[0][2]==-9999)
+                    PitchPos[0][2]=MOT[MInArmPitchX2].ReadPos();
+                if(PitchPos[0][1]==-9999)
+                    PitchPos[0][1]=MOT[MOutArmPitchY].ReadPos();
+                if(PitchPos[0][2]==-9999)
+                    PitchPos[0][2]=MOT[MOutArmPitchX2].ReadPos();
+            }
+            else if(INOUT_ARM_Y_PITCH==1 ||                                     //Steven for HT1032
+                    USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Bd_Be)                    //Ztex 2024.02.23 Add Pitch Y Home After Move Pos Error
+            {
+                if(PitchPos[0][1]==-9999)
+                    PitchPos[0][1]=MOT[MInArmPitchY].ReadPos();
+                if(PitchPos[0][2]==-9999)
+                    PitchPos[0][2]=MOT[MInArmPitchX2].ReadPos();
+                if(PitchPos[0][3]==-9999)
+                    PitchPos[0][3]=MOT[MInArmPitchX3].ReadPos();
+                if(PitchPos[0][4]==-9999)
+                    PitchPos[0][4]=MOT[MInArmPitchX4].ReadPos();
+                if(PitchPos[1][1]==-9999)
+                    PitchPos[1][1]=MOT[MOutArmPitchY].ReadPos();
+                if(PitchPos[1][2]==-9999)
+                    PitchPos[1][2]=MOT[MOutArmPitchX2].ReadPos();
+                if(PitchPos[1][3]==-9999)
+                    PitchPos[1][3]=MOT[MOutArmPitchX3].ReadPos();
+                if(PitchPos[1][4]==-9999)
+                    PitchPos[1][4]=MOT[MOutArmPitchX4].ReadPos();
+            }
+
+            ZeroMemory(fInPitchMot, sizeof(fInPitchMot));
+            for(int i=0;i<4;i++)
+                iPitch_Move[i]=0;                                               //Ztex 2024.11.05 Add Pitch X Home Twice
+            if(bInArmPitchNeedHome)
+            {
+                if(USE_PICKER_COUNT==ep16Picker ||                              //Ztex 2023.12.15 Add Pitch X Home Twice
+                   USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Bd_Be)
+                {
+                    InitProcessSingleMotorTask(MInArmPitch);                    //Ztex 2024.11.05 Add Pitch X Home Twice ==>
+                    InitProcessSingleMotorTask(MInArmPitchY);
+                    InitProcessSingleMotorTask(MInArmPitchX2);
+                    InitProcessSingleMotorTask(MInArmPitchX3);
+                    InitProcessSingleMotorTask(MInArmPitchX4);
+                    Task=310;
+//                    if(fHome->MoveInArmPitch_X(iPitch_Move, true)==true)
+//                    {
+//                        Task=350;
+//                    }
+//                    else
+//                    {
+//                        Task=300;
+//                        break;
+//                    }                                                         //Ztex 2024.11.05 Add Pitch X Home Twice <==
+                }
+                else
+                {
+                    InitProcessSingleMotorTask(MInArmPitch);
+                    if(USE_IN_OUT_ARM_Y_PITCH==iXYPitchVariable ||              //ChungHung 20140304 add for AutoYPitch
+                       USE_IN_OUT_ARM_Y_PITCH==iXYPitchIn_Bb_Out_Bc)            //Ztex 2024.02.24 Add HT-1132
+                    {
+                        InitProcessSingleMotorTask(MInArmPitchY);
+                        InitProcessSingleMotorTask(MInArmPitchX2);
+                        fInPitchMot[3]=true;
+                        fInPitchMot[4]=true;
+                    }
+                    else if(INOUT_ARM_Y_PITCH==1)                               //Steven for HT1032
+                    {
+                        InitProcessSingleMotorTask(MInArmPitchY);
+                        InitProcessSingleMotorTask(MInArmPitchX2);
+                        InitProcessSingleMotorTask(MInArmPitchX3);
+                        InitProcessSingleMotorTask(MInArmPitchX4);
+                    }
+                    else
+                    {
+                        fInPitchMot[1]=true;
+                        fInPitchMot[2]=true;
+                        fInPitchMot[3]=true;
+                        fInPitchMot[4]=true;
+                    }
+                }
+            }
+            else
+            {
+                fInPitchMot[0]=true;
+                fInPitchMot[1]=true;
+                fInPitchMot[2]=true;
+                fInPitchMot[3]=true;
+                fInPitchMot[4]=true;
+            }
+
+            ZeroMemory(fOutPitchMot, sizeof(fOutPitchMot));
+            if(bOutArmPitchNeedHome)
+            {
+                if(USE_PICKER_COUNT==ep16Picker ||                              //Ztex 2023.12.15 Add Pitch X Home Twice
+                   USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Bd_Be)
+                {
+                    InitProcessSingleMotorTask(MOutArmPitch);                   //Ztex 2024.11.05 Add Pitch X Home Twice ==>
+                    InitProcessSingleMotorTask(MOutArmPitchY);
+                    InitProcessSingleMotorTask(MOutArmPitchX2);
+                    InitProcessSingleMotorTask(MOutArmPitchX3);
+                    InitProcessSingleMotorTask(MOutArmPitchX4);
+                    Task=310;
+                }
+                else
+                {
+                    InitProcessSingleMotorTask(MOutArmPitch);
+                    if(USE_IN_OUT_ARM_Y_PITCH==iXYPitchVariable ||              //ChungHung 20140304 add for AutoYPitch
+                       USE_IN_OUT_ARM_Y_PITCH==iXYPitchIn_Bb_Out_Bc)            //Ztex 2024.02.24 Add HT-1132
+                    {
+                        InitProcessSingleMotorTask(MOutArmPitchY);
+                        InitProcessSingleMotorTask(MOutArmPitchX2);
+                        fOutPitchMot[3]=true;
+                        fOutPitchMot[4]=true;
+                    }
+                    else if(INOUT_ARM_Y_PITCH==1)                               //Steven for HT1032
+                    {
+                        InitProcessSingleMotorTask(MOutArmPitchY);
+                        InitProcessSingleMotorTask(MOutArmPitchX2);
+                        InitProcessSingleMotorTask(MOutArmPitchX3);
+                        InitProcessSingleMotorTask(MOutArmPitchX4);
+                    }
+                    else
+                    {
+                        fOutPitchMot[1]=true;
+                        fOutPitchMot[2]=true;
+                        fOutPitchMot[3]=true;
+                        fOutPitchMot[4]=true;
+                    }
+                }
+            }
+            else
+            {
+                fOutPitchMot[0]=true;
+                fOutPitchMot[1]=true;
+                fOutPitchMot[2]=true;
+                fOutPitchMot[3]=true;
+                fOutPitchMot[4]=true;
+            }
+
+            if(USE_OUT_SORT_ARM!=eartUninstall)                                 //RogerYang 20250512 add for 9046AU
+            {
+                ZeroMemory(fSortPitchMot, sizeof(fSortPitchMot));
+                if(bSortArmPitchNeedHome)
+                {
+                    InitProcessSingleMotorTask(MOutSortPitchX);
+                    fSortPitchMot[1]=true;
+                    fSortPitchMot[2]=true;
+                    fSortPitchMot[3]=true;
+                    fSortPitchMot[4]=true;
+                }
+                else
+                {
+                    fSortPitchMot[0]=true;
+                    fSortPitchMot[1]=true;
+                    fSortPitchMot[2]=true;
+                    fSortPitchMot[3]=true;
+                    fSortPitchMot[4]=true;
+                }
+            }
+            else
+            {
+                fSortPitchMot[0]=true;
+                fSortPitchMot[1]=true;
+                fSortPitchMot[2]=true;
+                fSortPitchMot[3]=true;
+                fSortPitchMot[4]=true;
+            }
+
+            if(USE_IN_OUT_ARM_Y_PITCH!=iXYPitch16Bd_Be)
+                Task=400;
+            break;
+        case 310:                                                               //Ztex 2024.11.05 Add Pitch X Home Twice ==>
+            Task=400;
+            break;                                                              //Ztex 2024.11.05 Add Pitch X Home Twice <==
+        case 350:
+            for(int i=0; i<4; i++)
+                iPitch_Move[i]=-500;                                            //Ztex 2024.11.05 Add Pitch X Home Twice
+//AI(W906-PT-csystem-g2) 20260809: GATE G28 -- golden csystem.cpp:5249-5272 (the body of `case 350:`).
+// fHome->MoveInArmPitch_X / MoveOutArmPitch_X are NOT members of the ported TfHome
+// (forms/fHome.h; golden's bodies are uhome.cpp:5019 / :5106).  ZERO BEHAVIOUR DELTA:
+// case 350 is DEAD CODE IN GOLDEN ITSELF -- the only assignment `Task=350;` is commented
+// out at golden csystem.cpp:5118 (`//                        Task=350;`), so nothing can
+// ever enter this case.  The `case 350:` label, the iPitch_Move[] pre-fill and the
+// trailing `break;` are kept ACTIVE so the switch shape stays golden's.
+#if 0 // GATE G28 -- golden csystem.cpp:5249-5273 VERBATIM below; see note above
+            if(bInArmPitchNeedHome)                                             //Ztex 2024.02.23 Add Pitch Y Home After Move Pos Error
+            {
+                if(fHome->MoveInArmPitch_X(iPitch_Move, false)==true)
+                {
+                    InitProcessSingleMotorTask(MInArmPitch);
+                    InitProcessSingleMotorTask(MInArmPitchY);
+                    InitProcessSingleMotorTask(MInArmPitchX2);
+                    InitProcessSingleMotorTask(MInArmPitchX3);
+                    InitProcessSingleMotorTask(MInArmPitchX4);
+                    Task=400;
+                }
+            }
+
+            if(bOutArmPitchNeedHome)
+            {
+                if(fHome->MoveOutArmPitch_X(iPitch_Move, true))
+                {
+                    InitProcessSingleMotorTask(MOutArmPitch);
+                    InitProcessSingleMotorTask(MOutArmPitchY);
+                    InitProcessSingleMotorTask(MOutArmPitchX2);
+                    InitProcessSingleMotorTask(MOutArmPitchX3);
+                    InitProcessSingleMotorTask(MOutArmPitchX4);
+                    Task=400;
+                }
+            }
+#endif // GATE G28
+            break;
+        case 400:
+            if(fInPitchMot[0]==false)
+                fInPitchMot[0]=ProcessSingleMotorHome(MInArmPitch);
+            if(fInPitchMot[1]==false)
+                fInPitchMot[1]=ProcessSingleMotorHome(MInArmPitchY);
+            if(fInPitchMot[2]==false)
+                fInPitchMot[2]=ProcessSingleMotorHome(MInArmPitchX2);
+            if(fInPitchMot[3]==false)
+                fInPitchMot[3]=ProcessSingleMotorHome(MInArmPitchX3);
+            if(fInPitchMot[4]==false)
+                fInPitchMot[4]=ProcessSingleMotorHome(MInArmPitchX4);
+
+            if(fOutPitchMot[0]==false)
+                fOutPitchMot[0]=ProcessSingleMotorHome(MOutArmPitch);
+            if(fOutPitchMot[1]==false)
+                fOutPitchMot[1]=ProcessSingleMotorHome(MOutArmPitchY);
+            if(fOutPitchMot[2]==false)
+                fOutPitchMot[2]=ProcessSingleMotorHome(MOutArmPitchX2);
+            if(fOutPitchMot[3]==false)
+                fOutPitchMot[3]=ProcessSingleMotorHome(MOutArmPitchX3);
+            if(fOutPitchMot[4]==false)
+                fOutPitchMot[4]=ProcessSingleMotorHome(MOutArmPitchX4);
+
+            if(USE_OUT_SORT_ARM!=eartUninstall)                                 //RogerYang 20250512 add for 9046AU
+            {
+                if(fOutPitchMot[0]==false)
+                    fOutPitchMot[0]=ProcessSingleMotorHome(MOutSortPitchX);
+            }
+
+            if(fInPitchMot[0] && fOutPitchMot[0] && fSortPitchMot[0] &&         //RogerYang 20250512 add for 9046AU
+               fInPitchMot[1] && fOutPitchMot[1] && fSortPitchMot[1] &&
+               fInPitchMot[2] && fOutPitchMot[2] && fSortPitchMot[2] &&
+               fInPitchMot[3] && fOutPitchMot[3] && fSortPitchMot[3] &&
+               fInPitchMot[4] && fOutPitchMot[4] && fSortPitchMot[4])
+            {
+                for(int i=0; i<InArmSuck.iMotRow; i++)                          //Steven 2091209 Start
+                {
+                    for(int j=0; j<InArmSuck.iMotCol; j++)
+                    {
+                        iMotIn =(USE_PICKER_COUNT==ep16Picker && InOutArmPickerUseMotor==eptUseMotCyn)?MInArmZA:InArmSuck.Suck[i][j].iMotNo;
+                        iMotOut=(USE_PICKER_COUNT==ep16Picker && InOutArmPickerUseMotor==eptUseMotCyn)?MOutArmZA:OutArmSuck.Suck[i][j].iMotNo;
+                        SetMotorScaleSpeed(iMotIn, ArmSpeed[InArm].iZSP);
+                        SetMotorScaleSpeed(iMotOut, ArmSpeed[OutArm].iZSP);
+                        if(USE_OUT_SORT_ARM!=eartUninstall)                     //RogerYang 20250512 add for 9046AU
+                        {
+                            iMotSort=OutArm2Suck.Suck[i][j].iMotNo;
+                            SetMotorScaleSpeed(iMotSort, ArmSpeed[OutArm].iZSP);                                        //蹭OutArm的速度
+                        }
+                    }
+                }
+                SetMotorScaleSpeed(MInArmPitch  ,ArmSpeed[InArm].iVariSP);
+                SetMotorScaleSpeed(MOutArmPitch ,ArmSpeed[OutArm].iVariSP);
+                if(USE_OUT_SORT_ARM!=eartUninstall)                             //RogerYang 20250512 add for 9046AU
+                    SetMotorScaleSpeed(MOutSortPitchX  ,ArmSpeed[OutArm].iVariSP);                                      //蹭OutArm的速度
+
+                if(USE_IN_OUT_ARM_Y_PITCH==iXYPitchVariable ||                  //ChungHung 20140304 add for AutoYPitch
+                   USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Bd_Be  ||                  //Ztex 2023.12.15 Add Pitch X Home Twice
+                   USE_IN_OUT_ARM_Y_PITCH==iXYPitchIn_Bb_Out_Bc)                //Ztex 2024.02.24 Add HT-1132
+                {
+                    if(ArmSpeed[InArm].iVariSP<80)                              //Steven 20160630 : 限制Y-Pitch最低速度為80
+                        SetMotorScaleSpeed(MInArmPitchY, 80);
+                    else
+                        SetMotorScaleSpeed(MInArmPitchY, ArmSpeed[InArm].iVariSP);
+
+                    if(ArmSpeed[OutArm].iVariSP<80)
+                        SetMotorScaleSpeed(MOutArmPitchY, 80);
+                    else
+                        SetMotorScaleSpeed(MOutArmPitchY, ArmSpeed[OutArm].iVariSP);
+
+                    SetMotorScaleSpeed(MInArmPitchX2 , ArmSpeed[InArm].iVariSP);
+                    SetMotorScaleSpeed(MOutArmPitchX2, ArmSpeed[OutArm].iVariSP);
+                }
+                else if(INOUT_ARM_Y_PITCH==1)                                   //Steven for HT1032
+                {
+                    if(ArmSpeed[InArm].iVariSP<80)                              //Steven 20160630 : 限制Y-Pitch最低速度為80
+                        SetMotorScaleSpeed(MInArmPitchY, 80);
+                    else
+                        SetMotorScaleSpeed(MInArmPitchY, ArmSpeed[InArm].iVariSP);
+
+                    if(ArmSpeed[OutArm].iVariSP<80)
+                        SetMotorScaleSpeed(MOutArmPitchY, 80);
+                    else
+                        SetMotorScaleSpeed(MOutArmPitchY, ArmSpeed[OutArm].iVariSP);
+
+                    SetMotorScaleSpeed(MInArmPitchX2 , ArmSpeed[InArm].iVariSP);
+                    SetMotorScaleSpeed(MInArmPitchX3 , ArmSpeed[InArm].iVariSP);
+                    SetMotorScaleSpeed(MInArmPitchX4 , ArmSpeed[InArm].iVariSP);
+                    SetMotorScaleSpeed(MOutArmPitchX2, ArmSpeed[OutArm].iVariSP);
+                    SetMotorScaleSpeed(MOutArmPitchX3, ArmSpeed[OutArm].iVariSP);
+                    SetMotorScaleSpeed(MOutArmPitchX4, ArmSpeed[OutArm].iVariSP);
+                }
+
+                Task=500;
+
+                ZeroMemory(fInPitchMot, sizeof(fInPitchMot));
+                if(bInArmPitchNeedHome)
+                {
+                    if(USE_IN_OUT_ARM_Y_PITCH==iXYPitchVariable ||              //ChungHung 20140304 add for AutoYPitch
+                       USE_IN_OUT_ARM_Y_PITCH==iXYPitchIn_Bb_Out_Bc)            //Ztex 2024.02.24 Add HT-1132
+                    {
+                        fInPitchMot[3]=true;
+                        fInPitchMot[4]=true;
+                    }
+                    else if(INOUT_ARM_Y_PITCH==1)                               //Steven for HT1032
+                    {
+                    }
+                    else if(USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Bd_Be)
+                    {
+                    }
+                    else
+                    {
+                        fInPitchMot[1]=true;
+                        fInPitchMot[2]=true;
+                        fInPitchMot[3]=true;
+                        fInPitchMot[4]=true;
+                    }
+                }
+                else
+                {
+                    fInPitchMot[0]=true;
+                    fInPitchMot[1]=true;
+                    fInPitchMot[2]=true;
+                    fInPitchMot[3]=true;
+                    fInPitchMot[4]=true;
+                }
+
+                ZeroMemory(fOutPitchMot, sizeof(fOutPitchMot));
+                if(bOutArmPitchNeedHome)
+                {
+                    if(USE_IN_OUT_ARM_Y_PITCH==iXYPitchVariable ||              //ChungHung 20140304 add for AutoYPitch
+                       USE_IN_OUT_ARM_Y_PITCH==iXYPitchIn_Bb_Out_Bc)            //Ztex 2024.02.24 Add HT-1132
+                    {
+                        fOutPitchMot[3]=true;
+                        fOutPitchMot[4]=true;
+                    }
+                    else if(INOUT_ARM_Y_PITCH==1)                               //Steven for HT1032
+                    {
+                    }
+                    else if(USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Bd_Be)
+                    {
+                    }
+                    else
+                    {
+                        fOutPitchMot[1]=true;
+                        fOutPitchMot[2]=true;
+                        fOutPitchMot[3]=true;
+                        fOutPitchMot[4]=true;
+                    }
+                }
+                else
+                {
+                    fOutPitchMot[0]=true;
+                    fOutPitchMot[1]=true;
+                    fOutPitchMot[2]=true;
+                    fOutPitchMot[3]=true;
+                    fOutPitchMot[4]=true;
+                }
+
+                if(USE_OUT_SORT_ARM!=eartUninstall)                             //RogerYang 20250512 add for 9046AU
+                {
+                    ZeroMemory(fSortPitchMot, sizeof(fSortPitchMot));
+                    if(bSortArmPitchNeedHome)
+                    {
+                        fSortPitchMot[1]=true;
+                        fSortPitchMot[2]=true;
+                        fSortPitchMot[3]=true;
+                        fSortPitchMot[4]=true;
+                    }
+                    else
+                    {
+                        fSortPitchMot[0]=true;
+                        fSortPitchMot[1]=true;
+                        fSortPitchMot[2]=true;
+                        fSortPitchMot[3]=true;
+                        fSortPitchMot[4]=true;
+                    }
+                }
+                else
+                {
+                    fSortPitchMot[0]=true;
+                    fSortPitchMot[1]=true;
+                    fSortPitchMot[2]=true;
+                    fSortPitchMot[3]=true;
+                    fSortPitchMot[4]=true;
+                }
+                Task=500;
+            }
+            break;
+        case 500:
+            if(USE_PICKER_COUNT==ep16Picker ||
+               USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Bd_Be)                         //Ztex 2023.12.15 Add Pitch X Home Twice
+            {
+                SetMotorScaleSpeed(MInArmPitch   , ArmSpeed[InArm].iVariSP);
+                SetMotorScaleSpeed(MInArmPitchX2 , ArmSpeed[InArm].iVariSP);
+                SetMotorScaleSpeed(MInArmPitchX3 , ArmSpeed[InArm].iVariSP);
+                SetMotorScaleSpeed(MInArmPitchX4 , ArmSpeed[InArm].iVariSP);
+
+                SetMotorScaleSpeed(MOutArmPitch  , ArmSpeed[OutArm].iVariSP);
+                SetMotorScaleSpeed(MOutArmPitchX2, ArmSpeed[OutArm].iVariSP);
+                SetMotorScaleSpeed(MOutArmPitchX3, ArmSpeed[OutArm].iVariSP);
+                SetMotorScaleSpeed(MOutArmPitchX4, ArmSpeed[OutArm].iVariSP);
+                if(fInPitchMot[0]==false)
+                    fInPitchMot[0]=MOT[MInArmPitch].MotorMove(PitchPos[0][0]);
+                if(fInPitchMot[1]==false)
+                    fInPitchMot[1]=MOT[MInArmPitchY].MotorMove(PitchPos[0][1]);
+                if(fInPitchMot[2]==false)
+                    fInPitchMot[2]=MOT[MInArmPitchX2].MotorMove(PitchPos[0][2]);
+                if(fInPitchMot[3]==false)
+                    fInPitchMot[3]=MOT[MInArmPitchX3].MotorMove(PitchPos[0][3]);
+                if(fInPitchMot[4]==false)
+                    fInPitchMot[4]=MOT[MInArmPitchX4].MotorMove(PitchPos[0][4]);
+
+                if(fOutPitchMot[0]==false)
+                    fOutPitchMot[0]=MOT[MOutArmPitch].MotorMove(PitchPos[1][0]);
+                if(fOutPitchMot[1]==false)
+                    fOutPitchMot[1]=MOT[MOutArmPitchY].MotorMove(PitchPos[1][1]);
+                if(fOutPitchMot[2]==false)
+                    fOutPitchMot[2]=MOT[MOutArmPitchX2].MotorMove(PitchPos[1][2]);
+                if(fOutPitchMot[3]==false)
+                    fOutPitchMot[3]=MOT[MOutArmPitchX3].MotorMove(PitchPos[1][3]);
+                if(fOutPitchMot[4]==false)
+                    fOutPitchMot[4]=MOT[MOutArmPitchX4].MotorMove(PitchPos[1][4]);
+            }
+            else
+            {
+                if(fInPitchMot[0]==false)
+                    fInPitchMot[0]=MOT[MInArmPitch].MotorMove(PitchPos[0][0]);
+                if(fInPitchMot[1]==false)
+                    fInPitchMot[1]=MOT[MInArmPitchY].MotorMove(PitchPos[0][1]);
+                if(fInPitchMot[2]==false)
+                    fInPitchMot[2]=MOT[MInArmPitchX2].MotorMove(PitchPos[0][2]);
+                if(fInPitchMot[3]==false)
+                    fInPitchMot[3]=MOT[MInArmPitchX3].MotorMove(PitchPos[0][3]);
+                if(fInPitchMot[4]==false)
+                    fInPitchMot[4]=MOT[MInArmPitchX4].MotorMove(PitchPos[0][4]);
+
+                if(fOutPitchMot[0]==false)
+                    fOutPitchMot[0]=MOT[MOutArmPitch].MotorMove(PitchPos[1][0]);
+                if(fOutPitchMot[1]==false)
+                    fOutPitchMot[1]=MOT[MOutArmPitchY].MotorMove(PitchPos[1][1]);
+                if(fOutPitchMot[2]==false)
+                    fOutPitchMot[2]=MOT[MOutArmPitchX2].MotorMove(PitchPos[1][2]);
+                if(fOutPitchMot[3]==false)
+                    fOutPitchMot[3]=MOT[MOutArmPitchX3].MotorMove(PitchPos[1][3]);
+                if(fOutPitchMot[4]==false)
+                    fOutPitchMot[4]=MOT[MOutArmPitchX4].MotorMove(PitchPos[1][4]);
+
+                if(USE_OUT_SORT_ARM!=eartUninstall)                             //RogerYang 20250512 add for 9046AU
+                {
+                    if(fSortPitchMot[0]==false)
+                        fSortPitchMot[0]=MOT[MOutSortPitchX].MotorMove(PitchPos[2][0]);
+                }
+            }
+
+            if(fInPitchMot[0] && fOutPitchMot[0] && fSortPitchMot[0] &&         //RogerYang 20250512 add for 9046AU
+               fInPitchMot[1] && fOutPitchMot[1] && fSortPitchMot[1] &&
+               fInPitchMot[2] && fOutPitchMot[2] && fSortPitchMot[2] &&
+               fInPitchMot[3] && fOutPitchMot[3] && fSortPitchMot[3] &&
+               fInPitchMot[4] && fOutPitchMot[4] && fSortPitchMot[4])
+            {
+                if(bIsOutArmHome && OutArmZSafe(DETECT_ALL_FLAG)!=-1)           //Steven 20151010 : 確認歸零完成
+                {
+                    iAllArmZHomeCount++;                                        //Steven 20220819 : 針對吸嘴歸零異常做Alarm
+                    SetOutArmHome();
+                    Task=1;
+                    if(iAllArmZHomeCount<5)                                     //Steven 20220819 : 針對吸嘴歸零異常做Alarm
+                    {
+                        MyDBIProcessNew("Motion", "WAR2212", "Out Arm Z Home fail");
+                    }
+                    else
+                    {
+                        ShowErrorMessage("WAR2212", K_RETRY, MOutArmX);
+                        iAllArmZHomeCount=0;
+                    }
+                    break;
+                }
+
+                if(bIsInArmHome && InArmZSafe(DETECT_ALL_FLAG)!=-1)
+                {
+                    iAllArmZHomeCount++;                                        //Steven 20220819 : 針對吸嘴歸零異常做Alarm
+                    SetInArmHome();
+                    Task=1;
+                    if(iAllArmZHomeCount<5)                                     //Steven 20220819 : 針對吸嘴歸零異常做Alarm
+                    {
+                        MyDBIProcessNew("Motion", "WAR2211", "In Arm Z Home fail");
+                    }
+                    else
+                    {
+                        ShowErrorMessage("WAR2211", K_RETRY, MInArmX);
+                        iAllArmZHomeCount=0;
+                    }
+                    break;
+                }
+
+                if(USE_OUT_SORT_ARM!=eartUninstall &&                           //RogerYang 20250512 add for 9046AU
+                    bIsSortArmHome &&
+                    SortArmZSafe(DETECT_ALL_FLAG)!=-1)
+                {
+                    iAllArmZHomeCount++;                                        //針對吸嘴歸零異常做Alarm
+                    SetSortArmHome();
+                    Task=1;
+                    if(iAllArmZHomeCount<5)                                     //針對吸嘴歸零異常做Alarm
+                    {
+                        MyDBIProcessNew("Motion", "WAR2212", "Sort Arm Z Home fail");
+                    }
+                    else
+                    {
+                        ShowErrorMessage("WAR2212", K_RETRY, MInArmX);
+                        iAllArmZHomeCount=0;
+                    }
+                    break;
+                }
+
+                if(bIsOutArmHome)
+                    MyDBIProcessNew("Motion", "WAR2210", "Out Arm Z Home finish");
+                if(bIsInArmHome)
+                    MyDBIProcessNew("Motion", "WAR2209", "In Arm Z Home finish");
+                if(bIsSortArmHome)                                              //RogerYang 20250512 add for 9046AU
+                    MyDBIProcessNew("Motion", "WAR2210", "Sort Arm Z Home finish");
+
+//AI(W906-PT-csystem-g2) 20260809: GATE G32 -- golden csystem.cpp:5595.  fMain->bShowInOutAlarm again (see G27a).
+// DEFAULT: nothing.  BEHAVIOUR DELTA: the 'In/Out Arm Z Homing' banner is never cleared --
+// harmless here because G27a/b/c never set it.  DISPLAY ONLY.
+#if 0 // GATE G32 -- golden csystem.cpp:5595 VERBATIM below; see note above
+                fMain->bShowInOutAlarm=false;
+#endif // GATE G32
+                NeedAllHome=false;
+                bIsInArmHome=false;
+                bIsOutArmHome=false;
+                bIsSortArmHome=false;                                           //RogerYang 20250512 add for 9046AU
+                iAllArmZHomeCount=0;                                            //Steven 20220819 : 針對吸嘴歸零異常做Alarm
+                for(int i=0; i<3; i++)                                          //RogerYang 20250512 add for 9046AU add to 3 row
+                    for(int j=0; j<5; j++)
+                        PitchPos[i][j]=-9999;
+
+                return true;
+            }
+            break;
+    }
+    return false;
+}
+
+// ---------------------------------------------------------------------------
+//  end of PT csystem WAVE 1 GROUP g2 (golden csystem.cpp:3043-5610)
+// ---------------------------------------------------------------------------
+// =============================================================================
+//  AI(W906-PT-W5-g1) 20260809 -- APPENDED BLOCK, GROUP g1 of the csystem.cpp
+//  wave-1 split.  APPEND-ONLY: nothing above this line was read, reordered or
+//  reindented.  Four sibling groups append to this same file concurrently.
+//
+//  ROLE
+//  ----
+//  csystem.cpp is the machine tick / interlock / alarm hub.  Group g1 carries
+//  golden csystem.cpp:163-3042 -- the shuttle/index/arm POSITION + IC-presence
+//  predicate belt, the index-brake + EMG + motor-power interlocks, the heater
+//  relay/fan supervisor, the five IC-fall-down alarm state machines, and the
+//  safe-door interlock + door-state recorder.
+//
+//  Golden is Big5 (cp950); Chinese comments are TRANSCRIBED VERBATIM as UTF-8.
+//  Line endings are bare LF, matching the rest of this file (verified with
+//  python: 0 CR bytes before and after this append).
+//
+//  INTEGER DIVISION: this block contains exactly one division, golden :762
+//  `iXpitchMax/100.0` (already floating) and golden :763 `dSiteXPitch/2.0`
+//  (already floating).  There is NO int/int division to preserve or to break.
+//
+//  WAVE SCOPE -- one line per golden function, in golden order
+//  ----------------------------------------------------------
+//   ACTIVE = whole body translated with no gate.  GATED = body ACTIVE, the
+//   named sub-expression(s) gated; see the GATE REGISTER at the end.
+//    IonFanAutoCleanTask / DoIonFanAutoCleanWait  :163 :164  ACTIVE (file globals)
+//    DoIonFanAutoClean                            :165  GATED  G01
+//    XPitchIsStand                                :264  ACTIVE
+//    CheckSetupFinish                             :331  ACTIVE
+//    AllArmZIsSafe                                :343  ACTIVE
+//    InShtInLF                                    :365  ACTIVE
+//    InShtInRT                                    :389  ACTIVE
+//    InSHT1InLF                                   :413  ACTIVE
+//    InSHT1InRT                                   :458  ACTIVE
+//    InSHT2InLF                                   :498  ACTIVE
+//    InSHT2InRT                                   :542  ACTIVE
+//    SortShtSureInLF                              :582  ACTIVE
+//    SortShtSureInRT                              :601  ACTIVE
+//    SortSHTInLF                                  :620  ACTIVE
+//    SortSHTInRT                                  :661  ACTIVE
+//    YPitchIsStand                                :705  ACTIVE
+//    ArmCanSuck4IC                                :723  ACTIVE
+//    HasAreaOverAmbientTemp                       :772  GATED  G02
+//    InputShuttleFrontHasIC                       :964  ACTIVE
+//    InputShuttleRearHasIC                        :969  ACTIVE
+//    InputShuttleHasIC                            :982  ACTIVE
+//    OutputShuttleFrontHasIC                      :987  ACTIVE
+//    OutputShuttleRearHasIC                       :992  ACTIVE
+//    OutputShuttleHasIC                          :1004  ACTIVE
+//    ShuttleHasIC                                :1009  ACTIVE
+//    SortShuttleHasIC                            :1014  ACTIVE
+//    FrontTestHeadHasIC                          :1019  ACTIVE
+//    RearTestHeadHasIC                           :1024  ACTIVE
+//    TestHeadHasIC                               :1029  ACTIVE
+//    TestSocketHasIC                             :1034  ACTIVE
+//    IndexHasIC                                  :1039  ACTIVE
+//    IndexHasRealIC                              :1044  ACTIVE
+//    IndexMotorBreakerON                         :1076  ACTIVE
+//    IndexMotorBreakerOFF                        :1082  GATED  G03
+//    CheckATC6System                             :1109  GATED  G-ATC-A
+//    DoHeaterOnDelay / DoCloseHeadterDelay :1132 :1133  ACTIVE (file globals)
+//    DoHeaterOn                                  :1134  GATED  G04 G05 G06 G07
+//                                                       G08 G08b G09 G10 G11
+//                                                       G12 G12b G13b G13c
+//    IsEMGPressed                                :1416  GATED  G-PLC-A G-ATC-B
+//                                                       G14 G-ATC-C
+//    IsSystemPowerOff                            :1483  ACTIVE
+//    IsIndexMotorOutOfPower                      :1501  ACTIVE
+//    LockIndexMotorAndDoHomeProcess              :1514  GATED  G15
+//    DoAvoidIndexMotorFallDown                   :1537  ACTIVE
+//    CountMotorPowerDelay                        :1543  GATED  G16 G17
+//    CheckOutArmSuckICFallDown                   :1579  ACTIVE
+//    CheckInArmSuckFromLoaderICFallDown          :1867  GATED  G18 G19
+//    CheckInArmDestroyICFail                     :2096  ACTIVE
+//    CheckIndexSuckICFallDownSetToHasNullIC      :2141  GATED  G20
+//    CheckIndexAllSuckICFallDown                 :2417  ACTIVE
+//    CheckTestSuckICOn                           :2465  GATED  G21
+//    CheckSuckInitialStatus                      :2493  ACTIVE
+//    CheckTestSuckStatus                         :2522  ACTIVE
+//    CheckLoaderSafeDoor                         :2543  ACTIVE
+//    CheckUnLoadSafeDoor                         :2557  ACTIVE
+//    CheckFixTraySafeDoor                        :2581  ACTIVE
+//    DoorDelay                                   :2598  ACTIVE (file global)
+//    CheckSafeDoorIsClosed                       :2599  GATED  G-PLC-B G22 G23
+//                                                       G24 G-ATK
+//    IdleCheckSafeDoor                           :2749  ACTIVE
+//    IdleCheckSafeDoorByCylinder(int,int)        :2763  ACTIVE
+//    IdleCheckSafeDoorByCylinder(int,int,int,int):2805  ACTIVE  (see NOTE-OVERLOAD)
+//    RecordSafeDoorStates                        :2833  GATED  G25 G26 G27 G28
+//
+//  NOTE-OVERLOAD: the task list names IdleCheckSafeDoorByCylinder once (golden
+//  :2763).  Golden has TWO overloads back to back, :2763 (int,int) and :2805
+//  (int,int,int,int); csystem.h:240-241 declares both.  Both are translated,
+//  because skipping the 4-arg one would leave golden :2805 with no home and
+//  MyLaneIo.cpp:49 permanently shadowing it with a TU-local `static ... {return
+//  false;}`.  Flagged as a judgement call, not silently absorbed.
+//
+//  GATE REGISTER  (full text next to each gate in-body)
+//  ---------------------------------------------------
+//   G01 :210-211  MoveInArm2XYToDecayTeach()  -- NO body anywhere in this tree
+//   G02 :808-809  HasAreaOverAmbientTemp_DUT()-- golden :21102, WAVE-2 range
+//   G03 :1103-1106 Magazine/InOutArmZ/LDCarRot/Cassette BreakerOFF -- WAVE-2
+//   G04 :1158     DoSwCoolingFan()            -- golden :20434, WAVE-2 range
+//   G05 :1174-1179 fMain->tPSM.HotModule->bCheckTempClose -- no tPSM member
+//   G06 :1202-1209 ATC_InterfaceForm->GetRunState()/Stop() -- absent on shim
+//   G07 :1217     DoSwCoolingFan()
+//   G08 :1241     DoSwCoolingFan()
+//   G09 :1246-1247 fiosetview->fShow -- absent on TfiosetviewShim
+//   G10 :1251     fiosetview->fShow (condition only; body kept ACTIVE)
+//   G11 :1266-1269 fMain->spbChamberFanClick() -- absent on facade
+//   G12 :1320-1337 fConfiguration form branch + its DoSwCoolingFan calls
+//   (there is deliberately NO G13: golden :1349-1377, the two ATC arms that keep
+//    the ambient heater relay ON, is FULLY ACTIVE.  A first draft gated it on a
+//    FALSE absence claim about ATC_TYPE_*; see the #define block above.)
+//   G13b:1390-1395 fMain->tPSM.HotModule->Enabled
+//   G13c:1405     fMain->spbChamberFan->Caption
+//   G14 :1445-1448 Magazine/InOutArmZ/LDCarRot/Cassette BreakerOFF ** SAFETY **
+//   G-ATC-A :1111-1129 CheckATC6System whole body -- ATCInterface.h unincludable
+//   G-ATC-B :1442-1443 SendCommToATC7(ATC_EMG_DOWN) -- same header collision
+//   G-ATC-C :1470      SendCommToATC7(ATC_EMG_UP)   -- same header collision
+//   G-PLC-A :1431-1434 bPLCIOEffect/bIOPowered  ** WEAKENS A SAFETY INTERLOCK **
+//   G-PLC-B :2603-2604 bPLCIOEffect (early return true) -- stricter direction
+//   G-ATK   :2721-2725 fMain->spbChamberFan->Down ** RE-ENABLES MES16334 **
+//   G08b:1243-1244 CONTACT_MANUAL_GET_HEIGHT (cContact.h unincludable here)
+//   G15 :1532-1533 iEMGPressDelay / fContact->InitCarlibrationTask()
+//   G16 :1561-1564 Magazine/InOutArmZ/LDCarRot/Cassette BreakerON  ** SAFETY **
+//   G17 :1568     fContact->InitCarlibrationTask()
+//   G18 :2017     iRecordTrayPickPosX/Y -- no port; loader RETRY tray write
+//   G19 :2063     iRecordTrayPickPosX/Y -- no port; loader SKIP  tray write
+//   G20 :2340     fMain->SPIL_ResetForIndexDrop() -- absent on facade
+//   G21 :2481-2482 TMySucker::SuckerName -- not a member of the TMySucker this
+//                 TU sees (aHotPlateSubstrate.h); only mykitsuck.h has it
+//   G22 :2608-2624 fTeach->fShow -- fTeach has NO port anywhere
+//   G23 :2669-2670 bCheckPLCConnet() -- golden :24395, WAVE-2 range
+//   G24 :2684-2688 IsMultiEPPressureRouteActive() -- no port  ** ALARM PATH **
+//   G25 :2874-2875 WriteIniData(...AnsiString) -- see the gate note
+//   G26 :2966-2971 EmptySocketCheckModeBeUse() + fMain->ResetForESC()
+//   G27 :2973-3016 fMonitor -- no port anywhere (video monitor form)
+//   G28 :3028-3029 + :3036-3037 WriteIniData(...AnsiString)
+// =============================================================================
+
+// ---- headers this block needs that the file head does not already pull ------
+//  Deliberately placed HERE, not at the file head: four sibling agents are
+//  appending to this same file, and an insertion at the top would race with
+//  them.  A #include at namespace scope is legal C++ and all three headers are
+//  include-guarded.  NONE of the 110 `#define <name> W7C1_/W7C2_<name>` seam
+//  redirects already live in this TU collides with anything these three declare
+//  (checked name by name against the seam list).
+//  ainarm9045.h is DELIBERATELY NOT included -- it and aHotPlateSubstrate.h
+//  (already included above) both declare InArmLeftSideNoIC/HasIC with a default
+//  argument, which g++ rejects in one TU; the file head says so explicitly.
+//  GetVariableYInShuttleData is therefore forward-declared below in golden's own
+//  wording (ainarm9045.h:45), the same "plain forward declaration, real body
+//  binds at link" idiom acarry_shims.h:215-222 already uses for IsNNMode.
+#include "bthermo.h"                 // bGetHeaterUsed (HasAreaOverAmbientTemp)
+#include "uHeaterThread.h"           // bHeatOverTenErrorOK (DoHeaterOn)
+//  acarry_shims.h is needed for ATC_InterfaceForm (TATC_InterfaceFormShim,
+//  acarry_shims.h:106-114) -- golden DoHeaterOn :1350-1364 derefs
+//  ATC_InterfaceForm->iATC_MODE_TYPE, and without this include those two ATC
+//  arms cannot be ACTIVE.  MEASURED SAFE before adding: the ONE thing in this
+//  header that could have collided is its `MySleep` declaration, because this TU
+//  carries `#define MySleep W7C2_MySleep` over a file-static definition -- the
+//  declaration simply re-declares that same internal-linkage entity and g++ 6.3.0
+//  accepts it (probe-compiled on 2026-08-09 with this include and nothing else
+//  changed: zero errors).  It also happens to supply OutSht3Kit and IsNNMode, but
+//  the forward declarations below are kept anyway so the dependency is explicit.
+#include "acarry_shims.h"            // ATC_InterfaceForm (DoHeaterOn ATC arms)
+
+//  ATC/ATCInterface.h IS DELIBERATELY *NOT* INCLUDED, AND THAT IS WHY GATES
+//  G-ATC-A/B/C EXIST.  It is not a missing body -- ATCInterfaceForm is real
+//  (ATC/ATCInterface.h:298, body ATC/ATCInterface.cpp, registered in ht9045_sm
+//  at CMakeLists.txt:2119) and so is ATC60System (ATC/ATCSystem.h:339).  The
+//  header simply CANNOT be included into THIS translation unit:
+//    * acatchtray_shims.h:117 (already included at csystem.cpp:137) defines a
+//      GLOBAL `const TColor clWhite = 0x00FFFFFF;` inside its
+//      `#ifndef HT9045_TCOLOR_SHIM` block.
+//    * ATC/ATCInterface.h:175 does an UNGUARDED `using vclcompat::clWhite;`
+//      (vclcompat/LedCore.h:61, inside namespace vclcompat).
+//    * g++ 6.3.0 rejects that pair:
+//        ATC/ATCInterface.h:175:18: error: 'clWhite' is already declared in
+//        this scope
+//      MEASURED, not assumed -- it was the first error of the first probe
+//      compile of this block on 2026-08-09, and it is the ONLY clash of the
+//      two include sets (clLime/clSilver/clBlue/clBlack have no global twin,
+//      and `using vclcompat::TColor` is compatible with the shim typedef).
+//  THE REAL FIX IS ONE LINE IN A FILE THIS GROUP MAY NOT EDIT: wrap
+//  ATC/ATCInterface.h:168-175's using-block in the same `#ifndef
+//  HT9045_TCOLOR_SHIM` guard its own extras block at :178 already uses, or
+//  guard acatchtray_shims.h's global const.  Handed to the main loop; when
+//  that lands, G-ATC-A/B/C can be ungated with no other change.
+
+// ---- plain forward declarations (NOT shims -- real bodies bind at link) -----
+//  Same idiom acarry_shims.h:215-222 already establishes for IsNNMode/
+//  SetMotorScaleSpeed: "declaring header would drag clashing default-arg
+//  redecls, so forward-declare and let the real body bind".
+//    GetVariableYInShuttleData -- ainarm9045.h:45, body ainarm9045.cpp:2314
+//    MoveOutArm2XYToDecayTeach -- aoutarm.h:106,  body aoutarm.cpp:1008
+//    OutSht3Kit                -- acarry_shims.h:102 (golden MyKitSuck.h)
+extern int  GetVariableYInShuttleData();                                        //ChungHung 20131231 alter AutoYPitch
+bool MoveOutArm2XYToDecayTeach();                                               //Ifor 20151210 新增OurArm Move Decay
+extern TMyKitSuck OutSht3Kit;                                                   // golden MyKitSuck.h (9046AU sort kit)
+
+// ---- ATC_TYPE_* manifest constants (golden ATC/ATC_Handler_Side.h:24-31) -----
+//  golden ATC/ATC_Handler_Side.h HAS NO PORT (verified 2026-08-09:
+//  `ls ATC/ATC_Handler_Side.h` -> No such file; the ATC/ directory holds only
+//  ATCInterface / ATCSystem / ATC_WinWay / TCPData).  These six fixed manifest
+//  numbers are inlined as TU-LOCAL #defines with a golden citation -- which is
+//  NOT an invention and NOT a guess: it is the idiom this tree already
+//  established twice for exactly these constants, and the values are read
+//  straight out of the golden header:
+//    aTester_Front.cpp:125-126  `#define ATC_TYPE_33 33` / `_35 35`
+//    aTester_Rear.cpp:373-378   the same pair, #ifndef-guarded
+//    MainCalcCore.h:305-308     documents the technique AND the values
+//                               ("#define ints in ATC/ATC_Handler_Side.h:24,25,30
+//                               (33/35/61 respectively)")
+//  Values transcribed from golden ATC/ATC_Handler_Side.h lines 24/25/28/29/30/31.
+//  WHY THIS MATTERS: it is what lets golden :1349-1372 (the two ATC arms that
+//  KEEP SW[SwHeaterRelay] ON at ambient on ATC 7.0/6.0/5.1/3.3/3.5/6.1 machines)
+//  stay FULLY ACTIVE instead of being gated.  An earlier draft of this block DID
+//  gate them and claimed "none of the six exists anywhere in the port"; that
+//  claim was FALSE (ATC_TYPE_33 is named in MainCalcCore.h and defined in two
+//  aTester_*.cpp) and the gate would have silently turned the ambient heater
+//  relay OFF on six ATC generations.  Recorded here because the mistake, not
+//  just the fix, is the useful part.
+#ifndef ATC_TYPE_33
+#define ATC_TYPE_33         33                                                  // golden ATC/ATC_Handler_Side.h:24
+#endif
+#ifndef ATC_TYPE_35
+#define ATC_TYPE_35         35  //JerryYang 20220408 : add for ATC3.5             // golden ATC/ATC_Handler_Side.h:25
+#endif
+#ifndef ATC_TYPE_51
+#define ATC_TYPE_51         51                                                  // golden ATC/ATC_Handler_Side.h:28
+#endif
+#ifndef ATC_TYPE_60
+#define ATC_TYPE_60         60                                                  // golden ATC/ATC_Handler_Side.h:29
+#endif
+#ifndef ATC_TYPE_61
+#define ATC_TYPE_61         61                                                  // golden ATC/ATC_Handler_Side.h:30
+#endif
+#ifndef ATC_TYPE_70
+#define ATC_TYPE_70         70                                                  // golden ATC/ATC_Handler_Side.h:31
+#endif
+
+//==============================================================================
+//  golden csystem.cpp:163-262
+//==============================================================================
+int IonFanAutoCleanTask=1;
+TQPF_Timer DoIonFanAutoCleanWait;
+bool DoIonFanAutoClean()                                                        //Isaac 20210609 : IO觸發IonFan清針
+{
+    int &Task=IonFanAutoCleanTask;
+    static bool bflag1=false,bflag2=false;
+    switch(Task)
+    {
+        case 1:
+            DoIonFanAutoCleanWait.SetSecAndOn(30);
+            Task=2;
+            break;
+        case 2:
+            if(MTrayXCanSafeMove()==true)
+            {
+                if(TrayArmMotorMove(Prod.iXTrayColor))
+                {
+                    Task=100;
+                    MOT[MTrayX].fCanMove=false;
+                    bflag1=false;
+                    bflag2=false;
+                    DoIonFanAutoCleanWait.SetSecAndOn(30);                      //kevin 20220614 add time out alarm
+                }
+            }
+            else if(DoIonFanAutoCleanWait.Off())                                //kevin 20220614 add time out alarm
+            {
+                ShowErrorMessage("WAR2025", K_RETRY, MMSystem);
+                DoIonFanAutoCleanWait.SetSecAndOn(30);
+            }
+            break;
+        case 100:
+            if(bflag1==false)
+                bflag1=MoveInArmZToPlateSafe(0);
+            if(bflag2==false)
+                bflag2=MoveOutArmToAutoSafe_9045();
+
+            if(bflag1 && bflag2)                                                //Z軸往上
+            {
+                DoIonFanAutoCleanWait.SetSecAndOn(30);                          //kevin 20220614 add time out alarm
+                bflag1=false;
+                bflag2=false;
+                Task=200;
+            }
+            break;
+        case 200:
+            if(bflag1==false)
+                bflag1=MoveOutArm2XYToDecayTeach();
+//--------------------------------------------------------------------------
+//  GATE G01 -- golden csystem.cpp:210-211
+//  WHAT  : case 200 arms bflag2 from MoveInArm2XYToDecayTeach() -- move the IN arm
+//  WHAT  : X/Y to the ion-fan (Decay) teach point before the fan is switched on.
+//  WHY   : MoveInArm2XYToDecayTeach has NO compiled body anywhere in this tree.
+//  WHY   : Verified `grep -rn "MoveInArm2XYToDecayTeach"` over the whole port on
+//  WHY   : 2026-08-09: 3 hits, all inert -- ainarm9045.cpp:1241 (comment),
+//  WHY   : ainarm9045.cpp:1291 (`#if 0 // TODO(W7)` gate) and ainarm9045.cpp:1292
+//  WHY   : (the gated call).  Golden puts it in ainarm2.cpp/ainarm9045.cpp, neither
+//  WHY   : of which translated it.  Its OUT-arm twin MoveOutArm2XYToDecayTeach IS
+//  WHY   : real (aoutarm.cpp:1008) so golden :208-209 stays ACTIVE.
+//  DELTA : THE DEFAULT MAKES DoIonFanAutoClean UNABLE TO EVER COMPLETE.  bflag2 stays
+//  DELTA : false, so case 200 never advances to case 300; every 30 s the WAR2026
+//  DELTA : timeout alarm is raised again and the IO-triggered ion-fan clean never
+//  DELTA : runs.  THIS IS THE DELIBERATE FAIL-LOUD CHOICE.  The alternative --
+//  DELTA : defaulting bflag2=true -- would switch SwIonFanClean ON and drive
+//  DELTA : MOT[MInArmX/Y].fCanMove=false while the IN arm sits at WHATEVER X/Y it
+//  DELTA : happened to be at, i.e. blow the ion fan at a position that was never
+//  DELTA : taught, and report a clean that did not clean the in-arm pickers.  A
+//  DELTA : repeating operator-visible alarm is strictly safer than a silent no-clean.
+#if 0 // GATE G01 -- golden csystem.cpp:210-211 (text below is golden VERBATIM)
+            if(bflag2==false)
+                bflag2=MoveInArm2XYToDecayTeach();
+#else
+    // (no replacement -- the gated statement(s) simply do not happen)
+#endif
+
+            if(bflag1 && bflag2)                                                //Z軸往上
+            {
+                bflag1=false;
+                bflag2=false;
+
+                MOT[MInArmX].fCanMove=false;
+                MOT[MInArmY].fCanMove=false;
+
+                MOT[MOutArmX].fCanMove=false;
+                MOT[MOutArmY].fCanMove=false;
+                Task=300;
+            }
+            else if(DoIonFanAutoCleanWait.Off())                                //kevin 20220614 add time out alarm
+            {
+                ShowErrorMessage("WAR2026", K_RETRY, MMSystem);
+                DoIonFanAutoCleanWait.SetSecAndOn(30);
+            }
+            break;
+        case 300:
+            bStartAutoIonFanClean=true;                                         //Ifor 20210720 add: IO觸發IonFan清針才顯示
+            SW[SwIonFanClean].On();
+            DoIonFanAutoCleanWait.SetSecAndOn(10);
+            RecordProcess("Start IonFan auto cleaning");
+            Task=400;
+            break;
+        case 400:
+            if(DoIonFanAutoCleanWait.Off())
+            {
+                SW[SwIonFanClean].Off();
+                MOT[MTrayX].fCanMove=true;
+
+                InitInArmTask();
+                MOT[MInArmX].fCanMove=true;
+                MOT[MInArmY].fCanMove=true;
+
+                InitOutArmTask();
+                MOT[MOutArmX].fCanMove=true;
+                MOT[MOutArmY].fCanMove=true;
+
+                Task=500;
+            }
+            break;
+        case 500:
+            bDoIniStartAutoIonFanClean=false;
+            bStartAutoIonFanClean=false;                                        //Ifor 20210720 add: IO觸發IonFan清針才顯示
+            RecordProcess("Finish IonFan auto clean");
+            return true;
+    }
+    return false;
+}
+
+//==============================================================================
+//  golden csystem.cpp:263-696 -- pitch predicates, setup-teach predicate,
+//  arm-Z safety predicate and the shuttle in-position predicate belt.
+//  NOTE (ODR): golden csystem.cpp:698-701 (OutSHT1InLF/OutSHT1InRT/
+//  OutSHT2InLF/OutSHT2InRT) are NOT translated here -- they already have their
+//  single definition in csystem_predicates.cpp:243-249 and are not in this
+//  group's list.  Once the InSHT*InLF/InSHT*InRT stand-ins in that same file
+//  are retired in favour of the real bodies below, those four one-line
+//  delegates keep working unchanged.
+//==============================================================================
+//==============================================================================
+bool XPitchIsStand()
+{
+    if(CosFunction.b2x4SupportCenterPitch==true &&                              //Steven 20170706 (wei) : 2x4中間的Pitch不同 for SCC
+      (TestIF.iTestMode==_8Site2X4 || TestIF.iTestMode==_16Site4X4) &&          //Sam 20190226 : 16Site4X4
+       TestIF_File.bEnableUseXCenterPitch==true)
+    {
+        return false;
+    }
+    else if(TestIF.iTestMode==_10Site2X5)                                       //wei 20190614 10 site
+    {
+        return false;
+    }
+    else if(TestIF.iTestMode==QualSite1X4 || TestIF.iTestMode==_8Site2X4 ||
+            TestIF.iTestMode==_16Site2X8  || TestIF.iTestMode==_12Site2X6 ||
+            TestIF.iTestMode==_6Site2X3   ||                                    //ChungHung 20140115 add for 2x3
+            TestIF.iTestMode==_8Site1X4   ||                                    //ChungHung 20150528 add for 海思 _8Site1x4
+            TestIF.iTestMode==_16Site4X4  ||                                    //Sam 20190226 : 16Site4X4
+            TestIF.iTestMode==_32Site4X8N ||                                    //2013-01-15    Dell    Add nn Mode
+            TestIF.iTestMode==_8Site2X4N)                                       //Wei 20231211 : 2X4NN Mode
+    {
+        if(TestIF.dSiteXPitch>iXpitchMax)                                       //Isaac 20171204 (Steven) : Xpitch40->50mm
+            return false;
+    }
+    else if(TestIF.iTestMode==TriSite1X3 ||                                     //Frank 20160329 add for 1x3_4
+            TestIF.iTestMode==_6Site2X3N)                                       //Steven 20220425 : 2X3NN Mode
+    {
+        if(iInArmType==e9045_1x3_2_14)
+        {
+            if(TestIF.dSiteXPitch>iXpitchMaxX3)
+                return false;
+        }
+        else
+        {
+            if(TestIF.dSiteXPitch>iXpitchMax)
+                return false;
+        }
+    }
+    else if(TestIF.iTestMode==DualSite2x1)
+    {
+        return false;
+    }
+    else if(TestIF.iTestMode==QualSite2X2)
+    {
+        if(iInArmType==e9045_2x2_4_14)                                          //Steven 20191023 : fixed for 2x2_14 with Y-Pitch
+        {
+            if(TestIF.dSiteXPitch>iXpitchMaxX3)
+                return false;
+        }
+        else if(TestIF.dSiteXPitch>iXpitchMaxX2)                                //Isaac 20171204 (Steven) : Xpitch40->50mm, 12000->iXpitchMaxX3
+        {
+            return false;
+        }
+    }
+    else if(iInArmType==e9045_1x2_2_13 ||
+            iInArmType==e9045_1x2_4_Hot)                                        //Steven 20150505 : 1x2加大支援X-Pitch 120mm
+    {
+        if(TestIF.dSiteXPitch>iXpitchMaxX2)                                     //Isaac 20171204 (Steven) : Xpitch40->50mm, 8000->iXpitchMaxX2
+            return false;
+    }
+    else if(iInArmType==e9045_1x2_2_14)                                         //Steven 20220926 : for 1x2_14
+    {
+        if(TestIF.dSiteXPitch>iXpitchMaxX3)
+            return false;
+    }
+    return true;
+}
+//------------------------------------------------------------------------------
+bool CheckSetupFinish()                                                         //JerryYang 20180921 Setup Teach功能
+{
+    for(int i=0; i<5; i++)
+    {
+        if(bInArmSetupTeach[i]==false && iInArmPickPlaceCnt[i]<5)
+        {
+                return false;
+        }
+    }
+    return true;
+}
+//------------------------------------------------------------------------------
+bool AllArmZIsSafe()
+{
+    #ifdef SOFT_SIMULTE
+    return true;
+    #else
+    int iMotNoIn, iMotNoOut;
+    for(int i=0; i<InArmSuck.iMotRow; i++)
+    {
+        for(int j=0; j<InArmSuck.iMotCol; j++)
+        {
+            iMotNoIn =(USE_PICKER_COUNT==ep16Picker && InOutArmPickerUseMotor==eptUseMotCyn)?MInArmZA:InArmSuck.Suck[i][j].iMotNo;
+            iMotNoOut=(USE_PICKER_COUNT==ep16Picker && InOutArmPickerUseMotor==eptUseMotCyn)?MOutArmZA:OutArmSuck.Suck[i][j].iMotNo;
+            if(MOT[iMotNoIn].ReadPos()<0)                                       //Steven 20210713 : Prod.ZInArmSafe[i][j] --> 0
+                return false;
+            if(MOT[iMotNoOut].ReadPos()<0)                                      //Steven 20210713 : Prod.ZOutArmSafe[i][j] --> 0
+                return false;
+        }
+    }
+    return true;
+    #endif
+}
+//==============================================================================
+bool InShtInLF(int iSht)
+{
+    int iInPos=0;
+    iInPos=MOT[MInShuttle1+iSht].ReadPos();
+    #ifndef USE_CompareCommandPos
+    if(Prod.InSHT[iSht].iLeft==iInPos)
+    #else
+        #ifndef SOFT_SIMULTE
+    if(Prod.InSHT[iSht].iLeft==iInPos ||
+       MOT[MInShuttle1+iSht].CompareEncoderPos(Prod.InSHT[iSht].iLeft, 9)==1)   //AI(ht9045-shuttle-flow) 20260410 (RogerYang) : Use encoder check Gap容許誤差改為 9//Steven 20230202 : 增加判斷式, 避免hang up //Sam 20230621 : Gap容許誤差改為1>2
+        #else
+    if(Prod.InSHT[iSht].iLeft==iInPos ||                                        //Steven 20230202 : 增加判斷式, 避免hang up
+       MOT[MInShuttle1+iSht].CompareCommandPos(Prod.InSHT[iSht].iLeft, 2)==1)   //Sam 20230621 : Gap容許誤差改為1>2
+        #endif
+    #endif
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+//==============================================================================
+bool InShtInRT(int iSht)
+{
+    int iInPos=0;
+    iInPos=MOT[MInShuttle1+iSht].ReadPos();
+    #ifndef USE_CompareCommandPos
+    if(Prod.InSHT[iSht].iRight==iInPos)
+    #else
+        #ifndef SOFT_SIMULTE
+    if(Prod.InSHT[iSht].iRight==iInPos ||
+       MOT[MInShuttle1+iSht].CompareEncoderPos(Prod.InSHT[iSht].iRight, 9)==1)  //AI(ht9045-shuttle-flow) 20260410 (RogerYang) : Use encoder check Gap容許誤差改為 9 //Steven 20230202 : 增加判斷式, 避免hang up //Sam 20230621 : Gap容許誤差改為1>2
+        #else
+    if(Prod.InSHT[iSht].iRight==iInPos ||                                       //Steven 20230202 : 增加判斷式, 避免hang up
+       MOT[MInShuttle1+iSht].CompareCommandPos(Prod.InSHT[iSht].iRight, 2)==1)  //Sam 20230621 : Gap容許誤差改為1>2
+        #endif
+    #endif
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+//==============================================================================
+bool InSHT1InLF()
+{
+    if(b1ShuttleMoveToLeft==false)
+    {
+        return false;
+    }
+
+    MOT[MInShuttle1].ScanMotorStatus();
+    bool bLedFlag=!MOT[MInShuttle1].Led[iInposLed];
+    if(bLedFlag==false)
+    {
+        return false;
+    }
+    else
+    {
+        if(bSHTOfsChangeLeft[0])                                                //Sam 20230202 : 修正 Shuttle Left 移動完成後又被修改 Offset 導致 Hang up
+        {
+            #ifndef SOFT_SIMULTE
+            if(MOT[MInShuttle1].CompareEncoderPos(Prod.InSHT[0].iLeft, 9)==1)   //AI(ht9045-shuttle-flow) 20260410 (RogerYang) : Unified offset-change tolerance via encoder gap=9
+            #else
+            int iInPos=MOT[MInShuttle1].ReadPos();
+            if(abs(Prod.InSHT[0].iLeft-iInPos)<200)
+            #endif
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if(InShtInLF(0))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}
+//==============================================================================
+bool InSHT1InRT()
+{
+    MOT[MInShuttle1].ScanMotorStatus();
+    bool bLedFlag=!MOT[MInShuttle1].Led[iInposLed];
+    if(bLedFlag==false)
+    {
+        return false;
+    }
+    else
+    {
+        if(bSHTOfsChangeRight[0])                                               //Sam 20221205 : 修正 Shuttle 移動完成後又被修改 Offset 導致 Hang up
+        {
+            #ifndef SOFT_SIMULTE
+            if(MOT[MInShuttle1].CompareEncoderPos(Prod.InSHT[0].iRight, 9)==1)  //AI(ht9045-shuttle-flow) 20260410 (RogerYang) : Unified offset-change tolerance via encoder gap=9
+            #else
+            int iInPos=MOT[MInShuttle1].ReadPos();
+            if(abs(Prod.InSHT[0].iRight-iInPos)<200)
+            #endif
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if(InShtInRT(0))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}
+//==============================================================================
+bool InSHT2InLF()
+{
+    if(b2ShuttleMoveToLeft==false)
+    {
+        return false;
+    }
+    MOT[MInShuttle2].ScanMotorStatus();
+    bool bLedFlag=!MOT[MInShuttle2].Led[iInposLed];
+    if(bLedFlag==false)
+    {
+        return false;
+    }
+    else
+    {
+       if(bSHTOfsChangeLeft[1])                                                 //Sam 20230202 : 修正 Shuttle Left 移動完成後又被修改 Offset 導致 Hang up
+        {
+            #ifndef SOFT_SIMULTE
+            if(MOT[MInShuttle2].CompareEncoderPos(Prod.InSHT[1].iLeft, 9)==1)   //AI(ht9045-shuttle-flow) 20260410 (RogerYang) : Unified offset-change tolerance via encoder gap=9
+            #else
+            int iInPos=MOT[MInShuttle2].ReadPos();
+            if(abs(Prod.InSHT[1].iLeft-iInPos)<200)
+            #endif
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if(InShtInLF(1))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}
+//==============================================================================
+bool InSHT2InRT()
+{
+    MOT[MInShuttle2].ScanMotorStatus();
+    bool bLedFlag=!MOT[MInShuttle2].Led[iInposLed];
+    if(bLedFlag==false)
+    {
+        return false;
+    }
+    else
+    {
+        if(bSHTOfsChangeRight[1])                                               //Sam 20221205 : 修正 Shuttle 移動完成後又被修改 Offset 導致 Hang up
+        {
+            #ifndef SOFT_SIMULTE
+            if(MOT[MInShuttle2].CompareEncoderPos(Prod.InSHT[1].iRight, 9)==1)  //AI(ht9045-shuttle-flow) 20260410 (RogerYang) : Unified offset-change tolerance via encoder gap=9
+            #else
+            int iInPos=MOT[MInShuttle2].ReadPos();
+            if(abs(Prod.InSHT[1].iRight-iInPos)<200)
+            #endif
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if(InShtInRT(1))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}
+//==============================================================================
+bool SortShtSureInLF()                                                          //RogerYang 20250510 Add for 9046AU
+{
+    int iInPos=0;
+    iInPos=MOT[MOutSortSht].ReadPos();
+    #ifndef USE_CompareCommandPos
+    if(Prod.SortSHT.iLeft==iInPos)
+    #else
+    if(Prod.SortSHT.iLeft==iInPos ||                                            //Steven 20230202 : 增加判斷式, 避免hang up
+       MOT[MOutSortSht].CompareCommandPos(Prod.SortSHT.iLeft, 2)==1)            //Sam 20230621 : Gap容許誤差改為1>2 //Isaac 20201217 : 若齒輪比大於1，換算有機會和目標位置差1條
+    #endif
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+//==============================================================================
+bool SortShtSureInRT()                                                          //RogerYang 20250510 Add for 9046AU
+{
+    int iInPos=0;
+    iInPos=MOT[MOutSortSht].ReadPos();
+    #ifndef USE_CompareCommandPos
+    if(Prod.SortSHT.iRight==iInPos)
+    #else
+    if(Prod.SortSHT.iRight==iInPos ||                                           //Steven 20230202 : 增加判斷式, 避免hang up
+       MOT[MOutSortSht].CompareCommandPos(Prod.SortSHT.iRight, 2)==1)           //Sam 20230621 : Gap容許誤差改為1>2 //Isaac 20201217 : 若齒輪比大於1，換算有機會和目標位置差1條
+    #endif
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+//==============================================================================
+bool SortSHTInLF()                                                              //RogerYang 20250510 Add for 9046AU
+{
+    if(bSortShtMoveToLeft==false)
+    {
+        return false;
+    }
+    int iInPos=0;
+    MOT[MOutSortSht].ScanMotorStatus();
+    bool bLedFlag=!MOT[MOutSortSht].Led[iInposLed];
+    if(bLedFlag==false)
+    {
+        return false;
+    }
+    else
+    {
+        if(bSHTOfsChangeLeft[2])                                                //Sam 20230202 : 修正 Shuttle Left 移動完成後又被修改 Offset 導致 Hang up
+        {
+            iInPos=MOT[MOutSortSht].ReadPos();
+            if(abs(Prod.SortSHT.iLeft-iInPos)<200)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if(SortShtSureInLF())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}
+//==============================================================================
+bool SortSHTInRT()                                                              //RogerYang 20250510 Add for 9046AU
+{
+    int iInPos=0;
+    MOT[MOutSortSht].ScanMotorStatus();
+    bool bLedFlag=!MOT[MOutSortSht].Led[iInposLed];
+    if(bLedFlag==false)
+    {
+        return false;
+    }
+    else
+    {
+        if(bSHTOfsChangeRight[2])                                               //Sam 20221205 : 修正 Shuttle 移動完成後又被修改 Offset 導致 Hang up
+        {
+            iInPos=MOT[MOutSortSht].ReadPos();
+            if(abs(Prod.SortSHT.iRight-iInPos)<200)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if(SortShtSureInRT())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}
+
+//==============================================================================
+//Shuttle2
+//==============================================================================
+bool YPitchIsStand()
+{
+    if(InArmSuck.iYStep==2)
+    {
+        if(USE_IN_Y_IS_AUTO_PITCH==true)                                        //JerryYang 20251218 : IN/OUT ARM支援不同模組
+        {
+            if(TestIF.dSiteYPitch!=GetVariableYInShuttleData())
+                return false;
+        }
+        else
+        {
+            if(TestIF.dSiteYPitch!=TestIF.iARM_Y_PITCH)
+                return false;
+        }
+    }
+    return true;
+}
+//----------------------------------------------------------------------------
+bool ArmCanSuck4IC(int Direct, bool flag)
+{
+    if(TestIF_File.iTestMode==DualSite)                                         //jou 980313 1x2 can't suck 4's ic
+    {
+        if(TestIF_File.iUseSuckMode==2 ||
+           (TestIF_File.iUseSuckMode==4 && i1x2_4UseACEGPicker==0))
+        {
+            return false;
+        }
+    }
+
+    if(TestIF_File.iTestMode==DualSite2x1 ||                                    //1x2
+       TestIF_File.iTestMode==SingleSite ||
+       iInArmType==e9045_1x3_2_14)                                              //Steven 20220425 : 1x3_14
+    {
+        return false;
+    }
+
+    if(TestIF_File.iTestMode==QualSite2X2)                                      //2x2
+    {
+        if(TestIF_File.iUseSuckMode==4 ||                                       //jou 980502 2x2 select 4 or 8 pick unit
+           (TestIF_File.iUseSuckMode==8 && flag==false))                        //use 4 pick unit
+        {
+            return false;
+        }
+    }
+
+    if(USE_PICKER_COUNT==0)                                                     //Steven 20161117 : for HT-9045S
+        return false;
+
+    if(DeviceForm.XDimension>=ArmMaxPitch)                                      //Steven 20140509 : 單位不一樣
+        return false;
+
+//    if(TestIF.iTestMode==_8Site2X4 &&
+//   (DeviceForm_File.XDimension*2+2.0)>=TestIF_File.dSiteXPitch)               //Steven 20160614 :  31x31mm跑2x4_8遇到Site Pitch 60mm會撞到
+//        return false;
+
+    if((TestIF_File.iTestMode==_8Site2X4 ||                                     //Ifor 20161026 Fix Site pitch 28.575 mm時 跑4吸嘴導致IC擺放位置錯誤
+        TestIF_File.iTestMode==_16Site4X4) &&                                   //Sam 20190226 : 16Site4X4
+       TestIF_File.dSiteXPitch>(iXpitchMax/100.0) &&                            //Steven 20230410 : 改用TestIF_File判斷
+       (TestIF_File.dSiteXPitch/2.0)<=(DeviceForm_File.XDimension+2))           //kevin 20161108 < --> <=
+        return false;
+
+    return true;
+}
+
+//==============================================================================
+//iIndex=0 : chamber
+//iIndex=1 : Shuttle
+//==============================================================================
+bool HasAreaOverAmbientTemp(int iIndex)                                         //Steven 20110922 //Steven 20240606 : 整理渦流管動作
+{
+    #ifndef SOFT_SIMULTE
+        double dTemp=CheckRange(Temperature.fAbitTemp-VORTEX_COOLING, 40.0, 20.0);
+        double dTempWorkBase=0.0;
+
+        if(iIndex==0)                                                           //Chamber降溫控制
+        {
+            for(int i=tcHead1; i<=tcHead4; i++)                                 //2013-01-15    Dell tcSocket由HasAreaOverAmbientTemp_DUT()去判斷
+            {
+                if(bUT150Install[i] && bGetHeaterUsed(i))
+                {
+                    if(LastSet.iTemperature==Tempture_Ambient &&
+                       Temperature.bAmbientGuardbandCheck &&
+                       IniConfig.bL20AbientGuardBand)                           //kevin 20180115 (Steven) add Amient Guard Band
+                    {
+                        dTempWorkBase=Temperature.fAbitTemp;
+                    }
+                    else
+                    {
+                        dTempWorkBase=(CosFunction.bUseIndividulTempSet && Temperature.bUseIndividualTemp)?Temperature.fIndividualTemp[i]+2.0:Temperature.fWorkTemperBase+2.0;  //Steven 20140924 : 各個加熱區獨立有自己的設定值
+                    }
+
+                    if(UN150Read[i]<999 &&
+                       (LastSet.iTemperature==Tempture_Ambient  &&              //常溫
+                        UN150Read[i]>=dTemp)                    ||
+                       ((LastSet.iTemperature==Tempture_Hot     ||              //高溫
+                         LastSet.iTemperature==Tempture_AmbientHot) &&          //kevin 20140918 恆溫控制
+                        UN150Read[i]>=dTempWorkBase) &&
+                        UN150Read[i]!=999)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+        //--------------------------------------------------------------------------
+        //  GATE G02 -- golden csystem.cpp:808-809
+        //  WHAT  : the DUT / Socket-Base over-ambient contribution:
+        //  WHAT  : `if(HasAreaOverAmbientTemp_DUT(dTemp)) return true;`
+        //  WHY   : HasAreaOverAmbientTemp_DUT is golden csystem.cpp:21102 -- inside the
+        //  WHY   : WAVE-2 half of this file, so no sibling group in THIS wave defines it.
+        //  WHY   : csystem.h:233 declares it; `grep` for a definition over every .cpp in
+        //  WHY   : the port on 2026-08-09 found NONE.  Calling it would be an undefined
+        //  WHY   : reference that -fsyntax-only cannot see (campaign trap 2).
+        //  DELTA : HasAreaOverAmbientTemp() can now return false while the Socket-Base /
+        //  DELTA : DUT heaters are still above ambient.  Its consumers in THIS block are
+        //  DELTA : the six DoSwCoolingFan(HasAreaOverAmbientTemp()) calls, which are
+        //  DELTA : themselves gated (G04/G07/G08/G12), so inside this file the delta is
+        //  DELTA : currently unobservable.  It IS observable for every other caller of the
+        //  DELTA : csystem.h:232 predicate -- a "chamber/DUT still hot" test can read cool.
+        //  DELTA : NOT an interlock and NOT an alarm by itself.
+        #if 0 // GATE G02 -- golden csystem.cpp:808-809 (text below is golden VERBATIM)
+            if(HasAreaOverAmbientTemp_DUT(dTemp))                               //2013-01-15    Dell tcSocket由HasAreaOverAmbientTemp_DUT()去判斷
+                return true;
+        #else
+            // (no replacement -- the gated statement(s) simply do not happen)
+        #endif
+
+            if(bUT150Install[tcChamber])                                        //Steven 20111209 : Head Only要另外控制Chamber溫度
+            {
+                if(Temperature.iIndexHeatMode==HeadOnly ||
+                   Temperature.iIndexHeatMode==HeadSocket)                      //Head Only
+                {                                                               //不可以溫度到就關掉
+                    if((LastSet.iTemperature==Tempture_Ambient  &&              //常溫
+                        UN150Read[tcChamber]<=dTemp-1.0)        ||
+                       ((LastSet.iTemperature==Tempture_Hot     ||              //高溫
+                         LastSet.iTemperature==Tempture_AmbientHot) &&          //kevin 20140918 恆溫控制
+                        UN150Read[tcChamber]<=Temperature.fChamberCoolTemp-1.0) &&                                      //Steven 20111209 : Chamber降溫溫度
+                        UN150Read[tcChamber]!=999)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        if(UN150Read[tcChamber]<999)
+                            return true;
+                        else
+                            return false;
+                    }
+                }
+                else
+                {
+                    if(LastSet.iTemperature==Tempture_Ambient &&
+                       Temperature.bAmbientGuardbandCheck &&
+                       IniConfig.bL20AbientGuardBand)                           //kevin 20180115 (Steven) add Amient Guard Band
+                    {
+                        dTempWorkBase=Temperature.fAbitTemp;
+                    }
+                    else
+                    {
+                        dTempWorkBase=(CosFunction.bUseIndividulTempSet && Temperature.bUseIndividualTemp)?Temperature.fIndividualTemp[tcChamber]+2.0:Temperature.fWorkTemperBase+2.0;  //Steven 20140924 : 各個加熱區獨立有自己的設定值
+                    }
+
+                    if(UN150Read[tcChamber]<999 &&
+                       (LastSet.iTemperature==Tempture_Ambient  &&              //常溫
+                        UN150Read[tcChamber]>=dTemp)            ||
+                       ((LastSet.iTemperature==Tempture_Hot     ||              //高溫
+                         LastSet.iTemperature==Tempture_AmbientHot) &&          //kevin 20140918 恆溫控制
+                        UN150Read[tcChamber]>=dTempWorkBase) &&
+                        UN150Read[tcChamber]!=999)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            if(USE_16_HEATER==eht16Heater       ||                              //Steven 20120606 : 16溫控器 8Site使用Hontech頭
+               USE_16_HEATER==eht16HeaterEJ1N   ||
+               USE_16_HEATER==eht32HeaterEJ1N   ||                              //Steven 20140923 : Index使用EJ1N版32組加熱器
+               USE_16_HEATER==eht32HeaterKT4H   ||                              //Steven 20150211 : Index使用KT4H版32組加熱器
+               USE_16_HEATER==eht16HeaterDTME08 ||                              //JimmyChiu 20210923 : Index使用DTME08版16組加熱器
+               USE_16_HEATER==eht32HeaterDTME08 )                               //JimmyChiu 20210923 : Index使用DTME08版32組加熱器
+            {
+                for(int i=tcAa1; i<=tcBd2; i++)
+                {
+                    if(bUT150Install[i] && bGetHeaterUsed(i))
+                    {
+                        if(LastSet.iTemperature==Tempture_Ambient &&
+                           Temperature.bAmbientGuardbandCheck &&
+                           IniConfig.bL20AbientGuardBand)                       //kevin 20180115 (Steven) add Amient Guard Band
+                        {
+                            dTempWorkBase=Temperature.fAbitTemp;
+                        }
+                        else
+                        {
+                            dTempWorkBase=(CosFunction.bUseIndividulTempSet && Temperature.bUseIndividualTemp)?Temperature.fIndividualTemp[i]+2.0:Temperature.fWorkTemperBase+2.0;  //Steven 20140924 : 各個加熱區獨立有自己的設定值
+                        }
+
+                        if(UN150Read[i]<999 &&
+                           (LastSet.iTemperature==Tempture_Ambient  &&          //常溫
+                            UN150Read[i]>=dTemp)                    ||
+                           ((LastSet.iTemperature==Tempture_Hot     ||          //高溫
+                             LastSet.iTemperature==Tempture_AmbientHot) &&      //kevin 20140918 恆溫控制
+                            UN150Read[i]>=dTempWorkBase) &&
+                            UN150Read[i]!=999)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            if(USE_16_HEATER==eht32HeaterEJ1N ||                                //Steven 20140923 : Index使用EJ1N版32組加熱器
+               USE_16_HEATER==eht32HeaterKT4H ||                                //Steven 20150211 : Index使用KT4H版32組加熱器
+               USE_16_HEATER==eht32HeaterDTME08)                                //JimmyChiu 20210923 : Index使用DTME08版32組加熱器
+            {
+                for(int i=tcAe1; i<=tcBh2; i++)
+                {
+                    if(bUT150Install[i] && bGetHeaterUsed(i))
+                    {
+                        if(LastSet.iTemperature==Tempture_Ambient &&
+                           Temperature.bAmbientGuardbandCheck &&
+                           IniConfig.bL20AbientGuardBand)                       //kevin 20180115 (Steven) add Amient Guard Band
+                        {
+                            dTempWorkBase=Temperature.fAbitTemp;
+                        }
+                        else
+                        {
+                            dTempWorkBase=(CosFunction.bUseIndividulTempSet && Temperature.bUseIndividualTemp)?Temperature.fIndividualTemp[i]+2.0:Temperature.fWorkTemperBase+2.0;  //Steven 20140924 : 各個加熱區獨立有自己的設定值
+                        }
+
+                        if(UN150Read[i]<999 &&
+                           (LastSet.iTemperature==Tempture_Ambient  &&          //常溫
+                            UN150Read[i]>=dTemp)                    ||
+                           ((LastSet.iTemperature==Tempture_Hot     ||          //高溫
+                             LastSet.iTemperature==Tempture_AmbientHot) &&      //kevin 20140918 恆溫控制
+                            UN150Read[i]>=dTempWorkBase) &&
+                            UN150Read[i]!=999)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        else                                                                    //Shuttle降溫控制
+        {
+            dTemp=CheckRange(Temperature.fAbitTemp-SHUTTLE_COOLING, 40.0, 20.0);
+
+            for(int i=tcShuttle1; i<=tcShuttle2; i++)
+            {
+                if(bUT150Install[i] && bGetHeaterUsed(i))
+                {
+                    if(LastSet.iTemperature==Tempture_Ambient &&
+                       Temperature.bAmbientGuardbandCheck &&
+                       IniConfig.bL20AbientGuardBand)                           //kevin 20180115 (Steven) add Amient Guard Band
+                    {
+                        dTempWorkBase=Temperature.fAbitTemp;
+                    }
+                    else
+                    {
+                        dTempWorkBase=(CosFunction.bUseIndividulTempSet && Temperature.bUseIndividualTemp)?Temperature.fIndividualTemp[i]+2.0:Temperature.fWorkTemperBase+2.0;  //Steven 20140924 : 各個加熱區獨立有自己的設定值
+                    }
+
+                    if(UN150Read[i]<999 &&
+                       (LastSet.iTemperature==Tempture_Ambient  &&              //常溫
+                        UN150Read[i]>=dTemp)                    ||
+                       ((LastSet.iTemperature==Tempture_Hot     ||              //高溫
+                         LastSet.iTemperature==Tempture_AmbientHot) &&          //kevin 20140918 恆溫控制
+                        UN150Read[i]>=dTempWorkBase) &&
+                        UN150Read[i]!=999)
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+    #endif
+    return false;
+}
+
+//==============================================================================
+//  golden csystem.cpp:963-1047 -- the cross-arm IC-presence PREDICATE family.
+//  These are the REAL golden bodies.  csystem_predicates.cpp:61-186 currently
+//  holds a parallel set (its own banner calls them the W6.0 contract lock);
+//  those 14 are listed in this group's "STUBS I NOW SUPERSEDE" report section.
+//  Golden csystem.cpp:1049-1074 (SetInitialICCheck) is deliberately SKIPPED --
+//  it is already translated in this same file (csystem.cpp:209).
+//==============================================================================
+//==============================================================================
+bool InputShuttleFrontHasIC()
+{
+    return (FLCarryKit.UseSiteHasIC());
+}
+//==============================================================================
+bool InputShuttleRearHasIC()
+{
+    if(IniConfig.bIndexArm2SupplyLight==true ||                                 //jou 2012-10-19 Index Arm 2 供應光源 for CMOS
+       TestIF_File.bForEgisTecTest==true     ||                                 //Steven 20140922 : Arm2當作指紋測試
+       (IniConfig.bD58UseArm1PickPlaceArm2Test==true &&                         //kevin 20150127 Arm1 下壓 arm2 測試
+        TestIF_File.bArm1PickPlaceArm2Test==true))                              //Ifor 20200811 Fix: Arm1 Pick Place Arm2Test 需卡兩個條件
+    {
+        return false;
+    }
+
+    return (BLCarryKit.UseSiteHasIC());
+}
+//==============================================================================
+bool InputShuttleHasIC()
+{
+    return (InputShuttleFrontHasIC() || InputShuttleRearHasIC());
+}
+//==============================================================================
+bool OutputShuttleFrontHasIC()
+{
+    return (FRCarryKit.UseSiteHasIC());
+}
+//==============================================================================
+bool OutputShuttleRearHasIC()
+{
+    if(IniConfig.bIndexArm2SupplyLight==true ||                                 //jou 2012-10-19 Index Arm 2 供應光源 for CMOS
+       TestIF_File.bForEgisTecTest==true     ||                                 //Steven 20140922 : Arm2當作指紋測試
+       (IniConfig.bD58UseArm1PickPlaceArm2Test==true &&                         //kevin 20150127 Arm1 下壓 arm2 測試
+        TestIF_File.bArm1PickPlaceArm2Test==true))                              //Ifor 20200811 Fix: Arm1 Pick Place Arm2Test 需卡兩個條件
+    {
+        return false;
+    }
+    return (BRCarryKit.UseSiteHasIC());
+}
+//==============================================================================
+bool OutputShuttleHasIC()
+{
+    return (FRCarryKit.UseSiteHasIC() || BRCarryKit.UseSiteHasIC());
+}
+//==============================================================================
+bool ShuttleHasIC()
+{
+    return (InputShuttleHasIC() || OutputShuttleHasIC());
+}
+//==============================================================================
+bool SortShuttleHasIC()                                                         //RogerYang 20250506 Add for 9046AU
+{
+    return (OutSht3Kit.UseSiteHasIC());
+}
+//==============================================================================
+bool FrontTestHeadHasIC()
+{
+    return (FTestSuck.UseSiteHasIC());
+}
+//==============================================================================
+bool RearTestHeadHasIC()
+{
+    return (BTestSuck.UseSiteHasIC());
+}
+//==============================================================================
+bool TestHeadHasIC()
+{
+    return (FrontTestHeadHasIC() || RearTestHeadHasIC());
+}
+//==============================================================================
+bool TestSocketHasIC()
+{
+    return (TestSocket.UseSiteHasIC());
+}
+//==============================================================================
+bool IndexHasIC()
+{
+    return (TestHeadHasIC() || TestSocketHasIC());
+}
+//==============================================================================
+bool IndexHasRealIC()
+{
+    return (FTestSuck.HasRealIC() || BTestSuck.HasRealIC() || TestSocket.HasRealIC());
+}
+
+//==============================================================================
+void IndexMotorBreakerON()
+{
+    SW[SwFMotorBreaker].On();
+    SW[SwBMotorBreaker].On();
+}
+//==============================================================================
+void IndexMotorBreakerOFF()
+{
+    if(Sen[SnFMotorDown].IsOn() && IniConfig.bD48PowerOffEmgCanNotUseZ1Z2==false)
+    {
+        SW[SwManualZ1].On();
+        SW[SwFMotorBreaker].On();
+    }
+    else
+    {
+        SW[SwFMotorBreaker].Off();
+    }
+
+    if(Sen[SnBMotorDown].IsOn() && IniConfig.bD48PowerOffEmgCanNotUseZ1Z2==false)
+    {
+        SW[SwManualZ2].On();
+        SW[SwBMotorBreaker].On();
+    }
+    else
+    {
+        SW[SwBMotorBreaker].Off();
+    }
+    //--------------------------------------------------------------------------
+    //  GATE G03 -- golden csystem.cpp:1103-1106
+    //  WHAT  : the four auxiliary brake releases IndexMotorBreakerOFF tails with:
+    //  WHAT  : MagazineBreakerOFF / InOutArmZBreakerOFF / LDCarRotArmZBreakerOFF /
+    //  WHAT  : CassetteBreakerOFF.
+    //  WHY   : All four are golden csystem.cpp:24088 / :24099 / :24110 / :24122 -- the
+    //  WHY   : WAVE-2 half of this file.  csystem.h:172-173/:311-316 declares them; a
+    //  WHY   : definition scan over every .cpp in the port on 2026-08-09 found NONE, so
+    //  WHY   : the calls would be undefined references (campaign trap 2).
+    //  DELTA : ** SAFETY-RELEVANT.  THIS IS A BRAKE-CONTROL PATH.  WITH THE DEFAULT,
+    //  DELTA : IndexMotorBreakerOFF STILL DRIVES THE FRONT/REAR INDEX-Z BRAKES CORRECTLY
+    //  DELTA : (golden :1084-1102, fully ACTIVE) BUT THE MAGAZINE Z, THE IN/OUT-ARM Z,
+    //  DELTA : THE LOADER-ROTATE-ARM Z AND THE BOAT-CARRIER CASSETTE BRAKES ARE LEFT IN
+    //  DELTA : WHATEVER STATE THEY WERE IN.  ON A MACHINE FITTED WITH ANY OF THOSE FOUR
+    //  DELTA : OPTIONS, A POWER-OFF / EMG EVENT WOULD NOT ENGAGE THEIR BRAKES AND THE
+    //  DELTA : AXIS COULD DROP.  THE FOUR OPTIONS ARE ALL OFF ON A BASE MACHINE, WHICH IS
+    //  DELTA : WHY THIS IS SURVIVABLE AS AN INTERIM STATE -- IT MUST BE UNGATED THE MOMENT
+    //  DELTA : WAVE 2 LANDS golden :24083-24125. **
+    #if 0 // GATE G03 -- golden csystem.cpp:1103-1106 (text below is golden VERBATIM)
+    MagazineBreakerOFF();
+    InOutArmZBreakerOFF();                                                      //add One sucker with rotate
+    LDCarRotArmZBreakerOFF();                                                   //RogerYang 20250828 add for Loader Rotate Arm
+    CassetteBreakerOFF();                                                       //Ifor 20251216 add:Boat Carrier
+    #else
+        // (no replacement -- the gated statement(s) simply do not happen)
+    #endif
+}
+
+//==============================================================================
+void CheckATC6System()                                                          //ChungHung 20141024 add
+{
+    //--------------------------------------------------------------------------
+    //  GATE G-ATC-A -- golden csystem.cpp:1111-1129
+    //  WHAT  : the ENTIRE body of CheckATC6System: on an ATC 6.0 / ATC 3.0 machine, pump
+    //  WHAT  : ATCInterfaceForm->ATC_60_SYS.GetErrorMessage() into ShowMyMessage and, if
+    //  WHAT  : the ATC socket is neither connected nor connecting, CloseSocket() then
+    //  WHAT  : OpenSocket() to re-establish it.
+    //  WHY   : ATC/ATCInterface.h cannot be included into this TU -- see the clWhite
+    //  WHY   : collision documented at the top of this block (MEASURED: it is the first
+    //  WHY   : error g++ 6.3.0 emits).  Every symbol the body needs (ATCInterfaceForm,
+    //  WHY   : ATC_60_SYS, GetErrorMessage/IsConnected/IsConnecting/CloseSocket/
+    //  WHY   : OpenSocket at ATC/ATCSystem.h:416/:426/:427/:437/:438) HAS A REAL BODY
+    //  WHY   : and is already linked into ht9045_sm -- this is purely a header-visibility
+    //  WHY   : gate, the cheapest one in this group to retire.
+    //  DELTA : ** ON AN ATC 6.0 / ATC 3.0 MACHINE THIS MAKES TWO THINGS UNREACHABLE.
+    //  DELTA : (1) THE ATC ERROR-MESSAGE POPUP: ATC-reported faults are no longer shown
+    //  DELTA : to the operator at all.  (2) THE ATC SOCKET AUTO-RECONNECT: a dropped ATC
+    //  DELTA : link is never re-opened, so the ATC stays offline until the software is
+    //  DELTA : restarted.  NEITHER IS A MOTION INTERLOCK AND NEITHER IS A HANDLER ALARM
+    //  DELTA : (no ShowErrorMessage / no K_* code is involved), BUT (1) IS AN OPERATOR-
+    //  DELTA : FACING FAULT NOTIFICATION AND IT IS NOW SILENT.  On a machine with
+    //  DELTA : ATC_SYSTEM != eATC60/eATC30 the golden body does nothing at all, so for
+    //  DELTA : those machines this gate is behaviour-identical. **
+    #if 0 // GATE G-ATC-A -- golden csystem.cpp:1111-1129 (text below is golden VERBATIM)
+    AnsiString sMessage;
+    if(ATC_SYSTEM==eATC60 ||                                                    //ChungHung 20141024 add
+       ATC_SYSTEM==eATC30)                                                      //20141204 ChungHung add for ATC3.0
+    {
+        if(SystemInitialOK==false)
+            return;
+
+        if(ATCInterfaceForm->ATC_60_SYS.GetErrorMessage(sMessage))
+        {
+            ShowMyMessage(sMessage);
+        }
+
+        if(ATCInterfaceForm->ATC_60_SYS.IsConnected()==false &&
+           ATCInterfaceForm->ATC_60_SYS.IsConnecting()==false)
+        {
+            ATCInterfaceForm->ATC_60_SYS.CloseSocket();
+            ATCInterfaceForm->ATC_60_SYS.OpenSocket();
+        }
+    }
+    #else
+        // (no replacement -- the gated statement(s) simply do not happen)
+    #endif
+}
+
+//==============================================================================
+//  golden csystem.cpp:1131-1410
+//  DoCloseHeadterDelay (golden :1133) is declared `extern TQPF_Timer` in
+//  csystem.h:226 and re-declared extern by bthermo.cpp:256, and NOTHING in the
+//  port defined it -- measured by scanning every .cpp for a non-extern
+//  definition on 2026-08-09 (0 hits).  bthermo.cpp therefore carried an
+//  undefined reference that only stayed invisible because bthermo.cpp.obj sits
+//  in a static archive nobody had to pull that member from (campaign trap 3).
+//  Defining it here, in golden's own place, closes that hole.
+//==============================================================================
+//==============================================================================
+TQPF_Timer DoHeaterOnDelay;
+TQPF_Timer DoCloseHeadterDelay;
+void DoHeaterOn()
+{
+    static bool bHeaterFanOldStatus=false;
+    static int iHeaterFanSameCount=0;
+    bool bFan;
+    bool bEMG=false;
+
+    if(Sen[SnIndexHeaterFan].Enable)
+    {
+        if(SW[SwHeaterFan].Status())
+        {
+            bFan=Sen[SnIndexHeaterFan].IsOn();
+            if(bHeaterFanOldStatus!=bFan)
+            {
+                bHeaterFanOldStatus=bFan;
+                iHeaterFanSameCount=0;
+                bChamboFanCloseTemp=false;                                      //kevin 20130407關閉chambo 溫度
+            }
+            else
+            {
+                iHeaterFanSameCount++;
+                if(iHeaterFanSameCount>=1000)
+                {
+                    bChamboFanCloseTemp=true;                                   //kevin 20130407關閉chambo 溫度
+                    //--------------------------------------------------------------------------
+                    //  GATE G04 -- golden csystem.cpp:1158-1158
+                    //  WHAT  : DoSwCoolingFan(HasAreaOverAmbientTemp()) on the "heater fan stuck" path
+                    //  WHAT  : (the iHeaterFanSameCount>=1000 WAR1637 branch).
+                    //  WHY   : DoSwCoolingFan is golden csystem.cpp:20434 -- WAVE-2 range.  csystem.h:224
+                    //  WHY   : declares it; a definition scan over every .cpp on 2026-08-09 found NONE.
+                    //  WHY   : The ARGUMENT HasAreaOverAmbientTemp() is translated in THIS block and is
+                    //  WHY   : ACTIVE; only the call that consumes it is gated.
+                    //  DELTA : The vortex/cooling-fan solenoid is not driven.  WAR1637 ("Heater fan can
+                    //  DELTA : not run") STILL FIRES and bChamboFanCloseTemp is still latched, so the
+                    //  DELTA : ALARM PATH IS INTACT -- only the cooling-fan actuation is lost.
+                    #if 0 // GATE G04 -- golden csystem.cpp:1158-1158 (text below is golden VERBATIM)
+                    DoSwCoolingFan(HasAreaOverAmbientTemp());                   //20111130  Dell
+                    #else
+                        // (no replacement -- the gated statement(s) simply do not happen)
+                    #endif
+                    ShowErrorMessage("WAR1637", K_RETRY, MMSystem);             //Heater fan can not run
+                    iHeaterFanSameCount=0;
+                    return;
+                }
+            }
+        }
+    }
+
+    if(Sen[SnFrontLeftEMG].IsOff() || Sen[SnFrontRightEMG].IsOff() ||
+       Sen[SnRearLeftEMG ].IsOff() || Sen[SnRearRightEMG ].IsOff() ||           //緊停被按下時
+      (Enable_PLCSafety_IO && Sen[SnAllEMG].IsOff()))                           //KenHsieh 20250212 : 新增PLC 斷線可瞬間判斷EMG及安全門
+    {
+        bEMG=true;
+    }
+
+//--------------------------------------------------------------------------
+//  GATE G05 -- golden csystem.cpp:1174-1179
+//  WHAT  : the C05 power-saving arm that forces bEMG=true when the power-saving hot
+//  WHAT  : module has closed the temperature loop
+//  WHAT  : (fMain->tPSM.HotModule->bCheckTempClose).
+//  WHY   : TfMain (forms/fMain.h) has NO tPSM member.  Verified
+//  WHY   : `grep -n "tPSM" forms/fMain.h FormsFacade.h` on 2026-08-09: 0 hits; the
+//  WHY   : only tPSM-shaped type in the tree is PowerSavingMode.h's THotModule
+//  WHY   : (which does have bCheckTempClose at PowerSavingMode.h:122) but no form
+//  WHY   : owns an instance.
+//  DELTA : Power-saving mode no longer forces the heater relay off.  With the
+//  DELTA : default, bEMG is decided by the four EMG sensors + SnAllEMG only, so a
+//  DELTA : machine in C05 power-save with bCheckTempClose set WOULD KEEP HEATING.
+//  DELTA : NOT an interlock (the EMG contribution at golden :1167-1172 is ACTIVE
+//  DELTA : and unaffected); it is an energy/temperature-policy loss.
+#if 0 // GATE G05 -- golden csystem.cpp:1174-1179 (text below is golden VERBATIM)
+    if(IniConfig.bPowerSaveFunction==true &&
+       IniConfig.bC05_PowerSaveTemp==true &&
+       fMain->tPSM.HotModule->bCheckTempClose==true)                            //Ifor 20230706 add:省電模式不開啟SwHeaterRelay
+    {
+        bEMG=true;
+    }
+#else
+    // (no replacement -- the gated statement(s) simply do not happen)
+#endif
+
+    if(bEMG)
+    {
+        //--------------------------------------------------------------------------
+        //  GATE G06 -- golden csystem.cpp:1183-1209
+        //  WHAT  : the WHOLE three-arm ATC shutdown ladder inside `if(bEMG)`:
+        //  WHAT  :   eATCHonPrecType   (golden :1183-1191): ATCChillerSwitch(false) +
+        //  WHAT  :                     SetRunATC(false) + bRunATC=false
+        //  WHAT  :   eATC60 / eATC30   (golden :1192-1201): ATC_60_SYS.SetATCRun(false),
+        //  WHAT  :                     MySleep(100), ATC_60_SYS.CloseSocket(), MySleep(1000)
+        //  WHAT  :   eNewATCSystem     (golden :1202-1209): ATC_InterfaceForm->Stop() when
+        //  WHAT  :                     GetRunState()==true
+        //  WHY   : TWO separate blockers, one per group of arms.
+        //  WHY   : (a) arms 1 and 2 need ATCInterfaceForm, whose header cannot be included
+        //  WHY   :     into this TU (the clWhite collision documented at the top of this
+        //  WHY   :     block).  The bodies themselves are real and already in ht9045_sm.
+        //  WHY   : (b) arm 3 needs ATC_InterfaceForm, which in this tree is
+        //  WHY   :     acarry_shims.h:110's TATC_InterfaceFormShim exposing ONLY
+        //  WHY   :     iATC_MODE_TYPE -- it has neither GetRunState() nor Stop().  Read
+        //  WHY   :     acarry_shims.h:104-114 on 2026-08-09.
+        //  WHY   : Gated as ONE block because golden chains them with else-if; splitting
+        //  WHY   : would leave a dangling else.
+        //  DELTA : On an EMG press, or in C05 power-save, the ATC chiller is no longer
+        //  DELTA : stopped and the ATC 6.0/3.0 socket is no longer closed -- the ATC keeps
+        //  DELTA : running while the handler is stopped.  THE HEATER CUT ITSELF IS INTACT:
+        //  DELTA : golden :1211-1215 (SW[SwHeaterRelay].Off(), HeaterLog, fHeaterOK=false,
+        //  DELTA : bHeatOKBellowError) is ACTIVE and immediately follows.  No handler alarm
+        //  DELTA : and no motion interlock is on this path.  Side effect of the gate: the
+        //  DELTA : MySleep(100)/MySleep(1000) settle delays disappear with it -- which is
+        //  DELTA : moot here, because this TU already carries `#define MySleep W7C2_MySleep`
+        //  DELTA : (csystem.cpp W7C2 seam) whose stand-in is an empty body, so those two
+        //  DELTA : delays were already no-ops before this gate.
+        #if 0 // GATE G06 -- golden csystem.cpp:1183-1209 (text below is golden VERBATIM)
+        if(ATC_SYSTEM==eATCHonPrecType)                                         //Steven 20190523 : Add ATC off with power saving
+        {
+            if(Temperature.bATCActiveCooling==true)
+            {
+                ATCInterfaceForm->ATCChillerSwitch(false);
+                ATCInterfaceForm->SetRunATC(false);
+                bRunATC=false;                                                  //ChungHung 20160118 add for Hisi V102
+            }
+        }
+        else if(ATC_SYSTEM==eATC60 || ATC_SYSTEM==eATC30)                       //Steven 20220419 : Power Saving補上new ATC
+        {
+            if(Temperature.bATCActiveCooling==true)
+            {
+                ATCInterfaceForm->ATC_60_SYS.SetATCRun(false);
+                MySleep(100);
+                ATCInterfaceForm->ATC_60_SYS.CloseSocket();
+                MySleep(1000);
+            }
+        }
+        else if(ATC_SYSTEM==eNewATCSystem)                                      //Steven 20220419 : Power Saving補上new ATC
+        {
+            if(Temperature.bATCActiveCooling==true &&
+               ATC_InterfaceForm->GetRunState()==true)                          //Ztex 2023.04.19 Add HT-1032 TriTemp Function ATC 沒斷線在斷線 //檢查ATC 沒斷線在斷線
+            {
+                ATC_InterfaceForm->Stop();
+            }
+        }
+        #else
+            // (no replacement -- the gated statement(s) simply do not happen)
+        #endif
+
+        SW[SwHeaterRelay].Off();
+        HeaterLog("DoHeaterOn_3", false);                                       //Steven 20151123 : Log for Heater Relay
+        fHeaterOK=false;
+        if(CUSTOMER_CODE!=CC_ASE_KaohSiung)                                     //kevin 20141015   會造成溫度過低不會發alarm
+           bHeatOKBellowError=false;                                            //jou 2014-06-12 修正偶發性秀低溫異常
+
+        //--------------------------------------------------------------------------
+        //  GATE G07 -- golden csystem.cpp:1217-1217
+        //  WHAT  : DoSwCoolingFan(HasAreaOverAmbientTemp()) on the bEMG branch tail.
+        //  WHY   : same as G04 -- DoSwCoolingFan has no compiled body in this tree
+        //  WHY   : (golden :20434, WAVE-2 range).
+        //  DELTA : Cooling fan not driven when EMG/power-save switches the heater off.
+        //  DELTA : SW[SwHeaterRelay].Off() + HeaterLog + fHeaterOK=false (golden :1211-1215)
+        //  DELTA : are ACTIVE, so the heater really is cut.
+        #if 0 // GATE G07 -- golden csystem.cpp:1217-1217 (text below is golden VERBATIM)
+        DoSwCoolingFan(HasAreaOverAmbientTemp());                               //20111130  Dell
+        #else
+            // (no replacement -- the gated statement(s) simply do not happen)
+        #endif
+    }
+
+    if(bHeaterDoorIsOpen[0] ||
+       bHeaterDoorIsOpen[1] ||
+       bHeaterDoorIsOpen[2] ||                                                  //Steven 20191016 : For ATC3.3, 要第三個加熱門
+       bHeaterDoorIsOpen[3])                                                    //wei 20200616 : For ATC3.3 MR, 要第四個加熱門
+    {
+        if(Temperature.iIndexHeatMode==HeadOnly)                                //jou 2011-12-27 chamber一開溫度就重新設定fHeaterOK=false,不然一開門就會alarm
+        {
+            if(DoCloseHeadterDelay.Off())
+            {
+                fHeaterOK=false;
+                if(CUSTOMER_CODE!=CC_ASE_KaohSiung)                             //kevin 20141015   會造成溫度過低不會發alarm
+                   bHeatOKBellowError=false;                                    //jou 2014-06-12 修正偶發性秀低溫異常
+            }
+        }
+        else
+        {
+            fHeaterOK=false;
+            if(CUSTOMER_CODE!=CC_ASE_KaohSiung)                                 //kevin 20141015   會造成溫度過低不會發alarm
+               bHeatOKBellowError=false;                                        //jou 2014-06-12 修正偶發性秀低溫異常
+        }
+
+        //--------------------------------------------------------------------------
+        //  GATE G08 -- golden csystem.cpp:1241-1241
+        //  WHAT  : DoSwCoolingFan(HasAreaOverAmbientTemp()) on the heater-door-open branch.
+        //  WHY   : same as G04.
+        //  DELTA : Cooling fan not driven while a heater/chamber door is open.  fHeaterOK is
+        //  DELTA : still cleared (golden :1225-1239, ACTIVE), so the door interlock holds.
+        #if 0 // GATE G08 -- golden csystem.cpp:1241-1241 (text below is golden VERBATIM)
+        DoSwCoolingFan(HasAreaOverAmbientTemp());                               //20111130  Dell
+        #else
+            // (no replacement -- the gated statement(s) simply do not happen)
+        #endif
+
+        //--------------------------------------------------------------------------
+        //  GATE G08b -- golden csystem.cpp:1243-1244
+        //  WHAT  : the manual-teach early-return:
+        //  WHAT  : if(fContact->fShow && iContactMode==CONTACT_MANUAL_GET_HEIGHT) return;
+        //  WHY   : CONTACT_MANUAL_GET_HEIGHT is an enumerator declared ONLY in cContact.h:82,
+        //  WHY   : and cContact.h cannot be pulled into this TU: it is the header the
+        //  WHY   : atester_shims.h fContact stand-in exists in order to REPLACE, and this TU
+        //  WHY   : already binds fContact to that stand-in (atester_shims.h:150-230).  The
+        //  WHY   : other two names in the condition DO exist (fContact->fShow at
+        //  WHY   : atester_shims.h:157, iContactMode at cmydef.h:3102), so the enumerator is
+        //  WHY   : the single blocker.  Substituting its numeric value was rejected: this
+        //  WHY   : group may not verify cContact.h's enum ordering against golden, and a
+        //  WHY   : wrong integer here would silently mis-compare a MODE.
+        //  DELTA : While the operator is hand-teaching contact height with a heater/chamber
+        //  DELTA : door open, DoHeaterOn no longer bails out early -- it continues into the
+        //  DELTA : door-open fan ladder below and may switch SW[SwHeaterFan] /
+        //  DELTA : SW[SwManualZ1].OnOff(FlushFlag).  fHeaterOK has ALREADY been cleared
+        //  DELTA : above (golden :1225-1239, ACTIVE) in both golden and here, so no
+        //  DELTA : temperature interlock changes.  Offline fContact->fShow is false, so the
+        //  DELTA : default is branch-identical offline.  NOT an alarm path.
+        #if 0 // GATE G08b -- golden csystem.cpp:1243-1244 (text below is golden VERBATIM)
+        if(fContact->fShow && iContactMode==CONTACT_MANUAL_GET_HEIGHT)          //Steven 20100223 手K時,跳過
+            return;
+        #else
+            // (no replacement -- the gated statement(s) simply do not happen)
+        #endif
+
+        //--------------------------------------------------------------------------
+        //  GATE G09 -- golden csystem.cpp:1246-1247
+        //  WHAT  : the IO-view early-return:
+        //  WHAT  : if(IniConfig.bIOFormCanControlHeaterFan && fiosetview->fShow==true) return;
+        //  WHY   : fiosetview in this tree is atester_shims.h:404's TfiosetviewShim, whose
+        //  WHY   : ONLY member is bIndexSuck[2][4][8] -- there is no fShow.  Read
+        //  WHY   : atester_shims.h:404-410 on 2026-08-09.
+        //  DELTA : When the IO settings view is open AND bIOFormCanControlHeaterFan is set,
+        //  DELTA : DoHeaterOn no longer yields control of the fan to that view: it keeps
+        //  DELTA : driving SW[SwHeaterFan] itself.  Offline fShow would be false anyway, so
+        //  DELTA : the default is the offline-identical branch.  NOT an interlock.
+        #if 0 // GATE G09 -- golden csystem.cpp:1246-1247 (text below is golden VERBATIM)
+        if(IniConfig.bIOFormCanControlHeaterFan && fiosetview->fShow==true)     //Steven 20120622 : 開IO畫面要可以控制風扇
+            return;
+        #else
+            // (no replacement -- the gated statement(s) simply do not happen)
+        #endif
+
+        if(IniConfig.bKoreaFunction)                                            //jou 2010-12-03 start : ASE-KR當chamber門開啟時,需要能開關風扇
+        {
+            //--------------------------------------------------------------------------
+            //  GATE G10 -- golden csystem.cpp:1251-1251
+            //  WHAT  : the Korea-function guard `if(fiosetview->fShow==false)` around the
+            //  WHAT  : 5-second-delayed SW[SwHeaterFan].Off().  CONDITION ONLY -- the body it
+            //  WHAT  : guards is kept ACTIVE, unconditionally, immediately below.
+            //  WHY   : same as G09 -- TfiosetviewShim has no fShow.
+            //  DELTA : On an ASE-KR machine with the IO view OPEN, the chamber fan is now still
+            //  DELTA : turned off after DoHeaterOnDelay expires instead of being left to the IO
+            //  DELTA : view.  Offline fShow is false, so the default is branch-identical.
+            #if 0 // GATE G10 -- golden csystem.cpp:1251-1251 (text below is golden VERBATIM)
+            if(fiosetview->fShow==false)
+            #else
+                // (no replacement -- the gated statement(s) simply do not happen)
+            #endif
+            {
+                if(DoHeaterOnDelay.Off())
+                    SW[SwHeaterFan].Off();
+            }
+        }
+        else
+        {
+            if(IniConfig.bOpenDoorNotStopFan==false)
+            {
+                if(DoHeaterOnDelay.Off())
+                    SW[SwHeaterFan].Off();
+            }
+            else
+            {
+                //--------------------------------------------------------------------------
+                //  GATE G11 -- golden csystem.cpp:1266-1269
+                //  WHAT  : the "door open but do not stop the fan" click-through:
+                //  WHAT  : if(Sen[SnFMotorDown].IsOn()==true) fMain->spbChamberFanClick(fMain);
+                //  WHY   : TfMain has neither spbChamberFanClick nor spbChamberFan.  Verified
+                //  WHY   : `grep -n "spbChamberFan" forms/fMain.h` on 2026-08-09: 0 hits.
+                //  DELTA : The chamber-fan speed button is not "clicked" on behalf of the operator
+                //  DELTA : when the front index-Z is down with a door open.  Everything below it
+                //  DELTA : (golden :1271-1312, the bWantToStopChamberFan / ASE-KH / EMG / ambient
+                //  DELTA : ladder that actually drives SW[SwHeaterFan]) is ACTIVE.
+                #if 0 // GATE G11 -- golden csystem.cpp:1266-1269 (text below is golden VERBATIM)
+                if(Sen[SnFMotorDown].IsOn()==true)                              //Steven 20110725 : 開門不要關風扇
+                {
+                    fMain->spbChamberFanClick(fMain);
+                }
+                #else
+                    // (no replacement -- the gated statement(s) simply do not happen)
+                #endif
+
+                if(bWantToStopChamberFan==true)                                 //Steven 20110725 : 當有人想要關掉風扇
+                {
+                    if(DoHeaterOnDelay.Off())                                   //等到Delay結束後才可以關
+                    {
+                        SW[SwHeaterFan].Off();
+                    }
+                }
+                else
+                {
+                    if(CUSTOMER_CODE==CC_ASE_KaohSiung)                         //kevin 20170522 (wei) add 開門使用風扇降溫
+                    {
+                        if(Temperature.bAmbUsingAFan==true)
+                        {
+                            SW[SwHeaterFan].On();
+                            SW[SwManualZ1].OnOff(FlushFlag);
+                        }
+                        else
+                        {
+                            SW[SwHeaterFan].Off();
+                        }
+                    }
+
+                    if(bEMG==true ||
+                       (IniConfig.bL21PowerOffTemperature && bMotorPowerState==false &&
+                        Sen[SnHeaterDoor2].Enable==true &&
+                        Sen[SnHeaterDoor2].IsOff()==true))                      //kevin 20181112 motor power off
+                    {
+                        SW[SwHeaterRelay].Off();                                //kevin 20181116
+                    }
+                    else if(IniConfig.bAmbRunChamberFanCanStop==true &&         //jou 2012-01-30 機台生產 & 常溫時，Chamber風扇可以選擇不轉動
+                            LastSet.iTemperature==Tempture_Ambient &&
+                            Temperature.bAmbUsingAFan==false)
+                    {
+                         SW[SwHeaterFan].Off();
+                    }
+                    else
+                    {
+                        SW[SwHeaterFan].On();
+                        SW[SwManualZ1].OnOff(FlushFlag);
+                    }
+                    DoHeaterOnDelay.SetSecAndOn(5);
+                }
+            }
+        }
+    }
+    else
+    {
+        if(bEMG==false)
+        {
+            //--------------------------------------------------------------------------
+            //  GATE G12 -- golden csystem.cpp:1320-1335
+            //  WHAT  : the QA-mode branch that hands heater-relay control to the Configuration
+            //  WHAT  : form (CUSTOMER_CODE==CC_HONPREC_QC && fConfiguration->fShow &&
+            //  WHAT  : PageControl1->ActivePageIndex==ecp1TabSheet9), INCLUDING both of its
+            //  WHAT  : DoSwCoolingFan calls AND the `else` keyword.  The else-BODY (golden
+            //  WHAT  : :1336-1337 DoSwCoolingFan + :1338-1378 the temperature ladder) is kept
+            //  WHAT  : ACTIVE as an unconditional block immediately below; only its own
+            //  WHAT  : DoSwCoolingFan line is separately gated (see the G12b note inline).
+            //  WHY   : fConfiguration is declared only inside Automation/SCK_ART_Remainder.h:409
+            //  WHY   : and carries none of chkHeader/PageControl1/ecp1TabSheet9: verified
+            //  WHY   : `grep -n "chkHeater\|ecp1TabSheet9" *.h forms/*.h` on 2026-08-09 -- 0
+            //  WHY   : hits tree-wide for both names.  DoSwCoolingFan additionally has no body
+            //  WHY   : (G04).
+            //  DELTA : The default is exactly golden's behaviour with the Configuration form
+            //  DELTA : CLOSED (fShow==false), which is the only state the offline tree can be
+            //  DELTA : in.  On a real CC_HONPREC_QC machine with Configuration open on the
+            //  DELTA : communications page, the operator checkbox no longer overrides the
+            //  DELTA : heater relay -- the normal temperature ladder decides instead.  NOT an
+            //  DELTA : interlock; it removes a manual override, i.e. it is the LESS permissive
+            //  DELTA : direction.
+            #if 0 // GATE G12 -- golden csystem.cpp:1320-1335 (text below is golden VERBATIM)
+            if(CUSTOMER_CODE==CC_HONPREC_QC &&
+               fConfiguration->fShow==true  &&
+               fConfiguration->PageControl1->ActivePageIndex==fConfiguration->ecp1TabSheet9)                            //QA模式而且開啟Configuration，然後又在通訊頁面時
+            {
+                SW[SwHeaterRelay].OnOff(fConfiguration->chkHeater->Checked);
+                HeaterLog("DoHeaterOn_1", fConfiguration->chkHeater->Checked);  //Steven 20151123 : Log for Heater Relay
+                if(fConfiguration->chkHeater->Checked)
+                {
+                    DoSwCoolingFan(false);                                      //20111130  Dell
+                }
+                else
+                {
+                    DoSwCoolingFan(HasAreaOverAmbientTemp());                   //20111130  Dell
+                }
+            }
+            else
+            #else
+                // (no replacement -- the gated statement(s) simply do not happen)
+            #endif
+            {
+                // G12b: golden :1337 DoSwCoolingFan(HasAreaOverAmbientTemp()) -- same
+                //       missing body as G04/G07/G08 (golden :20434, WAVE-2 range).
+                //       DELTA: no cooling-fan drive on the normal (non-QA) heater
+                //       path.  The ladder below that actually switches
+                //       SW[SwHeaterRelay] is ACTIVE.
+#if 0 // GATE G12b -- golden csystem.cpp:1337 (text below is golden VERBATIM)
+                DoSwCoolingFan(HasAreaOverAmbientTemp());                       //20111130  Dell
+#else
+                // (DoSwCoolingFan has no compiled body in this tree -- see G04)
+#endif
+                if((LastSet.iTemperature==Tempture_Hot ||
+                    LastSet.iTemperature==Tempture_AmbientHot))
+                {                                                               //kevin 20140918 恆溫控制
+                    if(bHeatOverTenErrorOK)
+                    {
+                        SW[SwHeaterRelay].On();
+                        HeaterLog("DoHeaterOn_4", true);                        //Steven 20151123 : Log for Heater Relay
+                    }
+                }
+                else
+                {
+//--------------------------------------------------------------------------
+//  golden csystem.cpp:1349-1377 -- the two ATC arms that KEEP
+//  SW[SwHeaterRelay] ON at ambient on ATC 7.0/6.0/5.1 (arm 1) and ATC
+//  3.3/3.5/6.1 with an active heat gun (arm 2).  FULLY ACTIVE -- NOT GATED.
+//  An earlier draft of this block gated them on the claim that the six
+//  ATC_TYPE_* constants do not exist in the port.  THAT CLAIM WAS FALSE and
+//  the gate would have turned the ambient heater relay OFF on six ATC
+//  generations.  See the ATC_TYPE_* #define block at the top of this append.
+//--------------------------------------------------------------------------
+                    if(ATC_SYSTEM==eNewATCSystem &&
+                       (ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_70 ||       //Ifor 20170328 (wei) add ATC7.0
+                        ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_60 ||       //Ifor 20160527 ATC 6.0 不可關閉 Heat Relay
+                        ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_51 ) &&     //wei 20170217 (Steven) add ATC5.1
+                        Temperature.bATCActiveCooling==true)
+                    {
+                        if(SW[SwHeaterRelay].Status()==false)                   //Ifor 20170329 (wei) add 避免 Heater Relay 重複On的問題
+                        {
+                            SW[SwHeaterRelay].On();
+                            HeaterLog("DoHeaterOn_5", true);                    //Steven 20151123 : Log for Heater Relay
+                        }
+                    }
+                    else if(Temperature.bATCActiveCooling==true &&
+                           (ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_33 ||
+                            ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_35 ||
+                            ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_61) &&
+                            Temperature.bActiveHeatGun)
+                    {
+                        if(SW[SwHeaterRelay].Status()==false)                   //Ifor 20170329 (wei) add 避免 Heater Relay 重複On的問題
+                        {
+                            SW[SwHeaterRelay].On();
+                            HeaterLog("DoHeaterOn_51", true);                   //Steven 20151123 : Log for Heater Relay
+                        }
+                    }
+                    else
+                    {
+                        SW[SwHeaterRelay].Off();
+                        HeaterLog("DoHeaterOn_5", false);                       //Steven 20151123 : Log for Heater Relay
+                    }
+                }
+            }
+        }
+
+        if(IniConfig.bAmbRunChamberFanCanStop==true &&                          //jou 2012-01-30 機台生產 & 常溫時，Chamber風扇可以選擇不轉動
+           LastSet.iTemperature==Tempture_Ambient &&
+           Temperature.bAmbUsingAFan==false)
+        {
+             SW[SwHeaterFan].Off();
+        }
+        else
+        {
+            //--------------------------------------------------------------------------
+            //  GATE G13b -- golden csystem.cpp:1390-1396
+            //  WHAT  : the C05 power-saving arm that stops the chamber fan when the power-saving
+            //  WHAT  : hot module is disabled (fMain->tPSM.HotModule->Enabled==false), plus the
+            //  WHAT  : `else` keyword.  The else-body `SW[SwHeaterFan].On();` is kept ACTIVE
+            //  WHAT  : unconditionally below.
+            //  WHY   : same as G05 -- TfMain has no tPSM member (0 grep hits, 2026-08-09).
+            //  DELTA : In C05 power-saving with the hot module disabled the chamber fan now
+            //  DELTA : stays ON instead of being stopped.  That is the energy-wasteful but
+            //  DELTA : thermally SAFER direction (more cooling, not less).  NOT an interlock.
+            #if 0 // GATE G13b -- golden csystem.cpp:1390-1396 (text below is golden VERBATIM)
+            if(IniConfig.bPowerSaveFunction==true &&
+               IniConfig.bC05_PowerSaveTemp==true &&
+               fMain->tPSM.HotModule->Enabled==false)
+            {
+                SW[SwHeaterFan].Off();
+            }
+            else
+            #else
+                // (no replacement -- the gated statement(s) simply do not happen)
+            #endif
+            {
+                SW[SwHeaterFan].On();
+            }
+        }
+
+        if(IniConfig.bOpenDoorNotStopFan==true)
+        {
+            bWantToStopChamberFan=false;                                        //Steven 20110725 : 風扇被打開, flag要復原
+            //--------------------------------------------------------------------------
+            //  GATE G13c -- golden csystem.cpp:1405-1405
+            //  WHAT  : the caption feedback `fMain->spbChamberFan->Caption="Chamber FAN ON";`
+            //  WHY   : same as G11 -- TfMain has no spbChamberFan member (0 grep hits,
+            //  WHY   : 2026-08-09).
+            //  DELTA : Pure UI text.  The state it reports (bWantToStopChamberFan=false, golden
+            //  DELTA : :1404) IS set, ACTIVE, immediately above.  No behavioural delta.
+            #if 0 // GATE G13c -- golden csystem.cpp:1405-1405 (text below is golden VERBATIM)
+            fMain->spbChamberFan->Caption="Chamber FAN ON";
+            #else
+                // (no replacement -- the gated statement(s) simply do not happen)
+            #endif
+        }
+        DoHeaterOnDelay.SetSecAndOn(10);                                        //jou 2011-12-26 15 -> 10 sec, ASE-KR說吹太久了,試試10 sec的
+        DoCloseHeadterDelay.SetSecAndOn(3);
+    }
+}
+
+//******************************************************************************
+//
+//  注意!! IsEMGPressed為Handler EMG相關, 修改時要小心!!
+//
+//******************************************************************************
+bool IsEMGPressed()
+{
+    static bool bServoOff   =false;
+    bool bFrontLeftEMG      =Sen[SnFrontLeftEMG].IsOff();
+    bool bFrontRightEMG     =Sen[SnFrontRightEMG].IsOff();
+    bool bRearLeftEMG       =Sen[SnRearLeftEMG].IsOff();
+    bool bRearRightEMG      =Sen[SnRearRightEMG].IsOff();
+    bool bServo             =Sen[SnServo].IsOff();
+    bool bPLCEMG            =Sen[SnAllEMG].IsOff();                             //KenHsieh 20250212 : 新增PLC 斷線可瞬間判斷EMG及安全門
+    bool bPLCSafe           =false;
+
+    AnsiString s="";
+
+    if(Enable_PLCSafety_IO)                                                     //jou 20230925 : 新增PLC safe CE規範
+    {
+        //--------------------------------------------------------------------------
+        //  GATE G-PLC-A -- golden csystem.cpp:1431-1434
+        //  WHAT  : two of the three contributions to bPLCSafe inside `if(Enable_PLCSafety_IO)`:
+        //  WHAT  :   bPLCIOEffect==false  -- the PLC has never delivered a data frame
+        //  WHAT  :   bIOPowered==false    -- the PLC reports no power (E-STOP twist button not
+        //  WHAT  :                           yet cleared with Reset)
+        //  WHAT  : THE THIRD CONTRIBUTION, bPLCEMG (= Sen[SnAllEMG].IsOff(), golden :1424), IS
+        //  WHAT  : PRESERVED IN THE DEFAULT -- see the #else arm.
+        //  WHY   : bPLCIOEffect and bIOPowered are DEFINED (MyPLC/MyPLC_IO_Modbus.cpp:91-92)
+        //  WHY   : and declared (MyPLC/MyPLC_IO_Modbus.h:48-49), but MyPLC_IO_Modbus.cpp is
+        //  WHY   : registered in ht9045_comms (CMakeLists.txt:1303) and ht9045_sm -- the
+        //  WHY   : archive csystem.cpp lands in -- DOES NOT LINK ht9045_comms
+        //  WHY   : (CMakeLists.txt:2132-2143 lists ht9045_io / ht9045_motor / ht9045_globals /
+        //  WHY   : vclcompat / ht9045_secsgem / ht9045_forms and nothing else, and
+        //  WHY   : ht9045_secsgem's own line at :1214 does not reach it either).  Verified
+        //  WHY   : 2026-08-09 that NO existing ht9045_sm source references either symbol
+        //  WHY   : (`grep -n "bPLCIOEffect\|bIOPowered" **/*.cpp` -> only
+        //  WHY   : MyPLC/MyPLC_IO_Modbus.cpp itself), so there is no precedent edge to lean
+        //  WHY   : on: keeping the call active would add an UNDEFINED REFERENCE that
+        //  WHY   : -fsyntax-only cannot see (campaign trap 2), and this group may not edit
+        //  WHY   : CMakeLists.txt.  FIX FOR THE MAIN LOOP: add ht9045_comms to ht9045_sm's
+        //  WHY   : target_link_libraries, then ungate.
+        //  DELTA : ** THIS WEAKENS A SAFETY INTERLOCK ON A PLC-SAFETY MACHINE.  With
+        //  DELTA : Enable_PLCSafety_IO set, GOLDEN treats "PLC has never spoken" and "PLC
+        //  DELTA : reports no power" as EQUIVALENT TO AN EMG PRESS -- i.e. it refuses to run
+        //  DELTA : until the safety PLC has actually reported and power is confirmed.  WITH
+        //  DELTA : THE DEFAULT, THOSE TWO STATES NO LONGER FORCE bPLCSafe, SO IsEMGPressed()
+        //  DELTA : CAN RETURN false -- SERVOS STAY ON AND THE BRAKES STAY RELEASED -- WHILE
+        //  DELTA : THE SAFETY PLC IS SILENT OR UNPOWERED.  The live EMG line itself is NOT
+        //  DELTA : lost: bPLCEMG is kept in the default arm, and the four hard-wired EMG
+        //  DELTA : sensors + SnServo at golden :1437-1440 are ACTIVE.  So an actual EMG press
+        //  DELTA : is still caught; what is lost is the "prove the PLC is alive first"
+        //  DELTA : pre-condition.  ON A MACHINE WITH Enable_PLCSafety_IO==0 (the default)
+        //  DELTA : THIS GATE CHANGES NOTHING AT ALL.  MUST be the first thing ungated. **
+        #if 0 // GATE G-PLC-A -- golden csystem.cpp:1431-1434 (text below is golden VERBATIM)
+        if(bPLCIOEffect==false ||
+           bIOPowered==false   ||
+           bPLCEMG)                                                             //KenHsieh 20250212 : 新增PLC 斷線可瞬間判斷EMG及安全門
+            bPLCSafe=true;
+        #else
+        if(bPLCEMG)                                                             // GATE G-PLC-A default:
+            bPLCSafe=true;                                                      // keep ONLY golden :1433
+        #endif
+    }
+
+    if(bFrontLeftEMG || bFrontRightEMG ||
+       bRearLeftEMG  || bRearRightEMG  ||
+       (Sen[SnServo].Enable && bServo) ||
+       bPLCSafe==true )                                                         //kevin 20140121 偵測sevon 訊號
+    {
+        //--------------------------------------------------------------------------
+        //  GATE G-ATC-B -- golden csystem.cpp:1442-1443
+        //  WHAT  : the ATC7 "EMG down" notification:
+        //  WHAT  : if(bServoOff==false) ATCInterfaceForm->SendCommToATC7(ATC_EMG_DOWN,"","");
+        //  WHY   : ATC/ATCInterface.h cannot be included into this TU -- see the clWhite
+        //  WHY   : collision documented at the top of this block.  SendCommToATC7 itself is
+        //  WHY   : real (ATC/ATCInterface.h:491, body in ATC/ATCInterface.cpp, already in
+        //  WHY   : ht9045_sm) and ATC_EMG_DOWN is real (ATC/ATCInterface.h:516) -- this is a
+        //  WHY   : header-visibility gate only.
+        //  DELTA : The ATC is not told the handler EMG went down.  EVERY LOCAL EMG ACTION IS
+        //  DELTA : ACTIVE AND UNCHANGED: IndexMotorBreakerOFF (golden :1444), the servo-off
+        //  DELTA : sweep over all TOTAL_MOTOR enabled motors (golden :1450-1454), bServoOff
+        //  DELTA : and GEM_EMGPressed (golden :1456-1457) and the `return true` that every
+        //  DELTA : caller interlocks on.  So the HANDLER interlock is whole; only the ATC
+        //  DELTA : side of the handshake is silent, which means the ATC will keep heating /
+        //  DELTA : cooling through an EMG.
+        #if 0 // GATE G-ATC-B -- golden csystem.cpp:1442-1443 (text below is golden VERBATIM)
+        if(bServoOff==false)                                                    //Eliot 2015_0122
+            ATCInterfaceForm->SendCommToATC7(ATC_EMG_DOWN,"","");               //Eliot 2015_0122
+        #else
+            // (no replacement -- the gated statement(s) simply do not happen)
+        #endif
+        IndexMotorBreakerOFF();
+        //--------------------------------------------------------------------------
+        //  GATE G14 -- golden csystem.cpp:1445-1448
+        //  WHAT  : the four auxiliary brake engages on the EMG-pressed path:
+        //  WHAT  : MagazineBreakerOFF / InOutArmZBreakerOFF / LDCarRotArmZBreakerOFF /
+        //  WHAT  : CassetteBreakerOFF.
+        //  WHY   : same as G03 -- all four are golden csystem.cpp:24088/:24099/:24110/:24122
+        //  WHY   : (WAVE-2 range) and have no compiled body anywhere in the port
+        //  WHY   : (definition scan over every .cpp, 2026-08-09).
+        //  DELTA : ** SAFETY-RELEVANT, SAME CLASS AS G03.  ON EMG THE INDEX FRONT/REAR Z
+        //  DELTA : BRAKES ARE STILL ENGAGED (IndexMotorBreakerOFF at golden :1444 IS ACTIVE
+        //  DELTA : AND IS DEFINED IN THIS BLOCK) AND EVERY ENABLED MOTOR IS STILL SERVO-OFF
+        //  DELTA : (golden :1450-1454, ACTIVE), SO THE PRIMARY EMG INTERLOCK IS INTACT.  WHAT
+        //  DELTA : IS LOST IS THE MAGAZINE-Z / IN-OUT-ARM-Z / LOADER-ROTATE-ARM-Z /
+        //  DELTA : BOAT-CARRIER BRAKE ENGAGE, SO ON A MACHINE FITTED WITH THOSE OPTIONS AN
+        //  DELTA : EMG COULD LEAVE THAT AXIS UNBRAKED WHILE ITS SERVO IS OFF -- i.e. IT CAN
+        //  DELTA : DROP.  UNGATE THE MOMENT WAVE 2 LANDS golden :24083-24125. **
+        #if 0 // GATE G14 -- golden csystem.cpp:1445-1448 (text below is golden VERBATIM)
+        MagazineBreakerOFF();                                                   //JerryYang 20220909 : add magazine
+        InOutArmZBreakerOFF();                                                  //add One sucker with rotate
+        LDCarRotArmZBreakerOFF();                                               //RogerYang 20250828 add for Loader Rotate Arm
+        CassetteBreakerOFF();                                                   //Ifor 20251216 add:Boat Carrier
+        #else
+            // (no replacement -- the gated statement(s) simply do not happen)
+        #endif
+
+        for(int i=0; i<TOTAL_MOTOR; i++)
+        {
+            if(MOT[i].Motor->Enable)
+                MOT[i].ServoOnOff(false);
+        }
+
+        bServoOff=true;
+        GEM_EMGPressed=true;
+        #ifdef DEBUG_AutoHomeLog
+        if(fAllMotorHome && SystemStart)
+        {
+            s.sprintf("SnFrontLeftEMG=%s,SnFrontRightEMG=%s,SnRearLeftEMG=%s,SnRearRightEMG=%s,SnServo=%s", BoolToStr(bFrontLeftEMG), BoolToStr(bFrontRightEMG), BoolToStr(bRearLeftEMG), BoolToStr(bRearRightEMG), BoolToStr(bServo));
+            NewRecordProcess("", s, "IsEMGPressed()");
+        }
+        #endif
+        return true;
+    }
+
+    if(bServoOff)
+    {
+        //--------------------------------------------------------------------------
+        //  GATE G-ATC-C -- golden csystem.cpp:1470-1470
+        //  WHAT  : the ATC7 "EMG up" notification, on the EMG-released recovery path:
+        //  WHAT  : ATCInterfaceForm->SendCommToATC7(ATC_EMG_UP,"","");
+        //  WHY   : same as G-ATC-B -- header visibility only, real body already linked.
+        //  DELTA : The ATC is not told the EMG was released.  The servo-on sweep that follows
+        //  DELTA : (golden :1471-1476) and GEM_EMGPressed=false (golden :1479) ARE ACTIVE, so
+        //  DELTA : the handler recovers normally; the ATC just never sees the up-edge, so an
+        //  DELTA : ATC that latched on the (also-gated, G-ATC-B) down-edge would stay latched.
+        //  DELTA : Because BOTH edges are gated together, the ATC sees NEITHER and its state
+        //  DELTA : stays consistent -- which is why gating them as a pair matters.
+        #if 0 // GATE G-ATC-C -- golden csystem.cpp:1470-1470 (text below is golden VERBATIM)
+        ATCInterfaceForm->SendCommToATC7(ATC_EMG_UP,"","");                     //Eliot 2015_0122
+        #else
+            // (no replacement -- the gated statement(s) simply do not happen)
+        #endif
+        bServoOff=false;
+        for(int i=0; i<TOTAL_MOTOR; i++)
+        {
+            if(MOT[i].Motor->Enable)
+                MOT[i].ServoOnOff(true);
+        }
+    }
+
+    GEM_EMGPressed=false;
+    return false;
+}
+
+//==============================================================================
+bool IsSystemPowerOff()
+{
+    AnsiString s="";
+    bool bMotorPower=Sen[SnMotorPower].IsOff();
+    if(bMotorPower && MotorPowerOnDelay<=0)
+    {
+        #ifdef DEBUG_AutoHomeLog
+        if(fAllMotorHome && SystemStart)
+        {
+            s.sprintf("bMotorPower=%s", BoolToStr(bMotorPower));
+            NewRecordProcess("", s, "IsSystemPowerOff()");
+        }
+        #endif
+        return true;
+    }
+    return false;
+}
+//==============================================================================
+bool IsIndexMotorOutOfPower()
+{
+    #ifdef SOFT_SIMULTE                                                         //Ztex Add SOFT_SIMULTE Pass
+        return false;
+    #else
+        if(IsEMGPressed() || IsSystemPowerOff() ||
+           MOT[MTestZ1].Led[iServoOn]==false ||
+           MOT[MTestZ2].Led[iServoOn]==false)
+            return true;
+        return false;
+    #endif
+}
+
+//==============================================================================
+void LockIndexMotorAndDoHomeProcess()
+{
+    #ifdef DEBUG_AutoHomeLog
+    if(fAllMotorHome && SystemStart)
+    {
+        NewRecordProcess("", "fAllMotorHome", "LockIndexMotorAndDoHomeProcess");
+    }
+    #endif
+    iHome=1;
+    fAllMotorHome=false;
+    bLampHome=true;
+    MOT[MTestY1].Gali_Command("ST", __FUNC__);
+    IndexMotorBreakerOFF();
+    StopAllMotor();                                                             //Steven 20220309 : 拿掉false
+    for(int i=eAuto1; i<=iAutoRight; i++)
+    {
+        Cylinder[C_Auto_Selector[i]].Off();
+    }
+    //--------------------------------------------------------------------------
+    //  GATE G15 -- golden csystem.cpp:1532-1533
+    //  WHAT  : the tail of the index-motor lock:
+    //  WHAT  :   iEMGPressDelay=8;                 (arm the EMG re-press debounce)
+    //  WHAT  :   fContact->InitCarlibrationTask(); (rewind the contact-height calibration
+    //  WHAT  :                                      state machine)
+    //  WHY   : NEITHER symbol has a port.  Verified on 2026-08-09 by indexing all 14,172
+    //  WHY   : headers: `iEMGPressDelay` 0 hits, `InitCarlibrationTask` 0 hits.  The
+    //  WHY   : fContact stand-in that DOES exist (atester_shims.h:150-230) carries
+    //  WHY   : fShow / bSetupStart / bSetupStep / Do_ROILearning / IsRun2DCheck and NOT
+    //  WHY   : InitCarlibrationTask.
+    //  DELTA : Two losses, both on the RECOVERY side of a lock that has already happened
+    //  DELTA : (iHome=1, fAllMotorHome=false, bLampHome=true, the MTestY1 "ST" stop,
+    //  DELTA : IndexMotorBreakerOFF, StopAllMotor and the Auto-selector cylinder release
+    //  DELTA : at golden :1522-1531 are ALL ACTIVE, so the LOCK ITSELF IS FULLY INTACT).
+    //  DELTA : (1) iEMGPressDelay is not armed, so nothing debounces a second EMG press.
+    //  DELTA : (2) An in-progress Auto Contact Height Calibration is NOT rewound, so
+    //  DELTA : after an index power loss the calibration cursor keeps its old value --
+    //  DELTA : which is the same shape as the known JSI-Haoxing "calibration interrupted
+    //  DELTA : by PAUSE, CarlibrationTask!=1 blocks Exit" case.  NOT an alarm and NOT an
+    //  DELTA : interlock; it is a recovery-completeness loss.
+    #if 0 // GATE G15 -- golden csystem.cpp:1532-1533 (text below is golden VERBATIM)
+    iEMGPressDelay=8;
+    fContact->InitCarlibrationTask();
+    #else
+        // (no replacement -- the gated statement(s) simply do not happen)
+    #endif
+//    MyDBIProcess("System", "LockIndexMotorAndDoHomeProcess");                 //kevin 20201106     //Steven 20210126 : Mark for一直存檔導致軟替異常
+}
+//------------------------------------------------------------------------------
+void DoAvoidIndexMotorFallDown()
+{
+    if(IsIndexMotorOutOfPower())
+        LockIndexMotorAndDoHomeProcess();
+}
+
+//------------------------------------------------------------------------------
+bool CountMotorPowerDelay()
+{
+    #ifdef SOFT_SIMULTE
+        MotorPowerOnDelay=0;
+        return true;
+    #else
+        static int OldSecond;
+        if(MotorPowerOnDelay && Sen[SnMotorPower].IsOff()==false)
+        {
+            if(OldSecond!=SystemSec)
+            {
+                OldSecond=SystemSec;
+                MotorPowerOnDelay--;
+            }
+
+            if(MotorPowerOnDelay<=0)
+            {
+                IndexMotorBreakerON();
+                //--------------------------------------------------------------------------
+                //  GATE G16 -- golden csystem.cpp:1561-1564
+                //  WHAT  : the four auxiliary brake RELEASES once the motor-power-on delay expires:
+                //  WHAT  : MagazineBreakerON / InOutArmZBreakerON / LDCarRotArmZBreakerOn /
+                //  WHAT  : CassetteBreakerON.
+                //  WHY   : same as G03/G14 -- golden csystem.cpp:24083/:24093/:24105/:24115
+                //  WHY   : (WAVE-2 range), no compiled body anywhere in the port (2026-08-09 scan).
+                //  DELTA : ** SAFETY-RELEVANT MIRROR OF G03/G14.  IndexMotorBreakerON (golden :1560)
+                //  DELTA : IS ACTIVE, SO THE INDEX FRONT/REAR Z BRAKES ARE STILL RELEASED AND
+                //  DELTA : SW[SwManualZ1/Z2] ARE STILL CLEARED (golden :1565-1566, ACTIVE).  WHAT IS
+                //  DELTA : LOST IS THE MAGAZINE-Z / IN-OUT-ARM-Z / LOADER-ROTATE-ARM-Z /
+                //  DELTA : BOAT-CARRIER BRAKE RELEASE: ON A MACHINE FITTED WITH THOSE OPTIONS THE
+                //  DELTA : AXIS WOULD BE COMMANDED TO MOVE WITH ITS BRAKE STILL ENGAGED, WHICH IS A
+                //  DELTA : MOTOR-OVERLOAD / FOLLOWING-ERROR FAULT ON POWER-UP, NOT A DROP.  THAT IS
+                //  DELTA : THE SAFE DIRECTION, BUT IT IS A HARD FAILURE ON THOSE MACHINES.  UNGATE
+                //  DELTA : THE MOMENT WAVE 2 LANDS golden :24083-24125. **
+                #if 0 // GATE G16 -- golden csystem.cpp:1561-1564 (text below is golden VERBATIM)
+                MagazineBreakerON();                                            //JerryYang 20220909 : add magazine
+                InOutArmZBreakerON();                                           //add One sucker with rotate
+                LDCarRotArmZBreakerOn();                                        //RogerYang 20250828 add for Loader Rotate Arm
+                CassetteBreakerON();                                            //Ifor 20251216 add:Boat Carrier
+                #else
+                    // (no replacement -- the gated statement(s) simply do not happen)
+                #endif
+                SW[SwManualZ1].Off();
+                SW[SwManualZ2].Off();
+            }
+            //--------------------------------------------------------------------------
+            //  GATE G17 -- golden csystem.cpp:1568-1568
+            //  WHAT  : fContact->InitCarlibrationTask(); on every tick of the motor-power-on
+            //  WHAT  : countdown.
+            //  WHY   : same as G15 -- InitCarlibrationTask has no port (0 grep hits tree-wide,
+            //  WHY   : 2026-08-09).
+            //  DELTA : While motor power is coming back up the contact-height calibration cursor
+            //  DELTA : is no longer held rewound.  The countdown itself (golden :1550-1566) and
+            //  DELTA : its return value (golden :1571-1573) are ACTIVE and unaffected.
+            #if 0 // GATE G17 -- golden csystem.cpp:1568-1568 (text below is golden VERBATIM)
+            fContact->InitCarlibrationTask();
+            #else
+                // (no replacement -- the gated statement(s) simply do not happen)
+            #endif
+        }
+
+        if(MotorPowerOnDelay)
+            return false;
+        return true;
+    #endif
+}
+
+//------------------------------------------------------------------------------
+//out arm ic drop error
+//------------------------------------------------------------------------------
+bool CheckOutArmSuckICFallDown()                                                //Steven 20110513 : 修改成整合式Alarm  //JerryYang 20200422 修正掉料可能檢查不出來的問題, 檢查到有掉料要重新再確認全部吸嘴
+{
+    static int iSuckICFallDownCnt[MAX_ARM_Row][MAX_ARM_Col]={{0, 0, 0, 0},      //Sam 20221006 : In/Out Arm IC 掉落狀態多檢查幾次再報警
+                                                             {0, 0, 0, 0}};
+
+    int ret=0;
+    bool bHasErr=false;                                                         //kevin 20150805 Over
+    bool bIsSuckICFallDown[MAX_ARM_Row][MAX_ARM_Col]={{false, false, false, false},
+                                                      {false, false, false, false}};
+    AnsiString ErrPart="", sRetryLog="";
+
+    if(LastSet.iRealDummy==REALLY)
+    {
+        for(int i=0; i<OutArmSuck.iPickRow; i++)
+        {
+            for(int j=0; j<OutArmSuck.iPickCol; j++)
+            {
+                if(OutArmSuck.Suck[i][j].Enable       &&                        //Steven 20110725 : 不再使用IsSuckICFallDown
+                   OutArmSuck.Suck[i][j].SenUsing!="" &&
+                   OutArmSuck.Item[i][j]!=HAS_NULL_IC &&
+                   OutArmSuck.Item[i][j]!=NULL_IC)
+                {
+                    if(OutArmSuck.Suck[i][j].GetStatus()==false)
+                    {
+                        iSuckICFallDownCnt[i][j]++;
+                        if(IniConfig.bE68RecheckInOutArmICFallDown &&           //Sam 20221006 : In/Out Arm IC 掉落狀態多檢查幾次再報警
+                           iSuckICFallDownCnt[i][j]>IniConfig.iE68RecheckInOutArmICFallDown)
+                        {
+                            bHasErr=true;
+                        }
+                        else
+                        {
+                            bIsSuckICFallDown[i][j]=true;
+                            ErrPart+=OutArmSuck.Suck[i][j].sName;
+                            bHasErr=true;
+                        }
+                    }
+                    else
+                    {
+                        if(IniConfig.bE68RecheckInOutArmICFallDown && iSuckICFallDownCnt[i][j]>0)
+                        {
+                            sRetryLog.sprintf("iSuckICFallDownCnt[%d][%d]=%d", i, j, iSuckICFallDownCnt[i][j]);
+                            NewRecordProcess("", "OutArm E68 retry record", sRetryLog);
+                        }
+                        iSuckICFallDownCnt[i][j]=0;
+                    }
+                }
+            }
+        }
+    }
+
+    if(bHasErr)
+    {
+        if(IniConfig.bE68RecheckInOutArmICFallDown)                             //Sam 20221006 : In/Out Arm IC 掉落狀態多檢查幾次再報警
+        {
+            ErrPart="";
+            for(int i=0; i<OutArmSuck.iPickRow; i++)
+            {
+                for(int j=0; j<OutArmSuck.iPickCol; j++)
+                {
+                    if(iSuckICFallDownCnt[i][j]>0)
+                    {
+                        iSuckICFallDownCnt[i][j]=0;
+                        bIsSuckICFallDown[i][j]=true;
+                        ErrPart+=OutArmSuck.Suck[i][j].sName;
+                    }
+                }
+            }
+        }
+
+        ret=ShowErrorMessage("JAM0203", K_SKIP , MOutArmX, false, ErrPart);     //Steven 20091123 : Device Drop Error //jou 2013-03-27 out arm drop error 不應該能retry，掉下去的不知道是什麼bin
+        if(ret==K_SKIP)
+        {
+            if(SoftStop)
+                fMain->Pause("CheckOutArmSuckICFallDown");
+
+            for(int i=0; i<OutArmSuck.iPickRow; i++)
+            {
+                for(int j=0; j<OutArmSuck.iPickCol; j++)
+                {
+                    if(bIsSuckICFallDown[i][j])
+                    {
+                        OutArmSuck.SetItemData(i, j, NULL_IC);
+                        OutArmSuck.Suck[i][j].Off();                            //Steven 20101112 mark :待確認
+                        if(CosFunction.bUseSCKART)                              //JerryYang 20200303 fix drop error jam count沒加到
+                            fSCKART->AddOutputJamCnt(i, j, ret);                //RogerYang 20250923 : 整合ART OutArm JamCount
+
+                        //OutArmSuck.Suck[i][j].Normal();                       //Steven 20101112
+                    }
+                }
+            }
+        }
+    }
+    return bHasErr;
+}
+
+//------------------------------------------------------------------------------
+//  golden csystem.cpp:1867-2090.
+//  NOTE: golden csystem.cpp:1674-1865 (CheckInArmSuckICFallDownToHasNullIC) is
+//  deliberately SKIPPED -- it is already translated in this same file
+//  (csystem.cpp:971) and re-emitting it would be a duplicate definition.
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+bool CheckInArmSuckFromLoaderICFallDown()                                       //Steven 20110516 : 修改成整合式Alarm
+{
+    bool bIsSuckICFallDown[MAX_ARM_Row][MAX_ARM_Col]={{false, false, false, false},
+                                                      {false, false, false, false}};
+
+    AnsiString ErrPart="";
+    int ret=0, iRetryCT=0;
+    int iXpos=0;
+    int iYpos=0;
+    bool bHasErr=false;                                                         //kevin 20150805 Over
+
+    bDropRetry=false;
+
+    if(LastSet.iRealDummy==REALLY)
+    {
+        for(int i=0; i<InArmSuck.iMaxRow; i++)
+        {
+            for(int j=0; j<InArmSuck.iMaxCol; j++)
+            {
+                if(InArmSuck.Suck[i][j].Enable       &&
+                   InArmSuck.Suck[i][j].SenUsing!="" &&
+                   InArmSuck.Item[i][j]!=HAS_NULL_IC &&
+                   InArmSuck.Item[i][j]!=NULL_IC)
+                {
+                    if(InArmSuck.Suck[i][j].GetStatus()==false)
+                    {
+                        bIsSuckICFallDown[i][j]=true;
+                        iLoaderDropErrRetryCT[i][j]++;                          //JerryYang 20191216 吸到tray底部drop error的位置auto skip下一顆
+                        ErrPart+=InArmSuck.Suck[i][j].sName;
+                        bHasErr=true;
+                    }
+                    else
+                    {
+                        bIsSuckICFallDown[i][j]=false;
+                        iLoaderDropErrRetryCT[i][j]=0;                          //JerryYang 20191216 吸到tray底部drop error的位置auto skip下一顆
+                    }
+                }
+                else
+                {
+                    bIsSuckICFallDown[i][j]=false;
+                    iLoaderDropErrRetryCT[i][j]=0;                              //JerryYang 20191216 吸到tray底部drop error的位置auto skip下一顆
+                }
+
+                #ifdef SOFT_SIMULTE
+                if(fMain->chkInFromLoadDrop->Checked &&
+                   i==atoi(fMain->edHPY->Text.c_str()) &&
+                   j==atoi(fMain->edHPX->Text.c_str()))
+                {
+                    bIsSuckICFallDown[i][j]=true;
+                    iLoaderDropErrRetryCT[i][j]=5;
+                    ErrPart+=InArmSuck.Suck[i][j].sName;
+                    bHasErr=true;
+                }
+                #endif
+            }
+        }
+    }
+
+    if(bHasErr)
+    {
+        iXpos=MOT[MInArmX].ReadPos();
+        iYpos=MOT[MInArmY].ReadPos();
+        if(IniConfig.bNewResetFunction==true && bResetInArm==true)
+        {
+            bResetInArm=false;
+            ret=K_SKIP;
+        }
+        else if(CosFunction.bAutoSkipNoDropError==true &&
+                IniConfig.bE60PickLoaderDropAutoSkip &&
+                ArmSpeed[InArm].bAutoSKIP==true &&
+                IniConfig.bRecordSkipPosition &&
+                bFirstRecordLoaderData==true)                                   //JerryYang 20191216 吸到tray底部drop error的位置auto skip下一顆
+        {
+            for(int i=0; i<InArmSuck.iMaxRow; i++)
+            {
+                for(int j=0; j<InArmSuck.iMaxCol; j++)
+                {
+                    if(bIsSuckICFallDown[i][j])
+                    {
+                        if(iLoaderDropErrRetryCT[i][j]>iRetryCT)
+                        {
+                            iRetryCT=iLoaderDropErrRetryCT[i][j];               //找出retry最多的
+                        }
+                    }
+                }
+            }
+
+            if(iRetryCT>2)
+            {
+                ret=K_SKIP;
+                bLoaderHasSkip=true;
+                for(int i=0; i<MAX_ARM_Row; i++)
+                {
+                    for(int j=0; j<MAX_ARM_Col; j++)
+                    {
+                        iLoaderDropErrRetryCT[i][j]=0;
+                    }
+                }
+            }
+            else
+            {
+                ret=K_RETRY;
+            }
+        }
+        else
+        {
+            if(bRunAutoClean)                                                   //kevin 20121020 add //Steven 20121015 : Auto Clean有Alarm要開後門
+            {
+                bAutoCleanCheckOpenDoor=true;                                   //JerryYang 20160511 Auto Clean時要show出 clean pad 掉料異常
+                ret=ShowErrorMessage("JAM0128", K_SKIP, MInArmX, false, ErrPart);
+            }
+            else if(CosFunction.bAutoSkipNoDropError &&
+                    IniConfig.bE60PickLoaderDropAutoSkip &&                     //kevin 20220930 add drop again pickup
+                    CUSTOMER_CODE==CC_ASE_KaohSiung)                            //kevin 20221006 add ASE KH drop change pick up error
+            {
+                 ret=ShowErrorMessage("MES0101", K_SKIP, MInArmX, true, ErrPart);
+            }
+            else
+            {
+                if(IniConfig.bSPILFunction==true ||                             //wei 20160511 矽品Input掉料就只能Skip
+                   CUSTOMER_CODE==CC_SCK)                                       //Steven 20250707 JSCK Input loader drop IC only can Skip
+                {
+                    ret=ShowErrorMessage("JAM0126", K_SKIP, MInArmX, false, ErrPart);
+                }
+                else
+                {
+                    ret=ShowErrorMessage("JAM0126", K_SKIP|K_RETRY, MInArmX, false, ErrPart);                           //Steven 20091123 : Device Drop Error
+                }
+            }
+        }
+
+        if(SoftStop)
+            fMain->Pause("CheckInArmSuckFromLoaderICFallDown");
+
+        if(ret==K_RETRY)
+        {
+            bAutoSiteMapWaitTestResult=false;                                   //Ifor 20180115 (Steven) : add Site Mapping SKIP 需清除旗標
+            for(int i=0; i<InArmSuck.iMaxRow; i++)
+            {
+                for(int j=0; j<InArmSuck.iMaxCol; j++)
+                {
+                    if(bIsSuckICFallDown[i][j])
+                    {
+                        if(IniConfig.bSPILFunction==true &&
+                           CosFunction.bUseSCKART)                              //JerryYang 20220815 : drop error的數量要扣掉不算
+                        {
+                            LastSet.iSCKARTInputCT=LastSet.iSCKARTInputCT-1;
+                            LastSet.SendCT[0]=LastSet.SendCT[0]-1;
+                        }
+                        InArmSuck.PordRec[i][j].AddErrorRecordNoSave("JAM0126", true, iXpos, iYpos);
+                        //--------------------------------------------------------------------------
+                        //  GATE G18 -- golden csystem.cpp:2017-2017
+                        //  WHAT  : the loader-tray write-back on the RETRY branch:
+                        //  WHAT  : MOT[MMTrayY].SetTraySingleData(iRecordTrayPickPosX[i][j],
+                        //  WHAT  :                               iRecordTrayPickPosY[i][j], HAS_IC);
+                        //  WHY   : iRecordTrayPickPosX / iRecordTrayPickPosY have NO port.  Verified on
+                        //  WHY   : 2026-08-09 by indexing all 14,172 headers: 0 hits for either name.
+                        //  WHY   : MOT[MMTrayY].SetTraySingleData itself DOES exist (Motor/mymotor.h:356),
+                        //  WHY   : so the blocker is purely the two "where did I pick this from" position
+                        //  WHY   : arrays golden records at pick time (in ainarm2.cpp, untranslated).
+                        //  DELTA : On operator RETRY after an in-arm-at-loader drop, the source tray cell is
+                        //  DELTA : no longer restored to HAS_IC.  The rest of the retry path is ACTIVE:
+                        //  DELTA : AddErrorRecordNoSave, InArmSuck.SetItemData(i,j,NULL_IC),
+                        //  DELTA : InArmSuckUse[i][j]=true, the SPIL/SCKART count decrements and
+                        //  DELTA : bDropRetry=true.  CONSEQUENCE: the retried IC's tray slot stays marked
+                        //  DELTA : as already-picked, so the in arm will NOT come back for it -- one IC per
+                        //  DELTA : retry is silently left in the tray.  JAM0126 STILL FIRES (golden
+                        //  DELTA : :1972-1995, ACTIVE), so the ALARM PATH IS INTACT.
+                        #if 0 // GATE G18 -- golden csystem.cpp:2017-2017 (text below is golden VERBATIM)
+                        MOT[MMTrayY].SetTraySingleData(iRecordTrayPickPosX[i][j], iRecordTrayPickPosY[i][j], HAS_IC);
+                        #else
+                            // (no replacement -- the gated statement(s) simply do not happen)
+                        #endif
+                        InArmSuck.SetItemData(i, j, NULL_IC);
+                        InArmSuckUse[i][j]=true;
+                    }
+                }
+            }
+
+            if(CosFunction.bAutoSkipNoDropError==true &&
+               IniConfig.bE60PickLoaderDropAutoSkip &&
+               ArmSpeed[InArm].bAutoSKIP==true &&
+               IniConfig.bRecordSkipPosition &&
+               bFirstRecordLoaderData==true)                                    //JerryYang 20191216 吸到tray底部drop error的位置auto skip下一顆
+            {
+                MyDBIProcessNew("Motion", "WAR2211", "In arm drop error at loader(Retry)", ErrPart);                    //JerryYang 20200203 pick up error auto skip
+            }
+            bDropRetry=true;                                                    //JerryYang 20191216 吸到tray底部drop error的位置auto skip下一顆
+        }
+        else if(ret==K_SKIP)
+        {
+            for(int i=0; i<InArmSuck.iMaxRow; i++)
+            {
+                for(int j=0; j<InArmSuck.iMaxCol; j++)
+                {
+                    iLoaderDropErrRetryCT[i][j]=0;                              //JerryYang 20191216 吸到tray底部drop error的位置auto skip下一顆
+                    if(bIsSuckICFallDown[i][j])
+                    {
+                        if(bRunAutoClean)
+                        {
+                        }
+                        else
+                        {
+                            if(CosFunction.bUseSCKART)                          //Steven 20161214 (wei) : For SCK ART
+                            {
+                                if(IniConfig.bSPILFunction==true)               //JerryYang 20220815 : drop error的數量要扣掉不算
+                                {
+                                    LastSet.iSCKARTInputCT=LastSet.iSCKARTInputCT-1;
+                                    LastSet.SendCT[0]=LastSet.SendCT[0]-1;
+                                }
+                                else
+                                {
+                                    fSCKART->iInputJamCnt++;
+                                }
+                            }
+                            InArmSuck.PordRec[i][j].AddErrorRecord("JAM0126", true, iXpos, iYpos);                      //Steven 20161214 : Add Jam Record
+                        }
+
+                        //--------------------------------------------------------------------------
+                        //  GATE G19 -- golden csystem.cpp:2063-2063
+                        //  WHAT  : the loader-tray-buffer write-back on the SKIP branch:
+                        //  WHAT  : MOT[MMTrayY].SetTrayBufferSingleData(iRecordTrayPickPosX[i][j],
+                        //  WHAT  :                               iRecordTrayPickPosY[i][j], HAS_SKIP_IC);
+                        //  WHY   : same as G18 -- iRecordTrayPickPosX/Y have no port (0 grep hits,
+                        //  WHY   : 2026-08-09).  SetTrayBufferSingleData exists (Motor/mymotor.h:361).
+                        //  DELTA : A SKIPped position is not recorded as HAS_SKIP_IC in the tray buffer, so
+                        //  DELTA : the "skipped positions" report / re-pick planner cannot see it.  The
+                        //  DELTA : skip itself is ACTIVE (SetItemData NULL_IC, InArmSuckUse, the jam record
+                        //  DELTA : and the WAR2210 auto-skip DB entry).  JAM0126/MES0101 STILL FIRE.
+                        #if 0 // GATE G19 -- golden csystem.cpp:2063-2063 (text below is golden VERBATIM)
+                        MOT[MMTrayY].SetTrayBufferSingleData(iRecordTrayPickPosX[i][j], iRecordTrayPickPosY[i][j], HAS_SKIP_IC);                                //JerryYang 20200206 沒吸到的存到buffer
+                        #else
+                            // (no replacement -- the gated statement(s) simply do not happen)
+                        #endif
+
+                        InArmSuck.SetItemData(i, j, NULL_IC);
+                        InArmSuckUse[i][j]=true;
+                    }
+                }
+            }
+
+            if(CosFunction.bAutoSkipNoDropError==true &&
+               IniConfig.bE60PickLoaderDropAutoSkip &&
+               ArmSpeed[InArm].bAutoSKIP==true &&
+               IniConfig.bRecordSkipPosition &&
+               bFirstRecordLoaderData==true)                                    //JerryYang 20191216 吸到tray底部drop error的位置auto skip下一顆
+            {
+                MyDBIProcessNew("Motion", "WAR2210", "In arm drop error at loader(Auto skip)", ErrPart);                //JerryYang 20200203 pick up error auto skip
+            }
+        }
+
+        if(CosFunction.bShowHPICCount)                                          //Steven 20221228 : 計算加熱盤IC數量
+        {
+            fSortCT->pnlLoad->Caption=MOT[MMTrayY].Tray.HowManyIC();
+        }
+        bPickFromLoader=false;                                                  //Steven 20171226 (Wei) : 確認Loader吸取完成
+        return true;
+    }
+    bPickFromLoader=false;                                                      //Steven 20171226 (Wei) : 確認Loader吸取完成
+    return false;
+}
+
+//------------------------------------------------------------------------------
+//檢查In Arm的破壞錯誤
+// True  = 無異常
+// False = 有異常
+//------------------------------------------------------------------------------
+bool CheckInArmDestroyICFail()                                                  //Steven 20111223 : 檢查破壞錯誤
+{
+    static bool bSuckDuplicateErr[MAX_ARM_Row][MAX_ARM_Col]={{false, false, false, false},
+                                                             {false, false, false, false}};                             //Steven 20091218 : Avoid duplicate message
+
+    bool bHasDuplicateErr=false;
+    bool bNoError=true;
+    AnsiString ErrPart=" ";
+
+    for(int i=0; i<InArmSuck.iMaxRow; i++)
+    {
+        for(int j=0; j<InArmSuck.iMaxCol; j++)
+        {
+            if(bSuckDuplicateErr[i][j])
+                bHasDuplicateErr=true;
+
+            if(InArmSuck.Item[i][j]==NULL_IC &&                                 //jou 2012-01-11 拿掉InArmSuck.Suck[i][j].Error,Tray_End會造成Vaccum OFF error JAM0127
+               InArmSuck.Suck[i][j].GetStatus())                                //Steven 20111123 : 殘料偵測與破壞異常
+            {
+                bSuckDuplicateErr[i][j]=true;
+                InArmSuck.Suck[i][j].Error=false;
+                ErrPart+=InArmSuck.Suck[i][j].sName;
+                bNoError=false;
+            }
+            else
+            {
+                bSuckDuplicateErr[i][j]=false;
+            }
+        }
+    }
+
+    if(bNoError==false)
+    {
+        ShowErrorMessage("JAM0127", K_RETRY, MInArmX, bHasDuplicateErr, ErrPart);
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+
+//------------------------------------------------------------------------------
+// Index Device Drop Error : Steven 2010131 : 整合成只叫一次
+// Steven 20110511 : 加入掉料時,In Arm要移開
+//------------------------------------------------------------------------------
+bool CheckIndexSuckICFallDownSetToHasNullIC(int iArm)                           //Steven 20110511 : 加入掉料時,In Arm要移開
+{
+    int iCT=0;
+    int ret, iNN=IsNNMode();
+    bool bArm1Err=false;                                                        //Steven 20230110 : 修正NN mode index掉料顯示錯誤
+    bool bHasErr=false;
+    bool bSuckHasError[MAX_SOCKET_ROW][MAX_SOCKET_COL]={{false, false, false, false, false, false, false, false},
+                                                        {false, false, false, false, false, false, false, false},
+                                                        {false, false, false, false, false, false, false, false},
+                                                        {false, false, false, false, false, false, false, false}};      //Steven 20111026 : 排Jam時,如果有另外一顆掉料,要再叫一次
+
+    AnsiString sBuffer="";
+    AnsiString ErrPart=" ", ErrorCode;
+
+    if(LastSet.iRealDummy==REALLY)                                              //先檢查是不是有真的IC
+    {
+        for(int i=0; i<FTestSuck.iShtRow; i++)
+        {
+            for(int j=0; j<FTestSuck.iShtCol; j++)
+            {
+                if(iArm==1 || iArm==3)
+                {
+                    if(BTestSuck.Suck[i][j].Enable       &&
+                       BTestSuck.Suck[i][j].SenUsing!="" &&
+                       BTestSuck.Item[i][j]!=NULL_IC     &&
+                       BTestSuck.Item[i][j]!=HAS_NULL_IC)
+                    {
+                        if(BTestSuck.Suck[i][j].GetStatus()==false)             //IC掉了
+                        {
+                            if(INDEX_SUCKER_TYPE==1)                            //負壓避免IC掉落
+                            {
+                                BTestSuck.Suck[i][j].Normal();
+                            }
+
+                            ErrPart+=IndexSuckName[i][j];                       //Arm 2
+                            bSuckHasError[i][j]=true;                           //Steven 20111026 : 排Jam時,如果有另外一顆掉料,要再叫一次
+                            bHasErr=true;
+                        }
+                        else
+                        {
+                            bSuckHasError[i][j]=false;
+                        }
+                    }
+                }
+
+                if(iArm==0 || iArm==3)                                          //注意!!!   只給32site使用!!
+                {
+                    if(FTestSuck.Suck[i][j].Enable       &&
+                       FTestSuck.Suck[i][j].SenUsing!="" &&
+                       FTestSuck.Item[i][j]!=NULL_IC     &&
+                       FTestSuck.Item[i][j]!=HAS_NULL_IC)
+                    {
+                        if(FTestSuck.Suck[i][j].GetStatus()==false)             //IC掉了
+                        {
+                            if(INDEX_SUCKER_TYPE==1)                            //負壓避免IC掉落
+                            {
+                                FTestSuck.Suck[i][j].Normal();
+                            }
+
+                            ErrPart+=IndexSuckName[i+iNN][j];
+                            bSuckHasError[i+iNN][j]=true;                       //Steven 20111026 : 排Jam時,如果有另外一顆掉料,要再叫一次
+                            bHasErr=true;
+                            bArm1Err=true;                                      //Steven 20230110 : 修正NN mode index掉料顯示錯誤
+                        }
+                        else
+                        {
+                            bSuckHasError[i+iNN][j]=false;
+                        }
+                    }
+                }
+            }
+        }
+
+        if(bHasErr)
+        {
+            if(IndexAlarmInArmAway()==false)                                    //Steven 20130613 : Index異常時, In Arm要先讓位功能
+            {
+                return false;
+            }
+
+            if(CosFunction.bJAM0303NeedOpenChamberDoor)                         //Steven : JAM0303 & JAM0403需要開啟Chamber門10秒
+                bIsTestSitICFallDown=true;                                      //kevin 20130706
+
+            if(IniConfig.bIndexDropOnlyReset==true)                             //jou 2013-12-02 Index Drop Only Reset
+            {
+                if(bArm1Err)                                                    //Arm1
+                {
+                    ErrorCode="JAM0303";
+                    ret=ShowErrorMessage("JAM0303", K_RESET, MTestZ1, false, ErrPart);
+                }
+                else                                                            //Arm2
+                {
+                    ErrorCode="JAM0304";
+                    ret=ShowErrorMessage("JAM0304", K_RESET, MTestZ2, false, ErrPart);
+                }
+            }
+            else
+            {
+                if(bArm1Err)                                                    //Arm1
+                {
+                    ErrorCode="JAM0303";
+                    ret=ShowErrorMessage("JAM0303", K_SKIP, MTestZ1, false, ErrPart);
+                }
+                else                                                            //Arm2
+                {
+                    ErrorCode="JAM0304";
+                    ret=ShowErrorMessage("JAM0304", K_SKIP, MTestZ2, false, ErrPart);
+                }
+            }
+
+            if(ret==K_SKIP)
+            {
+                if(SoftStop)
+                    fMain->Pause("CheckIndexSuckICFallDownSetToHasNullIC K_SKIP");
+
+                for(int i=0; i<FTestSuck.iShtRow; i++)
+                {
+                    for(int j=0; j<FTestSuck.iShtCol; j++)
+                    {
+                        if(bArm1Err)
+                        {
+                            if(FTestSuck.Suck[i][j].Enable       &&
+                               FTestSuck.Suck[i][j].SenUsing!="" &&
+                               FTestSuck.Item[i][j]!=HAS_NULL_IC &&
+                               FTestSuck.Item[i][j]!=NULL_IC)
+                            {
+                                if(bSuckHasError[i+iNN][j]==true)               //Steven 20111026 : 排Jam時,如果有另外一顆掉料,要再叫一次
+                                {
+                                    FTestSuck.PordRec[i][j].AddErrorRecord(ErrorCode);                                  //Steven 20161214 : Add Jam Record
+                                    if(CosFunction.bUseSCKART)                  //Steven 20161214 (wei) : For SCK ART
+                                    {
+                                        fSCKART->AddOutputJamCnt(i, j, ret,
+                                        Prod.bIsPassBin[FTestSuck.iBinData[i][j]]);                                     //RogerYang 20250923 : 整合ART OutArm JamCount
+                                    }
+                                    FTestSuck.SetItemData(i, j, HAS_NULL_IC);
+                                    #ifndef ASE_KaohSiung                       //kevin 20110503 雲正隆建議不要吹氣 ic才不會亂飛
+                                    if(IniConfig.bIndexArm2SupplyLight==false &&                                        //jou 2012-10-19 Index Arm 2 供應光源 for CMOS
+                                       TestIF_File.bForEgisTecTest==false)      //Steven 20140922 : Arm2當作指紋測試
+                                    {
+                                        FTestSuck.Suck[i][j].Off();
+                                    }
+                                    #endif
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if(BTestSuck.Suck[i][j].Enable       &&
+                               BTestSuck.Suck[i][j].SenUsing!="" &&
+                               BTestSuck.Item[i][j]!=HAS_NULL_IC &&
+                               BTestSuck.Item[i][j]!=NULL_IC)
+                            {
+                                if(bSuckHasError[i][j]==true)                   //Steven 20111026 : 排Jam時,如果有另外一顆掉料,要再叫一次
+                                {
+                                    BTestSuck.PordRec[i][j].AddErrorRecord(ErrorCode);                                  //Steven 20161214 : Add Jam Record
+                                    if(CosFunction.bUseSCKART)                  //Steven 20161214 (wei) : For SCK ART
+                                    {
+                                        fSCKART->AddOutputJamCnt(i, j, ret,
+                                        Prod.bIsPassBin[BTestSuck.iBinData[i][j]]);                                     //RogerYang 20250923 : 整合ART OutArm JamCount
+                                    }
+                                    BTestSuck.SetItemData(i, j, HAS_NULL_IC);
+                                    #ifndef ASE_KaohSiung                       //kevin 20110503 雲正隆建議不要吹氣 ic才不會亂飛
+                                    if(IniConfig.bIndexArm2SupplyLight==false &&                                        //jou 2012-10-19 Index Arm 2 供應光源 for CMOS
+                                       TestIF_File.bForEgisTecTest==false)      //Steven 20140922 : Arm2當作指紋測試
+                                    {
+                                        BTestSuck.Suck[i][j].Off();
+                                    }
+                                    #endif
+                                    if(TestIF_File.bIndexDropICSetErrUntilOneCycle==true)                               //JerryYang 20170609 (wei) 記錄out shuttle lose IC的site
+                                        bTestSiteNeedSetErrBin[i][j]=true;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if(CUSTOMER_CODE==CC_AMKOR_Philippines)                         //Frank 20171213 (Steven) : Index 移動時掉料處理
+                {
+                    fMain->BtnOneCycleClick(fMain);
+
+                    if(bArm1Err)
+                    {
+                        iCT=FTestSuck.CountRealIC();
+                        sBuffer.printf("Index Alarm set Arm1 Place to Error bin : Device=%d;", iCT);
+                        MyDBIProcess("Message", sBuffer);
+                        FTestSuck.SetAllRealIC2InterfaceBin();
+                    }
+                    else
+                    {
+                        iCT=BTestSuck.CountRealIC();
+                        sBuffer.printf("Index Alarm set Arm2 Place to Error bin : Device=%d;", iCT);
+                        MyDBIProcess("Message", sBuffer);
+                        BTestSuck.SetAllRealIC2InterfaceBin();
+                    }
+                }
+                else if(TestIF_File.bIndexDropICSetErrUntilOneCycle==true)      //JerryYang 20170610 (wei) JSCC要求Out shuttle lose IC需自動one cycle,並將對應的site設為Error bin
+                {
+                    bIndexDropICNeedSetErrBin=true;
+                    fMain->BtnOneCycleClick(fMain);
+                    //--------------------------------------------------------------------------
+                    //  GATE G20 -- golden csystem.cpp:2340-2340
+                    //  WHAT  : fMain->SPIL_ResetForIndexDrop(); on the JSCC/SPIL "index dropped an IC ->
+                    //  WHAT  : auto one-cycle and set that site to Error bin" path.
+                    //  WHY   : TfMain has no SPIL_ResetForIndexDrop.  Verified `grep -n
+                    //  WHY   : "SPIL_ResetForIndexDrop" forms/fMain.h` and a whole-tree header index
+                    //  WHY   : lookup on 2026-08-09: 0 hits.  The sibling call on the same path,
+                    //  WHY   : fMain->BtnOneCycleClick(fMain) (golden :2339), DOES exist
+                    //  WHY   : (forms/fMain.h:204) and is ACTIVE.
+                    //  DELTA : On a machine with TestIF_File.bIndexDropICSetErrUntilOneCycle set, the
+                    //  DELTA : SPIL-specific reset that accompanies the automatic One Cycle does not
+                    //  DELTA : run.  bIndexDropICNeedSetErrBin=true and the One Cycle request itself
+                    //  DELTA : (golden :2338-2339) ARE ACTIVE, and JAM0303/JAM0304 STILL FIRE (golden
+                    //  DELTA : :2224-2248), so the alarm and the error-bin marking survive.
+                    #if 0 // GATE G20 -- golden csystem.cpp:2340-2340 (text below is golden VERBATIM)
+                    fMain->SPIL_ResetForIndexDrop();
+                    #else
+                        // (no replacement -- the gated statement(s) simply do not happen)
+                    #endif
+                }
+            }
+            else if(ret==K_RESET)
+            {
+                if(SoftStop)
+                    fMain->Pause("CheckIndexSuckICFallDownSetToHasNullIC K_RESET");
+
+                for(int i=0; i<FTestSuck.iShtRow; i++)
+                {
+                    for(int j=0; j<FTestSuck.iShtCol; j++)
+                    {
+                        if(bArm1Err)
+                        {
+                            if(FTestSuck.Suck[i][j].Enable       &&
+                               FTestSuck.Suck[i][j].SenUsing!="" &&
+                               FTestSuck.Item[i][j]!=HAS_NULL_IC &&
+                               FTestSuck.Item[i][j]!=NULL_IC)
+                            {
+                                if(bSuckHasError[i+iNN][j]==true)               //Steven 20111026 : 排Jam時,如果有另外一顆掉料,要再叫一次
+                                {
+                                    FTestSuck.PordRec[i][j].AddErrorRecord(ErrorCode);                                  //Steven 20161214 : Add Jam Record
+                                    if(CosFunction.bUseSCKART)                  //Steven 20161214 (wei) : For SCK ART
+                                        fSCKART->AddOutputJamCnt(i, j, ret);    //RogerYang 20250923 : 整合ART OutArm JamCount
+                                    FTestSuck.SetItemData(i, j, HAS_NULL_IC);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if(BTestSuck.Suck[i][j].Enable       &&
+                               BTestSuck.Suck[i][j].SenUsing!="" &&
+                               BTestSuck.Item[i][j]!=HAS_NULL_IC &&
+                               BTestSuck.Item[i][j]!=NULL_IC)
+                            {
+                                if(bSuckHasError[i][j]==true)                   //Steven 20111026 : 排Jam時,如果有另外一顆掉料,要再叫一次
+                                {
+                                    BTestSuck.PordRec[i][j].AddErrorRecord(ErrorCode);                                  //Steven 20161214 : Add Jam Record
+                                    if(CosFunction.bUseSCKART)                  //Steven 20161214 (wei) : For SCK ART
+                                        fSCKART->AddOutputJamCnt(i, j, ret);    //RogerYang 20250923 : 整合ART OutArm JamCount
+                                    BTestSuck.SetItemData(i, j, HAS_NULL_IC);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                FLCarryKit.ClearAll();
+                BLCarryKit.ClearAll();
+                RecordProcess("K_RESET CheckIndexSuckICFallDownSetToHasNullIC()");                                      //kevin 20180319 add log
+                fAllMotorHome=false;
+                iHome=true;
+            }
+        }
+        else
+        {
+            /*if(bArm1Err)                                                      //jou 2012-01-17 紀錄index Drop alarm
+            {                                                                   //Steven 20250903 : Mark for can not release the alarm
+                if(bRecIndexDropAlarm1==true)
+                {
+                    ShowMyMessage("Index Arm 1 Vacuum floating, please check", "Index Arm 1 真空值飄動，請檢查Index");
+                    bRecIndexDropAlarm1=false;
+                }
+            }
+            else
+            {
+                if(bRecIndexDropAlarm2==true)
+                {
+                    ShowMyMessage("Index Arm 2 Vacuum floating, please check", "Index Arm 2 真空值飄動，請檢查Index");
+                    bRecIndexDropAlarm2=false;
+                }
+            }*/
+        }
+    }
+    return true;
+}
+
+//------------------------------------------------------------------------------
+bool CheckIndexAllSuckICFallDown(bool bCheckArm1, bool bCheckArm2)              //Steven 20110725 : 修改檢查方式
+{
+    bool bFail=false;
+    #ifndef SOFT_SIMULTE
+    if(LastSet.iRealDummy==REALLY)
+    {
+        for(int i=0; i<FTestSuck.iShtRow; i++)
+        {
+            for(int j=0; j<FTestSuck.iShtCol; j++)
+            {
+                if(bCheckArm1 && bIndex1Suck==false)                            //kevin 20220105 Index 在下真空建立 pause 不能關閉
+                {
+                    if(FTestSuck.Suck[i][j].Enable       &&
+                       FTestSuck.Suck[i][j].SenUsing!="" &&
+                       FTestSuck.Item[i][j]!=HAS_NULL_IC &&
+                       FTestSuck.Item[i][j]!=NULL_IC)
+                    {
+                        if(FTestSuck.Suck[i][j].GetStatus()==false)
+                        {
+                            if(INDEX_SUCKER_TYPE==1)
+                                FTestSuck.Suck[i][j].Normal();
+                            bFail=true;                                         //Steven 20110707 : 只要有一個True就True
+                        }
+                    }
+                }
+
+                if(bCheckArm2 && bIndex2Suck==false)                            //kevin 20220105 Index 在下真空建立 pause 不能關閉
+                {
+                    if(BTestSuck.Suck[i][j].Enable       &&
+                       BTestSuck.Suck[i][j].SenUsing!="" &&
+                       BTestSuck.Item[i][j]!=HAS_NULL_IC &&
+                       BTestSuck.Item[i][j]!=NULL_IC)
+                    {
+                        if(BTestSuck.Suck[i][j].GetStatus()==false)
+                        {
+                            if(INDEX_SUCKER_TYPE==1)
+                                BTestSuck.Suck[i][j].Normal();
+                            bFail=true;                                         //Steven 20110707 : 只要有一個True就True
+                        }
+                    }
+                }
+            }
+        }
+    }
+    #endif
+    return bFail;
+}
+//------------------------------------------------------------------------------
+bool CheckTestSuckICOn(class TMyKitSuck &Ptr, int iR, int iC)
+{
+    AnsiString str1;
+
+    if(iR>=Ptr.iMaxRow ||
+       iC>=Ptr.iMaxCol)
+    {
+        return false;
+    }
+
+    if(Ptr.Suck[iR][iC].Enable &&
+       Ptr.Suck[iR][iC].SenUsing!="" &&
+       (Ptr.Item[iR][iC]==NULL_IC || Ptr.Item[iR][iC]==HAS_NULL_IC))
+    {
+        if(Ptr.Suck[iR][iC].GetStatus()==true)
+        {
+            //--------------------------------------------------------------------------
+            //  GATE G21 -- golden csystem.cpp:2481-2482
+            //  WHAT  : the diagnostic log line inside CheckTestSuckICOn:
+            //  WHAT  :   str1.sprintf("Index check socket vascuum sensor on @ %s (%d, %d)",
+            //  WHAT  :                Ptr.Suck[iR][iC].SuckerName, iR+1, iC+1);
+            //  WHAT  :   RecordProcess(str1);
+            //  WHY   : THIS IS THE TWO-TMyKitSuck ODR TRAP, not a missing feature.  This TU sees
+            //  WHY   : aHotPlateSubstrate.h's TMySucker (aHotPlateSubstrate.h:106), which has
+            //  WHY   : sName but NOT SuckerName.  The OTHER TMyKitSuck/TMySucker in this tree,
+            //  WHY   : mykitsuck.h:181, is the one that has SuckerName -- and it has a DIFFERENT
+            //  WHY   : LAYOUT, so switching this TU to that header would silently misread every
+            //  WHY   : field of the 177 TUs' worth of shared globals.  Verified 2026-08-09:
+            //  WHY   : `grep -n SuckerName aHotPlateSubstrate.h` -> only comment text at :270;
+            //  WHY   : `grep -n SuckerName mykitsuck.h` -> :181 the real member.  Using .sName
+            //  WHY   : instead was rejected: it would print a DIFFERENT string than golden and
+            //  WHY   : silently diverge the log.
+            //  DELTA : The RecordProcess breadcrumb naming which socket nozzle read vacuum-on is
+            //  DELTA : not written.  THE RETURN VALUE IS UNCHANGED -- `return true;` is ACTIVE,
+            //  DELTA : so every caller's behaviour (atester_32Site.cpp:1071/:1077, the index
+            //  DELTA : drop-detect guard) is identical.  Diagnostics only.
+            #if 0 // GATE G21 -- golden csystem.cpp:2481-2482 (text below is golden VERBATIM)
+            str1.sprintf("Index check socket vascuum sensor on @ %s (%d, %d)", Ptr.Suck[iR][iC].SuckerName, iR+1, iC+1);
+            RecordProcess(str1);
+            #else
+            RecordProcess("Index check socket vascuum sensor on");    // golden :2481-2482 minus the
+                                                                     // nozzle name -- see GATE G21
+            #endif
+            return true;
+        }
+    }
+    return false;
+}
+
+//------------------------------------------------------------------------------
+// ret==0                       nothing
+// ret==Vaccum_Initial_On       has ic error
+// ret==Vaccum_Initial_Off      no ic error
+//------------------------------------------------------------------------------
+int CheckSuckInitialStatus(class TMyKitSuck &Ptr, int iR, int iC)
+{
+    bool flag1, flag2;
+
+    if(iR>=Ptr.iMaxRow ||
+       iC>=Ptr.iMaxCol)
+    {
+        return 0;
+    }
+
+    if(Ptr.Suck[iR][iC].Enable)
+    {
+        flag1=Ptr.Suck[iR][iC].GetStatus();
+        if(Ptr.Item[iR][iC]!=NULL_IC && Ptr.Item[iR][iC]!=HAS_NULL_IC && Ptr.Item[iR][iC]!=HAS_TRY_SUCK_IC)
+            flag2=true;
+        else
+            flag2=false;
+
+        if(flag1!=flag2)
+        {
+            if(flag1)                                                           //吸嘴上有 IC
+                return Vaccum_Initial_On;
+            else if(LastSet.iRealDummy==REALLY)                                 //並非在 IC 忽視情況下
+                return Vaccum_Initial_Off;
+        }
+    }
+    return 0;
+}
+//------------------------------------------------------------------------------
+int CheckTestSuckStatus(class TMyKitSuck &Ptr, int iR, int iC)                  //Sam 20221019 : 矽格北興 Contact 模式初始檢查吸嘴上有 IC 就報警。
+{
+    bool flag1;
+
+    if(iR>=Ptr.iMaxRow ||
+       iC>=Ptr.iMaxCol)
+    {
+        return 0;
+    }
+
+    if(Ptr.Suck[iR][iC].Enable)
+    {
+        flag1=Ptr.Suck[iR][iC].GetStatus();
+        if(flag1)                                                               //吸嘴上有 IC
+            return Vaccum_Initial_On;
+    }
+    return 0;
+}
+//==============================================================================
+// 此為系統檢查安全門情形
+//==============================================================================
+bool CheckLoaderSafeDoor()
+{
+    bool bReturnFlag=true;
+
+    for(int i=0; i<3; i++)
+    {
+        if(Sen[iSafeDoor[i]].IsOff()==true)                                     //open Safe Door
+        {
+            bReturnFlag=false;
+        }
+    }
+    return bReturnFlag;
+}
+//==============================================================================
+bool CheckUnLoadSafeDoor()
+{
+    bool bReturnFlag=true;
+
+    for(int i=5; i<8; i++)
+    {
+        if(Sen[iSafeDoor[i]].IsOff()==true)                                     //open Safe Door
+        {
+            bReturnFlag=false;
+        }
+    }
+
+    if(bReturnFlag==true)                                                       //Steven 20120201 : One Cycle後也要開汽缸
+    {
+        if(InArmSuck.HasIC()==false && OutArmSuck.HasIC()==false &&
+           ShuttleHasIC()==false && IndexHasIC()==false && AllArmZIsSafe()==true)
+            bReturnFlag=false;
+    }
+
+    return bReturnFlag;
+}
+//==============================================================================
+//V3.27B.521 Ifor 20170426 (wei) add for 換Tray 檢查
+//==============================================================================
+bool CheckFixTraySafeDoor()
+{
+    bool bReturnFlag=false;                                                     //Ifor 20170518 (Steven) Savedoor 名稱修改 旗標變更 true --> false
+
+    for(int i=5; i<8; i++)
+    {
+        if(Sen[iSafeDoor[i]].IsOff()==true)                                     //open Safe Door
+        {
+            bReturnFlag=true;                                                   //Ifor 20170518 (Steven) Savedoor 名稱修改 旗標變更 false --> true
+        }
+    }
+
+    return bReturnFlag;
+
+}
+//******************************************************************************
+//  注意!! CheckSafeDoorIsClosed為Handler 安全門相關, 修改時要小心!!
+//******************************************************************************
+TQPF_Timer DoorDelay;                                                           //Ztex 2024.07.08 Add Enable_PLCSafety_IO
+bool CheckSafeDoorIsClosed()
+{
+    bool bReturnFlag=true;
+
+    //--------------------------------------------------------------------------
+    //  GATE G-PLC-B -- golden csystem.cpp:2603-2604
+    //  WHAT  : the early "the safety PLC has not spoken yet, treat every door as closed"
+    //  WHAT  : shortcut:
+    //  WHAT  : if(Enable_PLCSafety_IO==1 && bPLCIOEffect==false) return true;
+    //  WHY   : same blocker as G-PLC-A -- bPLCIOEffect lives in ht9045_comms
+    //  WHY   : (MyPLC/MyPLC_IO_Modbus.cpp:91, CMakeLists.txt:1303) and ht9045_sm does not
+    //  WHY   : link that archive (CMakeLists.txt:2132-2143).  Verified 2026-08-09.
+    //  DELTA : With the default the function NO LONGER returns true early while the
+    //  DELTA : safety PLC is still silent -- it falls through to the real door scan.
+    //  DELTA : THAT IS THE STRICTER DIRECTION: it can only ever report MORE doors open,
+    //  DELTA : never fewer, so no interlock is weakened and no alarm is suppressed.  The
+    //  DELTA : cost is the opposite nuisance: on a PLC-safety machine during the PLC's
+    //  DELTA : first frames, Sen[iSafeDoor[i]] still reads its default and can raise a
+    //  DELTA : spurious door alarm that golden would have swallowed.  ON A MACHINE WITH
+    //  DELTA : Enable_PLCSafety_IO==0 THIS GATE CHANGES NOTHING.
+    #if 0 // GATE G-PLC-B -- golden csystem.cpp:2603-2604 (text below is golden VERBATIM)
+    if(Enable_PLCSafety_IO==1 && bPLCIOEffect==false)                           //Ztex 2024.07.08 Add Enable_PLCSafety_IO ==>
+        return true;
+    #else
+        // (no replacement -- the gated statement(s) simply do not happen)
+    #endif
+
+    static bool bDoorDelay = false;
+
+    //--------------------------------------------------------------------------
+    //  GATE G22 -- golden csystem.cpp:2608-2624
+    //  WHAT  : the 0.5-second door-settle suppression window used while the machine is
+    //  WHAT  : NOT started and the Teach form is closed:
+    //  WHAT  : if(SystemStart==0 && fTeach->fShow==false) { ...DoorDelay... return true; }
+    //  WHY   : fTeach has NO port anywhere in this tree.  Verified 2026-08-09 by
+    //  WHY   : indexing all 14,172 headers and looking `fTeach` up: 0 hits (the tree has
+    //  WHY   : fContact / fiosetview / fSortCT / fMain / ... stand-ins, but no fTeach).
+    //  WHY   : The bDoorDelay static + DoorDelay timer it uses ARE fine -- the blocker is
+    //  WHY   : only the fTeach deref.
+    //  DELTA : The 0.5-second grace period after a not-started door transition is gone,
+    //  DELTA : so CheckSafeDoorIsClosed now evaluates the real door scan IMMEDIATELY
+    //  DELTA : instead of returning true for up to 0.5 s.  THIS IS THE STRICTER, MORE
+    //  DELTA : CONSERVATIVE DIRECTION -- it can raise a door alarm up to 0.5 s EARLIER,
+    //  DELTA : never later, and it can NEVER suppress one.  No interlock is weakened.
+    //  DELTA : It does mean a brief PLC/sensor bounce while stopped can now surface an
+    //  DELTA : alarm golden would have swallowed.
+    #if 0 // GATE G22 -- golden csystem.cpp:2608-2624 (text below is golden VERBATIM)
+    if(SystemStart==0 && fTeach->fShow==false)
+    {
+        if(bDoorDelay==false)
+        {
+            bDoorDelay=true;
+            DoorDelay.SetSecAndOn(0.5);
+        }
+
+        if(DoorDelay.Off()==true)
+        {
+            bDoorDelay=false;
+        }
+        else
+        {
+            return true;
+        }
+    }                                                                           //Ztex 2024.07.08 Add Enable_PLCSafety_IO <==
+    #else
+    // (the 0.5 s DoorDelay grace window is skipped -- see GATE G22.  Control
+    //  falls straight through to the real door scan below, which is stricter.)
+    #endif
+
+    #ifndef SOFT_SIMULTE
+    bool bPLCConnet=true;
+    int iC_DoorLock[]={C_SafeDoor1Lock, C_SafeDoor2Lock, C_SafeDoor3Lock, C_SafeDoor4Lock, C_SafeDoor6Lock, C_SafeDoor7Lock, C_SafeDoor8Lock};                  //Ztex 2024.08.14 Add Open Door Check IC
+
+    for(int i=0; i<MAX_SAFE_DOOR_CNT; i++)                                      //JerryYang 20230704 : 整合安全門15->MAX_SAFE_DOOR_CNT
+    {
+        if(iSafeDoor[i]>MAX_SENSOR_ITEM || iSafeDoor[i]<SnSafeDoor1)
+        {
+            ShowMyMessage("Safe Door setting error!", "Please comfirm with HonPrec Software Engineer.");
+        }
+        else if(Sen[iSafeDoor[i]].IsOff()==true)                                //open Safe Door
+        {
+            if(i==21 && iMagazineStatus!=0)                                     //Ifor 20231130 add: 0: Normal 1:Full Tray 2:Manual put tray
+            {
+            }
+            else
+            {
+                bStartOpenDoor=true;                                            //kevin 20201116  有開門停機
+                ShowErrorMessage(asSafeDoorAlarm[i], K_RETRY, iSafeDoorPosition[i]);                                    //Steven 20191016 : 重整安全門Alarm
+                bReturnFlag=false;
+                for(int j=0;j<7;j++)
+                {
+                    if(Tri_Temp_Machine==1)
+                    {
+                        if(Enable_PLCSafety_IO==1)
+                            Cylinder[iC_DoorLock[i]].Off();
+                        else
+                            Cylinder[iC_DoorLock[i]].On();
+                    }
+
+                    if(Enable_PLCSafety_IO==1)                                  //ChungHung 20230718 add for Safe plc
+                    {
+                        if(bServoOnOff==false)                                  //ChungHung 20230718 add for Safe plc
+                        {
+                            StopAllMotor();
+                            fAllMotorHome=false;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //--------------------------------------------------------------------------
+    //  GATE G23 -- golden csystem.cpp:2669-2670
+    //  WHAT  : the PLC link-health probe:
+    //  WHAT  : if(Enable_PLCSafety_IO && bCheckPLCConnet()==false) bPLCConnet=false;
+    //  WHY   : bCheckPLCConnet is golden csystem.cpp:24395 -- WAVE-2 range.
+    //  WHY   : csystem.h:307 declares it; a definition scan over every .cpp in the port
+    //  WHY   : on 2026-08-09 found NONE, so calling it is an undefined reference that
+    //  WHY   : -fsyntax-only cannot see (campaign trap 2).
+    //  DELTA : bPLCConnet stays true, so the extra ShowMyMessage("PLC disconnect, please
+    //  DELTA : check PLC") at golden :2676 never appears.  THE INTERLOCK ITSELF IS
+    //  DELTA : UNAFFECTED: the WAR16125 alarm and `bReturnFlag=false` at golden
+    //  DELTA : :2672-2678 are driven by Sen[SnAllSafeDoor].IsOff(), which is ACTIVE, and
+    //  DELTA : still fire.  A PLC that has gone silent is therefore still caught (its
+    //  DELTA : sensors read Off) -- only the operator hint that names the PLC is lost.
+    #if 0 // GATE G23 -- golden csystem.cpp:2669-2670 (text below is golden VERBATIM)
+    if(Enable_PLCSafety_IO && bCheckPLCConnet()==false)                         //KenHsieh 20250313 : Fix PLC 判斷連線問題
+        bPLCConnet=false;
+    #else
+        // (no replacement -- the gated statement(s) simply do not happen)
+    #endif
+
+    if(Enable_PLCSafety_IO && Sen[SnAllSafeDoor].IsOff() && bReturnFlag)        //KenHsieh 20250212 : 新增PLC 斷線可瞬間判斷EMG及安全門
+    {
+        ShowErrorMessage("WAR16125", K_RETRY, MMSystem);                        //KenHsieh 20250307 : fix PLC safedoor 通訊延遲問題
+        if(bPLCConnet==false)                                                   //KenHsieh 20250212 : 新增PLC 斷線可瞬間判斷EMG及安全門
+            ShowMyMessage("PLC disconnect, please check PLC", "PLC斷線，請檢查PLC");
+
+        bReturnFlag=false;
+    }
+
+    if(Temperature.bATCActiveCooling && Sen[SnEPDieForce].Enable==true && Sen[SnEPDieForce].IsOff()==true)              //Steven 20191024 : For die force
+    {
+        //--------------------------------------------------------------------------
+        //  GATE G24 -- golden csystem.cpp:2683-2688
+        //  WHAT  : the V899 Multi-EP carve-out on the die-force sensor check:
+        //  WHAT  : if(IsMultiEPPressureRouteActive()==true) { /* skip WAR0329 */ } else
+        //  WHAT  : The `else`-BODY (golden :2690-2693, bStartOpenDoor / WAR0329 /
+        //  WHAT  : bReturnFlag=false) is kept ACTIVE as an unconditional block below.
+        //  WHY   : IsMultiEPPressureRouteActive has NO port.  Verified 2026-08-09 by
+        //  WHY   : indexing all 14,172 headers: 0 hits.  It is itself an AI(ht9045-v899)
+        //  WHY   : 20260526 addition inside golden, so the port simply has not reached it.
+        //  DELTA : ** THIS RE-ENABLES AN ALARM, IT DOES NOT SUPPRESS ONE.  With the default,
+        //  DELTA : WAR0329 fires whenever bATCActiveCooling && Sen[SnEPDieForce] is enabled
+        //  DELTA : and reads Off -- i.e. golden's behaviour BEFORE the 20260526 fix.  On a
+        //  DELTA : Multi-EP / APAX-routed machine, where SnEPDieForce is deliberately unused,
+        //  DELTA : that is a SPURIOUS WAR0329 EVERY TICK and bReturnFlag=false, which will
+        //  DELTA : hold the safe-door check false and BLOCK THE MACHINE.  It is the
+        //  DELTA : fail-loud direction (nuisance alarm, not missed alarm) but it is the one
+        //  DELTA : gate in this group that can stop a specific machine variant from running.
+        //  DELTA : MUST be ungated when IsMultiEPPressureRouteActive is ported. **
+        #if 0 // GATE G24 -- golden csystem.cpp:2683-2688 (text below is golden VERBATIM)
+        //AI(ht9045-v899) 20260526: skip SnEPDieForce only when SwMultiEp selects the Multi/APAX route.
+        if(IsMultiEPPressureRouteActive()==true)
+        {
+            // Multi EP mode: SnEPDieForce sensor is unused; do not raise WAR0329.
+        }
+        else
+        #else
+            // (no replacement -- the gated statement(s) simply do not happen)
+        #endif
+        {
+        bStartOpenDoor=true;                                                    //kevin 20201116  有開門停機
+        if(SystemStart)
+            ShowErrorMessage("WAR0329", K_RETRY, MMSystem);
+        bReturnFlag=false;
+        }
+    }
+
+    //Ztex 2023.04.13 Add HT-1032 IO ==>
+    for(int i=0; i<MAX_HATCH_DOOR_CNT; i++)                                     //安全門保護
+    {
+        if(Sen[iSafeDoorHatchway[i]].Enable==true &&
+           Sen[iSafeDoorHatchway[i]].IsOff()==true)                             //open Safe Door
+        {
+            bStartOpenDoor=true;                                                //kevin 20201116  有開門停機
+            ShowErrorMessage(asHatchwaySafeDoorAlarm[i], K_RETRY, iHatchwaySafeDoorPosition[i]);                        //Ztex Not Finish
+            bReturnFlag=false;
+            if(Enable_PLCSafety_IO==1)                                          //ChungHung 20230718 add for Safe plc
+            {
+                if(bServoOnOff==false)                                          //ChungHung 20230718 add for Safe plc
+                {
+                    StopAllMotor();
+                    fAllMotorHome=false;
+                }
+            }
+        }
+    }
+    //Ztex 2023.04.13 Add HT-1032 IO <==
+    static int cnt=0;
+    if(Sen[SnLoadLightGat].Enable==true &&
+       Sen[SnLoadLightGat].IsOff()==true)                                       //Ifor 20230427 add:LD/ULD light gate
+    {
+        //--------------------------------------------------------------------------
+        //  GATE G-ATK -- golden csystem.cpp:2721-2725
+        //  WHAT  : the AMKOR-Korea Light-Curtain carve-out on the LD/ULD light-gate check:
+        //  WHAT  : if(CUSTOMER_CODE==CC_AMKOR_Korea && fMain->spbChamberFan->Down==true) {}
+        //  WHAT  : else
+        //  WHAT  : The `else`-BODY (golden :2726-2735, the cnt>5 debounce + MES16334) is kept
+        //  WHAT  : ACTIVE as an unconditional block immediately below.
+        //  WHY   : TfMain has no spbChamberFan member -- same absence as G11/G13c.  Verified
+        //  WHY   : `grep -n "spbChamberFan" forms/fMain.h` on 2026-08-09: 0 hits.
+        //  WHY   : CC_AMKOR_Korea itself DOES exist (MachineType.h:347).
+        //  DELTA : ** THIS RE-ENABLES AN ALARM RATHER THAN SUPPRESSING ONE, in the same shape
+        //  DELTA : as G24.  On an AMKOR-Korea machine the operator can normally hold the
+        //  DELTA : chamber-fan button DOWN to suppress the light-curtain alarm while working
+        //  DELTA : in the LD/ULD area; with the default that suppression is gone, so
+        //  DELTA : MES16334 fires (after the 5-tick debounce, golden :2727-2728, ACTIVE) and
+        //  DELTA : bReturnFlag=false holds the safe-door check false.  Fail-loud, not
+        //  DELTA : fail-silent -- but it can block that one machine variant.  On every other
+        //  DELTA : CUSTOMER_CODE the first condition is false, so this gate changes NOTHING.
+        //  DELTA : MUST be ungated when TfMain gains spbChamberFan. **
+        #if 0 // GATE G-ATK -- golden csystem.cpp:2721-2725 (text below is golden VERBATIM)
+        if(CUSTOMER_CODE==CC_AMKOR_Korea &&                                     //Steven 20251224 : for ATK Light Curtain
+           fMain->spbChamberFan->Down==true)
+        {
+        }
+        else
+        #else
+            // (no replacement -- the gated statement(s) simply do not happen)
+        #endif
+        {
+            cnt++;
+            if(cnt>5)                                                           //RogerYang 20250909 : pass第一次
+            {
+                bStartOpenDoor=true;                                            //kevin 20201116  有開門停機
+                if(SystemStart)
+                    ShowErrorMessage("MES16334", K_RETRY, MMSystem);
+                bReturnFlag=false;
+            }
+        }
+    }
+    else
+    {
+        cnt=0;
+    }
+    #endif
+    return bReturnFlag;
+
+//------------------------------------------------------------------------------
+//  golden csystem.cpp:2744-2826.
+//  csystem.h:239-241 already declares all three with their default arguments
+//  (iBit=-1 / Bit=-1), so the definitions below MUST NOT repeat the default --
+//  they do not.
+//  LINK NOTE: before this block NOTHING in the port defined either
+//  IdleCheckSafeDoorByCylinder overload.  myio.cpp:180-184 therefore had to
+//  gate its own call behind `#define MYIO_IDLECHECKSAFEDOOR(port,bit) (false)`,
+//  and MyLaneIo.cpp:49 carries a TU-local `static ... {return false;}` shadow of
+//  the 4-arg form.  Both of those live in files this group may not edit; both
+//  are now redundant and are listed in the report for the main loop.
+//------------------------------------------------------------------------------
+}
+//******************************************************************************
+//  注意!! IdleCheckSafeDoor為Handler 安全門相關, 修改時要小心!!
+//******************************************************************************
+//---------------------------------------------------------------------------
+// 2015.01.15 , Joye , Safe door check --------------------------------------->>
+bool IdleCheckSafeDoor(void)
+{
+    if(SystemStart || InitialOK==false)
+        return false;
+
+    #ifndef SOFT_SIMULTE
+    return !CheckSafeDoorIsClosed();
+    #else
+    return false;
+    #endif
+}
+//******************************************************************************
+//  注意!! IdleCheckSafeDoorByCylinder為Handler 安全門相關, 修改時要小心!!
+//******************************************************************************
+bool IdleCheckSafeDoorByCylinder(int iPort, int iBit)                           //Steven 20230703 : Add for PCI/ISA IO check SafeDoor
+{
+    if(SystemStart || InitialOK==false)
+        return false;
+
+    bool bIsCylinder=false;
+    for(int i=0; i<MaxCylinderItem; i++)
+    {
+        if(Cylinder[i].Enable==true)
+        {
+            if(iBit==-1)                                                        //針對IO Byte Mode
+            {
+                for(int j=0; j<8; j++)
+                {
+                    if(iPort==Cylinder[i].OutPort && j==Cylinder[i].OutBit)
+                    {
+                        if(Cylinder[i].bCheckSafeDoor==true)
+                            bIsCylinder=true;
+                        break;
+                    }
+                }
+            }
+            else                                                                //針對IO Bit Mode
+            {
+                if(iPort==Cylinder[i].OutPort && iBit==Cylinder[i].OutBit)
+                {
+                    if(Cylinder[i].bCheckSafeDoor==true)
+                        bIsCylinder=true;
+                    break;
+                }
+            }
+        }
+    }
+
+    if(bIsCylinder==false)
+        return false;
+
+    return IdleCheckSafeDoor();
+}
+//******************************************************************************
+//  注意!! IdleCheckSafeDoorByCylinder為Handler 安全門相關, 修改時要小心!!
+//******************************************************************************
+bool IdleCheckSafeDoorByCylinder(int Ring, int IP, int Port, int Bit)           //Steven 20230703 : Add for MotionNet IO check SafeDoor
+{
+    if(SystemStart || InitialOK==false)
+        return false;
+
+    if(Bit==-1)                                                                 //針對IO Byte Mode
+    {
+        for(int i=0; i<8; i++)
+        {
+            if(bIdleNeedCheckSafeDoor[Ring][IP][Port][i]==true)
+                return IdleCheckSafeDoor();
+        }
+        return false;
+    }
+    else                                                                        //針對IO Bit Mode
+    {
+        if(bIdleNeedCheckSafeDoor[Ring][IP][Port][Bit]==false)
+            return false;
+    }
+
+    return IdleCheckSafeDoor();
+}
+
+// 2015.01.15 , Joye , Safe door check ---------------------------------------<<
+//******************************************************************************
+//
+//  注意!! RecordSafeDoorStates為Handler 安全門相關, 修改時要小心!!
+//
+//******************************************************************************
+void RecordSafeDoorStates()                                                     //Steven 20100129 : Record when door opened
+{
+    AnsiString Str, sTime;
+    bool bSECSGEMReport=false, bDoorOpen=false;
+    static bool bClear=false;                                                   //Steven 20211229 : 只做一次就好
+    static bool bSafeDoorOpen[MAX_SAFE_DOOR_CNT], bHeaterDoorOpen=false;        //JerryYang 20230704 : 整合安全門15->MAX_SAFE_DOOR_CNT
+    static bool bChamberDoorOpen[4];
+    static bool bOldSafeDoorChange[MAX_SAFE_DOOR_CNT];                          //JerryYang 20230704 : 整合安全門15->MAX_SAFE_DOOR_CNT
+    static bool bSafeDoorHatchway[MAX_HATCH_DOOR_CNT];                          //Hmy 20210426 add Hatchway 1-1、1-2//Hmy 20181120 Modify Safe Door Record Error
+    static bool bLastIsOpen=false;
+    bool bDoorIsOpen=false;
+
+    if(SystemStart)
+    {
+        if(bClear==false)                                                       //Steven 20211229 : 只做一次就好
+        {
+            ZeroMemory(bSafeDoorOpen, sizeof(bSafeDoorOpen));
+            ZeroMemory(bChamberDoorOpen, sizeof(bChamberDoorOpen));
+            bHeaterDoorOpen=false;
+            ZeroMemory(bOldSafeDoorChange, sizeof(bOldSafeDoorChange));
+            ZeroMemory(bSafeDoorHatchway, sizeof(bSafeDoorHatchway));           //Ztex 2023.04.13 Add HT-1032 IO
+            bClear=true;
+        }
+        return;
+    }
+    bClear=false;                                                               //Steven 20211229 : 只做一次就好
+
+    for(int i=0; i<MAX_SAFE_DOOR_CNT; i++)                                      //JerryYang 20230704 : 整合安全門15->MAX_SAFE_DOOR_CNT
+    {
+        if(Sen[iSafeDoor[i]].IsOff()==true && bSafeDoorOpen[i]==false)          //open Safe Door
+        {
+            Str.sprintf("Safe Door %d is Opened", i+1);
+            MyDBIProcess("Message", Str);
+            bSafeDoorOpen[i]=true;
+            bDoorOpen=true;
+            if(IniConfig.bO18SafeDoorOnOffDurationDetect)                       //JerryYang 20210112 : 安全門檢查機制,長時間未開啟要跳出alarm
+            {
+                if(iSafeDoor[i]==SnSafeDoor1 || iSafeDoor[i]==SnSafeDoor2 || iSafeDoor[i]==SnSafeDoor3 ||
+                   iSafeDoor[i]==SnSafeDoor6 || iSafeDoor[i]==SnSafeDoor7 || iSafeDoor[i]==SnSafeDoor8 ||
+                   iSafeDoor[i]==SnHeaterDoor || iSafeDoor[i]==SnHeaterDoor2 || iSafeDoor[i]==SnHeaterDoor3 || iSafeDoor[i]==SnHeaterDoor4)
+                {
+                    //--------------------------------------------------------------------------
+                    //  GATE G25 -- golden csystem.cpp:2874-2875
+                    //  WHAT  : the "when was this door last opened" ini timestamp:
+                    //  WHAT  :   sTime.sprintf("%04d-%02d-%02d-%02d", SystemYear, ...);
+                    //  WHAT  :   WriteIniData(asGeneralPath, "LastSafeDoorOpen",
+                    //  WHAT  :                Sen[iSafeDoor[i]].Name, sTime);
+                    //  WHY   : TWO independent blockers, either one sufficient.  (1) This TU already
+                    //  WHY   : carries `#define WriteIniData W7C1_WriteIniData` (csystem.cpp, the W7C1
+                    //  WHY   : seam) whose only two stand-ins take an int or a double 4th argument --
+                    //  WHY   : an AnsiString 4th argument does not match either, so golden's text does
+                    //  WHY   : not even compile through the seam.  (2) The REAL
+                    //  WHY   : WriteIniData(AnsiString,AnsiString,AnsiString,AnsiString) lives in
+                    //  WHY   : common.cpp, which is in ht9045_core; CMakeLists.txt:2212 states in as many
+                    //  WHY   : words that "ht9045_sm does NOT itself link ht9045_core", which is exactly
+                    //  WHY   : why the W7C1 wave built that seam instead of calling the real function.
+                    //  WHY   : asGeneralPath is in the same library.  Un-#defining the macro here would
+                    //  WHY   : also silently strip the seam from any sibling group appended after this
+                    //  WHY   : block, so it was rejected.
+                    //  DELTA : The LastSafeDoorOpen timestamp is not persisted to system/Gerneral.ini.
+                    //  DELTA : Consumed only by IniConfig.bO18SafeDoorOnOffDurationDetect's "this door
+                    //  DELTA : has not been opened for a long time" report.  The door-open DB message
+                    //  DELTA : (MyDBIProcess "Safe Door %d is Opened", golden :2864-2865) and every SECS
+                    //  DELTA : report below ARE ACTIVE.  No interlock, no alarm.
+                    #if 0 // GATE G25 -- golden csystem.cpp:2874-2875 (text below is golden VERBATIM)
+                    sTime.sprintf("%04d-%02d-%02d-%02d", SystemYear, SystemMonth, SystemDate, SystemHour);
+                    WriteIniData(asGeneralPath, "LastSafeDoorOpen", Sen[iSafeDoor[i]].Name, sTime);
+                    #else
+                        // (no replacement -- the gated statement(s) simply do not happen)
+                    #endif
+                }
+            }
+
+            if(IniConfig.bA36OpenDoorSetErrBin && AccessLevel==0)               //JerryYang 20210901 : Microchip要求開安全門要分ERROR BIN
+            {
+//                if(iSafeDoor[i]==SnSafeDoor6 || iSafeDoor[i]==SnSafeDoor7 || iSafeDoor[i]==SnSafeDoor8)
+                {
+                    bIsOpenDoorNeedSetErrBin=true;                              //JerryYang 20210901
+                }
+            }
+        }
+
+        if(Sen[iSafeDoor[i]].IsOff()==false && bSafeDoorOpen[i]==true)          //Ifor 20250926 add:安全門關閉訊息
+        {
+            Str.sprintf("Safe Door %d is Closed", i+1);
+            MyDBIProcess("Message", Str);
+            bSafeDoorOpen[i]=false;
+        }
+    }
+
+    if(IniConfig.bEnable_SECS_GEM==true)
+    {
+        if(bDoorOpen==bLastIsOpen)                                              //狀態一樣不用報     //JerryYang 20240318
+        {
+        }
+        else                                                                    //有開關門
+        {
+            if(bDoorOpen==true)
+            {
+                EventReport(SECS_EVENT.SafetyDoorOpen);
+            }
+            else
+            {
+                EventReport(SECS_EVENT.SafetyDoorClosed);
+            }
+            bLastIsOpen=bDoorOpen;
+        }
+    }
+
+    //Ifor 20200416 add SafeDoor report
+    //==>
+    if(IniConfig.bEnable_SECS_GEM==true)
+    {
+        for(int j=0; j<MAX_SAFE_DOOR_CNT; j++)                                  //JerryYang 20230704 : 整合安全門15->MAX_SAFE_DOOR_CNT
+        {
+            if(Sen[iSafeDoor[j]].IsOff()==true)
+            {
+                RunInfo.bSafeDoor[j]=true;
+                bDoorIsOpen=true;
+            }
+            else
+            {
+                RunInfo.bSafeDoor[j]=false;
+            }
+
+            if(RunInfo.bSafeDoor[j] != bOldSafeDoorChange[j])
+            {
+                bOldSafeDoorChange[j]=RunInfo.bSafeDoor[j];
+                bSECSGEMReport=true;
+            }
+        }
+
+        if(bDoorIsOpen)
+        {
+            RunInfo.bSafeDoorIsOpen=true;
+        }
+        else
+        {
+            RunInfo.bSafeDoorIsOpen=false;
+        }
+
+        if(bSECSGEMReport==true)
+        {
+            bSECSGEMReport=false;
+            EventReport(SECS_EVENT.SafeDoorOnOff);
+        }
+    }
+    //<==
+    //Ifor 20200416 add SafeDoor report
+
+    for(int i=0; i<4; i++)                                                      //wei 20200616 : For ATC3.3 MR, 要第四個加熱門 3--> 4
+    {
+        if(bHeaterDoorIsOpen[i] && bHeaterDoorOpen==false)
+        {
+            Str.sprintf("Heater Door %d is Opened", i+1);
+            MyDBIProcess("Message", Str);
+            bHeaterDoorOpen=true;
+        }
+    }
+
+    //--------------------------------------------------------------------------
+    //  GATE G26 -- golden csystem.cpp:2966-2971
+    //  WHAT  : the RFMD Empty-Socket-Check auto-one-cycle trigger:
+    //  WHAT  : if(EmptySocketCheckModeBeUse() && IniConfig.bI41_2_OpenChamberDoor &&
+    //  WHAT  :    bHeaterDoorOpen) fMain->ResetForESC("Start Empty Socket OneCycle by
+    //  WHAT  :    open heater door");
+    //  WHY   : BOTH halves are missing.  (1) fMain has no ResetForESC -- 0 grep hits in
+    //  WHY   : forms/fMain.h and 0 in a whole-tree header index, 2026-08-09.
+    //  WHY   : (2) EmptySocketCheckModeBeUse is golden csystem.cpp:23313 (WAVE-2 range)
+    //  WHY   : with no compiled body in the port, and in THIS TU it would anyway resolve
+    //  WHY   : through the pre-existing `#define EmptySocketCheckModeBeUse
+    //  WHY   : W7C2_EmptySocketCheckModeBeUse` seam to a `return false` stand-in, so the
+    //  WHY   : branch is already dead here even before the gate.
+    //  DELTA : On an RFMD machine using Empty Socket Check, opening a heater door no
+    //  DELTA : longer kicks off the empty-socket One Cycle.  The heater-door-open DB
+    //  DELTA : message (golden :2958-2962) is ACTIVE.  No interlock, no alarm.
+    #if 0 // GATE G26 -- golden csystem.cpp:2966-2971 (text below is golden VERBATIM)
+    if(EmptySocketCheckModeBeUse() &&                                           //Steven 20201022 : For RFMD Empty Socket Check Funstion.
+       IniConfig.bI41_2_OpenChamberDoor &&
+       bHeaterDoorOpen)
+    {
+        fMain->ResetForESC("Start Empty Socket OneCycle by open heater door");
+    }
+    #else
+        // (no replacement -- the gated statement(s) simply do not happen)
+    #endif
+    //--------------------------------------------------------------------------
+    //  GATE G27 -- golden csystem.cpp:2973-3016
+    //  WHAT  : the whole C11 video-monitor block: start/stop the two monitor recordings
+    //  WHAT  : as the loader-side (SnSafeDoor1/2/3) and unloader-side (SnSafeDoor6/7/8)
+    //  WHAT  : doors open and close.
+    //  WHY   : fMonitor has NO port anywhere.  Verified 2026-08-09 by indexing all
+    //  WHY   : 14,172 headers and looking up `fMonitor`, `OpenMonitorVedio` and
+    //  WHY   : `StopMonitorVedio`: 0 hits for all three.  fMain->CheckCanChangeRealDummy
+    //  WHY   : DOES exist (MainCalcCore.h:154) -- the blocker is only the form.
+    //  DELTA : On a machine with IniConfig.bC11UseMonitorView the door-triggered video
+    //  DELTA : recording does not start or stop.  Recording is an evidence feature, not
+    //  DELTA : a control feature: no motion, no interlock and no alarm depends on it.
+    #if 0 // GATE G27 -- golden csystem.cpp:2973-3016 (text below is golden VERBATIM)
+    if(IniConfig.bC11UseMonitorView)                                            //JerryYang 20160621 移植錄影功能,UseMonitorVideoFunction start
+    {
+        if(fMain->CheckCanChangeRealDummy())
+        {
+            if(fMonitor->iStatus[1]==1)
+                fMonitor->StopMonitorVedio(1);
+            if(fMonitor->iStatus[2]==1)
+                fMonitor->StopMonitorVedio(2);
+        }
+        else
+        {
+            if(Sen[SnSafeDoor1].IsOff() || Sen[SnSafeDoor2].IsOff() || Sen[SnSafeDoor3].IsOff())
+            {
+                if(fMonitor->iStatus[1]==0)
+                    fMonitor->OpenMonitorVedio(1);
+                if(fMain->CheckCanChangeRealDummy())
+                {
+                    if(fMonitor->iStatus[1]==1)
+                        fMonitor->StopMonitorVedio(1);
+                }
+            }
+            else
+            {
+                if(fMonitor->iStatus[1]==1)
+                    fMonitor->StopMonitorVedio(1);
+            }
+
+            if(Sen[SnSafeDoor6].IsOff() || Sen[SnSafeDoor7].IsOff() || Sen[SnSafeDoor8].IsOff())
+            {
+                if(fMonitor->iStatus[2]==0)
+                    fMonitor->OpenMonitorVedio(2);
+                if(fMain->CheckCanChangeRealDummy())
+                {
+                    if(fMonitor->iStatus[2]==1)
+                        fMonitor->StopMonitorVedio(2);
+                }
+            }
+            else
+            {
+                if(fMonitor->iStatus[2]==1)
+                    fMonitor->StopMonitorVedio(2);
+            }
+        }
+    }
+    #else
+        // (no replacement -- the gated statement(s) simply do not happen)
+    #endif
+
+    for(int i=0; i<MAX_HATCH_DOOR_CNT; i++)                                     //安全門保護
+    {
+        if(Sen[iSafeDoorHatchway[i]].Enable==false)
+            continue;
+
+        if(Sen[iSafeDoorHatchway[i]].IsOff()==true)
+        {
+            if(bSafeDoorHatchway[i]==true)
+            {
+                bSafeDoorHatchway[i]=false;
+                //--------------------------------------------------------------------------
+                //  GATE G28a -- golden csystem.cpp:3028-3029
+                //  WHAT  : the Tri-Temp hatchway "opened at" ini timestamp
+                //  WHAT  : (WriteIniData(asGeneralPath, "TriTemp_SafeDoorHatchwayOpen", ...)).
+                //  WHY   : same two blockers as G25 -- the W7C1 WriteIniData seam has no AnsiString
+                //  WHY   : overload, and the real one is in ht9045_core which ht9045_sm does not
+                //  WHY   : link directly (CMakeLists.txt:2212).
+                //  DELTA : The hatchway-open timestamp is not persisted to system/Gerneral.ini.
+                //  DELTA : The bSafeDoorHatchway[i] latch transition itself (golden :3027) IS
+                //  DELTA : ACTIVE, and the hatchway ALARM lives in CheckSafeDoorIsClosed (golden
+                //  DELTA : :2698-2715, ACTIVE in this block), not here.  No interlock, no alarm.
+                #if 0 // GATE G28a -- golden csystem.cpp:3028-3029 (text below is golden VERBATIM)
+                sTime.sprintf("%04d-%02d-%02d-%02d", SystemYear, SystemMonth, SystemDate, SystemHour);
+                WriteIniData(asGeneralPath, "TriTemp_SafeDoorHatchwayOpen", Sen[iSafeDoorHatchway[i]].Name, sTime);
+                #else
+                    // (no replacement -- the gated statement(s) simply do not happen)
+                #endif
+            }
+        }
+        else
+        {
+            if(bSafeDoorHatchway[i]==false)
+            {
+                //--------------------------------------------------------------------------
+                //  GATE G28b -- golden csystem.cpp:3036-3037
+                //  WHAT  : the Tri-Temp hatchway "closed at" ini timestamp
+                //  WHAT  : (WriteIniData(asGeneralPath, "TriTemp_SafeDoorHatchwayClosed", ...)).
+                //  WHY   : same as G28a.
+                //  DELTA : The hatchway-closed timestamp is not persisted.  bSafeDoorHatchway[i]=true
+                //  DELTA : at golden :3039 IS ACTIVE.  No interlock, no alarm.
+                #if 0 // GATE G28b -- golden csystem.cpp:3036-3037 (text below is golden VERBATIM)
+                sTime.sprintf("%04d-%02d-%02d-%02d", SystemYear, SystemMonth, SystemDate, SystemHour);
+                WriteIniData(asGeneralPath, "TriTemp_SafeDoorHatchwayClosed", Sen[iSafeDoorHatchway[i]].Name, sTime);
+                #else
+                    // (no replacement -- the gated statement(s) simply do not happen)
+                #endif
+            }
+            bSafeDoorHatchway[i]=true;
+        }
+    }
+}
+
+// ===========================  end of group g1  ===============================

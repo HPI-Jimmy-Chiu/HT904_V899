@@ -99,7 +99,10 @@ void DoInArm()
 // DoLoad: RETIRED BODY (W7-L1 Wave 1 "Loader") -- real body now in
 // asendic_Loader.cpp.  Declaration kept in the header: csystem.cpp calls it
 // through csystem_shims.h and the two signatures are identical.
+#if 0   // PT-W5c RETIRED (DoSortArm)
+//AI(ht9045-v906) 20260809: PT-W5c phase 2 -- RETIRED. PRE-EXISTING latent ODR violation, not this wave: the real body always existed, but its archive member was never extracted until csystem.cpp entered the link. Real body wins.
 void DoSortArm() {}
+#endif
 
 // ===========================================================================
 //  SetFixTrayMiddleDtata -- golden aoutarm.cpp (Fix-tray middle-data shuffle).
@@ -176,6 +179,8 @@ bool DoOutArmTeachAlignmentProcess(unsigned long & /*lAction*/) { return true; }
 // XPitchIsStand (golden csystem.cpp:264): pure config predicate over TestIF /
 // CosFunction / iXpitch* -- transcribed VERBATIM (all inputs are config globals,
 // no HW).  Offline-faithful: returns the exact golden value for the live config.
+#if 0   // PT-W5c RETIRED (XPitchIsStand)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool XPitchIsStand()
 {
     if(CosFunction.b2x4SupportCenterPitch==true &&                              //Steven 20170706 (wei) : 2x4中間的Pitch不同 for SCC
@@ -242,6 +247,7 @@ bool XPitchIsStand()
     }
     return true;
 }
+#endif
 // DoSiteMappingCHK (golden csystem.cpp:20183) / AutoSiteMappingCheckShuttle
 // (golden csystem.cpp:22202): JCET/ASE Auto-Site-Mapping HW side-effect routines
 // (site-map check + which-shuttle select).  Offline-safe no-ops -- there is no

@@ -43,8 +43,14 @@
 //    * CheckIndexConnect -> 0 (all index heaters "connected", no WAR0360).
 //  These are the csystem.h-declared bodies; no other translated TU defines them.
 // ===========================================================================
+#if 0   // PT-W5c RETIRED (IsInArmCleanOutFinish)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool IsInArmCleanOutFinish(int /*iIsOneCycle*/) { return false; }  // golden csystem.h:89
+#endif
+#if 0   // PT-W5c RETIRED (IsInArmOneCycleFinish)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool IsInArmOneCycleFinish()                    { return false; }  // golden csystem.h:91
+#endif
 bool CanYieldAlarmRemainInSHT()                 { return false; }  // golden csystem.h:288
 int  CheckIndexConnect()                        { return 0; }      // golden csystem.h:212 (Dell 20111130)
 // TODO(W6.4b): real body golden csystem.cpp:23513, remove this stub when translated.
@@ -62,7 +68,10 @@ void SendTTLRS232CSOTsignal()                   {}                 // golden csy
 //   ShowIndexTime -> no-op: pure debug index-timing log, no control-flow effect on callers.
 //   TemperatureStorageLog -> false: golden's own first statement is `if(InitialOK==false) return
 //     false;` (offline InitialOK is false), matching the not-yet-initialized golden outcome.
+#if 0   // PT-W5c RETIRED (CheckContactOver)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool CheckContactOver()                         { return false; }  // golden csystem.h:156
+#endif
 void ShowIndexTime(int /*Item*/)                {}                 // golden csystem.h:200
 bool TemperatureStorageLog(int /*iRecord*/)     { return false; }  // golden csystem.h:275
 
@@ -76,7 +85,10 @@ bool TemperatureStorageLog(int /*iRecord*/)     { return false; }  // golden csy
 // in the Sim canary), so this is inert offline either way.
 bool bEcho=false, bExist=false, bUnderTest=false;                  // golden main.cpp (untranslated)
 bool bEchoStop=false;                                              // golden main.cpp (untranslated) //ChungHung 20130326 add
+#if 0   // PT-W5c RETIRED (CheckTestSuckICOn)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool CheckTestSuckICOn(TMyKitSuck &/*Ptr*/, int /*iR*/, int /*iC*/) { return false; }
+#endif
 
 // AI(W906-TesterTCPTimer) 20260720: iBin[4][8] production definition -- golden
 // main.cpp:15156 (untranslated, file-scope, zero-initialized). Same
@@ -238,7 +250,10 @@ void ADAM_Rang(int /*iRange*/)                        {}
 
 // ---- EP switch / heater-OK / NN-mode / in-arm-giveway helpers --------------
 void EPSwitchOnOff(int /*iArm*/)                      {}             // offline: no EP DAQ
+#if 0   // PT-W5c RETIRED (CheckHeaterOK)
+//AI(ht9045-v906) 20260809: PT-W5c phase 2 -- RETIRED. PRE-EXISTING latent ODR violation, not this wave: the real body always existed, but its archive member was never extracted until csystem.cpp entered the link. Real body wins.
 bool CheckHeaterOK()                                  { return true; }  // offline: heater ready
+#endif
 int  IsNNMode()                                       { return 0; }     // offline: not NN mode
 // CheckInArmFinishAllPickerAction() / MoveInArm2XYToWait() are defined ONCE in
 // acatchtray_shims.cpp (golden ainarm2.h:95 / :146).  Declared in atester_shims.h

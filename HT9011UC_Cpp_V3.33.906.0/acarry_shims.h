@@ -190,7 +190,13 @@ bool Check32siteOnlyEnabled4x4Site();                             // golden csys
 //  (K_OK), sort-arm safe-move no-op.
 bool MoveOutArmXY_ToShuttleAlarmArea();                            // golden aoutarm -- offline: away (true)
 int  SendHTTPRequest(int iSht);                                    // golden main -- offline: 0 (success, not the -1 fail path)
-void MoveSortArmToAutoSafe();                                     // golden 9046AU -- offline: no-op
+//AI(ht9045-v906) 20260809: PT-W5c -- return type corrected void -> bool to match golden
+// asortarm.h:37, whose real body (asortarm.cpp:663) now wins the link. The offline no-op
+// here was `void`, which asortarm.cpp:494 had already flagged as a mismatch; C++ mangling
+// ignores the return type, so the two disagreed on the contract while still colliding as
+// one symbol. acarry.cpp:8295/8302 discard the result, so correcting it changes nothing
+// at those call sites. Declaration only -- acarry.cpp does not include asortarm.h.
+bool MoveSortArmToAutoSafe();                                     // golden asortarm.h:37
 
 //  Do_Auto_SHT1AsOutArmIsRotater -- golden acarry.h declares it but the golden
 //  .cpp NEVER defines it (decl-only).  Provide an inert active stub so the header

@@ -161,7 +161,10 @@ extern void SetAutoSkipCount(int Add);                                         /
 //==  AMR cases 410/424 that call it are dormant offline (TrayForm.bEnableAMR
 //==  false), so this never drives behaviour.  TODO(W7).
 //==============================================================================
+#if 0   // PT-W5c RETIRED (DoReceiveAutoTray)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool DoReceiveAutoTray(int /*pos*/) { return false; }
+#endif
 
 bool AvoidOutArm(AnsiString S,int Task);                                        //Sam 20191120 : add log
 bool IsOutArmSafe();

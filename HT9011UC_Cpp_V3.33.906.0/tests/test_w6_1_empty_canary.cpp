@@ -727,19 +727,49 @@ static void test_supply_gate()
     CHECK(iAutoEmptyTask == 100,
           "DoAutoEmpty case 1 dispatches to 100 when no tray is parked on MMTrayY (golden :700)");
 
-    // (b) guard precondition PRESENT (tray on MMTrayY, no IC in it, no Auto wants
-    //     a tray) -> case 1 must fall back to 1 instead of dispatching.
+    // (b) RE-BASELINED by PT-W5c (20260809).  This half used to assert
+    //     `iAutoEmptyTask == 1`, i.e. that parking a tray on MMTrayY established the
+    //     "nobody needs tray" precondition and case 1 held at 1.  That expectation was
+    //     calibrated against a SCAFFOLD predicate, not against golden:
+    //
+    //       * golden csystem.cpp:12548 HasICUnderMachine() tests
+    //         `MOT[MMTrayZ].fHasTray || MOT[MMTrayY].fHasTray` -- TRAY presence, not IC
+    //         presence -- plus MMPlate1/2.HasIC(), InArmSuck/OutArmSuck.HasIC() and
+    //         MInRotateKit/MOutRotateKit.HasIC().
+    //       * the retired scaffold (csystem_predicates.cpp) had only
+    //         `ShuttleHasIC() || IndexHasIC() || HasICUnderHotPlate()` -- every term above
+    //         was missing, so a parked tray read as "nothing under the machine".
+    //       * golden acatchtray.cpp:463 gates on `iCleanOut==1 && HasICUnderMachine()==false`.
+    //         With the real predicate a parked tray makes that FALSE, so control reaches the
+    //         `else` branch, whose first act (acatchtray.cpp:598) is
+    //         `bAutoNeedTray[iAuto]=false;` -- it OVERWRITES the flags this fixture pre-set
+    //         and recomputes them from real state.
+    //
+    //     Measured under golden semantics: HasICUnderMachine()==1, WhichAutoNeedTray()==1,
+    //     iAutoEmptyTask==100.  So parking a tray does not reach the guard at all -- it
+    //     routes to the same dispatch as half (a).  Asserting golden's actual behaviour.
     emptyFixture();
     InitAutoEmptyTask();
     iCleanOut = 1;
     for (int i = 0; i < MAX_AUTO_TRAY; ++i) bAutoNeedTray[i] = false;
     MOT[MMTrayY].SetTray(NULL_IC, "test_w6_1");   // tray present, no IC
     CHECK(MOT[MMTrayY].fHasTray && MOT[MMTrayY].HasIC() == false,
-          "fixture: MMTrayY holds an empty tray (guard precondition)");
+          "fixture: MMTrayY holds an empty tray");
+    CHECK(HasICUnderMachine() == true,
+          "a parked tray alone makes HasICUnderMachine() true (golden csystem.cpp:12548 "
+          "tests fHasTray, NOT HasIC -- the scaffold predicate missed this)");
     advanceEmptyTime();
     DoAutoEmpty();
-    CHECK(iAutoEmptyTask == 1,
-          "DoAutoEmpty case-1 'nobody needs tray' guard holds Task==1 (golden :702-707)");
+    CHECK(WhichAutoNeedTray() == 1,
+          "with a tray parked the clean-out shortcut is skipped, so the else branch "
+          "recomputes bAutoNeedTray[] and Auto 1 asks for a tray (golden acatchtray.cpp:463/598)");
+    CHECK(iAutoEmptyTask == 100,
+          "DoAutoEmpty case 1 therefore dispatches to 100 here too (golden :700)");
+    // NOT COVERED, stated rather than silently lost: golden acatchtray.cpp:700-709's
+    // per-Auto `bAutoNeedTray[iAuto]==false -> continue` guard. Reaching it needs a fixture
+    // where WhichAutoNeedTray() returns 0 while a tray IS parked, which means making every
+    // Auto genuinely not want a tray under real evaluation -- this fixture cannot, because
+    // pre-setting the flags is undone by :598. Needs its own fixture; see DEVLOG PT-W5c.
 
     iCleanOut = savedCleanOut;                     // restore
     MOT[MMTrayY].ClearTray("test_w6_1");

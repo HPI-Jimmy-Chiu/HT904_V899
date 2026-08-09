@@ -1615,4 +1615,7 @@ const bool ZAxisNotDown = false;
 // CheckInArmDestroyICFail (golden csystem.cpp / declared csystem.h:88): checks
 // whether a blown-off (destroyed) IC is stuck.  Offline: no real vacuum -> no
 // destroy failure -> report ok (true) so the place SM proceeds.
+#if 0   // PT-W5c RETIRED (CheckInArmDestroyICFail)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool CheckInArmDestroyICFail() { return true; }
+#endif

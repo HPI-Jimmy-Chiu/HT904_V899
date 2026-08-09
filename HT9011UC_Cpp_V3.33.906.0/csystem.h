@@ -365,5 +365,33 @@ typedef struct
     bool    SvaveFilebyDay;                                                     //kevin 20180816 存記錄 一天存一筆
 }ESD_GENERAL_SET;                                                               //ESD_GENERAL.ScanInterval
 extern ESD_GENERAL_SET ESD_GENERAL;                                             //kevin 20180907 add ESD Data
+
+//==============================================================================
+//  AI(W906-PT-W5-g1) 20260809 -- declarations for the eight csystem.cpp bodies
+//  this wave's group g1 lands that golden does NOT declare in csystem.h and that
+//  NO port header declared either (verified 2026-08-09: a whole-tree grep of all
+//  14,172 headers found zero declarations for any of the eight).  Golden reaches
+//  them through cmydef.h / its own file-local externs -- e.g.
+//  atester_32Site.cpp:421 and asortarm.cpp:757 each carry their OWN
+//  `extern ...` line for CheckTestSuckICOn / CheckSuckInitialStatus, which is
+//  exactly the symptom of a missing shared declaration.  Declared HERE because
+//  csystem.h is the header this group is allowed to edit and because these are
+//  csystem.cpp bodies; wording is golden's own definition signature verbatim.
+//  DEVIATION FROM GOLDEN, stated plainly: golden puts none of these eight in
+//  csystem.h.  Nothing already declared in this header is touched.
+//  `class TMyKitSuck &` is golden's own elaborated-type-specifier form (golden
+//  csystem.cpp:2465/:2493/:2522) -- it forward-declares ::TMyKitSuck without
+//  committing this header to either of the tree's two TMyKitSuck definitions
+//  (aHotPlateSubstrate.h / mykitsuck.h), so it cannot pick the wrong layout.
+//  NO default arguments are introduced by any line below.
+//==============================================================================
+bool DoIonFanAutoClean();                                                       //Isaac 20210609 : IO觸發IonFan清針
+bool CheckTestSuckICOn(class TMyKitSuck &Ptr, int iR, int iC);
+int  CheckSuckInitialStatus(class TMyKitSuck &Ptr, int iR, int iC);
+int  CheckTestSuckStatus(class TMyKitSuck &Ptr, int iR, int iC);                //Sam 20221019 : 矽格北興 Contact 模式初始檢查吸嘴上有 IC 就報警。
+bool CheckLoaderSafeDoor();
+bool CheckUnLoadSafeDoor();
+bool CheckFixTraySafeDoor();
+bool CountMotorPowerDelay();
 #endif
 

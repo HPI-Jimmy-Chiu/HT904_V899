@@ -118,6 +118,15 @@ TDateTime dtStartLot=0.0;
 TDateTime dtEndLot=0.0;
 bool bNeedManualCheckEmptyTray=false;                                           //Jimmychiu 20250826 : Open Door Check Loader After TrayEnd
 bool bNeedOneByOnePickInArm=false;                                              //Jimmychiu 20250924 : Suck one by one when a pickup error occurs at the loader.
+//AI(ht9045-v906) 20260809: PT-W5c integrate -- bDoRTCLearning is declared extern in
+// cprod.h:1360 and read at uHeaterThread.cpp:603, but its golden home is cContact.cpp:97,
+// which is untranslated, so the port carried an undefined reference that only surfaced
+// when csystem.cpp entering the link pulled uHeaterThread.cpp.obj out of the archive.
+// Golden writes `bool bDoRTCLearning;` at file scope -- zero-initialised, no ctor -- so
+// defining it here beside its cprod.h declaration is byte-for-byte golden behaviour, and
+// is more faithful than gating the reader. WHOEVER TRANSLATES cContact.cpp: golden's
+// definition is at cContact.cpp:97; delete this line then, or it is a duplicate.
+bool bDoRTCLearning=false;                                                      //Ifor 20260226 add: Contact Mode 執行RTC Learn 不開啟Hot Air
 TQPF_Timer tP62MachineStopTimer;                                                //Jimmychiu 20251205 : First Tray Check On Unloader
 // =============================================================================
 //  AI(W4) 20260626: Ungated RUN_INFO ctor/dtor + InitialData.

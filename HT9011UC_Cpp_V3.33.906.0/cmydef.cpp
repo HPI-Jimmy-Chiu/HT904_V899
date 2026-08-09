@@ -5978,7 +5978,9 @@ bool bUnbindChkNG=false;
 bool bTRAYCHKNG=false;
 #if 0 // ...resume the TODO(W6) gate
 AnsiString sUnloadBin[MAX_UNLOAD_TRAY];
+#endif // AI(W906-PT-W5c-integrate) 20260809: ungate -- csystem.cpp / bthermo.cpp / uHeaterThread.cpp bind bNeedReportBundleID; plain data, no ctor that touches a NULL global (PT_CAMPAIGN_PLAN.md section 8); see this block's head note
 bool bNeedReportBundleID[eTrayCount];
+#if 0 // ...resume the TODO(W6) gate
 TMyStringList *slHanaTrayMap[eTrayCount];
 bool bBackupAutoClean=false;                                                    //JerryYang 20250514 : fix 2DID與Auto clean衝突, 做完2DID Map再把auto clean旗標打true
 //bool bVTestNoRTBin=false;                                                     //RogerYang 20250814 : 改到TrayAssignment下  //RogerYang 20250626 偉測不可複測bin功能
@@ -6003,7 +6005,9 @@ AnsiString sFTCTAlarmStr="SysErr_FTCT_Alarm_Req_Error";                         
 bool bContinueMessageByReply71=false;                                           //RogerYang 20251107 : 瑞薩FT-CT Add Continue Form
 bool bDestoryOnSht=false;                                                       //RogerYang 20251021 : 從inarm2搬過來
 bool bBoatChangeCasset[3]={false, false, false};                                //Ifor 20251220 add:Boat Change
+#endif // AI(W906-PT-W5c-integrate) 20260809: ungate -- csystem.cpp / bthermo.cpp / uHeaterThread.cpp bind bHasTjTemp; plain data, no ctor that touches a NULL global (PT_CAMPAIGN_PLAN.md section 8); see this block's head note
 bool bHasTjTemp;                                                                //JerryYang 20251124 : Tj control吃不同的溫度range
+#if 0 // ...resume the TODO(W6) gate
 int iCheckShuttleSensor=0;                                                      //Ifor 20251204 add:After Home Need Check Shuttle Sensor
 bool bFreezeHandler=false;                                                      //Ifor 20260119 add:Freeze Handler
 bool bChangeModeING=false;
@@ -6018,9 +6022,11 @@ int iBackupWihchSht=0;
 int iBackupWihchKit=0;
 bool bFindPickICFail=false;
 int iSystemUpTime=0;
+#endif // AI(W906-PT-W5c-integrate) 20260809: ungate -- csystem.cpp / bthermo.cpp / uHeaterThread.cpp bind tUNDER_20A_Delay; plain data, no ctor that touches a NULL global (PT_CAMPAIGN_PLAN.md section 8); see this block's head note
 TQPF_Timer tUNDER_20A_Delay;                                                    //Jimmychiu 20220713 for TEMPCTRL_NEED_UNDER_20A delay
 TQPF_Timer tUNDER_20A_SHT_Delay;                                                //Jimmychiu 20220713 for TEMPCTRL_NEED_UNDER_20A delay
 const int iUNDER_20A_Delay_Sec=30;                                              //Jimmychiu 20220713 for TEMPCTRL_NEED_UNDER_20A delay
+#if 0 // ...resume the TODO(W6) gate
 bool bAutoRetryFlag=false;                                                      //JerryYang 20220901 : ASE-CL pick up error時吸取邏輯要改找吸最左上角的
 AnsiString sSiteLayoutSiteMap="";
 #endif // AI(W906-PT-W4-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045_EC.cpp binds it; see the note at this block's head
@@ -6042,7 +6048,9 @@ int iGrossUPH=0;
 #endif // AI(W906-PT-W5b-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045.cpp binds it; see this block's head note
 bool bSECSPause=false;
 #if 0 // ...resume the TODO(W6) gate
+#endif // AI(W906-PT-W5c-integrate) 20260809: ungate -- csystem.cpp / bthermo.cpp / uHeaterThread.cpp bind bHasChangePlate; plain data, no ctor that touches a NULL global (PT_CAMPAIGN_PLAN.md section 8); see this block's head note
 bool bHasChangePlate=false;
+#if 0 // ...resume the TODO(W6) gate
 bool bDoInZTeach=false;
 bool bDoOutZTeach=false;
 bool bNeedDoRemainCheck=false;

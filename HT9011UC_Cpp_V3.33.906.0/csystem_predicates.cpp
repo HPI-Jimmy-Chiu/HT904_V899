@@ -58,6 +58,8 @@
 //==============================================================================
 //  Input shuttle (front carry-kit FLCarryKit)
 //==============================================================================
+#if 0   // PT-W5c RETIRED (InputShuttleFrontHasIC)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool InputShuttleFrontHasIC()
 {
 #if HT9045_KITSUCK_GRID_AVAILABLE
@@ -66,7 +68,10 @@ bool InputShuttleFrontHasIC()
     return false;   // TODO(W6.x): FLCarryKit.UseSiteHasIC() (TMyKitSuck grid)
 #endif
 }
+#endif
 //==============================================================================
+#if 0   // PT-W5c RETIRED (InputShuttleRearHasIC)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool InputShuttleRearHasIC()
 {
     if(IniConfig.bIndexArm2SupplyLight==true ||                                 //jou 2012-10-19 Index Arm 2 supply light for CMOS
@@ -83,14 +88,20 @@ bool InputShuttleRearHasIC()
     return false;   // TODO(W6.x): BLCarryKit.UseSiteHasIC() (TMyKitSuck grid)
 #endif
 }
+#endif
 //==============================================================================
+#if 0   // PT-W5c RETIRED (InputShuttleHasIC)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool InputShuttleHasIC()
 {
     return (InputShuttleFrontHasIC() || InputShuttleRearHasIC());
 }
+#endif
 //==============================================================================
 //  Output shuttle (front/rear carry-kit FRCarryKit / BRCarryKit)
 //==============================================================================
+#if 0   // PT-W5c RETIRED (OutputShuttleFrontHasIC)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool OutputShuttleFrontHasIC()
 {
 #if HT9045_KITSUCK_GRID_AVAILABLE
@@ -99,7 +110,10 @@ bool OutputShuttleFrontHasIC()
     return false;   // TODO(W6.x): FRCarryKit.UseSiteHasIC() (TMyKitSuck grid)
 #endif
 }
+#endif
 //==============================================================================
+#if 0   // PT-W5c RETIRED (OutputShuttleRearHasIC)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool OutputShuttleRearHasIC()
 {
     if(IniConfig.bIndexArm2SupplyLight==true ||                                 //jou 2012-10-19 Index Arm 2 supply light for CMOS
@@ -115,7 +129,10 @@ bool OutputShuttleRearHasIC()
     return false;   // TODO(W6.x): BRCarryKit.UseSiteHasIC() (TMyKitSuck grid)
 #endif
 }
+#endif
 //==============================================================================
+#if 0   // PT-W5c RETIRED (OutputShuttleHasIC)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool OutputShuttleHasIC()
 {
 #if HT9045_KITSUCK_GRID_AVAILABLE
@@ -124,12 +141,18 @@ bool OutputShuttleHasIC()
     return false;   // TODO(W6.x): FRCarryKit/BRCarryKit.UseSiteHasIC() (TMyKitSuck grid)
 #endif
 }
+#endif
 //==============================================================================
+#if 0   // PT-W5c RETIRED (ShuttleHasIC)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool ShuttleHasIC()
 {
     return (InputShuttleHasIC() || OutputShuttleHasIC());
 }
+#endif
 //==============================================================================
+#if 0   // PT-W5c RETIRED (SortShuttleHasIC)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool SortShuttleHasIC()                                                         //RogerYang 20250506 Add for 9046AU
 {
 #if HT9045_KITSUCK_GRID_AVAILABLE
@@ -138,9 +161,12 @@ bool SortShuttleHasIC()                                                         
     return false;   // TODO(W6.x): OutSht3Kit.UseSiteHasIC() (TMyKitSuck grid)
 #endif
 }
+#endif
 //==============================================================================
 //  Test head / socket (FTestSuck / BTestSuck / TestSocket)
 //==============================================================================
+#if 0   // PT-W5c RETIRED (FrontTestHeadHasIC)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool FrontTestHeadHasIC()
 {
 #if HT9045_KITSUCK_GRID_AVAILABLE
@@ -149,7 +175,10 @@ bool FrontTestHeadHasIC()
     return false;   // TODO(W6.x): FTestSuck.UseSiteHasIC() (TMyKitSuck grid)
 #endif
 }
+#endif
 //==============================================================================
+#if 0   // PT-W5c RETIRED (RearTestHeadHasIC)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool RearTestHeadHasIC()
 {
 #if HT9045_KITSUCK_GRID_AVAILABLE
@@ -158,12 +187,18 @@ bool RearTestHeadHasIC()
     return false;   // TODO(W6.x): BTestSuck.UseSiteHasIC() (TMyKitSuck grid)
 #endif
 }
+#endif
 //==============================================================================
+#if 0   // PT-W5c RETIRED (TestHeadHasIC)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool TestHeadHasIC()
 {
     return (FrontTestHeadHasIC() || RearTestHeadHasIC());
 }
+#endif
 //==============================================================================
+#if 0   // PT-W5c RETIRED (TestSocketHasIC)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool TestSocketHasIC()
 {
 #if HT9045_KITSUCK_GRID_AVAILABLE
@@ -172,12 +207,18 @@ bool TestSocketHasIC()
     return false;   // TODO(W6.x): TestSocket.UseSiteHasIC() (TMyKitSuck grid)
 #endif
 }
+#endif
 //==============================================================================
+#if 0   // PT-W5c RETIRED (IndexHasIC)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool IndexHasIC()
 {
     return (TestHeadHasIC() || TestSocketHasIC());
 }
+#endif
 //==============================================================================
+#if 0   // PT-W5c RETIRED (IndexHasRealIC)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool IndexHasRealIC()                                                           //Steven 20240217 : Fixed for one cycle / clean out hang up
 {
 #if HT9045_KITSUCK_GRID_AVAILABLE
@@ -186,38 +227,51 @@ bool IndexHasRealIC()                                                           
     return false;   // TODO(W6.x): FTestSuck/BTestSuck/TestSocket.HasRealIC() (TMyKitSuck grid)
 #endif
 }
+#endif
 //==============================================================================
 //  HasICUnderHotPlate (golden csystem.cpp:12664)
 //  Golden walks the HotPlate occupancy via MOT[MHotPlate*].HasIC()/Prod hotplate
 //  state.  The hotplate MOT-index map + Prod hotplate-occupancy accessor is not
 //  wired this wave; conservative false until W6.x.
 //==============================================================================
+#if 0   // PT-W5c RETIRED (HasICUnderHotPlate)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool HasICUnderHotPlate()                                                       //Steven 20110826
 {
     return false;   // TODO(W6.x): MOT[MHotPlate*].HasIC() / Prod hotplate occupancy
 }
+#endif
 //==============================================================================
 //  Cross-arm aggregate predicates (declared in csystem.h; golden bodies are the
 //  big sHasICUnderMachine / HasAutoICInMachine surface, gated in csystem.cpp).
 //  Provide the boolean aggregates the contract names; conservative until W6.x.
 //==============================================================================
+#if 0   // PT-W5c RETIRED (HasICUnderMachine)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool HasICUnderMachine()
 {
     // TODO(W6.x): golden aggregates Loader/HotPlate/Shuttle/Index occupancy.
     return (ShuttleHasIC() || IndexHasIC() || HasICUnderHotPlate());
 }
+#endif
 //==============================================================================
+#if 0   // PT-W5c RETIRED (HasAutoICInMachine)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool HasAutoICInMachine()
 {
     // TODO(W6.x): golden walks Auto-tray IC occupancy (MOT[]/Prod).
     return false;
 }
+#endif
 //==============================================================================
+#if 0   // PT-W5c RETIRED (HasAnyICInMachine)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool HasAnyICInMachine()                                                        //kevin 20150914 : whether any tray still in machine
 {
     // TODO(W6.x): golden aggregates every IC-bearing position.
     return (HasICUnderMachine() || HasAutoICInMachine());
 }
+#endif
 //==============================================================================
 //  W6.2 additions: frozen csystem predicates/helpers the shared HP geometry
 //  leaves (ainarm_SearchPickPlate/PlacePlate) consult.  These are declared in
@@ -227,8 +281,14 @@ bool HasAnyICInMachine()                                                        
 //==============================================================================
 //  InSHT1InLF / InSHT2InLF (golden csystem.cpp:413/498): the input shuttle is in
 //  its left-feed position.  Offline there is no shuttle motion -> not in LF.
+#if 0   // PT-W5c RETIRED (InSHT1InLF)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool InSHT1InLF() { return false; }
+#endif
+#if 0   // PT-W5c RETIRED (InSHT2InLF)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool InSHT2InLF() { return false; }
+#endif
 //------------------------------------------------------------------------------
 //  InSHT1InRT / InSHT2InRT (golden csystem.cpp:458/542): the shuttle is in its
 //  right-transfer position.  The golden body reads MOT[MInShuttle*].Led[iInposLed]
@@ -238,8 +298,14 @@ bool InSHT2InLF() { return false; }
 //  the InSHT*InRT predicates.  Added because the out-arm ENGINE
 //  (DoOutArmIonFanGiveWay case 1/5, aoutarm9045.cpp:1325/1361) consults them and
 //  they had no offline home.  AI(W6.2c-OUTARM) 20260626.
+#if 0   // PT-W5c RETIRED (InSHT1InRT)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool InSHT1InRT() { return false; }
+#endif
+#if 0   // PT-W5c RETIRED (InSHT2InRT)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool InSHT2InRT() { return false; }
+#endif
 bool OutSHT1InRT() { return InSHT1InRT(); }                                      // golden csystem.cpp:699
 bool OutSHT2InRT() { return InSHT2InRT(); }                                      // golden csystem.cpp:701
 // AI(W64b-Integrate) 20260706: OutSHT1InLF/OutSHT2InLF (golden csystem.cpp:698,700)
@@ -258,6 +324,8 @@ bool OutSHT2InLF() { return InSHT2InLF(); }                                     
 // FTestSuck/BTestSuck substrate + bIndex1Suck/bIndex2Suck (cmydef.h) +
 // LastSet.iRealDummy/REALLY.  SOFT_SIMULTE not defined -> the #ifndef body is LIVE,
 // exactly as golden.
+#if 0   // PT-W5c RETIRED (CheckIndexAllSuckICFallDown)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool CheckIndexAllSuckICFallDown(bool bCheckArm1, bool bCheckArm2)              //Steven 20110725 : 修改檢查方式
 {
     bool bFail=false;
@@ -305,11 +373,15 @@ bool CheckIndexAllSuckICFallDown(bool bCheckArm1, bool bCheckArm2)              
     #endif
     return bFail;
 }
+#endif
 //------------------------------------------------------------------------------
 //  CheckSafeDoorIsClosed (golden csystem.cpp:2599): offline (no PLC / no door
 //  sensor) the door is treated as CLOSED so the #ifndef SOFT_SIMULTE guard the
 //  leaves call is non-blocking.
+#if 0   // PT-W5c RETIRED (CheckSafeDoorIsClosed)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool CheckSafeDoorIsClosed() { return true; }
+#endif
 //------------------------------------------------------------------------------
 //  DoAutoSiteMappingDropError (golden csystem.cpp:23361): only acts when
 //  bRunAutoSiteMapping==true.  Offline ASM is off -> the golden body is a no-op;
@@ -331,6 +403,8 @@ void DoAutoSiteMappingDropError()
 //  so the loop is empty -> returns true (all Z safe), which is the faithful
 //  "arms parked up" posture for an idle/empty handler.  The Sim motor ReadPos()
 //  is >=0 once homed, so a homed offline machine is also safe.
+#if 0   // PT-W5c RETIRED (AllArmZIsSafe)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool AllArmZIsSafe()                                                            // golden csystem.cpp:343
 {
     #ifdef SOFT_SIMULTE
@@ -352,6 +426,7 @@ bool AllArmZIsSafe()                                                            
     return true;
     #endif
 }
+#endif
 //------------------------------------------------------------------------------
 //  CheckIndexIsNormal -- golden csystem.cpp:12676.  The two test-head Z motors
 //  must be within their safe encoder window and not moving.  Translated VERBATIM
@@ -359,6 +434,8 @@ bool AllArmZIsSafe()                                                            
 //  preserved exactly).  Offline the Sim Gali_ReadEncoderInRandge returns true at
 //  the home/safe window and MovFlag is false when idle -> a parked index reads
 //  Normal.
+#if 0   // PT-W5c RETIRED (CheckIndexIsNormal)
+//AI(ht9045-v906) 20260809: PT-W5c -- RETIRED. The real faithful body now lives in csystem.cpp (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0809_w5c. Same convention as csystem_shims.cpp:165.
 bool CheckIndexIsNormal()                                                       // golden csystem.cpp:12676
 {
     if(MOT[MTestZ1].Gali_ReadEncoderInRandge(Prod.TestZ1_Safe)==false  ||
@@ -387,6 +464,7 @@ bool CheckIndexIsNormal()                                                       
     }
     return true;
 }
+#endif
 //------------------------------------------------------------------------------
 //  hAutoCleanHangUp -- golden csystem.cpp:157 (TQPF_Timer global, Steven
 //  20220702).  Declared extern in csystem.h; the C1 finish-check arms it

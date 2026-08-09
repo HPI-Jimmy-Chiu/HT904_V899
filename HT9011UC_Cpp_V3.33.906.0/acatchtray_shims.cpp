@@ -187,7 +187,10 @@ int  ASE_OutTrayNum[eTrayCount]      = {0};                   // golden cmydef.c
 int  iThisPortNo                     = 0;                     // golden cmydef.cpp:5843
 int  iThisPortStatus                 = 0;                     // golden cmydef.cpp:5844
 int  iPortStatus[ePortTotal]         = {0};                   // golden cmydef.cpp:5845
+#if 0   // PT-W5c RETIRED (iReceiveAutoTrayTask)
+//AI(ht9045-v906) 20260809: PT-W5c phase 2 -- RETIRED. PRE-EXISTING latent ODR violation, not this wave: the real body always existed, but its archive member was never extracted until csystem.cpp entered the link. Real body wins.
 int  iReceiveAutoTrayTask[MAX_AUTO_TRAY] = {0};               // golden csystem.h:67 (auto-receive cursors)
+#endif
 // AI(W906-AGV-PortScan-Integrate) 20260713: same-neighborhood siblings of the
 // iThisPortNo/iThisPortStatus/iPortStatus trio just above (golden cmydef.cpp
 // :5916-5924, all still inside this tree's cmydef.cpp "#if 0 // TODO(W6)"
