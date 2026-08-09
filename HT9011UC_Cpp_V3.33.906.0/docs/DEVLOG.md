@@ -5189,3 +5189,107 @@ universal-newline 轉換，`
      **每個 CRLF 檔靜默回報 0 個命中**——我這波就是這樣先錯了一次。
 - **執行模式**：非表單優先、`.dfm`／UI 不處理、每波全新 dir Debug+Release、
   行為變更單獨一顆 commit 單獨量。
+
+### PT-W5c 稽核收回來了：5 份全到，**我自己複驗確認 3 個缺陷家族，都在我剛 commit 的碼裡**
+
+用 `resumeFromRunId` 重派成功（翻譯 agent 從 cache 回放沒重寫檔，只跑 5 個 verify，
+而且看到的是整併後的樹）。10 個 agent 全部完成，0 失敗。
+
+**這一波稽核值得記的地方：它抓到的不是翻譯錯字，是「落地的碼根本沒被呼叫」。**
+而且**兩份稽核各自獨立走到同一個機制**（audit 2 finding 1 與 audit 4 finding 2），
+這是我第一次在這個專案裡看到獨立交叉確認。
+
+#### 已複驗確認（逐行開檔對過，不是照抄報告）
+
+**(A) `iClearSocketFunctionTask` 被 `#undef` 防火牆切成兩個物件**
+
+| 行 | 內容 |
+|---|---|
+| `csystem.cpp:2901` | `static int W7C2_iClearSocketFunctionTask = 0;` |
+| `:2902` | `#define iClearSocketFunctionTask W7C2_iClearSocketFunctionTask` |
+| `:4003` | `iClearSocketFunctionTask=1;` ← 在 `#undef` **之前**，展開成那個 static |
+| `:4928` | `#undef iClearSocketFunctionTask` |
+| `:4963` | `int iClearSocketFunctionTask=1;` ← 真全域（golden `csystem.cpp:134`） |
+| `:5700` | `int &Task=iClearSocketFunctionTask;` ← 在 `#undef` **之後**，綁真全域 |
+
+寫的人和讀的人走兩個不同物件；golden 只有一個。
+
+**我對稽核的更正**：它說 `:4003` 經由 `MainProc:562` 可達——`:562` 本身是 **GATED**，
+讀端唯一呼叫點 `:607` 也是 GATED，所以這個缺陷是**雙重潛伏**，不是單重。
+論點對、可達性誇大了，還是同一個老形狀。
+
+**(C) 三個 W7C2 巨集接縫讓 g5 剛落地的本體變成死碼**
+
+`:2839-2842`／`:2866-2867` 的 `static ... { return false; }` + `#define` 全部 LIVE，
+`#undef` 在 `:11607-11609`，真本體在 `:12008`／`:12021`／`:12034`，
+而**三個呼叫點（`:2968`、`:2976`、`:4676`）全部在 `#undef` 之前**，
+所以全部展開成回 false 的 static stub。**真本體全樹零呼叫點（已自己 grep 確認）。**
+後果：golden 那個「還有 picker 吸著 IC → `iOneCycleTask=4; return;`」的 one-cycle 保持
+仍然被繞過，`bNeedRetest` 仍然恆假。
+
+> **這是「build 綠證明不了接上了」的第三種形狀，而且最難抓**：
+> 不是 archive 沒抽出，是**巨集在真本體可見之前就把呼叫接走了**。
+> 連結完全乾淨，`nm` 看不到任何東西。要加進 skill 的陷阱清單。
+
+**(B) `UseFix3Cylinder` / `InitialFix3CanFullTask`：stub 假裝成「已完成」，而且在 ACTIVE 本體裡**
+
+（audit 2 finding 5 與 audit 3 finding 1 獨立同結論，我複驗過）
+port `aoutarm9045.cpp:1552` 是 `bool UseFix3Cylinder(int){ return true; }`、
+`:1555` 是 no-op；golden `aoutarm9045.cpp:794` 是**真狀態機**
+（`int &Task=iFix3CanFullTask;`、`switch(Task)`、預設 `bResult=false`，**沒做完就回 false**）。
+port `csystem.cpp:9552` 把它當完成述詞用，`:9554` 呼叫那個 no-op。
+`bUseFix3CylinderActive` **全樹沒有任何寫入者**（只有 `cmydef.cpp:3981` 初始 false 與兩個讀者）。
+
+於是「還沒完成」變成「完成了，往下走」——**gate register 自己定義的最壞缺陷類別，
+卻是透過 stub 而不是 gate 進來的，所以 register 裡沒有它**。
+`FIX3_FULL_PLACE==Fix3K_UseCylinder` 的機台上，Initial Start 不會縮回 Fix3 氣缸、
+也不會等 OutArm 安全位置檢查。golden 在讀端的註解直接寫了風險：
+「UseFix3Cylinder()未完成 導致 Shuttle鎖死Hang up」。
+
+#### 尚未複驗（下一步逐條做）
+
+audit 1 的 4 條 BLOCKING、audit 4 的另外 3 條、audit 5 的 2 條。
+形狀大多是「這個 gate 的前提已到期，而被 gate 的碼讓某個安全功能不可達」
+（`IsEMGPressed`、index servo 斷電鎖定、`CountMotorPowerDelay`、馬達上電程序、
+safe-door IO 互鎖、`ArmCanSuck4IC` 的拒絕在 7 個 RotateKit 呼叫點不可達）。
+**這些是解閘候選＝行為變更＝各自單獨量的 commit，不是翻譯缺陷。**
+
+audit 1 finding 4 另外宣稱**我 commit 的某個站點註解「事實錯誤」**，要特別查。
+audit 4 finding 7 自承「G3 的支撐引用是編造的（但底層的不存在宣稱為真）」——
+老規矩：引用錯不代表論點錯，論點對也不赦免引用造假。
+
+#### 處置
+
+(A) 與 (C) 的最小修法相同：刪掉 W7C2 的 `static`+`#define`+`#undef` 接縫，讓一切綁真本體。
+但那會**把死碼變成活碼＝行為變更**，所以要**單獨一顆 commit、單獨一次全新 Debug+Release**。
+(B) 是在消費端用大寫揭露 delta，並修掉把這對誤標成 real body 的兄弟區塊
+（`csystem.cpp:4945-4946`、`:5077`）。
+本輪**不動碼**，先把證據記下來。
+
+### 🔖 RESUME（最新）
+
+- **⚠ 第一件事仍是 `git status`。** 樹是乾淨的（只有 `b1d_idempotent_report.json`
+  測試產物噪音）。**沒有未 commit 的在製碼。**
+- **PT-W5c 全部完成並已驗證**（`6977fc3` 翻譯＋整併、`3a13082` DEVLOG、
+  Debug 128/134、Release 128/134、census 非表單 77.7%）。
+  **獨立稽核也已完成**（5 份，run `wf_bf8f25d5-59e`），全文存
+  `scratchpad/w5c_audits.txt`，我複驗過的部分存 `scratchpad/W5C_AUDIT_LEDGER.md`。
+- **接續的第一件事＝修 (A) 與 (C)，一顆 commit、一次全新 Debug+Release**：
+  刪 `csystem.cpp:2839-2842`、`:2866-2867`、`:2901-2902` 的 `static`+`#define`，
+  以及 `:4928`、`:11607-11609` 的 `#undef`。
+  `csystem.h:61` 已宣告 `extern int iClearSocketFunctionTask;`（對應 golden `csystem.h:23`），
+  所以 `:4003` 能綁 `:4963` 的真全域，不需要另加宣告。
+  **這會把死碼變活碼（one-cycle 真空保持會開始生效、`bNeedRetest` 不再恆假），
+  是行為變更，預期會動到測試——失敗集合若擴大就照停止條件停下根因。**
+  順手要改：g5 WAVE SCOPE 表把那三個列成 `ACTIVE` 是錯的（SEAM NOTE 1 反而寫對了）。
+- **然後 (B)**：在 `csystem.cpp:9550` 用大寫揭露 `UseFix3Cylinder` stub 的 delta，
+  並修 `csystem.cpp:4945-4946` 與 `:5077` 把那對誤標成 real body 的敘述。
+- **然後逐條複驗剩下的 9 條 BLOCKING**。
+  **audit 1 finding 4 宣稱我 commit 的站點註解事實錯誤，優先查這條。**
+- **再然後**：task #12 安全門一家（audit 5 finding 1 已獨立佐證「兩個 IO 後端的
+  safe-door 互鎖仍被繞過」）／task #10 GATE (W5a-G)／csystem.cpp wave 2（5,835 行）。
+- **要寫進 skill 的第三種「build 綠證明不了接上了」形狀＝巨集接縫**：
+  `#define X W7C2_X` 在真本體可見之前把所有呼叫接走，`#undef` 之後才定義真本體
+  → 真本體零呼叫點、連結乾淨、`nm` 完全看不到。
+  前兩種是「沒人引用」與「stub 先滿足需求」，這是第三種。
+- **執行模式**：非表單優先、每波全新 dir Debug+Release、行為變更單獨一顆 commit 單獨量。
