@@ -131,6 +131,31 @@ cd HT9011UC_Cpp_V3.33.906.0 && python tools/census/census.py --detail
 > （census gate map 自我指涉、字串常數被當呼叫點、census 從不比本體大小、
 > 兩次 CRLF/LF 弄壞比對）。純翻譯量錯只浪費時間；安全解閘量錯會動到機器。
 
+## 冷啟動／中斷後恢復（20260810 加入）
+
+**任何一次新的 invocation（額度重置後、當機後、cron 心跳觸發）都照這個順序做，不要憑記憶接續：**
+
+1. `git log --oneline -5` —— 看真正 commit 到哪裡。
+2. `git status --porcelain -- HT9011UC_Cpp_V3.33.906.0/` —— 樹上有沒有未 commit 的在製工作。
+   有就先收完（驗證 → 驗收 → commit），**不要疊新波**。
+3. 檢查有沒有背景 workflow / build / ctest 還在跑。**有就不要介入**，尤其不要開第二個
+   波次去改同一批檔案（PT-W6b 四個 agent 共用一個檔就造成過誤判與整波作廢）。
+4. 讀 `docs/DEVLOG.md` 檔尾的 🔖 RESUME，從那裡的「下一步」開始。
+5. **不要重跑已完成的波次。** RESUME 與 git log 對不上時，相信 git log。
+
+### 兩條續跑路徑，故意重複
+
+| 機制 | 性質 | 失效方式 |
+|---|---|---|
+| `ScheduleWakeup` | **鏈**：每輪武裝下一輪 | **一個環節斷掉就整條死**（額度中斷、或忘記武裝） |
+| `CronCreate` 心跳 | **時間表**：固定間隔觸發 | 漏掉一次不影響下一次；但 **session 結束就消失** |
+
+所以**兩個都要有**：每輪照樣武裝 `ScheduleWakeup`（有東西在跑時當保險），
+另外掛一個守衛式 cron 心跳（每 20 分鐘，先檢查有沒有在跑，有就不介入）。
+
+**兩者都是 session-scoped。** session 一結束（關掉 client、機器重開）兩者都沒了，
+沒有任何機制能跨 session 自動續跑——這一點不要對使用者含糊。
+
 ## 硬邊界（永不觸碰）
 
 - `.dfm` 不手改（Delphi 格式，走 dfm2rc）
