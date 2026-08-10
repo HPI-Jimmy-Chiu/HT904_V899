@@ -5756,3 +5756,127 @@ gate 的註記本身就是行數。這正是「波次數字要在最後一次整
 - **驗收等級提醒**：純翻譯＋零行為變更 → tier 4a（`g++ -E` 比對＋`-O3` 單檔編譯）；
   只要動到 stub 退役／解閘／掛 driver → tier 4b 全新 Debug+Release，不可抄捷徑。
   **PT-W7a 就是靠 4b 才抓到 `27-AutoClean` 那個我自己造成的 SEGFAULT。**
+
+---
+
+## PT-W7b：aTester_Rear.cpp，以及波次計畫自己的盲點——「函式之間的全域」
+
+**這一波真正的產出不是 7,573 行，是一個我自己的計畫缺陷。**
+
+### 缺陷：以「函式」為工作單位，就會漏掉 golden 在函式之間宣告的一切
+
+我用 **函式 span** 挑這 17 個標的，因為 `census.py` 是以函式計數的。於是 golden 宣告在
+**函式與函式之間** 的檔案級全域，**沒有任何 agent 擁有**。其中 8 個被翻好的本體引用，
+而全樹沒有宣告：
+
+| golden 行 | 宣告 |
+|---|---|
+| `aTester_Rear.cpp:76` | `int iHangupCTArm2=0;` |
+| `:78` | `bool bReadTorqueOK=false;` |
+| `:98` | `TQPF_Timer BTorqueTimeOutDelay;` |
+| `:4253` | `HTimer DoTestYRearDelay, DoTestYRearDelay2;` |
+| `:5358` | `TQPF_Timer iWaitIndexArm2;` |
+| `:5359` | `TQPF_Timer hTestZ1Delay;` |
+| `:5360` | `TQPF_Timer hFRTCTimeOutDelay;` |
+
+`iWaitIndexArm2` 光是 chunk 1 就引用 4 次、chunk 2 再 2 次。9 個 audit agent 裡有 3 個
+各自獨立抓到，其中 2 個還把修法寫出來了。我自己逐名複驗過才動手
+（`grep -rl "{BS}b<name>{BS}b" --include=*.cpp --include=*.h .` → 8 個全部 ABSENT）。
+
+**通則（比這個檔重要）：任何用 census 輸出挑標的的波次都有同一個洞。**
+下一波開工前，標的清單必須連「函式之間的檔案級宣告」一起掃。
+
+### 差一點就發生的事：型別選錯會「乾淨連上然後說謊」
+
+golden 把其中兩個型別成 `HTimer`。這個 port **沒有 HTimer 實作** —— golden 真正的
+`HTimer` 在 `D:{BS}HT9045{BS}elec{BS}Component{BS}htimer.h`，**在版本樹外面**，從來沒被翻。
+這個 TU 實際會綁到的是 `atester_shims.h:463`：
+
+```cpp
+struct HTimer { bool Off(){ return true; } void SetSecAndOn(double){} };
+```
+
+`Off()` 硬寫 **true**。把那些全域宣告成 `HTimer` 會編過、會乾淨連上，然後
+**把 DoTestYRear 十一個狀態的每一個 dwell 靜默歸零**；而且它根本沒有 `SetMSAndOn`／
+`SetSec`（本波各呼叫 13 次／1 次）。改用 `TQPF_Timer`（`myTimer.h`，真的 QPC 計時器，
+本波用到的四個方法全有：`Off` 47 次、`SetSecAndOn` 39、`SetMSAndOn` 13、`SetSec` 1），
+而且 golden `HTimer` → `TQPF_Timer` 這個對應**本樹已經建立過三次**
+（`acatchtray.cpp:114`、`CanBus/cMyDNM100UD.cpp:85`、`MyPLC/MyPLC_IO_Modbus.cpp:49`）。
+
+**本樹現在有五種 HTimer 形狀，其中一種會說謊**；`uHGemEquipment.cpp:3345` 自己就提議
+「收斂成一個真的共用 shim」。本波不動，記錄在案。
+
+### 交付與量測
+
+`aTester_Rear.cpp` 2,482 → **12,581** 行（git +10,133）。17 個 golden 函式、7,573 golden
+code 行全數落地，9 個 audit 全部回報 `coverage=COMPLETE`。
+
+**全新 Debug 與全新 Release，各一次，都在最後一次整併之後量：兩邊都 128/134**，
+失敗集合逐項相同、就是那 6 個標準失敗；連結 `multiple definition` 0、
+`undefined reference` 0。
+
+完成度：非表單 83.3% → **85.5%**（287,826 / 336,509 golden code 行，尚缺 48,683）。
+**全部首次過半：50.1%。** 表單仍 4.5%。
+
+`DoTestYRear`（3,871 行、109 個 case）拆成三個 agent，切點落在 `case` 邊界
+（5362..6537 / 6538..7959 / 7960..9232），由我縫合。**沒有相信它，是驗了它**：
+chunk 1 以 `bool DoTestYRear()` + `{` 開頭、chunk 2 從 `case 115:`（= golden 6538）開始、
+chunk 3 從 `case 311:`（= golden 7960）開始，三段各自結束在正確的 golden 縫合行，
+brace delta 分別 +2 / 0 / -2，合計 0。
+
+**平行寫入完全不碰共用檔**：每個 agent 只寫自己的 part 檔，縫合腳本逐項 assert
+CRLF 純度、UTF-8 合法、無 U+FFFD、無過短 part、合計 brace delta 0、
+全檔括號平衡不變、insert-only，以及**三個 DoTestYRear chunk 之間不會插進別的檔**。
+
+### 我在這一波犯的錯，以及為什麼會被抓到
+
+1. **修全域時是「照 audit 指名的修」，不是窮舉。** 補完 8 個以後 Debug build 仍然掛，
+   少了 `bP65QAReTest` / `iP65QAReTestCount`。這兩個**不是同一類**：golden 把它們宣告在
+   `cmydef.cpp:5978-5979`，而 port 的定義被關在 `cmydef.cpp:6089` 的 `#if 0` 裡。
+   PT-W7b 的新本體是它們的**第一個消費者**，所以那個 gate 的前提過期了（task #16 的形狀）。
+   照該檔自己的慣用法解閘，EOL **偵測**出是 CRLF 而非假設。
+2. **我那個號稱嚴謹的符號檢查給了假的全綠。** 我編出 object、把它的 undefined 符號和所有
+   archive 定義的符號對差集，結果回報「0 個專案層級缺口」——**那是假的**。
+   MinGW 32-bit 會在符號前加底線，真名是 `_bP65QAReTest`，而我自己的 CRT 噪音過濾
+   `^_(imp__)?[a-z]` 把它吃掉了。我會發現，只因為那個「全綠」和眼前的連結失敗互相矛盾。
+   重做後：專案層級未滿足符號**恰好 2 個**，沒有其他。
+   **這和「`nm` 輸出是 CRLF 導致 `$` 不匹配」是同一族的假全綠——這次的新實例是我的過濾器。**
+3. 第一次 gate 跑到 Release 中途我把它**停掉**，不讓它產出一個已知無效的數字；停掉之後
+   有殘留的 `cc1plus`／`g++`／`ctest` 孤兒程序，一併清掉——殘留的 ctest 會和新量測搶 CPU，
+   而那正是之前某一波假 SEGFAULT 的成因。
+4. **對 PT-W7a commit 訊息的更正**：我說 CMakeLists 三處寫過「把 ht9045_comms 加進
+   ht9045_sm 會成環」。這次**讀**（不是 grep）`:1286`／`:1308`／`:1482` 之後：三處都沒這樣說。
+   `:1286` 與 `:1482` 講的是把 `Interface/InterfaceSYS.cpp` 獨立成一個 library 會成環，
+   `:1308` 講的是 `ht9045_motor`。**sm→comms 這條邊並沒有被那個檔禁止**，只是比這些波次
+   需要的範圍更寬。gate 仍是對的決定，但我當時寫的理由是錯的。
+
+### audit 三分類（4 BLOCKING + 8 MAJOR，每一條我自己開 golden 對過）
+
+| 類別 | 內容 |
+|---|---|
+| **真的，已修** | 8 個無主全域；`GATE k8-G2`（`iHangupCTArm2` 的「全樹沒有」前提在同一波內死掉，TRAP 2 原形）。退役前先照 TRAP 3 重問「它為什麼**該**被 gated」：沒有理由存活，那是無副作用的計數器歸零，gate 掉等於丟掉 golden 行為 |
+| **audit 錯了，而且兩次錯法相同** | k4 說 `SetHangupMaxTime` 的 gate 前提「明顯錯誤」、k2 說 `ShowMainScreenPresure`「有本體」。實際上只存在**另一個 TU 裡的 `static` 函式 + `#define`**（`atester_32Site.cpp:392/395`、`atester.cpp:5498/5499`）。內部連結**無法**滿足跨 TU 呼叫，兩個 gate 都站得住 |
+| **是事實但不是缺陷** | k7 三條「離線時 `iMaxRow==0` 所以函式空轉」。`iMaxRow` 是資料驅動的（`mykitsuck.cpp:267/384`），而 `W7bK7_All_HAS_NULL_IC` 是 golden 方法的逐句複製——同樣的空 grid 下 golden 行為一模一樣 |
+| **真的，記錄但不動** | k5 的 `#define COM2 (&k5_com2_ext)` 是 macro seam，但**有界**：`:6014` `#undef`、`:6016` define、`:6858` 再 `#undef`，只覆蓋 `DoBRTCAutoModelVerify` 本體，不外洩。列入 task #15 |
+| **真的，升為 task #18（安全）** | `aTester_Rear.cpp:358-359` 的 `W64bT2_BNeedCheckGet/Set` **沒有後備儲存**：`Get` 恆回 false、`Set` 是空的，所以每個 `if(Get(...))` 守衛永久是死路。本波把它從 6 個呼叫點**擴大到 12 個**。**沒有任何掃描器看得到**：它是「用 no-op 函式表達的 gate」，census 把呼叫者算成已翻、過期 gate 掃描器看不到 gate、macro seam 掃描器找的是 `#define`。不在本波修，因為那會把 12 個死守衛變成活的、而 `false` 是寬鬆分支——那是 index destroy 路徑上的運動相關行為變更 |
+
+### 🔖 RESUME（最新）
+
+- **樹是綠的、乾淨的。PT-W7b 已 commit：`b96c13c`**（前一顆 `c38f22d` / `9ab7f20` 是 PT-W7a）。
+- **量到的**：全新 Debug **128/134**、全新 Release **128/134**，失敗集合逐項相同＝那 6 個標準失敗；
+  連結 0 dup / 0 undef。
+- **完成度（附分母與單位）**：非表單 **85.5%**（287,826 / 336,509 golden code 行，尚缺 48,683）／
+  表單 4.5%（11,820 / 261,862）／全部 **50.1%**（首次過半）。
+- **下一波標的**：`aTester_Front.cpp`（6,353 golden 行，`DoTestYFront` 家族，
+  和本波的 Rear 是對稱雙生檔，`HTimer DoTestYFrontDelay, DoTestYFrontDelay2;` 在 golden `:4071`）。
+  之後 `ainarm9045.cpp`（4,565）、`ainarm2.cpp`（3,619）。
+  `cContact.cpp`（22,324，最大）**仍然不要碰**：golden 大括號不平衡且有同名 `.dfm`。
+- **⚠ 下一波開工的第一件事（本波學到的）**：標的清單**不能只有函式**。
+  先掃 golden 該檔在「函式之間」的檔案級宣告，並逐一確認 port 有沒有；
+  `aTester_Front.cpp` 幾乎確定有同一組 timer 全域（它是 Rear 的對稱檔）。
+  另外：`HTimer` 型別的全域一律用 `TQPF_Timer`，**不要**用 `atester_shims.h:463` 那個
+  `Off()` 恆真的 stub。
+- **安全佇列（等使用者在場）**：#10（sim-motor 解閘，已擴編含 W7a-I1..I4 與 57 個未覆蓋呼叫點）、
+  #12 safe-door、#14 `UseFix3Cylinder`、**#18 `bNeedCheck` 無後備儲存（12 個死守衛）**。
+- **非安全可自己做**：#15（macro seam，現在多一個有界的 `COM2`）、#16（過期 gate，本波又證實一例）、
+  #17（PT-W5f 5 個無可達呼叫者的本體）。
