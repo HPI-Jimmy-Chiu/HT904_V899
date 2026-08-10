@@ -178,12 +178,60 @@ def port_has(name, cache={}):
     return re.search(r'\b' + re.escape(name) + r'\b', cache['blob']) is not None
 
 
+
+
+def port_definition_index(cache={}):
+    r"""name -> [relpath:line, ...] for every LIVE function definition in the WHOLE port tree.
+
+    WHY (found 20260811, PT-W7e): main() compares golden against the port file of the SAME relative
+    path only, so a body an earlier wave parked in a DIFFERENT port file reads as MISSING. For
+    ainarm2.cpp that was 55 of 82 reported targets, 37 of them parked in aHotPlateSubstrate.cpp --
+    the wave translated ~55 functions that already existed and only found out at stitch time. This
+    is the THIRD instance of "the target list is wrong"; the other two were a ; in a trailing
+    comment and a ; inside a one-line body, both now handled by defn_probe().
+
+    Member functions (Class::name) are excluded, matching main()s free-function scope, and gated
+    definitions are excluded because a gated body is not a body.
+    """
+    if cache:
+        return cache["idx"]
+    idx = {}
+    for dp, dn, fn in os.walk(PORT):
+        dn[:] = [d for d in dn
+                 if d.lower() not in (".svn", ".git")
+                 and not d.startswith("build") and not d.startswith("_")]
+        for f in fn:
+            if not f.endswith(".cpp"):
+                continue
+            fp = os.path.join(dp, f)
+            try:
+                blob = io.open(fp, "rb").read()
+            except Exception:
+                continue
+            nl = chr(13) + chr(10) if blob.count((chr(13) + chr(10)).encode()) else chr(10)
+            LL = blob.decode("utf-8", "replace").split(nl)
+            g = gatemap(LL)
+            rp = os.path.relpath(fp, PORT).replace(chr(92), "/")
+            for i, l in enumerate(LL):
+                if g[i] or not l or l[0] in " " + chr(9) + "/#}":
+                    continue
+                m = DEFN.match(defn_probe(l))
+                if not m or m.group(1) or m.group(2) in KW:
+                    continue
+                idx.setdefault(m.group(2), []).append(rp + ":" + str(i + 1))
+    cache["idx"] = idx
+    return idx
 def main():
     args = [a for a in sys.argv[1:] if not a.startswith('--')]
     if not args:
         print(__doc__)
         return 2
     rel = args[0].replace('\\', '/')
+    if os.path.isabs(rel):
+        print("pass a path RELATIVE to the tree root, e.g. ainarm2.cpp or Motor/mymotor.cpp.")
+        print("An absolute path makes os.path.join(PORT, rel) return that same path, so the tool")
+        print("would silently compare golden against itself and print a nonsense count.")
+        return 2
     gf, pf = os.path.join(GOLD, rel), os.path.join(PORT, rel)
     if not os.path.exists(gf):
         print('no such golden file: %s' % gf)
@@ -202,11 +250,23 @@ def main():
     if '--globals-only' not in sys.argv:
         miss = sorted(((n, l, s) for n, (l, s, _g) in G.items() if n not in P),
                       key=lambda x: -x[2])
-        print('\n--- FUNCTIONS to translate: %d (%d golden lines) ---'
-              % (len(miss), sum(s for _n, _l, s in miss)))
-        print('%-46s %8s %7s' % ('function', 'goldLn', 'span'))
-        for n, l, s in miss:
-            print('%-46s %8d %7d' % (n, l, s))
+        idx = port_definition_index()
+        parked = [(n, l, s, idx[n]) for n, l, s in miss if n in idx]
+        fresh = [(n, l, s) for n, l, s in miss if n not in idx]
+        print("")
+        print("--- FUNCTIONS to translate: %d (%d golden lines) ---"
+              % (len(fresh), sum(s for _n, _l, s in fresh)))
+        print("%-46s %8s %7s" % ("function", "goldLn", "span"))
+        for n, l, s in fresh:
+            print("%-46s %8d %7d" % (n, l, s))
+        print("")
+        print("--- ALREADY TRANSLATED, parked in ANOTHER port file: %d (%d golden lines) ---"
+              % (len(parked), sum(s for _n, _l, s, _w in parked)))
+        print("DO NOT translate these; tell the agents they exist and where. Deleting the")
+        print("counterpart is HOMECOMING, not stub retirement -- plan it as its own pass.")
+        print("%-40s %8s %7s  %s" % ("function", "goldLn", "span", "live body already at"))
+        for n, l, s, where in parked:
+            print("%-40s %8d %7d  %s" % (n, l, s, ", ".join(where[:3])))
 
     gl = globals_of(GL, ginside)
     absent = []
