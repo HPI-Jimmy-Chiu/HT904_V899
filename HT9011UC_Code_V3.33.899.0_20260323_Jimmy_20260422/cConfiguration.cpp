@@ -2519,7 +2519,8 @@ void TfConfiguration::InitConfigEdtList_ItemI()
         else
             elConfig->Add(edI21_9,          &IniConfig.iI21UseFailBinSetting,   ECInteger,  "Auto Site Mapping", "iI21UseFailBinSetting",                   bNoShow, bDisable, bFixedValue, 0);
 
-        if(CUSTOMER_CODE==CC_JCET)                                              //Richard 20230427 : RT mode不跑sitemapping
+        //AI(ht9045-v899) 20260810: 甬矽要求RT複測模式可選擇不跑Site Mapping, 解鎖既有[I21-10]選項
+        if(CUSTOMER_CODE==CC_JCET || CUSTOMER_CODE==CC_FOREHOPE_NINGBO)         //Richard 20230427 : RT mode不跑sitemapping
         {
             elConfig->Add(cbI21_10,    &IniConfig.bI21RTmodeDonotRunSiteMapping,ECBool, "Auto Site Mapping", "bI21RTmodeDonotRunSiteMapping",  bShow, bEnable, bReadFromFile, 0);      //Ifor 20171128 (Steven) : add Auto Site Mapping Fail Bin Setting
         }
