@@ -5880,3 +5880,71 @@ CRLF 純度、UTF-8 合法、無 U+FFFD、無過短 part、合計 brace delta 0�
   #12 safe-door、#14 `UseFix3Cylinder`、**#18 `bNeedCheck` 無後備儲存（12 個死守衛）**。
 - **非安全可自己做**：#15（macro seam，現在多一個有界的 `COM2`）、#16（過期 gate，本波又證實一例）、
   #17（PT-W5f 5 個無可達呼叫者的本體）。
+
+---
+
+## PT-W7c：中途撞上 session 上限（部分落地，未 commit 任何原始碼）
+
+**2026-08-10 約 21:56，8 個翻譯 agent 全部以 `You've hit your session limit · resets 11:10pm`
+失敗。但 18 個 part 檔裡有 11 個已經寫進磁碟** —— 這正是知識庫那條「失敗的 workflow agent
+通常已寫完檔」的又一次驗證：agent 回報失敗 ≠ 沒有產出，**唯一可靠的對帳是 `git status`**。
+
+**原始碼一行都沒動**：`aTester_Front.cpp` 乾淨，邊界守住了。HEAD 仍是 `9a3a010`。
+
+### 已落地的 11 個 part（結構已驗、**但未經 audit**）
+
+`CRLF` 純度、零 U+FFFD、各自 brace delta 0、無過短 —— 合計 3,260 行，覆蓋 **1,467 golden 行**：
+
+`00257_TestZ1OutRandge2` · `02227_InitFTestSuckTestICTask` · `03945_DoFRTCUseSocketFloat` ·
+`04073_DoFRTCAutoModelVerify` · `04922_DoIndexArm2PickUpErrNeedPiggyback` ·
+`05080_CheckAnyCaseNeedToDoArm1` · `05155_InitTestYFrontTask` ·
+`08011_InitFrontTestPurgBeforePickShuttle` · `08016_DoFrontTestPurgBeforePickShuttle` ·
+`08439_DoArm1Suck` · `08542_DoArm1D44VacCheck`
+
+（對應 group：**k5 / k7 / k8 三組寫完了**。）
+
+### 還缺的 7 個 part = 4,886 golden 行
+
+| group | part | golden 範圍 |
+|---|---|---|
+| k1 | `05165_DoTestYFront_c1.txt` | 5165..6118 |
+| k2 | `06119_DoTestYFront_c2.txt` | 6119..7035 |
+| k3 | `07036_DoTestYFront_c3.txt` | 7036..8007 |
+| k4 | `02237_DoFTestSuckTestIC.txt` | 2237..3941 |
+| k6 | `08098_FTestNeedDestroy.txt` | 8098..8108 |
+| k6 | `08110_FTestSeparateSLK.txt` | 8110..8199 |
+| k6 | `08201_FTestCombineSLK.txt` | 8201..8437 |
+
+### 🔖 RESUME（最新）
+
+- **HEAD `9a3a010`，樹上沒有任何未 commit 的原始碼改動。** `_w7c_parts/` 是未追蹤的在製產物。
+- **PT-W7c 續作步驟，照順序：**
+  1. **只重跑 k1 / k2 / k3 / k4 / k6 五組**（上表 7 個 part）。
+     `wf_w7c.js` 在 scratchpad，把 `GROUPS` 砍成這五組即可；
+     **不要重跑 k5 / k7 / k8**，它們的檔已經在磁碟上。
+     （`Workflow` 的 `resumeFromRunId` 這次幫不上：8 個 agent 都是 error，沒有 cached 完成品。）
+  2. **那 11 個已落地的 part 從來沒被 audit 過** —— 補一輪唯讀對抗性 audit，
+     檢查重點照舊：覆蓋完整性（ABBREVIATED 是 census 看不見的缺陷類）、中文註解逐字、
+     gate 前提是否為真。
+  3. **那 16 個檔案級全域是主迴圈自己補的，不要交給 agent**（兩個 agent 各寫一次就是
+     `multiple definition`）。清單用 `python tools/census/wave_targets.py aTester_Front.cpp`
+     重新產（絕對宣稱會過期，要重跑）。golden 行：
+     `:75 iHangupCTArm1` · `:78 bReadFrontTorqueOK` · `:94-:98` 五個 `TQPF_Timer`
+     （`FTestSocketClampCloseDelay` / `FTestSocketClampOpenDelay` /
+     `FTestSocketClampTimeOutDelay` / `FTorqueTimeOutDelay` / `Z1UpZ2DownTimer`）·
+     `:2232 DoFTestSuckTestICDelay` · `:2235 DoFTestSuckOffDelay` ·
+     `:3943 DoUseSocketTestYFrontDelay` · **`:4071 DoTestYFrontDelay, DoTestYFrontDelay2`** ·
+     `:4921 hCheckSockerDelay2` · `:5160 iWaitIndexArm1` · `:5161 hTestZ2Delay` ·
+     `:5162 hBRTCTimeOutDelay` · `:8010 hDoFrontTestPurgBeforePickShuttle`。
+     **`:4071` 那一對 golden 型別是 `HTimer` —— 一律宣告成 `TQPF_Timer`**，
+     絕對不要用 `atester_shims.h:463` 那個 `Off()` 恆真的 stub（會靜默把 dwell 歸零）。
+  4. 縫合：`python <scratchpad>/stitch_w7c.py`（先 dry run，18 個 part 到齊才會動手，
+     不齊會拒絕）→ `--apply`。檢查器：`check_parts_w7c.py`。
+  5. 退役 `atester_shims.cpp` 裡被真本體取代的 stub（用 `retire_w7b.py`，它會逐名 assert
+     且**逐檔偵測 EOL**）；然後 grep `tests/` 有沒有同名 TU-local stand-in。
+  6. tier-4b：全新 Debug + 全新 Release，失敗集合必須 ⊆ 那 6 個標準失敗且兩邊逐項相同。
+  7. commit + DEVLOG。
+- **完成度目前（附分母與單位）**：非表單 **85.5%**（287,826 / 336,509 golden code 行，尚缺 48,683）／
+  表單 4.5%／全部 **50.1%**。PT-W7c 完成後非表單約可到 87.4%。
+- **安全佇列（等使用者在場，不要自己做）**：#10、#12、#14、#18。
+- **非安全可自己做**：#15、#16、#17。
