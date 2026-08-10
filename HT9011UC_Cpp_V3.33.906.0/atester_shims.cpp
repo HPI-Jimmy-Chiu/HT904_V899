@@ -200,25 +200,53 @@ int iBTestSocketClampOpenTask             = 1;
 int iRearTestPurgBeforePickShuttle        = 1;
 int iIndexArm1PickUpErrNeedPiggybackTask  = 1;
 bool bArm2SuckFinish[MAX_SOCKET_ROW][MAX_SOCKET_COL] = {{false}};
+#if 0   // PT-W7b RETIRED (CheckAnyCaseNeedToDoArm2): real body now lives in aTester_Rear.cpp
 int  CheckAnyCaseNeedToDoArm2()             { return 0; }
+#endif
+#if 0   // PT-W7b RETIRED (InitTestYRearTask): real body now lives in aTester_Rear.cpp
 void InitTestYRearTask()                    {}
+#endif
+#if 0   // PT-W7b RETIRED (InitBTestSuckTestICTask): real body now lives in aTester_Rear.cpp
 void InitBTestSuckTestICTask()              {}
+#endif
 // AI(W64b-Integrate) 20260706: InitRearTestDestroyICTask/TestZ2SetPos/
 // DoRearTestDestroyIC/CheckZ2IsDown/TestZ2OutRandge now defined for real in
 // aTester_Rear.cpp (golden aTester_Rear.cpp:170-298,309-886) -- stub bodies removed.
 // AI(W5-Automation-Integrate) 20260710: InitRearTestSuckICTask/DoRearTestSuckIC
 // now defined for real in aTester_Rear.cpp too -- stub bodies removed.
+#if 0   // PT-W7b RETIRED (InitRearTestPurgBeforePickShuttle): real body now lives in aTester_Rear.cpp
 void InitRearTestPurgBeforePickShuttle()    {}
+#endif
+#if 0   // PT-W7b RETIRED (DoArm2Suck): real body now lives in aTester_Rear.cpp
 void DoArm2Suck()                           {}
+#endif
+#if 0   // PT-W7b RETIRED (DoArm2D44VacCheck): real body now lives in aTester_Rear.cpp
 void DoArm2D44VacCheck()                    {}
+#endif
+#if 0   // PT-W7b RETIRED (BTestNeedDestroy): real body now lives in aTester_Rear.cpp
 bool BTestNeedDestroy()                     { return false; }
+#endif
+#if 0   // PT-W7b RETIRED (DoBTestSuckTestIC): real body now lives in aTester_Rear.cpp
 bool DoBTestSuckTestIC()                    { return true;  }
+#endif
+#if 0   // PT-W7b RETIRED (DoRearTestPurgBeforePickShuttle): real body now lives in aTester_Rear.cpp
 bool DoRearTestPurgBeforePickShuttle(int /*isp*/) { return true; }
+#endif
+#if 0   // PT-W7b RETIRED (DoTestYRear): real body now lives in aTester_Rear.cpp
 bool DoTestYRear()                          { return true;  }
+#endif
+#if 0   // PT-W7b RETIRED (TestZ2OutRandge2): real body now lives in aTester_Rear.cpp
 bool TestZ2OutRandge2()                     { return false; }
+#endif
+#if 0   // PT-W7b RETIRED (BTestCombineSLK): real body now lives in aTester_Rear.cpp
 bool BTestCombineSLK(bool /*bReset*/)       { return true;  }
+#endif
+#if 0   // PT-W7b RETIRED (BTestSeparateSLK): real body now lives in aTester_Rear.cpp
 bool BTestSeparateSLK(bool /*bReset*/)      { return true;  }
+#endif
+#if 0   // PT-W7b RETIRED (DoBRTCAutoModelVerify): real body now lives in aTester_Rear.cpp
 bool DoBRTCAutoModelVerify(bool /*bInitial*/){ return true; }
+#endif
 
 // ---- fContact (offline contact-mode form) ----------------------------------
 // AI(W906-W7-L2) 20260803: bSetupStart/bSetupStep added to the init list and the two

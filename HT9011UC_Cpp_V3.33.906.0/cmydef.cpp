@@ -6087,8 +6087,10 @@ bool bInitialCylinderCheck=false;
 #endif // AI(W906-PT-W5f-integrate) 20260810: ungate -- DoInitialCylinderCheck (csystem.cpp wave 2) needs its task cursor. Plain data, no ctor touching a NULL global (PT_CAMPAIGN_PLAN.md section 8).
 int iInitialCylinderCheckTask=1;
 #if 0 // ...resume the TODO(W6) gate
+#endif // AI(W906-PT-W7b-integrate) 20260810: ungate -- aTester_Rear.cpp's DoTestYRear (golden :5362-9232) and DoBTestSuckTestIC (golden :2222-3878), landed this wave, are the FIRST consumers; the gate's "nobody needs these" premise is now false (60 undefined-reference lines, 2 distinct symbols, measured 20260810). golden home cmydef.cpp:5978-5979.
 int iP65QAReTestCount=0;                                                        //Ifor 20260407 add: [P65] ARM QA Mode ReTest Counter
 bool bP65QAReTest=false;                                                        //Ifor 20260407 add: [P65] QA ReTest flag
+#if 0 // ...resume the TODO(W6) gate
 bool bWaitSECS=false;                                                           //KevinCheng 20250919 : Wait SECS
 bool bEject=false;                                                              //JerryYang 20251020 : 渠梁半清機功能
 #endif // AI(W906-PT-W5f-integrate) 20260810: ungate -- csystem.cpp:23652 (CheckAllAutoTrayEjectFinsh, landed this wave) actively reads bNeedEject[i], and this is its ONLY definition, so the link now requires it. Plain bool array, no ctor that touches a NULL global (PT_CAMPAIGN_PLAN.md section 8). NOTE: asendic_Auto.cpp:354/:404 hold a MACRO SEAM (static W7L1A_bNeedEject + #define) that keeps THAT file on its own private copy -- tracked separately, do not assume this ungate reconnects it.
