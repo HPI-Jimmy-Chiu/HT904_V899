@@ -5948,3 +5948,108 @@ CRLF 純度、UTF-8 合法、無 U+FFFD、無過短 part、合計 brace delta 0�
   表單 4.5%／全部 **50.1%**。PT-W7c 完成後非表單約可到 87.4%。
 - **安全佇列（等使用者在場，不要自己做）**：#10、#12、#14、#18。
 - **非安全可自己做**：#15、#16、#17。
+
+---
+
+## PT-W7c（完成）：一個「忠實卻仍然死鎖」的 gate 預設值
+
+額度中斷後續跑成功。只重跑 k1/k2/k3/k4/k6 五組（7 個 part），沒有重做已落地的 k5/k7/k8。
+
+### 本波最重要的發現：GATE K1F7 讓 index 測試狀態機永久停住
+
+golden `aTester_Front.cpp:5689-5690`：
+
+```cpp
+if(DoTestYFrontDelay2.Off()==false || CCDInterfaceForm->bCCDProgramExistence==false)
+```
+
+翻譯把第二個 disjunct 換成字面 `true`。**那是語意上忠實的選擇** —— 離線確實沒有 CCD 程式，
+所以 `bCCDProgramExistence==false` 為真。**但它照樣死鎖**，因為同一個 gate 也移掉了 golden
+`:5695` 的 `CCDInterfaceForm->CCDIdentificationOpen()`：沒有任何東西能讓那個程式「存在」，
+條件永遠為真，底下的 `return false` 每個 tick 都執行，`Task` 從來沒被寫入，
+`case 75` 永久停住。而 gate 自己的註解宣稱「一定會從 timeout arm 離開」—— timeout arm
+根本到不了，因為 return 先發生。
+
+**不是死碼**：`55→60→61→62→2000` 走 else（`atester_shims.cpp` 建構 `bCCDDummyRum=true`）
+`→70`，而 `case 70` 只需要 `IniConfig.bEnableCCDUSETCPIP` 加 `bC02InstallCCD`，
+兩者都被 `CosFunction.cpp` 的客戶 profile 設為 true `→72→73→75`。
+
+**修法**：換成 `false`，走 golden **自己**為「CCD 不回應」準備的出口 —— 20 秒
+`DoTestYFrontDelay` timeout arm，`iCCDTimeOutCount++` 然後 `Task=73`。
+已驗證可行：`TQPF_Timer::Off()` 對從未 arm 過的計時器回傳 true
+（`myTimer.cpp:40-44` 回 `now>=rEnd`，而 ctor 讓 `rEnd` 停在建構時的計數值），
+所以第一個 tick 就會走那條 arm。並且與同一段 golden 碼的樹內先例一致：
+`atester.cpp:5878-5880` gate 掉同一個 CCD 結果輪詢之後是**前進**，不是停住。
+
+由本波自己的對抗性 audit 找到；**我逐行對 golden 驗過才動手**
+（「agent 的引用比 agent 的程式碼更常錯」）。
+
+### 我自己的過度 gate，用同一種方式被抓到
+
+我為 `fMain->chkReadTorque` 寫的 `GATE (W7c-I1)` 包了 **7 行，實際只有 4 行需要**。
+另外 3 行用的是**可用的 seam** `W64B_FMAIN_CHKREADTORQUE*`（本檔 `:1096-1099`），
+本來就編得過、而且是正確的翻譯形式 —— gate 掉它們等於**靜默丟掉真實行為**，
+正是這一波在稽核的那類缺陷。已解閘；最終 3 行 LIVE / 4 行 gated。
+
+### 交付與量測
+
+`aTester_Front.cpp` 2,437 → **12,074** 行（+9,637）。16 個 golden 函式、6,353 golden code 行
+全數落地，9 個 audit 全回報 `coverage=COMPLETE`。
+
+**全新 Debug 128/134、全新 Release 128/134**，失敗集合逐項相同＝那 6 個標準失敗；
+連結 0 dup / 0 undef。`test_w6_4_tester` **通過**，值得記一筆：它 `:167` 的註解說自己的預期
+建立在 `DoTestYFront()` 回傳（已退役的）shim 的 `true` 上。
+
+完成度：非表單 85.5% → **87.4%**（294,179 / 336,509 golden code 行，尚缺 42,330）；
+全部 50.1% → **51.1%**；表單仍 4.5%。
+
+`DoTestYFront`（2,843 行、88 個 case）拆三段（5165..6118 / 6119..7035 / 7036..8007）。
+**chunk 1 用「反向重建」驗證而非用宣稱**：把 `#else` arm 丟掉、`#if 0` arm 留下，
+可以還原出 golden，**只有一處不同** —— golden `:5210` `static bRetryRTC=false;` →
+`static int bRetryRTC=false;`，那是 ISO C++ 必須的 K&R implicit-int 修正，
+也是 PT-W7b 在 Rear 對應的 `:5412` 做過的同一個修正。
+
+新工具 `tools/census/part_coverage.py` 量到覆蓋率 **99.10%**（5,968 行中 5,914 行在場），
+54 個 miss **全部**可歸因於已知 shim（`COM2->` scoped macro、
+`fiosetview->ProcessIndexSuckDestroy1`、`TestSocket.CopyFrom`、
+`BTestSuck.CheckVaccumIsIniaialON`、`FTestSuck.bNeedCheck`、VCL 表單控件、
+以及**保值**的 `CONTACT_NORMAL` 改名）。
+
+### 整併（全部刻意由主迴圈做）
+
+- **16 個檔案級全域由我加，不交給 agent**（兩個 agent 各寫一次就是 multiple definition）。
+  清單由 `tools/census/wave_targets.py` 產出 —— 那個工具正是 PT-W7b 在 Rear 漏掉同一類之後寫的
+  —— 並在整併時重新驗證仍然缺席（絕對宣稱會過期）。
+  **Front 有 16 個，Rear 只有 8 個，所以這個洞在這裡大一倍。**
+- golden `:4071` 的 `DoTestYFrontDelay/DoTestYFrontDelay2` 在 golden 是 `HTimer`，這裡宣告成
+  `TQPF_Timer`：port 唯一的 `HTimer` 是 `atester_shims.h:463`，`Off()` 硬寫 true，
+  忠實宣告會編過、乾淨連上、然後**把每個 dwell 靜默歸零**。
+  **三個 agent 各自獨立、未被提示地指出這一點。**
+- 5 行被 part 檔注入在**檔案中間**的 `#include`（02237、08110）已上移到檔首 ——
+  縫合後的 TU 裡的 mid-file include 是編譯順序風險。另加
+  `MessageDef.h` / `myswitch.h` / `mysensor.h` / `mycylin.h` / `Automation/AMR.h`，
+  每一個都先確認**有可連結的定義**才加。
+- 14 個 stub 退役（`atester_shims.cpp` 390 → 417 行）。腳本對
+  `DoIndexArm2PickUpErrNeedPiggyback` **拒絕動作**（它沒有 stub），沒有亂猜。
+- `ShowMyMessageUp` 維持 gated，與 Rear 已 commit 的 `GATE K1G3` 一致。有一條 audit 主張這樣會
+  刪掉 `StopAllMotor` + Pause；**我無法證實也無法否證**，因為那個函式在 port 和 golden 樹裡
+  都沒有定義（和 `HTimer` 一樣住在樹外的 component library）。**記為未證實，不當成事實轉述。**
+
+### 🔖 RESUME（最新）
+
+- **樹是綠的、乾淨的。PT-W7c 已 commit：`dff502d`。**
+  近期序列：`dff502d`（W7c）← `23e076c`（part_coverage 工具）← `619e4e6`（W7c 中斷紀錄）
+  ← `9a3a010`（wave_targets 工具）← `2e19ba7`／`b96c13c`（W7b）← `c38f22d`／`9ab7f20`（W7a）。
+- **量到的**：全新 Debug 128/134、全新 Release 128/134，失敗集合逐項相同＝6 個標準失敗；0 dup / 0 undef。
+- **完成度（附分母與單位）**：非表單 **87.4%**（294,179 / 336,509 golden code 行，尚缺 42,330）／
+  表單 4.5%（11,820 / 261,862）／全部 **51.1%**。
+- **下一波標的**：`ainarm9045.cpp`（4,565 golden 行）。之後 `ainarm2.cpp`（3,619）。
+  `cContact.cpp`（22,324）**仍然不要碰**（golden 大括號不平衡＋同名 `.dfm`，要使用者定表單策略）。
+- **開工第一件事（三波累積下來的規矩）**：
+  `python tools/census/wave_targets.py <檔名>` —— 它會同時列「缺的函式」與
+  **「函式之間的檔案級全域」**，後者是 PT-W7b 漏掉、PT-W7c 大一倍的那個洞。
+  全域一律由主迴圈加；golden 型別是 `HTimer` 的一律宣告 `TQPF_Timer`。
+  收工前用 `python tools/census/part_coverage.py` 量覆蓋率並**逐條讀 miss 清單**。
+- **安全佇列（等使用者在場）**：#10、#12、#14、**#18（`bNeedCheck` 無後備儲存，Rear+Front 對稱，要一起修）**。
+- **非安全可自己做**：#15（macro seam，現在多了 W7b 的 COM2 與 W7c 的 k5f_com2_ext，兩者都有界）、
+  #16（過期 gate，本波又證實一例：`cmydef.cpp` 的 `bP65QAReTest`／`iP65QAReTestCount`）、#17。
