@@ -872,7 +872,10 @@ AnsiString TMyCylinder::GetOffTimeAlarm()
 //---------------------------------------------------------------------------
 // AI(W6.0) 20260626: InitialCylinderName (cinitial god-stack) not needed by the
 //   W6.1 canary; provide a no-op so the header decl links.  TODO(W6.x).
+#if 0   // PT-W7a RETIRED (InitialCylinderName)
+//AI(ht9045-v906) 20260810: PT-W7a -- RETIRED. cinitial.cpp now holds golden's real body (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0810_w7a.
 void InitialCylinderName()
 {
 }
+#endif
 //---------------------------------------------------------------------------

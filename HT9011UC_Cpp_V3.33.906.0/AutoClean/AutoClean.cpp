@@ -905,6 +905,28 @@ void CleanSetSpeed(bool bBackup)
             SetSortArmSpeed(false);
     }
 
+#if 0 // GATE (W7a-I4): golden AutoClean.cpp:770-815 -- the motor-speed PUSH tail.
+//   WHY GATED, and why this is behaviour-neutral: every call below reaches
+//   SetMotorAccelSpeed (cinitial.cpp:16518) / SetMotorScaleSpeed (cinitial.cpp:13296),
+//   whose golden bodies deref MOT[Index].Motor->Enable UNGUARDED. Golden may do that
+//   because golden ALWAYS constructs the motor objects in InitialMotorParameter and then
+//   merely sets Enable=false offline (attach-then-disable, never NULL). In this port that
+//   construction is still behind GATE (W5a-G), so MOT[].Motor is NULL offline and the
+//   deref SEGFAULTs -- measured 20260810: PT-W7a retired the acatchtray_shims.cpp no-op
+//   stubs these calls used to land on, and ctest went 128->127 with 27-AutoClean SEGFAULT
+//   in BOTH Debug and Release. Until W5a-G lands, these pushes were ALREADY no-ops (the
+//   retired stubs did nothing), so gating them reproduces HEAD's behaviour exactly rather
+//   than inventing new behaviour.
+//   Deliberately NOT done instead: (a) adding `MOT[i].Motor &&` to the two real bodies --
+//   rejected because for a MOTION-SPEED setter, silently skipping the push leaves a motor
+//   at whatever rate was last programmed, which is a worse failure mode than crashing;
+//   (b) a file-local static no-op shadow here -- rejected because that is exactly the
+//   macro/static-seam class task #15 exists to remove, and it would hide the call entirely.
+//   RETIRES WHEN: task #10 (GATE W5a-G) constructs MOT[].Motor with Enable=false. At that
+//   point expired_gate_scan.py will surface this gate on its own.
+//   NOTE: `int iMot` (below) is declared and used only inside this block; nothing after
+//   :953 reads it, so gating the whole range leaves no dangling reference.
+//   AI(pt-wave) 20260810
     SetMotorAccelSpeed(MInArmX      ,ArmSpeed[InArm].iACDCBodySP);
     SetMotorAccelSpeed(MInArmY      ,ArmSpeed[InArm].iACDCBodySP);
     SetMotorScaleSpeed(MInArmX      ,ArmSpeed[InArm].iBodySP);
@@ -951,6 +973,7 @@ void CleanSetSpeed(bool bBackup)
     SetMotorScaleSpeed(MInShuttle1      ,SHSpeed.iSH1ACDCSp);
     SetMotorAccelSpeed(MInShuttle2      ,SHSpeed.iSH2Sp);
     SetMotorScaleSpeed(MInShuttle2      ,SHSpeed.iSH2ACDCSp);
+#endif // GATE (W7a-I4)
 
     fShowMessage->ShowSpeed(IniConfig.bG05ShowSpeedMessage);
 }

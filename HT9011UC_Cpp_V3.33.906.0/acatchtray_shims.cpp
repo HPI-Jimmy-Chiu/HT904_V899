@@ -127,7 +127,10 @@ void InitialDoMagazineAMRTrayFeed()             {}
 // DoAutoColor: RETIRED BODY (W7-L1 Wave 1 "Color") -- real body now in
 // asendic_Color.cpp, and it is VOID (golden asendic_Color.h:20); this stand-in
 // wrongly returned bool.  All 3 ported call sites discard the value.
+#if 0   // PT-W7a RETIRED (SetUnloaderInfoFile)
+//AI(ht9045-v906) 20260810: PT-W7a -- RETIRED. cinitial.cpp now holds golden's real body (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0810_w7a.
 void SetUnloaderInfoFile(int)                   {}
+#endif
 void InitDoOutArmTeachAlignmentProcessTask()    {}
 void NewRecordProcess(AnsiString, AnsiString, AnsiString) {}
 
@@ -163,8 +166,14 @@ int iReadCIDAction       = 0;                   // golden -- ePortTotal at rest 
 // Verified in this pass -- all four production callers include asendic.h:
 // acatchtray.cpp:90, asendic_Auto.cpp:122, asendic_Auto2.cpp:100,
 // asendic_Auto_RT.cpp:201.
+#if 0   // PT-W7a RETIRED (SetMotorScaleSpeed)
+//AI(ht9045-v906) 20260810: PT-W7a -- RETIRED. cinitial.cpp now holds golden's real body (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0810_w7a.
 void SetMotorScaleSpeed(int, int)                    {}                  // offline: no-op
+#endif
+#if 0   // PT-W7a RETIRED (SetMotorAccelSpeed)
+//AI(ht9045-v906) 20260810: PT-W7a -- RETIRED. cinitial.cpp now holds golden's real body (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0810_w7a.
 void SetMotorAccelSpeed(int, int)                    {}                  // AI(W906-AutoCleanFoundation) 20260721: golden cinitial.h:51 sibling -- offline no-op
+#endif
 void ClearAutoChangingWarn(int)                      {}                  // offline: BinDisp warn-clear no-op
 
 // =============================================================================

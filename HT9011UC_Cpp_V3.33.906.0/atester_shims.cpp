@@ -269,7 +269,10 @@ void EPSwitchOnOff(int /*iArm*/)                      {}             // offline:
 //AI(ht9045-v906) 20260809: PT-W5c phase 2 -- RETIRED. PRE-EXISTING latent ODR violation, not this wave: the real body always existed, but its archive member was never extracted until csystem.cpp entered the link. Real body wins.
 bool CheckHeaterOK()                                  { return true; }  // offline: heater ready
 #endif
+#if 0   // PT-W7a RETIRED (IsNNMode)
+//AI(ht9045-v906) 20260810: PT-W7a -- RETIRED. cinitial.cpp now holds golden's real body (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0810_w7a.
 int  IsNNMode()                                       { return 0; }     // offline: not NN mode
+#endif
 // CheckInArmFinishAllPickerAction() / MoveInArm2XYToWait() are defined ONCE in
 // acatchtray_shims.cpp (golden ainarm2.h:95 / :146).  Declared in atester_shims.h
 // so atester.cpp sees them, but NOT re-defined here (would be a multiple-definition

@@ -1602,7 +1602,10 @@ void DisableAutoSiteMapWhenCleanOut() {}
 
 // SetMotorSpeed (golden cinitial.cpp:5022): pushes the configured motor speed
 // table to the controllers.  Offline no-op (no real controllers).
+#if 0   // PT-W7a RETIRED (SetMotorSpeed)
+//AI(ht9045-v906) 20260810: PT-W7a -- RETIRED. cinitial.cpp now holds golden's real body (its golden home); keeping this stand-in is a multiple-definition error, measured in build_0810_w7a.
 void SetMotorSpeed() {}
+#endif
 
 // DoInArmAutoSiteMapping (declared csystem.h:200): auto-site-map step pump.
 // Offline: not running auto-site-map -> false (DoInArm_9045_1x1_1 falls through).

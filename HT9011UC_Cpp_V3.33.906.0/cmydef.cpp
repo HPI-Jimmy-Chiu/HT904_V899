@@ -6048,7 +6048,9 @@ AnsiString sSiteMapASECL="";
 #endif // AI(W906-PT-W4-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045_EC.cpp binds it; see the note at this block's head
 AnsiString sBinMap="";
 #if 0 // ...resume the TODO(W6) gate
+#endif // AI(W906-PT-W7a-integrate) 20260810: ungate -- cinitial.cpp:9497 (landed this wave) assigns iWhoTrigerASV and this is its only definition. Plain int, no ctor touching a NULL global (PT_CAMPAIGN_PLAN.md section 8).
 int iWhoTrigerASV=0;
+#if 0 // ...resume the TODO(W6) gate
 #endif // AI(W906-PT-W5b-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045.cpp binds it; see this block's head note
 bool bNeedDoRunCheck;
 #if 0 // ...resume the TODO(W6) gate

@@ -540,7 +540,21 @@ static const int eAtkTfMoveFixIC = 6;                                           
 static void InitialDoPickFromMagazineBuffer()                        {}         // (G1) golden Magazine.h:151      -- offline: magazine-buffer pick cursor not re-armed
 static int  SearchTrayToPick_Buffer()                                { return -1; } // (G2) golden aoutarm9045.h:64 -- offline: golden's own "not found" sentinel
 static void InitAOIFunction()                                        {}         // (G3) golden fAOI.h:418          -- offline: no AOI sub-SM to reset
-static void SetOutArmSpeed(bool /*bShow*/)                           {}         // (G4) golden cinitial.h:47       -- offline: computed speed not pushed to servo  ** SAFETY-ADJACENT **
+//AI(ht9045-v906) 20260810: PT-W7a integrate -- RENAMED, not retired, and the reason matters.
+// cinitial.cpp now holds golden's REAL SetOutArmSpeed (cinitial.cpp:10554), and cinitial.h's
+// declaration now reaches this TU, which made `extern` followed by `static` a hard compile
+// error here -- trap 4 (the static shadow) finally surfacing loudly instead of silently.
+// Deleting the shadow would bind the three call sites below (:1722/:1735/:1750) to the real
+// body, and that body calls SetMotorAccelSpeed/SetMotorScaleSpeed on MOutArmX/MOutArmY/
+// MOutArmPitch. This file's OWN note at :249 already calls that "SAFETY-ADJACENT (motion
+// speed)". Per the campaign policy, a safety-critical behaviour change queues for the user
+// rather than landing unattended, so behaviour is preserved EXACTLY as it was: the call sites
+// keep calling a private no-op, now under a name that cannot collide and cannot be mistaken
+// for the real thing. No macro, no shadow -- the code says what it does.
+// UN-GATE TASK: delete this stub, restore the three call sites to SetOutArmSpeed(true), and
+// measure on its own fresh Debug+Release. Same for AutoClean/AutoClean.cpp:177, which holds
+// an identical shadow that did not error only because cinitial.h does not reach it.
+static void W7A_OutArmSpeed_NoOp_PendingSafetyReview(bool /*bShow*/) {}          // (G4) golden cinitial.h:47       -- offline: computed speed not pushed to servo  ** SAFETY-ADJACENT **
 static void CheckOutArmXYScaleByAutoTeach(int & /*iXPos*/, int & /*iYPos*/, int /*iArea*/) {} // (G5) golden AutoAlignment/AutoAlignment.h:254 -- offline: leave caller's taught position uncorrected
 static int  LoadTrayCanUse8Suck()                                    { return 0; }  // (G6) golden ainarm2.h:200    -- offline: 0 (!=1) keeps the ORDINARY, non-8-nozzle path
 
@@ -1719,7 +1733,7 @@ void OutArmAddSpeed()
         if(AutoArmSpeed[OutArm].iACDCBodySP<=(ArmSpeed[OutArm].iACDCBodySP-5))
             AutoArmSpeed[OutArm].iACDCBodySP+=5;
 
-        SetOutArmSpeed(true);
+        W7A_OutArmSpeed_NoOp_PendingSafetyReview(true);           //AI(ht9045-v906) 20260810: PT-W7a -- was SetOutArmSpeed(true); see the stub note. Behaviour unchanged (no-op); restore this call when the safety review lands.
     }
     else
     {
@@ -1732,7 +1746,7 @@ void OutArmAddSpeed()
             if(AutoArmSpeed[OutArm].iACDCBodySP<ArmSpeed[OutArm].iACDCBodySP)
                 AutoArmSpeed[OutArm].iACDCBodySP=ArmSpeed[OutArm].iACDCBodySP;
 
-            SetOutArmSpeed(true);
+            W7A_OutArmSpeed_NoOp_PendingSafetyReview(true);           //AI(ht9045-v906) 20260810: PT-W7a -- was SetOutArmSpeed(true); see the stub note. Behaviour unchanged (no-op); restore this call when the safety review lands.
         }
     }
 }
@@ -1747,7 +1761,7 @@ void OutArmSubSpeed()
 
         if(AutoArmSpeed[OutArm].iACDCBodySP>25)
             AutoArmSpeed[OutArm].iACDCBodySP-=2;
-        SetOutArmSpeed(true);
+        W7A_OutArmSpeed_NoOp_PendingSafetyReview(true);           //AI(ht9045-v906) 20260810: PT-W7a -- was SetOutArmSpeed(true); see the stub note. Behaviour unchanged (no-op); restore this call when the safety review lands.
     }
 }
 //-----------------------------------------------------------------------------
