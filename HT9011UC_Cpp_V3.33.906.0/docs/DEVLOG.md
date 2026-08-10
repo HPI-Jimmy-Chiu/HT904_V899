@@ -6132,3 +6132,75 @@ if(DoTestYFrontDelay2.Off()==false || CCDInterfaceForm->bCCDProgramExistence==fa
   尚缺 42,247）／表單 4.5%／全部 **51.2%**。PT-W7d 完成後非表單約可到 88.7%。
 - **安全佇列（等使用者在場）**：#10、#12、#14、#18。
 - **非安全可自己做**：#15、#16、#17。
+
+---
+
+## PT-W7d 整併：連結收斂了，但 `27-AutoClean` 又 SEGFAULT（未 commit）
+
+樹上有未 commit 的在製工作。**Debug 127/134**：6 個標準失敗 **加上 `27-AutoClean` SEGFAULT**，
+超出驗收線，所以不 commit。
+
+### 整併做了什麼（連結已收斂：build rc=0、0 dup、0 undef）
+
+- `ainarm9045.cpp` 2,332 → **11,586 行**，65 個 part 縫入（`stitch_w7d.py` 全部斷言通過，
+  含 bare-LF 純度、合計 brace delta 0、insert-only）。
+- **退役 41 個 stub**：`ainarm9045.cpp` 內部一行 stub **35 個**、
+  `ainarm9045_2x4_16_shims.cpp` **6 個**。
+  後者只退 6 個而非 7：`:25` 的 `int CheckLoaderHasTray()`（無參數）是**不同 overload**，
+  留著；只有 `:26` 的三參數版本會撞。
+- **解閘 `cmydef.cpp` 2 個過期 gate**：`iCheckShuttleSensor`（golden `:5937`）、
+  `bAutoRetryFlag`（golden `:5954`），本波本體是它們的第一個消費者。
+- **刪掉安全相關的 `GATE k1-G1`**（見前一節；前提在同一波內就過期）。
+
+### 我自己在這一輪犯的三個錯
+
+1. **`d1cda91` 的正則修正只補了一半。** 我修掉「行尾註解裡的 `;`」，但**一行 stub 的 `;` 在
+   body 裡**：`int CheckShuttleSensor_9045_2x5(int,bool,bool){ return 0; }` 一樣讓 `[^;]*$` 失配。
+   結果 **65 個目標裡有 35 個其實早就存在**，是縫合後的 35 個 redefinition 才抓到。
+   **`DEFN` 還要再修一次**：定義行的判準應該是「有 `{`」，不是「沒有 `;`」。
+2. **7 個全域我寫錯了 3 個。** `wave_targets.py` 只**印**型別與名字，陣列維度在另一個 group ——
+   我把它丟了。`CheckInArmDestroyActiveDelay` 與 `bMyFlag` 是
+   `[MAX_ARM_Row][MAX_ARM_Col]` 陣列，我宣告成純量（前者**還編得過**）；
+   `iInArmXStep`／`iInArmYStep` golden 初值是 **1**，我寫 **0**。
+   編譯器只抓到 `bMyFlag`（因為 golden `:8637` 有 `ZeroMemory(bMyFlag, sizeof(bMyFlag))`）；
+   **錯的初值不會有任何東西告訴我**——這正是我一直在別人輸出裡抓的那類缺陷。已全部對 golden 改正。
+3. **我在背景指令裡多寫了一個 `&`**，把 gate 變成 detached，等於放棄完成通知；
+   已殺掉重新以 attached 方式跑。另外 `ainarm9045.cpp` 在整併中途被轉成 CRLF，
+   `core.autocrlf=true` 會正規化所以 commit 內容不受影響（diff 是 9,174 insertions / 0 deletions），
+   但**我查不出是誰轉的，就不編造原因**。
+
+### AutoClean SEGFAULT：已定位到兩個候選，尚未 bisect
+
+測試最後一個 PASS 是 `DoPickFromShuttle reaches case 10`。`AutoClean/AutoClean.cpp` 呼叫本波
+兩個新登場的真本體：**`MoveInArmXYToShuttle_9045`（6 處）**、**`InArmSideAllClose`（1 處）**，
+兩者本波之前都是 no-op stub。
+
+- `InArmSideAllClose`（`:5983`）是純讀取，而且**與 golden `:4231-4249` 逐字相同**；
+  它索引 `Prod.fInArmSuck4x8[iSht][i][j]`，迴圈上界是 `InArmSuck.iShtRow`。
+  我查過 golden `cprod.h:819` 也是 `bool fInArmSuck4x8[2][2][8]`（**與 port 一致，不是 port 宣告錯**），
+  而 `aHotPlateSubstrate.h:458` 說 ctor 會把 `iShtRow` 初始化成離線安全值 ——
+  **所以它比較不可能是兇手**。
+- 因此主嫌是 **`MoveInArmXYToShuttle_9045`**（85 golden 行、6 個呼叫點）。
+  **我還沒 bisect 確認**，這一點要說清楚，不要當成已證實。
+
+**下一步的處置方向**（與 `GATE (W7a-I4)` 同一形狀且有先例）：
+在 `AutoClean.cpp` 的呼叫點 gate 掉，這會**還原本波之前的行為**（兩者本來就是 no-op），
+而不是發明新行為；真本體對其他呼叫者仍然是活的。先 bisect 出是哪一個，只 gate 那一個。
+
+### 🔖 RESUME（最新）
+
+- **⚠ 工作樹有未 commit 的 PT-W7d 在製工作，且驗收未過。** HEAD 仍是 `6165df0`。
+  已改：`ainarm9045.cpp`（+9,174）、`ainarm9045_2x4_16_shims.cpp`（退 6 個 stub）、
+  `cmydef.cpp`（解閘 2 個）、`_w7d_parts/`（未追蹤，65 檔）。
+- **接續第一件事**：等 `b9ywnxs82` 的 Release ctest 收工（確認 SEGFAULT 在兩種建法都出現＝確定性）。
+- **然後 bisect AutoClean**：先只 gate `InArmSideAllClose` 那 1 個呼叫點跑一次，
+  再只 gate `MoveInArmXYToShuttle_9045` 那 6 個跑一次；只保留真正必要的那個 gate。
+- **然後**：`-fsyntax-only` → tier-4b 全新 Debug+Release，失敗集合須 ⊆ 那 6 個標準失敗 → commit。
+- **同一顆 commit 要含的行為翻轉**（RESUME 前一節已記）：`bCheckYPitchHome` false→true（約 40 個守衛）、
+  `AutoCalculateInArmYClosePitch` 0→真 pitch；`Find_InArm_PickerMaxUseCountOnTime` golden `:5770`
+  會除以後者。
+- **仍待辦**：修 `DEFN` 第二種形狀（見上）；補跑 k2..k8 的 audit；
+  決定 `bInArmToLoaderUsage` 歸屬（k1 在 `05735` 用 `#ifndef` 自行定義）。
+- **完成度**：非表單 87.4%（294,262 / 336,509 golden code 行）／全部 51.2%。
+  PT-W7d 通過後非表單約 88.7%。
+- **安全佇列（等使用者在場）**：#10、#12、#14、#18。**非安全**：#15、#16、#17。
