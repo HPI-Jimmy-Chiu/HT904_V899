@@ -6008,7 +6008,9 @@ bool bBoatChangeCasset[3]={false, false, false};                                
 #endif // AI(W906-PT-W5c-integrate) 20260809: ungate -- csystem.cpp / bthermo.cpp / uHeaterThread.cpp bind bHasTjTemp; plain data, no ctor that touches a NULL global (PT_CAMPAIGN_PLAN.md section 8); see this block's head note
 bool bHasTjTemp;                                                                //JerryYang 20251124 : Tj control吃不同的溫度range
 #if 0 // ...resume the TODO(W6) gate
+#endif // AI(W906-PT-W7d-integrate) 20260811: ungate -- ainarm9045.cpp bodies landed this wave are the FIRST consumers (60 undefined-reference lines, 2 distinct symbols). golden home cmydef.cpp:5937.
 int iCheckShuttleSensor=0;                                                      //Ifor 20251204 add:After Home Need Check Shuttle Sensor
+#if 0 // ...resume the TODO(W6) gate
 bool bFreezeHandler=false;                                                      //Ifor 20260119 add:Freeze Handler
 bool bChangeModeING=false;
 #endif // AI(W906-PT-W5f-integrate) 20260810: ungate -- DoInArmAutoSiteMapping (csystem.cpp wave 2) reads it. Plain data, no ctor touching a NULL global (PT_CAMPAIGN_PLAN.md section 8).
@@ -6037,7 +6039,9 @@ TQPF_Timer tUNDER_20A_Delay;                                                    
 TQPF_Timer tUNDER_20A_SHT_Delay;                                                //Jimmychiu 20220713 for TEMPCTRL_NEED_UNDER_20A delay
 const int iUNDER_20A_Delay_Sec=30;                                              //Jimmychiu 20220713 for TEMPCTRL_NEED_UNDER_20A delay
 #if 0 // ...resume the TODO(W6) gate
+#endif // AI(W906-PT-W7d-integrate) 20260811: ungate -- ainarm9045.cpp bodies landed this wave are the FIRST consumers (60 undefined-reference lines, 2 distinct symbols). golden home cmydef.cpp:5954.
 bool bAutoRetryFlag=false;                                                      //JerryYang 20220901 : ASE-CL pick up error時吸取邏輯要改找吸最左上角的
+#if 0 // ...resume the TODO(W6) gate
 AnsiString sSiteLayoutSiteMap="";
 #endif // AI(W906-PT-W4-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045_EC.cpp binds it; see the note at this block's head
 AnsiString sSiteLayoutASECL="";

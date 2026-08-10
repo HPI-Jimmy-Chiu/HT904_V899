@@ -21,15 +21,25 @@
 int  iXPosition[8] = {0,0,0,0,0,0,0,0};   // loader-pick X positions per pick column
 int  iYPosition    = 0;                   // loader-pick base Y position
 
+#if 0   // PT-W7d RETIRED: real translated body now in ainarm9045.cpp
 void AddLoadingCount(int /*iSuckRow*/, int /*iSuckCol*/, int /*iTrayRow*/, int /*iTrayCol*/) {}
+#endif
 int  CheckLoaderHasTray()                                  { return 0; }   // offline: no second tray under loader
+#if 0   // PT-W7d RETIRED: real translated body now in ainarm9045.cpp
 int  CheckLoaderHasTray(bool /*bAlarm*/, int /*iErrorCount*/, bool /*bTrayDuplicateErr*/) { return 0; }
+#endif
+#if 0   // PT-W7d RETIRED: real translated body now in ainarm9045.cpp
 bool DoAutoSkipCheck()                                     { return false; } // offline: not in auto-skip flow
+#endif
 bool MoveArmXYToLoaderStage_9045()                         { return false; } // offline: never reports "arrived"
+#if 0   // PT-W7d RETIRED: real translated body now in ainarm9045.cpp
 int  GetLoaderYPitchStep()                                 { return 0; }   // offline: single-row pull
+#endif
 void CheckTrayMapData(int /*iTrayRow*/, int /*iTrayCol*/)  {}
 bool ProcessTrayMapDataError(bool /*bReset*/)              { return false; }
+#if 0   // PT-W7d RETIRED: real translated body now in ainarm9045.cpp
 int  ProcessMES0101InArmPickLoaderError(bool /*bHasDuplicateErr*/, AnsiString /*ErrPart*/) { return 0; } // 0 = not RETRY/SKIP/HOME/TRAY_END
+#endif
 //AI(W6.2b-2x4_16) 20260626: PorcessJAM0109HotPlatePickUpErrorSkip is now DEFINED
 // in the registered ainarm_SearchPickPlate.cpp (its golden home) -- removed the
 // local stub to avoid an ODR multiple-definition at link once this TU registers.
@@ -54,7 +64,9 @@ bool CheckCloseSiteHasIC(int /*iMode*/, int /*iSht*/, int /*iKit*/) { return fal
 bool IsHaveSameHotCount(int /*iHotCount*/)                 { return false; }
 void AddArmSiteRecord(int /*iWhichSht*/)                   {}
 void WhichShuttleReady(bool /*bFlag*/)                     {}
+#if 0   // PT-W7d RETIRED: real translated body now in ainarm9045.cpp
 bool bNeedOneCycle()                                       { return false; } // offline: not in one-cycle exit
+#endif
 void AdjustShuttlePlaceOrder_AutoSiteMapping()            {}
 void DoJudgeInputShuttleNeedChangeToNullIC()              {}
 void InitInArmTryPickFromHotPlateTask100()               {}

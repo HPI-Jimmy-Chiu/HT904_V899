@@ -4496,7 +4496,21 @@ bool DoPlaceToShuttle(eWhichShuttle iSht)
             iKit=(iShuttleRowKit==1 || iShuttleRowKit==2)?0:1;                  //Steven 20240512 : 拆出MoveInArmXYToShuttle
             flag=InArmSuck.ArmAll_HasICType(NULL_IC, HAS_NULL_CLEAN_IC);        //Steven 20220929 : 避免全Site關閉, In arm來回吸 //Steven 20250420 : fixed for auto clean
             if(flag ||
-               MoveInArmXYToShuttle_9045(iSht, iKit, ZAxisNotDown, true))
+               // GATE (W7d-I1): MoveInArmXYToShuttle_9045 substituted with the value its retired stub returned
+               //   (ainarm9045.cpp:2304 at HEAD, `{ return false; }` -- read from git, not guessed), so
+               //   AutoClean keeps EXACTLY its pre-PT-W7d behaviour. WHY: PT-W7d landed the real 85-line body,
+               //   and gdb on build_0811_w7f_dbg/tests/test_AutoClean.exe puts the SEGFAULT three frames deeper
+               //   -- ARM_OFFSET::GetVariableY <- GetInArmPitchY_9045 <- MoveInArm2XYToShuttle_9045_1x4_4 <-
+               //   here -- at ainarm9045.cpp:190-191, `InArmOffSet[iOffsetPos]->GetVariableY()` with a NULL
+               //   element. That line is PRE-EXISTING and golden guards only iOffsetPos>=0, because golden
+               //   allocates those pointers at startup; offline they are NULL (plan doc section 8).
+               //   Deliberately NOT fixed by adding `&& InArmOffSet[i]!=NULL` there: this is a POSITION
+               //   calculation, and silently dropping the variable-Y offset is a worse failure mode than
+               //   crashing -- the same reason PT-W7a refused a NULL guard on a motion-speed setter. Allocating
+               //   InArmOffSet[] offline belongs to task #10. The real body stays LIVE for every other caller.
+               //   Same shape as GATE (W7a-I4). AI(pt-wave) 20260811
+               // GATE (W7d-I1) golden text: MoveInArmXYToShuttle_9045(iSht, iKit, ZAxisNotDown, true)
+               false /*GATE (W7d-I1)*/)
             {
                 Task=2000;
             }
@@ -4569,7 +4583,8 @@ bool DoPlaceToShuttle(eWhichShuttle iSht)
             }
             break;
         case 2170:
-            if(MoveInArmXYToShuttle_9045(iSht, iKit, ZAxisNotDown, true))
+            // GATE (W7d-I1) golden text: MoveInArmXYToShuttle_9045(iSht, iKit, ZAxisNotDown, true)
+            if(false /*GATE (W7d-I1)*/)
             {
                 Task=2100;
             }
@@ -4760,7 +4775,8 @@ bool DoPickFromShuttle(eWhichShuttle iSht, int iSelRow)
             Task=10;
             break;
         case 10:
-            if(MoveInArmXYToShuttle_9045(iSht, iKit, ZAxisNotDown, false))      //Steven 20240512 : 拆出MoveInArmXYToShuttle
+            // GATE (W7d-I1) golden text: MoveInArmXYToShuttle_9045(iSht, iKit, ZAxisNotDown, false)
+            if(false /*GATE (W7d-I1)*/)      //Steven 20240512 : 拆出MoveInArmXYToShuttle
             {
                 InArmZNeedDown_9045(iSht, iKit, false);                         //Steven 20240512 : 拆出InArmZNeedDown
                 Task=50;
@@ -8689,7 +8705,8 @@ void DoAutoCleanKit()                                                           
             }
             break;
         case 540:
-            if(MoveInArmXYToShuttle_9045(euShuttle1, 0, ZAxisNotDown, false))
+            // GATE (W7d-I1) golden text: MoveInArmXYToShuttle_9045(euShuttle1, 0, ZAxisNotDown, false)
+            if(false /*GATE (W7d-I1)*/)
             {
                 Task=600;
             }
@@ -8950,7 +8967,8 @@ void DoAutoCleanKit()                                                           
             }
             break;
         case 1300:
-            if(MoveInArmXYToShuttle_9045(euShuttle2, 0, ZAxisNotDown, false))
+            // GATE (W7d-I1) golden text: MoveInArmXYToShuttle_9045(euShuttle2, 0, ZAxisNotDown, false)
+            if(false /*GATE (W7d-I1)*/)
             {
                 // AI(W906-AutoCleanCluster) 20260722: golden `fCleaning->
                 // CleanPadCountCanSupport2Arm()` -- Wave-14 Part D translated
@@ -9352,7 +9370,8 @@ void DoAutoCleanKit()                                                           
             }
             break;
         case 2540:
-            if(MoveInArmXYToShuttle_9045(euShuttle2, 0, ZAxisNotDown, false))
+            // GATE (W7d-I1) golden text: MoveInArmXYToShuttle_9045(euShuttle2, 0, ZAxisNotDown, false)
+            if(false /*GATE (W7d-I1)*/)
             {
                 Task=2600;
             }
