@@ -2532,7 +2532,7 @@ void ProcessLastSetIni_Index(bool bRead)
 
     if(CUSTOMER_CODE==CC_GIGAS)                                                 //Isaac 20210604 : IndexY偵測範圍名子統一成IniConfig.GaliPosRange
     {
-        IniConfig.GaliPosRange        =ReadWriteIni(sPath, "Index", "GaliPosRange",             IniConfig.GaliPosRange,                10,    bRead,true, 5, 100);             //Isaac 20201012 : index Y超過範圍，做一次Tmode
+        IniConfig.GaliPosRange        =ReadWriteIni(sPath, "Index", "GaliPosRange",             IniConfig.GaliPosRange,                50,    bRead,true, 5, 100);             //Isaac 20201012 : index Y超過範圍，做一次Tmode  //AI(ht9045-v899) 20260810: 全智預設門檻 10 改 50 (與其他客戶原廠標準一致), 因 Y1 定位殘差恆為 10 與門檻相等造成 Index 4 Axis Need Home 誤報; 下限維持 5 保留客戶自行調緊彈性
     }
     else
     {
