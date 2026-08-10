@@ -2096,6 +2096,141 @@ bool DoPickFromShuttle_9045(int iSht)
     return bRet;
 }
 //------------------------------------------------------------------------------
+//==============================================================================
+//AI(ht9045-v899) 20260810: OutArm 逐輪診斷 Log 實作。宣告與用途見 aoutarm9045.h
+static AnsiString sOutArmRoundLog[OUTARM_ROUND_LOG_MAX];
+static int iOutArmRoundHead   =-1;                                              //目前輪在 ring 的位置
+static int iOutArmRoundSeq    =0;                                               //累計輪次序號, 不隨 ring 繞回
+static int iOutArmRoundEnable =-1;                                              //-1=尚未讀 0=關 1=開
+//------------------------------------------------------------------------------
+bool OutArmRoundLog_Enabled()
+{
+    if(iOutArmRoundEnable<0)
+    {
+        try
+        {
+            AnsiString sPath=AuthPath+"config.ini";
+            iOutArmRoundEnable=CheckAndReadIniData(sPath, "Debug", "bOutArmRoundLog", 1);
+        }
+        catch(...)
+        {
+            iOutArmRoundEnable=0;
+        }
+    }
+    return (iOutArmRoundEnable==1);
+}
+//------------------------------------------------------------------------------
+int OutArmRoundLog_Seq()
+{
+    return iOutArmRoundSeq;
+}
+//------------------------------------------------------------------------------
+void OutArmRoundLog_Line(AnsiString s)
+{
+    if(OutArmRoundLog_Enabled()==false)
+        return;
+    try
+    {
+        if(iOutArmRoundHead<0)
+            return;
+        SYSTEMTIME st;
+        GetLocalTime(&st);
+        AnsiString sT;
+        sT.sprintf("  %02d:%02d:%02d.%03d ", st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+        sOutArmRoundLog[iOutArmRoundHead]+=sT+s+"\r\n";
+    }
+    catch(...)
+    {
+    }
+}
+//------------------------------------------------------------------------------
+void OutArmRoundLog_Begin(int iSht, int iKit)
+{
+    if(OutArmRoundLog_Enabled()==false)
+        return;
+    try
+    {
+        iOutArmRoundSeq++;
+        iOutArmRoundHead=(iOutArmRoundHead+1)%OUTARM_ROUND_LOG_MAX;
+        SYSTEMTIME st;
+        GetLocalTime(&st);
+        AnsiString s;
+        s.sprintf("==== Round #%d  Sht=%d  Kit=%d  %04d-%02d-%02d %02d:%02d:%02d.%03d ====\r\n",
+                  iOutArmRoundSeq, iSht, iKit,
+                  st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond, st.wMilliseconds);
+        sOutArmRoundLog[iOutArmRoundHead]=s;
+        s.sprintf("CFG iInArmType=%d iPickRow=%d iPickCol=%d iMaxRow=%d iMaxCol=%d iShtCol=%d "
+                  "iXStep=%d iYStep=%d iModeX=%d iPickKitStep=%d iShtKitStep=%d",
+                  iInArmType, OutArmSuck.iPickRow, OutArmSuck.iPickCol,
+                  OutArmSuck.iMaxRow, OutArmSuck.iMaxCol, OutArmSuck.iShtCol,
+                  OutArmSuck.iXStep, OutArmSuck.iYStep, OutArmSuck.iModeX,
+                  OutArmSuck.iPickKitStep, OutArmSuck.iShtKitStep);
+        OutArmRoundLog_Line(s);
+        s.sprintf("CFG i2x2Suck=%d i2x2Suck_Out=%d USE_ROTATE_KIT=%d iRotate_Type=%d "
+                  "ActiveRotate=%d RotKitIn=%d RotKitOut=%d bE47_4Offset=%d iE50Opt=%d",
+                  i2x2Suck, i2x2Suck_Out, USE_ROTATE_KIT, iRotate_Type,
+                  (int)tRotate.ActiveRotate,
+                  TrayForm.iRotateKIT_InputType, TrayForm.iRotateKIT_OutputType,
+                  (int)IniConfig.bE47_ShuttleUse4Offset,
+                  IniConfig.iE50_OutArmPickUpErrorOption);
+        OutArmRoundLog_Line(s);
+    }
+    catch(...)
+    {
+    }
+}
+//------------------------------------------------------------------------------
+static void OutArmRoundLog_WriteTo(AnsiString sFile, AnsiString sReason)
+{
+    try
+    {
+        FILE *fp=fopen(sFile.c_str(), "w");
+        if(fp==NULL)
+            return;
+        SYSTEMTIME st;
+        GetLocalTime(&st);
+        fprintf(fp, "==== HT9045 OutArm Round Log ====\n");
+        fprintf(fp, "Dump: %04d-%02d-%02d %02d:%02d:%02d  Reason: %s\n",
+                st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond,
+                sReason.c_str());
+        fprintf(fp, "Keep: last %d rounds, newest last. Seq=%d\n\n",
+                OUTARM_ROUND_LOG_MAX, iOutArmRoundSeq);
+        for(int k=1; k<=OUTARM_ROUND_LOG_MAX; k++)                              //由最舊排到最新
+        {
+            int idx=(iOutArmRoundHead+k)%OUTARM_ROUND_LOG_MAX;
+            if(sOutArmRoundLog[idx].Length()>0)
+                fprintf(fp, "%s\n", sOutArmRoundLog[idx].c_str());
+        }
+        fflush(fp);
+        fclose(fp);
+    }
+    catch(...)
+    {
+    }
+}
+//------------------------------------------------------------------------------
+void OutArmRoundLog_Flush(AnsiString sReason)
+{
+    if(OutArmRoundLog_Enabled()==false)
+        return;
+    try
+    {
+        if(DirectoryExists("D:\\HT9045\\Error")==false)
+            ForceDirectories("D:\\HT9045\\Error");
+        OutArmRoundLog_WriteTo("D:\\HT9045\\Error\\OutArmRoundLog.txt", sReason);
+    }
+    catch(...)
+    {
+    }
+}
+//------------------------------------------------------------------------------
+void OutArmRoundLog_Dump(AnsiString sBasePath)
+{
+    if(OutArmRoundLog_Enabled()==false)
+        return;
+    OutArmRoundLog_WriteTo(sBasePath+"\\OutArmRoundLog.txt", "State Record");
+}
+//==============================================================================
 bool bOutRotator;
 bool bDoAOI;
 bool bDoFixAI;                                                                  //Sam 20211220 : 整合 Fix AI AOI
@@ -2201,6 +2336,16 @@ bool CheekNeedToDoOutArmAdditionalFunction()                                    
     if(bResult)
     {
         InitDoOutArmAdditionalFunction();
+    }
+
+    //AI(ht9045-v899) 20260810: 記錄旋轉/AOI 閘門的判定結果, 讓「為什麼沒去旋轉」有跡可循
+    {
+        AnsiString sLog;
+        sLog.sprintf("ROT-GATE bAlreadyRotate=%d bOutRotator=%d iOutRotateFinish=%d "
+                     "bDoAOI=%d bDoFixAI=%d NeedAdditional=%d",
+                     (int)OutArmSuck.bAlreadyRotate, (int)bOutRotator, iOutRotateFinish,
+                     (int)bDoAOI, (int)bDoFixAI, (int)bResult);
+        OutArmRoundLog_Line(sLog);
     }
     return bResult;
 }

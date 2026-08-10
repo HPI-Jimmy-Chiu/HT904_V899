@@ -1097,6 +1097,27 @@ bool M_MoveOutArmZ_ToRotateKIT_Place(int iKit)
                 return false;
         }
     }
+
+    //AI(ht9045-v899) 20260810: 記錄這一趟到底把哪幾支吸嘴放到旋轉站。列舉用的 stride 是 i2x2Suck_Out, 只要它跟吸嘴實際欄位對不上, 就會有 IC 沒旋轉就進 Auto tray (力成PTI DUT1/DUT3 即此)
+    try
+    {
+        AnsiString sLog, sOne;
+        sLog.sprintf("ROT-PLACE iKit=%d i2x2Suck_Out=%d iRotato_Out_Row=%d DutNum=%d Item:",
+                     iKit, i2x2Suck_Out, iRotato_Out_Row, tRotate.DutNum);
+        for(int i=0; i<MAX_ARM_Row; i++)
+        {
+            for(int j=0; j<MAX_ARM_Col; j++)
+            {
+                sOne.sprintf(" N%d%d=%d/D%d", i, j, OutArmSuck.Item[i][j],
+                             (int)OutArmSuck.Suck[i][j].GetNeedDestroyStatus());
+                sLog+=sOne;
+            }
+        }
+        OutArmRoundLog_Line(sLog);
+    }
+    catch(...)
+    {
+    }
     return true;
 }
 //---------------------------------------------------------------------------

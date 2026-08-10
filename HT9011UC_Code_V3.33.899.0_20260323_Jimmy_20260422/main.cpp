@@ -25779,6 +25779,8 @@ void __fastcall TfMain::DoStateRecord(int iShowAlarm, bool bManual)             
 
     //AI(ht9045-v899) 20260604: 改呼叫獨立函式 DumpMainFormSnapshot (內含 Loader/TrayArm 交接診斷區)
     DumpMainFormSnapshot(NewPath);
+    //AI(ht9045-v899) 20260810: 一併把 OutArm 逐輪診斷 Log 帶進 State Record, 交給 RD 分析
+    OutArmRoundLog_Dump(NewPath);
 }
 //------------------------------------------------------------------------------
 void __fastcall TfMain::AppException(TObject *Sender, Exception *E)             //ChungHung 20141226 add catch exception
