@@ -5546,3 +5546,76 @@ port 的 `DoAllProcess` **不是漏了那一段**，而是**整條 early-return 
 3. 這一條：census 從來沒比過本體大小 → **稽核 agent 的一條 BLOCKING 追下去才抓到**
 
 三次都不是工具「壞了」，是**工具問的問題比我以為的窄**。
+
+### 20260810 — PT-W7a：`cinitial.cpp` 53 個函式翻完並驗過，但**整併撞上被延後的安全叢集，未 commit**
+
+**翻譯完成且我自己驗過**（不是照抄報告）：
+
+| 檢查 | 結果 |
+|---|---|
+| 53 個目標 | **51 個 live、2 個 gated（golden 文字 47/47 完整）、0 缺席** |
+| 有沒有活本體不到 golden 一半 | 沒有 |
+| `MOT[]`／`Cylinder[]`／`Sen[]` NULL 指派 | golden 19 = port 19，全是 `.Ring/.IP/.Type` 欄位歸零，非指標歸 NULL |
+| `MOT[].Motor = new` | 逐行對過真實碼 **15 = 15**（差額全是 banner 註解） |
+| insert-only | agent 用 excise-and-md5 證明兩個檔都回得到 preimage |
+| `-fsyntax-only` | exit 0 |
+| 檔案 | `cinitial.cpp` 4,537 → 18,864 行；`cinitial.h` +69 行宣告 |
+
+那個 attach-then-disable 姿態（違反過一次就 88/134 SEGFAULT）確認保住。
+
+#### 整併：6 個普通碰撞已解，**50 個 Galil 家族碰撞擋住**
+
+已退役（普通整併）：`InitialCylinderName`（mycylin.cpp）、`IsNNMode`（atester_shims.cpp）、
+`SetMotorAccelSpeed`／`SetMotorScaleSpeed`／`SetUnloaderInfoFile`（acatchtray_shims.cpp）、
+`SetMotorSpeed`（aHotPlateSubstrate.cpp）。EOL 逐檔保持。
+
+剩下 **50 個 `TMyMotor::Gali_*` / `Z1*` / `ISZ*` / `CheckPos*` 碰撞** ——
+`Motor/mymotor.cpp` 的 48 個離線 stub 對上 `Motor/myGALILmotor.cpp` 的真本體。
+**這就是 task #10（GATE W5a-G 第 2 部分）**，PT-W5a 已經量過：退役那 48 個會讓 ctest
+從 6 個失敗變 19 個（**多 10 個 SEGFAULT**），因為 golden 的真 Galil 本體無防護地 deref
+`MOT[i].Motor`，而被退役的 stub 正是那 10 個測試賴以站著的東西。**而且它是安全關鍵（馬達運動）。**
+
+#### 我查到與沒查到的
+
+- 找到**一個**新的抽出需求並已 gate：`cinitial.cpp` 的 `GetIndexParm()` 讀
+  `bGali_CardInstall`（**全樹唯一定義在 `Motor/myGALILmotor.cpp:736`**）。
+  一個全域讀取就把整個 TU 拉進連結 —— archive-extraction 陷阱最純粹的形狀。
+  gate 它是**零行為變更**（該旗標初值 false、只在 `:3973/:4024` 開卡路徑設 true，離線永不執行）。
+  HEAD 對這個符號是**零引用**，所以確定是本波引入的。
+- **沒查出剩下的需求**。`new TMyGALILMotor`（`:3844`）在 **HEAD 也是 LIVE**，而 HEAD 建置是綠的，
+  所以它本身不構成抽出。用 `nm` 取「只有 myGALILmotor 定義」的 123 個可呼叫名字去掃新區域，
+  只命中 `AnsiString`／`sprintf` 這類 template 噪音 —— **本波新文字裡沒有真正的 myGALILmotor-only 引用**。
+  兩個 unit 又在同一個 archive（`ht9045_motor`），所以「誰先被抽出」的判定比單純符號需求複雜。
+
+#### 為什麼停在這裡而不是自己決定
+
+樹目前**編不起來**，而唯一已知的解法是 task #10 —— 使用者 20260810 明確定案
+「安全解閘要等他在場」。可行的替代方案我都評估過，沒有一個是誠實的零風險：
+
+| 方案 | 問題 |
+|---|---|
+| 退役 48 個 stub | **就是 task #10**，安全關鍵，且已量到多 10 個 SEGFAULT |
+| 反向 gate myGALILmotor.cpp 的 48 個真本體 | 零行為變更，但把 48 個翻好的本體變成 gated，是 fidelity 退步 |
+| 從 CMakeLists 移除 myGALILmotor.cpp | 讓 PT-W4 交付的 Galil 驅動整個不連結，比問題本身更糟 |
+| 繼續找抽出需求 | 值得做，但這一輪已用盡；下一輪第一件事 |
+
+**工作樹保留未 commit**（和 PT-W5c 同樣處置）：翻譯與 6 個退役都在磁碟上，不會遺失。
+
+### 🔖 RESUME（最新）
+
+- **⚠ 第一件事 `git status`。工作樹有 PT-W7a 的在製工作，且目前編不起來。**
+  已改：`cinitial.cpp`（+14,327）、`cinitial.h`（+69）、`aoutarm.cpp`（SetOutArmSpeed 改名為
+  `W7A_OutArmSpeed_NoOp_PendingSafetyReview` 並改 3 個呼叫點，**行為不變**）、
+  `mycylin.cpp`／`atester_shims.cpp`／`acatchtray_shims.cpp`／`aHotPlateSubstrate.cpp`（6 個 stub 退役）。
+- **PT-W7a 狀態**：翻譯 ✅ 已驗證 ／ 6 個普通碰撞 ✅ ／ **50 個 Galil 碰撞 ❌ 擋住** ／ 驗收 ❌ ／ commit ❌。
+- **接續第一件事：把剩下的 myGALILmotor 抽出需求找出來並 gate（零行為變更）。**
+  已知不是：`new TMyGALILMotor`（:3844，HEAD 也 LIVE 而 HEAD 綠）、
+  本波新文字裡的直接符號引用（用 nm 的 123 個 unique 名字掃過，只有 template 噪音）。
+  下一步建議：對 `libht9045_motor.a` 做逐步連結實驗，或用 `-Wl,--trace-symbol=bGali_CardInstall`
+  之類的方式讓連結器自己講是誰要它；也要重查我剛退役的 6 個 stub 是否改變了抽出順序。
+- **若找不到 → 這件事要使用者決定**（task #10 是安全關鍵，政策是等他在場）。
+  三個選項的代價已寫在上一節 DEVLOG。
+- **未解決的 3 個 undefined**：`InitPLCIO(AnsiString,int)`、`bScanSlave`、`iWhoTrigerASV`。
+- **驗收等級**：這一波**有行為變更**（53 個 live 本體），所以是 tier 4b —— 全新 Debug+Release，
+  不得用 preprocessed 比對抄捷徑。
+- **不要重跑 PT-W7a**：10 個 agent 全部完成，報告在 `scratchpad/w7a_reports.txt`。
