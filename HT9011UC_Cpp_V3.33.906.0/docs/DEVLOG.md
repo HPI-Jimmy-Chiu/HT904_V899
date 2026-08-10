@@ -5619,3 +5619,140 @@ port 的 `DoAllProcess` **不是漏了那一段**，而是**整條 early-return 
 - **驗收等級**：這一波**有行為變更**（53 個 live 本體），所以是 tier 4b —— 全新 Debug+Release，
   不得用 preprocessed 比對抄捷徑。
 - **不要重跑 PT-W7a**：10 個 agent 全部完成，報告在 `scratchpad/w7a_reports.txt`。
+
+---
+
+## PT-W7a（續）：Galil 抽出需求找到了，然後 AutoClean 用一個 SEGFAULT 告訴我退役是有代價的
+
+**上一節說「樹編不起來、50 個 Galil 碰撞擋住、等使用者」——那段現在是過期的，這節是更正。**
+被擋住的原因不是 task #10 非做不可，而是我當時**還沒找到真正的抽出需求**。找到了，
+用一個零行為變更的 gate 解掉，連結收斂：`build rc=0`、`multiple definition` 0 個、
+`undefined reference` 0 個。
+
+### 抽出需求是怎麼找到的：`ld -Map` 才是那個能問的人
+
+前兩輪我用 `nm` 掃「只有 `myGALILmotor.cpp` 定義的符號」，掃到的全是 `AnsiString`／`sprintf`
+template 噪音，於是我下結論說「本波新文字裡沒有真正的 Galil 引用」。**那個結論是錯的，
+錯在工具選擇**：`nm` 只告訴你「誰定義了什麼」，不告訴你「連結器為什麼把這個成員抽出來」。
+`ld -Map` 會直接印出那句話：
+
+```
+archive member included because of file (symbol)
+```
+
+它指名的是 `SetGaliRate` —— 來自 `cinitial.cpp` 的 `SetMotorSpeed()` 裡**一行**
+`SetGaliRate(ArmSpeed[IndexArm].iACDCBodySP);`。一行呼叫把整個 `myGALILmotor.cpp` 拉進連結，
+於是它的 48 個真本體全部跟 `Motor/mymotor.cpp` 的 48 個離線 stub 對撞。
+**教訓：archive 抽出的問題要用 `-Map` 問連結器，不要用 `nm` 猜。**
+
+### 本波加的 3 個整併 gate（全部零行為變更）
+
+| Gate | 位置 | 內容 | 為什麼零行為變更 |
+|---|---|---|---|
+| `W7a-I1` | `cinitial.cpp` `GetIndexParm()` | `if(bGali_CardInstall)` 整塊 99 行 | 該旗標初值 false，只在 `:3973/:4024` 開卡路徑設 true，離線永不成立 |
+| `W7a-I2` | `cinitial.cpp` `SetMotorSpeed()` | **一行** `SetGaliRate(...)` | 就是 `-Map` 指名的那個需求；離線沒有 Galil 卡可設速率 |
+| `W7a-I3` | `cinitial.cpp` | `bScanSlave[0]=true; InitPLCIO("172.16.8.120",502);` | 本體在 `MyPLC/MyPLC_IO_Modbus.cpp:85/:100`，但那個 archive（`ht9045_comms`）連不到 |
+
+`W7a-I3` 補記一個我自己犯的錯：我原本改 `CMakeLists.txt` 把 `ht9045_comms` 加進
+`target_link_libraries(ht9045_sm)`，還在註解裡寫「ACYCLIC」。**`CMakeLists.txt` 自己在
+`:1286`、`:1308`、`:1482` 三個地方寫過那樣會成環。** 我只 grep 了一行就下結論，沒讀那段註解。
+已回退，改用 gate。
+
+### 然後驗收 gate 抓到一個新的 SEGFAULT，而它是我造成的
+
+第一次全新 Debug+Release：**兩邊都 127/134**，失敗集合是那 6 個標準失敗 **加上
+`27-AutoClean`（SEGFAULT）**，兩種建法逐項相同 → 確定性缺陷，不是 CPU 競爭
+（上一波有過一次 CPU 競爭假 SEGFAULT，所以這次先確認兩邊一致才往下查）。
+
+**先對帳「本波之前它是綠的」**，不憑印象：上一波的 `gatea_dbg_ctest.log` 與
+`gatea_rel_ctest.log` 都是 `6 tests failed out of 134`、`#27 AutoClean ... Passed`。
+所以這個 SEGFAULT 是 PT-W7a 引入的，沒有懸念。
+
+#### 根因
+
+`tests/test_AutoClean.cpp:254` 呼叫 `CleanSetSpeed(true)`，而測試最後印出的 PASS 是
+`InitPlaceToShuttleTask resets cursor=1`（`:250`）—— 死在正中間那一行。
+`CleanSetSpeed` 的尾段把速度推進馬達，每一個呼叫都落到本波新登場的真本體：
+
+```cpp
+// cinitial.cpp:16535 (SetMotorAccelSpeed)
+if(MOT[Index].Motor->Enable)        // 無防護 deref
+```
+
+golden 可以這樣寫，因為 golden **一定**在 `InitialMotorParameter` 建好馬達物件、離線時只把
+`Enable` 設成 false（attach-then-disable，永遠不是 NULL）。這個 port 的那段建構還在
+**GATE W5a-G**（task #10）後面，所以離線 `MOT[].Motor` 是 NULL，一 deref 就死。
+
+**這正是 PT-W5a 已經量過的同一類**：退役那批離線 stub 會多 10 個 SEGFAULT。這次是同一個
+機制的第 11 個，只是從另一個方向撞上來 —— 我退役了 `acatchtray_shims.cpp` 的
+`SetMotorAccelSpeed`／`SetMotorScaleSpeed` 無操作 stub，而那兩個 stub 正是 AutoClean
+一直站著的東西。測試自己的註解（`:252-253`）就寫著「offline motor-speed setters are
+no-ops/Sim HAL」—— 那句話在本波之前是真的，被我改成假的。
+
+#### 處置：`GATE (W7a-I4)`，退役是有代價的就把代價寫清楚
+
+port `AutoClean/AutoClean.cpp:908-953` = golden `AutoClean.cpp:770-815`，**46 行 = 46 行**
+（行數精確對應，確認是同一個區塊）。整塊 gate 起來，附完整 GATE register 註記。
+
+**為什麼這是零行為變更**：本波之前這些呼叫全部落在無操作 stub 上，本來就什麼也沒做。
+gate 它們是**重現 HEAD 的行為**，不是發明新行為。
+
+**刻意沒選的兩條路，以及為什麼**：
+
+| 方案 | 為什麼不選 |
+|---|---|
+| 在兩個真本體加 `MOT[i].Motor &&` 防護 | 硬體上等價（`Motor` 永不為 NULL），但對一個**馬達速度**設定函式來說，靜默跳過推送會讓馬達停在上一次被設定的速率上 —— 那比當場崩潰是**更壞**的失效模式。機台安全上，大聲死掉優於安靜地用錯速度跑 |
+| 在 `AutoClean.cpp` 放 file-local `static` 無操作影子 | 那正是 task #15 存在的目的要清掉的那一類 seam（`macro_seam_scan.py` 的獵物）；而且它會把「這個呼叫曾經發生」整個藏起來 |
+
+`iMot`（`:931` 宣告）只在被 gate 的區間內使用，`:953` 之後沒有任何讀取 —— 插入前用
+assert 驗過，所以整塊 gate 不留懸空引用。
+
+#### 一個**留著沒處理**的潛在暴露，講清楚比默默 gate 掉誠實
+
+同樣那兩個真本體，現在也被這些呼叫點碰到：`csystem.cpp` 38 處、`acarry.cpp` 15 處、
+`acatchtray.cpp` 2 處、`AutoRetest.cpp` 2 處（共 57 處）。**ctest 沒有踩到它們**（所以沒有
+變成失敗），意思是這些路徑目前沒有測試覆蓋，不是它們安全。
+
+我**沒有**把這 57 處也 gate 掉：那是 4 個檔、未被任何測試量到的大範圍改動，盲改的風險
+高於記錄下來。**它們屬於 task #10 的範圍** —— W5a-G 一落地（`MOT[].Motor` 建好、
+`Enable=false`），這 57 處和 `W7a-I4` 會同時變成安全的，而 `expired_gate_scan.py` 會自己
+把 `W7a-I4` 這個 gate 撈出來提醒退役。
+
+#### 數字更正：上一節的行數是「整併前」量的
+
+上一節寫 `cinitial.cpp` 4,537 → **18,864** 行、`cinitial.h` **+69** 行宣告。
+最終 commit 量到的是 **18,905** 行（+14,368）與 `cinitial.h` 53 → **257** 行
+（+204，其中 34 行宣告、167 行 banner／空行）。
+
+兩組數字都不是打錯 —— 舊的那組是在**加上 `W7a-I1`/`I2`/`I3` 三個整併 gate 之前**量的，
+gate 的註記本身就是行數。這正是「波次數字要在最後一次整併之後才量」那條規則的又一例：
+**交付數字的量測時點必須晚於最後一次改動**，否則記錄下來的是中途快照。
+
+
+### 🔖 RESUME（最新）
+
+- **上面第 5604 行那個 RESUME 已經過期**（它說「工作樹編不起來、50 個 Galil 碰撞擋住、
+  等使用者決定」）。那三件事都解決了，**PT-W7a 已經 commit：`9ab7f20`**。
+- **樹是綠的、乾淨的**：全新 Debug 與全新 Release 各一次，**兩邊都 128/134**，
+  失敗集合就是計畫書 §7 那 6 個（config_db / IniFiles / ini_helpers / config_loaders /
+  dfm2rc_idempotent / GA1_ReadGeneralIni），逐項相同；連結 `multiple definition` 0、
+  `undefined reference` 0。
+- **完成度（附分母與單位）**：非表單 **83.3%**（280,253 / 336,509 golden code 行，
+  尚缺 56,256 行）／表單 4.5%（11,820 / 261,862）／全部 48.8%。PT-W7a 交付約 10,931 行。
+- **下一波標的**：`aTester_Rear.cpp`（7,573 golden 行）。之後依序 `aTester_Front.cpp`（6,353）、
+  `ainarm9045.cpp`（4,565）、`ainarm2.cpp`（3,619）。
+  `cContact.cpp`（22,324，最大）**先不要碰**：golden 大括號不平衡且有同名 `.dfm`，
+  要使用者決定表單策略。
+- **工具教訓（下次遇到 archive 抽出問題直接用）**：`nm` 回答「誰定義」，
+  **`ld -Map` 才回答「連結器為什麼抽出這個成員」**（它會印
+  `archive member included because of file (symbol)`）。我前兩輪用 `nm` 掃，
+  掃出來全是 template 噪音並據此下了錯結論；`-Map` 一次就指名 `SetGaliRate`。
+- **安全佇列（等使用者在場，不要自己動）**：task #10 已擴編 —— 除了原本的 48 個
+  Galil stub，還要一併清掉 `W7a-I1`／`I2`／`I3`／`I4` 四個 gate，以及
+  **57 個沒有測試覆蓋的潛在呼叫點**（csystem 38／acarry 15／acatchtray 2／AutoRetest 2）。
+  其餘安全佇列：#12 safe-door、#14 `UseFix3Cylinder`。
+- **非安全、可自己做的技術債**：#15（25 個 macro seam）、#16（50 個過期 gate）、
+  #17（PT-W5f 5 個無可達呼叫者的本體，含 686 行 `DoInitialCylinderCheck`）。
+- **驗收等級提醒**：純翻譯＋零行為變更 → tier 4a（`g++ -E` 比對＋`-O3` 單檔編譯）；
+  只要動到 stub 退役／解閘／掛 driver → tier 4b 全新 Debug+Release，不可抄捷徑。
+  **PT-W7a 就是靠 4b 才抓到 `27-AutoClean` 那個我自己造成的 SEGFAULT。**
