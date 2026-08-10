@@ -37,7 +37,13 @@ int GetNowShuttleMode_2x4_4(int iSht)
 
     if(OutArmSuck.iXStep==1 && OutArmSuck.iYStep==1)
     {
-        return 2;
+        //AI(ht9045-v899) 20260810: 原本這裡一律 return 2, 在判斷左右半 kit 前就早退, 使 iModeCol 恆為 0, OutArm 取右半 kit 時算出的 X 與左半同一點(差 2 個 Site X-Pitch), 右半 IC 必吸空 -> JAM0202 重複發生, SKIP 又把沒去過的 Shuttle 格清成 NULL_IC -> 殘料回 Index 疊成 double IC; 改成沒料才回標準值 2, 有料時比照 iOutArmiWhichKit 的同一判斷式 LeftSideNoIC() 回 10002(左)/11002(右), 讓 CheckOutArmXYPitch_2x4_4() 既有的 iModeCol==110 分支生效(原為死碼), 行為對齊 V3.32
+        if(ptrOutSHT->UseSiteNoIC())
+            return 2;
+        else if(ptrOutSHT->LeftSideNoIC(OutArmSuck.iShtKitStep))
+            return 11002;                                                   //右半四顆(kit1)
+        else
+            return 10002;                                                   //左半四顆(kit0)
     }
     else if(ptrOutSHT->UseSiteNoIC())
     {
