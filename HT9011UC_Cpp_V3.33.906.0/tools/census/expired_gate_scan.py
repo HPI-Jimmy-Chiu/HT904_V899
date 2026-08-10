@@ -42,6 +42,27 @@ KW = {'if', 'for', 'while', 'switch', 'return', 'else', 'do', 'catch', 'sizeof',
       'strcmp', 'strlen', 'atoi', 'atof', 'sizeof', 'static_cast', 'reinterpret_cast'}
 
 
+def defn_probe(line):
+    r"""Reduce a source line to just its would-be signature, for DEFN matching.
+
+    DEFN ends in `\([^;]*$` so that a DECLARATION (which ends in ';') is not mistaken for a
+    definition. Two things defeated that, both found 20260811 and both causing real definitions to
+    be counted as MISSING:
+      1. a trailing COMMENT containing ';' --
+             bool bUseAxxGPicker()   // golden :8304 (REAL-defined here; stub removed)
+      2. a ONE-LINE BODY, where the ';' is inside the braces --
+             int CheckShuttleSensor_9045_2x5(int, bool, bool) { return 0; }
+         This one hid 35 already-translated functions from a single wave's target list, and only
+         surfaced as 35 redefinition errors after the stitch.
+    So: drop the comment, then drop anything from the first '{' onwards. A real declaration still
+    keeps its ';' and is still correctly rejected.
+    """
+    s = line.split('//')[0]
+    if '{' in s:
+        s = s.split('{')[0]
+    return s.rstrip()
+
+
 def load(p):
     b = io.open(p, 'rb').read()
     eol = '\r\n' if b.count(b'\r\n') else '\n'
@@ -91,7 +112,7 @@ for p in srcs:
         # SaveEventLog defined inside tests/). Free functions only.
         if '::' in raw.split('(')[0]:
             continue
-        m = DEFN.match(raw.split('//')[0].rstrip())   # see census.py: a ';' in a trailing comment hid real definitions
+        m = DEFN.match(defn_probe(raw))
         if m and m.group(1) not in KW:
             live.setdefault(m.group(1), '%s:%d' % (p, i + 1))
 

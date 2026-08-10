@@ -64,6 +64,27 @@ TYPE_KW = {'return', 'if', 'else', 'for', 'while', 'switch', 'case', 'typedef', 
            'extern', 'friend', 'template', 'namespace', 'public', 'private', 'protected'}
 
 
+def defn_probe(line):
+    r"""Reduce a source line to just its would-be signature, for DEFN matching.
+
+    DEFN ends in `\([^;]*$` so that a DECLARATION (which ends in ';') is not mistaken for a
+    definition. Two things defeated that, both found 20260811 and both causing real definitions to
+    be counted as MISSING:
+      1. a trailing COMMENT containing ';' --
+             bool bUseAxxGPicker()   // golden :8304 (REAL-defined here; stub removed)
+      2. a ONE-LINE BODY, where the ';' is inside the braces --
+             int CheckShuttleSensor_9045_2x5(int, bool, bool) { return 0; }
+         This one hid 35 already-translated functions from a single wave's target list, and only
+         surfaced as 35 redefinition errors after the stitch.
+    So: drop the comment, then drop anything from the first '{' onwards. A real declaration still
+    keeps its ';' and is still correctly rejected.
+    """
+    s = line.split('//')[0]
+    if '{' in s:
+        s = s.split('{')[0]
+    return s.rstrip()
+
+
 def read(path, golden):
     raw = io.open(path, 'rb').read()
     eol = '\r\n' if raw.count(b'\r\n') else '\n'
@@ -92,7 +113,7 @@ def spans(L):
         if not l or l[0] in ' \t/#}':
             i += 1
             continue
-        m = DEFN.match(l.split('//')[0].rstrip())   # see census.py: a ';' in a trailing comment hid real definitions
+        m = DEFN.match(defn_probe(l))
         if not m or m.group(2) in KW or (m.group(1) or '') in KW:
             i += 1
             continue
