@@ -258,6 +258,42 @@ def index_golden():
     return idx
 
 
+def port_live_names(cache={}):
+    r"""Every name with a LIVE free-function definition ANYWHERE in the port tree.
+
+    WHY (found 20260811, PT-W7e): the per-file model below asks only whether the port file of the
+    SAME relative path defines a golden function. A body an earlier wave parked in a DIFFERENT port
+    file therefore counts as MISSING. For ainarm2.cpp that was 55 of 82 functions, 37 of them in
+    aHotPlateSubstrate.cpp. So the headline "missing" figure overstates how much is left.
+    This does not replace the per-file number -- both are reported, because they answer different
+    questions: per-file is "is this file mirrored", tree-wide is "is this golden code translated".
+    """
+    if cache:
+        return cache["n"]
+    names = set()
+    for dp, dn, fn in os.walk(PORT):
+        dn[:] = [d for d in dn if d.lower() not in (".svn", ".git")
+                 and not d.startswith("build") and not d.startswith("_")]
+        for f in fn:
+            if not f.endswith(".cpp"):
+                continue
+            try:
+                blob = io.open(os.path.join(dp, f), "rb").read()
+            except Exception:
+                continue
+            sep = chr(13) + chr(10) if blob.count((chr(13) + chr(10)).encode()) else chr(10)
+            LL = blob.decode("utf-8", "replace").split(sep)
+            g = gate_depth_map(LL)
+            for j, l in enumerate(LL):
+                if (j < len(g) and g[j]) or not l or l[0] in " " + chr(9) + "/#}":
+                    continue
+                m = DEFN.match(defn_probe(l))
+                if m and not m.group(1) and m.group(2) not in KEYWORDS:
+                    names.add(m.group(2))
+    cache["n"] = names
+    return names
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--detail', action='store_true')
@@ -308,14 +344,18 @@ def main():
                     missing.append((k, span))     # gated == not translated behaviour
                 else:
                     done_ct += 1
+            live_tree = port_live_names()
+            parked = [(k, s) for k, s in missing if k.split("::")[-1] in live_tree]
+            parked_lines = sum(s for _, s in parked)
             miss_lines = sum(s for _, s in missing)
             rows.append(dict(src=src, form=form, mirrored=True, graw=graw, gcode=gcode,
                              gfuncs=len(gfun), missing_funcs=len(missing),
-                             gated_funcs=gated_ct, missing_lines=miss_lines))
+                             gated_funcs=gated_ct, missing_lines=miss_lines,
+                             parked_lines=parked_lines))
         else:
             rows.append(dict(src=src, form=form, mirrored=False, graw=graw, gcode=gcode,
                              gfuncs=len(gfun), missing_funcs=len(gfun),
-                             gated_funcs=0, missing_lines=gcode))
+                             gated_funcs=0, missing_lines=gcode, parked_lines=0))
 
     def tot(rs, k):
         return sum(r[k] for r in rs)
@@ -339,6 +379,18 @@ def main():
              len([r for r in nomirror if r['form']])))
     partial = sorted([r for r in rows if r['mirrored'] and r['missing_lines'] > 0],
                      key=lambda r: -r['missing_lines'])
+    print("")
+    print("SAME TREE, crediting bodies that ARE translated but parked in ANOTHER port file")
+    print("(the line above uses the per-file model, which counts those as missing; see")
+    print(" port_live_names() for why both numbers are reported):")
+    print("%-10s %9s %9s %9s %7s" % ("group", "goldCode", "missing", "done", "done%"))
+    for label, rs in (("non-form", [r for r in rows if not r["form"]]),
+                      ("form", [r for r in rows if r["form"]]),
+                      ("ALL", rows)):
+        gc = tot(rs, "gcode")
+        ml = tot(rs, "missing_lines") - tot(rs, "parked_lines")
+        print("%-10s %9d %9d %9d %6.1f%%"
+              % (label, gc, ml, gc - ml, 100.0 * (gc - ml) / gc if gc else 0.0))
     print('mirrored but INCOMPLETE: %d files, %d golden code lines still missing'
           % (len(partial), sum(r['missing_lines'] for r in partial)))
     if a.detail:
