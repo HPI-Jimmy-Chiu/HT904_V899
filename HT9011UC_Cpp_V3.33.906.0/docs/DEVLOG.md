@@ -6249,3 +6249,93 @@ if(iOffsetPos>=0)
 **建議（留給下一輪決定並執行）**：先做 (B)，因為它零行為變更、有直接先例、且不動位置計算；
 同時把 (A) 連同 `InArmOffSet[]` 的離線配置一起記進 task #10（sim-motor 解閘）的範圍，
 因為那才是「離線讓這些指標非 NULL」的正確落點。
+
+---
+
+## PT-W7d（完成並 commit）＋ 一個把完成度低估了 1.4 點的量測缺陷
+
+**前一節的 RESUME 說「工作樹有未 commit 的在製工作、驗收未過」—— 那已經過期。**
+`GATE (W7d-I1)` 修掉 AutoClean 之後兩種建法都回到 **128/134**，已 commit `4dd9650`。
+
+### AutoClean 的處置：用 gdb 定位，不是逐一 gate 去猜
+
+一次 `gdb -batch` 就拿到完整堆疊（`ARM_OFFSET::GetVariableY` ←
+`GetInArmPitchY_9045` ← `MoveInArm2XYToShuttle_9045_1x4_4` ← `MoveInArmXYToShuttle_9045` ←
+`DoPickFromShuttle`），比 gate 六個呼叫點逐一試便宜得多，而且指出真正的斷點是
+**`ainarm9045.cpp:190-191` 這行本波之前就存在的碼** ——
+`InArmOffSet[iOffsetPos]->GetVariableY()` 的元素離線是 NULL，
+而它之前到不了，只因為 `MoveInArmXYToShuttle_9045` 是回傳 false 的 stub。
+
+`GATE (W7d-I1)`：在 `AutoClean.cpp` 六個呼叫點取代成 `false` ——
+**那是退役 stub 的原值**（`git show HEAD:` 讀出來的，不是猜的），所以 AutoClean 精確保持本波之前的行為，
+真本體對其他呼叫者仍然是活的。
+
+**刻意不在 `:190` 加 `&& InArmOffSet[i]!=NULL`**，即使 skill 對 TRAP 4 開的處方就是加指標守衛：
+那行算的是**位置**，靜默丟掉 variable-Y 偏移比當場崩潰更糟 ——
+和 PT-W7a 拒絕對馬達速度設定加 NULL 守衛是同一個判斷。離線配置 `InArmOffSet[]` 屬於 task #10。
+
+### 交付數字（fresh Debug + fresh Release，都在最後一次整併之後量）
+
+- `ainarm9045.cpp` 2,332 → **11,586 行**（+9,254），65 個 part，41 個 stub 退役。
+- **Debug 128/134、Release 128/134**，失敗集合逐項相同＝那 6 個標準失敗；0 dup / 0 undef。
+- `part_coverage.py` 覆蓋率 **99.24%**，54 個 miss 全部可歸因。
+
+### ⚠ 量測缺陷：`DEFN` 的第二種失敗形狀，把完成度低估了約 1.4 點
+
+`d1cda91` 只修了一半。`DEFN` 以 `\([^;]*$` 結尾，是為了不把**宣告**誤認成定義；我修掉了
+「行尾註解裡的 `;`」，但**一行本體的 `;` 在大括號裡面**：
+
+```cpp
+int CheckShuttleSensor_9045_2x5(int, bool, bool) { return 0; }
+```
+
+所以每一個一行 stub 定義都還是隱形的。在 PT-W7d，這讓 **65 個目標裡有 35 個其實早就存在**，
+而且只在縫合後以 35 個 redefinition error 的形式浮現 —— 一個正確的掃描器本來可以省下那一小時整併。
+`d725d30` 用一個有文件的 `defn_probe()` 把兩種形狀一起處理（先去註解、再砍掉第一個 `{` 之後的一切）。
+
+**這是量測更正，不是進度。** 同一棵樹重新量：
+
+| 指標 | 修正前 | 修正後 |
+|---|---|---|
+| 非表單 | 88.8%（298,784 / 336,509） | **90.2%（303,502 / 336,509，尚缺 33,007）** |
+| 全部 | 51.9% | **52.7%** |
+| mirrored but INCOMPLETE | 34 檔 | 33 檔 |
+
+也就是說之前的百分比都應該當成**下限**讀，而不是「另一棵樹」。
+正對照：`wave_targets.py` 對 PT-W7d 剛做完的 `ainarm9045.cpp` 現在回報 **0 missing**（修正前列 65）。
+
+### 我在這一波犯的錯（完整列表）
+
+1. `DEFN` 修一半（見上）—— 已在 `d725d30` 補完。
+2. **7 個全域寫錯 3 個**：`wave_targets.py` 只**印**型別與名字，陣列維度在另一個 group，我丟了它。
+   `CheckInArmDestroyActiveDelay`／`bMyFlag` 是 `[MAX_ARM_Row][MAX_ARM_Col]` 陣列被我寫成純量
+   （前者**還編得過**）；`iInArmXStep`／`iInArmYStep` golden 初值是 **1**，我寫 **0**。
+   只有 `bMyFlag` 被編譯器抓到（靠 golden `:8637` 的 `ZeroMemory`）。**錯的初值不會有任何東西告訴我。**
+3. 背景指令多寫一個 `&`，把 gate 變 detached，等於放棄完成通知；已殺掉重跑 attached。
+4. `ainarm9045.cpp` 整併中途被轉成 CRLF；`core.autocrlf=true` 會正規化所以 commit 不受影響
+   （diff 是純 insertions），但**我查不出是誰轉的，不編造原因**。
+
+### 🔖 RESUME（最新）
+
+- **樹是綠的、乾淨的。HEAD `d725d30`。** 近期：`d725d30`（DEFN 補完）← `4dd9650`（PT-W7d）
+  ← `f9e830a`／`fc3c62c`（W7d 診斷紀錄）← `6165df0` ← `d1cda91` ← `ab3a75a`／`dff502d`（PT-W7c）。
+- **完成度（附分母與單位，工具修正後）**：非表單 **90.2%**（303,502 / 336,509 golden code 行，
+  尚缺 33,007）／表單 **4.5%**（11,864 / 261,862）／全部 **52.7%**。
+- **下一波標的**：`ainarm2.cpp`（census 列 3,619 golden 行，但**要先跑
+  `python tools/census/wave_targets.py ainarm2.cpp` 重新確認** —— DEFN 修正後數字會變小）。
+  之後看 census 的 `mirrored but INCOMPLETE` 清單（33 檔 / 45,336 行）挑缺口最大的非表單檔。
+  `cContact.cpp`（22,324）**仍然不要碰**：golden 大括號不平衡＋同名 `.dfm`，要使用者定表單策略。
+- **開工三步（四波累積的規矩）**：
+  1. `python tools/census/wave_targets.py <檔名>` —— 同時列「缺的函式」與**「函式之間的檔案級全域」**；
+     全域一律由主迴圈加，**且要照 golden 抄完整宣告（陣列維度、初值都要）**。
+  2. 逐檔偵測 EOL 再寫 part（`ainarm9045.cpp` 是 bare LF，`aTester_*.cpp` 是 CRLF —— 不要沿用上一波的習慣）。
+  3. 收工用 `python tools/census/part_coverage.py` 量覆蓋率並**逐條讀 miss 清單**；
+     新 SEGFAULT 直接上 `gdb -batch` 拿堆疊，不要逐一 gate 猜。
+- **仍待辦（非安全）**：補跑 PT-W7d 的 k2..k8 audit（k1 已完成且已複驗）；
+  決定 `bInArmToLoaderUsage` 歸屬（k1 在 part 內用 `#ifndef` 自行定義，golden 家在 `ainarm2.cpp:100`
+  —— **下一波正好會處理該檔，屆時刪掉暫時定義**）；#15 macro seam；#16 過期 gate；#17。
+- **安全佇列（等使用者在場，不要自己做）**：#10（sim-motor 解閘，範圍已含 W7a-I1..I4、W7d-I1、
+  `InArmOffSet[]` 離線配置、57 個未覆蓋呼叫點）、#12 safe-door、#14 `UseFix3Cylinder`、
+  #18 `bNeedCheck` 無後備儲存（Rear+Front 對稱，要一起修）。
+- **表單邊界**：非表單翻完之前不碰表單；表單 4.5%（尚缺 249,998 行）**要使用者先定 facade 策略**，
+  這是政策上的停止點。
