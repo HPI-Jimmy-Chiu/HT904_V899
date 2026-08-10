@@ -187,7 +187,7 @@ def functions(text):
         if not l or l[0] in ' \t/#}':
             i += 1
             continue
-        m = DEFN.match(l)
+        m = DEFN.match(l.split('//')[0].rstrip())   # strip trailing comment first: a ';' inside it defeated DEFN's [^;]*$ and hid real definitions (found 20260811)
         if not m:
             i += 1
             continue

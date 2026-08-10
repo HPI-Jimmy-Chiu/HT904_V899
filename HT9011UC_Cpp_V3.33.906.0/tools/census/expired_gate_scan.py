@@ -91,7 +91,7 @@ for p in srcs:
         # SaveEventLog defined inside tests/). Free functions only.
         if '::' in raw.split('(')[0]:
             continue
-        m = DEFN.match(raw)
+        m = DEFN.match(raw.split('//')[0].rstrip())   # see census.py: a ';' in a trailing comment hid real definitions
         if m and m.group(1) not in KW:
             live.setdefault(m.group(1), '%s:%d' % (p, i + 1))
 

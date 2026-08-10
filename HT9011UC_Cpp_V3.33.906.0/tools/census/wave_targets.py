@@ -92,7 +92,7 @@ def spans(L):
         if not l or l[0] in ' \t/#}':
             i += 1
             continue
-        m = DEFN.match(l)
+        m = DEFN.match(l.split('//')[0].rstrip())   # see census.py: a ';' in a trailing comment hid real definitions
         if not m or m.group(2) in KW or (m.group(1) or '') in KW:
             i += 1
             continue
