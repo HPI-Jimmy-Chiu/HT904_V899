@@ -6339,3 +6339,92 @@ int CheckShuttleSensor_9045_2x5(int, bool, bool) { return 0; }
   #18 `bNeedCheck` 無後備儲存（Rear+Front 對稱，要一起修）。
 - **表單邊界**：非表單翻完之前不碰表單；表單 4.5%（尚缺 249,998 行）**要使用者先定 facade 策略**，
   這是政策上的停止點。
+
+---
+
+## PT-W7e：翻譯全部落地且覆蓋率 100%，但整併撞上「同名檔以外的既有本體」—— 停在整併邊界
+
+翻譯側乾淨得少見：82 個 part 全部落地，**pure bare LF、零 U+FFFD、逐檔 brace delta 0**，
+`part_coverage.py` 覆蓋率 **100.00%（3,374 / 3,374 substantive golden 行，零 miss）** ——
+這是四波以來第一次零 miss（W7c 99.10%、W7d 99.24%）。合理：這個 port 檔本來幾乎是空的（114 行），
+沒有既有 shim 可以把行「路由」掉。
+
+**但整併不能照原計畫做。**
+
+### ⚠ 82 個目標裡有 55 個「已經翻好了，只是停在別的 port 檔」
+
+k1 agent raise 了這件事，**我自己獨立掃過一次確認，而且數字比它說的更大（它說 50，實際 55）**：
+
+| 既有本體所在檔 | 個數 |
+|---|---|
+| `aHotPlateSubstrate.cpp` | **37** |
+| `acatchtray_shims.cpp` | 5 |
+| `ainarm9045_2x4_16_shims.cpp` | 5 |
+| `ainarm9045_w7_shims.cpp` | 5 |
+| `aoutarm.cpp` / `csystem_shims.cpp` / `AutoClean/AutoClean.cpp` | 各 1 |
+
+所以 **PT-W7e 真正新翻的只有約 27 個函式，不是 82 個**。
+
+### 根因是工具缺陷，而且是同一類的第三個實例
+
+`tools/census/wave_targets.py` 用 `pf = os.path.join(PORT, rel)`，**只跟同名的 port 檔比對**；
+`census.py` 也是同一個 per-file 模型。於是「本體被前面的波次停在另一個 port 檔」就會被報成 missing。
+
+| commit | 這一類的哪個形狀 | 代價 |
+|---|---|---|
+| `d1cda91` | 行尾註解裡的 `;` 讓 `DEFN` 失配 | 2 個目標（PT-W7d） |
+| `d725d30` | **一行本體**的 `;` 在大括號裡 | 35 / 65 個目標（PT-W7d） |
+| **未修（task #19）** | **跨檔停放（cross-file parking）** | **55 / 82 個目標（PT-W7e）** |
+
+這也意味著 **census 的「缺 33,007 行」把停在別處的本體算成缺**。
+下次引用完成度前要先量化這一塊（task #19 第 2 項），不要再直接引用 90.2%。
+
+### 為什麼我停在這裡，而不是把 55 個 counterpart 刪掉
+
+那 55 個**不是 stub，是真的、行為等價的本體**（k1 逐一比對過三個屬於它的：
+`ResetInToShtFlag` → `aHotPlateSubstrate.cpp:1466`、`BackupPlacePos` → `:1494`、
+`InArmAddSpeedDisplay` → `:1508`）。把 37 個本體從 `aHotPlateSubstrate.cpp` 搬到 `ainarm2.cpp`
+是**搬家（homecoming），不是退役 stub**：牽動宣告、archive 歸屬、以及每一個既有呼叫點。
+那是一個需要自己規劃與量測的 pass，不該在一個波次的尾巴即興做完 ——
+尤其是在連續數波之後、清晨、額度將盡的時候。
+
+**所以本波停在整併邊界，parts 全部保留在磁碟上（已驗證），一行原始碼都沒改。**
+
+### 這一波 agent 做得好的地方（值得記，因為它們是對的）
+
+- k1 **拒絕**對 `SetPrecisorZPos`／`PreciserPitchCalculate` 上 gate，理由是：gate 掉會讓
+  `bPrecise_Z` 全 false、`iPrecise_Z` 全 0，於是狀態機會**在四個 Z-down 步驟都「不動 Z 卻回報成功」**
+  —— 靜默的安全損失，比大聲的連結錯誤更糟。改用有 guard 的前向宣告，並讓真本體由兄弟 part 落地。
+  **這正是我在 PT-W7c／W7d 反覆做的同一個判斷**（位置／速度計算寧可大聲壞掉）。
+- k1 對 `SetInArmHome(bool)` 的前向宣告**刻意不給預設引數**，因為
+  `aHotPlateSubstrate.h:906` 還有零參數宣告可見，加 `=false` 會讓既有零參數呼叫全部 ambiguous。
+- 整數／浮點紀律有明確交代：golden `:3177-3179`／`:3284-3285` 的 `/244` 本來就是 double
+  （`Offset.iPreciserOpen/iPreciserClose` 是 `double`，`cprod.h:252-253`），
+  沒有把任何 int/int 改成浮點，也沒引入 `ChangeToFloat*` helper。
+
+### 整併時還欠的兩個宣告（k1 指出，我尚未加）
+
+- `extern void ChangeHotPlateData(bool bSwapSht=false);`（golden `ainarm2.h:104`）
+- `extern bool EnableTraymapCheckFunction(int iCheck=0);`（golden `ainarm2.h:216`）
+
+兩者目前全樹都沒有，所以對應本體落地後仍然不可達；
+`aHotPlateSubstrate.h:1062-1085` 那個「-- functions (golden ainarm2.cpp)」區塊是它們兄弟所在處。
+沒有後者的宣告，它可以解掉的 5 個 gate 也不能解。
+
+### 🔖 RESUME（最新）
+
+- **HEAD `3047e00`，原始碼零改動。`_w7e_parts/`（82 檔，已驗證）是未追蹤在製產物。**
+- **PT-W7e 續作前必須先決定一件事**：那 55 個既有本體怎麼處理。
+  1. **建議路徑（低風險）**：只縫入真正新翻的約 27 個 part，把 55 個重複的 part 丟棄；
+     `ainarm2.cpp` 只長那 27 個函式。census 對該檔仍會顯示「缺」，但那是 task #19 的量測問題，
+     不是樹的問題 —— **不要為了讓數字好看而搬 37 個本體。**
+  2. **完整路徑（要自己規劃的一個 pass）**：homecoming —— 把 55 個 counterpart 刪掉、
+     本體回到 golden 家。牽動宣告、archive、呼叫點，要獨立量測。
+- **先做 task #19 的第 1 項（工具）**：讓 `wave_targets.py` 對每個「同名檔裡沒有」的函式，
+  額外回報「別處有沒有活的本體、在哪裡」。這樣下一波的 brief 就能直接寫「已翻好，停在 X:N，不要 emit」。
+  順手修它的絕對路徑陷阱（傳絕對 golden 路徑會讓它拿 golden 跟自己比）。
+- **仍待辦**：補跑 PT-W7d 的 k2..k8 audit；`bInArmToLoaderUsage` 歸屬（golden 家是 `ainarm2.cpp:100`）；
+  上面那兩個欠的宣告；#15 macro seam；#16 過期 gate；#17。
+- **安全佇列（等使用者在場）**：#10、#12、#14、#18。
+- **完成度**：非表單 90.2%（303,502 / 336,509 golden code 行）／全部 52.7% ——
+  **但這是上限被低估、下限被高估的混合值**，因為跨檔停放的本體被算成缺。引用前先做 task #19 第 2 項。
