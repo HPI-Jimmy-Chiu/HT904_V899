@@ -29,6 +29,23 @@ class TPowerSaving *tPowerSaving;
 const int MaxMinute=200;                                                        //Alarm 設定最大值
 TDateTime OverDayPM=StrToTime("pm 11:59:59");
 TDateTime OverDayAM=StrToTime("am 12:00:00");
+//------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260804: the C05 halt-time limit became per-customer (PTI 720min). MaxMinute stays as the
+//fallback so an unset flag cannot collapse every customer to 1 minute, and the result is
+//clamped to 1439 because SetAlarmTime feeds EncodeTime(), which rejects hour>23. (CASE-PTI-20260804-001)
+//------------------------------------------------------------------------------
+int GetPowerSaveMaxMinute()
+{
+    int iLimit=MaxMinute;
+
+    if(CosFunction.iPowerSaveMaxMinute>0)
+        iLimit=CosFunction.iPowerSaveMaxMinute;
+
+    if(iLimit>1439)
+        iLimit=1439;
+
+    return iLimit;
+}
 //---------------------------------------------------------------------------
 __fastcall TPowerSaving::TPowerSaving()
 {
@@ -99,6 +116,20 @@ void __fastcall TPowerSaving::OnScanTmr(TObject *Sender)
 
 //    if(CUSTOMER_CODE==CC_GIGAS &&                                               //Isaac 20200720 : 客戶要求開啟contact頁面下，不啟動省電模式
     if(fContact->fShow)                                                         //Steven 20250324 : contact頁面下，不啟動省電模式
+    {
+        bRestart=true;
+        return;
+    }
+
+    //AI(ht9045-v899) 20260804: PTI power-save gates. Placed here (not in CheckSystemRun) and mirroring the
+    //fContact guard so that a change during the count-down also restarts it. (CASE-PTI-20260804-001)
+    if(CosFunction.bPowerSaveLotEndOnly && RunInfo.bLotStart)
+    {
+        bRestart=true;
+        return;
+    }
+
+    if(CosFunction.bPowerSaveSkipAmbient && LastSet.iTemperature==Tempture_Ambient)
     {
         bRestart=true;
         return;
@@ -209,6 +240,13 @@ void __fastcall TPowerSaving::OnScanTmr(TObject *Sender)
                HotModule->Enabled==false &&
                VacuumModule->Enabled==false)        //Steven 20221215 : Power saving for vacuum pump
             {
+                //AI(ht9045-v899) 20260804: set the caption once at the transition, otherwise the panel keeps showing
+                //the last count-down value while power saving is actually engaged. (CASE-PTI-20260804-001)
+                if(CosFunction.bPowerSaveShowCaption && fMain!=NULL)
+                {
+                    fMain->pnlPowerSaving->Caption="Power Save Mode";
+                    fMain->pnlPowerSaving->Font->Color=clRed;
+                }
                 Task++;
             }
             break;
@@ -238,8 +276,8 @@ void TPowerSaving::SetAlarmTime(TDateTime &Module ,int Minute)
 
     if(Minute==0)
         Minute=1;
-    else if(Minute>MaxMinute)
-        Minute=MaxMinute;
+    else if(Minute>GetPowerSaveMaxMinute())                                     //AI(ht9045-v899) 20260804: per-customer limit (PTI 720min) instead of the fixed 200 (CASE-PTI-20260804-001)
+        Minute=GetPowerSaveMaxMinute();
 
     whh=Minute/60;
     wmm=Minute%60;
@@ -308,6 +346,13 @@ void TPowerSaving::Restart()
    bRestart=true;
    SetFunction(true);
    tModule->iCountDown=tModule->AlarmTmr;
+
+   //AI(ht9045-v899) 20260804: restore the panel so the next count-down is readable again (CASE-PTI-20260804-001)
+   if(CosFunction.bPowerSaveShowCaption && fMain!=NULL)
+   {
+       fMain->pnlPowerSaving->Caption="PowerSaving";
+       fMain->pnlPowerSaving->Font->Color=clBlue;
+   }
 }
 //---------------------------------------------------------------------------
 bool TPowerSaving::CheckChangeState()                                           //2013-03-05    Dell modify for ATK 在主畫面不是在最前就不能進入

@@ -1465,6 +1465,13 @@ void FUNC_CC_PTI()
     CosFunction.bUseFix3FullTray                                                =true;  //AI(ht9045-v899) 20260520: enable E55 Fix3 full tray gate for PTI import plan
     CosFunction.bFirstTrayCheckOnUnloader                                       =true;  //Jimmychiu 20251205 : First Tray Check On Unloader
     CosFunction.bEndLotAfterTrayFeed                                            =true;  //Jimmychiu 20250115 : Auto End Lot After Tray Feed
+    //AI(ht9045-v899) 20260804: turn on C05 power saving for PTI; stop heating after a long HALT once the lot has ended (CASE-PTI-20260804-001)
+    IniConfig.bPowerSaveFunction                                                =true;  //AI(ht9045-v899) 20260804: unhide the [C05] group, it was forced off by InitialCosFunction
+    CosFunction.iPowerSaveMaxMinute                                             =720;    //AI(ht9045-v899) 20260804: 720min=12h so 8h(480min) is reachable; EncodeTime caps the hard ceiling at 1439
+    CosFunction.bPowerSaveTempOnly                                              =true;  //AI(ht9045-v899) 20260804: temp module only; motor/vacuum/ATC/mode stay forced to 0 exactly as today
+    CosFunction.bPowerSaveLotEndOnly                                            =true;  //AI(ht9045-v899) 20260804: one-cycle repair keeps lot-start, cutting the heater there would waste a re-soak
+    CosFunction.bPowerSaveSkipAmbient                                           =true;  //AI(ht9045-v899) 20260804: ambient halt is out of scope per the customer remark
+    CosFunction.bPowerSaveShowCaption                                           =true;  //AI(ht9045-v899) 20260804: main-screen indication per the customer remark
 }
 //------------------------------------------------------------------------------
 void FUNC_CC_THAILIN()
@@ -2778,6 +2785,7 @@ void FUNC_CC_ARDENTEC()
     CosFunction.bTrayDeviceCheckFromLoader                                      =true;  //JimmyChiu 20220219 : 殘料檢查 From Loader
     CosFunction.bTrayOCR                                                        =true;
     CosFunction.bFTPFunction                                                    =true;
+    CosFunction.bUseInArmLoadStageWatchdog                                      =true;  //AI(ht9045-v899) 20260803: the 20260602 InArm case-15 dead-lock watchdog was added for this customer only (CASE-GIGAS-20260729-001)
 }
 //------------------------------------------------------------------------------
 void FUNC_CC_FULCAP()
@@ -2834,7 +2842,7 @@ void FUNC_CC_CYUEAN()
     IniConfig.bShowFTandRTButtonCanClick                                        =true;
     IniConfig.bDoorOpenShuttleContinueHeat                                      =true;
     CosFunction.bRunModeFollowLotInfo                                           =true;  //Steven 20250603 : 根據Lot Info的Run mode進行切換
-//    CosFunction.bUnloadTrayModeByRecipe                                         =true;
+    IniConfig.bCleanOutCanTrayEnd                                               =true;  //Steven 20140426 : 客戶要求Clean Out後要跳Initial Start
 }
 //------------------------------------------------------------------------------
 void FUNC_CC_PANTHER()
@@ -3860,6 +3868,12 @@ void InitialCosFunction()
     IniConfig.bDutOnOffNeedASM                                                  =false; //Steven 20120628 : 開關Site, 強制啟動Auto Site Mapping
     IniConfig.bIndexEveryTimeCheckEP                                            =false; //Index每一次都確認EP是否有充飽氣。
     IniConfig.bPowerSaveFunction                                                =false; //省電模式
+    //AI(ht9045-v899) 20260804: C05 power-save per-customer defaults; every flag keeps the legacy behaviour when not overridden (CASE-PTI-20260804-001)
+    CosFunction.iPowerSaveMaxMinute                                             =200;    //AI(ht9045-v899) 20260804: legacy C05 limit; PTI overrides this to 720
+    CosFunction.bPowerSaveTempOnly                                              =false;
+    CosFunction.bPowerSaveLotEndOnly                                            =false;
+    CosFunction.bPowerSaveSkipAmbient                                           =false;
+    CosFunction.bPowerSaveShowCaption                                           =false;
     CosFunction.bFTPFunction                                                    =false; //FTP功能
     IniConfig.bEventLogAutoSaveFunction                                         =true;  //自動存EventLog
     IniConfig.bShowFunctionWindow                                               =false; //顯示在溫度值下面的功能開關畫面
@@ -4391,6 +4405,7 @@ void InitialCosFunction()
     CosFunction.bDeviceMapTestPandP                                             =false; //Jimmychiu 20251222 : Device Map Test By P&P
     CosFunction.bOffsetTempByRecipeMinMaxLimit                                  =false; //StevenHong 20260119 : Add Offset By Recipe Max Limit
     CosFunction.bCleanCountAlarmByMin                                           =false; //Jimmychiu 20260212 : Gigas Clear alarms based on minimum usage count
+    CosFunction.bUseInArmLoadStageWatchdog                                      =false; //AI(ht9045-v899) 20260803: default off - the 20260602 case-15 watchdog must only run for CC_ARDENTEC (CASE-GIGAS-20260729-001)
     //----------------------
     DoCustomerFunction();                                                               //Steven 20240927 : 整合並保持在最下面
 

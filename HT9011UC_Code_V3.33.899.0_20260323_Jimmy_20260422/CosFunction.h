@@ -466,6 +466,13 @@ typedef struct
     bool bATCModeNoUseCheckHeaterFunction;                                      //Ifor 20260113 add:ATC Mode No Use CheckHeater Function
     bool bOffsetTempByRecipeMinMaxLimit;                                        //StevenHong 20260119 : Add Offset By Recipe Max Limit    
     bool bCleanCountAlarmByMin;                                                 //Jimmychiu 20260212 : Gigas Clear alarms based on minimum usage count
+    bool bUseInArmLoadStageWatchdog;                                            //AI(ht9045-v899) 20260803: InArm load-stage dead-lock watchdog (case 15), CC_ARDENTEC only (CASE-GIGAS-20260729-001)
+    //AI(ht9045-v899) 20260804: C05 power-save per-customer profile, added for the PTI HALT temperature saving request (CASE-PTI-20260804-001)
+    int  iPowerSaveMaxMinute;                                                   //AI(ht9045-v899) 20260804: C05 halt-time upper limit in minutes; 0 keeps the built-in 200 fallback
+    bool bPowerSaveTempOnly;                                                    //AI(ht9045-v899) 20260804: C05 page shows the temp module only and forces motor/vacuum/ATC/mode to 0
+    bool bPowerSaveLotEndOnly;                                                  //AI(ht9045-v899) 20260804: C05 must not engage while RunInfo.bLotStart is true (one-cycle repair)
+    bool bPowerSaveSkipAmbient;                                                 //AI(ht9045-v899) 20260804: C05 does not intervene when the machine halts in ambient mode
+    bool bPowerSaveShowCaption;                                                 //AI(ht9045-v899) 20260804: show "Power Save Mode" on pnlPowerSaving once power saving is engaged
 } HT9045_COUSTOMER_FUNCTION;
 extern HT9045_COUSTOMER_FUNCTION CosFunction;
 extern void InitialCosFunction();

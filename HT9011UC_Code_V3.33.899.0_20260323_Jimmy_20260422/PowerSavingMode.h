@@ -63,6 +63,8 @@ class TPowerSaving
    bool bRestart;                                        //重新計數
 };
 //---------------------------------------------------------------------------
+//AI(ht9045-v899) 20260804: shared by cConfiguration for the [C05] halt-time edit limit (CASE-PTI-20260804-001)
+extern int GetPowerSaveMaxMinute();
 extern class TPowerSaving *tPowerSaving;
 #endif
 

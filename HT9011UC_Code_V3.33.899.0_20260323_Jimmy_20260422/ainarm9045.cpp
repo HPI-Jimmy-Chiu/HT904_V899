@@ -7260,7 +7260,12 @@ bool DoInArmPickFromLoadStage_9045()
                 //AI(ht9045-v899) 20260602: tray present again, disarm no-tray watchdog before going back to pick
                 bLoadStageNoTrayArmed=false;
                 //AI(ht9045-v899) 20260602: empty-tray residual watchdog - if the load-stage tray stays empty and never gets swapped (e.g. OP pressed SKIP on WAR16122 without removing it), InArm loops case10<->case15 silently; arm a timer and raise WAR09101 so OP can clear the empty tray and Retry instead of a silent hang
-                if(bLoadStageEmptyTrayArmed==false)
+                //AI(ht9045-v899) 20260803: gate this 20260602 watchdog to CC_ARDENTEC only; TQPF_Timer is a pure wall clock with no stop awareness, so alarm-stop plus OP recovery time was counted as InArm stall and GIGAS got a spurious WAR09101 within 1s of START after every MES1020 empty-tray-full stop (CASE-GIGAS-20260729-001)
+                if(CosFunction.bUseInArmLoadStageWatchdog==false)
+                {
+                    bLoadStageEmptyTrayArmed=false;
+                }
+                else if(bLoadStageEmptyTrayArmed==false)
                 {
                     DoInArmLoadStageEmptyTray_Watchdog.SetSecAndOn(dInArmLoadStageEmptyTrayTimeoutSec);
                     bLoadStageEmptyTrayArmed=true;
@@ -7291,7 +7296,12 @@ bool DoInArmPickFromLoadStage_9045()
                 else
                 {
                     //AI(ht9045-v899) 20260602: no tray + no auto-skip path would dead-lock silently after OP manually removes Loader tray; arm watchdog then raise WAR09101 so OP can supply tray and Retry instead of hang
-                    if(bLoadStageNoTrayArmed==false)
+                    //AI(ht9045-v899) 20260803: gate this 20260602 watchdog to CC_ARDENTEC only, same pure-wall-clock defect as the empty-tray one above (CASE-GIGAS-20260729-001)
+                    if(CosFunction.bUseInArmLoadStageWatchdog==false)
+                    {
+                        bLoadStageNoTrayArmed=false;
+                    }
+                    else if(bLoadStageNoTrayArmed==false)
                     {
                         DoInArmLoadStageNoTray_Watchdog.SetSecAndOn(dInArmLoadStageNoTrayTimeoutSec);
                         bLoadStageNoTrayArmed=true;
