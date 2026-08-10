@@ -210,7 +210,18 @@ def functions(text):
             i += 1
             continue
         key = (m.group(1) + '::' + name) if m.group(1) else name
-        out.setdefault(key, (i + 1, j + 1, j - i + 1, gated[i]))
+        # BUG FIXED 20260810: this was a bare `out.setdefault(...)`, i.e. FIRST OCCURRENCE
+        # WINS. That is wrong for this tree, which deliberately keeps a `#if 0` golden-verbatim
+        # copy BESIDE a small live body -- and the gated copy usually comes FIRST
+        # (csystem.cpp MainProc: gated golden at :595, live body at :2999). First-wins recorded
+        # the function as GATED and therefore charged it as MISSING, so ADDING golden's text
+        # made completion appear to DROP: PT-W6a moved non-form from 79.4% to 78.4% purely
+        # through this, while the compiler's own preprocessed output was byte-identical.
+        # A LIVE occurrence must beat a GATED one; among equals, keep the larger span.
+        prev = out.get(key)
+        if prev is None or (prev[3] and not gated[i]) or \
+           (prev[3] == gated[i] and (j - i + 1) > prev[2]):
+            out[key] = (i + 1, j + 1, j - i + 1, gated[i])
         i = j + 1
     return out
 

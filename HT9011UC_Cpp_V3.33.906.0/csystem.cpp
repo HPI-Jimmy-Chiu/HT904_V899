@@ -524,6 +524,2465 @@ bool IsMainProcAlive(int iTimeoutSec)
     return GetMainProcSilentSeconds()<=iTimeoutSec;
 }
 
+//==============================================================================
+//  MainProc -- golden csystem.cpp:16711-19100 (2390 golden lines).
+//  GATE G-W7-MainProc-FIDELITY: golden's WHOLE body, VERBATIM, gated #if 0.
+//
+//  THIS BLOCK IS NOT COMPILED AND CHANGES NO BEHAVIOUR.
+//  ----------------------------------------------------
+//  The ACTIVE MainProc() is the 26-line slim body that begins immediately after
+//  this block's #endif, and it is BYTE-IDENTICAL to what it was before this
+//  block was added.  Net behaviour delta of adding this gate: exactly zero.
+//
+//  WHY IT EXISTS
+//  -------------
+//  A census audit scored MainProc "translated" because a same-named LIVE body
+//  exists, without comparing SIZE: golden is 2390 lines, the live body is 26.
+//  Golden's text for the other 2364 lines was NOWHERE in this tree -- lost, not
+//  deferred, and so unauditable.  Parking golden VERBATIM here restores
+//  fidelity: it can now be diffed line-for-line against golden, and the
+//  eventual un-gate becomes a mechanical move instead of a re-translation.
+//  Same shape as the two gates csystem.cpp already carries:
+//    DoTrayFeedProcess          golden 1235 lines gated, 6-line live no-op
+//    CheckContinusStartIsReady  golden  700 lines gated, 9-line live body
+//
+//  WHAT GOLDEN'S BODY IS -- ONE MACHINE TICK, OUTER MODE DISPATCHER
+//  ---------------------------------------------------------------
+//    :16724        InitialOK guard                          <-- LIVE below
+//    :16736-17129  per-tick housekeeping, independent ifs: Magazine monitor,
+//                  OffLineBin, AutoRetest/MRT mode, FIX3_FULL_PLACE, tray-check
+//                  mode, IsSafeLockCheck lamp, PLC safety IO, Tri_Temp_Machine,
+//                  E84 loader/unloader scan, IO-view, socket comms, Galil-Pr,
+//                  purge-air, ScanTrayStatus, manual-step AutoTeach, DoCDAAir
+//    :17130        if(SystemStart)  -- the whole run/mode tree, to :18792
+//      :17138-17610  Tri-Temp 1032 IO, Arm1/Arm2 suck + D44 vac, HiSilicon
+//                    setup-name check, OEE/auto-alignment, ATC3.0 record,
+//                    Fix3 teach data, pause-time, M01 monitor, 2DID enable,
+//                    LockByServer, In/OutArm Z home need-check
+//      :17615-17943  MODE LADDER -- one if / else-if chain, each arm an early
+//                    exit: Index-4-axis home, ArmZ home, fContact, Zteach,
+//                    fTeach, fBarCode, fShuttleMove, fLaserSensor, fOffSet,
+//                    iHome==1 (DoHomeProcess), FrmRotate in/out home,
+//                    ClearSocket, fAllMotorHome==false
+//      :17944        else  -- THE NORMAL RUN PATH:
+//                    :18098 DoTrayFeedProcess, :18108 DoCatchTray,
+//                    :18109 DoAutoEmpty, :18110 DoAutoColor,
+//                    :18114 DoAutoReceiveBinTray, OCR / ATK / AMR reports,
+//                    :18328 SetMotorSpeed, :18363 AutoClean task init,
+//                    :18546 RTC ROI count,
+//                    :18695 CheckContinusStartIsReady() gate ->
+//                    :18728 DoAllProcess()
+//                    :18739 DoOneCycleFinishCheck()
+//                    :18740 DoCleanOutFinishCheck()      <-- THE LIVE SLIM
+//                           BODY DISPATCHES EXACTLY THIS INNER TRIO
+//                    :18750 WinWay ATC-temp-not-ready refusal
+//      :18766-18791  N14/18 temp offset, HP-card torque read start/stop
+//    :18793        else (SystemStart!=true) -- idle path, to :19097: torque
+//                  read, OCR release, socket air cooling, panel/abort buttons,
+//                  ResetPanasonicTime, AutoCoolChambo, SaveMachineRecord,
+//                  loader/unload safe-door checks, DoLockLoader,
+//                  IC-fall-down check, SPIL AMR CheckBundleAndRead
+//    :19098-19100  iMyTimer wrap
+//
+//  The live 26-line body keeps the guard + the alive-instrumentation + the
+//  inner trio and drops the ladder.  DO NOT UN-GATE PIECEMEAL: the :17615
+//  ladder's arms are mutually exclusive by construction (one if/else-if
+//  chain), so lifting a subset of them without its chain would let two modes
+//  run in the same tick.  The un-gate blocker list (missing free functions and
+//  missing form/global objects) is in the wave report accompanying this commit.
+//==============================================================================
+#if 0 // GOLDEN VERBATIM -- golden csystem.cpp:16711-19100 (2390 lines).  GATE G-W7-MainProc-FIDELITY.  NOT COMPILED: the ACTIVE MainProc() is the slim body immediately after this #endif.  See the banner above for the tick outline and why the default is faithful.
+void MainProc()
+{
+    static int iOldSec;
+    static int iNeedRecord=0;
+    static int iMyTimer=0;
+    static bool CleanLamp=false,bSetupEnter=true,bInitialSpeed=false;
+    static bool bUnloadTrayFreeSenFlag[MAX_AUTO_TRAY]={false, false, false, false, false, false};                       //jou 2011-07-05 start : 當汽缸打上去前,先檢查sensor是否有on,避免翻盤
+    static bool bUnloadTrayDupErr[MAX_AUTO_TRAY]={false, false, false, false, false, false};                            //Steven 20120208 : Auto Tray沒放好,重複Alarm
+    static bool bInOutArmStartCheck=false;                                      //ChungHung 20140605 add Fix Shuttle hit In/OutArm
+    static bool bEvenStart=false;
+    static double dOldGreatekTempOfs=0.0;                                       //Sam 20200806 : 溫度 By Servo
+    static TDateTime tStartCount;
+
+    if(InitialOK==false)                                                        //Steven 20141023 : for 解構異常
+        return;
+
+    gtMainProcLastEnter=Now();                                                  //JerryYang 20260414 : Add 執行緒最後進入時間log
+    guMainProcCallCount++;
+    gbMainProcEntered=true;
+    int ret;
+    int iFix;
+    int icount=2;
+    TDateTime tEndCount;
+    iMyTimer++;
+
+    if(CUSTOMER_CODE==CC_KYEC_LEE && fObserveMagazine)                          //Eastsun 20260515 F021: Magazine monitor
+        fObserveMagazine->labSimMagazineTrayNo->Caption=IntToStr(iWhichMag);
+
+    DoBoostFunctionStepCooling();                                               //Steven 20180817 : Boost Function
+    if(CosFunction.bOffLineBin)
+    {
+        icount=3;
+    }
+
+    if(USE_AUTO_RETEST==eartInstall)                                            //ChungHung 20141002 add for KYEC AutoRetest
+    {
+        icount=6;
+    }
+
+    if(CosFunction.bUseMRTMode==true)                                           //Ifor 20170316 (wei) add KYEC MRT Mode
+    {
+        icount=8;
+    }
+
+    if(iTestRunMode>=icount)
+    {
+        ShowMyMessage("Test Mode FT/RT Fail");
+    }
+
+//    #ifdef ASE_KaohSiung                                                      //Steven 20220623 : Mark
+        fMain->CheckON_LINE();                                                  //kevin 20140407 off line 模式強制 ON_LINE
+//    #endif
+    static bool bFix3Lock=false;
+
+    if(FIX3_FULL_PLACE==3)                                                      //ChungHung 20140722 add for HT9046LA  //ChungHung 20140724 add
+    {
+        if(Sen[SnFix3Lock].IsOn()==true && bFix3Lock==false)
+        {
+            bFix3Lock=true;
+            RecordProcess("Press Fix3 Cylinder Manual Button On");
+        }
+        else if(Sen[SnFix3Lock].IsOff()==true && bFix3Lock==true)
+        {
+            bFix3Lock=false;
+            RecordProcess("Press Fix3 Cylinder Manual Button Off");
+        }
+    }
+
+    if(bCheckTrayBySoftWareOpen==false)                                         //KaiChen 20191128 ：矽格-湖口，軟體重啟時檢查所有Tray
+    {
+        ret=1;
+        for(int i=iFixMin; i<=iFixMax; i++)
+        {
+            iFix=iAutoIndex[i];
+            if(bCheckTrayBySoftWareOpen_Sen[iFix]==false)
+            {
+                if(Sen[SnFixedTrayDetect[iFix]].IsOn()==false)
+                {
+                    bCheckTrayBySoftWareOpen_Sen[iFix]=true;
+                }
+            }
+
+            if(bCheckTrayBySoftWareOpen_Sen[iFix]==false)
+            {
+                ret=0;
+            }
+        }
+
+        if(ret==1)
+        {
+            bCheckTrayBySoftWareOpen=true;
+        }
+    }
+
+    if(fAllMotorHome==false || SystemStart==false || bRunAutoClean==false)      //Steven 20220823 : 機台有暫停就要重新計算
+    {
+        tGalilTwoYMoveDelay.SetSecAndOn(60);
+        if(IniConfig.bEnableAutoCleanFunction && TestIF.iAutoClean_Function==true)
+            hAutoCleanHangUp.SetSecAndOn(Prod.iHangupMaxTime);
+    }
+
+    if(fiosetview->fShow==false)
+    {
+        SW[SwACAuto1Mode].Off();
+    }
+
+    if(IsSafeLockCheck())
+    {
+        if(SoftStop==false)                                                     //Sam 20221110 : 避免 Lock 鍵接觸不良導致機台停止卻沒有 Log 紀錄
+        {
+            fMain->ShowNowStatus(clBlack, "LOCK");
+        }
+        SoftStop=true;
+    }
+
+    //Austin 20190531.01 增加PLC_IO模組及安全相關IO.                            //Jason 20230619 增加安全PLC部分
+    //==>
+    if(Enable_PLCSafety_IO)
+    {
+        //斷電模式暫不整合
+        //SW[SwAllowPowerOff].On();//通知PLC不允許斷電
+    }
+    //<==
+    //Austin 20190531.01 增加PLC_IO模組及安全相關IO.
+
+    //Ztex 2023.04.19 Add HT-1032 TriTemp Function
+    if(Tri_Temp_Machine==1)
+    {
+        DoTriTempState_AlwaysCheck();                                           //Add alway check tri temp satat
+        DoTriTempState_1032();                                                  //TriTemp 溫度保護相關
+    }
+    //Ztex 2023.04.19 Add HT-1032 TriTemp Function
+
+#ifdef DEBUG_TRY_CATCH
+    try
+    {
+#endif
+        COM2->ReadTorque();
+#ifdef DEBUG_TRY_CATCH
+    }
+    catch(...)
+    {
+        //發生error
+        MyDBIProcess("Exception", "COM2->ReadTorque()");
+    }
+
+    try
+    {
+#endif
+        COM2->ReadWriterParameter();
+#ifdef DEBUG_TRY_CATCH
+    }
+    catch(...)
+    {
+        //發生error
+        MyDBIProcess("Exception", "COM2->ReadWriterParameter()");
+    }
+#endif
+
+    if(USE_E84_Sensor==1 && TestIF_File.bEnableE84)                             //Frank 20251204 add E84
+    {
+        for(int i=0; i<3; i++)
+        {
+            fAGV->DoE84LoaderScan(i);
+            fAGV->DoE84UnloaderScan(i);
+        }
+
+        if(fiosetview->fShow==false)
+        {
+            fAGV->E84StatusChange();
+            fAGV->DoE84Loader();
+            fAGV->DoE84Unloader();
+            fAGV->ShowE84Sensor();
+        }
+    }
+
+    if(fiosetview->fShow)
+        return;
+
+#ifdef DEBUG_TRY_CATCH
+    try
+    {
+#endif
+        ScanSystemSensor();                                                     // if [Start] is Active then SystemStart=true
+        if(IniConfig.bG14UseStartSoundAlarm && bStartMoveSpeed)                 //kevin 20201116  Start 發出聲音 不動 5sec
+        {                                                                       //kevin 20201116  motor move speed 10 % 移鄧10 sec 系統暫停 恢復速度
+             if(RunStartLowSpeedBuzzer(false))
+                bStartMoveSpeed=false;
+        }
+#ifdef DEBUG_TRY_CATCH
+    }
+    catch(...)
+    {
+        //發生error
+        MyDBIProcess("Exception", "ScanSystemSensor()");
+    }
+
+    try
+    {
+#endif
+        DoSystem();
+#ifdef DEBUG_TRY_CATCH
+    }
+    catch(...)
+    {
+        MyDBIProcess("Exception", "DoSystem()");
+    }
+
+    try
+    {
+#endif
+        DoTriTempState();                                                       //pig 2015.06.06 TriTempMachine
+#ifdef DEBUG_TRY_CATCH
+    }
+    catch(...)
+    {
+        MyDBIProcess("Exception", "DoTriTempState()");
+    }
+
+    try
+    {
+#endif
+        ProcessStatrDigital();
+#ifdef DEBUG_TRY_CATCH
+    }
+    catch(...)
+    {
+        MyDBIProcess("Exception", "ProcessStatrDigital()");
+    }
+#endif
+
+#ifdef DEBUG_COLOR
+    if(fTrayMapping->btnColorTrack->Down)
+    {
+        if(DoColorTrayToRear())
+        {
+            fTrayMapping->btnColorTrack->Down=false;
+        }
+    }
+#endif
+
+    if(fMotorTest->fShow || fTeach->fShow)
+    {
+        if(fMotorTest->bSingleHome)                                             //JerryYang 20230815 : 移到上面 避免motor test頁面不能回home
+        {
+            if(ProcessSingleMotorHome(fMotorTest->iSingleHomeIndex) &&
+               MOT[fMotorTest->iSingleHomeIndex].HomeFlag==1)                   //Steven 20160427 : 反過來，修正還沒歸零完成就跳掉
+            {
+                fMotorTest->bSingleHome=false;
+            }
+        }
+
+        if(SystemStart==false && VerifyMotorAction())                           //Steven 20230728 : 確認馬達有沒有在動
+        {
+            return ;
+        }
+
+        if(MACHINE_HAS_AUTO_ALIGNMENT_CCD       &&                              //Ifor 20250108 : fixed for AOA
+           TestIF.bEnableAutoAlignment==true    &&
+           Teach_AutoAlignmentUnit!=0           )
+        {
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    if(IniConfig.bEnableSocketCommunication)                                    //ChungHung 20130112 add for ASE_KR Socket Tester
+    {
+        if(SystemStart)                                                         //ChungHung 20130112 add for ASE_KR Socket Tester
+        {
+            fSocketCommunication->bNeedShow=true;
+            fSocketCommunication->bStopShowAlarm=false;
+        }
+
+        if(fSocketCommunication->Socket_ASE_KR_Open(IniConfig.SocketIP, IniConfig.SocketPort, false)==false)
+        {
+            return;
+        }
+        else if(fSocketCommunication->bStopFormServer)
+        {
+            fSocketCommunication->bStopFormServer=false;
+            ShowMyMessage("Stop Form Server", fSocketCommunication->ErrorMessage, fSocketCommunication->ErrorMessage);
+            return;
+        }
+        else if(fSocketCommunication->bOneCycleFormServerButNoRunJustShow)
+        {
+            fSocketCommunication->bOneCycleFormServerButNoRunJustShow=false;
+            ShowMyMessage("OneCycle Form Server", fSocketCommunication->ErrorMessage, fSocketCommunication->ErrorMessage);
+            return;
+        }
+        else if(fSocketCommunication->InitialzedHandler()==false)
+        {
+            fSocketCommunication->SetHandlerState(2);
+            fSocketCommunication->aCurrentHandlerState=fSocketCommunication->aSetHandlerState;
+            return;
+        }
+        else if(fSocketCommunication->aSetHandlerState!=fSocketCommunication->aCurrentHandlerState)
+        {
+            if(fSocketCommunication->SendCurrentStatus()==true)
+            {
+                fSocketCommunication->aCurrentHandlerState=fSocketCommunication->aSetHandlerState;
+            }
+        }
+        else if(fSocketCommunication->bSendBinMapReport)
+        {
+            if(fSocketCommunication->BinMapReport()==false)
+            {
+                return;
+            }
+            fSocketCommunication->bSendBinMapReport=false;
+        }
+    }
+
+    static bool bRunGali_Pr=false;
+    AnsiString strError_Count;
+    #ifndef SOFT_SIMULTE
+    long Y1_ErrorCount=0;
+    long Z1_ErrorCount=0;
+    long Z2_ErrorCount=0;
+    long Y2_ErrorCount=0;
+    if(IniConfig.bD34GailDMCProtection)                                         //ChungHung 20131230 add for ATK
+    {
+        Y1_ErrorCount=MOT[MTestY1].GetGali_Pr_Result();
+        Z1_ErrorCount=MOT[MTestZ1].GetGali_Pr_Result();
+        Z2_ErrorCount=MOT[MTestZ2].GetGali_Pr_Result();
+        Y2_ErrorCount=MOT[MTestY2].GetGali_Pr_Result();
+
+        if(bRunGali_Pr && Y1_ErrorCount>=GALI_ERROR_MAX_PR1)                    //Chunghung 20131111 add
+        {
+            iHome=1;
+            fAllMotorHome=false;
+            MOT[MTestY1].EndGali_Pr();                                          //Chunghung 20131111 add
+            strError_Count.printf("[D34] MTestY1 Error Count over %d", Y1_ErrorCount);
+            ShowMyMessage(strError_Count);
+            SoftStop=true;
+            SystemStart=false;
+        }
+
+        if(bRunGali_Pr && Z1_ErrorCount>=GALI_ERROR_MAX_PR2)                    //Chunghung 20131111 add
+        {
+            iHome=1;
+            fAllMotorHome=false;
+            MOT[MTestY1].EndGali_Pr();                                          //Chunghung 20131111 add
+            strError_Count.printf("[D34] MTestZ1 Error Count over %d", Z1_ErrorCount);
+            ShowMyMessage(strError_Count);
+            SoftStop=true;
+            SystemStart=false;
+        }
+
+        if(bRunGali_Pr && Z2_ErrorCount>=GALI_ERROR_MAX_PR3)                    //Chunghung 20131111 add
+        {
+            iHome=1;
+            fAllMotorHome=false;
+            MOT[MTestY1].EndGali_Pr();                                          //Chunghung 20131111 add
+            strError_Count.printf("[D34] MTestZ2 Error Count over %d", Z2_ErrorCount);
+            ShowMyMessage(strError_Count);
+            SoftStop=true;
+            SystemStart=false;
+        }
+
+        if(bRunGali_Pr && Y2_ErrorCount>=GALI_ERROR_MAX_PR4)                    //Chunghung 20131111 add
+        {
+            iHome=1;
+            fAllMotorHome=false;
+            MOT[MTestY1].EndGali_Pr();                                          //Chunghung 20131111 add
+            strError_Count.printf("[D34] MTestY2 Error Count over %d", Y2_ErrorCount);
+            ShowMyMessage(strError_Count);
+            SoftStop=true;
+            SystemStart=false;
+        }
+
+        bRunGali_Pr = MOT[MTestY1].IsStartGali_Pr();
+        fMain->ALed5->Value=bRunGali_Pr;
+    }
+    #endif
+
+    if(CUSTOMER_CODE==CC_KYEC_LEE &&                                            //Ifor 20170421 (wei) 移動至上方，不管機台是否有Start 都要判斷Tray狀態
+       fNote->fShow==false &&
+       MyMessageBox->fShow==false)
+    {
+        ScanTrayStatus();
+    }
+
+    static bool bNeedCheckSetupNameList=true;
+    if(TestIF_File.bPurgeAirAfterContract &&                                    //ChungHung 20130112 add for ASE_KR Socket Tester
+       (iContractCount>=TestIF_File.iPurgeAirContract))                         //kevin 20180928 add contract count
+    {
+        SW[SwPurgeAir].On();                                                    //kevin 20180928 (Steven) : add blower load board
+        iContractCount=0;
+    }
+
+    int  TestIntervals=0;
+    if(TestIF_File.bPurgeAirAfterContract &&
+       ((bEOTToLongStopBlowAir && bTestFinishToNextTestOver) ||
+        (bSOTToLongStopBlowAir && bTestStartToNextTestStart)))                  //kevin 20181009  add contract count 吹氣關閉
+    {
+        if(bTestFinishToNextTestOver)
+            TestIntervals=PauseIntervalsTime.LatchCycleTime(false)/1000.0;
+        else
+            TestIntervals=SOTPauseIntervalsTime.LatchCycleTime(false)/1000.0;
+
+        if((bTestFinishToNextTestOver && TestIntervals>=TestIF.iTestFinishToNextTestOver) ||
+           (bTestStartToNextTestStart && TestIntervals>=Prod.dTeststartToNextTestStart))                                //kevin 20181102 add SOT time
+        {
+            SW[SwPurgeAir].Off();                                               //kevin 20180928 add blower load board
+            iContractCount=0;
+            bEOTToLongStopBlowAir=false;                                        //kevin 20181009 add上次測試訊號太久 需停止吹氣
+            if(bTestStartToNextTestStart)
+                bTestStartToNextTestStartDelay=true;                            //kevin 20181101 SOT 間隔時間驅動
+            bSOTToLongStopBlowAir=false;
+        }
+    }
+    DoCDAAir();                                                                 //Steven 20181012 : 使用熱風槍吹冷風
+    if(CosFunction.bManualSteplAutoTeach &&
+       IniConfig.bA56EnableAutoTeachFunciton)                                   //JimmyChiu 20211020 : Auto alignment mode
+        fAutoTeach->DoAutoTeachProcess();
+
+    if(SystemStart)
+    {
+        for(int i=1; i<qTaskCount; i++)                                         //Steven 20180808 (wei) : 修改紀錄Task的方式 //Steven 20220218 : 紀錄Task移到最上面,避免沒記錄到
+        {
+            if(QueueTaskList[i].CheckTaskChange())
+                fMain->StringGrid2->Cells[1][i]=QueueTaskList[i].GetLastData();
+        }
+
+        if(CUSTOMER_CODE==CC_SCC &&
+           IniConfig.bN24_EnableRTM &&
+           FormHS->bHaltHandler==true)                                          //Steven 20200409 : JSCC RTM功能
+        {
+            SystemStart=false;
+            return;
+        }
+
+        if(Tri_Temp_Machine==1)                                                 //Ztex 2023.04.13 Add HT-1032 IO ==>
+        {                                                                       //Configuration功能選項設定
+            if(bDelayTimeAfterFixDoorOpen==true)                                //Add Fix Door
+                return;
+
+            if(IniConfig.bL35_1OverSetTempOpenFan==true && iSuperHotKit_CheckFinish==0)                                 //Add 超高溫Kit完成完成。
+                return;
+
+            if(IniConfig.bL39_1AutoRunWhenTempOk==true && IniConfig.bL39_2WaitTempstabilize==true && IniConfig.iL39_2WaitTempstabilize!=0)
+            {
+                if((bAllPosTempOkOverTime==false || bAllPosTempInRange==false) && fAllMotorHome==true)
+                {
+                    return;
+                }
+            }
+            else if(IniConfig.bL39_1AutoRunWhenTempOk==true && (IniConfig.bL39_2WaitTempstabilize==false || IniConfig.iL39_2WaitTempstabilize==0))              //Hmy 20191224  Add Wait Temperature Stable Time
+            {
+                if(bAllPosTempInRange==false && fAllMotorHome==true)
+                {
+                    return;
+                }
+            }
+        }                                                                       //Ztex 2023.04.13 Add HT-1032 IO <==
+
+        if(bArm1NeedSuck &&                                                     //JerryYang 20190123 新增保護避免真空持續on會造成all site掉料
+           fAllMotorHome==false)                                                //Steven 20210824 : index歸零時要把IC放回去
+        {
+            DoArm1Suck();
+        }
+
+        if(bArm2NeedSuck &&
+           fAllMotorHome==false)                                                //Steven 20210824 : index歸零時要把IC放回去
+        {
+            DoArm2Suck();
+        }
+
+        if(bD44Arm1CheckVacOn)
+        {
+            DoArm1D44VacCheck();
+        }
+
+        if(bD44Arm2CheckVacOn)
+        {
+            DoArm2D44VacCheck();
+        }
+
+        if(CosFunction.bHiSiliconFunction==true &&                              //Ifor 20160101 海思專用版本
+           CUSTOMER_CODE==CC_KYEC_LEE &&
+           bEnablePEModel==false)                                               //Ifor 20170809 (wei) PE模式下不判斷工作檔
+        {
+            AnsiString aFileName_HS=fMain->cbSetupFileName->Text;               //Ifor 20160101 :判斷工作檔是否為HISI專用
+            AnsiString aTemp_HS="";                                             //Ifor 20170424 (wei) KYEC 要求海思版本新增客戶碼
+
+            if(aFileName_HS.Pos("9203")!=1 &&
+               aFileName_HS.Pos("5611")!=1 &&
+               aFileName_HS.Pos("9287")!=1 &&
+               aFileName_HS.Pos("3971")!=1 &&
+               aFileName_HS.Pos("9606")!=1 &&
+               aFileName_HS.Pos("KL")!=1   &&                                   //Ifor 20200914 Fix: HISI => KL
+               aFileName_HS.Pos("9378")!=1 )                                    //Ifor 20190711 : KYEC 要求新增客戶代碼9378
+            {
+                ShowErrorMessage("WAR15320", 0, MMATC_Handler);                 //Ifor 20160726 add WAR15320"Please Check Setup Name non Hisilicon!!!"
+                return;
+            }
+
+            if(ATC_SYSTEM!=eATCUninstall && ATC_SYSTEM!=eNonChamber)            //Ifor 20160420 新增NonChamber不判斷 ATC 常溫控溫設定值
+            {
+                double dbSetATCTemp=0;                                          //Ifor 20160114 add常溫溫度與高溫溫度判斷
+                aTemp_HS=aFileName_HS.SubString(24, 3);                         //Ifor 20160101 判斷工作黨溫度是否符合工作檔名稱
+                                                                                //Hisi_SD6602??_H9045_11_025_V01
+                                                                                //123456789012345678901234567890
+
+                if(LastSet.iTemperature==Tempture_Ambient &&
+                   Temperature.bATCActiveCooling)                               //Ifor 20181011 (Steven) : Add 修改判斷條件
+                {
+                    dbSetATCTemp=IniConfig.dATCAmbientTemperature;              //Ifor 20160111 : [L11] ATC常溫的設定溫度
+                }
+                else
+                {
+                    dbSetATCTemp=Temperature.fWorkTemperBase;                   //Ifor 20160111 : ATC高溫的設定溫度
+                }
+
+                if(atoi(aTemp_HS.c_str())!=dbSetATCTemp)
+                {
+                    ShowErrorMessage("WAR15321", 0, MMATC_Handler);             //Ifor 20160726 add WAR15321"Please Check Work Temperature Does not comply File name!!!"
+                    return;
+                }
+            }
+
+            if(bNeedCheckSetupNameList &&                                       //Ifor 20160310 add for Hisi Setup name check start
+               FormHS->CheckSetupNamelist_Hisi()==false)
+            {
+                ShowErrorMessage("WAR15322", 0, MMATC_Handler);                 //Ifor 20160726 add WAR15322"This Setup file must use ATC System!!!Please check again"
+            }
+            bNeedCheckSetupNameList = false;
+        }
+        else if(CosFunction.bHiSiliconFunction==true &&
+                CUSTOMER_CODE==CC_ASE_KaohSiung)                                //kevin 20180626 add HISI判斷工作檔
+        {
+            AnsiString aFileName_HS=fMain->cbSetupFileName->Text;               //Ifor 20160101 :判斷工作檔是否為HISI專用
+            AnsiString aTemp_HS="";                                             //Ifor 20170424 (wei) KYEC 要求海思版本新增客戶碼
+            AnsiString aFile=aFileName_HS.UpperCase();                          //kevin 20180626
+            HisiWorkName(aFile);                                                //kevin 20170120 start
+
+            if(sHisiWorkName[0].Pos("KL")==1 ||                                 //Ifor 20200914 Fix: HISI => KL
+               sHisiWorkName[0].Pos("JOBFILE")==1 )                             //JOBFILE 不判斷檔名溫度
+            {
+                 aFile="";
+            }
+            else
+            {
+                ShowErrorMessage("WAR15320", 0, MMATC_Handler);                 //Ifor 20160726 add WAR15320"Please Check Setup Name non Hisilicon!!!"
+                return;
+            }
+
+            if(sHisiWorkName[0].Pos("JOBFILE")==0)                              //JOBFILE 不判斷檔名溫度
+            {                                                                   //Ifor 20160420 新增NonChamber不判斷 ATC 常溫控溫設定值
+                double dbSetATCTemp=0;
+                int iWorkTemp= atoi(sHisiWorkName[4].c_str());
+                if(LastSet.iTemperature==Tempture_Hot ||
+                   LastSet.iTemperature==Tempture_AmbientHot)
+                {
+                    dbSetATCTemp=Temperature.fWorkTemperBase;                   //Ifor 20160111 : ATC高溫的設定溫度
+                }
+                else
+                {
+                    if(ATC_SYSTEM ==eATCUninstall)                              //kevin 20180724 add
+                        dbSetATCTemp=Temperature.fAbitTemp;                     //20180709 ATC常溫的設定溫度
+                    else
+                        dbSetATCTemp=IniConfig.dATCAmbientTemperature;          //Ifor 20160111 : [L11] ATC常溫的設定溫度
+                }
+
+                if(iWorkTemp != dbSetATCTemp)
+                {
+                    ShowErrorMessage("WAR15321", 0, MMATC_Handler);             //Ifor 20160726 add WAR15321"Please Check Work Temperature Does not comply File name!!!"
+                    return;
+                }
+            }
+
+            if(ATC_SYSTEM!=eATCUninstall && ATC_SYSTEM!=eNonChamber)            //kevin 20180709 沒有atc 系統
+            {
+                if(bNeedCheckSetupNameList && FormHS->CheckSetupNamelist_Hisi()==false)
+                {
+                    ShowErrorMessage("WAR15322", 0, MMATC_Handler);             //Ifor 20160726 add WAR15322"This Setup file must use ATC System!!!Please check again"
+                }
+            }
+            bNeedCheckSetupNameList=false;
+        }
+
+        #ifndef SOFT_SIMULTE
+        if(CosFunction.bOEEFunction && fAutoTeach->IsRun()==false)              //JimmyChiu 20211020 : Auto alignment mode //Steven 20180417 (Jou) : OEE功能
+        {                                                                       //Sam 20170810 (Steven) 移植超豐 OEE 功能 form HT-7045
+            if(tOEESystemCycle.Off())
+            {
+                tOEESystemCycle.SetSecAndOn(2);
+                if(IniConfig.bN14_14_AlarmCtrlMachine)                          //Steven 20190724 : [N14-14] Use alarm control machine
+                {
+                    if(fProductionInfo->ACM_ReadFlag("Start")!="1")             //Start=1
+                    {
+                        fProductionInfo->SetACM_WriteMsgAndCallExe_sMessage("Start");                                   //jimmychiu 20220622 add
+                        if(IniConfig.bN14_1_EnableOEEFunction)                  //Sam 20200525 : Control Bin
+                        {
+                            fProductionInfo->RecordControlBinCount("Pause Control Bin Check");
+                        }
+
+                        if(MyMessageBox->fShow==false)
+                        {
+                            ShowMyMessage("Alarm control machine stop!");
+                        }
+                        else
+                        {
+                            MyMessageBox->BringToFront();
+                        }
+                        return;
+                    }
+                }
+                fProductionInfo->bIsPauseTime=false;                            //Mylin 20170705 Add OEE Report Field
+                if(IniConfig.bN14_1_EnableOEEFunction==true)
+                {
+                    if(IniConfig.iN14_1_OEERecordCycleTime>0)
+                    {
+                        if(fProductionInfo->bStartNeedSaveAndUpdateOEEFiles==true)
+                        {
+                            fProductionInfo->bStartNeedSaveAndUpdateOEEFiles=false;                                     //Sam 20180423 (wei) : 修正 MOFile  檢查到參數設定異常沒有強制停機。
+                            fProductionInfo->EachCycleSecondDo_SaveAndUpdateOEEFiles(true);
+                            fProductionInfo->SetStartStatus();
+                        }
+                    }
+
+                    if(fProductionInfo->bNeedLotEndAfterCleanOut==true &&
+                       fProductionInfo->_bOEEStartLotSuccess==true &&
+                       iTrayFeed!=1)
+                    {
+                        if(MyMessageBox->fShow==false)
+                        {
+                            ShowMyMessage("Please End Lot!");
+                        }
+                        else
+                        {
+                            MyMessageBox->BringToFront();
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+        #endif
+        bEvenStart=true;                                                        //ChungHung 20150526 add for ATK want to even stop over will use initial delay
+
+        if((ATC_SYSTEM==eATC60 || ATC_SYSTEM==eATC30) && iNeedRecord==2)        //20141204 ChungHung add for ATC3.0   //20141204 ChungHung add for ATC3.0
+        {
+            ATCInterfaceForm->ATC_60_SYS.ReSendCommand(ATCInterfaceForm->ATC_60_SYS.SETTEMP);
+            ATCInterfaceForm->ATC_60_SYS.ReSendCommand(ATCInterfaceForm->ATC_60_SYS.USESITE);
+            ATCInterfaceForm->ATC_60_SYS.ReSendCommand(ATCInterfaceForm->ATC_60_SYS.SETOFFSET);
+            ATCInterfaceForm->ATC_60_SYS.ReSendCommand(ATCInterfaceForm->ATC_60_SYS.ATCENABLED);                        //ChungHung 20141124 change
+        }
+
+        if(fAllMotorHome &&
+           fHome->fShow==false &&
+           FIX3_FULL_PLACE==Fix3K_ShortShuttle)                                 //Steven 20130126 : Fix3滿盤功能
+        {
+            if(CheckFix3FullPlaceTechData()==false)
+            {
+                fMain->BtnPauseClick(fMain);
+                ShowMyMessage("Please redo the teaching because of the Fix 3 could be full filled function.", "由於Fix3滿盤功能，請重新校準點位");
+            }
+        }
+
+        if(FIX3_FULL_PLACE==Fix3K_UseCylinder46LA)                              //ChungHung 20140722 add for HT9046LA  //ChungHung 20140724 add
+        {
+            if(Sen[SnFix3Lock].IsOn()==true)
+            {
+                ShowMyMessage("Pleass press Fix3 Cylinder Manual Button off");
+            }
+        }
+
+        if(bCalculatePauseTime)
+        {
+            tUPH_PauseTime+=Now()-tUPH_PauseStartTime;
+            bCalculatePauseTime=false;
+        }
+
+        ScanColorFixTrayStatus();                                               //Steven 20141019 : 按下Start才檢查Fix盤上的Color Tray
+
+        if(IniConfig.bM01EnableMonitorFunction &&
+           (CUSTOMER_CODE==CC_SCK ||
+            CUSTOMER_CODE==CC_ASE_CL))                                          //KaiHuang 202201023 Add ASE-CL
+        {
+            if(IniConfig.bM0101ContactModeUseDifferentSpeed)                    //ChungHung 20131009 add for SCK
+            {
+                if(DeviceForm.ContactMode!=DirectContactModeDiffentSpeed)
+                    ShowMyMessage("Please Select Direct Contact Diffent Speed");
+            }
+
+            if(IniConfig.bM0102SiteYieldDifferentMustOn)                        //ChungHung 20131009 add for SCK
+            {
+                if(LastSet.iRunStartMode==rsmContinuStart ||
+                   LastSet.iRunStartMode==rsmInitialStart ||
+                   LastSet.iRunStartMode==rsmAutoSiteMap  ||
+                   LastSet.iRunStartMode==rsmQAMode)
+                {
+                    if(TestIF.bFailAlarmSiteYieldDifferent==false)
+                        ShowMyMessage("Please enable Site Differ Yield%");
+                }
+                else if(LastSet.iRunStartMode==rsmContinuRetest ||
+                        LastSet.iRunStartMode==rsmCInitialRetest)
+                {
+                    if(TestIF.bFailAlarmSiteYieldDifferent_RT==false)
+                        ShowMyMessage("Please enable Site Differ Yield%");
+                }
+            }
+
+            if(IniConfig.bM0103ContinueFailBySocketMustOn)                      //ChungHung 20131009 add for SCK
+            {
+                if(LastSet.iRunStartMode==rsmContinuStart ||
+                   LastSet.iRunStartMode==rsmInitialStart ||
+                   LastSet.iRunStartMode==rsmAutoSiteMap  ||
+                   LastSet.iRunStartMode==rsmQAMode)
+                {
+                    if(TestIF.bContsFailBySocket==false)
+                        ShowMyMessage("Please enable Consecutive Failure Alarm(Socket)");
+                }
+                else if(LastSet.iRunStartMode==rsmContinuRetest || LastSet.iRunStartMode==rsmCInitialRetest)
+                {
+                    if(TestIF.bContsFailBySocket_RT==false)
+                        ShowMyMessage("Please enable Consecutive Failure Alarm(Socket)");
+                }
+            }
+
+            if(IniConfig.bM0104ContinueFailByHeadMustOn)                        //ChungHung 20131009 add for SCK
+            {
+                if(LastSet.iRunStartMode==rsmContinuStart ||
+                   LastSet.iRunStartMode==rsmInitialStart ||
+                   LastSet.iRunStartMode==rsmAutoSiteMap  ||
+                   LastSet.iRunStartMode==rsmQAMode)
+                {
+                    if(TestIF.bContsFailByHead==false)
+                        ShowMyMessage("Please enable Consecutive Failure Alarm(Head)");
+                }
+                else if(LastSet.iRunStartMode==rsmContinuRetest ||
+                        LastSet.iRunStartMode==rsmCInitialRetest)
+                {
+                    if(TestIF.bContsFailByHead_RT==false)
+                        ShowMyMessage("Please enable Consecutive Failure Alarm(Head)");
+                }
+            }
+
+            if(IniConfig.bM0105InOutArmDeviceCheckMustOn)                       //ChungHung 20131009 add for SCK
+            {
+                if(IniConfig.bInOutArmPlaceSkipSuckDetect==true)
+                    ShowMyMessage("Please disable [E35]In && Out arm place device disable Vacuum detect Off ");
+            }
+
+            if(IniConfig.bM0106IndexDeviceCheckDestoryMustOn)                   //ChungHung 20131009 add for SCK
+            {
+                if(IniConfig.bD44CheckIndexICDestroy==false)
+                    ShowMyMessage("Please enable [D44] Check vacumn after test head purge, (sec) ");
+            }
+
+            if(IniConfig.bM0107AutoSpeedMustOn)                                 //ChungHung 20131009 add for SCK
+            {
+                if(ArmSpeed[InArm].bAutoSpeed==false)
+                    ShowMyMessage("Please enable Auto Speed");
+            }
+
+            if(IniConfig.bM0108EveryFirstDeviceMustOn)                          //ChungHung 20141210 add for SCK want to add Monitor every first device have delay time
+            {
+                if(TestIF.bEveryFirstDeviceUseInitialDelay==false)
+                    ShowMyMessage("Please enable every first device have initial delay time");
+            }
+
+            if(IniConfig.bM0109RTCOffCheckYieldPiggyBack)                       //ChungHung 20150613 add for SCK want to check and show message
+            {
+                if(REAL_TIME_CCD==false || (COM2!=NULL && COM2->bCCDDummyRum))  //Steven 20150727 : Fixed for SCK
+                {
+                    if(iRunStartMode==FT || iRunStartMode==FT_ART)
+                    {
+                        if(TestIF_File.iCountAlarmAction!=1)
+                        {
+                            ShowMyMessage("Please enable Yield Alarm to PiggyBack");
+                        }
+                        else if(TestIF_File.bContinuousPassBySocket!=true)
+                        {
+                            ShowMyMessage("Please enable Yield Continuous Pass By Socket");
+                        }
+                        else if(TestIF_File.bContinuousContact!=true)
+                        {
+                            ShowMyMessage("Please enable Yield Continuous Contact");
+                        }
+                    }
+                    else
+                    {
+                        if(TestIF_File.iCountAlarmAction_RT!=1)
+                        {
+                            ShowMyMessage("Please enable Yield Alarm to PiggyBack");
+                        }
+                        else if(TestIF_File.bContinuousPassBySocket_RT!=true)
+                        {
+                            ShowMyMessage("Please enable Yield Continuous Pass By Socket");
+                        }
+                        else if(TestIF_File.bContinuousContact_RT!=true)
+                        {
+                            ShowMyMessage("Please enable Yield Continuous Contact");
+                        }
+                    }
+                }
+            }
+
+            if(IniConfig.bM1010Disable_I12)                                     //Steven 20160727 : For SCK
+            {
+                if(IniConfig.bI12TesterTimerOutNotNeedReTest)
+                {
+                    ShowMyMessage("Please disable function [I12].");
+                }
+            }
+
+            if(IniConfig.bM1012EnableAutoClean)                                 //Steven 20160727 : For SCK
+            {
+                if(TestIF.iAutoClean_Function==false)
+                {
+                    ShowMyMessage("Please enable auto clean function.");
+                }
+            }
+
+            if(IniConfig.bM1013Enable2DID)                                      //Steven 20160727 : For SCK
+            {
+                if(BAR_CODE_INSTALL!=ebctUninstall && TestIF.bEnableBarCode==false)
+                {
+                    ShowMyMessage("Please enable 2DID function.");
+                }
+            }
+
+            if(IniConfig.bM1014EnableATC)                                       //Steven 20191129 : For SCK
+            {
+                if(ATC_SYSTEM==eNewATCSystem    ||                              //Jimmychiu 20210906
+                   ATC_SYSTEM==eWinWay          ||
+                   ATC_SYSTEM==eATCHonPrecType)
+                {
+                    if(Temperature.bATCActiveCooling==false)
+                        ShowMyMessage("Please enable ATC function.");
+                }
+            }
+
+            if(IniConfig.bM1015EnableBottom2DID)                                //Steven 20191129 : For SCK
+            {
+                if(BOTTOM_2DID==1 && TestIF_File.bEnableBottom2D==false)
+                {
+                    ShowMyMessage("Please enable Bottom 2DID function.");
+                }
+            }
+        }
+
+        if(TestIF.bCheckEnable2DIDFunction)                                     //KaiHuang 20201028 : ASE-CL 生產時檢查是否開啟 2D
+        {
+            if(BAR_CODE_INSTALL!=ebctUninstall && TestIF.bEnableBarCode==false)
+            {
+                ShowMyMessage("Please enable 2DID function.");
+            }
+        }
+
+        if(TestIF.bCheckEnableBottom2DIDFunction)                               //KaiHuang 20201028 : ASE-CL 生產時檢查是否開啟 Bottom 2D
+        {
+            if(BOTTOM_2DID==1 && TestIF_File.bEnableBottom2D==false)
+            {
+                ShowMyMessage("Please enable Bottom 2DID function.");
+            }
+        }
+
+        if(bLockByServer)                                                       //2008/07/11 lee start
+        {
+            fMain->BtnPauseClick(fMain);
+            ShowMyMessage("Handler was paused by the host command", "Handler被網路控管中心暫停");
+        }
+
+        if(bLongTimePause==false)
+            iLongTimePauseCount=0;
+
+        iNeedRecord=1;
+        iReset=0;
+
+        if(fAllMotorHome==false &&
+            fContact->fShow==false &&
+            bDestoryOnSht==false)                                               //RogerYang 20251021 : 吹氣完成才能歸零
+        {
+            iHome=1;
+            if(IniConfig.bI01TesterFinishThenHome &&                            //ChungHung 20140716 add if testing not finish can not homing
+               LastSet.iTester==ON_LINE)                                        //kevin 20150721 收到測試資料才能home  && LastSet.iRealDummy==REALLY)
+            {
+                if(bFinshTest==false)
+                {
+                    bWaitTesterFinish=true;
+                    DoTestHeadMotor();
+                    return;
+                }
+                bWaitTesterFinish=false;
+            }
+        }
+
+        if(bInOutArmStartCheck)                                                 //ChungHung 20140605 add Fix Shuttle hit In/OutArm
+        {
+            if(CheckInArmZNeedHome()!=-1)                                       //ChungHung 20140605 add Fix Shuttle hit In/OutArm
+                SetInArmHome();
+
+            if(CheckOutArmZNeedHome()!=-1)
+                SetOutArmHome();
+
+            bInOutArmStartCheck=false;
+        }
+        #ifdef INDEX_PROTECT_TMOVE
+        if(bOverRange4Indexhome==true &&
+           bTriger4Indexhome==true &&                                           //Isaac 20201012 : index Y超過範圍，做一次Tmode
+           fAllMotorHome==true)
+        {
+#ifdef DEBUG_TRY_CATCH
+            try
+            {
+#endif
+                if(DoIndex4AxisHome(false))                                     //Isaac 20201012 : index Y超過範圍，做一次Tmode，indexArm四軸先回home
+                {
+                    bOverRange4Indexhome=false;
+                    iIndexOverRangeCount++;
+                    if(iIndexOverRangeCount>2)                                  //兩次自動校正後，報alarm
+                    {
+                        iIndexOverRangeCount=0;
+                        RecordIndexPosition(0, 3);
+                        ShowMyMessage("Index position over range,already Auto-calibrating twice. Please check!");
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+#ifdef DEBUG_TRY_CATCH
+            }
+            catch(...)
+            {
+                MyDBIProcess("Exception", "DoIndex4AxisHome(false)");
+            }
+#endif
+        }
+        #endif
+        else if(bNeedArmZHome &&
+                fAllMotorHome==true)                                            //Steven 20140703 : 整體歸零優先。
+        {
+#ifdef DEBUG_TRY_CATCH
+            try
+            {
+#endif
+                if(DoArmZHome())
+                {
+                    bNeedArmZHome=false;
+                    bBackArmZHomeFlag=false;
+                }
+#ifdef DEBUG_TRY_CATCH
+            }
+            catch(...)
+            {
+                MyDBIProcess("Exception", "DoArmZHome()");
+            }
+#endif
+        }
+        else if(fContact->fShow && iHome==0 && iContactMode!=CONTACT_NORMAL)    //JerryYang 20160823 增加防護
+        {
+            if(DoServoOn()==false)                                              //jou 2012-11-08 contact mode 時，shuttle sensor alarm，in arm 沒 servor on hang up。
+                return;
+
+            bSetupEnter=false;
+
+#ifdef DEBUG_TRY_CATCH
+            try
+            {
+#endif
+                fContact->DoTestContactFunction();
+#ifdef DEBUG_TRY_CATCH
+            }
+            catch(...)
+            {
+                MyDBIProcess("Exception", "DoTestContactFunction()");
+            }
+#endif
+            if(fAllMotorHome==false)
+            {
+                iContactMode=CONTACT_NORMAL;
+                fContact->rbModeNormal->Checked=true;
+            }
+
+            if(REAL_TIME_CCD==true && !COM2->bCCDDummyRum)                      //JerryYang 20220215 : Release跟InspEnd一起送
+            {
+                if(CosFunction.bRTCAutoModelVerify==true &&
+                   IniConfig.bD36EnableRTCAutoModelVerify &&
+                   CosFunction.bRTCHalfViewAutoVerify &&
+                   bNeedWaitContactTestAutoVerify)
+                {
+                    if(SystemStart)
+                    {
+                        if(bSendRealCCDSendStart==true)
+                        {
+                            COM2->bRealTimeCom_ReceiveOK[COM2->rtInspStart]=false;
+                            COM2->bRealTimeCom_ReceiveOK[COM2->rtInspStartROI]=false;
+                            COM2->bRealTimeCom_ReceiveOK[COM2->rtInspStartGolden]=false;
+                            COM2->bRealTimeCom_ReceiveOK[COM2->rtInspStartUnKnow]=false;
+                            COM2->bRealTimeCom_ReceiveOK[COM2->rtStartLightF]=false;
+                            COM2->SendCommToVision(COM2->rtInspStart, true);
+                            bSendRealCCDSendStart=false;
+                            hRealCCDDelay.SetSecAndOn(10);                      //ChungHung 20140515 3--->10
+                            return;
+                        }
+
+                        if(COM2->bRealTimeCom_ReceiveOK[COM2->rtInspStart]==false)
+                        {
+                            if(hRealCCDDelay.Off())
+                            {
+                                //ChungHung 20140520 add 不要第一次TimeOut就秀錯誤訊息
+                                if(COM2->OpenRTCComPortAgain())                 //ChungHung 20121005 add
+                                ShowErrorMessage("WAR0334", 0, MMIndex);        //RTC Start Error!
+                                bSendRealCCDSendStart=true;
+                                bSendRealCCDSendVerify=true;
+                                hRealCCDDelay.SetSecAndOn(1);
+                            }
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        else if(Zteach->fShow && iHome==0)                                      //kevin 20210408 JerryYang 20161229 add auto teach
+        {
+            if(DoServoOn()==false)
+                return;
+
+#ifdef DEBUG_TRY_CATCH
+            try
+            {
+#endif
+                Zteach->AutoTeachPos();
+#ifdef DEBUG_TRY_CATCH
+            }
+            catch(...)
+            {
+                MyDBIProcess("Exception", "AutoTeachPos()");
+            }
+#endif
+        }
+        else if(fTeach->fShow==true && Zteach->fShow==false)
+        {
+            if(TestIF_File.bEnableAutoAlignment)                                //Kenhsieh 20210813 : add CCD AUTO ALIGNMENT
+                fAutoAlignment->DoAutoAlignment();
+            else
+                fMain->Pause("AutoAlignment");
+        }
+        else if(fBarCode->bShow && iHome==0 &&
+                (fBarCode->btStart2DIDCheckSh1->Enabled==false ||
+                 fBarCode->btStart2DIDCheckSh2->Enabled==false))                //Frank 20170810 (Steven) add BarCode Shuttle手動Check
+        {
+            if(DoServoOn()==false)                                              //jou 2012-11-08 contact mode 時，shuttle sensor alarm，in arm 沒 servor on hang up。
+                return;
+
+#ifdef DEBUG_TRY_CATCH
+            try
+            {
+#endif
+                fBarCode->Do2DIDCheck();
+#ifdef DEBUG_TRY_CATCH
+            }
+            catch(...)
+            {
+                MyDBIProcess("Exception", "Do2DIDCheck()");
+            }
+#endif
+        }
+        else if(fShuttleMove->fShow && iHome==0)                                //JerryYang 20160726 新增Shuttle maintain相關流程
+        {
+            if(DoServoOn()==false)                                              //jou 2012-11-08 contact mode 時，shuttle sensor alarm，in arm 沒 servor on hang up。
+                return;
+
+#ifdef DEBUG_TRY_CATCH
+            try
+            {
+#endif
+                fShuttleMove->DoShuttleMove();
+#ifdef DEBUG_TRY_CATCH
+            }
+            catch(...)
+            {
+                MyDBIProcess("Exception", "DoShuttleMove()");
+            }
+#endif
+        }
+
+        //==> Eastsun 20260525 laser 整合
+        else if(fLaserSensor->fShow && iHome==0)
+        {
+            if(DoServoOn()==false)
+                return;
+
+#ifdef DEBUG_TRY_CATCH
+            try
+            {
+#endif
+                fLaserSensor->DoGetLaserValue();
+                fLaserSensor->DoGetOutLaserValue();
+#ifdef DEBUG_TRY_CATCH
+            }
+            catch(...)
+            {
+                MyDBIProcess("Exception", "DoShuttleMove()");
+            }
+#endif
+        }
+        //<== Eastsun 20260525 laser 整合
+        else if(fOffSet->fShow && iHome==0 && (bDoInZTeach || bDoOutZTeach))    //JerryYang 20250120 : add
+        {
+            if(DoServoOn()==false)                                              //jou 2012-11-08 contact mode 時，shuttle sensor alarm，in arm 沒 servor on hang up。
+                return;
+
+            if(InArmSuck.HasIC()==true && OutArmSuck.HasIC()==true &&
+               ShuttleHasIC()==true && IndexHasIC()==true)
+            {
+                bDoInZTeach=false;
+                bDoOutZTeach=false;
+                return;
+            }
+
+            if(bDoInZTeach==true)
+            {
+                if(AutoTeachLoadTrayZ(false, InArm, iInArmZTeachTask))
+                {
+                    bDoInZTeach=false;
+                    SystemStart=false;
+                    StopAllMotor();
+                    ShowMyMessage("Input arm Z calibration finished.");
+                    fOffSet->sbInArmZCalibration->Enabled=true;
+                    fOffSet->sbOutArmZCalibration->Enabled=true;
+                    fOffSet->sbInArmZCalibration->Down=false;
+                    fOffSet->sbOutArmZCalibration->Down=false;
+                }
+            }
+            else if(bDoOutZTeach==true)
+            {
+                if(AutoTeachLoadTrayZ(false, OutArm, iOutArmZTeachTask))
+                {
+                    bDoOutZTeach=false;
+                    SystemStart=false;
+                    StopAllMotor();
+                    ShowMyMessage("Output arm Z calibration finished.");
+                    fOffSet->sbInArmZCalibration->Enabled=true;
+                    fOffSet->sbOutArmZCalibration->Enabled=true;
+                    fOffSet->sbInArmZCalibration->Down=false;
+                    fOffSet->sbOutArmZCalibration->Down=false;
+                }
+            }
+        }
+        else if(iHome==1)
+        {
+            bNeedArmZHome=false;
+            bBackArmZHomeFlag=false;
+            FrmRotate->bRotateInHome=false;                                     //kevin 20130706
+            FrmRotate->bRotateOutHome=false;                                    //kevin 20130706
+            for(int i=0; i<2; i++)
+                for(int j=0; j<5; j++)
+                    PitchPos[i][j]=-9999;
+            bInitialSpeed=true;
+            if(fSpeed->fShow)
+                fSpeed->Close();
+
+            if(fSetup->fShow==false)
+            {
+                CleanLamp=false;
+#ifdef DEBUG_TRY_CATCH
+                try
+                {
+#endif
+                    DoHomeProcess();
+#ifdef DEBUG_TRY_CATCH
+                }
+                catch(...)
+                {
+                    MyDBIProcess("Exception", "DoHomeProcess()");
+                }
+#endif
+            }
+        }
+        else if(FrmRotate->bRotateInHome)                                       //kevin 20130706 InRotate home add start
+        {
+#ifdef DEBUG_TRY_CATCH
+            try
+            {
+#endif
+                if(FrmRotate->DoInRotateHome())                                 //Steven 20170329 : Add individual rotate motor
+                {
+                    FrmRotate->bRotateInHome=false;
+                }
+#ifdef DEBUG_TRY_CATCH
+            }
+            catch(...)
+            {
+                MyDBIProcess("Exception", "DoRotateInHome()");
+            }
+#endif
+        }
+        else if(iClearSocketFunction==2)
+        {
+#ifdef DEBUG_TRY_CATCH
+            try
+            {
+#endif
+                DoCleanSocket();
+#ifdef DEBUG_TRY_CATCH
+            }
+            catch(...)
+            {
+                MyDBIProcess("Exception", "DoCleanSocket()");
+            }
+#endif
+        }
+        else if(FrmRotate->bRotateOutHome)
+        {
+#ifdef DEBUG_TRY_CATCH
+            try
+            {
+#endif
+                if(FrmRotate->DoOutRotateHome())                                //Steven 20170329 : Add individual rotate motor
+                {
+                    FrmRotate->bRotateOutHome=false;
+                }
+#ifdef DEBUG_TRY_CATCH
+            }
+            catch(...)
+            {
+                MyDBIProcess("Exception", "DoRotateOutHome()");
+            }
+#endif
+        }                                                                       //kevin 20130706 OutRotate home add end
+        else if(fAllMotorHome==false)
+        {
+            ShowMyMessage("Motor out of torque, home again!", "馬達跳脫請歸零!", "MainProc");
+        }
+        else
+        {
+            if(bTakeAway)
+            {
+                if(IndexAlarmInArmAway())                                       //kevin 20190806
+                    bTakeAway=false;                                            //kevin 20190806
+            }
+
+            if(CUSTOMER_CODE==CC_ASE_M &&                                       //Ifor 20181016 (Steven) : add ASEM 要求"Initial Start" 時強制開啟Consecutive Failure Alarm功能
+               fMain->cbRunStartMode->Text==StartModeName[1])
+            {
+                TestIF_File.bContsFailByHead=true;
+                TestIF_File.bContsFailBySocket=true;
+                AnsiString szDir=GetRecipeFileName("Tester.Data");
+                WriteIniData(szDir, "Alarm",     "HeadEnable",      int(TestIF_File.bContsFailByHead));
+                WriteIniData(szDir, "Alarm",     "SocketEnable",    int(TestIF_File.bContsFailBySocket));
+            }
+
+            if((CUSTOMER_CODE==CC_KYEC_LEE &&                                   //Alick 20170117 add 京元要求一般版也要
+                bUseATC_SelfTestFunction==true) ||                              //Ifor 20170124 : add KYEC 要求由General.ini開關使用ATC Self Test功能
+               CosFunction.bHiSiliconFunction==true)                            //Ifor 20160912 add 海思專用版本才執行 ATC Self Test
+            {
+                bool bHasSelfTest=false;                                        //Ifor 20161006 Add 判斷ATC版本是否支援 Self Test 機制
+                int iCheckATCVer=0;
+
+                if(iATCForHSMode==1 &&                                          //HISI_ATC2X_V02.00.K005
+                   (ATC_SYSTEM==eNewATCSystem ||
+                    ATC_SYSTEM==eATCHonPrecType ||
+                    ATC_SYSTEM==eWinWay) &&
+                   Temperature.bATCActiveCooling==true)                         //Jimmychiu 20210906
+                {
+                    iCheckATCVer=atoi(sATCVerRead.SubString(11,2).c_str())*100;                                         //Ifor 20161108 add 取得ATC2.0大版號    //Ifor 20200914 Fix: HISI -> KL 長度減2 13>11
+                    iCheckATCVer=iCheckATCVer+atoi(sATCVerRead.SubString(14,2).c_str());                                //Ifor 20161108 add 取得ATC2.0小版號    //Ifor 20200914 Fix: HISI -> KL 長度減2 16>14
+                    if(iCheckATCVer>=200)                                       //Ifor 20161108 2 -> 200
+                        bHasSelfTest=true;
+                }
+
+                if(CUSTOMER_CODE==CC_KYEC_LEE &&
+                   bUseATC_SelfTestFunction==true)                              //Ifor 20170203 (Steven) add KYEC 一般版本依照設定執行ATC self Test
+                    bHasSelfTest=true;
+
+                if(Temperature.bATCActiveCooling==true && bHasSelfTest==true)
+                {
+                    if(bNeedSendATCRunSelfTest)                                 //Ifor 20160720 add for ATC Auto Safe Test start
+                    {
+                        if(AccessLevel>0)
+                        {
+                            fTemp_Set->SendATCSelfTest(1);                      //Ifor 20160823 Modify Auto Send ATC Self Test
+                        }
+                        else
+                        {
+                            ShowMyMessage("Please Call Engineer Execute Safe Test Atc First");
+                        }
+                        return;
+                    }
+
+                    if(fMain->cbRunStartMode->Text==StartModeName[1])           //Ifor 20160823 add "Initial Start" 時 自動執行 ATC Self Test //Ifor 20160908 "Re-Test Initial Start" 不做ATC Self Test
+                    {
+                        if(bNeedWaitATCRunSelfTestFinish==false &&
+                           HasICUnderMachine()==false &&                        //Ifor 20160826 增加判斷機台內無料才執行 ATC Auto Self Test
+                           bInitialATCSelfTest==true)
+                        {
+                            fTemp_Set->SendATCSelfTest(1);                      //Ifor 20160823 Modify Auto Send ATC Self Test
+                        }
+                    }
+                }
+
+                if(bNeedWaitATCRunSelfTestFinish==true)
+                    return;
+            }
+
+            if(DoServoOn()==false)                                              //Steven 20120705 : Tray Feed 時,如果ServoOff會像賽
+                return;
+
+            if(IniConfig.bB01_UsePrecautionRecordFunction)                      //Sam 20171120 (Steven) AddPrecautionRecordFunction (form HT7045)
+            {
+                if(fObserver->bSavePrecautionRecordFinish==false &&
+                   fObserver->bStartPrecautionRecord &&
+                   fObserver->CheckKeyInPrecautionMemoInformation(1)==false)
+                {
+                    ShowMyMessage("Precaution Memo Information Not Enter Complete, Please Check");
+                }
+            }
+
+            if(IniConfig.bEnableSocketCommunication)                            //ChungHung 20130112 add for ASE_KR Socket Tester
+            {
+                fSocketCommunication->SetHandlerState(1);
+            }
+
+            if(FrmRotate->bIsAngleZero && tRotate.ActiveRotate)                 //Eastsun 20260515 F022: D12 detect rotate 0 angle
+            {
+                ShowMyMessage("Rotate zero angle", "偵測到旋轉0度");
+                return;
+                //FrmRotate->bIsAngleZero=false;
+            }
+
+            if(bChangeCleanPad)                                                 //kevin 20130226 autoclean change clean pad
+            {
+                if(TestIF_File.iAutoClean_Tray==eCKPos_Fix3)                    //放在FIX 3
+                    ShowICFallDownASlarmMessage("Open 6 Safe door ", "請開6號門並更換Clean Pad");
+                else
+                    ShowICFallDownASlarmMessage("Open 3 Safe door ","請開3號門並更換Clean Pad");
+            }
+            else if(bIsTestSitICFallDownResetHT9045)                            //jou 2011-12-23 以上那段是在重開程式的時候要用到的,但是flag使用錯誤,修正為bIsTestSitICFallDownResetHT9045
+            {
+                ShowICFallDownASlarmMessage("Open rear door and pick IC from socket", "請打開門，並將IC從Socket取走");
+            }
+            else if(bIsTestSitICFallDown)                                       //Steven 20110517
+            {
+                if(CUSTOMER_CODE==CC_AMKOR_China ||                             //Steven 20101123
+                   CUSTOMER_CODE==CC_QUALCOMM)                                  //JerryYang 20170412 (Steven) add QUALCOMM
+                {
+                    bIsTestSitICFallDown=false;
+                }
+                else
+                {
+                    if(CUSTOMER_CODE==CC_SIGURD_HUKOU &&
+                       (FileExists(asErrNotePath) &&
+                       1==ReadIniData(asErrNotePath, "SUCK", "TestSuck",0)))    //ChungHung 20110829 add
+                    {
+                        bIsTestSitICFallDown=false;
+                    }
+                    else                                                        //kevin 20120709
+                    {
+                        ShowICFallDownASlarmMessage("Open rear door and pick IC from socket and push Z1 Key", "請開門，並將IC從Socket取走,並按Z1燈");
+                    }
+                }
+            }
+            else if(bAutoCleanCheckOpenDoor)                                    //kevin 20121020 add
+            {
+                if(bRunAutoClean)
+                    ShowICFallDownASlarmMessage("Open door 3 take Clean pad", "請開3號門，並將CleanPad取走");
+                else
+                    ShowICFallDownASlarmMessage("Open door 3 take out In shuttle iC", "請開3號門，並將In shuttle IC 取走");      //kevin 20180725 add
+            }
+            else if(bIsContactforce)                                            //kevin 20130421 add
+            {
+                ShowICFallDownASlarmMessage("Open rear door check socket or contact high press Z1 to continue","打開後門檢查Socket上是否為空，或確認CONTRACT高度並按 Z1 開始");
+            }
+            else if(IniConfig.bC08_SocketSensor && bIsSocketSensor)             //kevin 20130418 Contactforce
+            {
+                ShowICFallDownASlarmMessage("Open rear door check socket have IC or check socket sensor press Z1 to continue","打開後門檢查Socket上是否為空，或確認socket sensor 並按 Z1 開始");
+            }
+            //jou 2011-10-13 end
+            else if(iTrayFeed && fAGV->IsATK_AMR())                             //Steven 20260202 : for ATK AMR
+            {
+//                if(MOT[MTrayX].fHasTray==true)
+//                {
+//                    DoCatchTray();
+//                }
+//                else
+                if(LastSet.iUnloadFixTray==eAtkTfInit ||
+                   LastSet.iUnloadFixTray==eAtkTfFeedAuto)
+                {
+                    DoTrayFeedProcess();
+                }
+                else if(LastSet.iUnloadFixTray==eAtkTfAutoToAMR)
+                {
+                    DoTrayFeedProcess();
+                }
+                else if(LastSet.iUnloadFixTray==eAtkTfPutIDTray)
+                {
+                    ret=-1;
+                    iCatchTrayControlManual=2;
+                    DoCatchTray();
+                    DoAutoEmpty();
+                    DoAutoColor();
+
+                    for(int i=eAuto1; i<=iAutoRight; i++)
+                    {
+                        DoAutoReceiveBinTray(i);
+
+                        if(bNeed1DCoverTray[i] ||
+                           MOT[MTrayX].fHasTray==true ||
+                           (MOT[iMMAuto[i]].fHasTray==true &&
+                            MOT[iMMAuto[i]].FullIC()==true) ||
+                           MOT[iMMAuto_Car[i]].fHasTray==true ||
+                           IsTrayArmAtEmptyOrColor()==false)
+                        {
+                            ret=i;
+                        }
+                    }
+
+                    if(ret<0)
+                    {
+                        LastSet.iUnloadFixTray=eAtkTfPutCover;
+                    }
+                }
+                else if(LastSet.iUnloadFixTray==eAtkTfPutCover)
+                {
+                    ret=-1;
+                    iCatchTrayControlManual=2;
+                    DoCatchTray();
+                    DoAutoEmpty();
+                    DoAutoColor();
+                    for(int i=eAuto1; i<=iAutoRight; i++)
+                    {
+                        DoAutoReceiveBinTray(i);
+
+                        if(bNeedCoverTray[i] ||
+                           MOT[MTrayX].fHasTray==true ||
+                           (MOT[iMMAuto[i]].fHasTray==true &&
+                            MOT[iMMAuto[i]].FullIC()==true) ||
+                           MOT[iMMAuto_Car[i]].fHasTray==true ||
+                           IsTrayArmAtEmptyOrColor()==false)
+                        {
+                            ret=i;
+                        }
+                    }
+
+                    if(ret<0)
+                    {
+                        LastSet.iUnloadFixTray=eAtkTfPutEmptyTray;
+                    }
+                }
+                else if(LastSet.iUnloadFixTray==eAtkTfPutEmptyTray)
+                {
+                    ret=-1;
+                    iCatchTrayControlManual=2;
+                    DoCatchTray();
+                    DoAutoEmpty();
+                    DoAutoColor();
+
+                    for(int i=eAuto1; i<=iAutoRight; i++)
+                    {
+                        DoAutoReceiveBinTray(i);
+                        if(bHasCoverTray[i]==true)
+                        {
+                            if(MOT[iMMAuto[i]].fHasTray==false)
+                            {
+                                bAutoNeedTray[i]=true;
+                            }
+                            else
+                            {
+                                bAutoNeedTray[i]=false;
+                            }
+
+                            if(MOT[MTrayX].fHasTray==true ||
+                               MOT[MMColor].fHasTray==false ||
+                               MOT[MMEmpty].fHasTray==false ||
+                               MOT[iMMAuto[i]].fHasTray==false ||
+                               IsTrayArmAtEmptyOrColor()==false)
+                            {
+                                ret=i;
+                            }
+                        }
+                    }
+
+                    if(ret<0)
+                    {
+                        if(Cylinder[C_TrayX_UpDown].OffSensor())
+                        {
+                            if(IsTrayArmAtEmptyOrColor()==true)
+                            {
+                                if(TRAY_ARM_MODE==eAboveCoveyor)
+                                {
+                                    MOT[MOutArmX].fCanMove=true;
+                                    MOT[MOutArmY].fCanMove=true;
+                                    iCatchTrayControlManual=0;
+                                }
+                                LastSet.iUnloadFixTray=eAtkTfMoveFixIC;
+                            }
+                        }
+                    }
+                }
+                else if(LastSet.iUnloadFixTray==eAtkTfMoveFixIC)
+                {
+                    DoOutArm();
+                }
+                else if(LastSet.iUnloadFixTray==eAtkTfFixToAMR)                 //AI(ht9045-atk-amr-flow) 20260427 (RogerYang) : Rev.4 restore (Auto=backup, Fix=Auto current)
+                {
+                    for(int ir=eAuto1; ir<=eAuto3; ir++)
+                    {
+                        if(LastSet.bFixHadIC_ATK_Backup[ir])
+                        {
+                            // Fix had IC: Fix port = Auto current (sorting result)
+                            asBundleTrayID[ir+ePortAuto4]=asBundleTrayID[ir+ePortAuto1];
+                            LastSet.iUnloaderTrayCount_ART[ir+eAuto4]=LastSet.iUnloaderTrayCount_ART[ir];
+                            LastSet.BinCT[0][e3Auto4+ir]=LastSet.BinCT[0][e3Auto1+ir];
+                            // Auto port = restore backup
+                            asBundleTrayID[ir+ePortAuto1]=AnsiString(LastSet.szBundleTrayID_ATK_Backup[ir]);
+                            LastSet.iUnloaderTrayCount_ART[ir]=LastSet.iUnloaderTrayCount_ART_ATK_Backup[ir];
+                            LastSet.BinCT[0][e3Auto1+ir]=LastSet.iBinCT_ATK_Backup[ir];
+                        }
+                        else
+                        {
+                            // Fix no IC: Auto port = restore backup
+                            asBundleTrayID[ir+ePortAuto1]=AnsiString(LastSet.szBundleTrayID_ATK_Backup[ir]);
+                            LastSet.iUnloaderTrayCount_ART[ir]=LastSet.iUnloaderTrayCount_ART_ATK_Backup[ir];
+                            LastSet.BinCT[0][e3Auto1+ir]=LastSet.iBinCT_ATK_Backup[ir];
+                            // Fix port = clear
+                            asBundleTrayID[ir+ePortAuto4]="";
+                            LastSet.iUnloaderTrayCount_ART[ir+eAuto4]=0;
+                            LastSet.BinCT[0][e3Auto4+ir]=0;
+                        }
+                    }
+                    for(int ir=eAuto1; ir<=eAuto3; ir++)                        //AI(ht9045-atk-amr-flow) 20260427 (RogerYang) : B2 restore log
+                    {
+                        AnsiString s;
+                        s.sprintf("[ATK-Restore] Auto%d: TrayID=%s, Count=%d, BinCT=%u | Fix%d(Auto%d): TrayID=%s, Count=%d, BinCT=%u",
+                            ir+1,
+                            asBundleTrayID[ir+ePortAuto1].c_str(),
+                            LastSet.iUnloaderTrayCount_ART[ir],
+                            LastSet.BinCT[0][e3Auto1+ir],
+                            ir+1, ir+4,
+                            asBundleTrayID[ir+ePortAuto4].c_str(),
+                            LastSet.iUnloaderTrayCount_ART[ir+eAuto4],
+                            LastSet.BinCT[0][e3Auto4+ir]);
+                        WriteATKLog(s);
+                    }
+                    EventReport(SECS_EVENT.DoLotEnd);                           //Send CEID 8 with correct data
+                    for(int ir=0; ir<3; ir++)                                   //AI(ht9045-atk-amr-flow) 20260428 (RogerYang) : Fix had IC after sorting -> report Fix ReadyToUnload CEID 284
+                    {
+                        if(LastSet.bFixHadIC_ATK_Backup[ir])
+                        {
+                            iThisPortNo=ePortFix1+ir;
+                            iThisPortStatus=3;
+                            EventReport(SECS_EVENT.PortStateUpdated);           // CEID 284
+                            iLoadStateATK[etFix1+ir]=3;                         // sync gate
+                            AnsiString s;                                       //AI(ht9045-atk-amr-flow) 20260428 (RogerYang) : C2 CEID 284 log
+                            s.sprintf("[ATK-CEID284] Port=Fix%d, Status=3(ReadyToUnload)", ir+1);
+                            WriteATKLog(s);
+                        }
+                    }
+                    for(int ir=0; ir<3; ir++)                                   //Clear backup fields
+                    {
+                        LastSet.szBundleTrayID_ATK_Backup[ir][0]=0;
+                        LastSet.iUnloaderTrayCount_ART_ATK_Backup[ir]=0;
+                        LastSet.iBinCT_ATK_Backup[ir]=0;
+                        LastSet.bFixHadIC_ATK_Backup[ir]=false;
+                        LastSet.bAutoHadIC_ATK_Backup[ir]=false;
+                    }
+                    LastSet.iUnloadFixTray=eAtkTfFeedFix;
+                }
+                else if(LastSet.iUnloadFixTray==eAtkTfFeedFix)
+                {
+                    DoTrayFeedProcess();
+                }
+                else
+                {
+                    DoTrayFeedProcess();
+                }
+            }
+            else if(iTrayFeed &&
+                    (TrayForm.bEnableAMR==true && (iTrayFeedTask>=160 && iTrayFeedTask<=180))) //Eastsun 20260515 F018 AMR magazine tray feed (split from below)
+            {
+#ifdef DEBUG_TRY_CATCH
+                try
+                {
+#endif
+                    DoTrayFeedProcess();
+#ifdef DEBUG_TRY_CATCH
+                }
+                catch(...)
+                {
+                    MyDBIProcess("Exception", "DoTrayFeedProcess()");
+                }
+#endif
+            }
+            else if(iTrayFeed && MOT[MTrayX].fHasTray==false &&                 //kevin 20170214 (wei) tray Arm  沒有tray  //KevinCheng 20250919 : Wait SECS
+                    (IniConfig.bA81WaitSECS==false || (IniConfig.bA81WaitSECS==true && bRunAutoClean==false && bWaitSECS==false)))
+            {
+#ifdef DEBUG_TRY_CATCH
+                try
+                {
+#endif
+                    DoTrayFeedProcess();
+#ifdef DEBUG_TRY_CATCH
+                }
+                catch(...)
+                {
+                    MyDBIProcess("Exception", "DoTrayFeedProcess()");
+                }
+#endif
+            }
+            else
+            {
+                if(bInitialSpeed)
+                {
+                    bInitialSpeed=false;
+#ifdef DEBUG_TRY_CATCH
+                    try
+                    {
+#endif
+                        SetMotorSpeed();
+#ifdef DEBUG_TRY_CATCH
+                    }
+                    catch(...)
+                    {
+                        MyDBIProcess("Exception", "SetMotorSpeed()");
+                    }
+#endif
+                }
+
+                if(AUTO3_IS_MAGAZINE==1 &&                                      //JerryYang 20220909 : add magazine
+                  (LastSet.iRunStartMode==rsmInitialStart ||
+                   LastSet.iRunStartMode==rsmCInitialRetest))
+                {
+                    bInitCheckMag=true;
+                }
+
+                if(IniConfig.bEnableAutoCleanFunction &&                        //pig 2011.09.01 AutoClean start
+                   TestIF.iAutoClean_Function==true)
+                {
+                    if(((TestIF.iAutoClean_Mode & M_INIT_START) &&
+                        (LastSet.iRunStartMode==rsmInitialStart ||
+                         LastSet.iRunStartMode==rsmInitial_ART ||
+                         LastSet.iRunStartMode==rsmInitial_MRT)) ||             //wei 20150904 ART Auto clean INIT_START INIT_RESTART
+                       ((TestIF.iAutoClean_Mode & M_INIT_RESTART) &&
+                         LastSet.iRunStartMode==rsmCInitialRetest))             //Ifor 20200210 : add Initial_MRT 執行Auto Clean 功能
+                    {
+                        if(fAllMotorHome==false)
+                            return;
+
+                        if(IniConfig.bP56TrayArmWaitAtColorTrack ||             //Steven 20240516 : Tray Arm等待位置改到Color
+                           (INSTALL_OCR!=eocrUninstal && CosFunction.bTrayOCR))                                         //wei 20150925 待機位置改道 Color
+                        {
+                            if(TrayArmMotorMove(Prod.iXTrayColor))
+                            {
+                                InitialAutoCleanTask();
+                                InitialShuttleAutoCleanTask();
+                                InitialIndexAutoCleanTask();
+                                bRunAutoClean=true;
+                                hAutoCleanHangUp.SetSecAndOn(Prod.iHangupMaxTime);                                      //Steven 20220702 : 針對Auto Clean的Hang Up偵測
+                            }
+                            else
+                            {
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            if(TrayArmMotorMove(Prod.iXTrayEmpty))
+                            {
+                                InitialAutoCleanTask();
+                                InitialShuttleAutoCleanTask();
+                                InitialIndexAutoCleanTask();
+                                bRunAutoClean=true;
+                                hAutoCleanHangUp.SetSecAndOn(Prod.iHangupMaxTime);                                      //Steven 20220702 : 針對Auto Clean的Hang Up偵測
+                            }
+                            else
+                            {
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                if(IniConfig.bA05UseAutoDocking)                                //ChungHung 20120718 add UseAutoDocking Check Sensor
+                {
+                    #ifndef SOFT_SIMULTE
+                    if(USE_OTD==1)                                              //ChungHung 20140409 add  //ChungHung 20140709 add 1--->2 區分軟體控制及外部控制
+                    {
+                        if(Cylinder[C_DockYAxisOn].Status==true  && Cylinder[C_DockYAxisOff].Status==false &&           //240KG
+                           Cylinder[C_DockXAxisOn].Status==false && Cylinder[C_DockXAxisOff].Status==true    )
+                        {
+                            if(Cylinder[C_DockYAxisOn].OnSensor()!=false || Cylinder[C_DockYAxisOff].OnSensor()!=false)
+                            {
+                                ShowMyMessage("Auto Docking Must Lock, Plase Check Again", "");
+                                return;
+                            }
+                        }
+                        else if(Cylinder[C_DockYAxisOn].Status==true && Cylinder[C_DockYAxisOff].Status==false &&
+                                Cylinder[C_DockXAxisOn].Status==true && Cylinder[C_DockXAxisOff].Status==false    )
+                        {
+                            if(Cylinder[C_DockYAxisOn].OnSensor()!=false || Cylinder[C_DockYAxisOff].OnSensor()!=false ||
+                               Cylinder[C_DockXAxisOn].OnSensor()!=false || Cylinder[C_DockXAxisOff].OnSensor()!=false    )
+                            {
+                                ShowMyMessage("Auto Docking Must Lock,Plase Check Again", "");
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            ShowMyMessage("Auto Docking Must Lock,Plase Check Again", "");
+                            return;
+                        }
+                    }
+                    else if(USE_OTD==2)                                         //ChungHung 20140709 add 1--->2 區分軟體控制及外部控制
+                    {
+                        if(Sen[SenAutoDocking240KG].IsOff()!=true && Sen[SenAutoDocking360KG].IsOn()!=true)
+                        {
+                            if(Cylinder[C_DockYAxisOn].OnSensor()!=false || Cylinder[C_DockYAxisOff].OnSensor()!=false)
+                            {
+                                ShowMyMessage("Auto Docking Must Lock,Plase Check Again", "");
+                                return;
+                            }
+                        }
+                        else if(Sen[SenAutoDocking240KG].IsOff()!=true && Sen[SenAutoDocking360KG].IsOff()!=true)
+                        {
+                            if(Cylinder[C_DockYAxisOn].OnSensor()!=false || Cylinder[C_DockYAxisOff].OnSensor()!=false ||
+                               Cylinder[C_DockXAxisOn].OnSensor()!=false || Cylinder[C_DockXAxisOff].OnSensor()!=false)
+                            {
+                                ShowMyMessage("Auto Docking Must Lock,Plase Check Again", "");
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            ShowMyMessage("Auto Docking Must Lock,Plase Check Again", "");
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if(CUSTOMER_CODE==CC_KYEC_LEE)                          //wei 20151022 OTD Log
+                        {
+                            if(Sen[SnAutoDockingOn].IsOn()==false || Sen[SnAutoDockingOff].IsOn())
+                            {
+                                ShowMyMessage("Auto Docking Must Lock,Plase Check Again", "");
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            #ifndef SOFT_SIMULTE
+                            if(Sen[SnAutoDockingOff].IsOff()!=true ||
+                               Sen[SnAutoDockingOn].IsOff()!=true)              //Off必須要滅 On必須要滅
+                            {
+                                ShowMyMessage("Auto Docking Must Lock,Plase Check Again", "");
+                                return;
+                            }
+                            #endif
+                        }
+                    }
+                    #endif
+                }
+
+                //----- by dell ccd realtime-------------
+                if(REAL_TIME_CCD==true && !COM2->bCCDDummyRum)
+                {
+                    if(IniConfig.bD33RTCInitStartVerify==true)                  //Handler Use Model Verify
+                    {
+                        if(bSendRealCCDSendVerify==true || bDoRTCVerify==true)
+                        {
+                            COM2->bRealTimeCom_ReceiveOK[COM2->rtInspVerifyOK]=false;
+                            COM2->bRealTimeCom_ReceiveOK[COM2->rtInspVerifyNG]=false;
+                            COM2->SendCommToVision(COM2->rtInspVerifyOK, true);
+
+                            bSendRealCCDSendVerify=false;
+                            bSendRealCCDSendVerifyOK=false;
+                            bDoRTCVerify=false;
+                            hRealCCDDelay.SetSecAndOn(10);                      //ChungHung 20140515 5--->10
+                            return;                                             //Ifor 20251024 add:避免RTC命令丟太快導致RTC Time Out
+                        }
+
+                        if(bSendRealCCDSendVerifyOK==false &&
+                           COM2->bRealTimeCom_ReceiveOK[COM2->rtInspVerifyOK]==false)
+                        {
+                            if(hRealCCDDelay.Off())
+                            {
+                                ShowMyMessage("RTC Verify Time Out Error","");
+                                bSendRealCCDSendVerify=true;
+                                hRealCCDDelay.SetSecAndOn(1);
+                            }
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        bSendRealCCDSendVerifyOK=true;
+                    }
+
+                    if(CUSTOMER_CODE==CC_TSMC_TAINAN ||                         //wei 20170308 (jou) RTC ROI Check
+                       CUSTOMER_CODE==CC_Microchip_Phil ||                      //JerryYang 20190516 Microchip要求ROI check指令
+                       IniConfig.bSPILFunction==true)                           //JerryYang 20241106 : add
+                    {
+                        if(bRealCCDROICheck==true)
+                        {
+                            COM2->bRealTimeCom_ReceiveOK[COM2->rtROICheckOK]=false;
+                            COM2->bRealTimeCom_ReceiveOK[COM2->rtROICheckNG]=false;
+                            COM2->SendCommToVision(COM2->rtROICheckOK, true);
+
+                            bRealCCDROICheck=false;
+                            bRealCCDROICheckOK=false;
+                            hRealCCDDelay.SetSecAndOn(10);                      //ChungHung 20140515 5--->10
+                            return;                                             //Ifor 20251024 add:避免RTC命令丟太快導致RTC Time Out
+                        }
+
+                        if(bRealCCDROICheckOK==false &&
+                           COM2->bRealTimeCom_ReceiveOK[COM2->rtInspVerifyOK]==false)
+                        {
+                            if(hRealCCDDelay.Off())
+                            {
+                                ShowMyMessage("RTC ROI Check Time Out Error","");
+                                bRealCCDROICheck=true;
+                                hRealCCDDelay.SetSecAndOn(1);
+                            }
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        bRealCCDROICheckOK=true;
+                    }
+
+                    if(CosFunction.bRTC_ROICount==true)                         //jou 20171201 (Steven) : RTC ROI 確認數量是否正確
+                    {
+                        if(bRealCCDROICountCheck==true)
+                        {
+                            COM2->bRealTimeCom_ReceiveOK[COM2->rtROICountOK]=false;
+                            COM2->bRealTimeCom_ReceiveOK[COM2->rtROICountNG]=false;
+                            COM2->RTC_ROICount();
+
+                            bRealCCDROICountCheck=false;
+                            bRealCCDROICountCheckOK=false;
+                            hRealCCDDelay.SetSecAndOn(10);                      //ChungHung 20140515 5--->10
+                            return;                                             //Ifor 20251024 add:避免RTC命令丟太快導致RTC Time Out
+                        }
+
+                        if(bRealCCDROICountCheckOK==false &&
+                           COM2->bRealTimeCom_ReceiveOK[COM2->rtROICountOK]==false)
+                        {
+                            if(hRealCCDDelay.Off())
+                            {
+                                ShowMyMessage("RTC ROI Count Check Time Out Error","");
+                                bRealCCDROICountCheck=true;
+                                hRealCCDDelay.SetSecAndOn(1);
+                            }
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        bRealCCDROICountCheckOK=true;
+                    }
+
+                    if(bSendRealCCDSendVerifyOK==true &&                        //jou 20171201 (Steven) : RTC ROI 確認數量是否正確
+                       bRealCCDROICheckOK==true &&                              //RTC Start
+                       bRealCCDROICountCheckOK==true)
+                    {
+                        if(bSendRealCCDSendStart==true && bDoROILearning==false)                                        //Ifor 20240919
+                        {
+                            COM2->bRealTimeCom_ReceiveOK[COM2->rtInspStart]=false;
+                            COM2->bRealTimeCom_ReceiveOK[COM2->rtInspStartROI]=false;
+                            COM2->bRealTimeCom_ReceiveOK[COM2->rtInspStartGolden]=false;
+                            COM2->bRealTimeCom_ReceiveOK[COM2->rtInspStartUnKnow]=false;
+                            COM2->bRealTimeCom_ReceiveOK[COM2->rtStartLightF]=false;
+                            COM2->SendCommToVision(COM2->rtInspStart, true);
+
+                            bSendRealCCDSendStart=false;
+                            hRealCCDDelay.SetSecAndOn(10);                      //ChungHung 20140515 3--->10
+                            return;                                             //Ifor 20251024 add:避免RTC命令丟太快導致RTC Time Out
+                        }
+
+                        if(COM2->bRealTimeCom_ReceiveOK[COM2->rtInspStart]==false)
+                        {
+                            if(hRealCCDDelay.Off())                             //ChungHung 20140520 add 不要第一次TimeOut就秀錯誤訊息
+                            {
+                                if(COM2->OpenRTCComPortAgain() && bDoROILearning==false)                                //ChungHung 20121005 add
+                                {
+                                    ShowErrorMessage("WAR0334", 0, MMIndex);    //RTC Start Error!
+                                }
+                                bSendRealCCDSendStart=true;
+                                bSendRealCCDSendVerify=true;
+                                hRealCCDDelay.SetSecAndOn(1);
+                            }
+                            return;
+                        }
+                    }
+                }
+
+                if(INSTALL_OCR!=eocrUninstal &&
+                   TestIF.bOcrFunction &&
+                   CosFunction.bTrayOCR==false)                                 //wei 20160603 TSMC OCR不跑舊版本的
+                {
+                    if(fOCR->bSendOcrSendStart==true)
+                    {
+                        fOCR->SendOcrStart();
+                        fOCR->bSendOcrSendStart=false;
+
+                        hOCRDelay.SetSecAndOn(3);
+                    }
+
+                    if(fOCR->bOcr_ReceiveOK[fOCR->ocrStartOk]==false)
+                    {
+                        if(hOCRDelay.Off())
+                        {
+                            ShowErrorMessage("WAR0934", 0, MMTrayY);            //OCR start time out error!!
+                            fOCR->bSendOcrSendStart=true;
+                            hOCRDelay.SetSecAndOn(1);
+                        }
+                        return;
+                    }
+
+                    if(bGetLotIDFormTester)                                     //ChungHung 20121123 add
+                    {
+                        if(fOCR->bSendOCRGetLotID==true)
+                        {
+                            fOCR->InitOcrWithTester();
+                        }
+
+                        if(fOCR->bHaveLotID==false)
+                        {
+                            ret=fOCR->OcrWithTester();
+                            if(ret==1)
+                            {
+                                fOCR->bHaveLotID=true;
+                                fOCR->edInsp->Text=fOCR->sTesterLotId;
+                            }
+                            else if(ret==2)
+                            {
+                                ret==ShowErrorMessage("WAR0955", K_RETRY|K_SKIP, MMOCR);                                //"OCR LOTID NG!!"
+                                if(ret==K_RETRY)
+                                {
+                                    fOCR->bSendOCRGetLotID=true;
+                                }
+                                else
+                                {
+                                    fOCR->bHaveLotID=false;
+                                    fOCR->bSendOCRGetLotID=true;   //Steven 20260618 fix: == -> = (P11 bug fix)
+
+                                    Cylinder[C_TrayY_Fixer].Off();
+                                    Cylinder[C_LoaderEdgePush].Off();
+                                    Cylinder[C_LoaderUpPress].Off();            //JerryYang 20181120 (Steven) : (Steven) : 獨立控制loader壓tray
+                                    ShowErrorMessage("WAR0954", 0,MMOCR);       //請拿出Tray盤
+                                    MOT[MMOCR].fHasTray=false;
+                                    MOT[MMOCR].ClearTray(__FUNC__);
+                                }
+                            }
+                            else if(ret==3)
+                            {
+                                ret=ShowErrorMessage("WAR0960", K_RETRY|K_SKIP, MMOCR);                                //"OCR LOTID NG!!" //Steven 20260618 fix: == -> = (P11 bug fix)
+                                if(ret==K_RETRY)
+                                {
+                                    fOCR->bSendOCRGetLotID=true;
+                                }
+                                else
+                                {
+                                    fOCR->bHaveLotID=false;
+                                    fOCR->bSendOCRGetLotID=true;   //Steven 20260618 fix: == -> = (P11 bug fix)
+                                    Cylinder[C_TrayY_Fixer].Off();
+                                    Cylinder[C_LoaderEdgePush].Off();
+                                    Cylinder[C_LoaderUpPress].Off();            //JerryYang 20181120 (Steven) : (Steven) : 獨立控制loader壓tray
+                                    ShowErrorMessage("WAR0954", 0,MMOCR);       //請拿出Tray盤
+                                    MOT[MMOCR].fHasTray=false;
+                                    MOT[MMOCR].ClearTray(__FUNC__);
+                                }
+                            }
+                            return;
+                        }
+                    }
+                }
+
+                if(IniConfig.bEnableSocketCommunication)                        //ChungHung 20130112 add for ASE_KR Socket Tester
+                {
+                    if(fSocketCommunication->InitialzedHandler()==false)
+                        return;
+                }
+
+                //---------------------------------------
+                if(CheckContinusStartIsReady())
+                {
+                    if(CleanLamp==false)
+                    {
+                        ClosePanelLamp();
+                        CleanLamp=true;
+                    }
+
+                    if(fNote->fShow==false)                                     //Steven 20151022 : 為了讓按鈕在Note畫面會閃爍
+                    {
+                        bLampOneCycle=iOneCycle || bOneCycle_BackUp;            //JerryYang 20161223 (Steven) 修正12site按one cycle時面板燈號未即時亮起
+                        bLampCleanOut=iCleanOut;
+                    }
+
+                    if(IniConfig.bD34GailDMCProtection)                         //ChungHung 20131230 add for ATK
+                    {
+                        if(bRunGali_Pr==false)                                  //Chunghung 20131111 add
+                        {
+                            MOT[MTestY1].StartGali_Pr();                        //Chunghung 20131111 add
+                            MOT[MTestY1].GetGali_Pr_ER(GALI_ERROR_MAX_PR1, GALI_ERROR_MAX_PR2, GALI_ERROR_MAX_PR3, GALI_ERROR_MAX_PR4);                         //Chunghung 20131111 add
+                        }
+                    }
+
+                    if(SystemStart==true)                                       //Ifor 20160909 避免程式開啟時瞬間發出Alarm
+                    {
+                        FormHS->LoaderBufPreAlarm();                            //Ifor 20160829 add for KYEC Loader PreAalrm
+                        FormHS->FixTrayPreAlarm();                              //Ifor 20160829 add for KYEC FixTray PreAalrm
+                    }
+
+#ifdef DEBUG_TRY_CATCH
+                    try
+                    {
+#endif
+                        DoAllProcess();
+#ifdef DEBUG_TRY_CATCH
+                    }
+                    catch(...)
+                    {
+                        MyDBIProcess("Exception", "DoAllProcess()");
+                    }
+
+                    try
+                    {
+#endif
+                        DoOneCycleFinishCheck();
+                        DoCleanOutFinishCheck();
+#ifdef DEBUG_TRY_CATCH
+                    }
+                    catch(...)
+                    {
+                        MyDBIProcess("Exception", "DoOneCycleAndCleanOutFinishCheck()");
+                    }
+#endif
+                }
+
+                if(ATC_SYSTEM==eWinWay &&                                       //Jimmychiu 20210902 add: ATC Winway IO ready
+                   Temperature.bATCActiveCooling==true)
+                {
+                    if(bCheckWinWayATCSite())
+                    {
+                        ShowMyMessage("ATC Temp not ready!");
+                        return;
+                    }
+                }
+            }
+        }
+
+        fLotInfo->ALed3->FalseColor=clLime;                                     //Steven 20110922
+        fLotInfo->ALed2->FalseColor=clLime;
+        fLotInfo->ALed1->FalseColor=clLime;
+
+        if(IniConfig.bN14_18_EnableTempOffset &&
+           fProductionInfo->dTempTajOfs!=dOldGreatekTempOfs)                    //Sam 20200806 : 溫度 By Servo
+        {
+            dOldGreatekTempOfs=fProductionInfo->dTempTajOfs;
+            fMain->StringGrid2->Cells[7][20]=FloatToStr(dOldGreatekTempOfs);
+        }
+
+        if(iHandlerStartCount>3)                                                //Steven 20190123 : 紀錄Handler被暫停
+            bHandlerPause=false;
+        else
+            iHandlerStartCount++;
+
+        if(TorqueUseHPComCard)                                                  //Steven 20210524 : 連續讀取扭力
+        {
+            if(iLogTorque!=1 && fAllMotorHome==true)
+            {
+                if(fContact->fShow && iContactMode!=CONTACT_NORMAL)
+                {
+                }
+                else
+                {
+                    COM2->iReadSTopTorque_HPCardTask=1;                         //Steven 20211116 : 改成一送一收
+                    iLogTorque=COM2->StartReadTorque_HPCard();                  //Steven 20211116 : 改成一送一收
+                }
+            }
+        }
+    }
+    else                                                                        //SystemStart!=true
+    {
+        if(TorqueUseHPComCard)                                                  //Steven 20210524 : 連續讀取扭力
+        {
+            if(iLogTorque!=0 && iStopLogTorque!=1)                              //kevin 20211207 MCU Stop
+            {
+                //iLogTorque=0;                                                 //kevin 20220106 mark
+                COM2->iReadTorque_HPCardTask=1;                                 //Steven 20211116 : 改成一送一收
+                iStopLogTorque=COM2->StopReadTorque_HPCard();
+                if(iStopLogTorque!=1)
+                {
+                    iLogTorque=0;
+                    iStopLogTorque=0;
+                }
+            }
+        }
+
+        bHandlerPause=true;                                                     //Steven 20190123 : 紀錄Handler被暫停
+        if(INDEX_SUCKER_TYPE==1)                                                //JerryYang 20250110 : 新增保護避免真空持續on會造成all site掉料
+        {
+            if(bArm1NeedSuck && iFrontTestSuckICTask==310)
+            {
+                DoArm1Suck();
+            }
+
+            if(bArm2NeedSuck && iRearTestSuckICTask==310)
+            {
+                DoArm2Suck();
+            }
+        }
+        iHandlerStartCount=0;
+        bResetGalilTwoYMove=true;                                               //Ifor 20220729 add Reset Galil Two Y Move時間計時
+
+        if(CosFunction.bOEEFunction)                                            //Steven 20180417 (Jou) : OEE功能
+        {
+            fObserver->bTestIndexZ=false;
+        }
+        bNeedCheckSetupNameList = true;
+        bFix3_OneCycleTimeSet=false;                                            //Ifor 20190516 :add KYEC 避免Fix3 Full功能導致無預警Hang up 新增Alarm
+        bFix3_CleanOutTimeSet=false;                                            //Ifor 20190516 :add KYEC 避免Fix3 Full功能導致無預警Hang up 新增Alarm
+        if(IniConfig.bI01TesterFinishThenHome &&
+           LastSet.iTester==ON_LINE &&
+           fAllMotorHome==false &&
+           bFinshTest==false)                                                   //kevin 20150721 收到測試資料才能home
+        {
+            if(fAllMotorHome==false &&
+               bFinshTest==false &&
+               fPassword->bShow==false)                                         //jou 20220923 : 修正password輸入時跳出continue fail造成hang up
+            {
+                for(int j=0; j<TOTAL_MOTOR; j++)                                //kevin 20220122 : 避免[I01]跟緊停動作衝突導致撞機
+                    MOT[j].Lock(MOT[j].Alias, "bI01 ", 1);
+                DoTestHeadMotor();
+            }
+        }
+
+        if(bUseInitDelay && Prod.bWhenPressStopOverUseInitialDelay)             //ChungHung 20150526 add for ATK want to even stop over will use initial delay //Ifor 20180116 (Steven) : add KYEC 常溫使用 Initial start delay
+        {
+            if(bEvenStart==true)
+            {
+                bEvenStart=false;
+                tStartCount = Now();
+            }
+            tEndCount = Now();
+            if(Prod.iWhenPressStopOver/86400.0<= tEndCount - tStartCount)
+            {
+                bDoWhenPressStopOverUseInitialDelay=true;
+                iInitContactCount=0;                                            //Steven 20160519 : 起測時溫度要補Offset
+            }
+        }
+
+        bScanColorTray=true;                                                    //Steven 20141019 : 按下Start才檢查Fix盤上的Color Tray
+
+        if(fOCR->bOcr_ReceiveOK[fOCR->ocrEnd]==false &&                         //ChungHung 20120830 add OCR Function add
+           fOCR->bSendOcrSendStart==false)
+        {
+            fOCR->DoOCRReleaseAndInspEnd();
+        }
+
+        SW[SwSocketClean].Off();
+        SocketAirCoolingStart();                                                //jou 2016-04-28 Socket Air Cooling contact count trun on
+
+        fLotInfo->ALed3->FalseColor=clSilver;                                   //Steven 20110922
+        fLotInfo->ALed2->FalseColor=clSilver;
+        fLotInfo->ALed1->FalseColor=clSilver;
+
+        bNeedCheckSocketNumber=true;
+
+        bTranArmWaitFlag=true;
+        if(bLongTimePause==false)
+        {
+            if(iOldSec!=SystemSec)
+            {
+                iOldSec=SystemSec;
+                iLongTimePauseCount++;
+                if(iLongTimePauseCount>600)
+                {
+                    iLongTimePauseCount=0;
+                    bLongTimePause=true;
+                }
+            }
+        }
+
+        if(bNeedArmZHome)
+        {
+            if(bBackArmZHomeFlag)
+            {
+                bBackArmZHomeFlag=false;
+                if(bIsInArmHome==true)
+                {
+                    SetInArmHome();
+                }
+
+                if(bIsOutArmHome==true)
+                {
+                    SetOutArmHome();
+                }
+            }
+        }
+
+        bInOutArmStartCheck=true;                                               //ChungHung 20140605 add Fix Shuttle hit In/OutArm
+
+        for(int i=0; i<7; i++)                                                  //jou 2011-02-21 start : magazine沒動作會alarm
+        {
+            bLifterPause[i]=true;
+            bAuto2Pause[i]=true;                                                //kevin 20120718 for auto2
+        }
+#ifdef DEBUG_TRY_CATCH
+        try
+        {
+#endif
+            if(fHome->fShow)
+                fHome->sbAbortHomeClick(fHome);
+#ifdef DEBUG_TRY_CATCH
+        }
+        catch(...)
+        {
+            MyDBIProcess("Exception", "fHome->BtnPanel1Click(fHome)");
+        }
+
+        try
+        {
+#endif
+            COM2->ResetPanasonicTime();
+#ifdef DEBUG_TRY_CATCH
+        }
+        catch(...)
+        {
+            MyDBIProcess("Exception", "ResetPanasonicTime()");
+        }
+
+        try
+        {
+#endif
+            if(CUSTOMER_CODE!=CC_KYEC_LEE && fNote->fShow==false && MyMessageBox->fShow==false)
+            {
+                ScanTrayStatus();
+            }
+
+            if(CUSTOMER_CODE==CC_ASE_KaohSiung)                                 //kevin 20201223 add
+                AutoCoolChambo();
+#ifdef DEBUG_TRY_CATCH
+        }
+        catch(...)
+        {
+            MyDBIProcess("Exception", "ScanTrayStatus()");
+        }
+#endif
+
+        bPauseTester=true;
+        bPauseInMotor=true;
+        bPauseOutMotor=true;
+        bPauseSortMotor=true;                                                   //RogerYang 20250510 Add for 9046AU
+        bSupplyNewICTrayPause=true;
+        bHangTimePause=true;                                                    //Steven 20090827 : Hang Up dectector
+        bScanLightPause=true;                                                   // for scanner light know has pause happend
+        if(iNeedRecord==1)
+        {
+            iNeedRecord=2;
+            SaveMachineRecord();
+        }
+
+        if(IniConfig.bEnableSocketCommunication)                                //ChungHung 20130112 add for ASE_KR Socket Tester
+        {
+            fSocketCommunication->SetHandlerState(0);
+            if(fSocketCommunication->aCurrentHandlerState=="IDLE")
+            {
+                fSocketCommunication->aCurrentHandlerState=fSocketCommunication->aSetHandlerState;
+            }
+        }
+
+        if(CUSTOMER_CODE!=CC_ASE_KaohSiung)                                     //JerryYang 20181115 只有高雄不要開門的時候 unlock loader tray      //kevin 20180716 add ASE_KH no use 開門 釋放所有軌道夾TRAY汽缸
+        {                                                                       //ChungHung 20121015 Loader Tray Setting Error
+            if(LastSet.iRealDummy!=DUMMY &&
+               MOT[MMTrayY].fHasTray &&
+               bForKyecBu3RunART==false &&
+               Sen[SnLoaderSureTray].IsOn() &&                                  //Steven 20141024 : SnLoaderTrayHasTray --> SnLoaderSureTray
+               MOT[MMTrayY].HasIC())
+            {
+                if(CheckLoaderSafeDoor()==false)
+                {
+                    if(TRAY_ARM_MODE==eUnderCoveyor)
+                    {
+                        Cylinder[C_LoaderPushBack_Back].Off();
+                        Cylinder[C_LoaderPushBack_Push].On();
+                    }
+                    else
+                    {
+                        Cylinder[C_TrayY_Fixer].Off();
+                    }
+                    Cylinder[C_LoaderEdgePush].Off();
+                    Cylinder[C_LoaderUpPress].Off();
+                    InitialDoLockLoader();                                      //JerryYang 20190115 避免Loader tray定位汽缸同時作動會造成跳料
+                }
+                else
+                {
+                    if(LastSet.iRunStartMode!=rsmAutoRetest)                    //ChungHung 20140625 AutoRetest 不能鎖
+                    {
+                        DoLockLoader();                                         //JerryYang 20190115 避免Loader tray定位汽缸同時作動會造成跳料
+                    }
+                }
+            }
+
+            if(IniConfig.bUnloadTrayFree==true)
+            {
+                if(LastSet.iRealDummy!=DUMMY)
+                {
+                    for(int i=eAuto1; i<=iAutoRight; i++)
+                    {
+                        int iAuto=iAutoIndex[i];
+                        if(MOT[iMMAuto[i]].fHasTray &&
+                           Sen[SnAutoTrayDetect[iAuto]].IsOn())                 //Steven 20120201 : 沒IC也要放開
+                        {
+                            if(CheckUnLoadSafeDoor()==false)
+                            {
+                                Cylinder[C_AutoEdgePush[iAuto]].Off();
+                                Cylinder[C_AutoSide_Fixer[iAuto]].Off();
+                                Cylinder[C_AutoUpPress[iAuto]].Off();           //JerryYang 20190423 新增unloader壓tray
+                                bUnloadTrayFreeSenFlag[iAuto]=true;
+                            }
+                            else
+                            {
+                                if(bUnloadTrayFreeSenFlag[iAuto]==true &&       //jou 2011-07-05 start : 當汽缸打上去前,先檢查sensor是否有on,避免翻盤
+                                   Sen[SnAutoTrayDetect[iAuto]].IsOff())
+                                {
+                                    ShowErrorMessage(sJAM1109[iAuto], K_RETRY, iMMAuto[i], bUnloadTrayDupErr[iAuto], __FUNC__);
+                                    bUnloadTrayDupErr[iAuto]=true;              //Steven 20120208 : Auto Tray沒放好,重複Alarm
+                                }
+                                else
+                                {
+                                    if(bUnloadTrayFreeSenFlag[iAuto]==true &&   //Steven 20110726 : 有開的才要關
+                                       LastSet.iRunStartMode!=rsmAutoRetest)    //ChungHung 20140625 AutoRetest 不能鎖
+                                    {
+                                        Cylinder[C_AutoEdgePush[iAuto]].On();   //先側推
+                                        MySleep(500);
+                                        Cylinder[C_AutoSide_Fixer[iAuto]].On();                                         //固定
+                                        MySleep(500);
+                                        Cylinder[C_AutoUpPress[iAuto]].On();
+                                        bUnloadTrayFreeSenFlag[iAuto]=false;
+                                    }
+                                    bUnloadTrayDupErr[iAuto]=false;             //Steven 20120208 : Auto Tray沒放好,重複Alarm
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if(CosFunction.bStopMustTestTimeOut)                                    //Steven 20111003
+        {
+            if(fContact->fShow==false && TestSocket.HasNotTestYet())            //ChungHung 20121121 alter 進入Contact畫面時不要做這段
+            {
+                if(bFinshTest==false && fPassword->bShow==false)                //jou 20220923 : 修正password輸入時跳出continue fail造成hang up
+                {
+                    if(IsNNMode()==NN_1Row)
+                    {
+                        if(fTwoArmNeedTest)                                     //Steven 20170426 (wei) : Add protection
+                            fTwoArmNeedTest=!DoTestSuckTestIC_TwoArm32Site();
+                        CheckIndexAllSuckICFallDown(false, true);               //Steven 20110725 : 修改負壓檢查方式
+                    }
+                    else
+                    {
+                        if(IndexStatus==Z1Down_Z2Up)
+                        {
+                            if(fFrontNeedTest)                                  //Steven 20170426 (wei) : Add protection
+                                fFrontNeedTest=!DoFTestSuckTestIC();            //做測試頭下降至測試點測試動作
+                            CheckIndexAllSuckICFallDown(true, false);           //Steven 20110725 : 修改負壓檢查方式
+                        }
+                        else if(IndexStatus==Z1Up_Z2Down)
+                        {
+                            if(fRearNeedTest)                                   //Steven 20170426 (wei) : Add protection
+                                fRearNeedTest=!DoBTestSuckTestIC();             //Index2 測試程序
+                            CheckIndexAllSuckICFallDown(false, true);           //Steven 20110725 : 修改負壓檢查方式
+                        }
+                    }
+                }
+            }
+        }
+
+        if(fAGV->IsSPIL_AMR())                                                  //JerryYang 20250521 : For AMR
+        {
+            CheckBundleAndRead();
+        }
+    }
+
+    if(iMyTimer>10)
+        iMyTimer=0;
+}
+#endif // golden csystem.cpp:16711-19100  (GATE G-W7-MainProc-FIDELITY)
 // ===========================================================================
 //  MainProc  -- golden csystem.cpp:16711.  OUTER per-frame entry.
 //
@@ -584,6 +3043,1171 @@ void MainProc()
 //  block is gated WHOLESALE this wave because its surrounding guards
 //  (fContact->IsRun2DCheck / ShowMyMessage / fOCR / fLotInfo) are not.
 // ===========================================================================
+// ===========================================================================
+//  GOLDEN VERBATIM PAIR -- DoAllProcess
+//  ------------------------------------
+//  The block below is golden csystem.cpp:9115-10255 (1,141 golden lines)
+//  transcribed CHARACTER-FOR-CHARACTER (Big5 -> UTF-8 only) and GATED OFF.
+//  It is INERT: the ACTIVE DoAllProcess is the 239-line body immediately
+//  after the #endif, and it is unchanged by this pair being here.
+//
+//  WHY: the previous shape summarised golden's 883-line early-return ladder
+//  (golden :9165-10047) as twelve lines of prose ("/* ... ~300 lines ... */").
+//  That LOST golden's text.  Now the text EXISTS in the tree and is
+//  auditable line-by-line, and a later un-gate is mechanical rather than a
+//  re-translation.  NOTHING inside the gate has been fixed, renamed,
+//  reflowed or reindented -- golden's own defects are preserved on purpose
+//  so a diff against golden stays empty.
+//
+//  Same shape as this file's existing pairs: DoTrayFeedProcess (gated :6248,
+//  live :7487) and CheckContinusStartIsReady (gated :7550, live :8251).
+//  Being gated, it needs NO callee to exist -- only lexical validity.  Do not
+//  add stubs or declarations for its symbols; the un-gate blockers are listed
+//  in the wave report, not papered over here.
+// ===========================================================================
+#if 0 // GOLDEN VERBATIM -- golden csystem.cpp:9115-10255.  INERT reference text; the live DoAllProcess follows the #endif.
+void DoAllProcess()
+{
+    int cmpt=MAX_AUTO_TRAY, ret, iRBinICTrayCount=0, iBinRCount=0;              //Frank 20170109 add
+    bool flag, flag2=true;                                                      //ChungHung  modify flag2--->flag2=true
+
+    static bool bDoProcess=true;                                                //Steven 20110608 : 降低CPU負載
+    int iOutputCount=0;                                                         //ChungHung 20141002 add for KYEC AutoRetest
+    int sum=0, iFail=0, iFailYield=0, Sum_ART=0, iFail_ART=0;                   //ChungHung 20141002 add for KYEC AutoRetest
+    AnsiString Str, Buffer, Buffer1, Buffer2;                                   //ChungHung 20141002 add for KYEC AutoRetest
+    double iPass=0.0, iPassYield=0.0, fTest=0.0, fTest1=0.0, fOpenYield=0.0, fTest2=0.0, fRecoverYield=0.0;             //kevin 20150709
+    bool bFlag[5]={false};                                                      //kevin 20150709
+    bool bFlagreturn[5]={false};                                                //kevin 20150709
+    static AnsiString asBarCodeError="";                                        //Frank 20170109 add
+//    static bool bCheckShuttle[2];                                             //20260326健銘說會死雞  //Ifor 20260112 add:In Shuttle 疊料偵測
+
+    fMain->ProcessSensorScan();                                                 //ChungHung 20140815 測試用
+
+//    if(iCheckShuttleSensor!=0)                                                //20260326健銘說會死雞
+//    {
+//        if(iCheckShuttleSensor==1)
+//        {
+//            bCheckShuttle[0]=false;
+//            bCheckShuttle[1]=false;
+//            InitDoInArmCheckShtFloatTask();
+//            iCheckShuttleSensor=2;
+//        }
+//        else if(iCheckShuttleSensor==2)
+//        {
+//            bCheckShuttle[0]=DoInArmCheckShuttleFloating(0,false, true);
+//            if(bCheckShuttle[0]==true)
+//            {
+//                InitDoInArmCheckShtFloatTask();
+//                iCheckShuttleSensor=3;
+//            }
+//        }
+//        else if(iCheckShuttleSensor==3)
+//        {
+//            bCheckShuttle[1]=DoInArmCheckShuttleFloating(1,false, true);
+//        }
+//
+//        if(bCheckShuttle[0]==true && bCheckShuttle[1]==true)
+//            iCheckShuttleSensor=0;
+//        return;
+//    }
+//    else
+//    {
+//        bCheckShuttle[0]=false;
+//        bCheckShuttle[1]=false;
+//    }
+
+    if(LastSet.iRunStartMode==rsmAutoRetest ||                                  //Steven 20140409 : Auto Retest
+       bART_needRT2)                                                            //kevin 20150717 need RT2
+    {
+        flag=DoAutoRetest();
+        if(flag)
+        {
+            if(CosFunction.bUseSCKART)                                          //Steven 20161201 (wei) : For SCK 93K ART
+            {
+                if(fSCKART->iTesterType==0)
+                {
+                    if(fSCKART->iNeedRT==2)
+                        SetRunStartMode(rsmContinuRetest_ART);
+                    else
+                        SetRunStartMode(rsmContinuStart_ART);
+
+                    fSCKART->iWaitGPIBLotR=0;
+                }
+                else
+                {
+                    if(fSCKART->iNeedRT==2)
+                        SetRunStartMode(rsmContinuRetest_ART);
+                    else
+                        SetRunStartMode(rsmContinuStart_ART);
+
+                    if(TestIF_File.bRENESAS_EnableFTCT==true)                   //RogerYang 20250922 : 瑞薩FT-CT
+                    {
+                        fSCKART->iCurrent93KARTStep=9;                          //已經接收"50"
+                    }
+                }
+                fLotInfo->SetTesterStartTimeByB03();                            //Sam 20240809 : PTI ART 模式
+                fMain->Clarn_Data(5, "DoAutoRetest_ClearData1");
+                for(int i=eAuto1; i<=iAutoRight; i++)                           //JerryYang 20200422 搬完tray需初始化task
+                {
+                    Initial_Auto_BinTray_Task(i);
+                }
+            }
+            else
+            {
+                for(int i=eAuto1; i<=iAutoRight; i++)
+                {
+                    if(Prod.bART6Tray[i])
+                    {
+                        if(CUSTOMER_CODE==CC_KYEC_LEE)
+                            iOutputCount+=LastSet.iUnloaderTrayCount_ART[i]-iRetestNoIC[i];                             //wei 20160203 回盤為空盤不計數
+                        else
+                            iOutputCount+=LastSet.iUnloaderTrayCount_ART[i];
+                    }
+                }
+
+                //==> Eastsun 20260513 F015 KYEC AMR cover-tray output adjustment
+                if(TrayForm.bEnableAMR)
+                {
+                    for(int i=0; i<3; i++)
+                    {
+                        if(BinSelect[iTestRunMode].bAutoRetest[i])
+                        {
+                            iOutputCount-=iAMRCoverTray;
+                            iUnloaderTrayCountCal[i]=iAMRCoverTray;
+                            TestIF_File.iAMRARTCount+=TestIF_File.iAMRDeviceCount[i+3];
+                            TestIF_File.iAMRTrayCount[i+3]=iAMRCoverTray;
+                            TestIF_File.iAMRDeviceCount[i+3]=0;
+                        }
+                    }
+                }
+                //<== Eastsun 20260513 F015
+
+                if(CUSTOMER_CODE!=CC_KYEC_LEE)
+                    LastSet.iLoaderTotalTray=iOutputCount;
+
+                fMain->edLoadCnt->Text=LastSet.iLoaderTotalTray;
+                LastSet.iInputLoaderCount=0;
+                for(int i=eAuto1; i<=iAutoRight; i++)
+                {
+                    LastSet.iUnloaderTrayCount_ART[i]=0;
+                    Initial_Auto_BinTray_Task(i);                               //ChungHung 20150604 add for AutoRetest
+                }
+
+                bFlag[0]=TestIF_File.bEnablePassYieldART;                       //kevin 20150709 //kevin 20150709  pass yield
+                bFlag[1]=TestIF_File.bEnableOpenShortART;                       //kevin 20150709 open short yield
+                bFlag[2]=TestIF_File.bEnableRecoverART;                         //kevin 20150709 Recover yield
+
+                for(int i=0; i<eTrayCount; i++)
+                {
+                    sum     +=LastSet.BinCT    [0][iTo3Unload[i]];
+                    Sum_ART +=LastSet.BinCT_ART[0][iTo3Unload[i]];
+                    if(Prod.iIsFailT6[i]==1)                                    //Steven 20240105 : Prod.bIsPass --> Prod.iIsFailT6
+                    {
+                        iFail    +=LastSet.BinCT    [0][iTo3Unload[i]];
+                        iFail_ART+=LastSet.BinCT_ART[0][iTo3Unload[i]];         //wei 20150923 add ART計數
+                    }
+                    else
+                    {
+                        iPass+=LastSet.BinCT[0][iTo3Unload[i]];                 //kevin 20150613
+                    }
+                }
+
+                if(CUSTOMER_CODE==CC_ASE_KaohSiung)                             //kevin 20150706 ART  bin 設定
+                {
+                    for(int i=0; i<iTestBinCount; i++)
+                    {
+                        if(TestIF_File.bEnablePassYieldART && (TestIF_File.bPass[i] || Prod.bIsPassBin[i]))             //autoRetest 設定pass bin 和原本 PASS TRAY BIN
+                            fTest+=LastSet.iBinData32[0][i];
+
+                        if(TestIF_File.bEnableOpenShortART && TestIF_File.bOpenShort[i])                                //kevin 20150706
+                            fTest1+=LastSet.iBinData32[0][i];
+
+                        if(LastSet.iAutoRetestCount_ART>=1 && (TestIF_File.bPass[i] || Prod.bIsPassBin[i]))             //kevin 20150709 需生產過ft
+                        {
+                            fTest2+=LastSet.iBinData32[0][i];
+                        }
+                    }
+                }
+
+                iPassYield=ChangeToFloat((double)fTest, (double)sum);           //Steven 20250820 : 針對除以0加上保護
+                fOpenYield=ChangeToFloat((double)fTest1, (double)sum);
+
+                if(Sum_ART>0)
+                {
+                    iFailYield=ChangeToFloat((double)iFail_ART, (double)Sum_ART);
+                    iPassYield=100-iFailYield;
+                    fRecoverYield=ChangeToFloat((double)fTest2, (double)Sum_ART);
+                }
+                fMain->Clarn_Data(6, "DoAutoRetest_ClearData2");
+
+                if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+                {
+                    fCounterClear->ClearCount(ctAutoRetestCount);               //kevin 20150530 清除有做 autoretest tray  Fail bin
+                    if(LastSet.iAutoRetestCount_ART>=iAutoRetestLimit)          //kevin 20150601 做AUTO RETEST最大次數
+                    {
+                        SetRunStartMode(rsmContinuRetest_ART);
+                    }
+                    else if(LastSet.iAutoRetestCount_ART>=1  &&
+                        ((TestIF_File.bEnablePassYieldART && (iPassYield>=fFirstYieldSet_ART))    ||
+                         (TestIF_File.bEnableOpenShortART && (fOpenYield<fOpenShortYieldSet_ART)) ||
+                         (TestIF_File.bEnableRecoverART   && (fRecoverYield<fRecoverRateYieldRT1Set_ART))))             //kevin 20150706
+                    {
+                        bFlagreturn[0]=TestIF_File.bEnablePassYieldART &&(iPassYield>=fFirstYieldSet_ART);
+                        bFlagreturn[1]=TestIF_File.bEnableOpenShortART &&(fOpenYield<fOpenShortYieldSet_ART);
+                        bFlagreturn[2]=TestIF_File.bEnableRecoverART   &&(fRecoverYield<fRecoverRateYieldRT1Set_ART);
+
+                        if(bFlag[0]==false && bFlag[1]==false && bFlag[2]==false ||
+                          (bFlag[0]==false && bFlag[1]==false && bFlag[2]==true  && bFlagreturn[0]==false && bFlagreturn[1]==false && bFlagreturn[2]==true ) ||
+                          (bFlag[0]==false && bFlag[1]==true  && bFlag[2]==false && bFlagreturn[0]==false && bFlagreturn[1]==true  && bFlagreturn[2]==false) ||
+                          (bFlag[0]==false && bFlag[1]==true  && bFlag[2]==true  && bFlagreturn[0]==false && bFlagreturn[1]==true  && bFlagreturn[2]==true ) ||
+                          (bFlag[0]==true  && bFlag[1]==false && bFlag[2]==false && bFlagreturn[0]==true  && bFlagreturn[1]==false && bFlagreturn[2]==false) ||
+                          (bFlag[0]==true  && bFlag[1]==false && bFlag[2]==true  && bFlagreturn[0]==true  && bFlagreturn[1]==false && bFlagreturn[2]==true ) ||
+                          (bFlag[0]==true  && bFlag[1]==true  && bFlag[2]==false && bFlagreturn[0]==true  && bFlagreturn[1]==true  && bFlagreturn[2]==false) ||
+                          (bFlag[0]==true  && bFlag[1]==true  && bFlag[2]==true  && bFlagreturn[0]==true  && bFlagreturn[1]==true  && bFlagreturn[2]==true ))   //kevin 20150709 add 000 -> 111
+                        {
+                            RespondASECom("@e02010Done");                       //kevin 20170830 (Steven) 回應 ase ART change RT Bin
+                            SetRunStartMode(rsmContinuRetest_ART);
+                        }
+                        else
+                        {
+                            SetRunStartMode(rsmContinuStart_ART);
+                        }
+                    }
+                    else
+                    {
+                        SetRunStartMode(rsmContinuStart_ART);
+                    }
+                }
+                else if(CosFunction.bAutoRetestGPIBmode==true)                  //jou 2015-10-02 Auto Retest GPIB mode
+                {
+                    if(LastSet.bFinEndLotAutoRetestGPIB==true)
+                        SetRunStartMode(rsmContinuRetest_ART);
+                    else
+                        SetRunStartMode(rsmContinuStart_ART);
+                    fCounterClear->ClearCount(ctAutoRetestCount);               //wei 20150923 add ART計數
+                }
+                else
+                {
+                    fCounterClear->ClearCount(ctTraySortCount);
+                    if(CUSTOMER_CODE==CC_KYEC_LEE)                              //wei 20150825 KYEC 修改成By File
+                    {
+                        IniConfig.iAutoRetestLimit=iAutoRetestLimitFile;
+                        IniConfig.iFailYieldRate_ART=iFailYieldRate_ARTFile;
+
+                        if(bAutoLeastRetestFile && LastSet.iAutoRetestCount_ART<=iAutoLeastRetestLimitFile)
+                        {
+                            SetRunStartMode(rsmContinuStart_ART);
+                        }
+                        else if(LastSet.iAutoRetestCount_ART>=IniConfig.iAutoRetestLimit)
+                        {
+                            SetRunStartMode(rsmContinuRetest_ART);
+                        }
+                        else if(LastSet.iAutoRetestCount_ART==1 &&
+                                ((iUseFTFailYield==0 &&
+                                 ((iUseFTFailYieldModel==0 && iPassYield>=dFailYieldRate_ARTFTFile[1])   ||
+                                  (iUseFTFailYieldModel==1 && iPassYield>dFailYieldRate_ARTFTFile[1])    ||
+                                  (iUseFTFailYieldModel==2 && iPassYield<dFailYieldRate_ARTFTFile[1])    ||
+                                  (iUseFTFailYieldModel==3 && iPassYield<=dFailYieldRate_ARTFTFile[1]))) ||
+                                  (iUseFTFailYield==1 && (iPassYield>=dFailYieldRate_ARTFTFile[0] && iPassYield<=dFailYieldRate_ARTFTFile[2]))))
+                        {
+                            SetRunStartMode(rsmContinuRetest_ART);
+                        }
+                        else if(LastSet.iAutoRetestCount_ART>=2 &&
+                                ((iUseRTFailYield==0 &&
+                                 ((iUseRTFailYieldModel==0 && iPassYield>=dFailYieldRate_ARTRTFile[1])   ||
+                                  (iUseRTFailYieldModel==1 && iPassYield>dFailYieldRate_ARTRTFile[1])    ||
+                                  (iUseRTFailYieldModel==2 && iPassYield<dFailYieldRate_ARTRTFile[1])    ||
+                                  (iUseRTFailYieldModel==3 && iPassYield<=dFailYieldRate_ARTRTFile[1]))) ||
+                                 (iUseRTFailYield==1 && (iPassYield>=dFailYieldRate_ARTRTFile[0] && iPassYield<=dFailYieldRate_ARTRTFile[2]))))
+                        {
+                            SetRunStartMode(rsmContinuRetest_ART);
+                        }
+                        else
+                        {
+                            SetRunStartMode(rsmContinuStart_ART);
+                        }
+                        fCounterClear->ClearCount(ctAutoRetestCount);           //wei 20150923 add ART計數
+
+                        if(TrayForm.bEnableAMR==false)                          //Eastsun 20260514 F010 AMR ART guard
+                            LastSet.iLoaderTrayCount_ART=0;                     //wei 20160127 不先清除
+                        fMain->lblLoadTrayCnt->Caption=LastSet.iLoaderTrayCount_ART;
+                        fLotInfo->edLoadingCnt->Text=LastSet.iLoaderTrayCount_ART;
+                    }
+                    else
+                    {
+                        if(LastSet.iAutoRetestCount_ART>=IniConfig.iAutoRetestLimit)                                    //wei 20150331  大於改大於等於
+                        {
+                            SetRunStartMode(rsmContinuRetest_ART);              //retest
+                        }
+                        else if(LastSet.iAutoRetestCount_ART>=1 && iFailYield<=IniConfig.iFailYieldRate_ART)            //wei 20150331  大於改大於等於
+                        {
+                            SetRunStartMode(rsmContinuRetest_ART);              //retest
+                        }
+                        else
+                        {
+                            SetRunStartMode(rsmContinuStart_ART);
+                        }
+                        fCounterClear->ClearCount(ctAutoRetestCount);           //wei 20150923 add ART計數
+                    }
+                }
+            }
+
+            if(CosFunction.bAutoRetestGPIBmode==false && CosFunction.bUseSCKART==false)                                 //jou 2015-10-02 Auto Retest GPIB mode     //Steven 20161201 (wei) : For SCK 93K ART
+            {
+                SoftStop=true;
+                SystemStart=false;
+            }
+
+            if(IniConfig.bEnable_SECS_GEM==false)                               //wei 20150630 使用SECS_GEM不ShowMessage
+            {
+                if(LastSet.iRunStartMode==rsmContinuRetest_ART &&
+                   bART_needRT2==false)                                         //kevin 20150717
+                {
+                    fYieldMonitoring->btnApplyClick(fYieldMonitoring);
+                    if(CosFunction.bUseSCKART==false)                           //Steven 20161201 (wei) : For SCK 93K ART
+                    {
+                        RespondASECom("@e02010Done");                           //kevin 20170830 (Steven) 回應 ase ART change RT Bin
+                        ShowMyMessage("Change to RT, Tester Ready?", "改變到RT，測試機已完成?");
+                        bARTSeparate=true;                                      //kevin 20170908 (wei) add art 分bin 狀態成立
+                    }
+                }
+            }
+
+            if(IniConfig.bSPILFunction)                                         //JerryYang 20220923 : 矽品半套ART
+            {
+                ShowMyMessage("Tester Ready?","測試機已完成?");
+            }
+
+            if(bART_needRT2==false)                                             //kevin 20150717
+            {
+                if(CUSTOMER_CODE==CC_ASE_KaohSiung)                             //kevin 20150706 autotest Data
+                {
+                    Str="AutoRetest:"+fLotInfo->LART_Limit->Caption+fLotInfo->eART_Limit->Text+";"+
+                                      fLotInfo->LART_Count->Caption+fLotInfo->eART_Count->Text+";"+
+                                      fLotInfo->LART_Passlimit->Caption+fLotInfo->eART_Passlimit->Text+";"+
+                                      fLotInfo->LART_PassYield->Caption+fLotInfo->eART_PassYield->Text+";"+
+                                      fLotInfo->LART_Openlimit->Caption+fLotInfo->eART_Openlimit->Text+";"+
+                                      fLotInfo->LART_OpenYield->Caption+fLotInfo->eART_OpenYield->Text+";";
+                }
+                else
+                {
+                    Str="AutoRetest:"+fLotInfo->Label23->Caption+fLotInfo->edInputAmount->Text+";"+
+                                      fLotInfo->Label22->Caption+fLotInfo->edLoadingCnt->Text+";"+
+                                      fLotInfo->Label24->Caption+fLotInfo->edAuto1Cnt->Text+";"+
+                                      fLotInfo->Label25->Caption+fLotInfo->edAuto2Cnt->Text+";"+
+                                      fLotInfo->Label26->Caption+fLotInfo->edAuto3Cnt->Text+";"+
+                                      fLotInfo->Label28->Caption+fLotInfo->edARTMaxLimit->Text+";"+
+                                      fLotInfo->Label27->Caption+fLotInfo->edCurrARTCnt->Text+";"+
+                                      fLotInfo->Label30->Caption+fLotInfo->edCurrARTRate->Text+";"+
+                                      fLotInfo->Label29->Caption+fLotInfo->edARTPassLimit->Text+";";
+                }
+                RecordProcess(Str);                                             //ChungHung 20141015 add
+            }
+
+            if(CUSTOMER_CODE==CC_KYEC_LEE)                                      //Frank 20161229 (Steven) BIN R回盤機制最後一次R要結束前機台ALARM並跳出輸入視窗
+            {
+                iBinRCount=atoi(fShowBinSelect->StrARTSkipICCount->Cells[1][LastSet.iAutoRetestCount_ART].c_str());
+
+                if(iBinRCount>0 && LoadForm->XDivision>0 && LoadForm->YDivision>0) //Steven 20260505 : add zero-guard for (XDivision*YDivision)
+                {
+                    iRBinICTrayCount=(iBinRCount/(LoadForm->XDivision*LoadForm->YDivision))+1;
+                }
+                else
+                {
+                    iRBinICTrayCount=0;
+                }
+                LastSet.iLoaderTotalTray=iOutputCount+iRBinICTrayCount;
+                fMain->edLoadCnt->Text=LastSet.iLoaderTotalTray;
+            }
+            bART_needRT2=false;                                                 //kevin 20150717
+        }
+        return;
+    }
+
+    flag=true;
+
+    bAutoRetestMusic=false;                                                     //Frank 20160822 add AutoRetestMusic
+
+    if(bInitialLaserCheck)                                                      //Steven 20140228 : 雷射測距功能
+    {
+        if(TestIF_File.iShuttleMode==1 && TestIF_File.iShuttle_Sel==1 && iLaserShuttle==0)                              //只用Arm 2, 所以 Arm 1不需要檢查
+            iLaserShuttle++;
+
+        if(TestIF_File.iShuttleMode==1 && TestIF_File.iShuttle_Sel==0 && iLaserShuttle!=0)                              //只用Arm 1, 所以 Arm 2不需要檢查
+        {
+            bInitialLaserCheck=false;
+            return;
+        }
+
+        if(ShtLaserInit(iLaserShuttle))
+        {
+            iLaserShuttle++;
+            if(iLaserShuttle>=2)
+            {
+                bInitialLaserCheck=false;
+            }
+            else
+            {
+                ShtLaserInit(iLaserShuttle, true);
+            }
+        }
+        return;
+    }
+
+    if(LastSet.iTemperature==Tempture_Hot && bInitialLaserCheckPlate)           //Steven 20140228 : 雷射測距功能
+    {
+        if(InArmLaserInit())
+        {
+            bInitialLaserCheckPlate=false;
+        }
+        return;
+    }
+
+    if(bInitialICCheck)
+    {
+        DoInitialICCheck();
+        return;
+    }
+
+    if(AUTO3_IS_MAGAZINE==1 && bInitCheckMag)                                   //JerryYang 20220909 : add magazine
+    {
+        DoMagazineInitCheck();
+        return;
+    }
+
+    if(bInitialCylinderCheck)                                                   //JerryYang 20250120 : add
+    {
+        DoInitialCylinderCheck();
+        return;
+    }
+
+    if(bLoadCellTest)                                                           //kevin 20190305 add one cycle run arm 1 arm 2 load cell test
+    {
+       DoTestHeadMotorLoadCell();                                               //kevin 20190306 load cell test
+       return;
+    }
+
+    if(FormHS->CheckATCTempWait()==true)                                        //==> Eastsun 20260526 #026-1.45 Ifor 20230608 add:KYEC 要求新增ATC 溫度等待功能
+    {
+        return;
+    }
+
+    if(LastSet.iRunStartMode==rsmAutoSiteMap &&
+       bRunAutoClean==true &&                                                   //JerryYang 20201014 : 修正Auto site mapping模式下執行auto clean會因suck map被修改而發生異常
+       iCleanOut==0)                                                            //jou 20221101 : 修正 Clean out 時 AutoSiteMap 與 AutoClean 同時做動會 hang up問題
+    {
+        bRunAutoClean=false;
+    }
+
+    if(CosFunction.bStartESDAutoDecayFunction &&                                //Ifor 20220112 add:Auto Decay 流程整合
+       IniConfig.bA15AutoDecayTest &&
+       USE_NOVX3360==true &&
+       bRunDecayTest==true)
+    {
+        if(DoAutoDecayCheck()==false)
+        {
+            return;
+        }
+        else
+        {
+            bRunDecayTest=false;
+            return;
+        }
+    }
+    else if(IniConfig.bA31EnableAutoCleanIonFanFunction==true &&                //Isaac 20210609 : IO觸發IonFan清針
+            USE_AutoCleanIonFan==1 &&
+            bDoIniStartAutoIonFanClean==true)
+    {
+        if(DoIonFanAutoClean()==false)
+        {
+            return;
+        }
+        else
+        {
+            bDoIniStartAutoIonFanClean=false;
+            return;
+        }
+    }
+    else if(fContact->IsRun2DCheck())                                           //JerryYang 20250220 : 2DID硬體順序檢查功能
+    {
+        fContact->Do2DIDMapCheck();
+        return;
+    }
+    else if(bRunAutoClean &&
+            fContact->IsRun2DCheck()==false &&
+            TestIF.iAutoClean_Function &&
+            MOT[MInArmX].fCanMove==true &&
+            MOT[MInArmY].fCanMove==true &&                                      //Ifor 20200323 :Fix 換Tray時執行Auto Clean Hangup
+            bInitialStartIndexCheckDone)                                        //Sam 20221214 : 當機台 Initail Start 時需要先做 Index Check
+    {
+        CheckInArmDestroyActive();                                              //Sam 20240704 : 修正回吸偵測異常
+        if(CosFunction.bAutoCleanAutoSelIndexArm)                               //Steven 20160804 : fixed for auto clean
+        {
+        }
+        else
+        {
+            if(TestIF_File.iShuttleMode==1)
+            {
+                if(TestIF_File.iShuttle_Sel==0 && TestIF_File.iAutoClean_SelectArm==0)
+                {
+                }
+                else if(TestIF_File.iShuttle_Sel==1 && TestIF_File.iAutoClean_SelectArm==1)
+                {
+                }
+                else
+                {
+                    if(bUse_NewAutoCleanForm)                                   //kevin 20160905
+                    {
+                        ShowMyMessage("Auto clean arm is disabled error!!", "現在執行auto claen的index arm設定錯誤!");
+                        bRunAutoClean=false;
+                        return;
+                    }
+                }
+            }
+        }
+
+        if(TestIF_File.iAutoClean_Tray!=eCKPos_CleanAir)
+        {
+            if(MachineTypeChoice!=Type_HT9046_LS &&                             //Steven 20140520 : LS的行程可以做Arm 2 Auto Clean
+               TestIF.dSiteYPitch>6350 && TestIF.iShuttleMode==1 && TestIF.iShuttle_Sel==1 && IniConfig.bE43AutoCleanUseHotplate==false)
+            {
+                bRunAutoClean=false;
+                TestIF.iAutoClean_Function=false;
+                ShowMyMessage("Y Pitch > 63.5mm & 使用Arm 2 會造成Auto Clean行程不足","");
+                return;
+            }
+
+            //以下為支援 Auto Clean的模式
+            if(!(TestIF.iTestMode==SingleSite  ||
+                 TestIF.iTestMode==DualSite    ||
+                 TestIF.iTestMode==QualSite2X2 ||
+                 TestIF.iTestMode==QualSite2X2N ||                              //Frank 20200520 2X2NN Mode
+                 TestIF.iTestMode==_16Site2X8  ||
+                 TestIF.iTestMode==_8Site2X4   ||
+                 TestIF.iTestMode==QualSite1X4 ||
+                 TestIF.iTestMode==_10Site2X5  ||                               //wei 20190614 10 site
+                 TestIF.iTestMode==_12Site2X6  ||
+                 TestIF.iTestMode==_6Site2X3   ||                               //ChungHung 20150119 add for 2x3 mode autoclean
+                 TestIF.iTestMode==_32Site4X8N ||                               //Steven 20140512: For HT-9047
+                 TestIF.iTestMode==_16Site4X4  ||                               //Sam 20190226 : 16Site4X4
+                 TestIF.iTestMode==TriSite1X3  ||                               //Frank 20160323 1x3 AutoClean Add
+                 TestIF.iTestMode==_6Site2X3N  ||                               //Steven 20220425 : 2X3NN Mode
+                 TestIF.iTestMode==_8Site2X4N  ))                               //Wei 20231211 : 2X4NN Mode
+            {
+                bRunAutoClean=false;
+                TestIF.iAutoClean_Function=false;
+                return;
+            }
+
+            if(TestIF_File.iShuttleMode==1)                                     //jou 2014-04-11 Index use single arm Auto Clean 強制關閉使用兩個arm
+            {
+                TestIF.bCleanIndexOtherArm=false;
+                TestIF_File.bCleanIndexOtherArm=false;
+            }
+
+            if(Prod.bAfterAutoCleanFunctionUseInitialDelay)                     //ChungHung 20140105 add for SCK remodify
+            {
+                iInitContactCount=0;                                            //Steven 20141117 : 起測時溫度要補Offset
+                if(bUseInitDelay)                                               //ChungHung 20141027 add 只有加熱模式需要Initial start delay count  //Ifor 20180116 (Steven) : add KYEC 常溫使用 Initial start delay
+                {
+                    bDoAfterAutoCleanFunctionUseInitialDelay=true;              //ChungHung 20140105 add for SCK have order
+                }
+                else
+                {
+                    bDoAfterAutoCleanFunctionUseInitialDelay =false;            //ChungHung 20140105 add for SCK
+                }
+            }
+            else
+            {
+                bDoAfterAutoCleanFunctionUseInitialDelay=false;                 //ChungHung 20141023 add for SCK request
+            }
+
+            if(USE_IN_Y_IS_AUTO_PITCH==true && CUSTOMER_CODE==CC_ASE_KaohSiung)                                         //KenHsieh 20211214 : AOA add AutoClean //KenHsieh 20220103 : 新增ASEKH判定  //JerryYang 20251218 : IN/OUT ARM支援不同模組
+            {
+                if(bRunInArmAutoAlignment)                                      //KenHsieh 20211214 : AOA add AutoClean
+                    bRunInArmAutoAlignment=!DoInArmTeachAlignmentProcess(lInArmAutoAlignmentFlag);
+                if(bRunInArmAutoAlignment==true)
+                    return;
+            }
+            DoAutoCleanKit();
+            DoShuttle1AutoClean();
+            DoShuttle2AutoClean();
+            #ifndef SOFT_SIMULTE
+            if(hAutoCleanHangUp.Off())                                          //Steven 20220702 : 針對Auto Clean的Hang Up偵測
+            {
+                RecordProcess("Auto State Record by hAutoCleanHangUp");
+                fMain->DoStateRecord(1, false);                                 //Steven 20220716 : 把State record獨立出來, 避免抓圖的時候被Alarm擋住    //KenHsieh 20230116 : 區分手動或自動
+                fAllMotorHome=false;
+            }
+            #endif
+        }
+
+        DoIndexAutoClean();
+        return;
+    }
+    bRunDecayTest=false;                                                        //Ifor 20220114 add:關閉功能需要清除旗標
+    bDoIniStartAutoIonFanClean=false;                                           //Ifor 20220114 add:關閉功能需要清除旗標
+    bStartAutoIonFanClean=false;                                                //Ifor 20210720 add: IO觸發IonFan清針才顯示
+
+    if(bDoEmptySocketCheck)                                                     //Steven 20201022 : For RFMD Empty Socket Check Funstion.
+    {
+        DoIndexSocketCheck();
+        return;
+    }
+
+    if(LastSet.iRealDummy!=DUMMY &&
+       bRunOcrInsp &&
+       TestIF.bOcrFunction &&
+       CosFunction.bTrayOCR &&                                                  //ChungHung 20120830 add OCR Function add
+       bCatchTrayFinishAction==false &&
+       InArmSuck.HAS_NO_IC()==false)                                            //KenHsieh 20250718 : 需放完料再做OCR，避免Inarm 跑到安全位置後，直接放下IC
+    {
+        if(CosFunction.bTrayOCR)                                                //wei 20150924
+        {
+            ret=DoOCRFlow1();
+            if(ret==0)                                                          // 0:未完成 1:檢測完成(OK) 2:檢測結果(NG) 3:Training NG
+            {
+                if(iNewOCRCount[iOCRSearchCount]<MOT[MMTrayY].Tray.XItem*MOT[MMTrayY].Tray.YItem &&
+                   bBarCodeError==true)                                         //wei 20161118 強制使用Loader Tray資料
+                {
+                    bBarCodeError=false;
+                    fOCR->ReadOCRImage();                                       //wei 20161122 OCR 存圖檔名加入輸入值 mark
+                    if(bOCRNoIC==true)
+                    {
+                        ret=ShowErrorMessage("WAR0998", K_RETRY|K_SKIP , MMOCR);
+                        asBarCodeError="NoIC";                                  //Frank 20170109
+                    }
+                    else if(bInspectError==true)
+                    {
+                        bInspectError=false;
+                        ret=ShowErrorMessage("WAR0997", K_RETRY|K_SKIP , MMOCR);
+                        asBarCodeError=asBarCodeErrorSend;                      //Frank 20170109  add
+                    }
+                    else
+                    {
+                        ret=ShowErrorMessage("WAR0940", K_RETRY|K_SKIP , MMOCR);
+                    }
+
+                    if(bOCRNoIC==true && ret==K_SKIP)
+                    {
+                        if(IniConfig.bDisabledKeyin)                            //wei 20161004 No IC 不能Keyin
+                        {
+                            MOT[MMTrayY].Tray.cDeviceInf[iBarCodeErrorC][iBarCodeErrorR]=asBarCodeErrorSend;
+                            MOT[MMOCR].SetTraySingleData(iBarCodeErrorC, iBarCodeErrorR, HAS_OCR_Err);
+
+                            Buffer1.sprintf("%02d,%02d,%s - Auto Keyin", iBarCodeErrorR+1, iBarCodeErrorC+1, asBarCodeError);
+                            Buffer2.sprintf("%s_%02d,%02d,%s - Auto Keyin", Now().FormatString("yyyymmddhhmmss"), iBarCodeErrorR+1, iBarCodeErrorC+1, asBarCodeError);  //Alick 20170104 add 多一組LOG紀錄+上時間
+                            if(asBarCodeError=="NoIC")
+                            {
+                                iNewOCRCount[iOCRSkipCount]++;
+                                iNewOCRCount[iOCRSkipContinue]++;
+                                asBarCodeError="";
+                            }
+                            else
+                            {
+                                iNewOCRCount[iOCRErrCount]++;
+                                asBarCodeError="";
+                            }
+                        }
+                        else
+                        {
+                            Buffer = ShowMyInput1("Please keyin BarCode " , "Please Keyin BarCode Number : ");
+
+                            if(Buffer=="ERROR")                                 //wei 20161128 (Steven) 確認字串各自Type是否正確
+                            {
+                                ShowErrorMessage("WAR09100", K_RETRY , MMOCR);
+                            }
+                            else if(Buffer.UpperCase()=="NOIC")                 //wei 20161122 (Steven) 必免OCR錯誤時輸入小寫會有問題
+                            {
+                                MOT[MMOCR].SetTraySingleData(iBarCodeErrorC, iBarCodeErrorR, HAS_OCR_Err);
+                                Buffer1.sprintf("%02d,%02d,%s - Skip", iBarCodeErrorR+1, iBarCodeErrorC+1, Buffer.c_str());
+                                Buffer2.sprintf("%s_%02d,%02d,%s - Skip", Now().FormatString("yyyymmddhhmmss"), iBarCodeErrorR+1, iBarCodeErrorC+1, Buffer.c_str());  //Alick 20170104 add 多一組LOG紀錄+上時間
+                                bOCRNoIC=false;
+                                iNewOCRCount[iOCRSkipCount]++;
+                                iNewOCRCount[iOCRSkipContinue]++;               //Frank 20170109 add
+                            }
+                            else
+                            {
+                                if(Buffer!="")
+                                {
+                                    MOT[MMTrayY].Tray.cDeviceInf[iBarCodeErrorC][iBarCodeErrorR]=Buffer.c_str();
+                                    MOT[MMOCR].SetTraySingleData(iBarCodeErrorC, iBarCodeErrorR, HAS_OCR_OK);
+
+                                    Buffer1.sprintf("%02d,%02d,%s - Keyin", iBarCodeErrorR+1, iBarCodeErrorC+1, Buffer.c_str());
+                                    Buffer2.sprintf("%s_%02d,%02d,%s - Keyin", Now().FormatString("yyyymmddhhmmss"), iBarCodeErrorR+1, iBarCodeErrorC+1, Buffer.c_str());  //Alick 20170104 add 多一組LOG紀錄+上時間
+                                    iNewOCRCount[iOCRErrCount]++;
+                                    iNewOCRCount[iOCRSkipCount]=0;
+                                }
+                            }
+                        }
+                        //Alick 20170106搬出來外面NO IC一律存檔
+                        //==>
+                        asOCRSaveName=Buffer+"_NO IC";                          //wei 20161122 必免OCR錯誤時輸入小寫會有問題
+                        asOCRSaveType="_NO IC";                                 //Alick 20170119 add OCR 存檔時多加入存檔原因
+                        fOCR->SaveOCRImage();                                   //wei 20161122 必免OCR錯誤時輸入小寫會有問題
+                        fLotInfo->Memo2->Lines->Add(Buffer1.c_str());
+                        fLotInfo->Memo3->Lines->Add(Buffer2.c_str());           //Alick 20170104 add 多一組LOG紀錄+上時間
+                        iNewOCRCount[iOCRSearchCount]++;
+                        bDoOCRFunction=true;
+                        fOCR->DeleteOCRImage();                                 //wei 20161122 必免OCR錯誤時輸入小寫會有問題
+                        asOCRSaveType="";                                       //Alick 20170119 add OCR 存檔時多加入存檔原因
+                        //<==
+                        //Alick 20170106搬出來外面NO IC一律存檔
+                    }
+                    else if(bOCRNoIC==false && ret==K_SKIP)
+                    {
+                        if(IniConfig.bDisabledKeyin)                            //wei 20161004 No IC 不能Keyin
+                        {
+                            MOT[MMTrayY].Tray.cDeviceInf[iBarCodeErrorC][iBarCodeErrorR]=asBarCodeErrorSend;
+                            MOT[MMOCR].SetTraySingleData(iBarCodeErrorC, iBarCodeErrorR, HAS_OCR_Err);
+
+                            Buffer1.sprintf("%02d,%02d,%s - Auto Keyin", iBarCodeErrorR+1, iBarCodeErrorC+1, asBarCodeErrorSend);
+                            Buffer2.sprintf("%s_%02d,%02d,%s - Auto Keyin", Now().FormatString("yyyymmddhhmmss"), iBarCodeErrorR+1, iBarCodeErrorC+1, asBarCodeErrorSend);  //Alick 20170104 add 多一組LOG紀錄+上時間
+                        }
+                        else
+                        {
+                            Buffer = ShowMyInput1("Please keyin BarCode " , "Please Keyin BarCode Number : ");
+
+                            if(Buffer=="ERROR")                                 //wei 20161128 (Steven) 確認字串各自Type是否正確
+                            {
+                                ShowErrorMessage("WAR09100", K_RETRY , MMOCR);
+                            }
+                            else if(Buffer.UpperCase()=="NOIC")                 //wei 20161122 (Steven) 必免OCR錯誤時輸入小寫會有問題
+                            {
+                                MOT[MMOCR].SetTraySingleData(iBarCodeErrorC, iBarCodeErrorR, HAS_OCR_Err);
+                                Buffer1.sprintf("%02d,%02d,%s - Keyin Skip", iBarCodeErrorR+1, iBarCodeErrorC+1, Buffer.c_str());
+                                Buffer2.sprintf("%s_%02d,%02d,%s - Keyin Skip", Now().FormatString("yyyymmddhhmmss"), iBarCodeErrorR+1, iBarCodeErrorC+1, Buffer.c_str());  //Alick 20170104 add 多一組LOG紀錄+上時間
+                                bOCRNoIC=false;
+                                iNewOCRCount[iOCRSkipCount]++;
+                                iNewOCRCount[iOCRSkipContinue]++;
+                            }
+                            else if(Buffer!="")
+                            {
+                                MOT[MMTrayY].Tray.cDeviceInf[iBarCodeErrorC][iBarCodeErrorR]=Buffer.c_str();
+                                MOT[MMOCR].SetTraySingleData(iBarCodeErrorC, iBarCodeErrorR, HAS_OCR_OK);
+
+                                Buffer1.sprintf("%02d,%02d,%s - Keyin", iBarCodeErrorR+1, iBarCodeErrorC+1, Buffer.c_str());
+                                Buffer2.sprintf("%s_%02d,%02d,%s - Keyin", Now().FormatString("yyyymmddhhmmss"), iBarCodeErrorR+1, iBarCodeErrorC+1, Buffer.c_str());  //Alick 20170104 add 多一組LOG紀錄+上時間
+                            }
+                        }
+
+                        asOCRSaveName=Buffer;                                   //wei 20161122 必免OCR錯誤時輸入小寫會有問題
+                        fOCR->SaveOCRImage();                                   //wei 20161122 必免OCR錯誤時輸入小寫會有問題
+                        fLotInfo->Memo2->Lines->Add(Buffer1.c_str());
+                        fLotInfo->Memo3->Lines->Add(Buffer2.c_str());           //Alick 20170104 add 多一組LOG紀錄+上時間
+                        bDoOCRFunction=true;                                    //ChungHung 20121009 add
+                        fOCR->DeleteOCRImage();                                 //wei 20161122 必免OCR錯誤時輸入小寫會有問題
+                        iNewOCRCount[iOCRSearchCount]++;
+                        iNewOCRCount[iOCRErrCount]++;
+                    }
+                }
+
+                if(IniConfig.bEnabledOCRCheckIC)                                //wei 20161228 確認Tray是否有IC
+                {
+                    iNewOCRCount[iOCRTotalCount]=iNewOCRCount[iOCRPassCount]+iNewOCRCount[iOCRSkipCount];
+                }
+                else
+                {
+                    iNewOCRCount[iOCRTotalCount]=iNewOCRCount[iOCRPassCount]+iNewOCRCount[iOCRErrCount];
+                }
+            }
+            else if(ret==1)
+            {
+                if(IniConfig.bCheckBarCodeMap==false)                           //Frank 20161025 確認四個角落的OCR Code
+                {
+                    Buffer1.sprintf("PASS: %02d,Key In: %02d,No IC: %02d,Total: %02d", iNewOCRCount[iOCRPassCount] ,iNewOCRCount[iOCRErrCount] ,iNewOCRCount[iOCRSkipCount], iNewOCRCount[iOCRTotalCount]);
+                    Buffer2.sprintf("%s,PASS: %02d,Key In: %02d,No IC: %02d,Total: %02d", Now().FormatString("yyyymmddhhmmss"), iNewOCRCount[iOCRPassCount] ,iNewOCRCount[iOCRErrCount] ,iNewOCRCount[iOCRSkipCount], iNewOCRCount[iOCRTotalCount]);  //Alick 20170104 add 多一組LOG紀錄+上時間
+                    fLotInfo->Memo2->Lines->Add(Buffer1.c_str());
+                    fLotInfo->Memo3->Lines->Add(Buffer2.c_str());               //Alick 20170104 add 多一組LOG紀錄+上時間
+                    fLotInfo->Save_BarCodeLog();
+                }
+            }
+            else if(ret==4)
+            {
+                ret=ShowErrorMessage("WAR0949", K_RETRY|K_TRAY_END , MMOCR);
+
+                if(ret==K_RETRY)                                                //在檢測一次
+                {
+                    OCRNGSetToHASIC();
+                    InitOCRFlow(false);                                         //ChungHung 20120830 add OCR Function add
+                    bRunOcrInsp=true;
+                }
+                else if(ret==K_TRAY_END)
+                {
+                    bDoOCRFunction=true;                                        //ChungHung 20121009 add
+                }
+            }
+            else if(ret==5)
+            {
+                ret=ShowErrorMessage("WAR0999", K_RETRY , MMOCR);
+
+                if(ret==K_RETRY)                                                //在檢測一次
+                {
+                    OCRNGSetToHASIC();
+                    InitOCRFlow(false);                                         //ChungHung 20120830 add OCR Function add
+                    bRunOcrInsp=true;
+                    bOCRCheck=true;
+                    iOCRCheck=0;
+                    bOCRCheckNG=true;
+                }
+            }
+            else if(ret==6)                                                     //在檢測一次
+            {
+                OCRNGSetToHASIC();
+                InitOCRFlow(false);                                             //ChungHung 20120830 add OCR Function add
+                bRunOcrInsp=true;
+                bOCRStartPosition=false;
+            }
+            fLotInfo->Label36->Caption= " Key In :" + AnsiString(iNewOCRCount[iOCRErrCount]);
+            fLotInfo->Label37->Caption= " Total :"  + AnsiString(iNewOCRCount[iOCRTotalCount]);
+            fLotInfo->Label38->Caption= " Pass :"   + AnsiString(iNewOCRCount[iOCRPassCount]);
+            fLotInfo->Label39->Caption= " No IC :"  + AnsiString(iNewOCRCount[iOCRSkipCount]);
+
+            //wei 20161125 OCR顆數統計顯示修改
+            //==>
+            fLotInfo->sgOCR->Cells[ 1][ 1]=iNewOCRCount[iOCRPassCount];
+            fLotInfo->sgOCR->Cells[ 1][ 2]=iNewOCRCount[iOCRErrCount];
+            fLotInfo->sgOCR->Cells[ 1][ 3]=iNewOCRCount[iOCRSkipCount];
+            fLotInfo->sgOCR->Cells[ 1][ 4]=iNewOCRCount[iOCRTotalCount];
+
+            fLotInfo->sgOCR->Cells[ 2][ 1]=iNewOCRCount[iOCrLotPassCount]+iNewOCRCount[iOCRPassCount];
+            fLotInfo->sgOCR->Cells[ 2][ 2]=iNewOCRCount[iOCrLotErrCount]+iNewOCRCount[iOCRErrCount];
+            fLotInfo->sgOCR->Cells[ 2][ 3]=iNewOCRCount[iOCrLotSkipCount]+iNewOCRCount[iOCRSkipCount];
+            fLotInfo->sgOCR->Cells[ 2][ 4]=iNewOCRCount[iOCRLotTotalCount]+iNewOCRCount[iOCRTotalCount];
+            //<==
+            //wei 20161125 OCR顆數統計顯示修改
+            return;
+        }
+        else
+        {
+            ret=DoOCRFlow();
+            if(ret==1)                                                          // 0:未完成 1:檢測完成(OK) 2:檢測結果(NG) 3:Training NG
+            {
+                //ShowMyMessageBox_YES_NO("OCR 檢測OK","OCR Insp OK");
+                //MyDBIProcess("Process", "OCR Insp OK.");
+            }
+            else if(ret==2)
+            {
+                fOCR->DoOCRReleaseAndInspEnd();
+                ret=ShowErrorMessage("WAR0940", K_RETRY|K_TRAIN|K_SKIP , MMOCR);
+                if(ret==K_RETRY)                                                //在檢測一次
+                {
+                    OCRNGSetToHASIC();
+                    InitOCRFlow(false);                                         //ChungHung 20120830 add OCR Function add
+                    bRunOcrInsp=true;
+                }
+                else if(ret==K_TRAIN)                                           //在檢測一次
+                {
+                    OCRNGSetToHASIC();
+                    InitOCRFlow(true);                                          //ChungHung 20120830 add OCR Function add
+                    bRunOcrInsp=true;
+                }
+                else if(ret==K_SKIP)
+                {
+                    MOT[MMOCR].fHasTray=false;                                  //Steven 20120626 : OCR
+                    MOT[MMOCR].ClearTray(__FUNC__);
+                    MOT[MMTrayY_Car].fHasTray=false;
+                    MOT[MMTrayY_Car].ClearTray(__FUNC__);
+                    Cylinder[C_TrayY_Fixer].Off();
+                    Cylinder[C_LoaderEdgePush].Off();
+                    Cylinder[C_LoaderUpPress].Off();                            //JerryYang 20181120 (Steven) : (Steven) : 獨立控制loader壓tray
+                    bDoOCRFunction=true;                                        //ChungHung 20121009 add
+                }
+            }
+            else if(ret==3)                                                     //在檢測一次
+            {
+                fOCR->DoOCRReleaseAndInspEnd();
+                ShowErrorMessage("WAR0948", K_RETRY, MMTrayY);                  //"OCR Train NG!!"
+                OCRNGSetToHASIC();
+                InitOCRFlow(true);                                              //ChungHung 20120830 add OCR Function add
+                bRunOcrInsp=true;
+            }
+            else if(ret==4)
+            {
+                ret=ShowErrorMessage("WAR0949", K_RETRY|K_TRAY_END , MMOCR);
+                if(ret==K_RETRY)                                                //在檢測一次
+                {
+                    OCRNGSetToHASIC();
+                    InitOCRFlow(false);                                         //ChungHung 20120830 add OCR Function add
+                    bRunOcrInsp=true;
+                }
+                else if(ret==K_TRAY_END)
+                {
+                    bDoOCRFunction=true;                                        //ChungHung 20121009 add
+                }
+            }
+            return;
+        }
+    }
+
+    if(CosFunction.bAutoRetestGPIBmode==true)                                   //jou 2015-10-02 Auto Retest GPIB mode
+    {
+        if(LastSet.iRunStartMode==rsmInitial_ART ||
+           LastSet.iRunStartMode==rsmContinuStart_ART ||
+           LastSet.iRunStartMode==rsmContinuRetest_ART ||
+           IniConfig.bA37LotStartLotEnd)                                        //JerryYang 20220923 : add SPIL ART LOT START/LOT END timeout機制
+        {
+            if(CosFunction.bUseSCKART && fSCKART->iTesterType==0)
+            {
+            }
+
+            if(fMain->hanaART->IsHanaArtAvailable()==true)                      //JimmyChiu 20241023 HANA ART Function
+            {
+                if(fMain->hanaART->IsContactAvailable()==false)
+                    return;
+            }
+            else if(CosFunction.iAutoRetestTCPmode==2 &&                        //RogerYang 20250918 : 瑞薩FT-CT
+                    TestIF_File.bRENESAS_EnableFTCT==true)
+            {
+            }
+            else
+            {
+                if(IniConfig.bA37LotStartLotEnd &&                      //JerryYang 20260611 : Fix hang up
+                   LastSet.iTester==OFF_LINE &&
+                   (LastSet.iRunStartMode==rsmContinuStart ||
+                   LastSet.iRunStartMode==rsmInitialStart ||
+                   LastSet.iRunStartMode==rsmContinuRetest ||
+                   LastSet.iRunStartMode==rsmCInitialRetest))
+                {
+                }
+                else if(LastSet.bWaitStartLotAutoRetestGPIB==false &&
+                   TestIF_File.bSCKART_RunARTWithoutCmd==false)
+                {
+                    return;
+                }
+            }
+        }
+    }
+
+    if(CUSTOMER_CODE==CC_UTAC)                                                  //Richard 20220929 :Add for UTAC
+    {
+        if(LastSet.iTester==ON_LINE)
+        {
+            if(LastSet.bWaitStartLotAutoRetestGPIB==false)
+            {
+                return;
+            }
+        }
+    }
+
+    if(iClearSocketFunction==2)
+    {
+        DoCleanSocket();
+        return;
+    }
+    else
+    {
+        SW[SwSocketClean].Off();
+    }
+
+    if(SoftStop==true || SystemStart==false || fAllMotorHome==false)            //Jou 20180102 (Steven) : 全部加上 SystemStart==false
+    {
+        return;
+    }
+
+    if(flag)
+    {
+        if(TrayForm.bEnableAMR)                                                 //Eastsun 20260514 F010 AMR loader lock
+        {
+            if(bLoaderLockActionFlag[0]==false)
+                DoLoad();
+        }
+        else
+        {
+            DoLoad();
+        }
+    }
+
+    if(SoftStop==true || SystemStart==false || fAllMotorHome==false)            //Jou 20180102 (Steven) : 全部加上 SystemStart==false
+    {
+        return;
+    }
+
+    if(bDoProcess)                                                              //Steven 20110608
+    {
+        DoInArm();
+    }
+
+    if(bShuttleShake)                                                           //Sam 20210701 : Tray Arm 剛好補 Tray 時，剛好有搖搖動作，Tray Arm 將 InArm 鎖起來導致搖搖動作無法完成。
+    {
+    }
+    else
+    {
+        if(SoftStop==true || SystemStart==false || fAllMotorHome==false)        //Jou 20180102 (Steven) : 全部加上 SystemStart==false
+        {
+            return;
+        }
+
+//        if(bShuttleShake)                                                     //Sam 20210701 : Tray Arm 剛好補 Tray 時，剛好有搖搖動作，Tray Arm 將 InArm 鎖起來導致搖搖動作無法完成。Mark
+//        {
+//            return ;
+//        }
+
+        if(bDoProcess)                                                          //Steven 20110608
+        {
+            Do_Auto_SHT1();
+        }
+        else
+        {
+            Do_Auto_SHT2();
+        }
+
+        if(USE_OUT_SORT_ARM!=eartUninstall)
+        {
+            Do_Auto_SHT3();                                                     //RogerYang 20250514 Add for 9046AU
+        }
+
+        if(SoftStop==true || SystemStart==false || fAllMotorHome==false)        //Jou 20180102 (Steven) : 全部加上 SystemStart==false
+            return;
+
+        DoTestHeadMotor();
+    }
+
+    if(SoftStop==true || SystemStart==false || fAllMotorHome==false)            //Jou 20180102 (Steven) : 全部加上 SystemStart==false
+        return;
+
+    if(flag)
+        DoCatchTray();
+
+    if(SoftStop==true || SystemStart==false || fAllMotorHome==false)            //Jou 20180102 (Steven) : 全部加上 SystemStart==false
+        return;
+
+    if(bDoProcess==false)                                                       //Steven 20110608
+    {
+        DoOutArm();
+        if(USE_OUT_SORT_ARM!=eartUninstall)                                     //RogerYang 20250515 add for 9046AU
+            DoSortArm();
+    }
+
+    if(SoftStop==true || SystemStart==false || fAllMotorHome==false)            //Jou 20180102 (Steven) : 全部加上 SystemStart==false
+        return;
+
+    if(flag)
+    {
+        flag2=false;
+
+        if(AUTO3_IS_MAGAZINE==1)                                                //JerryYang 20220909 : add magazine
+        {
+            DoAuto3Magazine();
+            cmpt=2;
+        }
+
+        if(AUTO_EMPTY_COLOR<3)
+        {
+            if(AUTO3_IS_MAGAZINE==1)                                            //JerryYang 20220909 : add magazine
+                cmpt=2;
+            else
+                cmpt=3;
+        }
+        else if(AUTO_EMPTY_COLOR==3)
+        {
+            if(AUTO3_IS_MAGAZINE==1)
+                cmpt=4;
+            else
+                cmpt=5;
+        }
+        else if(AUTO_EMPTY_COLOR==4)
+        {
+            if(AUTO3_IS_MAGAZINE==1)
+                cmpt=5;
+            else
+                cmpt=6;
+        }
+
+        for(int i=0; i<cmpt; i++)
+        {
+            flag2|=Cylinder[C_AutoEdgePush[i]].Enable;                          // 2011.10.19 , Q_Q V207C new Tray Vibration
+            if(TrayForm.AutoFromEmptyColor[iRunStartMode][i]==2 && i==1)        //kevin 20120726   AUTO 2
+            {
+            }
+            else
+            {
+                if(TrayForm.bEnableAMR)                                         //Eastsun 20260514 F010 AMR unloader lock
+                {
+                    if(bUnLoaderLockActionFlag[i]==false)
+                        DoAutoReceiveBinTray(i);
+                }
+                else
+                {
+                    DoAutoReceiveBinTray(i);
+                }
+            }
+
+            if(SoftStop==true || SystemStart==false || fAllMotorHome==false)    //Jou 20180102 (Steven) : 全部加上 SystemStart==false
+                return;
+        }
+    }
+
+    flag2|=Cylinder[C_TrayVibration].Enable;
+    // 2011.10.19 , Q_Q V207C new Tray Vibration{
+    if(TRAY_VIBRATION!=NonVibration && flag2)                                   //JerryYang 20170531 (wei) 敲tray方式新增震動馬達
+    {
+        NewDoAutoTrayEdgeCylinderLoop();
+    }
+    //}
+
+    if(AUTO_EMPTY_COLOR!=0)                                                     //Eliot 2007_12_10
+    {
+        if(flag)
+        {
+            if(TrayForm.bEnableAMR)                                             //Eastsun 20260514 F010 AMR empty/color lock
+            {
+                if(bLoaderLockActionFlag[1]==false)
+                    DoAutoEmpty();
+                if(bLoaderLockActionFlag[2]==false)
+                    DoAutoColor();
+            }
+            else
+            {
+                DoAutoEmpty();
+                DoAutoColor();
+            }
+        }
+    }
+
+    if(bUseAuto2Empty && TrayForm.AutoFromEmptyColor[iRunStartMode][eAuto2]==2)                                         //使用auto2 送tray
+         DoAuto2();                                                             //kevin 20120718 auto2送空tray
+
+    if(SUPPORT_2_EMPTY_EMPTY)                                                   //Eliot 2007_12_10
+    {
+        DoAutoEmpty1();
+    }
+
+    //KenHsieh 20210813 : add CCD AUTO ALIGNMENT
+    //==>
+    //ChungHung 20210113 add for Alignment CCD start
+    if(bLoaderNeedTrayMustFinish==false && bAutoNeedTrayMustFinish==false)
+    {
+        if(bRunInArmAutoAlignment)
+        {
+            bRunInArmAutoAlignment=!DoInArmTeachAlignmentProcess(lInArmAutoAlignmentFlag);
+        }
+        else
+        {
+            bInArmAutoAlignmentClearFlag=false;                                 //Kenhsieh 20211007 : 解決沒有掃描Kit問題
+        }
+
+        if(bRunOutArmAutoAlignment)
+        {
+            bRunOutArmAutoAlignment=!DoOutArmTeachAlignmentProcess(lOutArmAutoAlignmentFlag);
+        }
+        else
+        {
+            bOutArmAutoAlignmentClearFlag=false;                                //Kenhsieh 20211007 : 解決沒有掃描Kit問題
+        }
+
+        if(bRunInArmAutoAlignment==true || bRunOutArmAutoAlignment==true)
+            return;
+    }
+    //ChungHung 20210113 add for Alignment CCD end
+    //<==
+    //KenHsieh 20210813 : add CCD AUTO ALIGNMENT
+
+    DoHotplateEdgeCylinderLoop();                                               //jou 2011-08-09 start : Hotplate也要敲敲敲
+    DoLoaderVibrateLoop();                                                      //JerryYang 20191001 loader震動馬達
+    bDoProcess=!bDoProcess;                                                     //Steven 20110608
+}
+#endif // GOLDEN VERBATIM -- golden csystem.cpp:9115-10255 (end)
 void DoAllProcess()
 {
     int cmpt=MAX_AUTO_TRAY;                                                     //Frank 20170109 add
