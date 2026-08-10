@@ -6204,3 +6204,48 @@ if(DoTestYFrontDelay2.Off()==false || CCDInterfaceForm->bCCDProgramExistence==fa
 - **完成度**：非表單 87.4%（294,262 / 336,509 golden code 行）／全部 51.2%。
   PT-W7d 通過後非表單約 88.7%。
 - **安全佇列（等使用者在場）**：#10、#12、#14、#18。**非安全**：#15、#16、#17。
+
+### PT-W7d：AutoClean SEGFAULT 已用 gdb 定位到確切位置（不是猜的）
+
+兩種建法都是 **127/134 + `27-AutoClean` SEGFAULT** → 確定性缺陷，不是 CPU 競爭。
+
+用 `gdb -batch` 跑 `build_0811_w7f_dbg/tests/test_AutoClean.exe` 取得堆疊，
+比逐一 gate 六個呼叫點便宜也精確得多：
+
+```
+#0  ARM_OFFSET::GetVariableY()
+#1  GetInArmPitchY_9045(int, int)
+#2  MoveInArm2XYToShuttle_9045_1x4_4(int, bool, bool)
+#3  MoveInArmXYToShuttle_9045(int, int, bool, bool)   <- 本波新登場的真本體
+#4  DoPickFromShuttle(eWhichShuttle, int)
+```
+
+**確切崩潰點：`ainarm9045.cpp:190-191`（本波之前就存在的碼，不在我翻譯的文字裡）**
+
+```cpp
+if(iOffsetPos>=0)
+    iPos=r+InArmOffSet[iOffsetPos]->GetVariableY();
+```
+
+`InArmOffSet[iOffsetPos]` 離線是 **NULL**（NULL `this` 會在成員函式內部才爆，所以堆疊頂端是
+`GetVariableY`）。這就是計畫書 §8 的 NULL 全域那一類 —— 也正是「新的 SEGFAULT 先查 §8」那條
+規矩指的東西。**本波之前不會爆，因為 `MoveInArmXYToShuttle_9045` 是回傳 false 的 stub，
+這條路徑根本到不了。** golden 只守 `iOffsetPos>=0`，不守指標，因為 golden 在開機時一定配置好。
+
+### 這個修法是一個真正需要判斷的選擇，兩個先例互相牴觸，所以我不在這個時間點草率決定
+
+| 選項 | 論據 | 反對論據 |
+|---|---|---|
+| (A) 在 `:190` 加 `&& InArmOffSet[iOffsetPos]!=NULL`，else 走 `iPos=r` | 這正是 pt-wave-loop skill 對 TRAP 4 開出的處置（「在呼叫點加 `if(指標)` 並留 hand-off」）；硬體上 `InArmOffSet[]` 一定非 NULL，所以**硬體行為完全不變** | 這是**位置計算**。萬一硬體上真的是 NULL，golden 會當場崩潰，而加了守衛會**靜默改用少了 variable-Y 偏移的位置** —— 這和我在 PT-W7a 明確**拒絕**對馬達速度設定加 NULL 守衛的理由一模一樣（安靜地用錯值比大聲崩潰更糟） |
+| (B) 在 `AutoClean.cpp` 的 6 個 `MoveInArmXYToShuttle_9045` 呼叫點取代為 stub 舊值 `false`（`GATE (W7d-I1)`） | 與 `GATE (W7a-I4)` 完全同形且有先例；**還原本波之前的行為**而非發明新行為；真本體對其他呼叫者仍是活的；完全不動位置計算 | 同一個 NULL deref 對「任何其他會走到這條路徑的呼叫者」仍然潛在（目前 ctest 沒有其他測試踩到） |
+
+**兩者的 stub 舊值已查明**（`git show HEAD:` ）：`MoveInArmXYToShuttle_9045` → `false`、
+`InArmSideAllClose` → `true`。所以 (B) 的取代值是 `false`，是精確還原，不是猜的。
+
+`InArmSideAllClose` **已排除**：它與 golden `:4231-4249` 逐字相同，
+`Prod.fInArmSuck4x8[2][2][8]` 與 golden `cprod.h:819` 完全一致，
+且 `aHotPlateSubstrate.h:458` 的 ctor 會把 `iShtRow` 初始化成離線安全值。
+
+**建議（留給下一輪決定並執行）**：先做 (B)，因為它零行為變更、有直接先例、且不動位置計算；
+同時把 (A) 連同 `InArmOffSet[]` 的離線配置一起記進 task #10（sim-motor 解閘）的範圍，
+因為那才是「離線讓這些指標非 NULL」的正確落點。
