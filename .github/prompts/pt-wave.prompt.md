@@ -1,11 +1,7 @@
 ---
-mode: agent
-description: "HT9045 V906 純翻譯戰役：執行一個完整波次（選標的 → 翻譯 → 整併 → Debug+Release 驗收 → commit → 更新 RESUME）"
+description: "HT9045 V906 純翻譯戰役：執行一個完整波次（選標的 → 翻譯 → 整併 → Debug+Release 驗收 → commit → 更新 RESUME）。搭配 /loop 可自動連續推進。關鍵字：PT-W, 波次, 純翻譯, 翻譯波次, 下一波"
+argument-hint: "[目標檔名或 auto] [單波行數上限，預設 15000]"
 ---
-
-> 鏡像檔：權威版本是 `.claude/commands/pt-wave.md`。修改任一邊都要同步另一邊
-> （見 CLAUDE.md 的資產對照表）。
-
 
 先載入 **pt-wave-loop** skill（`Skill` 工具，`skill: pt-wave-loop`）取得完整政策，
 再照下面執行。使用者輸入：$ARGUMENTS
@@ -72,9 +68,15 @@ python tools/census/census.py --detail
    **但前提死掉不代表答案就是退役**——重新問「為什麼它該是 gated」。
 5. **行為變更留到下一顆 commit**（解閘、退 ACTIVE stub、掛 driver、改預設值）。
 
-## 步驟 4 — 驗收 gate
+## 步驟 4 — 驗收 gate（分兩級）
 
-**全新 build dir、Debug 與 Release 各一次，且在最後一次整併之後量。**
+**先判斷這一波有沒有改行為。**
+
+零行為變更（golden 原文塞進 `#if 0`、不碰活的碼）→ `g++ -E` 比對 HEAD 與現況、
+剝掉 `^# ` line marker，**每行差異都必須是空行**，再跑一次 Debug build
+（唯一未排除的風險是 Release `-O3` OOM）。比對前兩邊都要剝 ``。
+
+有行為變更 → **全新 build dir、Debug 與 Release 各一次，且在最後一次整併之後量。**
 
 ```
 rm -rf build_<tag> build_<tag>_rel
@@ -112,6 +114,20 @@ config_loaders / dfm2rc_idempotent / GA1_ReadGeneralIni），且兩種建法逐�
 
 ---
 
-## 停止條件（照 skill，不可自動跨過）
+## 不准自行停下（照 skill，20260810 使用者定案）
 
-失敗集合擴大 · 到達表單邊界 · 安全關鍵行為變更信心 < 90% · 運算額度接近（先寫 RESUME）
+**預設是繼續，不是回報後等待。**
+
+- **回合結束前不准是閒著的**：沒有背景工作在跑就不准結束回合——開下一波，
+  或做主迴圈能做的整併／量測／文件。喚醒只是保險，不是節奏器。
+- **預先授權**：多出的 ctest 失敗若根因是「測試期望值照鷹架校準」，
+  **同一回合內重新校準並繼續**（附 golden 行號，並把失去的覆蓋寫進測試的 NOT COVERED 區）。
+  選標的／切波／整併／stub 退役／fidelity 修正／量測／文件全部自動。
+  agent 死掉用 `resumeFromRunId` 重派；額度不足就改做主迴圈的事，不要空等。
+- **真正要停的只有三個**：
+  **安全關鍵行為變更**（解閘煞車／安全門互鎖／把「未完成」變「完成」的 stub）
+  → 累積到佇列、**繼續下一個非安全項目**，等使用者在場；
+  到達表單邊界 → 停、等 facade 策略；
+  運算額度耗盡 → 寫完 DEVLOG + RESUME 再停。
+- **驗收分兩級**：零行為變更的波次用 `g++ -E` preprocessed 比對（每行差異都必須是空行）
+  + 一次 Debug build；有行為變更的才跑全新 Debug+Release。
