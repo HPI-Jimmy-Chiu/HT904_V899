@@ -165,25 +165,53 @@ int iFTestSocketClampCloseTask            = 1;
 int iFTestSocketClampOpenTask             = 1;
 bool bArm2NeedCombine                     = false;
 bool bArm1SuckFinish[4][8]                = {{false}};
+#if 0   // PT-W7b RETIRED (CheckAnyCaseNeedToDoArm1): real body now lives in aTester_Rear.cpp
 int  CheckAnyCaseNeedToDoArm1()             { return 0; }
+#endif
+#if 0   // PT-W7b RETIRED (InitTestYFrontTask): real body now lives in aTester_Rear.cpp
 void InitTestYFrontTask()                   {}
+#endif
+#if 0   // PT-W7b RETIRED (InitFTestSuckTestICTask): real body now lives in aTester_Rear.cpp
 void InitFTestSuckTestICTask()              {}
+#endif
 // AI(W64b-Integrate) 20260706: InitFrontTestDestroyICTask/TestZ1SetPos/
 // DoFrontTestDestroyIC/CheckZ1IsDown/TestZ1OutRandge now defined for real in
 // aTester_Front.cpp (golden aTester_Front.cpp:170-298,309-865) -- stub bodies removed.
 // AI(W5-Automation-Integrate) 20260710: InitFrontTestSuckICTask/DoFrontTestSuckIC
 // now defined for real in aTester_Front.cpp too -- stub bodies removed.
+#if 0   // PT-W7b RETIRED (InitFrontTestPurgBeforePickShuttle): real body now lives in aTester_Rear.cpp
 void InitFrontTestPurgBeforePickShuttle()   {}
+#endif
+#if 0   // PT-W7b RETIRED (DoArm1Suck): real body now lives in aTester_Rear.cpp
 void DoArm1Suck()                           {}
+#endif
+#if 0   // PT-W7b RETIRED (DoArm1D44VacCheck): real body now lives in aTester_Rear.cpp
 void DoArm1D44VacCheck()                    {}
+#endif
+#if 0   // PT-W7b RETIRED (FTestNeedDestroy): real body now lives in aTester_Rear.cpp
 bool FTestNeedDestroy()                     { return false; }
+#endif
+#if 0   // PT-W7b RETIRED (DoFTestSuckTestIC): real body now lives in aTester_Rear.cpp
 bool DoFTestSuckTestIC()                    { return true;  }
+#endif
+#if 0   // PT-W7b RETIRED (DoFrontTestPurgBeforePickShuttle): real body now lives in aTester_Rear.cpp
 bool DoFrontTestPurgBeforePickShuttle(int /*isp*/) { return true; }
+#endif
+#if 0   // PT-W7b RETIRED (DoTestYFront): real body now lives in aTester_Rear.cpp
 bool DoTestYFront()                         { return true;  }
+#endif
+#if 0   // PT-W7b RETIRED (TestZ1OutRandge2): real body now lives in aTester_Rear.cpp
 bool TestZ1OutRandge2()                     { return false; }
+#endif
+#if 0   // PT-W7b RETIRED (FTestSeparateSLK): real body now lives in aTester_Rear.cpp
 bool FTestSeparateSLK(bool /*bReset*/)      { return true;  }
+#endif
+#if 0   // PT-W7b RETIRED (FTestCombineSLK): real body now lives in aTester_Rear.cpp
 bool FTestCombineSLK(bool /*bReset*/)       { return true;  }
+#endif
+#if 0   // PT-W7b RETIRED (DoFRTCAutoModelVerify): real body now lives in aTester_Rear.cpp
 bool DoFRTCAutoModelVerify(bool /*bInitial*/){ return true; }
+#endif
 
 // ---- aTester_Rear cursors + bodies -----------------------------------------
 int iBTestSuckTestICTask                  = 1;
