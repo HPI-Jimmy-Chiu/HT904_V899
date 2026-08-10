@@ -3122,6 +3122,11 @@ int AutoCalculateOutArmXClosePitch(int iAuto, bool bUseDeviceDinemsion)
                 iOutArmXStep=i;
                 OutArmClose_PitchX=DeviceForm.XDimension*iOutArmXStep+100.0;
 
+                //AI(ht9045-v899) 20260810: 超出極限救援時, 最小階(i=1)若僅略低於機構下限則夾到下限
+                //AI(ht9045-v899) 20260810: 原本會被丟棄改用下一倍數, 間距反而比原來更大而仍然超限
+                if(i==1 && OutArmClose_PitchX<iMinXPitch4Pick)
+                    OutArmClose_PitchX=iMinXPitch4Pick;
+
                 if(OutArmClose_PitchX>=iMinXPitch4Pick && OutArmClose_PitchX<=iMaxXPitch4Pick)
                 {
                     dOutArmXPitch_1Step     =(USE_16PICKER_TYPE==1)?(double(OutArmClose_PitchX)/2.0):OutArmClose_PitchX;
