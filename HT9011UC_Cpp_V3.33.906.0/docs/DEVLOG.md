@@ -6053,3 +6053,82 @@ if(DoTestYFrontDelay2.Off()==false || CCDInterfaceForm->bCCDProgramExistence==fa
 - **安全佇列（等使用者在場）**：#10、#12、#14、**#18（`bNeedCheck` 無後備儲存，Rear+Front 對稱，要一起修）**。
 - **非安全可自己做**：#15（macro seam，現在多了 W7b 的 COM2 與 W7c 的 k5f_com2_ext，兩者都有界）、
   #16（過期 gate，本波又證實一例：`cmydef.cpp` 的 `bP65QAReTest`／`iP65QAReTestCount`）、#17。
+
+---
+
+## PT-W7d：翻譯全部落地，但 audit 只跑完 1/8 就撞上 session 上限
+
+2026-08-11 約 02:10，`[k5-ainarm]` 與 6 個 `audit:*` agent 以
+`You've hit your session limit · resets 4:10am` 失敗。**但 65 個 part 檔全部已在磁碟上**
+（又一次「失敗的 agent 通常已寫完檔」）。**原始碼一行都沒動**，HEAD 仍是 `d1cda91`。
+
+### 已機械驗證的部分（不依賴 agent 的說法）
+
+- **65/65 part 全部 pure bare LF、合法 UTF-8、零 U+FFFD**、各檔 brace delta 0。
+  （本檔特例：golden 是 CRLF 但 **port 的 `ainarm9045.cpp` 是 bare LF**，
+  和前兩波相反；agent 指示與 stitch 斷言都已改成 bare LF，實測全部遵守。）
+- `part_coverage.py`：覆蓋率 **99.24%**（4,222 行中 4,190 行在場）。
+  miss 幾乎全是既有 shim 與 `__fastcall` 簽章差異。
+
+### 兩個目標其實早就翻好了 —— 工具的錯，agent 是對的
+
+`wave_targets.py` 把 `bUseAxxGPicker`、`bUseAxExPicker` 列為待翻，但兩者**已經 ACTIVE**
+在 port `ainarm9045.cpp:436` / `:406`。**兩個 agent 各自獨立發現並拒絕重複定義**
+（一個完全不輸出程式碼並寫明理由，一個把 golden 逐字文字包在
+`#if 0 // GATE k6-G5 -- DUPLICATE-DEFINITION GUARD` 裡）。
+根因是 `DEFN` 正則對**原始行**比對，而行尾註解裡的 `;` 會讓 `[^;]*$` 失配 ——
+已修四個工具，見 commit `d1cda91`。**所以本波真實範圍是 63 個函式，不是 65。**
+
+### ⚠ 已由我逐條複驗、必須在整併時處理的 BLOCKING
+
+**GATE k1-G1（`_w7d_parts/01085_CheckShuttleSensor_9045_2x3.txt`，以及它的 1x2／2x6 雙生）
+前提在同一波內就失效了，而且後果是安全相關的。**
+
+- 它 gate 掉 golden `:1096` 對 `CheckShuttleSensorStatus(...)` 的呼叫，理由是「全樹沒有」；
+  absence 指令戳記 **01:29**。
+- 但兄弟 part `_w7d_parts/00879_CheckShuttleSensorStatus.txt`（**01:47** 落地，206 行）
+  第 68 行就**定義了**那個引擎：
+  `int CheckShuttleSensorStatus(int Index, bool alarmflag, int Line, bool *bDuplicateErr, bool *bSensorOn, bool bAutoclean)`
+  —— 我自己開檔確認過，不是照抄 audit 的說法。
+- 而且同一個 TU 裡出現**兩種真相**：`_2x4` 轉呼 `_1x4`（會偵測浮高），
+  `_2x3` 直接 `return 0` = golden 定義的「正確放入飛梭中」。
+  **gated 的那幾支會讓浮高／疊片的 IC 無警報地被送進 Index 下壓。**
+- **處置：整併時刪掉這個 gate（含 1x2／2x6 雙生），不是替它重寫理由。**
+  這正是 TRAP 2 的原形，也正是「收工要重跑 absence-claim」那條規矩存在的原因。
+
+### 整併時要一起量的行為翻轉（k1 自己標出來的，不是我猜的）
+
+- 退役 port `ainarm9045.cpp:2291` 的 `bool bCheckYPitchHome(int){ return false; }`
+  會把離線值 **false → true**（真本體唯一的 callee 是
+  `acatchtray_shims.cpp:117` 的 `ProcessSingleMotorHome(){ return true; }`），
+  影響 `ainarm9045_*` / `aoutarm9045_*` 變體 SM 裡約 **40 個** `if(bCheckYPitchHome(0/1))` 守衛。
+- 退役 `:2315` 的 `int AutoCalculateInArmYClosePitch(bool,bool){ return 0; }` 會把 0 變成真 pitch。
+- **兩者必須同一顆 commit 落地**：`Find_InArm_PickerMaxUseCountOnTime` golden `:5770`
+  把 `LoadForm->YPitch` 除以後者的結果，分開落地會讓 `iInArmYStep` 在兩個 build 之間換意義。
+
+### 🔖 RESUME（最新）
+
+- **HEAD `d1cda91`，樹上沒有未 commit 的原始碼。`_w7d_parts/`（65 檔）是未追蹤在製產物。**
+- **PT-W7d 續作，照順序：**
+  1. **重跑 audit：k2..k8 七組**（k1 的已完成且已複驗）。k5 的**翻譯**報告也遺失，
+     但它的 part 檔在磁碟上且已通過機械驗證，所以**不要重跑 k5 的翻譯**，只補它的 audit。
+  2. **刪掉 GATE k1-G1 及其 1x2／2x6 雙生**（見上節，安全相關，我已複驗）。
+  3. **我自己補 7 個檔案級全域**（agent 不准碰）：`:1168 TQPF_Timer CheckInArmDestroyActiveDelay`、
+     `:4977 double dInArmXPitch_1Step`、`:4978 double dInArmXPitch_MovePitch`、
+     `:4979 int iInArmXStep`、`:4980 int iInArmYStep`、`:6131 bool bMyFlag`、
+     `:8842 TQPF_Timer tAutoCalSuckDelayInarm`。
+     `05735_...txt:130-131` 有 `extern int iInArmXStep/iInArmYStep` 前向宣告 —— 合法且冗餘，可留。
+  4. **決定 `bInArmToLoaderUsage[MAX_ARM_Row][MAX_ARM_Col]`**：k1 在
+     `05735_...txt` 用 `#ifndef HT9045_bInArmToLoaderUsage_DEFINED` 自行定義了它
+     （golden 家在 `ainarm2.cpp:100`，本波範圍外，全樹沒有）。
+     要嘛保留該 guard，要嘛移到主迴圈的全域區集中管理（刪 `05735` 的 133-136 行即可）。
+     `ainarm2.cpp` 那一波落地時要刪掉這個暫時定義。
+  5. `python <scratchpad>/stitch_w7d.py`（先 dry run；**它斷言 bare LF**）→ `--apply`。
+  6. 退役 stub（`retire_w7b.py`，逐名 assert + 逐檔偵測 EOL），
+     **含上節那兩個行為翻轉的 stub，且必須同一顆 commit**。
+  7. `-fsyntax-only` → tier-4b 全新 Debug+Release，失敗集合須 ⊆ 那 6 個標準失敗。
+  8. commit + DEVLOG。
+- **完成度（附分母與單位，工具修正後）**：非表單 **87.4%**（294,262 / 336,509 golden code 行，
+  尚缺 42,247）／表單 4.5%／全部 **51.2%**。PT-W7d 完成後非表單約可到 88.7%。
+- **安全佇列（等使用者在場）**：#10、#12、#14、#18。
+- **非安全可自己做**：#15、#16、#17。
