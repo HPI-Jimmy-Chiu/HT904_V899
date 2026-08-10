@@ -68,8 +68,14 @@ cd HT9011UC_Cpp_V3.33.906.0 && python tools/census/census.py --detail
 
    **驗收線：每一行差異都必須是空行。** 那代表編譯器看到的碼完全相同——
    **這比測試套件更強**，因為它不是「測不出差異」而是「沒有差異」。
-   然後跑一次 Debug build（**唯一還沒排除的風險是 Release `-O3` 在更大的檔上 OOM**；
-   `uHGemHT9045_EC.cpp` 曾因此被釘 `-O1`）。
+   然後補**唯一還沒排除的風險**：Release `-O3` 在變大的檔上 OOM
+   （`uHGemHT9045_EC.cpp` 曾因此被釘 `-O1`）。
+   **注意：跑 Debug build 不能覆蓋這個風險**——20260810 第一版政策寫成「跑一次 Debug build」，
+   但風險在 Release，這是寫錯的。正確做法是**直接對那個檔單獨編一次 `-O3`**（約 1 分鐘）：
+   ```
+   C:/MinGW/bin/g++.exe -std=c++17 -O3 -DNDEBUG -c <上面同一組 -D/-I> <檔> -o tmp.o
+   ```
+   再跑一次 Debug build 確認沒有編譯退化（這一項是回歸檢查，不是 OOM 檢查）。
    約 5 分鐘取代 50 分鐘。**省下來的時間是拿來開下一波的，不是拿來閒置的。**
 
    坑：`git show` 輸出 LF、工作檔可能是 CRLF；比對前兩邊都要剝 `\r`，
