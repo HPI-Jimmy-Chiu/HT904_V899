@@ -1569,6 +1569,268 @@ void W906_ShowRunLedLabel_ResetCounts()
     W906_ShowRunLabel_Count = 0;
 }
 
+// ===========================================================================
+//  GOLDEN VERBATIM PAIR -- ShowRunLed
+//  --------------------------------
+//  The block below is golden ckernel.cpp:704-932 (229 golden lines)
+//  transcribed CHARACTER-FOR-CHARACTER (Big5/cp950 -> UTF-8 only) and GATED
+//  OFF.  It is INERT: the ACTIVE ShowRunLed is the counter-bump DEFERRED stub
+//  below (void ShowRunLed() at preimage :1579), which this pair does NOT touch.
+//
+//  WHY: the census scored ShowRunLed "translated" because a same-named live body
+//  exists; it never compared SIZE.  That live body is a 38-line DEFERRED
+//  STUB (W906-W7-L2, 20260803) whose own #if 0 held a PROSE SUMMARY of
+//  golden, not golden.  These 229 lines of golden text existed NOWHERE in
+//  this tree.  Now they do, auditable line-by-line, so the W7-U un-gate is
+//  mechanical rather than a re-translation.  NET BEHAVIOUR CHANGE: ZERO.
+//
+//  NOTHING inside the gate is fixed, renamed, reflowed or reindented --
+//  golden's own defects are preserved on purpose so a diff against golden
+//  stays empty.  Preserved defects in this span:
+//    golden :891  RunState==LED_Running && fMain->ALed1->Value==false || bTesterDucking...
+//                 -- mixed &&/|| with NO parentheses, so it means (A&&B)||C.  NOT parenthesised.
+//    golden :797  SW[SwMusic1+iSECS_GEM_PPMUSIC_CONTROL_CLASS-1].On() -- a CLASS of 0 indexes
+//                 SwMusic1-1, one slot BELOW the group.  No range guard.  NOT added.
+//    golden :838  the FlushFlag latch sits MID-BODY: the music/buzzer group above it runs
+//                 every tick, the whole LED group below it only on a FlushFlag edge.
+//
+//  Same shape as this tree's existing pairs: csystem.cpp MainProc / DoAllProcess
+//  / DoTrayFeedProcess / CheckContinusStartIsReady, plus the 26 pairs PT-W6b
+//  landed in atester.cpp.  Being gated it needs NO callee to exist -- only
+//  lexical validity.  Do NOT add stubs or declarations for its symbols; the
+//  un-gate blockers are listed in the wave report, not papered over here.
+// ===========================================================================
+#if 0 // GOLDEN VERBATIM -- golden ckernel.cpp:704-932 (229 lines).  GATE G-PTm1-ShowRunLed.  NOT COMPILED: the ACTIVE ShowRunLed() is the DEFERRED counter-bump stub just below.  See the banner immediately above.
+void ShowRunLed()
+{
+    static bool OldFlushFlag;
+    int is, i;
+    if(fNote->fShow || IsEMGPressed())      //JerryYang 20260415 : 按EMG也要顯示紅燈
+    {
+        if(CosFunction.bTowerLightUseLD &&  //JerryYang 20230721 : LD/ULD區分不同的異常音樂
+          (fNote->edErrorCode->Text=="MES0920" || fNote->edErrorCode->Text=="MES0921" || fNote->edErrorCode->Text=="MES0922" || fNote->edErrorCode->Text=="MES0923" ||
+           fNote->edErrorCode->Text=="MES1021" || fNote->edErrorCode->Text=="MES1421" ||
+           fNote->edErrorCode->Text=="MES1721" || fNote->edErrorCode->Text=="MES1821" || fNote->edErrorCode->Text=="MES1921" ||     //Steven 20230907 : For HT-9011UC
+           fNote->edErrorCode->Text=="MES2821" || fNote->edErrorCode->Text=="MES2921" || fNote->edErrorCode->Text=="MES3021" ||
+           fNote->edErrorCode->Text=="MES1120" || fNote->edErrorCode->Text=="MES1220" || fNote->edErrorCode->Text=="MES1320" ||
+           fNote->edErrorCode->Text=="MES2520" || fNote->edErrorCode->Text=="MES2620" || fNote->edErrorCode->Text=="MES2720"))
+        {
+            RunState=LED_AutoRetest;
+        }
+        else if(fNote->AlarmType==3)    //Steven 20120203 : MES的Code用Message的音樂
+        {
+            RunState=LED_Message;
+        }
+        else
+        {
+            RunState=LED_ErrJam;
+        }
+    }
+    else if(MyMessageBox->fShow || fShowBinSet->fShow)  //JerryYang 20190523 Microchip要求跳出site map確認視窗時蜂鳴器要叫
+    {
+//        if(iUnLoaderCount)      //Jou 20150721 : 重新啟用功能    //JerryYang 20160811 Mark掉,使用Message的設定
+//            RunState=LED_TrayCounter;
+//        else
+            RunState=LED_Message;
+    }
+    else if(bTesterSendPause)   //Steven 20201022 : For RFMD
+    {
+        RunState=LED_Message;
+        if(bTesterPauseMusic)   //Steven 20220616 : Can select "Alarm Reset" when show "Tester Pause" for QORVO.
+            bAlarmBuzzer=true;
+        else
+            bAlarmBuzzer=false;
+    }
+    else if(fHome->fShow)
+    {
+        RunState=LED_Homeing;
+    }
+    else if(bReplyFTCTAlarm==true ||                                            //RogerYang 20251021 : 瑞薩FT-CT FTCT發送違法指令回傳Error需要報警
+            bContinueMessageByReply71==true)                                    //RogerYang 20251107 : 瑞薩FT-CT Add Continue Form
+    {
+        RunState=LED_Message;
+    }
+    else if(SystemStart && (LastSet.iRunStartMode==rsmAutoRetest || bAutoRetestMusic))   //Steven 20140409 : Auto Retest
+    {
+        RunState=LED_AutoRetest;
+    }
+#ifndef DEBUG_SPIL
+    else if(SystemStart && LastSet.iTester==OFF_LINE &&
+            OFFLINE_ALARM)                                                      //Steven 20140805
+    {
+        RunState=LED_OfflineRun;
+    }
+#endif
+    else if(SystemStart)
+    {
+        if(LastSet.iTemperature!=Tempture_Ambient &&
+           fHeaterOK==false)
+        {
+            RunState=LED_Heating;
+        }
+        else if(bTesterDuckingFinishLightYellowAndAlarmOn || bNeedMusicAndAlarmOn) //kevin 20170817 (Steven) add music alarm
+        {
+            RunState=LED_Message;
+            bAlarmBuzzer=true;
+            bNeedMusicFinishLighAndAlarmOn=true;                                //kevin 20170817 (Steven) add music alarm
+        }
+        else
+        {
+            RunState=LED_Running;
+        }
+    }
+    else
+    {
+        if(IniConfig.bG14UseStartSoundAlarm && bStartMoveSpeed)                //kevin 20201116  Start 發出聲音 不動 5sec
+            RunState=LED_Message;
+        else
+            RunState=LED_Pause;
+    }
+    // 處理音樂
+    if(fTowerLight->fShow==false)
+    {
+        if(IniConfig.bEnable_SECS_GEM==true && SECS_GEM_PPMUSIC_CONTROL_flag==true)       //Steven 20150605 : Add SECS GEM控制蜂鳴器
+        {
+            bAlarmBuzzer=true;
+            for(i=0; i<4; i++)
+                SW[SwMusic1+i].Off();
+            SW[SwMusic1+iSECS_GEM_PPMUSIC_CONTROL_CLASS-1].On();
+        }
+        else
+        {
+            is=LastSet.MusicSelect[RunState];
+            if(is)
+            {
+                is--;
+                for(i=0; i<4; i++)
+                {
+                    if(is==i)
+                    {
+                        if((RunState==LED_Message || RunState==LED_ErrJam) && bAlarmBuzzer==false)  //Steven 20111030 : 少打一個等於
+                            SW[SwMusic1+i].Off();
+                        else
+                            SW[SwMusic1+i].On();
+                    }
+                    else
+                    {
+                        SW[SwMusic1+i].Off();
+                    }
+                }
+            }
+            else
+            {
+                for(i=0; i<4; i++)
+                    SW[SwMusic1+i].Off();
+            }
+            //Eliot 2010_1206 start
+            if(IniConfig.bEnableCCDUSETCPIP)
+            {
+                if(CCDInterfaceForm->bIdentificationFinish==true &&
+                   CCDInterfaceForm->iIdentificationStatus==2)//0:未測試 1:Pass 2:Fail
+                {
+                    SW[SwMusic1].On();
+                }
+            }
+            //Eliot 2010_1206 end
+        }
+    }
+
+    if(OldFlushFlag==FlushFlag)
+    {
+        return;
+    }
+    OldFlushFlag=FlushFlag;
+
+    if(IniConfig.bEnable_SECS_GEM==true && SECS_GEM_PPSIGNALTOWER_CONTROL_flag==true)
+    {
+        bAlarmBuzzer=true;
+        if(iSECS_GEM_PPSIGNALTOWER_CONTROL_RED==0)
+            fMain->ledRed->Value=false;
+        else if(iSECS_GEM_PPSIGNALTOWER_CONTROL_RED==1)
+            fMain->ledRed->Value=true;
+        else
+            fMain->ledRed->Value=FlushFlag;
+
+        if(iSECS_GEM_PPSIGNALTOWER_CONTROL_GREEN==0)
+            fMain->ledGreen->Value=false;
+        else if(iSECS_GEM_PPSIGNALTOWER_CONTROL_GREEN==1)
+            fMain->ledGreen->Value=true;
+        else
+            fMain->ledGreen->Value=FlushFlag;
+
+        if(iSECS_GEM_PPSIGNALTOWER_CONTROL_YELLOW==0)
+            fMain->ledYellow->Value=false;
+        else if(iSECS_GEM_PPSIGNALTOWER_CONTROL_YELLOW==1)
+            fMain->ledYellow->Value=true;
+        else
+            fMain->ledYellow->Value=FlushFlag;
+    }
+    else
+    {
+        //ChungHung 20130528 SCK要求AutoClean後要自動檢測是否Loader有補Tray
+        if(IniConfig.bA08LastLoaderAutoCleanOutAndCheckAgain && bLoaderNoTrayAutoCleanOut && RunState==LED_Running)
+        {
+            fMain->ledGreen->Value=FlushFlag;
+        }
+        else
+        {
+            if(LastSet.MessageLight[RunState][0]==1)        fMain->ledGreen->Value=true;
+            else if(LastSet.MessageLight[RunState][0]==2)   fMain->ledGreen->Value=FlushFlag;
+            else                                            fMain->ledGreen->Value=false;
+        }
+
+        if(LastSet.MessageLight[RunState][1]==1)        fMain->ledYellow->Value=true;
+        else if(LastSet.MessageLight[RunState][1]==2)   fMain->ledYellow->Value=FlushFlag;
+        else                                            fMain->ledYellow->Value=false;
+        if(LastSet.MessageLight[RunState][2]==1)        fMain->ledRed->Value=true;
+        else if(LastSet.MessageLight[RunState][2]==2)   fMain->ledRed->Value=FlushFlag;
+        else                                            fMain->ledRed->Value=false;
+
+        //if(RunState==LED_Running && fMain->ALed1->Value==false)
+        //ChungHung 20141015 add for SCK When the handler start running (finished Start count function),Yellow light blinking & alarm on (press "alarm reset" then clear)
+        if(RunState==LED_Running && fMain->ALed1->Value==false || bTesterDuckingFinishLightYellowAndAlarmOn)
+            fMain->ledYellow->Value=FlushFlag;
+
+        if(bNeedMusicAndAlarmOn)//kevin 20170816 (Steven) 發出音樂及閃燈
+        {
+            fMain->ledRed->Value=FlushFlag;
+            bLampAlarmReset=true;
+            if(bFrontPadActive) SW[SwFKAlarmReset].On();
+            else                SW[SwRKAlarmReset].On();
+        }
+
+        //jou 2014-12-19 Temperature Less 30 deg. Show Light
+        //jou 20180529 : Temperature Heater Ok Show Light
+        if(CosFunction.bTempLess30degShowLight || CosFunction.bTempHeaterOkShowLight)
+        {
+            if(bTempLess30degShowLightFlag==true || bTempHeaterOkShowLightFlag==true)
+            {
+                fMain->ledGreen->Value=FlushFlag;
+                fMain->ledYellow->Value=FlushFlag;
+                fMain->ledRed->Value=FlushFlag;
+            }
+        }
+    }
+
+    SW[SwTowerRed].OnOff(fMain->ledRed->Value);
+    SW[SwTowerYellow].OnOff(fMain->ledYellow->Value);
+    SW[SwTowerGreen].OnOff(fMain->ledGreen->Value);
+
+    //ben 20230913 add
+    //==>
+    if(Enable_PLCSafety_IO==true)
+    {
+        fMain->pnlSafePLC->Visible=true;
+        fMain->ledSafePLC->Value=bSafePLCThread;
+    }
+    else
+    {
+        fMain->pnlSafePLC->Visible=false;
+    }
+    //<==
+    //ben 20230913 add
+}
+#endif // GOLDEN VERBATIM -- golden ckernel.cpp:704-932  (GATE G-PTm1-ShowRunLed, end)
 //AI(W906-W7-L2) 20260803: DEFERRED STUB for golden ckernel.cpp:704-932.
 // This is NOT ShowRunLed.  It selects no RunState, drives no SW[SwMusic1+i],
 // writes no fMain->led*, and returns without touching a single golden input.
@@ -1638,6 +1900,836 @@ void ShowRunLed()
 // consumers, so it is NOT changed here.  W7-U must resolve it before it un-gates
 // ShowRunLabel.
 extern int iArmTask,OutArmTask,iTestHeadMotorTask;
+// ===========================================================================
+//  GOLDEN VERBATIM PAIR -- ShowRunLabel
+//  ----------------------------------
+//  The block below is golden ckernel.cpp:935-1726 (792 golden lines)
+//  transcribed CHARACTER-FOR-CHARACTER (Big5/cp950 -> UTF-8 only) and GATED
+//  OFF.  It is INERT: the ACTIVE ShowRunLabel is the counter-bump DEFERRED stub
+//  below (void ShowRunLabel() at preimage :1651), which this pair does NOT touch.
+//
+//  WHY: the census scored ShowRunLabel "translated" because a same-named live body
+//  exists; it never compared SIZE.  That live body is a 73-line DEFERRED
+//  STUB (W906-W7-L2, 20260803) whose own #if 0 held a PROSE SUMMARY of
+//  golden, not golden.  These 792 lines of golden text existed NOWHERE in
+//  this tree.  Now they do, auditable line-by-line, so the W7-U un-gate is
+//  mechanical rather than a re-translation.  NET BEHAVIOUR CHANGE: ZERO.
+//
+//  NOTHING inside the gate is fixed, renamed, reflowed or reindented --
+//  golden's own defects are preserved on purpose so a diff against golden
+//  stays empty.  Preserved defects in this span:
+//    golden :944-951   the ASYMMETRIC double latch.  OldFlushFlag is advanced at :947 BEFORE
+//                      the second guard at :949 can return, so that return leaves
+//                      OldiHeaterWaitTime stale while OldFlushFlag has already moved on.
+//    golden :1564-1567 CheckCanChangeRealDummy()==false || HasICUnderMachine() &&
+//                      HasAnyICInMachine() && CUSTOMER_CODE==CC_ASE_KaohSiung -- mixed &&/||
+//                      with NO parentheses, so it means A||(B&&C&&D).  NOT corrected.
+//    golden :1239-1244 dead block: the guarded ShowNowStatus(iHeaterWaitTime) is immediately
+//                      overwritten by the unconditional :1246-1248 with the SAME value.
+//    golden :1394-1403 index [1] of iTempStart/iTempFinish is WRITTEN (:1362 :1382 :1391) and
+//                      never READ -- only [0] is ever tested.  Half-dead pair kept as-is.
+//    golden :1677-1679 and :1687-1689  two deliberately EMPTY branch bodies.  Kept.
+//
+//  Same shape as this tree's existing pairs: csystem.cpp MainProc / DoAllProcess
+//  / DoTrayFeedProcess / CheckContinusStartIsReady, plus the 26 pairs PT-W6b
+//  landed in atester.cpp.  Being gated it needs NO callee to exist -- only
+//  lexical validity.  Do NOT add stubs or declarations for its symbols; the
+//  un-gate blockers are listed in the wave report, not papered over here.
+// ===========================================================================
+#if 0 // GOLDEN VERBATIM -- golden ckernel.cpp:935-1726 (792 lines).  GATE G-PTm1-ShowRunLabel.  NOT COMPILED: the ACTIVE ShowRunLabel() is the DEFERRED counter-bump stub just below.  See the banner immediately above.
+void ShowRunLabel()
+{
+    AnsiString str;
+    static bool OldFlushFlag=false;
+    static int OldiHeaterWaitTime=-1, CoolTime=0, iOldSec=-1;
+    AnsiString EmgStr="";
+    static int iTempStart[2]={0,0};                                             //kevin 20200829 add
+    static int iTempFinish[2]={0,0};                                            //kevin 20200829 add
+
+    if(OldFlushFlag==FlushFlag && OldiHeaterWaitTime==iHeaterWaitTime)
+        return;
+
+    OldFlushFlag=FlushFlag;
+
+    if(FlushFlag==false && OldiHeaterWaitTime==iHeaterWaitTime)
+        return;
+    OldiHeaterWaitTime=iHeaterWaitTime;
+
+    if(bSendChangeTempDelayAlarm)                                               //kevin 20151023 Auto Temp offset
+    {
+        if(tSendChangeTempDelay.Off())
+        {
+            bSendChangeTempDelayAlarm=false;
+            RecordProcess("Auto Temp offset finish");
+        }
+    }
+
+    if(IsTriTempFixDoorLockCheck())                                             //Ztex 2023.04.19 Add HT-1032 TriTemp Function
+    {
+        fMain->ShowNowStatus(clRed, "FixDoorOpen"); //檢查SafeDoor 6            //Ztex 2024.05.12 Change FixDoorOpen
+        CoolTime=0;
+        return;
+    }
+
+    if(((MyMessageBox->fShow==true &&
+         iUnLoaderCount==0) ||                                                  //Steven 20140627 : Add for Secs Gem
+         fNote->fShow==true) &&                                                 //JerryYang 20160830 考慮auto滿tray時show message但不停機的情況,機台不要show alarm
+        bAlarmReset==false)                                                     //Steven 20140905 : 紀錄有被按下Alarm Reset
+    {
+        fMain->ShowNowStatus(clRed, "Alarm");
+        return;
+    }
+    else if(IsSafeLockCheck())
+    {
+        fMain->ShowNowStatus(clBlack, "LOCK");
+        CoolTime=0;
+        return;
+    }
+    else if(IsEMGPressed())
+    {
+        //Ifor 20210810 add:Copy 7000
+        //==>
+//        if(bOutArmPlaceToUnloaderDestroy==true)
+//        {
+//            bOutArmPlaceToUnloaderDestroy_EMGAndPowerOff=true;
+//        }
+//        else
+//        {
+//            bOutArmPlaceToUnloaderDestroy_EMGAndPowerOff=false;
+//        }
+        //<==
+        //Ifor 20210810 add:Copy 7000
+
+        if(Sen[SnFrontLeftEMG].IsOff())
+            EmgStr="EMG 1";
+        else if(Sen[SnFrontRightEMG].IsOff())
+            EmgStr="EMG 4";
+        else if(Sen[SnRearLeftEMG].IsOff())
+            EmgStr="EMG 2";
+        else if(Sen[SnRearRightEMG].IsOff())                                    //kevin 20140121 add
+            EmgStr="EMG 3";
+        else if(Enable_PLCSafety_IO && Sen[SnAllEMG].IsOff())                   //KenHsieh 20250212 : 新增PLC 斷線可瞬間判斷EMG及安全門
+            EmgStr="EMG & PLC";
+        else
+            EmgStr="Servo Off";                                                 //kevin 20140121 偵測sevon 訊號
+
+        fMain->ShowNowStatus(clRed, EmgStr);
+        CoolTime=0;
+        return;
+    }
+    else if(Sen[SnMotorPower].IsOff())
+    {
+        //Ifor 20210810 add:Copy 7000
+        //==>
+//        if(bOutArmPlaceToUnloaderDestroy==true)
+//        {
+//            bOutArmPlaceToUnloaderDestroy_EMGAndPowerOff=true;
+//        }
+//        else
+//        {
+//            bOutArmPlaceToUnloaderDestroy_EMGAndPowerOff=false;
+//        }
+        //<==
+        //Ifor 20210810 add:Copy 7000
+
+        fMain->ShowNowStatus(clRed, "Power Off");
+        CoolTime=0;
+        return;
+    }
+
+    if(IniConfig.bQAMode==true && LastSet.iRunStartMode==rsmQAMode &&           //Steven 20111128
+       CUSTOMER_CODE!=CC_KYEC_LEE)                                              //Eastsun 20260526 #026-1.27 Ifor 20201109 add:KYEC 主畫面上不顯示QA Count
+    {
+        fMain->labQAMode->Visible=true;
+        if(CosFunction.bQAModeUseUnloadCnt)                                     //JerryYang 20221004 : Maxim版本QA mode
+        {
+            str.sprintf("[Operation count %d / Setting Count %d]", iQAModePassCT, Prod.iQAModeCount);   //jou 2012-05-03 增加QA mode使用獨立的Loader Count
+        }
+        else
+        {
+            str.sprintf("[Operation count %d / Setting Count %d]", iQAModeLoaderCT, Prod.iQAModeCount);   //jou 2012-05-03 增加QA mode使用獨立的Loader Count
+        }
+        fMain->labQAMode->Caption=str;
+    }
+    else
+    {
+        fMain->labQAMode->Visible=false;
+    }
+
+    if(SystemStart)
+    {
+        fMain->EnabledSetupFile(false);
+        fLotInfo->btnFtpServer->Enabled=false;
+        fLotInfo->btnFtpHD->Enabled=false;
+
+        //ChungHung 20140716 add if testing not finish can not homing
+        if(bTesterSendPause)                                                    //Steven 20201022 : For RFMD
+        {
+            fMain->ShowNowStatus(clRed, "Tester PAUSE");
+            CoolTime=0;
+        }
+        else if(IniConfig.bI01TesterFinishThenHome &&
+                LastSet.iTester==ON_LINE &&
+                bWaitTesterFinish)                                              //kevin 20150721 收到測試資料才能home
+        {
+            fMain->ShowNowStatus((TColor) 0x000080FF, "Wait Tester");
+            CoolTime=0;
+        }
+        else if(fHome->fShow)
+        {
+            fMain->ShowNowStatus((TColor) 0x000080FF, "Homing");
+            CoolTime=0;
+        }
+        else if((ATC_SYSTEM==eATCHonPrecType ||
+                 ATC_SYSTEM==eNewATCSystem) &&
+                bNeedWaitATCRunSelfTestFinish)                                  //Ifor 20160720 add for ATC Safe Test start
+        {
+            fMain->ShowNowStatus((TColor) 0x000080FF, "ATC Self Test");
+            CoolTime=0;
+        }
+        //==> Eastsun 20260526 #026-1.28 Ifor 20230608/20231107 add:KYEC 要求新增在主畫面顯示ATC Temp Wait秒數
+        else if(CUSTOMER_CODE==CC_KYEC_LEE && bEnable_KLT_Function==false && bCheckATCTemp==true && iATCTempWaitTimer!=0)
+        {
+            fMain->ShowNowStatus(clFuchsia, AnsiString(iATCTempWaitTimer));
+            fMain->labDelayStatus->Caption="ATC Temp Wait";
+            fMain->labDelayStatus->Visible=true;
+            CoolTime=0;
+        }
+        //<== Eastsun 20260526 #026-1.28
+        else if(CUSTOMER_CODE!=CC_KYEC_LEE &&
+                bDoIniStartAutoIonFanClean &&                                   //Isaac 20210609 : IO觸發IonFan清針
+                bStartAutoIonFanClean==true)                                    //Ifor 20210720 add: IO觸發IonFan清針才顯示
+        {
+            fMain->ShowNowStatus((TColor) 0x000080FF, "Auto Clean Ion Fan");
+        }
+        else if(AUTO3_IS_MAGAZINE==1 && iMagazineStatus!=0)                     //Ifor 20231130 add: 0: Normal 1:Full Tray 2:Manual put tray
+        {
+            fMain->labDelayStatus->Caption="MAGAZINE Remove The Tray";
+            fMain->labDelayStatus->Visible=true;
+        }
+        else
+        {
+            if(LastSet.iRunStartMode==rsmAutoRetest)                            //Steven 20140409 : Auto Retest
+            {
+                fMain->ShowNowStatus(clNavy, "Auto Retest");
+            }
+//            else if(fHeaterOK==false && LastSet.iTemperature==Tempture_Ambient && Temperature.bAmbientGuardbandCheck && IniConfig.bL20AbientGuardBand)  //Steven 20200427 : JCET凌中心說常溫溫度過低不能生產
+//            {
+//                fMain->ShowNowStatus((TColor) 0x000080FF, "Heater Wait");
+//            }
+            else if(LastSet.iTemperature==Tempture_Hot ||
+                    LastSet.iTemperature==Tempture_AmbientHot ||                //kevin 2014091
+                    (LastSet.iTemperature==Tempture_Ambient && CUSTOMER_CODE==CC_KYEC_LEE))     //KaiChen 20180201 (Steven) ：Use initial start delay in socket 增加常溫顯示
+            {
+                if(bSendChangeTempDelayAlarm)                                   //kevin 20151023 Auto Temp offset
+                {
+                    fMain->ShowNowStatus(clNavy, "Auto Temp offset");
+                }
+                else if(fHeaterOK ||
+                        (LastSet.iTemperature==Tempture_Ambient &&
+                         CUSTOMER_CODE==CC_KYEC_LEE))                           //KaiChen 20180201 (Steven) ：Use initial start delay in socket 增加常溫顯示
+                {
+                    if(bOneTimeHotPlateCheckAll && IniConfig.bE39CheckHotPlateAfterCleanOutAndBeforeTrayFeed && LastSet.iTemperature==Tempture_Hot)  //Steven : 20120315 主畫面狀態 --> HP Check
+                    {
+                        fMain->ShowNowStatus(clNavy, "HP Check");
+                    }
+                    else if(fContact->IsRun2DCheck()==true)                     //JerryYang 20250220 : 2DID硬體順序檢查功能
+                    {
+                        fMain->ShowNowStatus(clNavy, "2DID Map Checking");
+                    }
+                    else if(bRunAutoClean)                                      //Steven 20120208
+                    {
+                        fMain->ShowNowStatus(clNavy, "Cleaning");
+                    }
+                    else if(bRunOcrInsp)                                        //ChungHung 20120830 add OCR Function add
+                    {
+                        fMain->ShowNowStatus(clNavy, "OCR Insp");
+                    }
+                    else if(bDoEmptySocketCheck)                                //Steven 20201022 : For RFMD Empty Socket Check Funstion.
+                    {
+                        fMain->ShowNowStatus(clRed, "ESC");
+                    }
+                    else if(bResetMode || bResetModeAndCleanOut)                //JerryYang 20151007 : ResetMode可選OneCycle或CleanOut
+                    {
+                        if(bDoEmptySocketOneCycle)                              //Steven 20201022 : For RFMD Empty Socket Check Funstion.
+                            fMain->ShowNowStatus(clRed, "ESC Reset");
+                        else
+                            fMain->ShowNowStatus(clRed, "Resetting");
+                    }
+                    else if(bCheckIndex)                                        //Steven 20110502
+                    {
+                        fMain->ShowNowStatus(clNavy, "Piggy Back");
+                        SocketAirCoolingStart();                                //jou 2016-04-28 Socket Air Cooling contact count trun on
+                    }
+                    else if(IniConfig.bQAMode==true &&
+                            LastSet.iRunStartMode==rsmQAMode)                   //Steven 20111128
+                    {
+                        fMain->ShowNowStatus(clLime, "QA Mode");
+                    }
+                    else if(bIsAutoOneCycleAutoclean)                           //kevin 20120710
+                    {
+                        fMain->ShowNowStatus(clNavy, "Onecycle Cleaning");
+                    }
+                    else if(IniConfig.bA08LastLoaderAutoCleanOutAndCheckAgain && bLoaderNoTrayAutoCleanOut) //ChungHung 20130528 SCK要求AutoClean後要自動檢測是否Loader有補Tray
+                    {
+                        fMain->ShowNowStatus(clNavy, "No Tray");
+                    }
+                    else
+                    {
+                        if((CUSTOMER_CODE==CC_ASE_KaohSiung || CUSTOMER_CODE==CC_KYEC_LEE) &&
+                           USE_AUTO_RETEST==eartInstall &&
+                           (bAutoReTest_ART || (CUSTOMER_CODE==CC_KYEC_LEE && IniConfig.bA10_AutoReTest)) &&
+                           (LastSet.iRunStartMode==rsmInitial_ART       ||
+                            LastSet.iRunStartMode==rsmContinuStart_ART  ||
+                            LastSet.iRunStartMode==rsmContinuRetest_ART))       //kevin 20150602     //Frank 20161017 KYEC_KW want add
+                        {
+                            if(LastSet.iRunStartMode==rsmAutoRetest)            //kevin 20150721 : Auto Retest
+                            {
+                                fMain->ShowNowStatus(clNavy, "Auto Retest");
+                            }
+                            else
+                            {
+                                if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+                                {
+                                    fMain->ARTCombine->Visible=true;
+                                    if(bARTSeparate==false)                     //kevin 20170908 (wei) add art 分bin 狀態成立
+                                    {
+                                        fMain->ARTCombine->Caption="ART Combine Bin";
+                                    }
+                                    else
+                                    {
+                                        fMain->ARTCombine->Caption="ART Separate Bin";
+                                    }
+                                }
+
+                                switch(LastSet.iAutoRetestCount_ART)            //Steven 20140409 : Auto Retest
+                                {
+                                    case 0:
+                                        fMain->ShowNowStatus(clNavy, "FT ART");
+                                        break;
+                                    case 1:
+                                        fMain->ShowNowStatus(clNavy, "RT1 ART");
+                                        break;
+                                    case 2:
+                                        fMain->ShowNowStatus(clNavy, "RT2 ART");
+                                        break;
+                                    case 3:
+                                        fMain->ShowNowStatus(clNavy, "RT3 ART");
+                                        break;
+                                    case 4:
+                                        fMain->ShowNowStatus(clNavy, "RT4 ART");
+                                        break;
+                                    case 5:
+                                        fMain->ShowNowStatus(clNavy, "RT5 ART");
+                                        break;
+                                    default:
+                                        fMain->ShowNowStatus(clLime, "Running");
+                                        break;
+                                }
+                            }
+                        }
+                        else if(LastSet.iRunStartMode==rsmContinuRetest_ART)    //kevin 20150715
+                        {
+                            if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+                                fMain->ShowNowStatus(clNavy, "ART_Tray Move");  //kevin 20170908
+                            else
+                                fMain->ShowNowStatus(clNavy, "ART_ReTest");
+                        }
+                        else
+                        {
+                            fMain->ShowNowStatus(clLime, "Running");
+                        }
+                    }
+                    CoolTime=0;
+                    if(iOneCycle==0 && bRunAutoClean==false &&                  //kevin 20130220 add iOneCycle 時會秀sacktime
+                       bIsAutoOneCycleAutoclean==false &&
+                       iHeaterWaitTime!=0)                                      //kevin 20121023
+                    {
+                        fMain->ShowNowStatus(clLime, AnsiString(iHeaterWaitTime));
+                    }
+
+                    if(iHeaterWaitTime!=0)
+                    {
+                        fMain->ShowNowStatus(clLime, AnsiString(iHeaterWaitTime));
+                        fMain->labDelayStatus->Caption="Heater Wait Time";      //wei 20171020 (jou) 延遲狀態顯示
+                        fMain->labDelayStatus->Visible=true;                    //JerryYang 20171211 (Steven) 有用到再顯示避免擋到SECS GEM連線狀態
+                    }
+                    else if(Temperature.bLBTempFunction && iTriggerBoostFunction==Temperature.eBLBL)
+                    {
+                        fMain->ShowNowStatus(clFuchsia, AnsiString("Wait L/B"));
+                    }
+                    else if((Temperature.bBoostFuncttion || Temperature.bLBTempFunction) && iTriggerBoostFunction!=-1 && iBoostFuncStep==1)   //Steven 20180817 : Boost Function
+                    {
+                        fMain->ShowNowStatus(clFuchsia, AnsiString(iInitialCount));
+                        fMain->labDelayStatus->Caption="Boost Duration";
+                        fMain->labDelayStatus->Visible=true;
+                    }
+                    else if((Temperature.bBoostFuncttion || Temperature.bLBTempFunction) && iTriggerBoostFunction!=-1 && iBoostFuncStep==4)   //Steven 20180817 : Boost Function
+                    {
+                        fMain->ShowNowStatus(clFuchsia, AnsiString(iInitialCount));
+                        fMain->labDelayStatus->Caption="Post Boost Duration";
+                        fMain->labDelayStatus->Visible=true;
+                    }
+                    else if(((IniConfig.bA05UseAutoDocking==true && Temperature.bUseTesterDocking==true) || CUSTOMER_CODE==CC_SCK) && bTesterDucking==true && iTesterDucking>0) //ChungHung 20140714 only for SCK add CUSTOMER_CODE==CC_SCK
+                    {
+                        fMain->ShowNowStatus((TColor) 0x000080FF, AnsiString(iTesterDucking));
+                    }
+                    else if(bNeedInitialTestDelay && iInitialCount>0)           //ChungHung 20140801 add Korea Want to count down in main status
+                    {
+                        fMain->ShowNowStatus(clFuchsia, AnsiString(iInitialCount));
+                        fMain->labDelayStatus->Caption=InitialTestDelayStatus();    //wei 20171020 (jou) 延遲狀態顯示
+                        fMain->labDelayStatus->Visible=true;                        //JerryYang 20171211 (Steven) 有用到再顯示避免擋到SECS GEM連線狀態
+                    }
+                    else if(CosFunction.bEnableAfterTestedDelay && iAfterTestedCount>0) //ChungHung 20140730 add for ATK function after tested delay time
+                    {
+                        fMain->ShowNowStatus(clTeal, AnsiString(iAfterTestedCount));
+                    }
+                    else if(iSoakTimer>0)                                       //2013-11-27    Dell Add Index soak time
+                    {
+                        fMain->ShowNowStatus(clLime, AnsiString(iSoakTimer));
+                        fMain->labDelayStatus->Caption="Soak Time";             //wei 20171020 (jou) 延遲狀態顯示
+                        fMain->labDelayStatus->Visible=true;                    //JerryYang 20171211 (Steven) 有用到再顯示避免擋到SECS GEM連線狀態
+                    }
+                    else if(fHeaterOK && fHeaterStableOK==false && iStableTime>0)   //JerryYang 20210122 : ASE-CL新增待溫功能
+                    {
+                        fMain->ShowNowStatus(clLime, AnsiString(iStableTime));
+                        fMain->labDelayStatus->Caption="Stable Time";
+                        fMain->labDelayStatus->Visible=true;
+                    }
+                    else if(iInitialSoakTimer>0)                                //Steven 20140827
+                    {
+                        fMain->ShowNowStatus(clLime, AnsiString(iInitialSoakTimer));
+                        fMain->labDelayStatus->Caption="Initial Soak Time";     //wei 20171020 (jou) 延遲狀態顯示
+                        fMain->labDelayStatus->Visible=true;                    //JerryYang 20171211 (Steven) 有用到再顯示避免擋到SECS GEM連線狀態
+                    }
+                    else if(bInitStartDelayTime && iInitStartDelayCount>0)      //wei 20171020 (jou) InitStartDelayTime秒數倒數
+                    {
+                        fMain->ShowNowStatus(clBlue, AnsiString(iInitStartDelayCount));
+                        fMain->labDelayStatus->Caption="Initial Start Delay Time";  //wei 20171020 (jou) 延遲狀態顯示
+                        fMain->labDelayStatus->Visible=true;                    //JerryYang 20171211 (Steven) 有用到再顯示避免擋到SECS GEM連線狀態
+                    }
+                    else if(bInitialStart1Time && iInitialStart1Count>0)        //wei 20171020 (jou) InitialStart1 秒數倒數
+                    {
+                        fMain->ShowNowStatus(clBlue, AnsiString(iInitialStart1Count));
+                        fMain->labDelayStatus->Caption="Initial Start 1 Time";  //wei 20171020 (jou) 延遲狀態顯示
+                        fMain->labDelayStatus->Visible=true;                    //JerryYang 20171211 (Steven) 有用到再顯示避免擋到SECS GEM連線狀態
+                    }
+                    else if(bInitialStart2Time && iInitialStart2Count>0)        //kevin 20180905 InitialStart1 秒數倒數
+                    {
+                        fMain->ShowNowStatus(clBlue, AnsiString(iInitialStart2Count));
+                        fMain->labDelayStatus->Caption="Shuttle Soak Time";
+                        fMain->labDelayStatus->Visible=true;
+                    }
+                    else
+                    {
+                        fMain->labDelayStatus->Caption="";                      //wei 20171020 (jou) 延遲狀態顯示
+                        fMain->labDelayStatus->Visible=false;                   //JerryYang 20171211 (Steven) 有用到再顯示避免擋到SECS GEM連線狀態
+                        for(int i=0; i<15; i++)                                 //kevin 20200730 10->15
+                        {
+                            bInitialTestDelayStatus[i]=false;
+                        }
+                    }
+
+                    bool bFlag=fMain->labDelayStatus->Visible;
+                    if((Temperature.bBoostFuncttion || Temperature.bLBTempFunction) && iTriggerBoostFuncBack!=-1 && iBoostFuncStep==10)   //Steven 20180817 : Boost Function
+                    {
+                        str.sprintf("Boost Cooling : %d", iBoostCountDown);
+                        fMain->labDelayStatus->Caption=str;
+                        fMain->labDelayStatus->Visible=true;
+                    }
+                    else if((Temperature.bBoostFuncttion || Temperature.bLBTempFunction) && iTriggerBoostFuncBack!=-1 && iBoostFuncStep==11)   //Steven 20180817 : Boost Function
+                    {
+                        str.sprintf("L/B Boosting");
+                        fMain->labDelayStatus->Caption=str;
+                        fMain->labDelayStatus->Visible=true;
+                    }
+                    else
+                    {
+                        if(bFlag==false)
+                            fMain->labDelayStatus->Visible=false;
+                    }
+
+                    if(IniConfig.bUseAutoSiteMapping)                           //jou 2011-03-24 start : Auto Site Mapping
+                    {
+                        if(LastSet.iTemperature==Tempture_Hot && LastSet.iRunStartMode==rsmAutoSiteMap && bSiteMappingCHKOK==false)
+                        {
+                            if(iShuttleHeaterWaitTime>0)
+                            {
+                                fMain->ShowNowStatus(clLime,AnsiString(iShuttleHeaterWaitTime));
+                            }
+                        }
+                    }
+                    //jou 2011-03-24 end
+                }
+                else
+                {
+                    iTempStart[0]=0;                                            //kevin 20200829 add
+                    iTempStart[1]=0;                                            //kevin 20200829 add
+                    if(Temperature.bLBTempFunction && iTriggerBoostFunction==Temperature.eBLBL)
+                    {
+                        fMain->ShowNowStatus(clFuchsia, AnsiString("Wait L/B"));
+                    }
+                    else if((Temperature.bBoostFuncttion || Temperature.bLBTempFunction) && iTriggerBoostFunction!=-1 && iBoostFuncStep==1)   //Steven 20180817 : Boost Function
+                    {
+                        fMain->ShowNowStatus(clFuchsia, AnsiString(iInitialCount));
+                        fMain->labDelayStatus->Caption="Boost Duration";
+                        fMain->labDelayStatus->Visible=true;
+                    }
+                    else if((Temperature.bBoostFuncttion || Temperature.bLBTempFunction) && iTriggerBoostFunction!=-1 && iBoostFuncStep==4)   //Steven 20180817 : Boost Function
+                    {
+                        fMain->ShowNowStatus(clFuchsia, AnsiString(iInitialCount));
+                        fMain->labDelayStatus->Caption="Post Boost Duration";
+                        fMain->labDelayStatus->Visible=true;
+                    }
+                    else
+                    {
+                        iTempStart[0]=1;                                        //kevin 20200829 add
+                        iTempStart[1]=1;                                        //kevin 20200829 add
+                        fMain->ShowNowStatus((TColor) 0x000080FF, "Heater Wait");
+                    }
+                    CoolTime=0;
+                    if(iTemperatureOk!=2)
+                    {
+                        iTemperatureOk=2;                                       //kevin 20150914
+                        NewRecordProcess("MES2130", "Temperature Wait");        //kevin 20150914
+                        iTempStart[0]=1;                                        //kevin 20200829 add
+                        iTempStart[1]=1;                                        //kevin 20200829 add
+                    }
+
+                    if(iTempStart[0]==1)                                        //kevin 20200829 add 加熱完成
+                    {
+                       iTempFinish[0]=2;
+                    }
+
+                    if(iTempStart[0]==0 && iTempFinish[0]==2)                   //kevin 20200829 add 加熱完成
+                    {
+                       iTempFinish[0]=0;                                        //kevin 20200829 add
+                       RecordProcess("Working Temperature Arrived Done");       //kevin 20200829  加熱完成
+                    }
+                }
+            }
+            else
+            {
+                if(iHeaterCooling)
+                {
+                    fMain->ShowNowStatus((TColor) 0x000080FF, "Cooling Wait");
+                    CoolTime=0;
+                }
+                else
+                {
+                    if(fContact->IsRun2DCheck())                                //JerryYang 20250220 : 2DID硬體順序檢查功能
+                    {
+                        fMain->ShowNowStatus(clNavy, "2DID Map Checking");
+                    }
+                    else if(bRunAutoClean)                                      //Steven 20120208
+                    {
+                        fMain->ShowNowStatus(clNavy, "Cleaning");
+                    }
+                    else if(bDoEmptySocketCheck)                                //Steven 20201022 : For RFMD Empty Socket Check Funstion.
+                    {
+                        fMain->ShowNowStatus(clRed, "ESC");
+                    }
+                    else if(bResetMode || bResetModeAndCleanOut)                //JerryYang 20151007 : ResetMode可選OneCycle或CleanOut
+                    {
+                        if(bDoEmptySocketOneCycle)                              //Steven 20201022 : For RFMD Empty Socket Check Funstion.
+                            fMain->ShowNowStatus(clRed, "ESC Reset");
+                        else
+                            fMain->ShowNowStatus(clRed, "Resetting");
+                    }
+                    else if(bCheckIndex)                                        //Steven 20110502
+                    {
+                        fMain->ShowNowStatus(clNavy, "Piggy Back");
+                        SocketAirCoolingStart();                                //jou 2016-04-28 Socket Air Cooling contact count trun on
+                    }
+                    else if(IniConfig.bQAMode==true && LastSet.iRunStartMode==rsmQAMode)    //Steven 20111128
+                    {
+                        fMain->ShowNowStatus(clLime, "QA Mode");
+                    }
+                    else if(bIsAutoOneCycleAutoclean)                           //kevin 20120710
+                    {
+                        fMain->ShowNowStatus(clNavy, "Onecycle Cleaning");
+                    }
+                    else if(IniConfig.bA08LastLoaderAutoCleanOutAndCheckAgain && bLoaderNoTrayAutoCleanOut) //ChungHung 20130528 SCK要求AutoClean後要自動檢測是否Loader有補Tray
+                    {
+                        fMain->ShowNowStatus(clNavy, "No Tray");
+                    }
+                    else if((CUSTOMER_CODE==CC_ASE_KaohSiung || CUSTOMER_CODE==CC_KYEC_LEE) &&
+                            USE_AUTO_RETEST==eartInstall &&
+                            (bAutoReTest_ART || (CUSTOMER_CODE==CC_KYEC_LEE && IniConfig.bA10_AutoReTest)) &&
+                            (LastSet.iRunStartMode==rsmInitial_ART      ||
+                             LastSet.iRunStartMode==rsmContinuStart_ART ||
+                             LastSet.iRunStartMode==rsmContinuRetest_ART))      //kevin 20150610       //Frank 20161017 KYEC_KW want add
+                    {
+                        if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+                        {
+                            fMain->ARTCombine->Visible=true;                    //kevin 20170908 (wei) add art 分bin 狀態成立
+                            if(bARTSeparate==false)
+                            {
+                                fMain->ARTCombine->Caption="ART Combine Bin";
+                            }
+                            else
+                            {
+                                fMain->ARTCombine->Caption="ART Separate Bin";
+                            }
+                        }
+
+                        switch(LastSet.iAutoRetestCount_ART)                    //Steven 20140409 : Auto Retest
+                        {
+                            case 0:
+                                fMain->ShowNowStatus(clNavy, "FT ART");
+                                break;
+                            case 1:
+                                fMain->ShowNowStatus(clNavy, "RT1 ART");
+                                break;
+                            case 2:
+                                fMain->ShowNowStatus(clNavy, "RT2 ART");
+                                break;
+                            case 3:
+                                fMain->ShowNowStatus(clNavy, "RT3 ART");
+                                break;
+                            case 4:
+                                fMain->ShowNowStatus(clNavy, "RT4 ART");
+                                break;
+                            case 5:
+                                fMain->ShowNowStatus(clNavy, "RT5 ART");
+                                break;
+                            case 6:
+                                fMain->ShowNowStatus(clNavy, "RT6 ART");
+                                break;
+                            case 7:
+                                fMain->ShowNowStatus(clNavy, "RT7 ART");
+                                break;
+                            case 8:
+                                fMain->ShowNowStatus(clNavy, "RT8 ART");
+                                break;
+                            case 9:
+                                fMain->ShowNowStatus(clNavy, "RT9 ART");
+                                break;
+                            case 10:
+                                fMain->ShowNowStatus(clNavy, "RT10 ART");
+                                break;
+                            default:
+                                fMain->ShowNowStatus(clLime, "ART Over");
+                                break;
+                        }
+                    }
+                    else if(LastSet.iRunStartMode==rsmContinuRetest_ART)        //kevin 20150715
+                    {
+                        if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+                            fMain->ShowNowStatus(clNavy, "ART_Tray Move");
+                        else
+                            fMain->ShowNowStatus(clNavy, "ART_ReTest");
+                    }
+                    else
+                    {
+                        if(IniConfig.bG12ContractModeManualMessage && bContractModeTest)    //kevin 20180222 (Steven) Arm 1 Arm2 吸取IC 做CONTRACT MODE
+                        {                                                                   //kevin 20180222 (Steven) contract mode 秀手動送測試訊號
+                            fMain->ShowNowStatus(clLime, "Manual T.Start");
+                        }
+                        else
+                        {
+                            fMain->ShowNowStatus(clLime, "Running");
+                        }
+                    }
+                    CoolTime=0;
+                }
+            }
+        }
+        bHALTing=false;                                                         //jou 2012-01-30 常溫 & 機台沒在跑的時候chamber風扇不轉
+    }
+    else
+    {
+        if((IniConfig.bEnable_SECS_GEM==true && IniConfig.bRCMDStart==true && bPhysicalStart==true) ||          //Steven 20141006 : SECS GEM使用Remote Start功能
+           (CUSTOMER_CODE==CC_ChipMos_ZHUBEI &&
+            IniConfig.bN25_1_EnableStartControl && bPhysicalStart==true) ||     //JerryYang 20250120 : modify
+           (IniConfig.bEnable_SECS_GEM==true && bSECSPause==true))              //Steven 20210413 : 南茂的自動Start功能
+        {
+            fMain->ShowNowStatus(clNavy, "RUN CHECK");
+            if(IniConfig.bEnable_SECS_GEM==true &&
+               ((IniConfig.bRCMDStart==true && bPhysicalStart==true) ||
+                bSECSPause==true))                                              //JerryYang 20250120 : modify
+                bSECSGEMAlarm=true;                                             //Ifor 20151210 鎖定面板
+        }
+        else if(bRunDecayTest==true)
+        {
+            fMain->ShowNowStatus((TColor) 0x000080FF, "Decay Test");
+            CoolTime=0;
+        }
+        else if(CUSTOMER_CODE!=CC_KYEC_LEE &&
+                bDoIniStartAutoIonFanClean &&                                   //Isaac 20210609 : IO觸發IonFan清針
+                bStartAutoIonFanClean==true)                                    //Ifor 20210720 add: IO觸發IonFan清針才顯示
+        {
+            fMain->ShowNowStatus((TColor) 0x000080FF, "Auto Clean Ion Fan");
+        }
+        else if(AUTO3_IS_MAGAZINE==1 && iMagazineStatus!=0)                     //Ifor 20231130 add: 0: Normal 1:Full Tray 2:Manual put tray
+        {
+            fMain->labDelayStatus->Caption="MAGAZINE Remove The Tray";
+            fMain->labDelayStatus->Visible=true;
+        }
+        else if(fMain->CheckCanChangeRealDummy()==false ||
+                HasICUnderMachine() &&
+                HasAnyICInMachine() &&
+                CUSTOMER_CODE==CC_ASE_KaohSiung)                                //kevin 20151012
+        {
+            if(bCalculatePauseTime==false)
+            {
+                tUPH_PauseStartTime=Now();
+                bCalculatePauseTime=true;
+            }
+            fMain->ShowNowStatus(clRed, "PAUSE");
+
+            if(HasICUnderMachine() || iArmTask!=1 || OutArmTask!=1 || iTestHeadMotorTask!=1)
+            {
+                fMain->EnabledSetupFile(false);
+                fLotInfo->btnFtpServer->Enabled=false;
+            }
+            else
+            {
+                if(CosFunction.bFTPFunction && IniConfig.bEnableFTP)
+                {
+                    fMain->EnabledSetupFile(true);                              //Steven 20250407 : 調整 cbSetupFileName 的 Enable判斷
+
+                    if(IniConfig.iServerEnable<=AccessLevel)
+                    {
+                        if(fFTPClient->bShow==false)
+                            fLotInfo->btnFtpServer->Enabled=true;
+                    }
+                    else
+                    {
+                        fLotInfo->btnFtpServer->Enabled=false;
+                    }
+
+                    if(IniConfig.iHDEnable<=AccessLevel)
+                        fLotInfo->btnFtpHD->Enabled=true;
+                    else
+                        fLotInfo->btnFtpHD->Enabled=false;
+                }
+                else
+                {
+                    fMain->EnabledSetupFile(true);
+                }
+            }
+            CoolTime=0;
+            bHALTing=false;                                                     //jou 2012-01-30 常溫 & 機台沒在跑的時候chamber風扇不轉
+            fLotInfo->btnFtpHD->Enabled=true;                                   //wei 20160314 不需要onecycle or Cleanout就可上傳
+        }
+        else
+        {
+            if(iHome==0 && CheckThermo()==false)
+            {
+                if(iOldSec!=SystemSec)
+                {
+                    iOldSec=SystemSec;
+                    CoolTime++;
+                }
+                fMain->ShowNowStatus(clBlack,AnsiString(CoolTime));
+                bHALTing=false;                                                 //jou 2012-01-30 常溫 & 機台沒在跑的時候chamber風扇不轉
+            }
+            else
+            {
+                fMain->ShowNowStatus(clBlack, "HALT");
+                CoolTime=0;
+                bHALTing=true;                                                  //jou 2012-01-30 常溫 & 機台沒在跑的時候chamber風扇不轉
+            }
+
+            if(CosFunction.bFTPFunction && IniConfig.bEnableFTP)                // Landam 20110324 enable setup file selection
+            {
+                fMain->EnabledSetupFile(true);                                  //Steven 20250407 : 調整 cbSetupFileName 的 Enable判斷
+
+                if(IniConfig.iServerEnable<=AccessLevel)                        //jou 2012-12-21 修正 FTP clean out 後，HD & server button 沒有 enabled 的問題。
+                {
+                    if(fFTPClient->bShow==false)
+                    {
+                        if(HasICUnderMachine()==false &&
+                           HasAnyICInMachine()==false)                          //JerryYang 20191212 機台內有IC不能download工作檔
+                        {
+                            if(CUSTOMER_CODE==CC_GIGAS &&
+                               (LastSet.iRunStartMode!=rsmInitialStart &&
+                                LastSet.iRunStartMode!=rsmCInitialRetest))      //Isaac 20200803 : 全智只有initial mode可以更換工作檔
+                                fLotInfo->btnFtpServer->Enabled=false;
+                            else
+                                fLotInfo->btnFtpServer->Enabled=true;
+                        }
+                        else
+                        {
+                            fLotInfo->btnFtpServer->Enabled=false;
+                        }
+                    }
+                }
+                else
+                {
+                    fLotInfo->btnFtpServer->Enabled=false;
+                }
+
+                if(IniConfig.iHDEnable<=AccessLevel)
+                    fLotInfo->btnFtpHD->Enabled=true;
+                else
+                    fLotInfo->btnFtpHD->Enabled=false;
+
+                if(CUSTOMER_CODE==CC_Greatek)                                   //Sam 20171031 (wei) : OP 權限時隱藏 FTP
+                {
+                    if(AccessLevel==0)
+                        fLotInfo->tsFTP->Enabled=false;                         //Sam 20190218 : 改用 Enable
+                    else
+                        fLotInfo->tsFTP->Enabled=true;                          //Sam 20190218 : 改用 Enable
+                }
+            }
+            else if(CUSTOMER_CODE==CC_ASE_CL &&
+                    CosFunction.bLastSetInSetUpFile)
+            {
+                fMain->EnabledSetupFile(OLPClientConnect);
+            }
+            else if(TestIF_File.bRENESAS_EnableFTCT==true)                      //RogerYang 20251020 : 瑞薩FT-CT
+            {
+            }
+            else
+            {
+                fMain->EnabledSetupFile(true);
+            }
+            //-----------------------------------
+        }
+
+        if(AUTO3_IS_MAGAZINE==1 && iMagazineStatus!=0)
+        {
+        }
+        else
+        {
+            fMain->labDelayStatus->Caption="";                                  //wei 20171020 (jou) 延遲狀態顯示
+            fMain->labDelayStatus->Visible=false;                               //JerryYang 20171211 (Steven) 有用到再顯示避免擋到SECS GEM連線狀態
+        }
+    }
+
+    if(IniConfig.bN09_LotCountAutoFunc && bWaitTSV)                             //Steven 20190521 : ATK lot count
+    {
+        fMain->ShowNowStatus(clNavy, "Waiting LCA");
+    }
+
+    if(CUSTOMER_CODE==CC_GIGAS)                                                 //Isaac 20210128 : 全智Auto Clean顯示狀態
+    {
+        fMain->labAutoClean->Visible=true;
+        if(TestIF_File.iAutoClean_Function)
+            fMain->labAutoClean->Caption="Auto clean ON";
+        else
+            fMain->labAutoClean->Caption="Auto clean OFF";
+    }
+    else
+    {
+        if(TestIF_File.iAutoClean_Function &&
+           (IniConfig.bSIGURDFunction ||                                        //Alick 20160829 add for 矽格北興要求開啟AutoClean功能時，MAIN畫面要顯示告知Label
+            CUSTOMER_CODE==CC_JCET))
+            fMain->labAutoClean->Visible=true;
+        else
+            fMain->labAutoClean->Visible=false;
+    }
+
+    if(fAutoTeach->GetState()>0 && CosFunction.bManualSteplAutoTeach)           //JimmyChiu 20211020 : Auto alignment mode
+    {
+        fMain->ShowNowStatus(clLime, "Auto Alignment Mode");
+        CoolTime=0;
+        return;
+    }
+}
+#endif // GOLDEN VERBATIM -- golden ckernel.cpp:935-1726  (GATE G-PTm1-ShowRunLabel, end)
 //AI(W906-W7-L2) 20260803: DEFERRED STUB for golden ckernel.cpp:935-1726.
 // This is NOT ShowRunLabel.  It makes none of golden's 88 fMain->ShowNowStatus
 // paint calls, none of its 40 labDelayStatus accesses (39 writes plus the one

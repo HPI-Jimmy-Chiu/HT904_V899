@@ -1264,6 +1264,340 @@ void TATCInterfaceForm::FormDestroy(TObject *Sender)
     LogSoftwareOffTime("TATCInterfaceForm, FormDestroy");                       //Steven 20210526 : 紀錄軟體執行時間
 }
 //---------------------------------------------------------------------------
+// ===========================================================================
+//  GOLDEN VERBATIM PAIR -- TMyHonPrecATCPanel::TMyHonPrecATCPanel()
+//  GATED : golden ATC/ATCInterface.cpp:961-1274 (314 lines), inert reference text.
+//  LIVE  : the TMyHonPrecATCPanel::TMyHonPrecATCPanel() body immediately AFTER the #endif below.  It is UNCHANGED by
+//          this wave -- net behaviour change is ZERO.
+//  WHY   : the census scored this "translated" because a same-named LIVE body
+//          existed, without comparing SIZE.  Golden's 314 lines were NOWHERE in
+//          the tree -- lost text, not deferred behaviour.  Now the text EXISTS
+//          and is auditable, so a later un-gate is mechanical.
+//  NOTE  : the LIVE ctor is a 117-line PARTIAL -- it keeps the data-bearing
+//          assignments but drops golden's ~200 lines of widget geometry/Font/
+//          Name/Hint layout (this file's own GATE (7)).  The full 314 lines now exist.
+//  RULES : nothing inside the gate is fixed, renamed, reflowed or reindented;
+//          it is golden's bytes.  Nothing it references had to be made to
+//          exist -- no stub, declaration or header was added for it.
+//  SHAPE : same pair shape as csystem.cpp MainProc / atester.cpp (PT-W6a/W6b)
+//          golden-verbatim gates.
+// ===========================================================================
+#if 0 // GOLDEN VERBATIM -- golden ATC/ATCInterface.cpp:961-1274 (314 lines).  GATE G-PTW6c-TMyHonPrecATCPanel.  NOT COMPILED: the ACTIVE TMyHonPrecATCPanel::TMyHonPrecATCPanel() is the body immediately after this #endif.
+__fastcall TMyHonPrecATCPanel::TMyHonPrecATCPanel(TComponent* Owner, int index) : TComponent(Owner)         //設定元件位置
+{
+    AnsiString str;
+    iMyTag=index;
+    bSiteOnOffStatus=false;                                                     //Steven 20120528 : 確認開關Site
+    bATCTempReady=false;                                                        //Steven 20120530 : 確認溫度是否到達
+    iRecordCount=0;                                                             // 2011.05.24 , Joye , ATC
+    iErrorCount=0;                                                              //pig 2011.12.21 ATC改
+    fLastTemp=0.0;                                                              // 2011.05.24 , Joye , ATC
+    fATCSiteNowTemp=0.0;
+    fATCSiteSVValue=0.0;
+    fATCRefSensorTemp=0.0;                                                      //Steven 20150108 : [L11-5] For海思使用兩組感溫
+    fATCNotReceivedCount=0;                                                     //Ifor 20160223 未收到溫度回傳次數
+    iATCSelfTestResult=0;                                                       //Ifor 20160720 Add ATC SELF TEST RESULT 結果
+    iATCSelfTestStatus=0;                                                       //Ifor 20160824 Add ATC SELF TEST Status
+
+    sAddress.sprintf("10%02d", index+1);
+    iPort=1000+index;
+    gbATC           =new TGroupBox(this);
+    gbOffset        =new TGroupBox(this);
+    edtOffset       =new TEdit(this);
+    btSetOffset     =new TButton(this);
+    ATCSocket       =new TClientSocket(this);
+    LedATCConnect   =new TMyLed(this);
+    LedATCActive    =new TMyLed(this);
+    labState        =new TLabel(this);
+    labAddress      =new TLabel(this);
+    labPort         =new TLabel(this);
+    edtAddress      =new TEdit(this);
+    edtPort         =new TEdit(this);
+    edtSendData     =new TEdit(this);
+    BitBtnSet       =new TBitBtn(this);
+    BitBtnConnect   =new TBitBtn(this);
+    BitBtnDisconnect=new TBitBtn(this);
+    BitBtnSend      =new TBitBtn(this);
+    MemoATC         =new TMemo(this);
+    pal_SV          =new TEdit(this);
+    pal_PV          =new TPanel(this);
+    cbEnableSite    =new TCheckBox(this);
+
+    str.sprintf("gbATC%02d", iMyTag);
+    gbATC->Name         =str;
+    gbATC->Left         =4;
+    gbATC->Top          =8+iMyTag*130;
+    gbATC->Width        =956;
+    gbATC->Height       =120;
+    gbATC->Font->Color  =clBlack;
+    gbATC->Font->Name   ="Arial";
+    gbATC->Font->Size   =14;
+    str.sprintf("Channel%02d", iMyTag+1);
+    gbATC->Caption      =str;
+
+    str.sprintf("gbOffset%02d", iMyTag);
+    gbOffset->Parent       =gbATC;
+    gbOffset->Name         =str;
+    gbOffset->Left         =88;
+    gbOffset->Top          =44;
+    gbOffset->Width        =100;
+    gbOffset->Height       =70;
+    gbOffset->Font->Color  =clBlack;
+    gbOffset->Font->Name   ="Arial";
+    gbOffset->Font->Size   =12;
+    gbOffset->Caption      ="Offset";
+
+    str.sprintf("edtOffset%02d", iMyTag);
+    edtOffset->Parent         =gbOffset;
+    edtOffset->Name           =str;
+    edtOffset->Left           =10;
+    edtOffset->Top            =16;
+    edtOffset->Width          =80;
+    edtOffset->Height         =26;
+    edtOffset->Font->Color    =clBlack;
+    edtOffset->Font->Name     ="Arial";
+    edtOffset->Font->Size     =12;
+    edtOffset->Text           =0.0;
+    edtOffset->Tag            =iMyTag;
+
+    str.sprintf("btSetOffset%02d", iMyTag);
+    btSetOffset->Parent       =gbOffset;
+    btSetOffset->Name         =str;
+    btSetOffset->Left         =10;
+    btSetOffset->Top          =44;
+    btSetOffset->Width        =80;
+    btSetOffset->Height       =20;
+    btSetOffset->Font->Color  =clBlack;
+    btSetOffset->Font->Name   ="Arial";
+    btSetOffset->Font->Size   =12;
+    btSetOffset->Caption      ="Set";
+    btSetOffset->Tag          =iMyTag;
+
+    str.sprintf("ATCSoclet%02d", iMyTag);
+    ATCSocket->Name=str;
+    ATCSocket->Port=1000;
+    ATCSocket->ClientType=ctNonBlocking;
+    ATCSocket->Active=false;
+    ATCSocket->Tag=iMyTag;
+
+    str.sprintf("LedATCConnect%02d", iMyTag);
+    LedATCConnect->Parent      =gbATC;
+    LedATCConnect->Name        =str;
+    LedATCConnect->Left        =19;
+    LedATCConnect->Top         =21;
+    LedATCConnect->Width       =23;
+    LedATCConnect->Height      =23;
+    LedATCConnect->TrueColor   =clLime;
+    LedATCConnect->FalseColor  =clSilver;
+    LedATCConnect->LEDStyle    =LEDSqLarge;
+    LedATCConnect->Tag         =iMyTag;
+    LedATCConnect->Hint        ="ATC Connection";
+    LedATCConnect->ShowHint    =true;
+
+    str.sprintf("LedATCActive%02d", iMyTag);
+    LedATCActive->Parent      =gbATC;
+    LedATCActive->Name        =str;
+    LedATCActive->Left        =55;
+    LedATCActive->Top         =21;
+    LedATCActive->Width       =23;
+    LedATCActive->Height      =23;
+    LedATCActive->TrueColor   =clLime;
+    LedATCActive->FalseColor  =clSilver;
+    LedATCActive->LEDStyle    =LEDSqLarge;
+    LedATCActive->Tag         =iMyTag;
+    str.sprintf("ATC %02d Active", iMyTag);
+    LedATCActive->Hint        =str;
+    LedATCActive->ShowHint    =true;
+
+    str.sprintf("labState%02d", iMyTag);
+    labState->Parent        =gbATC;
+    labState->Name          =str;
+    labState->Left          =10;
+    labState->Top           =46;
+    labState->Width         =73;
+    labState->Height        =16;
+    labState->Font->Color   =clBlack;
+    labState->Font->Name    ="Arial";
+    labState->Font->Size    =10;
+    labState->Caption       ="Off-Line";
+    labState->Tag           =iMyTag;
+    labState->Alignment     =taCenter;
+
+    str.sprintf("labAddress%02d", iMyTag);
+    labAddress->Parent      =gbATC;
+    labAddress->Name        =str;
+    labAddress->Left        =197;
+    labAddress->Top         =30;
+    labAddress->Width       =59;
+    labAddress->Height      =18;
+    labAddress->Font->Color =clBlack;
+    labAddress->Font->Name  ="Arial";
+    labAddress->Font->Size  =12;
+    labAddress->Caption     ="Address";
+    labAddress->Tag         =iMyTag;
+
+    str.sprintf("labPort%02d", iMyTag);
+    labPort->Parent         =gbATC;
+    labPort->Name           =str;
+    labPort->Left           =331;
+    labPort->Top            =30;
+    labPort->Width          =29;
+    labPort->Height         =18;
+    labPort->Font->Color    =clBlack;
+    labPort->Font->Name     ="Arial";
+    labPort->Font->Size     =12;
+    labPort->Caption        ="Port";
+    labPort->Tag            =iMyTag;
+
+    str.sprintf("edtAddress%02d", iMyTag);
+    edtAddress->Parent      =gbATC;
+    edtAddress->Name        =str;
+    edtAddress->Left        =195;
+    edtAddress->Top         =54;
+    edtAddress->Width       =130;
+    edtAddress->Height      =26;
+    edtAddress->Font->Color =clBlack;
+    edtAddress->Font->Name  ="Arial";
+    edtAddress->Font->Size  =12;
+    str.sprintf("127.0.0.%d", iMyTag+1);
+    edtAddress->Text        =str;
+    edtAddress->Tag          =iMyTag;
+
+    str.sprintf("edtPort%02d", iMyTag);
+    edtPort->Parent         =gbATC;
+    edtPort->Name           =str;
+    edtPort->Left           =330;
+    edtPort->Top            =54;
+    edtPort->Width          =60;
+    edtPort->Height         =26;
+    edtPort->Font->Color    =clBlack;
+    edtPort->Font->Name     ="Arial";
+    edtPort->Font->Size     =12;
+    str.sprintf("10%02d", iMyTag);
+    edtPort->Text           =str;
+    edtPort->Tag            =iMyTag;
+
+    str.sprintf("edtSendData%02d", iMyTag);
+    edtSendData->Parent     =gbATC;
+    edtSendData->Name       =str;
+    edtSendData->Left       =194;
+    edtSendData->Top        =89;
+    edtSendData->Width      =251;
+    edtSendData->Height     =24;
+    edtSendData->Font->Color=clBlack;
+    edtSendData->Font->Name ="Arial";
+    edtSendData->Font->Size =10;
+    edtSendData->Text       ="";
+    edtSendData->Tag        =iMyTag;
+
+    str.sprintf("BitBtnSet%02d", iMyTag);
+    BitBtnSet->Parent       =gbATC;
+    BitBtnSet->Name         =str;
+    BitBtnSet->Left         =396;
+    BitBtnSet->Top          =54;
+    BitBtnSet->Width        =49;
+    BitBtnSet->Height       =30;
+    BitBtnSet->Caption      ="SET";
+    BitBtnSet->Font->Color  =clNavy;
+    BitBtnSet->Font->Name   ="Arial";
+    BitBtnSet->Font->Size   =12;
+    BitBtnSet->Tag          =iMyTag;
+
+    str.sprintf("BitBtnConnect%02d", iMyTag);
+    BitBtnConnect->Parent       =gbATC;
+    BitBtnConnect->Name         =str;
+    BitBtnConnect->Left         =450;
+    BitBtnConnect->Top          =16;
+    BitBtnConnect->Width        =120;
+    BitBtnConnect->Height       =30;
+    BitBtnConnect->Caption      ="Connect";
+    BitBtnConnect->Font->Color  =clGreen;
+    BitBtnConnect->Font->Name   ="Arial";
+    BitBtnConnect->Font->Size   =12;
+    BitBtnConnect->Tag          =iMyTag;
+
+    str.sprintf("BitBtnDisconnect%02d", iMyTag);
+    BitBtnDisconnect->Parent       =gbATC;
+    BitBtnDisconnect->Name         =str;
+    BitBtnDisconnect->Left         =450;
+    BitBtnDisconnect->Top          =51;
+    BitBtnDisconnect->Width        =120;
+    BitBtnDisconnect->Height       =30;
+    BitBtnDisconnect->Caption      ="Disconnect";
+    BitBtnDisconnect->Font->Color  =TColor(0x00404080);
+    BitBtnDisconnect->Font->Name   ="Arial";
+    BitBtnDisconnect->Font->Size   =12;
+    BitBtnDisconnect->Tag          =iMyTag;
+
+    str.sprintf("BitBtnSend%02d", iMyTag);
+    BitBtnSend->Parent       =gbATC;
+    BitBtnSend->Name         =str;
+    BitBtnSend->Left         =450;
+    BitBtnSend->Top          =86;
+    BitBtnSend->Width        =120;
+    BitBtnSend->Height       =30;
+    BitBtnSend->Caption      ="Send";
+    BitBtnSend->Font->Color  =clNavy;
+    BitBtnSend->Font->Name   ="Arial";
+    BitBtnSend->Font->Size   =12;
+    BitBtnSend->Tag          =iMyTag;
+
+    str.sprintf("MemoATC%02d", iMyTag);
+    MemoATC->Parent       =gbATC;
+    MemoATC->Name         =str;
+    MemoATC->Color        =TColor(0x00DFD9CC);
+    MemoATC->Left         =576;
+    MemoATC->Top          =16;
+    MemoATC->Width        =374;
+    MemoATC->Height       =97;
+    MemoATC->Font->Color  =clBlack;
+    MemoATC->Font->Name   ="Arial";
+    MemoATC->Font->Size   =10;
+    MemoATC->Tag          =iMyTag;
+    MemoATC->ScrollBars   =ssVertical;
+
+    str.sprintf("pal_SV%02d", iMyTag);
+    pal_SV->Parent       =gbATC;
+    pal_SV->Name         =str;
+    pal_SV->Color        =clWhite;
+    pal_SV->Left         =11;
+    pal_SV->Top          =63;
+    pal_SV->Width        =70;
+    pal_SV->Height       =25;
+    pal_SV->Font->Color  =clBlack;
+    pal_SV->Font->Name   ="Arial";
+    pal_SV->Font->Size   =12;
+    pal_SV->Text         ="000.0℃";
+    pal_SV->Tag          =iMyTag;
+
+    str.sprintf("pal_PV%02d", iMyTag);
+    pal_PV->Parent       =gbATC;
+    pal_PV->Name         =str;
+    pal_PV->Color        =TColor(0x00DFD9CC);
+    pal_PV->Left         =12;
+    pal_PV->Top          =89;
+    pal_PV->Width        =70;
+    pal_PV->Height       =25;
+    pal_PV->Font->Color  =clBlack;
+    pal_PV->Font->Name   ="Arial";
+    pal_PV->Font->Size   =12;
+    pal_PV->Caption      ="000.0℃";
+    pal_PV->Tag          =iMyTag;
+
+    str.sprintf("cbEnableSite%02d", iMyTag);
+    cbEnableSite->Parent       =gbATC;
+    cbEnableSite->Name         =str;
+    cbEnableSite->Left         =88;
+    cbEnableSite->Top          =24;
+    cbEnableSite->Width        =109;
+    cbEnableSite->Height       =17;
+    cbEnableSite->Font->Color  =clBlack;
+    cbEnableSite->Font->Name   ="Arial";
+    cbEnableSite->Font->Size   =12;
+    cbEnableSite->Caption      ="Enable Site";
+    cbEnableSite->Tag          =iMyTag;
+}
+#endif // GOLDEN VERBATIM -- golden ATC/ATCInterface.cpp:961-1274  (GATE G-PTW6c-TMyHonPrecATCPanel, end)
 TMyHonPrecATCPanel::TMyHonPrecATCPanel(TComponent* Owner, int index) : TComponent(Owner)         //設定元件位置
 {
     AnsiString str;

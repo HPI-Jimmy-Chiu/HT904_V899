@@ -365,6 +365,125 @@ void GetOutArmToShtCellPos(int iRow, int iCol, int &Ypos, int &Xpos)            
 //==  GATED hardware helpers kept as ACTIVE compiling stubs (// TODO(W7)).
 //==  Golden bodies are MOT[]/OutArmZSafe/ScanMotorStatus/sensor-bound.
 //==============================================================================
+// ===========================================================================
+//  GOLDEN VERBATIM PAIR -- MoveOutArmToAutoSafe_9045()
+//  GATED : golden aoutarm9045.cpp:55-155 (101 lines), inert reference text.
+//  LIVE  : the MoveOutArmToAutoSafe_9045() body immediately AFTER the #endif below.  It is UNCHANGED by
+//          this wave -- net behaviour change is ZERO.
+//  WHY   : the census scored this "translated" because a same-named LIVE body
+//          existed, without comparing SIZE.  Golden's 101 lines were NOWHERE in
+//          the tree -- lost text, not deferred behaviour.  Now the text EXISTS
+//          and is auditable, so a later un-gate is mechanical.
+//  NOTE  : golden's body is MOT[]/OutArmZSafe/SetOutArmHome/WAR0257 bound.
+//  RULES : nothing inside the gate is fixed, renamed, reflowed or reindented;
+//          it is golden's bytes.  Nothing it references had to be made to
+//          exist -- no stub, declaration or header was added for it.
+//  SHAPE : same pair shape as csystem.cpp MainProc / atester.cpp (PT-W6a/W6b)
+//          golden-verbatim gates.
+// ===========================================================================
+#if 0 // GOLDEN VERBATIM -- golden aoutarm9045.cpp:55-155 (101 lines).  GATE G-PTW6c-MoveOutArmToAutoSafe_9045.  NOT COMPILED: the ACTIVE MoveOutArmToAutoSafe_9045() is the body immediately after this #endif.
+bool MoveOutArmToAutoSafe_9045()
+{
+    bool OK=true;
+    int iAlarmSuck=0, iAlarmSuck1=0;
+    static int iRetryCount=0;
+    static int iRetryFail=0;
+    int iMot=0;
+    #ifndef SOFT_SIMULTE
+    int iZPos=0;
+    bool bHomeFlag=false;
+    AnsiString sData;
+    #endif
+
+    for(int i=0; i<OutArmSuck.iMotRow; i++)
+    {
+        for(int j=0; j<OutArmSuck.iMotCol; j++)
+        {
+            iMot=(InOutArmPickerUseMotor==eptUseMotCyn)?MOutArmZA:OutArmSuck.Suck[i][j].iMotNo;
+            if(MOT[iMot].MotorMove(Prod.ZOutArmSafe[i][j])==false)
+            {
+                OK=false;
+                #ifndef SOFT_SIMULTE
+                MOT[iMot].ScanMotorStatus();
+                bHomeFlag=MOT[iMot].Led[iHomeLed];
+                if(bHomeFlag)                                                   //JerryYang 20200924 : Z軸失步偵測
+                {
+                   iZPos=MOT[iMot].ReadPos();
+                   if(iZPos<-200)
+                   {
+                        sData.sprintf("%s pos %d home sensor on", MOT[iMot].Alias, iZPos);
+                        if(CUSTOMER_CODE==CC_ATEC)                              //Steven 20221224 : 艾科暫時不檢查Z軸Home Sensor
+                            MyDBIProcess("Motion", sData, "MoveOutArmToAutoSafe_9045");
+                        else
+                            ShowMyMessage(sData, "", "MoveOutArmToAutoSafe_9045");
+                        SetOutArmHome();
+                   }
+                }
+                #endif
+            }
+        }
+    }
+
+    if(OK)
+    {
+        iAlarmSuck=OutArmZSafe(DETECT_ALL_FLAG);
+        if(iAlarmSuck!=-1)
+        {
+            if(iRetryCount>50)
+            {
+                iRetryCount=0;
+                if(iRetryFail<3)
+                {
+                    iRetryFail++;
+                    SetOutArmHome();
+                }
+                else
+                {
+                    ShowErrorMessage("WAR0257", 0, MOutArmX, false, MOT[iAlarmSuck].NumberAlias);                       //出料手臂的吸嘴 %s 沒有在安全位置
+                    iRetryFail=0;
+                }
+                return false;
+            }
+            else
+            {
+                iRetryCount++;
+                return false;
+            }
+        }
+        iRetryFail=0;
+        iRetryCount=0;
+    }
+
+    if(OK)
+    {
+        for(int i=0; i<OutArmSuck.iMotRow; i++)
+        {
+            for(int j=0; j<OutArmSuck.iMotCol; j++)
+            {
+                iMot=(InOutArmPickerUseMotor==eptUseMotCyn)?MOutArmZA:OutArmSuck.Suck[i][j].iMotNo;
+                MOT[iMot].fCMD=false;
+            }
+        }
+    }
+
+    if(OK==true && iAlarmSuck==-1)                                              //Jou 2011-02-09
+    {
+        iAlarmSuck1=OutArmZSafe(DETECT_SENSOR_FLAG);
+        if(iAlarmSuck1==-1)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else
+    {
+        return false;
+    }
+}
+#endif // GOLDEN VERBATIM -- golden aoutarm9045.cpp:55-155  (GATE G-PTW6c-MoveOutArmToAutoSafe_9045, end)
 bool MoveOutArmToAutoSafe_9045()                                                // golden :55
 {
     // golden :57-154 walks OutArmSuck.iMotRow/iMotCol driving MOT[].MotorMove /
@@ -373,6 +492,76 @@ bool MoveOutArmToAutoSafe_9045()                                                
     return true;                                                                // TODO(W7) -- golden aoutarm9045.cpp:55 (MOT[]/OutArmZSafe motion)
 }
 //-----------------------------------------------------------------------------
+// ===========================================================================
+//  GOLDEN VERBATIM PAIR -- GetOutArmZDownPos_9045()
+//  GATED : golden aoutarm9045.cpp:198-249 (52 lines), inert reference text.
+//  LIVE  : the GetOutArmZDownPos_9045() body immediately AFTER the #endif below.  It is UNCHANGED by
+//          this wave -- net behaviour change is ZERO.
+//  WHY   : the census scored this "translated" because a same-named LIVE body
+//          existed, without comparing SIZE.  Golden's 52 lines were NOWHERE in
+//          the tree -- lost text, not deferred behaviour.  Now the text EXISTS
+//          and is auditable, so a later un-gate is mechanical.
+//  NOTE  : golden's body reads OutArmSuck.Suck[][].iMyRow/iMyCol + Prod.ZPlace[][].
+//  RULES : nothing inside the gate is fixed, renamed, reflowed or reindented;
+//          it is golden's bytes.  Nothing it references had to be made to
+//          exist -- no stub, declaration or header was added for it.
+//  SHAPE : same pair shape as csystem.cpp MainProc / atester.cpp (PT-W6a/W6b)
+//          golden-verbatim gates.
+// ===========================================================================
+#if 0 // GOLDEN VERBATIM -- golden aoutarm9045.cpp:198-249 (52 lines).  GATE G-PTW6c-GetOutArmZDownPos_9045.  NOT COMPILED: the ACTIVE GetOutArmZDownPos_9045() is the body immediately after this #endif.
+void GetOutArmZDownPos_9045(int iWhichAuto, bool bNeedDown, bool ZDownSel[MAX_ARM_Row][MAX_ARM_Col], int iZPos[MAX_ARM_Row][MAX_ARM_Col])                       //Steven 20230323 : For HT1032
+{
+    int iR, iC;
+    for(int i=0; i<OutArmSuck.iMaxRow; i++)
+    {
+        for(int j=0; j<OutArmSuck.iMaxCol; j++)
+        {
+            iR=OutArmSuck.Suck[i][j].iMyRow;                                    //實體Row   //Steven 20250826 : fixed for out arm offset
+            iC=OutArmSuck.Suck[i][j].iMyCol;                                    //實體Col
+
+            if(i<OutArmSuck.iPickRow && j<OutArmSuck.iPickCol)
+            {
+                if(bNeedDown==true)
+                {
+                    ZDownSel[i][j]=bOutArmSuckActive[i][j];
+                }
+                else
+                {
+                    iOutArmXPosition[i][j]=j;
+                    bOutArmSuckActive[i][j]=true;
+                    ZDownSel[i][j]=false;
+                }
+
+                if(ZDownSel[i][j])
+                {
+                    iZPos[i][j]=Prod.ZPlace[iWhichAuto][iR][iC];
+                }
+                else
+                {
+                    iZPos[i][j]=ZSafePos;
+                }
+            }
+            else
+            {
+                ZDownSel[i][j]=false;
+                iZPos[i][j]=ZSafePos;
+            }
+        }
+    }
+
+    if(InOutArmPickerUseMotor==eptUseMotCyn)
+    {
+        if(bNeedDown==true)
+        {
+            iZPos[0][0]=Prod.ZPlace[iWhichAuto][0][0];
+        }
+        else
+        {
+            iZPos[0][0]=ZSafePos;
+        }
+    }
+}
+#endif // GOLDEN VERBATIM -- golden aoutarm9045.cpp:198-249  (GATE G-PTW6c-GetOutArmZDownPos_9045, end)
 void GetOutArmZDownPos_9045(int iWhichAuto, bool bNeedDown, bool ZDownSel[MAX_ARM_Row][MAX_ARM_Col], int iZPos[MAX_ARM_Row][MAX_ARM_Col])                       //Steven 20230323 : For HT1032  -- golden :198
 {
     // golden :200-248 fills ZDownSel/iZPos from OutArmSuck.Suck[][].iMyRow/iMyCol
@@ -412,6 +601,138 @@ bool IsCheckOutArmDestroyActiveFinish(int iXPos, int iYPos)                     
 //  ACTIVE no-op so DoOutArm_9045's bCheckOutArmDestroyActive[][] guard reads false
 //  and dispatch proceeds (mirror in-arm CheckInArmDestroyActive gate).
 //------------------------------------------------------------------------------
+// ===========================================================================
+//  GOLDEN VERBATIM PAIR -- CheckOutArmDestroyActive()
+//  GATED : golden aoutarm9045.cpp:287-400 (114 lines), inert reference text.
+//  LIVE  : the CheckOutArmDestroyActive() body immediately AFTER the #endif below.  It is UNCHANGED by
+//          this wave -- net behaviour change is ZERO.
+//  WHY   : the census scored this "translated" because a same-named LIVE body
+//          existed, without comparing SIZE.  Golden's 114 lines were NOWHERE in
+//          the tree -- lost text, not deferred behaviour.  Now the text EXISTS
+//          and is auditable, so a later un-gate is mechanical.
+//  NOTE  : golden's body is the per-nozzle destroy-confirm SM (iTask[Row][Col], cases 1/200/300).
+//  RULES : nothing inside the gate is fixed, renamed, reflowed or reindented;
+//          it is golden's bytes.  Nothing it references had to be made to
+//          exist -- no stub, declaration or header was added for it.
+//  SHAPE : same pair shape as csystem.cpp MainProc / atester.cpp (PT-W6a/W6b)
+//          golden-verbatim gates.
+// ===========================================================================
+#if 0 // GOLDEN VERBATIM -- golden aoutarm9045.cpp:287-400 (114 lines).  GATE G-PTW6c-CheckOutArmDestroyActive.  NOT COMPILED: the ACTIVE CheckOutArmDestroyActive() is the body immediately after this #endif.
+void CheckOutArmDestroyActive()                                                 //jou 981130 start : 確認device確實destroy完成
+{
+    int iPos[MAX_ARM_Row][MAX_ARM_Col];
+    static int iTask[MAX_ARM_Row][MAX_ARM_Col]={{0, 0, 0, 0}, {0, 0, 0, 0}};
+    static int iXPos=0, iYPos=0;                                                //kevin 20120514 開吹氣時xy 馬達移動就關吹氣
+    int iXpos;
+    int iYpos;
+    int iMotZ;
+    int iWhichAuto, iCol, iRow, iMotor;
+    AnsiString Msg;
+
+    for(int i=0; i<OutArmSuck.iPickRow; i++)
+    {
+        for(int j=0; j<OutArmSuck.iPickCol; j++)
+        {
+            if(bOutArmCheckDestroyACT[i][j]==false)
+            {
+                iTask[i][j]=1;
+                continue;
+            }
+
+            switch(iTask[i][j])
+            {
+                case 1:
+                    bCheckOutArmDestroyActiveFinish[i][j]=false;                //ChungHung 201112296 add Pick 前先確認CheckInArmDestroyActive 已完成
+                    iMotZ=(InOutArmPickerUseMotor==eptUseMotCyn)?MOutArmZA:OutArmSuck.Suck[i][j].iMotNo;
+                    iPos[i][j]=MOT[iMotZ].ReadPos();
+                    if(iXPos!=MOT[MOutArmX].ReadPos() &&
+                       iYPos!=MOT[MOutArmY].ReadPos())                          //kevin 20120514 Xy 移動關吹氣
+                    {
+                        if(OutArmSuck.Item[i][j]==NULL_IC)                      //Steven 20120507 : 要持續吹氣
+                            OutArmSuck.Suck[i][j].OffDestroy();
+                    }
+
+                    if(iPos[i][j]>-500)
+                    {
+                        iTask[i][j]=200;
+                        OutArmSuck.Suck[i][j].OffDestroy();
+                    }
+                    else
+                    {
+                        if(OutArmSuck.Item[i][j]==NULL_IC)                      //Steven 20120507 : 要持續吹氣
+                        {
+                            if(ArmSpeed[InArm].bSuckOnDown)                     //jou 2012-10-29 大IC才持續吹氣
+                                OutArmSuck.Suck[i][j].OnDestroy();
+                            iXPos=MOT[MOutArmX].ReadPos();
+                            iYPos=MOT[MOutArmY].ReadPos();
+                        }
+                    }
+                    break;
+                case 200:
+                    OutArmSuck.Suck[i][j].OnSuck();
+                    CheckOutArmDestroyActiveDelay[i][j].SetSecAndOn(ArmSpeed[OutArm].dDestroyCheckTime);                //2013-08-01    Dell    modify  公司統一回吸功能
+                    if(ArmSpeed[OutArm].bSuckOnDown==false ||
+                       ArmSpeed[OutArm].bDestroyPauseCheck)                                                             //2013-08-01    Dell    modify  公司統一回吸功能
+                    {
+                        bCheckOutArmDestroyActive[i][j]=true;                                                           //Steven 20120507 : 要偵測完才可以動，會影響UPH
+                    }
+
+                    iTask[i][j]=300;
+                    break;
+                case 300:
+                    if(CheckOutArmDestroyActiveDelay[i][j].Off())
+                    {
+                        bResetOutArm=false;
+                        if(OutArmSuck.Suck[i][j].GetStatus())
+                        {
+                            iXpos=MOT[MOutArmX].ReadPos();
+                            iYpos=MOT[MOutArmY].ReadPos();
+                            ShowErrorMessage("WAR0258", 0, MOutArmX, false, OutArmSuck.Suck[i][j].sName);               //破壞錯誤, 請將IC取下
+
+                            iWhichAuto=OutArmPordRec[i][j].GetWhcihAuto();
+                            iCol=OutArmPordRec[i][j].GetAutoX();
+                            iRow=OutArmPordRec[i][j].GetAutoY();
+                            if(iWhichAuto>=0)                                                                           //Steven 20210316 : 掉料的時候, 清除Unloader tray上的資料
+                            {
+                                iMotor=iMMAuto[iWhichAuto];
+
+                                if(IniConfig.bE65_ClearTrayDataWhenOutArmDestoryErr)
+                                {
+                                    MOT[iMotor].SetTrayBinData(iCol, iRow, NULL_IC, AnsiString(""));
+
+                                    if(iWhichAuto<0)
+                                        Msg.sprintf("Clear unloader data error");
+                                    else if(iWhichAuto<iAutoCnt)
+                                        Msg.sprintf("Clear data of Auto%d, X:%d, Y%d", iWhichAuto+1, iCol, iRow);
+                                    else
+                                        Msg.sprintf("Clear data of Fix%d, X:%d, Y%d", iWhichAuto+1, iCol, iRow);
+
+                                    MyDBIProcess("Process", Msg);
+                                }
+                                OutArmPordRec[i][j].bUse=true;
+                                OutArmPordRec[i][j].AddErrorRecord("WAR0258", true, iXpos, iYpos);
+                            }
+                            bCheckOutArmDestroyActive[i][j]=true;
+                            iTask[i][j]=200;                                                                            //Steven 20120507 : 有出錯就繼續吸吸看，看IC有沒有被拿掉。
+                        }
+                        else
+                        {
+                            bCheckOutArmDestroyActiveFinish[i][j]=true;                                                 //ChungHung 201112296 add Pick 前先確認CheckInArmDestroyActive 已完成
+                            OutArmSuck.Suck[i][j].Normal();
+                            OutArmPordRec[i][j].InitialRecord();                                                        //Steven 20210316 : 掉料的時候, 清除Unloader tray上的資料
+                            bOutArmCheckDestroyACT[i][j]=false;
+                            bCheckOutArmDestroyActive[i][j]=false;
+                            iTask[i][j]=1;                                                                              //ChungHung 20111229 add 防止跳出後bInArmCheckDestroyACT馬上被設為true 會照成有一次無效
+                        }
+                    }
+                    break;
+                default :
+                    break;
+            }
+        }
+    }
+}
+#endif // GOLDEN VERBATIM -- golden aoutarm9045.cpp:287-400  (GATE G-PTW6c-CheckOutArmDestroyActive, end)
 void CheckOutArmDestroyActive()                                                 //jou 981130 : 確認device確實destroy完成
 {
 #if 0 // TODO(W7) -- golden aoutarm9045.cpp:287-400 (MOT[]/OutArmSuck destroy SM + OutArmPordRec[][] + SetTrayBinData)
@@ -609,6 +930,64 @@ void DoOutArm_9045()                                                            
 //  + ShowErrorMessage("WAR0226"); MOT[]/CheckSuckInitialStatus hardware-bound.
 //  GATED whole-body; offline init-state is OK (no fail) -> true.
 //-----------------------------------------------------------------------------
+// ===========================================================================
+//  GOLDEN VERBATIM PAIR -- CheckOutArmInitState_9045()
+//  GATED : golden aoutarm9045.cpp:632-671 (40 lines), inert reference text.
+//  LIVE  : the CheckOutArmInitState_9045() body immediately AFTER the #endif below.  It is UNCHANGED by
+//          this wave -- net behaviour change is ZERO.
+//  WHY   : the census scored this "translated" because a same-named LIVE body
+//          existed, without comparing SIZE.  Golden's 40 lines were NOWHERE in
+//          the tree -- lost text, not deferred behaviour.  Now the text EXISTS
+//          and is auditable, so a later un-gate is mechanical.
+//  NOTE  : golden's body walks OutArmSuck + CheckSuckInitialStatus + WAR0226.
+//  RULES : nothing inside the gate is fixed, renamed, reflowed or reindented;
+//          it is golden's bytes.  Nothing it references had to be made to
+//          exist -- no stub, declaration or header was added for it.
+//  SHAPE : same pair shape as csystem.cpp MainProc / atester.cpp (PT-W6a/W6b)
+//          golden-verbatim gates.
+// ===========================================================================
+#if 0 // GOLDEN VERBATIM -- golden aoutarm9045.cpp:632-671 (40 lines).  GATE G-PTW6c-CheckOutArmInitState_9045.  NOT COMPILED: the ACTIVE CheckOutArmInitState_9045() is the body immediately after this #endif.
+bool CheckOutArmInitState_9045()                                                //Steven 20100104 : 將所有錯誤整合只顯示一次
+{
+    bool bHasFail=false;
+    int ret;
+    int flag[MAX_ARM_Row][MAX_ARM_Col]={{0, 0, 0, 0}, {0, 0, 0, 0}};
+    AnsiString errSuck="at Out Arm Suck";
+    int iXpos=MOT[MOutArmX].ReadPos();
+    int iYpos=MOT[MOutArmY].ReadPos();
+    for(int i=0; i<OutArmSuck.iPickRow; i++)
+    {
+        for(int j=0; j<OutArmSuck.iPickCol; j++)
+        {
+            flag[i][j]=CheckSuckInitialStatus(OutArmSuck, i, j);
+            if(flag[i][j]!=0)
+            {
+                bHasFail=true;
+                errSuck+=OutArmSuck.Suck[i][j].sName;
+            }
+        }
+    }
+
+    if(bHasFail)
+        ret=ShowErrorMessage("WAR0226", K_RETRY|K_SKIP, MOutArmX, false, errSuck);
+
+    if(ret==K_SKIP)
+    {
+        for(int i=0; i<OutArmSuck.iMaxRow; i++)
+        {
+            for(int j=0; j<OutArmSuck.iMaxCol; j++)
+            {
+                if(flag[i][j]>=Vaccum_Initial_Off)
+                {
+                    OutArmSuck.PordRec[i][j].AddErrorRecord("WAR0226", true, iXpos, iYpos);                             //Steven 20160114 (jou) : Add Production Error Log
+                    OutArmSuck.SetItemData(i, j, HAS_NULL_IC);
+                }
+            }
+        }
+    }
+    return !bHasFail;
+}
+#endif // GOLDEN VERBATIM -- golden aoutarm9045.cpp:632-671  (GATE G-PTW6c-CheckOutArmInitState_9045, end)
 bool CheckOutArmInitState_9045()                                                //Steven 20100104 : 將所有錯誤整合只顯示一次
 {
 #if 0 // TODO(W7) -- golden aoutarm9045.cpp:632-671 (CheckSuckInitialStatus/MOT[]/ShowErrorMessage WAR0226)
@@ -757,6 +1136,126 @@ void InitDoOutArmAdditionalFunction()                                           
     iOutArmAdditionalFunctionTask=1;
 }
 //------------------------------------------------------------------------------
+// ===========================================================================
+//  GOLDEN VERBATIM PAIR -- CheekNeedToDoOutArmAdditionalFunction()
+//  GATED : golden aoutarm9045.cpp:2143-2244 (102 lines), inert reference text.
+//  LIVE  : the CheekNeedToDoOutArmAdditionalFunction() body immediately AFTER the #endif below.  It is UNCHANGED by
+//          this wave -- net behaviour change is ZERO.
+//  WHY   : the census scored this "translated" because a same-named LIVE body
+//          existed, without comparing SIZE.  Golden's 102 lines were NOWHERE in
+//          the tree -- lost text, not deferred behaviour.  Now the text EXISTS
+//          and is auditable, so a later un-gate is mechanical.
+//  NOTE  : golden's body is the Rotate/AOI/FixAI predicate (tRotate/tAOISetup/FrmAOI/fFixAICCD).
+//  RULES : nothing inside the gate is fixed, renamed, reflowed or reindented;
+//          it is golden's bytes.  Nothing it references had to be made to
+//          exist -- no stub, declaration or header was added for it.
+//  SHAPE : same pair shape as csystem.cpp MainProc / atester.cpp (PT-W6a/W6b)
+//          golden-verbatim gates.
+// ===========================================================================
+#if 0 // GOLDEN VERBATIM -- golden aoutarm9045.cpp:2143-2244 (102 lines).  GATE G-PTW6c-CheekNeedToDoOutArmAdditionalFunction.  NOT COMPILED: the ACTIVE CheekNeedToDoOutArmAdditionalFunction() is the body immediately after this #endif.
+bool CheekNeedToDoOutArmAdditionalFunction()                                    //Steven 20210609 : 整合Precisor, Rotator, Bottom CCD, Die Clean
+{
+    bool bResult=false;
+    bool bSupportFixAI=false;
+    if(OutArmSuck.bAlreadyRotate==false)
+    {
+        if(CheckRotateOutNotFinish())
+        {
+            bOutRotator=true;
+            bResult=true;
+        }
+        else if(USE_ROTATE_KIT==1 &&
+                tRotate.ActiveRotate &&
+                TrayForm.iRotateKIT_InputType!=0 &&
+                (iOutRotateFinish==0 || iOutRotateFinish==1))
+        {
+            bOutRotator=true;
+            bResult=true;
+        }
+    }
+
+    if(CosFunction.bART_RT_NoRotate && tRotate.bART_RT_NoRotate && bCanRunSCKART)                                       //Sam 20240809 : ART RT No Rotate
+        bOutRotator=false;
+    if(OutArmSuck.bAlreadyAOI==false)
+    {
+//        if(tAOISetup.bEnabledAOI ||                                             //2014-03-04    Dell    for SPIL WLP Add 5S Inspection
+//           (USE_Scanner_AOI_Inspection==true && ScannerAOIIF.iEnableScannerMode!=0) ||
+//           (USE_Top_Scanner_AOI_Inspection==true && ScannerAOIIF.iEnableTopScannerMode!=0))
+        if(tAOISetup.bEnabledAOI ||  //2014-03-04    Dell    for SPIL WLP Add 5S Inspection
+           (USE_Scanner_AOI_Inspection==(int)eBtnAOI_BottomInstall && ScannerAOIIF.iEnableScannerMode!=0) || //AI(general) 20260411 (RogerYang) : fix eBtnAOI_Uninstall typo, was always false
+           (USE_Top_Scanner_AOI_Inspection==(int)eBtnAOI_BottomInstall && ScannerAOIIF.iEnableTopScannerMode!=0) ||
+           FrmAOI->RunTopBottomInspect()==true)  //Jimmychiu 20240322 : Top & Bottom Inspect
+        {
+            bDoAOI=true;
+            bResult=true;
+        }
+    }
+
+    if(OutArmSuck.bAlreadyFixAI==false)                                         //Sam 20211220 : 整合 Fix AI AOI
+    {
+        if(TestIF.iTestMode==SingleSite                         ||
+           TestIF.iTestMode==QualSite2X2N                       ||
+           TestIF.iTestMode==DualSite)
+        {
+            bSupportFixAI=true;
+        }
+        else if(TestIF.iTestMode==QualSite2X2)
+        {
+            if(USE_PICKER_COUNT==0)
+            {
+                bSupportFixAI=true;
+            }
+            else if(TestIF.iUseSuckMode==4 && TestIF.dSiteXPitch>iXpitchMinX2)
+            {
+                bSupportFixAI=true;
+            }
+            else
+            {
+                if(TestIF.iUseSuckMode==8 &&
+                   TestIF.dSiteXPitch>iXpitchMinX2)                             //Sam 20231107 : 補 Fix AOI 模式
+                {
+                    bSupportFixAI=true;
+                }
+            }
+        }
+       else if(TestIF.iTestMode==QualSite1X4 ||                                 //Sam 20220613: 修正 FixAOI 未動作問題
+               TestIF.iTestMode==_12Site2X6  ||                                 //Sam 20240329 : 新增 FixAOI 模式
+               TestIF.iTestMode==_16Site2X8)
+        {
+            //if(TestIF.iUseSuckMode==4)                                        //Sam 20231107 : 補 Fix AOI 模式 Mark
+            {
+                bSupportFixAI=true;
+            }
+        }
+        else if(TestIF.iTestMode==_8Site2X4 ||
+                TestIF.iTestMode==_16Site4X4)
+        {
+            if(ArmCanSuck4IC(0, true)==false || USE_PICKER_COUNT==0)
+            {
+            }
+            else
+            {
+               bSupportFixAI=true;
+            }
+        }
+
+        if(bSupportFixAI &&
+           USE_Fix_AI_CCD &&
+           TestIF_File.bEnableFix2BGAAICCD &&
+           fFixAICCD->NeedToGrabImage())                                        //KaiChen 20190508 ：矽格湖口 AI CCD Function
+        {
+            bDoFixAI=true;
+            bResult=true;
+        }
+    }
+
+    if(bResult)
+    {
+        InitDoOutArmAdditionalFunction();
+    }
+    return bResult;
+}
+#endif // GOLDEN VERBATIM -- golden aoutarm9045.cpp:2143-2244  (GATE G-PTW6c-CheekNeedToDoOutArmAdditionalFunction, end)
 bool CheekNeedToDoOutArmAdditionalFunction()                                    //Steven 20210609 : 整合Precisor, Rotator, Bottom CCD, Die Clean  -- golden :2143
 {
     bool bResult=false;
@@ -1465,6 +1964,153 @@ bool DoOutArmIonFanGiveWay()                                                    
 //==  is the live offline behavior (debug flag off by default); the bX/bY compare
 //==  body (MOT[] encoders + ShowErrorMessage alarm sink) is gated.
 //==============================================================================
+// ===========================================================================
+//  GOLDEN VERBATIM PAIR -- InspectOutArmPosition()
+//  GATED : golden aoutarm9045.cpp:3865-3993 (129 lines), inert reference text.
+//  LIVE  : the InspectOutArmPosition() body immediately AFTER the #endif below.  It is UNCHANGED by
+//          this wave -- net behaviour change is ZERO.
+//  WHY   : the census scored this "translated" because a same-named LIVE body
+//          existed, without comparing SIZE.  Golden's 129 lines were NOWHERE in
+//          the tree -- lost text, not deferred behaviour.  Now the text EXISTS
+//          and is auditable, so a later un-gate is mechanical.
+//  NOTE  : golden's body is the bX/bY encoder compare + WAR0263/WAR0264 alarm sink.
+//  RULES : nothing inside the gate is fixed, renamed, reflowed or reindented;
+//          it is golden's bytes.  Nothing it references had to be made to
+//          exist -- no stub, declaration or header was added for it.
+//  SHAPE : same pair shape as csystem.cpp MainProc / atester.cpp (PT-W6a/W6b)
+//          golden-verbatim gates.
+// ===========================================================================
+#if 0 // GOLDEN VERBATIM -- golden aoutarm9045.cpp:3865-3993 (129 lines).  GATE G-PTW6c-InspectOutArmPosition.  NOT COMPILED: the ACTIVE InspectOutArmPosition() is the body immediately after this #endif.
+void InspectOutArmPosition(int iTarget, int iSuckRow, int iSuckCol, int iTargetRow, int iTargetCol, int iAction)
+{
+    if(IniConfig.bE74_InspectArmPosition==false)                                //Jimmychiu 20240408 : debug for inarm position
+        return;
+
+    bool bX, bY;
+    int iOutPutTray;
+    AnsiString sError, sPos="";
+    AnsiString sPlace;
+
+    if(iAction==iOutPlaceToAuto)
+    {
+        sPlace="Place to";
+        sPos=s6TrayName[iTarget];
+
+        if(AUTO3_IS_MAGAZINE==1             &&                                  //JerryYang 20221215 : Magazine把fix區當buffer區功能
+           TestIF_File.iMagFixTrayType==1   &&
+           iTarget>=iMagMin)
+        {
+            iOutPutTray=iWhichBuff;
+        }
+        else
+        {
+            iOutPutTray=iTarget;
+        }
+    }
+    else
+    {
+        return;                                                                 //Steven 20241220 : 暫時跳過
+        sPlace="Pick from";
+        if(iTarget==MOutShuttle1)
+        {
+            sPos="Shuttle 1";
+        }
+        else if(iTarget==MOutShuttle2)
+        {
+            sPos="Shuttle 2";
+        }
+        else if(iTarget==MOutRotateKit)
+        {
+            sPos="Out Rotator";
+        }
+    }
+
+    int XEncoder=0, YEncoder=0, HardwarePosX=0, HardwarePosY=0;
+
+    if(OutArmSuck.Item[iSuckRow][iSuckCol]!=HAS_NULL_IC &&
+       OutArmSuck.Item[iSuckRow][iSuckCol]!=HAS_NULL_CLEAN_IC)
+    {
+        if(iTarget==MOutShuttle1 ||
+           iTarget==MOutShuttle2)
+            GetOutArmToShtCellPos(iSuckRow, iSuckCol, YEncoder, XEncoder);
+        else
+            GetOutArmCellPos(iSuckRow, iSuckCol, YEncoder, XEncoder);
+
+        if(iAction==iOutPlaceToAuto)
+        {
+            if(iTarget==eBulkBox)
+            {
+                HardwarePosX=Prod.iOutArmBinBoxX+dOutArmXPitch_1Step*iTargetCol;
+                HardwarePosY=Prod.iOutArmBinBoxY-Prod.iOutArmBinBoxY*200;       //待確認
+            }
+            else                                                                //Jimmychiu 20240731 : remove offset value
+            {
+                HardwarePosX=Prod.XStart[iOutPutTray][iOutArmYBase][iOutArmXBase]+AutoForm[iOutPutTray]->XPitch*iTargetCol;                                     //Jimmy 20240826 : fixed for E74
+                HardwarePosY=Prod.YStart[iOutPutTray][iOutArmYBase][iOutArmXBase]-AutoForm[iOutPutTray]->YPitch*iTargetRow;
+
+                if(USE_PICKER_COUNT==ep1Picker)
+                    HardwarePosX=HardwarePosX;
+                else
+                    HardwarePosX+=((OutArmOffSet[GetOutOffsetFromWhichAuto(iOutPutTray)]->GetVariable())/3)*(iSuckCol-iOutArmXBase);
+
+                HardwarePosY-=OutArmOffSet[GetOutOffsetFromWhichAuto(iOutPutTray)]->GetVariableY()*(iSuckRow-iOutArmYBase);
+            }
+        }
+        else
+        {
+            if(iTarget==MOutShuttle1 ||
+               iTarget==MOutShuttle2)
+            {
+                GetShtRowColStartPos(iTarget,HardwarePosX,HardwarePosY);
+                HardwarePosX+=TestIF.dSiteXPitch*iTargetCol;
+                HardwarePosY-=TestIF.dSiteYPitch*iTargetRow;
+                int iXoffset=0, iYoffset=0;
+                if(iTarget==MOutShuttle1)
+                {
+                    iXoffset=OutArmOffSet[OutOfsOutSh1]->GetVariable();
+                    iYoffset=OutArmOffSet[OutOfsOutSh1]->GetVariableY();
+                }
+                else                                                            //MOutShuttle2
+                {
+                    iXoffset=OutArmOffSet[OutOfsOutSh2]->GetVariable();
+                    iYoffset=OutArmOffSet[OutOfsOutSh2]->GetVariableY();
+                }
+
+                if(USE_PICKER_COUNT==ep1Picker)
+                    HardwarePosX=HardwarePosX;
+                else
+                    HardwarePosX+=(iXoffset/3)*(iSuckCol-iOutArmXBase);
+
+                HardwarePosY-=iYoffset*(iSuckRow-iOutArmYBase);
+                if(TestIF.bNS7000kit)                                           //jou 981208 start : NS7000 bias kit
+                {
+                    int iShiftY=(TestIF.dSiteYPitch==0)?(6000/2):(TestIF.dSiteYPitch/2);
+                    if(iTarget==MOutShuttle1)
+                        HardwarePosY+=iShiftY;
+                    else
+                        HardwarePosY-=iShiftY;
+                }
+            }
+            else if(iTarget==MOutRotateKit)                                     //待確認
+            {
+                HardwarePosX=Prod.iOutArmRotateToUnloaderX;
+                HardwarePosY=Prod.iOutArmRotateToUnloaderY;
+            }
+        }
+
+        int iLimit=100*InputLimit.iOffsetXYHigh;                                //Jimmychiu 20240731 : remove offset value
+        bX=MOT[MOutArmX].CheckArmPosArrival(HardwarePosX, XEncoder, iLimit);    //Steven 20240719 : 放寬檢查的範圍
+        bY=MOT[MOutArmY].CheckArmPosArrival(HardwarePosY, YEncoder, iLimit);
+        if(bX==false || bY==false)
+        {
+            sError.sprintf("OutArm Suck[%d, %d] Pos(Y=%d, X=%d), \r%s %s [%d, %d] Pos(Y=%d, X=%d)",
+                           iSuckRow, iSuckCol, YEncoder, XEncoder, sPlace, sPos, iTargetRow, iTargetCol, HardwarePosY, HardwarePosX);
+
+            ShowMyMessage(sError);
+        }
+    }
+}
+#endif // GOLDEN VERBATIM -- golden aoutarm9045.cpp:3865-3993  (GATE G-PTW6c-InspectOutArmPosition, end)
 void InspectOutArmPosition(int iTarget, int iSuckRow, int iSuckCol, int iTargetRow, int iTargetCol, int iAction)   // golden :3865
 {
     if(IniConfig.bE74_InspectArmPosition==false)                                //Jimmychiu 20240408 : debug for inarm position

@@ -571,6 +571,538 @@ TQPF_Timer DoTestYFrontDelay_32, DoTestYFrontDelay2_32;
 //  real-time-vision handshake) -- see file-header banner island #2.
 //==============================================================================
 int i32RTCAutoModelVerifyTask=1;
+// ===========================================================================
+//  GOLDEN VERBATIM PAIR -- Do32RTCAutoModelVerify
+//  golden atester_32Site.cpp:184-681 (498 golden lines), transcribed CHARACTER-FOR-CHARACTER
+//  (Big5/cp950 -> UTF-8 only) and GATED OFF.  The block is INERT: the ACTIVE
+//  Do32RTCAutoModelVerify is the 204-line body immediately after the #endif, and that body is
+//  UNCHANGED by this pair being here.  Net behaviour change: ZERO.
+//
+//  WHY: the census scored this function "translated" because a same-named
+//  LIVE body exists -- but it never compares SIZE.  That body is 204 lines
+//  standing in for 498 golden lines whose text was NOWHERE in this tree.
+//  That is LOST TEXT, not deferred behaviour.  Now the text EXISTS and is
+//  auditable line-by-line, and a later un-gate is mechanical rather than a
+//  re-translation.
+//
+//  NOTE ON WHAT WAS ACTUALLY MISSING: the live body faithfully carries golden
+//  cases 1/100/200/12010-12400 (golden :218-363).  The lost text is golden
+//  :364-679 -- cases 12500..14000, the RTC real-time-vision handshake -- for
+//  which the live body holds only a one-line `case 12500:` placeholder inside
+//  its own pre-existing `#if 0 // TODO(W5-atester32site-vision)` gate.  This
+//  pair restores the WHOLE function (:184-681) rather than just that island so
+//  a diff of the gate against golden's range is exactly empty.
+//
+//  NOTHING inside the gate is fixed, renamed, reflowed or reindented --
+//  golden's own defects are preserved ON PURPOSE so a diff against golden
+//  stays EMPTY (this wave's report lists them with their golden line
+//  numbers).  Same shape as this tree's existing pairs: atester.cpp
+//  GetTesterResult (golden 1,705 gated / 6-line live) and csystem.cpp
+//  MainProc (2,390 / 26), DoTrayFeedProcess (1,235 / 6),
+//  CheckContinusStartIsReady (700 / 9), DoAllProcess.  Being gated it needs
+//  NO callee to exist -- only lexical validity; no stub, declaration or
+//  header edit was added anywhere for its symbols.
+// ===========================================================================
+#if 0 // GOLDEN VERBATIM -- golden atester_32Site.cpp:184-681.  INERT reference text; the live Do32RTCAutoModelVerify follows the #endif.
+bool Do32RTCAutoModelVerify(bool bInitial)
+{
+    if(bInitial==true)
+    {
+        i32RTCAutoModelVerifyTask=1;
+        return false;
+    }
+
+    static bool bVerifyNG=false;
+    static bool bFTestSuckUse[MAX_SOCKET_ROW][MAX_SOCKET_COL]={{false, false, false, false, false, false, false, false},
+                                                               {false, false, false, false, false, false, false, false},
+                                                               {false, false, false, false, false, false, false, false},
+                                                               {false, false, false, false, false, false, false, false} };
+
+    static bool bFTSuckFinish[MAX_SOCKET_ROW][MAX_SOCKET_COL]={{false, false, false, false, false, false, false, false},
+                                                               {false, false, false, false, false, false, false, false},
+                                                               {false, false, false, false, false, false, false, false},
+                                                               {false, false, false, false, false, false, false, false}};
+
+    static bool bBTestSuckUse[MAX_SOCKET_ROW][MAX_SOCKET_COL]={{false, false, false, false, false, false, false, false},
+                                                               {false, false, false, false, false, false, false, false},
+                                                               {false, false, false, false, false, false, false, false},
+                                                               {false, false, false, false, false, false, false, false} };
+
+    static bool bBTSuckFinish[MAX_SOCKET_ROW][MAX_SOCKET_COL]={{false, false, false, false, false, false, false, false},
+                                                               {false, false, false, false, false, false, false, false},
+                                                               {false, false, false, false, false, false, false, false},
+                                                               {false, false, false, false, false, false, false, false}};
+
+    int &Task=i32RTCAutoModelVerifyTask;
+    bool bCheckAllSuck=false, flag=false;
+
+    switch(Task)
+    {
+        case 1:
+            if(MOT[MTestZ1].Gali_Two_ZAxis_Move(Prod.TestZ1_Safe, iSpeedSlow, "Do32RTCAutoModelVerify 1"))
+            {
+                bVerifyNG=false;
+                Task=100;
+            }
+            break;
+        case 100:
+            if(MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Front, Prod.TestY2_Rear, iSpeedY, "Do32RTCAutoModelVerify 100"))
+            {
+                DoAllPassVerifyRTC(true);
+                Task=200;
+            }
+            break;
+        case 200:
+            if(DoAllPassVerifyRTC())
+            {
+                Task=12010;
+            }
+            break;
+        case 12010:
+            if(MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Middle, Prod.TestY2_Middle, iSpeedY, "Do32RTCAutoModelVerify 12010"))
+            {
+                Task=12020;
+            }
+            break;
+        case 12020:
+            if(Prod.TestZ1_Drop_Offset!=0)
+            {
+                if(MOT[MTestZ1].Gali_MotMove(Prod.TestZ1_Test-Prod.TestZ1_Drop_Offset+200, iSpeedSlow))
+                {
+                    Task=12100;
+                }
+            }
+            else
+            {
+                if(MOT[MTestZ1].Gali_MotMove(Prod.TestZ1_Test+200, iSpeedSlow))
+                {
+                    Task=12100;                                                 //Steven 20110511
+                }
+            }
+            break;
+        case 12100:
+            bFTestSuckDrop=true;
+
+            for(int i=0; i<FTestSuck.iShtRow; i++)
+            {
+                for(int j=0; j<FTestSuck.iShtCol; j++)
+                {
+                    if(FTestSuck.Item[i][j]==HAS_HOT_IC ||
+                       FTestSuck.Item[i][j]==HAS_IC)
+                    {
+                        FTestSuck.Suck[i][j].Off();
+                    }
+
+                    DoTestYFrontDelay_32.SetSecAndOn(3);
+                }
+            }
+            Task=12200;
+            break;
+        case 12200:
+            if(DoTestYFrontDelay_32.Off())
+            {
+                for(int i=0; i<FTestSuck.iShtRow; i++)
+                {
+                    for(int j=0; j<FTestSuck.iShtCol; j++)
+                    {
+                        if(FTestSuck.Item[i][j]==HAS_HOT_IC ||
+                           FTestSuck.Item[i][j]==HAS_IC)
+                            FTestSuck.Suck[i][j].Normal();
+                    }
+                }
+
+                bIndexCheckNoStopVaccum=false;
+                Task=12300;
+            }
+            break;
+        case 12300:
+            if(MOT[MTestZ1].Gali_MotMove(Prod.TestZ1_Safe, MOT[MTestZ1].GailSpeed))
+            {
+                Task=12310;
+            }
+            break;
+        case 12310:
+            if(Prod.TestZ2_Drop_Offset!=0)
+            {
+                if(MOT[MTestZ2].Gali_MotMove(Prod.TestZ2_Test-Prod.TestZ2_Drop_Offset+200, iSpeedSlow))
+                {
+                    Task=12320;
+                }
+            }
+            else
+            {
+                if(MOT[MTestZ2].Gali_MotMove(Prod.TestZ2_Test+200, iSpeedSlow))
+                {
+                    Task=12320;                                                 //Steven 20110511
+                }
+            }
+            break;
+        case 12320:
+            bBTestSuckDrop=true;
+
+            for(int i=0; i<BTestSuck.iShtRow; i++)
+            {
+                for(int j=0; j<BTestSuck.iShtCol; j++)
+                {
+                    if(BTestSuck.Item[i][j]==HAS_HOT_IC ||
+                       BTestSuck.Item[i][j]==HAS_IC)
+                    {
+                        BTestSuck.Suck[i][j].Off();
+                    }
+
+                    DoTestYFrontDelay_32.SetSecAndOn(3);
+                }
+            }
+            Task=12330;
+            break;
+        case 12330:
+            if(DoTestYFrontDelay_32.Off())
+            {
+                for(int i=0; i<BTestSuck.iShtRow; i++)
+                {
+                    for(int j=0; j<BTestSuck.iShtCol; j++)
+                    {
+                        if(BTestSuck.Item[i][j]==HAS_HOT_IC ||
+                           BTestSuck.Item[i][j]==HAS_IC)
+                            BTestSuck.Suck[i][j].Normal();
+                    }
+                }
+
+                bIndexCheckNoStopVaccum=false;
+                Task=12340;
+            }
+            break;
+        case 12340:
+            if(MOT[MTestZ2].Gali_Two_ZAxis_Move(Prod.TestZ2_Safe, MOT[MTestZ2].GailSpeed, "Do32RTCAutoModelVerify 12340"))
+            {
+                Task=12400;
+            }
+            break;
+        case 12400:
+            if(MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Front, Prod.TestY2_Rear, iSpeedY, "Do32RTCAutoModelVerify 12400"))
+            {
+                Task=12500;
+            }
+            break;
+        case 12500:
+            COM2->bRealTimeCom_ReceiveOK[COM2->rtRelease]=false;
+            COM2->SendCommToVision(COM2->rtRelease, true);
+            DoTestYFrontDelay_32.SetSecAndOn(10);
+            Task=12600;
+            break;
+        case 12600:
+            if(COM2->bRealTimeCom_ReceiveOK[COM2->rtRelease])
+            {
+                Task=12700;
+            }
+            else if(DoTestYFrontDelay_32.Off())
+            {
+                if(COM2->OpenRTCComPortAgain())
+                    ShowMyMessage("RTC Release Time out of Auto Model Verify");
+                COM2->DoReleaseAndInspEnd();
+                Task=12500;
+            }
+            break;
+        case 12700:
+            COM2->bRealTimeCom_ReceiveOK[COM2->rtInspEnd]=false;
+            COM2->SendCommToVision(COM2->rtInspEnd, true);
+            DoTestYFrontDelay_32.SetSecAndOn(10);
+            Task=12800;
+            break;
+        case 12800:
+            if(COM2->bRealTimeCom_ReceiveOK[COM2->rtInspEnd])
+            {
+                Task=12900;
+            }
+            else if(DoTestYFrontDelay_32.Off())
+            {
+                if(COM2->OpenRTCComPortAgain())
+                    ShowMyMessage("RTC End Time out");
+                COM2->DoReleaseAndInspEnd();
+                Task=12500;
+            }
+            break;
+        case 12900:
+            COM2->bRealTimeCom_ReceiveOK[COM2->rtOPENVERIFYOK]=false;
+            COM2->SendCommToVision(COM2->rtOPENVERIFYNG, true);
+            DoTestYFrontDelay_32.SetSecAndOn(10);
+            Task=13000;
+            break;
+        case 13000:
+            if(COM2->bRealTimeCom_ReceiveOK[COM2->rtOPENVERIFYOK])
+            {
+                Task=13100;
+            }
+            else if(COM2->bRealTimeCom_ReceiveOK[COM2->rtOPENVERIFYNG])
+            {
+                ShowMyMessage("RTC Open Verify NG");
+                Task=12500;
+            }
+            else if(DoTestYFrontDelay_32.Off())
+            {
+                if(COM2->OpenRTCComPortAgain())
+                    ShowMyMessage("RTC Open Verify Time out");
+                COM2->DoReleaseAndInspEnd();
+                Task=12500;
+            }
+            break;
+        case 13100:
+            COM2->bRealTimeCom_ReceiveOK[COM2->rtALLFAILNG]=false;
+            COM2->SendCommToVision(COM2->rtALLFAILOK, true);
+            DoTestYFrontDelay_32.SetSecAndOn(10);
+            Task=13200;
+            break;
+        case 13200:
+            if(COM2->bRealTimeCom_ReceiveOK[COM2->rtALLFAILOK])
+            {
+                bVerifyNG=false;
+                Task=13400;
+            }
+            else if(COM2->bRealTimeCom_ReceiveOK[COM2->rtALLFAILNG])
+            {
+                bVerifyNG=true;
+                Task=13300;
+            }
+            else if(DoTestYFrontDelay_32.Off())
+            {
+                if(COM2->OpenRTCComPortAgain())
+                    ShowMyMessage("RTC Verify All Fail Time out");
+                COM2->DoReleaseAndInspEnd();
+                Task=12500;
+            }
+            break;
+        case 13300:
+            if(IndexAlarmInArmAway()==true)
+            {
+                ShowMyMessage("RTC Verify All Fail NG");
+                Task=13400;
+            }
+            break;
+        case 13400:
+            COM2->SendCommToVision(COM2->rtCLOSEVERIFY, true);
+            DoTestYFrontDelay_32.SetSecAndOn(10);
+            Task=13500;
+            break;
+        case 13500:
+            if(COM2->bRealTimeCom_ReceiveOK[COM2->rtCLOSEVERIFY])
+            {
+                Task=13600;
+            }
+            else if(DoTestYFrontDelay_32.Off())
+            {
+                if(COM2->OpenRTCComPortAgain())
+                    ShowMyMessage("RTC Close Verify Time out");
+                COM2->DoReleaseAndInspEnd();
+                Task=13400;
+            }
+            break;
+        case 13600:
+            if(MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Middle, Prod.TestY2_Middle, iSpeedY, "Do32RTCAutoModelVerify 13600"))
+            {
+                Task=13700;
+            }
+            break;
+        case 13700:
+            if(MOT[MTestZ1].Gali_MotMove(Prod.TestZ1_Test-Prod.TestZ1_Drop_Offset, iSpeedSlow))
+            {
+                for(int i=0; i<FTestSuck.iShtRow; i++)
+                {
+                    for(int j=0; j<FTestSuck.iShtCol; j++)
+                    {
+                        if(FTestSuck.Item[i][j]!=NULL_IC &&
+                           FTestSuck.Item[i][j]!=HAS_NULL_IC)
+                        {
+                            FTestSuck.Suck[i][j].Error=false;
+                            bFTestSuckUse[i][j]=true;
+                        }
+                        bFTSuckFinish[i][j]=false;
+                    }
+                }
+
+                Task=13800;
+            }
+            break;
+        case 13800:
+            bCheckAllSuck=true;
+            for(int i=0; i<FTestSuck.iShtRow; i++)
+            {
+                for(int j=0; j<FTestSuck.iShtCol; j++)
+                {
+                    if(bFTSuckFinish[i][j]==false)
+                    {
+                        if(bFTestSuckUse[i][j])
+                        {
+                            if(FTestSuck.Suck[i][j].Suck())
+                            {
+                                bFTSuckFinish[i][j]=true;
+                                bFTestSuckUse[i][j]=false;
+                            }
+                            else if(FTestSuck.Suck[i][j].Error)
+                            {
+                                bFTSuckFinish[i][j]=true;
+                            }
+                            else
+                            {
+                                bCheckAllSuck=false;
+                            }
+                        }
+                        else
+                        {
+                            bFTSuckFinish[i][j]=true;
+                        }
+                    }
+                }
+            }
+
+            flag=true;
+            for(int i=0; i<FTestSuck.iShtRow; i++)
+            {
+                for(int j=0; j<FTestSuck.iShtCol; j++)
+                {
+                    if(bFTSuckFinish[i][j]==false)
+                        flag=false;
+                }
+            }
+
+            if(flag)
+            {
+                for(int i=0; i<FTestSuck.iShtRow; i++)                          //若有吸取錯誤
+                {
+                    for(int j=0; j<FTestSuck.iShtCol; j++)
+                    {
+                        if(FTestSuck.Suck[i][j].Error)
+                        {
+                            if(IniConfig.bD62PickUpErrorNeedPurge)              //Steven 20161024 : 吸取異常需要吹氣一次
+                            {
+                                FTestSuck.Suck[i][j].Off();
+                            }
+                        }
+                    }
+                }
+
+                if(bCheckAllSuck)
+                {
+                    Task=13810;
+                }
+            }
+            break;
+        case 13810:
+            if(MOT[MTestZ1].Gali_MotMove(Prod.TestZ1_Safe, iSpeedSlow))
+            {
+                Task=13820;
+            }
+            break;
+        case 13820:
+            if(MOT[MTestZ2].Gali_MotMove(Prod.TestZ2_Test-Prod.TestZ2_Drop_Offset, iSpeedSlow))
+            {
+                for(int i=0; i<BTestSuck.iShtRow; i++)
+                {
+                    for(int j=0; j<BTestSuck.iShtCol; j++)
+                    {
+                        if(BTestSuck.Item[i][j]!=NULL_IC &&
+                           BTestSuck.Item[i][j]!=HAS_NULL_IC)
+                        {
+                            BTestSuck.Suck[i][j].Error=false;
+                            bBTestSuckUse[i][j]=true;
+                        }
+                        bBTSuckFinish[i][j]=false;
+                    }
+                }
+
+                Task=13830;
+            }
+            break;
+        case 13830:
+            bCheckAllSuck=true;
+            for(int i=0; i<BTestSuck.iShtRow; i++)
+            {
+                for(int j=0; j<BTestSuck.iShtCol; j++)
+                {
+                    if(bBTSuckFinish[i][j]==false)
+                    {
+                        if(bBTestSuckUse[i][j])
+                        {
+                            if(BTestSuck.Suck[i][j].Suck())
+                            {
+                                bBTSuckFinish[i][j]=true;
+                                bBTestSuckUse[i][j]=false;
+                            }
+                            else if(BTestSuck.Suck[i][j].Error)
+                            {
+                                bBTSuckFinish[i][j]=true;
+                            }
+                            else
+                            {
+                                bCheckAllSuck=false;
+                            }
+                        }
+                        else
+                        {
+                            bBTSuckFinish[i][j]=true;
+                        }
+                    }
+                }
+            }
+
+            flag=true;
+            for(int i=0; i<BTestSuck.iShtRow; i++)
+            {
+                for(int j=0; j<BTestSuck.iShtCol; j++)
+                {
+                    if(bBTSuckFinish[i][j]==false)
+                        flag=false;
+                }
+            }
+
+            if(flag)
+            {
+                for(int i=0; i<BTestSuck.iShtRow; i++)                          //若有吸取錯誤
+                {
+                    for(int j=0; j<BTestSuck.iShtCol; j++)
+                    {
+                        if(BTestSuck.Suck[i][j].Error)
+                        {
+                            if(IniConfig.bD62PickUpErrorNeedPurge)              //Steveb 20161024 : 吸取異常需要吹氣一次
+                            {
+                                BTestSuck.Suck[i][j].Off();
+                            }
+                        }
+                    }
+                }
+
+                if(bCheckAllSuck)
+                {
+                    Task=13900;
+                }
+            }
+            break;
+        case 13900:
+            if(MOT[MTestZ1].Gali_Two_ZAxis_Move(Prod.TestZ1_Safe, iSpeedSlow, "Do32RTCAutoModelVerify 13900"))
+            {
+                Task=14000;
+            }
+            break;
+        case 14000:
+            if(MOT[MTestY1].GalilTwoY_Move(Prod.TestY1_Front,Prod.TestY2_Rear, iSpeedY, "Do32RTCAutoModelVerify 14000"))
+            {
+                if(bVerifyNG==true)
+                {
+                    ShowMyMessage("RTC Auto Verify fail!!");
+                    Task=1;
+                }
+                else
+                {
+                    COM2->InitRealTimeCCDPara();
+                    bFTestSuckDrop=false;
+                    IndexStatus=Z1Down_Z2Up;
+                    return true;
+                }
+            }
+            break;
+    }
+    return false;
+}
+#endif // GOLDEN VERBATIM -- golden atester_32Site.cpp:184-681 (end)
 bool Do32RTCAutoModelVerify(bool bInitial)
 {
     if(bInitial==true)

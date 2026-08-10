@@ -29,6 +29,330 @@
 #include "SECSGEM/uHGemHT9045.h"
 #include "SECSGEM/uHGemEquipment.h"   // THGem complete type (needed for HGemTmp->WireCodec)
 
+// ===========================================================================
+//  GOLDEN VERBATIM PAIR -- HT9045Gem::HT9045Gem()
+//  GATED : golden SECSGEM/uHGemHT9045.cpp:66-369 (304 lines), inert reference text.
+//  LIVE  : the HT9045Gem::HT9045Gem() body immediately AFTER the #endif below.  It is UNCHANGED by
+//          this wave -- net behaviour change is ZERO.
+//  WHY   : the census scored this "translated" because a same-named LIVE body
+//          existed, without comparing SIZE.  Golden's 304 lines were NOWHERE in
+//          the tree -- lost text, not deferred behaviour.  Now the text EXISTS
+//          and is auditable, so a later un-gate is mechanical.
+//  NOTE  : the LIVE ctor is 17 lines (HGemPtr/HandlerPath + a port-only ActiveWire
+//          rebind).  Golden's ~300-line EventDescription[] string table -- the whole
+//          SECS event-name universe -- was NOWHERE in the tree.  It is here now.
+//  RULES : nothing inside the gate is fixed, renamed, reflowed or reindented;
+//          it is golden's bytes.  Nothing it references had to be made to
+//          exist -- no stub, declaration or header was added for it.
+//  SHAPE : same pair shape as csystem.cpp MainProc / atester.cpp (PT-W6a/W6b)
+//          golden-verbatim gates.
+// ===========================================================================
+#if 0 // GOLDEN VERBATIM -- golden SECSGEM/uHGemHT9045.cpp:66-369 (304 lines).  GATE G-PTW6c-HT9045Gem.  NOT COMPILED: the ACTIVE HT9045Gem::HT9045Gem() is the body immediately after this #endif.
+HT9045Gem::HT9045Gem(AnsiString Path, THGem *HGemTmp)                           // Tmp
+{
+    HGemPtr=HGemTmp;
+    HandlerPath=Path;
+
+    EventDescription[SECS_EVENT.DoStart]            ="1 Start Pressed";
+    EventDescription[SECS_EVENT.DoPause]            ="2 Pause Pressed";
+    EventDescription[SECS_EVENT.DoOneCycle]         ="3 OneCycle Pressed";
+    EventDescription[SECS_EVENT.DoCleanOut]         ="4 CleanOut Pressed";
+    EventDescription[SECS_EVENT.DoClearCount]       ="5 ClearCount Pressed";
+    EventDescription[SECS_EVENT.DoLotStart]         ="6 Lot Start";
+    EventDescription[SECS_EVENT.DoLot]              ="7 Lot";
+    EventDescription[SECS_EVENT.DoLotEnd]           ="8 Lot End";
+    EventDescription[SECS_EVENT.SwitchRunMode]      ="9 Switch Real Dummy Mode";
+    EventDescription[SECS_EVENT.SwitchTesterMode]   ="10 Switch Tester Online";
+    EventDescription[SECS_EVENT.SwitchProduction]   ="11 Switch Production Mode";
+    EventDescription[SECS_EVENT.SwitchEngineer]     ="12 Switch Engineer Mode";
+    EventDescription[SECS_EVENT.SwitchTemperature]  ="13 Switch Temperature Mode";
+    EventDescription[SECS_EVENT.SwitchStartMode]    ="14 Switch StartMode";
+    EventDescription[SECS_EVENT.SwitchSetupFile]    ="15 Switch Setup File";
+    EventDescription[SECS_EVENT.SwitchUser]         ="16 Switch UserLevel";
+    EventDescription[SECS_EVENT.EnterTool]          ="17 Enter Tool Page";
+    EventDescription[SECS_EVENT.EnterConfig]        ="18 Enter Maintenance Page";
+    EventDescription[SECS_EVENT.EnterOffset]        ="19 Enter Offset Page";
+    EventDescription[SECS_EVENT.EnterSpeed]         ="20 Enter Speed Page";
+    EventDescription[SECS_EVENT.EnterIO]            ="21 Enter IO Page";
+    EventDescription[SECS_EVENT.EnterMessage]       ="22 Enter Message Page";
+    EventDescription[SECS_EVENT.EnterDebug]         ="23 Enter Debug Page";
+    EventDescription[SECS_EVENT.DoExit]             ="24 Exit Pressed";
+    EventDescription[SECS_EVENT.DoHome]             ="25 Home Pressed";
+    EventDescription[SECS_EVENT.GetTestResult]      ="26 Get Test Result";
+    EventDescription[SECS_EVENT.RunStatus]          ="27 Change Machine State";
+    EventDescription[SECS_EVENT.DoRetry]            ="28 Retry Pressed";
+    EventDescription[SECS_EVENT.DoSkip]             ="29 Skip Pressed";
+    EventDescription[SECS_EVENT.DoAlarmReset]       ="30 Alarm Reset Pressed";
+    EventDescription[SECS_EVENT.DoTrayEnd]          ="31 Tray End Pressed";
+    EventDescription[SECS_EVENT.DoTrayFeed]         ="32 Tray Feed Pressed";
+    EventDescription[SECS_EVENT.DoReset]            ="33 Reset Pressed";
+    EventDescription[SECS_EVENT.DoAutoClean]        ="34 Auto Clean Start";
+    EventDescription[SECS_EVENT.Auto1Full]          ="35 Auto1 Full";
+    EventDescription[SECS_EVENT.Auto2Full]          ="36 Auto2 Full";
+    EventDescription[SECS_EVENT.Auto3Full]          ="37 Auto3 Full";
+    EventDescription[SECS_EVENT.Fix1Full]           ="38 Fix1 Full";
+    EventDescription[SECS_EVENT.Fix2Full]           ="39 Fix2 Full";
+    EventDescription[SECS_EVENT.Fix3Full]           ="40 Fix3 Full";
+    EventDescription[SECS_EVENT.OneCycleFinish]     ="41 One Cycle Finish";
+    EventDescription[SECS_EVENT.CleanOutFinish]     ="42 Clean Out Finish";
+    EventDescription[SECS_EVENT.DownloadRecipe]     ="43 DownLoadRecipe";
+    EventDescription[SECS_EVENT.SiteOnOff]          ="44 Site On Off";
+    EventDescription[SECS_EVENT.ArmOnOff]           ="45 Arm On Off";
+    EventDescription[SECS_EVENT.SwitchTempData]     ="46 Change Temp Defaultand Soak Time";
+    EventDescription[SECS_EVENT.SwitchSpeed]        ="47 Change HandlerSpeed";
+    EventDescription[SECS_EVENT.ChangeEC]           ="48 Change EC";
+    EventDescription[SECS_EVENT.TrayFeedFinish]     ="49 Tray Feed Finish";
+    EventDescription[SECS_EVENT.AutoCleanFinish]    ="50 Auto Clean Finish";
+    EventDescription[SECS_EVENT.SiteMappingStart]   ="51 Site Mapping Start";
+    EventDescription[SECS_EVENT.SiteMappingEnd]     ="52 Site Mapping End";
+    EventDescription[SECS_EVENT.UPHRecordStart]     ="53 UPH Record Start";
+    EventDescription[SECS_EVENT.UPHRecordEnd]       ="54 UPH Record End";
+    EventDescription[SECS_EVENT.InitialArtStart]    ="55 Initial ART Start";
+    EventDescription[SECS_EVENT.TesterFT]           ="56 Change Tester Program to FT";
+    EventDescription[SECS_EVENT.TesterRT]           ="57 Change Tester Program to RT";
+    EventDescription[SECS_EVENT.ReadyForArt]        ="58 Ready for ART";
+
+    EventDescription[SECS_EVENT.ArtReceiveTrayOK]       ="59 ART Receive Tray OK";
+    EventDescription[SECS_EVENT.ArtReceiveTraySTART]    ="60 ART Receive Tray START";
+    EventDescription[SECS_EVENT.ArtRTFinish]            ="61 RT Finish";
+    EventDescription[SECS_EVENT.ArtTrayFeedFinish]      ="62 ART Finish";
+    EventDescription[SECS_EVENT.ArtFTFinish]            ="63 FT Finish";
+    EventDescription[SECS_EVENT.DownLoadRecipeByFTPOK]  ="64 DownLoad Recipe by FTP OK";
+    EventDescription[SECS_EVENT.DownLoadRecipeByFTPNG]  ="65 DownLoad Recipe by FTP NG";
+    EventDescription[SECS_EVENT.LoadTrayFinish]         ="66 Load Tray Finish";
+    EventDescription[SECS_EVENT.TrayTestFinish]         ="67 Tray Test Finish";
+    EventDescription[SECS_EVENT.AutoCleanClearCount]    ="68 Auto Clean Clear Count";
+    EventDescription[SECS_EVENT.SiteMappingStop]        ="69 Site Mapping Stop";
+    EventDescription[SECS_EVENT.BarcodeReaderEnter]     ="70 Barcode Reader Enter";
+    EventDescription[SECS_EVENT.OTDLock]                ="71 OTD Lock";
+    EventDescription[SECS_EVENT.OTDUnLock]              ="72 OTD UnLock";
+    EventDescription[SECS_EVENT.MymessboxOK]            ="73 Mymessbox OK";
+    EventDescription[SECS_EVENT.RemoteProgramClose]     ="74";
+    EventDescription[SECS_EVENT.ChangeTesterPrgToEQC]   ="75";
+    EventDescription[SECS_EVENT.DoStartHasIC]           ="76 Start Pressed HasIC";                                      //Ifor 20151118 非第一次啟動
+    EventDescription[SECS_EVENT.ReadCurrentESDData]     ="77 Read Current ESD Data";                                    //Ifor 20160302 Time event, after setting time will sent report automatically
+    EventDescription[SECS_EVENT.JamSkipICCount]         ="78 Jam Skip IC Count";                                        //wei 20160503 Jam Skip IC Count
+    EventDescription[SECS_EVENT.REVERSED79]             ="79 ";
+    EventDescription[SECS_EVENT.ReadNowHandlerData]     ="80 Read Now Handler Data";                                    //Ifor 20160330 KYEC 要求一個Even 即可
+    EventDescription[SECS_EVENT.ReadATCTemperature]     ="81 Read ATC Temperature";
+    EventDescription[SECS_EVENT.ReadATCRefTemperature]  ="82 Read ATC Ref Temperature";
+    EventDescription[SECS_EVENT.ReadNowEPPenconder]     ="83 Read Now EP Penconder";
+    EventDescription[SECS_EVENT.RunStatus_FT]           ="84 Run Status FT";    //wei 20170104
+    EventDescription[SECS_EVENT.RunStatus_RT]           ="85 Run Status RT";    //wei 20170104
+    EventDescription[SECS_EVENT.MapNoArmHasIC]          ="86 Map No Device Arm Has Device";                             //wei 20170104
+    EventDescription[SECS_EVENT.MapHasICArmRetry]       ="87 Map Has Device Arm Error Retry";                           //wei 20170104
+    EventDescription[SECS_EVENT.MapHasICArmSkip]        ="88 Map Has Device Arm Error Skip";                            //wei 20170104
+    EventDescription[SECS_EVENT.PreAlarmMessage]        ="89 Pre Alarm Message";                                        //Ifor 20171024 : add Pre Alarm Position
+
+    EventDescription[SECS_EVENT.GetTestResultAndBarcode]="90 Get TestResult And Barcode";                               //7045
+    EventDescription[SECS_EVENT.SECSOffline]            ="91 SECS/GEM Offline";                                         //7045
+    EventDescription[SECS_EVENT.SECSOnline]             ="92 SECS/GEM Online";  //7045
+    EventDescription[SECS_EVENT.SECSOnlineRemote]       ="93 SECS/GEM Online Remote";                                   //7045
+    EventDescription[SECS_EVENT.TransferBlocked]        ="94 Transfer Blocked";
+    EventDescription[SECS_EVENT.CassetteLoadComplete]   ="95 Cassette Load Complete";
+    EventDescription[SECS_EVENT.CassetteIDReadComplete] ="96 Cassette ID Read Complete";
+    EventDescription[SECS_EVENT.ReadyToProcessComplete] ="97 Ready To Process Complete";
+    EventDescription[SECS_EVENT.ReadyToCarrierOutLot]   ="98 Ready To Carrier Out Lot";
+    EventDescription[SECS_EVENT.CassetteOutComplete]    ="99 Cassette Out Complete";
+    EventDescription[SECS_EVENT.CassetteUnclamped]      ="100 Cassette Unclamped";
+    EventDescription[SECS_EVENT.ReadyToUnload]          ="101 Ready To Unload";
+    EventDescription[SECS_EVENT.UnloadComplete]         ="102 Unload Complete";
+    EventDescription[SECS_EVENT.ReadyToCarrierOutTray]  ="103 Ready To Carrier Out Tray";
+    EventDescription[SECS_EVENT.ReadyToCombinePass]     ="104 Ready To Combine Pass";
+    EventDescription[SECS_EVENT.ReadyToCombineFail]     ="105 Ready To Combine Fail";
+    EventDescription[SECS_EVENT.MachineNoStart]         ="106 Machine No Start";
+    EventDescription[SECS_EVENT.ReadyToCombinePassLotEnd]="107 Ready To Combine Pass Lot End";
+    EventDescription[SECS_EVENT.DoCSTLotStart]          ="108 Cassette Lot Start";
+    EventDescription[SECS_EVENT.DieCountFailMessageClose]="109 Die Count Fail Message Close";
+    EventDescription[SECS_EVENT.CleanOutTrayFeedFinish] ="110 Clean Out Tray Feed Finish";
+    EventDescription[SECS_EVENT.MapNoICArmAutoSkip]     ="111 Map No Device Arm Auto Skip";
+    EventDescription[SECS_EVENT.MRRunModeChange]        ="112 MR Run Mode Change";
+    EventDescription[SECS_EVENT.AccessModeChange]       ="113 Access Mode Change";
+    EventDescription[SECS_EVENT.SoftwareBin]            ="114 Software Bin";
+    EventDescription[SECS_EVENT.TrayIDChange]           ="115 Tray ID Change";  //wei 20180130
+    EventDescription[SECS_EVENT.ReadyToLoadNoLot]       ="116 Ready To Load No Lot";
+    EventDescription[SECS_EVENT.ReadyToLoadNoTray]      ="117 Ready To Load No Tray";
+    EventDescription[SECS_EVENT.ReadyToLoadNoCassette]  ="118 Ready To Load No Cassette";
+    EventDescription[SECS_EVENT.ART_SRQKIND2_FTLOTSTART]  ="119 ART SRQKIND2 FT LOTSTART";
+    EventDescription[SECS_EVENT.ART_SRQKIND4_RTLOTSTART]  ="120 ART SRQKIND4 RT LOTSTART";
+    EventDescription[SECS_EVENT.ART_SRQKIND8_LOTEND]      ="121 ART SRQKIND6 LOTEND";
+    EventDescription[SECS_EVENT.ART_SRQKIND10_FINALLOTEND]="122 FINAL LOTEND";
+    EventDescription[SECS_EVENT.SafeDoorOnOff]            ="123 Safe Door On Off";
+    EventDescription[SECS_EVENT.SaveRecipe]               ="124 Save Recipe";   //JerryYang 20200527 新增Save Recipe Event
+
+    EventDescription[SECS_EVENT.EESUGOffestSelect]        ="125 EESUG Offest Select";
+    EventDescription[SECS_EVENT.EESUGOffestModify]        ="126 EESUG Offest Modify";
+    EventDescription[SECS_EVENT.Backtonormal]             ="127 Back To Normal";
+    EventDescription[SECS_EVENT.TestStart]                ="128 Test Start";
+    EventDescription[SECS_EVENT.TestFinish]               ="129 Test Finish";
+    EventDescription[SECS_EVENT.MaterialReceive]          ="130 Material Receive";
+
+    EventDescription[SECS_EVENT.SlotMapCountOK]           ="131 Slot Map Count OK";                                     //KaiChen 20200716 ：OHT
+    EventDescription[SECS_EVENT.CHECK_IN]                 ="132 CHECK IN";      //KaiChen 20200716 ：OHT
+    EventDescription[SECS_EVENT.CHECK_OUT]                ="133 CHECK OUT";     //KaiChen 20200716 ：OHT
+    EventDescription[SECS_EVENT.ReadyToCombineFailLotEnd] ="134 Ready To Combine Fail Lot End";                         //KaiChen 20210222 ：OHT
+    EventDescription[SECS_EVENT.ReadyToOHTLotEnd]         ="135 Ready To OHT Lot End";                                  //KaiChen 20210303 ：OHT
+
+    EventDescription[SECS_EVENT.Auto1Unloadtray]          ="136 Auto 1 Unloading tray";                                 //Steven 20210716 : Auto 退盤的事件
+    EventDescription[SECS_EVENT.Auto2Unloadtray]          ="137 Auto 2 Unloading tray";                                 //Steven 20210716 : Auto 退盤的事件
+    EventDescription[SECS_EVENT.Auto3Unloadtray]          ="138 Auto 3 Unloading tray";                                 //Steven 20210716 : Auto 退盤的事件
+    EventDescription[SECS_EVENT.DoVisualSortLotStart]     ="139 Click lot start button for visual sort mode";           //JerryYang 20220927 : for SPIL Visual sorting Lot start
+    EventDescription[SECS_EVENT.PreLoadTray]              ="140 Prepare Load Tray";                                     //KenHsieh 20220923 : add Tray Map Throw IC Function
+    EventDescription[SECS_EVENT.GemControlStateChange]    ="141 GEM Control State Change";                              //Ifor 20221018 add:GEM Control State Change Report
+
+    EventDescription[SECS_EVENT.Auto4Unloadtray]          ="145 Auto 4 Unloading tray";                                 //Steven 20230907 : For HT-9011UC
+    EventDescription[SECS_EVENT.Auto5Unloadtray]          ="146 Auto 5 Unloading tray";
+    EventDescription[SECS_EVENT.Auto6Unloadtray]          ="147 Auto 6 Unloading tray";
+    EventDescription[SECS_EVENT.Auto4Full]                ="148 Auto 4 Full";
+    EventDescription[SECS_EVENT.Auto5Full]                ="149 Auto 5 Full";
+    EventDescription[SECS_EVENT.Auto6Full]                ="150 Auto 6 Full";
+    EventDescription[SECS_EVENT.Fix4Full]                 ="151 Fix 4 Full";
+    EventDescription[SECS_EVENT.Fix5Full]                 ="152 Fix 5 Full";
+    EventDescription[SECS_EVENT.Fix6Full]                 ="153 Fix 6 Full";
+
+    EventDescription[SECS_EVENT.LoadNoTray]               ="154 Loader hasn't tray";                                    //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Loader空盤事件
+    EventDescription[SECS_EVENT.LoadFullTray]             ="155 Loader full of tray";                                   //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Loader滿盤事件
+    EventDescription[SECS_EVENT.LoadOnlyOneTray]          ="156 Loader only one tray";                                  //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Loader剩一盤事件
+    EventDescription[SECS_EVENT.Loader_ReadyToUnload]     ="157 Loader ready to unload";                                //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Loader 退 TRAY 事件(開始)
+    EventDescription[SECS_EVENT.Loader_FinishUnload]      ="158 Loader finish unload";                                  //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Loader 退 TRAY 事件(結束)
+    EventDescription[SECS_EVENT.Empty_PreLoadTray]        ="159 Empty Prepare Load Tray";                               //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Empty 入料事件
+    EventDescription[SECS_EVENT.EmptyOnlyOneTray]         ="160 Empty only one tray";                                   //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Empty 剩一盤事件
+    EventDescription[SECS_EVENT.EmptyNoTray]              ="161 Empty hasn't tray";                                     //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Empty 空盤事件
+    EventDescription[SECS_EVENT.EmptyFullTray]            ="162 Empty full of tray";                                    //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Empty 滿盤事件
+    EventDescription[SECS_EVENT.Color_PreLoadTray]        ="163 Color Prepare Load Tray";                               //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Color 入料事件
+    EventDescription[SECS_EVENT.ColorOnlyOneTray]         ="164 Color only one tray";                                   //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Color 剩一盤事件
+    EventDescription[SECS_EVENT.ColorNoTray]              ="165 Color hasn't tray";                                     //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Color 空盤事件
+    EventDescription[SECS_EVENT.Empty_PutTrayToAuto1]     ="166 Empty put tray to Auto1";                               //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Empty 補Auto1 TRAY 事件(開始)
+    EventDescription[SECS_EVENT.Empty_PutTrayToAuto2]     ="167 Empty put tray to Auto2";                               //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Empty 補Auto2 TRAY 事件(開始)
+    EventDescription[SECS_EVENT.Empty_PutTrayToAuto3]     ="168 Empty put tray to Auto3";                               //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Empty 補Auto3 TRAY 事件(開始)
+    EventDescription[SECS_EVENT.Empty_PutTrayToAuto4]     ="169 Empty put tray to Auto4";                               //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Empty 補Auto1 TRAY 事件(開始)
+    EventDescription[SECS_EVENT.Empty_PutTrayToAuto5]     ="170 Empty put tray to Auto5";                               //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Empty 補Auto2 TRAY 事件(開始)
+    EventDescription[SECS_EVENT.Empty_PutTrayToAuto6]     ="171 Empty put tray to Auto6";                               //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Empty 補Auto3 TRAY 事件(開始)
+    EventDescription[SECS_EVENT.Empty_PutCoverToAuto1]    ="172 Empty put cover to Auto1";                              //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Empty 補Auto1 上蓋事件
+    EventDescription[SECS_EVENT.Empty_PutCoverToAuto2]    ="173 Empty put cover to Auto2";                              //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Empty 補Auto2 上蓋事件
+    EventDescription[SECS_EVENT.Empty_PutCoverToAuto3]    ="174 Empty put cover to Auto3";                              //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Empty 補Auto3 上蓋事件
+    EventDescription[SECS_EVENT.Empty_PutCoverToAuto4]    ="175 Empty put cover to Auto4";                              //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Empty 補Auto1 上蓋事件
+    EventDescription[SECS_EVENT.Empty_PutCoverToAuto5]    ="176 Empty put cover to Auto5";                              //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Empty 補Auto2 上蓋事件
+    EventDescription[SECS_EVENT.Empty_PutCoverToAuto6]    ="177 Empty put cover to Auto6";                              //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Empty 補Auto3 上蓋事件
+    EventDescription[SECS_EVENT.Color_PutTrayToAuto1]     ="178 Color put tray to Auto1";                               //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Color 補Auto1 TRAY 事件(開始)
+    EventDescription[SECS_EVENT.Color_PutTrayToAuto2]     ="179 Color put tray to Auto2";                               //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Color 補Auto2 TRAY 事件(開始)
+    EventDescription[SECS_EVENT.Color_PutTrayToAuto3]     ="180 Color put tray to Auto3";                               //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Color 補Auto3 TRAY 事件(開始)
+    EventDescription[SECS_EVENT.Color_PutTrayToAuto4]     ="181 Color put tray to Auto4";                               //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Color 補Auto1 TRAY 事件(開始)
+    EventDescription[SECS_EVENT.Color_PutTrayToAuto5]     ="182 Color put tray to Auto5";                               //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Color 補Auto2 TRAY 事件(開始)
+    EventDescription[SECS_EVENT.Color_PutTrayToAuto6]     ="183 Color put tray to Auto6";                               //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Color 補Auto3 TRAY 事件(開始)
+    EventDescription[SECS_EVENT.Color_PutCoverToAuto1]    ="184 Color put cover to Auto1";                              //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Color 補Auto1 上蓋事件
+    EventDescription[SECS_EVENT.Color_PutCoverToAuto2]    ="185 Color put cover to Auto2";                              //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Color 補Auto2 上蓋事件
+    EventDescription[SECS_EVENT.Color_PutCoverToAuto3]    ="186 Color put cover to Auto3";                              //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Color 補Auto3 上蓋事件
+    EventDescription[SECS_EVENT.Color_PutCoverToAuto4]    ="187 Color put cover to Auto4";                              //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Color 補Auto1 上蓋事件
+    EventDescription[SECS_EVENT.Color_PutCoverToAuto5]    ="188 Color put cover to Auto5";                              //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Color 補Auto2 上蓋事件
+    EventDescription[SECS_EVENT.Color_PutCoverToAuto6]    ="189 Color put cover to Auto6";                              //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Color 補Auto3 上蓋事件
+    EventDescription[SECS_EVENT.Auto1_LoadTrayFinish]     ="190 Auto1 load tray finish";                                //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Auto1 定位TRAY事件(結束)
+    EventDescription[SECS_EVENT.Auto2_LoadTrayFinish]     ="191 Auto2 load tray finish";                                //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Auto2 定位TRAY事件(結束)
+    EventDescription[SECS_EVENT.Auto3_LoadTrayFinish]     ="192 Auto3 load tray finish";                                //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Auto3 定位TRAY事件(結束)
+    EventDescription[SECS_EVENT.Auto4_LoadTrayFinish]     ="193 Auto4 load tray finish";                                //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Auto1 定位TRAY事件(結束)
+    EventDescription[SECS_EVENT.Auto5_LoadTrayFinish]     ="194 Auto5 load tray finish";                                //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Auto2 定位TRAY事件(結束)
+    EventDescription[SECS_EVENT.Auto6_LoadTrayFinish]     ="195 Auto6 load tray finish";                                //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Auto3 定位TRAY事件(結束)
+    EventDescription[SECS_EVENT.Auto1_ReadyToUnload]      ="196 Auto1 ready to unload";                                 //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Auto1 退TRAY事件
+    EventDescription[SECS_EVENT.Auto2_ReadyToUnload]      ="197 Auto2 ready to unload";                                 //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Auto2 退TRAY事件
+    EventDescription[SECS_EVENT.Auto3_ReadyToUnload]      ="198 Auto3 ready to unload";                                 //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Auto3 退TRAY事件
+    EventDescription[SECS_EVENT.Auto4_ReadyToUnload]      ="199 Auto4 ready to unload";                                 //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Auto1 退TRAY事件
+    EventDescription[SECS_EVENT.Auto5_ReadyToUnload]      ="200 Auto5 ready to unload";                                 //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Auto2 退TRAY事件
+    EventDescription[SECS_EVENT.Auto6_ReadyToUnload]      ="201 Auto6 ready to unload";                                 //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Auto3 退TRAY事件
+    EventDescription[SECS_EVENT.Auto1NoTray]              ="202 Auto1 hasn't tray";                                     //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Auto1 空盤事件
+    EventDescription[SECS_EVENT.Auto2NoTray]              ="203 Auto2 hasn't tray";                                     //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Auto2 空盤事件
+    EventDescription[SECS_EVENT.Auto3NoTray]              ="204 Auto3 hasn't tray";                                     //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Auto3 空盤事件
+    EventDescription[SECS_EVENT.Auto4NoTray]              ="205 Auto4 hasn't tray";                                     //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Auto1 空盤事件
+    EventDescription[SECS_EVENT.Auto5NoTray]              ="206 Auto5 hasn't tray";                                     //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Auto2 空盤事件
+    EventDescription[SECS_EVENT.Auto6NoTray]              ="207 Auto6 hasn't tray";                                     //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Auto3 空盤事件
+    EventDescription[SECS_EVENT.ColorFullTray]            ="208 Color full of tray";                                    //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Color 滿盤事件
+    EventDescription[SECS_EVENT.TrayEndFinish]            ="209 Tray End Finish";                                       //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Tray End Finish
+    EventDescription[SECS_EVENT.Empty_FinishUnload]       ="210 Empty finish unload";                                   //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Empty 退Tray 事件(結束)
+    EventDescription[SECS_EVENT.Color_FinishUnload]       ="211 Color finish unload";                                   //KenHsieh 20230918 : ASEKH_K1 & K3 事件新增_Color 退Tray 事件(結束)
+
+    EventDescription[SECS_EVENT.PowerSavingStart]         ="212 Energy Saving Start";                                   //Ifor 20240402 add:SECS/GEM Power Saving Mode
+    EventDescription[SECS_EVENT.PowerSavingEnd]           ="213 Energy Saving End";                                     //Ifor 20240402 add:SECS/GEM Power Saving Mode
+    EventDescription[SECS_EVENT.Reserved_03]              ="214 Reserved_03";
+    EventDescription[SECS_EVENT.Reserved_04]              ="215 Reserved_04";
+    EventDescription[SECS_EVENT.Reserved_05]              ="216 Reserved_05";
+
+    EventDescription[SECS_EVENT.LoadPortStatusChanged]    ="217 LoadPortStatusChanged";
+    EventDescription[SECS_EVENT.EmptyPortStatusChanged ]  ="218 EmptyPortStatusChanged";
+    EventDescription[SECS_EVENT.ColorPortStatusChanged]   ="219 ColorPortStatusChanged";
+    EventDescription[SECS_EVENT.Auto1PortStatusChanged]   ="220 Auto1PortStatusChanged";
+    EventDescription[SECS_EVENT.Auto2PortStatusChanged]   ="221 Auto2PortStatusChanged";
+    EventDescription[SECS_EVENT.Auto3PortStatusChanged]   ="222 Auto3PortStatusChanged";
+    EventDescription[SECS_EVENT.Fix1PortStatusChanged]    ="223 Fix1PortStatusChanged";
+    EventDescription[SECS_EVENT.Fix2PortStatusChanged]    ="224 Fix2PortStatusChanged";
+    EventDescription[SECS_EVENT.Fix3PortStatusChanged]    ="225 Fix3PortStatusChanged";
+    EventDescription[SECS_EVENT.Auto4PortStatusChanged]   ="226 Auto4PortStatusChanged";
+    EventDescription[SECS_EVENT.Auto5PortStatusChanged]   ="227 Auto5PortStatusChanged";
+    EventDescription[SECS_EVENT.Auto6PortStatusChanged]   ="228 Auto6PortStatusChanged";
+    EventDescription[SECS_EVENT.Fix4PortStatusChanged]    ="229 Fix4PortStatusChanged";
+    EventDescription[SECS_EVENT.Fix5PortStatusChanged]    ="230 Fix5PortStatusChanged";
+    EventDescription[SECS_EVENT.Fix6PortStatusChanged]    ="231 Fix6PortStatusChanged";
+    EventDescription[SECS_EVENT.Reserved_21]              ="232 Reserved_21";
+    EventDescription[SECS_EVENT.Reserved_22]              ="233 Reserved_22";
+    EventDescription[SECS_EVENT.SafetyDoorOpen]           ="234 SafetyDoorOpen";
+    EventDescription[SECS_EVENT.SafetyDoorClosed]         ="235 SafetyDoorClosed";
+    EventDescription[SECS_EVENT.LoadPortBundleArrived]    ="236 LoadPortBundleArrived";
+    EventDescription[SECS_EVENT.LoadPortBundleRead]       ="237 LoadPortBundleRead";
+    EventDescription[SECS_EVENT.RemoteStart]              ="238 RemoteStart]";
+    EventDescription[SECS_EVENT.UnexpectedBundleIDRead]   ="239 UnexpectedBundleIDRead";
+    EventDescription[SECS_EVENT.UnexpectedUNITIDRead]     ="240 UnexpectedUNITIDRead";
+    EventDescription[SECS_EVENT.BundleCompleteProcessed]  ="241 BundleCompleteProcessed";
+    EventDescription[SECS_EVENT.BundleCompleteIDRead]     ="242 BundleCompleteIDRead";
+    EventDescription[SECS_EVENT.NoCoverTray_2DID]         ="243 NoCoverTray_2DID";
+    EventDescription[SECS_EVENT.NoCoverTray_Normal]       ="244 NoCoverTray_Normal";
+    EventDescription[SECS_EVENT.BundleEnd_Auto1]          ="245 BundleEnd_Auto1";                                       //Auto1
+    EventDescription[SECS_EVENT.BundleEnd_IDREAD_Auto1]   ="246 BundleEnd_IDREAD_Auto1";
+    EventDescription[SECS_EVENT.BundleEnd_Auto2]          ="247 BundleEnd_Auto2";                                       //Auto2
+    EventDescription[SECS_EVENT.BundleEnd_IDREAD_Auto2]   ="248 BundleEnd_IDREAD_Auto2";
+    EventDescription[SECS_EVENT.ProcessEnd]               ="249 ProcessEnd";    //Process end
+    EventDescription[SECS_EVENT.DoStartAutoHeight]        ="250 START Auto contact height";                             //Ifor 20240311 add: START Auto contact height
+    EventDescription[SECS_EVENT.BundleEnd_Auto3]          ="251 BundleEnd_Auto3";                                       //Auto3
+    EventDescription[SECS_EVENT.BundleEnd_IDREAD_Auto3]   ="252 BundleEnd_IDREAD_Auto3";
+    EventDescription[SECS_EVENT.BundleEnd_Auto4]          ="253 BundleEnd_Auto4";                                       //Auto4
+    EventDescription[SECS_EVENT.BundleEnd_IDREAD_Auto4]   ="254 BundleEnd_IDREAD_Auto4";
+    EventDescription[SECS_EVENT.BundleEnd_Auto5]          ="255 BundleEnd_Auto5";                                       //Auto5
+    EventDescription[SECS_EVENT.BundleEnd_IDREAD_Auto5]   ="256 BundleEnd_IDREAD_Auto5";
+    EventDescription[SECS_EVENT.BundleEnd_Auto6]          ="257 BundleEnd_Auto6";                                       //Auto6
+    EventDescription[SECS_EVENT.BundleEnd_IDREAD_Auto6]   ="258 BundleEnd_IDREAD_Auto6";
+    EventDescription[SECS_EVENT.BundleEnd_Fix1]           ="259 BundleEnd_Fix1";                                        //Fix1
+    EventDescription[SECS_EVENT.BundleEnd_IDREAD_Fix1]    ="260 BundleEnd_IDREAD_Fix1";
+    EventDescription[SECS_EVENT.BundleEnd_Fix2]           ="261 BundleEnd_Fix2";                                        //Fix2
+    EventDescription[SECS_EVENT.BundleEnd_IDREAD_Fix2]    ="262 BundleEnd_IDREAD_Fix2";
+    EventDescription[SECS_EVENT.BundleEnd_Fix3]           ="263 BundleEnd_Fix3";                                        //Fix3
+    EventDescription[SECS_EVENT.BundleEnd_IDREAD_Fix3]    ="264 BundleEnd_IDREAD_Fix3";
+    EventDescription[SECS_EVENT.BundleEnd_Fix4]           ="265 BundleEnd_Fix4";                                        //Fix4
+    EventDescription[SECS_EVENT.BundleEnd_IDREAD_Fix4]    ="266 BundleEnd_IDREAD_Fix4";
+    EventDescription[SECS_EVENT.BundleEnd_Fix5]           ="267 BundleEnd_Fix5";                                        //Fix5
+    EventDescription[SECS_EVENT.BundleEnd_IDREAD_Fix5]    ="268 BundleEnd_IDREAD_Fix5";
+    EventDescription[SECS_EVENT.BundleEnd_Fix6]           ="269 BundleEnd_Fix6";                                        //Fix6
+    EventDescription[SECS_EVENT.BundleEnd_IDREAD_Fix6]    ="270 BundleEnd_IDREAD_Fix6";
+    EventDescription[SECS_EVENT.LoaderTrayState]            ="271 LoaderTrayState";
+    EventDescription[SECS_EVENT.AGVSupplement]              ="272 AGVSupplement";
+    EventDescription[SECS_EVENT.AGVLDUnLDStatus]            ="273 AGVLDUnLDStatus";
+    EventDescription[SECS_EVENT.SECSGEMConsecutiveFailure]  ="274 SECSGEMConsecutiveFailure";
+    EventDescription[SECS_EVENT.Loader_Buffer_HasTray]      ="275 Loader_Buffer_HasTray";                               //Sam 20250605 : Loader buffer status change event
+    EventDescription[SECS_EVENT.Loader_Buffer_NoTray]       ="276 Loader_Buffer_NoTray";
+    EventDescription[SECS_EVENT.OutputPort1BinCode]         ="277 OutputPort1BinCode";
+    EventDescription[SECS_EVENT.OutputPort2BinCode]         ="278 OutputPort2BinCode";
+    EventDescription[SECS_EVENT.OutputPort3BinCode]         ="279 OutputPort3BinCode";
+    EventDescription[SECS_EVENT.OutputPort4BinCode]         ="280 OutputPort4BinCode";
+    EventDescription[SECS_EVENT.OutputPort5BinCode]         ="281 OutputPort5BinCode";
+    EventDescription[SECS_EVENT.OutputPort6BinCode]         ="282 OutputPort6BinCode";
+    EventDescription[SECS_EVENT.MaterialModeChange]         ="283 MaterialModeChange";
+    EventDescription[SECS_EVENT.PortStateUpdated]           ="284 PortStateUpdated";
+    EventDescription[SECS_EVENT.UnloaderTrayIDReadOK]       ="285 UnloaderTrayIDReadOK";
+    EventDescription[SECS_EVENT.UnloaderTrayIDReadFail]     ="286 UnloaderTrayIDReadFail";
+    EventDescription[SECS_EVENT.LoaderTrayIDReadFail]       ="287 LoaderTrayIDReadFail";
+    EventDescription[SECS_EVENT.MaximumOutputPortReport]    ="288 MaximumOutputPortReport";
+    EventDescription[SECS_EVENT.RunCheckRequest]            ="289 RunCheckRequest";//Eastsun 20260515 F018
+    EventDescription[SECS_EVENT.AGVLDUnLDFinish]            ="290 AGVLDUnLDFinish";//Eastsun 20260512 F009 KYEC AMR LDUnLD Finish
+    EventDescription[SECS_EVENT.AGVLdID]                    ="291 AGVLdID";//Eastsun 20260513 F016 KYEC AMR cover-tray ID
+    EventDescription[SECS_EVENT.DoSecsGemIndexFail]         ="292 DoSecsGemIndexFail";//Eastsun 20260515 F018 KYEC Index Fail
+};
+#endif // GOLDEN VERBATIM -- golden SECSGEM/uHGemHT9045.cpp:66-369  (GATE G-PTW6c-HT9045Gem, end)
 HT9045Gem::HT9045Gem(AnsiString Path, THGem *HGemTmp)
 {
     HGemPtr=HGemTmp;

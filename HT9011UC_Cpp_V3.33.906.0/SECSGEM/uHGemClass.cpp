@@ -2058,6 +2058,163 @@ void HTGem::S2F30_EquipmentConstantNamelistReply()
 // (`bApplyClock==false` in that case) -- golden's own asymmetry against the
 // range-check-failure case (hour>23 etc, which DOES set Error=true ->
 // DTACK=1), not "fixed" into a uniform decision here.
+// ===========================================================================
+//  GOLDEN VERBATIM PAIR -- HTGem::S2F32_DateAndTimeAcknowledge
+//  golden SECSGEM/uHGemClass.cpp:1095-1216 (122 golden lines), transcribed CHARACTER-FOR-CHARACTER
+//  (Big5/cp950 -> UTF-8 only) and GATED OFF.  The block is INERT: the ACTIVE
+//  HTGem::S2F32_DateAndTimeAcknowledge is the 44-line body immediately after the #endif, and that body is
+//  UNCHANGED by this pair being here.  Net behaviour change: ZERO.
+//
+//  READ THIS FIRST -- THIS ONE IS A SIZE-HEURISTIC FALSE POSITIVE, NOT LOST
+//  TEXT.  Unlike the other pairs added by this wave, golden's logic here is
+//  ALREADY PRESENT in this tree; it is merely RELOCATED, which is exactly the
+//  second way body_size_scan.py can mis-rank a function (see DEVLOG 20260810:
+//  "某個區塊被正確搬到別的檔案也會讓本體變短").  Golden :1111-1200 (the whole
+//  len==12/14/16/19/22 decode plus the IsCorrectDateFormat + hour/min/sec/hund
+//  range checks) lives at ParseSECSDateTimeString, this file :764-852, field
+//  for field and comment for comment; golden's settime()/setdate() pair
+//  (:1196-1197) is the SetSystemDateTimeHook seam.  The live body is 44 lines
+//  vs golden's 122 ONLY because ~78 lines were extracted into that helper.
+//  This block is therefore a REFERENCE COPY of golden's original one-function
+//  form (useful for auditing the split), NOT a restoration of missing text --
+//  do NOT un-gate it, that would duplicate a definition.  Recorded here
+//  because the wave brief listed it; the honest classification is in the
+//  wave report.
+//
+//  NOTHING inside the gate is fixed, renamed, reflowed or reindented --
+//  golden's own defects are preserved ON PURPOSE so a diff against golden
+//  stays EMPTY (this wave's report lists them with their golden line
+//  numbers).  Same shape as this tree's existing pairs: atester.cpp
+//  GetTesterResult (golden 1,705 gated / 6-line live) and csystem.cpp
+//  MainProc (2,390 / 26), DoTrayFeedProcess (1,235 / 6),
+//  CheckContinusStartIsReady (700 / 9), DoAllProcess.  Being gated it needs
+//  NO callee to exist -- only lexical validity; no stub, declaration or
+//  header edit was added anywhere for its symbols.
+// ===========================================================================
+#if 0 // GOLDEN VERBATIM -- golden SECSGEM/uHGemClass.cpp:1095-1216.  INERT reference text; the live HTGem::S2F32_DateAndTimeAcknowledge follows the #endif.
+void HTGem::S2F32_DateAndTimeAcknowledge()
+{
+    char str[256];
+    int len,ret;
+    unsigned char Type;
+    bool Error=false;
+    AnsiString S, S1;
+//    unsigned YY,MM,DD,hh,mm,ss,cc;
+    struct  time t;
+    struct date reset;
+
+    ret=HGemPtr->GetDataItemLenAndType(len, Type);
+    if(Type==HType.ASCII_TYPE && ret==1)
+    {
+        if(HGemPtr->DataItemIn(len, Type, str)==1)
+        {
+            if(len==12)                                                         // "030601134700"
+            {
+                S=str;
+                reset.da_year   =atoi(S.SubString(1, 2).c_str())+2000;
+                reset.da_mon    =atoi(S.SubString(3, 2).c_str());
+                reset.da_day    =atoi(S.SubString(5, 2).c_str());
+                t.ti_hour       =atoi(S.SubString(7, 2).c_str());
+                t.ti_min        =atoi(S.SubString(9, 2).c_str());
+                t.ti_sec        =atoi(S.SubString(11, 2).c_str());
+                t.ti_hund       =0;
+            }
+            else if(len==14)                                                    // "20030602134700"
+            {
+                S=str;
+                reset.da_year   =atoi(S.SubString(1, 4).c_str());
+                reset.da_mon    =atoi(S.SubString(5, 2).c_str());
+                reset.da_day    =atoi(S.SubString(7, 2).c_str());
+                t.ti_hour       =atoi(S.SubString(9, 2).c_str());
+                t.ti_min        =atoi(S.SubString(11, 2).c_str());
+                t.ti_sec        =atoi(S.SubString(13, 2).c_str());
+                t.ti_hund       =0;
+            }
+            else if(len==16)                                                    // "2003060313401000"
+            {
+                S=str;
+                reset.da_year   =atoi(S.SubString(1, 4).c_str());
+                reset.da_mon    =atoi(S.SubString(5, 2).c_str());
+                reset.da_day    =atoi(S.SubString(7, 2).c_str());
+                t.ti_hour       =atoi(S.SubString(9, 2).c_str());
+                t.ti_min        =atoi(S.SubString(11, 2).c_str());
+                t.ti_sec        =atoi(S.SubString(13, 2).c_str());
+                t.ti_hund       =atoi(S.SubString(15, 2).c_str());
+            }
+            else if(len==19)                                                    //  "2003-06-04T13:01:01"
+            {
+                S=str;
+                reset.da_year   =atoi(S.SubString(1, 4).c_str());
+                reset.da_mon    =atoi(S.SubString(6, 2).c_str());
+                reset.da_day    =atoi(S.SubString(9, 2).c_str());
+                t.ti_hour       =atoi(S.SubString(12, 2).c_str());
+                t.ti_min        =atoi(S.SubString(15, 2).c_str());
+                t.ti_sec        =atoi(S.SubString(18, 2).c_str());
+                t.ti_hund       =0;
+            }
+            else if(len==21)                                                    //  "2003-06-05T13:01:01.2"
+            {
+                S=str;
+                reset.da_year   =atoi(S.SubString(1, 4).c_str());
+                reset.da_mon    =atoi(S.SubString(6, 2).c_str());
+                reset.da_day    =atoi(S.SubString(9, 2).c_str());
+                t.ti_hour       =atoi(S.SubString(12, 2).c_str());
+                t.ti_min        =atoi(S.SubString(15, 2).c_str());
+                t.ti_sec        =atoi(S.SubString(18, 2).c_str());
+                t.ti_hund       =atoi(S.SubString(21, 1).c_str())*10;
+            }
+            else if(len==22)                                                    //  "2003-06-06T13:01:01.25"
+            {
+                S=str;
+                reset.da_year   =atoi(S.SubString(1, 4).c_str());
+                reset.da_mon    =atoi(S.SubString(6, 2).c_str());
+                reset.da_day    =atoi(S.SubString(9, 2).c_str());
+                t.ti_hour       =atoi(S.SubString(12, 2).c_str());
+                t.ti_min        =atoi(S.SubString(15, 2).c_str());
+                t.ti_sec        =atoi(S.SubString(18, 2).c_str());
+                t.ti_hund       =atoi(S.SubString(21, 2).c_str());
+            }
+            else
+            {
+                Error=true;
+            }
+
+            if(Error==false)
+            {
+                if(IsCorrectDateFormat(reset.da_year, reset.da_mon, reset.da_day))
+                {
+                    if(t.ti_hour>23)                                            //Steven 20140404 : 避免Warning
+                        Error=true;
+                    if(t.ti_min>59)
+                        Error=true;
+                    if(t.ti_sec>59)
+                        Error=true;
+                    if(t.ti_hund>99)
+                        Error=true;
+                    if(Error==false)
+                    {
+                        settime(&t);
+                        setdate(&reset);
+                    }
+                }
+            }
+        }
+        else
+        {
+            Error=true;
+        }
+    }
+    else
+    {
+        Error=true;
+    }
+
+    if(Error==true)
+        HGemPtr->LocalAcknowledge(2, 32, 1);
+    else
+        HGemPtr->LocalAcknowledge(2, 32, 0);
+}
+#endif // GOLDEN VERBATIM -- golden SECSGEM/uHGemClass.cpp:1095-1216 (end)
 void HTGem::S2F32_DateAndTimeAcknowledge()
 {
     char str[256];

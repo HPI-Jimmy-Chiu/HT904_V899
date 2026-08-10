@@ -170,6 +170,67 @@ void TLaneIO::InitialMyUseIP()
     }
 }
 
+// ===========================================================================
+//AI(W906-PT-W6c) 20260810: GOLDEN TEXT RESTORED (GATED) -- SetUseIP
+//  golden HT9011UC_Code_V3.33.906.0_20260618/MyLaneIo.cpp:55-101  (47 lines)
+//  Census scored this function "translated" on name match only; the LIVE body
+//  below is an abbreviated stand-in and golden's text existed nowhere in the
+//  tree. The block inside the gate is golden's body transcribed VERBATIM
+//  (cp950 -> UTF-8; byte-exact when re-encoded to cp950) and is INACTIVE.
+//  The LIVE body that follows is UNCHANGED and remains the only active
+//  definition -- net behaviour delta = 0. NOTHING was added inside the gate,
+//  so a later un-gate is mechanical.
+// ===========================================================================
+#if 0 // AI-W6C-GOLDEN-BEGIN SetUseIP MyLaneIo.cpp:55-101
+void TLaneIO::SetUseIP(int Ring, int IP, int iISABase, AnsiString Alias, bool bOutPut)
+{
+   /* if(Ring<MAXRing && IP<MAXIP)
+    {
+        if(iISABase==eMotionNet)                                                //JerryYang 20241231 : 修改Restore IO模組判斷方式, 有輸入database的才需要恢復
+        {
+            if(bOutPut==true)
+            {
+                if(iUseMNetIP[Ring][IP]==DEV_INF_IO_32IN_DEV)
+                {
+                    iUseMNetIP[Ring][IP]=DEV_INF_IO_16IN_16OUT_DEV;
+                    MNetLog(AnsiString().sprintf("Ring=%d IP=%d OutPut=%d Alias=%s", Ring, IP, (bOutPut)?1:0, Alias));
+                }
+                else if(iUseMNetIP[Ring][IP]!=DEV_INF_IO_32OUT_DEV &&
+                        iUseMNetIP[Ring][IP]!=DEV_INF_IO_16IN_16OUT_DEV)
+                {
+                    iUseMNetIP[Ring][IP]=DEV_INF_IO_32OUT_DEV;
+                    MNetLog(AnsiString().sprintf("Ring=%d IP=%d OutPut=%d Alias=%s", Ring, IP, (bOutPut)?1:0, Alias));
+                }
+                else
+                {
+                    iUseMNetIP[Ring][IP]=DEV_INF_IO_32OUT_DEV;
+                    MNetLog(AnsiString().sprintf("Ring=%d IP=%d OutPut=%d Alias=%s", Ring, IP, (bOutPut)?1:0, Alias));
+                }
+            }
+            else if(bOutPut==false)
+            {
+                if(iUseMNetIP[Ring][IP]==DEV_INF_IO_32OUT_DEV)
+                {
+                    iUseMNetIP[Ring][IP]=DEV_INF_IO_16IN_16OUT_DEV;
+                    MNetLog(AnsiString().sprintf("Ring=%d IP=%d OutPut=%d Alias=%s", Ring, IP, (bOutPut)?1:0, Alias));
+                }
+                else if(iUseMNetIP[Ring][IP]!=DEV_INF_IO_32IN_DEV &&
+                        iUseMNetIP[Ring][IP]!=DEV_INF_IO_16IN_16OUT_DEV)
+                {
+                    iUseMNetIP[Ring][IP]=DEV_INF_IO_32IN_DEV;
+                    MNetLog(AnsiString().sprintf("Ring=%d IP=%d OutPut=%d Alias=%s", Ring, IP, (bOutPut)?1:0, Alias));
+                }
+                else
+                {
+                    iUseMNetIP[Ring][IP]=DEV_INF_IO_32IN_DEV;
+                    MNetLog(AnsiString().sprintf("Ring=%d IP=%d OutPut=%d Alias=%s", Ring, IP, (bOutPut)?1:0, Alias));
+                }
+            }
+        }
+    }     */
+}
+#endif // AI-W6C-GOLDEN-END SetUseIP MyLaneIo.cpp:55-101
+
 // ---------------------------------------------------------------------------
 //  SetUseIP -- BCB6 body is entirely commented out; translated faithfully as
 //  an empty no-op (preserving the block comment).

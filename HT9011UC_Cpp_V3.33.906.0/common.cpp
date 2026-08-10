@@ -824,6 +824,88 @@ AnsiString __fastcall ReadIniDataMem(AnsiString FileName, AnsiString Group, Ansi
 //  The ini-core (Read-old / try{Write*} catch RecordProcess) is active.
 // ===========================================================================
 
+// ===========================================================================
+//AI(W906-PT-W6c) 20260810: GOLDEN TEXT RESTORED (GATED) -- WriteIniData
+//  golden HT9011UC_Code_V3.33.906.0_20260618/common.cpp:622-689  (68 lines)
+//  Census scored this function "translated" on name match only; the LIVE body
+//  below is an abbreviated stand-in and golden's text existed nowhere in the
+//  tree. The block inside the gate is golden's body transcribed VERBATIM
+//  (cp950 -> UTF-8; byte-exact when re-encoded to cp950) and is INACTIVE.
+//  The LIVE body that follows is UNCHANGED and remains the only active
+//  definition -- net behaviour delta = 0. NOTHING was added inside the gate,
+//  so a later un-gate is mechanical.
+// ===========================================================================
+#if 0 // AI-W6C-GOLDEN-BEGIN WriteIniData common.cpp:622-689
+void __fastcall WriteIniData(AnsiString FileName, AnsiString Group, AnsiString Name, bool bValue)  //Steven 20090731
+{
+    AnsiString Str, Str1, Str2;
+    bool ret;
+    AnsiString StrChangeName="";                                                //Ifor 20190930 : add Display temperature switch Site Name
+    bool bHasChange=false;                                                      //Ifor 20191004 : Change Log By Lot 需放在最下面，避免開檔後存錯位置
+    bool bStr2HasFind=false;                                                    //Ifor 20191021 : 整理Even Log
+    if(OpenIniFile(FileName)==false)                                            //Steven 20141120 : Add Read/Write IniFile Speed
+    {
+        Str.sprintf("Write NULL INI on [%s] %s", Group, Name);
+        RecordProcess(Str);
+        return;
+    }
+
+    ret=INIFile->ReadBool(Group, Name, bValue);
+    if(ret!=bValue && InitialOK==true)                                          //Ifor 20190919 : add 避免程式開啟時因客戶要求強制開啟功能寫入時發生異常
+    {
+        StrChangeName=TempChangeLog(Group,Name);                                //Ifor 20190930 : add Display temperature switch Site Name
+        if(FileName.Pos("Offset")==0)                                           //Ifor 20191004 : add Change Log 是否為Offset 資料
+        {
+            Str1.sprintf("%s_%s change Value",Group , StrChangeName);
+        }
+        else
+        {
+            Str1.sprintf("%s_%s Offset change Value",Group , StrChangeName);
+        }
+
+        if(FileName.Pos("HandlerCondition.Data")!=0)
+        {
+            if(Group=="Configuration")
+            {
+                bStr2HasFind=true;
+                if(Name=="bAutoClean_UseTray")
+                {
+                    Str2.sprintf("%s ==> %s", fCleaning->rgCleanKitType->Items->Strings[ret], fCleaning->rgCleanKitType->Items->Strings[bValue]);
+                }
+                else
+                {
+                    bStr2HasFind=false;
+                }
+            }
+        }
+
+        if(bStr2HasFind==false)
+        {
+            Str2.sprintf("%d==>%d", ret, bValue);
+        }
+        RecordChangeLogProcess(Str1.c_str(), Str2.c_str());                     //wei 20180625 offset Change log紀錄
+        bHasChange=true;
+    }
+
+    try
+    {
+        INIFile->WriteBool(Group, Name, bValue);
+    }
+    catch(...)
+    {
+        Str1.sprintf("WriteIniData:%s", FileName);
+        RecordProcess("Exception", Str1);
+    }
+
+    if(CosFunction.bUseChangeLogByLot==true &&                                  //Ifor 20191004 : Change Log By Lot 需放在最下面，避免開檔後存錯位置
+       bSysLotStart==true &&
+       bHasChange==true)                                                        //Ifor 20191002 : add Change Log By Lot
+    {
+        FormHS->RecordChangeLogByLot(Str1, Str2);
+    }
+}
+#endif // AI-W6C-GOLDEN-END WriteIniData common.cpp:622-689
+
 // ---------------------------------------------------------------------------
 //  WriteIniData(bool) (common.cpp:622-689)
 //  Core: ReadBool old value; try{ WriteBool } catch.
@@ -1908,6 +1990,77 @@ DWORD MyTickCount()                                                          // 
 {
     return GetTickCount();
 }
+
+// ===========================================================================
+//AI(W906-PT-W6c) 20260810: GOLDEN TEXT RESTORED (GATED) -- MySleepEx
+//  golden HT9011UC_Code_V3.33.906.0_20260618/common.cpp:1735-1791  (57 lines)
+//  Census scored this function "translated" on name match only; the LIVE body
+//  below is an abbreviated stand-in and golden's text existed nowhere in the
+//  tree. The block inside the gate is golden's body transcribed VERBATIM
+//  (cp950 -> UTF-8; byte-exact when re-encoded to cp950) and is INACTIVE.
+//  The LIVE body that follows is UNCHANGED and remains the only active
+//  definition -- net behaviour delta = 0. NOTHING was added inside the gate,
+//  so a later un-gate is mechanical.
+// ===========================================================================
+#if 0 // AI-W6C-GOLDEN-BEGIN MySleepEx common.cpp:1735-1791
+DWORD MySleepEx(DWORD dwMilliseconds, bool bAlertable)                          //Steven 20200807 : 趁著Sleep的時候去檢查EC change report
+{
+    #ifdef USE_EC_CHANGE
+    int iFlag;
+    bool bStopWhile=false;
+    static int iInputCnt=0;
+    int iLeftTime;
+
+    if(bAlreadySleep==false)                                                    //避免多執行緒進來
+    {
+        bAlreadySleep=true;
+    }
+    else
+    {
+        return SleepEx(dwMilliseconds, bAlertable);
+    }
+
+    if(bRunTimer==false)
+    {
+        MySpeelTimer.SetMSAndOn(dwMilliseconds);
+        MySpeelTimer.LatchCycleTime(true);
+        bRunTimer=true;
+    }
+
+    iInputCnt=iSleepCount;
+    do
+    {
+        iFlag=HGem->DoReportECChange(iSleepCount);
+        if(iFlag==1)
+        {
+            iSleepCount++;
+            if(iSleepCount>=HGem->EC_ID->Count)
+                iSleepCount=0;
+        }
+
+        if(iSleepCount==iInputCnt || iFlag!=1)                                  //假設已經繞了一圈, 或者不需要執行EC check, 就停止while loop
+        {
+            bStopWhile=true;
+            break;
+        }
+    }
+    while(MySpeelTimer.Off()==false && bStopWhile==false);
+
+    if(bStopWhile==true)
+    {
+        iLeftTime=dwMilliseconds-MySpeelTimer.LatchCycleTime();
+
+        if(iLeftTime>0)
+            SleepEx(iLeftTime, bAlertable);
+    }
+    bRunTimer=false;
+    bAlreadySleep=false;
+    return 1;
+    #else
+    return SleepEx(dwMilliseconds, bAlertable);
+    #endif
+}
+#endif // AI-W6C-GOLDEN-END MySleepEx common.cpp:1735-1791
 
 DWORD MySleepEx(DWORD dwMilliseconds, bool bAlertable)                       // common.cpp:1735 -- Steven 20200807
 {

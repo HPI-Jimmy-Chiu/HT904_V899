@@ -535,6 +535,98 @@ AnsiString CheckFile(AnsiString szDir, AnsiString str)
     return szDir;
 }
 //---------------------------------------------------------------------------
+// ===========================================================================
+//  GOLDEN VERBATIM PAIR -- ChangeCompomentEnabled
+//  golden cAuthority.cpp:438-503 (66 golden lines), transcribed CHARACTER-FOR-CHARACTER
+//  (Big5/cp950 -> UTF-8 only) and GATED OFF.  The block is INERT: the ACTIVE
+//  ChangeCompomentEnabled is the 11-line body immediately after the #endif, and that body is
+//  UNCHANGED by this pair being here.  Net behaviour change: ZERO.
+//
+//  WHY: the census scored this function "translated" because a same-named
+//  LIVE body exists -- but it never compares SIZE.  That body is 11 lines
+//  standing in for 66 golden lines whose text was NOWHERE in this tree.
+//  That is LOST TEXT, not deferred behaviour.  Now the text EXISTS and is
+//  auditable line-by-line, and a later un-gate is mechanical rather than a
+//  re-translation.
+//
+//  NOTHING inside the gate is fixed, renamed, reflowed or reindented --
+//  golden's own defects are preserved ON PURPOSE so a diff against golden
+//  stays EMPTY (this wave's report lists them with their golden line
+//  numbers).  Same shape as this tree's existing pairs: atester.cpp
+//  GetTesterResult (golden 1,705 gated / 6-line live) and csystem.cpp
+//  MainProc (2,390 / 26), DoTrayFeedProcess (1,235 / 6),
+//  CheckContinusStartIsReady (700 / 9), DoAllProcess.  Being gated it needs
+//  NO callee to exist -- only lexical validity; no stub, declaration or
+//  header edit was added anywhere for its symbols.
+// ===========================================================================
+#if 0 // GOLDEN VERBATIM -- golden cAuthority.cpp:438-503.  INERT reference text; the live ChangeCompomentEnabled follows the #endif.
+void __fastcall ChangeCompomentEnabled(TWinControl *PCtrl, bool bEnable, bool bMustEnable)
+{
+    // 先將主物件的資料寫入 ......................
+    TPanel          *PanelPtr  = dynamic_cast <TPanel       *>(PCtrl);
+    TTabSheet       *ShtPtr    = dynamic_cast <TTabSheet    *>(PCtrl);
+    TForm           *FrmPtr    = dynamic_cast <TForm        *>(PCtrl);
+    TGroupBox       *PGroupBox = dynamic_cast <TGroupBox    *>(PCtrl);
+    TRadioGroup     *RadGup    = dynamic_cast <TRadioGroup  *>(PCtrl);
+    if(bMustEnable==false)
+    {
+        if     (PanelPtr  !=NULL) PanelPtr   ->Enabled=(bEnable==false)?false:PanelPtr   ->Enabled;
+        else if(ShtPtr    !=NULL) ShtPtr     ->Enabled=(bEnable==false)?false:ShtPtr     ->Enabled;
+        else if(FrmPtr    !=NULL) FrmPtr     ->Enabled=(bEnable==false)?false:FrmPtr     ->Enabled;
+        else if(PGroupBox !=NULL) PGroupBox  ->Enabled=(bEnable==false)?false:PGroupBox  ->Enabled;
+        else if(RadGup    !=NULL) RadGup     ->Enabled=(bEnable==false)?false:RadGup     ->Enabled;
+    }
+    else
+    {
+        if     (PanelPtr  !=NULL) PanelPtr   ->Enabled=bEnable;
+        else if(ShtPtr    !=NULL) ShtPtr     ->Enabled=bEnable;
+        else if(FrmPtr    !=NULL) FrmPtr     ->Enabled=bEnable;
+        else if(PGroupBox !=NULL) PGroupBox  ->Enabled=bEnable;
+        else if(RadGup    !=NULL) RadGup     ->Enabled=bEnable;
+    }
+
+    // 再將附屬物件的資料寫入 .....................
+    for(int iP=0; iP<PCtrl->ControlCount; iP++)
+    {
+        TControl *P=PCtrl->Controls[iP];
+        if(dynamic_cast <TPanel       *>(P)!=NULL ||     // 有子節點
+            dynamic_cast <TPageControl *>(P)!=NULL ||
+            dynamic_cast <TTabSheet    *>(P)!=NULL ||
+            dynamic_cast <TTabControl  *>(P)!=NULL ||
+            dynamic_cast <TForm        *>(P)!=NULL ||
+            dynamic_cast <THeader      *>(P)!=NULL ||
+            dynamic_cast <TPage        *>(P)!=NULL ||
+            dynamic_cast <TGroupBox    *>(P)!=NULL ||
+            dynamic_cast <TScrollBox   *>(P)!=NULL ||
+            dynamic_cast <TRadioGroup  *>(P)!=NULL
+            )
+        {
+            ChangeCompomentEnabled((TWinControl *) P, bEnable, bMustEnable);       // 找該物件附屬的物件(遞迴) //Steven 20120912 : 會發生被Disable後,無法Enable的狀況
+        }
+        TLabel          *PLabel       = dynamic_cast <TLabel        *>(P);
+        TSpeedButton    *PSpeedButton = dynamic_cast <TSpeedButton  *>(P);
+        TButton         *PButton      = dynamic_cast <TButton       *>(P);
+        TCheckBox       *PCheckBox    = dynamic_cast <TCheckBox     *>(P);
+        TRadioButton    *PRadioButton = dynamic_cast <TRadioButton  *>(P);
+        if(bMustEnable==false)
+        {
+            if     (PLabel      !=NULL) PLabel      ->Enabled=(bEnable==false)?false:PLabel         ->Enabled;
+            else if(PSpeedButton!=NULL) PSpeedButton->Enabled=(bEnable==false)?false:PSpeedButton   ->Enabled;
+            else if(PButton     !=NULL) PButton     ->Enabled=(bEnable==false)?false:PButton        ->Enabled;
+            else if(PCheckBox   !=NULL) PCheckBox   ->Enabled=(bEnable==false)?false:PCheckBox      ->Enabled;
+            else if(PRadioButton!=NULL) PRadioButton->Enabled=(bEnable==false)?false:PRadioButton   ->Enabled;
+        }
+        else
+        {
+            if     (PLabel      !=NULL) PLabel      ->Enabled=bEnable;
+            else if(PSpeedButton!=NULL) PSpeedButton->Enabled=bEnable;
+            else if(PButton     !=NULL) PButton     ->Enabled=bEnable;
+            else if(PCheckBox   !=NULL) PCheckBox   ->Enabled=bEnable;
+            else if(PRadioButton!=NULL) PRadioButton->Enabled=bEnable;
+        }
+    }
+}
+#endif // GOLDEN VERBATIM -- golden cAuthority.cpp:438-503 (end)
 void ChangeCompomentEnabled(TWinControl * /*PCtrl*/, bool /*bEnable*/, bool /*bMustEnable*/)
 {
     // GATED: see banner GATE REGISTER (1). Offline: no live widget tree to

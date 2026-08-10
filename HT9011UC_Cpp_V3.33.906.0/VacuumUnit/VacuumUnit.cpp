@@ -617,6 +617,70 @@ void TfVacuumUnit::sbResetClick(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
+// ===========================================================================
+//AI(W906-PT-W6c) 20260810: GOLDEN TEXT RESTORED (GATED) -- SetIOTableByECAT_VC8_Sucker
+//  golden HT9011UC_Code_V3.33.906.0_20260618/VacuumUnit/VacuumUnit.cpp:431-480  (50 lines)
+//  Census scored this function "translated" on name match only; the LIVE body
+//  below is an abbreviated stand-in and golden's text existed nowhere in the
+//  tree. The block inside the gate is golden's body transcribed VERBATIM
+//  (cp950 -> UTF-8; byte-exact when re-encoded to cp950) and is INACTIVE.
+//  The LIVE body that follows is UNCHANGED and remains the only active
+//  definition -- net behaviour delta = 0. NOTHING was added inside the gate,
+//  so a later un-gate is mechanical.
+// ===========================================================================
+#if 0 // AI-W6C-GOLDEN-BEGIN SetIOTableByECAT_VC8_Sucker VacuumUnit/VacuumUnit.cpp:431-480
+void SetIOTableByECAT_VC8_Sucker()
+{
+    if(VCCU_UNIT_TYPE==1)
+    {
+        //由軟體自動編排 2
+        /*
+        for(int iRow=0; iRow<2; iRow++)
+        {
+            for(int iCol=0; iCol<fVacuumUnit->iIndexColMax; iCol++)
+            {
+                VaccumCopyToSuck(*fVacuumUnit->myPalArm1[iCol][iRow],FTestSuck.Suck[iRow][iCol]);
+                VaccumCopyToSuck(*fVacuumUnit->myPalArm2[iCol][iRow],BTestSuck.Suck[iRow][iCol]);
+            }
+        }
+
+        for(int iRow=0; iRow<2; iRow++)
+        {
+            for(int iCol=0; iCol<fVacuumUnit->iInOutColMax; iCol++)
+            {
+                VaccumCopyToSuck(*fVacuumUnit->myPalInArm[iCol][iRow],InArmSuck.Suck[iRow][iCol]);
+                VaccumCopyToSuck(*fVacuumUnit->myPalOutArm[iCol][iRow],OutArmSuck.Suck[iRow][iCol]);
+            }
+        }
+        */
+
+        //讀 DB 檔 2
+        for(int iRow=0; iRow<2; iRow++)
+        {
+            for(int iCol=0; iCol<fVacuumUnit->iIndexColMax; iCol++)
+            {
+                SetSuckISABase(FTestSuck.Suck[iRow][iCol],ePCI1203);
+                VaccumCopyFormSuck(*fVacuumUnit->myPalArm1[iCol][iRow],FTestSuck.Suck[iRow][iCol]);
+
+                SetSuckISABase(BTestSuck.Suck[iRow][iCol],ePCI1203);
+                VaccumCopyFormSuck(*fVacuumUnit->myPalArm2[iCol][iRow],BTestSuck.Suck[iRow][iCol]);
+            }
+        }
+        for(int iRow=0; iRow<2; iRow++)
+        {
+            for(int iCol=0; iCol<fVacuumUnit->iInOutColMax; iCol++)
+            {
+                SetSuckISABase(InArmSuck.Suck[iRow][iCol],ePCI1203);
+                VaccumCopyFormSuck(*fVacuumUnit->myPalInArm[iCol][iRow],InArmSuck.Suck[iRow][iCol]);
+
+                SetSuckISABase(OutArmSuck.Suck[iRow][iCol],ePCI1203);
+                VaccumCopyFormSuck(*fVacuumUnit->myPalOutArm[iCol][iRow],OutArmSuck.Suck[iRow][iCol]);
+            }
+        }
+    }
+}
+#endif // AI-W6C-GOLDEN-END SetIOTableByECAT_VC8_Sucker VacuumUnit/VacuumUnit.cpp:431-480
+
 //AI(W906-PT-W3) 20260807: GATE (1) -- see this file's own banner GATE
 //  REGISTER entry (1). Golden body preserved verbatim, in comment form:
 //

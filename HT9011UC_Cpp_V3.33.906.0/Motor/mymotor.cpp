@@ -371,6 +371,332 @@ void TMyMotor::InitMOTParameter()
     MovFlag   = false;
 }
 
+// ===========================================================================
+//AI(W906-PT-W6c) 20260810: GOLDEN TEXT RESTORED (GATED) -- MotorMovePosition
+//  golden HT9011UC_Code_V3.33.906.0_20260618/Motor/mymotor.cpp:549-860  (312 lines)
+//  Census scored this function "translated" on name match only; the LIVE body
+//  below is an abbreviated stand-in and golden's text existed nowhere in the
+//  tree. The block inside the gate is golden's body transcribed VERBATIM
+//  (cp950 -> UTF-8; byte-exact when re-encoded to cp950) and is INACTIVE.
+//  The LIVE body that follows is UNCHANGED and remains the only active
+//  definition -- net behaviour delta = 0. NOTHING was added inside the gate,
+//  so a later un-gate is mechanical.
+// ===========================================================================
+#if 0 // AI-W6C-GOLDEN-BEGIN MotorMovePosition Motor/mymotor.cpp:549-860
+int TMyMotor::MotorMovePosition(int &Position, int speed, int Tar)
+{
+    //******************************************************************************
+    //  注意!! CheckIsSafeDoorOpen為Handler 安全門相關, 修改時要小心!!
+    //******************************************************************************
+    if(Motor->CheckIsSafeDoorOpen())                                            //Jimmychiu 20221013 safedoor判斷整合Function
+    {
+        return -1;
+    }
+
+    int ret=0;
+    int Pos=Tar;
+    int iEncoder=0;
+    AnsiString S1="", S2="", S3="";
+    int iGap=2;                                                                 //Sam 20230621 : Gap容許誤差改為1>2 //Isaac 20201217 : 若齒輪比大於1，換算有機會和目標位置差1條
+
+    if(Motor!=NULL &&                                                           //JimmyChiu 20250306 : 避免還沒初始化就操作馬達
+       Motor->Enable)                                                           // has true motor
+    {
+        if(Tar>=Motor->PSoftLimitP)
+        {
+            S1=AnsiString("The target position of ")+Alias+AnsiString(" over positive soft limit !");
+            S2=Alias+AnsiString("的目標位置超過正向軟體極限!");
+            S3.sprintf("%d > %d", Tar, Motor->PSoftLimitP);
+            ShowMyMessage(S1, S2, S3);
+            return -2;
+        }
+
+        if(Tar<=Motor->PSoftLimitN)
+        {
+            S1=AnsiString("The target position of ")+Alias+AnsiString(" below negative soft limit !");
+            S2=Alias+AnsiString("的目標位置低於負向軟體極限!");
+            S3.sprintf("%d <= %d", Tar, Motor->PSoftLimitN);
+            ShowMyMessage(S1, S2, S3);
+            return -3;
+        }
+
+        Position=ReadPos();                                                     //calculate GearRate Pos
+
+        if(Position!=Tar)                                                       //RogerYang 20260113 : 用來紀錄Rotator最近一次旋轉方向
+        {
+            iLastRotatorDirP=(Tar>Position)?true:false;
+        }
+
+        if(fCMD==false && Motor->MotionDone()==false)
+        {
+            return 0;
+        }
+        else if(fCMD==false)
+        {
+            GetRealPos(&Pos);                                                   //pos will change to gear ration value
+            #ifndef USE_CompareCommandPos
+            if(Tar==Position)
+            #else
+            if((Motor->GearRatio>2 && Motor->GearRatio<=5)  &&
+                ((Mot_Name>=MInArmZA && Mot_Name<=MInArmZH) ||
+                 (Mot_Name>=MOutArmZA && Mot_Name<=MOutArmZH)))                 //Jimmychiu 20230216 : 吸嘴高度
+            {
+                iGap=5;
+            }
+
+            if(CompareCommandPos(Tar, iGap)==1)                                 //Isaac 20201217 : 若齒輪比大於1，換算有機會和目標位置差1條
+            #endif
+            {
+                if(Motor->PServoAlarmOn)
+                {
+                    ScanMotorStatus();
+                    if(Led[iInposLed]==true)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        InitMOTParameter();
+                        return 1;                                               // -4 --> 1
+                    }
+                }
+                else
+                {
+                    InitMOTParameter();
+                    return 1;
+                }
+            }
+//            if(Motor->Direction==false)
+//                Pos=-Pos;
+
+            if(Mot_Name==MInArmY || Mot_Name==MOutArmY)                         //Steven 20181129 : 短距離的移動把加減速縮短一半
+            {
+                if(AUTO_EMPTY_COLOR>=3)
+                {
+                    if(Mot_Name==MOutArmY && (abs(Tar-Position)<6500))
+                        ret=Motor->MoveToPosShortDisSlowSP(Pos);
+                    else
+                        ret=Motor->MoveToPos(Pos);
+                }
+                else
+                {
+                    if(abs(Tar-Position)<6500)
+                        ret=Motor->MoveToPosShortDistance(Pos);
+                    else
+                        ret=Motor->MoveToPos(Pos);
+                }
+            }
+            else if(Mot_Name==MInShuttle1 || Mot_Name==MInShuttle2)
+            {
+                if(SHUTTLE_FLOODGATE==1)                                        //Ifor 20260327 add:避免Shuttle 移動時閘門未完全開啟導致撞機
+                {
+                    if(Mot_Name==MInShuttle1)
+                    {
+                        Cylinder[C_Shuttle1Floodgate].Off();
+                        Cylinder[C_OutShuttle1Floodgate].Off();
+                        if(Cylinder[C_Shuttle1Floodgate].OffSensor()==false ||
+                           Cylinder[C_OutShuttle1Floodgate].OffSensor()==false)
+                        {                                                       //Ifor 20260401 add: Floodgate open timeout
+                            if(!bSh1FloodgateOpenWaiting)
+                            {
+                                tSh1FloodgateOpenTimeout.SetSecAndOn(3);
+                                bSh1FloodgateOpenWaiting=true;
+                            }
+                            else if(tSh1FloodgateOpenTimeout.Off())
+                            {
+                                tSh1FloodgateOpenTimeout.SetSecAndOn(3);           //Ifor 20260401 add: re-arm for next warning
+                                ShowMyMessage("Shuttle Floodgate open timeout! Check cylinder sensor.");
+                            }
+                            return -1;
+                        }
+                        bSh1FloodgateOpenWaiting=false;                            //Ifor 20260401 add: reset on success
+                    }
+                    else
+                    {
+                        Cylinder[C_Shuttle2Floodgate].Off();
+                        Cylinder[C_OutShuttle2Floodgate].Off();
+                        if(Cylinder[C_Shuttle2Floodgate].OffSensor()==false ||
+                           Cylinder[C_OutShuttle2Floodgate].OffSensor()==false)
+                        {                                                       //Ifor 20260401 add: Floodgate open timeout
+                            if(!bSh2FloodgateOpenWaiting)
+                            {
+                                tSh2FloodgateOpenTimeout.SetSecAndOn(3);
+                                bSh2FloodgateOpenWaiting=true;
+                            }
+                            else if(tSh2FloodgateOpenTimeout.Off())
+                            {
+                                tSh2FloodgateOpenTimeout.SetSecAndOn(3);           //Ifor 20260401 add: re-arm for next warning
+                                ShowMyMessage("Shuttle Floodgate open timeout! Check cylinder sensor.");
+                            }
+                            return -1;
+                        }
+                        bSh2FloodgateOpenWaiting=false;                            //Ifor 20260401 add: reset on success
+                    }
+                }
+
+                if(abs(Tar-Position)<5000)
+                    ret=Motor->MoveToPosShortDistance(Pos);
+                else
+                    ret=Motor->MoveToPos(Pos);
+            }
+            else
+            {
+                ret=Motor->MoveToPos(Pos);
+            }
+
+            if(ret==0)
+            {
+            }
+
+            fCMD=true;
+        }
+        else
+        {
+            if(Motor->MotionDone())
+            {
+                Position=Tar;
+                if(Motor->PServoAlarmOn)
+                {
+                    ScanMotorStatus();
+                    if(Led[iInposLed]==true)
+                    {
+                        return 0;
+                    }
+                    else
+                    {
+                        InitMOTParameter();
+                        iEncoderCheckCT++;
+                        if(bCheckEncoderEveryTime==true || iEncoderCheckCT>100)
+                        {
+                            iEncoderCheckCT=0;
+                            iEncoder=ReadEncoderPos();
+                            if((Tar-iEncoderTorence)>iEncoder ||                //JerryYang 20180706 : 修改Encoder到位容許範圍
+                               (Tar+iEncoderTorence)<iEncoder)
+                            {
+                                S1.sprintf("MOT=%s, Tar=%d, Encoder=%d", Alias, Tar, iEncoder);
+                                ShowErrorMessage("WAR1639", 0, MMSystem, 0, S1);   //Motor encoder error, check encoder cable
+                                return -5;
+                            }
+
+                            if(Motor->PServoAlarmOn)
+                            {
+                                if(Mot_Name==MInRotateKit ||                    //Sam 20190811 : 防止 Rotate 旋轉完後剛好位置剛好落在原點上面導致誤報警。
+                                   Mot_Name==MOutRotateKit)
+                                {
+                                    return 1;
+                                }
+
+                                if(iEncoder>2000 || iEncoder<-2000)
+                                {
+                                    ScanMotorStatus();
+                                    if((Mot_Name==MInArmY ||                    //JerryYang 20191210 fix auto clean時後排到shuttle row A跳出home sensor error
+                                        Mot_Name==MOutArmY) &&
+                                       iEncoder>2000)
+                                    {
+                                    }
+                                    else
+                                    {
+                                        if(Led[1]==true)
+                                        {
+                                            S1.sprintf("MOT=%s Home sensor error!!", Alias);
+                                            ShowMyMessage(S1, "");
+                                            return -6;
+                                        }
+                                    }
+                                }
+                            }
+
+                            return 1;
+                        }
+                        else
+                        {
+                            return 1;
+                        }
+                    }
+                }
+                else
+                {
+                    InitMOTParameter();
+
+                    //AI(ht9045-v899) 20260505: MLoaderY 工作位置 iMLoaderYCarPos=-505 會誤觸發此防護，僅對 MLoaderY 豁免，其餘馬達維持原有 home sensor 防護
+                    if(Position<=-500 && Mot_Name!=MLoaderY)                                          //kevin 20140121 Z軸 home sensor 損壞
+                    {
+                        if(Mot_Name==MInRotateKit ||                            //Sam 20190811 : 防止 Rotate 旋轉完後剛好位置剛好落在原點上面導致誤報警。
+                           Mot_Name==MOutRotateKit)
+                        {
+                            return 1;
+                        }
+                        ScanMotorStatus();
+                        if(Led[1]==true)
+                        {
+                            S1.sprintf("MOT=%s Home sensor error!!", Alias);
+                            ShowMyMessage(S1, "");
+
+                            if(Mot_Name==MInArmPitch   || Mot_Name==MInArmPitchX2 ||
+                               Mot_Name==MInArmPitchX3 || Mot_Name==MInArmPitchX4 ||
+                               Mot_Name==MInArmPitchY)
+                            {
+                                SetInArmHome();
+                            }
+
+                            if(Mot_Name==MOutArmPitch   || Mot_Name==MOutArmPitchX2 ||
+                               Mot_Name==MOutArmPitchX3 || Mot_Name==MOutArmPitchX4 ||
+                               Mot_Name==MOutArmPitchY)
+                            {
+                                SetOutArmHome();
+                            }
+                            return -6;
+                        }
+                    }
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    }
+
+    #ifndef SOFT_SIMULTE
+        Position=Tar;
+        return 1;
+    #else
+        if(Position==Tar)
+        {
+            fCMD=false;
+            return 1;
+        }
+        else
+        {
+            if(speed<=0)                                                        //Steven 20210730 : 修正軟體模擬的最小速度
+                speed=100;
+
+            if(Position>Tar)
+            {
+                fCMD=true;
+                Position-=speed;
+                if(Position<=Tar)
+                {
+                    fCMD=false;
+                    Position=Tar;
+                    return 1;
+                }
+            }
+            else
+            {
+                fCMD=true;
+                Position+=speed;
+                if(Position>=Tar)
+                {
+                    fCMD=false;
+                    Position=Tar;
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    #endif
+}
+#endif // AI-W6C-GOLDEN-END MotorMovePosition Motor/mymotor.cpp:549-860
+
 // ---------------------------------------------------------------------------
 //  MotorMovePosition -- private helper
 //
@@ -404,6 +730,112 @@ int TMyMotor::MotorMovePosition(int &Position, int /*speed*/, int Tar)
     // Real-driver path (Motor!=NULL && Enable); never taken in the offline build.
     return 0;
 }
+
+// ===========================================================================
+//AI(W906-PT-W6c) 20260810: GOLDEN TEXT RESTORED (GATED) -- MotorMove
+//  golden HT9011UC_Code_V3.33.906.0_20260618/Motor/mymotor.cpp:871-962  (92 lines)
+//  Census scored this function "translated" on name match only; the LIVE body
+//  below is an abbreviated stand-in and golden's text existed nowhere in the
+//  tree. The block inside the gate is golden's body transcribed VERBATIM
+//  (cp950 -> UTF-8; byte-exact when re-encoded to cp950) and is INACTIVE.
+//  The LIVE body that follows is UNCHANGED and remains the only active
+//  definition -- net behaviour delta = 0. NOTHING was added inside the gate,
+//  so a later un-gate is mechanical.
+// ===========================================================================
+#if 0 // AI-W6C-GOLDEN-BEGIN MotorMove Motor/mymotor.cpp:871-962
+int TMyMotor::MotorMove(int p)
+{
+    //******************************************************************************
+    //  注意!! CheckIsSafeDoorOpen為Handler 安全門相關, 修改時要小心!!
+    //******************************************************************************
+    if(Motor==NULL ||                                                           //JimmyChiu 20250306 : 避免還沒初始化就操作馬達
+       Motor->CheckIsSafeDoorOpen())                                            //Jimmychiu 20221013 safedoor判斷整合Function
+    {
+        return -1;
+    }
+
+    //jou 2010-12-23 保護兩次命令會造成撞機
+    if(p!=iOldPos)
+    {
+        fCMD=false;
+        iOldPos=p;
+        bSh1FloodgateOpenWaiting=false;                                         //Ifor 20260401 add: reset timeout when target changes
+        bSh2FloodgateOpenWaiting=false;                                         //Ifor 20260401 add: reset timeout when target changes
+    }
+
+    int ret=0;
+    int iCommandPos;
+    int iGap=1;
+
+    if(fCanMove ==false  ||
+       fCanMoveR==false  ||
+       fCanMoveM==false  ||
+       fCanMoveL==false  ||
+       mapLockList.size()!=0)  //Klutter 20210817 加入鎖馬達機制                //Steven 20210825 : 吹氣完成才可以歸零
+    {
+        PCIL132_StopMotor();
+
+        if((Mot_Name==MInShuttle1 || Mot_Name==MInShuttle2) && (Motor->GearRatio>1))
+        {
+            iCommandPos=ReadPos();
+            if(iCommandPos>p+iGap)      //超出+
+            {
+                return -2;
+            }
+            else if(iCommandPos<p-iGap)
+            {
+                return -3;             //低於-
+            }
+            else
+            {
+                fCMD=false;
+                return 1;              //正常等於
+            }
+        }
+        else
+        {
+            if(p==ReadPos())
+            {
+                fCMD=false;
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+    }
+
+    ret=MotorMovePosition(Position, speed, p);
+    if(bShowMotorMove==true)
+    {
+        ScreenPos=(int)(Scale*(Position-FactStart))+RefStart;
+        if(bPanelUse)
+        {
+            if(bUpDownMove)
+            {
+                if(abs(PWinCtrl->Top-ScreenPos)>2)
+                    PWinCtrl->Top=ScreenPos;
+            }
+            else
+            {
+                if(abs(PWinCtrl->Left-ScreenPos)>2)
+                    PWinCtrl->Left=ScreenPos;
+            }
+        }
+    }
+
+    if(ret==1)
+    {
+        fCMD=false;
+        return 1;
+    }
+    else
+    {
+        return ret;
+    }
+}
+#endif // AI-W6C-GOLDEN-END MotorMove Motor/mymotor.cpp:871-962
 
 // ---------------------------------------------------------------------------
 //  MotorMove -- W4 STUB
@@ -448,6 +880,139 @@ bool TMyMotor::MotorMove2SpeedForPicker(int FinalPos, ARM_CONDITION * /*ARM*/, b
     // Real-driver path (Motor!=NULL && Enable); never taken in the offline build.
     return false;
 }
+
+// ===========================================================================
+//AI(W906-PT-W6c) 20260810: GOLDEN TEXT RESTORED (GATED) -- MotorMoveShuttleShake
+//  golden HT9011UC_Code_V3.33.906.0_20260618/Motor/mymotor.cpp:5198-5316  (119 lines)
+//  Census scored this function "translated" on name match only; the LIVE body
+//  below is an abbreviated stand-in and golden's text existed nowhere in the
+//  tree. The block inside the gate is golden's body transcribed VERBATIM
+//  (cp950 -> UTF-8; byte-exact when re-encoded to cp950) and is INACTIVE.
+//  The LIVE body that follows is UNCHANGED and remains the only active
+//  definition -- net behaviour delta = 0. NOTHING was added inside the gate,
+//  so a later un-gate is mechanical.
+// ===========================================================================
+#if 0 // AI-W6C-GOLDEN-BEGIN MotorMoveShuttleShake Motor/mymotor.cpp:5198-5316
+bool TMyMotor::MotorMoveShuttleShake(int p)                                     //JerryYang 20190628 shuttle shake專用command
+{
+    //******************************************************************************
+    //  注意!! CheckIsSafeDoorOpen為Handler 安全門相關, 修改時要小心!!
+    //******************************************************************************
+    if(Motor->CheckIsSafeDoorOpen())                                            //Jimmychiu 20221013 safedoor判斷整合Function
+    {
+        return false;
+    }
+
+    if(bShuttleShake==false)
+        return false;
+    if(Mot_Name==MInShuttle1 || Mot_Name==MInShuttle2)
+    {
+    }
+    else
+    {
+        return false;
+    }
+
+    if(Mot_Name==MInShuttle1)
+    {
+        if(p==Prod.InSHT[0].iLeft+SHSpeed_File.iShakeDistance*100 || p==Prod.InSHT[0].iLeft)    //Sam 20250326 : 新增 Shake 條件設定
+        {
+        }
+        else
+        {
+            return false;
+        }
+    }
+    else if(Mot_Name==MInShuttle2)
+    {
+        if(p==Prod.InSHT[1].iLeft+SHSpeed_File.iShakeDistance*100 || p==Prod.InSHT[1].iLeft)    //Sam 20250326 : 新增 Shake 條件設定
+        {
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    if(p!=iOldPos)                                                              //jou 2010-12-23 保護兩次命令會造成撞機
+    {
+        fCMD=false;
+        iOldPos=p;
+    }
+
+    int ret=0;
+    int iCommandPos;
+    int iGap=1;
+
+    if(fCanMove ==false  ||
+//       fCanMoveR==false  ||
+       fCanMoveM==false  ||
+       fCanMoveL==false  ||                                                     //Klutter 20210817 加入鎖馬達機制
+       mapLockList.size()!=0)                                                   //Steven 20210825 : 吹氣完成才可以歸零
+    {
+        PCIL132_StopMotor();
+
+        if((Mot_Name==MInShuttle1 || Mot_Name==MInShuttle2) && (Motor->GearRatio>1))
+        {
+            iCommandPos=ReadPos();
+            if(iCommandPos>p+iGap)                                              //超出+
+            {
+                return false;
+            }
+            else if(iCommandPos<p-iGap)
+            {
+                return false;                                                   //低於-
+            }
+            else
+            {
+                fCMD=false;
+                return true;                                                    //正常等於
+            }
+        }
+        else
+        {
+            if(p==ReadPos())
+            {
+                fCMD=false;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    ret=MotorMovePosition(Position, speed, p);
+    if(bShowMotorMove==true)
+    {
+        ScreenPos=(int)(Scale*(Position-FactStart))+RefStart;
+        if(bPanelUse)
+        {
+            if(bUpDownMove)
+            {
+                if(abs(PWinCtrl->Top-ScreenPos)>2)
+                    PWinCtrl->Top=ScreenPos;
+            }
+            else
+            {
+                if(abs(PWinCtrl->Left-ScreenPos)>2)
+                    PWinCtrl->Left=ScreenPos;
+            }
+        }
+    }
+
+    if(ret==1)
+    {
+        fCMD=false;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+#endif // AI-W6C-GOLDEN-END MotorMoveShuttleShake Motor/mymotor.cpp:5198-5316
 
 // ---------------------------------------------------------------------------
 //  MotorMoveShuttleShake -- W4 STUB
@@ -1186,6 +1751,268 @@ void TTrayMotor::Refresh()
     }
 }
 
+// ===========================================================================
+//AI(W906-PT-W6c) 20260810: GOLDEN TEXT RESTORED (GATED) -- InitNewTray
+//  golden HT9011UC_Code_V3.33.906.0_20260618/Motor/mymotor.cpp:1192-1439  (248 lines)
+//  Census scored this function "translated" on name match only; the LIVE body
+//  below is an abbreviated stand-in and golden's text existed nowhere in the
+//  tree. The block inside the gate is golden's body transcribed VERBATIM
+//  (cp950 -> UTF-8; byte-exact when re-encoded to cp950) and is INACTIVE.
+//  The LIVE body that follows is UNCHANGED and remains the only active
+//  definition -- net behaviour delta = 0. NOTHING was added inside the gate,
+//  so a later un-gate is mechanical.
+// ===========================================================================
+#if 0 // AI-W6C-GOLDEN-BEGIN InitNewTray Motor/mymotor.cpp:1192-1439
+void TTrayMotor::InitNewTray(int data, bool bShowSiteMapFlag, AnsiString Func)
+{
+    int iCount;
+    Tray.ClearData();                                                           //Steven 20200619 : 加上保護
+    Tray.SetData(data);
+
+    AnsiString Str;
+    Str.sprintf("Initial new tray [%s] with IC type %s by function %s ", Alias, sIC_Type[data], Func);
+    MNetLog(Str);
+
+    if(fHTary)
+    {
+        pHTray->XBlockItem=Tray.XBItem;                                         //Frank 20160928 add Subtray Function
+        pHTray->YBlockItem=Tray.YBItem;
+
+        pHTray->XBlockWidth=Tray.XBWidth;
+        pHTray->YBlockWidth=Tray.YBWidth;
+
+        pHTray->XItem=Tray.XItem;
+        pHTray->YItem=Tray.YItem;
+
+        bShowSiteMap=bShowSiteMapFlag;
+        if(bShowSiteMap)                                                        //Steven 20170302 (wei) : FIFO MODE
+        {
+            if(IniConfig.bI37_LockLoaderDirection)
+            {
+                iDirection=IniConfig.iI37_LockLoaderDirection;
+            }
+            else
+            {
+                iDirection=TrayForm.Loader.Direction;
+            }
+            iSiteCount=GetSiteCount();
+            for(int i=0; i<MAX_SOCKET_ROW; i++)
+            {
+                for(int j=0; j<MAX_SOCKET_COL; j++)
+                {
+                    if(TestIF_File.iSiteMap[i][j]>0)                            //Steven 20170302 (wei) : 確認哪個Site有開, 從1開始~32
+                    {
+                        if(TestIF_File.iShuttleMode==1)                         //單arm       //Isaac 20210821 : FIFO開site修正
+                            bSiteHasTurnOn[TestIF_File.iSiteMap[i][j]]=bTestSiteUse[TestIF_File.iShuttle_Sel][i][j];
+                        else                                                    //雙arm
+                            bSiteHasTurnOn[TestIF_File.iSiteMap[i][j]]=bTestSiteUse[0][i][j];
+                    }
+                }
+            }
+        }
+
+        for(int i=0; i<Tray.XItem; i++)
+        {
+            for(int j=0; j<Tray.YItem; j++)
+            {
+                pHTray->SetCellColorIndex(i, j, data);
+                if(bShowSiteMap==false)                                         //Steven 20170302 (wei) : FIFO MODE
+                    pHTray->SetCellNumber(i, j, "");
+            }
+        }
+
+        if(bShowSiteMap)                                                        //Steven 20170302 (wei) : FIFO MODE
+        {
+            iCount=1;
+            // ----   左至右,上至下
+            //  /
+            // --->
+            if(iDirection==0)
+            {
+                for(int j=0; j<Tray.YItem; j++)
+                {
+                    for(int i=0; i<Tray.XItem; i++)
+                    {
+                        while(bSiteHasTurnOn[iCount]==false)
+                        {
+                            iCount++;
+                            if(iCount>iSiteCount)
+                                iCount=1;
+                        };
+                        pHTray->SetCellNumber(i, j, iCount);
+                        Tray.iWhichSite[i][j]=iCount;
+                        iCount++;
+                        if(iCount>iSiteCount)
+                            iCount=1;
+                    }
+                }
+            }
+            // ----   右至左,上至下
+            //  \\
+            // <---
+            else if(iDirection==1)
+            {
+                for(int j=0; j<Tray.YItem; j++)
+                {
+                    for(int i=Tray.XItem-1; i>=0; i--)
+                    {
+                        while(bSiteHasTurnOn[iCount]==false)
+                        {
+                            iCount++;
+                            if(iCount>iSiteCount)
+                                iCount=1;
+                        };
+                        pHTray->SetCellNumber(i, j, iCount);
+                        Tray.iWhichSite[i][j]=iCount;
+                        iCount++;
+                        if(iCount>iSiteCount)
+                            iCount=1;
+                    }
+                }
+            }
+            // --->   左至右,下至上
+            //  \\
+            // ----
+            else if(iDirection==2)
+            {
+                for(int j=Tray.YItem-1; j>=0; j--)
+                {
+                    for(int i=0; i<Tray.XItem; i++)
+                    {
+                        while(bSiteHasTurnOn[iCount]==false)
+                        {
+                            iCount++;
+                            if(iCount>iSiteCount)
+                                iCount=1;
+                        };
+                        pHTray->SetCellNumber(i, j, iCount);
+                        Tray.iWhichSite[i][j]=iCount;
+                        iCount++;
+                        if(iCount>iSiteCount)
+                            iCount=1;
+                    }
+                }
+            }
+            // <---   右至左,下至上
+            //   /
+            // ----
+            else if(iDirection==3)
+            {
+                for(int j=Tray.YItem-1; j>=0; j--)
+                {
+                    for(int i=Tray.XItem-1; i>=0; i--)
+                    {
+                        while(bSiteHasTurnOn[iCount]==false)
+                        {
+                            iCount++;
+                            if(iCount>iSiteCount)
+                                iCount=1;
+                        };
+                        pHTray->SetCellNumber(i, j, iCount);
+                        Tray.iWhichSite[i][j]=iCount;
+                        iCount++;
+                        if(iCount>iSiteCount)
+                            iCount=1;
+                    }
+                }
+            }
+            // |   | 上至下, 左至右
+            // | / |
+            // |   V
+            else if(iDirection==4)
+            {
+                for(int i=0; i<Tray.XItem; i++)
+                {
+                    for(int j=0; j<Tray.YItem; j++)
+                    {
+                        while(bSiteHasTurnOn[iCount]==false)
+                        {
+                            iCount++;
+                            if(iCount>iSiteCount)
+                                iCount=1;
+                        };
+                        pHTray->SetCellNumber(i, j, iCount);
+                        Tray.iWhichSite[i][j]=iCount;
+                        iCount++;
+                        if(iCount>iSiteCount)
+                            iCount=1;
+                    }
+                }
+            }
+            // |   ^ 下至上, 左至右
+            // | \\|
+            // |   |
+            else if(iDirection==5)
+            {
+                for(int i=0; i<Tray.XItem; i++)
+                {
+                    for(int j=Tray.YItem-1; j>=0; j--)
+                    {
+                        while(bSiteHasTurnOn[iCount]==false)
+                        {
+                            iCount++;
+                            if(iCount>iSiteCount)
+                                iCount=1;
+                        };
+                        pHTray->SetCellNumber(i, j, iCount);
+                        Tray.iWhichSite[i][j]=iCount;
+                        iCount++;
+                        if(iCount>iSiteCount)
+                            iCount=1;
+                    }
+                }
+            }
+            // |   | 上至下, 右至左
+            // | \\|
+            // V   |
+            else if(iDirection==6)
+            {
+                for(int i=Tray.XItem-1; i>=0; i--)
+                {
+                    for(int j=0; j<Tray.YItem; j++)
+                    {
+                        while(bSiteHasTurnOn[iCount]==false)
+                        {
+                            iCount++;
+                            if(iCount>iSiteCount)
+                                iCount=1;
+                        };
+                        pHTray->SetCellNumber(i, j, iCount);
+                        Tray.iWhichSite[i][j]=iCount;
+                        iCount++;
+                        if(iCount>iSiteCount)
+                            iCount=1;
+                    }
+                }
+            }
+            // ^   | 下至上, 右至左
+            // | / |
+            // |   |
+            else if(iDirection==7)
+            {
+                for(int i=Tray.XItem-1; i>=0; i--)
+                {
+                    for(int j=Tray.YItem-1; j>=0; j--)
+                    {
+                        while(bSiteHasTurnOn[iCount]==false)
+                        {
+                            iCount++;
+                            if(iCount>iSiteCount)
+                                iCount=1;
+                        };
+                        pHTray->SetCellNumber(i, j, iCount);
+                        Tray.iWhichSite[i][j]=iCount;
+                        iCount++;
+                        if(iCount>iSiteCount)
+                            iCount=1;
+                    }
+                }
+            }
+        }
+    }
+}
+#endif // AI-W6C-GOLDEN-END InitNewTray Motor/mymotor.cpp:1192-1439
+
 // ---------------------------------------------------------------------------
 void TTrayMotor::InitNewTray(int data, bool bShowSiteMapFlag, AnsiString Func)
 {
@@ -1429,7 +2256,216 @@ bool TrayArmContinuousMoveForOCR(int,int) { return false; }
 bool TrayMoveHome()                    { return false; }
 bool ShuttleSensorContinuousMove(int,int,bool) { return false; }
 int  CheckOutArmDestory()              { return 0; }
+// ===========================================================================
+//AI(W906-PT-W6c) 20260810: GOLDEN TEXT RESTORED (GATED) -- RecordIndexPosition
+//  golden HT9011UC_Code_V3.33.906.0_20260618/Motor/mymotor.cpp:5318-5424  (107 lines)
+//  Census scored this function "translated" on name match only; the LIVE body
+//  below is an abbreviated stand-in and golden's text existed nowhere in the
+//  tree. The block inside the gate is golden's body transcribed VERBATIM
+//  (cp950 -> UTF-8; byte-exact when re-encoded to cp950) and is INACTIVE.
+//  The LIVE body that follows is UNCHANGED and remains the only active
+//  definition -- net behaviour delta = 0. NOTHING was added inside the gate,
+//  so a later un-gate is mechanical.
+// ===========================================================================
+#if 0 // AI-W6C-GOLDEN-BEGIN RecordIndexPosition Motor/mymotor.cpp:5318-5424
+void RecordIndexPosition(int iArm,int Part)                                     //Isaac 20200922 : 紀錄indexArmY encoder值和command值
+{
+    AnsiString Strtemp="",StrType="";
+    AnsiString sFileName="",sFileName2="",StrIndexLog="";
+    GetTimeInfo();
+
+    int y1CmdPos     = MOT[MTestY1].Gali_ReadPos();
+    int y1EncoderPos = MOT[MTestY1].Gali_ReadEncoderPos();
+    int y2CmdPos     = (USE_INDEX_ARM_AXES==IndexArm_3_Axis)?0:MOT[MTestY2].Gali_ReadPos();
+    int y2EncoderPos = (USE_INDEX_ARM_AXES==IndexArm_3_Axis)?0:MOT[MTestY2].Gali_ReadEncoderPos();
+    int z1CmdPos     = MOT[MTestZ1].Gali_ReadPos();
+    int z1EncoderPos = MOT[MTestZ1].Gali_ReadEncoderPos();
+    int z2CmdPos     = MOT[MTestZ2].Gali_ReadPos();
+    int z2EncoderPos = MOT[MTestZ2].Gali_ReadEncoderPos();
+    if(Part==3)                                                                 //Error
+    {
+        if(iArm==0)                                                             //Handler status Halt
+        {
+            StrType="Halt";
+            sFileName2.sprintf("%s\\%04d\\%02d_IndexPosLog\\IndexArmHalt_%04d%02d%02d%02d%02d%02d.logs", "D:\\HT9045_Log\\IndexPos",SystemYear, SystemMonth, SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);
+        }
+        else if(iArm==3)                                                        //Gali_Two_ZAxis_Move
+        {
+            StrType="Gali_Two_ZAxis_Move";
+            sFileName2.sprintf("%s\\%04d\\%02d_IndexPosLog\\IndexArm12_%04d%02d%02d%02d%02d%02d.logs", "D:\\HT9045_Log\\IndexPos",SystemYear, SystemMonth, SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);
+        }
+        else                                                                    //Arm1,Arm2
+        {
+            StrType.sprintf("IndexArm%d",iArm);
+            sFileName2.sprintf("%s\\%04d\\%02d_IndexPosLog\\IndexArm%d_%04d%02d%02d%02d%02d%02d.logs", "D:\\HT9045_Log\\IndexPos",SystemYear, SystemMonth, iArm, SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);
+        }
+
+        Strtemp.sprintf("%s :Y1CMD:%d, Y1POS:%d, Teach F:%d, M:%d, Y2CMD:%d, Y2POS:%d, Teach M:%d, R:%d, Z1CMD:%d, Z1POS:%d, Z2CMD:%d, Z2POS:%d",
+                StrType,
+                y1CmdPos, y1EncoderPos, Prod.TestY1_Front, Prod.TestY1_Middle,
+                y2CmdPos, y2EncoderPos, Prod.TestY2_Middle, Prod.TestY2_Rear,
+                z1CmdPos, z1EncoderPos,
+                z2CmdPos, z2EncoderPos);
+        fMain->AddIndexPosLog(Strtemp);
+        fMain->AddIndexPosLog("Save Log", true);
+    }
+    else                                                                        //Part : Shuttle==0 or Socket==1
+    {
+        if(fMain->cbBoth->Checked)                                              //Record Both Arm1 and Arm2
+        {
+            if (iArm == 1)
+            {
+                if (Part == 0)  // Shuttle
+                {
+                    Strtemp.sprintf("Arm1 on Shuttle : Teach:%d, Y1CMD:%d, Y1POS:%d, Y2CMD:%d, Y2POS:%d",
+                                    Prod.TestY1_Front, y1CmdPos, y1EncoderPos, y2CmdPos, y2EncoderPos);
+                }
+                else if (Part == 1)  // Socket
+                {
+                    Strtemp.sprintf("Arm1 on Socket : Teach:%d, Y1CMD:%d, Y1POS:%d, Y2CMD:%d, Y2POS:%d",
+                                    Prod.TestY1_Middle, y1CmdPos, y1EncoderPos, y2CmdPos, y2EncoderPos);
+                }
+            }
+            else  // iArm == 2
+            {
+                if (Part == 0)  // Shuttle
+                {
+                    Strtemp.sprintf("Arm2 on Shuttle : Teach:%d, Y1CMD:%d, Y1POS:%d, Y2CMD:%d, Y2POS:%d",
+                                    Prod.TestY2_Rear, y1CmdPos, y1EncoderPos, y2CmdPos, y2EncoderPos);
+                }
+                else if (Part == 1)  // Socket
+                {
+                    Strtemp.sprintf("Arm2 on Socket : Teach:%d, Y1CMD:%d, Y1POS:%d, Y2CMD:%d, Y2POS:%d",
+                                    Prod.TestY2_Middle, y1CmdPos, y1EncoderPos, y2CmdPos, y2EncoderPos);
+                }
+            }
+        }
+        else if (fMain->cbArm1->Checked && iArm == 1)  // Record Arm1 only
+        {
+            if (Part == 0)  // Shuttle
+            {
+                Strtemp.sprintf("Arm1 on Shuttle : Teach:%d, Y1CMD:%d, Y1POS:%d",
+                                Prod.TestY1_Front, y1CmdPos, y1EncoderPos);
+            }
+            else if (Part == 1)  // Socket
+            {
+                Strtemp.sprintf("Arm1 on Socket : Teach:%d, Y1CMD:%d, Y1POS:%d",
+                                Prod.TestY1_Middle, y1CmdPos, y1EncoderPos);
+            }
+        }
+        else if (fMain->cbArm2->Checked && iArm == 2)  // Record Arm2 only
+        {
+            if (Part == 0)  // Shuttle
+            {
+                Strtemp.sprintf("Arm2 on Shuttle : Teach:%d, Y2CMD:%d, Y2POS:%d",
+                                Prod.TestY2_Rear, y2CmdPos, y2EncoderPos);
+            }
+            else if (Part == 1)  // Socket
+            {
+                Strtemp.sprintf("Arm2 on Socket : Teach:%d, Y2CMD:%d, Y2POS:%d",
+                                Prod.TestY2_Middle, y2CmdPos, y2EncoderPos);
+            }
+        }
+        else
+        {
+            return;
+        }
+
+        fMain->AddIndexPosLog(Strtemp);
+    }
+    return;
+}
+#endif // AI-W6C-GOLDEN-END RecordIndexPosition Motor/mymotor.cpp:5318-5424
+
 void RecordIndexPosition(int, int)     {}
+// ===========================================================================
+//AI(W906-PT-W6c) 20260810: GOLDEN TEXT RESTORED (GATED) -- EncoderTeachingMaxMinCount
+//  golden HT9011UC_Code_V3.33.906.0_20260618/Motor/mymotor.cpp:5426-5499  (74 lines)
+//  Census scored this function "translated" on name match only; the LIVE body
+//  below is an abbreviated stand-in and golden's text existed nowhere in the
+//  tree. The block inside the gate is golden's body transcribed VERBATIM
+//  (cp950 -> UTF-8; byte-exact when re-encoded to cp950) and is INACTIVE.
+//  The LIVE body that follows is UNCHANGED and remains the only active
+//  definition -- net behaviour delta = 0. NOTHING was added inside the gate,
+//  so a later un-gate is mechanical.
+// ===========================================================================
+#if 0 // AI-W6C-GOLDEN-BEGIN EncoderTeachingMaxMinCount Motor/mymotor.cpp:5426-5499
+void EncoderTeachingMaxMinCount(int iRecordArm)                                 //Isaac 20201012 : 計算Encoder和commandpos/Teaching的差值
+{
+    int check1=0, check2=0;
+    int iEncoderPos=0;
+
+    if(iRecordArm==1)                                                           //Arm1
+    {
+        iEncoderPos=MOT[MTestY1].Gali_ReadEncoderPos();
+
+        check1=abs(iEncoderPos-Prod.TestY1_Front);
+        check2=abs(iEncoderPos-Prod.TestY1_Middle);
+
+        if(check1>5000)                                                         //Middle
+        {
+            if(check2>iMaxTeachY1M)
+            {
+                iMaxTeachY1M=check2;
+            }
+            else if(check2<iMinTeachY1M)
+            {
+                iMinTeachY1M=check2;
+            }
+        }
+        else                                                                    //Front
+        {
+            if(check1>iMaxTeachY1F)
+            {
+                iMaxTeachY1F=check1;
+            }
+            else if(check1<iMinTeachY1F)
+            {
+                iMinTeachY1F=check1;
+            }
+        }
+    }
+    else if(iRecordArm==2)                                                      //Arm2
+    {
+        if(USE_INDEX_ARM_AXES==IndexArm_3_Axis)
+        {
+            iEncoderPos=0;
+        }
+        else
+        {
+            iEncoderPos=MOT[MTestY2].Gali_ReadEncoderPos();
+        }
+
+        check1=abs(iEncoderPos-Prod.TestY2_Middle);
+        check2=abs(iEncoderPos-Prod.TestY2_Rear);
+
+        if(check1>5000)                                                         //Rear
+        {
+            if(check2>iMaxTeachY2R)
+            {
+                iMaxTeachY2R=check2;
+            }
+            else if(check2<iMinTeachY2R)
+            {
+                iMinTeachY2R=check2;
+            }
+        }
+        else                                                                    //Middle
+        {
+            if(check1>iMaxTeachY2M)
+            {
+                iMaxTeachY2M=check1;
+            }
+            else if(check1<iMinTeachY2M)
+            {
+                iMinTeachY2M=check1;
+            }
+        }
+    }
+    return;
+}
+#endif // AI-W6C-GOLDEN-END EncoderTeachingMaxMinCount Motor/mymotor.cpp:5426-5499
+
 void EncoderTeachingMaxMinCount(int)   {}
 void InitialMaxMinValue(AnsiString)    {}
 void TrigerIndexAxisHome()             {}

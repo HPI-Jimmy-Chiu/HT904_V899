@@ -17,6 +17,23 @@ For every golden function with a live same-name port body, the ratio port_span/g
 A low ratio means the port body is a summary, a partial translation, or a stub wearing the
 real name -- all of which census currently scores as complete.
 
+FALSE POSITIVES MEASURED 20260810 (PT-W6c), and both were caught by an agent refusing to act
+  Of 28 targets this scan produced, 2 were WRONG -- golden's text was already in the tree:
+  * `THGem::DataItemOut` -- OVERLOAD COLLAPSE, inherited from census.py. Golden has TWO
+    overloads: `(int, unsigned char, char*)` at 198 lines and `(unsigned char, AnsiString)` at
+    6. This scan keys by NAME, so it compared the 198-line overload's span against the port's
+    4-line forwarder for the OTHER overload. The real body is
+    SECSGEM/SecsWireCodec.cpp:713 with const-correctness adaptations.
+  * `THGem::SendLocalData` -- EXTRACT-AND-FORWARD with a SUFFIXED name. Golden's 104 lines live
+    in `THGem::SendLocalDataFrom(SecsWireCodec&)`, with a 4-line forwarder left at the golden
+    name. census.py's alias rule covers `<Prefix>_<Name>` and `<Class>_<Name>` but NOT a
+    suffix like `...From`, so neither tool sees the relocation.
+  WHY THIS MATTERS MORE THAN THE COUNT: acting on either would have put a SECOND copy of
+  already-translated golden text in the tree, which is a double-apply hazard at un-gate time.
+  So a hit here is a QUESTION ("is golden's text really absent?"), never an instruction.
+  Before restoring any body, grep golden's distinctive statements across the WHOLE port -- not
+  just the same file, and not just the same name.
+
 DELIBERATE LIMITS, so the output is not over-read
   * Span is a proxy for content. A legitimately shorter body exists: gate notes REMOVED are
     rare but comments STRIPPED or a golden block correctly relocated elsewhere both shrink a
