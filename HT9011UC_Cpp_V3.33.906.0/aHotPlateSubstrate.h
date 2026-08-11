@@ -903,7 +903,16 @@ extern bool IsCheckInArmDestroyActiveFinish();                          //ChungH
 extern void DoInArm_9045_SuckerMap();                                   //Steven 20220531
 extern void SetShuttleToHasNullIC_9045(int iSht, int iKit);
 extern void AdjustShuttlePlaceOrder(int iReset=-1);
-extern void SetInArmHome();
+// AI(pt-wave) 20260811 PT-W7e: arity corrected to golden ainarm2.h:136
+//   `extern void SetInArmHome(bool bPrecisorNeedHome=false);`
+//   The body here is still the zero-behaviour no-op stub (aHotPlateSubstrate.cpp:1067); only the
+//   SIGNATURE changes, so this is behaviour-neutral. It is needed because golden calls it BOTH
+//   ways -- bare at golden ainarm2.cpp:1060/:1073/:1091/:1198 and with an argument at :3152 --
+//   and PT-W7e landed the :3152 caller, which failed to link against the zero-arity stub.
+//   Changing the single canonical declaration (rather than adding a second overload) is what
+//   keeps every existing bare call unambiguous.
+//   golden REAL body is ainarm2.cpp:1266 and is still NOT translated.
+extern void SetInArmHome(bool bPrecisorNeedHome=false);
 extern void AddInArmPickerCount(int iSuckR, int iSuckC);
 extern void InArmSubSpeed();
 extern void InArmAddSpeed();
@@ -1064,6 +1073,12 @@ extern void CopyInitSuck(TMyKitSuck *Source, TMyKitSuck *Target,
 extern void SetInArmNeedDestory(bool bPlace, int iShtRow, int iShtCol, int iRow, int iCol); // golden ainarm2.h:230
 extern void TransferInShuttleRatio(int iSht, int *iXPos, int *iYPos, int iRow, int iCol);   // golden ainarm2.h:159
 extern void ResetInToShtFlag();                                              // golden ainarm2.h:40
+// AI(pt-wave) 20260811 PT-W7e: the two declarations the wave owed. Both bodies landed in
+// ainarm2.cpp this wave and are UNREACHABLE without these; verified against golden ainarm2.h
+// (:104 and :216) rather than transcribed from a report, and the default arguments are
+// golden's own -- dropping them would break every existing zero/one-arg call.
+extern void ChangeHotPlateData(bool bSwapSht=false);                         // golden ainarm2.h:104
+extern bool EnableTraymapCheckFunction(int iCheck=0);                        // golden ainarm2.h:216
 extern void SetInArm_Unuse_SuckToNullICForHP();                              // golden ainarm2.h:153
 extern void AdjustShuttleWhichKitOrder();                                    // golden ainarm2.h:130
 extern bool CheckInArmFloating(bool bReset=false);                           // golden OmronLaser/LaserSensorInArm.h:30

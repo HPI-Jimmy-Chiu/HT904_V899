@@ -1064,7 +1064,7 @@ void SetRunStartMode(int) {}
 void TransferHotPlateRatio(bool, int *, int *) {}          //Steven 20110324 : ratio xform no-op
 bool MoveInArmZToPlateSafe(int) { return true; }           // offline: Z reaches safe immediately
 void AdjustShuttlePlaceOrder(int) {}
-void SetInArmHome() {}
+void SetInArmHome(bool /*bPrecisorNeedHome*/) {}   // AI(pt-wave) 20260811: golden arity (ainarm2.h:136); still a no-op stub, golden real body ainarm2.cpp:1266 not yet translated
 void InArmSubSpeed() {}
 void InArmAddSpeed() {}
 void StopAllMotor() {}
