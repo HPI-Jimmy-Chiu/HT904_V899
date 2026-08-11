@@ -6505,3 +6505,165 @@ FAIL: ... returning iResult=2
 - 完成度（兩種讀法都要引用）：非表單 per-file 91.4%／crediting parked 91.8%；全部 52.9%／53.6%。
   part2 落地後會再往上，但**要重量**。
 - 安全佇列（等使用者在場）：#10、#12、#14、#18。非安全：#15、#16、#17、#19、#20。
+
+---
+
+## PT-W7e-part2 收工（20260811）：50 個撿回來的函式通過完整 tier-4b
+
+HEAD `2ea4979`。接續 `f6d0ca9` 的在製狀態，這一輪**沒有新增任何翻譯**，只做一件事：
+把那棵樹驗完並收掉。
+
+### 量到什麼（tier-4b，全新 build dir，Debug 與 Release 各一次，都在最後一次整併之後）
+
+|  | Debug | Release |
+|---|---|---|
+| configure / build | rc=0 / rc=0 | rc=0 / rc=0 |
+| ctest | **128 / 134 passed**（662.60 s） | **128 / 134 passed**（401.29 s） |
+
+**失敗集合兩邊逐項相同，且等於計畫書 §7 那 6 個常駐項**：
+config_db、IniFiles、ini_helpers、config_loaders、dfm2rc_idempotent、GA1_ReadGeneralIni。
+零超出。`27-AutoClean` 這一輪**通過**（上一輪唯一的超出項）。
+
+交付 +5,139 / −13，10 個檔；`ainarm2.cpp` 3,048 → 8,035 行；50 個 stand-in 以
+`#if 0 // PT-W7e-part2 RETIRED (<name>)` 退役，橫跨 7 個檔。
+
+### 我自己複驗了什麼（沒有只信上一輪的紀錄）
+
+1. **EOL / 編碼**：10 個檔逐檔量。`acatchtray_shims.cpp`(248)、`csystem_shims.cpp`(268) 仍 CRLF，
+   其餘 8 個仍 bare LF，與這棵樹既有的混合一致；全部 UTF-8 可解、**零 U+FFFD**。
+2. **忠實度抽驗**：`TransferHotPlateRatio` 對 golden `ainarm2.cpp:1767`（golden span 204／port 206）。
+   正規化後 189 vs 191 行，**唯一差異是一個有登記的 gate**（k2ai2-G1）。
+3. **那個 gate 的 absence-claim 重跑**（陷阱 2：會過期）：`CheckInArmXYScaleByAutoTeach` 全樹唯一定義
+   仍是 `AutoClean/AutoClean.cpp:234` 的 **`static`（內部連結）no-op**，沒有可連結符號 ——
+   前提在 **2026-08-11T03:01:54Z** 仍成立。這正是**陷阱 1 的形狀 (d)：static 影子**。
+   5 個呼叫點（`ainarm2.cpp` :1074 :5915 :5917 :6174 :6176）確認**一致地全部 gated**。
+4. **失去的覆蓋補登記**：`tests/test_AutoClean.cpp` 加了 NOT COVERED 區，寫明 WAR1922 /
+   case 30→10 反彈路徑離線不再被走到、為什麼（真本體要真的運動到位）、以及**怎麼把它救回來**
+   （在 Sim HAL 把 `MOT[MInArmPitch]` 開到 shuttle-2 等待位再 pump）。
+   這是 gate 之後才加的 21 行純註解，用 preprocessed 比對證明對編譯結果只影響 FAIL 診斷裡的
+   `__LINE__`：兩邊各 62,758 行、130 行有差、**每個數字差恰好 +21，沒有任何其他差異**。
+
+### 我這一輪犯的兩個錯
+
+* **gate-unaware 掃描器製造假的重複定義警報。** 第一版檢查同時看到「真本體在 `ainarm2.cpp`」
+  和「一行 stub 還在 `aHotPlateSubstrate.cpp`」，判成 50 個重複定義。錯的是掃描器不看 `#if 0`。
+  補上 gate map 後確認抽樣的 stub 全在 `#if 0` 內。**對這棵樹，任何不懂 gate 的掃描都會穩定地
+  假報重複定義**，不要照著動手。
+* **差點把 `Command.cpp` 選成下一波主標的**（見下一節），因為 census 說它是非表單，
+  而我在讀內容之前就開始規劃了。
+
+---
+
+## census 的兩個量測缺陷（20260811 發現，直接改變「還剩多少」與停止條件）
+
+census 是唯一權威的完成度量法，但它這兩個判斷都是**檔名比對**，兩個都會誤導波次規劃。
+
+### 缺陷 A：鏡射判定看檔名，於是把「已翻好但檔名不同」算成「完全沒翻」
+
+census 報「非表單 3 個檔完全沒有 port 鏡射，共 19,793 code 行」。逐一查證後：
+
+| golden 檔 | census 說缺 | 真的缺 | 真相 |
+|---|---|---|---|
+| `BarCode/BarCode_Sh1.cpp` | 5,168 | **760** | 10 個函式有 7 個早就翻好，在 `BarCode/BarCode_Shuttle1_Scan.cpp` 與 `_CCDScan.cpp`。真缺口只有最後 3 個（golden :4698-:5534） |
+| `BarCode/BarCode_Sh2.cpp` | 5,180 | **717** | 同型；真缺口 golden :4880-:5665 |
+| `Command.cpp` | 9,445 | 9,445 | 確實沒翻（164 個名字有 153 個全樹不存在），但**它是表單工作**，見缺陷 B |
+
+**census 因此把非表單缺口高估了 8,871 code 行**（非表單完成度低估約 2.6 個百分點）。
+`BarCode_Shuttle1_Scan.h:32` 自己的 banner 早就寫明那 3 個是 deferred —— 資訊一直都在，
+只是 census 的檔名比對看不到。
+
+### 缺陷 B：`Command.cpp` 是表單工作，被 `.dfm` 檔名測試判成非表單
+
+`census.py:321` 是 `form = os.path.exists(<golden 去副檔名> + '.dfm')`。沒有 `Command.dfm`，
+所以它報非表單。但 `Command.cpp` 的 **164 個函式全部是 `TfMain::` 成員** —— 主表單的類別，
+只是 golden 把它拆成兩個檔。**census.py 自己的檔頭 line 119-120 已經寫明這件事**：
+「form/non-form by .dfm is mechanically right and semantically wrong for a class that spans
+files (TfMain across main.cpp + Command.cpp). Reported, not hidden.」
+
+而且 `forms/fMain.h` **已經**把其中幾個當 facade no-op stub 收著，還註明本體在
+`Command.cpp:945-1482` 等等（`ArmStatusStrings`、`GetSamSungMap`、`GetSamSungSoakTime`、
+`PERSITETemperatureStrings`、`WritePERSITETemperature`）。而 facade 契約第 1 條說那些離線 body 是
+**「PERMANENT OFFLINE IMPLEMENTATION -- not scaffolding to be deleted」**。
+所以翻 `Command.cpp` = 用真 body 取代 facade no-op = **替使用者決定表單 facade 策略**。
+
+**結論：`Command.cpp` 撤出非表單範圍，歸到表單邊界，等使用者定 facade 策略。**
+
+### 修正後的非表單剩餘（單位一律 golden code 行；分母 336,509）
+
+| 類別 | code 行 |
+|---|---|
+| 有鏡射但沒翻完，**非 gated** | ~4,247 |
+| 有鏡射但沒翻完，**刻意 gated** | ~4,991（SECSGEM EC/SV/主檔、cpublic、cmydef、cinitial、asortarm、aoutarm、cMyDB） |
+| `BarCode_Sh1/Sh2` 真缺口 | 1,477 |
+| 小計（不含 `Command.cpp`） | **~11,107** |
+
+census 目前印的是「非表單缺 27,549／91.8%（crediting parked）」。把缺陷 A 的 8,871 行還回去，
+非表單是 **317,831 / 336,509 = 94.4%**；再把 `Command.cpp` 的 9,445 行改歸表單（分母降到 327,064），
+是 **97.2%**。三個數字都對，**差別只在分母與歸類**，引用時必須講清楚是哪一個。
+
+**下一步不是改 census** —— 那會動到唯一權威量法，要獨立一顆 commit 與獨立驗證（task #19 第 3 項）。
+
+---
+
+## PT-W8 派工中（20260811）：非表單非 gated 的尾巴
+
+用修好的 `wave_targets.py` 選標的（`86eb8f8` —— 修好之前它會把一行 stub 當成「已翻譯」而叫人跳過）。
+
+**範圍：85 個函式、~5,724 golden code 行、14 個檔**，9 個 agent 一組一檔群，
+之後對 5 個高風險組跑唯讀對抗性稽核（`aoutarm9045`、`mymotor`、`MyProductionRecord`、
+`barcode_sh1`、`barcode_sh2`）。
+
+已先替 agent 查好、寫進 brief 的事實（**這些是主迴圈的活，不該讓 agent 各自重查**）：
+
+* **17 個要退役的 stub，14 個沒有 header 宣告** —— 但呼叫端 TU 都自己帶 forward declaration
+  （例：`aoutarm9045_1x1_1.cpp:206/:238`），所以退役**不會**重演 part2 那個
+  「退 stub 連帶拿掉別人依賴的宣告」編譯錯誤。
+* **簽名一致性已查**：`int SearchTrayToPlace_Magazine();` ×28、`int VerifyTrayStatus();` ×23、
+  `bool DoFixTrayFullAlarm();` ×27、`int GetVariableYOutShuttleData();` ×29、
+  `bool CheckOutArmToTask50(int);` ×19（只有參數名不同）。W906-W7-A2 修掉的那個
+  `void`/`int` ODR 陷阱**已經不在了**，退役是安全的。
+* **BarCode 那 6 個函式落地後全樹沒有呼叫者**（golden 的呼叫者在 `cContact.cpp:12289/12355/
+  12374/12395`、`uhome.cpp:4311`、`BarCode/BarCode.cpp:6839`，全都還沒翻）。這就是
+  **陷阱 1 形狀 (a)**：會編、會進 archive、永遠不被抽出，build 全綠。brief 明講這是預期結果，
+  **不准為了製造呼叫者而擴大範圍**。
+* golden 行號抽驗 15 筆全部命中（agent 最常見的錯是引用造假，所以 brief 自己的引用要先驗）。
+
+### 順手量到的：過期 gate 主要是安全佇列
+
+`expired_gate_scan.py`：1,563 個 gate，344 個至少一個 callee 已活，**184 個全部 callee 都活**。
+但排在最前面的一大群是 `csystem.cpp` 的**馬達煞車** gate（`CassetteBreakerOFF`／
+`InOutArmZBreakerOFF`／`IndexMotorBreakerOFF`／`LDCarRotArmZBreakerOFF`…，9 個 gate）。
+**解閘馬達煞車是政策明列的安全關鍵項** → 進佇列，不自己做。
+`ainarm2.cpp:7597` 那一族則是 part2 落地 `EnableTraymapCheckFunction`（`ainarm2.cpp:2631`）
+讓前提死掉的，如 `f6d0ca9` 預測（3 個 gate 提到它）。
+
+### 🔖 RESUME（最新）
+
+- **HEAD `86eb8f8`，工作樹乾淨**（除了 `tools/dfm2rc/reports/b1d_idempotent_report.json`
+  這個 ctest 產生的報告檔，非本波產物）。
+- **PT-W8 workflow 執行中**（run id `wf_7cd4c664-f92`，script
+  `scratchpad/ptw8.workflow.js`）。agent 死掉用 `resumeFromRunId` 重派，不要重寫。
+- **PT-W8 收工步驟（順序不可換）**：
+  1. `git status` 對帳每個 agent 實際落地了什麼（**失敗的 agent 常常已經把檔寫完了**）。
+  2. CMakeLists：`BarCode/BarCode_Shuttle1_SFCAutoTune.cpp`、`_Shuttle2_SFCAutoTune.cpp`
+     加到 **`ht9045_sm`**（其餘 BarCode 檔在 CMakeLists.txt:1920-1952 那一段）。其餘 12 個檔
+     都是既有鏡射，不必動 CMakeLists。
+  3. 退役 17 個 stub：`aoutarm_shims.cpp` :47 :48 :49 :50 :66 :81 :82 :83 :121 :146、
+     `aoutarm.cpp:541`、`atester_shims.cpp` :147 :148 :149 :150 :151、
+     `AutoClean/AutoClean.cpp:199`。**逐行 assert 符號存在才動手，並逐檔偵測 EOL。**
+  4. 退役後 grep `tests/` 有沒有同名 TU-local stand-in（陷阱 1 形狀 (e)）。
+  5. 重跑所有 absence claim（陷阱 2），逐條複驗 agent 的引用行號。
+  6. tier-4b：全新 Debug + Release，失敗集合須 ⊆ 那 6 個。
+- **下一波標的**（PT-W8 之後）：非表單只剩**刻意 gated 的約 4,991 行** ——
+  `SECSGEM/uHGemHT9045_EC.cpp`(1,860, 1 個 gated 函式)、`uHGemHT9045.cpp`(1,202, 3 gated)、
+  `uHGemHT9045_SV.cpp`(958, 1 gated)、`cpublic.cpp`(560, 21 gated)、`cMyDB.cpp`(159, 4 gated)、
+  `cmydef.cpp`(121, 4 gated)、`cinitial.cpp`(94, 2 gated)、`asortarm.cpp`(32, 4 gated)、
+  `aoutarm.cpp`(5, 1 gated)。**解 gate 是行為變更，要單獨一顆 commit 單獨量**，
+  而且要先逐條重問「為什麼它該是 gated」（陷阱 3）。
+- **⚠ 停止條件**：PT-W8 之後，非表單就只剩刻意 gated 的部分 ——
+  **等於到達表單邊界**。`Command.cpp`（9,445 code 行、164 個 `TfMain::` 方法）與 107 個表單單元
+  都要等使用者定 facade 策略，不自己決定。
+- **安全佇列（等使用者在場）**：#10、#12、#14、#18，加上**馬達煞車 gate 群**（`csystem.cpp`
+  :18442 :18302 :18485 :18521 :18571 :21242 :21925 :22104 :16631）。
+- **非安全待辦**：#15 macro seam、#16 過期 gate（扣掉煞車群）、#17、#19 第 3 項（census 兩個
+  檔名比對缺陷）、#20；PT-W7d 的 k2..k8 audit 仍未補跑。
