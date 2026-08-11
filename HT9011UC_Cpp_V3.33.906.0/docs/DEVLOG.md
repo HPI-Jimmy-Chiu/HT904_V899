@@ -6902,3 +6902,78 @@ PT-W8 之後，非表單**沒有任何「非 gated 且真的沒翻」的工作�
 **已驗證 vs 未驗證**：上面所有 ctest／build 數字都是 `83ae7f4` 那棵樹實測的；
 完成度百分比是 `census.py` 實跑的，但**census 本身有兩個已知缺陷**（見 `9d72111`），
 所以「非表單 98.5%」是我人工還原後的推算，**不是腳本輸出**，引用時要講清楚。
+
+---
+
+## PT-W9（20260811）：`AddSV`/`AddEC` 變回真 override —— 但**執行期行為今天沒變**
+
+行為變更波次，單獨一顆 commit（`96a37a1`）、單獨量。
+
+### 量到什麼（tier-4b，全新 build dir）
+
+|  | Debug | Release |
+|---|---|---|
+| configure / build | rc=0 / rc=0 | rc=0 / rc=0 |
+| ctest | **128 / 134**（598.19 s） | **128 / 134**（462.07 s） |
+
+失敗集合兩邊逐項相同，等於 §7 那 6 個常駐項，零超出。
+census 非表單 **92.6% → 93.5%**（缺 24,838 → 22,020），credit 的 2,818 行正好是
+`uHGemHT9045_EC.cpp`(1,860) + `_SV.cpp`(958)。
+
+### 做了什麼（3 檔、42 行）
+
+`SECSGEM/uHGemHT9045.h` 補上 `virtual void AddSV();` / `virtual void AddEC();`，位置照 golden
+（`uHGemHT9045.h:346-347`，在 ctor 與 `AddAlarmList` 之間）。**那個標頭自己的註解就寫明這是
+「the main loop's serialized job」**，也寫明 `_SV.cpp`／`_EC.cpp` 之所以用自由函式頭
+（`HT9045Gem_AddSV`／`HT9045Gem_AddEC`）就是因為缺這兩行宣告。宣告補上後，
+`_EC.cpp` 的 GATE g31 退役、`_SV.cpp` 補上對應的 member wrapper。
+`nm` 確認 `libht9045_sm.a` 現在真的定義了 `HT9045Gem::AddSV()` 與 `::AddEC()`。
+
+**SV 我選 wrapper 而不是照 [G1] 說的「flip both arms」**：flip 要動定義頭加 5 個 `Self->`，
+等於為了零收益去碰那個已驗證的千行 body；wrapper 又剛好和兄弟檔 `_EC.cpp` 的 g31 同形狀。
+被否決的替代方案寫在這裡以便日後審。
+
+### 一個**朝我們有利**的方向過期掉的 absence claim
+
+g31 的「READ FIRST」說解閘會要求 `ESD_GENERAL`、而它「全樹未定義」，要同一筆變更裡補進
+`csystem.cpp`。**那句話已經過期**：它定義在 `csystem_predicates.cpp:494`（golden `csystem.cpp:155`）。
+動手前重查過，`csystem.cpp` 完全不用改。**absence claim 會朝兩個方向過期**，不是只會變嚴格。
+
+### 這件事**沒有**做到什麼（寫下來，因為相反的說法很好聽）
+
+**全樹沒有任何地方呼叫這兩個方法。** golden 的唯一呼叫點是
+`SECSGEM/UsecegemMainFrom.cpp:202-203`（`HSys.MyGem->AddSV(); ...->AddEC();`），
+而 `UsecegemMainFrom` **有 `.dfm`，是表單單元**，沒有 port。樹內唯一那個呼叫
+（`tests/test_uHGemClass.cpp:178`）是對 base `HTGem g;` 呼叫的，仍然走 HTGem 自己的 inline virtual。
+
+所以這是**結構正確、連得到、census 會計分，但今天執行期行為不變** —— 與 PT-W8 那六個 BarCode
+函式同一個 archive-extraction 形狀 (a)。要等表單落地才會真的生效。
+
+### 範圍更正：另外三個「非 form gate」其實不是
+
+我上一則說 `cpublic.cpp`／`cinitial.cpp`／`cmydef.cpp` 的 gate 是非 form、可以直接做。
+那是**看 `#if 0` 開頭那一行**下的判斷。逐條讀真正的 blocker 之後，三個都沒動：
+
+| 檔 | 真正卡在什麼 |
+|---|---|
+| `cinitial.cpp` | **前提仍成立**。gate 講的是 `TMySucker@aHotPlateSubstrate.h` 缺 `SuckerName`；`mykitsuck.h:181` 有，但那是**另一個同名 class**（雙標頭陷阱）。「名字在別處存在」正是最需要重問一次的那種假死前提。 |
+| `cpublic.cpp` | `:667` 卡 `fMain` 成員、`:876` 卡 `fSCKART->bShow` → **form**；`:292`/`:581` 卡 `TCOM2`（rs232 真的沒翻）。 |
+| `cmydef.cpp` | TODO(W3)／TODO(W6)，依賴未翻的全域與狀態機。 |
+
+**所以非 form 的 gate 面基本上是耗盡了，不是延後。**
+
+### 🔖 RESUME（最新）
+
+- **HEAD `96a37a1`，工作樹乾淨**（只剩 ctest 產生的 `tools/dfm2rc/reports/b1d_idempotent_report.json`）。
+- **完成度**：census 印 非表單 **93.5%**、全案 **54.6%**。
+  還原 census 兩個檔名比對缺陷、並把 `Command.cpp` 歸表單後約 **98.6%**（人工推算，非腳本輸出）。
+- **⚠ 停在表單邊界。非 form 的可做工作已耗盡**（翻譯面 PT-W8 收掉、gate 面 PT-W9 收掉）。
+
+**唯一還能不靠使用者裁決往前推的**：`tools/census/census.py` 兩個檔名比對缺陷
+（鏡射判定看檔名、`form` 判定看同名 `.dfm`）。**這會動到唯一權威量法，必須單獨一顆 commit
+並獨立驗證**（改完要能重現本檔記錄過的每一個歷史數字，否則就是把量法改壞而不是改對）。
+
+**等使用者裁決的**：表單 facade 策略（`Command.cpp` 9,445 行 / 164 個 `TfMain::` 方法 + 107 個表單單元）。
+
+**安全佇列（等使用者在場）**：#10、#12、#14、#18，加上馬達煞車 gate 群
+（`csystem.cpp` :18442 :18302 :18485 :18521 :18571 :21242 :21925 :22104 :16631）。
