@@ -6977,3 +6977,54 @@ g31 的「READ FIRST」說解閘會要求 `ESD_GENERAL`、而它「全樹未定�
 
 **安全佇列（等使用者在場）**：#10、#12、#14、#18，加上馬達煞車 gate 群
 （`csystem.cpp` :18442 :18302 :18485 :18521 :18571 :21242 :21925 :22104 :16631）。
+
+---
+
+## 20260811 附記：我提議的「census 修正」其實是誤判，已還原
+
+PT-W9 收工後，我把「修 `census.py` 兩個檔名比對缺陷」當成唯一還能不靠使用者裁決推進的事，
+並動手做了第一個（讓未鏡射的檔也去查 `port_live_names()`）。**做出來的東西是錯的，已 `git checkout` 還原。**
+
+### 錯在哪（兩個，都是自己量出來才發現的）
+
+1. **算出了不可能的值**：`BarCode_Sh2.cpp` 被 credit **5,622** 行，而該檔 `gcode` 只有 **5,180**。
+   一個檔不可能翻好的行數比它自己還多。根因是**單位不一致** —— 我累加的是 golden 函式的 raw span，
+   卻拿去跟 code line（去空白去註解）比。
+2. **大量假 credit**：`main.cpp` 被 credit 5,115 行、`BarCode/BarCode.cpp` 4,743、`uhome.cpp` 4,270 ——
+   這些檔幾乎什麼都沒翻。根因是我的別名規則 `any(n.endswith('_'+bare))` 太鬆，
+   任何 `X_Foo` 都會匹配 golden 的 `Foo`。
+
+整體會把非表單從 93.5% 灌到 96.8%、表單從 4.6% 灌到 13.8%、全案 54.6% → 60.5%。**全是假的。**
+
+### 更重要的：那根本不是缺陷，是有量測背書的刻意保守
+
+還原後我把 `census.py` 的 docstring 讀完（我之前只讀了 form/.dfm 那一段就下結論）。
+它在 **20260809 PT-W5c** 就已經找到這件事、量過、而且**刻意拒絕**我剛剛實作的那種比對：
+
+> CROSS-FILE HOMES are counted as MISSING … MEASURED CEILING, tree-wide: … 268 have a body
+> elsewhere … 23,871 golden lines … **A further 564 hits (49,368 lines) were EXCLUDED as
+> unprovable**: names like `FormShow` / `ReadFile` / `SaveSetupFile` / `DoIniDataToForm` exist on
+> dozens of distinct VCL form classes, so a port hit does not identify the same function --
+> **which is exactly why the alias rule above refuses bare cross-class matching.**
+> Treat 23,871 as a CEILING, not a correction: a same-named body elsewhere may be a DEGRADED
+> STUB rather than a translation.
+
+我製造的 35,289 行假 credit，正是它說的那 49,368 行「unprovable」那一族。
+它連「同名不代表同一個函式，也可能是退化 stub」都寫了 —— 對 csystem.cpp 的 24 個 hit 實查過，
+21 個忠實、1 個忠實但複製了 golden 缺陷、1 個是 `static` no-op stub。
+
+### 所以要更正我先前對使用者說的話
+
+我說 census 有「兩個檔名比對缺陷」。**準確的說法是：兩個都是已知、已量化、並在檔頭寫明的
+保守設計，不是缺陷。**
+- 跨檔家：不做裸名跨類別比對，因為無法證明是同一個函式；已給出 23,871 行的**上限**。
+- form/.dfm：檔頭原文就寫「mechanically right and semantically wrong … Reported, not hidden」。
+
+**我先前引用的「非表單 98.5%」那個人工推算，也要打折看**：它建立在「BarCode_Sh1/Sh2 全額 credit」
+之上，而 census 的立場是那種 credit 只能當上限、不能當修正。
+
+### 刻意不做
+
+不改 `census.py`。要真的改，需要的是**逐一證明**每個跨檔對應是同一個函式（而不是同名 stub），
+那是一個要自己規劃與驗證的 pass，不是一個別名規則。在那之前，
+**引用完成度就照 census 印的兩個模型講，並附上檔頭那些已量化的失真上限。**
