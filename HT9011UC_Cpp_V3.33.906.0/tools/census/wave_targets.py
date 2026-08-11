@@ -181,7 +181,16 @@ def port_has(name, cache={}):
 
 
 def port_definition_index(cache={}):
-    r"""name -> [relpath:line, ...] for every LIVE function definition in the WHOLE port tree.
+    r"""name -> [(relpath, line, span), ...] for every LIVE function definition in the port tree.
+
+    THE SPAN IS LOAD-BEARING -- do not drop it again.  Found 20260811 (PT-W7e-part2): this
+    index originally recorded only relpath:line, so ANY live definition read as "already
+    translated".  It cannot tell a faithful body from a one-line offline stand-in, and for
+    aoutarm9045.cpp 10 of the 11 names it reported as parked are `{ return true; }` stubs
+    (DoFixTrayFullAlarm is 343 golden lines vs 1 port line; SearchTrayToPlace_Magazine 140
+    vs 1; VerifyTrayStatus 90 vs 1).  Acting on that report is how PT-W7e discarded 50
+    functions / 2,261 golden lines and had to recover them in a follow-up pass.  main() now
+    splits the parked list on this span, so callers get "REAL BODY" and "STUB" separately.
 
     WHY (found 20260811, PT-W7e): main() compares golden against the port file of the SAME relative
     path only, so a body an earlier wave parked in a DIFFERENT port file reads as MISSING. For
@@ -212,13 +221,28 @@ def port_definition_index(cache={}):
             LL = blob.decode("utf-8", "replace").split(nl)
             g = gatemap(LL)
             rp = os.path.relpath(fp, PORT).replace(chr(92), "/")
+            n = len(LL)
             for i, l in enumerate(LL):
                 if g[i] or not l or l[0] in " " + chr(9) + "/#}":
                     continue
                 m = DEFN.match(defn_probe(l))
                 if not m or m.group(1) or m.group(2) in KW:
                     continue
-                idx.setdefault(m.group(2), []).append(rp + ":" + str(i + 1))
+                # Same brace-walk spans() uses, so the port span is measured the same way
+                # the golden span is -- otherwise the two are not comparable.
+                depth, j, seen = 0, i, False
+                while j < n:
+                    depth += LL[j].count("{") - LL[j].count("}")
+                    if "{" in LL[j]:
+                        seen = True
+                    if seen and depth <= 0:
+                        break
+                    j += 1
+                    if j - i > 4000:
+                        break
+                if not seen:
+                    continue
+                idx.setdefault(m.group(2), []).append((rp, i + 1, j - i + 1))
     cache["idx"] = idx
     return idx
 def main():
@@ -251,22 +275,42 @@ def main():
         miss = sorted(((n, l, s) for n, (l, s, _g) in G.items() if n not in P),
                       key=lambda x: -x[2])
         idx = port_definition_index()
-        parked = [(n, l, s, idx[n]) for n, l, s in miss if n in idx]
         fresh = [(n, l, s) for n, l, s in miss if n not in idx]
+        # Split the parked names on the PORT body span.  A parked entry only counts as
+        # "already translated" if its port body is big enough to plausibly BE the golden
+        # body; anything at or below STUB_MAX_LINES, or under STUB_RATIO of golden, is an
+        # offline stand-in and the function is still UNTRANSLATED work.  See the docstring
+        # on port_definition_index() for what conflating the two cost.
+        STUB_MAX_LINES, STUB_RATIO = 3, 0.10
+        real, stub = [], []
+        for n, l, s in miss:
+            if n not in idx:
+                continue
+            best = max(idx[n], key=lambda w: w[2])          # widest live body wins
+            (real if (best[2] > STUB_MAX_LINES and best[2] >= s * STUB_RATIO)
+             else stub).append((n, l, s, best, idx[n]))
         print("")
         print("--- FUNCTIONS to translate: %d (%d golden lines) ---"
-              % (len(fresh), sum(s for _n, _l, s in fresh)))
-        print("%-46s %8s %7s" % ("function", "goldLn", "span"))
+              % (len(fresh) + len(stub), sum(s for _n, _l, s in fresh)
+                 + sum(s for _n, _l, s, _b, _w in stub)))
+        print("%-46s %8s %7s  %s" % ("function", "goldLn", "span", "note"))
         for n, l, s in fresh:
             print("%-46s %8d %7d" % (n, l, s))
+        for n, l, s, best, _w in sorted(stub, key=lambda x: -x[2]):
+            print("%-46s %8d %7d  STUB to retire: %s:%d is %d line(s)"
+                  % (n, l, s, best[0], best[1], best[2]))
         print("")
         print("--- ALREADY TRANSLATED, parked in ANOTHER port file: %d (%d golden lines) ---"
-              % (len(parked), sum(s for _n, _l, s, _w in parked)))
+              % (len(real), sum(s for _n, _l, s, _b, _w in real)))
         print("DO NOT translate these; tell the agents they exist and where. Deleting the")
         print("counterpart is HOMECOMING, not stub retirement -- plan it as its own pass.")
-        print("%-40s %8s %7s  %s" % ("function", "goldLn", "span", "live body already at"))
-        for n, l, s, where in parked:
-            print("%-40s %8d %7d  %s" % (n, l, s, ", ".join(where[:3])))
+        print("Span-checked against golden, but a same-size body is not a FAITHFUL body --")
+        print("spot-check before relying on one.")
+        print("%-40s %8s %7s %7s  %s"
+              % ("function", "goldLn", "span", "portSpan", "live body already at"))
+        for n, l, s, best, where in real:
+            print("%-40s %8d %7d %7d  %s"
+                  % (n, l, s, best[2], ", ".join("%s:%d" % (w[0], w[1]) for w in where[:3])))
 
     gl = globals_of(GL, ginside)
     absent = []
