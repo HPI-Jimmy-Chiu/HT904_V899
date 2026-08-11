@@ -2469,3 +2469,643 @@ void EncoderTeachingMaxMinCount(int iRecordArm)                                 
 void EncoderTeachingMaxMinCount(int)   {}
 void InitialMaxMinValue(AnsiString)    {}
 void TrigerIndexAxisHome()             {}
+
+// ===========================================================================
+//  AI(pt-wave) 20260811  PT-W7n  --  BANNER EXTENSION (append-only block)
+//
+//  ROLE
+//    Eight golden FREE FUNCTIONS of this same golden unit plus thirteen of its
+//    file-scope globals.  None of the eight is a method; all are TU-scope in
+//    golden (golden declares CheckTestZ/1/2 in Motor/myGALILmotor.cpp:52-54 and
+//    the other five NOWHERE -- their only callers are inside golden
+//    Motor/mymotor.cpp itself).  Who pumps them, in golden:
+//      CheckTestZ / CheckTestZ1 / CheckTestZ2   <- 14 sites in golden
+//          Motor/myGALILmotor.cpp (Gali_MotMove2 / Gali_MotMoveNoWait /
+//          Z1UpZ2Down1/2 / Z1DownZ2Up1/2 / Gali_SingalHome / Gali_FindZPhase /
+//          Gali_nnMode_Z1Z2_Down/_Up).  Index-arm four-axis command-vs-encoder
+//          agreement gate: a FALSE return makes the Galil layer refuse the move.
+//      IndexPosMonitor                          <- golden index-arm callers;
+//          pure diagnostic sampler, return value is unconditionally false.
+//      CheckInArmZHomeSensor_2x8                <- golden :3104
+//          (InArmContinuousMove_9045)
+//      CheckOutArmZHomeSensor_2x8               <- golden :4328
+//          (OutArmContinuousMove_9045)
+//      CheckSortArmZHomeSensor_2x8              <- golden :6220
+//          (SortArmContinuousMove)
+//          All three: picker-Z HOME-SENSOR SANITY gate taken while the arm is
+//          about to descend.  FALSE means 'home sensor says home but the encoder
+//          says below zero' -> stop X and Y, tell the operator, re-home.
+//      ChangePosition                           <- golden :2937/:2947/:2958/:2968
+//          (InArm) and :3500/:3512/:3525/:3537 + :4149/:4161/:4174/:4186 (OutArm)
+//          Magnetic-scale linear-interpolation position remap.
+//
+//  WAVE SCOPE  (one line per golden function assigned to this wave)
+//    ACTIVE  CheckTestZ                    golden Motor/mymotor.cpp:67
+//    ACTIVE  CheckTestZ1                   golden Motor/mymotor.cpp:117
+//    ACTIVE  CheckTestZ2                   golden Motor/mymotor.cpp:173
+//    ACTIVE  IndexPosMonitor               golden Motor/mymotor.cpp:228
+//            (body ACTIVE; the two fMain->tMonitorIndex->Add() DIAGNOSTIC SINK
+//             lines are GATED -- see GATE(PT-W7n-1).  Return value unaffected.)
+//    ACTIVE  CheckInArmZHomeSensor_2x8     golden Motor/mymotor.cpp:2394
+//    ACTIVE  CheckSortArmZHomeSensor_2x8   golden Motor/mymotor.cpp:2424
+//    ACTIVE  CheckOutArmZHomeSensor_2x8    golden Motor/mymotor.cpp:2453
+//    ACTIVE  ChangePosition                golden Motor/mymotor.cpp:2485
+//    -- globals (storage only; no ctor below reaches any of the 18 NULL globals) --
+//    ACTIVE  iIDLETime                     golden :2556
+//    ACTIVE  InArmIdle                     golden :2557
+//    ACTIVE  bInArmZMove[][]               golden :2720
+//    ACTIVE  InArmCylinderDelayTimer       golden :2884   (HTimer -> TQPF_Timer)
+//    ACTIVE  OutArmIdle                    golden :3456
+//    ACTIVE  bOutArmZMove[][]              golden :3937
+//    ACTIVE  OutArmCylinderDelayTimer      golden :4092   (HTimer -> TQPF_Timer)
+//    ACTIVE  iTrayXTask                    golden :5653
+//    ACTIVE  iTrayOldPos                   golden :5654
+//    ACTIVE  SortArmIdle                   golden :5907
+//    ACTIVE  iSortArmZMoveTask             golden :5908
+//    ACTIVE  bSortArmZMove[][]             golden :5909
+//    ACTIVE  SortArmCylinderDelayTimer     golden :6069   (HTimer -> TQPF_Timer)
+//
+//  HTimer -> TQPF_Timer SUBSTITUTION (golden :2884 / :4092 / :6069)
+//    Golden's HTimer is D:\HT9045\elec\Component\htimer.h -- a BCB6 *component
+//    package* OUTSIDE the version tree, never translated (same class of finding as
+//    halarm.h, recorded at canary_support.h:220-254).  The ONLY `HTimer` this tree
+//    has is atester_shims.h:463
+//        struct HTimer { bool Off(){ return true; } void SetSecAndOn(double){} };
+//    whose Off() is HARD-CODED true.  Typing these three on it would compile, link
+//    clean, and make every cylinder dwell expire INSTANTLY -- a silent motion-timing
+//    loss, not a visible one.  TQPF_Timer (myTimer.h) is the tree's established
+//    substitute for golden timers in exactly this position -- acatchtray.cpp:114,
+//    CanBus/cMyDNM100UD.cpp:85, MyPLC/MyPLC_IO_Modbus.cpp:49 -- and its Off() is a
+//    real QueryPerformanceCounter deadline test.  Golden itself uses TQPF_Timer for
+//    the sibling idle timers a few lines away (:2557 / :3456 / :5907), so the two
+//    families already coexist in golden's own text.
+//    SURFACE DELTA, stated because it is NOT zero: golden HTimer offers at least
+//    Off()/SetSecAndOn(double) (the two members atester_shims.h bothered to mirror);
+//    TQPF_Timer offers Off()/SetSecAndOn(double)/SetMSAndOn/SetUSAndOn/
+//    Set0_1SecAndOn/On/SetSec/SetMS/SetUS/LatchCycleTime*.  Every member golden
+//    calls on these three objects exists; the extra members are additive.
+//    BEHAVIOUR DELTA on a virgin object: TQPF_Timer::Off() reads rEnd, which the
+//    ctor does NOT initialise, so Off() BEFORE any Set*AndOn() is indeterminate.
+//    All three globals below have ZERO call sites in this tree today (measured --
+//    see the report), so nothing polls them unarmed.
+//
+//  GATE REGISTER
+//  ------------------------------------------------------------------------
+//  GATE(PT-W7n-1) -- `fMain->tMonitorIndex->Add(str);`
+//                    golden Motor/mymotor.cpp:242 and :254 (2 sites, both inside
+//                    IndexPosMonitor).  Everything else in that function is ACTIVE.
+//    (a) GOLDEN LINE / WHAT IT IS
+//        golden main.h:1391 `TStringList *tMonitorIndex;` -- a member of TfMain,
+//        allocated at golden main.cpp:2227 (`tMonitorIndex = new TStringList();`),
+//        drained at golden main.cpp:28550-28551 (SaveToFile then Clear), freed at
+//        golden main.cpp:11850-11854 (which guards `if(tMonitorIndex!=NULL)`).
+//    (b) WHY THE OFFLINE DEFAULT IS FAITHFUL
+//        Golden's IndexPosMonitor declares `bool bRet=false;` at :230 and NEVER
+//        assigns it again -- `return bRet` at :258 is UNCONDITIONALLY false on
+//        every path, in golden, on a real machine.  So the RETURN VALUE, the only
+//        thing a caller can act on, is bit-identical with the Add() present or
+//        absent.  The Add() is a pure DIAGNOSTIC SINK: an append-only string log
+//        that nothing in golden reads back for a decision.  Skipping it cannot
+//        change control flow anywhere.  This is NOT the weaker claim that 'the
+//        degraded value happens to be equivalent' -- there is no degraded value
+//        here; the observable (bRet) is literally golden's own constant.
+//    (c) HOW REAL-MACHINE BEHAVIOUR DIFFERS
+//        On a real machine, every sample where the index-arm Z encoder sits below
+//        Prod.All_TestZ_Test_Safe appends one line -- "Z1,<z>,Y1,<y>" or
+//        "Z2,<z>,Y2,<y>" -- to an in-memory TStringList that golden later writes
+//        to disk (golden main.cpp:28550).  Offline that forensic trail is not
+//        recorded.  Nothing else differs.
+//    ABSENCE CLAIM + COMMAND + TIME  (re-run immediately before hand-off)
+//        rg -n "tMonitorIndex" D:/HT9045/HT9011UC_Cpp_V3.33.906.0
+//        -> 0 hits.  Run twice: 2026-08-11 03:20 UTC (before writing) and again
+//           at hand-off; the second timestamp is in this wave's report.
+//        `fMain` DOES exist in this tree (forms/fMain.h facade) -- the absence
+//        claim is about the MEMBER tMonitorIndex only, which is why the gate is
+//        on the member access and not on fMain.
+//    GA-3 HAND-OFF NOTE (trap 4).  When a tMonitorIndex facade lands, do NOT just
+//        delete the #if 0.  Golden's line here is UNGUARDED against NULL while
+//        golden's own teardown at main.cpp:11850 proves the pointer IS nullable,
+//        and in this tree the object would be born NULL like the other late-`new`
+//        globals.  Re-activate as `if(fMain && fMain->tMonitorIndex)` at the CALL
+//        SITE -- exactly the shape the fLaserSensor/elLaser incident mandates.
+//  ------------------------------------------------------------------------
+//  NON-GATE 1 -- golden's `#ifdef DEBUG` (:149-154) and `#ifdef DEGBU` (:204-209)
+//    blocks are transcribed VERBATIM, golden's typo `DEGBU` included (it is
+//    golden's own misspelling of DEBUG at golden :204, so that block is
+//    unreachable in EVERY build golden has ever produced).  This build defines
+//    neither macro (checked: CMakeLists.txt add_compile_definitions carries only
+//    _WIN32_WINNT / WINVER / MN200DLL_EXPORTS / DLLDIR_EX; no -DDEBUG anywhere),
+//    so both blocks are inert.  Same treatment as the sibling copy at
+//    Motor/myGALILmotor.cpp:832+, deliberately, so the two texts stay diffable.
+//    LANDMINE, stated rather than hidden: a `-DDEBUG` build WOULD try to compile
+//    `fMain->lbEnCoder0->Caption=S;` and fail -- fMain has no lbEnCoder0/1 in this
+//    tree.  That is already true of Motor/myGALILmotor.cpp today.
+//  ------------------------------------------------------------------------
+//  NON-GATE 2 -- `MOT[iMotNo].Motor->Enable` (golden :2408, :2438, :2470) is kept
+//    UNGUARDED, and that is a DELIBERATE FAIL-LOUD choice, not an oversight.
+//    MOT[].Motor is NULL in this tree offline: the construction ladder is still
+//    behind GATE(W5a-G) in cinitial.cpp, as AutoClean/AutoClean.cpp:909-928 records
+//    (that gate exists because retiring the acatchtray_shims no-ops took ctest
+//    128 -> 127 with 27-AutoClean SEGFAULTing in both Debug and Release).
+//    Adding `MOT[iMotNo].Motor &&` here would make the predicate FALSE offline,
+//    i.e. 'no home-sensor fault found', i.e. these three functions would return
+//    TRUE and the arm would be cleared to descend.  An always-true home sensor is
+//    precisely the silent safety loss this wave is required to avoid; a SEGFAULT
+//    is the loud alternative and is therefore the correct one.  Consistent with
+//    the rest of the tree, which keeps the same unguarded deref at acarry.cpp:7730/
+//    :7781/:8324, aoutarm.cpp:3003/:3060, asortarm.cpp:2238/:2295, ckernel.cpp:3863
+//    and cinitial.cpp:3846.  ALL THREE FUNCTIONS HAVE ZERO CALL SITES IN THIS TREE
+//    TODAY, so nothing can reach the deref yet -- see this wave's report, trap 1.
+//  ------------------------------------------------------------------------
+//  NON-GATE 3 -- ShowIndexMotorError / RecordIndexPositionError (called by
+//    CheckTestZ/1/2) resolve to the EMPTY STUBS already living in THIS SAME TU at
+//    Motor/mymotor.cpp:2252 and :2254.  Not introduced here and not retired here.
+//    Consequence, to be explicit: the retry-ceiling ALARM arm of CheckTestZ*
+//    (>150 / >100 consecutive failures) is behaviourally SILENT in this build --
+//    no operator dialog, no position record.  The load-bearing half is untouched:
+//    `iRetryCT` still resets and the function still returns FALSE, which is what
+//    the 14 Galil call sites branch on.
+//  ------------------------------------------------------------------------
+//  NON-GATE 4 -- ShowMyMessage (called by the three home-sensor checks) resolves
+//    to canary_support.cpp's RECORDING SIM in ht9045_sm, not to golden's modal VCL
+//    dialog.  Golden BLOCKS the operator there; the sim records S1 and returns
+//    immediately.  The control-flow half -- the two PCIL132_StopMotor() calls that
+//    precede it and the `return false` that follows it -- is fully ACTIVE, so the
+//    caller still learns the arm must not descend.  Pre-existing substrate
+//    property of the whole tree, restated here because these are SAFETY functions.
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+//  AI(pt-wave) 20260811 PT-W7n: includes for THIS BLOCK ONLY, placed here rather
+//  than at the file head because this wave is append-only on an existing mirror.
+//  Legal at file scope, and it keeps the pre-existing 2471 lines byte-untouched.
+//
+//  common.h             -- MySleepEx (golden common.h:260; golden reaches it via
+//                          its own `#include "common.h"` at golden :15)
+//  canary_support.h     -- ShowMyMessage (golden mymessbox.h:58, golden :11) and
+//                          __FUNC__ (BCB6 builtin -> __func__).  Same header
+//                          Motor/myGALILmotor.cpp:579 uses for the same two.
+//  aHotPlateSubstrate.h -- TMyKitSuck + InArmSuck / OutArmSuck / OutArm2Suck
+//                          + SetInArmHome.
+//
+//  TRAP-5 CHECK ON aHotPlateSubstrate.h -- THIS TREE HAS **TWO** TMyKitSuck.
+//    (i) aHotPlateSubstrate.h:365 and (ii) mykitsuck.h:274.  They have DIFFERENT
+//    LAYOUTS, and mykitsuck.cpp:205-207 defines a SECOND InArmSuck / FLCarryKit /
+//    FRCarryKit.  Picking the wrong one links perfectly cleanly and then reads
+//    Suck[i][j].iMotNo at the wrong offset -- i.e. these functions would stop a
+//    random motor.  WHICH ONE IS ACTUALLY LINKED, measured (not assumed):
+//      nm --defined-only -C build_0811_w7h_rel/libht9045_sm.a
+//        -> aHotPlateSubstrate.cpp.obj: 00031b80 B InArmSuck
+//        -> aHotPlateSubstrate.cpp.obj: 00029060 B OutArmSuck
+//        -> aHotPlateSubstrate.cpp.obj: 00026200 B OutArm2Suck
+//      and mykitsuck.cpp is in NO archive (it has no entry in CMakeLists.txt).
+//      So aHotPlateSubstrate.h is the header whose layout matches the objects we
+//      link against.  Both measurements 2026-08-11.
+//    aHotPlateSubstrate.h:132 is the `int iMotNo;` this block reads (golden
+//    MyKitSuck.h:138); aHotPlateSubstrate.h:419-420 are iMotRow / iMotCol
+//    (golden MyKitSuck.h:156-157).
+// ---------------------------------------------------------------------------
+#include "common.h"                 // MySleepEx  (golden common.h:260)
+#include "canary_support.h"         // ShowMyMessage (golden mymessbox.h:58) + __FUNC__
+#include "aHotPlateSubstrate.h"     // TMyKitSuck InArmSuck/OutArmSuck/OutArm2Suck + SetInArmHome
+
+// AI(pt-wave) 20260811 PT-W7n: golden Motor/mymotor.cpp:64-65 sit here, just above
+//   CheckTestZ.  :64 is `extern void SetInArmHome(bool bPrecisorNeedHome=false);`
+//   -- NOT re-emitted: aHotPlateSubstrate.h:915 already carries that exact
+//   declaration WITH the default argument, and C++ forbids repeating a default
+//   argument for the same parameter in one translation unit (hard error, not a
+//   silent shadow).  Same signature, same default, same meaning; the only thing
+//   lost is a duplicate line.  :65 has no default argument, so it is transcribed
+//   verbatim.  golden :63 `extern HAlarm *Alarm;` is NOT in this wave's scope and
+//   HAlarm has no port (see canary_support.h:220-254).
+extern void SetOutArmHome();
+//==============================================================================
+// golden Motor/mymotor.cpp:67-115  (CheckTestZ)
+bool CheckTestZ(AnsiString sFunc)                                               //Steven 20141007 : 換位置
+{
+    AnsiString Str;
+    static int iRetryCT=0;
+    bool flag1=false, flag2=false, flag3=false, flag4=false;
+    long lPos[4]={0, 0, 0, 0};                                                  //kevin 20150915
+
+    lPos[0]=MOT[MTestZ1].Gali_ReadPos();
+    if(MOT[MTestZ1].Gali_ReadEncoderInRandgeMinLimit(lPos[0]))
+        flag1=true;
+
+    lPos[1]=MOT[MTestZ2].Gali_ReadPos();
+    if(MOT[MTestZ2].Gali_ReadEncoderInRandgeMinLimit(lPos[1]))
+        flag2=true;
+
+    lPos[2]=MOT[MTestY1].Gali_ReadPos();
+    if(MOT[MTestY1].Gali_ReadEncoderInRandgeMinLimit(lPos[2]))
+        flag3=true;
+
+    if(USE_INDEX_ARM_AXES==IndexArm_3_Axis)                                     //JimmyChiu 20220708 : add Index Arm Axis
+    {
+        lPos[3]=0;
+        flag4=true;
+    }
+    else
+    {
+        lPos[3]=MOT[MTestY2].Gali_ReadPos();
+        if(MOT[MTestY2].Gali_ReadEncoderInRandgeMinLimit(lPos[3]))
+            flag4=true;
+    }
+
+    if(flag1 && flag2 && flag3 && flag4)
+    {
+        iRetryCT=0;
+        return true;
+    }
+    else
+    {
+        iRetryCT++;
+        if(iRetryCT>150)                                                        //kevin 20130312100
+        {
+            Str.sprintf("CheckTestZ(%s)", sFunc);
+            ShowIndexMotorError(Str);
+            iRetryCT=0;                                                         //kevin 20110628 發生alarm 需清為0否則要關程式
+            RecordIndexPositionError(Str, flag1, flag2, flag3, flag4, &lPos[0]); //kevin 20150915 record
+        }
+        return false;
+    }
+}
+//==============================================================================
+// golden Motor/mymotor.cpp:117-171  (CheckTestZ1)
+bool CheckTestZ1(AnsiString sFunc)                                              //Steven 20141007 : 換位置
+{
+    static int iRetryCT=0;
+    bool flag1=false, flag2=false, flag3=false, flag4=false;
+    long lPos[4]={0, 0, 0, 0};                                                  //kevin 20150915
+    AnsiString S;
+
+    lPos[0]=MOT[MTestZ1].Gali_ReadPos();
+    if(MOT[MTestZ1].Gali_ReadEncoderInRandgeMinLimit(lPos[0]))
+        flag1=true;
+
+    flag2=true;
+    lPos[1]=0;
+
+    lPos[2]=MOT[MTestY1].Gali_ReadPos();
+    if(MOT[MTestY1].Gali_ReadEncoderInRandgeMinLimit(lPos[2]))
+        flag3=true;
+
+    if(USE_INDEX_ARM_AXES==IndexArm_3_Axis)                                     //JimmyChiu 20220708 : add Index Arm Axis
+    {
+        lPos[3]=0;
+        flag4=true;
+    }
+    else
+    {
+        lPos[3]=MOT[MTestY2].Gali_ReadPos();
+        if(MOT[MTestY2].Gali_ReadEncoderInRandgeMinLimit(lPos[3]))
+            flag4=true;
+    }
+
+    if(flag1 && flag2 && flag3 && flag4)
+    {
+#ifdef DEBUG
+        long Pos=MOT[MTestZ1].Gali_ReadPos();
+        long Pos1=MOT[MTestZ1].Gali_ReadEncoderPos();
+        S.sprintf("%d, %d, %d, %d", Pos, Pos1, Pos-Pos1, iRetryCT);
+        fMain->lbEnCoder0->Caption=S;
+#endif
+        iRetryCT=0;
+        return true;
+    }
+    else
+    {
+        iRetryCT++;
+        MySleepEx(5, true);
+        if(iRetryCT>100)
+        {
+            S.sprintf("CheckTestZ1(%s)", sFunc);
+            ShowIndexMotorError(S);
+            iRetryCT=0;
+            RecordIndexPositionError(S, flag1, flag2, flag3, flag4, &lPos[0]); //kevin 20150915 record
+        }
+        return false;
+    }
+}
+//==============================================================================
+// golden Motor/mymotor.cpp:173-226  (CheckTestZ2)
+bool CheckTestZ2(AnsiString sFunc)                                              //Steven 20141007 : 換位置
+{
+    static int iRetryCT=0;
+    bool flag1=false, flag2=false, flag3=false, flag4=false;
+    long lPos[4]={0, 0, 0, 0};                                             //kevin 20150915
+    AnsiString S;
+
+    flag1=true;
+
+    lPos[1]=MOT[MTestZ2].Gali_ReadPos();
+    if(MOT[MTestZ2].Gali_ReadEncoderInRandgeMinLimit(lPos[1]))
+        flag2=true;
+
+    lPos[2]=MOT[MTestY1].Gali_ReadPos();
+    if(MOT[MTestY1].Gali_ReadEncoderInRandgeMinLimit(lPos[2]))
+        flag3=true;
+
+    if(USE_INDEX_ARM_AXES==IndexArm_3_Axis)                                     //JimmyChiu 20220708 : add Index Arm Axis
+    {
+        lPos[3]=0;
+        flag4=true;
+    }
+    else
+    {
+        lPos[3]=MOT[MTestY2].Gali_ReadPos();
+        if(MOT[MTestY2].Gali_ReadEncoderInRandgeMinLimit(lPos[3]))
+            flag4=true;
+    }
+
+    if(flag1 && flag2 && flag3 && flag4)
+    {
+#ifdef DEGBU
+        long Pos=MOT[MTestZ2].Gali_ReadPos();
+        long Pos1=MOT[MTestZ2].Gali_ReadEncoderPos();
+        S.sprintf("%d, %d, %d, %d", Pos, Pos1, Pos-Pos1, iRetryCT);
+        fMain->lbEnCoder1->Caption=S;
+#endif
+        iRetryCT=0;
+        return true;
+    }
+    else
+    {
+        iRetryCT++;
+        MySleepEx(5, true);
+        if(iRetryCT>100)
+        {
+            S.sprintf("CheckTestZ2(%s)", sFunc);
+            ShowIndexMotorError(S);
+            iRetryCT=0;
+            RecordIndexPositionError(S, flag1, flag2, flag3, flag4, &lPos[0]);  //kevin 20150915 record
+        }
+        return false;
+    }
+}
+//---------------------------------------------------------------------------
+// golden Motor/mymotor.cpp:228-259  (IndexPosMonitor)
+//  GOLDEN DEFECTS PRESERVED, NOT FIXED (all three reported):
+//   (1) `bool Z1, Z2, Y1, Y2;` (:231) are assigned from Gali_ReadEncoderPos(),
+//       which returns `long` -- so every non-zero encoder position collapses to
+//       true==1 and zero collapses to false==0 BEFORE the `Z1<Prod.All_TestZ_
+//       Test_Safe` comparison at :239/:251 and before the %d in the sprintf.
+//       The whole predicate is therefore `0or1 < All_TestZ_Test_Safe` in golden
+//       too.  Kept exactly: the types stay `bool`.
+//   (2) Y2 (:231) is read at :253 on the USE_INDEX_ARM_AXES!=IndexArm_4_Axis
+//       path without ever being written (:248-249 only writes it on the 4-axis
+//       path) -- an indeterminate read, in golden.  Kept exactly.
+//   (3) bRet (:230) is never assigned, so :258 always returns false.  Kept.
+bool IndexPosMonitor(int IsZ1Down)
+{
+    bool bRet=false;
+    bool Z1, Z2, Y1, Y2;
+    AnsiString str;
+
+    if(IsZ1Down==1)                                                             //Index Arm 1
+    {
+        Z1=MOT[MTestZ1].Gali_ReadEncoderPos();
+        Y1=MOT[MTestY1].Gali_ReadEncoderPos();
+
+        if(Z1<Prod.All_TestZ_Test_Safe)
+        {
+            str.sprintf("Z1,%d,Y1,%d", Z1, Y1);
+#if 0 // GATE(PT-W7n-1a): golden Motor/mymotor.cpp:242 -- VERBATIM golden text below; see GATE REGISTER
+            fMain->tMonitorIndex->Add(str);
+#endif // GATE(PT-W7n-1a)
+        }
+    }
+    else if(IsZ1Down==2)                                                        //Index Arm 2
+    {
+        Z2=MOT[MTestZ2].Gali_ReadEncoderPos();
+        if(USE_INDEX_ARM_AXES==IndexArm_4_Axis)
+            Y2=MOT[MTestY2].Gali_ReadEncoderPos();
+
+        if(Z2<Prod.All_TestZ_Test_Safe)
+        {
+            str.sprintf("Z2,%d,Y2,%d", Z2, Y2);
+#if 0 // GATE(PT-W7n-1b): golden Motor/mymotor.cpp:254 -- VERBATIM golden text below; see GATE REGISTER
+            fMain->tMonitorIndex->Add(str);
+#endif // GATE(PT-W7n-1b)
+        }
+    }
+
+    return bRet;
+}
+//------------------------------------------------------------------------------
+// golden Motor/mymotor.cpp:2392  (the declaration golden puts immediately above
+//   CheckInArmZHomeSensor_2x8; transcribed verbatim -- no default argument, so it
+//   cannot clash with asortarm.h:111's identical declaration.)
+extern void SetSortArmHome();                                                   //RogerYang 20250510 Add for 9046AU
+//------------------------------------------------------------------------------
+// golden Motor/mymotor.cpp:2394-2422  (CheckInArmZHomeSensor_2x8)
+bool CheckInArmZHomeSensor_2x8(bool ZNeedDown, bool ZDownSel[MAX_ARM_Row][MAX_ARM_Col])   //Steven for HT1032
+{
+    int iMotNo;
+    int iPos;
+    for(int i=0; i<InArmSuck.iMotRow; i++)
+    {
+        for(int j=0; j<InArmSuck.iMotCol; j++)
+        {
+            iMotNo=(USE_PICKER_COUNT==ep16Picker && InOutArmPickerUseMotor==eptUseMotCyn)?MInArmZA:InArmSuck.Suck[i][j].iMotNo;
+            MOT[iMotNo].fCMD=false;
+            if(ZNeedDown && ZDownSel[i][j])
+            {
+                MOT[iMotNo].ScanMotorStatus();
+                iPos=MOT[iMotNo].ReadEncoderPos();
+                if(MOT[iMotNo].Motor->Enable && MOT[iMotNo].Led[iHomeLed] && iPos<0)
+                {
+                    MOT[MInArmX].PCIL132_StopMotor();
+                    MOT[MInArmY].PCIL132_StopMotor();
+                    ShowMyMessage(MOT[iMotNo].NumberAlias+" Home sensor error, if suck is down, maybe sensor fail!",
+                                  MOT[iMotNo].NumberAlias+"歸零sensor錯誤；如果吸嘴在下方，可能是sensor壞掉", __FUNC__);
+                    SetInArmHome();
+                    return false;
+                }
+            }
+        }
+    }
+
+    return true;
+}
+//------------------------------------------------------------------------------
+// golden Motor/mymotor.cpp:2424-2451  (CheckSortArmZHomeSensor_2x8)
+bool CheckSortArmZHomeSensor_2x8(bool ZNeedDown, bool ZDownSel[MAX_ARM_Row][MAX_ARM_Col])  //RogerYang 20250510 Add for 9046AU
+{
+    int iMotNo;
+    int iPos;
+    for(int i=0; i<OutArm2Suck.iMotRow; i++)
+    {
+        for(int j=0; j<OutArm2Suck.iMotCol; j++)
+        {
+            iMotNo=OutArm2Suck.Suck[i][j].iMotNo;
+            MOT[iMotNo].fCMD=false;
+            if(ZNeedDown && ZDownSel[i][j])
+            {
+                MOT[iMotNo].ScanMotorStatus();
+                iPos=MOT[iMotNo].ReadEncoderPos();
+                if(MOT[iMotNo].Motor->Enable && MOT[iMotNo].Led[iHomeLed] && iPos<0)
+                {
+                    MOT[MOutSortX].PCIL132_StopMotor();
+                    MOT[MOutSortY].PCIL132_StopMotor();
+                    ShowMyMessage(MOT[iMotNo].NumberAlias+" Home sensor error, if suck is down, maybe sensor fail!",
+                                  MOT[iMotNo].NumberAlias+"歸零sensor錯誤；如果吸嘴在下方，可能是sensor壞掉", __FUNC__);
+                    SetSortArmHome();
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+//------------------------------------------------------------------------------
+// golden Motor/mymotor.cpp:2453-2483  (CheckOutArmZHomeSensor_2x8)
+bool CheckOutArmZHomeSensor_2x8(bool ZNeedDown, bool ZDownSel[MAX_ARM_Row][MAX_ARM_Col])  //Steven for HT1032
+{
+    int iMotNo;
+    int iPos;
+    for(int i=0; i<OutArmSuck.iMotRow; i++)
+    {
+        for(int j=0; j<OutArmSuck.iMotCol; j++)
+        {
+            if(USE_PICKER_COUNT==ep16Picker && InOutArmPickerUseMotor==eptUseMotCyn)
+                iMotNo=MOutArmZA;
+            else
+                iMotNo=OutArmSuck.Suck[i][j].iMotNo;
+            MOT[iMotNo].fCMD=false;
+            if(ZNeedDown && ZDownSel[i][j])
+            {
+                MOT[iMotNo].ScanMotorStatus();
+                iPos=MOT[iMotNo].ReadEncoderPos();
+                if(MOT[iMotNo].Motor->Enable && MOT[iMotNo].Led[iHomeLed] && iPos<0)
+                {
+                    MOT[MOutArmX].PCIL132_StopMotor();
+                    MOT[MOutArmY].PCIL132_StopMotor();
+                    ShowMyMessage(MOT[iMotNo].NumberAlias+" Home sensor error, if suck is down, maybe sensor fail!",
+                                  MOT[iMotNo].NumberAlias+"歸零sensor錯誤；如果吸嘴在下方，可能是sensor壞掉", __FUNC__);
+                    SetOutArmHome();
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+//------------------------------------------------------------------------------
+// golden Motor/mymotor.cpp:2485-2554  (ChangePosition)
+//  GOLDEN DEFECTS PRESERVED, NOT FIXED (both reported):
+//   (1) `return dPos6;` at golden :2518 and :2549 returns a DOUBLE from an INT
+//       function -> implicit truncation toward zero.  Kept exactly.
+//   (2) `iMagneticScalePos[iMove][j+1]` with j running to 999 reads index 1000
+//       of a [16][1000] array (cmydef.h:4576) on the last iteration -- a
+//       one-element OUT-OF-BOUNDS read, in golden.  Kept exactly.
+//   Division note: :2505 and :2536 divide a double by dPos1 (a double), so these
+//   are FLOATING divisions in golden and stay floating here.  There is no int/int
+//   anywhere in this function that could be wrongly 'improved'.
+int ChangePosition(int Pos, int iMoveTable)                                     //Frank 20180102 add
+{
+    double dPos1=0.0, dPos2=0.0, dPos3=0.0, dPos4=0.0, dPos5=0.0, dPos6=0.0;
+    int j=0;
+    int iMove=iMoveTable*2;
+
+    if(iMoveTable%2==0)
+    {                  //往負
+        for(j=0; j<1000; j++)
+        {
+            if(Pos>=iMagneticScalePos[iMove][j+1] && Pos<=iMagneticScalePos[iMove][j])
+            {
+                if(iMagneticScalePos[iMove][j+1]-iMagneticScalePos[iMove][j]!=0)
+                {
+                    dPos1=iMagneticScalePos[iMove+1][j+1]-iMagneticScalePos[iMove+1][j];
+                    dPos2=iMagneticScalePos[iMove][j+1]-iMagneticScalePos[iMove][j];
+                    dPos3=(Pos);
+
+                    if(dPos1!=0)
+                    {
+                        dPos4=(dPos3-(double)iMagneticScalePos[iMove+1][j])/dPos1;
+                        dPos5=dPos2*dPos4;
+                        dPos6=dPos5+iMagneticScalePos[iMove][j];
+                    }
+                    else
+                    {
+                        dPos6=0.0;
+                    }
+                }
+                else
+                {
+                    dPos6=0.0;
+                }
+                return dPos6;
+            }
+        }
+    }
+    else
+    {                 //往正
+        for(j=0; j<1000; j++)
+        {
+            if(iMagneticScalePos[iMove][j+1]>=Pos && Pos>=iMagneticScalePos[iMove][j])
+            {
+                if(iMagneticScalePos[iMove][j]-iMagneticScalePos[iMove][j+1]!=0)
+                {
+                    dPos1=iMagneticScalePos[iMove+1][j+1]-iMagneticScalePos[iMove+1][j];
+                    dPos2=iMagneticScalePos[iMove][j+1]-iMagneticScalePos[iMove][j];
+                    dPos3=(Pos);
+
+                    if(dPos1!=0)
+                    {
+                        dPos4=(dPos3-iMagneticScalePos[iMove+1][j])/dPos1;
+                        dPos5=dPos2*dPos4;
+                        dPos6=dPos5+iMagneticScalePos[iMove][j];
+                    }
+                    else
+                    {
+                        dPos6=0.0;
+                    }
+                }
+                else
+                {
+                    dPos6=0.0;
+                }
+                return dPos6;
+            }
+        }
+    }
+    return 0;
+}
+//------------------------------------------------------------------------------
+// golden Motor/mymotor.cpp:2556-2557  (iIDLETime, InArmIdle)
+const int iIDLETime=30;
+TQPF_Timer InArmIdle;
+//------------------------------------------------------------------------------
+// golden Motor/mymotor.cpp:2720  (bInArmZMove).  golden's :2719 iInArmZMoveTask
+//   is NOT re-emitted: this port already defines it at Motor/mymotor.cpp:105.
+//   Divergence recorded for the main loop: the port initialises it to 1, golden
+//   :2719 initialises it to -1.  Pre-existing, NOT touched by this wave.
+bool bInArmZMove[MAX_ARM_Row][MAX_ARM_Col];
+//------------------------------------------------------------------------------
+// golden Motor/mymotor.cpp:2884  (InArmCylinderDelayTimer; HTimer -> TQPF_Timer)
+TQPF_Timer InArmCylinderDelayTimer;                                             //AI(pt-wave) 20260811 PT-W7n: golden `HTimer InArmCylinderDelayTimer;` (:2884)
+//------------------------------------------------------------------------------
+// golden Motor/mymotor.cpp:3456  (OutArmIdle)
+TQPF_Timer OutArmIdle;
+//------------------------------------------------------------------------------
+// golden Motor/mymotor.cpp:3937  (bOutArmZMove).  golden's :3936 iOutArmZMoveTask
+//   is NOT re-emitted: this port already defines it at Motor/mymotor.cpp:106
+//   (same 1 vs -1 divergence noted above; pre-existing, NOT touched here).
+bool bOutArmZMove[MAX_ARM_Row][MAX_ARM_Col];
+//------------------------------------------------------------------------------
+// golden Motor/mymotor.cpp:4092  (OutArmCylinderDelayTimer; HTimer -> TQPF_Timer)
+TQPF_Timer OutArmCylinderDelayTimer;                                            //AI(pt-wave) 20260811 PT-W7n: golden `HTimer OutArmCylinderDelayTimer;` (:4092)
+//------------------------------------------------------------------------------
+// golden Motor/mymotor.cpp:5653-5654  (iTrayXTask, iTrayOldPos)
+int iTrayXTask;
+int iTrayOldPos;
+//------------------------------------------------------------------------------
+// golden Motor/mymotor.cpp:5907-5909  (SortArmIdle, iSortArmZMoveTask, bSortArmZMove)
+TQPF_Timer SortArmIdle;                                                         //RogerYang 20250510 Add for 9046AU
+int  iSortArmZMoveTask=-1;
+bool bSortArmZMove[MAX_ARM_Row][MAX_ARM_Col];
+//------------------------------------------------------------------------------
+// golden Motor/mymotor.cpp:6069  (SortArmCylinderDelayTimer; HTimer -> TQPF_Timer)
+TQPF_Timer SortArmCylinderDelayTimer;                                           //AI(pt-wave) 20260811 PT-W7n: golden `HTimer SortArmCylinderDelayTimer;`  //RogerYang 20250512 Add for 9046AU (:6069)
+//------------------------------------------------------------------------------

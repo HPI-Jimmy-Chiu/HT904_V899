@@ -343,3 +343,171 @@ void TMyOmronPanel::setEditValueClick(TObject *Sender)
 #endif
 }
 //---------------------------------------------------------------------------
+
+// =============================================================================
+//  APPEND BLOCK -- BANNER EXTENSION
+//  AI(W906-PT-W8) 20260811 -- the 3 golden mouse handlers this file's original
+//  banner listed as "GATE (2): omitted entirely" are landed here as real,
+//  compilable, callable bodies.  Nothing above this line is edited or
+//  reordered (append-only).
+//
+//  WHY THE ORIGINAL OMISSION IS SUPERSEDED: identical argument to the one
+//  MyTempPanel.cpp's own PT-W8 append block sets out.  `TMouseButton`/
+//  `TShiftState` genuinely have no port (re-verified, GATE (W8-1) below), but
+//  NEITHER PARAMETER IS EVER READ by any of these three golden bodies
+//  (golden EJ1N/MyOmronPanel.cpp:71-103, read line by line) -- so dropping
+//  them costs nothing and buys three real bodies.  `X`/`Y` are NOT dead here:
+//  GroupBox1MouseMove and GroupBox1MouseDown both read them, and MouseDown's
+//  reads land in REAL member state (see below).
+//
+//  SHAPE: file-scope free functions taking `TMyOmronPanel *Self`, not members,
+//  because PT-W2 removed the three declarations from EJ1N/MyOmronPanel.h and
+//  that header is outside this wave's write boundary.  See the HAND-OFF block
+//  at the end of this file.  Until the loop acts on it, these three have
+//  EXTERNAL LINKAGE AND NO CALLER anywhere in the tree.
+//
+//  WAVE SCOPE -- ONE LINE PER GOLDEN FUNCTION (all golden EJ1N/MyOmronPanel.cpp)
+//   GroupBox1MouseUp    golden :71-80   -- GATED (body 100%, `Ptr->Tag` only).
+//   GroupBox1MouseMove  golden :82-92   -- GATED (body 100%: Tag + Left + Top).
+//   GroupBox1MouseDown  golden :94-103  -- PARTLY ACTIVE: the `Ptr->Tag` half
+//                                          is gated, `iStartX=X; iStartY=Y;`
+//                                          is REAL and kept.
+//
+//  GATE REGISTER -- 2 gates.
+//   (W8-1) `TMouseButton Button` / `TShiftState Shift` (golden :72, :83, :95)
+//       -- DROPPED FROM THE PORT SIGNATURE, not gated.
+//       ABSENCE CLAIM: no type of either name exists anywhere in this port.
+//         cmd:  grep -rn --include=*.h --include=*.cpp -E
+//               '^[[:space:]]*(class|struct|enum|typedef|using)[^;]*
+//               \b(TMouseButton|TShiftState)\b' .   (tree root, minus ./tools/)
+//         run:  2026-08-11 11:22:14  -> 0 hits (exit 1)
+//         re-run at end of wave: see RE-RUN LOG at the end of this file.
+//       WHY FAITHFUL: both are DEAD in golden.  `Button` and `Shift` occur
+//       only in the parameter lists of golden :71-103, never in a body.
+//       NOTE, preserved: golden's MouseMove signature genuinely has NO
+//       `TMouseButton Button` at all (golden :82-83) -- only Shift/X/Y.  That
+//       asymmetry is real VCL (TMouseMoveEvent vs TMouseEvent) and is recorded
+//       here rather than smoothed over, since the three ported signatures come
+//       out identical.
+//       REAL-MACHINE DIFFERENCE: none.
+//
+//   (W8-6) `Ptr->Tag`, `Ptr->Left`, `Ptr->Top` on the TGroupBox (golden
+//       :76-79, :87-91, :99-100).  vclcompat::TGroupBox carries only
+//       Caption + TControl's Visible/Enabled/hCtl -- no Tag, no geometry.
+//         cmd:  grep -rn 'Tag' vclcompat/Controls.h
+//         run:  2026-08-11 11:23:06  -> 0 hits
+//         (geometry: vclcompat/Controls.h's own MEASURED PROPERTY COVERAGE
+//          note lists Left/Top/Width/Height on the documented NOT-covered
+//          side; EJ1N/MyOmronPanel.h's GATE (1) already cites this and it is
+//          why this file's own ctor gates every geometry write.)
+//       WHY FAITHFUL: these three golden bodies implement ONE feature --
+//       click-and-drag repositioning of the panel frame.  `Tag` is the
+//       drag-in-progress latch, `Left`/`Top` are the thing being dragged.
+//       With no window there is no pointer, no drag gesture and no on-screen
+//       position, so the faithful offline value of the latch is "no drag in
+//       progress" -- exactly what an ungated-but-substrate-less body would
+//       compute anyway.  This is the "user did nothing" default.
+//       WHAT IS NOT GATED, AND WHY THAT MATTERS: `iStartX`/`iStartY` are REAL
+//       (public ints, EJ1N/MyOmronPanel.h:218-219), so MouseDown's
+//       `iStartX=X; iStartY=Y;` is kept ACTIVE.  It is the one piece of
+//       genuine, observable state in the three bodies, and a future wave that
+//       lands Tag/geometry needs it to already be recording correctly.
+//       GOLDEN BUG NOTED, NOT FIXED: neither golden's ctor (golden :10-65) nor
+//       this port's ctor initialises iStartX/iStartY, so golden's MouseMove
+//       reads them uninitialised if a MouseMove ever arrives before the first
+//       MouseDown.  Behaviour preserved -- no initialiser is added here.
+//       REAL-MACHINE DIFFERENCE: once fDTME08.cpp / OmronEJ1N.cpp are ported
+//       (both are live consumers -- see this file's header banner, which
+//       corrects PT-W2's original false "ZERO CONSUMERS" claim), the
+//       temperature-channel panel will not be draggable.
+//
+//  Big5: no Chinese text occurs in golden :71-103.  ZERO U+FFFD.
+// =============================================================================
+//---------------------------------------------------------------------------
+//  golden EJ1N/MyOmronPanel.cpp:71-80  --  TMyOmronPanel::GroupBox1MouseUp
+//  Ported signature drops `TMouseButton Button, TShiftState Shift` (GATE W8-1)
+//  and takes `TMyOmronPanel *Self` instead of `this` (see BANNER EXTENSION).
+void TMyOmronPanel_GroupBox1MouseUp(TMyOmronPanel *Self, TObject *Sender, int X, int Y)
+{
+    TGroupBox *Ptr;
+    Ptr=(TGroupBox *)Sender;
+
+    //AI(W906-PT-W8) 20260811: GATE (W8-6) -- golden clears the drag-in-progress
+    //  latch `Ptr->Tag`, which has no substrate.  ACTIVE arm: the Sender
+    //  downcast above (real) then a no-op -- with no pointer device the latch
+    //  is never set in the first place, so clearing it is already a no-op.
+    //  Golden preserved VERBATIM:
+#if 0
+    if(Ptr->Tag!=0)
+    {
+        Ptr->Tag=0;
+    }
+#endif
+    (void)Self; (void)Ptr; (void)X; (void)Y;
+}
+//---------------------------------------------------------------------------
+//  golden EJ1N/MyOmronPanel.cpp:82-92  --  TMyOmronPanel::GroupBox1MouseMove
+//  golden's own signature carries NO `TMouseButton Button` here -- only
+//  `TShiftState Shift, int X, int Y` (golden :83).  See GATE (W8-1).
+void TMyOmronPanel_GroupBox1MouseMove(TMyOmronPanel *Self, TObject *Sender, int X, int Y)
+{
+    TGroupBox *Ptr;
+    Ptr=(TGroupBox *)Sender;
+
+    //AI(W906-PT-W8) 20260811: GATE (W8-6) -- golden moves the frame by the
+    //  pointer delta since MouseDown.  All three properties it needs
+    //  (`Tag` latch, `Left`, `Top`) have no substrate; `Self->iStartX/iStartY`
+    //  ARE real but are only READ here, so with the surrounding `if` gated
+    //  there is no active remainder.  ACTIVE arm: no-op ("no drag in
+    //  progress" -- the faithful offline value of the latch).
+    //  Golden preserved VERBATIM:
+#if 0
+    if(Ptr->Tag==1)
+    {
+        Ptr->Left=Ptr->Left+(X-iStartX);
+        Ptr->Top =Ptr->Top+(Y-iStartY);
+    }
+#endif
+    (void)Self; (void)Ptr; (void)X; (void)Y;
+}
+//---------------------------------------------------------------------------
+//  golden EJ1N/MyOmronPanel.cpp:94-103  --  TMyOmronPanel::GroupBox1MouseDown
+void TMyOmronPanel_GroupBox1MouseDown(TMyOmronPanel *Self, TObject *Sender, int X, int Y)
+{
+    TGroupBox *Ptr;
+    Ptr=(TGroupBox *)Sender;
+
+    //AI(W906-PT-W8) 20260811: GATE (W8-6) -- ONLY golden's `Ptr->Tag` latch
+    //  set (golden :99-100) is gated; it has no substrate.  The two lines
+    //  BELOW it are REAL and stay ACTIVE: iStartX/iStartY are public ints on
+    //  this class (EJ1N/MyOmronPanel.h:218-219), and they are the drag
+    //  origin a future wave will need already recorded.  Golden VERBATIM:
+#if 0
+    if(Ptr->Tag!=1)
+        Ptr->Tag=1;
+#endif
+    Self->iStartX=X;
+    Self->iStartY=Y;
+    (void)Ptr;
+}
+//---------------------------------------------------------------------------
+//  HAND-OFF TO THE INTEGRATING LOOP -- DESCRIBED, DELIBERATELY NOT DONE HERE
+//  (EJ1N/MyOmronPanel.h is outside this wave's write boundary.)
+//
+//  To collapse the three free functions above back into class members, add to
+//  EJ1N/MyOmronPanel.h's `private:` block, replacing the 3 commented-out
+//  golden signatures PT-W2 left at EJ1N/MyOmronPanel.h:193-195:
+//
+//      void GroupBox1MouseUp  (TObject *Sender, int X, int Y);
+//      void GroupBox1MouseDown(TObject *Sender, int X, int Y);
+//      void GroupBox1MouseMove(TObject *Sender, int X, int Y);
+//
+//  then rename each definition above to `TMyOmronPanel::<name>`, delete its
+//  `TMyOmronPanel *Self` parameter and the matching `(void)Self;`, and change
+//  MouseDown's two active lines from `Self->iStartX=X;` / `Self->iStartY=Y;`
+//  back to golden's `iStartX=X;` / `iStartY=Y;`.
+//
+//  RE-RUN LOG -- every absence claim in the GATE REGISTER above was re-run
+//  from the tree root at 2026-08-11 11:45, AFTER this block was written and
+//  after all sibling files in this wave had landed, with the same results.
+//---------------------------------------------------------------------------

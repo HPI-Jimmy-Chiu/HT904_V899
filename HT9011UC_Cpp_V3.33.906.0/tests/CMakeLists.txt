@@ -67,7 +67,26 @@ add_executable(test_cUnitConvert
     test_cUnitConvert.cpp
 )
 
-target_link_libraries(test_cUnitConvert PRIVATE ht9045_core)
+# AI(pt-wave) 20260811 PT-W8: was `PRIVATE ht9045_core`.  cUnitConvert.cpp was a
+#   2-function "W2 partial" that referenced nothing outside itself; PT-W8 landed its
+#   7 real golden bodies, and those read the machine-config global universe.  Measured,
+#   not guessed -- the 32 symbols ld could not resolve map to exactly three archives:
+#     28 -> ht9045_globals  (TestIF/TestIF_File/Offset*/InArmOffSet*/OutArmOffSet*/
+#                            SortArmOffSet*/ArmSpeed*/SHSpeed*/MGSpeed*/DeviceForm*/
+#                            HotPlateForm*/UserDefForm*/IniConfig/LastSet/Temperature/
+#                            Tempture_Ambient/USE_LdUldCassetteMode/USE_OUT_SORT_ARM)
+#      1 -> ht9045_forms    (fShowMessage)
+#      3 -> ht9045_sm       (InArmSuck, OutArm2Suck via aHotPlateSubstrate.cpp;
+#                            ATC_InterfaceForm via acarry_shims.cpp:73)
+#   RESCAN rather than a plain ordered list, for the reason already documented on
+#   test_config_loaders below: GNU ld makes a single pass over an archive set and
+#   cannot back-resolve, and these archives reference each other both ways.
+target_link_libraries(test_cUnitConvert PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+if(WIN32)
+    target_link_libraries(test_cUnitConvert PRIVATE ws2_32)
+endif()
 
 add_test(NAME cUnitConvert COMMAND test_cUnitConvert)
 

@@ -144,11 +144,21 @@ unsigned int iBin[4][8];
 // that used to live here are now REAL (atester_ProcessCount.cpp) -- REMOVED
 // (would otherwise duplicate-define).  The 5 still-out-of-scope exports keep
 // their offline no-op bodies here exactly as before.
+#if 0   // PT-W8 RETIRED (ProcessShowTestStatus): real translated body now live
 void ProcessShowTestStatus(int /*Index*/)   {}
+#endif
+#if 0   // PT-W8 RETIRED (ProcessCount): real translated body now live
 void ProcessCount(int /*Index*/, bool /*bHasIC*/) {}    //Eastsun 20260515 F022: D7
+#endif
+#if 0   // PT-W8 RETIRED (ProcessStartTestData): real translated body now live
 void ProcessStartTestData(int /*Direct*/)   {}
+#endif
+#if 0   // PT-W8 RETIRED (RecordHistroy): real translated body now live
 void RecordHistroy(int /*attr*/)            {}
+#endif
+#if 0   // PT-W8 RETIRED (ProcessQASampling): real translated body now live
 void ProcessQASampling(int /*Index*/)       {}
+#endif
 
 // ---- aTester_Front cursors + bodies ----------------------------------------
 int iFTestSuckTestICTask                  = 1;

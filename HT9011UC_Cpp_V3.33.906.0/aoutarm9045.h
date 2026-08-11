@@ -105,4 +105,14 @@ extern bool bCheckOutArmDestroyActive[MAX_ARM_Row][MAX_ARM_Col];
 extern bool bCheckOutArmDestroyActiveFinish[MAX_ARM_Row][MAX_ARM_Col];
 void CheckOutArmDestroyActive();                                                //jou 981130 確認device確實destroy完成
 
+// AI(pt-wave) 20260811 PT-W8 integrate: published because retiring the one-line
+// stand-in that used to live at aoutarm.cpp:541 also removed the DECLARATION
+// aoutarm.cpp:816 was relying on -- the stub sat in the SAME TU as its caller,
+// so its retirement is a COMPILE error, not a link error.  (The other 15 stubs
+// retired this wave were in *_shims.cpp, i.e. a different TU from every caller,
+// and those callers carry their own forward declarations -- which is exactly why
+// checking only the cross-TU case missed this one.)  Signature is golden's:
+// aoutarm9045.h:64.
+int  SearchTrayToPick_Buffer();                                                 // golden aoutarm9045.h:64
+
 #endif

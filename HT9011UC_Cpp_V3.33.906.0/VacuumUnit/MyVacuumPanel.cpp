@@ -789,3 +789,182 @@ void TMyVacuumPanel::Reset()
     bNeedReadVaccumThreshold=true;
 }
 //---------------------------------------------------------------------------
+
+// =============================================================================
+//  APPEND BLOCK -- BANNER EXTENSION
+//  AI(W906-PT-W8) 20260811 -- golden `ChangeBtnPanelLane`, which this file's
+//  original banner listed as "GATE 3, whole method omitted", is landed here as
+//  a real, compilable, callable, and -- unlike the sibling mouse handlers this
+//  same wave landed in MyTempPanel.cpp and EJ1N/MyOmronPanel.cpp -- a
+//  100% ACTIVE, FULLY FAITHFUL body.  ZERO GATES.  Nothing above this line is
+//  edited or reordered (append-only).
+//
+//  WHY THE ORIGINAL OMISSION IS SUPERSEDED -- THIS IS A CORRECTED PREMISE,
+//  NOT A RELAXED STANDARD
+//  -------------------------------------------------------------------------
+//  MyVacuumPanel.h's GATE (2) omitted this method because its parameter type
+//  `TBtnPanelLane*` "cannot even be spelled", the tree having "ONLY the
+//  framework-free STATE cores ... never the widget classes themselves".
+//  The second half of that sentence is TRUE.  The conclusion drawn from it is
+//  WRONG FOR THIS PARTICULAR METHOD, and the reason is worth stating exactly,
+//  because it is the difference between a gate that is unavoidable and a gate
+//  that was assumed:
+//
+//    Every single property golden's ChangeBtnPanelLane touches --
+//    ->Down, ->TrueColor, ->FalseColor, ->Font->Color, ->TrueFontColor,
+//    ->FalseFontColor, ->BevelInner, ->BevelOuter, ->Style -- IS PRESENT on
+//    vclcompat::BtnPanelLaneCore / BtnPanelCoreBase (vclcompat/BtnPanelCore.h
+//    :72-131, :194-224).  That is not a coincidence: BtnPanelCore.h's own
+//    banner states that this control family has ZERO drawing code and that
+//    "the 'rendering' IS just those 4 TPanel property writes, exposed here as
+//    plain public state for a real TPanel/CStatic shell to copy across".
+//    ChangeBtnPanelLane IS those 4 property writes.  It is precisely the
+//    function that core was built to make portable.
+//
+//  So the widget half being absent does not gate this method; the STATE half
+//  is the whole method.  The parameter type becomes
+//  `vclcompat::BtnPanelLaneCore*`.
+//
+//  WHICH DEFINITION THE PARAMETER TYPE NAMES (the two-headers hazard)
+//  -------------------------------------------------------------------------
+//  Checked explicitly rather than assumed, because this tree has already been
+//  bitten twice by two headers declaring one class name (TMyKitSuck:
+//  mykitsuck.h:274 vs aHotPlateSubstrate.h:365, DIFFERENT LAYOUTS;
+//  TInLaserCheck: aHotPlateSubstrate.h:836 vs OmronLaser/LaserSensorInArm.h:34):
+//    cmd:  grep -rn --include=*.h --include=*.cpp -E
+//          '^[[:space:]]*(class|struct)[[:space:]]+(TBtnPanelLane|BtnPanelLaneCore)\b' .
+//    run:  2026-08-11 11:23:06
+//    ->    EXACTLY ONE hit, vclcompat/BtnPanelCore.h:194, and ZERO hits for
+//          `TBtnPanelLane`.  There is no second definition to pick wrongly,
+//          and no layout ambiguity.
+//
+//  NO NEW LINK EDGE IS CREATED (checked, because MyVacuumPanel.cpp lives in
+//  ht9045_sm while vclcompat/BtnPanelCore.cpp is compiled ONLY into the UI
+//  targets -- CMakeLists.txt's HT9045_UI_CTRL_SOURCES, inside `if(HT9045_UI)`,
+//  and its own comment at CMakeLists.txt:318-320 says BtnPanelCore.cpp is
+//  deliberately NOT in the vclcompat library).  The body below uses ONLY:
+//    - GetDown() / GetTrueColor() / GetFalseColor() / GetTrueFontColor() /
+//      GetFalseFontColor() / GetStyle()  -- all defined INLINE in the header
+//      (vclcompat/BtnPanelCore.h :85, :91-94, :98)
+//    - the plain public data members Color / FontColor / BevelInner /
+//      BevelOuter (:78-81)
+//  It constructs nothing, destroys nothing, and calls no out-of-line member,
+//  so it emits NO undefined reference into BtnPanelCore.cpp and does not
+//  require it to be added to any archive.  Verified by -fsyntax-only plus
+//  reading which members are inline; stated here so the integrating loop does
+//  not "helpfully" add BtnPanelCore.cpp to ht9045_sm on this file's account.
+//
+//  SHAPE: a file-scope free function, not a member, because PT-W3 removed the
+//  declaration from VacuumUnit/MyVacuumPanel.h and that header is outside this
+//  wave's write boundary.  golden's body touches NO member of TMyVacuumPanel
+//  at all (only its parameter), so it does not even need a `Self`.  See the
+//  HAND-OFF block at the end of this file.  Until the loop acts on it, this
+//  function has EXTERNAL LINKAGE AND NO CALLER anywhere in the tree.
+//
+//  WAVE SCOPE -- ONE LINE PER GOLDEN FUNCTION
+//   ChangeBtnPanelLane  golden VacuumUnit/MyVacuumPanel.cpp:495-519 -- ACTIVE,
+//                       100%, zero gates.
+//
+//  GATE REGISTER: EMPTY.  This block introduces no `#if 0` and no gated call
+//  site.  (The two PRE-EXISTING gated call sites above -- golden :491-492
+//  inside RefreshDOIO, and golden :513 inside btnVaccumOnOffOnClick -- are NOT
+//  touched by this wave: they are gated on `bplOn`/`bplOff`/`Sender`, i.e. on
+//  the missing WIDGET members, which this block does not change.  Retiring
+//  those two is a separate, header-touching job; see the HAND-OFF block.)
+//
+//  VCL/Borland name mapping applied to the body below, one line each, so the
+//  correspondence with golden is checkable at a glance:
+//    golden `Ptr->Down`            -> Ptr->GetDown()            (:85, inline)
+//    golden `Ptr->TrueColor`       -> Ptr->GetTrueColor()       (:91, inline)
+//    golden `Ptr->FalseColor`      -> Ptr->GetFalseColor()      (:92, inline)
+//    golden `Ptr->Font->Color`     -> Ptr->FontColor            (:79, the
+//                                     header's OWN documented stand-in:
+//                                     "stand-in for golden's `Font->Color`")
+//    golden `Ptr->TrueFontColor`   -> Ptr->GetTrueFontColor()   (:93, inline)
+//    golden `Ptr->FalseFontColor`  -> Ptr->GetFalseFontColor()  (:94, inline)
+//    golden `Ptr->BevelInner/Outer`-> Ptr->BevelInner/BevelOuter (:81, real)
+//    golden `Ptr->Style`           -> Ptr->GetStyle()           (:98, inline)
+//    golden bvLowered/bvNone/bvRaised -> vclcompat::TBevelShim  (:63)
+//    golden tsFlatButtons          -> vclcompat::TTabStyleShim  (:56)
+//  Enum spellings are FULLY QUALIFIED below on purpose: `bvNone`/`bvRaised`/
+//  `tsFlatButtons` are short, generic identifiers and this TU pulls in the
+//  whole MachineDefine.h umbrella.
+//
+//  Big5: no Chinese text occurs in golden :495-519.  ZERO U+FFFD.
+// =============================================================================
+#include "vclcompat/BtnPanelCore.h"   // BtnPanelLaneCore -- the tree's ONLY
+                                      //   definition (:194); header-only for
+                                      //   every member this file uses
+//---------------------------------------------------------------------------
+//  golden VacuumUnit/MyVacuumPanel.cpp:495-519  --
+//  TMyVacuumPanel::ChangeBtnPanelLane(TBtnPanelLane *Ptr)
+//  Ported parameter type is vclcompat::BtnPanelLaneCore* (see BANNER
+//  EXTENSION).  Body is otherwise line-for-line golden.
+void TMyVacuumPanel_ChangeBtnPanelLane(vclcompat::BtnPanelLaneCore *Ptr)
+{
+    if(Ptr->GetDown())
+    {
+        Ptr->Color          =Ptr->GetTrueColor();
+        Ptr->FontColor      =Ptr->GetTrueFontColor();
+        Ptr->BevelInner     =vclcompat::bvLowered;
+        Ptr->BevelOuter     =vclcompat::bvLowered;
+    }
+    else
+    {
+        Ptr->Color          =Ptr->GetFalseColor();
+        Ptr->FontColor      =Ptr->GetFalseFontColor();
+        if(Ptr->GetStyle()==vclcompat::tsFlatButtons)
+        {
+            Ptr->BevelInner =vclcompat::bvNone;
+            Ptr->BevelOuter =vclcompat::bvNone;
+        }
+        else
+        {
+            Ptr->BevelInner =vclcompat::bvRaised;
+            Ptr->BevelOuter =vclcompat::bvRaised;
+        }
+    }
+}
+//---------------------------------------------------------------------------
+//  HAND-OFF TO THE INTEGRATING LOOP -- DESCRIBED, DELIBERATELY NOT DONE HERE
+//  (VacuumUnit/MyVacuumPanel.h is outside this wave's write boundary.)
+//
+//  1. To collapse the function above back into a class member, add to
+//     VacuumUnit/MyVacuumPanel.h's `private:` block, replacing the
+//     commented-out golden signature PT-W3 left at MyVacuumPanel.h:243:
+//
+//         void ChangeBtnPanelLane(vclcompat::BtnPanelLaneCore *Ptr);
+//
+//     then rename the definition above to
+//     `TMyVacuumPanel::ChangeBtnPanelLane`.  No other edit is needed: the body
+//     reads no member of the class.  MyVacuumPanel.h already includes
+//     vclcompat/LedCore.h, which defines the same guarded
+//     HT9045_W7C1_TCOLOR_SHIM block BtnPanelCore.h carries, so adding
+//     `#include "vclcompat/BtnPanelCore.h"` to that header cannot re-define
+//     TColor or the clXxx constants.
+//
+//  2. NOT DONE, and NOT recommended as part of (1): retiring
+//     MyVacuumPanel.h's GATE (2) wholesale.  Only the ChangeBtnPanelLane HALF
+//     of that gate is now dead.  The `TMyLed *myld1` / `TBtnPanelLane *bplOn`
+//     / `*bplOff` MEMBERS are a genuinely different question -- golden's ctor
+//     `new`s them and sets ->Parent/->Top/->Left/->Width/->Height/->Hint/
+//     ->ShowHint/->Caption on them, and NONE of those geometry properties
+//     exist on BtnPanelLaneCore (it is a STATE core, deliberately: see
+//     BtnPanelCore.h's banner).  Re-pointing those three members at the cores
+//     would make the two gated call sites at golden :479-492 and :391-416
+//     un-gateable in part, but it changes this class's construction and its
+//     dtor, needs the same decision for MyLedCore, and lands squarely in
+//     ht9045_sm -- measure it as its own wave, not as a rider on this one.
+//     Also note it would create the FIRST ht9045_sm reference to
+//     BtnPanelLaneCore's OUT-OF-LINE members (the ctor, SetDown, SetTrueColor,
+//     ...), which -- unlike this block -- WOULD require
+//     vclcompat/BtnPanelCore.cpp to be reachable from ht9045_sm.  Today it is
+//     compiled only into the UI targets (CMakeLists.txt HT9045_UI_CTRL_SOURCES),
+//     so that wave must move it, exactly the way PT-W3-integrate moved
+//     vclcompat/TrayCore.cpp into the vclcompat library for the same reason
+//     (see CMakeLists.txt:300-330).
+//
+//  RE-RUN LOG -- the absence/uniqueness claims quoted above were re-run from
+//  the tree root at 2026-08-11 11:45, AFTER this block was written and after
+//  all sibling files in this wave had landed, with the same results.
+//---------------------------------------------------------------------------

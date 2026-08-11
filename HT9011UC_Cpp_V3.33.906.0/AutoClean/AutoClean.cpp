@@ -32,6 +32,13 @@
 #include "cmydef.h"                 // global scalar universe + IC consts
 #include "cpublic.h"                // CosFunction
 #include "common.h"
+// AI(pt-wave) 20260811 PT-W8 integrate: needed because the one-line
+// DoStructUnitConvert stand-in retired from this file (was :199) was also the
+// DECLARATION for the call at :8322 in this same TU.  Golden gets the same
+// declaration transitively (golden AutoClean.cpp calls it at :4504 without
+// including cUnitConvert.h); this tree keeps include lists explicit, so it is
+// named here.
+#include "cUnitConvert.h"          // DoStructUnitConvert (golden cUnitConvert.h:5)
 // AI(W906-AutoCleanFoundation) 20260721: ainarm9045.h / ainarm9045_2x6_8.h MUST
 // be included BEFORE aHotPlateSubstrate.h in this TU. Both headers carry a
 // `#ifndef ainarm9045H` / `#ifndef ainarm9045_2x6_8H` order-dependent guard
@@ -196,7 +203,9 @@ static bool MNetLog(AnsiString /*Message*/) { return false; }   // golden Motor/
 // SetOutArmSpeed/SetSortArmSpeed/MNetLog immediately above (and
 // DoInArm_SuckerMap below) -- keeps DoAutoCleanKit linkable without inventing
 // cUnitConvert.cpp's real logic.
+#if 0   // PT-W8 RETIRED (DoStructUnitConvert): real translated body now live
 static void DoStructUnitConvert() {}                            // golden cUnitConvert.cpp:243 -- not yet translated
+#endif
 // AI(W906-AutoCleanCluster) 20260722: golden csystem.cpp:21360 `void
 // SocketAirCoolingStart()` -- socket air-cooling fan on/off timer bookkeeping
 // (IniConfig.bL03SocketAirCoolingCT gate + SW[SwTesterAirCooling] + a

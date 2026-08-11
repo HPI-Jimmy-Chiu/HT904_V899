@@ -2205,3 +2205,1841 @@ bool UseFix3Cylinder(int)                                { return true;  }      
 bool OutArmNeedCheckOffset(bool, int)                    { return false; }      // golden -- offline: no offset re-check
 bool Check_QA_ModeUnloadCount()                          { return false; }      // golden :70(decl) (offline: QA unload count not reached)
 void InitialFix3CanFullTask()                            {}                     // golden :749 (Fix3 cursor owned by aoutarm2.cpp; offline no-op)
+
+//=============================================================================
+// BANNER EXTENSION -- PT-W8 (aoutarm9045.cpp, 29 golden functions + 3 globals)
+// Translator: AI(ht9045-v906) 20260811.  Append-only; nothing above this line
+// was rewritten or reordered.
+//
+// ROLE (unchanged): out-arm ENGINE.  This batch adds the Fix-tray full/alarm
+//   ladder, the tray/magazine SEARCH helpers, the shuttle-offset pickers, the
+//   out-arm-to-task50 predicate, the tray-status verifier, the whole
+//   "Fill The Tray After Out Arm Place" family (Jimmychiu 20240726), and the
+//   9046AU sort-shuttle offset/place helpers (RogerYang 20250510/13).
+//   Pumped by: DoOutArm_9045 / DoOutArmPlaceToAuto_9045 / DoOutArmAfterPlaceToAuto
+//   (this file) and by the 27 aoutarm9045_<layout>.cpp variant SMs, which all
+//   already forward-declare these symbols locally.
+//
+// WAVE SCOPE -- one line per assigned golden function (golden aoutarm9045.cpp):
+//   :754   Fix3MoveToLeft                         ACTIVE
+//   :793   TQPF_Timer Fix3CylinderDelay           ACTIVE (file-scope global)
+//   :1188  GetVariableYOutShuttleData             ACTIVE
+//   :1211  GetOutArmToShuttleOffset_9045          ACTIVE
+//   :1290  GetOutArmXToShuttleOffset_9045         ACTIVE
+//   :1303  GetOutArmYToShuttleOffset_9045         ACTIVE
+//   :1420  SearchTrayToPlace_Magazine             ACTIVE (one gated callee: G1)
+//   :1561  SearchTrayToPick_Buffer                ACTIVE (one supplied constant: N1)
+//   :1674  DoFixTrayFullAlarm                     ACTIVE
+//   :3629  CheckOutArmToTask50                    ACTIVE
+//   :3675  VerifyTrayStatus                       ACTIVE
+//   :3995  GetOutOffsetFromWhichAuto              ACTIVE
+//   :4081  MyFillTheTrayAfterOutArmPlace mFillTray ACTIVE (file-scope global)
+//   :4082  IsEnableFillTheTrayAfterOutArmPlace    ACTIVE
+//   :4092  IsRunWhichAtuoFillTray                 ACTIVE
+//   :4110  RecTrayICStatus                        ACTIVE
+//   :4127  HasGapsInTheTray                       ACTIVE
+//   :4167  DetermineFeasibilityOfSuck             ACTIVE
+//   :4193  GetWhichAutoStart                      ACTIVE
+//   :4208  GetWhichAutoPickZ                      ACTIVE
+//   :4221  GetWhichAutoPlaceZ                     ACTIVE
+//   :4234  IsOutArmPosOutLimit                    ACTIVE
+//   :4248  FindArmSuck                            ACTIVE
+//   :4270  MoveOutArmXYAndSuck(SingleSuckPosOnTray,uPoint2D)  ACTIVE
+//   :4325  IsOutArmArrival                        ACTIVE
+//   :4332  int iOutArmFillTheTrayAfterPlaceAllICTask ACTIVE (file-scope global)
+//   :4333  DoOutArmFillTheTrayAfterPlaceAllIC     ACTIVE
+//   :4464  GetOutArmXToSortShtOffset              ACTIVE
+//   :4474  GetOutArmYToSortShtOffset              ACTIVE
+//   :4484  NeedPlaceToSort                        ACTIVE
+//   :4508  SetSortShuttleStatus_Place             ACTIVE
+//   :4536  InitNewFixTrayForUnloaderClipRead      GATED body (G2), ACTIVE shell
+//
+//   NOT IN SCOPE (deliberately): the SECOND MoveOutArmXYAndSuck overload,
+//   golden :4305 `bool MoveOutArmXYAndSuck(ArmAndSuckInfo asInfo)` -- it is a
+//   different function at a different golden line and was not in this batch.
+//   No call site of it is translated in this tree today (checked: `grep -rn
+//   "MoveOutArmXYAndSuck" D:/HT9045/HT9011UC_Cpp_V3.33.906.0` -> 0 hits before
+//   this file, 20260811), so leaving it out breaks nothing; the Auto-Cal-Suck-Z
+//   family (golden :4614+/MoveOutArmXYAndSuckUp) that consumes it is also
+//   untranslated.  Listed here so the next wave does not think it is done.
+//
+// GATE REGISTER -- every `#if 0` / gated callee this block introduces:
+//
+//  (G1) CheckPlaceToBufferTray(int)   -- golden Magazine.h:149, body golden
+//       Magazine.cpp:376-413.  Call site kept BYTE-IDENTICAL to golden
+//       (:1532).  Shape (b): file-local `static` stand-in.
+//       ABSENCE CLAIM + COMMAND + TIME: Magazine.cpp / Magazine.h have no port
+//       anywhere in this tree.  Verified with
+//         rg -n "CheckPlaceToBufferTray" D:/HT9045/HT9011UC_Cpp_V3.33.906.0
+//       -> the ONLY hits are golden-citation comments; no declaration and no
+//       definition.  Run 20260811 at the START of this wave and RE-RUN at the
+//       END (both runs clean; see report).
+//       WHY `false` IS FAITHFUL -- AI(pt-wave) 20260811 PT-W8 integrate, this
+//       entry REPLACES an earlier one that argued for `true`.  The struck text
+//       read: "Offline the buffer tray is freshly initialised (every Tray.Data
+//       cell NULL_IC) while iNeedPlace is at most the nozzle count, so golden's
+//       OWN body evaluates to true."  That derivation reaches the opposite
+//       conclusion from the code it cites.  Golden's body counts NULL_IC cells
+//       only INSIDE the band `j>=k*iYRegNum && j<(k+1)*iYRegNum` (golden
+//       Magazine.cpp:385-387), and iYRegNum is 0 in both trees (golden
+//       cmydef.cpp:5523, port cmydef.cpp:5541) -- so the band is `j>=0 && j<0`,
+//       empty for every j, and iCnt is 0 no matter how empty the tray is.
+//       iNeedPlace is likewise 0 offline (OutArmSuck.Item zero-init, NULL_IC==0
+//       at cmydef.cpp:153).  `if(iCnt<=iNeedPlace) return false;` => 0<=0 =>
+//       GOLDEN RETURNS false.  `false` is therefore the derived value, and it is
+//       also the cautious one for a capacity predicate.
+//       REAL-MACHINE DELTA: on a Magazine machine with a configured iYRegNum and
+//       genuine room in the band, golden returns true and the IC is placed in the
+//       buffer.  This stand-in always reports "no room", so SearchTrayToPlace_
+//       Magazine takes golden's divert path instead (`iOutArmWhichAuto=
+//       iMagAtAuto; return 2;`) and sends the IC to Auto3.  Retire it together
+//       with Magazine.cpp -- pure deletion of one line.
+//       REACHABILITY TODAY: the enclosing branch needs
+//       `AUTO3_IS_MAGAZINE==1 && TestIF_File.iMagFixTrayType==1 &&
+//       OutArmSuck.iWhichAuto[i][j]>=iMagMin`; none of those is true in the
+//       offline recipe, so the stand-in is currently unreached.
+//
+//  (G2) InitNewFixTrayForUnloaderClipRead -- golden :4536-4605.  The BODY is
+//       `#if 0`-gated; the shell (`bool bret=false;` ... `return bret;`) is
+//       golden's own first and last statement and stays ACTIVE.
+//       WHY: every line of the body derefs `fBarCode->eUnloaderClipAuto1/…` and
+//       `fBarCode->ccdUnloader[…]`.  In this tree `fBarCode` is NOT golden's
+//       TfBarCode: it is `TfBarCode_Shim *fBarCode` (aHotPlateSubstrate.h:984-
+//       1026), a 25-method offline facade that carries NEITHER the
+//       `enum eMulti2DType` (golden BarCode/BarCode.h:966-975) NOR the
+//       `uCCDUnloaderClip ccdUnloader[eUnloaderClipTotal]` array (golden
+//       BarCode/BarCode.h:976).  Extending that shim is an edit to
+//       aHotPlateSubstrate.h, which is NOT this wave's file.
+//       NOTE, and it matters: `uCCDUnloaderClip` ITSELF *is* translated
+//       (BarCode/BarCode_Helpers.h:109 / .cpp:57-265) -- so this is trap 3,
+//       not a dead premise.  The missing piece is only the OWNER (the
+//       `ccdUnloader[]` member on the form facade), not the class.
+//       WHY `false` IS FAITHFUL: with no CCD wired,
+//       `ccdUnloader[i].bGetResult` is false (ctor, BarCode_Helpers.cpp:57) and
+//       `DoGetPhotoCmd(false,sErr)` returns "" with sErr set only when a socket
+//       connect is attempted -- in this tree the socket is gated, so both sGet
+//       and sErr come back empty, neither inner branch runs, and golden's own
+//       `bret` is still false at `return bret;`.  Identical value, same path.
+//       REAL-MACHINE DELTA: on a machine with 海康 unloader-clip readers the
+//       body reads the clip code, calls InitNewFixTray(...) and stores the code
+//       into MOT[iMMAuto[]].Tray.cCassetteID, returning true.  Gated, it never
+//       initialises the new Fix tray and DoFixTrayFullAlarm therefore returns
+//       false on that path.  Both call-site guards
+//       (`CosFunction.bReadClipCodeFromUnloader && IniConfig.bP60ReadClipCode
+//       FromUnloader`) are false offline, so nothing reaches it today.
+//       RETIRE WHEN: BarCode/BarCode.cpp (TfBarCode) lands, or the shim gains
+//       `eMulti2DType` + `ccdUnloader[]`.  Retirement is deleting two lines.
+//
+//  (N1) eAtkTfMoveFixIC = 6  -- golden Automation/AGV.h:218, `enum eATkTrayFeed`.
+//       This is NOT a gate: it is golden's VERBATIM value, read out of golden,
+//       supplied file-locally because AGV.h has no port.  Exactly the shape
+//       aoutarm.cpp:527-530 and aoutarm9045_2x8_8.cpp:320-326 already use for
+//       this same enumerator.  ABSENCE CLAIM + COMMAND + TIME:
+//         rg -n "eAtkTfMoveFixIC" D:/HT9045/HT9011UC_Cpp_V3.33.906.0 --glob *.h
+//       -> 0 hits (run 20260811, start AND end of wave).  The only definitions
+//       in the tree are the two file-local ones cited above, both `static`, so
+//       adding a third file-local one cannot collide.
+//=============================================================================
+#include "mysensor.h"              // Sen[] (SnFixedTrayDetect / SnAutoTrayDetect / SnFix3FullPlace)
+#include "mycylin.h"               // Cylinder[] (C_FixTray_FullPlace / C_AutoSide_Fixer / C_AutoEdgePush / C_AutoUpPress)
+#include "SECSGEM/SecsEventType.h" // SECS_EVENT.Fix1..6Full / Fix1PortStatusChanged
+#include "SECSGEM/SecsEventReport.h" // EventReport(unsigned)
+#include "myTimer.h"               // TQPF_Timer (golden's Fix3CylinderDelay type)
+
+//-----------------------------------------------------------------------------
+//  (T5) SingleSuckPosOnTray / MyFillTheTrayAfterOutArmPlace -- golden
+//  Public/HTEditList.h:314-333 and :335-346, reproduced VERBATIM as a TU-local
+//  definition instead of `#include "Public/HTEditList.h"`.
+//  WHY NOT THE INCLUDE (this is trap 5, hit and measured, not theorised):
+//    `#include "Public/HTEditList.h"` in THIS TU is a hard compile error --
+//      Public/HTEditList.h:128 `redefinition of class TList`  (previous:
+//        aHotPlateSubstrate.h:80)
+//      Public/HTEditList.h:321 `redefinition of class uPlateInfo` (previous:
+//        aHotPlateSubstrate.h:673)
+//    and those two are NOT the same class in the two headers -- the substrate
+//    carries deliberately NARROWER mirrors.  Public/HTEditList.h documents the
+//    collision itself, at its own :50-79 "INTEGRATION HAZARDS (A)/(B)", and
+//    states that reconciling it (deleting the substrate copies and repointing
+//    ~30 consumers) is explicitly out of scope.  This TU already includes
+//    aHotPlateSubstrate.h at :64 and cannot drop it (OutArmSuck / TMyKitSuck /
+//    TMySucker / fBarCode all come from there), so the two headers are mutually
+//    exclusive here.
+//  WHY A LOCAL COPY IS SAFE: the text below is byte-identical to golden, and
+//  Public/HTEditList.h:437-469 is itself a byte-identical mirror of the same
+//  golden lines -- so both definitions have the SAME LAYOUT.  That is the exact
+//  property trap 5 says to verify rather than assume; it was verified by diffing
+//  golden Public/HTEditList.h:314-346 against port Public/HTEditList.h:437-469.
+//  If anyone ever changes one, they MUST change the other: the mangled name of
+//  MoveOutArmXYAndSuck(SingleSuckPosOnTray, uPoint2D) does not encode where the
+//  class was defined, so divergent layouts would link cleanly and read every
+//  field at the wrong offset.  Guarded so a future header include wins instead
+//  of colliding.  ArmAndSuckInfo (golden :292-312) is NOT copied -- this batch
+//  does not translate the overload that uses it.
+//-----------------------------------------------------------------------------
+#ifndef HT9045_FILLTRAY_TYPES_LOCAL
+#define HT9045_FILLTRAY_TYPES_LOCAL
+typedef struct                                                                  //Jimmychiu 20240726 : Fill The Tray After Out Arm Place
+{
+    int iWhichAuto;
+    uPoint2D pTrayRowCol;
+    uPoint2D pArmXYPos;
+    int iArmXV1;
+    int iArmXV2;
+    int iArmYV1;
+    bool bPlace;
+    void Clear()
+    {
+        iWhichAuto=-1;
+        pTrayRowCol.Clear();
+        pArmXYPos.Clear();
+        iArmXV1=0;
+        iArmXV2=0;
+        iArmYV1=0;
+        bPlace=false;
+    }
+}SingleSuckPosOnTray;
+//---------------------------------------------------------------------------
+typedef struct                                                                  //Jimmychiu 20240726 : Fill The Tray After Out Arm Place
+{
+    SingleSuckPosOnTray ssTarget;
+    SingleSuckPosOnTray ssSource;
+    uPoint2D pArmSuckActive;
+    void Clear()
+    {
+        ssTarget.Clear();
+        ssSource.Clear();
+        pArmSuckActive.Clear();
+    }
+}MyFillTheTrayAfterOutArmPlace;
+#endif // HT9045_FILLTRAY_TYPES_LOCAL
+
+//-----------------------------------------------------------------------------
+//  Declarations this block's OWN bodies need.  Golden gets all of them from
+//  aoutarm9045.h; this tree's aoutarm9045.h deliberately does NOT carry them
+//  and this wave does not extend it -- see the report's "for the main loop"
+//  section for WHY (every one of the 27 aoutarm9045_<layout>.cpp variants
+//  already forward-declares GetOutArmToShuttleOffset_9045 locally, several of
+//  them WITH `bool bPitch=true`; publishing the same default from the header
+//  would be a hard "default argument given ... after previous specification"
+//  error in each of those TUs).  Signatures verbatim from golden aoutarm9045.h.
+//-----------------------------------------------------------------------------
+void GetWhichAutoStart(int iWhichAuto, uPoint2D &pStartPos);                     // golden aoutarm9045.h (def below, golden :4193)
+bool IsOutArmPosOutLimit(uPoint2D pArmPos);                                      // golden aoutarm9045.h (def below, golden :4234)
+bool IsOutArmArrival(uPoint2D pTargetPos);                                       // golden aoutarm9045.h (def below, golden :4325)
+bool InitNewFixTrayForUnloaderClipRead(int iwhichauto, bool bOutputReport=false);// golden aoutarm9045.h (def below, golden :4536) -- default arg is golden's
+extern int iPlaceTrayToAutoTask;                                                 // golden acatchtray.h; port DECL acatchtray.h:50 -- declared locally rather than pulling the whole tray-arm header into the out-arm engine
+int  OutArmPickTrayAlarm(int iwhichTray, AnsiString ErrPart);                    //JerryYang 20151013 整盤OutArm吸取異常 -- REAL def SortingBinTray/SortingBinTray.cpp:2518 (declared SortingBinTray/SortingBinTray.h:77; declared LOCALLY here instead of including that header, because this TU already owns file-local `static` DoSortingBinTray/SortingBinTray_Set* stand-ins at :230-233 and pulling the header would turn them into "static declaration follows non-static declaration" hard errors)
+
+// (N1) golden Automation/AGV.h:218 -- see GATE REGISTER.
+#ifndef AOUT9045_EATKTFMOVEFIXIC_FWD
+#define AOUT9045_EATKTFMOVEFIXIC_FWD
+static const int eAtkTfMoveFixIC = 6;                                           // golden Automation/AGV.h:218 (enum eATkTrayFeed)
+#endif
+
+// (G1) golden Magazine.h:149 -- see GATE REGISTER.
+// AI(pt-wave) 20260811 PT-W8 integrate: stand-in corrected true -> false.  The
+// original comment claimed "golden's own arithmetic yields true on an empty
+// buffer band"; that derivation runs backwards.  Golden Magazine.cpp:376-413:
+//   iCnt counts Tray.Data[i][j]==NULL_IC cells inside the band
+//        j >= k*iYRegNum && j < (k+1)*iYRegNum      (golden :385-387)
+//   iNeedPlace counts nozzles already routed to this magazine (golden :395-401)
+//   if(iCnt<=iNeedPlace) return false;   else return true;  (golden :407-412)
+// iYRegNum is 0 in BOTH trees (golden cmydef.cpp:5523, port cmydef.cpp:5541), so
+// the band test is `j>=0 && j<0` -- false for every j, whatever the tray holds --
+// hence iCnt==0.  Offline OutArmSuck.Item is zero-initialised and NULL_IC==0
+// (cmydef.cpp:153), so the !=NULL_IC guard never passes and iNeedPlace==0.
+// 0<=0 => GOLDEN RETURNS false.  `true` was the permissive value ("buffer has
+// room, route the IC there") for a capacity predicate, licensed by a derivation
+// that reached the opposite conclusion from the code it cited.
+// Unreachable offline either way (needs AUTO3_IS_MAGAZINE==1 &&
+// TestIF_File.iMagFixTrayType==1 && OutArmSuck.iWhichAuto[i][j]>=iMagMin), so
+// this changes no current behaviour -- it stops the stand-in from lying.
+static bool CheckPlaceToBufferTray(int /*iWhichMagazine*/) { return false; }     // golden Magazine.h:149 / Magazine.cpp:376 -- see derivation above
+
+//------------------------------------------------------------------------------
+//  Fix3MoveToLeft -- golden aoutarm9045.cpp:754-791
+//------------------------------------------------------------------------------
+bool Fix3MoveToLeft(bool bLeft)                                                 //JimmyChiu 20220927 : Stepper Motor Control in Fix3
+{
+    int iXPos=0;
+    bool bBack=false;
+    if(FIX3_FULL_PLACE==Fix3K_UseStepperMotor)
+    {
+        iXPos=(bLeft)?Tech.iFix3PosL:Tech.iFix3PosR;
+        if(MOT[MFix3Full].CompareCommandPos(iXPos, 10)!=1)
+            bBack=MOT[MFix3Full].MotorMove(iXPos);
+        else
+            bBack=true;
+
+        if(bBack)
+        {
+            if(bLeft)
+            {
+                if(Sen[SnFix3FullPlace].Enable &&                               //Steven 20250814 : Fix3滿盤功能-馬達版+Sensor
+                   Sen[SnFix3FullPlace].IsOn()==false)
+                {
+                    bBack=false;
+                    ShowMyMessage("The fix3 motor does not move to left!!", "Please check the motor or the sensor (SnFix3FullPlace) should be on");
+                }
+            }
+            else
+            {
+                MOT[MFix3Full].ScanMotorStatus();
+                int iPos=MOT[MFix3Full].ReadPos();
+                if(iPos>=0 &&
+                   MOT[MFix3Full].Led[iHomeLed]==false)
+                {
+                    bBack=false;
+                    ShowMyMessage("The fix3 motor does not move to right!!", "Please check the motor or the motor home sensor should be on");
+                }
+            }
+        }
+    }
+    return bBack;
+}
+//------------------------------------------------------------------------------
+//  Fix3CylinderDelay -- golden aoutarm9045.cpp:793 (file-scope global).
+//  Golden's type IS TQPF_Timer (myTimer.h), not HTimer -- no substitution made.
+//  Its only golden reader is UseFix3Cylinder (golden :794), which is still an
+//  offline stand-in at aoutarm9045.cpp:2204 in this tree, so the object has no
+//  reader yet.  Static-init safety (trap 4): TQPF_Timer::TQPF_Timer()
+//  (myTimer.cpp:14-17) calls ONLY CalibratePerformanceCounterOverhead(), which
+//  is QueryPerformanceCounter x1001 -- it touches none of the 18 NULL globals in
+//  docs/PT_CAMPAIGN_PLAN.md §8.  Checked, not assumed.
+//------------------------------------------------------------------------------
+TQPF_Timer Fix3CylinderDelay;
+
+//------------------------------------------------------------------------------
+//  GetVariableYOutShuttleData -- golden aoutarm9045.cpp:1188-1209
+//  REPLACES the one-line offline stub aoutarm_shims.cpp:50 (`return 0;`).
+//------------------------------------------------------------------------------
+int GetVariableYOutShuttleData()                                                //ChungHung 20131231 alter AutoYPitch
+{
+    if(USE_OUT_Y_IS_AUTO_PITCH==true)                                           //JerryYang 20251218 : IN/OUT ARM支援不同模組
+    {
+        if(OutArmSuck.iPickRow==1 ||
+           iInArmType==e9045_1x4_8_Hot ||
+           iInArmType==e9045_1x2_4_Hot ||
+           iInArmType==e9045_2x2_8_Hot)                                         //JerryYang 20231003
+            return 6000;
+
+        if(TestIF.dSiteYPitch>=IN_OUT_ARM_Y_PITCH_MAX)                          //kevin 20190901 : 修正Y-Pitch
+             return IN_OUT_ARM_Y_PITCH_MAX;
+        else if(TestIF.dSiteYPitch<=IN_OUT_ARM_Y_PITCH_MIN)                     //kevin 20190901
+            return IN_OUT_ARM_Y_PITCH_MIN;
+
+        return TestIF.dSiteYPitch;
+    }
+    else
+    {
+        return TestIF_File.iARM_Y_PITCH;
+    }
+}
+//------------------------------------------------------------------------------
+//  GetOutArmToShuttleOffset_9045 -- golden aoutarm9045.cpp:1211-1288
+//  REPLACES the one-line offline stub aoutarm_shims.cpp:47 (`return 0;`).
+//  NOTE the behaviour delta the stub was hiding: golden's NOT-FOUND value is
+//  -1 (it is what `iOffsetPos` is initialised to and what comes back when
+//  TestIF.bEnableAutoAlignment is true), and every caller tests `iOffsetPos>=0`.
+//  The stub answered 0, i.e. "OutOfsOutSh1", not "no offset".
+//  The default argument (`bool bPitch=true`) is NOT repeated here -- golden
+//  states it in aoutarm9045.h and every variant TU restates it locally.
+//------------------------------------------------------------------------------
+int GetOutArmToShuttleOffset_9045(int iSht, int iModeRow, int iModeCol, bool bPitch)
+{
+    int iOffsetPos=-1;
+    if(TestIF.bEnableAutoAlignment==false)
+    {
+        if(IniConfig.bE34InOutArmPitchZOffsetSameOne==true && bPitch)
+        {
+            iOffsetPos=OutOfsOutSh1;
+        }
+        else
+        {
+            if(IniConfig.bE47_ShuttleUse4Offset)
+            {
+                if(iModeRow==1)
+                {
+                    if(iModeCol%100<10)
+                    {
+                        if(iSht==0)
+                            iOffsetPos=OutOfsOutSh1LB;
+                        else
+                            iOffsetPos=OutOfsOutSh2LB;
+                    }
+                    else
+                    {
+                        if(iSht==0)
+                            iOffsetPos=OutOfsOutSh1RB;
+                        else
+                            iOffsetPos=OutOfsOutSh2RB;
+                    }
+                }
+                else if(iModeRow==0)
+                {
+                    if(iModeCol%100<10)
+                    {
+                        if(iSht==0)
+                            iOffsetPos=OutOfsOutSh1;
+                        else
+                            iOffsetPos=OutOfsOutSh2;
+                    }
+                    else
+                    {
+                        if(iSht==0)
+                            iOffsetPos=OutOfsOutSh1RA;
+                        else
+                            iOffsetPos=OutOfsOutSh2RA;
+                    }
+                }
+                else
+                {
+                    if(iModeCol%100<10)                                         //Steven 20240826 : 補上Offset
+                    {
+                        if(iSht==0)
+                            iOffsetPos=OutOfsOutSh1;
+                        else
+                            iOffsetPos=OutOfsOutSh2;
+                    }
+                    else
+                    {
+                        if(iSht==0)
+                            iOffsetPos=OutOfsOutSh1RA;
+                        else
+                            iOffsetPos=OutOfsOutSh2RA;
+                    }
+                }
+            }
+            else
+            {
+                if(iSht==0)
+                    iOffsetPos=OutOfsOutSh1;
+                else if(iSht==1)                                                //RogerYang 20250510 Add for 9046AU
+                    iOffsetPos=OutOfsOutSh2;
+                else
+                    iOffsetPos=OutOfsSortSht;
+            }
+        }
+    }
+    return iOffsetPos;
+}
+//------------------------------------------------------------------------------
+//  GetOutArmXToShuttleOffset_9045 -- golden aoutarm9045.cpp:1290-1301
+//  REPLACES the one-line offline stub aoutarm_shims.cpp:49 (`return 0;`).
+//  GOLDEN QUIRK PRESERVED, NOT FIXED: both arms of `if(iSht==0)` are identical
+//  (`OutArmOffSet[iOffsetPos]->GetX()`), so the branch is a no-op.  Golden has
+//  it that way (:1295-1298); reproduced verbatim.
+//------------------------------------------------------------------------------
+int GetOutArmXToShuttleOffset_9045(int iSht, int iOffsetPos)                    //Steven 20240309 : fixed for out arm to sht offset
+{
+    int iPos=0;
+    if(iOffsetPos>=0)
+    {
+        if(iSht==0)
+            iPos=OutArmOffSet[iOffsetPos]->GetX();
+        else
+            iPos=OutArmOffSet[iOffsetPos]->GetX();
+    }
+    return iPos;
+}
+//------------------------------------------------------------------------------
+//  GetOutArmYToShuttleOffset_9045 -- golden aoutarm9045.cpp:1303-1314
+//  REPLACES the one-line offline stub aoutarm_shims.cpp:48 (`return 0;`).
+//  Same golden quirk as the X twin: both arms of `if(iSht==0)` are identical.
+//------------------------------------------------------------------------------
+int GetOutArmYToShuttleOffset_9045(int iSht, int iOffsetPos)
+{
+    int iPos=0;
+    if(iOffsetPos>=0)
+    {
+        if(iSht==0)
+            iPos=OutArmOffSet[iOffsetPos]->GetY();
+        else
+            iPos=OutArmOffSet[iOffsetPos]->GetY();
+    }
+    return iPos;
+}
+
+//------------------------------------------------------------------------------
+//  SearchTrayToPlace_Magazine -- golden aoutarm9045.cpp:1420-1559
+//  REPLACES the one-line offline stub aoutarm_shims.cpp:83 (`return 0;`).
+//  That stub's own comment already recorded that golden's real not-found value
+//  is `Prod.iIfErrorT6` (golden :1558) and never a literal 0 -- this body
+//  restores exactly that.  Gated callee: (G1) CheckPlaceToBufferTray at :1532.
+//------------------------------------------------------------------------------
+int SearchTrayToPlace_Magazine()                                                //JerryYang 20221215 : add Magazine
+{
+    int iTempWhichMag=-1;
+    iOutArmPlaceOrder=0;
+    bool bHasChang=false;
+
+    for(int i=0; i<OutArmSuck.iMaxRow; i++)                                     //Sam 20221121 : 先檢查吸嘴上有沒有可以直接放 Auto3 Magazine 的 Tray
+    {
+        for(int j=0; j<OutArmSuck.iMaxCol; j++)
+        {
+            for(int k=0; k<MAX_MGZ_TRAY; k++)
+            {
+                if(OutArmSuck.Item[i][j]!=NULL_IC &&
+                    OutArmSuck.iWhichAuto[i][j]==iSortTrayIndex[k])
+                {
+                    if(i==0)
+                        iOutArmPlaceOrder=0;
+                    else
+                        iOutArmPlaceOrder=1;
+
+                    iTempWhichMag=OutArmSuck.iWhichAuto[i][j]-iMagMin;          //JerryYang 20221121 : 避免iWhichMag一直被改變, 有找到當下要放auto3的再改
+                    if(MOT[MMMagazineTary1+iTempWhichMag].Tray.FullIC()==true)  //JerryYang 20250920 : fixed for Multi bin
+                    {
+                        for(int l=1; l<14; l++)
+                        {
+                            if(iTempWhichMag+l<14)
+                            {
+                                if(BinSelect[iTestRunMode].bMagazineLink[iTempWhichMag+l]==true)
+                                {
+                                    if(MOT[MMMagazineTary1+iTempWhichMag+l].Tray.FullIC()==false && iTempWhichMag+l==iAuto3MagazineIndex)
+                                    {
+                                        iWhichMag=iTempWhichMag+l;
+                                        iOutArmWhichAuto=iMagAtAuto;
+                                        return 2;
+                                    }
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if(iTempWhichMag==iAuto3MagazineIndex)
+                        {
+                            iWhichMag=iTempWhichMag;
+                            iOutArmWhichAuto=iMagAtAuto;
+                            return 2;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for(int k=0; k<eTrayCount; k++)
+    {
+        if(Prod.iTrayType[iSortTrayIndex[k]]==tNotUse)
+            continue;
+
+        for(int i=0; i<OutArmSuck.iMaxRow; i++)
+        {
+            for(int j=0; j<OutArmSuck.iMaxCol; j++)
+            {
+                if(OutArmSuck.Item[i][j]!=NULL_IC &&
+                   OutArmSuck.iWhichAuto[i][j]==iSortTrayIndex[k])
+                {
+                    if(i==0)
+                        iOutArmPlaceOrder=0;
+                    else
+                        iOutArmPlaceOrder=1;
+                    if(OutArmSuck.iWhichAuto[i][j]>=iMagMin)
+                    {
+                        iWhichBuff=(OutArmSuck.iWhichAuto[i][j]-iMagMin)%iFixCnt+iFixCnt;                               //QQQ
+                        iTempWhichMag=OutArmSuck.iWhichAuto[i][j]-iMagMin;
+                        bHasChang=false;
+                        if(MOT[MMMagazineTary1+iTempWhichMag].Tray.FullIC()==true)                                      //JerryYang 20250920 : fixed for Multi bin
+                        {
+                            for(int l=1; l<14; l++)
+                            {
+                                if(iTempWhichMag+l<14)
+                                {
+                                    if(BinSelect[iTestRunMode].bMagazineLink[iTempWhichMag+l]==true)
+                                    {
+                                        if(MOT[MMMagazineTary1+iTempWhichMag+l].Tray.FullIC()==false)
+                                        {
+                                            iWhichMag=iTempWhichMag+l;
+                                            bHasChang=true;
+                                             break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        iWhichMag=iTempWhichMag;
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        if(bHasChang==false)
+                            iWhichMag=iTempWhichMag;
+
+                        if(TestIF_File.iMagFixTrayType==1)                      //buffer tray
+                        {
+                            if(iAuto3MagazineIndex==iWhichMag)
+                            {
+                                iOutArmWhichAuto=iMagAtAuto;
+                                return 2;
+                            }
+                            else if(CheckPlaceToBufferTray(OutArmSuck.iWhichAuto[i][j]))                                //buffer區有位置, 先放buffer區
+                            {
+                                iOutArmWhichAuto=OutArmSuck.iWhichAuto[i][j];
+                                return OutArmSuck.iWhichAuto[i][j];
+                            }
+                            else                                                //buffer區不夠放, 放AUTO3
+                            {
+                                iOutArmWhichAuto=iMagAtAuto;
+                                return 2;
+                            }
+                        }
+                        else
+                        {
+                            iOutArmWhichAuto=iMagAtAuto;
+                            return 2;
+                        }
+                    }
+                    else
+                    {
+                        iOutArmWhichAuto=iSortTrayIndex[k];
+                        return iSortTrayIndex[k];
+                    }
+                }
+            }
+        }
+    }
+    return Prod.iIfErrorT6;
+}
+//------------------------------------------------------------------------------
+//  SearchTrayToPick_Buffer -- golden aoutarm9045.cpp:1561-1598
+//  REPLACES the file-local `static` offline stub aoutarm.cpp:541 (`return -1;`).
+//  That one is `static`, so it does NOT collide at link time -- it SHADOWS,
+//  which is trap 4 shape (d): aoutarm.cpp:814 will keep calling its own copy
+//  until the main loop deletes that line.  Supplied constant: (N1).
+//------------------------------------------------------------------------------
+int SearchTrayToPick_Buffer()                                                   //JerryYang 20221215 : add Magazine
+{
+    iOutArmPickOrder=0;
+    int iMag=iPickWhichMag-eMag1;
+    int iRx=iMag%iFixCnt+eMag1;
+    bool bCheck=false;
+
+    if(fAGV->IsATK_AMR() &&
+       LastSet.iUnloadFixTray==eAtkTfMoveFixIC)                                 //Steven 20260202 : for ATK AMR
+    {
+        for(int i=iFixMin; i<=iFixMax; i++)                                     //Fix Tray
+        {
+            if(bCheck==false &&
+               MOT[iMMAuto[i]].HasRealIC())
+            {
+                iRx=i;
+                iWhichAuto=i-iFixMin;
+                bCheck=true;
+            }
+        }
+    }
+
+    for(int i=0; i<OutArmSuck.iPickRow; i++)
+    {
+        for(int j=0; j<OutArmSuck.iPickCol; j++)
+        {
+            if(OutArmSuck.Item[i][j]==NULL_IC)
+            {
+                if(i==0)
+                    iOutArmPickOrder=0;
+                else
+                    iOutArmPickOrder=1;
+                return iRx;
+            }
+        }
+    }
+    return -1;
+}
+
+//------------------------------------------------------------------------------
+//  DoFixTrayFullAlarm -- golden aoutarm9045.cpp:1674-2016
+//  REPLACES the one-line offline stub aoutarm_shims.cpp:81 (`return true;`).
+//  BEHAVIOUR DELTA, NOT NEUTRAL: the stub said "alarm handled, carry on"
+//  unconditionally.  The real body can now return false (Fix tray full / tray
+//  missing / Fix3 stepper not at the right side) and will raise MES1710/1711/
+//  1811/sMES1720[]/sMES1721[] through ShowErrorMessage.
+//  The `#ifdef SOFT_SIMULTE` arms are kept VERBATIM but are inert (SOFT_SIMULTE
+//  is not defined in this tree) -- that is why SaveProductionRecord and the
+//  simulation-only InitNewFixTrayForUnloaderClipRead calls compile away.
+//------------------------------------------------------------------------------
+bool DoFixTrayFullAlarm()                                                       //Steven 20181113 : 修正Fix Link Alarm的問題
+{
+    bool bResult=true;
+    bool bScan1By1=false;
+    int iAuto, iFix=iAutoIndex[iWhichAuto];
+    AnsiString str, s;
+
+    if(FIX3_FULL_PLACE==Fix3K_UseStepperMotor &&
+       iWhichAuto==eFix3 &&                                                     //Jimmychiu 20250306 : iFix --> iWhichAuto
+       Fix3MoveToLeft(false)==false)                                            //Jimmychiu 20230628 : FIX3到達左側不檢查盤是否存在
+    {
+        bResult=false;
+        return bResult;
+    }
+
+    if(AUTO3_IS_MAGAZINE==1             &&                                      //JerryYang 20221215 : Magazine把fix區當buffer區功能
+       TestIF_File.iMagFixTrayType==1   &&
+       iWhichAuto>=iMagMin)
+    {
+    }
+    else
+    {
+        if(iWhichAuto==eFix1 &&                                                 //Steven 20181113 : 修正Fix Link顯示問題
+           Prod.bLinkTo6Tray[eFix2]==true &&
+           Prod.bLinkTo6Tray[eFix3]==true)
+        {
+            if(MOT[MManualTray1].FullIC() &&
+               MOT[MManualTray2].FullIC() &&
+               MOT[MManualTray3].FullIC())
+            {
+                #ifdef SOFT_SIMULTE
+                    if(CosFunction.bReadClipCodeFromUnloader==true &&
+                       IniConfig.bP60ReadClipCodeFromUnloader==true &&
+                       LastSet.iRealDummy!=DUMMY)
+                    {
+                        InitNewFixTrayForUnloaderClipRead(eFix1);
+                        InitNewFixTrayForUnloaderClipRead(eFix2);
+                        InitNewFixTrayForUnloaderClipRead(eFix3);
+                    }
+                    else
+                    {
+                        InitNewFixTray(eFix1, "AOutArm_FullIC");                //Steven 20160414 : 整合Fix盤設定
+                        InitNewFixTray(eFix2, "AOutArm_FullIC");
+                        InitNewFixTray(eFix3, "AOutArm_FullIC");
+                    }
+                #else
+                    if(LastSet.iRealDummy!=DUMMY)
+                    {
+                        if(IniConfig.bEnable_SECS_GEM==true)                    //Steven 20140528 : Secs Gem
+                        {
+                            EventReport(SECS_EVENT.Fix1Full);                   //38     Fix 1 Full
+                            EventReport(SECS_EVENT.Fix2Full);
+                            EventReport(SECS_EVENT.Fix3Full);
+                        }
+
+                        ShowErrorMessage("MES1710", K_RETRY, MManualTray1);     //Fix Tray 1, 2 and 3 is filled with devices.
+                    }
+                    else if(CosFunction.bReadClipCodeFromUnloader==true &&
+                            IniConfig.bP60ReadClipCodeFromUnloader==true &&
+                            LastSet.iRealDummy!=DUMMY)
+                    {
+                        InitNewFixTrayForUnloaderClipRead(eFix1);
+                        InitNewFixTrayForUnloaderClipRead(eFix2);
+                        InitNewFixTrayForUnloaderClipRead(eFix3);
+                    }
+                    else
+                    {
+                        InitNewFixTray(eFix1, "AOutArm_FullIC");                //Steven 20160414 : 整合Fix盤設定
+                        InitNewFixTray(eFix2, "AOutArm_FullIC");
+                        InitNewFixTray(eFix3, "AOutArm_FullIC");
+                    }
+                #endif
+                bResult=false;
+            }
+            else
+            {
+                bScan1By1=true;
+            }
+        }
+        else if(iWhichAuto==eFix2 &&
+                Prod.bLinkTo6Tray[eFix2]==true &&
+                Prod.bLinkTo6Tray[eFix3]==false)
+        {
+            if(MOT[MManualTray1].FullIC() &&
+               MOT[MManualTray2].FullIC())
+            {
+                #ifdef SOFT_SIMULTE
+                    if(CosFunction.bReadClipCodeFromUnloader==true &&
+                       IniConfig.bP60ReadClipCodeFromUnloader==true &&
+                       LastSet.iRealDummy!=DUMMY)
+                    {
+                        InitNewFixTrayForUnloaderClipRead(eFix1);
+                        InitNewFixTrayForUnloaderClipRead(eFix2);
+                    }
+                    else
+                    {
+                        InitNewFixTray(eFix1, "AOutArm_FullIC");                //Steven 20160414 : 整合Fix盤設定
+                        InitNewFixTray(eFix2, "AOutArm_FullIC");
+                    }
+                #else
+                    if(LastSet.iRealDummy!=DUMMY)
+                    {
+                        if(IniConfig.bEnable_SECS_GEM==true)                    //Steven 20140528 : Secs Gem
+                        {
+                            EventReport(SECS_EVENT.Fix1Full);                   //38     Fix 1 Full
+                            EventReport(SECS_EVENT.Fix2Full);
+                        }
+
+                        ShowErrorMessage("MES1711", K_RETRY, MManualTray1);     //Fix Tray 1 and 2 is filled with devices.
+                    }
+                    else if(CosFunction.bReadClipCodeFromUnloader==true &&
+                            IniConfig.bP60ReadClipCodeFromUnloader==true &&
+                            LastSet.iRealDummy!=DUMMY)
+                    {
+                        InitNewFixTrayForUnloaderClipRead(eFix1);
+                        InitNewFixTrayForUnloaderClipRead(eFix2);
+                    }
+                    else
+                    {
+                        InitNewFixTray(eFix1, "AOutArm_FullIC");                //Steven 20160414 : 整合Fix盤設定
+                        InitNewFixTray(eFix2, "AOutArm_FullIC");
+                    }
+                #endif
+                bResult=false;
+            }
+            else
+            {
+                bScan1By1=true;
+            }
+        }
+        else if(iWhichAuto==eFix3 &&
+                Prod.bLinkTo6Tray[eAuto2]==false &&
+                Prod.bLinkTo6Tray[eAuto3]==true)
+        {
+            if(MOT[MManualTray2].FullIC() &&
+               MOT[MManualTray3].FullIC())
+            {
+                #ifdef SOFT_SIMULTE
+                    if(CosFunction.bReadClipCodeFromUnloader==true &&
+                       IniConfig.bP60ReadClipCodeFromUnloader==true &&
+                       LastSet.iRealDummy!=DUMMY)
+                    {
+                        InitNewFixTrayForUnloaderClipRead(eFix2);
+                        InitNewFixTrayForUnloaderClipRead(eFix3);
+                    }
+                    else
+                    {
+                        InitNewFixTray(eFix2, "AOutArm_FullIC");                //Steven 20160414 : 整合Fix盤設定
+                        InitNewFixTray(eFix3, "AOutArm_FullIC");
+                    }
+                #else
+                    if(LastSet.iRealDummy!=DUMMY)
+                    {
+                        if(IniConfig.bEnable_SECS_GEM==true)                    //Steven 20140528 : Secs Gem
+                        {
+                            EventReport(SECS_EVENT.Fix2Full);                   //38     Fix 1 Full
+                            EventReport(SECS_EVENT.Fix3Full);
+                        }
+                        ShowErrorMessage("MES1811", K_RETRY, MManualTray1);     //Fix Tray 2 and 3 is filled with devices.
+                    }
+                    else if(CosFunction.bReadClipCodeFromUnloader==true &&
+                            IniConfig.bP60ReadClipCodeFromUnloader==true &&
+                            LastSet.iRealDummy!=DUMMY)
+                    {
+                        InitNewFixTrayForUnloaderClipRead(eFix2);
+                        InitNewFixTrayForUnloaderClipRead(eFix3);
+                    }
+                    else
+                    {
+                        InitNewFixTray(eFix2, "AOutArm_FullIC");                //Steven 20160414 : 整合Fix盤設定
+                        InitNewFixTray(eFix3, "AOutArm_FullIC");
+                    }
+                #endif
+                bResult=false;
+            }
+            else
+            {
+                bScan1By1=true;
+            }
+        }
+        //<==
+        //Steven 20181113 : 修正Fix Link顯示問題
+        else
+        {
+            bScan1By1=true;
+        }
+
+        if(bScan1By1)
+        {
+            for(int i=iFixMin; i<=iFixMax; i++)
+            {
+                iFix=iAutoIndex[i];
+                if(MOT[iMMAuto[i]].FullIC())
+                {
+                    #ifdef SOFT_SIMULTE
+                        if(CosFunction.bReadClipCodeFromUnloader==true &&
+                           IniConfig.bP60ReadClipCodeFromUnloader==true &&
+                           LastSet.iRealDummy!=DUMMY)
+                        {
+                            InitNewFixTrayForUnloaderClipRead(i);
+                        }
+                        else
+                        {
+                            if(MOT[iMMAuto[i]].Tray.HasRealIC())
+                            {
+                                SaveProductionRecord(&MOT[iMMAuto[i]].Tray, s6TrayName[i]);                             //Steven 20200330 : production log by unloader tray存檔
+                            }
+                            InitNewFixTray(i, "AOutArm_FullIC");                //Steven 20160414 : 整合Fix盤設定
+                        }
+                    #else
+                        if(LastSet.iRealDummy!=DUMMY)
+                        {
+                            if(IniConfig.bEnable_SECS_GEM==true)                //Steven 20140528 : Secs Gem
+                            {
+                                if(i==eFix1)
+                                    EventReport(SECS_EVENT.Fix1Full);           //38     Fix 1 Full
+                                else if(i==eFix2)
+                                    EventReport(SECS_EVENT.Fix2Full);
+                                else if(i==eFix3)
+                                    EventReport(SECS_EVENT.Fix3Full);
+                                else if(i==eFix4)
+                                    EventReport(SECS_EVENT.Fix4Full);           //Steven 20230907 : For HT-9011UC
+                                else if(i==eFix5)
+                                    EventReport(SECS_EVENT.Fix5Full);
+                                else if(i==eFix6)
+                                    EventReport(SECS_EVENT.Fix6Full);
+                            }
+
+                            if(IniConfig.bA68_AutoLoadUnload)                   //JerryYang 20250521 : For AMR
+                            {
+                                iPortStatus[ePortFix1+i-iFixMin]=eFixFullTray;
+                                iLastPortStatus[ePortFix1+i-iFixMin]=eFixFullTray;
+                                EventReport(SECS_EVENT.Fix1PortStatusChanged+i-iFixMin);
+                            }
+
+                            ShowErrorMessage(sMES1720[iFix], K_RETRY, iMMAuto[i]);
+                        }
+                        else if(CosFunction.bReadClipCodeFromUnloader==true &&
+                                IniConfig.bP60ReadClipCodeFromUnloader==true &&
+                                LastSet.iRealDummy!=DUMMY)
+                        {
+                            InitNewFixTrayForUnloaderClipRead(i);
+                        }
+                        else
+                        {
+                            InitNewFixTray(i, "AOutArm_FullIC");                //Steven 20160414 : 整合Fix盤設定
+                        }
+                    #endif
+                    bResult=false;
+                }
+            }
+        }
+    }
+
+    if(AUTO3_IS_MAGAZINE==1             &&                                      //JerryYang 20221215 : Magazine把fix區當buffer區功能
+       TestIF_File.iMagFixTrayType==1   &&
+       iWhichAuto>=iMagMin &&
+       iWhichBuff>=iFixMin)
+    {
+        iAuto=iWhichBuff;
+        iFix=iAutoIndex[iWhichBuff];
+    }
+    else
+    {
+        iAuto=iWhichAuto;
+        iFix=iAutoIndex[iWhichAuto];
+    }
+
+    if(Sen[SnFixedTrayDetect[iFix]].IsOff() && LastSet.iRealDummy!=DUMMY)
+    {
+        if(FIX3_FULL_PLACE==Fix3K_UseCylinder46LA &&                            //ChungHung 20140730 fix LA fix3 function 中途按Stop 會秀Alarm
+           iWhichAuto==eFix2 &&                                                 //Jimmychiu 20250306 : iFix --> iWhichAuto
+           Cylinder[C_FixTray_FullPlace].OffSensor()==false)
+        {
+            ;
+        }
+        else
+        {
+            ShowErrorMessage(sMES1721[iFix], K_RETRY, iMMAuto[iAuto]);
+            bResult=false;
+        }
+    }
+
+    for(int i=iFixMin; i<=iFixMax; i++)
+    {
+        iFix=iAutoIndex[i];
+        if(LastSet.iRealDummy!=DUMMY)
+        {
+            if(MOT[iMMAuto[i]].fHasTray==false &&
+               Sen[SnFixedTrayDetect[iFix]].IsOff()==false)
+            {
+                if(CosFunction.bReadClipCodeFromUnloader==true &&
+                   IniConfig.bP60ReadClipCodeFromUnloader==true &&
+                   LastSet.iRealDummy!=DUMMY)
+                {
+                    if(InitNewFixTrayForUnloaderClipRead(i)==true)
+                    {
+                        if(IniConfig.bA68_AutoLoadUnload)                       //JerryYang 20250521 : For AMR
+                        {
+                            iPortStatus[ePortFix1+i-iFixMin]=eFixFTrayArrived;
+                            iLastPortStatus[ePortFix1+i-iFixMin]=eFixFTrayArrived;
+                            EventReport(SECS_EVENT.Fix1PortStatusChanged+i-iFixMin);
+                        }
+                    }
+                    else
+                    {
+                        bResult=false;
+                    }
+                }
+                else
+                {
+                    InitNewFixTray(i, "AOutArm");                               //Steven 20160414 : 整合Fix盤設定
+                    if(IniConfig.bA68_AutoLoadUnload)                           //JerryYang 20250521 : For AMR
+                    {
+                        iPortStatus[ePortFix1+i-iFixMin]=eFixFTrayArrived;
+                        iLastPortStatus[ePortFix1+i-iFixMin]=eFixFTrayArrived;
+                        EventReport(SECS_EVENT.Fix1PortStatusChanged+i-iFixMin);
+                    }
+                }
+            }
+        }
+        else
+        {
+            if(MOT[iMMAuto[i]].fHasTray==false)
+            {
+                if(CosFunction.bReadClipCodeFromUnloader==true &&
+                   IniConfig.bP60ReadClipCodeFromUnloader==true &&
+                   LastSet.iRealDummy!=DUMMY)
+                {
+                    if(InitNewFixTrayForUnloaderClipRead(i)==false)
+                    {
+                        bResult=false;
+                    }
+                }
+                else
+                {
+                    InitNewFixTray(i, "AOutArm");                               //Steven 20160414 : 整合Fix盤設定
+                }
+            }
+        }
+    }
+    return bResult;
+}
+
+//------------------------------------------------------------------------------
+//  CheckOutArmToTask50 -- golden aoutarm9045.cpp:3629-3673
+//  REPLACES the one-line offline stub aoutarm_shims.cpp:66 (`return true;`).
+//  BEHAVIOUR DELTA, NOT NEUTRAL: the stub said "always jump to task 50".  The
+//  real body is a 4-way carry-kit / test-suck / shuttle-at-right interlock and
+//  returns false for most states.
+//------------------------------------------------------------------------------
+bool CheckOutArmToTask50(int iSht)                                              //Steven 20241019 : 整合out arm判斷式
+{
+    if(iSht==0)
+    {
+        if((iOneCycle==1 || iCleanOut==1) &&
+            FTestSuck.UseSiteNoIC() &&
+            FRCarryKit.UseSiteNoIC() &&
+            (BRCarryKit.UseSiteHasIC() ||
+             BTestSuck.UseSiteHasIC()))
+        {
+            return true;
+        }
+
+        if(FRCarryKit.UseSiteNoIC() &&
+           OutSHT1InRT() &&
+           BRCarryKit.UseSiteHasIC() &&
+           OutSHT2InRT())
+        {
+            return true;
+        }
+    }
+    else
+    {
+        if((iOneCycle==1 || iCleanOut==1) &&
+            BTestSuck.UseSiteNoIC() &&
+            BRCarryKit.UseSiteNoIC() &&
+            (FRCarryKit.UseSiteHasIC() ||
+             FTestSuck.UseSiteHasIC()))
+        {
+            return true;
+        }
+
+        if(BRCarryKit.UseSiteNoIC() &&
+           OutSHT2InRT())
+        {
+            if(FRCarryKit.UseSiteHasIC() &&
+               OutSHT1InRT())
+            {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+//------------------------------------------------------------------------------
+//  VerifyTrayStatus -- golden aoutarm9045.cpp:3675-3764
+//  REPLACES the one-line offline stub aoutarm_shims.cpp:82 (`return 3300;`).
+//  3300 happens to be golden's fall-through value, so the stub was numerically
+//  right for the common case -- but it could never produce 3100 / 3020 / 3050,
+//  i.e. the JAM1102/JAM1103/WAR1130 retry-skip ladder was unreachable.
+//  The `#ifndef SOFT_SIMULTE` arm is the LIVE one here (flag2/flag3 read real
+//  sensors); the `#else` arm is kept verbatim and inert.
+//------------------------------------------------------------------------------
+int VerifyTrayStatus()
+{
+    static int iRetry=0;
+    bool flag1=false, flag2=false, flag3=false, flag4=false;
+    AnsiString str, Str2;
+    int Task=3300, ret;
+    if(TRAY_ARM_MODE==eAboveCoveyor &&
+       MOT[iMMAuto[iWhichAuto]].fHasTray==true)
+    {
+        flag1=Sen[SnAutoTrayDetect[iWhichAuto]].IsOff();
+        #ifndef SOFT_SIMULTE
+        flag2=Sen[SnAutoFixCyPush[iWhichAuto]].IsOn();
+        flag3=Cylinder[C_AutoSide_Fixer[iWhichAuto]].OffSensor();               //wei 20241011 新增後勾氣缸off sensor,避免氣缸沒作動
+        if(AUTO3_IS_MAGAZINE==1 &&  iWhichAuto==iMagAtAuto)
+        {
+            flag3=false;
+        }
+        #else
+        flag2=false;
+        flag3=false;
+        #endif
+        flag4=Sen[SnAutoEdgePush[iWhichAuto]].IsOn();
+
+        if((flag1 || flag2 || flag3 || flag4) &&
+           LastSet.iRealDummy!=DUMMY)
+        {
+            if(iPlaceTrayToAutoTask!=1)                                         //Steven 20241125 : fixed for place tray to auto alarm.
+            {
+                Task=3100;
+                return Task;
+            }
+
+            Cylinder[C_AutoSide_Fixer[iWhichAuto]].Off();
+            Cylinder[C_AutoEdgePush  [iWhichAuto]].Off();
+            Cylinder[C_AutoUpPress   [iWhichAuto]].Off();                       //JerryYang 20190423 新增unloader壓tray
+
+            if(flag2)
+            {
+                Str2.sprintf("%s must off.", Sen[SnAutoFixCyPush[iWhichAuto]].Name);
+                str=sJAM1103[iWhichAuto];
+            }
+            else if(flag3)                                                      //Steven 20241108 : 增加顯示sensor狀態
+            {
+                Str2.sprintf("%s must off.", Cylinder[C_AutoSide_Fixer[iWhichAuto]].OffSensorName);
+                str=sJAM1103[iWhichAuto];
+            }
+            else if(flag4)
+            {
+                Str2.sprintf("%s must off.", Sen[SnAutoEdgePush[iWhichAuto]].Name);
+                str=sJAM1102[iWhichAuto];
+            }
+            else
+            {
+                Str2.sprintf("%s must on.", Sen[SnAutoTrayDetect[iWhichAuto]].Name);
+                str=sWAR1130[iWhichAuto];
+            }
+
+            if(iRetry<=5)                                                       //Steven 20241122 : retry 5次
+            {
+                iRetry++;
+//                RecordProcess(Str2, "Auto Retry");
+                ret=K_RETRY;
+            }
+            else
+            {
+                ret=ShowErrorMessage(str, K_RETRY|K_SKIP, iMMAuto[iWhichAuto], bOutArmTrayDuplicateErr[iWhichAuto], Str2);
+                iRetry=0;
+            }
+            bOutArmTrayDuplicateErr[iWhichAuto]=true;
+
+            if(ret==K_SKIP)
+            {
+                fProductionInfo->CalTrayICCount(iWhichAuto);
+                MOT[iMMAuto[iWhichAuto]].ClearTray(__FUNC__);
+                bOutArmTrayDuplicateErr[iWhichAuto]=false;
+                Task=3020;
+            }
+            else
+            {
+                Task=3050;                                                      //Ifor 20171031 add Auto Tray ReCheck
+            }
+            return Task;
+        }
+        else
+        {
+            bOutArmTrayDuplicateErr[iWhichAuto]=false;
+        }
+    }
+    return Task;
+}
+
+//------------------------------------------------------------------------------
+//  GetOutOffsetFromWhichAuto -- golden aoutarm9045.cpp:3995-4079
+//  GOLDEN BUG PRESERVED, NOT FIXED (:3999): the diagnostic uses "%s" for the
+//  INT iWhichAuto (`sprintf("Error Func:%s iWhichAuto:%s",__FUNC__,iWhichAuto)`).
+//  On a real BCB6 build that prints garbage / faults.  Reproduced verbatim --
+//  it only fires on the already-invalid `iWhichAuto>=eTrayCount` path.
+//  NOTE: this file already CALLS this function at :2054/:2056, inside the
+//  `#if 0` twin of InspectOutArmPosition -- those call sites were waiting for
+//  exactly this body.
+//------------------------------------------------------------------------------
+int GetOutOffsetFromWhichAuto(int iWhichAuto)                                   //Jimmychiu 20240731 : for out arm offset value
+{
+    if(iWhichAuto>=eTrayCount)
+    {
+        ShowMyMessage(AnsiString().sprintf("Error Func:%s iWhichAuto:%s",__FUNC__,iWhichAuto));
+        return 0;
+    }
+
+    if(AUTO_EMPTY_COLOR>=3)
+    {
+        int iWhichAutoToOutOffset[eTrayCount]={OutOfsAuto1,                     //eAuto1
+                                               OutOfsAuto2,                     //eAuto2
+                                               OutOfsAuto3,                     //eAuto3
+                                               OutOfsAuto4,                     //eAuto4
+                                               OutOfsAuto5,                     //eAuto5
+                                               OutOfsAuto6,                     //eAuto6
+                                               OutOfsFix1,                      //eFix1
+                                               OutOfsFix2,                      //eFix2
+                                               OutOfsFix3,                      //eFix3
+                                               OutOfsFix4,                      //eFix4
+                                               OutOfsFix5,                      //eFix5
+                                               OutOfsFix6,                      //eFix6
+                                               OutOfsFix1,                      //eFix7
+                                               OutOfsFix2,                      //eFix8
+                                               OutOfsFix3,                      //eFix9
+                                               OutOfsFix4,                      //eFix10
+                                               OutOfsFix5,                      //eFix11
+                                               OutOfsFix6,                      //eFix12
+                                               OutOfsFix6,                      //eBulkBox
+                                               OutOfsAuto6,                     //eMag1
+                                               OutOfsAuto6,                     //eMag2
+                                               OutOfsAuto6,                     //eMag3
+                                               OutOfsAuto6,                     //eMag4
+                                               OutOfsAuto6,                     //eMag5
+                                               OutOfsAuto6,                     //eMag6
+                                               OutOfsAuto6,                     //eMag7
+                                               OutOfsAuto6,                     //eMag8
+                                               OutOfsAuto6,                     //eMag9
+                                               OutOfsAuto6,                     //eMag10
+                                               OutOfsAuto6,                     //eMag11
+                                               OutOfsAuto6,                     //eMag12
+                                               OutOfsAuto6,                     //eMag13
+                                               OutOfsAuto6,                     //eMag14
+                                              };
+        return iWhichAutoToOutOffset[iWhichAuto];
+    }
+    else
+    {
+        int iWhichAutoToOutOffset[eTrayCount]={OutOfsAuto1,                     //eAuto1
+                                               OutOfsAuto2,                     //eAuto2
+                                               OutOfsAuto3,                     //eAuto3
+                                               OutOfsAuto4,                     //eAuto4
+                                               OutOfsAuto5,                     //eAuto5
+                                               OutOfsAuto6,                     //eAuto6
+                                               OutOfsFix1,                      //eFix1
+                                               OutOfsFix2,                      //eFix2
+                                               OutOfsFix3,                      //eFix3
+                                               OutOfsFix1,                      //eFix4
+                                               OutOfsFix2,                      //eFix5
+                                               OutOfsFix3,                      //eFix6
+                                               OutOfsFix1,                      //eFix7
+                                               OutOfsFix2,                      //eFix8
+                                               OutOfsFix3,                      //eFix9
+                                               OutOfsFix4,                      //eFix10
+                                               OutOfsFix5,                      //eFix11
+                                               OutOfsFix6,                      //eFix12
+                                               OutOfsFix3,                      //eBulkBox
+                                               OutOfsAuto3,                     //eMag1
+                                               OutOfsAuto3,                     //eMag2
+                                               OutOfsAuto3,                     //eMag3
+                                               OutOfsAuto3,                     //eMag4
+                                               OutOfsAuto3,                     //eMag5
+                                               OutOfsAuto3,                     //eMag6
+                                               OutOfsAuto3,                     //eMag7
+                                               OutOfsAuto3,                     //eMag8
+                                               OutOfsAuto3,                     //eMag9
+                                               OutOfsAuto3,                     //eMag10
+                                               OutOfsAuto3,                     //eMag11
+                                               OutOfsAuto3,                     //eMag12
+                                               OutOfsAuto3,                     //eMag13
+                                               OutOfsAuto3,                     //eMag14
+                                              };
+        return iWhichAutoToOutOffset[iWhichAuto];
+    }
+}
+
+//==============================================================================
+//  "Fill The Tray After Out Arm Place" family -- Jimmychiu 20240726.
+//  golden aoutarm9045.cpp:4081-4462, translated in golden order.
+//  Static-init safety (trap 4): `mFillTray` is a plain aggregate
+//  (Public/HTEditList.h:458-469) whose only non-trivial members are uPoint2D,
+//  and uPoint2D::uPoint2D() (Public/HTEditList.cpp:2712) assigns X/Y only.
+//  `iOutArmFillTheTrayAfterPlaceAllICTask` is a plain int.  Neither ctor
+//  touches any of the 18 NULL globals in docs/PT_CAMPAIGN_PLAN.md §8 -- read
+//  the two ctor bodies to confirm, did not assume.
+//==============================================================================
+//  mFillTray + IsEnableFillTheTrayAfterOutArmPlace -- golden :4081-4090
+MyFillTheTrayAfterOutArmPlace mFillTray;
+bool IsEnableFillTheTrayAfterOutArmPlace()                                      //Jimmychiu 20240726 : Fill The Tray After Out Arm Place
+{
+    if(CosFunction.bFillTheTrayAfterOutArmPlace==true &&
+       IniConfig.bE85_FillTray_Enable==true)
+    {
+        return true;
+    }
+    return false;
+}
+//------------------------------------------------------------------------------
+//  IsRunWhichAtuoFillTray -- golden aoutarm9045.cpp:4092-4108  (golden spells
+//  it "Atuo"; the typo is part of the symbol name and is preserved)
+bool IsRunWhichAtuoFillTray(int iWhichAuto)                                     //Jimmychiu 20240726 : Fill The Tray After Out Arm Place
+{
+    if(IsEnableFillTheTrayAfterOutArmPlace())
+    {
+        if(iWhichAuto==iSortingTrayAuto3 &&
+           IniConfig.bE85_FillTray_Auto3==true)
+        {
+            return true;
+        }
+        else if(iWhichAuto==iSortingTrayAuto1 &&
+                IniConfig.bE85_FillTray_Auto1==true)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+//------------------------------------------------------------------------------
+//  RecTrayICStatus -- golden aoutarm9045.cpp:4110-4125  (file-scope, golden
+//  gives it no header declaration; only HasGapsInTheTray calls it)
+//  NOTE the deliberate argument order at the call sites (:4142/:4155): golden
+//  passes (irow, icol) and the body indexes Tray.Data[icol][irow].
+bool RecTrayICStatus(TTrayMotor *myMotor, int irow, int icol, bool &bHasMidEmpty, uPoint2D &pTargetPos, uPoint2D &pSourcePos)                                   //Jimmychiu 20240726 : Fill The Tray After Out Arm Place
+{
+    if(bHasMidEmpty==false && myMotor->Tray.Data[icol][irow]==HAS_NULL_IC)
+    {
+        pTargetPos.X=icol;
+        pTargetPos.Y=irow;
+        bHasMidEmpty=true;
+    }
+    else if(bHasMidEmpty==true && myMotor->Tray.Data[icol][irow]==HAS_IC)
+    {
+        pSourcePos.X=icol;
+        pSourcePos.Y=irow;
+        return true;
+    }
+    return false;
+}
+//------------------------------------------------------------------------------
+//  HasGapsInTheTray -- golden aoutarm9045.cpp:4127-4165
+//  GOLDEN QUIRK PRESERVED (:4134-4135): GetTrayDirection() writes `Direction`,
+//  then the very next line overwrites it with AutoForm[iWhichAuto]->Direction.
+//  The GetTrayDirection call is still load-bearing -- it also fills the six
+//  ix/iy Start/End/Step loop bounds.  Reproduced verbatim.
+bool HasGapsInTheTray(int iWhichAuto, uPoint2D &pTargetPos, uPoint2D &pSourcePos)                                       //Jimmychiu 20240726 : Fill The Tray After Out Arm Place
+{
+    bool bHasMidEmpty=false;
+    TTrayMotor *myMotor=&MOT[iMMAuto[iWhichAuto]];
+    if(myMotor->fHasTray==false || myMotor->HasIC()==false)
+        return false;
+    int Direction=0, ixStart=0, ixEnd=0, ixStep=0, iyStart=0, iyEnd=0, iyStep=0;
+    GetTrayDirection(iWhichAuto, Direction, ixStart, ixEnd, ixStep, iyStart, iyEnd, iyStep);
+    Direction=AutoForm[iWhichAuto]->Direction;
+    if(Direction<4)
+    {
+        for(int irow=iyStart; irow!=iyEnd; irow+=iyStep)
+        {
+            for(int icol=ixStart; icol!=ixEnd; icol+=ixStep)
+            {
+                if(RecTrayICStatus(myMotor, irow, icol, bHasMidEmpty, pTargetPos, pSourcePos))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    else
+    {
+        for(int icol=ixStart; icol!=ixEnd; icol+=ixStep)
+        {
+            for(int irow=iyStart; irow!=iyEnd; irow+=iyStep)
+            {
+                if(RecTrayICStatus(myMotor, irow, icol, bHasMidEmpty, pTargetPos, pSourcePos))
+                {
+                    return true;
+                }
+            }
+        }
+    }
+    pTargetPos.Clear();
+    pSourcePos.Clear();
+    return false;
+}
+//------------------------------------------------------------------------------
+//  DetermineFeasibilityOfSuck -- golden aoutarm9045.cpp:4167-4191
+bool DetermineFeasibilityOfSuck(SingleSuckPosOnTray &ssp, uPoint2D pArmSuckActive)                                      //Jimmychiu 20240726 : Fill The Tray After Out Arm Place
+{
+    ssp.iArmXV1=iXpitchMaxX3;
+    ssp.iArmXV2=iXpitchMaxX3;
+    ssp.iArmYV1=TestIF.iARM_Y_PITCH;
+    uPoint2D pStartPos;
+    GetWhichAutoStart(ssp.iWhichAuto,pStartPos);
+    //to tray cell(0, 0)
+    ssp.pArmXYPos.X=pStartPos.X;
+    ssp.pArmXYPos.Y=pStartPos.Y;
+    //to tray cell(iy, ix)
+    ssp.pArmXYPos.X+=(ssp.pTrayRowCol.X*AutoForm[ssp.iWhichAuto]->XPitch);
+    ssp.pArmXYPos.Y-=(ssp.pTrayRowCol.Y*AutoForm[ssp.iWhichAuto]->YPitch);
+    //suck xy to cell(iy, ix)
+    ssp.pArmXYPos.X-=(pArmSuckActive.X-iOutArmXBase)*iXpitchMax;
+    ssp.pArmXYPos.Y+=(pArmSuckActive.Y-iOutArmYBase)*ssp.iArmYV1;
+    if(IsOutArmPosOutLimit(ssp.pArmXYPos)==true)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+}
+//------------------------------------------------------------------------------
+//  GetWhichAutoStart -- golden aoutarm9045.cpp:4193-4206
+void GetWhichAutoStart(int iWhichAuto, uPoint2D &pStartPos)                     //Jimmychiu 20240726 : Fill The Tray After Out Arm Place
+{
+    if(iWhichAuto<3)
+    {
+        pStartPos.X=Prod.XOutArm_Auto_Place[iWhichAuto][iOutArmYBase][iOutArmXBase];
+        pStartPos.Y=Prod.YOutArm_Auto_Place[iWhichAuto][iOutArmYBase][iOutArmXBase];
+    }
+    else
+    {
+        iWhichAuto%=3;
+        pStartPos.X=Prod.XOutArm_Fix_Place[iWhichAuto][iOutArmYBase][iOutArmXBase];
+        pStartPos.Y=Prod.YOutArm_Fix_Place[iWhichAuto][iOutArmYBase][iOutArmXBase];
+    }
+}
+//------------------------------------------------------------------------------
+//  GetWhichAutoPickZ -- golden aoutarm9045.cpp:4208-4219
+//  GOLDEN QUIRK PRESERVED (:4217): the Fix arm subtracts the AUTO place-offset
+//  (`OutArmOffSet[OutOfsAuto1+iWhichAuto]->GetPlace()`) but adds the FIX
+//  pick-up offset (`OutArmOffSet[OutOfsFix1+iWhichAuto]->GetPickUp()`).  The
+//  mismatched offset bases are golden's; NOT "corrected".
+int GetWhichAutoPickZ(int iWhichAuto, int irow, int icol)                       //Jimmychiu 20240726 : Fill The Tray After Out Arm Place
+{
+    if(iWhichAuto<3)
+    {
+        return Prod.ZOutArm_Auto_Place[iWhichAuto][irow][icol]-OutArmOffSet[OutOfsAuto1+iWhichAuto]->GetPlace()+OutArmOffSet[OutOfsAuto1+iWhichAuto]->GetPickUp();
+    }
+    else
+    {
+        iWhichAuto%=3;
+        return Prod.ZOutArm_Fix_Place[iWhichAuto][irow][icol]-OutArmOffSet[OutOfsAuto1+iWhichAuto]->GetPlace()+OutArmOffSet[OutOfsFix1+iWhichAuto]->GetPickUp();
+    }
+}
+//------------------------------------------------------------------------------
+//  GetWhichAutoPlaceZ -- golden aoutarm9045.cpp:4221-4232
+int GetWhichAutoPlaceZ(int iWhichAuto, int irow, int icol)                      //Jimmychiu 20240726 : Fill The Tray After Out Arm Place
+{
+    if(iWhichAuto<3)
+    {
+        return Prod.ZOutArm_Auto_Place[iWhichAuto][irow][icol];
+    }
+    else
+    {
+        iWhichAuto%=3;
+        return Prod.ZOutArm_Fix_Place[iWhichAuto][irow][icol];
+    }
+}
+//------------------------------------------------------------------------------
+//  IsOutArmPosOutLimit -- golden aoutarm9045.cpp:4234-4246
+//  The asymmetric margins (+10 on the negative soft limit, -100 on the
+//  positive) are golden's magic numbers, kept exactly.
+bool IsOutArmPosOutLimit(uPoint2D pArmPos)                                      //Jimmychiu 20240726 : Fill The Tray After Out Arm Place
+{
+    if(pArmPos.X<(MOT[MOutArmX].Motor->PSoftLimitN+10) || pArmPos.X>(MOT[MOutArmX].Motor->PSoftLimitP-100))
+    {
+        return true;
+    }
+
+    if(pArmPos.Y<(MOT[MOutArmY].Motor->PSoftLimitN+10) || pArmPos.Y>(MOT[MOutArmY].Motor->PSoftLimitP-100))
+    {
+        return true;
+    }
+    return false;
+}
+//------------------------------------------------------------------------------
+//  FindArmSuck -- golden aoutarm9045.cpp:4248-4268
+bool FindArmSuck(int iWhichAuto, MyFillTheTrayAfterOutArmPlace &mfillT)         //Jimmychiu 20240726 : Fill The Tray After Out Arm Place
+{
+    mfillT.ssTarget.iWhichAuto=iWhichAuto;
+    mfillT.ssTarget.bPlace=true;
+    mfillT.ssSource.iWhichAuto=iWhichAuto;
+    mfillT.ssSource.bPlace=false;
+    for(int irow=0; irow<MAX_ARM_Row; irow++)
+    {
+        for(int icol=0; icol<MAX_ARM_Col; icol++)
+        {
+            mfillT.pArmSuckActive.X=icol;
+            mfillT.pArmSuckActive.Y=irow;
+            if(DetermineFeasibilityOfSuck(mfillT.ssTarget, mfillT.pArmSuckActive)==true &&
+               DetermineFeasibilityOfSuck(mfillT.ssSource, mfillT.pArmSuckActive)==true)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+//------------------------------------------------------------------------------
+//  MoveOutArmXYAndSuck(SingleSuckPosOnTray, uPoint2D) -- golden :4270-4303
+//  (the ArmAndSuckInfo overload at golden :4305 is out of this batch's scope --
+//   see WAVE SCOPE above)
+bool MoveOutArmXYAndSuck(SingleSuckPosOnTray ssTarget, uPoint2D pActiveSuck)    //Jimmychiu 20240726 : Fill The Tray After Out Arm Place
+{
+    bool bDoSuck=IsOutArmArrival(ssTarget.pArmXYPos);
+    if(bDoSuck==false && MoveOutArmToAutoSafe()==false)
+    {
+        return false;
+    }
+    bool ZDownFlag[MAX_ARM_Row][MAX_ARM_Col];
+    int ZDownPos[MAX_ARM_Row][MAX_ARM_Col];
+    int iXVariable[X_PITCH_COUNT];
+    int iYVariable=0;
+    ZeroMemory(iXVariable,  sizeof(iXVariable));
+    ZeroMemory(ZDownFlag,   sizeof(ZDownFlag));
+    ZeroMemory(ZDownPos,    sizeof(ZDownPos));
+    iXVariable[0]=GetOutArmPitch_9045(ssTarget.iArmXV1);
+    iXVariable[1]=GetOutArmPitch2_9045(ssTarget.iArmXV2);
+    iYVariable   =GetOutArmPitchY_9045(ssTarget.iArmYV1);
+    int irow     =pActiveSuck.Y, icol=pActiveSuck.X;
+    ZDownFlag[irow][icol]=true;
+    if(ssTarget.bPlace)
+    {
+        ZDownPos[irow][icol]=GetWhichAutoPlaceZ(ssTarget.iWhichAuto, irow, icol);
+    }
+    else
+    {
+        ZDownPos[irow][icol]=GetWhichAutoPickZ(ssTarget.iWhichAuto, irow, icol);
+    }
+    bool bZDown=true;
+    if(OutArmContinuousMove_9045(ssTarget.pArmXYPos.X, ssTarget.pArmXYPos.Y, iXVariable, iYVariable, ZDownFlag, ZDownPos, bZDown))
+    {
+        return true;
+    }
+    return false;
+}
+//------------------------------------------------------------------------------
+//  IsOutArmArrival -- golden aoutarm9045.cpp:4325-4330
+//  `TMyMotor()` is golden's own temporary (CheckArmPosArrival needs no state);
+//  TMyMotor has a public default ctor (Motor/mymotor.h:130), so this is a
+//  1:1 translation, not a workaround.
+bool IsOutArmArrival(uPoint2D pTargetPos)                                       //Jimmychiu 20240726 : Fill The Tray After Out Arm Place
+{
+    bool bX=TMyMotor().CheckArmPosArrival(pTargetPos.X, MOT[MOutArmX].ReadPos(), 10);
+    bool bY=TMyMotor().CheckArmPosArrival(pTargetPos.Y, MOT[MOutArmY].ReadPos(), 10);
+    return (bX && bY);
+}
+//------------------------------------------------------------------------------
+//  iOutArmFillTheTrayAfterPlaceAllICTask + DoOutArmFillTheTrayAfterPlaceAllIC
+//  -- golden aoutarm9045.cpp:4332-4462
+//  `int &Task=iOutArmFillTheTrayAfterPlaceAllICTask;` is golden's reference-to-
+//  cursor idiom, kept.  `bResult` is written once (false) and never set true --
+//  golden's, not a translation slip: the SM signals completion through Task,
+//  and the `case 1` "nothing to fill" exit is the only `return true`.
+//  The `#ifdef SOFT_SIMULTE` fMain->chkInPickLoadError arms are verbatim/inert.
+//------------------------------------------------------------------------------
+int iOutArmFillTheTrayAfterPlaceAllICTask;
+bool DoOutArmFillTheTrayAfterPlaceAllIC(bool bIsFirst, int iWhichAuto)          //Jimmychiu 20240726 : Fill The Tray After Out Arm Place
+{
+    bool bResult=false;
+    int &Task=iOutArmFillTheTrayAfterPlaceAllICTask;
+    if(bIsFirst)
+    {
+        Task=1;
+        mFillTray.Clear();
+        return true;
+    }
+    int ret=0;
+    switch(Task)
+    {
+        case 1:
+            if(HasGapsInTheTray(iWhichAuto, mFillTray.ssTarget.pTrayRowCol, mFillTray.ssSource.pTrayRowCol)==true &&
+               FindArmSuck(iWhichAuto, mFillTray)==true)
+            {
+                Task=100;
+            }
+            else
+            {
+                return true;
+            }
+            break;
+        case 100:                                                               //move to source tray
+            if(MoveOutArmXYAndSuck(mFillTray.ssSource, mFillTray.pArmSuckActive))
+            {
+                if(OutArmNeedCheckOffset(false, 0))                             //Steven 20230531 : 簡化判斷式
+                {
+                    bEnterOffset=false;
+                    fMain->Pause("DoOutArmFillTheTrayAfterPlaceAllIC");
+                    Task=100;
+                    break;
+                }
+                OutArmSuck.ResetAll();                                          //Steven 20160323 : 避免未開啟真空
+                Task=200;
+            }
+            break;
+        case 200:
+            if(OutArmSuck.Suck[mFillTray.pArmSuckActive.Y][mFillTray.pArmSuckActive.X].Suck())
+            {
+                #ifdef SOFT_SIMULTE                                             //模擬ic不見了
+                if(fMain->chkInPickLoadError->Checked==true)
+                {
+                    OutArmSuck.Suck[mFillTray.pArmSuckActive.Y][mFillTray.pArmSuckActive.X].Error=true;
+                }
+                #endif                                                          //模擬ic不見了 end
+                MOT[iMMAuto[iWhichAuto]].SetTrayBinData(mFillTray.ssSource.pTrayRowCol.X, mFillTray.ssSource.pTrayRowCol.Y, NULL_IC, "");
+                OutArmSuck.SetItemData(mFillTray.pArmSuckActive.Y, mFillTray.pArmSuckActive.X, HAS_IC);
+                InspectOutArmPosition(iWhichAuto, mFillTray.pArmSuckActive.Y, mFillTray.pArmSuckActive.X, mFillTray.ssSource.pTrayRowCol.Y, mFillTray.ssSource.pTrayRowCol.X, iOutPlaceToAuto);
+                Task=300;
+            }
+            else
+            {
+                if(OutArmSuck.Suck[mFillTray.pArmSuckActive.Y][mFillTray.pArmSuckActive.X].Error==false)
+                    break;
+            }
+
+            if(OutArmSuck.Suck[mFillTray.pArmSuckActive.Y][mFillTray.pArmSuckActive.X].Error)
+            {
+                AnsiString ErrPart=OutArmSuck.Suck[mFillTray.pArmSuckActive.Y][mFillTray.pArmSuckActive.X].sName;
+                ret=OutArmPickTrayAlarm(iWhichAuto, ErrPart);
+                if(ret==K_RETRY)
+                {
+                    Task=100;
+                }
+                else                                                            //K_SKIP
+                {
+                    MOT[iMMAuto[iWhichAuto]].SetTrayBinData(mFillTray.ssSource.pTrayRowCol.X, mFillTray.ssSource.pTrayRowCol.Y, NULL_IC, "");
+                    Task=500;
+                }
+            }
+            break;
+        case 300:                                                               //move to target tray
+            if(MoveOutArmXYAndSuck(mFillTray.ssTarget,mFillTray.pArmSuckActive))
+            {
+                if(OutArmNeedCheckOffset(false, 0))                             //Steven 20230531 : 簡化判斷式
+                {
+                    bEnterOffset=false;
+                    fMain->Pause("DoOutArmFillTheTrayAfterPlaceAllIC");
+                    Task=300;
+                    break;
+                }
+                OutArmSuck.ResetAll();                                          //Steven 20160323 : 避免未開啟真空
+                Task=400;
+            }
+            break;
+        case 400:
+            if(OutArmSuck.Suck[mFillTray.pArmSuckActive.Y][mFillTray.pArmSuckActive.X].Destroy())
+            {
+                #ifdef SOFT_SIMULTE                                             //模擬ic不見了
+                if(fMain->chkInPickLoadError->Checked==true)
+                {
+                    OutArmSuck.Suck[mFillTray.pArmSuckActive.Y][mFillTray.pArmSuckActive.X].Error=true;
+                }
+                #endif                                                          //模擬ic不見了 end
+                MOT[iMMAuto[iWhichAuto]].SetTrayBinData(mFillTray.ssTarget.pTrayRowCol.X, mFillTray.ssTarget.pTrayRowCol.Y, HAS_IC , "");
+                OutArmSuck.SetItemData(mFillTray.pArmSuckActive.Y, mFillTray.pArmSuckActive.X, NULL_IC);
+                Task=500;
+            }
+            else
+            {
+                if(OutArmSuck.Suck[mFillTray.pArmSuckActive.Y][mFillTray.pArmSuckActive.X].Error==false)
+                    break;
+            }
+
+            if(OutArmSuck.Suck[mFillTray.pArmSuckActive.Y][mFillTray.pArmSuckActive.X].Error)
+            {
+                AnsiString ErrPart=OutArmSuck.Suck[mFillTray.pArmSuckActive.Y][mFillTray.pArmSuckActive.X].sName;
+                ret=ShowErrorMessage("JAM0217", K_RETRY|K_SKIP, MOutArmX, false, ErrPart);
+                if(ret==K_RETRY)
+                {
+                    Task=300;
+                }
+                else                                                            //K_SKIP
+                {
+                    OutArmSuck.SetItemData(mFillTray.pArmSuckActive.Y, mFillTray.pArmSuckActive.X, NULL_IC);
+                    Task=500;
+                }
+            }
+            break;
+        case 500:
+            if(MoveOutArmToAutoSafe()==true)
+            {
+                Task=1;
+            }
+            break;
+    }
+    return bResult;
+}
+
+//------------------------------------------------------------------------------
+//  GetOutArmXToSortShtOffset -- golden aoutarm9045.cpp:4464-4472
+//  9046AU sort-shuttle offset.  No stub existed for this pair.
+//------------------------------------------------------------------------------
+int GetOutArmXToSortShtOffset(int iOffsetPos)                                   //RogerYang 20250510 Add for 9046AU
+{
+    int iPos=0;
+    if(iOffsetPos>=0)
+    {
+        iPos=SortArmOffSet[iOffsetPos]->GetX();
+    }
+    return iPos;
+}
+//------------------------------------------------------------------------------
+//  GetOutArmYToSortShtOffset -- golden aoutarm9045.cpp:4474-4482
+//------------------------------------------------------------------------------
+int GetOutArmYToSortShtOffset(int iOffsetPos)                                   //RogerYang 20250510 Add for 9046AU
+{
+    int iPos=0;
+    if(iOffsetPos>=0)
+    {
+        iPos=SortArmOffSet[iOffsetPos]->GetY();
+    }
+    return iPos;
+}
+//------------------------------------------------------------------------------
+//  NeedPlaceToSort -- golden aoutarm9045.cpp:4484-4506
+//  REPLACES the one-line offline stub aoutarm_shims.cpp:121 (`return false;`).
+//  Offline the answer is STILL false, because USE_OUT_SORT_ARM==eartUninstall
+//  short-circuits at :4486 -- so this retirement is behaviour-neutral on a
+//  non-9046AU machine and correct on a 9046AU one.
+//------------------------------------------------------------------------------
+bool NeedPlaceToSort()                                                          //RogerYang 20250513 Add for 9046AU
+{
+    if(USE_OUT_SORT_ARM==eartUninstall)
+    {
+        return false;
+    }
+
+    bool bIsNeedSort=false;
+    for(int i=0; i<OutArmSuck.iMaxRow; i++)
+    {
+        for(int j=0; j<OutArmSuck.iMaxCol; j++)
+        {
+            if(OutArmSuck.Item[i][j]!=NULL_IC &&
+               (OutArmSuck.iWhichAuto[i][j]==eAuto4 ||
+                OutArmSuck.iWhichAuto[i][j]==eAuto5 ||
+                OutArmSuck.iWhichAuto[i][j]==eAuto6))
+            {
+                bIsNeedSort=true;
+            }
+        }
+    }
+    return bIsNeedSort;
+}
+//------------------------------------------------------------------------------
+//  SetSortShuttleStatus_Place -- golden aoutarm9045.cpp:4508-4534
+//  REPLACES the no-op offline stub aoutarm_shims.cpp:146.
+//  `OutSht3Kit` is the 9046AU sort kit: declared acarry_shims.h:101, DEFINED
+//  acarry_shims.cpp:67, and it is a `TMyKitSuck` from aHotPlateSubstrate.h:365
+//  -- the SAME header this TU already includes, so the layout the linker binds
+//  is the layout this code compiled against (trap 5 checked, see report).
+//  Golden's commented-out InspectOutArmPosition line at :4520 is kept as a
+//  comment, verbatim, including its Chinese note.
+//------------------------------------------------------------------------------
+extern TMyKitSuck OutSht3Kit;                                                   // DECL acarry_shims.h:101 / DEF acarry_shims.cpp:67 -- golden MyKitSuck.h (9046AU sort kit)
+void SetSortShuttleStatus_Place(int iShtRow, int iShtCol, int iSuckRow, int iSuckCol)
+{
+    AnsiString Str;
+
+    if(OutArmSuck.Item[iSuckRow][iSuckCol]!=HAS_NULL_IC)                        //Steven 20170109 : 沒IC的地方不檢查吹氣
+    {
+        bOutArmCheckDestroyACT[iSuckRow][iSuckCol]=true;                        //jou 981130 確認device確實destroy完成
+    }
+
+    if(OutSht3Kit.Item[iShtRow][iShtCol]==NULL_IC)
+    {
+        OutArmSuck.PordRec[iSuckRow][iSuckCol].AddArmSiteRecord(3, OutArmSuck.iWhichSite[iSuckRow][iSuckCol]);          //Steven 20240508 : fixed for iWhichSite flag
+        //InspectOutArmPosition(MOutSortSht, iSuckRow, iSuckCol, iShtRow, iShtCol, true);   //裡面還沒寫 針對outarm放到shuttle的功能
+        OutSht3Kit.MoveSuckDataDiff(OutArmSuck, iSuckRow, iSuckCol, iShtRow, iShtCol);
+        OutSht3Kit.iWhichSite[iShtRow][iShtCol]=OutSht3Kit.iWhichSite[iShtRow][iShtCol]-1;                              //Steven 20240320 : 變更iWhcihSite填入位置
+        OutSht3Kit.iWhichIndex[iShtRow][iShtCol]=0;                             //Steven 20240320 : 變更iWhichIndex填入位置
+    }
+    else if(OutArmSuck.Item[iSuckRow][iSuckCol]==HAS_NULL_IC)
+    {
+        OutArmSuck.SetItemData(iSuckRow, iSuckCol, NULL_IC);
+    }
+    else
+    {
+        Str.sprintf("SortShuttleKit.Item[%d][%d]=%d, OutArmSuck.Item[%d][%d]=%d", iShtRow, iShtCol, OutSht3Kit.Item[iShtRow][iShtCol], iSuckRow, iSuckCol, OutArmSuck.Item[iSuckRow][iSuckCol]);  //Steven 20220620 : add log message
+        ShowMyMessage("Program Error in SetSortShuttleStatus", Str);
+    }
+}
+
+//------------------------------------------------------------------------------
+//  InitNewFixTrayForUnloaderClipRead -- golden aoutarm9045.cpp:4536-4605
+//  GATE (G2) -- see GATE REGISTER at the top of this block.  Golden's first and
+//  last statements stay ACTIVE; the fBarCode-dependent middle is `#if 0`.
+//------------------------------------------------------------------------------
+bool InitNewFixTrayForUnloaderClipRead(int iwhichauto,bool bOutputReport)       //Jimmychiu 20250818 : 海康智能讀碼
+{
+    bool bret=false;
+#if 0 // GATE (G2) -- golden aoutarm9045.cpp:4539-4603: needs fBarCode->eUnloaderClipAuto1/… (golden BarCode/BarCode.h:966-975) and fBarCode->ccdUnloader[] (golden BarCode/BarCode.h:976); this tree's fBarCode is TfBarCode_Shim (aHotPlateSubstrate.h:984-1026) and carries neither.  Offline result is golden's own: bret stays false.
+    AnsiString sErr="";
+    AnsiString sGet="";
+    AnsiString sAreaName="";
+    //
+    int iiccdUnloaderID=0;
+    if(iwhichauto==(int)eAuto1)
+    {
+        iiccdUnloaderID=(int)(fBarCode->eUnloaderClipAuto1);
+        sAreaName="Auto1";
+    }
+    else if(iwhichauto==(int)eAuto2)
+    {
+        iiccdUnloaderID=(int)(fBarCode->eUnloaderClipAuto2);
+        sAreaName="Auto2";
+    }
+    else if(iwhichauto==(int)eAuto3)
+    {
+        iiccdUnloaderID=(int)(fBarCode->eUnloaderClipAuto3);
+        sAreaName="Auto3";
+    }
+    else if(iwhichauto==(int)eFix1)
+    {
+        iiccdUnloaderID=(int)(fBarCode->eUnloaderClipFix1);
+        sAreaName="Fix1";
+    }
+    else if(iwhichauto==(int)eFix2)
+    {
+        iiccdUnloaderID=(int)(fBarCode->eUnloaderClipFix2);
+        sAreaName="Fix2";
+    }
+    else if(iwhichauto==(int)eFix3)
+    {
+        iiccdUnloaderID=(int)(fBarCode->eUnloaderClipFix3);
+        sAreaName="Fix3";
+    }
+    else
+    {
+        iiccdUnloaderID=(int)(fBarCode->eUnloaderClipAuto1);
+        sAreaName="Unknown Area";
+    }
+    //
+    if(fBarCode->ccdUnloader[iiccdUnloaderID].bGetResult==false)
+    {
+        sErr="";
+        sGet=fBarCode->ccdUnloader[iiccdUnloaderID].DoGetPhotoCmd(false,sErr);
+        if(sGet.IsEmpty()==false)
+        {
+            if(bOutputReport==true)
+            {
+                //out put report
+            }
+            InitNewFixTray(iwhichauto, "AOutArm_FullIC");                       //Steven 20160414 : 整合Fix盤設定
+            MOT[iMMAuto[iwhichauto]].Tray.cCassetteID=sGet;
+            bret=true;
+        }
+        else if(sErr.IsEmpty()==false)
+        {
+            ShowMyMessage(AnsiString().sprintf("%s CCD Clip ID:%s",sAreaName,sGet));
+            fBarCode->ccdUnloader[iiccdUnloaderID].DoGetPhotoCmd(true,sErr);
+        }
+    }
+    else
+    {
+        bret=true;
+    }
+#endif
+    return bret;
+}
+
+//=============================================================================
+//  END PT-W8 append block.
+//=============================================================================

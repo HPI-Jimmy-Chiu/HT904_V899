@@ -109,4 +109,12 @@ int iUnitMultiply1000(double Data);
 //   BCB6 source: cUnitConvert.cpp lines 243-260.
 // ---------------------------------------------------------------------------
 
+// AI(pt-wave) 20260811 PT-W8 integrate: the "TODO(W6+W7)" note above is now
+// SUPERSEDED -- DoStructUnitConvert has a real translated body at
+// cUnitConvert.cpp:675 (golden cUnitConvert.cpp:243).  Declared here because the
+// one-line stand-in retired from AutoClean/AutoClean.cpp:199 was also serving as
+// the declaration for its caller at AutoClean/AutoClean.cpp:8322, in that same TU.
+// Signature is golden's: cUnitConvert.h:5.
+void DoStructUnitConvert();                                                     // golden cUnitConvert.h:5
+
 #endif // C_UNIT_CONVERT_H

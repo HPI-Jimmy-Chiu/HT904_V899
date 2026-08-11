@@ -11962,3 +11962,249 @@ bool CheckTwoArmSiteMap()                                                       
     }
     return bFlag;
 }
+//---------------------------------------------------------------------------
+//  WAVE SCOPE EXTENSION -- PT-Wk (APPEND-ONLY; the head banner above is
+//  deliberately left byte-for-byte untouched, per this wave's append-only rule)
+//  Translator: AI(PT-Wk-atester) 20260811
+//  Golden source: HT9011UC_Code_V3.33.906.0_20260618/atester.cpp (cp950)
+//
+//  ROLE
+//  ----
+//  Two further golden atester.cpp free functions, appended in GOLDEN ORDER
+//  (:699 before :5373):
+//    * Sim_TTL_Single(int,int)   golden :699   GATED  -- offline TTL BIN
+//      simulator; sources its answer from fMain->cbSimuBinSite0..3, four
+//      TComboBox widgets the FormsFacade fMain stand-in does not carry.
+//    * CheckIndexArmInitState()  golden :5373  ACTIVE -- index-arm INTERLOCK
+//      predicate (were the two index test nozzles in a legal vacuum state at
+//      init?).  Every dependency it needs is REAL in this tree; nothing in it
+//      is degraded, so it cannot answer a false "state OK".
+//
+//  WHO PUMPS THEM
+//  --------------
+//    * Sim_TTL_Single -- golden's ONLY call site is atester.cpp:2079, wrapped in
+//      `#ifdef SOFT_SIMULTE`.  This port mirrors that verbatim at port
+//      :2064-2066 and SOFT_SIMULTE is NOT defined, so the call is compiled out
+//      in BOTH trees.  The function is compiled-but-uncalled here exactly as it
+//      is compiled-but-uncalled in a golden release (non-SOFT_SIMULTE) build.
+//    * CheckIndexArmInitState -- golden's ONLY call site is atester.cpp:5751,
+//      `case 600000:` of DoTestHeadMotor ("flag=CheckIndexArmInitState(); if
+//      (flag==true) Task=1;" -- i.e. a TRUE return sends the index SM back to
+//      task 1 instead of releasing it).  That case still sits inside this port's
+//      GATED down-press tree, so nothing calls it YET.  Because both live in
+//      THIS translation unit and the call site is ABOVE this definition, the
+//      main loop must publish `bool CheckIndexArmInitState();` (golden needs no
+//      such declaration: golden defines it at :5373, above the :5751 use) before
+//      un-gating case 600000.  NOT done here -- append-only, atester.h is not
+//      one of my targets.
+//
+//  GATE REGISTER (this extension only)
+//  -----------------------------------
+//  G-PTk1 -- Sim_TTL_Single body.
+//    (a) GOLDEN LINE: atester.cpp:702
+//          TComboBox *ComboCH[4]={fMain->cbSimuBinSite0, fMain->cbSimuBinSite1,
+//                                 fMain->cbSimuBinSite2, fMain->cbSimuBinSite3};
+//        plus the nine `ComboCH[iCH]->Text=="N"` comparisons at :707-748 that
+//        read through it.  Whole body :701-752 gated as one unit.
+//    (b) WHY THE OFFLINE DEFAULT IS FAITHFUL: golden reaches this function from
+//        exactly ONE place, atester.cpp:2079, and that call is inside
+//        `#ifdef SOFT_SIMULTE`.  SOFT_SIMULTE is off in a golden release build
+//        and is not defined anywhere in this port, so the function is
+//        UNREACHABLE in both trees.  A body that does nothing is therefore
+//        observationally identical to golden-as-shipped.  The complete golden
+//        body is retained VERBATIM inside the `#if 0` below so a later wave has
+//        the exact text -- the same "GOLDEN VERBATIM ... (GATE ..., end)" idiom
+//        this file already uses for SendSiteMapToRTC (port :11866-11942).
+//    (c) HOW REAL-MACHINE BEHAVIOUR DIFFERS: in a SOFT_SIMULTE build golden
+//        OVERWRITES ScanPort[iSite*5 .. iSite*5+4] with the bit pattern the
+//        operator selected in cbSimuBinSite<n> -- an offline "fake the tester's
+//        BIN reply" affordance.  The gated body writes nothing, so those 5 bits
+//        keep whatever ScanPortRefresh (port :745-752) last read from the REAL
+//        Sen[] TTL inputs.  That is the cautious direction: real sensor data is
+//        preserved and no BIN verdict is fabricated.
+//    UN-GATE CONDITION: add cbSimuBinSite0..3 (TComboBox*) to the FormsFacade
+//        fMain stand-in.  Absence re-verified at delivery -- see report.
+//
+//  G-PTk2 -- (none for CheckIndexArmInitState).  It is fully ACTIVE.  Noted for
+//    the record, and NOT a gate I introduce: `IsNNMode()` (golden cinitial.h:60)
+//    resolves to the pre-existing atester_shims.cpp body, which returns 0 (not
+//    NN mode) offline.  It appears ONLY in `IndexSuckName[i+IsNNMode()][j]`
+//    (golden :5410), i.e. it selects which nozzle NAME is appended to the
+//    WAR0320 alarm TEXT.  It can never flip bHasFail1/bHasFail2 or the return
+//    value, so the interlock verdict is unaffected; on an NN-mode machine only
+//    the nozzle label printed inside the alarm would shift by one row.
+//---------------------------------------------------------------------------
+
+//---------------------------------------------------------------------------
+//  golden atester.cpp:694-698 -- banner comment, transcribed verbatim
+//---------------------------------------------------------------------------
+//******************************************************************************
+//
+//  注意!! Sim_TTL_Single為TTL收發BIN相關, 修改時要小心!!
+//
+//******************************************************************************
+// golden atester.cpp:699-753 -- GATED (GATE G-PTk1).  Body kept VERBATIM.
+#if 0 // GOLDEN VERBATIM -- golden atester.cpp:699-753  (GATE G-PTk1-Sim_TTL_Single, begin)
+void Sim_TTL_Single(int i, int j)                                               //Steven 20091031 Start : for TTL offline testing
+{
+    int iSenBitStatus[10]={0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    TComboBox *ComboCH[4]={fMain->cbSimuBinSite0, fMain->cbSimuBinSite1, fMain->cbSimuBinSite2, fMain->cbSimuBinSite3};
+
+    int iSite=ArrayConvertSite(i, j);
+    int iCH=TestIF.iSiteMap[i][j]-1;
+
+    if(ComboCH[iCH]->Text=="1")
+    {
+        iSenBitStatus[0]=1;
+    }
+    else if(ComboCH[iCH]->Text=="2")
+    {
+        iSenBitStatus[1]=1;
+    }
+    else if(ComboCH[iCH]->Text=="3")
+    {
+        iSenBitStatus[0]=1;
+        iSenBitStatus[1]=1;
+    }
+    else if(ComboCH[iCH]->Text=="4")
+    {
+        iSenBitStatus[2]=1;
+    }
+    else if(ComboCH[iCH]->Text=="5")
+    {
+        iSenBitStatus[0]=1;
+        iSenBitStatus[2]=1;
+    }
+    else if(ComboCH[iCH]->Text=="6")
+    {
+        iSenBitStatus[1]=1;
+        iSenBitStatus[2]=1;
+    }
+    else if(ComboCH[iCH]->Text=="7")
+    {
+        iSenBitStatus[0]=1;
+        iSenBitStatus[1]=1;
+        iSenBitStatus[2]=1;
+    }
+    else if(ComboCH[iCH]->Text=="8")
+    {
+        iSenBitStatus[3]=1;
+    }
+    else if(ComboCH[iCH]->Text=="9")
+    {
+        iSenBitStatus[0]=1;
+        iSenBitStatus[3]=1;
+    }
+    for(int k=0; k<5; k++)
+    {
+        ScanPort[k+iSite*5]=iSenBitStatus[k];
+    }
+}
+#endif // GOLDEN VERBATIM -- golden atester.cpp:699-753  (GATE G-PTk1-Sim_TTL_Single, end)
+void Sim_TTL_Single(int i, int j)                                               //Steven 20091031 Start : for TTL offline testing  -- golden :699
+{
+#if 0 // TODO(GA-3/UI) -- golden :701-752 (fMain->cbSimuBinSite0..3 absent from the FormsFacade fMain stand-in)
+#endif
+    // Offline: leave ScanPort untouched (see GATE G-PTk1 (c) above).  Golden's
+    // sole call site is `#ifdef SOFT_SIMULTE` (golden :2078-2080 == port
+    // :2064-2066), which is not defined, so this body is unreachable in both trees.
+    (void)i; (void)j;
+}
+//------------------------------------------------------------------------------
+// golden atester.cpp:5371 -- golden re-declares this here even though csystem.h
+// already carries it (csystem.h:390, `int CheckSuckInitialStatus(class
+// TMyKitSuck &Ptr, int iR, int iC)`); reproduced verbatim.
+// TRAP 5 (two headers, same class name): the `TMyKitSuck` bound here is
+// aHotPlateSubstrate.h:365 -- this TU includes "aHotPlateSubstrate.h" (port
+// :93) and NOT mykitsuck.h.  The body that actually gets linked is
+// csystem.cpp:22953, and csystem.cpp likewise includes ONLY
+// "aHotPlateSubstrate.h" (csystem.cpp:103) with no mykitsuck.h -- so both sides
+// of this call compile against the SAME layout.  FTestSuck/BTestSuck are
+// declared by that same header, so the reference argument cannot straddle the
+// two competing definitions.
+//------------------------------------------------------------------------------
+extern int CheckSuckInitialStatus(TMyKitSuck &Ptr, int iR, int iC);              // golden :5371
+//------------------------------------------------------------------------------
+// CheckIndexArmInitState -- golden atester.cpp:5373-5446.  ACTIVE, verbatim.
+// INTERLOCK PREDICATE.  Returns TRUE when at least one index nozzle failed its
+// initial vacuum-vs-Item cross-check; golden's caller (:5751, case 600000) sends
+// the index SM back to Task=1 on TRUE.  Nothing in this body is degraded to an
+// offline default, so it cannot answer a false "state OK": every input
+// (LastSet.bUseTestSocket, IniConfig/TestIF_File flags, FTestSuck/BTestSuck
+// geometry + Item[], CheckSuckInitialStatus) is the real tree object.
+//------------------------------------------------------------------------------
+bool CheckIndexArmInitState()
+{
+    int ret1[MAX_SOCKET_ROW][MAX_SOCKET_COL]={{0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}};
+    int ret2[MAX_SOCKET_ROW][MAX_SOCKET_COL]={{0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 0, 0, 0}};
+    bool bHasFail1=false, bHasFail2=false;
+    AnsiString errPart1="at Index Arm 1";
+    AnsiString errPart2="at Index Arm 2";
+
+    for(int i=0; i<FTestSuck.iShtRow; i++)
+    {
+        for(int j=0; j<FTestSuck.iShtCol; j++)
+        {
+            if(LastSet.bUseTestSocket[0][i][j] ||                               //ChungHung 20130910 alter for SCK can close site by Index
+               LastSet.bUseTestSocket[1][i][j])                                 //Steven 20100824 : 關Site的位置不做檢查
+            {
+                ret1[i][j]=CheckSuckInitialStatus(FTestSuck, i, j);
+
+                if((IniConfig.bD58UseArm1PickPlaceArm2Test==true &&
+                    TestIF_File.bArm1PickPlaceArm2Test==true) &&
+                    TestIF_File.bCheckArm2Vacuum==false)                        //Steven 20150129 : 需要確認Arm2有沒有粘料   //Ifor 20200811 Fix: Arm1 Pick Place Arm2Test 需卡兩個條件
+                {
+                    ret2[i][j]=0;                                               //kevin 20150128
+                }
+                else
+                {
+                    ret2[i][j]=CheckSuckInitialStatus(BTestSuck, i, j);
+                }
+            }
+            else
+            {
+                ret1[i][j]=0;
+                ret2[i][j]=0;
+            }
+
+            if(ret1[i][j]!=0)
+            {
+                bHasFail1=true;
+                errPart1+=IndexSuckName[i+IsNNMode()][j];                       //Steven 20230712 : 修正NN mode alarm顯示
+            }
+
+            if(ret2[i][j]!=0)
+            {
+                bHasFail2=true;
+                errPart2+=IndexSuckName[i][j];
+            }
+        }
+    }
+
+    if(bHasFail1)
+    {
+        if(CUSTOMER_CODE==CC_KYEC_LEE && bEnable_KLT_Function==false)  //Ifor 20220701 KYEC 要求WAR0320 需開門確認並按Z1//Eastsun 20260508 合入
+            bIsTestSitICFallDown=true;
+        ShowErrorMessage("WAR0320", K_SKIP, MTestZ1, false, errPart1);          //jou 2011-11-08 retry -> skip字義上比較恰當
+    }
+
+    if(bHasFail2)
+    {
+        if(CUSTOMER_CODE==CC_KYEC_LEE && bEnable_KLT_Function==false)  //Ifor 20220701 KYEC 要求WAR0320 需開門確認並按Z1//Eastsun 20260508 合入
+            bIsTestSitICFallDown=true;
+        ShowErrorMessage("WAR0320", K_SKIP, MTestZ2, false, errPart2);
+    }
+
+    for(int i=0; i<FTestSuck.iShtRow; i++)
+    {
+        for(int j=0; j<FTestSuck.iShtCol; j++)
+        {
+            if(ret1[i][j]==Vaccum_Initial_Off)
+                FTestSuck.SetItemData(i, j, HAS_NULL_IC);
+            if(ret2[i][j]==Vaccum_Initial_Off)
+                BTestSuck.SetItemData(i, j, HAS_NULL_IC);
+        }
+    }
+    return (bHasFail1 || bHasFail2);
+}
+//------------------------------------------------------------------------------

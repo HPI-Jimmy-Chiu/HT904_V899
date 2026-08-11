@@ -651,3 +651,441 @@ AnsiString TMyTempPanel::GetCaption()
     return labName->Caption;
 }
 //---------------------------------------------------------------------------
+
+// =============================================================================
+//  APPEND BLOCK -- BANNER EXTENSION
+//  AI(W906-PT-W8) 20260811 -- the 4 golden mouse-down handlers this file's
+//  original banner listed as "OMITTED per MyTempPanel.h's GATE (1)" are landed
+//  here as real, compilable, callable bodies.  Nothing above this line is
+//  edited or reordered (append-only).
+//
+//  WHY THE ORIGINAL OMISSION IS SUPERSEDED, AND WHAT REPLACES IT
+//  -------------------------------------------------------------------------
+//  The PT-W3 reasoning ("`TMouseButton`/`TShiftState` cannot be spelled, so
+//  the SIGNATURE cannot exist") is still a TRUE fact about those two types --
+//  re-verified this wave, see GATE (W8-1) -- but it does not force the whole
+//  handler to disappear, because NEITHER PARAMETER IS EVER READ.  All four
+//  golden bodies (golden MyTempPanel.cpp:417-599) were read line by line:
+//  `Button` and `Shift` appear ONLY in the parameter lists.  Dropping two
+//  provably-dead parameters costs zero behaviour, and buys four real bodies.
+//
+//  SHAPE, AND WHY IT IS NOT A MEMBER FUNCTION
+//  -------------------------------------------------------------------------
+//  These are landed as file-scope free functions taking an explicit
+//  `TMyTempPanel *Self`, NOT as `TMyTempPanel::edBaseMouseDown(...)`.  The
+//  reason is mechanical, not a design opinion: PT-W3 removed the four
+//  declarations from MyTempPanel.h's class body, and MyTempPanel.h is OUTSIDE
+//  this wave's write boundary (this wave may append to this .cpp only).  A
+//  member definition without a matching in-class declaration does not compile.
+//  See the HAND-OFF block at the end of this file for the exact 4 lines the
+//  integrating loop should publish in MyTempPanel.h to collapse these back
+//  into members.  Until it does, these four have EXTERNAL LINKAGE AND NO
+//  CALLER anywhere in the tree -- stated plainly rather than implied.
+//
+//  WAVE SCOPE -- ONE LINE PER GOLDEN FUNCTION (all golden MyTempPanel.cpp)
+//   edBaseMouseDown      golden :417-526  -- GATED (body 100%); ACTIVE arm is
+//                                            the Sender downcast + faithful
+//                                            "user did nothing" no-op.
+//   edLimitMouseDown     golden :528-532  -- GATED (body 100%, single
+//                                            ShowQwertyKey call).
+//   edIndiviMouseDown    golden :534-560  -- GATED (body 100%).
+//   edinitialMouseDown   golden :562-599  -- GATED (body 100%).
+//
+//  GATE REGISTER -- 5 gates.  Every absence claim below carries the command
+//  and the time it was run; all of them were re-run immediately before this
+//  block was written (see the RE-RUN LOG at the end of this file).
+//
+//   (W8-1) `TMouseButton Button` / `TShiftState Shift` (golden :418, :529,
+//       :535, :563) -- DROPPED FROM THE PORT SIGNATURE, not gated.
+//       ABSENCE CLAIM: no type of either name exists anywhere in this port.
+//         cmd:  grep -rn --include=*.h --include=*.cpp -E
+//               '^[[:space:]]*(class|struct|enum|typedef|using)[^;]*
+//               \b(TMouseButton|TShiftState)\b' .   (from the tree root,
+//               excluding ./tools/)
+//         run:  2026-08-11 11:22:14  -> 0 hits (exit 1)
+//         re-run at end of wave: see RE-RUN LOG.
+//       WHY FAITHFUL: both parameters are DEAD in golden itself.  Verified by
+//       reading golden :417-599 in full: the identifiers `Button` and `Shift`
+//       occur exactly 4 times each, all of them in a parameter list, never in
+//       a body.  A dropped parameter that is never read cannot change any
+//       observable behaviour.  `X`/`Y` are equally dead in all four of THESE
+//       handlers but are KEPT, because they are spellable ints and because
+//       the sibling EJ1N/MyOmronPanel handlers landed by this same wave DO
+//       read them -- one uniform ported signature across the wave.
+//       REAL-MACHINE DIFFERENCE: none.
+//
+//   (W8-2) `Buffer->Tag` -- every branch CONDITION in edBaseMouseDown
+//       (golden :425,433,441-445,457,482-485) and edIndiviMouseDown
+//       (golden :543,547).  vclcompat::TControl (and therefore TEdit) carries
+//       NO `Tag` member.
+//         cmd:  grep -rn 'Tag' vclcompat/Controls.h
+//         run:  2026-08-11 11:23:06  -> 0 hits
+//       WHY FAITHFUL: this is a branch selector, not a leaf, so it cannot be
+//       reduced -- but EVERY leaf it selects between is itself a
+//       `fQwertyKey->ShowQwertyKey(...)` call (GATE W8-4), i.e. all arms have
+//       the same, empty, ported effect.  Choosing "no arm" is therefore
+//       observationally identical to choosing any arm.
+//       A SHORTCUT THAT WAS CONSIDERED AND REJECTED, recorded so the next
+//       wave does not re-derive it wrongly: `Self->iIndexTag` looks like a
+//       drop-in for `Buffer->Tag`, because golden's ctor sets BOTH from the
+//       same `iTag` argument (golden :53 and :325-346).  IT IS NOT.
+//       golden uTemp_Set.cpp:154 constructs each panel as
+//       `new TMyTempPanel(asTempCtrl[i], i)` -- so the 19 widgets' `->Tag`
+//       hold the eTempControll CHANNEL index -- and then uTemp_Set.cpp:267-283
+//       calls `SetIndexTag(-1)` / `SetIndexTag(0..N)` on the same panels,
+//       which (golden :606-609) rewrites `iIndexTag` ONLY and never touches
+//       any widget's `->Tag`.  After that call the two hold DIFFERENT
+//       numbering systems (channel index vs heater ordinal), on every machine
+//       where CosFunction.bUseOldATCTempOffset==false.  Substituting one for
+//       the other would silently select the wrong branch.
+//       REAL-MACHINE DIFFERENCE: on real hardware the Tag decides which
+//       min/max pair the pop-up keypad clamps to; here no keypad opens at all.
+//
+//   (W8-3) `dTempMax=fTemp_Set->MaxTempSetting();` /
+//       `dTempMin=fTemp_Set->MinTempSetting();` (golden :422-423, :539-540).
+//       `dTempMax`/`dTempMin` THEMSELVES ARE REAL in this port (cmydef.h:3437-
+//       3438, defined cmydef.cpp:3649-3650 = 135.0 / 20) -- it is the SOURCE,
+//       the `fTemp_Set` form, that has no port.
+//         cmd:  grep -rn --include=*.cpp --include=*.h -E
+//               'fTemp_Set[[:space:]]*(;|=)|\*[[:space:]]*fTemp_Set|TfTemp_Set' .
+//         run:  2026-08-11 11:25:53  -> only Automation/auto9045.cpp's
+//               TU-LOCAL stand-in `W5FA_TfTemp_SetExt W5FA_FTemp_Set`
+//               (edSoakTime/edWorkTemp only -- no MaxTempSetting/
+//               MinTempSetting), plus ./build/* generated layout tables and
+//               comments.  The atester.cpp:2245-2248 hits are INSIDE the
+//               `#if 0` that opens at atester.cpp:834, confirmed by scanning
+//               that file's preprocessor directives -- inert text, not a port.
+//       WHY FAITHFUL: the ACTIVE arm leaves both globals at whatever the rest
+//       of the system last wrote.  This is the SAME treatment bthermo.cpp's
+//       own GATE W7-UI G27 already applies to the same missing form
+//       (bthermo.cpp:4536-4541).  Not writing a value we cannot compute is
+//       strictly safer than writing a guessed one, and dTempMax/dTempMin are
+//       shared globals other units read.
+//       REAL-MACHINE DIFFERENCE: on real hardware these two globals are
+//       refreshed from the Temp_Set form on every such click; here they keep
+//       their cmydef.cpp defaults unless some other ported unit sets them.
+//
+//   (W8-4) `fQwertyKey->ShowQwertyKey(...)` -- the ONLY leaf action in all
+//       four handlers (golden :435,449,454,461,466,473,478,491,496,503,508,
+//       518,522,531,545,549,553,558,580,584,592,596).  fQwertyKey has no port.
+//         cmd:  grep -rn --include=*.h --include=*.cpp -E
+//               'fQwertyKey|ShowQwertyKey' .   (excluding ./tools/, ./build/)
+//         run:  2026-08-11 11:24:21  -> zero declarations/definitions; only
+//               comments and generated .dfm layout tables under ./build/.
+//       WHY FAITHFUL: this is the "keyboard/dialog interaction with no
+//       offline equivalent" case, and the faithful offline default is
+//       USER DID NOTHING.  ShowQwertyKey's entire contract is "pop a modal
+//       on-screen keypad, and if the operator commits a value, write it into
+//       the TEdit passed as argument 1".  With no window subsystem there is no
+//       operator and no commit, so "no keypad, no edit" is not a degraded
+//       stand-in -- it is exactly what happens.  Established precedent in this
+//       tree for the identical golden idiom: Public/HTEdit.cpp GATE (6)
+//       (EditClick), EJ1N/MyOmronPanel.cpp GATE (3) (setEditValueClick),
+//       VacuumUnit/MyVacuumPanel.cpp GATE (3) (edSVClick),
+//       ATC/ATCInterface.h GATE (4), OmronLaser/LaserSensor.h.
+//       REAL-MACHINE DIFFERENCE: an operator cannot tap these 19 TEdit fields
+//       to enter a temperature offset in this build.
+//
+//   (W8-5) `Barcode_Reader(bcTemperature)` (golden :427, :569).
+//         cmd:  grep -rn --include=*.h --include=*.cpp -E
+//               '\bBarcode_Reader[[:space:]]*\(' .
+//         run:  2026-08-11 11:24:21  -> exactly ONE hit, Public/HTEdit.cpp:300,
+//               and that line is inside that file's own `#if 0` GATE (6).
+//               No declaration, no definition, anywhere.
+//       `bcTemperature` itself IS real (MachineType.h:921) -- only the
+//       function is missing.  WHY FAITHFUL: golden uses it as an early-return
+//       guard whose ONLY effect is to skip the ShowQwertyKey call below it,
+//       which is already gated (W8-4).  Both the "returned early" and the
+//       "fell through" paths therefore have identical ported effect (none).
+//       REAL-MACHINE DIFFERENCE: on a KYEC machine the operator must scan a
+//       barcode before the keypad opens; here neither happens.
+//
+//  Big5: every Chinese comment below is transcribed VERBATIM from golden via
+//  cp950, character for character.  Final gate: ZERO U+FFFD.
+// =============================================================================
+#include "cmydef.h"        // dTempMax/dTempMin (:3437-3438), N_DOUBLE (:290),
+                           //   INSTALL_HEAT_GUN (:3366), Tri_Temp_Machine (:5536),
+                           //   SetHeaterTemp_MaxOutSht/MaxIndex/MaxBase (:5543-5545),
+                           //   CUSTOMER_CODE (:3181) -- ALL REAL in this port
+#include "cprod.h"         // Temperature (SYSTEM_TEMPERATURE, :1646) /
+                           //   InputLimit (INPUT_LIMIT, :3058) -- both REAL
+#include "CosFunction.h"   // CosFunction (:488) -- REAL
+#include "MachineType.h"   // eTempControll tcXxx (:637-652), CC_ASE_KaohSiung
+                           //   (:308), bcTemperature (:921) -- ALL REAL
+//---------------------------------------------------------------------------
+//  golden MyTempPanel.cpp:417-526  --  TMyTempPanel::edBaseMouseDown
+//  Ported signature drops `TMouseButton Button, TShiftState Shift` (GATE W8-1)
+//  and takes `TMyTempPanel *Self` instead of `this` (see BANNER EXTENSION).
+void TMyTempPanel_edBaseMouseDown(TMyTempPanel *Self, TObject *Sender, int X, int Y)
+{
+    TEdit *Buffer;
+    Buffer=(TEdit *)Sender;
+
+    //AI(W906-PT-W8) 20260811: GATES (W8-2)/(W8-3)/(W8-4)/(W8-5) -- golden's
+    //  whole body is a `Buffer->Tag` branch tree (no Tag member here) whose
+    //  every leaf is `fQwertyKey->ShowQwertyKey(...)` (no port), fed by
+    //  `fTemp_Set->MaxTempSetting()/MinTempSetting()` (no port) and guarded by
+    //  `Barcode_Reader(...)` (no port).  ACTIVE arm: the Sender downcast above
+    //  (real -- vclcompat TEdit:TCustomEdit:TControl:TObject is a single
+    //  non-virtual chain) and then the faithful "user did nothing" no-op.
+    //  Golden preserved VERBATIM, ready to un-gate as one block:
+#if 0
+    TEdit *Buffer;
+    Buffer=(TEdit *)Sender;
+    dTempMax=fTemp_Set->MaxTempSetting();                                       //Ztex 2023.04.19 Add HT-1032 TriTemp Function
+    dTempMin=fTemp_Set->MinTempSetting();                                       //Ztex 2023.04.19 Add HT-1032 TriTemp Function
+    double fTemp = 0;                                                           //Ztex 2023.04.19 Add HT-1032 TriTemp Function
+    if(Buffer->Tag==1 && Tri_Temp_Machine!=1)                                   //20140320 wei //Ztex 2023.04.19 Add HT-1032 TriTemp Function
+    {
+        if(Barcode_Reader(bcTemperature)==0)                                    // 20140103 wei KYEC Barcode Reader
+        {
+            return;
+        }
+    }
+
+    if(INSTALL_HEAT_GUN && (Buffer->Tag==tcHeatGun1 || Buffer->Tag==tcHeatGun2))                                        //kevin 20200101  hot gun
+    {
+        fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)InputLimit.iHeaterGunH , (double)InputLimit.iHeaterGunL);
+    }
+    else
+    {
+        if(Tri_Temp_Machine==1)                                                 //Ztex 2023.04.19 Add HT-1032 TriTemp Function
+        {
+            if((Buffer->Tag>=tcDUT1 && Buffer->Tag<=tcDUT4) ||
+               (Buffer->Tag>=tcOutSht1 && Buffer->Tag<=tcBase6) ||
+               (Buffer->Tag>=tcDoor1 && Buffer->Tag<=tcDoor2) )                 //Ztex 2023.10.23 Add Index Door Heater
+            {
+                if(Buffer->Tag>=tcDUT1 && Buffer->Tag<=tcDUT4)
+                {
+                    if(SetHeaterTemp_MaxIndex - Temperature.iTriTempDefault_Ini[1] > 30)
+                    {
+                        fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 30.00, 0.00);
+                    }
+                    else
+                    {
+                        fTemp = SetHeaterTemp_MaxIndex - Temperature.iTriTempDefault_Ini[1];
+                        fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, fTemp, 0.00);
+                    }
+                }
+                else if(Buffer->Tag>=tcOutSht1 && Buffer->Tag<=tcOutSht2)
+                {
+                    if(SetHeaterTemp_MaxOutSht - Temperature.iTriTempDefault_Ini[0] > 30)
+                    {
+                        fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 30.00, 0.00);
+                    }
+                    else
+                    {
+                        fTemp = SetHeaterTemp_MaxOutSht - Temperature.iTriTempDefault_Ini[0];
+                        fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, fTemp, 0.00);
+                    }
+                }
+                else
+                {
+                    if(SetHeaterTemp_MaxBase - Temperature.iTriTempDefault_Ini[2] > 30)
+                    {
+                        fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 30.00, 0.00);
+                    }
+                    else
+                    {
+                        fTemp = SetHeaterTemp_MaxBase - Temperature.iTriTempDefault_Ini[2];
+                        fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, fTemp, 0.00);
+                    }
+                }
+            }
+            else if(((Buffer->Tag>=tcAa1 && Buffer->Tag<=tcBd2) ||
+                     (Buffer->Tag>=tcAe1 && Buffer->Tag<=tcBh2)) ||
+                     (Buffer->Tag>=tcHotPlate1 && Buffer->Tag<=tcShuttle2) ||
+                     (Buffer->Tag>=tcHotPlate3 && Buffer->Tag<=tcShuttle4))
+            {
+                if(Temperature.fWorkTemperBase>0)                               //Temperature > 0
+                {
+                    if((dTempMax - Temperature.fWorkTemperBase)>30)
+                    {
+                        fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 30.00, -30.00);
+                    }
+                    else
+                    {
+                        fTemp = dTempMax - Temperature.fWorkTemperBase;
+                        fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, fTemp, (-1)*fTemp);
+                    }
+                }
+                else                                                            //Temperature < 0
+                {
+                    if(abs(dTempMin - Temperature.fWorkTemperBase)>30)
+                    {
+                        fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 30.00, -30.00);
+                    }
+                    else
+                    {
+                        fTemp = dTempMin - Temperature.fWorkTemperBase;
+                        fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, fTemp, (-1)*fTemp);
+                    }
+                }
+            }
+        }
+        else
+        {
+            if(CosFunction.bOffsetTempByRecipeMinMaxLimit &&
+               Sender==edOffset)
+            {
+                fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)Temperature.iOffsetByRecipeMaxLimit, (double)Temperature.iOffsetByRecipeMinLimit);
+            }
+            else
+            {
+                fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)InputLimit.iTempHigh, (double)InputLimit.iTempLow);
+            }
+        }
+    }
+#endif
+    (void)Self; (void)Buffer; (void)X; (void)Y;
+}
+//---------------------------------------------------------------------------
+//  golden MyTempPanel.cpp:528-532  --  TMyTempPanel::edLimitMouseDown
+void TMyTempPanel_edLimitMouseDown(TMyTempPanel *Self, TObject *Sender, int X, int Y)
+{
+    //AI(W906-PT-W8) 20260811: GATE (W8-4) -- golden's ENTIRE body is one
+    //  ShowQwertyKey call, with hard-coded bounds 0.0 / 12.0.
+    //  CORRECTION TO A CLAIM THIS COMMENT ORIGINALLY MADE, recorded rather
+    //  than silently deleted: an earlier draft of this note called the
+    //  argument pair a GOLDEN BUG ("max below min").  THAT WAS WRONG, and the
+    //  check that disproved it is worth writing down, because the SAME
+    //  reasoning applies to every other ShowQwertyKey site in this file.
+    //  golden myQwertyKeyBoard.h:153 declares
+    //     ShowQwertyKey(TWinControl*, int iFunction, int iDP=0,
+    //                   bool bCheckRange=false, double min=0, double max=0)
+    //  -- so the trailing pair is (min, max), NOT (max, min); and golden
+    //  myQwertyKeyBoard.cpp:259-271 then NORMALISES it anyway
+    //  (`if(max>min){...}else{ swap }`), so the pair is order-insensitive at
+    //  the callee.  0.0/12.0 here, and the (High, Low) pairs the other three
+    //  handlers pass, are all correct as written.  No bug; nothing to preserve
+    //  or correct.
+    //  ACTIVE arm: faithful "user did nothing" no-op.
+#if 0
+    fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 0.0, 12.0);
+#endif
+    (void)Self; (void)Sender; (void)X; (void)Y;
+}
+//---------------------------------------------------------------------------
+//  golden MyTempPanel.cpp:534-560  --  TMyTempPanel::edIndiviMouseDown
+void TMyTempPanel_edIndiviMouseDown(TMyTempPanel *Self, TObject *Sender, int X, int Y)
+{
+    TEdit *Buffer;                                                              //Ztex 2023.04.19 Add HT-1032 TriTemp Function
+    Buffer=(TEdit *)Sender;                                                     //Ztex 2023.04.19 Add HT-1032 TriTemp Function
+
+    //AI(W906-PT-W8) 20260811: GATES (W8-2)/(W8-3)/(W8-4) -- same three
+    //  missing surfaces as edBaseMouseDown above (Tag / fTemp_Set /
+    //  fQwertyKey).  ACTIVE arm: the real Sender downcast, then the faithful
+    //  "user did nothing" no-op.  Golden preserved VERBATIM:
+#if 0
+    dTempMax=fTemp_Set->MaxTempSetting();                                       //Steven 20170427 : 回傳機台可以用的最大溫度值
+    dTempMin=fTemp_Set->MinTempSetting();
+    if(Tri_Temp_Machine==1)                                                     //Ztex 2023.04.19 Add HT-1032 TriTemp Function
+    {
+        if(Buffer->Tag>=tcDUT1 && Buffer->Tag<=tcDUT4)
+        {
+            fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)SetHeaterTemp_MaxIndex, 20.00);
+        }
+        else if(Buffer->Tag>=tcOutSht1 && Buffer->Tag<=tcOutSht2)
+        {
+            fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)SetHeaterTemp_MaxOutSht, 20.00);
+        }
+        else
+        {
+            fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)SetHeaterTemp_MaxBase, 20.00);
+        }
+    }
+    else
+    {
+        fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, dTempMax, dTempMin);
+    }
+#endif
+    (void)Self; (void)Buffer; (void)X; (void)Y;
+}
+//---------------------------------------------------------------------------
+//  golden MyTempPanel.cpp:562-599  --  TMyTempPanel::edinitialMouseDown
+//  golden :562 trailing comment: //kevin 20210421 獨立offset range
+void TMyTempPanel_edinitialMouseDown(TMyTempPanel *Self, TObject *Sender, int X, int Y)
+{
+    TEdit *Buffer;
+    Buffer=(TEdit *)Sender;
+
+    //AI(W906-PT-W8) 20260811: GATES (W8-2)/(W8-4)/(W8-5) -- `Buffer->Tag`
+    //  (no Tag member), `fQwertyKey` (no port) and `Barcode_Reader` (no port).
+    //  NOTE for whoever un-gates this: golden's CUSTOMER_CODE==CC_ASE_KaohSiung
+    //  branch and its `else` branch differ ONLY in which InputLimit pair the
+    //  non-heat-gun arm uses (iIlitialTempHigh/Low vs iTempHigh/Low); the
+    //  heat-gun arm is byte-identical in both.  That duplication is golden's
+    //  own and is preserved, not folded.  CUSTOMER_CODE, CC_ASE_KaohSiung,
+    //  INSTALL_HEAT_GUN, tcHeatGun1/2 and the whole InputLimit struct are ALL
+    //  REAL in this port -- ONLY Tag/Barcode_Reader/fQwertyKey are missing, so
+    //  this handler is the closest of the four to being un-gateable.
+    //  ACTIVE arm: faithful "user did nothing" no-op.  Golden VERBATIM:
+#if 0
+    if(Buffer->Tag==1)
+    {
+        if(Barcode_Reader(bcTemperature)==0)                                    // 20140103 wei KYEC Barcode Reader
+        {
+            return;
+        }
+    }
+
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+    {
+        if(INSTALL_HEAT_GUN &&
+           (Buffer->Tag==tcHeatGun1 ||Buffer->Tag==tcHeatGun2))                 //kevin 20200101  hot gun
+        {
+            fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)InputLimit.iHeaterGunH , (double)InputLimit.iHeaterGunL);
+        }
+        else
+        {
+            fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)InputLimit.iIlitialTempHigh, (double)InputLimit.iIlitialTempLow);
+        }
+    }
+    else
+    {
+        if(INSTALL_HEAT_GUN &&
+           (Buffer->Tag==tcHeatGun1 ||Buffer->Tag==tcHeatGun2))                 //kevin 20200101  hot gun
+        {
+            fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)InputLimit.iHeaterGunH , (double)InputLimit.iHeaterGunL);
+        }
+        else
+        {
+            fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)InputLimit.iTempHigh, (double)InputLimit.iTempLow);
+        }
+    }
+#endif
+    (void)Self; (void)Buffer; (void)X; (void)Y;
+}
+//---------------------------------------------------------------------------
+//  HAND-OFF TO THE INTEGRATING LOOP -- DESCRIBED, DELIBERATELY NOT DONE HERE
+//  (MyTempPanel.h is outside this wave's write boundary.)
+//
+//  To collapse the four free functions above back into class members, add to
+//  MyTempPanel.h's `private:` block, replacing the 4 commented-out golden
+//  signatures PT-W3 left at MyTempPanel.h:111-114:
+//
+//      void edBaseMouseDown   (TObject *Sender, int X, int Y);
+//      void edLimitMouseDown  (TObject *Sender, int X, int Y);
+//      void edIndiviMouseDown (TObject *Sender, int X, int Y);
+//      void edinitialMouseDown(TObject *Sender, int X, int Y);   //kevin 20210421 initial temp 獨立範圍值
+//
+//  then rename each definition above to `TMyTempPanel::<name>` and delete its
+//  `TMyTempPanel *Self` parameter and the matching `(void)Self;`.  No other
+//  edit is required -- no body above reads any PRIVATE member of the class
+//  (`edOffset`, the one member golden's edBaseMouseDown compares `Sender`
+//  against at golden :516, is PUBLIC in this port's MyTempPanel.h:151, and
+//  that comparison is inside GATE W8-4 anyway).
+//
+//  Also worth doing at the same time, but NOT required for the above:
+//  MyTempPanel.h's banner GATE (1) currently says these 4 are omitted because
+//  their signature "cannot be spelled".  That premise is now superseded by
+//  GATE (W8-1) here (the two unspellable parameters are provably dead in
+//  golden).  Nothing in the header is WRONG today -- it is describing a state
+//  this .cpp has just moved past.
+//
+//  RE-RUN LOG -- every absence claim in the GATE REGISTER above was re-run
+//  from the tree root at 2026-08-11 11:45, AFTER this block was written and
+//  after all sibling files in this wave had landed, and every one still
+//  returned the same result recorded at its own gate.  See this wave's report
+//  for the verbatim command list.
+//---------------------------------------------------------------------------

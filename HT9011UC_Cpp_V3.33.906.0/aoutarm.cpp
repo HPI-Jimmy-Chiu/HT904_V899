@@ -538,7 +538,9 @@ static const int eAtkTfMoveFixIC = 6;                                           
 //==  aoutarm9045.cpp:147-174, csystem.cpp:1266-1270, AutoClean/AutoClean.cpp:177.
 //==============================================================================
 static void InitialDoPickFromMagazineBuffer()                        {}         // (G1) golden Magazine.h:151      -- offline: magazine-buffer pick cursor not re-armed
+#if 0   // PT-W8 RETIRED (SearchTrayToPick_Buffer): real translated body now live
 static int  SearchTrayToPick_Buffer()                                { return -1; } // (G2) golden aoutarm9045.h:64 -- offline: golden's own "not found" sentinel
+#endif
 static void InitAOIFunction()                                        {}         // (G3) golden fAOI.h:418          -- offline: no AOI sub-SM to reset
 //AI(ht9045-v906) 20260810: PT-W7a integrate -- RENAMED, not retired, and the reason matters.
 // cinitial.cpp now holds golden's REAL SetOutArmSpeed (cinitial.cpp:10554), and cinitial.h's

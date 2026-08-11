@@ -1951,6 +1951,21 @@ add_library(ht9045_sm STATIC
     BarCode/BarCode_Shuttle2_ScanRemainder1.cpp
     BarCode/BarCode_Shuttle2_ScanRemainder2.cpp
     BarCode/BarCode_8CCD_Glue.cpp
+    # --- PT-W8 (2026-08-11): the last 3 golden TfBarCode methods of each of
+    #     BarCode_Sh1.cpp / BarCode_Sh2.cpp (InitialSFCAutoTune / DoSFCAutoTune /
+    #     Do2DIDCheck) -- the trio BarCode_Shuttle1_Scan.h:32 recorded as
+    #     "deferred, not touched at all by this unit".  Same target as their 7
+    #     already-landed siblings above, which is what they share a substrate
+    #     with (FLCarryKit/InArmSuck/MOT[]/Offset/TestIF_File + the ckernel
+    #     seams SendCCDCommand/WaitManualStepKey), so no new link dependency.
+    #     NOTE, stated rather than implied: nothing in this tree CALLS these six
+    #     yet -- golden's callers are cContact.cpp:12289+, uhome.cpp:4311 and
+    #     BarCode/BarCode.cpp:6839, all still untranslated.  They will compile,
+    #     enter libht9045_sm.a, and not be extracted by the link until one of
+    #     those lands.  That is expected, not a defect (archive-extraction
+    #     shape (a)); it is recorded here so a later reader does not "fix" it.
+    BarCode/BarCode_Shuttle1_SFCAutoTune.cpp
+    BarCode/BarCode_Shuttle2_SFCAutoTune.cpp
     # --- W7-L2 substrate (2026-08-03): free-function seams that golden's
     #     ScanSystemSensor (ckernel.cpp:359-691) calls and that have NO ported
     #     home of their own -- SetWorkParameter (called golden ckernel.cpp:371,

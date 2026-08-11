@@ -170,6 +170,61 @@ TArm *ArmData[3];
 TArm *ArmDataLot[3];
 TArm *ArmHistory[3];
 TArm *ArmData_AutoClean[3];                                                     //ChungHung 20131225 add
+
+//==============================================================================
+//  ArmData / ArmDataLot / ArmHistory / ArmData_AutoClean BOOTSTRAP
+//  AI(pt-wave) 20260811 PT-W8.
+//
+//  WHY THIS EXISTS.  PT-W8 retired the one-line ProcessCount stand-in
+//  (atester_shims.cpp:148) and landed golden's real body
+//  (atester_ProcessCount.cpp, golden :1749).  That body's first statements are
+//  `ArmData[Index]->SetContactCT(1);` / `ArmHistory[Index]->SetContactCT(1);`,
+//  and the four arrays above are declared exactly as golden declares them --
+//  bare pointer arrays, hence NULL.  Golden CONSTRUCTS them somewhere this port
+//  does not have yet: main.cpp:2141-2148, a `for(int i=0;i<3;i++)` loop.
+//  main.cpp is the TfMain form unit and is not translated, so nothing ever ran
+//  those four lines and W5_Atester32Site SEGFAULTed at cSocket.cpp:841 with
+//  `this=0x0` the moment the real body became reachable.
+//
+//  This is the SAME class as PT_CAMPAIGN_PLAN section 8's NULL-global table,
+//  and the same treatment its PickFromHPList/PlaceToCleanList entry already
+//  received (aHotPlateSubstrate.cpp, HPListBootstrap).  NOTE FOR THAT TABLE:
+//  these four are NOT in it.  The 20260807 sweep matched golden main.cpp's
+//  `X = new T;` sites against port files defining same-named bare pointers, and
+//  golden's form here is `ArmData[i] = new TArm(...)` -- an ARRAY-ELEMENT
+//  assignment, which that pattern does not match.  The table is therefore
+//  incomplete, not wrong; re-run nullsweep.py with array-element handling.
+//
+//  ON STATIC-INITIALISATION ORDER.  Standard C++ gives no cross-TU ordering
+//  guarantee, so this is only safe because all four are read from ordinary
+//  runtime functions and NEVER from another TU's static initialiser -- checked
+//  across every reader (SECSGEM/uHGemHT9045_SV.cpp, cSocket.cpp,
+//  atester_ProcessCount.cpp, Automation/auto9045.cpp, csystem.cpp,
+//  Automation/SCK_ART.cpp, SECSGEM/uHGemHT9045.cpp), not assumed.  TArm's ctor
+//  (cSocket.cpp:453) only allocates its own TStringLists/TMySockets and fills
+//  its own fields -- it reads no other global, so it cannot depend on another
+//  TU being initialised first.
+//
+//  It does what golden main.cpp:2141-2148 does and nothing more, and it retires
+//  the moment main.cpp lands.
+//==============================================================================
+namespace {
+struct ArmDataBootstrap
+{
+    ArmDataBootstrap()
+    {
+        for(int i=0; i<3; i++)                                                  //Steven 20110801 : 改成初始化後讀檔
+        {
+            if(ArmData[i]          == NULL) ArmData[i]          = new TArm("Arm"+AnsiString(i));            // golden main.cpp:2143
+            if(ArmHistory[i]       == NULL) ArmHistory[i]       = new TArm("ArmHis"+AnsiString(i));         // golden main.cpp:2144
+            if(ArmData_AutoClean[i]== NULL) ArmData_AutoClean[i]= new TArm("ArmAutoClean"+AnsiString(i));   // golden main.cpp:2145
+            if(ArmDataLot[i]       == NULL) ArmDataLot[i]       = new TArm("ArmByLot"+AnsiString(i));       // golden main.cpp:2146
+        }
+    }
+};
+ArmDataBootstrap g_armDataBootstrap;
+}
+//==============================================================================
 TLotSummary LotSummary;
 TEST_CATEGORY TastCategory;
 TEST_CATEGORY OldControlBinCategory;                                            //Sam 20200525 : Control Bin

@@ -140,6 +140,63 @@ public:
     void AddPlaceCleanPad(int iSuckRow, int iSuckCol, int iKitRow, int iKitCol);           // Sam 20230616
     void SaveRecordCleanPad(AnsiString ErrorLog = "na");                                   // Sam 20230616
 
+    // =========================================================================
+    // AI(W906-PT-MyProdRec-HeavyHalf) 20260811 -- HEAVY-HALF DECLARATIONS
+    // -------------------------------------------------------------------------
+    // SUPERSEDES this header's own head banner lines 23-39 ("STILL OUT OF
+    // SCOPE ... SaveRecord/SaveDataForASE/SaveDataForGreatek/SaveGroundESDData/
+    // SaveRecordCleanPad/SaveRecordForLeadYo/Save2DIDForJCET/SaveJHT_Record/
+    // GetProdLogFileName/GetProdLogFilePath ... AddIndexPickVacuum also stays
+    // undeclared ... AddErrorRecord is ALSO deliberately left declared-only").
+    // Those statements are no longer true: Public/MyProductionRecord.cpp's
+    // appended WAVE-2 section now carries real bodies for all of them except
+    // the three noted below.  The old banner text is left VERBATIM above rather
+    // than rewritten, so this block is the authority where the two disagree.
+    //
+    // Signatures below are golden Public/MyProductionRecord.h:47/49-56/79-80,
+    // byte-for-byte including the `="na"` defaults.  Class layout is NOT
+    // restructured: these are appended inside the same single `public:` region,
+    // after the existing AutoClean block and before the `asBuffer` member, so
+    // no existing declaration moved.
+    //
+    // BODY STATUS (see the .cpp's GATE REGISTER for the full entries):
+    //   AddIndexPickVacuum / SaveRecord / SaveDataForASE / SaveDataForGreatek /
+    //   SaveGroundESDData / SaveRecordForLeadYo / GetProdLogFileName /
+    //   GetProdLogFilePath / SaveJHT_Record ......... REAL body, active.
+    //   Save2DIDForJCET ............................. DEFINED but body gated
+    //       (G-4: fBarCode->iJCETWhitelistSN absent from TfBarCode_Shim).
+    //       Declaring it is safe -- it is defined, so no undefined reference.
+    //   AddErrorRecord (already declared above) ..... body gated G-5, live
+    //       no-op stand-in remains at aHotPlateSubstrate.cpp:773.
+    //   SaveRecordCleanPad (already declared above) . body gated G-6, live
+    //       no-op stand-in remains at aHotPlateSubstrate.cpp:775.
+    //
+    // TRAP-2 NOTE FOR THE MAIN LOOP (a premise this block KILLS, in a file this
+    // wave may not touch): asortarm.cpp:4177's gate says
+    //   "#if 0 // GATE(10) ... TMyProductionRecord::SaveRecord is explicitly out
+    //    of scope tree-wide and not even declared -- Public/MyProductionRecord.h:24-30"
+    // and asortarm.cpp:377-381 repeats it.  SaveRecord IS declared as of this
+    // block, so that stated premise is now FALSE.  The gate is still compiling
+    // (it is #if 0) so nothing breaks, but the justification must be rewritten
+    // or the gate opened -- and if opened, read the .cpp's G-5(b) first: it
+    // makes OutArm2Suck rows append to the real D:\HT9045_Log\Production_Log.
+    // Same for aTester_Front.cpp:11662 / aTester_Rear.cpp:12313 /
+    // atester_32Site.cpp:233, whose FIRST premise ("AddIndexPickVacuum is not
+    // even DECLARED") dies here -- but whose SECOND premise (TMySucker has no
+    // GetIOValue()) is untouched and still holds, so those gates must STAY.
+    // =========================================================================
+    void AddIndexPickVacuum(double dKpa);                                   // golden .h:47  Sam 20230210
+    void SaveRecord(AnsiString ErrorLog="na");                              // golden .h:49
+    void SaveJHT_Record(AnsiString ErrorLog="na");                          // golden .h:50  JerryYang 20240405
+    void SaveDataForASE(AnsiString sPcName);                                // golden .h:51
+    void SaveDataForGreatek(AnsiString asPath);                             // golden .h:52  Sam 20200707
+    void SaveGroundESDData(AnsiString sLot);                                // golden .h:53  Sam 20211223
+    void SaveRecordForLeadYo();                                             // golden .h:55  KenHsieh 20230727
+    void Save2DIDForJCET(AnsiString SubLOTID, AnsiString CustLOTID,
+                         AnsiString Modecode);                              // golden .h:56  RogerYang 20251210
+    AnsiString GetProdLogFileName(bool bTryCatch);                          // golden .h:79
+    AnsiString GetProdLogFilePath();                                        // golden .h:80
+
     // AI(W906-AutoCleanFoundation) 20260721: golden TMyProductionRecord has an
     // `asBuffer` TStringList* member (per-record scratch buffer that AddXxxRecord
     // methods write AnsiString fields into, and SaveRecord* later flush to CSV).

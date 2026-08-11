@@ -332,3 +332,119 @@ AnsiString GetErrorMsg(TObject * /*Sender*/, int ErrorCode)
 // MyDBIProcess from cMyDB.h.  Neither is available in the W1 pure-logic
 // translation wave.  Original: WinSocketErrorCode.cpp:316-327.
 // ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// WAVE SCOPE EXTENSION -- PT-Wk (APPEND-ONLY; the head banner above is left
+// byte-for-byte untouched, per this wave's append-only rule)
+// Translator: AI(PT-Wk-winsock) 20260811
+// Golden source: HT9011UC_Code_V3.33.906.0_20260618/Public/WinSocketErrorCode.cpp
+//
+// ROLE
+// ----
+// Leaf utility TU of the ht9045_public library (CMakeLists.txt:439).  It turns a
+// Winsock error code into an operator-readable AnsiString (GetErrorMsg, above)
+// and -- with this extension -- formats a socket EXCEPTION into an EventLog
+// line.  Nothing pumps it on a timer; every entry point is called from a VCL
+// socket OnError / catch(...) handler in a consumer TU.
+//
+// WAVE SCOPE
+// ----------
+//   * LogClientSocketExceptionError(TObject*, AnsiString)   golden :316
+//     ACTIVE formatting / GATED sink -- see GATE G-PTk4 and G-PTk5.
+//
+// GATE REGISTER
+// -------------
+// G-PTk4 -- the `MyDBIProcess("Exception", Str);` sink.
+//   (a) GOLDEN LINE: Public/WinSocketErrorCode.cpp:326.
+//   (b) WHY THE OFFLINE DEFAULT IS FAITHFUL -- and, more importantly, why this
+//       SHOULD stay gated even though the old premise has expired.  The header
+//       banner above (written in W1) says MyDBIProcess "requires cMyDB" and is
+//       unavailable.  THAT PREMISE IS DEAD: MyDBIProcess IS now real in this
+//       tree -- declared aHotPlateSubstrate.h:933, defined aHotPlateSubstrate.cpp
+//       :1099 (a counting canary: W906_MyDBIProcess_Count / _LastS1 / _LastS2).
+//       The gate stays anyway, for a DIFFERENT and structural reason:
+//         - aHotPlateSubstrate.cpp lives in ht9045_sm (CMakeLists.txt:1466).
+//         - THIS file lives in ht9045_public (CMakeLists.txt:439), whose only
+//           link edge is `target_link_libraries(ht9045_public PUBLIC vclcompat)`
+//           (CMakeLists.txt:464).  ht9045_public is a LEAF.
+//         - tests/CMakeLists.txt:119 is `target_link_libraries(
+//           test_WinSocketErrorCode PRIVATE ht9045_public)` -- ht9045_public
+//           ALONE.  That test calls GetErrorMsg, which extracts THIS object
+//           from libht9045_public.a.  An active MyDBIProcess call here would
+//           make that link fail with `undefined reference to
+//           MyDBIProcess(AnsiString, AnsiString)`, and the same is true for
+//           test_HTMD5 / test_cJSON / test_ExternFunction / test_cBootLog /
+//           test_keypro_tcomm if the object is ever pulled in for them.
+//       So the honest answer to "why SHOULD this be gated" is: not because the
+//       symbol is missing, but because wiring a leaf utility library to the
+//       state-machine library inverts the dependency graph and breaks five
+//       standalone unit-test targets.  The main loop owns that call (see the
+//       report's "for the main loop" section); this file must not make it.
+//   (c) HOW REAL-MACHINE BEHAVIOUR DIFFERS: on the machine this writes one row
+//       into the "Exception" EventLog table per socket exception.  Offline the
+//       row is not written.  It is pure best-effort DIAGNOSTICS -- golden's
+//       callers (Interface/TesterTCP.cpp, Automation/automation.cpp,
+//       EJ1N/uSocketServerClient.cpp, SECSGEM, BarCode) all call it from inside
+//       a handler that has ALREADY done the behaviourally load-bearing thing
+//       (Close()/Active=false/bConnected=false), so no control flow depends on
+//       it.  `Str` is still built in full so un-gating is a one-line edit.
+//
+// G-PTk5 -- the `Ptr->Name` field read.
+//   (a) GOLDEN LINE: Public/WinSocketErrorCode.cpp:322, the first `%s`.
+//   (b) WHY THE OFFLINE DEFAULT IS FAITHFUL: in BCB6 `Name` is inherited from
+//       VCL TComponent (the design-time component name, e.g. "ClientSocket1").
+//       This port`s vclcompat TComponent (vclcompat/Comm.h:84) models only
+//       Owner_ -- it has no Name -- and vclcompat TClientSocket
+//       (vclcompat/ClientSocket.h:325) adds Address/Port/Tag but not Name.
+//       There is no Name to read, and inventing one would fabricate diagnostic
+//       text.  Substituting "" keeps the field PRESENT and empty, which is
+//       exactly the shape golden itself emits on its own NULL path (:324,
+//       `"Name:, IP:, Port:, ..."`).  This does not touch the IP/Port/Msg
+//       fields, which are real.
+//   (c) HOW REAL-MACHINE BEHAVIOUR DIFFERS: the logged line reads `Name:,`
+//       instead of `Name:ClientSocket_TCPIP,`.  Diagnostics only -- and with
+//       G-PTk4 in force the line is not written at all today.
+//   UN-GATE CONDITION: add `AnsiString Name;` to vclcompat TComponent (VCL
+//       parity) and populate it where the sockets are constructed.
+//
+// TRAP 5 (two headers, same class name) for the TClientSocket used below: there
+// is exactly ONE `class TClientSocket` in this tree -- vclcompat/ClientSocket.h
+// :325, in namespace Scktcomp, hoisted to global scope by that header`s own
+// `using namespace Scktcomp` (:403).  No second declaration exists anywhere in
+// the port.  The cast below reads only Address (AnsiString) and Port (int),
+// both plain public data members of that one class, and calls NO member
+// function -- so this TU adds no link-time dependency on ClientSocket.cpp
+// either; it needs the layout, nothing more.
+//
+// NOTE ON INCLUDE PLACEMENT: `#include "vclcompat/ClientSocket.h"` sits HERE,
+// mid-file, rather than in the include block at the top.  That is deliberate --
+// this wave is strictly append-only on existing mirrors, and editing the header
+// block would be an insertion.  It is placed after the file`s existing
+// <winsock2.h> (:29) so the winsock2-before-windows.h ordering rule still holds.
+// The main loop may hoist it to the top when it next touches this file.
+// ---------------------------------------------------------------------------
+#include "vclcompat/ClientSocket.h"   // TClientSocket (->Address/->Port); golden reached this via ScktComp.hpp
+
+// ---------------------------------------------------------------------------
+// LogClientSocketExceptionError -- golden Public/WinSocketErrorCode.cpp:316-327.
+// ---------------------------------------------------------------------------
+void LogClientSocketExceptionError(TObject *Sender, AnsiString Msg)             //Steven 20231113 : 紀錄網路連線例外
+{
+    TClientSocket *Ptr;
+    Ptr=(TClientSocket *) Sender;
+    AnsiString Str;
+    if(Ptr!=NULL)
+        // GATE G-PTk5: golden passes `Ptr->Name` as the first %s; vclcompat`s
+        // TComponent/TClientSocket carry no Name member.  "" keeps the field
+        // present and empty (same shape as golden`s own NULL path below).
+        Str.sprintf("Name:%s, IP:%s, Port:%d, Exception Error:%s", "", Ptr->Address, Ptr->Port, Msg);
+    else
+        Str.sprintf("Name:, IP:, Port:, Exception Error:%s", Msg);
+
+#if 0 // GATE G-PTk4 -- golden :326.  MyDBIProcess lives in ht9045_sm; this TU is
+      // in the leaf library ht9045_public, and tests/CMakeLists.txt:119 links
+      // test_WinSocketErrorCode against ht9045_public ALONE.  See register above.
+    MyDBIProcess("Exception", Str);
+#endif
+    (void)Str;   // consumed by the gated sink above; kept built so un-gating is one line
+}
+// ---------------------------------------------------------------------------
