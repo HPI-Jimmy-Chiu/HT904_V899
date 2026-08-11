@@ -130,6 +130,18 @@ public:
     // main loop's serialized job, and those two files currently emit
     // free-function heads (HT9045Gem_AddSV/HT9045Gem_AddEC) precisely because
     // this header lacks the declarations.
+    // AI(pt-wave) 20260811 PT-W9: the two declarations the block above calls
+    //   "the main loop's serialized job", added at golden's own position
+    //   (golden uHGemHT9045.h:346-347, between the ctor and AddAlarmList).
+    //   Until now SECSGEM/uHGemHT9045_SV.cpp and _EC.cpp emitted their bodies
+    //   under free-function heads (HT9045Gem_AddSV / HT9045Gem_AddEC) *because*
+    //   this header lacked these two lines, so PT-W4's delivered SV/EC
+    //   dictionaries were unreachable as overrides -- a host S1F3/S1F11 saw
+    //   HTGem's empty base virtuals instead.  Golden spells both
+    //   `virtual void __fastcall`; this tree drops __fastcall everywhere, same
+    //   as the ctor above and the five overrides below.
+    virtual void AddSV()                    ;   // golden uHGemHT9045.h:346
+    virtual void AddEC()                    ;   // golden uHGemHT9045.h:347
     virtual void AddAlarmList()             ;   // golden uHGemHT9045.h:348
     virtual void AddCEID()                  ;   // golden uHGemHT9045.h:349
     virtual void AddReprot()                ;   // golden uHGemHT9045.h:350 (golden's own misspelling of "Report" -- KEPT)

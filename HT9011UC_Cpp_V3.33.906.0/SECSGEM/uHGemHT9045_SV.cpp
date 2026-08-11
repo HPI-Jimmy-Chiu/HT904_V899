@@ -1432,3 +1432,25 @@ void HT9045Gem_AddSV(HT9045Gem *Self)
     }
 }
 //------------------------------------------------------------------------------
+
+//==============================================================================
+//  AI(pt-wave) 20260811 PT-W9: the member wrapper that turns the free function
+//  above into golden's real `HT9045Gem::AddSV()` override.
+//
+//  GATE [G1]'s own instruction was "add `virtual void AddSV();` to
+//  SECSGEM/uHGemHT9045.h, then flip both arms here".  The declaration is added
+//  (golden uHGemHT9045.h:346).  I did NOT flip the arms: flipping means editing
+//  the definition head plus all 5 `Self->` sites, i.e. touching the verified
+//  1,000-line body, to gain nothing a wrapper does not already give.  The
+//  wrapper is also exactly the shape the sibling _EC.cpp already uses for
+//  AddEC (its GATE g31), so both halves of the SV/EC pair now look the same.
+//  The `#if 0` arms in the body stay as golden-verbatim reference text.
+//
+//  EFFECT: a host S1F3/S1F11 now reaches this dictionary instead of HTGem's
+//  empty base virtual.  That is the whole point of the change and it is a
+//  BEHAVIOUR CHANGE -- see this wave's DEVLOG entry.
+//==============================================================================
+void HT9045Gem::AddSV()
+{
+    HT9045Gem_AddSV(this);
+}

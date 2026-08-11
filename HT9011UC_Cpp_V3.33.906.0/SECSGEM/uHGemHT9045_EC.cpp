@@ -2362,9 +2362,15 @@ void HT9045Gem_AddEC(HT9045Gem *self)
 //  HT9045Gem (the sole call site, tests/test_uHGemClass.cpp:178, calls it on a
 //  base HTGem and reaches HTGem's own empty virtual either way).
 //==============================================================================
-#if 0   // GATE g31 -- see above
+// AI(pt-wave) 20260811 PT-W9: GATE g31 RETIRED.  SECSGEM/uHGemHT9045.h now
+//   declares `virtual void AddEC();` (added this wave at golden :347), so the
+//   member wrapper below is legal and AddEC is a real override again.
+//   The gate head also warned "demands ESD_GENERAL -- undefined tree-wide
+//   today".  THAT CLAIM HAS EXPIRED: ESD_GENERAL is defined at
+//   csystem_predicates.cpp:494 (`ESD_GENERAL_SET ESD_GENERAL;`, golden
+//   csystem.cpp:155).  Re-checked 2026-08-11 before retiring; no csystem.cpp
+//   change is needed after all.
 void HT9045Gem::AddEC()
 {
     HT9045Gem_AddEC(this);
 }
-#endif
