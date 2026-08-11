@@ -281,14 +281,22 @@ def main():
         # body; anything at or below STUB_MAX_LINES, or under STUB_RATIO of golden, is an
         # offline stand-in and the function is still UNTRANSLATED work.  See the docstring
         # on port_definition_index() for what conflating the two cost.
+        # A port body at least as big as golden's IS the body, however small both
+        # are -- golden has plenty of one-line functions and calling those "stubs"
+        # invites deleting correct code. Found 20260811: csystem.cpp:698-701 are
+        # four 1-line forwarders (`bool OutSHT1InLF() {return InSHT1InLF();};`)
+        # faithfully translated 1:1 at csystem_predicates.cpp:309/310/316/317, and
+        # a bare `port_span > 3` rule reported all four as "STUB to retire".
+        # Over-reporting is only the safe direction for "translate this"; it is NOT
+        # safe for "retire this".
         STUB_MAX_LINES, STUB_RATIO = 3, 0.10
         real, stub = [], []
         for n, l, s in miss:
             if n not in idx:
                 continue
             best = max(idx[n], key=lambda w: w[2])          # widest live body wins
-            (real if (best[2] > STUB_MAX_LINES and best[2] >= s * STUB_RATIO)
-             else stub).append((n, l, s, best, idx[n]))
+            is_real = (best[2] >= s) or (best[2] > STUB_MAX_LINES and best[2] >= s * STUB_RATIO)
+            (real if is_real else stub).append((n, l, s, best, idx[n]))
         print("")
         print("--- FUNCTIONS to translate: %d (%d golden lines) ---"
               % (len(fresh) + len(stub), sum(s for _n, _l, s in fresh)
