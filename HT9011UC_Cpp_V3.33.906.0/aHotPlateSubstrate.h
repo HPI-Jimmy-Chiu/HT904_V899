@@ -1079,6 +1079,14 @@ extern void ResetInToShtFlag();                                              // 
 // golden's own -- dropping them would break every existing zero/one-arg call.
 extern void ChangeHotPlateData(bool bSwapSht=false);                         // golden ainarm2.h:104
 extern bool EnableTraymapCheckFunction(int iCheck=0);                        // golden ainarm2.h:216
+// AI(pt-wave) 20260811 PT-W7e-part2: two more declarations the wave owed, and the reason is a
+//   general one worth keeping: retiring a stub also removes the DECLARATION that other TUs in the
+//   same build were relying on. AutoClean.cpp had 4 live calls and csystem.cpp:6943 one more, all
+//   satisfied by the stub sitting in AutoClean.cpp itself; retiring it broke them with
+//   "not declared in this scope" rather than a link error. Checked all 50 retired stubs for this
+//   role -- 48 already had a header declaration, these 2 did not.
+extern void DoInArm_SuckerMap();                                             // golden ainarm2.h:148
+extern int  LoadTrayCanUse8Suck();                                           // golden ainarm2.h:200
 extern void SetInArm_Unuse_SuckToNullICForHP();                              // golden ainarm2.h:153
 extern void AdjustShuttleWhichKitOrder();                                    // golden ainarm2.h:130
 extern bool CheckInArmFloating(bool bReset=false);                           // golden OmronLaser/LaserSensorInArm.h:30

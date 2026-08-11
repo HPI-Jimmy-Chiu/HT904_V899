@@ -1050,23 +1050,43 @@ bool bInArmTryPickFromHotPlateFinish = false;   //ChungHung 20120206
 //  The remaining stubs below stay -- their real bodies live in not-yet-translated
 //  modules (ainarm2.cpp / cmydef.cpp / motor speed ctrl, W7).
 //==============================================================================
+#if 0   // PT-W7e-part2 RETIRED (ResetShuttleWhichKit): real translated body now in ainarm2.cpp
 void ResetShuttleWhichKit() {}                             //golden ainarm2.h:133
+#endif
+#if 0   // PT-W7e-part2 RETIRED (CloseSiteState): real translated body now in ainarm2.cpp
 int  CloseSiteState(bool /*bPlace*/) { return 0; }         // no site closed offline
+#endif
 // RowCanDualSite (golden ainarm2.cpp:1554, ChungHung 20150528).  W6.2c batch-4: the
 // 2x2_8_Hot place-to-HP SM derefs it (GetPlaceHotPlate_4/_8/_8All).  The golden body
 // reads TestIF.iTestMode/iUseSuckMode + ArmCanSuck4IC(0) + HotPlateForm.XDivision and
 // returns false on every branch EXCEPT the ArmCanSuck4IC(0)==false early-out (which
 // the Sim HAL does not model); 3 of 4 returns are false.  Offline: false (the
 // dominant/faithful outcome -- no dual-site over the Sim Suck grid).
+#if 0   // PT-W7e-part2 RETIRED (RowCanDualSite): real translated body now in ainarm2.cpp
 bool RowCanDualSite() { return false; }                    //golden ainarm2.cpp:1554
+#endif
+#if 0   // PT-W7e-part2 RETIRED (InitInArmTask): real translated body now in ainarm2.cpp
 void InitInArmTask()  {}
+#endif
 void SetRunStartMode(int) {}
+#if 0   // PT-W7e-part2 RETIRED (TransferHotPlateRatio): real translated body now in ainarm2.cpp
 void TransferHotPlateRatio(bool, int *, int *) {}          //Steven 20110324 : ratio xform no-op
+#endif
+#if 0   // PT-W7e-part2 RETIRED (MoveInArmZToPlateSafe): real translated body now in ainarm2.cpp
 bool MoveInArmZToPlateSafe(int) { return true; }           // offline: Z reaches safe immediately
+#endif
+#if 0   // PT-W7e-part2 RETIRED (AdjustShuttlePlaceOrder): real translated body now in ainarm2.cpp
 void AdjustShuttlePlaceOrder(int) {}
+#endif
+#if 0   // PT-W7e-part2 RETIRED (SetInArmHome): real translated body now in ainarm2.cpp
 void SetInArmHome(bool /*bPrecisorNeedHome*/) {}   // AI(pt-wave) 20260811: golden arity (ainarm2.h:136); still a no-op stub, golden real body ainarm2.cpp:1266 not yet translated
+#endif
+#if 0   // PT-W7e-part2 RETIRED (InArmSubSpeed): real translated body now in ainarm2.cpp
 void InArmSubSpeed() {}
+#endif
+#if 0   // PT-W7e-part2 RETIRED (InArmAddSpeed): real translated body now in ainarm2.cpp
 void InArmAddSpeed() {}
+#endif
 void StopAllMotor() {}
 // AI(W906-GA1-B2-integrate) 20260804: still a behavioural no-op (golden writes a
 // DB row; offline sink drops it) but now carries the tree's established W906_*
@@ -1471,7 +1491,9 @@ void ResetInToShtFlag()
 }
 
 // cursor-init helpers (golden ainarm2.cpp) -- FAITHFUL.
+#if 0   // PT-W7e-part2 RETIRED (InitInArmPickFromHotPlateTask340): real translated body now in ainarm2.cpp
 void InitInArmPickFromHotPlateTask340() { iInArmPickFromHotPlateTask=340; }     // golden :628
+#endif
 void InitInArmPickFromHotPlateTask50()                                          // golden :633
 {
     if(bPickFormHotplateRetry==true)                                            //Ifor 20160616
@@ -1485,10 +1507,18 @@ void InitInArmPlaceToShuttleTask()                                              
     if(TestIF_File.UseRotateForHT7000HPKit==false)                              //Sam 20250428
         iInRotateFinish=2;                                                      //Ifor 20211220
 }
+#if 0   // PT-W7e-part2 RETIRED (InitInArmPlaceToHotPlateTask): real translated body now in ainarm2.cpp
 void InitInArmPlaceToHotPlateTask()    { iInArmPlaceToHotPlateTask=1;   }       // golden :1539
+#endif
+#if 0   // PT-W7e-part2 RETIRED (InitInArmPlaceToHotPlateTask400): real translated body now in ainarm2.cpp
 void InitInArmPlaceToHotPlateTask400() { iInArmPlaceToHotPlateTask=400; }       // golden :1544
+#endif
+#if 0   // PT-W7e-part2 RETIRED (InitInArmPlaceToHotPlateTask100): real translated body now in ainarm2.cpp
 void InitInArmPlaceToHotPlateTask100() { iInArmPlaceToHotPlateTask=100; }       // golden :1549
+#endif
+#if 0   // PT-W7e-part2 RETIRED (InitInArmTryPickFromHotPlateTask): real translated body now in ainarm2.cpp
 void InitInArmTryPickFromHotPlateTask(){ iInArmTryPickFromHotPlateTask=1; }     // golden :613
+#endif
 
 // BackupPlacePos / RestorePlacePos (golden ainarm2.cpp:2185/:2192) -- FAITHFUL.
 void BackupPlacePos()
@@ -1505,18 +1535,26 @@ void RestorePlacePos()
 }
 
 // speed-display nudgers (golden ainarm2.cpp:2934/:2939) -- FAITHFUL.
+#if 0   // PT-W7e-part2 RETIRED (InArmAddSpeedDisplay): real translated body now in ainarm2.cpp
 void InArmAddSpeedDisplay() { iInArmSpeed1++; }                                 //KaiChen 20171225
+#endif
+#if 0   // PT-W7e-part2 RETIRED (InArmSubSpeedDisplay): real translated body now in ainarm2.cpp
 void InArmSubSpeedDisplay() { iInArmSpeed1--; }                                 //KaiChen 20171225
+#endif
 
 // InitArmPickFromLoadStageTask (golden ainarm2.cpp:1016): the golden body resets
 // the central pick cursor + several Loader-search statics (HAL-bound).  Offline:
 // reset the cursor so the engine's DoInArmPickFromLoadStage_9045 SM restarts.
+#if 0   // PT-W7e-part2 RETIRED (InitArmPickFromLoadStageTask): real translated body now in ainarm2.cpp
 void InitArmPickFromLoadStageTask() { iPickFromLoadStageTask=1; }
+#endif
 
 // SetInArm_Unuse_SuckToNullICForHP (golden ainarm2.cpp:320): turns unused-site
 // nozzles into NULL_IC before HP place.  Offline conservative no-op (the Sim grid
 // is driven by the engine pick SM; nothing to reclassify offline).
+#if 0   // PT-W7e-part2 RETIRED (SetInArm_Unuse_SuckToNullICForHP): real translated body now in ainarm2.cpp
 void SetInArm_Unuse_SuckToNullICForHP() {}
+#endif
 
 // W6.2c: cross-variant in-arm shims with NO live golden home.  AI(W6.2c-INARM) 20260626.
 // Zteach (golden InOutArmZteach.h): AutoTeach Z form.  Offline stand-in; fShow==false
@@ -1526,29 +1564,41 @@ TfInOutArmZteach_Facade *Zteach = &g_ZteachFacade;                              
 // DoCheckAutoSiteMappingPosition (golden ainarm2.cpp:2812): drives the JCET/ASE
 // Auto-Site-Mapping step on a HW-bound site-map check.  Offline-safe no-op (no
 // site-map HW; bRunAutoSiteMapping path is inert offline).
+#if 0   // PT-W7e-part2 RETIRED (DoCheckAutoSiteMappingPosition): real translated body now in ainarm2.cpp
 void DoCheckAutoSiteMappingPosition() {}
+#endif
 // CheckClearAllHotICThenPickLoadIC (golden ainarm2.cpp:533): true iff the HP grid
 // still holds >= iLimit real ICs (so "clear all hot IC before picking load IC").
 // Offline conservative: report not-satisfied so the SM takes the normal pick path.
+#if 0   // PT-W7e-part2 RETIRED (CheckClearAllHotICThenPickLoadIC): real translated body now in ainarm2.cpp
 bool CheckClearAllHotICThenPickLoadIC() { return false; }
+#endif
 
 // AdjustShuttleWhichKitOrder (golden ainarm2.cpp:849): re-orders which Shuttle/Kit
 // the in-arm targets next.  Offline no-op (single-site: order is invariant).
+#if 0   // PT-W7e-part2 RETIRED (AdjustShuttleWhichKitOrder): real translated body now in ainarm2.cpp
 void AdjustShuttleWhichKitOrder() {}
+#endif
 
 // AdjustShtOrderWhenPlaceToSht (golden ainarm2.cpp:772): post-place shuttle-order
 // adjust.  Offline no-op (single-site).
+#if 0   // PT-W7e-part2 RETIRED (AdjustShtOrderWhenPlaceToSht): real translated body now in ainarm2.cpp
 void AdjustShtOrderWhenPlaceToSht(int /*iMode*/) {}
+#endif
 
 // SetInArmNeedDestory (golden ainarm2.cpp:3897): marks a nozzle as needing a
 // destroy (blow-off) before/after place.  Offline no-op (no real vacuum line;
 // TMySucker::Destroy() already reports "not finished" so the SM is consistent).
+#if 0   // PT-W7e-part2 RETIRED (SetInArmNeedDestory): real translated body now in ainarm2.cpp
 void SetInArmNeedDestory(bool /*bPlace*/, int /*iShtRow*/, int /*iShtCol*/, int /*iRow*/, int /*iCol*/) {}
+#endif
 
 // TransferInShuttleRatio (golden ainarm2.cpp:1972): in-shuttle software gear-ratio
 // X/Y transform.  Offline: identity (gear ratio applies a 1:1 mapping when the
 // ratio params are unset).  Pointers are caller-owned and non-null at the call site.
+#if 0   // PT-W7e-part2 RETIRED (TransferInShuttleRatio): real translated body now in ainarm2.cpp
 void TransferInShuttleRatio(int /*iSht*/, int * /*iXPos*/, int * /*iYPos*/, int /*iRow*/, int /*iCol*/) {}
+#endif
 
 // CheckInArmFloating (golden OmronLaser/LaserSensorInArm.h:30): laser float check.
 // Offline: no laser -> report "finished/ok" (true) so the place SM advances.
@@ -1564,41 +1614,55 @@ void TransferInShuttleRatio(int /*iSht*/, int * /*iXPos*/, int * /*iYPos*/, int 
 // SetShuttlefCanMoveL (golden ainarm2.cpp:3910): set per-shuttle can-move-left
 // interlock flag.  Offline: write the engine-visible MOT[] flag faithfully so the
 // in-arm/shuttle handshake is consistent.
+#if 0   // PT-W7e-part2 RETIRED (SetShuttlefCanMoveL): real translated body now in ainarm2.cpp
 void SetShuttlefCanMoveL(int iShuttle, bool bCanMoveL, AnsiString /*sFun*/, AnsiString /*sTask*/)
 {
     int mot = (iShuttle==0) ? MInShuttle1 : MInShuttle2;
     MOT[mot].fCanMoveL = bCanMoveL;
 }
+#endif
 
 // InitInOCRWaitTask / OCRMoveInArm2XYToWait (golden ainarm2.cpp:3950/:3955): OCR
 // tray-arm wait handshake.  Offline: no OCR -> the move "completes" immediately.
+#if 0   // PT-W7e-part2 RETIRED (InitInOCRWaitTask): real translated body now in ainarm2.cpp
 void InitInOCRWaitTask() {}
+#endif
+#if 0   // PT-W7e-part2 RETIRED (OCRMoveInArm2XYToWait): real translated body now in ainarm2.cpp
 bool OCRMoveInArm2XYToWait() { return true; }
+#endif
 
 // IsHotPlateCheckFinsih (golden ainarm2.cpp:2199): scans the HP grids vs a
 // site-mode count to decide whether the HP try-pick sweep is done.  The golden
 // body reads HotPlateForm / TestIF.iTestMode / MOT[MMPlate*] (HAL+form bound).
 // Offline conservative: report finished (true) so the try-pick sweep terminates
 // rather than looping over a HotPlate that is never populated offline.
+#if 0   // PT-W7e-part2 RETIRED (IsHotPlateCheckFinsih): real translated body now in ainarm2.cpp
 bool IsHotPlateCheckFinsih() { return true; }
+#endif
 
 // CheckInArmSuckInitial (golden ainarm2.cpp:1207): integrates all suck-init errors
 // into one alarm; reads the vacuum sensors.  Offline: vacuum is idealized -> no
 // init error -> report ready (true) so DoInArm_9045_1x1_1 case 10 proceeds.
+#if 0   // PT-W7e-part2 RETIRED (CheckInArmSuckInitial): real translated body now in ainarm2.cpp
 bool CheckInArmSuckInitial() { return true; }
+#endif
 
 // SetInArmUseSuckToHasTrySuckIC (golden ainarm2.cpp:261): mark in-use nozzles
 // HAS_TRY_SUCK_IC for the HotPlate try-pick.  Offline conservative: the single
 // 1-picker path (the only one this single-site variant drives) sets nozzle (0,0).
+#if 0   // PT-W7e-part2 RETIRED (SetInArmUseSuckToHasTrySuckIC): real translated body now in ainarm2.cpp
 void SetInArmUseSuckToHasTrySuckIC(int /*iSht*/, int /*iKit*/)
 {
     InArmSuck.SetItemData(0, 0, HAS_TRY_SUCK_IC);                               //JerryYang 20251013 (offline subset of golden)
 }
+#endif
 
 // DisableAutoSiteMapWhenCleanOut (golden ainarm2.cpp:2786): clears the auto-site-
 // map run flag when Loader has no IC during clean-out.  Offline no-op (auto site
 // map is not exercised offline).
+#if 0   // PT-W7e-part2 RETIRED (DisableAutoSiteMapWhenCleanOut): real translated body now in ainarm2.cpp
 void DisableAutoSiteMapWhenCleanOut() {}
+#endif
 
 // SetMotorSpeed (golden cinitial.cpp:5022): pushes the configured motor speed
 // table to the controllers.  Offline no-op (no real controllers).

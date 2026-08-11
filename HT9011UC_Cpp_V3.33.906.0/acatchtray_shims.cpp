@@ -107,11 +107,21 @@ TLoadCCDShim *LoadCCD = new TLoadCCDShim();
 //      global now that it exists) -- see acatchtray_shims.h comment.
 
 // ---- missing free functions (offline-safe) ---------------------------------
+#if 0   // PT-W7e-part2 RETIRED (MoveInArm2XYToWait): real translated body now in ainarm2.cpp
 bool MoveInArm2XYToWait()                       { return true;  }
+#endif
+#if 0   // PT-W7e-part2 RETIRED (MoveInArm2XYToShuttle2Wait): real translated body now in ainarm2.cpp
 bool MoveInArm2XYToShuttle2Wait()               { return true;  }
+#endif
+#if 0   // PT-W7e-part2 RETIRED (CheckInArmFinishAllPickerAction): real translated body now in ainarm2.cpp
 bool CheckInArmFinishAllPickerAction()          { return true;  }
+#endif
+#if 0   // PT-W7e-part2 RETIRED (IsMoveInArm2XYToWait): real translated body now in ainarm2.cpp
 bool IsMoveInArm2XYToWait()                     { return true;  }
+#endif
+#if 0   // PT-W7e-part2 RETIRED (IsMoveInArm2XYToShuttle2Wait): real translated body now in ainarm2.cpp
 bool IsMoveInArm2XYToShuttle2Wait()             { return false; }  // golden ainarm2.h:142 (Sam 20250522) -- offline: NOT at wait
+#endif
 bool CheckOutArmAutoAlignmentTrayModeBeUse(int) { return false; }
 void InitProcessSingleMotorTask(int)            {}
 bool ProcessSingleMotorHome(int)                { return true;  }

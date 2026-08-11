@@ -35,13 +35,23 @@
 #define HT9045_AINARM_W7_SHIMS_DEFINED
 
 // ---- shuttle-motion engine helpers (offline: converge immediately) ----------
+#if 0   // PT-W7e-part2 RETIRED (DoShakeShuttle): real translated body now in ainarm2.cpp
 bool DoShakeShuttle(int /*iShuttle*/, bool /*bNeedInitial*/)        { return true; } // golden ainarm2.h:189 -- Sim HAL: shake done
+#endif
+#if 0   // PT-W7e-part2 RETIRED (DoKnockShuttle): real translated body now in ainarm2.cpp
 bool DoKnockShuttle(int /*iShuttle*/, bool /*bNeedInitial*/)        { return true; } // golden ainarm2.h:190 -- Sim HAL: knock done
+#endif
+#if 0   // PT-W7e-part2 RETIRED (DoKnockShuttleFirst): real translated body now in ainarm2.cpp
 bool DoKnockShuttleFirst(int /*iShuttle*/, bool /*bNeedInitial*/)   { return true; } // golden ainarm2.h:191 -- Sim HAL: first-knock done
+#endif
+#if 0   // PT-W7e-part2 RETIRED (DoVibrateShuttle): real translated body now in ainarm2.cpp
 bool DoVibrateShuttle(int /*iShuttle*/, bool /*bNeedInitial*/)      { return true; } // golden ainarm2.h:214 -- Sim HAL: vibrate done
+#endif
 
 // ---- RecordShtSuperflous (golden ainarm2.h:218): log no-op offline -----------
+#if 0   // PT-W7e-part2 RETIRED (RecordShtSuperflous): real translated body now in ainarm2.cpp
 void RecordShtSuperflous(int /*iShuttle*/)                          {}             // Sim HAL: no superfluous-IC log sink
+#endif
 
 // ---- plain globals (golden ainarm2.h:48 / :85) ------------------------------
 bool IndexZCanMove[2] = { false, false };   // golden ainarm2.h:48 -- per-index Z-can-move interlock

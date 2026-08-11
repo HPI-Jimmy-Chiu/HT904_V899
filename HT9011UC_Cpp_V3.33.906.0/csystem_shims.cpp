@@ -45,6 +45,7 @@ bool bShuttleShake = false;
 //  ainarm2.cpp (NOT translated); offline it is skipped -- DoInArm_9045() owns
 //  the real per-tick in-arm SM (translated in ainarm9045.cpp).
 // ===========================================================================
+#if 0   // PT-W7e-part2 RETIRED (DoInArm): real translated body now in ainarm2.cpp
 void DoInArm()
 {
     if(bInitialStartIndexCheckDone==false)                                      // golden ainarm2.cpp:1622
@@ -75,6 +76,7 @@ void DoInArm()
     // untranslated ainarm2.cpp; offline we proceed straight to the engine.
     DoInArm_9045();                                                            // translated engine entry (ainarm9045.cpp)
 }
+#endif
 
 // ===========================================================================
 //  DoOutArm -- AI(W906-PT-W4-integrate) 20260809: THIS STAND-IN IS RETIRED.

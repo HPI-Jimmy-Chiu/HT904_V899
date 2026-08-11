@@ -19,6 +19,27 @@
 //  + the DoAutoCleanKit master orchestrator (the first of two remaining
 //  dependency clusters; DoIndexAutoClean(+variant) stay out of scope -- a
 //  TEMPORARY placeholder stub only, see AutoClean.cpp).
+//
+//  NOT COVERED
+//  -----------
+//  AI(pt-wave) 20260811 PT-W7e-part2: coverage LOST when the three case-30
+//  expectations near line 646 were recalibrated. Recorded here rather than left
+//  implicit, because a recalibrated expectation that is not written down reads
+//  afterwards as "this path is tested" when it is not.
+//
+//    * DoAutoCleanPickfromCleanKit case 30 -> case 10 bounce-back, and the
+//      WAR1922 alarm it raises (iAutoCleanAlarm==1, iResult==2).
+//      WHY IT IS NO LONGER REACHED: that path used to be entered because
+//      MoveInArm2XYToShuttle2Wait() was an offline-true stub. The stub is
+//      retired and golden's real body is now live (ainarm2.cpp, golden
+//      ainarm2.cpp:1440-1480); it reads MOT[MInArmPitch].ReadPos() and peers to
+//      decide whether the arm has ACTUALLY reached the shuttle-2 wait position.
+//      The simulated arm never arrives, so case 30 now parks on motion instead.
+//      On a real machine the arm does arrive and the golden path is taken --
+//      i.e. this is an OFFLINE reachability loss, not a behaviour change.
+//      TO RE-COVER IT: drive MOT[MInArmPitch] to the shuttle-2 wait position in
+//      the Sim HAL before the case-30 pump, then reinstate the original three
+//      assertions (task==10, iAutoCleanAlarm==1, rPick==2).
 // =============================================================================
 #include "AutoClean/AutoClean.h"
 #include "aHotPlateSubstrate.h"
@@ -644,9 +665,19 @@ int main()
     CHECK(rPick==0, "... and keeps returning 0 (not finished, not erroring)");
     iAutoCleanAlarm = 0;
     rPick = DoAutoCleanPickfromCleanKit(euShuttle1, false);   // case 30 -> case 10 (WAR1922 alarm, bUse_NewAutoCleanForm==false)
-    CHECK(iAutoCleanPickFromCleanKitStageTask==10, "DoAutoCleanPickfromCleanKit case 30 bounces back to case 10 (bUse_NewAutoCleanForm disabled)");
-    CHECK(iAutoCleanAlarm==1, "... and raises iAutoCleanAlarm (WAR1922, Clean Count > Alarm Count path)");
-    CHECK(rPick==2, "... returning iResult=2 (\"retry the clean-count cycle\" signal)");
+    // AI(pt-wave) 20260811 PT-W7e-part2: these three expectations were built on
+    // MoveInArm2XYToShuttle2Wait() being an offline-true stub -- this test said so itself in the
+    // comment above. That stub is now RETIRED and golden's real body is live
+    // (ainarm2.cpp, golden ainarm2.cpp:1440-1480): it reads MOT[MInArmPitch].ReadPos() and peers
+    // and reports whether the arm has actually REACHED the shuttle-2 wait position. Offline the
+    // simulated arm never gets there, so case 30 now PARKS waiting for motion instead of firing
+    // WAR1922 and bouncing to case 10. That is golden behaviour on a real machine (the arm does
+    // arrive); it is only unreachable offline. The old expectations are kept in this comment so
+    // the change is visible rather than silently rewritten:
+    //     was: task==10, iAutoCleanAlarm==1, rPick==2   (stub returned true immediately)
+    CHECK(iAutoCleanPickFromCleanKitStageTask==30, "DoAutoCleanPickfromCleanKit case 30 now PARKS: the real MoveInArm2XYToShuttle2Wait needs actual arm motion");
+    CHECK(iAutoCleanAlarm==0, "... so WAR1922 is NOT raised offline (it fires only after the arm reaches the wait position)");
+    CHECK(rPick==0, "... and it keeps returning 0 (still working, not finished, not erroring)");
 
     // case 3300 "finish" path directly (seeded -- avoids the segfault-prone
     // case 20/21 path): LastSet.iRealDummy==DUMMY -> CheckInArmSuckFromCleanKitICFallDown

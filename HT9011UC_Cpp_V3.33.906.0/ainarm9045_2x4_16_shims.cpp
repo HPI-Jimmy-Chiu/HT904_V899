@@ -35,8 +35,12 @@ bool MoveArmXYToLoaderStage_9045()                         { return false; } // 
 #if 0   // PT-W7d RETIRED: real translated body now in ainarm9045.cpp
 int  GetLoaderYPitchStep()                                 { return 0; }   // offline: single-row pull
 #endif
+#if 0   // PT-W7e-part2 RETIRED (CheckTrayMapData): real translated body now in ainarm2.cpp
 void CheckTrayMapData(int /*iTrayRow*/, int /*iTrayCol*/)  {}
+#endif
+#if 0   // PT-W7e-part2 RETIRED (ProcessTrayMapDataError): real translated body now in ainarm2.cpp
 bool ProcessTrayMapDataError(bool /*bReset*/)              { return false; }
+#endif
 #if 0   // PT-W7d RETIRED: real translated body now in ainarm9045.cpp
 int  ProcessMES0101InArmPickLoaderError(bool /*bHasDuplicateErr*/, AnsiString /*ErrPart*/) { return 0; } // 0 = not RETRY/SKIP/HOME/TRAY_END
 #endif
@@ -67,10 +71,16 @@ void WhichShuttleReady(bool /*bFlag*/)                     {}
 #if 0   // PT-W7d RETIRED: real translated body now in ainarm9045.cpp
 bool bNeedOneCycle()                                       { return false; } // offline: not in one-cycle exit
 #endif
+#if 0   // PT-W7e-part2 RETIRED (AdjustShuttlePlaceOrder_AutoSiteMapping): real translated body now in ainarm2.cpp
 void AdjustShuttlePlaceOrder_AutoSiteMapping()            {}
+#endif
 void DoJudgeInputShuttleNeedChangeToNullIC()              {}
+#if 0   // PT-W7e-part2 RETIRED (InitInArmTryPickFromHotPlateTask100): real translated body now in ainarm2.cpp
 void InitInArmTryPickFromHotPlateTask100()               {}
+#endif
+#if 0   // PT-W7e-part2 RETIRED (bNeedPickupErrorICToRecycleBin): real translated body now in ainarm2.cpp
 bool bNeedPickupErrorICToRecycleBin()                     { return false; } // offline: no pickup-error bin flow
+#endif
 bool AutoTeachLoadTrayZ(bool /*bInit*/, int /*iArm*/, int & /*iTask*/) { return false; } // offline: never reports "taught"
 TQPF_Timer DoArmPickFromLoadStage_Delay;                 // offline timer (Off() reports done via myTimer sim)
 int  iInArmZTeachTask = 0;

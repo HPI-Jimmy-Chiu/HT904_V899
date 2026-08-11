@@ -124,7 +124,9 @@ static const int CONTACT_DEVICE_MAP_CHECK = 9;
 // `static void W7C2_DoInArm_SuckerMap(){}` macro'd stub, invisible outside
 // that TU. File-local no-op mirrors the same posture (offline: the sucker
 // map does not need rebuilding without a live site-mapping change).
+#if 0   // PT-W7e-part2 RETIRED (DoInArm_SuckerMap): real translated body now in ainarm2.cpp
 static void DoInArm_SuckerMap() {}
+#endif
 
 // golden AutoClean.cpp:46-47 -- file-scope globals (declared in AutoClean.h).
 int iInXPos;

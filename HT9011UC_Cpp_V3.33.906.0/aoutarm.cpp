@@ -556,7 +556,9 @@ static void InitAOIFunction()                                        {}         
 // an identical shadow that did not error only because cinitial.h does not reach it.
 static void W7A_OutArmSpeed_NoOp_PendingSafetyReview(bool /*bShow*/) {}          // (G4) golden cinitial.h:47       -- offline: computed speed not pushed to servo  ** SAFETY-ADJACENT **
 static void CheckOutArmXYScaleByAutoTeach(int & /*iXPos*/, int & /*iYPos*/, int /*iArea*/) {} // (G5) golden AutoAlignment/AutoAlignment.h:254 -- offline: leave caller's taught position uncorrected
+#if 0   // PT-W7e-part2 RETIRED (LoadTrayCanUse8Suck): real translated body now in ainarm2.cpp
 static int  LoadTrayCanUse8Suck()                                    { return 0; }  // (G6) golden ainarm2.h:200    -- offline: 0 (!=1) keeps the ORDINARY, non-8-nozzle path
+#endif
 
 //==============================================================================
 //==  GATE shape (b'), for the three symbols that ARE declared by an included
