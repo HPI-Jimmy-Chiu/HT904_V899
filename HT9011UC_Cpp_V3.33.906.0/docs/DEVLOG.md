@@ -6667,3 +6667,238 @@ census 目前印的是「非表單缺 27,549／91.8%（crediting parked）」。
   :18442 :18302 :18485 :18521 :18571 :21242 :21925 :22104 :16631）。
 - **非安全待辦**：#15 macro seam、#16 過期 gate（扣掉煞車群）、#17、#19 第 3 項（census 兩個
   檔名比對缺陷）、#20；PT-W7d 的 k2..k8 audit 仍未補跑。
+
+---
+
+## PT-W8（20260811）：非表單非 gated 的尾巴翻完 —— **到達表單邊界**
+
+### 這一波交付
+
+9 個 agent 一組一檔群，14 個檔。**+7,184 行 / −0** 附加到 13 個既有鏡射（append-only 完全遵守），
+外加 4 個新檔 `BarCode/BarCode_Shuttle{1,2}_SFCAutoTune.{h,cpp}` 共 2,635 行。
+新增 91 個非 gated 符號，涵蓋 **85 個 golden 函式 / ~5,724 golden code 行**。
+
+標的是用修好的 `wave_targets.py`（`86eb8f8`）選的 —— 修好之前它會把一行 stub 當成「已翻譯」而叫人跳過。
+
+### 量到什麼（tier-4b，全新 build dir，Debug 與 Release 各一次）
+
+|  | Debug | Release |
+|---|---|---|
+| configure / build | rc=0 / rc=0 | rc=0 / rc=0 |
+| ctest | **128 / 134 passed**（620.89 s） | **128 / 134 passed**（424.57 s） |
+
+**失敗集合兩邊逐項相同，且等於計畫書 §7 那 6 個常駐項**（config_db、IniFiles、ini_helpers、
+config_loaders、dfm2rc_idempotent、GA1_ReadGeneralIni），**零超出**。
+這是本波第三次 gate —— 前兩次的失敗與根因記在下面兩節，它們比通過本身更有價值。
+
+### 第一次 gate 失敗，根因值得記
+
+第一次跑：Debug 與 Release **都** `build rc=2`，ctest 兩邊都沒跑。**只有一個 target 失敗**：
+`tests/test_cUnitConvert.exe`；所有 library archive 都連起來了。
+
+根因：`cUnitConvert.cpp` 原本是「W2 partial」，只有兩個自給自足的純函式，所以
+`tests/CMakeLists.txt:70` 只連 `ht9045_core`。PT-W8 讓它的 7 個真本體落地，而那些本體會讀
+整個機台設定全域宇宙 —— 這個 TU 的連結面從「零」變成 **32 個符號**。
+
+我用 `nm` 把每個未解符號對到 archive（政策要求量、不要猜）：
+
+| 數量 | archive | 符號 |
+|---|---|---|
+| 28 | `ht9045_globals` | TestIF/TestIF_File、Offset*、InArmOffSet*、OutArmOffSet*、SortArmOffSet*、ArmSpeed*、SHSpeed*、MGSpeed*、DeviceForm*、HotPlateForm*、UserDefForm*、IniConfig、LastSet、Temperature、Tempture_Ambient、USE_LdUldCassetteMode、USE_OUT_SORT_ARM |
+| 1 | `ht9045_forms` | fShowMessage |
+| 3 | `ht9045_sm` | InArmSuck、OutArm2Suck（aHotPlateSubstrate.cpp）、ATC_InterfaceForm（acarry_shims.cpp:73）|
+
+那 3 個一開始顯示「所有 archive 都找不到」，看起來像真的缺定義。**不是** —— build 在 37% 就死了，
+`libht9045_sm.a` 根本還沒產生。去看**原始碼**而不是半成品 archive 才問對問題。
+記一下這條通則：**符號沒出現在一個失敗 build 的 archive 裡，不能當成它不存在。**
+
+處置：`test_cUnitConvert` 改用 `$<LINK_GROUP:RESCAN,...>`，照抄 `test_config_loaders` 已經寫好的
+理由（GNU ld 對 archive 集合只掃一遍、無法回頭解析，而這些 archive 互相引用）。
+**沒有搬動任何原始檔** —— root-level `.cpp` 放 `ht9045_core` 是那個 archive 自己的規則，
+問題出在測試的連結行，不是落點。
+
+> **這一次 gate 失敗證明了方法本身**：14 個交付檔全部通過 `-fsyntax-only`，我的碰撞分析也乾淨，
+> 樹還是連不起來。syntax 綠與碰撞乾淨對 **undefined reference 那個方向完全沒有保證**。
+> 只有整包 build 找得到，這正是波次政策要求跑它、而不是用更便宜的檢查代替的原因。
+
+### 第二次 gate：build 兩邊綠，但多出一個 SEGFAULT —— 是 §8 漏掉的第 19/20 個 NULL 全域
+
+Debug／Release **build 都 rc=0**，ctest 兩邊 **127/134**，失敗集合兩邊**逐項相同**，
+但比那 6 個常駐項多出一個：**`68 - W5_Atester32Site (SEGFAULT)`**。政策說「超出 → 停、根因、不 commit」。
+
+`gdb` 一次就問到底：
+
+```
+Program received signal SIGSEGV
+0x0056bc1e in TArm::SetContactCT (this=0x0, iCT=1) at cSocket.cpp:841
+#1  ProcessCount (Index=0, bHasIC=true) at atester_ProcessCount.cpp:2200
+#2  DoInterFaceErrorStep_TwoArm32Site () at atester_32Site.cpp:492
+#3  main () at tests/test_atester_32site.cpp:195
+```
+
+`this=0x0`。PT-W8 退掉了 `ProcessCount` 的一行 stub（`atester_shims.cpp:148`）、讓 golden 真本體活起來，
+而它的頭幾句就是 `ArmData[Index]->SetContactCT(1);`。`ArmData`／`ArmDataLot`／`ArmHistory`／
+`ArmData_AutoClean` 在 `cSocket.cpp:169-172` **照 golden 原樣宣告成裸指標陣列**，所以是 NULL；
+golden 是在 **`main.cpp:2141-2148`** 的 `for(i<3)` 迴圈裡 `new` 它們的，而 `main.cpp` 是表單、沒翻。
+
+**這正是計畫書 §8 那張「18 個 NULL 全域」表的同一族 —— 但這四個不在表上。**
+20260807 那次普查是拿 golden `main.cpp` 的 `X = new T;` 站點去比對 port 中同名裸指標，
+而 golden 這裡的形狀是 `ArmData[i] = new TArm(...)` —— **陣列元素指派**，那個 pattern 抓不到。
+表是不完整，不是寫錯；`nullsweep.py` 要補上陣列元素的處理再跑一次。
+
+處置照 §8 自己的先例（`PickFromHPList`／`PlaceToCleanList` 的 `HPListBootstrap`）：
+在 `cSocket.cpp` 加一個 anonymous-namespace 的 static-init 物件，**照抄 golden `main.cpp:2141-2148`**，
+四個陣列一起補（只補兩個會在下一行再爆），並在原地寫明它是 unported 單元的 stand-in、main.cpp 落地就退役。
+
+§8 要求的安全條件**我查了、不是假設**：四個陣列的讀者只有 runtime 函式
+（`SECSGEM/uHGemHT9045_SV.cpp`、`cSocket.cpp`、`atester_ProcessCount.cpp`、`Automation/auto9045.cpp`、
+`csystem.cpp`、`Automation/SCK_ART.cpp`、`SECSGEM/uHGemHT9045.cpp`），**沒有任何別的 TU 的 static
+initialiser 讀它們**；`TArm` 的 ctor（`cSocket.cpp:453`）只配置自己的 TStringList／TMySocket、
+只填自己的欄位，不讀任何其他全域，所以不依賴別的 TU 先初始化。
+
+增量重建後 `W5_Atester32Site` 由 SEGFAULT 轉為 **Passed（11.27 s）**，才重跑完整 gate。
+
+> **這是本波唯一一個超出「翻譯＋整併」的行為變更**，而且是被整併逼出來的、不是選配：
+> 不補，樹就是 crash 的。單獨標示在這裡以便日後歸因。
+
+### 順手修好的一個測試語意漂移
+
+`tests/test_w7_a2_searchtray_magazine_return.cpp` 斷言 `SearchTrayToPlace_Magazine()` 回 0，
+註解寫明那是「aoutarm_shims.cpp 的離線 stand-in 值，不是 golden 的規格」，並留了 TODO：
+「等真本體翻好時改寫這個 CHECK，不要把合法的值變化誤判成回歸。」
+
+本波真本體落地了。答案是 **數字一樣、意義不同**：離線每個 `OutArmSuck.Item[i][j]` 都是 NULL_IC，
+搜尋迴圈一次都不進去，golden 掉到最後一句 `return Prod.iIfErrorT6;`（golden `:1558`），
+而 `Prod` 是零初始化的 file-scope 物件（`cprod.cpp:10`）、全樹沒人寫 `iIfErrorT6`，所以是 0。
+斷言仍然成立，但現在斷的是 **golden 的 not-found 路徑**。已改寫註解與訊息，
+並補上 NOT COVERED 區：golden 另外 7 條有值的 return 路徑離線都走不到，附上怎麼把它們蓋回來的做法。
+
+### 整併做了什麼
+
+1. **EOL 還原**：`Motor/mymotor.cpp`、`atester.cpp` 被 agent 翻成 CRLF，還原成 bare LF。
+   （`core.autocrlf=true` 且無 `.gitattributes`，blob 本來就會正規化 —— 實測 `git diff --numstat`
+   是 640/0 與 246/0，若沒正規化會看到 ~6,500 行刪除。所以那是工作樹層面的問題，仍然還原。）
+2. **CMakeLists**：兩個新 BarCode 單元註冊到 **`ht9045_sm`**（CRLF 保持，2436→2451），
+   並把「全樹沒有呼叫者」寫進註解，免得後人來「修」。
+3. **退役 17 個 stub**：腳本對每一行先 assert 符號在那一行、拒絕多行 body、跳過已 gated、逐檔偵測 EOL。
+   17/17 成功。退役後複驗：**17 個符號每一個都只剩唯一一個活定義，且都在它 golden 的家**。
+4. `tests/` 重掃 25 個新符號有沒有 TU-local stand-in：沒有。
+
+### 稽核抓到 4 個真缺陷（我逐條對 golden 複驗過才動手）
+
+5 個唯讀對抗性稽核跑完。結果重現了記憶裡那條規律：**碼是好的，碼旁邊的引用是壞的。**
+
+* **D1（行為）** `BarCode_Shuttle1_SFCAutoTune.cpp` 把 `iSFCAutoTune1Task` 種成 `1`。
+  golden `BarCode.h:884` 是 `class TfBarCode : public TForm` 的裸成員，沒有初始值、沒有 ctor 指派，
+  全樹只有 `InitialSFCAutoTune1` 會寫（`BarCode_Sh1.cpp:4701`→1、`:4703`→10000）。
+  VCL 會把 instance 清零，所以 golden 開機值是 **0**，而 0 不是 switch 的任何 case —— golden 就是閒置，
+  直到有人 arm 它。種成 1 等於**在 static-init 時就把週期 arm 起來**：第一個 tick 會跑 `case 1`、
+  對兩排 CCD 發 E9 清 buffer、重置 step/error/exposure/result 陣列、並 arm 一個 5000 ms 延時，
+  到期會叫 WAR0462。**同一波寫的 Sh2 雙胞胎做對了而且寫了理由。** 已改成 0。
+* **D2（假的 absence claim）** Sh1 的 GATE 5 說 common.h 的 `WriteDataToFile`/`MyForceDirectories`
+  「本體還是 `#if 0 // TODO(wave-file)`」。查證為**假**：`common.cpp:1759`/`:1822`/`:1888` 三個都活著、
+  `#if 0` 深度 0，而 "TODO(wave-file)" 在 common.cpp 出現 **0 次**。那段字是從
+  `BarCode_Shuttle1_Scan.cpp:44`（20260711）抄來的，**抄的當下就已經過期**。
+  gate 本身仍然成立，但成立的理由是另一半（Memo 沒有 shim、這是 void trace）。已就地更正。
+* **D3（造假的行號）** Sh1 banner 的 golden 行號整批錯掉。我手驗了 6 筆
+  （`:5439/:5452/:5483`→`:5424/:5437/:5468`、`:5267`→`:5269`、`:5468`→`:5471`、`:4718`→`:4716`）。
+  **不是固定偏移**（GATE 1 約 +28、GATE 2 +3~+6、其餘 ±2），所以不能整批平移。
+  函式**body 裡**的 `// golden :NNNN` 逐 case 註記是好的（29/30 正確）。
+  處置：加一塊很大聲的警告，**沒有**手改那 ~40 個數字 —— 手打 40 個數字是製造下一批錯號的好方法。
+* **D4（推導方向相反的容量判斷）** `aoutarm9045.cpp` 的 `CheckPlaceToBufferTray` stand-in 回 `true`
+  （「buffer 有空間，把 IC 放過去」），理由寫「golden 自己的 body 在離線下就是 true」。
+  golden `Magazine.cpp:376-413` 只在 `j>=k*iYRegNum && j<(k+1)*iYRegNum` 這個帶狀範圍裡數 NULL_IC，
+  而 **`iYRegNum` 在兩棵樹都是 0**（golden `cmydef.cpp:5523`、port `cmydef.cpp:5541`），
+  所以帶狀範圍是 `j>=0 && j<0`，對任何 j 都不成立，`iCnt` 恆為 0；離線 `iNeedPlace` 也是 0。
+  `if(iCnt<=iNeedPlace) return false;` ⇒ **golden 回 false**。已改成 `false`，那也是保守方向。
+  離線兩邊都走不到，所以不改變當前行為 —— 只是讓 stand-in 不再說謊。
+
+**還有一條是稽核自己錯了**：MyProductionRecord 的稽核說 `atester_32Site.cpp:95-98` 講的是相反的話。
+不是。`:95-96` 講 `AddIndexPickVacuum`，寫的是「not declared anywhere」，**支持**原檔的說法；
+`:97-98` 講的是另外兩個方法。只有指標（`:233`）錯。已改指標、保留主張，並把稽核的誤讀記在旁邊。
+
+### 我自己犯的三個錯
+
+1. **stub 宣告的預檢做了一半就外推。** 我查了 17 個待退 stub 有沒有 header 宣告，發現 14 個沒有，
+   然後在 `aoutarm9045_1x1_1.cpp` 確認呼叫端自帶 forward declaration，就下結論說退役是安全的。
+   那對住在 `*_shims.cpp` 的 15 個成立（跟呼叫者不同 TU）。**對「stub 跟呼叫者住同一個 TU」的 2 個不成立**：
+   `SearchTrayToPick_Buffer`（stub 在 `aoutarm.cpp:541`、呼叫在 `:816`）與
+   `DoStructUnitConvert`（stub 在 `AutoClean/AutoClean.cpp:199`、呼叫在 `:8322`）。
+   那裡 stub **就是**宣告，退掉是**編譯**錯誤。被 syntax check 抓到，不是被我的預檢抓到。
+   已照 golden 簽名補發（`aoutarm9045.h:64`、`cUnitConvert.h:5`）並替 AutoClean.cpp 加上 include。
+   **這正是 PT-W7e-part2 已經付過一次錢的同一個坑** —— 教訓當時記成「退 stub 會連帶拿掉宣告」，
+   我卻只把它套用在跨 TU 的形狀上。
+2. **在 gate 已經開跑之後改了原始檔。** 只是註解，但那會讓數字不再描述被量的那棵樹。
+   我把它砍掉重跑，而砍掉讓腳本掉進 Release 段、對著我正在刪的 build dir 失敗 —— 那一輪整個作廢。
+   規則是「最後一次編輯之後才量」，我違反了它。
+3. **我自己修的工具一開始把 4 個正確的本體標成「STUB to retire」。**
+   `csystem.cpp:698-701` 是四個一行的轉發函式（`bool OutSHT1InLF() {return InSHT1InLF();};`），
+   在 `csystem_predicates.cpp:309/310/316/317` 被 1:1 忠實翻譯。我加的規則是
+   「port span > 3 才算真本體」，於是把它們全判成 stub。**照著做會刪掉正確的碼。**
+   已改成「port span >= golden span 就是真本體，不論絕對大小」。
+   通則：**「多報」只有對「這個要翻」是安全方向，對「這個要退役」不是。**
+
+### census 前後（單位一律 golden code 行）
+
+| | 波次前 | 波次後 |
+|---|---|---|
+| 非表單（分母 336,509，census 印的） | 91.8% / 缺 27,549 | **92.6% / 缺 24,838** |
+| 全部（分母 598,371） | 53.6% | **54.1%** |
+| 「有鏡射但沒翻完」的檔數 | 33 | **23** |
+
+census 的兩個檔名比對缺陷（見上一節）依然在，所以上面是**下限**。把它們還原之後：
+`BarCode_Sh1/Sh2` 現在**真的翻完了**（6 個函式全部落地，Sh1 用裸名、Sh2 用 `BarCode_Sh2_` 前綴），
+census 卻仍把兩個檔各算成整檔未鏡射（10,348 行）。扣掉這個、再把 `Command.cpp`（9,445 行、
+164 個 `TfMain::` 方法）歸到表單，**非表單實質完成度是 322,019 / 327,064 = 98.5%**。
+
+### ⚠ 到達表單邊界 —— 這是政策裡的停止條件
+
+PT-W8 之後，非表單**沒有任何「非 gated 且真的沒翻」的工作了**。剩下的全部是：
+
+* **刻意 gated：5,110 code 行**，集中在 11 個檔 ——
+  `SECSGEM/uHGemHT9045_EC.cpp`(1,860)、`uHGemHT9045.cpp`(1,202)、`uHGemHT9045_SV.cpp`(958)、
+  `cpublic.cpp`(560)、`cMyDB.cpp`(159)、`cmydef.cpp`(121)、`Public/MyProductionRecord.cpp`(113)、
+  `cinitial.cpp`(94)、`asortarm.cpp`(32)、`Public/ExternFunction.cpp`(6)、`aoutarm.cpp`(5)。
+  **解 gate 是行為變更**，要單獨一顆 commit 單獨量，而且要先逐條重問「為什麼它該是 gated」（陷阱 3）。
+* **真本體停在別的 port 檔**（不是缺，是 census 的 per-file 模型算成缺）：
+  `ainarm2.cpp` 5 個 / 35 行、`csystem.cpp` 4 個 / 4 行、`OmronLaser/LaserSensorShuttle.cpp` 1 個 / 93 行。
+* **`common.cpp: MyDrawText`** —— 6 個 VCL GDI overload，被 `common.h:387` 的
+  `#if 0 // TODO(wave-canvas)` 刻意擋著，屬於 canvas/表單領域。
+* **`Command.cpp`** —— 9,445 code 行、164 個 `TfMain::` 方法，**是表單工作**（見前一節）。
+
+**所以下一步是表單 facade 策略，那是使用者保留的決定，不自己做。**
+
+### 🔖 RESUME（最新）
+
+- **HEAD `e458465`。工作樹乾淨**（只剩 `tools/dfm2rc/reports/b1d_idempotent_report.json` 這個
+  ctest 產生的報告檔，以及一堆本來就在的未追蹤暫存夾 `_w*`／`_ga*`／`*_test_scratch`／`scratchpad`）。
+- 本波三顆 commit：`83ae7f4`（PT-W8 翻譯＋整併）、`e458465`（wave_targets 門檻修正）、
+  外加本節所在的 DEVLOG commit。
+- **⚠ 已到達表單邊界 —— 停在這裡等使用者定 facade 策略。**
+  非表單已經沒有任何「非 gated 且真的沒翻」的工作（證據見上一節）。
+
+**下一步的三個候選（都需要使用者先裁決或先排序）**
+
+1. **表單 facade 策略（阻塞中，使用者的決定）** —— `Command.cpp` 9,445 code 行 / 164 個
+   `TfMain::` 方法，加上 107 個表單單元。`forms/fMain.h` 的 facade 契約第 1 條說離線 body 是
+   「PERMANENT OFFLINE IMPLEMENTATION」，所以翻 `Command.cpp` 等於改寫那份契約。
+2. **解 gate（行為變更，非安全的部分可自動做，但要單獨一顆 commit 單獨量）** ——
+   5,110 code 行、11 個檔，最大三塊是 `SECSGEM/uHGemHT9045_EC.cpp`(1,860)、
+   `uHGemHT9045.cpp`(1,202)、`uHGemHT9045_SV.cpp`(958)。**動手前要逐條重問「為什麼它該是 gated」**
+   （陷阱 3：前提死掉不代表答案就是退役）。
+3. **量測缺陷修正（非安全，可自動）** ——
+   a. `tools/census/census.py` 兩個檔名比對缺陷（鏡射看檔名、form 看同名 `.dfm`）。
+      **這會動到唯一權威量法，必須單獨一顆 commit 並獨立驗證。**
+   b. `nullsweep.py` 補上陣列元素指派（`X[i] = new T;`），§8 那張表現在確定是不完整的 ——
+      本波撞到的 `ArmData`／`ArmDataLot`／`ArmHistory`／`ArmData_AutoClean` 就不在表上。
+
+**安全佇列（等使用者在場，不自己做）**：#10、#12、#14、#18，
+加上**馬達煞車 gate 群**（`csystem.cpp` :18442 :18302 :18485 :18521 :18571 :21242 :21925 :22104 :16631）。
+
+**其他非安全待辦**：#15 macro seam 整併（本波又添一例：`fShowBinSelect` 現在有兩個不同的 TU-local seam，
+`ainarm9045.cpp` 計進 stand-in grid、`atester_ProcessCount.cpp` 直接丟棄）、#16 過期 gate（扣掉煞車群）、
+#17、#20；PT-W7d 的 k2..k8 audit 仍未補跑。
+
+**已驗證 vs 未驗證**：上面所有 ctest／build 數字都是 `83ae7f4` 那棵樹實測的；
+完成度百分比是 `census.py` 實跑的，但**census 本身有兩個已知缺陷**（見 `9d72111`），
+所以「非表單 98.5%」是我人工還原後的推算，**不是腳本輸出**，引用時要講清楚。
