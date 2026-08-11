@@ -6428,3 +6428,80 @@ k1 agent raise 了這件事，**我自己獨立掃過一次確認，而且數字
 - **安全佇列（等使用者在場）**：#10、#12、#14、#18。
 - **完成度**：非表單 90.2%（303,502 / 336,509 golden code 行）／全部 52.7% ——
   **但這是上限被低估、下限被高估的混合值**，因為跨檔停放的本體被算成缺。引用前先做 task #19 第 2 項。
+
+---
+
+## PT-W7e-part2（在製中，使用者要求暫停）：把我自己丟掉的 50 個函式撿回來
+
+**⚠ 工作樹有未 commit 的在製工作，且尚未通過完整 tier-4b。**
+
+### 為什麼有 part2：我自己的工具害我丟掉 50 個函式
+
+PT-W7e（`252603a`）只縫入 82 個 part 裡的 27 個，理由是另外 55 個「別處已經有活的本體」。
+之後我把那 55 個逐一分類（比對 port 本體 span 與 golden span）：
+
+| 類別 | 數量 | 說明 |
+|---|---|---|
+| 真本體 | **5** | 6–11 行，port span == golden span，**跳過是對的** |
+| **一行 stub** | **50** | golden span 的 1–2%，代表 **2,261 golden code 行**被我丟掉 |
+
+例：`TransferHotPlateRatio` golden 204 行 vs port **1**；`CloseSiteState` 145 vs 1；
+`TransferInShuttleRatio` 139 vs 1；`MoveInArmZToPlateSafe` 114 vs 1。
+
+**根因是我自己一小時前 commit 的工具**：`port_definition_index()`（`35d2959`）把任何活的定義
+都當成「已翻譯」，**分不出 stub 與真本體**，於是它的 parked 清單把 5 個真本體和 50 個 stub 混在一起，
+而我沒有分類就照它行動。這和 task #14／#18 是同一族（stub 把「沒做」變成「做了」），
+但這次它讓工作被丟棄，而不只是量錯。**是逐一分類、而不是相信工具，把它找回來的。**
+
+### part2 已做的整併（`ainarm2.cpp` 3,048 → 8,035 行）
+
+- 50 個 stub-backed part 縫入（82 個原始 part 檔全都還在磁碟上，所以可回收）
+- **退役 50 個 stub**，橫跨 7 個檔；47 個用一行匹配，腳本對 3 個**多行** stub **拒絕動作**，我再按 body span 處理
+- 56 個 mid-file `#include` 上移（21 個唯一），`fNote.h` → `forms/fNea.h` 修正為 `forms/fNote.h`
+- **`cMyDB.h` 刻意不上移**：在檔案層級會讓 `NewRecordProcess`／`RecordProcess`／`MyDBIProcess`
+  與 `canary_support.h` 衝突（重複宣告帶預設值）。那個 part 把它放在區域是有理由的
+- 移除 part 內的 `ChangeHotPlateData(bool=false)` 區域宣告 —— 我已在 header 發布同一個帶預設的宣告，預設給兩次是錯誤
+- 補 `bDoPreciser`（golden `ainarm2.cpp:50`）—— `wave_targets.py` 漏了它，因為名字出現在 port 的**註解**裡，`port_has()` 就當它存在
+
+### 通則：退役 stub 會連帶拿掉別的 TU 依賴的宣告
+
+第一次 gate 兩種建法都 build 失敗：`'DoInArm_SuckerMap' was not declared in this scope`（`AutoClean.cpp` 4 處）。
+那個 stub 原本住在 `AutoClean.cpp` **裡面**，同時扮演它自己 4 個呼叫點與 `csystem.cpp:6943` 的**宣告**。
+退役它 → 呼叫者連宣告都沒了，所以是**編譯**錯誤而不是連結錯誤。
+
+沒有只修這一個，我把 **50 個退役 stub 全部檢查一遍**：
+**48 個本來就有 header 宣告，2 個沒有**（`DoInArm_SuckerMap`、`LoadTrayCanUse8Suck`），
+已照 golden `ainarm2.h:148/:200` 補發在 `aHotPlateSubstrate.h`。
+
+### 第二次 gate：build 兩邊乾淨，但 `27-AutoClean` **Failed**（不是 SEGFAULT）
+
+Debug／Release 都 build rc=0、0 dup、0 undef，但 AutoClean **127 passed, 3 failed**：
+
+```
+FAIL: DoAutoCleanPickfromCleanKit case 30 bounces back to case 10
+FAIL: ... and raises iAutoCleanAlarm (WAR1922)
+FAIL: ... returning iResult=2
+```
+
+**測試自己的註解就寫明了原因**（`tests/test_AutoClean.cpp:633-634`）：
+「case 30 的 `MoveInArm2XYToShuttle2Wait()` 是離線恆真的 stub」。那個 stub 正是我退役的 50 個之一。
+真本體會讀 `MOT[MInArmPitch].ReadPos()` 等位置、回報手臂是否**真的到達** shuttle-2 等待位；
+離線模擬手臂永遠到不了，所以 case 30 現在**停在 30 等運動**，不再觸發 WAR1922 跳回 case 10。
+**這是真機上 golden 的行為**（手臂會到），只是離線到不了。
+
+處置：改測試的三個預期，**並且是先寫下預測再驗證**（task==30、alarm==0、rPick==0），
+單獨跑 test 27 通過 —— 不是把測試調到變綠。舊預期原文保留在註解裡，讓變更可見。
+
+### 🔖 RESUME（最新）
+
+- **⚠ 未 commit**：`ainarm2.cpp`、`aHotPlateSubstrate.h/.cpp`、`AutoClean/AutoClean.cpp`、
+  `acatchtray_shims.cpp`、`ainarm9045_2x4_16_shims.cpp`、`ainarm9045_w7_shims.cpp`、
+  `aoutarm.cpp`、`csystem_shims.cpp`、`tests/test_AutoClean.cpp`。HEAD 仍是 `252603a`。
+- **只做過增量驗證**：test 27 單獨通過；**完整 tier-4b 還沒重跑**。
+- **續作第一件事**：全新 Debug+Release 跑一次
+  （`scratchpad/gate_w7b.sh`，現在會在 build 失敗時跳過 ctest），失敗集合須 ⊆ 那 6 個標準失敗 → 才 commit。
+- **注意**：`ainarm2.cpp` 在整併中被 CRLF 轉換過兩次（`core.autocrlf=true`），
+  **每次寫入前都要重驗 EOL**，不要假設它還是 bare LF。
+- 完成度（兩種讀法都要引用）：非表單 per-file 91.4%／crediting parked 91.8%；全部 52.9%／53.6%。
+  part2 落地後會再往上，但**要重量**。
+- 安全佇列（等使用者在場）：#10、#12、#14、#18。非安全：#15、#16、#17、#19、#20。
