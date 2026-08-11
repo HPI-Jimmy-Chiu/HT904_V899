@@ -339,7 +339,7 @@ regen 的」檔用的，`*_uimap.gen.*` 是**產生出來的**，排除等於默
 
 ---
 
-## §8 `main.cpp` 建構缺口 —— 18 個全域指標目前是 NULL（20260807 普查）
+## §8 `main.cpp` 建構缺口 —— 目前 23 個全域指標是 NULL（20260811 重跑，普查腳本已進 repo）
 
 **怎麼發現的**：PT-W2 整併時退役了 `aHotPlateSubstrate.cpp` 裡 `uPlateInfo` 的 stub
 （真本體隨 `Public/HTEditList.cpp` 落地了），結果三個原本綠的測試變成 **SEGFAULT**
@@ -426,3 +426,51 @@ _GLOBAL__sub_I_fLaserSensor -> TfLaserSensor::TfLaserSensor()
 `fLaserSensor`（上述）與 `ATC/ATCInterface.cpp:207` 的 `ATCInterfaceForm`（ctor 只配置
 自己的 `TTimer`，不碰上表任何一個，ctest 已證）。`VacuumUnit.cpp` 有 9 處
 `elVacuumUnit->`，但全在 runtime 函式裡，不在 ctor。
+
+### 20260811（PT-W8）：那張表本身是不完整的，而普查腳本從來沒進 repo
+
+第三次兌現，這次的全域**不在表上**。PT-W8 退掉 `ProcessCount` 的一行 stub、讓 golden 真本體活起來，
+`W5_Atester32Site` 立刻 SEGFAULT：
+
+```
+TArm::SetContactCT (this=0x0) at cSocket.cpp:841
+  <- ProcessCount (atester_ProcessCount.cpp:2200)
+  <- DoInterFaceErrorStep_TwoArm32Site (atester_32Site.cpp:492)
+```
+
+`ArmData` / `ArmDataLot` / `ArmHistory` / `ArmData_AutoClean` 在 `cSocket.cpp:169-172` 照 golden
+原樣宣告成裸指標陣列，golden 只在 **`main.cpp:2141-2148`** 的迴圈裡 new 它們。
+
+**根因不是漏看，是普查的 pattern 看不到這個形狀**：20260807 那次是拿 `X = new T;` 去比對，
+而 golden 這裡寫的是 `ArmData[i] = new TArm(...)` —— **陣列元素指派**。
+golden `main.cpp` 有 **61 個純量 + 14 個陣列元素**配置站點（去掉 `#if 0` 與註解後），
+所以那個盲區蓋掉了將近五分之一的面。
+
+**而且原本那支 `nullsweep.py` 從來沒有進 repo**（跟最早的 census 腳本一樣留在 scratchpad、隨場次消失），
+所以「可重跑」這句話當時就已經不成立。**現在有了**：`tools/census/nullsweep.py`，兩種形狀都認。
+
+重跑結果：**23 個全域「port 有定義、但 port 從來沒 new 過」**。與舊表的差異：
+
+* **已解決 4 個**：`ArmData` / `ArmDataLot` / `ArmHistory` / `ArmData_AutoClean` ——
+  PT-W8 照本節 `PickFromHPList` 的先例，在 `cSocket.cpp` 加了 `ArmDataBootstrap`
+  （anonymous namespace、照抄 golden `main.cpp:2141-2148`、四個一起補）。
+  安全條件逐一查過：讀者全是 runtime 函式，沒有任何別的 TU 的 static initializer 讀它們，
+  `TArm` 的 ctor 不讀任何其他全域。
+* **新增 6 個舊表沒有的**，全部是陣列元素形狀，全部是 `class ARM_OFFSET *`：
+
+  | 全域 | golden main.cpp | port 定義處 |
+  |---|---:|---|
+  | `InArmOffSet` | 2125 | `cprod.cpp:67` |
+  | `InArmOffSet_File` | 2126 | `cprod.cpp:69` |
+  | `OutArmOffSet` | 2131 | `cprod.cpp:68` |
+  | `OutArmOffSet_File` | 2132 | `cprod.cpp:70` |
+  | `SortArmOffSet` | 2137 | `cprod.cpp:71` |
+  | `SortArmOffSet_File` | 2138 | `cprod.cpp:72` |
+
+  這六個 PT-W8 已經**踩到但沒爆**：`cUnitConvert.cpp` 的 `DoArmOffsetConvert` 會讀它們，
+  而那個 agent 自己發現了並在 `:474` 加了 `if(InArmOffSet[i]==NULL || InArmOffSet_File[i]==NULL) continue;`，
+  在檔頭 `:250-255` 寫明理由 —— 正是本節對 `elLaser` 用的同一套處置（呼叫點加 `if(指標)`）。
+  **下一波只要有人在沒加 guard 的情況下用到它們，就會是第四次。**
+
+**維護規則**：這張表不要用手改。改 `tools/census/nullsweep.py` 或直接重跑它。
+一張手抄的表會再一次悄悄地過期，而過期的方式就是這次這種 —— 看起來很完整，實際上少了一個形狀。
