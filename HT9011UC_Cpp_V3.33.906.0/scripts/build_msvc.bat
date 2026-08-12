@@ -44,8 +44,16 @@ REM  it itself (hard prohibition #4 -- UAC-gated, would race other agents).
 REM =============================================================================
 setlocal enabledelayedexpansion
 
-set "VCVARSALL=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC\Auxiliary\Build\vcvarsall.bat"
-set "NINJA_EXE=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja\ninja.exe"
+REM AI(W906-GateA-vsdiscover) 20260811: same change as scripts\build_msvc_ui.bat
+REM -- the hard-coded BuildTools path died when VS 2022 Professional 17.14.37
+REM replaced BuildTools on 2026-08-11. Discover the install with vswhere so any
+REM edition works. See build_msvc_ui.bat for the full note.
+set "VSWHERE=%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe"
+set "VS_INSTALL="
+if exist "%VSWHERE%" for /f "usebackq tokens=*" %%i in (`"%VSWHERE%" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath`) do set "VS_INSTALL=%%i"
+set "VCVARSALL=%VS_INSTALL%\VC\Auxiliary\Build\vcvarsall.bat"
+set "NINJA_EXE=%VS_INSTALL%\Common7\IDE\CommonExtensions\Microsoft\CMake\Ninja\ninja.exe"
+if not exist "%NINJA_EXE%" for %%n in (ninja.exe) do if not "%%~$PATH:n"=="" set "NINJA_EXE=%%~$PATH:n"
 set "VCVARS_VER=14.44"
 set "BUILD_DIR=build_msvc"
 
@@ -56,16 +64,27 @@ pushd "%SCRIPT_DIR%.."
 set "REPO_ROOT=%CD%"
 popd
 
+if not defined VS_INSTALL (
+    echo [build_msvc] FATAL: no Visual Studio install carrying the C++ toolset
+    echo [build_msvc] was found via "%VSWHERE%". Install the "Desktop
+    echo [build_msvc] development with C++" workload ^(or VS Build Tools^), then
+    echo [build_msvc] re-run -- do NOT install or modify VS tooling from this
+    echo [build_msvc] script.
+    exit /b 1
+)
+echo [build_msvc] VS install: %VS_INSTALL%
 if not exist "%VCVARSALL%" (
     echo [build_msvc] FATAL: vcvarsall.bat not found at "%VCVARSALL%"
-    echo [build_msvc] This script targets VS2022 BuildTools 17.14.3. If the
-    echo [build_msvc] install moved/changed, update VCVARSALL above -- do NOT
-    echo [build_msvc] install or modify VS tooling from this script.
+    echo [build_msvc] ^(discovered install: %VS_INSTALL%^) -- do NOT install or
+    echo [build_msvc] modify VS tooling from this script.
     exit /b 1
 )
 
 if not exist "%NINJA_EXE%" (
     echo [build_msvc] FATAL: ninja.exe not found at "%NINJA_EXE%"
+    echo [build_msvc] and no ninja.exe on PATH. It ships with the VS component
+    echo [build_msvc] "C++ CMake tools for Windows"
+    echo [build_msvc] ^(Microsoft.VisualStudio.Component.VC.CMake.Project^).
     exit /b 1
 )
 
