@@ -19,7 +19,8 @@
 > 維護提醒：修改任一 Skill / Agent / Command 後，若仍同時使用 Copilot，請同步更新對應的鏡像檔。
 
 ### 可用子代理（Task 工具呼叫）
-- `ht9045-v899` — V3.33.899.0 版本除錯與修正，鎖定 `HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422`。
+- `ht9045-v899` — V3.33.899.0 版本除錯與修正，鎖定 `HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422`。**量產機台使用中的出貨版本。**
+- `ht9045-v906` — V906 C++ 移植版（**實驗機**）開發，鎖定 `HT9011UC_Cpp_V3.33.906.0`。C++17 / UTF-8 / CMake，與 V899 的 BCB6 / Big5 / pre-C++11 規則完全相反。負責翻譯波次、CMake/ctest、MinGW+MSVC 雙 oracle、MFC UI、WebBridge 與瀏覽器 HMI。
 - `case-coordinator` — 客戶異常案件協調入口，分派 intake/analysis/closure。
 - `weekly-report` — 週報與客戶異常 case 管理（Hub 模式，操作 Weekly_AI 工作區 `d:\Work-jimmychiu\document\WeeklyReport\Weekly_AI` 的 Python 工具）。破壞性動作（建下週週報、建 case、重產 Excel）執行前先確認。
 
@@ -36,7 +37,12 @@
 
 ## 路徑範圍指令（取代 Copilot `applyTo`）
 
-Claude Code 無原生路徑範圍指令機制，故將原 `.github/instructions/*.instructions.md` 的關鍵守則統整於此，全程適用。詳細表格仍可參考對應 instruction 檔。
+Claude Code 無原生路徑範圍指令機制，故將原 `.github/instructions/*.instructions.md` 的關鍵守則統整於此。詳細表格仍可參考對應 instruction 檔。
+
+> **⚠️ 兩棵樹的規則是相反的，先確認你在哪一棵。**
+> `HT9011UC_Code_V3.33.899.0_...`（**量產機**，BCB6 / Big5 / pre-C++11）
+> `HT9011UC_Cpp_V3.33.906.0`（**實驗機**，C++17 / UTF-8 / CMake）
+> 另注意 `HT9011UC_Code_V3.33.906.0_20260618` 是**另一棵 BCB6 樹**，同樣叫 906 但唯讀；差別在 `_Code_` 與 `_Cpp_`。
 
 ### 編輯 V899 C/C++（`HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422/**/*.{cpp,h,hpp}`）
 
@@ -61,6 +67,29 @@ Claude Code 無原生路徑範圍指令機制，故將原 `.github/instructions/
 - 確認落在 V899 目錄內、未碰禁改檔、最小差異、無編碼亂碼。
 - 回覆需說明：影響函式/狀態機、風險、驗證方式。
 - 修改共用標頭、核心狀態機、跨模組函式、全域變數時，優先對 V899 根目錄 `HT9045.bpr` 做 BCB6 build 檢查；環境不足無法編譯時要明說，不可假設成功。
+
+### 編輯 V906 C++ 移植版（`HT9011UC_Cpp_V3.33.906.0/**/*.{cpp,h,hpp}`）
+
+> 本節規則**與上面 V899 那節相反**，不要混用。專屬代理：`ht9045-v906`。
+
+**寫入邊界**
+- 只允許修改 `HT9011UC_Cpp_V3.33.906.0/`。**V899 是量產出貨版，一律唯讀**，要改請交回 `ht9045-v899`。
+- `D:\HT9045\EXE\` 是 BCB6 量產建置的輸出目錄，V906 的 exe 永不複製或覆寫進去。
+- `common.cpp:89` 的 `asGeneralPath` 目前指向**量產機共用的** `system\Gerneral.ini`，且 `LoadMachineConfig()` 會回寫它 → 跑 `wb_serve` / `wb_publish` 一律加 `--dry`。
+
+**語言 / 編碼 / 工具鏈**
+- **C++17**（`CMAKE_CXX_STANDARD 17`）；新寫的基礎建設開 `-Wall -Wextra`。
+- 原始碼 **UTF-8**。EOL 是**混合**的，逐檔保持原樣；`build.bat` 必須純 CRLF 無 BOM（cmd 掃 `goto` 承重）。
+- 主 oracle 是 **MinGW g++**（唯一重現 BCB6 x87 算術，不可替換）；MSVC 是次 oracle，且**只有 MSVC 能編 MFC UI**。
+- 建置一律走 `build.bat`（quick / gate / test / ui / run / msvc / clean / prune），不要自己另組 cmake 指令。
+
+**AI 修改註解**：`//AI(W906-<工作代號>) YYYYMMDD: 描述`（例 `AI(W906-PT-W1)`、`AI(W906-GateA-0)`、`AI(W906-WebBridge-Tcp)`）。
+
+**完成後自我審查**
+- 翻譯以**忠實**優先於「寫得更好」；golden 不合理處照翻並在註解說明，改行為須使用者決定。
+- 驗收比對 **ctest 失敗清單**，不看數字或百分比。既有失敗（非回歸）：`config_db`、`IniFiles`、`ini_helpers`、`config_loaders`、`dfm2rc_idempotent`、`GA1_ReadGeneralIni`。
+- 「build 綠」不等於「接上了」；交付數字只在全新 build dir 量，收工最後一個動作是 build 不是 commit。
+- 引用完成度百分比必附分母與單位。
 
 ### 安全關鍵變更（運動控制 / IO / 互鎖 / 模式切換 / 警報 / 執行期設定）
 - 修改前先描述風險與影響範圍，修改後提供回歸與驗證建議。
