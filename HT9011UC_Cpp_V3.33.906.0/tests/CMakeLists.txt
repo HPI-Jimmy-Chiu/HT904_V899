@@ -3097,22 +3097,30 @@ add_executable(test_wb_crypto  test_wb_crypto.cpp)
 add_executable(test_wb_state   test_wb_state.cpp)
 add_executable(test_wb_wsproto test_wb_wsproto.cpp)
 add_executable(test_wb_server  test_wb_server.cpp)
+# AI(W906-WebBridge-Tcp) 20260812: the sidecar seam (TagJson + TcpTagLink).
+add_executable(test_wb_tcplink test_wb_tcplink.cpp)
 
 target_link_libraries(test_wb_crypto  PRIVATE ht9045_webbridge)
 target_link_libraries(test_wb_state   PRIVATE ht9045_webbridge)
 target_link_libraries(test_wb_wsproto PRIVATE ht9045_webbridge)
 target_link_libraries(test_wb_server  PRIVATE ht9045_webbridge)
+target_link_libraries(test_wb_tcplink PRIVATE ht9045_webbridge)
 
 add_test(NAME WB_Crypto  COMMAND test_wb_crypto)
 add_test(NAME WB_State   COMMAND test_wb_state)
 add_test(NAME WB_WsProto COMMAND test_wb_wsproto)
 add_test(NAME WB_Server  COMMAND test_wb_server)
+add_test(NAME WB_TcpLink COMMAND test_wb_tcplink)
 
 # WB_State spawns real threads and runs 2,000 publish generations, and WB_Server
 # opens real sockets; 300s is far above their measured runtimes (under 2s each)
 # and only trips if one genuinely wedges. WB_Server's own client puts a 5s
 # deadline on every blocking read for the same reason.
-set_tests_properties(WB_Crypto WB_State WB_WsProto WB_Server PROPERTIES TIMEOUT 300)
+# WB_TcpLink opens real loopback sockets and deliberately waits for a reconnect,
+# so it is the slowest of the group; its own waits are all budgeted (waitFor),
+# so 300s only trips if a thread genuinely wedges rather than merely being slow.
+set_tests_properties(WB_Crypto WB_State WB_WsProto WB_Server WB_TcpLink
+                     PROPERTIES TIMEOUT 300)
 
 # ===========================================================================
 #  PT-W1 leaf coverage (AI(W906-PT-W1-Tests) 20260807)

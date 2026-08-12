@@ -2401,6 +2401,13 @@ add_library(ht9045_webbridge
     WebBridge/WsFrame.cpp
     WebBridge/HttpStatic.cpp
     WebBridge/WebBridgeServer.cpp
+    # AI(W906-WebBridge-Tcp) 20260812: the sidecar seam. TagJson is the single
+    # tag<->JSON definition (WebBridgeServer.cpp forwards to it); TcpTagLink is
+    # the loopback, read-only TCP link that lets the web server run in a
+    # DIFFERENT process from the machine data. See WebBridge/TcpTagLink.h for
+    # why SECS was rejected as that transport (uHGemEquipment.cpp:2005-2013).
+    WebBridge/TagJson.cpp
+    WebBridge/TcpTagLink.cpp
 )
 
 target_include_directories(ht9045_webbridge PUBLIC
@@ -2442,6 +2449,46 @@ target_link_libraries(wb_serve PRIVATE
 
 if(WIN32)
     target_link_libraries(wb_serve PRIVATE ws2_32)
+endif()
+
+# ---------------------------------------------------------------------------
+# Tools: wb_publish + wb_gateway -- the sidecar split of wb_serve
+#   AI(W906-WebBridge-Tcp) 20260812: wb_serve serves the browser from the SAME
+#   process as the machine data (ARCHITECTURE.md option A, in miniature). These
+#   two are the same path cut in half over a loopback TCP tag feed (option B):
+#
+#       wb_publish  = data layer + TcpTagPublisher      (no HTTP)
+#       wb_gateway  = TcpTagClient + WebBridgeServer    (no machine code)
+#
+#   THE LINK LISTS BELOW ARE THE POINT, NOT AN IMPLEMENTATION DETAIL.
+#   wb_publish links the god-stack because it must read the machine.
+#   wb_gateway links ht9045_webbridge and nothing else -- no database.h, no
+#   state machines, no vclcompat. It is structurally incapable of touching the
+#   machine, which is what lets it be rebuilt and restarted on its own schedule
+#   and front either V906 or V899 over the same wire.
+#
+#   If someone ever adds a machine library to wb_gateway, that property is gone
+#   and this comment is the thing they were supposed to read first.
+# ---------------------------------------------------------------------------
+add_executable(wb_publish
+    tools/wb_publish.cpp
+    WebBridgeTags.cpp
+)
+
+target_link_libraries(wb_publish PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    ht9045_webbridge
+)
+
+add_executable(wb_gateway
+    tools/wb_gateway.cpp
+)
+
+target_link_libraries(wb_gateway PRIVATE ht9045_webbridge)
+
+if(WIN32)
+    target_link_libraries(wb_publish PRIVATE ws2_32)
+    target_link_libraries(wb_gateway PRIVATE ws2_32)
 endif()
 
 # ---------------------------------------------------------------------------

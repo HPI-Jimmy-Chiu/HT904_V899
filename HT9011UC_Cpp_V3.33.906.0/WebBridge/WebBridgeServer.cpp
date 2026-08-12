@@ -17,6 +17,7 @@
 #include "WebBridge/WebBridgeServer.h"
 
 #include "WebBridge/JsonWriter.h"
+#include "WebBridge/TagJson.h"
 #include "WebBridge/WsFrame.h"
 #include "WebBridge/WsHandshake.h"
 #include "WebBridge/Sync.h"
@@ -86,7 +87,8 @@ namespace webbridge {
 //                       bool Ok() const; const std::string& Str() const; };
 //                   std::string JsonQuote(const std::string& raw);
 //                   // JsonWriter has its own JsonValue variant, unrelated to
-//                   // TagValue, so sib::WriteValue does that mapping by hand.
+//                   // TagValue; WebBridge/TagJson.h owns that mapping (both
+//                   // directions) and sib::ObjectFrom forwards to it.
 // =============================================================================
 namespace sib {
 
@@ -213,33 +215,23 @@ static bool QueuePush(CommandQueue* q, unsigned long long ticket,
 }
 
 // --- JsonWriter -------------------------------------------------------------
-// TagValue and JsonWriter are independent variants, so the mapping is explicit.
-// The Null vs "" distinction is preserved here because the browser renders them
-// differently (null -> "---", "" -> blank) and collapsing them misreports an
-// uninstalled device as a real zero.
-static void WriteValue(JsonWriter& w, const TagValue& v)
-{
-    switch (v.type()) {
-        case TagType::Null:   w.Null();                                        break;
-        case TagType::Bool:   w.Bool(v.asBool());                              break;
-        case TagType::Int:    w.Number(static_cast<wb_int64>(v.asInt()));       break;
-        case TagType::Double: w.Number(v.asDouble());                           break;
-        case TagType::String: w.String(v.asString());                           break;
-        default:              w.Null();                                         break;
-    }
-}
+// AI(W906-WebBridge-Tcp) 20260812: the TagValue -> JsonWriter mapping that used
+// to live here as sib::WriteValue now lives in WebBridge/TagJson.cpp, which is
+// also where the reverse direction lives. The Null vs "" distinction it
+// preserves is unchanged and still load-bearing: the browser renders null as
+// "---" and "" as blank, and collapsing them misreports an uninstalled device
+// as a real zero.
 
 // {"tag":value,"tag2":value2}
+//
+// AI(W906-WebBridge-Tcp) 20260812: delegated to WebBridge/TagJson.h. This used
+// to be the only tag encoder in the tree; the TCP sidecar link now needs the
+// identical bytes (and the decode direction, which has no counterpart here), so
+// the definition moved to TagJson and this became a forwarder. Keeping a second
+// hand-maintained copy is how the two wires would silently drift apart.
 static std::string ObjectFrom(const std::map<std::string, TagValue>& m)
 {
-    JsonWriter w;
-    w.BeginObject();
-    for (std::map<std::string, TagValue>::const_iterator it = m.begin(); it != m.end(); ++it) {
-        w.Key(it->first);
-        WriteValue(w, it->second);
-    }
-    w.EndObject();
-    return w.Str();
+    return EncodeTagObject(m);
 }
 
 // A JSON string literal, quotes included.
