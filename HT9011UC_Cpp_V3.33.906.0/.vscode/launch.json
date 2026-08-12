@@ -11,11 +11,18 @@
   //  The exe is a RELEASE build with /Zi (root CMakeLists, ht9045_app target),
   //  so breakpoints work but locals may be optimised away. We do NOT offer a
   //  Debug-CRT build: its asserts raise modal dialogs (KNOWLEDGE.md Gotcha 9).
+  //
+  //  WHICH ONE IS "THE APP"?  AI(W906-WebHMI-F5) 20260812: the product
+  //  direction is web UI + C++ core, so the default F5 experience is the
+  //  "Web HMI" COMPOUND at the bottom: it builds (MinGW), starts
+  //  wb_publish --dry (data feed, tcp 8046) and wb_gateway (http+ws 8045),
+  //  then opens the browser HMI. The MFC exe stays only as the Gate A
+  //  translation-verification harness -- its placeholder window is expected.
   // ==========================================================================
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Run/Debug HT9045.exe (MFC UI)",
+      "name": "MFC Gate A skeleton (HT9045.exe, verification harness)",
       "type": "cppvsdbg",
       "request": "launch",
       "program": "${workspaceFolder}/build_msvc_ui/HT9045.exe",
@@ -70,6 +77,60 @@
       "args": [],
       "cwd": "${workspaceFolder}/build_msvc_ui",
       "console": "integratedTerminal"
+    },
+    {
+      // Data half of the sidecar split: links the god-stack, publishes the
+      // tag snapshot on tcp://127.0.0.1:8046. --dry is NOT optional on a dev
+      // machine: LoadMachineConfig() WRITES the shared production
+      // system\Gerneral.ini (common.cpp:89); --dry works on a scratch copy.
+      // No preLaunchTask here -- launch via the "Web HMI" compound below,
+      // which builds once for both halves.
+      "name": "Web HMI: wb_publish --dry (data feed)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/wb_publish.exe",
+      "args": ["--dry"],
+      "cwd": "${workspaceFolder}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "C:/MinGW/bin/gdb.exe",
+      "externalConsole": false
+    },
+    {
+      // Web half: links ht9045_webbridge and NOTHING else from the machine
+      // side -- it cannot read a motor or open an ini. Serves D:\HT9045\web
+      // on http://127.0.0.1:8045 and reconnects to the publisher by itself,
+      // so start order does not matter.
+      "name": "Web HMI: wb_gateway (web server, no machine code)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/wb_gateway.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "C:/MinGW/bin/gdb.exe",
+      "externalConsole": false,
+      // Opens the browser HMI as soon as the gateway prints its startup URL.
+      "serverReadyAction": {
+        "pattern": "http://127\\.0\\.0\\.1:([0-9]+)/",
+        "uriFormat": "http://127.0.0.1:%s/?src=ws",
+        "action": "openExternally"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      // THE default F5 for this project (pick it once in the debug dropdown;
+      // VS Code remembers). Publisher and gateway start together; the browser
+      // shows "---" until the first frame arrives, which is the correct
+      // rendering of "no data yet".
+      "name": "Web HMI (publisher + gateway + browser)",
+      "configurations": [
+        "Web HMI: wb_publish --dry (data feed)",
+        "Web HMI: wb_gateway (web server, no machine code)"
+      ],
+      "preLaunchTask": "V906: Build (MinGW, quick)",
+      "stopAll": true,
+      "presentation": { "order": 1 }
     }
   ],
   "inputs": [

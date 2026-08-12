@@ -7163,3 +7163,48 @@ handler 對真正的 MES 變啞巴，沒有 else、沒有 log。`:4037` 又無�
   並順手掃全樹「連續 `else if` 超過 ~120」的檔案，不要只修這一個。
 - **等使用者裁決**：(a) 是否動 V899 加快照埠（見風險評估 §8 三個待決項）；
   (b) 是否把 906 的執行期資料從量產機拆開；(c) 是否開 V906 專屬分支。
+
+---
+
+## 2026-08-12 — 方向定案：web UI + C++ 底層；F5 改開 Web HMI；專屬 C++ 代理升級
+
+**使用者裁決（本輪最重要的一句話）：「我目標是UI用web開發，底層邏輯和控制是c++。」**
+這句話把幾個懸案一次錨定，記錄如下。
+
+### 做了什麼（零翻譯，純方向與工具鏈）
+
+1. **F5 現在開的是 Web HMI，不再只有 MFC 佔位視窗。**
+   `.vscode/launch.json` 新增 compound **「Web HMI (publisher + gateway + browser)」**：
+   quick build（MinGW）→ 同時啟 `wb_publish --dry`（tag feed :8046）與 `wb_gateway`
+   （HTTP+WS :8045）→ `serverReadyAction` 抓 gateway 印出的 URL 自動開瀏覽器
+   （`http://127.0.0.1:8045/?src=ws`）。兩個子設定都是 cppdbg/gdb（MinGW binary）。
+   原 MFC 設定改名 **「MFC Gate A skeleton (HT9045.exe, verification harness)」**——
+   佔位視窗是設計如此（GA-4 前的 scaffolding），但它已不是「按 F5 該看到的東西」。
+   注意：debug 下拉要**手動選一次** compound，VS Code 之後會記住。
+
+2. **`ht9045-v906` 升級為「HT9045 專屬 C++ 代理」**（使用者要求建 C++ 專屬 agent；
+   agent 昨天已存在，故升級而非重複建）。新增「定位與目標架構」一節：web+C++ 方向、
+   sidecar 拓撲、wb_gateway 零機台碼承重牆、write path 未設計警語、MFC=驗證 harness。
+   `.claude/agents/ht9045-v906.md` 與 `.github/agents/ht9045-v906.agent.md` 鏡像同步，
+   `CLAUDE.md` 子代理清單同步。
+
+### 方向定案的結構性後果（評估，尚未動工）
+
+- **C1061 降級**：handler／publisher 程序留 MinGW（本來就是主 oracle），god-stack
+  不必進 MSVC 編的 exe → `TextProcess.cpp` 的 C1061 從「GA-3 硬阻塞」降為
+  「MSVC 驗證 harness 阻塞」。仍值得修（順掃 >120 連續 else-if），但優先序可重排。
+- **GA-3/GA-4 降級**：「產生 fMain 對話框」變成驗證工具，不是產品 UI。dfm2rc 的
+  layout/uimap 產物將來可改吐 web 版面資料，管線本身不白做。
+- **表單 facade 問題重新框定**：TfXxx 的業務邏輯仍要忠實翻譯；渲染目標=web。
+- **下一個安全關鍵設計題：WebBridge 指令通道（write path）**。目前是唯讀快照；
+  web UI 要能操作機台，指令進 handler 必須重新過互鎖，瀏覽器永遠只是 view。
+
+### 🔖 RESUME（最新）
+
+- **方向已定**：UI=web、底層=C++（使用者 20260812）。MFC/Gate A=驗證 harness。
+- **F5 = Web HMI compound**（launch.json；wb_publish 一律 `--dry`，common.cpp:89 未拆家）。
+- **完成度未變**：本輪零翻譯，census 同 PT-W9 收工值；仍停在表單邊界，
+  但 facade 裁決現在有錨點（渲染目標=web）。
+- **待使用者裁決**：(a) V899 加快照埠（風險評估文件已出）；(b) 906 執行期資料與量產機
+  拆分——web HMI 要長跑，這件事得先做；(c) WebBridge write path 設計輪（安全關鍵）；
+  (d) C1061 降級後的修復優先序。

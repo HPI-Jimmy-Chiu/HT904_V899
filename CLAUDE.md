@@ -20,7 +20,7 @@
 
 ### 可用子代理（Task 工具呼叫）
 - `ht9045-v899` — V3.33.899.0 版本除錯與修正，鎖定 `HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422`。**量產機台使用中的出貨版本。**
-- `ht9045-v906` — V906 C++ 移植版（**實驗機**）開發，鎖定 `HT9011UC_Cpp_V3.33.906.0`。C++17 / UTF-8 / CMake，與 V899 的 BCB6 / Big5 / pre-C++11 規則完全相反。負責翻譯波次、CMake/ctest、MinGW+MSVC 雙 oracle、MFC UI、WebBridge 與瀏覽器 HMI。
+- `ht9045-v906` — **HT9045 專屬 C++ 代理**（V906 移植樹，**實驗機**），鎖定 `HT9011UC_Cpp_V3.33.906.0`。所有 C++ 工作都歸它：翻譯波次、翻完後的新功能、CMake/ctest、MinGW+MSVC 雙 oracle、WebBridge 與瀏覽器 HMI。C++17 / UTF-8 / CMake，與 V899 的 BCB6 / Big5 / pre-C++11 規則完全相反。目標架構（20260812 定案）：**UI 用 web 開發、底層邏輯與控制是 C++**；MFC/Gate A 只是翻譯驗證 harness。
 - `case-coordinator` — 客戶異常案件協調入口，分派 intake/analysis/closure。
 - `weekly-report` — 週報與客戶異常 case 管理（Hub 模式，操作 Weekly_AI 工作區 `d:\Work-jimmychiu\document\WeeklyReport\Weekly_AI` 的 Python 工具）。破壞性動作（建下週週報、建 case、重產 Excel）執行前先確認。
 
