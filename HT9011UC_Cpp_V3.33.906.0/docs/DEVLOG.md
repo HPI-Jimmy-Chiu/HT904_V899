@@ -7028,3 +7028,138 @@ PT-W9 收工後，我把「修 `census.py` 兩個檔名比對缺陷」當成唯�
 不改 `census.py`。要真的改，需要的是**逐一證明**每個跨檔對應是同一個函式（而不是同名 stub），
 那是一個要自己規劃與驗證的 pass，不是一個別名規則。在那之前，
 **引用完成度就照 census 印的兩個模型講，並附上檔頭那些已量化的失真上限。**
+
+---
+
+## 20260812：F5 修不起來的真因是工具鏈搬家，不是程式碼；順手把 web sidecar 拆成兩個行程
+
+使用者按 F5，只拿到一個對話框：`preLaunchTask 'V906: Build UI exe (MSVC/MFC)' 已終止，結束代碼為 1`。
+沒有任何編譯錯誤，因為**編譯器根本沒被跑到**。
+
+### 真因鏈（四個，全部是環境，沒有一個是我們的程式碼）
+
+1. `scripts\build_msvc_ui.bat` 與 `build_msvc.bat` 把 VS 路徑寫死成
+   `C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\...`。
+   **VS 2022 Professional 17.14.37 在 20260811 11:10 裝上，BuildTools 連同 MFC 一起消失**
+   （`state.json` 的 `installDate` 是 `2026-08-11T03:10:22Z`）。腳本第一個 `if not exist` 就 `exit /b 1`。
+2. MFC（`VC.ATLMFC`）沒裝進 Professional：`afxwin.h` → `C1083`。UI 是 MFC，非它不可。
+3. ninja（`VC.CMake.Project`）沒裝。
+4. `build_msvc_ui` 這個 build dir 還綁在已消失的 BuildTools `cl.exe` 上。
+   CMake 把**已解析的絕對路徑**記在 `CMakeFiles/<ver>/CMakeCXXCompiler.cmake`，
+   **那份記錄會蓋過命令列的 `-DCMAKE_CXX_COMPILER=cl`**，所以怎麼重跑都一樣死。
+
+Windows SDK **不需要補**：實測 BuildTools 卸載後殘留的 `10.0.19041.0` 配
+`vcvarsall x86 -vcvars_ver=14.44` 可編可連，`rc.exe` 也在。
+
+修法：兩支腳本改用 `vswhere -requires ...VC.Tools.x86.x64` 動態找 VS；ninja 找不到時回退 PATH；
+`build_msvc_ui.bat` 在 configure 失敗時自動清掉 build dir 再配置一次（本次就是它自己救回來的）。
+
+### 安裝那一段繳的學費（三次才成功）
+
+- 第一次 `--passive`：`Start-Process -Wait` 回 **exit 0，但一個元件都沒裝**。
+  日誌裡只有一次 channel manifest 的 update check —— 真因是**軟體安裝控制原則整支封殺了 `setup.exe`**，
+  使用者螢幕上才看得到那個警告視窗。
+- 第二次（使用者放行後）`--passive` → **exit 5007**，提權被拒。`--passive` 與 `--quiet` 一樣不自我提權。
+- 第三次 GUI 模式 → **參數錯誤**：PowerShell 5.1 的 `Start-Process -ArgumentList @(...)`
+  **不會替含空格的參數補引號**，`--installPath C:\Program` 就這樣送出去了。改傳單一字串並自己加引號才對。
+
+教訓：**`setup.exe` 是 bootstrapper，exit code 完全不可信，只能查檔案是否落地。**
+
+### ⚠ MSVC `C1061`：這件事擋在 GA-3 的關鍵路徑上
+
+用 MSVC 編 `wb_serve` 時撞到：
+
+```
+EJ1N\TextProcess.cpp(420): fatal error C1061: 區塊巢狀結構太深
+```
+
+`TextProcess.cpp:404-424` 是一條 **127 層的 ASCII `else if` 連鎖**（0..127 的查表題）。
+MinGW 與 BCB6 都吃得下，MSVC 的巢狀上限 128 剛好卡死。
+
+**它屬於 `ht9045_globals`，所以任何 link god-stack 的 MSVC target 都編不出來。**
+GA-3 的目標正是把 god-stack 放進 MFC 的 `HT9045.exe` —— **MinGW gate 全綠，完全看不出這堵牆。**
+本次改用 MinGW 繞過（`wb_serve` 只是工具，不是產品）。
+修法機械且行為等價（改 switch 或查表），但屬翻譯保真度決定，**未動**。
+
+### web sidecar：把 wb_serve 拆成兩個行程
+
+使用者要的是「不綁 VS、我自己有一個 web server、透過 127.0.0.1 看網頁」。
+`wb_serve` 已經是那個 server，缺的只是**資料從哪來**。所以把它拆成：
+
+```
+wb_publish  = 資料層 + TcpTagPublisher   （不做 HTTP）
+wb_gateway  = TcpTagClient + WebBridgeServer （不含任何機台程式碼）
+```
+
+link 清單就是重點本身，而且是**量出來的**：`DoInArm` 在 `wb_publish` 有 335 筆、在 `wb_gateway` 是 **0**；
+2.41 MB 對 12.11 MB。這性質讓 web server 能獨立改版、獨立重啟，並且**同一支 binary 可以同時面對 V906 或 V899**。
+
+新增 `WebBridge/TagJson`（tag↔JSON 雙向，單一定義，`WebBridgeServer.cpp` 原本的私有編碼器改為委派）
+與 `WebBridge/TcpTagLink`（loopback、唯讀、行分隔 JSON：`hello`/`snapshot`/`patch`/`ping`）。
+
+`removed` 用明列陣列而不是編成 null：對瀏覽器兩者都是 `---`，但**在兩個 C++ 端之間
+「消失了」與「存在但未知」是不同的事實**。
+
+收到的位元組一律丟棄且有上限。這不是潔癖 —— 出貨版的同類通道
+`Command.cpp:12697-12708` 把無上限的 `ReceiveLength()` 讀進 `char EthernetBuffer[100]`。
+
+### SECS 為什麼不能當 UI 匯流排（程式碼層級否決）
+
+`HT9011UC_Code_V3.33.899.0_...\SECSGEM\uHGemEquipment.cpp:2005-2013`：
+
+```cpp
+if (ActiveConnections > 0)
+  if (Connections[0]->Connected)
+    if (ActiveConnections == 1)      // 第二條連線進來就不成立
+      Connections[0]->SendBuf(...);
+```
+
+web 端以第二個 SECS host 身分連入 → `ActiveConnections` 變 2 → **整個送出被靜默跳過**，
+handler 對真正的 MES 變啞巴，沒有 else、沒有 log。`:4037` 又無條件送 `Connections[0]`。
+這是生產事故等級。SECS 該留在它本來的用途。
+
+### 驗收
+
+- `test_wb_tcplink`（ctest `WB_TcpLink`）**53 checks 全過**，含斷線重連。
+  被 pin 住的還有那個已知失真：整數值的 Double 解碼回來是 Int（JSON 只有一種數字型別）。
+- 完整 ctest **129/135**，失敗清單與動手前**逐項相同**：
+  `config_db`、`IniFiles`、`ini_helpers`、`config_loaders`、`dfm2rc_idempotent`、`GA1_ReadGeneralIni`。
+  **`WB_Server` 仍過**，這就是「編碼器改成委派沒有改變任何位元組」的證據。
+- 端到端實跑：`wb_publish → TCP 8046 → wb_gateway → WebSocket 8045 → Chrome`。
+  送到瀏覽器的 snapshot 與 in-process 的 `wb_serve` **逐位元組相同**（922 bytes）。
+  閒置時每 5 秒只多 26 bytes（心跳），不是重送整份快照。
+
+### 分家：V906 有了自己的代理
+
+899 跑在客戶量產機台、906 是實驗機，語言／編碼／工具鏈／風險承受度全部相反，
+所以建立 `ht9045-v906` 子代理（+ Copilot 鏡像），鎖定 `HT9011UC_Cpp_V3.33.906.0`。
+
+`CLAUDE.md` 不只是加一列：它的「路徑範圍指令」原本**只有 V899 的規則卻宣告全程適用**
+（不用 `auto`/`nullptr`、字串用 `AnsiString`、原始碼 Big5）—— 套到 V906 是**恰好相反**。
+已補對稱的 V906 一節，並標註「906」在本 repo 有兩棵樹（`_Cpp_` 可寫 vs `_Code_` 唯讀）。
+
+**未解的限制**：`.github/ops/write-boundary-policy.json` 對 899 與 906 兩棵樹**都放行**
+（因為 v899 代理需要 899），所以「V906 不准碰量產」目前只靠代理自己的規則守，沒有機械強制。
+
+### 刻意不做
+
+- **不動 V899 任何一行**。要在出貨版加快照埠的代價已寫成獨立評估文件
+  （`docs/RD5軟體_V899加TCP快照埠_風險評估_20260812_084103.md`），等使用者裁決。
+  最大成本項是 **R3：BCB6 編不動 C++17 的 WebBridge，wire 可共用但程式碼不能共用**。
+- **不修 `TextProcess.cpp` 的 C1061**（翻譯保真度決定）。
+- **不修 `Command.cpp:12697` 的既有堆疊溢位**（另案，但任何能連上該埠的程式都能弄掉 handler）。
+- **不拆 906 的執行期資料**：`common.cpp:89` 的 `asGeneralPath` 仍指向**量產機共用的**
+  `system\Gerneral.ini`，而 `LoadMachineConfig()` 會回寫它。目前只靠 `--dry` 這種人為紀律擋著。
+- 不開 V906 專屬分支（使用者本輪只選了子代理）。
+
+### 🔖 RESUME（最新）
+
+- **完成度未變**：本輪沒有翻譯任何 golden 函式，census 數字與 PT-W9 收工時相同。
+- **仍停在表單邊界**，等使用者裁決表單 facade 策略。
+- **F5 可用了**：`build.bat ui` 三段全綠（編 exe → ctrl probe → smoke，皆 exit 0），
+  BootLog 乾淨無例外。開出來的是 Gate A 佔位視窗（真 fMain 要 GA-3/GA-4）。
+- **新的阻塞項（優先於 GA-3）**：`EJ1N/TextProcess.cpp` 的 C1061。
+  GA-3 一旦把 god-stack 放進 MFC exe 就會撞上，且 MinGW gate 看不到。**建議排在 GA-3 之前處理**，
+  並順手掃全樹「連續 `else if` 超過 ~120」的檔案，不要只修這一個。
+- **等使用者裁決**：(a) 是否動 V899 加快照埠（見風險評估 §8 三個待決項）；
+  (b) 是否把 906 的執行期資料從量產機拆開；(c) 是否開 V906 專屬分支。
