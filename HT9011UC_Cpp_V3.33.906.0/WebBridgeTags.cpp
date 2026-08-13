@@ -10,8 +10,43 @@
 #include "Config.h"
 #include "LastSet.h"
 #include "cmydef.h"
+//AI(W906-SimPump) 20260813: pump mode needs the spine entry + instrumentation
+// (MainProc/InitAllProcessTask/GetMainProcCallCount/IsMainProcAlive), the
+// machine-shape enums the guard fixture pins (eartUninstall/NonVibration), and
+// bShuttleShake, whose home is the shims TU rather than a golden header.
+#include "csystem.h"
+#include "csystem_shims.h"
+#include "MachineType.h"
 
 #include "WebBridge/TagValue.h"
+
+#include <cstdio>
+#include <ctime>
+#include <vector>
+
+//AI(W906-SimPump) 20260813: engine cursors, declared here rather than by including
+// their owning headers. Every one is a plain int, so an extern declaration is
+// exact -- and pulling the real headers in would be actively risky: iArmTask's
+// home, aHotPlateSubstrate.h, also carries a SECOND TMyKitSuck with a DIFFERENT
+// layout from mykitsuck.h's, and 14 globals collide across the two. Picking the
+// wrong one links cleanly and reads every field at the wrong offset. A plain
+// `extern int` cannot be wrong that way.
+extern int iArmTask;              // in-arm      -- aHotPlateSubstrate.h:945
+extern int OutArmTask;            // out-arm     -- aoutarm.h:77
+extern int AutoSHT1Task;          // shuttle 1   -- acarry.h:39
+extern int AutoSHT2Task;          // shuttle 2   -- acarry.h:40
+extern int iTestHeadMotorTask;    // index/tester-- atester.h:169
+extern int LoadTask;              // loader      -- asendic_Loader.h:53
+// CatchTrayTask is already declared by csystem.h:63 (also acatchtray.h:48).
+
+//AI(W906-SimPump) 20260813: the tick oracle. CSYSTEM_TICK_ORACLE is compiled
+// UNCONDITIONALLY into ht9045_sm (CMakeLists.txt:2196), so these two symbols are
+// present in every binary that links it -- no test-only lib variant is involved.
+// That also means g_csystemTrace GROWS ON EVERY ENGINE CALL for the life of the
+// process (csystem.cpp:196) and csystemTraceClear() is the ONLY thing that bounds
+// it. Calling it each tick is not optional in a process that runs for hours.
+extern std::vector<int> g_csystemTrace;   // csystem.cpp:194
+extern void csystemTraceClear();          // csystem.cpp:195
 
 namespace ht9045 {
 
@@ -113,6 +148,15 @@ void stageNull(webbridge::TagSnapshot& s, const char* tag)
     s.stage(tag, TagValue::makeNull());
 }
 
+//AI(W906-SimPump) 20260813: bool needs its own stager -- routing a bool through
+// stageInt would publish 1/0, and the UI's boolean modes test truthiness
+// (data-lit / btn--on, web/js/ui/bind.js:141-149) where a JSON number and a JSON
+// bool are not interchangeable for a reader trying to tell a flag from a count.
+void stageBool(webbridge::TagSnapshot& s, const char* tag, bool live, bool v)
+{
+    s.stage(tag, live ? TagValue::makeBool(v) : TagValue::makeNull());
+}
+
 // The home screen's tags whose source is measurably not loaded. Publishing them
 // as null is not a placeholder -- it is the correct value, and it makes the
 // extent of the gap visible on the screen instead of hiding it behind zeros.
@@ -140,7 +184,147 @@ const char* const kUnloadedTags[] = {
 
 const std::size_t kUnloadedCount = sizeof(kUnloadedTags) / sizeof(kUnloadedTags[0]);
 
+// ---------------------------------------------------------------------------
+//  PUMP MODE internals.  Contract, and the reachability measurement that forces
+//  the "SIM" prefix, are in WebBridgeTags.h -- read that before changing any of
+//  this.  AI(W906-SimPump) 20260813.
+// ---------------------------------------------------------------------------
+
+// Engine ids the tick oracle records; must match the enum at csystem.cpp:198-201.
+enum {
+    CT_SENSORSCAN = 1, CT_DOLOAD = 2, CT_DOINARM = 3, CT_SHT1 = 4, CT_SHT2 = 5,
+    CT_SHT3 = 6, CT_TESTHEAD = 7, CT_CATCHTRAY = 8, CT_OUTARM = 9, CT_SORTARM = 10
+};
+
+bool               g_pumpActive     = false;
+unsigned long long g_pumpTicks      = 0;
+unsigned long long g_pumpExceptions = 0;
+int                g_lastTickKind   = 0;   // 1 = A tick, 2 = B tick, 0 = neither
+
+bool traceHas(const std::vector<int>& v, int id)
+{
+    for (std::size_t i = 0; i < v.size(); ++i) {
+        if (v[i] == id) return true;
+    }
+    return false;
+}
+
+// Classify one tick, same rule as tests/test_w6_6_csystem_cycle.cpp:161-170.
+// bDoProcess (csystem.cpp:4216, toggled :4448) makes the spine alternate:
+//   A = DoInArm + SHT1, no OutArm/SHT2      B = DoOutArm + SHT2, no DoInArm/SHT1
+// "neither" is not an error on a guard-truncated tick -- it is the honest answer.
+int classifyTick(const std::vector<int>& v)
+{
+    const bool inarm  = traceHas(v, CT_DOINARM);
+    const bool sht1   = traceHas(v, CT_SHT1);
+    const bool outarm = traceHas(v, CT_OUTARM);
+    const bool sht2   = traceHas(v, CT_SHT2);
+    if ( inarm &&  sht1 && !outarm && !sht2) return 1;
+    if (!inarm && !sht1 &&  outarm &&  sht2) return 2;
+    return 0;
+}
+
+// The three master-guard terms, re-read live. This is the ONLY thing behind the
+// state word -- csystem.cpp:4235 (golden csystem.cpp:10049), re-evaluated by the
+// spine 8 times per tick, so a mid-tick flip truncates the tick.
+bool guardAllowsEngines()
+{
+    return SoftStop == false && SystemStart == true && fAllMotorHome == true;
+}
+
 }  // namespace
+
+// ---------------------------------------------------------------------------
+//AI(W906-SimPump) 20260813: see the PUMP MODE block in WebBridgeTags.h.
+bool PumpInit(std::string& whyNot)
+{
+    // ---- sim canary -------------------------------------------------------
+    // LastSet.iRealDummy==DUMMY(0) != REALLY, together with a non-Contec motion
+    // card, is what makes CheckInShuttleSensor_Latch return 1 (Finish) at
+    // ainarm9045.cpp:1891-1893 BEFORE any CCLink/Ltc/MOT body runs. Those bodies
+    // have never executed offline. If a config load has flipped both terms, the
+    // interlock is live and pumping would be the first thing to ever run it --
+    // refuse rather than find out.
+    if (MOTION_CARD_TYPE == MotionCard_Contec && LastSet.iRealDummy == REALLY) {
+        whyNot = "sim canary violated (MOTION_CARD_TYPE==Contec AND "
+                 "LastSet.iRealDummy==REALLY): the hardware interlock at "
+                 "ainarm9045.cpp:1891 is live -- refusing to pump";
+        return false;
+    }
+
+    // ---- the offline "Run" fixture ----------------------------------------
+    // Verbatim from tests/test_w6_6_csystem_cycle.cpp:135-156 (RunGuards), which
+    // is the only version of this recipe backed by a passing 64-tick oracle.
+    // Deliberately NOT re-derived: every line here is load-bearing on tick shape.
+    InitialOK                 = true;            // MainProc head guard, csystem.cpp:3001
+    SoftStop                  = false;           // master guard, csystem.cpp:4235
+    SystemStart               = true;            //   "
+    fAllMotorHome             = true;            //   "
+    bShuttleShake             = false;           // else shuttle+index block skipped, :4265
+
+    TrayForm.bEnableAMR       = false;           // plain DoLoad path, :4242
+    USE_OUT_SORT_ARM          = eartUninstall;   // no SHT3/SortArm, :4286/:4315
+
+    AUTO_EMPTY_COLOR          = 0;               // :4336 -> cmpt=3; see NOTE below
+    AUTO3_IS_MAGAZINE         = 0;               // no DoAuto3Magazine, :4331
+    TRAY_VIBRATION            = NonVibration;    // no tray-edge cylinder loop, :4383
+    SUPPORT_2_EMPTY_EMPTY     = false;           // no DoAutoEmpty1, :4411
+    bUseAuto2Empty            = false;           // no DoAuto2, :4408
+
+    bLoaderNeedTrayMustFinish = false;
+    bAutoNeedTrayMustFinish   = false;
+    bRunInArmAutoAlignment    = false;           // else DoAllProcess returns at :4440
+    bRunOutArmAutoAlignment   = false;           //   BEFORE the bDoProcess toggle :4448,
+                                                 //   freezing the A/B parity.
+    // NOTE, verified 20260813: the test's own comment at
+    // tests/test_w6_6_csystem_cycle.cpp:146 says AUTO_EMPTY_COLOR=0 "skip[s] the
+    // DoAutoReceiveBinTray loop". That comment is WRONG -- 0 takes the `<3` branch
+    // at csystem.cpp:4336 and sets cmpt=3, so DoAutoReceiveBinTray(0..2) runs every
+    // tick. Harmless here (it is why BinTrayTask moves at all), but recorded so the
+    // next reader does not inherit the mistake.
+
+    InitAllProcessTask();                        // per-engine cursor reset, csystem.cpp:241
+    g_pumpActive = true;
+    whyNot.clear();
+    return true;
+}
+
+void PumpTick()
+{
+    if (!g_pumpActive) return;
+
+    // Bounds g_csystemTrace. Not cosmetic: nothing else trims it, so skipping this
+    // is an unbounded leak for the life of the process (csystem.cpp:196).
+    csystemTraceClear();
+
+    // The compiled MainProc path (csystem.cpp:3020-3022) has NO try/catch of its
+    // own -- its #ifdef DEBUG_TRY_CATCH pair is dead because DEBUG_TRY_CATCH is
+    // defined nowhere in the build. One escaping exception would otherwise take the
+    // whole publisher down and, without SetErrorMode, do it behind a modal box.
+    try {
+        MainProc();
+    } catch (...) {
+        ++g_pumpExceptions;
+    }
+
+    ++g_pumpTicks;
+    g_lastTickKind = classifyTick(g_csystemTrace);
+}
+
+bool PumpActive()
+{
+    return g_pumpActive;
+}
+
+PumpStats PumpTelemetry()
+{
+    PumpStats st;
+    st.ticks         = g_pumpTicks;
+    st.exceptions    = g_pumpExceptions;
+    st.mainProcCalls = g_pumpActive ? GetMainProcCallCount() : 0u;
+    st.alive         = g_pumpActive ? IsMainProcAlive(60) : false;
+    return st;
+}
 
 // ---------------------------------------------------------------------------
 std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap)
@@ -172,6 +356,88 @@ std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap)
         stageNull(snap, kUnloadedTags[i]);
     }
 
+    // --- machine state + pump telemetry -------------------------------------
+    //AI(W906-SimPump) 20260813: WITHOUT a pump these are NULL, not "HALT". We are
+    // not driving the spine, so we have no state to report, and "HALT" would be a
+    // claim about a machine we are not observing. With a pump the word reports the
+    // LIVE master guard, re-read here every tick, prefixed "SIM " because this
+    // process forced the guard terms rather than sensing them (WebBridgeTags.h).
+    const bool pumping = g_pumpActive;
+
+    // --- the wall clock ------------------------------------------------------
+    //AI(W906-SimPump) 20260813: gated on `pumping` like every other process tag,
+    // and that gate is deliberate rather than incidental.
+    //
+    // My first version published it unconditionally, on the reasoning that the
+    // publisher always knows its own clock. That broke a REAL invariant asserted at
+    // tests/test_wb_tags.cpp:68 -- "every tag is null before the data layer is
+    // loaded (nothing is inventing values)" -- whose stated purpose (:53-55) is to
+    // be the control for the liveness checks after it. Relaxing that assertion to
+    // accommodate one convenience tag would have traded a strong, simple invariant
+    // for a weaker one coupled to a tag-naming convention. Gating instead keeps the
+    // invariant untouched and costs nothing that matters: the F5 compound runs
+    // --pump, and a publisher that is not driving the spine has a static screen by
+    // definition, so a ticking clock on it would be the misleading part.
+    //
+    // Format matches what the UI was authored against (web/js/model/state.js:63).
+    if (pumping) {
+        const std::time_t now = std::time(0);
+        const std::tm*    lt  = std::localtime(&now);
+        if (lt != 0) {
+            char buf[64];
+            std::sprintf(buf, "%04d / %02d / %02d   %02d:%02d",
+                         lt->tm_year + 1900, lt->tm_mon + 1, lt->tm_mday,
+                         lt->tm_hour, lt->tm_min);
+            snap.stage("clock.text", TagValue::makeString(buf));
+        } else {
+            stageNull(snap, "clock.text");
+        }
+    } else {
+        stageNull(snap, "clock.text");
+    }
+
+    if (pumping) {
+        const bool run = guardAllowsEngines();
+        snap.stage("machine.state",
+                   TagValue::makeString(run ? "SIM RUN" : "SIM HALT"));
+        snap.stage("machine.stateSource",
+                   TagValue::makeString("sim: wb_publish --pump forced the guard "
+                                        "terms; no machine is attached"));
+    } else {
+        stageNull(snap, "machine.state");
+        stageNull(snap, "machine.stateSource");
+    }
+
+    // Raw guard terms, published individually so the derived word above can always
+    // be checked against its inputs rather than trusted.
+    stageBool(snap, "pump.guard.softStop",     pumping, SoftStop);
+    stageBool(snap, "pump.guard.systemStart",  pumping, SystemStart);
+    stageBool(snap, "pump.guard.allMotorHome", pumping, fAllMotorHome);
+
+    // Liveness. guMainProcCallCount is file-static in csystem.cpp, so it is read
+    // through golden's own accessor (csystem.h:52) rather than an extern.
+    stageInt (snap, "pump.ticks",         pumping, static_cast<long long>(g_pumpTicks));
+    stageInt (snap, "pump.mainProcCalls", pumping, GetMainProcCallCount());
+    stageInt (snap, "pump.exceptions",    pumping, static_cast<long long>(g_pumpExceptions));
+    stageBool(snap, "pump.alive",         pumping, IsMainProcAlive(60));
+    if (pumping) {
+        snap.stage("pump.tickKind",
+                   TagValue::makeString(g_lastTickKind == 1 ? "A" :
+                                        g_lastTickKind == 2 ? "B" : "?"));
+    } else {
+        stageNull(snap, "pump.tickKind");
+    }
+
+    // Engine cursors. These are the things that actually MOVE, and therefore the
+    // evidence that the translated engines are cycling rather than merely linked.
+    stageInt(snap, "pump.task.load",      pumping, LoadTask);
+    stageInt(snap, "pump.task.inArm",     pumping, iArmTask);
+    stageInt(snap, "pump.task.outArm",    pumping, OutArmTask);
+    stageInt(snap, "pump.task.sht1",      pumping, AutoSHT1Task);
+    stageInt(snap, "pump.task.sht2",      pumping, AutoSHT2Task);
+    stageInt(snap, "pump.task.testHead",  pumping, iTestHeadMotorTask);
+    stageInt(snap, "pump.task.catchTray", pumping, CatchTrayTask);
+
     const std::size_t staged = snap.stagedTagCount();
     snap.commitPublish();
     return staged;
@@ -189,6 +455,25 @@ TagCoverage HandlerTagCoverage()
     // 3 identity strings + 1 customer code + 4 LastSet scalars + the dead set.
     c.total = 3 + 1 + 4 + kUnloadedCount;
     c.live  = (strs ? 3u : 0u) + (cust ? 1u : 0u) + (lastS ? 4u : 0u);
+
+    //AI(W906-SimPump) 20260813: the 18 clock/state/pump tags are DELIBERATELY NOT
+    // counted here, and the reason is the same one this file exists for.
+    //
+    // TagCoverage answers exactly one question: "how many MACHINE DATA SOURCES are
+    // actually loaded?". clock.text is the publisher's own wall clock and pump.* is
+    // the publisher's own telemetry -- neither is a reading taken from the machine.
+    // machine.state is excluded too, because under --pump it reports a fixture this
+    // process FORCED rather than a condition it sensed (see WebBridgeTags.h).
+    //
+    // Counting any of them would push `live` up without a single new machine source
+    // having been read -- precisely the flattering denominator this file's own rule
+    // is meant to prevent, and it would also have broken the invariant asserted at
+    // tests/test_wb_tags.cpp:75 ("0 live before loading"), which is a genuine
+    // property worth keeping rather than an assertion to update.
+    //
+    // The true count of tags on the wire is PublishHandlerTags()'s return value
+    // (snap.stagedTagCount()), which is 61 = 43 machine + 18 process. Coverage and
+    // wire-count are different questions and this struct only answers the first.
 
     // Referenced so the currently-always-false predicates cannot rot into
     // unused code and silently stop being checked when their sources land.

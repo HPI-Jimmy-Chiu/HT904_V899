@@ -14,10 +14,16 @@
   //
   //  WHICH ONE IS "THE APP"?  AI(W906-WebHMI-F5) 20260812: the product
   //  direction is web UI + C++ core, so the default F5 experience is the
-  //  "Web HMI" COMPOUND at the bottom: it builds (MinGW), starts
-  //  wb_publish --dry (data feed, tcp 8046) and wb_gateway (http+ws 8045),
-  //  then opens the browser HMI. The MFC exe stays only as the Gate A
-  //  translation-verification harness -- its placeholder window is expected.
+  //  "Web HMI" COMPOUND at the bottom: it builds (MinGW), starts the publisher
+  //  (tcp 8046) and wb_gateway (http+ws 8045), then opens the browser HMI. The
+  //  MFC exe stays only as the Gate A translation-verification harness -- its
+  //  placeholder window is expected.
+  //
+  //  AI(W906-SimPump) 20260813: the compound's publisher is now `wb_publish
+  //  --pump`, which DRIVES the translated state machine so the screen moves. The
+  //  big word reads "SIM RUN"/"SIM HALT" -- SIM because nothing in the translated
+  //  tree can set SystemStart/fAllMotorHome, so this process forces them. Read the
+  //  PUMP MODE block in WebBridgeTags.h before changing any of that.
   // ==========================================================================
   "version": "0.2.0",
   "configurations": [
@@ -96,6 +102,29 @@
       "externalConsole": false
     },
     {
+      // AI(W906-SimPump) 20260813: the feed the F5 compound actually uses.
+      // --pump DRIVES the translated spine (MainProc every 250 ms), so the browser
+      // shows a live machine.state word and moving engine cursors instead of a
+      // static config dump. It reads NO ini and writes NO ini, which makes it
+      // strictly safer than the --dry config above as well as more useful: --dry
+      // still calls LoadMachineConfig against a scratch COPY of the production
+      // Gerneral.ini, while --pump does not open it at all.
+      //
+      // The word on screen reads "SIM RUN"/"SIM HALT". That prefix is load-bearing,
+      // not decoration -- this process forces SystemStart/fAllMotorHome because
+      // NOTHING in the translated tree can set them (see WebBridgeTags.h for the
+      // reachability measurement). No machine is attached and none is sensed.
+      "name": "Web HMI: wb_publish --pump (live spine feed)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/wb_publish.exe",
+      "args": ["--pump"],
+      "cwd": "${workspaceFolder}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "C:/MinGW/bin/gdb.exe",
+      "externalConsole": false
+    },
+    {
       // Web half: links ht9045_webbridge and NOTHING else from the machine
       // side -- it cannot read a motor or open an ini. Serves D:\HT9045\web
       // on http://127.0.0.1:8045 and reconnects to the publisher by itself,
@@ -125,7 +154,10 @@
       // rendering of "no data yet".
       "name": "Web HMI (publisher + gateway + browser)",
       "configurations": [
-        "Web HMI: wb_publish --dry (data feed)",
+        // AI(W906-SimPump) 20260813: switched from the --dry feed to the --pump
+        // feed. The --dry config is still in the list above if you want the
+        // config-derived identity tags instead of a moving screen.
+        "Web HMI: wb_publish --pump (live spine feed)",
         "Web HMI: wb_gateway (web server, no machine code)"
       ],
       "preLaunchTask": "V906: Build (MinGW, quick)",

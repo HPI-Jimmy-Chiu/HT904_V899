@@ -3093,6 +3093,22 @@ if(WIN32)
 endif()
 add_test(NAME WB_Tags COMMAND test_wb_tags)
 
+# WB_SimPump: pump mode -- the first thing outside tests/ that DRIVES the
+# translated spine, and the only tag that puts a word on an operator screen.
+# Same link shape as WB_Tags (it reaches MainProc + the engine cursors through
+# WebBridgeTags.cpp), and deliberately loads NO config: PumpInit() is specified to
+# work with zero config, so this TU cannot touch the shared production ini at all.
+# AI(W906-SimPump) 20260813.
+add_executable(test_wb_simpump test_wb_simpump.cpp ../WebBridgeTags.cpp)
+target_link_libraries(test_wb_simpump PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+    ht9045_webbridge
+)
+if(WIN32)
+    target_link_libraries(test_wb_simpump PRIVATE ws2_32)
+endif()
+add_test(NAME WB_SimPump COMMAND test_wb_simpump)
+
 add_executable(test_wb_crypto  test_wb_crypto.cpp)
 add_executable(test_wb_state   test_wb_state.cpp)
 add_executable(test_wb_wsproto test_wb_wsproto.cpp)

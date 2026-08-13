@@ -7208,3 +7208,100 @@ handler 對真正的 MES 變啞巴，沒有 else、沒有 log。`:4037` 又無�
 - **待使用者裁決**：(a) V899 加快照埠（風險評估文件已出）；(b) 906 執行期資料與量產機
   拆分——web HMI 要長跑，這件事得先做；(c) WebBridge write path 設計輪（安全關鍵）；
   (d) C1061 降級後的修復優先序。
+
+---
+
+## 2026-08-13 — 路線 A：pump 模式（web HMI 第一次顯示活著的機台狀態）
+
+**使用者指示「依據建議執行」**。路線 A（讓畫面會動）本輪做完；路線 B（V899 加快照埠）
+**未動**——它要改量產出貨二進位，仍等使用者對風險評估 §8 的裁決。
+
+### 推翻原本前提的量測（本輪最重要的發現）
+
+**翻譯過的碼永遠無法讓機台離開 HALT。** DoAllProcess 的 master guard（port
+`csystem.cpp:4235` = golden `csystem.cpp:10049`）需要
+`SystemStart && fAllMotorHome && !SoftStop`，而兩個 true-writer 都執行期不可達：
+
+- `SystemStart=true` 全樹僅 `ckernel.cpp:1015` 一處（非測試），位在 `if(SoftStart==true)` 內；
+  唯一 live caller 是 ProcessAlarm，而 `ckernel.cpp:4009` 在呼叫前一行就 `SoftStart=false;`
+  → 該臂進不去。另一個 call site `csystem.cpp:778` 在 `#if 0` 內。
+- `fAllMotorHome=true` 全樹僅 `csystem.cpp:9709` 一處，在 DoHomeProcess 內；本樹自己的橫幅
+  已記載其不可達（`csystem.cpp:9632` "HAS NO CALLER TODAY"、`:8678`）。
+
+以上由主迴圈**親自 grep + 讀碼複驗**（不只採信偵查 agent 轉述）。結論：要看到引擎 tick，
+publisher 必須**自己強制** guard 項——這是合法的（W6.6 通過的測試就是這麼做），但那是
+**模擬**，畫面絕不能讓人誤認為接上機台了。故狀態字是 `SIM RUN` / `SIM HALT`。
+
+### 做了什麼
+
+- `WebBridgeTags.h/.cpp`：新增 `PumpInit()` / `PumpTick()` / `PumpActive()` / `PumpTelemetry()`
+  與 **18 個新 tag**（43 → 61）。guard 配方**逐字照抄** `tests/test_w6_6_csystem_cycle.cpp:135-156`
+  的 16 個旗標，不自行重編。god-stack 耦合全留在這個「唯一允許混兩個世界」的 TU 內。
+- `tools/wb_publish.cpp`：`--pump` / `--with-config` / `--tick-ms`，`SetErrorMode()` 為 main 第一行。
+- `.vscode/launch.json`：F5 compound 的 publisher 改用 `--pump`（`--dry` 那個設定保留）。
+- `tests/test_wb_simpump.cpp`（新）+ CMake 註冊 `WB_SimPump`：O1–O7 oracle。
+- **零 CMake 建置改動**（wb_publish 早已 link `ht9045_sm` 全 god-stack，link delta = 0）、
+  **零 web 改動**（`machine.state` / `clock.text` UI 早已綁好，publisher 從沒送過）。
+
+### 安全決定（每條都有量測背書）
+
+- **`--pump` 一律不呼叫 `LoadMachineConfig()`**，這是安全性質不是省略：
+  (1) `ReadGeneralIni` 會覆寫 pump 依賴的五個 guard 全域（`database.cpp:454/593/703/1079/1430`）；
+  (2) 它可能把 `MOTION_CARD_TYPE`→Contec、`LastSet.iRealDummy`→REALLY，**解除**
+  `ainarm9045.cpp:1891-1893` 的互鎖自我停用，讓從未離線執行過的 CCLink/Ltc/MOT body 跑起來；
+  (3) 它 seed key = **寫檔**，而 `--dry` 只重導 `asGeneralPath`——`lastdata.dat` /
+  `lastdata_backup*.dat` 的路徑是**硬編字面值**（`cprod.cpp:1701`、`:1729`）。本樹已為這個形狀
+  付過一次代價（靜默毀教導值）。不載 config 的代價為零：既有 liveness predicate 本來就會把那
+  8 個 tag 正確地送 null。
+- **sim canary 斷言**：`MOTION_CARD_TYPE==Contec && iRealDummy==REALLY` 時 `PumpInit` 拒絕。
+  不載 config 時預設 `0`/`0` 天然安全（`cmydef.cpp:3643`、`:265-267`）。O7 測此分支雙向。
+- **每 tick `csystemTraceClear()`**：`CSYSTEM_TICK_ORACLE` 是**無條件**編進 ht9045_sm
+  （`CMakeLists.txt:2196`），trace 會終生成長 → 長跑 blocker。O4 守它。
+- **每 tick `try/catch(...)`**：`DEBUG_TRY_CATCH` 全樹未定義，編譯路徑
+  （`csystem.cpp:3020-3022`）自己沒有保護。
+- **`SetErrorMode`**：wb_publish 在 root CMakeLists，拿不到 tests/ 目錄範圍的
+  `ht9045_test_bootstrap`（`tests/CMakeLists.txt:25-29`）→ 崩潰會彈 WER modal 永久卡住且 log 全無。
+
+### 驗收（比對失敗清單，不看數字）
+
+| 階段 | 結果 |
+|---|---|
+| 基線（改動前） | 135 測試 / **6 失敗** = `config_db`、`IniFiles`、`ini_helpers`、`config_loaders`、`dfm2rc_idempotent`、`GA1_ReadGeneralIni`。零未知失敗 |
+| v1 驗收 | 唯一新失敗 `WB_Tags`（我自己造成，見下）；其餘與基線相同 |
+| **決定性驗收** | **136 測試 / 6 失敗 = 完全等於基線失敗集，零回歸**；`WB_Tags` Passed、`WB_SimPump` Passed |
+| WB_SimPump（加 O7 後單跑） | Passed，0 失敗 |
+
+**我自己造成並修掉的兩個回歸**（誠實記錄，兩個都在結果回來前就診斷出原因）：
+1. 把 clock/pump tag 算進 `HandlerTagCoverage()` → 打破 `test_wb_tags.cpp:75` 的 `c.live==0`。
+   修法不是改測試，而是認清 coverage 量的是**機台資料來源**，process metadata 不該進分母
+   （否則正是我自己註解警告的「美化分母」）。
+2. `clock.text` 恆 live → 打破 `test_wb_tags.cpp:68`「載入前每個 tag 都是 null」。
+   修法是把它跟其他 process tag 一樣綁在 `pumping` 上，**既有斷言一行都不用改**——
+   不為了自己的新功能去放寬既有的強不變量。
+
+EOL 已驗：五個改動檔磁碟上仍 100% CRLF，numstat 為外科式小 diff，無假 churn。
+
+### 🔖 RESUME（最新）
+
+- **本輪已完成並驗收**：pump 模式（實作 + 18 tag + O1–O7 測試 + gate 綠 + 零回歸）。
+- **尚未執行（下次接續的第一件事）**：
+  1. **端到端實跑**：腳本已備在 scratchpad `e2e_verify.ps1`（同資料夾另有 `wire_probe.py`
+     直讀 TCP :8046、`ws_probe.py` 走 WebSocket :8045 驗使用者實際會看到的整條鏈）。
+     **注意**：不可在 ctest 執行期間跑，`WB_TcpLink` 會撞埠造成假失敗。
+  2. **安全實測**：`system_before.txt`（550 檔 MD5+size+mtime）已在 scratchpad 錄好；
+     e2e 跑完比對 after，用**實測**證明 pump 沒寫 `D:\HT9045\system`
+     （不靠在 25k 行狀態機上證明不存在）。
+  3. 觀察 publisher stats 那行既有的 `%llu` 缺陷（MinGW msvcrt printf 不支援 `%ll`，
+     `wb_publish.cpp:222` 會印垃圾）。**這是既有缺陷非本輪造成**；我的新行已改用 `%lu`。
+     實跑看到確認後再決定要不要順手修。
+- **仍待使用者裁決**：(a) **路線 B = V899 加 TCP 快照埠**（要動量產出貨二進位，
+  風險評估 §8 三題；消費端 100% 已完成可直接沿用，V899 那側是整條鏈唯一缺口）；
+  (b) 906 執行期資料與量產機拆分；(c) WebBridge write path 設計輪（安全關鍵）；
+  (d) C1061 修復優先序。
+- **範圍外但要提**：`D:\HT9045\web` **不在 allowedWriteRoots 內，且 git 完全沒追蹤（0 檔）**。
+  本輪不需要改 web 就達成目標，但前端完全沒版控是真實風險。
+- **量測到的落差**（供後續參考）：網頁實際綁 **296** 個 tag（234 data-tag + 62 data-tone-tag），
+  本輪後發布 61 個。剩下的是翻譯問題，不是 bridge 問題。
+- **誠實界定**：這是 **liveness harness，不是機台週期**。無盤無 IC 時 DoLoad 停在 case 800
+  （"Loader has no tray"），sim `ShowErrorMessage` 回 K_RETRY（`canary_support.cpp:57`），
+  所以 cursor 會動、A/B 會交替、不會崩，但**沒有生產進度可看**。不要當成機台在跑來報告。
