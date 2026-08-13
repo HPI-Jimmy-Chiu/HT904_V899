@@ -7305,3 +7305,72 @@ EOL 已驗：五個改動檔磁碟上仍 100% CRLF，numstat 為外科式小 dif
 - **誠實界定**：這是 **liveness harness，不是機台週期**。無盤無 IC 時 DoLoad 停在 case 800
   （"Loader has no tray"），sim `ShowErrorMessage` 回 K_RETRY（`canary_support.cpp:57`），
   所以 cursor 會動、A/B 會交替、不會崩，但**沒有生產進度可看**。不要當成機台在跑來報告。
+
+## 2026-08-13（續）— 路線 A 端到端實跑 + 安全實測，並修正我自己一個錯誤斷言
+
+前一段只到「gate 綠」。本段補完 RESUME 列的兩件事，並更正一條我寫進註解與記憶的**錯誤**宣稱。
+
+### 端到端實跑（瀏覽器實際會看到的整條鏈）
+
+`wb_publish --pump` → TCP :8046 → `wb_gateway` → WebSocket :8045。兩支探針直讀線上內容，
+不靠「畫面看起來有東西」當證據（腳本留在 session scratchpad）。
+
+| 觀察 | 結果 |
+|---|---|
+| 線上 tag 數 | **61**（43 machine + 18 process），與設計相符 |
+| `machine.state` | **`'SIM RUN'`**，TCP 與 WebSocket 兩側都收到 |
+| HTTP / WS | `GET / → 200 OK`（949 B）、WS → **`101 Switching Protocols`** |
+| frame 種類 | TCP: hello×1 + snapshot×1 + patch×31；WS: snapshot×1 + patch×32 |
+| spine 前進 | `pump.ticks == pump.mainProcCalls`（56→88 一致遞增），**exceptions=0**，`alive=yes` |
+| 真的在動的 tag | TCP 7 個、WS 6 個（`pump.ticks`/`mainProcCalls`/`tickKind`/`task.load`/`task.sht1`/`task.sht2`/`clock.text`）|
+| `tickKind` | 觀察到 `A`/`B` 兩值交替，與 `bDoProcess` 的 A/B 語意相符 |
+
+`clock.text` 在 WS 視窗只看到 1 個值，因為格式是分鐘解析度而探針視窗 8 秒——不是缺陷。
+
+### 安全實測：pump 不寫量產設定（這是本段最重要的結論）
+
+**做法**：對 `D:\HT9045\system` 全 550 檔取 MD5 + size + mtime，前後比對。
+刻意**不用**「在 25k 行狀態機上證明不存在」這種脆弱論證。
+
+第一次 e2e 後比對出 **`system\BinCount.txt` 的 mtime 變了**（02:34:20Z → 02:53:36Z，
+**MD5 與 size 完全相同**，內容沒變但檔案被重寫過）。因此做**隔離實驗**：重取 before →
+只跑 `wb_publish --pump --seconds 20`、不跑其他任何東西 → 重取 after。
+
+> **結果：550 檔全部 byte-identical 且 mtime-identical。pump 本身完全不寫 `D:\HT9045\system`。**
+
+那個 mtime 變動落在 **gate2 的 ctest 視窗（10:47–10:54）** 內，時間對不上 pump 的執行區間
+（11:05–11:09），且隔離實驗二次否證。結論：**是 V906 測試套件裡某個測試碰的，不是 pump。**
+`ReadWriteBinCountMode` 在 `csystem.cpp:6522-6523` 被 `#define` 成 no-op（call site 都在其後），
+真本體在 `csystem.cpp:30975`；`tests/` 下有 6 個檔提到 BinCount。**我沒有釘到是哪一個測試**——
+誠實記為未收斂項，值得單獨一張單：**跑 V906 測試套件會寫到量產機共用的 `system\`**。
+
+### 更正：我寫錯了一條斷言
+
+先前我在 `wb_publish.cpp` 註解與記憶裡寫「這個 MinGW 的 printf 不支援 `%llu`，會印垃圾」。
+**實跑證明這是錯的**：既有那行用 `%llu` 印出 `frames=79 bytes=14531`，值完全正確。
+`-Wformat` 的 "unknown conversion type character 'l'" 是**關於能力的假警報**（格式檢查器照
+msvcrt 語意，實際連結到的 printf 支援 `%ll`）。
+
+→ 已更正註解，並明確寫下**不要**因為這個警告去「修」既有的 `%llu` 那行。新寫的行仍用 `%lu`
+純粹是為了避開診斷，不是因為 `%llu` 壞掉。記憶條目同步更正。
+
+### 觀察到的粗糙點（F5 使用者會看到）
+
+pump 期間 stdout 會持續出現
+`[ShowErrorMessage] Code=MES0920 KCode=5 Pos=168`：**20 秒 37 行 ≈ 1.85 行/秒**（總 63 行）。
+來源已查明是 `asendic_Loader.cpp:3091` 一族的 `DoLoad_800-*`，旗標 `K_RETRY|K_CLEAN_OUT`，
+`Pos=168` = `MMTrayY_Car`。這正是「無盤 → 重試」，**實證了 liveness harness 的誠實界定**：
+cursor 會動、A/B 會交替、零例外，但沒有生產進度。F5 的 debug console 會以約 2 行/秒累積；
+不是洪流、目前不會塞爆已被抽取的 console，但長跑或 stdout 接到沒人讀的 pipe 時要留意。
+
+### 🔖 RESUME（最新）
+
+- **路線 A 完成並實測驗收**：實作 + 18 tag + O1–O7 測試 + gate 綠（136/6 = 基線同清單）
+  + 端到端實跑通 + **pump 不寫量產設定（實測）**。
+- **未收斂項（新）**：V906 **測試套件**會寫 `D:\HT9045\system\BinCount.txt`（內容相同但重寫）。
+  非 pump 造成、未釘到具體測試。建議單獨處理——它與「906 執行期資料與量產機拆分」同一件事。
+- **仍待使用者裁決**：(a) **路線 B = V899 加 TCP 快照埠**（動量產出貨二進位；風險評估 §8 三題；
+  消費端已 100% 完成，V899 側是整條鏈唯一缺口）；(b) 906 執行期資料拆分；
+  (c) WebBridge write path 設計輪（安全關鍵）；(d) C1061 修復優先序。
+- **範圍外仍未解**：`D:\HT9045\web` 不在 allowedWriteRoots 且 git 零追蹤（前端無版控）。
+- **落差**：網頁綁 296 個 tag，本輪發布 61 個。剩下是翻譯問題，不是 bridge 問題。

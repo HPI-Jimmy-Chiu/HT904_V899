@@ -230,12 +230,19 @@ int main(int argc, char** argv)
                 // serving frames but NOT ticking -- or ticking and throwing every
                 // time -- looks identical from the browser.
                 const ht9045::PumpStats ps = ht9045::PumpTelemetry();
-                //AI(W906-SimPump) 20260813: %lu + unsigned long, NOT %llu. This
-                // MinGW's printf is the msvcrt one and does not implement %ll --
-                // g++ -Wformat reports "unknown conversion type character 'l'" and
-                // the field prints garbage. (The socket-stats line above still has
-                // that defect; it predates this change.) unsigned long is ample:
-                // at the 250 ms default, 2^32 ticks is ~34 years.
+                //AI(W906-SimPump) 20260813: %lu + unsigned long, NOT %llu, to keep
+                // this line -Wformat-clean. g++ here reports "unknown conversion
+                // type character 'l'" for %llu because the format checker follows
+                // msvcrt semantics.
+                //
+                // CORRECTION, measured 20260813: that warning is a FALSE ALARM about
+                // capability. I first wrote here that %llu "prints garbage"; a real
+                // run disproves it -- the socket-stats line above uses %llu and
+                // printed frames=79 bytes=14531, i.e. correct values. So the
+                // pre-existing line is NOT broken and must not be "fixed" on the
+                // strength of the warning alone. %lu is used below only to avoid the
+                // diagnostic; unsigned long is ample either way (at the 250 ms
+                // default, 2^32 ticks is ~34 years).
                 std::printf("        pump: ticks=%lu mainProcCalls=%lu "
                             "exceptions=%lu alive=%s\n",
                             (unsigned long)ps.ticks,
