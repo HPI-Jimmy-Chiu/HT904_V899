@@ -106,6 +106,28 @@
       "problemMatcher": "$msCompile"
     },
     {
+      // AI(W906-StateWin) 20260814: the F5 build step, and the reason it exists.
+      //
+      // One keypress has to produce BOTH halves, and they come from DIFFERENT
+      // toolchains: the publisher/gateway are MinGW binaries, and HT9045.exe can
+      // only be built by MSVC because MFC ships with MSVC alone. A launch
+      // configuration takes exactly one preLaunchTask, so before this task the F5
+      // compound could build one half or the other but never both -- which is
+      // precisely why pressing F5 could open a stale exe and look like nothing had
+      // changed.
+      //
+      // dependsOrder is "sequence" on purpose, not parallel: the two builds write
+      // into different build dirs (build\ vs build_msvc_ui\) but share the source
+      // tree and the CMake cache generation step, and running them concurrently is
+      // the documented way to corrupt a build dir in this project.
+      "label": "V906: Build ALL (MinGW libs + MSVC exe)",
+      "detail": "F5's build step. MinGW libs/tests, then the MSVC MFC exe. Sequential on purpose.",
+      "dependsOn": ["V906: Build (MinGW, quick)", "V906: Build UI exe (MSVC/MFC)"],
+      "dependsOrder": "sequence",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
       "label": "V906: Run HT9045.exe",
       "detail": "Launch the Gate A skeleton with the --devpath that golden's path check requires. Builds the exe first if it is missing.",
       "type": "shell",

@@ -11,6 +11,13 @@
 #define IDD_GATEA_PLACEHOLDER   9045
 #define IDC_GATEA_BANNER        9046
 
+// AI(W906-StateWin) 20260814: the machine-state monitor window -- HT9045.exe's
+// DEFAULT main window from this wave on. Only the dialog SHELL is a resource;
+// every control inside it is created at runtime from the tag table in
+// MachineStateDlg.cpp, so adding a row needs no resource edit and no new ID.
+#define IDD_MACHINE_STATE       9050
+#define IDC_STATEWIN_FIRST      9100   // runtime controls take 9100.. sequentially
+
 // rc.exe (the authoritative gate, W7 plan SS9-R2) does not know IDC_STATIC --
 // that macro lives in afxres.h/winres.h, not windows.h. Define it here rather
 // than pull afxres.h into the .rc so the file stays SDK-only.

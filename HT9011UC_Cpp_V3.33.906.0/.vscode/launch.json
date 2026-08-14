@@ -28,7 +28,23 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "MFC Gate A skeleton (HT9045.exe, verification harness)",
+      // AI(W906-StateWin) 20260814: RENAMED, and the rename is deliberate.
+      //
+      // This entry used to be called "MFC Gate A skeleton (HT9045.exe,
+      // verification harness)" and it opened a window that said nothing about a
+      // machine. It now opens the MACHINE STATE MONITOR, which reads the loopback
+      // tag feed and displays the live state word plus the engine cursors.
+      //
+      // Renaming it also fixes a real trap: VS Code remembers the selected debug
+      // configuration in per-workspace storage that the repo cannot reach, so a
+      // developer who had once picked the old entry kept getting the placeholder
+      // no matter what this file said. Changing the name invalidates that stale
+      // selection, which is the only mechanism available from inside the repo.
+      //
+      // No preLaunchTask on purpose -- launch this via the compound at the bottom,
+      // which builds BOTH toolchains once. Same house pattern as the two web
+      // halves below.
+      "name": "HT9045.exe -- Machine State window (native)",
       "type": "cppvsdbg",
       "request": "launch",
       "program": "${workspaceFolder}/build_msvc_ui/HT9045.exe",
@@ -36,7 +52,24 @@
       // (HT9045.cpp:151-155) rejects any path outside D:\HT9045\EXE\, and that
       // check is faithfully translated. Without it you get the EXE Path Error
       // box (and, in --smoke mode, a BootLog line instead).
+      //
+      // --feed-host/--feed-port default to 127.0.0.1:8046, so this window follows
+      // whichever publisher is on that port: V906's wb_publish today, the V899
+      // production handler once its snapshot port lands. No rebuild to switch.
       "args": ["--devpath"],
+      "cwd": "${workspaceFolder}/build_msvc_ui",
+      "console": "integratedTerminal",
+      "symbolSearchPath": "${workspaceFolder}/build_msvc_ui"
+    },
+    {
+      // The old Gate A open/pump/close harness, still reachable. It is kept
+      // because it verifies the MFC message loop with ZERO dependencies -- useful
+      // precisely when the state window is the thing under suspicion.
+      "name": "HT9045.exe -- Gate A placeholder (bare MFC harness)",
+      "type": "cppvsdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build_msvc_ui/HT9045.exe",
+      "args": ["--devpath", "--gatea-placeholder"],
       "cwd": "${workspaceFolder}/build_msvc_ui",
       "console": "integratedTerminal",
       "preLaunchTask": "V906: Build UI exe (MSVC/MFC)",
@@ -152,15 +185,27 @@
       // VS Code remembers). Publisher and gateway start together; the browser
       // shows "---" until the first frame arrives, which is the correct
       // rendering of "no data yet".
-      "name": "Web HMI (publisher + gateway + browser)",
+      // AI(W906-StateWin) 20260814: THIS is the F5. It now delivers all three
+      // things in one keypress, which is what it was missing before:
+      //   1. the C++ core COMPILES   -- "Build ALL" does MinGW libs then the MSVC exe
+      //   2. a NATIVE window shows machine state  -- HT9045.exe, reading the feed
+      //   3. the WEB view opens      -- gateway + browser via serverReadyAction
+      // Renamed from "Web HMI (...)" because it is no longer web-only, and because
+      // the rename invalidates any stale remembered selection (see the note on the
+      // state-window configuration above).
+      "name": "HT9045: build + state window + web  (THE F5)",
       "configurations": [
         // AI(W906-SimPump) 20260813: switched from the --dry feed to the --pump
         // feed. The --dry config is still in the list above if you want the
         // config-derived identity tags instead of a moving screen.
         "Web HMI: wb_publish --pump (live spine feed)",
-        "Web HMI: wb_gateway (web server, no machine code)"
+        "Web HMI: wb_gateway (web server, no machine code)",
+        "HT9045.exe -- Machine State window (native)"
       ],
-      "preLaunchTask": "V906: Build (MinGW, quick)",
+      // Builds BOTH toolchains, sequentially. A single preLaunchTask is all a
+      // launch config gets, which is why this composite task had to exist before
+      // one F5 could produce both halves (tasks.json, "V906: Build ALL").
+      "preLaunchTask": "V906: Build ALL (MinGW libs + MSVC exe)",
       "stopAll": true,
       "presentation": { "order": 1 }
     }

@@ -26,6 +26,17 @@
 //   [DEV-5] LogSoftwareOnTime (golden :160,:163) not called yet -- its home
 //           (main.cpp) is untranslated until GA-3; BootLog checkpoints are
 //           carried since Public/cBootLog.cpp is already ported (W1).
+//   [DEV-6] AI(W906-StateWin) 20260814: the main window is CMachineStateDlg, a
+//           monitor that READS the loopback tag feed -- not golden's fMain. This
+//           is a deviation, recorded as one. Two reasons it is the right first
+//           step rather than a detour: (a) it makes the exe state something TRUE
+//           about the machine, which the Gate A placeholder never did; (b) a
+//           window that read machine globals directly cannot be BUILT today --
+//           only MSVC can compile MFC, and MSVC cannot compile the god-stack
+//           because EJ1N/TextProcess.cpp:404-424 is a 127-deep else-if chain that
+//           trips C1061. Reading the wire needs ht9045_webbridge and no machine
+//           code at all. GA-4's generated fMain (ui/forms/FMainFirstLightDlg,
+//           not yet wired) stays the path to the real form.
 //
 //  FAITHFUL pieces: single-instance CreateMutex("MyMutexName")+GetLastError
 //  (golden :142-144, same mutex name on purpose -- it also mutually excludes
@@ -35,6 +46,10 @@
 // =============================================================================
 #include "HT9045App.h"
 #include "GateAPlaceholderDlg.h"
+//AI(W906-StateWin) 20260814: the new DEFAULT main window. The placeholder above is
+// kept and still reachable with --gatea-placeholder: it is the Gate A open/pump/
+// close harness and deleting it would remove a verification tool to gain nothing.
+#include "MachineStateDlg.h"
 #include "RegisterCustomClasses.h"   // AI(W906-GateA-4-C5) 20260804: HT9045_RegisterAllCustomClasses
 
 #include "Public/cBootLog.h"    // RotateBootLogIfNeeded / WriteBootLog (ported W1)
@@ -56,12 +71,27 @@ BOOL CHT9045App::InitInstance()
     // [DEV-1] golden :132-138 OSK kiosk block deliberately skipped (see banner).
 
     // ---- command line (Gate A only; golden has none) -----------------------
+    //AI(W906-StateWin) 20260814: --gatea-placeholder / --feed-host / --feed-port.
+    // The feed knobs exist so the SAME exe can be pointed at either publisher --
+    // V906's wb_publish today, the V899 production handler's snapshot port once
+    // Route B lands -- without a rebuild. That is the whole point of matching the
+    // wire format instead of inventing a second one.
+    bool           bUsePlaceholder = false;
+    const char*    szFeedHost      = "127.0.0.1";
+    unsigned short usFeedPort      = 8046;
+
     for (int i = 1; i < __argc; i++)
     {
         if (lstrcmpA(__argv[i], "--smoke") == 0 && i + 1 < __argc)
             m_iSmokeCloseMs = atoi(__argv[++i]);
         else if (lstrcmpA(__argv[i], "--devpath") == 0)
             m_bDevPathBypass = true;
+        else if (lstrcmpA(__argv[i], "--gatea-placeholder") == 0)
+            bUsePlaceholder = true;
+        else if (lstrcmpA(__argv[i], "--feed-host") == 0 && i + 1 < __argc)
+            szFeedHost = __argv[++i];
+        else if (lstrcmpA(__argv[i], "--feed-port") == 0 && i + 1 < __argc)
+            usFeedPort = (unsigned short)atoi(__argv[++i]);
     }
     if (m_iSmokeCloseMs > 0)
     {
@@ -125,12 +155,33 @@ BOOL CHT9045App::InitInstance()
         }
         WriteBootLog("Custom classes registered");
 
-        // [DEV-3] FormRegistry lands in GA-3; placeholder dialog only for now.
+        // [DEV-3] FormRegistry lands in GA-3; this exe still has no ported forms.
         WriteBootLog("Application Initialize Done");     // golden :164 checkpoint kept
 
-        CGateAPlaceholderDlg dlg(m_iSmokeCloseMs);
-        m_pMainWnd = &dlg;
-        dlg.DoModal();                                    // [DEV-4]
+        //AI(W906-StateWin) 20260814: the main window is now the machine-state
+        // monitor, which READS the loopback tag feed and links no machine code.
+        // [DEV-6] added to the deviation ledger: golden's main window is fMain,
+        // and this is not fMain -- it is a monitor over the same data fMain would
+        // show. GA-4's generated fMain (ui/forms/FMainFirstLightDlg) remains the
+        // path to the real form; it is not wired in yet and is a separate track.
+        // Rationale for shipping this first: it makes the exe say something true
+        // about the machine, which the placeholder never did, and it does so
+        // WITHOUT needing the god-stack in an MSVC target -- the C1061 wall
+        // (EJ1N/TextProcess.cpp:404-424) makes that route unavailable today.
+        if (bUsePlaceholder)
+        {
+            WriteBootLog("MainWindow = Gate A placeholder (--gatea-placeholder)");
+            CGateAPlaceholderDlg dlg(m_iSmokeCloseMs);
+            m_pMainWnd = &dlg;
+            dlg.DoModal();                                // [DEV-4]
+        }
+        else
+        {
+            WriteBootLog("MainWindow = MachineStateDlg (tag feed consumer)");
+            CMachineStateDlg dlg(m_iSmokeCloseMs, szFeedHost, usFeedPort);
+            m_pMainWnd = &dlg;
+            dlg.DoModal();                                // [DEV-4]
+        }
 
         WriteBootLog("Application->Run returned (normal exit)");   // golden :287
     }

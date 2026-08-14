@@ -17,3 +17,25 @@ BEGIN
     LTEXT "This placeholder window is replaced by the generated fMain dialog in GA-4.", IDC_STATIC, 12, 26, 236, 18
     DEFPUSHBUTTON "Close", IDOK, 104, 54, 52, 15
 END
+
+// =============================================================================
+//  AI(W906-StateWin) 20260814: the machine-state monitor.
+//
+//  An EMPTY shell on purpose. Every label and value inside it is created at
+//  runtime from the tag table in MachineStateDlg.cpp, because the tag set is
+//  data (it grows as the port lands more sources) and a resource template would
+//  make every new tag a two-file edit plus an ID. The shell only fixes the
+//  window's size, caption, font and the one real control, Close.
+//
+//  Units here are DIALOG UNITS, not pixels -- the dialog manager scales them by
+//  the font. That is fine for a shell whose contents are positioned in pixels at
+//  runtime off the client rect, and it is the same DLU trap documented for the
+//  generated forms in docs/DESIGN_GA4_UI_ENGINES.md (D-GA4-2).
+// =============================================================================
+IDD_MACHINE_STATE DIALOGEX 0, 0, 300, 300
+STYLE DS_SETFONT | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX
+CAPTION "HT9045 V906 -- Machine State Monitor"
+FONT 9, "Segoe UI", 400, 0, 0x0
+BEGIN
+    PUSHBUTTON "Close", IDOK, 124, 280, 52, 15
+END

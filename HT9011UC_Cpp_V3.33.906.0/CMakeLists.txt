@@ -2332,6 +2332,10 @@ if(HT9045_UI)
     add_executable(ht9045_app WIN32
         ui/HT9045App.cpp
         ui/GateAPlaceholderDlg.cpp
+        #AI(W906-StateWin) 20260814: the machine-state monitor, now the default
+        # main window. The placeholder stays in the build -- --gatea-placeholder
+        # still selects it, and it is the Gate A open/pump/close harness.
+        ui/MachineStateDlg.cpp
         ${HT9045_UI_CTRL_SOURCES}
         ui/app.rc
     )
@@ -2348,7 +2352,17 @@ if(HT9045_UI)
     target_link_options(ht9045_app PRIVATE /DEBUG)
     target_include_directories(ht9045_app PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ui)
     set_target_properties(ht9045_app PROPERTIES OUTPUT_NAME "HT9045")
-    target_link_libraries(ht9045_app PRIVATE ht9045_public)
+    #AI(W906-StateWin) 20260814: + ht9045_webbridge, and that is the ONLY library
+    # added. It is the same load-bearing property wb_gateway has (CMakeLists.txt
+    # :2465-2471): the exe gains a tag-feed CLIENT and still links NO machine code
+    # -- no database.h, no state machines, no vclcompat. Two consequences worth
+    # stating, because someone will eventually be tempted to add "just one" more:
+    #   * it keeps this target clear of the C1061 wall. MSVC cannot compile the
+    #     god-stack (EJ1N/TextProcess.cpp:404-424, a 127-deep else-if chain), so
+    #     the moment a machine library appears here the UI stops building at all.
+    #   * it keeps the window incapable of touching the machine. There is no write
+    #     path; the monitor is a view, and that is a safety property, not a phase.
+    target_link_libraries(ht9045_app PRIVATE ht9045_public ht9045_webbridge)
 
     # AI(W906-GateA-4-C5) 20260804: headless verification exe for the shells.
     # Console subsystem (its own main() + AfxWinInit), creates the three

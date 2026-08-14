@@ -44,6 +44,45 @@
       "**/EXE": true
     }
   },
+  // ==========================================================================
+  //  AI(W906-StateWin) 20260814: WORKSPACE-LEVEL F5.
+  //
+  //  WHY THIS SECTION HAD TO BE ADDED. Every launch configuration in this repo
+  //  lived in HT9011UC_Cpp_V3.33.906.0/.vscode/launch.json, i.e. in ONE of the two
+  //  folders. In a multi-root window, F5 acts on whatever the debug dropdown has
+  //  selected, and that selection is stored in VS Code's per-workspace state --
+  //  which no file in this repository can reach. The observed consequence was
+  //  exactly the confusing one: the compound could be rewired, and pressing F5
+  //  still launched whatever had been picked months earlier.
+  //
+  //  A workspace-level compound is the fix, because it is listed regardless of
+  //  which folder has focus, and it appears above the folder-scoped entries. The
+  //  folder's own launch.json keeps the individual pieces; this only names the
+  //  one-keypress combination, so there is a single definition of each piece.
+  // ==========================================================================
+  "launch": {
+    "version": "0.2.0",
+    "configurations": [],
+    "compounds": [
+      {
+        // The three things one keypress is supposed to deliver:
+        //   1. the C++ core compiles      (preLaunchTask, both toolchains)
+        //   2. a native window shows state (HT9045.exe reading the tag feed)
+        //   3. the web view opens          (gateway + serverReadyAction)
+        "name": "HT9045: build + state window + web  (THE F5)",
+        "configurations": [
+          { "folder": "V906 C++ port (UTF-8)", "name": "Web HMI: wb_publish --pump (live spine feed)" },
+          { "folder": "V906 C++ port (UTF-8)", "name": "Web HMI: wb_gateway (web server, no machine code)" },
+          { "folder": "V906 C++ port (UTF-8)", "name": "HT9045.exe -- Machine State window (native)" }
+        ],
+        // The task is folder-scoped, so it is named as folder + task.
+        "preLaunchTask": "V906: Build ALL (MinGW libs + MSVC exe)",
+        "stopAll": true,
+        "presentation": { "order": 1 }
+      }
+    ]
+  },
+
   "extensions": {
     "recommendations": [
       "ms-vscode.cpptools-extension-pack"
