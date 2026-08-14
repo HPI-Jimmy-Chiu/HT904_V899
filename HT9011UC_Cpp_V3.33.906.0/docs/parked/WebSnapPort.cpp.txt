@@ -1,0 +1,332 @@
+//------------------------------------------------------------------------------
+//  WebSnapPort.cpp -- see WebSnapPort.h for the contract and the safety posture.
+//AI(ht9045-v899) 20260814: NEW UNIT.
+//------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260814: MachineDefine.h first, then hdrstop -- the house order
+//  every unit in this tree uses (cf. main.cpp:1-2, cSetUp.cpp:1-2), not <vcl.h>.
+#include "MachineDefine.h"
+#pragma hdrstop
+
+#include "WebSnapPort.h"
+
+//AI(ht9045-v899) 20260814: myTimer.h MUST come before main.h, and that is not
+//  cosmetic. main.h:5 includes PowerSavingMode.h, whose THotModule declares a
+//  TQPF_Timer member (PowerSavingMode.h:37), but main.h does not include
+//  myTimer.h -- where TQPF_Timer is declared -- until main.h:33. So main.h only
+//  compiles when something ahead of it has already supplied that type. Existing
+//  units get it by accident, from the pile of headers they list before main.h
+//  (cSetUp.cpp:6-12); measured: cSetUp.cpp compiles isolated with zero errors,
+//  and this unit did NOT until this line was added. Stating the dependency
+//  explicitly is better than reproducing the accident.
+#include "myTimer.h"                    // TQPF_Timer -- required by main.h:5's chain
+#include "main.h"                       // fMain -> palMainStatus (the state word)
+#include "cMyDef.h"                     // SystemStart / fAllMotorHome / SoftStop / iSECSGEMMachineState
+//AI(ht9045-v899) 20260814: Config.h, NOT cprod.h. The identity strings are members
+//  of HT9045_CONFIG (Config.h:5 opens the struct, IniConfig is declared at
+//  Config.h:1457): RMSTesterID at :50, sMachineType at :201, sGPIBMachineID at :202.
+//  They are NOT in cprod.h -- that was a V906-port assumption and it does not hold
+//  in this tree.
+#include "Config.h"                     // IniConfig identity strings
+#include "common.h"                     // ReadIniData / asGeneralPath
+
+#include <ScktComp.hpp>                 // TServerSocket / TCustomWinSocket
+
+//------------------------------------------------------------------------------
+//  Module state. File-static on purpose: nothing outside this unit may reach the
+//  socket, which is what keeps the "read-only, no command channel" claim checkable
+//  by reading one file.
+//------------------------------------------------------------------------------
+static bool          g_bEnabled      = false;
+static bool          g_bInitDone     = false;
+static TServerSocket *g_pSrv         = NULL;
+static int           g_iTickDiv      = 0;
+static long          g_lFramesSent   = 0;
+static long          g_lBytesDropped = 0;   // inbound bytes discarded
+static long          g_lClientsDropped = 0; // dropped for slow/oversized/non-local
+
+// Emit every Nth call. The host timer is Timer10 at Interval=100 (main.dfm:17065),
+// so 5 gives ~2 Hz. Deliberately derived here rather than assumed from the caller:
+// if someone re-times Timer10 this stays a divider, not a rate.
+static const int     kTickDivisor    = 5;
+
+// A single line >4KB from a client is treated as hostile: the port has no command
+// channel, so nobody has a legitimate reason to send anything at all.
+static const int     kMaxInboundLine = 4096;
+
+//------------------------------------------------------------------------------
+//  Event sink. BCB closures need an object, so the handlers live on a tiny
+//  TObject rather than being free functions.
+//------------------------------------------------------------------------------
+class TWebSnapSink : public TObject
+{
+public:
+    void __fastcall OnClientConnect(TObject *Sender, TCustomWinSocket *Socket);
+    void __fastcall OnClientRead(TObject *Sender, TCustomWinSocket *Socket);
+    void __fastcall OnClientError(TObject *Sender, TCustomWinSocket *Socket,
+                                  TErrorEvent ErrorEvent, int &ErrorCode);
+};
+
+static TWebSnapSink *g_pSink = NULL;
+
+//------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260814: loopback enforcement happens HERE, at accept time,
+//  and not by binding.
+//
+//  TServerSocket has no property for the bind interface -- Port/Service/
+//  ServerType/Active only -- so the listener is on INADDR_ANY whether we like it
+//  or not. Rejecting a non-loopback peer the moment it connects, before a single
+//  byte of machine data is written, gets the same result that mattered: no remote
+//  party can read this handler's state. Recorded as a deviation from the design
+//  doc's "bind 127.0.0.1 only" wording, with this as the mitigation.
+//------------------------------------------------------------------------------
+void __fastcall TWebSnapSink::OnClientConnect(TObject *Sender, TCustomWinSocket *Socket)
+{
+    if(Socket==NULL)
+        return;
+
+    if(Socket->RemoteAddress!="127.0.0.1")
+    {
+        g_lClientsDropped++;
+        Socket->Close();
+    }
+}
+
+//------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260814: inbound is counted and thrown away -- this port is
+//  read-only by construction, not by convention. An oversized line drops the
+//  client rather than growing a buffer.
+//------------------------------------------------------------------------------
+void __fastcall TWebSnapSink::OnClientRead(TObject *Sender, TCustomWinSocket *Socket)
+{
+    if(Socket==NULL)
+        return;
+
+    int iLen = Socket->ReceiveLength();
+    if(iLen>kMaxInboundLine)
+    {
+        g_lClientsDropped++;
+        Socket->Close();
+        return;
+    }
+
+    // ReceiveText() consumes the bytes; the result is deliberately unused.
+    AnsiString sJunk = Socket->ReceiveText();
+    g_lBytesDropped += sJunk.Length();
+}
+
+//------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260814: swallow socket errors. A bridge fault must never
+//  raise on the machine's execution thread; ErrorCode=0 tells the VCL we handled
+//  it so it does not throw.
+//------------------------------------------------------------------------------
+void __fastcall TWebSnapSink::OnClientError(TObject *Sender, TCustomWinSocket *Socket,
+                                            TErrorEvent ErrorEvent, int &ErrorCode)
+{
+    ErrorCode = 0;
+}
+
+//------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260814: JSON string escape, ASCII-only output.
+//
+//  The state captions in this tree are ASCII today (sMacStatus[30] at
+//  cmydef.cpp:5205-5207 is "LOCK"/"Homing"/"Running"/"HALT"/..., and the
+//  ShowNowStatus call sites pass ASCII literals), but ShowNowStatus also takes a
+//  variable in at least one place (ckernel.cpp:993 passes EmgStr). A single Big5
+//  byte would make the whole frame a parse error at the consumer and the screen
+//  would go blank rather than degrade, so every byte >=0x80 is replaced with '?'
+//  instead of being forwarded.
+//------------------------------------------------------------------------------
+static AnsiString JsonEscapeAscii(AnsiString s)
+{
+    AnsiString sOut = "";
+    for(int i=1; i<=s.Length(); i++)
+    {
+        unsigned char c = (unsigned char)s[i];
+        if(c=='\"')      sOut += "\\\"";
+        else if(c=='\\') sOut += "\\\\";
+        else if(c=='\n') sOut += "\\n";
+        else if(c=='\r') sOut += "\\r";
+        else if(c=='\t') sOut += "\\t";
+        else if(c<0x20)  sOut += " ";           // other control bytes
+        else if(c>=0x80) sOut += "?";           // never emit a raw Big5 byte
+        else             sOut += (char)c;
+    }
+    return sOut;
+}
+
+static AnsiString JsonStr(AnsiString sTag, AnsiString sValue)
+{
+    return AnsiString("\"") + sTag + "\":\"" + JsonEscapeAscii(sValue) + "\"";
+}
+
+static AnsiString JsonInt(AnsiString sTag, int iValue)
+{
+    return AnsiString("\"") + sTag + "\":" + IntToStr(iValue);
+}
+
+static AnsiString JsonBool(AnsiString sTag, bool bValue)
+{
+    return AnsiString("\"") + sTag + "\":" + (bValue ? "true" : "false");
+}
+
+//------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260814: build the snapshot line.
+//
+//  SNAPSHOT-ONLY, every tag every tick, and that is not laziness -- it is what
+//  the consumer wants. "snapshot" makes TcpTagClient do a FULL REPLACE, and the
+//  browser-facing delta is computed by wb_gateway itself per connection, so an
+//  unchanged snapshot re-sent costs ZERO bytes downstream. Because it is a full
+//  replace, omitting a tag on one tick would make it vanish and flicker "---",
+//  so every tag is written unconditionally.
+//
+//  Built with AnsiString concatenation. No fixed char buffer anywhere in this
+//  function -- that is risk R2 in the assessment, and anything that can reach
+//  this port could reach such a buffer.
+//------------------------------------------------------------------------------
+static AnsiString BuildSnapshotLine()
+{
+    AnsiString sState = "";
+    if(fMain!=NULL && fMain->palMainStatus!=NULL)
+        sState = fMain->palMainStatus->Caption;   // main.cpp:21378 is its only writer
+
+    AnsiString s = "{\"type\":\"snapshot\",\"data\":{";
+
+    // The state word the operator sees, and its numeric code. The code is carried
+    // as well as the text so a consumer never has to parse English to know where
+    // the machine is: it indexes sMacStatus[30] (cmydef.cpp:5205-5207).
+    s += JsonStr("machine.state", sState);
+    s += "," + JsonInt("machine.stateCode", iSECSGEMMachineState);
+
+    // The run flags, published raw. SystemStart is the authoritative "running"
+    // master flag; fAllMotorHome is a PRECONDITION (all motors homed), not a run
+    // state; SoftStop is a one-shot stop request latch.
+    s += "," + JsonBool("machine.run.systemStart",  SystemStart);
+    s += "," + JsonBool("machine.run.allMotorHome", fAllMotorHome);
+    s += "," + JsonBool("machine.run.softStop",     SoftStop);
+
+    // Identity, same tag names the V906 publisher already uses so the monitor and
+    // the browser need no change to front this handler.
+    s += "," + JsonStr("machine.id.type",   IniConfig.sMachineType);
+    s += "," + JsonStr("machine.id.gpib",   IniConfig.sGPIBMachineID);
+    s += "," + JsonStr("machine.id.tester", IniConfig.RMSTesterID);
+
+    // Provenance. The V906 publisher sets this to say its state is simulated; here
+    // it says the opposite, so one screen can never be mistaken for the other.
+    s += "," + JsonStr("machine.stateSource", "V899 handler, live machine");
+
+    s += "}}\r\n";
+    return s;
+}
+
+//------------------------------------------------------------------------------
+void WebSnap_Init()
+{
+    if(g_bInitDone)
+        return;
+    g_bInitDone = true;
+
+    // ReadIniData, NOT CheckAndReadIniDataGeneral: the latter seeds a missing key,
+    // i.e. WRITES the shared production Gerneral.ini. With the feature off this
+    // unit must not change one byte on disk.
+    g_bEnabled = ReadIniData(asGeneralPath, "WebSnapshot", "Enable", false);
+    if(g_bEnabled==false)
+        return;
+
+    int iPort = ReadIniData(asGeneralPath, "WebSnapshot", "Port", 8046);
+    if(iPort<=0 || iPort>65535)
+        iPort = 8046;
+
+    try
+    {
+        g_pSink = new TWebSnapSink();
+
+        g_pSrv = new TServerSocket(fMain);
+        g_pSrv->ServerType     = stNonBlocking;   // events on the UI thread, no locking
+        g_pSrv->Port           = iPort;
+        g_pSrv->OnClientConnect= g_pSink->OnClientConnect;
+        g_pSrv->OnClientRead   = g_pSink->OnClientRead;
+        g_pSrv->OnClientError  = g_pSink->OnClientError;
+        g_pSrv->Active         = true;
+    }
+    catch(...)
+    {
+        // A bridge that cannot start must never stop the handler from running.
+        g_bEnabled = false;
+        if(g_pSrv!=NULL)  { delete g_pSrv;  g_pSrv  = NULL; }
+        if(g_pSink!=NULL) { delete g_pSink; g_pSink = NULL; }
+    }
+}
+
+//------------------------------------------------------------------------------
+void WebSnap_Tick()
+{
+    // Cheapest possible early-out: with the feature off this is two loads and a
+    // return, which is what "identical behaviour when disabled" requires of the
+    // host timer.
+    if(g_bEnabled==false || g_pSrv==NULL)
+        return;
+
+    if(++g_iTickDiv < kTickDivisor)
+        return;
+    g_iTickDiv = 0;
+
+    try
+    {
+        if(g_pSrv->Socket==NULL || g_pSrv->Socket->ActiveConnections<=0)
+            return;
+
+        AnsiString sLine = BuildSnapshotLine();
+
+        // Walk downwards: Close() inside the loop compacts Connections[].
+        for(int i=g_pSrv->Socket->ActiveConnections-1; i>=0; i--)
+        {
+            TCustomWinSocket *pC = g_pSrv->Socket->Connections[i];
+            if(pC==NULL)
+                continue;
+
+            // NO SEND QUEUE, BY DESIGN. A client that cannot take the whole line
+            // right now is dropped instead of buffered: this runs on the thread
+            // that also runs MainProc for the machine, and a slow reader must not
+            // be able to make it wait. The consumer reconnects by itself and the
+            // next tick re-establishes full state, because a snapshot is complete
+            // in one line.
+            int iSent = pC->SendText(sLine);
+            if(iSent<sLine.Length())
+            {
+                g_lClientsDropped++;
+                pC->Close();
+            }
+            else
+            {
+                g_lFramesSent++;
+            }
+        }
+    }
+    catch(...)
+    {
+        // Never let the bridge raise on the machine's execution thread.
+    }
+}
+
+//------------------------------------------------------------------------------
+void WebSnap_Shutdown()
+{
+    try
+    {
+        if(g_pSrv!=NULL)
+        {
+            g_pSrv->Active = false;
+            delete g_pSrv;
+            g_pSrv = NULL;
+        }
+        if(g_pSink!=NULL)
+        {
+            delete g_pSink;
+            g_pSink = NULL;
+        }
+    }
+    catch(...)
+    {
+    }
+    g_bEnabled = false;
+}

@@ -1,0 +1,45 @@
+//------------------------------------------------------------------------------
+//  WebSnapPort.h -- read-only TCP snapshot port for the browser/monitor bridge.
+//
+//AI(ht9045-v899) 20260814: NEW UNIT. Publishes a one-line JSON snapshot of the
+//  machine state on a loopback TCP port so the existing wb_gateway.exe (and the
+//  V906 MFC monitor) can display this handler with NO change on their side.
+//
+//  WHY A SEPARATE UNIT AND NOT LINES IN main.cpp: this is the shipping binary.
+//  ~200 lines added to a 33,000-line main.cpp is far harder for a reviewer to
+//  isolate than one small unit, and main.cpp is the most-churned file on this
+//  branch so it is also the worst place for merge conflicts. Cost of the choice
+//  is two mechanical insertions in HT9045.bpr (OBJFILES + FILELIST); the .bpr is
+//  under version control, so a mistake there is recoverable.
+//
+//  SAFETY POSTURE -- the whole design is "off by default, read-only, drop rather
+//  than block". Details and the recon behind each decision are in
+//  HT9011UC_Cpp_V3.33.906.0\docs\DESIGN_RouteB_V899SnapshotPort.md.
+//    * DISABLED unless [WebSnapshot]Enable=1 in system\Gerneral.ini. The flag is
+//      read with ReadIniData (common.h:60), NOT CheckAndReadIniDataGeneral --
+//      the "CheckAnd" family SEEDS a missing key, i.e. writes the shared
+//      production ini. With this unit off, not even the ini file changes.
+//    * Inbound bytes are counted and DISCARDED. There is no command channel.
+//    * Non-loopback peers are disconnected on connect, before any byte is sent.
+//    * A client that cannot absorb a whole line is DROPPED, never queued -- the
+//      emit runs on the machine's single execution thread and must not wait.
+//
+//  BCB6 / pre-C++11 only: AnsiString, no STL containers, no auto/nullptr.
+//------------------------------------------------------------------------------
+#ifndef WebSnapPortH
+#define WebSnapPortH
+
+//AI(ht9045-v899) 20260814: called once from TfMain startup; a no-op when the ini
+//  flag is off. Safe to call twice (second call returns immediately).
+void WebSnap_Init();
+
+//AI(ht9045-v899) 20260814: called from TfMain::Timer10Timer. Returns immediately
+//  when disabled. When enabled it emits at ~2 Hz regardless of the caller's
+//  period, using its own tick divider, so re-timing the host timer cannot turn
+//  this into a flood.
+void WebSnap_Tick();
+
+//AI(ht9045-v899) 20260814: called on shutdown; closes the listener and frees it.
+void WebSnap_Shutdown();
+
+#endif
