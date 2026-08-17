@@ -7891,3 +7891,41 @@ GA1_ReadGeneralIni）、清單逐項相同；guard 552 檔全等。
   設定入口，語意近 write path）。「絕不進波次」清單維持（TCPCommandServerClientRead
   溢位、RemoteControl、ChangeTo* 家族）。
 - 可用 build dir：build_fwfix2g（Debug）／build_fwfix2r（Release），當下全新。
+
+---
+
+## 2026-08-18（凌晨 II，cObserver Wave 1）— 第二個表單：EventLog 檢視器的唯讀核心
+
+commit `feba8d4`。recon＋翻譯＋整併一夜完成；戰役表單形狀第一次完整走通。
+
+**Recon 重點**（詳見該代理報告）：94 方法＋9 個檔案級自由函式（超出「83」的部分點名不吸收）；
+CSV 解析路徑=4 個 CommaText 讀點（golden :3848/:3892/:3927/:5131）；
+**CommaText 相容性判定進 KNOWLEDGE.md**（對格式良好檔=VCL 全等；刻意不重現未加引號
+右移 bug）；GDI Draw* 家族依賴被 gate 的 MyDrawText → 判「不翻譯」而非「延後」
+（渲染目標=瀏覽器）；檔案路徑風險點盤清（SGJamCount 的「讀」也會 MyForceDirectories 建目錄）。
+
+**Wave 1（feba8d4）**：20 方法＋facade＋測試。
+- facade 形狀＝**widget stand-in 存資料不畫圖**（grid 存 Cells、tray 複用已測的
+  vclcompat TrayCore、chart 存 series 點）——計畫書 §3「邏輯忠實、渲染=web」第一次實作。
+- TfObserver 與 TfObserverShim **不同名共存零 ODR**；fObserver 全域交換=獨立佇列波。
+- EventLog 根路徑走 `W906_EVENTLOG_ROOT`（BinCount 先例），測試餵 scratch 語料。
+- 代理超出 -fsyntax-only 做了拋棄式真連結，抓到兩個 syntax 檢查抓不到的 bug：
+  自己測試的壞佔位斷言＋**golden .dfm/程式碼不一致**（sgTimeData .dfm 說 ColCount=10、
+  ctor 卻寫 Cells[10][0]——facade 照程式碼實需求開 11，已註記）。
+- 兩個宣告偏離已記錄：CalculateStopTime 對做成 public static（不碰 this，for 測試）。
+
+**驗收**：test_observer_core 40/40；全新 build_fwobs1g/r Debug **135/3**＋Release
+**135/3** 清單逐項相同；guard 552 檔全等。
+
+### 🔖 RESUME（最新）
+
+- **完成鏈**：FW-0→FW-1a/1b→FW-2/2b→FW-Fix1/Fix2→FW-3 Wave A/B（Command.cpp 66/164 方法）
+  →**cObserver Wave 1**（HEAD=feba8d4）。
+- **進行中**：cObserver Wave 2 翻譯代理（純統計子集：WriteCategoryData/CountMTBF/
+  ProcessRunInfo/RecordIndexTime/AddTimeData/RecordInArmTime/RecordIndexCycle/
+  GetTimeDataText/GetMachineData/Timer1Timer/UpdateTempChart，~800 golden 行；
+  **排除** StatisticalJamCount 家族——寫檔＋FTP，等使用者）。
+- **等使用者的佇列**：(a) Command.cpp Wave C 的 ByDLL 家族性質（近 write path）；
+  (b) fObserver 全域 shim→facade 交換波（解鎖 csystem/uHGem/cMyDB 的 observer gates）；
+  (c) StatisticalJamCount 家族（寫檔＋FTP）；(d) write path 設計輪。
+- 可用 build dir：build_fwobs1g/r（HEAD=feba8d4 當下全新）。
