@@ -7972,3 +7972,47 @@ Debug 135/3＋Release 135/3（常駐子集）；guard 552 檔全等。
   shim→facade 交換波（含拆 csystem 的 IniRecord* TU-local 遮蔽）；(c) StatisticalJamCount
   家族（寫檔+FTP）；(d) write path 設計輪；(e) W906_Trace G6 測試強化（小）。
 - 可用 build dir：build_fwobs2fg/r（HEAD=c3c8dbf 當下全新）。
+
+---
+
+## 2026-08-18（早晨，uYieldMonitoring Wave A）— 良率引擎落地；安全線守住
+
+commit `8fb3299`。第三個表單（批 2 完結）。
+
+- 17 個 PURE 方法（CalculateSiteYield／六個 Check*Alarm 家族／SlidingWindow 環狀緩衝／
+  CanAutoCloseSite **只翻判斷式**）進新鏡射檔＋`forms/fYieldMonitoring.h` facade。
+- **安全 ACTION 刻意不翻**：`DoAutoCloseSite`/`DoRTAutoSocketOff` 今天被 26 個 arm 變體
+  TU 活呼叫到 no-op stand-in——翻譯它們=啟用真關站行為，這個開關屬於使用者不屬於夜班。
+- recon 的一條錯誤宣稱被波次抓到：`Prod/TestIF` 的 SlidingWindow 欄位**早已存在**
+  （cprod.h:645/1810），未加影子欄位。
+- 三組 gate（fContactCT×25／fShowBinSelect×14／fLotInfo labels）＋誠實後果註記：
+  `bLowYieldAlarmSameNS`/`bE53LowYieldAutoClean` 兩個 config 分支結構在但**目前無效**，
+  等 facade 落地要回頭解 gate，不可默默留著。
+- 兩個工具鏈發現：裸 `abs()` 對 double（BCB6 合法、g++ 歧義）×6 改 `fabs()`；
+  **真潛伏 bug**：`cMyDB.h:82`（__fastcall）vs `canary_support.h:210`（無）的
+  `MyDBIProcessNew` calling-convention 不一致——本波 TU-local 繞過，入共用標頭稽核佇列。
+- 驗收：test_yieldmon_core 30/30；全新 build_fwymag/r Debug **136/3**＋Release **136/3**
+  清單逐項相同；guard 552 檔全等。
+
+### 🔖 RESUME（最新——夜班總結）
+
+**一夜完成鏈**（20260817 傍晚→20260818 早晨，全部單獨 commit＋雙建法 gate＋system guard）：
+FW-0（web 入版控/BinCount 兇手釘死修根因/webprobe）→ FW-1a（+33 tags）→ FW-1b（+6 sort
+counters）→ FW-2/2b（emit_web＋formview＋**133 表單全部有 layout.json**）→ FW-Fix1/Fix2
+（五張全零對照表回家）→ FW-3 Command.cpp Wave A+B（66/164 方法 ~7.7k 行）→ cObserver
+Wave 1+2＋Obs2fix（36 方法+82 oracle）→ uYieldMonitoring Wave A（17 方法+30 oracle）。
+**wire=100 tags；ctest 基線 136 測試/3 常駐失敗；量產 system\ 全程零污染（僅 Gerneral.ini
+事故一次，已記憶＋工具已加雙保險）。**
+
+**等使用者裁決（優先序建議）**：
+1. **fObserver/fYieldMonitoring 全域 shim→facade 交換波**（解鎖 csystem/uHGem/cMyDB 的
+   gates＋讓 26 個 arm 呼叫點接上真 ClearYieldCount 等唯讀行為）——中風險整併，建議白天做。
+2. **DoAutoCloseSite/DoRTAutoSocketOff 翻譯**（啟用低良率自動關站=真機行為變更，安全項）。
+3. Command.cpp Wave C 的 **ByDLL 家族**性質認定（外部程式改機台設定入口，近 write path）。
+4. StatisticalJamCount 家族（寫檔＋FTP）。
+5. **WebBridge write path 設計輪**（互動表單全部卡在這）。
+6. 小項：W906_Trace G6 測試強化；cMyDB.h/canary_support.h __fastcall 稽核；
+   fContactCT/fShowBinSelect facade 波（解 39 個 gate）。
+
+**自動可續（不需裁決）**：uYieldMonitoring Wave B/C；cTemperFrom／BinDisplay（批 3）recon+
+翻譯；FW-1 tag 接線續批。
