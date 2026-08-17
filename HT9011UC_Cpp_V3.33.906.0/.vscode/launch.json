@@ -14,7 +14,11 @@
   //  and there should never be another one unless MFC comes back.
   //
   //  THE DEBUGGER IS NEW, THE COMPILER IS NOT. miDebuggerPath points at gdb
-  //  17.2 from install/mingw32-16.2.0 (see install/README.md). The compiler
+  //  17.2 from ../install/mingw32-16.2.0 -- note the "..": the user moved
+  //  install/ out of the port folder on 20260817, so it is now a SIBLING of
+  //  this folder under the repo root (D:\HT9045\install\). It holds ~2.4 GB of
+  //  third-party toolchain and does not belong inside the source tree; its own
+  //  .gitignore keeps all of it out of git. See ../install/README.md. The compiler
   //  stays MinGW.org g++ 6.3.0 at C:\MinGW -- it is the only toolchain that
   //  reproduces BCB6's x87 arithmetic and build.bat has a FATAL guard on it.
   //  Reading DWARF is independent of generating code; verified 20260817 by
@@ -59,7 +63,7 @@
       "args": ["--pump"],
       "cwd": "${workspaceFolder}",
       "MIMode": "gdb",
-      "miDebuggerPath": "${workspaceFolder}/install/mingw32-16.2.0/mingw32/bin/gdb.exe",
+      "miDebuggerPath": "${workspaceFolder}/../install/mingw32-16.2.0/mingw32/bin/gdb.exe",
       "externalConsole": false
     },
     {
@@ -74,7 +78,7 @@
       "args": [],
       "cwd": "${workspaceFolder}",
       "MIMode": "gdb",
-      "miDebuggerPath": "${workspaceFolder}/install/mingw32-16.2.0/mingw32/bin/gdb.exe",
+      "miDebuggerPath": "${workspaceFolder}/../install/mingw32-16.2.0/mingw32/bin/gdb.exe",
       "externalConsole": false,
       // Opens the browser HMI as soon as the gateway prints its startup URL.
       // ?src=ws is REQUIRED: web/js/transport/index.js defaults to the MOCK
@@ -98,7 +102,7 @@
       "args": ["--dry"],
       "cwd": "${workspaceFolder}",
       "MIMode": "gdb",
-      "miDebuggerPath": "${workspaceFolder}/install/mingw32-16.2.0/mingw32/bin/gdb.exe",
+      "miDebuggerPath": "${workspaceFolder}/../install/mingw32-16.2.0/mingw32/bin/gdb.exe",
       "externalConsole": false
     },
     {
@@ -114,7 +118,7 @@
       "args": [],
       "cwd": "${workspaceFolder}",
       "MIMode": "gdb",
-      "miDebuggerPath": "${workspaceFolder}/install/mingw32-16.2.0/mingw32/bin/gdb.exe",
+      "miDebuggerPath": "${workspaceFolder}/../install/mingw32-16.2.0/mingw32/bin/gdb.exe",
       "externalConsole": false
     },
     {
@@ -131,7 +135,7 @@
       "environment": [],
       "externalConsole": false,
       "MIMode": "gdb",
-      "miDebuggerPath": "${workspaceFolder}/install/mingw32-16.2.0/mingw32/bin/gdb.exe",
+      "miDebuggerPath": "${workspaceFolder}/../install/mingw32-16.2.0/mingw32/bin/gdb.exe",
       "preLaunchTask": "V906: Build (MinGW, quick)",
       "setupCommands": [
         {

@@ -116,15 +116,15 @@ double），數字會微幅不同。而我們證明「翻譯翻對了」的唯�
 
 | 解壓位置 | 架構 | 內含（實測） | 用途 |
 |---|---|---|---|
-| `install\mingw32-16.2.0\mingw32\` | `i686-w64-mingw32` | g++ **16.2.0**、gdb **17.2**、gdbserver **17.2** | **新版 GDB**＋現場 `gdbserver` |
-| `install\mingw64-16.2.0\mingw64\` | `x86_64-w64-mingw32` | g++ **16.2.0**、gdb **17.2** | **64-bit 相容性警報器**（見下） |
+| `D:\HT9045\install\mingw32-16.2.0\mingw32\` | `i686-w64-mingw32` | g++ **16.2.0**、gdb **17.2**、gdbserver **17.2** | **新版 GDB**＋現場 `gdbserver` |
+| `D:\HT9045\install\mingw64-16.2.0\mingw64\` | `x86_64-w64-mingw32` | g++ **16.2.0**、gdb **17.2** | **64-bit 相容性警報器**（見下） |
 
 > 這正是使用者想要的 **GDB 17.2** — 不用自己編，winlibs 已經包好了。
 
 ### 6a. 新版 GDB — 已就位，且**已實測通過**
 
 `.vscode/launch.json` 的 `miDebuggerPath` 已改指
-`${workspaceFolder}/install/mingw32-16.2.0/mingw32/bin/gdb.exe`。
+`${workspaceFolder}/../install/mingw32-16.2.0/mingw32/bin/gdb.exe`。
 `C:\MinGW\bin\gdb.exe`（7.6.1）**保留未動**，當退路。
 
 **為什麼可以只換 gdb 不換 g++**：gdb 只是**讀** DWARF 除錯資訊，跟產生機器碼無關。
@@ -212,3 +212,21 @@ x64 必須改成 intrinsics。
 | 項目 | 狀況 |
 |---|---|
 | `D:\Work-jimmychiu\software\gdb-17.2` | ❌ **那是原始碼不是程式**，整包 0 個 `.exe`。要編它需要 MSYS2（本機沒有）＋ C++17 host 編譯器（我們只有 g++ 6.3，部分支援）＋ GMP/MPFR。**建議不要編**，用 §6a 的現成二進位檔 |
+
+---
+
+## 9. 位置變更（20260817）
+
+這個資料夾原本在 `D:\HT9045\HT9011UC_Cpp_V3.33.906.0\install\`，使用者手動搬到
+`D:\HT9045\install\` —— 也就是從**港內**移到**與 906 樹並排**。
+
+搬對了：這裡是 ~2.4 GB 的第三方工具鏈，不是原始碼，本來就不該長在原始碼樹裡面。
+（搬移後 906 樹從 3,950 MB 回到約 1,577 MB，其中真正的原始碼只有約 75 MB。）
+
+**跟著改的引用**：`HT9011UC_Cpp_V3.33.906.0/.vscode/launch.json` 的 5 個
+`miDebuggerPath` 改成 `${workspaceFolder}/../install/...`（相對寫法，因為 install 是
+906 資料夾固定的兄弟目錄）。本檔內的路徑也一併更新。
+
+本資料夾的 `.gitignore` 跟著搬過來了，所以 `_downloads/`、`mingw32-*/`、`mingw64-*/`
+仍然不進 git —— 只有這份 README 和 `.gitignore` 本身進版控。已驗證：
+`git status --untracked-files=all -- install/` 只列出 2 個檔。
