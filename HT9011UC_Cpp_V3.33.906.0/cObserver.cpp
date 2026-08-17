@@ -241,6 +241,32 @@ TfObserver::TfObserver()
     mtTotal         = new TfObserverTray();
     mtCategoryTotal = new TfObserverTray();
 
+    // AI(W906-FW3-Obs2fix) 20260818: .dfm-hydration substitute for the Tray
+    // widgets. golden's VCL streams XItem/YItem into every TTMyTray at form
+    // creation; this port has no .dfm loader, so without these lines every
+    // tray sits at TrayCore's default 2x2 and its bounds-checked
+    // SetCellNumber SILENTLY DROPS writes beyond (1,1) -- measured by Wave
+    // 2's WriteCategoryData oracle (mtTotal write at y=3 read back empty).
+    // Sizes are the authoritative design-time values from
+    // tools/dfm2rc/ir_out/cObserver.dfm.ir.json (read 20260818). mtRow[A-D]
+    // are NOT set here: the golden ctor body below sizes them itself.
+    mtCategorySum->Core.SetXItem(1);    mtCategorySum->Core.SetYItem(5);
+    mtRowName->Core.SetXItem(1);        mtRowName->Core.SetYItem(1);
+    mtNo->Core.SetXItem(1);             mtNo->Core.SetYItem(1);
+    mtTotalName->Core.SetXItem(1);      mtTotalName->Core.SetYItem(1);
+    myCategoryName->Core.SetXItem(1);   myCategoryName->Core.SetYItem(60);
+    mtChName->Core.SetXItem(8);         mtChName->Core.SetYItem(1);
+    mtDutName->Core.SetXItem(8);        mtDutName->Core.SetYItem(1);
+    mtArmName->Core.SetXItem(16);       mtArmName->Core.SetYItem(1);
+    mtCategoryNo->Core.SetXItem(16);    mtCategoryNo->Core.SetYItem(60);
+    mtHeadTotal->Core.SetXItem(16);     mtHeadTotal->Core.SetYItem(1);
+    mtSockTotal->Core.SetXItem(16);     mtSockTotal->Core.SetYItem(1);
+    mtPassHead->Core.SetXItem(16);      mtPassHead->Core.SetYItem(1);
+    mtPassSocket->Core.SetXItem(16);    mtPassSocket->Core.SetYItem(1);
+    mtIfError->Core.SetXItem(16);       mtIfError->Core.SetYItem(1);
+    mtTotal->Core.SetXItem(1);          mtTotal->Core.SetYItem(5);
+    mtCategoryTotal->Core.SetXItem(1);  mtCategoryTotal->Core.SetYItem(60);
+
     // golden .dfm design-time ColCount/RowCount (tools/dfm2rc/ir_out/cObserver.dfm.ir.json, read 20260818):
     StringGrid2                = new TfObserverGrid(17, 4);    // StringGrid2: ColCount=17 RowCount=4
     StringGrid3                = new TfObserverGrid(9, 4);     // StringGrid3: ColCount=9  RowCount=4

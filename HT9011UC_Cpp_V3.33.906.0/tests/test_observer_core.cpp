@@ -406,23 +406,15 @@ static void Test_WriteCategoryData_ZeroBaseline()
     TestSocket.iShtCol = 0;
     bUseTwoArm32Site = false;
 
-    observer.mtChName->Core.SetXItem(8);
-    // AI(W906-FW3-Observer-W2) 20260818: FINDING (test-setup gap, not fixed
-    // this wave -- see risk section of the wave report) -- NONE of Wave 1's
-    // ctor bootstrap sizes mtTotal/mtCategoryNo/mtCategoryTotal/mtHeadTotal/
-    // etc. to their golden .dfm design-time XItem/YItem (only mtRow[] gets
-    // sized, via SetSiteYieldDiagram's SetYItem call). Left at TrayCore's own
-    // ctor default (FXItem=FYItem=2), TrayCore::SetCellNumber's bounds guard
-    // (`if(x>=FXItem||y>=FYItem)return;`) SILENTLY DROPS every WriteCategoryData
-    // write past (1,1) -- caught by this test (mtTotal cell(0,3) read back as
-    // "" instead of "0" until sized). Golden .dfm (cObserver.dfm.ir.json, read
-    // this wave): mtTotal YItem=5, mtCategoryNo XItem=16/YItem=60,
-    // mtCategoryTotal XItem=1/YItem=60, mtHeadTotal XItem=16/YItem=1,
-    // mtChName XItem=8/YItem=1. Sized here to what THIS test's own assertions
-    // touch (mtTotal up to y=4); the REST are left at their current (silently
-    // truncated) state -- exercising ctor-bootstrap sizing for every tray is
-    // out of THIS wave's write boundary (append-only on Wave 1's ctor body).
-    observer.mtTotal->Core.SetYItem(5);
+    // AI(W906-FW3-Obs2fix) 20260818: the Wave-2 FINDING that used to live here
+    // (ctor left every non-mtRow tray at TrayCore's default 2x2, so
+    // WriteCategoryData writes past (1,1) were SILENTLY DROPPED -- this test
+    // caught mtTotal cell(0,3) reading back "" instead of "0") is now FIXED at
+    // the source: the ctor carries a .dfm-hydration block sizing all 16 trays
+    // from tools/dfm2rc/ir_out/cObserver.dfm.ir.json. The manual
+    // SetXItem/SetYItem workaround this test used is deliberately REMOVED so
+    // the assertions below now verify the ctor's own hydration end to end --
+    // reintroducing the 2x2 default makes them fail again.
     observer.rbHeadNumber->Checked = false;
     observer.rbSocketNumber->Checked = true;    // forces the NUMBER branch AND mtCategoryNo->XItem==8,
     observer.rbSocketPercent->Checked = false;  // independent of IsNNMode()'s (uncontrolled-by-this-test) value
