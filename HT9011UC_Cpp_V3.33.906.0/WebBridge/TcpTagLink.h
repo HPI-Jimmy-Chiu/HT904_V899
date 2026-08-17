@@ -61,7 +61,9 @@
 //      than maxInboundBurst in one go is dropped.
 //
 //      That last rule is not paranoia. The comparable channel in the shipping
-//      handler, Command.cpp:12697-12708, does:
+//      handler, Command.cpp:12767-12778 (was cited :12697-12708; golden line
+//      numbers drifted -- re-verified 20260817, grep "ReceiveBuf" hits :12778
+//      only, inside TCPCommandServerClientRead), does:
 //          int iBufferLenght = Socket->ReceiveLength();   // unbounded
 //          char EthernetBuffer[100];
 //          Socket->ReceiveBuf(EthernetBuffer, iBufferLenght);
