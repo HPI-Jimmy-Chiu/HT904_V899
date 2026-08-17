@@ -1843,6 +1843,13 @@ add_library(ht9045_sm STATIC
     # WritePERSITETemperature/PERSITETemperatureStrings) were retired in the
     # same commit -- multiple definition otherwise.
     Command.cpp
+    # AI(W906-FW3-Obs1) 20260818: cObserver.cpp -- FW-3 cObserver Wave 1, the
+    # read-only display core (EventLog CSV parse/filter, MDB query strings,
+    # contact-kind stats) against the new forms/fObserver.h facade. The class
+    # is TfObserver -- a DIFFERENT name from atester_shims' TfObserverShim, so
+    # the two coexist without ODR contact; the shim<->facade swap of the
+    # global fObserver is a separate, deliberate wave.
+    cObserver.cpp
     # --- W6.6 HUB cross-module offline shims (DoInArm->DoInArm_9045 /
     #     DoOutArm->DoOutArm_9045 / DoLoad / DoSortArm / bShuttleShake +
     #     InitLoadTask / InitOutArmTask / InitialDoLockUnloader /
