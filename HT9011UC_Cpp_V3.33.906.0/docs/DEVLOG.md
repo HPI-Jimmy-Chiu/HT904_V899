@@ -7929,3 +7929,46 @@ CSV 解析路徑=4 個 CommaText 讀點（golden :3848/:3892/:3927/:5131）；
   (b) fObserver 全域 shim→facade 交換波（解鎖 csystem/uHGem/cMyDB 的 observer gates）；
   (c) StatisticalJamCount 家族（寫檔＋FTP）；(d) write path 設計輪。
 - 可用 build dir：build_fwobs1g/r（HEAD=feba8d4 當下全新）。
+
+---
+
+## 2026-08-18（清晨，cObserver Wave 2＋Obs2fix）— 統計核心落地；雙建法 gate 抓到一個邊界值
+
+三顆 commit：`5fd0c61`（Wave 2）、`c3c8dbf`（Obs2fix）、本則 DEVLOG。
+
+**Wave 2（5fd0c61）**：16 方法＋6 個檔案級自由函式（WriteCategoryData／CountMTBF／OEE
+時間記錄群／UpdateTempChart 等）。主迴圈用去空白 diff 複驗 9 方法：6 個逐字同、3 個差異
+全屬 facade/compat 適配（TrayCore 組合、ClearRow、FormatDateTime 代 vclcompat 缺的
+.FormatString）。五個 gate 全在 RecordEndTestTime 的被呼叫方；**INTEGRATION GAP 記錄**：
+csystem.cpp 對 IniRecordMonitoringIndexCycleTime 的 TU-local #define 遮蔽未拆（真本體
+目前只有測試呼叫得到）。recon 範圍修正一筆（RecordReceiveTestTime 實為 :4755-4764）。
+
+**雙建法 gate 的戰果**：Debug 綠、Release 紅一條——測試把 iUPH=int(10/dTime) 停在
+截斷邊界上（dTime=(5/24)*24=5.0±1ulp；x87 暫存器壽命隨 -O3 不同，Debug 截 2、Release
+截 1）。**production 碼未動**，測試改內部點（+4h→2.5→兩種捨入都是 2）。
+另量到一個獨立 flake：W906_Trace G6 拿發出的時間戳對「現取樣的時鐘」，秒跳變就輸——
+單輪 1 失敗、重跑 6/6 綠＋後續兩輪 gate 全綠，**判 flake 非回歸**，入測試強化佇列
+（取樣前後兩次時鐘、接受兩者其一）。
+
+**Obs2fix（c3c8dbf）**：Wave 2 oracle 抓到的真缺陷修掉——16 個 Tray stand-in 停在
+TrayCore 預設 2x2，bounds guard **靜默吞掉** WriteCategoryData 超出 (1,1) 的寫入。
+ctor 補 .dfm-hydration 區塊（權威尺寸=cObserver.dfm.ir.json）；測試移除手動 workaround
+改為端到端驗 ctor hydration。
+
+**孤兒進程教訓**：Wave 2 代理收工留了一個 `build.bat gate` 背景進程（ctest 還在
+`build/` 上跑）——代理死後無人收結果、且會與主迴圈 gate 撞埠，已 taskkill。
+**規則追加**：波次代理 brief 不准留背景進程存活到收工。
+
+**驗收（Obs2fix 後最終）**：test_observer_core **82/82 兩建法**；全新 build_fwobs2fg/r
+Debug 135/3＋Release 135/3（常駐子集）；guard 552 檔全等。
+
+### 🔖 RESUME（最新）
+
+- **完成鏈（一夜）**：FW-0→FW-1a/1b→FW-2/2b→FW-Fix1/Fix2→FW-3 Wave A/B（Command.cpp
+  66/164 方法 ~7.7k 行）→cObserver Wave 1/2＋Obs2fix（36 方法＋facade＋82 oracle）。
+  wire 100 tags；133 表單各有 layout.json＋viewer；量產 system\ 兩個寫入源修根因。
+- **進行中**：uYieldMonitoring recon 代理（批 2 續）。
+- **等使用者裁決的佇列**：(a) Command.cpp Wave C ByDLL 家族性質；(b) fObserver 全域
+  shim→facade 交換波（含拆 csystem 的 IniRecord* TU-local 遮蔽）；(c) StatisticalJamCount
+  家族（寫檔+FTP）；(d) write path 設計輪；(e) W906_Trace G6 測試強化（小）。
+- 可用 build dir：build_fwobs2fg/r（HEAD=c3c8dbf 當下全新）。
