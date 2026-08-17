@@ -7656,3 +7656,63 @@ ini_helpers 在全新 dir 通過（狀態相關，與 20260817 白天觀察一�
   SOURCE-EXISTS/需翻譯。每批 ~20-30 tag，liveness 與 getter 分離，e2e 用 tools/webprobe。
 - **可用 build dir**：build_fw0g（Debug）／build_fw0r（Release），HEAD=b10096b 當下全新。
 - 掛著的：46 gated 非表單複審（另一條線）；write path 設計輪（等使用者）。
+
+---
+
+## 2026-08-17（夜，FW-1a）— 33 個 LastSet tag 上線；以及一次付了學費的 Gerneral.ini 事故
+
+三顆 commit：`cc4f8c0`（工具安全反轉）、`10f3f60`（FW-1a 接線）、本則 DEVLOG。
+
+### 事故（先講，比成果重要）：真實 Gerneral.ini 被整檔重寫
+
+19:51 我誤跑 `wb_publish.exe --help`——舊參數迴圈把未知參數丟進 atoi 當 port（--help
+→ port 0 → ephemeral :59320），**並 fall-through 進「讀真檔」預設模式**。LoadMachineConfig
+的 seed-missing-keys 寫入觸發 vclcompat TIniFile flush＝從 parse model 整檔重寫：
+**md5 1071788a→3e48a689、12,918→12,878 bytes；key=value 全數保留（機台行為不變），
+但註解/空行/排版永久遺失**。檔案未進版控、無備份（%TEMP% 的 0812 scratch 是另一台機
+957 快照的 seeded 副本，非基線）——pristine 位元組不可復原。已寫入長期記憶
+（ht9045-gerneral-ini-normalized-20260817）供 V899 session 周知。
+
+**修法（cc4f8c0）**：wb_publish／wb_serve 未知參數一律拒絕（usage＋exit 2）；
+**讀真檔改成顯式 `--real`，預設一律 --dry scratch**（--dry 保留為 no-op 別名，
+既有 launch config 不破）。驗證：--help 現在拒絕；default-dry e2e 後 system\ 552 檔
+bytes＋mtime 全等。
+
+### FW-1a（10f3f60）：61 → 94 tags
+
+審計代理（唯讀，Sonnet）產出 32 家族審計表；乾淨 wirable-offline=Y 只有兩家族，
+主迴圈逐條複驗後接線：
+
+- `startmode.value`：經 golden 自己的 `StartModeName[]`（cmydef.cpp:62，port 已翻）
+  解碼，不手寫對照表；越界（rsmNull=-1）發 null 不猜字。
+- `site.arm{1,2}.s{1..16}` ×32：**來源刻意不用審計建議的 `TestMode.iDutOnOff`**——
+  複驗發現 `ReadTestMode` 在 `bLastSetInSetUpFile==false` 時 :3642 就 return，iDutOnOff
+  可能全 0 而真 site map 存在；改接 `LastSet.bUseTestSocket[2][4][8]`（blob 本身，
+  兩分支都是真相，ReadTestMode 讀它也寫回它）。第一維語意**量測非假設**：
+  [0]=Arm1（"Dut <name>"，:3689）、[1]=Arm2（"Dut <name>2"，:3773）；FT/RT 只切
+  ini section。對映 site.arm{a}.s{n} → [a-1][(n-1)/8][(n-1)%8]。
+- test_wb_tags 新增直寫 oracle（12 checks：解碼、[1][1][2]→s11、活 blob 下真 0 非 null、
+  越界 null）；既有不變量（載入前全 null、coverage 0 live）零放寬。
+- 審計另一收穫：**state.js 實際展開 266 個 tag 非 296**（296 是 runtime DOM 綁定數，
+  另一個分母）；引用時兩個都要標明。
+
+### 驗收
+
+| 項 | 結果 |
+|---|---|
+| e2e（default-dry，--with-config） | wire＋WS 都是 **94 tags／41 非 null**（8 舊＋33 新，精確吻合）；site.arm1.s1..16=1 來自 790 快照的真 lastdata.dat；200＋101＋accept key 獨立重算相符 |
+| 全新 build_fw1g（Debug） | 133 測試 3 失敗（config_db／config_loaders／GA1_ReadGeneralIni） |
+| 全新 build_fw1r（Release） | 133 測試 3 失敗，**清單逐項相同** |
+| system_guard（跨整輪雙 ctest） | **552 檔 bytes＋mtime 全等** |
+
+### 🔖 RESUME（最新）
+
+- **FW-0 ✅（c69ccb5/150b5dd/b10096b）、FW-1a ✅（cc4f8c0/10f3f60）**。wire 上 94 tags。
+- **下一步雙線**：(a) FW-1b 前置——唯讀代理驗證審計 P 項的索引對應
+  （lot.auto{1,2,3}.trayCount↔iAMRTrayCount[6]、sort.*.count↔iStackDefFailCate[eTrayCount]、
+  speed.*↔ArmSpeed[]/是否在 wb_publish 呼叫鏈上）；(b) 主迴圈開 **FW-2 dfm2web 產生器**
+  （emit_web.py 吃 ir_out IR → web/forms/<form>.layout.json；formview.js 泛用唯讀渲染器；
+  pilot=cTestCategory；idempotent 測試比照 dfm2rc_idempotent）。
+- **可用 build dir**：build_fw1g（Debug）／build_fw1r（Release），HEAD=10f3f60 當下全新。
+- 事故後續：Gerneral.ini 已無註解排版（值完好）；若 V899 side 有该檔的更早備份可還原排版，
+  但**不要**在不確認值相同前直接覆蓋。
