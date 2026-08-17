@@ -785,6 +785,22 @@ public:
     virtual void GetMaxInitialTest();                 // golden main.h:1639 (body Command.cpp:12501-12506)
     virtual AnsiString GetSiteState();                 // golden main.h:1644 (body Command.cpp:12508-12536)
     // -- end FW3-WA ADD --------------------------------------------------------
+    // -- FW3-WB ADD: Command.cpp wave-B declarations ---------------------------
+    // AI(W906-FW3-WB) 20260817: FW-3 Wave B ADD -- 3 golden TfMain:: PURE-method
+    // declarations (the "giant-triplet", 4,402 golden lines total) whose bodies
+    // are translated in Command.cpp's new "FW3-WB GROUP B" section (golden
+    // Command.cpp :2244-3823 / :4007-5168 / :5640-7299). All three are pure
+    // branch-logic + AnsiString::sprintf builders with a single tail
+    // SendMSG_CMD -- zero VCL widget references (grep-verified, see this
+    // wave's report) -- so unlike Wave A there are no GATED-partial members and
+    // no STUB COLLISIONS to flag here. Per contract rule 1 both are `virtual`;
+    // per rule 4 each cites its golden home. Signatures re-read from the
+    // cp950-decoded golden main.h this pass (golden line numbers cited per
+    // member).
+    virtual void WriteTemp_NS();                      // golden main.h:1385 (body Command.cpp:3796-5375)
+    virtual void WriteNowAllTempData();               // golden main.h:1419 (body Command.cpp:5378-6539)
+    virtual void GetCZAllMassTemp();                  // golden main.h:1467 (body Command.cpp:6542-8201)
+    // -- end FW3-WB ADD --------------------------------------------------------
     TfMain();
     virtual ~TfMain() {}
 };
