@@ -4267,6 +4267,159 @@ int  iTo3PosUnload[ePosTrayCount];
 
 int  iTo6Unload[ePosTrayCount];
 int  iTo3Unload[ePosTrayCount];
+
+//AI(W906-FW-Fix1) 20260817: golden fills these four cross-index maps in the
+// TfMain ctor (main.cpp:1850-1986) -- untranslated, which left all four
+// arrays ALL-ZERO here while translated runtime code consumes them
+// (aoutarm.cpp:3332 AOA fix path, csystem, cinitial, SortingBinTray):
+// every station silently mapped to slot 0. The table is pure enum
+// constants, so a same-TU static initializer is order-safe (zero-init of
+// the arrays above precedes dynamic init within this TU) and semantically
+// equivalent to golden's set-before-first-use. Lines transcribed
+// mechanically from golden, not typed.
+namespace {
+struct W906_TrayIndexMapInit
+{
+    W906_TrayIndexMapInit()
+    {
+        iTo6Unload[e3Auto1  ]=eAuto1  ;
+        iTo6Unload[e3Auto2  ]=eAuto2  ;
+        iTo6Unload[e3Auto3  ]=eAuto3  ;
+        iTo6Unload[e3Fix1   ]=eFix1   ;
+        iTo6Unload[e3Fix2   ]=eFix2   ;
+        iTo6Unload[e3Fix3   ]=eFix3   ;
+        iTo6Unload[e3Fix4   ]=eFix4   ;
+        iTo6Unload[e3Fix5   ]=eFix5   ;
+        iTo6Unload[e3Fix6   ]=eFix6   ;
+        iTo6Unload[e3BulkBox]=eBulkBox;
+        iTo6Unload[e3Mag1   ]=eMag1   ;
+        iTo6Unload[e3Mag2   ]=eMag2   ;
+        iTo6Unload[e3Mag3   ]=eMag3   ;
+        iTo6Unload[e3Mag4   ]=eMag4   ;
+        iTo6Unload[e3Mag5   ]=eMag5   ;
+        iTo6Unload[e3Mag6   ]=eMag6   ;
+        iTo6Unload[e3Mag7   ]=eMag7   ;
+        iTo6Unload[e3Mag8   ]=eMag8   ;
+        iTo6Unload[e3Mag9   ]=eMag9   ;
+        iTo6Unload[e3Mag10  ]=eMag10  ;
+        iTo6Unload[e3Mag11  ]=eMag11  ;
+        iTo6Unload[e3Mag12  ]=eMag12  ;
+        iTo6Unload[e3Mag13  ]=eMag13  ;
+        iTo6Unload[e3Mag14  ]=eMag14  ;
+        iTo6Unload[e3Auto4  ]=eAuto4  ;
+        iTo6Unload[e3Auto5  ]=eAuto5  ;
+        iTo6Unload[e3Auto6  ]=eAuto6  ;
+        iTo6Unload[e3Fix7   ]=eFix7   ;
+        iTo6Unload[e3Fix8   ]=eFix8   ;
+        iTo6Unload[e3Fix9   ]=eFix9   ;
+        iTo6Unload[e3Fix10  ]=eFix10  ;
+        iTo6Unload[e3Fix11  ]=eFix11  ;
+        iTo6Unload[e3Fix12  ]=eFix12  ;
+        iTo6PosUnload[e3PosNoUse]=ePosNoUse;                                        //JerryYang 20230916 : bin顯示
+        iTo6PosUnload[e3PosAuto1]=ePosAuto1;
+        iTo6PosUnload[e3PosAuto2]=ePosAuto2;
+        iTo6PosUnload[e3PosAuto3]=ePosAuto3;
+        iTo6PosUnload[e3PosFix1 ]=ePosFix1 ;
+        iTo6PosUnload[e3PosFix2 ]=ePosFix2 ;
+        iTo6PosUnload[e3PosFix3 ]=ePosFix3 ;
+        iTo6PosUnload[e3PosFix4 ]=ePosFix4 ;
+        iTo6PosUnload[e3PosFix5 ]=ePosFix5 ;
+        iTo6PosUnload[e3PosFix6 ]=ePosFix6 ;
+        iTo6PosUnload[e3Bulkbox ]=eBulkbox ;
+        iTo6PosUnload[e3PosMag1 ]=ePosMag1 ;
+        iTo6PosUnload[e3PosMag2 ]=ePosMag2 ;
+        iTo6PosUnload[e3PosMag3 ]=ePosMag3 ;
+        iTo6PosUnload[e3PosMag4 ]=ePosMag4 ;
+        iTo6PosUnload[e3PosMag5 ]=ePosMag5 ;
+        iTo6PosUnload[e3PosMag6 ]=ePosMag6 ;
+        iTo6PosUnload[e3PosMag7 ]=ePosMag7 ;
+        iTo6PosUnload[e3PosMag8 ]=ePosMag8 ;
+        iTo6PosUnload[e3PosMag9 ]=ePosMag9 ;
+        iTo6PosUnload[e3PosMag10]=ePosMag10;
+        iTo6PosUnload[e3PosMag11]=ePosMag11;
+        iTo6PosUnload[e3PosMag12]=ePosMag12;
+        iTo6PosUnload[e3PosMag13]=ePosMag13;
+        iTo6PosUnload[e3PosMag14]=ePosMag14;
+        iTo6PosUnload[e3PosAuto4]=ePosAuto4;
+        iTo6PosUnload[e3PosAuto5]=ePosAuto5;
+        iTo6PosUnload[e3PosAuto6]=ePosAuto6;
+        iTo6PosUnload[e3PosFix7 ]=ePosFix7 ;
+        iTo6PosUnload[e3PosFix8 ]=ePosFix8 ;
+        iTo6PosUnload[e3PosFix9 ]=ePosFix9 ;
+        iTo6PosUnload[e3PosFix10]=ePosFix10;
+        iTo6PosUnload[e3PosFix11]=ePosFix11;
+        iTo6PosUnload[e3PosFix12]=ePosFix12;
+        iTo3PosUnload[ePosNoUse]=e3PosNoUse;
+        iTo3PosUnload[ePosAuto1]=e3PosAuto1;
+        iTo3PosUnload[ePosAuto2]=e3PosAuto2;
+        iTo3PosUnload[ePosAuto3]=e3PosAuto3;
+        iTo3PosUnload[ePosAuto4]=e3PosAuto4;
+        iTo3PosUnload[ePosAuto5]=e3PosAuto5;
+        iTo3PosUnload[ePosAuto6]=e3PosAuto6;
+        iTo3PosUnload[ePosFix1 ]=e3PosFix1 ;
+        iTo3PosUnload[ePosFix2 ]=e3PosFix2 ;
+        iTo3PosUnload[ePosFix3 ]=e3PosFix3 ;
+        iTo3PosUnload[ePosFix4 ]=e3PosFix4 ;
+        iTo3PosUnload[ePosFix5 ]=e3PosFix5 ;
+        iTo3PosUnload[ePosFix6 ]=e3PosFix6 ;
+        iTo3PosUnload[ePosFix7 ]=e3PosFix7 ;
+        iTo3PosUnload[ePosFix8 ]=e3PosFix8 ;
+        iTo3PosUnload[ePosFix9 ]=e3PosFix9 ;
+        iTo3PosUnload[ePosFix10]=e3PosFix10;
+        iTo3PosUnload[ePosFix11]=e3PosFix11;
+        iTo3PosUnload[ePosFix12]=e3PosFix12;
+        iTo3PosUnload[eBulkbox ]=e3Bulkbox ;
+        iTo3PosUnload[ePosMag1 ]=e3PosMag1 ;
+        iTo3PosUnload[ePosMag2 ]=e3PosMag2 ;
+        iTo3PosUnload[ePosMag3 ]=e3PosMag3 ;
+        iTo3PosUnload[ePosMag4 ]=e3PosMag4 ;
+        iTo3PosUnload[ePosMag5 ]=e3PosMag5 ;
+        iTo3PosUnload[ePosMag6 ]=e3PosMag6 ;
+        iTo3PosUnload[ePosMag7 ]=e3PosMag7 ;
+        iTo3PosUnload[ePosMag8 ]=e3PosMag8 ;
+        iTo3PosUnload[ePosMag9 ]=e3PosMag9 ;
+        iTo3PosUnload[ePosMag10]=e3PosMag10;
+        iTo3PosUnload[ePosMag11]=e3PosMag11;
+        iTo3PosUnload[ePosMag12]=e3PosMag12;
+        iTo3PosUnload[ePosMag13]=e3PosMag13;
+        iTo3PosUnload[ePosMag14]=e3PosMag14;
+        iTo3Unload[eAuto1  ]= e3Auto1   ;
+        iTo3Unload[eAuto2  ]= e3Auto2   ;
+        iTo3Unload[eAuto3  ]= e3Auto3   ;
+        iTo3Unload[eAuto4  ]= e3Auto4   ;
+        iTo3Unload[eAuto5  ]= e3Auto5   ;
+        iTo3Unload[eAuto6  ]= e3Auto6   ;
+        iTo3Unload[eFix1   ]= e3Fix1    ;
+        iTo3Unload[eFix2   ]= e3Fix2    ;
+        iTo3Unload[eFix3   ]= e3Fix3    ;
+        iTo3Unload[eFix4   ]= e3Fix4    ;
+        iTo3Unload[eFix5   ]= e3Fix5    ;
+        iTo3Unload[eFix6   ]= e3Fix6    ;
+        iTo3Unload[eFix7   ]= e3Fix7    ;
+        iTo3Unload[eFix8   ]= e3Fix8    ;
+        iTo3Unload[eFix9   ]= e3Fix9    ;
+        iTo3Unload[eFix10  ]= e3Fix10   ;
+        iTo3Unload[eFix11  ]= e3Fix11   ;
+        iTo3Unload[eFix12  ]= e3Fix12   ;
+        iTo3Unload[eBulkBox]= e3BulkBox ;
+        iTo3Unload[eMag1   ]= e3Mag1    ;
+        iTo3Unload[eMag2   ]= e3Mag2    ;
+        iTo3Unload[eMag3   ]= e3Mag3    ;
+        iTo3Unload[eMag4   ]= e3Mag4    ;
+        iTo3Unload[eMag5   ]= e3Mag5    ;
+        iTo3Unload[eMag6   ]= e3Mag6    ;
+        iTo3Unload[eMag7   ]= e3Mag7    ;
+        iTo3Unload[eMag8   ]= e3Mag8    ;
+        iTo3Unload[eMag9   ]= e3Mag9    ;
+        iTo3Unload[eMag10  ]= e3Mag10   ;
+        iTo3Unload[eMag11  ]= e3Mag11   ;
+        iTo3Unload[eMag12  ]= e3Mag12   ;
+        iTo3Unload[eMag13  ]= e3Mag13   ;
+        iTo3Unload[eMag14  ]= e3Mag14   ;
+    }
+};
+W906_TrayIndexMapInit g_w906TrayIndexMapInit;
+} // namespace
 int  iSortTrayIndex[eTrayCount];
 int  AddBinDisp[MAX_BIN_UNIT];
 bool bSetTempChange=false;                                                      //Ifor 20160331 ATC啟動狀態
