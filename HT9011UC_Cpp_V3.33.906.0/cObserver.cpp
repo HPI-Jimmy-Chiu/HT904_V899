@@ -1840,7 +1840,1237 @@ void TfObserver::DoProduction_Summary_Report(AnsiString /*asStartData*/, AnsiStr
     // GAP: golden body lives outside Wave 1's byte ranges -- no-op offline.
 }
 
-void TfObserver::CountMTBF()
+// AI(W906-FW3-Observer-W2) 20260818: Wave 1's no-op stub retired -- real body
+// below (golden :3683-3752). See the FW3-Obs2 APPEND banner further down this
+// file for the full Wave 2 scope/GATE register; this is the ONE authorized
+// exception to "append-only" for this wave (task brief: "把 stub 換成真本體算
+// append-only 的唯一例外"), everything else this wave adds is appended after
+// the file's previous end (originally right after this function).
+void TfObserver::CountMTBF()                                                    //Steven 20170309 (wei) add MTBF(PauseTime/Jam)
 {
-    // GAP: golden body lives outside Wave 1's byte ranges -- no-op offline.
+    AnsiString asMTBA, asMUBA;
+    int iMins, iUnit, iSGCount, iUPH, iMTBFTime = 0;                             //Isaac 20180418 add iMTBFTime  //JerryYang 20180518 : add
+    double dJamCount, dLoadingCount, dTime;
+
+    dJamCount     = atof(pnlTotalCount->Caption.c_str());
+    dLoadingCount = atof(lbltTotalLoader->Caption.c_str());
+
+    if (dJamCount == 0)                                                         //Alick 20161130 add MTBF(PauseTime/Jam)
+    {
+        asMTBA.sprintf("0 / 1");
+    }
+    else
+    {
+        iMTBFTime = iPauseTime + iProductTime + iJamTime;                       //Isaac 20180418 add iMTBFTime
+        if (iMTBFTime != 0)
+        {
+            iMins = iMTBFTime / 60;                                             //JerryYang 20180619 : ASE_CL 尚智要求主MTBF單位改為min
+            iMins = iMins / dJamCount;                                          //Isaac 20180417 (Steven) 修正MTBF公式(pause+production+jam)/jamcount
+            asMTBA.sprintf("1 / %d", iMins);
+        }
+        else
+        {
+            asMTBA.sprintf("%d / 0", (int)dJamCount);
+        }
+    }
+
+    if (dJamCount == 0)                                                         //Alick 20161130 add MUBF(LoadingCount/Jam)
+    {
+        asMUBA.sprintf("0 / 1");
+    }
+    else
+    {
+        if (dLoadingCount != 0)
+        {
+            iUnit = dLoadingCount / dJamCount;
+            asMUBA.sprintf("1 / %d", iUnit);
+        }
+        else
+        {
+            asMUBA.sprintf("%d / 0", (int)dJamCount);
+        }
+    }
+
+    dTime = double(DateTimePicker3->Date - DateTimePicker1->Date + DateTimePicker4->Time - DateTimePicker2->Time) * 24;
+    if (dTime == 0)
+    {
+        iUPH = dLoadingCount;
+    }
+    else
+    {
+        iUPH = dLoadingCount / dTime;
+    }
+
+    iSGCount = strngrdMDBQuery->RowCount;
+    strngrdMDBQuery->RowCount = iSGCount + 7;
+
+    strngrdMDBQuery->Cells[1][iSGCount + 2] = "MTBA";
+    strngrdMDBQuery->Cells[2][iSGCount + 2] = asMTBA;
+    strngrdMDBQuery->Cells[3][iSGCount + 2] = "[mins]";                         //JerryYang 20180619 (wei) : ASE_CL 尚智要求主MTBF單位改為min
+
+    strngrdMDBQuery->Cells[1][iSGCount + 3] = "MUBA";
+    strngrdMDBQuery->Cells[2][iSGCount + 3] = asMUBA;
+    strngrdMDBQuery->Cells[3][iSGCount + 3] = "[unit]";
+
+    strngrdMDBQuery->Cells[1][iSGCount + 6] = "UPH";
+    strngrdMDBQuery->Cells[2][iSGCount + 6] = iUPH;
+    strngrdMDBQuery->Cells[3][iSGCount + 6] = "[unit/H]";
+}
+
+// =============================================================================
+//  -- FW3-Obs2 APPEND --  FW-3 cObserver Wave 2: OEE/statistics subset
+// =============================================================================
+//  Translation wave: FW-3 cObserver Wave 2
+//  Translator: AI(W906-FW3-Observer-W2) 20260818
+//  Golden source: same as Wave 1's file-head banner (HT9011UC_Code_V3.33.906.0_
+//  20260618/cObserver.cpp, cp950, 0 U+FFFD -- re-verified this wave with the
+//  identical `python3 -c "open(path,'rb').read().decode('cp950').encode('utf-8')"`
+//  command, 20260818).
+//
+//  See forms/fObserver.h's "-- FW3-Obs2 ADD --" block for the full WAVE SCOPE
+//  table and GATE REGISTER (W2-1..W2-5) -- not duplicated here per Wave 1's
+//  own "don't let the two files drift apart" convention.
+//
+//  ABSENCE-CLAIM TIMESTAMPS (commands + when run, this wave)
+//  --------------------------------------------------------------------------
+//    RecordMonitoringIndexCycleTime_New body anywhere in the golden tree:
+//        `grep -n "RecordMonitoringIndexCycleTime_New"` over the cp950-decoded
+//        golden cObserver.cpp -> 0 hits besides its own two call sites
+//        (golden :2176/:1794-ish is a DIFFERENT function, RecordMonitoringIndexCycleTime,
+//        not the _New variant) (20260818)
+//    RecordTimeInfo / RecordMonitoringIndexCycleTime / RecordMonitoringIndexCycleTime_New
+//    / SendTestResultToHttp already real (non-stub) anywhere in the C++ port tree:
+//        `grep -rn "RecordTimeInfo\|RecordMonitoringIndexCycleTime_New\|SendTestResultToHttp"
+//         --include=*.cpp --include=*.h .` over HT9011UC_Cpp_V3.33.906.0 -> 0 real
+//        definitions (only local no-op shadows: atester_32Site.cpp/aTester_Front.cpp/
+//        aTester_Rear.cpp each already carry their OWN TU-local
+//        `SendTestResultToHttp` stub-plus-`#define`; csystem.cpp carries its own
+//        TU-local `IniRecordMonitoringIndexCycleTime` stub-plus-`#define` for a
+//        DIFFERENT, unrelated free function this wave also gives a real body to
+//        -- see the integration-gap note below) (20260818)
+//    fMain->slTestLog facade member: `grep -n "slTestLog" forms/fMain.h` -> 0
+//        hits; already gated at cprod.cpp:2936-2939 for the identical reason
+//        (20260818)
+//
+//  INTEGRATION GAP (not this wave's job, flagged for the main loop)
+//  --------------------------------------------------------------------------
+//  csystem.cpp:12108-12109 already has
+//      `static void W7G3_IniRecordMonitoringIndexCycleTime(){}`
+//      `#define IniRecordMonitoringIndexCycleTime  W7G3_IniRecordMonitoringIndexCycleTime`
+//  (added when no real global existed yet). That `#define` is TU-local to
+//  csystem.cpp (preprocessor, not linkage) so it does NOT collide with the
+//  REAL, global `void IniRecordMonitoringIndexCycleTime();` this wave adds
+//  below -- but it DOES mean csystem.cpp's two call sites (csystem.cpp:9935/
+//  :12860) still reach the old no-op, not this wave's real translation, until
+//  a later wave removes that local shadow. Same shape of gap as the
+//  SendTestResultToHttp stubs this wave adds its OWN copy of, just discovered
+//  from the other direction (a real body arriving after 3 stub shadows already
+//  existed, instead of before).
+//
+//  DESIGN NOTE -- `fObserver->X` inside a TfObserver MEMBER method -> `X`
+//  --------------------------------------------------------------------------
+//  Golden member methods (RecordIndexCycle) read/write `fObserver->TimeInfoGrid`
+//  etc. rather than using implicit `this`. In real BCB6 this is inert: `fObserver`
+//  is the module-level global VCL sets to the one live TfObserver instance, so for
+//  any method CALLED ON that instance, `fObserver` and `this` are the same pointer.
+//  Translated as implicit `this` (i.e. just `TimeInfoGrid->...`) rather than
+//  reintroducing the global by name -- Wave 1's own banner already ruled out
+//  redeclaring `fObserver` in this header (would collide with the live
+//  `TfObserverShim* fObserver`, atester_shims.h, exactly like the two-TMyKitSuck
+//  trap). See forms/fObserver.h's W906Obs2_InstanceRegistrar banner for how the
+//  free (non-member) functions below reach the same state instead.
+//
+//  DESIGN NOTE -- golden `SetCellNumber(x, y, someAnsiString.c_str())` -> `.Core.SetCellNumber(x, y, someAnsiString)`
+//  --------------------------------------------------------------------------
+//  Golden's TTMyTray::SetCellNumber has separate `char*` and `AnsiString`
+//  overloads; several golden call sites explicitly select the `char*` one via
+//  `.c_str()` even when the argument is already an AnsiString. This port's
+//  vclcompat::TrayCore folds both into ONE `SetCellNumber(int,int,const
+//  AnsiString&)` (forms/fObserver.h's own DESIGN NOTE on TfObserverTray) --
+//  passing the AnsiString directly is the SAME text, just without the
+//  redundant round-trip through `const char*`. Applied throughout
+//  WriteCategoryData below without a comment at every individual site (same
+//  "explain once" convention as Wave 1's `(long)` cast / `.FormatString` notes).
+// =============================================================================
+#include "forms/fMain.h"   // TfMain/fMain -- RecordIndexCycle's fMain->cbSetupFileName->Text
+#include "LastSet.h"       // LastSet global -- GetMachineData/ProcessRunInfo/RecordIndexCycle
+                            //   (NOT transitively pulled in by any of Wave 1's own includes)
+#include <cstdio>          // sprintf into the raw char[64] sSocketCT buffers (WriteCategoryData)
+
+// ---------------------------------------------------------------------------
+//  File-scope data this wave's free functions need (golden cObserver.cpp:63-81,
+//  the TestTimeInfo struct + TestSocketTimeInfo[2]/OEERecevieTimeInfo[2]
+//  globals). Landed here (Wave 2's own append point) rather than moved up next
+//  to Wave 1's file-scope block (append-only rule -- Wave 1's block is
+//  existing content). Only the TWO instances of TestTimeInfo this wave's
+//  in-scope functions actually touch are declared -- golden ALSO declares
+//  `TestTimeInfoRecord[2][10]` (golden :72) and a SEPARATE
+//  `TestReceiveTimeInfo` struct + `TestReceiveTimeInfoRecord[2][10]` (golden
+//  :76-81), but both are read/written ONLY inside RecordTimeInfo (golden
+//  :1846-2134), which is explicitly excluded this wave (task brief: "290 行
+//  未 recon 完") -- not added (no delivered method touches them, Wave 1's own
+//  "don't invent surface" discipline).
+// ---------------------------------------------------------------------------
+struct TestTimeInfo
+{
+    int iStartMin;
+    int iStartSec;
+    int iStartMSec;
+    int iEndMin;
+    int iEndSec;
+    int iEndMSec;
+};
+static TestTimeInfo TestSocketTimeInfo[2];
+static TestTimeInfo OEERecevieTimeInfo[2];
+
+// ---------------------------------------------------------------------------
+//  W906Obs2_InstanceRegistrar::ctor -- see forms/fObserver.h's banner on this
+//  type for the full rationale. `W906Obs2_Instance` is TU-local (internal
+//  linkage, this file only) and intentionally never cleared on destruction
+//  (see that same banner's SAFETY paragraph).
+// ---------------------------------------------------------------------------
+static TfObserver *W906Obs2_Instance = 0;
+W906Obs2_InstanceRegistrar::W906Obs2_InstanceRegistrar(TfObserver *self)
+{
+    W906Obs2_Instance = self;
+}
+
+// =============================================================================
+//  GetMachineData -- golden :755-767
+// =============================================================================
+void TfObserver::GetMachineData()
+{
+    labPowerOnTime->Caption   = ConvertMSecToTime(LastSet.SystemAccSecond[0][stPowerOn]);
+    labRunningTime->Caption   = ConvertMSecToTime(LastSet.SystemAccSecond[0][stStartTime]);
+    labProductTime->Caption   = ConvertMSecToTime(LastSet.SystemAccSecond[0][stProductTime]);
+
+    if (CUSTOMER_CODE == CC_AMKOR_Korea)   //jou 2012-05-04 CC_AMKOR_Korea不自動清除Loader Count
+        labLoadingCount->Caption = LastSet.SendCT[0];
+    else
+        labLoadingCount->Caption = LastSet.SendCT[1];   //jou 2010-08-13 計數jam rate,改為Tray Feed為一單位
+
+    ProcessRunInfo();
+}
+
+// =============================================================================
+//  Timer1Timer -- golden :708-753 (Close() -> facade no-op, see forms/fObserver.h DEVIATION note)
+// =============================================================================
+void TfObserver::Timer1Timer(void * /*Sender*/)
+{
+    if (bShow == false)
+        return;
+
+    GetMachineData();
+
+    static Word iSystemSec = 0, iSystemMin = 0;   //Steven 20100818 Start: 按下Show Yield Chart按鈕一分鐘後要隱藏。
+    static bool bStartShowYieldChart = false;
+    static int  iCT = 0;
+
+    if (iShowYieldChart == 1)
+    {
+        bStartShowYieldChart = true;
+        iShowYieldChart = 2;
+        iCT = 0;
+    }
+    else if (iShowYieldChart == 2)
+    {
+        if (bStartShowYieldChart)
+        {
+            iSystemSec = SystemSec;
+            iSystemMin = SystemMin;
+            bStartShowYieldChart = false;
+        }
+        else
+        {
+            if (SystemMin != iSystemMin)
+            {
+                if ((SystemSec + 60 - iSystemSec) > 60)
+                {
+                    iSystemSec = SystemSec;
+                    iSystemMin = SystemMin;
+                    iCT++;
+                }
+            }
+
+            if (iCT >= 2)
+            {
+                iCT = 0;
+                Close();
+            }
+        }
+    }
+    //Steven 20100818 End
+}
+
+void TfObserver::Close()
+{
+    // DEVIATION: golden TForm::Close() (:748) closes/hides the Observer
+    // dialog. No TForm base here (see forms/fObserver.h banner) -- no-op,
+    // matching Wave 1's own GDI/window-method convention
+    // (TfObserverGrid::Repaint/Refresh). The counting logic that decides WHEN
+    // to call it (iShowYieldChart/iCT/iSystemSec/iSystemMin, above) is
+    // translated in full and genuinely observable.
+}
+
+// =============================================================================
+//  UpdateTempChart / cbbTempChartChange -- golden :905-943 / :945-948
+// =============================================================================
+void TfObserver::UpdateTempChart()   //Steven 20090827
+{
+    AnsiString S;
+    if      (IniConfig.iL10TempRecordInterval == 0) S = " (5  Sec)";
+    else if (IniConfig.iL10TempRecordInterval == 2) S = " (30 Sec)";
+    else if (IniConfig.iL10TempRecordInterval == 3) S = " (1  Min)";
+    else if (IniConfig.iL10TempRecordInterval == 4) S = " (5  Min)";
+    else if (IniConfig.iL10TempRecordInterval == 5) S = " (10 Min)";
+    else                                             S = " (15 Sec)";
+
+    TempChart->Title.Text->Clear();
+    TempChart->Title.Text->Add("Temperature Chart of " + cbbTempChart->Text + S);
+
+    if (cbbTempChart->ItemIndex == 0)
+    {
+        for (int j = 0; j < tcTotalCount; j++)   //Steven 20210621 : 動態產生溫度線段
+        {
+            TempChart->Series[j]->Clear();
+            if (bUT150Install[j])
+            {
+                for (int i = 0; i < 60; i++)
+                {
+                    TempChart->Series[j]->AddY(dTempHistroy[j][i], AnsiString(" "), TC[j]);   //Steven 20140923 : Index使用EJ1N版32組加熱器
+                }
+            }
+        }
+    }
+    else
+    {
+        for (int j = 0; j < tcTotalCount; j++)
+            TempChart->Series[j]->Clear();
+
+        int index = cbbTempChart->ItemIndex - 1;
+        for (int i = 0; i < 60; i++)
+        {
+            TempChart->Series[index]->AddY(dTempHistroy[index][i], AnsiString(" "), TC[index]);   //Steven 20140923 : Index使用EJ1N版32組加熱器
+        }
+    }
+}
+
+void TfObserver::cbbTempChartChange(void * /*Sender*/)
+{
+    UpdateTempChart();
+}
+
+// =============================================================================
+//  ProcessRunInfo -- golden :2254-2331
+// =============================================================================
+void TfObserver::ProcessRunInfo()
+{
+    AnsiString str = "";
+    int dSec;
+    int unit;
+
+    dSec = ((LastSet.SystemAccSecond[0][stPauseTime] +                          //Isaac 20180417 (Steven) 修正MTBA公式(pause+production+jam)/jamcount
+             LastSet.SystemAccSecond[0][stProductTime] +
+             LastSet.SystemAccSecond[0][stJamTime]) / 1000);                    //Steven 20140816 : 改用秒為單位
+
+    if (LastSet.iJamCount[1] == 0)
+    {
+        str.sprintf("0 / %s", ConvertSecondToSPC(dSec));
+    }
+    else
+    {
+        if (dSec != 0)
+        {
+            dSec = ChangeToFloatNonPcnt((double)(dSec), (double)(LastSet.iJamCount[1]));
+            str.sprintf("1 / %s", ConvertSecondToSPC(dSec));
+        }
+        else
+        {
+            str.sprintf("%d / 0", LastSet.iJamCount[1]);
+        }
+    }
+    labMTBA->Caption = str;
+
+    if (LastSet.iJamCount[1] == 0)
+    {
+        str.sprintf("0 / %d unit", LastSet.SendCT[1]);
+    }
+    else
+    {
+        if (IniConfig.iUserLanguage == eulSingapore)   //Steven 20120807 : 新加坡要求顯示數量
+        {
+            str.sprintf("%d / %d unit", LastSet.iJamCount[1], LastSet.SendCT[1]);
+        }
+        else
+        {
+            unit = LastSet.SendCT[1];                  //jou 2010-08-13 計數jam rate,改為Tray Feed為一單位
+            if (unit != 0)
+            {
+                unit /= LastSet.iJamCount[1];           //jou 2010-08-13 計數jam rate,改為Tray Feed為一單位
+                str.sprintf("1 / %d unit", unit);
+            }
+            else
+            {
+                str.sprintf("%d / 0 unit", LastSet.iJamCount[1]);   //Steven 20110103
+            }
+        }
+    }
+    labMUBA->Caption = str;
+
+    labMTBF->Caption = ConvertSecondToSPC(LastSet.SystemAccSecond[0][stPowerOn] / 1000);
+
+    if (IniConfig.bVTESTFunction == true)   //jou 20210108 : 上海偉測要求新增每日jam rate統計
+    {
+        if (LastSet.iDayJamCount == 0)
+        {
+            str.sprintf("0 / 1 unit");
+        }
+        else
+        {
+            unit = LastSet.iDaySendCT;
+            if (unit != 0)
+            {
+                unit /= LastSet.iDayJamCount;
+                str.sprintf("1 / %d unit", unit);
+            }
+            else
+            {
+                str.sprintf("%d / 0 unit", LastSet.iDayJamCount);
+            }
+        }
+        pnlDayJamRate->Caption = str;
+    }
+}
+
+// =============================================================================
+//  RecordIndexTime -- golden :2814-2903
+// =============================================================================
+void TfObserver::RecordIndexTime(double fData)   //jou 2010-12-22 新增index time ave.
+{
+    double fAve, iCT = 0.0;
+    double temp;
+    double dIndexCycleTime[9];
+
+    for (int i = 9; i >= 0; i--)
+    {
+        fRecordIndexTime[i + 1] = fRecordIndexTime[i];
+    }
+    fRecordIndexTime[0] = fData;
+
+    fAve = 0;
+    for (int i = 0; i < 10; i++)
+    {
+        if (fRecordIndexTime[i] != 0)
+        {
+            fAve += fRecordIndexTime[i];
+            iCT++;
+        }
+    }
+
+    if (iCT == 0)
+        fRecordIndexTime[11] = 0;
+    else
+        fRecordIndexTime[11] = fAve / iCT;
+
+    if (CosFunction.bOEEFunction)   //Steven 20180417 (Jou) : OEE功能
+    {                               //KaiChen 20171127 (Steven) ：超豐 OEE 新增 Test Time、Index Time
+        if (bTestIndexZ == true && iTestIndexZCount < 12)
+        {
+            bTestIndexZ = false;
+            for (int j = 8; j >= 0; j--)
+            {
+                dRecordIndexZTime[j + 1] = dRecordIndexZTime[j];
+            }
+            dRecordIndexZTime[0] = fData;
+            if (iTestIndexZCount >= 11)
+            {
+                for (int x = 0; x < 11; x++)
+                {
+                    for (int y = x; y <= 9; y++)
+                    {
+                        if (dRecordIndexZTime[y] > dRecordIndexZTime[x])
+                        {
+                            temp = dRecordIndexZTime[y];
+                            dRecordIndexZTime[y] = dRecordIndexZTime[x];
+                            dRecordIndexZTime[x] = temp;
+                        }
+                    }
+                }
+
+                double dTimeTotal = 0.0;
+                for (int k = 0; k <= 4; k++)
+                {
+                    dTimeTotal += dRecordIndexZTime[k];
+                }
+                sTestIndexZTime = FloatToStr(dTimeTotal / 5.0);
+
+                for (int i = 0; i < 9; i++)   //Sam 20180802 (wei) : OEE 32Site 修正
+                {
+                    dIndexCycleTime[i] = StrToFloatDef(TimeInfoGrid->Cells[4][i + 3], 0.0);   //Sam 20180822 : OEE 顯示修正
+                }
+
+                for (int i = 0; i < 9; i++)
+                {
+                    for (int j = 0; j < 8 - i; j++)   //Sam 20201216 : 修正記憶體溢位
+                        if (dIndexCycleTime[j + 1] < dIndexCycleTime[j])
+                        {
+                            temp = dIndexCycleTime[j];
+                            dIndexCycleTime[j] = dIndexCycleTime[j + 1];
+                            dIndexCycleTime[j + 1] = temp;
+                        }
+                }
+                dTimeTotal = 0;
+                for (int i = 0; i < 5; i++)
+                {
+                    dTimeTotal += dIndexCycleTime[4 + i];
+                }
+                dOEEIndexCycleTime = dTimeTotal / 5.0;
+            }
+            else
+            {
+                // AI(W906-FW3-Observer-W2) 20260818: golden's own '==' typo
+                // (cObserver.cpp:2897) -- a no-op COMPARISON, not the
+                // assignment `sTestIndexZTime="";` the surrounding code
+                // clearly intends. Translated verbatim per project policy:
+                // sTestIndexZTime silently keeps whatever value it already
+                // had on this path (it is NOT reset to "").
+                sTestIndexZTime == "";
+                dOEEIndexCycleTime = 0;   //Sam 20180802 (wei) : OEE 32Site 修正
+            }
+            iTestIndexZCount++;
+        }
+    }
+}
+
+// =============================================================================
+//  AddTimeData -- golden :2905-2966
+// =============================================================================
+void TfObserver::AddTimeData(int iRow, double Time)   //JerryYang 20151209
+{
+    for (int i = 10; i > 1; i--)
+    {
+        sgTimeData->Cells[i][iRow] = sgTimeData->Cells[i - 1][iRow];
+    }
+
+    sgTimeData->Cells[1][iRow] = AnsiString(Time);
+    if (iRow == 2)
+    {
+        for (int i = 0; i < 9; i++)
+        {
+            if (sgTimeData->Cells[i + 1][2] != "" && sgTimeData->Cells[i + 1][1] != "")
+            {
+                sgTimeData->Cells[i + 1][17] = FloatToStr(StrToFloat(sgTimeData->Cells[i + 1][2]) - StrToFloat(sgTimeData->Cells[i + 1][1]));
+            }
+        }
+    }
+    else if (iRow == 7)
+    {
+        sgTimeData->Cells[1][16] = FloatToStr(StrToFloat(sgTimeData->Cells[1][7]) - StrToFloat(sgTimeData->Cells[1][6]));
+        if (sgTimeData->Cells[2][7] != "" && sgTimeData->Cells[2][6] != "")
+            sgTimeData->Cells[2][16] = FloatToStr(StrToFloat(sgTimeData->Cells[2][7]) - StrToFloat(sgTimeData->Cells[2][6]));
+    }
+    else if (iRow == 9)
+    {
+        sgTimeData->Cells[1][17] = FloatToStr(StrToFloat(sgTimeData->Cells[1][9]) - StrToFloat(sgTimeData->Cells[1][8]));
+        if (sgTimeData->Cells[2][9] != "" && sgTimeData->Cells[2][8] != "")
+            sgTimeData->Cells[2][17] = FloatToStr(StrToFloat(sgTimeData->Cells[2][9]) - StrToFloat(sgTimeData->Cells[2][8]));
+    }
+    else if (iRow == 11)
+    {
+        sgTimeData->Cells[1][18] = FloatToStr(StrToFloat(sgTimeData->Cells[1][11]) - StrToFloat(sgTimeData->Cells[1][10]));
+        if (sgTimeData->Cells[2][11] != "" && sgTimeData->Cells[2][10] != "")
+            sgTimeData->Cells[2][18] = FloatToStr(StrToFloat(sgTimeData->Cells[2][11]) - StrToFloat(sgTimeData->Cells[2][10]));
+    }
+    else if (iRow == 13)
+    {
+        sgTimeData->Cells[1][19] = FloatToStr(StrToFloat(sgTimeData->Cells[1][13]) - StrToFloat(sgTimeData->Cells[1][9]));
+        if (sgTimeData->Cells[2][13] != "" && sgTimeData->Cells[2][9] != "")
+            // AI(W906-FW3-Observer-W2) 20260818: golden's own copy/paste bug
+            // (cObserver.cpp:2945) -- both operands read Cells[2][9]. The line
+            // right above (Cells[1][19]) pairs [1][13]-[1][9], and the guard
+            // just above THIS line tests BOTH Cells[2][13] and Cells[2][9] are
+            // non-empty, strongly suggesting the intent was
+            // `Cells[2][13]-Cells[2][9]` (matching the [1][19] line's own
+            // shape) -- instead this computes Cells[2][9]-Cells[2][9], always
+            // "0". Kept verbatim per project policy: translate what golden
+            // DOES, not what it probably meant; not corrected without an
+            // explicit user decision to change behaviour.
+            sgTimeData->Cells[2][19] = FloatToStr(StrToFloat(sgTimeData->Cells[2][9]) - StrToFloat(sgTimeData->Cells[2][9]));
+    }
+    else if (iRow == 15)
+    {
+        sgTimeData->Cells[1][20] = FloatToStr(StrToFloat(sgTimeData->Cells[1][15]) - StrToFloat(sgTimeData->Cells[1][14]));
+        if (sgTimeData->Cells[2][15] != "" && sgTimeData->Cells[2][14] != "")
+            sgTimeData->Cells[2][20] = FloatToStr(StrToFloat(sgTimeData->Cells[2][15]) - StrToFloat(sgTimeData->Cells[2][14]));
+    }
+    else if (iRow == 20)   //JerryYang 20170503 (wei) drop contact的index cycle time分成三段來計時
+    {
+        for (int i = 0; i < 9; i++)
+        {
+            if (sgTimeData->Cells[i + 1][18] != "" && sgTimeData->Cells[i + 1][19] != "" && sgTimeData->Cells[i + 1][20] != "")
+            {
+                sgTimeData->Cells[i + 1][21] = FloatToStr(StrToFloat(sgTimeData->Cells[i + 1][18]) + StrToFloat(sgTimeData->Cells[i + 1][19]) + StrToFloat(sgTimeData->Cells[i + 1][20]));
+            }
+        }
+    }
+
+    if (bShow)
+        sgTimeData->Refresh();
+}
+
+// =============================================================================
+//  RecordInArmTime -- golden :2968-2999
+// =============================================================================
+void TfObserver::RecordInArmTime()   //Steven 20140930 : For XY-Pitch
+{
+    double fAve, iCT = 0.0;
+    for (int i = 9; i >= 0; i--)
+    {
+        fRecordInArmTime[i + 1] = fRecordInArmTime[i];
+    }
+
+    fRecordInArmTime[0] = tRecordInArmTimer.LatchCycleTime() / 1000.0;
+    tRecordInArmTimer.LatchCycleTime(true);
+
+    fAve = 0;
+    for (int i = 0; i < 10; i++)
+    {
+        if (fRecordInArmTime[i] != 0)
+        {
+            fAve += fRecordInArmTime[i];
+            iCT++;
+        }
+    }
+
+    if (iCT == 0.0)
+        fRecordInArmTime[11] = 0;
+    else
+        fRecordInArmTime[11] = fAve / iCT;
+
+    if (bShow)
+    {
+        for (int i = 0; i < 11; i++)
+            TimeInfoGrid_InArm->Cells[1][i + 1] = fRecordInArmTime[i];
+    }
+}
+
+// =============================================================================
+//  WriteCategoryData -- golden :3274-3547
+//
+//  Two golden patterns below LOOK like bugs and are translated VERBATIM
+//  (project policy:照翻，並在 //AI 註解寫下它為什麼看起來錯):
+//   (1) The `mtIfError->SetCellNumber(..., iCat)` line in BOTH percent-mode
+//       branches reads `iCat` BEFORE the `for(iCat=0;...)` loop right after it
+//       (re)sets it fresh. Traced by hand this wave: every loop that touches
+//       `iCat` earlier in the SAME function (the `mtCategoryTotal` loop, and
+//       every `mtCategoryNo` loop from a PRIOR outer-loop iteration) always
+//       runs to full completion, so `iCat` is reliably `iTestBinCount` at
+//       every one of these read sites -- i.e. this consistently (not
+//       randomly) lands on the SAME index the NUMBER-mode branches spell out
+//       literally as `[iTestBinCount]` just above. Not "fixed" to the literal
+//       spelling, to keep this file line-for-line diffable against golden.
+//   (2) In the `bUseTwoArm32Site==false` branches, `mtHeadTotal`/`mtPassHead`
+//       index by `iCol*2+iArm` (0..15, one cell per arm/col pair) but
+//       `mtSockTotal`/`mtPassSocket` index by `iCol+iArm` (0..8, OVERLAPPING:
+//       e.g. iCol=0,iArm=1 and iCol=1,iArm=0 both write index 1). Harmless in
+//       VALUE (the written value never depends on iArm, so an overlapping
+//       write repeats the same value), but it means mtSockTotal/mtPassSocket
+//       never populate the full 16-cell range mtHeadTotal/mtPassHead do.
+//       Translated verbatim (marked at both occurrences below).
+// =============================================================================
+void TfObserver::WriteCategoryData()
+{
+    int iArm, iRow, iCol, iCat;
+    AnsiString Result = "";
+    TastCategory.UpdataCount(true);
+    RowNo = rgRowNo->ItemIndex;
+    AnsiString aStr;
+
+    if (bUseTwoArm32Site == true)   //Steven 20210630 : 修正32site的socket資料顯示
+    {
+        if (RowNo == 0)
+            mtRowName->Core.SetCellNumber(0, 0, AnsiString("Arm 1"));
+        else
+            mtRowName->Core.SetCellNumber(0, 0, AnsiString("Arm 2"));
+
+        for (int i = 0; i < mtChName->Core.FXItem; i++)
+        {
+            if (IsNNMode() == NN_1Row)
+            {
+                if (RowNo == 0)
+                    iRow = i / 8 + 1;
+                else
+                    iRow = i / 8;
+            }
+            else
+            {
+                if (RowNo == 0)
+                    iRow = i / 8 + 2;
+                else
+                    iRow = i / 8;
+            }
+            iCol = i % 8;
+
+            aStr.sprintf("Col-%c", 'a' + iCol);
+            mtDutName->Core.SetCellNumber(i, 0, aStr);
+
+            if (TestIF.iSiteMap[iRow][iCol] > 0)
+            {
+                aStr.sprintf("CH%d", TestIF.iSiteMap[iRow][iCol]);
+                mtChName->Core.SetCellNumber(i, 0, aStr);
+            }
+            else
+            {
+                mtChName->Core.SetCellNumber(i, 0, AnsiString("----"));
+            }
+        }
+    }
+    else
+    {
+        if (RowNo == 0)   //jou 20171023 (wei) : 修正yield RowB顯示錯誤
+            mtRowName->Core.SetCellNumber(0, 0, AnsiString("RowA"));
+        else
+            mtRowName->Core.SetCellNumber(0, 0, AnsiString("RowB"));
+
+        for (int i = 0; i < mtChName->Core.FXItem; i++)
+        {
+            if (TestIF.iSiteMap[RowNo][i] > 0)
+            {
+                aStr.sprintf("CH%d", TestIF.iSiteMap[RowNo][i]);
+                mtChName->Core.SetCellNumber(i, 0, aStr);
+            }
+            else
+            {
+                mtChName->Core.SetCellNumber(i, 0, AnsiString("----"));
+            }
+        }
+    }
+
+    if (rgRowNo->ItemIndex == 2 || rgRowNo->ItemIndex == 3)
+        RowNo = 0;
+
+    TastCategory.UpdataCount(true);   //Steven 20250514 : 統一計算數量
+    mtTotal->Core.SetCellNumber(0, 0, AnsiString(" Total "));
+    mtTotal->Core.SetCellNumber(0, 2, AnsiString(" Total "));
+
+    if (rbSocketNumber->Checked ||
+        rbSocketPercent->Checked ||
+        IsNNMode() == NN_1Row)
+        mtCategoryNo->Core.SetXItem(8);
+    else
+        mtCategoryNo->Core.SetXItem(16);
+
+    if (bUseTwoArm32Site == true)   //Steven 20210630 : 修正32site的socket資料顯示
+    {
+        if (RowNo == 0)
+        {
+            iArm = 0;
+        }
+        else
+        {
+            iArm = 1;
+        }
+
+        if (rbHeadNumber->Checked || rbSocketNumber->Checked)   //顯示數字的話
+        {
+            //By Socket顯示
+            mtTotal->Core.SetCellNumber(0, 1, TastCategory.iTotalSocket);
+            mtTotal->Core.SetCellNumber(0, 3, TastCategory.iPassSocket);
+            mtTotal->Core.SetCellNumber(0, 4, TastCategory.iTotalCategory[iTestBinCount]);
+
+            for (iCat = 0; iCat < iTestBinCount; iCat++)
+            {
+                mtCategoryTotal->Core.SetCellNumber(0, iCat, TastCategory.iTotalCategory[iCat]);   //填右側下面總和
+            }
+            //處理其他的Col
+            for (int i = 0; i < mtChName->Core.FXItem; i++)
+            {
+                if (IsNNMode() == NN_1Row)   //Ifor 20260401 : 修正bUseTwoArm32Site ARM1資料未更新問題(與百分比分支對齊iRow計算)
+                {
+                    if (RowNo == 0)
+                        iRow = i / 8 + 1;
+                    else
+                        iRow = i / 8;
+                }
+                else
+                {
+                    if (RowNo == 0)
+                        iRow = i / 8 + 2;
+                    else
+                        iRow = i / 8;
+                }
+                iCol = i % 8;
+                //處理最下面Row的Total數字
+                mtHeadTotal->Core.SetCellNumber(i,  0, TastCategory.iCountHeadTotal[iArm][iRow][iCol]);
+                mtPassHead ->Core.SetCellNumber(i,  0, TastCategory.iCountPassHead[iArm][iRow][iCol]);
+                mtSockTotal ->Core.SetCellNumber(i, 0, TastCategory.iCountHeadTotal[iArm][iRow][iCol]);   //Head Total
+                mtPassSocket->Core.SetCellNumber(i, 0, TastCategory.iCountPassHead[iArm][iRow][iCol]);    //Pass Total
+
+                //處理每個DUT的數字
+                mtIfError->Core.SetCellNumber(i, 0, TastCategory.iCountCategory[iArm][iRow][iCol][iTestBinCount]);   //IFErr
+                //By Arm顯示
+                for (iCat = 0; iCat < iTestBinCount; iCat++)
+                    mtCategoryNo->Core.SetCellNumber(i, iCat, TastCategory.iCountCategory[iArm][iRow][iCol][iCat]);
+            }
+        }
+        else   //if(rbSocketPercent->Checked || rbHeadPercent->Checked)
+        {
+            mtTotal->Core.SetCellNumber(0, 1, ChangeToPercentage(TastCategory.iTotalSocket, TastCategory.iTotalSocket));
+            mtTotal->Core.SetCellNumber(0, 3, ChangeToPercentage(TastCategory.iPassSocket,  TastCategory.iTotalSocket));
+            mtTotal->Core.SetCellNumber(0, 4, ChangeToPercentage(TastCategory.iTotalCategory[iTestBinCount],  TastCategory.iTotalSocket));
+            for (iCat = 0; iCat < iTestBinCount; iCat++)
+            {
+                mtCategoryTotal->Core.SetCellNumber(0, iCat, ChangeToPercentage(TastCategory.iTotalCategory[iCat], TastCategory.iTotalSocket));
+            }
+
+            //處理其他的Col
+            for (int i = 0; i < mtChName->Core.FXItem; i++)
+            {
+                if (IsNNMode() == NN_1Row)
+                {
+                    if (RowNo == 0)
+                        iRow = i / 8 + 1;
+                    else
+                        iRow = i / 8;
+                }
+                else
+                {
+                    if (RowNo == 0)
+                        iRow = i / 8 + 2;
+                    else
+                        iRow = i / 8;
+                }
+                iCol = i % 8;
+                mtSockTotal ->Core.SetCellNumber(i, 0, ChangeToPercentage(TastCategory.iCountHeadTotal[iArm][iRow][iCol], TastCategory.iTotalSocket));   //Head Total
+                mtPassSocket->Core.SetCellNumber(i, 0, ChangeToPercentage(TastCategory.iCountPassHead[iArm][iRow][iCol], TastCategory.iTotalSocket));
+                mtHeadTotal ->Core.SetCellNumber(i, 0, ChangeToPercentage(TastCategory.iCountHeadTotal[iArm][iRow][iCol], TastCategory.iTotalSocket));
+                mtPassHead->Core.SetCellNumber(i, 0, ChangeToPercentage(TastCategory.iCountPassHead[iArm][iRow][iCol], TastCategory.iCountHeadTotal[iArm][iRow][iCol]));
+
+                //處理每個DUT的數字 -- see WriteCategoryData's file-head DESIGN NOTE (1): `iCat`
+                //here is whatever the LAST completed `for(iCat=0;...)` loop left it at
+                //(iTestBinCount), same index the NUMBER-mode branch above spells literally.
+                mtIfError->Core.SetCellNumber(i, 0, ChangeToPercentage(TastCategory.iCountCategory[iArm][iRow][iCol][iCat], TastCategory.iCountSocketTotal[iRow][iCol]));   //IFErr
+                //By Arm顯示
+                for (iCat = 0; iCat < iTestBinCount; iCat++)   //category
+                {
+                    mtCategoryNo->Core.SetCellNumber(i, iCat, ChangeToPercentage(TastCategory.iCountCategory[iArm][iRow][iCol][iCat], TastCategory.iCountHeadTotal[iArm][iRow][iCol]));
+                }
+            }
+        }
+    }
+    else
+    {
+        //顯示數字的話
+        if (rbHeadNumber->Checked || rbSocketNumber->Checked)
+        {
+            //By Socket顯示
+            mtTotal->Core.SetCellNumber(0, 1, TastCategory.iTotalSocket);
+            mtTotal->Core.SetCellNumber(0, 3, TastCategory.iPassSocket);
+            mtTotal->Core.SetCellNumber(0, 4, TastCategory.iTotalCategory[iTestBinCount]);
+
+            for (iCat = 0; iCat < iTestBinCount; iCat++)
+            {
+                mtCategoryTotal->Core.SetCellNumber(0, iCat, TastCategory.iTotalCategory[iCat]);   //填右側下面總和
+            }
+            //處理其他的Col
+            for (iCol = 0; iCol < NEW_MAX_Index_Col; iCol++)   //最大是8
+            {
+                //處理最下面Row的Total數字
+                for (iArm = 0; iArm < 2; iArm++)   //arm
+                {
+                    mtHeadTotal->Core.SetCellNumber(iCol * 2 + iArm, 0, TastCategory.iCountHeadTotal[iArm][RowNo][iCol]);
+                    mtPassHead ->Core.SetCellNumber(iCol * 2 + iArm, 0, TastCategory.iCountPassHead[iArm][RowNo][iCol]);
+                    // See file-head DESIGN NOTE (2): iCol+iArm OVERLAPS across
+                    // iCol/iArm pairs (unlike iCol*2+iArm just above) -- verbatim.
+                    mtSockTotal ->Core.SetCellNumber(iCol + iArm,  0, TastCategory.iCountHeadTotal[0][RowNo][iCol] + TastCategory.iCountHeadTotal[1][RowNo][iCol]);   //Head Total
+                    mtPassSocket->Core.SetCellNumber(iCol + iArm,  0, TastCategory.iCountPassHead[0][RowNo][iCol] + TastCategory.iCountPassHead[1][RowNo][iCol]);     //Pass Total
+                }
+
+                //處理每個DUT的數字
+                mtIfError->Core.SetCellNumber(iCol, 0, TastCategory.iCountCategory[0][RowNo][iCol][iTestBinCount] + TastCategory.iCountCategory[1][RowNo][iCol][iTestBinCount]);   //IFErr
+                if (rbSocketNumber->Checked)
+                {
+                    for (iCat = 0; iCat < iTestBinCount; iCat++)   //category    //Steven 20121112 : RS232支援32Bin 15 --> iTestBinCount
+                    {
+                        sprintf(sSocketCT[iCol][iCat], "%d", TastCategory.iCountCategory[0][RowNo][iCol][iCat] + TastCategory.iCountCategory[1][RowNo][iCol][iCat]);
+                        mtCategoryNo->Core.SetCellNumber(iCol, iCat, AnsiString(sSocketCT[iCol][iCat]));   //填入中下面的數值
+                    }
+                }
+                else
+                {
+                    //By Arm顯示
+                    for (iArm = 0; iArm < 2; iArm++)   //arm
+                    {
+                        for (iCat = 0; iCat < iTestBinCount; iCat++)   //category //Steven 20121112 : RS232支援32Bin 15 --> iTestBinCount
+                        {
+                            mtCategoryNo->Core.SetCellNumber(iCol * 2 + iArm, iCat, TastCategory.iCountCategory[iArm][RowNo][iCol][iCat]);
+                        }
+                    }
+                }
+            }
+        }
+        else   //if(rbSocketPercent->Checked || rbHeadPercent->Checked)
+        {
+            mtTotal->Core.SetCellNumber(0, 1, ChangeToPercentage(TastCategory.iTotalSocket, TastCategory.iTotalSocket));
+            mtTotal->Core.SetCellNumber(0, 3, ChangeToPercentage(TastCategory.iPassSocket,  TastCategory.iTotalSocket));
+            mtTotal->Core.SetCellNumber(0, 4, ChangeToPercentage(TastCategory.iTotalCategory[iTestBinCount],  TastCategory.iTotalSocket));
+            for (iCat = 0; iCat < iTestBinCount; iCat++)
+            {
+                mtCategoryTotal->Core.SetCellNumber(0, iCat, ChangeToPercentage(TastCategory.iTotalCategory[iCat], TastCategory.iTotalSocket));
+            }
+
+            //處理其他的Col
+            for (iCol = 0; iCol < NEW_MAX_Index_Col; iCol++)   //最大是8
+            {
+                for (iArm = 0; iArm < 2; iArm++)   //arm
+                {
+                    mtSockTotal ->Core.SetCellNumber(iCol + iArm, 0, ChangeToPercentage(TastCategory.iCountHeadTotal[0][RowNo][iCol] + TastCategory.iCountHeadTotal[1][RowNo][iCol], TastCategory.iTotalSocket));   //Head Total
+                    mtPassSocket->Core.SetCellNumber(iCol + iArm, 0, ChangeToPercentage(TastCategory.iCountPassHead[0][RowNo][iCol] + TastCategory.iCountPassHead[1][RowNo][iCol], TastCategory.iTotalSocket));
+                    mtHeadTotal ->Core.SetCellNumber(iCol * 2 + iArm, 0, ChangeToPercentage(TastCategory.iCountHeadTotal[iArm][RowNo][iCol], TastCategory.iTotalSocket));
+                    mtPassHead->Core.SetCellNumber(iCol * 2 + iArm, 0, ChangeToPercentage(TastCategory.iCountPassHead[iArm][RowNo][iCol], TastCategory.iCountHeadTotal[iArm][RowNo][iCol]));
+                }
+
+                //處理每個DUT的數字 -- see file-head DESIGN NOTE (1): `iCat` here is
+                //whatever the LAST completed `for(iCat=0;...)` loop left it at.
+                mtIfError->Core.SetCellNumber(iCol, 0, ChangeToPercentage(TastCategory.iCountCategory[0][RowNo][iCol][iCat] + TastCategory.iCountCategory[1][RowNo][iCol][iCat], TastCategory.iCountSocketTotal[RowNo][iCol]));   //IFErr
+                if (rbSocketPercent->Checked)
+                {
+                    //By Socket顯示                +iArm
+                    for (iCat = 0; iCat < iTestBinCount; iCat++)   //category    //Steven 20121112 : RS232支援32Bin 15 --> iTestBinCount
+                    {
+                        sprintf(sSocketCT[iCol][iCat], "%s",
+                                ChangeToPercentage(TastCategory.iCountCategory[0][RowNo][iCol][iCat] + TastCategory.iCountCategory[1][RowNo][iCol][iCat], TastCategory.iCountSocketTotal[RowNo][iCol]).c_str());   // .c_str(): plain ::sprintf's "..." cannot bind a non-trivial AnsiString directly (GCC hard error) -- same text, see file-head DESIGN NOTE
+                        mtCategoryNo->Core.SetCellNumber(iCol, iCat, AnsiString(sSocketCT[iCol][iCat]));   //填入中下面的數值
+                    }
+                }
+                else
+                {
+                    //By Arm顯示
+                    for (iArm = 0; iArm < 2; iArm++)   //arm
+                    {
+                        for (iCat = 0; iCat < iTestBinCount; iCat++)   //category
+                        {
+                            mtCategoryNo->Core.SetCellNumber(iCol * 2 + iArm, iCat, ChangeToPercentage(TastCategory.iCountCategory[iArm][RowNo][iCol][iCat], TastCategory.iCountHeadTotal[iArm][RowNo][iCol]));
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// =============================================================================
+//  GetTimeDataText -- golden :4795-4839
+// =============================================================================
+void TfObserver::GetTimeDataText()   //Steven 20190903 : Time Data顯示
+{
+    AnsiString Str;   // golden declares this but never reads/writes it in this range -- verbatim
+    for (int i = 1; i < strngrdTimeData->RowCount; i++)
+    {
+        strngrdTimeData->ClearRow(i);   // golden ->Rows[i]->Clear() -- see forms/fObserver.h DESIGN NOTES (Wave 1)
+    }
+
+    if (lstTimeData->Items->Count < 1)   // golden ->Count shortcut (Wave 1's own lstEventLog precedent)
+    {
+        strngrdTimeData->RowCount = 2;
+        strngrdTimeData->Cells[1][1] = "No Record!!";
+    }
+    else
+    {
+        AnsiString FileName = lstTimeData->Items->Strings[lstTimeData->ItemIndex];
+        if (FileExists(FileName))
+        {
+            TStringList *tsLogFile, *tsRow;
+            tsLogFile = new TStringList();
+            tsRow     = new TStringList();
+            tsLogFile->LoadFromFile(FileName);
+
+            strngrdTimeData->RowCount = tsLogFile->Count;
+            for (int i = 0; i < tsLogFile->Count; i++)
+            {
+                tsRow->Clear();
+                tsRow->CommaText = tsLogFile->Strings[i];
+                for (int j = 0; j < tsRow->Count; j++)
+                {
+                    strngrdTimeData->Cells[j][i] = tsRow->Strings[j];
+                }
+            }
+            tsLogFile->Clear();
+            tsRow->Clear();
+            delete tsLogFile;
+            delete tsRow;
+        }
+        else
+        {
+            strngrdTimeData->RowCount = 2;
+            strngrdTimeData->Cells[1][1] = "No Record!!";
+        }
+    }
+}
+
+// =============================================================================
+//  RecordIndexCycle -- golden :4846-4887
+// =============================================================================
+void TfObserver::RecordIndexCycle(bool bReset)   //Sam 20200916 : Add Index Cycle Time Record
+{
+    TStringList *sIndexCycleTimeCnt;
+    static int iRecordIndexCycleTimeCnt = 0;
+
+    AnsiString sFilePath = "D:\\HT9045_log\\IndexCycleTimeRecord\\";
+    AnsiString sFilePathName = "";
+
+    if (IniConfig.bD70IndexCycleTimeRecord == false)
+    {
+        iRecordIndexCycleTimeCnt = 0;
+        return;
+    }
+
+    MyForceDirectories(sFilePath, "TfObserver::RecordIndexCycle");
+
+    if (bReset)
+    {
+        iRecordIndexCycleTimeCnt = 0;
+        return;
+    }
+
+    // golden `fObserver->TimeInfoGrid` -> implicit `this` (see file-head DESIGN
+    // NOTE); golden `Now().FormatString(fmt)` -> `FormatDateTime(fmt, Now())`
+    // (Wave 1's own established conversion, file-head DESIGN NOTE).
+    sRecordIndexCycleTime[iRecordIndexCycleTimeCnt] =
+        FormatDateTime("yyyy-mm-dd hh:nn:ss", Now()) + "," + IntToStr(iRecordIndexCycleTimeCnt + 1) + "," + TimeInfoGrid->Cells[4][11];
+    iRecordIndexCycleTimeCnt++;
+    if (iRecordIndexCycleTimeCnt >= 10)
+    {
+        sIndexCycleTimeCnt = new TStringList();
+        sIndexCycleTimeCnt->Clear();
+        sIndexCycleTimeCnt->Add("Record Time,No,Index Cycle Time");
+        for (int i = 0; i < iRecordIndexCycleTimeCnt; i++)
+        {
+            sIndexCycleTimeCnt->Add(sRecordIndexCycleTime[i]);
+        }
+
+        sFilePathName.sprintf("%s%s_Temperature[%d]_AutoTray1Dir[%d]_%s.csv", sFilePath, fMain->cbSetupFileName->Text,
+                               LastSet.iTemperature, TrayForm.Auto[0].Direction, FormatDateTime("yyyymmdd_hhnnss", Now()));
+        sIndexCycleTimeCnt->SaveToFile(sFilePathName);
+        sIndexCycleTimeCnt->Clear();
+        delete sIndexCycleTimeCnt;
+        iRecordIndexCycleTimeCnt = 0;
+    }
+}
+
+// =============================================================================
+//  RecordStartTestTime -- golden :2136-2147 (file-scope free function)
+// =============================================================================
+void RecordStartTestTime()
+{
+    iCurrentTime = 0;
+    GetTimeInfo();
+    for (int i = 0; i < 2; i++)
+    {
+        TestSocketTimeInfo[i].iStartMin  = SystemMin;
+        TestSocketTimeInfo[i].iStartSec  = SystemSec;
+        TestSocketTimeInfo[i].iStartMSec = SystemMSec;
+    }
+    sBufferSOT = FormatDateTime("yyyymmdd_hhnnss", Now());   //wei 20181211 (Steven) : 更換位置SOT
+}
+
+// =============================================================================
+//  RecordEndTestTime -- golden :2150-2235 (file-scope free function)
+//  GATE stubs for its 4 unported callees -- see forms/fObserver.h GATE
+//  REGISTER W2-1/W2-2/W2-3/W2-4 for the full rationale on each.
+// =============================================================================
+static void RecordMonitoringIndexCycleTime_New()
+{
+    // GAP (GATE REGISTER W2-1): not declared anywhere in the golden tree
+    // outside this one call site; not one of this wave's named targets.
+}
+
+static void RecordMonitoringIndexCycleTime()
+{
+    // GAP (GATE REGISTER W2-2): real golden body exists (cObserver.cpp:
+    // 1709-1751) but is explicitly excluded this wave (task brief: "彈訊息").
+}
+
+static void RecordTimeInfo()
+{
+    // GAP (GATE REGISTER W2-3): real golden body (cObserver.cpp:1846-2134,
+    // ~290 lines) explicitly excluded this wave (task brief: "290 行未 recon 完").
+}
+
+// GATE REGISTER W2-4: golden itself only forward-declares this LOCALLY
+// (cObserver.cpp:2149, right before RecordEndTestTime) -- same gap already
+// solved 3x elsewhere (atester_32Site.cpp:394/397, aTester_Front.cpp:3264,
+// aTester_Rear.cpp:3148). TU-local stub returning 1 (== upload OK, matching
+// golden's own offline convention) + #define shadow.
+static int W7Obs_SendTestResultToHttp() { return 1; }
+#define SendTestResultToHttp W7Obs_SendTestResultToHttp
+
+int RecordEndTestTime(int iArm)   //Sam 20201231 : 修正關 Arm 後，Index Cycle time 異常。0:arm1 1:arm2 2:雙Arm
+{
+    AnsiString str;
+    int iCount = 0, iMaxSite, iSiteCh;
+    GetTimeInfo();
+    for (int i = 0; i < 2; i++)
+    {
+        TestSocketTimeInfo[i].iEndMin  = SystemMin;
+        TestSocketTimeInfo[i].iEndSec  = SystemSec;
+        TestSocketTimeInfo[i].iEndMSec = SystemMSec;
+    }
+    sBufferEOT = FormatDateTime("yyyymmdd_hhnnss", Now());   //wei 20181211 (Steven) : 更換位置SOT
+
+    if ((TestIF_File.iShuttleMode == 1 && TestIF_File.iShuttle_Sel == 0 && iArm == 0) ||
+        (TestIF_File.iShuttleMode == 1 && TestIF_File.iShuttle_Sel == 1 && iArm == 1) ||
+        TestIF_File.iShuttleMode == 0 ||
+        iArm == 2)   //Sam 20201231 : 修正關 Arm 後，Index Cycle time 異常 1:arm1 2:arm2
+    {
+        RecordTimeInfo();
+    }
+
+    int iRet = SendTestResultToHttp();
+
+    if (IniConfig.bSPILFunction == true &&
+        TestIF_File.bIndexCycleTimeMonitor == true)   //JerryYang 20220824 : SPIL index cycle time monitor
+    {
+        RecordMonitoringIndexCycleTime_New();
+    }
+    else
+    {
+        if (TestIF_File.bIndexCycleTimeMonitor == true && bResetflag == true)   //Isaac 20180301 (Steven) Index Cycle Time Monitoring function
+        {
+            RecordMonitoringIndexCycleTime();
+        }
+    }
+
+    if (IniConfig.bN28_SCK_OEE)   //Steven 20210608 : JSCK OEE Function.
+    {
+        TStringList *List1 = new TStringList();
+        TStringList *List2 = new TStringList();
+        List1->Clear();
+        List1->Add(IniConfig.sN28_IP);   //IP
+        str.sprintf("%04d/%02d/%02d %02d:%02d:%02d:%03d", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec, SystemMSec);
+        List1->Add(str);   //yyyy/mm/dd hh:mm:ss:sss
+        str.sprintf("%0.3f", RunInfo.dTestTimeSec);
+        List1->Add(str);   //Test time
+        List1->Add(RunInfo.IndexCycleTime);   //Index time
+        List1->Add("0.00");   //0.00
+        if (TestIF.iTestMode == _32Site4X8N)
+            iMaxSite = 32;
+        else
+            iMaxSite = 16;
+
+        for (int i = 0; i < iMaxSite; i++)
+        {
+            List2->Add("0");
+        }
+
+        for (int i = 0; i < TestSocket.iShtRow; i++)
+        {
+            for (int j = 0; j < TestSocket.iShtCol; j++)
+            {
+                if (TestSocket.Item[i][j] != HAS_NULL_IC &&   //kevin 20120618  沒有IC 就不要設定避免畫面被誤解
+                    TestSocket.Item[i][j] != NULL_IC)
+                {
+                    iSiteCh = TestIF_File.iSiteMap[i][j] - 1;
+                    if (iSiteCh >= 0 && iSiteCh < iMaxSite)
+                    {
+                        List2->Strings[iSiteCh] = TestSocket.iBinData[i][j];
+                        iCount++;
+                    }
+                }
+            }
+        }
+        List1->Add(iCount);   //Enabled site
+        List1->Add(List2->CommaText);   //site1 tested bin, ... site16 tested bin
+        str = StringReplace(List1->CommaText, "\"", "", TReplaceFlags() << rfReplaceAll);
+        str = StringReplace(str, ",", ", ", TReplaceFlags() << rfReplaceAll);
+        // GATE REGISTER W2-5: fMain->slTestLog is not a forms/fMain.h facade
+        // member (same pre-existing gap already documented at cprod.cpp:
+        // 2936-2939, NOT a new one this wave introduces).
+#if 0
+        fMain->slTestLog->AddText(str);
+#endif
+        List1->Clear();
+        List2->Clear();
+        delete List1;
+        delete List2;
+    }
+    return iRet;
+}
+
+// =============================================================================
+//  RecordReceiveTestTime -- golden :4755-4764 (file-scope free function).
+//  NOTE: recon's own byte-range citation (:4755-4794) also spans the NEXT
+//  golden function, pgcMessageChange (:4766-4793) -- NOT one of this wave's
+//  named targets and NOT translated (it reads lstTimeData/SearchFileAll
+//  against a hardcoded "D:\\HT9045_Log\\TimeData\\%d\\" path, a whole
+//  separate UI action). Verified by reading golden text end to end this wave.
+// =============================================================================
+void RecordReceiveTestTime()   //KaiChen 20171127 (Steven) ：超豐 OEE 新增 Test Time、Index Time
+{
+    GetTimeInfo();
+    for (int i = 0; i < 2; i++)
+    {
+        OEERecevieTimeInfo[i].iStartMin  = SystemMin;
+        OEERecevieTimeInfo[i].iStartSec  = SystemSec;
+        OEERecevieTimeInfo[i].iStartMSec = SystemMSec;
+    }
+}
+
+// =============================================================================
+//  IniRecordMonitoringIndexCycleTime -- golden :1836-1844 (file-scope free function)
+//  See forms/fObserver.h's W906Obs2_InstanceRegistrar banner for
+//  W906Obs2_Instance (golden's own `fObserver->` self-reference, reached here
+//  through the registrar since this is NOT a TfObserver member).
+// =============================================================================
+void IniRecordMonitoringIndexCycleTime()   //Isaac 20180301 (Steven) Index Cycle Time Monitoring function
+{
+    if (W906Obs2_Instance)   // PORT-ONLY guard -- golden's `fObserver` is never
+                              // null once the app is running; this facade's
+                              // instance may not be registered yet in an
+                              // isolated caller/test. See registrar SAFETY note.
+        W906Obs2_Instance->iIndexCycleTimeCount = 0;
+    for (int i = 0; i < 20; i++)   //清除
+    {
+        queue20[i] = 0;
+    }
+    iMonitoringOutlierCnt = 0;
+}
+
+// =============================================================================
+//  RecordIndexAirOnTime1 / RecordIndexAirOnTime2 -- golden :5331-5343 / :5346-5358
+//  (file-scope free functions). Same W906Obs2_Instance guard rationale as
+//  IniRecordMonitoringIndexCycleTime above.
+// =============================================================================
+void RecordIndexAirOnTime1()   //Sam 20220329 : Record Index Air On Time
+{
+    if (CosFunction.RecordIndexAirOnTime == false)
+        return;
+    if (!W906Obs2_Instance)   // PORT-ONLY guard, see IniRecordMonitoringIndexCycleTime above
+        return;
+    for (int j = 0; j < 100; j++)
+    {
+        if (j <= QueueAirOnTime1.iCount)
+        {
+            W906Obs2_Instance->strngrdIndeAirOn1->Cells[1][101 - j] = QueueAirOnTime1.GetStartTime(j);
+            W906Obs2_Instance->strngrdIndeAirOn1->Cells[2][101 - j] = QueueAirOnTime1.GetEndTime(j);
+            W906Obs2_Instance->strngrdIndeAirOn1->Cells[3][101 - j] = QueueAirOnTime1.GetTimeString(j);
+        }
+    }
+}
+
+void RecordIndexAirOnTime2()   //Sam 20220329 : Record Index Air On Time
+{
+    if (CosFunction.RecordIndexAirOnTime == false)
+        return;
+    if (!W906Obs2_Instance)   // PORT-ONLY guard, see IniRecordMonitoringIndexCycleTime above
+        return;
+    for (int j = 0; j < 100; j++)
+    {
+        if (j <= QueueAirOnTime2.iCount)
+        {
+            W906Obs2_Instance->strngrdIndeAirOn2->Cells[1][101 - j] = QueueAirOnTime2.GetStartTime(j);
+            W906Obs2_Instance->strngrdIndeAirOn2->Cells[2][101 - j] = QueueAirOnTime2.GetEndTime(j);
+            W906Obs2_Instance->strngrdIndeAirOn2->Cells[3][101 - j] = QueueAirOnTime2.GetTimeString(j);
+        }
+    }
 }

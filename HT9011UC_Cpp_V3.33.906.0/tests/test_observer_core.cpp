@@ -254,6 +254,276 @@ static void Test_GetEventLogText_FiltersAndNotFound()
     IniConfig.bSPILFunction = savedSpil;
 }
 
+// =============================================================================
+//  -- FW3-Obs2 ORACLE APPEND --  FW-3 cObserver Wave 2 test coverage
+// =============================================================================
+//  AI(W906-FW3-Observer-W2) 20260818: new oracle block, appended after Wave 1's
+//  own 3 test functions (Test_CalculateStopTime_KnownValuesAndRoundTrip /
+//  Test_BuildQuery_AlarmHistory / Test_GetEventLogText_FiltersAndNotFound,
+//  their 40 checks all UNCHANGED above). Covers (per this wave's task brief,
+//  "至少蓋 CalculateStopTime 之外的 3 個新方法（含一個時間記錄類的直寫 oracle）"):
+//   (d) RecordIndexTime      -- direct-write oracle, the time-record class.
+//   (e) AddTimeData          -- direct-write oracle, grid-delta arithmetic.
+//   (f) GetTimeDataText      -- file-based (mirrors Wave 1's GetEventLogText
+//                               test shape: real CSV / not-found / no-record),
+//                               driven directly (no env-redirectable search
+//                               step exists for this grid -- that's
+//                               pgcMessageChange, NOT one of this wave's
+//                               targets, see cObserver.cpp's own note).
+//   (g) WriteCategoryData    -- branching/layout oracle, deliberately at an
+//                               ALL-ZERO TastCategory baseline (see its own
+//                               design note below) rather than fabricating
+//                               TMySocket/ArmData fixture counts.
+//   (h) CountMTBF            -- Wave 1's no-op stub retired this wave; verified
+//                               with hand-computed arithmetic.
+//   (i) ProcessRunInfo / GetMachineData -- LastSet-driven Caption assembly.
+// =============================================================================
+#include "LastSet.h"     // LastSet global -- ProcessRunInfo/GetMachineData/CountMTBF
+#include "cpublic.h"     // ConvertMSecToTime/ConvertSecondToSPC -- comparison oracles below
+#include "CosFunction.h" // CosFunction.bOEEFunction -- RecordIndexTime's OEE branch guard
+#include "aHotPlateSubstrate.h" // TestSocket (NOT mykitsuck.h -- see KNOWLEDGE.md two-TMyKitSuck ODR gotcha,
+                                //   same header cObserver.cpp itself uses) -- WriteCategoryData's
+                                //   TastCategory.UpdataCount(true) input
+
+// =============================================================================
+//  (d) RecordIndexTime -- direct-write oracle (the time-record class)
+// =============================================================================
+static void Test_RecordIndexTime_ShiftAndAverage()
+{
+    TfObserver observer;
+    bool savedOEE = CosFunction.bOEEFunction;
+    CosFunction.bOEEFunction = false;   // skip the OEE sub-branch -- exercised structurally, not this test's focus
+
+    for (int i = 0; i < 20; ++i)
+        observer.fRecordIndexTime[i] = 0;
+
+    observer.RecordIndexTime(5.0);
+    CHECK(observer.fRecordIndexTime[0] == 5.0, "RecordIndexTime(5.0): fRecordIndexTime[0] == 5.0");
+    CHECK(observer.fRecordIndexTime[11] == 5.0, "RecordIndexTime(5.0): average over 1 nonzero sample == 5.0");
+
+    observer.RecordIndexTime(10.0);
+    CHECK(observer.fRecordIndexTime[0] == 10.0, "RecordIndexTime(10.0): fRecordIndexTime[0] shifted to the new value");
+    CHECK(observer.fRecordIndexTime[1] == 5.0, "RecordIndexTime(10.0): fRecordIndexTime[1] holds the PREVIOUS [0] (5.0)");
+    CHECK(observer.fRecordIndexTime[11] == 7.5, "RecordIndexTime(10.0): average of {10.0,5.0} == 7.5");
+
+    observer.RecordIndexTime(0.0);   // golden `if(fRecordIndexTime[i]!=0)` excludes zero samples from the average
+    CHECK(observer.fRecordIndexTime[0] == 0.0, "RecordIndexTime(0.0): fRecordIndexTime[0] == 0.0");
+    CHECK(observer.fRecordIndexTime[1] == 10.0, "RecordIndexTime(0.0): fRecordIndexTime[1] holds the PREVIOUS [0] (10.0)");
+    CHECK(observer.fRecordIndexTime[2] == 5.0, "RecordIndexTime(0.0): fRecordIndexTime[2] holds the PREVIOUS [1] (5.0)");
+    CHECK(observer.fRecordIndexTime[11] == 7.5, "RecordIndexTime(0.0): the new 0.0 sample is EXCLUDED -- average stays {10.0,5.0}/2 == 7.5");
+
+    CosFunction.bOEEFunction = savedOEE;
+}
+
+// =============================================================================
+//  (e) AddTimeData -- direct-write oracle, grid-delta arithmetic (iRow==7 branch)
+// =============================================================================
+static void Test_AddTimeData_ComputesDeltas()
+{
+    TfObserver observer;
+
+    observer.AddTimeData(6, 100.0);    // sgTimeData->Cells[1][6] = "100"
+    CHECK(observer.sgTimeData->Cells[1][6] == "100", "AddTimeData(6,100.0): Cells[1][6] == \"100\"");
+
+    observer.AddTimeData(7, 130.5);    // iRow==7 branch: Cells[1][16] = Cells[1][7]-Cells[1][6] = 130.5-100 = 30.5
+    CHECK(observer.sgTimeData->Cells[1][7] == "130.5", "AddTimeData(7,130.5): Cells[1][7] == \"130.5\"");
+    CHECK(observer.sgTimeData->Cells[1][16] == "30.5", "AddTimeData(7,130.5): Cells[1][16] == Cells[1][7]-Cells[1][6] == \"30.5\"");
+    CHECK(observer.sgTimeData->Cells[2][16] == "", "AddTimeData(7,130.5): Cells[2][16] left \"\" -- column-2 guard (Cells[2][7]/[2][6] both still \"\") correctly skipped");
+}
+
+// =============================================================================
+//  (f) GetTimeDataText -- file-based (real CSV / not-found / no-record)
+// =============================================================================
+static void WriteScratchTimeDataCsv(const AnsiString &path)
+{
+    std::FILE *fp = std::fopen(path.c_str(), "wb");
+    CHECK(fp != NULL, "(setup) scratch TimeData CSV created");
+    if (!fp) return;
+    const char *rows =
+        "Motion Part,Current,Last 1\r\n"
+        "DoArmPickFromLoadStage,12.3,45.6\r\n"
+        "DoPlaceToHotPlate,7.8,9.0\r\n";
+    std::fputs(rows, fp);
+    std::fclose(fp);
+}
+
+static void Test_GetTimeDataText_FileAndNoRecord()
+{
+    TfObserver observer;
+    AnsiString csvPath = ScratchDir() + "timedata_sample.csv";
+    WriteScratchTimeDataCsv(csvPath);
+
+    // --- real file ------------------------------------------------------
+    observer.lstTimeData->Clear();
+    observer.lstTimeData->Items->Add(csvPath);
+    observer.lstTimeData->ItemIndex = 0;
+    observer.GetTimeDataText();
+    CHECK(observer.strngrdTimeData->RowCount == 3, "GetTimeDataText (real file): RowCount == 3 (1 header + 2 data rows)");
+    CHECK(observer.strngrdTimeData->Cells[0][0] == "Motion Part", "GetTimeDataText: header Cells[0][0] == \"Motion Part\"");
+    CHECK(observer.strngrdTimeData->Cells[1][1] == "12.3", "GetTimeDataText: row 1 Cells[1][1] == \"12.3\"");
+    CHECK(observer.strngrdTimeData->Cells[2][2] == "9.0", "GetTimeDataText: row 2 Cells[2][2] == \"9.0\"");
+
+    // --- file not found ---------------------------------------------------
+    observer.lstTimeData->Clear();
+    observer.lstTimeData->Items->Add(ScratchDir() + "does_not_exist_timedata.csv");
+    observer.lstTimeData->ItemIndex = 0;
+    observer.GetTimeDataText();
+    CHECK(observer.strngrdTimeData->RowCount == 2, "GetTimeDataText (file not found): RowCount == 2");
+    CHECK(observer.strngrdTimeData->Cells[1][1] == "No Record!!", "GetTimeDataText (file not found): Cells[1][1] == \"No Record!!\"");
+
+    // --- empty lstTimeData (golden's OTHER no-record path) ----------------
+    observer.lstTimeData->Clear();
+    observer.lstTimeData->ItemIndex = -1;
+    observer.GetTimeDataText();
+    CHECK(observer.strngrdTimeData->RowCount == 2, "GetTimeDataText (empty lstTimeData): RowCount == 2");
+    CHECK(observer.strngrdTimeData->Cells[1][1] == "No Record!!", "GetTimeDataText (empty lstTimeData): Cells[1][1] == \"No Record!!\"");
+}
+
+// =============================================================================
+//  (g) WriteCategoryData -- branching/layout oracle at an ALL-ZERO baseline.
+//
+//  DESIGN NOTE: WriteCategoryData calls `TastCategory.UpdataCount(true)` TWICE
+//  (golden's own idiom, kept verbatim in the port) -- a REAL recount that
+//  iterates `TestSocket.iShtRow x TestSocket.iShtCol` reading `ArmData[arm]->
+//  ArmSKET[row][col]` (real TMySocket counters). Rather than fabricate a
+//  TMySocket/ArmData fixture (out of proportion for THIS method's own unique
+//  contribution -- the grid layout/branching logic, already covered by
+//  Wave5's atester_ProcessCount.cpp tests on the TastCategory/UpdataCount
+//  side), this test forces TestSocket.iShtRow=iShtCol=0 so the recount touches
+//  ZERO cells and TastCategory settles at a deterministic ALL-ZERO baseline
+//  (ClearCount(), no accumulation). WriteCategoryData's OWN per-column loop
+//  (driven by mtChName->Core.FXItem, fully test-controlled) still runs and is
+//  what this test actually verifies.
+// =============================================================================
+static void Test_WriteCategoryData_ZeroBaseline()
+{
+    TfObserver observer;
+
+    int savedShtRow = TestSocket.iShtRow;
+    int savedShtCol = TestSocket.iShtCol;
+    bool savedTwoArm = bUseTwoArm32Site;
+    TestSocket.iShtRow = 0;
+    TestSocket.iShtCol = 0;
+    bUseTwoArm32Site = false;
+
+    observer.mtChName->Core.SetXItem(8);
+    // AI(W906-FW3-Observer-W2) 20260818: FINDING (test-setup gap, not fixed
+    // this wave -- see risk section of the wave report) -- NONE of Wave 1's
+    // ctor bootstrap sizes mtTotal/mtCategoryNo/mtCategoryTotal/mtHeadTotal/
+    // etc. to their golden .dfm design-time XItem/YItem (only mtRow[] gets
+    // sized, via SetSiteYieldDiagram's SetYItem call). Left at TrayCore's own
+    // ctor default (FXItem=FYItem=2), TrayCore::SetCellNumber's bounds guard
+    // (`if(x>=FXItem||y>=FYItem)return;`) SILENTLY DROPS every WriteCategoryData
+    // write past (1,1) -- caught by this test (mtTotal cell(0,3) read back as
+    // "" instead of "0" until sized). Golden .dfm (cObserver.dfm.ir.json, read
+    // this wave): mtTotal YItem=5, mtCategoryNo XItem=16/YItem=60,
+    // mtCategoryTotal XItem=1/YItem=60, mtHeadTotal XItem=16/YItem=1,
+    // mtChName XItem=8/YItem=1. Sized here to what THIS test's own assertions
+    // touch (mtTotal up to y=4); the REST are left at their current (silently
+    // truncated) state -- exercising ctor-bootstrap sizing for every tray is
+    // out of THIS wave's write boundary (append-only on Wave 1's ctor body).
+    observer.mtTotal->Core.SetYItem(5);
+    observer.rbHeadNumber->Checked = false;
+    observer.rbSocketNumber->Checked = true;    // forces the NUMBER branch AND mtCategoryNo->XItem==8,
+    observer.rbSocketPercent->Checked = false;  // independent of IsNNMode()'s (uncontrolled-by-this-test) value
+    observer.rbHeadPercent->Checked = false;
+
+    observer.rgRowNo->ItemIndex = 0;
+    observer.WriteCategoryData();
+    CHECK(observer.mtRowName->Core.GetCellText(0, 0) == "RowA", "WriteCategoryData (RowNo=0, bUseTwoArm32Site=false): mtRowName == \"RowA\"");
+    CHECK(observer.mtCategoryNo->Core.FXItem == 8, "WriteCategoryData (rbSocketNumber checked): mtCategoryNo->XItem == 8");
+    CHECK(observer.mtTotal->Core.GetCellText(0, 1) == "0", "WriteCategoryData (zero baseline): mtTotal cell(0,1) [iTotalSocket] == \"0\"");
+    CHECK(observer.mtTotal->Core.GetCellText(0, 3) == "0", "WriteCategoryData (zero baseline): mtTotal cell(0,3) [iPassSocket] == \"0\"");
+
+    observer.rgRowNo->ItemIndex = 1;
+    observer.WriteCategoryData();
+    CHECK(observer.mtRowName->Core.GetCellText(0, 0) == "RowB", "WriteCategoryData (RowNo=1, bUseTwoArm32Site=false): mtRowName == \"RowB\"");
+
+    TestSocket.iShtRow = savedShtRow;
+    TestSocket.iShtCol = savedShtCol;
+    bUseTwoArm32Site = savedTwoArm;
+}
+
+// =============================================================================
+//  (h) CountMTBF -- hand-computed arithmetic (Wave 1's no-op stub retired this wave)
+// =============================================================================
+static void Test_CountMTBF_KnownValues()
+{
+    TfObserver observer;
+
+    observer.pnlTotalCount->Caption = "2";       // dJamCount
+    observer.lbltTotalLoader->Caption = "10";    // dLoadingCount
+    observer.iPauseTime = 60;
+    observer.iProductTime = 60;
+    observer.iJamTime = 0;                        // iMTBFTime = 120 -> iMins = 120/60=2 -> 2/dJamCount(2) = 1 -> "1 / 1"
+
+    observer.DateTimePicker1->Date = EncodeDate(2026, 8, 18);
+    observer.DateTimePicker3->Date = EncodeDate(2026, 8, 18);   // same day -> 0 date delta
+    observer.DateTimePicker2->Time = EncodeTime(0, 0, 0, 0);
+    // AI(W906-FW3-Obs2-cal) 20260818: was EncodeTime(5,0,0,0), which puts
+    // iUPH = 10/dTime EXACTLY on the int-truncation boundary: dTime is
+    // (5/24)*24, and 5/24 is not binary-representable, so the product is
+    // 5.0 +/- 1ulp -- x87 keeps it in an 80-bit register for a different
+    // lifetime under -O3, and the Release build truncated 10/(5+ulp) to 1
+    // while Debug got 2 (caught by the double-build gate, invisible in
+    // Debug alone). +4h puts the quotient at 2.5, safely interior: 10/(4
+    // +/- ulp) truncates to 2 under every rounding. The production code is
+    // untouched -- golden's own math sits on this boundary by design.
+    observer.DateTimePicker4->Time = EncodeTime(4, 0, 0, 0);    // +4h -> iUPH = int(10/4.0) = 2 (interior)
+
+    int iSGCountBefore = observer.strngrdMDBQuery->RowCount;
+    observer.CountMTBF();
+
+    CHECK(observer.strngrdMDBQuery->RowCount == iSGCountBefore + 7, "CountMTBF: RowCount grew by exactly 7");
+    CHECK(observer.strngrdMDBQuery->Cells[1][iSGCountBefore + 2] == "MTBA", "CountMTBF: Cells[1][iSGCount+2] == \"MTBA\"");
+    CHECK(observer.strngrdMDBQuery->Cells[2][iSGCountBefore + 2] == "1 / 1", "CountMTBF: asMTBA == \"1 / 1\" (iMTBFTime=120 -> iMins=2 -> 2/dJamCount(2)=1)");
+    CHECK(observer.strngrdMDBQuery->Cells[3][iSGCountBefore + 2] == "[mins]", "CountMTBF: Cells[3][iSGCount+2] == \"[mins]\"");
+    CHECK(observer.strngrdMDBQuery->Cells[1][iSGCountBefore + 3] == "MUBA", "CountMTBF: Cells[1][iSGCount+3] == \"MUBA\"");
+    CHECK(observer.strngrdMDBQuery->Cells[2][iSGCountBefore + 3] == "1 / 5", "CountMTBF: asMUBA == \"1 / 5\" (dLoadingCount(10)/dJamCount(2)=5)");
+    CHECK(observer.strngrdMDBQuery->Cells[1][iSGCountBefore + 6] == "UPH", "CountMTBF: Cells[1][iSGCount+6] == \"UPH\"");
+    CHECK(observer.strngrdMDBQuery->Cells[2][iSGCountBefore + 6] == "2", "CountMTBF: iUPH == 2 (int(10/4.0)==2, interior point)");
+}
+
+// =============================================================================
+//  (i) ProcessRunInfo / GetMachineData -- LastSet-driven Caption assembly
+// =============================================================================
+static void Test_ProcessRunInfo_And_GetMachineData()
+{
+    TfObserver observer;
+    int savedCustomerCode = CUSTOMER_CODE;
+    bool savedVTEST = IniConfig.bVTESTFunction;
+    IniConfig.bVTESTFunction = false;   // skip the pnlDayJamRate branch, not this test's focus
+
+    LastSet.SystemAccSecond[0][stPowerOn]    = 3600000;   // 3600 sec
+    LastSet.SystemAccSecond[0][stStartTime]  = 1800000;
+    LastSet.SystemAccSecond[0][stProductTime]= 600000;    // 600 sec
+    LastSet.SystemAccSecond[0][stPauseTime]  = 60000;     // 60 sec
+    LastSet.SystemAccSecond[0][stJamTime]    = 0;
+    LastSet.iJamCount[1] = 0;   // both MTBA/MUBA take golden's "0 / ..." branch
+    LastSet.SendCT[0] = 111;
+    LastSet.SendCT[1] = 222;
+
+    CUSTOMER_CODE = 0;   // not CC_AMKOR_Korea -> labLoadingCount reads SendCT[1]
+    observer.GetMachineData();   // calls ProcessRunInfo() internally (golden :766)
+
+    CHECK(observer.labPowerOnTime->Caption == ConvertMSecToTime(3600000), "GetMachineData: labPowerOnTime == ConvertMSecToTime(stPowerOn)");
+    CHECK(observer.labLoadingCount->Caption == "222", "GetMachineData (not CC_AMKOR_Korea): labLoadingCount == SendCT[1] (\"222\")");
+    CHECK(observer.labMTBA->Caption == AnsiString("0 / ") + ConvertSecondToSPC(660), "ProcessRunInfo (iJamCount[1]==0): labMTBA == \"0 / \"+ConvertSecondToSPC(660) (dSec=(60000+600000+0)/1000=660)");
+    CHECK(observer.labMUBA->Caption == "0 / 222 unit", "ProcessRunInfo (iJamCount[1]==0): labMUBA == \"0 / 222 unit\" (SendCT[1])");
+    CHECK(observer.labMTBF->Caption == ConvertSecondToSPC(3600), "ProcessRunInfo: labMTBF == ConvertSecondToSPC(stPowerOn/1000)");
+
+    // --- CC_AMKOR_Korea branch: labLoadingCount switches to SendCT[0], and a
+    //     nonzero iJamCount[1] takes the "1 / ..." ChangeToFloatNonPcnt branch --
+    CUSTOMER_CODE = CC_AMKOR_Korea;
+    LastSet.iJamCount[1] = 2;
+    observer.GetMachineData();
+    CHECK(observer.labLoadingCount->Caption == "111", "GetMachineData (CC_AMKOR_Korea): labLoadingCount == SendCT[0] (\"111\")");
+    CHECK(AnsiString(observer.labMTBA->Caption).SubString(1, 4) == "1 / ", "ProcessRunInfo (iJamCount[1]=2!=0): labMTBA takes the \"1 / ...\" branch, not \"0 / ...\"");
+
+    CUSTOMER_CODE = savedCustomerCode;
+    IniConfig.bVTESTFunction = savedVTEST;
+}
+
 int main()
 {
     // --- one-time safety redirect: BOTH production config paths TfObserver's
@@ -272,6 +542,14 @@ int main()
     Test_CalculateStopTime_KnownValuesAndRoundTrip();
     Test_BuildQuery_AlarmHistory();
     Test_GetEventLogText_FiltersAndNotFound();
+
+    // -- FW3-Obs2 ORACLE APPEND -- Wave 2's new coverage (see banner above) --
+    Test_RecordIndexTime_ShiftAndAverage();
+    Test_AddTimeData_ComputesDeltas();
+    Test_GetTimeDataText_FileAndNoRecord();
+    Test_WriteCategoryData_ZeroBaseline();
+    Test_CountMTBF_KnownValues();
+    Test_ProcessRunInfo_And_GetMachineData();
 
     CloseGeneralIniFile();
     AuthPath = savedAuthPath;

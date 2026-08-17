@@ -209,13 +209,23 @@
 #define FORMS_FOBSERVER_H
 
 #include "vclcompat/vcl_compat.h"     // AnsiString, TStringList, TDateTime -- brought to global scope
-#include "vclcompat/Controls.h"       // TComboBox/TListBox/TRadioGroup/TPanel (stock widgets, reused as-is)
+#include "vclcompat/Controls.h"       // TComboBox/TListBox/TRadioGroup/TPanel/TRadioButton (stock widgets, reused as-is)
 #include "vclcompat/StringGrid.h"     // vclcompat::TStringGrid -- TfObserverGrid's base
 #include "vclcompat/TrayCore.h"       // vclcompat::TrayCore -- TfObserverTray's composed core
+// AI(W906-FW3-Observer-W2) 20260818: myTimer.h -- TQPF_Timer, golden TfObserver::
+// tRecordInArmTimer (cObserver.h:549). Real, already-ported class (RecordInArmTime,
+// this wave) -- QueryPerformanceCounter-backed, NOT a facade stand-in.
+#include "myTimer.h"
+// AI(W906-FW3-Observer-W2) 20260818: MachineType.h -- tcTotalCount (the
+// dTempHistroy[tcTotalCount][60] member, UpdateTempChart). Not transitively
+// pulled in by any header above; cObserver.cpp itself also includes this
+// directly (Wave 1) but a HEADER member array needs it visible right here too.
+#include "MachineType.h"
 
 using vclcompat::TComboBox;
 using vclcompat::TListBox;
 using vclcompat::TRadioGroup;
+using vclcompat::TRadioButton;
 using vclcompat::TPanel;
 using vclcompat::TStringGrid;
 
@@ -376,9 +386,59 @@ class TfObserverDateTimePicker : public vclcompat::TObject
 public:
     TDateTime Date;       // golden TDateTimePicker->Date
     TDateTime DateTime;   // golden TDateTimePicker->DateTime
+    // AI(W906-FW3-Observer-W2) 20260818: golden TDateTimePicker->Time (CountMTBF,
+    // this wave, DateTimePicker2/4). Real VCL TDateTimePicker holds ONE TDateTime
+    // value and Date/Time/DateTime are three views of it that differ only by
+    // which part a given ->Kind (dtDate/dtTime) exposes; this headless facade has
+    // no Kind and no single backing value, so (matching this class's own existing
+    // Date/DateTime split, Wave 1) Time is a THIRD independent stored field, not
+    // a computed alias. Nothing this wave's translated code WRITES any of the
+    // three -- all three are populated from outside (the not-yet-built UI layer,
+    // or a test) -- so three independent fields cannot desync a call path that
+    // never cross-reads them.
+    TDateTime Time;       // golden TDateTimePicker->Time
 
     TfObserverDateTimePicker() {}
     virtual ~TfObserverDateTimePicker() {}
+};
+
+// ===========================================================================
+//  W906Obs2_InstanceRegistrar -- PORT-ONLY, NOT a golden type.
+//
+//  AI(W906-FW3-Observer-W2) 20260818: golden's file-scope free functions
+//  IniRecordMonitoringIndexCycleTime/RecordIndexAirOnTime1/RecordIndexAirOnTime2
+//  (golden cObserver.h:563-565) are NOT TfObserver members -- they reach the
+//  single live form through golden's own module-level `fObserver` global
+//  (e.g. `fObserver->iIndexCycleTimeCount=0;`). This header deliberately does
+//  NOT redeclare that global here (Wave 1's own "integration-pending" note,
+//  above: the live `fObserver` is already `TfObserverShim*`, atester_shims.h --
+//  a second, differently-typed `fObserver` would collide exactly like the
+//  two-TMyKitSuck-headers trap). Those 3 free functions still need SOME way to
+//  reach the one constructed `TfObserver`, and Wave 1's own ctor BODY
+//  (cObserver.cpp) is existing, untouched content this wave may not edit
+//  (append-only rule) -- so it cannot simply assign a new TU-local pointer
+//  itself. This tiny registrar's constructor does that assignment instead, as
+//  an ordinary member (see its use below, declared LAST so `this` is fully
+//  built when it runs) -- a normal RAII side effect, not a language trick.
+//  Definition (the TU-local pointer + the 3 consumers): cObserver.cpp, this
+//  wave.
+//
+//  SAFETY -- the registered pointer is NEVER cleared on destruction (the
+//  destructor body is ALSO existing/untouched Wave 1 content). In real
+//  production this matches golden exactly (one TfObserver, created once, torn
+//  down only at process exit -- golden's own `fObserver` global has the
+//  identical lifetime assumption). In a test that constructs more than one
+//  TfObserver, or that destroys one before calling
+//  IniRecordMonitoringIndexCycleTime/RecordIndexAirOnTime1/RecordIndexAirOnTime2,
+//  the pointer would dangle -- tests/test_observer_core.cpp (this wave) is
+//  written to only call those 3 functions while its one `TfObserver` instance
+//  is still in scope, precisely to avoid that.
+// ===========================================================================
+class TfObserver;
+class W906Obs2_InstanceRegistrar
+{
+public:
+    explicit W906Obs2_InstanceRegistrar(TfObserver *self);
 };
 
 // ===========================================================================
@@ -508,6 +568,183 @@ public:
     // FILE-SCOPE global (cObserver.cpp:54 `TTMyTray *mtRow[MAX_SOCKET_ROW];`),
     // not a TfObserver class member, and this port keeps that shape (see
     // cObserver.cpp's own file-scope data section).
+
+    // =========================================================================
+    //  -- FW3-Obs2 ADD -- FW-3 cObserver Wave 2: OEE/statistics subset
+    // =========================================================================
+    //  AI(W906-FW3-Observer-W2) 20260818: additive-only continuation of Wave 1's
+    //  facade (same file, same class -- Wave 1's own members/methods above are
+    //  UNCHANGED). Golden ref unchanged: HT9011UC_Code_V3.33.906.0_20260618/
+    //  cObserver.h + cObserver.cpp (see cObserver.cpp's own Wave 2 file-tail
+    //  banner for the ABSENCE-CLAIM commands and U+FFFD count, not repeated here
+    //  per Wave 1's own "don't duplicate across the two files" convention).
+    //
+    //  WAVE SCOPE (golden line span, ACTIVE / GATED / DEVIATION)
+    //  -------------------------------------------------------------------------
+    //    GetMachineData                      golden :755-767             ACTIVE
+    //    Timer1Timer                         golden :708-753             ACTIVE, Close() -> facade no-op (see below)
+    //    UpdateTempChart                     golden :905-943             ACTIVE
+    //    cbbTempChartChange                  golden :945-948             ACTIVE
+    //    ProcessRunInfo                      golden :2254-2331           ACTIVE
+    //    RecordIndexTime                     golden :2814-2903           ACTIVE
+    //    AddTimeData                         golden :2905-2966           ACTIVE
+    //    RecordInArmTime                     golden :2968-2999           ACTIVE
+    //    WriteCategoryData                   golden :3274-3547           ACTIVE
+    //    CountMTBF                           golden :3683-3752           ACTIVE (Wave 1's no-op stub retired --
+    //                                                                     SAME signature, declared already above,
+    //                                                                     no header change; body only, cObserver.cpp)
+    //    GetTimeDataText                     golden :4795-4839           ACTIVE
+    //    RecordIndexCycle                    golden :4846-4887           ACTIVE
+    //
+    //    (free functions, declared at file scope below the class, matching
+    //    golden cObserver.h:560-565's own placement)
+    //    RecordStartTestTime()               golden :2136-2147           ACTIVE
+    //    RecordEndTestTime(int)              golden :2150-2235           ACTIVE, 3 GATED callees (GATE REGISTER W2-1/2/3)
+    //    RecordReceiveTestTime()             golden :4755-4764           ACTIVE (recon's :4755-4794 span also covers
+    //                                                                     the NEXT function, pgcMessageChange -- NOT
+    //                                                                     one of this wave's named targets, NOT
+    //                                                                     translated; see cObserver.cpp for the
+    //                                                                     verbatim golden text proving the boundary)
+    //    IniRecordMonitoringIndexCycleTime() golden :1836-1844           ACTIVE
+    //    RecordIndexAirOnTime1()             golden :5331-5343           ACTIVE
+    //    RecordIndexAirOnTime2()             golden :5346-5358           ACTIVE
+    //
+    //  GATE REGISTER (W2)
+    //  -------------------------------------------------------------------------
+    //  (W2-1) RecordEndTestTime, golden :2176 `RecordMonitoringIndexCycleTime_New();`.
+    //      Not declared ANYWHERE in the golden tree outside this one call site
+    //      (grepped the cp950-decoded golden .cpp in full this wave -- 0 hits for
+    //      a definition) and not one of this wave's named targets either way.
+    //      TU-local no-op stub in cObserver.cpp, GATE-documented there.
+    //  (W2-2) RecordEndTestTime, golden :2182 `RecordMonitoringIndexCycleTime();`.
+    //      This one DOES have a real golden body (cObserver.cpp:1709-1751), but
+    //      it is explicitly excluded from this wave's scope (task brief: "彈訊息" --
+    //      it opens a message box on the outlier-count branch). Same TU-local
+    //      no-op stub treatment, NOT a translation of the real body.
+    //  (W2-3) RecordEndTestTime, golden :2168 `RecordTimeInfo();`. RecordTimeInfo's
+    //      real body (golden :1846-2134, ~290 lines) is explicitly excluded this
+    //      wave (task brief: "290 行未 recon 完"). Same TU-local no-op stub
+    //      treatment.
+    //  (W2-4) RecordEndTestTime, golden :2149/:2171 `extern int
+    //      SendTestResultToHttp(); ... SendTestResultToHttp();`. Golden itself
+    //      only ever forward-declares this LOCALLY (its real body lives in an
+    //      unported networking/MES module) -- the SAME gap 3 sibling translators
+    //      already solved (atester_32Site.cpp:394/397, aTester_Front.cpp:3264,
+    //      aTester_Rear.cpp:3148): TU-local stub returning 1 (== upload OK) +
+    //      `#define` shadow, so the call site keeps golden's own spelling.
+    //  (W2-5) RecordEndTestTime, golden :2228 `fMain->slTestLog->AddText(str);`
+    //      (inside the `IniConfig.bN28_SCK_OEE` / JSCK-OEE branch). `slTestLog`
+    //      is NOT a forms/fMain.h facade member -- confirmed already gated for
+    //      the SAME reason at cprod.cpp:2936-2939 (`fMain->slTestLog` inside a
+    //      documented `#if 0` block, "missing facade member"), so this is the
+    //      SAME pre-existing gap, not a new one, and out of this wave's write
+    //      boundary (forms/fMain.h is not one of the 3 files this wave may
+    //      touch). Everything ELSE in that branch (List1/List2 assembly,
+    //      StringReplace) is real and ACTIVE; only this one trailing call is
+    //      `#if 0`-gated in cObserver.cpp, with a pointer back to cprod.cpp's
+    //      existing note.
+    //
+    //  DEVIATION -- Timer1Timer's Close()
+    //  -------------------------------------------------------------------------
+    //  golden :748 `Close();` (a TForm method that closes/hides the dialog after
+    //  2 consecutive stale-Yield-Chart ticks). No TForm base here (same posture
+    //  as every other translated form facade); modeled as a virtual no-op method
+    //  below, matching Wave 1's own "GDI/window methods -> no-op" convention
+    //  (TfObserverGrid::Repaint/Refresh). The COUNTING logic that decides WHEN to
+    //  call it (iShowYieldChart/iCT/iSystemSec/iSystemMin state machine) is
+    //  translated in full and is genuinely observable (iShowYieldChart itself is
+    //  a Wave 1 member); only the actual window-close side effect is dropped.
+    //
+    //  NEW FACADE MEMBERS this wave's methods dereference (golden line cited)
+    //  -------------------------------------------------------------------------
+    //  ALL given in-class default member initializers (NSDMI): Wave 1's own
+    //  ctor BODY (cObserver.cpp) is existing, untouched content this wave may
+    //  not edit or move a line of (append-only rule) -- these new members are
+    //  never listed in TfObserver()'s member-init-list either, so each one is
+    //  constructed from ITS OWN in-class default before the ctor body runs,
+    //  with NO change to that body. Same reasoning on the destructor side:
+    //  Wave 1's ~TfObserver() body is also untouched, so pointer members added
+    //  here are intentionally never `delete`d there -- a process-lifetime leak
+    //  identical in kind (not new in kind) to the one already accepted for
+    //  TfObserverChartSeries via TfObserverChart's OWN destructor loop, just
+    //  without that loop's cleanup; acceptable because every consumer (real
+    //  future UI wiring, and this wave's own tests) constructs at most one
+    //  TfObserver per process lifetime.
+    bool bShow = false;                            // golden cObserver.h:490 (bool)
+
+    int RowNo = 0;                                 // golden cObserver.h:482 (private int; WriteCategoryData sets/reads
+                                                    // it) -- promoted to public per this facade's established
+                                                    // "no BCB6 private/__published split" convention (Wave 1 banner)
+
+    TRadioGroup  *rgRowNo = new TRadioGroup();             // golden cObserver.h:129 -- WriteCategoryData
+    TRadioButton *rbHeadNumber = new TRadioButton();       // golden cObserver.h:125
+    TRadioButton *rbSocketNumber = new TRadioButton();     // golden cObserver.h:126
+    TRadioButton *rbHeadPercent = new TRadioButton();      // golden cObserver.h:127
+    TRadioButton *rbSocketPercent = new TRadioButton();    // golden cObserver.h:128
+
+    TPanel *labPowerOnTime = new TPanel();          // golden cObserver.h:356 -- GetMachineData
+    TPanel *labRunningTime = new TPanel();          // golden cObserver.h:357
+    TPanel *labProductTime = new TPanel();          // golden cObserver.h:358
+    TPanel *labLoadingCount = new TPanel();         // golden cObserver.h:359
+    TPanel *labMUBA = new TPanel();                 // golden cObserver.h:360 -- ProcessRunInfo
+    TPanel *labMTBA = new TPanel();                 // golden cObserver.h:361
+    TPanel *labMTBF = new TPanel();                 // golden cObserver.h:362
+    TPanel *pnlDayJamRate = new TPanel();           // golden cObserver.h:363
+
+    // golden .dfm design-time ColCount/RowCount (tools/dfm2rc/ir_out/
+    // cObserver.dfm.ir.json, read this wave): TimeInfoGrid_InArm ColCount=2
+    // RowCount=15; strngrdTimeData ColCount=13, RowCount UNSET in the .dfm ->
+    // default 5 (same "no explicit RowCount -> ctor default" posture Wave 1
+    // already established for strngrdEventLog/strngrdMDBQuery).
+    TfObserverGrid *TimeInfoGrid_InArm = new TfObserverGrid(2, 15);  // golden cObserver.h:140 -- RecordInArmTime
+    TfObserverGrid *strngrdTimeData = new TfObserverGrid(13);        // golden cObserver.h:290 -- GetTimeDataText
+    TListBox       *lstTimeData = new TListBox();                   // golden cObserver.h:288
+
+    int iIndexCycleTimeCount = 0;                  // golden cObserver.h:540 -- IniRecordMonitoringIndexCycleTime
+    int iPauseTime = 0;                            // golden cObserver.h:518 -- CountMTBF
+    int iProductTime = 0;                          // golden cObserver.h:519
+    int iJamTime = 0;                              // golden cObserver.h:520
+
+    double dTempHistroy[tcTotalCount][60] = {};    // golden cObserver.h:522 -- UpdateTempChart
+    double fRecordIndexTime[20] = {};              // golden cObserver.h:510 -- RecordIndexTime
+    // NOTE: golden also declares `fRecordInArmTime1[20]`/`fRecordInArmTime2[20]`
+    // (cObserver.h:512-513) but RecordInArmTime (this wave's only fRecordInArmTime*
+    // consumer) reads/writes ONLY the plain `fRecordInArmTime[20]` array -- grepped
+    // golden :2968-2999 in full, 0 hits for the 1/2 variants inside this range.
+    // Not added (no delivered method touches them -- Wave 1's own "don't invent
+    // surface" discipline).
+    double fRecordInArmTime[20] = {};              // golden cObserver.h:511 -- RecordInArmTime
+
+    bool   bTestIndexZ = false;                    // golden cObserver.h:544 -- RecordIndexTime
+    int    iTestIndexZCount = 0;                   // golden cObserver.h:545
+    double dRecordIndexZTime[10] = {};             // golden cObserver.h:546
+    AnsiString sTestIndexZTime;                    // golden cObserver.h:547 (AnsiString self-defaults to "")
+    double dOEEIndexCycleTime = 0.0;               // golden cObserver.h:548
+
+    TQPF_Timer tRecordInArmTimer;                  // golden cObserver.h:549 -- RecordInArmTime (real ctor, myTimer.h)
+
+    AnsiString sRecordIndexCycleTime[200];         // golden cObserver.h:551 -- RecordIndexCycle (each self-defaults to "")
+
+    // -- Wave 2 translated methods (bodies: cObserver.cpp, this wave) --------
+    virtual void GetMachineData();                                 // golden :755-767
+    virtual void Timer1Timer(void *Sender);                        // golden :708-753
+    virtual void UpdateTempChart();                                // golden :905-943
+    virtual void cbbTempChartChange(void *Sender);                 // golden :945-948
+    virtual void ProcessRunInfo();                                 // golden :2254-2331
+    virtual void RecordIndexTime(double fData);                    // golden :2814-2903
+    virtual void AddTimeData(int iRow, double Time);               // golden :2905-2966
+    virtual void RecordInArmTime();                                // golden :2968-2999
+    virtual void WriteCategoryData();                              // golden :3274-3547
+    virtual void GetTimeDataText();                                // golden :4795-4839
+    virtual void RecordIndexCycle(bool bReset = false);            // golden :4846-4887
+
+    // -- DEVIATION: TForm::Close() has no window here -- no-op (see banner) --
+    virtual void Close();
+
+    // -- PORT-ONLY, NOT a golden member -- see W906Obs2_InstanceRegistrar's
+    //    banner above. Declared LAST so `this` is fully constructed (every
+    //    member above it already initialized) when its ctor runs.
+    W906Obs2_InstanceRegistrar _w906Obs2SelfRegister{this};
 };
 
 // AI(W906-FW3-Observer-W1) 20260818: integration-pending -- NO `extern
@@ -517,5 +754,15 @@ public:
 // typed `fObserver` here would collide with that global exactly like the
 // two-TMyKitSuck-headers trap (docs/KNOWLEDGE.md) -- picking which facade
 // backs the live global is the main loop's integration call, not this wave's.
+
+// AI(W906-FW3-Observer-W2) 20260818: free functions (golden cObserver.h:
+// 560-565, same file-scope placement -- these are NOT TfObserver members in
+// golden either). Bodies: cObserver.cpp, this wave, appended at file tail.
+void RecordStartTestTime();                     // golden :2136-2147
+int  RecordEndTestTime(int iArm);               // golden :2150-2235 (0:arm1 1:arm2 2:雙Arm)
+void RecordReceiveTestTime();                   // golden :4755-4764
+void IniRecordMonitoringIndexCycleTime();       // golden :1836-1844
+void RecordIndexAirOnTime1();                   // golden :5331-5343
+void RecordIndexAirOnTime2();                   // golden :5346-5358
 
 #endif // FORMS_FOBSERVER_H
