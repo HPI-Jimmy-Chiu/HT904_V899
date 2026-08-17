@@ -2495,6 +2495,28 @@ if(Python3_Interpreter_FOUND)
     add_test(NAME dfm2rc_idempotent
         COMMAND test_dfm2rc_pipeline idempotent "${_dfm2rc_regen_dir_idempotent}")
 
+    # AI(W906-FW2) 20260817: FW campaign -- every form layout committed under
+    # web/forms/ must regenerate byte-identically from its IR (the G7 idea
+    # applied to the web projection; emit_web.py --check writes nothing).
+    # The stem list is derived from the committed files at CONFIGURE time, so
+    # each FW-3 wave extends coverage just by emitting -- but a brand-new form
+    # needs a reconfigure before ctest sees it, which the fresh-build-dir gate
+    # discipline already guarantees.
+    file(GLOB_RECURSE _fw_web_layouts
+         RELATIVE "${CMAKE_SOURCE_DIR}/../web/forms"
+         "${CMAKE_SOURCE_DIR}/../web/forms/*.layout.json")
+    set(_fw_web_stems "")
+    foreach(_f ${_fw_web_layouts})
+        string(REPLACE ".layout.json" "" _n "${_f}")
+        list(APPEND _fw_web_stems "${_n}")
+    endforeach()
+    if(_fw_web_stems)
+        add_test(NAME web_layout_idempotent
+            COMMAND "${Python3_EXECUTABLE}"
+                    "${CMAKE_SOURCE_DIR}/tools/dfm2rc/emit_web.py"
+                    --check ${_fw_web_stems})
+    endif()
+
     # Explicit per-test TIMEOUT (plan S6-B1d: "每一個都要明確 TIMEOUT"),
     # IN ADDITION to (not instead of) the blanket 600s ratchet at the
     # bottom of this file -- these 4 legitimately run longer than the

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!-- =========================================================================
+  form.html - standalone viewer for fw-weblayout/1 documents (FW campaign).
+  Open as  /form.html?form=<stem>  e.g.  /form.html?form=cTestCategory
+  AI(W906-FW2) 20260817: pilot viewer. Read-only by construction: formview.js
+  never wires events. Unknown widget classes are listed in the footer so a
+  partial render is always visibly partial.
+========================================================================== -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>HT9045 form viewer</title>
+<style>
+  body { margin: 0; padding: 16px; background: #1c1f24; color: #ddd;
+         font: 13px/1.4 "Segoe UI", sans-serif; }
+  h1 { font-size: 15px; margin: 0 0 12px; color: #9fc3e8; }
+  #stage { overflow: auto; border: 1px solid #444; display: inline-block;
+           background: #d4d0c8; }
+  #summary { margin-top: 12px; color: #999; white-space: pre-wrap; }
+  .fv-canvas   { font: 11px "MS Sans Serif", "Segoe UI", sans-serif; color: #000; }
+  .fv-label    { display: inline-block; overflow: hidden; }
+  .fv-panel    { border: 1px solid #999; box-sizing: border-box; background: #d4d0c8; }
+  .fv-group    { border: 1px solid #999; margin: 0; padding: 0; box-sizing: border-box; }
+  .fv-group legend { font-size: 11px; padding: 0 4px; }
+  .fv-edit     { background: #fff; border: 1px inset #ccc; box-sizing: border-box;
+                 overflow: hidden; padding: 1px 3px; }
+  .fv-btn      { background: #e6e2da; border: 1px outset #fff; box-sizing: border-box;
+                 text-align: center; overflow: hidden; display: flex;
+                 align-items: center; justify-content: center; }
+  .fv-check    { display: flex; align-items: center; gap: 4px; overflow: hidden; }
+  .fv-check__box { width: 11px; height: 11px; border: 1px inset #999;
+                   background: #fff; flex: none; }
+  .fv-check__box.is-on { background: #2e7d32; }
+  .fv-combo    { background: #fff; border: 1px inset #ccc; box-sizing: border-box;
+                 overflow: hidden; padding: 1px 16px 1px 3px; }
+  .fv-grid     { overflow: hidden; border: 1px solid #999; box-sizing: border-box;
+                 background: #fff; }
+  .fv-grid__t  { border-collapse: collapse; }
+  .fv-grid__t td { border: 1px solid #ddd; padding: 0; }
+  .fv-image    { background: repeating-linear-gradient(45deg, #eee, #eee 6px,
+                 #ddd 6px, #ddd 12px); box-sizing: border-box; }
+  .fv-shape    { box-sizing: border-box; }
+  .fv-led      { border-radius: 50%; background: #666; border: 1px solid #333;
+                 box-sizing: border-box; }
+  .fv-unknown  { border: 1px dashed #c00; color: #c00; font-size: 10px;
+                 overflow: hidden; box-sizing: border-box; background: #fff0f0; }
+  .fv-error    { color: #f66; }
+</style>
+</head>
+<body>
+<h1 id="title">HT9045 form viewer</h1>
+<div id="stage"></div>
+<div id="summary"></div>
+<script type="module">
+  import { renderForm } from "./js/ui/formview.js";
+  const stem = new URLSearchParams(location.search).get("form") || "cTestCategory";
+  document.getElementById("title").textContent = "HT9045 form viewer -- " + stem;
+  const s = await renderForm(document.getElementById("stage"), stem);
+  const unk = [...s.unknown.entries()].map(([k, n]) => `${k} x${n}`).join(", ");
+  document.getElementById("summary").textContent =
+    `${s.widgets} widgets rendered` +
+    (unk ? ` | UNKNOWN classes (placeholdered): ${unk}` : " | all classes known") +
+    (s.errors.length ? `\nerrors: ${s.errors.join("; ")}` : "");
+</script>
+</body>
+</html>

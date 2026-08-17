@@ -1,0 +1,140 @@
+{
+ "canvas": {
+  "h": 160,
+  "w": 258
+ },
+ "caption": "Tester Category",
+ "form": "fTestCategory",
+ "form_class": "TfTestCategory",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "cTestCategory.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfTestCategory",
+   "events": {
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fTestCategory",
+   "parent": null,
+   "path": "fTestCategory",
+   "props": {
+    "BorderIcons": [],
+    "BorderStyle": "bsToolWindow",
+    "Caption": "Tester Category",
+    "ClientHeight": 160,
+    "ClientWidth": 258,
+    "Color": "clBtnFace",
+    "DragKind": "dkDock",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Left": 657,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 299
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 657,
+    "y": 299
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TStringGrid",
+   "events": {
+    "OnDrawCell": "sgArm1DrawCell"
+   },
+   "kind": "LEAF",
+   "name": "sgArm2",
+   "parent": "fTestCategory",
+   "path": "fTestCategory.sgArm2",
+   "props": {
+    "Align": "alClient",
+    "ColCount": 3,
+    "DefaultColWidth": 80,
+    "Enabled": "False",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 80,
+    "Left": 0,
+    "OnDrawCell": "sgArm1DrawCell",
+    "ParentFont": "False",
+    "RowCount": 3,
+    "RowHeights": [
+     24,
+     24,
+     24
+    ],
+    "ScrollBars": "ssNone",
+    "TabOrder": 0,
+    "TabStop": "False",
+    "Top": 0,
+    "Width": 258
+   },
+   "rect": {
+    "h": 80,
+    "w": 258,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TStringGrid",
+   "events": {
+    "OnDrawCell": "sgArm1DrawCell"
+   },
+   "kind": "LEAF",
+   "name": "sgArm1",
+   "parent": "fTestCategory",
+   "path": "fTestCategory.sgArm1",
+   "props": {
+    "Align": "alBottom",
+    "ColCount": 3,
+    "ColWidths": [
+     80,
+     80,
+     80
+    ],
+    "DefaultColWidth": 80,
+    "Enabled": "False",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 80,
+    "Left": 0,
+    "OnDrawCell": "sgArm1DrawCell",
+    "ParentFont": "False",
+    "RowCount": 3,
+    "ScrollBars": "ssNone",
+    "TabOrder": 1,
+    "TabStop": "False",
+    "Top": 80,
+    "Width": 258
+   },
+   "rect": {
+    "h": 80,
+    "w": 258,
+    "x": 0,
+    "y": 80
+   }
+  }
+ ]
+}
