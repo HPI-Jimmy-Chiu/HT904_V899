@@ -212,3 +212,21 @@
 - 注意：`defense-in-depth`/`root-cause-tracing`/`condition-based-waiting` 不是獨立技能，已內含於 systematic-debugging，勿當名字裝。
 
 **真正標的不是導航效率，是覆蓋率/驗證深度（兩工具皆無解）**：W7 的 `#if 0` gated 大宗（csystem MainProc ladder ~2000 行、DoOneCycleFinishCheck/DoCleanOutFinishCheck ~2900 行、cContact 22761 行 index SM、W5 comms ~22k LOC）從未端到端在真實 HAL pump 過。降風險只能靠「盡早接真實/半真實 HAL pump gated 主路徑 + 持續 golden-cited oracle」。下一階段規劃重點應從「再多翻 site variant（純機械 clone）」挪向此。
+
+## vclcompat CommaText：對格式良好檔=VCL 全等；對壞檔刻意不 bug-for-bug（20260818）
+
+FW-3 cObserver recon 判定（vclcompat/TStringList.cpp:163-225 vs BCB6 classes.pas）：
+
+- **編碼端（GetCommaText）**：欄位含空白/逗號/引號就補雙引號——與真實 VCL 一致。
+  golden 的 EventLog 寫入端（cMyDB.cpp/handlerlog.cpp 的 AddTextWithLineNo(SL->CommaText)）
+  走這條，所以**本系統自己寫出的 CSV 讀回必然全等**。
+- **解析端（SetCommaText）**：真實 VCL 對未加引號 token 是 `P^ > ' '` 掃描——
+  **空白本身是分隔符**（甬矽案「整列右移」的根因，見記憶
+  ht9045-eventlog-csv-quoting-load-bearing）。vclcompat 只在逗號切斷、
+  頭尾裁空白——**不重現右移 bug**。
+- **後果**：對歷史累積、可能夾雜未加引號列的機台 EventLogTxt，V906 web 檢視
+  與 V899 VCL 畫面會顯示不同的欄位對齊（V899 右移出包、V906 完整保留）。
+  這是**刻意的健壯化**，不是缺陷；若有客戶要求 bug-for-bug 重現右移，
+  要單獨開波並問過使用者（預設不重現）。
+- 適用面：cObserver GetEventLogText 三個 CommaText 讀點（golden :3848/:3892/:3927）
+  ＋StatisticalJamCount（:5131）。
