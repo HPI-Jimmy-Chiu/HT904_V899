@@ -428,6 +428,41 @@ std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap)
         }
     }
 
+    // --- FW-1b: sort counters (Auto1..3 / Fix1..3 place-to-tray counts) ------
+    //AI(W906-FW1b) 20260817: source LastSet.BinCT[4][256] (LastSet.h:179 =
+    // golden LastSet.h:106) -- the exact cell golden's fSortCT displays:
+    // cSortCT.cpp:399  pnlCount->Caption = LastSet.BinCT[0][iTo3Unload[i]].
+    //
+    // TWO index spaces, verified against golden main.cpp:1954-1966 and
+    // MachineType.h; conflating them is the exact trap this block dodges:
+    //   display gate uses e6TrayName:  eAuto1..3 = 0..2,  eFix1..3 = 6..8
+    //   BinCT column uses e3TrayName:  e3Auto1..3 = 0..2, e3Fix1..3 = 3..5
+    // The port's own iTo3Unload[] global is DECLARED but never initialized
+    // (golden fills it in the untranslated TfMain ctor) -- it reads all-zero
+    // today, so publishing through it would silently point every Fix at
+    // Auto1's cell. Constants are used directly instead. (That all-zero
+    // global is ALSO consumed by translated runtime code, e.g.
+    // aoutarm.cpp:3332 -- recorded as a latent port defect, separate issue.)
+    //
+    // Per-tag liveness mirrors golden's own display gate
+    // (Prod.iTrayType[i]!=tNotUse, cSortCT.cpp:396): an unconfigured station
+    // publishes null, exactly like golden draws nothing for it. With Prod
+    // unloaded (all zero == tNotUse) every station is null -- honest.
+    {
+        static const struct { const char* tag; int typeIdx; int binIdx; } kSort[6] = {
+            {"sort.auto1.count", eAuto1, e3Auto1},
+            {"sort.auto2.count", eAuto2, e3Auto2},
+            {"sort.auto3.count", eAuto3, e3Auto3},
+            {"sort.fix1.count",  eFix1,  e3Fix1 },
+            {"sort.fix2.count",  eFix2,  e3Fix2 },
+            {"sort.fix3.count",  eFix3,  e3Fix3 },
+        };
+        for (int i = 0; i < 6; ++i) {
+            const bool binLive = lastS && Prod.iTrayType[kSort[i].typeIdx] != tNotUse;
+            stageInt(snap, kSort[i].tag, binLive, LastSet.BinCT[0][kSort[i].binIdx]);
+        }
+    }
+
     // --- everything whose source is measurably dead --------------------------
     for (std::size_t i = 0; i < kUnloadedCount; ++i) {
         stageNull(snap, kUnloadedTags[i]);
@@ -552,6 +587,18 @@ TagCoverage HandlerTagCoverage()
     c.total = 3 + 1 + 4 + 33 + kUnloadedCount;
     c.live  = (strs ? 3u : 0u) + (cust ? 1u : 0u) + (lastS ? (4u + 33u) : 0u);
 
+    //AI(W906-FW1b) 20260817: the 6 sort counters are gated per station
+    // (LastSet blob AND Prod.iTrayType configured), so their live count is
+    // genuinely dynamic -- counted station by station, same rule as the
+    // publish path, never flattered to "6 if the blob loaded".
+    {
+        static const int kSortTypeIdx[6] = {eAuto1, eAuto2, eAuto3, eFix1, eFix2, eFix3};
+        c.total += 6;
+        for (int i = 0; i < 6; ++i) {
+            if (lastS && Prod.iTrayType[kSortTypeIdx[i]] != tNotUse) c.live += 1;
+        }
+    }
+
     //AI(W906-SimPump) 20260813: the 18 clock/state/pump tags are DELIBERATELY NOT
     // counted here, and the reason is the same one this file exists for.
     //
@@ -568,8 +615,8 @@ TagCoverage HandlerTagCoverage()
     // property worth keeping rather than an assertion to update.
     //
     // The true count of tags on the wire is PublishHandlerTags()'s return value
-    // (snap.stagedTagCount()), which is 94 = 76 machine + 18 process since FW-1a
-    // (was 61 = 43 + 18 before the 33 LastSet-blob tags landed 20260817).
+    // (snap.stagedTagCount()): 100 = 82 machine + 18 process since FW-1b
+    // (61 before 20260817; +33 FW-1a LastSet tags; +6 FW-1b sort counters).
     // Coverage and wire-count are different questions; this struct answers the first.
 
     // Referenced so the currently-always-false predicates cannot rot into

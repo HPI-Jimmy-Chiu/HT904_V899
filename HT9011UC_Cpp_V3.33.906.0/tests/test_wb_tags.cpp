@@ -183,6 +183,31 @@ int main()
               "an out-of-range start-mode code publishes null, never a guessed word");
     }
 
+    // --- 5. FW-1b: sort counters pin BOTH index spaces ------------------------
+    //AI(W906-FW1b) 20260817: the gate reads Prod.iTrayType[e6TrayName]
+    // (eFix2 == 7) while the value reads LastSet.BinCT[0][e3TrayName]
+    // (e3Fix2 == 4) -- golden maps between them via iTo3Unload (main.cpp:
+    // 1954-1966), whose PORT global is uninitialized all-zero, which is why
+    // the wiring uses constants. This oracle fails if anyone "simplifies"
+    // the two spaces into one.
+    {
+        Prod.iTrayType[eFix2]  = tTrayFix;                       // gate idx 7 -> configured
+        Prod.iTrayType[eAuto2] = tNotUse;                        // gate idx 1 -> not configured
+        LastSet.BinCT[0][e3Fix2] = 77;                           // column idx 4
+
+        TagSnapshot snap;
+        ht9045::PublishHandlerTags(snap);
+        const TagSnapshotView v = snap.read();
+        const TagValue& f2 = v.tags.find("sort.fix2.count")->second;
+        const TagValue& a2 = v.tags.find("sort.auto2.count")->second;
+        std::printf("\n-- 5. FW-1b oracle: sort.fix2.count = %s\n",
+                    f2.debugString().c_str());
+        check(f2.isInt() && f2.asInt() == 77,
+              "sort.fix2.count reads BinCT[0][e3Fix2==4] gated by iTrayType[eFix2==7] (cSortCT.cpp:396/:399)");
+        check(a2.isNull(),
+              "an unconfigured station (iTrayType==tNotUse) publishes null even with a live blob");
+    }
+
     CloseGeneralIniFile();
     asGeneralPath = savedGeneralPath;
     ::DeleteFileA(scratch.c_str());
