@@ -4416,6 +4416,16 @@ struct W906_TrayIndexMapInit
         iTo3Unload[eMag12  ]= e3Mag12   ;
         iTo3Unload[eMag13  ]= e3Mag13   ;
         iTo3Unload[eMag14  ]= e3Mag14   ;
+        // AI(W906-FW-Fix2) 20260818: the fifth map from the same golden ctor
+        // block -- iSortTrayIndex reversal (golden main.cpp:1989-1992,
+        // JerryYang 20230820). Same all-zero defect class as the four maps
+        // above: translated aoutarm9045.cpp:2683-2802 walks this table to
+        // pick the sort target, and an all-zero table makes every probe read
+        // slot 0 (Auto1).
+        for(int i=0; i<eTrayCount; i++)
+        {
+            iSortTrayIndex[i]=eTrayCount-i-1;
+        }
     }
 };
 W906_TrayIndexMapInit g_w906TrayIndexMapInit;
