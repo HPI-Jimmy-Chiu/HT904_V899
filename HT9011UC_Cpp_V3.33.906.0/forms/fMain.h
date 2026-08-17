@@ -710,6 +710,81 @@ public:
                                     //   LOTNUMBER/LOTEND over TesterTCP when iTestType==TCP_IP_MODE, else GPIB
                                     //   MSG_CMD path; early-returns otherwise) -- offline no-op is behaviourally
                                     //   identical whenever iTestType is neither TCP_IP_MODE nor GPIB_MODE
+    // -- FW3-WA ADD: Command.cpp wave-A declarations --------------------------
+    // AI(W906-FW3-WA) 20260817: FW-3 Wave A ADD -- 60 golden TfMain:: PURE-method
+    // declarations whose bodies are now translated for real in the NEW file
+    // Command.cpp (golden Command.cpp:86-2242 / :3825-4005 / :5170-5638 minus
+    // SetSiteMapData/SetAlarmSetup / :12063-12508).  3 sibling methods in this
+    // same golden byte range (WritePERSITETemperature, PERSITETemperatureStrings,
+    // ArmStatusStrings) are declared ABOVE already (pre-existing GATED-leaf /
+    // wrapper stubs, bodies in forms/fMain.cpp) and are NOT redeclared here --
+    // Command.cpp still carries a full-body translation of all three per the
+    // wave brief, which is a KNOWN STUB COLLISION for the next integration pass
+    // to retire (see this wave's report's STUB COLLISIONS section). Per contract
+    // rule 1 every declaration below is `virtual`; per rule 4 each cites its
+    // golden home. Signatures re-read from the cp950-decoded golden main.h this
+    // pass (golden line numbers cited per member).
+    virtual int RefreshTempData(bool bTransfer=false, int iArm=0, int iSite=0); // golden main.h:1388 (body Command.cpp:86-933)
+    virtual void WriteHandlerID();                    // golden main.h:1367 (body Command.cpp:1484-1487)
+    virtual void WriteArmStatus();                    // golden main.h:1369 (body Command.cpp:1489-1495)
+    virtual void WriteArmForce();                     // golden main.h:1371 (body Command.cpp:1510-1541)
+    virtual void WriteTempData();                     // golden main.h:1176 (body Command.cpp:1543-1549)
+    virtual AnsiString TempDataStrings();             // golden main.h:1177 (body Command.cpp:1551-1586)
+    virtual void WriteSetTempStatus();                // golden main.h:1178 (body Command.cpp:1588-1649)
+    virtual void WriteSetTestTempStatus();            // golden main.h:1179 (body Command.cpp:1651-1764)
+    virtual void WriteSoakTimeData();                 // golden main.h:1180 (body Command.cpp:1766-1775)
+    virtual void WriteSetSoakTimeStatus();             // golden main.h:1181 (body Command.cpp:1777-1794)
+    virtual AnsiString WriteSiteMapData(bool bGPIB=true); // golden main.h:1223 (body Command.cpp:1797-2028)
+    virtual void WriteStartMode_NS();                 // golden main.h:1383 (body Command.cpp:2030-2060)
+    virtual void WriteAssign_NS();                    // golden main.h:1384 (body Command.cpp:2062-2242)
+    virtual void WriteForce_NS();                     // golden main.h:1386 (body Command.cpp:3825-3855)
+    virtual AnsiString WriteBinMap(bool bGPIB=true);  // golden main.h:1374 (body Command.cpp:3858-3912)
+    virtual void WriteSetBinMap(AnsiString BinData);  // golden main.h:1375 (body Command.cpp:3914-3987)
+    virtual void WriteTestMode();                     // golden main.h:1376 (body Command.cpp:3989-4005)
+    virtual void WriteChkSetup();                     // golden main.h:1420 (body Command.cpp:5170-5275)
+    virtual void WriteHandlerTestArmEncoder();        // golden main.h:1421 (body Command.cpp:5277-5291)
+    virtual void WriteHandlerTestArmEP();             // golden main.h:1422 (body Command.cpp:5293-5299)
+    virtual void GetCZtesterBin();                    // golden main.h:1462 (body Command.cpp:5390-5417)
+    virtual void GetCZSoakTime();                     // golden main.h:1463 (body Command.cpp:5419-5427)
+    virtual void GetCZDoubleContactCount();           // golden main.h:1468 (body Command.cpp:5429-5438)
+    virtual void GetCDHandlerID();                    // golden main.h:1464 (body Command.cpp:5440-5445)
+    virtual void GetCZJamCode();                      // golden main.h:1465 (body Command.cpp:5447-5461)
+    virtual void GetCZSiteMap(bool bSendGPIB=true);   // golden main.h:1466 (body Command.cpp:5463-5638)
+    virtual void SetTesterID();                       // golden main.h:1594 (body Command.cpp:12063-12102)
+    virtual void GetTesterID();                       // golden main.h:1595 (body Command.cpp:12104-12109)
+    virtual void GetAutoClean();                      // golden main.h:1597 (body Command.cpp:12111-12116)
+    virtual AnsiString AutoCleanStrings();             // golden main.h:1602 (body Command.cpp:12118-12128)
+    virtual void GetForcePerPinN();                   // golden main.h:1603 (body Command.cpp:12130-12135)
+    virtual AnsiString ForcePerPinNStrings();          // golden main.h:1604 (body Command.cpp:12137-12142)
+    virtual void GetContactHeight();                  // golden main.h:1605 (body Command.cpp:12144-12149)
+    virtual AnsiString ContactHeightStrings();         // golden main.h:1606 (body Command.cpp:12151-12156)
+    virtual void GetYieldContinusFail();              // golden main.h:1607 (body Command.cpp:12158-12163)
+    virtual AnsiString YieldContinusFailStrings();     // golden main.h:1608 (body Command.cpp:12165-12173)
+    virtual void GetYieldSiteCompare();               // golden main.h:1609 (body Command.cpp:12175-12180)
+    virtual AnsiString YieldSiteCompareStrings();      // golden main.h:1610 (body Command.cpp:12182-12190)
+    virtual void GetDUTStaus();                       // golden main.h:1611 (body Command.cpp:12192-12197)
+    virtual AnsiString DUTStausStrings();              // golden main.h:1612 (body Command.cpp:12199-12264)
+    virtual void GetUPH();                            // golden main.h:1613 (body Command.cpp:12266-12271)
+    virtual AnsiString UPHStrings();                   // golden main.h:1614 (body Command.cpp:12273-12285)
+    virtual void GetIndexCycleTime();                 // golden main.h:1615 (body Command.cpp:12287-12292)
+    virtual AnsiString IndexCycleTimeStrings();        // golden main.h:1616 (body Command.cpp:12294-12306)
+    virtual void GetTempOfs();                        // golden main.h:1617 (body Command.cpp:12308-12313)
+    virtual AnsiString TempOfsStrings();               // golden main.h:1618 (body Command.cpp:12315-12332)
+    virtual void GetTempRange();                      // golden main.h:1619 (body Command.cpp:12334-12339)
+    virtual AnsiString TempRangeStrings();             // golden main.h:1620 (body Command.cpp:12341-12347)
+    virtual void GetVacuumAir();                      // golden main.h:1621 (body Command.cpp:12349-12354)
+    virtual AnsiString VacuumAirStrings();             // golden main.h:1622 (body Command.cpp:12356-12363)
+    virtual void GetAll();                            // golden main.h:1623 (body Command.cpp:12365-12385)
+    virtual void GetHandlerVersion();                 // golden main.h:1624 (body Command.cpp:12387-12392)
+    virtual AnsiString HandlerVersionStrings();        // golden main.h:1625 (body Command.cpp:12394-12399)
+    virtual void UploadProdLog();                     // golden main.h:1534 (body Command.cpp:12401-12447)
+    virtual void GetShuttleMode();                    // golden main.h:1635 (body Command.cpp:12449-12464)
+    virtual void SetMaxTest();                        // golden main.h:1636 (body Command.cpp:12466-12478)
+    virtual void GetMaxTest();                        // golden main.h:1637 (body Command.cpp:12480-12485)
+    virtual void SetMaxInitialTest();                 // golden main.h:1638 (body Command.cpp:12487-12499)
+    virtual void GetMaxInitialTest();                 // golden main.h:1639 (body Command.cpp:12501-12506)
+    virtual AnsiString GetSiteState();                 // golden main.h:1644 (body Command.cpp:12508-12536)
+    // -- end FW3-WA ADD --------------------------------------------------------
     TfMain();
     virtual ~TfMain() {}
 };

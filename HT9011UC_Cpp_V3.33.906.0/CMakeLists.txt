@@ -1833,6 +1833,16 @@ add_library(ht9045_sm STATIC
     #     // TODO(W7).  Predicates (HasIC family) stay in csystem_predicates.cpp
     #     (ODR-skipped here).  See the file-head documentation.
     csystem.cpp
+    # AI(W906-FW3-WA) 20260817: Command.cpp -- FW-3 Wave A, 63 golden TfMain::
+    # PURE methods (the GPIB/TCP reply surface). Lives in ht9045_sm, NOT
+    # ht9045_forms: the bodies are heavy machine-global consumers
+    # (TestIF/LastSet/BinSelect/IndexStatus...) and ht9045_forms links nothing
+    # above itself by design (see the ht9045_forms block); TfMain member
+    # definitions may legally live in any TU. Declarations: forms/fMain.h
+    # FW3-WA block. The 3 pre-existing fMain.cpp stub bodies (ArmStatusStrings/
+    # WritePERSITETemperature/PERSITETemperatureStrings) were retired in the
+    # same commit -- multiple definition otherwise.
+    Command.cpp
     # --- W6.6 HUB cross-module offline shims (DoInArm->DoInArm_9045 /
     #     DoOutArm->DoOutArm_9045 / DoLoad / DoSortArm / bShuttleShake +
     #     InitLoadTask / InitOutArmTask / InitialDoLockUnloader /

@@ -406,17 +406,34 @@ int main()
         int savedTestType = TestIF.iTestType;
 
         TestIF.iTestType = TCP_IP_MODE;
+        // AI(W906-FW3-WA) 20260817: RECALIBRATED. The sim-seam stub
+        // PERSITETemperatureStrings was retired -- the REAL body (golden
+        // Command.cpp:945-1482) landed in Command.cpp. Offline it is
+        // deterministic: iArm stays -1 (no IndexStatus, no fContact), the
+        // single-site arm takes golden's asSite="SINGLESITE_" branch
+        // (golden :1006, port Command.cpp:1228) and the temp cell reads
+        // "NULL" -> "SINGLESITE_NULL_" (measured before this edit, then
+        // matched to the golden text). Quirk #14 (unconditional "%s\r"
+        // wrapper) is still what [T-F-a] proves -- now with a REAL payload.
         fMain->W906_PERSITETemperatureStrings_Sim = "";
         TesterTCPSocket_ClientSocket->Socket->SimClearTx();
         w906_push("TempArm?\r\n");
         TesterTCPSocket_TimerProcessTCPDataTimer();
-        check_s("[T-F-a] TempArm? empty seam -> minimum \"TempArm:\" (quirk #14)", w906_wire(), std::string("TempArm:\r\n"));
+        check_s("[T-F-a] TempArm? real body offline -> TempArm:SINGLESITE_NULL_ (golden :1006, quirk #14 wrapper)",
+                w906_wire(), std::string("TempArm:SINGLESITE_NULL_\r\n"));
 
+        // [T-F-b] repurposed: the retired seam must be DEAD. Seeding it must
+        // not change the reply -- this line fails if anyone resurrects the
+        // stub. NOT COVERED since this recalibration: driving a specific
+        // per-site temperature string through the real 537-line body (needs
+        // seeded UN150Read[]/IndexStatus state; deferred to the temp/GPIB
+        // surface wave).
         fMain->W906_PERSITETemperatureStrings_Sim = "25.0,25.1";
         TesterTCPSocket_ClientSocket->Socket->SimClearTx();
         w906_push("TempArm?\r\n");
         TesterTCPSocket_TimerProcessTCPDataTimer();
-        check_s("[T-F-b] TempArm? seam \"25.0,25.1\" -> TempArm:25.0,25.1", w906_wire(), std::string("TempArm:25.0,25.1\r\n"));
+        check_s("[T-F-b] retired seam is dead: seeding it changes nothing",
+                w906_wire(), std::string("TempArm:SINGLESITE_NULL_\r\n"));
 
         TestIF.iTestType = (savedTestType == TCP_IP_MODE) ? 0 : savedTestType;   // force a NON-TCP_IP_MODE value for (c)
         TesterTCPSocket_ClientSocket->Socket->SimClearTx();

@@ -275,98 +275,14 @@ const W7L2_RetryCountSeam &W7L2_GetRetryCountSeam()
 //      because the cinitial wave will have to decide whether TMyTray's ported
 //      1x1 ctor seed is itself faithful.
 // -----------------------------------------------------------------------------
-bool SetWorkParameter()
-{
-    ChangeSite();
-    ReadTechData();
-    DoStructUnitConvert();
-    if(bDoBRTCGiveWayCheck==false)                                              //Ifor 20191121 RTC 讓位時不重新讀取位置避免發生異常
-    {
-        SetTechDataToProd();
-        DoSetupSystemToProd();
-    }
-    SetSimuScreenPara();
-
-    if(IniConfig.bHaveRotateShuttle==true && TestIF_File.bRotateShuttle)        //Steven 20110801 : 轉轉蝦頭要檢查有沒有轉頭
-    {
-        //In Shuttle向右移動時,用第1個位置檢查------------------------
-        if(InArmSuck.iShtCol==1)
-        {
-            SThreadPara.iInShRotateCheck[0]=Prod.iInSHSen7DetectPos1x1[0];
-            SThreadPara.iInShRotateCheck[1]=Prod.iInSHSen7DetectPos1x1[1];
-        }
-        else if(InArmSuck.iShtCol==2)
-        {
-            SThreadPara.iInShRotateCheck[0]=Prod.iInSHSen7DetectPos1x2[0][0];
-            SThreadPara.iInShRotateCheck[1]=Prod.iInSHSen7DetectPos1x2[1][0];
-        }
-        else if(InArmSuck.iShtCol==3)                                           //ChungHung 20140115 add for 2x3_6
-        {
-            SThreadPara.iInShRotateCheck[0]=Prod.iInSHSen7DetectPos2x3[0][0];
-            SThreadPara.iInShRotateCheck[1]=Prod.iInSHSen7DetectPos2x3[1][0];
-        }
-        else if(InArmSuck.iShtCol==4)
-        {
-            SThreadPara.iInShRotateCheck[0]=Prod.iInSHSen7DetectPos1x4[0][0];
-            SThreadPara.iInShRotateCheck[1]=Prod.iInSHSen7DetectPos1x4[1][0];
-        }
-        else if(InArmSuck.iShtCol==5)                                           //Steven 20221107 : Add for 2x5
-        {
-            SThreadPara.iInShRotateCheck[0]=Prod.iInSHSen9DetectPos2x5[0][0];
-            SThreadPara.iInShRotateCheck[1]=Prod.iInSHSen9DetectPos2x5[1][0];
-        }
-        else if(InArmSuck.iShtCol==6)                                           //ChungHung 20130507 add HT9045 updata for 12site 517
-        {
-            SThreadPara.iInShRotateCheck[0]=Prod.iInSHSen9DetectPos2x6[0][0];
-            SThreadPara.iInShRotateCheck[1]=Prod.iInSHSen9DetectPos2x6[1][0];
-        }
-        else if(InArmSuck.iShtCol==8)
-        {
-            SThreadPara.iInShRotateCheck[0]=Prod.iInSHSen9DetectPos2x8[0][0];
-            SThreadPara.iInShRotateCheck[1]=Prod.iInSHSen9DetectPos2x8[1][0];
-        }
-        else
-        {
-            ShowMyMessage("The mode is not support!!", "Please save state record and provide to HonPrec software engineer", "SetWorkParameter");
-        }
-
-        //Out Shuttle向左移動時,檢查最後一個位置------------------------
-        SThreadPara.iOShRotateToLeftCheck[0]=GetSHCHKPos(InArmSuck.iShtCol-1, Tech.OutSH1ZOneRowDetectPos+2000);
-        SThreadPara.iOShRotateToLeftCheck[1]=GetSHCHKPos(InArmSuck.iShtCol-1, Tech.OutSH2ZOneRowDetectPos+2000);
-        //Out Shuttle向右移動時,檢查第一個位置--------------------------
-        SThreadPara.iOShRotateToRightCheck[0]=GetSHCHKPos(0, Tech.OutSH1ZOneRowDetectPos+2000);
-        SThreadPara.iOShRotateToRightCheck[1]=GetSHCHKPos(0, Tech.OutSH2ZOneRowDetectPos+2000);
-        //向右移動時，先檢查In Shuttle或Out
-        SThreadPara.bChechInShFirst[0]=(SThreadPara.iInShRotateCheck[0]<SThreadPara.iOShRotateToRightCheck[0]);
-        SThreadPara.bChechInShFirst[1]=(SThreadPara.iInShRotateCheck[1]<SThreadPara.iOShRotateToRightCheck[1]);
-    }
-
-    if(IN_SHT_LAST_SENSOR==1)                                                   //Steven 20181203 : In Shuttle最後一個Sensor定義
-    {
-        SThreadPara.iInShuttleSen7[0]=SnInPutSHT1S9;
-        SThreadPara.iInShuttleSen7[1]=SnInPutSHT2S9;
-    }
-    else
-    {
-        //ChungHung 20130507 add HT9045 updata for 12site 517
-        SThreadPara.iInShuttleSen7[0]=(MachineTypeChoice==Type_HT9045 || MachineTypeChoice==Type_HT9045_12Site)?SnInPutSHT1S7:SnInPutSHT1S9;
-        SThreadPara.iInShuttleSen7[1]=(MachineTypeChoice==Type_HT9045 || MachineTypeChoice==Type_HT9045_12Site)?SnInPutSHT2S7:SnInPutSHT2S9;
-    }
-
-    //AI(W906-W7-L2) 20260803: golden :13571-13572 is `if(fMain!=NULL) fMain->
-    //ShowFunctions();`.  ShowFunctions is absent from the ported TfMain facade
-    //and forms/fMain.* is not this wave's file -- see the macro in SECTION 1.
-    W7L2_FMAIN_SHOWFUNCTIONS();                                                 //Steven 20240123 : 顯示功能列表
-
-    int mIndex[15]={MMTrayY, MMAuto1, MMAuto2, MMAuto3, MMAuto4, MMAuto5, MMAuto6,
-                    MManualTray1, MManualTray2, MManualTray3,
-                    MManualTray4, MManualTray5, MManualTray6, MMPlate1, MMPlate2};
-    for(int i=0; i<15; i++)                                                     //Steven 20140516 : 移到下面,避免參數沒有Init
-        if(MOT[mIndex[i]].Tray.XItem<=0 || MOT[mIndex[i]].Tray.YItem<=0)
-            return false;
-
-    return true;
-}
+// AI(W906-FW3-WA) 20260817: SetWorkParameter RETIRED (homecoming) -- the newer,
+// gate-registered translation at cinitial.cpp:6972 is the golden home
+// (golden cinitial.cpp:13494). This older stand-in body coexisted only
+// because no single link ever extracted both objects; FW-3 Wave A's
+// Command.cpp calls changed the extraction shape and the linker
+// reported the collision (trap #1). Offline behaviour equivalent:
+// this body called TU-local no-op stand-ins where cinitial's gates
+// the same calls out.
 
 // =============================================================================
 //  SECTION 4 -- SetSuckRetryCount
@@ -397,28 +313,11 @@ bool SetWorkParameter()
 //      runtime NEW_MAX_Index_Col -- that asymmetry is golden's and is preserved.
 //    * CatchTraySuck.Suck[0][0] is always visited.
 // -----------------------------------------------------------------------------
-void SetSuckRetryCount()
-{
-    int i, j;
-    for(i=0; i<InArmSuck.iMaxRow; i++)
-    {
-        for(j=0; j<InArmSuck.iMaxCol; j++)
-        {
-            W7L2_SetRetryCount(InArmSuck.Suck[i][j],  ArmSpeed[InArm].iRetryCT,  W7L2_Seam.iInArmRetryCT,  W7L2_Seam.iInArmNozzles);
-            W7L2_SetRetryCount(OutArmSuck.Suck[i][j], ArmSpeed[OutArm].iRetryCT, W7L2_Seam.iOutArmRetryCT, W7L2_Seam.iOutArmNozzles);
-        }
-    }
-
-    for(i=0; i<MAX_Index_Row; i++)
-    {
-        for(j=0; j<MAX_Index_Col; j++)
-        {
-            W7L2_SetRetryCount(FTestSuck.Suck[i][j], 0, W7L2_Seam.iFTestRetryCT, W7L2_Seam.iFTestNozzles);  //Steven 20110317 : 確保是0
-            W7L2_SetRetryCount(BTestSuck.Suck[i][j], 0, W7L2_Seam.iBTestRetryCT, W7L2_Seam.iBTestNozzles);
-//            FTestSuck.Suck[i][j].SetRetryCount(ArmSpeed[IndexArm].iRetryCT);
-//            BTestSuck.Suck[i][j].SetRetryCount(ArmSpeed[IndexArm].iRetryCT);
-        }
-    }
-
-    W7L2_SetRetryCount(CatchTraySuck.Suck[0][0], ArmSpeed[TrayArm].iRetryCT, W7L2_Seam.iCatchTrayRetryCT, W7L2_Seam.iCatchTrayNozzles);
-}
+// AI(W906-FW3-WA) 20260817: SetSuckRetryCount RETIRED (homecoming) -- the newer,
+// gate-registered translation at cinitial.cpp:(sibling, same wave) is the golden home
+// (golden cinitial.cpp:see cinitial). This older stand-in body coexisted only
+// because no single link ever extracted both objects; FW-3 Wave A's
+// Command.cpp calls changed the extraction shape and the linker
+// reported the collision (trap #1). Offline behaviour equivalent:
+// this body called TU-local no-op stand-ins where cinitial's gates
+// the same calls out.

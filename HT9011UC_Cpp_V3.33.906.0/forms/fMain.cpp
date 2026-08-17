@@ -281,7 +281,8 @@ void TfMain::SendMSG_CMD(int /*CMD*/) {}                                    // o
 void TfMain::SendMSG_CMD(int /*CMD*/, AnsiString /*Message*/) {}            // offline: no real GPIB-bridge process
 AnsiString TfMain::GetSamSungMap(bool /*bSend*/) { return AnsiString(""); } // offline: no SamSung map source
 AnsiString TfMain::GetSamSungSoakTime(bool /*bSend*/) { return AnsiString("0"); } // offline: no soak-time source
-AnsiString TfMain::ArmStatusStrings() { return AnsiString(""); }            // offline: no arm-status telemetry
+// AI(W906-FW3-WA) 20260817: ArmStatusStrings stub RETIRED -- the real body
+// (golden Command.cpp:1497-1508) landed in Command.cpp with FW-3 Wave A.
 // -- W5-Final-SckArtRemainder ADD: method sinks (all offline no-op) --
 void TfMain::SetStartModeData() {}                                          // offline: recipe start-mode UI refresh no-op
 void TfMain::LoadTestModePicture() {}                                       // offline: test-mode picture UI refresh no-op
@@ -298,29 +299,13 @@ bool TfMain::Home(AnsiString /*Func*/) { return false; }
 // -- W906-AutoCleanFoundation ADD: golden AutoClean.cpp AddAutoCleanMessage
 //    sink -- offline no-op log sink, same idiom as AddShuttleMessage/CleanOut.
 void TfMain::AddAutoCleanMessage(AnsiString /*S*/) {}
-// -- W906-TesterTCPTimer ADD: golden TfMain::WritePERSITETemperature,
-//    Command.cpp:935-943 (void __fastcall) -- WRAPPER, translated faithfully.
-void TfMain::WritePERSITETemperature()
-{
-    AnsiString sRet="";
-    sRet=PERSITETemperatureStrings();
-    if(TestIF.iTestType==TCP_IP_MODE)                // golden Command.cpp:939 (wei 20211027 open short TCP/IP)
-        asTCPIPTemperature.sprintf("%s\r", sRet);    // golden :940 (Sam 20231205) -- NOTE: unconditional "%s\r"
-                                                     //   => even empty sRet yields "\r" != "" => the timer's
-                                                     //   TempArm? branch ALWAYS replies (min "TempArm:")
-    // AI(W906-TesterTCPTimer) 20260720: golden else-branch (Command.cpp:942)
-    //   SendMSG_CMD(MSG_CMD_TempArm, sRet+"\r") -- MSG_CMD_TempArm is an extern
-    //   const in untranslated MessageDef.h/.cpp and facade SendMSG_CMD is an
-    //   offline no-op anyway; branch gated with this note (no #if 0 needed:
-    //   nothing to compile). Un-gate together with MessageDef wave.
-}
-// -- W906-TesterTCPTimer ADD: golden TfMain::PERSITETemperatureStrings body,
-//    Command.cpp:945-1482 (+RefreshTempData main.h:1388) -- GATED LEAF, see
-//    forms/fMain.h member comment. Independent future wave (temp/GPIB surface).
-AnsiString TfMain::PERSITETemperatureStrings()
-{
-    return W906_PERSITETemperatureStrings_Sim;
-}
+// AI(W906-FW3-WA) 20260817: WritePERSITETemperature (faithful wrapper) and
+// PERSITETemperatureStrings (sim-seam stand-in) both RETIRED -- their real
+// bodies (golden Command.cpp:935-943 / :945-1482) landed in Command.cpp with
+// FW-3 Wave A; homecoming per the B4 precedent (golden home wins). The
+// W906_PERSITETemperatureStrings_Sim field stays declared on the class but
+// is no longer read by anything -- tests that seeded it were recalibrated
+// the same commit (tests/test_testertcp_socket.cpp [T-F]).
 // -- W7-F1 ADD: "Wall 2" facade method bodies -- see forms/fMain.h for the
 //    full per-member golden citations and offline-default rationale.
 void TfMain::cbSetupFileNameChange(void * /*Sender*/) { W906_cbSetupFileNameChangeCallCount++; }
