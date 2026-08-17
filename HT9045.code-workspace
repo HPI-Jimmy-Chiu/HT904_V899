@@ -60,6 +60,55 @@
   //  folder's own launch.json keeps the individual pieces; this only names the
   //  one-keypress combination, so there is a single definition of each piece.
   // ==========================================================================
+  // ==========================================================================
+  //  AI(W906-WsTask) 20260817: WORKSPACE-LEVEL TASKS -- and why this had to exist.
+  //
+  //  The compound below names a preLaunchTask. A workspace-level launch entry has
+  //  no owning folder, so VS Code resolves preLaunchTask against WORKSPACE-level
+  //  tasks -- and this file declared none, while the label it named
+  //  ("V906: Build (MinGW, quick)") lives in the PORT FOLDER's .vscode/tasks.json.
+  //  The previous comment on that line even said "the task is folder-scoped, so it
+  //  is named as folder + task", but the value was just the bare task name: the
+  //  original author spotted the mismatch and it was never resolved.
+  //
+  //  Declaring it here makes the workspace F5 self-contained. ${workspaceFolder:...}
+  //  is indexed by the FOLDER NAME as declared in "folders" above, so this string
+  //  and that name must stay in sync -- if you rename the folder entry, rename it
+  //  here too.
+  //
+  //  The port folder's own tasks.json is UNCHANGED, so Ctrl+Shift+B from inside
+  //  that folder still runs its copy. Two declarations of the same one-line
+  //  delegation to build.bat is the cost of multi-root; duplicating build LOGIC
+  //  would not be acceptable, duplicating a delegation is.
+  // ==========================================================================
+  "tasks": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "V906: Build (MinGW, quick) [workspace]",
+        "detail": "Workspace-level copy so the F5 compound below can resolve it. Delegates to build.bat, same as the folder task.",
+        "type": "shell",
+        "command": "${workspaceFolder:V906 C++ port (UTF-8)}\\build.bat",
+        "options": {
+          "cwd": "${workspaceFolder:V906 C++ port (UTF-8)}",
+          // cmd.exe, not PowerShell: build.bat documents that requirement, and
+          // PowerShell will not resolve a bare batch name from the cwd anyway.
+          "shell": { "executable": "cmd.exe", "args": ["/d", "/c"] }
+        },
+        "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
+        // g++ emits absolute paths, so anchor the matcher to them.
+        "problemMatcher": {
+          "owner": "cpp",
+          "fileLocation": "absolute",
+          "pattern": {
+            "regexp": "^(.*?):(\\d+):(\\d+):\\s+(warning|error|note|fatal error):\\s+(.*)$",
+            "file": 1, "line": 2, "column": 3, "severity": 4, "message": 5
+          }
+        }
+      }
+    ]
+  },
+
   "launch": {
     "version": "0.2.0",
     "configurations": [],
@@ -76,8 +125,10 @@
           { "folder": "V906 C++ port (UTF-8)", "name": "Web HMI: wb_publish --pump (live spine feed)" },
           { "folder": "V906 C++ port (UTF-8)", "name": "Web HMI: wb_gateway (web server, no machine code)" }
         ],
-        // The task is folder-scoped, so it is named as folder + task.
-        "preLaunchTask": "V906: Build (MinGW, quick)",
+        //AI(W906-WsTask) 20260817: points at the WORKSPACE-level task declared
+        // above, not the port folder's. A workspace launch entry cannot resolve a
+        // folder-scoped task label -- that was the latent defect here.
+        "preLaunchTask": "V906: Build (MinGW, quick) [workspace]",
         "stopAll": true,
         "presentation": { "order": 1 }
       }
