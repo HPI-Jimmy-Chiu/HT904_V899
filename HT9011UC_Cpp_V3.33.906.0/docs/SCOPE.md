@@ -26,8 +26,17 @@ this session's work that survives the re-scope untouched.
 
 ## 2. In scope
 
-1. **Translate the non-form C++ logic to completion.** Measured 20260813: 336,509 golden code
-   lines, 313,904 done = **93.3%**. This is the least ambiguous work left.
+1. ~~**Translate the non-form C++ logic to completion.**~~ **DONE — measured 20260817 (PT-W10).**
+   The 93.3% this line used to quote is a census matching artifact, not progress. The 22,605-line
+   "gap" is: `Command.cpp` 9,445 (form work — all 164 class-scoped defs are `TfMain::`),
+   `BarCode_Sh1`+`_Sh2` 10,348 (already translated; `TfBarCode_Shim` is 20/20 real methods, but
+   both the filenames and the function names were changed so census cannot match them), 46 gated
+   functions 2,671 (golden text present inside `#if 0`), and 11 "absent" functions 141 — of which
+   10 have bodies already linked (nm-verified in `csystem_predicates`/`aHotPlateSubstrate`/
+   `atester`) and the 11th, `MyDrawText`, is gated `TODO(wave-canvas)` TCanvas/GDI rendering that
+   the web-UI decision says must NOT be translated. **Genuine untranslated non-form lines: 0.**
+   Do not "fix" census — its conservatism is deliberate; a prior attempt falsely credited 35,289
+   lines. Full derivation and the three tooling errors it took to get there: DEVLOG 20260817.
 2. **Extract the business logic out of the form files** — see §3, the crux.
 3. **The tag bridge and the core's publish path.** Built and verified: `WebBridge/`,
    `WebBridgeTags.cpp`, `wb_publish`/`wb_gateway`, 61 tags, snapshot-only wire.
