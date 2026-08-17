@@ -7777,3 +7777,43 @@ Fix1..3 全部靜默指到 Auto1 的格子。接線直接用常數；oracle 用 
   4. **FW-3 批 1**：`Command.cpp`（TfMain 邏輯 9,445 行）切 2–3 波翻譯。
 - REJECT 存檔：lot.auto*（golden 死 Label/AMR 鎖）、speed.*（等 cSpeed.cpp 表單翻譯）。
 - 可用 build dir：build_fw1bg（Debug）／build_fw1br（Release），HEAD=fb9e059 當下全新。
+
+---
+
+## 2026-08-17（深夜 II，FW-2b＋FW-Fix1）— 133 個表單全數有 web 版面；四張全零對照表回家
+
+兩顆 commit：`FW-2b`（web/forms 全量 133 檔）、`d47acc4`（FW-Fix1）。
+
+### FW-2b：全量 emit 零崩潰
+
+133/133 emit 成功、133/133 位元組冪等（--check）、21.6MB、零 U+FFFD；
+`web_layout_idempotent` 經 configure-time glob 自動覆蓋全量（fresh configure 跑 0.71s 過）；
+巢狀子目錄版面經 gateway 200（forms/ARMS/ARMS）。**每一個 .dfm 現在都是一個 URL**：
+`/form.html?form=<stem>`。途中一次假警報：cp950 console 把正確 UTF-8 的 repr 顯示成亂碼，
+用 codepoint 數值驗證（0x53c3=參）拆穿——**終端顯示層不可當編碼證據**。
+
+### FW-Fix1（d47acc4）：FW-1b 照出的潛在缺陷修掉
+
+golden 在 TfMain ctor（main.cpp:1850-1986）填 `iTo6Unload/iTo6PosUnload/iTo3PosUnload/
+iTo3Unload` 四張跨索引對照表；ctor 未翻譯 → port 四陣列全零，而已翻譯的執行碼在消費
+（aoutarm.cpp:3332 AOA 修正路徑、csystem、cinitial、SortingBinTray）——所有站位靜默映到
+slot 0。修法＝cmydef.cpp 定義旁的同 TU static initializer（純 enum 常數，zero-init 先於
+dynamic-init 故順序安全；set-before-first-use 與 golden 語意等價）。**134 行是用程式從
+golden 抽取的（cp950＋regex），不是手抄**。鄰接的 iSortTrayIndex 迴圈（golden :1989）
+刻意不帶——獨立項目入佇列。
+
+驗收：smoke 134/3（**沒有任何測試被全零表校準過**）→ 全新 build_fwfix1g/r
+Debug 134/3＋Release 134/3 清單逐項相同（常駐子集）；guard 552 檔全等。
+
+### 🔖 RESUME（最新）
+
+- **完成鏈**：FW-0→FW-1a→FW-1b→FW-2→FW-2b→FW-Fix1（HEAD=d47acc4）。wire 100 tags、
+  133 表單版面全數落地、四張對照表活了。
+- **進行中**：FW-3 批 1 recon 代理（唯讀）盤 golden Command.cpp（15,273 行、51 個
+  TfMain:: 方法，GPIB/Tester 指令回覆層）——輸出=方法分類（PURE/WIDGET/COMM）＋
+  三波切分＋依賴表。**recon 回來後：主迴圈逐條複驗行號 → 發第一個翻譯波**
+  （自由函式 Command_<名>，比照 BarCode_Sh2_* 先例；COMM 送出席位 gate）。
+- 佇列不變：iSortTrayIndex 初始化（小）；write path 設計輪（等使用者）；
+  REJECT 存檔（lot.auto*/speed.*）。
+- 可用 build dir：build_fwfix1g（Debug）／build_fwfix1r（Release）＋build_fw2b（Debug 髒增量，
+  僅供快速 smoke）。HEAD=d47acc4 當下 fwfix1 兩個是全新。
