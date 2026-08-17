@@ -7374,3 +7374,74 @@ cursor 會動、A/B 會交替、零例外，但沒有生產進度。F5 的 debug
   (c) WebBridge write path 設計輪（安全關鍵）；(d) C1061 修復優先序。
 - **範圍外仍未解**：`D:\HT9045\web` 不在 allowedWriteRoots 且 git 零追蹤（前端無版控）。
 - **落差**：網頁綁 296 個 tag，本輪發布 61 個。剩下是翻譯問題，不是 bridge 問題。
+
+
+## 2026-08-17 — PT-W10：非表單翻譯已經完成，93.3% 是量測假象
+
+本波**沒有翻譯任何一行**，因為量到的結論是：**非表單已無真正的翻譯工作**。
+交付物是量測與根因，不是程式碼。
+
+### census 報的 22,605 行缺口，逐項拆解後全部有歸屬
+
+| 成分 | golden code 行 | 真相 |
+|---|---|---|
+| `Command.cpp` | 9,445 | **表單工作**。實測：檔內 164 個 class-scoped 定義**全部**是 `TfMain::`，零個自由函式、零個其他類別。census 判它非表單只因旁邊沒有同名 `.dfm`（census.py:321），但它是 TfMain 拆出來的邏輯檔。依 20260814 定案由 web 取代 |
+| `BarCode/BarCode_Sh1.cpp` + `_Sh2.cpp` | 10,348 | **已翻完**。`aHotPlateSubstrate.cpp:1000` 明寫「TfBarCode_Shim is 20/20 real methods」，20 個方法全部委派到真實本體（`BarCode/BarCode_Shuttle{1,2}_*.cpp`、`BarCode_Bottom2DID.cpp`，port 側共 15,233 行）。census 比對不到是因為**檔名與函式名都被改過**（`TfBarCode::DoBarcodeScanInShuttle_2` → 自由函式 `BarCode_Sh2_DoBarcodeScanInShuttle_2`） |
+| 46 個 GATED 函式 | 2,671 | golden 原文**已在 port**，包在 `#if 0` 裡並附 GATE REGISTER 理由。不是未翻譯，是刻意不編譯 |
+| 11 個 ABSENT 函式 | 141 | 見下 |
+
+### 那 11 個 ABSENT，10 個本體已存在且**已連結**（nm 驗證，非讀原始碼）
+
+| golden 函式 | 定義所在 .obj |
+|---|---|
+| `OutSHT1InLF` / `OutSHT2InLF` / `OutSHT1InRT` / `OutSHT2InRT` | `csystem_predicates.cpp.obj` |
+| `ResetInToShtFlag` / `InitInArmPickFromHotPlateTask50` / `InitInArmPlaceToShuttleTask` / `BackupPlacePos` / `RestorePlacePos` | `aHotPlateSubstrate.cpp.obj` |
+| `GetRowCol` | `atester.cpp.obj` |
+
+第 11 個是 `common.cpp` 的 `MyDrawText`——**不是 absent，是 gated**：`common.cpp:1443`
+`#if 0 // TODO(wave-canvas): MyDrawText x6`，`common.h:387` 同。它是 `TCanvas` + Win32
+`DrawText` 的純繪圖碼。**在「UI 是 web」的定案下，這正是不該翻的那一類**，維持 gated 是對的。
+
+census 把它算成 ABSENT 而不是 GATED，是因為 golden 有 6 個同名多載而 census 的
+`functions()` 以**名稱**為鍵、多載會塌成一筆，first-wins 規則挑到的那筆與 port 側 gated
+區塊對不上。
+
+### 結論
+
+**非表單真正未翻譯的 golden code 行數 = 0。**
+
+93.3% 這個數字不是進度，是 census 的檔名／函式名比對侷限。**不要去修 census**——
+它的保守是有量測背書的刻意設計（先前修過一次，算出 parked > gcode 並假 credit 35,289 行）。
+
+### 我在這一波犯的錯（比結論重要）
+
+1. **`nm` 驗證連續三次得到假的「0/10 全缺」**。三個不同原因疊在一起：
+   (a) 政策明文警告的 CRLF —— `grep " T __sym$"` 的 `$` 錨點被殘留 `\r` 擋掉；
+   (b) 把 nm 輸出寫到 `/tmp`，而 `/tmp` 是 MSYS 虛擬路徑，**Windows 原生 python 看不到**，
+       且不同 Bash 呼叫間不穩定；
+   (c) 修完前兩個後又把前綴加錯 —— nm 顯示 `__Z11...`（兩底線），我的字串已含一個，
+       `'__' + '_Z11...'` 變成三個底線。
+   三次都是「工具用錯」而不是「結論錯」，但如果沒有先用 `grep -i` 看到過真實那一行，
+   我會把「已翻完」誤報成「全部缺失」。**量測工具本身要先自我驗證一條已知為真的樣本。**
+2. **第一次量 BarCode 用了會吃到呼叫點的 regex**（`\bfn\s*\(`），得到「acarry.cpp 有本體」
+   的假象。政策裡「字串常數/呼叫點被當本體」那條說的就是這個。改成只找 `::fn(` 才對。
+
+### 刻意沒做的事
+
+- **沒有動 census.py**（見上，有前例）。
+- **沒有解任何 gate**。46 個 gated 函式需要逐條重問「為什麼它該是 gated」（政策陷阱 #3：
+  前提死掉不代表答案就是退役），而解閘是行為變更，依政策要獨立一波獨立量。
+- **沒有碰表單**。`Command.cpp` 9,445 行與 118 個表單單元等 facade 策略定案。
+
+### 🔖 RESUME（最新）
+
+- **非表單翻譯：完成。** 0 行真正未翻譯（本波量測，方法見上）。
+- **下一步（具體）**：46 個 gated 非表單函式的逐條複審。最大的三筆在
+  `SECSGEM/uHGemHT9045.cpp`：`S7F4_ProcessProgramAcknowledge`（golden:4478，844 行）、
+  `S7F6_ProcessProgramData`（golden:5326，278 行）、`S7F2_ProcessProgramLoadGrant`
+  （golden:4397，80 行）。其次 `cpublic.cpp` 21 個（560 行，最大 `GetBundleInfo` golden:2016，165 行）、
+  `common.cpp` `TempChangeLog`（golden:1802，236 行）、`cMyDB.cpp` 4 個（159 行）。
+  **每一條都要先回答「為什麼它該是 gated」再決定退不退役，且解閘是行為變更＝獨立 commit＋獨立量。**
+- **未驗證**：46 個 gated 的 GATE REGISTER 前提是否仍成立（absence-claim 會過期，政策陷阱 #2）。
+  本波沒有重跑它們的量測指令。
+- **等使用者**：表單 facade 策略（`Command.cpp` + 118 個表單單元）。
