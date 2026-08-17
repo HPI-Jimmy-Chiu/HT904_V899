@@ -58,6 +58,14 @@
 #  include <float.h>   // _controlfp_s / _PC_64 / _MCW_PC (FP fidelity, below)
 #endif
 
+// AI(W906-FW0) 20260817: -std=c++17 defines __STRICT_ANSI__, which hides
+// MinGW's _putenv declaration. Declare it ourselves (msvcrt.dll exports it);
+// NOT SetEnvironmentVariableA -- that writes the Win32 block only, and the
+// CRT's getenv (what csystem.cpp reads) snapshots its own copy at startup.
+#if defined(__MINGW32__)
+extern "C" int _putenv(const char *);
+#endif
+
 namespace {
 
 #if defined(_MSC_VER)
@@ -94,6 +102,21 @@ struct HT9045_DisableModalErrorDialogs
         SetErrorMode(SEM_FAILCRITICALERRORS |
                      SEM_NOGPFAULTERRORBOX  |
                      SEM_NOOPENFILEERRORBOX);
+
+        // AI(W906-FW0) 20260817: redirect the production BinCount/TrayID store
+        // for EVERY test executable. csystem.cpp's ReadWriteBinCountMode /
+        // ReadWriteTrayID hardcode D:\HT9045\system\BinCount.txt (golden
+        // faithful), and W7_L1 tray tests were MEASURED rewriting that live
+        // production file from ctest (tools/webprobe/system_guard, 20260817).
+        // An env var, read at call time inside csystem.cpp, is deliberately
+        // chosen over a link-level seam: this TU is compiled into every test
+        // whether or not it links csystem.obj, so a symbol reference here
+        // would break non-csystem tests, and a dynamic-init global in
+        // csystem.cpp would race this initializer (static-init order).
+        // Production behaviour is untouched -- the env var only ever exists
+        // inside test processes. Relative path lands in the test's cwd
+        // (build_*/tests), never in D:\HT9045\system.
+        _putenv("W906_BINCOUNT_PATH=w906_bincount_scratch.txt");
 
 #if defined(_MSC_VER)
         // --- MSVC Debug CRT --------------------------------------------------

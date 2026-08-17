@@ -82,6 +82,8 @@
 //  calling MainProc()/DoAllProcess() in a for-loop (no Win32 thread translated).
 // =============================================================================
 #include "vclcompat/vcl_compat.h"   // AnsiString / TDateTime / Now / FormatDateTime
+//AI(W906-FW0) 20260817: getenv for the W906_BINCOUNT_PATH test-env redirect (see ReadWriteBinCountMode/ReadWriteTrayID)
+#include <stdlib.h>
 #include "csystem.h"                 // the frozen HUB interface this TU realizes
 #include "csystem_shims.h"           // DoInArm/DoOutArm/DoLoad/DoSortArm/bShuttleShake/... offline shims
 
@@ -30978,7 +30980,8 @@ void ReadWriteBinCountMode(bool bRead)                                          
 
     AnsiString szDir="", sData[4];
     int  iLengh=0,iPoint=0;
-    szDir="D:\\HT9045\\system\\BinCount.txt";
+    //AI(W906-FW0) 20260817: test-env redirect -- W7_L1 tray tests were measured (tools/webprobe/system_guard, 20260817) rewriting the LIVE production counter/tray-id store from ctest; tests set W906_BINCOUNT_PATH in tests/test_bootstrap.cpp, production (env unset) keeps the golden literal
+    szDir=getenv("W906_BINCOUNT_PATH") ? getenv("W906_BINCOUNT_PATH") : "D:\\HT9045\\system\\BinCount.txt";
     sData[0]="";
     sData[1]="";
     sData[2]="";
@@ -31105,7 +31108,8 @@ void ReadWriteTrayID(bool bRead)                                                
     AnsiString S="", S1="";
 
     AnsiString szDir="",sData[4];
-    szDir="D:\\HT9045\\system\\BinCount.txt";
+    //AI(W906-FW0) 20260817: test-env redirect -- W7_L1 tray tests were measured (tools/webprobe/system_guard, 20260817) rewriting the LIVE production counter/tray-id store from ctest; tests set W906_BINCOUNT_PATH in tests/test_bootstrap.cpp, production (env unset) keeps the golden literal
+    szDir=getenv("W906_BINCOUNT_PATH") ? getenv("W906_BINCOUNT_PATH") : "D:\\HT9045\\system\\BinCount.txt";
 
     if(IniConfig.bG11ASEReport ==false)
         return;
