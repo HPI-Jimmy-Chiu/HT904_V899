@@ -64,6 +64,7 @@ bool Check_QA_ModeUnloadCount();                                                
 
 extern int iOutPickFromSht;
 extern int iOutPlaceToAuto;
+extern int iOutPlaceToRotate;                                                   //AI(ht9045-v899) 20260811: 出料旋轉站放料位置檢查
 void InspectOutArmPosition(int iTarget, int iSuckRow, int iSuckCol, int iTargetRow, int iTargetCol, int iAction);
 
 extern MyFillTheTrayAfterOutArmPlace mFillTray;                                 //Jimmychiu 20240726 : Fill The Tray After Out Arm Place

@@ -3789,6 +3789,10 @@ void GetOutArmToShtCellPos(int iRow, int iCol, int &Ypos, int &Xpos)
 
 int iOutPickFromSht=0;
 int iOutPlaceToAuto=1;
+//AI(ht9045-v899) 20260811: 新增第三種動作：放 IC 到出料旋轉站。
+//  不能用 iOutPlaceToAuto，因為那條路徑的 sPos=s6TrayName[iTarget] 只有 eTrayCount(33) 個元素，
+//  而 MOutRotateKit=42 會陣列越界；它走下方 else 那條（座標算式與取料共用）
+int iOutPlaceToRotate=2;
 //==============================================================================
 void InspectOutArmPosition(int iTarget, int iSuckRow, int iSuckCol, int iTargetRow, int iTargetCol, int iAction)
 {
@@ -3818,8 +3822,9 @@ void InspectOutArmPosition(int iTarget, int iSuckRow, int iSuckCol, int iTargetR
     }
     else
     {
-        return;                                                                 //Steven 20241220 : 暫時跳過
-        sPlace="Pick from";
+//        return;                                                                 //Steven 20241220 : 暫時跳過
+        //AI(ht9045-v899) 20260811: iOutPlaceToRotate 也走這條，但動作是「放」不是「取」
+        sPlace=(iAction==iOutPlaceToRotate)?"Place to":"Pick from";
         if(iTarget==MOutShuttle1)
         {
             sPos="Shuttle 1";
@@ -3834,25 +3839,39 @@ void InspectOutArmPosition(int iTarget, int iSuckRow, int iSuckCol, int iTargetR
         }
     }
 
+    //AI(ht9045-v899) 20260811: 【數值撞號】eFix12(17)==MOutShuttle1(17)、eBulkBox(18)==MOutShuttle2(18)。
+    //  iTarget 這個參數被兩套不同的列舉共用（放料時是 e6TrayName，取料時是馬達常數），
+    //  而下方「要用 GetOutArmToShtCellPos 還是 GetOutArmCellPos」的分流沒有先看 iAction，
+    //  所以放料到 Fix12/BulkBox 時會被誤判成 shuttle，改用多乘 iPickStep 的算式
+    //  -> 實際位置算錯 -> 假警報。依需求 BulkBox 不做檢查，這裡直接跳過；
+    //  判斷式必須帶 iAction，否則 18 這個值會連 MOutShuttle2 的取料檢查一起關掉。
+    //  Fix12 則在下方分流補上 iAction 條件
+    if(iAction==iOutPlaceToAuto && iTarget==eBulkBox)
+        return;
+
     int XEncoder=0, YEncoder=0, HardwarePosX=0, HardwarePosY=0;
 
     if(OutArmSuck.Item[iSuckRow][iSuckCol]!=HAS_NULL_IC &&
        OutArmSuck.Item[iSuckRow][iSuckCol]!=HAS_NULL_CLEAN_IC)
     {
-        if(iTarget==MOutShuttle1 ||
-           iTarget==MOutShuttle2)
+        if(iAction!=iOutPlaceToAuto &&                                          //AI(ht9045-v899) 20260811: 見上方撞號說明，放料路徑不可落入 shuttle 算式
+           (iTarget==MOutShuttle1 ||
+            iTarget==MOutShuttle2))
             GetOutArmToShtCellPos(iSuckRow, iSuckCol, YEncoder, XEncoder);
         else
             GetOutArmCellPos(iSuckRow, iSuckCol, YEncoder, XEncoder);
 
         if(iAction==iOutPlaceToAuto)
         {
-            if(iTarget==eBulkBox)
-            {
-                HardwarePosX=Prod.iOutArmBinBoxX+dOutArmXPitch_1Step*iTargetCol;
-                HardwarePosY=Prod.iOutArmBinBoxY-Prod.iOutArmBinBoxY*200;       //待確認
-            }
-            else                                                                //Jimmychiu 20240731 : remove offset value
+            //AI(ht9045-v899) 20260811: BulkBox 依需求不檢查（上方已 return），整段 Mark。
+            //  另記：原本第二行 HardwarePosY 同一個符號出現在等號兩邊（原作者已標需確認），
+            //  算出來恆為負值，本來就不能當基準
+//            if(iTarget==eBulkBox)
+//            {
+//                HardwarePosX=Prod.iOutArmBinBoxX+dOutArmXPitch_1Step*iTargetCol;
+//                HardwarePosY=Prod.iOutArmBinBoxY-Prod.iOutArmBinBoxY*200;       //待確認
+//            }
+//            else                                                                //Jimmychiu 20240731 : remove offset value
             {
                 HardwarePosX=Prod.XStart[iOutPutTray][iOutArmYBase][iOutArmXBase]+AutoForm[iOutPutTray]->XPitch*iTargetCol; //Jimmy 20240826 : fixed for E74
                 HardwarePosY=Prod.YStart[iOutPutTray][iOutArmYBase][iOutArmXBase]-AutoForm[iOutPutTray]->YPitch*iTargetRow;
@@ -3888,7 +3907,11 @@ void InspectOutArmPosition(int iTarget, int iSuckRow, int iSuckCol, int iTargetR
                 if(USE_PICKER_COUNT==ep1Picker)
                     HardwarePosX=HardwarePosX;
                 else
-                    HardwarePosX+=(iXoffset/3)*(iSuckCol-iOutArmXBase);
+                    //AI(ht9045-v899) 20260811: 實際值側 GetOutArmToShtCellPos() 用的是
+                    //  (iCol*iPickStep-iOutArmXBase)，會把邏輯欄換算成實體欄；期望值這邊原本
+                    //  只寫 (iSuckCol-iOutArmXBase)，在有 picker 重映射的機型上兩邊基準不同，
+                    //  offset 會多分攤一份。改成與實際值側同一個換算
+                    HardwarePosX+=(iXoffset/3)*(iSuckCol*OutArmSuck.iPickStep-iOutArmXBase);
 
                 HardwarePosY-=iYoffset*(iSuckRow-iOutArmYBase);
                 if(TestIF.bNS7000kit)                                               //jou 981208 start : NS7000 bias kit
@@ -3902,8 +3925,18 @@ void InspectOutArmPosition(int iTarget, int iSuckRow, int iSuckCol, int iTargetR
             }
             else if(iTarget==MOutRotateKit)                                     //待確認
             {
-                HardwarePosX=Prod.iOutArmRotateToUnloaderX;
-                HardwarePosY=Prod.iOutArmRotateToUnloaderY;
+                //AI(ht9045-v899) 20260811: 原本只取 Prod.iOutArmRotateToUnloaderX/Y 這個單點（原標需確認），
+                //  既沒有孔位(iTargetRow/iTargetCol)項，用的也是氣缸型旋轉站的基準點，
+                //  馬達型(iRotate_Type!=eCynRotate)對不上。改由旋轉站自己的幾何推期望值：
+                //  X 兩個孔位相隔 KitPitchX，最遠那個落在 iOutArm_RotateX+iRotateKIT_Start_X_H；
+                //  Y 以 KitPitchY 逐列遞減，基準列是 iOutArmYBase。
+                //  【重點】期望值刻意不呼叫 CalcPosition_OutArm()：那是算「指令值」的人，
+                //  拿它當基準就變成自己驗自己，899.35 那種「指令算錯」的缺陷會驗不出來
+                int iRotColMax=(tRotate.ColCount>1)?(tRotate.ColCount-1):1;
+                HardwarePosX=Prod.iOutArm_RotateX+iRotateKIT_Start_X_H
+                             -iRotateKIT_Pitch_X_H*(iRotColMax-iTargetCol);
+                HardwarePosY=Prod.iOutArm_RotateY-iRotateKIT_Start_Y_H
+                             -iRotateKIT_Pitch_Y_H*(iTargetRow-iOutArmYBase);
             }
         }
 
