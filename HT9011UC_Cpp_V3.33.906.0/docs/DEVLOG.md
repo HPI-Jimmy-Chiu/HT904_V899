@@ -7445,3 +7445,106 @@ census 把它算成 ABSENT 而不是 GATED，是因為 golden 有 6 個同名多
 - **未驗證**：46 個 gated 的 GATE REGISTER 前提是否仍成立（absence-claim 會過期，政策陷阱 #2）。
   本波沒有重跑它們的量測指令。
 - **等使用者**：表單 facade 策略（`Command.cpp` + 118 個表單單元）。
+
+
+## 2026-08-17（續）— IDLE PUMP：機台開啟後不再自動 Start
+
+使用者看著 F5 的終端機不斷冒出 `[ShowErrorMessage] Code=MES0920 KCode=5 Pos=168`
+（約 2 行/秒），問「是不是 hang up」。**不是**——他自己截圖上的
+`ticks=4200 == mainProcCalls=4200 / exceptions=0 / alive=yes` 就是「沒卡住」的證據
+（`ticks` 與 `mainProcCalls` 相等代表每次心跳都成功進入 `MainProc`；真的卡在裡面會是
+`ticks` 繼續漲而 `mainProcCalls` 凍住）。
+
+但他的追問才是真發現：**「軟體開啟正常是不會 Start，哪邊出問題?」** 剛開啟的 BCB6
+HT9045 是停在待命等操作員按 HOME 再按 START，而我們的 pump 在跑生產流程。
+
+### 根因（逐層查證，非憑記憶）
+
+`PumpInit()` 強制了主守衛：`SystemStart=true`、`fAllMotorHome=true` → `DoAllProcess`
+通過 `csystem.cpp:4235` → `DoLoad` 執行 → 無盤到達 case 800（`asendic_Loader.cpp:3091`）
+→ 模擬版 `ShowErrorMessage` 永遠回 `K_RETRY`（`canary_support.cpp:97`）→ 無限重複。
+
+訊息各欄查證：`Pos=168` = `MMTrayY_Car`（`cmydef.cpp:2537`）；
+`KCode=5` = `K_RETRY(0x1)|K_CLEAN_OUT(0x4)`（`cmydef.cpp:337/339`）。與截圖精確吻合。
+
+### 改動 = 刪兩行
+
+兩個強制寫入拿掉。方向是**減少**假動作不是增加，所以比原狀更安全。
+**沒有任何 golden 翻譯碼被修改** —— `WebBridgeTags.cpp` 是我們自己的發布層，它原本
+在做 golden 從不做的事。
+
+狀態字加第三個值：`SIM IDLE`（沒人啟動）／`SIM HALT`（`SoftStop` 真的停了它）／
+`SIM RUN`（守衛成立）。把 idle 和 halt 混為一談正是這個檔案存在要防止的謊。
+安全可加：`web/js/panels/left.js:23` 把 `machine.state` 當純文字渲染，沒有值分支也沒有 tone tag。
+
+### 未來網頁 START 按鈕：已量測，而且很便宜
+
+`ScanSystemSensor` 已經在測 `if(SoftStart==true)`（`ckernel.cpp:816`），走那條 arm 會跑
+golden 真正的啟動許可序列（指示燈、shuttle 閘門、`DoInArm_SuckerMap`、安全門檢查）並
+自己在 `ckernel.cpp:1015` 設 `SystemStart`。而 `MainProc`（`csystem.cpp:595`）
+**每個 tick 都會到達** `csystem.cpp:778` 的那個呼叫。所以網頁只要升起一個旗標。
+另外還需要 HOME，因為 `fAllMotorHome` 的唯一寫入者是無呼叫者的 `DoHomeProcess` ——
+這也正好是真機的操作順序。
+
+### 更正 `WebBridgeTags.h` 對自己證據的錯誤宣稱
+
+它寫「`csystem.cpp:778` 那個呼叫點在 `#if 0` 裡」。**不是**：它在
+`#ifdef DEBUG_TRY_CATCH / try { / #endif` 之內，那是條件式的 **try 包裝**，不是條件編譯。
+巨集是註解掉的（`MachineType.h:23`），所以沒有 try，但呼叫無條件編譯。
+這條錯誤宣稱正是讓「網頁 START」看起來很貴、實際只差一個旗標的原因。已就地更正。
+
+### 測試校準：5 條失敗，0 條被刪
+
+| 斷言 | 處理 |
+|---|---|
+| `O2 fixture set SystemStart=true` / `fAllMotorHome=true` | **反轉** → 變成防止強制啟動被加回來的防線。**覆蓋率是增加的** |
+| `O5`/`O6` 的「守衛成立時字要說 RUN」 | **保留**，改由測試自己升守衛。測試可以寫機台全域變數、生產碼不可以，這個不對稱就是本次改動的重點。那段只呼叫 `PublishHandlerTags` 從不呼叫 `PumpTick`，所以沒有引擎會跑 |
+| `O5 pump.guard.systemStart` | 改斷言它**追蹤**全域變數而非固定 true |
+| 新增 | `SIM IDLE` 必須是 `PumpInit` 之後的狀態字 |
+
+**NOT COVERED（已寫進測試）**：沒有任何測試涵蓋「真正的 START」，因為離線還無法升起
+`SoftStart`。那要等網頁寫入路徑，屆時需要自己的測試。
+
+`33 checks, 0 failures`（原本 32 checks）。
+
+### 驗收（行為變更 → 全新 dir、Debug 與 Release 各一次）
+
+| 建法 | 測試 | 失敗 | 時間 |
+|---|---|---|---|
+| Debug（`CMAKE_BUILD_TYPE` 空） | 133 | **4** | 487s |
+| Release（`-O3`） | 133 | **4** | 657s |
+
+兩邊失敗清單**逐項相同**：`config_db`、`config_loaders`、`dfm2rc_idempotent`、
+`GA1_ReadGeneralIni` —— 是常駐六項的**子集**。`IniFiles` 與 `ini_helpers` 在全新 dir 反而
+通過（它們讀真實的 `system\Gerneral.ini`、與狀態相關），比基線好，不歸因於本次改動。
+
+端到端 20 秒實跑 `wb_publish --pump`：`MES0920` **0 次**、任何 `ShowErrorMessage` **0 次**、
+`ticks=70 == mainProcCalls=70`、`exceptions=0`、`alive=yes`。console 乾淨，spine 仍可證明活著。
+
+### 順手更正一條會誤導人的過期警告
+
+`CMakeLists.txt:411-424` 記著 `-O3` 會弄壞 `MyPLCModbus`（client3 starts disconnected）
+與 `BarCodeBottom2DID`（main() 印任何東西前 segfault）。**今天兩個都在 `-O3` 下通過**
+（單獨重跑 2/2 Passed）。後續某個翻譯波次修掉了，但沒人再跑過 Release 所以沒被發現。
+註解保留但明確標示已retract並改成過去式 —— **Release 又是可用的建法了**，這對未來 64-bit
+產品建置有意義，不要再拿那段當理由避開它。
+
+### 🔖 RESUME（最新）
+
+- **非表單翻譯：完成**（PT-W10 量測）。
+- **本輪完成**：idle pump（`SystemStart`/`fAllMotorHome` 不再被強制）+ `SIM IDLE` 狀態字
+  + 測試校準（33/0）+ Debug/Release 雙驗收（各 133 測試 4 失敗、清單相同）
+  + workspace 層 F5 的 preLaunchTask 修好。
+- **未驗證，需要人**：VS Code 的變數展開與 workspace 層 `preLaunchTask` 解析無法從編輯器外
+  測試。已請使用者用 `HT9045.code-workspace` 開啟後按 F5 回報。若 workspace 層
+  `preLaunchTask` 不被支援，退路是移除它（F5 仍會啟兩個程序，只是不先編譯）。
+- **下一步（三選一，等使用者定）**：
+  1. 46 個 gated 非表單函式逐條複審（最大三筆在 `SECSGEM/uHGemHT9045.cpp`：
+     `S7F4_ProcessProgramAcknowledge` golden:4478/844 行、`S7F6_ProcessProgramData`
+     golden:5326/278 行、`S7F2_ProcessProgramLoadGrant` golden:4397/80 行）
+  2. web UI：畫面上活機台資料 0/296，缺口裡 84 個是 SOURCE-EXISTS
+  3. 表單邏輯抽取（需先定 facade 策略）
+- **使用者已明確拒絕**：把 906 邊界 hook 掛上（「先不要動」）。所以邊界目前仍**只靠自律**，
+  沒有機制在守（`.claude/settings.json` 不存在 → `check-write-boundary.ps1` 從未執行）。
+- **工作區分工**：這個 VS Code 工作區只動 906 版本樹；V899 在 Claude app 那邊處理。
+  兩個 session 共用同一個 git repo，所以 `git add` 絕不用寬 glob、絕不用 `git checkout` 還原。

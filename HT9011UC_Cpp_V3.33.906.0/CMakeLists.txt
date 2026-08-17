@@ -336,14 +336,30 @@ set_source_files_properties(Public/cJSON.c PROPERTIES LANGUAGE C)
 #  target's PUBLIC vclcompat dependency) and then put back, because two tests
 #  started failing at the same time and the extraction was the obvious suspect.
 #
-#  IT WAS NOT THE CAUSE, and the real cause is worth knowing:
-#      MyPLCModbus        passes unoptimised, FAILS under -O3
+#  IT WAS NOT THE CAUSE, and the real cause was worth knowing:
+#      MyPLCModbus        passed unoptimised, FAILED under -O3
 #                         ("client3 starts disconnected")
-#      BarCodeBottom2DID  passes unoptimised, SEGFAULTS under -O3 before
-#                         main() prints anything
-#  Proven by building the same source both ways: build_nobt (no
-#  CMAKE_BUILD_TYPE) passes both; a -DCMAKE_BUILD_TYPE=Release build fails
+#      BarCodeBottom2DID  passed unoptimised, SEGFAULTED under -O3 before
+#                         main() printed anything
+#  Proven at the time by building the same source both ways: build_nobt (no
+#  CMAKE_BUILD_TYPE) passed both; a -DCMAKE_BUILD_TYPE=Release build failed
 #  both, with or without the extraction.
+#
+#  AI(W906-IdlePump) 20260817: *** THIS NOTE IS NOW STALE, AND THE TENSES
+#  ABOVE ARE PAST TENSE FOR THAT REASON. BOTH TESTS PASS UNDER -O3 TODAY. ***
+#  Measured in a FRESH -DCMAKE_BUILD_TYPE=Release dir (build_idle_rel):
+#      133 tests, 4 failed -- config_db, config_loaders, dfm2rc_idempotent,
+#      GA1_ReadGeneralIni -- an IDENTICAL list to the Debug run beside it.
+#      MyPLCModbus and BarCodeBottom2DID re-run alone: 2/2 Passed.
+#  Some later translation wave fixed them; nobody noticed because nothing
+#  re-ran Release after this note was written. Left in place rather than
+#  deleted, because the REASONING is still the lesson worth keeping (a link
+#  change was blamed for two real latent optimisation defects), and because
+#  a reader who remembers the warning needs to see it retracted, not gone.
+#  CONSEQUENCE: Release is a viable build type again. That matters for the
+#  eventual 64-bit product build -- see install/README.md section 6b -- so do
+#  not cite this paragraph as a reason to avoid it. Re-measure before
+#  trusting either way; that is the actual lesson.
 #
 #  The reason nobody had seen this: every recorded baseline in this tree
 #  (including the 122/126 of 20260804) was measured with CMAKE_BUILD_TYPE
