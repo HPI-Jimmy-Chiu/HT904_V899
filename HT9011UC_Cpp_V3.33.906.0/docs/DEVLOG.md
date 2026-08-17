@@ -7548,3 +7548,45 @@ golden 真正的啟動許可序列（指示燈、shuttle 閘門、`DoInArm_Sucke
   沒有機制在守（`.claude/settings.json` 不存在 → `check-write-boundary.ps1` 從未執行）。
 - **工作區分工**：這個 VS Code 工作區只動 906 版本樹；V899 在 Claude app 那邊處理。
   兩個 session 共用同一個 git repo，所以 `git add` 絕不用寬 glob、絕不用 `git checkout` 還原。
+
+---
+
+## 2026-08-17（續 II）— FW 戰役開張：dfm→web 定案，計畫書＋波次 harness 落地
+
+**使用者裁決：「我的目標是 dfm 轉成 web」＝表單 facade 策略定案**——渲染目標=web、
+業務邏輯=C++ form-core（UI-state 欄位取代 widget 存取）、唯讀先行、
+write path（指令通道）是安全關鍵永不夜間做。PT 戰役停在表單邊界的最大未決項就此解鎖。
+
+**交付（本節零程式碼變更，全是治理件）**：
+- `docs/DFM2WEB_CAMPAIGN_PLAN.md`：§0 定案鏈／§3 每表單三件套（邏輯翻譯、tag 匯出、
+  web 渲染，可分波）／§4 波次佇列（FW-0 基建→FW-1 tag 接線→FW-2 emit_web 產生器→
+  FW-3 表單波→FW-W write path 佇列）／§5 gate（承接 PT 兩級制＋e2e 探針＋system MD5 對帳）／
+  §6 夜間 loop 與額度中斷協議／§7 停止條件／§9 三軸量法（census 行數、活 tag 數、
+  layout.json 覆蓋，不可互換算）。
+- `/fw-wave` 指令＋`fw-wave-loop` skill（`.claude/` 本體＋`.github/prompts/`、
+  `.agents/skills/` 鏡像）；政策引用 `pt-wave-loop` 為單一出處不複寫（防兩處漂移）。
+- `CLAUDE.md` 斜線指令清單：`/pt-wave` 標已完成、新增 `/fw-wave`。
+
+**關鍵盤點（把成本壓低的事實）**：dfm2rc 已產出**全 133 表單**的 `layout_out/`
+（`*_layout.gen.cpp|h`＋`*_events.gen.json`）與 fMain uimap（91 dialogs/758 controls）
+→ dfm→web 只缺 `emit_web.py` 一個 emitter，.dfm 解析層是現成的，不重做。
+
+**夜間執行**：`/loop /fw-wave` 自我節奏；ScheduleWakeup＋cron 心跳雙保險；
+額度中斷照 pt-wave-loop 實測表（背景 build 照跑、心跳解除後自己回來）；
+session 死了＝磁碟上的 commit＋RESUME 接手，重開後再打 `/loop /fw-wave` 即無損。
+
+### 🔖 RESUME（最新）
+
+- **表單 facade 策略：已定案 dfm→web**（20260817 使用者裁決）。
+  權威計畫書 `docs/DFM2WEB_CAMPAIGN_PLAN.md`。
+- **下一步 = FW-0 基礎建設**（計畫書 §4，一波做完）：
+  1. web/ 入版控（`web/.gitignore` 排 `__pycache__/`；`git add` 逐檔點名）。
+  2. 釘出寫 `system\BinCount.txt` 的測試並隔離（tests/ 有 6 檔提到 BinCount，
+     逐一單跑＋前後 mtime 對帳；修法優先序=scratch 重導 > stub 寫入 > 記錄跳過）。
+  3. `tools/webprobe/` 重寫 ws/wire 探針＋system 550 檔 MD5 對帳模式
+     （20260813 scratchpad 舊腳本已隨 session 消失，功能規格在該日 DEVLOG）。
+- 之後：FW-1 tag 接線（開工先重量 SOURCE-EXISTS，20260817 記 84 須重量）→
+  FW-2 emit_web＋formview pilot（`cTestCategory`，layout 最小）→
+  FW-3 表單波（`Command.cpp` 先，9,445 行切 2–3 波）。
+- 46 個 gated 非表單函式複審＝另一條線，**不在 FW 戰役內**。
+- 停止條件見計畫書 §7；write path/互鎖/動真機一律佇列，不做也不問。
