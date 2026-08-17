@@ -360,7 +360,17 @@ void TPowerSaving::ShowPowerSaveHighlight(bool bOn)
     if(CosFunction.bPowerSaveShowCaption==false || fMain==NULL)
         return;
 
-    if(bHighlightOn==bOn)
+    //AI(ht9045-v899) 20260817: guard 只擋「重複點亮」,還原一律要能執行。倒數字串是
+    //  OnScanTmr case 2 每秒直接寫 pnlPowerSaving->Caption,不經過這裡也不動 bHighlightOn;
+    //  舊寫法 if(bHighlightOn==bOn) return; 在倒數中切入生產時 bOn 與 bHighlightOn 同為
+    //  false,還原被整個吃掉,Caption 就凍在最後一個倒數值 (CASE-PTI-20260811-001)
+    if(bOn)
+    {
+        if(bHighlightOn)                                                        //重複點亮才擋
+            return;
+    }
+    else if(bHighlightOn==false &&
+            fMain->pnlPowerSaving->Caption=="PowerSaving")                      //已在還原狀態才略過,否則生產中每秒都會重排狀態欄
         return;
 
     bHighlightOn=bOn;
