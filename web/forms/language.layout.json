@@ -1,0 +1,47 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "fLan",
+ "form": "fLan",
+ "form_class": "TfLan",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "language.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfLan",
+   "events": {
+    "OnDestroy": "FormDestroy"
+   },
+   "kind": "ROOT",
+   "name": "fLan",
+   "parent": null,
+   "path": "fLan",
+   "props": {
+    "Caption": "fLan",
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 100,
+    "Left": 622,
+    "OldCreateOrder": "False",
+    "OnDestroy": "FormDestroy",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 213,
+    "Width": 136
+   },
+   "rect": {
+    "h": 100,
+    "w": 136,
+    "x": 622,
+    "y": 213
+   }
+  }
+ ]
+}

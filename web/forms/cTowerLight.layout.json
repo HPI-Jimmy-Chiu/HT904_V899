@@ -1,0 +1,1620 @@
+{
+ "canvas": {
+  "h": 530,
+  "w": 760
+ },
+ "caption": "TowerLight",
+ "form": "fTowerLight",
+ "form_class": "TfTowerLight",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "cTowerLight.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfTowerLight",
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fTowerLight",
+   "parent": null,
+   "path": "fTowerLight",
+   "props": {
+    "BorderIcons": [],
+    "BorderStyle": "bsToolWindow",
+    "Caption": "TowerLight",
+    "ClientHeight": 530,
+    "ClientWidth": 760,
+    "Color": 12761254,
+    "DragKind": "dkDock",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Left": 762,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 160
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 762,
+    "y": 160
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel3",
+   "parent": "fTowerLight",
+   "path": "fTowerLight.Panel3",
+   "props": {
+    "Align": "alClient",
+    "BevelInner": "bvLowered",
+    "Color": 12761254,
+    "Height": 456,
+    "Left": 0,
+    "TabOrder": 1,
+    "Top": 33,
+    "Width": 760
+   },
+   "rect": {
+    "h": 456,
+    "w": 760,
+    "x": 0,
+    "y": 33
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB50",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB50",
+   "props": {
+    "FalseColor": 22272,
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 168,
+    "OnClick": "RGB00Click",
+    "Tag": 15,
+    "Top": 260,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 168,
+    "y": 260
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB40",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB40",
+   "props": {
+    "FalseColor": 22272,
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 168,
+    "OnClick": "RGB00Click",
+    "Tag": 12,
+    "Top": 219,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 168,
+    "y": 219
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB30",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB30",
+   "props": {
+    "FalseColor": 22272,
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 168,
+    "OnClick": "RGB00Click",
+    "Tag": 9,
+    "Top": 177,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 168,
+    "y": 177
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB20",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB20",
+   "props": {
+    "FalseColor": 22272,
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 168,
+    "OnClick": "RGB00Click",
+    "Tag": 6,
+    "Top": 136,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 168,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB10",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB10",
+   "props": {
+    "FalseColor": 22272,
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 168,
+    "OnClick": "RGB00Click",
+    "Tag": 3,
+    "Top": 95,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 168,
+    "y": 95
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB00",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB00",
+   "props": {
+    "FalseColor": 22272,
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 168,
+    "OnClick": "RGB00Click",
+    "Top": 54,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 168,
+    "y": 54
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB01",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB01",
+   "props": {
+    "FalseColor": 881034,
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 224,
+    "OnClick": "RGB00Click",
+    "Tag": 1,
+    "Top": 55,
+    "TrueColor": "clYellow",
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 224,
+    "y": 55
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB11",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB11",
+   "props": {
+    "FalseColor": 881034,
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 224,
+    "OnClick": "RGB00Click",
+    "Tag": 4,
+    "Top": 95,
+    "TrueColor": "clYellow",
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 224,
+    "y": 95
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB21",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB21",
+   "props": {
+    "FalseColor": 881034,
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 224,
+    "OnClick": "RGB00Click",
+    "Tag": 7,
+    "Top": 136,
+    "TrueColor": "clYellow",
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 224,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB31",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB31",
+   "props": {
+    "FalseColor": 881034,
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 224,
+    "OnClick": "RGB00Click",
+    "Tag": 10,
+    "Top": 177,
+    "TrueColor": "clYellow",
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 224,
+    "y": 177
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB41",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB41",
+   "props": {
+    "FalseColor": 881034,
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 224,
+    "OnClick": "RGB00Click",
+    "Tag": 13,
+    "Top": 219,
+    "TrueColor": "clYellow",
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 224,
+    "y": 219
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB51",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB51",
+   "props": {
+    "FalseColor": 881034,
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 224,
+    "OnClick": "RGB00Click",
+    "Tag": 16,
+    "Top": 260,
+    "TrueColor": "clYellow",
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 224,
+    "y": 260
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB52",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB52",
+   "props": {
+    "FalseColor": "clMaroon",
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 280,
+    "OnClick": "RGB00Click",
+    "Tag": 17,
+    "Top": 260,
+    "TrueColor": "clRed",
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 280,
+    "y": 260
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB42",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB42",
+   "props": {
+    "FalseColor": "clMaroon",
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 279,
+    "OnClick": "RGB00Click",
+    "Tag": 14,
+    "Top": 218,
+    "TrueColor": "clRed",
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 279,
+    "y": 218
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB32",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB32",
+   "props": {
+    "FalseColor": "clMaroon",
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 280,
+    "OnClick": "RGB00Click",
+    "Tag": 11,
+    "Top": 177,
+    "TrueColor": "clRed",
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 280,
+    "y": 177
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB22",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB22",
+   "props": {
+    "FalseColor": "clMaroon",
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 280,
+    "OnClick": "RGB00Click",
+    "Tag": 8,
+    "Top": 136,
+    "TrueColor": "clRed",
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 280,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB12",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB12",
+   "props": {
+    "FalseColor": "clMaroon",
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 280,
+    "OnClick": "RGB00Click",
+    "Tag": 5,
+    "Top": 95,
+    "TrueColor": "clRed",
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 280,
+    "y": 95
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB02",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB02",
+   "props": {
+    "FalseColor": "clMaroon",
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 280,
+    "OnClick": "RGB00Click",
+    "Tag": 2,
+    "Top": 54,
+    "TrueColor": "clRed",
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 280,
+    "y": 54
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label2",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Label2",
+   "props": {
+    "Caption": "Green",
+    "Height": 13,
+    "Left": 164,
+    "Top": 24,
+    "Width": 29
+   },
+   "rect": {
+    "h": 13,
+    "w": 29,
+    "x": 164,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label3",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Label3",
+   "props": {
+    "Caption": "Yellow",
+    "Height": 13,
+    "Left": 219,
+    "Top": 24,
+    "Width": 31
+   },
+   "rect": {
+    "h": 13,
+    "w": 31,
+    "x": 219,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label4",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Label4",
+   "props": {
+    "Caption": "Red",
+    "Height": 13,
+    "Left": 281,
+    "Top": 24,
+    "Width": 20
+   },
+   "rect": {
+    "h": 13,
+    "w": 20,
+    "x": 281,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label6",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Label6",
+   "props": {
+    "Caption": "Music Select",
+    "Height": 13,
+    "Left": 344,
+    "Top": 24,
+    "Width": 61
+   },
+   "rect": {
+    "h": 13,
+    "w": 61,
+    "x": 344,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBevel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Bevel1",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Bevel1",
+   "props": {
+    "Height": 50,
+    "Left": 177,
+    "Shape": "bsLeftLine",
+    "Top": 362,
+    "Width": 7
+   },
+   "rect": {
+    "h": 50,
+    "w": 7,
+    "x": 177,
+    "y": 362
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBevel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Bevel2",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Bevel2",
+   "props": {
+    "Height": 50,
+    "Left": 233,
+    "Shape": "bsLeftLine",
+    "Top": 362,
+    "Width": 7
+   },
+   "rect": {
+    "h": 50,
+    "w": 7,
+    "x": 233,
+    "y": 362
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBevel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Bevel3",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Bevel3",
+   "props": {
+    "Height": 50,
+    "Left": 289,
+    "Shape": "bsLeftLine",
+    "Top": 362,
+    "Width": 7
+   },
+   "rect": {
+    "h": 50,
+    "w": 7,
+    "x": 289,
+    "y": 362
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBevel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Bevel4",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Bevel4",
+   "props": {
+    "Height": 51,
+    "Left": 177,
+    "Shape": "bsBottomLine",
+    "Top": 362,
+    "Width": 134
+   },
+   "rect": {
+    "h": 51,
+    "w": 134,
+    "x": 177,
+    "y": 362
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label43",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Label43",
+   "props": {
+    "Caption": "Click to change",
+    "Height": 13,
+    "Left": 316,
+    "Top": 406,
+    "Width": 74
+   },
+   "rect": {
+    "h": 13,
+    "w": 74,
+    "x": 316,
+    "y": 406
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB60",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB60",
+   "props": {
+    "FalseColor": 22272,
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 168,
+    "OnClick": "RGB00Click",
+    "Tag": 18,
+    "Top": 300,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 168,
+    "y": 300
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB61",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB61",
+   "props": {
+    "FalseColor": 881034,
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 224,
+    "OnClick": "RGB00Click",
+    "Tag": 19,
+    "Top": 300,
+    "TrueColor": "clYellow",
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 224,
+    "y": 300
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB62",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.RGB62",
+   "props": {
+    "FalseColor": "clMaroon",
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 280,
+    "OnClick": "RGB00Click",
+    "Tag": 20,
+    "Top": 300,
+    "TrueColor": "clRed",
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 280,
+    "y": 300
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel4",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Panel4",
+   "props": {
+    "BevelInner": "bvRaised",
+    "BevelOuter": "bvLowered",
+    "Caption": "Running",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 33,
+    "Left": 40,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 48,
+    "Width": 121
+   },
+   "rect": {
+    "h": 33,
+    "w": 121,
+    "x": 40,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel5",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Panel5",
+   "props": {
+    "BevelInner": "bvRaised",
+    "BevelOuter": "bvLowered",
+    "Caption": "Error/Jam",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 33,
+    "Left": 40,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 89,
+    "Width": 121
+   },
+   "rect": {
+    "h": 33,
+    "w": 121,
+    "x": 40,
+    "y": 89
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel6",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Panel6",
+   "props": {
+    "BevelInner": "bvRaised",
+    "BevelOuter": "bvLowered",
+    "Caption": "Pause",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 33,
+    "Left": 40,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 130,
+    "Width": 121
+   },
+   "rect": {
+    "h": 33,
+    "w": 121,
+    "x": 40,
+    "y": 130
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel7",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Panel7",
+   "props": {
+    "BevelInner": "bvRaised",
+    "BevelOuter": "bvLowered",
+    "Caption": "Message",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 33,
+    "Left": 40,
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Top": 171,
+    "Width": 121
+   },
+   "rect": {
+    "h": 33,
+    "w": 121,
+    "x": 40,
+    "y": 171
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel8",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Panel8",
+   "props": {
+    "BevelInner": "bvRaised",
+    "BevelOuter": "bvLowered",
+    "Caption": "Heating",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 33,
+    "Left": 40,
+    "ParentFont": "False",
+    "TabOrder": 9,
+    "Top": 213,
+    "Width": 121
+   },
+   "rect": {
+    "h": 33,
+    "w": 121,
+    "x": 40,
+    "y": 213
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel9",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Panel9",
+   "props": {
+    "BevelInner": "bvRaised",
+    "BevelOuter": "bvLowered",
+    "Caption": "Homing",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 33,
+    "Left": 40,
+    "ParentFont": "False",
+    "TabOrder": 11,
+    "Top": 254,
+    "Width": 121
+   },
+   "rect": {
+    "h": 33,
+    "w": 121,
+    "x": 40,
+    "y": 254
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbRunning",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.cbRunning",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "ItemHeight": 13,
+    "Items.Strings": [
+     "Silent",
+     "Music 1",
+     "Music 2",
+     "Music 3",
+     "Music 4"
+    ],
+    "Left": 344,
+    "TabOrder": 1,
+    "Text": "Silent",
+    "Top": 50,
+    "Width": 89
+   },
+   "rect": {
+    "h": 21,
+    "w": 89,
+    "x": 344,
+    "y": 50
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbJam",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.cbJam",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "ItemHeight": 13,
+    "Items.Strings": [
+     "Silent",
+     "Music 1",
+     "Music 2",
+     "Music 3",
+     "Music 4"
+    ],
+    "Left": 344,
+    "TabOrder": 4,
+    "Text": "Silent",
+    "Top": 92,
+    "Width": 89
+   },
+   "rect": {
+    "h": 21,
+    "w": 89,
+    "x": 344,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbPause",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.cbPause",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "ItemHeight": 13,
+    "Items.Strings": [
+     "Silent",
+     "Music 1",
+     "Music 2",
+     "Music 3",
+     "Music 4"
+    ],
+    "Left": 344,
+    "TabOrder": 6,
+    "Text": "Silent",
+    "Top": 133,
+    "Width": 89
+   },
+   "rect": {
+    "h": 21,
+    "w": 89,
+    "x": 344,
+    "y": 133
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbMessage",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.cbMessage",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "ItemHeight": 13,
+    "Items.Strings": [
+     "Silent",
+     "Music 1",
+     "Music 2",
+     "Music 3",
+     "Music 4"
+    ],
+    "Left": 344,
+    "TabOrder": 8,
+    "Text": "Silent",
+    "Top": 174,
+    "Width": 89
+   },
+   "rect": {
+    "h": 21,
+    "w": 89,
+    "x": 344,
+    "y": 174
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbHeating",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.cbHeating",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "ItemHeight": 13,
+    "Items.Strings": [
+     "Silent",
+     "Music 1",
+     "Music 2",
+     "Music 3",
+     "Music 4"
+    ],
+    "Left": 344,
+    "TabOrder": 10,
+    "Text": "Silent",
+    "Top": 216,
+    "Width": 89
+   },
+   "rect": {
+    "h": 21,
+    "w": 89,
+    "x": 344,
+    "y": 216
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbHome",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.cbHome",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "ItemHeight": 13,
+    "Items.Strings": [
+     "Silent",
+     "Music 1",
+     "Music 2",
+     "Music 3",
+     "Music 4"
+    ],
+    "Left": 344,
+    "TabOrder": 12,
+    "Text": "Silent",
+    "Top": 257,
+    "Width": 89
+   },
+   "rect": {
+    "h": 21,
+    "w": 89,
+    "x": 344,
+    "y": 257
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "rgMusicTestClick"
+   },
+   "kind": "SUBDLG",
+   "name": "rgMusicTest",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.rgMusicTest",
+   "props": {
+    "Caption": "Music Test",
+    "Height": 225,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "[ 0 ] Silent",
+     "[ 1 ] Music 1",
+     "[ 2 ] Music 2",
+     "[ 3 ] Music 3",
+     "[ 4 ] Music 4"
+    ],
+    "Left": 520,
+    "OnClick": "rgMusicTestClick",
+    "TabOrder": 2,
+    "Top": 56,
+    "Width": 185
+   },
+   "rect": {
+    "h": 225,
+    "w": 185,
+    "x": 520,
+    "y": 56
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel1",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Panel1",
+   "props": {
+    "BevelInner": "bvRaised",
+    "BevelOuter": "bvLowered",
+    "Caption": "OffLine Running",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 33,
+    "Left": 40,
+    "ParentFont": "False",
+    "TabOrder": 13,
+    "Top": 294,
+    "Width": 121
+   },
+   "rect": {
+    "h": 33,
+    "w": 121,
+    "x": 40,
+    "y": 294
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbOffLine",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.cbOffLine",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "ItemHeight": 13,
+    "Items.Strings": [
+     "Silent",
+     "Music 1",
+     "Music 2",
+     "Music 3",
+     "Music 4"
+    ],
+    "Left": 344,
+    "TabOrder": 14,
+    "Text": "Silent",
+    "Top": 297,
+    "Width": 89
+   },
+   "rect": {
+    "h": 21,
+    "w": 89,
+    "x": 344,
+    "y": 297
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel11",
+   "parent": "fTowerLight.Panel3",
+   "path": "fTowerLight.Panel3.Panel11",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 33,
+    "Left": 40,
+    "TabOrder": 15,
+    "Top": 332,
+    "Width": 405
+   },
+   "rect": {
+    "h": 33,
+    "w": 405,
+    "x": 40,
+    "y": 332
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB72",
+   "parent": "fTowerLight.Panel3.Panel11",
+   "path": "fTowerLight.Panel3.Panel11.RGB72",
+   "props": {
+    "FalseColor": "clMaroon",
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 240,
+    "OnClick": "RGB00Click",
+    "Tag": 23,
+    "Top": 8,
+    "TrueColor": "clRed",
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 240,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB71",
+   "parent": "fTowerLight.Panel3.Panel11",
+   "path": "fTowerLight.Panel3.Panel11.RGB71",
+   "props": {
+    "FalseColor": 881034,
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 184,
+    "OnClick": "RGB00Click",
+    "Tag": 22,
+    "Top": 8,
+    "TrueColor": "clYellow",
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 184,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {
+    "OnClick": "RGB00Click"
+   },
+   "kind": "LEAF",
+   "name": "RGB70",
+   "parent": "fTowerLight.Panel3.Panel11",
+   "path": "fTowerLight.Panel3.Panel11.RGB70",
+   "props": {
+    "FalseColor": 22272,
+    "Height": 22,
+    "Interval": 300,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 128,
+    "OnClick": "RGB00Click",
+    "Tag": 21,
+    "Top": 8,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 128,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbART",
+   "parent": "fTowerLight.Panel3.Panel11",
+   "path": "fTowerLight.Panel3.Panel11.cbART",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "ItemHeight": 13,
+    "Items.Strings": [
+     "Silent",
+     "Music 1",
+     "Music 2",
+     "Music 3",
+     "Music 4"
+    ],
+    "Left": 304,
+    "TabOrder": 1,
+    "Text": "Silent",
+    "Top": 5,
+    "Width": 89
+   },
+   "rect": {
+    "h": 21,
+    "w": 89,
+    "x": 304,
+    "y": 5
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palART",
+   "parent": "fTowerLight.Panel3.Panel11",
+   "path": "fTowerLight.Panel3.Panel11.palART",
+   "props": {
+    "BevelInner": "bvRaised",
+    "BevelOuter": "bvLowered",
+    "Caption": "Auto Retest",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 33,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 2,
+    "Width": 121
+   },
+   "rect": {
+    "h": 33,
+    "w": 121,
+    "x": 0,
+    "y": 2
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel2",
+   "parent": "fTowerLight",
+   "path": "fTowerLight.Panel2",
+   "props": {
+    "Align": "alTop",
+    "BevelInner": "bvLowered",
+    "Caption": "Tower light and  music setup",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 33,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 760
+   },
+   "rect": {
+    "h": 33,
+    "w": 760,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TPanel",
+   "events": {
+    "OnClick": "spbExitClick"
+   },
+   "kind": "LEAF",
+   "name": "spbExit",
+   "parent": "fTowerLight",
+   "path": "fTowerLight.spbExit",
+   "props": {
+    "Align": "alBottom",
+    "Caption": "Exit",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -19,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 41,
+    "Left": 0,
+    "OnClick": "spbExitClick",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 489,
+    "Width": 760
+   },
+   "rect": {
+    "h": 41,
+    "w": 760,
+    "x": 0,
+    "y": 489
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "Timer1Timer"
+   },
+   "kind": "NONVISUAL",
+   "name": "Timer1",
+   "parent": "fTowerLight",
+   "path": "fTowerLight.Timer1",
+   "props": {
+    "Interval": 10,
+    "Left": 516,
+    "OnTimer": "Timer1Timer",
+    "Top": 32
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 516,
+    "y": 32
+   }
+  }
+ ]
+}

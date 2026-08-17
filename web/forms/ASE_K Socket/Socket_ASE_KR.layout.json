@@ -1,0 +1,752 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "Socket Communication",
+ "form": "fSocketCommunication",
+ "form_class": "TfSocketCommunication",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "ASE_K Socket/Socket_ASE_KR.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfSocketCommunication",
+   "events": {
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fSocketCommunication",
+   "parent": null,
+   "path": "fSocketCommunication",
+   "props": {
+    "AutoSize": "True",
+    "Caption": "Socket Communication",
+    "Color": 12761254,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 608,
+    "Left": 556,
+    "OldCreateOrder": "False",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 121,
+    "Width": 378
+   },
+   "rect": {
+    "h": 608,
+    "w": 378,
+    "x": 556,
+    "y": 121
+   }
+  },
+  {
+   "align": "alNone",
+   "cls": "TSplitter",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Splitter1",
+   "parent": "fSocketCommunication",
+   "path": "fSocketCommunication.Splitter1",
+   "props": {
+    "Align": "alNone",
+    "Cursor": "crHSplit",
+    "Height": 8,
+    "Left": 0,
+    "ResizeStyle": "rsLine",
+    "Top": 217,
+    "Width": 369
+   },
+   "rect": {
+    "h": 8,
+    "w": 369,
+    "x": 0,
+    "y": 217
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox1",
+   "parent": "fSocketCommunication",
+   "path": "fSocketCommunication.GroupBox1",
+   "props": {
+    "Caption": "Tester communiction",
+    "Height": 217,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 369
+   },
+   "rect": {
+    "h": 217,
+    "w": 369,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "OnLine",
+   "parent": "fSocketCommunication.GroupBox1",
+   "path": "fSocketCommunication.GroupBox1.OnLine",
+   "props": {
+    "Enabled": "False",
+    "Glyph.Data": {
+     "byte_len": 3130,
+     "hex": "360C0000424D360C000000000000360000002800000020000000200000000100180000000000000C0000130B0000130B00000000000000000000FFFFFF000000000000000000000000000000000000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000000000000000000000000000000000000000000000000000000000000000FFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080808080808080000000FFFFFF808080FFFFFFC0C0C000FF0000FF00C0C0C0C0C0C0000000000000000000000000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C000FF0000FF00C0C0C0C0C0C0000000000000000000000000C0C0C0808080000000FFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080808080808080808080C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080808080808080808080C0C0C0808080000000FFFFFF808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080000000FFFFFFFFFFFF808080000000000000000000000000000000000000000000000000000000000000C0C0C0000000FFFFFFFFFFFFFFFFFFFFFFFF808080000000000000000000000000000000000000000000000000000000000000C0C0C0000000FFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BF0000BF0000BF0000BF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BF0000BF0000BF0000BF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FF0000FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FF0000FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FF0000FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FF0000FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FFFF00FF0000FF0000FF0000BF0000C0C0C0808080000000000000FFFFFFFFFFFFFFFFFF000000808080FFFFFF808080000000FFFF00FF0000FF0000FF0000BF0000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFF808080000000000000000000000000000000000000C0C0C0808080000000FFFFFF000000000000000000FFFFFF808080FFFFFF808080000000000000000000000000000000000000C0C0C0808080000000FFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFF000000FFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080FFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF000000000000000000000000000000000000000000000000000000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C000FF0000FF00C0C0C0C0C0C0000000000000000000000000C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080808080808080808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080000000000000000000000000000000000000000000000000000000000000C0C0C0000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BFBF00BFBF00BFBF00BFBF00808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BFBF00BFBF00BFBF00BFBF00808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000BFBF00BFBF00BFBF00BFBF00808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000FFFF00BFBF00BFBF00BFBF00808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFF808080000000000000000000000000000000808080C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080FFFFFFC0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0808080000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF808080808080808080808080808080808080808080808080808080808080FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+     "sha1": "6bc36ed42298a2900b4526eb6281c21b5d8207cd"
+    },
+    "Height": 45,
+    "Left": 308,
+    "Top": 12,
+    "Width": 45
+   },
+   "rect": {
+    "h": 45,
+    "w": 45,
+    "x": 308,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbEnableSocket",
+   "parent": "fSocketCommunication.GroupBox1",
+   "path": "fSocketCommunication.GroupBox1.cbEnableSocket",
+   "props": {
+    "Caption": "Enable Socket Communication",
+    "Height": 17,
+    "Left": 16,
+    "TabOrder": 0,
+    "Top": 16,
+    "Width": 177
+   },
+   "rect": {
+    "h": 17,
+    "w": 177,
+    "x": 16,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbSetting",
+   "parent": "fSocketCommunication.GroupBox1",
+   "path": "fSocketCommunication.GroupBox1.gbSetting",
+   "props": {
+    "Caption": "Setting",
+    "Height": 121,
+    "Left": 8,
+    "TabOrder": 1,
+    "Top": 40,
+    "Width": 289
+   },
+   "rect": {
+    "h": 121,
+    "w": 289,
+    "x": 8,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "fSocketCommunication.GroupBox1.gbSetting",
+   "path": "fSocketCommunication.GroupBox1.gbSetting.Label1",
+   "props": {
+    "Caption": "Server IP Addr.",
+    "Height": 13,
+    "Left": 16,
+    "Top": 58,
+    "Width": 72
+   },
+   "rect": {
+    "h": 13,
+    "w": 72,
+    "x": 16,
+    "y": 58
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label2",
+   "parent": "fSocketCommunication.GroupBox1.gbSetting",
+   "path": "fSocketCommunication.GroupBox1.gbSetting.Label2",
+   "props": {
+    "Caption": "Server Port",
+    "Height": 13,
+    "Left": 16,
+    "Top": 92,
+    "Width": 53
+   },
+   "rect": {
+    "h": 13,
+    "w": 53,
+    "x": 16,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label3",
+   "parent": "fSocketCommunication.GroupBox1.gbSetting",
+   "path": "fSocketCommunication.GroupBox1.gbSetting.Label3",
+   "props": {
+    "Caption": "Socket Timeout (secs)",
+    "Height": 13,
+    "Left": 16,
+    "Top": 24,
+    "Width": 106
+   },
+   "rect": {
+    "h": 13,
+    "w": 106,
+    "x": 16,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtServerIP_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtServerIP_1",
+   "parent": "fSocketCommunication.GroupBox1.gbSetting",
+   "path": "fSocketCommunication.GroupBox1.gbSetting.edtServerIP_1",
+   "props": {
+    "Height": 21,
+    "Left": 96,
+    "MaxLength": 3,
+    "OnClick": "edtServerIP_1Click",
+    "TabOrder": 1,
+    "Top": 50,
+    "Width": 41
+   },
+   "rect": {
+    "h": 21,
+    "w": 41,
+    "x": 96,
+    "y": 50
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtServerPortClick"
+   },
+   "kind": "LEAF",
+   "name": "edtServerPort",
+   "parent": "fSocketCommunication.GroupBox1.gbSetting",
+   "path": "fSocketCommunication.GroupBox1.gbSetting.edtServerPort",
+   "props": {
+    "Height": 21,
+    "Left": 96,
+    "OnClick": "edtServerPortClick",
+    "TabOrder": 5,
+    "Top": 84,
+    "Width": 57
+   },
+   "rect": {
+    "h": 21,
+    "w": 57,
+    "x": 96,
+    "y": 84
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtSocketTimeoutClick"
+   },
+   "kind": "LEAF",
+   "name": "edtSocketTimeout",
+   "parent": "fSocketCommunication.GroupBox1.gbSetting",
+   "path": "fSocketCommunication.GroupBox1.gbSetting.edtSocketTimeout",
+   "props": {
+    "Height": 21,
+    "Left": 133,
+    "OnClick": "edtSocketTimeoutClick",
+    "TabOrder": 0,
+    "Text": "30",
+    "Top": 16,
+    "Width": 105
+   },
+   "rect": {
+    "h": 21,
+    "w": 105,
+    "x": 133,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtServerIP_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtServerIP_2",
+   "parent": "fSocketCommunication.GroupBox1.gbSetting",
+   "path": "fSocketCommunication.GroupBox1.gbSetting.edtServerIP_2",
+   "props": {
+    "Height": 21,
+    "Left": 144,
+    "MaxLength": 3,
+    "OnClick": "edtServerIP_1Click",
+    "TabOrder": 2,
+    "Top": 50,
+    "Width": 41
+   },
+   "rect": {
+    "h": 21,
+    "w": 41,
+    "x": 144,
+    "y": 50
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtServerIP_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtServerIP_3",
+   "parent": "fSocketCommunication.GroupBox1.gbSetting",
+   "path": "fSocketCommunication.GroupBox1.gbSetting.edtServerIP_3",
+   "props": {
+    "Height": 21,
+    "Left": 192,
+    "MaxLength": 3,
+    "OnClick": "edtServerIP_1Click",
+    "TabOrder": 3,
+    "Top": 50,
+    "Width": 41
+   },
+   "rect": {
+    "h": 21,
+    "w": 41,
+    "x": 192,
+    "y": 50
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtServerIP_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtServerIP_4",
+   "parent": "fSocketCommunication.GroupBox1.gbSetting",
+   "path": "fSocketCommunication.GroupBox1.gbSetting.edtServerIP_4",
+   "props": {
+    "Height": 21,
+    "Left": 240,
+    "MaxLength": 3,
+    "OnClick": "edtServerIP_1Click",
+    "TabOrder": 4,
+    "Top": 50,
+    "Width": 41
+   },
+   "rect": {
+    "h": 21,
+    "w": 41,
+    "x": 240,
+    "y": 50
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnOKClick"
+   },
+   "kind": "LEAF",
+   "name": "btnOK",
+   "parent": "fSocketCommunication.GroupBox1",
+   "path": "fSocketCommunication.GroupBox1.btnOK",
+   "props": {
+    "Caption": "OK",
+    "Height": 25,
+    "Left": 40,
+    "OnClick": "btnOKClick",
+    "TabOrder": 2,
+    "Top": 176,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 40,
+    "y": 176
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnCancelClick"
+   },
+   "kind": "LEAF",
+   "name": "btnCancel",
+   "parent": "fSocketCommunication.GroupBox1",
+   "path": "fSocketCommunication.GroupBox1.btnCancel",
+   "props": {
+    "Caption": "Cancel",
+    "Height": 25,
+    "Left": 192,
+    "OnClick": "btnCancelClick",
+    "TabOrder": 3,
+    "Top": 176,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 192,
+    "y": 176
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox3",
+   "parent": "fSocketCommunication",
+   "path": "fSocketCommunication.GroupBox3",
+   "props": {
+    "Caption": "Command List",
+    "Height": 137,
+    "Left": 1,
+    "TabOrder": 1,
+    "Top": 224,
+    "Visible": "False",
+    "Width": 369
+   },
+   "rect": {
+    "h": 137,
+    "w": 369,
+    "x": 1,
+    "y": 224
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnC1N1Click"
+   },
+   "kind": "LEAF",
+   "name": "btnC1N1",
+   "parent": "fSocketCommunication.GroupBox3",
+   "path": "fSocketCommunication.GroupBox3.btnC1N1",
+   "props": {
+    "Caption": "C1N1",
+    "Height": 25,
+    "Left": 24,
+    "OnClick": "btnC1N1Click",
+    "TabOrder": 0,
+    "Top": 24,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 24,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnC1N3Click"
+   },
+   "kind": "LEAF",
+   "name": "btnC1N3",
+   "parent": "fSocketCommunication.GroupBox3",
+   "path": "fSocketCommunication.GroupBox3.btnC1N3",
+   "props": {
+    "Caption": "C1N3",
+    "Height": 25,
+    "Left": 148,
+    "OnClick": "btnC1N3Click",
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 148,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnC6N1Click"
+   },
+   "kind": "LEAF",
+   "name": "btnC6N1",
+   "parent": "fSocketCommunication.GroupBox3",
+   "path": "fSocketCommunication.GroupBox3.btnC6N1",
+   "props": {
+    "Caption": "C6N1",
+    "Height": 25,
+    "Left": 272,
+    "OnClick": "btnC6N1Click",
+    "TabOrder": 2,
+    "Top": 24,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 272,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnC9N1Click"
+   },
+   "kind": "LEAF",
+   "name": "btnC9N1",
+   "parent": "fSocketCommunication.GroupBox3",
+   "path": "fSocketCommunication.GroupBox3.btnC9N1",
+   "props": {
+    "Caption": "C9N1",
+    "Height": 25,
+    "Left": 24,
+    "OnClick": "btnC9N1Click",
+    "TabOrder": 3,
+    "Top": 64,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 24,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnC9N3Click"
+   },
+   "kind": "LEAF",
+   "name": "btnC9N3",
+   "parent": "fSocketCommunication.GroupBox3",
+   "path": "fSocketCommunication.GroupBox3.btnC9N3",
+   "props": {
+    "Caption": "C9N3",
+    "Height": 25,
+    "Left": 148,
+    "OnClick": "btnC9N3Click",
+    "TabOrder": 4,
+    "Top": 64,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 148,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnC9N5Click"
+   },
+   "kind": "LEAF",
+   "name": "btnC9N5",
+   "parent": "fSocketCommunication.GroupBox3",
+   "path": "fSocketCommunication.GroupBox3.btnC9N5",
+   "props": {
+    "Caption": "C9N5",
+    "Height": 25,
+    "Left": 272,
+    "OnClick": "btnC9N5Click",
+    "TabOrder": 5,
+    "Top": 64,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 272,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button1Click"
+   },
+   "kind": "LEAF",
+   "name": "Button1",
+   "parent": "fSocketCommunication.GroupBox3",
+   "path": "fSocketCommunication.GroupBox3.Button1",
+   "props": {
+    "Caption": "Connent",
+    "Height": 25,
+    "Left": 64,
+    "OnClick": "Button1Click",
+    "TabOrder": 6,
+    "Top": 104,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 64,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button2Click"
+   },
+   "kind": "LEAF",
+   "name": "Button2",
+   "parent": "fSocketCommunication.GroupBox3",
+   "path": "fSocketCommunication.GroupBox3.Button2",
+   "props": {
+    "Caption": "Disconnect",
+    "Height": 25,
+    "Left": 224,
+    "OnClick": "Button2Click",
+    "TabOrder": 7,
+    "Top": 104,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 224,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo",
+   "parent": "fSocketCommunication",
+   "path": "fSocketCommunication.Memo",
+   "props": {
+    "Color": 14670284,
+    "Height": 209,
+    "Left": 0,
+    "TabOrder": 2,
+    "Top": 368,
+    "Visible": "False",
+    "Width": 369
+   },
+   "rect": {
+    "h": 209,
+    "w": 369,
+    "x": 0,
+    "y": 368
+   }
+  },
+  {
+   "align": null,
+   "cls": "TClientSocket",
+   "events": {
+    "OnConnect": "ClientSocket1Connect",
+    "OnConnecting": "ClientSocket1Connecting",
+    "OnDisconnect": "ClientSocket1Disconnect",
+    "OnError": "ClientSocket1Error",
+    "OnRead": "ClientSocket1Read"
+   },
+   "kind": "NONVISUAL",
+   "name": "ClientSocket1",
+   "parent": "fSocketCommunication",
+   "path": "fSocketCommunication.ClientSocket1",
+   "props": {
+    "Active": "False",
+    "ClientType": "ctNonBlocking",
+    "Left": 272,
+    "OnConnect": "ClientSocket1Connect",
+    "OnConnecting": "ClientSocket1Connecting",
+    "OnDisconnect": "ClientSocket1Disconnect",
+    "OnError": "ClientSocket1Error",
+    "OnRead": "ClientSocket1Read",
+    "Port": 0,
+    "Top": 8
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 272,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "Timer1",
+   "parent": "fSocketCommunication",
+   "path": "fSocketCommunication.Timer1",
+   "props": {
+    "Enabled": "False",
+    "Left": 304,
+    "Top": 64
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 304,
+    "y": 64
+   }
+  }
+ ]
+}

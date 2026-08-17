@@ -1,0 +1,579 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "三色七段顯示器測試機",
+ "form": "Form1",
+ "form_class": "TForm1",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "BinDisplay/BinDisp.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TForm1",
+   "events": {
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "Form1",
+   "parent": null,
+   "path": "Form1",
+   "props": {
+    "Caption": "三色七段顯示器測試機",
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 487,
+    "Left": 413,
+    "OldCreateOrder": "False",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 265,
+    "Width": 476
+   },
+   "rect": {
+    "h": 487,
+    "w": 476,
+    "x": 413,
+    "y": 265
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel3",
+   "parent": "Form1",
+   "path": "Form1.Panel3",
+   "props": {
+    "BevelOuter": "bvLowered",
+    "Color": 12761254,
+    "Height": 422,
+    "Left": 3,
+    "TabOrder": 0,
+    "Top": 3,
+    "Width": 450
+   },
+   "rect": {
+    "h": 422,
+    "w": 450,
+    "x": 3,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label7",
+   "parent": "Form1.Panel3",
+   "path": "Form1.Panel3.Label7",
+   "props": {
+    "Alignment": "taCenter",
+    "AutoSize": "False",
+    "Caption": "三色七段顯示器專用測試機",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clGreen",
+    "Font.Height": -32,
+    "Font.Name": "微軟正黑體",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 40,
+    "Left": 19,
+    "ParentFont": "False",
+    "Top": 4,
+    "Width": 394
+   },
+   "rect": {
+    "h": 40,
+    "w": 394,
+    "x": 19,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox1",
+   "parent": "Form1.Panel3",
+   "path": "Form1.Panel3.GroupBox1",
+   "props": {
+    "Caption": "Display Select",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 329,
+    "Left": 36,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 76,
+    "Width": 185
+   },
+   "rect": {
+    "h": 329,
+    "w": 185,
+    "x": 36,
+    "y": 76
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "CheckBox1",
+   "parent": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox1",
+   "props": {
+    "Caption": "Loader",
+    "Checked": "True",
+    "Height": 17,
+    "Left": 12,
+    "State": "cbChecked",
+    "TabOrder": 0,
+    "Top": 20,
+    "Width": 97
+   },
+   "rect": {
+    "h": 17,
+    "w": 97,
+    "x": 12,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "CheckBox2",
+   "parent": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox2",
+   "props": {
+    "Caption": "Empty",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 1,
+    "Top": 46,
+    "Width": 97
+   },
+   "rect": {
+    "h": 17,
+    "w": 97,
+    "x": 12,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "CheckBox3",
+   "parent": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox3",
+   "props": {
+    "Caption": "Color",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 97
+   },
+   "rect": {
+    "h": 17,
+    "w": 97,
+    "x": 12,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "CheckBox4",
+   "parent": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox4",
+   "props": {
+    "Caption": "Auto1",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 3,
+    "Top": 97,
+    "Width": 97
+   },
+   "rect": {
+    "h": 17,
+    "w": 97,
+    "x": 12,
+    "y": 97
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "CheckBox5",
+   "parent": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox5",
+   "props": {
+    "Caption": "Auto2",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 4,
+    "Top": 123,
+    "Width": 97
+   },
+   "rect": {
+    "h": 17,
+    "w": 97,
+    "x": 12,
+    "y": 123
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "CheckBox6",
+   "parent": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox6",
+   "props": {
+    "Caption": "Auto3",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 5,
+    "Top": 149,
+    "Width": 97
+   },
+   "rect": {
+    "h": 17,
+    "w": 97,
+    "x": 12,
+    "y": 149
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "CheckBox7",
+   "parent": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox7",
+   "props": {
+    "Caption": "Fix1",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 6,
+    "Top": 175,
+    "Width": 97
+   },
+   "rect": {
+    "h": 17,
+    "w": 97,
+    "x": 12,
+    "y": 175
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "CheckBox8",
+   "parent": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox8",
+   "props": {
+    "Caption": "Fix2",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 7,
+    "Top": 201,
+    "Width": 97
+   },
+   "rect": {
+    "h": 17,
+    "w": 97,
+    "x": 12,
+    "y": 201
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "CheckBox9",
+   "parent": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox9",
+   "props": {
+    "Caption": "Fix3",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 8,
+    "Top": 227,
+    "Width": 97
+   },
+   "rect": {
+    "h": 17,
+    "w": 97,
+    "x": 12,
+    "y": 227
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "CheckBox10",
+   "parent": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox10",
+   "props": {
+    "Caption": "Fix4",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 9,
+    "Top": 252,
+    "Width": 97
+   },
+   "rect": {
+    "h": 17,
+    "w": 97,
+    "x": 12,
+    "y": 252
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "CheckBox11",
+   "parent": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox11",
+   "props": {
+    "Caption": "Fix5",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 10,
+    "Top": 278,
+    "Width": 97
+   },
+   "rect": {
+    "h": 17,
+    "w": 97,
+    "x": 12,
+    "y": 278
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "CheckBox12",
+   "parent": "Form1.Panel3.GroupBox1",
+   "path": "Form1.Panel3.GroupBox1.CheckBox12",
+   "props": {
+    "Caption": "Fix6",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 11,
+    "Top": 304,
+    "Width": 97
+   },
+   "rect": {
+    "h": 17,
+    "w": 97,
+    "x": 12,
+    "y": 304
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox2",
+   "parent": "Form1.Panel3",
+   "path": "Form1.Panel3.GroupBox2",
+   "props": {
+    "Caption": "Send Data",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 121,
+    "Left": 232,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 84,
+    "Width": 181
+   },
+   "rect": {
+    "h": 121,
+    "w": 181,
+    "x": 232,
+    "y": 84
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ComboBox1",
+   "parent": "Form1.Panel3.GroupBox2",
+   "path": "Form1.Panel3.GroupBox2.ComboBox1",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "Items.Strings": [
+     "紅色",
+     "綠色",
+     "橘色"
+    ],
+    "Left": 16,
+    "TabOrder": 0,
+    "Text": "綠色",
+    "Top": 24,
+    "Width": 145
+   },
+   "rect": {
+    "h": 24,
+    "w": 145,
+    "x": 16,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ComboBox2",
+   "parent": "Form1.Panel3.GroupBox2",
+   "path": "Form1.Panel3.GroupBox2.ComboBox2",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "Items.Strings": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "A",
+     "B",
+     "C",
+     "D",
+     "E",
+     "F",
+     "G",
+     "H",
+     "I",
+     "J",
+     "K",
+     "L",
+     "M",
+     "N",
+     "O",
+     "P",
+     "Q",
+     "R",
+     "S",
+     "T",
+     "U",
+     "V",
+     "W",
+     "X",
+     "Y",
+     "Z"
+    ],
+    "Left": 16,
+    "TabOrder": 1,
+    "Text": "0",
+    "Top": 72,
+    "Width": 145
+   },
+   "rect": {
+    "h": 24,
+    "w": 145,
+    "x": 16,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button1Click"
+   },
+   "kind": "LEAF",
+   "name": "Button1",
+   "parent": "Form1.Panel3",
+   "path": "Form1.Panel3.Button1",
+   "props": {
+    "Caption": "傳送",
+    "Height": 61,
+    "Left": 232,
+    "OnClick": "Button1Click",
+    "TabOrder": 2,
+    "Top": 340,
+    "Width": 181
+   },
+   "rect": {
+    "h": 61,
+    "w": 181,
+    "x": 232,
+    "y": 340
+   }
+  },
+  {
+   "align": null,
+   "cls": "TStatusBar",
+   "events": {},
+   "kind": "LEAF",
+   "name": "StatusBar1",
+   "parent": "Form1",
+   "path": "Form1.StatusBar1",
+   "props": {
+    "Height": 19,
+    "Left": 0,
+    "Panels": [],
+    "SimplePanel": "False",
+    "Top": 430,
+    "Width": 460
+   },
+   "rect": {
+    "h": 19,
+    "w": 460,
+    "x": 0,
+    "y": 430
+   }
+  }
+ ]
+}

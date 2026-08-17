@@ -1,0 +1,154 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "fTeachShow",
+ "form": "fTeachShow",
+ "form_class": "TfTeachShow",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "uTechShow.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfTeachShow",
+   "events": {},
+   "kind": "ROOT",
+   "name": "fTeachShow",
+   "parent": null,
+   "path": "fTeachShow",
+   "props": {
+    "BorderIcons": [],
+    "Caption": "fTeachShow",
+    "Color": 14670284,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "FormStyle": "fsStayOnTop",
+    "Height": 224,
+    "Left": 245,
+    "OldCreateOrder": "False",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 222,
+    "Width": 526
+   },
+   "rect": {
+    "h": 224,
+    "w": 526,
+    "x": 245,
+    "y": 222
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "fTeachShow",
+   "path": "fTeachShow.Label1",
+   "props": {
+    "Caption": "The manual motion motor to treats measures in the position.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 24,
+    "ParentFont": "False",
+    "Top": 40,
+    "Width": 423
+   },
+   "rect": {
+    "h": 20,
+    "w": 423,
+    "x": 24,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label3",
+   "parent": "fTeachShow",
+   "path": "fTeachShow.Label3",
+   "props": {
+    "Caption": "Save ?",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 24,
+    "ParentFont": "False",
+    "Top": 80,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 24,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button1Click"
+   },
+   "kind": "LEAF",
+   "name": "Button1",
+   "parent": "fTeachShow",
+   "path": "fTeachShow.Button1",
+   "props": {
+    "Caption": "Yes",
+    "Height": 25,
+    "Left": 104,
+    "OnClick": "Button1Click",
+    "TabOrder": 0,
+    "Top": 120,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 104,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button2Click"
+   },
+   "kind": "LEAF",
+   "name": "Button2",
+   "parent": "fTeachShow",
+   "path": "fTeachShow.Button2",
+   "props": {
+    "Caption": "No",
+    "Height": 25,
+    "Left": 328,
+    "OnClick": "Button2Click",
+    "TabOrder": 1,
+    "Top": 120,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 328,
+    "y": 120
+   }
+  }
+ ]
+}

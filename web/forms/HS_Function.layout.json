@@ -1,0 +1,465 @@
+{
+ "canvas": {
+  "h": 214,
+  "w": 190
+ },
+ "caption": "ATC Self Test",
+ "form": "FormHS",
+ "form_class": "TFormHS",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "HS_Function.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TFormHS",
+   "events": {
+    "OnCreate": "FormCreate",
+    "OnDestroy": "FormDestroy"
+   },
+   "kind": "ROOT",
+   "name": "FormHS",
+   "parent": null,
+   "path": "FormHS",
+   "props": {
+    "BorderIcons": [],
+    "BorderStyle": "bsSingle",
+    "Caption": "ATC Self Test",
+    "ClientHeight": 214,
+    "ClientWidth": 190,
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Left": 461,
+    "OldCreateOrder": "False",
+    "OnCreate": "FormCreate",
+    "OnDestroy": "FormDestroy",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 265
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 461,
+    "y": 265
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlSlfeTestRun",
+   "parent": "FormHS",
+   "path": "FormHS.pnlSlfeTestRun",
+   "props": {
+    "Height": 217,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 190
+   },
+   "rect": {
+    "h": 217,
+    "w": 190,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "FormHS.pnlSlfeTestRun",
+   "path": "FormHS.pnlSlfeTestRun.Label1",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "SELF TEST RUN STATE",
+    "Color": "clBtnFace",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -16,
+    "Font.Name": "Times New Roman",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 22,
+    "Left": 5,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 6,
+    "Width": 180
+   },
+   "rect": {
+    "h": 22,
+    "w": 180,
+    "x": 5,
+    "y": 6
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pl_ATCSelfTestSatus_01",
+   "parent": "FormHS.pnlSlfeTestRun",
+   "path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_01",
+   "props": {
+    "BevelInner": "bvRaised",
+    "BorderWidth": 1,
+    "Height": 41,
+    "Left": 15,
+    "TabOrder": 0,
+    "Tag": 5,
+    "Top": 30,
+    "Width": 160
+   },
+   "rect": {
+    "h": 41,
+    "w": 160,
+    "x": 15,
+    "y": 30
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label2",
+   "parent": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_01",
+   "path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_01.Label2",
+   "props": {
+    "Caption": "Temperature(+5)",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Times New Roman",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 19,
+    "Left": 25,
+    "ParentFont": "False",
+    "Tag": 5,
+    "Top": 11,
+    "Width": 113
+   },
+   "rect": {
+    "h": 19,
+    "w": 113,
+    "x": 25,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pl_ATCSelfTestSatus_02",
+   "parent": "FormHS.pnlSlfeTestRun",
+   "path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_02",
+   "props": {
+    "BevelInner": "bvRaised",
+    "BorderWidth": 1,
+    "Height": 41,
+    "Left": 15,
+    "TabOrder": 1,
+    "Tag": 5,
+    "Top": 75,
+    "Width": 160
+   },
+   "rect": {
+    "h": 41,
+    "w": 160,
+    "x": 15,
+    "y": 75
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label3",
+   "parent": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_02",
+   "path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_02.Label3",
+   "props": {
+    "Caption": "Temperature(-5)",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Times New Roman",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 19,
+    "Left": 25,
+    "ParentFont": "False",
+    "Tag": 5,
+    "Top": 11,
+    "Width": 109
+   },
+   "rect": {
+    "h": 19,
+    "w": 109,
+    "x": 25,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pl_ATCSelfTestSatus_03",
+   "parent": "FormHS.pnlSlfeTestRun",
+   "path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_03",
+   "props": {
+    "BevelInner": "bvRaised",
+    "BorderWidth": 1,
+    "Height": 41,
+    "Left": 15,
+    "TabOrder": 2,
+    "Tag": 5,
+    "Top": 120,
+    "Width": 160
+   },
+   "rect": {
+    "h": 41,
+    "w": 160,
+    "x": 15,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label4",
+   "parent": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_03",
+   "path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_03.Label4",
+   "props": {
+    "Caption": "Temperature(+0)",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Times New Roman",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 19,
+    "Left": 25,
+    "ParentFont": "False",
+    "Tag": 5,
+    "Top": 11,
+    "Width": 113
+   },
+   "rect": {
+    "h": 19,
+    "w": 113,
+    "x": 25,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pl_ATCSelfTestSatus_99",
+   "parent": "FormHS.pnlSlfeTestRun",
+   "path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_99",
+   "props": {
+    "BevelInner": "bvRaised",
+    "BorderWidth": 1,
+    "Height": 41,
+    "Left": 15,
+    "TabOrder": 3,
+    "Tag": 5,
+    "Top": 165,
+    "Width": 160
+   },
+   "rect": {
+    "h": 41,
+    "w": 160,
+    "x": 15,
+    "y": 165
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label5",
+   "parent": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_99",
+   "path": "FormHS.pnlSlfeTestRun.pl_ATCSelfTestSatus_99.Label5",
+   "props": {
+    "Caption": "ATC STOP",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Times New Roman",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 19,
+    "Left": 45,
+    "ParentFont": "False",
+    "Tag": 5,
+    "Top": 11,
+    "Width": 75
+   },
+   "rect": {
+    "h": 19,
+    "w": 75,
+    "x": 45,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "TimerAutoBackupTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "TimerAutoBackup",
+   "parent": "FormHS",
+   "path": "FormHS.TimerAutoBackup",
+   "props": {
+    "Enabled": "False",
+    "OnTimer": "TimerAutoBackupTimer",
+    "Top": 160
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": 160
+   }
+  },
+  {
+   "align": null,
+   "cls": "TServerSocket",
+   "events": {
+    "OnClientConnect": "ESDServerSocketClientConnect",
+    "OnClientError": "ESDServerSocketClientError",
+    "OnClientRead": "ESDServerSocketClientRead"
+   },
+   "kind": "NONVISUAL",
+   "name": "ESDServerSocket",
+   "parent": "FormHS",
+   "path": "FormHS.ESDServerSocket",
+   "props": {
+    "Active": "False",
+    "OnClientConnect": "ESDServerSocketClientConnect",
+    "OnClientError": "ESDServerSocketClientError",
+    "OnClientRead": "ESDServerSocketClientRead",
+    "Port": 6666,
+    "ServerType": "stNonBlocking",
+    "ThreadCacheSize": 1000,
+    "Top": 128
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": 128
+   }
+  },
+  {
+   "align": null,
+   "cls": "TServerSocket",
+   "events": {
+    "OnClientConnect": "RTMServerSocketClientConnect",
+    "OnClientDisconnect": "RTMServerSocketClientDisconnect",
+    "OnClientError": "RTMServerSocketClientError",
+    "OnClientRead": "RTMServerSocketClientRead"
+   },
+   "kind": "NONVISUAL",
+   "name": "RTMServerSocket",
+   "parent": "FormHS",
+   "path": "FormHS.RTMServerSocket",
+   "props": {
+    "Active": "False",
+    "OnClientConnect": "RTMServerSocketClientConnect",
+    "OnClientDisconnect": "RTMServerSocketClientDisconnect",
+    "OnClientError": "RTMServerSocketClientError",
+    "OnClientRead": "RTMServerSocketClientRead",
+    "Port": 6000,
+    "ServerType": "stNonBlocking",
+    "Top": 96
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "TimerRTMMsgTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "TimerRTMMsg",
+   "parent": "FormHS",
+   "path": "FormHS.TimerRTMMsg",
+   "props": {
+    "Enabled": "False",
+    "Interval": 100,
+    "Left": 28,
+    "OnTimer": "TimerRTMMsgTimer",
+    "Top": 160
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 28,
+    "y": 160
+   }
+  },
+  {
+   "align": null,
+   "cls": "TClientSocket",
+   "events": {
+    "OnConnect": "HandlerClientSocketConnect",
+    "OnError": "HandlerClientSocketError",
+    "OnRead": "HandlerClientSocketRead"
+   },
+   "kind": "NONVISUAL",
+   "name": "HandlerClientSocket",
+   "parent": "FormHS",
+   "path": "FormHS.HandlerClientSocket",
+   "props": {
+    "Active": "False",
+    "Address": "127.0.0.1",
+    "ClientType": "ctNonBlocking",
+    "Left": 168,
+    "OnConnect": "HandlerClientSocketConnect",
+    "OnError": "HandlerClientSocketError",
+    "OnRead": "HandlerClientSocketRead",
+    "Port": 1023,
+    "Top": 120
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 168,
+    "y": 120
+   }
+  }
+ ]
+}

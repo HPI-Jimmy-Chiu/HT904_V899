@@ -1,0 +1,2459 @@
+{
+ "canvas": {
+  "h": 752,
+  "w": 935
+ },
+ "caption": "Pad Interface",
+ "form": "fPadInterface",
+ "form_class": "TfPadInterface",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "uPadInterface.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfPadInterface",
+   "events": {
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fPadInterface",
+   "parent": null,
+   "path": "fPadInterface",
+   "props": {
+    "BorderStyle": "bsSingle",
+    "Caption": "Pad Interface",
+    "ClientHeight": 752,
+    "ClientWidth": 935,
+    "Color": 12761254,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Left": 759,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 183
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 759,
+    "y": 183
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "pc_PadInterface",
+   "parent": "fPadInterface",
+   "path": "fPadInterface.pc_PadInterface",
+   "props": {
+    "Align": "alClient",
+    "Height": 473,
+    "Left": 0,
+    "MultiLine": "True",
+    "Style": "tsButtons",
+    "TabOrder": 1,
+    "TabWidth": 100,
+    "Top": 0,
+    "Width": 935
+   },
+   "rect": {
+    "h": 473,
+    "w": 935,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pn_PadInterfaceTitle",
+   "parent": "fPadInterface",
+   "path": "fPadInterface.pn_PadInterfaceTitle",
+   "props": {
+    "Align": "alBottom",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 73,
+    "Left": 0,
+    "TabOrder": 3,
+    "Top": 679,
+    "Width": 935
+   },
+   "rect": {
+    "h": 73,
+    "w": 935,
+    "x": 0,
+    "y": 679
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sb_PadInterface_ExitClick"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_Exit",
+   "parent": "fPadInterface.pn_PadInterfaceTitle",
+   "path": "fPadInterface.pn_PadInterfaceTitle.sb_PadInterface_Exit",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Exit",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 4202,
+     "hex": "66100000424D661000000000000036000000280000002500000025000000010018000000000030100000232E0000232E00000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEDEDEEB6B6B89D9EA088898C7274777B7D80929396A8A9ABCBCCCDFEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFECEDED8285A4383C901D22981D22A91E24BA1E24C71E24BA1E23A91D22971B1F76191C432C2E34727477BFBFC1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEDEDF6585DB01E25B91E25CD1F25CB1F25CA1F25CA1F25C91F25C72025C72025C62025C42025C32026C31F24B21C2077171B2B4C4F53CACACBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCFCFF7E81C81F26BF1E25CE1E25CD1F25CB1F25CA1F25CA1F25C91F25C72025C72025C62025C42025C32026C32026C22026C02126C02025B61B1F6B171A25686A6DF5F5F5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEEEEFC3E43C41E25CE1E25CE1E25CD1F25CB1F25CA1F25CA1F25C91F25C72025C72025C62025C42025C32026C32026C22026C02126C02126BF2126BD1D217C1C2076181B33414347E3E4E4FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD7D8F72A30C61E25CE1E25CE1E25CD1F25CB1F25CA1F25CA1F25C91F25C72025C72025C62025C42025C32026C32026C22026C02126C02126BF2126BEABADE5EDEDEE9596981E228F191D462B2D32D6D7D8FFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD9DBF8252BCD1E25CE1E25CE1E25CD1F25CB1F25CA1F25CA1F25C91F25C72025C72025C62025C42025C32026C31D217C1D23982126C02126BF2126BE2126BCB7B8E9FFFFFF9FA0A21F23932125B5191D4734363BEBECECFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFEFEFFC343ACE1E25CE1E25CE1E25CD1F25CB1F25CA1F25CA1F25C91F25C72025C72025C62025C42025C32026C32228B4D4D4D67F80831D21592024AF2126BC2126BCB7B8E8FFFFFF9FA0A21F23932226B72125AA181B334E5154FAFAFAFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFEFEFF545AD61B21901D23B41E25CD1F25CB1F25CA1F25CA1F25C91F25C72025C72025C62025C42025C32026C32026C271749CFFFFFFFFFFFFD7D8D950525E2025B42126BBB7B8E8FFFFFF9FA0A21F23932226B52226B520249C171A258F9193FFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFAFB1EE464CC9A6A7A977797C4346531A1E611D229F1F25C91F25C72025C72025C62025C42025C32026C32026C22C319DE9E9E9FFFFFFFFFFFFFFFFFFD5D6E02126BB2226B9B7B8E7FFFFFF9FA0A21F23912226B52226B42326B21C1F6623262BECEDEDFFFFFF00FFFFFFFFFFFFF9F9FE383ED25D61CCFFFFFFFFFFFFFFFFFFDDDDDE8A8B8E31344E1D21922025C62025C42025C32026C32026C21F24AFAAABB3FFFFFFFFFFFFFFFFFFFFFFFF6B6EC02226B92226B8B7B8E7FFFFFF9FA0A21F23912226B42326B22326B12225A9181B2B7B7D80FFFFFF00FFFFFFFFFFFFA0A3EB1E25CE6469C9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7F7F88E90922326501F23B02026C32026C21F25B77D7F91FFFFFFFFFFFFFFFFFFFFFFFFD6D7E42428BA2226B82226B8B7B8E7FFFFFF9FA0A21F23902326B22326B12326B12326B01D206E202327F7F7F800FFFFFFFFFFFF4F55D91E25CD6E71C9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE6E6E74A4D5B1D239B1F24AD696C80FDFDFDFFFFFFFFFFFFFFFFFFFBFBFC4B4FC32226B82226B82226B7B7B8E6FFFFFF9FA0A220238F2326B12326B12326B02326AE2225A1171A20B8B9BB00FFFFFFE9EAFB1F26CE1F25CB585CD8E0E1F6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF9F9F9707277868891FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8E90CF2226B82226B82226B72226B5B7B8E6FFFFFF9FA0A220238E2326B12326B02326AE2426AE2426AD1A1C3E70727500FFFFFFA5A8EB1F25CB1F25CA1F25CA1F25C94449D1878AE1CCCDF1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB7B8DB2327B92226B82226B72226B52226B5B7B8E6FFFFFF9FA0A220238E2326B02326AE2426AE2426AD2426AC1E216934363B00FFFFFF7A7EE11F25CA1F25CA1F25C91F25C72025C72025C62025C45559D2C8C9EFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCFCFE32A2EBB2226B82226B72226B52226B52226B4B7B8E5FFFFFF9FA0A220238D2326AE2426AE2426AD2426AC2427AA2023831B1E2300FFFFFF6468DB1F25CA1F25C91F25C72025C72025C62025C42025C32026C32127C37B7EDAF6F6F9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE2E2EC3639BF2226B82226B72226B52226B52226B42326B2B7B8E5FFFFFF9FA0A220238C2426AE2426AD2426AC2427AA2427AA212491171A1F00FFFFFF4D52D51F25C91F25C72025C72025C62025C42025C32026C32026C22026C02126C0BBBCD7FFFFFFFFFFFFFFFFFFFFFFFFF0F0F141448B1D21781D21791D21791D217A1D217B1E217C2124A0B7B8E5FFFFFF9FA0A221238C2426AD2426AC2427AA2427AA2427A923269C171A1F00FFFFFF4248D32F35CB393ECE3B3FCD2F34C82429C42026C32026C22026C02126C02126BFA0A2D2FFFFFFFFFFFFFFFFFFFFFFFFE3E4E4C0C0C2BCBDBEBABBBCB8B9BBB5B6B7B3B4B5B1B2B435378DB7B8E5FFFFFF9FA0A221238B2426AC2427AA2427AA2427A92427A72426A6171A1F00FFFFFF9C9EE79B9EE69B9EE69B9EE59B9EE59B9EE59598E28A8DDE7F82DB7073D6595CCF8386D8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF414494B7B8E4FFFFFF9FA0A221238A2427AA2427AA2427A92427A72527A723259A171A1F00FFFFFF9FA1E7989AE5989AE4989AE4989BE4989BE3989BE2989BE2989BE2989BE1989BE0A0A3E3FCFCFDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF414493B8B8E4FFFFFF9FA0A22124892427AA2427A92427A72527A73234AC5456A622252A00FFFFFFA5A7E99497E39497E39497E39497E29497E19597E19597E19597E09597DF9597DF9597DFD2D2E9FFFFFFFFFFFFFFFFFFFDFDFEFBFBFDFBFBFDFAFAFCFAFAFCF9F9FCF9F9FCF9F9FC4446B1B8B8E4FFFFFF9FA0A22124892629AA3C3EB15455BA7677C79697D47172AC45484C00FFFFFFBDBFEE9294E29295E29295E19295E09295E09295E09295E09295DF9295DF9295DE9395DDA3A5E2FAFAFBD6D7E59798CC4E50723E41584E51738385C19395D99395D99395D89495D89495D7D9DAF0FFFFFF9FA0A26F71A79294D49495D49495D49495D39495D25556878C8D9000FFFFFFF1F1FC8E91E18E91E18E91E08F91E08F91DF8F91DE8F91DD8F91DD8F91DD8F91DC8F91DB8F91DBB5B6E87D7EB2939498EAEAEAFCFCFCD4D4D55B5D637576AE9091D69091D69091D69091D5DADBF0FFFFFF9FA0A27375A89192D39192D29192D29192D19192D12D2F48D4D4D500FFFFFFFFFFFF9598E38C8FDF8C8FDF8C8FDE8C8FDE8C8FDD8C8FDD8C8FDC8D8FDB8D8FDB8D8FDB8D8FDA8D8FD9B0B1B7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF60626E8E8FD58E8FD58E8FD48E8FD3DADAF0FFFFFF9FA0A27173A78E8FD18E8FD18E8FD08E8FD07F80BF383B3FFFFFFF00FFFFFFFFFFFFBCBEEC898BDE898BDD898BDD898BDC898BDC898BDB898BDA898BD9898BD9898BD9898BD88F91CAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCBCBCC7F80C38A8BD38A8CD28A8CD2D8D9EFFFFFFF9FA0A26F71A68B8CCF8B8CCE8B8CCE8B8CCE525384ACADAFFFFFFF00FFFFFFFFFFFFFEFEFF8C8FDF8588DC8588DB8588DB8588DA8688D98688D88688D88688D88688D78688D7A8A9D8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5F6F67F80C58788D18788D18788D0D7D8EFFFFFFF9FA0A26C6EA48788CD8788CD8788CC7E7FC1444751FEFEFEFFFFFF00FFFFFFFFFFFFFFFFFFC9CAF08385DA8385DA8385D98385D88385D88385D88385D78385D68385D68385D59FA0DEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDDDEE18486D08486D08486CF8486CED7D7EEFFFFFF9FA0A26B6CA38586CC8586CB8586CB464874C4C5C6FFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFF9799E07F82D88082D78082D68082D68082D68082D58082D58082D48082D38284D3E2E2F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFADAED38182CE8182CE8182CD8182CDD6D6EEFFFFFF9FA0A26869A18182CA8282C9696AAA939498FFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFF9F9FE8A8CDB8082D68082D68082D68082D58082D58082D48082D38082D28082D29192D8E2E2F2FFFFFFFFFFFFFDFDFEC2C2E48283CF8182CE8182CD8182CD8182CCD6D6EDFFFFFF9FA0A26869A18282C97575BA6B6C79FFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE9E9F98284D77D7FD57D7FD47D7FD47D7FD37E7FD27E7FD17E7FD17E7FD17E7FD08081D19596D8A3A4DC8A8CD27E80CD7E80CD7E80CC7F80CC7F80CB7F80CAD5D5EDFFFFFF9FA0A26668A07A7AC1696B82F9F9F9FFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE9E9F98688D77A7CD37A7CD27A7CD17A7CD07A7CD07A7CD07A7CCE7B7CCE7B7CCE7B7CCD7B7DCC7B7DCC7B7DCB7B7DCA7B7DCA7B7DCA7B7DC97B7DC8D4D5EDFFFFFFB2B3C26566A687899DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF9F9FE9495DB7779D07779CF7779CF7779CE7779CD7779CD7779CC7779CC7779CB7779CB7779CA7779C97879C97879C87879C87879C67879C67B7CC77D7DC7696AABB7B8C3FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC8C9EC8183D37476CD7476CC7576CC7576CC7576CB7577CA7577CA7577C97577C87577C87577C77577C67577C57577C57577C56C6DB78A8BB2FDFDFDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFFBABBE68788D37273CB7173CA7173C87173C87173C87173C67273C67273C67273C57273C47172C37071B79899C5FAFAFDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF2F2FBBABBE59A9BD88D8ED38082CC7778C77879C48182C69192CEB3B4DFEBEBF7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00",
+     "sha1": "15961b786ba5385ac4b2f7007ded53474bc9482b"
+    },
+    "Height": 40,
+    "Left": 569,
+    "Margin": 10,
+    "OnClick": "sb_PadInterface_ExitClick",
+    "ParentFont": "False",
+    "Spacing": 10,
+    "Tag": 10,
+    "Top": 13,
+    "Width": 200
+   },
+   "rect": {
+    "h": 40,
+    "w": 200,
+    "x": 569,
+    "y": 13
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "sb_PadInterface_MainPage",
+   "parent": "fPadInterface",
+   "path": "fPadInterface.sb_PadInterface_MainPage",
+   "props": {
+    "Align": "alClient",
+    "BevelInner": "bvLowered",
+    "Color": 12761254,
+    "Height": 473,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 935
+   },
+   "rect": {
+    "h": 473,
+    "w": 935,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pn_PadInterface_Front",
+   "parent": "fPadInterface.sb_PadInterface_MainPage",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "props": {
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvSpace",
+    "Color": 14670284,
+    "Height": 353,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 460
+   },
+   "rect": {
+    "h": 353,
+    "w": 460,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_FrontPowerOff",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.ml_PadInterface_FrontPowerOff",
+   "props": {
+    "Alias": "SnFKPowerOff",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 49,
+    "Top": 41,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 49,
+    "y": 41
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_FrontPowerOn",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.ml_PadInterface_FrontPowerOn",
+   "props": {
+    "Alias": "SnFKPowerOn",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 162,
+    "Top": 41,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 162,
+    "y": 41
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_FrontReset",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.ml_PadInterface_FrontReset",
+   "props": {
+    "Alias": "SnFKReset",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 49,
+    "Top": 116,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 49,
+    "y": 116
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_FrontPause",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.ml_PadInterface_FrontPause",
+   "props": {
+    "Alias": "SnFKPause",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 162,
+    "Top": 116,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 162,
+    "y": 116
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_FrontHome",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.ml_PadInterface_FrontHome",
+   "props": {
+    "Alias": "SnFKHome",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 275,
+    "Top": 116,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 275,
+    "y": 116
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_FrontStart",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.ml_PadInterface_FrontStart",
+   "props": {
+    "Alias": "SnFKStart",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 388,
+    "Top": 116,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 388,
+    "y": 116
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_FrontOneCycle",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.ml_PadInterface_FrontOneCycle",
+   "props": {
+    "Alias": "SnFKOneCycle",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 49,
+    "Top": 192,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 49,
+    "y": 192
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_FrontRetry",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.ml_PadInterface_FrontRetry",
+   "props": {
+    "Alias": "SnFKRetry",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 162,
+    "Top": 192,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 162,
+    "y": 192
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_FrontSkip",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.ml_PadInterface_FrontSkip",
+   "props": {
+    "Alias": "SnFKSkip",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 275,
+    "Top": 192,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 275,
+    "y": 192
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_FrontCleanOut",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.ml_PadInterface_FrontCleanOut",
+   "props": {
+    "Alias": "SnFKCleanOut",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 388,
+    "Top": 192,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 388,
+    "y": 192
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_FrontTrayFeed",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.ml_PadInterface_FrontTrayFeed",
+   "props": {
+    "Alias": "SnFKTrayFeed",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 49,
+    "Top": 268,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 49,
+    "y": 268
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_FrontTrayEnd",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.ml_PadInterface_FrontTrayEnd",
+   "props": {
+    "Alias": "SnFKTrayEnd",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 162,
+    "Top": 268,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 162,
+    "y": 268
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_FrontAlarmReset",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.ml_PadInterface_FrontAlarmReset",
+   "props": {
+    "Alias": "SnFKAlarmReset",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 275,
+    "Top": 268,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 275,
+    "y": 268
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_Front",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.ml_PadInterface_Front",
+   "props": {
+    "Alias": "SnFrontPadActive",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 388,
+    "Top": 73,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 388,
+    "y": 73
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pn_PadInterface_FrontTop",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.pn_PadInterface_FrontTop",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Caption": "Front",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -19,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 32,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 2,
+    "Width": 456
+   },
+   "rect": {
+    "h": 32,
+    "w": 456,
+    "x": 2,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_FrontPowerOff",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontPowerOff",
+   "props": {
+    "Alias": "SwFKPowerOff",
+    "BevelInner": "bvRaised",
+    "Caption": "Off",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 12,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 1,
+    "Top": 62,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 12,
+    "y": 62
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_FrontPowerOn",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontPowerOn",
+   "props": {
+    "Alias": "SwFKPowerOn",
+    "BevelInner": "bvRaised",
+    "Caption": "On",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 125,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 2,
+    "Top": 62,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 125,
+    "y": 62
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_Front",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_Front",
+   "props": {
+    "Alias": "SwFrontActiveLed",
+    "BevelInner": "bvRaised",
+    "Caption": "Front",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 351,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 3,
+    "Top": 62,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 351,
+    "y": 62
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_FrontStart",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontStart",
+   "props": {
+    "Alias": "SwFKStart",
+    "BevelInner": "bvRaised",
+    "Caption": "Start",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 351,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 7,
+    "Top": 138,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 351,
+    "y": 138
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_FrontHome",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontHome",
+   "props": {
+    "Alias": "SwFKHome",
+    "BevelInner": "bvRaised",
+    "Caption": "Home",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 238,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 6,
+    "Top": 138,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 238,
+    "y": 138
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_FrontPause",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontPause",
+   "props": {
+    "Alias": "SwFKPause",
+    "BevelInner": "bvRaised",
+    "Caption": "Pause",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 125,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 5,
+    "Top": 138,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 125,
+    "y": 138
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_FrontReset",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontReset",
+   "props": {
+    "Alias": "SwFKReset",
+    "BevelInner": "bvRaised",
+    "Caption": "Reset",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 12,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 4,
+    "Top": 138,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 12,
+    "y": 138
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_FrontOneCycle",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontOneCycle",
+   "props": {
+    "Alias": "SwFKOneCycle",
+    "BevelInner": "bvRaised",
+    "Caption": "One Cycle",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 12,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 8,
+    "Top": 214,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 12,
+    "y": 214
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_FrontRetry",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontRetry",
+   "props": {
+    "Alias": "SwFKRetry",
+    "BevelInner": "bvRaised",
+    "Caption": "Retry",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 125,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 9,
+    "Top": 214,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 125,
+    "y": 214
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_FrontSkip",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontSkip",
+   "props": {
+    "Alias": "SwFKSkip",
+    "BevelInner": "bvRaised",
+    "Caption": "Skip",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 238,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 10,
+    "Top": 214,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 238,
+    "y": 214
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_FrontCleanOut",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontCleanOut",
+   "props": {
+    "Alias": "SwFKCleanOut",
+    "BevelInner": "bvRaised",
+    "Caption": "Clean Out",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 351,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 11,
+    "Top": 214,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 351,
+    "y": 214
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_FrontAlarmReset",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontAlarmReset",
+   "props": {
+    "Alias": "SwFKAlarmReset",
+    "BevelInner": "bvRaised",
+    "Caption": "Alarm Reset",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 238,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 14,
+    "Top": 290,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 238,
+    "y": 290
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_FrontTrayEnd",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontTrayEnd",
+   "props": {
+    "Alias": "SwFKTrayEnd",
+    "BevelInner": "bvRaised",
+    "Caption": "Tray End",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 125,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 13,
+    "Top": 290,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 125,
+    "y": 290
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_FrontTrayFeed",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Front.sb_PadInterface_FrontTrayFeed",
+   "props": {
+    "Alias": "SwFKTrayFeed",
+    "BevelInner": "bvRaised",
+    "Caption": "Tray Feed",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 12,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 12,
+    "Top": 290,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 12,
+    "y": 290
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pn_PadInterface_Rear",
+   "parent": "fPadInterface.sb_PadInterface_MainPage",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "props": {
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvSpace",
+    "Color": 14670284,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 433,
+    "Left": 467,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 0,
+    "Width": 462
+   },
+   "rect": {
+    "h": 433,
+    "w": 462,
+    "x": 467,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_RearPowerOff",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.ml_PadInterface_RearPowerOff",
+   "props": {
+    "Alias": "SnRKPowerOff",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 49,
+    "Tag": 1,
+    "Top": 41,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 49,
+    "y": 41
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_RearPowerOn",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.ml_PadInterface_RearPowerOn",
+   "props": {
+    "Alias": "SnRKPowerOn",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 162,
+    "Tag": 1,
+    "Top": 41,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 162,
+    "y": 41
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_RearReset",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.ml_PadInterface_RearReset",
+   "props": {
+    "Alias": "SnRKReset",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 49,
+    "Tag": 1,
+    "Top": 116,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 49,
+    "y": 116
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_RearPause",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.ml_PadInterface_RearPause",
+   "props": {
+    "Alias": "SnRKPause",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 162,
+    "Tag": 1,
+    "Top": 116,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 162,
+    "y": 116
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_RearHome",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.ml_PadInterface_RearHome",
+   "props": {
+    "Alias": "SnRKHome",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 275,
+    "Tag": 1,
+    "Top": 116,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 275,
+    "y": 116
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_RearStart",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.ml_PadInterface_RearStart",
+   "props": {
+    "Alias": "SnRKStart",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 388,
+    "Tag": 1,
+    "Top": 116,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 388,
+    "y": 116
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_RearOneCycle",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.ml_PadInterface_RearOneCycle",
+   "props": {
+    "Alias": "SnRKOneCycle",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 49,
+    "Tag": 1,
+    "Top": 192,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 49,
+    "y": 192
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_RearRetry",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.ml_PadInterface_RearRetry",
+   "props": {
+    "Alias": "SnRKRetry",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 162,
+    "Tag": 1,
+    "Top": 192,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 162,
+    "y": 192
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_RearSkip",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.ml_PadInterface_RearSkip",
+   "props": {
+    "Alias": "SnRKSkip",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 275,
+    "Tag": 1,
+    "Top": 192,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 275,
+    "y": 192
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_RearCleanOut",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.ml_PadInterface_RearCleanOut",
+   "props": {
+    "Alias": "SnRKCleanOut",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 388,
+    "Tag": 1,
+    "Top": 192,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 388,
+    "y": 192
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_RearTrayFeed",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.ml_PadInterface_RearTrayFeed",
+   "props": {
+    "Alias": "SnRKTrayFeed",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 49,
+    "Tag": 1,
+    "Top": 268,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 49,
+    "y": 268
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_RearTrayEnd",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.ml_PadInterface_RearTrayEnd",
+   "props": {
+    "Alias": "SnRKTrayEnd",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 162,
+    "Tag": 1,
+    "Top": 268,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 162,
+    "y": 268
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_RearAlarmReset",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.ml_PadInterface_RearAlarmReset",
+   "props": {
+    "Alias": "SnRKAlarmReset",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 275,
+    "Tag": 1,
+    "Top": 268,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 275,
+    "y": 268
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_RearStep",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.ml_PadInterface_RearStep",
+   "props": {
+    "Alias": "SnRKManualStep",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 275,
+    "Tag": 1,
+    "Top": 344,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 275,
+    "y": 344
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_RearTStart",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.ml_PadInterface_RearTStart",
+   "props": {
+    "Alias": "SnRKManualTStart",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 388,
+    "Tag": 1,
+    "Top": 344,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 388,
+    "y": 344
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_Rear",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.ml_PadInterface_Rear",
+   "props": {
+    "Alias": "SnRearPadActive",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 388,
+    "Tag": 1,
+    "Top": 41,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 388,
+    "y": 41
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ml_PadInterface_RearSafeLock",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.ml_PadInterface_RearSafeLock",
+   "props": {
+    "Alias": "SnRKSafeLock",
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 49,
+    "Tag": 1,
+    "Top": 344,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 49,
+    "y": 344
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pn_PadInterface_RearTop",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.pn_PadInterface_RearTop",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Caption": "Rear",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -19,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 32,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 2,
+    "Width": 458
+   },
+   "rect": {
+    "h": 32,
+    "w": 458,
+    "x": 2,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_RearPowerOff",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearPowerOff",
+   "props": {
+    "Alias": "SwRKPowerOff",
+    "BevelInner": "bvRaised",
+    "Caption": "Off",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 12,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 1,
+    "Tag": 1,
+    "Top": 62,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 12,
+    "y": 62
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_RearPowerOn",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearPowerOn",
+   "props": {
+    "Alias": "SwRKPowerOn",
+    "BevelInner": "bvRaised",
+    "Caption": "On",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 125,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 2,
+    "Tag": 1,
+    "Top": 62,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 125,
+    "y": 62
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_RearPause",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearPause",
+   "props": {
+    "Alias": "SwRKPause",
+    "BevelInner": "bvRaised",
+    "Caption": "Pause",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 125,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 5,
+    "Tag": 1,
+    "Top": 138,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 125,
+    "y": 138
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_RearReset",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearReset",
+   "props": {
+    "Alias": "SwRKReset",
+    "BevelInner": "bvRaised",
+    "Caption": "Reset",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 12,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 4,
+    "Tag": 1,
+    "Top": 138,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 12,
+    "y": 138
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_RearOneCycle",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearOneCycle",
+   "props": {
+    "Alias": "SwRKOneCycle",
+    "BevelInner": "bvRaised",
+    "Caption": "One Cycle",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 12,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 8,
+    "Tag": 1,
+    "Top": 214,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 12,
+    "y": 214
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_RearRetry",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearRetry",
+   "props": {
+    "Alias": "SwRKRetry",
+    "BevelInner": "bvRaised",
+    "Caption": "Retry",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 125,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 9,
+    "Tag": 1,
+    "Top": 214,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 125,
+    "y": 214
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_RearSkip",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearSkip",
+   "props": {
+    "Alias": "SwRKSkip",
+    "BevelInner": "bvRaised",
+    "Caption": "Skip",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 238,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 10,
+    "Tag": 1,
+    "Top": 214,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 238,
+    "y": 214
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_RearHome",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearHome",
+   "props": {
+    "Alias": "SwRKHome",
+    "BevelInner": "bvRaised",
+    "Caption": "Home",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 238,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 6,
+    "Tag": 1,
+    "Top": 138,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 238,
+    "y": 138
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_RearStart",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearStart",
+   "props": {
+    "Alias": "SwRKStart",
+    "BevelInner": "bvRaised",
+    "Caption": "Start",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 351,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 7,
+    "Tag": 1,
+    "Top": 138,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 351,
+    "y": 138
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_RearCleanOut",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearCleanOut",
+   "props": {
+    "Alias": "SwRKCleanOut",
+    "BevelInner": "bvRaised",
+    "Caption": "Clean Out",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 351,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 11,
+    "Tag": 1,
+    "Top": 214,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 351,
+    "y": 214
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_RearAlarmReset",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearAlarmReset",
+   "props": {
+    "Alias": "SwRKAlarmReset",
+    "BevelInner": "bvRaised",
+    "Caption": "Alarm Reset",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 238,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 14,
+    "Tag": 1,
+    "Top": 290,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 238,
+    "y": 290
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_RearTrayEnd",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearTrayEnd",
+   "props": {
+    "Alias": "SwRKTrayEnd",
+    "BevelInner": "bvRaised",
+    "Caption": "Tray End",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 125,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 13,
+    "Tag": 1,
+    "Top": 290,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 125,
+    "y": 290
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_RearTrayFeed",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearTrayFeed",
+   "props": {
+    "Alias": "SwRKTrayFeed",
+    "BevelInner": "bvRaised",
+    "Caption": "Tray Feed",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 12,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 12,
+    "Tag": 1,
+    "Top": 290,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 12,
+    "y": 290
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_RearStep",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearStep",
+   "props": {
+    "Alias": "SwRKManualStep",
+    "BevelInner": "bvRaised",
+    "Caption": "Step",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 238,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 16,
+    "Tag": 1,
+    "Top": 366,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 238,
+    "y": 366
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_RearTStart",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearTStart",
+   "props": {
+    "Alias": "SwRKManualTStart",
+    "BevelInner": "bvRaised",
+    "Caption": "T. Start",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 351,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 17,
+    "Tag": 1,
+    "Top": 366,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 351,
+    "y": 366
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_RearSafeLock",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_RearSafeLock",
+   "props": {
+    "Alias": "SwRKManualStep",
+    "BevelInner": "bvRaised",
+    "Caption": "Safe Lock",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 12,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 15,
+    "Tag": 1,
+    "Top": 366,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 12,
+    "y": 366
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_Rear",
+   "parent": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear",
+   "path": "fPadInterface.sb_PadInterface_MainPage.pn_PadInterface_Rear.sb_PadInterface_Rear",
+   "props": {
+    "Alias": "SwRearActiveLed",
+    "BevelInner": "bvRaised",
+    "Caption": "Rear",
+    "Color": 8404992,
+    "FalseColor": 8404992,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 48,
+    "Left": 351,
+    "OnMouseDown": "sb_PadInterface_FrontPowerOffMouseDown",
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabOrder": 3,
+    "Tag": 1,
+    "Top": 62,
+    "TrueColor": 16744448,
+    "Width": 96
+   },
+   "rect": {
+    "h": 48,
+    "w": 96,
+    "x": 351,
+    "y": 62
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "sb_PadInterface_ManualSendClick"
+   },
+   "kind": "LEAF",
+   "name": "sb_PadInterface_ManualSend",
+   "parent": "fPadInterface.sb_PadInterface_MainPage",
+   "path": "fPadInterface.sb_PadInterface_MainPage.sb_PadInterface_ManualSend",
+   "props": {
+    "Caption": "Send",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 32,
+    "Left": 228,
+    "OnClick": "sb_PadInterface_ManualSendClick",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 370,
+    "Width": 90
+   },
+   "rect": {
+    "h": 32,
+    "w": 90,
+    "x": 228,
+    "y": 370
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ed_PadInterface_ManualSend",
+   "parent": "fPadInterface.sb_PadInterface_MainPage",
+   "path": "fPadInterface.sb_PadInterface_MainPage.ed_PadInterface_ManualSend",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 22,
+    "Left": 24,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 372,
+    "Width": 189
+   },
+   "rect": {
+    "h": 22,
+    "w": 189,
+    "x": 24,
+    "y": 372
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "btnResetCom",
+   "parent": "fPadInterface.sb_PadInterface_MainPage",
+   "path": "fPadInterface.sb_PadInterface_MainPage.btnResetCom",
+   "props": {
+    "Caption": "Reset Com",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 32,
+    "Left": 228,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 408,
+    "Width": 90
+   },
+   "rect": {
+    "h": 32,
+    "w": 90,
+    "x": 228,
+    "y": 408
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cb_PadInterface_PadLedBling",
+   "parent": "fPadInterface.sb_PadInterface_MainPage",
+   "path": "fPadInterface.sb_PadInterface_MainPage.cb_PadInterface_PadLedBling",
+   "props": {
+    "Caption": "Pad Led Control Bling",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 17,
+    "Left": 24,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 412,
+    "Width": 185
+   },
+   "rect": {
+    "h": 17,
+    "w": 185,
+    "x": 24,
+    "y": 412
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo_PadInterface",
+   "parent": "fPadInterface",
+   "path": "fPadInterface.Memo_PadInterface",
+   "props": {
+    "Align": "alBottom",
+    "Color": 14670284,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -15,
+    "Font.Name": "新細明體",
+    "Font.Style": [],
+    "Height": 206,
+    "Left": 0,
+    "ParentFont": "False",
+    "ScrollBars": "ssBoth",
+    "TabOrder": 2,
+    "Top": 473,
+    "Width": 935
+   },
+   "rect": {
+    "h": 206,
+    "w": 935,
+    "x": 0,
+    "y": 473
+   }
+  }
+ ]
+}

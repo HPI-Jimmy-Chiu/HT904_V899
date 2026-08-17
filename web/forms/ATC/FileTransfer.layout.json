@@ -1,0 +1,44 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "FileTransfer",
+ "form": "frmFileTransfer",
+ "form_class": "TfrmFileTransfer",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "ATC/FileTransfer.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfrmFileTransfer",
+   "events": {},
+   "kind": "ROOT",
+   "name": "frmFileTransfer",
+   "parent": null,
+   "path": "frmFileTransfer",
+   "props": {
+    "Caption": "FileTransfer",
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 314,
+    "Left": 631,
+    "OldCreateOrder": "False",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 682,
+    "Width": 464
+   },
+   "rect": {
+    "h": 314,
+    "w": 464,
+    "x": 631,
+    "y": 682
+   }
+  }
+ ]
+}

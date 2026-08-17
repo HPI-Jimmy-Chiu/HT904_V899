@@ -1,0 +1,916 @@
+{
+ "canvas": {
+  "h": 559,
+  "w": 397
+ },
+ "caption": "Counter Selection",
+ "form": "fCounterSel",
+ "form_class": "TfCounterSel",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "cCounterSel.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfCounterSel",
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fCounterSel",
+   "parent": null,
+   "path": "fCounterSel",
+   "props": {
+    "BorderIcons": [],
+    "BorderStyle": "bsToolWindow",
+    "Caption": "Counter Selection",
+    "ClientHeight": 559,
+    "ClientWidth": 397,
+    "Color": 12761254,
+    "DragKind": "dkDock",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Left": 279,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 116
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 279,
+    "y": 116
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "spbExitClick"
+   },
+   "kind": "LEAF",
+   "name": "spbExit",
+   "parent": "fCounterSel",
+   "path": "fCounterSel.spbExit",
+   "props": {
+    "Caption": "Exit",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 1554,
+     "hex": "0E060000424D0E06000000000000360000002800000016000000160000000100180000000000D805000001000000010000000000000000000000EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF7474A44C4C946C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA44C4C947474A4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C5454C45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC4C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9C645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D46C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC6464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CAC8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEF8C8CAC2424946464D45454C46C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C4C4CBC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424945454C44C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF",
+     "sha1": "f9091dff96fbb403d8fe7eec0dcccd5c7539ad97"
+    },
+    "Height": 48,
+    "Left": 43,
+    "OnClick": "spbExitClick",
+    "ParentFont": "False",
+    "Top": 504,
+    "Width": 314
+   },
+   "rect": {
+    "h": 48,
+    "w": 314,
+    "x": 43,
+    "y": 504
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox17",
+   "parent": "fCounterSel",
+   "path": "fCounterSel.GroupBox17",
+   "props": {
+    "Caption": "Counter Select",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -12,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 462,
+    "Left": 20,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 15,
+    "Width": 353
+   },
+   "rect": {
+    "h": 462,
+    "w": 353,
+    "x": 20,
+    "y": 15
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbLoadingCount",
+   "parent": "fCounterSel.GroupBox17",
+   "path": "fCounterSel.GroupBox17.gbLoadingCount",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -12,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 59,
+    "Left": 11,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 332
+   },
+   "rect": {
+    "h": 59,
+    "w": 332,
+    "x": 11,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labLoadingCount",
+   "parent": "fCounterSel.GroupBox17.gbLoadingCount",
+   "path": "fCounterSel.GroupBox17.gbLoadingCount.labLoadingCount",
+   "props": {
+    "Caption": "Loading Counter",
+    "Height": 13,
+    "Left": 15,
+    "Top": 25,
+    "Width": 78
+   },
+   "rect": {
+    "h": 13,
+    "w": 78,
+    "x": 15,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "rbLoadingCount_On",
+   "parent": "fCounterSel.GroupBox17.gbLoadingCount",
+   "path": "fCounterSel.GroupBox17.gbLoadingCount.rbLoadingCount_On",
+   "props": {
+    "Caption": "ON",
+    "Height": 13,
+    "Left": 119,
+    "TabOrder": 0,
+    "Top": 25,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 119,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "rbLoadingCount_Off",
+   "parent": "fCounterSel.GroupBox17.gbLoadingCount",
+   "path": "fCounterSel.GroupBox17.gbLoadingCount.rbLoadingCount_Off",
+   "props": {
+    "Caption": "OFF",
+    "Height": 13,
+    "Left": 186,
+    "TabOrder": 1,
+    "Top": 25,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 186,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbContactCount",
+   "parent": "fCounterSel.GroupBox17",
+   "path": "fCounterSel.GroupBox17.gbContactCount",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -12,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 59,
+    "Left": 11,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 72,
+    "Width": 332
+   },
+   "rect": {
+    "h": 59,
+    "w": 332,
+    "x": 11,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labContactCount",
+   "parent": "fCounterSel.GroupBox17.gbContactCount",
+   "path": "fCounterSel.GroupBox17.gbContactCount.labContactCount",
+   "props": {
+    "Caption": "Contact Count",
+    "Height": 13,
+    "Left": 16,
+    "Top": 25,
+    "Width": 68
+   },
+   "rect": {
+    "h": 13,
+    "w": 68,
+    "x": 16,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "rbContactCount_On",
+   "parent": "fCounterSel.GroupBox17.gbContactCount",
+   "path": "fCounterSel.GroupBox17.gbContactCount.rbContactCount_On",
+   "props": {
+    "Caption": "ON",
+    "Height": 18,
+    "Left": 119,
+    "TabOrder": 0,
+    "Top": 25,
+    "Width": 60
+   },
+   "rect": {
+    "h": 18,
+    "w": 60,
+    "x": 119,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "rbContactCount_Off",
+   "parent": "fCounterSel.GroupBox17.gbContactCount",
+   "path": "fCounterSel.GroupBox17.gbContactCount.rbContactCount_Off",
+   "props": {
+    "Caption": "OFF",
+    "Height": 18,
+    "Left": 186,
+    "TabOrder": 1,
+    "Top": 25,
+    "Width": 60
+   },
+   "rect": {
+    "h": 18,
+    "w": 60,
+    "x": 186,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbTestCategory",
+   "parent": "fCounterSel.GroupBox17",
+   "path": "fCounterSel.GroupBox17.gbTestCategory",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -12,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 58,
+    "Left": 11,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 134,
+    "Width": 332
+   },
+   "rect": {
+    "h": 58,
+    "w": 332,
+    "x": 11,
+    "y": 134
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labTestCategory",
+   "parent": "fCounterSel.GroupBox17.gbTestCategory",
+   "path": "fCounterSel.GroupBox17.gbTestCategory.labTestCategory",
+   "props": {
+    "Caption": "Tester Category",
+    "Height": 13,
+    "Left": 16,
+    "Top": 25,
+    "Width": 75
+   },
+   "rect": {
+    "h": 13,
+    "w": 75,
+    "x": 16,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "rbTestCategory_On",
+   "parent": "fCounterSel.GroupBox17.gbTestCategory",
+   "path": "fCounterSel.GroupBox17.gbTestCategory.rbTestCategory_On",
+   "props": {
+    "Caption": "ON",
+    "Height": 18,
+    "Left": 119,
+    "TabOrder": 1,
+    "Top": 25,
+    "Width": 60
+   },
+   "rect": {
+    "h": 18,
+    "w": 60,
+    "x": 119,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "rbTestCategory_Off",
+   "parent": "fCounterSel.GroupBox17.gbTestCategory",
+   "path": "fCounterSel.GroupBox17.gbTestCategory.rbTestCategory_Off",
+   "props": {
+    "Caption": "OFF",
+    "Height": 18,
+    "Left": 186,
+    "TabOrder": 2,
+    "Top": 25,
+    "Width": 60
+   },
+   "rect": {
+    "h": 18,
+    "w": 60,
+    "x": 186,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "rgTestCategory",
+   "parent": "fCounterSel.GroupBox17.gbTestCategory",
+   "path": "fCounterSel.GroupBox17.gbTestCategory.rgTestCategory",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -9,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 45,
+    "ItemIndex": 1,
+    "Items.Strings": [
+     "Normal",
+     "By Arm"
+    ],
+    "Left": 242,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 8,
+    "Width": 82
+   },
+   "rect": {
+    "h": 45,
+    "w": 82,
+    "x": 242,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbScanner",
+   "parent": "fCounterSel.GroupBox17",
+   "path": "fCounterSel.GroupBox17.gbScanner",
+   "props": {
+    "Enabled": "False",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -12,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 59,
+    "Left": 11,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 194,
+    "Width": 332
+   },
+   "rect": {
+    "h": 59,
+    "w": 332,
+    "x": 11,
+    "y": 194
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labScanner",
+   "parent": "fCounterSel.GroupBox17.gbScanner",
+   "path": "fCounterSel.GroupBox17.gbScanner.labScanner",
+   "props": {
+    "Caption": "Scanner Category",
+    "Height": 13,
+    "Left": 14,
+    "Top": 25,
+    "Width": 85
+   },
+   "rect": {
+    "h": 13,
+    "w": 85,
+    "x": 14,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "rbScanner_On",
+   "parent": "fCounterSel.GroupBox17.gbScanner",
+   "path": "fCounterSel.GroupBox17.gbScanner.rbScanner_On",
+   "props": {
+    "Caption": "ON",
+    "Height": 18,
+    "Left": 119,
+    "TabOrder": 0,
+    "Top": 25,
+    "Width": 60
+   },
+   "rect": {
+    "h": 18,
+    "w": 60,
+    "x": 119,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "rbScanner_Off",
+   "parent": "fCounterSel.GroupBox17.gbScanner",
+   "path": "fCounterSel.GroupBox17.gbScanner.rbScanner_Off",
+   "props": {
+    "Caption": "OFF",
+    "Height": 18,
+    "Left": 186,
+    "TabOrder": 1,
+    "Top": 25,
+    "Width": 60
+   },
+   "rect": {
+    "h": 18,
+    "w": 60,
+    "x": 186,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbTemperature",
+   "parent": "fCounterSel.GroupBox17",
+   "path": "fCounterSel.GroupBox17.gbTemperature",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -12,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 59,
+    "Left": 11,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 255,
+    "Width": 332
+   },
+   "rect": {
+    "h": 59,
+    "w": 332,
+    "x": 11,
+    "y": 255
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labTemperature",
+   "parent": "fCounterSel.GroupBox17.gbTemperature",
+   "path": "fCounterSel.GroupBox17.gbTemperature.labTemperature",
+   "props": {
+    "Caption": "Temperature",
+    "Height": 13,
+    "Left": 16,
+    "Top": 25,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 16,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "rbTemperature_On",
+   "parent": "fCounterSel.GroupBox17.gbTemperature",
+   "path": "fCounterSel.GroupBox17.gbTemperature.rbTemperature_On",
+   "props": {
+    "Caption": "ON",
+    "Height": 18,
+    "Left": 119,
+    "TabOrder": 0,
+    "Top": 25,
+    "Width": 60
+   },
+   "rect": {
+    "h": 18,
+    "w": 60,
+    "x": 119,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "rbTemperature_Off",
+   "parent": "fCounterSel.GroupBox17.gbTemperature",
+   "path": "fCounterSel.GroupBox17.gbTemperature.rbTemperature_Off",
+   "props": {
+    "Caption": "OFF",
+    "Height": 18,
+    "Left": 186,
+    "TabOrder": 1,
+    "Top": 25,
+    "Width": 60
+   },
+   "rect": {
+    "h": 18,
+    "w": 60,
+    "x": 186,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbBinAssign",
+   "parent": "fCounterSel.GroupBox17",
+   "path": "fCounterSel.GroupBox17.gbBinAssign",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -12,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 58,
+    "Left": 11,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 316,
+    "Width": 332
+   },
+   "rect": {
+    "h": 58,
+    "w": 332,
+    "x": 11,
+    "y": 316
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labBinAssign",
+   "parent": "fCounterSel.GroupBox17.gbBinAssign",
+   "path": "fCounterSel.GroupBox17.gbBinAssign.labBinAssign",
+   "props": {
+    "Caption": "Bin Assign",
+    "Height": 13,
+    "Left": 16,
+    "Top": 25,
+    "Width": 49
+   },
+   "rect": {
+    "h": 13,
+    "w": 49,
+    "x": 16,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "rbBinAssign_On",
+   "parent": "fCounterSel.GroupBox17.gbBinAssign",
+   "path": "fCounterSel.GroupBox17.gbBinAssign.rbBinAssign_On",
+   "props": {
+    "Caption": "ON",
+    "Height": 18,
+    "Left": 119,
+    "TabOrder": 0,
+    "Top": 25,
+    "Width": 60
+   },
+   "rect": {
+    "h": 18,
+    "w": 60,
+    "x": 119,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "rbBinAssign_Off",
+   "parent": "fCounterSel.GroupBox17.gbBinAssign",
+   "path": "fCounterSel.GroupBox17.gbBinAssign.rbBinAssign_Off",
+   "props": {
+    "Caption": "OFF",
+    "Height": 18,
+    "Left": 186,
+    "TabOrder": 1,
+    "Top": 25,
+    "Width": 60
+   },
+   "rect": {
+    "h": 18,
+    "w": 60,
+    "x": 186,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbStatus",
+   "parent": "fCounterSel.GroupBox17",
+   "path": "fCounterSel.GroupBox17.gbStatus",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -12,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 74,
+    "Left": 11,
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Top": 376,
+    "Width": 332
+   },
+   "rect": {
+    "h": 74,
+    "w": 332,
+    "x": 11,
+    "y": 376
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labStatus",
+   "parent": "fCounterSel.GroupBox17.gbStatus",
+   "path": "fCounterSel.GroupBox17.gbStatus.labStatus",
+   "props": {
+    "Caption": "Status",
+    "Height": 13,
+    "Left": 16,
+    "Top": 32,
+    "Width": 30
+   },
+   "rect": {
+    "h": 13,
+    "w": 30,
+    "x": 16,
+    "y": 32
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbIndexTime",
+   "parent": "fCounterSel.GroupBox17.gbStatus",
+   "path": "fCounterSel.GroupBox17.gbStatus.cbIndexTime",
+   "props": {
+    "Caption": "Index Time",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -12,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 126,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 15,
+    "Width": 90
+   },
+   "rect": {
+    "h": 16,
+    "w": 90,
+    "x": 126,
+    "y": 15
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbUPH",
+   "parent": "fCounterSel.GroupBox17.gbStatus",
+   "path": "fCounterSel.GroupBox17.gbStatus.cbUPH",
+   "props": {
+    "Caption": "UPH",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -12,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 15,
+    "Left": 126,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 46,
+    "Width": 98
+   },
+   "rect": {
+    "h": 15,
+    "w": 98,
+    "x": 126,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbCycleTime",
+   "parent": "fCounterSel.GroupBox17.gbStatus",
+   "path": "fCounterSel.GroupBox17.gbStatus.cbCycleTime",
+   "props": {
+    "Caption": "Cycle Time",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -12,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 230,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 15,
+    "Width": 90
+   },
+   "rect": {
+    "h": 16,
+    "w": 90,
+    "x": 230,
+    "y": 15
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbContactHeight",
+   "parent": "fCounterSel.GroupBox17.gbStatus",
+   "path": "fCounterSel.GroupBox17.gbStatus.cbContactHeight",
+   "props": {
+    "Caption": "Contact Height",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -12,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 15,
+    "Left": 230,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 46,
+    "Width": 98
+   },
+   "rect": {
+    "h": 15,
+    "w": 98,
+    "x": 230,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbDefaultValue",
+   "parent": "fCounterSel",
+   "path": "fCounterSel.cbDefaultValue",
+   "props": {
+    "Caption": "Default Position Value",
+    "Height": 16,
+    "Left": 226,
+    "TabOrder": 1,
+    "Top": 483,
+    "Width": 151
+   },
+   "rect": {
+    "h": 16,
+    "w": 151,
+    "x": 226,
+    "y": 483
+   }
+  }
+ ]
+}

@@ -1,0 +1,194 @@
+{
+ "canvas": {
+  "h": 198,
+  "w": 365
+ },
+ "caption": "Defrost Note",
+ "form": "fDefrostNote",
+ "form_class": "TfDefrostNote",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "cDefrostNote.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfDefrostNote",
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fDefrostNote",
+   "parent": null,
+   "path": "fDefrostNote",
+   "props": {
+    "BorderIcons": [
+     "biHelp"
+    ],
+    "BorderStyle": "bsToolWindow",
+    "Caption": "Defrost Note",
+    "ClientHeight": 198,
+    "ClientWidth": 365,
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Left": 688,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 196
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 688,
+    "y": 196
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel11",
+   "parent": "fDefrostNote",
+   "path": "fDefrostNote.Panel11",
+   "props": {
+    "Color": 12761254,
+    "Height": 197,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 357
+   },
+   "rect": {
+    "h": 197,
+    "w": 357,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnl_ShowMessage",
+   "parent": "fDefrostNote.Panel11",
+   "path": "fDefrostNote.Panel11.pnl_ShowMessage",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Defrost Time Has Arrived",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -27,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 132,
+    "Left": 1,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 1,
+    "Width": 355
+   },
+   "rect": {
+    "h": 132,
+    "w": 355,
+    "x": 1,
+    "y": 1
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btn_StartClick"
+   },
+   "kind": "LEAF",
+   "name": "btn_Start",
+   "parent": "fDefrostNote.Panel11",
+   "path": "fDefrostNote.Panel11.btn_Start",
+   "props": {
+    "Caption": "Start",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 37,
+    "Left": 100,
+    "OnClick": "btn_StartClick",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 144,
+    "Width": 85
+   },
+   "rect": {
+    "h": 37,
+    "w": 85,
+    "x": 100,
+    "y": 144
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btn_InterruptClick"
+   },
+   "kind": "LEAF",
+   "name": "btn_Interrupt",
+   "parent": "fDefrostNote.Panel11",
+   "path": "fDefrostNote.Panel11.btn_Interrupt",
+   "props": {
+    "Caption": "Interrupt ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 37,
+    "Left": 192,
+    "OnClick": "btn_InterruptClick",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 144,
+    "Width": 85
+   },
+   "rect": {
+    "h": 37,
+    "w": 85,
+    "x": 192,
+    "y": 144
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "Timer1Timer"
+   },
+   "kind": "NONVISUAL",
+   "name": "Timer1",
+   "parent": "fDefrostNote",
+   "path": "fDefrostNote.Timer1",
+   "props": {
+    "Interval": 500,
+    "Left": 320,
+    "OnTimer": "Timer1Timer",
+    "Top": 156
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 320,
+    "y": 156
+   }
+  }
+ ]
+}

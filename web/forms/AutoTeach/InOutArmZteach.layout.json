@@ -1,0 +1,2204 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "Auto Teach",
+ "form": "Zteach",
+ "form_class": "TZteach",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "AutoTeach/InOutArmZteach.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TZteach",
+   "events": {
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "Zteach",
+   "parent": null,
+   "path": "Zteach",
+   "props": {
+    "Caption": "Auto Teach",
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 752,
+    "Left": 396,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 163,
+    "Width": 1181
+   },
+   "rect": {
+    "h": 752,
+    "w": 1181,
+    "x": 396,
+    "y": 163
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel1",
+   "parent": "Zteach",
+   "path": "Zteach.Panel1",
+   "props": {
+    "Align": "alClient",
+    "Color": 12761254,
+    "Height": 718,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 1173
+   },
+   "rect": {
+    "h": 718,
+    "w": 1173,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton14Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton14",
+   "parent": "Zteach.Panel1",
+   "path": "Zteach.Panel1.SpeedButton14",
+   "props": {
+    "Caption": "STOP",
+    "Height": 30,
+    "Left": 996,
+    "OnClick": "SpeedButton14Click",
+    "Top": 264,
+    "Width": 100
+   },
+   "rect": {
+    "h": 30,
+    "w": 100,
+    "x": 996,
+    "y": 264
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton11Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton11",
+   "parent": "Zteach.Panel1",
+   "path": "Zteach.Panel1.SpeedButton11",
+   "props": {
+    "Caption": "Start",
+    "Height": 30,
+    "Left": 996,
+    "OnClick": "SpeedButton11Click",
+    "Top": 228,
+    "Width": 100
+   },
+   "rect": {
+    "h": 30,
+    "w": 100,
+    "x": 996,
+    "y": 228
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox8",
+   "parent": "Zteach.Panel1",
+   "path": "Zteach.Panel1.GroupBox8",
+   "props": {
+    "Caption": "InArm Z",
+    "Height": 130,
+    "Left": 6,
+    "TabOrder": 0,
+    "Top": 3,
+    "Width": 305
+   },
+   "rect": {
+    "h": 130,
+    "w": 305,
+    "x": 6,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label46",
+   "parent": "Zteach.Panel1.GroupBox8",
+   "path": "Zteach.Panel1.GroupBox8.Label46",
+   "props": {
+    "Caption": "A",
+    "Height": 13,
+    "Left": 32,
+    "Top": 16,
+    "Width": 7
+   },
+   "rect": {
+    "h": 13,
+    "w": 7,
+    "x": 32,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label47",
+   "parent": "Zteach.Panel1.GroupBox8",
+   "path": "Zteach.Panel1.GroupBox8.Label47",
+   "props": {
+    "Caption": "B",
+    "Height": 13,
+    "Left": 32,
+    "Top": 59,
+    "Width": 7
+   },
+   "rect": {
+    "h": 13,
+    "w": 7,
+    "x": 32,
+    "y": 59
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label48",
+   "parent": "Zteach.Panel1.GroupBox8",
+   "path": "Zteach.Panel1.GroupBox8.Label48",
+   "props": {
+    "Caption": "C",
+    "Height": 13,
+    "Left": 104,
+    "Top": 16,
+    "Width": 7
+   },
+   "rect": {
+    "h": 13,
+    "w": 7,
+    "x": 104,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label53",
+   "parent": "Zteach.Panel1.GroupBox8",
+   "path": "Zteach.Panel1.GroupBox8.Label53",
+   "props": {
+    "Caption": "D",
+    "Height": 13,
+    "Left": 104,
+    "Top": 59,
+    "Width": 8
+   },
+   "rect": {
+    "h": 13,
+    "w": 8,
+    "x": 104,
+    "y": 59
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label58",
+   "parent": "Zteach.Panel1.GroupBox8",
+   "path": "Zteach.Panel1.GroupBox8.Label58",
+   "props": {
+    "Caption": "E",
+    "Height": 13,
+    "Left": 175,
+    "Top": 16,
+    "Width": 7
+   },
+   "rect": {
+    "h": 13,
+    "w": 7,
+    "x": 175,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label59",
+   "parent": "Zteach.Panel1.GroupBox8",
+   "path": "Zteach.Panel1.GroupBox8.Label59",
+   "props": {
+    "Caption": "F",
+    "Height": 13,
+    "Left": 175,
+    "Top": 59,
+    "Width": 6
+   },
+   "rect": {
+    "h": 13,
+    "w": 6,
+    "x": 175,
+    "y": 59
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label60",
+   "parent": "Zteach.Panel1.GroupBox8",
+   "path": "Zteach.Panel1.GroupBox8.Label60",
+   "props": {
+    "Caption": "G",
+    "Height": 13,
+    "Left": 247,
+    "Top": 16,
+    "Width": 8
+   },
+   "rect": {
+    "h": 13,
+    "w": 8,
+    "x": 247,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label61",
+   "parent": "Zteach.Panel1.GroupBox8",
+   "path": "Zteach.Panel1.GroupBox8.Label61",
+   "props": {
+    "Caption": "H",
+    "Height": 13,
+    "Left": 247,
+    "Top": 59,
+    "Width": 8
+   },
+   "rect": {
+    "h": 13,
+    "w": 8,
+    "x": 247,
+    "y": 59
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "AEdit1Click"
+   },
+   "kind": "LEAF",
+   "name": "AEdit1",
+   "parent": "Zteach.Panel1.GroupBox8",
+   "path": "Zteach.Panel1.GroupBox8.AEdit1",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "Left": 11,
+    "OnClick": "AEdit1Click",
+    "TabOrder": 0,
+    "Top": 32,
+    "Width": 60
+   },
+   "rect": {
+    "h": 21,
+    "w": 60,
+    "x": 11,
+    "y": 32
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "AEdit1Click"
+   },
+   "kind": "LEAF",
+   "name": "AEdit2",
+   "parent": "Zteach.Panel1.GroupBox8",
+   "path": "Zteach.Panel1.GroupBox8.AEdit2",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "Left": 9,
+    "OnClick": "AEdit1Click",
+    "TabOrder": 4,
+    "Top": 75,
+    "Width": 60
+   },
+   "rect": {
+    "h": 21,
+    "w": 60,
+    "x": 9,
+    "y": 75
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "AEdit1Click"
+   },
+   "kind": "LEAF",
+   "name": "AEdit3",
+   "parent": "Zteach.Panel1.GroupBox8",
+   "path": "Zteach.Panel1.GroupBox8.AEdit3",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "Left": 84,
+    "OnClick": "AEdit1Click",
+    "TabOrder": 1,
+    "Top": 32,
+    "Width": 60
+   },
+   "rect": {
+    "h": 21,
+    "w": 60,
+    "x": 84,
+    "y": 32
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "AEdit1Click"
+   },
+   "kind": "LEAF",
+   "name": "AEdit4",
+   "parent": "Zteach.Panel1.GroupBox8",
+   "path": "Zteach.Panel1.GroupBox8.AEdit4",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "Left": 82,
+    "OnClick": "AEdit1Click",
+    "TabOrder": 5,
+    "Top": 75,
+    "Width": 60
+   },
+   "rect": {
+    "h": 21,
+    "w": 60,
+    "x": 82,
+    "y": 75
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "AEdit1Click"
+   },
+   "kind": "LEAF",
+   "name": "AEdit5",
+   "parent": "Zteach.Panel1.GroupBox8",
+   "path": "Zteach.Panel1.GroupBox8.AEdit5",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "Left": 156,
+    "OnClick": "AEdit1Click",
+    "TabOrder": 2,
+    "Top": 32,
+    "Width": 60
+   },
+   "rect": {
+    "h": 21,
+    "w": 60,
+    "x": 156,
+    "y": 32
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "AEdit1Click"
+   },
+   "kind": "LEAF",
+   "name": "AEdit6",
+   "parent": "Zteach.Panel1.GroupBox8",
+   "path": "Zteach.Panel1.GroupBox8.AEdit6",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "Left": 156,
+    "OnClick": "AEdit1Click",
+    "TabOrder": 6,
+    "Top": 75,
+    "Width": 60
+   },
+   "rect": {
+    "h": 21,
+    "w": 60,
+    "x": 156,
+    "y": 75
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "AEdit1Click"
+   },
+   "kind": "LEAF",
+   "name": "AEdit7",
+   "parent": "Zteach.Panel1.GroupBox8",
+   "path": "Zteach.Panel1.GroupBox8.AEdit7",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "Left": 229,
+    "OnClick": "AEdit1Click",
+    "TabOrder": 3,
+    "Top": 32,
+    "Width": 60
+   },
+   "rect": {
+    "h": 21,
+    "w": 60,
+    "x": 229,
+    "y": 32
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "AEdit1Click"
+   },
+   "kind": "LEAF",
+   "name": "AEdit8",
+   "parent": "Zteach.Panel1.GroupBox8",
+   "path": "Zteach.Panel1.GroupBox8.AEdit8",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "Left": 229,
+    "OnClick": "AEdit1Click",
+    "TabOrder": 7,
+    "Top": 75,
+    "Width": 60
+   },
+   "rect": {
+    "h": 21,
+    "w": 60,
+    "x": 229,
+    "y": 75
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "SendInarmClick"
+   },
+   "kind": "LEAF",
+   "name": "SendInarm",
+   "parent": "Zteach.Panel1.GroupBox8",
+   "path": "Zteach.Panel1.GroupBox8.SendInarm",
+   "props": {
+    "Caption": "Send InArm",
+    "Height": 25,
+    "Left": 222,
+    "OnClick": "SendInarmClick",
+    "TabOrder": 8,
+    "Top": 101,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 222,
+    "y": 101
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox9",
+   "parent": "Zteach.Panel1",
+   "path": "Zteach.Panel1.GroupBox9",
+   "props": {
+    "Caption": "OutArm Z",
+    "Height": 130,
+    "Left": 322,
+    "TabOrder": 1,
+    "Top": 4,
+    "Width": 305
+   },
+   "rect": {
+    "h": 130,
+    "w": 305,
+    "x": 322,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label62",
+   "parent": "Zteach.Panel1.GroupBox9",
+   "path": "Zteach.Panel1.GroupBox9.Label62",
+   "props": {
+    "Caption": "A",
+    "Height": 13,
+    "Left": 32,
+    "Top": 16,
+    "Width": 7
+   },
+   "rect": {
+    "h": 13,
+    "w": 7,
+    "x": 32,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label63",
+   "parent": "Zteach.Panel1.GroupBox9",
+   "path": "Zteach.Panel1.GroupBox9.Label63",
+   "props": {
+    "Caption": "B",
+    "Height": 13,
+    "Left": 32,
+    "Top": 59,
+    "Width": 7
+   },
+   "rect": {
+    "h": 13,
+    "w": 7,
+    "x": 32,
+    "y": 59
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label64",
+   "parent": "Zteach.Panel1.GroupBox9",
+   "path": "Zteach.Panel1.GroupBox9.Label64",
+   "props": {
+    "Caption": "C",
+    "Height": 13,
+    "Left": 104,
+    "Top": 16,
+    "Width": 7
+   },
+   "rect": {
+    "h": 13,
+    "w": 7,
+    "x": 104,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label65",
+   "parent": "Zteach.Panel1.GroupBox9",
+   "path": "Zteach.Panel1.GroupBox9.Label65",
+   "props": {
+    "Caption": "D",
+    "Height": 13,
+    "Left": 104,
+    "Top": 59,
+    "Width": 8
+   },
+   "rect": {
+    "h": 13,
+    "w": 8,
+    "x": 104,
+    "y": 59
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label70",
+   "parent": "Zteach.Panel1.GroupBox9",
+   "path": "Zteach.Panel1.GroupBox9.Label70",
+   "props": {
+    "Caption": "E",
+    "Height": 13,
+    "Left": 175,
+    "Top": 16,
+    "Width": 7
+   },
+   "rect": {
+    "h": 13,
+    "w": 7,
+    "x": 175,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label85",
+   "parent": "Zteach.Panel1.GroupBox9",
+   "path": "Zteach.Panel1.GroupBox9.Label85",
+   "props": {
+    "Caption": "F",
+    "Height": 13,
+    "Left": 175,
+    "Top": 59,
+    "Width": 6
+   },
+   "rect": {
+    "h": 13,
+    "w": 6,
+    "x": 175,
+    "y": 59
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label101",
+   "parent": "Zteach.Panel1.GroupBox9",
+   "path": "Zteach.Panel1.GroupBox9.Label101",
+   "props": {
+    "Caption": "G",
+    "Height": 13,
+    "Left": 247,
+    "Top": 16,
+    "Width": 8
+   },
+   "rect": {
+    "h": 13,
+    "w": 8,
+    "x": 247,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label102",
+   "parent": "Zteach.Panel1.GroupBox9",
+   "path": "Zteach.Panel1.GroupBox9.Label102",
+   "props": {
+    "Caption": "H",
+    "Height": 13,
+    "Left": 247,
+    "Top": 59,
+    "Width": 8
+   },
+   "rect": {
+    "h": 13,
+    "w": 8,
+    "x": 247,
+    "y": 59
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "AEdit1Click"
+   },
+   "kind": "LEAF",
+   "name": "AOutEdit7",
+   "parent": "Zteach.Panel1.GroupBox9",
+   "path": "Zteach.Panel1.GroupBox9.AOutEdit7",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "Left": 229,
+    "OnClick": "AEdit1Click",
+    "TabOrder": 3,
+    "Top": 33,
+    "Width": 60
+   },
+   "rect": {
+    "h": 21,
+    "w": 60,
+    "x": 229,
+    "y": 33
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "AEdit1Click"
+   },
+   "kind": "LEAF",
+   "name": "AOutEdit5",
+   "parent": "Zteach.Panel1.GroupBox9",
+   "path": "Zteach.Panel1.GroupBox9.AOutEdit5",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "Left": 156,
+    "OnClick": "AEdit1Click",
+    "TabOrder": 2,
+    "Top": 33,
+    "Width": 60
+   },
+   "rect": {
+    "h": 21,
+    "w": 60,
+    "x": 156,
+    "y": 33
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "AEdit1Click"
+   },
+   "kind": "LEAF",
+   "name": "AOutEdit3",
+   "parent": "Zteach.Panel1.GroupBox9",
+   "path": "Zteach.Panel1.GroupBox9.AOutEdit3",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "Left": 84,
+    "OnClick": "AEdit1Click",
+    "TabOrder": 1,
+    "Top": 33,
+    "Width": 60
+   },
+   "rect": {
+    "h": 21,
+    "w": 60,
+    "x": 84,
+    "y": 33
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "AEdit1Click"
+   },
+   "kind": "LEAF",
+   "name": "AOutEdit1",
+   "parent": "Zteach.Panel1.GroupBox9",
+   "path": "Zteach.Panel1.GroupBox9.AOutEdit1",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "Left": 11,
+    "OnClick": "AEdit1Click",
+    "TabOrder": 0,
+    "Top": 33,
+    "Width": 60
+   },
+   "rect": {
+    "h": 21,
+    "w": 60,
+    "x": 11,
+    "y": 33
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "AEdit1Click"
+   },
+   "kind": "LEAF",
+   "name": "AOutEdit8",
+   "parent": "Zteach.Panel1.GroupBox9",
+   "path": "Zteach.Panel1.GroupBox9.AOutEdit8",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "Left": 229,
+    "OnClick": "AEdit1Click",
+    "TabOrder": 7,
+    "Top": 73,
+    "Width": 60
+   },
+   "rect": {
+    "h": 21,
+    "w": 60,
+    "x": 229,
+    "y": 73
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "AEdit1Click"
+   },
+   "kind": "LEAF",
+   "name": "AOutEdit6",
+   "parent": "Zteach.Panel1.GroupBox9",
+   "path": "Zteach.Panel1.GroupBox9.AOutEdit6",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "Left": 156,
+    "OnClick": "AEdit1Click",
+    "TabOrder": 6,
+    "Top": 73,
+    "Width": 60
+   },
+   "rect": {
+    "h": 21,
+    "w": 60,
+    "x": 156,
+    "y": 73
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "AEdit1Click"
+   },
+   "kind": "LEAF",
+   "name": "AOutEdit4",
+   "parent": "Zteach.Panel1.GroupBox9",
+   "path": "Zteach.Panel1.GroupBox9.AOutEdit4",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "Left": 84,
+    "OnClick": "AEdit1Click",
+    "TabOrder": 5,
+    "Top": 73,
+    "Width": 60
+   },
+   "rect": {
+    "h": 21,
+    "w": 60,
+    "x": 84,
+    "y": 73
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "AEdit1Click"
+   },
+   "kind": "LEAF",
+   "name": "AOutEdit2",
+   "parent": "Zteach.Panel1.GroupBox9",
+   "path": "Zteach.Panel1.GroupBox9.AOutEdit2",
+   "props": {
+    "Height": 21,
+    "ImeName": "",
+    "Left": 11,
+    "OnClick": "AEdit1Click",
+    "TabOrder": 4,
+    "Top": 73,
+    "Width": 60
+   },
+   "rect": {
+    "h": 21,
+    "w": 60,
+    "x": 11,
+    "y": 73
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "SendOutarmClick"
+   },
+   "kind": "LEAF",
+   "name": "SendOutarm",
+   "parent": "Zteach.Panel1.GroupBox9",
+   "path": "Zteach.Panel1.GroupBox9.SendOutarm",
+   "props": {
+    "Caption": "Send OutArm",
+    "Height": 25,
+    "Left": 218,
+    "OnClick": "SendOutarmClick",
+    "TabOrder": 8,
+    "Top": 100,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 218,
+    "y": 100
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo1",
+   "parent": "Zteach.Panel1",
+   "path": "Zteach.Panel1.Memo1",
+   "props": {
+    "Color": 14670284,
+    "Height": 259,
+    "ImeMode": "imClose",
+    "Left": 755,
+    "TabOrder": 9,
+    "Top": 161,
+    "Width": 233
+   },
+   "rect": {
+    "h": 259,
+    "w": 233,
+    "x": 755,
+    "y": 161
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBitBtn",
+   "events": {
+    "OnClick": "BitBtn1Click"
+   },
+   "kind": "LEAF",
+   "name": "BitBtn1",
+   "parent": "Zteach.Panel1",
+   "path": "Zteach.Panel1.BitBtn1",
+   "props": {
+    "Caption": "Exit",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 41,
+    "Left": 732,
+    "OnClick": "BitBtn1Click",
+    "ParentFont": "False",
+    "TabOrder": 15,
+    "Top": 646,
+    "Width": 145
+   },
+   "rect": {
+    "h": 41,
+    "w": 145,
+    "x": 732,
+    "y": 646
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "AutoTeachSingleClick"
+   },
+   "kind": "SUBDLG",
+   "name": "AutoTeachSingle",
+   "parent": "Zteach.Panel1",
+   "path": "Zteach.Panel1.AutoTeachSingle",
+   "props": {
+    "Caption": "AutoTeach",
+    "Color": "clRed",
+    "Height": 105,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "Single",
+     "Full-AutoTeach"
+    ],
+    "Left": 820,
+    "OnClick": "AutoTeachSingleClick",
+    "ParentColor": "False",
+    "TabOrder": 3,
+    "Top": 9,
+    "Width": 185
+   },
+   "rect": {
+    "h": 105,
+    "w": 185,
+    "x": 820,
+    "y": 9
+   }
+  },
+  {
+   "align": null,
+   "cls": "TStringGrid",
+   "events": {
+    "OnMouseDown": "StringGrid1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "StringGrid1",
+   "parent": "Zteach.Panel1",
+   "path": "Zteach.Panel1.StringGrid1",
+   "props": {
+    "ColCount": 13,
+    "Color": 14670284,
+    "DefaultColWidth": 80,
+    "DefaultRowHeight": 20,
+    "FixedColor": 9534289,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 214,
+    "Left": 10,
+    "OnMouseDown": "StringGrid1MouseDown",
+    "ParentFont": "False",
+    "TabOrder": 11,
+    "Top": 423,
+    "Width": 491
+   },
+   "rect": {
+    "h": 214,
+    "w": 491,
+    "x": 10,
+    "y": 423
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "SendDataClick"
+   },
+   "kind": "LEAF",
+   "name": "SendData",
+   "parent": "Zteach.Panel1",
+   "path": "Zteach.Panel1.SendData",
+   "props": {
+    "Caption": "SendData",
+    "Height": 41,
+    "Left": 92,
+    "OnClick": "SendDataClick",
+    "TabOrder": 14,
+    "Top": 641,
+    "Width": 85
+   },
+   "rect": {
+    "h": 41,
+    "w": 85,
+    "x": 92,
+    "y": 641
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "rgTeachModeClick"
+   },
+   "kind": "SUBDLG",
+   "name": "rgTeachMode",
+   "parent": "Zteach.Panel1",
+   "path": "Zteach.Panel1.rgTeachMode",
+   "props": {
+    "Caption": "Teaching Mode",
+    "Color": "clAqua",
+    "Height": 105,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "1 point teach",
+     "3 point teach",
+     "Z teach offset"
+    ],
+    "Left": 632,
+    "OnClick": "rgTeachModeClick",
+    "ParentColor": "False",
+    "TabOrder": 2,
+    "Top": 9,
+    "Width": 185
+   },
+   "rect": {
+    "h": 105,
+    "w": 185,
+    "x": 632,
+    "y": 9
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbInarm",
+   "parent": "Zteach.Panel1",
+   "path": "Zteach.Panel1.gbInarm",
+   "props": {
+    "Caption": "Input Arm",
+    "Height": 265,
+    "Left": 8,
+    "TabOrder": 7,
+    "Top": 155,
+    "Width": 313
+   },
+   "rect": {
+    "h": 265,
+    "w": 313,
+    "x": 8,
+    "y": 155
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "sbHotPlate2",
+   "parent": "Zteach.Panel1.gbInarm",
+   "path": "Zteach.Panel1.gbInarm.sbHotPlate2",
+   "props": {
+    "Caption": "Hot Plate 2",
+    "GroupIndex": 1,
+    "Height": 88,
+    "Left": 7,
+    "OnClick": "sbLoaderClick",
+    "Tag": 5,
+    "Top": 15,
+    "Width": 97
+   },
+   "rect": {
+    "h": 88,
+    "w": 97,
+    "x": 7,
+    "y": 15
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "sbHotPlate1",
+   "parent": "Zteach.Panel1.gbInarm",
+   "path": "Zteach.Panel1.gbInarm.sbHotPlate1",
+   "props": {
+    "Caption": "Hot Plate 1",
+    "GroupIndex": 1,
+    "Height": 88,
+    "Left": 7,
+    "OnClick": "sbLoaderClick",
+    "Tag": 4,
+    "Top": 110,
+    "Width": 97
+   },
+   "rect": {
+    "h": 88,
+    "w": 97,
+    "x": 7,
+    "y": 110
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "sbInSht2",
+   "parent": "Zteach.Panel1.gbInarm",
+   "path": "Zteach.Panel1.gbInarm.sbInSht2",
+   "props": {
+    "Caption": "Shuttle 2",
+    "GroupIndex": 1,
+    "Height": 33,
+    "Left": 112,
+    "OnClick": "sbLoaderClick",
+    "Tag": 2,
+    "Top": 16,
+    "Width": 97
+   },
+   "rect": {
+    "h": 33,
+    "w": 97,
+    "x": 112,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "sbInSht1",
+   "parent": "Zteach.Panel1.gbInarm",
+   "path": "Zteach.Panel1.gbInarm.sbInSht1",
+   "props": {
+    "Caption": "Shuttle 1",
+    "GroupIndex": 1,
+    "Height": 33,
+    "Left": 113,
+    "OnClick": "sbLoaderClick",
+    "Tag": 1,
+    "Top": 94,
+    "Width": 97
+   },
+   "rect": {
+    "h": 33,
+    "w": 97,
+    "x": 113,
+    "y": 94
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "sbInZ_Calibration",
+   "parent": "Zteach.Panel1.gbInarm",
+   "path": "Zteach.Panel1.gbInarm.sbInZ_Calibration",
+   "props": {
+    "Caption": "Z Calibration",
+    "GroupIndex": 1,
+    "Height": 33,
+    "Left": 213,
+    "OnClick": "sbLoaderClick",
+    "Top": 16,
+    "Width": 97
+   },
+   "rect": {
+    "h": 33,
+    "w": 97,
+    "x": 213,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "sbInRotate",
+   "parent": "Zteach.Panel1.gbInarm",
+   "path": "Zteach.Panel1.gbInarm.sbInRotate",
+   "props": {
+    "Caption": "Rotate",
+    "GroupIndex": 1,
+    "Height": 33,
+    "Left": 112,
+    "OnClick": "sbLoaderClick",
+    "Tag": 6,
+    "Top": 52,
+    "Width": 97
+   },
+   "rect": {
+    "h": 33,
+    "w": 97,
+    "x": 112,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "sbLoader",
+   "parent": "Zteach.Panel1.gbInarm",
+   "path": "Zteach.Panel1.gbInarm.sbLoader",
+   "props": {
+    "Caption": "Loader",
+    "GroupIndex": 1,
+    "Height": 87,
+    "Left": 113,
+    "OnClick": "sbLoaderClick",
+    "Tag": 3,
+    "Top": 166,
+    "Width": 97
+   },
+   "rect": {
+    "h": 87,
+    "w": 97,
+    "x": 113,
+    "y": 166
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbOutArm",
+   "parent": "Zteach.Panel1",
+   "path": "Zteach.Panel1.gbOutArm",
+   "props": {
+    "Caption": "Output Arm",
+    "Height": 265,
+    "Left": 324,
+    "TabOrder": 8,
+    "Top": 155,
+    "Width": 429
+   },
+   "rect": {
+    "h": 265,
+    "w": 429,
+    "x": 324,
+    "y": 155
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "sbFix1",
+   "parent": "Zteach.Panel1.gbOutArm",
+   "path": "Zteach.Panel1.gbOutArm.sbFix1",
+   "props": {
+    "Caption": "Fix 1",
+    "GroupIndex": 1,
+    "Height": 85,
+    "Left": 116,
+    "OnClick": "sbLoaderClick",
+    "Tag": 16,
+    "Top": 16,
+    "Width": 65
+   },
+   "rect": {
+    "h": 85,
+    "w": 65,
+    "x": 116,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "sbFix2",
+   "parent": "Zteach.Panel1.gbOutArm",
+   "path": "Zteach.Panel1.gbOutArm.sbFix2",
+   "props": {
+    "Caption": "Fix 2",
+    "GroupIndex": 1,
+    "Height": 85,
+    "Left": 188,
+    "OnClick": "sbLoaderClick",
+    "Tag": 17,
+    "Top": 16,
+    "Width": 65
+   },
+   "rect": {
+    "h": 85,
+    "w": 65,
+    "x": 188,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "sbFix3",
+   "parent": "Zteach.Panel1.gbOutArm",
+   "path": "Zteach.Panel1.gbOutArm.sbFix3",
+   "props": {
+    "Caption": "Fix 3",
+    "GroupIndex": 1,
+    "Height": 85,
+    "Left": 260,
+    "OnClick": "sbLoaderClick",
+    "Tag": 18,
+    "Top": 16,
+    "Width": 65
+   },
+   "rect": {
+    "h": 85,
+    "w": 65,
+    "x": 260,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "sbAuto3",
+   "parent": "Zteach.Panel1.gbOutArm",
+   "path": "Zteach.Panel1.gbOutArm.sbAuto3",
+   "props": {
+    "Caption": "Auto 3",
+    "GroupIndex": 1,
+    "Height": 85,
+    "Left": 260,
+    "OnClick": "sbLoaderClick",
+    "Tag": 15,
+    "Top": 156,
+    "Width": 65
+   },
+   "rect": {
+    "h": 85,
+    "w": 65,
+    "x": 260,
+    "y": 156
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "sbAuto2",
+   "parent": "Zteach.Panel1.gbOutArm",
+   "path": "Zteach.Panel1.gbOutArm.sbAuto2",
+   "props": {
+    "Caption": "Auto 2",
+    "GroupIndex": 1,
+    "Height": 85,
+    "Left": 188,
+    "OnClick": "sbLoaderClick",
+    "Tag": 14,
+    "Top": 156,
+    "Width": 65
+   },
+   "rect": {
+    "h": 85,
+    "w": 65,
+    "x": 188,
+    "y": 156
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "sbAuto1",
+   "parent": "Zteach.Panel1.gbOutArm",
+   "path": "Zteach.Panel1.gbOutArm.sbAuto1",
+   "props": {
+    "Caption": "Auto 1",
+    "GroupIndex": 1,
+    "Height": 85,
+    "Left": 116,
+    "OnClick": "sbLoaderClick",
+    "Tag": 13,
+    "Top": 156,
+    "Width": 65
+   },
+   "rect": {
+    "h": 85,
+    "w": 65,
+    "x": 116,
+    "y": 156
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "sbOutSht2",
+   "parent": "Zteach.Panel1.gbOutArm",
+   "path": "Zteach.Panel1.gbOutArm.sbOutSht2",
+   "props": {
+    "Caption": "Shuttle 2",
+    "GroupIndex": 1,
+    "Height": 33,
+    "Left": 8,
+    "OnClick": "sbLoaderClick",
+    "Tag": 12,
+    "Top": 16,
+    "Width": 97
+   },
+   "rect": {
+    "h": 33,
+    "w": 97,
+    "x": 8,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "sbOutSht1",
+   "parent": "Zteach.Panel1.gbOutArm",
+   "path": "Zteach.Panel1.gbOutArm.sbOutSht1",
+   "props": {
+    "Caption": "Shuttle 1",
+    "GroupIndex": 1,
+    "Height": 33,
+    "Left": 8,
+    "OnClick": "sbLoaderClick",
+    "Tag": 11,
+    "Top": 94,
+    "Width": 97
+   },
+   "rect": {
+    "h": 33,
+    "w": 97,
+    "x": 8,
+    "y": 94
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "sbOutZ_Calibration",
+   "parent": "Zteach.Panel1.gbOutArm",
+   "path": "Zteach.Panel1.gbOutArm.sbOutZ_Calibration",
+   "props": {
+    "Caption": "Z Calibration",
+    "GroupIndex": 1,
+    "Height": 33,
+    "Left": 329,
+    "OnClick": "sbLoaderClick",
+    "Tag": 10,
+    "Top": 17,
+    "Width": 97
+   },
+   "rect": {
+    "h": 33,
+    "w": 97,
+    "x": 329,
+    "y": 17
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "sbOutRotate",
+   "parent": "Zteach.Panel1.gbOutArm",
+   "path": "Zteach.Panel1.gbOutArm.sbOutRotate",
+   "props": {
+    "Caption": "Rotate",
+    "GroupIndex": 1,
+    "Height": 33,
+    "Left": 8,
+    "OnClick": "sbLoaderClick",
+    "Tag": 19,
+    "Top": 56,
+    "Width": 97
+   },
+   "rect": {
+    "h": 33,
+    "w": 97,
+    "x": 8,
+    "y": 56
+   }
+  },
+  {
+   "align": null,
+   "cls": "TStringGrid",
+   "events": {
+    "OnDrawCell": "sgThreePointTeachDrawCell"
+   },
+   "kind": "LEAF",
+   "name": "sgThreePointTeach",
+   "parent": "Zteach.Panel1",
+   "path": "Zteach.Panel1.sgThreePointTeach",
+   "props": {
+    "ColCount": 12,
+    "Color": 14670284,
+    "DefaultColWidth": 80,
+    "DefaultRowHeight": 20,
+    "FixedColor": 9534289,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 214,
+    "Left": 502,
+    "OnDrawCell": "sgThreePointTeachDrawCell",
+    "ParentFont": "False",
+    "RowHeights": [
+     20,
+     20,
+     20,
+     20,
+     20
+    ],
+    "TabOrder": 12,
+    "Top": 423,
+    "Width": 411
+   },
+   "rect": {
+    "h": 214,
+    "w": 411,
+    "x": 502,
+    "y": 423
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "PanelTeachPosSelect",
+   "parent": "Zteach.Panel1",
+   "path": "Zteach.Panel1.PanelTeachPosSelect",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -23,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 41,
+    "Left": 632,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 116,
+    "Width": 313
+   },
+   "rect": {
+    "h": 41,
+    "w": 313,
+    "x": 632,
+    "y": 116
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {
+    "OnClick": "cbEnableUseAreaZCalbrationClick"
+   },
+   "kind": "LEAF",
+   "name": "cbEnableUseAreaZCalbration",
+   "parent": "Zteach.Panel1",
+   "path": "Zteach.Panel1.cbEnableUseAreaZCalbration",
+   "props": {
+    "Caption": "Enable Use Area Z Calibration",
+    "Height": 17,
+    "Left": 8,
+    "OnClick": "cbEnableUseAreaZCalbrationClick",
+    "TabOrder": 5,
+    "Top": 136,
+    "Width": 177
+   },
+   "rect": {
+    "h": 17,
+    "w": 177,
+    "x": 8,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "CbEnRecordVacuum",
+   "parent": "Zteach.Panel1",
+   "path": "Zteach.Panel1.CbEnRecordVacuum",
+   "props": {
+    "Caption": "Record Vacuum Time",
+    "Height": 17,
+    "Left": 321,
+    "TabOrder": 6,
+    "Top": 137,
+    "Width": 177
+   },
+   "rect": {
+    "h": 17,
+    "w": 177,
+    "x": 321,
+    "y": 137
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel2",
+   "parent": "Zteach.Panel1",
+   "path": "Zteach.Panel1.Panel2",
+   "props": {
+    "Color": 14670284,
+    "Height": 273,
+    "Left": 917,
+    "TabOrder": 13,
+    "Top": 424,
+    "Width": 232
+   },
+   "rect": {
+    "h": 273,
+    "w": 232,
+    "x": 917,
+    "y": 424
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "MotorInArmXClick"
+   },
+   "kind": "LEAF",
+   "name": "MotorInArmX",
+   "parent": "Zteach.Panel1.Panel2",
+   "path": "Zteach.Panel1.Panel2.MotorInArmX",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "X",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 30,
+    "Left": 4,
+    "OnClick": "MotorInArmXClick",
+    "ParentFont": "False",
+    "Top": 168,
+    "Width": 100
+   },
+   "rect": {
+    "h": 30,
+    "w": 100,
+    "x": 4,
+    "y": 168
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "MotorInArmXClick"
+   },
+   "kind": "LEAF",
+   "name": "MotorInArmY",
+   "parent": "Zteach.Panel1.Panel2",
+   "path": "Zteach.Panel1.Panel2.MotorInArmY",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Y",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 30,
+    "Left": 4,
+    "OnClick": "MotorInArmXClick",
+    "ParentFont": "False",
+    "Tag": 1,
+    "Top": 208,
+    "Width": 100
+   },
+   "rect": {
+    "h": 30,
+    "w": 100,
+    "x": 4,
+    "y": 208
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton13Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton13",
+   "parent": "Zteach.Panel1.Panel2",
+   "path": "Zteach.Panel1.Panel2.SpeedButton13",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Move -",
+    "Font.Charset": "CHINESEBIG5_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "新細明體",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 1198,
+     "hex": "AA040000424DAA040000000000003600000028000000140000001300000001001800000000007404000000000000000000000000000000000000C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7877F87FFFFFFFFFFFFC7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7FFFFFFFFFFFFC7BFC7C7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7FFFFFFFFFFFFFF0707FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7FFFFFFFFFFFFFF0707FF0707FF0707FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7C7BFC7FFFFFFFFFFFFFF0707FF0707FF0707FF0707FF0707FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7FFFFFFFFFFFFFF0707FF0707FF0707FF0707FF0707FF0707FF0707FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7FFFFFFFF0707FF0707FF0707FF0707FF0707FF0707FF0707FF0707FF0707FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7877F87877F87FF0707FF0707FF0707FF0707FF0707FF0707FF0707FF0707FF0707FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7877F87877F87FF0707FF0707FF0707FF0707FF0707FF0707FF0707FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7C7BFC7877F87877F87FF0707FF0707FF0707FF0707FF0707FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7877F87877F87FF0707FF0707FF0707FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7877F87877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7877F87877F87FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7877F87FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7",
+     "sha1": "4beab82a60b848d8a9a2979104747e979c9f17dc"
+    },
+    "Height": 49,
+    "Layout": "blGlyphRight",
+    "Left": 3,
+    "OnClick": "SpeedButton13Click",
+    "ParentFont": "False",
+    "Top": 107,
+    "Width": 110
+   },
+   "rect": {
+    "h": 49,
+    "w": 110,
+    "x": 3,
+    "y": 107
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton12Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton12",
+   "parent": "Zteach.Panel1.Panel2",
+   "path": "Zteach.Panel1.Panel2.SpeedButton12",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Move +",
+    "Font.Charset": "CHINESEBIG5_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "新細明體",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 1198,
+     "hex": "AA040000424DAA040000000000003600000028000000140000001300000001001800000000007404000000000000000000000000000000000000C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7877F87FFFFFFFFFFFFC7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFFFFFFFC7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7877F87FF0707FF0707FF0707FFFFFFFFFFFFC7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7877F87FF0707FF0707FF0707FF0707FF0707FFFFFFFFFFFFC7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7877F87FF0707FF0707FF0707FF0707FF0707FF0707FF0707FFFFFFFFFFFFC7BFC7C7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7877F87FF0707FF0707FF0707FF0707FF0707FF0707FF0707FF0707FF0707FFFFFFFFFFFFC7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7877F87FF0707FF0707FF0707FF0707FF0707FF0707FF0707FF0707FF0707877F87877F87FFFFFFC7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7877F87FF0707FF0707FF0707FF0707FF0707FF0707FF0707877F87877F87C7BFC7C7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7877F87FF0707FF0707FF0707FF0707FF0707877F87877F87C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7877F87FF0707FF0707FF0707877F87877F87C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7877F87FF0707877F87877F87C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7877F87FF0707FFFFFFC7BFC7C7BFC7C7BFC7877F87877F87C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7877F87877F87FFFFFFC7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7C7BFC7",
+     "sha1": "4cc947dd7e3eb2f9e8d62f4b7a39786243870ac8"
+    },
+    "Height": 49,
+    "Left": 119,
+    "OnClick": "SpeedButton12Click",
+    "ParentFont": "False",
+    "Top": 107,
+    "Width": 103
+   },
+   "rect": {
+    "h": 49,
+    "w": 103,
+    "x": 119,
+    "y": 107
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label4",
+   "parent": "Zteach.Panel1.Panel2",
+   "path": "Zteach.Panel1.Panel2.Label4",
+   "props": {
+    "Caption": "Now Position",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 131,
+    "ParentFont": "False",
+    "Top": 42,
+    "Width": 91
+   },
+   "rect": {
+    "h": 20,
+    "w": 91,
+    "x": 131,
+    "y": 42
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton1Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton1",
+   "parent": "Zteach.Panel1.Panel2",
+   "path": "Zteach.Panel1.Panel2.SpeedButton1",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Start Auto Z offset",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 30,
+    "Left": 112,
+    "OnClick": "SpeedButton1Click",
+    "ParentFont": "False",
+    "Top": 230,
+    "Width": 109
+   },
+   "rect": {
+    "h": 30,
+    "w": 109,
+    "x": 112,
+    "y": 230
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ComboBox1",
+   "parent": "Zteach.Panel1.Panel2",
+   "path": "Zteach.Panel1.Panel2.ComboBox1",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 32,
+    "ImeName": "",
+    "ItemHeight": 24,
+    "Items.Strings": [
+     "1",
+     "10",
+     "100",
+     "1000",
+     "10000"
+    ],
+    "Left": 137,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Text": "1",
+    "Top": 171,
+    "Width": 81
+   },
+   "rect": {
+    "h": 32,
+    "w": 81,
+    "x": 137,
+    "y": 171
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel3",
+   "parent": "Zteach.Panel1.Panel2",
+   "path": "Zteach.Panel1.Panel2.Panel3",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -23,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 31,
+    "Left": 1,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 4,
+    "Width": 225
+   },
+   "rect": {
+    "h": 31,
+    "w": 225,
+    "x": 1,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlEncoderPos",
+   "parent": "Zteach.Panel1.Panel2",
+   "path": "Zteach.Panel1.Panel2.pnlEncoderPos",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -23,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 31,
+    "Left": 4,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 64,
+    "Width": 89
+   },
+   "rect": {
+    "h": 31,
+    "w": 89,
+    "x": 4,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtPositionClick"
+   },
+   "kind": "LEAF",
+   "name": "edtPosition",
+   "parent": "Zteach.Panel1.Panel2",
+   "path": "Zteach.Panel1.Panel2.edtPosition",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 32,
+    "ImeName": "",
+    "Left": 124,
+    "OnClick": "edtPositionClick",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 69,
+    "Width": 97
+   },
+   "rect": {
+    "h": 32,
+    "w": 97,
+    "x": 124,
+    "y": 69
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button1Click"
+   },
+   "kind": "LEAF",
+   "name": "Button1",
+   "parent": "Zteach.Panel1",
+   "path": "Zteach.Panel1.Button1",
+   "props": {
+    "Caption": "Vacuum Check",
+    "Height": 30,
+    "Left": 996,
+    "OnClick": "Button1Click",
+    "TabOrder": 10,
+    "Top": 164,
+    "Width": 100
+   },
+   "rect": {
+    "h": 30,
+    "w": 100,
+    "x": 996,
+    "y": 164
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "AutoTimerTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "AutoTimer",
+   "parent": "Zteach",
+   "path": "Zteach.AutoTimer",
+   "props": {
+    "Interval": 30,
+    "Left": 991,
+    "OnTimer": "AutoTimerTimer",
+    "Top": 4
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 991,
+    "y": 4
+   }
+  }
+ ]
+}

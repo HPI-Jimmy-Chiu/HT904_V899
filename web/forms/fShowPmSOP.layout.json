@@ -1,0 +1,74 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "PM SOP Form",
+ "form": "fShowPmSOPForm",
+ "form_class": "TfShowPmSOPForm",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "fShowPmSOP.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfShowPmSOPForm",
+   "events": {
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fShowPmSOPForm",
+   "parent": null,
+   "path": "fShowPmSOPForm",
+   "props": {
+    "Caption": "PM SOP Form",
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 847,
+    "Left": 372,
+    "OldCreateOrder": "False",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 13,
+    "Width": 1228
+   },
+   "rect": {
+    "h": 847,
+    "w": 1228,
+    "x": 372,
+    "y": 13
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCppWebBrowser",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cpwbrwsrPmSOP",
+   "parent": "fShowPmSOPForm",
+   "path": "fShowPmSOPForm.cpwbrwsrPmSOP",
+   "props": {
+    "ControlData": {
+     "byte_len": 156,
+     "hex": "4C0000004D7B0000F55100000000000000000000000000000000000000000000000000004C000000000000000000000001000000E0D057007335CF11AE6908002B2E126208000000000000004C0000000114020000000000C000000000000046800000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000",
+     "sha1": "06e64b64e038fc0d4c7fb3a56bad64919ed125cc"
+    },
+    "Height": 793,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 1193
+   },
+   "rect": {
+    "h": 793,
+    "w": 1193,
+    "x": 0,
+    "y": 0
+   }
+  }
+ ]
+}

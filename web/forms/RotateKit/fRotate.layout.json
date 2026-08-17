@@ -1,0 +1,1006 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "FrmRotate",
+ "form": "FrmRotate",
+ "form_class": "TFrmRotate",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "RotateKit/fRotate.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TFrmRotate",
+   "events": {
+    "OnClose": "FormClose",
+    "OnCreate": "FormCreate",
+    "OnDestroy": "FormDestroy",
+    "OnShortCut": "FormShortCut",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "FrmRotate",
+   "parent": null,
+   "path": "FrmRotate",
+   "props": {
+    "Caption": "FrmRotate",
+    "Color": 13550775,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 595,
+    "Left": 443,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnCreate": "FormCreate",
+    "OnDestroy": "FormDestroy",
+    "OnShortCut": "FormShortCut",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 216,
+    "Width": 800
+   },
+   "rect": {
+    "h": 595,
+    "w": 800,
+    "x": 443,
+    "y": 216
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel1",
+   "parent": "FrmRotate",
+   "path": "FrmRotate.Panel1",
+   "props": {
+    "Align": "alClient",
+    "Color": 13550775,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 564,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 792
+   },
+   "rect": {
+    "h": 564,
+    "w": 792,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "spbSaveClick"
+   },
+   "kind": "LEAF",
+   "name": "spbSave",
+   "parent": "FrmRotate.Panel1",
+   "path": "FrmRotate.Panel1.spbSave",
+   "props": {
+    "Caption": "Save",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 3946,
+     "hex": "660F0000424D660F000000000000360000002800000024000000240000000100180000000000300F000001000000010000000000000000000000FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF9F9F9F9F9F9F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F9F9F9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF7F7F7EFEFEFE8E8E8E6E6E6E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E9E9E9F3F3F3F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF8F8F8ECECECD6D6D6C8C8C8C5C5C5C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4D0D0D0E9E9E9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF0EFEFC0A6A7A55B6CA96270A45E6C934556A6A3A3A4A1A1A19C9C9C9797979393948D8D8E88888A8383867F7D837A7A807978807978994759994759994759994759994759994759994759994756C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAD2C1C1B28181AF6D79B8717FB7707DAA6472EFEFF1EEEEF1995D68B8717EB06B78E1E0E0DDDADBD8D5D6D4D1D2CFCCCCCAC6C6DBD8D88F4B59A05565A05565BE848EB9727FB8727EB8717E994557C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAF6D79BA7481B97380B7737FAA6472E9E9EBECEBEF995D68B8717EB06B78E1DFE1DCDADDD7D5D6D2D0D1CDC9CAC8C3C3D9D6D68D49589F5464A05565BF848EB97380B9737FB9727F9B4457C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC38D95BA7682BA7481B97480AA6472E5E4E7E9E9EB9A5D69B8737FB06B78E5E5E7E2E0E3DDDBDDD8D5D7D3D0D1CDCACBDDDADB8B48579D53639F5464BF858FBA7480BA7481BA74819B4558C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC48E96BA7783BA7682B97481AA6472E0DFE1E5E3E69B5F6BB97580B06B78E9EAECE6E5E8E2E1E4DDDCDED9D6D8D4D0D2E0DFDF8945549B50619D5363BF8590BA7481BA7481BA74819A4759C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F96BB7784BA7784BA7582AA6472DAD9DBE0DEE09B5F6BBA7582B06B78EDECEFEAE9EDE6E6E9E2E2E4DEDDDFDAD8DAE5E2E4874353994E5F9B5061C18690B97480BA7481BA74819C495CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F98BC7886BB7785BB7783AA6472D5D2D4DBD8DA9C606C925864925864EAEAEDEDEDF0EAEAEDE8E7E9E4E2E5DFDDDFE8E7E8864252974C5D994E5FC08691B9727FB97380B973809C4B5CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC49098BC7986BD7985BC7784AA6472CFCCCCD4D1D3D9D7D9DFDCDFE2E1E4E7E5E8EAEAEDEDECF0EAEBEEE8E7EAE4E2E6ECEAEC864252864252874353C28791B7727FB8727EB9727F9C4E5DC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC79198BD7A87BD7987BC7985BB7785AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472B77A84B76F7DB7707DB7707EB8717E9E4E5FC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB7717EB76F7DB76D7CB76D7BB76D7BB66D7BB56C7AB56C7AB66D7BB76F7CB76F7CB7707D9F4E60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB76F7DB76D7CB76D7CB76C7AB66C7AB66D7BB56C7AB56C7AB56C7AB66C7AB66C7AB76D7C9F4F60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6939BBE7E89BC7884A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70B66B7AB66C7B9F5162C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC7949CBF7F8AAF6F7BEBE1E1FEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFEFDFDFEFDFDFDFCFCFCFCFBFCFBFBFBFBFAFAFAF9F9F9F9F9F9F8F8F8E8D1D1A75E70B76D7BB66C7A9F5262C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC8959DC0808BAF6F7BFEFFFEFCFCFBFBFBFAFAFBFAFAFAFAF9FAF9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F7F7F7F6F6F6F6F6F9F9F9A75E70B96F7DB66B7AA05363C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9959DC1818CAF6F7BFEFFFEE1E1E1DFDFDFDDDDDDDBDCDBDADAD9D9D9D9D7D7D6D5D6D5D4D4D3D2D3D2D1D1D1D0D0D0CFCFCFCFCFCFCFCFCFCFCFCFF9FAF9A75E70BA707EB66B79A15466C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9969EC1818DAF6F7BFEFFFEFCFCFCFCFCFBFBFBFBFBFBFAFBFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F6FBFBFBA75E70B97480B56B79A25666C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2828EAF6F7BFEFFFEE4E4E4E3E3E3E2E2E1E0E0E0DEDDDEDCDCDCDADADAD9D9D9D7D8D8D6D5D5D4D4D4D2D3D3D1D2D1D0D0D0CFCFCFCFCFCFFCFCFBA75E70BA7581B56B79A45968C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2838EAF6F7BFEFFFEFCFCFCFCFCFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F8F8F9F8F8F8F8F8F7F7F7F7F7F7F7F7FCFCFCA75E70BA7783B66C7AA55969C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA98A0C2838EAF6F7BFEFFFEE6E6E6E6E5E6E4E4E4E3E3E3E1E2E2E0E0E0DEDEDEDCDCDCDBDBDBD9D9D9D8D8D8D6D6D6D4D5D5D3D3D3D1D1D1D0D0D0FDFDFCA75E70BC7783B76D7BA55D6CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB98A0C2838EAF6F7BFEFFFEFDFDFDFDFDFCFCFDFCFCFCFCFCFCFBFBFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7FDFEFDA75E70BD7985B76F7DA65F6EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E5E5E6E4E5E5E4E3E3E2E2E2E1E0E0DFDFDFDDDDDDDBDBDCDADAD9D9D8D9D7D6D7D5D5D5D3D4D3FEFEFEA75E70BE7A86B7707DA6606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFCFCFBFBFBFAFBFBFAFAFAF9F9F9F9F9F9F9F9F9F9F9F9F8F8F8F8FEFFFEA75E70B38088B8717FA7606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E5E5E5E4E4E3E2E3E3E1E1E1E0DFDFDDDDDEDCDBDCDADADAD9D9D9D7D8D7FEFFFEA75E70996E759E5967A9606EC5C5C5E5E5E5F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFFFEFEFEFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9FAFAF9F9F9F9F9F9F9FEFFFEA75E70B0757F9E5A68AA6471C5C5C5E6E6E6F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA969EC2838EAF6F7BFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEA75E70C77F8BC77F8BAA6572D1D1D1EBEBEBFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAE6A7AAE6A7AAE6A7AD9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6A75E70A75E70A75E70A75E70ECECECF6F6F6FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFA",
+     "sha1": "b6420a2c6417ab1d75d6f7441ace55c339665e38"
+    },
+    "Height": 40,
+    "Left": 74,
+    "OnClick": "spbSaveClick",
+    "ParentFont": "False",
+    "Top": 512,
+    "Width": 227
+   },
+   "rect": {
+    "h": 40,
+    "w": 227,
+    "x": 74,
+    "y": 512
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbtExitClick"
+   },
+   "kind": "LEAF",
+   "name": "sbtExit",
+   "parent": "FrmRotate.Panel1",
+   "path": "FrmRotate.Panel1.sbtExit",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Exit",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 1554,
+     "hex": "0E060000424D0E06000000000000360000002800000016000000160000000100180000000000D805000001000000010000000000000000000000EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF7474A44C4C946C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA44C4C947474A4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C5454C45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC4C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9C645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D46C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC6464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CAC8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEF8C8CAC2424946464D45454C46C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C4C4CBC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424945454C44C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF",
+     "sha1": "f9091dff96fbb403d8fe7eec0dcccd5c7539ad97"
+    },
+    "GroupIndex": 1,
+    "Height": 41,
+    "Left": 384,
+    "OnClick": "sbtExitClick",
+    "ParentFont": "False",
+    "Top": 512,
+    "Width": 241
+   },
+   "rect": {
+    "h": 41,
+    "w": 241,
+    "x": 384,
+    "y": 512
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label_Err",
+   "parent": "FrmRotate.Panel1",
+   "path": "FrmRotate.Panel1.Label_Err",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Label_Err",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 1,
+    "ParentFont": "False",
+    "Top": 1,
+    "Visible": "False",
+    "Width": 790
+   },
+   "rect": {
+    "h": 20,
+    "w": 790,
+    "x": 1,
+    "y": 1
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "LabelRotatePositon",
+   "parent": "FrmRotate.Panel1",
+   "path": "FrmRotate.Panel1.LabelRotatePositon",
+   "props": {
+    "Caption": "Rotate Kit Position",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 29,
+    "Left": 792,
+    "ParentFont": "False",
+    "Top": 68,
+    "Width": 217
+   },
+   "rect": {
+    "h": 29,
+    "w": 217,
+    "x": 792,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "rgDutNumClick"
+   },
+   "kind": "SUBDLG",
+   "name": "rgDutNum",
+   "parent": "FrmRotate.Panel1",
+   "path": "FrmRotate.Panel1.rgDutNum",
+   "props": {
+    "Caption": "Kit Number",
+    "Columns": 2,
+    "Height": 89,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "2x2",
+     "2x4 ",
+     "1x1 ",
+     "1x2 "
+    ],
+    "Left": 8,
+    "OnClick": "rgDutNumClick",
+    "TabOrder": 0,
+    "Top": 32,
+    "Width": 209
+   },
+   "rect": {
+    "h": 89,
+    "w": 209,
+    "x": 8,
+    "y": 32
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "rgSelectClick"
+   },
+   "kind": "SUBDLG",
+   "name": "rgSelect",
+   "parent": "FrmRotate.Panel1",
+   "path": "FrmRotate.Panel1.rgSelect",
+   "props": {
+    "Caption": "Select",
+    "Height": 89,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "All",
+     "Single"
+    ],
+    "Left": 8,
+    "OnClick": "rgSelectClick",
+    "TabOrder": 3,
+    "Top": 128,
+    "Width": 153
+   },
+   "rect": {
+    "h": 89,
+    "w": 153,
+    "x": 8,
+    "y": 128
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox1",
+   "parent": "FrmRotate.Panel1",
+   "path": "FrmRotate.Panel1.GroupBox1",
+   "props": {
+    "Caption": "From Tray Angle",
+    "Color": 8454143,
+    "Height": 121,
+    "Left": 8,
+    "ParentColor": "False",
+    "TabOrder": 5,
+    "Top": 228,
+    "Width": 153
+   },
+   "rect": {
+    "h": 121,
+    "w": 153,
+    "x": 8,
+    "y": 228
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TStringGrid",
+   "events": {
+    "OnDrawCell": "sgFTADrawCell",
+    "OnSelectCell": "sgFTASelectCell"
+   },
+   "kind": "LEAF",
+   "name": "sgFTA",
+   "parent": "FrmRotate.Panel1.GroupBox1",
+   "path": "FrmRotate.Panel1.GroupBox1.sgFTA",
+   "props": {
+    "Align": "alClient",
+    "ColCount": 1,
+    "FixedCols": 0,
+    "FixedRows": 0,
+    "Height": 97,
+    "Left": 2,
+    "OnDrawCell": "sgFTADrawCell",
+    "OnSelectCell": "sgFTASelectCell",
+    "RowCount": 1,
+    "TabOrder": 0,
+    "Top": 22,
+    "Width": 149
+   },
+   "rect": {
+    "h": 97,
+    "w": 149,
+    "x": 2,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbActiveRotate",
+   "parent": "FrmRotate.Panel1",
+   "path": "FrmRotate.Panel1.cbActiveRotate",
+   "props": {
+    "Caption": "Active Rotate",
+    "Color": 8454143,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 37,
+    "Left": 248,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 32,
+    "Width": 529
+   },
+   "rect": {
+    "h": 37,
+    "w": 529,
+    "x": 248,
+    "y": 32
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTMyTray",
+   "events": {},
+   "kind": "LEAF",
+   "name": "tmyRotatePosion",
+   "parent": "FrmRotate.Panel1",
+   "path": "FrmRotate.Panel1.tmyRotatePosion",
+   "props": {
+    "Color": "clWhite",
+    "Height": 200,
+    "Left": 792,
+    "Top": 121,
+    "Width": 366,
+    "XItem": 4
+   },
+   "rect": {
+    "h": 200,
+    "w": 366,
+    "x": 792,
+    "y": 121
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "pgcRotate",
+   "parent": "FrmRotate.Panel1",
+   "path": "FrmRotate.Panel1.pgcRotate",
+   "props": {
+    "ActivePage": "tsM8RotateIn",
+    "Height": 373,
+    "Left": 246,
+    "TabIndex": 2,
+    "TabOrder": 2,
+    "TabWidth": 120,
+    "Top": 72,
+    "Width": 529
+   },
+   "rect": {
+    "h": 373,
+    "w": 529,
+    "x": 246,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsM1RotateIn",
+   "parent": "FrmRotate.Panel1.pgcRotate",
+   "path": "FrmRotate.Panel1.pgcRotate.tsM1RotateIn",
+   "props": {
+    "Caption": "Rotate In"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TStringGrid",
+   "events": {
+    "OnDrawCell": "sgRotateInDrawCell",
+    "OnSelectCell": "sgRotateInSelectCell"
+   },
+   "kind": "LEAF",
+   "name": "sgRotateIn",
+   "parent": "FrmRotate.Panel1.pgcRotate.tsM1RotateIn",
+   "path": "FrmRotate.Panel1.pgcRotate.tsM1RotateIn.sgRotateIn",
+   "props": {
+    "Align": "alClient",
+    "FixedCols": 0,
+    "FixedRows": 0,
+    "Height": 338,
+    "Left": 0,
+    "OnDrawCell": "sgRotateInDrawCell",
+    "OnSelectCell": "sgRotateInSelectCell",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 521
+   },
+   "rect": {
+    "h": 338,
+    "w": 521,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsM1RotateOut",
+   "parent": "FrmRotate.Panel1.pgcRotate",
+   "path": "FrmRotate.Panel1.pgcRotate.tsM1RotateOut",
+   "props": {
+    "Caption": "Out Rotate",
+    "ImageIndex": 2
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TStringGrid",
+   "events": {
+    "OnDrawCell": "sgRotateInDrawCell",
+    "OnSelectCell": "sgRotateInSelectCell"
+   },
+   "kind": "LEAF",
+   "name": "sgRotateOut",
+   "parent": "FrmRotate.Panel1.pgcRotate.tsM1RotateOut",
+   "path": "FrmRotate.Panel1.pgcRotate.tsM1RotateOut.sgRotateOut",
+   "props": {
+    "Align": "alClient",
+    "FixedCols": 0,
+    "FixedRows": 0,
+    "Height": 338,
+    "Left": 0,
+    "OnDrawCell": "sgRotateInDrawCell",
+    "OnSelectCell": "sgRotateInSelectCell",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 521
+   },
+   "rect": {
+    "h": 338,
+    "w": 521,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsM8RotateIn",
+   "parent": "FrmRotate.Panel1.pgcRotate",
+   "path": "FrmRotate.Panel1.pgcRotate.tsM8RotateIn",
+   "props": {
+    "Caption": "M8 In Rotate",
+    "ImageIndex": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsM8RotateOut",
+   "parent": "FrmRotate.Panel1.pgcRotate",
+   "path": "FrmRotate.Panel1.pgcRotate.tsM8RotateOut",
+   "props": {
+    "Caption": "M8 Out Rotate",
+    "ImageIndex": 3
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsM1RotateInRT",
+   "parent": "FrmRotate.Panel1.pgcRotate",
+   "path": "FrmRotate.Panel1.pgcRotate.tsM1RotateInRT",
+   "props": {
+    "Caption": "Rotate In RT",
+    "ImageIndex": 4
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TStringGrid",
+   "events": {
+    "OnDrawCell": "sgRotateInDrawCell",
+    "OnSelectCell": "sgRotateInSelectCell"
+   },
+   "kind": "LEAF",
+   "name": "sgRotateInRT",
+   "parent": "FrmRotate.Panel1.pgcRotate.tsM1RotateInRT",
+   "path": "FrmRotate.Panel1.pgcRotate.tsM1RotateInRT.sgRotateInRT",
+   "props": {
+    "Align": "alClient",
+    "FixedCols": 0,
+    "FixedRows": 0,
+    "Height": 338,
+    "Left": 0,
+    "OnDrawCell": "sgRotateInDrawCell",
+    "OnSelectCell": "sgRotateInSelectCell",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 521
+   },
+   "rect": {
+    "h": 338,
+    "w": 521,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsM1RotateOutRT",
+   "parent": "FrmRotate.Panel1.pgcRotate",
+   "path": "FrmRotate.Panel1.pgcRotate.tsM1RotateOutRT",
+   "props": {
+    "Caption": "Out Rotate RT",
+    "ImageIndex": 5
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TStringGrid",
+   "events": {
+    "OnDrawCell": "sgRotateInDrawCell",
+    "OnSelectCell": "sgRotateInSelectCell"
+   },
+   "kind": "LEAF",
+   "name": "sgRotateOutRT",
+   "parent": "FrmRotate.Panel1.pgcRotate.tsM1RotateOutRT",
+   "path": "FrmRotate.Panel1.pgcRotate.tsM1RotateOutRT.sgRotateOutRT",
+   "props": {
+    "Align": "alClient",
+    "FixedCols": 0,
+    "FixedRows": 0,
+    "Height": 338,
+    "Left": 0,
+    "OnDrawCell": "sgRotateInDrawCell",
+    "OnSelectCell": "sgRotateInSelectCell",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 521
+   },
+   "rect": {
+    "h": 338,
+    "w": 521,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {
+    "OnClick": "cbOutRotateDifferentAngleClick"
+   },
+   "kind": "LEAF",
+   "name": "cbOutRotateDifferentAngle",
+   "parent": "FrmRotate.Panel1",
+   "path": "FrmRotate.Panel1.cbOutRotateDifferentAngle",
+   "props": {
+    "Caption": "Output rotate use different angle",
+    "Height": 25,
+    "Left": 8,
+    "OnClick": "cbOutRotateDifferentAngleClick",
+    "TabOrder": 9,
+    "Top": 456,
+    "Width": 265
+   },
+   "rect": {
+    "h": 25,
+    "w": 265,
+    "x": 8,
+    "y": 456
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Edit1",
+   "parent": "FrmRotate.Panel1",
+   "path": "FrmRotate.Panel1.Edit1",
+   "props": {
+    "Height": 28,
+    "Left": 170,
+    "ReadOnly": "True",
+    "TabOrder": 7,
+    "Top": 414,
+    "Visible": "False",
+    "Width": 63
+   },
+   "rect": {
+    "h": 28,
+    "w": 63,
+    "x": 170,
+    "y": 414
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkPassBinNoRotate",
+   "parent": "FrmRotate.Panel1",
+   "path": "FrmRotate.Panel1.chkPassBinNoRotate",
+   "props": {
+    "Caption": "Pass Bin No Rotate",
+    "Height": 25,
+    "Left": 8,
+    "TabOrder": 10,
+    "Top": 479,
+    "Width": 169
+   },
+   "rect": {
+    "h": 25,
+    "w": 169,
+    "x": 8,
+    "y": 479
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {
+    "OnClick": "chkRotateUseRTmodeClick"
+   },
+   "kind": "LEAF",
+   "name": "chkRotateUseRTmode",
+   "parent": "FrmRotate.Panel1",
+   "path": "FrmRotate.Panel1.chkRotateUseRTmode",
+   "props": {
+    "Caption": "Rotate Use RT mode",
+    "Height": 25,
+    "Left": 192,
+    "OnClick": "chkRotateUseRTmodeClick",
+    "TabOrder": 11,
+    "Top": 479,
+    "Width": 169
+   },
+   "rect": {
+    "h": 25,
+    "w": 169,
+    "x": 192,
+    "y": 479
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {
+    "OnClick": "chkRotateUseRTmodeClick"
+   },
+   "kind": "LEAF",
+   "name": "chkART_RTNoRotate",
+   "parent": "FrmRotate.Panel1",
+   "path": "FrmRotate.Panel1.chkART_RTNoRotate",
+   "props": {
+    "Caption": "ART RT No Rotate",
+    "Height": 25,
+    "Left": 384,
+    "OnClick": "chkRotateUseRTmodeClick",
+    "TabOrder": 12,
+    "Top": 479,
+    "Width": 169
+   },
+   "rect": {
+    "h": 25,
+    "w": 169,
+    "x": 384,
+    "y": 479
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabeledEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "YPitch",
+   "parent": "FrmRotate.Panel1",
+   "path": "FrmRotate.Panel1.YPitch",
+   "props": {
+    "EditLabel.Caption": "Y Pitch",
+    "EditLabel.Height": 20,
+    "EditLabel.Width": 50,
+    "Height": 28,
+    "LabelPosition": "lpAbove",
+    "LabelSpacing": 3,
+    "Left": 172,
+    "TabOrder": 6,
+    "Top": 280,
+    "Width": 65
+   },
+   "rect": {
+    "h": 28,
+    "w": 65,
+    "x": 172,
+    "y": 280
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabeledEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "XPitch",
+   "parent": "FrmRotate.Panel1",
+   "path": "FrmRotate.Panel1.XPitch",
+   "props": {
+    "EditLabel.Caption": "X Pitch (mm)",
+    "EditLabel.Height": 20,
+    "EditLabel.Width": 90,
+    "Height": 28,
+    "LabelPosition": "lpLeft",
+    "LabelSpacing": 3,
+    "Left": 524,
+    "TabOrder": 8,
+    "Top": 448,
+    "Width": 65
+   },
+   "rect": {
+    "h": 28,
+    "w": 65,
+    "x": 524,
+    "y": 448
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpRotateOffset",
+   "parent": "FrmRotate.Panel1",
+   "path": "FrmRotate.Panel1.grpRotateOffset",
+   "props": {
+    "Caption": "Rotate Offset",
+    "Height": 77,
+    "Left": 2,
+    "TabOrder": 13,
+    "Top": 356,
+    "Width": 159
+   },
+   "rect": {
+    "h": 77,
+    "w": 159,
+    "x": 2,
+    "y": 356
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "FrmRotate.Panel1.grpRotateOffset",
+   "path": "FrmRotate.Panel1.grpRotateOffset.Label1",
+   "props": {
+    "Caption": "Rotate",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 40,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 2,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label5",
+   "parent": "FrmRotate.Panel1.grpRotateOffset",
+   "path": "FrmRotate.Panel1.grpRotateOffset.Label5",
+   "props": {
+    "Caption": "In Arm",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 54,
+    "ParentFont": "False",
+    "Top": 24,
+    "Width": 37
+   },
+   "rect": {
+    "h": 16,
+    "w": 37,
+    "x": 54,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label6",
+   "parent": "FrmRotate.Panel1.grpRotateOffset",
+   "path": "FrmRotate.Panel1.grpRotateOffset.Label6",
+   "props": {
+    "Caption": "Out Arm",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 106,
+    "ParentFont": "False",
+    "Top": 24,
+    "Width": 47
+   },
+   "rect": {
+    "h": 16,
+    "w": 47,
+    "x": 106,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edInRotate_0MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edInRotate_0",
+   "parent": "FrmRotate.Panel1.grpRotateOffset",
+   "path": "FrmRotate.Panel1.grpRotateOffset.edInRotate_0",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 54,
+    "OnMouseDown": "edInRotate_0MouseDown",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0",
+    "Top": 40,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 54,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edInRotate_0MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edOutRotate_0",
+   "parent": "FrmRotate.Panel1.grpRotateOffset",
+   "path": "FrmRotate.Panel1.grpRotateOffset.edOutRotate_0",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 106,
+    "OnMouseDown": "edInRotate_0MouseDown",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0",
+    "Top": 40,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 106,
+    "y": 40
+   }
+  }
+ ]
+}

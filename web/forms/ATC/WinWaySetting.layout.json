@@ -1,0 +1,877 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "ATC WinWay Setting",
+ "form": "fWinway",
+ "form_class": "TfWinway",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "ATC/WinWaySetting.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfWinway",
+   "events": {
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fWinway",
+   "parent": null,
+   "path": "fWinway",
+   "props": {
+    "Caption": "ATC WinWay Setting",
+    "Color": 12761254,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 518,
+    "Left": 280,
+    "OldCreateOrder": "False",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 264,
+    "Width": 330
+   },
+   "rect": {
+    "h": 518,
+    "w": 330,
+    "x": 280,
+    "y": 264
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblWinwayNumber",
+   "parent": "fWinway",
+   "path": "fWinway.lblWinwayNumber",
+   "props": {
+    "Caption": "No.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 16,
+    "ParentFont": "False",
+    "Top": 8,
+    "Width": 24
+   },
+   "rect": {
+    "h": 20,
+    "w": 24,
+    "x": 16,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "btnUpdateClick"
+   },
+   "kind": "LEAF",
+   "name": "btnUpdate",
+   "parent": "fWinway",
+   "path": "fWinway.btnUpdate",
+   "props": {
+    "Caption": "Save",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": 25600,
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 41,
+    "Left": 16,
+    "OnClick": "btnUpdateClick",
+    "ParentFont": "False",
+    "Top": 308,
+    "Width": 287
+   },
+   "rect": {
+    "h": 41,
+    "w": 287,
+    "x": 16,
+    "y": 308
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpcps",
+   "parent": "fWinway",
+   "path": "fWinway.grpcps",
+   "props": {
+    "Caption": "COM Port Setting",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 273,
+    "Left": 11,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 40,
+    "Width": 289
+   },
+   "rect": {
+    "h": 273,
+    "w": 289,
+    "x": 11,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbl1",
+   "parent": "fWinway.grpcps",
+   "path": "fWinway.grpcps.lbl1",
+   "props": {
+    "Alignment": "taRightJustify",
+    "AutoSize": "False",
+    "Caption": "Baud Rate：",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 84,
+    "Width": 104
+   },
+   "rect": {
+    "h": 20,
+    "w": 104,
+    "x": 2,
+    "y": 84
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbl2",
+   "parent": "fWinway.grpcps",
+   "path": "fWinway.grpcps.lbl2",
+   "props": {
+    "Alignment": "taRightJustify",
+    "AutoSize": "False",
+    "Caption": "Byte Size：",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 131,
+    "Width": 104
+   },
+   "rect": {
+    "h": 20,
+    "w": 104,
+    "x": 2,
+    "y": 131
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbl3",
+   "parent": "fWinway.grpcps",
+   "path": "fWinway.grpcps.lbl3",
+   "props": {
+    "Alignment": "taRightJustify",
+    "AutoSize": "False",
+    "Caption": "Stop Bit：",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 178,
+    "Width": 104
+   },
+   "rect": {
+    "h": 20,
+    "w": 104,
+    "x": 2,
+    "y": 178
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbl4",
+   "parent": "fWinway.grpcps",
+   "path": "fWinway.grpcps.lbl4",
+   "props": {
+    "Alignment": "taRightJustify",
+    "AutoSize": "False",
+    "Caption": "Parity：",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 225,
+    "Width": 104
+   },
+   "rect": {
+    "h": 20,
+    "w": 104,
+    "x": 2,
+    "y": 225
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbl5",
+   "parent": "fWinway.grpcps",
+   "path": "fWinway.grpcps.lbl5",
+   "props": {
+    "Alignment": "taRightJustify",
+    "AutoSize": "False",
+    "Caption": "Device：",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 37,
+    "Width": 104
+   },
+   "rect": {
+    "h": 20,
+    "w": 104,
+    "x": 2,
+    "y": 37
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbbBaudRate",
+   "parent": "fWinway.grpcps",
+   "path": "fWinway.grpcps.cbbBaudRate",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "4800",
+     "7200",
+     "9600",
+     "14400",
+     "19200",
+     "57600",
+     "115200"
+    ],
+    "Left": 104,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "cbbBaudRate",
+    "Top": 81,
+    "Width": 170
+   },
+   "rect": {
+    "h": 28,
+    "w": 170,
+    "x": 104,
+    "y": 81
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbbByteSize",
+   "parent": "fWinway.grpcps",
+   "path": "fWinway.grpcps.cbbByteSize",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "5",
+     "6",
+     "7",
+     "8"
+    ],
+    "Left": 104,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "cbbByteSize",
+    "Top": 128,
+    "Width": 170
+   },
+   "rect": {
+    "h": 28,
+    "w": 170,
+    "x": 104,
+    "y": 128
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbbStopBit",
+   "parent": "fWinway.grpcps",
+   "path": "fWinway.grpcps.cbbStopBit",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "1.5",
+     "2"
+    ],
+    "Left": 104,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "cbbStopBit",
+    "Top": 174,
+    "Width": 170
+   },
+   "rect": {
+    "h": 28,
+    "w": 170,
+    "x": 104,
+    "y": 174
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbbParity",
+   "parent": "fWinway.grpcps",
+   "path": "fWinway.grpcps.cbbParity",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "None",
+     "Odd",
+     "Even",
+     "Mark",
+     "Space"
+    ],
+    "Left": 104,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Text": "cbbParity",
+    "Top": 221,
+    "Width": 170
+   },
+   "rect": {
+    "h": 28,
+    "w": 170,
+    "x": 104,
+    "y": 221
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbbDevice",
+   "parent": "fWinway.grpcps",
+   "path": "fWinway.grpcps.cbbDevice",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "COM1",
+     "COM2",
+     "COM3",
+     "COM4",
+     "COM5",
+     "COM6",
+     "COM7",
+     "COM8",
+     "COM9",
+     "COM10",
+     "COM11",
+     "COM12",
+     "COM13",
+     "COM14",
+     "COM15"
+    ],
+    "Left": 104,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Text": "cbCOM",
+    "Top": 34,
+    "Width": 170
+   },
+   "rect": {
+    "h": 28,
+    "w": 170,
+    "x": 104,
+    "y": 34
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {
+    "OnChange": "cbbWinwayATCIndexChange"
+   },
+   "kind": "LEAF",
+   "name": "cbbWinwayATCIndex",
+   "parent": "fWinway",
+   "path": "fWinway.cbbWinwayATCIndex",
+   "props": {
+    "Height": 21,
+    "ItemHeight": 13,
+    "Items.Strings": [
+     "ATC 1",
+     "ATC 2",
+     "ATC 3",
+     "ATC 4"
+    ],
+    "Left": 48,
+    "OnChange": "cbbWinwayATCIndexChange",
+    "TabOrder": 1,
+    "Top": 8,
+    "Width": 145
+   },
+   "rect": {
+    "h": 21,
+    "w": 145,
+    "x": 48,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpcommu",
+   "parent": "fWinway",
+   "path": "fWinway.grpcommu",
+   "props": {
+    "Caption": "Communication",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 97,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 368,
+    "Width": 289
+   },
+   "rect": {
+    "h": 97,
+    "w": 289,
+    "x": 8,
+    "y": 368
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbl6",
+   "parent": "fWinway.grpcommu",
+   "path": "fWinway.grpcommu.lbl6",
+   "props": {
+    "Caption": "Set Temprature:",
+    "Height": 20,
+    "Left": 16,
+    "Top": 24,
+    "Width": 115
+   },
+   "rect": {
+    "h": 20,
+    "w": 115,
+    "x": 16,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbl7",
+   "parent": "fWinway.grpcommu",
+   "path": "fWinway.grpcommu.lbl7",
+   "props": {
+    "Caption": "Present Tempature:",
+    "Height": 20,
+    "Left": 16,
+    "Top": 64,
+    "Width": 140
+   },
+   "rect": {
+    "h": 20,
+    "w": 140,
+    "x": 16,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblShowPT",
+   "parent": "fWinway.grpcommu",
+   "path": "fWinway.grpcommu.lblShowPT",
+   "props": {
+    "Caption": "0",
+    "Height": 20,
+    "Left": 184,
+    "Top": 64,
+    "Width": 9
+   },
+   "rect": {
+    "h": 20,
+    "w": 9,
+    "x": 184,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtSetTempClick"
+   },
+   "kind": "LEAF",
+   "name": "edtSetTemp",
+   "parent": "fWinway.grpcommu",
+   "path": "fWinway.grpcommu.edtSetTemp",
+   "props": {
+    "Height": 28,
+    "Left": 136,
+    "OnClick": "edtSetTempClick",
+    "TabOrder": 0,
+    "Top": 24,
+    "Width": 97
+   },
+   "rect": {
+    "h": 28,
+    "w": 97,
+    "x": 136,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnSendTempClick"
+   },
+   "kind": "LEAF",
+   "name": "btnSendTemp",
+   "parent": "fWinway.grpcommu",
+   "path": "fWinway.grpcommu.btnSendTemp",
+   "props": {
+    "Caption": ">>",
+    "Height": 33,
+    "Left": 248,
+    "OnClick": "btnSendTempClick",
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 33
+   },
+   "rect": {
+    "h": 33,
+    "w": 33,
+    "x": 248,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnGetPVClick"
+   },
+   "kind": "LEAF",
+   "name": "btnGetPV",
+   "parent": "fWinway.grpcommu",
+   "path": "fWinway.grpcommu.btnGetPV",
+   "props": {
+    "Caption": "<<",
+    "Height": 33,
+    "Left": 248,
+    "OnClick": "btnGetPVClick",
+    "TabOrder": 2,
+    "Top": 64,
+    "Width": 33
+   },
+   "rect": {
+    "h": 33,
+    "w": 33,
+    "x": 248,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComm",
+   "events": {
+    "OnReceiveData": "WinWayATCComm1ReceiveData"
+   },
+   "kind": "NONVISUAL",
+   "name": "WinWayATCComm1",
+   "parent": "fWinway",
+   "path": "fWinway.WinWayATCComm1",
+   "props": {
+    "BaudRate": 9600,
+    "ByteSize": "_8",
+    "CommName": "COM2",
+    "DsrSensitivity": "False",
+    "DtrControl": "DtrEnable",
+    "IgnoreNullChar": "False",
+    "Inx_XonXoffFlow": "False",
+    "Left": 184,
+    "OnReceiveData": "WinWayATCComm1ReceiveData",
+    "Outx_CtsFlow": "False",
+    "Outx_DsrFlow": "False",
+    "Outx_XonXoffFlow": "False",
+    "Parity": "None",
+    "ParityCheck": "False",
+    "ReadIntervalTimeout": 100,
+    "ReadTotalTimeoutConstant": 0,
+    "ReadTotalTimeoutMultiplier": 0,
+    "ReplaceWhenParityError": "False",
+    "ReplacedChar": "\u0000",
+    "RtsControl": "RtsEnable",
+    "StopBits": "_1",
+    "Top": 8,
+    "TxContinueOnXoff": "False",
+    "WriteTotalTimeoutConstant": 0,
+    "WriteTotalTimeoutMultiplier": 0,
+    "XoffChar": "\u0013",
+    "XoffLimit": 500,
+    "XonChar": "\u0011",
+    "XonLimit": 500
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 184,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComm",
+   "events": {
+    "OnReceiveData": "WinWayATCComm1ReceiveData"
+   },
+   "kind": "NONVISUAL",
+   "name": "WinWayATCComm2",
+   "parent": "fWinway",
+   "path": "fWinway.WinWayATCComm2",
+   "props": {
+    "BaudRate": 9600,
+    "ByteSize": "_8",
+    "CommName": "COM2",
+    "DsrSensitivity": "False",
+    "DtrControl": "DtrEnable",
+    "IgnoreNullChar": "False",
+    "Inx_XonXoffFlow": "False",
+    "Left": 216,
+    "OnReceiveData": "WinWayATCComm1ReceiveData",
+    "Outx_CtsFlow": "False",
+    "Outx_DsrFlow": "False",
+    "Outx_XonXoffFlow": "False",
+    "Parity": "None",
+    "ParityCheck": "False",
+    "ReadIntervalTimeout": 100,
+    "ReadTotalTimeoutConstant": 0,
+    "ReadTotalTimeoutMultiplier": 0,
+    "ReplaceWhenParityError": "False",
+    "ReplacedChar": "\u0000",
+    "RtsControl": "RtsEnable",
+    "StopBits": "_1",
+    "Top": 8,
+    "TxContinueOnXoff": "False",
+    "WriteTotalTimeoutConstant": 0,
+    "WriteTotalTimeoutMultiplier": 0,
+    "XoffChar": "\u0013",
+    "XoffLimit": 500,
+    "XonChar": "\u0011",
+    "XonLimit": 500
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 216,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComm",
+   "events": {
+    "OnReceiveData": "WinWayATCComm1ReceiveData"
+   },
+   "kind": "NONVISUAL",
+   "name": "WinWayATCComm3",
+   "parent": "fWinway",
+   "path": "fWinway.WinWayATCComm3",
+   "props": {
+    "BaudRate": 9600,
+    "ByteSize": "_8",
+    "CommName": "COM2",
+    "DsrSensitivity": "False",
+    "DtrControl": "DtrEnable",
+    "IgnoreNullChar": "False",
+    "Inx_XonXoffFlow": "False",
+    "Left": 248,
+    "OnReceiveData": "WinWayATCComm1ReceiveData",
+    "Outx_CtsFlow": "False",
+    "Outx_DsrFlow": "False",
+    "Outx_XonXoffFlow": "False",
+    "Parity": "None",
+    "ParityCheck": "False",
+    "ReadIntervalTimeout": 100,
+    "ReadTotalTimeoutConstant": 0,
+    "ReadTotalTimeoutMultiplier": 0,
+    "ReplaceWhenParityError": "False",
+    "ReplacedChar": "\u0000",
+    "RtsControl": "RtsEnable",
+    "StopBits": "_1",
+    "Top": 8,
+    "TxContinueOnXoff": "False",
+    "WriteTotalTimeoutConstant": 0,
+    "WriteTotalTimeoutMultiplier": 0,
+    "XoffChar": "\u0013",
+    "XoffLimit": 500,
+    "XonChar": "\u0011",
+    "XonLimit": 500
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 248,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComm",
+   "events": {
+    "OnReceiveData": "WinWayATCComm1ReceiveData"
+   },
+   "kind": "NONVISUAL",
+   "name": "WinWayATCComm4",
+   "parent": "fWinway",
+   "path": "fWinway.WinWayATCComm4",
+   "props": {
+    "BaudRate": 9600,
+    "ByteSize": "_8",
+    "CommName": "COM2",
+    "DsrSensitivity": "False",
+    "DtrControl": "DtrEnable",
+    "IgnoreNullChar": "False",
+    "Inx_XonXoffFlow": "False",
+    "Left": 280,
+    "OnReceiveData": "WinWayATCComm1ReceiveData",
+    "Outx_CtsFlow": "False",
+    "Outx_DsrFlow": "False",
+    "Outx_XonXoffFlow": "False",
+    "Parity": "None",
+    "ParityCheck": "False",
+    "ReadIntervalTimeout": 100,
+    "ReadTotalTimeoutConstant": 0,
+    "ReadTotalTimeoutMultiplier": 0,
+    "ReplaceWhenParityError": "False",
+    "ReplacedChar": "\u0000",
+    "RtsControl": "RtsEnable",
+    "StopBits": "_1",
+    "Top": 8,
+    "TxContinueOnXoff": "False",
+    "WriteTotalTimeoutConstant": 0,
+    "WriteTotalTimeoutMultiplier": 0,
+    "XoffChar": "\u0013",
+    "XoffLimit": 500,
+    "XonChar": "\u0011",
+    "XonLimit": 500
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 280,
+    "y": 8
+   }
+  }
+ ]
+}

@@ -1,0 +1,6317 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "Tray Assignment",
+ "form": "fTrayAssignment",
+ "form_class": "TfTrayAssignment",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "cTrayAssignment.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfTrayAssignment",
+   "events": {
+    "OnClose": "FormClose",
+    "OnShortCut": "FormShortCut",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fTrayAssignment",
+   "parent": null,
+   "path": "fTrayAssignment",
+   "props": {
+    "Caption": "Tray Assignment",
+    "Color": 12761254,
+    "DragKind": "dkDock",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 847,
+    "Left": 96,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnShortCut": "FormShortCut",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 16,
+    "Top": 249,
+    "Width": 1490
+   },
+   "rect": {
+    "h": 847,
+    "w": 1490,
+    "x": 96,
+    "y": 249
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "palTrayAssign",
+   "parent": "fTrayAssignment",
+   "path": "fTrayAssignment.palTrayAssign",
+   "props": {
+    "Align": "alTop",
+    "BevelInner": "bvLowered",
+    "Color": 12761254,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 429,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 1474
+   },
+   "rect": {
+    "h": 429,
+    "w": 1474,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbAuto3",
+   "parent": "fTrayAssignment.palTrayAssign",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto3",
+   "props": {
+    "Caption": "Auto 3",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 146,
+    "Left": 704,
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Top": 277,
+    "Width": 129
+   },
+   "rect": {
+    "h": 146,
+    "w": 129,
+    "x": 704,
+    "y": 277
+   }
+  },
+  {
+   "align": null,
+   "cls": "TImage",
+   "events": {
+    "OnClick": "imgLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "imgAuto3",
+   "parent": "fTrayAssignment.palTrayAssign.gbAuto3",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto3.imgAuto3",
+   "props": {
+    "AutoSize": "True",
+    "Height": 61,
+    "Left": 34,
+    "OnClick": "imgLoaderClick",
+    "Tag": 3,
+    "Top": 22,
+    "Width": 61
+   },
+   "rect": {
+    "h": 61,
+    "w": 61,
+    "x": 34,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edAuto3Type",
+   "parent": "fTrayAssignment.palTrayAssign.gbAuto3",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto3.edAuto3Type",
+   "props": {
+    "Enabled": "False",
+    "Height": 24,
+    "Left": 9,
+    "ReadOnly": "True",
+    "TabOrder": 0,
+    "Top": 92,
+    "Width": 114
+   },
+   "rect": {
+    "h": 24,
+    "w": 114,
+    "x": 9,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkTrayEndRecvAuto3",
+   "parent": "fTrayAssignment.palTrayAssign.gbAuto3",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto3.chkTrayEndRecvAuto3",
+   "props": {
+    "Caption": "Tray End Recv",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 1,
+    "Top": 120,
+    "Width": 109
+   },
+   "rect": {
+    "h": 17,
+    "w": 109,
+    "x": 12,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbAuto2",
+   "parent": "fTrayAssignment.palTrayAssign",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto2",
+   "props": {
+    "Caption": "Auto 2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 146,
+    "Left": 565,
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Top": 277,
+    "Width": 129
+   },
+   "rect": {
+    "h": 146,
+    "w": 129,
+    "x": 565,
+    "y": 277
+   }
+  },
+  {
+   "align": null,
+   "cls": "TImage",
+   "events": {
+    "OnClick": "imgLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "imgAuto2",
+   "parent": "fTrayAssignment.palTrayAssign.gbAuto2",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto2.imgAuto2",
+   "props": {
+    "AutoSize": "True",
+    "Height": 61,
+    "Left": 34,
+    "OnClick": "imgLoaderClick",
+    "Tag": 2,
+    "Top": 22,
+    "Width": 61
+   },
+   "rect": {
+    "h": 61,
+    "w": 61,
+    "x": 34,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edAuto2Type",
+   "parent": "fTrayAssignment.palTrayAssign.gbAuto2",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto2.edAuto2Type",
+   "props": {
+    "Enabled": "False",
+    "Height": 24,
+    "Left": 9,
+    "ReadOnly": "True",
+    "TabOrder": 0,
+    "Top": 92,
+    "Width": 114
+   },
+   "rect": {
+    "h": 24,
+    "w": 114,
+    "x": 9,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkTrayEndRecvAuto2",
+   "parent": "fTrayAssignment.palTrayAssign.gbAuto2",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto2.chkTrayEndRecvAuto2",
+   "props": {
+    "Caption": "Tray End Recv",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 1,
+    "Top": 120,
+    "Width": 109
+   },
+   "rect": {
+    "h": 17,
+    "w": 109,
+    "x": 12,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbAuto1",
+   "parent": "fTrayAssignment.palTrayAssign",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto1",
+   "props": {
+    "Caption": "Auto 1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 146,
+    "Left": 426,
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Top": 277,
+    "Width": 129
+   },
+   "rect": {
+    "h": 146,
+    "w": 129,
+    "x": 426,
+    "y": 277
+   }
+  },
+  {
+   "align": null,
+   "cls": "TImage",
+   "events": {
+    "OnClick": "imgLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "imgAuto1",
+   "parent": "fTrayAssignment.palTrayAssign.gbAuto1",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto1.imgAuto1",
+   "props": {
+    "AutoSize": "True",
+    "Height": 61,
+    "Left": 34,
+    "OnClick": "imgLoaderClick",
+    "Tag": 1,
+    "Top": 22,
+    "Width": 61
+   },
+   "rect": {
+    "h": 61,
+    "w": 61,
+    "x": 34,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edAuto1Type",
+   "parent": "fTrayAssignment.palTrayAssign.gbAuto1",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto1.edAuto1Type",
+   "props": {
+    "Enabled": "False",
+    "Height": 24,
+    "Left": 9,
+    "ReadOnly": "True",
+    "TabOrder": 0,
+    "Top": 92,
+    "Width": 114
+   },
+   "rect": {
+    "h": 24,
+    "w": 114,
+    "x": 9,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkTrayEndRecvAuto1",
+   "parent": "fTrayAssignment.palTrayAssign.gbAuto1",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto1.chkTrayEndRecvAuto1",
+   "props": {
+    "Caption": "Tray End Recv",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 1,
+    "Top": 120,
+    "Width": 109
+   },
+   "rect": {
+    "h": 17,
+    "w": 109,
+    "x": 12,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbColorTray",
+   "parent": "fTrayAssignment.palTrayAssign",
+   "path": "fTrayAssignment.palTrayAssign.gbColorTray",
+   "props": {
+    "Caption": "Color Tray",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 146,
+    "Left": 286,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 277,
+    "Width": 129
+   },
+   "rect": {
+    "h": 146,
+    "w": 129,
+    "x": 286,
+    "y": 277
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {
+    "OnChange": "cbEmptyChange"
+   },
+   "kind": "LEAF",
+   "name": "cbColor",
+   "parent": "fTrayAssignment.palTrayAssign.gbColorTray",
+   "path": "fTrayAssignment.palTrayAssign.gbColorTray.cbColor",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "Items.Strings": [
+     "Type1",
+     "Type2",
+     "Type3"
+    ],
+    "Left": 10,
+    "OnChange": "cbEmptyChange",
+    "Style": "csDropDownList",
+    "TabOrder": 0,
+    "Top": 92,
+    "Width": 109
+   },
+   "rect": {
+    "h": 24,
+    "w": 109,
+    "x": 10,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbEmptyTray",
+   "parent": "fTrayAssignment.palTrayAssign",
+   "path": "fTrayAssignment.palTrayAssign.gbEmptyTray",
+   "props": {
+    "Caption": "Empty Tray",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 146,
+    "Left": 147,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 277,
+    "Width": 129
+   },
+   "rect": {
+    "h": 146,
+    "w": 129,
+    "x": 147,
+    "y": 277
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {
+    "OnChange": "cbEmptyChange"
+   },
+   "kind": "LEAF",
+   "name": "cbEmpty",
+   "parent": "fTrayAssignment.palTrayAssign.gbEmptyTray",
+   "path": "fTrayAssignment.palTrayAssign.gbEmptyTray.cbEmpty",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "Items.Strings": [
+     "Type1",
+     "Type2",
+     "Type3"
+    ],
+    "Left": 10,
+    "OnChange": "cbEmptyChange",
+    "Style": "csDropDownList",
+    "TabOrder": 0,
+    "Top": 92,
+    "Width": 109
+   },
+   "rect": {
+    "h": 24,
+    "w": 109,
+    "x": 10,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox1",
+   "parent": "fTrayAssignment.palTrayAssign",
+   "path": "fTrayAssignment.palTrayAssign.GroupBox1",
+   "props": {
+    "Caption": "Loader",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 146,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 277,
+    "Width": 129
+   },
+   "rect": {
+    "h": 146,
+    "w": 129,
+    "x": 8,
+    "y": 277
+   }
+  },
+  {
+   "align": null,
+   "cls": "TImage",
+   "events": {
+    "OnClick": "imgLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "imgLoader",
+   "parent": "fTrayAssignment.palTrayAssign.GroupBox1",
+   "path": "fTrayAssignment.palTrayAssign.GroupBox1.imgLoader",
+   "props": {
+    "AutoSize": "True",
+    "Height": 61,
+    "Left": 34,
+    "OnClick": "imgLoaderClick",
+    "Top": 22,
+    "Width": 61
+   },
+   "rect": {
+    "h": 61,
+    "w": 61,
+    "x": 34,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {
+    "OnChange": "cbLoaderChange",
+    "OnDropDown": "cbLoaderDropDown"
+   },
+   "kind": "LEAF",
+   "name": "cbLoader",
+   "parent": "fTrayAssignment.palTrayAssign.GroupBox1",
+   "path": "fTrayAssignment.palTrayAssign.GroupBox1.cbLoader",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "Items.Strings": [
+     "Type1",
+     "Type2",
+     "Type3"
+    ],
+    "Left": 10,
+    "OnChange": "cbLoaderChange",
+    "OnDropDown": "cbLoaderDropDown",
+    "Style": "csDropDownList",
+    "TabOrder": 0,
+    "Top": 92,
+    "Width": 109
+   },
+   "rect": {
+    "h": 24,
+    "w": 109,
+    "x": 10,
+    "y": 92
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "pgRunMode",
+   "parent": "fTrayAssignment.palTrayAssign",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode",
+   "props": {
+    "ActivePage": "tsReTestGroup",
+    "Align": "alTop",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabIndex": 1,
+    "TabOrder": 2,
+    "TabWidth": 100,
+    "Top": 153,
+    "Width": 1470
+   },
+   "rect": {
+    "h": 120,
+    "w": 1470,
+    "x": 2,
+    "y": 153
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsNormalTestGroup",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup",
+   "props": {
+    "Caption": "Normal Test",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clGreen",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "ParentFont": "False"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlFTTrayFrom",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom",
+   "props": {
+    "Align": "alClient",
+    "BevelInner": "bvLowered",
+    "Color": 12761254,
+    "Height": 89,
+    "Left": 360,
+    "TabOrder": 1,
+    "Top": 0,
+    "Width": 1102
+   },
+   "rect": {
+    "h": 89,
+    "w": 1102,
+    "x": 360,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TShape",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Shape11",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom.Shape11",
+   "props": {
+    "Height": 1,
+    "Left": 152,
+    "Top": -16,
+    "Width": 329
+   },
+   "rect": {
+    "h": 1,
+    "w": 329,
+    "x": 152,
+    "y": -16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label63",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom.Label63",
+   "props": {
+    "Caption": "From",
+    "Height": 16,
+    "Left": 6,
+    "Top": 36,
+    "Width": 31
+   },
+   "rect": {
+    "h": 16,
+    "w": 31,
+    "x": 6,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "cbEmptyChange"
+   },
+   "kind": "SUBDLG",
+   "name": "RGAuto1",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom.RGAuto1",
+   "props": {
+    "Height": 67,
+    "ItemIndex": 1,
+    "Items.Strings": [
+     "[1] Empty",
+     "[2] Color"
+    ],
+    "Left": 60,
+    "OnClick": "cbEmptyChange",
+    "TabOrder": 0,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 67,
+    "w": 129,
+    "x": 60,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "RGAuto2Click"
+   },
+   "kind": "SUBDLG",
+   "name": "RGAuto2",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom.RGAuto2",
+   "props": {
+    "Height": 67,
+    "ItemIndex": 1,
+    "Items.Strings": [
+     "[1] Empty",
+     "[2] Color"
+    ],
+    "Left": 199,
+    "OnClick": "RGAuto2Click",
+    "TabOrder": 1,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 67,
+    "w": 129,
+    "x": 199,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "cbEmptyChange"
+   },
+   "kind": "SUBDLG",
+   "name": "RGAuto3",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom.RGAuto3",
+   "props": {
+    "Height": 67,
+    "ItemIndex": 1,
+    "Items.Strings": [
+     "[1] Empty",
+     "[2] Color"
+    ],
+    "Left": 338,
+    "OnClick": "cbEmptyChange",
+    "TabOrder": 2,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 67,
+    "w": 129,
+    "x": 338,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "cbEmptyChange"
+   },
+   "kind": "SUBDLG",
+   "name": "RGAuto4",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom.RGAuto4",
+   "props": {
+    "Height": 67,
+    "ItemIndex": 1,
+    "Items.Strings": [
+     "[1] Empty",
+     "[2] Color"
+    ],
+    "Left": 476,
+    "OnClick": "cbEmptyChange",
+    "TabOrder": 3,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 67,
+    "w": 129,
+    "x": 476,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "RGAuto2Click"
+   },
+   "kind": "SUBDLG",
+   "name": "RGAuto5",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom.RGAuto5",
+   "props": {
+    "Height": 67,
+    "ItemIndex": 1,
+    "Items.Strings": [
+     "[1] Empty",
+     "[2] Color"
+    ],
+    "Left": 615,
+    "OnClick": "RGAuto2Click",
+    "TabOrder": 4,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 67,
+    "w": 129,
+    "x": 615,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "cbEmptyChange"
+   },
+   "kind": "SUBDLG",
+   "name": "RGAuto6",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlFTTrayFrom.RGAuto6",
+   "props": {
+    "Height": 67,
+    "ItemIndex": 1,
+    "Items.Strings": [
+     "[1] Empty",
+     "[2] Color"
+    ],
+    "Left": 754,
+    "OnClick": "cbEmptyChange",
+    "TabOrder": 5,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 67,
+    "w": 129,
+    "x": 754,
+    "y": 2
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlLoad_FT",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlLoad_FT",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 89,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 360
+   },
+   "rect": {
+    "h": 89,
+    "w": 360,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label64",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlLoad_FT",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlLoad_FT.Label64",
+   "props": {
+    "Caption": "To",
+    "Height": 16,
+    "Left": 2,
+    "Top": 38,
+    "Width": 17
+   },
+   "rect": {
+    "h": 16,
+    "w": 17,
+    "x": 2,
+    "y": 38
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblHint",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlLoad_FT",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlLoad_FT.lblHint",
+   "props": {
+    "Caption": "Loader to By P24",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 128,
+    "ParentFont": "False",
+    "Top": 16,
+    "Width": 102
+   },
+   "rect": {
+    "h": 16,
+    "w": 102,
+    "x": 128,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "RGLoaderClick"
+   },
+   "kind": "SUBDLG",
+   "name": "RGLoader",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlLoad_FT",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGroup.pnlLoad_FT.RGLoader",
+   "props": {
+    "Caption": "FT",
+    "Height": 67,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "[1] Empty",
+     "[2] Color"
+    ],
+    "Left": 26,
+    "OnClick": "RGLoaderClick",
+    "TabOrder": 0,
+    "Top": 6,
+    "Width": 97
+   },
+   "rect": {
+    "h": 67,
+    "w": 97,
+    "x": 26,
+    "y": 6
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsReTestGroup",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup",
+   "props": {
+    "Caption": "Retest",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "ImageIndex": 1,
+    "ParentFont": "False"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlRTTrayFrom",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom",
+   "props": {
+    "Align": "alClient",
+    "BevelInner": "bvLowered",
+    "Color": 12761254,
+    "Height": 89,
+    "Left": 360,
+    "TabOrder": 1,
+    "Top": 0,
+    "Width": 1102
+   },
+   "rect": {
+    "h": 89,
+    "w": 1102,
+    "x": 360,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TShape",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Shape1",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom.Shape1",
+   "props": {
+    "Height": 1,
+    "Left": 152,
+    "Top": -16,
+    "Width": 329
+   },
+   "rect": {
+    "h": 1,
+    "w": 329,
+    "x": 152,
+    "y": -16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom.Label1",
+   "props": {
+    "Caption": "From",
+    "Height": 16,
+    "Left": 6,
+    "Top": 36,
+    "Width": 31
+   },
+   "rect": {
+    "h": 16,
+    "w": 31,
+    "x": 6,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "cbEmptyChange"
+   },
+   "kind": "SUBDLG",
+   "name": "rgAuto1_RT",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom.rgAuto1_RT",
+   "props": {
+    "Height": 67,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "[1] Empty",
+     "[2] Color"
+    ],
+    "Left": 60,
+    "OnClick": "cbEmptyChange",
+    "TabOrder": 0,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 67,
+    "w": 129,
+    "x": 60,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "cbEmptyChange"
+   },
+   "kind": "SUBDLG",
+   "name": "rgAuto2_RT",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom.rgAuto2_RT",
+   "props": {
+    "Height": 67,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "[1] Empty",
+     "[2] Color"
+    ],
+    "Left": 199,
+    "OnClick": "cbEmptyChange",
+    "TabOrder": 1,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 67,
+    "w": 129,
+    "x": 199,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "cbEmptyChange"
+   },
+   "kind": "SUBDLG",
+   "name": "rgAuto3_RT",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom.rgAuto3_RT",
+   "props": {
+    "Height": 67,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "[1] Empty",
+     "[2] Color"
+    ],
+    "Left": 338,
+    "OnClick": "cbEmptyChange",
+    "TabOrder": 2,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 67,
+    "w": 129,
+    "x": 338,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "cbEmptyChange"
+   },
+   "kind": "SUBDLG",
+   "name": "rgAuto4_RT",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom.rgAuto4_RT",
+   "props": {
+    "Height": 67,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "[1] Empty",
+     "[2] Color"
+    ],
+    "Left": 476,
+    "OnClick": "cbEmptyChange",
+    "TabOrder": 3,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 67,
+    "w": 129,
+    "x": 476,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "cbEmptyChange"
+   },
+   "kind": "SUBDLG",
+   "name": "rgAuto5_RT",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom.rgAuto5_RT",
+   "props": {
+    "Height": 67,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "[1] Empty",
+     "[2] Color"
+    ],
+    "Left": 615,
+    "OnClick": "cbEmptyChange",
+    "TabOrder": 4,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 67,
+    "w": 129,
+    "x": 615,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "cbEmptyChange"
+   },
+   "kind": "SUBDLG",
+   "name": "rgAuto6_RT",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlRTTrayFrom.rgAuto6_RT",
+   "props": {
+    "Height": 67,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "[1] Empty",
+     "[2] Color"
+    ],
+    "Left": 754,
+    "OnClick": "cbEmptyChange",
+    "TabOrder": 5,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 67,
+    "w": 129,
+    "x": 754,
+    "y": 2
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlLoad_RT",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlLoad_RT",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 89,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 360
+   },
+   "rect": {
+    "h": 89,
+    "w": 360,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label2",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlLoad_RT",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlLoad_RT.Label2",
+   "props": {
+    "Caption": "To",
+    "Height": 16,
+    "Left": 2,
+    "Top": 38,
+    "Width": 17
+   },
+   "rect": {
+    "h": 16,
+    "w": 17,
+    "x": 2,
+    "y": 38
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblHint2",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlLoad_RT",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlLoad_RT.lblHint2",
+   "props": {
+    "Caption": "Lock By P24",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 200,
+    "ParentFont": "False",
+    "Top": 32,
+    "Width": 74
+   },
+   "rect": {
+    "h": 16,
+    "w": 74,
+    "x": 200,
+    "y": 32
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "rgLoad_RTClick"
+   },
+   "kind": "SUBDLG",
+   "name": "rgLoad_RT",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlLoad_RT",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGroup.pnlLoad_RT.rgLoad_RT",
+   "props": {
+    "Caption": "RT",
+    "Height": 67,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "[1] Empty",
+     "[2] Color"
+    ],
+    "Left": 26,
+    "OnClick": "rgLoad_RTClick",
+    "TabOrder": 0,
+    "Top": 6,
+    "Width": 97
+   },
+   "rect": {
+    "h": 67,
+    "w": 97,
+    "x": 26,
+    "y": 6
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsNormalTestGraph",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGraph",
+   "props": {
+    "Caption": "Normal Test",
+    "ImageIndex": 2
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TImage",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ImgNormalTest",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGraph",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGraph.ImgNormalTest",
+   "props": {
+    "Align": "alClient",
+    "Height": 89,
+    "Left": 0,
+    "Top": 0,
+    "Width": 1235
+   },
+   "rect": {
+    "h": 89,
+    "w": 1235,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alRight",
+   "cls": "TScrollBar",
+   "events": {
+    "OnChange": "sbNormalTestChange"
+   },
+   "kind": "LEAF",
+   "name": "sbNormalTest",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGraph",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsNormalTestGraph.sbNormalTest",
+   "props": {
+    "Align": "alRight",
+    "Height": 89,
+    "Kind": "sbVertical",
+    "Left": 1235,
+    "Max": 15,
+    "OnChange": "sbNormalTestChange",
+    "PageSize": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 17
+   },
+   "rect": {
+    "h": 89,
+    "w": 17,
+    "x": 1235,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsReTestGraph",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGraph",
+   "props": {
+    "Caption": "Re-Test",
+    "ImageIndex": 3
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TImage",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ImgReTest",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGraph",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGraph.ImgReTest",
+   "props": {
+    "Align": "alClient",
+    "Height": 89,
+    "Left": 0,
+    "Top": 0,
+    "Width": 1235
+   },
+   "rect": {
+    "h": 89,
+    "w": 1235,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alRight",
+   "cls": "TScrollBar",
+   "events": {
+    "OnChange": "sbNormalTest_RTChange"
+   },
+   "kind": "LEAF",
+   "name": "sbNormalTest_RT",
+   "parent": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGraph",
+   "path": "fTrayAssignment.palTrayAssign.pgRunMode.tsReTestGraph.sbNormalTest_RT",
+   "props": {
+    "Align": "alRight",
+    "Height": 89,
+    "Kind": "sbVertical",
+    "Left": 1235,
+    "Max": 15,
+    "OnChange": "sbNormalTest_RTChange",
+    "PageSize": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 17
+   },
+   "rect": {
+    "h": 89,
+    "w": 17,
+    "x": 1235,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlTop",
+   "parent": "fTrayAssignment.palTrayAssign",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 151,
+    "Left": 2,
+    "TabOrder": 0,
+    "Top": 2,
+    "Width": 1470
+   },
+   "rect": {
+    "h": 151,
+    "w": 1470,
+    "x": 2,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "rgLoaderTypeClick"
+   },
+   "kind": "SUBDLG",
+   "name": "rgLoaderType",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.rgLoaderType",
+   "props": {
+    "Caption": "Loader Type",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 145,
+    "ItemIndex": 1,
+    "Items.Strings": [
+     "Same",
+     "Different"
+    ],
+    "Left": 8,
+    "OnClick": "rgLoaderTypeClick",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 145,
+    "w": 129,
+    "x": 8,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpFix1",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix1",
+   "props": {
+    "Caption": "Fix 1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 145,
+    "Left": 424,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 145,
+    "w": 129,
+    "x": 424,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TImage",
+   "events": {
+    "OnClick": "imgLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "imgFix1",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix1",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix1.imgFix1",
+   "props": {
+    "AutoSize": "True",
+    "Height": 61,
+    "Left": 34,
+    "OnClick": "imgLoaderClick",
+    "Tag": 7,
+    "Top": 22,
+    "Width": 61
+   },
+   "rect": {
+    "h": 61,
+    "w": 61,
+    "x": 34,
+    "y": 22
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFix1",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix1",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix1.labFix1",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "Has IC on tray",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 127,
+    "Width": 125
+   },
+   "rect": {
+    "h": 16,
+    "w": 125,
+    "x": 2,
+    "y": 127
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbFix1",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix1",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix1.cbFix1",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "Type1",
+     "Type2",
+     "Type3"
+    ],
+    "Left": 10,
+    "Style": "csDropDownList",
+    "TabOrder": 0,
+    "Text": "Type1",
+    "Top": 92,
+    "Width": 109
+   },
+   "rect": {
+    "h": 24,
+    "w": 109,
+    "x": 10,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ckUseFix1",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix1",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix1.ckUseFix1",
+   "props": {
+    "Caption": "UpDown Tray",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 1,
+    "Top": 120,
+    "Width": 109
+   },
+   "rect": {
+    "h": 17,
+    "w": 109,
+    "x": 12,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpFix2",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix2",
+   "props": {
+    "Caption": "Fix 2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 145,
+    "Left": 563,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 145,
+    "w": 129,
+    "x": 563,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TImage",
+   "events": {
+    "OnClick": "imgLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "imgFix2",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix2",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix2.imgFix2",
+   "props": {
+    "AutoSize": "True",
+    "Height": 61,
+    "Left": 34,
+    "OnClick": "imgLoaderClick",
+    "Tag": 8,
+    "Top": 22,
+    "Width": 61
+   },
+   "rect": {
+    "h": 61,
+    "w": 61,
+    "x": 34,
+    "y": 22
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFix2",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix2",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix2.labFix2",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "Has IC on tray",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 127,
+    "Width": 125
+   },
+   "rect": {
+    "h": 16,
+    "w": 125,
+    "x": 2,
+    "y": 127
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbFix2",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix2",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix2.cbFix2",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "Type1",
+     "Type2",
+     "Type3"
+    ],
+    "Left": 10,
+    "Style": "csDropDownList",
+    "TabOrder": 0,
+    "Text": "Type1",
+    "Top": 92,
+    "Width": 109
+   },
+   "rect": {
+    "h": 24,
+    "w": 109,
+    "x": 10,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ckUseFix2",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix2",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix2.ckUseFix2",
+   "props": {
+    "Caption": "UpDown Tray",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 1,
+    "Tag": 1,
+    "Top": 120,
+    "Width": 109
+   },
+   "rect": {
+    "h": 17,
+    "w": 109,
+    "x": 8,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpFix3",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix3",
+   "props": {
+    "Caption": "Fix 3",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 145,
+    "Left": 702,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 145,
+    "w": 129,
+    "x": 702,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TImage",
+   "events": {
+    "OnClick": "imgLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "imgFix3",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix3",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix3.imgFix3",
+   "props": {
+    "AutoSize": "True",
+    "Height": 61,
+    "Left": 34,
+    "OnClick": "imgLoaderClick",
+    "Tag": 9,
+    "Top": 22,
+    "Width": 61
+   },
+   "rect": {
+    "h": 61,
+    "w": 61,
+    "x": 34,
+    "y": 22
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFix3",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix3",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix3.labFix3",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "Has IC on tray",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 127,
+    "Width": 125
+   },
+   "rect": {
+    "h": 16,
+    "w": 125,
+    "x": 2,
+    "y": 127
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbFix3",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix3",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix3.cbFix3",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "Type1",
+     "Type2",
+     "Type3"
+    ],
+    "Left": 10,
+    "Style": "csDropDownList",
+    "TabOrder": 0,
+    "Text": "Type1",
+    "Top": 92,
+    "Width": 109
+   },
+   "rect": {
+    "h": 24,
+    "w": 109,
+    "x": 10,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ckUseFix3",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix3",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix3.ckUseFix3",
+   "props": {
+    "Caption": "UpDown Tray",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 1,
+    "Tag": 2,
+    "Top": 120,
+    "Width": 109
+   },
+   "rect": {
+    "h": 17,
+    "w": 109,
+    "x": 8,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "rgFixTrayModeClick"
+   },
+   "kind": "SUBDLG",
+   "name": "rgFixTrayMode",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.rgFixTrayMode",
+   "props": {
+    "Caption": "Fix Tray Mode",
+    "Height": 145,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "[1]  Full Bin",
+     "[2] Up Down"
+    ],
+    "Left": 147,
+    "OnClick": "rgFixTrayModeClick",
+    "TabOrder": 1,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 145,
+    "w": 129,
+    "x": 147,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbRotateKit",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.gbRotateKit",
+   "props": {
+    "Caption": "Device Rotation",
+    "Height": 145,
+    "Left": 278,
+    "TabOrder": 2,
+    "Top": 2,
+    "Visible": "False",
+    "Width": 139
+   },
+   "rect": {
+    "h": 145,
+    "w": 139,
+    "x": 278,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label4",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.gbRotateKit",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.gbRotateKit.Label4",
+   "props": {
+    "Caption": "Loader",
+    "Height": 16,
+    "Left": 8,
+    "Top": 35,
+    "Width": 43
+   },
+   "rect": {
+    "h": 16,
+    "w": 43,
+    "x": 8,
+    "y": 35
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label5",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.gbRotateKit",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.gbRotateKit.Label5",
+   "props": {
+    "Caption": "Unloader",
+    "Height": 16,
+    "Left": 8,
+    "Top": 91,
+    "Width": 56
+   },
+   "rect": {
+    "h": 16,
+    "w": 56,
+    "x": 8,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbInputRotateKIT",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.gbRotateKit",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.gbRotateKit.cbInputRotateKIT",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "Items.Strings": [
+     "0   Deg",
+     "90  Deg",
+     "-90 Deg"
+    ],
+    "Left": 66,
+    "Style": "csDropDownList",
+    "TabOrder": 0,
+    "Top": 31,
+    "Width": 70
+   },
+   "rect": {
+    "h": 24,
+    "w": 70,
+    "x": 66,
+    "y": 31
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbOutputRotateKIT",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.gbRotateKit",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.gbRotateKit.cbOutputRotateKIT",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "Items.Strings": [
+     "0   Deg",
+     "90  Deg",
+     "-90 Deg"
+    ],
+    "Left": 66,
+    "Style": "csDropDownList",
+    "TabOrder": 1,
+    "Top": 87,
+    "Width": 70
+   },
+   "rect": {
+    "h": 24,
+    "w": 70,
+    "x": 66,
+    "y": 87
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpFix4",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix4",
+   "props": {
+    "Caption": "Fix 4",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 145,
+    "Left": 840,
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 145,
+    "w": 129,
+    "x": 840,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TImage",
+   "events": {
+    "OnClick": "imgLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "imgFix4",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix4",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix4.imgFix4",
+   "props": {
+    "AutoSize": "True",
+    "Height": 61,
+    "Left": 34,
+    "OnClick": "imgLoaderClick",
+    "Tag": 10,
+    "Top": 22,
+    "Width": 61
+   },
+   "rect": {
+    "h": 61,
+    "w": 61,
+    "x": 34,
+    "y": 22
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFix4",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix4",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix4.labFix4",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "Has IC on tray",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 127,
+    "Width": 125
+   },
+   "rect": {
+    "h": 16,
+    "w": 125,
+    "x": 2,
+    "y": 127
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbFix4",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix4",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix4.cbFix4",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "Type1",
+     "Type2",
+     "Type3"
+    ],
+    "Left": 10,
+    "Style": "csDropDownList",
+    "TabOrder": 0,
+    "Text": "Type1",
+    "Top": 92,
+    "Width": 109
+   },
+   "rect": {
+    "h": 24,
+    "w": 109,
+    "x": 10,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ckUseFix4",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix4",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix4.ckUseFix4",
+   "props": {
+    "Caption": "UpDown Tray",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 1,
+    "Top": 120,
+    "Width": 109
+   },
+   "rect": {
+    "h": 17,
+    "w": 109,
+    "x": 12,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpFix5",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix5",
+   "props": {
+    "Caption": "Fix 5",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 145,
+    "Left": 979,
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 145,
+    "w": 129,
+    "x": 979,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TImage",
+   "events": {
+    "OnClick": "imgLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "imgFix5",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix5",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix5.imgFix5",
+   "props": {
+    "AutoSize": "True",
+    "Height": 61,
+    "Left": 34,
+    "OnClick": "imgLoaderClick",
+    "Tag": 11,
+    "Top": 22,
+    "Width": 61
+   },
+   "rect": {
+    "h": 61,
+    "w": 61,
+    "x": 34,
+    "y": 22
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFix5",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix5",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix5.labFix5",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "Has IC on tray",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 127,
+    "Width": 125
+   },
+   "rect": {
+    "h": 16,
+    "w": 125,
+    "x": 2,
+    "y": 127
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbFix5",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix5",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix5.cbFix5",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "Type1",
+     "Type2",
+     "Type3"
+    ],
+    "Left": 10,
+    "Style": "csDropDownList",
+    "TabOrder": 0,
+    "Text": "Type1",
+    "Top": 92,
+    "Width": 109
+   },
+   "rect": {
+    "h": 24,
+    "w": 109,
+    "x": 10,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ckUseFix5",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix5",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix5.ckUseFix5",
+   "props": {
+    "Caption": "UpDown Tray",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 1,
+    "Tag": 1,
+    "Top": 120,
+    "Width": 109
+   },
+   "rect": {
+    "h": 17,
+    "w": 109,
+    "x": 8,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpFix6",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix6",
+   "props": {
+    "Caption": "Fix 6",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 145,
+    "Left": 1118,
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Top": 2,
+    "Width": 129
+   },
+   "rect": {
+    "h": 145,
+    "w": 129,
+    "x": 1118,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TImage",
+   "events": {
+    "OnClick": "imgLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "imgFix6",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix6",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix6.imgFix6",
+   "props": {
+    "AutoSize": "True",
+    "Height": 61,
+    "Left": 34,
+    "OnClick": "imgLoaderClick",
+    "Tag": 12,
+    "Top": 22,
+    "Width": 61
+   },
+   "rect": {
+    "h": 61,
+    "w": 61,
+    "x": 34,
+    "y": 22
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFix6",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix6",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix6.labFix6",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "Has IC on tray",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 127,
+    "Width": 125
+   },
+   "rect": {
+    "h": 16,
+    "w": 125,
+    "x": 2,
+    "y": 127
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbFix6",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix6",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix6.cbFix6",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "Type1",
+     "Type2",
+     "Type3"
+    ],
+    "Left": 10,
+    "Style": "csDropDownList",
+    "TabOrder": 0,
+    "Text": "Type1",
+    "Top": 92,
+    "Width": 109
+   },
+   "rect": {
+    "h": 24,
+    "w": 109,
+    "x": 10,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ckUseFix6",
+   "parent": "fTrayAssignment.palTrayAssign.pnlTop.grpFix6",
+   "path": "fTrayAssignment.palTrayAssign.pnlTop.grpFix6.ckUseFix6",
+   "props": {
+    "Caption": "UpDown Tray",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 1,
+    "Tag": 2,
+    "Top": 120,
+    "Width": 109
+   },
+   "rect": {
+    "h": 17,
+    "w": 109,
+    "x": 8,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbAuto6",
+   "parent": "fTrayAssignment.palTrayAssign",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto6",
+   "props": {
+    "Caption": "Auto 6",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 146,
+    "Left": 1120,
+    "ParentFont": "False",
+    "TabOrder": 11,
+    "Top": 277,
+    "Width": 129
+   },
+   "rect": {
+    "h": 146,
+    "w": 129,
+    "x": 1120,
+    "y": 277
+   }
+  },
+  {
+   "align": null,
+   "cls": "TImage",
+   "events": {
+    "OnClick": "imgLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "imgAuto6",
+   "parent": "fTrayAssignment.palTrayAssign.gbAuto6",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto6.imgAuto6",
+   "props": {
+    "AutoSize": "True",
+    "Height": 61,
+    "Left": 34,
+    "OnClick": "imgLoaderClick",
+    "Tag": 6,
+    "Top": 22,
+    "Width": 61
+   },
+   "rect": {
+    "h": 61,
+    "w": 61,
+    "x": 34,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edAuto6Type",
+   "parent": "fTrayAssignment.palTrayAssign.gbAuto6",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto6.edAuto6Type",
+   "props": {
+    "Enabled": "False",
+    "Height": 24,
+    "Left": 9,
+    "ReadOnly": "True",
+    "TabOrder": 0,
+    "Top": 92,
+    "Width": 114
+   },
+   "rect": {
+    "h": 24,
+    "w": 114,
+    "x": 9,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkTrayEndRecvAuto6",
+   "parent": "fTrayAssignment.palTrayAssign.gbAuto6",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto6.chkTrayEndRecvAuto6",
+   "props": {
+    "Caption": "Tray End Recv",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 1,
+    "Top": 120,
+    "Width": 109
+   },
+   "rect": {
+    "h": 17,
+    "w": 109,
+    "x": 12,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbAuto5",
+   "parent": "fTrayAssignment.palTrayAssign",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto5",
+   "props": {
+    "Caption": "Auto 5",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 146,
+    "Left": 981,
+    "ParentFont": "False",
+    "TabOrder": 10,
+    "Top": 277,
+    "Width": 129
+   },
+   "rect": {
+    "h": 146,
+    "w": 129,
+    "x": 981,
+    "y": 277
+   }
+  },
+  {
+   "align": null,
+   "cls": "TImage",
+   "events": {
+    "OnClick": "imgLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "imgAuto5",
+   "parent": "fTrayAssignment.palTrayAssign.gbAuto5",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto5.imgAuto5",
+   "props": {
+    "AutoSize": "True",
+    "Height": 61,
+    "Left": 34,
+    "OnClick": "imgLoaderClick",
+    "Tag": 5,
+    "Top": 22,
+    "Width": 61
+   },
+   "rect": {
+    "h": 61,
+    "w": 61,
+    "x": 34,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edAuto5Type",
+   "parent": "fTrayAssignment.palTrayAssign.gbAuto5",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto5.edAuto5Type",
+   "props": {
+    "Enabled": "False",
+    "Height": 24,
+    "Left": 9,
+    "ReadOnly": "True",
+    "TabOrder": 0,
+    "Top": 92,
+    "Width": 114
+   },
+   "rect": {
+    "h": 24,
+    "w": 114,
+    "x": 9,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkTrayEndRecvAuto5",
+   "parent": "fTrayAssignment.palTrayAssign.gbAuto5",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto5.chkTrayEndRecvAuto5",
+   "props": {
+    "Caption": "Tray End Recv",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 1,
+    "Top": 120,
+    "Width": 109
+   },
+   "rect": {
+    "h": 17,
+    "w": 109,
+    "x": 12,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbAuto4",
+   "parent": "fTrayAssignment.palTrayAssign",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto4",
+   "props": {
+    "Caption": "Auto 4",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 146,
+    "Left": 842,
+    "ParentFont": "False",
+    "TabOrder": 9,
+    "Top": 277,
+    "Width": 129
+   },
+   "rect": {
+    "h": 146,
+    "w": 129,
+    "x": 842,
+    "y": 277
+   }
+  },
+  {
+   "align": null,
+   "cls": "TImage",
+   "events": {
+    "OnClick": "imgLoaderClick"
+   },
+   "kind": "LEAF",
+   "name": "imgAuto4",
+   "parent": "fTrayAssignment.palTrayAssign.gbAuto4",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto4.imgAuto4",
+   "props": {
+    "AutoSize": "True",
+    "Height": 61,
+    "Left": 34,
+    "OnClick": "imgLoaderClick",
+    "Tag": 4,
+    "Top": 22,
+    "Width": 61
+   },
+   "rect": {
+    "h": 61,
+    "w": 61,
+    "x": 34,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edAuto4Type",
+   "parent": "fTrayAssignment.palTrayAssign.gbAuto4",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto4.edAuto4Type",
+   "props": {
+    "Enabled": "False",
+    "Height": 24,
+    "Left": 9,
+    "ReadOnly": "True",
+    "TabOrder": 0,
+    "Top": 92,
+    "Width": 114
+   },
+   "rect": {
+    "h": 24,
+    "w": 114,
+    "x": 9,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkTrayEndRecvAuto4",
+   "parent": "fTrayAssignment.palTrayAssign.gbAuto4",
+   "path": "fTrayAssignment.palTrayAssign.gbAuto4.chkTrayEndRecvAuto4",
+   "props": {
+    "Caption": "Tray End Recv",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 1,
+    "Top": 120,
+    "Width": 109
+   },
+   "rect": {
+    "h": 17,
+    "w": 109,
+    "x": 12,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "palAMR",
+   "parent": "fTrayAssignment.palTrayAssign",
+   "path": "fTrayAssignment.palTrayAssign.palAMR",
+   "props": {
+    "Color": 12761254,
+    "Height": 550,
+    "Left": 1262,
+    "TabOrder": 1,
+    "Top": 10,
+    "Width": 210
+   },
+   "rect": {
+    "h": 550,
+    "w": 210,
+    "x": 1262,
+    "y": 10
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label47",
+   "parent": "fTrayAssignment.palTrayAssign.palAMR",
+   "path": "fTrayAssignment.palTrayAssign.palAMR.Label47",
+   "props": {
+    "Caption": "Input Tray Count :",
+    "Height": 16,
+    "Left": 12,
+    "Top": 130,
+    "Width": 102
+   },
+   "rect": {
+    "h": 16,
+    "w": 102,
+    "x": 12,
+    "y": 130
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label49",
+   "parent": "fTrayAssignment.palTrayAssign.palAMR",
+   "path": "fTrayAssignment.palTrayAssign.palAMR.Label49",
+   "props": {
+    "Caption": "Full Tray Count :",
+    "Height": 16,
+    "Left": 12,
+    "Top": 158,
+    "Width": 95
+   },
+   "rect": {
+    "h": 16,
+    "w": 95,
+    "x": 12,
+    "y": 158
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSpecTrayCnt",
+   "parent": "fTrayAssignment.palTrayAssign.palAMR",
+   "path": "fTrayAssignment.palTrayAssign.palAMR.cbSpecTrayCnt",
+   "props": {
+    "Caption": "Manually specify the quantity.",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 0,
+    "Top": 97,
+    "Width": 195
+   },
+   "rect": {
+    "h": 17,
+    "w": 195,
+    "x": 8,
+    "y": 97
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edAMRInputTrayCount",
+   "parent": "fTrayAssignment.palTrayAssign.palAMR",
+   "path": "fTrayAssignment.palTrayAssign.palAMR.edAMRInputTrayCount",
+   "props": {
+    "Height": 24,
+    "Left": 119,
+    "TabOrder": 1,
+    "Text": "0",
+    "Top": 126,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 119,
+    "y": 126
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edAMRFullTrayCount",
+   "parent": "fTrayAssignment.palTrayAssign.palAMR",
+   "path": "fTrayAssignment.palTrayAssign.palAMR.edAMRFullTrayCount",
+   "props": {
+    "Height": 24,
+    "Left": 119,
+    "TabOrder": 2,
+    "Text": "0",
+    "Top": 154,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 119,
+    "y": 154
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpVTestNoTBin",
+   "parent": "fTrayAssignment.palTrayAssign.palAMR",
+   "path": "fTrayAssignment.palTrayAssign.palAMR.grpVTestNoTBin",
+   "props": {
+    "Caption": "VTest",
+    "Height": 137,
+    "Left": 1,
+    "TabOrder": 3,
+    "Top": 184,
+    "Visible": "False",
+    "Width": 209
+   },
+   "rect": {
+    "h": 137,
+    "w": 209,
+    "x": 1,
+    "y": 184
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label48",
+   "parent": "fTrayAssignment.palTrayAssign.palAMR.grpVTestNoTBin",
+   "path": "fTrayAssignment.palTrayAssign.palAMR.grpVTestNoTBin.Label48",
+   "props": {
+    "Caption": "Fix1",
+    "Height": 16,
+    "Left": 7,
+    "Top": 51,
+    "Width": 24
+   },
+   "rect": {
+    "h": 16,
+    "w": 24,
+    "x": 7,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label50",
+   "parent": "fTrayAssignment.palTrayAssign.palAMR.grpVTestNoTBin",
+   "path": "fTrayAssignment.palTrayAssign.palAMR.grpVTestNoTBin.Label50",
+   "props": {
+    "Caption": "Fix2",
+    "Height": 16,
+    "Left": 7,
+    "Top": 77,
+    "Width": 24
+   },
+   "rect": {
+    "h": 16,
+    "w": 24,
+    "x": 7,
+    "y": 77
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label51",
+   "parent": "fTrayAssignment.palTrayAssign.palAMR.grpVTestNoTBin",
+   "path": "fTrayAssignment.palTrayAssign.palAMR.grpVTestNoTBin.Label51",
+   "props": {
+    "Caption": "Fix3",
+    "Height": 16,
+    "Left": 7,
+    "Top": 103,
+    "Width": 24
+   },
+   "rect": {
+    "h": 16,
+    "w": 24,
+    "x": 7,
+    "y": 103
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edNoRTBinFix1",
+   "parent": "fTrayAssignment.palTrayAssign.palAMR.grpVTestNoTBin",
+   "path": "fTrayAssignment.palTrayAssign.palAMR.grpVTestNoTBin.edNoRTBinFix1",
+   "props": {
+    "Height": 24,
+    "Left": 39,
+    "TabOrder": 1,
+    "Text": "FIX1@NORTBIN",
+    "Top": 48,
+    "Width": 138
+   },
+   "rect": {
+    "h": 24,
+    "w": 138,
+    "x": 39,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edNoRTBinFix2",
+   "parent": "fTrayAssignment.palTrayAssign.palAMR.grpVTestNoTBin",
+   "path": "fTrayAssignment.palTrayAssign.palAMR.grpVTestNoTBin.edNoRTBinFix2",
+   "props": {
+    "Height": 24,
+    "Left": 39,
+    "TabOrder": 2,
+    "Text": "FIX2@NORTBIN",
+    "Top": 74,
+    "Width": 138
+   },
+   "rect": {
+    "h": 24,
+    "w": 138,
+    "x": 39,
+    "y": 74
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edNoRTBinFix3",
+   "parent": "fTrayAssignment.palTrayAssign.palAMR.grpVTestNoTBin",
+   "path": "fTrayAssignment.palTrayAssign.palAMR.grpVTestNoTBin.edNoRTBinFix3",
+   "props": {
+    "Height": 24,
+    "Left": 39,
+    "TabOrder": 3,
+    "Text": "FIX3@NORTBIN",
+    "Top": 100,
+    "Width": 138
+   },
+   "rect": {
+    "h": 24,
+    "w": 138,
+    "x": 39,
+    "y": 100
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbVTestNoRTBin",
+   "parent": "fTrayAssignment.palTrayAssign.palAMR.grpVTestNoTBin",
+   "path": "fTrayAssignment.palTrayAssign.palAMR.grpVTestNoTBin.cbVTestNoRTBin",
+   "props": {
+    "Caption": "No ReTest Bins (Fix Tray)",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 0,
+    "Top": 25,
+    "Width": 195
+   },
+   "rect": {
+    "h": 17,
+    "w": 195,
+    "x": 8,
+    "y": 25
+   }
+  },
+  {
+   "align": "alRight",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox2_KYEC",
+   "parent": "fTrayAssignment",
+   "path": "fTrayAssignment.GroupBox2_KYEC",
+   "props": {
+    "Align": "alRight",
+    "Caption": "AMR",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 285,
+    "Left": 631,
+    "ParentFont": "False",
+    "TabOrder": 99,
+    "Top": 429,
+    "Width": 222
+   },
+   "rect": {
+    "h": 285,
+    "w": 222,
+    "x": 631,
+    "y": 429
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblAMR_1st_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.lblAMR_1st_KYEC",
+   "props": {
+    "Caption": "1 st",
+    "Height": 16,
+    "Left": 12,
+    "Top": 62,
+    "Width": 20
+   },
+   "rect": {
+    "h": 16,
+    "w": 20,
+    "x": 12,
+    "y": 62
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblAMR_2nd_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.lblAMR_2nd_KYEC",
+   "props": {
+    "Caption": "2 nd",
+    "Height": 16,
+    "Left": 12,
+    "Top": 92,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 12,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblAMR_3rd_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.lblAMR_3rd_KYEC",
+   "props": {
+    "Caption": "3 rd",
+    "Height": 16,
+    "Left": 12,
+    "Top": 121,
+    "Width": 22
+   },
+   "rect": {
+    "h": 16,
+    "w": 22,
+    "x": 12,
+    "y": 121
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblAMR_TrayNo_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.lblAMR_TrayNo_KYEC",
+   "props": {
+    "Caption": "Tray No.",
+    "Height": 16,
+    "Left": 59,
+    "Top": 38,
+    "Width": 52
+   },
+   "rect": {
+    "h": 16,
+    "w": 52,
+    "x": 59,
+    "y": 38
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblAMR_IDUse_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.lblAMR_IDUse_KYEC",
+   "props": {
+    "Caption": "ID Use",
+    "Height": 16,
+    "Left": 145,
+    "Top": 36,
+    "Width": 41
+   },
+   "rect": {
+    "h": 16,
+    "w": 41,
+    "x": 145,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblAMR_FullTrayCountCap_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.lblAMR_FullTrayCountCap_KYEC",
+   "props": {
+    "Caption": "Full Tray Count :",
+    "Height": 16,
+    "Left": 12,
+    "Top": 148,
+    "Width": 95
+   },
+   "rect": {
+    "h": 16,
+    "w": 95,
+    "x": 12,
+    "y": 148
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblAMR_InputTrayCountCap_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.lblAMR_InputTrayCountCap_KYEC",
+   "props": {
+    "Caption": "Input Tray Count :",
+    "Height": 16,
+    "Left": 12,
+    "Top": 218,
+    "Width": 102
+   },
+   "rect": {
+    "h": 16,
+    "w": 102,
+    "x": 12,
+    "y": 218
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblAMR_LotTrayCountCap_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.lblAMR_LotTrayCountCap_KYEC",
+   "props": {
+    "Caption": "Lot Tray Count :",
+    "Height": 16,
+    "Left": 12,
+    "Top": 242,
+    "Width": 92
+   },
+   "rect": {
+    "h": 16,
+    "w": 92,
+    "x": 12,
+    "y": 242
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbAMRTray1st_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.cbAMRTray1st_KYEC",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "Items.Strings": [
+     "Empty",
+     "Color",
+     "No Use"
+    ],
+    "Left": 50,
+    "Style": "csDropDownList",
+    "TabOrder": 0,
+    "Top": 58,
+    "Width": 70
+   },
+   "rect": {
+    "h": 24,
+    "w": 70,
+    "x": 50,
+    "y": 58
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbAMRTray2nd_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.cbAMRTray2nd_KYEC",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "Items.Strings": [
+     "Empty",
+     "Color",
+     "No Use"
+    ],
+    "Left": 50,
+    "Style": "csDropDownList",
+    "TabOrder": 1,
+    "Top": 88,
+    "Width": 70
+   },
+   "rect": {
+    "h": 24,
+    "w": 70,
+    "x": 50,
+    "y": 88
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbAMRTray3rd_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.cbAMRTray3rd_KYEC",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "Items.Strings": [
+     "Empty",
+     "Color",
+     "No Use"
+    ],
+    "Left": 50,
+    "Style": "csDropDownList",
+    "TabOrder": 2,
+    "Top": 117,
+    "Width": 70
+   },
+   "rect": {
+    "h": 24,
+    "w": 70,
+    "x": 50,
+    "y": 117
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbAMRTrayID1st_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.cbAMRTrayID1st_KYEC",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "Items.Strings": [
+     "No Use",
+     "Use"
+    ],
+    "Left": 130,
+    "Style": "csDropDownList",
+    "TabOrder": 3,
+    "Top": 58,
+    "Width": 70
+   },
+   "rect": {
+    "h": 24,
+    "w": 70,
+    "x": 130,
+    "y": 58
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbAMRTrayID2nd_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.cbAMRTrayID2nd_KYEC",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "Items.Strings": [
+     "No Use",
+     "Use"
+    ],
+    "Left": 130,
+    "Style": "csDropDownList",
+    "TabOrder": 4,
+    "Top": 88,
+    "Width": 70
+   },
+   "rect": {
+    "h": 24,
+    "w": 70,
+    "x": 130,
+    "y": 88
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbAMRTrayID3rd_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.cbAMRTrayID3rd_KYEC",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "Items.Strings": [
+     "No Use",
+     "Use"
+    ],
+    "Left": 130,
+    "Style": "csDropDownList",
+    "TabOrder": 5,
+    "Top": 117,
+    "Width": 70
+   },
+   "rect": {
+    "h": 24,
+    "w": 70,
+    "x": 130,
+    "y": 117
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edAMRFullTrayCount_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.edAMRFullTrayCount_KYEC",
+   "props": {
+    "Height": 24,
+    "Left": 119,
+    "TabOrder": 6,
+    "Text": "0",
+    "Top": 144,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 119,
+    "y": 144
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {
+    "OnClick": "cbEnableAMR_KYECClick"
+   },
+   "kind": "LEAF",
+   "name": "cbEnableAMR_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.cbEnableAMR_KYEC",
+   "props": {
+    "Caption": "Enable AMR",
+    "Height": 17,
+    "Left": 12,
+    "OnClick": "cbEnableAMR_KYECClick",
+    "TabOrder": 7,
+    "Top": 18,
+    "Width": 172
+   },
+   "rect": {
+    "h": 17,
+    "w": 172,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "rgAMRReaderPos_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.rgAMRReaderPos_KYEC",
+   "props": {
+    "Caption": "Reader Pos",
+    "Columns": 2,
+    "Height": 39,
+    "ItemIndex": 1,
+    "Items.Strings": [
+     "[1] Empty",
+     "[2] Color"
+    ],
+    "Left": 13,
+    "TabOrder": 8,
+    "Top": 170,
+    "Width": 188
+   },
+   "rect": {
+    "h": 39,
+    "w": 188,
+    "x": 13,
+    "y": 170
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edAMRInputTrayCount_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.edAMRInputTrayCount_KYEC",
+   "props": {
+    "Height": 24,
+    "Left": 119,
+    "TabOrder": 9,
+    "Text": "0",
+    "Top": 214,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 119,
+    "y": 214
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbEnableAMRLoader_KYEC",
+   "parent": "fTrayAssignment.GroupBox2_KYEC",
+   "path": "fTrayAssignment.GroupBox2_KYEC.cbEnableAMRLoader_KYEC",
+   "props": {
+    "Caption": "Enable AMR Loader",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 10,
+    "Top": 264,
+    "Width": 172
+   },
+   "rect": {
+    "h": 17,
+    "w": 172,
+    "x": 12,
+    "y": 264
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel2",
+   "parent": "fTrayAssignment",
+   "path": "fTrayAssignment.Panel2",
+   "props": {
+    "Align": "alBottom",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 62,
+    "Left": 0,
+    "TabOrder": 2,
+    "Top": 746,
+    "Width": 1474
+   },
+   "rect": {
+    "h": 62,
+    "w": 1474,
+    "x": 0,
+    "y": 746
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbtExitClick"
+   },
+   "kind": "LEAF",
+   "name": "sbtExit",
+   "parent": "fTrayAssignment.Panel2",
+   "path": "fTrayAssignment.Panel2.sbtExit",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Exit",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 1554,
+     "hex": "0E060000424D0E06000000000000360000002800000016000000160000000100180000000000D805000001000000010000000000000000000000EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF7474A44C4C946C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA44C4C947474A4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C5454C45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC4C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9C645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D46C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC6464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CAC8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEF8C8CAC2424946464D45454C46C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C4C4CBC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424945454C44C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF",
+     "sha1": "f9091dff96fbb403d8fe7eec0dcccd5c7539ad97"
+    },
+    "GroupIndex": 1,
+    "Height": 41,
+    "Left": 504,
+    "OnClick": "sbtExitClick",
+    "ParentFont": "False",
+    "Top": 14,
+    "Width": 241
+   },
+   "rect": {
+    "h": 41,
+    "w": 241,
+    "x": 504,
+    "y": 14
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "spbSaveClick"
+   },
+   "kind": "LEAF",
+   "name": "spbSave",
+   "parent": "fTrayAssignment.Panel2",
+   "path": "fTrayAssignment.Panel2.spbSave",
+   "props": {
+    "Caption": "Save",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 3946,
+     "hex": "660F0000424D660F000000000000360000002800000024000000240000000100180000000000300F000001000000010000000000000000000000FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF9F9F9F9F9F9F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F9F9F9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF7F7F7EFEFEFE8E8E8E6E6E6E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E9E9E9F3F3F3F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF8F8F8ECECECD6D6D6C8C8C8C5C5C5C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4D0D0D0E9E9E9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF0EFEFC0A6A7A55B6CA96270A45E6C934556A6A3A3A4A1A1A19C9C9C9797979393948D8D8E88888A8383867F7D837A7A807978807978994759994759994759994759994759994759994759994756C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAD2C1C1B28181AF6D79B8717FB7707DAA6472EFEFF1EEEEF1995D68B8717EB06B78E1E0E0DDDADBD8D5D6D4D1D2CFCCCCCAC6C6DBD8D88F4B59A05565A05565BE848EB9727FB8727EB8717E994557C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAF6D79BA7481B97380B7737FAA6472E9E9EBECEBEF995D68B8717EB06B78E1DFE1DCDADDD7D5D6D2D0D1CDC9CAC8C3C3D9D6D68D49589F5464A05565BF848EB97380B9737FB9727F9B4457C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC38D95BA7682BA7481B97480AA6472E5E4E7E9E9EB9A5D69B8737FB06B78E5E5E7E2E0E3DDDBDDD8D5D7D3D0D1CDCACBDDDADB8B48579D53639F5464BF858FBA7480BA7481BA74819B4558C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC48E96BA7783BA7682B97481AA6472E0DFE1E5E3E69B5F6BB97580B06B78E9EAECE6E5E8E2E1E4DDDCDED9D6D8D4D0D2E0DFDF8945549B50619D5363BF8590BA7481BA7481BA74819A4759C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F96BB7784BA7784BA7582AA6472DAD9DBE0DEE09B5F6BBA7582B06B78EDECEFEAE9EDE6E6E9E2E2E4DEDDDFDAD8DAE5E2E4874353994E5F9B5061C18690B97480BA7481BA74819C495CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F98BC7886BB7785BB7783AA6472D5D2D4DBD8DA9C606C925864925864EAEAEDEDEDF0EAEAEDE8E7E9E4E2E5DFDDDFE8E7E8864252974C5D994E5FC08691B9727FB97380B973809C4B5CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC49098BC7986BD7985BC7784AA6472CFCCCCD4D1D3D9D7D9DFDCDFE2E1E4E7E5E8EAEAEDEDECF0EAEBEEE8E7EAE4E2E6ECEAEC864252864252874353C28791B7727FB8727EB9727F9C4E5DC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC79198BD7A87BD7987BC7985BB7785AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472B77A84B76F7DB7707DB7707EB8717E9E4E5FC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB7717EB76F7DB76D7CB76D7BB76D7BB66D7BB56C7AB56C7AB66D7BB76F7CB76F7CB7707D9F4E60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB76F7DB76D7CB76D7CB76C7AB66C7AB66D7BB56C7AB56C7AB56C7AB66C7AB66C7AB76D7C9F4F60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6939BBE7E89BC7884A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70B66B7AB66C7B9F5162C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC7949CBF7F8AAF6F7BEBE1E1FEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFEFDFDFEFDFDFDFCFCFCFCFBFCFBFBFBFBFAFAFAF9F9F9F9F9F9F8F8F8E8D1D1A75E70B76D7BB66C7A9F5262C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC8959DC0808BAF6F7BFEFFFEFCFCFBFBFBFAFAFBFAFAFAFAF9FAF9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F7F7F7F6F6F6F6F6F9F9F9A75E70B96F7DB66B7AA05363C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9959DC1818CAF6F7BFEFFFEE1E1E1DFDFDFDDDDDDDBDCDBDADAD9D9D9D9D7D7D6D5D6D5D4D4D3D2D3D2D1D1D1D0D0D0CFCFCFCFCFCFCFCFCFCFCFCFF9FAF9A75E70BA707EB66B79A15466C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9969EC1818DAF6F7BFEFFFEFCFCFCFCFCFBFBFBFBFBFBFAFBFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F6FBFBFBA75E70B97480B56B79A25666C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2828EAF6F7BFEFFFEE4E4E4E3E3E3E2E2E1E0E0E0DEDDDEDCDCDCDADADAD9D9D9D7D8D8D6D5D5D4D4D4D2D3D3D1D2D1D0D0D0CFCFCFCFCFCFFCFCFBA75E70BA7581B56B79A45968C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2838EAF6F7BFEFFFEFCFCFCFCFCFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F8F8F9F8F8F8F8F8F7F7F7F7F7F7F7F7FCFCFCA75E70BA7783B66C7AA55969C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA98A0C2838EAF6F7BFEFFFEE6E6E6E6E5E6E4E4E4E3E3E3E1E2E2E0E0E0DEDEDEDCDCDCDBDBDBD9D9D9D8D8D8D6D6D6D4D5D5D3D3D3D1D1D1D0D0D0FDFDFCA75E70BC7783B76D7BA55D6CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB98A0C2838EAF6F7BFEFFFEFDFDFDFDFDFCFCFDFCFCFCFCFCFCFBFBFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7FDFEFDA75E70BD7985B76F7DA65F6EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E5E5E6E4E5E5E4E3E3E2E2E2E1E0E0DFDFDFDDDDDDDBDBDCDADAD9D9D8D9D7D6D7D5D5D5D3D4D3FEFEFEA75E70BE7A86B7707DA6606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFCFCFBFBFBFAFBFBFAFAFAF9F9F9F9F9F9F9F9F9F9F9F9F8F8F8F8FEFFFEA75E70B38088B8717FA7606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E5E5E5E4E4E3E2E3E3E1E1E1E0DFDFDDDDDEDCDBDCDADADAD9D9D9D7D8D7FEFFFEA75E70996E759E5967A9606EC5C5C5E5E5E5F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFFFEFEFEFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9FAFAF9F9F9F9F9F9F9FEFFFEA75E70B0757F9E5A68AA6471C5C5C5E6E6E6F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA969EC2838EAF6F7BFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEA75E70C77F8BC77F8BAA6572D1D1D1EBEBEBFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAE6A7AAE6A7AAE6A7AD9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6A75E70A75E70A75E70A75E70ECECECF6F6F6FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFA",
+     "sha1": "b6420a2c6417ab1d75d6f7441ace55c339665e38"
+    },
+    "Height": 40,
+    "Left": 54,
+    "OnClick": "spbSaveClick",
+    "ParentFont": "False",
+    "Top": 15,
+    "Width": 227
+   },
+   "rect": {
+    "h": 40,
+    "w": 227,
+    "x": 54,
+    "y": 15
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "rbTemp",
+   "parent": "fTrayAssignment.Panel2",
+   "path": "fTrayAssignment.Panel2.rbTemp",
+   "props": {
+    "Caption": "rbTemp",
+    "Height": 17,
+    "Left": -77,
+    "TabOrder": 0,
+    "Top": 4,
+    "Width": 113
+   },
+   "rect": {
+    "h": 17,
+    "w": 113,
+    "x": -77,
+    "y": 4
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel3",
+   "parent": "fTrayAssignment",
+   "path": "fTrayAssignment.Panel3",
+   "props": {
+    "Align": "alClient",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 317,
+    "Left": 0,
+    "TabOrder": 1,
+    "Top": 429,
+    "Width": 1474
+   },
+   "rect": {
+    "h": 317,
+    "w": 1474,
+    "x": 0,
+    "y": 429
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel5",
+   "parent": "fTrayAssignment.Panel3",
+   "path": "fTrayAssignment.Panel3.Panel5",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 317,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 421
+   },
+   "rect": {
+    "h": 317,
+    "w": 421,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpCheckLoaderDirection",
+   "parent": "fTrayAssignment.Panel3.Panel5",
+   "path": "fTrayAssignment.Panel3.Panel5.grpCheckLoaderDirection",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Check loader tray direction",
+    "Height": 49,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 421
+   },
+   "rect": {
+    "h": 49,
+    "w": 421,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkCheckLoadDirection",
+   "parent": "fTrayAssignment.Panel3.Panel5.grpCheckLoaderDirection",
+   "path": "fTrayAssignment.Panel3.Panel5.grpCheckLoaderDirection.chkCheckLoadDirection",
+   "props": {
+    "Caption": "Enable to check loader tray direction",
+    "Height": 17,
+    "Left": 20,
+    "TabOrder": 0,
+    "Top": 21,
+    "Width": 353
+   },
+   "rect": {
+    "h": 17,
+    "w": 353,
+    "x": 20,
+    "y": 21
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbColorTrayMode",
+   "parent": "fTrayAssignment.Panel3.Panel5",
+   "path": "fTrayAssignment.Panel3.Panel5.gbColorTrayMode",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Use Color Tray Mode",
+    "Height": 49,
+    "Left": 0,
+    "TabOrder": 1,
+    "Top": 49,
+    "Width": 421
+   },
+   "rect": {
+    "h": 49,
+    "w": 421,
+    "x": 0,
+    "y": 49
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkColorTray",
+   "parent": "fTrayAssignment.Panel3.Panel5.gbColorTrayMode",
+   "path": "fTrayAssignment.Panel3.Panel5.gbColorTrayMode.chkColorTray",
+   "props": {
+    "Caption": "Color Sensor Detect",
+    "Height": 17,
+    "Left": 20,
+    "TabOrder": 0,
+    "Top": 21,
+    "Width": 353
+   },
+   "rect": {
+    "h": 17,
+    "w": 353,
+    "x": 20,
+    "y": 21
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbUnloadMode",
+   "parent": "fTrayAssignment.Panel3.Panel5",
+   "path": "fTrayAssignment.Panel3.Panel5.gbUnloadMode",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Unloading Tray Mode",
+    "Height": 88,
+    "Left": 0,
+    "TabOrder": 2,
+    "Top": 98,
+    "Width": 421
+   },
+   "rect": {
+    "h": 88,
+    "w": 421,
+    "x": 0,
+    "y": 98
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkAutoTrayFeed",
+   "parent": "fTrayAssignment.Panel3.Panel5.gbUnloadMode",
+   "path": "fTrayAssignment.Panel3.Panel5.gbUnloadMode.chkAutoTrayFeed",
+   "props": {
+    "Caption": "Feed trays automatically after cleaning out device",
+    "Height": 17,
+    "Left": 20,
+    "TabOrder": 0,
+    "Top": 17,
+    "Width": 353
+   },
+   "rect": {
+    "h": 17,
+    "w": 353,
+    "x": 20,
+    "y": 17
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbManuTakeAutoFailTray_FT",
+   "parent": "fTrayAssignment.Panel3.Panel5.gbUnloadMode",
+   "path": "fTrayAssignment.Panel3.Panel5.gbUnloadMode.cbManuTakeAutoFailTray_FT",
+   "props": {
+    "Caption": "[FT] Auto tray is fail bin must manual put tray  ",
+    "Checked": "True",
+    "Height": 17,
+    "Left": 20,
+    "State": "cbChecked",
+    "TabOrder": 1,
+    "Top": 40,
+    "Width": 325
+   },
+   "rect": {
+    "h": 17,
+    "w": 325,
+    "x": 20,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbManuTakeAutoFailTray_RT",
+   "parent": "fTrayAssignment.Panel3.Panel5.gbUnloadMode",
+   "path": "fTrayAssignment.Panel3.Panel5.gbUnloadMode.cbManuTakeAutoFailTray_RT",
+   "props": {
+    "Caption": "[RT] Auto tray is fail bin must manual put tray  ",
+    "Checked": "True",
+    "Height": 17,
+    "Left": 20,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 62,
+    "Width": 325
+   },
+   "rect": {
+    "h": 17,
+    "w": 325,
+    "x": 20,
+    "y": 62
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TRadioGroup",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "rgLoaderTrayMode",
+   "parent": "fTrayAssignment.Panel3.Panel5",
+   "path": "fTrayAssignment.Panel3.Panel5.rgLoaderTrayMode",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Loader Tray Mode",
+    "Height": 90,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "None",
+     "When Loader had skip device, need remove loader tray manually.",
+     "When Loader had skip device, need open door to check tray."
+    ],
+    "Left": 0,
+    "TabOrder": 3,
+    "Top": 186,
+    "Width": 421
+   },
+   "rect": {
+    "h": 90,
+    "w": 421,
+    "x": 0,
+    "y": 186
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbTrayArmMode",
+   "parent": "fTrayAssignment.Panel3.Panel5",
+   "path": "fTrayAssignment.Panel3.Panel5.gbTrayArmMode",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Tray Arm Motion",
+    "Height": 40,
+    "Left": 0,
+    "TabOrder": 4,
+    "Top": 276,
+    "Width": 421
+   },
+   "rect": {
+    "h": 40,
+    "w": 421,
+    "x": 0,
+    "y": 276
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbMoveAfterTrayGoOut",
+   "parent": "fTrayAssignment.Panel3.Panel5.gbTrayArmMode",
+   "path": "fTrayAssignment.Panel3.Panel5.gbTrayArmMode.cbMoveAfterTrayGoOut",
+   "props": {
+    "Caption": "Tray arm move to AUTO after tray goes outside.",
+    "Height": 17,
+    "Left": 20,
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 353
+   },
+   "rect": {
+    "h": 17,
+    "w": 353,
+    "x": 20,
+    "y": 18
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpICSortFunc",
+   "parent": "fTrayAssignment.Panel3",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc",
+   "props": {
+    "Align": "alClient",
+    "Caption": "Device Sort Funcrion",
+    "Height": 317,
+    "Left": 421,
+    "TabOrder": 1,
+    "Top": 0,
+    "Visible": "False",
+    "Width": 1053
+   },
+   "rect": {
+    "h": 317,
+    "w": 1053,
+    "x": 421,
+    "y": 0
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpICSort3",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Auto 3",
+    "Height": 297,
+    "Left": 282,
+    "TabOrder": 2,
+    "Top": 18,
+    "Width": 140
+   },
+   "rect": {
+    "h": 297,
+    "w": 140,
+    "x": 282,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label7",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.Label7",
+   "props": {
+    "Caption": "No. of Tray       Count",
+    "Height": 16,
+    "Left": 8,
+    "Top": 44,
+    "Width": 121
+   },
+   "rect": {
+    "h": 16,
+    "w": 121,
+    "x": 8,
+    "y": 44
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label20",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.Label20",
+   "props": {
+    "Caption": "1",
+    "Height": 16,
+    "Left": 36,
+    "Top": 68,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label21",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.Label21",
+   "props": {
+    "Caption": "2",
+    "Height": 16,
+    "Left": 36,
+    "Top": 98,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 98
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label22",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.Label22",
+   "props": {
+    "Caption": "3",
+    "Height": 16,
+    "Left": 36,
+    "Top": 127,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 127
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label23",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.Label23",
+   "props": {
+    "Caption": "4",
+    "Height": 16,
+    "Left": 36,
+    "Top": 156,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 156
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label24",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.Label24",
+   "props": {
+    "Caption": "5",
+    "Height": 16,
+    "Left": 36,
+    "Top": 186,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 186
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label25",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.Label25",
+   "props": {
+    "Caption": "6",
+    "Height": 16,
+    "Left": 36,
+    "Top": 217,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 217
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkICSort3",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.chkICSort3",
+   "props": {
+    "Caption": "Enable Auto 3",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 0,
+    "Top": 24,
+    "Width": 121
+   },
+   "rect": {
+    "h": 17,
+    "w": 121,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort3_1",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.edtICSort3_1",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 1,
+    "Text": "0",
+    "Top": 64,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort3_2",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.edtICSort3_2",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 2,
+    "Text": "0",
+    "Top": 94,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 94
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort3_3",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.edtICSort3_3",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 3,
+    "Text": "0",
+    "Top": 123,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 123
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort3_4",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.edtICSort3_4",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 4,
+    "Text": "0",
+    "Top": 152,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 152
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort3_5",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.edtICSort3_5",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 5,
+    "Text": "0",
+    "Top": 182,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 182
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort3_6",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort3.edtICSort3_6",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 6,
+    "Text": "0",
+    "Top": 213,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 213
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpICSort2",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Auto 2",
+    "Height": 297,
+    "Left": 142,
+    "TabOrder": 1,
+    "Top": 18,
+    "Width": 140
+   },
+   "rect": {
+    "h": 297,
+    "w": 140,
+    "x": 142,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label6",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.Label6",
+   "props": {
+    "Caption": "No. of Tray       Count",
+    "Height": 16,
+    "Left": 8,
+    "Top": 44,
+    "Width": 121
+   },
+   "rect": {
+    "h": 16,
+    "w": 121,
+    "x": 8,
+    "y": 44
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label14",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.Label14",
+   "props": {
+    "Caption": "1",
+    "Height": 16,
+    "Left": 36,
+    "Top": 68,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label15",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.Label15",
+   "props": {
+    "Caption": "2",
+    "Height": 16,
+    "Left": 36,
+    "Top": 98,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 98
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label16",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.Label16",
+   "props": {
+    "Caption": "3",
+    "Height": 16,
+    "Left": 36,
+    "Top": 127,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 127
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label17",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.Label17",
+   "props": {
+    "Caption": "4",
+    "Height": 16,
+    "Left": 36,
+    "Top": 156,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 156
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label18",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.Label18",
+   "props": {
+    "Caption": "5",
+    "Height": 16,
+    "Left": 36,
+    "Top": 186,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 186
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label19",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.Label19",
+   "props": {
+    "Caption": "6",
+    "Height": 16,
+    "Left": 36,
+    "Top": 217,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 217
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkICSort2",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.chkICSort2",
+   "props": {
+    "Caption": "Enable Auto 2",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 0,
+    "Top": 24,
+    "Width": 117
+   },
+   "rect": {
+    "h": 17,
+    "w": 117,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort2_1",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.edtICSort2_1",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 1,
+    "Text": "0",
+    "Top": 64,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort2_2",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.edtICSort2_2",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 2,
+    "Text": "0",
+    "Top": 94,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 94
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort2_3",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.edtICSort2_3",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 3,
+    "Text": "0",
+    "Top": 123,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 123
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort2_4",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.edtICSort2_4",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 4,
+    "Text": "0",
+    "Top": 152,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 152
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort2_5",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.edtICSort2_5",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 5,
+    "Text": "0",
+    "Top": 182,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 182
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort2_6",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort2.edtICSort2_6",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 6,
+    "Text": "0",
+    "Top": 213,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 213
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpICSort1",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Auto 1",
+    "Height": 297,
+    "Left": 2,
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 140
+   },
+   "rect": {
+    "h": 297,
+    "w": 140,
+    "x": 2,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label3",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.Label3",
+   "props": {
+    "Caption": "No. of Tray       Count",
+    "Height": 16,
+    "Left": 8,
+    "Top": 44,
+    "Width": 121
+   },
+   "rect": {
+    "h": 16,
+    "w": 121,
+    "x": 8,
+    "y": 44
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label8",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.Label8",
+   "props": {
+    "Caption": "1",
+    "Height": 16,
+    "Left": 36,
+    "Top": 68,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label9",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.Label9",
+   "props": {
+    "Caption": "2",
+    "Height": 16,
+    "Left": 36,
+    "Top": 98,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 98
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label10",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.Label10",
+   "props": {
+    "Caption": "3",
+    "Height": 16,
+    "Left": 36,
+    "Top": 127,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 127
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label11",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.Label11",
+   "props": {
+    "Caption": "4",
+    "Height": 16,
+    "Left": 36,
+    "Top": 156,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 156
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label12",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.Label12",
+   "props": {
+    "Caption": "5",
+    "Height": 16,
+    "Left": 36,
+    "Top": 186,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 186
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label13",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.Label13",
+   "props": {
+    "Caption": "6",
+    "Height": 16,
+    "Left": 36,
+    "Top": 217,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 217
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkICSort1",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.chkICSort1",
+   "props": {
+    "Caption": "Enable Auto 1",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 0,
+    "Top": 24,
+    "Width": 121
+   },
+   "rect": {
+    "h": 17,
+    "w": 121,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort1_1",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.edtICSort1_1",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 1,
+    "Text": "0",
+    "Top": 64,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort1_2",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.edtICSort1_2",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 2,
+    "Text": "0",
+    "Top": 94,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 94
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort1_3",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.edtICSort1_3",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 3,
+    "Text": "0",
+    "Top": 123,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 123
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort1_4",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.edtICSort1_4",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 4,
+    "Text": "0",
+    "Top": 152,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 152
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort1_5",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.edtICSort1_5",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 5,
+    "Text": "0",
+    "Top": 182,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 182
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort1_6",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort1.edtICSort1_6",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 6,
+    "Text": "0",
+    "Top": 213,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 213
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpICSort4",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Auto 4",
+    "Height": 297,
+    "Left": 422,
+    "TabOrder": 3,
+    "Top": 18,
+    "Width": 140
+   },
+   "rect": {
+    "h": 297,
+    "w": 140,
+    "x": 422,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label26",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.Label26",
+   "props": {
+    "Caption": "No. of Tray       Count",
+    "Height": 16,
+    "Left": 8,
+    "Top": 44,
+    "Width": 121
+   },
+   "rect": {
+    "h": 16,
+    "w": 121,
+    "x": 8,
+    "y": 44
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label27",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.Label27",
+   "props": {
+    "Caption": "1",
+    "Height": 16,
+    "Left": 36,
+    "Top": 68,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label28",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.Label28",
+   "props": {
+    "Caption": "2",
+    "Height": 16,
+    "Left": 36,
+    "Top": 98,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 98
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label29",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.Label29",
+   "props": {
+    "Caption": "3",
+    "Height": 16,
+    "Left": 36,
+    "Top": 127,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 127
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label30",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.Label30",
+   "props": {
+    "Caption": "4",
+    "Height": 16,
+    "Left": 36,
+    "Top": 156,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 156
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label31",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.Label31",
+   "props": {
+    "Caption": "5",
+    "Height": 16,
+    "Left": 36,
+    "Top": 186,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 186
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label32",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.Label32",
+   "props": {
+    "Caption": "6",
+    "Height": 16,
+    "Left": 36,
+    "Top": 217,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 217
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkICSort4",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.chkICSort4",
+   "props": {
+    "Caption": "Enable Auto 4",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 0,
+    "Top": 24,
+    "Width": 121
+   },
+   "rect": {
+    "h": 17,
+    "w": 121,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort4_1",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.edtICSort4_1",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 1,
+    "Text": "0",
+    "Top": 64,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort4_2",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.edtICSort4_2",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 2,
+    "Text": "0",
+    "Top": 94,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 94
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort4_3",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.edtICSort4_3",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 3,
+    "Text": "0",
+    "Top": 123,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 123
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort4_4",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.edtICSort4_4",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 4,
+    "Text": "0",
+    "Top": 152,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 152
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort4_5",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.edtICSort4_5",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 5,
+    "Text": "0",
+    "Top": 182,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 182
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort4_6",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort4.edtICSort4_6",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 6,
+    "Text": "0",
+    "Top": 213,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 213
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpICSort6",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Auto 6",
+    "Height": 297,
+    "Left": 702,
+    "TabOrder": 5,
+    "Top": 18,
+    "Width": 140
+   },
+   "rect": {
+    "h": 297,
+    "w": 140,
+    "x": 702,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label33",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.Label33",
+   "props": {
+    "Caption": "No. of Tray       Count",
+    "Height": 16,
+    "Left": 8,
+    "Top": 44,
+    "Width": 121
+   },
+   "rect": {
+    "h": 16,
+    "w": 121,
+    "x": 8,
+    "y": 44
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label34",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.Label34",
+   "props": {
+    "Caption": "1",
+    "Height": 16,
+    "Left": 36,
+    "Top": 68,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label35",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.Label35",
+   "props": {
+    "Caption": "2",
+    "Height": 16,
+    "Left": 36,
+    "Top": 98,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 98
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label36",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.Label36",
+   "props": {
+    "Caption": "3",
+    "Height": 16,
+    "Left": 36,
+    "Top": 127,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 127
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label37",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.Label37",
+   "props": {
+    "Caption": "4",
+    "Height": 16,
+    "Left": 36,
+    "Top": 156,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 156
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label38",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.Label38",
+   "props": {
+    "Caption": "5",
+    "Height": 16,
+    "Left": 36,
+    "Top": 186,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 186
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label39",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.Label39",
+   "props": {
+    "Caption": "6",
+    "Height": 16,
+    "Left": 36,
+    "Top": 217,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 217
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkICSort6",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.chkICSort6",
+   "props": {
+    "Caption": "Enable Auto 6",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 0,
+    "Top": 24,
+    "Width": 121
+   },
+   "rect": {
+    "h": 17,
+    "w": 121,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort6_1",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.edtICSort6_1",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 1,
+    "Text": "0",
+    "Top": 64,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort6_2",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.edtICSort6_2",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 2,
+    "Text": "0",
+    "Top": 94,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 94
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort6_3",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.edtICSort6_3",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 3,
+    "Text": "0",
+    "Top": 123,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 123
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort6_4",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.edtICSort6_4",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 4,
+    "Text": "0",
+    "Top": 152,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 152
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort6_5",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.edtICSort6_5",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 5,
+    "Text": "0",
+    "Top": 182,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 182
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort6_6",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort6.edtICSort6_6",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 6,
+    "Text": "0",
+    "Top": 213,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 213
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpICSort5",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Auto 5",
+    "Height": 297,
+    "Left": 562,
+    "TabOrder": 4,
+    "Top": 18,
+    "Width": 140
+   },
+   "rect": {
+    "h": 297,
+    "w": 140,
+    "x": 562,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label40",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.Label40",
+   "props": {
+    "Caption": "No. of Tray       Count",
+    "Height": 16,
+    "Left": 8,
+    "Top": 44,
+    "Width": 121
+   },
+   "rect": {
+    "h": 16,
+    "w": 121,
+    "x": 8,
+    "y": 44
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label41",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.Label41",
+   "props": {
+    "Caption": "1",
+    "Height": 16,
+    "Left": 36,
+    "Top": 68,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label42",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.Label42",
+   "props": {
+    "Caption": "2",
+    "Height": 16,
+    "Left": 36,
+    "Top": 98,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 98
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label43",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.Label43",
+   "props": {
+    "Caption": "3",
+    "Height": 16,
+    "Left": 36,
+    "Top": 127,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 127
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label44",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.Label44",
+   "props": {
+    "Caption": "4",
+    "Height": 16,
+    "Left": 36,
+    "Top": 156,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 156
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label45",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.Label45",
+   "props": {
+    "Caption": "5",
+    "Height": 16,
+    "Left": 36,
+    "Top": 186,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 186
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label46",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.Label46",
+   "props": {
+    "Caption": "6",
+    "Height": 16,
+    "Left": 36,
+    "Top": 217,
+    "Width": 7
+   },
+   "rect": {
+    "h": 16,
+    "w": 7,
+    "x": 36,
+    "y": 217
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkICSort5",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.chkICSort5",
+   "props": {
+    "Caption": "Enable Auto 5",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 0,
+    "Top": 24,
+    "Width": 121
+   },
+   "rect": {
+    "h": 17,
+    "w": 121,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort5_1",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.edtICSort5_1",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 1,
+    "Text": "0",
+    "Top": 64,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort5_2",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.edtICSort5_2",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 2,
+    "Text": "0",
+    "Top": 94,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 94
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort5_3",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.edtICSort5_3",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 3,
+    "Text": "0",
+    "Top": 123,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 123
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort5_4",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.edtICSort5_4",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 4,
+    "Text": "0",
+    "Top": 152,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 152
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort5_5",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.edtICSort5_5",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 5,
+    "Text": "0",
+    "Top": 182,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 182
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtICSort1_1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtICSort5_6",
+   "parent": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5",
+   "path": "fTrayAssignment.Panel3.grpICSortFunc.grpICSort5.edtICSort5_6",
+   "props": {
+    "Height": 24,
+    "Left": 84,
+    "OnMouseDown": "edtICSort1_1MouseDown",
+    "TabOrder": 6,
+    "Text": "0",
+    "Top": 213,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 84,
+    "y": 213
+   }
+  }
+ ]
+}

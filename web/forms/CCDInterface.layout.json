@@ -1,0 +1,476 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "MUTInterface",
+ "form": "CCDInterfaceForm",
+ "form_class": "TCCDInterfaceForm",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "CCDInterface.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TCCDInterfaceForm",
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "CCDInterfaceForm",
+   "parent": null,
+   "path": "CCDInterfaceForm",
+   "props": {
+    "Caption": "MUTInterface",
+    "Color": 12761254,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 333,
+    "Left": 400,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "Position": "poScreenCenter",
+    "TextHeight": 13,
+    "Top": 289,
+    "Width": 391
+   },
+   "rect": {
+    "h": 333,
+    "w": 391,
+    "x": 400,
+    "y": 289
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {
+    "OnDblClick": "MemoDblClick"
+   },
+   "kind": "LEAF",
+   "name": "Memo",
+   "parent": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.Memo",
+   "props": {
+    "Color": 14670284,
+    "Height": 193,
+    "Left": 131,
+    "OnDblClick": "MemoDblClick",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 236
+   },
+   "rect": {
+    "h": 193,
+    "w": 236,
+    "x": 131,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button1Click"
+   },
+   "kind": "LEAF",
+   "name": "Button1",
+   "parent": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.Button1",
+   "props": {
+    "Caption": "EXISTENCE",
+    "Height": 25,
+    "Left": 8,
+    "OnClick": "Button1Click",
+    "TabOrder": 1,
+    "Top": 40,
+    "Width": 113
+   },
+   "rect": {
+    "h": 25,
+    "w": 113,
+    "x": 8,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button2Click"
+   },
+   "kind": "LEAF",
+   "name": "Button2",
+   "parent": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.Button2",
+   "props": {
+    "Caption": "FILE READY",
+    "Height": 25,
+    "Left": 8,
+    "OnClick": "Button2Click",
+    "TabOrder": 2,
+    "Top": 104,
+    "Width": 113
+   },
+   "rect": {
+    "h": 25,
+    "w": 113,
+    "x": 8,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button3Click"
+   },
+   "kind": "LEAF",
+   "name": "Button3",
+   "parent": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.Button3",
+   "props": {
+    "Caption": "IDENTIFICATION",
+    "Height": 25,
+    "Left": 8,
+    "OnClick": "Button3Click",
+    "TabOrder": 3,
+    "Top": 136,
+    "Width": 113
+   },
+   "rect": {
+    "h": 25,
+    "w": 113,
+    "x": 8,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button4Click"
+   },
+   "kind": "LEAF",
+   "name": "Button4",
+   "parent": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.Button4",
+   "props": {
+    "Caption": "END",
+    "Height": 25,
+    "Left": 8,
+    "OnClick": "Button4Click",
+    "TabOrder": 4,
+    "Top": 168,
+    "Width": 113
+   },
+   "rect": {
+    "h": 25,
+    "w": 113,
+    "x": 8,
+    "y": 168
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Edit1",
+   "parent": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.Edit1",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Text": "Test",
+    "Top": 72,
+    "Width": 113
+   },
+   "rect": {
+    "h": 24,
+    "w": 113,
+    "x": 8,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button5Click"
+   },
+   "kind": "LEAF",
+   "name": "Button5",
+   "parent": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.Button5",
+   "props": {
+    "Caption": "Call CCD Progran",
+    "Height": 25,
+    "Left": 8,
+    "OnClick": "Button5Click",
+    "TabOrder": 6,
+    "Top": 8,
+    "Width": 113
+   },
+   "rect": {
+    "h": 25,
+    "w": 113,
+    "x": 8,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox1",
+   "parent": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.GroupBox1",
+   "props": {
+    "Caption": "Grab Image",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 81,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Top": 200,
+    "Width": 361
+   },
+   "rect": {
+    "h": 81,
+    "w": 361,
+    "x": 8,
+    "y": 200
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "CCDInterfaceForm.GroupBox1",
+   "path": "CCDInterfaceForm.GroupBox1.Label1",
+   "props": {
+    "Caption": "Count :",
+    "Height": 16,
+    "Left": 96,
+    "Top": 24,
+    "Width": 40
+   },
+   "rect": {
+    "h": 16,
+    "w": 40,
+    "x": 96,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label2",
+   "parent": "CCDInterfaceForm.GroupBox1",
+   "path": "CCDInterfaceForm.GroupBox1.Label2",
+   "props": {
+    "Caption": "Save Path",
+    "Height": 16,
+    "Left": 8,
+    "Top": 52,
+    "Width": 62
+   },
+   "rect": {
+    "h": 16,
+    "w": 62,
+    "x": 8,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "CountCBox",
+   "parent": "CCDInterfaceForm.GroupBox1",
+   "path": "CCDInterfaceForm.GroupBox1.CountCBox",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ItemHeight": 16,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "10"
+    ],
+    "Left": 144,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "1",
+    "Top": 20,
+    "Width": 41
+   },
+   "rect": {
+    "h": 24,
+    "w": 41,
+    "x": 144,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button6Click"
+   },
+   "kind": "LEAF",
+   "name": "Button6",
+   "parent": "CCDInterfaceForm.GroupBox1",
+   "path": "CCDInterfaceForm.GroupBox1.Button6",
+   "props": {
+    "Caption": "GRAB",
+    "Height": 25,
+    "Left": 200,
+    "OnClick": "Button6Click",
+    "TabOrder": 1,
+    "Top": 20,
+    "Width": 65
+   },
+   "rect": {
+    "h": 25,
+    "w": 65,
+    "x": 200,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edSavePath",
+   "parent": "CCDInterfaceForm.GroupBox1",
+   "path": "CCDInterfaceForm.GroupBox1.edSavePath",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 80,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "D:\\",
+    "Top": 48,
+    "Width": 185
+   },
+   "rect": {
+    "h": 24,
+    "w": 185,
+    "x": 80,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "VideoCBox",
+   "parent": "CCDInterfaceForm.GroupBox1",
+   "path": "CCDInterfaceForm.GroupBox1.VideoCBox",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "Items.Strings": [
+     "Video 1",
+     "Video 2",
+     "Video 3",
+     "Video 4"
+    ],
+    "Left": 8,
+    "TabOrder": 3,
+    "Text": "Video 1",
+    "Top": 20,
+    "Width": 73
+   },
+   "rect": {
+    "h": 24,
+    "w": 73,
+    "x": 8,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "Timer1",
+   "parent": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.Timer1",
+   "props": {
+    "Enabled": "False",
+    "Interval": 200,
+    "Left": 184,
+    "Top": 16
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 184,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "Timer2",
+   "parent": "CCDInterfaceForm",
+   "path": "CCDInterfaceForm.Timer2",
+   "props": {
+    "Interval": 200,
+    "Left": 220,
+    "Top": 16
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 220,
+    "y": 16
+   }
+  }
+ ]
+}

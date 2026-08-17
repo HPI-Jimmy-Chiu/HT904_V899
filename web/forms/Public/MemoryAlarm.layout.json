@@ -1,0 +1,108 @@
+{
+ "canvas": {
+  "h": 160,
+  "w": 754
+ },
+ "caption": "Memory Alarm",
+ "form": "MemoryAlarmForm",
+ "form_class": "TMemoryAlarmForm",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "Public/MemoryAlarm.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TMemoryAlarmForm",
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "MemoryAlarmForm",
+   "parent": null,
+   "path": "MemoryAlarmForm",
+   "props": {
+    "BorderIcons": [
+     "biSystemMenu"
+    ],
+    "BorderStyle": "bsSingle",
+    "Caption": "Memory Alarm",
+    "ClientHeight": 160,
+    "ClientWidth": 754,
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Left": 701,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 295
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 701,
+    "y": 295
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlMemoryAlarm",
+   "parent": "MemoryAlarmForm",
+   "path": "MemoryAlarmForm.pnlMemoryAlarm",
+   "props": {
+    "Align": "alClient",
+    "Color": 1384132,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 160,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 754
+   },
+   "rect": {
+    "h": 160,
+    "w": 754,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbMemoryAlarm",
+   "parent": "MemoryAlarmForm.pnlMemoryAlarm",
+   "path": "MemoryAlarmForm.pnlMemoryAlarm.lbMemoryAlarm",
+   "props": {
+    "Align": "alClient",
+    "AutoSize": "False",
+    "Caption": "Memory Alarm",
+    "Height": 158,
+    "Layout": "tlCenter",
+    "Left": 1,
+    "Top": 1,
+    "Width": 752
+   },
+   "rect": {
+    "h": 158,
+    "w": 752,
+    "x": 1,
+    "y": 1
+   }
+  }
+ ]
+}

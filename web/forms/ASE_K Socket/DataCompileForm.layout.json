@@ -1,0 +1,541 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "DataCompile",
+ "form": "DataCompile",
+ "form_class": "TDataCompile",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "ASE_K Socket/DataCompileForm.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TDataCompile",
+   "events": {},
+   "kind": "ROOT",
+   "name": "DataCompile",
+   "parent": null,
+   "path": "DataCompile",
+   "props": {
+    "Caption": "DataCompile",
+    "Color": 12761254,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 561,
+    "Left": 326,
+    "OldCreateOrder": "False",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 165,
+    "Width": 1309
+   },
+   "rect": {
+    "h": 561,
+    "w": 1309,
+    "x": 326,
+    "y": 165
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel1",
+   "parent": "DataCompile",
+   "path": "DataCompile.Panel1",
+   "props": {
+    "Align": "alClient",
+    "Color": 12761254,
+    "Height": 530,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 1301
+   },
+   "rect": {
+    "h": 530,
+    "w": 1301,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.Label1",
+   "props": {
+    "Caption": "Set Temp",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 29,
+    "Left": 8,
+    "ParentFont": "False",
+    "Top": 24,
+    "Width": 106
+   },
+   "rect": {
+    "h": 29,
+    "w": 106,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label2",
+   "parent": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.Label2",
+   "props": {
+    "Caption": "Soak time ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 29,
+    "Left": 8,
+    "ParentFont": "False",
+    "Top": 80,
+    "Width": 113
+   },
+   "rect": {
+    "h": 29,
+    "w": 113,
+    "x": 8,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label3",
+   "parent": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.Label3",
+   "props": {
+    "Caption": "binning",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 29,
+    "Left": 10,
+    "ParentFont": "False",
+    "Top": 405,
+    "Width": 79
+   },
+   "rect": {
+    "h": 29,
+    "w": 79,
+    "x": 10,
+    "y": 405
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label4",
+   "parent": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.Label4",
+   "props": {
+    "Caption": "site map ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 29,
+    "Left": 10,
+    "ParentFont": "False",
+    "Top": 282,
+    "Width": 97
+   },
+   "rect": {
+    "h": 29,
+    "w": 97,
+    "x": 10,
+    "y": 282
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label5",
+   "parent": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.Label5",
+   "props": {
+    "Caption": "pin force ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 29,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 140,
+    "Width": 99
+   },
+   "rect": {
+    "h": 29,
+    "w": 99,
+    "x": 7,
+    "y": 140
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label6",
+   "parent": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.Label6",
+   "props": {
+    "Caption": "pin count",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 29,
+    "Left": 8,
+    "ParentFont": "False",
+    "Top": 192,
+    "Width": 97
+   },
+   "rect": {
+    "h": 29,
+    "w": 97,
+    "x": 8,
+    "y": 192
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label7",
+   "parent": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.Label7",
+   "props": {
+    "Caption": "A    ====>     G",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 29,
+    "Left": 161,
+    "ParentFont": "False",
+    "Top": 239,
+    "Width": 157
+   },
+   "rect": {
+    "h": 29,
+    "w": 157,
+    "x": 161,
+    "y": 239
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label8",
+   "parent": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.Label8",
+   "props": {
+    "Caption": "Bin 1  ====>     Bin15     Key in    Auto1-3 Fix 1-3 =   1 -6  0 no use   Ex  2,1,1,0,",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 29,
+    "Left": 161,
+    "ParentFont": "False",
+    "Top": 366,
+    "Width": 821
+   },
+   "rect": {
+    "h": 29,
+    "w": 821,
+    "x": 161,
+    "y": 366
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label9",
+   "parent": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.Label9",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 29,
+    "Left": 264,
+    "ParentFont": "False",
+    "Top": 461,
+    "Width": 6
+   },
+   "rect": {
+    "h": 29,
+    "w": 6,
+    "x": 264,
+    "y": 461
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtWorkTempClick"
+   },
+   "kind": "LEAF",
+   "name": "edtWorkTemp",
+   "parent": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.edtWorkTemp",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Color": "clYellow",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 37,
+    "Left": 161,
+    "OnClick": "edtWorkTempClick",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "30",
+    "Top": 24,
+    "Width": 121
+   },
+   "rect": {
+    "h": 37,
+    "w": 121,
+    "x": 161,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtSoakTimeClick"
+   },
+   "kind": "LEAF",
+   "name": "edtSoakTime",
+   "parent": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.edtSoakTime",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Color": "clYellow",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 37,
+    "Left": 161,
+    "OnClick": "edtSoakTimeClick",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "10",
+    "Top": 78,
+    "Width": 121
+   },
+   "rect": {
+    "h": 37,
+    "w": 121,
+    "x": 161,
+    "y": 78
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtForcePerPinClick"
+   },
+   "kind": "LEAF",
+   "name": "edtForcePerPin",
+   "parent": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.edtForcePerPin",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Color": "clYellow",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 37,
+    "Left": 161,
+    "OnClick": "edtForcePerPinClick",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "10",
+    "Top": 135,
+    "Width": 121
+   },
+   "rect": {
+    "h": 37,
+    "w": 121,
+    "x": 161,
+    "y": 135
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtPinCountClick"
+   },
+   "kind": "LEAF",
+   "name": "edtPinCount",
+   "parent": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.edtPinCount",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Color": "clYellow",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 37,
+    "Left": 161,
+    "OnClick": "edtPinCountClick",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Text": "10",
+    "Top": 189,
+    "Width": 121
+   },
+   "rect": {
+    "h": 37,
+    "w": 121,
+    "x": 161,
+    "y": 189
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtSiteMap",
+   "parent": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.edtSiteMap",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 37,
+    "Left": 161,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 288,
+    "Width": 1065
+   },
+   "rect": {
+    "h": 37,
+    "w": 1065,
+    "x": 161,
+    "y": 288
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtBinMap",
+   "parent": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.edtBinMap",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 37,
+    "Left": 161,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 415,
+    "Width": 1065
+   },
+   "rect": {
+    "h": 37,
+    "w": 1065,
+    "x": 161,
+    "y": 415
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnCompareClick"
+   },
+   "kind": "LEAF",
+   "name": "btnCompare",
+   "parent": "DataCompile.Panel1",
+   "path": "DataCompile.Panel1.btnCompare",
+   "props": {
+    "Caption": "Compare",
+    "Height": 37,
+    "Left": 1056,
+    "OnClick": "btnCompareClick",
+    "TabOrder": 6,
+    "Top": 464,
+    "Width": 145
+   },
+   "rect": {
+    "h": 37,
+    "w": 145,
+    "x": 1056,
+    "y": 464
+   }
+  }
+ ]
+}

@@ -1,0 +1,7167 @@
+{
+ "canvas": {
+  "h": 800,
+  "w": 907
+ },
+ "caption": "FTestIF",
+ "form": "FTestIF",
+ "form_class": "TFTestIF",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "cTesterIF.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TFTestIF",
+   "events": {
+    "OnClose": "FormClose",
+    "OnShortCut": "FormShortCut",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "FTestIF",
+   "parent": null,
+   "path": "FTestIF",
+   "props": {
+    "BorderStyle": "bsDialog",
+    "Caption": "FTestIF",
+    "ClientHeight": 800,
+    "ClientWidth": 907,
+    "Color": 12761254,
+    "DragKind": "dkDock",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Left": 615,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnShortCut": "FormShortCut",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 123
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 615,
+    "y": 123
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpIFType",
+   "parent": "FTestIF",
+   "path": "FTestIF.grpIFType",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Tester Interface",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 748,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 357
+   },
+   "rect": {
+    "h": 748,
+    "w": 357,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "rgInterfaceTypeClick"
+   },
+   "kind": "SUBDLG",
+   "name": "rgInterfaceType",
+   "parent": "FTestIF.grpIFType",
+   "path": "FTestIF.grpIFType.rgInterfaceType",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Interface for Connection",
+    "Columns": 3,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 57,
+    "ItemIndex": 1,
+    "Items.Strings": [
+     "DIO",
+     "GP-IB",
+     "RS232",
+     "TCP/IP"
+    ],
+    "Left": 2,
+    "OnClick": "rgInterfaceTypeClick",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 353
+   },
+   "rect": {
+    "h": 57,
+    "w": 353,
+    "x": 2,
+    "y": 18
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "PageControl2",
+   "parent": "FTestIF.grpIFType",
+   "path": "FTestIF.grpIFType.PageControl2",
+   "props": {
+    "ActivePage": "tsGpib",
+    "Align": "alClient",
+    "Height": 671,
+    "Left": 2,
+    "TabIndex": 1,
+    "TabOrder": 1,
+    "Top": 75,
+    "Width": 353
+   },
+   "rect": {
+    "h": 671,
+    "w": 353,
+    "x": 2,
+    "y": 75
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsDio",
+   "parent": "FTestIF.grpIFType.PageControl2",
+   "path": "FTestIF.grpIFType.PageControl2.tsDio",
+   "props": {
+    "Caption": "DIO"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpTTL",
+   "parent": "FTestIF.grpIFType.PageControl2.tsDio",
+   "path": "FTestIF.grpIFType.PageControl2.tsDio.grpTTL",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Setting",
+    "Height": 453,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 345
+   },
+   "rect": {
+    "h": 453,
+    "w": 345,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpTTLSetting",
+   "parent": "FTestIF.grpIFType.PageControl2.tsDio.grpTTL",
+   "path": "FTestIF.grpIFType.PageControl2.tsDio.grpTTL.grpTTLSetting",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Type",
+    "Height": 60,
+    "Left": 2,
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 341
+   },
+   "rect": {
+    "h": 60,
+    "w": 341,
+    "x": 2,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {
+    "OnChange": "cbDIOTypeChange"
+   },
+   "kind": "LEAF",
+   "name": "cbDIOType",
+   "parent": "FTestIF.grpIFType.PageControl2.tsDio.grpTTL.grpTTLSetting",
+   "path": "FTestIF.grpIFType.PageControl2.tsDio.grpTTL.grpTTLSetting.cbDIOType",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Hint": "Select commuction method",
+    "ImeName": "",
+    "ItemHeight": 0,
+    "Left": 22,
+    "OnChange": "cbDIOTypeChange",
+    "ParentFont": "False",
+    "ParentShowHint": "False",
+    "ShowHint": "True",
+    "TabOrder": 0,
+    "Top": 24,
+    "Width": 252
+   },
+   "rect": {
+    "h": 24,
+    "w": 252,
+    "x": 22,
+    "y": 24
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TListBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lstTTL",
+   "parent": "FTestIF.grpIFType.PageControl2.tsDio.grpTTL",
+   "path": "FTestIF.grpIFType.PageControl2.tsDio.grpTTL.lstTTL",
+   "props": {
+    "Align": "alTop",
+    "Color": 14670284,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 311,
+    "ItemHeight": 17,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 78,
+    "Width": 341
+   },
+   "rect": {
+    "h": 311,
+    "w": 341,
+    "x": 2,
+    "y": 78
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {
+    "OnClick": "AntiSignalCBoxClick"
+   },
+   "kind": "LEAF",
+   "name": "AntiSignalCBox",
+   "parent": "FTestIF.grpIFType.PageControl2.tsDio.grpTTL",
+   "path": "FTestIF.grpIFType.PageControl2.tsDio.grpTTL.AntiSignalCBox",
+   "props": {
+    "Caption": "Anti-Signal",
+    "Height": 20,
+    "Left": 3,
+    "OnClick": "AntiSignalCBoxClick",
+    "TabOrder": 2,
+    "Top": 392,
+    "Width": 90
+   },
+   "rect": {
+    "h": 20,
+    "w": 90,
+    "x": 3,
+    "y": 392
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {
+    "OnClick": "AntiSignalCBoxClick"
+   },
+   "kind": "LEAF",
+   "name": "cbASEJPMode",
+   "parent": "FTestIF.grpIFType.PageControl2.tsDio.grpTTL",
+   "path": "FTestIF.grpIFType.PageControl2.tsDio.grpTTL.cbASEJPMode",
+   "props": {
+    "Caption": "ASE Special Mode",
+    "Height": 20,
+    "Left": 3,
+    "OnClick": "AntiSignalCBoxClick",
+    "TabOrder": 3,
+    "Top": 416,
+    "Width": 158
+   },
+   "rect": {
+    "h": 20,
+    "w": 158,
+    "x": 3,
+    "y": 416
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsGpib",
+   "parent": "FTestIF.grpIFType.PageControl2",
+   "path": "FTestIF.grpIFType.PageControl2.tsGpib",
+   "props": {
+    "Caption": "GPIB",
+    "ImageIndex": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labcAutoOnecycleHomStart",
+   "parent": "FTestIF.grpIFType.PageControl2.tsGpib",
+   "path": "FTestIF.grpIFType.PageControl2.tsGpib.labcAutoOnecycleHomStart",
+   "props": {
+    "Caption": "min",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 294,
+    "ParentFont": "False",
+    "Top": 432,
+    "Visible": "False",
+    "Width": 21
+   },
+   "rect": {
+    "h": 16,
+    "w": 21,
+    "x": 294,
+    "y": 432
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpGPIB",
+   "parent": "FTestIF.grpIFType.PageControl2.tsGpib",
+   "path": "FTestIF.grpIFType.PageControl2.tsGpib.grpGPIB",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Setting",
+    "Height": 420,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 345
+   },
+   "rect": {
+    "h": 420,
+    "w": 345,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpGPIBType",
+   "parent": "FTestIF.grpIFType.PageControl2.tsGpib.grpGPIB",
+   "path": "FTestIF.grpIFType.PageControl2.tsGpib.grpGPIB.grpGPIBType",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Type",
+    "Height": 110,
+    "Left": 2,
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 341
+   },
+   "rect": {
+    "h": 110,
+    "w": 341,
+    "x": 2,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblGPIBAddr",
+   "parent": "FTestIF.grpIFType.PageControl2.tsGpib.grpGPIB.grpGPIBType",
+   "path": "FTestIF.grpIFType.PageControl2.tsGpib.grpGPIB.grpGPIBType.lblGPIBAddr",
+   "props": {
+    "Caption": "Address",
+    "Height": 16,
+    "Left": 119,
+    "Top": 74,
+    "Width": 51
+   },
+   "rect": {
+    "h": 16,
+    "w": 51,
+    "x": 119,
+    "y": 74
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbGPIBType",
+   "parent": "FTestIF.grpIFType.PageControl2.tsGpib.grpGPIB.grpGPIBType",
+   "path": "FTestIF.grpIFType.PageControl2.tsGpib.grpGPIB.grpGPIBType.cbGPIBType",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Hint": "Select commuction method",
+    "ImeMode": "imClose",
+    "ItemHeight": 16,
+    "ItemIndex": 1,
+    "Items.Strings": [
+     "Advan type1",
+     "255 Bin",
+     "16 Bin",
+     "32 Bin",
+     "SPEA Type",
+     "16 Bin GS",
+     "32 Bin GS",
+     "Advan T6577",
+     "Qrovo Protocol",
+     "Delta_Castle"
+    ],
+    "Left": 22,
+    "ParentFont": "False",
+    "ParentShowHint": "False",
+    "ShowHint": "True",
+    "TabOrder": 0,
+    "Text": "255 Bin",
+    "Top": 24,
+    "Width": 252
+   },
+   "rect": {
+    "h": 24,
+    "w": 252,
+    "x": 22,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edGPIBAddressClick"
+   },
+   "kind": "LEAF",
+   "name": "edGPIBAddress",
+   "parent": "FTestIF.grpIFType.PageControl2.tsGpib.grpGPIB.grpGPIBType",
+   "path": "FTestIF.grpIFType.PageControl2.tsGpib.grpGPIB.grpGPIBType.edGPIBAddress",
+   "props": {
+    "Height": 24,
+    "ImeName": "",
+    "Left": 178,
+    "OnClick": "edGPIBAddressClick",
+    "TabOrder": 1,
+    "Top": 72,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 178,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSpiroxTesterLotEnd",
+   "parent": "FTestIF.grpIFType.PageControl2.tsGpib.grpGPIB",
+   "path": "FTestIF.grpIFType.PageControl2.tsGpib.grpGPIB.cbSpiroxTesterLotEnd",
+   "props": {
+    "Caption": "Spirox Lot End and Full lot end command.",
+    "Height": 21,
+    "Left": 5,
+    "ParentShowHint": "False",
+    "ShowHint": "True",
+    "TabOrder": 2,
+    "Top": 316,
+    "Width": 268
+   },
+   "rect": {
+    "h": 21,
+    "w": 268,
+    "x": 5,
+    "y": 316
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TRadioGroup",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "rg2DID_Format",
+   "parent": "FTestIF.grpIFType.PageControl2.tsGpib.grpGPIB",
+   "path": "FTestIF.grpIFType.PageControl2.tsGpib.grpGPIB.rg2DID_Format",
+   "props": {
+    "Align": "alTop",
+    "Caption": "2DID format",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 182,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "Standard",
+     "AMD format",
+     "Intel format"
+    ],
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 128,
+    "Width": 341
+   },
+   "rect": {
+    "h": 182,
+    "w": 341,
+    "x": 2,
+    "y": 128
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbAutoOnecycleHomStart",
+   "parent": "FTestIF.grpIFType.PageControl2.tsGpib",
+   "path": "FTestIF.grpIFType.PageControl2.tsGpib.cbAutoOnecycleHomStart",
+   "props": {
+    "Caption": "Auto home and start every",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 17,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 431,
+    "Visible": "False",
+    "Width": 209
+   },
+   "rect": {
+    "h": 17,
+    "w": 209,
+    "x": 8,
+    "y": 431
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtAutoOnecycleHomStartTimeClick"
+   },
+   "kind": "LEAF",
+   "name": "edtAutoOnecycleHomStartTime",
+   "parent": "FTestIF.grpIFType.PageControl2.tsGpib",
+   "path": "FTestIF.grpIFType.PageControl2.tsGpib.edtAutoOnecycleHomStartTime",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 187,
+    "OnClick": "edtAutoOnecycleHomStartTimeClick",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0.00",
+    "Top": 427,
+    "Visible": "False",
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 187,
+    "y": 427
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsRs232",
+   "parent": "FTestIF.grpIFType.PageControl2",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232",
+   "props": {
+    "Caption": "RS232",
+    "ImageIndex": 2
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "pgcRS232",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232",
+   "props": {
+    "ActivePage": "tsRS232Setting",
+    "Align": "alClient",
+    "Height": 640,
+    "Left": 0,
+    "TabIndex": 0,
+    "TabOrder": 0,
+    "TabWidth": 100,
+    "Top": 0,
+    "Width": 345
+   },
+   "rect": {
+    "h": 640,
+    "w": 345,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsRS232Setting",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting",
+   "props": {
+    "Caption": "Setting"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpRS232",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Setting",
+    "Height": 369,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 337
+   },
+   "rect": {
+    "h": 369,
+    "w": 337,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpRS232Type",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.grpRS232Type",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Type",
+    "Height": 73,
+    "Left": 2,
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 333
+   },
+   "rect": {
+    "h": 73,
+    "w": 333,
+    "x": 2,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {
+    "OnChange": "cbRs232TypeChange"
+   },
+   "kind": "LEAF",
+   "name": "cbRs232Type",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.grpRS232Type",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.grpRS232Type.cbRs232Type",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Hint": "Select commuction method",
+    "ItemHeight": 16,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "Standard"
+    ],
+    "Left": 19,
+    "OnChange": "cbRs232TypeChange",
+    "ParentFont": "False",
+    "ParentShowHint": "False",
+    "ShowHint": "True",
+    "TabOrder": 0,
+    "Text": "Standard",
+    "Top": 22,
+    "Width": 251
+   },
+   "rect": {
+    "h": 24,
+    "w": 251,
+    "x": 19,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cb_NeedSendVSOT",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.grpRS232Type",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.grpRS232Type.cb_NeedSendVSOT",
+   "props": {
+    "Caption": "SPRD",
+    "Height": 17,
+    "Left": 200,
+    "TabOrder": 1,
+    "Top": 48,
+    "Visible": "False",
+    "Width": 73
+   },
+   "rect": {
+    "h": 17,
+    "w": 73,
+    "x": 200,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbForEgistec",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.grpRS232Type",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.grpRS232Type.cbForEgistec",
+   "props": {
+    "Caption": "For EgisTec",
+    "Height": 17,
+    "Left": 20,
+    "TabOrder": 2,
+    "Top": 52,
+    "Width": 105
+   },
+   "rect": {
+    "h": 17,
+    "w": 105,
+    "x": 20,
+    "y": 52
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlRS232",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.pnlRS232",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 280,
+    "Left": 2,
+    "TabOrder": 1,
+    "Top": 91,
+    "Width": 333
+   },
+   "rect": {
+    "h": 280,
+    "w": 333,
+    "x": 2,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "rgParity",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.pnlRS232",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.pnlRS232.rgParity",
+   "props": {
+    "Caption": "Parity",
+    "Columns": 3,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 57,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "Even",
+     "Odd",
+     "None"
+    ],
+    "Left": 11,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 137,
+    "Width": 318
+   },
+   "rect": {
+    "h": 57,
+    "w": 318,
+    "x": 11,
+    "y": 137
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "rgStopBit",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.pnlRS232",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.pnlRS232.rgStopBit",
+   "props": {
+    "Caption": "Stop Bit",
+    "Columns": 2,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 57,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "1 Bit",
+     "2Bits"
+    ],
+    "Left": 11,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 204,
+    "Width": 318
+   },
+   "rect": {
+    "h": 57,
+    "w": 318,
+    "x": 11,
+    "y": 204
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "rgBitLength",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.pnlRS232",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.pnlRS232.rgBitLength",
+   "props": {
+    "Caption": "Bit Length",
+    "Columns": 2,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 57,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "7 Bits",
+     "8 Bits"
+    ],
+    "Left": 11,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 73,
+    "Width": 318
+   },
+   "rect": {
+    "h": 57,
+    "w": 318,
+    "x": 11,
+    "y": 73
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "rgBaudRate",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.pnlRS232",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.pnlRS232.rgBaudRate",
+   "props": {
+    "Caption": "Baud Rate",
+    "Columns": 3,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 57,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "19200",
+     "9600",
+     "4800"
+    ],
+    "Left": 11,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 11,
+    "Visible": "False",
+    "Width": 279
+   },
+   "rect": {
+    "h": 57,
+    "w": 279,
+    "x": 11,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbBaudRate",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.pnlRS232",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.pnlRS232.gbBaudRate",
+   "props": {
+    "Caption": "Baud Rate",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 61,
+    "Left": 11,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 12,
+    "Width": 318
+   },
+   "rect": {
+    "h": 61,
+    "w": 318,
+    "x": 11,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {
+    "OnChange": "cbRs232TypeChange"
+   },
+   "kind": "LEAF",
+   "name": "cbbBaudRate",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.pnlRS232.gbBaudRate",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsRS232Setting.grpRS232.pnlRS232.gbBaudRate.cbbBaudRate",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Hint": "Select commuction method",
+    "ItemHeight": 16,
+    "ItemIndex": 2,
+    "Items.Strings": [
+     "4800",
+     "7200",
+     "9600",
+     "14400",
+     "19200",
+     "115200"
+    ],
+    "Left": 19,
+    "OnChange": "cbRs232TypeChange",
+    "ParentFont": "False",
+    "ParentShowHint": "False",
+    "ShowHint": "True",
+    "TabOrder": 0,
+    "Text": "9600",
+    "Top": 22,
+    "Width": 251
+   },
+   "rect": {
+    "h": 24,
+    "w": 251,
+    "x": 19,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsSLTSetting",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting",
+   "props": {
+    "Caption": "SLT Setting",
+    "ImageIndex": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labProgramerrorcode",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.labProgramerrorcode",
+   "props": {
+    "Caption": "Check Program ErrCode",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 40,
+    "Width": 146
+   },
+   "rect": {
+    "h": 16,
+    "w": 146,
+    "x": 0,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbRunCheckProgramUse",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.cbRunCheckProgramUse",
+   "props": {
+    "Caption": "Run Check Program",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 17,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 15,
+    "Width": 145
+   },
+   "rect": {
+    "h": 17,
+    "w": 145,
+    "x": 8,
+    "y": 15
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtRunCheckProgramName",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.edtRunCheckProgramName",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 152,
+    "MaxLength": 100,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0",
+    "Top": 10,
+    "Width": 169
+   },
+   "rect": {
+    "h": 24,
+    "w": 169,
+    "x": 152,
+    "y": 10
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtRunCheckProgramNameErrCode",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.edtRunCheckProgramNameErrCode",
+   "props": {
+    "Enabled": "False",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 152,
+    "MaxLength": 100,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "PROGRAMERROR",
+    "Top": 38,
+    "Width": 169
+   },
+   "rect": {
+    "h": 24,
+    "w": 169,
+    "x": 152,
+    "y": 38
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox5",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox5",
+   "props": {
+    "Caption": "Alarm",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 401,
+    "Left": 270,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 88,
+    "Width": 49
+   },
+   "rect": {
+    "h": 401,
+    "w": 49,
+    "x": 270,
+    "y": 88
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label43",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox5",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox5.Label43",
+   "props": {
+    "Caption": "Use",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 11,
+    "ParentFont": "False",
+    "Top": 305,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 11,
+    "y": 305
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbMaxBIOSWaitTimeAlm",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox5",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox5.cbMaxBIOSWaitTimeAlm",
+   "props": {
+    "Height": 17,
+    "Left": 15,
+    "TabOrder": 0,
+    "Top": 211,
+    "Width": 17
+   },
+   "rect": {
+    "h": 17,
+    "w": 17,
+    "x": 15,
+    "y": 211
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbMinTestTimeAlm",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox5",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox5.cbMinTestTimeAlm",
+   "props": {
+    "Height": 17,
+    "Left": 15,
+    "TabOrder": 1,
+    "Top": 269,
+    "Width": 17
+   },
+   "rect": {
+    "h": 17,
+    "w": 17,
+    "x": 15,
+    "y": 269
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbMaxTestTimeAlm",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox5",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox5.cbMaxTestTimeAlm",
+   "props": {
+    "Height": 17,
+    "Left": 15,
+    "TabOrder": 2,
+    "Top": 320,
+    "Width": 17
+   },
+   "rect": {
+    "h": 17,
+    "w": 17,
+    "x": 15,
+    "y": 320
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox4",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox4",
+   "props": {
+    "Caption": "ErrCode",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 401,
+    "Left": 151,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 88,
+    "Width": 121
+   },
+   "rect": {
+    "h": 401,
+    "w": 121,
+    "x": 151,
+    "y": 88
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edMinTestTimeErrCode",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox4",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox4.edMinTestTimeErrCode",
+   "props": {
+    "Enabled": "False",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -12,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 21,
+    "ImeName": "",
+    "Left": 7,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "MINTESTERROR",
+    "Top": 270,
+    "Width": 106
+   },
+   "rect": {
+    "h": 21,
+    "w": 106,
+    "x": 7,
+    "y": 270
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edBIOSErrCode",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox4",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox4.edBIOSErrCode",
+   "props": {
+    "Enabled": "False",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -12,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 21,
+    "ImeName": "",
+    "Left": 7,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "MAXBIOSERROR",
+    "Top": 213,
+    "Width": 106
+   },
+   "rect": {
+    "h": 21,
+    "w": 106,
+    "x": 7,
+    "y": 213
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edMaxTestTimeErrCode",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox4",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox4.edMaxTestTimeErrCode",
+   "props": {
+    "Enabled": "False",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -12,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 21,
+    "ImeName": "",
+    "Left": 6,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "MAXTESTERROR",
+    "Top": 315,
+    "Width": 106
+   },
+   "rect": {
+    "h": 21,
+    "w": 106,
+    "x": 6,
+    "y": 315
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox6",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "props": {
+    "Caption": "Time Setting",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 401,
+    "Left": 6,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 88,
+    "Width": 147
+   },
+   "rect": {
+    "h": 401,
+    "w": 147,
+    "x": 6,
+    "y": 88
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label31",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.Label31",
+   "props": {
+    "Caption": "Sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 112,
+    "ParentFont": "False",
+    "Top": 100,
+    "Width": 27
+   },
+   "rect": {
+    "h": 16,
+    "w": 27,
+    "x": 112,
+    "y": 100
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label32",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.Label32",
+   "props": {
+    "Caption": "Send NEXT Delay",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 6,
+    "ParentFont": "False",
+    "Top": 76,
+    "Width": 110
+   },
+   "rect": {
+    "h": 16,
+    "w": 110,
+    "x": 6,
+    "y": 76
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label33",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.Label33",
+   "props": {
+    "Caption": "Max BIOS Wait Time",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 6,
+    "ParentFont": "False",
+    "Top": 188,
+    "Width": 123
+   },
+   "rect": {
+    "h": 16,
+    "w": 123,
+    "x": 6,
+    "y": 188
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label4",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.Label4",
+   "props": {
+    "Caption": "Sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 112,
+    "ParentFont": "False",
+    "Top": 212,
+    "Width": 27
+   },
+   "rect": {
+    "h": 16,
+    "w": 27,
+    "x": 112,
+    "y": 212
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label6",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.Label6",
+   "props": {
+    "Caption": "Min Test Time",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 6,
+    "ParentFont": "False",
+    "Top": 244,
+    "Width": 85
+   },
+   "rect": {
+    "h": 16,
+    "w": 85,
+    "x": 6,
+    "y": 244
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label13",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.Label13",
+   "props": {
+    "Caption": "Sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 112,
+    "ParentFont": "False",
+    "Top": 268,
+    "Width": 27
+   },
+   "rect": {
+    "h": 16,
+    "w": 27,
+    "x": 112,
+    "y": 268
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label14",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.Label14",
+   "props": {
+    "Caption": "PowerSwitchDelay",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 6,
+    "ParentFont": "False",
+    "Top": 20,
+    "Width": 112
+   },
+   "rect": {
+    "h": 16,
+    "w": 112,
+    "x": 6,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label17",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.Label17",
+   "props": {
+    "Caption": "Sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 112,
+    "ParentFont": "False",
+    "Top": 44,
+    "Width": 27
+   },
+   "rect": {
+    "h": 16,
+    "w": 27,
+    "x": 112,
+    "y": 44
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label30",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.Label30",
+   "props": {
+    "Caption": "Test OK Wait Time",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 6,
+    "ParentFont": "False",
+    "Top": 132,
+    "Visible": "False",
+    "Width": 112
+   },
+   "rect": {
+    "h": 16,
+    "w": 112,
+    "x": 6,
+    "y": 132
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label18",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.Label18",
+   "props": {
+    "Caption": "Sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 112,
+    "ParentFont": "False",
+    "Top": 156,
+    "Visible": "False",
+    "Width": 27
+   },
+   "rect": {
+    "h": 16,
+    "w": 27,
+    "x": 112,
+    "y": 156
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label21",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.Label21",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Max Test Time",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 6,
+    "ParentFont": "False",
+    "Top": 295,
+    "Width": 136
+   },
+   "rect": {
+    "h": 18,
+    "w": 136,
+    "x": 6,
+    "y": 295
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label22",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.Label22",
+   "props": {
+    "Caption": "Sec",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 113,
+    "ParentFont": "False",
+    "Top": 321,
+    "Width": 24
+   },
+   "rect": {
+    "h": 16,
+    "w": 24,
+    "x": 113,
+    "y": 321
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edPowerSwitchDelayClick"
+   },
+   "kind": "LEAF",
+   "name": "edTestOKWaitTime",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.edTestOKWaitTime",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 9,
+    "OnClick": "edPowerSwitchDelayClick",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "0.00",
+    "Top": 152,
+    "Visible": "False",
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 9,
+    "y": 152
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edPowerSwitchDelayClick"
+   },
+   "kind": "LEAF",
+   "name": "edSendNEXTDelay",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.edSendNEXTDelay",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 9,
+    "OnClick": "edPowerSwitchDelayClick",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0.00",
+    "Top": 96,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 9,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edMaxBIOSWaitTimeClick"
+   },
+   "kind": "LEAF",
+   "name": "edMaxBIOSWaitTime",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.edMaxBIOSWaitTime",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 9,
+    "OnClick": "edMaxBIOSWaitTimeClick",
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Text": "0.00",
+    "Top": 208,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 9,
+    "y": 208
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edMinTestTimeClick"
+   },
+   "kind": "LEAF",
+   "name": "edMinTestTime",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.edMinTestTime",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 9,
+    "OnClick": "edMinTestTimeClick",
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Text": "0.00",
+    "Top": 264,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 9,
+    "y": 264
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edPowerSwitchDelayClick"
+   },
+   "kind": "LEAF",
+   "name": "edPowerSwitchDelay",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.edPowerSwitchDelay",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 9,
+    "OnClick": "edPowerSwitchDelayClick",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0.00",
+    "Top": 40,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 9,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edMaxBIOSWaitTimeClick"
+   },
+   "kind": "LEAF",
+   "name": "edSLTMaxTestTime",
+   "parent": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6",
+   "path": "FTestIF.grpIFType.PageControl2.tsRs232.pgcRS232.tsSLTSetting.GroupBox6.edSLTMaxTestTime",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 9,
+    "OnClick": "edMaxBIOSWaitTimeClick",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Text": "0.00",
+    "Top": 313,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 9,
+    "y": 313
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsTCPIP",
+   "parent": "FTestIF.grpIFType.PageControl2",
+   "path": "FTestIF.grpIFType.PageControl2.tsTCPIP",
+   "props": {
+    "Caption": "TCP/IP",
+    "ImageIndex": 4
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label23",
+   "parent": "FTestIF.grpIFType.PageControl2.tsTCPIP",
+   "path": "FTestIF.grpIFType.PageControl2.tsTCPIP.Label23",
+   "props": {
+    "Caption": "Address",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 5,
+    "ParentFont": "False",
+    "Top": 58,
+    "Width": 51
+   },
+   "rect": {
+    "h": 16,
+    "w": 51,
+    "x": 5,
+    "y": 58
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label24",
+   "parent": "FTestIF.grpIFType.PageControl2.tsTCPIP",
+   "path": "FTestIF.grpIFType.PageControl2.tsTCPIP.Label24",
+   "props": {
+    "Caption": "Port",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 5,
+    "ParentFont": "False",
+    "Top": 98,
+    "Width": 24
+   },
+   "rect": {
+    "h": 16,
+    "w": 24,
+    "x": 5,
+    "y": 98
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btTesterTCPShowClick"
+   },
+   "kind": "LEAF",
+   "name": "btTesterTCPShow",
+   "parent": "FTestIF.grpIFType.PageControl2.tsTCPIP",
+   "path": "FTestIF.grpIFType.PageControl2.tsTCPIP.btTesterTCPShow",
+   "props": {
+    "Caption": "Tester TCP ",
+    "Height": 25,
+    "Left": 184,
+    "OnClick": "btTesterTCPShowClick",
+    "TabOrder": 2,
+    "Top": 96,
+    "Width": 115
+   },
+   "rect": {
+    "h": 25,
+    "w": 115,
+    "x": 184,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edTCPIP_Address",
+   "parent": "FTestIF.grpIFType.PageControl2.tsTCPIP",
+   "path": "FTestIF.grpIFType.PageControl2.tsTCPIP.edTCPIP_Address",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 83,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "192.168.1.50",
+    "Top": 54,
+    "Width": 130
+   },
+   "rect": {
+    "h": 24,
+    "w": 130,
+    "x": 83,
+    "y": 54
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edTCPIP_PortClick"
+   },
+   "kind": "LEAF",
+   "name": "edTCPIP_Port",
+   "parent": "FTestIF.grpIFType.PageControl2.tsTCPIP",
+   "path": "FTestIF.grpIFType.PageControl2.tsTCPIP.edTCPIP_Port",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 83,
+    "OnClick": "edTCPIP_PortClick",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "6000",
+    "Top": 94,
+    "Width": 60
+   },
+   "rect": {
+    "h": 24,
+    "w": 60,
+    "x": 83,
+    "y": 94
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlBtm",
+   "parent": "FTestIF",
+   "path": "FTestIF.pnlBtm",
+   "props": {
+    "Align": "alBottom",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 52,
+    "Left": 0,
+    "TabOrder": 2,
+    "Top": 748,
+    "Width": 907
+   },
+   "rect": {
+    "h": 52,
+    "w": 907,
+    "x": 0,
+    "y": 748
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "spbSaveClick"
+   },
+   "kind": "LEAF",
+   "name": "spbSave",
+   "parent": "FTestIF.pnlBtm",
+   "path": "FTestIF.pnlBtm.spbSave",
+   "props": {
+    "Caption": "Save",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 3946,
+     "hex": "660F0000424D660F000000000000360000002800000024000000240000000100180000000000300F000001000000010000000000000000000000FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF9F9F9F9F9F9F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F9F9F9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF7F7F7EFEFEFE8E8E8E6E6E6E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E9E9E9F3F3F3F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF8F8F8ECECECD6D6D6C8C8C8C5C5C5C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4D0D0D0E9E9E9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF0EFEFC0A6A7A55B6CA96270A45E6C934556A6A3A3A4A1A1A19C9C9C9797979393948D8D8E88888A8383867F7D837A7A807978807978994759994759994759994759994759994759994759994756C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAD2C1C1B28181AF6D79B8717FB7707DAA6472EFEFF1EEEEF1995D68B8717EB06B78E1E0E0DDDADBD8D5D6D4D1D2CFCCCCCAC6C6DBD8D88F4B59A05565A05565BE848EB9727FB8727EB8717E994557C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAF6D79BA7481B97380B7737FAA6472E9E9EBECEBEF995D68B8717EB06B78E1DFE1DCDADDD7D5D6D2D0D1CDC9CAC8C3C3D9D6D68D49589F5464A05565BF848EB97380B9737FB9727F9B4457C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC38D95BA7682BA7481B97480AA6472E5E4E7E9E9EB9A5D69B8737FB06B78E5E5E7E2E0E3DDDBDDD8D5D7D3D0D1CDCACBDDDADB8B48579D53639F5464BF858FBA7480BA7481BA74819B4558C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC48E96BA7783BA7682B97481AA6472E0DFE1E5E3E69B5F6BB97580B06B78E9EAECE6E5E8E2E1E4DDDCDED9D6D8D4D0D2E0DFDF8945549B50619D5363BF8590BA7481BA7481BA74819A4759C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F96BB7784BA7784BA7582AA6472DAD9DBE0DEE09B5F6BBA7582B06B78EDECEFEAE9EDE6E6E9E2E2E4DEDDDFDAD8DAE5E2E4874353994E5F9B5061C18690B97480BA7481BA74819C495CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F98BC7886BB7785BB7783AA6472D5D2D4DBD8DA9C606C925864925864EAEAEDEDEDF0EAEAEDE8E7E9E4E2E5DFDDDFE8E7E8864252974C5D994E5FC08691B9727FB97380B973809C4B5CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC49098BC7986BD7985BC7784AA6472CFCCCCD4D1D3D9D7D9DFDCDFE2E1E4E7E5E8EAEAEDEDECF0EAEBEEE8E7EAE4E2E6ECEAEC864252864252874353C28791B7727FB8727EB9727F9C4E5DC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC79198BD7A87BD7987BC7985BB7785AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472B77A84B76F7DB7707DB7707EB8717E9E4E5FC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB7717EB76F7DB76D7CB76D7BB76D7BB66D7BB56C7AB56C7AB66D7BB76F7CB76F7CB7707D9F4E60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB76F7DB76D7CB76D7CB76C7AB66C7AB66D7BB56C7AB56C7AB56C7AB66C7AB66C7AB76D7C9F4F60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6939BBE7E89BC7884A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70B66B7AB66C7B9F5162C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC7949CBF7F8AAF6F7BEBE1E1FEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFEFDFDFEFDFDFDFCFCFCFCFBFCFBFBFBFBFAFAFAF9F9F9F9F9F9F8F8F8E8D1D1A75E70B76D7BB66C7A9F5262C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC8959DC0808BAF6F7BFEFFFEFCFCFBFBFBFAFAFBFAFAFAFAF9FAF9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F7F7F7F6F6F6F6F6F9F9F9A75E70B96F7DB66B7AA05363C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9959DC1818CAF6F7BFEFFFEE1E1E1DFDFDFDDDDDDDBDCDBDADAD9D9D9D9D7D7D6D5D6D5D4D4D3D2D3D2D1D1D1D0D0D0CFCFCFCFCFCFCFCFCFCFCFCFF9FAF9A75E70BA707EB66B79A15466C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9969EC1818DAF6F7BFEFFFEFCFCFCFCFCFBFBFBFBFBFBFAFBFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F6FBFBFBA75E70B97480B56B79A25666C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2828EAF6F7BFEFFFEE4E4E4E3E3E3E2E2E1E0E0E0DEDDDEDCDCDCDADADAD9D9D9D7D8D8D6D5D5D4D4D4D2D3D3D1D2D1D0D0D0CFCFCFCFCFCFFCFCFBA75E70BA7581B56B79A45968C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2838EAF6F7BFEFFFEFCFCFCFCFCFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F8F8F9F8F8F8F8F8F7F7F7F7F7F7F7F7FCFCFCA75E70BA7783B66C7AA55969C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA98A0C2838EAF6F7BFEFFFEE6E6E6E6E5E6E4E4E4E3E3E3E1E2E2E0E0E0DEDEDEDCDCDCDBDBDBD9D9D9D8D8D8D6D6D6D4D5D5D3D3D3D1D1D1D0D0D0FDFDFCA75E70BC7783B76D7BA55D6CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB98A0C2838EAF6F7BFEFFFEFDFDFDFDFDFCFCFDFCFCFCFCFCFCFBFBFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7FDFEFDA75E70BD7985B76F7DA65F6EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E5E5E6E4E5E5E4E3E3E2E2E2E1E0E0DFDFDFDDDDDDDBDBDCDADAD9D9D8D9D7D6D7D5D5D5D3D4D3FEFEFEA75E70BE7A86B7707DA6606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFCFCFBFBFBFAFBFBFAFAFAF9F9F9F9F9F9F9F9F9F9F9F9F8F8F8F8FEFFFEA75E70B38088B8717FA7606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E5E5E5E4E4E3E2E3E3E1E1E1E0DFDFDDDDDEDCDBDCDADADAD9D9D9D7D8D7FEFFFEA75E70996E759E5967A9606EC5C5C5E5E5E5F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFFFEFEFEFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9FAFAF9F9F9F9F9F9F9FEFFFEA75E70B0757F9E5A68AA6471C5C5C5E6E6E6F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA969EC2838EAF6F7BFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEA75E70C77F8BC77F8BAA6572D1D1D1EBEBEBFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAE6A7AAE6A7AAE6A7AD9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6A75E70A75E70A75E70A75E70ECECECF6F6F6FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFA",
+     "sha1": "b6420a2c6417ab1d75d6f7441ace55c339665e38"
+    },
+    "Height": 40,
+    "Left": 62,
+    "OnClick": "spbSaveClick",
+    "ParentFont": "False",
+    "Top": 9,
+    "Width": 227
+   },
+   "rect": {
+    "h": 40,
+    "w": 227,
+    "x": 62,
+    "y": 9
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbtExitClick"
+   },
+   "kind": "LEAF",
+   "name": "sbtExit",
+   "parent": "FTestIF.pnlBtm",
+   "path": "FTestIF.pnlBtm.sbtExit",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Exit",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 1554,
+     "hex": "0E060000424D0E06000000000000360000002800000016000000160000000100180000000000D805000001000000010000000000000000000000EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF7474A44C4C946C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA44C4C947474A4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C5454C45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC4C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9C645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D46C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC6464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CAC8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEF8C8CAC2424946464D45454C46C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C4C4CBC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424945454C44C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF",
+     "sha1": "f9091dff96fbb403d8fe7eec0dcccd5c7539ad97"
+    },
+    "GroupIndex": 1,
+    "Height": 41,
+    "Left": 384,
+    "OnClick": "sbtExitClick",
+    "ParentFont": "False",
+    "Top": 8,
+    "Width": 237
+   },
+   "rect": {
+    "h": 41,
+    "w": 237,
+    "x": 384,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "rbTemp",
+   "parent": "FTestIF.pnlBtm",
+   "path": "FTestIF.pnlBtm.rbTemp",
+   "props": {
+    "Caption": "rbTemp",
+    "Height": 17,
+    "Left": -77,
+    "TabOrder": 0,
+    "Top": 28,
+    "Width": 113
+   },
+   "rect": {
+    "h": 17,
+    "w": 113,
+    "x": -77,
+    "y": 28
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlTimeSetting",
+   "parent": "FTestIF",
+   "path": "FTestIF.pnlTimeSetting",
+   "props": {
+    "Align": "alClient",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 748,
+    "Left": 357,
+    "TabOrder": 1,
+    "Top": 0,
+    "Width": 550
+   },
+   "rect": {
+    "h": 748,
+    "w": 550,
+    "x": 357,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpTestingStopTime",
+   "parent": "FTestIF.pnlTimeSetting",
+   "path": "FTestIF.pnlTimeSetting.grpTestingStopTime",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Testing Stop Time",
+    "Font.Charset": "CHINESEBIG5_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -15,
+    "Font.Name": "新細明體",
+    "Font.Style": [],
+    "Height": 76,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 219,
+    "Width": 550
+   },
+   "rect": {
+    "h": 76,
+    "w": 550,
+    "x": 0,
+    "y": 219
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblInitialWaitTIme",
+   "parent": "FTestIF.pnlTimeSetting.grpTestingStopTime",
+   "path": "FTestIF.pnlTimeSetting.grpTestingStopTime.lblInitialWaitTIme",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Initial Wait Time",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 12,
+    "ParentFont": "False",
+    "Top": 22,
+    "Width": 140
+   },
+   "rect": {
+    "h": 18,
+    "w": 140,
+    "x": 12,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblInitialWaitTImeSec",
+   "parent": "FTestIF.pnlTimeSetting.grpTestingStopTime",
+   "path": "FTestIF.pnlTimeSetting.grpTestingStopTime.lblInitialWaitTImeSec",
+   "props": {
+    "Caption": "sec",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 265,
+    "ParentFont": "False",
+    "Top": 23,
+    "Width": 22
+   },
+   "rect": {
+    "h": 16,
+    "w": 22,
+    "x": 265,
+    "y": 23
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblTestWaitTime",
+   "parent": "FTestIF.pnlTimeSetting.grpTestingStopTime",
+   "path": "FTestIF.pnlTimeSetting.grpTestingStopTime.lblTestWaitTime",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Testing Wait Time",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 12,
+    "ParentFont": "False",
+    "Top": 49,
+    "Width": 136
+   },
+   "rect": {
+    "h": 18,
+    "w": 136,
+    "x": 12,
+    "y": 49
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblTestWaitTimeSec",
+   "parent": "FTestIF.pnlTimeSetting.grpTestingStopTime",
+   "path": "FTestIF.pnlTimeSetting.grpTestingStopTime.lblTestWaitTimeSec",
+   "props": {
+    "Caption": "sec",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 265,
+    "ParentFont": "False",
+    "Top": 50,
+    "Width": 22
+   },
+   "rect": {
+    "h": 16,
+    "w": 22,
+    "x": 265,
+    "y": 50
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtTestingWaitTime",
+   "parent": "FTestIF.pnlTimeSetting.grpTestingStopTime",
+   "path": "FTestIF.pnlTimeSetting.grpTestingStopTime.edtTestingWaitTime",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 153,
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0.00",
+    "Top": 46,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 153,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtInitWaitTime",
+   "parent": "FTestIF.pnlTimeSetting.grpTestingStopTime",
+   "path": "FTestIF.pnlTimeSetting.grpTestingStopTime.edtInitWaitTime",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 153,
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0.00",
+    "Top": 19,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 153,
+    "y": 19
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbRs232BinCount",
+   "parent": "FTestIF.pnlTimeSetting",
+   "path": "FTestIF.pnlTimeSetting.gbRs232BinCount",
+   "props": {
+    "Align": "alTop",
+    "Caption": "RS232 Max Bin Count",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 46,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 295,
+    "Width": 550
+   },
+   "rect": {
+    "h": 46,
+    "w": 550,
+    "x": 0,
+    "y": 295
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labRs232BinCount",
+   "parent": "FTestIF.pnlTimeSetting.gbRs232BinCount",
+   "path": "FTestIF.pnlTimeSetting.gbRs232BinCount.labRs232BinCount",
+   "props": {
+    "Caption": "Count : 15 ~ 255",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 132,
+    "ParentFont": "False",
+    "Top": 21,
+    "Width": 93
+   },
+   "rect": {
+    "h": 16,
+    "w": 93,
+    "x": 132,
+    "y": 21
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edMaxBinCountMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edMaxBinCount",
+   "parent": "FTestIF.pnlTimeSetting.gbRs232BinCount",
+   "path": "FTestIF.pnlTimeSetting.gbRs232BinCount.edMaxBinCount",
+   "props": {
+    "Height": 24,
+    "Left": 12,
+    "OnMouseDown": "edMaxBinCountMouseDown",
+    "TabOrder": 0,
+    "Text": "32",
+    "Top": 17,
+    "Width": 117
+   },
+   "rect": {
+    "h": 24,
+    "w": 117,
+    "x": 12,
+    "y": 17
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbInitialDelay",
+   "parent": "FTestIF.pnlTimeSetting",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay",
+   "props": {
+    "Align": "alClient",
+    "Caption": "Use initial start delay in socket",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 407,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 341,
+    "Width": 550
+   },
+   "rect": {
+    "h": 407,
+    "w": 550,
+    "x": 0,
+    "y": 341
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnl1stDevice",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnl1stDevice",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 30,
+    "Left": 2,
+    "TabOrder": 1,
+    "Top": 54,
+    "Width": 546
+   },
+   "rect": {
+    "h": 30,
+    "w": 546,
+    "x": 2,
+    "y": 54
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbEveryFirstDeviceUseInitialDelay",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnl1stDevice",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnl1stDevice.cbEveryFirstDeviceUseInitialDelay",
+   "props": {
+    "Caption": "Every first devices",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 17,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 7,
+    "Width": 169
+   },
+   "rect": {
+    "h": 17,
+    "w": 169,
+    "x": 8,
+    "y": 7
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_1",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnl1stDevice",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnl1stDevice.edtInitialDelay_1",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 320,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 320,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_1_RT",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnl1stDevice",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnl1stDevice.edtInitialDelay_1_RT",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 428,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 428,
+    "y": 3
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlTitle",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlTitle",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 36,
+    "Left": 2,
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 546
+   },
+   "rect": {
+    "h": 36,
+    "w": 546,
+    "x": 2,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblDelayTime",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlTitle",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlTitle.lblDelayTime",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Initial delay time (Sec)",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 320,
+    "ParentFont": "False",
+    "Top": 1,
+    "Width": 137
+   },
+   "rect": {
+    "h": 19,
+    "w": 137,
+    "x": 320,
+    "y": 1
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblTriggerTime",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlTitle",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlTitle.lblTriggerTime",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Trigger time (Sec)",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 192,
+    "ParentFont": "False",
+    "Top": 1,
+    "Width": 113
+   },
+   "rect": {
+    "h": 19,
+    "w": 113,
+    "x": 192,
+    "y": 1
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblFT",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlTitle",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlTitle.lblFT",
+   "props": {
+    "Caption": "FT",
+    "Height": 16,
+    "Left": 361,
+    "Top": 20,
+    "Width": 17
+   },
+   "rect": {
+    "h": 16,
+    "w": 17,
+    "x": 361,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblRT",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlTitle",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlTitle.lblRT",
+   "props": {
+    "Caption": "RT",
+    "Height": 16,
+    "Left": 469,
+    "Top": 20,
+    "Width": 19
+   },
+   "rect": {
+    "h": 16,
+    "w": 19,
+    "x": 469,
+    "y": 20
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlPause",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlPause",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 30,
+    "Left": 2,
+    "TabOrder": 6,
+    "Top": 204,
+    "Width": 546
+   },
+   "rect": {
+    "h": 30,
+    "w": 546,
+    "x": 2,
+    "y": 204
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbWhenPressStopOverUseInitialDelay",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlPause",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlPause.cbWhenPressStopOverUseInitialDelay",
+   "props": {
+    "Caption": "When Press Stop Over ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 17,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 7,
+    "Width": 197
+   },
+   "rect": {
+    "h": 17,
+    "w": 197,
+    "x": 8,
+    "y": 7
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_6",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlPause",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlPause.edtInitialDelay_6",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 320,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 320,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edOverSec",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlPause",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlPause.edOverSec",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 224,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 80
+   },
+   "rect": {
+    "h": 24,
+    "w": 80,
+    "x": 224,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_6_RT",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlPause",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlPause.edtInitialDelay_6_RT",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 428,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 428,
+    "y": 3
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlLowTestTime",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlLowTestTime",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 30,
+    "Left": 2,
+    "TabOrder": 5,
+    "Top": 174,
+    "Width": 546
+   },
+   "rect": {
+    "h": 30,
+    "w": 546,
+    "x": 2,
+    "y": 174
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbWhenHappenTestedTimeBelowUseInitialDelay",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlLowTestTime",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlLowTestTime.cbWhenHappenTestedTimeBelowUseInitialDelay",
+   "props": {
+    "Caption": "When happen tested time below",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 17,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 7,
+    "Width": 221
+   },
+   "rect": {
+    "h": 17,
+    "w": 221,
+    "x": 8,
+    "y": 7
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_4",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlLowTestTime",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlLowTestTime.edtInitialDelay_4",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 320,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 320,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edBelowSec",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlLowTestTime",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlLowTestTime.edBelowSec",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 224,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 80
+   },
+   "rect": {
+    "h": 24,
+    "w": 80,
+    "x": 224,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_4_RT",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlLowTestTime",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlLowTestTime.edtInitialDelay_4_RT",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 428,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 428,
+    "y": 3
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlHeatDoor",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlHeatDoor",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 30,
+    "Left": 2,
+    "TabOrder": 4,
+    "Top": 144,
+    "Width": 546
+   },
+   "rect": {
+    "h": 30,
+    "w": 546,
+    "x": 2,
+    "y": 144
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbAfterOpenHeatDoorUseInitialDelay",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlHeatDoor",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlHeatDoor.cbAfterOpenHeatDoorUseInitialDelay",
+   "props": {
+    "Caption": "After Open Heat Door ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 17,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 7,
+    "Width": 169
+   },
+   "rect": {
+    "h": 17,
+    "w": 169,
+    "x": 8,
+    "y": 7
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_5",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlHeatDoor",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlHeatDoor.edtInitialDelay_5",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 320,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 320,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_5_RT",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlHeatDoor",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlHeatDoor.edtInitialDelay_5_RT",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 428,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 428,
+    "y": 3
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlAutoClean",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlAutoClean",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 30,
+    "Left": 2,
+    "TabOrder": 3,
+    "Top": 114,
+    "Width": 546
+   },
+   "rect": {
+    "h": 30,
+    "w": 546,
+    "x": 2,
+    "y": 114
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_3",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlAutoClean",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlAutoClean.edtInitialDelay_3",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 320,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 320,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbAfterAutoCleanFunctionUseInitialDelay",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlAutoClean",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlAutoClean.cbAfterAutoCleanFunctionUseInitialDelay",
+   "props": {
+    "Caption": "After Auto Clean Function ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 17,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 7,
+    "Width": 177
+   },
+   "rect": {
+    "h": 17,
+    "w": 177,
+    "x": 8,
+    "y": 7
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_3_RT",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlAutoClean",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlAutoClean.edtInitialDelay_3_RT",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 428,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 428,
+    "y": 3
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlAlarmMsg",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlAlarmMsg",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 30,
+    "Left": 2,
+    "TabOrder": 2,
+    "Top": 84,
+    "Width": 546
+   },
+   "rect": {
+    "h": 30,
+    "w": 546,
+    "x": 2,
+    "y": 84
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbAfterShowAlarmMessageUseInitialDelay",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlAlarmMsg",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlAlarmMsg.cbAfterShowAlarmMessageUseInitialDelay",
+   "props": {
+    "Caption": "After ShowAlarm Message",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 17,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 7,
+    "Width": 177
+   },
+   "rect": {
+    "h": 17,
+    "w": 177,
+    "x": 8,
+    "y": 7
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_2",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlAlarmMsg",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlAlarmMsg.edtInitialDelay_2",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 320,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 320,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_2_RT",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlAlarmMsg",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlAlarmMsg.edtInitialDelay_2_RT",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 428,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 428,
+    "y": 3
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlOTD",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlOTD",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 30,
+    "Left": 2,
+    "TabOrder": 8,
+    "Top": 264,
+    "Width": 546
+   },
+   "rect": {
+    "h": 30,
+    "w": 546,
+    "x": 2,
+    "y": 264
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbOTDUnlockDelay",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlOTD",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlOTD.cbOTDUnlockDelay",
+   "props": {
+    "Caption": "OTD unlock",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 15,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 8,
+    "Width": 137
+   },
+   "rect": {
+    "h": 15,
+    "w": 137,
+    "x": 8,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_9",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlOTD",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlOTD.edtInitialDelay_9",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 320,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 320,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_9_RT",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlOTD",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlOTD.edtInitialDelay_9_RT",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 428,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 428,
+    "y": 3
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlEOTTime",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlEOTTime",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 30,
+    "Left": 2,
+    "TabOrder": 9,
+    "Top": 294,
+    "Width": 546
+   },
+   "rect": {
+    "h": 30,
+    "w": 546,
+    "x": 2,
+    "y": 294
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbTestFinishToNextTestOver",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlEOTTime",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlEOTTime.cbTestFinishToNextTestOver",
+   "props": {
+    "Caption": "EOT monitor time ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 15,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 8,
+    "Width": 137
+   },
+   "rect": {
+    "h": 15,
+    "w": 137,
+    "x": 8,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "iTestFinishToNextTestOver",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlEOTTime",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlEOTTime.iTestFinishToNextTestOver",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 224,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 80
+   },
+   "rect": {
+    "h": 24,
+    "w": 80,
+    "x": 224,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_8",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlEOTTime",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlEOTTime.edtInitialDelay_8",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 320,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 320,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_8_RT",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlEOTTime",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlEOTTime.edtInitialDelay_8_RT",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 428,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 428,
+    "y": 3
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlNoFullsite",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlNoFullsite",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 30,
+    "Left": 2,
+    "TabOrder": 7,
+    "Top": 234,
+    "Width": 546
+   },
+   "rect": {
+    "h": 30,
+    "w": 546,
+    "x": 2,
+    "y": 234
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbWhenNoFullSiteUseInitialDelay",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlNoFullsite",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlNoFullsite.cbWhenNoFullSiteUseInitialDelay",
+   "props": {
+    "Caption": "When No Full Site",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 17,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 6,
+    "Width": 129
+   },
+   "rect": {
+    "h": 17,
+    "w": 129,
+    "x": 8,
+    "y": 6
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_7",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlNoFullsite",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlNoFullsite.edtInitialDelay_7",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 320,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 320,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_7_RT",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlNoFullsite",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlNoFullsite.edtInitialDelay_7_RT",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 428,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 428,
+    "y": 3
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel39",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.Panel39",
+   "props": {
+    "Align": "alBottom",
+    "BevelInner": "bvRaised",
+    "BevelOuter": "bvLowered",
+    "Color": 12761254,
+    "Height": 30,
+    "Left": 2,
+    "TabOrder": 13,
+    "Top": 375,
+    "Width": 546
+   },
+   "rect": {
+    "h": 30,
+    "w": 546,
+    "x": 2,
+    "y": 375
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbUseOtherArmToTestAfterInitialDelay",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.Panel39",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.Panel39.cbUseOtherArmToTestAfterInitialDelay",
+   "props": {
+    "Caption": "After initial start delay, use the other arm to test first",
+    "Font.Charset": "CHINESEBIG5_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -16,
+    "Font.Name": "新細明體",
+    "Font.Style": [],
+    "Height": 17,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 7,
+    "Width": 350
+   },
+   "rect": {
+    "h": 17,
+    "w": 350,
+    "x": 8,
+    "y": 7
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlSOTTime",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlSOTTime",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 30,
+    "Left": 2,
+    "TabOrder": 10,
+    "Top": 324,
+    "Width": 546
+   },
+   "rect": {
+    "h": 30,
+    "w": 546,
+    "x": 2,
+    "y": 324
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbTestStartToNextTestStart",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlSOTTime",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlSOTTime.cbTestStartToNextTestStart",
+   "props": {
+    "Caption": "SOT monitor time ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 15,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 9,
+    "Width": 137
+   },
+   "rect": {
+    "h": 15,
+    "w": 137,
+    "x": 8,
+    "y": 9
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "iTeststartToNextTestStart",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlSOTTime",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlSOTTime.iTeststartToNextTestStart",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 224,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0.00",
+    "Top": 4,
+    "Width": 80
+   },
+   "rect": {
+    "h": 24,
+    "w": 80,
+    "x": 224,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_10",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlSOTTime",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlSOTTime.edtInitialDelay_10",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 320,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "0.00",
+    "Top": 4,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 320,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDelay_10_RT",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlSOTTime",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.pnlSOTTime.edtInitialDelay_10_RT",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 428,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 100
+   },
+   "rect": {
+    "h": 24,
+    "w": 100,
+    "x": 428,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbUseSocketHeating",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.cbUseSocketHeating",
+   "props": {
+    "Caption": "Use Socket Heating",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 17,
+    "Left": 10,
+    "ParentFont": "False",
+    "TabOrder": 12,
+    "Top": 359,
+    "Width": 169
+   },
+   "rect": {
+    "h": 17,
+    "w": 169,
+    "x": 10,
+    "y": 359
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDelay_1Click"
+   },
+   "kind": "LEAF",
+   "name": "edt_UseSocketHeating",
+   "parent": "FTestIF.pnlTimeSetting.gbInitialDelay",
+   "path": "FTestIF.pnlTimeSetting.gbInitialDelay.edt_UseSocketHeating",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 224,
+    "OnClick": "edtInitialDelay_1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 11,
+    "Text": "0.00",
+    "Top": 355,
+    "Width": 80
+   },
+   "rect": {
+    "h": 24,
+    "w": 80,
+    "x": 224,
+    "y": 355
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "PageControl1",
+   "parent": "FTestIF.pnlTimeSetting",
+   "path": "FTestIF.pnlTimeSetting.PageControl1",
+   "props": {
+    "ActivePage": "rgTime1",
+    "Align": "alTop",
+    "Height": 219,
+    "Left": 0,
+    "TabIndex": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 550
+   },
+   "rect": {
+    "h": 219,
+    "w": 550,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "rgTime1",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1",
+   "props": {
+    "Caption": "Time1"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "palTime",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "props": {
+    "Align": "alClient",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 191,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 542
+   },
+   "rect": {
+    "h": 191,
+    "w": 542,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label50",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.Label50",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Initial Maximum Test",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 9,
+    "ParentFont": "False",
+    "Top": 8,
+    "Width": 140
+   },
+   "rect": {
+    "h": 18,
+    "w": 140,
+    "x": 9,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label51",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.Label51",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Dummy Test",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 9,
+    "ParentFont": "False",
+    "Top": 60,
+    "Width": 119
+   },
+   "rect": {
+    "h": 18,
+    "w": 119,
+    "x": 9,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label53",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.Label53",
+   "props": {
+    "Caption": "sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 278,
+    "ParentFont": "False",
+    "Top": 9,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 278,
+    "y": 9
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label58",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.Label58",
+   "props": {
+    "Caption": "sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 278,
+    "ParentFont": "False",
+    "Top": 61,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 278,
+    "y": 61
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label19",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.Label19",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Maximum Test",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 9,
+    "ParentFont": "False",
+    "Top": 34,
+    "Width": 136
+   },
+   "rect": {
+    "h": 18,
+    "w": 136,
+    "x": 9,
+    "y": 34
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label20",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.Label20",
+   "props": {
+    "Caption": "sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 278,
+    "ParentFont": "False",
+    "Top": 35,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 278,
+    "y": 35
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label49",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.Label49",
+   "props": {
+    "Caption": "Initial Start Delay",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 9,
+    "ParentFont": "False",
+    "Top": 111,
+    "Width": 99
+   },
+   "rect": {
+    "h": 16,
+    "w": 99,
+    "x": 9,
+    "y": 111
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.Label1",
+   "props": {
+    "Caption": "sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 278,
+    "ParentFont": "False",
+    "Top": 111,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 278,
+    "y": 111
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label2",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.Label2",
+   "props": {
+    "Caption": "Initial Start Delay Count",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 9,
+    "ParentFont": "False",
+    "Top": 139,
+    "Width": 136
+   },
+   "rect": {
+    "h": 16,
+    "w": 136,
+    "x": 9,
+    "y": 139
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label52",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.Label52",
+   "props": {
+    "Caption": "times",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 278,
+    "ParentFont": "False",
+    "Top": 139,
+    "Width": 32
+   },
+   "rect": {
+    "h": 16,
+    "w": 32,
+    "x": 278,
+    "y": 139
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label8",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.Label8",
+   "props": {
+    "Caption": "After Tested Delay",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 11,
+    "ParentFont": "False",
+    "Top": 167,
+    "Width": 112
+   },
+   "rect": {
+    "h": 16,
+    "w": 112,
+    "x": 11,
+    "y": 167
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label12",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.Label12",
+   "props": {
+    "Caption": "sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 278,
+    "ParentFont": "False",
+    "Top": 167,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 278,
+    "y": 167
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edInitialMaxTestClick"
+   },
+   "kind": "LEAF",
+   "name": "edMaxTestTime",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.edMaxTestTime",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 166,
+    "OnClick": "edInitialMaxTestClick",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0.00",
+    "Top": 31,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 166,
+    "y": 31
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edInitialMaxTestClick"
+   },
+   "kind": "LEAF",
+   "name": "edInitialMaxTest",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.edInitialMaxTest",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 166,
+    "OnClick": "edInitialMaxTestClick",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0.00",
+    "Top": 5,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 166,
+    "y": 5
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edDummyTestTime",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.edDummyTestTime",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 166,
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "0.00",
+    "Top": 57,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 166,
+    "y": 57
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitStartDelayClick",
+    "OnKeyPress": "edMaxTestTimeKeyPress"
+   },
+   "kind": "LEAF",
+   "name": "edtInitStartDelay",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.edtInitStartDelay",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 166,
+    "OnClick": "edtInitStartDelayClick",
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Text": "0",
+    "Top": 107,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 166,
+    "y": 107
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDecCount1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitStartDelayCT",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.edtInitStartDelayCT",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 166,
+    "OnClick": "edtInitialDecCount1Click",
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Text": "0",
+    "Top": 135,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 166,
+    "y": 135
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtAfterTestedDelay",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.edtAfterTestedDelay",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 166,
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Text": "0",
+    "Top": 163,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 166,
+    "y": 163
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "palStartDelay",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.palStartDelay",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 26,
+    "Left": 4,
+    "TabOrder": 3,
+    "Top": 80,
+    "Width": 322
+   },
+   "rect": {
+    "h": 26,
+    "w": 322,
+    "x": 4,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label54",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.palStartDelay",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.palStartDelay.Label54",
+   "props": {
+    "Caption": "sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 274,
+    "ParentFont": "False",
+    "Top": 7,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 274,
+    "y": 7
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label45",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.palStartDelay",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.palStartDelay.Label45",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Start Delay",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 5,
+    "ParentFont": "False",
+    "Top": 6,
+    "Width": 105
+   },
+   "rect": {
+    "h": 19,
+    "w": 105,
+    "x": 5,
+    "y": 6
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edStartDelayTime",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.palStartDelay",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime1.palTime.palStartDelay.edStartDelayTime",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 162,
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 162,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "rgTime2",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "props": {
+    "Caption": "Time2",
+    "ImageIndex": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label34",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.Label34",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "+",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 127,
+    "ParentFont": "False",
+    "Top": 35,
+    "Width": 20
+   },
+   "rect": {
+    "h": 19,
+    "w": 20,
+    "x": 127,
+    "y": 35
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label35",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.Label35",
+   "props": {
+    "Caption": "sec(each count)",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 224,
+    "ParentFont": "False",
+    "Top": 37,
+    "Width": 95
+   },
+   "rect": {
+    "h": 16,
+    "w": 95,
+    "x": 224,
+    "y": 37
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label3",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.Label3",
+   "props": {
+    "Caption": "Initial Start Delay 1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 3,
+    "ParentFont": "False",
+    "Top": 37,
+    "Width": 109
+   },
+   "rect": {
+    "h": 16,
+    "w": 109,
+    "x": 3,
+    "y": 37
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label5",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.Label5",
+   "props": {
+    "Caption": "Count",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 380,
+    "ParentFont": "False",
+    "Top": 38,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 380,
+    "y": 38
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label9",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.Label9",
+   "props": {
+    "Caption": "Initial Start Delay 2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 3,
+    "ParentFont": "False",
+    "Top": 66,
+    "Width": 109
+   },
+   "rect": {
+    "h": 16,
+    "w": 109,
+    "x": 3,
+    "y": 66
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label10",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.Label10",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "+",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 127,
+    "ParentFont": "False",
+    "Top": 64,
+    "Width": 20
+   },
+   "rect": {
+    "h": 19,
+    "w": 20,
+    "x": 127,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label11",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.Label11",
+   "props": {
+    "Caption": "sec(each count)",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 224,
+    "ParentFont": "False",
+    "Top": 66,
+    "Width": 95
+   },
+   "rect": {
+    "h": 16,
+    "w": 95,
+    "x": 224,
+    "y": 66
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label15",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.Label15",
+   "props": {
+    "Caption": "Count",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 380,
+    "ParentFont": "False",
+    "Top": 67,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 380,
+    "y": 67
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label16",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.Label16",
+   "props": {
+    "Caption": "Initial Start Delay 3",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 3,
+    "ParentFont": "False",
+    "Top": 95,
+    "Width": 109
+   },
+   "rect": {
+    "h": 16,
+    "w": 109,
+    "x": 3,
+    "y": 95
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label28",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.Label28",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "+",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 127,
+    "ParentFont": "False",
+    "Top": 93,
+    "Width": 20
+   },
+   "rect": {
+    "h": 19,
+    "w": 20,
+    "x": 127,
+    "y": 93
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label29",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.Label29",
+   "props": {
+    "Caption": "sec(each count)",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 224,
+    "ParentFont": "False",
+    "Top": 95,
+    "Width": 95
+   },
+   "rect": {
+    "h": 16,
+    "w": 95,
+    "x": 224,
+    "y": 95
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label36",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.Label36",
+   "props": {
+    "Caption": "Count",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 380,
+    "ParentFont": "False",
+    "Top": 96,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 380,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label37",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.Label37",
+   "props": {
+    "Caption": "Initial Start Delay 4",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 3,
+    "ParentFont": "False",
+    "Top": 124,
+    "Width": 109
+   },
+   "rect": {
+    "h": 16,
+    "w": 109,
+    "x": 3,
+    "y": 124
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label38",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.Label38",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "+",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 127,
+    "ParentFont": "False",
+    "Top": 122,
+    "Width": 20
+   },
+   "rect": {
+    "h": 19,
+    "w": 20,
+    "x": 127,
+    "y": 122
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label39",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.Label39",
+   "props": {
+    "Caption": "sec(each count)",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 224,
+    "ParentFont": "False",
+    "Top": 124,
+    "Width": 95
+   },
+   "rect": {
+    "h": 16,
+    "w": 95,
+    "x": 224,
+    "y": 124
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label40",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.Label40",
+   "props": {
+    "Caption": "Count",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 380,
+    "ParentFont": "False",
+    "Top": 125,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 380,
+    "y": 125
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label41",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.Label41",
+   "props": {
+    "Caption": "Use Function",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 4,
+    "ParentFont": "False",
+    "Top": 8,
+    "Width": 95
+   },
+   "rect": {
+    "h": 20,
+    "w": 95,
+    "x": 4,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDec1",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDec1",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeMode": "imClose",
+    "ImeName": "",
+    "Left": 148,
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "0.00",
+    "Top": 33,
+    "Width": 70
+   },
+   "rect": {
+    "h": 24,
+    "w": 70,
+    "x": 148,
+    "y": 33
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDecCount1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDecCount1",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDecCount1",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 327,
+    "OnClick": "edtInitialDecCount1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0",
+    "Top": 32,
+    "Width": 50
+   },
+   "rect": {
+    "h": 24,
+    "w": 50,
+    "x": 327,
+    "y": 32
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "iStartDelayCount",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.iStartDelayCount",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Hint": "Select commuction method",
+    "ImeMode": "imClose",
+    "ItemHeight": 16,
+    "Items.Strings": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4"
+    ],
+    "Left": 122,
+    "ParentFont": "False",
+    "ParentShowHint": "False",
+    "ShowHint": "True",
+    "TabOrder": 0,
+    "Text": "0",
+    "Top": 4,
+    "Width": 67
+   },
+   "rect": {
+    "h": 24,
+    "w": 67,
+    "x": 122,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDec2",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDec2",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 148,
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Text": "0.00",
+    "Top": 62,
+    "Width": 70
+   },
+   "rect": {
+    "h": 24,
+    "w": 70,
+    "x": 148,
+    "y": 62
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDecCount1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDecCount2",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDecCount2",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 327,
+    "OnClick": "edtInitialDecCount1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Text": "0",
+    "Top": 62,
+    "Width": 50
+   },
+   "rect": {
+    "h": 24,
+    "w": 50,
+    "x": 327,
+    "y": 62
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDec3",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDec3",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 148,
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Text": "0.00",
+    "Top": 91,
+    "Width": 70
+   },
+   "rect": {
+    "h": 24,
+    "w": 70,
+    "x": 148,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDecCount1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDecCount3",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDecCount3",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 327,
+    "OnClick": "edtInitialDecCount1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Text": "0",
+    "Top": 91,
+    "Width": 50
+   },
+   "rect": {
+    "h": 24,
+    "w": 50,
+    "x": 327,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDec4",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDec4",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 148,
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Text": "0.00",
+    "Top": 120,
+    "Width": 70
+   },
+   "rect": {
+    "h": 24,
+    "w": 70,
+    "x": 148,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDecCount1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitialDecCount4",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgTime2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgTime2.edtInitialDecCount4",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeMode": "imClose",
+    "ImeName": "",
+    "Left": 327,
+    "OnClick": "edtInitialDecCount1Click",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Text": "0",
+    "Top": 120,
+    "Width": 50
+   },
+   "rect": {
+    "h": 24,
+    "w": 50,
+    "x": 327,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "rgPurgeAir",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgPurgeAir",
+   "props": {
+    "Caption": "PurgeAir",
+    "ImageIndex": 2
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label7",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgPurgeAir",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgPurgeAir.Label7",
+   "props": {
+    "Caption": "Count",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 224,
+    "ParentFont": "False",
+    "Top": 5,
+    "Width": 34
+   },
+   "rect": {
+    "h": 16,
+    "w": 34,
+    "x": 224,
+    "y": 5
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbPurgeAir",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgPurgeAir",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgPurgeAir.cbPurgeAir",
+   "props": {
+    "Caption": "After Contract",
+    "Font.Charset": "CHINESEBIG5_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "新細明體",
+    "Font.Style": [],
+    "Height": 17,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 7,
+    "Width": 137
+   },
+   "rect": {
+    "h": 17,
+    "w": 137,
+    "x": 8,
+    "y": 7
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edPurgeAirClick"
+   },
+   "kind": "LEAF",
+   "name": "edPurgeAir",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.rgPurgeAir",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.rgPurgeAir.edPurgeAir",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeMode": "imClose",
+    "ImeName": "",
+    "Left": 148,
+    "OnClick": "edPurgeAirClick",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0",
+    "Top": 1,
+    "Width": 70
+   },
+   "rect": {
+    "h": 24,
+    "w": 70,
+    "x": 148,
+    "y": 1
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsRT",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT",
+   "props": {
+    "Caption": "RT",
+    "ImageIndex": 3
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labRT1",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.labRT1",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Initial Maximum Test",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 9,
+    "ParentFont": "False",
+    "Top": 8,
+    "Width": 140
+   },
+   "rect": {
+    "h": 18,
+    "w": 140,
+    "x": 9,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labRT3",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.labRT3",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Dummy Test",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 9,
+    "ParentFont": "False",
+    "Top": 60,
+    "Width": 119
+   },
+   "rect": {
+    "h": 18,
+    "w": 119,
+    "x": 9,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labRT7",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.labRT7",
+   "props": {
+    "Caption": "sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 278,
+    "ParentFont": "False",
+    "Top": 9,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 278,
+    "y": 9
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labRT9",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.labRT9",
+   "props": {
+    "Caption": "sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 278,
+    "ParentFont": "False",
+    "Top": 61,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 278,
+    "y": 61
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labRT2",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.labRT2",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Maximum Test",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 9,
+    "ParentFont": "False",
+    "Top": 34,
+    "Width": 136
+   },
+   "rect": {
+    "h": 18,
+    "w": 136,
+    "x": 9,
+    "y": 34
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labRT8",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.labRT8",
+   "props": {
+    "Caption": "sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 278,
+    "ParentFont": "False",
+    "Top": 35,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 278,
+    "y": 35
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labRT5",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.labRT5",
+   "props": {
+    "Caption": "Initial Start Delay",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 9,
+    "ParentFont": "False",
+    "Top": 111,
+    "Width": 99
+   },
+   "rect": {
+    "h": 16,
+    "w": 99,
+    "x": 9,
+    "y": 111
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labRT11",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.labRT11",
+   "props": {
+    "Caption": "sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 278,
+    "ParentFont": "False",
+    "Top": 111,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 278,
+    "y": 111
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labRT6",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.labRT6",
+   "props": {
+    "Caption": "Initial Start Delay Count",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 9,
+    "ParentFont": "False",
+    "Top": 139,
+    "Width": 136
+   },
+   "rect": {
+    "h": 16,
+    "w": 136,
+    "x": 9,
+    "y": 139
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labRT12",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.labRT12",
+   "props": {
+    "Caption": "times",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 278,
+    "ParentFont": "False",
+    "Top": 139,
+    "Width": 32
+   },
+   "rect": {
+    "h": 16,
+    "w": 32,
+    "x": 278,
+    "y": 139
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edInitialMaxTestClick"
+   },
+   "kind": "LEAF",
+   "name": "edMaxTestTime_RT",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.edMaxTestTime_RT",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 166,
+    "OnClick": "edInitialMaxTestClick",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0.00",
+    "Top": 31,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 166,
+    "y": 31
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edInitialMaxTestClick"
+   },
+   "kind": "LEAF",
+   "name": "edInitialMaxTest_RT",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.edInitialMaxTest_RT",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 166,
+    "OnClick": "edInitialMaxTestClick",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0.00",
+    "Top": 5,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 166,
+    "y": 5
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edDummyTestTime_RT",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.edDummyTestTime_RT",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 166,
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "0.00",
+    "Top": 57,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 166,
+    "y": 57
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitStartDelayClick",
+    "OnKeyPress": "edMaxTestTimeKeyPress"
+   },
+   "kind": "LEAF",
+   "name": "edtInitStartDelay_RT",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.edtInitStartDelay_RT",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 166,
+    "OnClick": "edtInitStartDelayClick",
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Text": "0",
+    "Top": 107,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 166,
+    "y": 107
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDecCount1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitStartDelayCT_RT",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.edtInitStartDelayCT_RT",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 166,
+    "OnClick": "edtInitialDecCount1Click",
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Text": "0",
+    "Top": 135,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 166,
+    "y": 135
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel1",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.Panel1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 26,
+    "Left": 4,
+    "TabOrder": 3,
+    "Top": 80,
+    "Width": 322
+   },
+   "rect": {
+    "h": 26,
+    "w": 322,
+    "x": 4,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labRT10",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT.Panel1",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.Panel1.labRT10",
+   "props": {
+    "Caption": "sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 274,
+    "ParentFont": "False",
+    "Top": 7,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 274,
+    "y": 7
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labRT4",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT.Panel1",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.Panel1.labRT4",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Start Delay",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 5,
+    "ParentFont": "False",
+    "Top": 6,
+    "Width": 105
+   },
+   "rect": {
+    "h": 19,
+    "w": 105,
+    "x": 5,
+    "y": 6
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edStartDelayTime_RT",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsRT.Panel1",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsRT.Panel1.edStartDelayTime_RT",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 162,
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 162,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsEQC",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC",
+   "props": {
+    "Caption": "EQC",
+    "ImageIndex": 4
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labEQC1",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.labEQC1",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Initial Maximum Test",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 9,
+    "ParentFont": "False",
+    "Top": 8,
+    "Width": 140
+   },
+   "rect": {
+    "h": 18,
+    "w": 140,
+    "x": 9,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labEQC3",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.labEQC3",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Dummy Test",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 9,
+    "ParentFont": "False",
+    "Top": 60,
+    "Width": 119
+   },
+   "rect": {
+    "h": 18,
+    "w": 119,
+    "x": 9,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labEQC7",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.labEQC7",
+   "props": {
+    "Caption": "sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 278,
+    "ParentFont": "False",
+    "Top": 9,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 278,
+    "y": 9
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labEQC9",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.labEQC9",
+   "props": {
+    "Caption": "sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 278,
+    "ParentFont": "False",
+    "Top": 61,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 278,
+    "y": 61
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labEQC2",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.labEQC2",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Maximum Test",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 9,
+    "ParentFont": "False",
+    "Top": 34,
+    "Width": 136
+   },
+   "rect": {
+    "h": 18,
+    "w": 136,
+    "x": 9,
+    "y": 34
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labEQC8",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.labEQC8",
+   "props": {
+    "Caption": "sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 278,
+    "ParentFont": "False",
+    "Top": 35,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 278,
+    "y": 35
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labEQC5",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.labEQC5",
+   "props": {
+    "Caption": "Initial Start Delay",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 9,
+    "ParentFont": "False",
+    "Top": 111,
+    "Width": 99
+   },
+   "rect": {
+    "h": 16,
+    "w": 99,
+    "x": 9,
+    "y": 111
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labEQC11",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.labEQC11",
+   "props": {
+    "Caption": "sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 278,
+    "ParentFont": "False",
+    "Top": 111,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 278,
+    "y": 111
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labEQC6",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.labEQC6",
+   "props": {
+    "Caption": "Initial Start Delay Count",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 9,
+    "ParentFont": "False",
+    "Top": 139,
+    "Width": 136
+   },
+   "rect": {
+    "h": 16,
+    "w": 136,
+    "x": 9,
+    "y": 139
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labEQC12",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.labEQC12",
+   "props": {
+    "Caption": "times",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 278,
+    "ParentFont": "False",
+    "Top": 139,
+    "Width": 32
+   },
+   "rect": {
+    "h": 16,
+    "w": 32,
+    "x": 278,
+    "y": 139
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edInitialMaxTestClick"
+   },
+   "kind": "LEAF",
+   "name": "edMaxTestTime_EQC",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.edMaxTestTime_EQC",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 166,
+    "OnClick": "edInitialMaxTestClick",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0.00",
+    "Top": 31,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 166,
+    "y": 31
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edInitialMaxTestClick"
+   },
+   "kind": "LEAF",
+   "name": "edInitialMaxTest_EQC",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.edInitialMaxTest_EQC",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 166,
+    "OnClick": "edInitialMaxTestClick",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0.00",
+    "Top": 5,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 166,
+    "y": 5
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edDummyTestTime_EQC",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.edDummyTestTime_EQC",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 166,
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "0.00",
+    "Top": 57,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 166,
+    "y": 57
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitStartDelayClick",
+    "OnKeyPress": "edMaxTestTimeKeyPress"
+   },
+   "kind": "LEAF",
+   "name": "edtInitStartDelay_EQC",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.edtInitStartDelay_EQC",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 166,
+    "OnClick": "edtInitStartDelayClick",
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Text": "0",
+    "Top": 107,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 166,
+    "y": 107
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInitialDecCount1Click"
+   },
+   "kind": "LEAF",
+   "name": "edtInitStartDelayCT_EQC",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.edtInitStartDelayCT_EQC",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 166,
+    "OnClick": "edtInitialDecCount1Click",
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Text": "0",
+    "Top": 135,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 166,
+    "y": 135
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel2",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.Panel2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 26,
+    "Left": 4,
+    "TabOrder": 3,
+    "Top": 80,
+    "Width": 322
+   },
+   "rect": {
+    "h": 26,
+    "w": 322,
+    "x": 4,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labEQC10",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.Panel2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.Panel2.labEQC10",
+   "props": {
+    "Caption": "sec.",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 274,
+    "ParentFont": "False",
+    "Top": 7,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 274,
+    "y": 7
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labEQC4",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.Panel2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.Panel2.labEQC4",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Start Delay",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 5,
+    "ParentFont": "False",
+    "Top": 6,
+    "Width": 105
+   },
+   "rect": {
+    "h": 19,
+    "w": 105,
+    "x": 5,
+    "y": 6
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edStartDelayTime_EQC",
+   "parent": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.Panel2",
+   "path": "FTestIF.pnlTimeSetting.PageControl1.tsEQC.Panel2.edStartDelayTime_EQC",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "ImeName": "",
+    "Left": 162,
+    "OnKeyPress": "edMaxTestTimeKeyPress",
+    "OnMouseDown": "edMaxTestTimeMouseDown",
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0.00",
+    "Top": 3,
+    "Width": 94
+   },
+   "rect": {
+    "h": 24,
+    "w": 94,
+    "x": 162,
+    "y": 3
+   }
+  }
+ ]
+}

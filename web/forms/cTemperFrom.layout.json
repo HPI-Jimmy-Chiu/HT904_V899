@@ -1,0 +1,6676 @@
+{
+ "canvas": {
+  "h": 421,
+  "w": 1192
+ },
+ "caption": "fTemperFrom",
+ "form": "fTemperFrom",
+ "form_class": "TfTemperFrom",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "cTemperFrom.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfTemperFrom",
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fTemperFrom",
+   "parent": null,
+   "path": "fTemperFrom",
+   "props": {
+    "BorderIcons": [],
+    "BorderStyle": "bsNone",
+    "Caption": "fTemperFrom",
+    "ClientHeight": 421,
+    "ClientWidth": 1192,
+    "Color": "clBtnFace",
+    "DragKind": "dkDock",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Left": 154,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 197
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 154,
+    "y": 197
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "palLed",
+   "parent": "fTemperFrom",
+   "path": "fTemperFrom.palLed",
+   "props": {
+    "Align": "alClient",
+    "BevelOuter": "bvNone",
+    "Height": 421,
+    "Left": 1170,
+    "TabOrder": 1,
+    "Top": 0,
+    "Width": 22
+   },
+   "rect": {
+    "h": 421,
+    "w": 22,
+    "x": 1170,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "Panel73MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "Panel73",
+   "parent": "fTemperFrom.palLed",
+   "path": "fTemperFrom.palLed.Panel73",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Color": "clYellow",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -12,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 15,
+    "Left": 5,
+    "OnMouseDown": "Panel73MouseDown",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 48,
+    "Width": 12
+   },
+   "rect": {
+    "h": 15,
+    "w": 12,
+    "x": 5,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "Panel72MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "Panel72",
+   "parent": "fTemperFrom.palLed",
+   "path": "fTemperFrom.palLed.Panel72",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Color": 2468626,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -12,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 15,
+    "Left": 5,
+    "OnMouseDown": "Panel72MouseDown",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 28,
+    "Width": 12
+   },
+   "rect": {
+    "h": 15,
+    "w": 12,
+    "x": 5,
+    "y": 28
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "Panel71MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "Panel71",
+   "parent": "fTemperFrom.palLed",
+   "path": "fTemperFrom.palLed.Panel71",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Color": 8388863,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -12,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 15,
+    "Left": 5,
+    "OnMouseDown": "Panel71MouseDown",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 8,
+    "Width": 12
+   },
+   "rect": {
+    "h": 15,
+    "w": 12,
+    "x": 5,
+    "y": 8
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlLeft",
+   "parent": "fTemperFrom",
+   "path": "fTemperFrom.pnlLeft",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Height": 421,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 1170
+   },
+   "rect": {
+    "h": 421,
+    "w": 1170,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbFunctionWindow",
+   "parent": "fTemperFrom.pnlLeft",
+   "path": "fTemperFrom.pnlLeft.gbFunctionWindow",
+   "props": {
+    "Align": "alTop",
+    "Height": 53,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 1170
+   },
+   "rect": {
+    "h": 53,
+    "w": 1170,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palErrorRecovery",
+   "parent": "fTemperFrom.pnlLeft.gbFunctionWindow",
+   "path": "fTemperFrom.pnlLeft.gbFunctionWindow.palErrorRecovery",
+   "props": {
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvNone",
+    "Caption": "Error Recovery On",
+    "Height": 22,
+    "Left": 4,
+    "TabOrder": 0,
+    "Top": 6,
+    "Width": 147
+   },
+   "rect": {
+    "h": 22,
+    "w": 147,
+    "x": 4,
+    "y": 6
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palDoubleDevice",
+   "parent": "fTemperFrom.pnlLeft.gbFunctionWindow",
+   "path": "fTemperFrom.pnlLeft.gbFunctionWindow.palDoubleDevice",
+   "props": {
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvNone",
+    "Caption": "Double Device On",
+    "Height": 22,
+    "Left": 150,
+    "TabOrder": 1,
+    "Top": 6,
+    "Width": 147
+   },
+   "rect": {
+    "h": 22,
+    "w": 147,
+    "x": 150,
+    "y": 6
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palCGoodBin",
+   "parent": "fTemperFrom.pnlLeft.gbFunctionWindow",
+   "path": "fTemperFrom.pnlLeft.gbFunctionWindow.palCGoodBin",
+   "props": {
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvNone",
+    "Caption": "Continue Good Bin On",
+    "Height": 22,
+    "Left": 296,
+    "TabOrder": 2,
+    "Top": 6,
+    "Width": 147
+   },
+   "rect": {
+    "h": 22,
+    "w": 147,
+    "x": 296,
+    "y": 6
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palYieldMonitor",
+   "parent": "fTemperFrom.pnlLeft.gbFunctionWindow",
+   "path": "fTemperFrom.pnlLeft.gbFunctionWindow.palYieldMonitor",
+   "props": {
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvNone",
+    "Caption": "Yield Monitoring On",
+    "Height": 22,
+    "Left": 442,
+    "TabOrder": 3,
+    "Top": 6,
+    "Width": 147
+   },
+   "rect": {
+    "h": 22,
+    "w": 147,
+    "x": 442,
+    "y": 6
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palConsAlarm",
+   "parent": "fTemperFrom.pnlLeft.gbFunctionWindow",
+   "path": "fTemperFrom.pnlLeft.gbFunctionWindow.palConsAlarm",
+   "props": {
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvNone",
+    "Caption": "Consecutive Alarm On",
+    "Height": 22,
+    "Left": 588,
+    "TabOrder": 4,
+    "Top": 6,
+    "Width": 147
+   },
+   "rect": {
+    "h": 22,
+    "w": 147,
+    "x": 588,
+    "y": 6
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palIndexStartErr",
+   "parent": "fTemperFrom.pnlLeft.gbFunctionWindow",
+   "path": "fTemperFrom.pnlLeft.gbFunctionWindow.palIndexStartErr",
+   "props": {
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvNone",
+    "Caption": "Index Start Error On",
+    "Height": 22,
+    "Left": 4,
+    "TabOrder": 5,
+    "Top": 27,
+    "Width": 147
+   },
+   "rect": {
+    "h": 22,
+    "w": 147,
+    "x": 4,
+    "y": 27
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palOcrOn",
+   "parent": "fTemperFrom.pnlLeft.gbFunctionWindow",
+   "path": "fTemperFrom.pnlLeft.gbFunctionWindow.palOcrOn",
+   "props": {
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvNone",
+    "Height": 22,
+    "Left": 150,
+    "TabOrder": 6,
+    "Top": 27,
+    "Width": 147
+   },
+   "rect": {
+    "h": 22,
+    "w": 147,
+    "x": 150,
+    "y": 27
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlQAMode",
+   "parent": "fTemperFrom.pnlLeft.gbFunctionWindow",
+   "path": "fTemperFrom.pnlLeft.gbFunctionWindow.pnlQAMode",
+   "props": {
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvNone",
+    "Height": 22,
+    "Left": 296,
+    "TabOrder": 7,
+    "Top": 27,
+    "Width": 147
+   },
+   "rect": {
+    "h": 22,
+    "w": 147,
+    "x": 296,
+    "y": 27
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palTest1",
+   "parent": "fTemperFrom.pnlLeft.gbFunctionWindow",
+   "path": "fTemperFrom.pnlLeft.gbFunctionWindow.palTest1",
+   "props": {
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvNone",
+    "Caption": "Test 1",
+    "Height": 22,
+    "Left": 442,
+    "TabOrder": 8,
+    "Top": 27,
+    "Width": 147
+   },
+   "rect": {
+    "h": 22,
+    "w": 147,
+    "x": 442,
+    "y": 27
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palTest2",
+   "parent": "fTemperFrom.pnlLeft.gbFunctionWindow",
+   "path": "fTemperFrom.pnlLeft.gbFunctionWindow.palTest2",
+   "props": {
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvNone",
+    "Caption": "Test 2",
+    "Height": 22,
+    "Left": 588,
+    "TabOrder": 9,
+    "Top": 27,
+    "Width": 147
+   },
+   "rect": {
+    "h": 22,
+    "w": 147,
+    "x": 588,
+    "y": 27
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "palNewTempWindow",
+   "parent": "fTemperFrom.pnlLeft",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Height": 139,
+    "Left": 0,
+    "TabOrder": 3,
+    "Top": 122,
+    "Width": 1170
+   },
+   "rect": {
+    "h": 139,
+    "w": 1170,
+    "x": 0,
+    "y": 122
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnl16Heater",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Height": 69,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 1170
+   },
+   "rect": {
+    "h": 69,
+    "w": 1170,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpIndex",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpIndex",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Index",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 69,
+    "Left": 750,
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Top": 0,
+    "Width": 66
+   },
+   "rect": {
+    "h": 69,
+    "w": 66,
+    "x": 750,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameChamber_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpIndex",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpIndex.hlNameChamber_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Chamber",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameDut_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpIndex",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpIndex.hlNameDut_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Socket",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempChamber_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpIndex",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpIndex.hlTempChamber_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempDut_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpIndex",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpIndex.hlTempDut_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 52
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbShuttle",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbShuttle",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Shuttle",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 69,
+    "Left": 132,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 0,
+    "Width": 66
+   },
+   "rect": {
+    "h": 69,
+    "w": 66,
+    "x": 132,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameShuttle1_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbShuttle",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbShuttle.hlNameShuttle1_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Shut 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameShuttle2_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbShuttle",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbShuttle.hlNameShuttle2_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Shut 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempShuttle1_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbShuttle",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbShuttle.hlTempShuttle1_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempShuttle2_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbShuttle",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbShuttle.hlTempShuttle2_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 52
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbPlate",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbPlate",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Hot Plate",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 69,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 66
+   },
+   "rect": {
+    "h": 69,
+    "w": 66,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNamePlate1_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbPlate",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbPlate.hlNamePlate1_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Plate 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNamePlate2_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbPlate",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbPlate.hlNamePlate2_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Plate 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempPlate1_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbPlate",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbPlate.hlTempPlate1_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempPlate2_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbPlate",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbPlate.hlTempPlate2_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 52
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbArm1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Arm1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 69,
+    "Left": 264,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 0,
+    "Width": 243
+   },
+   "rect": {
+    "h": 69,
+    "w": 243,
+    "x": 264,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameAa1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1.hlNameAa1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Aa 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameAb1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1.hlNameAb1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Ab 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameAc1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1.hlNameAc1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Ac 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameAd1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1.hlNameAd1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Ad 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 179,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 179,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBa1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1.hlNameBa1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Ba 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBb1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1.hlNameBb1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Bb 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 9,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBc1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1.hlNameBc1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Bc 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 10,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBd1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1.hlNameBd1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Bd 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 179,
+    "ParentFont": "False",
+    "TabOrder": 11,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 179,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempAa1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1.hlTempAa1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempAb1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1.hlTempAb1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempAc1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1.hlTempAc1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempAd1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1.hlTempAd1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 179,
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 179,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBa1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1.hlTempBa1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 12,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBb1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1.hlTempBb1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 13,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBc1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1.hlTempBc1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 14,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBd1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm1.hlTempBd1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 179,
+    "ParentFont": "False",
+    "TabOrder": 15,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 179,
+    "y": 52
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbArm2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Arm2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 69,
+    "Left": 507,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 0,
+    "Width": 243
+   },
+   "rect": {
+    "h": 69,
+    "w": 243,
+    "x": 507,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameAc2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2.hlNameAc2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Ac 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameAa2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2.hlNameAa2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Aa 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameAb2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2.hlNameAb2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Ab 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempAa2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2.hlTempAa2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempAb2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2.hlTempAb2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempAc2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2.hlTempAc2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameAd2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2.hlNameAd2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Ad 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 179,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 179,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBa2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2.hlNameBa2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Ba 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBb2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2.hlNameBb2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Bb 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 9,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBc2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2.hlNameBc2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Bc 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 10,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBd2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2.hlNameBd2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Bd 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 179,
+    "ParentFont": "False",
+    "TabOrder": 11,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 179,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempAd2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2.hlTempAd2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 179,
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 179,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBa2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2.hlTempBa2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 12,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBb2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2.hlTempBb2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 13,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBc2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2.hlTempBc2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 14,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBd2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbArm2.hlTempBd2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 179,
+    "ParentFont": "False",
+    "TabOrder": 15,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 179,
+    "y": 52
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbHeatGun",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbHeatGun",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Heat Gun",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 69,
+    "Left": 948,
+    "ParentFont": "False",
+    "TabOrder": 9,
+    "Top": 0,
+    "Width": 66
+   },
+   "rect": {
+    "h": 69,
+    "w": 66,
+    "x": 948,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameHeatGun1_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbHeatGun",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbHeatGun.hlNameHeatGun1_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Gun 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameHeatGun2_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbHeatGun",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbHeatGun.hlNameHeatGun2_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Gun 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempHeatGun1_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbHeatGun",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbHeatGun.hlTempHeatGun1_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempHeatGun2_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbHeatGun",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbHeatGun.hlTempHeatGun2_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 52
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbATCHeatGun",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbATCHeatGun",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "ATC air",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 69,
+    "Left": 882,
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Top": 0,
+    "Width": 66
+   },
+   "rect": {
+    "h": 69,
+    "w": 66,
+    "x": 882,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameATCHeatGun1_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbATCHeatGun",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbATCHeatGun.hlNameATCHeatGun1_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Gun 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameATCHeatGun2_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbATCHeatGun",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbATCHeatGun.hlNameATCHeatGun2_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Gun 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempATCHeatGun1_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbATCHeatGun",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbATCHeatGun.hlTempATCHeatGun1_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempATCHeatGun2_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbATCHeatGun",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.gbATCHeatGun.hlTempATCHeatGun2_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 52
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpOutSht",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpOutSht",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Out Sht",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 69,
+    "Left": 1014,
+    "ParentFont": "False",
+    "TabOrder": 10,
+    "Top": 0,
+    "Width": 66
+   },
+   "rect": {
+    "h": 69,
+    "w": 66,
+    "x": 1014,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameOutShuttle1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpOutSht",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpOutSht.hlNameOutShuttle1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Out Sht 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameOutShuttle2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpOutSht",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpOutSht.hlNameOutShuttle2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Out Sht 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempOutShuttle1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpOutSht",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpOutSht.hlTempOutShuttle1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempOutShuttle2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpOutSht",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpOutSht.hlTempOutShuttle2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 52
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grp_Shuttle2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grp_Shuttle2",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Shuttle 2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 69,
+    "Left": 198,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 0,
+    "Visible": "False",
+    "Width": 66
+   },
+   "rect": {
+    "h": 69,
+    "w": 66,
+    "x": 198,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameShuttle_3",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grp_Shuttle2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grp_Shuttle2.hlNameShuttle_3",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Shut 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameShuttle_4",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grp_Shuttle2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grp_Shuttle2.hlNameShuttle_4",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Shut 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempShuttle_3",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grp_Shuttle2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grp_Shuttle2.hlTempShuttle_3",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempShuttle_4",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grp_Shuttle2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grp_Shuttle2.hlTempShuttle_4",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 52
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grp_HopPlate2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grp_HopPlate2",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "HP 2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 69,
+    "Left": 66,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 0,
+    "Visible": "False",
+    "Width": 66
+   },
+   "rect": {
+    "h": 69,
+    "w": 66,
+    "x": 66,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNamePlate_3",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grp_HopPlate2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grp_HopPlate2.hlNamePlate_3",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Plate 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNamePlate_4",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grp_HopPlate2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grp_HopPlate2.hlNamePlate_4",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Plate 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempPlate_3",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grp_HopPlate2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grp_HopPlate2.hlTempPlate_3",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempPlate_4",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grp_HopPlate2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grp_HopPlate2.hlTempPlate_4",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 52
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpDoor",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpDoor",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Door",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 69,
+    "Left": 1080,
+    "ParentFont": "False",
+    "TabOrder": 11,
+    "Top": 0,
+    "Width": 66
+   },
+   "rect": {
+    "h": 69,
+    "w": 66,
+    "x": 1080,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameDoor1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpDoor",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpDoor.hlNameDoor1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Door 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameDoor2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpDoor",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpDoor.hlNameDoor2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Door 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempDoor1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpDoor",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpDoor.hlTempDoor1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempDoor2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpDoor",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpDoor.hlTempDoor2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 52
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpCCD",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpCCD",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "CCD",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 69,
+    "Left": 816,
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Top": 0,
+    "Width": 66
+   },
+   "rect": {
+    "h": 69,
+    "w": 66,
+    "x": 816,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameCCD_3",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpCCD",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpCCD.hlNameCCD_3",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "CCD",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempCCD_3",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpCCD",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpCCD.hlTempCCD_3",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameCCD_2_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpCCD",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpCCD.hlNameCCD_2_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "CCD1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempCCD_2_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpCCD",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl16Heater.grpCCD.hlTempCCD_2_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 52
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnl32Heater",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater",
+   "props": {
+    "Align": "alClient",
+    "BevelOuter": "bvNone",
+    "Height": 70,
+    "Left": 0,
+    "TabOrder": 1,
+    "Top": 69,
+    "Width": 1170
+   },
+   "rect": {
+    "h": 70,
+    "w": 1170,
+    "x": 0,
+    "y": 69
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbArm1_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Arm1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 70,
+    "Left": 374,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 0,
+    "Width": 243
+   },
+   "rect": {
+    "h": 70,
+    "w": 243,
+    "x": 374,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameAe1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2.hlNameAe1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Ae 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameAf1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2.hlNameAf1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Af 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameAg1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2.hlNameAg1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Ag 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameAh1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2.hlNameAh1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Ah 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 179,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 179,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBe1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2.hlNameBe1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Be 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBf1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2.hlNameBf1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Bf 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 9,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBg1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2.hlNameBg1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Bg 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 10,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBh1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2.hlNameBh1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Bh 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 179,
+    "ParentFont": "False",
+    "TabOrder": 11,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 179,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempAe1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2.hlTempAe1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempAf1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2.hlTempAf1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempAg1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2.hlTempAg1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempAh1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2.hlTempAh1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 179,
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 179,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBe1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2.hlTempBe1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 12,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBf1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2.hlTempBf1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 13,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBg1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2.hlTempBg1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 14,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBh1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm1_2.hlTempBh1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 179,
+    "ParentFont": "False",
+    "TabOrder": 15,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 179,
+    "y": 52
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbArm2_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Arm2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 70,
+    "Left": 617,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 0,
+    "Width": 243
+   },
+   "rect": {
+    "h": 70,
+    "w": 243,
+    "x": 617,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameAe2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2.hlNameAe2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Ae 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameAf2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2.hlNameAf2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Af 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempAe2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2.hlTempAe2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempAf2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2.hlTempAf2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameAg2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2.hlNameAg2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Ag 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameAh2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2.hlNameAh2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Ah 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 179,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 179,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBe2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2.hlNameBe2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Be 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBf2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2.hlNameBf2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Bf 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 9,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBg2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2.hlNameBg2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Bg 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 10,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBh2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2.hlNameBh2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Bh 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 179,
+    "ParentFont": "False",
+    "TabOrder": 11,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 179,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempAh2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2.hlTempAh2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 179,
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 179,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBe2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2.hlTempBe2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 12,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBf2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2.hlTempBf2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 13,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBg2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2.hlTempBg2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 14,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBh2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2.hlTempBh2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 179,
+    "ParentFont": "False",
+    "TabOrder": 15,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 179,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempAg2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gbArm2_2.hlTempAg2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 24
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grp2DID",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grp2DID",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "2D",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 70,
+    "Left": 860,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 0,
+    "Width": 66
+   },
+   "rect": {
+    "h": 70,
+    "w": 66,
+    "x": 860,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlName2D_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grp2DID",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grp2DID.hlName2D_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "2D",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTemp2D_2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grp2DID",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grp2DID.hlTemp2D_2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpLB",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpLB",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "L/B",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 70,
+    "Left": 926,
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Top": 0,
+    "Width": 66
+   },
+   "rect": {
+    "h": 70,
+    "w": 66,
+    "x": 926,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameLB",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpLB",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpLB.hlNameLB",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "L/B",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempLB",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpLB",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpLB.hlTempLB",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpESD",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpESD",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "ESD Air",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 70,
+    "Left": 992,
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Top": 0,
+    "Width": 66
+   },
+   "rect": {
+    "h": 70,
+    "w": 66,
+    "x": 992,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameESD",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpESD",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpESD.hlNameESD",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "ESD",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 11,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 0,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempESD",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpESD",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpESD.hlTempESD",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 0,
+    "y": 24
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpChamber",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpChamber",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Chamber",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 70,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 66
+   },
+   "rect": {
+    "h": 70,
+    "w": 66,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameChamber_3",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpChamber",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpChamber.hlNameChamber_3",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Chamber",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempChamber_3",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpChamber",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpChamber.hlTempChamber_3",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpBase",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Base",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 70,
+    "Left": 190,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 0,
+    "Width": 184
+   },
+   "rect": {
+    "h": 70,
+    "w": 184,
+    "x": 190,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBase1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase.hlNameBase1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Base 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBase1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase.hlTempBase1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBase4",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase.hlNameBase4",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Base 4",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBase4",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase.hlTempBase4",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 9,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBase2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase.hlNameBase2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Base 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBase2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase.hlTempBase2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBase5",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase.hlNameBase5",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Base 5",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Top": 39,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 39
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBase5",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase.hlTempBase5",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 10,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBase3",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase.hlNameBase3",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Base 3",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBase3",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase.hlTempBase3",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameBase6",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase.hlNameBase6",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Base 6",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Top": 39,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 39
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempBase6",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpBase.hlTempBase6",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 120,
+    "ParentFont": "False",
+    "TabOrder": 11,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 120,
+    "y": 52
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gb_Index",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gb_Index",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Index",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 70,
+    "Left": 66,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 0,
+    "Width": 124
+   },
+   "rect": {
+    "h": 70,
+    "w": 124,
+    "x": 66,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameDut_A1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gb_Index",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gb_Index.hlNameDut_A1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "DUT 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempDut_A1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gb_Index",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gb_Index.hlTempDut_A1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameDut_A2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gb_Index",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gb_Index.hlNameDut_A2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "DUT 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameDut_A4",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gb_Index",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gb_Index.hlNameDut_A4",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "DUT 4",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempDut_A2",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gb_Index",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gb_Index.hlTempDut_A2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempDut_A4",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gb_Index",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gb_Index.hlTempDut_A4",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 61,
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 61,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameDut_A3",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gb_Index",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gb_Index.hlNameDut_A3",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "DUT 3",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempDut_A3",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gb_Index",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.gb_Index.hlTempDut_A3",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 52
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpLB1",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpLB1",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "L/B",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 70,
+    "Left": 1058,
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Top": 0,
+    "Width": 66
+   },
+   "rect": {
+    "h": 70,
+    "w": 66,
+    "x": 1058,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameLBUp",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpLB1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpLB1.hlNameLBUp",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "L/B Up",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameLBDown",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpLB1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpLB1.hlNameLBDown",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "L/B Down",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 40,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempLBUp",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpLB1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpLB1.hlTempLBUp",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempLBDown",
+   "parent": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpLB1",
+   "path": "fTemperFrom.pnlLeft.palNewTempWindow.pnl32Heater.grpLB1.hlTempLBDown",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "130.0",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 52,
+    "Width": 60
+   },
+   "rect": {
+    "h": 13,
+    "w": 60,
+    "x": 2,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo1",
+   "parent": "fTemperFrom.pnlLeft",
+   "path": "fTemperFrom.pnlLeft.Memo1",
+   "props": {
+    "Height": 53,
+    "Left": 206,
+    "ScrollBars": "ssBoth",
+    "TabOrder": 4,
+    "Top": 308,
+    "Visible": "False",
+    "Width": 469
+   },
+   "rect": {
+    "h": 53,
+    "w": 469,
+    "x": 206,
+    "y": 308
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button1Click"
+   },
+   "kind": "LEAF",
+   "name": "Button1",
+   "parent": "fTemperFrom.pnlLeft",
+   "path": "fTemperFrom.pnlLeft.Button1",
+   "props": {
+    "Caption": "開始記錄",
+    "Height": 25,
+    "Left": 354,
+    "OnClick": "Button1Click",
+    "TabOrder": 5,
+    "Top": 324,
+    "Visible": "False",
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 354,
+    "y": 324
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbOldTempWindow",
+   "parent": "fTemperFrom.pnlLeft",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow",
+   "props": {
+    "Align": "alTop",
+    "BevelInner": "bvRaised",
+    "BevelOuter": "bvLowered",
+    "Height": 69,
+    "Left": 0,
+    "TabOrder": 2,
+    "Top": 53,
+    "Width": 1170
+   },
+   "rect": {
+    "h": 69,
+    "w": 1170,
+    "x": 0,
+    "y": 53
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnl4Plate1",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Plate1",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Height": 65,
+    "Left": 2,
+    "TabOrder": 0,
+    "Top": 2,
+    "Width": 57
+   },
+   "rect": {
+    "h": 65,
+    "w": 57,
+    "x": 2,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNamePlate1",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Plate1",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Plate1.hlNamePlate1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Plate 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 11,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempPlate1",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Plate1",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Plate1.hlTempPlate1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Plate 1",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 35,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 35
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnl4Plate2",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Plate2",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Height": 65,
+    "Left": 59,
+    "TabOrder": 1,
+    "Top": 2,
+    "Width": 57
+   },
+   "rect": {
+    "h": 65,
+    "w": 57,
+    "x": 59,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNamePlate2",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Plate2",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Plate2.hlNamePlate2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Plate 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 11,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempPlate2",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Plate2",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Plate2.hlTempPlate2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Plate 2",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 35,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 35
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnl4Sht1",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Sht1",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Height": 65,
+    "Left": 116,
+    "TabOrder": 2,
+    "Top": 2,
+    "Width": 57
+   },
+   "rect": {
+    "h": 65,
+    "w": 57,
+    "x": 116,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameShuttle1",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Sht1",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Sht1.hlNameShuttle1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Shut 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 11,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempShuttle1",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Sht1",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Sht1.hlTempShuttle1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Shuttle 1",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 35,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 35
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnl4Sht2",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Sht2",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Height": 65,
+    "Left": 173,
+    "TabOrder": 3,
+    "Top": 2,
+    "Width": 57
+   },
+   "rect": {
+    "h": 65,
+    "w": 57,
+    "x": 173,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameShuttle2",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Sht2",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Sht2.hlNameShuttle2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Shut 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 11,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempShuttle2",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Sht2",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Sht2.hlTempShuttle2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Shuttle 2",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 35,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 35
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnl4Head1",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head1",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Height": 65,
+    "Left": 230,
+    "TabOrder": 4,
+    "Top": 2,
+    "Width": 57
+   },
+   "rect": {
+    "h": 65,
+    "w": 57,
+    "x": 230,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameHead12",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head1",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head1.hlNameHead12",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Head 1/2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 11,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempHead12",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head1",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head1.hlTempHead12",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Head 1/2",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 35,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 35
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnl4Head3",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head3",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Height": 65,
+    "Left": 287,
+    "TabOrder": 5,
+    "Top": 2,
+    "Width": 57
+   },
+   "rect": {
+    "h": 65,
+    "w": 57,
+    "x": 287,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameHead34",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head3",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head3.hlNameHead34",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Head 3/4",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 11,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempHead34",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head3",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head3.hlTempHead34",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Head 3/4",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 35,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 35
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnl4Head5",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head5",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Height": 65,
+    "Left": 344,
+    "TabOrder": 6,
+    "Top": 2,
+    "Width": 57
+   },
+   "rect": {
+    "h": 65,
+    "w": 57,
+    "x": 344,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameHead56",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head5",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head5.hlNameHead56",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Head 5/6",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 11,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempHead56",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head5",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head5.hlTempHead56",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Head 5/6",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 35,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 35
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnl4Head7",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head7",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Height": 65,
+    "Left": 401,
+    "TabOrder": 7,
+    "Top": 2,
+    "Width": 57
+   },
+   "rect": {
+    "h": 65,
+    "w": 57,
+    "x": 401,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameHead78",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head7",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head7.hlNameHead78",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Head 7/8",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 11,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempHead78",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head7",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Head7.hlTempHead78",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Head 7/8",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 35,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 35
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnl4Dut",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Dut",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Height": 65,
+    "Left": 458,
+    "TabOrder": 8,
+    "Top": 2,
+    "Width": 57
+   },
+   "rect": {
+    "h": 65,
+    "w": 57,
+    "x": 458,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameDut",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Dut",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Dut.hlNameDut",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Dut",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 11,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempDut",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Dut",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Dut.hlTempDut",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Dut",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 35,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 35
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnl4Chamber",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Chamber",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Height": 65,
+    "Left": 515,
+    "TabOrder": 9,
+    "Top": 2,
+    "Width": 57
+   },
+   "rect": {
+    "h": 65,
+    "w": 57,
+    "x": 515,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameChamber",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Chamber",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Chamber.hlNameChamber",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Chamber",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 11,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempChamber",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Chamber",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4Chamber.hlTempChamber",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Chamber",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 35,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 35
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnl4CCD",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4CCD",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Height": 65,
+    "Left": 572,
+    "TabOrder": 10,
+    "Top": 2,
+    "Width": 57
+   },
+   "rect": {
+    "h": 65,
+    "w": 57,
+    "x": 572,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameCCD",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4CCD",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4CCD.hlNameCCD",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "CCD",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 11,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempCCD",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4CCD",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4CCD.hlTempCCD",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "CCD",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 35,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 35
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnl4HotGun1",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4HotGun1",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Height": 65,
+    "Left": 629,
+    "TabOrder": 11,
+    "Top": 2,
+    "Width": 57
+   },
+   "rect": {
+    "h": 65,
+    "w": 57,
+    "x": 629,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameHeatGun1",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4HotGun1",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4HotGun1.hlNameHeatGun1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Heat Gun 1",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 11,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempHeatGun1",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4HotGun1",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4HotGun1.hlTempHeatGun1",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "HeatGun1",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 35,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 35
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnl4HotGun2",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4HotGun2",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Height": 65,
+    "Left": 686,
+    "TabOrder": 12,
+    "Top": 2,
+    "Width": 57
+   },
+   "rect": {
+    "h": 65,
+    "w": 57,
+    "x": 686,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlNameHeatGun2",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4HotGun2",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4HotGun2.hlNameHeatGun2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Heat Gun 2",
+    "Color": "clBtnHighlight",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 11,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "hlTempHeatGun2",
+   "parent": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4HotGun2",
+   "path": "fTemperFrom.pnlLeft.gbOldTempWindow.pnl4HotGun2.hlTempHeatGun2",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "HeatGun2",
+    "Color": 51712,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 35,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 0,
+    "y": 35
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button6Click"
+   },
+   "kind": "LEAF",
+   "name": "Button6",
+   "parent": "fTemperFrom.pnlLeft",
+   "path": "fTemperFrom.pnlLeft.Button6",
+   "props": {
+    "Caption": "AlarmSimulator",
+    "Height": 25,
+    "Left": 82,
+    "OnClick": "Button6Click",
+    "TabOrder": 1,
+    "Top": 5,
+    "Visible": "False",
+    "Width": 81
+   },
+   "rect": {
+    "h": 25,
+    "w": 81,
+    "x": 82,
+    "y": 5
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "Timer1Timer"
+   },
+   "kind": "NONVISUAL",
+   "name": "Timer1",
+   "parent": "fTemperFrom",
+   "path": "fTemperFrom.Timer1",
+   "props": {
+    "Interval": 100,
+    "Left": 680,
+    "OnTimer": "Timer1Timer",
+    "Top": 345
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 680,
+    "y": 345
+   }
+  }
+ ]
+}

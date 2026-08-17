@@ -1,0 +1,864 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": null,
+ "form": "DataModule1",
+ "form_class": "TDataModule1",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "database.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TDataModule1",
+   "events": {
+    "OnDestroy": "DataModuleDestroy"
+   },
+   "kind": "ROOT",
+   "name": "DataModule1",
+   "parent": null,
+   "path": "DataModule1",
+   "props": {
+    "Height": 479,
+    "Left": 1181,
+    "OldCreateOrder": "True",
+    "OnDestroy": "DataModuleDestroy",
+    "Top": 564,
+    "Width": 741
+   },
+   "rect": {
+    "h": 479,
+    "w": 741,
+    "x": 1181,
+    "y": 564
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTable",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "MotorTable",
+   "parent": "DataModule1",
+   "path": "DataModule1.MotorTable",
+   "props": {
+    "DatabaseName": "newhandler",
+    "FieldDefs": [
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "Motorname"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 23
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "Alias"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 15
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "Direction"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 10
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "GearRatio"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 10
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "HomeDirectior"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 10
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "HomeHighSpeed"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 10
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "HomeLowSpeed"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 10
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "InitSpeed"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 10
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "JogHighSpeed"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 10
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "JogLowSpeed"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 10
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "Rate"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 10
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "SoftLimitN"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 10
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "SoftLimitP"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 10
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "Chinese"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 255
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "English"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 255
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "Port"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 8
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "Enable"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 1
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "ServoAlarmOn"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 1
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "Range"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 4
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "1P2P"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 1
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "SensorType"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 1
+       }
+      }
+     }
+    ],
+    "Left": 32,
+    "StoreDefs": "True",
+    "TableName": "motor.db",
+    "Top": 88
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 32,
+    "y": 88
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTable",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "CylinderTable",
+   "parent": "DataModule1",
+   "path": "DataModule1.CylinderTable",
+   "props": {
+    "DatabaseName": "newhandler",
+    "FieldDefs": [
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "DelayIndex"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 8
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftInteger"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "DelayCT"
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "DelayMessage"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 255
+       }
+      }
+     }
+    ],
+    "Left": 128,
+    "StoreDefs": "True",
+    "TableName": "cylinder.DB",
+    "Top": 24
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 128,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTable",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "SensorTable",
+   "parent": "DataModule1",
+   "path": "DataModule1.SensorTable",
+   "props": {
+    "DatabaseName": "newhandler",
+    "FieldDefs": [
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "SensorName"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 30
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "InIOPort"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 10
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "InIOBit"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 1
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "InType"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 1
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "Enable"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 1
+       }
+      }
+     }
+    ],
+    "Left": 128,
+    "StoreDefs": "True",
+    "TableName": "sensor.DB",
+    "Top": 88
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 128,
+    "y": 88
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTable",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "SwitchTable",
+   "parent": "DataModule1",
+   "path": "DataModule1.SwitchTable",
+   "props": {
+    "DatabaseName": "newhandler",
+    "FieldDefs": [
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "SwitchName"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 20
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "OutIOPort"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 6
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "OutIOBit"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 1
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "OutIOType"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 1
+       }
+      }
+     },
+     {
+      "order": [
+       "Name",
+       "DataType",
+       "Size"
+      ],
+      "properties": {
+       "DataType": {
+        "type": "SCALAR",
+        "value": "ftString"
+       },
+       "Name": {
+        "type": "STR",
+        "value": "Enable"
+       },
+       "Size": {
+        "type": "SCALAR",
+        "value": 1
+       }
+      }
+     }
+    ],
+    "Left": 224,
+    "StoreDefs": "True",
+    "TableName": "switch.db",
+    "Top": 24
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 224,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTable",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "SuckerTable",
+   "parent": "DataModule1",
+   "path": "DataModule1.SuckerTable",
+   "props": {
+    "DatabaseName": "newhandler",
+    "Left": 232,
+    "TableName": "sucker.DB",
+    "Top": 88
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 232,
+    "y": 88
+   }
+  }
+ ]
+}

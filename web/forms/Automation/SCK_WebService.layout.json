@@ -1,0 +1,108 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "fWebService",
+ "form": "fWebService",
+ "form_class": "TfWebService",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "Automation/SCK_WebService.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfWebService",
+   "events": {},
+   "kind": "ROOT",
+   "name": "fWebService",
+   "parent": null,
+   "path": "fWebService",
+   "props": {
+    "Caption": "fWebService",
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 155,
+    "Left": 543,
+    "OldCreateOrder": "False",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 403,
+    "Width": 220
+   },
+   "rect": {
+    "h": 155,
+    "w": 220,
+    "x": 543,
+    "y": 403
+   }
+  },
+  {
+   "align": null,
+   "cls": "THTTPRIO",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "HTTPRIO1",
+   "parent": "fWebService",
+   "path": "fWebService.HTTPRIO1",
+   "props": {
+    "Converter.Options": [
+     "soSendMultiRefObj",
+     "soTryAllSchema",
+     "soRootRefNodesToBody"
+    ],
+    "HTTPWebNode.Agent": "Borland SOAP 1.1",
+    "HTTPWebNode.InvokeOptions": [
+     "soIgnoreInvalidCerts"
+    ],
+    "HTTPWebNode.UseUTF8InHeader": "False",
+    "Left": 20,
+    "Port": "SIP1Soap",
+    "Service": "SIP1",
+    "Top": 12,
+    "WSDLLocation": "http://10.20.20.32/cimreport/ws/sip1.asmx?WSDL"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 20,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "THTTPRIO",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "HTTPRIO_VTEST",
+   "parent": "fWebService",
+   "path": "fWebService.HTTPRIO_VTEST",
+   "props": {
+    "Converter.Options": [
+     "soSendMultiRefObj",
+     "soTryAllSchema",
+     "soRootRefNodesToBody"
+    ],
+    "HTTPWebNode.Agent": "Borland SOAP 1.1",
+    "HTTPWebNode.InvokeOptions": [
+     "soIgnoreInvalidCerts"
+    ],
+    "HTTPWebNode.UseUTF8InHeader": "False",
+    "Left": 84,
+    "Port": "MesWebServiceSoap",
+    "Service": "MesWebService",
+    "Top": 12,
+    "WSDLLocation": "http://192.168.10.216/vt_mes/MesWebService.asmx?WSDL"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 84,
+    "y": 12
+   }
+  }
+ ]
+}

@@ -1,0 +1,835 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "Input",
+ "form": "fInput",
+ "form_class": "TfInput",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "INPUT.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfInput",
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fInput",
+   "parent": null,
+   "path": "fInput",
+   "props": {
+    "BorderIcons": [],
+    "Caption": "Input",
+    "Color": 12761254,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 418,
+    "Left": 498,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "Position": "poScreenCenter",
+    "TextHeight": 13,
+    "Top": 147,
+    "Width": 585
+   },
+   "rect": {
+    "h": 418,
+    "w": 585,
+    "x": 498,
+    "y": 147
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton1Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton1",
+   "parent": "fInput",
+   "path": "fInput.SpeedButton1",
+   "props": {
+    "Caption": "+100",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -24,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 380,
+    "OnClick": "SpeedButton1Click",
+    "ParentFont": "False",
+    "Top": 65,
+    "Width": 86
+   },
+   "rect": {
+    "h": 65,
+    "w": 86,
+    "x": 380,
+    "y": 65
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton1Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton2",
+   "parent": "fInput",
+   "path": "fInput.SpeedButton2",
+   "props": {
+    "Caption": "+10",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -24,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 380,
+    "OnClick": "SpeedButton1Click",
+    "ParentFont": "False",
+    "Top": 136,
+    "Width": 86
+   },
+   "rect": {
+    "h": 65,
+    "w": 86,
+    "x": 380,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton1Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton3",
+   "parent": "fInput",
+   "path": "fInput.SpeedButton3",
+   "props": {
+    "Caption": "+1",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -24,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 380,
+    "OnClick": "SpeedButton1Click",
+    "ParentFont": "False",
+    "Top": 207,
+    "Width": 86
+   },
+   "rect": {
+    "h": 65,
+    "w": 86,
+    "x": 380,
+    "y": 207
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton4Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton4",
+   "parent": "fInput",
+   "path": "fInput.SpeedButton4",
+   "props": {
+    "Caption": "Abort",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -24,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 135,
+    "Left": 286,
+    "OnClick": "SpeedButton4Click",
+    "ParentFont": "False",
+    "Top": 207,
+    "Width": 86
+   },
+   "rect": {
+    "h": 135,
+    "w": 86,
+    "x": 286,
+    "y": 207
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton1Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton5",
+   "parent": "fInput",
+   "path": "fInput.SpeedButton5",
+   "props": {
+    "Caption": "-100",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -24,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 473,
+    "OnClick": "SpeedButton1Click",
+    "ParentFont": "False",
+    "Top": 65,
+    "Width": 86
+   },
+   "rect": {
+    "h": 65,
+    "w": 86,
+    "x": 473,
+    "y": 65
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton1Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton6",
+   "parent": "fInput",
+   "path": "fInput.SpeedButton6",
+   "props": {
+    "Caption": "-10",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -24,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 473,
+    "OnClick": "SpeedButton1Click",
+    "ParentFont": "False",
+    "Top": 136,
+    "Width": 86
+   },
+   "rect": {
+    "h": 65,
+    "w": 86,
+    "x": 473,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton1Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton7",
+   "parent": "fInput",
+   "path": "fInput.SpeedButton7",
+   "props": {
+    "Caption": "-1",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -24,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 473,
+    "OnClick": "SpeedButton1Click",
+    "ParentFont": "False",
+    "Top": 207,
+    "Width": 86
+   },
+   "rect": {
+    "h": 65,
+    "w": 86,
+    "x": 473,
+    "y": 207
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "fInput",
+   "path": "fInput.Label1",
+   "props": {
+    "Caption": "Label1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -19,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 22,
+    "Left": 8,
+    "ParentFont": "False",
+    "Top": 352,
+    "Visible": "False",
+    "Width": 58
+   },
+   "rect": {
+    "h": 22,
+    "w": 58,
+    "x": 8,
+    "y": 352
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "kind": "LEAF",
+   "name": "Button1",
+   "parent": "fInput",
+   "path": "fInput.Button1",
+   "props": {
+    "Caption": "7",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -48,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 6,
+    "OnClick": "NumberClick",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Tag": 7,
+    "Top": 65,
+    "Width": 86
+   },
+   "rect": {
+    "h": 65,
+    "w": 86,
+    "x": 6,
+    "y": 65
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnKeyDown": "Edit1KeyDown",
+    "OnKeyPress": "Edit1KeyPress"
+   },
+   "kind": "LEAF",
+   "name": "Edit1",
+   "parent": "fInput",
+   "path": "fInput.Edit1",
+   "props": {
+    "AutoSize": "False",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -32,
+    "Font.Name": "Times New Roman",
+    "Font.Pitch": "fpFixed",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 57,
+    "Left": 4,
+    "OnKeyDown": "Edit1KeyDown",
+    "OnKeyPress": "Edit1KeyPress",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 3,
+    "Width": 555
+   },
+   "rect": {
+    "h": 57,
+    "w": 555,
+    "x": 4,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "kind": "LEAF",
+   "name": "Button2",
+   "parent": "fInput",
+   "path": "fInput.Button2",
+   "props": {
+    "Caption": "4",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -48,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 6,
+    "OnClick": "NumberClick",
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Tag": 4,
+    "Top": 136,
+    "Width": 86
+   },
+   "rect": {
+    "h": 65,
+    "w": 86,
+    "x": 6,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "kind": "LEAF",
+   "name": "Button3",
+   "parent": "fInput",
+   "path": "fInput.Button3",
+   "props": {
+    "Caption": "1",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -48,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 6,
+    "OnClick": "NumberClick",
+    "ParentFont": "False",
+    "TabOrder": 9,
+    "Tag": 1,
+    "Top": 207,
+    "Width": 86
+   },
+   "rect": {
+    "h": 65,
+    "w": 86,
+    "x": 6,
+    "y": 207
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "kind": "LEAF",
+   "name": "Button5",
+   "parent": "fInput",
+   "path": "fInput.Button5",
+   "props": {
+    "Caption": "8",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -48,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 99,
+    "OnClick": "NumberClick",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Tag": 8,
+    "Top": 65,
+    "Width": 86
+   },
+   "rect": {
+    "h": 65,
+    "w": 86,
+    "x": 99,
+    "y": 65
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "kind": "LEAF",
+   "name": "Button6",
+   "parent": "fInput",
+   "path": "fInput.Button6",
+   "props": {
+    "Caption": "5",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -48,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 99,
+    "OnClick": "NumberClick",
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Tag": 5,
+    "Top": 136,
+    "Width": 86
+   },
+   "rect": {
+    "h": 65,
+    "w": 86,
+    "x": 99,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "kind": "LEAF",
+   "name": "Button8",
+   "parent": "fInput",
+   "path": "fInput.Button8",
+   "props": {
+    "Caption": "9",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -48,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 193,
+    "OnClick": "NumberClick",
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Tag": 9,
+    "Top": 65,
+    "Width": 86
+   },
+   "rect": {
+    "h": 65,
+    "w": 86,
+    "x": 193,
+    "y": 65
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "kind": "LEAF",
+   "name": "Button9",
+   "parent": "fInput",
+   "path": "fInput.Button9",
+   "props": {
+    "Caption": "6",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -48,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 193,
+    "OnClick": "NumberClick",
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Tag": 6,
+    "Top": 136,
+    "Width": 86
+   },
+   "rect": {
+    "h": 65,
+    "w": 86,
+    "x": 193,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "kind": "LEAF",
+   "name": "Button11",
+   "parent": "fInput",
+   "path": "fInput.Button11",
+   "props": {
+    "Caption": "3",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -48,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 193,
+    "OnClick": "NumberClick",
+    "ParentFont": "False",
+    "TabOrder": 11,
+    "Tag": 3,
+    "Top": 207,
+    "Width": 86
+   },
+   "rect": {
+    "h": 65,
+    "w": 86,
+    "x": 193,
+    "y": 207
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "kind": "LEAF",
+   "name": "Button12",
+   "parent": "fInput",
+   "path": "fInput.Button12",
+   "props": {
+    "Caption": "2",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -48,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 99,
+    "OnClick": "NumberClick",
+    "ParentFont": "False",
+    "TabOrder": 10,
+    "Tag": 2,
+    "Top": 207,
+    "Width": 86
+   },
+   "rect": {
+    "h": 65,
+    "w": 86,
+    "x": 99,
+    "y": 207
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button15Click"
+   },
+   "kind": "LEAF",
+   "name": "Button15",
+   "parent": "fInput",
+   "path": "fInput.Button15",
+   "props": {
+    "Caption": "Enter",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -48,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 64,
+    "Left": 380,
+    "OnClick": "Button15Click",
+    "ParentFont": "False",
+    "TabOrder": 14,
+    "Top": 278,
+    "Width": 180
+   },
+   "rect": {
+    "h": 64,
+    "w": 180,
+    "x": 380,
+    "y": 278
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button17Click",
+    "OnKeyPress": "Button17KeyPress"
+   },
+   "kind": "LEAF",
+   "name": "Button17",
+   "parent": "fInput",
+   "path": "fInput.Button17",
+   "props": {
+    "Caption": ".",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -48,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 193,
+    "OnClick": "Button17Click",
+    "OnKeyPress": "Button17KeyPress",
+    "ParentFont": "False",
+    "TabOrder": 13,
+    "Top": 278,
+    "Width": 86
+   },
+   "rect": {
+    "h": 65,
+    "w": 86,
+    "x": 193,
+    "y": 278
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "NumberClick"
+   },
+   "kind": "LEAF",
+   "name": "Button18",
+   "parent": "fInput",
+   "path": "fInput.Button18",
+   "props": {
+    "Caption": "0",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -48,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 6,
+    "OnClick": "NumberClick",
+    "ParentFont": "False",
+    "TabOrder": 12,
+    "Top": 278,
+    "Width": 179
+   },
+   "rect": {
+    "h": 65,
+    "w": 179,
+    "x": 6,
+    "y": 278
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button13Click"
+   },
+   "kind": "LEAF",
+   "name": "Button13",
+   "parent": "fInput",
+   "path": "fInput.Button13",
+   "props": {
+    "Caption": "BS",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -48,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 286,
+    "OnClick": "Button13Click",
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Top": 136,
+    "Width": 86
+   },
+   "rect": {
+    "h": 65,
+    "w": 86,
+    "x": 286,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button4Click"
+   },
+   "kind": "LEAF",
+   "name": "Button4",
+   "parent": "fInput",
+   "path": "fInput.Button4",
+   "props": {
+    "Caption": "-",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -48,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 65,
+    "Left": 286,
+    "OnClick": "Button4Click",
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 65,
+    "Width": 86
+   },
+   "rect": {
+    "h": 65,
+    "w": 86,
+    "x": 286,
+    "y": 65
+   }
+  }
+ ]
+}

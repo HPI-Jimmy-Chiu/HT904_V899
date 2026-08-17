@@ -1,0 +1,2325 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "Auto Temperature",
+ "form": "ACTForm",
+ "form_class": "TACTForm",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "AutoTemperature.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TACTForm",
+   "events": {
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnResize": "FormResize",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "ACTForm",
+   "parent": null,
+   "path": "ACTForm",
+   "props": {
+    "Caption": "Auto Temperature",
+    "Color": 12761254,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 853,
+    "Left": 225,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnResize": "FormResize",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 20,
+    "Top": 95,
+    "Width": 1194
+   },
+   "rect": {
+    "h": 853,
+    "w": 1194,
+    "x": 225,
+    "y": 95
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "pcACT",
+   "parent": "ACTForm",
+   "path": "ACTForm.pcACT",
+   "props": {
+    "ActivePage": "tsTemperature",
+    "Align": "alClient",
+    "Height": 822,
+    "Left": 0,
+    "TabIndex": 1,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 1186
+   },
+   "rect": {
+    "h": 822,
+    "w": 1186,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsTemperature",
+   "parent": "ACTForm.pcACT",
+   "path": "ACTForm.pcACT.tsTemperature",
+   "props": {
+    "Caption": "Temperature"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlData",
+   "parent": "ACTForm.pcACT.tsTemperature",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData",
+   "props": {
+    "Align": "alLeft",
+    "BevelInner": "bvLowered",
+    "Color": 12761254,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clGreen",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 577,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 265
+   },
+   "rect": {
+    "h": 577,
+    "w": 265,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labTimer",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.labTimer",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Auto Offset Timer: 00:00",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 4,
+    "ParentFont": "False",
+    "Top": 124,
+    "Width": 193
+   },
+   "rect": {
+    "h": 20,
+    "w": 193,
+    "x": 4,
+    "y": 124
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label15",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.Label15",
+   "props": {
+    "Caption": "：",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 105,
+    "ParentFont": "False",
+    "Top": 190,
+    "Width": 16
+   },
+   "rect": {
+    "h": 20,
+    "w": 16,
+    "x": 105,
+    "y": 190
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label16",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.Label16",
+   "props": {
+    "Caption": "Range",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 197,
+    "ParentFont": "False",
+    "Top": 7,
+    "Visible": "False",
+    "Width": 48
+   },
+   "rect": {
+    "h": 20,
+    "w": 48,
+    "x": 197,
+    "y": 7
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlBase01",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.pnlBase01",
+   "props": {
+    "Caption": "Low Base",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clPurple",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 21,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 30,
+    "Width": 89
+   },
+   "rect": {
+    "h": 25,
+    "w": 89,
+    "x": 21,
+    "y": 30
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlBase02",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.pnlBase02",
+   "props": {
+    "Caption": "Mid Base",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clPurple",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 21,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 62,
+    "Width": 89
+   },
+   "rect": {
+    "h": 25,
+    "w": 89,
+    "x": 21,
+    "y": 62
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlBase03",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.pnlBase03",
+   "props": {
+    "Caption": "High Base",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clPurple",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 21,
+    "ParentFont": "False",
+    "TabOrder": 9,
+    "Top": 94,
+    "Width": 89
+   },
+   "rect": {
+    "h": 25,
+    "w": 89,
+    "x": 21,
+    "y": 94
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlBaseTemp01",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.pnlBaseTemp01",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "000.00",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 115,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 30,
+    "Width": 81
+   },
+   "rect": {
+    "h": 25,
+    "w": 81,
+    "x": 115,
+    "y": 30
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlBaseTemp02",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.pnlBaseTemp02",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "000.00",
+    "Color": 50688,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 115,
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Top": 62,
+    "Width": 81
+   },
+   "rect": {
+    "h": 25,
+    "w": 81,
+    "x": 115,
+    "y": 62
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlBaseTemp03",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.pnlBaseTemp03",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "000.00",
+    "Color": 10921472,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 115,
+    "ParentFont": "False",
+    "TabOrder": 10,
+    "Top": 94,
+    "Width": 81
+   },
+   "rect": {
+    "h": 25,
+    "w": 81,
+    "x": 115,
+    "y": 94
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbBase01",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.cbBase01",
+   "props": {
+    "Height": 17,
+    "Left": 4,
+    "TabOrder": 3,
+    "Top": 34,
+    "Width": 17
+   },
+   "rect": {
+    "h": 17,
+    "w": 17,
+    "x": 4,
+    "y": 34
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbBase02",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.cbBase02",
+   "props": {
+    "Height": 17,
+    "Left": 4,
+    "TabOrder": 7,
+    "Top": 66,
+    "Width": 17
+   },
+   "rect": {
+    "h": 17,
+    "w": 17,
+    "x": 4,
+    "y": 66
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbBase03",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.cbBase03",
+   "props": {
+    "Height": 17,
+    "Left": 4,
+    "TabOrder": 11,
+    "Top": 98,
+    "Width": 17
+   },
+   "rect": {
+    "h": 17,
+    "w": 17,
+    "x": 4,
+    "y": 98
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBitBtn",
+   "events": {
+    "OnClick": "btnAutoStartClick"
+   },
+   "kind": "LEAF",
+   "name": "btnAutoStart",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.btnAutoStart",
+   "props": {
+    "Caption": "START",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clGreen",
+    "Font.Height": -24,
+    "Font.Name": "Courier New",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 41,
+    "Left": 4,
+    "OnClick": "btnAutoStartClick",
+    "ParentFont": "False",
+    "TabOrder": 17,
+    "Top": 383,
+    "Width": 192
+   },
+   "rect": {
+    "h": 41,
+    "w": 192,
+    "x": 4,
+    "y": 383
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBitBtn",
+   "events": {
+    "OnClick": "btnDutOnOffClick"
+   },
+   "kind": "LEAF",
+   "name": "btnDutOnOff",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.btnDutOnOff",
+   "props": {
+    "Caption": "GET On / Off",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clOlive",
+    "Font.Height": -24,
+    "Font.Name": "Courier New",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 41,
+    "Left": 4,
+    "OnClick": "btnDutOnOffClick",
+    "ParentFont": "False",
+    "TabOrder": 16,
+    "Top": 339,
+    "Width": 192
+   },
+   "rect": {
+    "h": 41,
+    "w": 192,
+    "x": 4,
+    "y": 339
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBitBtn",
+   "events": {
+    "OnClick": "btShowPosClick"
+   },
+   "kind": "LEAF",
+   "name": "btShowPos",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.btShowPos",
+   "props": {
+    "Caption": "Default Position",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -19,
+    "Font.Name": "Courier New",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 41,
+    "Left": 4,
+    "OnClick": "btShowPosClick",
+    "ParentFont": "False",
+    "TabOrder": 15,
+    "Top": 295,
+    "Width": 192
+   },
+   "rect": {
+    "h": 41,
+    "w": 192,
+    "x": 4,
+    "y": 295
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkAutoStart",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.chkAutoStart",
+   "props": {
+    "Caption": "Enable auto start Timer",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 17,
+    "Left": 4,
+    "ParentFont": "False",
+    "TabOrder": 12,
+    "Top": 164,
+    "Width": 189
+   },
+   "rect": {
+    "h": 17,
+    "w": 189,
+    "x": 4,
+    "y": 164
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtAutoStartHrMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtAutoStartHr",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.edtAutoStartHr",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "Left": 56,
+    "MaxLength": 2,
+    "OnMouseDown": "edtAutoStartHrMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 13,
+    "Text": "00",
+    "Top": 184,
+    "Width": 49
+   },
+   "rect": {
+    "h": 28,
+    "w": 49,
+    "x": 56,
+    "y": 184
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtAutoStartMinMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtAutoStartMin",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.edtAutoStartMin",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "Left": 124,
+    "MaxLength": 2,
+    "OnMouseDown": "edtAutoStartMinMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 14,
+    "Text": "00",
+    "Top": 184,
+    "Width": 49
+   },
+   "rect": {
+    "h": 28,
+    "w": 49,
+    "x": 124,
+    "y": 184
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtRange1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtRange1",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.edtRange1",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "Left": 200,
+    "OnMouseDown": "edtRange1MouseDown",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "3",
+    "Top": 28,
+    "Width": 41
+   },
+   "rect": {
+    "h": 28,
+    "w": 41,
+    "x": 200,
+    "y": 28
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtRange1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtRange2",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.edtRange2",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "Left": 200,
+    "OnMouseDown": "edtRange1MouseDown",
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Text": "3",
+    "Top": 60,
+    "Width": 41
+   },
+   "rect": {
+    "h": 28,
+    "w": 41,
+    "x": 200,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtRange1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtRange3",
+   "parent": "ACTForm.pcACT.tsTemperature.pnlData",
+   "path": "ACTForm.pcACT.tsTemperature.pnlData.edtRange3",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "Left": 200,
+    "OnMouseDown": "edtRange1MouseDown",
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Text": "3",
+    "Top": 92,
+    "Width": 41
+   },
+   "rect": {
+    "h": 28,
+    "w": 41,
+    "x": 200,
+    "y": 92
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel3",
+   "parent": "ACTForm.pcACT.tsTemperature",
+   "path": "ACTForm.pcACT.tsTemperature.Panel3",
+   "props": {
+    "Align": "alBottom",
+    "BevelInner": "bvLowered",
+    "Color": 12761254,
+    "Height": 202,
+    "Left": 0,
+    "TabOrder": 2,
+    "Top": 577,
+    "Width": 1170
+   },
+   "rect": {
+    "h": 202,
+    "w": 1170,
+    "x": 0,
+    "y": 577
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "MemoLog",
+   "parent": "ACTForm.pcACT.tsTemperature.Panel3",
+   "path": "ACTForm.pcACT.tsTemperature.Panel3.MemoLog",
+   "props": {
+    "Align": "alTop",
+    "Color": 14670284,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Courier New",
+    "Font.Style": [],
+    "Height": 87,
+    "Left": 2,
+    "ParentFont": "False",
+    "ScrollBars": "ssBoth",
+    "TabOrder": 0,
+    "Top": 2,
+    "Width": 1166
+   },
+   "rect": {
+    "h": 87,
+    "w": 1166,
+    "x": 2,
+    "y": 2
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "MemoOffset",
+   "parent": "ACTForm.pcACT.tsTemperature.Panel3",
+   "path": "ACTForm.pcACT.tsTemperature.Panel3.MemoOffset",
+   "props": {
+    "Align": "alClient",
+    "Color": 14670284,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Courier New",
+    "Font.Style": [],
+    "Height": 111,
+    "Left": 2,
+    "ParentFont": "False",
+    "ScrollBars": "ssBoth",
+    "TabOrder": 1,
+    "Top": 89,
+    "Width": 981
+   },
+   "rect": {
+    "h": 111,
+    "w": 981,
+    "x": 2,
+    "y": 89
+   }
+  },
+  {
+   "align": "alRight",
+   "cls": "TPanel",
+   "events": {
+    "OnClick": "palSaveLogClick"
+   },
+   "kind": "LEAF",
+   "name": "palSaveLog",
+   "parent": "ACTForm.pcACT.tsTemperature.Panel3",
+   "path": "ACTForm.pcACT.tsTemperature.Panel3.palSaveLog",
+   "props": {
+    "Align": "alRight",
+    "Caption": "Save Log",
+    "Height": 111,
+    "Left": 983,
+    "OnClick": "palSaveLogClick",
+    "TabOrder": 2,
+    "Top": 89,
+    "Width": 185
+   },
+   "rect": {
+    "h": 111,
+    "w": 185,
+    "x": 983,
+    "y": 89
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TScrollBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "ScrollBox1",
+   "parent": "ACTForm.pcACT.tsTemperature",
+   "path": "ACTForm.pcACT.tsTemperature.ScrollBox1",
+   "props": {
+    "Align": "alClient",
+    "Height": 577,
+    "Left": 265,
+    "TabOrder": 1,
+    "Top": 0,
+    "Width": 905
+   },
+   "rect": {
+    "h": 577,
+    "w": 905,
+    "x": 265,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbMeasurePoint",
+   "parent": "ACTForm.pcACT.tsTemperature.ScrollBox1",
+   "path": "ACTForm.pcACT.tsTemperature.ScrollBox1.gbMeasurePoint",
+   "props": {
+    "Caption": "Measure Point",
+    "Height": 105,
+    "Left": 4,
+    "TabOrder": 0,
+    "Top": 4,
+    "Visible": "False",
+    "Width": 280
+   },
+   "rect": {
+    "h": 105,
+    "w": 280,
+    "x": 4,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TImage",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ImgOriginalOffset",
+   "parent": "ACTForm.pcACT.tsTemperature.ScrollBox1.gbMeasurePoint",
+   "path": "ACTForm.pcACT.tsTemperature.ScrollBox1.gbMeasurePoint.ImgOriginalOffset",
+   "props": {
+    "Height": 84,
+    "Left": 174,
+    "Top": 16,
+    "Width": 100
+   },
+   "rect": {
+    "h": 84,
+    "w": 100,
+    "x": 174,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlTemp",
+   "parent": "ACTForm.pcACT.tsTemperature.ScrollBox1.gbMeasurePoint",
+   "path": "ACTForm.pcACT.tsTemperature.ScrollBox1.gbMeasurePoint.pnlTemp",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "000.00",
+    "Color": 10419454,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 4,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 21,
+    "Width": 168
+   },
+   "rect": {
+    "h": 25,
+    "w": 168,
+    "x": 4,
+    "y": 21
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbUse01",
+   "parent": "ACTForm.pcACT.tsTemperature.ScrollBox1.gbMeasurePoint",
+   "path": "ACTForm.pcACT.tsTemperature.ScrollBox1.gbMeasurePoint.cbUse01",
+   "props": {
+    "Caption": "Use",
+    "Height": 17,
+    "Left": 4,
+    "TabOrder": 2,
+    "Top": 80,
+    "Width": 89
+   },
+   "rect": {
+    "h": 17,
+    "w": 89,
+    "x": 4,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbMeasurePoint",
+   "parent": "ACTForm.pcACT.tsTemperature.ScrollBox1.gbMeasurePoint",
+   "path": "ACTForm.pcACT.tsTemperature.ScrollBox1.gbMeasurePoint.cbMeasurePoint",
+   "props": {
+    "Height": 28,
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "Plate 1",
+     "Plate 2",
+     "Shuttle 1",
+     "Shuttle 2",
+     "Head 1/2",
+     "Head 3/4",
+     "Head 5/6",
+     "Head 7/8",
+     "Dut",
+     "Chamber",
+     "CCD",
+     "A1",
+     "C1",
+     "E1",
+     "G1",
+     "B1",
+     "D1",
+     "F1",
+     "H1",
+     "A2",
+     "C2",
+     "E2",
+     "G2",
+     "B2",
+     "D2",
+     "F2",
+     "H2",
+     "Heat Gun1",
+     "Heat Gun2"
+    ],
+    "Left": 4,
+    "TabOrder": 1,
+    "Text": "Hot Plate 1",
+    "Top": 48,
+    "Width": 168
+   },
+   "rect": {
+    "h": 28,
+    "w": 168,
+    "x": 4,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsSetup",
+   "parent": "ACTForm.pcACT",
+   "path": "ACTForm.pcACT.tsSetup",
+   "props": {
+    "Caption": "Setup",
+    "ImageIndex": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox1",
+   "parent": "ACTForm.pcACT.tsSetup",
+   "path": "ACTForm.pcACT.tsSetup.GroupBox1",
+   "props": {
+    "Caption": "COM Port Setting",
+    "Height": 332,
+    "Left": 363,
+    "TabOrder": 1,
+    "Top": 21,
+    "Width": 313
+   },
+   "rect": {
+    "h": 332,
+    "w": 313,
+    "x": 363,
+    "y": 21
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "ACTForm.pcACT.tsSetup.GroupBox1",
+   "path": "ACTForm.pcACT.tsSetup.GroupBox1.Label1",
+   "props": {
+    "Alignment": "taRightJustify",
+    "AutoSize": "False",
+    "Caption": "Baud Rate：",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 10,
+    "ParentFont": "False",
+    "Top": 132,
+    "Width": 104
+   },
+   "rect": {
+    "h": 20,
+    "w": 104,
+    "x": 10,
+    "y": 132
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label2",
+   "parent": "ACTForm.pcACT.tsSetup.GroupBox1",
+   "path": "ACTForm.pcACT.tsSetup.GroupBox1.Label2",
+   "props": {
+    "Alignment": "taRightJustify",
+    "AutoSize": "False",
+    "Caption": "Byte Size：",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 10,
+    "ParentFont": "False",
+    "Top": 175,
+    "Width": 104
+   },
+   "rect": {
+    "h": 20,
+    "w": 104,
+    "x": 10,
+    "y": 175
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label3",
+   "parent": "ACTForm.pcACT.tsSetup.GroupBox1",
+   "path": "ACTForm.pcACT.tsSetup.GroupBox1.Label3",
+   "props": {
+    "Alignment": "taRightJustify",
+    "AutoSize": "False",
+    "Caption": "Stop Bit：",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 10,
+    "ParentFont": "False",
+    "Top": 217,
+    "Width": 104
+   },
+   "rect": {
+    "h": 20,
+    "w": 104,
+    "x": 10,
+    "y": 217
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label4",
+   "parent": "ACTForm.pcACT.tsSetup.GroupBox1",
+   "path": "ACTForm.pcACT.tsSetup.GroupBox1.Label4",
+   "props": {
+    "Alignment": "taRightJustify",
+    "AutoSize": "False",
+    "Caption": "Parity：",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 10,
+    "ParentFont": "False",
+    "Top": 259,
+    "Width": 104
+   },
+   "rect": {
+    "h": 20,
+    "w": 104,
+    "x": 10,
+    "y": 259
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label5",
+   "parent": "ACTForm.pcACT.tsSetup.GroupBox1",
+   "path": "ACTForm.pcACT.tsSetup.GroupBox1.Label5",
+   "props": {
+    "Alignment": "taRightJustify",
+    "AutoSize": "False",
+    "Caption": "Device：",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 10,
+    "ParentFont": "False",
+    "Top": 89,
+    "Width": 104
+   },
+   "rect": {
+    "h": 20,
+    "w": 104,
+    "x": 10,
+    "y": 89
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label14",
+   "parent": "ACTForm.pcACT.tsSetup.GroupBox1",
+   "path": "ACTForm.pcACT.tsSetup.GroupBox1.Label14",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Thermo Contraller Type：",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 14,
+    "ParentFont": "False",
+    "Top": 23,
+    "Width": 207
+   },
+   "rect": {
+    "h": 20,
+    "w": 207,
+    "x": 14,
+    "y": 23
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbBaudRate",
+   "parent": "ACTForm.pcACT.tsSetup.GroupBox1",
+   "path": "ACTForm.pcACT.tsSetup.GroupBox1.cbBaudRate",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "4800",
+     "7200",
+     "9600",
+     "14400",
+     "19200"
+    ],
+    "Left": 112,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "cbBaudRate",
+    "Top": 128,
+    "Width": 170
+   },
+   "rect": {
+    "h": 28,
+    "w": 170,
+    "x": 112,
+    "y": 128
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbByteSize",
+   "parent": "ACTForm.pcACT.tsSetup.GroupBox1",
+   "path": "ACTForm.pcACT.tsSetup.GroupBox1.cbByteSize",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "5",
+     "6",
+     "7",
+     "8"
+    ],
+    "Left": 112,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Text": "cbByteSize",
+    "Top": 171,
+    "Width": 170
+   },
+   "rect": {
+    "h": 28,
+    "w": 170,
+    "x": 112,
+    "y": 171
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbStopBit",
+   "parent": "ACTForm.pcACT.tsSetup.GroupBox1",
+   "path": "ACTForm.pcACT.tsSetup.GroupBox1.cbStopBit",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "1.5",
+     "2"
+    ],
+    "Left": 112,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Text": "cbStopBit",
+    "Top": 213,
+    "Width": 170
+   },
+   "rect": {
+    "h": 28,
+    "w": 170,
+    "x": 112,
+    "y": 213
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbParity",
+   "parent": "ACTForm.pcACT.tsSetup.GroupBox1",
+   "path": "ACTForm.pcACT.tsSetup.GroupBox1.cbParity",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "None",
+     "Odd",
+     "Even",
+     "Mark",
+     "Space"
+    ],
+    "Left": 112,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Text": "cbParity",
+    "Top": 255,
+    "Width": 170
+   },
+   "rect": {
+    "h": 28,
+    "w": 170,
+    "x": 112,
+    "y": 255
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbDevice",
+   "parent": "ACTForm.pcACT.tsSetup.GroupBox1",
+   "path": "ACTForm.pcACT.tsSetup.GroupBox1.cbDevice",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "COM1",
+     "COM2",
+     "COM3",
+     "COM4",
+     "COM5",
+     "COM6",
+     "COM7",
+     "COM8",
+     "COM9",
+     "COM10",
+     "COM11",
+     "COM12",
+     "COM13",
+     "COM14",
+     "COM15",
+     "COM16",
+     "COM17",
+     "COM18"
+    ],
+    "Left": 112,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "cbCOM",
+    "Top": 86,
+    "Width": 170
+   },
+   "rect": {
+    "h": 28,
+    "w": 170,
+    "x": 112,
+    "y": 86
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbbThermoCtrlType",
+   "parent": "ACTForm.pcACT.tsSetup.GroupBox1",
+   "path": "ACTForm.pcACT.tsSetup.GroupBox1.cbbThermoCtrlType",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ItemHeight": 20,
+    "ItemIndex": 1,
+    "Items.Strings": [
+     "Agilent 34970A",
+     "Delta DTB4824"
+    ],
+    "Left": 112,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "Delta DTB4824",
+    "Top": 43,
+    "Width": 170
+   },
+   "rect": {
+    "h": 28,
+    "w": 170,
+    "x": 112,
+    "y": 43
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnUpdateClick"
+   },
+   "kind": "LEAF",
+   "name": "btnUpdate",
+   "parent": "ACTForm.pcACT.tsSetup",
+   "path": "ACTForm.pcACT.tsSetup.btnUpdate",
+   "props": {
+    "Caption": "Update",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 41,
+    "Left": 16,
+    "OnClick": "btnUpdateClick",
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 500,
+    "Width": 321
+   },
+   "rect": {
+    "h": 41,
+    "w": 321,
+    "x": 16,
+    "y": 500
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbACTSetting",
+   "parent": "ACTForm.pcACT.tsSetup",
+   "path": "ACTForm.pcACT.tsSetup.gbACTSetting",
+   "props": {
+    "Caption": "A.C.T. Setting",
+    "Height": 316,
+    "Left": 16,
+    "TabOrder": 0,
+    "Top": 21,
+    "Width": 329
+   },
+   "rect": {
+    "h": 316,
+    "w": 329,
+    "x": 16,
+    "y": 21
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label6",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTSetting",
+   "path": "ACTForm.pcACT.tsSetup.gbACTSetting.Label6",
+   "props": {
+    "Caption": "Check Interval Time：",
+    "Height": 20,
+    "Left": 20,
+    "Top": 43,
+    "Width": 155
+   },
+   "rect": {
+    "h": 20,
+    "w": 155,
+    "x": 20,
+    "y": 43
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label7",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTSetting",
+   "path": "ACTForm.pcACT.tsSetup.gbACTSetting.Label7",
+   "props": {
+    "Caption": "Min.",
+    "Height": 20,
+    "Left": 277,
+    "Top": 44,
+    "Width": 29
+   },
+   "rect": {
+    "h": 20,
+    "w": 29,
+    "x": 277,
+    "y": 44
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label8",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTSetting",
+   "path": "ACTForm.pcACT.tsSetup.gbACTSetting.Label8",
+   "props": {
+    "Caption": "Calibration Range：",
+    "Height": 20,
+    "Left": 32,
+    "Top": 83,
+    "Visible": "False",
+    "Width": 143
+   },
+   "rect": {
+    "h": 20,
+    "w": 143,
+    "x": 32,
+    "y": 83
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label9",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTSetting",
+   "path": "ACTForm.pcACT.tsSetup.gbACTSetting.Label9",
+   "props": {
+    "Caption": "Read Scan Time：",
+    "Height": 20,
+    "Left": 41,
+    "Top": 123,
+    "Width": 134
+   },
+   "rect": {
+    "h": 20,
+    "w": 134,
+    "x": 41,
+    "y": 123
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label10",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTSetting",
+   "path": "ACTForm.pcACT.tsSetup.gbACTSetting.Label10",
+   "props": {
+    "Caption": "Sec.",
+    "Height": 20,
+    "Left": 277,
+    "Top": 123,
+    "Width": 32
+   },
+   "rect": {
+    "h": 20,
+    "w": 32,
+    "x": 277,
+    "y": 123
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label11",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTSetting",
+   "path": "ACTForm.pcACT.tsSetup.gbACTSetting.Label11",
+   "props": {
+    "Caption": "Maximum Offset Limit：",
+    "Height": 20,
+    "Left": 7,
+    "Top": 163,
+    "Width": 168
+   },
+   "rect": {
+    "h": 20,
+    "w": 168,
+    "x": 7,
+    "y": 163
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label13",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTSetting",
+   "path": "ACTForm.pcACT.tsSetup.gbACTSetting.Label13",
+   "props": {
+    "Caption": "Single Offset Limit：",
+    "Height": 20,
+    "Left": 30,
+    "Top": 203,
+    "Width": 145
+   },
+   "rect": {
+    "h": 20,
+    "w": 145,
+    "x": 30,
+    "y": 203
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtCheckIntervalTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtCheckIntervalTime",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTSetting",
+   "path": "ACTForm.pcACT.tsSetup.gbACTSetting.edtCheckIntervalTime",
+   "props": {
+    "Height": 28,
+    "Left": 180,
+    "OnMouseDown": "edtCheckIntervalTimeMouseDown",
+    "TabOrder": 0,
+    "Text": "10",
+    "Top": 40,
+    "Width": 89
+   },
+   "rect": {
+    "h": 28,
+    "w": 89,
+    "x": 180,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtCheckIntervalTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtCalibrationRange",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTSetting",
+   "path": "ACTForm.pcACT.tsSetup.gbACTSetting.edtCalibrationRange",
+   "props": {
+    "Height": 28,
+    "Left": 180,
+    "OnMouseDown": "edtCheckIntervalTimeMouseDown",
+    "TabOrder": 1,
+    "Text": "3",
+    "Top": 80,
+    "Visible": "False",
+    "Width": 89
+   },
+   "rect": {
+    "h": 28,
+    "w": 89,
+    "x": 180,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtCheckIntervalTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtReadScanTime",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTSetting",
+   "path": "ACTForm.pcACT.tsSetup.gbACTSetting.edtReadScanTime",
+   "props": {
+    "Height": 28,
+    "Left": 180,
+    "OnMouseDown": "edtCheckIntervalTimeMouseDown",
+    "TabOrder": 2,
+    "Text": "5",
+    "Top": 120,
+    "Width": 89
+   },
+   "rect": {
+    "h": 28,
+    "w": 89,
+    "x": 180,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtCheckIntervalTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtOffsetLimit",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTSetting",
+   "path": "ACTForm.pcACT.tsSetup.gbACTSetting.edtOffsetLimit",
+   "props": {
+    "Height": 28,
+    "Left": 180,
+    "OnMouseDown": "edtCheckIntervalTimeMouseDown",
+    "TabOrder": 3,
+    "Text": "30",
+    "Top": 159,
+    "Width": 89
+   },
+   "rect": {
+    "h": 28,
+    "w": 89,
+    "x": 180,
+    "y": 159
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtCheckIntervalTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edSingleOffset",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTSetting",
+   "path": "ACTForm.pcACT.tsSetup.gbACTSetting.edSingleOffset",
+   "props": {
+    "Height": 28,
+    "Left": 180,
+    "OnMouseDown": "edtCheckIntervalTimeMouseDown",
+    "TabOrder": 4,
+    "Text": "30",
+    "Top": 199,
+    "Width": 89
+   },
+   "rect": {
+    "h": 28,
+    "w": 89,
+    "x": 180,
+    "y": 199
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "rgOffsetMethod",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTSetting",
+   "path": "ACTForm.pcACT.tsSetup.gbACTSetting.rgOffsetMethod",
+   "props": {
+    "Caption": "Offset Method",
+    "Columns": 2,
+    "Height": 65,
+    "ItemIndex": 1,
+    "Items.Strings": [
+     "Max - Min",
+     "Average"
+    ],
+    "Left": 4,
+    "TabOrder": 5,
+    "Top": 236,
+    "Width": 317
+   },
+   "rect": {
+    "h": 65,
+    "w": 317,
+    "x": 4,
+    "y": 236
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbDisplay",
+   "parent": "ACTForm.pcACT.tsSetup",
+   "path": "ACTForm.pcACT.tsSetup.gbDisplay",
+   "props": {
+    "Caption": "Display Setting",
+    "Height": 65,
+    "Left": 16,
+    "TabOrder": 2,
+    "Top": 364,
+    "Width": 329
+   },
+   "rect": {
+    "h": 65,
+    "w": 329,
+    "x": 16,
+    "y": 364
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label12",
+   "parent": "ACTForm.pcACT.tsSetup.gbDisplay",
+   "path": "ACTForm.pcACT.tsSetup.gbDisplay.Label12",
+   "props": {
+    "Caption": "Columns No.：",
+    "Height": 20,
+    "Left": 12,
+    "Top": 28,
+    "Width": 106
+   },
+   "rect": {
+    "h": 20,
+    "w": 106,
+    "x": 12,
+    "y": 28
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtCheckIntervalTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edColumns",
+   "parent": "ACTForm.pcACT.tsSetup.gbDisplay",
+   "path": "ACTForm.pcACT.tsSetup.gbDisplay.edColumns",
+   "props": {
+    "Height": 28,
+    "Left": 164,
+    "OnMouseDown": "edtCheckIntervalTimeMouseDown",
+    "TabOrder": 0,
+    "Text": "3",
+    "Top": 24,
+    "Width": 89
+   },
+   "rect": {
+    "h": 28,
+    "w": 89,
+    "x": 164,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbACTTCPIP",
+   "parent": "ACTForm.pcACT.tsSetup",
+   "path": "ACTForm.pcACT.tsSetup.gbACTTCPIP",
+   "props": {
+    "Caption": "TCP/IP Port Setting",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 110,
+    "Left": 688,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 29,
+    "Width": 313
+   },
+   "rect": {
+    "h": 110,
+    "w": 313,
+    "x": 688,
+    "y": 29
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label17",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTTCPIP",
+   "path": "ACTForm.pcACT.tsSetup.gbACTTCPIP.Label17",
+   "props": {
+    "Caption": "Address",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 9,
+    "ParentFont": "False",
+    "Top": 22,
+    "Width": 59
+   },
+   "rect": {
+    "h": 18,
+    "w": 59,
+    "x": 9,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label18",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTTCPIP",
+   "path": "ACTForm.pcACT.tsSetup.gbACTTCPIP.Label18",
+   "props": {
+    "Caption": "Port",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 143,
+    "ParentFont": "False",
+    "Top": 22,
+    "Width": 29
+   },
+   "rect": {
+    "h": 18,
+    "w": 29,
+    "x": 143,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edACTIPAddress",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTTCPIP",
+   "path": "ACTForm.pcACT.tsSetup.gbACTTCPIP.edACTIPAddress",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 7,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "127.000.000.100",
+    "Top": 46,
+    "Width": 130
+   },
+   "rect": {
+    "h": 26,
+    "w": 130,
+    "x": 7,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edACTPort",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTTCPIP",
+   "path": "ACTForm.pcACT.tsSetup.gbACTTCPIP.edACTPort",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 142,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "1000",
+    "Top": 46,
+    "Width": 60
+   },
+   "rect": {
+    "h": 26,
+    "w": 60,
+    "x": 142,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBitBtn",
+   "events": {
+    "OnClick": "btConnectClick"
+   },
+   "kind": "LEAF",
+   "name": "btConnect",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTTCPIP",
+   "path": "ACTForm.pcACT.tsSetup.gbACTTCPIP.btConnect",
+   "props": {
+    "Caption": "Connect",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clGreen",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 30,
+    "Left": 6,
+    "OnClick": "btConnectClick",
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Tag": 2,
+    "Top": 76,
+    "Width": 120
+   },
+   "rect": {
+    "h": 30,
+    "w": 120,
+    "x": 6,
+    "y": 76
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBitBtn",
+   "events": {
+    "OnClick": "btDisConnectClick"
+   },
+   "kind": "LEAF",
+   "name": "btDisConnect",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTTCPIP",
+   "path": "ACTForm.pcACT.tsSetup.gbACTTCPIP.btDisConnect",
+   "props": {
+    "Caption": "Disconnect",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": 4210816,
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 30,
+    "Left": 130,
+    "OnClick": "btDisConnectClick",
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Tag": 2,
+    "Top": 76,
+    "Width": 120
+   },
+   "rect": {
+    "h": 30,
+    "w": 120,
+    "x": 130,
+    "y": 76
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btACTTriggerClick"
+   },
+   "kind": "LEAF",
+   "name": "btACTTrigger",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTTCPIP",
+   "path": "ACTForm.pcACT.tsSetup.gbACTTCPIP.btACTTrigger",
+   "props": {
+    "Caption": "Send CMD",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 29,
+    "Left": 212,
+    "OnClick": "btACTTriggerClick",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Tag": 2,
+    "Top": 16,
+    "Width": 90
+   },
+   "rect": {
+    "h": 29,
+    "w": 90,
+    "x": 212,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edACTCMD",
+   "parent": "ACTForm.pcACT.tsSetup.gbACTTCPIP",
+   "path": "ACTForm.pcACT.tsSetup.gbACTTCPIP.edACTCMD",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 211,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 46,
+    "Width": 90
+   },
+   "rect": {
+    "h": 26,
+    "w": 90,
+    "x": 211,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComm",
+   "events": {
+    "OnReceiveData": "ACTComReceiveData"
+   },
+   "kind": "NONVISUAL",
+   "name": "ACTCom",
+   "parent": "ACTForm",
+   "path": "ACTForm.ACTCom",
+   "props": {
+    "BaudRate": 9600,
+    "ByteSize": "_8",
+    "CommName": "COM1",
+    "DsrSensitivity": "False",
+    "DtrControl": "DtrEnable",
+    "IgnoreNullChar": "False",
+    "Inx_XonXoffFlow": "False",
+    "Left": 672,
+    "OnReceiveData": "ACTComReceiveData",
+    "Outx_CtsFlow": "False",
+    "Outx_DsrFlow": "False",
+    "Outx_XonXoffFlow": "False",
+    "Parity": "None",
+    "ParityCheck": "False",
+    "ReadIntervalTimeout": 100,
+    "ReadTotalTimeoutConstant": 0,
+    "ReadTotalTimeoutMultiplier": 0,
+    "ReplaceWhenParityError": "False",
+    "ReplacedChar": "\u0000",
+    "RtsControl": "RtsEnable",
+    "StopBits": "_1",
+    "TxContinueOnXoff": "True",
+    "WriteTotalTimeoutConstant": 0,
+    "WriteTotalTimeoutMultiplier": 0,
+    "XoffChar": "\u0013",
+    "XoffLimit": 500,
+    "XonChar": "\u0011",
+    "XonLimit": 500
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 672,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "TimerACTTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "TimerACT",
+   "parent": "ACTForm",
+   "path": "ACTForm.TimerACT",
+   "props": {
+    "Enabled": "False",
+    "Interval": 50,
+    "Left": 645,
+    "OnTimer": "TimerACTTimer"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 645,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TClientSocket",
+   "events": {
+    "OnRead": "ClientSocketACTRead"
+   },
+   "kind": "NONVISUAL",
+   "name": "ClientSocketACT",
+   "parent": "ACTForm",
+   "path": "ACTForm.ClientSocketACT",
+   "props": {
+    "Active": "False",
+    "ClientType": "ctNonBlocking",
+    "Left": 712,
+    "OnRead": "ClientSocketACTRead",
+    "Port": 0,
+    "Tag": 4
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 712,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "ACTConnectTimerTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "ACTConnectTimer",
+   "parent": "ACTForm",
+   "path": "ACTForm.ACTConnectTimer",
+   "props": {
+    "Interval": 50,
+    "Left": 741,
+    "OnTimer": "ACTConnectTimerTimer"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 741,
+    "y": null
+   }
+  }
+ ]
+}

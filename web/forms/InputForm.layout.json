@@ -1,0 +1,211 @@
+{
+ "canvas": {
+  "h": 118,
+  "w": 379
+ },
+ "caption": "Input Form",
+ "form": "fInputForm",
+ "form_class": "TfInputForm",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "InputForm.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfInputForm",
+   "events": {},
+   "kind": "ROOT",
+   "name": "fInputForm",
+   "parent": null,
+   "path": "fInputForm",
+   "props": {
+    "BorderIcons": [
+     "biMinimize",
+     "biMaximize"
+    ],
+    "BorderStyle": "bsSingle",
+    "Caption": "Input Form",
+    "ClientHeight": 118,
+    "ClientWidth": 379,
+    "Color": 12761254,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Left": 630,
+    "OldCreateOrder": "False",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 318
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 630,
+    "y": 318
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "fInputForm",
+   "path": "fInputForm.Label1",
+   "props": {
+    "Caption": "Please Keyin Number : ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Left": 8,
+    "ParentFont": "False",
+    "Top": 8,
+    "Width": 185
+   },
+   "rect": {
+    "h": 20,
+    "w": 185,
+    "x": 8,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TImage",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Image1",
+   "parent": "fInputForm",
+   "path": "fInputForm.Image1",
+   "props": {
+    "Center": "True",
+    "Height": 741,
+    "Left": 8,
+    "Stretch": "True",
+    "Top": 132,
+    "Width": 841
+   },
+   "rect": {
+    "h": 741,
+    "w": 841,
+    "x": 8,
+    "y": 132
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "Edit1Click",
+    "OnKeyPress": "Edit1KeyPress"
+   },
+   "kind": "LEAF",
+   "name": "Edit1",
+   "parent": "fInputForm",
+   "path": "fInputForm.Edit1",
+   "props": {
+    "Height": 21,
+    "Left": 40,
+    "OnClick": "Edit1Click",
+    "OnKeyPress": "Edit1KeyPress",
+    "TabOrder": 0,
+    "Top": 40,
+    "Width": 305
+   },
+   "rect": {
+    "h": 21,
+    "w": 305,
+    "x": 40,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button1Click"
+   },
+   "kind": "LEAF",
+   "name": "Button1",
+   "parent": "fInputForm",
+   "path": "fInputForm.Button1",
+   "props": {
+    "Caption": "OK",
+    "Height": 25,
+    "Left": 144,
+    "OnClick": "Button1Click",
+    "TabOrder": 3,
+    "Top": 80,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 144,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Edit2",
+   "parent": "fInputForm",
+   "path": "fInputForm.Edit2",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -21,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 32,
+    "Left": 40,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 44,
+    "Width": 305
+   },
+   "rect": {
+    "h": 32,
+    "w": 305,
+    "x": 40,
+    "y": 44
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Edit3",
+   "parent": "fInputForm",
+   "path": "fInputForm.Edit3",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -21,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 32,
+    "Left": 40,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 44,
+    "Width": 305
+   },
+   "rect": {
+    "h": 32,
+    "w": 305,
+    "x": 40,
+    "y": 44
+   }
+  }
+ ]
+}

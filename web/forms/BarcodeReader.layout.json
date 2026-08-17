@@ -1,0 +1,253 @@
+{
+ "canvas": {
+  "h": 139,
+  "w": 368
+ },
+ "caption": "Barcode Reader",
+ "form": "FormBarcodeReader",
+ "form_class": "TFormBarcodeReader",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "BarcodeReader.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TFormBarcodeReader",
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "FormBarcodeReader",
+   "parent": null,
+   "path": "FormBarcodeReader",
+   "props": {
+    "BorderIcons": [
+     "biSystemMenu"
+    ],
+    "BorderStyle": "bsSingle",
+    "Caption": "Barcode Reader",
+    "ClientHeight": 139,
+    "ClientWidth": 368,
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "FormStyle": "fsStayOnTop",
+    "Left": 764,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "Position": "poScreenCenter",
+    "TextHeight": 13,
+    "Top": 212
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 764,
+    "y": 212
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlBarcodeReader",
+   "parent": "FormBarcodeReader",
+   "path": "FormBarcodeReader.pnlBarcodeReader",
+   "props": {
+    "Align": "alClient",
+    "BevelInner": "bvLowered",
+    "Color": 6682876,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 139,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 368
+   },
+   "rect": {
+    "h": 139,
+    "w": 368,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblInputType",
+   "parent": "FormBarcodeReader.pnlBarcodeReader",
+   "path": "FormBarcodeReader.pnlBarcodeReader.lblInputType",
+   "props": {
+    "Caption": "Input Operator ID:",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": 11359005,
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 24,
+    "ParentFont": "False",
+    "Top": 17,
+    "Width": 147
+   },
+   "rect": {
+    "h": 24,
+    "w": 147,
+    "x": 24,
+    "y": 17
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnKeyDown": "edtBarcodeNumberKeyDown",
+    "OnKeyUp": "edtBarcodeNumberKeyUp"
+   },
+   "kind": "LEAF",
+   "name": "edtBarcodeNumber",
+   "parent": "FormBarcodeReader.pnlBarcodeReader",
+   "path": "FormBarcodeReader.pnlBarcodeReader.edtBarcodeNumber",
+   "props": {
+    "Height": 32,
+    "Left": 24,
+    "OnKeyDown": "edtBarcodeNumberKeyDown",
+    "OnKeyUp": "edtBarcodeNumberKeyUp",
+    "PopupMenu": "pmBarcode",
+    "TabOrder": 0,
+    "Top": 46,
+    "Width": 321
+   },
+   "rect": {
+    "h": 32,
+    "w": 321,
+    "x": 24,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnEnterClick"
+   },
+   "kind": "LEAF",
+   "name": "btnEnter",
+   "parent": "FormBarcodeReader.pnlBarcodeReader",
+   "path": "FormBarcodeReader.pnlBarcodeReader.btnEnter",
+   "props": {
+    "Caption": "Enter",
+    "Height": 36,
+    "Left": 88,
+    "OnClick": "btnEnterClick",
+    "TabOrder": 1,
+    "Top": 92,
+    "Width": 193
+   },
+   "rect": {
+    "h": 36,
+    "w": 193,
+    "x": 88,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "TimerKeyInTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "TimerKeyIn",
+   "parent": "FormBarcodeReader",
+   "path": "FormBarcodeReader.TimerKeyIn",
+   "props": {
+    "Enabled": "False",
+    "Interval": 50,
+    "Left": 328,
+    "OnTimer": "TimerKeyInTimer",
+    "Top": 104
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 328,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPopupMenu",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "pmBarcode",
+   "parent": "FormBarcodeReader",
+   "path": "FormBarcodeReader.pmBarcode",
+   "props": {
+    "Left": 8,
+    "Top": 104
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 8,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMenuItem",
+   "events": {
+    "OnClick": "miClearClick"
+   },
+   "kind": "NONVISUAL",
+   "name": "miClear",
+   "parent": "FormBarcodeReader.pmBarcode",
+   "path": "FormBarcodeReader.pmBarcode.miClear",
+   "props": {
+    "Caption": "Clear",
+    "OnClick": "miClearClick"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMenuItem",
+   "events": {
+    "OnClick": "miCloseClick"
+   },
+   "kind": "NONVISUAL",
+   "name": "miClose",
+   "parent": "FormBarcodeReader.pmBarcode",
+   "path": "FormBarcodeReader.pmBarcode.miClose",
+   "props": {
+    "Caption": "Close",
+    "OnClick": "miCloseClick"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  }
+ ]
+}

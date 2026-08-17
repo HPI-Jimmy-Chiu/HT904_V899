@@ -1,0 +1,110 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": null,
+ "form": "dmTrayMotor",
+ "form_class": "TdmTrayMotor",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "Motor/TrayStepMotor.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TdmTrayMotor",
+   "events": {
+    "OnDestroy": "DataModuleDestroy"
+   },
+   "kind": "ROOT",
+   "name": "dmTrayMotor",
+   "parent": null,
+   "path": "dmTrayMotor",
+   "props": {
+    "Height": 165,
+    "Left": 752,
+    "OldCreateOrder": "False",
+    "OnDestroy": "DataModuleDestroy",
+    "Top": 341,
+    "Width": 215
+   },
+   "rect": {
+    "h": 165,
+    "w": 215,
+    "x": 752,
+    "y": 341
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "tmrTrayStepMotorTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "tmrTrayStepMotor",
+   "parent": "dmTrayMotor",
+   "path": "dmTrayMotor.tmrTrayStepMotor",
+   "props": {
+    "Enabled": "False",
+    "Interval": 20,
+    "Left": 116,
+    "OnTimer": "tmrTrayStepMotorTimer",
+    "Top": 8
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 116,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComm",
+   "events": {
+    "OnReceiveData": "comTrayStepMotorReceiveData"
+   },
+   "kind": "NONVISUAL",
+   "name": "comTrayStepMotor",
+   "parent": "dmTrayMotor",
+   "path": "dmTrayMotor.comTrayStepMotor",
+   "props": {
+    "BaudRate": 115200,
+    "ByteSize": "_8",
+    "CommName": "COM2",
+    "DsrSensitivity": "False",
+    "DtrControl": "DtrEnable",
+    "IgnoreNullChar": "False",
+    "Inx_XonXoffFlow": "False",
+    "Left": 26,
+    "OnReceiveData": "comTrayStepMotorReceiveData",
+    "Outx_CtsFlow": "False",
+    "Outx_DsrFlow": "False",
+    "Outx_XonXoffFlow": "False",
+    "Parity": "None",
+    "ParityCheck": "False",
+    "ReadIntervalTimeout": 100,
+    "ReadTotalTimeoutConstant": 0,
+    "ReadTotalTimeoutMultiplier": 0,
+    "ReplaceWhenParityError": "False",
+    "ReplacedChar": "\u0000",
+    "RtsControl": "RtsEnable",
+    "StopBits": "_1",
+    "Top": 6,
+    "TxContinueOnXoff": "True",
+    "WriteTotalTimeoutConstant": 0,
+    "WriteTotalTimeoutMultiplier": 0,
+    "XoffChar": "\u0013",
+    "XoffLimit": 500,
+    "XonChar": "\u0011",
+    "XonLimit": 500
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 26,
+    "y": 6
+   }
+  }
+ ]
+}

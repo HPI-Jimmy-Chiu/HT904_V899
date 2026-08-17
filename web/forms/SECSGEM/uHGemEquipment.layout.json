@@ -1,0 +1,1687 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "HGem",
+ "form": "HGem",
+ "form_class": "THGem",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "SECSGEM/uHGemEquipment.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "THGem",
+   "events": {
+    "OnClose": "FormClose",
+    "OnCreate": "FormCreate",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "HGem",
+   "parent": null,
+   "path": "HGem",
+   "props": {
+    "Caption": "HGem",
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 595,
+    "Left": 653,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnCreate": "FormCreate",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 16,
+    "Top": 263,
+    "Width": 627
+   },
+   "rect": {
+    "h": 595,
+    "w": 627,
+    "x": 653,
+    "y": 263
+   }
+  },
+  {
+   "align": null,
+   "cls": "TFileListBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "FileListBox1",
+   "parent": "HGem",
+   "path": "HGem.FileListBox1",
+   "props": {
+    "Height": 41,
+    "ItemHeight": 16,
+    "Left": 88,
+    "Mask": "spool\\\\*.dat",
+    "TabOrder": 1,
+    "Top": 192,
+    "Width": 57
+   },
+   "rect": {
+    "h": 41,
+    "w": 57,
+    "x": 88,
+    "y": 192
+   }
+  },
+  {
+   "align": null,
+   "cls": "TFileListBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "FileListBox2",
+   "parent": "HGem",
+   "path": "HGem.FileListBox2",
+   "props": {
+    "Height": 33,
+    "ItemHeight": 16,
+    "Left": 96,
+    "Mask": "d:\\*.*",
+    "TabOrder": 3,
+    "Top": 240,
+    "Width": 57
+   },
+   "rect": {
+    "h": 33,
+    "w": 57,
+    "x": 96,
+    "y": 240
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckListBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "CheckListBox1",
+   "parent": "HGem",
+   "path": "HGem.CheckListBox1",
+   "props": {
+    "Height": 41,
+    "ItemHeight": 16,
+    "Left": 152,
+    "TabOrder": 2,
+    "Top": 192,
+    "Width": 49
+   },
+   "rect": {
+    "h": 41,
+    "w": 49,
+    "x": 152,
+    "y": 192
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "PageControl1",
+   "parent": "HGem",
+   "path": "HGem.PageControl1",
+   "props": {
+    "ActivePage": "TabSheet1",
+    "Align": "alClient",
+    "Height": 564,
+    "Left": 0,
+    "TabIndex": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 619
+   },
+   "rect": {
+    "h": 564,
+    "w": 619,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet1",
+   "parent": "HGem.PageControl1",
+   "path": "HGem.PageControl1.TabSheet1",
+   "props": {
+    "Caption": "Main"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "palSheet0",
+   "parent": "HGem.PageControl1.TabSheet1",
+   "path": "HGem.PageControl1.TabSheet1.palSheet0",
+   "props": {
+    "Align": "alClient",
+    "Height": 533,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 611
+   },
+   "rect": {
+    "h": 533,
+    "w": 611,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label8",
+   "parent": "HGem.PageControl1.TabSheet1.palSheet0",
+   "path": "HGem.PageControl1.TabSheet1.palSheet0.Label8",
+   "props": {
+    "Caption": "Communication",
+    "Height": 16,
+    "Left": 16,
+    "Top": 16,
+    "Width": 106
+   },
+   "rect": {
+    "h": 16,
+    "w": 106,
+    "x": 16,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ComboBox1",
+   "parent": "HGem.PageControl1.TabSheet1.palSheet0",
+   "path": "HGem.PageControl1.TabSheet1.palSheet0.ComboBox1",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "Items.Strings": [
+     "HSMS",
+     "SECS-1"
+    ],
+    "Left": 176,
+    "TabOrder": 0,
+    "Text": "HSMS",
+    "Top": 12,
+    "Width": 145
+   },
+   "rect": {
+    "h": 24,
+    "w": 145,
+    "x": 176,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "OnLineOrOffLine",
+   "parent": "HGem.PageControl1.TabSheet1.palSheet0",
+   "path": "HGem.PageControl1.TabSheet1.palSheet0.OnLineOrOffLine",
+   "props": {
+    "Caption": "DefaultControlState<EC:8>",
+    "Columns": 2,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 38,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "On Line",
+     "Off Line"
+    ],
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 109,
+    "Width": 169
+   },
+   "rect": {
+    "h": 38,
+    "w": 169,
+    "x": 8,
+    "y": 109
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "RemoteOrLocal",
+   "parent": "HGem.PageControl1.TabSheet1.palSheet0",
+   "path": "HGem.PageControl1.TabSheet1.palSheet0.RemoteOrLocal",
+   "props": {
+    "Caption": "DefaultControlState<EC:8>",
+    "Columns": 2,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 46,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "Remote",
+     "Local"
+    ],
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 176,
+    "Width": 169
+   },
+   "rect": {
+    "h": 46,
+    "w": 169,
+    "x": 8,
+    "y": 176
+   }
+  },
+  {
+   "align": null,
+   "cls": "TDirectoryListBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "DirectoryListBox1",
+   "parent": "HGem.PageControl1.TabSheet1.palSheet0",
+   "path": "HGem.PageControl1.TabSheet1.palSheet0.DirectoryListBox1",
+   "props": {
+    "Height": 149,
+    "ItemHeight": 16,
+    "Left": 8,
+    "TabOrder": 3,
+    "Top": 232,
+    "Width": 377
+   },
+   "rect": {
+    "h": 149,
+    "w": 377,
+    "x": 8,
+    "y": 232
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet2",
+   "parent": "HGem.PageControl1",
+   "path": "HGem.PageControl1.TabSheet2",
+   "props": {
+    "Caption": "HSMS",
+    "ImageIndex": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "palSheet1",
+   "parent": "HGem.PageControl1.TabSheet2",
+   "path": "HGem.PageControl1.TabSheet2.palSheet1",
+   "props": {
+    "Align": "alClient",
+    "Height": 533,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 611
+   },
+   "rect": {
+    "h": 533,
+    "w": 611,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblAddress",
+   "parent": "HGem.PageControl1.TabSheet2.palSheet1",
+   "path": "HGem.PageControl1.TabSheet2.palSheet1.lblAddress",
+   "props": {
+    "Caption": "Address",
+    "Height": 16,
+    "Left": 13,
+    "Top": 92,
+    "Width": 59
+   },
+   "rect": {
+    "h": 16,
+    "w": 59,
+    "x": 13,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblPort",
+   "parent": "HGem.PageControl1.TabSheet2.palSheet1",
+   "path": "HGem.PageControl1.TabSheet2.palSheet1.lblPort",
+   "props": {
+    "Caption": "Port",
+    "Height": 16,
+    "Left": 13,
+    "Top": 124,
+    "Width": 29
+   },
+   "rect": {
+    "h": 16,
+    "w": 29,
+    "x": 13,
+    "y": 124
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblT3TimeOut",
+   "parent": "HGem.PageControl1.TabSheet2.palSheet1",
+   "path": "HGem.PageControl1.TabSheet2.palSheet1.lblT3TimeOut",
+   "props": {
+    "Caption": "T3                                 sec",
+    "Height": 16,
+    "Left": 13,
+    "Top": 186,
+    "Width": 176
+   },
+   "rect": {
+    "h": 16,
+    "w": 176,
+    "x": 13,
+    "y": 186
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblT5TimeOut",
+   "parent": "HGem.PageControl1.TabSheet2.palSheet1",
+   "path": "HGem.PageControl1.TabSheet2.palSheet1.lblT5TimeOut",
+   "props": {
+    "Caption": "T5                                 sec",
+    "Height": 16,
+    "Left": 13,
+    "Top": 218,
+    "Width": 176
+   },
+   "rect": {
+    "h": 16,
+    "w": 176,
+    "x": 13,
+    "y": 218
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblT6TimeOut",
+   "parent": "HGem.PageControl1.TabSheet2.palSheet1",
+   "path": "HGem.PageControl1.TabSheet2.palSheet1.lblT6TimeOut",
+   "props": {
+    "Caption": "T6                                 sec",
+    "Height": 16,
+    "Left": 13,
+    "Top": 250,
+    "Width": 176
+   },
+   "rect": {
+    "h": 16,
+    "w": 176,
+    "x": 13,
+    "y": 250
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblT7TimeOut",
+   "parent": "HGem.PageControl1.TabSheet2.palSheet1",
+   "path": "HGem.PageControl1.TabSheet2.palSheet1.lblT7TimeOut",
+   "props": {
+    "Caption": "T7                                 sec",
+    "Height": 16,
+    "Left": 13,
+    "Top": 282,
+    "Width": 176
+   },
+   "rect": {
+    "h": 16,
+    "w": 176,
+    "x": 13,
+    "y": 282
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblT8TimeOut",
+   "parent": "HGem.PageControl1.TabSheet2.palSheet1",
+   "path": "HGem.PageControl1.TabSheet2.palSheet1.lblT8TimeOut",
+   "props": {
+    "Caption": "T8                                 sec",
+    "Height": 16,
+    "Left": 13,
+    "Top": 314,
+    "Width": 176
+   },
+   "rect": {
+    "h": 16,
+    "w": 176,
+    "x": 13,
+    "y": 314
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblDeviceID",
+   "parent": "HGem.PageControl1.TabSheet2.palSheet1",
+   "path": "HGem.PageControl1.TabSheet2.palSheet1.lblDeviceID",
+   "props": {
+    "Caption": "Device ID",
+    "Height": 16,
+    "Left": 12,
+    "Top": 155,
+    "Width": 69
+   },
+   "rect": {
+    "h": 16,
+    "w": 69,
+    "x": 12,
+    "y": 155
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "rgRole",
+   "parent": "HGem.PageControl1.TabSheet2.palSheet1",
+   "path": "HGem.PageControl1.TabSheet2.palSheet1.rgRole",
+   "props": {
+    "Caption": "    Role     ",
+    "Columns": 2,
+    "Height": 65,
+    "Hint": "Need restart program after modify",
+    "Items.Strings": [
+     "[1] Passive",
+     "[2] Active"
+    ],
+    "Left": 8,
+    "ParentShowHint": "False",
+    "ShowHint": "True",
+    "TabOrder": 0,
+    "Top": 14,
+    "Width": 361
+   },
+   "rect": {
+    "h": 65,
+    "w": 361,
+    "x": 8,
+    "y": 14
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtIP",
+   "parent": "HGem.PageControl1.TabSheet2.palSheet1",
+   "path": "HGem.PageControl1.TabSheet2.palSheet1.edtIP",
+   "props": {
+    "Height": 24,
+    "Left": 112,
+    "TabOrder": 1,
+    "Text": "128.128.128.128",
+    "Top": 88,
+    "Width": 153
+   },
+   "rect": {
+    "h": 24,
+    "w": 153,
+    "x": 112,
+    "y": 88
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtPortClick"
+   },
+   "kind": "LEAF",
+   "name": "edtPort",
+   "parent": "HGem.PageControl1.TabSheet2.palSheet1",
+   "path": "HGem.PageControl1.TabSheet2.palSheet1.edtPort",
+   "props": {
+    "Height": 24,
+    "Left": 112,
+    "OnClick": "edtPortClick",
+    "TabOrder": 2,
+    "Text": "5001",
+    "Top": 120,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 112,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtT3TimeOutClick"
+   },
+   "kind": "LEAF",
+   "name": "edtT3TimeOut",
+   "parent": "HGem.PageControl1.TabSheet2.palSheet1",
+   "path": "HGem.PageControl1.TabSheet2.palSheet1.edtT3TimeOut",
+   "props": {
+    "Height": 24,
+    "Left": 112,
+    "OnClick": "edtT3TimeOutClick",
+    "TabOrder": 4,
+    "Text": "30",
+    "Top": 182,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 112,
+    "y": 182
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtT5TimeOut",
+   "parent": "HGem.PageControl1.TabSheet2.palSheet1",
+   "path": "HGem.PageControl1.TabSheet2.palSheet1.edtT5TimeOut",
+   "props": {
+    "Height": 24,
+    "Left": 112,
+    "TabOrder": 5,
+    "Text": "30",
+    "Top": 214,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 112,
+    "y": 214
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtT6TimeOut",
+   "parent": "HGem.PageControl1.TabSheet2.palSheet1",
+   "path": "HGem.PageControl1.TabSheet2.palSheet1.edtT6TimeOut",
+   "props": {
+    "Height": 24,
+    "Left": 112,
+    "TabOrder": 6,
+    "Text": "30",
+    "Top": 246,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 112,
+    "y": 246
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtT7TimeOut",
+   "parent": "HGem.PageControl1.TabSheet2.palSheet1",
+   "path": "HGem.PageControl1.TabSheet2.palSheet1.edtT7TimeOut",
+   "props": {
+    "Height": 24,
+    "Left": 112,
+    "TabOrder": 7,
+    "Text": "30",
+    "Top": 278,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 112,
+    "y": 278
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtT8TimeOut",
+   "parent": "HGem.PageControl1.TabSheet2.palSheet1",
+   "path": "HGem.PageControl1.TabSheet2.palSheet1.edtT8TimeOut",
+   "props": {
+    "Height": 24,
+    "Left": 112,
+    "TabOrder": 8,
+    "Text": "30",
+    "Top": 310,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 112,
+    "y": 310
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtPortClick"
+   },
+   "kind": "LEAF",
+   "name": "edDeviceID",
+   "parent": "HGem.PageControl1.TabSheet2.palSheet1",
+   "path": "HGem.PageControl1.TabSheet2.palSheet1.edDeviceID",
+   "props": {
+    "Height": 24,
+    "Left": 111,
+    "OnClick": "edtPortClick",
+    "TabOrder": 3,
+    "Text": "0",
+    "Top": 151,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 111,
+    "y": 151
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet3",
+   "parent": "HGem.PageControl1",
+   "path": "HGem.PageControl1.TabSheet3",
+   "props": {
+    "Caption": "Normal",
+    "ImageIndex": 2
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "palSheet2",
+   "parent": "HGem.PageControl1.TabSheet3",
+   "path": "HGem.PageControl1.TabSheet3.palSheet2",
+   "props": {
+    "Align": "alClient",
+    "Height": 525,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 603
+   },
+   "rect": {
+    "h": 525,
+    "w": 603,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "GemCheckBoxAcceptHostOnlineRequest",
+   "parent": "HGem.PageControl1.TabSheet3.palSheet2",
+   "path": "HGem.PageControl1.TabSheet3.palSheet2.GemCheckBoxAcceptHostOnlineRequest",
+   "props": {
+    "Caption": "Accept OnLine Req",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 0,
+    "Top": 15,
+    "Width": 201
+   },
+   "rect": {
+    "h": 17,
+    "w": 201,
+    "x": 8,
+    "y": 15
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "GemCheckBoxShowBinary",
+   "parent": "HGem.PageControl1.TabSheet3.palSheet2",
+   "path": "HGem.PageControl1.TabSheet3.palSheet2.GemCheckBoxShowBinary",
+   "props": {
+    "Caption": "Show Binary Data",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 1,
+    "Top": 47,
+    "Width": 201
+   },
+   "rect": {
+    "h": 17,
+    "w": 201,
+    "x": 8,
+    "y": 47
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "GemCheckBoxShowHeadInformation",
+   "parent": "HGem.PageControl1.TabSheet3.palSheet2",
+   "path": "HGem.PageControl1.TabSheet3.palSheet2.GemCheckBoxShowHeadInformation",
+   "props": {
+    "Caption": "Show Head Info.",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 2,
+    "Top": 79,
+    "Width": 185
+   },
+   "rect": {
+    "h": 17,
+    "w": 185,
+    "x": 8,
+    "y": 79
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "GemCheckBoxUseExtendedAlarm",
+   "parent": "HGem.PageControl1.TabSheet3.palSheet2",
+   "path": "HGem.PageControl1.TabSheet3.palSheet2.GemCheckBoxUseExtendedAlarm",
+   "props": {
+    "Caption": "Use Extended Alarm ",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 3,
+    "Top": 111,
+    "Width": 289
+   },
+   "rect": {
+    "h": 17,
+    "w": 289,
+    "x": 8,
+    "y": 111
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkAnnotatedEventReport",
+   "parent": "HGem.PageControl1.TabSheet3.palSheet2",
+   "path": "HGem.PageControl1.TabSheet3.palSheet2.chkAnnotatedEventReport",
+   "props": {
+    "Caption": "Enable Annotated Event Report",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 4,
+    "Top": 176,
+    "Width": 569
+   },
+   "rect": {
+    "h": 17,
+    "w": 569,
+    "x": 8,
+    "y": 176
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkMoreMessageAbortProcess",
+   "parent": "HGem.PageControl1.TabSheet3.palSheet2",
+   "path": "HGem.PageControl1.TabSheet3.palSheet2.chkMoreMessageAbortProcess",
+   "props": {
+    "Caption": "Send Illegore data when has more message ",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 5,
+    "Top": 208,
+    "Width": 569
+   },
+   "rect": {
+    "h": 17,
+    "w": 569,
+    "x": 8,
+    "y": 208
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ckAddDefaultReport",
+   "parent": "HGem.PageControl1.TabSheet3.palSheet2",
+   "path": "HGem.PageControl1.TabSheet3.palSheet2.ckAddDefaultReport",
+   "props": {
+    "Caption": "Add Default Report ( change this item need restart )",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 6,
+    "Top": 240,
+    "Width": 393
+   },
+   "rect": {
+    "h": 17,
+    "w": 393,
+    "x": 8,
+    "y": 240
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbECChaneEventReport",
+   "parent": "HGem.PageControl1.TabSheet3.palSheet2",
+   "path": "HGem.PageControl1.TabSheet3.palSheet2.cbECChaneEventReport",
+   "props": {
+    "Caption": "EC change Event Report",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 7,
+    "Top": 144,
+    "Width": 289
+   },
+   "rect": {
+    "h": 17,
+    "w": 289,
+    "x": 8,
+    "y": 144
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet4",
+   "parent": "HGem.PageControl1",
+   "path": "HGem.PageControl1.TabSheet4",
+   "props": {
+    "Caption": "Debug",
+    "ImageIndex": 3
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "palSheet3",
+   "parent": "HGem.PageControl1.TabSheet4",
+   "path": "HGem.PageControl1.TabSheet4.palSheet3",
+   "props": {
+    "Align": "alClient",
+    "Height": 533,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 611
+   },
+   "rect": {
+    "h": 533,
+    "w": 611,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TListBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "SFCodeResponseList",
+   "parent": "HGem.PageControl1.TabSheet4.palSheet3",
+   "path": "HGem.PageControl1.TabSheet4.palSheet3.SFCodeResponseList",
+   "props": {
+    "Height": 89,
+    "ItemHeight": 16,
+    "Left": 8,
+    "TabOrder": 0,
+    "Top": 23,
+    "Width": 193
+   },
+   "rect": {
+    "h": 89,
+    "w": 193,
+    "x": 8,
+    "y": 23
+   }
+  },
+  {
+   "align": null,
+   "cls": "TStringGrid",
+   "events": {},
+   "kind": "LEAF",
+   "name": "strGrdAlarmOld",
+   "parent": "HGem.PageControl1.TabSheet4.palSheet3",
+   "path": "HGem.PageControl1.TabSheet4.palSheet3.strGrdAlarmOld",
+   "props": {
+    "FixedRows": 0,
+    "Height": 273,
+    "Left": 8,
+    "RowCount": 1,
+    "TabOrder": 1,
+    "Top": 120,
+    "Width": 505
+   },
+   "rect": {
+    "h": 273,
+    "w": 505,
+    "x": 8,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet5",
+   "parent": "HGem.PageControl1",
+   "path": "HGem.PageControl1.TabSheet5",
+   "props": {
+    "Caption": "Event",
+    "ImageIndex": 4
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "palSheet4",
+   "parent": "HGem.PageControl1.TabSheet5",
+   "path": "HGem.PageControl1.TabSheet5.palSheet4",
+   "props": {
+    "Align": "alClient",
+    "Height": 525,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 603
+   },
+   "rect": {
+    "h": 525,
+    "w": 603,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TStringGrid",
+   "events": {},
+   "kind": "LEAF",
+   "name": "strGrdCEID",
+   "parent": "HGem.PageControl1.TabSheet5.palSheet4",
+   "path": "HGem.PageControl1.TabSheet5.palSheet4.strGrdCEID",
+   "props": {
+    "Align": "alTop",
+    "ColCount": 258,
+    "Height": 217,
+    "Left": 1,
+    "RowCount": 1025,
+    "TabOrder": 0,
+    "Top": 1,
+    "Width": 601
+   },
+   "rect": {
+    "h": 217,
+    "w": 601,
+    "x": 1,
+    "y": 1
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TStringGrid",
+   "events": {},
+   "kind": "LEAF",
+   "name": "stdGridReportID",
+   "parent": "HGem.PageControl1.TabSheet5.palSheet4",
+   "path": "HGem.PageControl1.TabSheet5.palSheet4.stdGridReportID",
+   "props": {
+    "Align": "alTop",
+    "ColCount": 1026,
+    "Height": 217,
+    "Left": 1,
+    "RowCount": 257,
+    "TabOrder": 1,
+    "Top": 218,
+    "Width": 601
+   },
+   "rect": {
+    "h": 217,
+    "w": 601,
+    "x": 1,
+    "y": 218
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet6",
+   "parent": "HGem.PageControl1",
+   "path": "HGem.PageControl1.TabSheet6",
+   "props": {
+    "Caption": "Alarm",
+    "ImageIndex": 5
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "palSheet5",
+   "parent": "HGem.PageControl1.TabSheet6",
+   "path": "HGem.PageControl1.TabSheet6.palSheet5",
+   "props": {
+    "Align": "alClient",
+    "Height": 533,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 611
+   },
+   "rect": {
+    "h": 533,
+    "w": 611,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TStringGrid",
+   "events": {},
+   "kind": "LEAF",
+   "name": "strGrdAlarm",
+   "parent": "HGem.PageControl1.TabSheet6.palSheet5",
+   "path": "HGem.PageControl1.TabSheet6.palSheet5.strGrdAlarm",
+   "props": {
+    "Align": "alClient",
+    "ColCount": 12,
+    "Height": 531,
+    "Left": 1,
+    "Options": [
+     "goFixedVertLine",
+     "goFixedHorzLine",
+     "goVertLine",
+     "goHorzLine",
+     "goRangeSelect",
+     "goColSizing"
+    ],
+    "TabOrder": 0,
+    "Top": 1,
+    "Width": 609
+   },
+   "rect": {
+    "h": 531,
+    "w": 609,
+    "x": 1,
+    "y": 1
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnExportClick"
+   },
+   "kind": "LEAF",
+   "name": "btnExport",
+   "parent": "HGem.PageControl1.TabSheet6.palSheet5",
+   "path": "HGem.PageControl1.TabSheet6.palSheet5.btnExport",
+   "props": {
+    "Caption": "Export",
+    "Height": 25,
+    "Left": 512,
+    "OnClick": "btnExportClick",
+    "TabOrder": 1,
+    "Top": 472,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 512,
+    "y": 472
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsSecsECData",
+   "parent": "HGem.PageControl1",
+   "path": "HGem.PageControl1.tsSecsECData",
+   "props": {
+    "Caption": "EC Data",
+    "ImageIndex": 7
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TStringGrid",
+   "events": {},
+   "kind": "LEAF",
+   "name": "sgSECSECData",
+   "parent": "HGem.PageControl1.tsSecsECData",
+   "path": "HGem.PageControl1.tsSecsECData.sgSECSECData",
+   "props": {
+    "Align": "alClient",
+    "ColCount": 4,
+    "FixedRows": 0,
+    "Height": 525,
+    "Left": 0,
+    "RowCount": 1,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 603
+   },
+   "rect": {
+    "h": 525,
+    "w": 603,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsSetup",
+   "parent": "HGem.PageControl1",
+   "path": "HGem.PageControl1.tsSetup",
+   "props": {
+    "Caption": "Setup",
+    "ImageIndex": 6
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pSetup",
+   "parent": "HGem.PageControl1.tsSetup",
+   "path": "HGem.PageControl1.tsSetup.pSetup",
+   "props": {
+    "Align": "alClient",
+    "Height": 533,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 611
+   },
+   "rect": {
+    "h": 533,
+    "w": 611,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label9",
+   "parent": "HGem.PageControl1.tsSetup.pSetup",
+   "path": "HGem.PageControl1.tsSetup.pSetup.Label9",
+   "props": {
+    "Caption": "Run Time",
+    "Height": 16,
+    "Left": 16,
+    "Top": 16,
+    "Width": 67
+   },
+   "rect": {
+    "h": 16,
+    "w": 67,
+    "x": 16,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label10",
+   "parent": "HGem.PageControl1.tsSetup.pSetup",
+   "path": "HGem.PageControl1.tsSetup.pSetup.Label10",
+   "props": {
+    "Caption": "Average Test Time",
+    "Height": 16,
+    "Left": 16,
+    "Top": 48,
+    "Width": 134
+   },
+   "rect": {
+    "h": 16,
+    "w": 134,
+    "x": 16,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label11",
+   "parent": "HGem.PageControl1.tsSetup.pSetup",
+   "path": "HGem.PageControl1.tsSetup.pSetup.Label11",
+   "props": {
+    "Caption": "Yield ( 0.0~1.0)",
+    "Height": 16,
+    "Left": 16,
+    "Top": 80,
+    "Width": 105
+   },
+   "rect": {
+    "h": 16,
+    "w": 105,
+    "x": 16,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtRunTime",
+   "parent": "HGem.PageControl1.tsSetup.pSetup",
+   "path": "HGem.PageControl1.tsSetup.pSetup.edtRunTime",
+   "props": {
+    "Height": 24,
+    "Left": 164,
+    "TabOrder": 0,
+    "Top": 13,
+    "Width": 76
+   },
+   "rect": {
+    "h": 24,
+    "w": 76,
+    "x": 164,
+    "y": 13
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtAverageTestTime",
+   "parent": "HGem.PageControl1.tsSetup.pSetup",
+   "path": "HGem.PageControl1.tsSetup.pSetup.edtAverageTestTime",
+   "props": {
+    "Height": 24,
+    "Left": 164,
+    "TabOrder": 1,
+    "Top": 45,
+    "Width": 76
+   },
+   "rect": {
+    "h": 24,
+    "w": 76,
+    "x": 164,
+    "y": 45
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtOEE_Yield",
+   "parent": "HGem.PageControl1.tsSetup.pSetup",
+   "path": "HGem.PageControl1.tsSetup.pSetup.edtOEE_Yield",
+   "props": {
+    "Height": 24,
+    "Left": 164,
+    "TabOrder": 2,
+    "Top": 77,
+    "Width": 76
+   },
+   "rect": {
+    "h": 24,
+    "w": 76,
+    "x": 164,
+    "y": 77
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsPPBody",
+   "parent": "HGem.PageControl1",
+   "path": "HGem.PageControl1.tsPPBody",
+   "props": {
+    "Caption": "PPBody",
+    "ImageIndex": 8
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "memoPPBody",
+   "parent": "HGem.PageControl1.tsPPBody",
+   "path": "HGem.PageControl1.tsPPBody.memoPPBody",
+   "props": {
+    "Align": "alClient",
+    "Height": 328,
+    "Left": 0,
+    "ScrollBars": "ssVertical",
+    "TabOrder": 1,
+    "Top": 197,
+    "Width": 603
+   },
+   "rect": {
+    "h": 328,
+    "w": 603,
+    "x": 0,
+    "y": 197
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TFileListBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "FileListBox3",
+   "parent": "HGem.PageControl1.tsPPBody",
+   "path": "HGem.PageControl1.tsPPBody.FileListBox3",
+   "props": {
+    "Align": "alTop",
+    "Height": 197,
+    "ItemHeight": 13,
+    "Left": 0,
+    "Mask": "*.data",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 603
+   },
+   "rect": {
+    "h": 197,
+    "w": 603,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TClientSocket",
+   "events": {
+    "OnConnect": "clientGemConnect",
+    "OnConnecting": "clientGemConnecting",
+    "OnDisconnect": "clientGemDisconnect",
+    "OnError": "clientGemError",
+    "OnRead": "clientGemRead"
+   },
+   "kind": "NONVISUAL",
+   "name": "clientGem",
+   "parent": "HGem",
+   "path": "HGem.clientGem",
+   "props": {
+    "Active": "False",
+    "Address": "192.168.1.3",
+    "ClientType": "ctBlocking",
+    "Left": 544,
+    "OnConnect": "clientGemConnect",
+    "OnConnecting": "clientGemConnecting",
+    "OnDisconnect": "clientGemDisconnect",
+    "OnError": "clientGemError",
+    "OnRead": "clientGemRead",
+    "Port": 5100,
+    "Top": 104
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 544,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "Timer1Timer"
+   },
+   "kind": "NONVISUAL",
+   "name": "Timer1",
+   "parent": "HGem",
+   "path": "HGem.Timer1",
+   "props": {
+    "Enabled": "False",
+    "Interval": 300,
+    "Left": 544,
+    "OnTimer": "Timer1Timer",
+    "Top": 40
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 544,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TServerSocket",
+   "events": {
+    "OnClientConnect": "srvGemClientConnect",
+    "OnClientDisconnect": "srvGemClientDisconnect",
+    "OnClientError": "srvGemClientError",
+    "OnClientRead": "clientGemRead"
+   },
+   "kind": "NONVISUAL",
+   "name": "srvGem",
+   "parent": "HGem",
+   "path": "HGem.srvGem",
+   "props": {
+    "Active": "False",
+    "Left": 544,
+    "OnClientConnect": "srvGemClientConnect",
+    "OnClientDisconnect": "srvGemClientDisconnect",
+    "OnClientError": "srvGemClientError",
+    "OnClientRead": "clientGemRead",
+    "Port": 6000,
+    "ServerType": "stNonBlocking",
+    "ThreadCacheSize": 1000,
+    "Top": 72
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 544,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSaveDialog",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "SaveDialog1",
+   "parent": "HGem",
+   "path": "HGem.SaveDialog1",
+   "props": {
+    "DefaultExt": "xls",
+    "Filter": "Excel (*.xls)|*.xls",
+    "InitialDir": "D:\\",
+    "Left": 544,
+    "Top": 136
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 544,
+    "y": 136
+   }
+  }
+ ]
+}

@@ -1,0 +1,2480 @@
+{
+ "canvas": {
+  "h": 480,
+  "w": 1198
+ },
+ "caption": "LtcSensor",
+ "form": "fLtcSensor",
+ "form_class": "TfLtcSensor",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "LtcSensor.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfLtcSensor",
+   "events": {
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fLtcSensor",
+   "parent": null,
+   "path": "fLtcSensor",
+   "props": {
+    "BorderIcons": [
+     "biSystemMenu"
+    ],
+    "BorderStyle": "bsSingle",
+    "Caption": "LtcSensor",
+    "ClientHeight": 480,
+    "ClientWidth": 1198,
+    "Color": 12761254,
+    "DragKind": "dkDock",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Left": 309,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 159
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 309,
+    "y": 159
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TPanel",
+   "events": {
+    "OnClick": "btnCloseClick"
+   },
+   "kind": "LEAF",
+   "name": "btnClose",
+   "parent": "fLtcSensor",
+   "path": "fLtcSensor.btnClose",
+   "props": {
+    "Align": "alBottom",
+    "Caption": "Exit",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 39,
+    "Left": 0,
+    "OnClick": "btnCloseClick",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 441,
+    "Width": 1198
+   },
+   "rect": {
+    "h": 39,
+    "w": 1198,
+    "x": 0,
+    "y": 441
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel1",
+   "parent": "fLtcSensor",
+   "path": "fLtcSensor.Panel1",
+   "props": {
+    "Align": "alClient",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 441,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 1198
+   },
+   "rect": {
+    "h": 441,
+    "w": 1198,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlTop",
+   "parent": "fLtcSensor.Panel1",
+   "path": "fLtcSensor.Panel1.pnlTop",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 73,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 1198
+   },
+   "rect": {
+    "h": 73,
+    "w": 1198,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ledSht2Servo",
+   "parent": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.ledSht2Servo",
+   "props": {
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 364,
+    "Top": 13,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 364,
+    "y": 13
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblSht1Servo",
+   "parent": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.lblSht1Servo",
+   "props": {
+    "Caption": "Servo On",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 188,
+    "ParentFont": "False",
+    "Top": 14,
+    "Width": 66
+   },
+   "rect": {
+    "h": 20,
+    "w": 66,
+    "x": 188,
+    "y": 14
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ledSht1Servo",
+   "parent": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.ledSht1Servo",
+   "props": {
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 164,
+    "Top": 13,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 164,
+    "y": 13
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblSht2Servo",
+   "parent": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.lblSht2Servo",
+   "props": {
+    "Caption": "Servo On",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 388,
+    "ParentFont": "False",
+    "Top": 14,
+    "Width": 66
+   },
+   "rect": {
+    "h": 20,
+    "w": 66,
+    "x": 388,
+    "y": 14
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblLtcCount",
+   "parent": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.lblLtcCount",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "lblLtcCount",
+    "Height": 13,
+    "Left": 164,
+    "Top": 56,
+    "Width": 297
+   },
+   "rect": {
+    "h": 13,
+    "w": 297,
+    "x": 164,
+    "y": 56
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label22",
+   "parent": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.Label22",
+   "props": {
+    "Caption": "Label22",
+    "Height": 13,
+    "Left": 808,
+    "Top": 40,
+    "Visible": "False",
+    "Width": 38
+   },
+   "rect": {
+    "h": 13,
+    "w": 38,
+    "x": 808,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label23",
+   "parent": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.Label23",
+   "props": {
+    "Caption": "Label23",
+    "Height": 13,
+    "Left": 732,
+    "Top": 12,
+    "Visible": "False",
+    "Width": 38
+   },
+   "rect": {
+    "h": 13,
+    "w": 38,
+    "x": 732,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ledSht3Servo",
+   "parent": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.ledSht3Servo",
+   "props": {
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 556,
+    "Top": 13,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 556,
+    "y": 13
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblSht3Servo",
+   "parent": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.lblSht3Servo",
+   "props": {
+    "Caption": "Servo On",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 580,
+    "ParentFont": "False",
+    "Top": 14,
+    "Width": 66
+   },
+   "rect": {
+    "h": 20,
+    "w": 66,
+    "x": 580,
+    "y": 14
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btSetLtcClick"
+   },
+   "kind": "LEAF",
+   "name": "btSetLtc",
+   "parent": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.btSetLtc",
+   "props": {
+    "Caption": "Set",
+    "Height": 25,
+    "Left": 84,
+    "OnClick": "btSetLtcClick",
+    "TabOrder": 5,
+    "Top": 44,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 84,
+    "y": 44
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btSh1ServoClick"
+   },
+   "kind": "LEAF",
+   "name": "btSh1Servo",
+   "parent": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.btSh1Servo",
+   "props": {
+    "Caption": "Shuttle1 Servo",
+    "Height": 25,
+    "Left": 84,
+    "OnClick": "btSh1ServoClick",
+    "TabOrder": 1,
+    "Top": 12,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 84,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btSh2ServoClick"
+   },
+   "kind": "LEAF",
+   "name": "btSh2Servo",
+   "parent": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.btSh2Servo",
+   "props": {
+    "Caption": "Shuttle2 Servo",
+    "Height": 25,
+    "Left": 280,
+    "OnClick": "btSh2ServoClick",
+    "TabOrder": 2,
+    "Top": 12,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 280,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "BtnDellTestClick"
+   },
+   "kind": "LEAF",
+   "name": "BtnDellTest",
+   "parent": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.BtnDellTest",
+   "props": {
+    "Caption": "BtnDellTest",
+    "Height": 25,
+    "Left": 772,
+    "OnClick": "BtnDellTestClick",
+    "TabOrder": 0,
+    "Top": 8,
+    "Visible": "False",
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 772,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TScrollBar",
+   "events": {
+    "OnChange": "ScrollBar1Change"
+   },
+   "kind": "LEAF",
+   "name": "ScrollBar1",
+   "parent": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.ScrollBar1",
+   "props": {
+    "Height": 17,
+    "Left": 684,
+    "Min": 10,
+    "OnChange": "ScrollBar1Change",
+    "PageSize": 0,
+    "Position": 10,
+    "TabOrder": 4,
+    "Top": 40,
+    "Visible": "False",
+    "Width": 121
+   },
+   "rect": {
+    "h": 17,
+    "w": 121,
+    "x": 684,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btSh3ServoClick"
+   },
+   "kind": "LEAF",
+   "name": "btSh3Servo",
+   "parent": "fLtcSensor.Panel1.pnlTop",
+   "path": "fLtcSensor.Panel1.pnlTop.btSh3Servo",
+   "props": {
+    "Caption": "Shuttle3 Servo",
+    "Height": 25,
+    "Left": 472,
+    "OnClick": "btSh3ServoClick",
+    "TabOrder": 3,
+    "Top": 12,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 472,
+    "y": 12
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlCenter",
+   "parent": "fLtcSensor.Panel1",
+   "path": "fLtcSensor.Panel1.pnlCenter",
+   "props": {
+    "Align": "alClient",
+    "BevelOuter": "bvNone",
+    "BorderWidth": 4,
+    "Color": 12761254,
+    "Height": 368,
+    "Left": 0,
+    "TabOrder": 1,
+    "Top": 73,
+    "Width": 1198
+   },
+   "rect": {
+    "h": 368,
+    "w": 1198,
+    "x": 0,
+    "y": 73
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbOutSh1Z",
+   "parent": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Out Shuttle 1 Z",
+    "Height": 360,
+    "Left": 80,
+    "TabOrder": 1,
+    "Top": 4,
+    "Width": 142
+   },
+   "rect": {
+    "h": 360,
+    "w": 142,
+    "x": 80,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut1_Z1_Axis",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.labOut1_Z1_Axis",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 12,
+    "Top": 60,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 12,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut1_Z2_Axis",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.labOut1_Z2_Axis",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 80,
+    "Top": 60,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 80,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut1_Z1_Count",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.labOut1_Z1_Count",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 12,
+    "Top": 96,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 12,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut1_Z2_Count",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.labOut1_Z2_Count",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 80,
+    "Top": 96,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 80,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ledOut1_1",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.ledOut1_1",
+   "props": {
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 26,
+    "Top": 19,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 26,
+    "y": 19
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ledOut1_2",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.ledOut1_2",
+   "props": {
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 94,
+    "Top": 19,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 94,
+    "y": 19
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btGetSh1LtcClick"
+   },
+   "kind": "LEAF",
+   "name": "btGetSh1Ltc",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.btGetSh1Ltc",
+   "props": {
+    "Caption": "Get",
+    "Height": 25,
+    "Left": 8,
+    "OnClick": "btGetSh1LtcClick",
+    "TabOrder": 2,
+    "Top": 328,
+    "Width": 129
+   },
+   "rect": {
+    "h": 25,
+    "w": 129,
+    "x": 8,
+    "y": 328
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo_Out1Z1",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.Memo_Out1Z1",
+   "props": {
+    "Color": 14670284,
+    "Height": 189,
+    "Left": 7,
+    "TabOrder": 0,
+    "Top": 136,
+    "Width": 60
+   },
+   "rect": {
+    "h": 189,
+    "w": 60,
+    "x": 7,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo_Out1Z2",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Z.Memo_Out1Z2",
+   "props": {
+    "Color": 14670284,
+    "Height": 189,
+    "Left": 75,
+    "TabOrder": 1,
+    "Top": 136,
+    "Width": 60
+   },
+   "rect": {
+    "h": 189,
+    "w": 60,
+    "x": 75,
+    "y": 136
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbOutSh2Z",
+   "parent": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Out Shuttle 2 Z",
+    "Height": 360,
+    "Left": 222,
+    "TabOrder": 2,
+    "Top": 4,
+    "Width": 142
+   },
+   "rect": {
+    "h": 360,
+    "w": 142,
+    "x": 222,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut2_Z1_Axis",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.labOut2_Z1_Axis",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 12,
+    "Top": 60,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 12,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut2_Z2_Axis",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.labOut2_Z2_Axis",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 80,
+    "Top": 60,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 80,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut2_Z1_Count",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.labOut2_Z1_Count",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 12,
+    "Top": 96,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 12,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut2_Z2_Count",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.labOut2_Z2_Count",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 80,
+    "Top": 96,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 80,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ledOut2_1",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.ledOut2_1",
+   "props": {
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 26,
+    "Top": 19,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 26,
+    "y": 19
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ledOut2_2",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.ledOut2_2",
+   "props": {
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 94,
+    "Top": 19,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 94,
+    "y": 19
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo_Out2Z1",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.Memo_Out2Z1",
+   "props": {
+    "Color": 14670284,
+    "Height": 189,
+    "Left": 7,
+    "TabOrder": 0,
+    "Top": 136,
+    "Width": 60
+   },
+   "rect": {
+    "h": 189,
+    "w": 60,
+    "x": 7,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo_Out2Z2",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.Memo_Out2Z2",
+   "props": {
+    "Color": 14670284,
+    "Height": 189,
+    "Left": 75,
+    "TabOrder": 1,
+    "Top": 136,
+    "Width": 60
+   },
+   "rect": {
+    "h": 189,
+    "w": 60,
+    "x": 75,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btGetSh2LtcClick"
+   },
+   "kind": "LEAF",
+   "name": "btGetSh2Ltc",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Z.btGetSh2Ltc",
+   "props": {
+    "Caption": "Get",
+    "Height": 25,
+    "Left": 8,
+    "OnClick": "btGetSh2LtcClick",
+    "TabOrder": 2,
+    "Top": 328,
+    "Width": 129
+   },
+   "rect": {
+    "h": 25,
+    "w": 129,
+    "x": 8,
+    "y": 328
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbOutSh1Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Out Shuttle 1 Y",
+    "Height": 360,
+    "Left": 506,
+    "TabOrder": 4,
+    "Top": 4,
+    "Width": 90
+   },
+   "rect": {
+    "h": 360,
+    "w": 90,
+    "x": 506,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut1_Y_Axis",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y.labOut1_Y_Axis",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 20,
+    "Top": 60,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 20,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut1_Y_Count",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y.labOut1_Y_Count",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 20,
+    "Top": 96,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 20,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ledOut1_Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y.ledOut1_Y",
+   "props": {
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 34,
+    "Top": 19,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 34,
+    "y": 19
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btGetSh1LtcClick"
+   },
+   "kind": "LEAF",
+   "name": "btGetSh1YLtc",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y.btGetSh1YLtc",
+   "props": {
+    "Caption": "Get",
+    "Height": 25,
+    "Left": 16,
+    "OnClick": "btGetSh1LtcClick",
+    "TabOrder": 1,
+    "Top": 328,
+    "Width": 60
+   },
+   "rect": {
+    "h": 25,
+    "w": 60,
+    "x": 16,
+    "y": 328
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo_Out1Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh1Y.Memo_Out1Y",
+   "props": {
+    "Color": 14670284,
+    "Height": 189,
+    "Left": 15,
+    "TabOrder": 0,
+    "Top": 136,
+    "Width": 60
+   },
+   "rect": {
+    "h": 189,
+    "w": 60,
+    "x": 15,
+    "y": 136
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbOutSh2Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Out Shuttle 2 Y",
+    "Height": 360,
+    "Left": 596,
+    "TabOrder": 5,
+    "Top": 4,
+    "Width": 90
+   },
+   "rect": {
+    "h": 360,
+    "w": 90,
+    "x": 596,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut2_Y_Axis",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y.labOut2_Y_Axis",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 20,
+    "Top": 60,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 20,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut2_Y_Count",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y.labOut2_Y_Count",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 20,
+    "Top": 96,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 20,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ledOut2_Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y.ledOut2_Y",
+   "props": {
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 34,
+    "Top": 19,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 34,
+    "y": 19
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo_Out2Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y.Memo_Out2Y",
+   "props": {
+    "Color": 14670284,
+    "Height": 189,
+    "Left": 15,
+    "TabOrder": 0,
+    "Top": 136,
+    "Width": 60
+   },
+   "rect": {
+    "h": 189,
+    "w": 60,
+    "x": 15,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btGetSh2LtcClick"
+   },
+   "kind": "LEAF",
+   "name": "btGetSh2YLtc",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh2Y.btGetSh2YLtc",
+   "props": {
+    "Caption": "Get",
+    "Height": 25,
+    "Left": 15,
+    "OnClick": "btGetSh2LtcClick",
+    "TabOrder": 1,
+    "Top": 328,
+    "Width": 60
+   },
+   "rect": {
+    "h": 25,
+    "w": 60,
+    "x": 15,
+    "y": 328
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbInSh1Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "In Shuttle 1 Y",
+    "Height": 360,
+    "Left": 828,
+    "TabOrder": 7,
+    "Top": 4,
+    "Width": 90
+   },
+   "rect": {
+    "h": 360,
+    "w": 90,
+    "x": 828,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labIn1_Y_Axis",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y.labIn1_Y_Axis",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 20,
+    "Top": 60,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 20,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labIn1_Y_Count",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y.labIn1_Y_Count",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 20,
+    "Top": 96,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 20,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ledIn1_Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y.ledIn1_Y",
+   "props": {
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 34,
+    "Top": 19,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 34,
+    "y": 19
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btGetSh1LtcClick"
+   },
+   "kind": "LEAF",
+   "name": "btGetInSh1YLtc",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y.btGetInSh1YLtc",
+   "props": {
+    "Caption": "Get",
+    "Height": 25,
+    "Left": 16,
+    "OnClick": "btGetSh1LtcClick",
+    "TabOrder": 1,
+    "Top": 328,
+    "Width": 60
+   },
+   "rect": {
+    "h": 25,
+    "w": 60,
+    "x": 16,
+    "y": 328
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo_In1Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh1Y.Memo_In1Y",
+   "props": {
+    "Color": 14670284,
+    "Height": 189,
+    "Left": 15,
+    "TabOrder": 0,
+    "Top": 136,
+    "Width": 60
+   },
+   "rect": {
+    "h": 189,
+    "w": 60,
+    "x": 15,
+    "y": 136
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbInSh2Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "In Shuttle 2 Y",
+    "Height": 360,
+    "Left": 918,
+    "TabOrder": 8,
+    "Top": 4,
+    "Width": 90
+   },
+   "rect": {
+    "h": 360,
+    "w": 90,
+    "x": 918,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labIn2_Y_Axis",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y.labIn2_Y_Axis",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 20,
+    "Top": 60,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 20,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labIn2_Y_Count",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y.labIn2_Y_Count",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 20,
+    "Top": 96,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 20,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ledIn2_Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y.ledIn2_Y",
+   "props": {
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 34,
+    "Top": 19,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 34,
+    "y": 19
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo_In2Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y.Memo_In2Y",
+   "props": {
+    "Color": 14670284,
+    "Height": 189,
+    "Left": 15,
+    "TabOrder": 0,
+    "Top": 136,
+    "Width": 60
+   },
+   "rect": {
+    "h": 189,
+    "w": 60,
+    "x": 15,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btGetSh2LtcClick"
+   },
+   "kind": "LEAF",
+   "name": "btGetInSh2YLtc",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbInSh2Y.btGetInSh2YLtc",
+   "props": {
+    "Caption": "Get",
+    "Height": 25,
+    "Left": 15,
+    "OnClick": "btGetSh2LtcClick",
+    "TabOrder": 1,
+    "Top": 328,
+    "Width": 60
+   },
+   "rect": {
+    "h": 25,
+    "w": 60,
+    "x": 15,
+    "y": 328
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlCaption",
+   "parent": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.pnlCaption",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 360,
+    "Left": 4,
+    "TabOrder": 0,
+    "Top": 4,
+    "Width": 76
+   },
+   "rect": {
+    "h": 360,
+    "w": 76,
+    "x": 4,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label9",
+   "parent": "fLtcSensor.Panel1.pnlCenter.pnlCaption",
+   "path": "fLtcSensor.Panel1.pnlCenter.pnlCaption.Label9",
+   "props": {
+    "Caption": "Axis No.",
+    "Height": 13,
+    "Left": 8,
+    "Top": 64,
+    "Width": 39
+   },
+   "rect": {
+    "h": 13,
+    "w": 39,
+    "x": 8,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label10",
+   "parent": "fLtcSensor.Panel1.pnlCenter.pnlCaption",
+   "path": "fLtcSensor.Panel1.pnlCenter.pnlCaption.Label10",
+   "props": {
+    "Caption": "Latch count",
+    "Height": 13,
+    "Left": 8,
+    "Top": 100,
+    "Width": 57
+   },
+   "rect": {
+    "h": 13,
+    "w": 57,
+    "x": 8,
+    "y": 100
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label13",
+   "parent": "fLtcSensor.Panel1.pnlCenter.pnlCaption",
+   "path": "fLtcSensor.Panel1.pnlCenter.pnlCaption.Label13",
+   "props": {
+    "Caption": "Latch Signal",
+    "Height": 13,
+    "Left": 8,
+    "Top": 28,
+    "Width": 59
+   },
+   "rect": {
+    "h": 13,
+    "w": 59,
+    "x": 8,
+    "y": 28
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbOutSh3Z",
+   "parent": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Out Shuttle 3 Z",
+    "Height": 360,
+    "Left": 364,
+    "TabOrder": 3,
+    "Top": 4,
+    "Width": 142
+   },
+   "rect": {
+    "h": 360,
+    "w": 142,
+    "x": 364,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut3_Z1_Axis",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.labOut3_Z1_Axis",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 12,
+    "Top": 60,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 12,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut3_Z2_Axis",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.labOut3_Z2_Axis",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 80,
+    "Top": 60,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 80,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut3_Z1_Count",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.labOut3_Z1_Count",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 12,
+    "Top": 96,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 12,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut3_Z2_Count",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.labOut3_Z2_Count",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 80,
+    "Top": 96,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 80,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ledOut3_1",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.ledOut3_1",
+   "props": {
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 26,
+    "Top": 19,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 26,
+    "y": 19
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ledOut3_2",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.ledOut3_2",
+   "props": {
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 94,
+    "Top": 19,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 94,
+    "y": 19
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo_Out3Z1",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.Memo_Out3Z1",
+   "props": {
+    "Color": 14670284,
+    "Height": 189,
+    "Left": 7,
+    "TabOrder": 0,
+    "Top": 136,
+    "Width": 60
+   },
+   "rect": {
+    "h": 189,
+    "w": 60,
+    "x": 7,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo_Out3Z2",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.Memo_Out3Z2",
+   "props": {
+    "Color": 14670284,
+    "Height": 189,
+    "Left": 75,
+    "TabOrder": 1,
+    "Top": 136,
+    "Width": 60
+   },
+   "rect": {
+    "h": 189,
+    "w": 60,
+    "x": 75,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btGetSh3LtcClick"
+   },
+   "kind": "LEAF",
+   "name": "btGetSh3Ltc",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Z.btGetSh3Ltc",
+   "props": {
+    "Caption": "Get",
+    "Height": 25,
+    "Left": 8,
+    "OnClick": "btGetSh3LtcClick",
+    "TabOrder": 2,
+    "Top": 328,
+    "Width": 129
+   },
+   "rect": {
+    "h": 25,
+    "w": 129,
+    "x": 8,
+    "y": 328
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbOutSh3Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "Out Shuttle 3 Y",
+    "Height": 360,
+    "Left": 686,
+    "TabOrder": 6,
+    "Top": 4,
+    "Width": 142
+   },
+   "rect": {
+    "h": 360,
+    "w": 142,
+    "x": 686,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut3_Y_Axis",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.labOut3_Y_Axis",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 12,
+    "Top": 60,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 12,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut3_Y_Count",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.labOut3_Y_Count",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 12,
+    "Top": 96,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 12,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ledOut3_Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.ledOut3_Y",
+   "props": {
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 26,
+    "Top": 19,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 26,
+    "y": 19
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ledOut3_Y2",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.ledOut3_Y2",
+   "props": {
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 94,
+    "Top": 19,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 94,
+    "y": 19
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut3_Y2_Axis",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.labOut3_Y2_Axis",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 80,
+    "Top": 60,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 80,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOut3_Y2_Count",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.labOut3_Y2_Count",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 80,
+    "Top": 96,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 80,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btGetSh3LtcClick"
+   },
+   "kind": "LEAF",
+   "name": "btGetSh3YLtc",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.btGetSh3YLtc",
+   "props": {
+    "Caption": "Get",
+    "Height": 25,
+    "Left": 8,
+    "OnClick": "btGetSh3LtcClick",
+    "TabOrder": 1,
+    "Top": 328,
+    "Width": 129
+   },
+   "rect": {
+    "h": 25,
+    "w": 129,
+    "x": 8,
+    "y": 328
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo_Out3Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.Memo_Out3Y",
+   "props": {
+    "Color": 14670284,
+    "Height": 189,
+    "Left": 7,
+    "TabOrder": 0,
+    "Top": 136,
+    "Width": 60
+   },
+   "rect": {
+    "h": 189,
+    "w": 60,
+    "x": 7,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo_Out3Y2",
+   "parent": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.gbOutSh3Y.Memo_Out3Y2",
+   "props": {
+    "Color": 14670284,
+    "Height": 189,
+    "Left": 75,
+    "TabOrder": 2,
+    "Top": 136,
+    "Width": 60
+   },
+   "rect": {
+    "h": 189,
+    "w": 60,
+    "x": 75,
+    "y": 136
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "palInSHAutoLtc",
+   "parent": "fLtcSensor.Panel1.pnlCenter",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 360,
+    "Left": 1008,
+    "TabOrder": 9,
+    "Top": 4,
+    "Width": 185
+   },
+   "rect": {
+    "h": 360,
+    "w": 185,
+    "x": 1008,
+    "y": 4
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbInSh1_2Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "In Shuttle 1_2 Y",
+    "Height": 360,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 90
+   },
+   "rect": {
+    "h": 360,
+    "w": 90,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labIn1_2_Y_Axis",
+   "parent": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y.labIn1_2_Y_Axis",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 20,
+    "Top": 60,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 20,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labIn1_2_Y_Count",
+   "parent": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y.labIn1_2_Y_Count",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 20,
+    "Top": 96,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 20,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ledIn1_2_Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y.ledIn1_2_Y",
+   "props": {
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 34,
+    "Top": 19,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 34,
+    "y": 19
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btGetSh1LtcClick"
+   },
+   "kind": "LEAF",
+   "name": "Button5",
+   "parent": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y.Button5",
+   "props": {
+    "Caption": "Get",
+    "Height": 25,
+    "Left": 16,
+    "OnClick": "btGetSh1LtcClick",
+    "TabOrder": 0,
+    "Top": 328,
+    "Width": 60
+   },
+   "rect": {
+    "h": 25,
+    "w": 60,
+    "x": 16,
+    "y": 328
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo_In1_2Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh1_2Y.Memo_In1_2Y",
+   "props": {
+    "Color": 14670284,
+    "Height": 189,
+    "Left": 15,
+    "TabOrder": 1,
+    "Top": 136,
+    "Width": 60
+   },
+   "rect": {
+    "h": 189,
+    "w": 60,
+    "x": 15,
+    "y": 136
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbInSh2_2Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "In Shuttle 2_2 Y",
+    "Height": 360,
+    "Left": 90,
+    "TabOrder": 1,
+    "Top": 0,
+    "Width": 90
+   },
+   "rect": {
+    "h": 360,
+    "w": 90,
+    "x": 90,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labIn2_2_Y_Axis",
+   "parent": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y.labIn2_2_Y_Axis",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 20,
+    "Top": 60,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 20,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labIn2_2_Y_Count",
+   "parent": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y.labIn2_2_Y_Count",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Counter",
+    "Height": 13,
+    "Left": 20,
+    "Top": 96,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 20,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ledIn2_2_Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y.ledIn2_2_Y",
+   "props": {
+    "Height": 22,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 34,
+    "Top": 19,
+    "Width": 22
+   },
+   "rect": {
+    "h": 22,
+    "w": 22,
+    "x": 34,
+    "y": 19
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo_In2_2Y",
+   "parent": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y.Memo_In2_2Y",
+   "props": {
+    "Color": 14670284,
+    "Height": 189,
+    "Left": 15,
+    "TabOrder": 0,
+    "Top": 136,
+    "Width": 60
+   },
+   "rect": {
+    "h": 189,
+    "w": 60,
+    "x": 15,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btGetSh2LtcClick"
+   },
+   "kind": "LEAF",
+   "name": "Button6",
+   "parent": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y",
+   "path": "fLtcSensor.Panel1.pnlCenter.palInSHAutoLtc.gbInSh2_2Y.Button6",
+   "props": {
+    "Caption": "Get",
+    "Height": 25,
+    "Left": 15,
+    "OnClick": "btGetSh2LtcClick",
+    "TabOrder": 1,
+    "Top": 328,
+    "Width": 60
+   },
+   "rect": {
+    "h": 25,
+    "w": 60,
+    "x": 15,
+    "y": 328
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "TimerLtcSensorTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "TimerLtcSensor",
+   "parent": "fLtcSensor",
+   "path": "fLtcSensor.TimerLtcSensor",
+   "props": {
+    "Enabled": "False",
+    "Interval": 100,
+    "Left": 932,
+    "OnTimer": "TimerLtcSensorTimer"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 932,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "DellTestTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "DellTest",
+   "parent": "fLtcSensor",
+   "path": "fLtcSensor.DellTest",
+   "props": {
+    "Enabled": "False",
+    "Interval": 100,
+    "Left": 904,
+    "OnTimer": "DellTestTimer"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 904,
+    "y": null
+   }
+  }
+ ]
+}

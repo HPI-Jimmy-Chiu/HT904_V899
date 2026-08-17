@@ -1,0 +1,4876 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "Contact Force Setting",
+ "form": "fContactForce",
+ "form_class": "TfContactForce",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "ContactForce.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfContactForce",
+   "events": {
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fContactForce",
+   "parent": null,
+   "path": "fContactForce",
+   "props": {
+    "Caption": "Contact Force Setting",
+    "Color": 12761254,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 747,
+    "Left": 329,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 114,
+    "Width": 870
+   },
+   "rect": {
+    "h": 747,
+    "w": 870,
+    "x": 329,
+    "y": 114
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "PageControl1",
+   "parent": "fContactForce",
+   "path": "fContactForce.PageControl1",
+   "props": {
+    "ActivePage": "tsDieForceDynamicKit",
+    "Align": "alClient",
+    "Height": 647,
+    "Left": 0,
+    "TabIndex": 5,
+    "TabOrder": 0,
+    "TabWidth": 150,
+    "Top": 0,
+    "Width": 862
+   },
+   "rect": {
+    "h": 647,
+    "w": 862,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsDynamicKit",
+   "parent": "fContactForce.PageControl1",
+   "path": "fContactForce.PageControl1.tsDynamicKit",
+   "props": {
+    "Caption": "Dynamic Kit",
+    "ImageIndex": 3
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TScrollBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "scrlbxDynamicKit",
+   "parent": "fContactForce.PageControl1.tsDynamicKit",
+   "path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit",
+   "props": {
+    "Align": "alClient",
+    "Height": 612,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 846
+   },
+   "rect": {
+    "h": 612,
+    "w": 846,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbLoadRate",
+   "parent": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit",
+   "path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Load rate of xx mm",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 100,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Visible": "False",
+    "Width": 842
+   },
+   "rect": {
+    "h": 100,
+    "w": 842,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblDiameter",
+   "parent": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate",
+   "path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate.lblDiameter",
+   "props": {
+    "Caption": "60mm : ",
+    "Height": 20,
+    "Left": 6,
+    "Top": 31,
+    "Width": 56
+   },
+   "rect": {
+    "h": 20,
+    "w": 56,
+    "x": 6,
+    "y": 31
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblHotOffset",
+   "parent": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate",
+   "path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate.lblHotOffset",
+   "props": {
+    "Caption": "60mm offset by heater mode",
+    "Height": 20,
+    "Left": 464,
+    "Top": 18,
+    "Width": 203
+   },
+   "rect": {
+    "h": 20,
+    "w": 203,
+    "x": 464,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblDiameter_NS",
+   "parent": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate",
+   "path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate.lblDiameter_NS",
+   "props": {
+    "Caption": "60mm for NS: ",
+    "Height": 20,
+    "Left": 6,
+    "Top": 63,
+    "Width": 101
+   },
+   "rect": {
+    "h": 20,
+    "w": 101,
+    "x": 6,
+    "y": 63
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblContactOffset",
+   "parent": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate",
+   "path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate.lblContactOffset",
+   "props": {
+    "Caption": "60mm contact offset",
+    "Height": 20,
+    "Left": 464,
+    "Top": 45,
+    "Width": 146
+   },
+   "rect": {
+    "h": 20,
+    "w": 146,
+    "x": 464,
+    "y": 45
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblContactOffset_NS",
+   "parent": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate",
+   "path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate.lblContactOffset_NS",
+   "props": {
+    "Caption": "60mm contact offset__NS",
+    "Height": 20,
+    "Left": 464,
+    "Top": 73,
+    "Width": 186
+   },
+   "rect": {
+    "h": 20,
+    "w": 186,
+    "x": 464,
+    "y": 73
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTrackBar",
+   "events": {},
+   "kind": "LEAF",
+   "name": "trckbrDiameter",
+   "parent": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate",
+   "path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate.trckbrDiameter",
+   "props": {
+    "Frequency": 1,
+    "Height": 35,
+    "Left": 108,
+    "Max": 150,
+    "Min": 80,
+    "Orientation": "trHorizontal",
+    "Position": 80,
+    "SelEnd": 0,
+    "SelStart": 0,
+    "TabOrder": 1,
+    "TickMarks": "tmBottomRight",
+    "TickStyle": "tsAuto",
+    "Top": 26,
+    "Width": 275
+   },
+   "rect": {
+    "h": 35,
+    "w": 275,
+    "x": 108,
+    "y": 26
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtHotOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtHotOffset",
+   "parent": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate",
+   "path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate.edtHotOffset",
+   "props": {
+    "Height": 28,
+    "Left": 677,
+    "OnClick": "edtHotOffsetClick",
+    "TabOrder": 0,
+    "Top": 14,
+    "Width": 80
+   },
+   "rect": {
+    "h": 28,
+    "w": 80,
+    "x": 677,
+    "y": 14
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTrackBar",
+   "events": {},
+   "kind": "LEAF",
+   "name": "trckbrDiameter_NS",
+   "parent": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate",
+   "path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate.trckbrDiameter_NS",
+   "props": {
+    "Frequency": 1,
+    "Height": 35,
+    "Left": 108,
+    "Max": 150,
+    "Min": 80,
+    "Orientation": "trHorizontal",
+    "Position": 80,
+    "SelEnd": 0,
+    "SelStart": 0,
+    "TabOrder": 4,
+    "TickMarks": "tmBottomRight",
+    "TickStyle": "tsAuto",
+    "Top": 58,
+    "Width": 275
+   },
+   "rect": {
+    "h": 35,
+    "w": 275,
+    "x": 108,
+    "y": 58
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtLoadRate",
+   "parent": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate",
+   "path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate.edtLoadRate",
+   "props": {
+    "Height": 28,
+    "Left": 380,
+    "TabOrder": 2,
+    "Top": 26,
+    "Width": 65
+   },
+   "rect": {
+    "h": 28,
+    "w": 65,
+    "x": 380,
+    "y": 26
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtLoadRate_NS",
+   "parent": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate",
+   "path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate.edtLoadRate_NS",
+   "props": {
+    "Height": 28,
+    "Left": 380,
+    "TabOrder": 5,
+    "Top": 58,
+    "Width": 65
+   },
+   "rect": {
+    "h": 28,
+    "w": 65,
+    "x": 380,
+    "y": 58
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtContactOffset",
+   "parent": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate",
+   "path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate.edtContactOffset",
+   "props": {
+    "Height": 28,
+    "Left": 677,
+    "OnClick": "edtContactOffsetClick",
+    "TabOrder": 3,
+    "Top": 39,
+    "Width": 80
+   },
+   "rect": {
+    "h": 28,
+    "w": 80,
+    "x": 677,
+    "y": 39
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffset_NSClick"
+   },
+   "kind": "LEAF",
+   "name": "edtContactOffset_NS",
+   "parent": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate",
+   "path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.gbLoadRate.edtContactOffset_NS",
+   "props": {
+    "Height": 28,
+    "ImeMode": "imClose",
+    "Left": 677,
+    "OnClick": "edtContactOffset_NSClick",
+    "TabOrder": 6,
+    "Top": 68,
+    "Width": 80
+   },
+   "rect": {
+    "h": 28,
+    "w": 80,
+    "x": 677,
+    "y": 68
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpAddNewKit",
+   "parent": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit",
+   "path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.grpAddNewKit",
+   "props": {
+    "Align": "alBottom",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 168,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 440,
+    "Width": 842
+   },
+   "rect": {
+    "h": 168,
+    "w": 842,
+    "x": 0,
+    "y": 440
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtCurrentType",
+   "parent": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.grpAddNewKit",
+   "path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.grpAddNewKit.edtCurrentType",
+   "props": {
+    "Enabled": "False",
+    "Height": 28,
+    "Left": 32,
+    "TabOrder": 0,
+    "Text": "30,40,60,56",
+    "Top": 68,
+    "Visible": "False",
+    "Width": 169
+   },
+   "rect": {
+    "h": 28,
+    "w": 169,
+    "x": 32,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtVisible",
+   "parent": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.grpAddNewKit",
+   "path": "fContactForce.PageControl1.tsDynamicKit.scrlbxDynamicKit.grpAddNewKit.edtVisible",
+   "props": {
+    "Enabled": "False",
+    "Height": 28,
+    "Left": 32,
+    "TabOrder": 1,
+    "Text": "1,1,1,0",
+    "Top": 104,
+    "Visible": "False",
+    "Width": 169
+   },
+   "rect": {
+    "h": 28,
+    "w": 169,
+    "x": 32,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsD25",
+   "parent": "fContactForce.PageControl1",
+   "path": "fContactForce.PageControl1.tsD25",
+   "props": {
+    "Caption": "[D25] EP Load Rate "
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labD25_1",
+   "parent": "fContactForce.PageControl1.tsD25",
+   "path": "fContactForce.PageControl1.tsD25.labD25_1",
+   "props": {
+    "Caption": "60mm : ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 16,
+    "ParentFont": "False",
+    "Top": 31,
+    "Width": 45
+   },
+   "rect": {
+    "h": 16,
+    "w": 45,
+    "x": 16,
+    "y": 31
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labD25_3",
+   "parent": "fContactForce.PageControl1.tsD25",
+   "path": "fContactForce.PageControl1.tsD25.labD25_3",
+   "props": {
+    "Caption": "30mm : ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 16,
+    "ParentFont": "False",
+    "Top": 171,
+    "Width": 45
+   },
+   "rect": {
+    "h": 16,
+    "w": 45,
+    "x": 16,
+    "y": 171
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labD25_2",
+   "parent": "fContactForce.PageControl1.tsD25",
+   "path": "fContactForce.PageControl1.tsD25.labD25_2",
+   "props": {
+    "Caption": "40mm : ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 16,
+    "ParentFont": "False",
+    "Top": 103,
+    "Width": 45
+   },
+   "rect": {
+    "h": 16,
+    "w": 45,
+    "x": 16,
+    "y": 103
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labD25_4",
+   "parent": "fContactForce.PageControl1.tsD25",
+   "path": "fContactForce.PageControl1.tsD25.labD25_4",
+   "props": {
+    "Caption": "60mm Offset by heater mode",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 136,
+    "ParentFont": "False",
+    "Top": 64,
+    "Width": 170
+   },
+   "rect": {
+    "h": 16,
+    "w": 170,
+    "x": 136,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labD25_5",
+   "parent": "fContactForce.PageControl1.tsD25",
+   "path": "fContactForce.PageControl1.tsD25.labD25_5",
+   "props": {
+    "Caption": "40mm Offset by heater mode",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 136,
+    "ParentFont": "False",
+    "Top": 136,
+    "Width": 170
+   },
+   "rect": {
+    "h": 16,
+    "w": 170,
+    "x": 136,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labD25_6",
+   "parent": "fContactForce.PageControl1.tsD25",
+   "path": "fContactForce.PageControl1.tsD25.labD25_6",
+   "props": {
+    "Caption": "30mm Offset by heater mode",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 136,
+    "ParentFont": "False",
+    "Top": 208,
+    "Width": 170
+   },
+   "rect": {
+    "h": 16,
+    "w": 170,
+    "x": 136,
+    "y": 208
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labD60",
+   "parent": "fContactForce.PageControl1.tsD25",
+   "path": "fContactForce.PageControl1.tsD25.labD60",
+   "props": {
+    "Caption": "56mm : ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 16,
+    "ParentFont": "False",
+    "Top": 239,
+    "Width": 45
+   },
+   "rect": {
+    "h": 16,
+    "w": 45,
+    "x": 16,
+    "y": 239
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labD60_1",
+   "parent": "fContactForce.PageControl1.tsD25",
+   "path": "fContactForce.PageControl1.tsD25.labD60_1",
+   "props": {
+    "Caption": "56mm Offset by heater mode",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 136,
+    "ParentFont": "False",
+    "Top": 276,
+    "Width": 170
+   },
+   "rect": {
+    "h": 16,
+    "w": 170,
+    "x": 136,
+    "y": 276
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTrackBar",
+   "events": {},
+   "kind": "LEAF",
+   "name": "tbD25_Index60mm",
+   "parent": "fContactForce.PageControl1.tsD25",
+   "path": "fContactForce.PageControl1.tsD25.tbD25_Index60mm",
+   "props": {
+    "Frequency": 1,
+    "Height": 35,
+    "Left": 96,
+    "Max": 150,
+    "Min": 80,
+    "Orientation": "trHorizontal",
+    "Position": 80,
+    "SelEnd": 0,
+    "SelStart": 0,
+    "TabOrder": 0,
+    "TickMarks": "tmBottomRight",
+    "TickStyle": "tsAuto",
+    "Top": 26,
+    "Width": 275
+   },
+   "rect": {
+    "h": 35,
+    "w": 275,
+    "x": 96,
+    "y": 26
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTrackBar",
+   "events": {},
+   "kind": "LEAF",
+   "name": "tbD25_Index30mm",
+   "parent": "fContactForce.PageControl1.tsD25",
+   "path": "fContactForce.PageControl1.tsD25.tbD25_Index30mm",
+   "props": {
+    "Frequency": 1,
+    "Height": 35,
+    "Left": 96,
+    "Max": 150,
+    "Min": 80,
+    "Orientation": "trHorizontal",
+    "Position": 80,
+    "SelEnd": 0,
+    "SelStart": 0,
+    "TabOrder": 4,
+    "TickMarks": "tmBottomRight",
+    "TickStyle": "tsAuto",
+    "Top": 166,
+    "Width": 275
+   },
+   "rect": {
+    "h": 35,
+    "w": 275,
+    "x": 96,
+    "y": 166
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTrackBar",
+   "events": {},
+   "kind": "LEAF",
+   "name": "tbD25_Index40mm",
+   "parent": "fContactForce.PageControl1.tsD25",
+   "path": "fContactForce.PageControl1.tsD25.tbD25_Index40mm",
+   "props": {
+    "Frequency": 1,
+    "Height": 35,
+    "Left": 96,
+    "Max": 150,
+    "Min": 80,
+    "Orientation": "trHorizontal",
+    "Position": 80,
+    "SelEnd": 0,
+    "SelStart": 0,
+    "TabOrder": 2,
+    "TickMarks": "tmBottomRight",
+    "TickStyle": "tsAuto",
+    "Top": 98,
+    "Width": 275
+   },
+   "rect": {
+    "h": 35,
+    "w": 275,
+    "x": 96,
+    "y": 98
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edD25_60mmMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edD25_60mm",
+   "parent": "fContactForce.PageControl1.tsD25",
+   "path": "fContactForce.PageControl1.tsD25.edD25_60mm",
+   "props": {
+    "Height": 21,
+    "Left": 322,
+    "OnMouseDown": "edD25_60mmMouseDown",
+    "TabOrder": 1,
+    "Top": 60,
+    "Width": 49
+   },
+   "rect": {
+    "h": 21,
+    "w": 49,
+    "x": 322,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edD25_60mmMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edD25_40mm",
+   "parent": "fContactForce.PageControl1.tsD25",
+   "path": "fContactForce.PageControl1.tsD25.edD25_40mm",
+   "props": {
+    "Height": 21,
+    "Left": 322,
+    "OnMouseDown": "edD25_60mmMouseDown",
+    "TabOrder": 3,
+    "Top": 132,
+    "Width": 49
+   },
+   "rect": {
+    "h": 21,
+    "w": 49,
+    "x": 322,
+    "y": 132
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edD25_60mmMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edD25_30mm",
+   "parent": "fContactForce.PageControl1.tsD25",
+   "path": "fContactForce.PageControl1.tsD25.edD25_30mm",
+   "props": {
+    "Height": 21,
+    "Left": 322,
+    "OnMouseDown": "edD25_60mmMouseDown",
+    "TabOrder": 5,
+    "Top": 204,
+    "Width": 49
+   },
+   "rect": {
+    "h": 21,
+    "w": 49,
+    "x": 322,
+    "y": 204
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTrackBar",
+   "events": {},
+   "kind": "LEAF",
+   "name": "tbD60_Index56mm",
+   "parent": "fContactForce.PageControl1.tsD25",
+   "path": "fContactForce.PageControl1.tsD25.tbD60_Index56mm",
+   "props": {
+    "Frequency": 1,
+    "Height": 35,
+    "Left": 96,
+    "Max": 150,
+    "Min": 80,
+    "Orientation": "trHorizontal",
+    "Position": 80,
+    "SelEnd": 0,
+    "SelStart": 0,
+    "TabOrder": 6,
+    "TickMarks": "tmBottomRight",
+    "TickStyle": "tsAuto",
+    "Top": 234,
+    "Width": 275
+   },
+   "rect": {
+    "h": 35,
+    "w": 275,
+    "x": 96,
+    "y": 234
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edD25_60mmMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edD60_56mm",
+   "parent": "fContactForce.PageControl1.tsD25",
+   "path": "fContactForce.PageControl1.tsD25.edD60_56mm",
+   "props": {
+    "Height": 21,
+    "Left": 322,
+    "OnMouseDown": "edD25_60mmMouseDown",
+    "TabOrder": 7,
+    "Top": 272,
+    "Width": 49
+   },
+   "rect": {
+    "h": 21,
+    "w": 49,
+    "x": 322,
+    "y": 272
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsNewMethod",
+   "parent": "fContactForce.PageControl1",
+   "path": "fContactForce.PageControl1.tsNewMethod",
+   "props": {
+    "Caption": "New Method",
+    "ImageIndex": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox1",
+   "parent": "fContactForce.PageControl1.tsNewMethod",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox1",
+   "props": {
+    "Align": "alTop",
+    "Caption": "30MM",
+    "Height": 117,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 854
+   },
+   "rect": {
+    "h": 117,
+    "w": 854,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lab30mm_10kg",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox1",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox1.lab30mm_10kg",
+   "props": {
+    "Caption": "16KG",
+    "Height": 13,
+    "Left": 24,
+    "Top": 28,
+    "Width": 27
+   },
+   "rect": {
+    "h": 13,
+    "w": 27,
+    "x": 24,
+    "y": 28
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lab30mm_60kg",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox1",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox1.lab30mm_60kg",
+   "props": {
+    "Caption": "64KG",
+    "Height": 13,
+    "Left": 24,
+    "Top": 76,
+    "Width": 27
+   },
+   "rect": {
+    "h": 13,
+    "w": 27,
+    "x": 24,
+    "y": 76
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lab30mm10kgNum",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox1",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox1.lab30mm10kgNum",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "0",
+    "Height": 13,
+    "Left": 736,
+    "Top": 24,
+    "Width": 41
+   },
+   "rect": {
+    "h": 13,
+    "w": 41,
+    "x": 736,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lab30mm60kgNum",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox1",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox1.lab30mm60kgNum",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "0",
+    "Height": 13,
+    "Left": 736,
+    "Top": 72,
+    "Width": 41
+   },
+   "rect": {
+    "h": 13,
+    "w": 41,
+    "x": 736,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTrackBar",
+   "events": {
+    "OnChange": "tb30mm_10kgChange"
+   },
+   "kind": "LEAF",
+   "name": "tb30mm_10kg",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox1",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox1.tb30mm_10kg",
+   "props": {
+    "Frequency": 1,
+    "Height": 45,
+    "Left": 60,
+    "Max": 4095,
+    "OnChange": "tb30mm_10kgChange",
+    "Orientation": "trHorizontal",
+    "Position": 0,
+    "SelEnd": 0,
+    "SelStart": 0,
+    "TabOrder": 0,
+    "TickMarks": "tmBottomRight",
+    "TickStyle": "tsAuto",
+    "Top": 20,
+    "Width": 677
+   },
+   "rect": {
+    "h": 45,
+    "w": 677,
+    "x": 60,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTrackBar",
+   "events": {
+    "OnChange": "tb30mm_10kgChange"
+   },
+   "kind": "LEAF",
+   "name": "tb30mm_60kg",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox1",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox1.tb30mm_60kg",
+   "props": {
+    "Frequency": 1,
+    "Height": 45,
+    "Left": 60,
+    "Max": 4095,
+    "OnChange": "tb30mm_10kgChange",
+    "Orientation": "trHorizontal",
+    "Position": 0,
+    "SelEnd": 0,
+    "SelStart": 0,
+    "TabOrder": 1,
+    "TickMarks": "tmBottomRight",
+    "TickStyle": "tsAuto",
+    "Top": 68,
+    "Width": 677
+   },
+   "rect": {
+    "h": 45,
+    "w": 677,
+    "x": 60,
+    "y": 68
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox2",
+   "parent": "fContactForce.PageControl1.tsNewMethod",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox2",
+   "props": {
+    "Align": "alTop",
+    "Caption": "40MM",
+    "Height": 117,
+    "Left": 0,
+    "TabOrder": 1,
+    "Top": 117,
+    "Width": 854
+   },
+   "rect": {
+    "h": 117,
+    "w": 854,
+    "x": 0,
+    "y": 117
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lab40mm_10kg",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox2",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox2.lab40mm_10kg",
+   "props": {
+    "Caption": "16KG",
+    "Height": 13,
+    "Left": 24,
+    "Top": 28,
+    "Width": 27
+   },
+   "rect": {
+    "h": 13,
+    "w": 27,
+    "x": 24,
+    "y": 28
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lab40mm_60kg",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox2",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox2.lab40mm_60kg",
+   "props": {
+    "Caption": "64KG",
+    "Height": 13,
+    "Left": 24,
+    "Top": 76,
+    "Width": 27
+   },
+   "rect": {
+    "h": 13,
+    "w": 27,
+    "x": 24,
+    "y": 76
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lab40mm60kgNum",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox2",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox2.lab40mm60kgNum",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "0",
+    "Height": 13,
+    "Left": 736,
+    "Top": 72,
+    "Width": 41
+   },
+   "rect": {
+    "h": 13,
+    "w": 41,
+    "x": 736,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lab40mm10kgNum",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox2",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox2.lab40mm10kgNum",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "0",
+    "Height": 13,
+    "Left": 736,
+    "Top": 24,
+    "Width": 41
+   },
+   "rect": {
+    "h": 13,
+    "w": 41,
+    "x": 736,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTrackBar",
+   "events": {
+    "OnChange": "tb30mm_10kgChange"
+   },
+   "kind": "LEAF",
+   "name": "tb40mm_10kg",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox2",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox2.tb40mm_10kg",
+   "props": {
+    "Frequency": 1,
+    "Height": 45,
+    "Left": 60,
+    "Max": 4095,
+    "OnChange": "tb30mm_10kgChange",
+    "Orientation": "trHorizontal",
+    "Position": 0,
+    "SelEnd": 0,
+    "SelStart": 0,
+    "TabOrder": 0,
+    "TickMarks": "tmBottomRight",
+    "TickStyle": "tsAuto",
+    "Top": 20,
+    "Width": 677
+   },
+   "rect": {
+    "h": 45,
+    "w": 677,
+    "x": 60,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTrackBar",
+   "events": {
+    "OnChange": "tb30mm_10kgChange"
+   },
+   "kind": "LEAF",
+   "name": "tb40mm_60kg",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox2",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox2.tb40mm_60kg",
+   "props": {
+    "Frequency": 1,
+    "Height": 45,
+    "Left": 60,
+    "Max": 4095,
+    "OnChange": "tb30mm_10kgChange",
+    "Orientation": "trHorizontal",
+    "Position": 0,
+    "SelEnd": 0,
+    "SelStart": 0,
+    "TabOrder": 1,
+    "TickMarks": "tmBottomRight",
+    "TickStyle": "tsAuto",
+    "Top": 68,
+    "Width": 677
+   },
+   "rect": {
+    "h": 45,
+    "w": 677,
+    "x": 60,
+    "y": 68
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox3",
+   "parent": "fContactForce.PageControl1.tsNewMethod",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox3",
+   "props": {
+    "Align": "alTop",
+    "Caption": "60MM",
+    "Height": 117,
+    "Left": 0,
+    "TabOrder": 2,
+    "Top": 234,
+    "Width": 854
+   },
+   "rect": {
+    "h": 117,
+    "w": 854,
+    "x": 0,
+    "y": 234
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lab60mm_10kg",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox3",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox3.lab60mm_10kg",
+   "props": {
+    "Caption": "16KG",
+    "Height": 13,
+    "Left": 24,
+    "Top": 28,
+    "Width": 27
+   },
+   "rect": {
+    "h": 13,
+    "w": 27,
+    "x": 24,
+    "y": 28
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lab60mm_60kg",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox3",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox3.lab60mm_60kg",
+   "props": {
+    "Caption": "64KG",
+    "Height": 13,
+    "Left": 24,
+    "Top": 76,
+    "Width": 27
+   },
+   "rect": {
+    "h": 13,
+    "w": 27,
+    "x": 24,
+    "y": 76
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lab60mm60kgNum",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox3",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox3.lab60mm60kgNum",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "0",
+    "Height": 13,
+    "Left": 736,
+    "Top": 72,
+    "Width": 41
+   },
+   "rect": {
+    "h": 13,
+    "w": 41,
+    "x": 736,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lab60mm10kgNum",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox3",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox3.lab60mm10kgNum",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "0",
+    "Height": 13,
+    "Left": 736,
+    "Top": 24,
+    "Width": 41
+   },
+   "rect": {
+    "h": 13,
+    "w": 41,
+    "x": 736,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTrackBar",
+   "events": {
+    "OnChange": "tb30mm_10kgChange"
+   },
+   "kind": "LEAF",
+   "name": "tb60mm_10kg",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox3",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox3.tb60mm_10kg",
+   "props": {
+    "Frequency": 1,
+    "Height": 45,
+    "Left": 60,
+    "Max": 4095,
+    "OnChange": "tb30mm_10kgChange",
+    "Orientation": "trHorizontal",
+    "Position": 0,
+    "SelEnd": 0,
+    "SelStart": 0,
+    "TabOrder": 0,
+    "TickMarks": "tmBottomRight",
+    "TickStyle": "tsAuto",
+    "Top": 20,
+    "Width": 677
+   },
+   "rect": {
+    "h": 45,
+    "w": 677,
+    "x": 60,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTrackBar",
+   "events": {
+    "OnChange": "tb30mm_10kgChange"
+   },
+   "kind": "LEAF",
+   "name": "tb60mm_60kg",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox3",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox3.tb60mm_60kg",
+   "props": {
+    "Frequency": 1,
+    "Height": 45,
+    "Left": 60,
+    "Max": 4095,
+    "OnChange": "tb30mm_10kgChange",
+    "Orientation": "trHorizontal",
+    "Position": 0,
+    "SelEnd": 0,
+    "SelStart": 0,
+    "TabOrder": 1,
+    "TickMarks": "tmBottomRight",
+    "TickStyle": "tsAuto",
+    "Top": 68,
+    "Width": 677
+   },
+   "rect": {
+    "h": 45,
+    "w": 677,
+    "x": 60,
+    "y": 68
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox4",
+   "parent": "fContactForce.PageControl1.tsNewMethod",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox4",
+   "props": {
+    "Align": "alTop",
+    "Caption": "56MM",
+    "Height": 117,
+    "Left": 0,
+    "TabOrder": 3,
+    "Top": 351,
+    "Width": 854
+   },
+   "rect": {
+    "h": 117,
+    "w": 854,
+    "x": 0,
+    "y": 351
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lab56mm_10kg",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox4",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox4.lab56mm_10kg",
+   "props": {
+    "Caption": "16KG",
+    "Height": 13,
+    "Left": 24,
+    "Top": 28,
+    "Width": 27
+   },
+   "rect": {
+    "h": 13,
+    "w": 27,
+    "x": 24,
+    "y": 28
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lab56mm_60kg",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox4",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox4.lab56mm_60kg",
+   "props": {
+    "Caption": "64KG",
+    "Height": 13,
+    "Left": 24,
+    "Top": 76,
+    "Width": 27
+   },
+   "rect": {
+    "h": 13,
+    "w": 27,
+    "x": 24,
+    "y": 76
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lab56mm60kgNum",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox4",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox4.lab56mm60kgNum",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "0",
+    "Height": 13,
+    "Left": 736,
+    "Top": 72,
+    "Width": 41
+   },
+   "rect": {
+    "h": 13,
+    "w": 41,
+    "x": 736,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lab56mm10kgNum",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox4",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox4.lab56mm10kgNum",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "0",
+    "Height": 13,
+    "Left": 736,
+    "Top": 24,
+    "Width": 41
+   },
+   "rect": {
+    "h": 13,
+    "w": 41,
+    "x": 736,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTrackBar",
+   "events": {
+    "OnChange": "tb30mm_10kgChange"
+   },
+   "kind": "LEAF",
+   "name": "tb56mm_10kg",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox4",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox4.tb56mm_10kg",
+   "props": {
+    "Frequency": 1,
+    "Height": 45,
+    "Left": 60,
+    "Max": 4095,
+    "OnChange": "tb30mm_10kgChange",
+    "Orientation": "trHorizontal",
+    "Position": 0,
+    "SelEnd": 0,
+    "SelStart": 0,
+    "TabOrder": 0,
+    "TickMarks": "tmBottomRight",
+    "TickStyle": "tsAuto",
+    "Top": 20,
+    "Width": 677
+   },
+   "rect": {
+    "h": 45,
+    "w": 677,
+    "x": 60,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTrackBar",
+   "events": {
+    "OnChange": "tb30mm_10kgChange"
+   },
+   "kind": "LEAF",
+   "name": "tb56mm_60kg",
+   "parent": "fContactForce.PageControl1.tsNewMethod.GroupBox4",
+   "path": "fContactForce.PageControl1.tsNewMethod.GroupBox4.tb56mm_60kg",
+   "props": {
+    "Frequency": 1,
+    "Height": 45,
+    "Left": 60,
+    "Max": 4095,
+    "OnChange": "tb30mm_10kgChange",
+    "Orientation": "trHorizontal",
+    "Position": 0,
+    "SelEnd": 0,
+    "SelStart": 0,
+    "TabOrder": 1,
+    "TickMarks": "tmBottomRight",
+    "TickStyle": "tsAuto",
+    "Top": 68,
+    "Width": 677
+   },
+   "rect": {
+    "h": 45,
+    "w": 677,
+    "x": 60,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsEPCalibration",
+   "parent": "fContactForce.PageControl1",
+   "path": "fContactForce.PageControl1.tsEPCalibration",
+   "props": {
+    "Caption": "EP Calibratiion",
+    "ImageIndex": 4
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox5",
+   "parent": "fContactForce.PageControl1.tsEPCalibration",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox5",
+   "props": {
+    "Caption": "EP Setting",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 140,
+    "Left": 132,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 4,
+    "Width": 540
+   },
+   "rect": {
+    "h": 140,
+    "w": 540,
+    "x": 132,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbEPSetting",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox5",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPSetting",
+   "props": {
+    "Caption": "For Output",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 91,
+    "Left": 40,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 30,
+    "Width": 225
+   },
+   "rect": {
+    "h": 91,
+    "w": 225,
+    "x": 40,
+    "y": 30
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label11",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPSetting",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPSetting.Label11",
+   "props": {
+    "Caption": "Max KPA: ",
+    "Height": 20,
+    "Left": 8,
+    "Top": 24,
+    "Width": 72
+   },
+   "rect": {
+    "h": 20,
+    "w": 72,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label13",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPSetting",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPSetting.Label13",
+   "props": {
+    "Caption": "Min MPA : ",
+    "Height": 20,
+    "Left": 8,
+    "Top": 56,
+    "Width": 75
+   },
+   "rect": {
+    "h": 20,
+    "w": 75,
+    "x": 8,
+    "y": 56
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edMaxKpaClick"
+   },
+   "kind": "LEAF",
+   "name": "edMaxKpa",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPSetting",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPSetting.edMaxKpa",
+   "props": {
+    "Height": 28,
+    "Left": 88,
+    "OnClick": "edMaxKpaClick",
+    "TabOrder": 0,
+    "Text": "499",
+    "Top": 20,
+    "Width": 121
+   },
+   "rect": {
+    "h": 28,
+    "w": 121,
+    "x": 88,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edMinMpaClick"
+   },
+   "kind": "LEAF",
+   "name": "edMinMpa",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPSetting",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPSetting.edMinMpa",
+   "props": {
+    "Height": 28,
+    "Left": 88,
+    "OnClick": "edMinMpaClick",
+    "TabOrder": 1,
+    "Text": "0.001",
+    "Top": 52,
+    "Width": 121
+   },
+   "rect": {
+    "h": 28,
+    "w": 121,
+    "x": 88,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbEPReadSetting",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox5",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPReadSetting",
+   "props": {
+    "Caption": "For Feedback",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 91,
+    "Left": 270,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 30,
+    "Width": 225
+   },
+   "rect": {
+    "h": 91,
+    "w": 225,
+    "x": 270,
+    "y": 30
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label12",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPReadSetting",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPReadSetting.Label12",
+   "props": {
+    "Caption": "Max VDC:",
+    "Height": 20,
+    "Left": 8,
+    "Top": 24,
+    "Width": 71
+   },
+   "rect": {
+    "h": 20,
+    "w": 71,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPReadSetting",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPReadSetting.Label1",
+   "props": {
+    "Caption": "Min VDC : ",
+    "Height": 20,
+    "Left": 8,
+    "Top": 56,
+    "Width": 75
+   },
+   "rect": {
+    "h": 20,
+    "w": 75,
+    "x": 8,
+    "y": 56
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edMaxMpaFBClick"
+   },
+   "kind": "LEAF",
+   "name": "edMaxMpaFB",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPReadSetting",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPReadSetting.edMaxMpaFB",
+   "props": {
+    "Height": 28,
+    "Left": 88,
+    "OnClick": "edMaxMpaFBClick",
+    "TabOrder": 0,
+    "Text": "5.013",
+    "Top": 20,
+    "Width": 121
+   },
+   "rect": {
+    "h": 28,
+    "w": 121,
+    "x": 88,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edMaxMpaFBClick"
+   },
+   "kind": "LEAF",
+   "name": "edtMinMpaFB",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPReadSetting",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox5.gbEPReadSetting.edtMinMpaFB",
+   "props": {
+    "Height": 28,
+    "Left": 88,
+    "OnClick": "edMaxMpaFBClick",
+    "TabOrder": 1,
+    "Text": "0.968",
+    "Top": 52,
+    "Width": 121
+   },
+   "rect": {
+    "h": 28,
+    "w": 121,
+    "x": 88,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpEPForDieForce",
+   "parent": "fContactForce.PageControl1.tsEPCalibration",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce",
+   "props": {
+    "Caption": "EP Setting For Die Force",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 140,
+    "Left": 132,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 152,
+    "Width": 540
+   },
+   "rect": {
+    "h": 140,
+    "w": 540,
+    "x": 132,
+    "y": 152
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox6",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox6",
+   "props": {
+    "Caption": "For Output",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 91,
+    "Left": 40,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 30,
+    "Width": 225
+   },
+   "rect": {
+    "h": 91,
+    "w": 225,
+    "x": 40,
+    "y": 30
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label2",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox6",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox6.Label2",
+   "props": {
+    "Caption": "Max KPA: ",
+    "Height": 20,
+    "Left": 8,
+    "Top": 24,
+    "Width": 72
+   },
+   "rect": {
+    "h": 20,
+    "w": 72,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label3",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox6",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox6.Label3",
+   "props": {
+    "Caption": "Min MPA : ",
+    "Height": 20,
+    "Left": 8,
+    "Top": 56,
+    "Width": 75
+   },
+   "rect": {
+    "h": 20,
+    "w": 75,
+    "x": 8,
+    "y": 56
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edMaxKpaClick"
+   },
+   "kind": "LEAF",
+   "name": "edMaxKpaDual",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox6",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox6.edMaxKpaDual",
+   "props": {
+    "Height": 28,
+    "Left": 88,
+    "OnClick": "edMaxKpaClick",
+    "TabOrder": 0,
+    "Text": "499",
+    "Top": 20,
+    "Width": 121
+   },
+   "rect": {
+    "h": 28,
+    "w": 121,
+    "x": 88,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edMinMpaClick"
+   },
+   "kind": "LEAF",
+   "name": "edMinMpaDual",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox6",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox6.edMinMpaDual",
+   "props": {
+    "Height": 28,
+    "ImeMode": "imClose",
+    "Left": 88,
+    "OnClick": "edMinMpaClick",
+    "TabOrder": 1,
+    "Text": "0.001",
+    "Top": 52,
+    "Width": 121
+   },
+   "rect": {
+    "h": 28,
+    "w": 121,
+    "x": 88,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox7",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox7",
+   "props": {
+    "Caption": "For Feedback",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 91,
+    "Left": 270,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 30,
+    "Width": 225
+   },
+   "rect": {
+    "h": 91,
+    "w": 225,
+    "x": 270,
+    "y": 30
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label4",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox7",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox7.Label4",
+   "props": {
+    "Caption": "Max VDC:",
+    "Height": 20,
+    "Left": 8,
+    "Top": 24,
+    "Width": 71
+   },
+   "rect": {
+    "h": 20,
+    "w": 71,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label5",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox7",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox7.Label5",
+   "props": {
+    "Caption": "Min VDC : ",
+    "Height": 20,
+    "Left": 8,
+    "Top": 56,
+    "Width": 75
+   },
+   "rect": {
+    "h": 20,
+    "w": 75,
+    "x": 8,
+    "y": 56
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edMaxMpaFBClick"
+   },
+   "kind": "LEAF",
+   "name": "edMaxMpaFBDual",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox7",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox7.edMaxMpaFBDual",
+   "props": {
+    "Height": 28,
+    "Left": 88,
+    "OnClick": "edMaxMpaFBClick",
+    "TabOrder": 0,
+    "Text": "5.013",
+    "Top": 20,
+    "Width": 121
+   },
+   "rect": {
+    "h": 28,
+    "w": 121,
+    "x": 88,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edMaxMpaFBClick"
+   },
+   "kind": "LEAF",
+   "name": "edtMinMpaFBDual",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox7",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForDieForce.GroupBox7.edtMinMpaFBDual",
+   "props": {
+    "Height": 28,
+    "Left": 88,
+    "OnClick": "edMaxMpaFBClick",
+    "TabOrder": 1,
+    "Text": "0.968",
+    "Top": 52,
+    "Width": 121
+   },
+   "rect": {
+    "h": 28,
+    "w": 121,
+    "x": 88,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpEPForArm2",
+   "parent": "fContactForce.PageControl1.tsEPCalibration",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2",
+   "props": {
+    "Caption": "EP Setting For Arm2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 140,
+    "Left": 128,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 300,
+    "Width": 540
+   },
+   "rect": {
+    "h": 140,
+    "w": 540,
+    "x": 128,
+    "y": 300
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbEPSetting_1032",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPSetting_1032",
+   "props": {
+    "Caption": "For Output",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 91,
+    "Left": 40,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 30,
+    "Width": 225
+   },
+   "rect": {
+    "h": 91,
+    "w": 225,
+    "x": 40,
+    "y": 30
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label6",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPSetting_1032",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPSetting_1032.Label6",
+   "props": {
+    "Caption": "Max KPA: ",
+    "Height": 20,
+    "Left": 8,
+    "Top": 24,
+    "Width": 72
+   },
+   "rect": {
+    "h": 20,
+    "w": 72,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label7",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPSetting_1032",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPSetting_1032.Label7",
+   "props": {
+    "Caption": "Min MPA : ",
+    "Height": 20,
+    "Left": 8,
+    "Top": 56,
+    "Width": 75
+   },
+   "rect": {
+    "h": 20,
+    "w": 75,
+    "x": 8,
+    "y": 56
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edMaxKpaClick"
+   },
+   "kind": "LEAF",
+   "name": "edMaxKpa_1032",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPSetting_1032",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPSetting_1032.edMaxKpa_1032",
+   "props": {
+    "Height": 28,
+    "Left": 88,
+    "OnClick": "edMaxKpaClick",
+    "TabOrder": 0,
+    "Text": "499",
+    "Top": 20,
+    "Width": 121
+   },
+   "rect": {
+    "h": 28,
+    "w": 121,
+    "x": 88,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edMinMpaClick"
+   },
+   "kind": "LEAF",
+   "name": "edMinMpa_1032",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPSetting_1032",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPSetting_1032.edMinMpa_1032",
+   "props": {
+    "Height": 28,
+    "Left": 88,
+    "OnClick": "edMinMpaClick",
+    "TabOrder": 1,
+    "Text": "0.001",
+    "Top": 52,
+    "Width": 121
+   },
+   "rect": {
+    "h": 28,
+    "w": 121,
+    "x": 88,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbEPReadSetting_1032",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPReadSetting_1032",
+   "props": {
+    "Caption": "For Feedback",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 91,
+    "Left": 270,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 30,
+    "Width": 225
+   },
+   "rect": {
+    "h": 91,
+    "w": 225,
+    "x": 270,
+    "y": 30
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label8",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPReadSetting_1032",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPReadSetting_1032.Label8",
+   "props": {
+    "Caption": "Max VDC:",
+    "Height": 20,
+    "Left": 8,
+    "Top": 24,
+    "Width": 71
+   },
+   "rect": {
+    "h": 20,
+    "w": 71,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label9",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPReadSetting_1032",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPReadSetting_1032.Label9",
+   "props": {
+    "Caption": "Min VDC : ",
+    "Height": 20,
+    "Left": 8,
+    "Top": 56,
+    "Width": 75
+   },
+   "rect": {
+    "h": 20,
+    "w": 75,
+    "x": 8,
+    "y": 56
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edMaxMpaFBClick"
+   },
+   "kind": "LEAF",
+   "name": "edMaxMpaFB_1032",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPReadSetting_1032",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPReadSetting_1032.edMaxMpaFB_1032",
+   "props": {
+    "Height": 28,
+    "Left": 88,
+    "OnClick": "edMaxMpaFBClick",
+    "TabOrder": 0,
+    "Text": "5.013",
+    "Top": 20,
+    "Width": 121
+   },
+   "rect": {
+    "h": 28,
+    "w": 121,
+    "x": 88,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edMaxMpaFBClick"
+   },
+   "kind": "LEAF",
+   "name": "edtMinMpaFB_1032",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPReadSetting_1032",
+   "path": "fContactForce.PageControl1.tsEPCalibration.grpEPForArm2.gbEPReadSetting_1032.edtMinMpaFB_1032",
+   "props": {
+    "Height": 28,
+    "Left": 88,
+    "OnClick": "edMaxMpaFBClick",
+    "TabOrder": 1,
+    "Text": "0.968",
+    "Top": 52,
+    "Width": 121
+   },
+   "rect": {
+    "h": 28,
+    "w": 121,
+    "x": 88,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox8",
+   "parent": "fContactForce.PageControl1.tsEPCalibration",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox8",
+   "props": {
+    "Caption": "Calculator",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 91,
+    "Left": 127,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 450,
+    "Width": 546
+   },
+   "rect": {
+    "h": 91,
+    "w": 546,
+    "x": 127,
+    "y": 450
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label10",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox8",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox8.Label10",
+   "props": {
+    "Caption": "4 mA(0MPa)",
+    "Height": 20,
+    "Left": 31,
+    "Top": 20,
+    "Width": 88
+   },
+   "rect": {
+    "h": 20,
+    "w": 88,
+    "x": 31,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label14",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox8",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox8.Label14",
+   "props": {
+    "Caption": "12.889 mA(0.5MPa)",
+    "Height": 20,
+    "Left": 181,
+    "Top": 20,
+    "Width": 141
+   },
+   "rect": {
+    "h": 20,
+    "w": 141,
+    "x": 181,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label15",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox8",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox8.Label15",
+   "props": {
+    "Caption": "20 mA (0.9MPa)",
+    "Height": 20,
+    "Left": 419,
+    "Top": 20,
+    "Width": 114
+   },
+   "rect": {
+    "h": 20,
+    "w": 114,
+    "x": 419,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label16",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox8",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox8.Label16",
+   "props": {
+    "Caption": "V",
+    "Height": 20,
+    "Left": 128,
+    "Top": 46,
+    "Width": 11
+   },
+   "rect": {
+    "h": 20,
+    "w": 11,
+    "x": 128,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label17",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox8",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox8.Label17",
+   "props": {
+    "Caption": "V",
+    "Height": 20,
+    "Left": 280,
+    "Top": 46,
+    "Width": 11
+   },
+   "rect": {
+    "h": 20,
+    "w": 11,
+    "x": 280,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label18",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox8",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox8.Label18",
+   "props": {
+    "Caption": "V",
+    "Height": 20,
+    "Left": 520,
+    "Top": 46,
+    "Width": 11
+   },
+   "rect": {
+    "h": 20,
+    "w": 11,
+    "x": 520,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtMinVol",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox8",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox8.edtMinVol",
+   "props": {
+    "Height": 28,
+    "Left": 32,
+    "TabOrder": 1,
+    "Top": 46,
+    "Width": 94
+   },
+   "rect": {
+    "h": 28,
+    "w": 94,
+    "x": 32,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtMaxVol",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox8",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox8.edtMaxVol",
+   "props": {
+    "Enabled": "False",
+    "Height": 28,
+    "Left": 420,
+    "TabOrder": 3,
+    "Top": 46,
+    "Width": 94
+   },
+   "rect": {
+    "h": 28,
+    "w": 94,
+    "x": 420,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtMidVol",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox8",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox8.edtMidVol",
+   "props": {
+    "Height": 28,
+    "Left": 176,
+    "TabOrder": 2,
+    "Top": 46,
+    "Width": 94
+   },
+   "rect": {
+    "h": 28,
+    "w": 94,
+    "x": 176,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button1Click"
+   },
+   "kind": "LEAF",
+   "name": "Button1",
+   "parent": "fContactForce.PageControl1.tsEPCalibration.GroupBox8",
+   "path": "fContactForce.PageControl1.tsEPCalibration.GroupBox8.Button1",
+   "props": {
+    "Caption": "Convert",
+    "Height": 25,
+    "Left": 327,
+    "OnClick": "Button1Click",
+    "TabOrder": 0,
+    "Top": 42,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 327,
+    "y": 42
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet1",
+   "parent": "fContactForce.PageControl1",
+   "path": "fContactForce.PageControl1.TabSheet1",
+   "props": {
+    "Caption": "EP load rate one by one",
+    "ImageIndex": 4
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TScrollBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "scrlbxDynamicKitInd",
+   "parent": "fContactForce.PageControl1.TabSheet1",
+   "path": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd",
+   "props": {
+    "Align": "alClient",
+    "Height": 612,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 846
+   },
+   "rect": {
+    "h": 612,
+    "w": 846,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbLoadRateInd",
+   "parent": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd",
+   "path": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd.gbLoadRateInd",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Load rate of xx mm",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 61,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Visible": "False",
+    "Width": 842
+   },
+   "rect": {
+    "h": 61,
+    "w": 842,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblDiameterInd",
+   "parent": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd.gbLoadRateInd",
+   "path": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd.gbLoadRateInd.lblDiameterInd",
+   "props": {
+    "Caption": "60mm : ",
+    "Height": 20,
+    "Left": 6,
+    "Top": 26,
+    "Width": 56
+   },
+   "rect": {
+    "h": 20,
+    "w": 56,
+    "x": 6,
+    "y": 26
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblContactOffsetInd",
+   "parent": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd.gbLoadRateInd",
+   "path": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd.gbLoadRateInd.lblContactOffsetInd",
+   "props": {
+    "Caption": "60mm contact offset",
+    "Height": 20,
+    "Left": 507,
+    "Top": 26,
+    "Width": 146
+   },
+   "rect": {
+    "h": 20,
+    "w": 146,
+    "x": 507,
+    "y": 26
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTrackBar",
+   "events": {},
+   "kind": "LEAF",
+   "name": "trckbrDiameterInd",
+   "parent": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd.gbLoadRateInd",
+   "path": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd.gbLoadRateInd.trckbrDiameterInd",
+   "props": {
+    "Frequency": 1,
+    "Height": 35,
+    "Left": 108,
+    "Max": 150,
+    "Min": 80,
+    "Orientation": "trHorizontal",
+    "Position": 80,
+    "SelEnd": 0,
+    "SelStart": 0,
+    "TabOrder": 1,
+    "TickMarks": "tmBottomRight",
+    "TickStyle": "tsAuto",
+    "Top": 24,
+    "Width": 275
+   },
+   "rect": {
+    "h": 35,
+    "w": 275,
+    "x": 108,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtLoadRateIndClick"
+   },
+   "kind": "LEAF",
+   "name": "edtLoadRateInd",
+   "parent": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd.gbLoadRateInd",
+   "path": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd.gbLoadRateInd.edtLoadRateInd",
+   "props": {
+    "Height": 28,
+    "Left": 380,
+    "OnClick": "edtLoadRateIndClick",
+    "TabOrder": 2,
+    "Top": 24,
+    "Width": 65
+   },
+   "rect": {
+    "h": 28,
+    "w": 65,
+    "x": 380,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtContactOffsetInd",
+   "parent": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd.gbLoadRateInd",
+   "path": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd.gbLoadRateInd.edtContactOffsetInd",
+   "props": {
+    "Height": 28,
+    "Left": 676,
+    "OnClick": "edtContactOffsetClick",
+    "TabOrder": 0,
+    "Top": 23,
+    "Width": 80
+   },
+   "rect": {
+    "h": 28,
+    "w": 80,
+    "x": 676,
+    "y": 23
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpAddNewKitInd",
+   "parent": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd",
+   "path": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd.grpAddNewKitInd",
+   "props": {
+    "Align": "alBottom",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 168,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 440,
+    "Width": 842
+   },
+   "rect": {
+    "h": 168,
+    "w": 842,
+    "x": 0,
+    "y": 440
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtCurrentTypeInd",
+   "parent": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd.grpAddNewKitInd",
+   "path": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd.grpAddNewKitInd.edtCurrentTypeInd",
+   "props": {
+    "Enabled": "False",
+    "Height": 28,
+    "Left": 32,
+    "TabOrder": 0,
+    "Text": "30,40,60,56",
+    "Top": 68,
+    "Visible": "False",
+    "Width": 169
+   },
+   "rect": {
+    "h": 28,
+    "w": 169,
+    "x": 32,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtVisibleInd",
+   "parent": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd.grpAddNewKitInd",
+   "path": "fContactForce.PageControl1.TabSheet1.scrlbxDynamicKitInd.grpAddNewKitInd.edtVisibleInd",
+   "props": {
+    "Enabled": "False",
+    "Height": 28,
+    "Left": 32,
+    "TabOrder": 1,
+    "Text": "1,1,1,0",
+    "Top": 104,
+    "Visible": "False",
+    "Width": 169
+   },
+   "rect": {
+    "h": 28,
+    "w": 169,
+    "x": 32,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsDieForceDynamicKit",
+   "parent": "fContactForce.PageControl1",
+   "path": "fContactForce.PageControl1.tsDieForceDynamicKit",
+   "props": {
+    "Caption": "Die Force Dynamic Kit",
+    "ImageIndex": 4
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TScrollBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "scrlbxDieForceDynamicKit",
+   "parent": "fContactForce.PageControl1.tsDieForceDynamicKit",
+   "path": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit",
+   "props": {
+    "Align": "alClient",
+    "Height": 619,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 854
+   },
+   "rect": {
+    "h": 619,
+    "w": 854,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbDieForceLoadRate",
+   "parent": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit",
+   "path": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit.gbDieForceLoadRate",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Load rate of xx mm",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 65,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Visible": "False",
+    "Width": 850
+   },
+   "rect": {
+    "h": 65,
+    "w": 850,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblDieForceDiameter",
+   "parent": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit.gbDieForceLoadRate",
+   "path": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit.gbDieForceLoadRate.lblDieForceDiameter",
+   "props": {
+    "Caption": "60mm : ",
+    "Height": 20,
+    "Left": 6,
+    "Top": 31,
+    "Width": 56
+   },
+   "rect": {
+    "h": 20,
+    "w": 56,
+    "x": 6,
+    "y": 31
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblDieForceContactOffset",
+   "parent": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit.gbDieForceLoadRate",
+   "path": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit.gbDieForceLoadRate.lblDieForceContactOffset",
+   "props": {
+    "Caption": "60mm contact offset",
+    "Height": 20,
+    "Left": 464,
+    "Top": 29,
+    "Width": 146
+   },
+   "rect": {
+    "h": 20,
+    "w": 146,
+    "x": 464,
+    "y": 29
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTrackBar",
+   "events": {},
+   "kind": "LEAF",
+   "name": "trckbrDieForceDiameter",
+   "parent": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit.gbDieForceLoadRate",
+   "path": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit.gbDieForceLoadRate.trckbrDieForceDiameter",
+   "props": {
+    "Frequency": 1,
+    "Height": 35,
+    "Left": 108,
+    "Max": 150,
+    "Min": 80,
+    "Orientation": "trHorizontal",
+    "Position": 80,
+    "SelEnd": 0,
+    "SelStart": 0,
+    "TabOrder": 1,
+    "TickMarks": "tmBottomRight",
+    "TickStyle": "tsAuto",
+    "Top": 26,
+    "Width": 275
+   },
+   "rect": {
+    "h": 35,
+    "w": 275,
+    "x": 108,
+    "y": 26
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtDieForceLoadRate",
+   "parent": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit.gbDieForceLoadRate",
+   "path": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit.gbDieForceLoadRate.edtDieForceLoadRate",
+   "props": {
+    "Height": 28,
+    "Left": 380,
+    "TabOrder": 2,
+    "Top": 26,
+    "Width": 65
+   },
+   "rect": {
+    "h": 28,
+    "w": 65,
+    "x": 380,
+    "y": 26
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtDieForceContactOffset",
+   "parent": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit.gbDieForceLoadRate",
+   "path": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit.gbDieForceLoadRate.edtDieForceContactOffset",
+   "props": {
+    "Height": 28,
+    "Left": 677,
+    "OnClick": "edtContactOffsetClick",
+    "TabOrder": 0,
+    "Top": 23,
+    "Width": 80
+   },
+   "rect": {
+    "h": 28,
+    "w": 80,
+    "x": 677,
+    "y": 23
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpDieForceAddNewKit",
+   "parent": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit",
+   "path": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit.grpDieForceAddNewKit",
+   "props": {
+    "Align": "alBottom",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 168,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 447,
+    "Width": 850
+   },
+   "rect": {
+    "h": 168,
+    "w": 850,
+    "x": 0,
+    "y": 447
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtDieForceCurrentType",
+   "parent": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit.grpDieForceAddNewKit",
+   "path": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit.grpDieForceAddNewKit.edtDieForceCurrentType",
+   "props": {
+    "Enabled": "False",
+    "Height": 28,
+    "Left": 32,
+    "TabOrder": 0,
+    "Text": "30,40,60,56",
+    "Top": 68,
+    "Visible": "False",
+    "Width": 169
+   },
+   "rect": {
+    "h": 28,
+    "w": 169,
+    "x": 32,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtDieForceVisible",
+   "parent": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit.grpDieForceAddNewKit",
+   "path": "fContactForce.PageControl1.tsDieForceDynamicKit.scrlbxDieForceDynamicKit.grpDieForceAddNewKit.edtDieForceVisible",
+   "props": {
+    "Enabled": "False",
+    "Height": 28,
+    "Left": 32,
+    "TabOrder": 1,
+    "Text": "1,1,1,0",
+    "Top": 104,
+    "Visible": "False",
+    "Width": 169
+   },
+   "rect": {
+    "h": 28,
+    "w": 169,
+    "x": 32,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsContactHighOffset",
+   "parent": "fContactForce.PageControl1",
+   "path": "fContactForce.PageControl1.tsContactHighOffset",
+   "props": {
+    "Caption": "ContactHighOffset",
+    "ImageIndex": 5
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpATCTempOffset",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "props": {
+    "Align": "alTop",
+    "Caption": "ContactHighOffset",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 145,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 854
+   },
+   "rect": {
+    "h": 145,
+    "w": 854,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbArm1",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.lbArm1",
+   "props": {
+    "Caption": "ARM 1 :",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 6,
+    "ParentFont": "False",
+    "Top": 51,
+    "Width": 46
+   },
+   "rect": {
+    "h": 16,
+    "w": 46,
+    "x": 6,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lb4",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.lb4",
+   "props": {
+    "Caption": " 120    180    240    300    360    420    480    520    560    600    640   680    720     760     800",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 52,
+    "ParentFont": "False",
+    "Top": 21,
+    "Width": 740
+   },
+   "rect": {
+    "h": 24,
+    "w": 740,
+    "x": 52,
+    "y": 21
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbArm2",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.lbArm2",
+   "props": {
+    "Caption": "ARM 2 :",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 6,
+    "ParentFont": "False",
+    "Top": 91,
+    "Width": 46
+   },
+   "rect": {
+    "h": 16,
+    "w": 46,
+    "x": 6,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm1Offset_01",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_01",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 55,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "0",
+    "Top": 51,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 55,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm1Offset_02",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_02",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 105,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "0",
+    "Top": 51,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 105,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm1Offset_03",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_03",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 155,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "0",
+    "Top": 51,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 155,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm1Offset_04",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_04",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 205,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Text": "0",
+    "Top": 51,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 205,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm1Offset_05",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_05",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 255,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Text": "0",
+    "Top": 51,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 255,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm1Offset_06",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_06",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 305,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Text": "0",
+    "Top": 51,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 305,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm1Offset_07",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_07",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 355,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Text": "0",
+    "Top": 51,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 355,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm2Offset_01",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_01",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 55,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 15,
+    "Text": "0",
+    "Top": 91,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 55,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm2Offset_02",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_02",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 105,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 16,
+    "Text": "0",
+    "Top": 91,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 105,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm2Offset_03",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_03",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 155,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 17,
+    "Text": "0",
+    "Top": 91,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 155,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm2Offset_04",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_04",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 205,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 18,
+    "Text": "0",
+    "Top": 91,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 205,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm2Offset_05",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_05",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 255,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 19,
+    "Text": "0",
+    "Top": 91,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 255,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm2Offset_06",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_06",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 305,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 20,
+    "Text": "0",
+    "Top": 91,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 305,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm2Offset_07",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_07",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 355,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 21,
+    "Text": "0",
+    "Top": 91,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 355,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm1Offset_08",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_08",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 405,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Text": "0",
+    "Top": 51,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 405,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm1Offset_09",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_09",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 455,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Text": "0",
+    "Top": 51,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 455,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm1Offset_10",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_10",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 505,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 9,
+    "Text": "0",
+    "Top": 51,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 505,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm1Offset_11",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_11",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 555,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 10,
+    "Text": "0",
+    "Top": 51,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 555,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm2Offset_08",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_08",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 405,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 22,
+    "Text": "0",
+    "Top": 91,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 405,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm2Offset_09",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_09",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 455,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 23,
+    "Text": "0",
+    "Top": 91,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 455,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm2Offset_10",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_10",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 505,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 24,
+    "Text": "0",
+    "Top": 91,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 505,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm2Offset_11",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_11",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 555,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 25,
+    "Text": "0",
+    "Top": 91,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 555,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm1Offset_12",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_12",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 605,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 11,
+    "Text": "0",
+    "Top": 51,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 605,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm1Offset_13",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_13",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 655,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 12,
+    "Text": "0",
+    "Top": 51,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 655,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm1Offset_14",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_14",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 705,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 13,
+    "Text": "0",
+    "Top": 51,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 705,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm2Offset_12",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_12",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 605,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 26,
+    "Text": "0",
+    "Top": 91,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 605,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm2Offset_13",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_13",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 655,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 27,
+    "Text": "0",
+    "Top": 91,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 655,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm2Offset_14",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_14",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 705,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 28,
+    "Text": "0",
+    "Top": 91,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 705,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm1Offset_15",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm1Offset_15",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 755,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 14,
+    "Text": "0",
+    "Top": 51,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 755,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtArm2Offset_15",
+   "parent": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset",
+   "path": "fContactForce.PageControl1.tsContactHighOffset.grpATCTempOffset.edtArm2Offset_15",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 755,
+    "MaxLength": 20,
+    "OnClick": "edtContactOffsetClick",
+    "ParentFont": "False",
+    "TabOrder": 29,
+    "Text": "0",
+    "Top": 91,
+    "Width": 40
+   },
+   "rect": {
+    "h": 24,
+    "w": 40,
+    "x": 755,
+    "y": 91
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsDieForceOneByOneKit",
+   "parent": "fContactForce.PageControl1",
+   "path": "fContactForce.PageControl1.tsDieForceOneByOneKit",
+   "props": {
+    "Caption": "tsDieForceOneByOneKit",
+    "ImageIndex": 7
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TScrollBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "scrlbxDieForceOneByOneDynamicKit",
+   "parent": "fContactForce.PageControl1.tsDieForceOneByOneKit",
+   "path": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit",
+   "props": {
+    "Align": "alClient",
+    "Height": 611,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 846
+   },
+   "rect": {
+    "h": 611,
+    "w": 846,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbDieForceOneByOneLoadRate",
+   "parent": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit",
+   "path": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit.gbDieForceOneByOneLoadRate",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Load rate of xx mm",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 61,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Visible": "False",
+    "Width": 842
+   },
+   "rect": {
+    "h": 61,
+    "w": 842,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblDieForceOneByOneDiameter",
+   "parent": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit.gbDieForceOneByOneLoadRate",
+   "path": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit.gbDieForceOneByOneLoadRate.lblDieForceOneByOneDiameter",
+   "props": {
+    "Caption": "60mm : ",
+    "Height": 20,
+    "Left": 6,
+    "Top": 26,
+    "Width": 56
+   },
+   "rect": {
+    "h": 20,
+    "w": 56,
+    "x": 6,
+    "y": 26
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblDieForceOneByOneContactOffset",
+   "parent": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit.gbDieForceOneByOneLoadRate",
+   "path": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit.gbDieForceOneByOneLoadRate.lblDieForceOneByOneContactOffset",
+   "props": {
+    "Caption": "60mm contact offset",
+    "Height": 20,
+    "Left": 515,
+    "Top": 26,
+    "Width": 146
+   },
+   "rect": {
+    "h": 20,
+    "w": 146,
+    "x": 515,
+    "y": 26
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTrackBar",
+   "events": {},
+   "kind": "LEAF",
+   "name": "trckbrDieForceOneByOneDiameter",
+   "parent": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit.gbDieForceOneByOneLoadRate",
+   "path": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit.gbDieForceOneByOneLoadRate.trckbrDieForceOneByOneDiameter",
+   "props": {
+    "Frequency": 1,
+    "Height": 35,
+    "Left": 108,
+    "Max": 150,
+    "Min": 80,
+    "Orientation": "trHorizontal",
+    "Position": 80,
+    "SelEnd": 0,
+    "SelStart": 0,
+    "TabOrder": 0,
+    "TickMarks": "tmBottomRight",
+    "TickStyle": "tsAuto",
+    "Top": 24,
+    "Width": 275
+   },
+   "rect": {
+    "h": 35,
+    "w": 275,
+    "x": 108,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtLoadRateIndClick"
+   },
+   "kind": "LEAF",
+   "name": "edtDieForceOneByOneLoadRate",
+   "parent": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit.gbDieForceOneByOneLoadRate",
+   "path": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit.gbDieForceOneByOneLoadRate.edtDieForceOneByOneLoadRate",
+   "props": {
+    "Height": 28,
+    "Left": 380,
+    "OnClick": "edtLoadRateIndClick",
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 65
+   },
+   "rect": {
+    "h": 28,
+    "w": 65,
+    "x": 380,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtContactOffsetClick"
+   },
+   "kind": "LEAF",
+   "name": "edtDieForceOneByOneContactOffset",
+   "parent": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit.gbDieForceOneByOneLoadRate",
+   "path": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit.gbDieForceOneByOneLoadRate.edtDieForceOneByOneContactOffset",
+   "props": {
+    "Height": 28,
+    "Left": 676,
+    "OnClick": "edtContactOffsetClick",
+    "TabOrder": 2,
+    "Top": 23,
+    "Width": 80
+   },
+   "rect": {
+    "h": 28,
+    "w": 80,
+    "x": 676,
+    "y": 23
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpDieForceOneByOneAddNewKit",
+   "parent": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit",
+   "path": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit.grpDieForceOneByOneAddNewKit",
+   "props": {
+    "Align": "alBottom",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 168,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 439,
+    "Width": 842
+   },
+   "rect": {
+    "h": 168,
+    "w": 842,
+    "x": 0,
+    "y": 439
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtDieForceOneByOneCurrentType",
+   "parent": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit.grpDieForceOneByOneAddNewKit",
+   "path": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit.grpDieForceOneByOneAddNewKit.edtDieForceOneByOneCurrentType",
+   "props": {
+    "Enabled": "False",
+    "Height": 28,
+    "Left": 32,
+    "TabOrder": 0,
+    "Text": "30,40,60,56",
+    "Top": 68,
+    "Visible": "False",
+    "Width": 169
+   },
+   "rect": {
+    "h": 28,
+    "w": 169,
+    "x": 32,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtDieForceOneByOneVisible",
+   "parent": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit.grpDieForceOneByOneAddNewKit",
+   "path": "fContactForce.PageControl1.tsDieForceOneByOneKit.scrlbxDieForceOneByOneDynamicKit.grpDieForceOneByOneAddNewKit.edtDieForceOneByOneVisible",
+   "props": {
+    "Enabled": "False",
+    "Height": 28,
+    "Left": 32,
+    "TabOrder": 1,
+    "Text": "1,1,1,0",
+    "Top": 104,
+    "Visible": "False",
+    "Width": 169
+   },
+   "rect": {
+    "h": 28,
+    "w": 169,
+    "x": 32,
+    "y": 104
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel1",
+   "parent": "fContactForce",
+   "path": "fContactForce.Panel1",
+   "props": {
+    "Align": "alBottom",
+    "Color": 12761254,
+    "Height": 69,
+    "Left": 0,
+    "TabOrder": 1,
+    "Top": 647,
+    "Width": 862
+   },
+   "rect": {
+    "h": 69,
+    "w": 862,
+    "x": 0,
+    "y": 647
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btSaveClick"
+   },
+   "kind": "LEAF",
+   "name": "btSave",
+   "parent": "fContactForce.Panel1",
+   "path": "fContactForce.Panel1.btSave",
+   "props": {
+    "Caption": "Save",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 53,
+    "Left": 44,
+    "OnClick": "btSaveClick",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 8,
+    "Width": 317
+   },
+   "rect": {
+    "h": 53,
+    "w": 317,
+    "x": 44,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btExitClick"
+   },
+   "kind": "LEAF",
+   "name": "btExit",
+   "parent": "fContactForce.Panel1",
+   "path": "fContactForce.Panel1.btExit",
+   "props": {
+    "Caption": "Exit",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 53,
+    "Left": 516,
+    "OnClick": "btExitClick",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 8,
+    "Width": 317
+   },
+   "rect": {
+    "h": 53,
+    "w": 317,
+    "x": 516,
+    "y": 8
+   }
+  }
+ ]
+}

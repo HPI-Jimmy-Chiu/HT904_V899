@@ -1,0 +1,103 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "CleanPadFrom",
+ "form": "CleanPadFrom",
+ "form_class": "TCleanPadFrom",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "AutoClean/uShowcleanPad_ASEKH.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TCleanPadFrom",
+   "events": {
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "CleanPadFrom",
+   "parent": null,
+   "path": "CleanPadFrom",
+   "props": {
+    "Caption": "CleanPadFrom",
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 443,
+    "Left": 281,
+    "OldCreateOrder": "False",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 164,
+    "Width": 572
+   },
+   "rect": {
+    "h": 443,
+    "w": 572,
+    "x": 281,
+    "y": 164
+   }
+  },
+  {
+   "align": null,
+   "cls": "TImage",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Image1",
+   "parent": "CleanPadFrom",
+   "path": "CleanPadFrom.Image1",
+   "props": {
+    "Height": 361,
+    "Left": 0,
+    "Top": 0,
+    "Width": 556
+   },
+   "rect": {
+    "h": 361,
+    "w": 556,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton1Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton1",
+   "parent": "CleanPadFrom",
+   "path": "CleanPadFrom.SpeedButton1",
+   "props": {
+    "Caption": "Exit",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 38,
+    "Left": 200,
+    "OnClick": "SpeedButton1Click",
+    "ParentFont": "False",
+    "Top": 364,
+    "Width": 161
+   },
+   "rect": {
+    "h": 38,
+    "w": 161,
+    "x": 200,
+    "y": 364
+   }
+  }
+ ]
+}

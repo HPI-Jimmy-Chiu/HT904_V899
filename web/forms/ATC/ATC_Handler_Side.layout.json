@@ -1,0 +1,2919 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "(OFF-Line)",
+ "form": "ATC_InterfaceForm",
+ "form_class": "TATC_InterfaceForm",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "ATC/ATC_Handler_Side.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TATC_InterfaceForm",
+   "events": {
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "ATC_InterfaceForm",
+   "parent": null,
+   "path": "ATC_InterfaceForm",
+   "props": {
+    "Caption": "(OFF-Line)",
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "FormStyle": "fsStayOnTop",
+    "Height": 847,
+    "Left": 343,
+    "OldCreateOrder": "False",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "Position": "poScreenCenter",
+    "TextHeight": 20,
+    "Top": 121,
+    "Width": 1097
+   },
+   "rect": {
+    "h": 847,
+    "w": 1097,
+    "x": 343,
+    "y": 121
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel1",
+   "parent": "ATC_InterfaceForm",
+   "path": "ATC_InterfaceForm.Panel1",
+   "props": {
+    "Align": "alLeft",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 791,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 689
+   },
+   "rect": {
+    "h": 791,
+    "w": 689,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "A31_TempOffsetLabel",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.A31_TempOffsetLabel",
+   "props": {
+    "Caption": "Temperature Offset",
+    "Height": 20,
+    "Left": 16,
+    "Top": 392,
+    "Width": 139
+   },
+   "rect": {
+    "h": 20,
+    "w": 139,
+    "x": 16,
+    "y": 392
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "A31_SetTempLabel",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.A31_SetTempLabel",
+   "props": {
+    "Caption": "Set Temperature",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 16,
+    "ParentFont": "False",
+    "Top": 352,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 16,
+    "y": 352
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "A31_RunStopsBtnClick"
+   },
+   "kind": "LEAF",
+   "name": "A31_RunStopsBtn",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.A31_RunStopsBtn",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "RUN",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clGreen",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "GroupIndex": 1,
+    "Height": 49,
+    "Left": 192,
+    "OnClick": "A31_RunStopsBtnClick",
+    "ParentFont": "False",
+    "Top": 216,
+    "Width": 177
+   },
+   "rect": {
+    "h": 49,
+    "w": 177,
+    "x": 192,
+    "y": 216
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.Label1",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Set Single Temperature Offset",
+    "Height": 20,
+    "Left": 16,
+    "Top": 472,
+    "Width": 225
+   },
+   "rect": {
+    "h": 20,
+    "w": 225,
+    "x": 16,
+    "y": 472
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label2",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.Label2",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Set Single Temperature",
+    "Height": 20,
+    "Left": 16,
+    "Top": 432,
+    "Width": 201
+   },
+   "rect": {
+    "h": 20,
+    "w": 201,
+    "x": 16,
+    "y": 432
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "ATC_ConnectBtnClick"
+   },
+   "kind": "LEAF",
+   "name": "ATC_ConnectBtn",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.ATC_ConnectBtn",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Connect",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clGreen",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "GroupIndex": 2,
+    "Height": 49,
+    "Left": 8,
+    "OnClick": "ATC_ConnectBtnClick",
+    "ParentFont": "False",
+    "Top": 216,
+    "Width": 177
+   },
+   "rect": {
+    "h": 49,
+    "w": 177,
+    "x": 8,
+    "y": 216
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ATC_Now_RecipeFile",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.ATC_Now_RecipeFile",
+   "props": {
+    "Caption": "ATC_Now_RecipeFile",
+    "Height": 20,
+    "Left": 8,
+    "Top": 280,
+    "Width": 155
+   },
+   "rect": {
+    "h": 20,
+    "w": 155,
+    "x": 8,
+    "y": 280
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label7",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.Label7",
+   "props": {
+    "Alignment": "taRightJustify",
+    "Caption": "Label7",
+    "Height": 20,
+    "Left": 544,
+    "Top": 240,
+    "Width": 48
+   },
+   "rect": {
+    "h": 20,
+    "w": 48,
+    "x": 544,
+    "y": 240
+   }
+  },
+  {
+   "align": null,
+   "cls": "TShape",
+   "events": {},
+   "kind": "LEAF",
+   "name": "sheRecipe",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.sheRecipe",
+   "props": {
+    "Brush.Color": "clScrollBar",
+    "Height": 30,
+    "Left": 12,
+    "Shape": "stCircle",
+    "Top": 720,
+    "Width": 30
+   },
+   "rect": {
+    "h": 30,
+    "w": 30,
+    "x": 12,
+    "y": 720
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labRecipe",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.labRecipe",
+   "props": {
+    "AutoSize": "False",
+    "Caption": "Label1",
+    "Height": 29,
+    "Left": 48,
+    "Top": 724,
+    "Width": 161
+   },
+   "rect": {
+    "h": 29,
+    "w": 161,
+    "x": 48,
+    "y": 724
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "A31_Temp_OFSClick"
+   },
+   "kind": "LEAF",
+   "name": "A31_Temp_OFS",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.A31_Temp_OFS",
+   "props": {
+    "Height": 28,
+    "Left": 168,
+    "OnClick": "A31_Temp_OFSClick",
+    "TabOrder": 15,
+    "Text": "0",
+    "Top": 388,
+    "Width": 49
+   },
+   "rect": {
+    "h": 28,
+    "w": 49,
+    "x": 168,
+    "y": 388
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "A31_Set_Temp_OFSClick"
+   },
+   "kind": "LEAF",
+   "name": "A31_Set_Temp_OFS",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.A31_Set_Temp_OFS",
+   "props": {
+    "Caption": "Set Temperature Offset",
+    "Height": 33,
+    "Left": 224,
+    "OnClick": "A31_Set_Temp_OFSClick",
+    "TabOrder": 13,
+    "Top": 384,
+    "Width": 185
+   },
+   "rect": {
+    "h": 33,
+    "w": 185,
+    "x": 224,
+    "y": 384
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "A31_TemperatureClick"
+   },
+   "kind": "LEAF",
+   "name": "A31_Temperature",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.A31_Temperature",
+   "props": {
+    "Height": 28,
+    "Left": 168,
+    "OnClick": "A31_TemperatureClick",
+    "TabOrder": 11,
+    "Text": "0",
+    "Top": 348,
+    "Width": 49
+   },
+   "rect": {
+    "h": 28,
+    "w": 49,
+    "x": 168,
+    "y": 348
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "A31_Set_TempClick"
+   },
+   "kind": "LEAF",
+   "name": "A31_Set_Temp",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.A31_Set_Temp",
+   "props": {
+    "Caption": "Set Temperature",
+    "Height": 33,
+    "Left": 224,
+    "OnClick": "A31_Set_TempClick",
+    "TabOrder": 9,
+    "Top": 344,
+    "Width": 185
+   },
+   "rect": {
+    "h": 33,
+    "w": 185,
+    "x": 224,
+    "y": 344
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "ATC_Recipe_FileClick"
+   },
+   "kind": "LEAF",
+   "name": "ATC_Recipe_File",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.ATC_Recipe_File",
+   "props": {
+    "Caption": "Set Recipe File",
+    "Height": 33,
+    "Left": 280,
+    "OnClick": "ATC_Recipe_FileClick",
+    "TabOrder": 6,
+    "Top": 304,
+    "Width": 129
+   },
+   "rect": {
+    "h": 33,
+    "w": 129,
+    "x": 280,
+    "y": 304
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "ChannelGroupBox",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.ChannelGroupBox",
+   "props": {
+    "Caption": "Site Enabled",
+    "Height": 129,
+    "Left": 8,
+    "TabOrder": 24,
+    "Top": 504,
+    "Width": 673
+   },
+   "rect": {
+    "h": 129,
+    "w": 673,
+    "x": 8,
+    "y": 504
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "ATC_SetChannelEnabledClick"
+   },
+   "kind": "LEAF",
+   "name": "ATC_SetChannelEnabled",
+   "parent": "ATC_InterfaceForm.Panel1.ChannelGroupBox",
+   "path": "ATC_InterfaceForm.Panel1.ChannelGroupBox.ATC_SetChannelEnabled",
+   "props": {
+    "Caption": "Set",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -24,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 89,
+    "Left": 584,
+    "OnClick": "ATC_SetChannelEnabledClick",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 24,
+    "Width": 81
+   },
+   "rect": {
+    "h": 89,
+    "w": 81,
+    "x": 584,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "A31_Read_TempClick"
+   },
+   "kind": "LEAF",
+   "name": "A31_Read_Temp",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.A31_Read_Temp",
+   "props": {
+    "Caption": "Read Temperature",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 33,
+    "Left": 512,
+    "OnClick": "A31_Read_TempClick",
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 272,
+    "Width": 161
+   },
+   "rect": {
+    "h": 33,
+    "w": 161,
+    "x": 512,
+    "y": 272
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "A31_Single_Temp_OFS_Site",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.A31_Single_Temp_OFS_Site",
+   "props": {
+    "Height": 28,
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "10",
+     "11",
+     "12",
+     "13",
+     "14",
+     "15"
+    ],
+    "Left": 248,
+    "TabOrder": 22,
+    "Text": "0",
+    "Top": 468,
+    "Width": 57
+   },
+   "rect": {
+    "h": 28,
+    "w": 57,
+    "x": 248,
+    "y": 468
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "ATC_Set_Single_Temp_OFSClick"
+   },
+   "kind": "LEAF",
+   "name": "ATC_Set_Single_Temp_OFS",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.ATC_Set_Single_Temp_OFS",
+   "props": {
+    "Caption": "Set",
+    "Height": 33,
+    "Left": 368,
+    "OnClick": "ATC_Set_Single_Temp_OFSClick",
+    "TabOrder": 21,
+    "Top": 464,
+    "Width": 89
+   },
+   "rect": {
+    "h": 33,
+    "w": 89,
+    "x": 368,
+    "y": 464
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "A31_Single_Temp_Site",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.A31_Single_Temp_Site",
+   "props": {
+    "Height": 28,
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "10",
+     "11",
+     "12",
+     "13",
+     "14",
+     "15"
+    ],
+    "Left": 248,
+    "TabOrder": 18,
+    "Text": "0",
+    "Top": 428,
+    "Width": 57
+   },
+   "rect": {
+    "h": 28,
+    "w": 57,
+    "x": 248,
+    "y": 428
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "ATC_Set_Single_TempClick"
+   },
+   "kind": "LEAF",
+   "name": "ATC_Set_Single_Temp",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.ATC_Set_Single_Temp",
+   "props": {
+    "Caption": "Set",
+    "Height": 33,
+    "Left": 368,
+    "OnClick": "ATC_Set_Single_TempClick",
+    "TabOrder": 17,
+    "Top": 424,
+    "Width": 89
+   },
+   "rect": {
+    "h": 33,
+    "w": 89,
+    "x": 368,
+    "y": 424
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button2Click"
+   },
+   "kind": "LEAF",
+   "name": "Button2",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.Button2",
+   "props": {
+    "Caption": "Close Message From",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 33,
+    "Left": 512,
+    "OnClick": "Button2Click",
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Top": 312,
+    "Width": 161
+   },
+   "rect": {
+    "h": 33,
+    "w": 161,
+    "x": 512,
+    "y": 312
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "A31_TemperatureClick"
+   },
+   "kind": "LEAF",
+   "name": "A31_Single_Temp",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.A31_Single_Temp",
+   "props": {
+    "Height": 28,
+    "Left": 312,
+    "OnClick": "A31_TemperatureClick",
+    "TabOrder": 19,
+    "Text": "0",
+    "Top": 428,
+    "Width": 49
+   },
+   "rect": {
+    "h": 28,
+    "w": 49,
+    "x": 312,
+    "y": 428
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "A31_Temp_OFSClick"
+   },
+   "kind": "LEAF",
+   "name": "A31_Single_Temp_OFS",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.A31_Single_Temp_OFS",
+   "props": {
+    "Height": 28,
+    "Left": 312,
+    "OnClick": "A31_Temp_OFSClick",
+    "TabOrder": 23,
+    "Text": "0",
+    "Top": 468,
+    "Width": 49
+   },
+   "rect": {
+    "h": 28,
+    "w": 49,
+    "x": 312,
+    "y": 468
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Temp_Panel",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.Temp_Panel",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Color": "clRed",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 201,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 8,
+    "Width": 673
+   },
+   "rect": {
+    "h": 201,
+    "w": 673,
+    "x": 8,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel5",
+   "parent": "ATC_InterfaceForm.Panel1.Temp_Panel",
+   "path": "ATC_InterfaceForm.Panel1.Temp_Panel.Panel5",
+   "props": {
+    "Caption": "TJ",
+    "Color": "clInfoBk",
+    "Height": 25,
+    "Left": 0,
+    "TabOrder": 3,
+    "Top": 72,
+    "Width": 33
+   },
+   "rect": {
+    "h": 25,
+    "w": 33,
+    "x": 0,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel7",
+   "parent": "ATC_InterfaceForm.Panel1.Temp_Panel",
+   "path": "ATC_InterfaceForm.Panel1.Temp_Panel.Panel7",
+   "props": {
+    "Caption": "TJ",
+    "Color": "clInfoBk",
+    "Height": 25,
+    "Left": 0,
+    "TabOrder": 7,
+    "Top": 176,
+    "Width": 33
+   },
+   "rect": {
+    "h": 25,
+    "w": 33,
+    "x": 0,
+    "y": 176
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel4",
+   "parent": "ATC_InterfaceForm.Panel1.Temp_Panel",
+   "path": "ATC_InterfaceForm.Panel1.Temp_Panel.Panel4",
+   "props": {
+    "Caption": "TC2",
+    "Color": "clInfoBk",
+    "Height": 25,
+    "Left": 0,
+    "TabOrder": 2,
+    "Top": 48,
+    "Width": 33
+   },
+   "rect": {
+    "h": 25,
+    "w": 33,
+    "x": 0,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel3",
+   "parent": "ATC_InterfaceForm.Panel1.Temp_Panel",
+   "path": "ATC_InterfaceForm.Panel1.Temp_Panel.Panel3",
+   "props": {
+    "Caption": "TC",
+    "Color": "clInfoBk",
+    "Height": 25,
+    "Left": 0,
+    "TabOrder": 1,
+    "Top": 24,
+    "Width": 33
+   },
+   "rect": {
+    "h": 25,
+    "w": 33,
+    "x": 0,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel9",
+   "parent": "ATC_InterfaceForm.Panel1.Temp_Panel",
+   "path": "ATC_InterfaceForm.Panel1.Temp_Panel.Panel9",
+   "props": {
+    "Color": "clInfoBk",
+    "Height": 25,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 33
+   },
+   "rect": {
+    "h": 25,
+    "w": 33,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel6",
+   "parent": "ATC_InterfaceForm.Panel1.Temp_Panel",
+   "path": "ATC_InterfaceForm.Panel1.Temp_Panel.Panel6",
+   "props": {
+    "Caption": "TC2",
+    "Color": "clInfoBk",
+    "Height": 25,
+    "Left": 0,
+    "TabOrder": 6,
+    "Top": 152,
+    "Width": 33
+   },
+   "rect": {
+    "h": 25,
+    "w": 33,
+    "x": 0,
+    "y": 152
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel2",
+   "parent": "ATC_InterfaceForm.Panel1.Temp_Panel",
+   "path": "ATC_InterfaceForm.Panel1.Temp_Panel.Panel2",
+   "props": {
+    "Caption": "TC",
+    "Color": "clInfoBk",
+    "Height": 25,
+    "Left": 0,
+    "TabOrder": 5,
+    "Top": 128,
+    "Width": 33
+   },
+   "rect": {
+    "h": 25,
+    "w": 33,
+    "x": 0,
+    "y": 128
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel8",
+   "parent": "ATC_InterfaceForm.Panel1.Temp_Panel",
+   "path": "ATC_InterfaceForm.Panel1.Temp_Panel.Panel8",
+   "props": {
+    "Color": "clInfoBk",
+    "Height": 25,
+    "Left": 0,
+    "TabOrder": 4,
+    "Top": 104,
+    "Width": 33
+   },
+   "rect": {
+    "h": 25,
+    "w": 33,
+    "x": 0,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {
+    "OnClick": "cBox_RecordCommClick"
+   },
+   "kind": "LEAF",
+   "name": "cBox_RecordComm",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.cBox_RecordComm",
+   "props": {
+    "Caption": "Record Command",
+    "Checked": "True",
+    "Height": 17,
+    "Left": 528,
+    "OnClick": "cBox_RecordCommClick",
+    "State": "cbChecked",
+    "TabOrder": 1,
+    "Top": 216,
+    "Width": 153
+   },
+   "rect": {
+    "h": 17,
+    "w": 153,
+    "x": 528,
+    "y": 216
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ATC_RecipeFile",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.ATC_RecipeFile",
+   "props": {
+    "Height": 28,
+    "ItemHeight": 20,
+    "Left": 8,
+    "TabOrder": 7,
+    "Top": 306,
+    "Width": 265
+   },
+   "rect": {
+    "h": 28,
+    "w": 265,
+    "x": 8,
+    "y": 306
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnGetNowRecipeFileClick"
+   },
+   "kind": "LEAF",
+   "name": "btnGetNowRecipeFile",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.btnGetNowRecipeFile",
+   "props": {
+    "Caption": "Get Now Recipe File",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 33,
+    "Left": 512,
+    "OnClick": "btnGetNowRecipeFileClick",
+    "ParentFont": "False",
+    "TabOrder": 12,
+    "Top": 352,
+    "Width": 161
+   },
+   "rect": {
+    "h": 33,
+    "w": 161,
+    "x": 512,
+    "y": 352
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnGetRecipeFileListClick"
+   },
+   "kind": "LEAF",
+   "name": "btnGetRecipeFileList",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.btnGetRecipeFileList",
+   "props": {
+    "Caption": "Get Recipe File List",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 33,
+    "Left": 512,
+    "OnClick": "btnGetRecipeFileListClick",
+    "ParentFont": "False",
+    "TabOrder": 16,
+    "Top": 392,
+    "Width": 161
+   },
+   "rect": {
+    "h": 33,
+    "w": 161,
+    "x": 512,
+    "y": 392
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox2",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.GroupBox2",
+   "props": {
+    "Caption": "SW / FW Version",
+    "Height": 81,
+    "Left": 8,
+    "TabOrder": 25,
+    "Top": 632,
+    "Width": 673
+   },
+   "rect": {
+    "h": 81,
+    "w": 673,
+    "x": 8,
+    "y": 632
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lab_SW",
+   "parent": "ATC_InterfaceForm.Panel1.GroupBox2",
+   "path": "ATC_InterfaceForm.Panel1.GroupBox2.lab_SW",
+   "props": {
+    "Caption": "lab_SW",
+    "Height": 20,
+    "Left": 8,
+    "Top": 24,
+    "Width": 56
+   },
+   "rect": {
+    "h": 20,
+    "w": 56,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFW1",
+   "parent": "ATC_InterfaceForm.Panel1.GroupBox2",
+   "path": "ATC_InterfaceForm.Panel1.GroupBox2.labFW1",
+   "props": {
+    "Caption": "labFW1",
+    "Height": 20,
+    "Left": 120,
+    "Top": 24,
+    "Width": 55
+   },
+   "rect": {
+    "h": 20,
+    "w": 55,
+    "x": 120,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFW7",
+   "parent": "ATC_InterfaceForm.Panel1.GroupBox2",
+   "path": "ATC_InterfaceForm.Panel1.GroupBox2.labFW7",
+   "props": {
+    "Caption": "labFW7",
+    "Height": 20,
+    "Left": 120,
+    "Top": 48,
+    "Width": 55
+   },
+   "rect": {
+    "h": 20,
+    "w": 55,
+    "x": 120,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFW2",
+   "parent": "ATC_InterfaceForm.Panel1.GroupBox2",
+   "path": "ATC_InterfaceForm.Panel1.GroupBox2.labFW2",
+   "props": {
+    "Caption": "labFW2",
+    "Height": 20,
+    "Left": 208,
+    "Top": 24,
+    "Width": 55
+   },
+   "rect": {
+    "h": 20,
+    "w": 55,
+    "x": 208,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFW8",
+   "parent": "ATC_InterfaceForm.Panel1.GroupBox2",
+   "path": "ATC_InterfaceForm.Panel1.GroupBox2.labFW8",
+   "props": {
+    "Caption": "labFW8",
+    "Height": 20,
+    "Left": 208,
+    "Top": 48,
+    "Width": 55
+   },
+   "rect": {
+    "h": 20,
+    "w": 55,
+    "x": 208,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFW3",
+   "parent": "ATC_InterfaceForm.Panel1.GroupBox2",
+   "path": "ATC_InterfaceForm.Panel1.GroupBox2.labFW3",
+   "props": {
+    "Caption": "labFW3",
+    "Height": 20,
+    "Left": 296,
+    "Top": 24,
+    "Width": 55
+   },
+   "rect": {
+    "h": 20,
+    "w": 55,
+    "x": 296,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFW9",
+   "parent": "ATC_InterfaceForm.Panel1.GroupBox2",
+   "path": "ATC_InterfaceForm.Panel1.GroupBox2.labFW9",
+   "props": {
+    "Caption": "labFW9",
+    "Height": 20,
+    "Left": 296,
+    "Top": 48,
+    "Width": 55
+   },
+   "rect": {
+    "h": 20,
+    "w": 55,
+    "x": 296,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFW4",
+   "parent": "ATC_InterfaceForm.Panel1.GroupBox2",
+   "path": "ATC_InterfaceForm.Panel1.GroupBox2.labFW4",
+   "props": {
+    "Caption": "labFW4",
+    "Height": 20,
+    "Left": 384,
+    "Top": 24,
+    "Width": 55
+   },
+   "rect": {
+    "h": 20,
+    "w": 55,
+    "x": 384,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFW10",
+   "parent": "ATC_InterfaceForm.Panel1.GroupBox2",
+   "path": "ATC_InterfaceForm.Panel1.GroupBox2.labFW10",
+   "props": {
+    "Caption": "labFW10",
+    "Height": 20,
+    "Left": 384,
+    "Top": 48,
+    "Width": 64
+   },
+   "rect": {
+    "h": 20,
+    "w": 64,
+    "x": 384,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFW5",
+   "parent": "ATC_InterfaceForm.Panel1.GroupBox2",
+   "path": "ATC_InterfaceForm.Panel1.GroupBox2.labFW5",
+   "props": {
+    "Caption": "labFW5",
+    "Height": 20,
+    "Left": 472,
+    "Top": 24,
+    "Width": 55
+   },
+   "rect": {
+    "h": 20,
+    "w": 55,
+    "x": 472,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFW11",
+   "parent": "ATC_InterfaceForm.Panel1.GroupBox2",
+   "path": "ATC_InterfaceForm.Panel1.GroupBox2.labFW11",
+   "props": {
+    "Caption": "labFW11",
+    "Height": 20,
+    "Left": 472,
+    "Top": 48,
+    "Width": 64
+   },
+   "rect": {
+    "h": 20,
+    "w": 64,
+    "x": 472,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFW6",
+   "parent": "ATC_InterfaceForm.Panel1.GroupBox2",
+   "path": "ATC_InterfaceForm.Panel1.GroupBox2.labFW6",
+   "props": {
+    "Caption": "labFW6",
+    "Height": 20,
+    "Left": 560,
+    "Top": 24,
+    "Width": 55
+   },
+   "rect": {
+    "h": 20,
+    "w": 55,
+    "x": 560,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFW12",
+   "parent": "ATC_InterfaceForm.Panel1.GroupBox2",
+   "path": "ATC_InterfaceForm.Panel1.GroupBox2.labFW12",
+   "props": {
+    "Caption": "labFW12",
+    "Height": 20,
+    "Left": 560,
+    "Top": 48,
+    "Width": 64
+   },
+   "rect": {
+    "h": 20,
+    "w": 64,
+    "x": 560,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "A31_LotID",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.A31_LotID",
+   "props": {
+    "Height": 28,
+    "Left": 376,
+    "TabOrder": 4,
+    "Text": "A31_LotID",
+    "Top": 248,
+    "Width": 145
+   },
+   "rect": {
+    "h": 28,
+    "w": 145,
+    "x": 376,
+    "y": 248
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "A31_LotStart",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.A31_LotStart",
+   "props": {
+    "Caption": "Lot Start",
+    "Height": 33,
+    "Left": 528,
+    "TabOrder": 2,
+    "Top": 240,
+    "Width": 73
+   },
+   "rect": {
+    "h": 33,
+    "w": 73,
+    "x": 528,
+    "y": 240
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "A31_LotEnd",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.A31_LotEnd",
+   "props": {
+    "Caption": "Lot End",
+    "Height": 33,
+    "Left": 608,
+    "TabOrder": 3,
+    "Top": 240,
+    "Width": 73
+   },
+   "rect": {
+    "h": 33,
+    "w": 73,
+    "x": 608,
+    "y": 240
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnGetSelfTestResultClick"
+   },
+   "kind": "LEAF",
+   "name": "btnGetSelfTestResult",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.btnGetSelfTestResult",
+   "props": {
+    "Caption": "Get Self-Test Result",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 33,
+    "Left": 520,
+    "OnClick": "btnGetSelfTestResultClick",
+    "ParentFont": "False",
+    "TabOrder": 20,
+    "Top": 456,
+    "Width": 161
+   },
+   "rect": {
+    "h": 33,
+    "w": 161,
+    "x": 520,
+    "y": 456
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnFFCEnableClick"
+   },
+   "kind": "LEAF",
+   "name": "btnFFCEnable",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.btnFFCEnable",
+   "props": {
+    "Caption": "FFCEnable",
+    "Height": 33,
+    "Left": 416,
+    "OnClick": "btnFFCEnableClick",
+    "TabOrder": 10,
+    "Top": 344,
+    "Width": 97
+   },
+   "rect": {
+    "h": 33,
+    "w": 97,
+    "x": 416,
+    "y": 344
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnFFCTriggerClick"
+   },
+   "kind": "LEAF",
+   "name": "btnFFCTrigger",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.btnFFCTrigger",
+   "props": {
+    "Caption": "FFCTrigger",
+    "Height": 33,
+    "Left": 412,
+    "OnClick": "btnFFCTriggerClick",
+    "TabOrder": 14,
+    "Top": 384,
+    "Width": 105
+   },
+   "rect": {
+    "h": 33,
+    "w": 105,
+    "x": 412,
+    "y": 384
+   }
+  },
+  {
+   "align": null,
+   "cls": "TProgressBar",
+   "events": {},
+   "kind": "LEAF",
+   "name": "probRecipe",
+   "parent": "ATC_InterfaceForm.Panel1",
+   "path": "ATC_InterfaceForm.Panel1.probRecipe",
+   "props": {
+    "Height": 25,
+    "Left": 8,
+    "Max": 100,
+    "Min": 0,
+    "TabOrder": 26,
+    "Top": 752,
+    "Width": 281
+   },
+   "rect": {
+    "h": 25,
+    "w": 281,
+    "x": 8,
+    "y": 752
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "PageControl",
+   "parent": "ATC_InterfaceForm",
+   "path": "ATC_InterfaceForm.PageControl",
+   "props": {
+    "ActivePage": "TabSheet31",
+    "Align": "alClient",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 791,
+    "Left": 689,
+    "ParentFont": "False",
+    "TabIndex": 3,
+    "TabOrder": 2,
+    "Top": 0,
+    "Width": 0
+   },
+   "rect": {
+    "h": 791,
+    "w": 0,
+    "x": 689,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet20",
+   "parent": "ATC_InterfaceForm.PageControl",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet20",
+   "props": {
+    "Caption": "ATC 2.0"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet21",
+   "parent": "ATC_InterfaceForm.PageControl",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet21",
+   "props": {
+    "Caption": "ATC 2.1",
+    "ImageIndex": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet30",
+   "parent": "ATC_InterfaceForm.PageControl",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet30",
+   "props": {
+    "Caption": "ATC 3.0",
+    "ImageIndex": 2
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet31",
+   "parent": "ATC_InterfaceForm.PageControl",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31",
+   "props": {
+    "Caption": "ATC 3.1",
+    "ImageIndex": 3
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SecondSensorFunctionClick"
+   },
+   "kind": "LEAF",
+   "name": "SecondSensorFunction",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.SecondSensorFunction",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "2nd Sensor Function",
+    "GroupIndex": 5,
+    "Height": 33,
+    "Left": 4,
+    "OnClick": "SecondSensorFunctionClick",
+    "Top": 464,
+    "Width": 161
+   },
+   "rect": {
+    "h": 33,
+    "w": 161,
+    "x": 4,
+    "y": 464
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton1Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton1",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.SpeedButton1",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Run Self-Test",
+    "GroupIndex": 5,
+    "Height": 33,
+    "Left": 48,
+    "OnClick": "SpeedButton1Click",
+    "Top": 504,
+    "Width": 145
+   },
+   "rect": {
+    "h": 33,
+    "w": 145,
+    "x": 48,
+    "y": 504
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton2Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton2",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.SpeedButton2",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Manual Self-Test",
+    "GroupIndex": 5,
+    "Height": 33,
+    "Left": 48,
+    "OnClick": "SpeedButton2Click",
+    "Top": 544,
+    "Width": 145
+   },
+   "rect": {
+    "h": 33,
+    "w": 145,
+    "x": 48,
+    "y": 544
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton3Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton3",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.SpeedButton3",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Abnormal Site",
+    "GroupIndex": 5,
+    "Height": 33,
+    "Left": 46,
+    "OnClick": "SpeedButton3Click",
+    "Top": 584,
+    "Width": 145
+   },
+   "rect": {
+    "h": 33,
+    "w": 145,
+    "x": 46,
+    "y": 584
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton4Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton4",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.SpeedButton4",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Get Controller SN",
+    "GroupIndex": 5,
+    "Height": 33,
+    "Left": 46,
+    "OnClick": "SpeedButton4Click",
+    "Top": 624,
+    "Width": 145
+   },
+   "rect": {
+    "h": 33,
+    "w": 145,
+    "x": 46,
+    "y": 624
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "A31_Temp_Reading_Mode",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.A31_Temp_Reading_Mode",
+   "props": {
+    "Height": 28,
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "TEMP_FROM_TC",
+     "TEMP_FROM_TJ",
+     "TEMP_FROM_AD_TC",
+     "TEMP_FROM_AD_TJ",
+     "TEMP_FROM_INT_TC"
+    ],
+    "Left": 5,
+    "TabOrder": 5,
+    "Text": "TEMP_FROM_TC",
+    "Top": 212,
+    "Visible": "False",
+    "Width": 182
+   },
+   "rect": {
+    "h": 28,
+    "w": 182,
+    "x": 5,
+    "y": 212
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "A31_Set_Temp_Reading_ModeClick"
+   },
+   "kind": "LEAF",
+   "name": "A31_Set_Temp_Reading_Mode",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.A31_Set_Temp_Reading_Mode",
+   "props": {
+    "Caption": "Set Temp. Read Mode",
+    "Height": 33,
+    "Left": 4,
+    "OnClick": "A31_Set_Temp_Reading_ModeClick",
+    "TabOrder": 6,
+    "Top": 248,
+    "Visible": "False",
+    "Width": 182
+   },
+   "rect": {
+    "h": 33,
+    "w": 182,
+    "x": 4,
+    "y": 248
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "A31_Handler_ArmClick"
+   },
+   "kind": "LEAF",
+   "name": "A31_Handler_Arm",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.A31_Handler_Arm",
+   "props": {
+    "Caption": "Handler Arm",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 33,
+    "Left": 4,
+    "OnClick": "A31_Handler_ArmClick",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 8,
+    "Width": 161
+   },
+   "rect": {
+    "h": 33,
+    "w": 161,
+    "x": 4,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "A31_Test_StartClick"
+   },
+   "kind": "LEAF",
+   "name": "A31_Test_Start",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.A31_Test_Start",
+   "props": {
+    "Caption": "Test Start",
+    "Height": 33,
+    "Left": 4,
+    "OnClick": "A31_Test_StartClick",
+    "TabOrder": 1,
+    "Top": 48,
+    "Width": 161
+   },
+   "rect": {
+    "h": 33,
+    "w": 161,
+    "x": 4,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "A31_Initial_SetClick"
+   },
+   "kind": "LEAF",
+   "name": "A31_Initial_Set",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.A31_Initial_Set",
+   "props": {
+    "Caption": "Initial ATC Set",
+    "Height": 33,
+    "Left": 4,
+    "OnClick": "A31_Initial_SetClick",
+    "TabOrder": 2,
+    "Top": 88,
+    "Visible": "False",
+    "Width": 161
+   },
+   "rect": {
+    "h": 33,
+    "w": 161,
+    "x": 4,
+    "y": 88
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "A31_Chiller_StatusClick"
+   },
+   "kind": "LEAF",
+   "name": "A31_Chiller_Status",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.A31_Chiller_Status",
+   "props": {
+    "Caption": "Chiller Status",
+    "Height": 33,
+    "Left": 4,
+    "OnClick": "A31_Chiller_StatusClick",
+    "TabOrder": 3,
+    "Top": 129,
+    "Visible": "False",
+    "Width": 161
+   },
+   "rect": {
+    "h": 33,
+    "w": 161,
+    "x": 4,
+    "y": 129
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "A31_GetAlarmMsgClick"
+   },
+   "kind": "LEAF",
+   "name": "A31_GetAlarmMsg",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.A31_GetAlarmMsg",
+   "props": {
+    "Caption": "Get Alarm Msg",
+    "Height": 33,
+    "Left": 4,
+    "OnClick": "A31_GetAlarmMsgClick",
+    "TabOrder": 4,
+    "Top": 168,
+    "Width": 161
+   },
+   "rect": {
+    "h": 33,
+    "w": 161,
+    "x": 4,
+    "y": 168
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel11",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11",
+   "props": {
+    "BevelInner": "bvRaised",
+    "BevelOuter": "bvLowered",
+    "Height": 169,
+    "Left": 0,
+    "TabOrder": 7,
+    "Top": 288,
+    "Width": 185
+   },
+   "rect": {
+    "h": 169,
+    "w": 185,
+    "x": 0,
+    "y": 288
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label3",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11.Label3",
+   "props": {
+    "Caption": "PID CH Count",
+    "Height": 20,
+    "Left": 8,
+    "Top": 16,
+    "Width": 101
+   },
+   "rect": {
+    "h": 20,
+    "w": 101,
+    "x": 8,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label4",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11.Label4",
+   "props": {
+    "Caption": "P",
+    "Height": 20,
+    "Left": 8,
+    "Top": 48,
+    "Width": 10
+   },
+   "rect": {
+    "h": 20,
+    "w": 10,
+    "x": 8,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label5",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11.Label5",
+   "props": {
+    "Caption": "I",
+    "Height": 20,
+    "Left": 8,
+    "Top": 80,
+    "Width": 5
+   },
+   "rect": {
+    "h": 20,
+    "w": 5,
+    "x": 8,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label6",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11.Label6",
+   "props": {
+    "Caption": "D",
+    "Height": 20,
+    "Left": 8,
+    "Top": 112,
+    "Width": 12
+   },
+   "rect": {
+    "h": 20,
+    "w": 12,
+    "x": 8,
+    "y": 112
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cBox_PID",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11.cBox_PID",
+   "props": {
+    "Height": 28,
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "10",
+     "11",
+     "12",
+     "13",
+     "14",
+     "15",
+     "16",
+     "17",
+     "18",
+     "19",
+     "20",
+     "21",
+     "22",
+     "23",
+     "24",
+     "25",
+     "26",
+     "27",
+     "28",
+     "29",
+     "30",
+     "31",
+     "32"
+    ],
+    "Left": 112,
+    "TabOrder": 0,
+    "Text": "1",
+    "Top": 12,
+    "Width": 57
+   },
+   "rect": {
+    "h": 28,
+    "w": 57,
+    "x": 112,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "ed_PClick"
+   },
+   "kind": "LEAF",
+   "name": "ed_P",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11.ed_P",
+   "props": {
+    "Height": 28,
+    "Left": 32,
+    "OnClick": "ed_PClick",
+    "TabOrder": 1,
+    "Text": "100",
+    "Top": 48,
+    "Width": 57
+   },
+   "rect": {
+    "h": 28,
+    "w": 57,
+    "x": 32,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "ed_PClick"
+   },
+   "kind": "LEAF",
+   "name": "ed_I",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11.ed_I",
+   "props": {
+    "Height": 28,
+    "Left": 32,
+    "OnClick": "ed_PClick",
+    "TabOrder": 3,
+    "Text": "0.1",
+    "Top": 80,
+    "Width": 57
+   },
+   "rect": {
+    "h": 28,
+    "w": 57,
+    "x": 32,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "ed_PClick"
+   },
+   "kind": "LEAF",
+   "name": "ed_D",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11.ed_D",
+   "props": {
+    "Height": 28,
+    "Left": 32,
+    "OnClick": "ed_PClick",
+    "TabOrder": 4,
+    "Text": "10",
+    "Top": 112,
+    "Width": 57
+   },
+   "rect": {
+    "h": 28,
+    "w": 57,
+    "x": 32,
+    "y": 112
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "PID_SetClick"
+   },
+   "kind": "LEAF",
+   "name": "PID_Set",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.Panel11.PID_Set",
+   "props": {
+    "Caption": "Set",
+    "Height": 33,
+    "Left": 96,
+    "OnClick": "PID_SetClick",
+    "TabOrder": 2,
+    "Top": 48,
+    "Width": 75
+   },
+   "rect": {
+    "h": 33,
+    "w": 75,
+    "x": 96,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Edit1",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.Edit1",
+   "props": {
+    "Height": 28,
+    "Left": 8,
+    "ReadOnly": "True",
+    "TabOrder": 8,
+    "Text": "0",
+    "Top": 504,
+    "Width": 33
+   },
+   "rect": {
+    "h": 28,
+    "w": 33,
+    "x": 8,
+    "y": 504
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Edit2",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.Edit2",
+   "props": {
+    "Height": 28,
+    "Left": 8,
+    "ReadOnly": "True",
+    "TabOrder": 9,
+    "Text": "0",
+    "Top": 544,
+    "Width": 33
+   },
+   "rect": {
+    "h": 28,
+    "w": 33,
+    "x": 8,
+    "y": 544
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Edit3",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet31",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet31.Edit3",
+   "props": {
+    "Height": 28,
+    "Left": 8,
+    "TabOrder": 10,
+    "Text": "0",
+    "Top": 584,
+    "Width": 33
+   },
+   "rect": {
+    "h": 28,
+    "w": 33,
+    "x": 8,
+    "y": 584
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet50",
+   "parent": "ATC_InterfaceForm.PageControl",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet50",
+   "props": {
+    "Caption": "ATC 5.0",
+    "ImageIndex": 4
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox1",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet50",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet50.GroupBox1",
+   "props": {
+    "Caption": "ATC Module",
+    "Height": 105,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 8,
+    "Width": 185
+   },
+   "rect": {
+    "h": 105,
+    "w": 185,
+    "x": 0,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "AtcModuleBox",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet50.GroupBox1",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet50.GroupBox1.AtcModuleBox",
+   "props": {
+    "Height": 28,
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4"
+    ],
+    "Left": 16,
+    "TabOrder": 0,
+    "Text": "1",
+    "Top": 32,
+    "Width": 145
+   },
+   "rect": {
+    "h": 28,
+    "w": 145,
+    "x": 16,
+    "y": 32
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "RunModuleBtn",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet50.GroupBox1",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet50.GroupBox1.RunModuleBtn",
+   "props": {
+    "Caption": "Run",
+    "Height": 25,
+    "Left": 16,
+    "TabOrder": 1,
+    "Top": 72,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 16,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "StopModuleBtn",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet50.GroupBox1",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet50.GroupBox1.StopModuleBtn",
+   "props": {
+    "Caption": "Stop",
+    "Height": 25,
+    "Left": 96,
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 96,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet51",
+   "parent": "ATC_InterfaceForm.PageControl",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet51",
+   "props": {
+    "Caption": "ATC 5.1",
+    "ImageIndex": 7
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet60",
+   "parent": "ATC_InterfaceForm.PageControl",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet60",
+   "props": {
+    "Caption": "ATC 6.0",
+    "ImageIndex": 5
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet70",
+   "parent": "ATC_InterfaceForm.PageControl",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet70",
+   "props": {
+    "Caption": "ATC 7.0",
+    "ImageIndex": 6
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {
+    "OnClick": "EMG_UP_DOWNClick"
+   },
+   "kind": "LEAF",
+   "name": "EMG_UP_DOWN",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet70",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet70.EMG_UP_DOWN",
+   "props": {
+    "Caption": "EMG Up/Down",
+    "Height": 17,
+    "Left": 8,
+    "OnClick": "EMG_UP_DOWNClick",
+    "TabOrder": 0,
+    "Top": 144,
+    "Width": 137
+   },
+   "rect": {
+    "h": 17,
+    "w": 137,
+    "x": 8,
+    "y": 144
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox3",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet70",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet70.GroupBox3",
+   "props": {
+    "Caption": "Use TSD",
+    "Height": 121,
+    "Left": 8,
+    "TabOrder": 1,
+    "Top": 16,
+    "Width": 145
+   },
+   "rect": {
+    "h": 121,
+    "w": 145,
+    "x": 8,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cBox_CH1",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet70.GroupBox3",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet70.GroupBox3.cBox_CH1",
+   "props": {
+    "Caption": "CH1",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 0,
+    "Top": 24,
+    "Width": 97
+   },
+   "rect": {
+    "h": 17,
+    "w": 97,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cBox_CH2",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet70.GroupBox3",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet70.GroupBox3.cBox_CH2",
+   "props": {
+    "Caption": "CH2",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 1,
+    "Top": 48,
+    "Width": 97
+   },
+   "rect": {
+    "h": 17,
+    "w": 97,
+    "x": 8,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cBox_CH3",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet70.GroupBox3",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet70.GroupBox3.cBox_CH3",
+   "props": {
+    "Caption": "CH3",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 97
+   },
+   "rect": {
+    "h": 17,
+    "w": 97,
+    "x": 8,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cBox_CH4",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet70.GroupBox3",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet70.GroupBox3.cBox_CH4",
+   "props": {
+    "Caption": "CH4",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 3,
+    "Top": 96,
+    "Width": 97
+   },
+   "rect": {
+    "h": 17,
+    "w": 97,
+    "x": 8,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "BtnSetTSDClick"
+   },
+   "kind": "LEAF",
+   "name": "BtnSetTSD",
+   "parent": "ATC_InterfaceForm.PageControl.TabSheet70.GroupBox3",
+   "path": "ATC_InterfaceForm.PageControl.TabSheet70.GroupBox3.BtnSetTSD",
+   "props": {
+    "Caption": "Set",
+    "Height": 89,
+    "Left": 72,
+    "OnClick": "BtnSetTSDClick",
+    "TabOrder": 4,
+    "Top": 24,
+    "Width": 59
+   },
+   "rect": {
+    "h": 89,
+    "w": 59,
+    "x": 72,
+    "y": 24
+   }
+  },
+  {
+   "align": "alRight",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel10",
+   "parent": "ATC_InterfaceForm",
+   "path": "ATC_InterfaceForm.Panel10",
+   "props": {
+    "Align": "alRight",
+    "Height": 791,
+    "Left": 689,
+    "TabOrder": 1,
+    "Top": 0,
+    "Width": 399
+   },
+   "rect": {
+    "h": 791,
+    "w": 399,
+    "x": 689,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "A31_Memo",
+   "parent": "ATC_InterfaceForm.Panel10",
+   "path": "ATC_InterfaceForm.Panel10.A31_Memo",
+   "props": {
+    "Align": "alTop",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 624,
+    "Left": 1,
+    "ParentFont": "False",
+    "ScrollBars": "ssBoth",
+    "TabOrder": 0,
+    "Top": 1,
+    "Width": 397
+   },
+   "rect": {
+    "h": 624,
+    "w": 397,
+    "x": 1,
+    "y": 1
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "AlarmMsg",
+   "parent": "ATC_InterfaceForm.Panel10",
+   "path": "ATC_InterfaceForm.Panel10.AlarmMsg",
+   "props": {
+    "Align": "alClient",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 165,
+    "Left": 1,
+    "Lines.Strings": [
+     "1",
+     "2",
+     "3",
+     "4"
+    ],
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 625,
+    "Width": 397
+   },
+   "rect": {
+    "h": 165,
+    "w": 397,
+    "x": 1,
+    "y": 625
+   }
+  },
+  {
+   "align": null,
+   "cls": "TClientSocket",
+   "events": {
+    "OnConnect": "ClientSocketConnect",
+    "OnDisconnect": "ClientSocketDisconnect",
+    "OnError": "ClientSocketError",
+    "OnRead": "ClientSocketRead"
+   },
+   "kind": "NONVISUAL",
+   "name": "ClientSocket",
+   "parent": "ATC_InterfaceForm",
+   "path": "ATC_InterfaceForm.ClientSocket",
+   "props": {
+    "Active": "False",
+    "Address": "172.16.8.101",
+    "ClientType": "ctNonBlocking",
+    "Left": 648,
+    "OnConnect": "ClientSocketConnect",
+    "OnDisconnect": "ClientSocketDisconnect",
+    "OnError": "ClientSocketError",
+    "OnRead": "ClientSocketRead",
+    "Port": 1234,
+    "Top": 16
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 648,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "TimerTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "Timer",
+   "parent": "ATC_InterfaceForm",
+   "path": "ATC_InterfaceForm.Timer",
+   "props": {
+    "Interval": 10,
+    "Left": 616,
+    "OnTimer": "TimerTimer",
+    "Top": 15
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 616,
+    "y": 15
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "CommFlagTimerTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "CommFlagTimer",
+   "parent": "ATC_InterfaceForm",
+   "path": "ATC_InterfaceForm.CommFlagTimer",
+   "props": {
+    "Left": 584,
+    "OnTimer": "CommFlagTimerTimer",
+    "Top": 16
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 584,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TClientSocket",
+   "events": {
+    "OnConnect": "FileSocketConnect",
+    "OnDisconnect": "FileSocketDisconnect",
+    "OnError": "FileSocketError",
+    "OnRead": "FileSocketRead"
+   },
+   "kind": "NONVISUAL",
+   "name": "FileSocket",
+   "parent": "ATC_InterfaceForm",
+   "path": "ATC_InterfaceForm.FileSocket",
+   "props": {
+    "Active": "False",
+    "Address": "172.16.8.101",
+    "ClientType": "ctNonBlocking",
+    "Left": 648,
+    "OnConnect": "FileSocketConnect",
+    "OnDisconnect": "FileSocketDisconnect",
+    "OnError": "FileSocketError",
+    "OnRead": "FileSocketRead",
+    "Port": 5678,
+    "Top": 56
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 648,
+    "y": 56
+   }
+  }
+ ]
+}

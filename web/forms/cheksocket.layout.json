@@ -1,0 +1,634 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "fCCDPin1",
+ "form": "fCCDPin1",
+ "form_class": "TfCCDPin1",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "cheksocket.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfCCDPin1",
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fCCDPin1",
+   "parent": null,
+   "path": "fCCDPin1",
+   "props": {
+    "Caption": "fCCDPin1",
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 698,
+    "Left": 16,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 1,
+    "Width": 899
+   },
+   "rect": {
+    "h": 698,
+    "w": 899,
+    "x": 16,
+    "y": 1
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton1Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton1",
+   "parent": "fCCDPin1",
+   "path": "fCCDPin1.SpeedButton1",
+   "props": {
+    "Caption": "Live",
+    "Height": 33,
+    "Left": 6,
+    "OnClick": "SpeedButton1Click",
+    "Top": 530,
+    "Width": 137
+   },
+   "rect": {
+    "h": 33,
+    "w": 137,
+    "x": 6,
+    "y": 530
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton2Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton2",
+   "parent": "fCCDPin1",
+   "path": "fCCDPin1.SpeedButton2",
+   "props": {
+    "Caption": "Grab",
+    "Height": 33,
+    "Left": 6,
+    "OnClick": "SpeedButton2Click",
+    "Top": 570,
+    "Width": 137
+   },
+   "rect": {
+    "h": 33,
+    "w": 137,
+    "x": 6,
+    "y": 570
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton3Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton3",
+   "parent": "fCCDPin1",
+   "path": "fCCDPin1.SpeedButton3",
+   "props": {
+    "Caption": "Stop",
+    "Height": 33,
+    "Left": 6,
+    "OnClick": "SpeedButton3Click",
+    "Top": 610,
+    "Width": 137
+   },
+   "rect": {
+    "h": 33,
+    "w": 137,
+    "x": 6,
+    "y": 610
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "SpeedButton8",
+   "parent": "fCCDPin1",
+   "path": "fCCDPin1.SpeedButton8",
+   "props": {
+    "Caption": "Shuttle Go",
+    "Height": 33,
+    "Left": 144,
+    "Top": 530,
+    "Width": 137
+   },
+   "rect": {
+    "h": 33,
+    "w": 137,
+    "x": 144,
+    "y": 530
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label3",
+   "parent": "fCCDPin1",
+   "path": "fCCDPin1.Label3",
+   "props": {
+    "Caption": "Label3",
+    "Height": 13,
+    "Left": 536,
+    "Top": 536,
+    "Width": 32
+   },
+   "rect": {
+    "h": 13,
+    "w": 32,
+    "x": 536,
+    "y": 536
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "fCCDPin1",
+   "path": "fCCDPin1.Label1",
+   "props": {
+    "Caption": "Max Limit",
+    "Height": 13,
+    "Left": 696,
+    "Top": 16,
+    "Width": 44
+   },
+   "rect": {
+    "h": 13,
+    "w": 44,
+    "x": 696,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "PageControl1",
+   "parent": "fCCDPin1",
+   "path": "fCCDPin1.PageControl1",
+   "props": {
+    "ActivePage": "TabSheet1",
+    "Height": 521,
+    "Left": 3,
+    "TabOrder": 0,
+    "Tag": 1,
+    "Top": 1,
+    "Width": 655
+   },
+   "rect": {
+    "h": 521,
+    "w": 655,
+    "x": 3,
+    "y": 1
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet1",
+   "parent": "fCCDPin1.PageControl1",
+   "path": "fCCDPin1.PageControl1.TabSheet1",
+   "props": {
+    "Caption": "Run Image"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEBW8Image",
+   "events": {},
+   "kind": "LEAF",
+   "name": "LiveImage",
+   "parent": "fCCDPin1.PageControl1.TabSheet1",
+   "path": "fCCDPin1.PageControl1.TabSheet1.LiveImage",
+   "props": {
+    "ControlData": {
+     "byte_len": 49,
+     "hex": "03000500254200009C31000000000000000352E30B918FCE119DE300AA004BB8510100000090013C67020005417269616C",
+     "sha1": "ed08ebcf91d724426eb6a255faa6778a73d5c484"
+    },
+    "Height": 480,
+    "Left": 3,
+    "TabOrder": 0,
+    "TabStop": "True",
+    "Top": 7,
+    "Width": 640
+   },
+   "rect": {
+    "h": 480,
+    "w": 640,
+    "x": 3,
+    "y": 7
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet2",
+   "parent": "fCCDPin1.PageControl1",
+   "path": "fCCDPin1.PageControl1.TabSheet2",
+   "props": {
+    "Caption": "Source Image",
+    "ImageIndex": 1,
+    "Tag": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEBW8Image",
+   "events": {},
+   "kind": "LEAF",
+   "name": "SourceImage",
+   "parent": "fCCDPin1.PageControl1.TabSheet2",
+   "path": "fCCDPin1.PageControl1.TabSheet2.SourceImage",
+   "props": {
+    "ControlData": {
+     "byte_len": 49,
+     "hex": "03000500254200009C31000000000000000352E30B918FCE119DE300AA004BB8510100000090013C67020005417269616C",
+     "sha1": "ed08ebcf91d724426eb6a255faa6778a73d5c484"
+    },
+    "Height": 480,
+    "Left": 3,
+    "TabOrder": 0,
+    "TabStop": "True",
+    "Top": 7,
+    "Width": 640
+   },
+   "rect": {
+    "h": 480,
+    "w": 640,
+    "x": 3,
+    "y": 7
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet3",
+   "parent": "fCCDPin1.PageControl1",
+   "path": "fCCDPin1.PageControl1.TabSheet3",
+   "props": {
+    "Caption": "TabSheet3",
+    "ImageIndex": 2
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEBW8Image",
+   "events": {},
+   "kind": "LEAF",
+   "name": "EBW8Image1",
+   "parent": "fCCDPin1.PageControl1.TabSheet3",
+   "path": "fCCDPin1.PageControl1.TabSheet3.EBW8Image1",
+   "props": {
+    "ControlData": {
+     "byte_len": 49,
+     "hex": "03000500254200009C31000000000000000352E30B918FCE119DE300AA004BB8510100000090013C67020005417269616C",
+     "sha1": "ed08ebcf91d724426eb6a255faa6778a73d5c484"
+    },
+    "Height": 480,
+    "Left": 3,
+    "TabOrder": 0,
+    "TabStop": "True",
+    "Top": 7,
+    "Width": 640
+   },
+   "rect": {
+    "h": 480,
+    "w": 640,
+    "x": 3,
+    "y": 7
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet4",
+   "parent": "fCCDPin1.PageControl1",
+   "path": "fCCDPin1.PageControl1.TabSheet4",
+   "props": {
+    "Caption": "TabSheet4",
+    "ImageIndex": 3
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEBW8Image",
+   "events": {},
+   "kind": "LEAF",
+   "name": "EBW8Image2",
+   "parent": "fCCDPin1.PageControl1.TabSheet4",
+   "path": "fCCDPin1.PageControl1.TabSheet4.EBW8Image2",
+   "props": {
+    "ControlData": {
+     "byte_len": 49,
+     "hex": "03000500254200009C31000000000000000352E30B918FCE119DE300AA004BB8510100000090013C67020005417269616C",
+     "sha1": "ed08ebcf91d724426eb6a255faa6778a73d5c484"
+    },
+    "Height": 480,
+    "Left": 3,
+    "TabOrder": 0,
+    "TabStop": "True",
+    "Top": 7,
+    "Width": 640
+   },
+   "rect": {
+    "h": 480,
+    "w": 640,
+    "x": 3,
+    "y": 7
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEBW8ROI",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ROI1",
+   "parent": "fCCDPin1",
+   "path": "fCCDPin1.ROI1",
+   "props": {
+    "ControlData": {
+     "byte_len": 16,
+     "hex": "03000500560A00002B05000000000000",
+     "sha1": "49090da80736498e6cabef640a74ad0bca9ec683"
+    },
+    "Height": 32,
+    "Left": 288,
+    "Top": 528,
+    "Width": 32
+   },
+   "rect": {
+    "h": 32,
+    "w": 32,
+    "x": 288,
+    "y": 528
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEasyMain",
+   "events": {},
+   "kind": "LEAF",
+   "name": "EasyMain",
+   "parent": "fCCDPin1",
+   "path": "fCCDPin1.EasyMain",
+   "props": {
+    "ControlData": {
+     "byte_len": 16,
+     "hex": "03000500560A00002B05000000000000",
+     "sha1": "49090da80736498e6cabef640a74ad0bca9ec683"
+    },
+    "Height": 32,
+    "Left": 374,
+    "Top": 529,
+    "Width": 32
+   },
+   "rect": {
+    "h": 32,
+    "w": 32,
+    "x": 374,
+    "y": 529
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button1Click"
+   },
+   "kind": "LEAF",
+   "name": "Button1",
+   "parent": "fCCDPin1",
+   "path": "fCCDPin1.Button1",
+   "props": {
+    "Caption": "Stand",
+    "Height": 33,
+    "Left": 144,
+    "OnClick": "Button1Click",
+    "TabOrder": 3,
+    "Top": 569,
+    "Width": 137
+   },
+   "rect": {
+    "h": 33,
+    "w": 137,
+    "x": 144,
+    "y": 569
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button2Click"
+   },
+   "kind": "LEAF",
+   "name": "Button2",
+   "parent": "fCCDPin1",
+   "path": "fCCDPin1.Button2",
+   "props": {
+    "Caption": "Caculate",
+    "Height": 29,
+    "Left": 288,
+    "OnClick": "Button2Click",
+    "TabOrder": 4,
+    "Top": 570,
+    "Width": 97
+   },
+   "rect": {
+    "h": 29,
+    "w": 97,
+    "x": 288,
+    "y": 570
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEBW8ROI",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ROI2",
+   "parent": "fCCDPin1",
+   "path": "fCCDPin1.ROI2",
+   "props": {
+    "ControlData": {
+     "byte_len": 16,
+     "hex": "03000500560A00002B05000000000000",
+     "sha1": "49090da80736498e6cabef640a74ad0bca9ec683"
+    },
+    "Height": 32,
+    "Left": 328,
+    "Top": 528,
+    "Width": 32
+   },
+   "rect": {
+    "h": 32,
+    "w": 32,
+    "x": 328,
+    "y": 528
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo1",
+   "parent": "fCCDPin1",
+   "path": "fCCDPin1.Memo1",
+   "props": {
+    "Height": 577,
+    "Left": 688,
+    "Lines.Strings": [
+     "Memo1"
+    ],
+    "TabOrder": 6,
+    "Top": 64,
+    "Width": 202
+   },
+   "rect": {
+    "h": 577,
+    "w": 202,
+    "x": 688,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TECameraPicolo",
+   "events": {
+    "OnSurfaceAvailable": "CCDSurfaceAvailable"
+   },
+   "kind": "LEAF",
+   "name": "CCD",
+   "parent": "fCCDPin1",
+   "path": "fCCDPin1.CCD",
+   "props": {
+    "ControlData": {
+     "byte_len": 180,
+     "hex": "000300003D040000ED0300000800060000002300300000000300000000000300020000000300000000000300000001000300000000000300000001000300000001000300000000000300800200000300E00100000300000001000300000001000300000000000300000000000B0000000B0001000B0001000300020000000300000000000300010000000300000000000300000000000300000000000300010000000300000000000300000000000300FFFFFFFF",
+     "sha1": "1c61ad6236ea3d436dd112b91bb20434ba9392e8"
+    },
+    "Height": 32,
+    "Left": 400,
+    "OnSurfaceAvailable": "CCDSurfaceAvailable",
+    "Top": 568,
+    "Width": 32
+   },
+   "rect": {
+    "h": 32,
+    "w": 32,
+    "x": 400,
+    "y": 568
+   }
+  },
+  {
+   "align": null,
+   "cls": "TScrollBar",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ScrollBar1",
+   "parent": "fCCDPin1",
+   "path": "fCCDPin1.ScrollBar1",
+   "props": {
+    "Height": 497,
+    "Kind": "sbVertical",
+    "Left": 664,
+    "Max": 255,
+    "PageSize": 0,
+    "TabOrder": 8,
+    "Top": 24,
+    "Width": 16
+   },
+   "rect": {
+    "h": 497,
+    "w": 16,
+    "x": 664,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Edit3",
+   "parent": "fCCDPin1",
+   "path": "fCCDPin1.Edit3",
+   "props": {
+    "Height": 21,
+    "Left": 696,
+    "TabOrder": 9,
+    "Text": "50",
+    "Top": 32,
+    "Width": 121
+   },
+   "rect": {
+    "h": 21,
+    "w": 121,
+    "x": 696,
+    "y": 32
+   }
+  }
+ ]
+}

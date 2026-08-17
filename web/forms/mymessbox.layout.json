@@ -1,0 +1,465 @@
+{
+ "canvas": {
+  "h": 241,
+  "w": 500
+ },
+ "caption": "Message",
+ "form": "MyMessageBox",
+ "form_class": "TMyMessageBox",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "mymessbox.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TMyMessageBox",
+   "events": {
+    "OnClose": "FormClose",
+    "OnShortCut": "FormShortCut",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "MyMessageBox",
+   "parent": null,
+   "path": "MyMessageBox",
+   "props": {
+    "BorderIcons": [],
+    "BorderStyle": "bsSingle",
+    "Caption": "Message",
+    "ClientHeight": 241,
+    "ClientWidth": 500,
+    "Color": 12761254,
+    "DragKind": "dkDock",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Left": 432,
+    "OldCreateOrder": "True",
+    "OnClose": "FormClose",
+    "OnShortCut": "FormShortCut",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "Position": "poScreenCenter",
+    "TextHeight": 13,
+    "Top": 411
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 432,
+    "y": 411
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labStopTime",
+   "parent": "MyMessageBox",
+   "path": "MyMessageBox.labStopTime",
+   "props": {
+    "Caption": "Timer : 0000 days 00:00:00",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -21,
+    "Font.Name": "Times New Roman",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 24,
+    "Left": 102,
+    "ParentFont": "False",
+    "Top": 208,
+    "Width": 244
+   },
+   "rect": {
+    "h": 24,
+    "w": 244,
+    "x": 102,
+    "y": 208
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblSecsMsg",
+   "parent": "MyMessageBox",
+   "path": "MyMessageBox.lblSecsMsg",
+   "props": {
+    "Alignment": "taCenter",
+    "AutoSize": "False",
+    "Caption": "SECS GEM Message",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -32,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 8,
+    "ParentFont": "False",
+    "Top": 0,
+    "Visible": "False",
+    "Width": 441,
+    "WordWrap": "True"
+   },
+   "rect": {
+    "h": 49,
+    "w": 441,
+    "x": 8,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnClick": "pnlPauseClick"
+   },
+   "kind": "LEAF",
+   "name": "pnlPause",
+   "parent": "MyMessageBox",
+   "path": "MyMessageBox.pnlPause",
+   "props": {
+    "BevelWidth": 2,
+    "Caption": "Pause",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 33,
+    "Left": 155,
+    "OnClick": "pnlPauseClick",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 172,
+    "Width": 130
+   },
+   "rect": {
+    "h": 33,
+    "w": 130,
+    "x": 155,
+    "y": 172
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlMain",
+   "parent": "MyMessageBox",
+   "path": "MyMessageBox.pnlMain",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Color": 14670284,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -16,
+    "Font.Name": "MS Serif",
+    "Font.Style": [],
+    "Height": 153,
+    "Left": 24,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 16,
+    "Width": 457
+   },
+   "rect": {
+    "h": 153,
+    "w": 457,
+    "x": 24,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblSubMsg",
+   "parent": "MyMessageBox.pnlMain",
+   "path": "MyMessageBox.pnlMain.lblSubMsg",
+   "props": {
+    "Alignment": "taCenter",
+    "AutoSize": "False",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 27,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 99,
+    "Width": 441
+   },
+   "rect": {
+    "h": 27,
+    "w": 441,
+    "x": 7,
+    "y": 99
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblMainMsg",
+   "parent": "MyMessageBox.pnlMain",
+   "path": "MyMessageBox.pnlMain.lblMainMsg",
+   "props": {
+    "Alignment": "taCenter",
+    "AutoSize": "False",
+    "Caption": "English",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 8,
+    "ParentFont": "False",
+    "Top": 8,
+    "Width": 441,
+    "WordWrap": "True"
+   },
+   "rect": {
+    "h": 49,
+    "w": 441,
+    "x": 8,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblChineseMsg",
+   "parent": "MyMessageBox.pnlMain",
+   "path": "MyMessageBox.pnlMain.lblChineseMsg",
+   "props": {
+    "Alignment": "taCenter",
+    "AutoSize": "False",
+    "Caption": "中文",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 62,
+    "Left": 8,
+    "ParentFont": "False",
+    "Top": 64,
+    "Width": 441,
+    "WordWrap": "True"
+   },
+   "rect": {
+    "h": 62,
+    "w": 441,
+    "x": 8,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "moSecsGem",
+   "parent": "MyMessageBox.pnlMain",
+   "path": "MyMessageBox.pnlMain.moSecsGem",
+   "props": {
+    "Color": 14670284,
+    "Height": 141,
+    "Left": 8,
+    "ScrollBars": "ssBoth",
+    "TabOrder": 0,
+    "Top": 8,
+    "Width": 437
+   },
+   "rect": {
+    "h": 141,
+    "w": 437,
+    "x": 8,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnClick": "pnlYesClick"
+   },
+   "kind": "LEAF",
+   "name": "pnlNo",
+   "parent": "MyMessageBox",
+   "path": "MyMessageBox.pnlNo",
+   "props": {
+    "BevelWidth": 2,
+    "Caption": "No",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 33,
+    "Left": 247,
+    "OnClick": "pnlYesClick",
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Tag": 2,
+    "Top": 172,
+    "Visible": "False",
+    "Width": 130
+   },
+   "rect": {
+    "h": 33,
+    "w": 130,
+    "x": 247,
+    "y": 172
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnClick": "pnlYesClick"
+   },
+   "kind": "LEAF",
+   "name": "pnlYes",
+   "parent": "MyMessageBox",
+   "path": "MyMessageBox.pnlYes",
+   "props": {
+    "BevelWidth": 2,
+    "Caption": "Yes",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 33,
+    "Left": 47,
+    "OnClick": "pnlYesClick",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Tag": 1,
+    "Top": 172,
+    "Visible": "False",
+    "Width": 130
+   },
+   "rect": {
+    "h": 33,
+    "w": 130,
+    "x": 47,
+    "y": 172
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnClick": "pnlAlarmResetClick"
+   },
+   "kind": "LEAF",
+   "name": "pnlAlarmReset",
+   "parent": "MyMessageBox",
+   "path": "MyMessageBox.pnlAlarmReset",
+   "props": {
+    "BevelWidth": 2,
+    "Caption": "AlarmReset",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 33,
+    "Left": 347,
+    "OnClick": "pnlAlarmResetClick",
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 172,
+    "Width": 110
+   },
+   "rect": {
+    "h": 33,
+    "w": 110,
+    "x": 347,
+    "y": 172
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palWaitEAP",
+   "parent": "MyMessageBox",
+   "path": "MyMessageBox.palWaitEAP",
+   "props": {
+    "Caption": "Waiting for EAP system judgment",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -27,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 49,
+    "Left": 552,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 776,
+    "Visible": "False",
+    "Width": 625
+   },
+   "rect": {
+    "h": 49,
+    "w": 625,
+    "x": 552,
+    "y": 776
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "Timer1Timer"
+   },
+   "kind": "NONVISUAL",
+   "name": "Timer1",
+   "parent": "MyMessageBox",
+   "path": "MyMessageBox.Timer1",
+   "props": {
+    "Interval": 10,
+    "Left": 416,
+    "OnTimer": "Timer1Timer",
+    "Top": 176
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 416,
+    "y": 176
+   }
+  }
+ ]
+}

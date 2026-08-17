@@ -1,0 +1,1130 @@
+{
+ "canvas": {
+  "h": 504,
+  "w": 736
+ },
+ "caption": "fArmOffsetData",
+ "form": "fArmOffsetData",
+ "form_class": "TfArmOffsetData",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "ArmOffsetData.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfArmOffsetData",
+   "events": {
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fArmOffsetData",
+   "parent": null,
+   "path": "fArmOffsetData",
+   "props": {
+    "BorderIcons": [],
+    "BorderStyle": "bsToolWindow",
+    "Caption": "fArmOffsetData",
+    "ClientHeight": 504,
+    "ClientWidth": 736,
+    "Color": 12761254,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Left": 1071,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 236
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 1071,
+    "y": 236
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "pgcArmOffset",
+   "parent": "fArmOffsetData",
+   "path": "fArmOffsetData.pgcArmOffset",
+   "props": {
+    "ActivePage": "tsOutArm",
+    "Align": "alClient",
+    "Height": 464,
+    "Left": 0,
+    "TabIndex": 1,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 736
+   },
+   "rect": {
+    "h": 464,
+    "w": 736,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsInArm",
+   "parent": "fArmOffsetData.pgcArmOffset",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm",
+   "props": {
+    "Caption": "In Arm"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlInArm",
+   "parent": "fArmOffsetData.pgcArmOffset.tsInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 257,
+    "Left": 0,
+    "TabOrder": 1,
+    "Top": 40,
+    "Width": 728
+   },
+   "rect": {
+    "h": 257,
+    "w": 728,
+    "x": 0,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label1",
+   "props": {
+    "Caption": "Loader",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 84,
+    "ParentFont": "False",
+    "Top": 10,
+    "Width": 33
+   },
+   "rect": {
+    "h": 13,
+    "w": 33,
+    "x": 84,
+    "y": 10
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label2",
+   "parent": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label2",
+   "props": {
+    "Caption": "Hand X",
+    "Height": 13,
+    "Left": 16,
+    "Top": 30,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 16,
+    "y": 30
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label3",
+   "parent": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label3",
+   "props": {
+    "Caption": "Hand Y",
+    "Height": 13,
+    "Left": 16,
+    "Top": 55,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 16,
+    "y": 55
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label4",
+   "parent": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label4",
+   "props": {
+    "Caption": "Pick up",
+    "Height": 13,
+    "Left": 16,
+    "Top": 105,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 16,
+    "y": 105
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label5",
+   "parent": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label5",
+   "props": {
+    "Caption": "Release",
+    "Height": 13,
+    "Left": 16,
+    "Top": 80,
+    "Width": 39
+   },
+   "rect": {
+    "h": 13,
+    "w": 39,
+    "x": 16,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label6",
+   "parent": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label6",
+   "props": {
+    "Caption": "X Pitch 1",
+    "Height": 13,
+    "Left": 16,
+    "Top": 130,
+    "Width": 43
+   },
+   "rect": {
+    "h": 13,
+    "w": 43,
+    "x": 16,
+    "y": 130
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label9",
+   "parent": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label9",
+   "props": {
+    "Caption": "Hot Plate1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 201,
+    "ParentFont": "False",
+    "Top": 10,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 201,
+    "y": 10
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label10",
+   "parent": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label10",
+   "props": {
+    "Caption": "Hot Plate2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 323,
+    "ParentFont": "False",
+    "Top": 10,
+    "Width": 50
+   },
+   "rect": {
+    "h": 13,
+    "w": 50,
+    "x": 323,
+    "y": 10
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label11",
+   "parent": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label11",
+   "props": {
+    "Caption": "Shuttle 1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 450,
+    "ParentFont": "False",
+    "Top": 10,
+    "Width": 42
+   },
+   "rect": {
+    "h": 13,
+    "w": 42,
+    "x": 450,
+    "y": 10
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label12",
+   "parent": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label12",
+   "props": {
+    "Caption": "Shuttle 2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 572,
+    "ParentFont": "False",
+    "Top": 10,
+    "Width": 42
+   },
+   "rect": {
+    "h": 13,
+    "w": 42,
+    "x": 572,
+    "y": 10
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label28",
+   "parent": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label28",
+   "props": {
+    "Caption": "X Pitch 2",
+    "Height": 13,
+    "Left": 16,
+    "Top": 155,
+    "Width": 43
+   },
+   "rect": {
+    "h": 13,
+    "w": 43,
+    "x": 16,
+    "y": 155
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label29",
+   "parent": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label29",
+   "props": {
+    "Caption": "X Pitch 3",
+    "Height": 13,
+    "Left": 16,
+    "Top": 180,
+    "Width": 43
+   },
+   "rect": {
+    "h": 13,
+    "w": 43,
+    "x": 16,
+    "y": 180
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label30",
+   "parent": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label30",
+   "props": {
+    "Caption": "X Pitch 4",
+    "Height": 13,
+    "Left": 16,
+    "Top": 205,
+    "Width": 43
+   },
+   "rect": {
+    "h": 13,
+    "w": 43,
+    "x": 16,
+    "y": 205
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label31",
+   "parent": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.pnlInArm.Label31",
+   "props": {
+    "Caption": "Y Pitch",
+    "Height": 13,
+    "Left": 16,
+    "Top": 230,
+    "Width": 34
+   },
+   "rect": {
+    "h": 13,
+    "w": 34,
+    "x": 16,
+    "y": 230
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "palOffsetParts",
+   "parent": "fArmOffsetData.pgcArmOffset.tsInArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.palOffsetParts",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Caption": "Input Arm",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -24,
+    "Font.Name": "Arial Black",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 40,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 728
+   },
+   "rect": {
+    "h": 40,
+    "w": 728,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alRight",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label27",
+   "parent": "fArmOffsetData.pgcArmOffset.tsInArm.palOffsetParts",
+   "path": "fArmOffsetData.pgcArmOffset.tsInArm.palOffsetParts.Label27",
+   "props": {
+    "Align": "alRight",
+    "Caption": "Unit : mm",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clFuchsia",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 40,
+    "Layout": "tlBottom",
+    "Left": 674,
+    "ParentFont": "False",
+    "Top": 0,
+    "Width": 54
+   },
+   "rect": {
+    "h": 40,
+    "w": 54,
+    "x": 674,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsOutArm",
+   "parent": "fArmOffsetData.pgcArmOffset",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm",
+   "props": {
+    "Caption": "OutArm",
+    "ImageIndex": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlOutArm",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "props": {
+    "Align": "alClient",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 396,
+    "Left": 0,
+    "TabOrder": 1,
+    "Top": 40,
+    "Width": 728
+   },
+   "rect": {
+    "h": 396,
+    "w": 728,
+    "x": 0,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label13",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label13",
+   "props": {
+    "Caption": "Shuttle 1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 80,
+    "ParentFont": "False",
+    "Top": 10,
+    "Width": 42
+   },
+   "rect": {
+    "h": 13,
+    "w": 42,
+    "x": 80,
+    "y": 10
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label19",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label19",
+   "props": {
+    "Caption": "Shuttle 2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 159,
+    "ParentFont": "False",
+    "Top": 10,
+    "Width": 42
+   },
+   "rect": {
+    "h": 13,
+    "w": 42,
+    "x": 159,
+    "y": 10
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label20",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label20",
+   "props": {
+    "Caption": "Auto 1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 238,
+    "ParentFont": "False",
+    "Top": 10,
+    "Width": 31
+   },
+   "rect": {
+    "h": 13,
+    "w": 31,
+    "x": 238,
+    "y": 10
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label21",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label21",
+   "props": {
+    "Caption": "Auto 2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 317,
+    "ParentFont": "False",
+    "Top": 10,
+    "Width": 31
+   },
+   "rect": {
+    "h": 13,
+    "w": 31,
+    "x": 317,
+    "y": 10
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label22",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label22",
+   "props": {
+    "Caption": "Auto 3",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 395,
+    "ParentFont": "False",
+    "Top": 10,
+    "Width": 31
+   },
+   "rect": {
+    "h": 13,
+    "w": 31,
+    "x": 395,
+    "y": 10
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label23",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label23",
+   "props": {
+    "Caption": "Fix 1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 474,
+    "ParentFont": "False",
+    "Top": 10,
+    "Width": 22
+   },
+   "rect": {
+    "h": 13,
+    "w": 22,
+    "x": 474,
+    "y": 10
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label24",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label24",
+   "props": {
+    "Caption": "Fix 2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 553,
+    "ParentFont": "False",
+    "Top": 10,
+    "Width": 22
+   },
+   "rect": {
+    "h": 13,
+    "w": 22,
+    "x": 553,
+    "y": 10
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label25",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label25",
+   "props": {
+    "Caption": "Fix 3",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 13,
+    "Left": 632,
+    "ParentFont": "False",
+    "Top": 10,
+    "Width": 22
+   },
+   "rect": {
+    "h": 13,
+    "w": 22,
+    "x": 632,
+    "y": 10
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label14",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label14",
+   "props": {
+    "Caption": "Hand X",
+    "Height": 13,
+    "Left": 16,
+    "Top": 30,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 16,
+    "y": 30
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label15",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label15",
+   "props": {
+    "Caption": "Hand Y",
+    "Height": 13,
+    "Left": 16,
+    "Top": 55,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 16,
+    "y": 55
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label16",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label16",
+   "props": {
+    "Caption": "Pick up",
+    "Height": 13,
+    "Left": 16,
+    "Top": 105,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 16,
+    "y": 105
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label17",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label17",
+   "props": {
+    "Caption": "Release",
+    "Height": 13,
+    "Left": 16,
+    "Top": 80,
+    "Width": 39
+   },
+   "rect": {
+    "h": 13,
+    "w": 39,
+    "x": 16,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label18",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label18",
+   "props": {
+    "Caption": "X Pitch 1",
+    "Height": 13,
+    "Left": 16,
+    "Top": 130,
+    "Width": 43
+   },
+   "rect": {
+    "h": 13,
+    "w": 43,
+    "x": 16,
+    "y": 130
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label32",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label32",
+   "props": {
+    "Caption": "X Pitch 2",
+    "Height": 13,
+    "Left": 16,
+    "Top": 155,
+    "Width": 43
+   },
+   "rect": {
+    "h": 13,
+    "w": 43,
+    "x": 16,
+    "y": 155
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label33",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label33",
+   "props": {
+    "Caption": "X Pitch 3",
+    "Height": 13,
+    "Left": 16,
+    "Top": 180,
+    "Width": 43
+   },
+   "rect": {
+    "h": 13,
+    "w": 43,
+    "x": 16,
+    "y": 180
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label34",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label34",
+   "props": {
+    "Caption": "X Pitch 4",
+    "Height": 13,
+    "Left": 16,
+    "Top": 205,
+    "Width": 43
+   },
+   "rect": {
+    "h": 13,
+    "w": 43,
+    "x": 16,
+    "y": 205
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label35",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.pnlOutArm.Label35",
+   "props": {
+    "Caption": "Y Pitch",
+    "Height": 13,
+    "Left": 16,
+    "Top": 230,
+    "Width": 34
+   },
+   "rect": {
+    "h": 13,
+    "w": 34,
+    "x": 16,
+    "y": 230
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel1",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.Panel1",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Caption": "Output Arm",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -24,
+    "Font.Name": "Arial Black",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 40,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 728
+   },
+   "rect": {
+    "h": 40,
+    "w": 728,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alRight",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label8",
+   "parent": "fArmOffsetData.pgcArmOffset.tsOutArm.Panel1",
+   "path": "fArmOffsetData.pgcArmOffset.tsOutArm.Panel1.Label8",
+   "props": {
+    "Align": "alRight",
+    "Caption": "Unit : mm",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clFuchsia",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 40,
+    "Layout": "tlBottom",
+    "Left": 674,
+    "ParentFont": "False",
+    "Top": 0,
+    "Width": 54
+   },
+   "rect": {
+    "h": 40,
+    "w": 54,
+    "x": 674,
+    "y": 0
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel2",
+   "parent": "fArmOffsetData",
+   "path": "fArmOffsetData.Panel2",
+   "props": {
+    "Align": "alBottom",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 40,
+    "Left": 0,
+    "TabOrder": 1,
+    "Top": 464,
+    "Width": 736
+   },
+   "rect": {
+    "h": 40,
+    "w": 736,
+    "x": 0,
+    "y": 464
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnSaveClick"
+   },
+   "kind": "LEAF",
+   "name": "btnSave",
+   "parent": "fArmOffsetData.Panel2",
+   "path": "fArmOffsetData.Panel2.btnSave",
+   "props": {
+    "Caption": "Save",
+    "Height": 30,
+    "Left": 116,
+    "OnClick": "btnSaveClick",
+    "TabOrder": 0,
+    "Top": 5,
+    "Width": 150
+   },
+   "rect": {
+    "h": 30,
+    "w": 150,
+    "x": 116,
+    "y": 5
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnOutArmExitClick"
+   },
+   "kind": "LEAF",
+   "name": "btnExit",
+   "parent": "fArmOffsetData.Panel2",
+   "path": "fArmOffsetData.Panel2.btnExit",
+   "props": {
+    "Caption": "Exit",
+    "Height": 30,
+    "Left": 509,
+    "OnClick": "btnOutArmExitClick",
+    "TabOrder": 1,
+    "Top": 5,
+    "Width": 150
+   },
+   "rect": {
+    "h": 30,
+    "w": 150,
+    "x": 509,
+    "y": 5
+   }
+  }
+ ]
+}

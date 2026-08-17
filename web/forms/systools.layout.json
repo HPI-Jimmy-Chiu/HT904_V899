@@ -1,0 +1,44 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "SysTools",
+ "form": "FormSysTools",
+ "form_class": "TFormSysTools",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "systools.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TFormSysTools",
+   "events": {},
+   "kind": "ROOT",
+   "name": "FormSysTools",
+   "parent": null,
+   "path": "FormSysTools",
+   "props": {
+    "Caption": "SysTools",
+    "Color": 12761254,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 355,
+    "Left": 693,
+    "OldCreateOrder": "False",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 262,
+    "Width": 488
+   },
+   "rect": {
+    "h": 355,
+    "w": 488,
+    "x": 693,
+    "y": 262
+   }
+  }
+ ]
+}

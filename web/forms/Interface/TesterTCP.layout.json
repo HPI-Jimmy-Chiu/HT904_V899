@@ -1,0 +1,5906 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "Tester TCP/IP",
+ "form": "fTesterTCP",
+ "form_class": "TfTesterTCP",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "Interface/TesterTCP.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfTesterTCP",
+   "events": {
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fTesterTCP",
+   "parent": null,
+   "path": "fTesterTCP",
+   "props": {
+    "Caption": "Tester TCP/IP",
+    "Color": 8421440,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 881,
+    "Left": 403,
+    "OldCreateOrder": "False",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 66,
+    "Width": 856
+   },
+   "rect": {
+    "h": 881,
+    "w": 856,
+    "x": 403,
+    "y": 66
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "pgcTcpIp",
+   "parent": "fTesterTCP",
+   "path": "fTesterTCP.pgcTcpIp",
+   "props": {
+    "ActivePage": "tsTestResult2",
+    "Align": "alClient",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 850,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabHeight": 30,
+    "TabIndex": 3,
+    "TabOrder": 0,
+    "TabWidth": 120,
+    "Top": 0,
+    "Width": 848
+   },
+   "rect": {
+    "h": 850,
+    "w": 848,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsMain",
+   "parent": "fTesterTCP.pgcTcpIp",
+   "path": "fTesterTCP.pgcTcpIp.tsMain",
+   "props": {
+    "Caption": "Main"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "mmTCPIPCommLog",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.mmTCPIPCommLog",
+   "props": {
+    "Align": "alBottom",
+    "Color": 14670284,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 303,
+    "Left": 0,
+    "ParentFont": "False",
+    "ScrollBars": "ssVertical",
+    "TabOrder": 32,
+    "Top": 507,
+    "Width": 840
+   },
+   "rect": {
+    "h": 303,
+    "w": 840,
+    "x": 0,
+    "y": 507
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbSite",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.gbSite",
+   "props": {
+    "Caption": "Site01",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr01",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.gbSite",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.gbSite.labOcr01",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite01",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.gbSite",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.gbSite.cbSite01",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn01",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.gbSite",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.gbSite.cbSiteOn01",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite01",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.gbSite",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.gbSite.plSite01",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox1",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox1",
+   "props": {
+    "Caption": "Site02",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 104,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 0,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 104,
+    "y": 0
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr02",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox1",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox1.labOcr02",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite02",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox1",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox1.cbSite02",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn02",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox1",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox1.cbSiteOn02",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite02",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox1",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox1.plSite02",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox2",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox2",
+   "props": {
+    "Caption": "Site03",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 208,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 0,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 208,
+    "y": 0
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr03",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox2",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox2.labOcr03",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite03",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox2",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox2.cbSite03",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn03",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox2",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox2.cbSiteOn03",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite03",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox2",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox2.plSite03",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox3",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox3",
+   "props": {
+    "Caption": "Site06",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 520,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 0,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 520,
+    "y": 0
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr06",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox3",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox3.labOcr06",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite06",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox3",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox3.cbSite06",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn06",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox3",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox3.cbSiteOn06",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite06",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox3",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox3.plSite06",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox4",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox4",
+   "props": {
+    "Caption": "Site05",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 416,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 0,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 416,
+    "y": 0
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr05",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox4",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox4.labOcr05",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite05",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox4",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox4.cbSite05",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn05",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox4",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox4.cbSiteOn05",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite05",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox4",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox4.plSite05",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox5",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox5",
+   "props": {
+    "Caption": "Site04",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 312,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 0,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 312,
+    "y": 0
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr04",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox5",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox5.labOcr04",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite04",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox5",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox5.cbSite04",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn04",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox5",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox5.cbSiteOn04",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite04",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox5",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox5.plSite04",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox6",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox6",
+   "props": {
+    "Caption": "Site08",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 728,
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Top": 0,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 728,
+    "y": 0
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr08",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox6",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox6.labOcr08",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite08",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox6",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox6.cbSite08",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn08",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox6",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox6.cbSiteOn08",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite08",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox6",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox6.plSite08",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox7",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox7",
+   "props": {
+    "Caption": "Site07",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 624,
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Top": 0,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 624,
+    "y": 0
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr07",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox7",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox7.labOcr07",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite07",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox7",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox7.cbSite07",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn07",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox7",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox7.cbSiteOn07",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite07",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox7",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox7.plSite07",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox8",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox8",
+   "props": {
+    "Caption": "Site09",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Top": 124,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 0,
+    "y": 124
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr09",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox8",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox8.labOcr09",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite09",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox8",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox8.cbSite09",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn09",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox8",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox8.cbSiteOn09",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite09",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox8",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox8.plSite09",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox9",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox9",
+   "props": {
+    "Caption": "Site10",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 104,
+    "ParentFont": "False",
+    "TabOrder": 9,
+    "Top": 124,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 104,
+    "y": 124
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr10",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox9",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox9.labOcr10",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite10",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox9",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox9.cbSite10",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn10",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox9",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox9.cbSiteOn10",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite10",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox9",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox9.plSite10",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox10",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox10",
+   "props": {
+    "Caption": "Site11",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 208,
+    "ParentFont": "False",
+    "TabOrder": 10,
+    "Top": 124,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 208,
+    "y": 124
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr11",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox10",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox10.labOcr11",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite11",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox10",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox10.cbSite11",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn11",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox10",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox10.cbSiteOn11",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite11",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox10",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox10.plSite11",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox11",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox11",
+   "props": {
+    "Caption": "Site14",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 520,
+    "ParentFont": "False",
+    "TabOrder": 13,
+    "Top": 124,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 520,
+    "y": 124
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr14",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox11",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox11.labOcr14",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite14",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox11",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox11.cbSite14",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn14",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox11",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox11.cbSiteOn14",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite14",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox11",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox11.plSite14",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox12",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox12",
+   "props": {
+    "Caption": "Site13",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 416,
+    "ParentFont": "False",
+    "TabOrder": 12,
+    "Top": 124,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 416,
+    "y": 124
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr13",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox12",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox12.labOcr13",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite13",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox12",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox12.cbSite13",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn13",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox12",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox12.cbSiteOn13",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite13",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox12",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox12.plSite13",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox13",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox13",
+   "props": {
+    "Caption": "Site12",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 312,
+    "ParentFont": "False",
+    "TabOrder": 11,
+    "Top": 124,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 312,
+    "y": 124
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr12",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox13",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox13.labOcr12",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite12",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox13",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox13.cbSite12",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn12",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox13",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox13.cbSiteOn12",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite12",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox13",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox13.plSite12",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox14",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox14",
+   "props": {
+    "Caption": "Site16",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 728,
+    "ParentFont": "False",
+    "TabOrder": 15,
+    "Top": 124,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 728,
+    "y": 124
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr16",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox14",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox14.labOcr16",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite16",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox14",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox14.cbSite16",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn16",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox14",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox14.cbSiteOn16",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite16",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox14",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox14.plSite16",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox15",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox15",
+   "props": {
+    "Caption": "Site15",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 624,
+    "ParentFont": "False",
+    "TabOrder": 14,
+    "Top": 124,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 624,
+    "y": 124
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr15",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox15",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox15.labOcr15",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite15",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox15",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox15.cbSite15",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn15",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox15",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox15.cbSiteOn15",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite15",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox15",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox15.plSite15",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox16",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox16",
+   "props": {
+    "Caption": "Site17",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 16,
+    "Top": 248,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 0,
+    "y": 248
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr17",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox16",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox16.labOcr17",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite17",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox16",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox16.cbSite17",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn17",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox16",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox16.cbSiteOn17",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite17",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox16",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox16.plSite17",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox17",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox17",
+   "props": {
+    "Caption": "Site18",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 104,
+    "ParentFont": "False",
+    "TabOrder": 17,
+    "Top": 248,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 104,
+    "y": 248
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr18",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox17",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox17.labOcr18",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite18",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox17",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox17.cbSite18",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn18",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox17",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox17.cbSiteOn18",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite18",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox17",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox17.plSite18",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox18",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox18",
+   "props": {
+    "Caption": "Site19",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 208,
+    "ParentFont": "False",
+    "TabOrder": 18,
+    "Top": 248,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 208,
+    "y": 248
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr19",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox18",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox18.labOcr19",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite19",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox18",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox18.cbSite19",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn19",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox18",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox18.cbSiteOn19",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite19",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox18",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox18.plSite19",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox19",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox19",
+   "props": {
+    "Caption": "Site22",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 520,
+    "ParentFont": "False",
+    "TabOrder": 21,
+    "Top": 248,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 520,
+    "y": 248
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr22",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox19",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox19.labOcr22",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite22",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox19",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox19.cbSite22",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn22",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox19",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox19.cbSiteOn22",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite22",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox19",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox19.plSite22",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox20",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox20",
+   "props": {
+    "Caption": "Site21",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 416,
+    "ParentFont": "False",
+    "TabOrder": 20,
+    "Top": 248,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 416,
+    "y": 248
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr21",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox20",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox20.labOcr21",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite21",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox20",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox20.cbSite21",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn21",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox20",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox20.cbSiteOn21",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite21",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox20",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox20.plSite21",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox21",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox21",
+   "props": {
+    "Caption": "Site20",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 312,
+    "ParentFont": "False",
+    "TabOrder": 19,
+    "Top": 248,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 312,
+    "y": 248
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr20",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox21",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox21.labOcr20",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite20",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox21",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox21.cbSite20",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn20",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox21",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox21.cbSiteOn20",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite20",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox21",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox21.plSite20",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox22",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox22",
+   "props": {
+    "Caption": "Site24",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 728,
+    "ParentFont": "False",
+    "TabOrder": 23,
+    "Top": 248,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 728,
+    "y": 248
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr24",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox22",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox22.labOcr24",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite24",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox22",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox22.cbSite24",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn24",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox22",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox22.cbSiteOn24",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite24",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox22",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox22.plSite24",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox23",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox23",
+   "props": {
+    "Caption": "Site23",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 624,
+    "ParentFont": "False",
+    "TabOrder": 22,
+    "Top": 248,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 624,
+    "y": 248
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr23",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox23",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox23.labOcr23",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite23",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox23",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox23.cbSite23",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn23",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox23",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox23.cbSiteOn23",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite23",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox23",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox23.plSite23",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox24",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox24",
+   "props": {
+    "Caption": "Site25",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 24,
+    "Top": 372,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 0,
+    "y": 372
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr25",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox24",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox24.labOcr25",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite25",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox24",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox24.cbSite25",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn25",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox24",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox24.cbSiteOn25",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite25",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox24",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox24.plSite25",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox25",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox25",
+   "props": {
+    "Caption": "Site26",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 104,
+    "ParentFont": "False",
+    "TabOrder": 25,
+    "Top": 372,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 104,
+    "y": 372
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr26",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox25",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox25.labOcr26",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite26",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox25",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox25.cbSite26",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn26",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox25",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox25.cbSiteOn26",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite26",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox25",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox25.plSite26",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox26",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox26",
+   "props": {
+    "Caption": "Site27",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 208,
+    "ParentFont": "False",
+    "TabOrder": 26,
+    "Top": 372,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 208,
+    "y": 372
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr27",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox26",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox26.labOcr27",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite27",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox26",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox26.cbSite27",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn27",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox26",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox26.cbSiteOn27",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite27",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox26",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox26.plSite27",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox27",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox27",
+   "props": {
+    "Caption": "Site30",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 520,
+    "ParentFont": "False",
+    "TabOrder": 29,
+    "Top": 372,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 520,
+    "y": 372
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr30",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox27",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox27.labOcr30",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite30",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox27",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox27.cbSite30",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn30",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox27",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox27.cbSiteOn30",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite30",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox27",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox27.plSite30",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox28",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox28",
+   "props": {
+    "Caption": "Site29",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 416,
+    "ParentFont": "False",
+    "TabOrder": 28,
+    "Top": 372,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 416,
+    "y": 372
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr29",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox28",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox28.labOcr29",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite29",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox28",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox28.cbSite29",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn29",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox28",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox28.cbSiteOn29",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite29",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox28",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox28.plSite29",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox29",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox29",
+   "props": {
+    "Caption": "Site28",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 312,
+    "ParentFont": "False",
+    "TabOrder": 27,
+    "Top": 372,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 312,
+    "y": 372
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr28",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox29",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox29.labOcr28",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite28",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox29",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox29.cbSite28",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn28",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox29",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox29.cbSiteOn28",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite28",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox29",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox29.plSite28",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox30",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox30",
+   "props": {
+    "Caption": "Site32",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 728,
+    "ParentFont": "False",
+    "TabOrder": 31,
+    "Top": 372,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 728,
+    "y": 372
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr32",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox30",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox30.labOcr32",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite32",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox30",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox30.cbSite32",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn32",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox30",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox30.cbSiteOn32",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite32",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox30",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox30.plSite32",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox31",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox31",
+   "props": {
+    "Caption": "Site31",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 624,
+    "ParentFont": "False",
+    "TabOrder": 30,
+    "Top": 372,
+    "Width": 100
+   },
+   "rect": {
+    "h": 120,
+    "w": 100,
+    "x": 624,
+    "y": 372
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labOcr31",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox31",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox31.labOcr31",
+   "props": {
+    "Align": "alBottom",
+    "Alignment": "taCenter",
+    "Caption": "OCR Text",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 14,
+    "Left": 2,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 96
+   },
+   "rect": {
+    "h": 14,
+    "w": 96,
+    "x": 2,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSite31",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox31",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox31.cbSite31",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ImeMode": "imClose",
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "1..5",
+     "1..10",
+     "1..16"
+    ],
+    "Left": 35,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 68,
+    "Width": 55
+   },
+   "rect": {
+    "h": 28,
+    "w": 55,
+    "x": 35,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbSiteOn31",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox31",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox31.cbSiteOn31",
+   "props": {
+    "Checked": "True",
+    "Height": 17,
+    "Left": 15,
+    "State": "cbChecked",
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 14
+   },
+   "rect": {
+    "h": 17,
+    "w": 14,
+    "x": 15,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "plSite31",
+   "parent": "fTesterTCP.pgcTcpIp.tsMain.GroupBox31",
+   "path": "fTesterTCP.pgcTcpIp.tsMain.GroupBox31.plSite31",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "01",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -35,
+    "Font.Name": "Impact",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 77
+   },
+   "rect": {
+    "h": 49,
+    "w": 77,
+    "x": 12,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsSetting",
+   "parent": "fTesterTCP.pgcTcpIp",
+   "path": "fTesterTCP.pgcTcpIp.tsSetting",
+   "props": {
+    "Caption": "Setting",
+    "ImageIndex": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpTrayFunc_OS",
+   "parent": "fTesterTCP.pgcTcpIp.tsSetting",
+   "path": "fTesterTCP.pgcTcpIp.tsSetting.grpTrayFunc_OS",
+   "props": {
+    "Align": "alTop",
+    "Caption": "OutArm Place Type",
+    "Color": 8421440,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clMenu",
+    "Font.Height": -19,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 89,
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 120,
+    "Width": 840
+   },
+   "rect": {
+    "h": 89,
+    "w": 840,
+    "x": 0,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblTrayFunc_OS",
+   "parent": "fTesterTCP.pgcTcpIp.tsSetting.grpTrayFunc_OS",
+   "path": "fTesterTCP.pgcTcpIp.tsSetting.grpTrayFunc_OS.lblTrayFunc_OS",
+   "props": {
+    "Caption": "If Func.Checked, OutArm will perform  Variable Pitch Mode",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 15,
+    "ParentFont": "False",
+    "Top": 30,
+    "Width": 405
+   },
+   "rect": {
+    "h": 18,
+    "w": 405,
+    "x": 15,
+    "y": 30
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkAuto1_OS",
+   "parent": "fTesterTCP.pgcTcpIp.tsSetting.grpTrayFunc_OS",
+   "path": "fTesterTCP.pgcTcpIp.tsSetting.grpTrayFunc_OS.chkAuto1_OS",
+   "props": {
+    "Caption": "Auto1",
+    "Height": 17,
+    "Left": 12,
+    "TabOrder": 0,
+    "Top": 60,
+    "Width": 77
+   },
+   "rect": {
+    "h": 17,
+    "w": 77,
+    "x": 12,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkAuto2_OS",
+   "parent": "fTesterTCP.pgcTcpIp.tsSetting.grpTrayFunc_OS",
+   "path": "fTesterTCP.pgcTcpIp.tsSetting.grpTrayFunc_OS.chkAuto2_OS",
+   "props": {
+    "Caption": "Auto2",
+    "Height": 17,
+    "Left": 112,
+    "TabOrder": 1,
+    "Top": 60,
+    "Width": 77
+   },
+   "rect": {
+    "h": 17,
+    "w": 77,
+    "x": 112,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkAuto3_OS",
+   "parent": "fTesterTCP.pgcTcpIp.tsSetting.grpTrayFunc_OS",
+   "path": "fTesterTCP.pgcTcpIp.tsSetting.grpTrayFunc_OS.chkAuto3_OS",
+   "props": {
+    "Caption": "Auto3",
+    "Height": 17,
+    "Left": 212,
+    "TabOrder": 2,
+    "Top": 60,
+    "Width": 77
+   },
+   "rect": {
+    "h": 17,
+    "w": 77,
+    "x": 212,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnSaveClick"
+   },
+   "kind": "LEAF",
+   "name": "btnSave",
+   "parent": "fTesterTCP.pgcTcpIp.tsSetting.grpTrayFunc_OS",
+   "path": "fTesterTCP.pgcTcpIp.tsSetting.grpTrayFunc_OS.btnSave",
+   "props": {
+    "Caption": "Save",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 29,
+    "Left": 425,
+    "OnClick": "btnSaveClick",
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 52,
+    "Width": 90
+   },
+   "rect": {
+    "h": 29,
+    "w": 90,
+    "x": 425,
+    "y": 52
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbTCPIP",
+   "parent": "fTesterTCP.pgcTcpIp.tsSetting",
+   "path": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP",
+   "props": {
+    "Align": "alTop",
+    "Caption": "TCP/IP",
+    "Color": 8421440,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clMenu",
+    "Font.Height": -19,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 120,
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 840
+   },
+   "rect": {
+    "h": 120,
+    "w": 840,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label23",
+   "parent": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP",
+   "path": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP.Label23",
+   "props": {
+    "Caption": "Address",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 9,
+    "ParentFont": "False",
+    "Top": 22,
+    "Width": 59
+   },
+   "rect": {
+    "h": 18,
+    "w": 59,
+    "x": 9,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label24",
+   "parent": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP",
+   "path": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP.Label24",
+   "props": {
+    "Caption": "Port",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindow",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 143,
+    "ParentFont": "False",
+    "Top": 22,
+    "Width": 29
+   },
+   "rect": {
+    "h": 18,
+    "w": 29,
+    "x": 143,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edTCPIP_Address",
+   "parent": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP",
+   "path": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP.edTCPIP_Address",
+   "props": {
+    "Enabled": "False",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 7,
+    "ParentFont": "False",
+    "ReadOnly": "True",
+    "TabOrder": 0,
+    "Text": "192.168.1.50",
+    "Top": 46,
+    "Width": 130
+   },
+   "rect": {
+    "h": 26,
+    "w": 130,
+    "x": 7,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edTCPIP_Port",
+   "parent": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP",
+   "path": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP.edTCPIP_Port",
+   "props": {
+    "Enabled": "False",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 142,
+    "ParentFont": "False",
+    "ReadOnly": "True",
+    "TabOrder": 1,
+    "Text": "6000",
+    "Top": 46,
+    "Width": 60
+   },
+   "rect": {
+    "h": 26,
+    "w": 60,
+    "x": 142,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBitBtn",
+   "events": {
+    "OnClick": "btTCPIP_ConnectClick"
+   },
+   "kind": "LEAF",
+   "name": "btTCPIP_Connect",
+   "parent": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP",
+   "path": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP.btTCPIP_Connect",
+   "props": {
+    "Caption": "Connect",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clGreen",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 30,
+    "Left": 6,
+    "OnClick": "btTCPIP_ConnectClick",
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 76,
+    "Width": 120
+   },
+   "rect": {
+    "h": 30,
+    "w": 120,
+    "x": 6,
+    "y": 76
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBitBtn",
+   "events": {
+    "OnClick": "btTCPIP_DisconnectClick"
+   },
+   "kind": "LEAF",
+   "name": "btTCPIP_Disconnect",
+   "parent": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP",
+   "path": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP.btTCPIP_Disconnect",
+   "props": {
+    "Caption": "Disconnect",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": 4210816,
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 30,
+    "Left": 130,
+    "OnClick": "btTCPIP_DisconnectClick",
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 76,
+    "Width": 120
+   },
+   "rect": {
+    "h": 30,
+    "w": 120,
+    "x": 130,
+    "y": 76
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btTCPIP_TriggerClick"
+   },
+   "kind": "LEAF",
+   "name": "btTCPIP_Trigger",
+   "parent": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP",
+   "path": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP.btTCPIP_Trigger",
+   "props": {
+    "Caption": "Send CMD",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 29,
+    "Left": 297,
+    "OnClick": "btTCPIP_TriggerClick",
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 76,
+    "Width": 90
+   },
+   "rect": {
+    "h": 29,
+    "w": 90,
+    "x": 297,
+    "y": 76
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edTCPIP_CMD",
+   "parent": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP",
+   "path": "fTesterTCP.pgcTcpIp.tsSetting.gbTCPIP.edTCPIP_CMD",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 215,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 46,
+    "Width": 171
+   },
+   "rect": {
+    "h": 26,
+    "w": 171,
+    "x": 215,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsTestResult",
+   "parent": "fTesterTCP.pgcTcpIp",
+   "path": "fTesterTCP.pgcTcpIp.tsTestResult",
+   "props": {
+    "Caption": "Test Result",
+    "ImageIndex": 2
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlLeft",
+   "parent": "fTesterTCP.pgcTcpIp.tsTestResult",
+   "path": "fTesterTCP.pgcTcpIp.tsTestResult.pnlLeft",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Color": 8421440,
+    "Height": 810,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 833
+   },
+   "rect": {
+    "h": 810,
+    "w": 833,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpTempData",
+   "parent": "fTesterTCP.pgcTcpIp.tsTestResult.pnlLeft",
+   "path": "fTesterTCP.pgcTcpIp.tsTestResult.pnlLeft.grpTempData",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Temp Data",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 229,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 833
+   },
+   "rect": {
+    "h": 229,
+    "w": 833,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "SourceMemo",
+   "parent": "fTesterTCP.pgcTcpIp.tsTestResult.pnlLeft.grpTempData",
+   "path": "fTesterTCP.pgcTcpIp.tsTestResult.pnlLeft.grpTempData.SourceMemo",
+   "props": {
+    "Align": "alClient",
+    "Color": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 205,
+    "Left": 2,
+    "ParentFont": "False",
+    "ScrollBars": "ssBoth",
+    "TabOrder": 0,
+    "Top": 22,
+    "Width": 829
+   },
+   "rect": {
+    "h": 205,
+    "w": 829,
+    "x": 2,
+    "y": 22
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpSummary",
+   "parent": "fTesterTCP.pgcTcpIp.tsTestResult.pnlLeft",
+   "path": "fTesterTCP.pgcTcpIp.tsTestResult.pnlLeft.grpSummary",
+   "props": {
+    "Align": "alClient",
+    "Caption": "Summary",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 581,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 229,
+    "Width": 833
+   },
+   "rect": {
+    "h": 581,
+    "w": 833,
+    "x": 0,
+    "y": 229
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TRichEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "redtSummary",
+   "parent": "fTesterTCP.pgcTcpIp.tsTestResult.pnlLeft.grpSummary",
+   "path": "fTesterTCP.pgcTcpIp.tsTestResult.pnlLeft.grpSummary.redtSummary",
+   "props": {
+    "Align": "alClient",
+    "Color": "clWhite",
+    "Font.Charset": "CHINESEBIG5_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Courier New",
+    "Font.Style": [],
+    "Height": 557,
+    "Left": 2,
+    "ParentFont": "False",
+    "ScrollBars": "ssBoth",
+    "TabOrder": 0,
+    "Top": 22,
+    "Width": 829
+   },
+   "rect": {
+    "h": 557,
+    "w": 829,
+    "x": 2,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsTestResult2",
+   "parent": "fTesterTCP.pgcTcpIp",
+   "path": "fTesterTCP.pgcTcpIp.tsTestResult2",
+   "props": {
+    "Caption": "Test Result2",
+    "ImageIndex": 3
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TScrollBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "scrlbxSummary",
+   "parent": "fTesterTCP.pgcTcpIp.tsTestResult2",
+   "path": "fTesterTCP.pgcTcpIp.tsTestResult2.scrlbxSummary",
+   "props": {
+    "Align": "alClient",
+    "Height": 739,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 840
+   },
+   "rect": {
+    "h": 739,
+    "w": 840,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "rgUnloaderClick"
+   },
+   "kind": "SUBDLG",
+   "name": "rgUnloader",
+   "parent": "fTesterTCP.pgcTcpIp.tsTestResult2",
+   "path": "fTesterTCP.pgcTcpIp.tsTestResult2.rgUnloader",
+   "props": {
+    "Align": "alBottom",
+    "Columns": 4,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 71,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "All",
+     "Auto 1",
+     "Auto 2",
+     "Auto 3"
+    ],
+    "Left": 0,
+    "OnClick": "rgUnloaderClick",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 739,
+    "Width": 840
+   },
+   "rect": {
+    "h": 71,
+    "w": 840,
+    "x": 0,
+    "y": 739
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "TimerTCPIPConnectTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "TimerTCPIPConnect",
+   "parent": "fTesterTCP",
+   "path": "fTesterTCP.TimerTCPIPConnect",
+   "props": {
+    "Enabled": "False",
+    "Left": 672,
+    "OnTimer": "TimerTCPIPConnectTimer"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 672,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TClientSocket",
+   "events": {
+    "OnConnect": "ClientSocket_TCPIPConnect",
+    "OnDisconnect": "ClientSocket_TCPIPDisconnect",
+    "OnError": "ClientSocket_TCPIPError",
+    "OnRead": "ClientSocket_TCPIPRead"
+   },
+   "kind": "NONVISUAL",
+   "name": "ClientSocket_TCPIP",
+   "parent": "fTesterTCP",
+   "path": "fTesterTCP.ClientSocket_TCPIP",
+   "props": {
+    "Active": "False",
+    "ClientType": "ctNonBlocking",
+    "Left": 704,
+    "OnConnect": "ClientSocket_TCPIPConnect",
+    "OnDisconnect": "ClientSocket_TCPIPDisconnect",
+    "OnError": "ClientSocket_TCPIPError",
+    "OnRead": "ClientSocket_TCPIPRead",
+    "Port": 0,
+    "Top": 4
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 704,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "TimerProcessTCPDataTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "TimerProcessTCPData",
+   "parent": "fTesterTCP",
+   "path": "fTesterTCP.TimerProcessTCPData",
+   "props": {
+    "Enabled": "False",
+    "Interval": 1,
+    "Left": 643,
+    "OnTimer": "TimerProcessTCPDataTimer",
+    "Top": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 643,
+    "y": 1
+   }
+  }
+ ]
+}

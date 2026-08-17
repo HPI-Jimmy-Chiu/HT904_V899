@@ -1,0 +1,89 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "Xml",
+ "form": "frmXml",
+ "form_class": "TfrmXml",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "BarCode/BarcodeXML.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfrmXml",
+   "events": {},
+   "kind": "ROOT",
+   "name": "frmXml",
+   "parent": null,
+   "path": "frmXml",
+   "props": {
+    "Caption": "Xml",
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 83,
+    "Left": 313,
+    "OldCreateOrder": "False",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 120,
+    "Width": 180
+   },
+   "rect": {
+    "h": 83,
+    "w": 180,
+    "x": 313,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TIdHTTP",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "IdHTTPMESSystem",
+   "parent": "frmXml",
+   "path": "frmXml.IdHTTPMESSystem",
+   "props": {
+    "Left": 36,
+    "Request.Accept": "text/html, */*",
+    "Request.ContentLength": 0,
+    "Request.ContentRangeEnd": 0,
+    "Request.ContentRangeStart": 0,
+    "Request.ProxyPort": 0,
+    "Request.UserAgent": "Mozilla/3.0 (compatible; Indy Library)",
+    "Top": 8
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 36,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TXMLDocument",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "XMLDocument1",
+   "parent": "frmXml",
+   "path": "frmXml.XMLDocument1",
+   "props": {
+    "DOMVendorDesc": "Open XML",
+    "Left": 72,
+    "Top": 8
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 72,
+    "y": 8
+   }
+  }
+ ]
+}

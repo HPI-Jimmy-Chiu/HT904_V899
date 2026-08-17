@@ -1,0 +1,3695 @@
+{
+ "canvas": {
+  "h": 819,
+  "w": 959
+ },
+ "caption": "BIN Setting Check",
+ "form": "fShowBinSet",
+ "form_class": "TfShowBinSet",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "cShowBinSet.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfShowBinSet",
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fShowBinSet",
+   "parent": null,
+   "path": "fShowBinSet",
+   "props": {
+    "BorderStyle": "bsToolWindow",
+    "Caption": "BIN Setting Check",
+    "ClientHeight": 819,
+    "ClientWidth": 959,
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Left": 1212,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 169
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 1212,
+    "y": 169
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "PageControl1",
+   "parent": "fShowBinSet",
+   "path": "fShowBinSet.PageControl1",
+   "props": {
+    "ActivePage": "tsSiteMappingCheck",
+    "Align": "alClient",
+    "Height": 819,
+    "Left": 0,
+    "TabIndex": 1,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 959
+   },
+   "rect": {
+    "h": 819,
+    "w": 959,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsBinSettingCheck",
+   "parent": "fShowBinSet.PageControl1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck",
+   "props": {
+    "Caption": "Bin"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pal1",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Height": 791,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 89
+   },
+   "rect": {
+    "h": 791,
+    "w": 89,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lab4",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.lab4",
+   "props": {
+    "Caption": "Bin Box",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -24,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 29,
+    "Left": -2,
+    "ParentFont": "False",
+    "Top": 630,
+    "Width": 91
+   },
+   "rect": {
+    "h": 29,
+    "w": 91,
+    "x": -2,
+    "y": 630
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labAuto1",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labAuto1",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Auto 1",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 0,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labAuto2",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labAuto2",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Auto 2",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 20,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 20
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labAuto3",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labAuto3",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Auto 3",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 40,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 40
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFix1",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix1",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix1",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 120,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 120
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFix2",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix2",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix2",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 140,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 140
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFix3",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix3",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix3",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 160,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 160
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFix4",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix4",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix4",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 180,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 180
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFix5",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix5",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix5",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 200,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 200
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFix6",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix6",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix6",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 220,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 220
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label2",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.Label2",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "BulkBox",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 360,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 360
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labMag1",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag1",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Mag 1",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 380,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 380
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labMag2",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag2",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Mag 2",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 400,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 400
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labMag3",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag3",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Mag 3",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 420,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 420
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labMag4",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag4",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Mag 4",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 440,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 440
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labMag5",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag5",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Mag 5",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 460,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 460
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labMag6",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag6",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Mag 6",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 480,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 480
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labMag7",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag7",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Mag 7",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 500,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 500
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labMag8",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag8",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Mag 8",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 520,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 520
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labMag9",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag9",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Mag 9",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 540,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 540
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labMag10",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag10",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Mag 10",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 560,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 560
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labMag11",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag11",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Mag 11",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 580,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 580
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labMag12",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag12",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Mag 12",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 600,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 600
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labMag13",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag13",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Mag 13",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 620,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 620
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labMag14",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labMag14",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Mag 14",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 640,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 640
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labAuto4",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labAuto4",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Auto 4",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 60,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 60
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labAuto5",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labAuto5",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Auto 5",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 80,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 80
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labAuto6",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labAuto6",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Auto 6",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 100,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 100
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFix7",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix7",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix 7",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 240,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 240
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFix8",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix8",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix 8",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 260,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 260
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFix9",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix9",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix 9",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 280,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 280
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFix10",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix10",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix 10",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 300,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 300
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFix11",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix11",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix 11",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 320,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 320
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labFix12",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.pal1.labFix12",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix 12",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentFont": "False",
+    "Top": 340,
+    "Width": 89
+   },
+   "rect": {
+    "h": 20,
+    "w": 89,
+    "x": 0,
+    "y": 340
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TScrollBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "ScrollBox1",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1",
+   "props": {
+    "Align": "alClient",
+    "AutoScroll": "False",
+    "BorderStyle": "bsNone",
+    "Color": "clHighlightText",
+    "Height": 791,
+    "Left": 89,
+    "ParentColor": "False",
+    "TabOrder": 1,
+    "Top": 0,
+    "Width": 862
+   },
+   "rect": {
+    "h": 791,
+    "w": 862,
+    "x": 89,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labBinBox",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.labBinBox",
+   "props": {
+    "Caption": "Fix6",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -24,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 29,
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 628,
+    "Width": 48
+   },
+   "rect": {
+    "h": 29,
+    "w": 48,
+    "x": 0,
+    "y": 628
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlShowBin",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "props": {
+    "Align": "alClient",
+    "BevelOuter": "bvNone",
+    "Caption": "pnlShowBin",
+    "Color": "clHighlightText",
+    "Height": 791,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 862
+   },
+   "rect": {
+    "h": 791,
+    "w": 862,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laAuto1",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laAuto1",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Auto 1",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 0,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laAuto2",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laAuto2",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Auto 2",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 20,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 20
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laAuto3",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laAuto3",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Auto 3",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 40,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 40
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laBinBox",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laBinBox",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Bulk Box",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 360,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 360
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laMag1",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag1",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Magazine 1",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 380,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 380
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laMag2",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag2",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Magazine 2",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 400,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 400
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laMag3",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag3",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Magazine 3",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 420,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 420
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laMag4",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag4",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Magazine 4",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 440,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 440
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laMag5",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag5",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Magazine 5",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 460,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 460
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laMag6",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag6",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Magazine 6",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 480,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 480
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laMag7",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag7",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Magazine 7",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 500,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 500
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laMag8",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag8",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Magazine 8",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 520,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 520
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laMag9",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag9",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Magazine 9",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 540,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 540
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laMag10",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag10",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Magazine 10",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 560,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 560
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laMag11",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag11",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Magazine 11",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 580,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 580
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laMag12",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag12",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Magazine 12",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 600,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 600
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laMag13",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag13",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Magazine 13",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 620,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 620
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laMag14",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laMag14",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Magazine 14",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 640,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 640
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laAuto5",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laAuto5",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Auto 5",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 80,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 80
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laAuto6",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laAuto6",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Auto 6",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 100,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 100
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laFix4",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix4",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix 4",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 180,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 180
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laFix5",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix5",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix 5",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 200,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 200
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laFix6",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix6",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix 6",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 220,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 220
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laAuto4",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laAuto4",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Auto 4",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 60,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 60
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laFix1",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix1",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix 1",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 120,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 120
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laFix2",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix2",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix 2",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 140,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 140
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laFix3",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix3",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix 3",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 160,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 160
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laFix7",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix7",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix 7",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 240,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 240
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laFix8",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix8",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix 8",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 260,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 260
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laFix9",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix9",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix 9",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 280,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 280
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laFix10",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix10",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix 10",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 300,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 300
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laFix11",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix11",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix 11",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 320,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 320
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "laFix12",
+   "parent": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin",
+   "path": "fShowBinSet.PageControl1.tsBinSettingCheck.ScrollBox1.pnlShowBin.laFix12",
+   "props": {
+    "Align": "alTop",
+    "AutoSize": "False",
+    "Caption": "Fix 12",
+    "Color": "clHighlightText",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Layout": "tlCenter",
+    "Left": 0,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "Top": 340,
+    "Width": 862
+   },
+   "rect": {
+    "h": 20,
+    "w": 862,
+    "x": 0,
+    "y": 340
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsSiteMappingCheck",
+   "parent": "fShowBinSet.PageControl1",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck",
+   "props": {
+    "Caption": "Site mapping",
+    "ImageIndex": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "palSiteMap",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap",
+   "props": {
+    "Color": "clRed",
+    "Height": 629,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 949
+   },
+   "rect": {
+    "h": 629,
+    "w": 949,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel2",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2",
+   "props": {
+    "Height": 601,
+    "Left": 24,
+    "TabOrder": 0,
+    "Top": 16,
+    "Width": 905
+   },
+   "rect": {
+    "h": 601,
+    "w": 905,
+    "x": 24,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.Label1",
+   "props": {
+    "Caption": "Please check handler Site Mapping.\r\n-- Press OK if Site Mapping is Correct to continue running.\r\n-- Press Cancel if Not Correct, Please call Maintenance or Supervisor to correct it.\r\n",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 96,
+    "Left": 8,
+    "ParentFont": "False",
+    "Top": 12,
+    "Width": 673
+   },
+   "rect": {
+    "h": 96,
+    "w": 673,
+    "x": 8,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnClick": "Panel4Click"
+   },
+   "kind": "LEAF",
+   "name": "Panel4",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.Panel4",
+   "props": {
+    "BevelWidth": 2,
+    "Caption": "Cancel",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 33,
+    "Left": 243,
+    "OnClick": "Panel4Click",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Tag": 2,
+    "Top": 280,
+    "Width": 130
+   },
+   "rect": {
+    "h": 33,
+    "w": 130,
+    "x": 243,
+    "y": 280
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnClick": "Panel3Click"
+   },
+   "kind": "LEAF",
+   "name": "Panel3",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.Panel3",
+   "props": {
+    "BevelWidth": 2,
+    "Caption": "OK",
+    "Color": 9534289,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 33,
+    "Left": 23,
+    "OnClick": "Panel3Click",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Tag": 1,
+    "Top": 280,
+    "Width": 130
+   },
+   "rect": {
+    "h": 33,
+    "w": 130,
+    "x": 23,
+    "y": 280
+   }
+  },
+  {
+   "align": "alCustom",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox4",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "props": {
+    "Align": "alCustom",
+    "Caption": "Test Site Assign",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 177,
+    "Left": 4,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 96,
+    "Width": 745
+   },
+   "rect": {
+    "h": 177,
+    "w": 745,
+    "x": 4,
+    "y": 96
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labRowA",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labRowA",
+   "props": {
+    "Caption": "RowA",
+    "Height": 17,
+    "Left": 9,
+    "Top": 41,
+    "Width": 39
+   },
+   "rect": {
+    "h": 17,
+    "w": 39,
+    "x": 9,
+    "y": 41
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labRowB",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labRowB",
+   "props": {
+    "Caption": "RowB",
+    "Height": 17,
+    "Left": 9,
+    "Top": 71,
+    "Width": 40
+   },
+   "rect": {
+    "h": 17,
+    "w": 40,
+    "x": 9,
+    "y": 71
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labColA",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColA",
+   "props": {
+    "Caption": "a",
+    "Height": 17,
+    "Left": 90,
+    "Top": 16,
+    "Width": 8
+   },
+   "rect": {
+    "h": 17,
+    "w": 8,
+    "x": 90,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labColB",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColB",
+   "props": {
+    "Caption": "b",
+    "Height": 17,
+    "Left": 176,
+    "Top": 16,
+    "Width": 8
+   },
+   "rect": {
+    "h": 17,
+    "w": 8,
+    "x": 176,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labColC",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColC",
+   "props": {
+    "Caption": "c",
+    "Height": 17,
+    "Left": 262,
+    "Top": 16,
+    "Width": 8
+   },
+   "rect": {
+    "h": 17,
+    "w": 8,
+    "x": 262,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labColD",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColD",
+   "props": {
+    "Caption": "d",
+    "Height": 17,
+    "Left": 347,
+    "Top": 16,
+    "Width": 8
+   },
+   "rect": {
+    "h": 17,
+    "w": 8,
+    "x": 347,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labColE",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColE",
+   "props": {
+    "Caption": "e",
+    "Height": 17,
+    "Left": 432,
+    "Top": 16,
+    "Width": 8
+   },
+   "rect": {
+    "h": 17,
+    "w": 8,
+    "x": 432,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labColF",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColF",
+   "props": {
+    "Caption": "f",
+    "Height": 17,
+    "Left": 517,
+    "Top": 16,
+    "Width": 4
+   },
+   "rect": {
+    "h": 17,
+    "w": 4,
+    "x": 517,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labColG",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColG",
+   "props": {
+    "Caption": "g",
+    "Height": 17,
+    "Left": 603,
+    "Top": 16,
+    "Width": 8
+   },
+   "rect": {
+    "h": 17,
+    "w": 8,
+    "x": 603,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labColH",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labColH",
+   "props": {
+    "Caption": "h",
+    "Height": 17,
+    "Left": 688,
+    "Top": 16,
+    "Width": 8
+   },
+   "rect": {
+    "h": 17,
+    "w": 8,
+    "x": 688,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labRowC",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labRowC",
+   "props": {
+    "Caption": "RowC",
+    "Height": 17,
+    "Left": 9,
+    "Top": 102,
+    "Width": 41
+   },
+   "rect": {
+    "h": 17,
+    "w": 41,
+    "x": 9,
+    "y": 102
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labRowD",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.labRowD",
+   "props": {
+    "Caption": "RowD",
+    "Height": 17,
+    "Left": 9,
+    "Top": 132,
+    "Width": 41
+   },
+   "rect": {
+    "h": 17,
+    "w": 41,
+    "x": 9,
+    "y": 132
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palAa",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAa",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 68,
+    "TabOrder": 0,
+    "Top": 36,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 68,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palAb",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAb",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 152,
+    "TabOrder": 1,
+    "Top": 36,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 152,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palAc",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAc",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 236,
+    "TabOrder": 2,
+    "Top": 36,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 236,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palAd",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAd",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 320,
+    "TabOrder": 3,
+    "Top": 36,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 320,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palAg",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAg",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 572,
+    "TabOrder": 6,
+    "Top": 36,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 572,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palAh",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAh",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 656,
+    "TabOrder": 7,
+    "Top": 36,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 656,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palAf",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAf",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 488,
+    "TabOrder": 5,
+    "Top": 36,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 488,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palAe",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palAe",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 404,
+    "TabOrder": 4,
+    "Top": 36,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 404,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palBa",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBa",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 68,
+    "TabOrder": 8,
+    "Top": 68,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 68,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palBb",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBb",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 152,
+    "TabOrder": 9,
+    "Top": 68,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 152,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palBc",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBc",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 236,
+    "TabOrder": 10,
+    "Top": 68,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 236,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palBd",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBd",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 320,
+    "TabOrder": 11,
+    "Top": 68,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 320,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palBg",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBg",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 572,
+    "TabOrder": 14,
+    "Top": 68,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 572,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palBh",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBh",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 656,
+    "TabOrder": 15,
+    "Top": 68,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 656,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palBf",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBf",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 488,
+    "TabOrder": 13,
+    "Top": 68,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 488,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palBe",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palBe",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 404,
+    "TabOrder": 12,
+    "Top": 68,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 404,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palCa",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCa",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 68,
+    "TabOrder": 16,
+    "Top": 100,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 68,
+    "y": 100
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palCb",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCb",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 152,
+    "TabOrder": 17,
+    "Top": 100,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 152,
+    "y": 100
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palCc",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCc",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 236,
+    "TabOrder": 18,
+    "Top": 100,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 236,
+    "y": 100
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palCd",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCd",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 320,
+    "TabOrder": 19,
+    "Top": 100,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 320,
+    "y": 100
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palCg",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCg",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 572,
+    "TabOrder": 22,
+    "Top": 100,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 572,
+    "y": 100
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palCh",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCh",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 656,
+    "TabOrder": 23,
+    "Top": 100,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 656,
+    "y": 100
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palCf",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCf",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 488,
+    "TabOrder": 21,
+    "Top": 100,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 488,
+    "y": 100
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palCe",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palCe",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 404,
+    "TabOrder": 20,
+    "Top": 100,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 404,
+    "y": 100
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palDa",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDa",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 68,
+    "TabOrder": 24,
+    "Top": 132,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 68,
+    "y": 132
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palDb",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDb",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 152,
+    "TabOrder": 25,
+    "Top": 132,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 152,
+    "y": 132
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palDc",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDc",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 236,
+    "TabOrder": 26,
+    "Top": 132,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 236,
+    "y": 132
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palDd",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDd",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 320,
+    "TabOrder": 27,
+    "Top": 132,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 320,
+    "y": 132
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palDg",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDg",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 572,
+    "TabOrder": 30,
+    "Top": 132,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 572,
+    "y": 132
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palDh",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDh",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 656,
+    "TabOrder": 31,
+    "Top": 132,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 656,
+    "y": 132
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palDf",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDf",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 488,
+    "TabOrder": 29,
+    "Top": 132,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 488,
+    "y": 132
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "palDe",
+   "parent": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4",
+   "path": "fShowBinSet.PageControl1.tsSiteMappingCheck.palSiteMap.Panel2.GroupBox4.palDe",
+   "props": {
+    "Color": "clSilver",
+    "Height": 25,
+    "Left": 404,
+    "TabOrder": 28,
+    "Top": 132,
+    "Width": 71
+   },
+   "rect": {
+    "h": 25,
+    "w": 71,
+    "x": 404,
+    "y": 132
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "Timer1Timer"
+   },
+   "kind": "NONVISUAL",
+   "name": "Timer1",
+   "parent": "fShowBinSet",
+   "path": "fShowBinSet.Timer1",
+   "props": {
+    "Interval": 100,
+    "Left": 720,
+    "OnTimer": "Timer1Timer",
+    "Top": 8
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 720,
+    "y": 8
+   }
+  }
+ ]
+}

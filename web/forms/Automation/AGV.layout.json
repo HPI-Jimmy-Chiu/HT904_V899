@@ -1,0 +1,3586 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "fAGV",
+ "form": "fAGV",
+ "form_class": "TfAGV",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "Automation/AGV.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfAGV",
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fAGV",
+   "parent": null,
+   "path": "fAGV",
+   "props": {
+    "Caption": "fAGV",
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 714,
+    "Left": 738,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 20,
+    "Width": 903
+   },
+   "rect": {
+    "h": 714,
+    "w": 903,
+    "x": 738,
+    "y": 20
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "AGV",
+   "parent": "fAGV",
+   "path": "fAGV.AGV",
+   "props": {
+    "ActivePage": "tsAGV_Setting",
+    "Align": "alClient",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 676,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabIndex": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 887
+   },
+   "rect": {
+    "h": 676,
+    "w": 887,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsAGV_Setting",
+   "parent": "fAGV.AGV",
+   "path": "fAGV.AGV.tsAGV_Setting",
+   "props": {
+    "Caption": "AMR Setting",
+    "ImageIndex": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel2",
+   "parent": "fAGV.AGV.tsAGV_Setting",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel2",
+   "props": {
+    "Align": "alBottom",
+    "BevelOuter": "bvNone",
+    "Color": "clInactiveCaption",
+    "Height": 54,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 591,
+    "Width": 879
+   },
+   "rect": {
+    "h": 54,
+    "w": 879,
+    "x": 0,
+    "y": 591
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "spbSaveClick"
+   },
+   "kind": "LEAF",
+   "name": "spbSave",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel2",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel2.spbSave",
+   "props": {
+    "Caption": "Save",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 3946,
+     "hex": "660F0000424D660F000000000000360000002800000024000000240000000100180000000000300F000001000000010000000000000000000000FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF9F9F9F9F9F9F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F9F9F9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF7F7F7EFEFEFE8E8E8E6E6E6E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E9E9E9F3F3F3F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF8F8F8ECECECD6D6D6C8C8C8C5C5C5C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4D0D0D0E9E9E9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF0EFEFC0A6A7A55B6CA96270A45E6C934556A6A3A3A4A1A1A19C9C9C9797979393948D8D8E88888A8383867F7D837A7A807978807978994759994759994759994759994759994759994759994756C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAD2C1C1B28181AF6D79B8717FB7707DAA6472EFEFF1EEEEF1995D68B8717EB06B78E1E0E0DDDADBD8D5D6D4D1D2CFCCCCCAC6C6DBD8D88F4B59A05565A05565BE848EB9727FB8727EB8717E994557C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAF6D79BA7481B97380B7737FAA6472E9E9EBECEBEF995D68B8717EB06B78E1DFE1DCDADDD7D5D6D2D0D1CDC9CAC8C3C3D9D6D68D49589F5464A05565BF848EB97380B9737FB9727F9B4457C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC38D95BA7682BA7481B97480AA6472E5E4E7E9E9EB9A5D69B8737FB06B78E5E5E7E2E0E3DDDBDDD8D5D7D3D0D1CDCACBDDDADB8B48579D53639F5464BF858FBA7480BA7481BA74819B4558C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC48E96BA7783BA7682B97481AA6472E0DFE1E5E3E69B5F6BB97580B06B78E9EAECE6E5E8E2E1E4DDDCDED9D6D8D4D0D2E0DFDF8945549B50619D5363BF8590BA7481BA7481BA74819A4759C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F96BB7784BA7784BA7582AA6472DAD9DBE0DEE09B5F6BBA7582B06B78EDECEFEAE9EDE6E6E9E2E2E4DEDDDFDAD8DAE5E2E4874353994E5F9B5061C18690B97480BA7481BA74819C495CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F98BC7886BB7785BB7783AA6472D5D2D4DBD8DA9C606C925864925864EAEAEDEDEDF0EAEAEDE8E7E9E4E2E5DFDDDFE8E7E8864252974C5D994E5FC08691B9727FB97380B973809C4B5CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC49098BC7986BD7985BC7784AA6472CFCCCCD4D1D3D9D7D9DFDCDFE2E1E4E7E5E8EAEAEDEDECF0EAEBEEE8E7EAE4E2E6ECEAEC864252864252874353C28791B7727FB8727EB9727F9C4E5DC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC79198BD7A87BD7987BC7985BB7785AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472B77A84B76F7DB7707DB7707EB8717E9E4E5FC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB7717EB76F7DB76D7CB76D7BB76D7BB66D7BB56C7AB56C7AB66D7BB76F7CB76F7CB7707D9F4E60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB76F7DB76D7CB76D7CB76C7AB66C7AB66D7BB56C7AB56C7AB56C7AB66C7AB66C7AB76D7C9F4F60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6939BBE7E89BC7884A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70B66B7AB66C7B9F5162C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC7949CBF7F8AAF6F7BEBE1E1FEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFEFDFDFEFDFDFDFCFCFCFCFBFCFBFBFBFBFAFAFAF9F9F9F9F9F9F8F8F8E8D1D1A75E70B76D7BB66C7A9F5262C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC8959DC0808BAF6F7BFEFFFEFCFCFBFBFBFAFAFBFAFAFAFAF9FAF9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F7F7F7F6F6F6F6F6F9F9F9A75E70B96F7DB66B7AA05363C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9959DC1818CAF6F7BFEFFFEE1E1E1DFDFDFDDDDDDDBDCDBDADAD9D9D9D9D7D7D6D5D6D5D4D4D3D2D3D2D1D1D1D0D0D0CFCFCFCFCFCFCFCFCFCFCFCFF9FAF9A75E70BA707EB66B79A15466C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9969EC1818DAF6F7BFEFFFEFCFCFCFCFCFBFBFBFBFBFBFAFBFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F6FBFBFBA75E70B97480B56B79A25666C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2828EAF6F7BFEFFFEE4E4E4E3E3E3E2E2E1E0E0E0DEDDDEDCDCDCDADADAD9D9D9D7D8D8D6D5D5D4D4D4D2D3D3D1D2D1D0D0D0CFCFCFCFCFCFFCFCFBA75E70BA7581B56B79A45968C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2838EAF6F7BFEFFFEFCFCFCFCFCFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F8F8F9F8F8F8F8F8F7F7F7F7F7F7F7F7FCFCFCA75E70BA7783B66C7AA55969C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA98A0C2838EAF6F7BFEFFFEE6E6E6E6E5E6E4E4E4E3E3E3E1E2E2E0E0E0DEDEDEDCDCDCDBDBDBD9D9D9D8D8D8D6D6D6D4D5D5D3D3D3D1D1D1D0D0D0FDFDFCA75E70BC7783B76D7BA55D6CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB98A0C2838EAF6F7BFEFFFEFDFDFDFDFDFCFCFDFCFCFCFCFCFCFBFBFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7FDFEFDA75E70BD7985B76F7DA65F6EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E5E5E6E4E5E5E4E3E3E2E2E2E1E0E0DFDFDFDDDDDDDBDBDCDADAD9D9D8D9D7D6D7D5D5D5D3D4D3FEFEFEA75E70BE7A86B7707DA6606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFCFCFBFBFBFAFBFBFAFAFAF9F9F9F9F9F9F9F9F9F9F9F9F8F8F8F8FEFFFEA75E70B38088B8717FA7606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E5E5E5E4E4E3E2E3E3E1E1E1E0DFDFDDDDDEDCDBDCDADADAD9D9D9D7D8D7FEFFFEA75E70996E759E5967A9606EC5C5C5E5E5E5F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFFFEFEFEFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9FAFAF9F9F9F9F9F9F9FEFFFEA75E70B0757F9E5A68AA6471C5C5C5E6E6E6F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA969EC2838EAF6F7BFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEA75E70C77F8BC77F8BAA6572D1D1D1EBEBEBFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAE6A7AAE6A7AAE6A7AD9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6A75E70A75E70A75E70A75E70ECECECF6F6F6FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFA",
+     "sha1": "b6420a2c6417ab1d75d6f7441ace55c339665e38"
+    },
+    "Height": 40,
+    "Left": 123,
+    "OnClick": "spbSaveClick",
+    "ParentFont": "False",
+    "Top": 7,
+    "Width": 227
+   },
+   "rect": {
+    "h": 40,
+    "w": 227,
+    "x": 123,
+    "y": 7
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbtExitClick"
+   },
+   "kind": "LEAF",
+   "name": "sbtExit",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel2",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel2.sbtExit",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Exit",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 1554,
+     "hex": "0E060000424D0E06000000000000360000002800000016000000160000000100180000000000D805000001000000010000000000000000000000EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF7474A44C4C946C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA44C4C947474A4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C5454C45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC4C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9C645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D46C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC6464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CAC8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEF8C8CAC2424946464D45454C46C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C4C4CBC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424945454C44C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF",
+     "sha1": "f9091dff96fbb403d8fe7eec0dcccd5c7539ad97"
+    },
+    "GroupIndex": 1,
+    "Height": 41,
+    "Left": 492,
+    "OnClick": "sbtExitClick",
+    "ParentFont": "False",
+    "Top": 7,
+    "Width": 241
+   },
+   "rect": {
+    "h": 41,
+    "w": 241,
+    "x": 492,
+    "y": 7
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel3",
+   "parent": "fAGV.AGV.tsAGV_Setting",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3",
+   "props": {
+    "Align": "alClient",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 591,
+    "Left": 0,
+    "TabOrder": 1,
+    "Top": 0,
+    "Width": 879
+   },
+   "rect": {
+    "h": 591,
+    "w": 879,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox1",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "props": {
+    "Caption": "E84 Time Out Setting",
+    "Height": 260,
+    "Left": 208,
+    "TabOrder": 0,
+    "Top": 320,
+    "Width": 193
+   },
+   "rect": {
+    "h": 260,
+    "w": 193,
+    "x": 208,
+    "y": 320
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label21",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label21",
+   "props": {
+    "Caption": "TP1",
+    "Height": 16,
+    "Left": 8,
+    "Top": 24,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label22",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label22",
+   "props": {
+    "Caption": "TP2",
+    "Height": 16,
+    "Left": 8,
+    "Top": 64,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 8,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label23",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label23",
+   "props": {
+    "Caption": "TP3",
+    "Height": 16,
+    "Left": 8,
+    "Top": 104,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 8,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label24",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label24",
+   "props": {
+    "Caption": "TP4",
+    "Height": 16,
+    "Left": 8,
+    "Top": 144,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 8,
+    "y": 144
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label25",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label25",
+   "props": {
+    "Caption": "TP5",
+    "Height": 16,
+    "Left": 8,
+    "Top": 184,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 8,
+    "y": 184
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label26",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label26",
+   "props": {
+    "Caption": "TP6",
+    "Height": 16,
+    "Left": 8,
+    "Top": 224,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 8,
+    "y": 224
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label27",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label27",
+   "props": {
+    "Caption": "TA1",
+    "Height": 16,
+    "Left": 96,
+    "Top": 24,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 96,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label28",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label28",
+   "props": {
+    "Caption": "TA2",
+    "Height": 16,
+    "Left": 96,
+    "Top": 64,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 96,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label29",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label29",
+   "props": {
+    "Caption": "TA3",
+    "Height": 16,
+    "Left": 96,
+    "Top": 104,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 96,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label30",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label30",
+   "props": {
+    "Caption": "TD0",
+    "Height": 16,
+    "Left": 96,
+    "Top": 144,
+    "Width": 26
+   },
+   "rect": {
+    "h": 16,
+    "w": 26,
+    "x": 96,
+    "y": 144
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label31",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.Label31",
+   "props": {
+    "Caption": "TD1",
+    "Height": 16,
+    "Left": 96,
+    "Top": 184,
+    "Width": 26
+   },
+   "rect": {
+    "h": 16,
+    "w": 26,
+    "x": 96,
+    "y": 184
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_2_TP1",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP1",
+   "props": {
+    "Height": 24,
+    "Left": 39,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 0,
+    "Text": "2",
+    "Top": 20,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 39,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_2_TP2",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP2",
+   "props": {
+    "Height": 24,
+    "Left": 39,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 1,
+    "Text": "2",
+    "Top": 60,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 39,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_2_TP3",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP3",
+   "props": {
+    "Height": 24,
+    "Left": 39,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 2,
+    "Text": "60",
+    "Top": 100,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 39,
+    "y": 100
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_2_TP4",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP4",
+   "props": {
+    "Height": 24,
+    "Left": 39,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 3,
+    "Text": "60",
+    "Top": 140,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 39,
+    "y": 140
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_2_TP5",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP5",
+   "props": {
+    "Height": 24,
+    "Left": 39,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 4,
+    "Text": "2",
+    "Top": 180,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 39,
+    "y": 180
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_2_TP6",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TP6",
+   "props": {
+    "Height": 24,
+    "Left": 39,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 5,
+    "Text": "2",
+    "Top": 220,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 39,
+    "y": 220
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_2_TA1",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TA1",
+   "props": {
+    "Height": 24,
+    "Left": 127,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 6,
+    "Text": "2",
+    "Top": 20,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 127,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_2_TA2",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TA2",
+   "props": {
+    "Height": 24,
+    "Left": 127,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 7,
+    "Text": "2",
+    "Top": 60,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 127,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_2_TA3",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TA3",
+   "props": {
+    "Height": 24,
+    "Left": 127,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 8,
+    "Text": "2",
+    "Top": 100,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 127,
+    "y": 100
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_2_TD0",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TD0",
+   "props": {
+    "Height": 24,
+    "Left": 127,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 9,
+    "Text": "2",
+    "Top": 140,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 127,
+    "y": 140
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_2_TD1",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox1.edE84_2_TD1",
+   "props": {
+    "Height": 24,
+    "Left": 127,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 10,
+    "Text": "2",
+    "Top": 180,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 127,
+    "y": 180
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbE84TimeOut",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "props": {
+    "Caption": "E84 Time Out Setting",
+    "Height": 260,
+    "Left": 8,
+    "TabOrder": 1,
+    "Top": 320,
+    "Width": 193
+   },
+   "rect": {
+    "h": 260,
+    "w": 193,
+    "x": 8,
+    "y": 320
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labTP1",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTP1",
+   "props": {
+    "Caption": "TP1",
+    "Height": 16,
+    "Left": 8,
+    "Top": 24,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labTP2",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTP2",
+   "props": {
+    "Caption": "TP2",
+    "Height": 16,
+    "Left": 8,
+    "Top": 64,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 8,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labTP3",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTP3",
+   "props": {
+    "Caption": "TP3",
+    "Height": 16,
+    "Left": 8,
+    "Top": 104,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 8,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labTP4",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTP4",
+   "props": {
+    "Caption": "TP4",
+    "Height": 16,
+    "Left": 8,
+    "Top": 144,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 8,
+    "y": 144
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labTP5",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTP5",
+   "props": {
+    "Caption": "TP5",
+    "Height": 16,
+    "Left": 8,
+    "Top": 184,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 8,
+    "y": 184
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labTP6",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTP6",
+   "props": {
+    "Caption": "TP6",
+    "Height": 16,
+    "Left": 8,
+    "Top": 224,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 8,
+    "y": 224
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labTA1",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTA1",
+   "props": {
+    "Caption": "TA1",
+    "Height": 16,
+    "Left": 96,
+    "Top": 24,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 96,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labTA2",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTA2",
+   "props": {
+    "Caption": "TA2",
+    "Height": 16,
+    "Left": 96,
+    "Top": 64,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 96,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labTA3",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.labTA3",
+   "props": {
+    "Caption": "TA3",
+    "Height": 16,
+    "Left": 96,
+    "Top": 104,
+    "Width": 25
+   },
+   "rect": {
+    "h": 16,
+    "w": 25,
+    "x": 96,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "LabTD0",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.LabTD0",
+   "props": {
+    "Caption": "TD0",
+    "Height": 16,
+    "Left": 96,
+    "Top": 144,
+    "Width": 26
+   },
+   "rect": {
+    "h": 16,
+    "w": 26,
+    "x": 96,
+    "y": 144
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "LabTD1",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.LabTD1",
+   "props": {
+    "Caption": "TD1",
+    "Height": 16,
+    "Left": 96,
+    "Top": 184,
+    "Width": 26
+   },
+   "rect": {
+    "h": 16,
+    "w": 26,
+    "x": 96,
+    "y": 184
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_1_TP1",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP1",
+   "props": {
+    "Height": 24,
+    "Left": 40,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 0,
+    "Text": "2",
+    "Top": 20,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 40,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_1_TP2",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP2",
+   "props": {
+    "Height": 24,
+    "Left": 40,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 1,
+    "Text": "2",
+    "Top": 60,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 40,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_1_TP3",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP3",
+   "props": {
+    "Height": 24,
+    "Left": 40,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 2,
+    "Text": "60",
+    "Top": 100,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 40,
+    "y": 100
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_1_TP4",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP4",
+   "props": {
+    "Height": 24,
+    "Left": 40,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 3,
+    "Text": "60",
+    "Top": 140,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 40,
+    "y": 140
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_1_TP5",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP5",
+   "props": {
+    "Height": 24,
+    "Left": 40,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 4,
+    "Text": "2",
+    "Top": 180,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 40,
+    "y": 180
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_1_TP6",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TP6",
+   "props": {
+    "Height": 24,
+    "Left": 40,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 5,
+    "Text": "2",
+    "Top": 220,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 40,
+    "y": 220
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_1_TA1",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TA1",
+   "props": {
+    "Height": 24,
+    "Left": 128,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 6,
+    "Text": "2",
+    "Top": 20,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 128,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_1_TA2",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TA2",
+   "props": {
+    "Height": 24,
+    "Left": 128,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 7,
+    "Text": "2",
+    "Top": 60,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 128,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_1_TA3",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TA3",
+   "props": {
+    "Height": 24,
+    "Left": 128,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 8,
+    "Text": "2",
+    "Top": 100,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 128,
+    "y": 100
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_1_TD0",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TD0",
+   "props": {
+    "Height": 24,
+    "Left": 128,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 9,
+    "Text": "2",
+    "Top": 140,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 128,
+    "y": 140
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edE84_1_TP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edE84_1_TD1",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.gbE84TimeOut.edE84_1_TD1",
+   "props": {
+    "Height": 24,
+    "Left": 128,
+    "OnMouseDown": "edE84_1_TP1MouseDown",
+    "TabOrder": 10,
+    "Text": "2",
+    "Top": 180,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 128,
+    "y": 180
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbEnableAGVFunction",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.cbEnableAGVFunction",
+   "props": {
+    "Caption": "Enable AMR function",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -19,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 21,
+    "Left": 20,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 27,
+    "Width": 273
+   },
+   "rect": {
+    "h": 21,
+    "w": 273,
+    "x": 20,
+    "y": 27
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btInitalLoadClick"
+   },
+   "kind": "LEAF",
+   "name": "btInitalLoad",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.btInitalLoad",
+   "props": {
+    "Caption": "Inital Load",
+    "Height": 25,
+    "Left": 32,
+    "OnClick": "btInitalLoadClick",
+    "TabOrder": 3,
+    "Top": 232,
+    "Width": 100
+   },
+   "rect": {
+    "h": 25,
+    "w": 100,
+    "x": 32,
+    "y": 232
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btInitalUnLoadClick"
+   },
+   "kind": "LEAF",
+   "name": "btInitalUnLoad",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.btInitalUnLoad",
+   "props": {
+    "Caption": "Inital Unload",
+    "Height": 25,
+    "Left": 32,
+    "OnClick": "btInitalUnLoadClick",
+    "TabOrder": 4,
+    "Top": 264,
+    "Width": 100
+   },
+   "rect": {
+    "h": 25,
+    "w": 100,
+    "x": 32,
+    "y": 264
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox4",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4",
+   "props": {
+    "Caption": "Unloader Tray Count",
+    "Height": 94,
+    "Left": 144,
+    "TabOrder": 5,
+    "Top": 216,
+    "Width": 257
+   },
+   "rect": {
+    "h": 94,
+    "w": 257,
+    "x": 144,
+    "y": 216
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label32",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.Label32",
+   "props": {
+    "Caption": "Auto1 Tray Count :",
+    "Height": 16,
+    "Left": 16,
+    "Top": 25,
+    "Width": 108
+   },
+   "rect": {
+    "h": 16,
+    "w": 108,
+    "x": 16,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label42",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.Label42",
+   "props": {
+    "Caption": "Auto2 Tray Count :",
+    "Height": 16,
+    "Left": 16,
+    "Top": 45,
+    "Width": 108
+   },
+   "rect": {
+    "h": 16,
+    "w": 108,
+    "x": 16,
+    "y": 45
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label43",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.Label43",
+   "props": {
+    "Caption": "Auto3 Tray Count :",
+    "Height": 16,
+    "Left": 16,
+    "Top": 65,
+    "Width": 108
+   },
+   "rect": {
+    "h": 16,
+    "w": 108,
+    "x": 16,
+    "y": 65
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edAuto1CountMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edAuto1Count",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.edAuto1Count",
+   "props": {
+    "Height": 24,
+    "Left": 136,
+    "OnMouseDown": "edAuto1CountMouseDown",
+    "TabOrder": 0,
+    "Top": 21,
+    "Width": 93
+   },
+   "rect": {
+    "h": 24,
+    "w": 93,
+    "x": 136,
+    "y": 21
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edAuto1CountMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edAuto2Count",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.edAuto2Count",
+   "props": {
+    "Height": 24,
+    "Left": 136,
+    "OnMouseDown": "edAuto1CountMouseDown",
+    "TabOrder": 1,
+    "Top": 41,
+    "Width": 93
+   },
+   "rect": {
+    "h": 24,
+    "w": 93,
+    "x": 136,
+    "y": 41
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edAuto1CountMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edAuto3Count",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox4.edAuto3Count",
+   "props": {
+    "Height": 24,
+    "Left": 136,
+    "OnMouseDown": "edAuto1CountMouseDown",
+    "TabOrder": 2,
+    "Top": 61,
+    "Width": 93
+   },
+   "rect": {
+    "h": 24,
+    "w": 93,
+    "x": 136,
+    "y": 61
+   }
+  },
+  {
+   "align": "alRight",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox10",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10",
+   "props": {
+    "Align": "alRight",
+    "Caption": "E84 Handshaking Log",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 591,
+    "Left": 409,
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Top": 0,
+    "Width": 470
+   },
+   "rect": {
+    "h": 591,
+    "w": 470,
+    "x": 409,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label19",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Label19",
+   "props": {
+    "Caption": "Load/Empty/Color",
+    "FocusControl": "GroupBox10",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Left": 57,
+    "ParentFont": "False",
+    "Top": 314,
+    "Width": 143
+   },
+   "rect": {
+    "h": 20,
+    "w": 143,
+    "x": 57,
+    "y": 314
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label20",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Label20",
+   "props": {
+    "Caption": "UnLoad",
+    "FocusControl": "GroupBox10",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 20,
+    "Left": 324,
+    "ParentFont": "False",
+    "Top": 314,
+    "Width": 64
+   },
+   "rect": {
+    "h": 20,
+    "w": 64,
+    "x": 324,
+    "y": 314
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "mmE84Log",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.mmE84Log",
+   "props": {
+    "Align": "alTop",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 283,
+    "Left": 2,
+    "Lines.Strings": [
+     ""
+    ],
+    "ParentFont": "False",
+    "ReadOnly": "True",
+    "ScrollBars": "ssVertical",
+    "TabOrder": 0,
+    "Top": 22,
+    "Width": 466
+   },
+   "rect": {
+    "h": 283,
+    "w": 466,
+    "x": 2,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel18",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "props": {
+    "Color": 12761254,
+    "Height": 225,
+    "Left": 9,
+    "TabOrder": 1,
+    "Top": 345,
+    "Width": 223
+   },
+   "rect": {
+    "h": 225,
+    "w": 223,
+    "x": 9,
+    "y": 345
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label128",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label128",
+   "props": {
+    "Caption": "VALID",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 27,
+    "ParentFont": "False",
+    "Top": 11,
+    "Width": 47
+   },
+   "rect": {
+    "h": 19,
+    "w": 47,
+    "x": 27,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label129",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label129",
+   "props": {
+    "Caption": "TR_REQ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 12,
+    "ParentFont": "False",
+    "Top": 105,
+    "Width": 63
+   },
+   "rect": {
+    "h": 19,
+    "w": 63,
+    "x": 12,
+    "y": 105
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label130",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label130",
+   "props": {
+    "Caption": "CS_0",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 34,
+    "ParentFont": "False",
+    "Top": 34,
+    "Width": 41
+   },
+   "rect": {
+    "h": 19,
+    "w": 41,
+    "x": 34,
+    "y": 34
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label132",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label132",
+   "props": {
+    "Caption": "AM_AVBL",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 1,
+    "ParentFont": "False",
+    "Top": 81,
+    "Width": 74
+   },
+   "rect": {
+    "h": 19,
+    "w": 74,
+    "x": 1,
+    "y": 81
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label133",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label133",
+   "props": {
+    "Caption": "BUSY",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 31,
+    "ParentFont": "False",
+    "Top": 128,
+    "Width": 44
+   },
+   "rect": {
+    "h": 19,
+    "w": 44,
+    "x": 31,
+    "y": 128
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label134",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label134",
+   "props": {
+    "Caption": "CONT",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 31,
+    "ParentFont": "False",
+    "Top": 175,
+    "Width": 44
+   },
+   "rect": {
+    "h": 19,
+    "w": 44,
+    "x": 31,
+    "y": 175
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label135",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label135",
+   "props": {
+    "Caption": "COMPT",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 18,
+    "ParentFont": "False",
+    "Top": 151,
+    "Width": 57
+   },
+   "rect": {
+    "h": 19,
+    "w": 57,
+    "x": 18,
+    "y": 151
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label136",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label136",
+   "props": {
+    "Caption": "GO",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 51,
+    "ParentFont": "False",
+    "Top": 198,
+    "Width": 24
+   },
+   "rect": {
+    "h": 19,
+    "w": 24,
+    "x": 51,
+    "y": 198
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label140",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label140",
+   "props": {
+    "Caption": "CS_1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 34,
+    "ParentFont": "False",
+    "Top": 58,
+    "Width": 41
+   },
+   "rect": {
+    "h": 19,
+    "w": 41,
+    "x": 34,
+    "y": 58
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label33",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label33",
+   "props": {
+    "Caption": "L_REQ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 149,
+    "ParentFont": "False",
+    "Top": 11,
+    "Width": 52
+   },
+   "rect": {
+    "h": 19,
+    "w": 52,
+    "x": 149,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label34",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label34",
+   "props": {
+    "Caption": "VS_0",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 149,
+    "ParentFont": "False",
+    "Top": 105,
+    "Width": 40
+   },
+   "rect": {
+    "h": 19,
+    "w": 40,
+    "x": 149,
+    "y": 105
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label35",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label35",
+   "props": {
+    "Caption": "U_REQ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 149,
+    "ParentFont": "False",
+    "Top": 34,
+    "Width": 54
+   },
+   "rect": {
+    "h": 19,
+    "w": 54,
+    "x": 149,
+    "y": 34
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label36",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label36",
+   "props": {
+    "Caption": "READY",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 149,
+    "ParentFont": "False",
+    "Top": 81,
+    "Width": 56
+   },
+   "rect": {
+    "h": 19,
+    "w": 56,
+    "x": 149,
+    "y": 81
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label37",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label37",
+   "props": {
+    "Caption": "VS_1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 149,
+    "ParentFont": "False",
+    "Top": 128,
+    "Width": 40
+   },
+   "rect": {
+    "h": 19,
+    "w": 40,
+    "x": 149,
+    "y": 128
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label38",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label38",
+   "props": {
+    "Caption": "HO_AVBL",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 149,
+    "ParentFont": "False",
+    "Top": 151,
+    "Width": 73
+   },
+   "rect": {
+    "h": 19,
+    "w": 73,
+    "x": 149,
+    "y": 151
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label39",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label39",
+   "props": {
+    "Caption": "ES",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 149,
+    "ParentFont": "False",
+    "Top": 175,
+    "Width": 22
+   },
+   "rect": {
+    "h": 19,
+    "w": 22,
+    "x": 149,
+    "y": 175
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label40",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label40",
+   "props": {
+    "Caption": "POWER",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 149,
+    "ParentFont": "False",
+    "Top": 198,
+    "Width": 62
+   },
+   "rect": {
+    "h": 19,
+    "w": 62,
+    "x": 149,
+    "y": 198
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label41",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.Label41",
+   "props": {
+    "Caption": "VA",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 149,
+    "ParentFont": "False",
+    "Top": 58,
+    "Width": 21
+   },
+   "rect": {
+    "h": 19,
+    "w": 21,
+    "x": 149,
+    "y": 58
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed1",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed1",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 118,
+    "Top": 13,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 118,
+    "y": 13
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed2",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed2",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 118,
+    "Top": 37,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 118,
+    "y": 37
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed3",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed3",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 118,
+    "Top": 60,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 118,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed4",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed4",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 118,
+    "Top": 83,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 118,
+    "y": 83
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed5",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed5",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 118,
+    "Top": 107,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 118,
+    "y": 107
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed6",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed6",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 118,
+    "Top": 131,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 118,
+    "y": 131
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed7",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed7",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 118,
+    "Top": 154,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 118,
+    "y": 154
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed8",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed8",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 118,
+    "Top": 177,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 118,
+    "y": 177
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed10",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed10",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 86,
+    "Top": 13,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 86,
+    "y": 13
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed11",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed11",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 86,
+    "Top": 37,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 86,
+    "y": 37
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed12",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed12",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 86,
+    "Top": 60,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 86,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed13",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed13",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 86,
+    "Top": 83,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 86,
+    "y": 83
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed14",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed14",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 86,
+    "Top": 107,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 86,
+    "y": 107
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed15",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed15",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 86,
+    "Top": 131,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 86,
+    "y": 131
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed16",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed16",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 86,
+    "Top": 178,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 86,
+    "y": 178
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed17",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed17",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 86,
+    "Top": 153,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 86,
+    "y": 153
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed18",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed18",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 86,
+    "Top": 201,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 86,
+    "y": 201
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed9",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel18.ALed9",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 118,
+    "Top": 201,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 118,
+    "y": 201
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel1",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "props": {
+    "Color": 12761254,
+    "Height": 225,
+    "Left": 241,
+    "TabOrder": 2,
+    "Top": 345,
+    "Width": 223
+   },
+   "rect": {
+    "h": 225,
+    "w": 223,
+    "x": 241,
+    "y": 345
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label1",
+   "props": {
+    "Caption": "VALID",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 27,
+    "ParentFont": "False",
+    "Top": 11,
+    "Width": 47
+   },
+   "rect": {
+    "h": 19,
+    "w": 47,
+    "x": 27,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label2",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label2",
+   "props": {
+    "Caption": "TR_REQ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 12,
+    "ParentFont": "False",
+    "Top": 105,
+    "Width": 63
+   },
+   "rect": {
+    "h": 19,
+    "w": 63,
+    "x": 12,
+    "y": 105
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label3",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label3",
+   "props": {
+    "Caption": "CS_0",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 34,
+    "ParentFont": "False",
+    "Top": 34,
+    "Width": 41
+   },
+   "rect": {
+    "h": 19,
+    "w": 41,
+    "x": 34,
+    "y": 34
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label4",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label4",
+   "props": {
+    "Caption": "AM_AVBL",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 1,
+    "ParentFont": "False",
+    "Top": 81,
+    "Width": 74
+   },
+   "rect": {
+    "h": 19,
+    "w": 74,
+    "x": 1,
+    "y": 81
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label5",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label5",
+   "props": {
+    "Caption": "BUSY",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 31,
+    "ParentFont": "False",
+    "Top": 128,
+    "Width": 44
+   },
+   "rect": {
+    "h": 19,
+    "w": 44,
+    "x": 31,
+    "y": 128
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label6",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label6",
+   "props": {
+    "Caption": "CONT",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 31,
+    "ParentFont": "False",
+    "Top": 175,
+    "Width": 44
+   },
+   "rect": {
+    "h": 19,
+    "w": 44,
+    "x": 31,
+    "y": 175
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label7",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label7",
+   "props": {
+    "Caption": "COMPT",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 18,
+    "ParentFont": "False",
+    "Top": 151,
+    "Width": 57
+   },
+   "rect": {
+    "h": 19,
+    "w": 57,
+    "x": 18,
+    "y": 151
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label8",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label8",
+   "props": {
+    "Caption": "GO",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 51,
+    "ParentFont": "False",
+    "Top": 198,
+    "Width": 24
+   },
+   "rect": {
+    "h": 19,
+    "w": 24,
+    "x": 51,
+    "y": 198
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label9",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label9",
+   "props": {
+    "Caption": "CS_1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 34,
+    "ParentFont": "False",
+    "Top": 58,
+    "Width": 41
+   },
+   "rect": {
+    "h": 19,
+    "w": 41,
+    "x": 34,
+    "y": 58
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label10",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label10",
+   "props": {
+    "Caption": "L_REQ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 149,
+    "ParentFont": "False",
+    "Top": 11,
+    "Width": 52
+   },
+   "rect": {
+    "h": 19,
+    "w": 52,
+    "x": 149,
+    "y": 11
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label11",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label11",
+   "props": {
+    "Caption": "VS_0",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 149,
+    "ParentFont": "False",
+    "Top": 105,
+    "Width": 40
+   },
+   "rect": {
+    "h": 19,
+    "w": 40,
+    "x": 149,
+    "y": 105
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label12",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label12",
+   "props": {
+    "Caption": "U_REQ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 149,
+    "ParentFont": "False",
+    "Top": 34,
+    "Width": 54
+   },
+   "rect": {
+    "h": 19,
+    "w": 54,
+    "x": 149,
+    "y": 34
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label13",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label13",
+   "props": {
+    "Caption": "READY",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 149,
+    "ParentFont": "False",
+    "Top": 81,
+    "Width": 56
+   },
+   "rect": {
+    "h": 19,
+    "w": 56,
+    "x": 149,
+    "y": 81
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label14",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label14",
+   "props": {
+    "Caption": "VS_1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 149,
+    "ParentFont": "False",
+    "Top": 128,
+    "Width": 40
+   },
+   "rect": {
+    "h": 19,
+    "w": 40,
+    "x": 149,
+    "y": 128
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label15",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label15",
+   "props": {
+    "Caption": "HO_AVBL",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 149,
+    "ParentFont": "False",
+    "Top": 151,
+    "Width": 73
+   },
+   "rect": {
+    "h": 19,
+    "w": 73,
+    "x": 149,
+    "y": 151
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label16",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label16",
+   "props": {
+    "Caption": "ES",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 149,
+    "ParentFont": "False",
+    "Top": 175,
+    "Width": 22
+   },
+   "rect": {
+    "h": 19,
+    "w": 22,
+    "x": 149,
+    "y": 175
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label17",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label17",
+   "props": {
+    "Caption": "POWER",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 149,
+    "ParentFont": "False",
+    "Top": 198,
+    "Width": 62
+   },
+   "rect": {
+    "h": 19,
+    "w": 62,
+    "x": 149,
+    "y": 198
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label18",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.Label18",
+   "props": {
+    "Caption": "VA",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 149,
+    "ParentFont": "False",
+    "Top": 58,
+    "Width": 21
+   },
+   "rect": {
+    "h": 19,
+    "w": 21,
+    "x": 149,
+    "y": 58
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed19",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed19",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 118,
+    "Top": 13,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 118,
+    "y": 13
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed20",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed20",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 118,
+    "Top": 37,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 118,
+    "y": 37
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed21",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed21",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 118,
+    "Top": 60,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 118,
+    "y": 60
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed22",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed22",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 118,
+    "Top": 83,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 118,
+    "y": 83
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed23",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed23",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 118,
+    "Top": 107,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 118,
+    "y": 107
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed24",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed24",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 118,
+    "Top": 131,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 118,
+    "y": 131
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed25",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed25",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 118,
+    "Top": 154,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 118,
+    "y": 154
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed26",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed26",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 118,
+    "Top": 177,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 118,
+    "y": 177
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed27",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed27",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 118,
+    "Top": 200,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 118,
+    "y": 200
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed28",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed28",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 86,
+    "Top": 13,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 86,
+    "y": 13
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed29",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed29",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 86,
+    "Top": 36,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 86,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed30",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed30",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 86,
+    "Top": 59,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 86,
+    "y": 59
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed31",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed31",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 86,
+    "Top": 83,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 86,
+    "y": 83
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed32",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed32",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 86,
+    "Top": 107,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 86,
+    "y": 107
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed33",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed33",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 86,
+    "Top": 131,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 86,
+    "y": 131
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed34",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed34",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 86,
+    "Top": 177,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 86,
+    "y": 177
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed35",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed35",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 86,
+    "Top": 154,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 86,
+    "y": 154
+   }
+  },
+  {
+   "align": null,
+   "cls": "TALed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ALed36",
+   "parent": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1",
+   "path": "fAGV.AGV.tsAGV_Setting.Panel3.GroupBox10.Panel1.ALed36",
+   "props": {
+    "Height": 14,
+    "LEDStyle": "LEDHorizontal",
+    "Left": 86,
+    "Top": 201,
+    "Width": 22
+   },
+   "rect": {
+    "h": 14,
+    "w": 22,
+    "x": 86,
+    "y": 201
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "Timer1",
+   "parent": "fAGV",
+   "path": "fAGV.Timer1",
+   "props": {
+    "Left": 376,
+    "Top": 40
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 376,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "Timer2Timer"
+   },
+   "kind": "NONVISUAL",
+   "name": "Timer2",
+   "parent": "fAGV",
+   "path": "fAGV.Timer2",
+   "props": {
+    "Interval": 10,
+    "Left": 344,
+    "OnTimer": "Timer2Timer",
+    "Top": 40
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 344,
+    "y": 40
+   }
+  }
+ ]
+}

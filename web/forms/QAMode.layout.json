@@ -1,0 +1,858 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "QA Mode",
+ "form": "fQAMode",
+ "form_class": "TfQAMode",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "QAMode.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfQAMode",
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fQAMode",
+   "parent": null,
+   "path": "fQAMode",
+   "props": {
+    "Caption": "QA Mode",
+    "Color": 12761254,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 500,
+    "Left": 761,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 257,
+    "Width": 502
+   },
+   "rect": {
+    "h": 500,
+    "w": 502,
+    "x": 761,
+    "y": 257
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnApplyClick"
+   },
+   "kind": "LEAF",
+   "name": "btnApply",
+   "parent": "fQAMode",
+   "path": "fQAMode.btnApply",
+   "props": {
+    "Caption": "Save",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 40,
+    "Left": 12,
+    "OnClick": "btnApplyClick",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 415,
+    "Width": 200
+   },
+   "rect": {
+    "h": 40,
+    "w": 200,
+    "x": 12,
+    "y": 415
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnOkClick"
+   },
+   "kind": "LEAF",
+   "name": "btnOk",
+   "parent": "fQAMode",
+   "path": "fQAMode.btnOk",
+   "props": {
+    "Caption": "Exit",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 40,
+    "Left": 257,
+    "OnClick": "btnOkClick",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 415,
+    "Width": 200
+   },
+   "rect": {
+    "h": 40,
+    "w": 200,
+    "x": 257,
+    "y": 415
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "pgcQAMode",
+   "parent": "fQAMode",
+   "path": "fQAMode.pgcQAMode",
+   "props": {
+    "ActivePage": "tsQAMode",
+    "Align": "alTop",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 405,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabIndex": 0,
+    "TabOrder": 0,
+    "TabWidth": 100,
+    "Top": 0,
+    "Width": 486
+   },
+   "rect": {
+    "h": 405,
+    "w": 486,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsQAMode",
+   "parent": "fQAMode.pgcQAMode",
+   "path": "fQAMode.pgcQAMode.tsQAMode",
+   "props": {
+    "Caption": "QA Mode"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbQAMode",
+   "parent": "fQAMode.pgcQAMode.tsQAMode",
+   "path": "fQAMode.pgcQAMode.tsQAMode.gbQAMode",
+   "props": {
+    "Align": "alClient",
+    "Caption": "QA Mode",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -16,
+    "Font.Name": "Arial Black",
+    "Font.Style": [],
+    "Height": 374,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 478
+   },
+   "rect": {
+    "h": 374,
+    "w": 478,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label34",
+   "parent": "fQAMode.pgcQAMode.tsQAMode.gbQAMode",
+   "path": "fQAMode.pgcQAMode.tsQAMode.gbQAMode.Label34",
+   "props": {
+    "Caption": "Device Counts :",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 12,
+    "ParentFont": "False",
+    "Top": 32,
+    "Width": 111
+   },
+   "rect": {
+    "h": 20,
+    "w": 111,
+    "x": 12,
+    "y": 32
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label35",
+   "parent": "fQAMode.pgcQAMode.tsQAMode.gbQAMode",
+   "path": "fQAMode.pgcQAMode.tsQAMode.gbQAMode.Label35",
+   "props": {
+    "Caption": "*Count limitation: 5-10000",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 76,
+    "ParentFont": "False",
+    "Top": 57,
+    "Width": 182
+   },
+   "rect": {
+    "h": 20,
+    "w": 182,
+    "x": 76,
+    "y": 57
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labQAModeBin",
+   "parent": "fQAMode.pgcQAMode.tsQAMode.gbQAMode",
+   "path": "fQAMode.pgcQAMode.tsQAMode.gbQAMode.labQAModeBin",
+   "props": {
+    "Caption": "Setted bin for untest devices : ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 12,
+    "ParentFont": "False",
+    "Top": 216,
+    "Width": 214
+   },
+   "rect": {
+    "h": 20,
+    "w": 214,
+    "x": 12,
+    "y": 216
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edQAModeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edQAMode",
+   "parent": "fQAMode.pgcQAMode.tsQAMode.gbQAMode",
+   "path": "fQAMode.pgcQAMode.tsQAMode.gbQAMode.edQAMode",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "Left": 136,
+    "OnMouseDown": "edQAModeMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "50",
+    "Top": 28,
+    "Width": 121
+   },
+   "rect": {
+    "h": 28,
+    "w": 121,
+    "x": 136,
+    "y": 28
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "rgQARunMode",
+   "parent": "fQAMode.pgcQAMode.tsQAMode.gbQAMode",
+   "path": "fQAMode.pgcQAMode.tsQAMode.gbQAMode.rgQARunMode",
+   "props": {
+    "Caption": "Running Mode after QA Mode Finish",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 105,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "Clean out every devices without test automatically.",
+     "One cycle and alarm, then normal production.",
+     "Clean out every devices as setted bin automatically.",
+     "Not counting Device.Need to end manually."
+    ],
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 104,
+    "Width": 461
+   },
+   "rect": {
+    "h": 105,
+    "w": 461,
+    "x": 8,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbQAModeBin",
+   "parent": "fQAMode.pgcQAMode.tsQAMode.gbQAMode",
+   "path": "fQAMode.pgcQAMode.tsQAMode.gbQAMode.cbQAModeBin",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "10",
+     "11",
+     "12",
+     "13",
+     "14",
+     "15",
+     "16"
+    ],
+    "Left": 232,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Text": "1",
+    "Top": 212,
+    "Width": 145
+   },
+   "rect": {
+    "h": 28,
+    "w": 145,
+    "x": 232,
+    "y": 212
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbLoaderDirection",
+   "parent": "fQAMode.pgcQAMode.tsQAMode.gbQAMode",
+   "path": "fQAMode.pgcQAMode.tsQAMode.gbQAMode.gbLoaderDirection",
+   "props": {
+    "Caption": "Loader",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 87,
+    "Left": 372,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 15,
+    "Width": 94
+   },
+   "rect": {
+    "h": 87,
+    "w": 94,
+    "x": 372,
+    "y": 15
+   }
+  },
+  {
+   "align": null,
+   "cls": "TImage",
+   "events": {
+    "OnClick": "Image1Click"
+   },
+   "kind": "LEAF",
+   "name": "Image1",
+   "parent": "fQAMode.pgcQAMode.tsQAMode.gbQAMode.gbLoaderDirection",
+   "path": "fQAMode.pgcQAMode.tsQAMode.gbQAMode.gbLoaderDirection.Image1",
+   "props": {
+    "AutoSize": "True",
+    "Height": 61,
+    "Left": 18,
+    "OnClick": "Image1Click",
+    "Top": 20,
+    "Width": 61
+   },
+   "rect": {
+    "h": 61,
+    "w": 61,
+    "x": 18,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbTrayEndDoQAModeAgain",
+   "parent": "fQAMode.pgcQAMode.tsQAMode.gbQAMode",
+   "path": "fQAMode.pgcQAMode.tsQAMode.gbQAMode.cbTrayEndDoQAModeAgain",
+   "props": {
+    "Caption": "Tray end need to do QA mode again",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 17,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 256,
+    "Width": 349
+   },
+   "rect": {
+    "h": 17,
+    "w": 349,
+    "x": 12,
+    "y": 256
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbTrayEndCloseYield100Site",
+   "parent": "fQAMode.pgcQAMode.tsQAMode.gbQAMode",
+   "path": "fQAMode.pgcQAMode.tsQAMode.gbQAMode.cbTrayEndCloseYield100Site",
+   "props": {
+    "Caption": "Tray end need to close the yield 100% site",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 17,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Top": 304,
+    "Width": 325
+   },
+   "rect": {
+    "h": 17,
+    "w": 325,
+    "x": 12,
+    "y": 304
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbQAD22Double",
+   "parent": "fQAMode.pgcQAMode.tsQAMode.gbQAMode",
+   "path": "fQAMode.pgcQAMode.tsQAMode.gbQAMode.cbQAD22Double",
+   "props": {
+    "Caption": "[D22] Double Contact Function",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 17,
+    "Left": 12,
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Top": 280,
+    "Width": 253
+   },
+   "rect": {
+    "h": 17,
+    "w": 253,
+    "x": 12,
+    "y": 280
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbbQAD22Double",
+   "parent": "fQAMode.pgcQAMode.tsQAMode.gbQAMode",
+   "path": "fQAMode.pgcQAMode.tsQAMode.gbQAMode.cbbQAD22Double",
+   "props": {
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ItemHeight": 20,
+    "Items.Strings": [
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "10"
+    ],
+    "Left": 259,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Text": "2",
+    "Top": 274,
+    "Width": 115
+   },
+   "rect": {
+    "h": 28,
+    "w": 115,
+    "x": 259,
+    "y": 274
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsQASampling",
+   "parent": "fQAMode.pgcQAMode",
+   "path": "fQAMode.pgcQAMode.tsQASampling",
+   "props": {
+    "Caption": "QA Sampling",
+    "ImageIndex": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlQASample",
+   "parent": "fQAMode.pgcQAMode.tsQASampling",
+   "path": "fQAMode.pgcQAMode.tsQASampling.pnlQASample",
+   "props": {
+    "Align": "alClient",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 374,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 478
+   },
+   "rect": {
+    "h": 374,
+    "w": 478,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblQASampleBin",
+   "parent": "fQAMode.pgcQAMode.tsQASampling.pnlQASample",
+   "path": "fQAMode.pgcQAMode.tsQASampling.pnlQASample.lblQASampleBin",
+   "props": {
+    "Caption": "Sampling Bin",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 20,
+    "ParentFont": "False",
+    "Top": 48,
+    "Width": 93
+   },
+   "rect": {
+    "h": 20,
+    "w": 93,
+    "x": 20,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblQASampleTray",
+   "parent": "fQAMode.pgcQAMode.tsQASampling.pnlQASample",
+   "path": "fQAMode.pgcQAMode.tsQASampling.pnlQASample.lblQASampleTray",
+   "props": {
+    "Caption": "Sampling Tray",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 20,
+    "ParentFont": "False",
+    "Top": 84,
+    "Width": 100
+   },
+   "rect": {
+    "h": 20,
+    "w": 100,
+    "x": 20,
+    "y": 84
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label2",
+   "parent": "fQAMode.pgcQAMode.tsQASampling.pnlQASample",
+   "path": "fQAMode.pgcQAMode.tsQASampling.pnlQASample.Label2",
+   "props": {
+    "Caption": "Sampling Count",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 20,
+    "ParentFont": "False",
+    "Top": 120,
+    "Width": 113
+   },
+   "rect": {
+    "h": 20,
+    "w": 113,
+    "x": 20,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbTempOffset",
+   "parent": "fQAMode.pgcQAMode.tsQASampling.pnlQASample",
+   "path": "fQAMode.pgcQAMode.tsQASampling.pnlQASample.cbTempOffset",
+   "props": {
+    "Caption": "Enable QA sampling function",
+    "Checked": "True",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -19,
+    "Font.Name": "Arial Black",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 25,
+    "Left": 8,
+    "ParentFont": "False",
+    "State": "cbChecked",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 425
+   },
+   "rect": {
+    "h": 25,
+    "w": 425,
+    "x": 8,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbbQASampleBin",
+   "parent": "fQAMode.pgcQAMode.tsQASampling.pnlQASample",
+   "path": "fQAMode.pgcQAMode.tsQASampling.pnlQASample.cbbQASampleBin",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ItemHeight": 20,
+    "ItemIndex": 1,
+    "Items.Strings": [
+     "0",
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "10",
+     "11",
+     "12",
+     "13",
+     "14",
+     "15",
+     "16"
+    ],
+    "Left": 144,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "1",
+    "Top": 44,
+    "Width": 145
+   },
+   "rect": {
+    "h": 28,
+    "w": 145,
+    "x": 144,
+    "y": 44
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbbQASampleTray",
+   "parent": "fQAMode.pgcQAMode.tsQASampling.pnlQASample",
+   "path": "fQAMode.pgcQAMode.tsQASampling.pnlQASample.cbbQASampleTray",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "ItemHeight": 20,
+    "ItemIndex": 3,
+    "Items.Strings": [
+     "Auto 1",
+     "Auto 2",
+     "Auto 3",
+     "Fix 1",
+     "Fix 2",
+     "Fix 3"
+    ],
+    "Left": 144,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "Fix 1",
+    "Top": 80,
+    "Width": 145
+   },
+   "rect": {
+    "h": 28,
+    "w": 145,
+    "x": 144,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edtQASampleCntMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edtQASampleCnt",
+   "parent": "fQAMode.pgcQAMode.tsQASampling.pnlQASample",
+   "path": "fQAMode.pgcQAMode.tsQASampling.pnlQASample.edtQASampleCnt",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "Left": 144,
+    "OnMouseDown": "edtQASampleCntMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Text": "100",
+    "Top": 116,
+    "Width": 145
+   },
+   "rect": {
+    "h": 28,
+    "w": 145,
+    "x": 144,
+    "y": 116
+   }
+  }
+ ]
+}

@@ -1,0 +1,2442 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "OCR",
+ "form": "fOCR",
+ "form_class": "TfOCR",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "OCR.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfOCR",
+   "events": {
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fOCR",
+   "parent": null,
+   "path": "fOCR",
+   "props": {
+    "Caption": "OCR",
+    "Color": 12761254,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 662,
+    "Left": 777,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 16,
+    "Top": 123,
+    "Width": 870
+   },
+   "rect": {
+    "h": 662,
+    "w": 870,
+    "x": 777,
+    "y": 123
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "PageControl1",
+   "parent": "fOCR",
+   "path": "fOCR.PageControl1",
+   "props": {
+    "ActivePage": "tsOCR_Cognex_Setting",
+    "Align": "alClient",
+    "Height": 631,
+    "Left": 0,
+    "TabIndex": 2,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 862
+   },
+   "rect": {
+    "h": 631,
+    "w": 862,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "TabSheet1",
+   "parent": "fOCR.PageControl1",
+   "path": "fOCR.PageControl1.TabSheet1",
+   "props": {
+    "Caption": "TabSheet1"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "palLeft",
+   "parent": "fOCR.PageControl1.TabSheet1",
+   "path": "fOCR.PageControl1.TabSheet1.palLeft",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 600,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 437
+   },
+   "rect": {
+    "h": 600,
+    "w": 437,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbFileName",
+   "parent": "fOCR.PageControl1.TabSheet1.palLeft",
+   "path": "fOCR.PageControl1.TabSheet1.palLeft.gbFileName",
+   "props": {
+    "Caption": "FileName",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 49,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 430
+   },
+   "rect": {
+    "h": 49,
+    "w": 430,
+    "x": 2,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edFileName",
+   "parent": "fOCR.PageControl1.TabSheet1.palLeft.gbFileName",
+   "path": "fOCR.PageControl1.TabSheet1.palLeft.gbFileName.edFileName",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "edFileName",
+    "Top": 20,
+    "Width": 410
+   },
+   "rect": {
+    "h": 24,
+    "w": 410,
+    "x": 8,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbInsp",
+   "parent": "fOCR.PageControl1.TabSheet1.palLeft",
+   "path": "fOCR.PageControl1.TabSheet1.palLeft.gbInsp",
+   "props": {
+    "Caption": "Inspection Text",
+    "Height": 49,
+    "Left": 2,
+    "TabOrder": 1,
+    "Top": 56,
+    "Width": 430
+   },
+   "rect": {
+    "h": 49,
+    "w": 430,
+    "x": 2,
+    "y": 56
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edInsp",
+   "parent": "fOCR.PageControl1.TabSheet1.palLeft.gbInsp",
+   "path": "fOCR.PageControl1.TabSheet1.palLeft.gbInsp.edInsp",
+   "props": {
+    "Height": 24,
+    "Left": 8,
+    "TabOrder": 0,
+    "Text": "edInsp",
+    "Top": 16,
+    "Width": 410
+   },
+   "rect": {
+    "h": 24,
+    "w": 410,
+    "x": 8,
+    "y": 16
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TPanel",
+   "events": {
+    "OnClick": "btSendClick",
+    "OnMouseDown": "btSendMouseDown",
+    "OnMouseUp": "btSendMouseUp"
+   },
+   "kind": "LEAF",
+   "name": "btSend",
+   "parent": "fOCR.PageControl1.TabSheet1.palLeft",
+   "path": "fOCR.PageControl1.TabSheet1.palLeft.btSend",
+   "props": {
+    "Align": "alBottom",
+    "BevelInner": "bvRaised",
+    "BevelOuter": "bvNone",
+    "Caption": "Send Command",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -19,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 41,
+    "Left": 0,
+    "OnClick": "btSendClick",
+    "OnMouseDown": "btSendMouseDown",
+    "OnMouseUp": "btSendMouseUp",
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 559,
+    "Width": 437
+   },
+   "rect": {
+    "h": 41,
+    "w": 437,
+    "x": 0,
+    "y": 559
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TRadioGroup",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "rgCommadn",
+   "parent": "fOCR.PageControl1.TabSheet1.palLeft",
+   "path": "fOCR.PageControl1.TabSheet1.palLeft.rgCommadn",
+   "props": {
+    "Align": "alBottom",
+    "Caption": "SendCommand",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "Courier New",
+    "Font.Style": [],
+    "Height": 284,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "#VISIONON+ //",
+     "詢",
+     "問",
+     "系",
+     "統",
+     "上",
+     "線",
+     "#START+    //Handler",
+     "通",
+     "知",
+     "啟",
+     "動",
+     "檢",
+     "測",
+     "#END+      //Handler",
+     "通",
+     "知",
+     "關",
+     "閉",
+     "檢",
+     "測",
+     "#FILE+     //Handler",
+     "通",
+     "知",
+     "換",
+     "料",
+     "檔",
+     "名",
+     "#CLEAR+    //Handler",
+     "通",
+     "知",
+     "結",
+     "批",
+     "完",
+     "成",
+     "#INSP+     //Handler",
+     "送",
+     "出",
+     "比",
+     "對",
+     "命",
+     "令",
+     "與",
+     "字",
+     "串"
+    ],
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 275,
+    "Width": 437
+   },
+   "rect": {
+    "h": 284,
+    "w": 437,
+    "x": 0,
+    "y": 275
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbEnableOcr",
+   "parent": "fOCR.PageControl1.TabSheet1.palLeft",
+   "path": "fOCR.PageControl1.TabSheet1.palLeft.cbEnableOcr",
+   "props": {
+    "Caption": "Enable OCR Check",
+    "Enabled": "False",
+    "Height": 17,
+    "Left": 4,
+    "TabOrder": 2,
+    "Top": 132,
+    "Width": 261
+   },
+   "rect": {
+    "h": 17,
+    "w": 261,
+    "x": 4,
+    "y": 132
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button1Click"
+   },
+   "kind": "LEAF",
+   "name": "Button1",
+   "parent": "fOCR.PageControl1.TabSheet1.palLeft",
+   "path": "fOCR.PageControl1.TabSheet1.palLeft.Button1",
+   "props": {
+    "Caption": "LOTID?",
+    "Height": 25,
+    "Left": 56,
+    "OnClick": "Button1Click",
+    "TabOrder": 3,
+    "Top": 160,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 56,
+    "y": 160
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "palRight",
+   "parent": "fOCR.PageControl1.TabSheet1",
+   "path": "fOCR.PageControl1.TabSheet1.palRight",
+   "props": {
+    "Align": "alClient",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 600,
+    "Left": 437,
+    "TabOrder": 1,
+    "Top": 0,
+    "Width": 417
+   },
+   "rect": {
+    "h": 600,
+    "w": 417,
+    "x": 437,
+    "y": 0
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "memoOcrCommand",
+   "parent": "fOCR.PageControl1.TabSheet1.palRight",
+   "path": "fOCR.PageControl1.TabSheet1.palRight.memoOcrCommand",
+   "props": {
+    "Align": "alClient",
+    "Color": 14670284,
+    "Height": 158,
+    "Left": 0,
+    "TabOrder": 2,
+    "Top": 442,
+    "Width": 417
+   },
+   "rect": {
+    "h": 158,
+    "w": 417,
+    "x": 0,
+    "y": 442
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbMatchImage",
+   "parent": "fOCR.PageControl1.TabSheet1.palRight",
+   "path": "fOCR.PageControl1.TabSheet1.palRight.gbMatchImage",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Match Image",
+    "Height": 221,
+    "Left": 0,
+    "TabOrder": 1,
+    "Top": 221,
+    "Width": 417
+   },
+   "rect": {
+    "h": 221,
+    "w": 417,
+    "x": 0,
+    "y": 221
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TImage",
+   "events": {},
+   "kind": "LEAF",
+   "name": "imgMatch",
+   "parent": "fOCR.PageControl1.TabSheet1.palRight.gbMatchImage",
+   "path": "fOCR.PageControl1.TabSheet1.palRight.gbMatchImage.imgMatch",
+   "props": {
+    "Align": "alClient",
+    "AutoSize": "True",
+    "Center": "True",
+    "Height": 201,
+    "Left": 2,
+    "Top": 18,
+    "Width": 413
+   },
+   "rect": {
+    "h": 201,
+    "w": 413,
+    "x": 2,
+    "y": 18
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbOCRImage",
+   "parent": "fOCR.PageControl1.TabSheet1.palRight",
+   "path": "fOCR.PageControl1.TabSheet1.palRight.gbOCRImage",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Golden Image",
+    "Height": 221,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 417
+   },
+   "rect": {
+    "h": 221,
+    "w": 417,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TImage",
+   "events": {},
+   "kind": "LEAF",
+   "name": "imgOCR",
+   "parent": "fOCR.PageControl1.TabSheet1.palRight.gbOCRImage",
+   "path": "fOCR.PageControl1.TabSheet1.palRight.gbOCRImage.imgOCR",
+   "props": {
+    "Align": "alClient",
+    "AutoSize": "True",
+    "Center": "True",
+    "Height": 201,
+    "Left": 2,
+    "Top": 18,
+    "Width": 413
+   },
+   "rect": {
+    "h": 201,
+    "w": 413,
+    "x": 2,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsOCR_Cognex",
+   "parent": "fOCR.PageControl1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex",
+   "props": {
+    "Caption": "OCR_Cognex",
+    "ImageIndex": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel1",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel1",
+   "props": {
+    "Align": "alLeft",
+    "Color": 12761254,
+    "Height": 372,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 425
+   },
+   "rect": {
+    "h": 372,
+    "w": 425,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label14",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex.Panel1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel1.Label14",
+   "props": {
+    "Caption": "IP Address ",
+    "Height": 16,
+    "Left": 12,
+    "Top": 36,
+    "Width": 67
+   },
+   "rect": {
+    "h": 16,
+    "w": 67,
+    "x": 12,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label15",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex.Panel1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel1.Label15",
+   "props": {
+    "Caption": "TCP/IP Port",
+    "Height": 16,
+    "Left": 12,
+    "Top": 68,
+    "Width": 69
+   },
+   "rect": {
+    "h": 16,
+    "w": 69,
+    "x": 12,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "spInternetConnectClick"
+   },
+   "kind": "LEAF",
+   "name": "spInternetConnect",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex.Panel1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel1.spInternetConnect",
+   "props": {
+    "Caption": "Connect",
+    "Height": 25,
+    "Left": 284,
+    "OnClick": "spInternetConnectClick",
+    "Top": 27,
+    "Width": 97
+   },
+   "rect": {
+    "h": 25,
+    "w": 97,
+    "x": 284,
+    "y": 27
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "spInternetDisConnecClick"
+   },
+   "kind": "LEAF",
+   "name": "spInternetDisConnec",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex.Panel1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel1.spInternetDisConnec",
+   "props": {
+    "Caption": "DisConnect",
+    "Height": 25,
+    "Left": 284,
+    "OnClick": "spInternetDisConnecClick",
+    "Top": 63,
+    "Width": 97
+   },
+   "rect": {
+    "h": 25,
+    "w": 97,
+    "x": 284,
+    "y": 63
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "IPAddress1",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex.Panel1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel1.IPAddress1",
+   "props": {
+    "Height": 24,
+    "Left": 104,
+    "TabOrder": 0,
+    "Text": "172.16.8.104",
+    "Top": 30,
+    "Width": 149
+   },
+   "rect": {
+    "h": 24,
+    "w": 149,
+    "x": 104,
+    "y": 30
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "IPPort1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "IPPort1",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex.Panel1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel1.IPPort1",
+   "props": {
+    "Height": 24,
+    "Left": 104,
+    "OnMouseDown": "IPPort1MouseDown",
+    "TabOrder": 1,
+    "Text": "3000",
+    "Top": 62,
+    "Width": 149
+   },
+   "rect": {
+    "h": 24,
+    "w": 149,
+    "x": 104,
+    "y": 62
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button2Click"
+   },
+   "kind": "LEAF",
+   "name": "Button2",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex.Panel1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel1.Button2",
+   "props": {
+    "Caption": "Reader  On",
+    "Height": 25,
+    "Left": 16,
+    "OnClick": "Button2Click",
+    "TabOrder": 2,
+    "Top": 131,
+    "Width": 97
+   },
+   "rect": {
+    "h": 25,
+    "w": 97,
+    "x": 16,
+    "y": 131
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button3Click"
+   },
+   "kind": "LEAF",
+   "name": "Button3",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex.Panel1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel1.Button3",
+   "props": {
+    "Caption": "Reader  Off",
+    "Height": 25,
+    "Left": 127,
+    "OnClick": "Button3Click",
+    "TabOrder": 3,
+    "Top": 131,
+    "Width": 97
+   },
+   "rect": {
+    "h": 25,
+    "w": 97,
+    "x": 127,
+    "y": 131
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "Button4Click"
+   },
+   "kind": "LEAF",
+   "name": "Button4",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex.Panel1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel1.Button4",
+   "props": {
+    "Caption": "Save Log",
+    "Height": 25,
+    "Left": 248,
+    "OnClick": "Button4Click",
+    "TabOrder": 4,
+    "Top": 288,
+    "Width": 75
+   },
+   "rect": {
+    "h": 25,
+    "w": 75,
+    "x": 248,
+    "y": 288
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo2",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Memo2",
+   "props": {
+    "Align": "alBottom",
+    "Height": 228,
+    "Left": 0,
+    "TabOrder": 2,
+    "Top": 372,
+    "Width": 854
+   },
+   "rect": {
+    "h": 228,
+    "w": 854,
+    "x": 0,
+    "y": 372
+   }
+  },
+  {
+   "align": "alRight",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel2",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel2",
+   "props": {
+    "Align": "alRight",
+    "Color": 12761254,
+    "Height": 372,
+    "Left": 429,
+    "TabOrder": 1,
+    "Top": 0,
+    "Width": 425
+   },
+   "rect": {
+    "h": 372,
+    "w": 425,
+    "x": 429,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton2Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton2",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex.Panel2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel2.SpeedButton2",
+   "props": {
+    "Caption": "Send",
+    "Height": 25,
+    "Left": 224,
+    "OnClick": "SpeedButton2Click",
+    "Top": 108,
+    "Width": 97
+   },
+   "rect": {
+    "h": 25,
+    "w": 97,
+    "x": 224,
+    "y": 108
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex.Panel2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel2.Label1",
+   "props": {
+    "Caption": "IP Address ",
+    "Height": 16,
+    "Left": 12,
+    "Top": 36,
+    "Width": 67
+   },
+   "rect": {
+    "h": 16,
+    "w": 67,
+    "x": 12,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label2",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex.Panel2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel2.Label2",
+   "props": {
+    "Caption": "TCP/IP Port",
+    "Height": 16,
+    "Left": 12,
+    "Top": 68,
+    "Width": 69
+   },
+   "rect": {
+    "h": 16,
+    "w": 69,
+    "x": 12,
+    "y": 68
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "SpeedButton4Click"
+   },
+   "kind": "LEAF",
+   "name": "SpeedButton4",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex.Panel2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel2.SpeedButton4",
+   "props": {
+    "Caption": "Change File",
+    "Height": 25,
+    "Left": 324,
+    "OnClick": "SpeedButton4Click",
+    "Top": 108,
+    "Width": 97
+   },
+   "rect": {
+    "h": 25,
+    "w": 97,
+    "x": 324,
+    "y": 108
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "RadioGroup1Click"
+   },
+   "kind": "SUBDLG",
+   "name": "RadioGroup1",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex.Panel2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel2.RadioGroup1",
+   "props": {
+    "Align": "alBottom",
+    "Caption": "Item",
+    "Height": 119,
+    "Items.Strings": [
+     "User",
+     "\t",
+     "          admin + /r/n ",
+     "Password           /r/n",
+     "Off-line",
+     "\t",
+     "          SO0 + /r/n",
+     "Load Job File     LF + JobFileName + /r/n",
+     "On-line",
+     "\t",
+     "          SO1 +/r/n"
+    ],
+    "Left": 1,
+    "OnClick": "RadioGroup1Click",
+    "TabOrder": 3,
+    "Top": 140,
+    "Width": 423
+   },
+   "rect": {
+    "h": 119,
+    "w": 423,
+    "x": 1,
+    "y": 140
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtSendCmd",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex.Panel2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel2.edtSendCmd",
+   "props": {
+    "Height": 24,
+    "Left": 12,
+    "TabOrder": 2,
+    "Text": "||>trigger on",
+    "Top": 108,
+    "Width": 189
+   },
+   "rect": {
+    "h": 24,
+    "w": 189,
+    "x": 12,
+    "y": 108
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo1",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex.Panel2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel2.Memo1",
+   "props": {
+    "Align": "alBottom",
+    "Height": 112,
+    "Left": 1,
+    "TabOrder": 4,
+    "Top": 259,
+    "Width": 423
+   },
+   "rect": {
+    "h": 112,
+    "w": 423,
+    "x": 1,
+    "y": 259
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "IPAddress2",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex.Panel2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel2.IPAddress2",
+   "props": {
+    "Height": 24,
+    "Left": 104,
+    "TabOrder": 0,
+    "Text": "172.16.8.104",
+    "Top": 30,
+    "Width": 149
+   },
+   "rect": {
+    "h": 24,
+    "w": 149,
+    "x": 104,
+    "y": 30
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "IPPort1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "IPPort2",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex.Panel2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex.Panel2.IPPort2",
+   "props": {
+    "Height": 24,
+    "Left": 104,
+    "OnMouseDown": "IPPort1MouseDown",
+    "TabOrder": 1,
+    "Text": "23",
+    "Top": 62,
+    "Width": 149
+   },
+   "rect": {
+    "h": 24,
+    "w": 149,
+    "x": 104,
+    "y": 62
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsOCR_Cognex_Setting",
+   "parent": "fOCR.PageControl1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting",
+   "props": {
+    "Caption": "OCR_Cognex_Setting",
+    "ImageIndex": 2
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox1",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "props": {
+    "Align": "alLeft",
+    "Caption": "OCR Setup",
+    "Height": 511,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 397
+   },
+   "rect": {
+    "h": 511,
+    "w": 397,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label85",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.Label85",
+   "props": {
+    "Caption": "No IC Count：",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 12,
+    "ParentFont": "False",
+    "Top": 32,
+    "Width": 82
+   },
+   "rect": {
+    "h": 16,
+    "w": 82,
+    "x": 12,
+    "y": 32
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label86",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.Label86",
+   "props": {
+    "Caption": "Retest Count：",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 10,
+    "ParentFont": "False",
+    "Top": 70,
+    "Width": 88
+   },
+   "rect": {
+    "h": 16,
+    "w": 88,
+    "x": 10,
+    "y": 70
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label3",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.Label3",
+   "props": {
+    "Caption": "Word Type：",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 16,
+    "Left": 10,
+    "ParentFont": "False",
+    "Top": 140,
+    "Width": 80
+   },
+   "rect": {
+    "h": 16,
+    "w": 80,
+    "x": 10,
+    "y": 140
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edOCRRetryClick"
+   },
+   "kind": "LEAF",
+   "name": "edOCRRetry",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.edOCRRetry",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 116,
+    "OnClick": "edOCRRetryClick",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "2",
+    "Top": 66,
+    "Width": 45
+   },
+   "rect": {
+    "h": 24,
+    "w": 45,
+    "x": 116,
+    "y": 66
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edOCRRetryClick"
+   },
+   "kind": "LEAF",
+   "name": "edOCRSkip",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.edOCRSkip",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 114,
+    "OnClick": "edOCRRetryClick",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "2",
+    "Top": 28,
+    "Width": 45
+   },
+   "rect": {
+    "h": 24,
+    "w": 45,
+    "x": 114,
+    "y": 28
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edOCRRetryClick"
+   },
+   "kind": "LEAF",
+   "name": "edOCRWordCount",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.edOCRWordCount",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 116,
+    "OnClick": "edOCRRetryClick",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "2",
+    "Top": 104,
+    "Width": 45
+   },
+   "rect": {
+    "h": 24,
+    "w": 45,
+    "x": 116,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TFileListBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "FileListBox1",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.FileListBox1",
+   "props": {
+    "Height": 97,
+    "ItemHeight": 16,
+    "Left": 200,
+    "TabOrder": 15,
+    "Top": 392,
+    "Visible": "False",
+    "Width": 145
+   },
+   "rect": {
+    "h": 97,
+    "w": 145,
+    "x": 200,
+    "y": 392
+   }
+  },
+  {
+   "align": null,
+   "cls": "TDirectoryListBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "DirectoryListBox1",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.DirectoryListBox1",
+   "props": {
+    "FileList": "FileListBox1",
+    "Height": 97,
+    "ItemHeight": 16,
+    "Left": 24,
+    "TabOrder": 14,
+    "Top": 392,
+    "Visible": "False",
+    "Width": 145
+   },
+   "rect": {
+    "h": 97,
+    "w": 145,
+    "x": 24,
+    "y": 392
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ckDisabledKeyin",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.ckDisabledKeyin",
+   "props": {
+    "Caption": "Disabled Skip IC Keyin",
+    "Height": 17,
+    "Left": 16,
+    "TabOrder": 4,
+    "Top": 168,
+    "Width": 193
+   },
+   "rect": {
+    "h": 17,
+    "w": 193,
+    "x": 16,
+    "y": 168
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbCheckBarCodeMap",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.cbCheckBarCodeMap",
+   "props": {
+    "Caption": "Enable Check BarCode Map",
+    "Height": 17,
+    "Left": 16,
+    "TabOrder": 5,
+    "Top": 192,
+    "Width": 193
+   },
+   "rect": {
+    "h": 17,
+    "w": 193,
+    "x": 16,
+    "y": 192
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ckOCRCheckHasIC",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.ckOCRCheckHasIC",
+   "props": {
+    "Caption": "Enabled OCR Check Has IC",
+    "Height": 17,
+    "Left": 16,
+    "TabOrder": 6,
+    "Top": 216,
+    "Visible": "False",
+    "Width": 193
+   },
+   "rect": {
+    "h": 17,
+    "w": 193,
+    "x": 16,
+    "y": 216
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ckOCRMoveSRead",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.ckOCRMoveSRead",
+   "props": {
+    "Caption": "Enabled OCR Move S Read",
+    "Height": 17,
+    "Left": 16,
+    "TabOrder": 7,
+    "Top": 240,
+    "Visible": "False",
+    "Width": 193
+   },
+   "rect": {
+    "h": 17,
+    "w": 193,
+    "x": 16,
+    "y": 240
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edOCRWordType",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.edOCRWordType",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Text": "AANN**",
+    "Top": 136,
+    "Width": 125
+   },
+   "rect": {
+    "h": 24,
+    "w": 125,
+    "x": 116,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ckStartposshift",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.ckStartposshift",
+   "props": {
+    "Caption": "Start pos shift",
+    "Height": 17,
+    "Left": 16,
+    "TabOrder": 9,
+    "Top": 270,
+    "Width": 113
+   },
+   "rect": {
+    "h": 17,
+    "w": 113,
+    "x": 16,
+    "y": 270
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edStartposshiftClick"
+   },
+   "kind": "LEAF",
+   "name": "edStartposshift",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.edStartposshift",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 132,
+    "OnClick": "edStartposshiftClick",
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Text": "0",
+    "Top": 266,
+    "Width": 45
+   },
+   "rect": {
+    "h": 24,
+    "w": 45,
+    "x": 132,
+    "y": 266
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ckOCRLightChange",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.ckOCRLightChange",
+   "props": {
+    "Caption": "Auto change light",
+    "Height": 17,
+    "Left": 15,
+    "TabOrder": 11,
+    "Top": 294,
+    "Width": 137
+   },
+   "rect": {
+    "h": 17,
+    "w": 137,
+    "x": 15,
+    "y": 294
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ckOCRLightNoDown",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.ckOCRLightNoDown",
+   "props": {
+    "Caption": "Light cylinder no down",
+    "Height": 17,
+    "Left": 15,
+    "TabOrder": 12,
+    "Top": 319,
+    "Width": 209
+   },
+   "rect": {
+    "h": 17,
+    "w": 209,
+    "x": 15,
+    "y": 319
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ckCompareOCRData",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.ckCompareOCRData",
+   "props": {
+    "Caption": "Compare OCR Data",
+    "Height": 17,
+    "Left": 15,
+    "TabOrder": 13,
+    "Top": 341,
+    "Width": 146
+   },
+   "rect": {
+    "h": 17,
+    "w": 146,
+    "x": 15,
+    "y": 341
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox3",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.GroupBox3",
+   "props": {
+    "Caption": "OCR And Bin Log",
+    "Height": 70,
+    "Left": 187,
+    "TabOrder": 10,
+    "Top": 289,
+    "Width": 145
+   },
+   "rect": {
+    "h": 70,
+    "w": 145,
+    "x": 187,
+    "y": 289
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ckOCRAndBinLog",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.GroupBox3",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.GroupBox3.ckOCRAndBinLog",
+   "props": {
+    "Caption": "OCR And Bin Log",
+    "Height": 17,
+    "Left": 7,
+    "TabOrder": 0,
+    "Top": 24,
+    "Width": 122
+   },
+   "rect": {
+    "h": 17,
+    "w": 122,
+    "x": 7,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ckOCRBinLogAddMark",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.GroupBox3",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox1.GroupBox3.ckOCRBinLogAddMark",
+   "props": {
+    "Caption": "Log Add Mark",
+    "Height": 17,
+    "Left": 7,
+    "TabOrder": 1,
+    "Top": 46,
+    "Width": 108
+   },
+   "rect": {
+    "h": 17,
+    "w": 108,
+    "x": 7,
+    "y": 46
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel4",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.Panel4",
+   "props": {
+    "Align": "alBottom",
+    "Color": 12761254,
+    "Height": 89,
+    "Left": 0,
+    "TabOrder": 2,
+    "Top": 511,
+    "Width": 854
+   },
+   "rect": {
+    "h": 89,
+    "w": 854,
+    "x": 0,
+    "y": 511
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "spbSaveClick"
+   },
+   "kind": "LEAF",
+   "name": "spbSave",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.Panel4",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.Panel4.spbSave",
+   "props": {
+    "Caption": "Save",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 3946,
+     "hex": "660F0000424D660F000000000000360000002800000024000000240000000100180000000000300F000001000000010000000000000000000000FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF9F9F9F9F9F9F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F9F9F9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF7F7F7EFEFEFE8E8E8E6E6E6E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E9E9E9F3F3F3F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF8F8F8ECECECD6D6D6C8C8C8C5C5C5C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4D0D0D0E9E9E9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF0EFEFC0A6A7A55B6CA96270A45E6C934556A6A3A3A4A1A1A19C9C9C9797979393948D8D8E88888A8383867F7D837A7A807978807978994759994759994759994759994759994759994759994756C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAD2C1C1B28181AF6D79B8717FB7707DAA6472EFEFF1EEEEF1995D68B8717EB06B78E1E0E0DDDADBD8D5D6D4D1D2CFCCCCCAC6C6DBD8D88F4B59A05565A05565BE848EB9727FB8727EB8717E994557C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAF6D79BA7481B97380B7737FAA6472E9E9EBECEBEF995D68B8717EB06B78E1DFE1DCDADDD7D5D6D2D0D1CDC9CAC8C3C3D9D6D68D49589F5464A05565BF848EB97380B9737FB9727F9B4457C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC38D95BA7682BA7481B97480AA6472E5E4E7E9E9EB9A5D69B8737FB06B78E5E5E7E2E0E3DDDBDDD8D5D7D3D0D1CDCACBDDDADB8B48579D53639F5464BF858FBA7480BA7481BA74819B4558C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC48E96BA7783BA7682B97481AA6472E0DFE1E5E3E69B5F6BB97580B06B78E9EAECE6E5E8E2E1E4DDDCDED9D6D8D4D0D2E0DFDF8945549B50619D5363BF8590BA7481BA7481BA74819A4759C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F96BB7784BA7784BA7582AA6472DAD9DBE0DEE09B5F6BBA7582B06B78EDECEFEAE9EDE6E6E9E2E2E4DEDDDFDAD8DAE5E2E4874353994E5F9B5061C18690B97480BA7481BA74819C495CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F98BC7886BB7785BB7783AA6472D5D2D4DBD8DA9C606C925864925864EAEAEDEDEDF0EAEAEDE8E7E9E4E2E5DFDDDFE8E7E8864252974C5D994E5FC08691B9727FB97380B973809C4B5CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC49098BC7986BD7985BC7784AA6472CFCCCCD4D1D3D9D7D9DFDCDFE2E1E4E7E5E8EAEAEDEDECF0EAEBEEE8E7EAE4E2E6ECEAEC864252864252874353C28791B7727FB8727EB9727F9C4E5DC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC79198BD7A87BD7987BC7985BB7785AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472B77A84B76F7DB7707DB7707EB8717E9E4E5FC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB7717EB76F7DB76D7CB76D7BB76D7BB66D7BB56C7AB56C7AB66D7BB76F7CB76F7CB7707D9F4E60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB76F7DB76D7CB76D7CB76C7AB66C7AB66D7BB56C7AB56C7AB56C7AB66C7AB66C7AB76D7C9F4F60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6939BBE7E89BC7884A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70B66B7AB66C7B9F5162C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC7949CBF7F8AAF6F7BEBE1E1FEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFEFDFDFEFDFDFDFCFCFCFCFBFCFBFBFBFBFAFAFAF9F9F9F9F9F9F8F8F8E8D1D1A75E70B76D7BB66C7A9F5262C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC8959DC0808BAF6F7BFEFFFEFCFCFBFBFBFAFAFBFAFAFAFAF9FAF9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F7F7F7F6F6F6F6F6F9F9F9A75E70B96F7DB66B7AA05363C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9959DC1818CAF6F7BFEFFFEE1E1E1DFDFDFDDDDDDDBDCDBDADAD9D9D9D9D7D7D6D5D6D5D4D4D3D2D3D2D1D1D1D0D0D0CFCFCFCFCFCFCFCFCFCFCFCFF9FAF9A75E70BA707EB66B79A15466C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9969EC1818DAF6F7BFEFFFEFCFCFCFCFCFBFBFBFBFBFBFAFBFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F6FBFBFBA75E70B97480B56B79A25666C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2828EAF6F7BFEFFFEE4E4E4E3E3E3E2E2E1E0E0E0DEDDDEDCDCDCDADADAD9D9D9D7D8D8D6D5D5D4D4D4D2D3D3D1D2D1D0D0D0CFCFCFCFCFCFFCFCFBA75E70BA7581B56B79A45968C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2838EAF6F7BFEFFFEFCFCFCFCFCFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F8F8F9F8F8F8F8F8F7F7F7F7F7F7F7F7FCFCFCA75E70BA7783B66C7AA55969C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA98A0C2838EAF6F7BFEFFFEE6E6E6E6E5E6E4E4E4E3E3E3E1E2E2E0E0E0DEDEDEDCDCDCDBDBDBD9D9D9D8D8D8D6D6D6D4D5D5D3D3D3D1D1D1D0D0D0FDFDFCA75E70BC7783B76D7BA55D6CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB98A0C2838EAF6F7BFEFFFEFDFDFDFDFDFCFCFDFCFCFCFCFCFCFBFBFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7FDFEFDA75E70BD7985B76F7DA65F6EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E5E5E6E4E5E5E4E3E3E2E2E2E1E0E0DFDFDFDDDDDDDBDBDCDADAD9D9D8D9D7D6D7D5D5D5D3D4D3FEFEFEA75E70BE7A86B7707DA6606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFCFCFBFBFBFAFBFBFAFAFAF9F9F9F9F9F9F9F9F9F9F9F9F8F8F8F8FEFFFEA75E70B38088B8717FA7606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E5E5E5E4E4E3E2E3E3E1E1E1E0DFDFDDDDDEDCDBDCDADADAD9D9D9D7D8D7FEFFFEA75E70996E759E5967A9606EC5C5C5E5E5E5F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFFFEFEFEFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9FAFAF9F9F9F9F9F9F9FEFFFEA75E70B0757F9E5A68AA6471C5C5C5E6E6E6F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA969EC2838EAF6F7BFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEA75E70C77F8BC77F8BAA6572D1D1D1EBEBEBFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAE6A7AAE6A7AAE6A7AD9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6A75E70A75E70A75E70A75E70ECECECF6F6F6FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFA",
+     "sha1": "b6420a2c6417ab1d75d6f7441ace55c339665e38"
+    },
+    "Height": 40,
+    "Left": 178,
+    "OnClick": "spbSaveClick",
+    "ParentFont": "False",
+    "Top": 25,
+    "Width": 227
+   },
+   "rect": {
+    "h": 40,
+    "w": 227,
+    "x": 178,
+    "y": 25
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbtExitClick"
+   },
+   "kind": "LEAF",
+   "name": "sbtExit",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.Panel4",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.Panel4.sbtExit",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Exit",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 1554,
+     "hex": "0E060000424D0E06000000000000360000002800000016000000160000000100180000000000D805000001000000010000000000000000000000EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF7474A44C4C946C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA44C4C947474A4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C5454C45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC4C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9C645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D46C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC6464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CAC8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEF8C8CAC2424946464D45454C46C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C4C4CBC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424945454C44C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF",
+     "sha1": "f9091dff96fbb403d8fe7eec0dcccd5c7539ad97"
+    },
+    "GroupIndex": 1,
+    "Height": 40,
+    "Left": 431,
+    "OnClick": "sbtExitClick",
+    "ParentFont": "False",
+    "Top": 25,
+    "Width": 227
+   },
+   "rect": {
+    "h": 40,
+    "w": 227,
+    "x": 431,
+    "y": 25
+   }
+  },
+  {
+   "align": "alRight",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox2",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2",
+   "props": {
+    "Align": "alRight",
+    "Caption": "Light Setup",
+    "Height": 511,
+    "Left": 405,
+    "TabOrder": 1,
+    "Top": 0,
+    "Width": 449
+   },
+   "rect": {
+    "h": 511,
+    "w": 449,
+    "x": 405,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label17",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.Label17",
+   "props": {
+    "Caption": "COM Port: ",
+    "Height": 16,
+    "Left": 24,
+    "Top": 33,
+    "Width": 66
+   },
+   "rect": {
+    "h": 16,
+    "w": 66,
+    "x": 24,
+    "y": 33
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label7",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.Label7",
+   "props": {
+    "Caption": "Blue Light",
+    "Height": 16,
+    "Left": 16,
+    "Top": 117,
+    "Width": 58
+   },
+   "rect": {
+    "h": 16,
+    "w": 58,
+    "x": 16,
+    "y": 117
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "spbResetComClick"
+   },
+   "kind": "LEAF",
+   "name": "spbResetCom",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.spbResetCom",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Reset COM",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "GroupIndex": 2,
+    "Height": 25,
+    "Left": 232,
+    "Margin": 2,
+    "OnClick": "spbResetComClick",
+    "ParentFont": "False",
+    "Top": 28,
+    "Width": 80
+   },
+   "rect": {
+    "h": 25,
+    "w": 80,
+    "x": 232,
+    "y": 28
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "SpeedButton1",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.SpeedButton1",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Stop COM",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "GroupIndex": 2,
+    "Height": 25,
+    "Left": 336,
+    "Margin": 2,
+    "ParentFont": "False",
+    "Top": 28,
+    "Width": 80
+   },
+   "rect": {
+    "h": 25,
+    "w": 80,
+    "x": 336,
+    "y": 28
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label5",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.Label5",
+   "props": {
+    "Caption": "Red Light",
+    "Height": 16,
+    "Left": 16,
+    "Top": 157,
+    "Width": 55
+   },
+   "rect": {
+    "h": 16,
+    "w": 55,
+    "x": 16,
+    "y": 157
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComboBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbCommReader1",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.cbCommReader1",
+   "props": {
+    "Height": 24,
+    "ItemHeight": 16,
+    "Items.Strings": [
+     "COM1",
+     "COM2",
+     "COM3",
+     "COM4",
+     "COM5",
+     "COM6",
+     "COM7",
+     "COM8",
+     "COM9",
+     "COM10",
+     "COM11",
+     "COM12",
+     "COM13",
+     "COM14",
+     "COM15",
+     "COM16",
+     "COM17",
+     "COM18",
+     "COM19"
+    ],
+    "Left": 96,
+    "TabOrder": 0,
+    "Text": "COM15",
+    "Top": 29,
+    "Width": 117
+   },
+   "rect": {
+    "h": 24,
+    "w": 117,
+    "x": 96,
+    "y": 29
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnChange": "edSetBlueLightChange",
+    "OnClick": "edSetBlueLightClick"
+   },
+   "kind": "LEAF",
+   "name": "edSetBlueLight",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.edSetBlueLight",
+   "props": {
+    "Height": 24,
+    "Left": 268,
+    "OnChange": "edSetBlueLightChange",
+    "OnClick": "edSetBlueLightClick",
+    "TabOrder": 1,
+    "Text": "0",
+    "Top": 112,
+    "Width": 57
+   },
+   "rect": {
+    "h": 24,
+    "w": 57,
+    "x": 268,
+    "y": 112
+   }
+  },
+  {
+   "align": null,
+   "cls": "TScrollBar",
+   "events": {
+    "OnChange": "sbSetBlueLightChange"
+   },
+   "kind": "LEAF",
+   "name": "sbSetBlueLight",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.sbSetBlueLight",
+   "props": {
+    "Height": 17,
+    "Left": 84,
+    "Max": 255,
+    "OnChange": "sbSetBlueLightChange",
+    "PageSize": 0,
+    "TabOrder": 3,
+    "Top": 116,
+    "Width": 173
+   },
+   "rect": {
+    "h": 17,
+    "w": 173,
+    "x": 84,
+    "y": 116
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btSetBlueLightClick"
+   },
+   "kind": "LEAF",
+   "name": "btSetBlueLight",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.btSetBlueLight",
+   "props": {
+    "Caption": "Set Blue Light",
+    "Height": 25,
+    "Left": 336,
+    "OnClick": "btSetBlueLightClick",
+    "TabOrder": 2,
+    "Top": 112,
+    "Width": 105
+   },
+   "rect": {
+    "h": 25,
+    "w": 105,
+    "x": 336,
+    "y": 112
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnChange": "edSetRedLightChange",
+    "OnClick": "edSetBlueLightChange"
+   },
+   "kind": "LEAF",
+   "name": "edSetRedLight",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.edSetRedLight",
+   "props": {
+    "Height": 24,
+    "Left": 268,
+    "OnChange": "edSetRedLightChange",
+    "OnClick": "edSetBlueLightChange",
+    "TabOrder": 4,
+    "Text": "0",
+    "Top": 152,
+    "Width": 57
+   },
+   "rect": {
+    "h": 24,
+    "w": 57,
+    "x": 268,
+    "y": 152
+   }
+  },
+  {
+   "align": null,
+   "cls": "TScrollBar",
+   "events": {
+    "OnChange": "sbSetRedLightChange"
+   },
+   "kind": "LEAF",
+   "name": "sbSetRedLight",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.sbSetRedLight",
+   "props": {
+    "Height": 17,
+    "Left": 84,
+    "Max": 255,
+    "OnChange": "sbSetRedLightChange",
+    "PageSize": 0,
+    "TabOrder": 6,
+    "Top": 156,
+    "Width": 173
+   },
+   "rect": {
+    "h": 17,
+    "w": 173,
+    "x": 84,
+    "y": 156
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btSetRedLightClick"
+   },
+   "kind": "LEAF",
+   "name": "btSetRedLight",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.btSetRedLight",
+   "props": {
+    "Caption": "Set Red Light",
+    "Height": 25,
+    "Left": 336,
+    "OnClick": "btSetRedLightClick",
+    "TabOrder": 5,
+    "Top": 152,
+    "Width": 105
+   },
+   "rect": {
+    "h": 25,
+    "w": 105,
+    "x": 336,
+    "y": 152
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo3",
+   "parent": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2",
+   "path": "fOCR.PageControl1.tsOCR_Cognex_Setting.GroupBox2.Memo3",
+   "props": {
+    "Align": "alBottom",
+    "Height": 186,
+    "Left": 2,
+    "TabOrder": 7,
+    "Top": 323,
+    "Width": 445
+   },
+   "rect": {
+    "h": 186,
+    "w": 445,
+    "x": 2,
+    "y": 323
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "ckWordCount",
+   "parent": "fOCR",
+   "path": "fOCR.ckWordCount",
+   "props": {
+    "Caption": "Word Count：",
+    "Height": 17,
+    "Left": 8,
+    "TabOrder": 1,
+    "Top": 136,
+    "Width": 97
+   },
+   "rect": {
+    "h": 17,
+    "w": 97,
+    "x": 8,
+    "y": 136
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComm",
+   "events": {
+    "OnReceiveData": "CommOcrReceiveData"
+   },
+   "kind": "NONVISUAL",
+   "name": "CommOcr",
+   "parent": "fOCR",
+   "path": "fOCR.CommOcr",
+   "props": {
+    "BaudRate": 38400,
+    "ByteSize": "_8",
+    "CommName": "COM11",
+    "DsrSensitivity": "False",
+    "DtrControl": "DtrEnable",
+    "IgnoreNullChar": "False",
+    "Inx_XonXoffFlow": "False",
+    "Left": 40,
+    "OnReceiveData": "CommOcrReceiveData",
+    "Outx_CtsFlow": "False",
+    "Outx_DsrFlow": "False",
+    "Outx_XonXoffFlow": "False",
+    "Parity": "None",
+    "ParityCheck": "False",
+    "ReadIntervalTimeout": 100,
+    "ReadTotalTimeoutConstant": 0,
+    "ReadTotalTimeoutMultiplier": 0,
+    "ReplaceWhenParityError": "False",
+    "ReplacedChar": "\u0000",
+    "RtsControl": "RtsEnable",
+    "StopBits": "_1",
+    "Top": 580,
+    "TxContinueOnXoff": "True",
+    "WriteTotalTimeoutConstant": 0,
+    "WriteTotalTimeoutMultiplier": 0,
+    "XoffChar": "\u0013",
+    "XoffLimit": 500,
+    "XonChar": "\u0011",
+    "XonLimit": 500
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 40,
+    "y": 580
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "TimerOcrOnTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "TimerOcrOn",
+   "parent": "fOCR",
+   "path": "fOCR.TimerOcrOn",
+   "props": {
+    "Enabled": "False",
+    "Left": 68,
+    "OnTimer": "TimerOcrOnTimer",
+    "Top": 580
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 68,
+    "y": 580
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "TimerOcrChangeFileTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "TimerOcrChangeFile",
+   "parent": "fOCR",
+   "path": "fOCR.TimerOcrChangeFile",
+   "props": {
+    "Enabled": "False",
+    "Interval": 100,
+    "Left": 68,
+    "OnTimer": "TimerOcrChangeFileTimer",
+    "Top": 544
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 68,
+    "y": 544
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComm",
+   "events": {
+    "OnReceiveData": "CommOcr_TesterReceiveData"
+   },
+   "kind": "NONVISUAL",
+   "name": "CommOcr_Tester",
+   "parent": "fOCR",
+   "path": "fOCR.CommOcr_Tester",
+   "props": {
+    "BaudRate": 9600,
+    "ByteSize": "_8",
+    "CommName": "COM2",
+    "DsrSensitivity": "False",
+    "DtrControl": "DtrEnable",
+    "IgnoreNullChar": "False",
+    "Inx_XonXoffFlow": "False",
+    "Left": 41,
+    "OnReceiveData": "CommOcr_TesterReceiveData",
+    "Outx_CtsFlow": "False",
+    "Outx_DsrFlow": "False",
+    "Outx_XonXoffFlow": "False",
+    "Parity": "None",
+    "ParityCheck": "False",
+    "ReadIntervalTimeout": 100,
+    "ReadTotalTimeoutConstant": 0,
+    "ReadTotalTimeoutMultiplier": 0,
+    "ReplaceWhenParityError": "False",
+    "ReplacedChar": "\u0000",
+    "RtsControl": "RtsEnable",
+    "StopBits": "_1",
+    "Top": 544,
+    "TxContinueOnXoff": "True",
+    "WriteTotalTimeoutConstant": 0,
+    "WriteTotalTimeoutMultiplier": 0,
+    "XoffChar": "\u0013",
+    "XoffLimit": 500,
+    "XonChar": "\u0011",
+    "XonLimit": 500
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 41,
+    "y": 544
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "Timer1Timer"
+   },
+   "kind": "NONVISUAL",
+   "name": "Timer1",
+   "parent": "fOCR",
+   "path": "fOCR.Timer1",
+   "props": {
+    "Enabled": "False",
+    "Interval": 1,
+    "Left": 12,
+    "OnTimer": "Timer1Timer",
+    "Tag": 2,
+    "Top": 580
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 12,
+    "y": 580
+   }
+  },
+  {
+   "align": null,
+   "cls": "TClientSocket",
+   "events": {
+    "OnConnect": "ClientSocket1Connect",
+    "OnDisconnect": "ClientSocket1Disconnect",
+    "OnRead": "ClientSocket1Read"
+   },
+   "kind": "NONVISUAL",
+   "name": "ClientSocket1",
+   "parent": "fOCR",
+   "path": "fOCR.ClientSocket1",
+   "props": {
+    "Active": "False",
+    "Address": "172.16.8.104",
+    "ClientType": "ctNonBlocking",
+    "Left": 12,
+    "OnConnect": "ClientSocket1Connect",
+    "OnDisconnect": "ClientSocket1Disconnect",
+    "OnRead": "ClientSocket1Read",
+    "Port": 3000,
+    "Top": 544
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 12,
+    "y": 544
+   }
+  },
+  {
+   "align": null,
+   "cls": "TClientSocket",
+   "events": {
+    "OnConnect": "ClientSocket2Connect",
+    "OnDisconnect": "ClientSocket2Disconnect",
+    "OnRead": "ClientSocket2Read"
+   },
+   "kind": "NONVISUAL",
+   "name": "ClientSocket2",
+   "parent": "fOCR",
+   "path": "fOCR.ClientSocket2",
+   "props": {
+    "Active": "False",
+    "Address": "172.16.8.104",
+    "ClientType": "ctNonBlocking",
+    "Left": 100,
+    "OnConnect": "ClientSocket2Connect",
+    "OnDisconnect": "ClientSocket2Disconnect",
+    "OnRead": "ClientSocket2Read",
+    "Port": 23,
+    "Top": 580
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 100,
+    "y": 580
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComm",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "CommOcr_Light",
+   "parent": "fOCR",
+   "path": "fOCR.CommOcr_Light",
+   "props": {
+    "BaudRate": 9600,
+    "ByteSize": "_8",
+    "CommName": "COM2",
+    "DsrSensitivity": "False",
+    "DtrControl": "DtrEnable",
+    "IgnoreNullChar": "False",
+    "Inx_XonXoffFlow": "False",
+    "Left": 100,
+    "Outx_CtsFlow": "False",
+    "Outx_DsrFlow": "False",
+    "Outx_XonXoffFlow": "False",
+    "Parity": "None",
+    "ParityCheck": "False",
+    "ReadIntervalTimeout": 100,
+    "ReadTotalTimeoutConstant": 0,
+    "ReadTotalTimeoutMultiplier": 0,
+    "ReplaceWhenParityError": "False",
+    "ReplacedChar": "\u0000",
+    "RtsControl": "RtsEnable",
+    "StopBits": "_1",
+    "Top": 543,
+    "TxContinueOnXoff": "True",
+    "WriteTotalTimeoutConstant": 0,
+    "WriteTotalTimeoutMultiplier": 0,
+    "XoffChar": "\u0013",
+    "XoffLimit": 500,
+    "XonChar": "\u0011",
+    "XonLimit": 500
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 100,
+    "y": 543
+   }
+  }
+ ]
+}

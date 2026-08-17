@@ -1,0 +1,76 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "ADAM",
+ "form": "fAdam6024",
+ "form_class": "TfAdam6024",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "adam6024.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfAdam6024",
+   "events": {
+    "OnDestroy": "FormDestroy"
+   },
+   "kind": "ROOT",
+   "name": "fAdam6024",
+   "parent": null,
+   "path": "fAdam6024",
+   "props": {
+    "Caption": "ADAM",
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 106,
+    "Left": 1611,
+    "OldCreateOrder": "False",
+    "OnDestroy": "FormDestroy",
+    "PixelsPerInch": 96,
+    "Position": "poScreenCenter",
+    "TextHeight": 20,
+    "Top": 840,
+    "Width": 346
+   },
+   "rect": {
+    "h": 106,
+    "w": 346,
+    "x": 1611,
+    "y": 840
+   }
+  },
+  {
+   "align": null,
+   "cls": "TClientSocket",
+   "events": {
+    "OnConnect": "ClientSocket1Connect",
+    "OnError": "ClientSocket1Error"
+   },
+   "kind": "NONVISUAL",
+   "name": "ClientSocket1",
+   "parent": "fAdam6024",
+   "path": "fAdam6024.ClientSocket1",
+   "props": {
+    "Active": "False",
+    "Address": "172.16.8.110",
+    "ClientType": "ctNonBlocking",
+    "Left": 36,
+    "OnConnect": "ClientSocket1Connect",
+    "OnError": "ClientSocket1Error",
+    "Port": 10001,
+    "Top": 16
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 36,
+    "y": 16
+   }
+  }
+ ]
+}

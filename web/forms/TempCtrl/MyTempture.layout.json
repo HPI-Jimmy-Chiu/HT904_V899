@@ -1,0 +1,80 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": null,
+ "form": "DataModule2",
+ "form_class": "TDataModule2",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "TempCtrl/MyTempture.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TDataModule2",
+   "events": {},
+   "kind": "ROOT",
+   "name": "DataModule2",
+   "parent": null,
+   "path": "DataModule2",
+   "props": {
+    "Height": 245,
+    "Left": 656,
+    "OldCreateOrder": "False",
+    "Top": 422,
+    "Width": 457
+   },
+   "rect": {
+    "h": 245,
+    "w": 457,
+    "x": 656,
+    "y": 422
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComm",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "Tempture",
+   "parent": "DataModule2",
+   "path": "DataModule2.Tempture",
+   "props": {
+    "BaudRate": 9600,
+    "ByteSize": "_8",
+    "CommName": "COM2",
+    "DsrSensitivity": "False",
+    "DtrControl": "DtrEnable",
+    "IgnoreNullChar": "False",
+    "Inx_XonXoffFlow": "True",
+    "Left": 40,
+    "Outx_CtsFlow": "False",
+    "Outx_DsrFlow": "False",
+    "Outx_XonXoffFlow": "True",
+    "Parity": "None",
+    "ParityCheck": "False",
+    "ReadIntervalTimeout": 100,
+    "ReadTotalTimeoutConstant": 0,
+    "ReadTotalTimeoutMultiplier": 0,
+    "ReplaceWhenParityError": "False",
+    "ReplacedChar": "\u0000",
+    "RtsControl": "RtsEnable",
+    "StopBits": "_1",
+    "Top": 24,
+    "TxContinueOnXoff": "True",
+    "WriteTotalTimeoutConstant": 0,
+    "WriteTotalTimeoutMultiplier": 0,
+    "XoffChar": "\u0013",
+    "XoffLimit": 500,
+    "XonChar": "\u0011",
+    "XonLimit": 500
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 40,
+    "y": 24
+   }
+  }
+ ]
+}

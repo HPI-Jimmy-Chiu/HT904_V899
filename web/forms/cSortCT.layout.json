@@ -1,0 +1,7866 @@
+{
+ "canvas": {
+  "h": 1002,
+  "w": 484
+ },
+ "caption": "Sort Count",
+ "form": "fSortCT",
+ "form_class": "TfSortCT",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "cSortCT.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfSortCT",
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fSortCT",
+   "parent": null,
+   "path": "fSortCT",
+   "props": {
+    "BorderIcons": [],
+    "BorderStyle": "bsToolWindow",
+    "Caption": "Sort Count",
+    "ClientHeight": 1002,
+    "ClientWidth": 484,
+    "Color": "clBtnFace",
+    "DragKind": "dkDock",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Left": 833,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 0
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 833,
+    "y": 0
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "PageControl1",
+   "parent": "fSortCT",
+   "path": "fSortCT.PageControl1",
+   "props": {
+    "ActivePage": "SortCount",
+    "Align": "alClient",
+    "Height": 1002,
+    "Left": 0,
+    "TabHeight": 25,
+    "TabIndex": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 484
+   },
+   "rect": {
+    "h": 1002,
+    "w": 484,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "SortCount",
+   "parent": "fSortCT.PageControl1",
+   "path": "fSortCT.PageControl1.SortCount",
+   "props": {
+    "Caption": "SortCount"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlLoadingBG",
+   "parent": "fSortCT.PageControl1.SortCount",
+   "path": "fSortCT.PageControl1.SortCount.pnlLoadingBG",
+   "props": {
+    "Align": "alTop",
+    "BevelInner": "bvLowered",
+    "Height": 36,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 476
+   },
+   "rect": {
+    "h": 36,
+    "w": 476,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblLoading",
+   "parent": "fSortCT.PageControl1.SortCount.pnlLoadingBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlLoadingBG.lblLoading",
+   "props": {
+    "Caption": "Loading",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 12,
+    "Width": 46
+   },
+   "rect": {
+    "h": 13,
+    "w": 46,
+    "x": 7,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlLoaderMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlLoader",
+   "parent": "fSortCT.PageControl1.SortCount.pnlLoadingBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlLoadingBG.pnlLoader",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Caption": "100",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "OnMouseDown": "pnlLoaderMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 8,
+    "Width": 176
+   },
+   "rect": {
+    "h": 20,
+    "w": 176,
+    "x": 60,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlAuto1YieldMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlLoadTrayCt",
+   "parent": "fSortCT.PageControl1.SortCount.pnlLoadingBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlLoadingBG.pnlLoadTrayCt",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 244,
+    "OnMouseDown": "pnlAuto1YieldMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 8,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 244,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnDblClick": "pnlAuto1DblClick",
+    "OnMouseDown": "pnlAuto1YieldMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlLoadCID",
+   "parent": "fSortCT.PageControl1.SortCount.pnlLoadingBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlLoadingBG.pnlLoadCID",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 300,
+    "OnDblClick": "pnlAuto1DblClick",
+    "OnMouseDown": "pnlAuto1YieldMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 8,
+    "Width": 170
+   },
+   "rect": {
+    "h": 20,
+    "w": 170,
+    "x": 300,
+    "y": 8
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlTotalBG",
+   "parent": "fSortCT.PageControl1.SortCount",
+   "path": "fSortCT.PageControl1.SortCount.pnlTotalBG",
+   "props": {
+    "Align": "alTop",
+    "BevelInner": "bvLowered",
+    "Height": 36,
+    "Left": 0,
+    "TabOrder": 1,
+    "Top": 36,
+    "Width": 476
+   },
+   "rect": {
+    "h": 36,
+    "w": 476,
+    "x": 0,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {
+    "OnClick": "lblTotalClick"
+   },
+   "kind": "LEAF",
+   "name": "lblTotal",
+   "parent": "fSortCT.PageControl1.SortCount.pnlTotalBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlTotalBG.lblTotal",
+   "props": {
+    "Caption": "Total",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "OnClick": "lblTotalClick",
+    "ParentFont": "False",
+    "Top": 12,
+    "Width": 30
+   },
+   "rect": {
+    "h": 13,
+    "w": 30,
+    "x": 7,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlTotal",
+   "parent": "fSortCT.PageControl1.SortCount.pnlTotalBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlTotalBG.pnlTotal",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Caption": "100",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 8,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlYield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlTotalBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlTotalBG.pnlYield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 8,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 60,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnDblClick": "pnlAuto1DblClick",
+    "OnMouseDown": "pnlAuto1YieldMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlCoverTrayD",
+   "parent": "fSortCT.PageControl1.SortCount.pnlTotalBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlTotalBG.pnlCoverTrayD",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 300,
+    "OnDblClick": "pnlAuto1DblClick",
+    "OnMouseDown": "pnlAuto1YieldMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 8,
+    "Width": 170
+   },
+   "rect": {
+    "h": 20,
+    "w": 170,
+    "x": 300,
+    "y": 8
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlUnloadBG",
+   "parent": "fSortCT.PageControl1.SortCount",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "props": {
+    "Align": "alTop",
+    "BevelInner": "bvLowered",
+    "Height": 849,
+    "Left": 0,
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 476
+   },
+   "rect": {
+    "h": 849,
+    "w": 476,
+    "x": 0,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblAuto1",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblAuto1",
+   "props": {
+    "Caption": "Auto 1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 8,
+    "Width": 38
+   },
+   "rect": {
+    "h": 13,
+    "w": 38,
+    "x": 7,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblAuto2",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblAuto2",
+   "props": {
+    "Caption": "Auto 2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 30,
+    "Width": 38
+   },
+   "rect": {
+    "h": 13,
+    "w": 38,
+    "x": 7,
+    "y": 30
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblAuto3",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblAuto3",
+   "props": {
+    "Caption": "Auto 3",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 51,
+    "Width": 38
+   },
+   "rect": {
+    "h": 13,
+    "w": 38,
+    "x": 7,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblAuto4",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblAuto4",
+   "props": {
+    "Caption": "Auto 4",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 74,
+    "Width": 38
+   },
+   "rect": {
+    "h": 13,
+    "w": 38,
+    "x": 7,
+    "y": 74
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblAuto5",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblAuto5",
+   "props": {
+    "Caption": "Auto 5",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 98,
+    "Width": 38
+   },
+   "rect": {
+    "h": 13,
+    "w": 38,
+    "x": 7,
+    "y": 98
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblAuto6",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblAuto6",
+   "props": {
+    "Caption": "Auto 6",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 122,
+    "Width": 38
+   },
+   "rect": {
+    "h": 13,
+    "w": 38,
+    "x": 7,
+    "y": 122
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblFix1",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblFix1",
+   "props": {
+    "Caption": "Fix 1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 146,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 7,
+    "y": 146
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblFix2",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblFix2",
+   "props": {
+    "Caption": "Fix 2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 166,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 7,
+    "y": 166
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblFix4",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblFix4",
+   "props": {
+    "Caption": "Fix 4",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 214,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 7,
+    "y": 214
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblFix3",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblFix3",
+   "props": {
+    "Caption": "Fix 3",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 190,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 7,
+    "y": 190
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblFix5",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblFix5",
+   "props": {
+    "Caption": "Fix 5",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 238,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 7,
+    "y": 238
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblFix6",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblFix6",
+   "props": {
+    "Caption": "Fix 6",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 258,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 7,
+    "y": 258
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblFix7",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblFix7",
+   "props": {
+    "Caption": "Fix 7",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 282,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 7,
+    "y": 282
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblFix8",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblFix8",
+   "props": {
+    "Caption": "Fix 8",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 306,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 7,
+    "y": 306
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblFix9",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblFix9",
+   "props": {
+    "Caption": "Fix 9",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 330,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 7,
+    "y": 330
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblFix10",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblFix10",
+   "props": {
+    "Caption": "Fix 10",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 354,
+    "Width": 35
+   },
+   "rect": {
+    "h": 13,
+    "w": 35,
+    "x": 7,
+    "y": 354
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblFix11",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblFix11",
+   "props": {
+    "Caption": "Fix 11",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 378,
+    "Width": 35
+   },
+   "rect": {
+    "h": 13,
+    "w": 35,
+    "x": 7,
+    "y": 378
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblFix12",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblFix12",
+   "props": {
+    "Caption": "Fix 12",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 402,
+    "Width": 35
+   },
+   "rect": {
+    "h": 13,
+    "w": 35,
+    "x": 7,
+    "y": 402
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblBinBox",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblBinBox",
+   "props": {
+    "Caption": "Bulk Box",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 426,
+    "Width": 51
+   },
+   "rect": {
+    "h": 13,
+    "w": 51,
+    "x": 7,
+    "y": 426
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblMag1",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblMag1",
+   "props": {
+    "Caption": "Mag 1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 450,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 7,
+    "y": 450
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblMag2",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblMag2",
+   "props": {
+    "Caption": "Mag 2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 474,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 7,
+    "y": 474
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblMag3",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblMag3",
+   "props": {
+    "Caption": "Mag 3",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 498,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 7,
+    "y": 498
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblMag4",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblMag4",
+   "props": {
+    "Caption": "Mag 4",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 522,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 7,
+    "y": 522
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblMag5",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblMag5",
+   "props": {
+    "Caption": "Mag 5",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 546,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 7,
+    "y": 546
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblMag6",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblMag6",
+   "props": {
+    "Caption": "Mag 6",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 570,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 7,
+    "y": 570
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblMag7",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblMag7",
+   "props": {
+    "Caption": "Mag 7",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 594,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 7,
+    "y": 594
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblMag8",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblMag8",
+   "props": {
+    "Caption": "Mag 8",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 618,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 7,
+    "y": 618
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblMag9",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblMag9",
+   "props": {
+    "Caption": "Mag 9",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 642,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 7,
+    "y": 642
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblMag10",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblMag10",
+   "props": {
+    "Caption": "Mag 10",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 666,
+    "Width": 43
+   },
+   "rect": {
+    "h": 13,
+    "w": 43,
+    "x": 7,
+    "y": 666
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblMag11",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblMag11",
+   "props": {
+    "Caption": "Mag 11",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 690,
+    "Width": 43
+   },
+   "rect": {
+    "h": 13,
+    "w": 43,
+    "x": 7,
+    "y": 690
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblMag12",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblMag12",
+   "props": {
+    "Caption": "Mag 12",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 714,
+    "Width": 43
+   },
+   "rect": {
+    "h": 13,
+    "w": 43,
+    "x": 7,
+    "y": 714
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblMag13",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblMag13",
+   "props": {
+    "Caption": "Mag 13",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 738,
+    "Width": 43
+   },
+   "rect": {
+    "h": 13,
+    "w": 43,
+    "x": 7,
+    "y": 738
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblMag14",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.lblMag14",
+   "props": {
+    "Caption": "Mag 14",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 762,
+    "Width": 43
+   },
+   "rect": {
+    "h": 13,
+    "w": 43,
+    "x": 7,
+    "y": 762
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "btnClearCountClick"
+   },
+   "kind": "LEAF",
+   "name": "btnClearCount",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.btnClearCount",
+   "props": {
+    "Caption": "Clear Count",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Times New Roman",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Glyph.Data": {
+     "byte_len": 1198,
+     "hex": "AA040000424DAA040000000000003600000028000000140000001300000001001800000000007404000074120000741200000000000000000000C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033990033990033990033990033990033990033990033990033990033990033990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033FFFFFFFFFFFFFFFFFFFFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033990033FFFFFFFFFFFF990033990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033FFFFFF990033990033FFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033FFFFFFFFFFFFFFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033FFFFFFFFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033FFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033990033990033990033990033990033990033990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0",
+     "sha1": "4c9902eab4280e7569d07a82dbb04e13b6ebdd1e"
+    },
+    "Height": 23,
+    "Left": 16,
+    "OnClick": "btnClearCountClick",
+    "ParentFont": "False",
+    "Top": 801,
+    "Width": 220
+   },
+   "rect": {
+    "h": 23,
+    "w": 220,
+    "x": 16,
+    "y": 801
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlAuto1YieldMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlAuto1Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto1Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "OnMouseDown": "pnlAuto1YieldMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 4,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 60,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnDblClick": "pnlAuto1DblClick",
+    "OnMouseDown": "pnlAuto1YieldMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlAuto1",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto1",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Caption": "100",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "OnDblClick": "pnlAuto1DblClick",
+    "OnMouseDown": "pnlAuto1YieldMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 4,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlAuto2Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto2Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 26,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 60,
+    "y": 26
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlAuto2",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto2",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Caption": "100",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 26,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 26
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlAuto3Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto3Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 47,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 60,
+    "y": 47
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlAuto3",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto3",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Caption": "100",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 47,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 47
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlAuto4Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto4Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Top": 70,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 60,
+    "y": 70
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlAuto4",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto4",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Caption": "100",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Top": 70,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 70
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlAuto5Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto5Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Top": 94,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 60,
+    "y": 94
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlAuto5",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto5",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Caption": "100",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 9,
+    "Top": 94,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 94
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlAuto6Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto6Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 10,
+    "Top": 118,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 60,
+    "y": 118
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlAuto6",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto6",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Caption": "100",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 11,
+    "Top": 118,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 118
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlFix1YieldMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlFix1Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix1Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "OnMouseDown": "pnlFix1YieldMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 12,
+    "Top": 142,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 142
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlFix1",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix1",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 13,
+    "Top": 142,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 142
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlFix2MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlFix2Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix2Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "OnMouseDown": "pnlFix2MouseDown",
+    "ParentFont": "False",
+    "TabOrder": 14,
+    "Top": 162,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 162
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlFix2",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix2",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 15,
+    "Top": 162,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 162
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlFix4YieldMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlFix4Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix4Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "OnMouseDown": "pnlFix4YieldMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 18,
+    "Top": 210,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 210
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlFix4",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix4",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 19,
+    "Top": 210,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 210
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlFix3MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlFix3Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix3Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "OnMouseDown": "pnlFix3MouseDown",
+    "ParentFont": "False",
+    "TabOrder": 16,
+    "Top": 186,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 186
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlFix3",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix3",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 17,
+    "Top": 186,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 186
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlFix5YieldMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlFix5Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix5Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "OnMouseDown": "pnlFix5YieldMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 20,
+    "Top": 234,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 234
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlFix5",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix5",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 21,
+    "Top": 234,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 234
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlFix6YieldMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlFix6Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix6Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "OnMouseDown": "pnlFix6YieldMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 22,
+    "Top": 254,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 254
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlFix6",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix6",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 23,
+    "Top": 254,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 254
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlFix7Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix7Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 24,
+    "Top": 278,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 278
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlFix7",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix7",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 25,
+    "Top": 278,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 278
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlFix8Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix8Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 26,
+    "Top": 302,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 302
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlFix8",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix8",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 27,
+    "Top": 302,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 302
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlFix9Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix9Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 28,
+    "Top": 326,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 326
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlFix9",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix9",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 29,
+    "Top": 326,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 326
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlFix10Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix10Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 30,
+    "Top": 350,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 350
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlFix10",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix10",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 31,
+    "Top": 350,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 350
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlFix11Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix11Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 32,
+    "Top": 374,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 374
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlFix11",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix11",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 33,
+    "Top": 374,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 374
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlFix12Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix12Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 34,
+    "Top": 398,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 398
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlFix12",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlFix12",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 35,
+    "Top": 398,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 398
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlBinBoxYield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlBinBoxYield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 36,
+    "Top": 422,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 422
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlBinBox",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlBinBox",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 37,
+    "Top": 422,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 422
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag1Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag1Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 38,
+    "Top": 446,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 446
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag1",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag1",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 39,
+    "Top": 446,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 446
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag2Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag2Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 40,
+    "Tag": 1,
+    "Top": 470,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 470
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag2",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag2",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 41,
+    "Tag": 1,
+    "Top": 470,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 470
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag3Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag3Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 42,
+    "Tag": 2,
+    "Top": 494,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 494
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag3",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag3",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 43,
+    "Tag": 2,
+    "Top": 494,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 494
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag4Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag4Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 44,
+    "Tag": 3,
+    "Top": 518,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 518
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag4",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag4",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 45,
+    "Tag": 3,
+    "Top": 518,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 518
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag5Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag5Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 46,
+    "Tag": 4,
+    "Top": 542,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 542
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag5",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag5",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 47,
+    "Tag": 4,
+    "Top": 542,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 542
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag6Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag6Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 48,
+    "Tag": 5,
+    "Top": 566,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 566
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag6",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag6",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 49,
+    "Tag": 5,
+    "Top": 566,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 566
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag7Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag7Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 50,
+    "Tag": 6,
+    "Top": 590,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 590
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag7",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag7",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 51,
+    "Tag": 6,
+    "Top": 590,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 590
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag8Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag8Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 52,
+    "Tag": 7,
+    "Top": 614,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 614
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag8",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag8",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 53,
+    "Tag": 7,
+    "Top": 614,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 614
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag9Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag9Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 54,
+    "Tag": 8,
+    "Top": 638,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 638
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag9",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag9",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 55,
+    "Tag": 8,
+    "Top": 638,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 638
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag10Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag10Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 56,
+    "Tag": 9,
+    "Top": 662,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 662
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag10",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag10",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 57,
+    "Tag": 9,
+    "Top": 662,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 662
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag11Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag11Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 58,
+    "Tag": 10,
+    "Top": 686,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 686
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag11",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag11",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 59,
+    "Tag": 10,
+    "Top": 686,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 686
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag12Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag12Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 60,
+    "Tag": 11,
+    "Top": 710,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 710
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag12",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag12",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 61,
+    "Tag": 11,
+    "Top": 710,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 710
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag13Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag13Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 62,
+    "Tag": 12,
+    "Top": 734,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 734
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag13",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag13",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 63,
+    "Tag": 12,
+    "Top": 734,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 734
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag14Yield",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag14Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 64,
+    "Tag": 13,
+    "Top": 758,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 758
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlMag14",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlMag14",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 65,
+    "Tag": 13,
+    "Top": 758,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 758
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlAuto1YieldMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlAuto1TrayCt",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto1TrayCt",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 244,
+    "OnMouseDown": "pnlAuto1YieldMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 66,
+    "Top": 4,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 244,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnDblClick": "pnlAuto1CIDDblClick"
+   },
+   "kind": "LEAF",
+   "name": "pnlAuto1CID",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto1CID",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 300,
+    "OnDblClick": "pnlAuto1CIDDblClick",
+    "ParentFont": "False",
+    "TabOrder": 67,
+    "Top": 4,
+    "Width": 170
+   },
+   "rect": {
+    "h": 20,
+    "w": 170,
+    "x": 300,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlAuto1YieldMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlAuto2TrayCt",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto2TrayCt",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 244,
+    "OnMouseDown": "pnlAuto1YieldMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 68,
+    "Top": 26,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 244,
+    "y": 26
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnDblClick": "pnlAuto1CIDDblClick"
+   },
+   "kind": "LEAF",
+   "name": "pnlAuto2CID",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto2CID",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 300,
+    "OnDblClick": "pnlAuto1CIDDblClick",
+    "ParentFont": "False",
+    "TabOrder": 69,
+    "Top": 26,
+    "Width": 170
+   },
+   "rect": {
+    "h": 20,
+    "w": 170,
+    "x": 300,
+    "y": 26
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlAuto1YieldMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlAuto3TrayCt",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto3TrayCt",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 244,
+    "OnMouseDown": "pnlAuto1YieldMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 70,
+    "Top": 47,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 244,
+    "y": 47
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnDblClick": "pnlAuto1CIDDblClick"
+   },
+   "kind": "LEAF",
+   "name": "pnlAuto3CID",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto3CID",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 300,
+    "OnDblClick": "pnlAuto1CIDDblClick",
+    "ParentFont": "False",
+    "TabOrder": 71,
+    "Top": 47,
+    "Width": 170
+   },
+   "rect": {
+    "h": 20,
+    "w": 170,
+    "x": 300,
+    "y": 47
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlAuto1YieldMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlAuto4TrayCt",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto4TrayCt",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 244,
+    "OnMouseDown": "pnlAuto1YieldMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 72,
+    "Top": 70,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 244,
+    "y": 70
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnDblClick": "pnlAuto1CIDDblClick"
+   },
+   "kind": "LEAF",
+   "name": "pnlAuto4CID",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto4CID",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 300,
+    "OnDblClick": "pnlAuto1CIDDblClick",
+    "ParentFont": "False",
+    "TabOrder": 73,
+    "Top": 70,
+    "Width": 170
+   },
+   "rect": {
+    "h": 20,
+    "w": 170,
+    "x": 300,
+    "y": 70
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlAuto1YieldMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlAuto5TrayCt",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto5TrayCt",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 244,
+    "OnMouseDown": "pnlAuto1YieldMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 74,
+    "Top": 94,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 244,
+    "y": 94
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnDblClick": "pnlAuto1CIDDblClick"
+   },
+   "kind": "LEAF",
+   "name": "pnlAuto5CID",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto5CID",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 300,
+    "OnDblClick": "pnlAuto1CIDDblClick",
+    "ParentFont": "False",
+    "TabOrder": 75,
+    "Top": 94,
+    "Width": 170
+   },
+   "rect": {
+    "h": 20,
+    "w": 170,
+    "x": 300,
+    "y": 94
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlAuto1YieldMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlAuto6TrayCt",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto6TrayCt",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 244,
+    "OnMouseDown": "pnlAuto1YieldMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 76,
+    "Top": 118,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 244,
+    "y": 118
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnDblClick": "pnlAuto1CIDDblClick"
+   },
+   "kind": "LEAF",
+   "name": "pnlAuto6CID",
+   "parent": "fSortCT.PageControl1.SortCount.pnlUnloadBG",
+   "path": "fSortCT.PageControl1.SortCount.pnlUnloadBG.pnlAuto6CID",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 300,
+    "OnDblClick": "pnlAuto1CIDDblClick",
+    "ParentFont": "False",
+    "TabOrder": 77,
+    "Top": 118,
+    "Width": 170
+   },
+   "rect": {
+    "h": 20,
+    "w": 170,
+    "x": 300,
+    "y": 118
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "gbLotID",
+   "parent": "fSortCT.PageControl1.SortCount",
+   "path": "fSortCT.PageControl1.SortCount.gbLotID",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Lot ID",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 86,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 921,
+    "Visible": "False",
+    "Width": 476
+   },
+   "rect": {
+    "h": 86,
+    "w": 476,
+    "x": 0,
+    "y": 921
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "spbClearAllCountClick"
+   },
+   "kind": "LEAF",
+   "name": "spbClearAllCount",
+   "parent": "fSortCT.PageControl1.SortCount.gbLotID",
+   "path": "fSortCT.PageControl1.SortCount.gbLotID.spbClearAllCount",
+   "props": {
+    "Caption": "Clear All Count",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Times New Roman",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Glyph.Data": {
+     "byte_len": 1198,
+     "hex": "AA040000424DAA040000000000003600000028000000140000001300000001001800000000007404000074120000741200000000000000000000C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033990033990033990033990033990033990033990033990033990033990033990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033FFFFFFFFFFFFFFFFFFFFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033990033FFFFFFFFFFFF990033990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033FFFFFF990033990033FFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033FFFFFFFFFFFFFFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033FFFFFFFFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF990033FFFFFF990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0990033990033990033990033990033990033990033990033C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0C0",
+     "sha1": "4c9902eab4280e7569d07a82dbb04e13b6ebdd1e"
+    },
+    "Height": 26,
+    "Left": 12,
+    "OnClick": "spbClearAllCountClick",
+    "ParentFont": "False",
+    "Top": 51,
+    "Width": 221
+   },
+   "rect": {
+    "h": 26,
+    "w": 221,
+    "x": 12,
+    "y": 51
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edLotID",
+   "parent": "fSortCT.PageControl1.SortCount.gbLotID",
+   "path": "fSortCT.PageControl1.SortCount.gbLotID.edLotID",
+   "props": {
+    "Height": 24,
+    "Left": 12,
+    "TabOrder": 0,
+    "Top": 20,
+    "Width": 221
+   },
+   "rect": {
+    "h": 24,
+    "w": 221,
+    "x": 12,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "ARTSortCount",
+   "parent": "fSortCT.PageControl1",
+   "path": "fSortCT.PageControl1.ARTSortCount",
+   "props": {
+    "Caption": "ARTSortCount",
+    "ImageIndex": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlLoadingARTBG",
+   "parent": "fSortCT.PageControl1.ARTSortCount",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlLoadingARTBG",
+   "props": {
+    "Align": "alTop",
+    "BevelInner": "bvLowered",
+    "Height": 36,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 476
+   },
+   "rect": {
+    "h": 36,
+    "w": 476,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label14",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlLoadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlLoadingARTBG.Label14",
+   "props": {
+    "Caption": "Loading",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 12,
+    "Width": 46
+   },
+   "rect": {
+    "h": 13,
+    "w": 46,
+    "x": 7,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlLoaderMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlLoadingART",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlLoadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlLoadingARTBG.pnlLoadingART",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 57,
+    "OnMouseDown": "pnlLoaderMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 8,
+    "Width": 176
+   },
+   "rect": {
+    "h": 20,
+    "w": 176,
+    "x": 57,
+    "y": 8
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlTotalARTBG",
+   "parent": "fSortCT.PageControl1.ARTSortCount",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlTotalARTBG",
+   "props": {
+    "Align": "alTop",
+    "BevelInner": "bvLowered",
+    "Height": 36,
+    "Left": 0,
+    "TabOrder": 1,
+    "Top": 36,
+    "Width": 476
+   },
+   "rect": {
+    "h": 36,
+    "w": 476,
+    "x": 0,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label15",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlTotalARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlTotalARTBG.Label15",
+   "props": {
+    "Caption": "Total",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 12,
+    "Width": 30
+   },
+   "rect": {
+    "h": 13,
+    "w": 30,
+    "x": 7,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlTotalART",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlTotalARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlTotalARTBG.pnlTotalART",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 113,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 8,
+    "Width": 118
+   },
+   "rect": {
+    "h": 20,
+    "w": 118,
+    "x": 113,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlYieldART",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlTotalARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlTotalARTBG.pnlYieldART",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 58,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 8,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 58,
+    "y": 8
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnlUnloadingARTBG",
+   "parent": "fSortCT.PageControl1.ARTSortCount",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "props": {
+    "Align": "alTop",
+    "BevelInner": "bvLowered",
+    "Height": 801,
+    "Left": 0,
+    "TabOrder": 2,
+    "Top": 72,
+    "Width": 476
+   },
+   "rect": {
+    "h": 801,
+    "w": 476,
+    "x": 0,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTMag14",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTMag14",
+   "props": {
+    "Caption": "Mag 14",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 776,
+    "Width": 43
+   },
+   "rect": {
+    "h": 13,
+    "w": 43,
+    "x": 7,
+    "y": 776
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTMag13",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTMag13",
+   "props": {
+    "Caption": "Mag 13",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 752,
+    "Width": 43
+   },
+   "rect": {
+    "h": 13,
+    "w": 43,
+    "x": 7,
+    "y": 752
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTMag12",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTMag12",
+   "props": {
+    "Caption": "Mag 12",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 728,
+    "Width": 43
+   },
+   "rect": {
+    "h": 13,
+    "w": 43,
+    "x": 7,
+    "y": 728
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTMag11",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTMag11",
+   "props": {
+    "Caption": "Mag 11",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 704,
+    "Width": 43
+   },
+   "rect": {
+    "h": 13,
+    "w": 43,
+    "x": 7,
+    "y": 704
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTMag10",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTMag10",
+   "props": {
+    "Caption": "Mag 10",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 680,
+    "Width": 43
+   },
+   "rect": {
+    "h": 13,
+    "w": 43,
+    "x": 7,
+    "y": 680
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTMag9",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTMag9",
+   "props": {
+    "Caption": "Mag 9",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 656,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 7,
+    "y": 656
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTMag8",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTMag8",
+   "props": {
+    "Caption": "Mag 8",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 632,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 7,
+    "y": 632
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTMag7",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTMag7",
+   "props": {
+    "Caption": "Mag 7",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 608,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 7,
+    "y": 608
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTMag6",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTMag6",
+   "props": {
+    "Caption": "Mag 6",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 584,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 7,
+    "y": 584
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTMag5",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTMag5",
+   "props": {
+    "Caption": "Mag 5",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 560,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 7,
+    "y": 560
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTMag4",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTMag4",
+   "props": {
+    "Caption": "Mag 4",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 536,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 7,
+    "y": 536
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTMag3",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTMag3",
+   "props": {
+    "Caption": "Mag 3",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 512,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 7,
+    "y": 512
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTMag2",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTMag2",
+   "props": {
+    "Caption": "Mag 2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 488,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 7,
+    "y": 488
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTMag1",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTMag1",
+   "props": {
+    "Caption": "Mag 1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 464,
+    "Width": 36
+   },
+   "rect": {
+    "h": 13,
+    "w": 36,
+    "x": 7,
+    "y": 464
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTBinBox",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTBinBox",
+   "props": {
+    "Caption": "Bulk Box",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 440,
+    "Width": 51
+   },
+   "rect": {
+    "h": 13,
+    "w": 51,
+    "x": 7,
+    "y": 440
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTFix12",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTFix12",
+   "props": {
+    "Caption": "Fix 12",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 416,
+    "Width": 35
+   },
+   "rect": {
+    "h": 13,
+    "w": 35,
+    "x": 7,
+    "y": 416
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTFix11",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTFix11",
+   "props": {
+    "Caption": "Fix 11",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 392,
+    "Width": 35
+   },
+   "rect": {
+    "h": 13,
+    "w": 35,
+    "x": 7,
+    "y": 392
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTFix10",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTFix10",
+   "props": {
+    "Caption": "Fix 10",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 368,
+    "Width": 35
+   },
+   "rect": {
+    "h": 13,
+    "w": 35,
+    "x": 7,
+    "y": 368
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTFix9",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTFix9",
+   "props": {
+    "Caption": "Fix 9",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 344,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 7,
+    "y": 344
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTAuto4",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTAuto4",
+   "props": {
+    "Caption": "Auto 4",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 38
+   },
+   "rect": {
+    "h": 13,
+    "w": 38,
+    "x": 7,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTFix8",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTFix8",
+   "props": {
+    "Caption": "Fix 8",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 320,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 7,
+    "y": 320
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTFix7",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTFix7",
+   "props": {
+    "Caption": "Fix 7",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 296,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 7,
+    "y": 296
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTFix6",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTFix6",
+   "props": {
+    "Caption": "Fix 6",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 272,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 7,
+    "y": 272
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTFix5",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTFix5",
+   "props": {
+    "Caption": "Fix 5",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 248,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 7,
+    "y": 248
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTFix4",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTFix4",
+   "props": {
+    "Caption": "Fix 4",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 224,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 7,
+    "y": 224
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTFix3",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTFix3",
+   "props": {
+    "Caption": "Fix 3",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 200,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 7,
+    "y": 200
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTFix2",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTFix2",
+   "props": {
+    "Caption": "Fix 2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 176,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 7,
+    "y": 176
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTFix1",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTFix1",
+   "props": {
+    "Caption": "Fix 1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 152,
+    "Width": 28
+   },
+   "rect": {
+    "h": 13,
+    "w": 28,
+    "x": 7,
+    "y": 152
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTAuto2",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTAuto2",
+   "props": {
+    "Caption": "Auto 2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 32,
+    "Width": 38
+   },
+   "rect": {
+    "h": 13,
+    "w": 38,
+    "x": 7,
+    "y": 32
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTAuto1",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTAuto1",
+   "props": {
+    "Caption": "Auto 1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 8,
+    "Width": 38
+   },
+   "rect": {
+    "h": 13,
+    "w": 38,
+    "x": 7,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTAuto3",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTAuto3",
+   "props": {
+    "Caption": "Auto 3",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 56,
+    "Width": 38
+   },
+   "rect": {
+    "h": 13,
+    "w": 38,
+    "x": 7,
+    "y": 56
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTAuto5",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTAuto5",
+   "props": {
+    "Caption": "Auto 5",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 80,
+    "Width": 38
+   },
+   "rect": {
+    "h": 13,
+    "w": 38,
+    "x": 7,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblARTAuto6",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.lblARTAuto6",
+   "props": {
+    "Caption": "Auto 6",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 7,
+    "ParentFont": "False",
+    "Top": 128,
+    "Width": 38
+   },
+   "rect": {
+    "h": 13,
+    "w": 38,
+    "x": 7,
+    "y": 128
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag14Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag14Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Tag": 13,
+    "Top": 772,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 772
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag14",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag14",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Tag": 13,
+    "Top": 772,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 772
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag13Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag13Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Tag": 12,
+    "Top": 748,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 748
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag13",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag13",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Tag": 12,
+    "Top": 748,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 748
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag12Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag12Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Tag": 11,
+    "Top": 724,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 724
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag12",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag12",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Tag": 11,
+    "Top": 724,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 724
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag11Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag11Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Tag": 10,
+    "Top": 700,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 700
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag11",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag11",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Tag": 10,
+    "Top": 700,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 700
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag10Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag10Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Tag": 9,
+    "Top": 676,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 676
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag10",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag10",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 9,
+    "Tag": 9,
+    "Top": 676,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 676
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag9Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag9Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 10,
+    "Tag": 8,
+    "Top": 652,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 652
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag9",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag9",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 11,
+    "Tag": 8,
+    "Top": 652,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 652
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag8Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag8Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 12,
+    "Tag": 7,
+    "Top": 628,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 628
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag8",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag8",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 13,
+    "Tag": 7,
+    "Top": 628,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 628
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag7",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag7",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 14,
+    "Tag": 6,
+    "Top": 604,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 604
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag7Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag7Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 15,
+    "Tag": 6,
+    "Top": 604,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 604
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag6Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag6Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 16,
+    "Tag": 5,
+    "Top": 580,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 580
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag6",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag6",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 17,
+    "Tag": 5,
+    "Top": 580,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 580
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag5Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag5Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 18,
+    "Tag": 4,
+    "Top": 556,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 556
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag5",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag5",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 19,
+    "Tag": 4,
+    "Top": 556,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 556
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag4Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag4Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 20,
+    "Tag": 3,
+    "Top": 532,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 532
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag4",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag4",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 21,
+    "Tag": 3,
+    "Top": 532,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 532
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag3Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag3Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 22,
+    "Tag": 2,
+    "Top": 508,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 508
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag3",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag3",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 23,
+    "Tag": 2,
+    "Top": 508,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 508
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag2Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag2Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 24,
+    "Tag": 1,
+    "Top": 484,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 484
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag2",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag2",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 25,
+    "Tag": 1,
+    "Top": 484,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 484
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag1Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag1Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 26,
+    "Top": 460,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 460
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTMag1",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTMag1",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 27,
+    "Top": 460,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 460
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTBinBoxYield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTBinBoxYield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 28,
+    "Top": 436,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 436
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTBinBox",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTBinBox",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 29,
+    "Top": 436,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 436
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix12Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix12Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 30,
+    "Top": 412,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 412
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix12",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix12",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 31,
+    "Top": 412,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 412
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix11Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix11Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 32,
+    "Top": 388,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 388
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix11",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix11",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 33,
+    "Top": 388,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 388
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix10Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix10Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 34,
+    "Top": 364,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 364
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix10",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix10",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 35,
+    "Top": 364,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 364
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix9Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix9Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 36,
+    "Top": 340,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 340
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix9",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix9",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 37,
+    "Top": 340,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 340
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTAuto4Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTAuto4Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 38,
+    "Top": 100,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 60,
+    "y": 100
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTAuto4",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTAuto4",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Caption": "100",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 39,
+    "Top": 100,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 100
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix8Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix8Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 40,
+    "Top": 316,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 316
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix8",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix8",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 41,
+    "Top": 316,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 316
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix7Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix7Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 42,
+    "Top": 292,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 292
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix7",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix7",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 43,
+    "Top": 292,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 292
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix6Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix6Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 44,
+    "Top": 268,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 268
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix6",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix6",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 45,
+    "Top": 268,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 268
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix5Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix5Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 46,
+    "Top": 244,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 244
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix5",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix5",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 47,
+    "Top": 244,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 244
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix4Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix4Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 48,
+    "Top": 220,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 220
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix4",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix4",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 49,
+    "Top": 220,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 220
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix3Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix3Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 50,
+    "Top": 196,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 196
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix3",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix3",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 51,
+    "Top": 196,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 196
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix2Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix2Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 52,
+    "Top": 172,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 172
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix2",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix2",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 53,
+    "Top": 172,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 172
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix1Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix1Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 54,
+    "Top": 148,
+    "Width": 49
+   },
+   "rect": {
+    "h": 20,
+    "w": 49,
+    "x": 60,
+    "y": 148
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTFix1",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTFix1",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 55,
+    "Top": 148,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 148
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTAuto2Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTAuto2Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 56,
+    "Top": 28,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 60,
+    "y": 28
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTAuto2",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTAuto2",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Caption": "100",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 57,
+    "Top": 28,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 28
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTAuto1Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTAuto1Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 58,
+    "Top": 4,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 60,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTAuto1",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTAuto1",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Caption": "100",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 59,
+    "Top": 4,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTAuto3Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTAuto3Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 60,
+    "Top": 52,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 60,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTAuto3",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTAuto3",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Caption": "100",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 61,
+    "Top": 52,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTAuto5Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTAuto5Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 62,
+    "Top": 76,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 60,
+    "y": 76
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTAuto5",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTAuto5",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Caption": "100",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 63,
+    "Top": 76,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 76
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTAuto6Yield",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTAuto6Yield",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 60,
+    "ParentFont": "False",
+    "TabOrder": 64,
+    "Top": 124,
+    "Width": 50
+   },
+   "rect": {
+    "h": 20,
+    "w": 50,
+    "x": 60,
+    "y": 124
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnARTAuto6",
+   "parent": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG",
+   "path": "fSortCT.PageControl1.ARTSortCount.pnlUnloadingARTBG.pnARTAuto6",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Caption": "100",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 116,
+    "ParentFont": "False",
+    "TabOrder": 65,
+    "Top": 124,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 116,
+    "y": 124
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsICCount",
+   "parent": "fSortCT.PageControl1",
+   "path": "fSortCT.PageControl1.tsICCount",
+   "props": {
+    "Caption": "IC Count",
+    "ImageIndex": 2
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpInputArea",
+   "parent": "fSortCT.PageControl1.tsICCount",
+   "path": "fSortCT.PageControl1.tsICCount.grpInputArea",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Input Area",
+    "Height": 110,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 476
+   },
+   "rect": {
+    "h": 110,
+    "w": 476,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblLoad",
+   "parent": "fSortCT.PageControl1.tsICCount.grpInputArea",
+   "path": "fSortCT.PageControl1.tsICCount.grpInputArea.lblLoad",
+   "props": {
+    "Caption": "Loader",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 8,
+    "ParentFont": "False",
+    "Top": 24,
+    "Width": 40
+   },
+   "rect": {
+    "h": 13,
+    "w": 40,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblHP2",
+   "parent": "fSortCT.PageControl1.tsICCount.grpInputArea",
+   "path": "fSortCT.PageControl1.tsICCount.grpInputArea.lblHP2",
+   "props": {
+    "Caption": "HP1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 8,
+    "ParentFont": "False",
+    "Top": 52,
+    "Width": 25
+   },
+   "rect": {
+    "h": 13,
+    "w": 25,
+    "x": 8,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblHP1",
+   "parent": "fSortCT.PageControl1.tsICCount.grpInputArea",
+   "path": "fSortCT.PageControl1.tsICCount.grpInputArea.lblHP1",
+   "props": {
+    "Caption": "HP2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 13,
+    "Left": 8,
+    "ParentFont": "False",
+    "Top": 80,
+    "Width": 25
+   },
+   "rect": {
+    "h": 13,
+    "w": 25,
+    "x": 8,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlLoaderMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlLoad",
+   "parent": "fSortCT.PageControl1.tsICCount.grpInputArea",
+   "path": "fSortCT.PageControl1.tsICCount.grpInputArea.pnlLoad",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 57,
+    "OnMouseDown": "pnlLoaderMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 18,
+    "Width": 176
+   },
+   "rect": {
+    "h": 25,
+    "w": 176,
+    "x": 57,
+    "y": 18
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlHP1MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlHP1",
+   "parent": "fSortCT.PageControl1.tsICCount.grpInputArea",
+   "path": "fSortCT.PageControl1.tsICCount.grpInputArea.pnlHP1",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 57,
+    "OnMouseDown": "pnlHP1MouseDown",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 46,
+    "Width": 176
+   },
+   "rect": {
+    "h": 25,
+    "w": 176,
+    "x": 57,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnMouseDown": "pnlHP2MouseDown"
+   },
+   "kind": "LEAF",
+   "name": "pnlHP2",
+   "parent": "fSortCT.PageControl1.tsICCount.grpInputArea",
+   "path": "fSortCT.PageControl1.tsICCount.grpInputArea.pnlHP2",
+   "props": {
+    "Alignment": "taRightJustify",
+    "BevelInner": "bvLowered",
+    "BevelOuter": "bvLowered",
+    "Color": "clWhite",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -12,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 25,
+    "Left": 57,
+    "OnMouseDown": "pnlHP2MouseDown",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 74,
+    "Width": 176
+   },
+   "rect": {
+    "h": 25,
+    "w": 176,
+    "x": 57,
+    "y": 74
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlTrayCount",
+   "parent": "fSortCT",
+   "path": "fSortCT.pnlTrayCount",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Tray Count",
+    "Height": 25,
+    "Left": 228,
+    "TabOrder": 1,
+    "Top": 4,
+    "Width": 89
+   },
+   "rect": {
+    "h": 25,
+    "w": 89,
+    "x": 228,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlTrayCID",
+   "parent": "fSortCT",
+   "path": "fSortCT.pnlTrayCID",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Cover Tray ID",
+    "Height": 25,
+    "Left": 313,
+    "TabOrder": 2,
+    "Top": 4,
+    "Width": 153
+   },
+   "rect": {
+    "h": 25,
+    "w": 153,
+    "x": 313,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "Timer1Timer"
+   },
+   "kind": "NONVISUAL",
+   "name": "Timer1",
+   "parent": "fSortCT",
+   "path": "fSortCT.Timer1",
+   "props": {
+    "Enabled": "False",
+    "Left": 189,
+    "OnTimer": "Timer1Timer",
+    "Top": 765
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 189,
+    "y": 765
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "Timer2Timer"
+   },
+   "kind": "NONVISUAL",
+   "name": "Timer2",
+   "parent": "fSortCT",
+   "path": "fSortCT.Timer2",
+   "props": {
+    "Interval": 5000,
+    "Left": 220,
+    "OnTimer": "Timer2Timer",
+    "Top": 765
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 220,
+    "y": 765
+   }
+  }
+ ]
+}

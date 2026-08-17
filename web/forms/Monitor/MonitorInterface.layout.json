@@ -1,0 +1,1193 @@
+{
+ "canvas": {
+  "h": 480,
+  "w": 600
+ },
+ "caption": "Monitor ",
+ "form": "fMonitor",
+ "form_class": "TfMonitor",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "Monitor/MonitorInterface.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfMonitor",
+   "events": {
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fMonitor",
+   "parent": null,
+   "path": "fMonitor",
+   "props": {
+    "BorderStyle": "bsSingle",
+    "Caption": "Monitor ",
+    "ClientHeight": 480,
+    "ClientWidth": 600,
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Left": 1222,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 286
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 1222,
+    "y": 286
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnMVConnectTitle",
+   "parent": "fMonitor",
+   "path": "fMonitor.pnMVConnectTitle",
+   "props": {
+    "BevelInner": "bvSpace",
+    "BevelOuter": "bvLowered",
+    "Color": "clInactiveCaption",
+    "Height": 80,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 600
+   },
+   "rect": {
+    "h": 80,
+    "w": 600,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbMVConnectState",
+   "parent": "fMonitor.pnMVConnectTitle",
+   "path": "fMonitor.pnMVConnectTitle.lbMVConnectState",
+   "props": {
+    "Alignment": "taCenter",
+    "AutoSize": "False",
+    "Caption": "OFF-Line",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -32,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 39,
+    "Left": 90,
+    "ParentFont": "False",
+    "Top": 23,
+    "Width": 151
+   },
+   "rect": {
+    "h": 39,
+    "w": 151,
+    "x": 90,
+    "y": 23
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbMVConnectClick"
+   },
+   "kind": "LEAF",
+   "name": "sbMVConnect",
+   "parent": "fMonitor.pnMVConnectTitle",
+   "path": "fMonitor.pnMVConnectTitle.sbMVConnect",
+   "props": {
+    "Caption": "Connect",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 826,
+     "hex": "36030000424D360300000000000036000000280000001000000010000000010018000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFF868C8CAD8887909191A8A1A2CEAAA86E839283827D603F3FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF555252562C28364E5E385A57808E8E6B6C686F6C7A537BA0BDABA8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF002925B5D3EDA795AC87989FCEECEC9E9FBA7D6F74F0E8E5D6C4C6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF69839600080674657054808C50768353818B597B85675354FFFFFF632E006F3F107647187C5124774A20714113FFFFFF002120FFFFFFFFA423F08D1FF19324F17504FE6A0081919EFFFFFFFFFFFFFFFFFFD5D1E18C5F49CAB287FFFFFFFFFFFF565655F7EEFBE1B758FFFF77FFFF81FFC741EB75049CB2B4450000DCE2EAAFA195BD8C34BCA8707A4F2B734216FFFFFF6A5B5DEDEAF7E4B862FFFFB0FFFF79FFDF53F3781C9EB292772100000000FFFFFFD4CDDB8C5B42C9AD7CFFFFFF94EF9891615BF9FFFFDD875D7D642F855829833B0D9B2B00BCB086007B11005D223C2F38907F5A7A827594969C898B8C43EF468D9F84FDC5DFE4DAEFCAD8F2CADDF7E1E1F8E4E6FF7E7A6E005A003348289EBEC1CDCACDD8C2C15469688878788ACE7ABAFFB071FF4F5D6E00FFB708FF8E00C373002EBC230E93279452656970737A91A297BDB9768BA6B7C8D9563533FFE5C45EE57842AF3BCAA414FFB318FFBB20C9910077A05000591D678BA4342133000000223638000000000404FFF5F5F6E0DAFFFFACFFFF1CBF9720FFCC2B50A21670741D847410FF5332514F54FFEDDDF8CBA3FFD4C8F8CEA7FFECE4787D7EF7DECAFFFFFF55996E1BB669E88E0BFFCE2CD4B21500AF29003A15D2C1C7E1A8BAFFED63FFEA5BFFBC38EBB07E82888EFFFFFF63A15E9CFF8908B716007737F59310D5AD28F08326A75E01B9B4BEE7A4B2FFFF9BFFFF82FFBD4EF2B442818893FFFFFFCFF7D071DA74D9FFC546F52C009A2A007E34007D34432718BDC5CAFFFDE99688AA787C8B84909ECDCFCE777879FFFFFFFFFFFFFFFFFF8ADF8C94E59692EF9144E52903B226DFD1AFCFAFB4C7ACADD0B5B3D3B6B6D2B5B5C6A7A8FFFFFF",
+     "sha1": "4b51e643410f341979d5340901d98801563b32e9"
+    },
+    "Height": 40,
+    "Left": 288,
+    "OnClick": "sbMVConnectClick",
+    "ParentFont": "False",
+    "Top": 24,
+    "Width": 140
+   },
+   "rect": {
+    "h": 40,
+    "w": 140,
+    "x": 288,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbMVDisconnectClick"
+   },
+   "kind": "LEAF",
+   "name": "sbMVDisconnect",
+   "parent": "fMonitor.pnMVConnectTitle",
+   "path": "fMonitor.pnMVConnectTitle.sbMVDisconnect",
+   "props": {
+    "Caption": "Disconnect",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 826,
+     "hex": "36030000424D360300000000000036000000280000001000000010000000010018000000000000030000C40E0000C40E00000000000000000000FFFFFFFFFFFFFFFFFFD6D6FF0000903837CF0000BEECECEAEBEBE900009A3D3DD00000C4D6D6AEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6868A63B3DD28387EF3D3CD10000920000C84040D15C5CE02828BD6262FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCECEFF0000B96365DD4F4FD83A3AD03B3BCC4444D33535C50000CAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE4E4E10000994141D22626C32525C23434C90000C5E5E5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE5E5FF0000CB4040CE2E2EC72828C33E3ED3000090E5E5E1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCECEAF0000BA4646CF4747D43536C82E2EC93E3ED04343D30000C3CECEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6969AE3636D16D70E6585ADB0000D00000AA4E50DB6C6EE43030C36969FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCECEFF0000914E4EE40000AF6C829A6A77670000AF4848DC0000C2CECEA7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE3EAFF1522486BB84A4EAF5445B45B64B6451D2A8BE0DBBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF9D34298A9A5052D87553D5759FAF60C4AB6248A949C0D7B8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8B6F33D8A25EA8964A6DB85FBD742ACC833E8AC16C3D8737FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5F669C864CC79A52B17B2FB56D20938F3E6DB85FA5AF60BF804B8F897FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFAA5E65A98A53CA9852B5782C9E83324ADC7C59CC7050D37286924F8F837DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF68762ED1D09584A650AF7C2F7DAA5552CD6E5CD2713B8635FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF8D94893EA352ACF2B2DFB277E3A56A95DB8F369845B5D8B0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF29C95608B45B59165B495677F7A42C0CBB1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+     "sha1": "edcb4b0d67a4841f7fc8c5f764503a816a2af021"
+    },
+    "Height": 40,
+    "Left": 440,
+    "OnClick": "sbMVDisconnectClick",
+    "ParentFont": "False",
+    "Top": 24,
+    "Width": 140
+   },
+   "rect": {
+    "h": 40,
+    "w": 140,
+    "x": 440,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnMVState",
+   "parent": "fMonitor.pnMVConnectTitle",
+   "path": "fMonitor.pnMVConnectTitle.pnMVState",
+   "props": {
+    "BevelInner": "bvSpace",
+    "BevelOuter": "bvLowered",
+    "Color": "clGreen",
+    "Height": 60,
+    "Left": 10,
+    "TabOrder": 0,
+    "Top": 10,
+    "Width": 65
+   },
+   "rect": {
+    "h": 60,
+    "w": 65,
+    "x": 10,
+    "y": 10
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "MVPageControl",
+   "parent": "fMonitor",
+   "path": "fMonitor.MVPageControl",
+   "props": {
+    "ActivePage": "tsMVMain",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 401,
+    "Left": 0,
+    "ParentFont": "False",
+    "Style": "tsButtons",
+    "TabIndex": 0,
+    "TabOrder": 1,
+    "Top": 80,
+    "Width": 510
+   },
+   "rect": {
+    "h": 401,
+    "w": 510,
+    "x": 0,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsMVMain",
+   "parent": "fMonitor.MVPageControl",
+   "path": "fMonitor.MVPageControl.tsMVMain",
+   "props": {
+    "Caption": "Main"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbMVLogClearClick"
+   },
+   "kind": "LEAF",
+   "name": "sbMVLogClear",
+   "parent": "fMonitor.MVPageControl.tsMVMain",
+   "path": "fMonitor.MVPageControl.tsMVMain.sbMVLogClear",
+   "props": {
+    "Caption": "Clear All",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clPurple",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Glyph.Data": {
+     "byte_len": 1786,
+     "hex": "F6060000424DF606000000000000360000002800000018000000180000000100180000000000C0060000252E0000252E00000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFDFDF0F0F0D8D8D8C9CACAC3C4C4CECECFDFDFE0F7F7F7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFDFDD8D8D8A2A3A476787B6062635255554E5051585A5B67696B838587B5B6B7E8E8E8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFECECECA8A9A9686A6D464849393C373033352C303B2D303D30333B3538363F41404F51547D7E80C1C2C2FCFCFCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE5E6E59293945153563F413F3B3E4A3034712B2E84262A94262999282C8D2D317937395E41434343454668696CAFB0B0F7F7F7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBEBEB9394955B5C5F4C4D4C3A3E6D282CA22226B32124B32326AE2427AE2628B02427B22628A82E3188494B5B5455556B6C6FB4B5B5FCFCFCFFFFFFFFFFFFFFFFFFFFFFFFFAFBFAA9AAAB6C6D6F5D5E5D41447D2629B02225AF2629B02F32B63C3FBB3F42BC3D3FBA3B3DB73134B3272BB02A2D9A56576C6768677C7D7FCECECFFFFFFFFFFFFFFFFFFFFFFFFFD5D6D68586877677745758812C2FB03134B4292CB4272BB72F33BC3D41C23E42C23E42C23E41BE4547BD3B3EB6292CAF33349A6F707A7E7F7F999A9BF2F3F3FFFFFFFFFFFFFDFDFDAAABAC898A8B7F80863D3FA64143BA393CB93135BC383DC21C21BD2227C0262BC12025BE2D32BF4649C23A3CBA373AB42325AA5454948D8E8C8E8F90CACBCCFFFFFFFFFFFFF0F1F1A5A6A89FA09B6A6C9C4143B64D50BF3A3EBE8184D8F1F1FB9A9CE51C21C5131AC3373CCACBCCF0E2E3F63F43BF292CB12C2FAE2E309F8F909B9E9F9FBDBEBEFDFDFDFFFFFFE5E5E6B3B4B4AAABA96162A95254C05658C44347C37A7ED8FEFEFFFFFFFF9498E7383ED3D1D2F4FFFFFFD8D9F43136BD2427B22F32B02325A48687A6B0B1AEC1C2C2F6F6F6FFFFFFEAEAEAC5C6C4B1B2B85C5EB15F61C46163C85256C94247C9898DE1F6F6FDFFFFFFEFEFFCFFFFFFD9D9F64145C91C21B72327B22B2EAF2426A57A7CADC0C1BDCECFCFF7F7F7FFFFFFE9E9E9D0D1CFBEBFC75C5EB5696BC86769CA5E62CD5155CE3B40CD9699E8FFFFFFFFFFFFE8E9FA4449CF1419BC2228B92327B22427AC2124A47D7DB4D0D1CDD4D4D4F6F6F6FFFFFFE3E4E4D1D2D1D3D4D76E70BC6B6DC77173CD6568CE585CCE6266D5D2D3F5FFFFFFFFFFFFFEFEFF9497E31D22BC2025B72427B22427AC2023A39494C0DDDEDACFCFD0F3F3F3FFFFFFE5E5E6C2C3C3D7D8D2787AB9686AC6797BCF6D6FCE7377D5DDDEF5FFFFFFDBDCF69C9EE6F9FAFEFFFFFF9698DF2327B52225AF2527A92324A0AEAFC4D6D7D4C5C6C7F7F7F7FFFFFFF4F4F5B2B3B4C2C3BE8E8FB15C5EBD8687D26D6FCCAFB1E5FFFFFFE7E7F8696DD53A3FC78A8CDDFDFDFFFFFFFF4649BD1C1FA92023A64344A2B8B9BDBCBDBDC4C5C7FFFFFFFFFFFFFEFEFEBBBBBCA3A4A5A7A8A65658A97779CD8A8CD48788D5ACAEE3797CD4585CCB5256C94548C37C7ED38688D4373AB52629AA2123A3797AA4B5B6B1A1A2A4D8D9DAFFFFFFFFFFFFFFFFFFE1E1E18E8F919798967B7D904A4DB08F91D7999AD87C7ED06669C96567C95F62C85355C34447BC3E40B7393BB2282BAA4F50999A9B99979899A1A1A3FBFBFBFFFFFFFFFFFFFFFFFFFEFEFEAFB0B178797C8585846768834043A99193DCE4E4F5C2C3E8797BCD6769C66264C4585BBE4B4DB93537AE4749937F80858788887F7F82D8D8D9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7F7F78F9093696A6D6E6F6D5557693538885E61C29596DA7576CA6163C25456BC4345B636389A484A796E7070777878696A6EB9BABBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF1F1F28F90925C5D6154555645464735364F2C2F602E317431347A343770393A5A42444E5456535F616366676AB5B5B6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBFBFBBEBEBF7E7F825B5C5F4445463839392F32322F32313839393E3F3F4E4F5068696D929495D8D8D9FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF3F4F4CACBCCACADAF9698998586888080838C8D8F9E9FA0B5B6B7D9DADAFDFDFDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCFCFCF8F8F8F7F7F7F9F9FAFEFEFEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+     "sha1": "12855bc11664dda12007bb597fb44b08b9ab8f79"
+    },
+    "Height": 30,
+    "Left": 0,
+    "OnClick": "sbMVLogClearClick",
+    "ParentFont": "False",
+    "Spacing": 10,
+    "Top": 335,
+    "Width": 500
+   },
+   "rect": {
+    "h": 30,
+    "w": 500,
+    "x": 0,
+    "y": 335
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "MonitorMemo",
+   "parent": "fMonitor.MVPageControl.tsMVMain",
+   "path": "fMonitor.MVPageControl.tsMVMain.MonitorMemo",
+   "props": {
+    "Height": 150,
+    "Left": 0,
+    "ReadOnly": "True",
+    "TabOrder": 0,
+    "Top": 184,
+    "Width": 497
+   },
+   "rect": {
+    "h": 150,
+    "w": 497,
+    "x": 0,
+    "y": 184
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnMVMain",
+   "parent": "fMonitor.MVPageControl.tsMVMain",
+   "path": "fMonitor.MVPageControl.tsMVMain.pnMVMain",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Color": 16107399,
+    "Height": 180,
+    "Left": 0,
+    "TabOrder": 1,
+    "Top": 0,
+    "Width": 500
+   },
+   "rect": {
+    "h": 180,
+    "w": 500,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbSendCommandClick"
+   },
+   "kind": "LEAF",
+   "name": "sbSendCommand",
+   "parent": "fMonitor.MVPageControl.tsMVMain.pnMVMain",
+   "path": "fMonitor.MVPageControl.tsMVMain.pnMVMain.sbSendCommand",
+   "props": {
+    "Caption": "Send",
+    "Height": 22,
+    "Left": 280,
+    "OnClick": "sbSendCommandClick",
+    "Top": 16,
+    "Width": 73
+   },
+   "rect": {
+    "h": 22,
+    "w": 73,
+    "x": 280,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbMonitor1OpenClick"
+   },
+   "kind": "LEAF",
+   "name": "sbMonitor1Open",
+   "parent": "fMonitor.MVPageControl.tsMVMain.pnMVMain",
+   "path": "fMonitor.MVPageControl.tsMVMain.pnMVMain.sbMonitor1Open",
+   "props": {
+    "Caption": "Monitor 1 Open",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 30,
+    "Left": 48,
+    "OnClick": "sbMonitor1OpenClick",
+    "ParentFont": "False",
+    "Top": 104,
+    "Width": 100
+   },
+   "rect": {
+    "h": 30,
+    "w": 100,
+    "x": 48,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbMonitor1OpenClick"
+   },
+   "kind": "LEAF",
+   "name": "sbMonitor2Open",
+   "parent": "fMonitor.MVPageControl.tsMVMain.pnMVMain",
+   "path": "fMonitor.MVPageControl.tsMVMain.pnMVMain.sbMonitor2Open",
+   "props": {
+    "Caption": "Monitor 2 Open",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 30,
+    "Left": 160,
+    "OnClick": "sbMonitor1OpenClick",
+    "ParentFont": "False",
+    "Tag": 1,
+    "Top": 104,
+    "Width": 100
+   },
+   "rect": {
+    "h": 30,
+    "w": 100,
+    "x": 160,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbMonitor1OpenClick"
+   },
+   "kind": "LEAF",
+   "name": "sbMonitor3Open",
+   "parent": "fMonitor.MVPageControl.tsMVMain.pnMVMain",
+   "path": "fMonitor.MVPageControl.tsMVMain.pnMVMain.sbMonitor3Open",
+   "props": {
+    "Caption": "Monitor 3 Open",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 30,
+    "Left": 272,
+    "OnClick": "sbMonitor1OpenClick",
+    "ParentFont": "False",
+    "Tag": 2,
+    "Top": 104,
+    "Width": 100
+   },
+   "rect": {
+    "h": 30,
+    "w": 100,
+    "x": 272,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbMonitor1OpenClick"
+   },
+   "kind": "LEAF",
+   "name": "sbMonitor1Stop",
+   "parent": "fMonitor.MVPageControl.tsMVMain.pnMVMain",
+   "path": "fMonitor.MVPageControl.tsMVMain.pnMVMain.sbMonitor1Stop",
+   "props": {
+    "Caption": "Monitor 1 Stop",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 30,
+    "Left": 48,
+    "OnClick": "sbMonitor1OpenClick",
+    "ParentFont": "False",
+    "Tag": 3,
+    "Top": 144,
+    "Width": 100
+   },
+   "rect": {
+    "h": 30,
+    "w": 100,
+    "x": 48,
+    "y": 144
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbMonitor1OpenClick"
+   },
+   "kind": "LEAF",
+   "name": "sbMonitor2Stop",
+   "parent": "fMonitor.MVPageControl.tsMVMain.pnMVMain",
+   "path": "fMonitor.MVPageControl.tsMVMain.pnMVMain.sbMonitor2Stop",
+   "props": {
+    "Caption": "Monitor 2 Stop",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 30,
+    "Left": 160,
+    "OnClick": "sbMonitor1OpenClick",
+    "ParentFont": "False",
+    "Tag": 4,
+    "Top": 144,
+    "Width": 100
+   },
+   "rect": {
+    "h": 30,
+    "w": 100,
+    "x": 160,
+    "y": 144
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbMonitor1OpenClick"
+   },
+   "kind": "LEAF",
+   "name": "sbMonitor3Stop",
+   "parent": "fMonitor.MVPageControl.tsMVMain.pnMVMain",
+   "path": "fMonitor.MVPageControl.tsMVMain.pnMVMain.sbMonitor3Stop",
+   "props": {
+    "Caption": "Monitor 3 Stop",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 30,
+    "Left": 272,
+    "OnClick": "sbMonitor1OpenClick",
+    "ParentFont": "False",
+    "Tag": 5,
+    "Top": 144,
+    "Width": 100
+   },
+   "rect": {
+    "h": 30,
+    "w": 100,
+    "x": 272,
+    "y": 144
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "MyLed1",
+   "parent": "fMonitor.MVPageControl.tsMVMain.pnMVMain",
+   "path": "fMonitor.MVPageControl.tsMVMain.pnMVMain.MyLed1",
+   "props": {
+    "Height": 32,
+    "LEDStyle": "LEDLarge",
+    "Left": 7,
+    "Top": 104,
+    "Width": 32
+   },
+   "rect": {
+    "h": 32,
+    "w": 32,
+    "x": 7,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbMonitorGetHDSpaceClick"
+   },
+   "kind": "LEAF",
+   "name": "sbMonitorGetHDSpace",
+   "parent": "fMonitor.MVPageControl.tsMVMain.pnMVMain",
+   "path": "fMonitor.MVPageControl.tsMVMain.pnMVMain.sbMonitorGetHDSpace",
+   "props": {
+    "Caption": "Get HD Space",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 30,
+    "Left": 384,
+    "OnClick": "sbMonitorGetHDSpaceClick",
+    "ParentFont": "False",
+    "Tag": 2,
+    "Top": 104,
+    "Width": 100
+   },
+   "rect": {
+    "h": 30,
+    "w": 100,
+    "x": 384,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edCommandData",
+   "parent": "fMonitor.MVPageControl.tsMVMain.pnMVMain",
+   "path": "fMonitor.MVPageControl.tsMVMain.pnMVMain.edCommandData",
+   "props": {
+    "Height": 24,
+    "Left": 8,
+    "TabOrder": 0,
+    "Top": 16,
+    "Width": 265
+   },
+   "rect": {
+    "h": 24,
+    "w": 265,
+    "x": 8,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsMVSettingPage",
+   "parent": "fMonitor.MVPageControl",
+   "path": "fMonitor.MVPageControl.tsMVSettingPage",
+   "props": {
+    "Caption": "Setup",
+    "ImageIndex": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnMVSetupPage",
+   "parent": "fMonitor.MVPageControl.tsMVSettingPage",
+   "path": "fMonitor.MVPageControl.tsMVSettingPage.pnMVSetupPage",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Color": 16107399,
+    "Height": 365,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 500
+   },
+   "rect": {
+    "h": 365,
+    "w": 500,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbMVAddress",
+   "parent": "fMonitor.MVPageControl.tsMVSettingPage.pnMVSetupPage",
+   "path": "fMonitor.MVPageControl.tsMVSettingPage.pnMVSetupPage.lbMVAddress",
+   "props": {
+    "Caption": "Address",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 29,
+    "ParentFont": "False",
+    "Top": 20,
+    "Width": 59
+   },
+   "rect": {
+    "h": 20,
+    "w": 59,
+    "x": 29,
+    "y": 20
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbMVPort",
+   "parent": "fMonitor.MVPageControl.tsMVSettingPage.pnMVSetupPage",
+   "path": "fMonitor.MVPageControl.tsMVSettingPage.pnMVSetupPage.lbMVPort",
+   "props": {
+    "Caption": "Port",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 29,
+    "ParentFont": "False",
+    "Top": 50,
+    "Width": 29
+   },
+   "rect": {
+    "h": 20,
+    "w": 29,
+    "x": 29,
+    "y": 50
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edMVPortMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edMVPort",
+   "parent": "fMonitor.MVPageControl.tsMVSettingPage.pnMVSetupPage",
+   "path": "fMonitor.MVPageControl.tsMVSettingPage.pnMVSetupPage.edMVPort",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "Left": 94,
+    "OnMouseDown": "edMVPortMouseDown",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Text": "1000",
+    "Top": 48,
+    "Width": 60
+   },
+   "rect": {
+    "h": 28,
+    "w": 60,
+    "x": 94,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edMVAddress",
+   "parent": "fMonitor.MVPageControl.tsMVSettingPage.pnMVSetupPage",
+   "path": "fMonitor.MVPageControl.tsMVSettingPage.pnMVSetupPage.edMVAddress",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "Left": 94,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "127.0.0.1",
+    "Top": 16,
+    "Width": 140
+   },
+   "rect": {
+    "h": 28,
+    "w": 140,
+    "x": 94,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Memo1",
+   "parent": "fMonitor.MVPageControl.tsMVSettingPage.pnMVSetupPage",
+   "path": "fMonitor.MVPageControl.tsMVSettingPage.pnMVSetupPage.Memo1",
+   "props": {
+    "Height": 240,
+    "Left": 10,
+    "Lines.Strings": [
+     "1. CCD",
+     "狀",
+     "態",
+     "     GS                                             ",
+     "2. ",
+     "硬",
+     "碟",
+     "狀",
+     "態",
+     "       GP    (",
+     "硬",
+     "碟",
+     "大",
+     "小",
+     "G)",
+     "3. ",
+     "影",
+     "像",
+     "大",
+     "小",
+     "       GZ    (",
+     "影",
+     "像",
+     "大",
+     "小",
+     "XXX,XXX)",
+     "4. ",
+     "每",
+     "秒",
+     "張",
+     "數",
+     "       GF    (FPS)",
+     "5. ",
+     "錄",
+     "影",
+     "               SR    (0:NG;1:OK)",
+     "6. ",
+     "停",
+     "止",
+     "               SS    (0:NG;1:OK)",
+     "7. ",
+     "每",
+     "秒",
+     "張",
+     "數",
+     "       SF    (1~30FPS)",
+     "",
+     "",
+     "CH: 00,01,02,03,99(",
+     "表",
+     "示",
+     "全",
+     "部",
+     ")",
+     "\"CRLF\"(\\r\\n)",
+     "表",
+     "示",
+     "結",
+     "束"
+    ],
+    "ReadOnly": "True",
+    "TabOrder": 2,
+    "Top": 120,
+    "Width": 480
+   },
+   "rect": {
+    "h": 240,
+    "w": 480,
+    "x": 10,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsMonitorSpecific",
+   "parent": "fMonitor.MVPageControl",
+   "path": "fMonitor.MVPageControl.tsMonitorSpecific",
+   "props": {
+    "Caption": "Specific",
+    "ImageIndex": 2
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbWhenHDFullPrompt",
+   "parent": "fMonitor.MVPageControl.tsMonitorSpecific",
+   "path": "fMonitor.MVPageControl.tsMonitorSpecific.lbWhenHDFullPrompt",
+   "props": {
+    "Caption": "When HD Space High                    % Prompt",
+    "Height": 16,
+    "Left": 29,
+    "Top": 40,
+    "Width": 250
+   },
+   "rect": {
+    "h": 16,
+    "w": 250,
+    "x": 29,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbWhenHDFullAlarm",
+   "parent": "fMonitor.MVPageControl.tsMonitorSpecific",
+   "path": "fMonitor.MVPageControl.tsMonitorSpecific.cbWhenHDFullAlarm",
+   "props": {
+    "Caption": "When HD Space High                   %  Show Alarm",
+    "Height": 17,
+    "Left": 10,
+    "TabOrder": 0,
+    "Top": 10,
+    "Width": 311
+   },
+   "rect": {
+    "h": 17,
+    "w": 311,
+    "x": 10,
+    "y": 10
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edLowHDSpaceMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edLowHDSpace",
+   "parent": "fMonitor.MVPageControl.tsMonitorSpecific",
+   "path": "fMonitor.MVPageControl.tsMonitorSpecific.edLowHDSpace",
+   "props": {
+    "Height": 24,
+    "Left": 168,
+    "OnMouseDown": "edLowHDSpaceMouseDown",
+    "TabOrder": 1,
+    "Tag": 100,
+    "Text": "20",
+    "Top": 8,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 168,
+    "y": 8
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edWhenHDFullPromptMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edWhenHDFullPrompt",
+   "parent": "fMonitor.MVPageControl.tsMonitorSpecific",
+   "path": "fMonitor.MVPageControl.tsMonitorSpecific.edWhenHDFullPrompt",
+   "props": {
+    "Height": 24,
+    "Left": 168,
+    "OnMouseDown": "edWhenHDFullPromptMouseDown",
+    "TabOrder": 2,
+    "Tag": 100,
+    "Text": "40",
+    "Top": 40,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 168,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "cbAfterHandlerTrayFeedMonitor1ClosedVideo",
+   "parent": "fMonitor.MVPageControl.tsMonitorSpecific",
+   "path": "fMonitor.MVPageControl.tsMonitorSpecific.cbAfterHandlerTrayFeedMonitor1ClosedVideo",
+   "props": {
+    "Caption": "After Handler Tray Feed, Monitot 1 Closed Video Wait                   s",
+    "Height": 17,
+    "Left": 10,
+    "TabOrder": 3,
+    "Top": 82,
+    "Width": 415
+   },
+   "rect": {
+    "h": 17,
+    "w": 415,
+    "x": 10,
+    "y": 82
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnMouseDown": "edAfterHandlerTrayFeedMonitor1ClosedVideoWaitTimeMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "edAfterHandlerTrayFeedMonitor1ClosedVideoWaitTime",
+   "parent": "fMonitor.MVPageControl.tsMonitorSpecific",
+   "path": "fMonitor.MVPageControl.tsMonitorSpecific.edAfterHandlerTrayFeedMonitor1ClosedVideoWaitTime",
+   "props": {
+    "Height": 24,
+    "Left": 349,
+    "OnMouseDown": "edAfterHandlerTrayFeedMonitor1ClosedVideoWaitTimeMouseDown",
+    "TabOrder": 4,
+    "Tag": 100,
+    "Text": "20",
+    "Top": 78,
+    "Width": 49
+   },
+   "rect": {
+    "h": 24,
+    "w": 49,
+    "x": 349,
+    "y": 78
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnMVButtonTitle",
+   "parent": "fMonitor",
+   "path": "fMonitor.pnMVButtonTitle",
+   "props": {
+    "BevelInner": "bvSpace",
+    "BevelOuter": "bvLowered",
+    "Color": 13487501,
+    "Height": 395,
+    "Left": 504,
+    "TabOrder": 2,
+    "Top": 78,
+    "Width": 95
+   },
+   "rect": {
+    "h": 395,
+    "w": 95,
+    "x": 504,
+    "y": 78
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbMVUpdateClick"
+   },
+   "kind": "LEAF",
+   "name": "sbMVUpdate",
+   "parent": "fMonitor.pnMVButtonTitle",
+   "path": "fMonitor.pnMVButtonTitle.sbMVUpdate",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Update",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 2410,
+     "hex": "66090000424D660900000000000036000000280000001C0000001C000000010018000000000030090000232E0000232E00000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFEFED0D1D2C9C9CBC9C9CBC9C9CBC9C9CBC9C9CBC9C9CBC9C9CBC9C9CBC9C9CBC9C9CBC9C9CBC9C9CBC9C9CBC9C9CBC9C9CBC9C9CBC9C9CBC9C9CBC9C9CBC9C9CBC9C9CBD0D1D2FEFEFEFFFFFFFFFFFFFFFFFF8B8C8F505357484A4E484A4E47494D3B474B4D6B704D6B704D6B704D6B704D6B704D6B704D6B704D6B704D6B704D6B704D6B704D6B704D6B703F515544464A484A4E484A4E5A5D60CFD0D1FFFFFFFFFFFFFFFFFF7C7E8140434740434740434734373CE1E2E2FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBFBFB2C2F344043474043474B4E52C8C9CAFFFFFFFFFFFFFFFFFF7E8083484B4E484B4E484B4E373A3DF8F8F8E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3E3EFEFEF2D3034484B4E484B4E525558C8C9CAFFFFFFFFFFFFFFFFFF8183865053565053565053563C3F43F9F9F9E2E2E3E2E2E3E2E2E3E2E2E3E2E2E3E2E2E3E2E2E3E2E2E3E2E2E3E2E2E3E2E2E3E2E2E3E2E2E3EFEFEF3134385053565053565C5F61C8C9CAFFFFFFFFFFFFFFFFFF848688585A5D585A5D585A5D414347F8F8F8DCDCDDDCDCDDDCDCDDDCDCDDDCDCDDDCDCDDDCDCDDDCDCDDDCDCDDDCDCDDDCDCDDDCDCDDDCDCDDEBEBEC35373B585A5D585A5D67696CC8C9CAFFFFFFFFFFFFFFFFFF87888B60626560626560626546494CF5F5F6D5D6D6D5D6D6D5D6D6D5D6D6D5D6D6D5D6D6D5D6D6D5D6D6D5D6D6D5D6D6D5D6D6D5D6D6D5D6D6E7E7E8383B3F6062656062656A6C6EC8C9CAFFFFFFFFFFFFFFFFFF898B8D686A6C686A6C686A6C4C4E51F5F5F5D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3E5E6E63C3E42686A6C686A6C76787AC8C9CAFFFFFFFFFFFFFFFFFF8C8E90707274707274707274515356F5F5F6D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3E5E6E64042467072747072748A8B8CC8C9CAFFFFFFFFFFFFFFFFFF8F909378797B78797B78797B56585BF5F5F6D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3D2D2D3E5E6E643454978797B797A7CA3A4A6C8C9CAFFFFFFFFFFFFFFFFFF9293958081838081838081835B5D60F6F6F6D4D4D5D4D4D5D4D4D5D4D4D5D4D4D5D4D4D5D4D4D5D4D4D5D4D4D5D4D4D5D4D4D5D4D4D5D4D4D5E4E4E447494D808183939395A8A8AAC8C9CAFFFFFFFFFFFFFFFFFF95969888898A88898A88898A606265F7F7F7DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDEBEBEB4B4D5088898AB1B2B3ADADAEC8C9CAFFFFFFFFFFFFFFFFFF98989B909192909192909192737476A3CCD0C2F0F2C2F0F2C2F0F2C2F0F2C2F0F2C2F0F2C2F0F2C2F0F2C2F0F2C2F0F2C2F0F2C2F0F2C2F0F2B9E7EB5C5E60A3A4A5B8B9BAABACADC8C9CAFFFFFFFFFFFFFFFFFF999A9C9495969495969495969495966D6F715F61635F61635F61635F61635F61635F61635F61635F61635F61635F61635F61635F61635F616366686B98999ABABABBB3B4B4A7A8AAC8C9CAFFFFFFFFFFFFFFFFFF999A9C9495969495969495969495968C8E8F737578727476727476727476727476727476727476727476727476727476727476727476727476959798BBBCBDBBBBBCB3B4B4A7A8AAC8C9CAFFFFFFFFFFFFFFFFFF999A9C949596949596949596949596494C5037393E87888A8C8D8E8C8D8E8C8D8E8C8D8E8C8D8E8C8D8E8C8D8E898A8C43464A1E212624272C737579BFBFC0B3B4B4ABACADA2A3A4C8C9CAFFFFFFFFFFFFFFFFFF999A9C94959694959694959694959647494D5C5D6182838656585C56585C8A8C8DA2A3A4A2A3A4A2A3A4A2A3A4A2A3A46E6F722D2F347C7D8088898CBFC0C1B3B4B4ABACADA2A3A4C8C9CAFFFFFFFFFFFFFFFFFF999A9C9495969495969495969495964D4F526466697072742D30342D30347B7C7EABACADABACADABACADABACADABACAD7F818383848788898C7D7F81B8B9B9ABACADA4A5A5A1A2A4C8C9CAFFFFFFFFFFFFFFFFFF999A9C9495969495969495969495965354586C6E7077797C35373B35373B828385B4B5B6B4B5B6B4B5B6B4B5B6C2C3C4BBBCBD8C8D907E7F82737477B1B2B2A4A5A5A4A5A59C9D9FC8C9CAFFFFFFFFFFFFFFFFFF999A9C949596949596949596949596585A5D7476787E80823C3E423C3E42898A8CBDBEBFBDBEBFBFC0C1D6D7D7E3E4E4C4C4C6909194828486787A7CB1B2B2A4A5A5A4A5A59C9D9FC8C9CAFFFFFFFFFFFFFFFFFF999A9C9495969495969495969495965E60627D7F80878889444649444649919293C7C8C8D4D5D5E7E8E8E7E8E8E4E4E4C0C1C287898B7A7B7D717374AAABABA4A5A59C9D9E969799C8C9CAFFFFFFFFFFFFFFFFFF98999B9495969495969495969495966465688586898E8F914C4D514C4D51A9AAABE7E8E8EFEFEFEBECECE8E9E9E5E5E5BEBFBF7F80837373766A6B6EAAABAB9C9D9E949596969799C8C9CAFFFFFFFFFFFFFFFFFFBCBDBF8E90929495969495969495966A6B6E8D8E91B3B4B6A7A7AAD0D0D1EBECECF2F2F2F2F2F2EFF0F0EDEDEDEAEAEAC3C4C584858878797C707174AAABAB9C9D9E949596969799C8C9CAFFFFFFFFFFFFFFFFFFFFFFFFD0D1D2919294A2A3A4A2A3A4AFB0B1DADBDBF9F9F9F9F9F9F8F8F8F6F6F6F6F6F6F4F4F4F3F3F3F1F1F1F0F0F0D3D3D4A6A7A8A0A1A2A4A5A6AFB0B1A2A3A4A2A3A4A3A4A5C8C9CAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE3E4E47F8083737678BABABCC1C2C4C1C2C4C1C2C4C1C2C4C1C2C4C1C2C4C1C2C4C1C2C4C1C2C4C1C2C4C1C2C4C1C2C4C1C2C4C1C3C47B7C7F747578747578797B7EE0E1E2FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+     "sha1": "582b08aba5e6a2b60eb0e73c2a936bf66032d4a0"
+    },
+    "Height": 30,
+    "Left": 5,
+    "Margin": 0,
+    "OnClick": "sbMVUpdateClick",
+    "ParentFont": "False",
+    "Spacing": 5,
+    "Top": 325,
+    "Width": 85
+   },
+   "rect": {
+    "h": 30,
+    "w": 85,
+    "x": 5,
+    "y": 325
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbMVExitClick"
+   },
+   "kind": "LEAF",
+   "name": "sbMVExit",
+   "parent": "fMonitor.pnMVButtonTitle",
+   "path": "fMonitor.pnMVButtonTitle.sbMVExit",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Exit",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -16,
+    "Font.Name": "Times New Roman",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 2410,
+     "hex": "66090000424D660900000000000036000000280000001C0000001C000000010018000000000030090000232E0000232E00000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF0F0F1CCCDCEB5B6B7A0A1A397999B9495979293969192958D8F918D8F918F91939293969495979697999A9B9EA4A5A7B6B7B9BEBFC0C8C9CAD8D9DAD8D9DAD8D9DAD9DADADCDCDDE0E0E1E5E5E6F0F0F1F5F6F6FDFDFDD6D7D8C0C0C2B5B6B7999B9D8E90928E9092969799999B9C98999A9697989697989193948E90928E90928E90928E9092999B9DAFB0B2B8B9BBC3C4C5D9DADAD9DADADBDBDCE0E0E1E5E5E6F0F0F1F5F6F6FFFFFFFFFFFFDFDFDFAAAAACA9AAABA2A3A49A9B9C999A9B999A9B999A9B999A9B999A9BA0A1A2B2B3B4B2B3B4B2B3B4B9BABBE7E7E8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCFCFC8081839D9E9F9C9D9E9C9D9E9C9D9E9C9D9E9C9D9E9C9D9E9C9D9E9C9D9E747678414347414347414347999A9BA6A7A8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF2F3F37F81839FA0A19FA0A19FA0A19FA0A19FA0A19FA0A19FA0A19FA0A19FA0A18F90918787898787898787893F4145959697FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF2F3F37D7F81A2A3A4A2A3A4A2A3A4A2A3A4A2A3A4A2A3A4A2A3A4A2A3A4A2A3A49192938B8C8E8B8C8E8B8C8E4C4E518A8B8DFFFFFFFFFFFF7F869FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF2F3F37F8182A6A7A8A6A7A8A6A7A8A6A7A8A6A7A8A6A7A8A6A7A8A6A7A8A6A7A88E8F918485878485878485874A4C508C8E8FFFFFFFFFFFFF33416E4C608FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF3F3F3808284A9AAAAA9AAAAA9AAAAA9AAAAA9AAAAA9AAAAA9AAAAA9AAAAA9AAAA8C8D8E7D7E807D7E807D7E80484A4E909193FFFFFFFFFFFF3444732A458E505F8AFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF3F3F3828485ACADADACADADACADADACADADACADADACADADACADADACADADACADAD898A8C75767975767975767946484C929394FFFFFFFFFFFF364675274FA3294B956A799DFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF3F3F3848586AFB0B0AFB0B0AFB0B0AFB0B0AFB0B0AFB0B0AFB0B0AFB0B0AFB0B087888A6E6F72414B6B3B4A70303F6546557A6371966371963345752457B12457B12B50988995B3FFFFFFFFFFFFFFFFFFFFFFFFF4F4F4848688B1B2B3B1B2B3B1B2B3B1B2B3B1B2B3B1B2B3B1B2B3B1B2B3B1B2B38586885356662950942257AC2257AC2257AC2257AC2257AC2356AA215FBE215FBE215FBE2E5396AAB3C7FFFFFFFFFFFFFFFFFFF4F4F486878AB4B5B6B4B5B6B4B5B6B4B5B6B4B5B6B4B5B6B8B9BA7D7F81B4B5B68385864E526126539B1D68CC1D68CC1D68CC1D68CC1D68CC1D68CC1D68CC1D68CC1D68CC1D68CC324D84E6E9EFFFFFFFFFFFFFF4F4F587888BB8B9BAB8B9BAB8B9BAB8B9BAB8B9BAB8B9BA858789323538B8B9BA818384494D5D315FA43581E03581E03581E03581E03581E03581E03581E03581E03581E03581E0347EDC505E85FFFFFFFFFFFFF5F5F5898B8CBBBCBCBBBCBCBBBCBCBBBCBCBBBCBCBBBCBCB0B1B1848587BBBCBC8081834448582159A61778E71778E71778E71778E71778E71778E71778E71778E71778E71778E72B5292D6DBE6FFFFFFFFFFFFF5F5F58A8C8EBEBFBFD6D7D7D2D3D3BEBFBFBEBFBFBEBFBFBEBFBFBEBFBFBEBFBF7F80813F44532158A51778E71778E71778E71778E71778E71778E71778E71778E71778E7206ECD6D7C9EFFFFFFFFFFFFFFFFFFF5F6F6808284CECFCFE7E7E7E6E7E7C8C9C9C1C2C2C1C2C2C1C2C2C1C2C2C1C2C27D7E804244482D3B632B3D692A3C6836487340517D40517D324B7F1778E71778E71973DC55658CFFFFFFFFFFFFFFFFFFFFFFFFF5F6F6828386DFDFDFE2E3E3E2E3E3D8D8D8C4C5C5C4C5C5C4C5C5C4C5C5C4C5C57C7D7F3B3D413B3D413B3D4135373CA6A8A9FFFFFFFBFCFC3E53801778E71777E644557FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5F6F6848688DEDEDEDEDEDEDEDEDEDEDEDECCCDCDC7C8C8C7C8C8C7C8C8C7C8C87A7C7D34363A34363A34363A33353AA9AAABFFFFFFFBFCFC3E53801778E73E5381FAFBFCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6F6F6898A8CDADBDCDADBDCDADBDCDADBDCD7D8D9CBCCCDCACBCCCACBCCCACBCC797B7D2C2F332C2F332C2F33313438ACADAEFFFFFFFBFCFC3B4D793C598DE6E8EEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6F6F68A8C8ED7D8D8D7D8D8D7D8D8D7D8D8D7D8D8D5D6D6CECFCFCDCECECDCECE797A7C25282C25282C25282C2F3236AEAFB1FFFFFFFFFFFF647091DEE2EBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6F7F7888A8CD5D6D6D5D6D6D5D6D6D5D6D6D5D6D6D5D6D6D4D5D5D1D2D2D0D1D178797B1E21251E21251E21252D3034B1B2B3FFFFFFFFFFFFFFFFFFF8F8FAFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7F7F7878A8BD3D4D4D3D4D4D3D4D4D3D4D4D3D4D4D3D4D4D3D4D4D3D4D4D3D4D477797A171A1F171A1F171A1F2E3034B3B5B5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF7F7F78C8E90D6D7D7D6D7D7D6D7D7D6D7D7D6D7D7D6D7D7D0D1D1C7C8C8ACADAD4E50531B1E231B1E2324272CA2A3A5D3D4D4FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF898B8DDBDCDCD9DADAD0D1D1C0C1C3B3B5B6A3A5A6999B9D949698919395919395919395919395919395D6D7D7DDDEDEFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5F5F5C6C7C8C9CACBD4D6D6DFE0E1EAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEAEBEBEDEDEDFAFBFBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+     "sha1": "1c53a9a0fb2d43ceb4319b075e3d16a0425fb2fd"
+    },
+    "Height": 30,
+    "Hint": "Exit",
+    "Left": 5,
+    "Margin": 0,
+    "OnClick": "sbMVExitClick",
+    "ParentFont": "False",
+    "Spacing": 10,
+    "Top": 357,
+    "Width": 85
+   },
+   "rect": {
+    "h": 30,
+    "w": 85,
+    "x": 5,
+    "y": 357
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "MonitorTimerTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "MonitorTimer",
+   "parent": "fMonitor",
+   "path": "fMonitor.MonitorTimer",
+   "props": {
+    "Enabled": "False",
+    "Interval": 100,
+    "Left": 532,
+    "OnTimer": "MonitorTimerTimer",
+    "Top": 86
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 532,
+    "y": 86
+   }
+  },
+  {
+   "align": null,
+   "cls": "TClientSocket",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "MonitorClientSocket",
+   "parent": "fMonitor",
+   "path": "fMonitor.MonitorClientSocket",
+   "props": {
+    "Active": "False",
+    "ClientType": "ctNonBlocking",
+    "Left": 564,
+    "Port": 0,
+    "Top": 86
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 564,
+    "y": 86
+   }
+  }
+ ]
+}

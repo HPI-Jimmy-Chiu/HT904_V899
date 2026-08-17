@@ -1,0 +1,128 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": null,
+ "form": "DataModule3",
+ "form_class": "TDataModule3",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "BinDisplay/MyBinDisp.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TDataModule3",
+   "events": {
+    "OnDestroy": "DataModuleDestroy"
+   },
+   "kind": "ROOT",
+   "name": "DataModule3",
+   "parent": null,
+   "path": "DataModule3",
+   "props": {
+    "Height": 479,
+    "Left": 389,
+    "OldCreateOrder": "True",
+    "OnDestroy": "DataModuleDestroy",
+    "Top": 490,
+    "Width": 741
+   },
+   "rect": {
+    "h": 479,
+    "w": 741,
+    "x": 389,
+    "y": 490
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComm",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "BinDisp",
+   "parent": "DataModule3",
+   "path": "DataModule3.BinDisp",
+   "props": {
+    "BaudRate": 9600,
+    "ByteSize": "_8",
+    "CommName": "COM3",
+    "DsrSensitivity": "False",
+    "DtrControl": "DtrEnable",
+    "IgnoreNullChar": "False",
+    "Inx_XonXoffFlow": "True",
+    "Left": 64,
+    "Outx_CtsFlow": "False",
+    "Outx_DsrFlow": "False",
+    "Outx_XonXoffFlow": "False",
+    "Parity": "None",
+    "ParityCheck": "False",
+    "ReadIntervalTimeout": 100,
+    "ReadTotalTimeoutConstant": 0,
+    "ReadTotalTimeoutMultiplier": 0,
+    "ReplaceWhenParityError": "False",
+    "ReplacedChar": "\u0000",
+    "RtsControl": "RtsEnable",
+    "StopBits": "_1",
+    "Top": 32,
+    "TxContinueOnXoff": "False",
+    "WriteTotalTimeoutConstant": 0,
+    "WriteTotalTimeoutMultiplier": 0,
+    "XoffChar": "\u0013",
+    "XoffLimit": 500,
+    "XonChar": "\u0011",
+    "XonLimit": 500
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 64,
+    "y": 32
+   }
+  },
+  {
+   "align": null,
+   "cls": "TComm",
+   "events": {},
+   "kind": "NONVISUAL",
+   "name": "BinDisp2",
+   "parent": "DataModule3",
+   "path": "DataModule3.BinDisp2",
+   "props": {
+    "BaudRate": 9600,
+    "ByteSize": "_8",
+    "CommName": "COM3",
+    "DsrSensitivity": "False",
+    "DtrControl": "DtrEnable",
+    "IgnoreNullChar": "False",
+    "Inx_XonXoffFlow": "True",
+    "Left": 168,
+    "Outx_CtsFlow": "False",
+    "Outx_DsrFlow": "False",
+    "Outx_XonXoffFlow": "False",
+    "Parity": "None",
+    "ParityCheck": "False",
+    "ReadIntervalTimeout": 100,
+    "ReadTotalTimeoutConstant": 0,
+    "ReadTotalTimeoutMultiplier": 0,
+    "ReplaceWhenParityError": "False",
+    "ReplacedChar": "\u0000",
+    "RtsControl": "RtsEnable",
+    "StopBits": "_1",
+    "Top": 32,
+    "TxContinueOnXoff": "False",
+    "WriteTotalTimeoutConstant": 0,
+    "WriteTotalTimeoutMultiplier": 0,
+    "XoffChar": "\u0013",
+    "XoffLimit": 500,
+    "XonChar": "\u0011",
+    "XonLimit": 500
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 168,
+    "y": 32
+   }
+  }
+ ]
+}

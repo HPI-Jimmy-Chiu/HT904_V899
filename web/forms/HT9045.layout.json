@@ -1,0 +1,44 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "Form1",
+ "form": "Form1",
+ "form_class": "TForm1",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "HT9045.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TForm1",
+   "events": {},
+   "kind": "ROOT",
+   "name": "Form1",
+   "parent": null,
+   "path": "Form1",
+   "props": {
+    "Caption": "Form1",
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 500,
+    "Left": 192,
+    "OldCreateOrder": "False",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 114,
+    "Width": 870
+   },
+   "rect": {
+    "h": 500,
+    "w": 870,
+    "x": 192,
+    "y": 114
+   }
+  }
+ ]
+}

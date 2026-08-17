@@ -1,0 +1,1099 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "Vacuum Unit",
+ "form": "fVacuumUnit",
+ "form_class": "TfVacuumUnit",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "VacuumUnit/VacuumUnit.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfVacuumUnit",
+   "events": {
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fVacuumUnit",
+   "parent": null,
+   "path": "fVacuumUnit",
+   "props": {
+    "Caption": "Vacuum Unit",
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 711,
+    "Left": 756,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 127,
+    "Width": 655
+   },
+   "rect": {
+    "h": 711,
+    "w": 655,
+    "x": 756,
+    "y": 127
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "pgcVacuumUnit",
+   "parent": "fVacuumUnit",
+   "path": "fVacuumUnit.pgcVacuumUnit",
+   "props": {
+    "ActivePage": "tsManual",
+    "Align": "alClient",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -17,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 616,
+    "Left": 0,
+    "MultiLine": "True",
+    "ParentFont": "False",
+    "Style": "tsFlatButtons",
+    "TabIndex": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 647
+   },
+   "rect": {
+    "h": 616,
+    "w": 647,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsManual",
+   "parent": "fVacuumUnit.pgcVacuumUnit",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual",
+   "props": {
+    "Caption": "Manual"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox1",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.GroupBox1",
+   "props": {
+    "Caption": "myPalSamle",
+    "Color": "clBtnFace",
+    "Height": 177,
+    "Left": 520,
+    "ParentColor": "False",
+    "TabOrder": 1,
+    "Top": 0,
+    "Visible": "False",
+    "Width": 81
+   },
+   "rect": {
+    "h": 177,
+    "w": 81,
+    "x": 520,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {},
+   "kind": "LEAF",
+   "name": "btnSV",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual.GroupBox1",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.GroupBox1.btnSV",
+   "props": {
+    "Caption": "Set",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 23,
+    "Left": 6,
+    "ParentFont": "False",
+    "Top": 92,
+    "Width": 71
+   },
+   "rect": {
+    "h": 23,
+    "w": 71,
+    "x": 6,
+    "y": 92
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMyLed",
+   "events": {},
+   "kind": "LEAF",
+   "name": "myld1",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual.GroupBox1",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.GroupBox1.myld1",
+   "props": {
+    "Height": 20,
+    "LEDStyle": "LEDSqLarge",
+    "Left": 30,
+    "Top": 149,
+    "Width": 20
+   },
+   "rect": {
+    "h": 20,
+    "w": 20,
+    "x": 30,
+    "y": 149
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlCurectVal",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual.GroupBox1",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.GroupBox1.pnlCurectVal",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "-100.2",
+    "Color": 14540252,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clMaroon",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 15,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 75
+   },
+   "rect": {
+    "h": 15,
+    "w": 75,
+    "x": 0,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlThreshold",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual.GroupBox1",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.GroupBox1.pnlThreshold",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "##.##",
+    "Color": 14540252,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlue",
+    "Font.Height": -15,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 14,
+    "Left": 1,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 52,
+    "Width": 73
+   },
+   "rect": {
+    "h": 14,
+    "w": 73,
+    "x": 1,
+    "y": 52
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnlEvent",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual.GroupBox1",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.GroupBox1.pnlEvent",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Caption": "Event",
+    "Color": 14540252,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -11,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 16,
+    "Left": 3,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 32,
+    "Width": 73
+   },
+   "rect": {
+    "h": 16,
+    "w": 73,
+    "x": 3,
+    "y": 32
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edSV",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual.GroupBox1",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.GroupBox1.edSV",
+   "props": {
+    "AutoSize": "False",
+    "BiDiMode": "bdLeftToRight",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 5,
+    "MaxLength": 3,
+    "ParentBiDiMode": "False",
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Text": "0",
+    "Top": 72,
+    "Width": 71
+   },
+   "rect": {
+    "h": 20,
+    "w": 71,
+    "x": 5,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {},
+   "kind": "LEAF",
+   "name": "bplOn",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual.GroupBox1",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.GroupBox1.bplOn",
+   "props": {
+    "Alias": "InArmSuckA_On",
+    "BevelOuter": "bvNone",
+    "Caption": "^",
+    "Color": 10307329,
+    "FalseColor": 10307329,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -13,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 15,
+    "ParentFont": "False",
+    "Style": "tsFlatButtons",
+    "TabOrder": 4,
+    "Top": 120,
+    "TrueColor": 14464261,
+    "TrueFontColor": "clWhite",
+    "Width": 22
+   },
+   "rect": {
+    "h": 24,
+    "w": 22,
+    "x": 15,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBtnPanelLane",
+   "events": {},
+   "kind": "LEAF",
+   "name": "bplOff",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual.GroupBox1",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.GroupBox1.bplOff",
+   "props": {
+    "Alias": "InArmSuckA_Off",
+    "BevelOuter": "bvNone",
+    "Caption": "v",
+    "Color": 10307329,
+    "FalseColor": 10307329,
+    "FalseFontColor": "clWhite",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -13,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 24,
+    "Left": 41,
+    "ParentFont": "False",
+    "Style": "tsFlatButtons",
+    "TabOrder": 5,
+    "Top": 120,
+    "TrueColor": 14464261,
+    "TrueFontColor": "clWhite",
+    "Width": 22
+   },
+   "rect": {
+    "h": 24,
+    "w": 22,
+    "x": 41,
+    "y": 120
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "CheckBox1",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.CheckBox1",
+   "props": {
+    "Caption": "CheckBox1",
+    "Height": 17,
+    "Left": 40,
+    "TabOrder": 2,
+    "Top": 408,
+    "Width": 97
+   },
+   "rect": {
+    "h": 17,
+    "w": 97,
+    "x": 40,
+    "y": 408
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Edit1",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.Edit1",
+   "props": {
+    "Height": 27,
+    "Left": 40,
+    "TabOrder": 3,
+    "Text": "Edit1",
+    "Top": 432,
+    "Width": 121
+   },
+   "rect": {
+    "h": 27,
+    "w": 121,
+    "x": 40,
+    "y": 432
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpSetAllValue",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue",
+   "props": {
+    "Caption": "Set All Value",
+    "Height": 113,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 297
+   },
+   "rect": {
+    "h": 113,
+    "w": 297,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblInArm",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue.lblInArm",
+   "props": {
+    "Caption": "InArm",
+    "Height": 19,
+    "Left": 30,
+    "Top": 24,
+    "Width": 46
+   },
+   "rect": {
+    "h": 19,
+    "w": 46,
+    "x": 30,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblIndexArm",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue.lblIndexArm",
+   "props": {
+    "Caption": "IndexArm",
+    "Height": 19,
+    "Left": 104,
+    "Top": 24,
+    "Width": 74
+   },
+   "rect": {
+    "h": 19,
+    "w": 74,
+    "x": 104,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblOutArm",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue.lblOutArm",
+   "props": {
+    "Caption": "OutArm",
+    "Height": 19,
+    "Left": 199,
+    "Top": 24,
+    "Width": 61
+   },
+   "rect": {
+    "h": 19,
+    "w": 61,
+    "x": 199,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnSetInArmClick"
+   },
+   "kind": "LEAF",
+   "name": "btnSetInArm",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue.btnSetInArm",
+   "props": {
+    "Caption": "Set",
+    "Height": 25,
+    "Left": 24,
+    "OnClick": "btnSetInArmClick",
+    "TabOrder": 3,
+    "Top": 80,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 24,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edSetInArmClick"
+   },
+   "kind": "LEAF",
+   "name": "edSetInArm",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue.edSetInArm",
+   "props": {
+    "Height": 27,
+    "Left": 16,
+    "OnClick": "edSetInArmClick",
+    "TabOrder": 0,
+    "Text": "0",
+    "Top": 48,
+    "Width": 73
+   },
+   "rect": {
+    "h": 27,
+    "w": 73,
+    "x": 16,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edSetInArmClick"
+   },
+   "kind": "LEAF",
+   "name": "edSetIndexArm",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue.edSetIndexArm",
+   "props": {
+    "Height": 27,
+    "Left": 104,
+    "OnClick": "edSetInArmClick",
+    "TabOrder": 1,
+    "Text": "0",
+    "Top": 48,
+    "Width": 73
+   },
+   "rect": {
+    "h": 27,
+    "w": 73,
+    "x": 104,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnSetInArmClick"
+   },
+   "kind": "LEAF",
+   "name": "btnSetIndexArm",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue.btnSetIndexArm",
+   "props": {
+    "Caption": "Set",
+    "Height": 25,
+    "Left": 112,
+    "OnClick": "btnSetInArmClick",
+    "TabOrder": 4,
+    "Tag": 1,
+    "Top": 80,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 112,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btnSetInArmClick"
+   },
+   "kind": "LEAF",
+   "name": "btnSetOutArm",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue.btnSetOutArm",
+   "props": {
+    "Caption": "Set",
+    "Height": 25,
+    "Left": 200,
+    "OnClick": "btnSetInArmClick",
+    "TabOrder": 5,
+    "Tag": 2,
+    "Top": 80,
+    "Width": 57
+   },
+   "rect": {
+    "h": 25,
+    "w": 57,
+    "x": 200,
+    "y": 80
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edSetInArmClick"
+   },
+   "kind": "LEAF",
+   "name": "edSetOutArm",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsManual.grpSetAllValue.edSetOutArm",
+   "props": {
+    "Height": 27,
+    "Left": 192,
+    "OnClick": "edSetInArmClick",
+    "TabOrder": 2,
+    "Text": "0",
+    "Top": 48,
+    "Width": 73
+   },
+   "rect": {
+    "h": 27,
+    "w": 73,
+    "x": 192,
+    "y": 48
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsInArm",
+   "parent": "fVacuumUnit.pgcVacuumUnit",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsInArm",
+   "props": {
+    "Caption": "InArm"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpInarm",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsInArm",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsInArm.grpInarm",
+   "props": {
+    "BiDiMode": "bdLeftToRight",
+    "Height": 300,
+    "Left": 0,
+    "ParentBiDiMode": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 300
+   },
+   "rect": {
+    "h": 300,
+    "w": 300,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TScrollBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "scrlbxInArm",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsInArm.grpInarm",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsInArm.grpInarm.scrlbxInArm",
+   "props": {
+    "Align": "alClient",
+    "BiDiMode": "bdLeftToRight",
+    "BorderStyle": "bsNone",
+    "Color": "clBtnFace",
+    "Height": 277,
+    "Left": 2,
+    "ParentBiDiMode": "False",
+    "ParentColor": "False",
+    "TabOrder": 0,
+    "Top": 21,
+    "Width": 296
+   },
+   "rect": {
+    "h": 277,
+    "w": 296,
+    "x": 2,
+    "y": 21
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsIndex",
+   "parent": "fVacuumUnit.pgcVacuumUnit",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsIndex",
+   "props": {
+    "Caption": "Index",
+    "ImageIndex": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpIndexArm2",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsIndex",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsIndex.grpIndexArm2",
+   "props": {
+    "Caption": "Index Arm2",
+    "Height": 300,
+    "Left": 8,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 300
+   },
+   "rect": {
+    "h": 300,
+    "w": 300,
+    "x": 8,
+    "y": 0
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TScrollBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "scrlbxIndexArm2",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsIndex.grpIndexArm2",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsIndex.grpIndexArm2.scrlbxIndexArm2",
+   "props": {
+    "Align": "alClient",
+    "BiDiMode": "bdLeftToRight",
+    "BorderStyle": "bsNone",
+    "Color": "clBtnFace",
+    "Height": 277,
+    "Left": 2,
+    "ParentBiDiMode": "False",
+    "ParentColor": "False",
+    "TabOrder": 0,
+    "Top": 21,
+    "Width": 296
+   },
+   "rect": {
+    "h": 277,
+    "w": 296,
+    "x": 2,
+    "y": 21
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpIndexArm1",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsIndex",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsIndex.grpIndexArm1",
+   "props": {
+    "Caption": "Index Arm1",
+    "Height": 265,
+    "Left": 8,
+    "TabOrder": 1,
+    "Top": 304,
+    "Width": 297
+   },
+   "rect": {
+    "h": 265,
+    "w": 297,
+    "x": 8,
+    "y": 304
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TScrollBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "scrlbxIndexArm1",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsIndex.grpIndexArm1",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsIndex.grpIndexArm1.scrlbxIndexArm1",
+   "props": {
+    "Align": "alClient",
+    "BiDiMode": "bdLeftToRight",
+    "BorderStyle": "bsNone",
+    "Color": "clBtnFace",
+    "Height": 242,
+    "Left": 2,
+    "ParentBiDiMode": "False",
+    "ParentColor": "False",
+    "TabOrder": 0,
+    "Top": 21,
+    "Width": 293
+   },
+   "rect": {
+    "h": 242,
+    "w": 293,
+    "x": 2,
+    "y": 21
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsOutArm",
+   "parent": "fVacuumUnit.pgcVacuumUnit",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsOutArm",
+   "props": {
+    "Caption": "OutArm",
+    "ImageIndex": 3
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "grpOutarm",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsOutArm",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsOutArm.grpOutarm",
+   "props": {
+    "Height": 300,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 300
+   },
+   "rect": {
+    "h": 300,
+    "w": 300,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TScrollBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "scrlbxOutArm",
+   "parent": "fVacuumUnit.pgcVacuumUnit.tsOutArm.grpOutarm",
+   "path": "fVacuumUnit.pgcVacuumUnit.tsOutArm.grpOutarm.scrlbxOutArm",
+   "props": {
+    "Align": "alClient",
+    "BiDiMode": "bdLeftToRight",
+    "BorderStyle": "bsNone",
+    "Color": "clBtnFace",
+    "Height": 277,
+    "Left": 2,
+    "ParentBiDiMode": "False",
+    "ParentColor": "False",
+    "TabOrder": 0,
+    "Top": 21,
+    "Width": 296
+   },
+   "rect": {
+    "h": 277,
+    "w": 296,
+    "x": 2,
+    "y": 21
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel1",
+   "parent": "fVacuumUnit",
+   "path": "fVacuumUnit.Panel1",
+   "props": {
+    "Align": "alBottom",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 64,
+    "Left": 0,
+    "TabOrder": 1,
+    "Top": 616,
+    "Width": 647
+   },
+   "rect": {
+    "h": 64,
+    "w": 647,
+    "x": 0,
+    "y": 616
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "spbSaveClick"
+   },
+   "kind": "LEAF",
+   "name": "spbSave",
+   "parent": "fVacuumUnit.Panel1",
+   "path": "fVacuumUnit.Panel1.spbSave",
+   "props": {
+    "Caption": "Save",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 3946,
+     "hex": "660F0000424D660F000000000000360000002800000024000000240000000100180000000000300F000001000000010000000000000000000000FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF9F9F9F9F9F9F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F9F9F9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF7F7F7EFEFEFE8E8E8E6E6E6E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E9E9E9F3F3F3F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF8F8F8ECECECD6D6D6C8C8C8C5C5C5C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4D0D0D0E9E9E9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF0EFEFC0A6A7A55B6CA96270A45E6C934556A6A3A3A4A1A1A19C9C9C9797979393948D8D8E88888A8383867F7D837A7A807978807978994759994759994759994759994759994759994759994756C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAD2C1C1B28181AF6D79B8717FB7707DAA6472EFEFF1EEEEF1995D68B8717EB06B78E1E0E0DDDADBD8D5D6D4D1D2CFCCCCCAC6C6DBD8D88F4B59A05565A05565BE848EB9727FB8727EB8717E994557C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAF6D79BA7481B97380B7737FAA6472E9E9EBECEBEF995D68B8717EB06B78E1DFE1DCDADDD7D5D6D2D0D1CDC9CAC8C3C3D9D6D68D49589F5464A05565BF848EB97380B9737FB9727F9B4457C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC38D95BA7682BA7481B97480AA6472E5E4E7E9E9EB9A5D69B8737FB06B78E5E5E7E2E0E3DDDBDDD8D5D7D3D0D1CDCACBDDDADB8B48579D53639F5464BF858FBA7480BA7481BA74819B4558C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC48E96BA7783BA7682B97481AA6472E0DFE1E5E3E69B5F6BB97580B06B78E9EAECE6E5E8E2E1E4DDDCDED9D6D8D4D0D2E0DFDF8945549B50619D5363BF8590BA7481BA7481BA74819A4759C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F96BB7784BA7784BA7582AA6472DAD9DBE0DEE09B5F6BBA7582B06B78EDECEFEAE9EDE6E6E9E2E2E4DEDDDFDAD8DAE5E2E4874353994E5F9B5061C18690B97480BA7481BA74819C495CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F98BC7886BB7785BB7783AA6472D5D2D4DBD8DA9C606C925864925864EAEAEDEDEDF0EAEAEDE8E7E9E4E2E5DFDDDFE8E7E8864252974C5D994E5FC08691B9727FB97380B973809C4B5CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC49098BC7986BD7985BC7784AA6472CFCCCCD4D1D3D9D7D9DFDCDFE2E1E4E7E5E8EAEAEDEDECF0EAEBEEE8E7EAE4E2E6ECEAEC864252864252874353C28791B7727FB8727EB9727F9C4E5DC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC79198BD7A87BD7987BC7985BB7785AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472B77A84B76F7DB7707DB7707EB8717E9E4E5FC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB7717EB76F7DB76D7CB76D7BB76D7BB66D7BB56C7AB56C7AB66D7BB76F7CB76F7CB7707D9F4E60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB76F7DB76D7CB76D7CB76C7AB66C7AB66D7BB56C7AB56C7AB56C7AB66C7AB66C7AB76D7C9F4F60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6939BBE7E89BC7884A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70B66B7AB66C7B9F5162C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC7949CBF7F8AAF6F7BEBE1E1FEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFEFDFDFEFDFDFDFCFCFCFCFBFCFBFBFBFBFAFAFAF9F9F9F9F9F9F8F8F8E8D1D1A75E70B76D7BB66C7A9F5262C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC8959DC0808BAF6F7BFEFFFEFCFCFBFBFBFAFAFBFAFAFAFAF9FAF9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F7F7F7F6F6F6F6F6F9F9F9A75E70B96F7DB66B7AA05363C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9959DC1818CAF6F7BFEFFFEE1E1E1DFDFDFDDDDDDDBDCDBDADAD9D9D9D9D7D7D6D5D6D5D4D4D3D2D3D2D1D1D1D0D0D0CFCFCFCFCFCFCFCFCFCFCFCFF9FAF9A75E70BA707EB66B79A15466C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9969EC1818DAF6F7BFEFFFEFCFCFCFCFCFBFBFBFBFBFBFAFBFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F6FBFBFBA75E70B97480B56B79A25666C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2828EAF6F7BFEFFFEE4E4E4E3E3E3E2E2E1E0E0E0DEDDDEDCDCDCDADADAD9D9D9D7D8D8D6D5D5D4D4D4D2D3D3D1D2D1D0D0D0CFCFCFCFCFCFFCFCFBA75E70BA7581B56B79A45968C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2838EAF6F7BFEFFFEFCFCFCFCFCFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F8F8F9F8F8F8F8F8F7F7F7F7F7F7F7F7FCFCFCA75E70BA7783B66C7AA55969C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA98A0C2838EAF6F7BFEFFFEE6E6E6E6E5E6E4E4E4E3E3E3E1E2E2E0E0E0DEDEDEDCDCDCDBDBDBD9D9D9D8D8D8D6D6D6D4D5D5D3D3D3D1D1D1D0D0D0FDFDFCA75E70BC7783B76D7BA55D6CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB98A0C2838EAF6F7BFEFFFEFDFDFDFDFDFCFCFDFCFCFCFCFCFCFBFBFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7FDFEFDA75E70BD7985B76F7DA65F6EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E5E5E6E4E5E5E4E3E3E2E2E2E1E0E0DFDFDFDDDDDDDBDBDCDADAD9D9D8D9D7D6D7D5D5D5D3D4D3FEFEFEA75E70BE7A86B7707DA6606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFCFCFBFBFBFAFBFBFAFAFAF9F9F9F9F9F9F9F9F9F9F9F9F8F8F8F8FEFFFEA75E70B38088B8717FA7606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E5E5E5E4E4E3E2E3E3E1E1E1E0DFDFDDDDDEDCDBDCDADADAD9D9D9D7D8D7FEFFFEA75E70996E759E5967A9606EC5C5C5E5E5E5F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFFFEFEFEFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9FAFAF9F9F9F9F9F9F9FEFFFEA75E70B0757F9E5A68AA6471C5C5C5E6E6E6F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA969EC2838EAF6F7BFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEA75E70C77F8BC77F8BAA6572D1D1D1EBEBEBFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAE6A7AAE6A7AAE6A7AD9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6A75E70A75E70A75E70A75E70ECECECF6F6F6FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFA",
+     "sha1": "b6420a2c6417ab1d75d6f7441ace55c339665e38"
+    },
+    "Height": 41,
+    "Left": 22,
+    "OnClick": "spbSaveClick",
+    "ParentFont": "False",
+    "Top": 17,
+    "Width": 211
+   },
+   "rect": {
+    "h": 41,
+    "w": 211,
+    "x": 22,
+    "y": 17
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbtExitClick"
+   },
+   "kind": "LEAF",
+   "name": "sbtExit",
+   "parent": "fVacuumUnit.Panel1",
+   "path": "fVacuumUnit.Panel1.sbtExit",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Exit",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 1554,
+     "hex": "0E060000424D0E06000000000000360000002800000016000000160000000100180000000000D805000001000000010000000000000000000000EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF7474A44C4C946C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA44C4C947474A4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C5454C45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC4C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9C645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D46C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC6464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CAC8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEF8C8CAC2424946464D45454C46C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C4C4CBC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424945454C44C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF",
+     "sha1": "f9091dff96fbb403d8fe7eec0dcccd5c7539ad97"
+    },
+    "GroupIndex": 1,
+    "Height": 41,
+    "Left": 260,
+    "OnClick": "sbtExitClick",
+    "ParentFont": "False",
+    "Top": 17,
+    "Width": 205
+   },
+   "rect": {
+    "h": 41,
+    "w": 205,
+    "x": 260,
+    "y": 17
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbResetClick"
+   },
+   "kind": "LEAF",
+   "name": "sbReset",
+   "parent": "fVacuumUnit.Panel1",
+   "path": "fVacuumUnit.Panel1.sbReset",
+   "props": {
+    "Caption": "Reset",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "OpenSymbol",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 2186,
+     "hex": "86080000424D86080000000000003600000028000000190000001C00000001001800000000005008000001000000010000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDAA677E4D0A1FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFBD7637FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCF7D2FDFA454D6995BE6CCA8FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD28130E4AA5EC67D2BFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC67A27F2E88AFFC27BD6A458DCB392FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD38128E9BC73FFD482DFAF61C67934FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFC98036FFDF85F9D484FFCE79ECB162E3C095FFFFFFFFFFFFFFFFFFF4FFFFFFFFFFFFFFFFFFFFFFFFD17F38ECD2AEF6D499FFD27AFFCE7DD3A962CE822FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCA813DFFDF7BFBD27DFFD280FFD571D6A35AE2CFB4FFFFFFFFFFFFF9FFFFFFFFFFFFFFFFFFC38238E9D9C9FFE9C0FFD68FFFBE7BFAC777F9CE7DE6AD52C28339FFFFFFFFFFFFFFFFFFFFFFFFCE822FF0D27FFFD288FCCD7BFBD37AFDCD75D59E65FFFFFFFFFFFFFFFFFFFFFFFFFFCB8B44FFE5C6FFF5D4F9E2B5FFC98EFFC775F9C071FFCC71FFD47CE6B157CF8446FFFFFFFFFFFFFFFFFFEBC49DDC9649F7BE81FBD27DF5CC7DFFDB89E4A963E6D0ADFFFFFFFFFFFFFFCC8C45FFE7BFFDEFCBFAE8CBFFE5C3FDD495F4C16BFFC873FCC77EFECD7FFFDF8FE6B462CE8A3FFFFFFFFFFFFFF1FEF6F0D7C3E09850F2CF7FFFD685FFD188E4C17FDAB387FFFFFFFFFFFFFFF4DFB2FFF7C4FCEBB2FCF0CCFCE5C5FFD5A1F5C476FFC681FFD377F7D593FFDE99FFF19CE3BE6ADD8B3DFFFFFFF3FCFFFFFFFBECC898EBB76BFFD989F2D590F4D685DFA45EFFFFFFD2FFFFFFFFFFFFFFFFFFFFFFFFECC59EFFEBCBFFDA9FFFCD87FCCB7BF3AB5DE39045D99149DB9541D68B46DE9153FFFFFFFAFFFFFFFCFEF7E9CCDEA256FFDF8FFFDA91F3E397DB9650FFFFFFDEFFFFFFFFFFFFFFFFFFFFFFFFE3B683F8F3D4FFE5A2FCD587F9DA85DF9751FEFEF8FFF8FFF2FFF8F3FFFFFFFDF5FFFFFFF9FDF8FAFBFFFDFBFBDC9A4CFBE194FFE293FDE6A2D99E58FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE7B67EF7F1DAFFE9C1FFD391FBD98DE3A460F4E6D3FCFBFDFFFFF7FFF8FBFFFFF9FFFFFFFAFFF7FFFBFFF2E4D8E3A75BFCE599FCECA0FDDA9AE2B37BFFFFFFFBFFFFFFFFFFFFFFFFFFFFFFFFE8BF8EFCF0CEF4F3DFF7DD9AFFDE90F1C37CEEC8A5FFF9FFFFFFFBFFFEFFF5FDF3FFFFFFF8FDFEFFFCFAE0CDA2F6C47CFFE7A1F0E7A4FFDFA1E9BF9AFFFFFFF6FFFFFFFFFFFFFFFFFFFFFFFFFBDAC0EFCCAAFFFEEAF3E8ACFFDA9BFBD392E2AC70EEE1BBFCFEEBFAFEFFF9FBFBFFFFFFFFFFF6F5DDC1E1AB6CFBDD9CFFE7A9F9F2B9F9CB95EED9C3FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFE3B875FCECC7F2F0C8FFE896FBEFA1F3D691DBAD60F8D1ABF8E5DDFFFDF5FCEDDDFACAA8E2AE72FFDE8FF5E8AAFFEDBBFFF3BFE7B48CFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFD9C3F3D29AFDF7E4FFF7D5FFE8A2F9E6A9FFE7A5F5C98AEEB468ECA757E1B56EF8CB88FEE59DF8EFAFFEF6BBFFF9CEE4C090FFDCBBFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFD1AEFAE1B9FFFADFFFFCDBFAEEB8FEE4AEFFEEB4FFEEAFFAECAAFDEEAFFDEDB2FFEEB9FFF7C7FFFFD8E8CB8EF5D6A3FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF4CEABECC98AFFFFD1FFF6F0FDFFDBF4F5CBF6F2C1FEF8C3FDF7C8FEF8D3FBF9E1F6F5E7ECC690E9D4B5FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF9DDC5E7B591F2DDB7FFF3D9FFFAE6FFFFF4FFFFF4FFFAE9FFFADDFFE5BCE5C08EFFDFBCFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFCE1BFFACB97F0BA7EE8AB67ECAE68F1BA7DEDC89CEFDDC6FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+     "sha1": "f3f43db3ce1be7993526850e05983b068c343c62"
+    },
+    "Height": 41,
+    "Left": 527,
+    "Margin": 10,
+    "OnClick": "sbResetClick",
+    "ParentFont": "False",
+    "Spacing": 5,
+    "Top": 17,
+    "Width": 106
+   },
+   "rect": {
+    "h": 41,
+    "w": 106,
+    "x": 527,
+    "y": 17
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "tmr1Timer"
+   },
+   "kind": "NONVISUAL",
+   "name": "tmr1",
+   "parent": "fVacuumUnit",
+   "path": "fVacuumUnit.tmr1",
+   "props": {
+    "Left": 492,
+    "OnTimer": "tmr1Timer"
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 492,
+    "y": null
+   }
+  }
+ ]
+}

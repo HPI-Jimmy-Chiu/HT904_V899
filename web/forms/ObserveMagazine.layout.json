@@ -1,0 +1,822 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "fObserveMagazine",
+ "form": "fObserveMagazine",
+ "form_class": "TfObserveMagazine",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "ObserveMagazine.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfObserveMagazine",
+   "events": {
+    "OnClose": "FormClose",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fObserveMagazine",
+   "parent": null,
+   "path": "fObserveMagazine",
+   "props": {
+    "Caption": "fObserveMagazine",
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 531,
+    "Left": 235,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 150,
+    "Width": 561
+   },
+   "rect": {
+    "h": 531,
+    "w": 561,
+    "x": 235,
+    "y": 150
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "labSimMagazineTrayNo",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.labSimMagazineTrayNo",
+   "props": {
+    "Alignment": "taCenter",
+    "Caption": "NO.",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": 7357234,
+    "Font.Height": -21,
+    "Font.Name": "Courier New",
+    "Font.Style": [
+     "fsBold",
+     "fsItalic"
+    ],
+    "Height": 23,
+    "Left": 24,
+    "ParentFont": "False",
+    "Top": 12,
+    "Width": 39
+   },
+   "rect": {
+    "h": 23,
+    "w": 39,
+    "x": 24,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.Label1",
+   "props": {
+    "Caption": "1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 152,
+    "ParentFont": "False",
+    "Top": 16,
+    "Width": 13
+   },
+   "rect": {
+    "h": 20,
+    "w": 13,
+    "x": 152,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label2",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.Label2",
+   "props": {
+    "Caption": "2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 256,
+    "ParentFont": "False",
+    "Top": 16,
+    "Width": 9
+   },
+   "rect": {
+    "h": 20,
+    "w": 9,
+    "x": 256,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label3",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.Label3",
+   "props": {
+    "Caption": "3",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 352,
+    "ParentFont": "False",
+    "Top": 16,
+    "Width": 9
+   },
+   "rect": {
+    "h": 20,
+    "w": 9,
+    "x": 352,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label4",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.Label4",
+   "props": {
+    "Caption": "4",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 456,
+    "ParentFont": "False",
+    "Top": 16,
+    "Width": 9
+   },
+   "rect": {
+    "h": 20,
+    "w": 9,
+    "x": 456,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label5",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.Label5",
+   "props": {
+    "Caption": "5",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 56,
+    "ParentFont": "False",
+    "Top": 176,
+    "Width": 9
+   },
+   "rect": {
+    "h": 20,
+    "w": 9,
+    "x": 56,
+    "y": 176
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label6",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.Label6",
+   "props": {
+    "Caption": "6",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 152,
+    "ParentFont": "False",
+    "Top": 176,
+    "Width": 9
+   },
+   "rect": {
+    "h": 20,
+    "w": 9,
+    "x": 152,
+    "y": 176
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label7",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.Label7",
+   "props": {
+    "Caption": "7",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 256,
+    "ParentFont": "False",
+    "Top": 176,
+    "Width": 9
+   },
+   "rect": {
+    "h": 20,
+    "w": 9,
+    "x": 256,
+    "y": 176
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label8",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.Label8",
+   "props": {
+    "Caption": "8",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 352,
+    "ParentFont": "False",
+    "Top": 176,
+    "Width": 9
+   },
+   "rect": {
+    "h": 20,
+    "w": 9,
+    "x": 352,
+    "y": 176
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label9",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.Label9",
+   "props": {
+    "Caption": "9",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 456,
+    "ParentFont": "False",
+    "Top": 176,
+    "Width": 9
+   },
+   "rect": {
+    "h": 20,
+    "w": 9,
+    "x": 456,
+    "y": 176
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label10",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.Label10",
+   "props": {
+    "Caption": "10",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 48,
+    "ParentFont": "False",
+    "Top": 336,
+    "Width": 18
+   },
+   "rect": {
+    "h": 20,
+    "w": 18,
+    "x": 48,
+    "y": 336
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label11",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.Label11",
+   "props": {
+    "Caption": "11",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 150,
+    "ParentFont": "False",
+    "Top": 336,
+    "Width": 18
+   },
+   "rect": {
+    "h": 20,
+    "w": 18,
+    "x": 150,
+    "y": 336
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label12",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.Label12",
+   "props": {
+    "Caption": "12",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 248,
+    "ParentFont": "False",
+    "Top": 336,
+    "Width": 18
+   },
+   "rect": {
+    "h": 20,
+    "w": 18,
+    "x": 248,
+    "y": 336
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label13",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.Label13",
+   "props": {
+    "Caption": "13",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 350,
+    "ParentFont": "False",
+    "Top": 336,
+    "Width": 18
+   },
+   "rect": {
+    "h": 20,
+    "w": 18,
+    "x": 350,
+    "y": 336
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label14",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.Label14",
+   "props": {
+    "Caption": "14",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 448,
+    "ParentFont": "False",
+    "Top": 336,
+    "Width": 18
+   },
+   "rect": {
+    "h": 20,
+    "w": 18,
+    "x": 448,
+    "y": 336
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTMyTray",
+   "events": {},
+   "kind": "LEAF",
+   "name": "mtMagazineTray14",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.mtMagazineTray14",
+   "props": {
+    "Color": "clSilver",
+    "Height": 120,
+    "Left": 420,
+    "Tag": 13,
+    "Top": 360,
+    "Width": 75,
+    "XItem": 1,
+    "YItem": 1
+   },
+   "rect": {
+    "h": 120,
+    "w": 75,
+    "x": 420,
+    "y": 360
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTMyTray",
+   "events": {},
+   "kind": "LEAF",
+   "name": "mtMagazineTray13",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.mtMagazineTray13",
+   "props": {
+    "Color": "clSilver",
+    "Height": 120,
+    "Left": 320,
+    "Tag": 12,
+    "Top": 360,
+    "Width": 75,
+    "XItem": 1,
+    "YItem": 1
+   },
+   "rect": {
+    "h": 120,
+    "w": 75,
+    "x": 320,
+    "y": 360
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTMyTray",
+   "events": {},
+   "kind": "LEAF",
+   "name": "mtMagazineTray12",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.mtMagazineTray12",
+   "props": {
+    "Color": "clSilver",
+    "Height": 120,
+    "Left": 220,
+    "Tag": 11,
+    "Top": 360,
+    "Width": 75,
+    "XItem": 1,
+    "YItem": 1
+   },
+   "rect": {
+    "h": 120,
+    "w": 75,
+    "x": 220,
+    "y": 360
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTMyTray",
+   "events": {},
+   "kind": "LEAF",
+   "name": "mtMagazineTray11",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.mtMagazineTray11",
+   "props": {
+    "Color": "clSilver",
+    "Height": 120,
+    "Left": 120,
+    "Tag": 10,
+    "Top": 360,
+    "Width": 75,
+    "XItem": 1,
+    "YItem": 1
+   },
+   "rect": {
+    "h": 120,
+    "w": 75,
+    "x": 120,
+    "y": 360
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTMyTray",
+   "events": {},
+   "kind": "LEAF",
+   "name": "mtMagazineTray10",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.mtMagazineTray10",
+   "props": {
+    "Color": "clSilver",
+    "Height": 120,
+    "Left": 20,
+    "Tag": 9,
+    "Top": 360,
+    "Width": 75,
+    "XItem": 1,
+    "YItem": 1
+   },
+   "rect": {
+    "h": 120,
+    "w": 75,
+    "x": 20,
+    "y": 360
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTMyTray",
+   "events": {},
+   "kind": "LEAF",
+   "name": "mtMagazineTray9",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.mtMagazineTray9",
+   "props": {
+    "Color": "clSilver",
+    "Height": 120,
+    "Left": 420,
+    "Tag": 8,
+    "Top": 200,
+    "Width": 75,
+    "XItem": 1,
+    "YItem": 1
+   },
+   "rect": {
+    "h": 120,
+    "w": 75,
+    "x": 420,
+    "y": 200
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTMyTray",
+   "events": {},
+   "kind": "LEAF",
+   "name": "mtMagazineTray8",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.mtMagazineTray8",
+   "props": {
+    "Color": "clSilver",
+    "Height": 120,
+    "Left": 320,
+    "Tag": 7,
+    "Top": 200,
+    "Width": 75,
+    "XItem": 1,
+    "YItem": 1
+   },
+   "rect": {
+    "h": 120,
+    "w": 75,
+    "x": 320,
+    "y": 200
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTMyTray",
+   "events": {},
+   "kind": "LEAF",
+   "name": "mtMagazineTray7",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.mtMagazineTray7",
+   "props": {
+    "Color": "clSilver",
+    "Height": 120,
+    "Left": 220,
+    "Tag": 6,
+    "Top": 200,
+    "Width": 75,
+    "XItem": 1,
+    "YItem": 1
+   },
+   "rect": {
+    "h": 120,
+    "w": 75,
+    "x": 220,
+    "y": 200
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTMyTray",
+   "events": {},
+   "kind": "LEAF",
+   "name": "mtMagazineTray6",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.mtMagazineTray6",
+   "props": {
+    "Color": "clSilver",
+    "Height": 120,
+    "Left": 120,
+    "Tag": 5,
+    "Top": 200,
+    "Width": 75,
+    "XItem": 1,
+    "YItem": 1
+   },
+   "rect": {
+    "h": 120,
+    "w": 75,
+    "x": 120,
+    "y": 200
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTMyTray",
+   "events": {},
+   "kind": "LEAF",
+   "name": "mtMagazineTray5",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.mtMagazineTray5",
+   "props": {
+    "Color": "clSilver",
+    "Height": 120,
+    "Left": 20,
+    "Tag": 4,
+    "Top": 200,
+    "Width": 75,
+    "XItem": 1,
+    "YItem": 1
+   },
+   "rect": {
+    "h": 120,
+    "w": 75,
+    "x": 20,
+    "y": 200
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTMyTray",
+   "events": {},
+   "kind": "LEAF",
+   "name": "mtMagazineTray4",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.mtMagazineTray4",
+   "props": {
+    "Color": "clSilver",
+    "Height": 120,
+    "Left": 420,
+    "Tag": 3,
+    "Top": 40,
+    "Width": 75,
+    "XItem": 1,
+    "YItem": 1
+   },
+   "rect": {
+    "h": 120,
+    "w": 75,
+    "x": 420,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTMyTray",
+   "events": {},
+   "kind": "LEAF",
+   "name": "mtMagazineTray3",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.mtMagazineTray3",
+   "props": {
+    "Color": "clSilver",
+    "Height": 120,
+    "Left": 320,
+    "Tag": 2,
+    "Top": 40,
+    "Width": 75,
+    "XItem": 1,
+    "YItem": 1
+   },
+   "rect": {
+    "h": 120,
+    "w": 75,
+    "x": 320,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTMyTray",
+   "events": {},
+   "kind": "LEAF",
+   "name": "mtMagazineTray2",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.mtMagazineTray2",
+   "props": {
+    "Color": "clSilver",
+    "Height": 120,
+    "Left": 220,
+    "Tag": 1,
+    "Top": 40,
+    "Width": 75,
+    "XItem": 1,
+    "YItem": 1
+   },
+   "rect": {
+    "h": 120,
+    "w": 75,
+    "x": 220,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTMyTray",
+   "events": {},
+   "kind": "LEAF",
+   "name": "mtMagazineTray1",
+   "parent": "fObserveMagazine",
+   "path": "fObserveMagazine.mtMagazineTray1",
+   "props": {
+    "Color": "clSilver",
+    "Height": 120,
+    "Left": 120,
+    "Top": 40,
+    "Width": 75,
+    "XItem": 1,
+    "YItem": 1
+   },
+   "rect": {
+    "h": 120,
+    "w": 75,
+    "x": 120,
+    "y": 40
+   }
+  }
+ ]
+}

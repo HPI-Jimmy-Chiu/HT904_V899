@@ -1,0 +1,255 @@
+{
+ "canvas": {
+  "h": 289,
+  "w": 361
+ },
+ "caption": "Contact Counter Kinds",
+ "form": "fContactCT",
+ "form_class": "TfContactCT",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "cContactCT.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfContactCT",
+   "events": {
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fContactCT",
+   "parent": null,
+   "path": "fContactCT",
+   "props": {
+    "BorderIcons": [
+     "biHelp"
+    ],
+    "BorderStyle": "bsToolWindow",
+    "Caption": "Contact Counter Kinds",
+    "ClientHeight": 289,
+    "ClientWidth": 361,
+    "Color": "clBtnFace",
+    "DragKind": "dkDock",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Left": 1040,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 211
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 1040,
+    "y": 211
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TRadioGroup",
+   "events": {
+    "OnClick": "rgYieldTypeClick"
+   },
+   "kind": "SUBDLG",
+   "name": "rgYieldType",
+   "parent": "fContactCT",
+   "path": "fContactCT.rgYieldType",
+   "props": {
+    "Align": "alTop",
+    "Columns": 3,
+    "DragKind": "dkDock",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 88,
+    "ItemIndex": 3,
+    "Items.Strings": [
+     "History",
+     "Total",
+     "Kind",
+     "Kind(%)",
+     "ByHeadYield",
+     "ByBinPass",
+     "ByBinPass(%)",
+     "ByBinArmPass",
+     "ByBinArmPass(%)",
+     "ByBinSitePass",
+     "ByBinSitePass(%)"
+    ],
+    "Left": 0,
+    "OnClick": "rgYieldTypeClick",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 33,
+    "Width": 361
+   },
+   "rect": {
+    "h": 88,
+    "w": 361,
+    "x": 0,
+    "y": 33
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TStringGrid",
+   "events": {
+    "OnDblClick": "sgYieldDblClick",
+    "OnDrawCell": "sgYieldDrawCell",
+    "OnMouseDown": "sgYieldMouseDown"
+   },
+   "kind": "LEAF",
+   "name": "sgYield",
+   "parent": "fContactCT",
+   "path": "fContactCT.sgYield",
+   "props": {
+    "Align": "alClient",
+    "ColCount": 4,
+    "ColWidths": [
+     70,
+     69,
+     70,
+     70
+    ],
+    "DefaultColWidth": 70,
+    "DefaultRowHeight": 16,
+    "DragKind": "dkDock",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "Batang",
+    "Font.Style": [],
+    "Height": 168,
+    "Left": 0,
+    "OnDblClick": "sgYieldDblClick",
+    "OnDrawCell": "sgYieldDrawCell",
+    "OnMouseDown": "sgYieldMouseDown",
+    "Options": [
+     "goFixedVertLine",
+     "goFixedHorzLine",
+     "goVertLine",
+     "goHorzLine"
+    ],
+    "ParentFont": "False",
+    "RowCount": 9,
+    "ScrollBars": "ssNone",
+    "TabOrder": 2,
+    "TabStop": "False",
+    "Top": 121,
+    "Width": 361
+   },
+   "rect": {
+    "h": 168,
+    "w": 361,
+    "x": 0,
+    "y": 121
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "palClearCnt",
+   "parent": "fContactCT",
+   "path": "fContactCT.palClearCnt",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Height": 33,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 361
+   },
+   "rect": {
+    "h": 33,
+    "w": 361,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btClearCountClick"
+   },
+   "kind": "LEAF",
+   "name": "btClearCount",
+   "parent": "fContactCT.palClearCnt",
+   "path": "fContactCT.palClearCnt.btClearCount",
+   "props": {
+    "Caption": "Count Clear",
+    "DragKind": "dkDock",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 29,
+    "Left": 0,
+    "OnClick": "btClearCountClick",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 141
+   },
+   "rect": {
+    "h": 29,
+    "w": 141,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btYieldChartClick"
+   },
+   "kind": "LEAF",
+   "name": "btYieldChart",
+   "parent": "fContactCT.palClearCnt",
+   "path": "fContactCT.palClearCnt.btYieldChart",
+   "props": {
+    "Caption": "Yield Chart",
+    "DragKind": "dkDock",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 29,
+    "Left": 144,
+    "OnClick": "btYieldChartClick",
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 0,
+    "Width": 141
+   },
+   "rect": {
+    "h": 29,
+    "w": 141,
+    "x": 144,
+    "y": 0
+   }
+  }
+ ]
+}

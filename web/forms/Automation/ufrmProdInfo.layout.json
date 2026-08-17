@@ -1,0 +1,289 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": null,
+ "form": "frameProdInfo",
+ "form_class": "TframeProdInfo",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "Automation/ufrmProdInfo.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TframeProdInfo",
+   "events": {},
+   "kind": "ROOT",
+   "name": "frameProdInfo",
+   "parent": null,
+   "path": "frameProdInfo",
+   "props": {
+    "Height": 299,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 303
+   },
+   "rect": {
+    "h": 299,
+    "w": 303,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabeledEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbledtLotNo",
+   "parent": "frameProdInfo",
+   "path": "frameProdInfo.lbledtLotNo",
+   "props": {
+    "EditLabel.Caption": "lbledtLotNo",
+    "EditLabel.Height": 13,
+    "EditLabel.Width": 54,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "LabelPosition": "lpAbove",
+    "LabelSpacing": 3,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 24,
+    "Width": 289
+   },
+   "rect": {
+    "h": 24,
+    "w": 289,
+    "x": 8,
+    "y": 24
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabeledEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbledtLotID",
+   "parent": "frameProdInfo",
+   "path": "frameProdInfo.lbledtLotID",
+   "props": {
+    "EditLabel.Caption": "lbledtLotID",
+    "EditLabel.Height": 13,
+    "EditLabel.Width": 51,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "LabelPosition": "lpAbove",
+    "LabelSpacing": 3,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 64,
+    "Width": 289
+   },
+   "rect": {
+    "h": 24,
+    "w": 289,
+    "x": 8,
+    "y": 64
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabeledEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbledtHdParameter",
+   "parent": "frameProdInfo",
+   "path": "frameProdInfo.lbledtHdParameter",
+   "props": {
+    "EditLabel.Caption": "lbledtHdParameter",
+    "EditLabel.Height": 13,
+    "EditLabel.Width": 87,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "LabelPosition": "lpAbove",
+    "LabelSpacing": 3,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 104,
+    "Width": 289
+   },
+   "rect": {
+    "h": 24,
+    "w": 289,
+    "x": 8,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabeledEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbledtProduct",
+   "parent": "frameProdInfo",
+   "path": "frameProdInfo.lbledtProduct",
+   "props": {
+    "EditLabel.Caption": "lbledtProduct",
+    "EditLabel.Height": 13,
+    "EditLabel.Width": 62,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "LabelPosition": "lpAbove",
+    "LabelSpacing": 3,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 144,
+    "Width": 289
+   },
+   "rect": {
+    "h": 24,
+    "w": 289,
+    "x": 8,
+    "y": 144
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabeledEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbledtStepCode",
+   "parent": "frameProdInfo",
+   "path": "frameProdInfo.lbledtStepCode",
+   "props": {
+    "EditLabel.Caption": "lbledtStepCode",
+    "EditLabel.Height": 13,
+    "EditLabel.Width": 72,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "LabelPosition": "lpAbove",
+    "LabelSpacing": 3,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 184,
+    "Width": 289
+   },
+   "rect": {
+    "h": 24,
+    "w": 289,
+    "x": 8,
+    "y": 184
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabeledEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbledtQty",
+   "parent": "frameProdInfo",
+   "path": "frameProdInfo.lbledtQty",
+   "props": {
+    "EditLabel.Caption": "lbledtQty",
+    "EditLabel.Height": 13,
+    "EditLabel.Width": 41,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "LabelPosition": "lpAbove",
+    "LabelSpacing": 3,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 224,
+    "Width": 289
+   },
+   "rect": {
+    "h": 24,
+    "w": 289,
+    "x": 8,
+    "y": 224
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabeledEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbledtDate",
+   "parent": "frameProdInfo",
+   "path": "frameProdInfo.lbledtDate",
+   "props": {
+    "EditLabel.Caption": "lbledtDate",
+    "EditLabel.Height": 13,
+    "EditLabel.Width": 48,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 24,
+    "LabelPosition": "lpAbove",
+    "LabelSpacing": 3,
+    "Left": 8,
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Top": 264,
+    "Width": 289
+   },
+   "rect": {
+    "h": 24,
+    "w": 289,
+    "x": 8,
+    "y": 264
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "ShowTimerTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "ShowTimer",
+   "parent": "frameProdInfo",
+   "path": "frameProdInfo.ShowTimer",
+   "props": {
+    "Interval": 100,
+    "Left": 8,
+    "OnTimer": "ShowTimerTimer",
+    "Top": 264
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 8,
+    "y": 264
+   }
+  }
+ ]
+}

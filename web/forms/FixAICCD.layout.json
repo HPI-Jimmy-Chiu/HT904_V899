@@ -1,0 +1,1587 @@
+{
+ "canvas": {
+  "h": null,
+  "w": null
+ },
+ "caption": "Fix AI CCD",
+ "form": "fFixAICCD",
+ "form_class": "TfFixAICCD",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "FixAICCD.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfFixAICCD",
+   "events": {
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fFixAICCD",
+   "parent": null,
+   "path": "fFixAICCD",
+   "props": {
+    "Caption": "Fix AI CCD",
+    "Color": 12761254,
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 675,
+    "Left": 326,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnDestroy": "FormDestroy",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 174,
+    "Width": 1011
+   },
+   "rect": {
+    "h": 675,
+    "w": 1011,
+    "x": 326,
+    "y": 174
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPageControl",
+   "events": {},
+   "kind": "TABHOST",
+   "name": "PageControl1",
+   "parent": "fFixAICCD",
+   "path": "fFixAICCD.PageControl1",
+   "props": {
+    "ActivePage": "tsTraySetting",
+    "Align": "alClient",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 592,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabIndex": 0,
+    "TabOrder": 0,
+    "TabWidth": 150,
+    "Top": 0,
+    "Width": 995
+   },
+   "rect": {
+    "h": 592,
+    "w": 995,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsTraySetting",
+   "parent": "fFixAICCD.PageControl1",
+   "path": "fFixAICCD.PageControl1.tsTraySetting",
+   "props": {
+    "Caption": "Function Setting",
+    "ImageIndex": 1
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbllFix2AICCDGetResultTimeOut",
+   "parent": "fFixAICCD.PageControl1.tsTraySetting",
+   "path": "fFixAICCD.PageControl1.tsTraySetting.lbllFix2AICCDGetResultTimeOut",
+   "props": {
+    "Caption": "Get result time out (ms): ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 14,
+    "ParentFont": "False",
+    "Top": 376,
+    "Width": 174
+   },
+   "rect": {
+    "h": 20,
+    "w": 174,
+    "x": 14,
+    "y": 376
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblFix2AICCDStartDelay",
+   "parent": "fFixAICCD.PageControl1.tsTraySetting",
+   "path": "fFixAICCD.PageControl1.tsTraySetting.lblFix2AICCDStartDelay",
+   "props": {
+    "Caption": "Start delay time (ms): ",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 14,
+    "ParentFont": "False",
+    "Top": 251,
+    "Width": 153
+   },
+   "rect": {
+    "h": 20,
+    "w": 153,
+    "x": 14,
+    "y": 251
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lablFix2AICCDAutoRetry",
+   "parent": "fFixAICCD.PageControl1.tsTraySetting",
+   "path": "fFixAICCD.PageControl1.tsTraySetting.lablFix2AICCDAutoRetry",
+   "props": {
+    "Caption": "Auto retry count :",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 14,
+    "ParentFont": "False",
+    "Top": 314,
+    "Width": 121
+   },
+   "rect": {
+    "h": 20,
+    "w": 121,
+    "x": 14,
+    "y": 314
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lbllFix2AICCDExposureTimeOut",
+   "parent": "fFixAICCD.PageControl1.tsTraySetting",
+   "path": "fFixAICCD.PageControl1.tsTraySetting.lbllFix2AICCDExposureTimeOut",
+   "props": {
+    "Caption": "Exposure time out (ms) :",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 14,
+    "ParentFont": "False",
+    "Top": 283,
+    "Width": 171
+   },
+   "rect": {
+    "h": 20,
+    "w": 171,
+    "x": 14,
+    "y": 283
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lablFix2AICCDInspectCycle",
+   "parent": "fFixAICCD.PageControl1.tsTraySetting",
+   "path": "fFixAICCD.PageControl1.tsTraySetting.lablFix2AICCDInspectCycle",
+   "props": {
+    "Caption": "OutArm Cycle For Inspect :",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 14,
+    "ParentFont": "False",
+    "Top": 407,
+    "Width": 190
+   },
+   "rect": {
+    "h": 20,
+    "w": 190,
+    "x": 14,
+    "y": 407
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lablFix2AICCDInspectCycleCounter",
+   "parent": "fFixAICCD.PageControl1.tsTraySetting",
+   "path": "fFixAICCD.PageControl1.tsTraySetting.lablFix2AICCDInspectCycleCounter",
+   "props": {
+    "Caption": "0",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 334,
+    "ParentFont": "False",
+    "Top": 407,
+    "Width": 9
+   },
+   "rect": {
+    "h": 20,
+    "w": 9,
+    "x": 334,
+    "y": 407
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblInspectResultThres",
+   "parent": "fFixAICCD.PageControl1.tsTraySetting",
+   "path": "fFixAICCD.PageControl1.tsTraySetting.lblInspectResultThres",
+   "props": {
+    "Caption": "Inspect Result Threshold :",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 14,
+    "ParentFont": "False",
+    "Top": 345,
+    "Width": 185
+   },
+   "rect": {
+    "h": 20,
+    "w": 185,
+    "x": 14,
+    "y": 345
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label3",
+   "parent": "fFixAICCD.PageControl1.tsTraySetting",
+   "path": "fFixAICCD.PageControl1.tsTraySetting.Label3",
+   "props": {
+    "Caption": "使用 Learning Mode，請打開上方 Fix2 AI CCD 功能",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -15,
+    "Font.Name": "微軟正黑體",
+    "Font.Style": [],
+    "Height": 19,
+    "Left": 38,
+    "ParentFont": "False",
+    "Top": 87,
+    "Width": 350
+   },
+   "rect": {
+    "h": 19,
+    "w": 350,
+    "x": 38,
+    "y": 87
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtlFix2AICCDStartDelayClick"
+   },
+   "kind": "LEAF",
+   "name": "edtlFix2AICCDGetResultTimeOut",
+   "parent": "fFixAICCD.PageControl1.tsTraySetting",
+   "path": "fFixAICCD.PageControl1.tsTraySetting.edtlFix2AICCDGetResultTimeOut",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "Left": 242,
+    "OnClick": "edtlFix2AICCDStartDelayClick",
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Text": "100000",
+    "Top": 372,
+    "Width": 81
+   },
+   "rect": {
+    "h": 28,
+    "w": 81,
+    "x": 242,
+    "y": 372
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtlFix2AICCDStartDelayClick"
+   },
+   "kind": "LEAF",
+   "name": "edtlFix2AICCDStartDelay",
+   "parent": "fFixAICCD.PageControl1.tsTraySetting",
+   "path": "fFixAICCD.PageControl1.tsTraySetting.edtlFix2AICCDStartDelay",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "Left": 242,
+    "OnClick": "edtlFix2AICCDStartDelayClick",
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Text": "10",
+    "Top": 247,
+    "Width": 81
+   },
+   "rect": {
+    "h": 28,
+    "w": 81,
+    "x": 242,
+    "y": 247
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtlFix2AICCDAutoRetryClick"
+   },
+   "kind": "LEAF",
+   "name": "edtlFix2AICCDAutoRetry",
+   "parent": "fFixAICCD.PageControl1.tsTraySetting",
+   "path": "fFixAICCD.PageControl1.tsTraySetting.edtlFix2AICCDAutoRetry",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "Left": 242,
+    "OnClick": "edtlFix2AICCDAutoRetryClick",
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Text": "1",
+    "Top": 310,
+    "Width": 81
+   },
+   "rect": {
+    "h": 28,
+    "w": 81,
+    "x": 242,
+    "y": 310
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtlFix2AICCDStartDelayClick"
+   },
+   "kind": "LEAF",
+   "name": "edtlFix2AICCDExposureTimeOut",
+   "parent": "fFixAICCD.PageControl1.tsTraySetting",
+   "path": "fFixAICCD.PageControl1.tsTraySetting.edtlFix2AICCDExposureTimeOut",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "Left": 242,
+    "OnClick": "edtlFix2AICCDStartDelayClick",
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Text": "10",
+    "Top": 279,
+    "Width": 81
+   },
+   "rect": {
+    "h": 28,
+    "w": 81,
+    "x": 242,
+    "y": 279
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel4",
+   "parent": "fFixAICCD.PageControl1.tsTraySetting",
+   "path": "fFixAICCD.PageControl1.tsTraySetting.Panel4",
+   "props": {
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 37,
+    "Left": 4,
+    "TabOrder": 0,
+    "Top": 12,
+    "Width": 217
+   },
+   "rect": {
+    "h": 37,
+    "w": 217,
+    "x": 4,
+    "y": 12
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkEnableFix2AICCD",
+   "parent": "fFixAICCD.PageControl1.tsTraySetting.Panel4",
+   "path": "fFixAICCD.PageControl1.tsTraySetting.Panel4.chkEnableFix2AICCD",
+   "props": {
+    "Caption": "Enable Fix2 AI CCD",
+    "Checked": "True",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -19,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 19,
+    "Left": 4,
+    "ParentFont": "False",
+    "State": "cbChecked",
+    "TabOrder": 0,
+    "Top": 6,
+    "Width": 273
+   },
+   "rect": {
+    "h": 19,
+    "w": 273,
+    "x": 4,
+    "y": 6
+   }
+  },
+  {
+   "align": null,
+   "cls": "TCheckBox",
+   "events": {},
+   "kind": "LEAF",
+   "name": "chkEnableLearningMode",
+   "parent": "fFixAICCD.PageControl1.tsTraySetting",
+   "path": "fFixAICCD.PageControl1.tsTraySetting.chkEnableLearningMode",
+   "props": {
+    "Caption": "Enable Learning Mode",
+    "Checked": "True",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clRed",
+    "Font.Height": -19,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 19,
+    "Left": 8,
+    "ParentFont": "False",
+    "State": "cbChecked",
+    "TabOrder": 1,
+    "Top": 63,
+    "Width": 237
+   },
+   "rect": {
+    "h": 19,
+    "w": 237,
+    "x": 8,
+    "y": 63
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "rgFixAICCD",
+   "parent": "fFixAICCD.PageControl1.tsTraySetting",
+   "path": "fFixAICCD.PageControl1.tsTraySetting.rgFixAICCD",
+   "props": {
+    "Caption": "Learning Mode",
+    "Color": "clYellow",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 74,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "OK Devicec",
+     "NG Device"
+    ],
+    "Left": 636,
+    "ParentColor": "False",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 72,
+    "Visible": "False",
+    "Width": 145
+   },
+   "rect": {
+    "h": 74,
+    "w": 145,
+    "x": 636,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtOutArmCycleInspClick"
+   },
+   "kind": "LEAF",
+   "name": "edtOutArmCycleInsp",
+   "parent": "fFixAICCD.PageControl1.tsTraySetting",
+   "path": "fFixAICCD.PageControl1.tsTraySetting.edtOutArmCycleInsp",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "Left": 242,
+    "OnClick": "edtOutArmCycleInspClick",
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Text": "1",
+    "Top": 403,
+    "Width": 81
+   },
+   "rect": {
+    "h": 28,
+    "w": 81,
+    "x": 242,
+    "y": 403
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtInspectResultThresClick"
+   },
+   "kind": "LEAF",
+   "name": "edtInspectResultThres",
+   "parent": "fFixAICCD.PageControl1.tsTraySetting",
+   "path": "fFixAICCD.PageControl1.tsTraySetting.edtInspectResultThres",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 28,
+    "Left": 242,
+    "OnClick": "edtInspectResultThresClick",
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Text": "0.5",
+    "Top": 341,
+    "Width": 81
+   },
+   "rect": {
+    "h": 28,
+    "w": 81,
+    "x": 242,
+    "y": 341
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTabSheet",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "tsTrayCCD",
+   "parent": "fFixAICCD.PageControl1",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD",
+   "props": {
+    "Caption": "CCD Setting",
+    "ImageIndex": 2
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": null,
+    "y": null
+   }
+  },
+  {
+   "align": "alLeft",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel2",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2",
+   "props": {
+    "Align": "alLeft",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 558,
+    "Left": 0,
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 373
+   },
+   "rect": {
+    "h": 558,
+    "w": 373,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TGroupBox",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "GroupBox2",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "props": {
+    "Align": "alTop",
+    "Caption": "Fix2 AI CCD",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -19,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 369,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 373
+   },
+   "rect": {
+    "h": 369,
+    "w": 373,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label5",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.Label5",
+   "props": {
+    "Caption": "Address1",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 9,
+    "ParentFont": "False",
+    "Top": 22,
+    "Width": 68
+   },
+   "rect": {
+    "h": 18,
+    "w": 68,
+    "x": 9,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label6",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.Label6",
+   "props": {
+    "Caption": "Port",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 143,
+    "ParentFont": "False",
+    "Top": 22,
+    "Width": 29
+   },
+   "rect": {
+    "h": 18,
+    "w": 29,
+    "x": 143,
+    "y": 22
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "lblBGALightValue",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.lblBGALightValue",
+   "props": {
+    "Caption": "0",
+    "Height": 22,
+    "Left": 146,
+    "Top": 317,
+    "Width": 11
+   },
+   "rect": {
+    "h": 22,
+    "w": 11,
+    "x": 146,
+    "y": 317
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label1",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.Label1",
+   "props": {
+    "Caption": "Address2",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 12,
+    "ParentFont": "False",
+    "Top": 122,
+    "Width": 68
+   },
+   "rect": {
+    "h": 18,
+    "w": 68,
+    "x": 12,
+    "y": 122
+   }
+  },
+  {
+   "align": null,
+   "cls": "TLabel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Label2",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.Label2",
+   "props": {
+    "Caption": "Port",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 18,
+    "Left": 146,
+    "ParentFont": "False",
+    "Top": 122,
+    "Width": 29
+   },
+   "rect": {
+    "h": 18,
+    "w": 29,
+    "x": 146,
+    "y": 122
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edFix2AICCD_Address",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.edFix2AICCD_Address",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 7,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Text": "127.000.000.100",
+    "Top": 46,
+    "Width": 130
+   },
+   "rect": {
+    "h": 26,
+    "w": 130,
+    "x": 7,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtFix2AICCD_PortClick"
+   },
+   "kind": "LEAF",
+   "name": "edtFix2AICCD_Port",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.edtFix2AICCD_Port",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 142,
+    "OnClick": "edtFix2AICCD_PortClick",
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Text": "1000",
+    "Top": 46,
+    "Width": 60
+   },
+   "rect": {
+    "h": 26,
+    "w": 60,
+    "x": 142,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBitBtn",
+   "events": {
+    "OnClick": "btnFix2AICCD_ConnectClick"
+   },
+   "kind": "LEAF",
+   "name": "btnFix2AICCD_Connect",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.btnFix2AICCD_Connect",
+   "props": {
+    "Caption": "Connect",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clGreen",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 30,
+    "Left": 6,
+    "OnClick": "btnFix2AICCD_ConnectClick",
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 76,
+    "Width": 120
+   },
+   "rect": {
+    "h": 30,
+    "w": 120,
+    "x": 6,
+    "y": 76
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBitBtn",
+   "events": {
+    "OnClick": "btnFix2AICCD_DisconnectClick"
+   },
+   "kind": "LEAF",
+   "name": "btnFix2AICCD_Disconnect",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.btnFix2AICCD_Disconnect",
+   "props": {
+    "Caption": "Disconnect",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": 4210816,
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 30,
+    "Left": 130,
+    "OnClick": "btnFix2AICCD_DisconnectClick",
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 76,
+    "Width": 120
+   },
+   "rect": {
+    "h": 30,
+    "w": 120,
+    "x": 130,
+    "y": 76
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btFix2AICCD_TriggerClick"
+   },
+   "kind": "LEAF",
+   "name": "btFix2AICCD_Trigger",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.btFix2AICCD_Trigger",
+   "props": {
+    "Caption": "Send CMD",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 29,
+    "Left": 212,
+    "OnClick": "btFix2AICCD_TriggerClick",
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 16,
+    "Width": 90
+   },
+   "rect": {
+    "h": 29,
+    "w": 90,
+    "x": 212,
+    "y": 16
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtFix2AICCD_CMD",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.edtFix2AICCD_CMD",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 211,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 46,
+    "Width": 90
+   },
+   "rect": {
+    "h": 26,
+    "w": 90,
+    "x": 211,
+    "y": 46
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {
+    "OnDblClick": "pnlBGALightValueDblClick"
+   },
+   "kind": "LEAF",
+   "name": "pnlBGALightValue",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.pnlBGALightValue",
+   "props": {
+    "Alignment": "taLeftJustify",
+    "BevelOuter": "bvNone",
+    "Caption": "  Light Value :",
+    "Color": "clTeal",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -15,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 24,
+    "Left": 8,
+    "OnDblClick": "pnlBGALightValueDblClick",
+    "ParentFont": "False",
+    "TabOrder": 6,
+    "Top": 316,
+    "Width": 105
+   },
+   "rect": {
+    "h": 24,
+    "w": 105,
+    "x": 8,
+    "y": 316
+   }
+  },
+  {
+   "align": null,
+   "cls": "TScrollBar",
+   "events": {
+    "OnChange": "scrBGALightValueChange"
+   },
+   "kind": "LEAF",
+   "name": "scrBGALightValue",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.scrBGALightValue",
+   "props": {
+    "Height": 17,
+    "Left": 7,
+    "Max": 255,
+    "OnChange": "scrBGALightValueChange",
+    "PageSize": 0,
+    "TabOrder": 7,
+    "Tag": 1,
+    "Top": 346,
+    "Width": 158
+   },
+   "rect": {
+    "h": 17,
+    "w": 158,
+    "x": 7,
+    "y": 346
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edFix2AICCD_Address2",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.edFix2AICCD_Address2",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 10,
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Text": "127.000.000.100",
+    "Top": 146,
+    "Width": 130
+   },
+   "rect": {
+    "h": 26,
+    "w": 130,
+    "x": 10,
+    "y": 146
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {
+    "OnClick": "edtFix2AICCD_PortClick"
+   },
+   "kind": "LEAF",
+   "name": "edtFix2AICCD_Port2",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.edtFix2AICCD_Port2",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 145,
+    "OnClick": "edtFix2AICCD_PortClick",
+    "ParentFont": "False",
+    "TabOrder": 9,
+    "Text": "1000",
+    "Top": 146,
+    "Width": 60
+   },
+   "rect": {
+    "h": 26,
+    "w": 60,
+    "x": 145,
+    "y": 146
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBitBtn",
+   "events": {
+    "OnClick": "btnFix2AICCD_ConnectClick"
+   },
+   "kind": "LEAF",
+   "name": "btnFix2AICCD_Connect2",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.btnFix2AICCD_Connect2",
+   "props": {
+    "Caption": "Connect",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clGreen",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 30,
+    "Left": 9,
+    "OnClick": "btnFix2AICCD_ConnectClick",
+    "ParentFont": "False",
+    "TabOrder": 10,
+    "Tag": 1,
+    "Top": 176,
+    "Width": 120
+   },
+   "rect": {
+    "h": 30,
+    "w": 120,
+    "x": 9,
+    "y": 176
+   }
+  },
+  {
+   "align": null,
+   "cls": "TBitBtn",
+   "events": {
+    "OnClick": "btnFix2AICCD_DisconnectClick"
+   },
+   "kind": "LEAF",
+   "name": "btnFix2AICCD_Disconnect2",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.btnFix2AICCD_Disconnect2",
+   "props": {
+    "Caption": "Disconnect",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": 4210816,
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 30,
+    "Left": 133,
+    "OnClick": "btnFix2AICCD_DisconnectClick",
+    "ParentFont": "False",
+    "TabOrder": 11,
+    "Tag": 1,
+    "Top": 176,
+    "Width": 120
+   },
+   "rect": {
+    "h": 30,
+    "w": 120,
+    "x": 133,
+    "y": 176
+   }
+  },
+  {
+   "align": null,
+   "cls": "TButton",
+   "events": {
+    "OnClick": "btFix2AICCD_TriggerClick"
+   },
+   "kind": "LEAF",
+   "name": "btFix2AICCD_Trigger2",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.btFix2AICCD_Trigger2",
+   "props": {
+    "Caption": "Send CMD",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 29,
+    "Left": 215,
+    "OnClick": "btFix2AICCD_TriggerClick",
+    "ParentFont": "False",
+    "TabOrder": 12,
+    "Tag": 1,
+    "Top": 116,
+    "Width": 90
+   },
+   "rect": {
+    "h": 29,
+    "w": 90,
+    "x": 215,
+    "y": 116
+   }
+  },
+  {
+   "align": null,
+   "cls": "TEdit",
+   "events": {},
+   "kind": "LEAF",
+   "name": "edtFix2AICCD_CMD2",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.Panel2.GroupBox2.edtFix2AICCD_CMD2",
+   "props": {
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 214,
+    "ParentFont": "False",
+    "TabOrder": 13,
+    "Top": 146,
+    "Width": 90
+   },
+   "rect": {
+    "h": 26,
+    "w": 90,
+    "x": 214,
+    "y": 146
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "memoFix2AICCDCommLog",
+   "parent": "fFixAICCD.PageControl1.tsTrayCCD",
+   "path": "fFixAICCD.PageControl1.tsTrayCCD.memoFix2AICCDCommLog",
+   "props": {
+    "Align": "alClient",
+    "Color": 14670284,
+    "Height": 558,
+    "Left": 373,
+    "ScrollBars": "ssBoth",
+    "TabOrder": 1,
+    "Top": 0,
+    "Width": 614
+   },
+   "rect": {
+    "h": 558,
+    "w": 614,
+    "x": 373,
+    "y": 0
+   }
+  },
+  {
+   "align": "alBottom",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "Panel1",
+   "parent": "fFixAICCD",
+   "path": "fFixAICCD.Panel1",
+   "props": {
+    "Align": "alBottom",
+    "BevelOuter": "bvNone",
+    "Color": 12761254,
+    "Height": 44,
+    "Left": 0,
+    "TabOrder": 2,
+    "Top": 592,
+    "Width": 995
+   },
+   "rect": {
+    "h": 44,
+    "w": 995,
+    "x": 0,
+    "y": 592
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "spbSaveClick"
+   },
+   "kind": "LEAF",
+   "name": "spbSave",
+   "parent": "fFixAICCD.Panel1",
+   "path": "fFixAICCD.Panel1.spbSave",
+   "props": {
+    "Caption": "Save",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 3946,
+     "hex": "660F0000424D660F000000000000360000002800000024000000240000000100180000000000300F000001000000010000000000000000000000FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF9F9F9F9F9F9F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F8F9F9F9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF7F7F7EFEFEFE8E8E8E6E6E6E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E5E9E9E9F3F3F3F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF8F8F8ECECECD6D6D6C8C8C8C5C5C5C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4C4D0D0D0E9E9E9F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAF0EFEFC0A6A7A55B6CA96270A45E6C934556A6A3A3A4A1A1A19C9C9C9797979393948D8D8E88888A8383867F7D837A7A807978807978994759994759994759994759994759994759994759994756C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAD2C1C1B28181AF6D79B8717FB7707DAA6472EFEFF1EEEEF1995D68B8717EB06B78E1E0E0DDDADBD8D5D6D4D1D2CFCCCCCAC6C6DBD8D88F4B59A05565A05565BE848EB9727FB8727EB8717E994557C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAF6D79BA7481B97380B7737FAA6472E9E9EBECEBEF995D68B8717EB06B78E1DFE1DCDADDD7D5D6D2D0D1CDC9CAC8C3C3D9D6D68D49589F5464A05565BF848EB97380B9737FB9727F9B4457C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC38D95BA7682BA7481B97480AA6472E5E4E7E9E9EB9A5D69B8737FB06B78E5E5E7E2E0E3DDDBDDD8D5D7D3D0D1CDCACBDDDADB8B48579D53639F5464BF858FBA7480BA7481BA74819B4558C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC48E96BA7783BA7682B97481AA6472E0DFE1E5E3E69B5F6BB97580B06B78E9EAECE6E5E8E2E1E4DDDCDED9D6D8D4D0D2E0DFDF8945549B50619D5363BF8590BA7481BA7481BA74819A4759C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F96BB7784BA7784BA7582AA6472DAD9DBE0DEE09B5F6BBA7582B06B78EDECEFEAE9EDE6E6E9E2E2E4DEDDDFDAD8DAE5E2E4874353994E5F9B5061C18690B97480BA7481BA74819C495CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC58F98BC7886BB7785BB7783AA6472D5D2D4DBD8DA9C606C925864925864EAEAEDEDEDF0EAEAEDE8E7E9E4E2E5DFDDDFE8E7E8864252974C5D994E5FC08691B9727FB97380B973809C4B5CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC49098BC7986BD7985BC7784AA6472CFCCCCD4D1D3D9D7D9DFDCDFE2E1E4E7E5E8EAEAEDEDECF0EAEBEEE8E7EAE4E2E6ECEAEC864252864252874353C28791B7727FB8727EB9727F9C4E5DC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC79198BD7A87BD7987BC7985BB7785AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472AA6472B77A84B76F7DB7707DB7707EB8717E9E4E5FC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB7717EB76F7DB76D7CB76D7BB76D7BB66D7BB56C7AB56C7AB66D7BB76F7CB76F7CB7707D9F4E60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6929ABE7B88BE7B87BC7986BC7886BB7785BB7784BA7682B97481B97480B87380B8717EB76F7DB76D7CB76D7CB76C7AB66C7AB66D7BB56C7AB56C7AB56C7AB66C7AB66C7AB76D7C9F4F60C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC6939BBE7E89BC7884A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70A75E70B66B7AB66C7B9F5162C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC7949CBF7F8AAF6F7BEBE1E1FEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFEFDFDFEFDFDFDFCFCFCFCFBFCFBFBFBFBFAFAFAF9F9F9F9F9F9F8F8F8E8D1D1A75E70B76D7BB66C7A9F5262C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC8959DC0808BAF6F7BFEFFFEFCFCFBFBFBFAFAFBFAFAFAFAF9FAF9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F7F7F7F6F6F6F6F6F9F9F9A75E70B96F7DB66B7AA05363C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9959DC1818CAF6F7BFEFFFEE1E1E1DFDFDFDDDDDDDBDCDBDADAD9D9D9D9D7D7D6D5D6D5D4D4D3D2D3D2D1D1D1D0D0D0CFCFCFCFCFCFCFCFCFCFCFCFF9FAF9A75E70BA707EB66B79A15466C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9969EC1818DAF6F7BFEFFFEFCFCFCFCFCFBFBFBFBFBFBFAFBFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F8F7F7F7F7F7F7F7F7F7F7F7F6FBFBFBA75E70B97480B56B79A25666C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2828EAF6F7BFEFFFEE4E4E4E3E3E3E2E2E1E0E0E0DEDDDEDCDCDCDADADAD9D9D9D7D8D8D6D5D5D4D4D4D2D3D3D1D2D1D0D0D0CFCFCFCFCFCFFCFCFBA75E70BA7581B56B79A45968C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AC9989FC2838EAF6F7BFEFFFEFCFCFCFCFCFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F8F8F9F8F8F8F8F8F7F7F7F7F7F7F7F7FCFCFCA75E70BA7783B66C7AA55969C4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA98A0C2838EAF6F7BFEFFFEE6E6E6E6E5E6E4E4E4E3E3E3E1E2E2E0E0E0DEDEDEDCDCDCDBDBDBD9D9D9D8D8D8D6D6D6D4D5D5D3D3D3D1D1D1D0D0D0FDFDFCA75E70BC7783B76D7BA55D6CC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB98A0C2838EAF6F7BFEFFFEFDFDFDFDFDFCFCFDFCFCFCFCFCFCFBFBFCFBFBFBFBFBFBFAFAFAFAFAFAF9F9F9F9F9F9F9F9F9F9F8F8F8F8F8F8F7F7F7FDFEFDA75E70BD7985B76F7DA65F6EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E5E5E6E4E5E5E4E3E3E2E2E2E1E0E0DFDFDFDDDDDDDBDBDCDADAD9D9D8D9D7D6D7D5D5D5D3D4D3FEFEFEA75E70BE7A86B7707DA6606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFCFCFBFBFBFAFBFBFAFAFAF9F9F9F9F9F9F9F9F9F9F9F9F8F8F8F8FEFFFEA75E70B38088B8717FA7606EC4C4C4E5E5E5F8F8F8FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEE6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E6E5E5E5E4E4E3E2E3E3E1E1E1E0DFDFDDDDDEDCDBDCDADADAD9D9D9D7D8D7FEFFFEA75E70996E759E5967A9606EC5C5C5E5E5E5F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACB9BA1C2838EAF6F7BFEFFFEFEFFFEFEFEFEFEFEFDFEFEFDFDFDFCFDFDFCFCFDFCFCFCFCFCFCFBFBFBFBFBFBFAFAFAFAFAFAF9FAFAF9F9F9F9F9F9F9FEFFFEA75E70B0757F9E5A68AA6471C5C5C5E6E6E6F9F9F9FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7ACA969EC2838EAF6F7BFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEFEFFFEA75E70C77F8BC77F8BAA6572D1D1D1EBEBEBFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAAE6A7AAE6A7AAE6A7AAE6A7AD9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6D9D6D6A75E70A75E70A75E70A75E70ECECECF6F6F6FAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFAFA",
+     "sha1": "b6420a2c6417ab1d75d6f7441ace55c339665e38"
+    },
+    "Height": 40,
+    "Left": 206,
+    "OnClick": "spbSaveClick",
+    "ParentFont": "False",
+    "Top": 4,
+    "Width": 227
+   },
+   "rect": {
+    "h": 40,
+    "w": 227,
+    "x": 206,
+    "y": 4
+   }
+  },
+  {
+   "align": null,
+   "cls": "TSpeedButton",
+   "events": {
+    "OnClick": "sbtExitClick"
+   },
+   "kind": "LEAF",
+   "name": "sbtExit",
+   "parent": "fFixAICCD.Panel1",
+   "path": "fFixAICCD.Panel1.sbtExit",
+   "props": {
+    "AllowAllUp": "True",
+    "Caption": "Exit",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -16,
+    "Font.Name": "Arial",
+    "Font.Style": [],
+    "Glyph.Data": {
+     "byte_len": 1554,
+     "hex": "0E060000424D0E06000000000000360000002800000016000000160000000100180000000000D805000001000000010000000000000000000000EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF7474A44C4C946C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA44C4C947474A4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C5454C45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC4C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C4645C9C645C9C3C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D45454C43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424946464D46C6CDC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC6464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF645C9C3C3CAC6C6CDC2C2C9C8C8CAC8C8CAC2424946464D45454C4645C9CEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF6C6CA43C3CAC6C6CDC2C2C9C8C8CACEFEFEFEFEFEF8C8CAC2424946464D45454C46C6CA4EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF2C2C8C4C4CBC2C2C9C8C8CACEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC2424945454C44C4C94EFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF8C8CAC3434948C8CACEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEFEF",
+     "sha1": "f9091dff96fbb403d8fe7eec0dcccd5c7539ad97"
+    },
+    "GroupIndex": 1,
+    "Height": 41,
+    "Left": 556,
+    "OnClick": "sbtExitClick",
+    "ParentFont": "False",
+    "Top": 3,
+    "Width": 241
+   },
+   "rect": {
+    "h": 41,
+    "w": 241,
+    "x": 556,
+    "y": 3
+   }
+  },
+  {
+   "align": null,
+   "cls": "TRadioGroup",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "rgResultShowType",
+   "parent": "fFixAICCD",
+   "path": "fFixAICCD.rgResultShowType",
+   "props": {
+    "Caption": "Result Show Type",
+    "Height": 105,
+    "ItemIndex": 0,
+    "Items.Strings": [
+     "Normal",
+     "Do not wait for AOI results",
+     "Show Damage tray Mapping"
+    ],
+    "Left": 16,
+    "TabOrder": 1,
+    "Top": 160,
+    "Width": 345
+   },
+   "rect": {
+    "h": 105,
+    "w": 345,
+    "x": 16,
+    "y": 160
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "tmrProcessFixAICCDDataTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "tmrProcessFixAICCDData",
+   "parent": "fFixAICCD",
+   "path": "fFixAICCD.tmrProcessFixAICCDData",
+   "props": {
+    "Enabled": "False",
+    "Interval": 1,
+    "Left": 820,
+    "OnTimer": "tmrProcessFixAICCDDataTimer",
+    "Top": 36
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 820,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TClientSocket",
+   "events": {
+    "OnConnect": "ClientSocket_FixAICCDConnect",
+    "OnDisconnect": "ClientSocket_FixAICCDDisconnect",
+    "OnError": "ClientSocket_FixAICCDError",
+    "OnRead": "ClientSocket_FixAICCDRead"
+   },
+   "kind": "NONVISUAL",
+   "name": "ClientSocket_FixAICCD",
+   "parent": "fFixAICCD",
+   "path": "fFixAICCD.ClientSocket_FixAICCD",
+   "props": {
+    "Active": "False",
+    "ClientType": "ctNonBlocking",
+    "Left": 880,
+    "OnConnect": "ClientSocket_FixAICCDConnect",
+    "OnDisconnect": "ClientSocket_FixAICCDDisconnect",
+    "OnError": "ClientSocket_FixAICCDError",
+    "OnRead": "ClientSocket_FixAICCDRead",
+    "Port": 0,
+    "Top": 36
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 880,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "TimerDownFixAICCDConnectTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "TimerDownFixAICCDConnect",
+   "parent": "fFixAICCD",
+   "path": "fFixAICCD.TimerDownFixAICCDConnect",
+   "props": {
+    "Enabled": "False",
+    "Left": 936,
+    "OnTimer": "TimerDownFixAICCDConnectTimer",
+    "Top": 36
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 936,
+    "y": 36
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "tmrLightControlTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "tmrLightControl",
+   "parent": "fFixAICCD",
+   "path": "fFixAICCD.tmrLightControl",
+   "props": {
+    "Interval": 100,
+    "Left": 820,
+    "OnTimer": "tmrLightControlTimer",
+    "Top": 76
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 820,
+    "y": 76
+   }
+  },
+  {
+   "align": null,
+   "cls": "TClientSocket",
+   "events": {
+    "OnConnect": "ClientSocket_FixAICCDConnect",
+    "OnDisconnect": "ClientSocket_FixAICCDDisconnect",
+    "OnError": "ClientSocket_FixAICCDError",
+    "OnRead": "ClientSocket_FixAICCDRead"
+   },
+   "kind": "NONVISUAL",
+   "name": "ClientSocket_FixAICCD2",
+   "parent": "fFixAICCD",
+   "path": "fFixAICCD.ClientSocket_FixAICCD2",
+   "props": {
+    "Active": "False",
+    "ClientType": "ctNonBlocking",
+    "Left": 880,
+    "OnConnect": "ClientSocket_FixAICCDConnect",
+    "OnDisconnect": "ClientSocket_FixAICCDDisconnect",
+    "OnError": "ClientSocket_FixAICCDError",
+    "OnRead": "ClientSocket_FixAICCDRead",
+    "Port": 0,
+    "Tag": 1,
+    "Top": 76
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 880,
+    "y": 76
+   }
+  }
+ ]
+}

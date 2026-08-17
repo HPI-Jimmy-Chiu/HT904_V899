@@ -1,0 +1,749 @@
+{
+ "canvas": {
+  "h": 473,
+  "w": 574
+ },
+ "caption": "Precaution Record",
+ "form": "fPrecaution",
+ "form_class": "TfPrecaution",
+ "schema": "fw-weblayout/1",
+ "source_dfm": "Precaution.dfm",
+ "widgets": [
+  {
+   "align": null,
+   "cls": "TfPrecaution",
+   "events": {
+    "OnClose": "FormClose",
+    "OnCreate": "FormCreate",
+    "OnShow": "FormShow"
+   },
+   "kind": "ROOT",
+   "name": "fPrecaution",
+   "parent": null,
+   "path": "fPrecaution",
+   "props": {
+    "BorderStyle": "bsSingle",
+    "Caption": "Precaution Record",
+    "ClientHeight": 473,
+    "ClientWidth": 574,
+    "Color": "clBtnFace",
+    "Font.Charset": "DEFAULT_CHARSET",
+    "Font.Color": "clWindowText",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "FormStyle": "fsStayOnTop",
+    "Left": 756,
+    "OldCreateOrder": "False",
+    "OnClose": "FormClose",
+    "OnCreate": "FormCreate",
+    "OnShow": "FormShow",
+    "PixelsPerInch": 96,
+    "TextHeight": 13,
+    "Top": 155
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 756,
+    "y": 155
+   }
+  },
+  {
+   "align": "alClient",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnPrecautionsRecord",
+   "parent": "fPrecaution",
+   "path": "fPrecaution.pnPrecautionsRecord",
+   "props": {
+    "Align": "alClient",
+    "BevelInner": "bvLowered",
+    "Color": 9534289,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clBlack",
+    "Font.Height": -16,
+    "Font.Name": "Courier New",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 473,
+    "Left": 0,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 0,
+    "Width": 574
+   },
+   "rect": {
+    "h": 473,
+    "w": 574,
+    "x": 0,
+    "y": 0
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "SUBDLG",
+   "name": "pnMaintenanceRecord",
+   "parent": "fPrecaution.pnPrecautionsRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Color": 12761254,
+    "Height": 457,
+    "Left": 12,
+    "TabOrder": 0,
+    "Top": 8,
+    "Width": 549
+   },
+   "rect": {
+    "h": 457,
+    "w": 549,
+    "x": 12,
+    "y": 8
+   }
+  },
+  {
+   "align": "alTop",
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnMaintenanceRecordTitle",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnMaintenanceRecordTitle",
+   "props": {
+    "Align": "alTop",
+    "BevelOuter": "bvNone",
+    "Caption": "Station Precautions Record",
+    "Color": 9534289,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -19,
+    "Font.Name": "Courier New",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 30,
+    "Left": 2,
+    "ParentFont": "False",
+    "TabOrder": 0,
+    "Top": 2,
+    "Width": 545
+   },
+   "rect": {
+    "h": 30,
+    "w": 545,
+    "x": 2,
+    "y": 2
+   }
+  },
+  {
+   "align": null,
+   "cls": "TMemo",
+   "events": {},
+   "kind": "LEAF",
+   "name": "MemoHandlerPrecautionRecord",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.MemoHandlerPrecautionRecord",
+   "props": {
+    "Color": 14670284,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clNavy",
+    "Font.Height": -16,
+    "Font.Name": "Courier New",
+    "Font.Style": [
+     "fsBold"
+    ],
+    "Height": 225,
+    "Left": 5,
+    "ParentFont": "False",
+    "ReadOnly": "True",
+    "TabOrder": 6,
+    "Top": 104,
+    "Width": 536
+   },
+   "rect": {
+    "h": 225,
+    "w": 536,
+    "x": 5,
+    "y": 104
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnPrecautionRecordDocumentNoTitle",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnPrecautionRecordDocumentNoTitle",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "DOCUMENT NO.：",
+    "Color": 6055843,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "標楷體",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 5,
+    "ParentFont": "False",
+    "TabOrder": 2,
+    "Top": 40,
+    "Width": 150
+   },
+   "rect": {
+    "h": 26,
+    "w": 150,
+    "x": 5,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel91",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel91",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "(若無規範依循，則以\"N/A\"表示)",
+    "Color": 6055843,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "標楷體",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 310,
+    "ParentFont": "False",
+    "TabOrder": 3,
+    "Top": 40,
+    "Width": 231
+   },
+   "rect": {
+    "h": 26,
+    "w": 231,
+    "x": 310,
+    "y": 40
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel92",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel92",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "注意事項內容：",
+    "Color": 6055843,
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "標楷體",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 5,
+    "ParentFont": "False",
+    "TabOrder": 5,
+    "Top": 72,
+    "Width": 150
+   },
+   "rect": {
+    "h": 26,
+    "w": 150,
+    "x": 5,
+    "y": 72
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel93",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel93",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "部門經理核准：",
+    "Color": 6055843,
+    "Font.Charset": "CHINESEBIG5_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "標楷體",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 5,
+    "ParentFont": "False",
+    "TabOrder": 8,
+    "Top": 338,
+    "Width": 115
+   },
+   "rect": {
+    "h": 26,
+    "w": 115,
+    "x": 5,
+    "y": 338
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel94",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel94",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "製表者：",
+    "Color": 6055843,
+    "Font.Charset": "CHINESEBIG5_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "標楷體",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 290,
+    "ParentFont": "False",
+    "TabOrder": 7,
+    "Top": 337,
+    "Width": 115
+   },
+   "rect": {
+    "h": 26,
+    "w": 115,
+    "x": 290,
+    "y": 337
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel95",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel95",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "開始日期：",
+    "Color": 6055843,
+    "Font.Charset": "CHINESEBIG5_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "標楷體",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 5,
+    "ParentFont": "False",
+    "TabOrder": 11,
+    "Top": 370,
+    "Width": 115
+   },
+   "rect": {
+    "h": 26,
+    "w": 115,
+    "x": 5,
+    "y": 370
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnPrecautionStartTime",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnPrecautionStartTime",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Color": "clTeal",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clPurple",
+    "Font.Height": -11,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 140,
+    "ParentFont": "False",
+    "TabOrder": 12,
+    "Top": 370,
+    "Width": 120
+   },
+   "rect": {
+    "h": 26,
+    "w": 120,
+    "x": 140,
+    "y": 370
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel96",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel96",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "結案日期：",
+    "Color": 6055843,
+    "Font.Charset": "CHINESEBIG5_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "標楷體",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 290,
+    "ParentFont": "False",
+    "TabOrder": 13,
+    "Top": 370,
+    "Width": 115
+   },
+   "rect": {
+    "h": 26,
+    "w": 115,
+    "x": 290,
+    "y": 370
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnPrecautionEndTime",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnPrecautionEndTime",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Color": "clTeal",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clPurple",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 416,
+    "ParentFont": "False",
+    "TabOrder": 14,
+    "Top": 370,
+    "Width": 120
+   },
+   "rect": {
+    "h": 26,
+    "w": 120,
+    "x": 416,
+    "y": 370
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnPrecautionRecordDocumentNo",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnPrecautionRecordDocumentNo",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Color": "clTeal",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clPurple",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 159,
+    "ParentFont": "False",
+    "TabOrder": 1,
+    "Top": 39,
+    "Width": 146
+   },
+   "rect": {
+    "h": 26,
+    "w": 146,
+    "x": 159,
+    "y": 39
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnNoteContents",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnNoteContents",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Color": "clTeal",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clPurple",
+    "Font.Height": -19,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 159,
+    "ParentFont": "False",
+    "TabOrder": 4,
+    "Top": 71,
+    "Width": 382
+   },
+   "rect": {
+    "h": 26,
+    "w": 382,
+    "x": 159,
+    "y": 71
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnApprovedManager",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnApprovedManager",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Color": "clTeal",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clPurple",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 140,
+    "ParentFont": "False",
+    "TabOrder": 9,
+    "Top": 338,
+    "Width": 120
+   },
+   "rect": {
+    "h": 26,
+    "w": 120,
+    "x": 140,
+    "y": 338
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnWatchmakers",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnWatchmakers",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Color": "clTeal",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clPurple",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 416,
+    "ParentFont": "False",
+    "TabOrder": 10,
+    "Top": 338,
+    "Width": 120
+   },
+   "rect": {
+    "h": 26,
+    "w": 120,
+    "x": 416,
+    "y": 338
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel1",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel1",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "結案方式：",
+    "Color": 6055843,
+    "Font.Charset": "CHINESEBIG5_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "標楷體",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 5,
+    "ParentFont": "False",
+    "TabOrder": 15,
+    "Top": 402,
+    "Width": 115
+   },
+   "rect": {
+    "h": 26,
+    "w": 115,
+    "x": 5,
+    "y": 402
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnCloseType",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnCloseType",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Color": "clTeal",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clPurple",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 140,
+    "ParentFont": "False",
+    "TabOrder": 16,
+    "Top": 402,
+    "Width": 120
+   },
+   "rect": {
+    "h": 26,
+    "w": 120,
+    "x": 140,
+    "y": 402
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "Panel3",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.Panel3",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Caption": "結案者：",
+    "Color": 6055843,
+    "Font.Charset": "CHINESEBIG5_CHARSET",
+    "Font.Color": "clWhite",
+    "Font.Height": -16,
+    "Font.Name": "標楷體",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 290,
+    "ParentFont": "False",
+    "TabOrder": 17,
+    "Top": 402,
+    "Width": 115
+   },
+   "rect": {
+    "h": 26,
+    "w": 115,
+    "x": 290,
+    "y": 402
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnCloseName",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnCloseName",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Color": "clTeal",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clPurple",
+    "Font.Height": -16,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 26,
+    "Left": 416,
+    "ParentFont": "False",
+    "TabOrder": 18,
+    "Top": 402,
+    "Width": 120
+   },
+   "rect": {
+    "h": 26,
+    "w": 120,
+    "x": 416,
+    "y": 402
+   }
+  },
+  {
+   "align": null,
+   "cls": "TPanel",
+   "events": {},
+   "kind": "LEAF",
+   "name": "pnPRSpecification",
+   "parent": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord",
+   "path": "fPrecaution.pnPrecautionsRecord.pnMaintenanceRecord.pnPRSpecification",
+   "props": {
+    "BevelInner": "bvLowered",
+    "Color": "clSilver",
+    "Font.Charset": "ANSI_CHARSET",
+    "Font.Color": "clPurple",
+    "Font.Height": -13,
+    "Font.Name": "MS Sans Serif",
+    "Font.Style": [],
+    "Height": 20,
+    "Left": 416,
+    "ParentFont": "False",
+    "TabOrder": 19,
+    "Top": 432,
+    "Width": 120
+   },
+   "rect": {
+    "h": 20,
+    "w": 120,
+    "x": 416,
+    "y": 432
+   }
+  },
+  {
+   "align": null,
+   "cls": "TTimer",
+   "events": {
+    "OnTimer": "tm_CheckEditEmptyTimer"
+   },
+   "kind": "NONVISUAL",
+   "name": "tm_CheckEditEmpty",
+   "parent": "fPrecaution",
+   "path": "fPrecaution.tm_CheckEditEmpty",
+   "props": {
+    "Enabled": "False",
+    "Interval": 300,
+    "Left": 500,
+    "OnTimer": "tm_CheckEditEmptyTimer",
+    "Top": 144
+   },
+   "rect": {
+    "h": null,
+    "w": null,
+    "x": 500,
+    "y": 144
+   }
+  }
+ ]
+}
