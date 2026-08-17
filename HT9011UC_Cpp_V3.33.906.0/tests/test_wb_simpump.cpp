@@ -124,12 +124,31 @@ int main()
     check(whyNot.empty(), "O2 PumpInit() clears whyNot on success");
     check(ht9045::PumpActive(), "O2 PumpActive() is true after PumpInit()");
 
-    // The three master-guard terms it must have set -- csystem.cpp:4235.
-    check(SoftStop == false,      "O2 fixture set SoftStop=false");
-    check(SystemStart == true,    "O2 fixture set SystemStart=true");
-    check(fAllMotorHome == true,  "O2 fixture set fAllMotorHome=true");
+    //AI(W906-IdlePump) 20260817: THESE TWO ASSERTIONS ARE INVERTED, deliberately.
+    // They used to require SystemStart==true and fAllMotorHome==true, i.e. that
+    // PumpInit had STARTED the machine. The user rejected that behaviour -- a
+    // freshly opened BCB6 HT9045 is idle until the operator presses HOME then
+    // START -- so PumpInit no longer writes either term (WebBridgeTags.cpp, the
+    // "OPENED, NOT STARTED" fixture). Asserting the opposite turns this block into
+    // a REGRESSION GUARD: if anyone reintroduces the force, this fails first.
+    //
+    // NOT COVERED by this change, and covered elsewhere on purpose:
+    //   * "the word reads SIM RUN when all three guard terms hold" -- still tested,
+    //     in O5, with the TEST setting the terms instead of production code.
+    //   * "the word is re-derived per publish, not latched" -- still tested in O6.
+    //   * nothing tests a real START, because nothing can raise SoftStart offline
+    //     yet; that arrives with the browser write path (SCOPE.md section 2.6) and
+    //     needs its own test then.
+    check(SoftStop == false,      "O2 fixture set SoftStop=false (a fresh boot is "
+                                  "not soft-stopped)");
+    check(SystemStart == false,   "O2 fixture did NOT start the machine "
+                                  "(SystemStart stays false -- opened, not started)");
+    check(fAllMotorHome == false, "O2 fixture did NOT claim the motors homed "
+                                  "(fAllMotorHome stays false -- HOME comes first "
+                                  "on a real machine, then START)");
     check(InitialOK == true,      "O2 fixture set InitialOK=true (MainProc head "
-                                  "guard, csystem.cpp:3001)");
+                                  "guard, csystem.cpp:3001 -- a real opened "
+                                  "program does finish initialisation)");
 
     // -------------------------------------------------------------------------
     //  O3 -- the spine ADVANCES: golden's own counter, +1 per tick.
@@ -181,10 +200,14 @@ int main()
         check(haveState, "O5 machine.state carries a value while pumping");
         if (haveState) {
             std::printf("   machine.state = \"%s\"\n", st->second.asString().c_str());
-            check(st->second.asString() == std::string("SIM RUN"),
-                  "O5 machine.state reads \"SIM RUN\" with all guard terms held "
-                  "(SIM because this process FORCED them -- nothing in the "
-                  "translated tree can set SystemStart/fAllMotorHome)");
+            //AI(W906-IdlePump) 20260817: the pump does not start the machine any
+            // more, so the word straight after PumpInit is IDLE. IDLE and HALT are
+            // NOT interchangeable: HALT means something stopped the machine,
+            // IDLE means nobody has started it. Pinning the distinction here is
+            // what stops a future change from quietly collapsing them.
+            check(st->second.asString() == std::string("SIM IDLE"),
+                  "O5 machine.state reads \"SIM IDLE\" after PumpInit -- pumping, "
+                  "not started, and not halted either");
         }
 
         webbridge::TagMap::const_iterator src = v.tags.find("machine.stateSource");
@@ -197,9 +220,13 @@ int main()
               "O5 clock.text is live while pumping");
 
         // Raw guard terms, so the derived word can be checked against its inputs.
+        //AI(W906-IdlePump) 20260817: assert the published term TRACKS the global
+        // rather than asserting a fixed true. That is the property that actually
+        // matters -- "nothing derived is published without its inputs" -- and unlike
+        // a hardcoded expectation it keeps holding whatever the machine state is.
         check(v.tags.find("pump.guard.systemStart") != v.tags.end() &&
-              v.tags.find("pump.guard.systemStart")->second.asBool() == true,
-              "O5 pump.guard.systemStart publishes the raw term");
+              v.tags.find("pump.guard.systemStart")->second.asBool() == SystemStart,
+              "O5 pump.guard.systemStart publishes the raw term, matching the global");
         check(v.tags.find("pump.guard.softStop") != v.tags.end() &&
               v.tags.find("pump.guard.softStop")->second.asBool() == false,
               "O5 pump.guard.softStop publishes the raw term");
@@ -217,6 +244,23 @@ int main()
         }
         std::printf("   engine cursors carrying a value: %u of 7\n", (unsigned)present);
         check(present == 7, "O5 all seven engine cursors publish a value while pumping");
+    }
+
+    //AI(W906-IdlePump) 20260817: from here on the TEST holds the guard open, so the
+    // "word says RUN" and anti-latch properties stay covered after production code
+    // stopped forcing them. A test may set machine globals; production may not, and
+    // that asymmetry is the entire point of the change.
+    // Only PublishHandlerTags is called below -- never PumpTick -- so raising these
+    // does NOT let an engine run, and DoLoad never reaches its no-tray retry.
+    SystemStart   = true;                  // csystem.cpp:4235 term 2
+    fAllMotorHome = true;                  // csystem.cpp:4235 term 3
+    {
+        const webbridge::TagValue s = publishAndGet(snap, "machine.state");
+        std::printf("   test raised the guard -> \"%s\"\n",
+                    s.isNull() ? "<null>" : s.asString().c_str());
+        check(!s.isNull() && s.asString() == std::string("SIM RUN"),
+              "O5 machine.state reads \"SIM RUN\" once all three guard terms hold "
+              "(still SIM: the terms were set, not sensed)");
     }
 
     // -------------------------------------------------------------------------

@@ -252,14 +252,45 @@ bool PumpInit(std::string& whyNot)
         return false;
     }
 
-    // ---- the offline "Run" fixture ----------------------------------------
-    // Verbatim from tests/test_w6_6_csystem_cycle.cpp:135-156 (RunGuards), which
-    // is the only version of this recipe backed by a passing 64-tick oracle.
-    // Deliberately NOT re-derived: every line here is load-bearing on tick shape.
+    // ---- the offline fixture: OPENED, NOT STARTED --------------------------
+    //AI(W906-IdlePump) 20260817: this used to be the "Run" fixture and it FORCED
+    // SystemStart=true and fAllMotorHome=true. The user rejected that, and was
+    // right to: "軟體開啟正常是不會 Start" -- a freshly opened BCB6 HT9045 sits
+    // IDLE waiting for the operator to press HOME then START. Forcing the guard
+    // made the port show a machine mid-production-attempt, which is a state the
+    // real machine is never in on startup, and the visible symptom was a console
+    // filling with `[ShowErrorMessage] Code=MES0920 KCode=5 Pos=168` -- DoLoad
+    // case 800 "Loader has no tray" (asendic_Loader.cpp:3091) retrying forever
+    // because the sim ShowErrorMessage always answers K_RETRY.
+    //
+    // The two lines are simply GONE, not replaced by false: these are globals the
+    // data layer already zero-initialises, and writing false here would imply this
+    // function had a say in the machine's run state. It does not any more.
+    //
+    // WHAT STILL HAPPENS EVERY TICK, so this is not a downgrade to nothing:
+    // MainProc (csystem.cpp:595) is entered, runs its sensor scan, and calls
+    // ScanSystemSensor (csystem.cpp:778) -- then DoAllProcess returns at the master
+    // guard (csystem.cpp:4235) before DoLoad. So ticks, mainProcCalls, exceptions=0
+    // and alive still prove the spine is live; the engine cursors correctly do not
+    // move, because no engine ran.
+    //
+    // HOW START WILL ARRIVE (SCOPE.md section 2.6, the browser->core write path):
+    // set SoftStart=true. ScanSystemSensor already tests `if(SoftStart==true)`
+    // (ckernel.cpp:816) and, on that arm, runs golden's REAL admission sequence --
+    // lamp reset, shuttle floodgates, DoInArm_SuckerMap, the safe-door check -- and
+    // sets SystemStart itself at ckernel.cpp:1015. That path is LIVE in this tree
+    // and one flag away; do NOT reintroduce a direct SystemStart write.
+    //
+    // The rest of this block is unchanged and is NOT run state -- it is machine
+    // SHAPE (which machine this is), still verbatim from
+    // tests/test_w6_6_csystem_cycle.cpp:135-156 and still load-bearing on tick
+    // shape once something does start the machine.
     InitialOK                 = true;            // MainProc head guard, csystem.cpp:3001
+                                                 //   -- kept: a real opened program
+                                                 //   DOES finish initialisation.
     SoftStop                  = false;           // master guard, csystem.cpp:4235
-    SystemStart               = true;            //   "
-    fAllMotorHome             = true;            //   "
+                                                 //   -- kept: "not soft-stopped" is
+                                                 //   the state of a fresh boot.
     bShuttleShake             = false;           // else shuttle+index block skipped, :4265
 
     TrayForm.bEnableAMR       = false;           // plain DoLoad path, :4242
@@ -397,12 +428,26 @@ std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap)
     }
 
     if (pumping) {
-        const bool run = guardAllowsEngines();
-        snap.stage("machine.state",
-                   TagValue::makeString(run ? "SIM RUN" : "SIM HALT"));
+        //AI(W906-IdlePump) 20260817: three words, not two, and the third is the
+        // normal one now. HALT and IDLE are NOT the same machine state and an
+        // operator-facing word must not conflate them: HALT means something stopped
+        // the machine (SoftStop), IDLE means it was opened and nobody has started it
+        // yet. Since PumpInit stopped forcing the guard, IDLE is what a freshly
+        // launched publisher reports -- which is the point of the change.
+        //
+        // Safe to add a third string: web/js/panels/left.js:23 binds machine.state
+        // as plain text into div.halt__state with no tone tag and no switch on the
+        // value, so the page renders whatever it is told (checked 20260817).
+        const bool run  = guardAllowsEngines();
+        const char* word = run      ? "SIM RUN"
+                         : SoftStop ? "SIM HALT"
+                                    : "SIM IDLE";
+        snap.stage("machine.state", TagValue::makeString(word));
         snap.stage("machine.stateSource",
-                   TagValue::makeString("sim: wb_publish --pump forced the guard "
-                                        "terms; no machine is attached"));
+                   TagValue::makeString(run
+                       ? "sim: guard terms are true; no machine is attached"
+                       : "sim: spine is pumping, machine not started "
+                         "(SoftStart never raised); no machine is attached"));
     } else {
         stageNull(snap, "machine.state");
         stageNull(snap, "machine.stateSource");
