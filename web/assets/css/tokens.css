@@ -1,0 +1,78 @@
+/* ==========================================================================
+   tokens.css -- the single source of truth for colour, spacing and type.
+   Nothing else in the stylesheet may hard-code a hex value or a px font size.
+   Re-theming the HMI (e.g. a dark variant for a dimmed fab floor) means
+   editing this file only.
+   ========================================================================== */
+
+:root {
+  /* ---- surfaces ---------------------------------------------------- */
+  --c-page:        #ffffff;
+  --c-panel:       #ffffff;
+  --c-surface:     #f3f4f6;   /* inert cells, pills, disabled fields      */
+  --c-surface-2:   #e9ebef;   /* one step deeper: table headers           */
+  --c-hover:       #eef1f6;
+
+  /* ---- lines ------------------------------------------------------- */
+  --c-line:        #e2e5ea;   /* panel borders, table rules               */
+  --c-line-soft:   #eef0f3;   /* inner separators                         */
+  --c-line-strong: #cfd4db;   /* input borders                            */
+
+  /* ---- text -------------------------------------------------------- */
+  --c-text:        #1f2329;
+  --c-text-dim:    #6b7280;   /* labels                                   */
+  --c-text-faint:  #a3aab4;   /* "---" placeholders                       */
+  --c-text-invert: #ffffff;
+
+  /* ---- semantic ---------------------------------------------------- */
+  --c-accent:      #2563eb;   /* active nav, focus ring                   */
+  --c-danger:      #e5484d;
+  --c-ok:          #3fa34d;
+
+  /* ---- tower light / LED ------------------------------------------- */
+  --c-led-red:     #e5484d;
+  --c-led-amber:   #f5cd2f;
+  --c-led-green:   #4caf50;
+  --c-led-off:     #dfe3e8;
+
+  /* ---- data-cell tones (zone state colouring) ----------------------- */
+  --c-tone-blue:   #bedcf6;
+  --c-tone-yellow: #f0e884;
+  --c-tone-green:  #85cf86;
+  --c-tone-red:    #ec6a5e;
+
+  /* ---- status pill tones (tinted fill + readable text on it) --------- */
+  --c-pill-ok-bg:      #e7f5ea;  --c-pill-ok-fg:      #256b32;
+  --c-pill-warn-bg:    #fdf3d7;  --c-pill-warn-fg:    #7a5a03;
+  --c-pill-alarm-bg:   #fdeaea;  --c-pill-alarm-fg:   #9b2c2f;
+
+  /* ---- geometry ---------------------------------------------------- */
+  --r-lg: 9px;
+  --r-md: 6px;
+  --r-sm: 4px;
+
+  --sp-1: 2px;
+  --sp-2: 4px;
+  --sp-3: 6px;
+  --sp-4: 8px;
+  --sp-5: 12px;
+  --sp-6: 16px;
+
+  --rail-w:   48px;   /* left icon rail                                   */
+  --status-w: 150px;  /* right status pill column                         */
+
+  /* ---- type -------------------------------------------------------- */
+  --font-ui: "Segoe UI", "Noto Sans TC", "Microsoft JhengHei", system-ui,
+             -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-num: "Segoe UI", ui-monospace, "Consolas", monospace;
+
+  --fs-xs:   10px;
+  --fs-sm:   11px;
+  --fs-md:   12px;
+  --fs-lg:   13px;
+  --fs-xl:   15px;
+  --fs-readout: 24px;   /* the big temperature value */
+  --fs-halt:    44px;   /* the machine state word    */
+
+  --shadow-panel: 0 1px 2px rgba(16, 24, 40, .04);
+}

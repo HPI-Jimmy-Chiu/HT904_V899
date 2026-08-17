@@ -112,7 +112,8 @@ ABS-3372/
 BVL-3766/
 
 # --- Large binary/image/ini directories ---
-IMG/
+# AI(W906-FW0) 20260817: anchored to root -- the unanchored form also swallowed web/assets/img/ (web HMI assets)
+/IMG/
 bmp/
 IniData/
 system/

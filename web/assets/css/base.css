@@ -1,0 +1,124 @@
+/* ==========================================================================
+   base.css -- reset, page frame, and the three-column app shell.
+   Layout mirrors the legacy fMain "Main" tab (tsMain, 1272x763 client):
+     rail   -> the tsMain TSpeedButton toolbar, rotated to a vertical rail
+     left   -> Panel2 + palSetting
+     right  -> the consolidated aux-form panels (contact counter, lot info...)
+     status -> the vertical TPanel stack that sits at left=746 in tsMain
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font-ui);
+  font-size: var(--fs-md);
+  color: var(--c-text);
+  background: var(--c-page);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;                 /* the shell scrolls its panes, not the page */
+}
+
+button, input, select { font: inherit; color: inherit; }
+
+/* --- app shell ------------------------------------------------------ */
+
+/*
+ * The screen is authored at 1456x818 -- which is exactly 1920x1080 / 1.319,
+ * the scale the approved design mock was rendered at. So on a real 1920x1080
+ * operator panel the whole thing is scaled UP to fill, rather than sitting in
+ * the top-left corner of the screen with a third of it blank.
+ *
+ * `--ui-scale` is set by js/main.js and never drops below 1: on a smaller
+ * display the authored size is kept (and the columns scroll) rather than
+ * shrinking text that is already dense. Sizing the box in pre-zoom units
+ * makes it land exactly on the viewport after zoom.
+ */
+.app {
+  display: grid;
+  grid-template-columns: var(--rail-w) minmax(0, 1fr) var(--status-w);
+  zoom: var(--ui-scale, 1);
+  width:  calc(100vw / var(--ui-scale, 1));
+  height: calc(100vh / var(--ui-scale, 1));
+}
+
+/* --- left icon rail -------------------------------------------------- */
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-3) 0;
+  border-right: 1px solid var(--c-line);
+  background: var(--c-panel);
+}
+
+.rail__logo { width: 40px; padding: var(--sp-1) 0 var(--sp-4); }
+.rail__logo img { width: 100%; display: block; }
+
+.rail__spacer { flex: 1; }
+
+/* --- content: two columns separated by a full-height rule ------------ */
+
+.content {
+  display: grid;
+  grid-template-columns: minmax(0, 45fr) minmax(0, 55fr);
+  min-height: 0;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 10px;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.col--right { border-left: 1px solid var(--c-line); }
+
+/* --- right status column --------------------------------------------- */
+
+.statusrail {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: var(--sp-5) var(--sp-4);
+  border-left: 1px solid var(--c-line);
+  overflow-y: auto;
+}
+
+/* --- scrollbars: thin and quiet, an HMI should not look like a browser */
+
+.col::-webkit-scrollbar,
+.statusrail::-webkit-scrollbar { width: 8px; height: 8px; }
+.col::-webkit-scrollbar-thumb,
+.statusrail::-webkit-scrollbar-thumb {
+  background: var(--c-line-strong);
+  border-radius: 99px;
+}
+.col::-webkit-scrollbar-track,
+.statusrail::-webkit-scrollbar-track { background: transparent; }
+
+/* --- shared helpers --------------------------------------------------- */
+
+.row      { display: flex; align-items: center; gap: var(--sp-4); }
+.row--tight { gap: var(--sp-2); }
+.grow     { flex: 1; min-width: 0; }
+.num      { font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+.dim      { color: var(--c-text-dim); }
+.faint    { color: var(--c-text-faint); }
+.center   { text-align: center; }
+.right    { text-align: right; }
+.nowrap   { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+:where(button, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--c-accent);
+  outline-offset: 1px;
+}

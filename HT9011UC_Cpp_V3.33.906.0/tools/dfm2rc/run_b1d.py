@@ -323,6 +323,21 @@ def regenerate_all(out_root, rc_exe, windres, gxx, inc_dirs, env, do_compile):
             'status': 'PASS' if not form_problems else 'FAIL',
         })
 
+    # AI(W906-FW0) 20260817: uimap generation (emit_uimap.py) sits OUTSIDE the
+    # per-form B1a/B1b/B1c loop above, so any <stem>_uimap.gen.h shipped in the
+    # canonical rc_out flagged a permanent false G7_MISSING_IN_REGEN (exactly
+    # what happened when GA-4 left main_uimap.gen.* untracked). Regenerate them
+    # here for every stem the CANON tree carries, so G7 keeps proving their
+    # byte-idempotency instead of the alternative -- excluding them from the
+    # gate and never checking them again.
+    import emit_uimap as _emit_uimap
+    for _dp, _dn, _fn in os.walk(RC_OUT_CANON):
+        for _f in _fn:
+            if _f.endswith('_uimap.gen.h'):
+                _stem_rel = os.path.relpath(
+                    os.path.join(_dp, _f[:-len('_uimap.gen.h')]), RC_OUT_CANON)
+                _emit_uimap.emit_for_form(_stem_rel.replace(chr(92), '/'), out_root)
+
     layout_ok = layout_fail_list = None
     if do_compile and gxx is not None:
         # DfmLayoutTypes.h is hand-authored schema (not per-form generated,
