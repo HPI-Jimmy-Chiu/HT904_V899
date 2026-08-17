@@ -3066,6 +3066,14 @@ add_test(NAME WB_DataLayer COMMAND test_wb_datalayer)
 # BOTH the god-stack (it reads machine globals) and ht9045_webbridge (it stages
 # into a TagSnapshot); WebBridgeTags.cpp is the one translation unit allowed to
 # mix the two, which is why it lives at the tree root and not under WebBridge/.
+# AI(W906-FW3-YM-A) 20260818: FW-3 uYieldMonitoring Wave A oracle -- site-yield
+# math, sliding-window ring, CanAutoCloseSite predicate, CheckSettingNo bounds.
+add_executable(test_yieldmon_core test_yieldmon_core.cpp)
+target_link_libraries(test_yieldmon_core PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+add_test(NAME YieldMonCore COMMAND test_yieldmon_core)
+
 # AI(W906-FW3-Obs1) 20260818: FW-3 cObserver Wave 1 oracle -- CalculateStopTime
 # symmetry, GetEventLogText's three filters against a scratch CSV corpus fed
 # through W906_EVENTLOG_ROOT (the BinCount-redirect precedent), and a

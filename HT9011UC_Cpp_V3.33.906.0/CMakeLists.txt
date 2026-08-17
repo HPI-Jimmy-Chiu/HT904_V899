@@ -1850,6 +1850,12 @@ add_library(ht9045_sm STATIC
     # the two coexist without ODR contact; the shim<->facade swap of the
     # global fObserver is a separate, deliberate wave.
     cObserver.cpp
+    # AI(W906-FW3-YM-A) 20260818: uYieldMonitoring.cpp -- FW-3 yield-engine
+    # Wave A (17 PURE methods vs forms/fYieldMonitoring.h facade; the class
+    # coexists with the TfYieldMonitoring_2x4_16 stand-in by name -- the
+    # fYieldMonitoring global swap is a queued, deliberate wave; the safety
+    # ACTION methods DoAutoCloseSite/DoRTAutoSocketOff are NOT translated).
+    uYieldMonitoring.cpp
     # --- W6.6 HUB cross-module offline shims (DoInArm->DoInArm_9045 /
     #     DoOutArm->DoOutArm_9045 / DoLoad / DoSortArm / bShuttleShake +
     #     InitLoadTask / InitOutArmTask / InitialDoLockUnloader /
