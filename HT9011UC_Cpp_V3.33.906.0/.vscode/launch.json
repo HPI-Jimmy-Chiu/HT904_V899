@@ -1,145 +1,50 @@
 {
   // ==========================================================================
-  //  V906 debug/run configurations. AI(W906-GateA-vscode) 20260804.
+  //  V906 debug/run configurations.  AI(W906-GateA-vscode) 20260804.
   //
-  //  TWO DEBUGGERS, because this project has two toolchains:
-  //    * the MFC exe is built by MSVC  -> cppvsdbg (Visual Studio debugger)
-  //    * the 126 ctest binaries are built by MinGW g++ -> gdb
-  //  Mixing them does not work: cppvsdbg cannot read DWARF, and gdb cannot
-  //  read PDB. Pick the configuration that matches what you are launching.
+  //  AI(W906-DropMSVC) 20260817: REWRITTEN. Four MSVC/MFC configurations lived
+  //  here and every one of them pointed at build_msvc_ui\HT9045.exe, which
+  //  commit 7b86cfd deleted along with the MFC UI. Pressing F5 therefore failed
+  //  with "Invalid 'cwd' value 'D:\HT9045\HT9011UC_Cpp_V3.33.906.0/
+  //  build_msvc_ui'". That was a wiring miss in that commit, not a build
+  //  problem -- the removal itself was gate-verified.
   //
-  //  The exe is a RELEASE build with /Zi (root CMakeLists, ht9045_app target),
-  //  so breakpoints work but locals may be optimised away. We do NOT offer a
-  //  Debug-CRT build: its asserts raise modal dialogs (KNOWLEDGE.md Gotcha 9).
+  //  ONE TOOLCHAIN NOW. MSVC left the product with the MFC UI, so every
+  //  configuration below is MinGW + gdb (cppdbg). There is no cppvsdbg entry
+  //  and there should never be another one unless MFC comes back.
   //
-  //  WHICH ONE IS "THE APP"?  AI(W906-WebHMI-F5) 20260812: the product
-  //  direction is web UI + C++ core, so the default F5 experience is the
-  //  "Web HMI" COMPOUND at the bottom: it builds (MinGW), starts the publisher
-  //  (tcp 8046) and wb_gateway (http+ws 8045), then opens the browser HMI. The
-  //  MFC exe stays only as the Gate A translation-verification harness -- its
-  //  placeholder window is expected.
+  //  THE DEBUGGER IS NEW, THE COMPILER IS NOT. miDebuggerPath points at gdb
+  //  17.2 from install/mingw32-16.2.0 (see install/README.md). The compiler
+  //  stays MinGW.org g++ 6.3.0 at C:\MinGW -- it is the only toolchain that
+  //  reproduces BCB6's x87 arithmetic and build.bat has a FATAL guard on it.
+  //  Reading DWARF is independent of generating code; verified 20260817 by
+  //  breaking inside a g++ 6.3 -g binary under gdb 17.2 with working STL
+  //  pretty-printers.
   //
-  //  AI(W906-SimPump) 20260813: the compound's publisher is now `wb_publish
-  //  --pump`, which DRIVES the translated state machine so the screen moves. The
-  //  big word reads "SIM RUN"/"SIM HALT" -- SIM because nothing in the translated
-  //  tree can set SystemStart/fAllMotorHome, so this process forces them. Read the
-  //  PUMP MODE block in WebBridgeTags.h before changing any of that.
+  //  BREAKPOINTS NEED -g, WHICH build\ DOES NOT HAVE. CMAKE_BUILD_TYPE is empty
+  //  there, so CXX_FLAGS is just -std=c++1z and nothing binds. For source-level
+  //  debugging configure a SEPARATE dir -- keep build\ byte-comparable with
+  //  every recorded baseline:
+  //      cmake -S . -B build_dbg -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Debug
+  //      cmake --build build_dbg -j
+  //  Debug means -g only (GCC defaults to -O0), so codegen matches build\.
+  //  Do NOT use Release or RelWithDebInfo: -O3 is known to break MyPLCModbus
+  //  and BarCodeBottom2DID (CMakeLists.txt:411-424 has the evidence).
+  //
+  //  AI(W906-SimPump) 20260813: the compound's publisher is `wb_publish --pump`,
+  //  which DRIVES the translated state machine so the screen moves. The big word
+  //  reads "SIM RUN"/"SIM HALT" -- SIM because nothing in the translated tree can
+  //  set SystemStart/fAllMotorHome, so this process forces them. Read the PUMP
+  //  MODE block in WebBridgeTags.h before changing any of that.
   // ==========================================================================
   "version": "0.2.0",
   "configurations": [
-    {
-      // AI(W906-StateWin) 20260814: RENAMED, and the rename is deliberate.
-      //
-      // This entry used to be called "MFC Gate A skeleton (HT9045.exe,
-      // verification harness)" and it opened a window that said nothing about a
-      // machine. It now opens the MACHINE STATE MONITOR, which reads the loopback
-      // tag feed and displays the live state word plus the engine cursors.
-      //
-      // Renaming it also fixes a real trap: VS Code remembers the selected debug
-      // configuration in per-workspace storage that the repo cannot reach, so a
-      // developer who had once picked the old entry kept getting the placeholder
-      // no matter what this file said. Changing the name invalidates that stale
-      // selection, which is the only mechanism available from inside the repo.
-      //
-      // No preLaunchTask on purpose -- launch this via the compound at the bottom,
-      // which builds BOTH toolchains once. Same house pattern as the two web
-      // halves below.
-      "name": "HT9045.exe -- Machine State window (native)",
-      "type": "cppvsdbg",
-      "request": "launch",
-      "program": "${workspaceFolder}/build_msvc_ui/HT9045.exe",
-      // --devpath is REQUIRED from the build dir: golden's WinMain
-      // (HT9045.cpp:151-155) rejects any path outside D:\HT9045\EXE\, and that
-      // check is faithfully translated. Without it you get the EXE Path Error
-      // box (and, in --smoke mode, a BootLog line instead).
-      //
-      // --feed-host/--feed-port default to 127.0.0.1:8046, so this window follows
-      // whichever publisher is on that port: V906's wb_publish today, the V899
-      // production handler once its snapshot port lands. No rebuild to switch.
-      "args": ["--devpath"],
-      "cwd": "${workspaceFolder}/build_msvc_ui",
-      "console": "integratedTerminal",
-      "symbolSearchPath": "${workspaceFolder}/build_msvc_ui"
-    },
-    {
-      // The old Gate A open/pump/close harness, still reachable. It is kept
-      // because it verifies the MFC message loop with ZERO dependencies -- useful
-      // precisely when the state window is the thing under suspicion.
-      "name": "HT9045.exe -- Gate A placeholder (bare MFC harness)",
-      "type": "cppvsdbg",
-      "request": "launch",
-      "program": "${workspaceFolder}/build_msvc_ui/HT9045.exe",
-      "args": ["--devpath", "--gatea-placeholder"],
-      "cwd": "${workspaceFolder}/build_msvc_ui",
-      "console": "integratedTerminal",
-      "preLaunchTask": "V906: Build UI exe (MSVC/MFC)",
-      "symbolSearchPath": "${workspaceFolder}/build_msvc_ui"
-    },
-    {
-      "name": "Run HT9045.exe headless (smoke, 800ms)",
-      "type": "cppvsdbg",
-      "request": "launch",
-      "program": "${workspaceFolder}/build_msvc_ui/HT9045.exe",
-      // Auto-closes and suppresses WER fault dialogs -- safe to run unattended.
-      "args": ["--devpath", "--smoke", "800"],
-      "cwd": "${workspaceFolder}/build_msvc_ui",
-      "console": "integratedTerminal"
-    },
-    {
-      "name": "Debug one ctest binary (MinGW/gdb)",
-      "type": "cppdbg",
-      "request": "launch",
-      "program": "${workspaceFolder}/build/tests/${input:testExe}.exe",
-      "args": [],
-      "stopAtEntry": false,
-      // Several suites read real config/DB files with paths relative to the
-      // tree root, so run from there rather than from build/tests.
-      "cwd": "${workspaceFolder}",
-      "environment": [],
-      "externalConsole": false,
-      "MIMode": "gdb",
-      "miDebuggerPath": "${workspaceFolder}/install/mingw32-16.2.0/mingw32/bin/gdb.exe",
-      "preLaunchTask": "V906: Build (MinGW, quick)",
-      "setupCommands": [
-        {
-          "description": "Pretty-print STL containers",
-          "text": "-enable-pretty-printing",
-          "ignoreFailures": true
-        }
-      ]
-    },
-    {
-      "name": "Debug the headless control probe (MSVC)",
-      "type": "cppvsdbg",
-      "request": "launch",
-      "program": "${workspaceFolder}/build_msvc_ui/ht9045_ctrl_probe.exe",
-      "args": [],
-      "cwd": "${workspaceFolder}/build_msvc_ui",
-      "console": "integratedTerminal"
-    },
-    {
-      // Data half of the sidecar split: links the god-stack, publishes the
-      // tag snapshot on tcp://127.0.0.1:8046. --dry is NOT optional on a dev
-      // machine: LoadMachineConfig() WRITES the shared production
-      // system\Gerneral.ini (common.cpp:89); --dry works on a scratch copy.
-      // No preLaunchTask here -- launch via the "Web HMI" compound below,
-      // which builds once for both halves.
-      "name": "Web HMI: wb_publish --dry (data feed)",
-      "type": "cppdbg",
-      "request": "launch",
-      "program": "${workspaceFolder}/build/wb_publish.exe",
-      "args": ["--dry"],
-      "cwd": "${workspaceFolder}",
-      "MIMode": "gdb",
-      "miDebuggerPath": "${workspaceFolder}/install/mingw32-16.2.0/mingw32/bin/gdb.exe",
-      "externalConsole": false
-    },
     {
       // AI(W906-SimPump) 20260813: the feed the F5 compound actually uses.
       // --pump DRIVES the translated spine (MainProc every 250 ms), so the browser
       // shows a live machine.state word and moving engine cursors instead of a
       // static config dump. It reads NO ini and writes NO ini, which makes it
-      // strictly safer than the --dry config above as well as more useful: --dry
+      // strictly safer than the --dry config below as well as more useful: --dry
       // still calls LoadMachineConfig against a scratch COPY of the production
       // Gerneral.ini, while --pump does not open it at all.
       //
@@ -172,40 +77,92 @@
       "miDebuggerPath": "${workspaceFolder}/install/mingw32-16.2.0/mingw32/bin/gdb.exe",
       "externalConsole": false,
       // Opens the browser HMI as soon as the gateway prints its startup URL.
+      // ?src=ws is REQUIRED: web/js/transport/index.js defaults to the MOCK
+      // transport, so without it the page shows fake data and looks alive.
       "serverReadyAction": {
         "pattern": "http://127\\.0\\.0\\.1:([0-9]+)/",
         "uriFormat": "http://127.0.0.1:%s/?src=ws",
         "action": "openExternally"
       }
+    },
+    {
+      // Data half without the pump: links the god-stack and publishes the tag
+      // snapshot on tcp://127.0.0.1:8046, config-derived rather than moving.
+      // --dry is NOT optional on a dev machine: LoadMachineConfig() WRITES the
+      // shared production system\Gerneral.ini (common.cpp:89); --dry works on a
+      // scratch copy.
+      "name": "Web HMI: wb_publish --dry (static config feed)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/wb_publish.exe",
+      "args": ["--dry"],
+      "cwd": "${workspaceFolder}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "${workspaceFolder}/install/mingw32-16.2.0/mingw32/bin/gdb.exe",
+      "externalConsole": false
+    },
+    {
+      // wb_serve is the SINGLE-PROCESS shape: god-stack + HTTP/WS server in one
+      // exe, no loopback hop. It does not pump yet (grep -c Pump tools/wb_serve.cpp
+      // = 0), and it calls LoadMachineConfig unconditionally at :90 -- which SEEDS
+      // KEYS INTO THE SHARED PRODUCTION system\Gerneral.ini. Left here because it
+      // is the shape the architecture doc recommends, but do not run it casually.
+      "name": "Web HMI: wb_serve (single process -- WRITES production ini, see comment)",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/build/wb_serve.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}",
+      "MIMode": "gdb",
+      "miDebuggerPath": "${workspaceFolder}/install/mingw32-16.2.0/mingw32/bin/gdb.exe",
+      "externalConsole": false
+    },
+    {
+      "name": "Debug one ctest binary (MinGW/gdb)",
+      "type": "cppdbg",
+      "request": "launch",
+      // build_dbg first (it has -g); fall back to build\ if you have not made one.
+      "program": "${workspaceFolder}/build/tests/${input:testExe}.exe",
+      "args": [],
+      "stopAtEntry": false,
+      // Several suites read real config/DB files with paths relative to the
+      // tree root, so run from there rather than from build/tests.
+      "cwd": "${workspaceFolder}",
+      "environment": [],
+      "externalConsole": false,
+      "MIMode": "gdb",
+      "miDebuggerPath": "${workspaceFolder}/install/mingw32-16.2.0/mingw32/bin/gdb.exe",
+      "preLaunchTask": "V906: Build (MinGW, quick)",
+      "setupCommands": [
+        {
+          "description": "Pretty-print STL containers",
+          "text": "-enable-pretty-printing",
+          "ignoreFailures": true
+        }
+      ]
     }
   ],
   "compounds": [
     {
-      // THE default F5 for this project (pick it once in the debug dropdown;
-      // VS Code remembers). Publisher and gateway start together; the browser
-      // shows "---" until the first frame arrives, which is the correct
-      // rendering of "no data yet".
-      // AI(W906-StateWin) 20260814: THIS is the F5. It now delivers all three
-      // things in one keypress, which is what it was missing before:
-      //   1. the C++ core COMPILES   -- "Build ALL" does MinGW libs then the MSVC exe
-      //   2. a NATIVE window shows machine state  -- HT9045.exe, reading the feed
-      //   3. the WEB view opens      -- gateway + browser via serverReadyAction
-      // Renamed from "Web HMI (...)" because it is no longer web-only, and because
-      // the rename invalidates any stale remembered selection (see the note on the
-      // state-window configuration above).
-      "name": "HT9045: build + state window + web  (THE F5)",
+      // THE default F5. Pick it once in the debug dropdown; VS Code remembers.
+      //
+      // AI(W906-DropMSVC) 20260817: RENAMED from "HT9045: build + state window +
+      // web  (THE F5)". The native state window was deleted, so the old name
+      // described something that no longer happens -- and the rename also
+      // invalidates VS Code's stored selection, which is stored per-workspace
+      // where the repo cannot reach it and is the only reason a developer can
+      // keep launching a config the repo has already changed. Re-pick once.
+      //
+      // Two processes now, not three: the publisher drives the spine and serves
+      // the tag feed, the gateway serves the browser. Both are MinGW, so ONE
+      // preLaunchTask covers both -- which is why the old composite "Build ALL"
+      // task is gone too.
+      "name": "HT9045: build + Web HMI  (THE F5)",
       "configurations": [
-        // AI(W906-SimPump) 20260813: switched from the --dry feed to the --pump
-        // feed. The --dry config is still in the list above if you want the
-        // config-derived identity tags instead of a moving screen.
         "Web HMI: wb_publish --pump (live spine feed)",
-        "Web HMI: wb_gateway (web server, no machine code)",
-        "HT9045.exe -- Machine State window (native)"
+        "Web HMI: wb_gateway (web server, no machine code)"
       ],
-      // Builds BOTH toolchains, sequentially. A single preLaunchTask is all a
-      // launch config gets, which is why this composite task had to exist before
-      // one F5 could produce both halves (tasks.json, "V906: Build ALL").
-      "preLaunchTask": "V906: Build ALL (MinGW libs + MSVC exe)",
+      "preLaunchTask": "V906: Build (MinGW, quick)",
       "stopAll": true,
       "presentation": { "order": 1 }
     }

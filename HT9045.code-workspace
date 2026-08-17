@@ -66,17 +66,18 @@
     "compounds": [
       {
         // The three things one keypress is supposed to deliver:
-        //   1. the C++ core compiles      (preLaunchTask, both toolchains)
-        //   2. a native window shows state (HT9045.exe reading the tag feed)
-        //   3. the web view opens          (gateway + serverReadyAction)
-        "name": "HT9045: build + state window + web  (THE F5)",
+        // AI(W906-DropMSVC) 20260817: two legs now, not three -- the native MFC
+        // window was deleted with MSVC, and both survivors are MinGW so one
+        // preLaunchTask covers them.
+        //   1. the C++ core compiles   (preLaunchTask, MinGW)
+        //   2. the web view opens      (gateway + serverReadyAction, ?src=ws)
+        "name": "HT9045: build + Web HMI  (THE F5)",
         "configurations": [
           { "folder": "V906 C++ port (UTF-8)", "name": "Web HMI: wb_publish --pump (live spine feed)" },
-          { "folder": "V906 C++ port (UTF-8)", "name": "Web HMI: wb_gateway (web server, no machine code)" },
-          { "folder": "V906 C++ port (UTF-8)", "name": "HT9045.exe -- Machine State window (native)" }
+          { "folder": "V906 C++ port (UTF-8)", "name": "Web HMI: wb_gateway (web server, no machine code)" }
         ],
         // The task is folder-scoped, so it is named as folder + task.
-        "preLaunchTask": "V906: Build ALL (MinGW libs + MSVC exe)",
+        "preLaunchTask": "V906: Build (MinGW, quick)",
         "stopAll": true,
         "presentation": { "order": 1 }
       }
