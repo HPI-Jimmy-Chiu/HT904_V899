@@ -7860,3 +7860,34 @@ brief 高估的方法數（~82→實際 63）。主迴圈抽驗：WriteHandlerID
   （TCPCommandServerClientRead 含溢位缺陷、RemoteControl、ChangeTo* 家族）。
 - 佇列：iSortTrayIndex 初始化（小）；write path 設計輪（等使用者）。
 - 可用 build dir：build_fw3ag（Debug）／build_fw3ar（Release），HEAD=3fee669 當下全新。
+
+---
+
+## 2026-08-18（凌晨，FW-3 Wave B＋FW-Fix2）— 溫度三巨頭落地；第五張表歸位
+
+兩顆 commit：`5af4d03`（Wave B）、FW-Fix2（cmydef 初始化器擴充）。
+
+**Wave B（5af4d03）**：WriteTemp_NS／WriteNowAllTempData／GetCZAllMassTemp（golden
+:2244-3823／:4007-5168／:5640-7299，4,402 行）append 進 Command.cpp。**零 gate**（依賴
+稽核只中 bthermo 兩函式＋既有全域；全 span grep 零 widget）。翻譯手法=cp950 精確複製
+去 `__fastcall`；主迴圈位元組級複驗整個 WriteNowAllTempData：**1162/1162 行轉換後逐字同**。
+GOLDEN ODDITY 記錄不修：:7295 `sprintf("UNKNOWN", sizeof(t))` 多餘 vararg。
+Command.cpp 現載 66/164 個 golden TfMain 方法（~7.7k/15.3k golden 行）。
+途中一次 `vclcompat (BAD_COMMAND)`＝已知防毒隔離型（exe 消失；ls 證缺席＋重建單跑
+exit 0＋全新 dir gate 通過三重坐實，非回歸）。
+
+**FW-Fix2**：iSortTrayIndex 反轉表（golden main.cpp:1989-1992，同一個 TfMain ctor 區塊的
+第五張表）併入 FW-Fix1 的初始化器。全零時 aoutarm9045.cpp:2683-2802 的排序搜尋每一步
+都讀 slot 0（Auto1）。
+
+**驗收**：兩波各自全新 Debug＋Release 皆 134/3（常駐子集：config_db/config_loaders/
+GA1_ReadGeneralIni）、清單逐項相同；guard 552 檔全等。
+
+### 🔖 RESUME（最新）
+
+- **完成鏈**：FW-0→FW-1a/1b→FW-2/2b→FW-Fix1→FW-3 Wave A→**Wave B**→**FW-Fix2**。
+- **下一步**：cObserver（EventLog 檢視表單，計畫書 §4 批 2 首位）recon → 翻譯波。
+  Wave C（Command.cpp WIDGET＋ByDLL 家族）**等使用者定案 ByDLL 性質**（外部程式改機台
+  設定入口，語意近 write path）。「絕不進波次」清單維持（TCPCommandServerClientRead
+  溢位、RemoteControl、ChangeTo* 家族）。
+- 可用 build dir：build_fwfix2g（Debug）／build_fwfix2r（Release），當下全新。
