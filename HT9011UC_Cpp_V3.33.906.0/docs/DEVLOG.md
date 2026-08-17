@@ -7817,3 +7817,46 @@ Debug 134/3＋Release 134/3 清單逐項相同（常駐子集）；guard 552 檔
   REJECT 存檔（lot.auto*/speed.*）。
 - 可用 build dir：build_fwfix1g（Debug）／build_fwfix1r（Release）＋build_fw2b（Debug 髒增量，
   僅供快速 smoke）。HEAD=d47acc4 當下 fwfix1 兩個是全新。
+
+---
+
+## 2026-08-17/18（跨夜，FW-3 Wave A）— Command.cpp 落地：第一個表單邏輯波
+
+commit `3fee669`（＋`d47acc4` FW-Fix1、FW-2b、TcpTagLink 引用修正，見前節）。
+
+**交付**：golden Command.cpp 四段 PURE 方法群（:86-2242／:3825-4005／:5170-5638 排除
+SetSiteMapData/SetAlarmSetup／:12063-12508，~3.3k golden 行）→ 新鏡射檔 Command.cpp，
+63 方法（53 ACTIVE／10 gated-partial，13 個 gate 全附重跑 grep 證據）。翻譯代理誠實糾正
+brief 高估的方法數（~82→實際 63）。主迴圈抽驗：WriteHandlerID／GetCZJamCode 正規化後
+逐字同；SetMaxTest 差異=已登記 gate #10。宣告進 forms/fMain.h FW3-WA 區塊（`virtual`
+是 facade class 自身契約，非 golden 語意——golden 無 virtual，facade 有測試 seam 設計）。
+
+**整併照出三件事**：
+1. **陷阱 #1 經典型**：Command.cpp 的呼叫改變 archive 抽取形狀，連結器暴露
+   `SetWorkParameter`/`SetSuckRetryCount` **兩份長期共存的本體**（ckernel_shims.cpp 舊
+   暫居版 vs cinitial.cpp 新版含 N3-G* gate registry）——退役 shims 版（homecoming；
+   離線行為等價：shims 呼叫 TU-local no-op、cinitial 把同呼叫 gate 掉）。
+2. 三個 fMain.cpp stub homecoming 退役（ArmStatusStrings／WritePERSITETemperature／
+   PERSITETemperatureStrings 含 sim seam）。
+3. **測試重校準（照預授權，附證據）**：真 PERSITETemperatureStrings 離線決定性回
+   `"SINGLESITE_NULL_"`（golden :1006，先實測後對 golden 字面）；[T-F-b] 改造成
+   「seam 已死」回歸偵測器；失去的 seam 覆蓋寫進 NOT COVERED（等溫控/GPIB 面波次
+   種真 UN150Read 狀態）。
+4. 落點：ht9045_sm 非 ht9045_forms（forms「不往上連」設計不變量；本體重度消費機台全域）。
+
+**驗收**：test_testertcp_socket 80/0；全新 build_fw3ag/r Debug **134/3**＋Release
+**134/3** 清單逐項相同（常駐子集）；guard 552 檔全等。
+
+### 🔖 RESUME（最新）
+
+- **完成鏈**：FW-0→FW-1a→FW-1b→FW-2→FW-2b→FW-Fix1→**FW-3 Wave A**（HEAD=3fee669）。
+- **進行中**：FW-3 Wave B 翻譯代理——巨型三兄弟（WriteTemp_NS golden:2244-3823 1,580 行／
+  WriteNowAllTempData :4007-5168 1,162 行／GetCZAllMassTemp :5640-7299 1,660 行，
+  合計 4,402 行，全 PURE、零 widget、尾端單一 SendMSG_CMD）。**append 到既有 Command.cpp**、
+  宣告進 fMain.h FW3-WB 區塊。回來後：主迴圈抽驗（三兄弟是機械性分支海，抽 2-3 段對字面）
+  → 整併 → 雙 gate → commit。
+- **之後**：Wave C（WIDGET 類＋ByDLL 家族，**ByDLL 性質要先問使用者**——外部程式改機台
+  設定的入口，語意近 write path）；recon 標記的「絕不進波次」清單維持
+  （TCPCommandServerClientRead 含溢位缺陷、RemoteControl、ChangeTo* 家族）。
+- 佇列：iSortTrayIndex 初始化（小）；write path 設計輪（等使用者）。
+- 可用 build dir：build_fw3ag（Debug）／build_fw3ar（Release），HEAD=3fee669 當下全新。
