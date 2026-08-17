@@ -7590,3 +7590,69 @@ session 死了＝磁碟上的 commit＋RESUME 接手，重開後再打 `/loop /f
   FW-3 表單波（`Command.cpp` 先，9,445 行切 2–3 波）。
 - 46 個 gated 非表單函式複審＝另一條線，**不在 FW 戰役內**。
 - 停止條件見計畫書 §7；write path/互鎖/動真機一律佇列，不做也不問。
+
+---
+
+## 2026-08-17（夜，FW-0）— 基礎建設波：uimap 回家、web 入版控、BinCount 兇手釘死
+
+FW 戰役第一波（`/loop /fw-wave` 夜間自動模式的第一個完整波次）。三顆 commit：
+`c69ccb5`（uimap＋web/）、`150b5dd`（webprobe）、`b10096b`（BinCount 修法）。
+
+**1. GA-4 的 uimap 在製工作收編（git status 第五次撿到）＋常駐失敗修根因**：
+`emit_uimap.py`＋`rc_out/main_uimap.gen.*`（91 dialogs/758 controls）自 20260804 未 track，
+而 `dfm2rc_idempotent` 常駐失敗的 G7_MISSING_IN_REGEN 正是它。修法是接線不是排除：
+`run_b1d.py` 的 regenerate_all 現在對 canon 樹裡每個 `*_uimap.gen.h` stem 重跑 emit_uimap，
+G7 持續證明 uimap 的位元組冪等（單跑 idempotent mode：g7_diff_count 0/133）。
+
+**2. web/ 入版控（23 檔）＋ root .gitignore 的 `IMG/` 錨定成 `/IMG/`**（未錨定形式把
+`web/assets/img/` 一起吞掉；全樹量過只有兩個 img 目錄，錨定零誤傷）。
+**誠實記錄**：web 檔在 staging 區先掛著，被掃進 uimap 那顆 commit——「一顆 commit 一件事」
+違規一次，成因是先 add 後才 commit 別的東西。
+
+**3. BinCount 兇手釘死（20260813 未收斂項結案）**：用 ctest log 末端 mtime 倒推每測時段
+→ 鎖定 W7_L1 家族 → 單 exe bisect 重現 → **`test_w7_l1_color`**。鏈：asendic_Color.cpp
+:270/:369 → 跨 TU 呼叫真 `ReadWriteTrayID`（csystem.cpp:31103；檔內 no-op #define 管不到
+跨 TU）→ 與 ReadWriteBinCountMode 共用硬編的 `D:\HT9045\system\BinCount.txt`。
+**今天比 20260813 嚴重：md5 變了**（測試 tray-id `ASECID001` 被寫進活儲存；before 內容
+不可復原——檔案未 track、唯一備份是 2025-06 舊拷貝）。
+修法＝call-time 讀 `W906_BINCOUNT_PATH` 環境變數（test_bootstrap 對每個測試 exe 設定；
+production 未設＝golden 字面值）。**刻意否決的兩個替代**：連結層 seam（bootstrap 編進
+不連 csystem.obj 的測試會 undefined reference）、動態初始化 AnsiString 全域（SIOF 會
+讓 bootstrap 的 redirect 被蓋回）。途中一修：`-std=c++17` 的 `__STRICT_ANSI__` 藏掉
+`_putenv`，MinGW 下自行 extern "C" 宣告；`SetEnvironmentVariableA` 被否決（CRT getenv
+開機快照，看不到 Win32 層的變更）。
+
+**4. tools/webprobe 收編**（wire_probe / ws_probe / system_guard＋README）——20260813 的
+scratchpad 腳本已隨 session 消失，照 DEVLOG 規格重寫進樹。
+
+**驗收（全新 build_fw0g/build_fw0r，最後整併之後量）**：
+
+| 建法 | 測試 | 失敗清單 |
+|---|---|---|
+| Debug | 133/3 失敗 | config_db／config_loaders／GA1_ReadGeneralIni |
+| Release | 133/3 失敗 | **逐項相同** |
+
+失敗集合 ⊆ 常駐六項；`dfm2rc_idempotent` 兩種建法都轉綠（uimap 修法）；IniFiles／
+ini_helpers 在全新 dir 通過（狀態相關，與 20260817 白天觀察一致）。
+**system_guard 跨整輪雙 ctest：552 檔 bytes＋mtime 全等**——測試套件對量產 system/
+零寫入，第一次有實測證明。
+
+**本波犯的錯（照例比成果重要）**：
+- 反斜線字面值經 heredoc 傳輸掉了一層跳脫，run_b1d.py 語法壞一次（ast 抓到，改 chr(92)）。
+- 背景長鏈用 `&&`＋尾隨 echo：session shell 的 cwd 卡在 build_fw0/tests 讓 `rm -rf` 失敗，
+  `&&` 斷鏈後 `;` 又讓鏈跳過 Debug 直接建 Release；且尾隨 echo 把真實 exit code 遮成 0
+  （**兩次**）。規則：**gate 鏈一律寫成腳本檔、每步顯式 fail-loud、背景任務最後一個指令
+  就是真指令**；開背景鏈前先把前景 cwd 移出 build 目錄。
+
+### 🔖 RESUME（最新）
+
+- **FW-0 完成**（c69ccb5／150b5dd／b10096b，gate 綠，見上表）。
+- **新基線**：常駐失敗實際剩 3（config_db／config_loaders／GA1_ReadGeneralIni）；
+  dfm2rc_idempotent 已修根因、IniFiles／ini_helpers 全新 dir 會過。驗收線仍寫「⊆ 六項」。
+- **下一步 = FW-1 tag 接線波**：先重量缺口——`web/js/model/tagmap.js` 44 entries
+  （38 個 dfm 已解析）；「296 綁定」是 runtime DOM 計數（panels 動態插值 data-tag，
+  靜態 grep 只中 3，**已證無效**，勿再用）；分母改用 `web/js/model/state.js` 的 tag
+  宇宙＋tagmap，對 `WebBridgeTags.cpp` 的發布集與 port 全域的 liveness 逐一判
+  SOURCE-EXISTS/需翻譯。每批 ~20-30 tag，liveness 與 getter 分離，e2e 用 tools/webprobe。
+- **可用 build dir**：build_fw0g（Debug）／build_fw0r（Release），HEAD=b10096b 當下全新。
+- 掛著的：46 gated 非表單複審（另一條線）；write path 設計輪（等使用者）。
