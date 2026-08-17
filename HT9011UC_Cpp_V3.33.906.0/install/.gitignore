@@ -1,0 +1,6 @@
+# AI(W906-Install) 20260817: the toolchains here are ~2.4 GB of third-party
+# binaries. README.md records exactly which versions and where they came from,
+# so anyone can re-fetch them; the bytes themselves do not belong in git.
+_downloads/
+mingw32-*/
+mingw64-*/

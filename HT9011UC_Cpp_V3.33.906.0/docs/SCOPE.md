@@ -93,8 +93,8 @@ The web-UI decision retires work. Saying so explicitly is cheaper than letting i
 | `tools/dfm2rc/` (91 dialogs, 946 controls, layout/uimap generators) | **No longer on the product path.** Its output described DFM geometry so C++ could reproduce it; web does not need that. Keep as a *reference* for what each form contains and which controls map to which tags — that is genuinely useful for building web screens — but stop investing in it. |
 | GA-3 (god-stack into the MFC exe) | **Retired.** It existed to make `HT9045.exe` the real app. |
 | GA-4 / `ui/forms/FMainFirstLightDlg` (unwired) | **Retired** as a product path. |
-| **C1061** (`EJ1N/TextProcess.cpp:404-424`, 127-deep else-if breaking MSVC) | **Downgraded to near-irrelevant.** It only ever blocked linking the god-stack into an MSVC target, i.e. GA-3. With no MSVC product target, it stops being a blocker. Still worth fixing eventually as a portability wart. |
-| `ui/MachineStateDlg` (built this session) | **Keep, reclassified.** It is a thin native monitor: ~350 lines, links `ht9045_webbridge` and no machine code, reads the same wire the browser reads. It is a **developer/verification convenience**, explicitly not the product UI. Cheap to keep, cheap to delete. **User decision.** |
+| **C1061** (`EJ1N/TextProcess.cpp`, 128-deep else-if breaking MSVC) | **Downgraded to near-irrelevant** for the product: it is one compiler's nesting limit on one function, and MinGW compiles it (`wb_publish.exe` carries the whole god-stack). **One consumer still needs it fixed: the MSVC second oracle** (`scripts/build_msvc.bat` builds all targets with no `--target`, so it dies on this file). **Citation correction 20260817:** every reference in this tree says `404-424`; those 21 lines are only the *tail*. The construct is `MyASCIIToDec` declared at `:293`, chain from `:297` to `:424` = 1 `if` + 127 `else if` = 128 levels. Anyone fixing it edits `297-424`. (The sibling `MyDeCodeASCII`, `:155-291`, is the same table in reverse but written as a `switch` — not a problem.) |
+| `ui/MachineStateDlg` (built this session) | **KEEP — user decision 20260817.** A thin native monitor: 321 lines (`.cpp`) + 95 (`.h`), links `ht9045_webbridge` and no machine code, reads the same wire the browser reads. A **developer/verification convenience**, explicitly not the product UI. Consequence now settled rather than open: because it is MFC it needs MSVC, and because it consumes `tcp://127.0.0.1:8046` **something must keep publishing on 8046** — so the product exe keeps its `TcpTagPublisher` and F5 stays at 2 processes, not 1. |
 | The tag bridge, `--pump`, `WB_SimPump` tests | **Core product path.** Unaffected. |
 
 ---
@@ -103,10 +103,22 @@ The web-UI decision retires work. Saying so explicitly is cheaper than letting i
 
 1. **V899 is read-only.** No exceptions. (Violated once, 20260814; reverted, with one real
    casualty — see the DEVLOG entry for that date.)
-2. **`D:\HT9045\web` is outside `allowedWriteRoots` and has ZERO git tracking.** The product's UI
-   is currently unversioned. This must be fixed before serious web work starts, and it is a
-   scope-level decision: either the web folder moves inside the repo, or the write-boundary policy
-   is extended to cover it.
+2. **`D:\HT9045\web` has ZERO git tracking.** Verified 20260817: `git ls-files web/` → 0 files.
+   The product's UI is unversioned — that is the real hazard and one `git add web/` fixes it.
+   **Correction to this entry's earlier wording**, which conflated two independent mechanisms and
+   overstated the second:
+   - "Move it into the repo" was wrong. `D:\HT9045` **is** the repo root, `web/` is already inside
+     it and is **not** `.gitignore`d (`git check-ignore` → exit 1). Nothing needs moving; it has
+     simply never been `git add`ed.
+   - "Outside `allowedWriteRoots`" is literally true but **blocks nothing**. Three independent
+     checks, all measured 20260817: (a) `.claude/settings.json` does not exist, so
+     `scripts/ops/check-write-boundary.ps1` is **never invoked by Claude Code** — the only live
+     `PreToolUse` hook is the user-level `guard-big5.ps1`, which decides on *encoding*, not path;
+     (b) even if it ran, the policy sets `"confirmOutsideAllowed": false`, which suppresses the
+     ask for paths outside the allowed roots — only `readonlyRoots` deny and only
+     `.ini/.csv/.dat`-class extensions ask; (c) the user profile runs `defaultMode:
+     bypassPermissions`. Adding `web/` to `allowedWriteRoots` would align the document with
+     reality but changes no behaviour.
 3. **The 906 tree shares runtime config with the production machine.** `common.cpp:89`'s
    `asGeneralPath` points at the production `system\Gerneral.ini`, and `LoadMachineConfig()` writes
    it. `--dry` only redirects that one path; `lastdata.dat` paths are hard-coded literals. Also
@@ -117,14 +129,95 @@ The web-UI decision retires work. Saying so explicitly is cheaper than letting i
 
 ---
 
-## 6. Open decisions (user)
+## 6. Decisions — settled 20260817
 
-1. **The 296-tag web UI**: is it the specification to build towards, or a mockup to be redesigned?
-   It currently binds 234 `data-tag` + 62 `data-tone-tag` nodes and its layout mirrors the legacy
-   fMain screen. Building the core to fill 296 legacy-shaped tags is a very different project from
-   designing screens for how the machine is actually operated.
-2. **Keep or delete the native `MachineStateDlg`** (§4).
-3. **The web folder's home** (§5.2) — inside the repo, or policy extension?
-4. **Order of §3's measurement output**: extract logic file-by-file (mirrors the census, easy to
-   track) or as vertical slices per machine function (InArm, Index, Shuttle… — each slice ends with
-   something demonstrable on screen)?
+The four questions this section used to ask are answered. Recorded as decisions, not options.
+
+| # | Question | Decision |
+|---|---|---|
+| 1 | Is the 296-tag page the spec, or a mockup to redesign? | **It is the target, as-is.** `D:\HT9045\web\index.html` stays put; the goal is that it *works* and updates live once the core starts. No redesign, no new screens. |
+| 2 | Keep or delete `MachineStateDlg`? | **Keep** (§4). |
+| 3 | Web folder — move, or extend the policy? | Neither is required; **`git add web/`** is the whole fix (§5.2 records why). |
+| 4 | Extraction order — file-by-file or vertical slices? | **File-by-file.** |
+| 5 | (new) Do the DFM forms get touched? | **No.** Not edited, not converted, not migrated. The web page replaces them; the `.dfm` files are left alone. |
+| 6 | (new) One process, or the publisher/gateway sidecar split? | **One process** — see §7. |
+
+## 7. The product process: one exe, decided 20260817
+
+The user asked whether the sidecar split could be dropped in favour of what HT160S does — a BCB6
+app that opens its own HTTP server so a browser can just connect. Recon (9 read-only agents,
+2 adversarial verifiers) says yes, with one correction worth carrying:
+
+- **The merged link shape already exists**: `wb_serve` links the full god-stack **and**
+  `ht9045_webbridge`, and `nm -C build/wb_serve.exe` shows 321 `webbridge::WebBridgeServer::`
+  symbols beside `MainProc` and `LoadMachineConfig`. Zero `CMakeLists` edits are needed.
+- **The merged RUNTIME shape has never existed** — this is the verifier's refutation, and it is
+  correct. No binary on disk holds all three halves: `wb_serve` has the HTTP server and
+  `PumpInit`/`PumpTick` compiled in but **never calls them** (`grep -c Pump tools/wb_serve.cpp` →
+  0) and has no `TcpTagPublisher`; `wb_publish` pumps and publishes but has 0 `WebBridgeServer`
+  symbols. `MainProc()` ticking inside a process that is simultaneously running a live accept loop
+  has no precedent here. Treat it as new work, not as a rebuild.
+- **No structural obstacle.** Verified rather than assumed: no blocking accept (non-blocking
+  listener, one thread, `select` 50 ms, accept only under `FD_ISSET`); no duplicate symbols
+  (intersecting `libht9045_webbridge.a`'s 1,516 defined symbols against the god-stack's 14,568
+  gives 136, of which 133 are STL instantiations and the residue is COMDAT `operator new/delete`
+  and `sprintf`); no `atexit`/`signal`/console-ctrl/unhandled-exception handler anywhere in the
+  tree; no test asserts link shape; port collision fails loudly because `SO_REUSEADDR` is
+  deliberately unset on both listeners.
+- **Four behavioural rules must be hand-carried**, and `tools/wb_serve.cpp` — the nearest template
+  — violates three of them: it has **no `SetErrorMode`** (root-CMakeLists targets do not get
+  `tests/`'s modal-dialog suppression, so an unattended fault opens an invisible WER box and
+  blocks forever with nothing logged); it calls **`LoadMachineConfig()` unconditionally**
+  (`tools/wb_serve.cpp:90`), which **seeds keys into the shared production `system\Gerneral.ini`**
+  — `wb_publish`'s `loadConfig = (!pump || withCfg)` rule must be adopted instead; and
+  `PumpInit()` must be called **after** any config load, because `ReadGeneralIni` overwrites five
+  of the globals it pins.
+- **What merging costs.** The "gateway links no machine code" property is enforced *nowhere* — no
+  test, no assertion, only comments. It is delivered by static-archive extraction, not by the link
+  list: `wb_gateway`'s generated link line does carry `libht9045_public.a` and `libvclcompat.a`,
+  and 80 cJSON symbols **are** extracted into `wb_gateway.exe`. Keep `wb_gateway` as a target so
+  that property survives *somewhere*; merging does not delete it.
+- Because §6.2 keeps `MachineStateDlg`, the product exe also runs the `TcpTagPublisher` on 8046.
+  One `TagSnapshot`, one publisher thread (the pump), two independent reader threads.
+  **F5 goes from three processes to two.**
+
+## 8. The number that decides the schedule: 0 of 296
+
+Measured 20260817 by booting the page's own module graph headless and calling `bind.boundTags()`.
+
+| set | count | denominator |
+|---|---|---|
+| bound by the page | 296 | distinct tag names = 234 `[data-tag]` + 62 `[data-tone-tag]` |
+| published by the core | 61 | `stage()` calls = 43 machine + 18 process |
+| bound **and** published | 37 | of 296 bound (12.5%) |
+| …of which staged as unconditional null | 35 | of 37 (94.6%) |
+| bound, **not** published | **259** | of 296 bound (87.5%) |
+| published, not bound | 24 | of 61 published (39.3%) |
+
+**The "235-tag gap" quoted in earlier entries was wrong** — it assumed the 61 published tags were
+a subset of the 296 bound. Only 37 are. The gap is **259**.
+
+Worse, and this is the headline: **live machine values reaching the screen today = 0 of 296.**
+All eight published tags that can carry a real machine value (`machine.id.*`,
+`machine.customerCode`, `lastset.*`) are bound by **nothing**. Only `clock.text` and
+`machine.state` ever carry a value at all, and both are gated on `--pump`.
+
+The 259, classified by why each is missing:
+
+| bucket | count | % of 259 | what it means |
+|---|---|---|---|
+| **NO-SOURCE** | 93 | 35.9% | golden produces nothing either — the page invented it. 32 `arm.<zone>.tone`, 19 `status.slot<N>` (+19 tones), 11 `status.<name>.tone`, 6 `temp.led.<N>`, 6 `tester.led.<N>`. The slots self-declare as placeholders rendering `"----"`. |
+| **SOURCE-EXISTS** | 84 | 32.4% | the variable is translated and reachable **today**; publishing is a one-line registration. 32 `site.arm*.s*` (← `LastSet.bUseTestSocket`, inside the live blob), 32 `arm.<zone>` (← `UN150Read[]`, already read by `WebBridgeTags.cpp`), 8 `speed.*`, 6 `bin.*`, 3 `lot.auto*.nowTrayId`, `recipe.current`, `startmode.value`, `user.level`. |
+| **SOURCE-UNTRANSLATED** | 64 | 24.7% | blocked behind four modules absent from the tree (`main.cpp`, `cSortCT.cpp`, `uLotInfo.cpp`, `cContactCT.cpp`): 32 `cat.arm*.s*`, 14 `sort.*`, 13 `lot.*`, 4 `speed.shuttle*`, `machine.mode`. |
+| **SOURCE-IS-FORM** | 18 | 6.9% | all of `contact.*` — raw per-socket counters exist, the KIND grouping is the form's aggregation. |
+
+Two caveats the measurement states about itself: the 32 `cat.*` could equally be NO-SOURCE (the
+page's own `tagmap.js` says the control is unresolved), which would move 12.4% of the gap; and the
+exact `bUseTestSocket` subscript for a given `site.*` tag is unverified.
+
+**Transport is NOT the blocker.** `WebBridgeServer.cpp` already emits all four frame types
+(`snapshot`/`patch`/`ack`/`alarm`) at the shapes `js/transport/ws.js` expects, and already binds
+`/ht9045`. The entire gap is which tags `WebBridgeTags.cpp` stages. Two sharp edges to respect:
+the page handles `snapshot` and `patch` in the **same** switch arm and never clears state, so a
+snapshot cannot retract a tag — send explicit null to blank one; and the page defaults to the
+**mock** transport, so the URL must carry `?src=ws` (F5's `serverReadyAction` already does).

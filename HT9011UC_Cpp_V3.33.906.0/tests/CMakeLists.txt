@@ -2418,45 +2418,6 @@ add_executable(test_DfmLayoutGen
 add_test(NAME DfmLayoutGen COMMAND test_DfmLayoutGen)
 
 # ===========================================================================
-#  W906 W7-C2 -- HDC renderer + headless pixel tests for the 3 W7-C1 cores
-#
-#  vclcompat/render/{RenderCommon,TrayRender,LedRender,BtnPanelRender}.* --
-#  new, targets a raw HDC (link `gdi32`, which MinGW ships in full -- no MFC
-#  needed for this wave, see W7_UI_ARCHITECTURE_PLAN.md §6 W7-C2 and §7's
-#  "renderer 不卡" note). Each test renders into a memory DC backed by a
-#  CreateDIBSection (never a visible window) and asserts a full-buffer FNV-1a
-#  hash plus targeted per-pixel spot checks. Every add_executable below links
-#  ONLY vclcompat + gdi32 (+ its own W7-C1 core .cpp, same direct-source-file
-#  pattern the W7-C1 block above uses) -- no ht9045_* libraries, no LINK_GROUP.
-# ===========================================================================
-add_executable(test_trayrender
-    test_trayrender.cpp
-    ${CMAKE_SOURCE_DIR}/vclcompat/TrayCore.cpp
-    ${CMAKE_SOURCE_DIR}/vclcompat/render/TrayRender.cpp
-    ${CMAKE_SOURCE_DIR}/vclcompat/render/RenderCommon.cpp
-)
-target_link_libraries(test_trayrender PRIVATE vclcompat gdi32)
-add_test(NAME TrayRender COMMAND test_trayrender)
-
-add_executable(test_ledrender
-    test_ledrender.cpp
-    ${CMAKE_SOURCE_DIR}/vclcompat/LedCore.cpp
-    ${CMAKE_SOURCE_DIR}/vclcompat/render/LedRender.cpp
-    ${CMAKE_SOURCE_DIR}/vclcompat/render/RenderCommon.cpp
-)
-target_link_libraries(test_ledrender PRIVATE vclcompat gdi32)
-add_test(NAME LedRender COMMAND test_ledrender)
-
-add_executable(test_btnpanelrender
-    test_btnpanelrender.cpp
-    ${CMAKE_SOURCE_DIR}/vclcompat/BtnPanelCore.cpp
-    ${CMAKE_SOURCE_DIR}/vclcompat/render/BtnPanelRender.cpp
-    ${CMAKE_SOURCE_DIR}/vclcompat/render/RenderCommon.cpp
-)
-target_link_libraries(test_btnpanelrender PRIVATE vclcompat gdi32)
-add_test(NAME BtnPanelRender COMMAND test_btnpanelrender)
-
-# ===========================================================================
 #  W7-B1d -- full-corpus run + gate triage + CMake wiring
 #
 #  Wires tools/dfm2rc/run_b1d.py's 4 modes into ctest as ONE compiled

@@ -98,7 +98,7 @@
       "environment": [],
       "externalConsole": false,
       "MIMode": "gdb",
-      "miDebuggerPath": "C:/MinGW/bin/gdb.exe",
+      "miDebuggerPath": "${workspaceFolder}/install/mingw32-16.2.0/mingw32/bin/gdb.exe",
       "preLaunchTask": "V906: Build (MinGW, quick)",
       "setupCommands": [
         {
@@ -131,7 +131,7 @@
       "args": ["--dry"],
       "cwd": "${workspaceFolder}",
       "MIMode": "gdb",
-      "miDebuggerPath": "C:/MinGW/bin/gdb.exe",
+      "miDebuggerPath": "${workspaceFolder}/install/mingw32-16.2.0/mingw32/bin/gdb.exe",
       "externalConsole": false
     },
     {
@@ -154,7 +154,7 @@
       "args": ["--pump"],
       "cwd": "${workspaceFolder}",
       "MIMode": "gdb",
-      "miDebuggerPath": "C:/MinGW/bin/gdb.exe",
+      "miDebuggerPath": "${workspaceFolder}/install/mingw32-16.2.0/mingw32/bin/gdb.exe",
       "externalConsole": false
     },
     {
@@ -169,7 +169,7 @@
       "args": [],
       "cwd": "${workspaceFolder}",
       "MIMode": "gdb",
-      "miDebuggerPath": "C:/MinGW/bin/gdb.exe",
+      "miDebuggerPath": "${workspaceFolder}/install/mingw32-16.2.0/mingw32/bin/gdb.exe",
       "externalConsole": false,
       // Opens the browser HMI as soon as the gateway prints its startup URL.
       "serverReadyAction": {

@@ -2,11 +2,10 @@
 REM =============================================================================
 REM  build.bat -- one-stop build entry for the V906 C++ port.
 REM
-REM  AI(W906-GateA) 20260804: convenience wrapper requested by the user. It does
-REM  NOT reimplement anything: the MSVC paths delegate to the existing
-REM  scripts\build_msvc.bat (W7-A1 second oracle) and scripts\build_msvc_ui.bat
-REM  (W7-U0 / Gate A MFC exe), so there is exactly one definition of each
-REM  toolchain's rules.
+REM  AI(W906-GateA) 20260804: convenience wrapper requested by the user.
+REM  AI(W906-DropMSVC) 20260817: the MSVC modes (ui / run / msvc / all) and
+REM  their scriptsuild_msvc*.bat delegates are GONE. The UI is web and MFC
+REM  left the product, so MinGW is now the only toolchain this file drives.
 REM
 REM  USAGE (run from anywhere; paths are resolved from this file's location):
 REM
@@ -16,21 +15,18 @@ REM                         command.
 REM    build.bat gate       Full MinGW gate: configure + build + ctest. This is
 REM                         the number you quote when reporting work.
 REM    build.bat test       ctest only (assumes an existing build).
-REM    build.bat ui         MSVC MFC UI: builds HT9045.exe, runs the headless
-REM                         control probe, then the --smoke window check.
-REM    build.bat msvc       MSVC second oracle (non-UI libs + tests).
-REM    build.bat all        gate + ui.
 REM    build.bat clean      Delete the default MinGW build dir.
 REM    build.bat prune      List stale build_* dirs left over from past waves
 REM                         (dry run). "prune -y" deletes them; "prune 7" keeps
 REM                         anything touched in the last 7 days.
 REM    build.bat help       This text.
 REM
-REM  EXPECTED ctest BASELINE (2026-08-04): 122 passed / 4 failed of 126.
-REM  The 4 failures are ALWAYS config_db / IniFiles / ini_helpers /
-REM  config_loaders -- they are environment drift (the real system\Gerneral.ini
-REM  on this machine has been edited since those oracles were pinned), NOT code
-REM  regressions. Anything else failing IS a regression.
+REM  EXPECTED ctest BASELINE (2026-08-17): 129 passed / 6 failed of 136.
+REM  The 6 are ALWAYS config_db / IniFiles / ini_helpers / config_loaders /
+REM  dfm2rc_idempotent / GA1_ReadGeneralIni -- environment drift, NOT code
+REM  regressions. Anything else failing IS a regression. (A 7th, WB_Crypto,
+REM  can show BAD_COMMAND: that is antivirus quarantining the .exe, not a
+REM  test failure -- check whether build	ests	est_wb_crypto.exe exists.)
 REM
 REM  NOTE ON LINE ENDINGS: this file is CRLF on purpose, unlike the LF-only
 REM  convention of the rest of the tree -- cmd.exe's `goto` label scanning is
@@ -40,7 +36,6 @@ setlocal enabledelayedexpansion
 
 set "MINGW_BIN=C:\MinGW\bin"
 set "BUILD_DIR=build"
-set "UI_DIR=build_msvc_ui"
 set "SCRIPT_DIR=%~dp0"
 cd /d "%SCRIPT_DIR%"
 
@@ -50,12 +45,8 @@ if "%MODE%"=="" set "MODE=quick"
 if /i "%MODE%"=="help"  goto :help
 if /i "%MODE%"=="clean" goto :clean
 if /i "%MODE%"=="prune" goto :prune
-if /i "%MODE%"=="ui"    goto :ui
-if /i "%MODE%"=="run"   goto :run
-if /i "%MODE%"=="msvc"  goto :msvc
 if /i "%MODE%"=="test"  goto :testonly
 if /i "%MODE%"=="gate"  goto :mingw
-if /i "%MODE%"=="all"   goto :mingw
 if /i "%MODE%"=="quick" goto :mingw
 echo [build] Unknown mode "%MODE%".
 goto :help
@@ -136,27 +127,35 @@ echo [build] ctest exit code: %CTEST_RC%
 echo [build] REMINDER: 4 failures ^(config_db/IniFiles/ini_helpers/config_loaders^)
 echo [build] are the known environment drift, not regressions. Compare the
 echo [build] failing-test LIST, never just the exit code.
-if /i "%MODE%"=="all" goto :ui
 call :exenote
 endlocal & exit /b %CTEST_RC%
 
 REM ---------------------------------------------------------------------------
 REM  AI(W906-GateA-fix) 20260804: added after a real confusion -- the user ran
-REM  "build.bat", then went looking for HT9045.exe and found none. The MinGW
-REM  path CANNOT produce one: MFC is MSVC-only, so the exe lives entirely in
-REM  the "ui" mode. Say so instead of ending on a silent success.
+REM  "build.bat", then went looking for an exe and found none.
+REM  AI(W906-DropMSVC) 20260817: that text used to say "MinGW cannot produce an
+REM  exe: the UI is MFC, which is MSVC-only". Both halves are now false. The UI
+REM  is web, MSVC is gone, and this same MinGW invocation already produces the
+REM  three product exes below.
 :exenote
 echo.
-echo [build] NOTE: this mode builds LIBRARIES + TESTS only -- it does NOT make
-echo [build] an .exe. MinGW cannot: the UI is MFC, which is MSVC-only.
-echo [build]   to get the exe : build.bat ui
-echo [build]   then run it    : build.bat run
-if exist "%SCRIPT_DIR%%UI_DIR%\HT9045.exe" (
-    echo [build]   existing exe   : %SCRIPT_DIR%%UI_DIR%\HT9045.exe
+echo [build] Executables produced by this build:
+if exist "%SCRIPT_DIR%%BUILD_DIR%\wb_serve.exe" (
+    echo [build]   %BUILD_DIR%\wb_serve.exe
 ) else (
-    echo [build]   ^(no exe built yet^)
+    echo [build]   wb_serve.exe ^(not built yet^)
 )
-echo [build] The exe is NOT copied to D:\HT9045\EXE\ -- that directory belongs
+if exist "%SCRIPT_DIR%%BUILD_DIR%\wb_publish.exe" (
+    echo [build]   %BUILD_DIR%\wb_publish.exe
+) else (
+    echo [build]   wb_publish.exe ^(not built yet^)
+)
+if exist "%SCRIPT_DIR%%BUILD_DIR%\wb_gateway.exe" (
+    echo [build]   %BUILD_DIR%\wb_gateway.exe
+) else (
+    echo [build]   wb_gateway.exe ^(not built yet^)
+)
+echo [build] They are NOT copied to D:\HT9045\EXE\ -- that directory belongs
 echo [build] to the BCB6 production build, and this port must never overwrite it.
 goto :eof
 
@@ -183,52 +182,6 @@ echo      references -- never run two builds against "%BUILD_DIR%" at once.
 echo ==========================================================================
 endlocal & exit /b 1
 
-REM ---------------------------------------------------------------------------
-:ui
-echo [build] Delegating to scripts\build_msvc_ui.bat ^(MSVC + MFC^)...
-call "%SCRIPT_DIR%scripts\build_msvc_ui.bat"
-set "UI_RC=%ERRORLEVEL%"
-echo [build] UI pipeline exit code: %UI_RC%
-if "%UI_RC%"=="0" (
-    echo [build] HT9045.exe: %SCRIPT_DIR%%UI_DIR%\HT9045.exe
-    echo [build]   open it     : build.bat run
-    echo [build]   headless    : HT9045.exe --devpath --smoke 800
-    echo [build] NOTE: run it from cmd.exe, not PowerShell -- PowerShell does
-    echo [build] not wait on GUI-subsystem exes and reports no exit code.
-)
-endlocal & exit /b %UI_RC%
-
-REM ---------------------------------------------------------------------------
-REM  Launch the built exe interactively. --devpath is REQUIRED from the build
-REM  dir: golden's WinMain (HT9045.cpp:151-155) rejects any path outside
-REM  D:\HT9045\EXE\, faithfully translated. We do NOT copy the exe there --
-REM  see :exenote.
-:run
-if not exist "%SCRIPT_DIR%%UI_DIR%\HT9045.exe" (
-    echo [build] No exe yet -- building it first ^("build.bat ui"^)...
-    call "%SCRIPT_DIR%scripts\build_msvc_ui.bat"
-    if errorlevel 1 (
-        echo [build] FATAL: UI build failed; nothing to run.
-        exit /b 1
-    )
-)
-echo [build] Launching: %UI_DIR%\HT9045.exe --devpath
-echo [build] ^(Gate A skeleton: a placeholder window. The real fMain screen
-echo [build]  needs GA-3 + GA-4 -- see docs\GATE_A_FIRST_LIGHT_PLAN.md.^)
-"%SCRIPT_DIR%%UI_DIR%\HT9045.exe" --devpath
-set "RUN_RC=%ERRORLEVEL%"
-echo [build] exit code: %RUN_RC%   ^(BootLog: D:\HT9045\Error\BootLog.txt^)
-endlocal & exit /b %RUN_RC%
-
-REM ---------------------------------------------------------------------------
-:msvc
-echo [build] Delegating to scripts\build_msvc.bat ^(MSVC second oracle^)...
-call "%SCRIPT_DIR%scripts\build_msvc.bat"
-set "MSVC_RC=%ERRORLEVEL%"
-echo [build] MSVC oracle exit code: %MSVC_RC%
-echo [build] REMINDER: MSVC-only failures are advisory until W7-A3 triages
-echo [build] them ^(see docs\W7_UI_ARCHITECTURE_PLAN.md SS6/SS9-R13^).
-endlocal & exit /b %MSVC_RC%
 
 REM ---------------------------------------------------------------------------
 :clean
@@ -236,7 +189,7 @@ if exist "%BUILD_DIR%" (
     echo [build] Removing "%BUILD_DIR%"...
     rmdir /s /q "%BUILD_DIR%"
 )
-echo [build] Clean done. ^(build_msvc / build_msvc_ui are NOT touched --
+echo [build] Clean done. ^(build_dbg, if you made one, is NOT touched --
 echo [build] delete those by hand if you really mean to.^)
 endlocal & exit /b 0
 
@@ -262,7 +215,7 @@ if /i "%~3"=="-y" set "PRUNE_GO=1"
 
 REM The three dirs build.bat itself drives are never candidates. Note "build"
 REM cannot match build_* anyway; it is listed for the reader's benefit.
-set "PRUNE_KEEP=[build][%UI_DIR%][build_msvc]"
+set "PRUNE_KEEP=[build][build_dbg]"
 
 set "PRUNE_LIST=%TEMP%\ht9045_prune_%RANDOM%.txt"
 if exist "%PRUNE_LIST%" del /q "%PRUNE_LIST%"
@@ -271,7 +224,7 @@ if defined PRUNE_DAYS (
     REM forfiles /D -N selects entries last modified on or before N days ago.
     forfiles /P "%SCRIPT_DIR%." /M build_* /D -%PRUNE_DAYS% /C "cmd /c if @isdir==TRUE echo @file" > "%PRUNE_LIST%" 2>nul
 ) else (
-    echo [build] All stale build dirs ^(everything except build / %UI_DIR% / build_msvc^):
+    echo [build] All stale build dirs ^(everything except build / build_dbg^):
     for /d %%D in ("%SCRIPT_DIR%build_*") do echo "%%~nxD">> "%PRUNE_LIST%"
 )
 if not exist "%PRUNE_LIST%" echo [build] Nothing to prune. & endlocal & exit /b 0
@@ -306,23 +259,20 @@ endlocal & exit /b 0
 REM ---------------------------------------------------------------------------
 :help
 echo.
-echo   build.bat            fast incremental MinGW build   ^(libs+tests, NO exe^)
+echo   build.bat            fast incremental MinGW build   ^(libs+tests+exes^)
 echo   build.bat gate       MinGW configure + build + ctest ^(the reportable gate^)
 echo   build.bat test       ctest only
-echo   build.bat ui         MSVC MFC UI exe + probe + smoke ^(THIS makes the exe^)
-echo   build.bat run        open the exe ^(builds it first if missing^)
-echo   build.bat msvc       MSVC second oracle
-echo   build.bat all        gate + ui
 echo   build.bat clean      delete the MinGW build dir
 echo   build.bat prune      list leftover build_*_{wave,review,verify} dirs
 echo                        ^(dry run^); "prune -y" deletes, "prune 7 -y" keeps
 echo                        anything touched in the last 7 days
 echo.
-echo   WHERE IS THE EXE?  %UI_DIR%\HT9045.exe -- produced ONLY by "ui".
-echo   MinGW cannot build it ^(MFC is MSVC-only^), and it is never copied into
-echo   D:\HT9045\EXE\ ^(that dir is the BCB6 production build's output^).
+echo   WHERE IS THE EXE?  build\wb_serve.exe, wb_publish.exe, wb_gateway.exe
+echo   -- produced by the SAME MinGW build as the libs. They are never
+echo   copied into D:\HT9045\EXE\ ^(that dir is the BCB6 production output^).
 echo.
-echo   ctest baseline 2026-08-04: 122/126 pass; the 4 failures
-echo   ^(config_db/IniFiles/ini_helpers/config_loaders^) are environment drift.
+echo   ctest baseline 2026-08-17: 129/136 pass. SIX known failures
+echo   ^(config_db/IniFiles/ini_helpers/config_loaders/dfm2rc_idempotent/
+echo    GA1_ReadGeneralIni^) are environment drift, not regressions.
 echo.
 endlocal & exit /b 0

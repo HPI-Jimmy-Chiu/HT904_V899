@@ -96,98 +96,6 @@ add_compile_definitions(MN200DLL_EXPORTS)
 # =============================================================================
 add_compile_definitions(DLLDIR_EX)
 
-# =============================================================================
-# AI(W906-W7-A1) 20260728: MSVC second-oracle enablement block. MUST stay at
-# the TOP of this file (after project(), before any add_library) -- see
-# docs/W7_UI_ARCHITECTURE_PLAN.md SS6 W7-A1 / SS4-V5 / SS4-V8 for the full
-# rationale; only a compressed summary is kept here.
-#
-#   1. LINK_GROUP:RESCAN feature flags -- tests/CMakeLists.txt has exactly 66
-#      real "$<LINK_GROUP:RESCAN,...>" generator-expression sites (70 lines
-#      match the string; 4 of them are comments).  AI(W906-F0fix2) 20260729:
-#      this said "~69 real ... now more as later waves append tests", which was
-#      wrong -- the count is unchanged from the plan's SS4-V8 measurement of 66,
-#      because W7-F0 only edited existing group lines to insert ht9045_forms and
-#      added no new group.  Those exist ONLY to force GNU ld
-#      to re-scan static-archive dependency cycles at link time. CMake's
-#      LINK_GROUP feature is GNU/Clang-ld-specific and, unless MSVC is told
-#      the feature exists, CMake fails at CONFIGURE time with
-#      "Feature 'RESCAN' ... is not supported" -- before a single MSVC source
-#      file is even compiled. MSVC's link.exe already rescans archives on its
-#      own, so declaring the feature "supported" with an empty prefix/suffix
-#      makes every one of those sites a genuine no-op under MSVC. None of the
-#      66 sites needs editing for MSVC.
-#   2. /utf-8 -- translated sources contain UTF-8 non-ASCII (banner comments
-#      citing Chinese golden identifiers, etc). Without /utf-8, MSVC decodes
-#      source with the active code page (cp950 on this machine), which both
-#      warns (C4819) and can re-encode narrow string literals wrongly.
-#      /W3 matches the project's existing baseline warning level.
-#   3. _HAS_STD_BYTE=0 -- cmydef.h:127 / MyLaneIo.h:76-78,98 /
-#      Motor/HTMotor.h:92 use a bare `byte` name while `using namespace std;`
-#      is in scope (MachineDefine.h:30,67, database.h:39). Under MSVC's
-#      C++17 <cstddef>, std::byte pulled into scope makes `byte` C2872
-#      ambiguous; g++ 6.3 (MinGW) predates std::byte entirely, so MinGW never
-#      saw this. _CRT_SECURE_NO_WARNINGS -- silence MSVC's "unsafe" CRT
-#      function warnings (sprintf/strcpy/etc, already used throughout the
-#      ported BCB6-era code) so real signal isn't drowned by noise.
-#   4. FP fidelity: on 32-bit MSVC, /arch:IA32 restores x87 (rather than SSE2)
-#      floating point codegen. Per SS4-V5, /arch:IA32 ALONE is NOT enough to
-#      reproduce BCB6's x87 80-bit intermediate precision -- the runtime FP
-#      control word also has to be widened to 64-bit (extended) precision,
-#      which is done in tests/test_bootstrap.cpp via _controlfp_s. Both are
-#      required together; neither alone reproduces it.
-#
-# This whole block is a no-op for GNU/Clang (MinGW): every line is gated on
-# if(MSVC), so the primary MinGW oracle's build is byte-for-byte unaffected.
-# =============================================================================
-if(MSVC)
-    # --- 1. LINK_GROUP:RESCAN: declare the feature "supported" as a no-op ---
-    set(CMAKE_C_LINK_GROUP_USING_RESCAN_SUPPORTED TRUE)
-    set(CMAKE_C_LINK_GROUP_USING_RESCAN "" "")
-    set(CMAKE_CXX_LINK_GROUP_USING_RESCAN_SUPPORTED TRUE)
-    set(CMAKE_CXX_LINK_GROUP_USING_RESCAN "" "")
-
-    # --- 2. Source encoding ---------------------------------------------------
-    # AI(W906-W7-A1) 20260728: /wd4828 was added here after a from-scratch
-    # MSVC build produced 8,961,951 total C4828 warning lines, traced to
-    # leftover raw Big5 bytes in comments (and, in one file, in narrow string
-    # literals) across Config.h, CosFunction.h, MachineDefine.h, MachineType.h,
-    # cmydef.{h,cpp}, cprod.h, cpublic.h, myTimer.{h,cpp},
-    # Public/WinSocketErrorCode.cpp -- never converted when those files were
-    # copied out of the (Big5) golden tree.
-    # AI(W906-encoding) 20260728: fixed at the source instead of leaving the
-    # suppression permanent. All 11 files were transcoded whole-file
-    # cp950 -> UTF-8 (mechanical, not manual retranslation: each file's raw
-    # bytes decode losslessly under strict cp950 -- verified no exceptions --
-    # so decode(cp950).encode('utf-8') recovers the exact original Chinese
-    # text with only the on-disk byte encoding changed; confirmed line-by-line
-    # that decoded text is character-for-character identical before/after).
-    # Public/WinSocketErrorCode.cpp needed extra care: 8 of its bad-byte
-    # occurrences (7 string-literal assignments, lines ~60-231) are the Big5
-    # em dash (0xA1 0x58, U+2014) embedded in English MSDN-derived error text,
-    # not a comment -- under UTF-8 that raw pair is an invalid/orphan
-    # continuation byte (this IS the C4828 trigger), so leaving it raw would
-    # have been a real behaviour difference, not just noise. The same
-    # cp950->UTF-8 transcode turns it into a valid UTF-8 EM DASH, which is
-    # what a Big5-locale BCB6 build actually rendered -- so the fix recovers
-    # intended behaviour rather than changing it.
-    # All 11 files re-verified UTF-8-valid, BOM-free, and free of embedded
-    # U+FFFD after the transcode; /wd4828 is removed below because the
-    # detector's only known target is gone. g++/MinGW has no equivalent of
-    # this per-byte source-charset validation, so this class of defect is
-    # invisible to the primary (MinGW) oracle -- exactly why the MSVC second
-    # oracle (plan SS6) exists.
-    add_compile_options(/utf-8 /W3)
-
-    # --- 3. std::byte / using-namespace-std collision workaround --------------
-    add_compile_definitions(_HAS_STD_BYTE=0 _CRT_SECURE_NO_WARNINGS)
-
-    # --- 4. FP fidelity: x87-equivalent codegen on 32-bit MSVC -----------------
-    #        (paired with the _controlfp_s call in tests/test_bootstrap.cpp)
-    if(CMAKE_SIZEOF_VOID_P EQUAL 4)
-        add_compile_options(/arch:IA32)
-    endif()
-endif()
 
 # ---------------------------------------------------------------------------
 #  GNU/MinGW: static-link the compiler runtimes
@@ -315,16 +223,36 @@ add_library(vclcompat
     #   SAFE because TrayCore.cpp is zero-dependency by design (it includes only
     #   vclcompat/TrayCore.h and <cstdio> -- verified this pass), so vclcompat's
     #   own dependency graph does not widen by one edge.
-    #   LedCore.cpp / BtnPanelCore.cpp / render/*.cpp are deliberately NOT moved:
-    #   nothing outside the UI targets references them, and LedCore/BtnPanelCore
-    #   are what the W7-C1 note is really about.
-    #   The duplicate direct compiles (HT9045_UI_CTRL_SOURCES, tests/
-    #   CMakeLists.txt's test_traycore + test_trayrender) are left alone ON
-    #   PURPOSE: a static archive member is only extracted to resolve a symbol
-    #   that is still undefined, so an object compiled straight into a target
-    #   always wins and never collides with the archive copy.  Those three
-    #   targets keep the "self-contained, links only vclcompat" property their
-    #   own comments claim.
+    #   AI(W906-DropMSVC) 20260817: this note used to also cover render/*.cpp and
+    #   cite HT9045_UI_CTRL_SOURCES. Both are GONE -- vclcompat/render/ and the
+    #   whole MFC UI were deleted when the product UI became web. Rewritten to
+    #   say what is true now, because the old wording was actively dangerous.
+    #
+    #   LedCore.cpp / BtnPanelCore.cpp stay OUT of this library. Their only
+    #   out-of-line consumers are their own ctests (tests/CMakeLists.txt compiles
+    #   each straight into test_ledcore / test_btnpanelcore). PROVEN by the
+    #   20260817 build: with every UI target deleted, the god-stack still links,
+    #   so nothing on the machine side needs those bodies.
+    #
+    #   *** DO NOT DELETE THE FILES. *** The old wording, "nothing outside the UI
+    #   targets references them", is true of the .cpp BODIES and false of the
+    #   HEADERS, and someone skimming it could bin all three. Measured 20260817:
+    #     vclcompat/LedCore.h      included by 9 machine TUs (ATC/ATCInterface,
+    #       aTester_Front, aTester_Rear, csystem.cpp, mykitsuck.h,
+    #       EJ1N/MyOmronPanel.h, VacuumUnit/MyVacuumPanel.*)
+    #     vclcompat/BtnPanelCore.h included by 8 (forms/fMain.*, TempCtrl/TriTemp,
+    #       atester_ProcessCount, EJ1N/MyOmronPanel.h, mykitsuck.h, VacuumUnit/*)
+    #     vclcompat/TrayCore.h     included by 3 (OmronLaser/LaserSensor.*,
+    #       EJ1N/MyOmronPanel.h)
+    #   They are machine-side TYPE stand-ins that happen to have UI-sounding
+    #   names. Only the renderers and the MFC CWnd shells were ever UI.
+    #
+    #   The duplicate direct compile (tests/CMakeLists.txt's test_traycore) is
+    #   left alone ON PURPOSE: a static archive member is only extracted to
+    #   resolve a symbol that is still undefined, so an object compiled straight
+    #   into a target always wins and never collides with the archive copy. That
+    #   target keeps the "self-contained, links only vclcompat" property its own
+    #   comment claims.
     vclcompat/TrayCore.cpp
 )
 
@@ -704,7 +632,7 @@ endif()
 #   groups because its members reference ht9045_globals, which is listed AFTER
 #   it in those groups -- GNU ld is single-pass, so the group's re-scan is what
 #   settles that.  MSVC's link.exe re-scans archives on its own, which is why
-#   the RESCAN group is a declared no-op there (see the if(MSVC) block at the
+#   the RESCAN group was a declared no-op there (the if(MSVC) block was removed
 #   top of this file).
 # ---------------------------------------------------------------------------
 add_library(ht9045_forms STATIC
@@ -2272,111 +2200,6 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         -Wall -Wextra -Wno-conversion-null -Wno-write-strings -Wno-unused-parameter)
 endif()
 
-# =============================================================================
-# AI(W906-GateA-0) 20260804: W7-U0 -- the MFC UI executable, opt-in, MSVC-only.
-# docs/GATE_A_FIRST_LIGHT_PLAN.md GA-0 / docs/DESIGN_GateA.md D-A0-1.
-#
-#   * option() default OFF is LOAD-BEARING: MFC exists only under MSVC, and this
-#     project's primary oracle is MinGW -- a default-ON UI target would kill that
-#     oracle (MIGRATION_ROADMAP.md:22 flagged exactly this). scripts/
-#     build_msvc.bat:90 has been passing -DHT9045_UI=OFF since W7-A1 against an
-#     option that did not exist (CMake only warns on an undefined -D); this
-#     block finally defines it.
-#   * MSVC-only guard is FATAL_ERROR, not a silent skip: asking for the UI on
-#     MinGW is a wrong-toolchain mistake and must say so loudly.
-#   * CMAKE_MFC_FLAG=2 (shared MFC DLL) + explicit _AFXDLL: the 2026-07-29 MFC
-#     probe validated exactly this shape (Release /MD + /D_AFXDLL, vcvarsall
-#     x86 -vcvars_ver=14.44). Debug CRT is prohibited tree-wide (KNOWLEDGE.md
-#     Gotcha 9). _AFXDLL is defined explicitly because CMAKE_MFC_FLAG's
-#     define-injection is generator-dependent; doubling it is harmless.
-#   * OUTPUT_NAME HT9045: golden's exe name (HT9045.bpr PROJECT value), so the
-#     faithful exe-path check in ui/HT9045App.cpp compares like golden.
-#   * links ht9045_public only (cBootLog); the SM/engine libraries join in
-#     GA-3 when the FormRegistry starts constructing real facade objects.
-# =============================================================================
-option(HT9045_UI "Build the MFC UI executable ht9045_app (MSVC only)" OFF)
-if(HT9045_UI)
-    if(NOT MSVC)
-        message(FATAL_ERROR "HT9045_UI=ON requires MSVC+MFC. Use scripts/build_msvc_ui.bat; the MinGW oracle never builds UI.")
-    endif()
-    enable_language(RC)
-    set(CMAKE_MFC_FLAG 2)
-
-    # AI(W906-GateA-4-C5) 20260804: W7-C5 -- the three custom-control CWnd
-    # shells + the single global window-class registration (plan S7-6/7,
-    # S3-C1), together with the W7-C1 cores and W7-C2 renderers they drive.
-    #
-    #   * the vclcompat/*Core.cpp + vclcompat/render/*.cpp files are listed
-    #     here rather than linked from a library ON PURPOSE: they are NOT part
-    #     of the `vclcompat` target (grep -- only tests/CMakeLists.txt:2332-2412
-    #     compiles them today, once per test target), and adding them to that
-    #     library would change the MinGW oracle's link graph from inside a
-    #     UI-only wave. Compiling them into the UI targets keeps the change
-    #     confined to `if(HT9045_UI)`.
-    #   * shared between ht9045_app and the headless probe below so the two
-    #     never drift apart.
-    set(HT9045_UI_CTRL_SOURCES
-        ui/RegisterCustomClasses.cpp
-        ui/CLedCtrl.cpp
-        ui/CBtnPanelCtrl.cpp
-        ui/CTrayCtrl.cpp
-        vclcompat/LedCore.cpp
-        vclcompat/BtnPanelCore.cpp
-        vclcompat/TrayCore.cpp
-        vclcompat/render/RenderCommon.cpp
-        vclcompat/render/LedRender.cpp
-        vclcompat/render/BtnPanelRender.cpp
-        vclcompat/render/TrayRender.cpp
-    )
-
-    add_executable(ht9045_app WIN32
-        ui/HT9045App.cpp
-        ui/GateAPlaceholderDlg.cpp
-        #AI(W906-StateWin) 20260814: the machine-state monitor, now the default
-        # main window. The placeholder stays in the build -- --gatea-placeholder
-        # still selects it, and it is the Gate A open/pump/close harness.
-        ui/MachineStateDlg.cpp
-        ${HT9045_UI_CTRL_SOURCES}
-        ui/app.rc
-    )
-    target_compile_definitions(ht9045_app PRIVATE _AFXDLL)
-    # AI(W906-GateA-vscode) 20260804: emit debug info for the RELEASE exe so
-    # VS Code (F5 / cppvsdbg) can do source-level debugging. This deliberately
-    # does NOT switch to a Debug configuration: the Debug CRT is prohibited
-    # tree-wide (KNOWLEDGE.md Gotcha 9 -- its asserts raise MODAL dialogs that
-    # wedged a whole ctest run). /Zi only ADDS a .pdb; optimisation flags and
-    # therefore codegen are unchanged, so the binary the smoke test validates
-    # stays the binary we ship. /FS is required because Ninja compiles this
-    # target's TUs in parallel into one compiler PDB.
-    target_compile_options(ht9045_app PRIVATE /Zi /FS)
-    target_link_options(ht9045_app PRIVATE /DEBUG)
-    target_include_directories(ht9045_app PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ui)
-    set_target_properties(ht9045_app PROPERTIES OUTPUT_NAME "HT9045")
-    #AI(W906-StateWin) 20260814: + ht9045_webbridge, and that is the ONLY library
-    # added. It is the same load-bearing property wb_gateway has (CMakeLists.txt
-    # :2465-2471): the exe gains a tag-feed CLIENT and still links NO machine code
-    # -- no database.h, no state machines, no vclcompat. Two consequences worth
-    # stating, because someone will eventually be tempted to add "just one" more:
-    #   * it keeps this target clear of the C1061 wall. MSVC cannot compile the
-    #     god-stack (EJ1N/TextProcess.cpp:404-424, a 127-deep else-if chain), so
-    #     the moment a machine library appears here the UI stops building at all.
-    #   * it keeps the window incapable of touching the machine. There is no write
-    #     path; the monitor is a view, and that is a safety property, not a phase.
-    target_link_libraries(ht9045_app PRIVATE ht9045_public ht9045_webbridge)
-
-    # AI(W906-GateA-4-C5) 20260804: headless verification exe for the shells.
-    # Console subsystem (its own main() + AfxWinInit), creates the three
-    # controls under an HWND_MESSAGE parent and paints them into a memory DC,
-    # so it is structurally incapable of showing a window (plan S5-11 / S7).
-    # Run by scripts/build_msvc_ui.bat; exit code 0 == every check passed.
-    add_executable(ht9045_ctrl_probe
-        ui/tests_headless/headless_ctrl_probe.cpp
-        ${HT9045_UI_CTRL_SOURCES}
-    )
-    target_compile_definitions(ht9045_ctrl_probe PRIVATE _AFXDLL)
-    target_include_directories(ht9045_ctrl_probe PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/ui)
-    target_link_libraries(ht9045_ctrl_probe PRIVATE ht9045_public)
-endif()
 
 # ---------------------------------------------------------------------------
 # Library: ht9045_webbridge
