@@ -55,8 +55,13 @@ int main(int argc, char** argv)
     unsigned short port = 8045;
     std::string    root = "D:\\HT9045\\web";
     int            seconds = 0;      // 0 = run until Ctrl-C
-    bool           dry = false;
+    bool           dry = true;
 
+    //AI(W906-FW1) 20260817: same two safety reversals as wb_publish, paid for
+    // the same evening (see tools/wb_publish.cpp): unknown arguments refuse
+    // instead of falling through to atoi-as-port, and touching the REAL
+    // system\Gerneral.ini needs an explicit --real -- a config load can WRITE
+    // the file it reads, and the TIniFile flush destroys comments and layout.
     for (int i = 1; i < argc; ++i) {
         if (std::strcmp(argv[i], "--root") == 0 && i + 1 < argc) {
             root = argv[++i];
@@ -64,8 +69,17 @@ int main(int argc, char** argv)
             seconds = std::atoi(argv[++i]);
         } else if (std::strcmp(argv[i], "--dry") == 0) {
             dry = true;
+        } else if (std::strcmp(argv[i], "--real") == 0) {
+            dry = false;
+        } else if (std::strcmp(argv[i], "--port") == 0 && i + 1 < argc) {
+            port = static_cast<unsigned short>(std::atoi(argv[++i]));
         } else {
-            port = static_cast<unsigned short>(std::atoi(argv[i]));
+            std::printf("wb_serve: unknown argument '%s'\n"
+                        "usage: wb_serve [--port N] [--root DIR] [--seconds N] [--dry] [--real]\n"
+                        "  the config load uses a scratch copy by default; --real opts\n"
+                        "  into touching the live system\\Gerneral.ini.\n",
+                        argv[i]);
+            return 2;
         }
     }
 

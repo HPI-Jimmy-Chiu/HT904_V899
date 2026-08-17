@@ -90,11 +90,23 @@ int main(int argc, char** argv)
 
     unsigned short port    = 8046;
     int            seconds = 0;      // 0 = run until Ctrl-C
-    bool           dry     = false;
+    bool           dry     = true;   // see the 20260817 note below: dry is the DEFAULT
     bool           pump    = false;  // drive MainProc() each tick
     bool           withCfg = false;  // load config even when pumping (see header)
     int            tickMs  = 0;      // 0 = pick the default below
 
+    //AI(W906-FW1) 20260817: two safety reversals, both paid for the same evening.
+    // (1) An UNKNOWN argument used to fall through to atoi() as a port number --
+    //     so "--help" parsed as port 0, bound an ephemeral port, and (worse)
+    //     proceeded into the default config load. Unknown arguments now refuse.
+    // (2) Loading the REAL system\Gerneral.ini is now an explicit act (--real).
+    //     The default is the --dry scratch copy, because a config load can WRITE
+    //     the file it reads (seed-missing-keys), and the vclcompat TIniFile
+    //     flush rewrites the whole file from its parse model -- comments and
+    //     blank lines do not survive. That exact accident normalized the live
+    //     Gerneral.ini on 20260817 (values kept, layout lost, bytes
+    //     unrecoverable -- the file is untracked). --dry stays accepted as a
+    //     no-op alias so existing launch configs keep working.
     for (int i = 1; i < argc; ++i) {
         if (std::strcmp(argv[i], "--seconds") == 0 && i + 1 < argc) {
             seconds = std::atoi(argv[++i]);
@@ -102,12 +114,22 @@ int main(int argc, char** argv)
             tickMs = std::atoi(argv[++i]);
         } else if (std::strcmp(argv[i], "--dry") == 0) {
             dry = true;
+        } else if (std::strcmp(argv[i], "--real") == 0) {
+            dry = false;
         } else if (std::strcmp(argv[i], "--pump") == 0) {
             pump = true;
         } else if (std::strcmp(argv[i], "--with-config") == 0) {
             withCfg = true;
+        } else if (std::strcmp(argv[i], "--port") == 0 && i + 1 < argc) {
+            port = static_cast<unsigned short>(std::atoi(argv[++i]));
         } else {
-            port = static_cast<unsigned short>(std::atoi(argv[i]));
+            std::printf("wb_publish: unknown argument '%s'\n"
+                        "usage: wb_publish [--port N] [--seconds N] [--tick-ms N]\n"
+                        "                  [--pump] [--with-config] [--dry] [--real]\n"
+                        "  config loads use a scratch copy by default; --real opts\n"
+                        "  into touching the live system\\Gerneral.ini.\n",
+                        argv[i]);
+            return 2;
         }
     }
 
