@@ -7716,3 +7716,64 @@ bytes＋mtime 全等。
 - **可用 build dir**：build_fw1g（Debug）／build_fw1r（Release），HEAD=10f3f60 當下全新。
 - 事故後續：Gerneral.ini 已無註解排版（值完好）；若 V899 side 有该檔的更早備份可還原排版，
   但**不要**在不確認值相同前直接覆蓋。
+
+---
+
+## 2026-08-17（深夜，FW-1b＋FW-2）— sort 計數器上線、第一個 .dfm 進瀏覽器
+
+兩顆 commit：`68958e0`（FW-2 pilot）、`fb9e059`（FW-1b）。
+
+### FW-1b（fb9e059）：94 → 100 tags，與一個被否決兩次的審計候選
+
+驗證代理（唯讀）把 FW-1a 審計的三個 P 家族查到底，**兩個否決一個通過**，全部有
+golden 顯示碼證據：
+
+- `lot.auto*.trayId/.trayCount`（Bundle 分頁）＝**golden 自己的死 Label**（全樹零賦值）；
+  `.nowTrayId` 唯一活路徑掛在 KYEC AMR（`bEnableAMR`，pump 路徑寫死 false）且值只活在
+  VCL Caption 沒有模型變數 → REJECT。
+- `speed.*` ＝ 審計候選陣列**選錯兩次**（真來源是 `ArmSpeed_File[]`＋獨立的
+  `SHSpeed_File`，唯一填值函式 `TfSpeed::ReadFile()` 未翻譯且不在 --with-config 鏈）
+  → REJECT，歸 FW-3 表單翻譯。
+- `sort.*.count` ＝ WIRE。原候選 `iStackDefFailCate` 被 golden 讀碼否決（那是 Pass/Fail
+  分類旗標非計數器）；真來源 `LastSet.BinCT[0][...]`（cSortCT.cpp:399，blob 欄位已載入）。
+
+**本波最重要的陷阱（寫進程式註解與 oracle）**：兩套索引空間並存——顯示閘用
+e6TrayName（eFix1..3=6..8）、BinCT 欄用 e3TrayName（e3Fix1..3=3..5）；golden 靠
+`iTo3Unload[]` 換算，而 **port 的這個全域宣告了從未初始化（全零）**——經由它發布會讓
+Fix1..3 全部靜默指到 Auto1 的格子。接線直接用常數；oracle 用 iTrayType[7]+BinCT[0][4]=77
+的交叉種值釘死兩空間。**連帶照出潛在真缺陷**：已翻譯的執行碼也在消費這個全零表
+（`aoutarm.cpp:3332` AOA 修正路徑等）——golden 在未翻譯的 TfMain ctor 填它
+（main.cpp:1954-1966，純常數表）。已入佇列為獨立修復波。
+
+驗收：test_wb_tags 14 checks/0；全新 build_fw1bg/br Debug **134/3**＋Release **134/3**
+清單逐項相同（常駐子集）；system_guard 552 檔全等。
+
+### FW-2（68958e0）：dfm→web 產生器 pilot 走通全鏈
+
+- `tools/dfm2rc/emit_web.py`：**投影不是新解析器**——吃 dfm2rc 既有 IR（133 表單、
+  cp950 已解碼），產 `web/forms/<stem>.layout.json`（z-order 忠實；BINARY blob 按名
+  丟進 `binary_dropped` 可見不靜默；子目錄表單保留目錄——扁平化會讓 stem 不可回推，
+  真實表單名含底線如 uTemp_Set）。
+- `web/js/ui/formview.js`：唯讀防禦式渲染器（parent-relative 絕對定位重現 VCL 容器樹；
+  未知 class 畫紅框佔位並計數；events 帶在資料裡但**永不接線**）。
+- `web/form.html?form=<stem>`：獨立檢視頁。
+- ctest 新增 `web_layout_idempotent`（configure-time 從 web/forms glob stems，
+  FW-3 每波 emit 即自動擴充覆蓋）。
+- 驗收：pilot cTestCategory 位元組冪等；經 wb_gateway 全鏈 200（含 text/javascript
+  承重 header）；全新 build_fw2g Debug **134 測試**（新測試 Passed）失敗=常駐 3；
+  guard 全等。**誠實限制**：瀏覽器內的渲染保真最終還是要人按 F5 看。
+
+### 🔖 RESUME（最新）
+
+- **完成**：FW-0／FW-1a／FW-1b（wire 100 tags）／FW-2 pilot。commit 鏈：
+  1a49da7→c69ccb5→150b5dd→b10096b→e42a1c4→cc4f8c0→10f3f60→7a0196b→68958e0→fb9e059。
+- **下一步佇列（順序）**：
+  1. 舊 build dir 清理（保 build/、build_fw1bg、build_fw1br）。
+  2. **FW-2b 全量 emit**：133 表單全部產 layout.json＋--check＋reconfigure 讓
+     web_layout_idempotent 覆蓋全量（emitter 對怪 IR 的健壯性由這一波實測）。
+  3. **iTo3Unload 修復波**（行為變更，小）：照 golden main.cpp:1954-1966 常數表
+     在 port 補初始化（落點考慮 cmydef.cpp 定義處直接給初值=最小 diff；
+     golden 是 TfMain ctor 一次性寫入純常數，語意等價；雙 gate）。
+  4. **FW-3 批 1**：`Command.cpp`（TfMain 邏輯 9,445 行）切 2–3 波翻譯。
+- REJECT 存檔：lot.auto*（golden 死 Label/AMR 鎖）、speed.*（等 cSpeed.cpp 表單翻譯）。
+- 可用 build dir：build_fw1bg（Debug）／build_fw1br（Release），HEAD=fb9e059 當下全新。
