@@ -146,6 +146,43 @@ int main()
               "coverage is partial and honest about it");
     }
 
+    // --- 4. FW-1a: the LastSet-blob tags decode and map correctly ------------
+    //AI(W906-FW1) 20260817: direct-write oracle. The test seeds exact fields
+    // and asserts the published tag, pinning three properties: (a) the decode
+    // goes through golden's own StartModeName array (cmydef.cpp:62), (b) the
+    // [arm][row][col] -> site.arm{a}.s{n} mapping measured from ReadTestMode
+    // ([0]=Arm1 "Dut <name>" / [1]=Arm2 "Dut <name>2", cprod.cpp:3689/:3773;
+    // sites 9..16 = row 1), and (c) out-of-range codes publish null. Tests may
+    // write machine globals; production code may not -- that asymmetry is the
+    // same one the idle-pump change established.
+    {
+        LastSet.iRunStartMode = rsmContinuStart_ART;             // code 9
+        LastSet.bUseTestSocket[1][1][2] = true;                  // arm2 row1 col2 -> s11
+        LastSet.bUseTestSocket[0][0][0] = false;                 // arm1 s1 -> real 0
+
+        TagSnapshot snap;
+        ht9045::PublishHandlerTags(snap);
+        const TagSnapshotView v = snap.read();
+
+        const TagValue& sm  = v.tags.find("startmode.value")->second;
+        const TagValue& s11 = v.tags.find("site.arm2.s11")->second;
+        const TagValue& s1  = v.tags.find("site.arm1.s1")->second;
+        std::printf("\n-- 4. FW-1a oracle\n");
+        std::printf("   startmode.value = %s\n", sm.debugString().c_str());
+        check(sm.isString() && sm.asString() == "ContinuStart_ART",
+              "startmode.value decodes code 9 through StartModeName (cmydef.cpp:66)");
+        check(s11.isInt() && s11.asInt() == 1,
+              "site.arm2.s11 reads bUseTestSocket[1][1][2] -- arm dim per cprod.cpp:3773");
+        check(s1.isInt() && s1.asInt() == 0,
+              "site.arm1.s1 is a REAL 0 (site off) while the blob is live, not null");
+
+        LastSet.iRunStartMode = -1;                              // rsmNull
+        TagSnapshot snap2;
+        ht9045::PublishHandlerTags(snap2);
+        check(snap2.read().tags.find("startmode.value")->second.isNull(),
+              "an out-of-range start-mode code publishes null, never a guessed word");
+    }
+
     CloseGeneralIniFile();
     asGeneralPath = savedGeneralPath;
     ::DeleteFileA(scratch.c_str());

@@ -382,6 +382,52 @@ std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap)
     stageInt(snap, "lastset.runStartMode", lastS, LastSet.iRunStartMode);
     stageInt(snap, "lastset.temperature",  lastS, LastSet.iTemperature);
 
+    // --- FW-1a: the start-mode word + the 2-arm x 16-site map ----------------
+    //AI(W906-FW1) 20260817: first tag-wiring batch of the FW campaign
+    // (docs/DFM2WEB_CAMPAIGN_PLAN.md 4-FW-1). Both families read ONLY the
+    // LastSet blob, so the blob's liveness settles them like the scalars above.
+    //
+    // startmode.value decodes through golden's OWN display array,
+    // StartModeName[rsmRunModeTotal] (cmydef.cpp:62, translated verbatim) --
+    // the same lookup fMain does at golden main.cpp:560 -- rather than a
+    // hand-written mapping that could drift. The raw code stays on the wire as
+    // lastset.runStartMode so a reader can always cross-check the decode.
+    // Out-of-range codes (rsmNull = -1, or a corrupt blob) publish null: a
+    // missing word costs less than a confidently wrong one.
+    {
+        const int m = LastSet.iRunStartMode;
+        const bool decodable = lastS && m >= 0 && m < rsmRunModeTotal;
+        stageStr(snap, "startmode.value", decodable,
+                 decodable ? StartModeName[m] : AnsiString());
+    }
+
+    // site.arm{a}.s{n} <- LastSet.bUseTestSocket[a-1][(n-1)/8][(n-1)%8]
+    // ([2][4][8], LastSet.h:431).
+    //
+    // Source choice, verified against cprod.cpp:3630-3807 (ReadTestMode) and
+    // deliberately NOT the audit's first suggestion TestMode.iDutOnOff: when
+    // CosFunction.bLastSetInSetUpFile==false that function returns at :3642
+    // BEFORE filling iDutOnOff, so the TestMode array can sit all-zero while
+    // the real site map exists -- publishing it would show "every site off" as
+    // a confident value. bUseTestSocket IS the persisted truth in both
+    // branches: ReadTestMode seeds its ini reads from it AND writes its result
+    // back into it (:3712-3713, :3797-3798).
+    //
+    // First-dimension semantics measured, not assumed: [0] is Arm1 (ini key
+    // "Dut <name>", :3689->:3693), [1] is Arm2 ("Dut <name>2", :3773->:3777);
+    // FT/RT selects which ini SECTION is read (DutOnOff vs DutOnOff_RT), never
+    // the dimension. Site numbering follows tagmap.js "site.*" (XItem=8):
+    // sites 1..8 = row 0, 9..16 = row 1, col = (n-1)%8. Rows 2..3 of the
+    // 4-row array belong to shapes this screen does not show; not published.
+    for (int arm = 0; arm < 2; ++arm) {
+        for (int nSite = 1; nSite <= 16; ++nSite) {
+            char tag[24];
+            std::sprintf(tag, "site.arm%d.s%d", arm + 1, nSite);
+            stageInt(snap, tag, lastS,
+                     LastSet.bUseTestSocket[arm][(nSite - 1) / 8][(nSite - 1) % 8] ? 1 : 0);
+        }
+    }
+
     // --- everything whose source is measurably dead --------------------------
     for (std::size_t i = 0; i < kUnloadedCount; ++i) {
         stageNull(snap, kUnloadedTags[i]);
@@ -497,9 +543,14 @@ TagCoverage HandlerTagCoverage()
     const bool cust  = CustomerCodeLoaded();
     const bool lastS = LastSetLoaded();
 
-    // 3 identity strings + 1 customer code + 4 LastSet scalars + the dead set.
-    c.total = 3 + 1 + 4 + kUnloadedCount;
-    c.live  = (strs ? 3u : 0u) + (cust ? 1u : 0u) + (lastS ? 4u : 0u);
+    // 3 identity strings + 1 customer code + 4 LastSet scalars
+    // + FW-1a's 33 LastSet-blob tags (startmode.value + 32 site cells)
+    // + the dead set.
+    //AI(W906-FW1) 20260817: the 33 count under lastS because coverage asks
+    // about SOURCES -- the blob either loaded or it did not; startmode's
+    // per-value range guard is a publish-time concern, not a liveness one.
+    c.total = 3 + 1 + 4 + 33 + kUnloadedCount;
+    c.live  = (strs ? 3u : 0u) + (cust ? 1u : 0u) + (lastS ? (4u + 33u) : 0u);
 
     //AI(W906-SimPump) 20260813: the 18 clock/state/pump tags are DELIBERATELY NOT
     // counted here, and the reason is the same one this file exists for.
@@ -517,8 +568,9 @@ TagCoverage HandlerTagCoverage()
     // property worth keeping rather than an assertion to update.
     //
     // The true count of tags on the wire is PublishHandlerTags()'s return value
-    // (snap.stagedTagCount()), which is 61 = 43 machine + 18 process. Coverage and
-    // wire-count are different questions and this struct only answers the first.
+    // (snap.stagedTagCount()), which is 94 = 76 machine + 18 process since FW-1a
+    // (was 61 = 43 + 18 before the 33 LastSet-blob tags landed 20260817).
+    // Coverage and wire-count are different questions; this struct answers the first.
 
     // Referenced so the currently-always-false predicates cannot rot into
     // unused code and silently stop being checked when their sources land.
