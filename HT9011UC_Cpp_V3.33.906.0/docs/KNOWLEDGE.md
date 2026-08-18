@@ -265,3 +265,26 @@ CMakeLists.txt:50-53 寫「shipped MN200DLL.lib 是 32-bit OMF、MinGW 無可用
 **但 offline stub（vendor_offline_motionnet.cpp）仍有獨立價值**（無卡可建置、免執行期
 vendor DLL 依賴），真連結可行≠該退役 stub；改註解/接真 lib 屬設計取捨，動之前讀
 docs/RECON_MN200_PISO.md。另：x64 SDK 與 x86 同批同版（1.0.18.1，exports 各 192）。
+
+## MOTION_IO 是兩家 vendor 搶名（HAVE_PCI1203=1 必炸，20260818 診斷）
+
+**症狀**：`-DHAVE_PCI1203=1` 編 cinitial.cpp → `conflicting declaration typedef
+struct MOTION_IO`。**根因不是本樹的碼**：ICPDAS `Motor/vendor/MN200.h:221`
+（`typedef struct _MOTION_DEV_IO {...} MOTION_IO, *PMOTION_IO;`）與 Advantech
+`EtherCAT/vendor/AdvMotDrv.h:2594`（匿名 struct 同名 typedef）都在全域宣告
+`MOTION_IO/PMOTION_IO`。任何同時看到兩份 vendor header 的 TU 都會炸——
+cinitial.cpp 經 `Motor/myMN200motor.h:90`＋`Motor/myEthercatmotor.h:69` 同時掛到。
+預設組態（HAVE_PCI1203=0）不受影響。
+
+**修法屬 1203 HAL 設計輪，不在此先斬**（與「MN200 保留 vs 併入 EtherCAT」的
+使用者裁決糾纏）：
+1. **pimpl seam（正解候選）**：wrapper header（my*motor.h）不再 include vendor
+   header，vendor 型別只活在 wrapper .cpp——HAL 本來就該長這樣。
+2. **改名巨集（快解）**：在 myMN200motor.h include vendor 前
+   `#define MOTION_IO MN200_MOTION_IO`＋`#define PMOTION_IO MN200_PMOTION_IO`，
+   include 後 #undef。vendor 檔不動；限制＝跨 wrapper 傳 MOTION_IO 的碼要跟改。
+3. namespace 包 include：C linkage 下不可靠，不建議。
+
+順帶量到：cinitial.cpp:4525 起有一批 `iPortID`（unsigned int）塞進 `BYTE`
+陣列的 -Wnarrowing 警告，golden 同型（BCB6 不告警），非本診斷範圍。
+
