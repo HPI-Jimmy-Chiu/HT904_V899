@@ -10266,3 +10266,2631 @@ void TfMain::WriteNumOfSites()                                                  
 
 // -- FW3-WC APPEND -- end (ByDLL family, golden Command.cpp :8311-9994; RemoteControl :9673-9717 excluded per never-wave) --
 
+// AI(W906-FW3-WD) 20260818: additional #includes for symbols the FW3-WD GROUP
+// below needs that no earlier Command.cpp #include (see top of file, or the
+// FW3-WB/FW3-WC blocks) pulls in. Placed here rather than sorted into the top
+// block because this file's contract is append-only past "-- FW3-WC APPEND --
+// end" -- existing lines (including the existing #include blocks) are not to
+// be touched. Header-guarded, so safe regardless of what else already
+// (transitively) included them.
+//   NOTE: bthermo.h (bGetHeaterUsed), aHotPlateSubstrate.h (TestSocket/cSBin),
+//   csystem.h (HasICUnderMachine) and Config.h (IniConfig, via cprod.h) are
+//   ALREADY visible from the top-of-file / FW3-WB include blocks -- verified
+//   this pass (`grep -n "^#include" Command.cpp`, 20260818) -- so none of them
+//   is repeated below.
+
+// =============================================================================
+//  FW3-WD GROUP -- the SIGURD/GPIB status-string + bin/soak/site-map command
+//                  family
+//
+//  Translation wave: FW-3 Wave D
+//  Translator: AI(W906-FW3-WD) 20260818
+//  Golden source: HT9011UC_Code_V3.33.906.0_20260618/Command.cpp (15,273 lines, cp950)
+//
+//  ROLE
+//  ----
+//  29 golden TfMain:: methods, golden Command.cpp :9995-12061, declared in
+//  forms/fMain.h's new "FW3-WD ADD" block. These are the SIGURD-customer GPIB
+//  status/temperature/site-map/bin-configuration entry points layered on top
+//  of the FW3-WA/WB/WC families: Samsung-format temp/map/soak strings, TTL
+//  RS232 state, SIGURD SETTEMP_/SETSOAK_/SETSITEMAP_/CHKSTATUS?/SGSETUP_/
+//  SetStartMode_/CHECKLIST?/BINPOS_/SGFTP_*/NONDOUBLEBIN_/BINCOUNT_/SGOSBIN_/
+//  SGCONTFAIL_, plus the UTAC PPSELECT read-file pair and the Amlogic SBIN
+//  setter. Per the task brief: bodies are translated, NO caller (TCP dispatch
+//  / GPIB dispatch table) is wired up. golden Command.cpp :12063-12536 (the
+//  next 34 methods, SetTesterID..GetSiteState) were ALREADY translated by
+//  FW3-WA (confirmed present in this file, `grep -n "TfMain::SetTesterID\|
+//  TfMain::GetSiteState" Command.cpp`, 20260818) -- not re-touched here. Golden
+//  :12540 onward (the TCP-server family) is excluded per this wave's own
+//  scope boundary, not per any never-wave list.
+//
+//  WAVE SCOPE (every golden method, golden line span, ACTIVE or GATED-partial)
+//  ------------------------------------------------------------------------------
+//    GetSamSungTmp             :9995-10135  ACTIVE
+//    GetSamSungMap              :10137-10303 ACTIVE
+//    GetSamSungSoakTime         :10305-10322 ACTIVE
+//    GetTTLState                :10324-10500 GATED-partial (Handle/HVisionWnd, GATE REGISTER 1-2)
+//    Send_Command_TTL           :10502-10511 ACTIVE (1 vclcompat-surface substitution, S8)
+//    WriteSetTempStatus_SIGURD  :10513-10594 GATED-partial (fTemp_Set / edATCAmbientTemper / ChangeTempMode, GATE REGISTER 3-5)
+//    WriteSetSoakTimeStatus_SIGURD :10596-10668 GATED-partial (ChangeTempMode / IniData write, GATE REGISTER 6-7)
+//    SetSiteMapData_SIGURD      :10670-10728 GATED-partial (ChangeToSiteMap, GATE REGISTER 8) (1 vclcompat-surface substitution, S7)
+//    GetTestIFSiteMap           :10730-10954 ACTIVE
+//    ChkStatus                  :10956-11013 ACTIVE (1 GOLDEN ODDITY, B5)
+//    GetBinCategory             :11015-11024 ACTIVE
+//    GetSetUpFileName           :11026-11039 ACTIVE
+//    GetHandlerID_Sigurd        :11041-11051 ACTIVE
+//    SetSetupFileName           :11053-11102 GATED-partial (fFTPClient, GATE REGISTER 9)
+//    ChangeSetupFileName        :11104-11135 GATED-partial (fFTPClient, GATE REGISTER 10)
+//    PPSELECTAskFile            :11139-11144 ACTIVE
+//    PPSELECTLoadFile           :11146-11191 GATED-partial (ShowMessage, GATE REGISTER 11)
+//    SetStartMode               :11195-11271 ACTIVE (1 GOLDEN ODDITY, B5)
+//    ChangeHandlerStartMode     :11274-11332 GATED-partial (cbRunStartMode/DoFTRTClick, GATE REGISTER 12) -- SAFETY-RELEVANT, see RISK note below
+//    CheckList                  :11334-11357 GATED-partial (fLotInfo, GATE REGISTER 13)
+//    SetBinPosChange            :11359-11398 ACTIVE
+//    BinPosChange               :11400-11548 GATED-partial (fBinSel / fShowBinSelect, GATE REGISTER 14-15) -- SAFETY-RELEVANT, see RISK note below
+//    GetSGFTPSTATUS             :11550-11558 ACTIVE
+//    SetSGFTP                   :11560-11609 GATED-partial (fConfiguration / config\ write / fLotInfo, GATE REGISTER 16-18)
+//    SetNONDOUBLEBIN            :11611-11696 ACTIVE (1 vclcompat-surface substitution, S6)
+//    SetSBinData                :11698-11724 ACTIVE
+//    SetBINCOUNT                :11726-11891 GATED-partial (IniData write / fBinSel, GATE REGISTER 19-20) (1 vclcompat-surface substitution, S6) -- SAFETY-RELEVANT, see RISK note below
+//    SetSGOSBIN                 :11893-11947 GATED-partial (fLotInfo, GATE REGISTER 21)
+//    SetSGCONTFAIL              :11949-12061 GATED-partial (IniData write / fYieldMonitoring / fLotInfo, GATE REGISTER 22-24) (1 GOLDEN BUG, B6)
+//  TOTALS: 29 methods, 2,067 raw golden lines extracted; 12 ACTIVE, 17 GATED-partial.
+//
+//  RISK NOTE -- machine-mode-switching / persistence methods (per project rule:
+//  describe risk before verification, not after)
+//  ------------------------------------------------------------------------------
+//  * ChangeHandlerStartMode: the body is translated FAITHFULLY (per this wave's
+//    "本體照翻, 呼叫者不接線" instruction) including its unconditional
+//    `return true;` tail. Because `cbRunStartMode`/`DoFTRTClick` are gated
+//    (GATE REGISTER 12), the FT/RT arms currently do NOT actually flip
+//    `LastSet.iRunStartMode` the way golden's `DoFTRTClick` would -- only the
+//    QA arm (`SetRunStartMode(rsmQAMode)`, a real call) does. Since nothing
+//    calls `ChangeHandlerStartMode`/`SetStartMode` yet (no caller wired this
+//    wave), this is currently inert; it becomes live behavior the moment a
+//    GPIB/TCP dispatcher starts invoking `SetStartMode()`.
+//  * BinPosChange / SetBINCOUNT: both update the live in-memory `BinSelect[]`
+//    array for real (ACTIVE), but the on-screen `fBinSel` mirror AND the
+//    setup-file persistence (`fBinSel->spbSaveClick`, which golden's own
+//    comments identify as "寫入 FT SetupFile") are gated (GATE REGISTER 14/20
+//    -- fBinSel has no port anywhere in this tree). A BINPOS_/BINCOUNT_ command
+//    would report OK and change bin routing for the CURRENT run, but the
+//    change is lost on the next setup-file reload / restart. Same absence
+//    FW3-WC already established for `WriteSetBinMap` (GATE #6).
+//
+//  GATE REGISTER  (24 #if 0 sites; each states WHY the gate is correct, not
+//  just "not found" -- per this wave's own anti-absence-claim-rot instruction.
+//  Every grep below was re-run 20260818, from this tree's root, excluding
+//  ./tools/ and ./build*/.)
+//  ------------------------------------------------------------------------------
+//   1. GetTTLState, golden :10334-10335 `HHandler2Gpib.HandlerHwnd=this->Handle;`
+//      / `HHandler2Gpib.GpibHwnd=HVisionWnd;` -- neither `Handle` (TForm's own
+//      window handle) nor `HVisionWnd` (golden main.h:1215 `HWND HVisionWnd;`,
+//      a TfMain data member) is declared anywhere in forms/fMain.h
+//      (`grep -n "HVisionWnd" forms/fMain.h` -- 0 hits; bare `Handle` likewise
+//      0 hits). Both struct-field assignments are skipped; `HHandler2Gpib.
+//      HandlerHwnd`/`.GpibHwnd` simply keep whatever value they last held
+//      (VCL zero-inits `HWND` fields to 0, same as this port's own MV ctor).
+//   2. GetTTLState, golden :10497 `SendMessage(fMain->HVisionWnd, WM_COPYDATA,
+//      (WPARAM) NULL, (LPARAM)pcp);` -- same HVisionWnd absence as item 1; no
+//      real Win32 window subsystem exists offline to address, matching this
+//      tree's established "no hardware/UI to fail" posture (e.g.
+//      WriteHandlerTestArmEP GATE #7, FW3-WA banner). `pcp` is still
+//      allocated, populated (`dwData`/`cbData`/`lpData`) and freed exactly as
+//      golden does -- no leak -- only the message SEND itself is skipped.
+//      Every other line in this function (the whole TTL_CARD_TYPE / DIOCfg
+//      bit-length branch tree and the `asBuffer->Add(...)` message-content
+//      build) is real computation over real globals and stays ACTIVE.
+//   3. WriteSetTempStatus_SIGURD, golden :10530-10531 `dTempMax=fTemp_Set->
+//      MaxTempSetting(); dTempMin=fTemp_Set->MinTempSetting();` -- `fTemp_Set`
+//      (golden uTemp_Set.h TfTemp_Set) has NO port anywhere in this tree.
+//      ESTABLISHED precedent, not a fresh finding: MyTempPanel.cpp's own GATE
+//      (W8-3) already gates this EXACT golden idiom for the same reason.
+//      `grep -rn --include=*.h --include=*.cpp -E
+//       "fTemp_Set[[:space:]]*(;|=)|\*[[:space:]]*fTemp_Set|TfTemp_Set" .`
+//      -- only Automation/auto9045.cpp's TU-local stand-in `W5FA_TfTemp_SetExt
+//      W5FA_FTemp_Set` (carries `edSoakTime`/`edWorkTemp` only, no
+//      MaxTempSetting/MinTempSetting), plus ./build/* generated layout tables.
+//      `dTempMax`/`dTempMin` THEMSELVES are real (cmydef.h:3437-3438, default
+//      135.0/20.0) -- the ACTIVE arm leaves both at whatever the rest of the
+//      system last wrote, same as W8-3's own reasoning.
+//   4. WriteSetTempStatus_SIGURD, golden :10559 `edATCAmbientTemper->Text=d;`
+//      and :10580 `atof(edATCAmbientTemper->Text.c_str())` -- `edATCAmbientTemper`
+//      is not a declared TfMain member anywhere (`grep -rn "edATCAmbientTemper"
+//      .` -- 0 hits, any header or source, tree-wide). Since the widget's only
+//      role here is to MIRROR `d` (set two lines above the read, in the exact
+//      same `if(Temperature.bATCActiveCooling)` arm), the `SetTemp(...)` call
+//      substitutes `d` directly in place of the missing mirror -- the
+//      identical numeric value golden's own widget would have held, not a
+//      fabricated one.
+//   5. WriteSetTempStatus_SIGURD, golden :10585 `ret=ChangeTempMode(TempMode,
+//      false, bRefreshFunction, true);` -- ChangeTempMode absence, ESTABLISHED
+//      precedent (this file's own FW3-WA GATE #2, Command.cpp:1852-1867/
+//      1883-1888: golden main.h:1323 TfMain member, not in forms/fMain.h, no
+//      facade path). `ret` is left at whatever `SetTemp()` (a real,
+//      already-GATED-leaf fMain member) returned above, same posture as GATE #2.
+//   6. WriteSetSoakTimeStatus_SIGURD, golden :10651/:10657 `fMain->
+//      ChangeTempMode(0, false, true);` / `fMain->ChangeTempMode(1, false,
+//      true);` -- same ChangeTempMode absence as item 5.
+//   7. WriteSetSoakTimeStatus_SIGURD, golden :10652/:10658 `WriteIniData(szDir,
+//      "Mode", "Mode", 1/0);` where `szDir=DataPath+S+"\Temperature.Data"` --
+//      SHARED MACHINE CONFIG WRITE (`DataPath` = `D:\HT9045\IniData\Data\`,
+//      common.cpp:104). See "SHARED CONFIG WRITE GATES" list below for the
+//      full policy citation; not re-derived per-site.
+//   8. SetSiteMapData_SIGURD, golden :10715 `ret=ChangeToSiteMap(str);` --
+//      `ChangeToSiteMap` (golden main.h:1432, body golden Command.cpp:7511) has
+//      NO port anywhere in this tree (`grep -rn "ChangeToSiteMap" --include=*.h
+//      --include=*.cpp .` -- 0 hits). It is a genuine golden dependency this
+//      wave's 29-method list does NOT include (golden :7511 sits inside golden
+//      Command.cpp's earlier :6542-8201 span, already claimed by FW3-WB's
+//      GetCZAllMassTemp, and was not itself translated by that wave either --
+//      re-verified this pass). `ret` keeps its OWN declared initial value
+//      (`bool ret=true;`, golden :10672) rather than being reset to `false` --
+//      per this wave's "不可順手修好" rule, golden's own default is preserved
+//      even though it means a SETTINGOK reply is sent without the site map
+//      having actually changed. The backup bookkeeping
+//      (`iBackupDutOnOff`/`iBackupTestMode`) and the CRLF-strip/reply-building
+//      logic around it are real and stay ACTIVE.
+//   9. SetSetupFileName, golden :11086 `if(fFTPClient->
+//      CheckSetupFileNameFromServer(asChangeSetupFileName)==true) ret=true;`
+//      -- `fFTPClient` (golden TfFTPClient, KYECFTP's FTP-download dialog) has
+//      no facade in this tree. `grep -rn -E "class TfFTPClient|extern.*
+//      \bfFTPClient\b"  --include=*.h .` -- 0 hits; the two existing
+//      `fFTPClient` name occurrences (AutoRetest.h:28, canary_support.h:163)
+//      are prose NOTING its absence for an unrelated unit, not declarations.
+//      `ret` stays its declared default `false` for every customer code other
+//      than CC_SIGURD_PeiXing (whose own branch, immediately above, is real
+//      and un-gated).
+//  10. ChangeSetupFileName, golden :11120-11127, the whole `fFTPClient->
+//      bControlByGPIB=true; ->iErrorByGPIB=0; ->asSetUpNameByGPIB=...;
+//      ->ShowFTPModal(0); ... ->bControlByGPIB=false; if(fFTPClient->
+//      iErrorByGPIB==0)` cluster -- same fFTPClient absence as item 9. Faithful
+//      default: `return false;` (no download channel exists offline, so the
+//      recipe change cannot have succeeded). `bSigurdDownload_Recipe=true;`/
+//      `=false;` (cmydef.h:5184, a real global other code may observe) stay
+//      ACTIVE either side of the gated cluster, and the two early-return
+//      guards (`SystemStart==true`, name-equality check) stay ACTIVE.
+//  11. PPSELECTLoadFile, golden :11163 `ShowMessage("Has IC Under Machine");`
+//      -- golden's plain VCL Dialogs.hpp `void ShowMessage(const AnsiString&)`,
+//      an ESTABLISHED tree-wide absence with a standard TU-local no-op
+//      stand-in convention (5 other TUs each define their own: ATC/
+//      ATCSystem.cpp:196 `W906_ATCSystem_Gated_ShowMessage`, ProductionInfo/
+//      TfFTP.cpp:169 `Gated_ShowMessage`, SECSGEM/SecsSvEcRegistration.cpp:44,
+//      PMAlarm/PMAlarmSystem.cpp:176, SECSGEM/uHGemEquipment.cpp:3271, plus
+//      asendic_Loader.cpp:280/310's `#define ShowMessage W7L1L_ShowMessage`).
+//      Same treatment applied here: a TU-local `Gated_ShowMessage` no-op is
+//      defined once, immediately above PPSELECTLoadFile below, and substituted
+//      for golden's call.
+//  12. ChangeHandlerStartMode, golden :11302-11305 (the FT arm) and
+//      :11313-11316 (the RT arm), all four `cbRunStartMode->Enabled=...;` /
+//      `fMain->DoFTRTClick(...)` statements -- neither symbol is a declared
+//      TfMain member. `grep -n "cbRunStartMode" forms/fMain.h` -- exactly 1
+//      hit, a PROSE comment at line 541 ("the iSecsGemSwitchFTRT==0 &&
+//      cbRunStartMode->Enabled==false guard"), no declaration anywhere.
+//      `grep -n "DoFTRTClick" forms/fMain.h` -- 0 hits. Per this wave's brief
+//      ("SetStartMode/ChangeHandlerStartMode/ChangeSetupFileName 這類改機台
+//      模式的方法：本體照翻，呼叫者不接線"), the function's own `return true;`
+//      tail is left ACTIVE and un-gated -- see the RISK NOTE above for the
+//      behavioral consequence this creates.
+//  13. CheckList, golden :11341 `fLotInfo->GenerateCheckList(false,
+//      sCheckListName, true);`, :11343 `ret=fLotInfo->GenerateCheckList(false,
+//      fMain->cbSetupFileName->Text, false);`, and :11354 `fLotInfo->
+//      RefreshYieldMonitor();` -- neither `GenerateCheckList` nor
+//      `RefreshYieldMonitor` is a declared forms/fLotInfo.h member.
+//      `grep -n "GenerateCheckList\|RefreshYieldMonitor" --include=*.h .`
+//      (tree-wide) -- 0 hits. `ret` keeps its declared default `AnsiString
+//      ret="";` (golden :11336), so the SendMSG_CMD reply naturally resolves
+//      to the `t.sprintf("SETTINGNG")` arm -- a faithful "the checklist action
+//      did not happen" outcome, not a fabricated "OK".
+//  14. BinPosChange, golden :11535-11541, the whole `for(i<TEST_MAX_BIN)
+//      { if(i<fBinSel->sBinTraySetT3Pos[iTestRunMode]->Count)
+//      fBinSel->sBinTraySetT3Pos[iTestRunMode]->Strings[i]=...; }` loop, plus
+//      :11542-11543 `fBinSel->ChangeActivePageIndex();`/`->spbSaveClick(this);`
+//      -- `fBinSel` (golden TfBinSel) has no port anywhere in this tree.
+//      ESTABLISHED precedent: this file's own FW3-WC GATE (Command.cpp:8483/
+//      8498/8538/8546/8618) already cites the same absence for
+//      `SetTrayBinByDLL`/`WriteSetBinMap`. The in-memory `BinSelect[iTestRunMode]
+//      .iCatDataT3Pos[]` update immediately above (golden :11523-11533) stays
+//      ACTIVE and un-gated -- see the RISK NOTE above for the persistence
+//      consequence.
+//  15. BinPosChange, golden :11544 `fShowBinSelect->ShowBinSel();` --
+//      `ShowBinSel` (golden cShowBinSelect.cpp :388-757) is explicitly queued
+//      for a LATER wave by forms/fShowBinSelect.h's own "WAVE B QUEUE" table
+//      (that file's header banner, this pass re-read in full) -- it is not yet
+//      a declared TfShowBinSelect member (`grep -n "ShowBinSel\b"
+//      forms/fShowBinSelect.h` -- 1 hit, inside that WAVE-B-QUEUE comment
+//      list, no declaration).
+//  16. SetSGFTP, golden :11589/:11597 `fConfiguration->cbA32->Checked=
+//      true/false;` -- the only `fConfiguration` global in this tree is
+//      Automation/SCK_ART_Remainder.h's narrow `W5SckArtRem_ConfigStub`
+//      (ESTABLISHED absence, this file's own FW3-WA GATE #8: "carries only
+//      ->mmoN04_IP, not edN27_6" -- re-verified this pass that it carries no
+//      `cbA32` either, `grep -n "cbA32" Automation/SCK_ART_Remainder.h` -- 0
+//      hits).
+//  17. SetSGFTP, golden :11588/:11595 `WriteIniData(sPath, "Function",
+//      "bA32EnableFTPAutomation", 1/0);` where `sPath=AuthPath+"config.ini"`
+//      (AuthPath=`D:\HT9045\config\`, common.cpp:102) -- SHARED MACHINE CONFIG
+//      WRITE (config\), explicit case named in this wave's brief. See "SHARED
+//      CONFIG WRITE GATES" list below.
+//  18. SetSGFTP, golden :11605 `fLotInfo->RefreshYieldMonitor();` -- same
+//      absence as item 13.
+//  19. SetBINCOUNT, golden :11800/:11802/:11807/:11809, the four
+//      `WriteIniData(sLastFilePath, ...)` calls (`sLastFilePath=DataPath+
+//      asLastFileName+"\Tester.Data"`) -- SHARED MACHINE CONFIG WRITE
+//      (IniData\). See "SHARED CONFIG WRITE GATES" list below.
+//  20. SetBINCOUNT, golden :11875/:11876 `fBinSel->ChangeActivePageIndex();`/
+//      `->spbSaveClick(this);` -- same fBinSel absence as item 14. The
+//      in-memory `BinSelect[iTestRunMode].iPersentIgnore[]`/`Prod.
+//      iPersentIgnore[]` updates immediately around it stay ACTIVE -- see the
+//      RISK NOTE above.
+//  21. SetSGOSBIN, golden :11943 `fLotInfo->RefreshYieldMonitor();` -- same
+//      absence as item 13.
+//  22. SetSGCONTFAIL, golden :12008-12009/:12019-12020 (FT) and
+//      :12035-12036/:12046-12047 (RT), eight `WriteIniData(szDir, "Alarm",
+//      ...)` calls (`szDir=DataPath+S+"\Tester.Data"`) -- SHARED MACHINE
+//      CONFIG WRITE (IniData\). See "SHARED CONFIG WRITE GATES" list below.
+//  23. SetSGCONTFAIL, golden :12010-12011/:12021-12024 (FT) and
+//      :12037-12038/:12048-12051 (RT), twelve `fYieldMonitoring->
+//      edContsFail...->Text=...` / `->rbContsFail...->Checked=...` lines --
+//      none of the six exact widget names this function touches
+//      (`edContsFailSocketAlarmCT_FT/_RT`, `edContsFailHeadAlarmCT_FT/_RT`,
+//      `rbContsFailBySocket_FTOn/FTOff/RTOn/RTOff`,
+//      `rbContsFailByHead_FTOn/FTOff/RTOn/RTOff`) is a declared
+//      forms/fYieldMonitoring.h member. `grep -n "edContsFailSocketAlarmCT\|
+//      edContsFailHeadAlarmCT\|rbContsFailBySocket\|rbContsFailByHead"
+//      forms/fYieldMonitoring.h` -- 0 hits. The real
+//      `TestIF_File.bContsFailBySocket(_RT)`/`.bContsFailByHead(_RT)`/
+//      `.iContsFailSocketAlarmCT(_RT)`/`.iContsFailHeadAlarmCT(_RT)` globals
+//      immediately above each gated block stay ACTIVE. See GOLDEN BUG (B6)
+//      below for an inert bug preserved inside this GATE.
+//  24. SetSGCONTFAIL, golden :12056 `fLotInfo->RefreshYieldMonitor();` -- same
+//      absence as item 13.
+//
+//  SHARED CONFIG WRITE GATES (per this wave's own "共用 config 寫檔一律 gate"
+//  rule: any write toward setup.inf / CurrentSetupData.txt / D:\HT9045\system
+//  / config / CFG is `#if 0`-gated with the fixed comment "shared machine
+//  config write -- queued for redirect-seam design", because unlike the
+//  W906_EVENTLOG_ROOT log-path seam, there is NO redirect seam for these paths
+//  and they are shared with the production machine.)
+//  ------------------------------------------------------------------------------
+//  SCOPE NOTE (read before the list): the wave brief's own enumeration named
+//  setup.inf / CurrentSetupData.txt / system\ / config\ / CFG\ verbatim, and
+//  did not separately spell out `IniData\`. This wave extends the same gate to
+//  every `DataPath`-rooted write (`DataPath` = `D:\HT9045\IniData\Data\`,
+//  common.cpp:104) on the strength of the wider project posture already
+//  written into this agent's own persona brief and CLAUDE.md's write-boundary
+//  table, both of which list `IniData\` alongside `system\`/`config\`/`CFG\`
+//  as "量產機共用的執行期參數". `D:\HT9045_Log\CheckingList\...` writes
+//  (SetNONDOUBLEBIN/SetBINCOUNT/SetSGOSBIN/SetSGCONTFAIL's `sCheckListFilePath`
+//  target) are a DIFFERENT category -- a log directory, not shared machine
+//  config -- and are left ACTIVE, matching this wave's own "這與 log 寫檔不同"
+//  carve-out.
+//    * GATE REGISTER item 7  -- WriteSetSoakTimeStatus_SIGURD, `szDir`
+//      (`DataPath+S+"\Temperature.Data"`), 2 statements.
+//    * GATE REGISTER item 17 -- SetSGFTP, `sPath` (`AuthPath+"config.ini"`),
+//      2 statements. (`config\`, the wave brief's own explicit case.)
+//    * GATE REGISTER item 19 -- SetBINCOUNT, `sLastFilePath`
+//      (`DataPath+asLastFileName+"\Tester.Data"`), 4 statements.
+//    * GATE REGISTER item 22 -- SetSGCONTFAIL, `szDir`
+//      (`DataPath+S+"\Tester.Data"`), 8 statements (FT+RT, HeadCT/SocketCT/
+//      SocketEnable/HeadEnable).
+//
+//  VCLCOMPAT-SURFACE SUBSTITUTIONS (behavior-preserving, not gates -- flagged
+//  per pt-wave policy so the integration pass can review/veto each; numbered
+//  continuing from FW3-WC's S1-S5)
+//  ------------------------------------------------------------------------------
+//  (S6) SetNONDOUBLEBIN golden :11669 `atoi(tNonDoubleBin->Strings[i].c_str())`
+//       and SetBINCOUNT golden :11793/:11820/:11826/:11828
+//       `atoi(tBinCount->Strings[i].c_str())` / `asCondition=tBinCount->
+//       Strings[i].c_str();` / `atoi(tCondition->Strings[0].c_str())` /
+//       `atoi(tCondition->Strings[2].c_str())` -- vclcompat's
+//       `TStringList::Strings[i]` returns a `StringsProxy`
+//       (vclcompat/TStringList.h:90-99), which carries only an implicit
+//       `operator AnsiString()` conversion, NOT a `.c_str()` member -- chaining
+//       `.c_str()` directly onto `->Strings[i]` needs TWO user-defined
+//       conversions in sequence (StringsProxy->AnsiString->const char*), which
+//       C++ does not perform implicitly. Every such call site is wrapped with
+//       an explicit `AnsiString(...)` first (e.g.
+//       `atoi(AnsiString(tNonDoubleBin->Strings[i]).c_str())`), forcing the
+//       first conversion explicitly so the second (`.c_str()`, now a plain
+//       member call on a real AnsiString) is legal. Byte-identical result to
+//       golden's own `Strings[i].c_str()` in every case. Plain comparisons
+//       (`tNonDoubleBin->Strings[i]!=""`, `tBinCount->Strings[i]!=""`) and
+//       plain assignments to an AnsiString l-value (`asPassFail=tCondition->
+//       Strings[1];`, `asSBin=tSBin->Strings[...]` in SetSBinData,
+//       `asBin=tNonDoubleBin->Strings[0];`) need only ONE implicit conversion
+//       and are left unwrapped, matching golden's own literal shape.
+//  (S7) SetSiteMapData_SIGURD golden :10717 `char *asTestIFSiteMap=
+//       GetTestIFSiteMap().c_str();` -- vclcompat::AnsiString::c_str()
+//       (vclcompat/AnsiString.h:92) returns `const char*`, not `char*`;
+//       assigning it to a non-const `char*` is ill-formed in C++ (BCB6's own
+//       AnsiString::c_str() has the same const-qualified signature, so this is
+//       a straight port-of-the-type-annotation fix, not a behavior change).
+//       Retyped `const char *asTestIFSiteMap=...`; the variable is only ever
+//       read afterward (two `t.sprintf("...%s...", ..., asTestIFSiteMap)`
+//       calls), so the const qualifier costs nothing.
+//  (S8) Send_Command_TTL golden :10508 `sprintf(HHandler2Gpib.Message, "%s",
+//       asStr);` -- this is the real C-library `::sprintf` (destination
+//       `HHandler2Gpib.Message` is `char Message[2048]`, MessageDef.h:327, not
+//       an AnsiString), not AnsiString::sprintf's variadic-template overload.
+//       Passing a vclcompat::AnsiString object through real C varargs is
+//       undefined behaviour, same class of issue as FW3-WC's own (S2).
+//       Substituted with `asStr.c_str()`; produces the byte-identical `%s`
+//       output golden intended.
+//
+//  STUB COLLISIONS  (per this wave's task brief -- retire in the NEXT
+//  integration pass, NOT this one; this wave is barred from touching
+//  forms/fMain.cpp; same treatment FW3-WA already gave ArmStatusStrings/
+//  WritePERSITETemperature/PERSITETemperatureStrings)
+//  ------------------------------------------------------------------------------
+//    GetSamSungMap       -- offline stub at forms/fMain.cpp:282 (`return AnsiString("");`)
+//    GetSamSungSoakTime  -- offline stub at forms/fMain.cpp:283 (`return AnsiString("0");`)
+//  Re-verified by `grep -n "TfMain::<name>\b" --include=*.cpp .` for all 29
+//  names, 20260818 -- these 2 are the ONLY existing bodies anywhere in the
+//  port tree; no other collision exists (in particular GetSamSungTmp has
+//  none). forms/fMain.h's two pre-existing declarations (golden main.h:1531/
+//  1532, its own W5-Automation INTEGRATE ADD block) are left untouched and
+//  NOT re-declared in this wave's FW3-WD ADD block -- the two symbols would
+//  collide even as bare re-declarations of an identical signature. Once
+//  Command.cpp is added to CMakeLists.txt, forms/fMain.cpp:282-283 must be
+//  deleted (linker will otherwise report "multiple definition").
+//
+//  GOLDEN BUG / ODDITY  (continuing from FW3-WC's B1-B4; recorded, NOT fixed,
+//  per this wave's "golden 不合理處照翻並註記, 改行為需使用者決定" rule)
+//  ------------------------------------------------------------------------------
+//  (B5) ChkStatus golden :10958-10959 (`char runStartMode[10]; char
+//       MainStatus[10];`) and SetStartMode golden :11205 (`char
+//       runStartMode[10];`) -- all three are plain, UNINITIALISED C arrays.
+//       Each is populated ONLY by one arm of an if/else-if ladder over
+//       `LastSet.iRunStartMode` (ChkStatus) / `fMain->palMainStatus->Caption`
+//       (ChkStatus's `MainStatus`) that has NO final `else` branch. If
+//       `iRunStartMode`/`Caption` ever holds a value outside every listed
+//       case, the array is read uninitialised by the trailing
+//       `t.sprintf("...%s...", MainStatus, runStartMode)` (ChkStatus) /
+//       `t.sprintf("...%s", runStartMode)` (SetStartMode) call -- and in
+//       SetStartMode's case, the matching `else` arm that DOES exist only
+//       calls `ShowMyMessage(...)` and does NOT `return`, so execution falls
+//       through into the same uninitialised read regardless. Translated
+//       verbatim (bare `char[10]`, no zero-init) -- this reproduces the exact
+//       same undefined-behaviour class golden already has, not a new one this
+//       port introduces.
+//  (B6) SetSGCONTFAIL golden :12024 `fYieldMonitoring->rbContsFailByHead_FTOff
+//       ->Checked=TestIF_File.bContsFailByHead;` and golden :12051
+//       `fYieldMonitoring->rbContsFailByHead_RTOff->Checked=TestIF_File.
+//       bContsFailByHead_RT;` -- BOTH lines are missing the `!` negation their
+//       sibling `rbContsFailBySocket_FTOff`/`_RTOff` lines correctly apply two
+//       lines above each (golden :12022/:12049, `Checked=!TestIF_File.
+//       bContsFailBySocket(_RT)`). A consistent FT+RT copy-paste miss (the
+//       "On" radio gets the real value, the "Off" radio should get its
+//       negation, and does for Socket but not for Head), preserved verbatim
+//       inside GATE REGISTER item 23 -- currently inert (the whole
+//       `fYieldMonitoring` cluster is gated), but will reproduce golden's own
+//       "Head Off checkbox never actually shows Off" defect the moment that
+//       facade lands, unless fixed by explicit user decision at that time.
+// =============================================================================
+AnsiString TfMain::GetSamSungTmp(bool bSend)                                    //Steven 20191112 : 三星格式
+{
+    //Tester Send: TMP?
+    //Handler Reply: Chamber,HP1,HP2,SH1,SH2,
+    //If heater off, show NA
+    //If no chamber, use the average of index heater.
+    AnsiString Msg="", Str1, Str;
+    int iCount=0;
+    double dTemp=0.0, dResult=0.0, dTemp1=0.0;
+    double dBase=25.0;
+    if(LastSet.iTemperature!=Tempture_Ambient)
+        dBase=Temperature.fWorkTemperBase;
+
+    if(Temperature.iIndexHeatMode==ChamberOnly)
+    {
+        dTemp1=atof(asGPIBTempShow[tcChamber].c_str());
+
+        if(dTemp1>dBase+10.0 ||
+           dTemp1<dBase-10.0)
+        {
+            Str.sprintf("dTemp:%0.2f, Chamber", dTemp1);
+            NewRecordProcess("", "GetSamSungTmp error!", Str);
+            dTemp1=dBase;
+        }
+        Str1.sprintf("%0.1f,", dTemp1);
+    }
+    else
+    {
+        for(int i=tcHead1; i<=tcHead4; i++)
+        {
+            if(bUT150Install[i] && asGPIBTempShow[i]!="NULL" && asGPIBTempShow[i]!="ERR" &&
+               bGetHeaterUsed(i) && asGPIBTempShow[i]!="..." && asGPIBTempShow[i]!="---")
+            {
+                dTemp1=atof(asGPIBTempShow[i].c_str());
+
+                if(dTemp1>dBase+10.0 ||
+                   dTemp1<dBase-10.0)
+                {
+                    Str.sprintf("dTemp:%0.2f, Pos:%d", dTemp1, i);
+                    NewRecordProcess("", "GetSamSungTmp error!", Str);
+                    dTemp1=dBase;
+                }
+
+                dTemp+=dTemp1;
+                iCount++;
+            }
+        }
+
+        for(int i=tcAa1; i<=tcBd2; i++)
+        {
+            if(bUT150Install[i] && asGPIBTempShow[i]!="NULL" && asGPIBTempShow[i]!="ERR" &&
+               bGetHeaterUsed(i) && asGPIBTempShow[i]!="..." && asGPIBTempShow[i]!="---")
+            {
+                dTemp1=atof(asGPIBTempShow[i].c_str());
+
+                if(dTemp1>dBase+10.0 ||
+                   dTemp1<dBase-10.0)
+                {
+                    Str.sprintf("dTemp:%0.2f, Pos:%d", dTemp1, i);
+                    NewRecordProcess("", "GetSamSungTmp error!", Str);
+                    dTemp1=dBase;
+                }
+
+                dTemp+=dTemp1;
+                iCount++;
+            }
+        }
+
+        for(int i=tcAe1; i<=tcBh2; i++)
+        {
+            if(bUT150Install[i] && asGPIBTempShow[i]!="NULL" && asGPIBTempShow[i]!="ERR" &&
+               bGetHeaterUsed(i) && asGPIBTempShow[i]!="..." && asGPIBTempShow[i]!="---")
+            {
+                dTemp1=atof(asGPIBTempShow[i].c_str());
+
+                if(dTemp1>dBase+10.0 ||
+                   dTemp1<dBase-10.0)
+                {
+                    Str.sprintf("dTemp:%0.2f, Pos:%d", dTemp1, i);
+                    NewRecordProcess("", "GetSamSungTmp error!", Str);
+                    dTemp1=dBase;
+                }
+
+                dTemp+=dTemp1;
+                iCount++;
+            }
+        }
+
+        if(dTemp==0.0 || iCount==0)
+        {
+            Str1.sprintf("%0.1f,", dBase);
+            Str.sprintf("dTemp:%0.2f, iCount:%d", dTemp, iCount);
+            NewRecordProcess("", "GetSamSungTmp error!", Str);
+        }
+        else
+        {
+            dResult=(dTemp/(double)iCount);
+            if(dResult>dBase+10.0 ||
+               dResult<dBase-10.0)
+            {
+                dResult=dBase;
+                Str.sprintf("dTemp:%0.2f, iCount:%d", dTemp, iCount);
+                NewRecordProcess("", "GetSamSungTmp error!", Str);
+            }
+            Str1.sprintf("%0.1f,", dResult);
+        }
+    }
+    Msg=Str1;
+
+    if(bUT150Install[tcHotPlate1])
+        Str1=asGPIBTempShow[tcHotPlate1]+",";
+    else if(bUT150Install[tcHotPlate2])                                         //Steven 20210108 : Hana 要求關掉的加熱盤也要有溫度
+        Str1=asGPIBTempShow[tcHotPlate2]+",";
+    else
+        Str1="NA,";
+    Msg+=Str1;
+
+    if(bUT150Install[tcHotPlate2])
+        Str1=asGPIBTempShow[tcHotPlate2]+",";
+    else if(bUT150Install[tcHotPlate1])                                         //Steven 20210108 : Hana 要求關掉的加熱盤也要有溫度
+        Str1=asGPIBTempShow[tcHotPlate1]+",";
+    else
+        Str1="NA,";
+    Msg+=Str1;
+
+    if(bUT150Install[tcShuttle1])
+        Str1=asGPIBTempShow[tcShuttle1]+",";
+    else
+        Str1="NA,";
+    Msg+=Str1;
+
+    if(bUT150Install[tcShuttle2])
+        Str1=asGPIBTempShow[tcShuttle2]+",";
+    else
+        Str1="NA,";
+    Msg+=Str1;
+
+    if(bSend)
+        SendMSG_CMD(MSG_CMD_SamSung_Tmp, Msg);
+    return Msg;
+}
+//---------------------------------------------------------------------------
+AnsiString TfMain::GetSamSungMap(bool bSend)                                    //Steven 20191112 : 三星格式
+{
+    AnsiString Msg="";
+
+    if(TestIF_File.iTestMode==SingleSite  ||
+       TestIF_File.iTestMode==DualSite    ||
+       TestIF_File.iTestMode==TriSite1X3  ||
+       TestIF_File.iTestMode==QualSite1X4)
+    {
+        Msg.sprintf("%d%d%d%d",
+                        TestIF_File.iSiteMap[0][0],
+                        TestIF_File.iSiteMap[0][1],
+                        TestIF_File.iSiteMap[0][2],
+                        TestIF_File.iSiteMap[0][3]);
+    }
+    else if(TestIF_File.iTestMode==DualSite2x1 ||
+            TestIF_File.iTestMode==QualSite2X2 ||
+            TestIF_File.iTestMode==QualSite2X2N)     //Frank 20200520 2X2NN Mode
+    {
+        Msg.sprintf("%d%d%d%d",
+                        TestIF_File.iSiteMap[0][0],
+                        TestIF_File.iSiteMap[0][1],
+                        TestIF_File.iSiteMap[1][0],
+                        TestIF_File.iSiteMap[1][1]);
+    }
+    else if(TestIF_File.iTestMode==_6Site2X3  ||
+            TestIF_File.iTestMode==_6Site2X3N ||   //Steven 20220425 : 2X3NN Mode
+            TestIF_File.iTestMode==_8Site2X4N ||   //Wei 20231211 : 2X4NN Mode
+            TestIF_File.iTestMode==_8Site2X4)
+    {
+        Msg.sprintf("%d%d%d%d%d%d%d%d",
+                        TestIF_File.iSiteMap[0][0],
+                        TestIF_File.iSiteMap[0][1],
+                        TestIF_File.iSiteMap[1][0],
+                        TestIF_File.iSiteMap[1][1],
+                        TestIF_File.iSiteMap[0][2],
+                        TestIF_File.iSiteMap[0][3],
+                        TestIF_File.iSiteMap[1][2],
+                        TestIF_File.iSiteMap[1][3]);
+    }
+    else if(TestIF_File.iTestMode==_12Site2X6)
+    {
+        Msg.sprintf("0%d0%d%d%d%d%d%d%d%d%d%d0%d0",
+                        TestIF_File.iSiteMap[0][0],
+                        TestIF_File.iSiteMap[1][0],
+                        TestIF_File.iSiteMap[0][1],
+                        TestIF_File.iSiteMap[0][2],
+                        TestIF_File.iSiteMap[1][1],
+                        TestIF_File.iSiteMap[1][2],
+                        TestIF_File.iSiteMap[0][3],
+                        TestIF_File.iSiteMap[0][4],
+                        TestIF_File.iSiteMap[1][3],
+                        TestIF_File.iSiteMap[1][4],
+                        TestIF_File.iSiteMap[0][5],
+                        TestIF_File.iSiteMap[1][5]);
+    }
+    else if(TestIF_File.iTestMode==_16Site4X4)
+    {
+        Msg.sprintf("%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d",
+                        TestIF_File.iSiteMap[0][0],
+                        TestIF_File.iSiteMap[0][1],
+                        TestIF_File.iSiteMap[2][0],
+                        TestIF_File.iSiteMap[2][1],
+                        TestIF_File.iSiteMap[0][2],
+                        TestIF_File.iSiteMap[0][3],
+                        TestIF_File.iSiteMap[2][2],
+                        TestIF_File.iSiteMap[2][3],
+                        TestIF_File.iSiteMap[1][0],
+                        TestIF_File.iSiteMap[1][1],
+                        TestIF_File.iSiteMap[3][0],
+                        TestIF_File.iSiteMap[3][1],
+                        TestIF_File.iSiteMap[1][2],
+                        TestIF_File.iSiteMap[1][3],
+                        TestIF_File.iSiteMap[3][2],
+                        TestIF_File.iSiteMap[3][3]);
+    }
+    //QQ 20230214 : 4x8
+    else if(TestIF_File.iTestMode==_32Site4X8N ||
+            TestIF_File.iTestMode==_32Site4X8M)
+    {
+    }
+    else //if(TestIF_File.iTestMode==_16Site2X8)
+    {
+        if(TestIF_File.iSiteMap[0][0]==0 &&
+           TestIF_File.iSiteMap[1][0]==0 &&
+           TestIF_File.iSiteMap[0][1]==0 &&
+           TestIF_File.iSiteMap[1][1]==0 &&
+           TestIF_File.iSiteMap[0][3]==0 &&
+           TestIF_File.iSiteMap[1][3]==0 &&
+           TestIF_File.iSiteMap[0][5]==0 &&
+           TestIF_File.iSiteMap[1][5]==0 &&
+           TestIF_File.iSiteMap[0][6]==0 &&
+           TestIF_File.iSiteMap[1][6]==0 &&
+           TestIF_File.iSiteMap[0][7]==0 &&
+           TestIF_File.iSiteMap[1][7]==0)
+        {
+            Msg.sprintf("%d%d%d%d",
+                            TestIF_File.iSiteMap[0][2],
+                            TestIF_File.iSiteMap[0][4],
+                            TestIF_File.iSiteMap[1][2],
+                            TestIF_File.iSiteMap[1][4]);
+        }
+        else if(TestIF_File.iSiteMap[0][1]==0 &&
+                TestIF_File.iSiteMap[1][1]==0 &&
+                TestIF_File.iSiteMap[0][3]==0 &&
+                TestIF_File.iSiteMap[1][3]==0 &&
+                TestIF_File.iSiteMap[0][5]==0 &&
+                TestIF_File.iSiteMap[1][5]==0 &&
+                TestIF_File.iSiteMap[0][7]==0 &&
+                TestIF_File.iSiteMap[1][7]==0)
+        {
+            Msg.sprintf("%d%d%d%d%d%d%d%d",
+                            TestIF_File.iSiteMap[0][0],
+                            TestIF_File.iSiteMap[0][2],
+                            TestIF_File.iSiteMap[1][0],
+                            TestIF_File.iSiteMap[1][2],
+                            TestIF_File.iSiteMap[0][4],
+                            TestIF_File.iSiteMap[0][6],
+                            TestIF_File.iSiteMap[1][4],
+                            TestIF_File.iSiteMap[1][6]);
+        }
+        else if(TestIF_File.iSiteMap[0][0]==0 &&
+                TestIF_File.iSiteMap[1][0]==0 &&
+                TestIF_File.iSiteMap[0][1]==0 &&
+                TestIF_File.iSiteMap[1][1]==0 &&
+                TestIF_File.iSiteMap[0][6]==0 &&
+                TestIF_File.iSiteMap[1][6]==0 &&
+                TestIF_File.iSiteMap[0][7]==0 &&
+                TestIF_File.iSiteMap[1][7]==0)
+        {
+            Msg.sprintf("%d%d%d%d%d%d%d%d",
+                            TestIF_File.iSiteMap[0][2],
+                            TestIF_File.iSiteMap[0][3],
+                            TestIF_File.iSiteMap[1][2],
+                            TestIF_File.iSiteMap[1][3],
+                            TestIF_File.iSiteMap[0][4],
+                            TestIF_File.iSiteMap[0][5],
+                            TestIF_File.iSiteMap[1][4],
+                            TestIF_File.iSiteMap[1][5]);
+        }
+        else
+        {
+            Msg.sprintf("%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d%d",
+                            TestIF_File.iSiteMap[0][0],
+                            TestIF_File.iSiteMap[0][1],
+                            TestIF_File.iSiteMap[1][0],
+                            TestIF_File.iSiteMap[1][1],
+                            TestIF_File.iSiteMap[0][2],
+                            TestIF_File.iSiteMap[0][3],
+                            TestIF_File.iSiteMap[1][2],
+                            TestIF_File.iSiteMap[1][3],
+                            TestIF_File.iSiteMap[0][4],
+                            TestIF_File.iSiteMap[0][5],
+                            TestIF_File.iSiteMap[1][4],
+                            TestIF_File.iSiteMap[1][5],
+                            TestIF_File.iSiteMap[0][6],
+                            TestIF_File.iSiteMap[0][7],
+                            TestIF_File.iSiteMap[1][6],
+                            TestIF_File.iSiteMap[1][7]);
+        }
+    }
+
+    if(bSend)
+        SendMSG_CMD(MSG_CMD_SamSung_Map, Msg);
+
+    return Msg;
+}
+//---------------------------------------------------------------------------
+AnsiString TfMain::GetSamSungSoakTime(bool bSend)
+{
+    AnsiString t;
+    if(LastSet.iTemperature==Tempture_Ambient ||
+       LastSet.iTemperature==Tempture_AmbientHot)
+    {
+        t.sprintf("0");
+    }
+    else
+    {
+        t.sprintf("%s", edSoakTime->Text.c_str());
+    }
+
+    if(bSend)
+        SendMSG_CMD(MSG_CMD_SamSung_Soak, t);
+
+    return t;
+}
+//---------------------------------------------------------------------------
+void TfMain::GetTTLState()                                                      //Isaac 20200903 :TTL RS232通訊
+{
+    TStringList *asBuffer;
+    asBuffer=new TStringList();
+    AnsiString Str;
+    HHandler2Gpib.iSendCommand=MSG_CMD_State_TTL;
+    memset(HHandler2Gpib.Message,'\0', sizeof(HHandler2Gpib.Message));//清空陣列
+
+    HHandler2Gpib.bGpibMode=true;   //Isaac 20210922 : 選擇TTL板子是否帶站別
+    HHandler2Gpib.bSupport32Bin=false;      //true : use two TTL board  //Isaac 20210309 :TTL RS232兩塊板子(先不使用)
+    // GATE(FW3-WD) golden :10334-10335 -- see GATE REGISTER item 1 above.
+#if 0
+    HHandler2Gpib.HandlerHwnd=this->Handle; //Isaac 20211115 : 修正因檢查handler和RS232視窗是否開啟而自動關閉RS232視窗
+    HHandler2Gpib.GpibHwnd=HVisionWnd;      //Isaac 20211115 : 修正因檢查handler和RS232視窗是否開啟而自動關閉RS232視窗
+#endif
+    if(TTL_CARD_TYPE==3)
+    {
+        HHandler2Gpib.bGpibMode=true;   //true:要帶站號
+        HHandler2Gpib.bSupport32Bin=true;//true : use two TTL board //Isaac 20210309 :TTL RS232兩塊板子
+        if(Prod.DIOCfg.iCateBitLength==_3Bit || Prod.DIOCfg.iCateBitLength==_4Bit   ||
+           Prod.DIOCfg.iCateBitLength==_5Bit || Prod.DIOCfg.iCateBitLength==_5BitPE ||
+           Prod.DIOCfg.iCateBitLength==_5BitPO)
+        {
+            if(Prod.DIOCfg.iCateDataType==CHOneByOne)
+            {
+                //5BitBit
+                if(TestIF.iTestMode<=_8Site2X4)     //Isaac 20210309 :TTL RS232兩塊板子
+                {
+                    HHandler2Gpib.bSupport32Bin=false;//true : use two TTL board
+                }
+            }
+            else    //CHBinary
+            {
+                //5BitBinary
+                if(TestIF.iTestMode<=_8Site2X4)     //Isaac 20210309 :TTL RS232兩塊板子
+                {
+                    HHandler2Gpib.bSupport32Bin=false;//true : use two TTL board
+                }
+            }
+        }
+        else
+        {
+            if(Prod.DIOCfg.iCateDataType==CHOneByOne)
+            {
+                //10BitBit
+                if(TestIF.iTestMode<QualSite2X2)        //Isaac 20210309 :TTL RS232兩塊板子
+                {
+                    HHandler2Gpib.bSupport32Bin=false;//true : use two TTL board
+                }
+            }
+            else    //CHBinary
+            {
+                //10BitBinary
+                if(TestIF.iTestMode<QualSite2X2)        //Isaac 20210309 :TTL RS232兩塊板子
+                {
+                    HHandler2Gpib.bSupport32Bin=false;//true : use two TTL board
+                }
+            }
+        }
+    }
+    else
+    {
+        HHandler2Gpib.bGpibMode=TTL_CARD_USE_ADDRESS;   //true:要帶站號     //Isaac 20210922 : 選擇TTL板子是否帶站別
+        HHandler2Gpib.bSupport32Bin=false;  //false : use one TTL board
+    }
+//******************************************
+//以下順序不能對調!!
+//******************************************
+    //Data[0] TS+5V
+    asBuffer->Add("0");
+
+    //Data[1] Bin Mode
+    if(TestIF_File.bTTLUseASEJPMode)    //Frank 20220408 Add TTL ASE_JP Mode
+    {
+        asBuffer->Add("4");
+    }
+    else if(Prod.DIOCfg.iCateBitLength==_3Bit || Prod.DIOCfg.iCateBitLength==_4Bit   ||
+            Prod.DIOCfg.iCateBitLength==_5Bit || Prod.DIOCfg.iCateBitLength==_5BitPE ||
+            Prod.DIOCfg.iCateBitLength==_5BitPO)
+    {
+        if(Prod.DIOCfg.iCateDataType==CHOneByOne)
+        {
+            asBuffer->Add("0");     //5BitBit
+
+            if(TestIF.iTestMode<=_8Site2X4)     //Isaac 20210309 :TTL RS232兩塊板子
+            {
+                HHandler2Gpib.bSupport32Bin=false;//false : use one TTL board
+            }
+        }
+        else    //CHBinary
+        {
+            asBuffer->Add("2");     //5BitBinary
+
+            if(TestIF.iTestMode<=_8Site2X4)     //Isaac 20210309 :TTL RS232兩塊板子
+            {
+                HHandler2Gpib.bSupport32Bin=false;//false : use one TTL board
+            }
+        }
+    }
+    else
+    {
+        if(Prod.DIOCfg.iCateDataType==CHOneByOne)
+        {
+            asBuffer->Add("1");     //10BitBit
+
+            if(TestIF.iTestMode<QualSite2X2)        //Isaac 20210309 :TTL RS232兩塊板子
+            {
+                HHandler2Gpib.bSupport32Bin=false;//false : use one TTL board
+            }
+        }
+        else    //CHBinary
+        {
+            asBuffer->Add("3");     //10BitBinary
+
+            if(TestIF.iTestMode<QualSite2X2)        //Isaac 20210309 :TTL RS232兩塊板子
+            {
+                HHandler2Gpib.bSupport32Bin=false;//false : use one TTL board
+            }
+        }
+    }
+
+    if(TestIF_File.bTTLUseASEJPMode)    //Frank 20220408 Add TTL ASE_JP Mode
+    {
+        asBuffer->Add("00000000");
+        asBuffer->Add("00000000");
+        asBuffer->Add("00000000");
+        asBuffer->Add("00000000");
+    }
+    else
+    {
+        //Data[2-9] SOT Active Logic
+        if(Prod.DIOCfg.iSTLogicMode==0) //Positive
+            asBuffer->Add("11111111");
+        else                            //Negative
+            asBuffer->Add("00000000");
+
+        //Data[10-17] Data Active Logic
+        if(Prod.DIOCfg.iCateLogicMode==0)     //Positive
+            asBuffer->Add("11111111");
+        else                            //Negative
+            asBuffer->Add("00000000");
+
+        //Data[18-25] EOT Active Logic
+        asBuffer->Add("00000000");
+
+        //Data[26-33] DUT Active Logic
+        if(Prod.DIOCfg.iDutType==0 ||   //None
+           Prod.DIOCfg.iDutType==1 ||   //Positive Level
+           Prod.DIOCfg.iDutType==2)     //Positive Pulse
+            asBuffer->Add("11111111");
+        else                            //Negative Level || Negative Pulse
+            asBuffer->Add("00000000");
+    }
+    //Data[34-37] SOT Width (MS, 最大1000)
+    Str.sprintf("%04d", Prod.DIOCfg.iSTPluseWidth);
+    asBuffer->Add(Str);
+
+    //Data[38-41] Dut Width (MS, 最大1000)
+    Str.sprintf("%04d", 200);
+    asBuffer->Add(Str);
+
+    //Data[42-47] BIN Time Out (MS, 最大500000)
+    Str.sprintf("%06d", 0);
+    asBuffer->Add(Str);
+//******************************************
+//以上順序不能對調!!
+//******************************************
+
+    Str=StringReplace(asBuffer->Text, "\r\n", "", TReplaceFlags()<<rfReplaceAll);
+
+    strncpy(HHandler2Gpib.Message, Str.c_str(), Str.Length());
+    COPYDATASTRUCT *pcp=new COPYDATASTRUCT ;
+    pcp->dwData=0;
+    pcp->cbData=sizeof(HHandler2Gpib);
+    pcp->lpData=(unsigned char *)&HHandler2Gpib.iSendCommand;
+
+    // GATE(FW3-WD) golden :10497 -- see GATE REGISTER item 2 above.
+#if 0
+    SendMessage(fMain->HVisionWnd, WM_COPYDATA,(WPARAM) NULL, (LPARAM)pcp);
+#endif
+    delete pcp;
+    delete asBuffer;
+}
+//---------------------------------------------------------------------------
+void TfMain::Send_Command_TTL(AnsiString asStr)
+{
+    const int iLength=asStr.Length();
+    if(TestIF_File.iTestType==TTL_MODE && (TTL_CARD_TYPE==2 || TTL_CARD_TYPE==3))       //Isaac 20210309 :TTL RS232兩塊板子
+    {
+        HHandler2Gpib.iLotStatus=iLength;
+        // AI(W906-FW3-WD) 20260818: substitution (S8) -- see FW3-WD GROUP
+        // banner above for the full citation.
+        sprintf(HHandler2Gpib.Message, "%s", asStr.c_str());
+        fMain->SendMSG_CMD(MSG_CMD_Command_TTL);
+    }
+}
+//---------------------------------------------------------------------------
+void TfMain::WriteSetTempStatus_SIGURD()                                        //KaiChen 20181129 ：Add GPIB SETTEMP_
+{
+    int ret=0, TempMode;
+    double d=0.0;
+    AnsiString t;
+    bool bStatusOK=false;
+    bool bValueOK=false;
+
+    if(SystemStart==false &&
+       (LastSet.iRunStartMode==rsmInitialStart   ||                             //Sam 20210512 : GIPB 設定要卡 Initail
+        LastSet.iRunStartMode==rsmCInitialRetest ||
+        LastSet.iRunStartMode==rsmQAMode))                                      //Sam 20250214 : RMS 新增 QA 模式
+    {
+        bStatusOK=true;
+    }
+
+    d=atof(HGpib2Handler->cReturn);
+    // GATE(FW3-WD) golden :10530-10531 -- see GATE REGISTER item 3 above.
+    // dTempMax/dTempMin keep whatever value the rest of the system last wrote.
+#if 0
+    dTempMax=fTemp_Set->MaxTempSetting();
+    dTempMin=fTemp_Set->MinTempSetting();
+#endif
+    if(d<=dTempMax)                                                             // 檢查是否超出最大值
+    {
+        bValueOK=true;
+    }
+
+    if(bStatusOK==false)
+    {
+        t.sprintf("STATUS NG");
+        SendMSG_CMD(MSG_CMD_SetTemp, t);
+    }
+    else if(bValueOK==false)
+    {
+        t.sprintf("VALUE NG");
+        SendMSG_CMD(MSG_CMD_SetTemp, t);
+    }
+    else
+    {
+        if(Temperature.bATCActiveCooling)                                       //Sam 20250214 : RMS 新增 ATC 判斷
+        {
+            if(d>25.0)
+            {
+                TempMode=1;
+            }
+            else
+            {
+                TempMode=0;
+            }
+            // GATE(FW3-WD) golden :10559 -- see GATE REGISTER item 4 above.
+#if 0
+            edATCAmbientTemper->Text=d;
+#endif
+        }
+        else
+        {
+            if(d>25)
+            {
+                TempMode=1;
+                edWorkTemperBase->Text=d;
+            }
+            else
+            {
+                TempMode=0;
+            }
+        }
+        //Sam 20210510 : 先回傳 OK，再來寫入，不然寫入太慢對方會 TimeOut
+        //==>
+        t.sprintf("SETTINGOK>SETTEMP_%d>%d", (int)d, (int)d);
+        SendMSG_CMD(MSG_CMD_SetTemp, t);
+        //<==
+        //Sam 20210510 : 先回傳 OK，再來寫入，不然寫入太慢對方會 TimeOut
+        if(Temperature.bATCActiveCooling)                                       //Sam 20250214 : RMS 新增 ATC 判斷
+            // GATE(FW3-WD) golden :10580 -- see GATE REGISTER item 4 above:
+            // `edATCAmbientTemper->Text` is skipped; `d` (its would-be mirror,
+            // set two lines above in this same arm) is used directly instead.
+            ret=SetTemp(false, d, atof(edSoakTime->Text.c_str()));
+        else
+            ret=SetTemp(false, atof(edWorkTemperBase->Text.c_str()), atof(edSoakTime->Text.c_str()));
+        if(ret==0)
+        {
+            // GATE(FW3-WD) golden :10585 -- see GATE REGISTER item 5 above.
+            // `ret` is left at SetTemp()'s own return value.
+#if 0
+            ret=ChangeTempMode(TempMode, false, bRefreshFunction, true);
+#endif
+        }
+
+        if(ret!=0)
+        {
+            t.sprintf("SETTINGNG>SETTEMP_%d>%s Error", (int)d, edWorkTemperBase->Text);
+            ShowMyMessage(t, "");
+        }
+    }
+}
+//---------------------------------------------------------------------------
+void TfMain::WriteSetSoakTimeStatus_SIGURD()                                    //KaiChen 20181129 ：Add GPIB SETSOAK_
+{
+    int i, ret=0;
+    AnsiString t,S="",szDir="";
+    bool bStatusOK=false;
+    bool bValueOK=false;
+
+    if(SystemStart==false &&
+       (LastSet.iRunStartMode==rsmInitialStart   ||                             //Sam 20210512 : GIPB 設定要卡 Initail
+        LastSet.iRunStartMode==rsmCInitialRetest ||
+        LastSet.iRunStartMode==rsmQAMode))                                      //Sam 20250214 : RMS 新增 QA 模式
+    {
+        bStatusOK=true;
+    }
+
+    i=atoi(HGpib2Handler->cReturn);
+    if(i<=1000 && i>=0) //檢查是否超出最大值
+    {
+        bValueOK=true;
+    }
+
+    if(bStatusOK==false)
+    {
+        t.sprintf("STATUS NG");
+        SendMSG_CMD(MSG_CMD_SetSoakTime, t);
+    }
+    else if(bValueOK==false)
+    {
+        t.sprintf("VALUE NG");
+        SendMSG_CMD(MSG_CMD_SetSoakTime, t);
+    }
+    else
+    {
+        //Sam 20210510 : 先回傳 OK，再來寫入，不然寫入太慢對方會 TimeOut
+        //==>
+        edSoakTime->Text=i;
+        t.sprintf("SETTINGOK>SETSOAK_%d>%s", i, edSoakTime->Text);
+        SendMSG_CMD(MSG_CMD_SetSoakTime, t);
+        //<==
+        //Sam 20210510 : 先回傳 OK，再來寫入，不然寫入太慢對方會 TimeOut
+
+        ret=SetTemp(false, atof(edWorkTemperBase->Text.c_str()), atof(edSoakTime->Text.c_str()));     //Steven 20120730
+        if(ret==0)
+        {
+            S=GetLastOpenFN();
+            szDir.sprintf("%s%s", DataPath, S);
+            szDir+="\\Temperature.Data";
+            if(i==0)  //常溫
+            {
+                if(CUSTOMER_CODE==CC_UTAC_TW)   //Sa
+                {
+                    //Sam 20240606 : 聯測 SoakTime = 0 不要變更溫度模式
+                }
+                else
+                {
+                    // GATE(FW3-WD) golden :10651-10652 -- see GATE REGISTER
+                    // items 6 and 7 above (ChangeTempMode absence; IniData
+                    // shared config write).
+#if 0
+                    fMain->ChangeTempMode(0, false, true);
+                    WriteIniData(szDir, "Mode", "Mode", 1);                     // shared machine config write -- queued for redirect-seam design
+#endif
+                }
+            }
+            else      //高溫
+            {
+                // GATE(FW3-WD) golden :10657-10658 -- see GATE REGISTER items
+                // 6 and 7 above (ChangeTempMode absence; IniData\ shared
+                // config write).
+#if 0
+                fMain->ChangeTempMode(1, false, true);
+                WriteIniData(szDir, "Mode", "Mode", 0);                         // shared machine config write -- queued for redirect-seam design
+#endif
+            }
+        }
+
+        if(ret!=0)
+        {
+            t.sprintf("SETTINGNG>SETSOAK_%d>%s", i, edSoakTime->Text);
+            ShowMyMessage(t, "");
+        }
+    }
+}
+//---------------------------------------------------------------------------
+void TfMain::SetSiteMapData_SIGURD()                                            //KaiChen 20181129 ：Add GPIB SETSITEMAP_
+{
+    bool ret=true;
+    char str[256];
+    char str_buf[256];
+    AnsiString t;
+    bool bStatusOK=false;
+
+    if(SystemStart==false &&
+       (LastSet.iRunStartMode==rsmInitialStart   ||                             //Sam 20210512 : GIPB 設定要卡 Initail
+        LastSet.iRunStartMode==rsmCInitialRetest ||
+        LastSet.iRunStartMode==rsmQAMode) &&                                    //Sam 20250214 : RMS 新增 QA 模式
+       HasICUnderMachine()==false)
+    {
+        bStatusOK=true;
+    }
+
+    if(bStatusOK==false)
+    {
+        t.sprintf("STATUS NG");
+        SendMSG_CMD(MSG_CMD_SetSiteMapData, t);
+    }
+    else
+    {
+        strncpy(str, HGpib2Handler->cReturn, sizeof(str));
+        for(int i=0; i<sizeof(str); i++)
+        {
+            if(str[i]=='\r' || str[i]=='\n')
+            {
+                str_buf[i]='\0';
+            }
+            else
+            {
+                str_buf[i]=str[i];
+            }
+        }
+
+        for(int i=0; i<4; i++)  //JerryYang 20160519 備份開關site
+        {
+            for(int j=0; j<8; j++)
+            {
+                iBackupDutOnOff[i][j]=bTestSiteUse[0][i][j];
+            }
+        }
+        iBackupTestMode=TestIF_File.iTestMode;
+        // GATE(FW3-WD) golden :10715 -- see GATE REGISTER item 8 above. `ret`
+        // keeps its declared initial value (`true`) rather than being reset.
+#if 0
+        ret=ChangeToSiteMap(str);
+#endif
+
+        // AI(W906-FW3-WD) 20260818: substitution (S7) -- see FW3-WD GROUP
+        // banner above for the full citation.
+        const char *asTestIFSiteMap=GetTestIFSiteMap().c_str();
+        if(ret)
+        {
+            t.sprintf("SETTINGOK>SETSITEMAP_%s>%s\n", str_buf, asTestIFSiteMap);
+        }
+        else
+        {
+            t.sprintf("SETTINGNG>SETSITEMAP_%s>%s\n", str_buf, asTestIFSiteMap);
+        }
+        SendMSG_CMD(MSG_CMD_SetSiteMapData, t);
+    }
+}
+//---------------------------------------------------------------------------
+AnsiString TfMain::GetTestIFSiteMap()   //KaiChen 20181129 ：Add GPIB SETSITEMAP_
+{
+    AnsiString asReturn;
+    int iSiteMap[32]={-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2,-2};
+    int i=0;
+    AnsiString sSiteMode;
+
+    if(TestIF_File.iTestMode==SingleSite)//*   SingleSite
+    {
+        asReturn="SINGLE1X1";                           //Steven 20230214 : 補上GPIB set site map
+        iSiteMap[0]=TestIF_File.iSiteMap[0][0];
+    }
+    else if(TestIF_File.iTestMode==DualSite)//*   DualSite
+    {
+        asReturn="DUAL1X2";
+        iSiteMap[0]=TestIF_File.iSiteMap[0][0];
+        iSiteMap[1]=TestIF_File.iSiteMap[0][1];
+    }
+    else if(TestIF_File.iTestMode==TriSite1X3)//
+    {
+        asReturn="TRI1X3";
+        iSiteMap[0]=TestIF_File.iSiteMap[0][0];
+        iSiteMap[1]=TestIF_File.iSiteMap[0][1];
+        iSiteMap[2]=TestIF_File.iSiteMap[0][2];
+    }
+    else if(TestIF_File.iTestMode==QualSite1X4)//*     QualSite1X4    _8Site1X4
+    {
+        asReturn="QUAD1X4";
+        iSiteMap[0]=TestIF_File.iSiteMap[0][0];
+        iSiteMap[1]=TestIF_File.iSiteMap[0][1];
+        iSiteMap[2]=TestIF_File.iSiteMap[0][2];
+        iSiteMap[3]=TestIF_File.iSiteMap[0][3];
+    }
+    else if(TestIF_File.iTestMode==DualSite2x1)//*    DualSite2x1
+    {
+        asReturn="DUAL2X1";
+        iSiteMap[0]=TestIF_File.iSiteMap[0][0];
+        iSiteMap[1]=TestIF_File.iSiteMap[1][0];
+    }
+    else if(TestIF_File.iTestMode==QualSite2X2)//*    QualSite2X2
+    {
+        asReturn="QUAD2X2";
+        iSiteMap[0]=TestIF_File.iSiteMap[0][0];
+        iSiteMap[1]=TestIF_File.iSiteMap[1][0];
+        iSiteMap[2]=TestIF_File.iSiteMap[0][1];
+        iSiteMap[3]=TestIF_File.iSiteMap[1][1];
+    }
+    else if(TestIF_File.iTestMode==QualSite2X2N)                                //Steven 20230214 : 補上GPIB set site map
+    {
+        if(CUSTOMER_CODE==CC_SCK)                                               //Steven 20251024 : JSCK要求修改命令
+            asReturn="QUAD2X2";
+        else
+            asReturn="QUAD2X2N";
+
+        iSiteMap[0]=TestIF_File.iSiteMap[0][0];
+        iSiteMap[1]=TestIF_File.iSiteMap[1][0];
+        iSiteMap[2]=TestIF_File.iSiteMap[0][1];
+        iSiteMap[3]=TestIF_File.iSiteMap[1][1];
+    }
+    else if(TestIF_File.iTestMode==_6Site2X3)//*      _6Site2X3
+    {
+        asReturn="6SITE2X3";
+        iSiteMap[0]=TestIF_File.iSiteMap[0][0];
+        iSiteMap[1]=TestIF_File.iSiteMap[1][0];
+        iSiteMap[2]=TestIF_File.iSiteMap[0][1];
+        iSiteMap[3]=TestIF_File.iSiteMap[1][1];
+        iSiteMap[4]=TestIF_File.iSiteMap[0][2];
+        iSiteMap[5]=TestIF_File.iSiteMap[1][2];
+    }
+    else if(TestIF_File.iTestMode==_6Site2X3N)                                  //Steven 20230214 : 補上GPIB set site map
+    {
+        if(CUSTOMER_CODE==CC_SCK)                                               //Steven 20251024 : JSCK要求修改命令
+            asReturn="6SITE2X3";
+        else
+            asReturn="6SITE2X3N";
+        iSiteMap[0]=TestIF_File.iSiteMap[0][0];
+        iSiteMap[1]=TestIF_File.iSiteMap[1][0];
+        iSiteMap[2]=TestIF_File.iSiteMap[0][1];
+        iSiteMap[3]=TestIF_File.iSiteMap[1][1];
+        iSiteMap[4]=TestIF_File.iSiteMap[0][2];
+        iSiteMap[5]=TestIF_File.iSiteMap[1][2];
+    }
+    else if(TestIF_File.iTestMode==_8Site2X4N)                                  //Wei 20231211 : 2X4NN Mode
+    {
+        if(CUSTOMER_CODE==CC_SCK)                                               //Steven 20251024 : JSCK要求修改命令
+            asReturn="8SITE2X4";
+        else
+            asReturn="8SITE2X4N";
+        iSiteMap[0]=TestIF_File.iSiteMap[0][0];
+        iSiteMap[1]=TestIF_File.iSiteMap[1][0];
+        iSiteMap[2]=TestIF_File.iSiteMap[0][1];
+        iSiteMap[3]=TestIF_File.iSiteMap[1][1];
+        iSiteMap[4]=TestIF_File.iSiteMap[0][2];
+        iSiteMap[5]=TestIF_File.iSiteMap[1][2];
+        iSiteMap[6]=TestIF_File.iSiteMap[0][3];
+        iSiteMap[7]=TestIF_File.iSiteMap[1][3];
+    }
+    else if(TestIF_File.iTestMode==_8Site2X4)//*    _8Site2X4
+    {
+        asReturn="8SITE2X4";
+        iSiteMap[0]=TestIF_File.iSiteMap[0][0];
+        iSiteMap[1]=TestIF_File.iSiteMap[1][0];
+        iSiteMap[2]=TestIF_File.iSiteMap[0][1];
+        iSiteMap[3]=TestIF_File.iSiteMap[1][1];
+        iSiteMap[4]=TestIF_File.iSiteMap[0][2];
+        iSiteMap[5]=TestIF_File.iSiteMap[1][2];
+        iSiteMap[6]=TestIF_File.iSiteMap[0][3];
+        iSiteMap[7]=TestIF_File.iSiteMap[1][3];
+    }
+    else if(TestIF_File.iTestMode==_10Site2X5)
+    {
+        asReturn="10SITE2X5";
+        iSiteMap[0]=TestIF_File.iSiteMap[0][0];
+        iSiteMap[1]=TestIF_File.iSiteMap[1][0];
+        iSiteMap[2]=TestIF_File.iSiteMap[0][1];
+        iSiteMap[3]=TestIF_File.iSiteMap[1][1];
+        iSiteMap[4]=TestIF_File.iSiteMap[0][2];
+        iSiteMap[5]=TestIF_File.iSiteMap[1][2];
+        iSiteMap[6]=TestIF_File.iSiteMap[0][3];
+        iSiteMap[7]=TestIF_File.iSiteMap[1][3];
+        iSiteMap[8]=TestIF_File.iSiteMap[0][4];
+        iSiteMap[9]=TestIF_File.iSiteMap[1][4];
+    }
+    else if(TestIF_File.iTestMode==_12Site2X6)//*    _12Site2X6
+    {
+        asReturn="12SITE2X6";
+        iSiteMap[0]=TestIF_File.iSiteMap[0][0];
+        iSiteMap[1]=TestIF_File.iSiteMap[1][0];
+        iSiteMap[2]=TestIF_File.iSiteMap[0][1];
+        iSiteMap[3]=TestIF_File.iSiteMap[1][1];
+        iSiteMap[4]=TestIF_File.iSiteMap[0][2];
+        iSiteMap[5]=TestIF_File.iSiteMap[1][2];
+        iSiteMap[6]=TestIF_File.iSiteMap[0][3];
+        iSiteMap[7]=TestIF_File.iSiteMap[1][3];
+        iSiteMap[8]=TestIF_File.iSiteMap[0][4];
+        iSiteMap[9]=TestIF_File.iSiteMap[1][4];
+        iSiteMap[10]=TestIF_File.iSiteMap[0][5];
+        iSiteMap[11]=TestIF_File.iSiteMap[1][5];
+    }
+    else if(TestIF_File.iTestMode==_16Site2X8) //*     _16Site2X8
+    {
+        asReturn="16SITE2X8";
+        iSiteMap[0]=TestIF_File.iSiteMap[0][0];
+        iSiteMap[1]=TestIF_File.iSiteMap[1][0];
+        iSiteMap[2]=TestIF_File.iSiteMap[0][1];
+        iSiteMap[3]=TestIF_File.iSiteMap[1][1];
+        iSiteMap[4]=TestIF_File.iSiteMap[0][2];
+        iSiteMap[5]=TestIF_File.iSiteMap[1][2];
+        iSiteMap[6]=TestIF_File.iSiteMap[0][3];
+        iSiteMap[7]=TestIF_File.iSiteMap[1][3];
+        iSiteMap[8]=TestIF_File.iSiteMap[0][4];
+        iSiteMap[9]=TestIF_File.iSiteMap[1][4];
+        iSiteMap[10]=TestIF_File.iSiteMap[0][5];
+        iSiteMap[11]=TestIF_File.iSiteMap[1][5];
+        iSiteMap[12]=TestIF_File.iSiteMap[0][6];
+        iSiteMap[13]=TestIF_File.iSiteMap[1][6];
+        iSiteMap[14]=TestIF_File.iSiteMap[0][7];
+        iSiteMap[15]=TestIF_File.iSiteMap[1][7];
+    }
+    else if(TestIF_File.iTestMode==_16Site4X4)          //Steven 20230214 : 補上GPIB set site map
+    {
+        asReturn="16Site4X4";
+        iSiteMap[0]=TestIF_File.iSiteMap[0][0];
+        iSiteMap[1]=TestIF_File.iSiteMap[1][0];
+        iSiteMap[2]=TestIF_File.iSiteMap[2][0];
+        iSiteMap[3]=TestIF_File.iSiteMap[3][0];
+        iSiteMap[4]=TestIF_File.iSiteMap[0][1];
+        iSiteMap[5]=TestIF_File.iSiteMap[1][1];
+        iSiteMap[6]=TestIF_File.iSiteMap[2][1];
+        iSiteMap[7]=TestIF_File.iSiteMap[3][1];
+        iSiteMap[8]=TestIF_File.iSiteMap[0][2];
+        iSiteMap[9]=TestIF_File.iSiteMap[1][2];
+        iSiteMap[10]=TestIF_File.iSiteMap[2][2];
+        iSiteMap[11]=TestIF_File.iSiteMap[3][2];
+        iSiteMap[12]=TestIF_File.iSiteMap[0][3];
+        iSiteMap[13]=TestIF_File.iSiteMap[1][3];
+        iSiteMap[14]=TestIF_File.iSiteMap[2][3];
+        iSiteMap[15]=TestIF_File.iSiteMap[3][3];
+    }
+    else if(TestIF_File.iTestMode==_32Site4X8N)                                 //Steven 20230214 : 補上GPIB set site map
+    {
+        asReturn="32Site4X8";
+        iSiteMap[0]=TestIF_File.iSiteMap[0][0];
+        iSiteMap[1]=TestIF_File.iSiteMap[1][0];
+        iSiteMap[2]=TestIF_File.iSiteMap[2][0];
+        iSiteMap[3]=TestIF_File.iSiteMap[3][0];
+        iSiteMap[4]=TestIF_File.iSiteMap[0][1];
+        iSiteMap[5]=TestIF_File.iSiteMap[1][1];
+        iSiteMap[6]=TestIF_File.iSiteMap[2][1];
+        iSiteMap[7]=TestIF_File.iSiteMap[3][1];
+        iSiteMap[8]=TestIF_File.iSiteMap[0][2];
+        iSiteMap[9]=TestIF_File.iSiteMap[1][2];
+        iSiteMap[10]=TestIF_File.iSiteMap[2][2];
+        iSiteMap[11]=TestIF_File.iSiteMap[3][2];
+        iSiteMap[12]=TestIF_File.iSiteMap[0][3];
+        iSiteMap[13]=TestIF_File.iSiteMap[1][3];
+        iSiteMap[14]=TestIF_File.iSiteMap[2][3];
+        iSiteMap[15]=TestIF_File.iSiteMap[3][3];
+        iSiteMap[16]=TestIF_File.iSiteMap[0][4];
+        iSiteMap[17]=TestIF_File.iSiteMap[1][4];
+        iSiteMap[18]=TestIF_File.iSiteMap[2][4];
+        iSiteMap[19]=TestIF_File.iSiteMap[3][4];
+        iSiteMap[20]=TestIF_File.iSiteMap[0][5];
+        iSiteMap[21]=TestIF_File.iSiteMap[1][5];
+        iSiteMap[22]=TestIF_File.iSiteMap[2][5];
+        iSiteMap[23]=TestIF_File.iSiteMap[3][5];
+        iSiteMap[24]=TestIF_File.iSiteMap[0][6];
+        iSiteMap[25]=TestIF_File.iSiteMap[1][6];
+        iSiteMap[26]=TestIF_File.iSiteMap[2][6];
+        iSiteMap[27]=TestIF_File.iSiteMap[3][6];
+        iSiteMap[28]=TestIF_File.iSiteMap[0][7];
+        iSiteMap[29]=TestIF_File.iSiteMap[1][7];
+        iSiteMap[30]=TestIF_File.iSiteMap[2][7];
+        iSiteMap[31]=TestIF_File.iSiteMap[3][7];
+    }
+
+    for(i=0; i<32; i++)
+    {
+        if(iSiteMap[i]>-2)
+        {
+            asReturn=asReturn+"-"+iSiteMap[i];
+        }
+    }
+    return  asReturn;
+}
+//---------------------------------------------------------------------------
+void TfMain::ChkStatus()                                                        //KaiChen 20180910 ：Add GPIB CHKSTATUS?
+{
+    // GOLDEN ODDITY (B5) -- see FW3-WD GROUP banner above for the full
+    // citation. Both arrays are left genuinely uninitialised, exactly as
+    // golden declares them.
+    char runStartMode[10];
+    char MainStatus[10];
+    AnsiString t;
+
+    if(fMain->palMainStatus->Caption=="HALT")
+    {
+        sprintf(MainStatus, "HALT");
+    }
+    else if(fMain->palMainStatus->Caption=="PAUSE")
+    {
+        sprintf(MainStatus, "PAUSE");
+    }
+    else if(fMain->palMainStatus->Caption=="Running")
+    {
+        sprintf(MainStatus, "RUNNING");
+    }
+
+    if(LastSet.iRunStartMode==rsmContinuStart ||                                //確認機台狀態
+       LastSet.iRunStartMode==rsmContinuStart_MRT)                              //Sam 20240625 : 新增 MRT Status
+    {
+        sprintf(runStartMode, "FT_CONT");
+    }
+    else if(LastSet.iRunStartMode==rsmInitialStart ||
+            LastSet.iRunStartMode==rsmInitial_MRT)                              //Sam 20240625 : 新增 MRT Status
+    {
+        sprintf(runStartMode, "FT_INIT");
+    }
+    else if(LastSet.iRunStartMode==rsmContinuRetest)
+    {
+        sprintf(runStartMode, "RT_CONT");
+    }
+    else if(LastSet.iRunStartMode==rsmCInitialRetest)
+    {
+        sprintf(runStartMode, "RT_INIT");
+    }
+    else if(LastSet.iRunStartMode==rsmRetest_MRT)                               //Sam 20240625 : 新增 MRT Status
+    {
+        sprintf(runStartMode, "RT");
+    }
+    else if(LastSet.iRunStartMode==rsmQAMode)                                   //Sam 20240815 : 新增 QA Mode
+    {
+        sprintf(runStartMode, "QA_INIT");
+    }
+
+    if(LastSet.iRunStartMode==rsmContinuStart_MRT ||                            //Sam 20240625 : 新增 MRT Status
+       LastSet.iRunStartMode==rsmInitial_MRT      ||
+       LastSet.iRunStartMode==rsmRetest_MRT)
+    {
+        t.sprintf("MRT_%s_%s", MainStatus, runStartMode);
+    }
+    else
+    {
+        t.sprintf("%s_%s", MainStatus, runStartMode);
+    }
+    SendMSG_CMD(MSG_CMD_SIGURD_CHKSTATUS, t);
+}
+//---------------------------------------------------------------------------
+void TfMain::GetBinCategory()   //KaiChen 20180913 ：Add GPIB GETBINCATEGORY?
+{
+    AnsiString asCategData;
+    for(int i=0; i<15; i++)
+    {
+        asCategData=asCategData+BinSelect[iTestRunMode].iCatDataT3Pos[15-i];   //QQQ
+    }
+    asCategData=asCategData+(BinSelect[iTestRunMode].IfErrorT3+1);              //Sam 20250221 : 修正矽格 RMS 回傳資料
+    SendMSG_CMD(MSG_CMD_GETBINCATEGORY, asCategData);
+}
+//---------------------------------------------------------------------------
+void TfMain::GetSetUpFileName()     //KaiChen 20181022 ：Add GPIB GETSETUPFILENAME?
+{
+    AnsiString asFileName;
+
+    if(CUSTOMER_CODE==CC_SIGURD_HUKOU)
+    {
+        asFileName=fMain->cbSetupFileName->Text+"\r\n";//Sam 20210310 : SetupFile 矽格卓邵要求增加換行字元
+    }
+    else
+    {
+        asFileName.sprintf("%s", fMain->cbSetupFileName->Text);
+    }
+    SendMSG_CMD(MSG_CMD_SETUPFILENAME, asFileName);
+}
+//---------------------------------------------------------------------------
+void TfMain::GetHandlerID_Sigurd()                                              //KaiChen 20200507 ：Add GPIB HANDLERID?
+{
+    AnsiString asHandlerID;
+
+    asHandlerID=IniConfig.asA32_1_HandlerID;
+
+    if(IniConfig.bA32_2ReturnHandlerID2OI==true)                                //KaiChen 20200618 ：矽格，可以選擇是否回傳 HandlerID 給 OI
+    {
+        SendMSG_CMD(MSG_CMD_SIGURD_HANDLERID, asHandlerID);
+    }
+}
+//---------------------------------------------------------------------------
+void TfMain::SetSetupFileName()                                                 //KaiChen 20190613 ：Add GPIB SGSETUP_
+{
+    bool ret=false;
+    bool bStatusOK=false;
+    char str[256];
+    AnsiString t;
+
+    strncpy(str, HGpib2Handler->cReturn, sizeof(str));
+
+    AnsiString asChangeSetupFileName=AnsiString(str).Trim();
+
+    if(SystemStart==false &&                                                    //Sam 20210512 : GIPB 設定要卡 Initail
+       (LastSet.iRunStartMode==rsmInitialStart   ||
+        LastSet.iRunStartMode==rsmCInitialRetest ||
+        LastSet.iRunStartMode==rsmQAMode))                                      //Sam 20250214 : RMS 新增 QA 模式
+    {
+        bStatusOK=true;
+    }
+
+    if(bStatusOK==false)
+    {
+        t.sprintf("STATUS NG");
+        SendMSG_CMD(MSG_CMD_SGSETUP, t);
+    }
+    else
+    {
+        if(CUSTOMER_CODE==CC_SIGURD_PeiXing)    //KaiChen 20191128 ：矽格-北興，SetupFileName 不等於空白，就回傳 OK
+        {
+            if(asChangeSetupFileName!="")
+                ret=true;
+        }
+        else
+        {
+            // GATE(FW3-WD) golden :11086 -- see GATE REGISTER item 9 above.
+            // `ret` stays its declared default `false`.
+#if 0
+            if(fFTPClient->CheckSetupFileNameFromServer(asChangeSetupFileName)==true)   //KaiChen 20181129 ：Add FTP Downlaod Setup File by GPIB Command
+                ret=true;
+#endif
+        }
+
+        if(ret==true)
+            t.sprintf("SETTINGOK");
+        else
+            t.sprintf("SETTINGNG");
+
+        SendMSG_CMD(MSG_CMD_SGSETUP, t);
+
+        if(ret==true)
+        {
+            ChangeSetupFileName(str);
+        }
+    }
+}
+//---------------------------------------------------------------------------
+bool TfMain::ChangeSetupFileName(char *str)
+{
+    AnsiString asChangeSetupFileName=AnsiString(str).Trim();
+    AnsiString asNowSetupFileName=fMain->cbSetupFileName->Text;
+
+    if(SystemStart==true)
+    {
+        return false;
+    }
+
+    if(asChangeSetupFileName==asNowSetupFileName)   // 檢查是否與當前 Recipe 一樣
+    {
+        return false;
+    }
+
+    bSigurdDownload_Recipe=true;
+    // GATE(FW3-WD) golden :11120-11127 -- see GATE REGISTER item 10 above.
+    // Faithful default: no download channel exists offline, so the recipe
+    // change cannot have succeeded.
+#if 0
+    fFTPClient->bControlByGPIB=true;        //KaiChen 20181129 ：Add FTP Downlaod Setup File by GPIB Command
+    fFTPClient->iErrorByGPIB=0;
+    fFTPClient->asSetUpNameByGPIB=asChangeSetupFileName;
+    fFTPClient->ShowFTPModal(0);
+
+    bSigurdDownload_Recipe=false;
+    fFTPClient->bControlByGPIB=false;
+    if(fFTPClient->iErrorByGPIB==0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+#else
+    bSigurdDownload_Recipe=false;
+    return false;
+#endif
+}
+//---------------------------------------------------------------------------
+//Richard 20220929 :Add for UTAC 讀檔
+//==>
+void TfMain::PPSELECTAskFile()
+{
+    AnsiString asFileName="";
+    asFileName.sprintf("%s", fMain->cbSetupFileName->Text);
+    SendMSG_CMD(MSG_CMD_ASKPPSELECT, asFileName);
+}
+//==============================================================================
+// GATE(FW3-WD) golden :11163 -- see GATE REGISTER item 11 above. TU-local
+// no-op stand-in for golden's real VCL Dialogs.hpp `ShowMessage(const
+// AnsiString&)`, matching the established tree-wide convention (ATC/
+// ATCSystem.cpp, ProductionInfo/TfFTP.cpp, SECSGEM/SecsSvEcRegistration.cpp,
+// PMAlarm/PMAlarmSystem.cpp, SECSGEM/uHGemEquipment.cpp each carry their own
+// identically-shaped stand-in).
+static void Gated_ShowMessage(const AnsiString & /*S*/) {}
+void TfMain::PPSELECTLoadFile()
+{
+    char str[256];
+
+    strncpy(str, HGpib2Handler->cReturn, sizeof(str));
+    AnsiString atemp="";
+    AnsiString afiletemp="";
+    atemp=str;                                                       //example The Function File Name is "0809_PROD"
+//    int itemp=0;                                                   //"PPSELECT 0809_PROD"
+//    itemp=str.Pos(PPSELECT);
+    afiletemp=(atemp.Trim()).SubString(atemp.Pos("T")+2,atemp.Length());
+
+    bool bHasFile=false;
+
+    if(HasICUnderMachine()==true)
+    {
+        bHasFile=false;
+        Gated_ShowMessage("Has IC Under Machine");
+    }
+    else
+    {
+        for(int i=0; i<fMain->cbSetupFileName->Items->Count; i++)
+        {
+            if( (fMain->cbSetupFileName->Items->Strings[i])==afiletemp )
+            {
+                if(fMain->cbSetupFileName->Text!=fMain->cbSetupFileName->Items->Strings[i])
+                {
+                    fMain->cbSetupFileName->Text=fMain->cbSetupFileName->Items->Strings[i];
+                    fMain->cbSetupFileNameChange(fMain);
+                }
+                bHasFile=true;
+            }
+        }
+    }
+
+    if(bHasFile==true) //如果沒有檔案 報錯
+    {
+        SendMSG_CMD(MSG_CMD_PPSELECT, "ECHOCODEOK");
+        iFileOkPPSELECT=1;
+    }
+    else
+    {
+        SendMSG_CMD(MSG_CMD_PPSELECT, "ECHOCODENG");
+        iFileOkPPSELECT=2;
+    }
+}
+//<==
+//Richard 20220929 :Add for UTAC 讀檔
+//---------------------------------------------------------------------------
+void TfMain::SetStartMode()     //KaiChen 20180910 ：Add GPIB SetStartMode_
+{
+    bool ret=true;
+    char str[256];
+    AnsiString t;
+    strncpy(str, HGpib2Handler->cReturn, sizeof(str));
+
+    ret=ChangeHandlerStartMode(str);
+
+    AnsiString sMultiContactCount=AnsiString(str).Trim();   //用來判別是 FT 還是 RT
+    // GOLDEN ODDITY (B5) -- see FW3-WD GROUP banner above for the full
+    // citation. Left genuinely uninitialised, exactly as golden declares it.
+    char runStartMode[10];
+
+    if(LastSet.iRunStartMode==rsmContinuStart)  //確認機台狀態
+    {
+        sprintf(runStartMode, "FT_CONT");
+    }
+    else if(LastSet.iRunStartMode==rsmInitialStart)
+    {
+        sprintf(runStartMode, "FT_INIT");
+    }
+    else if(LastSet.iRunStartMode==rsmContinuRetest)
+    {
+        sprintf(runStartMode, "RT_CONT");
+    }
+    else if(LastSet.iRunStartMode==rsmCInitialRetest)
+    {
+        sprintf(runStartMode, "RT_INIT");
+    }
+    else if(LastSet.iRunStartMode==rsmQAMode) //Sam 20240301 : 新增 QA 模式
+    {
+        sprintf(runStartMode, "QA");
+    }
+    else
+    {
+        ShowMyMessage("SetStartMode command error1","SetStartMode 指令錯誤1");
+    }
+
+    if(ret==true)
+    {
+        if(sMultiContactCount.SubString(1,2)=="FT")
+        {
+            t.sprintf("SETTINGOK>SetStartMode_FT>%s", runStartMode);
+        }
+        else if(sMultiContactCount.SubString(1,2)=="RT")
+        {
+            t.sprintf("SETTINGOK>SetStartMode_RT>%s", runStartMode);
+        }
+        else if(sMultiContactCount.SubString(1,2)=="QA")    //Sam 20240301 : 新增 QA 模式
+        {
+            t.sprintf("SETTINGOK>SetStartMode_QA>%s", runStartMode);
+        }
+        else
+        {
+            ShowMyMessage("SetStartMode command error2","SetStartMode 指令錯誤2");
+        }
+    }
+    else
+    {
+        if(sMultiContactCount.SubString(1,2)=="FT")
+        {
+            t.sprintf("SETTINGNG>SetStartMode_FT>%s", runStartMode);
+        }
+        else if(sMultiContactCount.SubString(1,2)=="RT")
+        {
+            t.sprintf("SETTINGNG>SetStartMode_RT>%s", runStartMode);
+        }
+        else if(sMultiContactCount.SubString(1,2)=="QA")    //Sam 20240301 : 新增 QA 模式
+        {
+            t.sprintf("SETTINGNG>SetStartMode_QA>%s", runStartMode);
+        }
+        else
+        {
+            ShowMyMessage("SetStartMode command error3","SetStartMode 指令錯誤3");
+        }
+    }
+    SendMSG_CMD(MSG_CMD_SETSTARTMODE, t);
+}
+//extern void SetRunStartMode(eRunStartMode Mode=rsmNull, AnsiString ModeText="");
+//---------------------------------------------------------------------------
+bool TfMain::ChangeHandlerStartMode(char *str)                                  //KaiChen 20180910 ：Add GPIB SetStartMode_
+{
+    static bool bBackupState=false;
+    if(SystemStart)
+    {
+        return false;
+    }
+
+    if(LastSet.iRealDummy!=REALLY)
+    {
+        ShowMyMessage("Please Check Real/Dummy Mode!!!");
+        return false;
+    }
+
+    if(LastSet.iTester==OFF_LINE)
+    {
+        ShowMyMessage("Please Check Tester Mode!!!");
+        return false;
+    }
+
+    AnsiString sMultiContactCount=AnsiString(str).Trim();
+
+    if(sMultiContactCount.SubString(1,2)=="FT")
+    {
+        if(LastSet.iRunStartMode==rsmContinuRetest)
+        {
+            return false;
+        }
+        // GATE(FW3-WD) golden :11302-11305 -- see GATE REGISTER item 12 above
+        // and the RISK NOTE at the top of this wave's banner.
+#if 0
+        bBackupState=cbRunStartMode->Enabled;
+        cbRunStartMode->Enabled=true;                                           //Sam 20210715 : 切換模式不要卡權限
+        fMain->DoFTRTClick(false, false);                                        //RogerYang 20260410 : 整合並區分手動按下還是程式按下
+        cbRunStartMode->Enabled=bBackupState;
+#endif
+    }
+    else if(sMultiContactCount.SubString(1, 2)=="RT")
+    {
+        if(LastSet.iRunStartMode==rsmContinuStart)
+        {
+            return false;
+        }
+        // GATE(FW3-WD) golden :11313-11316 -- see GATE REGISTER item 12 above
+        // and the RISK NOTE at the top of this wave's banner.
+#if 0
+        bBackupState=cbRunStartMode->Enabled;
+        cbRunStartMode->Enabled=true;                                           //Sam 20210715 : 切換模式不要卡權限
+        fMain->DoFTRTClick(true, false);                                    //RogerYang 20260410 : 整合並區分手動按下還是程式按下
+        cbRunStartMode->Enabled=bBackupState;
+#endif
+    }
+    else if(sMultiContactCount.SubString(1, 2)=="QA")                           //Sam 20240301 : 新增 QA 模式
+    {
+        if(LastSet.iRunStartMode==rsmContinuStart || LastSet.iRunStartMode==rsmContinuRetest)
+        {
+            return false;
+        }
+        SetRunStartMode(rsmQAMode);
+    }
+    else
+    {
+        return false;
+    }
+
+    return true;
+}
+//---------------------------------------------------------------------------
+void TfMain::CheckList()     //KaiChen 20190613 ：Add GPIB CHECKLIST?
+{
+    AnsiString ret="";
+    AnsiString t;
+    AnsiString sCheckListName;
+
+    sCheckListName.sprintf("%s-OI%04d%02d%02d", fMain->cbSetupFileName->Text, SystemYear, SystemMonth, SystemDate);
+    // GATE(FW3-WD) golden :11341/:11343/:11354 -- see GATE REGISTER item 13
+    // above. `ret` keeps its declared default `""`, so the reply below
+    // naturally resolves to "SETTINGNG" -- a faithful "did not happen"
+    // outcome, not a fabricated success.
+#if 0
+    fLotInfo->GenerateCheckList(false, sCheckListName, true);
+
+    ret=fLotInfo->GenerateCheckList(false, fMain->cbSetupFileName->Text, false);
+#endif
+
+    if(ret=="OK")
+    {
+        t.sprintf("SETTINGOK");
+    }
+    else
+    {
+        t.sprintf("SETTINGNG");
+    }
+
+#if 0
+    fLotInfo->RefreshYieldMonitor();
+#endif
+
+    SendMSG_CMD(MSG_CMD_CHECKLIST, t);
+}
+//---------------------------------------------------------------------------
+void TfMain::SetBinPosChange()                                                  //KaiChen 20190706 ：Add GPIB BINPOS_
+{
+    AnsiString asRet;
+    char str[256];
+    AnsiString t;
+    bool bStatusOK=false;
+
+    if(SystemStart==false &&                                                    //Sam 20210512 : GIPB 設定要卡 Initail
+       (LastSet.iRunStartMode==rsmInitialStart   ||
+        LastSet.iRunStartMode==rsmCInitialRetest ||
+        LastSet.iRunStartMode==rsmQAMode))                                      //Sam 20250214 : RMS 新增 QA 模式
+    {
+        bStatusOK=true;
+    }
+
+    if(bStatusOK==false)
+    {
+        t.sprintf("STATUS NG");
+        SendMSG_CMD(MSG_CMD_BINPOS, t);
+    }
+    else
+    {
+        strncpy(str, HGpib2Handler->cReturn, sizeof(str));
+        asRet=BinPosChange(str);
+
+        if(asRet=="")
+        {
+            t.sprintf("OK");
+        }
+        else if(asRet=="NG")
+        {
+            t.sprintf("NG");
+        }
+        else
+        {
+            t.sprintf("NG%s", asRet);
+        }
+        SendMSG_CMD(MSG_CMD_BINPOS, t);
+    }
+}
+//---------------------------------------------------------------------------
+AnsiString TfMain::BinPosChange(char *str) //KaiChen 20190706 ：Add GPIB BINPOS_
+{
+    AnsiString asBinPos=AnsiString(str).Trim();
+    AnsiString asReturn="";
+    AnsiString asBuf[16][2];
+    int iBinData[16], iTrayData[16];
+    int iPosEnd1=0, iPosEnd2=0;
+    AnsiString asTemp1="";
+    int iFailCurrent, iFailSet, iWhichTrayCurrent;
+
+    RecordProcess(asBinPos);
+
+    for(int i=0; i<16; i++)
+    {
+        iBinData[i]=0;
+        iTrayData[i]=0;
+        asBuf[i][0]="";
+        asBuf[i][1]="";
+    }
+
+    for(int i=0; i<16; i++)
+    {
+        iPosEnd1=asBinPos.Pos(",");
+        asTemp1=asBinPos.SubString(1, iPosEnd1-1);
+
+        iPosEnd2=asTemp1.Pos("_");
+        asBuf[i][0]=asTemp1.SubString(1, iPosEnd2-1);
+        asBuf[i][1]=asTemp1.SubString(iPosEnd2+1, asTemp1.Length());
+
+        iBinData[i]=atoi(asBuf[i][0].c_str());
+//        iTrayData[i]=atoi(asBuf[i][1].c_str());
+        if(asBuf[i][1]=="N")    //KaiChen 20191227 ：修改可以將 Bin 設定到 NoUse
+        {
+            iTrayData[i]=0;
+        }
+        else
+        {
+            iTrayData[i]=atoi(asBuf[i][1].c_str());
+        }
+
+        asBinPos=asBinPos.SubString(iPosEnd1+1, asBinPos.Length());
+
+        if(iPosEnd1==0 || iPosEnd2==0)
+        {
+            return "NG";
+        }
+
+        if(asBinPos.Length()<=0)
+        {
+            break;
+        }
+    }
+
+    for(int i=0; i<16; i++)
+    {
+        if(iBinData[i]<0 || iBinData[i]>15)
+        {
+            return "NG";
+        }
+        //if(iTrayData[i]<0 || iTrayData[i]>6)
+        if(iTrayData[i]<0)  //KaiChen 20191227 ：增加回傳異常碼
+        {
+            return "NG";
+        }
+    }
+
+    for(int i=0; i<16; i++)
+    {
+        if(iBinData[i]>0)
+        {
+            iWhichTrayCurrent   =BinSelect[iTestRunMode].iCatDataT3Pos[iBinData[i]];       //QQQ
+            iFailCurrent        =BinSelect[iTestRunMode].iStackDefFailCate[iWhichTrayCurrent-1];
+            iFailSet            =BinSelect[iTestRunMode].iStackDefFailCate[iTrayData[i]-1];
+
+            if(iWhichTrayCurrent>0)
+            {
+                if(iFailCurrent==0 && iFailSet==0)
+                {
+                }
+                else if(iFailCurrent==1 && iFailSet==1)
+                {
+                }
+                else if(iFailCurrent==0 && iFailSet==1 && iTrayData[i]-1!=BinSelect[iTestRunMode].IfErrorT3)  //Good bin -> Fail bin
+                {
+                    asReturn=asReturn+"_A1";
+                }
+                else if(iFailCurrent==0 && iFailSet==1 && iTrayData[i]-1==BinSelect[iTestRunMode].IfErrorT3)
+                {
+                    asReturn=asReturn+"_A2";
+                }
+                else if(iFailCurrent==1 && iFailSet==0 && iWhichTrayCurrent-1!=BinSelect[iTestRunMode].IfErrorT3)
+                {
+                    asReturn=asReturn+"_B1";
+                }
+                else if(iFailCurrent==1 && iFailSet==0 && iWhichTrayCurrent-1==BinSelect[iTestRunMode].IfErrorT3)
+                {
+                    asReturn=asReturn+"_B2";
+                }
+                else
+                {
+                    return "NG";
+                }
+            }
+            else
+            {
+                if(iTrayData[i]>6)  //KaiChen 20191227 ：增加回傳異常碼
+                {
+                    asReturn=asReturn+"_D1";
+                }
+                else
+                {
+                    asReturn=asReturn+"_C1";
+                }
+            }
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    if(asReturn=="")
+    {
+        for(int i=0; i<16; i++)
+        {
+            if(iBinData[i]>0)
+            {
+                BinSelect[iTestRunMode].iCatDataT3Pos[iBinData[i]]=iTrayData[i];   //QQQ
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        // GATE(FW3-WD) golden :11535-11543 -- see GATE REGISTER items 14-15
+        // above and the RISK NOTE at the top of this wave's banner.
+#if 0
+        for(int i=0; i<TEST_MAX_BIN; i++)
+        {
+            if(i<fBinSel->sBinTraySetT3Pos[iTestRunMode]->Count)
+            {
+                fBinSel->sBinTraySetT3Pos[iTestRunMode]->Strings[i]=BinSelect[iTestRunMode].iCatDataT3Pos[i];
+            }
+        }
+        fBinSel->ChangeActivePageIndex();   //Sam 20230711 : 修正 OLP SetCategroy 異常
+        fBinSel->spbSaveClick(this);
+        fShowBinSelect->ShowBinSel();
+#endif
+    }
+
+    return asReturn;
+}
+//---------------------------------------------------------------------------
+void TfMain::GetSGFTPSTATUS()                   //Sam 20210329 : Add GPIB SGFTP_STATUS
+{
+    AnsiString asRet;
+    if(IniConfig.bA32EnableFTPAutomation==true)
+        asRet.sprintf("ON");
+    else
+        asRet.sprintf("OFF");
+    SendMSG_CMD(MSG_CMD_GetSGFTP_STATUS, asRet);
+}
+//---------------------------------------------------------------------------
+void TfMain::SetSGFTP()                                                         //Sam 20210329 : Add GPIB SGFTP_ SGFTP_ON/SGFTP_OFF
+{
+    AnsiString asRet,asCmd;
+    char str[256];
+    AnsiString sPath;
+    bool bStatusOK=false;
+
+    if(SystemStart==false &&                                                    //Sam 20210512 : GIPB 設定要卡 Initail
+       (LastSet.iRunStartMode==rsmInitialStart   ||
+        LastSet.iRunStartMode==rsmCInitialRetest ||
+        LastSet.iRunStartMode==rsmQAMode))                                      //Sam 20250214 : RMS 新增 QA 模式
+    {
+        bStatusOK=true;
+    }
+
+    if(bStatusOK==false)
+    {
+        asRet.sprintf("STATUS NG");
+        SendMSG_CMD(MSG_CMD_SetSGFTP, asRet);
+    }
+    else
+    {
+        strncpy(str, HGpib2Handler->cReturn, sizeof(str));
+        asCmd=AnsiString(str).Trim();
+        sPath=AuthPath+"config.ini";
+
+        if(asCmd.Pos("ON")==1)
+        {
+            // GATE(FW3-WD) golden :11588-11589 -- see GATE REGISTER items
+            // 16-17 above (config\ shared config write; fConfiguration
+            // absence).
+#if 0
+            WriteIniData(sPath, "Function", "bA32EnableFTPAutomation", 1);      // shared machine config write -- queued for redirect-seam design
+            fConfiguration->cbA32->Checked=true;
+#endif
+            IniConfig.bA32EnableFTPAutomation=true;
+            asRet.sprintf("OK");
+        }
+        else if(asCmd.Pos("OFF")==1)
+        {
+            // GATE(FW3-WD) golden :11595/:11597 -- see GATE REGISTER items
+            // 16-17 above (config\ shared config write; fConfiguration
+            // absence).
+#if 0
+            WriteIniData(sPath, "Function", "bA32EnableFTPAutomation", 0);      // shared machine config write -- queued for redirect-seam design
+#endif
+            IniConfig.bA32EnableFTPAutomation=false;
+#if 0
+            fConfiguration->cbA32->Checked=false;
+#endif
+            asRet.sprintf("OK");
+        }
+        else
+        {
+            asRet.sprintf("NG");
+        }
+
+        // GATE(FW3-WD) golden :11605 -- see GATE REGISTER item 18 above.
+#if 0
+        fLotInfo->RefreshYieldMonitor();
+#endif
+
+        SendMSG_CMD(MSG_CMD_SetSGFTP, asRet);
+    }
+}
+//---------------------------------------------------------------------------
+void TfMain::SetNONDOUBLEBIN()                                                  //Sam 20210329 : Add GPIB NONDOUBLEBIN_
+{
+    AnsiString asCmd,str1,asRet,asBin;
+    char str[256];
+    AnsiString sPath,sCheckListFilePath,asLastFileName;
+    TStringList *tNonDoubleBin=new TStringList();
+    bool bflag[256]={false};
+    int i,iBin;
+    bool bStatusOK=false;
+
+    if(SystemStart==false &&                                                    //Sam 20210512 : GIPB 設定要卡 Initail
+       (LastSet.iRunStartMode==rsmInitialStart   ||
+        LastSet.iRunStartMode==rsmCInitialRetest ||
+        LastSet.iRunStartMode==rsmQAMode))                                      //Sam 20250214 : RMS 新增 QA 模式
+    {
+        bStatusOK=true;
+    }
+
+    if(bStatusOK==false)
+    {
+        asRet.sprintf("STATUS NG");
+        SendMSG_CMD(MSG_CMD_SetNONDOUBLEBIN, asRet);
+    }
+    else
+    {
+        for(i=0;i<256;i++)
+        {
+            bflag[i]=false;
+        }
+
+        sPath.sprintf("D:\\HT9045_Log\\CheckingList");
+        MyForceDirectories(sPath);
+        asLastFileName=GetLastOpenFN();
+        sCheckListFilePath.sprintf("%s\\%s.txt",sPath, asLastFileName);
+
+        strncpy(str, HGpib2Handler->cReturn, sizeof(str));
+        asCmd=AnsiString(str).Trim();
+
+        str1=StringReplace(asCmd,"_", ",", TReplaceFlags()<<rfReplaceAll);
+        tNonDoubleBin->CommaText=str1;
+
+        asRet="OK";
+
+        if(SystemStart==true)   //系統在 Run 的時候不給改
+        {
+            asRet.sprintf("NG");
+        }
+        else if(tNonDoubleBin->Count==1)
+        {
+            asBin=tNonDoubleBin->Strings[0];
+            asCmd="NULL";
+        }
+        else if(tNonDoubleBin->Count>1)
+        {
+            for(i=0;i<tNonDoubleBin->Count;i++)
+            {
+                if(tNonDoubleBin->Strings[i]!="")
+                {
+                    // AI(W906-FW3-WD) 20260818: substitution (S6) -- see
+                    // FW3-WD GROUP banner above for the full citation.
+                    iBin=atoi(AnsiString(tNonDoubleBin->Strings[i]).c_str());
+                    //檢查 Bin 是否有重複設定
+                    if(bflag[iBin]==false)
+                        bflag[iBin]=true;
+                    else
+                        asRet="NG";
+                }
+                else
+                {
+                    asRet="NG";
+                }
+            }
+        }
+        else
+        {
+            asRet="NG";
+        }
+
+        if(asRet=="OK")
+            WriteIniData(sCheckListFilePath, "Tester_Control", "NONDOUBLEBIN", asCmd);
+        else
+            WriteIniData(sCheckListFilePath, "Tester_Control", "NONDOUBLEBIN", "");//有問題要把資料清空
+
+        SendMSG_CMD(MSG_CMD_SetNONDOUBLEBIN, asRet);
+    }
+    tNonDoubleBin->Clear();
+    delete tNonDoubleBin;
+}
+//---------------------------------------------------------------------------
+void TfMain::SetSBinData()                     //Steven 20220421 : Amlogic需要收SBIN
+{
+    AnsiString asCmd, str2, asSBin;
+    int iSBin;
+    char str[544];
+    strncpy(str, HGpib2Handler->cReturn, HGpib2Handler->GPIBBin);
+    asCmd=AnsiString(str).Trim();  //asCmd="30_1|P|20_2|F|3";
+    asCmd=asCmd.SubString(0, asCmd.AnsiPos(";")-1);
+    asCmd=asCmd.SubString(9, asCmd.Length());
+    TStringList *tSBin=new TStringList();
+    tSBin->CommaText=asCmd;
+    if(tSBin->Count==32)
+    {
+        for(int i=0; i<MAX_SOCKET_ROW; i++)
+        {
+            for(int j=0; j<MAX_SOCKET_COL; j++)
+            {
+                if(TestIF.iSiteMap[i][j]>0 && TestIF.iSiteMap[i][j]<=MAX_SOCKET_TOTAL)
+                {
+                    asSBin=tSBin->Strings[32-TestIF.iSiteMap[i][j]]; //要反序,所以32-
+                    iSBin=HexStrToInt(asSBin);
+                    TestSocket.cSBin[i][j]=iSBin;
+                }
+            }
+        }
+    }
+}
+//---------------------------------------------------------------------------
+void TfMain::SetBINCOUNT()                                                      //Sam 20210329 : Add GPIB BINCOUNT_
+{
+    AnsiString asRet,asCmd,str1,asCondition,str2,asCategory,asBin,asPassFail;
+    char str[256];
+    AnsiString sPath,sCheckListFilePath,sLastFilePath,asLastFileName;
+    TStringList *tBinCount=new TStringList();
+    TStringList *tCondition=new TStringList();
+
+    bool bflag[TEST_MAX_BIN]={false};
+    int i,j,iBin,iCount,iFailCnt;
+    bool bCondition;
+    bool bStatusOK=false;
+
+    for(i=0; i<TEST_MAX_BIN; i++)
+        bflag[i]=false;
+
+    if(SystemStart==false &&                                                    //Sam 20210512 : GIPB 設定要卡 Initail
+       (LastSet.iRunStartMode==rsmInitialStart   ||
+        LastSet.iRunStartMode==rsmCInitialRetest ||
+        LastSet.iRunStartMode==rsmQAMode))                                      //Sam 20250214 : RMS 新增 QA 模式
+    {
+        bStatusOK=true;
+    }
+
+    if(bStatusOK==false)
+    {
+        asRet.sprintf("STATUS NG");
+        SendMSG_CMD(MSG_CMD_SetBINCOUNT, asRet);
+    }
+    else
+    {
+        sPath.sprintf("D:\\HT9045_Log\\CheckingList");
+        MyForceDirectories(sPath);
+        asLastFileName=GetLastOpenFN();
+        sCheckListFilePath.sprintf("%s\\%s.txt",sPath, asLastFileName);     //CheckList檔案
+        sLastFilePath=DataPath+asLastFileName+"\\Tester.Data";              //SetupFile
+
+        strncpy(str, HGpib2Handler->cReturn, sizeof(str));
+        asCmd=AnsiString(str).Trim();  //asCmd="30_1|P|20_2|F|3";
+
+        str1=StringReplace(asCmd,"_", ",", TReplaceFlags()<<rfReplaceAll);
+        tBinCount->CommaText=str1;
+
+        asRet="OK";
+
+        if(asCmd=="NULL")
+        {
+            for(j=0; j<15; j++)
+            {
+                asBin.sprintf("IsPassBin%d", j+1);
+                WriteIniData(sCheckListFilePath, "Tester_Control", asBin, AnsiString("NULL")); //將所有 Bin Pass/Fail 設為 NULL
+                Prod.iPersentIgnore[j]=0;
+            }
+        }
+        else if(tBinCount->Count>1)
+        {
+            for(j=0; j<15; j++)
+            {
+                asBin.sprintf("IsPassBin%d", j+1);
+                WriteIniData(sCheckListFilePath, "Tester_Control", asBin, AnsiString("NULL")); //將所有 Bin Pass/Fail 設為 NULL
+            }
+            for(i=0;i<tBinCount->Count;i++)
+            {
+                if(tBinCount->Strings[i]!="")
+                {
+                    if(i==0)
+                    {
+                        // AI(W906-FW3-WD) 20260818: substitution (S6) -- see
+                        // FW3-WD GROUP banner above for the full citation.
+                        iCount=atoi(AnsiString(tBinCount->Strings[i]).c_str());//LowYield(By Total) after contact count & By Site Compare after contact count
+                        if(iCount>1)
+                        {
+                            WriteIniData(sCheckListFilePath, "FT_Yield", "Preset", iCount);                    //寫入 Check List
+                            sLastFilePath=DataPath+asLastFileName+"\\Tester.Data";
+                            // GATE(FW3-WD) golden :11800-11809 -- see GATE
+                            // REGISTER item 19 above (IniData\ shared config
+                            // write). The in-memory
+                            // TestIF_File.iLowYieldCountByTotal /
+                            // .iFailAlarmSiteYieldCmpCount /
+                            // TestIF.iLowYieldCountByTotal_RT /
+                            // TestIF_File.iFailAlarmSiteYieldCmpCount_RT
+                            // assignments stay ACTIVE.
+                            if(iTestRunMode==FT)
+                            {
+#if 0
+                                WriteIniData(sLastFilePath, "Site Yield Alarm", "Site Yield Compare Count",iCount);     // shared machine config write -- queued for redirect-seam design
+#endif
+                                TestIF_File.iLowYieldCountByTotal=iCount;
+#if 0
+                                WriteIniData(sLastFilePath, "Low Yield Alarm", "By Total Count",iCount);                // shared machine config write -- queued for redirect-seam design
+#endif
+                                TestIF_File.iFailAlarmSiteYieldCmpCount=iCount;
+                            }
+                            else if(iTestRunMode==RT)
+                            {
+#if 0
+                                WriteIniData(sLastFilePath, "Site Yield Alarm", "Site Yield Compare Count RT",iCount);  // shared machine config write -- queued for redirect-seam design
+#endif
+                                TestIF.iLowYieldCountByTotal_RT=iCount;
+#if 0
+                                WriteIniData(sLastFilePath, "Low Yield Alarm", "By Total Count RT",iCount);             // shared machine config write -- queued for redirect-seam design
+#endif
+                                TestIF_File.iFailAlarmSiteYieldCmpCount_RT=iCount;
+                            }
+                        }
+                        else
+                        {
+                            asRet="NG";
+                        }
+                    }
+                    else
+                    {
+                        // AI(W906-FW3-WD) 20260818: substitution (S6) -- see
+                        // FW3-WD GROUP banner above for the full citation.
+                        asCondition=AnsiString(tBinCount->Strings[i]).c_str();//1|P|Y Bin1 Pass, Yield Ignore Cnt 數量為 Y
+                        str2=StringReplace(asCondition,"|", ",", TReplaceFlags()<<rfReplaceAll);
+                        tCondition->CommaText=str2;
+                        if(tCondition->Count==3)
+                        {
+                            bCondition=true;
+                            // AI(W906-FW3-WD) 20260818: substitution (S6) --
+                            // see FW3-WD GROUP banner above for the full
+                            // citation.
+                            iBin=atoi(AnsiString(tCondition->Strings[0]).c_str());
+                            asPassFail=tCondition->Strings[1];
+                            iFailCnt=atoi(AnsiString(tCondition->Strings[2]).c_str());
+
+                            //檢查 Bin 是否有重複設定
+                            if(bflag[iBin]==false)
+                                bflag[iBin]=true;
+                            else
+                                bCondition=false;
+
+                            if(bCondition==true) //Condition 資料都正確才寫入
+                            {
+                                asCategory.sprintf("Category%d",iBin);
+                                WriteIniData(sCheckListFilePath, asCategory, "Fail Percent Ignore", iFailCnt);                    //寫入 Check List
+
+                                asBin.sprintf("IsPassBin%d",iBin);                                                                //寫入 Check List Pass/Fail
+                                WriteIniData(sCheckListFilePath, "Tester_Control", asBin, asPassFail);   //P:Pass , F:Fail
+
+                                Prod.iPersentIgnore[iBin]=iFailCnt;//先放到 Prod 等等再一起寫入 速度筆調快
+                            }
+                            else
+                            {
+                                asRet="NG";
+                            }
+                        }
+                        else
+                        {
+                            asRet="NG";
+                        }
+                    }
+                }
+                else
+                {
+                    asRet="NG";
+                }
+            }
+        }
+        else
+        {
+            asRet="NG";
+        }
+
+        if(asRet=="OK")
+        {
+            for(i=0; i<TEST_MAX_BIN; i++)
+            {
+                BinSelect[iTestRunMode].iPersentIgnore[i]=Prod.iPersentIgnore[i];
+            }
+            bSetBINCOUNT=true;
+            // GATE(FW3-WD) golden :11875-11876 -- see GATE REGISTER item 20
+            // above and the RISK NOTE at the top of this wave's banner.
+#if 0
+            fBinSel->ChangeActivePageIndex();   //Sam 20230711 : 修正 OLP SetCategroy 異常 Mark
+            fBinSel->spbSaveClick(this);                                                 //寫入 FT SetupFile
+#endif
+            bSetBINCOUNT=false;
+
+            WriteIniData(sCheckListFilePath, "Tester_Control", "BINCOUNT", asCmd);
+        }
+        else
+        {
+            WriteIniData(sCheckListFilePath, "Tester_Control", "BINCOUNT", "");     //有問題要把資料清空
+        }
+        SendMSG_CMD(MSG_CMD_SetBINCOUNT, asRet);
+    }
+    tBinCount->Clear();
+    tCondition->Clear();
+    delete tBinCount;
+    delete tCondition;
+}
+//---------------------------------------------------------------------------
+void TfMain::SetSGOSBIN()                                                       //Sam 20210406 : Add GPIB SGOSBIN_
+{
+    AnsiString asCmd,asRet;
+    char str[256];
+    AnsiString sPath,sCheckListFilePath,asLastFileName;
+    int iBin;
+    bool bStatusOK=false;
+
+    if(SystemStart==false &&                                                    //Sam 20210512 : GIPB 設定要卡 Initail
+       (LastSet.iRunStartMode==rsmInitialStart   ||
+        LastSet.iRunStartMode==rsmCInitialRetest ||
+        LastSet.iRunStartMode==rsmQAMode))                                      //Sam 20250214 : RMS 新增 QA 模式
+    {
+        bStatusOK=true;
+    }
+
+    if(bStatusOK==false)
+    {
+        asRet.sprintf("STATUS NG");
+        SendMSG_CMD(MSG_CMD_SetSGOSBIN, asRet);
+    }
+    else
+    {
+        sPath.sprintf("D:\\HT9045_Log\\CheckingList");
+        MyForceDirectories(sPath);
+        asLastFileName=GetLastOpenFN();
+        sCheckListFilePath.sprintf("%s\\%s.txt",sPath, asLastFileName);
+
+        strncpy(str, HGpib2Handler->cReturn, sizeof(str));
+        asCmd=AnsiString(str).Trim();
+        iBin=atoi(asCmd.c_str());
+
+        asRet="OK";
+        if(asCmd=="NULL")
+        {
+        }
+        else if(iBin<=0)
+        {
+             asRet="NG";
+        }
+
+        if(asRet=="OK")
+        {
+            WriteIniData(sCheckListFilePath, "Tester_Control", "SGOSBIN", asCmd);
+        }
+        else
+        {
+            WriteIniData(sCheckListFilePath, "Tester_Control", "SGOSBIN", "");//有問題要把資料清空
+        }
+
+        // GATE(FW3-WD) golden :11943 -- see GATE REGISTER item 21 above.
+#if 0
+        fLotInfo->RefreshYieldMonitor();
+#endif
+
+        SendMSG_CMD(MSG_CMD_SetSGOSBIN, asRet);
+    }
+}
+//---------------------------------------------------------------------------
+void TfMain::SetSGCONTFAIL()                                                    //Sam 20210422 : Add GPIB SGCONTFAIL_
+{
+    AnsiString asCmd,asRet;
+    char str[256];
+    AnsiString sPath,sCheckListFilePath,asLastFileName;
+    int iFailCount;
+    AnsiString S="";
+    S=GetLastOpenFN();
+    AnsiString szDir="";
+    int iOn=0;
+
+    bool bStatusOK=false;
+
+    if(SystemStart==false &&                                                    //Sam 20210512 : GIPB 設定要卡 Initail
+       (LastSet.iRunStartMode==rsmInitialStart   ||
+        LastSet.iRunStartMode==rsmCInitialRetest ||
+        LastSet.iRunStartMode==rsmQAMode))                                      //Sam 20250214 : RMS 新增 QA 模式
+    {
+        bStatusOK=true;
+    }
+
+    if(bStatusOK==false)
+    {
+        asRet.sprintf("STATUS NG");
+        SendMSG_CMD(MSG_CMD_SetSGCONTFAIL, asRet);
+    }
+    else
+    {
+        szDir.sprintf("%s%s\\Tester.Data", DataPath, S);
+        sPath.sprintf("D:\\HT9045_Log\\CheckingList");
+        MyForceDirectories(sPath);
+        asLastFileName=GetLastOpenFN();
+        sCheckListFilePath.sprintf("%s\\%s.txt",sPath, asLastFileName);
+
+        strncpy(str, HGpib2Handler->cReturn, sizeof(str));
+        asCmd=AnsiString(str).Trim();
+
+        iFailCount=atoi(asCmd.c_str());
+
+        asRet="OK";
+        if(asCmd=="NULL")
+        {
+        }
+        else if(iFailCount<=0)
+        {
+            asRet="NG";
+        }
+
+        if(asRet=="OK")
+        {
+            if(iTestRunMode==FT)
+            {
+                if(iFailCount>0 || asCmd!="NULL")
+                {
+                    iOn=1;
+                    TestIF_File.bContsFailBySocket=true;
+                    TestIF_File.bContsFailByHead=true;
+                    TestIF_File.iContsFailHeadAlarmCT=iFailCount;
+                    TestIF_File.iContsFailSocketAlarmCT=iFailCount;
+                    // GATE(FW3-WD) golden :12008-12011 -- see GATE REGISTER
+                    // items 22-23 above (IniData\ shared config write;
+                    // fYieldMonitoring absence).
+#if 0
+                    WriteIniData(szDir, "Alarm", "HeadCT",   iFailCount);       // shared machine config write -- queued for redirect-seam design
+                    WriteIniData(szDir, "Alarm", "SocketCT", iFailCount);       // shared machine config write -- queued for redirect-seam design
+                    fYieldMonitoring->edContsFailSocketAlarmCT_FT->Text=iFailCount;
+                    fYieldMonitoring->edContsFailHeadAlarmCT_FT->Text=iFailCount;
+#endif
+                }
+                else
+                {
+                    iOn=0;
+                    TestIF_File.bContsFailBySocket=false;
+                    TestIF_File.bContsFailByHead=false;
+                }
+                // GATE(FW3-WD) golden :12019-12024 -- see GATE REGISTER items
+                // 22-23 above. GOLDEN BUG (B6): golden's own
+                // `rbContsFailByHead_FTOff->Checked=TestIF_File.
+                // bContsFailByHead;` (no `!`) is preserved verbatim inside
+                // this (already-gated) block -- see the banner's B6 citation.
+#if 0
+                WriteIniData(szDir, "Alarm", "SocketEnable", iOn);              // shared machine config write -- queued for redirect-seam design
+                WriteIniData(szDir, "Alarm", "HeadEnable",   iOn);              // shared machine config write -- queued for redirect-seam design
+                fYieldMonitoring->rbContsFailBySocket_FTOn->Checked=TestIF_File.bContsFailBySocket;
+                fYieldMonitoring->rbContsFailBySocket_FTOff->Checked=!TestIF_File.bContsFailBySocket;
+                fYieldMonitoring->rbContsFailByHead_FTOn->Checked=TestIF_File.bContsFailByHead;
+                fYieldMonitoring->rbContsFailByHead_FTOff->Checked=TestIF_File.bContsFailByHead;
+#endif
+            }
+            else
+            {
+                if(iFailCount>0 || asCmd!="NULL")
+                {
+                    iOn=1;
+                    TestIF_File.bContsFailBySocket_RT=true;
+                    TestIF_File.bContsFailByHead_RT=true;
+                    TestIF_File.iContsFailHeadAlarmCT_RT=iFailCount;
+                    TestIF_File.iContsFailSocketAlarmCT_RT=iFailCount;
+                    // GATE(FW3-WD) golden :12035-12038 -- see GATE REGISTER
+                    // items 22-23 above (IniData\ shared config write;
+                    // fYieldMonitoring absence).
+#if 0
+                    WriteIniData(szDir, "Alarm", "HeadCT RT",   iFailCount);    // shared machine config write -- queued for redirect-seam design
+                    WriteIniData(szDir, "Alarm", "SocketCT RT", iFailCount);    // shared machine config write -- queued for redirect-seam design
+                    fYieldMonitoring->edContsFailSocketAlarmCT_RT->Text=iFailCount;
+                    fYieldMonitoring->edContsFailHeadAlarmCT_RT->Text=iFailCount;
+#endif
+                }
+                else
+                {
+                    iOn=0;
+                    TestIF_File.bContsFailBySocket_RT=false;
+                    TestIF_File.bContsFailByHead_RT=false;
+                }
+                // GATE(FW3-WD) golden :12046-12051 -- see GATE REGISTER items
+                // 22-23 above. GOLDEN BUG (B6): golden's own
+                // `rbContsFailByHead_RTOff->Checked=TestIF_File.
+                // bContsFailByHead_RT;` (no `!`) is preserved verbatim inside
+                // this (already-gated) block -- see the banner's B6 citation.
+#if 0
+                WriteIniData(szDir, "Alarm", "SocketEnable RT", iOn);           // shared machine config write -- queued for redirect-seam design
+                WriteIniData(szDir, "Alarm", "HeadEnable RT",   iOn);           // shared machine config write -- queued for redirect-seam design
+                fYieldMonitoring->rbContsFailBySocket_RTOn->Checked=TestIF_File.bContsFailBySocket_RT;
+                fYieldMonitoring->rbContsFailBySocket_RTOff->Checked=!TestIF_File.bContsFailBySocket_RT;
+                fYieldMonitoring->rbContsFailByHead_RTOn->Checked=TestIF_File.bContsFailByHead_RT;
+                fYieldMonitoring->rbContsFailByHead_RTOff->Checked=TestIF_File.bContsFailByHead_RT;
+#endif
+            }
+            WriteIniData(sCheckListFilePath, "Alarm", "Socket", iFailCount);
+            WriteIniData(sCheckListFilePath, "Alarm", "Head",   iFailCount);
+
+            // GATE(FW3-WD) golden :12056 -- see GATE REGISTER item 24 above.
+#if 0
+            fLotInfo->RefreshYieldMonitor();
+#endif
+        }
+
+        SendMSG_CMD(MSG_CMD_SetSGCONTFAIL, asRet);
+    }
+}
+
+// -- FW3-WD APPEND -- end (SIGURD/GPIB status-string family, golden Command.cpp :9995-12061) --
+

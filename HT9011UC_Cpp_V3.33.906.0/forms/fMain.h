@@ -847,6 +847,57 @@ public:
     virtual void   AutoSiteOnOff(AnsiString buffer);                      // golden main.h:1528 (body Command.cpp:9979-9985)
     virtual void   WriteNumOfSites();                                     // golden main.h:1529 (body Command.cpp:9986-9994)
     // -- end FW3-WC ADD --------------------------------------------------------
+    // -- FW3-WD ADD: Command.cpp wave-D declarations ---------------------------
+    // AI(W906-FW3-WD) 20260818: FW-3 Wave D ADD -- 29 golden TfMain:: member
+    // declarations (golden main.h :1196-1197 / :1530-1596 / :1633) whose bodies
+    // are translated in Command.cpp's new "FW3-WD GROUP" section (golden
+    // Command.cpp :9995-12061). Per contract rule 1 every declaration below is
+    // `virtual`; per rule 4 each cites its golden home. Signatures re-read from
+    // the cp950-decoded golden main.h this pass (golden line numbers cited per
+    // member).
+    virtual AnsiString GetSamSungTmp(bool bSend=true);                    // golden main.h:1530 (body Command.cpp:9995-10135)
+    // GetSamSungMap / GetSamSungSoakTime: NOT re-declared here -- both are
+    // ALREADY declared above (golden main.h:1531/1532, this file's own
+    // W5-Automation INTEGRATE ADD block, lines 236-237) with matching
+    // signatures. See this wave's own Command.cpp STUB COLLISIONS note: their
+    // offline stub bodies (forms/fMain.cpp:282-283, `return ""`/`return "0"`)
+    // are RETIRED by this wave's real bodies landing in Command.cpp, same
+    // treatment FW3-WA already gave ArmStatusStrings/WritePERSITETemperature/
+    // PERSITETemperatureStrings -- retire forms/fMain.cpp:282-283 in the NEXT
+    // integration pass (this wave is barred from touching forms/fMain.cpp).
+    virtual void   GetTTLState();                                         // golden main.h:1561 (body Command.cpp:10324-10500)
+    virtual void   Send_Command_TTL(AnsiString asStr);                    // golden main.h:1562 (body Command.cpp:10502-10511)
+    virtual void   WriteSetTempStatus_SIGURD();                           // golden main.h:1196 (body Command.cpp:10513-10594)
+    virtual void   WriteSetSoakTimeStatus_SIGURD();                       // golden main.h:1197 (body Command.cpp:10596-10668)
+    virtual void   SetSiteMapData_SIGURD();                               // golden main.h:1572 (body Command.cpp:10670-10728)
+    virtual AnsiString GetTestIFSiteMap();                                // golden main.h:1573 (body Command.cpp:10730-10954)
+    virtual void   ChkStatus();                                           // golden main.h:1574 (body Command.cpp:10956-11013)
+    virtual void   GetBinCategory();                                      // golden main.h:1575 (body Command.cpp:11015-11024)
+    virtual void   GetSetUpFileName();                                    // golden main.h:1576 (body Command.cpp:11026-11039)
+    virtual void   GetHandlerID_Sigurd();                                 // golden main.h:1577 (body Command.cpp:11041-11051)
+    virtual void   SetSetupFileName();                                    // golden main.h:1579 (body Command.cpp:11053-11102)
+    virtual bool   ChangeSetupFileName(char *str);                        // golden main.h:1580 (body Command.cpp:11104-11135)
+    virtual void   PPSELECTAskFile();                                     // golden main.h:1582 (body Command.cpp:11139-11144)
+    // [PORT-ONLY SEAM] golden main.h:1633 `int iFileOkPPSELECT;` -- plain data
+    // member PPSELECTLoadFile (below) writes; golden itself never initialises it
+    // in the ctor (VCL zero-inits), so this stays 0 the same way, and gets no
+    // dynamic initialiser (no SIOF risk -- it is a TfMain member, not a
+    // namespace-scope static).
+    int iFileOkPPSELECT;                                                  // [DATA] golden main.h:1633
+    virtual void   PPSELECTLoadFile();                                    // golden main.h:1581 (body Command.cpp:11146-11191)
+    virtual void   SetStartMode();                                        // golden main.h:1583 (body Command.cpp:11195-11271)
+    virtual bool   ChangeHandlerStartMode(char *str);                     // golden main.h:1584 (body Command.cpp:11274-11332)
+    virtual void   CheckList();                                           // golden main.h:1585 (body Command.cpp:11334-11357)
+    virtual void   SetBinPosChange();                                     // golden main.h:1586 (body Command.cpp:11359-11398)
+    virtual AnsiString BinPosChange(char *str);                           // golden main.h:1587 (body Command.cpp:11400-11548)
+    virtual void   GetSGFTPSTATUS();                                      // golden main.h:1588 (body Command.cpp:11550-11558)
+    virtual void   SetSGFTP();                                            // golden main.h:1589 (body Command.cpp:11560-11609)
+    virtual void   SetNONDOUBLEBIN();                                     // golden main.h:1590 (body Command.cpp:11611-11696)
+    virtual void   SetSBinData();                                         // golden main.h:1596 (body Command.cpp:11698-11724)
+    virtual void   SetBINCOUNT();                                         // golden main.h:1591 (body Command.cpp:11726-11891)
+    virtual void   SetSGOSBIN();                                          // golden main.h:1592 (body Command.cpp:11893-11947)
+    virtual void   SetSGCONTFAIL();                                       // golden main.h:1593 (body Command.cpp:11949-12061)
+    // -- end FW3-WD ADD --------------------------------------------------------
     TfMain();
     virtual ~TfMain() {}
 };

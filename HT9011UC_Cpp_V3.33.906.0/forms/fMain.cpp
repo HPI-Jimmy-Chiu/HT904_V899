@@ -279,8 +279,11 @@ void TfMain::CleanYieldCount() {}                              // W7-C1: offline
 // -- W5-Automation ADD: HANA_ART.cpp method sinks (all offline no-op / empty) --
 void TfMain::SendMSG_CMD(int /*CMD*/) {}                                    // offline: no real GPIB-bridge process
 void TfMain::SendMSG_CMD(int /*CMD*/, AnsiString /*Message*/) {}            // offline: no real GPIB-bridge process
-AnsiString TfMain::GetSamSungMap(bool /*bSend*/) { return AnsiString(""); } // offline: no SamSung map source
-AnsiString TfMain::GetSamSungSoakTime(bool /*bSend*/) { return AnsiString("0"); } // offline: no soak-time source
+// AI(W906-FW3-WD-integrate) 20260818: GetSamSungMap / GetSamSungSoakTime
+// offline stubs RETIRED -- real bodies (golden Command.cpp:10137-10303 /
+// :10305-10322) landed in Command.cpp with FW-3 Wave D; Command.cpp is
+// already registered in ht9045_sm, so keeping these would be a
+// multiple-definition link error, not a fallback.
 // AI(W906-FW3-WA) 20260817: ArmStatusStrings stub RETIRED -- the real body
 // (golden Command.cpp:1497-1508) landed in Command.cpp with FW-3 Wave A.
 // -- W5-Final-SckArtRemainder ADD: method sinks (all offline no-op) --
