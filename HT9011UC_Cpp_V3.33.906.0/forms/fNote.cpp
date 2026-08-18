@@ -36,7 +36,8 @@
 // be a crash, not a default.  vclcompat::TEdit's own Text defaults to "".
 TfNote::TfNote()
     : bMyServoOffInArm(false), iMyServoOffInArmPosX(0), iMyServoOffInArmPosY(0), aJamCodeFilePath(""),
-      fShow(false), AlarmType(0), edErrorCode(new vclcompat::TEdit())
+      fShow(false), AlarmType(0), edErrorCode(new vclcompat::TEdit()),
+      Edit3(new vclcompat::TEdit()), edUnitName(new vclcompat::TEdit())   // AI(W906-FW-SecUnlock) 20260819: see header
 {
 }
 TfNote *fNote = new TfNote();

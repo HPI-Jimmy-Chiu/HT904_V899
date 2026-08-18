@@ -155,6 +155,12 @@ public:
     //  and Z1 pressed" arm of IsTestSitICFallDown (JerryYang 20220923).  It is a
     //  real settable field, not a constant, so a test can open that arm.
     vclcompat::TEdit *edErrorCode;
+    // AI(W906-FW-SecUnlock) 20260819: golden note.h:49-50 -- the two fields
+    // Command.cpp's MachineStatus Bit8_HandlerJam feeds into
+    // fSecurity->GetBit8 ("<Edit3> <edUnitName>" is the jam-message key);
+    // landed to dissolve that gate now that fSecurity is real (FW-SecCC).
+    vclcompat::TEdit *Edit3;
+    vclcompat::TEdit *edUnitName;
 
     //  [METHOD] golden note.h:430 `bool __fastcall IsTestSitICFallDown();`,
     //  body golden note.cpp:5462-5492.  FAITHFULLY TRANSLATED (not a stub) --

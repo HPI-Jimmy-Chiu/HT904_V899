@@ -240,6 +240,7 @@
 #include "cinitial.h"                // SetWorkParameter
 #include "mysensor.h"                // Sen[] / SnAirIsEnough
 #include "forms/fNote.h"             // fNote->fShow / ->edErrorCode (real facade, offline fShow=false)
+#include "forms/fSecurity.h"         // AI(W906-FW-SecUnlock) 20260819: fSecurity->GetBit8 (MachineStatus Bit8 gate dissolved)
 //---------------------------------------------------------------------------
 
 // AI(W906-FW3-WA) 20260817: golden Command.cpp file-scope global (golden :?, right
@@ -14954,14 +14955,16 @@ void TfMain::MachineStatus() //JerryYang 20151109 回覆tester機台狀態
     }
 
     //----------判斷機台是否JAM
-    // GATE(FW3-WF) golden :7391 -- see GATE REGISTER item 5 above.
-#if 0
+    // AI(W906-FW-SecUnlock) 20260819: GATE(FW3-WF) item 5 DISSOLVED -- both
+    // missing pieces landed: fSecurity is real (FW-SecCC) and fNote gained
+    // Edit3/edUnitName (this wave). GetBit8's own table reads live behind
+    // fSecurity's SEC1-closed state, so this bit stays 0 offline -- same
+    // observable as the gate's forced default, now computed for real.
     if(fNote->fShow && fNote->edErrorCode->Text!="" && fSecurity->GetBit8(fNote->Edit3->Text+" "+fNote->edUnitName->Text, fNote->edErrorCode->Text)==1)                //Isaac 20170825(jou) 回傳JAM增加支援WAR,MES
     {
         HHandler2Gpib.iStatus[Bit8_HandlerJam]=1;
     }
     else
-#endif
     {
         HHandler2Gpib.iStatus[Bit8_HandlerJam]=0;
     }

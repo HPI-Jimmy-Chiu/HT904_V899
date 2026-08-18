@@ -48,6 +48,7 @@
 //                          gated tree-wide (common.h:387-393).
 // =============================================================================
 #include "forms/fContactCT.h"
+#include "forms/fSecurity.h"   // AI(W906-FW-SecUnlock) 20260819: fSecurity->Insufficient (C3 dissolved)
 
 #include "MachineType.h"          // test-mode enums, CC_* customer codes, ChangeToPercentage<T>
 #include "cmydef.h"                // SystemStart, InitialOK, iAutoTempOfsTriggerCnt, ASE_Yield[],
@@ -1187,13 +1188,11 @@ void TfContactCT::btClearCountClick(TObject *Sender)
 
     if (CUSTOMER_CODE == CC_ASE_KaohSiung)
     {
-        // GATE (C3): fSecurity->Insufficient(107) -- see forms/fContactCT.h
-        // GATE (C3). Fail-closed substitute: treat as insufficient
-        // (Insufficient(...)==false is forced true), so this whole branch
-        // ALWAYS returns unless bRefreshFunction==true (a real, already-
-        // ported global -- kevin 20181012 / wei 20151022 Count Clear
-        // permission gate).
-        if (bRefreshFunction == false /* && fSecurity->Insufficient(107)==false [GATE C3, forced true] */)
+        // AI(W906-FW-SecUnlock) 20260819: GATE (C3) DISSOLVED -- fSecurity is
+        // real (FW-SecCC). While SEC1 stays closed Insufficient(107) returns
+        // false (iMaxLevelItem==0), so this arm's observable behaviour today
+        // is identical to the old forced-true substitute.
+        if(bRefreshFunction ==false &&fSecurity->Insufficient(107)==false)      //kevin 20181012                    //wei 20151022 Count Clear權限設定
             return;
     }
     else if (CUSTOMER_CODE == CC_KYEC_LEE)   // Ifor 20191008: KYEC clear-Count requires barcode scan & permission
@@ -1239,11 +1238,10 @@ void TfContactCT::btClearCountClick(TObject *Sender)
         // clear-count body below on this customer code path yet.
         return;
     }
-    else
+    // AI(W906-FW-SecUnlock) 20260819: GATE (C3) DISSOLVED (else arm) --
+    // golden :985 shape restored; same today-equivalence note as the ASE arm.
+    else if(fSecurity->Insufficient(107)==false)                                //wei 20151022 Count Clear權限設定
     {
-        // GATE (C3): fSecurity->Insufficient(107)==false -- forced true
-        // (fail-closed), so this `return` ALWAYS fires for every OTHER
-        // customer code today. See forms/fContactCT.h GATE (C3).
         return;
     }
 

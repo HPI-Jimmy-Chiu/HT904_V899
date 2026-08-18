@@ -43,6 +43,7 @@
 //                            one pointer.
 // =============================================================================
 #include "forms/fShowBinSelect.h"
+#include "forms/fSecurity.h"   // AI(W906-FW-SecUnlock) 20260819: fSecurity->Insufficient (B6 permission half dissolved)
 
 #include "MachineType.h"           // enums, CC_* customer codes, ChangeToPercentage<T>/ChangeToFloat<T>
 #include "cmydef.h"                  // SystemStart/iHome/InitialOK/iTestBinCount/iByBinCnt[]/
@@ -985,10 +986,12 @@ void TfShowBinSelect::btnClearCountClick(TObject * /*Sender*/)
 {
     if (CUSTOMER_CODE != CC_Greatek)   // Sam 201700915 (Steven): Greatek's clear doesn't need permission
     {
-        // GATE (B6): fSecurity->Insufficient(108)==false -- forced true
-        // (fail-closed: permission not verified), so this ALWAYS returns for
-        // every customer code except CC_Greatek.
-        return;
+        // AI(W906-FW-SecUnlock) 20260819: GATE (B6) permission half DISSOLVED
+        // -- fSecurity real (FW-SecCC); Insufficient(108) is false while SEC1
+        // stays closed, so this still returns for every non-Greatek customer
+        // today (identical observable). The modal half below stays gated.
+        if(fSecurity->Insufficient(108)==false)
+            return;
     }
 
     // GATE (B6): int ret=ShowMyMessageBox_YES_NO(...); if(ret==2) return; --
