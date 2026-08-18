@@ -50,6 +50,7 @@
 // ReturnSiteDataArray's real side effects (see test (e) below).
 #include "forms/fContactCT.h"    // fContactCT
 #include "forms/fShowBinSelect.h" // fShowBinSelect
+#include "forms/fLotInfo.h"       // AI(W906-FW-Y3) 20260819: fLotInfo -- (Y3) caption assertions
 
 #include <cstdio>
 
@@ -133,6 +134,25 @@ static void Test_CalculateSiteYield_AverageBothArms_And_DisabledSite()
     CHECK(y.dSiteYield[0][0] == 50.0, "CalculateSiteYield: dSiteYield[0][0] == (75+25)/2 == 50.0 (iShuttleMode==0 averages both arms)");
 
     CHECK(y.dSiteYield[0][1] == 0.0, "CalculateSiteYield: disabled site (0,1) -> dSiteYield==0.0 (golden's `else` branch)");
+
+    // AI(W906-FW-Y3) 20260819: (Y3) dissolved -- the run above took the
+    // AutoClean-off `else` arm, which now really writes fLotInfo (golden
+    // :3659-3664). Assert the Disable-branch captions landed.
+    CHECK(fLotInfo->Label17->Caption == AnsiString("User set : ") + AnsiString(TestIF.iAutoClean_LowYieldLimit) + "%" + " Disable",
+          "CalculateSiteYield (Y3 else arm): Label17 Disable caption written to the real fLotInfo");
+    CHECK(fLotInfo->edtAutoCleanLowYield->Text == AnsiString(fContactCT->GetLowYield_AutoClean(0)),
+          "CalculateSiteYield (Y3 else arm): edtAutoCleanLowYield mirrors GetLowYield_AutoClean(0)");
+
+    // -- (Y3) if arm: AutoClean ON + SOCKET_ALARM mode -> Enable-flavoured captions --
+    TestIF_File.iAutoClean_Function = true;
+    TestIF_File.iAutoClean_Mode = M_SOCKET_ALARM;
+    TestIF.iAutoClean_LowYieldLimit = 77;
+    TestIF.bAutoClean_FailAlarmLowYield = true;
+    y.CalculateSiteYield();
+    CHECK(fLotInfo->Label17->Caption == "User set : 77% Enable",
+          "CalculateSiteYield (Y3 if arm): Label17 == \"User set : 77% Enable\" (golden :3647-3648 formatting)");
+    TestIF_File.iAutoClean_Function = false;   // restore for later tests
+    TestIF_File.iAutoClean_Mode = 0;
     CHECK(y.dPickerYield[0][0][1] == 0.0, "CalculateSiteYield: disabled site (0,1) -> dPickerYield[arm0]==0.0");
     CHECK(y.dPickerYield[1][0][1] == 0.0, "CalculateSiteYield: disabled site (0,1) -> dPickerYield[arm1]==0.0");
 

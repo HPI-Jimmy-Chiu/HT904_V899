@@ -165,14 +165,10 @@ void TfYieldMonitoring::CalculateSiteYield()
        (TestIF_File.iAutoClean_Mode&M_SOCKET_ALARM ||
         TestIF_File.iAutoClean_Mode&M_INTERVAL))                                //ChungHung 20131223 add for SCK
     {
-        // GATE (Y1)+(Y3): fLotInfo->Label17/18/21->Caption + fLotInfo->
-        // edtAutoCleanLowYield/edtAutoCleanSiteYieldDiff->Text (golden :3647-3654)
-        // -- fLotInfo exists but carries none of these 5 members; that is the
-        // ONLY remaining blocker (fContactCT->GetLowYield_AutoClean itself IS
-        // ported and ACTIVE, called live elsewhere in this file -- kept inside
-        // this gate only because its output has nowhere to go).
-        // See forms/fYieldMonitoring.h GATE REGISTER (Y1)/(Y3).
-#if 0
+        // AI(W906-FW-Y3) 20260819: (Y3) gate DISSOLVED -- the 5 fLotInfo
+        // AutoClean-display members (golden :3647-3654) landed in
+        // forms/fLotInfo.h this wave; GetLowYield_AutoClean was ACTIVE all
+        // along.
         fLotInfo->Label17->Caption = "User set : " + AnsiString(TestIF.iAutoClean_LowYieldLimit) + "%" +
                                     (TestIF.bAutoClean_FailAlarmLowYield?" Enable":" Disable");
         fLotInfo->Label18->Caption =  "User set : " + AnsiString(TestIF.iAutoClean_FailAlarmSiteYield) + "%" +
@@ -181,21 +177,19 @@ void TfYieldMonitoring::CalculateSiteYield()
                                     (TestIF_File.iAutoClean_Mode & M_INTERVAL?"/Contact Enable":"/Contact Disable");
         fLotInfo->edtAutoCleanLowYield->Text = AnsiString(fContactCT->GetLowYield_AutoClean(0));
         fLotInfo->edtAutoCleanSiteYieldDiff->Text = AnsiString(fContactCT->GetLowYield_AutoClean(1));
-#endif
     }
     else
     {
         iAutoClean_FailAlarmSiteYieldIntervalCount=0;
-        // GATE (Y1)+(Y3): fContactCT->ClearData_AutoClean() + the same
-        // fLotInfo block as the `if` arm above (golden :3659-3664).
-#if 0
+        // AI(W906-FW-Y3) 20260819: (Y3) gate DISSOLVED (else arm, golden
+        // :3659-3664) -- same 5-member landing as the `if` arm above;
+        // ClearData_AutoClean was ACTIVE all along.
         fContactCT->ClearData_AutoClean();                                      //ChungHung 20131225 add for SCK
         fLotInfo->Label17->Caption = "User set : " + AnsiString(TestIF.iAutoClean_LowYieldLimit) + "%" + " Disable";
         fLotInfo->Label18->Caption = "User set : " + AnsiString(TestIF.iAutoClean_FailAlarmSiteYield) + "%" + " Disable";
         fLotInfo->Label21->Caption = "User set : " + AnsiString(TestIF.iAutoClean_IntervalContact) + " Disable";
         fLotInfo->edtAutoCleanLowYield->Text = AnsiString(fContactCT->GetLowYield_AutoClean(0));
         fLotInfo->edtAutoCleanSiteYieldDiff->Text = AnsiString(fContactCT->GetLowYield_AutoClean(1));
-#endif
     }
 
     if(SystemStart &&

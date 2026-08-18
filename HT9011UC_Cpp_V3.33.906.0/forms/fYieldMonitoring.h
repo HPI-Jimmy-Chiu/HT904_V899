@@ -156,7 +156,11 @@
 //      each has its own `(void)str;` right after the gated block, matching
 //      CheckBySiteYieldAlarm's `(void)dYield;` precedent for the same
 //      "gate made a real local go quiet" situation.
-//  (Y3) fLotInfo->Label17/18/21->Caption + edtAutoCleanLowYield/
+//  (Y3) fLotInfo -- ⚠ STATUS UPDATE, AI(W906-FW-Y3) 20260819: DISSOLVED.
+//      The 5 members landed in forms/fLotInfo.h (allocated in its ctor);
+//      both CalculateSiteYield arms are ACTIVE now. Text below is the
+//      historical record; its absence claims are stale.
+//      [HISTORICAL] fLotInfo->Label17/18/21->Caption + edtAutoCleanLowYield/
 //      edtAutoCleanSiteYieldDiff->Text (CalculateSiteYield, golden
 //      :3647-3664, the AutoClean-mode display block). forms/fLotInfo.h EXISTS
 //      (unlike fContactCT/fShowBinSelect) but carries NONE of these five

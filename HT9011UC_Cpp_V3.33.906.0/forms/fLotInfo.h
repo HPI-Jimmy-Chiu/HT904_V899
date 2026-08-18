@@ -27,6 +27,13 @@ public:
     // -- W6.3 ADD: members the TRAY-ARM ENGINE (acatchtray.cpp) derefs -----------
     TfLotInfoLabel   *labNowLoaderTrayID;         // [DATA] golden uLotInfo.h:1078 (TLabel* loader tray-ID label)
     TfLotInfoEdit    *edtSysLotID;                // [DATA] golden uLotInfo.h:302  (TEdit* system lot-ID edit)
+    // AI(W906-FW-Y3) 20260819: the 5 AutoClean-display members whose absence
+    // kept uYieldMonitoring's (Y3) CalculateSiteYield block gated.
+    TfLotInfoLabel   *Label17;                    // [DATA] golden uLotInfo.h:48 (TLabel* AutoClean low-yield user-set line)
+    TfLotInfoLabel   *Label18;                    // [DATA] golden uLotInfo.h:49 (TLabel* AutoClean site-yield-diff user-set line)
+    TfLotInfoLabel   *Label21;                    // [DATA] golden uLotInfo.h:55 (TLabel* AutoClean interval/contact user-set line)
+    TfLotInfoEdit    *edtAutoCleanLowYield;       // [DATA] golden uLotInfo.h:50 (TEdit* live low-yield threshold display)
+    TfLotInfoEdit    *edtAutoCleanSiteYieldDiff;  // [DATA] golden uLotInfo.h:51 (TEdit* live site-yield-diff display)
     // AI(W906-AutoCleanFoundation) 20260721: golden uLotInfo.h:1264 `int
     // iUnloaderTask[3];` (Eastsun 20260515 F011) -- the backing store
     // InitialUnLoaderTask (below) writes. Was missing entirely (the previous

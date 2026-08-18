@@ -20,6 +20,12 @@ TfLotInfo::TfLotInfo()
     // -- W6.3 ADD --
     labNowLoaderTrayID = new TfLotInfoLabel();
     edtSysLotID        = new TfLotInfoEdit();
+    // AI(W906-FW-Y3) 20260819: the 5 AutoClean-display widgets (see header)
+    Label17                   = new TfLotInfoLabel();
+    Label18                   = new TfLotInfoLabel();
+    Label21                   = new TfLotInfoLabel();
+    edtAutoCleanLowYield      = new TfLotInfoEdit();
+    edtAutoCleanSiteYieldDiff = new TfLotInfoEdit();
     // -- W5-Automation ADD --
     cbProcess          = new TfLotInfoRunMode();
     // -- W5-Final-TesterTCPSocket ADD --
