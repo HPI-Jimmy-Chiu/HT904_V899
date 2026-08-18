@@ -8016,3 +8016,55 @@ Wave 1+2＋Obs2fix（36 方法+82 oracle）→ uYieldMonitoring Wave A（17 方�
 
 **自動可續（不需裁決）**：uYieldMonitoring Wave B/C；cTemperFrom／BinDisplay（批 3）recon+
 翻譯；FW-1 tag 接線續批。
+
+---
+
+## 2026-08-18（上午，ObsSwap＋三條硬體線）— 交換波接上真行為；三張硬體稽核卡就位
+
+五顆 commit：`61d8650`（ObsSwap）、`286a606`（vendor 升級）、`24574fe`/`5808a63`/`1f93b07`
+（PCIE-1203／MN200／Galil recon 文件）。
+
+**ObsSwap（61d8650）**：TfObserverShim 全退役、memo stand-in verbatim 搬進 fObserver.h、
+facade 補齊消費面成員、`fObserver` 全域 homecoming 到 cObserver.cpp。
+**146 個呼叫點（RecordInArmTime×82＋AddTimeData×64）從 no-op 接上真 OEE 記錄**。
+static-init 安全靠 ctor 兩處 config 讀取掛 `INIFileGeneral!=0` 守衛（golden 本就在
+ini 開啟後才建表單）。交換**一次連結通過、零測試需要重校準**。
+
+**Vendor 升級（286a606，使用者直接對背景代理下的指令）**：五 AdvMot 標頭升 SDK 2.0.15.2
+（101 新增/零移除改名，全量比對非抽樣）；**史上第一次編譯這些標頭**抓到三個舊缺陷
+（三處不存在的 include 路徑＋ht9045_io 缺 vendor include path，已修）＋一個**未解缺陷
+入佇列**：開 HAVE_PCI1203 時 cinitial.cpp 撞 `MOTION_IO/PMOTION_IO` typedef 衝突
+（AdvMotDrv.h:2594）＋:858 巨集污染——預設組態零影響。
+
+**三條硬體稽核線（各自分支標記，未 checkout）**：
+- **PCIE-1203**（feat/v906-pcie1203-hal）：HAL 已存在（TMyEtherCatMotor＋TPci1203Backend），
+  缺 HAVE_PCI1203＋`-D_STDCALL_SUPPORTED`＋probe timeout；X64 齊備。
+- **MN200**（feat/v906-mn200-audit）：x64 同批雙生（1.0.18.1/192 exports）；
+  **MinGW 可直連 x86 lib（35 符號實測）**——CMakeLists:50-53 舊註解把 COFF 的
+  MN200DLL.lib 與 OMF 的 MN200BCB.lib 搞混（KNOWLEDGE 已記，stub 保留價值不變）。
+- **Galil gclib**（feat/v906-galil-gclib-audit）：**64-bit only＋MSVC 已移除→目前無工具鏈
+  可碰**；gclib_compat 對 DMC32 覆蓋率零（遷移=結構性重寫含運動安全閘門）。
+  **架構題給使用者：index 馬達若上 1203 匯流排，gclib 遷移可能整個免做。**
+
+**驗收（合併終局 gate，交換＋vendor 同樹）**：Debug **137/3**＋Release **137/3**
+清單逐項相同（常駐子集）；guard 552 檔全等。
+
+**過程紀律事件**：cTemperFrom 波代理越界改 CMakeLists＋留孤兒 build.bat gate（審後保留
+編輯、等孤兒跑完）；PCIE 代理收到使用者直接指令後動手改檔（原 brief 唯讀）——兩案
+都以「內容審核通過＋事件記錄」收場，brief 範本已含「收工不留背景進程」條款。
+
+### 🔖 RESUME（最新）
+
+- **完成鏈（20260818 上午）**：cTemperFrom Wave A（9dbfa3c）→ObsSwap（61d8650）→
+  vendor 升級（286a606）→三硬體 recon 文件。ctest 基線 **137 測試/3 常駐**。
+- **佇列（使用者已核准、依序）**：
+  1. fYieldMonitoring 全域 shim→facade 交換（同 ObsSwap 手法；TfYieldMonitoring_2x4_16
+     →真 facade，讓 26 個 arm 呼叫點接上）＋順帶解 csystem 的 IniRecord* TU-local 遮蔽。
+  2. fContactCT/fShowBinSelect facade 波（解良率引擎 39 gate）。
+  3. DoAutoCloseSite/DoRTAutoSocketOff 翻譯（行為變更獨立 commit）。
+  4. Command.cpp Wave C（WIDGET＋ByDLL；絕不進波次清單維持）。
+  5. StatisticalJamCount 家族（W906_EVENTLOG_ROOT 重導）。
+  6. 小項：W906_Trace G6 強化、cMyDB/canary __fastcall 稽核、
+     HAVE_PCI1203 的 MOTION_IO 衝突診斷。
+- **設計面（最後提醒使用者）**：WebBridge write path 設計輪；
+  硬體架構題（index 馬達上不上 1203、MN200 保留 vs 併入 EtherCAT）。
