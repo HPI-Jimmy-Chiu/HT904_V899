@@ -8089,14 +8089,45 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   全部還 gated）；cmydef 四全域照「首個真消費者」慣例解 gate。oracle 12/12＋21/21。
 - 驗收鏈：三輪全新雙 gate 全綠（137/3→137/3→139/3），guard 全程 552 檔全等。
 
+## 20260818 下午 — FW-YEnable：良率引擎 39-gate 啟用波（cae07bb）
+
+- **交付**：Y1（fContactCT）11 站點全解 gate（含 :4949 SaveTotalYield，寫檔複驗
+  過——真旗標是 bI29YieldRecordIntervalIC、寫 asYieldRecordPath 非 system 檔）；
+  Y2 只解 4/14（ShowCategoryBin ×3＋iLowYieldBinSelectContactCount）；
+  Y3 維持全 gate。fContactCT/fShowBinSelect homecoming 為真實例。
+  test_yieldmon_core 30+6 checks。
+- **Y2 縮水的原因（不是縮手）**：TfShowBinSelect 缺 8 個 widget 成員
+  （labArmDiff/labSiteDiff/labLowYield/labTotalYield(Total)/lblSpeciallYield(Total)/
+  IntervalByTotal）——fShowBinSelect.h 的 ROLE prose 宣稱已落地但 class body
+  沒有（grep 全樹 0 命中）。10 站點原句保留在 #if 0，補齊成員後直接解。
+- **大坑（新知識）：homecoming 的 SIOF 樂透**。第一次雙 gate 爆 64/139 紅：
+  uYieldMonitoring 解 gate 後，連結器把 cShowBinSelect.o 拉進每顆 god-stack exe，
+  TfShowBinSelect ctor 變成靜態初始化器。兩種死法（gdb bt 坐實）：
+  (a) 跨 TU 寫 cmydef.cpp 未建構的 sBinCode_ATK[] → SEGV；
+  (b) 連結順序好籤時代理的尾端守衛（fContact/ArmData 非空）通過，
+  ShowCategoryBin 在 config 未載入下索引預設尺寸 grid → out_of_range。
+  **代理單顆 exe 36/36 綠 = 抽中初始化順序好籤，證明不了其他 138 顆**
+  （「build 綠≠接上了」的 SIOF 版本）。修法：ctor 動態段整段掛
+  if(INIFileGeneral != 0)（cObserver 同款 sentinel，重現 golden WinMain 前置
+  條件）；priming 由 runtime Y2 呼叫點自癒。
+- **代理錯誤修正**：Y3 gate 註解宣稱 GetLowYield_AutoClean「completely
+  unported」——實際已 ACTIVE 且同檔活呼叫，真阻塞只有 fLotInfo 缺 5 成員。
+- **驗收**：修正後全新雙 gate Debug 139/3＋Release 139/3，失敗集合逐項相同
+  且 ⊆ 常駐；guard 552 檔 IDENTICAL（含爆紅那輪也 IDENTICAL——system/ 全程
+  無汙染）。
+
 ### 🔖 RESUME（最新）
 
-- **完成**：佇列 1（ObsSwap+YMSwap+啟用）、佇列 2（CTBS 翻譯與註冊）。基線 **139 測試/3 常駐**。
-- **進行中**：良率引擎 39-gate 啟用波（fContactCT/fShowBinSelect 實體 homecoming＋
-  uYieldMonitoring 的 Y1×25/Y2×14/Y3 解 gate；TfShowBinSelect ctor 安全複驗
-  ——代理稱只讀資料全域，homecoming 前主迴圈驗證）。
-- **佇列後續**：3=DoAutoCloseSite/DoRTAutoSocketOff 真本體；4=Command.cpp Wave C；
-  5=StatisticalJamCount 家族；6=小項（W906_Trace G6、__fastcall 稽核、
-  HAVE_PCI1203 的 MOTION_IO 衝突）。cShowBinSelect Wave B 併入表單佇列。
-- **設計面（最後提醒使用者）**：write path 設計輪；硬體架構題（index 上不上 1203、
-  MN200 保留 vs 併入 EtherCAT）。
+- **完成**：佇列 1（ObsSwap+YMSwap+啟用）、佇列 2（CTBS）、**良率引擎 39-gate
+  啟用波（cae07bb）**。基線 **139 測試/3 常駐**（config_db/config_loaders/
+  GA1_ReadGeneralIni）。
+- **下一步＝佇列 3**：DoAutoCloseSite/DoRTAutoSocketOff 真本體翻譯
+  （uYieldMonitoring.cpp 現為文件化 no-op；行為變更獨立 commit＋雙 gate）。
+- **佇列後續**：4=Command.cpp Wave C（WIDGET+ByDLL；never-wave 清單不動）；
+  5=StatisticalJamCount 家族（W906_EVENTLOG_ROOT redirect）；6=小項
+  （W906_Trace G6、cMyDB.h/canary_support.h __fastcall 稽核、HAVE_PCI1203
+  MOTION_IO 衝突）。表單佇列：cShowBinSelect Wave B（含補 8 個缺件成員後
+  解 Y2 剩餘 10 站點）、fSecurity/fCounterClear/fBinSel facades、fLotInfo
+  5 成員補齊後解 Y3、FW-3 batch 3+。
+- **設計面（最後提醒使用者）**：write path 設計輪；硬體架構題（index 上不上
+  1203、MN200 保留 vs 併入 EtherCAT、gclib 是否因 1203 統一而免做）。
