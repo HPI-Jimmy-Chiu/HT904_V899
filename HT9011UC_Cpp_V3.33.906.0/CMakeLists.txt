@@ -967,6 +967,13 @@ add_library(ht9045_io STATIC
 
 target_include_directories(ht9045_io PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
+    # AI(W906-PCI1203-IncludeFix) 20260818: IOBackend.cpp/MyLaneIo.cpp both
+    # have had `#if HAVE_PCI1203 #include "AdvMotApi.h"` since the W4-IO wave,
+    # but this target never had EtherCAT/vendor on its include path -- so the
+    # bare include could never resolve the moment HAVE_PCI1203 was turned on.
+    # Mirrors ht9045_motor's identical entry below (same vendor headers, same
+    # uiDevhand master handle). Caught via a HAVE_PCI1203=1 probe build.
+    ${CMAKE_CURRENT_SOURCE_DIR}/EtherCAT/vendor
 )
 
 target_link_libraries(ht9045_io PUBLIC vclcompat ht9045_globals)

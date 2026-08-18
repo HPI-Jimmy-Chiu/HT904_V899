@@ -118,7 +118,14 @@ int TMN200Backend::ReadByte (int /*Ring*/, int /*IP*/, int /*Port*/, unsigned ch
 //  (MyLaneIo.cpp:143-149 / .cpp:210-216 / .cpp:278-284 / .cpp:397-403 / .cpp:466-472)
 // ---------------------------------------------------------------------------
 #if HAVE_PCI1203
-#include "EtherCAT/AdvMotApi.h"  // READ-ONLY vendor header
+//AI(W906-PCI1203-IncludeFix) 20260818: was "EtherCAT/AdvMotApi.h" (does not
+//  exist -- only EtherCAT/vendor/AdvMotApi.h does; EtherCAT/vendor/ is on the
+//  include path, see CMakeLists.txt ht9045_motor/ht9045_io). Fails to compile
+//  as soon as HAVE_PCI1203 is turned on -- caught via a HAVE_PCI1203=1 probe
+//  build 20260818. Same fix applied to EtherCAT/MyNUEC1.cpp and MyLaneIo.cpp,
+//  which had the identical typo; EtherCAT/MyEtherCAT.cpp:114 already used the
+//  correct bare form.
+#include "AdvMotApi.h"           // READ-ONLY vendor header
 
 int TPci1203Backend::WriteBit(int Ring, int IP, int Port, int Bit, int Value)
 {

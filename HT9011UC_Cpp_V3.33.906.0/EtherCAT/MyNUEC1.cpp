@@ -32,7 +32,17 @@
 #include <cstdlib>          // atoi
 
 #if HAVE_PCI1203
-#include "EtherCAT/AdvMotApi.h"  // READ-ONLY vendor header (Acm_Dev*/Acm_Daq*, SUCCESS,
+//AI(W906-PCI1203-IncludeFix) 20260818: was "EtherCAT/AdvMotApi.h" -- that path
+//  does not exist (only EtherCAT/vendor/AdvMotApi.h does) and fails to compile
+//  the moment HAVE_PCI1203 is actually turned on (verified: this exact
+//  #include is what a HAVE_PCI1203=1 probe build hit first, "No such file or
+//  directory"). EtherCAT/vendor/ is on ht9045_motor's PUBLIC include path
+//  (CMakeLists.txt), so the bare form resolves correctly -- same form
+//  EtherCAT/MyEtherCAT.cpp:114 already uses (and its own banner already
+//  explains why the "EtherCAT/"-prefixed form is wrong). This file and
+//  IOBackend.cpp/MyLaneIo.cpp had independently kept the wrong form; all
+//  three fixed together, see those files' own AI(W906-PCI1203-IncludeFix) notes.
+#include "AdvMotApi.h"           // READ-ONLY vendor header (Acm_Dev*/Acm_Daq*, SUCCESS,
                                  // ECAT_TYPE_I16/U16/BOOL -- pulled in transitively from
                                  // AdvMotDev.h/AdvMotDrv.h/AdvMotPropID.h/AdvMotErr.h)
 #endif

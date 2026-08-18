@@ -9,6 +9,7 @@
 // install media.
 //
 
+
 #ifndef __ADV_MOT_DEV_H__
 #define __ADV_MOT_DEV_H__
 
@@ -18,7 +19,7 @@
 +-----------------------------------------------------------------------------+
 */
 
-#define Adv_UNKNOWN                0xff
+#define Adv_UNKNOWN				0xff
 
 // ADAM Motion Series
 #define Adv_ADAM_MOTION          0x0
@@ -44,39 +45,39 @@
 #define Adv_PCI1245L            (Adv_IO_MOTION + 0xd)
 #define Adv_PCI1245S            (Adv_IO_MOTION + 0xe)
 #define Adv_PCI1285V            (Adv_IO_MOTION + 0xf)
-#define Adv_MIC3285             (Adv_IO_MOTION + 0x10)
+#define Adv_MIC3285             (Adv_IO_MOTION + 0x10) 
 #define Adv_MIC3245             (Adv_IO_MOTION + 0x11)
-#define Adv_PCI1245HP            (Adv_IO_MOTION + 0x12) //YDD 2015.6.1
-#define Adv_PCI1245LIO            (Adv_IO_MOTION + 0x13) //YDD 2015.6.1
-#define Adv_MAS324X                (Adv_IO_MOTION + 0x14)
-#define Adv_MAS328X                (Adv_IO_MOTION + 0x15)
+#define Adv_PCI1245HP			(Adv_IO_MOTION + 0x12) //YDD 2015.6.1
+#define Adv_PCI1245LIO			(Adv_IO_MOTION + 0x13) //YDD 2015.6.1
+#define Adv_MAS324X				(Adv_IO_MOTION + 0x14)
+#define Adv_MAS328X				(Adv_IO_MOTION + 0x15)
 #define Adv_PCI1245_MAS         (Adv_IO_MOTION + 0x16)
 #define Adv_PCI1285_MAS         (Adv_IO_MOTION + 0x17)
-#define Adv_PCI1245L_MAS        (Adv_IO_MOTION + 0x18)
-#define Adv_PCI1245LIO_MAS        (Adv_IO_MOTION + 0x19)
-#define Adv_PCI1245S_MAS        (Adv_IO_MOTION + 0x1A)
-#define Adv_MAS324XS            (Adv_IO_MOTION + 0x1B)
-
-#define Adv_PCIE1245            (Adv_IO_MOTION + 0x20)
-#define Adv_PCIE1245E           (Adv_IO_MOTION + 0x21)
-#define Adv_PCIE1245V           (Adv_IO_MOTION + 0x22)
+#define Adv_PCI1245L_MAS		(Adv_IO_MOTION + 0x18)
+#define Adv_PCI1245LIO_MAS		(Adv_IO_MOTION + 0x19)
+#define Adv_PCI1245S_MAS		(Adv_IO_MOTION + 0x1A)
+#define Adv_MAS324XS			(Adv_IO_MOTION + 0x1B)
+#define Adv_PCI1245T			(Adv_IO_MOTION + 0x1C)
+#define Adv_PCI1285T			(Adv_IO_MOTION + 0x1D)
 
 //YDD 2015.9.29
-#define Adv_MOTION_MVP            0xD0
-#define Adv_MVP3245             (Adv_MOTION_MVP + 0x01)
-#define Adv_MVP3245P            (Adv_MOTION_MVP + 0x02)
-#define Adv_MVP3245_MAS            (Adv_MOTION_MVP + 0x03)
-#define Adv_MVP3285_MAS            (Adv_MOTION_MVP + 0x04) //ydd 2016.12.27
-#define Adv_MVP3265_MAS            (Adv_MOTION_MVP + 0x05)
-#define Adv_MVP3245S_MAS        (Adv_MOTION_MVP + 0x06)
+#define Adv_MOTION_MVP	        0xD0
+#define Adv_MVP3245 			(Adv_MOTION_MVP + 0x01) 
+#define Adv_MVP3245P			(Adv_MOTION_MVP + 0x02)
+#define Adv_MVP3245_MAS		    (Adv_MOTION_MVP + 0x03)
+#define Adv_MVP3285_MAS		    (Adv_MOTION_MVP + 0x04) //ydd 2016.12.27
+#define Adv_MVP3265_MAS			(Adv_MOTION_MVP + 0x05)
+#define Adv_MVP3245S_MAS		(Adv_MOTION_MVP + 0x06)
 
-#define Adv_IO_MOTION_EX        0x80       //Custom
+#define Adv_IO_MOTION_EX        0x80       //Custom 
 #define Adv_PCI1285HT           (Adv_IO_MOTION_EX + 0x0)
-#define Adv_PCI1274_12AE        (Adv_IO_MOTION_EX + 0x1) //16.7.25
-#define Adv_PCI1274_16AE        (Adv_IO_MOTION_EX + 0x2) //16.7.25
+#define Adv_PCI1274_12AE		(Adv_IO_MOTION_EX + 0x1) //16.7.25
+#define Adv_PCI1274_16AE		(Adv_IO_MOTION_EX + 0x2) //16.7.25
+#define Adv_PCIE1274_12AE		(Adv_IO_MOTION_EX + 0x3)
 
 #define AdV_VIRTUAL_DIO_CARD        0x90       //VIRTUAL DIO CARD
-#define AdV_V_PCI1750                (AdV_VIRTUAL_DIO_CARD + 0)
+#define AdV_V_PCI1750				(AdV_VIRTUAL_DIO_CARD + 0)
+
 
 #define Adv_VirtualMotionCard   (0xA0)
 #define Adv_V_PCI1245             (Adv_VirtualMotionCard + Adv_PCI1245 -Adv_IO_MOTION)
@@ -113,16 +114,35 @@
 #define Adv_PCIE1203V            (Adv_EtherCAT + 5)
 #define Adv_PCIE1203L            (Adv_EtherCAT + 6)
 #define Adv_PCI1203L             (Adv_EtherCAT + 7)
-#define Adv_PCI1203S             (Adv_EtherCAT + 8)
-#define Adv_PCIE1203S            (Adv_EtherCAT + 9)
+//#define Adv_PCI1203S             (Adv_EtherCAT + 8)
+//#define Adv_PCIE1203S            (Adv_EtherCAT + 9)
+#define Adv_AMAX357				 (Adv_EtherCAT + 0x8)
+#define Adv_PCM26R1EC			 (Adv_EtherCAT + 0xA)
+#define Adv_PCM26R1EC_E			 (Adv_EtherCAT + 0xB)
+#define Adv_PCM26R1EC_V			 (Adv_EtherCAT + 0xC)
+#define Adv_PCM26R1EC_L			 (Adv_EtherCAT + 0xD)
+#define Adv_PCI1203T             (Adv_EtherCAT + 0xE)
+#define Adv_PCIE1203T            (Adv_EtherCAT + 0xF)
+#define Adv_PCIE1203LMC          (Adv_EtherCAT + 0x10)
 
-#define Adv_EtherCAT_MAS           0x70 //ydd. 18.3.22. add for ethercat -mas
+/*#define Adv_EtherCAT_MAS           0x70 //ydd. 18.3.22. add for ethercat -mas
 #define Adv_PCI1203_MAS           (Adv_EtherCAT_MAS + Adv_PCI1203 - Adv_EtherCAT)
 #define Adv_PCI1203L_MAS          (Adv_EtherCAT_MAS + Adv_PCI1203L - Adv_EtherCAT)
-#define Adv_PCI1203S_MAS          (Adv_EtherCAT_MAS + Adv_PCI1203S - Adv_EtherCAT)
+//#define Adv_PCI1203S_MAS          (Adv_EtherCAT_MAS + Adv_PCI1203S - Adv_EtherCAT)
 #define Adv_PCIE1203_MAS          (Adv_EtherCAT_MAS + Adv_PCIE1203 - Adv_EtherCAT)
 #define Adv_PCIE1203E_MAS         (Adv_EtherCAT_MAS + Adv_PCIE1203E - Adv_EtherCAT)
 #define Adv_PCIE1203V_MAS         (Adv_EtherCAT_MAS + Adv_PCIE1203V - Adv_EtherCAT)
 #define Adv_PCIE1203L_MAS         (Adv_EtherCAT_MAS + Adv_PCIE1203L - Adv_EtherCAT)
-#define Adv_PCIE1203S_MAS         (Adv_EtherCAT_MAS + Adv_PCIE1203S - Adv_EtherCAT)
+//#define Adv_PCIE1203S_MAS         (Adv_EtherCAT_MAS + Adv_PCIE1203S - Adv_EtherCAT)*/
+
+#define Adv_IO_MOTION_2			   0xB0	
+#define Adv_PCIE1245            (Adv_IO_MOTION_2 + 0x0)
+#define Adv_PCIE1245E           (Adv_IO_MOTION_2 + 0x1)
+#define Adv_PCIE1245V           (Adv_IO_MOTION_2 + 0x2)
+
+#define Adv_PCIE1203M           (Adv_IO_MOTION_2 + 0x10)
+#define Adv_AMAX357M            (Adv_IO_MOTION_2 + 0x11)
+#define Adv_PCM26R1ECM          (Adv_IO_MOTION_2 + 0x12)
+#define Adv_AMCCORE	            (Adv_IO_MOTION_2 + 0x13)
+#define Adv_Acrn    	        (Adv_IO_MOTION_2 + 0x14)
 #endif // __ADV_MOT_DEV_H__

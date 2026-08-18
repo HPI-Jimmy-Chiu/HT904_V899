@@ -110,7 +110,14 @@ extern bool bPLCIO[2048][8];
 //  IntToHex / HexStrToInt / atoi: available via vclcompat / standard headers.
 // ---------------------------------------------------------------------------
 #if HAVE_PCI1203
-#include "EtherCAT/AdvMotApi.h"   // READ-ONLY vendor header
+//AI(W906-PCI1203-IncludeFix) 20260818: was "EtherCAT/AdvMotApi.h" (does not
+//  exist -- only EtherCAT/vendor/AdvMotApi.h does; EtherCAT/vendor/ is on
+//  ht9045_motor's/ht9045_io's include path, see CMakeLists.txt). Fails to
+//  compile as soon as HAVE_PCI1203 is turned on -- caught via a HAVE_PCI1203=1
+//  probe build 20260818. Same fix applied to EtherCAT/MyNUEC1.cpp and
+//  IOBackend.cpp, which had the identical typo; EtherCAT/MyEtherCAT.cpp:114
+//  already used the correct bare form.
+#include "AdvMotApi.h"            // READ-ONLY vendor header
 #ifndef SUCCESS
 #define SUCCESS 0UL
 #endif

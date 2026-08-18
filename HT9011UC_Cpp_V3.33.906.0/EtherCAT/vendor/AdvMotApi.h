@@ -16,8 +16,14 @@ extern "C"
 
 #include "AdvMotDev.h"
 #include "AdvMotDrv.h"
+#ifndef _ADVMOTPROPID
+#define _ADVMOTPROPID
 #include "AdvMotPropID.h"
+#endif
+#ifndef _ADVMOTERR
+#define _ADVMOTERR
 #include "AdvMotErr.h"
+#endif
 
 //Add for other Corp.           //  [6/8/2011 dan.yang]
 #ifndef tagPT_DEVLIST
@@ -25,7 +31,7 @@ extern "C"
 typedef struct tagPT_DEVLIST
 {
     DWORD   dwDeviceNum;
-    char    szDeviceName[50];
+    char	szDeviceName[50];
     SHORT   nNumOfSubdevices;
 } DEVLIST, *LPDEVLIST;
 #endif
@@ -35,50 +41,50 @@ typedef struct tagPT_DEVLIST
 #define _DEV_IO_MAP_INFO
 typedef struct _DEV_IO_MAP_INFO
 {
-    char Name[50];
-    ULONG Index;
-    ULONG Offset;
-    ULONG ByteLength;
-    ULONG SlotID;
+	char Name[50];
+	ULONG Index;
+	ULONG Offset;
+	ULONG ByteLength;
+	ULONG SlotID;
 
-    ULONG PortChanID;
-    ULONG ModuleID;
-    char ModuleName[16];
-    char Description[100];
+	ULONG PortChanID;
+	ULONG ModuleID;
+	char ModuleName[16];
+	char Description[100];
 } DEV_IO_MAP_INFO, *PDEV_IO_MAP_INFO;
 #endif
 
-#ifndef _ADVAPI_SLAVE_INFO
-#define _ADVAPI_SLAVE_INFO
+#ifndef _ADVAPI_SUBDEVICE_INFO
+#define _ADVAPI_SUBDEVICE_INFO
 typedef struct {
-    ULONG desc; /**< Port descriptors. */
-    ULONG link_up; /**< Link detected. */
-    ULONG loop_closed; /**< Loop closed. */
-    ULONG next_slave; /**< Connected Position of slaves. */
-    ULONG delay_to_next_dc;
+	ULONG desc; /**< Port descriptors. */
+	ULONG link_up; /**< Link detected. */
+	ULONG loop_closed; /**< Loop closed. */
+	ULONG next_slave; /**< Connected Position of slaves. */
+	ULONG delay_to_next_dc;
 } port_info;
 
-typedef struct _ADVAPI_SLAVE_INFO_
+typedef struct _ADVAPI_SUBDEVICE_INFO_
 {
-    ULONG SlaveID;
-    ULONG Position;
-    ULONG VendorID;
-    ULONG ProductID;
-    ULONG RevisionNo;
-    ULONG SerialNo;
-    ULONG driverCnts;
-    port_info ports[4];
-    ULONG transmission_delay;
-    char DeviceName[64];
-}ADVAPI_SLAVE_INFO, *PADVAPI_SLAVE_INFO;
+	ULONG SubDeviceID;
+	ULONG Position;
+	ULONG VendorID;
+	ULONG ProductID;
+	ULONG RevisionNo;
+	ULONG SerialNo;
+	ULONG driverCnts;
+	port_info ports[4];
+	ULONG transmission_delay;
+	char DeviceName[64];
+}ADVAPI_SUBDEVICE_INFO, *PADVAPI_SUBDEVICE_INFO;
 #endif
 
 #ifndef _ADVAPI_IO_PORT_INFO
 #define _ADVAPI_IO_PORT_INFO
 typedef struct _ADVAPI_IO_PORT_INFO
 {
-    U16 PortNum;
-    U16 BitLength;
+	U16 PortNum;
+	U16 BitLength;
 }ADVAPI_IO_PORT_INFO, *PADVAPI_IO_PORT_INFO;
 #endif
 
@@ -86,8 +92,8 @@ typedef struct _ADVAPI_IO_PORT_INFO
 #define _DEV_ARES_INFO
 typedef struct _DEV_ARES_INFO
 {
-//    char Name[10][32];
-    char Name[12][32];
+//	char Name[10][32];
+	char Name[12][32];
 } DEV_ARES_INFO, *PDEV_ARES_INFO;
 #endif
 
@@ -95,10 +101,37 @@ typedef struct _DEV_ARES_INFO
 #define _DEV_PRE_SCAN_DATA
 typedef struct _DEV_PRE_SCAN_DATA
 {
-    F64 XScanData;
-    F64 YScanData;
-    F64 ZScanData;
+	F64 XScanData;
+	F64 YScanData;
+	F64 ZScanData;
 } DEV_PRE_SCAN_DATA, *PDEV_PRE_SCAN_DATA;
+#endif
+
+#ifndef _ECAT_CALLBACK_PAR_MODECHANGE
+#define _ECAT_CALLBACK_PAR_MODECHANGE
+#define MAX_SLAVE_CNT 100
+typedef struct _EAT_EVENT_INFO
+{
+	U16	alias_id;
+	U8	status;
+	U8	reserved;
+} EAT_EVENT_INFO;
+
+typedef struct _ECAT_CALLBACK_PAR_MODECHANGE
+{
+	U32               evt_data_count;                    //  目前總共有幾筆資料在 Buffer
+	EAT_EVENT_INFO    evt_data[MAX_SLAVE_CNT];
+} ECAT_CALLBACK_PAR_MODECHANGE, *PECAT_CALLBACK_PAR_MODECHANGE;
+#endif
+
+#ifndef _ECAT_CALLBACK_PAR_DISCONNECT
+#define _ECAT_CALLBACK_PAR_DISCONNECT
+typedef struct _ECAT_CALLBACK_PAR_DISCONNECT
+{
+	U32 SlaveID;
+	U16 State;
+	U16 AL_Status;
+} ECAT_CALLBACK_PAR_DISCONNECT, *PECAT_CALLBACK_PAR_DISCONNECT;
 #endif
 
 #ifndef  ADVCMNAPI
@@ -112,24 +145,25 @@ typedef struct _DEV_PRE_SCAN_DATA
 | ************ Advantech Motion Master Device Type ID************************ |
 +-----------------------------------------------------------------------------+
 */
-//U32    ADVCMNAPI Acm_GetAvailableDevNum(U32 *DeviceNum); //Add for other corp. [dan.yang 2011.06.08]
+//U32	ADVCMNAPI Acm_GetAvailableDevNum(U32 *DeviceNum); //Add for other corp. [dan.yang 2011.06.08]
 U32 ADVCMNAPI Acm_GetAvailableDevs(DEVLIST *DeviceList, U32 MaxEntries, PU32 OutEntries); //Add for other corp. [dan.yang 2011.06.08]
-void ADVCMNAPI GetAvailalbe_AMONet(DWORD        dwMasDevNum, //Add for other corp. [dan.yang 2011.07.13]
-                         DEVLIST    *DeviceList,
-                         ULONG      *devIndex,
-                         ULONG        *OutEntries);
+void ADVCMNAPI GetAvailalbe_AMONet(DWORD		dwMasDevNum, //Add for other corp. [dan.yang 2011.07.13]
+						 DEVLIST    *DeviceList,
+						 ULONG      *devIndex,
+						 ULONG		*OutEntries);
 BOOL ADVCMNAPI Acm_GetErrorMessage(U32 ErrorCode, PI8 lpszError,  U32 nMaxError);//  [9/5/2011 dan.yang]
 
 //Device operation
- U32 ADVCMNAPI Acm_DevOpen(U32 DeviceNumber, PHAND DeviceHandle);
- U32 ADVCMNAPI Acm_DevReOpen(HAND DeviceHandle); //  [11/25/2014 dan]
- U32 ADVCMNAPI Acm_DevClose(PHAND DeviceHandle);
+U32 ADVCMNAPI Acm_DevOpen(U32 DeviceNumber, PHAND DeviceHandle);
+U32 ADVCMNAPI Acm_DevECATOpen(U32 DeviceNumber, U16 Ring0SlaveCount, U16 Ring1SlaveCount, U16 Timeout, PHAND DeviceHandle);
+U32 ADVCMNAPI Acm_DevReOpen(HAND DeviceHandle); //  [11/25/2014 dan]
+U32 ADVCMNAPI Acm_DevClose(PHAND DeviceHandle);
 U32 ADVCMNAPI Acm_GetLastError(HAND Handle);
- U32 ADVCMNAPI Acm_DevReadEEPROM(HAND DeviceHandle, U16 EEPROMAddr, PU16 readValue);
- U32 ADVCMNAPI Acm_DevWriteEEPROM(HAND DeviceHandle, U16 EEPROMAddr, U16 writeValue);
+U32 ADVCMNAPI Acm_DevReadEEPROM(HAND DeviceHandle, U16 EEPROMAddr, PU16 readValue);
+U32 ADVCMNAPI Acm_DevWriteEEPROM(HAND DeviceHandle, U16 EEPROMAddr, U16 writeValue);
 
- U32 ADVCMNAPI Acm_DevReadEEPROM_Ex(HAND DeviceHandle, U16 PrivateID, PU32 PassWordArray, U32 PassArrayCnt, PU32 ReadArray, U32 BufferLength);//  [6/15/2012 dan.yang]
- U32 ADVCMNAPI Acm_DevWriteEEPROM_Ex(HAND DeviceHandle, U16 PrivateID, PU32 PassWordArray, U32 PassArrayCnt, PU32 WriteArray, U32 BufferLength); //  [6/15/2012 dan.yang]
+U32 ADVCMNAPI Acm_DevReadEEPROM_Ex(HAND DeviceHandle, U16 PrivateID, PU32 PassWordArray, U32 PassArrayCnt, PU32 ReadArray, U32 BufferLength);//  [6/15/2012 dan.yang]
+U32 ADVCMNAPI Acm_DevWriteEEPROM_Ex(HAND DeviceHandle, U16 PrivateID, PU32 PassWordArray, U32 PassArrayCnt, PU32 WriteArray, U32 BufferLength); //  [6/15/2012 dan.yang]
 
 U32 ADVCMNAPI Acm_GetProperty(HAND Handle, U32 PropertyID, PVOID Buffer, PU32 BufferLength);
 U32 ADVCMNAPI Acm_SetProperty(HAND Handle, U32 PropertyID, PVOID Buffer, U32 BufferLength);
@@ -137,100 +171,114 @@ U32 ADVCMNAPI Acm_SetProperty(HAND Handle, U32 PropertyID, PVOID Buffer, U32 Buf
 U32 ADVCMNAPI Acm_GetU32Property(HAND Handle, U32 PropertyID, PU32 Value);
 U32 ADVCMNAPI Acm_GetI32Property(HAND Handle, U32 PropertyID, PI32 Value);
 U32 ADVCMNAPI Acm_GetF64Property(HAND Handle, U32 PropertyID, PF64 Value);
-U32 ADVCMNAPI Acm_GetStringProperty (HAND Handle, U32 PropertyID, PU8 Value);
-U32 ADVCMNAPI Acm_SetU32Property (HAND Handle, U32 PropertyID, U32 Value);
-U32 ADVCMNAPI Acm_SetI32Property (HAND Handle, U32 PropertyID, I32 Value);
-U32 ADVCMNAPI Acm_SetF64Property (HAND Handle, U32 PropertyID, F64 Value);
-U32 ADVCMNAPI Acm_SetStringProperty (HAND Handle, U32 PropertyID, PU8 Value);
+U32 ADVCMNAPI Acm_GetStringProperty(HAND Handle, U32 PropertyID, PU8 Value);
+U32 ADVCMNAPI Acm_SetU32Property(HAND Handle, U32 PropertyID, U32 Value);
+U32 ADVCMNAPI Acm_SetI32Property(HAND Handle, U32 PropertyID, I32 Value);
+U32 ADVCMNAPI Acm_SetF64Property(HAND Handle, U32 PropertyID, F64 Value);
+U32 ADVCMNAPI Acm_SetStringProperty(HAND Handle, U32 PropertyID, PU8 Value);
+
+U32 ADVCMNAPI Acm_GetMultiProperty (HAND Handle, PU32 PropertyIDArray, PF64 ValueArray, U32 PropertyCnt, PU32 ErrorBuffer);
+
+U32 ADVCMNAPI Acm_SetMultiProperty (HAND Handle, PU32 PropertyIDArray, PF64 ValueArray, U32 PropertyCnt, PU32 ErrorBuffer);
+U32 ADVCMNAPI Acm_SetMultiU32Property (HAND Handle, PU32 PropertyIDArray, PU32 ValueArray, U32 PropertyCnt);
+U32 ADVCMNAPI Acm_SetMultiI32Property (HAND Handle, PU32 PropertyIDArray, PI32 ValueArray, U32 PropertyCnt);
+U32 ADVCMNAPI Acm_SetMultiF64Property (HAND Handle, PU32 PropertyIDArray, PF64 ValueArray, U32 PropertyCnt);
+
+U32 ADVCMNAPI Acm_SetMultiI32Property(HAND Handle, PU32 PropertyIDArray, PI32 ValueArray, U32 PropertyCnt);
+U32 ADVCMNAPI Acm_SetMultiF64Property(HAND Handle, PU32 PropertyIDArray, PF64 ValueArray, U32 PropertyCnt);
+
+U32 ADVCMNAPI Acm_SetMultiI32Property(HAND Handle, PU32 PropertyIDArray, PI32 ValueArray, U32 PropertyCnt);
+U32 ADVCMNAPI Acm_SetMultiF64Property(HAND Handle, PU32 PropertyIDArray, PF64 ValueArray, U32 PropertyCnt);
+
  //  [11/20/2014 dan]
 U32 ADVCMNAPI Acm_GetChannelProperty(HAND Handle, U32 ChannelID, U32 PropertyID,  PF64 Value);
 U32 ADVCMNAPI Acm_SetChannelProperty(HAND Handle, U32 ChannelID, U32 PropertyID,  F64 Value);
 U32 ADVCMNAPI Acm_GetMultiChannelProperty(HAND Handle, U32 PropertyID, U32 StartChID, U32 ChCount, PF64 ValueArray);
 U32 ADVCMNAPI Acm_SetMultiChannelProperty(HAND Handle, U32 PropertyID, U32 StartChID, U32 ChCount, PF64 ValueArray);
 
- U32 ADVCMNAPI Acm_DevEnableEvent(HAND DeviceHandle, U32 DevEnableEvt); //  [11/20/2014 dan]
- U32 ADVCMNAPI Acm_DevCheckEvent(HAND DeviceHandle, PU32 DevCheckEvt, U32 Millisecond); //  [11/20/2014 dan]
- U32 ADVCMNAPI Acm_SetMultiU32Property (HAND Handle, PU32 PropertyIDArray, PU32 ValueArray, U32 PropertyCnt);
- U32 ADVCMNAPI Acm_SetMultiI32Property (HAND Handle, PU32 PropertyIDArray, PI32 ValueArray, U32 PropertyCnt);
- U32 ADVCMNAPI Acm_SetMultiF64Property (HAND Handle, PU32 PropertyIDArray, PF64 ValueArray, U32 PropertyCnt);
- U32 ADVCMNAPI Acm_EnableMotionEvent(HAND DeviceHandle,
-                          PU32 AxEnableEvtArray,
-                          PU32 GpEnableEvtArray,
-                          U32 AxArrayElements,
-                          U32 GpArrayElements);
- U32 ADVCMNAPI Acm_CheckMotionEvent(HAND DeviceHandle,
-                         PU32 AxEvtStatusArray,
-                         PU32 GpEvtStatusArray,
-                         U32 AxArrayElements,
-                         U32 GpArrayElements,
-                         U32 Millisecond);
+U32 ADVCMNAPI Acm_DevEnableEvent(HAND DeviceHandle, U32 DevEnableEvt); //  [11/20/2014 dan]
+U32 ADVCMNAPI Acm_DevCheckEvent(HAND DeviceHandle, PU32 DevCheckEvt, U32 Millisecond); //  [11/20/2014 dan]
+
+U32 ADVCMNAPI Acm_EnableMotionEvent(HAND DeviceHandle,
+						  PU32 AxEnableEvtArray,
+						  PU32 GpEnableEvtArray,
+						  U32 AxArrayElements,
+						  U32 GpArrayElements);
+U32 ADVCMNAPI Acm_CheckMotionEvent(HAND DeviceHandle,
+						 PU32 AxEvtStatusArray,
+						 PU32 GpEvtStatusArray,
+						 U32 AxArrayElements,
+						 U32 GpArrayElements,
+						 U32 Millisecond);
 U32 ADVCMNAPI Acm_CancelCheckEvent(HAND ObjectHandle);
- U32 ADVCMNAPI Acm_DevEnableEvent_All(HAND  DeviceHandle,
-     PU32 DevEnableEvtArray,
-     PU32 AxEnableEvtArray,
-     PU32 GpEnableEvtArray,
-     U32 AxArrayElements,
-     U32 GpArrayElements) ;
- U32 ADVCMNAPI Acm_DevCheckEvent_All(HAND  DeviceHandle,
-     PU32  DevEvtStatusArray,
-     PU32  AxEvtStatusArray,
-     PU32 GpEvtStatusArray,
-     U32  AxArrayElements,
-     U32  GpArrayElements,
-     U32  Millisecond);
- U32 ADVCMNAPI Acm_DevLoadConfig(HAND DeviceHandle, PI8 ConfigPath);
- U32 ADVCMNAPI Acm_DevFwDownload(HAND DeviceHandle, U32 Data, U32 DataID); //internal function don't release.
- U32 ADVCMNAPI Acm_DevSlaveFwDownload(HAND DeviceHandle, U16 RingNo, U16 Position, PI8 FileName, PI8 FilePath, U32 Password);  //  [6/4/2015 andy.wang]
- U32 ADVCMNAPI Acm_DevDownloadCAMTable (HAND DeviceHandle,
-                            U32 CamTableID,
-                            PF64 pMasterArray,
-                            PF64 pSlaveArray,
-                            PF64 pPointRangeArray,
-                            PF64 pPointSlopeArray,
-                            U32 ArrayElements);
- U32 ADVCMNAPI Acm_DevLoadCAMTableFile(HAND DeviceHandle, PI8 FilePath, U32 CamTableID, PU32 Range, PU32 PointsCount); // [dan.yang 2011.08.22]
- U32 ADVCMNAPI Acm_DevConfigCAMTable(HAND DeviceHandle,  //Add for pci1265 and pci1245 [dan.yang 2011.06.23]
-                          U32 CamTableID,
-                          U32 Periodic,
-                          U32 MasterAbsolute,
-                          U32 SlaveAbsolute);
- U32 ADVCMNAPI Acm_DevReadMailBox(HAND Handle, U16 par_id, U32 data_index, U32 data_count, PU32 DataBuffer); //[dan.yang 2012.12.28]
- U32 ADVCMNAPI Acm_DevReadMultiMailBox(HAND Handle, U8 object_id, PU16 par_id, PU32 DataBuffer, PU32 ErrorBuffer, U32 ArrayElements);
- U32 ADVCMNAPI Acm_DevWriteMailBox(HAND Handle, U16 par_id, U32 data_index, U32 data_count, PU32 DataBuffer); //[dan.yang 2012.12.28]
- U32 ADVCMNAPI Acm_DevWriteMultiMailBox(HAND Handle, U8 object_id, PU16 par_id, PU32 DataBuffer, PU32 ErrorBuffer, U32 ArrayElements);
- U32 ADVCMNAPI Acm_WriteRingBuffer(HAND Handle, U32 cmd_id, U32 data_index, U32 data_cnt, PU32 dataBuffer);
- U32 ADVCMNAPI Acm_ReadRingBuffer(HAND Handle, PU32 cmd_id, PU32 data_index, U32 data_cnt, PU32 dataBuffer);
- U32 ADVCMNAPI Acm_LoadENI(HAND DeviceHandle, PI8 FilePath); //  [11/12/2014 dan]
- U32 ADVCMNAPI Acm_DevGetComStatus(HAND DeviceHandle, U16 RingNo, PU16 pStatus); //  [11/20/2014 dan]
- U32 ADVCMNAPI Acm_DevGetErrorTable(HAND DeviceHandle, U16 RingNo, PU32 ErrorTableArray, PU32 ArrayElements);
- U32 ADVCMNAPI Acm_DevGetMasInfo(HAND DeviceHandle, PVOID pMasInfo, PU16 SlaveIPArray, PU32 SlvCnt);
- U32 ADVCMNAPI Acm_DevGetSlaveInfo(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, PVOID pInfo);
- U32 ADVCMNAPI Acm_DevGetModuleInfo(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, PU32 ModIDArray, PU32 ModCnt);
- U32 ADVCMNAPI Acm_DevGetIOInfo(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 Slot, U8 DataType, PVOID pInfo);
- U32 ADVCMNAPI Acm_DevGetSlaveDataCnt(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U8 DataType, PU32 DataCnt);
+U32 ADVCMNAPI Acm_DevEnableEvent_All(HAND  DeviceHandle,
+	 PU32 DevEnableEvtArray,
+	 PU32 AxEnableEvtArray,
+	 PU32 GpEnableEvtArray,
+	 U32 AxArrayElements,
+	 U32 GpArrayElements) ;
+U32 ADVCMNAPI Acm_DevCheckEvent_All(HAND  DeviceHandle,
+	 PU32  DevEvtStatusArray,
+	 PU32  AxEvtStatusArray,
+	 PU32 GpEvtStatusArray,
+	 U32  AxArrayElements,
+	 U32  GpArrayElements,
+	 U32  Millisecond);
+U32 ADVCMNAPI Acm_DevLoadConfig(HAND DeviceHandle, PI8 ConfigPath);
+U32 ADVCMNAPI Acm_DevFwDownload(HAND DeviceHandle, U32 Data, U32 DataID); //internal function don't release.
+U32 ADVCMNAPI Acm_DevSlaveFwDownload(HAND DeviceHandle, U16 RingNo, U16 Position, PI8 FileName, PI8 FilePath, U32 Password);  //  [6/4/2015 andy.wang]
+U32 ADVCMNAPI Acm_DevDownloadCAMTable (HAND DeviceHandle,
+							U32 CamTableID,
+							PF64 pMasterArray,
+							PF64 pSlaveArray,
+							PF64 pPointRangeArray,
+							PF64 pPointSlopeArray,
+							U32 ArrayElements);
+U32 ADVCMNAPI Acm_DevLoadCAMTableFile(HAND DeviceHandle, PI8 FilePath, U32 CamTableID, PU32 Range, PU32 PointsCount); // [dan.yang 2011.08.22]
+U32 ADVCMNAPI Acm_DevConfigCAMTable(HAND DeviceHandle,  //Add for pci1265 and pci1245 [dan.yang 2011.06.23]
+						  U32 CamTableID,
+						  U32 Periodic,
+						  U32 MasterAbsolute,
+						  U32 SlaveAbsolute);
+U32 ADVCMNAPI Acm_DevReadMailBox(HAND Handle, U16 par_id, U32 data_index, U32 data_count, PU32 DataBuffer); //[dan.yang 2012.12.28]
+U32 ADVCMNAPI Acm_DevReadMultiMailBox(HAND Handle, U8 object_id, PU16 par_id, PU32 DataBuffer, PU32 ErrorBuffer, U32 ArrayElements);
+U32 ADVCMNAPI Acm_DevWriteMailBox(HAND Handle, U16 par_id, U32 data_index, U32 data_count, PU32 DataBuffer); //[dan.yang 2012.12.28]
+U32 ADVCMNAPI Acm_DevWriteDPMData(HAND Handle, U16 par_id, U32 data_index, U32 data_count, PU32 DataBuffer);
+U32 ADVCMNAPI Acm_DevWriteMultiMailBox(HAND Handle, U8 object_id, PU16 par_id, PU32 DataBuffer, PU32 ErrorBuffer, U32 ArrayElements);
+U32 ADVCMNAPI Acm_WriteRingBuffer(HAND Handle, U32 cmd_id, U32 data_index, U32 data_cnt, PU32 dataBuffer);
+U32 ADVCMNAPI Acm_ReadRingBuffer(HAND Handle, PU32 cmd_id, PU32 data_index, U32 data_cnt, PU32 dataBuffer);
+U32 ADVCMNAPI Acm_LoadENI(HAND DeviceHandle, PI8 FilePath); //  [11/12/2014 dan]
+U32 ADVCMNAPI Acm_DevGetComStatus(HAND DeviceHandle, U16 RingNo, PU16 pStatus); //  [11/20/2014 dan]
+U32 ADVCMNAPI Acm_DevGetErrorTable(HAND DeviceHandle, U16 RingNo, PU32 ErrorTableArray, PU32 ArrayElements);
+U32 ADVCMNAPI Acm_DevGetMasInfo(HAND DeviceHandle, PVOID pMasInfo, PU16 SlaveIPArray, PU32 SlvCnt);
+U32 ADVCMNAPI Acm_DevGetMasStates(HAND DeviceHandle, U16 RingNo, PU16 SlvCounters, PU16 SlvStates);
+U32 ADVCMNAPI Acm_DevGetSlaveInfo(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, PVOID pInfo);
+U32 ADVCMNAPI Acm_DevGetModuleInfo(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, PU32 ModIDArray, PU32 ModCnt);
+U32 ADVCMNAPI Acm_DevGetIOInfo(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 Slot, U8 DataType, PVOID pInfo);
+U32 ADVCMNAPI Acm_DevGetSlaveDataCnt(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U8 DataType, PU32 DataCnt);
 U32 ADVCMNAPI Acm_DevGetSlaveFwVersion(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, OUT PI8 VersionInfo); //  [6/4/2015 andy.wang]
- U32 ADVCMNAPI Acm_DevSetSlaveID(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 SlaveNewIP); //  [6/23/2015 andy.wang]
- U32 ADVCMNAPI Acm_CheckVersion(HAND DeviceHandle, U32 VersionID, PU32 Result); //  [11/3/2015 dandan.yang]:just for utility
+U32 ADVCMNAPI Acm_DevSetSlaveID(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 SlaveNewIP); //  [6/23/2015 andy.wang]
+U32 ADVCMNAPI Acm_CheckVersion(HAND DeviceHandle, U32 VersionID, PU32 Result); //  [11/3/2015 dandan.yang]:just for utility
 
  //YDD 2015.3.26
-  U32 ADVCMNAPI Acm_DevMultiTrigSetPWMTableOnTime (HAND DeviceHandle, PU32 TimeTableArray, U32 ArrayCount);
+U32 ADVCMNAPI Acm_DevMultiTrigSetPWMTableOnTime (HAND DeviceHandle, PU32 TimeTableArray, U32 ArrayCount);
 U32 ADVCMNAPI Acm_DevMultiTrigSetCmpDO(HAND DeviceHandle,U32 OFForON);
 U32 ADVCMNAPI Acm_DevMultiTrigForceCmpOut(HAND DeviceHandle, U32 OFForON);
-  U32 ADVCMNAPI Acm_DevMutiTrigSetCmpDO(HAND DeviceHandle,U32 OFForON);
-  U32 ADVCMNAPI  Acm_DevMutiTrigForceCmpOut(HAND DeviceHandle, U32 OFForON);
+U32 ADVCMNAPI Acm_DevMutiTrigSetCmpDO(HAND DeviceHandle,U32 OFForON);
+U32 ADVCMNAPI  Acm_DevMutiTrigForceCmpOut(HAND DeviceHandle, U32 OFForON);
 //YDD Add End
  //Master device operation
- U32 ADVCMNAPI Acm_MasStartRing(HAND DeviceHandle, U16 RingNo);
- U32 ADVCMNAPI Acm_MasStopRing(HAND DeviceHandle, U16 RingNo);
- U32 ADVCMNAPI Acm_MasGetComStatus(HAND DeviceHandle, U16 RingNo, PU16 pStatus);
- U32 ADVCMNAPI Acm_MasGetComCyclicTime(HAND DeviceHandle, U16 RingNo, PF64 pTime);
- U32 ADVCMNAPI Acm_MasGetDataCyclicTime(HAND DeviceHandle, U16 RingNo, PF64 DataCyclicTime);
- U32 ADVCMNAPI Acm_MasGetActiveTable(HAND DeviceHandle, U16 RingNo, PU32 ActiveTableArray, PU32 ArrayElements);
- U32 ADVCMNAPI Acm_MasGetErrorTable(HAND DeviceHandle, U16 RingNo, PU32 ErrorTableArray, PU32 ArrayElements);
+U32 ADVCMNAPI Acm_MasStartRing(HAND DeviceHandle, U16 RingNo);
+U32 ADVCMNAPI Acm_MasStopRing(HAND DeviceHandle, U16 RingNo);
+U32 ADVCMNAPI Acm_MasGetComStatus(HAND DeviceHandle, U16 RingNo, PU16 pStatus);
+U32 ADVCMNAPI Acm_MasGetComCyclicTime(HAND DeviceHandle, U16 RingNo, PF64 pTime);
+U32 ADVCMNAPI Acm_MasGetDataCyclicTime(HAND DeviceHandle, U16 RingNo, PF64 DataCyclicTime);
+U32 ADVCMNAPI Acm_MasGetActiveTable(HAND DeviceHandle, U16 RingNo, PU32 ActiveTableArray, PU32 ArrayElements);
+U32 ADVCMNAPI Acm_MasGetErrorTable(HAND DeviceHandle, U16 RingNo, PU32 ErrorTableArray, PU32 ArrayElements);
 U32 ADVCMNAPI Acm_MasGetSlaveInfo(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, PU32 pInfo); //  [11/16/2014 dan]
- U32 ADVCMNAPI Acm_MasLogComStatus(HAND DeviceHandle, U16 RingNo);
- U32 ADVCMNAPI Acm_MasTrigOut(HAND DeviceHandle, U16 RingNo);//Engineer function, don't release
- U32 ADVCMNAPI Acm_MasGetRingStatus(HAND DeviceHandle, U16 RingNo, PU16 pStatus);//internal function don't release.
+U32 ADVCMNAPI Acm_MasLogComStatus(HAND DeviceHandle, U16 RingNo);
+U32 ADVCMNAPI Acm_MasTrigOut(HAND DeviceHandle, U16 RingNo);//Engineer function, don't release
+U32 ADVCMNAPI Acm_MasGetRingStatus(HAND DeviceHandle, U16 RingNo, PU16 pStatus);//internal function don't release.
 
  //  [2/17/2016 dandan.yang]:Add for SRP
 U32 ADVCMNAPI Acm_DevDownloadScanData(HAND DeviceHandle, PDEV_PRE_SCAN_DATA pScanDataArray, U32 ArrayLength);
@@ -265,13 +313,13 @@ U32 ADVCMNAPI Acm_AxChangePos(HAND AxisHandle, F64 NewPos);
 U32 ADVCMNAPI Acm_AxChangeVelByRate(HAND AxisHandle, U32 Rate); //  [11/21/2012 dan.yang]
 //  [12/14/2012 dan.yang]
 U32 ADVCMNAPI Acm_AxChangeVelEx(HAND AxisHandle,
-                      F64  NewVel,
-                      F64  NewAcc,
-                      F64  NewDec);
+					  F64  NewVel,
+					  F64  NewAcc,
+					  F64  NewDec);
 U32 ADVCMNAPI Acm_AxChangeVelExByRate(HAND AxisHandle,
-                            U32  Rate,               //The percentage of velocity to be changed.
-                            F64  NewAcc,             // New acceleration.
-                            F64  NewDec);            // New deceleration.
+							U32  Rate,               //The percentage of velocity to be changed.
+							F64  NewAcc,             // New acceleration.
+							F64  NewDec);            // New deceleration.
 U32 ADVCMNAPI Acm_AxResetError(HAND AxisHandle);
 U32 ADVCMNAPI Acm_AxGetState(HAND AxisHandle, PU16 State);
 U32 ADVCMNAPI Acm_AxGetMotionIO(HAND AxisHandle, PU32 Status);
@@ -286,10 +334,10 @@ U32 ADVCMNAPI Acm_AxGetActVelocity(HAND AxisHandle, PF64 Velocity);//  [9/28/201
 U32 ADVCMNAPI Acm_AxGetLagCounter(HAND AxisHandle, PF64 Position);
 U32 ADVCMNAPI Acm_AxSetExtDrive(HAND AxisHandle, U16 ExtDrvMode);
 
-U32 ADVCMNAPI Acm_AxDoSetBit(HAND AxisHandle, U16    DoChannel, U8 BitData);
-U32 ADVCMNAPI Acm_AxDiSetBit(HAND AxisHandle, U16    DiChannel, U8 BitData);
-U32 ADVCMNAPI Acm_AxDoGetBit(HAND AxisHandle, U16    DoChannel, PU8 BitData);
-U32 ADVCMNAPI Acm_AxDiGetBit(HAND AxisHandle, U16    DiChannel, PU8 BitData);
+U32 ADVCMNAPI Acm_AxDoSetBit(HAND AxisHandle, U16	DoChannel, U8 BitData);
+U32 ADVCMNAPI Acm_AxDiSetBit(HAND AxisHandle, U16	DiChannel, U8 BitData);
+U32 ADVCMNAPI Acm_AxDoGetBit(HAND AxisHandle, U16	DoChannel, PU8 BitData);
+U32 ADVCMNAPI Acm_AxDiGetBit(HAND AxisHandle, U16	DiChannel, PU8 BitData);
 //ydd 2016.2.22
 U32 ADVCMNAPI Acm_AxDoSetByte(HAND AxisHandle, U16 DoPort, U8 ByteData);
 U32 ADVCMNAPI Acm_AxDoGetByte(HAND AxisHandle, U16 DoPort, PU8 ByteData);
@@ -306,33 +354,33 @@ U32 ADVCMNAPI Acm_AxStartSoftLatch(U32 AxisHandle);
 U32 ADVCMNAPI Acm_AxResetLatch(HAND AxisHandle);//Add for pci1245 and pci1265 [dan.yang 2011.05.05]
 U32 ADVCMNAPI Acm_AxGetLatchFlag(HAND AxisHandle, PU8 LatchFlag);//Add for pci1245 and pci1265 [dan.yang 2011.05.05]
 U32 ADVCMNAPI Acm_AxTriggerLatch(HAND AxisHandle); //Add for pci1245 and pci1265 [dan.yang 2011.05.10]
-U32    ADVCMNAPI Acm_AxReadLatchBuffer(HAND AxisHandle, PF64 LatchDataArray, PU32 DataCnt);
-U32    ADVCMNAPI Acm_AxResetLatchBuffer(HAND AxisHandle);
-U32    ADVCMNAPI Acm_AxGetLatchBufferStatus(HAND AxisHandle, PU32 RemainCnt, PU32 SpaceCnt);
+U32	ADVCMNAPI Acm_AxReadLatchBuffer(HAND AxisHandle, PF64 LatchDataArray, PU32 DataCnt);
+U32	ADVCMNAPI Acm_AxResetLatchBuffer(HAND AxisHandle);
+U32	ADVCMNAPI Acm_AxGetLatchBufferStatus(HAND AxisHandle, PU32 RemainCnt, PU32 SpaceCnt);
 
 U32 ADVCMNAPI Acm_AxCamInAx (HAND AxisHandle,   //Add for pci1245 and pci1265 [dan.yang 2011.05.10]
-                   HAND MasAxisHandle,
-                   F64 MasterOffset,
-                   F64 SlaveOffset,
-                   F64 MasterScaling,
-                   F64 SlaveScaling,
-                   U32 CamTableID,
-                   U32 RefSrc);
+				   HAND MasAxisHandle,
+				   F64 MasterOffset,
+				   F64 SlaveOffset,
+				   F64 MasterScaling,
+				   F64 SlaveScaling,
+				   U32 CamTableID,
+				   U32 RefSrc);
 U32 ADVCMNAPI Acm_AxGearInAx(HAND AxisHandle,  //Add for pci1245 and pci1265 [dan.yang 2011.06.23]
-                   HAND MasAxisHandle,
-                   I32 Numerator,
-                   I32 Denominator,
-                   U32 RefSrc,
-                   U32 Absolute);
-U32    ADVCMNAPI Acm_AxTangentInGp (HAND     AxisHandle, //Add for pci1245 and pci1265 [dan.yang 2011.06.24]
-                       HAND     MasGroupHandle,
-                       PI16        StartVectorArray,  //must three dimension
-                       U8        Working_plane,        // 0:  XY plane (default),  1: YZ plane,  2: XZ plane
-                       I16        Direction); //0: same with master group. 1:opposite
-U32    ADVCMNAPI Acm_AxGantryInAx (HAND     AxisHandle, //Add for pci1245 and pci1265 [dan.yang 2011.06.24]
-                      HAND     MasAxisHandle,
-                      I16        RefMasterSrc,
-                      I16        direction); //0: same with master axis. 1:opposite
+				   HAND MasAxisHandle,
+				   I32 Numerator,
+				   I32 Denominator,
+				   U32 RefSrc,
+				   U32 Absolute);
+U32	ADVCMNAPI Acm_AxTangentInGp (HAND 	AxisHandle, //Add for pci1245 and pci1265 [dan.yang 2011.06.24]
+					   HAND 	MasGroupHandle,
+					   PI16		StartVectorArray,  //must three dimension
+					   U8		Working_plane,		// 0:  XY plane (default),  1: YZ plane,  2: XZ plane
+					   I16		Direction); //0: same with master group. 1:opposite
+U32	ADVCMNAPI Acm_AxGantryInAx (HAND 	AxisHandle, //Add for pci1245 and pci1265 [dan.yang 2011.06.24]
+					  HAND 	MasAxisHandle,
+					  I16		RefMasterSrc,
+					  I16		direction); //0: same with master axis. 1:opposite
 U32 ADVCMNAPI Acm_AxPhaseAx(HAND AxisHandle, F64 Acc, F64 Dec, F64 PhaseSpeed, F64 PhaseDist);
 
 //  [10/30/2013 dan.yang]: Add compare channel
@@ -347,47 +395,55 @@ U32 ADVCMNAPI Acm_AxGetCmpbufferRemainCount(HAND AxisHandle, U16 ChannelID,PU32 
 //mining: Compare functions
 U32 ADVCMNAPI Acm_AxSetCmpAuto(HAND AxisHandle, F64 Start, F64 End, F64 Interval);
 U32 ADVCMNAPI Acm_AxGetCmpData(HAND AxisHandle, PF64 CmpPosition);
-U32 ADVCMNAPI Acm_AxSetCmpData(HAND AxisHandle, F64    CmpPosition);
-U32 ADVCMNAPI Acm_AxSetCmpTable(HAND AxisHandle, PF64 TableArray, I32    ArrayCount);
+U32 ADVCMNAPI Acm_AxSetCmpData(HAND AxisHandle, F64	CmpPosition);
+U32 ADVCMNAPI Acm_AxSetCmpTable(HAND AxisHandle, PF64 TableArray, I32	ArrayCount);
 U32 ADVCMNAPI Acm_AxChangeCmpIndex(HAND AxisHandle,    //  [9/22/2014 yang.kai]
-                                   U32 CmpIndex);
+								   U32 CmpIndex);
+U32 ADVCMNAPI Acm_AxSetCmpBufferData(HAND AxisHandle, PF64 TableArray, I32 ArrayCount);
+U32	ADVCMNAPI Acm_AxResetCmpData(HAND AxisHandle);
+U32	ADVCMNAPI Acm_AxGetCmpBufferStatus(HAND AxisHandle, PU32 CurIndex, PU32 RemainCnt, PU32 SpaceCnt);
+U32 ADVCMNAPI Acm_AxGetCmpCounter(HAND AxisHandle, PU32 CmpCounter);
 //YDD Add for salehi copr. 2015.4.11
 U32 ADVCMNAPI Acm_AxResetMPGOffset(HAND AxisHandle);
 //YDD End
 
 //2015.8.12
 U32 ADVCMNAPI Acm_AxMovePTPBufferRel(
-                           HAND AxisHandle,
-                           U16 MotionMode,
-                           PF64 PositionArray,
-                           PF64 FLArray,
-                           PF64 FHArray,
-                           PU16 TSArray,
-                           U32 ArrayLength);
+						   HAND AxisHandle,
+						   U16 MotionMode,
+						   PF64 PositionArray,
+						   PF64 FLArray,
+						   PF64 FHArray,
+						   PU16 TSArray,
+						   U32 ArrayLength);
 //2015.8.12
 U32 ADVCMNAPI Acm_AxMovePTPBufferAbs(
-                         HAND AxisHandle,
-                         U16 MotionMode,
-                         PF64 PositionArray,
-                         PF64 FLArray,
-                         PF64 FHArray,
-                         PU16 TSArray,
-                         U32 ArrayLength);
+						 HAND AxisHandle,
+						 U16 MotionMode,
+						 PF64 PositionArray,
+						 PF64 FLArray,
+						 PF64 FHArray,
+						 PU16 TSArray,
+						 U32 ArrayLength);
 
 //  [2/17/2016 dandan.yang]:Add fro SRP.
 U32 ADVCMNAPI Acm_AxEnableCompensation(HAND AxisHandle,F64 ZStartPos);
 U32 ADVCMNAPI Acm_AxGetCompensationValue(HAND AxisHandle, F64 XData, F64 YData, PF64 PCompensationValue);
 U32 ADVCMNAPI Acm_AxSetCompenPara(HAND AxisHandle, HAND GroupHandle, U32 XScanDataCnt, U32 YScanDataCnt, U32 CompMode) ;
 
+
 U32 ADVCMNAPI Acm_AxDIStartMoveAbs(HAND AxisHandle, U16 DIChannel, F64 Position);
 U32 ADVCMNAPI Acm_AxDIStartMoveRel(HAND AxisHandle, U16 DIChannel, F64 Distance);
 U32 ADVCMNAPI Acm_AxDIStartMoveVel(HAND AxisHandle, U16 DIChannel, U16 Direction);
 U32 ADVCMNAPI Acm_AxDisableDIStart(HAND AxisHandle);
 
+
 U32 ADVCMNAPI Acm_AxSetPWMTableOnTime(HAND AxisHandle, PU32 TimeTableArray, I32 ArrayCount);//zhaocui add
+
 
 U32 ADVCMNAPI Acm_AxGetINxStopStatus(HAND AxisHandle,PU32 Stop_Flag);//  [2/28/2014 deng]
 U32 ADVCMNAPI Acm_AxResetINxStopStatus(HAND AxisHandle);//  [2/28/2014 deng]
+
 
 U32 ADVCMNAPI Acm_AxJog(HAND AxisHandle,U16 Direction); //[5/22/2014 kai.yang]
 
@@ -398,7 +454,10 @@ U32 ADVCMNAPI Acm_AxLoadTorqueTableFile(HAND AxisHandle, PI8 FilePath, PU32 Poin
 //tehsin 2015/11/17
 U32 ADVCMNAPI Acm_AxResetPVTTable(HAND AxisHandle);
 U32 ADVCMNAPI Acm_AxLoadPVTTable(HAND AxisHandle, PF64 Position, PF64 Velocity, PF64 Time, U32 ArrayElements);
+U32 ADVCMNAPI Acm_AxCalculatePVTTableContinuous(HAND AxisHandle, PF64 Position, PF64 Velocity, PF64 JerkFactor, PF64 MaxVel, PF64 Acc, PF64 Dec, U32 ArrayElements, PF64 Time);
+U32 ADVCMNAPI Acm_AxLoadPVTTableContinuous(HAND AxisHandle, PF64 Position, PF64 Velocity, PF64 JerkFactor, PF64 MaxVel, PF64 Acc, PF64 Dec, F64 TimeDelay, U32 ArrayElements);
 U32 ADVCMNAPI Acm_AxStartPVT(HAND AxisHandle, U8 Repeat);
+U32 ADVCMNAPI Acm_AxStartAllPVT(PHAND AxisHandle, U8 Repeat, U32 ArrayElements);
 
 U32 ADVCMNAPI Acm_AxCheckPTBuffer(HAND AxisHandle, PU16 Freespace);
 U32 ADVCMNAPI Acm_AxAddPTData(HAND AxisHandle, F64 Position, F64 Time);
@@ -416,7 +475,8 @@ U32 ADVCMNAPI Acm_GpRemAxis(HAND GroupHandle, HAND AxisHandle);
 U32 ADVCMNAPI Acm_GpClose(PHAND GroupHandle);
 U32 ADVCMNAPI Acm_GpGetState(HAND GroupHandle, PU16 State);
 U32 ADVCMNAPI Acm_GpResetError(HAND GroupHandle);
-
+U32 ADVCMNAPI Acm_GpIpoMask(HAND GroupHandle, HAND AxHandle, U32 Mask);
+U32 ADVCMNAPI Acm_GpChangePos(HAND GroupHandle, U32 Mode, PF64 DistanceArray, PU32 ArrayElements);
 U32 ADVCMNAPI Acm_GpMoveLinearRel(HAND GroupHandle, PF64 DistanceArray, PU32 ArrayElements);
 U32 ADVCMNAPI Acm_GpMoveLinearAbs(HAND GroupHandle, PF64 PositionArray, PU32 ArrayElements);
 U32 ADVCMNAPI Acm_GpMoveDirectRel(HAND GroupHandle, PF64 DistanceArray, PU32 ArrayElements);
@@ -426,116 +486,116 @@ U32 ADVCMNAPI Acm_GpMoveCircularRel(HAND  GroupHandle, PF64 CenterArray, PF64 En
 U32 ADVCMNAPI Acm_GpMoveCircularAbs(HAND  GroupHandle, PF64 CenterArray, PF64 EndArray,
                           PU32 ArrayElements, I16 Direction);
 U32 ADVCMNAPI Acm_GpMoveCircularRel_3P(HAND GroupHandle,
-                                 PF64    RefArray,
+								 PF64	RefArray,
                                  PF64    EndArray,
-                                 PU32    pArrayElements,
+                                 PU32	pArrayElements,
                                  I16     Direction );
 U32 ADVCMNAPI Acm_GpMoveCircularAbs_3P(HAND GroupHandle,
-                                 PF64    RefArray,
+								 PF64	RefArray,
                                  PF64    EndArray,
-                                 PU32    pArrayElements,
+                                 PU32	pArrayElements,
                                  I16     Direction );
 U32 ADVCMNAPI Acm_GpMoveCircularRel_Angle(HAND  GroupHandle,  //  [8/15/2012 dan.yang]
-                                PF64 CenterArray,
-                                U16 Degree,
-                                PU32 ArrayElements,
-                                I16  Direction);
+								PF64 CenterArray,
+								U16 Degree,
+								PU32 ArrayElements,
+								I16  Direction);
 
 U32 ADVCMNAPI Acm_GpMoveCircularAbs_Angle(HAND  GroupHandle,  //  [8/15/2012 dan.yang]
-                                PF64 CenterArray,
-                                U16 Degree,
+								PF64 CenterArray,
+								U16 Degree,
                                 PU32 ArrayElements,
-                                I16  Direction);
+								I16  Direction);
 U32 ADVCMNAPI Acm_GpMoveArcRel_Angle(HAND  GroupHandle,  //  [9/22/2014 yang.kai]
-                                          PF64 CenterArray,
-                                          F64 Degree,
-                                          PU32 ArrayElements,
-                                          I16  Direction);
+										  PF64 CenterArray,
+										  F64 Degree,
+										  PU32 ArrayElements,
+										  I16  Direction);
 U32 ADVCMNAPI Acm_GpMoveArcAbs_Angle(HAND  GroupHandle,  //  [9/22/2014 yang.kai]
-                                          PF64 CenterArray,
-                                          F64 Degree,
-                                          PU32 ArrayElements,
-                                          I16  Direction);
+										  PF64 CenterArray,
+										  F64 Degree,
+										  PU32 ArrayElements,
+										  I16  Direction);
 U32 ADVCMNAPI Acm_GpMove3DArcAbs( HAND GroupHandle,
-                        PF64 CenterArray,
-                        PF64 EndArray,
-                        PU32 pArrayElements,
-                        I16  Direction);//zhaocui add 201308
+					    PF64 CenterArray,
+						PF64 EndArray,
+						PU32 pArrayElements,
+						I16  Direction);//zhaocui add 201308
 
 U32 ADVCMNAPI Acm_GpMove3DArcRel( HAND GroupHandle,
-                           PF64 CenterArray,
-                           PF64 EndArray,
-                           PU32 pArrayElements,
-                           I16  Direction);//zhaocui add 201308
+					       PF64 CenterArray,
+						   PF64 EndArray,
+						   PU32 pArrayElements,
+						   I16  Direction);//zhaocui add 201308
 
 U32 ADVCMNAPI Acm_GpMove3DArcAbs_V( HAND GroupHandle,
-                        PF64 CenterArray,
-                        PF64 NVectorArray,
-                        F64  Degree,
-                        PU32 pArrayElements,
-                        I16  Direction);//zhaocui add 201308
+					    PF64 CenterArray,
+						PF64 NVectorArray,
+						F64  Degree,
+						PU32 pArrayElements,
+						I16  Direction);//zhaocui add 201308
 
 U32 ADVCMNAPI Acm_GpMove3DArcRel_V( HAND GroupHandle,
-                        PF64 CenterArray,
-                        PF64 NVectorArray,
-                        F64  Degree,
-                        PU32 pArrayElements,
-                        I16  Direction);//zhaocui add 201308
+					    PF64 CenterArray,
+						PF64 NVectorArray,
+						F64  Degree,
+						PU32 pArrayElements,
+						I16  Direction);//zhaocui add 201308
 
 U32 ADVCMNAPI Acm_GpMove3DArcAbs_3P( HAND GroupHandle,
-                                 PF64 RefArray,
-                                 PF64 EndArray,
-                                 PU32 pArrayElements,
-                                 I16  Direction,
-                                 U16  cycCount);//zhaocui add 201501
+								 PF64 RefArray,
+								 PF64 EndArray,
+								 PU32 pArrayElements,
+								 I16  Direction,
+								 U16  cycCount);//zhaocui add 201501
 
 U32 ADVCMNAPI Acm_GpMove3DArcRel_3P( HAND GroupHandle,
-                                 PF64 RefArray,
-                                 PF64 EndArray,
-                                 PU32 pArrayElements,
-                                 I16  Direction,
-                                 U16  cycCount);//zhaocui add 201501
+								 PF64 RefArray,
+								 PF64 EndArray,
+								 PU32 pArrayElements,
+								 I16  Direction,
+								 U16  cycCount);//zhaocui add 201501
 U32 ADVCMNAPI Acm_GpMove3DArcAbs_3PAngle( HAND GroupHandle,//  [2/6/2015 dan]
-                        PF64 RefPoint_1,
-                        PF64 RefPoint_2,
-                        PU32 pArrayElements,
-                        I16  Direction,
-                        F64  Degree);
+						PF64 RefPoint_1,
+						PF64 RefPoint_2,
+						PU32 pArrayElements,
+						I16  Direction,
+						F64  Degree);
 U32 ADVCMNAPI Acm_GpMove3DArcRel_3PAngle( HAND GroupHandle, //  [2/6/2015 dan]
-                        PF64 RefPoint_1,
-                        PF64 RefPoint_2,
-                        PU32 pArrayElements,
-                        I16  Direction,
-                        F64  Degree);
+						PF64 RefPoint_1,
+						PF64 RefPoint_2,
+						PU32 pArrayElements,
+						I16  Direction,
+						F64  Degree);
 U32 ADVCMNAPI Acm_GpMoveHelixAbs(HAND GroupHandle,
-                        PF64    CenterArray,
+						PF64	CenterArray,
                         PF64    EndArray,
-                        PU32    pArrayElements,
+                        PU32	pArrayElements,
                         I16     Direction);   //  [6/21/2011 dan.yang]
 U32 ADVCMNAPI Acm_GpMoveHelixRel(HAND GroupHandle,
-                        PF64    CenterArray,
+						PF64	CenterArray,
                         PF64    EndArray,
-                        PU32    pArrayElements,
+                        PU32	pArrayElements,
                         I16     Direction);   //  [6/21/2011 dan.yang]
 U32 ADVCMNAPI Acm_GpMoveHelixAbs_3P(HAND GroupHandle,
-                                 PF64    RefArray,
+								 PF64	RefArray,
                                  PF64    EndArray,
-                                 PU32    pArrayElements,
+                                 PU32	pArrayElements,
                                  I16     Direction );  //  [6/21/2011 dan.yang]
 U32 ADVCMNAPI Acm_GpMoveHelixRel_3P(HAND GroupHandle,
-                                 PF64    RefArray,
+								 PF64	RefArray,
                                  PF64    EndArray,
-                                 PU32    pArrayElements,
+                                 PU32	pArrayElements,
                                  I16     Direction );  //  [6/21/2011 dan.yang]
 U32 ADVCMNAPI Acm_GpMoveHelixRel_Angle(HAND GroupHandle,
-                        PF64    CenterArray,
+						PF64	CenterArray,
                         PF64   EndArray,
-                        PU32    pArrayElements,
+                        PU32	pArrayElements,
                         I16    Direction);//added by zhaocui 201305
 U32 ADVCMNAPI Acm_GpMoveHelixAbs_Angle(HAND GroupHandle,
-                        PF64    CenterArray,
+						PF64	CenterArray,
                         PF64   EndArray,
-                        PU32    pArrayElements,
+                        PU32	pArrayElements,
                         I16    Direction);//added by zhaocui 201305
 U32 ADVCMNAPI Acm_GpMoveEllipticalRel(HAND GroupHandle, PF64 CenterArray, PF64 EndArray, PU32 pArrayElements, I16 Direction, F64 RatioSemiAxes);
 U32 ADVCMNAPI Acm_GpMoveEllipticalAbs(HAND GroupHandle, PF64 CenterArray, PF64 EndArray, PU32 pArrayElements, I16 Direction, F64 RatioSemiAxes);
@@ -545,50 +605,66 @@ U32 ADVCMNAPI Acm_GpUnloadPath(HAND GroupHandle, PHAND PathHandle);
 U32 ADVCMNAPI Acm_GpMovePath(HAND GroupHandle, HAND PathHandle);
 U32 ADVCMNAPI Acm_GpMoveAllPath(PHAND GroupHandle, U32 ArrayElements);
 U32 ADVCMNAPI Acm_GpAddPath (HAND GroupHandle,U16 MoveCmd,U16 MoveMode,F64 FH,F64 FL,
-                   PF64 EndPoint_DataArray,PF64 CenPoint_DataArray,PU32 ArrayElements);
+				   PF64 EndPoint_DataArray,PF64 CenPoint_DataArray,PU32 ArrayElements);
+U32 ADVCMNAPI Acm_GpAddPathEx(HAND GroupHandle, U16 MoveCmd, U16 MoveMode, F64 FH, F64 FL, F64 Acc, F64 Dec, F64 SmoothRadius,
+	PF64 EndPoint_DataArray, PF64 CenPoint_DataArray, PU32 ArrayElements);
+U32 ADVCMNAPI Acm_GpAddPathTrig(HAND GroupHandle, U16 MoveCmd, U16 MoveMode, F64 FH, F64 FL, F64 Acc, F64 Dec, F64 SmoothRadius, TRIG_PRM TrigPrm,
+				   PF64 EndPoint_DataArray,PF64 CenPoint_DataArray,PU32 ArrayElements);
+U32 ADVCMNAPI Acm_GpLookAheadPath(HAND GroupHandle, U16 BufferSize, PI8 OutputFile);
 U32 ADVCMNAPI Acm_GpResetPath (PHAND GroupHandle);
 U32 ADVCMNAPI Acm_GpGetPathStatus (HAND GroupHandle, // IN, Group Handle
-                         PU32 pCurIndex, // IN, OUT, Current index of path data in path buffer
-                         PU32 pCurCmdFunc, // IN, OUT, Return current command function in executing
-                         PU32 pRemainCount, // IN, OUT, Number of unexecuted path data in path
-                         PU32 pFreeSpaceCount );
-U32 ADVCMNAPI Acm_GpMoveSelPath(HAND    GroupHandle, //  [6/22/2011 dan.yang]
-                      HAND  PathHandle,
-                      U32    StartIndex,                // range: 0~9999
-                      U32    EndIndex,                // range: 0~9999
-                      U8    Repeat);
-U32 ADVCMNAPI Acm_GpGetPathIndexStatus(HAND           GroupHandle,  //  [6/22/2011 dan.yang]
-                                U32         Index,         // index of path
-                                PU16        CmdFunc,
-                                PU16        MoveMode,
-                                PF64         FH,
-                                PF64         FL,
-                                PF64         EndPoint_DataArray,
-                                PF64         CenPoint_DataArray,
-                                PU32         ArrayElements);
+						 PU32 pCurIndex, // IN, OUT, Current index of path data in path buffer
+						 PU32 pCurCmdFunc, // IN, OUT, Return current command function in executing
+						 PU32 pRemainCount, // IN, OUT, Number of unexecuted path data in path
+						 PU32 pFreeSpaceCount );
+U32 ADVCMNAPI Acm_GpMoveSelPath(HAND	GroupHandle, //  [6/22/2011 dan.yang]
+					  HAND  PathHandle,
+					  U32	StartIndex,				// range: 0~9999
+                      U32	EndIndex,				// range: 0~9999
+                      U8	Repeat);
+U32 ADVCMNAPI Acm_GpGetPathIndexStatus(HAND       	GroupHandle,  //  [6/22/2011 dan.yang]
+								U32 		Index, 		// index of path
+								PU16		CmdFunc,
+								PU16		MoveMode,
+								PF64 	    FH,
+								PF64 	    FL,
+								PF64 	    EndPoint_DataArray,
+								PF64 	    CenPoint_DataArray,
+								PU32 	    ArrayElements);
+U32 ADVCMNAPI Acm_GpDelay(HAND GroupHandle, U32 DelayTime);
+U32 ADVCMNAPI Acm_GpPathDO(HAND GroupHandle, PATH_DO_PRM PathDOPrm);
+U32 ADVCMNAPI Acm_GpPathWaitDI(HAND GroupHandle, PATH_DI_WAIT_PRM DIWaitPrm);
+U32 ADVCMNAPI Acm_GpPathWaitForAxis(HAND GroupHandle, PATH_AX_WAIT_PRM AxWaitPrm);
+U32 ADVCMNAPI Acm_GpPathDIConditional(HAND GroupHandle, U16 MoveCmd, PATH_DI_WAIT_PRM PathDIPrm);
+U32 ADVCMNAPI Acm_GpPathDOConditional(HAND GroupHandle, U16 MoveCmd, PATH_DO_PRM PathDOPrm);
+U32 ADVCMNAPI Acm_GpPathAxisConditional(HAND GroupHandle, U16 MoveCmd, PATH_AX_WAIT_PRM AxPrm);
+U32 ADVCMNAPI Acm_GpPathVarConditional(HAND GroupHandle, U16 MoveCmd, PATH_VAR_PRM VarPrm);
+U32 ADVCMNAPI Acm_GpPathConditional(HAND GroupHandle, U16 MoveCmd);
+U32 ADVCMNAPI Acm_GpPathOperator(HAND GroupHandle, PATH_OPERATOR_PRM OperatorPrm);
+
 U32 ADVCMNAPI Acm_GpAddBSplinePath(
-    HAND GroupHandle,     //  Handle
-    F64 FH,             // Feed rate
-    F64 FL,                // Initial feed rate
-    F64 *CtrlP0List,    // The control points of axis 0 (X-Axis)
-    F64 *CtrlP1List,    // The control points of axis 1 (Y-Axis)
-    U32 CtrlPCount,        // The number of control points
-    F64 *NodeList,        // *B-Spine knot list
-    U32 NodeCount,        // *The number of knot
-    U32 Degree,            // B-Spline degree
-    U32 CutPointCount    // The number of line segments used in interpolation
-    );
+	HAND GroupHandle, 	//  Handle
+	F64 FH, 			// Feed rate
+	F64 FL,				// Initial feed rate
+	F64 *CtrlP0List,	// The control points of axis 0 (X-Axis)
+	F64 *CtrlP1List,	// The control points of axis 1 (Y-Axis)
+	U32 CtrlPCount,		// The number of control points
+	F64 *NodeList,		// *B-Spine knot list
+	U32 NodeCount,		// *The number of knot
+	U32 Degree,			// B-Spline degree
+	U32 CutPointCount	// The number of line segments used in interpolation
+	);
 
 U32 Acm_GpAddCSplinePath(
-    HAND GroupHandle,         // Group Handle
-    F64 FH,                 // Feed rate
-    F64 FL,                    // Initial feed rate
-    F64 *CtrlP0List,        // The control points of axis 0 (X-Axis)
-    F64 *CtrlP1List,        // The control points of axis 1 (Y-Axis)
-    F64 *Tightness,            //
-    U32 CtrlPCount,            // The number of control points
-    U32 CutPointCount        // The number of line segments used in interpolation
-    );
+	HAND GroupHandle, 		// Group Handle
+	F64 FH, 				// Feed rate
+	F64 FL,					// Initial feed rate
+	F64 *CtrlP0List,		// The control points of axis 0 (X-Axis)
+	F64 *CtrlP1List,		// The control points of axis 1 (Y-Axis)
+	F64 *Tightness,			//
+	U32 CtrlPCount,			// The number of control points
+	U32 CutPointCount		// The number of line segments used in interpolation
+	);
 U32 ADVCMNAPI Acm_GpResumeMotion(HAND GroupHandle); //  [10/12/2012 dan.yang]
 U32 ADVCMNAPI Acm_GpPauseMotion(HAND GroupHandle); //  [10/12/2012 dan.yang]
 
@@ -603,49 +679,57 @@ U32 ADVCMNAPI Acm_GpGetINxStopStatus(HAND GroupHandle,PU32 Stop_Flag);//  [2/28/
 U32 ADVCMNAPI Acm_GpResetINxStopStatus(HAND GroupHandle);//  [2/28/2014 deng]
 // DIO
 U32 ADVCMNAPI Acm_DaqDiGetByte(HAND DeviceHandle, U16 DiPort,PU8 ByteData);
-U32 ADVCMNAPI Acm_DaqDiGetBit(HAND DeviceHandle, U16 DiChannel, PU8    BitData);
-U32 ADVCMNAPI Acm_DaqDoSetByte(HAND DeviceHandle, U16 DoPort, U8    ByteData);
-U32 ADVCMNAPI Acm_DaqDoSetBit(HAND    DeviceHandle, U16    DoChannel, U8 BitData);
-U32 ADVCMNAPI Acm_DaqDiSetBit(HAND    DeviceHandle, U16    DiChannel, U8 BitData);
+U32 ADVCMNAPI Acm_DaqDiGetBit(HAND DeviceHandle, U16 DiChannel, PU8	BitData);
+U32 ADVCMNAPI Acm_DaqDoSetByte(HAND DeviceHandle, U16 DoPort, U8	ByteData);
+U32 ADVCMNAPI Acm_DaqDoSetBit(HAND	DeviceHandle, U16	DoChannel, U8 BitData);
+U32 ADVCMNAPI Acm_DaqDiSetBit(HAND	DeviceHandle, U16	DiChannel, U8 BitData);
 U32 ADVCMNAPI Acm_DaqDoGetByte(HAND DeviceHandle, U16 DoPort, PU8 ByteData);
-U32 ADVCMNAPI Acm_DaqDoGetBit(HAND    DeviceHandle, U16    DoChannel, PU8    BitData);
+U32 ADVCMNAPI Acm_DaqDoGetBit(HAND	DeviceHandle, U16	DoChannel, PU8	BitData);
 U32 ADVCMNAPI Acm_DaqDiGetBytes(HAND DeviceHandle, U16 StartPort, U16 NumPort, PU8 ByteDataArray);
 U32 ADVCMNAPI Acm_DaqDoSetBytes(HAND DeviceHandle, U16 StartPort, U16 NumPort, PU8 ByteDataArray);
 U32 ADVCMNAPI Acm_DaqDoGetBytes(HAND DeviceHandle, U16 StartPort, U16 NumPort, PU8 ByteDataArray);
 
 U32 ADVCMNAPI Acm_DaqDiGetByteEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 DiPort, PU8 ByteData);
-U32 ADVCMNAPI Acm_DaqDiGetBitEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 DiChannel, PU8    BitData);
+U32 ADVCMNAPI Acm_DaqDiGetBitEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 DiChannel, PU8	BitData);
 U32 ADVCMNAPI Acm_DaqDoSetByteEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 DoPort, U8 ByteData);
-U32 ADVCMNAPI Acm_DaqDoSetBitEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16    DoChannel, U8 BitData);
+U32 ADVCMNAPI Acm_DaqDoSetBitEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16	DoChannel, U8 BitData);
 U32 ADVCMNAPI Acm_DaqDoGetByteEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 DoPort, PU8 ByteData);
 U32 ADVCMNAPI Acm_DaqDoGetBitEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 DoChannel, PU8 BitData);
 
 //AIO [Dan.Yang 2011.07.19]
 U32 ADVCMNAPI Acm_DaqAiGetRawData(HAND DeviceHandle, U16 AiChannel, PU16 AiData);
-U32 ADVCMNAPI Acm_DaqAiGetVoltData(HAND DeviceHandle, U16    AiChannel, PF32    AiData);
-U32 ADVCMNAPI Acm_DaqAiGetCurrData(HAND DeviceHandle, U16    AiChannel, PF32    AiData);
-U32 ADVCMNAPI Acm_DaqAiZeroCalibration(HAND DeviceHandle, U16    AiChannel);
-U32 ADVCMNAPI Acm_DaqAiSpanCalibration(HAND DeviceHandle, U16    AiChannel);
-U32 ADVCMNAPI Acm_DaqAiGetChannelStatus(HAND DeviceHandle, U16    AiChannel, PU32 ChanStatus);
-U32 ADVCMNAPI Acm_DaqAoSetRawData(HAND DeviceHandle, U16    AoChannel, U16 AoData);
-U32 ADVCMNAPI Acm_DaqAoSetVoltData(HAND DeviceHandle, U16    AoChannel, F32 AoData);
-U32 ADVCMNAPI Acm_DaqAoSetCurrData(HAND DeviceHandle, U16    AoChannel, F32 AoData);
-U32 ADVCMNAPI Acm_DaqAoGetRawData(HAND DeviceHandle, U16    AoChannel, PU16 AoData);
-U32 ADVCMNAPI Acm_DaqAoGetVoltData(HAND DeviceHandle, U16    AoChannel, PF32 AoData);
-U32 ADVCMNAPI Acm_DaqAoGetCurrData(HAND DeviceHandle, U16    AoChannel, PF32 AoData);
-U32 ADVCMNAPI Acm_DaqAoSetCaliType(HAND DeviceHandle, U16    AoChannel, U16 TrimType);
-U32 ADVCMNAPI Acm_DaqAoSetCaliValue(HAND DeviceHandle, U16    AoChannel, U16 CaliData);
-U32 ADVCMNAPI Acm_DaqAoCaliDone(HAND DeviceHandle, U16    AoChannel, bool done);
-U32 ADVCMNAPI Acm_DaqAoCaliDefault(HAND DeviceHandle, U16    AoChannel);
+U32 ADVCMNAPI Acm_DaqAiGetEngData(HAND DeviceHandle, U16 AiChannel, PF32 AiData);
+U32 ADVCMNAPI Acm_DaqAiGetVoltData(HAND DeviceHandle, U16	AiChannel, PF32	AiData);
+U32 ADVCMNAPI Acm_DaqAiGetCurrData(HAND DeviceHandle, U16	AiChannel, PF32	AiData);
+U32 ADVCMNAPI Acm_DaqAiZeroCalibration(HAND DeviceHandle, U16	AiChannel);
+U32 ADVCMNAPI Acm_DaqAiSpanCalibration(HAND DeviceHandle, U16	AiChannel);
+U32 ADVCMNAPI Acm_DaqAiGetChannelStatus(HAND DeviceHandle, U16	AiChannel, PU32 ChanStatus);
+U32 ADVCMNAPI Acm_DaqAoSetRawData(HAND DeviceHandle, U16	AoChannel, U16 AoData);
+U32 ADVCMNAPI Acm_DaqAoSetEngData(HAND DeviceHandle, U16	AoChannel, F32 AoData);
+U32 ADVCMNAPI Acm_DaqAoSetVoltData(HAND DeviceHandle, U16	AoChannel, F32 AoData);
+U32 ADVCMNAPI Acm_DaqAoSetCurrData(HAND DeviceHandle, U16	AoChannel, F32 AoData);
+U32 ADVCMNAPI Acm_DaqAoGetRawData(HAND DeviceHandle, U16	AoChannel, PU16 AoData);
+U32 ADVCMNAPI Acm_DaqAoGetEngData(HAND DeviceHandle, U16	AoChannel, PF32 AoData);
+U32 ADVCMNAPI Acm_DaqAoGetVoltData(HAND DeviceHandle, U16	AoChannel, PF32 AoData);
+U32 ADVCMNAPI Acm_DaqAoGetCurrData(HAND DeviceHandle, U16	AoChannel, PF32 AoData);
+U32 ADVCMNAPI Acm_DaqAoSetCaliType(HAND DeviceHandle, U16	AoChannel, U16 TrimType);
+U32 ADVCMNAPI Acm_DaqAoSetCaliValue(HAND DeviceHandle, U16	AoChannel, U16 CaliData);
+U32 ADVCMNAPI Acm_DaqAoCaliDone(HAND DeviceHandle, U16	AoChannel, bool done);
+U32 ADVCMNAPI Acm_DaqAoCaliDefault(HAND DeviceHandle, U16	AoChannel);
+U32 ADVCMNAPI Acm_DaqAoGetChannelStatus(HAND DeviceHandle, U16	AoChannel, PU32 ChanStatus);
+U32 ADVCMNAPI Acm_DaqSetScaledProperty(HAND DeviceHandle, U32 Type, U16 Channel, F32 UpperBound, F32 LowerBound, U16 Resolution, I16 TransType);
 
 U32 ADVCMNAPI Acm_DaqAiGetRawDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 AiChannel, PU16 AiData);
+U32 ADVCMNAPI Acm_DaqAiGetEngDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 AiChannel, PF32 AiData);
 U32 ADVCMNAPI Acm_DaqAiGetVoltDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 AiChannel, PF32 AiData);
 U32 ADVCMNAPI Acm_DaqAiGetCurrDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 AiChannel, PF32 AiData);
 U32 ADVCMNAPI Acm_DaqAiGetChannelStatusEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 AiChannel, PU32 ChanStatus);
-U32 ADVCMNAPI Acm_DaqAoSetRawDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16    AoChannel, U16 AoData);
+U32 ADVCMNAPI Acm_DaqAoSetRawDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16	AoChannel, U16 AoData);
+U32 ADVCMNAPI Acm_DaqAoSetEngDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 AoChannel, F32 AoData);
 U32 ADVCMNAPI Acm_DaqAoSetVoltDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 AoChannel, F32 AoData);
 U32 ADVCMNAPI Acm_DaqAoSetCurrDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 AoChannel, F32 AoData);
-U32 ADVCMNAPI Acm_DaqAoGetRawDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16    AoChannel, PU16 AoData);
+U32 ADVCMNAPI Acm_DaqAoGetRawDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16	AoChannel, PU16 AoData);
+U32 ADVCMNAPI Acm_DaqAoGetEngDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16	AoChannel, PF32 AoData);
 U32 ADVCMNAPI Acm_DaqAoGetVoltDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 AoChannel, PF32 AoData);
 U32 ADVCMNAPI Acm_DaqAoGetCurrDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 AoChannel, PF32 AoData);
 
@@ -653,21 +737,22 @@ U32 ADVCMNAPI Acm_DaqGetIOLinkStatus(HAND DeviceHandle, PU32 pStatus); //ydd 16.
 
 //Counter [Andy.Wang 2015.04.21]
 U32 ADVCMNAPI Acm_DaqCntTriggerCmp(HAND DeviceHandle, U16 CntChannel);
-U32 ADVCMNAPI Acm_DaqCntTriggerLatch(HAND DeviceHandle, U16    CntChannel);
+U32 ADVCMNAPI Acm_DaqCntTriggerLatch(HAND DeviceHandle, U16	CntChannel);
 U32 ADVCMNAPI Acm_DaqCntResetLatch(HAND DeviceHandle, U16 CntChannel);
-U32 ADVCMNAPI Acm_DaqCntResetCmp(HAND DeviceHandle, U16    CntChannel);
-U32 ADVCMNAPI Acm_DaqCntResetCnt(HAND DeviceHandle, U16    CntChannel);
+U32 ADVCMNAPI Acm_DaqCntResetCmp(HAND DeviceHandle, U16	CntChannel);
+U32 ADVCMNAPI Acm_DaqCntResetCnt(HAND DeviceHandle, U16	CntChannel);
 U32 ADVCMNAPI Acm_DaqCntGetCounterData(HAND DeviceHandle, U16 CntChannel, PF64 CounterData);
 U32 ADVCMNAPI Acm_DaqCntSetCounterData(HAND DeviceHandle, U16 CntChannel, F64 CounterData);
+U32 ADVCMNAPI Acm_DaqCntGetCounterFrequency(HAND DeviceHandle, U16 CntChannel, PF64 Frequency);
 U32 ADVCMNAPI Acm_DaqCntGetExtDriveData(HAND DeviceHandle, U16 CntChannel, PF64 CounterData);
 U32 ADVCMNAPI Acm_DaqCntSetExtDriveData(HAND DeviceHandle, U16 CntChannel, F64 CounterData);
-U32 ADVCMNAPI Acm_DaqCntGetLatchData(HAND DeviceHandle, U16    CntChannel, PF64 LatchData);
+U32 ADVCMNAPI Acm_DaqCntGetLatchData(HAND DeviceHandle, U16	CntChannel, PF64 LatchData);
 U32 ADVCMNAPI Acm_DaqCntGetCmpData(HAND DeviceHandle, U16 CntChannel, PF64 CmpData);
 U32 ADVCMNAPI Acm_DaqCntSetCmpData(HAND DeviceHandle, U16 CntChannel, F64 CmpData);
 U32 ADVCMNAPI Acm_DaqCntSetCmpTable(HAND DeviceHandle, U16 CntChannel, PF64 TableArray, I32 ArrayCount);
 U32 ADVCMNAPI Acm_DaqCntSetCmpAuto(HAND DeviceHandle, U16 CntChannel, F64 Start, F64 End, F64 Interval);
-U32    ADVCMNAPI Acm_DaqCntGetLatchBufferStatus(HAND DeviceHandle, U16 CntChannel, PU32 RemainCnt, PU32 SpaceCnt);
-U32    ADVCMNAPI Acm_DaqCntReadLatchBuffer(HAND DeviceHandle, U16 CntChannel, PF64 LatchDataArray, PU32 DataCnt);
+U32	ADVCMNAPI Acm_DaqCntGetLatchBufferStatus(HAND DeviceHandle, U16 CntChannel, PU32 RemainCnt, PU32 SpaceCnt);
+U32	ADVCMNAPI Acm_DaqCntReadLatchBuffer(HAND DeviceHandle, U16 CntChannel, PF64 LatchDataArray, PU32 DataCnt);
 
 U32 ADVCMNAPI Acm_DaqCntTriggerCmpEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 CntChannel);
 U32 ADVCMNAPI Acm_DaqCntTriggerLatchEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 CntChannel);
@@ -676,6 +761,7 @@ U32 ADVCMNAPI Acm_DaqCntResetCmpEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U
 U32 ADVCMNAPI Acm_DaqCntResetCntEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 CntChannel);
 U32 ADVCMNAPI Acm_DaqCntGetCounterDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 CntChannel, PF64 CounterData);
 U32 ADVCMNAPI Acm_DaqCntSetCounterDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 CntChannel, F64 CounterData);
+U32 ADVCMNAPI Acm_DaqCntGetCounterFrequencyEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 CntChannel, PF64 Frequency);
 U32 ADVCMNAPI Acm_DaqCntGetExtDriveDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 CntChannel, PF64 CounterData);
 U32 ADVCMNAPI Acm_DaqCntSetExtDriveDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 CntChannel, F64 CounterData);
 U32 ADVCMNAPI Acm_DaqCntGetLatchDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 CntChannel, PF64 LatchData);
@@ -683,8 +769,8 @@ U32 ADVCMNAPI Acm_DaqCntGetCmpDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP,
 U32 ADVCMNAPI Acm_DaqCntSetCmpDataEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 CntChannel, F64 CmpData);
 U32 ADVCMNAPI Acm_DaqCntSetCmpTableEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 CntChannel, PF64 TableArray, I32 ArrayCount);
 U32 ADVCMNAPI Acm_DaqCntSetCmpAutoEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 CntChannel, F64 Start, F64 End, F64 Interval);
-U32    ADVCMNAPI Acm_DaqCntGetLatchBufferStatusEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 CntChannel, PU32 RemainCnt, PU32 SpaceCnt);
-U32    ADVCMNAPI Acm_DaqCntReadLatchBufferEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 CntChannel, PF64 LatchDataArray, PU32 DataCnt);
+U32	ADVCMNAPI Acm_DaqCntGetLatchBufferStatusEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 CntChannel, PU32 RemainCnt, PU32 SpaceCnt);
+U32	ADVCMNAPI Acm_DaqCntReadLatchBufferEx(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 CntChannel, PF64 LatchDataArray, PU32 DataCnt);
 
 //Dan.Yang 2011.07.12 :Add for download Dsp Firmware program.
 U32 ADVCMNAPI Acm_GetDSPFrmWareDwnLoadRate(HAND DeviceHandle, PF64 Percentage);
@@ -715,10 +801,10 @@ U32 ADVCMNAPI Acm_RegCallBackFunc(HAND Handle, ADV_USER_CALLBACK_FUNC CallBackFu
 U32 ADVCMNAPI Acm_EnableEventCallBack(HAND DeviceHandle);
 U32 ADVCMNAPI Acm_RegCallBackFuncForOneEvent(HAND Handle, U32 EvtChannel, ADV_USER_CALLBACK_FUNC CallBackFun, PVOID UserParamter);
 U32 ADVCMNAPI Acm_DevEnableMotionEvent(HAND  DeviceHandle,
-                                        PU32 AxEnableEvtArray,
-                                        PU32 GpEnableEvtArray,
-                                        U32 AxArrayElements,
-                                        U32 GpArrayElements) ;
+										PU32 AxEnableEvtArray,
+										PU32 GpEnableEvtArray,
+										U32 AxArrayElements,
+										U32 GpArrayElements) ;
 //******************SCARA Robot*************************************************/
 U32 Acm_GpRbSetMode(HAND GroupHandle, U16 Mode, PI32 CurActPosiArray, U32 ArrayElement);
 U32 Acm_GpRbGetCmdPosition(HAND GroupHandle, PF64 PositionArray, U32 ArrayElement);
@@ -806,6 +892,7 @@ U32 ADVCMNAPI Acm_GmLoadPointF(IN HAND GMSHandle, IN PI8 FilePath);
 U32 ADVCMNAPI Acm_GmSavePointF(IN HAND GMSHandle, IN PI8 FilePath);
 U32 ADVCMNAPI Acm_GmResetPointF(IN HAND GMSHandle);
 
+
 //zhao cui add for robot 201307
 U32 ADVCMNAPI Acm_RbGetActualPosition(HAND RbHandle, PF64 PositionArray, U32 ArrayElement);
 U32 ADVCMNAPI Acm_RbGetCmdPosition(HAND RbHandle, PF64 PositionArray, U32 ArrayElement);
@@ -827,8 +914,8 @@ U32 ADVCMNAPI Acm_RbMoveArcRel( HAND RbHandle, PF64 CenterArray, PF64 EndArray, 
 U32 ADVCMNAPI Acm_RbMoveArcAbs( HAND RbHandle, PF64 CenterArray, PF64 EndArray, PU32 pArrayElements, I16 Direction);
 U32 ADVCMNAPI Acm_RbMoveArcRel_3P ( HAND RbHandle, PF64 RefArray, PF64 EndArray, PU32 pArrayElements, I16 Direction);
 U32 ADVCMNAPI Acm_RbMoveArcAbs_3P ( HAND RbHandle, PF64 RefArray, PF64 EndArray, PU32 pArrayElements, I16 Direction);
-U32 ADVCMNAPI Acm_RbMoveArcRel_Angle(HAND RbHandle,    PF64 CenterArray, F64 Degree, PU32 ArrayElements, I16 Direction);
-U32 ADVCMNAPI Acm_RbMoveArcAbs_Angle(HAND RbHandle,    PF64 CenterArray, F64 Degree, PU32 ArrayElements, I16 Direction);
+U32 ADVCMNAPI Acm_RbMoveArcRel_Angle(HAND RbHandle,	PF64 CenterArray, F64 Degree, PU32 ArrayElements, I16 Direction);
+U32 ADVCMNAPI Acm_RbMoveArcAbs_Angle(HAND RbHandle,	PF64 CenterArray, F64 Degree, PU32 ArrayElements, I16 Direction);
 U32 ADVCMNAPI Acm_RbMove3DArcAbs( HAND RbHandle, PF64 CenterArray, PF64 EndArray, PU32 pArrayElements, I16 Direction);
 U32 ADVCMNAPI Acm_RbMove3DArcRel( HAND RbHandle, PF64 CenterArray, PF64 EndArray, PU32 pArrayElements, I16 Direction);
 U32 ADVCMNAPI Acm_RbMove3DArcAbs_V( HAND RbHandle, PF64 CenterArray, PF64 NVectorArray, PF64 EndArray, F64 Degree, PU32 pArrayElements, I16 Direction);
@@ -838,13 +925,13 @@ U32 ADVCMNAPI Acm_RbMove3DArcRel_3P( HAND RbHandle, PF64 RefArray, PF64 EndArray
 U32 ADVCMNAPI Acm_RbMove3DArcAbs_3PAngle( HAND RbHandle, PF64 RefPoint_1, PF64 RefPoint_2, PU32 pArrayElements, I16 Direction, F64 Degree);
 U32 ADVCMNAPI Acm_RbMove3DArcRel_3PAngle( HAND RbHandle, PF64 RefPoint_1, PF64 RefPoint_2, PU32 pArrayElements, I16 Direction, F64 Degree);
 U32 ADVCMNAPI Acm_RbAddPath (HAND RbHandle,U16 MoveCmd,U16 MoveMode,F64 FH,F64 FL,
-                   PF64 EndPoint_DataArray,PF64 CenPoint_DataArray,PU32 ArrayElements);
+				   PF64 EndPoint_DataArray,PF64 CenPoint_DataArray,PU32 ArrayElements);
 U32 ADVCMNAPI Acm_RbResetPath (PHAND RbHandle);
 U32 ADVCMNAPI Acm_RbGetPathStatus (HAND RbHandle, // IN, Group Handle
-                         PU32 pCurIndex, // IN, OUT, Current index of path data in path buffer
-                         PU32 pCurCmdFunc, // IN, OUT, Return current command function in executing
-                         PU32 pRemainCount, // IN, OUT, Number of unexecuted path data in path
-                         PU32 pFreeSpaceCount );
+						 PU32 pCurIndex, // IN, OUT, Current index of path data in path buffer
+						 PU32 pCurCmdFunc, // IN, OUT, Return current command function in executing
+						 PU32 pRemainCount, // IN, OUT, Number of unexecuted path data in path
+						 PU32 pFreeSpaceCount );
 U32 ADVCMNAPI Acm_RbMovePath(HAND RbHandle, HAND PathHandle);
 U32 ADVCMNAPI Acm_RbChangeVel(HAND RbHandle, F64 NewVelocity);
 U32 ADVCMNAPI Acm_RbChangeVelByRate(HAND RbHandle, U32 Rate);
@@ -856,33 +943,33 @@ U32 ADVCMNAPI Acm_RbResumeMotion(HAND RbHandle);
 bool IsGMSHandleValid(HAND GMSHandle);
 U32 ADVCMNAPI Acm_RbLoadPath(HAND RbHandle, PI8 FilePath, PHAND PathHandle, PU32 pTotalCount);//  [6/26/2014 deng]
 U32 ADVCMNAPI Acm_RbUnloadPath(HAND RbHandle, PHAND PathHandle);//  [6/26/2014 deng]
-U32 ADVCMNAPI Acm_RbMoveSelPath(HAND    RbHandle,
-                      HAND  PathHandle,
-                      U32    StartIndex,                // range: 0~9999
-                      U32    EndIndex,                // range: 0~9999
-                      U8    Repeat);//  [6/26/2014 deng]
-U32 ADVCMNAPI Acm_RbGetPathIndexStatus(HAND           RbHandle,
-                             U32         Index,                 // index of path
-                             PU16        CmdFunc,
-                             PU16        MoveMode,
-                             PF64         FH,
-                             PF64         FL,
-                             PF64         EndPoint_DataArray,
-                             PF64         CenPoint_DataArray,
-                             PU32         ArrayElements);//  [6/26/2014 deng]
+U32 ADVCMNAPI Acm_RbMoveSelPath(HAND	RbHandle,
+					  HAND  PathHandle,
+					  U32	StartIndex,				// range: 0~9999
+					  U32	EndIndex,				// range: 0~9999
+					  U8	Repeat);//  [6/26/2014 deng]
+U32 ADVCMNAPI Acm_RbGetPathIndexStatus(HAND       	RbHandle,
+							 U32 		Index, 				// index of path
+							 PU16		CmdFunc,
+							 PU16		MoveMode,
+							 PF64 	    FH,
+							 PF64 	    FL,
+							 PF64 	    EndPoint_DataArray,
+							 PF64 	    CenPoint_DataArray,
+							 PU32 	    ArrayElements);//  [6/26/2014 deng]
 U32 ADVCMNAPI Acm_RbSetExtDrive(HAND RbHandle, U16 ExtDrvMode);//  [7/3/2014 deng]
 U32 ADVCMNAPI Acm_RbJog(HAND RbHandle,U16 Direction);//  [7/3/2014 deng]
 
 U32 ADVCMNAPI Acm_ServoSetCom(U32 ComPortID, U32 Baudrate, U32 Timeout);//  [7/17/2014 yang.kai]
 U32 ADVCMNAPI Acm_ServoGetAbsPosition(
-                            U32 ComPortID,
-                            U32 ServoType,
-                            U32 ServoID,
-                            U32 ServoAbsResolution,
-                            U32 ServoCmdResolution,
-                            U32 EncoderDir,
-                            PF64 AbsPosition
-                            );                                           //  [7/17/2014 yang.kai]
+							U32 ComPortID,
+							U32 ServoType,
+							U32 ServoID,
+							U32 ServoAbsResolution,
+							U32 ServoCmdResolution,
+							U32 EncoderDir,
+							PF64 AbsPosition
+							);                                           //  [7/17/2014 yang.kai]
 U32 ADVCMNAPI Acm_AxSetCmdPosi_Pulse(HAND AxisHandle,F64 Position);      //  [7/17/2014 yang.kai]
 U32 ADVCMNAPI Acm_AxSpecialDiSetBit(HAND AxisHandle,U16 DiType,U8 BitData);
 
@@ -914,10 +1001,15 @@ U32 ADVCMNAPI Acm_DevGetLTCSaftyDist(HAND DeviceHandle, U16 LtcID, PF64 SaftyDis
 U32 ADVCMNAPI Acm_DevGetLTCInSource(HAND DeviceHandle, U16 LtcID, PU16 Source);
 U32 ADVCMNAPI Acm_DevSetLTCInSource(HAND DeviceHandle, U16 LtcID, U16 Source);
 U32 ADVCMNAPI Acm_DevGetCmp(HAND DeviceHandle, U16 CmpID, PU32 CmpLogic, PU32 CmpSrc, PU32 CmpMethod, PU32 DOMode, PU32 DOWidth);
+// Software Compare
+U32 ADVCMNAPI Acm_ChLinkSWCmpObject(HAND DeviceHandle, U16 SWCmpID, ADV_OBJ_TYPE ObjType, PU32 ObjArray, U32 ArrayElement);
+U32 ADVCMNAPI Acm_DaqDoLinkSWCmpObject(HAND DeviceHandle, U32 DOChannel, U16 SWCmpID);
+U32 ADVCMNAPI Acm_ChGetLinkedSWCmpObject(HAND DeviceHandle, U16 SWCmpID, ADV_OBJ_TYPE *ObjType, PU32 ObjArray, PU32 ArrayElement);
+U32 ADVCMNAPI Acm_DaqDoGetLinkedSWCmpObject(HAND DeviceHandle, PU32 DOChannel, U16 SWCmpID);
 
-U32    ADVCMNAPI Acm_DevReadLatchBuffer(HAND DeviceHandle, U16 LtcID, PF64 CommandPositionArray, PF64 ActualPositionArray, PU32 DataCnt);
-U32    ADVCMNAPI Acm_DevGetLatchBufferStatus(HAND DeviceHandle, U16 LtcID, PU32 RemainCnt, PU32 SpaceCnt, PU32 LtcCounter);
-U32    ADVCMNAPI Acm_DevResetLatchBuffer(HAND DeviceHandle, U16 LtcID);
+U32	ADVCMNAPI Acm_DevReadLatchBuffer(HAND DeviceHandle, U16 LtcID, PF64 CommandPositionArray, PF64 ActualPositionArray, PU32 DataCnt);
+U32	ADVCMNAPI Acm_DevGetLatchBufferStatus(HAND DeviceHandle, U16 LtcID, PU32 RemainCnt, PU32 SpaceCnt, PU32 LtcCounter);
+U32	ADVCMNAPI Acm_DevResetLatchBuffer(HAND DeviceHandle, U16 LtcID);
 
 U32 ADVCMNAPI Acm_DevSetLTCInAxisID(HAND DeviceHandle, U16 LtcID, U32 AxisID);
 U32 ADVCMNAPI Acm_DevGetLTCInAxisID(HAND DeviceHandle, U16 LtcID, PU32 AxisID);
@@ -942,12 +1034,17 @@ U32 ADVCMNAPI Acm_DevReadMem_Ulong(HAND DeviceHandle, ULONG Address, PULONG dwDa
 //EtherCAT
 U32 ADVCMNAPI Acm_DevSetSlaveStates(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 SlvState);
 U32 ADVCMNAPI Acm_DevGetSlaveStates(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, PU16 SlvState);
+U32 ADVCMNAPI Acm_DevGetSlaveTxPDO(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 StartOffset, U16 Length, PU8 DataArray);
+U32 ADVCMNAPI Acm_DevGetSlaveRxPDO(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 StartOffset, U16 Length, PU8 DataArray);
+U32 ADVCMNAPI Acm_DevGetSlaveRxTxPDO(HAND DeviceHandle, U16 RingNo, U16 SlaveIP, U16 Length, PU8 DataArray);
+U32 ADVCMNAPI Acm_DevWriteSDOComplete(HAND DeviceHandle, IN U16 RingNo, IN U16 SlaveIP, IN U16 Index, IN U16 DataSize, IN PVOID pValue);
 U32 ADVCMNAPI Acm_DevWriteSDOData(HAND DeviceHandle, IN U16 RingNo, IN U16 SlaveIP, IN U16 Index, IN U16 SubIndex, IN U16 Type, IN U16 DataSize, IN PVOID pValue);
 U32 ADVCMNAPI Acm_DevReadSDOData(HAND DeviceHandle, IN U16 RingNo, IN U16 SlaveIP, IN U16 Index, IN U16 SubIndex, IN U16 Type, IN U16 DataSize, OUT PVOID pValue);
 U32 ADVCMNAPI Acm_DevWriteRegData(HAND DeviceHandle, IN U16 RingNo, IN U16 SlaveIP, IN U16 Address, IN U16 Type, IN U16 DataSize, IN PVOID pValue);
 U32 ADVCMNAPI Acm_DevReadRegData(HAND DeviceHandle, IN U16 RingNo, IN U16 SlaveIP, IN U16 Address, IN U16 Type, IN U16 DataSize, OUT PVOID pValue);
 U32 ADVCMNAPI Acm_DevReadEmgMessage(HAND DeviceHandle, IN U16 RingNo, IN U16 SlaveIP, IN U16 DataSize, OUT PU8 EmgMessage);
 U32 ADVCMNAPI Acm_DevReadSlvCommErrCnt(HAND DeviceHandle, IN U16 RingNo, IN PU32 ErrCntArray, IN PU32 ArrayElements);
+U32 ADVCMNAPI Acm_DaqLinkPDO(HAND DeviceHandle, U32 Type, U16 Channel, U32 RingNo, U32 SlaveID, U32 EntryIndex, U32 EntrySubIndex, U32 ProductCode);
 //ARES
 U32 ADVCMNAPI Acm_DevDownloadAres(HAND DeviceHandle, PI8 FilePath);
 U32 ADVCMNAPI Acm_DevGetAresVariable(HAND DeviceHandle, U32 Address, PF64 Value);
@@ -996,14 +1093,27 @@ U32 ADVCMNAPI Acm_CYLStatus(HAND CYLHandle, PU32 MultiIOStatus);
 U32 ADVCMNAPI Acm_CYLEnableEvent(HAND CYLHandle, U32 EvtEn);
 U32 ADVCMNAPI Acm_CYLCheckEvent(HAND DeviceHandle, /*U32 BufIndex, */PU32 EvtStatusArray, U32 Arraycnt, U32 Millisecond);
 
-U32 ADVCMNAPI Acm_AxMoveTorque(HAND AxisHandle, F64 Distance, F64 Torque, F64 Velocity, F64 PressTime, U8 Mode);
+U32 ADVCMNAPI Acm_AxMoveTorque(HAND AxisHandle, F64 Distance, F64 Torque, F64 TorqueSlope, F64 Velocity, F64 PressTime, U8 Mode);
 U32 ADVCMNAPI Acm_AxGetActTorque(HAND AxisHandle, PI32 Torque);
-U32    ADVCMNAPI Acm_Ax2DCompensateInAx (HAND AxisHandle, HAND RelAxisHandle, PF32 Coefficient, PF32 RelCoefficient, U32 ArrayElements);
-U32    ADVCMNAPI Acm_Ax1DCompensateTable (HAND AxisHandle, F32 OriginPos, F32 Pitch, PF32 OffsetData, U32 OffsetElements);
-U32 ADVCMNAPI Acm_Dev2DCompensateTable (HAND DeviceHandle, HAND AxisHandle, HAND RelAxisHandle, F32 OriginPosX, F32 OriginPosY, F32 PitchX, F32 PitchY, PF32 OffsetDataX, PF32 OffsetDataY, U32 OffsetElementsX, U32 OffsetElementsY);
+U32	ADVCMNAPI Acm_Ax2DCompensateInAx (HAND AxisHandle, HAND RelAxisHandle, PF64 Coefficient, PF64 RelCoefficient, U32 ArrayElements);
+U32	ADVCMNAPI Acm_Ax1DCompensateTable (HAND AxisHandle, F64 OriginPos, F64 Pitch, PF64 OffsetData, U32 OffsetElements, U32 Direction);
+U32 ADVCMNAPI Acm_DevZAxisCompensateTable(HAND DeviceHandle, HAND AxisHandle, HAND RelAxisHandle, HAND ZAxisHandle, F64 OriginPosX, F64 OriginPosY, F64 PitchX, F64 PitchY, PF64 OffsetDataZ, U32 OffsetElementsX, U32 OffsetElementsY);
+U32 ADVCMNAPI Acm_Dev2DCompensateTable (HAND DeviceHandle, HAND AxisHandle, HAND RelAxisHandle, F64 OriginPosX, F64 OriginPosY, F64 PitchX, F64 PitchY, PF64 OffsetDataX, PF64 OffsetDataY, U32 OffsetElementsX, U32 OffsetElementsY);
+U32 ADVCMNAPI Acm_DevZAxisCompensateTableEx(HAND DeviceHandle, HAND AxisHandle, HAND RelAxisHandle, HAND ZAxisHandle, F64 OriginPosX, F64 OriginPosY, F64 PitchX, F64 PitchY, PF64 OffsetDataZ, U32 OffsetElementsX, U32 OffsetElementsY, U32 Direction);
+U32 ADVCMNAPI Acm_Dev2DCompensateTableEx(HAND DeviceHandle, HAND AxisHandle, HAND RelAxisHandle, F64 OriginPosX, F64 OriginPosY, F64 PitchX, F64 PitchY, PF64 OffsetDataX, PF64 OffsetDataY, U32 OffsetElementsX, U32 OffsetElementsY, U32 Direction);
 U32 ADVCMNAPI Acm_AxGetCompensatePosition(HAND AxisHandle, PF64 Position);
 
+U32 ADVCMNAPI Acm_AxGetPreview1DCompensatePosition(HAND AxisHandle, F64 Position, U32 Direction, PF64 PreviewPosition);
+U32 ADVCMNAPI Acm_DevGetPreview2DCompensatePosition(HAND DeviceHandle, HAND AxisHandle, HAND RelAxisHandle, F64 Position, F64 RelPosition, U32 Direction, U32 RelDirection, PF64 PreviewPosition, PF64 PreviewRelPosition);
+U32 ADVCMNAPI Acm_DevGetPreviewZAxisCompensatePosition(HAND DeviceHandle, HAND AxisHandle, HAND RelAxisHandle, HAND ZAxisHandle, F64 Position, F64 RelPosition, U32 Direction, U32 RelDirection, PF64 PreviewZPosition);
+
 U32 ADVCMNAPI Acm_DevMultiTrigInitial(HAND DeviceHandle, IN U16 RingNo, IN U16 SlaveIP, IN U16 Enable, IN U8 PWM, IN U8 LTC, IN U8 MPG);
+U32 ADVCMNAPI Acm_DevOscChannelDataStart(HAND DeviceHandle);
+U32 ADVCMNAPI Acm_DevOscChannelDataStop(HAND DeviceHandle);
+U32 ADVCMNAPI Acm_DevGetOscChannelDataConfig(HAND DeviceHandle, U32 ChannelID, POSC_PROFILE_PRM oscflg);
+U32 ADVCMNAPI Acm_DevSetOscChannelDataConfig(HAND DeviceHandle, U32 ChannelID, OSC_PROFILE_PRM oscflg);
+U32 ADVCMNAPI Acm_DevGetOscChannelData(HAND DeviceHandle, U32 ChannelID, U32 DataIndex, PU32 MaxCount, PF64 DataBuffer);
+U32 ADVCMNAPI Acm_DevGetOscChannelStatus(HAND DeviceHandle, PU32 Status);
 //Axis Follow Group
 U32 ADVCMNAPI Acm_GpEnableAxisFollow(HAND GroupHandle, PU32 AxisArray, PF64 OffsetValue, PF64 RatioArray);
 U32 ADVCMNAPI Acm_GpStopAxisFollow(HAND GroupHandle);
@@ -1012,6 +1122,93 @@ U32 ADVCMNAPI Acm_GpSetFollowWpOffset(HAND GroupHandle, PF64 WpCenterPos, PF64 W
 U32 ADVCMNAPI Acm_EnableOneDevEventCallBack(HANDLE DeviceHandle, ULONG EventID); //ydd test
 
 U32 ADVCMNAPI Acm_AxGetRawData(HAND AxisHandle, U8 index, PF64 RawData);
+U32 ADVCMNAPI Acm_AxSetRawData(HAND AxisHandle, U8 index, F64 RawData);
+U32 ADVCMNAPI Acm_GpGetRawData(HAND GroupHandle, U8 index, PF64 RawData);
+U32 ADVCMNAPI Acm_GpSetRawData(HAND GroupHandle, U8 index, F64 RawData);
+U32 ADVCMNAPI Acm_GpGetPausePosition(HAND GroupHandle, PF64 RefPausePosition);
+U32 ADVCMNAPI Acm_AxReturnPausePosition(HAND AxHandle);
+U32 ADVCMNAPI Acm_AxAddOnAx(HAND AxisHandle, HAND MasAxisHandle);
+U32 ADVCMNAPI Acm_AxAddRemove(HAND AxisHandle, HAND MasAxisHandle);
+U32 ADVCMNAPI Acm_AxGetAddOnNum(HAND AxisHandle, PI32 num);
+U32 ADVCMNAPI Acm_AxSetCompensateDistance(HAND AxisHandle, F64 Distance);
+U32 ADVCMNAPI Acm_AxGetCompensateDistance(HAND AxisHandle, PF64 Distance);
+
+U32 ADVCMNAPI Acm_GpSetRLAxisId(HAND m_GpHand, PU32 id);
+U32 ADVCMNAPI Acm_GpGetRLAxisId(HAND m_GpHand, PU32 id);
+U32 ADVCMNAPI Acm_GpSetRLMachineType(HAND m_GpHand, U32 type);
+U32 ADVCMNAPI Acm_GpGetRLMachineType(HAND m_GpHand, PU32 type);
+U32 ADVCMNAPI Acm_GpSetRLAxisDir(HAND m_GpHand, PU32 dir);
+U32 ADVCMNAPI Acm_GpGetRLAxisDir(HAND m_GpHand, PU32 dir);
+U32 ADVCMNAPI Acm_GpSetRLACenter(HAND m_GpHand, double  Ypos, double  Zpos);
+U32 ADVCMNAPI Acm_GpSetRLBCenter(HAND m_GpHand, double  Xpos, double  Zpos);
+U32 ADVCMNAPI Acm_GpSetRLCCenter(HAND m_GpHand, double  Xpos, double  Ypos);
+U32 ADVCMNAPI Acm_GpGetRLACenter(HAND m_GpHand, double *Ypos, double  *Zpos);
+U32 ADVCMNAPI Acm_GpGetRLBCenter(HAND m_GpHand, double  *Xpos, double  *Zpos);
+U32 ADVCMNAPI Acm_GpGetRLCCenter(HAND m_GpHand, double *Xpos, double  *Ypos);
+U32 ADVCMNAPI Acm_GPSetRLRotateAxisCalibPos(HAND m_GpHand, double  A, double  B, double C);
+U32 ADVCMNAPI Acm_GPGetRLRotateAxisCalibPos(HAND m_GpHand, double *A, double *B, double *C);
+U32 ADVCMNAPI Acm_GpSetRLCalibStartPos(HAND m_GpHand, double XPos, double Ypos, double Zpos);
+U32 ADVCMNAPI Acm_GpGetRLCalibStartPos(HAND m_GpHand, double *XPos, double *Ypos, double *Zpos);
+U32 ADVCMNAPI Acm_GPSetRLRotateAxisActualPos(HAND m_GpHand, double  A, double  B, double C);
+U32 ADVCMNAPI Acm_GPGetRLRotateAxisActualPos(HAND m_GpHand, double  *A, double  *B, double *C);
+U32 ADVCMNAPI Acm_GpGetRLActualStartPos(HAND m_GpHand, double *XPos, double *Ypos, double *Zpos);
+U32 ADVCMNAPI Acm_GpSetRotateAxisMaxVel(HAND m_GpHand, double  A, double  B, double  C);
+U32 ADVCMNAPI Acm_GpGetRotateAxisMaxVel(HAND m_GpHand, double  *A, double  *B, double  *C);
+U32 ADVCMNAPI Acm_GpSetRLEnable(HAND m_GpHand, U32 On_Off);
+U32 ADVCMNAPI Acm_GpGetRLEnable(HAND m_GpHand, PU32 On_Off);
+U32 ADVCMNAPI Acm_GpGetCoordPosition(HAND GroupHandle, F64 CAngle, F64 BAngle, F64 AAngle, F64 X, F64 Y, F64 Z, F64 *TransX, F64 *TransY, F64 *TransZ);
+
+U32 ADVCMNAPI Acm_GpAddRLPath (HAND GroupHandle,U16 MoveCmd,U16 MoveMode,F64 FH,F64 FL,
+				   PF64 EndPoint_DataArray,PF64 CenPoint_DataArray,PU32 ArrayElements);
+
+U32 ADVCMNAPI Acm_GpAddContLinePath (HAND GroupHandle,U16 MoveCmd,U16 MoveMode,F64 FH,F64 FL,
+	PF64 X_DataArray,PF64 Y_DataArray,PF64 Z_DataArray,PF64 R1_DataArray,PF64 R2_DataArray,PU32 ArrayElements);
+
+U32  ADVCMNAPI Acm_DevDownloadCAMTableEx (HAND DeviceHandle, 
+							U32 CamTableID, 
+							/*LPCAMPOINT pCamPointArray,*/
+							PF64 pMasterArray, 
+							PF64 pSlaveArray,
+							PF64 pSpeedArray,
+							PF64 pAccArray,
+							U32 ArrayElements);
+U32  ADVCMNAPI Acm_DevDownloadCAMBox(HAND DeviceHandle, 
+							U32 CamTableID, 
+							/*LPCAMPOINT pCamPointArray,*/
+							PF64 pMasterArray, 
+							PF64 pSlaveArray,
+							PF64 pSpeedArray,
+							PF64 pAccArray,
+							U32 ArrayElements,
+							U32 StartMod,
+							I32 StartPos);
+
+
+U32  ADVCMNAPI Acm_DevConfigCAMTable_New(HAND DeviceHandle, 
+						  U32 CamTableID,
+						  U32 Periodic,
+						  U32 MasterAbsolute,
+						  U32 SlaveAbsolute);
+
+
+U32 ADVCMNAPI Acm_DevCAMBoxStatus (HAND DeviceHandle, U32 CamTableID, PU32 remain, PU32 free);
+U32  ADVCMNAPI Acm_AxCamInAxEx (HAND AxisHandle, 
+				   HAND MasAxisHandle, 
+				   U32 CamTableID, 
+				   F64 MasterOffset,
+				   F64 SlaveOffset, 
+				   U32 MasScalingNume, 
+				   U32 MasScalingDenom,
+				   U32 SlvScalingNume, 
+				   U32 SlvScalingDenom, 				   
+				   U32 RefSrc);
+
+U32  ADVCMNAPI Acm_DevCAMAvoidVacant(HAND DeviceHandle,
+	U32 CamTableCyclicID,
+	U32 CamTableVacantID,
+	F64  fInsertXR,
+	F64  fLeaveXR);
+U32 ADVCMNAPI Acm_DevCAMSetVacantSignal(HAND DeviceHandle, U32 Signal);
 #ifdef __cplusplus
 }
 #endif
