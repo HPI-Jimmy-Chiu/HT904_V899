@@ -2241,12 +2241,207 @@ void TfYieldMonitoring::SetClosedSiteBin()
 // =============================================================================
 TfYieldMonitoring *fYieldMonitoring = new TfYieldMonitoring();
 
-// AI(W906-FW-YMSwap) 20260818: DOCUMENTED NO-OP -- behaviour-neutral swap.
-// The REAL body (golden uYieldMonitoring.cpp:5340-5401) actually closes
-// sites on low yield; translating it is the user-approved queue's own
-// behaviour-change wave with its own gate and commit. Until then the ~26
-// live arm-variant call sites keep the exact no-op the retired shim gave
-// them.
-void TfYieldMonitoring::DoAutoCloseSite(bool /*bRT*/)
+// AI(W906-FW-Q3) 20260818: REAL BODIES land (user-approved queue item 3,
+// behaviour-change wave). golden's file-scope `bool bHasCloseSite;`
+// (uYieldMonitoring.cpp:72) is mirrored below for structural parity only --
+// it is dead in golden too: the class member (uYieldMonitoring.h:594,
+// ported to forms/fYieldMonitoring.h) shadows it inside every member
+// function.
+bool bHasCloseSite;                                                             //Isaac 20171227 (Steven) : 記錄low yield auto site off log，移到外層
+
+//---------------------------------------------------------------------------
+//  DoRTAutoSocketOff -- golden :5202-5299
+//---------------------------------------------------------------------------
+void TfYieldMonitoring::DoRTAutoSocketOff()                                     //Steven 20200205 : 切到RT的時候,要關閉Socket
 {
+    double dMaxYield=0, dYield[2][MAX_SOCKET_ROW][MAX_SOCKET_COL];
+    double dTargetYield;
+
+    if(CosFunction.bUseSCKART &&
+       USE_AUTO_RETEST==eartInstall &&
+       IniConfig.bA10_AutoReTest &&
+       TestIF_File.bSCKART_EnableART==true)
+        return;
+
+    if(CosFunction.bAutoCloseSiteWhenRT)
+    {
+        if(TestIF_File.iAutoCloseSiteWhenRT)
+        {
+            if(IniConfig.bA09_ByArmCloseSite==0)                                //Auto Head
+            {
+                for(int i=0; i<TestSocket.iShtRow; i++)                         //沒考慮到NN mode
+                {
+                    for(int j=0; j<TestSocket.iShtCol; j++)
+                    {
+                        dYield[0][i][j]=ArmData[0]->ArmSKET[i][j]->GetPCA();
+                        if(dYield[0][i][j]>dMaxYield)
+                        {
+                            dMaxYield=dYield[0][i][j];
+                        }
+
+                        dYield[1][i][j]=ArmData[1]->ArmSKET[i][j]->GetPCA();
+                        if(dYield[1][i][j]>dMaxYield)
+                        {
+                            dMaxYield=dYield[1][i][j];
+                        }
+                    }
+                }
+
+                dTargetYield=dMaxYield-TestIF_File.dAutoCloseSiteYieldWhenRT;
+
+                if(dTargetYield>0)
+                {
+                    for(int k=0; k<2; k++)
+                    {
+                        for(int i=0; i<TestSocket.iShtRow; i++)
+                        {
+                            for(int j=0; j<TestSocket.iShtCol; j++)
+                            {
+                                if(dYield[k][i][j]<dTargetYield)
+                                {
+                                    // GOLDEN BUG (faithful, golden :5249): `==` where `=` was
+                                    // plainly intended -- this statement compares and discards,
+                                    // so the whole dYield sweep above feeds NOTHING; the actual
+                                    // site-close set is whatever bLowYieldCloseSite already
+                                    // held. Translated verbatim per campaign policy (golden
+                                    // unreasonableness is翻照原樣, behaviour changes are the
+                                    // user's call). (void) wrapper only silences -Wunused-value.
+                                    (void)(bLowYieldCloseSite[k][i][j]==true);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            else                                                                //Auto Socket
+            {
+                for(int i=0; i<TestSocket.iShtRow; i++)
+                {
+                    for(int j=0; j<TestSocket.iShtCol; j++)
+                    {
+                        dYield[0][i][j]=0;
+                        if(LastSet.bUseTestSocket[0][i][j] &&
+                           LastSet.bUseTestSocket[1][i][j])
+                            dYield[0][i][j]=(ArmData[0]->ArmSKET[i][j]->GetPCA()+ArmData[1]->ArmSKET[i][j]->GetPCA())/2.0;
+                        else if(LastSet.bUseTestSocket[0][i][j])
+                            dYield[0][i][j]=ArmData[0]->ArmSKET[i][j]->GetPCA();
+                        else
+                            // GOLDEN ASYMMETRY (faithful, golden :5269): writes dYield[1]
+                            // while every read below (max sweep + close sweep) only ever
+                            // looks at dYield[0] -- arm-1-only sockets therefore keep
+                            // dYield[0]==0 and always look "low". Translated verbatim.
+                            dYield[1][i][j]=ArmData[1]->ArmSKET[i][j]->GetPCA();
+
+                        if(dYield[0][i][j]>dMaxYield)
+                        {
+                            dMaxYield=dYield[0][i][j];
+                        }
+                    }
+                }
+
+                dTargetYield=dMaxYield-TestIF_File.dAutoCloseSiteYieldWhenRT;
+                if(dTargetYield>0)
+                {
+                    for(int i=0; i<TestSocket.iShtRow; i++)
+                    {
+                        for(int j=0; j<TestSocket.iShtCol; j++)
+                        {
+                            if(dYield[0][i][j]<dTargetYield)
+                            {
+                                // GOLDEN BUG (faithful, golden :5288-5289): same `==` vs `=`
+                                // typo as the Auto Head arm above -- both statements discard.
+                                (void)(bLowYieldCloseSite[0][i][j]==true);
+                                (void)(bLowYieldCloseSite[1][i][j]==true);
+                            }
+                        }
+                    }
+                }
+            }
+            fYieldMonitoring->DoAutoCloseSite(2);                               //Steven 20170905 (wei) : Low Yield Auto Site Off for Ambient
+            fMain->ShowTestHeadComp(false);
+        }
+    }
+}
+//---------------------------------------------------------------------------
+//0: Low Yield關
+//1: 全開
+//2: RT關Site
+//---------------------------------------------------------------------------
+void TfYieldMonitoring::DoAutoCloseSite(int iAllSiteOn)                         //Steven 20170905 (wei) : Low Yield Auto Site Off for Ambient
+{
+    CanAutoCloseSite(iAllSiteOn);                                               //Steven 20230315 : 整合自動關Site功能的判斷
+    if(bCanAutoCloseSite)                                                       //Steven 20210809 : 改成可以強制全開
+    {
+        if(iAllSiteOn==1)                                                       //Steven 20230315 : 整合自動關Site功能的判斷
+        {
+            for(int i=0; i<TestSocket.iShtRow; i++)
+            {
+                for(int j=0; j<TestSocket.iShtCol; j++)
+                {
+                    if(TestIF_File.iSiteMap[i][j]!=0)
+                    {
+                        if(LastSet.iCloseSiteByLowYield[0][i][j]==1)            //Steven 20220223 : 紀錄Auto Site Off的位置
+                            LastSet.bUseTestSocket[0][i][j]=true;
+
+                        if(LastSet.iCloseSiteByLowYield[1][i][j]==1)
+                            LastSet.bUseTestSocket[1][i][j]=true;
+                    }
+                    LastSet.iCloseSiteByLowYield[0][i][j]=0;
+                    LastSet.iCloseSiteByLowYield[1][i][j]=0;
+                }
+            }
+            fMain->ShowTestHeadComp(false);                                     //Steven 20220308 : true --> false
+            fYieldMonitoring->ClearAutoSiteOffStatus();                         //Steven 20200409 : 修正清除count之後,不能開site的問題
+            RecordProcess("All site on for auto site off function.");
+        }
+        else
+        {
+            for(int a=0; a<2; a++)
+            {
+                for(int i=0; i<TestSocket.iShtRow; i++)
+                {
+                    for(int j=0; j<TestSocket.iShtCol; j++)
+                    {
+                        if(LastSet.bUseTestSocket[a][i][j] &&
+                           bLowYieldCloseSite[a][i][j]==true)
+                        {
+                            LastSet.bUseTestSocket[a][i][j]=false;
+                            LastSet.iCloseSiteByLowYield[a][i][j]=1;            //Steven 20220223 : 紀錄Auto Site Off的位置
+                            bTestSiteUse[a][i][j]=false;
+                            bHasCloseSite=true;
+                            // GATE (Q3a): FormHS->SaveCloseOpenSiteEven(a, i, j,
+                            // bTestSiteUse[a][i][j]); -- golden :5382. No FormHS facade
+                            // anywhere in the tree (`grep -rn "FormHS" --include=*.h .`
+                            // = 0 hits, 20260818). Pure log-to-file side effect
+                            // (records low-yield auto-site-off events), no state feeds
+                            // back; skipping loses only the audit line.
+#if 0
+                            FormHS->SaveCloseOpenSiteEven(a, i, j, bTestSiteUse[a][i][j]);                              //Isaac 20171227 (Steven) : 記錄low yield auto site off log
+#endif
+                        }
+                    }
+                }
+            }
+
+            if(bHasCloseSite)
+            {
+                fMain->ShowTestHeadComp(false);
+                // GATE (Q3b): golden :5391-5395 --
+                //   if(CUSTOMER_CODE==CC_Greatek && fProductionInfo!=NULL)
+                //       fProductionInfo->SaveInfoFileWhenStart();
+                // The TfProductionInfo stand-in (forms/fProductionInfo.h) has
+                // no SaveInfoFileWhenStart member (grep 0 hits, 20260818);
+                // golden's own NULL guard means the call is already
+                // conditional there. Customer-gated (Greatek) file write.
+#if 0
+                //AI(ht9045-v899) 20260519: save GTK RunSite after low-yield auto site-off state synchronization.
+                if(CUSTOMER_CODE==CC_Greatek && fProductionInfo!=NULL)
+                {
+                    fProductionInfo->SaveInfoFileWhenStart();
+                }
+#endif
+            }
+            bGetGPIBAutoSiteOff=false;                                          //JimmyChiu 20250715 : Auto site on/off by GPIB
+        }
+    }
 }

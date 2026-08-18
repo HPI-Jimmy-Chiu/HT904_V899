@@ -73,12 +73,11 @@
 //
 //  EXPLICITLY EXCLUDED (per task brief, not even a stub declared here)
 //  --------------------------------------------------------------------------
-//  DoAutoCloseSite / DoRTAutoSocketOff -- SAFETY ACTIONS. 26 existing arm
-//  variants already call `fYieldMonitoring->DoAutoCloseSite(bool)` against the
-//  no-op TfYieldMonitoring_2x4_16 stand-in; translating a REAL body here would
-//  make those 26 call sites start actually opening/closing sockets with no
-//  user sign-off. Save*/btn*Click, FormCreate/FormShow/DoIniDataToForm/
+//  Save*/btn*Click, FormCreate/FormShow/DoIniDataToForm/
 //  DoFormToData (Wave C), TMyYieldPanel (Wave B, cObserver-adjacent UI panel).
+//  [HISTORY] DoAutoCloseSite / DoRTAutoSocketOff sat here as SAFETY ACTIONS
+//  until the user approved the queue (20260817 ruling); real bodies landed
+//  20260818 as queue item 3 (AI(W906-FW-Q3), see method decls below).
 //
 //  DEVIATION -- CheckSettingNo made public
 //  --------------------------------------------------------------------------
@@ -244,6 +243,11 @@ public:
 
     int  iLowYieldByTotalContactCount = 0;   // golden :603 -- CheckLowYieldAlarmByTotal/ClearYieldCount
     bool bGetGPIBAutoSiteOff = false;        // golden :607 -- CanAutoCloseSite
+    bool bHasCloseSite = false;              // golden :594 -- DoAutoCloseSite. NOTE: golden's
+                                             // uYieldMonitoring.cpp:72 ALSO has a file-scope
+                                             // `bool bHasCloseSite;` -- dead there (class scope
+                                             // wins inside every member function); mirrored in
+                                             // the port TU for structural parity.
 
     // -- Sliding Window Yield ring buffer (golden :609-618, verbatim) --------
     struct TSWRing
@@ -286,13 +290,16 @@ public:
 
     virtual void SetClosedSiteBin();                                 // golden :5972-5980
 
-    // AI(W906-FW-YMSwap) 20260818: DOCUMENTED NO-OP (body in
-    // uYieldMonitoring.cpp). The REAL golden body (:5340-5401, actually
-    // closes sites on low yield) is the user-approved queue's own
-    // behaviour-change wave -- the shim->facade swap must be
-    // behaviour-neutral, so the ~26 live arm-variant call sites keep the
-    // exact no-op they had against TfYieldMonitoring_2x4_16 (retired).
-    virtual void DoAutoCloseSite(bool bRT);
+    // AI(W906-FW-Q3) 20260818: REAL BODIES, user-approved queue item 3
+    // (behaviour-change wave, own commit + double gate). Signature restored
+    // to golden's `int iAllSiteOn` (0=low-yield close, 1=all-site on,
+    // 2=RT close -- golden's own :5336-5339 comment); the 26 arm-variant
+    // call sites already carry golden's literal args verbatim (25x `0`,
+    // 1x `1`, 1x `false` -- golden itself has that same `false` implicit
+    // conversion), so NO call-site edits. The former documented no-op
+    // (FW-YMSwap) is retired.
+    virtual void DoAutoCloseSite(int iAllSiteOn);                    // golden :5340-5401
+    virtual void DoRTAutoSocketOff();                                // golden :5202-5299
 
     // PORT-ONLY: no user-declared ctor/dtor this wave (see banner "NO
     // CONSTRUCTOR THIS WAVE" above) -- NSDMI on every member does the work a

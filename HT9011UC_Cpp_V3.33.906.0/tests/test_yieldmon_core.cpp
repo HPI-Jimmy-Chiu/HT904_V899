@@ -342,6 +342,138 @@ static void Test_CanAutoCloseSite_TrueAndFalse()
 }
 
 // =============================================================================
+//  (Q3) DoAutoCloseSite real body -- golden :5340-5401 (AI(W906-FW-Q3) 20260818)
+// =============================================================================
+static void Test_DoAutoCloseSite_RealBodies()
+{
+    TfYieldMonitoring y;
+
+    TestSocket.iShtRow = 1;
+    TestSocket.iShtCol = 2;
+
+    // --- close path (iAllSiteOn==0): predicate true via the same one OR-term
+    //     Test_CanAutoCloseSite_TrueAndFalse used ---
+    CosFunction.bLowYieldAutoSiteOff = true;
+    iRunStartMode = FT;
+    TestIF_File.bLowYieldAutoSiteOff = true;
+    Prod.bFailAlarmSiteYieldCmp = true;
+    TestIF_File.bLowYieldAutoSiteOffByContiFail = false;
+    Prod.bContsFailBySocket = false;
+    TestIF_File.bLowYieldAutoSiteOffArmContiFail = false;
+    Prod.bContsFailByHead = false;
+    TestIF_File.bLowYieldAutoSiteOffByPicker = false;
+    Prod.bLowYieldByPicker = false;
+    TestIF_File.iAutoSiteOffByGPIB = 0;
+    y.bGetGPIBAutoSiteOff = false;
+
+    LastSet.bUseTestSocket[0][0][0] = true;   // flagged low-yield -> must close
+    LastSet.bUseTestSocket[0][0][1] = true;   // NOT flagged -> must stay open
+    LastSet.iCloseSiteByLowYield[0][0][0] = 0;
+    LastSet.iCloseSiteByLowYield[0][0][1] = 0;
+    bLowYieldCloseSite[0][0][0] = true;
+    bLowYieldCloseSite[0][0][1] = false;
+    bLowYieldCloseSite[1][0][0] = false;
+    bLowYieldCloseSite[1][0][1] = false;
+    bTestSiteUse[0][0][0] = true;
+    y.bHasCloseSite = false;
+    y.bGetGPIBAutoSiteOff = true;             // must be reset by the close path's tail
+
+    y.DoAutoCloseSite(0);
+
+    CHECK(LastSet.bUseTestSocket[0][0][0] == false, "DoAutoCloseSite(0): flagged site really closed (bUseTestSocket -> false)");
+    CHECK(LastSet.iCloseSiteByLowYield[0][0][0] == 1, "DoAutoCloseSite(0): closed position recorded (iCloseSiteByLowYield=1, Steven 20220223)");
+    CHECK(bTestSiteUse[0][0][0] == false, "DoAutoCloseSite(0): bTestSiteUse (cmydef global) also cleared");
+    CHECK(y.bHasCloseSite == true, "DoAutoCloseSite(0): bHasCloseSite MEMBER set (class scope shadows the dead TU-global, as in golden)");
+    CHECK(LastSet.bUseTestSocket[0][0][1] == true, "DoAutoCloseSite(0): unflagged neighbour site stays open");
+    CHECK(y.bGetGPIBAutoSiteOff == false, "DoAutoCloseSite(0): bGetGPIBAutoSiteOff reset at the close path's tail (JimmyChiu 20250715)");
+
+    // --- predicate-false path: nothing may move ---
+    Prod.bFailAlarmSiteYieldCmp = false;      // all 5 OR-terms now false
+    LastSet.bUseTestSocket[0][0][1] = true;
+    bLowYieldCloseSite[0][0][1] = true;
+    y.DoAutoCloseSite(0);
+    CHECK(LastSet.bUseTestSocket[0][0][1] == true, "DoAutoCloseSite(0): CanAutoCloseSite false -> flagged site NOT closed (whole body skipped)");
+    bLowYieldCloseSite[0][0][1] = false;
+
+    // --- all-site-on path (iAllSiteOn==1) ---
+    TestIF_File.iAllSiteOnAtInitialStart = 1; // CanAutoCloseSite(1) reads exactly this
+    TestIF_File.iSiteMap[0][0] = 1;
+    TestIF_File.iSiteMap[0][1] = 0;           // unmapped: reopen must NOT happen here
+    LastSet.bUseTestSocket[0][0][0] = false;
+    LastSet.iCloseSiteByLowYield[0][0][0] = 1;
+    LastSet.bUseTestSocket[0][0][1] = false;
+    LastSet.iCloseSiteByLowYield[0][0][1] = 1;
+
+    y.DoAutoCloseSite(1);
+
+    CHECK(LastSet.bUseTestSocket[0][0][0] == true, "DoAutoCloseSite(1): recorded auto-off site re-opened (iSiteMap!=0)");
+    CHECK(LastSet.bUseTestSocket[0][0][1] == false, "DoAutoCloseSite(1): iSiteMap==0 position NOT re-opened (golden checks the map first)");
+    CHECK(LastSet.iCloseSiteByLowYield[0][0][1] == 0, "DoAutoCloseSite(1): ...but its iCloseSiteByLowYield record IS cleared (clear sits outside the map check)");
+    CHECK(bLowYieldCloseSite[0][0][0] == false, "DoAutoCloseSite(1): ClearAutoSiteOffStatus() ran through the fYieldMonitoring global (Steven 20200409)");
+}
+
+// =============================================================================
+//  (Q3) DoRTAutoSocketOff -- golden :5202-5299, incl. the ==true typo kept faithful
+// =============================================================================
+static void Test_DoRTAutoSocketOff_FaithfulDeadSweep()
+{
+    // Route: guards open -> dead dYield sweep (golden's `==true` typo discards
+    // every "close this site" mark) -> fYieldMonitoring->DoAutoCloseSite(2).
+    CosFunction.bUseSCKART = false;           // defuse the SCKART early return
+    CosFunction.bAutoCloseSiteWhenRT = true;
+    TestIF_File.iAutoCloseSiteWhenRT = 1;     // also makes CanAutoCloseSite(2) true
+    IniConfig.bA09_ByArmCloseSite = 0;        // Auto Head arm of the sweep
+    TestSocket.iShtRow = 1;
+    TestSocket.iShtCol = 2;
+    TestIF_File.dAutoCloseSiteYieldWhenRT = 5.0;
+
+    // Make site [0][1] genuinely low-yield vs [0][0] so a CORRECT sweep would
+    // mark it: arm0 [0][0] 10/10 pass, [0][1] 0/10 pass.
+    for (int a = 0; a < 2; a++)
+        for (int j = 0; j < 2; j++)
+            ArmData[a]->ArmSKET[0][j]->ClearALLCT();
+    for (int n = 0; n < 10; n++)
+    {
+        ArmData[0]->ArmSKET[0][0]->Pass++; ArmData[0]->ArmSKET[0][0]->Total++;
+        ArmData[0]->ArmSKET[0][1]->Fail++; ArmData[0]->ArmSKET[0][1]->Total++;
+    }
+
+    bLowYieldCloseSite[0][0][0] = false;
+    bLowYieldCloseSite[0][0][1] = false;      // the typo means this stays false...
+    bLowYieldCloseSite[1][0][0] = false;
+    bLowYieldCloseSite[1][0][1] = false;
+    LastSet.bUseTestSocket[0][0][1] = true;
+    fYieldMonitoring->bHasCloseSite = false;
+
+    fYieldMonitoring->DoRTAutoSocketOff();
+
+    CHECK(bLowYieldCloseSite[0][0][1] == false, "DoRTAutoSocketOff: golden ==true typo kept -- low-yield site NOT marked (dead sweep, golden :5249)");
+    CHECK(LastSet.bUseTestSocket[0][0][1] == true, "DoRTAutoSocketOff: consequently DoAutoCloseSite(2) closes nothing (no marks to act on)");
+
+    // ...but a PRE-EXISTING mark does get acted on through the (2) delegation.
+    bLowYieldCloseSite[0][0][1] = true;
+    fYieldMonitoring->DoRTAutoSocketOff();
+    CHECK(LastSet.bUseTestSocket[0][0][1] == false, "DoRTAutoSocketOff: pre-existing bLowYieldCloseSite mark IS closed via fYieldMonitoring->DoAutoCloseSite(2)");
+    CHECK(fYieldMonitoring->bHasCloseSite == true, "DoRTAutoSocketOff: delegation ran on the GLOBAL instance (golden calls fYieldMonitoring->, not this->)");
+
+    // SCKART early return: every guard open EXCEPT the 4-term SCKART veto.
+    CosFunction.bUseSCKART = true;
+    IniConfig.bA10_AutoReTest = true;
+    TestIF_File.bSCKART_EnableART = true;
+    // USE_AUTO_RETEST==eartInstall must hold for the veto; force it.
+    int iSavedART = USE_AUTO_RETEST;
+    USE_AUTO_RETEST = eartInstall;
+    bLowYieldCloseSite[0][0][0] = true;
+    LastSet.bUseTestSocket[0][0][0] = true;
+    fYieldMonitoring->DoRTAutoSocketOff();
+    CHECK(LastSet.bUseTestSocket[0][0][0] == true, "DoRTAutoSocketOff: SCKART 4-term veto returns before ANY action (golden :5206-5210)");
+    USE_AUTO_RETEST = iSavedART;
+    CosFunction.bUseSCKART = false;
+    IniConfig.bA10_AutoReTest = false;
+    TestIF_File.bSCKART_EnableART = false;
+}
+
+// =============================================================================
 //  (d) CheckSettingNo -- boundary clamps
 // =============================================================================
 static void Test_CheckSettingNo_Boundaries()
@@ -382,6 +514,8 @@ int main()
     Test_FContactCT_And_FShowBinSelect_AreRealNonNullGlobals();
     Test_CheckLowYieldAlarm_SameNS_UsesRealContactCT();
     Test_CanAutoCloseSite_TrueAndFalse();
+    Test_DoAutoCloseSite_RealBodies();
+    Test_DoRTAutoSocketOff_FaithfulDeadSweep();
     Test_CheckSettingNo_Boundaries();
 
     std::printf("%d/%d checks passed (test_yieldmon_core)\n", g_pass, g_pass + g_fail);
