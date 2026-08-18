@@ -3090,6 +3090,11 @@ target_link_libraries(test_counterclear_core PRIVATE
     "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
 )
 add_test(NAME CounterClearCore COMMAND test_counterclear_core)
+add_executable(test_binsel_core test_binsel_core.cpp)
+target_link_libraries(test_binsel_core PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+add_test(NAME BinSelCore COMMAND test_binsel_core)
 
 # AI(W906-FW3-YM-A) 20260818: FW-3 uYieldMonitoring Wave A oracle -- site-yield
 # math, sliding-window ring, CanAutoCloseSite predicate, CheckSettingNo bounds.

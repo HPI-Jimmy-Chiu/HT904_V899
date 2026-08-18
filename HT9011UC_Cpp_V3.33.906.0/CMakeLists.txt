@@ -1878,6 +1878,11 @@ add_library(ht9045_sm STATIC
     # cross-TU work sits behind if(INIFileGeneral!=0)).
     cSecurity.cpp
     cCounterClear.cpp
+    # AI(W906-FW-BinSel-WA) 20260819: cBinSel.cpp Wave A (data core +
+    # the 21+ gate-consumer members; UI bulk = Wave B stubs). Global is a
+    # REAL instance (ctor = own-member allocations + zero-read bools,
+    # SIOF-audited at integration).
+    cBinSel.cpp
     # AI(W906-FW3-TemperFrom-WA) 20260818: cTemperFrom.cpp -- FW-3 cTemperFrom
     # Wave A (temperature-display data core: ctor channel/panel maps, the
     # 885-line ShowThermo classifier, TempRunShowAlarmHigh/Low, the small

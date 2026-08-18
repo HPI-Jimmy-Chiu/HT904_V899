@@ -93,6 +93,11 @@ public:
     operator AnsiString() const;                 // read
     StringsProxy& operator=(const AnsiString& v); // write
     StringsProxy& operator=(const char* v);
+    // AI(W906-FW-BinSel-WA-integrate) 20260819: same proxy-to-proxy text-
+    // semantics repair as CommaTextProxy below/above -- the defaulted copy-
+    // assign was a silent no-op for the BCB6 property-to-property idiom.
+    // (9 live `a->Strings[i]=b->Strings[j]` call sites measured 20260819.)
+    StringsProxy& operator=(const StringsProxy& v) { return *this = AnsiString(v); }
 private:
     TStringList* owner_;
     int idx_;
@@ -115,6 +120,10 @@ public:
     operator AnsiString() const;
     TextProxy& operator=(const AnsiString& v);
     TextProxy& operator=(const char* v);
+    // AI(W906-FW-BinSel-WA-integrate) 20260819: same proxy-to-proxy text-
+    // semantics repair as CommaTextProxy below/above -- the defaulted copy-
+    // assign was a silent no-op for the BCB6 property-to-property idiom.
+    TextProxy& operator=(const TextProxy& v) { return *this = AnsiString(v); }
 private:
     TStringList* owner_;
 };
@@ -125,6 +134,17 @@ public:
     operator AnsiString() const;
     CommaTextProxy& operator=(const AnsiString& v);
     CommaTextProxy& operator=(const char* v);
+    // AI(W906-FW-BinSel-WA-integrate) 20260819: proxy-to-proxy assignment
+    // MUST mean TEXT semantics (serialize source list -> parse into target),
+    // matching BCB6 property-to-property `a->CommaText = b->CommaText`.
+    // Without this overload the implicitly-defaulted copy-assign wins the
+    // overload resolution and copies the proxy's owner_ POINTER -- a silent
+    // no-op that ate every such golden idiom in the tree (24 call sites in
+    // 9 TUs, measured 20260819: PordRec production-log copies in
+    // aHotPlateSubstrate/asortarm/aTester_Front/aTester_Rear/ainarm9045 and
+    // TfBinSel::TransferBinTrayStrToName, where the BinSelCore gate exposed
+    // it: target list stayed empty, loop ran zero times).
+    CommaTextProxy& operator=(const CommaTextProxy& v) { return *this = AnsiString(v); }
 private:
     TStringList* owner_;
 };
@@ -135,6 +155,10 @@ public:
     operator AnsiString() const;
     DelimitedTextProxy& operator=(const AnsiString& v);
     DelimitedTextProxy& operator=(const char* v);
+    // AI(W906-FW-BinSel-WA-integrate) 20260819: same proxy-to-proxy text-
+    // semantics repair as CommaTextProxy below/above -- the defaulted copy-
+    // assign was a silent no-op for the BCB6 property-to-property idiom.
+    DelimitedTextProxy& operator=(const DelimitedTextProxy& v) { return *this = AnsiString(v); }
 private:
     TStringList* owner_;
 };
