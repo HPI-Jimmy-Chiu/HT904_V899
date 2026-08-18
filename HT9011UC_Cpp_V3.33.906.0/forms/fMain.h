@@ -132,6 +132,21 @@ public:
     virtual ~TfMainRENESASServer() {}
 };
 
+// AI(W906-FW3-WE) 20260818: forward declaration for the FW3-WE ADD block's
+// Get2DID_OrderBySites(TMyKitSuck*, TStringList*) member (see that block's
+// own comment for the full citation) -- MUST sit here, at file/global scope,
+// NOT inside `class TfMain` below: an earlier pass of this edit placed it
+// inside the class body by mistake, which silently declares a nested
+// `TfMain::TMyKitSuck` (a different, permanently-incomplete type) instead of
+// forward-declaring the real global `::TMyKitSuck` (aHotPlateSubstrate.h
+// :365) -- caught by the compiler ("invalid use of incomplete type
+// 'class TfMain::TMyKitSuck'") when Command.cpp's own Get2DID_OrderBySites
+// DEFINITION (which #includes aHotPlateSubstrate.h and so sees the REAL
+// global TMyKitSuck) tried to dereference `kit->Item[i][j]` against a
+// pointer the header had typed as the empty nested stand-in. Corrected
+// before landing.
+class TMyKitSuck;
+
 // ===========================================================================
 //  TfMain -- non-VCL stub (golden main.h, TfMain:public TForm)
 // ===========================================================================
@@ -898,6 +913,78 @@ public:
     virtual void   SetSGOSBIN();                                          // golden main.h:1592 (body Command.cpp:11893-11947)
     virtual void   SetSGCONTFAIL();                                       // golden main.h:1593 (body Command.cpp:11949-12061)
     // -- end FW3-WD ADD --------------------------------------------------------
+    // -- FW3-WE ADD: Command.cpp wave-E declarations ---------------------------
+    // AI(W906-FW3-WE) 20260818: FW-3 Wave E ADD -- 35 golden TfMain:: member
+    // declarations across two golden byte ranges (golden main.h :121-122 /
+    // :499 / :1078-1089 / :1647 for region 1; :1183-1185 / :1459-1460 /
+    // :1519-1522 / :1598-1601 / :1640-1643 / :1646 / :1649-1653 / :1655-1658 /
+    // :1690 / :1704-1705 for region 2) whose bodies are translated in
+    // Command.cpp's new "FW3-WE GROUP" section (golden Command.cpp
+    // :12540-12761 / :14302-15273). Per contract rule 1 every declaration
+    // below is `virtual`; per rule 4 each cites its golden home. Signatures
+    // re-read from the cp950-decoded golden main.h this pass (golden line
+    // numbers cited per member). golden's BCB6 `String sMessage` parameter
+    // (HandlerTCPIPResultSendProcess/HandlerTeraTResultSendProcess) is kept
+    // as `String` verbatim -- vcl_compat.h:340 `typedef vclcompat::AnsiString
+    // String;` (re-exported globally, `VCLCOMPAT_NO_GLOBAL_USING` is never
+    // defined anywhere in this tree, `grep -rn "#define VCLCOMPAT_NO_GLOBAL_
+    // USING" .` -- 0 hits) makes it available unqualified without any new
+    // #include -- forms/fMain.h's existing chain (FormWidgets.h -> vcl_compat.h)
+    // already transitively pulls in vclcompat/ServerSocket.h (vcl_compat.h:240,
+    // which itself includes ClientSocket.h), so `TObject`/`TCustomWinSocket`/
+    // `TErrorEvent` below are likewise already unqualified-visible -- no new
+    // #include was added to this file for this wave. `TMyKitSuck` (used only
+    // as an incomplete pointer parameter type by Get2DID_OrderBySites below)
+    // is forward-declared at FILE scope above the class (see that
+    // declaration's own comment for why it must NOT sit here, inside the
+    // class body).
+    // AI(W906-FW3-WE-integrate) 20260818: `= false` NSDMI added -- golden has
+    // no ctor init because VCL's TObject allocation zero-fills; this port's
+    // plain `new TfMain()` does NOT, so an uninitialized bool here is an
+    // indeterminate read (same NSDMI-everywhere rule every facade member of
+    // this class already follows).
+    bool bHandlerResultConnect = false;            // [DATA] golden main.h:1647
+                                    //   initialiser (VCL zero-init -> false); flipped true/false by the
+                                    //   TCPCommandServer*/TeraTCPResultServer* Connect/Disconnect/Error
+                                    //   handlers below (region 1) -- a plain status bool, not a socket
+                                    //   object member, so adding it does not touch this wave's "don't add
+                                    //   socket members yourself" boundary.
+    virtual void   TCPCommandServerClientConnect(TObject *Sender, TCustomWinSocket *Socket);       // golden main.h:1085 (body Command.cpp:12540-12548)
+    virtual void   TCPCommandServerClientDisconnect(TObject *Sender, TCustomWinSocket *Socket);    // golden main.h:1087 (body Command.cpp:12550-12557)
+    virtual void   TeraTCPResultServerClientConnect(TObject *Sender, TCustomWinSocket *Socket);    // golden main.h:1078 (body Command.cpp:12559-12567)
+    virtual void   TeraTCPResultServerClientDisconnect(TObject *Sender, TCustomWinSocket *Socket); // golden main.h:1080 (body Command.cpp:12569-12577)
+    virtual void   TeraTCPResultServerClientError(TObject *Sender, TCustomWinSocket *Socket, TErrorEvent ErrorEvent, int &ErrorCode); // golden main.h:1082 (body Command.cpp:12579-12608)
+    virtual void   TCPIPCommunicationLog(AnsiString Str);                 // golden main.h:1522 (body Command.cpp:12610-12621)
+    virtual void   HanderTcpIp();                                         // golden main.h:1519 (body Command.cpp:12623-12655)
+    virtual void   HandlerTCPIPResultSendProcess(String sMessage);       // golden main.h:1520 (body Command.cpp:12657-12723)
+    virtual void   HandlerTeraTResultSendProcess(String sMessage);       // golden main.h:1521 (body Command.cpp:12725-12760)
+    virtual int        GetProdModeByDll();                                // golden main.h:1460 (body Command.cpp:14302-14317)
+    virtual int        SetProdModeByDll(int iProdMode);                   // golden main.h:1459 (body Command.cpp:14319-14356)
+    virtual void       WriteREADYNEXTSHOT();                              // golden main.h:1650 (body Command.cpp:14358-14361)
+    virtual AnsiString GetREADYNEXTSHOT();                                // golden main.h:1651 (body Command.cpp:14363-14427)
+    virtual void       WriteNEXT2DID();                                   // golden main.h:1652 (body Command.cpp:14429-14432)
+    virtual AnsiString GetNEXT2DID();                                     // golden main.h:1653 (body Command.cpp:14434-14459)
+    virtual void       Get2DID_OrderBySites(TMyKitSuck *kit, TStringList *sSourceList); // golden main.h:1649 (body Command.cpp:14461-14485)
+    virtual void       SetAICCD();                                        // golden main.h:1640 (body Command.cpp:14487-14532)
+    virtual void       GetAICCD();                                        // golden main.h:1641 (body Command.cpp:14534-14547)
+    virtual bool       IsStackHasLess16Bin(int iStack);                   // golden main.h:1690 (body Command.cpp:14549-14565)
+    virtual void       TransformTcGPIBData(AnsiString asStr);             // golden main.h:1646 (body Command.cpp:14567-14669)
+    virtual void       SetOSBIN();                                        // golden main.h:1642 (body Command.cpp:14671-14683)
+    virtual void       GetOSBIN();                                        // golden main.h:1643 (body Command.cpp:14685-14690)
+    virtual void       GetDUTCHK();                                       // golden main.h:1598 (body Command.cpp:14692-14730)
+    virtual void       GetFFC();                                          // golden main.h:1599 (body Command.cpp:14732-14740)
+    virtual void       GetTJFunction();                                   // golden main.h:1600 (body Command.cpp:14742-14750)
+    virtual void       GetPowerFollowing();                               // golden main.h:1601 (body Command.cpp:14752-14760)
+    virtual void       WriteHeadContactCount();                           // golden main.h:1185 (body Command.cpp:14762-14976)
+    virtual void       WriteSetSetupFile();                               // golden main.h:1183 (body Command.cpp:14979-15034)
+    virtual void       WriteFTPDownSetupFile();                           // golden main.h:1184 (body Command.cpp:15036-15103)
+    virtual void       GetSocketCounter();                                // golden main.h:1704 (body Command.cpp:15105-15150)
+    virtual void       GetTIMCounter();                                   // golden main.h:1705 (body Command.cpp:15152-15212)
+    virtual void       WriteMultiZoneTemp();                              // golden main.h:1655 (body Command.cpp:15214-15236)
+    virtual void       WriteMultiZoneEnable();                            // golden main.h:1656 (body Command.cpp:15238-15249)
+    virtual void       ReadWaterValve();                                  // golden main.h:1657 (body Command.cpp:15251-15261)
+    virtual void       ReadDynamicPID();                                  // golden main.h:1658 (body Command.cpp:15263-15272)
+    // -- end FW3-WE ADD --------------------------------------------------------
     TfMain();
     virtual ~TfMain() {}
 };

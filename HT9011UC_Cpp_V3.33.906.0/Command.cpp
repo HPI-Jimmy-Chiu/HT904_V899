@@ -12894,3 +12894,1680 @@ void TfMain::SetSGCONTFAIL()                                                    
 
 // -- FW3-WD APPEND -- end (SIGURD/GPIB status-string family, golden Command.cpp :9995-12061) --
 
+// AI(W906-FW3-WE) 20260818: additional #include for the FW3-WE GROUP below.
+// `TObject`/`TCustomWinSocket`/`TErrorEvent` (region 1's socket-event
+// signatures) and `String` (the BCB6 AnsiString alias, region 1's
+// send-process parameter type) are ALREADY unqualified-visible through this
+// file's existing `#include "forms/fMain.h"` (top of file): forms/fMain.h
+// includes forms/FormWidgets.h, which includes vclcompat/vcl_compat.h
+// (FormWidgets.h:82), which itself includes vclcompat/ServerSocket.h
+// (vcl_compat.h:240) -- and THAT header includes vclcompat/ClientSocket.h
+// (ServerSocket.h:210), defines TCustomWinSocket/TErrorEvent inside
+// `namespace Scktcomp`, and re-exports them via `using namespace Scktcomp;`
+// (ServerSocket.h:332, guarded `#ifndef VCLCOMPAT_NO_GLOBAL_USING` -- that
+// macro is never `#define`d anywhere in this tree, `grep -rn "#define
+// VCLCOMPAT_NO_GLOBAL_USING" .` -- 0 hits, so the guard is always open).
+// `TObject` itself is re-exported the same way (vcl_compat.h:261 `using
+// vclcompat::TObject;`) and `String` via vcl_compat.h:340 `typedef
+// vclcompat::AnsiString String;`. `fLotInfo` (SetProdModeByDll's ACTIVE
+// `fLotInfo->SetLotStart(__FUNC__);` arm) is NOT already visible -- unlike
+// every FW3-WD `fLotInfo->` touch, which lived inside a GATED `#if 0` block,
+// this is the first ACTIVE `fLotInfo` use in this file, so forms/fLotInfo.h
+// is included below (a leaf header, only pulls in forms/FormWidgets.h,
+// already present).
+#include "forms/fLotInfo.h"           // fLotInfo (TfLotInfo*) -- SetProdModeByDll's ACTIVE SetLotStart() arm
+
+// AI(W906-FW3-WE) 20260818: TU-local no-op shim for golden's
+// LogClientSocketExceptionError(TObject*, AnsiString) (Public/
+// WinSocketErrorCode.cpp:430, a REAL, defined function -- not merely
+// declared). It is not called directly from here: that symbol lives in the
+// ht9045_public library, and ht9045_sm (this file's own library) does not
+// link it (CMakeLists.txt:2139-2150, ht9045_sm PUBLIC links ht9045_io/
+// ht9045_motor/ht9045_globals/vclcompat/ht9045_secsgem/ht9045_forms -- no
+// ht9045_public edge, direct or transitive per WinSocketErrorCode.cpp's own
+// G-PTk4 gate commentary, which documents ht9045_public as a leaf nothing
+// links). Calling it directly would be a NEW link edge, out of this wave's
+// CMakeLists-untouched mandate, and would fail as an undefined reference at
+// link time. Every other consumer in this tree hit the exact same wall and
+// built its OWN minimal-dependency TU-local wrapper rather than add a link
+// edge: EJ1N_LogClientSocketExceptionError (EJ1N/uSocketServerClient.cpp
+// :556), W906Auto_LogClientSocketExceptionError (Automation/automation.cpp
+// :88), Gated_LogClientSocketExceptionError (Interface/TesterTCP_Socket.cpp
+// :117), LogClientSocketExceptionError_ (SECSGEM/uHGemEquipment.cpp:3212).
+// This file's own wrapper follows the same shape -- per contract rule 4
+// ("TU-local `static` no-op shim 可以"), a `static` free function, not a
+// namespace-scope object with dynamic initialisation, so it carries no SIOF
+// risk.
+static void FW3WE_LogClientSocketExceptionError(TObject * /*Sender*/, const AnsiString & /*Context*/)
+{
+    // Offline: no EventLog "Exception" row is written (same best-effort-
+    // diagnostics-only posture the 4 sibling wrappers above already
+    // document -- nothing in TeraTCPResultServerClientError's control flow
+    // below depends on this having a real body).
+}
+
+// =============================================================================
+//  FW3-WE GROUP -- the TCP-command-server family + the ByDLL-tail/GPIB-2DID/
+//                  FixAICCD/ATC-multizone command family
+//
+//  Translation wave: FW-3 Wave E
+//  Translator: AI(W906-FW3-WE) 20260818
+//  Golden source: HT9011UC_Code_V3.33.906.0_20260618/Command.cpp (15,273 lines, cp950)
+//
+//  ROLE
+//  ----
+//  35 golden TfMain:: methods across two golden byte ranges: REGION 1
+//  (:12540-12761, the raw TCustomWinSocket OnConnect/OnDisconnect/OnError/
+//  send-process family behind TCPCommandServer/TeraTCPResultServer) and
+//  REGION 2 (:14302-15273, the tail of Command.cpp: ProdMode-by-DLL,
+//  READYNEXTSHOT/NEXT2DID GPIB 2DID polling, SETAICCD/GETAICCD FixAICCD,
+//  SETOSBIN/GETOSBIN/GETDUTCHK/GETFFC/GetTJFunction/GetPowerFollowing,
+//  head-contact-count reporting, FTP/direct setup-file-change GPIB commands,
+//  socket/TIM counters, and the ATC multi-zone-temp/water-valve/dynamic-PID
+//  tail). golden :12762-14301 (TCPCommandServerClientRead, the overflow-
+//  defect dispatcher) is EXCLUDED per this wave's own never-wave list --
+//  not declared, not translated, no stand-in, no call site anywhere in this
+//  tree. Per the task brief: bodies are translated, NO caller (TCP dispatch
+//  table / event wiring / GPIB dispatch) is wired up -- every one of these 35
+//  methods is presently unreachable from any translated call site, exactly
+//  like FW3-WA/WB/WC/WD before it.
+//
+//  WAVE SCOPE (every golden method, golden line span, ACTIVE or GATED-partial)
+//  ------------------------------------------------------------------------------
+//  REGION 1 (golden :12540-12761, 9 methods):
+//    TCPCommandServerClientConnect       :12540-12548 ACTIVE
+//    TCPCommandServerClientDisconnect    :12550-12557 ACTIVE
+//    TeraTCPResultServerClientConnect    :12559-12567 ACTIVE
+//    TeraTCPResultServerClientDisconnect :12569-12577 ACTIVE
+//    TeraTCPResultServerClientError      :12579-12608 GATED-partial (TeraTCPResultServer, GATE REGISTER 1)
+//    TCPIPCommunicationLog               :12610-12621 GATED-partial (Memo2, GATE REGISTER 2) (1 substitution, S9)
+//    HanderTcpIp                         :12623-12655 GATED-partial (TCPCommandServer/TeraTCPResultServer, GATE REGISTER 3-4) (1 GOLDEN BUG, B7)
+//    HandlerTCPIPResultSendProcess       :12657-12723 GATED-partial (TCPCommandServer, whole body, GATE REGISTER 5)
+//    HandlerTeraTResultSendProcess       :12725-12760 GATED-partial (TeraTCPResultServer, whole body, GATE REGISTER 6)
+//  REGION 2 (golden :14302-15273, 26 methods):
+//    GetProdModeByDll        :14302-14317 ACTIVE
+//    SetProdModeByDll        :14319-14356 GATED-partial (fLotInfo, GATE REGISTER 7-8) (1 substitution, S10)
+//    WriteREADYNEXTSHOT      :14358-14361 ACTIVE
+//    GetREADYNEXTSHOT        :14363-14427 GATED-partial (TMyKitSuck::HasNotTestYet, GATE REGISTER 9)
+//    WriteNEXT2DID           :14429-14432 ACTIVE
+//    GetNEXT2DID             :14434-14459 GATED-partial (TMyKitSuck::HasNotTestYet, GATE REGISTER 10-11)
+//    Get2DID_OrderBySites    :14461-14485 ACTIVE
+//    SetAICCD                :14487-14532 GATED-partial (fFixAICCD / IniData\ write, GATE REGISTER 12-13)
+//    GetAICCD                :14534-14547 ACTIVE
+//    IsStackHasLess16Bin     :14549-14565 ACTIVE
+//    TransformTcGPIBData     :14567-14669 GATED-partial (ATC_InterfaceForm, GATE REGISTER 14)
+//    SetOSBIN                :14671-14683 GATED-partial (fBinSel, GATE REGISTER 15)
+//    GetOSBIN                :14685-14690 ACTIVE
+//    GetDUTCHK               :14692-14730 ACTIVE
+//    GetFFC                  :14732-14740 ACTIVE
+//    GetTJFunction           :14742-14750 ACTIVE
+//    GetPowerFollowing       :14752-14760 ACTIVE
+//    WriteHeadContactCount   :14762-14976 ACTIVE (1 GOLDEN ODDITY, B8)
+//    WriteSetSetupFile       :14979-15034 ACTIVE
+//    WriteFTPDownSetupFile   :15036-15103 GATED-partial (fFTPClient, GATE REGISTER 16)
+//    GetSocketCounter        :15105-15150 ACTIVE
+//    GetTIMCounter           :15152-15212 ACTIVE
+//    WriteMultiZoneTemp      :15214-15236 ACTIVE
+//    WriteMultiZoneEnable    :15238-15249 ACTIVE
+//    ReadWaterValve          :15251-15261 GATED-partial (ATC_InterfaceForm, GATE REGISTER 17)
+//    ReadDynamicPID          :15263-15272 ACTIVE
+//  TOTALS: 35 methods, ~1,194 raw golden lines extracted (region 1: 222
+//  lines / region 2: 972 lines, cp950-clean-extracted line counts); 20
+//  ACTIVE, 15 GATED-partial (2 of which -- HandlerTCPIPResultSendProcess /
+//  HandlerTeraTResultSendProcess -- are gated across their WHOLE body, same
+//  "GATED-partial ... whole body" labelling FW3-WA used for UPHStrings/
+//  IndexCycleTimeStrings).
+//
+//  TYPE-SPELLING NOTE (not a gate, not a substitution -- confirmed compiling
+//  as-is): golden's BCB6 `String sMessage` parameter (HandlerTCPIPResult
+//  SendProcess/HandlerTeraTResultSendProcess) is kept VERBATIM as `String`,
+//  not respelled to `AnsiString` -- vcl_compat.h:340 `typedef vclcompat::
+//  AnsiString String;` is re-exported globally (see the file-scope note
+//  above this banner), so `String` is directly usable with zero new
+//  #include. (An earlier pass of this wave's own recon mis-grepped for
+//  `typedef AnsiString String` and reported 0 hits -- the real spelling is
+//  `typedef vclcompat::AnsiString String;`, which that pattern does not
+//  match. Corrected before writing any code; flagged here per this wave's
+//  own anti-absence-claim-rot instruction, since this actually happened
+//  during this wave's own recon, not a hypothetical.)
+//
+//  STUB COLLISIONS: NONE. Re-verified this pass, 20260818 --
+//  `grep -rn "TfMain::<name>\b" --include=*.cpp .` for all 35 names (run as
+//  two combined-alternation Grep passes, region 1's 9 names and region 2's
+//  26 names) returns ZERO hits anywhere in the tree (forms/fMain.cpp
+//  included) other than THIS file's own new definitions below; a matching
+//  pass over forms/fMain.h finds zero pre-existing DECLARATIONS either. This
+//  wave's task brief flagged this exact risk (Wave D nearly mis-registered
+//  Command.cpp as unregistered in CMakeLists; it has in fact been registered
+//  since FW3-WA, CMakeLists.txt:1852) -- the collision-free result here is a
+//  measurement, not an assumption: no stub retirement is needed for this
+//  wave's 35 names.
+//
+//  SUBSTITUTIONS (continuing from FW3-WD's S1-S8)
+//  ------------------------------------------------------------------------------
+//  (S9)  TCPIPCommunicationLog golden :12614 `Now().FormatString("yyyy/mm/dd")`
+//        -- vclcompat's TDateTime (vclcompat/TDateTime.h) has NO
+//        `.FormatString` member (`grep -rn "FormatString" vclcompat/` -- 0
+//        hits); it has the free function `AnsiString FormatDateTime(const
+//        AnsiString&, const TDateTime&)` instead (same token set, same
+//        semantics -- just a member-call vs. free-function spelling
+//        difference between BCB6's convenience method and vclcompat's
+//        SysUtils-style API). Substituted with `FormatDateTime("yyyy/mm/dd",
+//        Now())` -- identical output.
+//  (S10) SetProdModeByDll golden :14335 `fMain->CheckCanChangeRealDummy()` --
+//        NOT a declared TfMain member anywhere in forms/fMain.h (`grep -rn
+//        "CheckCanChangeRealDummy" forms/fMain.h` -- 0 hits), the SAME
+//        absence FW3-WC's (S4) already established for GetHandlerStatusByDll
+//        (see that GROUP banner, Command.cpp :8307-8313 and the call site at
+//        :9869-9871). Reuses the SAME already-proven-in-this-file
+//        replacement Wave C's S4 used, verbatim call shape:
+//        `ComputeCanChangeRealDummy(MOT[MMPlate1].HasIC(),
+//        MOT[MMPlate2].HasIC(), ShuttleHasIC(), IndexHasIC(),
+//        InArmSuck.HasIC(), OutArmSuck.HasIC())` (MainCalcCore.h's own
+//        documented "Portable replacement for TfMain::
+//        CheckCanChangeRealDummy()"). NOT the alternative zero-arg global
+//        free function `CheckCanChangeRealDummy()` (Automation/auto9045.h
+//        :201, a SEPARATE, also-real stand-in this wave's own recon first
+//        reached for -- corrected before landing, since it would have
+//        needed a brand-new `#include "Automation/auto9045.h"` this file
+//        does not otherwise need, where the MainCalcCore.h route is already
+//        proven compiling in THIS exact file via Wave C's own call).
+//
+//  GOLDEN BUG / ODDITY (recorded, NOT fixed -- continuing from FW3-WD's B1-B6)
+//  ------------------------------------------------------------------------------
+//  (B7) HanderTcpIp golden :12625-12626:
+//           if(TCPCommandServer->Active==true)
+//               TCPCommandServer->Active==false;
+//       The second line is a COMPARISON (`==`), not an assignment (`=`) --
+//       golden's own idle-server-should-be-closed-first guard is a silent
+//       no-op that discards its result. Preserved verbatim inside GATE
+//       REGISTER item 3 below (TCPCommandServer itself is also absent from
+//       this port, so the line is doubly inert here) -- flagged so a future
+//       wave that DOES stand up a real TCPCommandServer member does not
+//       inherit this typo unknowingly.
+//  (B8) WriteHeadContactCount golden :14778-14781 (the :14690-14691 citation
+//       this banner first carried pointed at GetOSBIN's closing brace --
+//       corrected at integration 20260818) (`catch(...) {
+//       asChangeSetupFileName=""; iSelect=-1; }`) reassigns
+//       `asChangeSetupFileName` -- a GLOBAL (cmydef.h:5729) that has nothing
+//       to do with head-contact-count reporting; every sibling GPIB command
+//       in this same file (SetTesterID, WriteSetSetupFile,
+//       WriteFTPDownSetupFile, ...) uses that exact global for the actual
+//       "which setup file did GPIB just send" purpose. Reads as a
+//       copy-paste artefact (this function's catch block was probably
+//       cloned from one of those setup-file functions and the "reset the
+//       parsed command" line was never re-targeted to a
+//       WriteHeadContactCount-local variable). Translated verbatim -- it is
+//       harmless here (nothing in THIS function reads `asChangeSetupFileName`
+//       afterwards) but DOES silently blank out whatever the setup-file-
+//       change functions were tracking if a WriteHeadContactCount parse
+//       exception fires between them and their own next read of it. Not
+//       fixed per contract (behavior change needs a user decision).
+//
+//  GATE REGISTER (17 #if 0 / dropped-term sites; each states WHY the gate is
+//  correct, not just "not found" -- per this wave's own anti-absence-claim-rot
+//  instruction. Every grep below was re-run 20260818, from this tree's root.)
+//  ------------------------------------------------------------------------------
+//   1. TeraTCPResultServerClientError, golden :12602 `TeraTCPResultServer->
+//      Close();` -- `TeraTCPResultServer` (golden main.h:121 `TServerSocket
+//      *TeraTCPResultServer;`) is NOT a member of forms/fMain.h's TfMain
+//      (`grep -rn "TeraTCPResultServer" --include=*.h --include=*.cpp .` --
+//      0 hits anywhere in the port tree other than this wave's own
+//      comments). vclcompat DOES now carry a real TServerSocket
+//      (vclcompat/ServerSocket.h, the FW-WB precedent this wave's brief
+//      pointed at) -- the TYPE exists, the MEMBER does not, and this wave's
+//      contract explicitly forbids adding socket object members on its own
+//      authority ("不要自己加成員"). The `try` body is therefore empty at
+//      runtime; the `catch` (ACTIVE, calls the TU-local shim above) never
+//      fires offline.
+//   2. TCPIPCommunicationLog, golden :12615 `fMain->Memo2->Lines->Add(s);` --
+//      `Memo2` (golden main.h:499 `TMemo *Memo2;`) is NOT a member of
+//      forms/fMain.h's TfMain (`grep -n "Memo2" forms/fMain.h` -- 0 hits).
+//      Real `vclcompat::TMemo` Memo2 members DO exist tree-wide, but only on
+//      OTHER forms' facades (fLotInfo, fOCR, fTemp_Set, fTeach, fBarCode,
+//      fObserver, fRFID -- e.g. OCRInsp.cpp:333/367) -- none of them is
+//      fMain's own TCP-log memo. Everything else in this function
+//      (GetTimeInfo/SystemHour.../the two MyForceDirectories+WriteDataToFile
+//      writes under asTCPIPPath, `D:\HT9045_Log\TCPIP_Log`) stays ACTIVE --
+//      that path is a LOG directory under D:\HT9045_Log, explicitly exempt
+//      from the IniData\/config\/system\ write gate per this wave's own
+//      instructions.
+//   3. HanderTcpIp, golden :12625-12626 (see GOLDEN BUG B7 above) --
+//      `TCPCommandServer` (golden main.h:122 `TServerSocket
+//      *TCPCommandServer;`) absent from forms/fMain.h, same class of absence
+//      as item 1 (`grep -rn "TCPCommandServer" --include=*.h --include=*.cpp
+//      .` -- 0 hits outside this wave's own comments).
+//   4. HanderTcpIp, golden :12635-12646 (the whole `if(CosFunction.
+//      bEnableHandlerResultServer==true){...}` body: both servers' `->Close()
+//      /->Port=.../->Open()` and the two "Server Listen"
+//      TCPIPCommunicationLog lines) -- every statement inside dereferences
+//      `fMain->TCPCommandServer` or `fMain->TeraTCPResultServer` (items
+//      1/3); logging "[nnnn] Server Listen" when no listen ever happened
+//      would be actively misleading, so the whole block -- not just the
+//      member-touching lines -- is gated as one unit.
+//      `iHandlerCommandServerPort=7016;`/`iHandlerResultServerPort=7017;`
+//      (just above, real globals, cmydef.h:4690-4691) and the try/catch
+//      shell (including the ACTIVE catch body) stay outside this gate.
+//   5. HandlerTCPIPResultSendProcess, golden :12657-12723, WHOLE BODY -- its
+//      very first executable line (`int iPort=fMain->TCPCommandServer->
+//      Socket->LocalPort;`) already dereferences the absent member (item 3);
+//      every later line (`iCount`, the `ReSendData:` retry loop, both
+//      `Connections[i]->` reads) is downstream of that same absent
+//      `->Socket`. Same "GATED-partial ... whole body" shape FW3-WA already
+//      used for UPHStrings/IndexCycleTimeStrings (fShowBinSelect/fObserver
+//      absence).
+//   6. HandlerTeraTResultSendProcess, golden :12725-12760, WHOLE BODY -- same
+//      reasoning as item 5, against `fMain->TeraTCPResultServer->Socket`
+//      (item 1).
+//   7. SetProdModeByDll, golden :14339 `fLotInfo->SetLotEnd(__FUNC__);` --
+//      forms/fLotInfo.h declares `SetLotStart(AnsiString,bool=false)` (:48)
+//      but NO `SetLotEnd` (`grep -n "SetLotEnd" forms/fLotInfo.h` -- 0
+//      hits). The sibling `fLotInfo->SetLotStart(__FUNC__);` in this SAME
+//      function's other branch (golden :14352) IS real and stays ACTIVE.
+//   8. SetProdModeByDll, golden :14340 `fLotInfo->edtBarcodeRecipe->Enabled=
+//      false;` -- `edtBarcodeRecipe` is not a member of forms/fLotInfo.h's
+//      TfLotInfo (`grep -n "edtBarcodeRecipe" forms/fLotInfo.h` -- 0 hits).
+//      The `return 0;` immediately following both item-7/item-8 lines stays
+//      ACTIVE (golden's own "Sucess" return is unconditional here regardless
+//      of what SetLotEnd/edtBarcodeRecipe do).
+//   9. GetREADYNEXTSHOT, golden :14384 `FTestSuck.HasNotTestYet()`, :14394
+//      `BTestSuck.HasNotTestYet()`, :14414 `FTestSuck.HasNotTestYet()`, :14415
+//      `BTestSuck.HasNotTestYet()` (4 occurrences, all inside `||` clauses)
+//      -- `HasNotTestYet()` is NOT a member of the TMyKitSuck this file uses
+//      (aHotPlateSubstrate.h:365 -- `grep -n "HasNotTestYet"
+//      aHotPlateSubstrate.h` -- 0 hits); it exists only on the OTHER
+//      same-named-but-different-layout class (mykitsuck.h:404), the
+//      established ODR gotcha (KNOWLEDGE.md). SAME precedent already on
+//      record in THIS tree: aTester_Rear.cpp:9495-9496 gates the identical
+//      golden idiom (`BTestSuck.HasNotTestYet() ||`) under its own GATE G15,
+//      dropping that one OR-term and keeping the rest of the boolean
+//      expression ACTIVE. All 4 occurrences here get the same treatment: the
+//      `HasNotTestYet() ||` term is dropped, the remaining OR-operand
+//      (`FLCarryKit.Item[i][j]!=NULL_IC && ...` / `... FLCarryKit.
+//      HasRealIC()` / `BLCarryKit.HasRealIC()`) stays ACTIVE. golden
+//      :14411-14413's `MOT[MMTrayY].HasIC() || MOT[MMPlate1].HasIC() ||
+//      MOT[MMPlate2].HasIC() ||` sibling OR-terms in the SAME expression are
+//      NOT gated -- MOT[]/MMTrayY/MMPlate1/MMPlate2 are all real
+//      (cmydef.h:2255-2258; Motor/mymotor.h:385 `extern class TTrayMotor
+//      MOT[MAX_TRAY_MOTOR];`; already used ACTIVE in this exact file by
+//      FW3-WC's ComputeCanChangeRealDummy() call site, :9869) -- an earlier
+//      pass of this wave's own recon mis-grepped for `TMyMotor MOT\[` /
+//      `HTMotor \*MOT\[` (the WRONG class name) and wrongly reported them
+//      absent; corrected before landing, flagged here per this wave's own
+//      anti-absence-claim-rot instruction, since -- like the `String` typedef
+//      miss noted in the TYPE-SPELLING NOTE above -- this also actually
+//      happened during this wave's own recon, not a hypothetical. DELTA (the
+//      real, surviving one): a device that is still physically under an
+//      untested test head no longer alone triggers "ready"/"ongoing" -- only
+//      a device already sitting in the carry-kit grid, or one of the three
+//      real MOT[]-tray/plate HasIC() checks, does. Compare
+//      aTester_Front.cpp:9568-9569, which appears to leave the SAME
+//      HasNotTestYet() term un-gated (worth the next wave cross-checking
+//      whether that call site actually compiles against
+//      aHotPlateSubstrate.h's TMyKitSuck or a differently-typed local).
+//  10. GetNEXT2DID, golden :14442-14447, the WHOLE
+//      `if(FTestSuck.HasNotTestYet()) Get2DID_OrderBySites(&FTestSuck,...);
+//       else Get2DID_OrderBySites(&FLCarryKit,...);` selector -- same
+//      HasNotTestYet() absence as item 9, but here the predicate is the
+//      ENTIRE if-condition (not one term of a multi-term `||`), so there is
+//      no "drop the term, keep the rest" move available the way item 9 had.
+//      Rather than silently hardcoding a guess at which of the two kits
+//      golden would have picked (a real behavior decision, not a mechanical
+//      gate), BOTH calls are gated together. `tNEXTBarCodeList` therefore
+//      keeps its initial all-"0" fill (golden :14436-14439, ACTIVE,
+//      unchanged) for the sht1 branch -- a defined, honest "no 2DID data"
+//      output rather than an invented one.
+//  11. GetNEXT2DID, golden :14449-14454, the sht2-branch mirror of item 10
+//      (`BTestSuck.HasNotTestYet()` selecting BTestSuck vs. BLCarryKit) --
+//      same reasoning.
+//  12. SetAICCD, golden :14513-14518 (`fFixAICCD->chkEnableFix2AICCD->
+//      Checked=...` through `->edtOutArmCycleInsp->Text=...`, 6 lines) --
+//      forms/fFixAICCD.h's TfFixAICCD carries exactly two methods
+//      (OutArmCycleCounterUpdate(), bCheckUnloaderHasAiNG(int)) and NO
+//      widget members (`grep -n "chkEnableFix2AICCD\|rgResultShowType\|
+//      edtlFix2AICCDStartDelay\|edtlFix2AICCDExposureTimeOut\|
+//      edtInspectResultThres\|edtOutArmCycleInsp" forms/fFixAICCD.h` -- 0
+//      hits). The REAL data this mirrors -- `TestIF_File.bEnableFix2BGAAICCD`
+//      / `.iResultShowType` / `.iFix2BGAAICCDStartDelay` / `.
+//      iFix2BGAAICCDExposureTimeOut` / `.iFix2BGAAICCDAutoRetry` / `.
+//      dInspectResultThres` / `.iFix2BGAAICCDGetResultTimeOut` / `.
+//      iFix2BGAAICCDOutArmCycleInsp` (all confirmed real fields, cprod.h
+//      :2297-2308, part of the SYSTEM_TEST_IF struct backing both `TestIF`
+//      and `TestIF_File`) -- is set by the ACTIVE lines directly above this
+//      gate and IS what GetAICCD (below) reads back; only the on-screen
+//      mirror is missing, same "form absent, real data present" shape as
+//      FW3-WD's SetSGCONTFAIL (fYieldMonitoring, GATE REGISTER 22-23).
+//  13. SetAICCD, golden :14520-14525 (`WriteIniData(szDir, "Configuration",
+//      "Fix2 AI ...", ...)`, 6 calls) -- `szDir` is built as `DataPath +
+//      GetLastOpenFN() + "\HandlerCondition.Data"`, and `DataPath`
+//      (common.cpp:104) is `D:\HT9045\IniData\Data\` -- squarely the
+//      IniData\ shared machine-config write surface this wave's
+//      instructions name as gate scope (same treatment FW3-WD gave every
+//      `WriteIniData(szDir,...)` / `WriteIniData(sPath,...)` call in
+//      SetSGCONTFAIL/SetSGFTP/SetBINCOUNT).
+//  14. TransformTcGPIBData, golden :14666 `ATC_InterfaceForm->SetOffset(
+//      iATC_Use_Heat_Count, dbATC_Offset);` -- `ATC_InterfaceForm` is
+//      acarry_shims.h:109's `TATC_InterfaceFormShim`, which carries ONLY
+//      `iATC_MODE_TYPE` (no `SetOffset`). This is not a fresh finding: this
+//      EXACT golden call (csystem.cpp:22363, the DoBoostFunctionStepCooling
+//      offset push) is ALREADY gated in this tree under GATE H3-5
+//      (csystem.cpp:28997-29016, `#if 0 ... ATC_InterfaceForm->SetOffset(
+//      iATC_Use_Heat_Count, dbATC_Offset); ... #endif // GATE H3-5`) with
+//      the identical two-argument call shape. Every other line of this
+//      function (the whole per-arm/per-site `dbATC_Offset[]` computation,
+//      the `dGPIBATCOffset[]` global writes, the >136/<20 out-of-range
+//      `ret++` counting, `bGPIBOffsetCommand=true;`) is real computation
+//      over real globals and stays ACTIVE -- same "computed then thrown
+//      away" shape GATE H3-5's own commentary already documents for its
+//      call site.
+//  15. SetOSBIN, golden :14678-14681, the WHOLE `if(fBinSel->SetOSBin(...))
+//      asRet="OK"; else asRet="NG";` -- `fBinSel` "has NO facade anywhere"
+//      (established citation already on record at forms/fShowBinSelect.h
+//      :202, `grep -rn "fBinSel" --include=*.h .`, re-run 20260818: still
+//      only that one comment mentions the name, 0 real declarations).
+//      Substituted with golden's OWN failure-path text, `asRet="NG";` -- not
+//      an invented value, the exact string golden's own `else` arm already
+//      produces.
+//  16. WriteFTPDownSetupFile, golden :15071-15074 (`fFTPClient->
+//      bControlByGPIB=true;` through `bControlByGPIB=false;`, 4 lines) --
+//      `fFTPClient` has no port anywhere in this tree, the SAME absence
+//      FW3-WD's SetSetupFileName/ChangeSetupFileName/SetSGFTP already
+//      recorded (GATE REGISTER items 9/10/16-18 in that wave's OWN banner --
+//      a different numbering space than this wave's). DELTA: because
+//      `ShowFTPModal` never runs, `fMain->iHasChangeFile` keeps whatever
+//      value it last held instead of being set by a real download outcome --
+//      the `if(fMain->iHasChangeFile==1){...}else{...}` branch right after
+//      this gate (ACTIVE, unchanged) will therefore almost always fall into
+//      the `else`/"SETNG" arm offline. This is an inherent, honest
+//      consequence of the absent facade, not something this wave papers
+//      over.
+//  17. ReadWaterValve, golden :15254 `ATC_InterfaceForm->ReadTCWaterValue();`
+//      -- same shim limitation as item 14 (acarry_shims.h:109, only
+//      `iATC_MODE_TYPE`). `asReadTCWater[]` (cmydef.h:5783, real global) is
+//      read immediately after by the ACTIVE loop that builds `asStr` -- it
+//      will simply hold whatever value it last held rather than a freshly-
+//      read one, same shape as item 4/16's "real array, absent refresh call"
+//      pattern.
+// =============================================================================
+void TfMain::TCPCommandServerClientConnect(TObject *Sender,
+      TCustomWinSocket *Socket)
+{
+    bHandlerResultConnect=true;
+    //Sam 20230417 : Log 新增 SocketHandle 資料
+    AnsiString s="";
+    s.sprintf("[%4d][%4d] Client Connect",Socket->SocketHandle, Socket->LocalPort);
+    TCPIPCommunicationLog(s);
+}
+//---------------------------------------------------------------------------
+void TfMain::TCPCommandServerClientDisconnect(TObject *Sender,
+      TCustomWinSocket *Socket)
+{
+    //Sam 20230417 : Log 新增 SocketHandle 資料
+    AnsiString s="";
+    s.sprintf("[%4d][%4d] Client Disconnect",Socket->SocketHandle, Socket->LocalPort);
+    TCPIPCommunicationLog(s);
+}
+//---------------------------------------------------------------------------
+void TfMain::TeraTCPResultServerClientConnect(TObject *Sender,
+      TCustomWinSocket *Socket)
+{
+    bHandlerResultConnect=true;
+    //Sam 20230417 : Log 新增 SocketHandle 資料
+    AnsiString s="";
+    s.sprintf("[%4d][%4d] Client Connect",Socket->SocketHandle, Socket->LocalPort);
+    TCPIPCommunicationLog(s);
+}
+//---------------------------------------------------------------------------
+void TfMain::TeraTCPResultServerClientDisconnect(
+      TObject *Sender, TCustomWinSocket *Socket)
+{
+    bHandlerResultConnect=false;
+    //Sam 20230417 : Log 新增 SocketHandle 資料
+    AnsiString s="";
+    s.sprintf("[%4d][%4d] Client Disconnect",Socket->SocketHandle, Socket->LocalPort);
+    TCPIPCommunicationLog(s);
+}
+//---------------------------------------------------------------------------
+void TfMain::TeraTCPResultServerClientError(TObject *Sender,
+      TCustomWinSocket *Socket, TErrorEvent ErrorEvent, int &ErrorCode)
+{
+    bHandlerResultConnect=false;
+    if(ErrorCode==10053)                                                        // 網路線拔除
+    {
+        ErrorCode=0;
+        TCPIPCommunicationLog("Connect fail : 網路線拔除!");
+    }
+    else if(ErrorCode==10061)                                                   //連線失敗
+    {
+        ErrorCode=0;
+        TCPIPCommunicationLog("Connect fail : 連線失敗!");
+    }
+    else
+    {
+        TCPIPCommunicationLog("Connect fail :" + AnsiString(ErrorCode));
+        ErrorCode=0;
+    }
+    //TCPCommandServer->Close();
+
+    try
+    {
+        // GATE(FW3-WE) golden :12602 -- see GATE REGISTER item 1 above.
+#if 0
+        TeraTCPResultServer->Close();
+#endif
+    }
+    catch(...)
+    {
+        FW3WE_LogClientSocketExceptionError(Sender, "TeraTCPResultServerClient Error");
+    }
+}
+//---------------------------------------------------------------------------
+void TfMain::TCPIPCommunicationLog(AnsiString Str)
+{
+    AnsiString Path, s="";
+    GetTimeInfo();
+    // AI(W906-FW3-WE) 20260818: substitution (S9) -- see FW3-WE GROUP banner
+    // above. golden: Now().FormatString("yyyy/mm/dd").
+    s.sprintf("%s %02d:%02d:%02d.%03d %s",FormatDateTime("yyyy/mm/dd", Now()), SystemHour, SystemMin, SystemSec, SystemMSec,Str);   //Sam 20230420 : 時間紀錄到小數點
+    // GATE(FW3-WE) golden :12615 -- see GATE REGISTER item 2 above.
+#if 0
+    fMain->Memo2->Lines->Add(s);
+#endif
+
+    Path.sprintf("%s\\%04d_%02d_%02d", asTCPIPPath, SystemYear, SystemMonth, SystemDate);
+    MyForceDirectories(Path);
+    Path.sprintf("%s\\%04d_%02d_%02d\\%04d_%02d_%02d_%02d.txt", asTCPIPPath, SystemYear, SystemMonth, SystemDate, SystemYear, SystemMonth, SystemDate , SystemHour);
+    WriteDataToFile(Path.c_str(), s);
+}
+//---------------------------------------------------------------------------
+void TfMain::HanderTcpIp()
+{
+    // GATE(FW3-WE) golden :12625-12626 -- see GATE REGISTER item 3 above.
+    // GOLDEN BUG (B7): golden's own second line is `TCPCommandServer->
+    // Active==false;` (comparison, not assignment) -- see the banner's B7
+    // citation. Preserved verbatim.
+#if 0
+    if(TCPCommandServer->Active==true)
+        TCPCommandServer->Active==false;
+#endif
+
+    AnsiString s="";
+    iHandlerCommandServerPort=7016;
+    iHandlerResultServerPort=7017;
+    try
+    {
+        if(CosFunction.bEnableHandlerResultServer==true)
+        {
+            // GATE(FW3-WE) golden :12635-12646 -- see GATE REGISTER item 4
+            // above.
+#if 0
+            fMain->TCPCommandServer->Close();
+            fMain->TCPCommandServer->Port=iHandlerCommandServerPort;
+            fMain->TCPCommandServer->Open();
+            //Sam 20230417 : Log 新增 SocketHandle 資料
+            s.sprintf("[%4d] Server Listen",iHandlerCommandServerPort);
+            TCPIPCommunicationLog(s);
+            fMain->TeraTCPResultServer->Close();
+            fMain->TeraTCPResultServer->Port=iHandlerResultServerPort;
+            fMain->TeraTCPResultServer->Open();
+            //Sam 20230417 : Log 新增 SocketHandle 資料
+            s.sprintf("[%4d] Server Listen",iHandlerResultServerPort);
+            TCPIPCommunicationLog(s);
+#endif
+        }
+    }
+    catch(...)
+    {
+        MyDBIProcess("Exception", "TfMain::HanderTcpIp");
+        ShowMyMessage("Socket Server Open Error!!");
+        TCPIPCommunicationLog("Socket Server Open Error!!");
+    }
+}
+//---------------------------------------------------------------------------
+void TfMain::HandlerTCPIPResultSendProcess(String sMessage)
+{
+    // GATE(FW3-WE) golden :12657-12723 -- see GATE REGISTER item 5 above
+    // (WHOLE BODY -- every line is downstream of the absent
+    // fMain->TCPCommandServer->Socket).
+#if 0
+    int iHandle=0,iErr=0,iHandleSendDone[100];
+    int iPort=fMain->TCPCommandServer->Socket->LocalPort;
+    AnsiString s="";
+    char cBuffer[500];          //Sam 20201021 : for contact count 資料需要再加長 100//Sam 20191120 Fix Issue
+    AnsiString Path;
+    strcpy(cBuffer, sMessage.c_str());
+    bool bNeedSend=false;
+    ZeroMemory(iHandleSendDone, sizeof(iHandleSendDone));
+
+    ReSendData:
+    int iCount=fMain->TCPCommandServer->Socket->ActiveConnections;
+    if(iCount>=1)   //Sam 20230417 : Log 新增 SocketHandle 資料
+    {
+        for(int i=0; i<iCount; i++)
+        {
+            try
+            {
+                iHandle=fMain->TCPCommandServer->Socket->Connections[i]->SocketHandle;  //Sam 20230417 : Log 新增 SocketHandle 資料
+
+                bNeedSend=true;      //Sam 20230509 : 送指令時發生例外事件需要重新送指令
+                for(int j=0;j<100;j++)
+                {
+                    if(iHandleSendDone[j]==iHandle)
+                    {
+                        bNeedSend=false;//有傳送過的 Handle 就不要再送了
+                        break;
+                    }
+                }
+
+                if(bNeedSend)
+                {
+                    s.sprintf("[%4d][%4d][ #Send#     ] %s",iHandle, iPort, sMessage);
+                    TCPIPCommunicationLog(s);
+                    fMain->TCPCommandServer->Socket->Connections[i]->SendBuf(cBuffer, sMessage.Length());
+
+                    for(int j=0;j<100;j++)   //Sam 20230509 : 送指令時發生例外事件需要重新送指令
+                    {
+                        if(iHandleSendDone[j]==0)
+                        {
+                            iHandleSendDone[j]=iHandle;//紀錄傳送過的 Handle
+                            break;
+                        }
+                    }
+                }
+            }
+            catch(...)
+            {
+                MyDBIProcess("Exception", "TfMain::HandlerTCPIPResultSendProcess");
+                s.sprintf("[%4d][%4d][ #Exception#] %s",iHandle, iPort, sMessage);
+                TCPIPCommunicationLog(s);
+
+                iErr++;     //Sam 20230509 : 送指令時發生例外事件需要重新送指令
+                if(iErr<3)
+                    goto ReSendData;
+                else
+                    ShowMyMessage("Handler Result Server Socket Error!!");
+            }
+        }
+    }
+    else    //Sam 20230417 : Log 新增 SocketHandle 資料
+    {
+        s.sprintf("[%04d][%4d][ #SendFail# ] %s",iHandle, iPort, sMessage);
+        TCPIPCommunicationLog(s);
+    }
+#endif
+}
+//---------------------------------------------------------------------------
+void TfMain::HandlerTeraTResultSendProcess(String sMessage)
+{
+    // GATE(FW3-WE) golden :12725-12760 -- see GATE REGISTER item 6 above
+    // (WHOLE BODY -- every line is downstream of the absent
+    // fMain->TeraTCPResultServer->Socket).
+#if 0
+    int iHandle=0;
+    int iPort=fMain->TeraTCPResultServer->Socket->LocalPort;
+    AnsiString s="";
+    char cBuffer[500];          //Sam 20201021 : for contact count 資料需要再加長 100//Sam 20191120 Fix Issue
+    AnsiString Path;
+    strcpy(cBuffer, sMessage.c_str());
+
+    int iCount=fMain->TeraTCPResultServer->Socket->ActiveConnections;
+    if(iCount>=1)   //Sam 20230417 : Log 新增 SocketHandle 資料
+    {
+        for(int i=0; i<iCount; i++)
+        {
+            try
+            {
+                iHandle=fMain->TeraTCPResultServer->Socket->Connections[i]->SocketHandle;  //Sam 20230417 : Log 新增 SocketHandle 資料
+                s.sprintf("[%4d][%4d][ #Send#     ] %s",iHandle, iPort, sMessage);
+                TCPIPCommunicationLog(s);
+                fMain->TeraTCPResultServer->Socket->Connections[i]->SendBuf(cBuffer, sMessage.Length());
+            }
+            catch(...)
+            {
+                MyDBIProcess("Exception", "TfMain::HandlerTeraTResultSendProcess");
+                ShowMyMessage("Handler Result Server Socket Error!!");
+                s.sprintf("[%4d][%4d][ #Exception#] %s",iHandle, iPort, sMessage);
+                TCPIPCommunicationLog(s);
+            }
+        }
+    }
+    else    //Sam 20230417 : Log 新增 SocketHandle 資料
+    {
+        s.sprintf("[%04d][%4d][ #SendFail# ] %s",iHandle, iPort, sMessage);
+        TCPIPCommunicationLog(s);
+    }
+#endif
+}
+//---------------------------------------------------------------------------
+int TfMain::GetProdModeByDll()                                                  //JerryYang 20220311 : ATP鎖定Critical parameter
+{
+    if(InitialOK==false)
+    {
+         return -4;                                                             //Operation not Allowed
+    }
+
+    if(RunInfo.bLotStart)                                                       //Lot start=Production mode
+    {
+        return 0;
+    }
+    else
+    {
+        return 1;
+    }
+}
+//---------------------------------------------------------------------------
+int TfMain::SetProdModeByDll(int iProdMode)                                     //bProdMode=true  : enable production(block edit mode)  //JerryYang 20220311 : ATP鎖定Critical parameter
+{                                                                               //bProdMode=false : disable production (allow edit)
+    AnsiString Msg="";
+    if(InitialOK==false)
+    {
+         return -4;                                                             //Operation not Allowed
+    }
+
+    if(iProdMode==0)                                                            //Allow edit
+    {
+        if(RunInfo.bLotStart==false)
+        {
+            return 0;                                                           //Sucess
+        }
+        else
+        {
+            // AI(W906-FW3-WE) 20260818: substitution (S10) -- see FW3-WE
+            // GROUP banner above. golden: fMain->CheckCanChangeRealDummy().
+            if(ComputeCanChangeRealDummy(MOT[MMPlate1].HasIC(), MOT[MMPlate2].HasIC(),
+                                          ShuttleHasIC(), IndexHasIC(),
+                                          InArmSuck.HasIC(), OutArmSuck.HasIC())==false ||
+               HasICUnderMachine())
+            {
+                return -1;                                                      //fail
+            }
+            // GATE(FW3-WE) golden :14339 -- see GATE REGISTER item 7 above.
+#if 0
+            fLotInfo->SetLotEnd(__FUNC__);
+#endif
+            // GATE(FW3-WE) golden :14340 -- see GATE REGISTER item 8 above.
+#if 0
+            fLotInfo->edtBarcodeRecipe->Enabled=false;                          //==> Eastsun 20260527 整合#027-2.MR.M1 SECS LotEnd lock BarcodeRecipe :KYEC
+#endif
+            return 0;                                                           //Sucess
+        }
+    }
+    else                                                                        //Block edit
+    {
+        if(RunInfo.bLotStart)
+        {
+            return 0;                                                           //Sucess
+        }
+        else
+        {
+            fLotInfo->SetLotStart(__FUNC__);
+            return 0;                                                           //Sucess
+        }
+    }
+}
+//---------------------------------------------------------------------------
+void TfMain::WriteREADYNEXTSHOT()                                               //Jimmychiu 20231011 : #[SCK_HT9046LS] Request for GPIB command adding for next 2DID information
+{
+    SendMSG_CMD(MSG_CMD_READYNEXTSHOT, GetREADYNEXTSHOT());
+}
+//---------------------------------------------------------------------------
+AnsiString TfMain::GetREADYNEXTSHOT()                                           //Jimmychiu 20231011 : #[SCK_HT9046LS] Request for GPIB command adding for next 2DID information
+{
+    AnsiString asDeviceInf="";
+    AnsiString asSendData="";
+    int iHasCode=0;
+
+    if(IndexStatus==Z1Up_Z2Down)                                                //sht1 barcode scan
+    {
+        iHasCode=-1;
+    }
+    else if(IndexStatus==Z1Down_Z2Up)
+    {
+        iHasCode=-2;
+    }
+
+    for(int i=0; i<TestSocket.iShtRow; i++)                                     //Steven 20231024 : not support NN mode
+    {
+        for(int j=0; j<TestSocket.iShtCol; j++)
+        {
+            if(IndexStatus==Z1Up_Z2Down)                                        //sht1 barcode scan
+            {
+                // GATE(FW3-WE) golden :14384 -- see GATE REGISTER item 9
+                // above (FTestSuck.HasNotTestYet() || dropped).
+                if((FLCarryKit.Item[i][j]!=NULL_IC &&
+                    FLCarryKit.Item[i][j]!=HAS_NULL_IC &&
+                    FLCarryKit.cDeviceInf[i][j]!=""))
+                {
+                    iHasCode=1;
+                }
+            }
+            else if(IndexStatus==Z1Down_Z2Up)
+            {
+                // GATE(FW3-WE) golden :14394 -- see GATE REGISTER item 9
+                // above (BTestSuck.HasNotTestYet() || dropped).
+                if((BLCarryKit.Item[i][j]!=NULL_IC &&
+                    BLCarryKit.Item[i][j]!=HAS_NULL_IC &&
+                    BLCarryKit.cDeviceInf[i][j]!=""))
+                {
+                    iHasCode=1;
+                }
+            }
+        }
+    }
+
+    if(iHasCode==1)
+    {
+        asSendData="1";                                                         //1 =>  ready
+    }
+    else
+    {
+        // GATE(FW3-WE) golden :14414-14415 -- see GATE REGISTER item 9 above
+        // (FTestSuck.HasNotTestYet() || / BTestSuck.HasNotTestYet() || each
+        // dropped from their own clause). MOT[MMTrayY/MMPlate1/MMPlate2]
+        // .HasIC() (golden :14411-14413) is NOT gated -- MOT[]/MMTrayY/
+        // MMPlate1/MMPlate2 are all real (cmydef.h:2255-2258, Motor/mymotor.h
+        // :385 `extern class TTrayMotor MOT[MAX_TRAY_MOTOR];`, already used
+        // ACTIVE in this exact file by FW3-WC's ComputeCanChangeRealDummy()
+        // call, :9869) -- kept ACTIVE, verbatim.
+        if(MOT[MMTrayY].HasIC() ||
+           MOT[MMPlate1].HasIC() ||
+           MOT[MMPlate2].HasIC() ||
+           (iHasCode==-1 && (FLCarryKit.HasRealIC())) ||
+           (iHasCode==-2 && (BLCarryKit.HasRealIC())))
+        {
+            asSendData="2";                                                     //2 => Ongoing to read next 2DID
+        }
+        else
+        {
+            asSendData="0";
+        }
+    }
+
+    asSendData="READYNEXTSHOT:"+asSendData;
+    return asSendData;
+}
+//---------------------------------------------------------------------------
+void TfMain::WriteNEXT2DID()                                                    //Jimmychiu 20231011 : #[SCK_HT9046LS] Request for GPIB command adding for next 2DID information
+{
+    SendMSG_CMD(MSG_CMD_NEXT2DID, GetNEXT2DID());
+}
+//---------------------------------------------------------------------------
+AnsiString TfMain::GetNEXT2DID()                                                //Jimmychiu 20231011 : #[SCK_HT9046LS] Request for GPIB command adding for next 2DID information
+{
+    TStringList *tNEXTBarCodeList=new TStringList;
+    for(int i=0; i<MAX_SOCKET_TOTAL; i++)
+    {
+        tNEXTBarCodeList->Add("0");
+    }
+
+    if(IndexStatus==Z1Up_Z2Down)                                                //sht1 barcode scan
+    {
+        // GATE(FW3-WE) golden :14442-14447 -- see GATE REGISTER item 10
+        // above (whole FTestSuck.HasNotTestYet() selector).
+#if 0
+        if(FTestSuck.HasNotTestYet())
+            Get2DID_OrderBySites(&FTestSuck, tNEXTBarCodeList);
+        else
+            Get2DID_OrderBySites(&FLCarryKit, tNEXTBarCodeList);
+#endif
+    }
+    else                                                                        //sht2 barcode scan
+    {
+        // GATE(FW3-WE) golden :14449-14454 -- see GATE REGISTER item 11
+        // above (whole BTestSuck.HasNotTestYet() selector).
+#if 0
+        if(BTestSuck.HasNotTestYet())
+            Get2DID_OrderBySites(&BTestSuck, tNEXTBarCodeList);
+        else
+            Get2DID_OrderBySites(&BLCarryKit, tNEXTBarCodeList);
+#endif
+    }
+    AnsiString t="NEXT2DID:"+tNEXTBarCodeList->CommaText;
+    delete tNEXTBarCodeList;
+    return t;
+}
+//---------------------------------------------------------------------------
+void TfMain::Get2DID_OrderBySites(TMyKitSuck *kit, TStringList *sSourceList)    //Jimmychiu 20231011 : #[SCK_HT9046LS] Request for GPIB command adding for next 2DID information
+{
+    if((BAR_CODE_INSTALL!=ebctUninstall && TestIF.bEnableBarCode) ||
+       (INSTALL_OCR!=eocrUninstal && TestIF.bOcrFunction))                      //Ifor 20210407 add: 自製OCR
+    {
+    }
+    else
+    {
+        return;
+    }
+    int iSiteNo=0;
+    for(int i=0; i<TestSocket.iShtRow; i++)                                     //Steven 20231024 : need to add for NN mode
+    {
+        for(int j=0; j<TestSocket.iShtCol; j++)
+        {
+            iSiteNo=TestIF.iSiteMap[i][j]-1;
+            if(iSiteNo>=0 &&
+               kit->Item[i][j]!=NULL_IC &&
+               kit->Item[i][j]!=HAS_NULL_IC)
+            {
+                sSourceList->Strings[MAX_SOCKET_TOTAL-1-iSiteNo]=kit->cDeviceInf[i][j];
+            }
+        }
+    }
+}
+//---------------------------------------------------------------------------
+void TfMain::SetAICCD()                                                         //Sam 20231108 : Add GPIB SETAICCD_
+{
+    TStringList *tFixAOICmd=new TStringList();
+    AnsiString asRet="OK", asCmd="", szDir="",str1="";
+    char str[256];
+
+    szDir.sprintf("%s%s\\HandlerCondition.Data", DataPath, GetLastOpenFN());
+    strncpy(str, HGpib2Handler->cReturn, sizeof(str));
+    asCmd=AnsiString(str).Trim();
+    str1=StringReplace(asCmd,"_", ",", TReplaceFlags()<<rfReplaceAll);
+
+    tFixAOICmd->CommaText=str1;
+
+    if(tFixAOICmd->Count==8)                                                    //Sam 20240826 : FixAOI 指令修改
+    {
+        //1_1_1000_15000_0.5_150 共六組參數
+        //bEnableFix2BGAAICCD
+        TestIF_File.bEnableFix2BGAAICCD             =(tFixAOICmd->Strings[0]=="1")?true:false;
+        TestIF_File.iResultShowType                 =atoi(tFixAOICmd->GetString(1).c_str());      //Sam 20240325 : 新增 DamageTrayMapping 功能
+        TestIF_File.iFix2BGAAICCDStartDelay         =atoi(tFixAOICmd->GetString(2).c_str());
+        TestIF_File.iFix2BGAAICCDExposureTimeOut    =atoi(tFixAOICmd->GetString(3).c_str());
+        TestIF_File.iFix2BGAAICCDAutoRetry          =atoi(tFixAOICmd->GetString(4).c_str());      //Sam 20240826 : FixAOI 指令修改
+        TestIF_File.dInspectResultThres             =atof(tFixAOICmd->GetString(5).c_str());
+        TestIF_File.iFix2BGAAICCDGetResultTimeOut   =atoi(tFixAOICmd->GetString(6).c_str());
+        TestIF_File.iFix2BGAAICCDOutArmCycleInsp    =atoi(tFixAOICmd->GetString(7).c_str());
+
+        // GATE(FW3-WE) golden :14513-14518 -- see GATE REGISTER item 12
+        // above.
+#if 0
+        fFixAICCD->chkEnableFix2AICCD->Checked          =TestIF_File.bEnableFix2BGAAICCD;
+        fFixAICCD->rgResultShowType->ItemIndex          =TestIF_File.iResultShowType;   //Sam 20240325 : 新增 DamageTrayMapping 功能
+        fFixAICCD->edtlFix2AICCDStartDelay->Text        =IntToStr(TestIF_File.iFix2BGAAICCDStartDelay);
+        fFixAICCD->edtlFix2AICCDExposureTimeOut->Text   =IntToStr(TestIF_File.iFix2BGAAICCDExposureTimeOut);
+        fFixAICCD->edtInspectResultThres->Text          =FloatToStr(TestIF_File.dInspectResultThres);
+        fFixAICCD->edtOutArmCycleInsp->Text             =IntToStr(TestIF_File.iFix2BGAAICCDOutArmCycleInsp);
+#endif
+
+        // GATE(FW3-WE) golden :14520-14525 -- see GATE REGISTER item 13
+        // above (IniData\ shared config write).
+#if 0
+        WriteIniData(szDir, "Configuration", "Fix2 AI CCD Enable",                  TestIF_File.bEnableFix2BGAAICCD);
+        WriteIniData(szDir, "Configuration", "Fix2 AI iResultShowType",             TestIF_File.iResultShowType);   //Sam 20240325 : 新增 DamageTrayMapping 功能
+        WriteIniData(szDir, "Configuration", "Fix2 AI CCD Start Delay",             TestIF_File.iFix2BGAAICCDStartDelay);
+        WriteIniData(szDir, "Configuration", "Fix2 AI CCD Exposure Time Out",       TestIF_File.iFix2BGAAICCDExposureTimeOut);
+        WriteIniData(szDir, "Configuration", "Fix2 AI InspectResultThres",          TestIF_File.dInspectResultThres);
+        WriteIniData(szDir, "Configuration", "Fix2 AI OutArmCycleInsp",             TestIF_File.iFix2BGAAICCDOutArmCycleInsp);
+#endif
+    }
+    else
+    {
+        asRet="NG";
+    }
+    SendMSG_CMD(MSG_CMD_SETAICCD, asRet);
+}
+//---------------------------------------------------------------------------
+void TfMain::GetAICCD()                                                         //Sam 20240826 : Add GPIB GETAICCD?
+{
+    AnsiString asRet="";
+    asRet.sprintf("AICCD_%s_%d_%d_%d_%d_%2.2f_%d_%d",
+                  (TestIF_File.bEnableFix2BGAAICCD)?"1":"0",
+                   TestIF_File.iResultShowType,
+                   TestIF_File.iFix2BGAAICCDStartDelay,
+                   TestIF_File.iFix2BGAAICCDExposureTimeOut,
+                   TestIF_File.iFix2BGAAICCDAutoRetry,
+                   TestIF_File.dInspectResultThres,
+                   TestIF_File.iFix2BGAAICCDGetResultTimeOut,
+                   TestIF_File.iFix2BGAAICCDOutArmCycleInsp);
+    SendMSG_CMD(MSG_CMD_GETAICCD, asRet);
+}
+//---------------------------------------------------------------------------
+bool TfMain::IsStackHasLess16Bin(int iStack)                                    //JerryYang 20231218 : 檢查該Unloader是否有設定bin別  //JerryYang 20250505 : 只檢查16 bin以下
+{
+    int iBinCntMax=17;
+    for(int i=1; i<iBinCntMax; i++)                                             //從Bin1開始, 比照Epson所定義的格式
+    {
+        if(BinSelect[iTestRunMode].iCatDataT3Pos[i]==iStack+1)
+        {
+            return true;
+        }
+    }
+
+    if(BinSelect[iTestRunMode].IfErrorT3==iStack)                               //比照EPSON的指令, Bin0當作是Error bin
+    {
+        return true;
+    }
+    return false;
+}
+//---------------------------------------------------------------------------
+void TfMain::TransformTcGPIBData(AnsiString asStr)
+{
+    double dbATC_Offset[ATC_HEAD_COUNT];
+    int ret=0;
+    ZeroMemory(dbATC_Offset, sizeof(dbATC_Offset));
+    AnsiString str;
+    TStringList *IsLine=new TStringList();
+    int Num=asStr.Pos("_");
+    asStr.Delete(1, Num);
+    str=StringReplace(asStr,"_", ",", TReplaceFlags()<<rfReplaceAll);
+    IsLine->CommaText=str;
+
+    bool bUse1by2Hear=false;
+    int iRow=TestSocket.iShtRow;
+    int iCol=TestSocket.iShtCol;
+
+    if((TestIF_File.iTestMode==_12Site2X6   ||
+        TestIF_File.iTestMode==_16Site2X8   ||
+        TestIF_File.iTestMode==_32Site4X8N) &&
+        TestIF_File.bUse32Heater==false)
+    {
+        iCol=TestSocket.iShtCol/2;
+        bUse1by2Hear=true;
+    }
+    else if(TestIF_File.iTestMode==QualSite2X2N ||
+            TestIF_File.iTestMode==_6Site2X3N   ||
+            TestIF_File.iTestMode==_8Site2X4N)
+    {
+        iRow=TestSocket.iShtRow/2;
+    }
+
+    for(int i=0; i<TestSocket.iShtRow; i++)
+    {
+        for(int j=0; j<iCol; j++)
+        {
+            //          Arm1                    Arm2
+            //00 01 02 03 04 05 06 07   16 17 18 19 20 21 22 23
+            //08 09 10 11 12 13 14 15   24 25 26 27 28 29 30 31
+            if(iRow==1)
+            {                                                                   //20160523 irow = 1 Site Mapping 方向  由左至右資料讀取
+                dbATC_Offset[j]=Temperature.dATCTempOffset[j];                                          //Ifor 20160523 Arm1 陣列起始位置00
+                dbATC_Offset[j+(iATC_Use_Heat_Count/2)]=Temperature.dATCTempOffset[j+16];               //Ifor 20160523 Arm2 陣列起始位置16
+            }
+            else
+            {
+                if(bUse1by2Hear==true)
+                {
+                    dbATC_Offset[j*2+i]=Temperature.dATCTempOffset[j*2+(i*8)];                                //Ifor 20160523 Arm1 陣列起始位置00 +下排起始位置間距8  (00+8=08)
+                    dbATC_Offset[j*2+i+(iATC_Use_Heat_Count/2)]=Temperature.dATCTempOffset[(j*2+16)+(i*8)];   //Ifor 20160523 Arm2 陣列起始位置16 +下排起始位置間距8  (16+8=24)
+                }
+                else
+                {                                                               //Ifor 20160523 irow = 2 Site Mapping 方向 由上至下 由下往上 位置之資料讀取
+                    dbATC_Offset[j*2+i]=Temperature.dATCTempOffset[j+(i*8)];                                //Ifor 20160523 Arm1 陣列起始位置00 +下排起始位置間距8  (00+8=08)
+                    dbATC_Offset[j*2+i+(iATC_Use_Heat_Count/2)]=Temperature.dATCTempOffset[(j+16)+(i*8)];   //Ifor 20160523 Arm2 陣列起始位置16 +下排起始位置間距8  (16+8=24)
+                }
+            }
+        }
+    }
+
+    for(int i=0; i<(iATC_Use_Heat_Count/2); i++)
+    {
+        if(IndexStatus==Z1Down_Z2Up || iGPIBIndexStatus==Z1Down_Z2Up)
+        {
+            dGPIBATCOffset[i]=atof(IsLine->GetString(i).c_str());
+            dbATC_Offset[i]+=atof(IsLine->GetString(i).c_str());
+            if(Temperature.fWorkTemperBase+dbATC_Offset[i]>136 ||
+               Temperature.fWorkTemperBase+dbATC_Offset[i]<20)
+                ret++;
+        }
+        else if(IndexStatus==Z1Up_Z2Down || iGPIBIndexStatus==Z1Up_Z2Down)
+        {
+            dGPIBATCOffset[i+iATC_Use_Heat_Count/2]=atof(IsLine->GetString(i).c_str());
+            dbATC_Offset[i+iATC_Use_Heat_Count/2]+=atof(IsLine->GetString(i).c_str());
+            if(Temperature.fWorkTemperBase+dbATC_Offset[i+iATC_Use_Heat_Count/2]>136 ||
+               Temperature.fWorkTemperBase+dbATC_Offset[i+iATC_Use_Heat_Count/2]<20)
+                ret++;
+        }
+        else if(IndexStatus==Z1_Z2_Down || iGPIBIndexStatus==Z1_Z2_Down)
+        {
+            if(i<iRow*iCol)
+            {
+                dGPIBATCOffset[i]=atof(IsLine->GetString(i).c_str());
+                dbATC_Offset[i]+=atof(IsLine->GetString(i).c_str());
+                if(Temperature.fWorkTemperBase+dbATC_Offset[i]>136 ||
+                   Temperature.fWorkTemperBase+dbATC_Offset[i]<20)
+                    ret++;
+
+                dGPIBATCOffset[i+iATC_Use_Heat_Count/2]=atof(IsLine->GetString(i).c_str());
+                dbATC_Offset[i+iATC_Use_Heat_Count/2]+=atof(IsLine->GetString(i+(iRow*iCol)).c_str());
+                if(Temperature.fWorkTemperBase+dbATC_Offset[i+iATC_Use_Heat_Count/2]>136 ||
+                   Temperature.fWorkTemperBase+dbATC_Offset[i+iATC_Use_Heat_Count/2]<20)
+                    ret++;
+            }
+        }
+    }
+
+    if(ret==0)
+    {
+        bGPIBOffsetCommand=true;
+        // GATE(FW3-WE) golden :14666 -- see GATE REGISTER item 14 above
+        // (established precedent GATE H3-5, csystem.cpp:29014).
+#if 0
+        ATC_InterfaceForm->SetOffset(iATC_Use_Heat_Count, dbATC_Offset);        //TransformTcGPIBData, not using
+#endif
+    }
+    delete IsLine;                                                              //Steven 20160912 : Add delete for save memory
+}
+//---------------------------------------------------------------------------
+void TfMain::SetOSBIN()                                                         //Sam 20250115 : Add GPIB SETOSBIN_
+{
+    AnsiString asRet="", asCmd="", szDir="";
+    char str[256];
+    strncpy(str, HGpib2Handler->cReturn, sizeof(str));
+    asCmd=AnsiString(str).Trim();
+
+    // GATE(FW3-WE) golden :14678-14681 -- see GATE REGISTER item 15 above.
+    // Substituted with golden's own failure-path text.
+#if 0
+    if(fBinSel->SetOSBin(atoi(asCmd.c_str())))
+        asRet="OK";
+    else
+        asRet="NG";
+#else
+    asRet="NG";
+#endif
+    SendMSG_CMD(MSG_CMD_SETOSBIN, asRet);
+}
+//---------------------------------------------------------------------------
+void TfMain::GetOSBIN()                                                         //Sam 20250115 : Add GPIB GETOSBIN?
+{
+    AnsiString asRet="";
+    asRet.sprintf("OSBIN_%d", TestIF_File.iOpenBin);
+    SendMSG_CMD(MSG_CMD_GETOSBIN, asRet);
+}
+//---------------------------------------------------------------------------
+void TfMain::GetDUTCHK()                                                        //Steven 20250701 : for DOOSAN TESNA
+{
+    AnsiString asRet="";
+    asRet+=AnsiString((TestIF_File.iSiteMap[0][0]<10)?TestIF_File.iSiteMap[0][0]:TestIF_File.iSiteMap[0][0]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[1][0]<10)?TestIF_File.iSiteMap[1][0]:TestIF_File.iSiteMap[1][0]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[0][1]<10)?TestIF_File.iSiteMap[0][1]:TestIF_File.iSiteMap[0][1]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[1][1]<10)?TestIF_File.iSiteMap[1][1]:TestIF_File.iSiteMap[1][1]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[0][2]<10)?TestIF_File.iSiteMap[0][2]:TestIF_File.iSiteMap[0][2]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[1][2]<10)?TestIF_File.iSiteMap[1][2]:TestIF_File.iSiteMap[1][2]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[0][3]<10)?TestIF_File.iSiteMap[0][3]:TestIF_File.iSiteMap[0][3]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[1][3]<10)?TestIF_File.iSiteMap[1][3]:TestIF_File.iSiteMap[1][3]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[0][4]<10)?TestIF_File.iSiteMap[0][4]:TestIF_File.iSiteMap[0][4]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[1][4]<10)?TestIF_File.iSiteMap[1][4]:TestIF_File.iSiteMap[1][4]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[0][5]<10)?TestIF_File.iSiteMap[0][5]:TestIF_File.iSiteMap[0][5]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[1][5]<10)?TestIF_File.iSiteMap[1][5]:TestIF_File.iSiteMap[1][5]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[0][6]<10)?TestIF_File.iSiteMap[0][6]:TestIF_File.iSiteMap[0][6]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[1][6]<10)?TestIF_File.iSiteMap[1][6]:TestIF_File.iSiteMap[1][6]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[0][7]<10)?TestIF_File.iSiteMap[0][7]:TestIF_File.iSiteMap[0][7]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[1][7]<10)?TestIF_File.iSiteMap[1][7]:TestIF_File.iSiteMap[1][7]+'A');
+
+    asRet+=AnsiString((TestIF_File.iSiteMap[2][0]<10)?TestIF_File.iSiteMap[2][0]:TestIF_File.iSiteMap[2][0]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[3][0]<10)?TestIF_File.iSiteMap[3][0]:TestIF_File.iSiteMap[3][0]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[2][1]<10)?TestIF_File.iSiteMap[2][1]:TestIF_File.iSiteMap[2][1]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[3][1]<10)?TestIF_File.iSiteMap[3][1]:TestIF_File.iSiteMap[3][1]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[2][2]<10)?TestIF_File.iSiteMap[2][2]:TestIF_File.iSiteMap[2][2]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[3][2]<10)?TestIF_File.iSiteMap[3][2]:TestIF_File.iSiteMap[3][2]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[2][3]<10)?TestIF_File.iSiteMap[2][3]:TestIF_File.iSiteMap[2][3]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[3][3]<10)?TestIF_File.iSiteMap[3][3]:TestIF_File.iSiteMap[3][3]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[2][4]<10)?TestIF_File.iSiteMap[2][4]:TestIF_File.iSiteMap[2][4]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[3][4]<10)?TestIF_File.iSiteMap[3][4]:TestIF_File.iSiteMap[3][4]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[2][5]<10)?TestIF_File.iSiteMap[2][5]:TestIF_File.iSiteMap[2][5]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[3][5]<10)?TestIF_File.iSiteMap[3][5]:TestIF_File.iSiteMap[3][5]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[2][6]<10)?TestIF_File.iSiteMap[2][6]:TestIF_File.iSiteMap[2][6]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[3][6]<10)?TestIF_File.iSiteMap[3][6]:TestIF_File.iSiteMap[3][6]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[2][7]<10)?TestIF_File.iSiteMap[2][7]:TestIF_File.iSiteMap[2][7]+'A');
+    asRet+=AnsiString((TestIF_File.iSiteMap[3][7]<10)?TestIF_File.iSiteMap[3][7]:TestIF_File.iSiteMap[3][7]+'A');
+
+    SendMSG_CMD(MSG_CMD_DUTCHK, asRet);
+}
+//---------------------------------------------------------------------------
+void TfMain::GetFFC()                                                           //Steven 20250701 : for Ampere
+{
+    AnsiString asRet="";
+    if(Temperature.bATC_FFCEnable==true)
+        asRet.sprintf("GetFFC 1");
+    else
+        asRet.sprintf("GetFFC 0");
+    SendMSG_CMD(MSG_CMD_GetFFC, asRet);
+}
+//---------------------------------------------------------------------------
+void TfMain::GetTJFunction()
+{
+    AnsiString asRet="";
+    if(Temperature.bEnableTJFunction==true)
+        asRet.sprintf("GetTJFunction 1");
+    else
+        asRet.sprintf("GetTJFunction 0");
+    SendMSG_CMD(MSG_CMD_GetTJFunction, asRet);
+}
+//---------------------------------------------------------------------------
+void TfMain::GetPowerFollowing()
+{
+    AnsiString asRet="";
+    if(Temperature.bPowerFollower_Enable==true)
+        asRet.sprintf("GetPowerFollowing 1");
+    else
+        asRet.sprintf("GetPowerFollowing 0");
+    SendMSG_CMD(MSG_CMD_GetPowerFollowing, asRet);
+}
+//---------------------------------------------------------------------------
+void TfMain::WriteHeadContactCount()                                 //Ifor 20240510 add:Report Head Contact Count
+{
+    AnsiString t="";
+    AnsiString asCmd="";
+    int iSelect=-1;
+
+    char str[256];
+
+    try
+    {
+        strncpy(str, HGpib2Handler->cReturn, sizeof(str));
+        asCmd=AnsiString(str).Trim();
+
+        iSelect=atoi(asCmd.c_str())-1;
+    }
+    catch(...)
+    {
+        // GOLDEN ODDITY (B8) -- see FW3-WE GROUP banner above for the full
+        // citation. Preserved verbatim (harmless here, cross-purpose
+        // global).
+        asChangeSetupFileName="";
+        iSelect=-1;
+    }
+
+    if(iSelect<0 || iSelect>=3)
+    {
+        t.sprintf("Out_Of_Scope\r");
+    }
+    else
+    {
+        if(TestIF_File.iTestMode==DualSite)
+        {
+            t.sprintf("Arm1_%d_%d_Arm2_%d_%d_\r",
+                                        IniConfig.HeadContactCount[iSelect][0][0],
+                                        IniConfig.HeadContactCount[iSelect][0][2],
+                                        IniConfig.HeadContactCount[iSelect][1][0],
+                                        IniConfig.HeadContactCount[iSelect][1][2]);
+        }
+        else if(TestIF_File.iTestMode==DualSite2x1)
+        {
+            t.sprintf("Arm1_%d_%d_Arm2_%d_%d_\r",
+                                        IniConfig.HeadContactCount[iSelect][0][0],
+                                        IniConfig.HeadContactCount[iSelect][0][1],
+                                        IniConfig.HeadContactCount[iSelect][1][0],
+                                        IniConfig.HeadContactCount[iSelect][1][1]);
+        }
+        else if(TestIF_File.iTestMode==QualSite1X4 || TestIF_File.iTestMode==_8Site1X4)
+        {
+            t.sprintf("Arm1_%d_%d_%d_%d_Arm2_%d_%d_%d_%d_\r",
+                                        IniConfig.HeadContactCount[iSelect][0][0],
+                                        IniConfig.HeadContactCount[iSelect][0][2],
+                                        IniConfig.HeadContactCount[iSelect][0][4],
+                                        IniConfig.HeadContactCount[iSelect][0][6],
+                                        IniConfig.HeadContactCount[iSelect][1][0],
+                                        IniConfig.HeadContactCount[iSelect][1][2],
+                                        IniConfig.HeadContactCount[iSelect][1][4],
+                                        IniConfig.HeadContactCount[iSelect][1][6]);
+        }
+        else if(TestIF_File.iTestMode==SingleSite)
+        {
+            t.sprintf("Arm1_%d_Arm2_%d_\r",
+                                        IniConfig.HeadContactCount[iSelect][0][0],
+                                        IniConfig.HeadContactCount[iSelect][1][0]);
+        }
+        else if(TestIF_File.iTestMode==QualSite2X2 || TestIF_File.iTestMode==QualSite2X2N)
+        {
+            t.sprintf("Arm1_%d_%d_%d_%d_Arm2_%d_%d_%d_%d_\r",
+                                        IniConfig.HeadContactCount[iSelect][0][0],
+                                        IniConfig.HeadContactCount[iSelect][0][1],
+                                        IniConfig.HeadContactCount[iSelect][0][2],
+                                        IniConfig.HeadContactCount[iSelect][0][3],
+                                        IniConfig.HeadContactCount[iSelect][1][0],
+                                        IniConfig.HeadContactCount[iSelect][1][1],
+                                        IniConfig.HeadContactCount[iSelect][1][2],
+                                        IniConfig.HeadContactCount[iSelect][1][3]);
+        }
+        else if(TestIF_File.iTestMode==_6Site2X3)
+        {
+            t.sprintf("Arm1_%d_%d_%d_%d_%d_%d_Arm2_%d_%d_%d_%d_%d_%d_\r",
+                                        IniConfig.HeadContactCount[iSelect][0][0],
+                                        IniConfig.HeadContactCount[iSelect][0][1],
+                                        IniConfig.HeadContactCount[iSelect][0][2],
+                                        IniConfig.HeadContactCount[iSelect][0][3],
+                                        IniConfig.HeadContactCount[iSelect][0][4],
+                                        IniConfig.HeadContactCount[iSelect][0][5],
+                                        IniConfig.HeadContactCount[iSelect][1][0],
+                                        IniConfig.HeadContactCount[iSelect][1][1],
+                                        IniConfig.HeadContactCount[iSelect][1][2],
+                                        IniConfig.HeadContactCount[iSelect][1][3],
+                                        IniConfig.HeadContactCount[iSelect][1][4],
+                                        IniConfig.HeadContactCount[iSelect][1][5]);
+        }
+        else if(TestIF_File.iTestMode==TriSite1X3)
+        {
+            t.sprintf("Arm1_%d_%d_%d_Arm2_%d_%d_%d_\r",
+                                        IniConfig.HeadContactCount[iSelect][0][0],
+                                        IniConfig.HeadContactCount[iSelect][0][2],
+                                        IniConfig.HeadContactCount[iSelect][0][4],
+                                        IniConfig.HeadContactCount[iSelect][1][0],
+                                        IniConfig.HeadContactCount[iSelect][1][2],
+                                        IniConfig.HeadContactCount[iSelect][1][4]);
+        }
+        else if(TestIF_File.iTestMode==_8Site2X4)
+        {
+            t.sprintf("Arm1_%d_%d_%d_%d_%d_%d_%d_%d_Arm2_%d_%d_%d_%d_%d_%d_%d_%d_\r",
+                                        IniConfig.HeadContactCount[iSelect][0][0],
+                                        IniConfig.HeadContactCount[iSelect][0][1],
+                                        IniConfig.HeadContactCount[iSelect][0][2],
+                                        IniConfig.HeadContactCount[iSelect][0][3],
+                                        IniConfig.HeadContactCount[iSelect][0][4],
+                                        IniConfig.HeadContactCount[iSelect][0][5],
+                                        IniConfig.HeadContactCount[iSelect][0][6],
+                                        IniConfig.HeadContactCount[iSelect][0][7],
+                                        IniConfig.HeadContactCount[iSelect][1][0],
+                                        IniConfig.HeadContactCount[iSelect][1][1],
+                                        IniConfig.HeadContactCount[iSelect][1][2],
+                                        IniConfig.HeadContactCount[iSelect][1][3],
+                                        IniConfig.HeadContactCount[iSelect][1][4],
+                                        IniConfig.HeadContactCount[iSelect][1][5],
+                                        IniConfig.HeadContactCount[iSelect][1][6],
+                                        IniConfig.HeadContactCount[iSelect][1][7]);
+        }
+        else if(TestIF_File.iTestMode==_16Site2X8)
+        {
+            t.sprintf("Arm1_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_Arm2_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_\r",
+                                        IniConfig.HeadContactCount[iSelect][0][0],
+                                        IniConfig.HeadContactCount[iSelect][0][1],
+                                        IniConfig.HeadContactCount[iSelect][0][2],
+                                        IniConfig.HeadContactCount[iSelect][0][3],
+                                        IniConfig.HeadContactCount[iSelect][0][4],
+                                        IniConfig.HeadContactCount[iSelect][0][5],
+                                        IniConfig.HeadContactCount[iSelect][0][6],
+                                        IniConfig.HeadContactCount[iSelect][0][7],
+                                        IniConfig.HeadContactCount[iSelect][0][8],
+                                        IniConfig.HeadContactCount[iSelect][0][9],
+                                        IniConfig.HeadContactCount[iSelect][0][10],
+                                        IniConfig.HeadContactCount[iSelect][0][11],
+                                        IniConfig.HeadContactCount[iSelect][0][12],
+                                        IniConfig.HeadContactCount[iSelect][0][13],
+                                        IniConfig.HeadContactCount[iSelect][0][14],
+                                        IniConfig.HeadContactCount[iSelect][0][15],
+                                        IniConfig.HeadContactCount[iSelect][1][0],
+                                        IniConfig.HeadContactCount[iSelect][1][1],
+                                        IniConfig.HeadContactCount[iSelect][1][2],
+                                        IniConfig.HeadContactCount[iSelect][1][3],
+                                        IniConfig.HeadContactCount[iSelect][1][4],
+                                        IniConfig.HeadContactCount[iSelect][1][5],
+                                        IniConfig.HeadContactCount[iSelect][1][6],
+                                        IniConfig.HeadContactCount[iSelect][1][7],
+                                        IniConfig.HeadContactCount[iSelect][1][8],
+                                        IniConfig.HeadContactCount[iSelect][1][9],
+                                        IniConfig.HeadContactCount[iSelect][1][10],
+                                        IniConfig.HeadContactCount[iSelect][1][11],
+                                        IniConfig.HeadContactCount[iSelect][1][12],
+                                        IniConfig.HeadContactCount[iSelect][1][13],
+                                        IniConfig.HeadContactCount[iSelect][1][14],
+                                        IniConfig.HeadContactCount[iSelect][1][15]);
+        }
+        else if(TestIF_File.iTestMode==_12Site2X6)
+        {
+            t.sprintf("Arm1_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_Arm2_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_\r",
+                                        IniConfig.HeadContactCount[iSelect][0][0],
+                                        IniConfig.HeadContactCount[iSelect][0][1],
+                                        IniConfig.HeadContactCount[iSelect][0][2],
+                                        IniConfig.HeadContactCount[iSelect][0][3],
+                                        IniConfig.HeadContactCount[iSelect][0][4],
+                                        IniConfig.HeadContactCount[iSelect][0][5],
+                                        IniConfig.HeadContactCount[iSelect][0][6],
+                                        IniConfig.HeadContactCount[iSelect][0][7],
+                                        IniConfig.HeadContactCount[iSelect][0][8],
+                                        IniConfig.HeadContactCount[iSelect][0][9],
+                                        IniConfig.HeadContactCount[iSelect][0][10],
+                                        IniConfig.HeadContactCount[iSelect][0][11],
+                                        IniConfig.HeadContactCount[iSelect][1][0],
+                                        IniConfig.HeadContactCount[iSelect][1][1],
+                                        IniConfig.HeadContactCount[iSelect][1][2],
+                                        IniConfig.HeadContactCount[iSelect][1][3],
+                                        IniConfig.HeadContactCount[iSelect][1][4],
+                                        IniConfig.HeadContactCount[iSelect][1][5],
+                                        IniConfig.HeadContactCount[iSelect][1][6],
+                                        IniConfig.HeadContactCount[iSelect][1][7],
+                                        IniConfig.HeadContactCount[iSelect][1][8],
+                                        IniConfig.HeadContactCount[iSelect][1][9],
+                                        IniConfig.HeadContactCount[iSelect][1][10],
+                                        IniConfig.HeadContactCount[iSelect][1][11]);
+        }
+        else if(TestIF_File.iTestMode==_10Site2X5)
+        {
+            t.sprintf("Arm1_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_Arm2_%d_%d_%d_%d_%d_%d_%d_%d_%d_%d_\r",
+                                        IniConfig.HeadContactCount[iSelect][0][0],
+                                        IniConfig.HeadContactCount[iSelect][0][1],
+                                        IniConfig.HeadContactCount[iSelect][0][2],
+                                        IniConfig.HeadContactCount[iSelect][0][3],
+                                        IniConfig.HeadContactCount[iSelect][0][4],
+                                        IniConfig.HeadContactCount[iSelect][0][5],
+                                        IniConfig.HeadContactCount[iSelect][0][6],
+                                        IniConfig.HeadContactCount[iSelect][0][7],
+                                        IniConfig.HeadContactCount[iSelect][0][8],
+                                        IniConfig.HeadContactCount[iSelect][0][9],
+                                        IniConfig.HeadContactCount[iSelect][1][0],
+                                        IniConfig.HeadContactCount[iSelect][1][1],
+                                        IniConfig.HeadContactCount[iSelect][1][2],
+                                        IniConfig.HeadContactCount[iSelect][1][3],
+                                        IniConfig.HeadContactCount[iSelect][1][4],
+                                        IniConfig.HeadContactCount[iSelect][1][5],
+                                        IniConfig.HeadContactCount[iSelect][1][6],
+                                        IniConfig.HeadContactCount[iSelect][1][7],
+                                        IniConfig.HeadContactCount[iSelect][1][8],
+                                        IniConfig.HeadContactCount[iSelect][1][9]);
+        }
+        else
+        {
+            t.sprintf("UNKNOWN\r");
+        }
+    }
+
+    SendMSG_CMD(MSG_CMD_GetContactCount, t);
+}
+
+//---------------------------------------------------------------------------
+void TfMain::WriteSetSetupFile()         //Ifor 20231101 add:FTP Function
+{
+    AnsiString t="";
+    AnsiString asRawSetupFileName="";
+    bool bMachineHasIC=false;
+    bool bDownloadFail=false;
+
+    try         //kevin 20180320 add 避免資料轉換異常
+    {
+        asChangeSetupFileName=HGpib2Handler->cReturn;
+    }
+    catch(...)
+    {
+        asChangeSetupFileName="";
+    }
+
+    if(HasICUnderMachine() || HasAnyICInMachine())
+        bMachineHasIC=true;
+
+    if(IniConfig.bEnableFTP==true || bMachineHasIC==true)
+    {
+        t.sprintf("SETNG_%s", asChangeSetupFileName);
+    }
+    else
+    {
+        if(asChangeSetupFileName=="")
+        {
+            t.sprintf("SETNG_%s", asChangeSetupFileName);
+        }
+        else
+        {
+            fMain->iHasChangeFile=9;
+            asRawSetupFileName=fMain->cbSetupFileName->Text;
+            asChangeSetupFileName=StringReplace(asChangeSetupFileName, "\r", "", TReplaceFlags()<<rfReplaceAll); //Steven 20160512 : 2D log排版
+            asChangeSetupFileName=StringReplace(asChangeSetupFileName, "\n", "", TReplaceFlags()<<rfReplaceAll);
+            fMain->cbSetupFileName->Text=asChangeSetupFileName;
+            fMain->cbSetupFileNameChange(fMain);
+
+            if(fMain->iHasChangeFile==1)
+            {
+                t.sprintf("SETOK_%s", fMain->cbSetupFileName->Text);
+            }
+            else
+            {
+                t.sprintf("SETNG_%s", asRawSetupFileName);
+                bDownloadFail=true;
+            }
+        }
+    }
+    fMain->iHasChangeFile=0;
+    SendMSG_CMD(MSG_CMD_SetupFileChange, t);
+    if(bDownloadFail)
+    {
+        iChangeFileHasErr=2;
+    }
+}
+//---------------------------------------------------------------------------
+void TfMain::WriteFTPDownSetupFile()         //Ifor 20231101 add:FTP Function
+{
+    AnsiString t="";
+    AnsiString asRawSetupFileName="";
+    bool bMachineHasIC=false;
+    bool bDownloadFail=false;
+
+    try         //kevin 20180320 add 避免資料轉換異常
+    {
+        asChangeSetupFileName=HGpib2Handler->cReturn;
+    }
+    catch(...)
+    {
+        asChangeSetupFileName="";
+    }
+
+    if(HasICUnderMachine() || HasAnyICInMachine())
+        bMachineHasIC=true;
+
+    if(IniConfig.bEnableFTP==false || bMachineHasIC==true)
+    {
+        t.sprintf("SETNG_%s", asChangeSetupFileName);
+    }
+    else
+    {
+        if(asChangeSetupFileName == "")
+        {
+            t.sprintf("SETNG_%s", asChangeSetupFileName);
+        }
+        else
+        {
+            asRawSetupFileName=fMain->cbSetupFileName->Text;
+            asChangeSetupFileName=StringReplace(asChangeSetupFileName, "\r", "", TReplaceFlags()<<rfReplaceAll); //Steven 20160512 : 2D log排版
+            asChangeSetupFileName=StringReplace(asChangeSetupFileName, "\n", "", TReplaceFlags()<<rfReplaceAll);
+
+            // GATE(FW3-WE) golden :15071-15074 -- see GATE REGISTER item 16
+            // above.
+#if 0
+            fFTPClient->bControlByGPIB=true;
+            fFTPClient->asSetUpNameByGPIB=asChangeSetupFileName;
+            fFTPClient->ShowFTPModal(0);
+            fFTPClient->bControlByGPIB=false;
+#endif
+
+            if(fMain->iHasChangeFile==1)
+            {
+                t.sprintf("SETOK_%s", fMain->cbSetupFileName->Text);
+            }
+            else
+            {
+                t.sprintf("SETNG_%s", asRawSetupFileName);
+                bDownloadFail=true;
+            }
+        }
+    }
+    fMain->iHasChangeFile=0;
+    SendMSG_CMD(MSG_CMD_FTPDownLoad, t);
+
+    if(bDownloadFail)
+    {
+        iChangeFileHasErr=1;
+//        if(fNote->fShow)      //Ifor 20240314 Mark GPIB 通訊會卡住 報警拉到外面處理
+//        {
+//            iChangeFileHasErr=1;
+//        }
+//        else
+//        {
+//            iChangeFileHasErr=0;
+//            ShowErrorMessage("WAR1684", K_SKIP, MMSystem, 0, asChangeSetupFileName);     //下載 %s.zip 失敗
+//        }
+    }
+}
+//---------------------------------------------------------------------------
+void TfMain::GetSocketCounter()
+{
+    AnsiString asRet,asCmd;
+
+    if(TestIF_File.iTestMode==DualSite2x1)
+    {
+        asRet.sprintf("%d,%d",LastSet.iSocketContactCount[0][0],LastSet.iSocketContactCount[1][0]);
+    }
+    else if(TestIF_File.iTestMode==QualSite2X2 || TestIF_File.iTestMode==QualSite2X2N)
+    {
+        asRet.sprintf("%d,%d,%d,%d",LastSet.iSocketContactCount[0][0],LastSet.iSocketContactCount[0][1],LastSet.iSocketContactCount[1][0],LastSet.iSocketContactCount[1][1]);
+    }
+    else if(TestIF_File.iTestMode==_6Site2X3)
+    {
+        asRet.sprintf("%d,%d,%d,%d,%d,%d",LastSet.iSocketContactCount[0][0],LastSet.iSocketContactCount[0][1],LastSet.iSocketContactCount[0][2],LastSet.iSocketContactCount[1][0],LastSet.iSocketContactCount[1][1],LastSet.iSocketContactCount[1][2]);
+    }
+    else if(TestIF_File.iTestMode==_8Site2X4)
+    {
+        asRet.sprintf("%d,%d,%d,%d,%d,%d,%d,%d",LastSet.iSocketContactCount[0][0],LastSet.iSocketContactCount[0][1],LastSet.iSocketContactCount[0][2],LastSet.iSocketContactCount[0][3],LastSet.iSocketContactCount[1][0],LastSet.iSocketContactCount[1][1],LastSet.iSocketContactCount[1][2],LastSet.iSocketContactCount[1][3]);
+    }
+    else
+    {
+        if(TestIF_File.iTestMode==SingleSite)
+        {
+            asRet.sprintf("%d",LastSet.iSocketContactCount[0][0]);
+        }
+        else if(TestIF_File.iTestMode==DualSite)
+        {
+            asRet.sprintf("%d,%d",LastSet.iSocketContactCount[0][0],LastSet.iSocketContactCount[0][1]);
+        }
+        else if(TestIF_File.iTestMode==TriSite1X3)
+        {
+            asRet.sprintf("%d,%d,%d",LastSet.iSocketContactCount[0][0],LastSet.iSocketContactCount[0][1],LastSet.iSocketContactCount[0][2]);
+        }
+        else if(TestIF_File.iTestMode==QualSite1X4)
+        {
+            asRet.sprintf("%d,%d,%d,%d",LastSet.iSocketContactCount[0][0],LastSet.iSocketContactCount[0][1],LastSet.iSocketContactCount[0][2],LastSet.iSocketContactCount[0][3]);
+        }
+        else
+        {
+            asRet.sprintf("NG");
+        }
+    }
+
+    SendMSG_CMD(MSG_CMD_GetSocketCounter, asRet);
+}
+//---------------------------------------------------------------------------
+void TfMain::GetTIMCounter()
+{
+    AnsiString asRet,asCmd;
+    int iCh=0;
+    char str[256];
+
+    strncpy(str, HGpib2Handler->cReturn, sizeof(str));
+    asCmd=AnsiString(str).Trim();
+//    iCh=atoi(asCmd);
+    iCh=asCmd.ToIntDef(-1)-1;
+
+    if(asCmd!="" && iCh!=-1)
+    {
+        asRet.sprintf("OK");
+        if(TestIF_File.iTestMode==DualSite2x1)
+        {
+            asRet.sprintf("%d,%d",IniConfig.HeadContactCount[0][iCh][0],IniConfig.HeadContactCount[0][iCh][1]);
+        }
+        else if(TestIF_File.iTestMode==QualSite2X2)
+        {
+            asRet.sprintf("%d,%d,%d,%d",IniConfig.HeadContactCount[0][iCh][0],IniConfig.HeadContactCount[0][iCh][2],IniConfig.HeadContactCount[0][iCh][1],IniConfig.HeadContactCount[0][iCh][3]);
+        }
+        else if(TestIF_File.iTestMode==QualSite2X2N)
+        {
+            asRet.sprintf("%d,%d,%d,%d",IniConfig.HeadContactCount[0][0][0],IniConfig.HeadContactCount[0][0][2],IniConfig.HeadContactCount[0][1][0],IniConfig.HeadContactCount[0][1][2]);   //待驗證
+        }
+        else if(TestIF_File.iTestMode==_6Site2X3)
+        {
+            asRet.sprintf("%d,%d,%d,%d,%d,%d",IniConfig.HeadContactCount[0][iCh][0],IniConfig.HeadContactCount[0][iCh][2],IniConfig.HeadContactCount[0][iCh][4],IniConfig.HeadContactCount[0][iCh][1],IniConfig.HeadContactCount[0][iCh][3],IniConfig.HeadContactCount[0][iCh][5]);
+        }
+        else if(TestIF_File.iTestMode==_8Site2X4)
+        {
+            asRet.sprintf("%d,%d,%d,%d,%d,%d,%d,%d",IniConfig.HeadContactCount[0][iCh][0],IniConfig.HeadContactCount[0][iCh][2],IniConfig.HeadContactCount[0][iCh][4],IniConfig.HeadContactCount[0][iCh][6],IniConfig.HeadContactCount[0][iCh][1],IniConfig.HeadContactCount[0][iCh][3],IniConfig.HeadContactCount[0][iCh][5],IniConfig.HeadContactCount[0][iCh][7]);
+        }
+        else
+        {
+            if(TestIF_File.iTestMode==SingleSite)
+            {
+                asRet.sprintf("%d",IniConfig.HeadContactCount[0][iCh][0]);
+            }
+            else if(TestIF_File.iTestMode==DualSite)
+            {
+                asRet.sprintf("%d,%d",IniConfig.HeadContactCount[0][iCh][0],IniConfig.HeadContactCount[0][iCh][2]);
+            }
+            else if(TestIF_File.iTestMode==TriSite1X3)
+            {
+                asRet.sprintf("%d,%d,%d",IniConfig.HeadContactCount[0][iCh][0],IniConfig.HeadContactCount[0][iCh][2],IniConfig.HeadContactCount[0][iCh][4]);
+            }
+            else if(TestIF_File.iTestMode==QualSite1X4)
+            {
+                asRet.sprintf("%d,%d,%d,%d",IniConfig.HeadContactCount[0][iCh][0],IniConfig.HeadContactCount[0][iCh][2],IniConfig.HeadContactCount[0][iCh][4],IniConfig.HeadContactCount[0][iCh][6]);
+            }
+            else
+            {
+                asRet.sprintf("NG");
+            }
+        }
+    }
+
+    SendMSG_CMD(MSG_CMD_GetTIMCounter, asRet);
+}
+//---------------------------------------------------------------------------
+void TfMain::WriteMultiZoneTemp()
+{
+    AnsiString asMultiZone="";
+
+    if(IndexStatus==Z1Down_Z2Up || iGPIBIndexStatus==Z1Down_Z2Up)
+    {
+        asMultiZone.sprintf("%s_%s_%s_%s;\r\n",
+                            asGPIBTempShow[tcAa1],
+                            asGPIBTempShow[tcAb1],
+                            asGPIBTempShow[tcAc1],
+                            asGPIBTempShow[tcAd1]);
+    }
+    else if(IndexStatus==Z1Up_Z2Down || iGPIBIndexStatus==Z1Up_Z2Down)
+    {
+        asMultiZone.sprintf("%s_%s_%s_%s;\r\n",
+                            asGPIBTempShow[tcAa2],
+                            asGPIBTempShow[tcAb2],
+                            asGPIBTempShow[tcAc2],
+                            asGPIBTempShow[tcAd2]);
+    }
+
+    SendMSG_CMD(MSG_CMD_MultiZoneTemp, asMultiZone.c_str());
+}
+//---------------------------------------------------------------------------
+void TfMain::WriteMultiZoneEnable()
+{
+    AnsiString asMultiZoneEnable="";
+
+    asMultiZoneEnable.sprintf("%d,%d,%d,%d;\r\n",
+                              Temperature.bZoneTempEnable[0],
+                              Temperature.bZoneTempEnable[1],
+                              Temperature.bZoneTempEnable[2],
+                              Temperature.bZoneTempEnable[3]);
+
+    SendMSG_CMD(MSG_CMD_MultiZoneEnable, asMultiZoneEnable.c_str());
+}
+//---------------------------------------------------------------------------
+void TfMain::ReadWaterValve()
+{
+    AnsiString asStr="";
+    // GATE(FW3-WE) golden :15254 -- see GATE REGISTER item 17 above.
+#if 0
+    ATC_InterfaceForm->ReadTCWaterValue();
+#endif
+    for(int i=0; i<iATC_Use_Heat_Count; i++)
+    {
+        asStr+=asReadTCWater[i];
+        asStr+=",";
+    }
+    SendMSG_CMD(MSG_CMD_READ_WATER_VALVE, asStr);
+}
+//---------------------------------------------------------------------------
+void TfMain::ReadDynamicPID()
+{
+    AnsiString asStr="";
+    for(int i=0; i<iATC_Use_Heat_Count; i++)
+    {
+        asStr+=asReadDynamicPID[i];
+        asStr+=",";
+    }
+    SendMSG_CMD(MSG_CMD_READ_DYNAMIC_PID, asStr);
+}
+//---------------------------------------------------------------------------
+
+// -- FW3-WE APPEND -- end (TCP-server family golden Command.cpp :12540-12761; ByDLL-tail/GPIB-2DID/FixAICCD/ATC-multizone family golden Command.cpp :14302-15273) --
+
