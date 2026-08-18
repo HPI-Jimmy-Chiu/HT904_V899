@@ -8148,18 +8148,34 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - **進行中**：FW-3 Wave C 翻譯代理（ByDLL 家族 27 方法，golden Command.cpp
   :8311-:9994，RemoteControl never-wave 排除）背景執行。
 
+## 20260818 晚 — FW3-WC：Command.cpp Wave C，ByDLL 家族 26 方法（5232a55）
+
+- **交付**：golden :8311-:9994 append（+2,063 行）＋fMain.h FW3-WC 宣告
+  （+46 行）。20 FULL＋6 部分 gate（全屬 facade 缺席）；5 個替代非 gate
+  （S1-S5，含 17 處 sprintf AnsiString→.c_str() 的 varargs UB 防）；
+  RemoteControl never-wave 跳過；**未接線任何呼叫者**。
+  Command.cpp 現載 92/164 golden TfMain 方法（~9.8k/15.3k golden 行）。
+- **GOLDEN BUG 帳**：B1/B2 CreateAndOpenMap sizeof(指標) 誤用（memset＋
+  CreateFileMapping 尺寸）；B3 cSiteInfo[32][10] 每列溢位 1 byte；
+  B4 GetSiteMappingByDLL 算完 32 站只回站 1 → 多站 GPIB site-map 天生
+  殘缺（WriteSiteOnOff 的 GPIB 回報路徑受影響，未來要修屬行為變更）。
+- **代理引用錯 1 筆**：B3 行號 :693 實為 :9003（函式 local 非全域），
+  整併時對 golden 逐字抽驗抓到並改正——off-by-N 引用又一例
+  （GetTempActualByDLL 158/158、GetSiteMappingByDLL 210/210 全中，
+  程式本體比引用可靠，與歷史一致）。
+- **驗收**：全新雙 gate Debug 139/3＋Release 139/3、guard 552 檔 IDENTICAL。
+
 ### 🔖 RESUME（最新）
 
-- **完成**：佇列 1、2、39-gate 啟用波（cae07bb）、佇列 3（e0f14cd）、
-  **佇列 6 三小項（0e2e450/c6f08f8/G6 結案）**。基線 139 測試/3 常駐。
-- **進行中**：佇列 4＝FW-3 Wave C 翻譯代理（ByDLL 家族 27 方法，golden
-  Command.cpp :8311-:9994；RemoteControl :9673-9717 never-wave 跳過；
-  允許寫入僅 Command.cpp append＋forms/fMain.h FW3-WC 區塊）。回來後：
-  主迴圈逐 gate 複驗（absence 宣稱重跑 grep）→ 整併 → 全新雙 gate → commit。
-- **佇列後續**：5=StatisticalJamCount 家族（W906_EVENTLOG_ROOT redirect）；
-  Wave D=Command.cpp 其餘 WIDGET 類；表單佇列（cShowBinSelect Wave B＋
-  8 缺件成員→解 Y2 剩 10 站、fSecurity/fCounterClear/fBinSel、fLotInfo
-  5 成員→解 Y3、FW-3 batch 3+）。
+- **完成**：佇列 1、2、39-gate 啟用波、佇列 3、佇列 6 三小項、
+  **佇列 4（FW3-WC, 5232a55）**。基線 139 測試/3 常駐。
+- **下一步＝佇列 5**：StatisticalJamCount 家族（cObserver 側，寫檔走
+  W906_EVENTLOG_ROOT redirect、FTP 照 golden 旗標；行為變更獨立 commit）。
+- **佇列後續**：Wave D=Command.cpp 其餘 WIDGET 類（剩 72/164 未翻，
+  never-wave 3 項在內）；表單佇列（cShowBinSelect Wave B＋8 缺件成員→
+  解 Y2 剩 10 站、fSecurity/fCounterClear/fBinSel、fLotInfo 5 成員→解 Y3、
+  FW-3 batch 3+）。
 - **設計面（最後提醒使用者）**：write path 設計輪；硬體架構題（index 上不上
-  1203、MN200 保留 vs 併入 EtherCAT——MOTION_IO 撞名修法掛在這題下、
-  gclib 是否因 1203 統一而免做）。
+  1203、MN200 保留 vs 併入 EtherCAT——MOTION_IO 撞名修法掛此題、gclib
+  是否因 1203 統一而免做）；**新增：B4 要不要修**（GPIB 多站 site-map
+  只回站 1 是 golden 行為，修=行為變更）。
