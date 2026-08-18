@@ -788,6 +788,10 @@ public:
     // ========================================================================
     TPanel *labModel    = new TPanel();   // golden cObserver.h:374
     TPanel *labFactory  = new TPanel();   // golden cObserver.h:377
+    // AI(W906-FW-Q5) 20260818: golden cObserver.h:296 `TLabel *labLoaderCount;`
+    // -- TPanel stand-in per this facade's labModel/labFactory precedent
+    // (Caption is the only member the translated code touches).
+    TPanel *labLoaderCount = new TPanel();
     TPanel *labBundleID = new TPanel();   // golden cObserver.h (SET_BUNDLE_INFO surface, uHGem G30-G33)
     TPanel *labBundlIn  = new TPanel();
     TPanel *labBundOut  = new TPanel();
@@ -801,12 +805,18 @@ public:
     TPanel *lbFirmwareNumber04 = new TPanel();
     TfObserverMemoLines0    *Memo1Lines     = new TfObserverMemoLines0();     // golden TMemo* Memo1 (peek shape)
     TfObserverMemoLotSummary *memoLotSummary = new TfObserverMemoLotSummary(); // golden cObserver.h:339
-    // StatisticalLoaderCount: golden cObserver.cpp:5278-5288 WRITES
-    // D:\HT9045_Log\...\LoaderCount.txt -- the real body belongs to the
-    // approved StatisticalJamCount-family wave; declared now (no-op body in
-    // cObserver.cpp) so csystem.cpp's three call sites can swap over without
-    // silently gaining a file write.
-    virtual void StatisticalLoaderCount();
+    // AI(W906-FW-Q5) 20260818: StatisticalJamCount family REAL BODIES landed
+    // (user-approved queue item 5). File writes go through the
+    // W906_EVENTLOG_ROOT call-time getenv redirect (cObserver.cpp:1200
+    // precedent); production (env unset) keeps golden's own literals.
+    // golden decls cObserver.h:553-556 (+ ReadLoaderCount :555, btnSG_*
+    // handlers :475-476).
+    virtual void StatisticalJamCount(bool bIsNextDay=false);         // golden :5060-5277
+    virtual void StatisticalLoaderCount();                           // golden :5278-5288
+    virtual void ReadLoaderCount();                                  // golden :5289-5299
+    virtual bool StatisticalJamCountEnable(AnsiString asJamCode);    // golden :5301-5329
+    virtual void btnSG_QueryNowClick(TObject *Sender);               // golden :5361-5364 (body translated, NOT wired)
+    virtual void btnSG_QueryYesterdayClick(TObject *Sender);         // golden :5366-5369 (body translated, NOT wired)
 
     // -- PORT-ONLY, NOT a golden member -- see W906Obs2_InstanceRegistrar's
     //    banner above. Declared LAST so `this` is fully constructed (every

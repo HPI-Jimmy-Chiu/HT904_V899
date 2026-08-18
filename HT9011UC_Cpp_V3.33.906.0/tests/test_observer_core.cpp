@@ -44,6 +44,7 @@
 #include "common.h"        // AuthPath, asGeneralPath, OpenGeneralIniFile/CloseGeneralIniFile, MyForceDirectories
 #include "cmydef.h"        // CUSTOMER_CODE
 #include "Config.h"        // IniConfig (bSPILFunction)
+#include "Public/MyStringList.h"   // AI(W906-FW-Q5) 20260818: TMyStringList full type -- slEventLog fixture in Test_StatisticalJamCount_Family (cmydef.h only fwd-declares)
 
 #include <cstdio>
 #include <cstdlib>
@@ -479,6 +480,96 @@ static void Test_CountMTBF_KnownValues()
 // =============================================================================
 //  (i) ProcessRunInfo / GetMachineData -- LastSet-driven Caption assembly
 // =============================================================================
+// =============================================================================
+//  (Q5) StatisticalJamCount family -- golden :5060-5329 (AI(W906-FW-Q5) 20260818)
+// =============================================================================
+static void Test_StatisticalJamCount_Family()
+{
+    AnsiString root = ScratchDir() + "jamcount_root";
+
+    // The function locates its input CSV at slEventLog->Path\YYYY\MM\
+    // <slEventLog->FileName>_YYYYMMDD.csv using GetTimeInfo()'s TODAY --
+    // sample the same clock source to build the fixture.
+    GetTimeInfo();
+    AnsiString monthDir; monthDir.sprintf("%s\\%04d\\%02d", root, (int)SystemYear, (int)SystemMonth);
+    MyForceDirectories(monthDir);
+    AnsiString csvPath; csvPath.sprintf("%s\\HTLog_%04d%02d%02d.csv", monthDir, (int)SystemYear, (int)SystemMonth, (int)SystemDate);
+    {
+        std::FILE *fp = std::fopen(csvPath.c_str(), "wb");
+        CHECK(fp != NULL, "(setup) scratch JamCount EventLog CSV created");
+        if (!fp) return;
+        // 2x JAM0301 + 1x JAM0302 + 1 non-JAM: exercises the new-code path,
+        // the duplicate-count path, and the JAM-prefix filter in one file.
+        // Row 1's Message keeps the embedded-comma quoting (load-bearing:
+        // CommaText would column-shift without it -- the same hazard the
+        // EventLog memory documents).
+        const char *rows =
+            "Date,Time,UnitName,AlarmCode,Recovery,StopedTime,Duplicate,Message,ErrPart\r\n"
+            "2026-08-18,09:00:00,InArm,JAM0301,1,12,0,\"Loader, jam near site A\",InArm1\r\n"
+            "2026-08-18,09:05:00,OutArm,WAR16102,1,3,0,\"Clean pad worn out\",OutArm2\r\n"
+            "2026-08-18,09:10:00,InArm,JAM0301,1,7,0,\"Loader, jam near site A\",InArm1\r\n"
+            "2026-08-18,09:15:00,Shuttle,JAM0302,1,5,0,\"Shuttle jam\",Shuttle1\r\n";
+        std::fputs(rows, fp);
+        std::fclose(fp);
+    }
+
+    // --- state setup with full save/restore (cross-test hygiene) ------------
+    bool savedInitialOK = InitialOK;
+    TMyStringList *savedSlEventLog = slEventLog;
+    int savedLoaderCount = iOneDayLoaderCount;
+    AnsiString savedHandlerID = IniConfig.asA32_1_HandlerID;
+    bool savedFtpFlag = IniConfig.bN26_UseJamRawDataUpdataToFTP;
+    AnsiString savedEnv = getenv("W906_EVENTLOG_ROOT") ? AnsiString(getenv("W906_EVENTLOG_ROOT")) : AnsiString("");
+    bool hadEnv = getenv("W906_EVENTLOG_ROOT") != NULL;
+    AnsiString envAssign = AnsiString("W906_EVENTLOG_ROOT=") + root;
+    _putenv(envAssign.c_str());
+
+    InitialOK = true;
+    slEventLog = new TMyStringList(root, "HTLog", "hdr");
+    iOneDayLoaderCount = 100;
+    IniConfig.asA32_1_HandlerID = "";           // -> "HandlerID" default branch
+    IniConfig.bN26_UseJamRawDataUpdataToFTP = false;   // FTP tail is (Q5a)-gated anyway
+
+    {
+        TfObserver observer;
+        observer.StatisticalJamCount(false);
+
+        CHECK(observer.strngrdJamLog->Cells[2][1] == "JAM0301", "StatisticalJamCount: row 1 AlarmCode == JAM0301 (JAM-prefix filter passed, WAR row skipped)");
+        CHECK(observer.strngrdJamLog->Cells[1][1] == "InArm", "StatisticalJamCount: row 1 UnitName from CSV field 2");
+        CHECK(observer.strngrdJamLog->Cells[3][1] == "Loader, jam near site A", "StatisticalJamCount: quoted embedded-comma Message survives CommaText parse (quoting is load-bearing)");
+        CHECK(observer.strngrdJamLog->Cells[4][1] == "2", "StatisticalJamCount: JAM0301 counted twice (duplicate-count path, golden :5164-5166)");
+        CHECK(observer.strngrdJamLog->Cells[2][2] == "JAM0302", "StatisticalJamCount: second distinct code lands on row 2 (new-code path)");
+        CHECK(observer.strngrdJamLog->Cells[4][2] == "1", "StatisticalJamCount: JAM0302 counted once");
+        CHECK(observer.strngrdJamLog->Cells[5][1] == "2.00", "StatisticalJamCount: Rate(%) = 2/100 -> \"2.00\" (ChangeToFloat is the PERCENTAGE helper, MachineType.h:1593 \"取出 float %\" -- first draft of this check wrongly expected the raw quotient 0.02)");
+        CHECK(observer.labLoaderCount->Caption == "100", "StatisticalJamCount: labLoaderCount shows iOneDayLoaderCount (bIsNextDay=false keeps it)");
+        CHECK(DirectoryExists(root + "\\SGJamCount"), "StatisticalJamCountEnable: SGJamCount dir created under the W906_EVENTLOG_ROOT redirect (NOT D:\\HT9045_Log)");
+
+        // --- LoaderCount write/read round-trip ------------------------------
+        observer.StatisticalLoaderCount();
+        CHECK(iOneDayLoaderCount == 101, "StatisticalLoaderCount: increments the counter");
+        CHECK(FileExists(root + "\\SGJamCount\\LoaderCount.txt"), "StatisticalLoaderCount: LoaderCount.txt written under the redirect root");
+        iOneDayLoaderCount = 0;
+        observer.ReadLoaderCount();
+        CHECK(iOneDayLoaderCount == 101, "ReadLoaderCount: reads back the persisted count (write/read round-trip)");
+
+        // --- bIsNextDay=true resets the day counter (uses YESTERDAY's date;
+        //     that CSV doesn't exist -> early return BEFORE the reset, so
+        //     exercise only the documented early-return here) ----------------
+        int before = iOneDayLoaderCount;
+        observer.StatisticalJamCount(true);
+        CHECK(iOneDayLoaderCount == before, "StatisticalJamCount(true): yesterday's CSV absent -> early return, counter untouched (golden :5106-5111)");
+    }
+
+    delete slEventLog;
+    slEventLog = savedSlEventLog;
+    InitialOK = savedInitialOK;
+    iOneDayLoaderCount = savedLoaderCount;
+    IniConfig.asA32_1_HandlerID = savedHandlerID;
+    IniConfig.bN26_UseJamRawDataUpdataToFTP = savedFtpFlag;
+    AnsiString envRestore = AnsiString("W906_EVENTLOG_ROOT=") + (hadEnv ? savedEnv : AnsiString(""));
+    _putenv(envRestore.c_str());
+}
+
 static void Test_ProcessRunInfo_And_GetMachineData()
 {
     TfObserver observer;
@@ -541,6 +632,7 @@ int main()
     Test_GetTimeDataText_FileAndNoRecord();
     Test_WriteCategoryData_ZeroBaseline();
     Test_CountMTBF_KnownValues();
+    Test_StatisticalJamCount_Family();
     Test_ProcessRunInfo_And_GetMachineData();
 
     CloseGeneralIniFile();

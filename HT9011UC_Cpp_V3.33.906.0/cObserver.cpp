@@ -85,6 +85,7 @@
 #include "cinitial.h"          // IsNNMode()
 #include "Config.h"            // IniConfig (bSPILFunction)
 #include "common.h"            // CheckAndReadIniDataGeneral, AuthPath/asGeneralPath/OpenGeneralIniFile (test seam)
+#include "Public/MyStringList.h"   // AI(W906-FW-Q5) 20260818: TMyStringList full type (cmydef.h only fwd-declares it) -- slEventLog->Path/FileName + local tsLogLog in the JamCount family; test_ptw1_mystringlist.cpp include precedent
 #include "cAuthority.h"        // GetObserAuth()
 #include "cMyDB.h"             // MyDBVProcess/MyDBVProcessFilter/MyDBVEventFreq/MyDBQTotalLoader/MyDBQTimeData
 #include "Public/HTMD5.h"      // SearchFileAll
@@ -3126,10 +3127,326 @@ void RecordIndexAirOnTime2()   //Sam 20220329 : Record Index Air On Time
 // =============================================================================
 TfObserver *fObserver = new TfObserver();
 
-// AI(W906-FW-ObsSwap) 20260818: documented no-op -- the REAL body (golden
-// cObserver.cpp:5278-5288) WRITES D:\HT9045_Log\EventLogTxt\SGJamCount// LoaderCount.txt and belongs to the approved StatisticalJamCount-family
-// wave; swapped-over csystem.cpp call sites must not silently gain a file
-// write in an integration commit.
-void TfObserver::StatisticalLoaderCount()
+// =============================================================================
+// AI(W906-FW-Q5) 20260818: StatisticalJamCount family -- REAL BODIES
+// (user-approved queue item 5; the ObsSwap-era documented no-op for
+// StatisticalLoaderCount is retired by this block).
+//
+// FILE-WRITE POLICY: every hardcoded "D:\HT9045_Log\EventLogTxt[\SGJamCount]"
+// literal goes through the W906_EVENTLOG_ROOT call-time getenv redirect
+// (:1200 precedent in this file) -- production (env unset) keeps golden's
+// own literal; tests point it at a scratch dir. The slEventLog->Path READ at
+// the top of StatisticalJamCount is NOT redirected (it reads the object,
+// faithful to golden -- a test controls it by constructing slEventLog).
+//
+// GATE (Q5a): the FTP-upload tail (golden :5242-5259 fFTPClient->
+// UploadFileFTP under bIsNextDay && IniConfig.bN26_UseJamRawDataUpdataToFTP)
+// -- no TfFTPClient facade exists anywhere (KYECFTP/
+// FTPClient_EventHandlers.h:94 self-documents "No `TfFTPClient` facade
+// exists anywhere yet"; re-checked 20260818). Outbound network side effect,
+// fail-closed.
+//
+// SUBSTITUTION (S-a): golden `strngrdJamLog->RowCount++` -- the vclcompat
+// RowCountProxy has operator int()/operator=(int) but no operator++;
+// written as `RowCount = RowCount + 1` (value-identical, still resizes).
+// =============================================================================
+static AnsiString W906_EventLogRootQ5()
 {
+    return getenv("W906_EVENTLOG_ROOT") ? AnsiString(getenv("W906_EVENTLOG_ROOT"))
+                                        : AnsiString("D:\\HT9045_Log\\EventLogTxt");
+}
+
+void TfObserver::StatisticalJamCount(bool bIsNextDay)                           //Sam 20210224 : Auto Upload FTP JAMRawData 功能 //KaiChen 20200618 ：矽格，增加Jam統計頁面
+{
+    if(InitialOK==false)
+    {
+        return;
+    }
+
+    Word Year,Month,Date;
+
+    AnsiString sPathName;
+    AnsiString sFileName;
+    AnsiString Str;
+    AnsiString asHandlerID="";
+    AnsiString asErr;
+
+    AnsiString HTPath=slEventLog->Path;
+    AnsiString HTFileName=slEventLog->FileName;
+
+    int x=1;
+
+    bool bNewCode=false;
+
+    int iCount=0;
+    int iJamCnt=0;
+    double dAverage=0.0;
+
+    GetYesterdayInfo();
+    GetTimeInfo();
+
+    if(bIsNextDay)                                                              //上傳時間回剛好跨日所以要用昨天時間
+    {
+        Year    =SystemYearYesterday;
+        Month   =SystemMonthYesterday;
+        Date    =SystemDateYesterday;
+    }
+    else
+    {
+        Year    =SystemYear;
+        Month   =SystemMonth;
+        Date    =SystemDate;
+    }
+
+    sPathName.sprintf("%s\\%04d\\%02d", HTPath, Year, Month);
+    MyForceDirectories(sPathName);
+
+    sFileName.sprintf("%s\\%s_%04d%02d%02d.csv", sPathName, HTFileName, Year, Month, Date);
+    if(FileExists(sFileName)==false)
+    {
+        asErr.sprintf("JamRawData is error. EventLog is not exist. %s",sFileName);
+        RecordProcess(asErr);
+        return;
+    }
+
+    TStringList *tsLogFile, *tsRow;
+    tsLogFile=new TStringList();
+    tsRow    =new TStringList();
+
+    tsLogFile->LoadFromFile(sFileName);
+    Str="JAM";
+    int iii=0;
+
+    for(int i=1; i<strngrdJamLog->RowCount; i++)
+    {
+        // S-b: golden `strngrdJamLog->Rows[i]->Clear();` -- the vclcompat grid
+        // carries only Cells/RowCount/ColCount (no Rows[] TStrings view);
+        // clearing every cell of row i is the same observable effect.
+        for(int c=0; c<strngrdJamLog->ColCount; c++)
+            strngrdJamLog->Cells[c][i]="";
+    }
+
+    strngrdJamLog->RowCount=2;
+
+    for(int i=1; i<tsLogFile->Count; i++)
+    {
+        tsRow->Clear();
+        tsRow->CommaText=tsLogFile->Strings[i];
+        if(tsRow->Count>3)
+        {
+            if(AnsiString(tsRow->Strings[3]).AnsiPos(Str)==1)                   // StringsProxy: explicit convert (this file's :1210 precedent)
+            {
+                if(StatisticalJamCountEnable(AnsiString(tsRow->Strings[3]))==true)
+                {
+                    for(int j=0; j<strngrdJamLog->RowCount; j++)
+                    {
+                        if(strngrdJamLog->Cells[2][j]==tsRow->Strings[3])
+                        {
+                            iii=j;
+                            bNewCode=false;
+                            break;
+                        }
+                        else
+                        {
+                            bNewCode=true;
+                        }
+                    }
+
+                    if(bNewCode)
+                    {
+                        strngrdJamLog->Cells[0][x]=x;                           //No
+                        strngrdJamLog->Cells[1][x]=tsRow->Strings[2];           //UnitName
+                        strngrdJamLog->Cells[2][x]=tsRow->Strings[3];           //AlarmCode
+                        strngrdJamLog->Cells[3][x]=tsRow->Strings[7];           //Message
+                        strngrdJamLog->Cells[4][x]=1;
+                        x++;
+                        strngrdJamLog->RowCount = strngrdJamLog->RowCount + 1;  // S-a: golden `RowCount++` (proxy has no ++)
+                    }
+                    else
+                    {
+                        int aaa=StrToInt(strngrdJamLog->Cells[4][iii]);
+                        strngrdJamLog->Cells[4][iii]=aaa+1;
+                    }
+                }
+            }
+        }
+    }
+
+    for(int j=0; j<strngrdJamLog->RowCount; j++)
+    {
+        if(strngrdJamLog->Cells[2][j].AnsiPos(Str)==1)
+        {
+            if(iOneDayLoaderCount>0)
+            {
+                iJamCnt=StrToInt(strngrdJamLog->Cells[4][j]);
+                dAverage=ChangeToFloat((double)iJamCnt, (double)iOneDayLoaderCount);    //Steven 20250820 : 針對除以0加上保護
+                AnsiString asAverage;
+                asAverage.printf("%0.2f", dAverage);
+                strngrdJamLog->Cells[5][j]=asAverage;
+            }
+            else
+            {
+                strngrdJamLog->Cells[5][j]=0;
+            }
+        }
+    }
+
+    if(IniConfig.asA32_1_HandlerID=="")
+    {
+        asHandlerID="HandlerID";
+    }
+    else
+    {
+        asHandlerID=IniConfig.asA32_1_HandlerID;
+    }
+
+    TMyStringList *tsLogLog;
+    // W906_EVENTLOG_ROOT redirect: golden ctor root literal "D:\\HT9045_Log\\EventLogTxt"
+    tsLogLog=new TMyStringList(W906_EventLogRootQ5(),
+                                 asHandlerID,
+                                "Date, Time, No, UnitName, AlarmCode, Message, Count, Rate (%), LoaderCount");
+    TStringList *SL;
+    SL=new TStringList();
+
+    tsLogLog->MySaveSGJamCountToFile(true, bIsNextDay);
+
+    for(int j=0; j<strngrdJamLog->RowCount; j++)
+    {
+        if(strngrdJamLog->Cells[2][j].AnsiPos(Str)==1)
+        {
+            iCount++;
+            SL->Clear();
+            SL->Add(strngrdJamLog->Cells[0][j]);
+            SL->Add(strngrdJamLog->Cells[1][j]);
+            SL->Add(strngrdJamLog->Cells[2][j]);
+            SL->Add(strngrdJamLog->Cells[3][j]);
+            SL->Add(strngrdJamLog->Cells[4][j]);
+            SL->Add(strngrdJamLog->Cells[5][j]);
+            SL->Add((AnsiString)iOneDayLoaderCount);
+            tsLogLog->AddTextWithDateTime(SL->CommaText);
+            tsLogLog->MySaveSGJamCountToFile(false, bIsNextDay);
+        }
+    }
+
+    if(iCount==0)
+    {
+        SL->Clear();
+        SL->Add("");
+        SL->Add("");
+        SL->Add("");
+        SL->Add("");
+        SL->Add("");
+        SL->Add("");
+        SL->Add((AnsiString)iOneDayLoaderCount);
+        tsLogLog->AddTextWithDateTime(SL->CommaText);
+        tsLogLog->MySaveSGJamCountToFile(false,bIsNextDay);
+    }
+
+    if(bIsNextDay && IniConfig.bN26_UseJamRawDataUpdataToFTP)                   //Sam 20210224 : Auto Upload FTP JAMRawData 功能
+    {
+        HTPath=tsLogLog->Path;
+        HTFileName=tsLogLog->FileName;
+        if(HTPath=="")
+        {
+            HTPath="D:\\HandlerLog";
+        }
+
+        sPathName.sprintf("%s\\SGJamCount\\%04d\\%02d", HTPath, Year, Month);
+        if(tsLogLog->SaveType==TByMaxLineCount)
+        {
+            sFileName.sprintf("%s_%04d%02d%02d %02d%02d%02d.csv", HTFileName, Year, Month, Date, SystemHour, SystemMin, SystemSec);
+        }
+        else
+        {
+            sFileName.sprintf("%s_%04d%02d%02d_RawData.csv", HTFileName, Year, Month, Date);
+        }
+        // GATE (Q5a): fFTPClient->UploadFileFTP(sPathName, sFileName,
+        // IniConfig.sN26_FTPUplaodPath, sFileName, IniConfig.sN26_FTPUserName,
+        // IniConfig.sN26_FTPPassword, IniConfig.sN26_FTPHost, __FUNC__);
+        // -- golden :5259; no TfFTPClient facade (see block banner).
+#if 0
+        fFTPClient->UploadFileFTP(sPathName, sFileName, IniConfig.sN26_FTPUplaodPath, sFileName, IniConfig.sN26_FTPUserName, IniConfig.sN26_FTPPassword,IniConfig.sN26_FTPHost,__FUNC__);
+#endif
+    }
+
+    if(bIsNextDay)
+        iOneDayLoaderCount=0;
+
+    SL->Clear();
+    delete SL;
+
+    labLoaderCount->Caption=(AnsiString)iOneDayLoaderCount;
+
+    tsLogLog->Clear();
+    tsLogFile->Clear();
+    tsRow->Clear();
+    delete tsLogLog;
+    delete tsLogFile;
+    delete tsRow;
+}
+//---------------------------------------------------------------------------
+void TfObserver::StatisticalLoaderCount()                                       //KaiChen 20200618 ：矽格，增加Jam統計頁面
+{
+    iOneDayLoaderCount++;
+
+    AnsiString sPathName, sFileName;
+    // W906_EVENTLOG_ROOT redirect: golden literal "D:\\HT9045_Log\\EventLogTxt\\SGJamCount"
+    sPathName.sprintf("%s\\SGJamCount", W906_EventLogRootQ5());
+    sFileName.sprintf("%s\\LoaderCount.txt", sPathName);
+    MyForceDirectories(sPathName);
+    WriteIniDataNoLog(sFileName, "Loader", "Count",          iOneDayLoaderCount);
+}
+//---------------------------------------------------------------------------
+void TfObserver::ReadLoaderCount()                                              //KaiChen 20200618 ：矽格，增加Jam統計頁面
+{
+    AnsiString sPathName, sFileName;
+    // W906_EVENTLOG_ROOT redirect: golden literal "D:\\HT9045_Log\\EventLogTxt\\SGJamCount"
+    sPathName.sprintf("%s\\SGJamCount", W906_EventLogRootQ5());
+    sFileName.sprintf("%s\\LoaderCount.txt",sPathName);
+    MyForceDirectories(sPathName);
+    if(FileExists(sFileName)==true)
+    {
+        iOneDayLoaderCount=ReadIniData(sFileName, "Loader",    "Count",          iOneDayLoaderCount);
+    }
+}
+//---------------------------------------------------------------------------
+bool TfObserver::StatisticalJamCountEnable(AnsiString asJamCode)                //KaiChen 20200618 ：矽格，增加Jam統計頁面
+{
+    AnsiString sPathName, sFileName;
+    AnsiString asEable="";
+    AnsiString Str;
+    bool bEnable[19];
+
+    // W906_EVENTLOG_ROOT redirect: golden literal "D:\\HT9045_Log\\EventLogTxt\\SGJamCount"
+    sPathName.sprintf("%s\\SGJamCount", W906_EventLogRootQ5());
+    sFileName.sprintf("%s\\JamCountEnable.ini",sPathName);
+    MyForceDirectories(sPathName);
+
+    for(int i=0; i<19; i++)
+    {
+        asEable.sprintf("%02d", i+1);
+        bEnable[i]=CheckAndReadIniData(sFileName, "JamCountEnable",    asEable,    true);
+    }
+
+    for(int i=0; i<19; i++)
+    {
+        if(bEnable[i]==true)
+        {
+            Str.sprintf("JAM%02d", i+1);
+            if(asJamCode.AnsiPos(Str)==1)
+                return true;
+        }
+    }
+
+    return false;
+}
+//---------------------------------------------------------------------------
+void TfObserver::btnSG_QueryNowClick(TObject * /*Sender*/)                      // golden :5361 (__fastcall dropped; NOT wired to any button)
+{
+    StatisticalJamCount(false);
+}
+//---------------------------------------------------------------------------
+void TfObserver::btnSG_QueryYesterdayClick(TObject * /*Sender*/)                // golden :5366 (__fastcall dropped; NOT wired to any button)
+{
+    StatisticalJamCount(true);
 }
