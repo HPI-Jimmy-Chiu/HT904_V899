@@ -14571,3 +14571,515 @@ void TfMain::ReadDynamicPID()
 
 // -- FW3-WE APPEND -- end (TCP-server family golden Command.cpp :12540-12761; ByDLL-tail/GPIB-2DID/FixAICCD/ATC-multizone family golden Command.cpp :14302-15273) --
 
+// =============================================================================
+//  FW3-WF GROUP -- Command.cpp's collection-closing wave: SetSiteMapData /
+//                  SetAlarmSetup / MachineStatus
+//
+//  Translation wave: FW-3 Wave F
+//  Translator: AI(W906-FW3-WF) 20260818
+//  Golden source: HT9011UC_Code_V3.33.906.0_20260618/Command.cpp (15,273 lines, cp950)
+//
+//  ROLE
+//  ----
+//  3 golden TfMain:: methods: SetSiteMapData (golden :5301-5339), SetAlarmSetup
+//  (golden :5341-5388), MachineStatus (golden :7304-7509). Per the task brief:
+//  bodies are translated, NO caller (GPIB command dispatch / TCP dispatch) is
+//  wired up -- unreachable from any translated call site, same as every FW3
+//  wave before it. This completes Command.cpp: 160/164 golden TfMain:: methods
+//  now have a body in this file; the remaining 4 are the never-wave group
+//  (TCPCommandServerClientRead, RemoteControl, ChangeToSiteMap,
+//  ChangeToAlarmSetup+ChangeToAlarmSetup_SG) -- not declared, not translated,
+//  no stand-in, per policy.
+//
+//  TASK-BRIEF LINE-RANGE CORRECTION (stated, not silently absorbed): the brief
+//  for this wave characterised SetAlarmSetup as golden ":5341-:7303, ~1,963
+//  行巨型單函式" (a giant single-function branch-sea, Wave B's WriteTemp_NS
+//  treatment). That characterisation is WRONG. Re-derived directly from the
+//  cp950-decoded golden this pass with `grep -noE "^[A-Za-z_][A-Za-z0-9_ *]*
+//  TfMain::[A-Za-z0-9_]+\(" golden_command_utf8.txt`: SetAlarmSetup is golden
+//  :5341-5388 -- only 48 lines, ending at the `}` on :5388, immediately
+//  followed by `//---...` and the NEXT method, `void __fastcall
+//  TfMain::GetCZtesterBin()`, at :5390. Golden :5389-7303 holds SEVEN other
+//  TfMain methods, every one of which is ALREADY translated in this file from
+//  an EARLIER wave -- verified with `grep -n "TfMain::<name>" Command.cpp`,
+//  exactly one definition each, all pre-dating this wave:
+//    GetCZtesterBin        :5390-5417 (port :2892, earlier wave)
+//    GetCZSoakTime         :5419-5426 (port :2922, earlier wave)
+//    GetCZDoubleContactCount :5429-5437 (port :2933, earlier wave)
+//    GetCDHandlerID        :5440-5444 (port :2945, earlier wave)
+//    GetCZJamCode          :5447-5460 (port :2953, earlier wave)
+//    GetCZSiteMap          :5463-5639 (port :2970, earlier wave)
+//    GetCZAllMassTemp      :5640-7299 (port :6542, Wave B)
+//  Golden :7300-7303 is a trio of `extern int` forward declarations
+//  (iTestHeadMotorTask/iTestYTask/LoadTask) belonging to MachineStatus's own
+//  TU, not a method body. None of those seven are re-emitted below -- doing so
+//  would be an ODR/multiple-definition link error. This wave's ACTUAL new
+//  work is SetSiteMapData (39 golden lines) + SetAlarmSetup (48 golden lines)
+//  + MachineStatus (206 golden lines) = 293 golden lines, not ~2,200.
+//  (Pre-existing and NOT fixed here, append-only mandate: forms/fMain.h's own
+//  Wave-B-era comment for GetCZAllMassTemp cites its golden body as
+//  "Command.cpp:6542-8201" -- also off-by-N, the real end is :7299; golden
+//  :7300-8310 is MachineStatus (:7304-7509) plus the never-wave
+//  ChangeToSiteMap/ChangeToAlarmSetup/ChangeToAlarmSetup_SG trio
+//  (:7511-8310). Flagged for whoever next touches that citation.)
+//
+//  WAVE SCOPE (every golden method, golden line span, ACTIVE or GATED-partial)
+//  ------------------------------------------------------------------------------
+//    SetSiteMapData   :5301-5339 GATED-partial (ChangeToSiteMap / fProductionInfo, GATE REGISTER 1-2)
+//    SetAlarmSetup    :5341-5388 GATED-partial (ChangeToAlarmSetup/_SG, GATE REGISTER 3)
+//    MachineStatus    :7304-7509 GATED-partial (~25 diagnostic-dialog form pointers / fSecurity / fMain->HVisionWnd, GATE REGISTER 4-6)
+//  TOTALS: 3 methods, 293 raw golden lines extracted; 0 fully ACTIVE (every one
+//  of the three has at least one gated site), 0 GOLDEN BUG/ODDITY found this
+//  wave (none of the three has an off-nominal golden defect worth a B-number;
+//  next available is still B9), 0 substitutions needed (next available is
+//  still S11) -- every symbol on every LIVE line already exists in this tree
+//  and is proven-compiling by an earlier wave's byte-identical usage (cited
+//  per gate below), confirmed by a clean -fsyntax-only pass after fixing the
+//  4 misses this wave's own pre-write grep survey missed (see gate 6 and the
+//  extern-forward-declaration note just above MachineStatus's body: 3 golden
+//  file-scope `extern int` lines at :7301-7303 that a definition-only grep
+//  does not surface, plus one gate this wave's OWN research got wrong --
+//  gate 6 below explains it).
+//
+//  CONSEQUENCE OF GATE 1+2 (SetSiteMapData): both live paths through the
+//  function now set `ret=false` (the `if(ret==false)` branch falls through the
+//  gated `ret=ChangeToSiteMap(str);` leaving `ret` at the value
+//  `HasICUnderMachine()` already gave it; the `else` branch explicitly sets
+//  `ret=false`), so the GPIB reply is now UNCONDITIONALLY "SETTINGNG" and the
+//  Greatek RunSite-file rewrite never fires. This is the honest offline
+//  consequence of gate 1, not an independent behaviour choice -- documented
+//  here so it is not mistaken for dead code by a later reader.
+//
+//  CONSEQUENCE OF GATE 3 (SetAlarmSetup): `bool ret=false;` is never
+//  reassigned on any live path (the whole `if(IniConfig.bSIGURDFunction) ...
+//  else ...` is gated), so the GPIB reply is now UNCONDITIONALLY "SETTINGNG".
+//  Same posture as gate 1+2: refuse to claim success for a site/alarm-map
+//  change this offline build cannot actually perform, rather than fabricate
+//  a misleading SETTINGOK.
+//
+//  GATE REGISTER  (6 #if 0 sites; each states WHY the gate is correct, not
+//  just that it exists)
+//  ------------------------------------------------------------------------------
+//    1. SetSiteMapData, golden :5320 `ret=ChangeToSiteMap(str);` --
+//       ChangeToSiteMap is one of this wave's own never-wave exclusions
+//       (golden bool ChangeToSiteMap(char *str), golden main.h:1432 / golden
+//       Command.cpp :7511-7851) -- not declared, not translated, per the task
+//       brief's explicit instruction not to touch it. `grep -rn
+//       "ChangeToSiteMap" forms/fMain.h Command.cpp` before this gate: 0 hits
+//       (confirms it was never declared by any earlier wave either).
+//    2. SetSiteMapData, golden :5334-5337 `if(ret && CUSTOMER_CODE==CC_Greatek
+//       && fProductionInfo!=NULL) { fProductionInfo->SaveInfoFileWhenStart();
+//       }` -- forms/fProductionInfo.h's TfProductionInfo stand-in has exactly
+//       one method, `CalTrayICCount` (forms/fProductionInfo.h:63); no
+//       `SaveInfoFileWhenStart` member (`grep -n "SaveInfoFileWhenStart"
+//       forms/fProductionInfo.h` -- 0 hits, 20260818). IDENTICAL gate already
+//       exists in this tree for the byte-identical golden snippet at a
+//       different call site: uYieldMonitoring.cpp:2429-2442 (golden :5391-
+//       5395, Q3b). This wave's gate follows that precedent verbatim
+//       (CUSTOMER_CODE/fProductionInfo are both real and evaluable; only the
+//       method call is missing, and golden's own NULL guard means the call
+//       was already conditional there).
+//    3. SetAlarmSetup, golden :5359-5362 `if(IniConfig.bSIGURDFunction)
+//       ret=ChangeToAlarmSetup_SG(str); else ret=ChangeToAlarmSetup(str);` --
+//       BOTH arms call never-wave exclusions (golden bool
+//       ChangeToAlarmSetup(char *str) / bool ChangeToAlarmSetup_SG(char *str),
+//       golden main.h:1434-1435 / golden Command.cpp :7852-8310). `grep -rn
+//       "ChangeToAlarmSetup" forms/fMain.h Command.cpp` before this gate: 0
+//       hits.
+//    4. MachineStatus, golden :7348-7360, the whole Bit4_HandlerDiagnostics
+//       detection condition -- references ~25 form pointers for "is some
+//       diagnostic/setup dialog open". Of those, 18 have NO facade header
+//       anywhere in this tree at all (confirmed via `grep -rn "extern.*\*
+//       <name>;" forms/*.h` returning 0 hits per name, 20260818): fTeach,
+//       fMotorTest, fConfiguration, fSpeed, fDIOFrom, fHotPlate,
+//       fTrayAssignment, fTemp_Set, FTestIF, fCounterClear, fLd_ULd, fCCLink,
+//       fTowerLight, fQAMode, fCounterSel, fBuilder, fStartCondition,
+//       fBarCode, fBinSel, fLtcSensor, fOmron, fiosetview (that is 22, plus
+//       fContact and fSecurity below -- 24 of 26 total operands are
+//       unavailable). fContact (the TfContact diagnostic-mode form, distinct
+//       from the already-real `cContact.h` contact-force CALCULATION struct)
+//       has no facade either. fSecurity likewise has no facade (see gate 5).
+//       Only 7 of the ~26 operands resolve today: fShuttleMove/fHome/fOffSet/
+//       fYieldMonitoring/fTrayForm/fCleaning/FrmRotate. Evaluating only those
+//       7 and dropping the other ~19 would silently NARROW this GPIB status
+//       bit's trigger surface (a behaviour change hidden inside a "gate"),
+//       not a faithful partial translation -- so the whole condition is
+//       gated instead, matching this tree's established treatment of "most
+//       of a compound condition's operands are unavailable" (e.g. the FormHS
+//       gate from queue 3, "facade 不存在，純 log"). DEFAULT: this port's
+//       Gate A is a placeholder window that cannot open any MFC/dialog
+//       surface yet, so today's ONLY reachable runtime state has every one of
+//       these ~26 `fShow`/`bShow` flags at their offline-zero-init default
+//       (false) anyway -- hard-coding the `else` branch (`=0`) is
+//       behaviour-preserving for the only state this build can currently be
+//       in, not merely a permanently-safe guess. Revisit when any of the 19
+//       missing forms lands a real facade.
+//    5. MachineStatus, golden :7391, the Bit8_HandlerJam condition
+//       `fSecurity->GetBit8(fNote->Edit3->Text+" "+fNote->edUnitName->Text,
+//       fNote->edErrorCode->Text)==1` -- fSecurity (TfSecurity) has no facade
+//       anywhere in this tree (`grep -rn "class TfSecurity\|extern.*\*
+//       fSecurity;" --include=*.h .` -- 0 hits, 20260818; the only
+//       `fSecurity` hits in the whole tree are comments and unrelated
+//       `forms/fContactCT.h`/`forms/fShowBinSelect.h` local variables of a
+//       different type). Even setting that aside, fNote's own facade
+//       (forms/fNote.h) has no `Edit3` or `edUnitName` member (`grep -n
+//       "Edit3\|edUnitName" forms/fNote.h` -- 0 hits) -- two independent
+//       missing pieces, not one. `fNote->fShow`/`fNote->edErrorCode->Text`
+//       (the other two operands) ARE real, but per the same "don't silently
+//       narrow a compound condition" reasoning as gate 4, the whole `if` is
+//       gated rather than partially evaluated. DEFAULT: `=0` (never report
+//       JAM via this GPIB status bit offline) -- the real JAM/WAR/MES lookup
+//       this bit reports lives entirely inside the missing fSecurity table,
+//       so there is no faithful way to compute it; `0` is the same
+//       "can't-possibly-be-true-yet" default as gate 4.
+//    6. MachineStatus, golden :7507 `SendMessage(fMain->HVisionWnd,
+//       WM_COPYDATA, (WPARAM) NULL, (LPARAM)pcp);` -- `HVisionWnd` is not a
+//       member of forms/fMain.h's TfMain facade (`grep -n "HVisionWnd"
+//       forms/fMain.h` -- 0 hits, 20260818). SELF-CORRECTION recorded here
+//       for the record: this wave's pre-write research grepped `Command.cpp`
+//       for "SendMessage(fMain->HVisionWnd" and found a hit at (what was
+//       then) line 11178 inside GetTTLState and treated it as a proven-
+//       compiling ACTIVE precedent -- but that hit sits inside a `#if 0`
+//       (GATE(FW3-WD) golden :10497, GATE REGISTER item 2 of the FW3-WD
+//       GROUP banner) and is therefore NOT compiled. The mistake was
+//       grepping for the call text without checking whether the surrounding
+//       block was gated; -fsyntax-only caught it immediately ("class TfMain
+//       has no member named HVisionWnd"). DEFAULT: only the `SendMessage`
+//       call itself is gated -- `pcp`'s allocation/field-fill and the
+//       `delete pcp;` both stay ACTIVE (same shape as the WD precedent this
+//       gate was modelled on, once corrected: build the struct, skip the
+//       send, still free it -- no leak).
+// =============================================================================
+void TfMain::SetSiteMapData()                                                   //wei 20151127 GPIB Change Site Map
+{
+    bool ret=true;
+    AnsiString t;
+    char str[256];
+
+    strncpy(str, HGpib2Handler->cReturn, sizeof(str));
+
+    ret=HasICUnderMachine();
+    if(ret==false)
+    {
+        for(int i=0; i<4; i++)                                                  //JerryYang 20160519 備份開關site
+        {
+            for(int j=0; j<8; j++)
+            {
+               iBackupDutOnOff[i][j]=bTestSiteUse[0][i][j];
+            }
+        }
+        iBackupTestMode=TestIF_File.iTestMode;
+        // GATE(FW3-WF) golden :5320 -- see GATE REGISTER item 1 above. `ret`
+        // keeps the value `HasICUnderMachine()` already gave it above
+        // (`false` -- this branch only runs when that is true) instead of
+        // being reassigned by the never-wave ChangeToSiteMap.
+#if 0
+        ret=ChangeToSiteMap(str);
+#endif
+    }
+    else
+    {
+        ret=false;
+    }
+
+    if(ret)
+        t.sprintf("SETTINGOK");
+    else
+        t.sprintf("SETTINGNG");
+
+    //AI(BVL-3766) 20260428: GPIB SETSITEMAP_ 變更 site 後，立即重寫 GTK info.txt 的 RunSite，
+    //                       涵蓋 IPSC 只動 runtime 旗標 / 不寫回 LastSet 的時序差。
+    // GATE(FW3-WF) golden :5334-5337 -- see GATE REGISTER item 2 above.
+#if 0
+    if(ret && CUSTOMER_CODE==CC_Greatek && fProductionInfo!=NULL)
+    {
+        fProductionInfo->SaveInfoFileWhenStart();
+    }
+#endif
+    SendMSG_CMD(MSG_CMD_SetSiteMapData, t);
+}
+//---------------------------------------------------------------------------
+void TfMain::SetAlarmSetup()                                                    // wei 20151125 Add CHKSETUP? Command
+{
+    bool ret=false;
+    AnsiString t;
+    char str[256];
+    AnsiString asLog;
+    GetTimeInfo();
+
+    strncpy(str, HGpib2Handler->cReturn, sizeof(str));
+
+    iRecordSigurdGPIBFlag=1;                                                    //KaiChen 20200330 ：紀錄，矽格 GPIB Commend Flag
+
+    if(SystemStart==false &&
+       (LastSet.iRunStartMode==rsmInitialStart   ||
+        LastSet.iRunStartMode==rsmCInitialRetest ||
+        LastSet.iRunStartMode==rsmQAMode))                                      //Sam 20250214 : RMS 新增 QA 模式
+    {
+        iRecordSigurdGPIBFlag=10;                                               //KaiChen 20200330 ：紀錄，矽格 GPIB Commend Flag
+        // GATE(FW3-WF) golden :5359-5362 -- see GATE REGISTER item 3 above.
+        // `ret` keeps its declared initial value (`false`) -- both arms call
+        // never-wave exclusions.
+#if 0
+        if(IniConfig.bSIGURDFunction)
+            ret=ChangeToAlarmSetup_SG(str);
+        else
+            ret=ChangeToAlarmSetup(str);
+#endif
+    }
+    else
+    {
+        iRecordSigurdGPIBFlag=11;                                               //KaiChen 20200330 ：紀錄，矽格 GPIB Commend Flag
+        ret=false;
+    }
+
+    //KaiChen 20200330 ：紀錄，矽格 GPIB Commend Flag
+    //==>
+    AnsiString sPathName;
+    sPathName.sprintf("D:\\HT9045_Log\\Sigurd_GPIB");
+    MyForceDirectories(sPathName);
+    sPathName.sprintf("D:\\HT9045_Log\\Sigurd_GPIB\\GPIBLog_%04d%02d%02d.txt", SystemYear, SystemMonth, SystemDate);
+    asLog.sprintf("GPIBFlag=%d, %s", iRecordSigurdGPIBFlag, AnsiString(str));
+    WriteDataToFile(sPathName,asLog);
+    //WriteIniData(sPathName, "GPIBLog",    "SETUP",       iRecordSigurdGPIBFlag);
+    //<==
+    //KaiChen 20200330 ：紀錄，矽格 GPIB Commend Flag
+
+    if(ret)
+        t.sprintf("SETTINGOK");
+    else
+        t.sprintf("SETTINGNG");
+
+    SendMSG_CMD(MSG_CMD_SetAlarmSetup, t);
+}
+//---------------------------------------------------------------------------
+// AI(W906-FW3-WF) 20260818: golden itself forward-declares these three right
+// here (golden Command.cpp :7301-7303, immediately before MachineStatus) --
+// even golden's OWN Command.cpp translation unit does not otherwise see
+// iTestHeadMotorTask/iTestYTask/LoadTask at this point via its includes.
+// This port's Command.cpp is in the same position (confirmed by
+// -fsyntax-only: "not declared in this scope" for all three before this
+// declaration was added) -- kept byte-identical to golden's own fix for the
+// same problem, not a port-specific workaround.
+extern int iTestHeadMotorTask;
+extern int iTestYTask;
+extern int LoadTask;
+void TfMain::MachineStatus() //JerryYang 20151109 回覆tester機台狀態
+{
+    int i;
+    bool bEMG=false;//JerryYang 20160125 判斷EMG是否被按下
+    AnsiString ErrorCode=fNote->edErrorCode->Text;
+
+    HHandler2Gpib.iStatus[Bit0_HandlerReBoot]=0;
+
+    //------------判斷是否無空盤可放至Auto
+    if(fNote->fShow &&
+       (ErrorCode=="MES1021" || ErrorCode=="MES1421" ||
+        ErrorCode=="MES1120" || ErrorCode=="MES1220" || ErrorCode=="MES1320" ||
+        ErrorCode=="MES2520" || ErrorCode=="MES2620" || ErrorCode=="MES2720" || //Steven 20230907 : For HT-9011UC
+        ErrorCode=="MES1720" || ErrorCode=="MES1820" || ErrorCode=="MES1920" ||
+        ErrorCode=="MES2820" || ErrorCode=="MES2920" || ErrorCode=="MES3020") )
+    {
+        HHandler2Gpib.iStatus[Bit1_HandlerOutputFull]=1;
+    }
+    else
+    {
+        HHandler2Gpib.iStatus[Bit1_HandlerOutputFull]=0;
+    }
+
+    //----------判斷Loader 是否有Tray
+    if(MOT[MMTrayY].HasIC()==false)
+    {
+        HHandler2Gpib.iStatus[Bit2_HandlerInputEmpty]=1;
+    }
+    else
+    {
+        HHandler2Gpib.iStatus[Bit2_HandlerInputEmpty]=0;
+    }
+
+    //----------判斷是否在做AutoClean
+    if(bAutoCleaning==true)
+    {
+        HHandler2Gpib.iStatus[Bit3_ContactorCleaning]=1;
+    }
+    else
+    {
+        HHandler2Gpib.iStatus[Bit3_ContactorCleaning]=0;
+    }
+
+    //----------判斷是否在設定參數
+    // GATE(FW3-WF) golden :7348-7360 -- see GATE REGISTER item 4 above.
+#if 0
+    if((fTeach->fShow || fMotorTest->fShow || fShuttleMove->fShow || fHome->fShow) ||
+       (fContact->fShow && fContact->rbModeNormal->Checked==false) ||
+       (SystemStart==false &&
+        (fSetup->fShow      || fOffSet->fShow       || fConfiguration->fShow    ||
+         fSpeed->fShow      || fDIOFrom->fShow      || fYieldMonitoring->fShow  ||
+         fTrayForm->fShow   || fHotPlate->fShow     || fTrayAssignment->fShow   ||
+         fTemp_Set->fShow   || FTestIF->fShow       || fCounterClear->fShow     ||
+         fLd_ULd->fShow     || fCCLink->bShow       || fTowerLight->fShow       ||
+         fCleaning->fShow   || fQAMode->fShow       || fCounterSel->fShow       ||
+         FrmRotate->fShow   || fBuilder->fShow      || fStartCondition->fShow   ||
+         fBarCode->bShow    || fSecurity->fShow     || fBinSel->bShow           ||
+         fLtcSensor->bShow  || fOmron->bShow        || fContact->fShow          ||
+         fiosetview->fShow)))
+    {
+        HHandler2Gpib.iStatus[Bit4_HandlerDiagnostics]=1;
+    }
+    else
+#endif
+    {
+        HHandler2Gpib.iStatus[Bit4_HandlerDiagnostics]=0;
+    }
+
+    if(SystemStart==false || (iTestHeadMotorTask==600 && iTestYTask>50))  //Steven 20171016 (wei) : 做Index Check的時候
+    {
+        HHandler2Gpib.iStatus[Bit5_IndexCheck]=0;
+    }
+    else
+    {
+        HHandler2Gpib.iStatus[Bit5_IndexCheck]=1;
+    }
+
+    HHandler2Gpib.iStatus[Bit6_Reversed]=0;
+
+    //------------判斷機台是否等待加熱
+    if(fHeaterOK==false && LastSet.iTemperature!=Tempture_Ambient)              //加熱中
+    {
+        HHandler2Gpib.iStatus[Bit7_HandlerGuardband]=1;
+    }
+    else
+    {
+        HHandler2Gpib.iStatus[Bit7_HandlerGuardband]=0;
+    }
+
+    //----------判斷機台是否JAM
+    // GATE(FW3-WF) golden :7391 -- see GATE REGISTER item 5 above.
+#if 0
+    if(fNote->fShow && fNote->edErrorCode->Text!="" && fSecurity->GetBit8(fNote->Edit3->Text+" "+fNote->edUnitName->Text, fNote->edErrorCode->Text)==1)                //Isaac 20170825(jou) 回傳JAM增加支援WAR,MES
+    {
+        HHandler2Gpib.iStatus[Bit8_HandlerJam]=1;
+    }
+    else
+#endif
+    {
+        HHandler2Gpib.iStatus[Bit8_HandlerJam]=0;
+    }
+
+    //----------判斷機台是否STOP
+    AnsiString asStrTemp=fMain->palMainStatus->Caption.UpperCase();             //JerryYang 20160127 機台停止中
+    if(SystemStart==false ||
+       Sen[SnFrontLeftEMG].IsOff() || Sen[SnFrontRightEMG].IsOff() ||           //緊停被按下時
+       Sen[SnRearLeftEMG ].IsOff() || Sen[SnRearRightEMG ].IsOff() ||
+       Sen[SnMotorPower].IsOff()   || Sen[SnSystemPower].IsOff()   ||
+       (Enable_PLCSafety_IO && Sen[SnAllEMG].IsOff()))                          //KenHsieh 20250212 : 新增PLC 斷線可瞬間判斷EMG及安全門
+    {
+        bEMG=true;
+    }
+
+    if(asStrTemp=="PAUSE" || asStrTemp=="Alarm" || asStrTemp=="LOCK" || bEMG)
+    {
+        HHandler2Gpib.iStatus[Bit9_HandlerStop]=1;
+    }
+    else                                                                        //JerryYang 20170704 (Steven) 修正handler stop狀態錯誤
+    {
+        HHandler2Gpib.iStatus[Bit9_HandlerStop]=0;
+    }
+
+    //-----------判斷是否在預熱中
+    if((fHeaterOK==true && LastSet.iTemperature!=Tempture_Ambient) &&           //JerryYang 20160126 Device預熱中
+       (iHeaterWaitTime>0 || iInitialSoakTimer>0 || iSoakTimer>0))
+    {
+        HHandler2Gpib.iStatus[Bit10_HandlerSoak]=1;
+    }
+    else
+    {
+        HHandler2Gpib.iStatus[Bit10_HandlerSoak]=0;
+    }
+    //-----------判斷安全門
+    for(i=0; i<MAX_SAFE_DOOR_CNT; i++)                                          //JerryYang 20230704 : 整合安全門15->MAX_SAFE_DOOR_CNT
+    {
+        if(Sen[iSafeDoor[i]].IsOff()==true)
+        {
+            HHandler2Gpib.iStatus[Bit11_HandlerDoorOpen]=1;
+            break;
+        }
+        else
+        {
+            HHandler2Gpib.iStatus[Bit11_HandlerDoorOpen]=0;
+        }
+    }
+
+    //----------判斷Handler內有無IC
+    if(HasICUnderMachine()==true || MOT[MMTrayY].HasIC()==true)                 //JerryYang 20160126 loader沒有IC
+    {
+        HHandler2Gpib.iStatus[Bit12_HandlerEmpty]=0;
+    }
+    else
+    {
+        HHandler2Gpib.iStatus[Bit12_HandlerEmpty]=1;
+    }
+
+    HHandler2Gpib.iStatus[Bit13_HandlerOk]=0;
+
+    //------------判斷是否正在Unloading
+    if(bUnloading)
+    {
+        HHandler2Gpib.iStatus[Bit14_Unloading]=1;
+    }
+    else
+    {
+        HHandler2Gpib.iStatus[Bit14_Unloading]=0;
+    }
+
+    //------------判斷是否正在Loading
+    if(LoadTask==1000 || LoadTask==900)                                         //Steven 20171016 (wei) : 用來判斷機台是否正在loading
+    {
+        HHandler2Gpib.iStatus[Bit15_Loading]=1;
+    }
+    else
+    {
+        HHandler2Gpib.iStatus[Bit15_Loading]=0;
+    }
+
+    //----------判斷IC是否都在Output
+    HHandler2Gpib.iStatus[Bit16_Reversed]=0;
+    if(CUSTOMER_CODE==CC_AMKOR_Philippines)
+    {
+    }
+    else
+    {
+        if(InArmSuck.HasIC()==false &&  OutArmSuck.HasIC()==false && ShuttleHasIC()==false &&
+           IndexHasIC()==false && MOT[MMPlate1].HasIC()==false && MOT[MMPlate2].HasIC()==false)
+        {
+            for(int i=0; i<eTrayCount; i++)
+            {
+                if(Prod.iTrayType[i]!=tNotUse)
+                {
+                    if(MOT[iMMAuto[i]].HasIC()==true)
+                    {
+                        HHandler2Gpib.iStatus[Bit16_Reversed]=1;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    HHandler2Gpib.iSendCommand=MSG_CMD_MachineState;                            //JerryYang 20151109 回覆機台狀態
+    memset(HHandler2Gpib.Message,'\0', sizeof(HHandler2Gpib.Message));          //清空陣列
+    COPYDATASTRUCT *pcp=new COPYDATASTRUCT;
+    pcp->dwData=0;
+    pcp->cbData=sizeof(HHandler2Gpib);
+    pcp->lpData=(unsigned char *)&HHandler2Gpib.iSendCommand;
+
+    // GATE(FW3-WF) golden :7507 -- see GATE REGISTER item 6 above.
+#if 0
+    SendMessage(fMain->HVisionWnd, WM_COPYDATA, (WPARAM) NULL, (LPARAM)pcp);
+#endif
+    delete pcp;
+}
+//---------------------------------------------------------------------------
+
+// -- FW3-WF APPEND -- end (SetSiteMapData golden Command.cpp :5301-5339; SetAlarmSetup :5341-5388; MachineStatus :7304-7509) --
+

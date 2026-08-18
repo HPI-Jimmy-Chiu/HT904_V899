@@ -985,6 +985,53 @@ public:
     virtual void       ReadWaterValve();                                  // golden main.h:1657 (body Command.cpp:15251-15261)
     virtual void       ReadDynamicPID();                                  // golden main.h:1658 (body Command.cpp:15263-15272)
     // -- end FW3-WE ADD --------------------------------------------------------
+    // -- FW3-WF ADD: Command.cpp wave-F declarations ---------------------------
+    // AI(W906-FW3-WF) 20260818: FW-3 Wave F ADD -- Command.cpp's collection-
+    // closing wave. 3 golden TfMain:: member declarations (golden main.h
+    // :1430-1433) whose bodies are translated in Command.cpp's new "FW3-WF
+    // GROUP" section (golden Command.cpp :5301-5339 / :5341-5388 / :7304-7509).
+    // Per contract rule 1 every declaration below is `virtual`; per rule 4 each
+    // cites its golden home. No new #include needed -- every symbol the three
+    // bodies touch (HHandler2Gpib/MOT[]/Sen[]/fNote/fProductionInfo/IniConfig/
+    // TestIF_File/Prod/HGpib2Handler/etc.) is already unqualified-visible
+    // through this file's existing include chain and this TU's own prior FW3
+    // waves (several -- e.g. HGpib2Handler->cReturn, iBackupDutOnOff/
+    // iBackupTestMode, MSG_CMD_SetSiteMapData -- are BYTE-FOR-BYTE reused
+    // patterns already compiling in Wave D's SetSiteMapData_SIGURD, Command.cpp
+    // :11400-11424).
+    //
+    // NOTE ON THE TASK BRIEF'S SetAlarmSetup LINE RANGE: the brief for this
+    // wave cited SetAlarmSetup as golden :5341-:7303 ("~1,963-line branch-sea
+    // single function"). That citation is WRONG. Re-derived directly from the
+    // cp950-decoded golden this pass: SetAlarmSetup is golden :5341-5388 (only
+    // 48 lines -- ends at the `}` on :5388, immediately followed by
+    // `//---...` and the NEXT method, `void __fastcall TfMain::GetCZtesterBin()`,
+    // at :5390). Golden :5389-7303 holds SEVEN other TfMain methods, every one
+    // of which is ALREADY translated in this file from an EARLIER wave:
+    // GetCZtesterBin (:5390-5417, port Command.cpp:2892), GetCZSoakTime
+    // (:5419-5426, port :2922), GetCZDoubleContactCount (:5429-5437, port
+    // :2933), GetCDHandlerID (:5440-5444, port :2945), GetCZJamCode
+    // (:5447-5460, port :2953), GetCZSiteMap (:5463-5639, port :2970), and
+    // GetCZAllMassTemp (:5640-7299, port Command.cpp:6542, Wave B). Verified
+    // with `grep -n "TfMain::<name>" Command.cpp` for all seven -- exactly one
+    // definition each, all pre-dating this wave -- confirming none of the
+    // three MUST NOT be re-emitted here (would be an ODR/multiple-definition
+    // link error). Golden :7300-7303 is a trio of `extern int` forward
+    // declarations (iTestHeadMotorTask/iTestYTask/LoadTask) belonging to
+    // MachineStatus's own TU, not code. This wave's ACTUAL new work is exactly
+    // the three methods below: SetSiteMapData (39 golden lines) + SetAlarmSetup
+    // (48 golden lines) + MachineStatus (206 golden lines) = 293 golden lines,
+    // not ~2,200. (Aside, not touched by this wave: this file's own Wave-B-era
+    // GetCZAllMassTemp comment at line 817 above cites its golden body as
+    // "Command.cpp:6542-8201" -- also off-by-N, the real end is :7299; :7300-
+    // 8201 is MachineStatus (:7304-7509) plus the never-wave ChangeToSiteMap/
+    // ChangeToAlarmSetup/ChangeToAlarmSetup_SG trio (:7511-8310). Pre-existing,
+    // out of this wave's append-only mandate -- flagged for whoever next
+    // touches that line, not corrected here.)
+    virtual void SetSiteMapData();   // golden main.h:1431 (body Command.cpp new FW3-WF GROUP, golden Command.cpp :5301-5339)
+    virtual void SetAlarmSetup();    // golden main.h:1433 (body Command.cpp new FW3-WF GROUP, golden Command.cpp :5341-5388)
+    virtual void MachineStatus();    // golden main.h:1430 (body Command.cpp new FW3-WF GROUP, golden Command.cpp :7304-7509)
+    // -- end FW3-WF ADD --------------------------------------------------------
     TfMain();
     virtual ~TfMain() {}
 };
