@@ -230,3 +230,15 @@ FW-3 cObserver recon 判定（vclcompat/TStringList.cpp:163-225 vs BCB6 classes.
   要單獨開波並問過使用者（預設不重現）。
 - 適用面：cObserver GetEventLogText 三個 CommaText 讀點（golden :3848/:3892/:3927）
   ＋StatisticalJamCount（:5131）。
+
+## Advantech Common Motion（PCI/PCIE-1203）兩個實測陷阱（20260818）
+
+1. **MinGW 開 `HAVE_PCI1203` 必加 `-D_STDCALL_SUPPORTED`**：AdvMotApi.h 只在
+   `_MSC_VER>=800 || _STDCALL_SUPPORTED` 時定義 `ADVCMNAPI=__stdcall`，MinGW 兩者皆無
+   → 每個 Acm_* 宣告解析失敗（error: expected initializer before 'Acm_...'）。
+   至今沒踩到只因 HAVE_PCI1203 從未真的開過。
+2. **無卡（且未註冊虛擬卡）時 `Acm_GetAvailableDevs`/`Acm_DevOpen` 阻塞 ≥15s 不返回**
+   （實測 timeout 124 殺掉）——與「批次不得 modal」同族的批次殺手，任何開發機
+   smoke/probe 必包 timeout；SDK 有官方虛擬卡（Adv_V_PCI1203，Common Motion Utility 註冊）。
+
+其餘（HAL 已存在、版本子集判定、呼叫序列、啟用步驟）見 docs/RECON_PCIE1203_CommonMotion.md。
