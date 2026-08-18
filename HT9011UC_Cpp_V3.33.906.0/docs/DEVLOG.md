@@ -8130,17 +8130,36 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   既有標記經 (2) 委派走全域實例真的關站；SCKART 否決早退）。
 - **驗收**：全新雙 gate Debug 139/3＋Release 139/3、guard 552 檔 IDENTICAL。
 
+## 20260818 傍晚 II — 佇列 6 三小項全收（0e2e450, c6f08f8）；Wave C 代理在飛
+
+- **__fastcall 稽核（0e2e450）**：MyDBIProcessNew 宣告（cMyDB.h:82 帶
+  __fastcall）與活定義（canary_support.cpp:457 沒帶）mangling 分家。今日純
+  潛伏——唯一 cMyDB.h 側呼叫者在 homecoming gate 內，且實證探針證明
+  cMyDB.h+canary_support.h 同 TU 兩種順序都編錯（互斥慣例真的在守）。
+  修＝lockstep-with-definition：宣告與 gated 本體同步去 __fastcall。
+- **HAVE_PCI1203 MOTION_IO 衝突（c6f08f8，診斷入 KNOWLEDGE.md）**：ICPDAS
+  MN200.h:221 與 Advantech AdvMotDrv.h:2594 兩家 vendor 搶同一個全域
+  typedef 名。修法（pimpl seam vs 改名巨集）牽動「MN200 併不併入 EtherCAT」
+  的使用者裁決 → fix 佇列進 1203 HAL 設計輪，不先斬。
+- **W906_Trace G6 收案（無程式變更）**：現行測試把發射 stamp 對 GemClock
+  成員（同一次 GetTimeInfo 取樣），全路徑單次 Now()，**沒有第二個時鐘可賽跑**
+  ——當初 flake 的機轉已被 D2 重構移除；200/200 連跑綠佐證。DEVLOG 舊提議
+  「取樣前後兩次時鐘」對現行斷言不適用，判定不需要強化，結案。
+- **進行中**：FW-3 Wave C 翻譯代理（ByDLL 家族 27 方法，golden Command.cpp
+  :8311-:9994，RemoteControl never-wave 排除）背景執行。
+
 ### 🔖 RESUME（最新）
 
-- **完成**：佇列 1、2、良率引擎 39-gate 啟用波（cae07bb）、**佇列 3
-  （FW-Q3, e0f14cd）**。基線 **139 測試/3 常駐**。
-- **下一步＝佇列 4**：Command.cpp Wave C（WIDGET+ByDLL 家族；never-wave
-  清單不動：TCPCommandServerClientRead overflow、RemoteControl、
-  ChangeTo* 家族）。
+- **完成**：佇列 1、2、39-gate 啟用波（cae07bb）、佇列 3（e0f14cd）、
+  **佇列 6 三小項（0e2e450/c6f08f8/G6 結案）**。基線 139 測試/3 常駐。
+- **進行中**：佇列 4＝FW-3 Wave C 翻譯代理（ByDLL 家族 27 方法，golden
+  Command.cpp :8311-:9994；RemoteControl :9673-9717 never-wave 跳過；
+  允許寫入僅 Command.cpp append＋forms/fMain.h FW3-WC 區塊）。回來後：
+  主迴圈逐 gate 複驗（absence 宣稱重跑 grep）→ 整併 → 全新雙 gate → commit。
 - **佇列後續**：5=StatisticalJamCount 家族（W906_EVENTLOG_ROOT redirect）；
-  6=小項（W906_Trace G6、__fastcall 稽核、HAVE_PCI1203 MOTION_IO 衝突）。
-  表單佇列：cShowBinSelect Wave B（含補 8 缺件成員後解 Y2 剩餘 10 站點）、
-  fSecurity/fCounterClear/fBinSel facades、fLotInfo 5 成員補齊後解 Y3、
-  FW-3 batch 3+。
+  Wave D=Command.cpp 其餘 WIDGET 類；表單佇列（cShowBinSelect Wave B＋
+  8 缺件成員→解 Y2 剩 10 站、fSecurity/fCounterClear/fBinSel、fLotInfo
+  5 成員→解 Y3、FW-3 batch 3+）。
 - **設計面（最後提醒使用者）**：write path 設計輪；硬體架構題（index 上不上
-  1203、MN200 保留 vs 併入 EtherCAT、gclib 是否因 1203 統一而免做）。
+  1203、MN200 保留 vs 併入 EtherCAT——MOTION_IO 撞名修法掛在這題下、
+  gclib 是否因 1203 統一而免做）。
