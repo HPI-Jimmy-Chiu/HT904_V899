@@ -8253,17 +8253,23 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   （GetBit8 還缺 fNote 兩成員）。
 - **驗收**：最終全新雙 gate Debug 141/3＋Release 141/3、guard IDENTICAL。
 
+## 20260819 凌晨 IV — FW-SecUnlock：fSecurity 消費端解鎖（a666193）
+
+- 主迴圈自做。C3×2（cContactCT Insufficient(107)）/B6 權限半邊
+  （cShowBinSelect Insufficient(108)）還原 golden 條件；fNote 補
+  Edit3/edUnitName → MachineStatus Bit8 gate 全解（GetBit8 真呼叫）。
+  今日行為全等（SEC1 關 → Insufficient 恆 false），SEC1 未來解鎖時
+  自動生效。仍 gate：C3 的 KYEC_LEE 臂（缺一批 fMain 登入成員）、
+  B6 modal 半邊、B5 整段（缺 fCleaning->btnResetCleanCountClick）。
+- **驗收**：全新雙 gate Debug 141/3＋Release 141/3、guard IDENTICAL。
+
 ### 🔖 RESUME（最新）
 
-- **完成**：核可佇列 1-6、FW3-WD/WE/WF（Command.cpp 159/164）、FW-SBWB、
-  FW-Y3（良率引擎全清）、**FW-SecCC（4626bd1）**。基線 141/3。
-- **下一步（自主佇列）**：
-  e. fSecurity 消費端解鎖小波（主迴圈可自做）：cContactCT GATE C3、
-     cShowBinSelect B5/B6 的 Insufficient 呼叫點解 gate；fNote 補
-     Edit3/edUnitName 兩成員→解 Command.cpp MachineStatus Bit8 的
-     GetBit8 站點；
-  f. fBinSel facade（6,652 行 golden，代理波，解鎖 SetTrayBinByDLL/
-     BinPosChange/SetBINCOUNT/SetOSBIN 的 21+ 站點）；
-  g. cShowBinSelect 家族真本體擴充；FW-3 batch 3+；FW-1 tag 批次。
+- **完成**：核可佇列 1-6、Command.cpp 159/164、良率引擎全清、FW-SecCC、
+  **FW-SecUnlock（a666193）**。基線 141/3。
+- **下一波（自主佇列）**：fBinSel facade（golden cBinSel.cpp 6,652 行＋
+  cBinSel.h 285 行，代理波；解鎖 SetTrayBinByDLL/BinPosChange/SetBINCOUNT/
+  SetOSBIN/SetConFail/chkShow0Xbin 等 21+ gate 站點；量大可切 Wave A/B）。
+  之後：cShowBinSelect 家族擴充、FW-3 batch 3+、FW-1 tag 批次。
 - **設計面（等使用者）**：write path 設計輪；硬體架構題（index/1203、
   MN200、gclib）；B4 GPIB site-map 修不修。
