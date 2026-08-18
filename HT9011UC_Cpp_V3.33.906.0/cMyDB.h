@@ -79,7 +79,15 @@ class TChart;
 //---------------------------------------------------------------------------
 int  __fastcall MyDBIEvent(AnsiString AlarmCode, int MotorID, int *AlarmID, int *UnitNo, int *AxleNo, int *Type, AnsiString *Message, AnsiString *UnitName, AnsiString asTemperature=" ", int bDuplicateErr=0, AnsiString errPart=" ", bool bDate=false, TDateTime date=0); //Chunghung 2012 0416 add date
 void __fastcall MyDBIProcess(AnsiString asTable, AnsiString S1, AnsiString S2=""); // see HOMECOMING NOTICE above -- real body lives in SECSGEM/uHGemEquipment.cpp today
-void __fastcall MyDBIProcessNew(AnsiString asTable, AnsiString AlarmCode, AnsiString S1, AnsiString S2=" "); //Steven 20161220 : Process加上Alarm Code -- see HOMECOMING NOTICE above (real body: canary_support.cpp)
+// AI(W906-FCAudit) 20260818: __fastcall dropped -- the LIVE definition
+// (canary_support.cpp:457) has none, so this decl referenced a fastcall-
+// mangled symbol nothing defines. Latent only today (the sole cMyDB.h-side
+// caller, cMyDB.cpp:1817, sits inside the NewRecordProcess homecoming gate;
+// probe: including cMyDB.h+canary_support.h in one TU errors either order,
+// so no TU ever saw both decls). Golden says __fastcall, but the vcl_compat.h
+// FastcallFix rule is lockstep-with-definition; when the body homecomes here,
+// keep both sides fastcall-free or flip both together.
+void MyDBIProcessNew(AnsiString asTable, AnsiString AlarmCode, AnsiString S1, AnsiString S2=" "); //Steven 20161220 : Process加上Alarm Code -- see HOMECOMING NOTICE above (real body: canary_support.cpp)
 void __fastcall MyDBITotalLoader(int iLoader);
 int  __fastcall MyDBITimeData(long StartTime, long HomeTime, long ContactTest, long PauseTime, long ProductTime, long JamTime, long PowerOn);
 void __fastcall MyDBIUPH(int UPH);                                              //Steven 20190906 : Add UPH in EventLog

@@ -921,7 +921,10 @@ int __fastcall MyDBIEvent(AnsiString AlarmCode, int MotorID, int *AlarmID, int *
 // (see the GA-1-B4 report for the exact steps + nm verification command).
 //---------------------------------------------------------------------------
 #if 0 // TODO(GA1-B4-integrate): homecoming from canary_support.cpp -- integrator swaps
-void __fastcall MyDBIProcessNew(AnsiString asTable, AnsiString AlarmCode, AnsiString S1, AnsiString S2) //Steven 20161220 : Process加上Alarm Code
+// AI(W906-FCAudit) 20260818: __fastcall dropped in lockstep with cMyDB.h:82
+// (see the note there) -- gated body must not resurrect the mangling mismatch
+// against canary_support.cpp:457 when this homecoming gate dissolves.
+void MyDBIProcessNew(AnsiString asTable, AnsiString AlarmCode, AnsiString S1, AnsiString S2) //Steven 20161220 : Process加上Alarm Code
 {
     int iAlarmCode, iUnitNo;
     AnsiString str, Str2, Code, sTime;
