@@ -4848,10 +4848,16 @@ struct W7C1_TfContactCTSeam { TRadioGroup *rgYieldType; void ClearData(int,int){
                               W7C1_TfContactCTSeam(){ rgYieldType=new TRadioGroup(); } };
 static W7C1_TfContactCTSeam *W7C1_fContactCT = new W7C1_TfContactCTSeam();
 #define fContactCT             W7C1_fContactCT
-//  fCounterClear : golden TfCounterClear* (LowYieldSpecialInitail()).
-struct W7C1_TfCounterClearSeam { void LowYieldSpecialInitail(){} };
-static W7C1_TfCounterClearSeam *W7C1_fCounterClear = new W7C1_TfCounterClearSeam();
-#define fCounterClear          W7C1_fCounterClear
+//  AI(W906-FW-SecCC-integrate) 20260819: W7C1_TfCounterClearSeam RETIRED --
+//  the real TfCounterClear facade landed (cCounterClear.cpp, FW-SecCC wave)
+//  with a real LowYieldSpecialInitail() (pure in-memory: bLowYeildAlarmSpecial
+//  flags + LastSet.BinCT_PTI zeroing -- verified no file/hardware touch
+//  before retiring). csystem.cpp:~5921's live call now binds the real body
+//  with zero call-site edits, exactly as the seam's own design intended.
+//  (The sibling W7C2_FCOUNTER_WRITECTINFO macro below is NOT flipped:
+//  WriteCTInfo -> TArm::WriteFile writes D:\HT9045\system\<Name>.dat --
+//  shared machine config, stays a documented no-op per the write boundary.)
+#include "forms/fCounterClear.h"
 //  fShowBinSelect : golden TfShowBinSelect* (UPH_StringGrid->Cells[c][r]).
 struct W7C1_TGridSeam { AnsiString &Cells(int,int){ static AnsiString s; return s; } };
 //  golden indexes Cells[col][row]; expose Cells as a 2-step proxy.

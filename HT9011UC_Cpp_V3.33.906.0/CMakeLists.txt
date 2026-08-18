@@ -1871,6 +1871,13 @@ add_library(ht9045_sm STATIC
     # 39-gate enablement wave.
     cContactCT.cpp
     cShowBinSelect.cpp
+    # AI(W906-FW-SecCC) 20260819: cSecurity.cpp (access-level engine +
+    # jam-level tables) + cCounterClear.cpp (counter-clear engine; its
+    # csystem.cpp W7C1 seam retired same commit). Globals are REAL instances
+    # (SIOF-audited: TfCounterClear ctor = one bool; TfSecurity ctor's
+    # cross-TU work sits behind if(INIFileGeneral!=0)).
+    cSecurity.cpp
+    cCounterClear.cpp
     # AI(W906-FW3-TemperFrom-WA) 20260818: cTemperFrom.cpp -- FW-3 cTemperFrom
     # Wave A (temperature-display data core: ctor channel/panel maps, the
     # 885-line ShowThermo classifier, TempRunShowAlarmHigh/Low, the small
