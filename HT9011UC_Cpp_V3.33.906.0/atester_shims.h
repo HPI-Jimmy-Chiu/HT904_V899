@@ -326,80 +326,24 @@ public:
 };
 extern TfAutomationShim *fAutomation;            // golden automation.h:151 (PACKAGE TfAutomation* fAutomation)
 
-// -- W5-Final-Auto9045 INTEGRATE ADD: tiny golden-shape stand-ins for TfObserver's
-//    label/memo widgets (golden cObserver.h) -- same {AnsiString Caption;} /
-//    Count-only-memo idiom already established elsewhere in this tree
-//    (FormsFacade.h's TfSortCTPanel / TfMainMemoLines).
-// AI(W906-W7-F2) 20260729: TfObserverLabel RETIRED -- vclcompat/Controls.h's TPanel is
-// the unified stand-in (plan D4) and every member that used it is a golden **TPanel***,
-// not a TLabel: golden cObserver.h:374 labModel, :356 labPowerOnTime, :357
-// labRunningTime, :358 labProductTime, :359 labLoadingCount, :360 labMUBA, :361
-// labMTBA, :377 labFactory.  (The retired type's own comment claimed "golden TLabel*";
-// that was wrong -- re-read from golden for this change.)  Zero behaviour change: same
-// single Caption member, same "" default, every instance heap-allocated via `new`.
-// TfObserverMemoLines0 is NOT retired -- its `Strings0` models one indexed element of
-// a golden TMemo->Lines, which has no unified equivalent in Controls.h.
-struct TfObserverMemoLines0 { AnsiString Strings0; };      // golden TMemo*->Lines->Strings[0] (only index used)
+// =============================================================================
+// AI(W906-FW-ObsSwap) 20260818: TfObserverShim RETIRED (user-approved queue).
+// The live `fObserver` global is now backed by the REAL TfObserver facade
+// (forms/fObserver.h, cObserver Waves 1/2), and its definition homecame to
+// cObserver.cpp. What moved where:
+//   * TfObserverMemoLines0 / TfObserverMemoLotSummaryLines /
+//     TfObserverMemoLotSummary -- moved VERBATIM into forms/fObserver.h
+//     (same names, same shapes; consumers compile unchanged).
+//   * labModel/labPowerOnTime/.../labFactory, Memo1Lines, memoLotSummary,
+//     bTestIndexZ, RecordInArmTime, AddTimeData -- all carried by the real
+//     facade (Waves 1/2 + the swap-enablement block).
+// Consequence, stated loudly: RecordInArmTime/AddTimeData at ~146 call sites
+// switch from the shim's no-ops to the REAL translated OEE bookkeeping.
+// =============================================================================
+#include "forms/fObserver.h"
 
-// -- AI(W906-SaveTestSummarySECS) 20260721: new sibling stand-in for a DIFFERENT golden TMemo* member
-//    than Memo1 above -- golden cObserver.h:339 `TMyMemo *memoLotSummary;`, dereferenced by
-//    Automation/SCK_ART_Remainder.cpp's SckArtRem_SaveTestSummarySECS as
-//    `fObserver->memoLotSummary->Lines=sList;` (golden SCK_ART.cpp:1965, a WHOLE-LIST assignment).
-//    Memo1Lines's {AnsiString Strings0;} shape above only supports a single-string PEEK
-//    (->Lines->Strings[0]) with no operator=(TStringList*) -- it cannot be reused verbatim for this
-//    DIFFERENT operation. Golden's real `TStrings::operator=(TPersistent*)` COPIES the source list's
-//    content into Lines; it does NOT take ownership of/alias the source pointer -- proven by golden
-//    itself, which calls `sList->Clear(); delete sList;` immediately after the assignment
-//    (SCK_ART.cpp:1967-1968), so the Memo must already hold its own independent copy. Modeled here as
-//    a small vector-backed COPY target with an `operator=(TStringList*)` that walks and copies
-//    `src->Strings[i]` for `i<src->Count` -- same spirit as the existing Count-only-memo idiom above,
-//    just shaped for a copy-assign instead of a read-only peek.
-struct TfObserverMemoLotSummaryLines
-{
-    std::vector<AnsiString> Strings;             // last-assigned COPY of golden Lines's content
-    TfObserverMemoLotSummaryLines &operator=(TStringList *src)
-    {
-        Strings.clear();
-        if(src!=0)
-        {
-            for(int i=0; i<src->Count; i++)
-                Strings.push_back(src->Strings[i]);
-        }
-        return *this;
-    }
-};
-struct TfObserverMemoLotSummary
-{
-    TfObserverMemoLotSummaryLines Lines;         // golden TMyMemo->Lines (TStrings*) -- whole-list-assign shape only
-};
-
-class TfObserverShim
-{
-public:
-    bool bTestIndexZ;                            // golden cObserver.h:544 (OEE)
-    // -- W6.2b1x1 ADD: in-arm 1x1_1 place/cycle SMs call these OEE recorders
-    //    (golden cObserver.h:515/516).  Offline: time bookkeeping no-ops.
-    void RecordInArmTime();                      // golden cObserver.h:515
-    void AddTimeData(int iRow, double Time);     // golden cObserver.h:516
-    // -- W5-Final-Auto9045 INTEGRATE ADD: members Automation/auto9045.cpp's
-    //    GetTesterMode/GetJamCount/GetLoadCount-family readers deref (golden
-    //    cObserver.h) -- ADDITIVE ONLY (see TfAutomationShim comment above for
-    //    the same not-yet-retargeted rationale).
-    TfObserverMemoLines0 *Memo1Lines;                                   // golden cObserver.h (TMemo* Memo1)
-    TPanel *labModel, *labPowerOnTime, *labRunningTime, *labProductTime,
-           *labLoadingCount, *labMUBA, *labMTBA;                        // golden cObserver.h:374/:356-361 (TPanel*)
-    // -- AI(W906-SaveTestSummarySECS) 20260721: new member, see TfObserverMemoLotSummary above.
-    TfObserverMemoLotSummary *memoLotSummary;                           // golden cObserver.h:339 (TMyMemo* memoLotSummary)
-    // -- AI(W906-Save2DSortingSummary) 20260723: new member, Automation/SCK_ART_Remainder.cpp's
-    //    SckArtRem_Save2DSortingSummary derefs `fObserver->labFactory->Caption` (golden SCK_ART.cpp
-    //    :3605/:3638, `Str.sprintf("ASSEMBLY SITE:%s", fObserver->labFactory->Caption)`) -- reuses the
-    //    same unified stand-in as labModel/labPowerOnTime/... above (only ->Caption read here).
-    //    AI(W906-W7-F2) 20260729: was TfObserverLabel*, now the unified TPanel*; golden
-    //    cObserver.h:377 declares `TPanel *labFactory;` (the old "TLabel*" note was wrong).
-    TPanel *labFactory;                                                 // golden cObserver.h:377 (TPanel*)
-    TfObserverShim();
-};
-extern TfObserverShim *fObserver;                // golden cObserver.h
+// (TfObserverShim class, its memo structs, and the extern all retired here --
+//  see the FW-ObsSwap banner above for where each piece lives now.)
 
 class TfiosetviewShim
 {

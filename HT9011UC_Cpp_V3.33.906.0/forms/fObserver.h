@@ -216,6 +216,9 @@
 // tRecordInArmTimer (cObserver.h:549). Real, already-ported class (RecordInArmTime,
 // this wave) -- QueryPerformanceCounter-backed, NOT a facade stand-in.
 #include "myTimer.h"
+// AI(W906-FW-ObsSwap) 20260818: <vector> for TfObserverMemoLotSummaryLines
+// (moved here from atester_shims.h with the shim retirement, see below).
+#include <vector>
 // AI(W906-FW3-Observer-W2) 20260818: MachineType.h -- tcTotalCount (the
 // dTempHistroy[tcTotalCount][60] member, UpdateTempChart). Not transitively
 // pulled in by any header above; cObserver.cpp itself also includes this
@@ -435,6 +438,40 @@ public:
 //  is still in scope, precisely to avoid that.
 // ===========================================================================
 class TfObserver;
+
+// ============================================================================
+// AI(W906-FW-ObsSwap) 20260818: the three memo stand-ins MOVED VERBATIM from
+// atester_shims.h (:342/:357-374 there) as part of retiring TfObserverShim --
+// the live `fObserver` global is now backed by TfObserver (this facade), and
+// the shim consumers (SCK_ART_Remainder's SaveTestSummarySECS whole-list
+// assign, the Memo1 single-element peek) keep compiling against these exact
+// names and shapes. Full provenance comments preserved from the shim header.
+// ============================================================================
+struct TfObserverMemoLines0 { AnsiString Strings0; };      // golden TMemo*->Lines->Strings[0] (only index used)
+
+// golden cObserver.h:339 `TMyMemo *memoLotSummary;` -- SckArtRem_SaveTestSummarySECS
+// does `fObserver->memoLotSummary->Lines=sList;` (golden SCK_ART.cpp:1965, a
+// WHOLE-LIST assignment). Golden's TStrings::operator=(TPersistent*) COPIES --
+// proven by golden itself calling `sList->Clear(); delete sList;` right after
+// (SCK_ART.cpp:1967-1968) -- so this is a vector-backed COPY target.
+struct TfObserverMemoLotSummaryLines
+{
+    std::vector<AnsiString> Strings;             // last-assigned COPY of golden Lines's content
+    TfObserverMemoLotSummaryLines &operator=(TStringList *src)
+    {
+        Strings.clear();
+        if(src!=0)
+        {
+            for(int i=0; i<src->Count; i++)
+                Strings.push_back(src->Strings[i]);
+        }
+        return *this;
+    }
+};
+struct TfObserverMemoLotSummary
+{
+    TfObserverMemoLotSummaryLines Lines;         // golden TMyMemo->Lines (TStrings*) -- whole-list-assign shape only
+};
 class W906Obs2_InstanceRegistrar
 {
 public:
@@ -741,19 +778,53 @@ public:
     // -- DEVIATION: TForm::Close() has no window here -- no-op (see banner) --
     virtual void Close();
 
+    // ========================================================================
+    // AI(W906-FW-ObsSwap) 20260818: swap-enablement members -- everything the
+    // live fObserver consumers deref that Waves 1/2 had not yet carried
+    // (measured usage sweep across all *.cpp, DEVLOG FW-ObsSwap). Same
+    // unified-TPanel idiom the retired shim already justified (only ->Caption
+    // is touched; the old "golden TLabel*" note was re-read and corrected to
+    // TPanel* back in W7-F2).
+    // ========================================================================
+    TPanel *labModel    = new TPanel();   // golden cObserver.h:374
+    TPanel *labFactory  = new TPanel();   // golden cObserver.h:377
+    TPanel *labBundleID = new TPanel();   // golden cObserver.h (SET_BUNDLE_INFO surface, uHGem G30-G33)
+    TPanel *labBundlIn  = new TPanel();
+    TPanel *labBundOut  = new TPanel();
+    TPanel *lbSerialNumber01 = new TPanel();   // uHGem serial/firmware surface
+    TPanel *lbSerialNumber02 = new TPanel();
+    TPanel *lbSerialNumber03 = new TPanel();
+    TPanel *lbSerialNumber04 = new TPanel();
+    TPanel *lbFirmwareNumber01 = new TPanel();
+    TPanel *lbFirmwareNumber02 = new TPanel();
+    TPanel *lbFirmwareNumber03 = new TPanel();
+    TPanel *lbFirmwareNumber04 = new TPanel();
+    TfObserverMemoLines0    *Memo1Lines     = new TfObserverMemoLines0();     // golden TMemo* Memo1 (peek shape)
+    TfObserverMemoLotSummary *memoLotSummary = new TfObserverMemoLotSummary(); // golden cObserver.h:339
+    // StatisticalLoaderCount: golden cObserver.cpp:5278-5288 WRITES
+    // D:\HT9045_Log\...\LoaderCount.txt -- the real body belongs to the
+    // approved StatisticalJamCount-family wave; declared now (no-op body in
+    // cObserver.cpp) so csystem.cpp's three call sites can swap over without
+    // silently gaining a file write.
+    virtual void StatisticalLoaderCount();
+
     // -- PORT-ONLY, NOT a golden member -- see W906Obs2_InstanceRegistrar's
     //    banner above. Declared LAST so `this` is fully constructed (every
     //    member above it already initialized) when its ctor runs.
     W906Obs2_InstanceRegistrar _w906Obs2SelfRegister{this};
 };
 
-// AI(W906-FW3-Observer-W1) 20260818: integration-pending -- NO `extern
-// TfObserver *fObserver;` here. The live global `fObserver` (golden
-// cObserver.h's own `extern PACKAGE TfObserver *fObserver;`) is already
-// TfObserverShim* (atester_shims.h/.cpp). Declaring a second, differently-
-// typed `fObserver` here would collide with that global exactly like the
-// two-TMyKitSuck-headers trap (docs/KNOWLEDGE.md) -- picking which facade
-// backs the live global is the main loop's integration call, not this wave's.
+// AI(W906-FW-ObsSwap) 20260818: the integration call was made (user-approved
+// queue, 20260818 morning): the live global is now backed by THIS facade.
+// TfObserverShim is retired from atester_shims.h/.cpp; the global's
+// DEFINITION moved home to cObserver.cpp (golden cObserver.h declares
+// `extern PACKAGE TfObserver *fObserver;` -- same homecoming as B4/cMyDB).
+// Static-init construction is safe ONLY because the ctor guards its config
+// reads on INIFileGeneral being open (see cObserver.cpp ctor) -- golden
+// constructs this form after OpenGeneralIniFile in WinMain order, and the
+// guard reproduces that precondition instead of crashing on a NULL ini or
+// seeding production files at static-init (the Gerneral.ini incident class).
+extern TfObserver *fObserver;                    // golden cObserver.h (extern PACKAGE)
 
 // AI(W906-FW3-Observer-W2) 20260818: free functions (golden cObserver.h:
 // 560-565, same file-scope placement -- these are NOT TfObserver members in

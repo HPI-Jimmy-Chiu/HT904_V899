@@ -415,7 +415,17 @@ TfObserver::TfObserver()
     strngrdTestTime->Cells[0][3] = "Last 8";          strngrdTestTime->Cells[0][2] = "Last 9";
 
     iTotoalTestTime = 0;
-    GetObserAuth();                                    //Steven 20090827 : 用來決定某些畫面是否顯示
+    // AI(W906-FW-ObsSwap) 20260818: guarded -- this ctor now runs at STATIC
+    // INIT (the live fObserver global homecame to this TU), and GetObserAuth
+    // reads/seeds the production D:\HT9045\config\Security_new.def via
+    // AuthPath. golden constructs this form AFTER WinMain opened the config
+    // layer; gating on INIFileGeneral being open reproduces that precondition
+    // instead of seeding production files at static-init (the Gerneral.ini
+    // incident class, docs/DEVLOG 20260817). Runtime construction after
+    // OpenGeneralIniFile() -- and the tests, which redirect both paths first
+    // -- still take the call exactly like golden.
+    if (INIFileGeneral != 0)
+        GetObserAuth();                                //Steven 20090827 : 用來決定某些畫面是否顯示
     SetSiteYieldDiagram();                              //Steven 20100126
     iShowYieldChart = 0;                                //Steven 20100818 : 只顯示Yield Chart
     labMachineID->Caption = IniConfig.SocketHandlerID;
@@ -530,7 +540,12 @@ TfObserver::TfObserver()
         strngrdIndeAirOn2->Cells[0][101 - i] = s;
     }
 
-    labSerialNo->Caption = CheckAndReadIniDataGeneral("Version", "Serial No", AnsiString("29818"));
+    // AI(W906-FW-ObsSwap) 20260818: same static-init guard as GetObserAuth
+    // above -- CheckAndReadIniDataGeneral derefs INIFileGeneral with NO null
+    // check (common.cpp:1478) and would CRASH at static init; when the ini
+    // layer is open it behaves exactly like golden (including the seed).
+    if (INIFileGeneral != 0)
+        labSerialNo->Caption = CheckAndReadIniDataGeneral("Version", "Serial No", AnsiString("29818"));
 
     cbbTempChart->Items->Clear();
     cbbTempChart->Items->Add("All");
@@ -3099,4 +3114,22 @@ void RecordIndexAirOnTime2()   //Sam 20220329 : Record Index Air On Time
             W906Obs2_Instance->strngrdIndeAirOn2->Cells[3][101 - j] = QueueAirOnTime2.GetTimeString(j);
         }
     }
+}
+
+// =============================================================================
+// AI(W906-FW-ObsSwap) 20260818: the live global comes HOME. golden
+// cObserver.h declares `extern PACKAGE TfObserver *fObserver;` and the VCL
+// runtime constructs it in WinMain's CreateForm chain; this port constructs
+// it at static init, which is safe ONLY because the ctor guards its two
+// config-layer touches on INIFileGeneral being open (see the guards above).
+// TfObserverShim (atester_shims) retired in the same commit.
+// =============================================================================
+TfObserver *fObserver = new TfObserver();
+
+// AI(W906-FW-ObsSwap) 20260818: documented no-op -- the REAL body (golden
+// cObserver.cpp:5278-5288) WRITES D:\HT9045_Log\EventLogTxt\SGJamCount// LoaderCount.txt and belongs to the approved StatisticalJamCount-family
+// wave; swapped-over csystem.cpp call sites must not silently gain a file
+// write in an integration commit.
+void TfObserver::StatisticalLoaderCount()
+{
 }

@@ -370,27 +370,10 @@ void TfAutomationShim::ClearEvent(int /*num*/)         {}
 TfAutomationShim *fAutomation = new TfAutomationShim();
 
 // ---- fObserver (offline OEE observer) --------------------------------------
-TfObserverShim::TfObserverShim() : bTestIndexZ(false)
-{
-    // -- W5-Final-Auto9045 INTEGRATE ADD: Memo1Lines + 7 label stand-ins --
-    // AI(W906-W7-F2) 20260729: TfObserverLabel retired -> unified vclcompat TPanel
-    // (see atester_shims.h).  Same "" Caption default, so no behaviour change.
-    Memo1Lines      = new TfObserverMemoLines0();
-    labModel        = new TPanel();
-    labPowerOnTime  = new TPanel();
-    labRunningTime  = new TPanel();
-    labProductTime  = new TPanel();
-    labLoadingCount = new TPanel();
-    labMUBA         = new TPanel();
-    labMTBA         = new TPanel();
-    // -- AI(W906-SaveTestSummarySECS) 20260721: new memoLotSummary member, see atester_shims.h.
-    memoLotSummary  = new TfObserverMemoLotSummary();
-    // -- AI(W906-Save2DSortingSummary) 20260723: new labFactory member, see atester_shims.h.
-    labFactory      = new TPanel();
-}
-void TfObserverShim::RecordInArmTime()                {}  // W6.2b1x1: OEE time bookkeeping no-op
-void TfObserverShim::AddTimeData(int /*iRow*/, double /*Time*/) {} // W6.2b1x1: OEE time bookkeeping no-op
-TfObserverShim *fObserver = new TfObserverShim();
+// AI(W906-FW-ObsSwap) 20260818: TfObserverShim ctor/methods/global RETIRED --
+// the live fObserver is now the REAL TfObserver facade, defined at its golden
+// home (cObserver.cpp). RecordInArmTime/AddTimeData call sites tree-wide now
+// bind to the real translated OEE bookkeeping instead of these no-ops.
 
 // ---- fiosetview (offline index-suck IO view) -------------------------------
 TfiosetviewShim::TfiosetviewShim() { for(int a=0;a<2;a++) for(int b=0;b<4;b++) for(int c=0;c<8;c++) bIndexSuck[a][b][c]=false; }
