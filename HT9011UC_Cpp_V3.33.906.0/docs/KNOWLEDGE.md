@@ -242,3 +242,16 @@ FW-3 cObserver recon 判定（vclcompat/TStringList.cpp:163-225 vs BCB6 classes.
    smoke/probe 必包 timeout；SDK 有官方虛擬卡（Adv_V_PCI1203，Common Motion Utility 註冊）。
 
 其餘（HAL 已存在、版本子集判定、呼叫序列、啟用步驟）見 docs/RECON_PCIE1203_CommonMotion.md。
+
+## Galil gclib 兩個實測陷阱（20260818）
+
+1. **64/32 位元數不合的連結失敗偽裝成「符號不存在」**：32-bit MinGW ld 對讀不懂的
+   x64 archive member 靜默跳過 → `undefined reference to GOpen`（不是 format error）；
+   32-bit nm 對 x64 庫報 File format not recognized。查位元數用 `file`（DLL）＋
+   `ar x` 抽成員讀 COFF machine（0x8664=AMD64）。本機這份 gclib 全套 64-bit only。
+2. **gclib 官方文件對舊世代 DMC32/DMCCOM 隻字未提**（doc/html grep dmc32/migrat 零命中），
+   `gclib_compat.h` 是 gclib 自己新舊 API 的相容層、對 906 用的 7 個 DMC* 函式覆蓋率零
+   ——遷移對照表只能自己維護（docs/RECON_GALIL_gclib.md §3）。
+
+另：MSVC 已於 20260817 自 build.bat 移除且本機無 cl.exe → 目前專案沒有任何工具鏈能連
+64-bit 函式庫；要動 gclib（或任何 x64-only SDK）先解 64-bit 工具鏈前置。
