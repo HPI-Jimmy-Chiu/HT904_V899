@@ -117,7 +117,14 @@
 //      unconditional :4949 `fContactCT->SaveTotalYield("")` tail call),
 //      CheckIntervalLowYieldAlarmBySite (1, golden :5566
 //      `fContactCT->sgYield->Refresh()`).
-//  (Y2) fShowBinSelect (golden cShowBinSelect.h, TfShowBinSelect*) -- PARTIALLY
+//  (Y2) fShowBinSelect -- ⚠ STATUS UPDATE, AI(W906-FW-SBWB) 20260818: FULLY
+//      DISSOLVED. forms/fShowBinSelect.h landed (FW-CTBS), the global became
+//      a real instance (FW-YEnable), and the 8 labels this block lists as
+//      missing landed 20260818 (SBWB wave) -- all 14 sites are ACTIVE now
+//      (4 dissolved by FW-YEnable, the remaining 10 by SBWB). The text below
+//      is kept as the historical record of WHY the gates existed; every
+//      factual claim in it about absence is stale.
+//      [HISTORICAL] (golden cShowBinSelect.h, TfShowBinSelect*) -- PARTIALLY
 //      seamed elsewhere. ainarm9045.cpp:7514-7517 and csystem.cpp:4855-4862
 //      both carry TU-local macro seams (`W7dK7_ShowBinSelect()` /
 //      `W7C1_TfShowBinSelectSeam`), but BOTH cover only `UPH_StringGrid`

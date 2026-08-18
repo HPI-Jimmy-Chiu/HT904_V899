@@ -563,29 +563,11 @@ void TfYieldMonitoring::CheckBySiteYieldAlarm()
                     iFailAlarmSiteYieldIntervalCount=0;
             }
 
-            // GATE (Y2) STAYS -- re-verified, NOT dissolved this wave, despite the
-            // Y1 fContactCT sites above this one being real. `fShowBinSelect->
-            // labArmDiff` (golden :4023) does not exist: forms/fShowBinSelect.h's
-            // own ROLE banner (lines 16-18) LISTS `labArmDiff`/`labSiteDiff`/
-            // `labLowYield`/`labTotalYield`/`labTotalYieldTotal`/`lblSpeciallYield`/
-            // `lblSpeciallYieldTotal`/`IntervalByTotal` as landed, but the actual
-            // TfShowBinSelect class body (same file, lines 302-382) declares NONE
-            // of those eight -- confirmed this wave by attempting to compile this
-            // exact site (`g++ -fsyntax-only`: "class TfShowBinSelect has no member
-            // named labArmDiff") and by grepping the header/cpp for each of the
-            // eight names (0 hits outside the ROLE banner's own prose). Only
-            // `ShowCategoryBin()` and `iLowYieldBinSelectContactCount` are real --
-            // this wave dissolves those. This site was ALSO absent from the (Y2)
-            // GATE REGISTER's own enumerated function list (which never mentions
-            // CheckBySiteYieldAlarm at all) even though its "14 sites total" count
-            // already included it. forms/fShowBinSelect.h is out of this wave's
-            // write boundary (only uYieldMonitoring.cpp/cContactCT.cpp/
-            // cShowBinSelect.cpp/tests/test_yieldmon_core.cpp are) -- adding the
-            // missing 8 widgets there is main-loop's call, flagged in hand-off.
-#if 0
+            // AI(W906-FW-SBWB) 20260818: (Y2) gate DISSOLVED -- the 8 missing
+            // TfShowBinSelect labels (the reason FW-YEnable re-gated this,
+            // golden :4023) landed in forms/fShowBinSelect.h this wave.
             if(CosFunction.bYieldControlUseEACount)
                 fShowBinSelect->labArmDiff->Caption=RunInfo.iUnloadCount-iYeildCT[0];
-#endif
         }
     }
     else
@@ -810,13 +792,9 @@ void TfYieldMonitoring::CheckByPickerYieldAlarm()                               
                     iPickerYieldIntervalCount=0;
             }
 
-            // GATE (Y2) STAYS -- `fShowBinSelect->labArmDiff` (golden :4247) does
-            // not exist on the landed TfShowBinSelect (see CheckBySiteYieldAlarm's
-            // sibling site above for the full re-verification note).
-#if 0
+            // AI(W906-FW-SBWB) 20260818: (Y2) gate DISSOLVED -- the 8 missing labels landed in forms/fShowBinSelect.h this wave.
             if(CosFunction.bYieldControlUseEACount)
                 fShowBinSelect->labArmDiff->Caption=RunInfo.iUnloadCount-iYeildCT[7];
-#endif
         }
     }
     else
@@ -1086,10 +1064,7 @@ void TfYieldMonitoring::CheckBySiteByArmYieldAlarm()
             }
         }
 
-        // GATE (Y2) STAYS -- `fShowBinSelect->labSiteDiff` (golden :4511/:4517)
-        // does not exist on the landed TfShowBinSelect (see CheckBySiteYieldAlarm's
-        // own labArmDiff site for the full re-verification note).
-#if 0
+        // AI(W906-FW-SBWB) 20260818: (Y2) gate DISSOLVED -- the 8 missing labels landed in forms/fShowBinSelect.h this wave.
         if(CosFunction.bYieldControlUseEACount)                                 //Steven 20170605 (wei) : 修正畫面顯示 //wei 20151111  //wei 20180606 Yield控制使用EA Count
         {
             fShowBinSelect->labSiteDiff->Caption=RunInfo.iUnloadCount-iYeildCT[2];
@@ -1098,7 +1073,6 @@ void TfYieldMonitoring::CheckBySiteByArmYieldAlarm()
         {
             fShowBinSelect->labSiteDiff->Caption=iFailAlarmSiteMaxYieldIntervalCount;
         }
-#endif
     }
 }
 
@@ -1225,13 +1199,8 @@ void TfYieldMonitoring::CheckLowYieldAlarm()
                         {
                             iYeildCT[1]=RunInfo.iUnloadCount;
                         }
-                        // GATE (Y2) STAYS -- `fShowBinSelect->labLowYield` (golden
-                        // :4639) does not exist on the landed TfShowBinSelect (see
-                        // CheckBySiteYieldAlarm's own labArmDiff site for the full
-                        // re-verification note).
-#if 0
+                        // AI(W906-FW-SBWB) 20260818: (Y2) gate DISSOLVED -- the 8 missing labels landed in forms/fShowBinSelect.h this wave.
                         fShowBinSelect->labLowYield->Caption=RunInfo.iUnloadCount-iYeildCT[1];
-#endif
                     }
                     else
                     {
@@ -1542,14 +1511,9 @@ void TfYieldMonitoring::CheckLowYieldAlarm()
         }
         else
         {
-            // GATE (Y2) STAYS -- `fShowBinSelect->labLowYield` (golden :4946)
-            // does not exist on the landed TfShowBinSelect (see
-            // CheckBySiteYieldAlarm's own labArmDiff site for the full
-            // re-verification note).
-#if 0
+            // AI(W906-FW-SBWB) 20260818: (Y2) gate DISSOLVED -- the 8 missing labels landed in forms/fShowBinSelect.h this wave.
             if(Prod.bFailAlarmLowYield==false)
                 fShowBinSelect->labLowYield->Caption=0;
-#endif
         }
 
         // AI(W906-FW-YEnable) 20260818: gate dissolved -- fContactCT/fShowBinSelect landed (ecf6154).
@@ -1701,15 +1665,7 @@ void TfYieldMonitoring::CheckLowYieldAlarmByTotal()
                     }
                 }
 
-                // GATE (Y2) STAYS -- `fShowBinSelect->labTotalYield`/
-                // `labTotalYieldTotal` (golden :5084/:5087/:5089) do not exist on
-                // the landed TfShowBinSelect (see CheckBySiteYieldAlarm's own
-                // labArmDiff site for the full re-verification note). `str` is
-                // computed only to feed the gated Caption write, so it is gated
-                // alongside (same "gate made a real local go quiet" posture as
-                // this function's own pre-existing precedent) -- `(void)str;`
-                // restored.
-#if 0
+                // AI(W906-FW-SBWB) 20260818: (Y2) gate DISSOLVED -- the 8 missing labels landed in forms/fShowBinSelect.h this wave.
                 str.sprintf("%0.2f", iYieldByTotal);
                 fShowBinSelect->labTotalYield->Caption=str.c_str();
                 if(CosFunction.bYieldControlUseEACount ||                       //Kaichen 20190628 : Low Yield ByTotal 控制使用 Contact Count
@@ -1717,20 +1673,13 @@ void TfYieldMonitoring::CheckLowYieldAlarmByTotal()
                     fShowBinSelect->labTotalYieldTotal->Caption=sumByTotal;
                 else
                     fShowBinSelect->labTotalYieldTotal->Caption=iLowYieldByTotalContactCount;
-#endif
-                (void)str;
             }
         }
         else
         {
-            // GATE (Y2) STAYS -- `fShowBinSelect->labTotalYield`/
-            // `labTotalYieldTotal` (golden :5094/:5095) do not exist on the
-            // landed TfShowBinSelect (see CheckBySiteYieldAlarm's own labArmDiff
-            // site for the full re-verification note).
-#if 0
+            // AI(W906-FW-SBWB) 20260818: (Y2) gate DISSOLVED -- the 8 missing labels landed in forms/fShowBinSelect.h this wave.
             fShowBinSelect->labTotalYield->Caption=0;
             fShowBinSelect->labTotalYieldTotal->Caption=0;
-#endif
         }
     }
     else
@@ -2039,14 +1988,8 @@ void TfYieldMonitoring::CheckIntervalLowYieldAlarmByTotal()                     
                     }
                 }
                 dYield1=ChangeToFloatNonPcnt((double)(iYieldTotalBinpass*100), (double)(Prod.iIntervalLowYieldCountByTotal));
-                // GATE (Y2) STAYS -- `fShowBinSelect->IntervalByTotal` (golden
-                // :5670) does not exist on the landed TfShowBinSelect (see
-                // CheckBySiteYieldAlarm's own labArmDiff site for the full
-                // re-verification note). `dYield1` keeps being read for real below
-                // (the bLowYieldbyTotal decision) regardless.
-#if 0
+                // AI(W906-FW-SBWB) 20260818: (Y2) gate DISSOLVED -- the 8 missing labels landed in forms/fShowBinSelect.h this wave.
                 fShowBinSelect->IntervalByTotal->Caption=dYield1;
-#endif
 
                 if(dYield1<Prod.dIntervalLowYieldLimitByTotal)                  //JerryYang 20160530 LowYieldLimit要能設定到小數點
                 {
@@ -2169,30 +2112,17 @@ void TfYieldMonitoring::CheckLowYieldAlarmSpecial()
                     }
                 }
 
-                // GATE (Y2) STAYS -- `fShowBinSelect->lblSpeciallYield`/
-                // `lblSpeciallYieldTotal` (golden :5791/:5792) do not exist on the
-                // landed TfShowBinSelect (see CheckBySiteYieldAlarm's own
-                // labArmDiff site for the full re-verification note). `str` is
-                // computed only to feed the gated Caption write, gated alongside
-                // -- `(void)str;` restored.
-#if 0
+                // AI(W906-FW-SBWB) 20260818: (Y2) gate DISSOLVED -- the 8 missing labels landed in forms/fShowBinSelect.h this wave.
                 str.sprintf("%0.2f", dYield1);
                 fShowBinSelect->lblSpeciallYield->Caption=str.c_str();
                 fShowBinSelect->lblSpeciallYieldTotal->Caption=iSum;
-#endif
-                (void)str;
             }
         }
         else
         {
-            // GATE (Y2) STAYS -- `fShowBinSelect->lblSpeciallYield`/
-            // `lblSpeciallYieldTotal` (golden :5797/:5798) do not exist on the
-            // landed TfShowBinSelect (see CheckBySiteYieldAlarm's own labArmDiff
-            // site for the full re-verification note).
-#if 0
+            // AI(W906-FW-SBWB) 20260818: (Y2) gate DISSOLVED -- the 8 missing labels landed in forms/fShowBinSelect.h this wave.
             fShowBinSelect->lblSpeciallYield->Caption=0;
             fShowBinSelect->lblSpeciallYieldTotal->Caption=0;
-#endif
         }
     }
     else

@@ -326,6 +326,20 @@ public:
     // it.
     TLabeledEdit *EditAi[eTrayCount];
 
+    // AI(W906-FW-SBWB) 20260818: the 8 yield-monitor labels the FW-YEnable
+    // wave found MISSING (header prose claimed them, class body had none --
+    // Y2 went 4/14 because of exactly this). All 8 are `TLabel*` in golden
+    // (cShowBinSelect.h:64/:66/:68/:70/:87/:94/:98/:99); landed now so
+    // uYieldMonitoring.cpp's 10 re-gated (Y2) sites can dissolve.
+    TLabel *labArmDiff             = new TLabel();
+    TLabel *labSiteDiff            = new TLabel();
+    TLabel *labLowYield            = new TLabel();
+    TLabel *labTotalYield          = new TLabel();
+    TLabel *labTotalYieldTotal     = new TLabel();
+    TLabel *lblSpeciallYield       = new TLabel();
+    TLabel *lblSpeciallYieldTotal  = new TLabel();
+    TLabel *IntervalByTotal        = new TLabel();
+
     // -- other widgets this wave's methods touch ------------------------------
     TGroupBox *gbBinBox   = new TGroupBox();
     TPanel    *pnlMag123  = new TPanel();

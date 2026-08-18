@@ -252,6 +252,20 @@ static void Test_FContactCT_And_FShowBinSelect_AreRealNonNullGlobals()
 {
     CHECK(fContactCT != 0, "FW-YEnable homecoming: fContactCT is a real, non-NULL global (cContactCT.cpp)");
     CHECK(fShowBinSelect != 0, "FW-YEnable homecoming: fShowBinSelect is a real, non-NULL global (cShowBinSelect.cpp, SIOF-guarded ctor)");
+
+    // AI(W906-FW-SBWB) 20260818: the 8 labels whose absence forced Y2 down to
+    // 4/14 are now real NSDMI-allocated members; the 10 dissolved
+    // uYieldMonitoring sites write their Captions on paths this suite already
+    // exercises, so a null here would SEGV those tests -- assert explicitly
+    // anyway so the failure is a named check, not a crash.
+    CHECK(fShowBinSelect->labArmDiff != 0 && fShowBinSelect->labSiteDiff != 0 &&
+          fShowBinSelect->labLowYield != 0 && fShowBinSelect->labTotalYield != 0 &&
+          fShowBinSelect->labTotalYieldTotal != 0 && fShowBinSelect->lblSpeciallYield != 0 &&
+          fShowBinSelect->lblSpeciallYieldTotal != 0 && fShowBinSelect->IntervalByTotal != 0,
+          "FW-SBWB: all 8 yield-monitor labels are real allocated widgets");
+    fShowBinSelect->labArmDiff->Caption = 42;
+    CHECK(fShowBinSelect->labArmDiff->Caption == "42",
+          "FW-SBWB: TLabel Caption round-trips an int write the way the dissolved (Y2) sites use it (golden :4023 idiom)");
 }
 
 static void Test_CheckLowYieldAlarm_SameNS_UsesRealContactCT()
