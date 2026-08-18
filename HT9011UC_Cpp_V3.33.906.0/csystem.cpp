@@ -6433,7 +6433,12 @@ static W7C2_TfSocketCommSeam W7C2_fSocketComm;
 //     fContactCT->ClearData_AutoClean : the objects exist (aHotPlateSubstrate /
 //     W7C1 seam) but these specific members are absent.  Gate each (offline
 //     no-op). --------------------------------------------------------------------
-#define W7C2_FYIELD_CLEARCOUNT()           do { } while(0)   // golden fYieldMonitoring->ClearYieldCount()
+//AI(W906-FW-YMSwap-enable) 20260818: the gate's premise died -- FW-YMSwap made
+// fYieldMonitoring the REAL facade and FW-3 Wave A translated ClearYieldCount
+// (golden uYieldMonitoring.cpp:5161-5200). The macro now forwards to golden's
+// own call: the two sites (:7044/:7381, yield-alarm paths) clear every Ignore
+// count for recount exactly like golden. Behaviour change, own commit.
+#define W7C2_FYIELD_CLEARCOUNT()           do { fYieldMonitoring->ClearYieldCount(); } while(0)
 #define W7C2_FCOUNTER_WRITECTINFO()        do { } while(0)   // golden fCounterClear->WriteCTInfo()
 #define W7C2_FCONTACTCT_CLEARAUTOCLEAN()   do { } while(0)   // golden fContactCT->ClearData_AutoClean()
 
@@ -12100,13 +12105,16 @@ enum eATkTrayFeed{eAtkTfInit        =0,
 //  tray sitting slightly high is never seated before the first InArm pick.
 static bool W7G3_PrePushLoaderCylinder(bool /*bReset*/=false){ return true; }
 #define PrePushLoaderCylinder  W7G3_PrePushLoaderCylinder
-//  IniRecordMonitoringIndexCycleTime (golden cObserver.cpp): arms the Index
-//  cycle-time monitor's record file.  DEFAULT no-op.
-//  BEHAVIOUR DELTA: with bSPILFunction / CC_ASE_CL the per-index cycle-time
-//  monitor is not re-armed at Initial Start, so its first window carries the
-//  previous lot's baseline.  No motion, no interlock, no alarm.
-static void W7G3_IniRecordMonitoringIndexCycleTime(){}
-#define IniRecordMonitoringIndexCycleTime  W7G3_IniRecordMonitoringIndexCycleTime
+//AI(W906-FW-YMSwap-enable) 20260818: TU-local shadow RETIRED -- the real
+//  IniRecordMonitoringIndexCycleTime landed with cObserver Wave 2
+//  (cObserver.cpp, golden :1836-1844) and the fObserver swap made its
+//  fObserver-> writes land on the real facade. The old BEHAVIOUR DELTA
+//  ("monitor not re-armed at Initial Start") is hereby closed: both call
+//  sites below (:9935, :12860) now re-arm exactly like golden. The :6242
+//  sibling call inside the #if 0 opening at :6181 binds to the same real
+//  body if that block is ever un-gated -- the old undefined-reference trap
+//  the previous warning described is gone with the shadow.
+void IniRecordMonitoringIndexCycleTime();   // real body: cObserver.cpp (decl mirror of forms/fObserver.h)
 //  ** WARNING FOR WHOEVER UN-GATES A SIBLING GROUP'S BLOCK IN THIS SAME FILE:
 //  there is a SECOND call to IniRecordMonitoringIndexCycleTime() at csystem.cpp
 //  :6242, inside a sibling's `#if 0` that opens at :6181 (verified by counting
