@@ -32,14 +32,22 @@
 //  WAVE SCOPE  (golden has exactly one function in this file)
 //  ---------------------------------------------------------
 //    HT9045Gem::AddEC()                       golden :52   ACTIVE
-//        1554 of golden's 1740 SetECDataPointer calls are ACTIVE (translated
+//        1701 of golden's 1740 SetECDataPointer calls are ACTIVE (translated
 //        verbatim -- byte-identical call text, verified line by line against the
-//        cp950-decoded golden); 186 are GATED in 30 `#if 0` blocks (GATE
-//        REGISTER below), plus one 31st gate for the member wrapper (g31).
+//        cp950-decoded golden); 39 are GATED in 13 `#if 0` blocks (GATE
+//        REGISTER below).
+//        AI(W906-FW-BinSelUnlock) 20260819: was 1554 ACTIVE / 186 GATED in 30
+//        blocks before this wave dissolved [C1]'s 17 fBinSel blocks (147
+//        registrations) -- see [C1] below for what changed and why.  The old
+//        text here also said "plus one 31st gate for the member wrapper
+//        (g31)"; that is independently stale and NOT this wave's doing -- g31
+//        was RETIRED by AI(pt-wave) PT-W9 20260811 (see the bottom of this
+//        file): `HT9045Gem::AddEC()` is ACTIVE code today, not a gate, so it
+//        is correctly excluded from both the old and the new block count.
 //        ACTIVE registrations by target family:
-//          IniConfig 432, TestIF_File 382, LastSet 134, LevelSet 103,
-//          Temperature 98, ArmSpeed_File 64, OutArmOffSet_File 55, TrayForm 40,
-//          UserDefForm_File 40, InArmOffSet_File 34, ESD_GENERAL 26,
+//          IniConfig 432, TestIF_File 382, fBinSel 147, LastSet 134,
+//          LevelSet 103, Temperature 98, ArmSpeed_File 64, OutArmOffSet_File 55,
+//          TrayForm 40, UserDefForm_File 40, InArmOffSet_File 34, ESD_GENERAL 26,
 //          DeviceForm_File 25, Offset_File 24, Prod 16, tRotate 9,
 //          HotPlateForm_File 8, Ld_UldDelayTime 8, asBundleTrayID 8,
 //          BinSelect 7, fLotInfo 6, TestIF 6, SHSpeed_File 5, fMain 3,
@@ -142,7 +150,11 @@
 //      bthermo.cpp's own 20 uses; nothing else, no external definition.
 //
 //  =============================================================================
-//  GATE REGISTER -- 31 `#if 0` blocks.  186 of 1740 registrations gated (10.7%),
+//  GATE REGISTER -- 13 `#if 0` blocks.  39 of 1740 registrations gated (2.2%,
+//  was 186/1740 = 10.7% in 30 blocks before AI(W906-FW-BinSelUnlock) 20260819
+//  dissolved [C1]'s 17 fBinSel blocks / 147 registrations; the pre-existing
+//  "31 blocks" figure quoted in some earlier notes already double-counted a
+//  retired g31 wrapper gate -- see the WAVE SCOPE note above),
 //  grouped below by CAUSE; every block keeps golden's text VERBATIM so each
 //  retirement is a deletion.  Every absence claim carries its grep and the time
 //  it was LAST re-run.  ALL of these greps were re-run as the final action of
@@ -151,7 +163,8 @@
 //  an absence proof in this tree).
 //  =============================================================================
 //
-//  [C1] `fBinSel` -- 147 registrations, 17 blocks (all listed):
+//  [C1] `fBinSel` -- DISSOLVED 20260819 (AI(W906-FW-BinSelUnlock)).  Was 147
+//       registrations, 17 blocks (all now ACTIVE, `#if 0`/`#endif` deleted):
 //       g7 (:390), g8 (:392), g9 (:412-415), g10 (:417-420), g11 (:422-429),
 //       g12 (:431-436), g13 (:439-444), g14 (:448-453), g15 (:458-463),
 //       g20 (:1011-1020), g21 (:1022-1026), g22 (:1063-1077), g23 (:1081-1095),
@@ -159,10 +172,11 @@
 //       WHAT: golden's Bin-select form `TfBinSel *fBinSel` (golden cBinSel.h),
 //       target of ECIDs 3617/3636/3656/3676-3678/3717-3727/... -- per-bin tray
 //       select, per-bin contact, per-bin type, the per-bin continuous-fail /
-//       auto-retest matrices across eBinFT/eBinRT/eBinOffLine.
-//       ABSENCE CLAIM: no `class TfBinSel` and no `fBinSel` object with external
-//       linkage exists anywhere in the port.  What DOES exist, stated precisely
-//       so nobody re-derives it as a contradiction:
+//       auto-retest matrices across eBinFT/eBinRT/eBinOffLine/*_ART/*_MRT.
+//       ORIGINAL ABSENCE CLAIM (true as of 2026-08-08 23:39, now SUPERSEDED --
+//       recorded rather than deleted, per this file's own practice elsewhere):
+//       no `class TfBinSel` and no `fBinSel` object with external linkage
+//       existed anywhere in the port at that time.  What DID exist then:
 //         * Automation/auto9045.cpp:318-323 `struct W5FA_TfBinSelExt` +
 //           `W5FA_FBinSel` -- a TU-LOCAL stand-in covering only
 //           ChangeActivePageIndex()/spbSaveClick(), i.e. none of the ~10 widget
@@ -171,19 +185,39 @@
 //           `#if 0` (its :773 comment says fBinSel "declared on NO form
 //           stand-in in this tree").
 //         * generated dfm2rc metadata (tools/, build*/) and doc/comment prose.
-//         grep -rn "fBinSel" --include=*.h --include=*.cpp (build*/tools/docs
-//              excluded)  D:/HT9045/HT9011UC_Cpp_V3.33.906.0
-//         LAST RE-RUN 2026-08-08 23:39.
-//       DEFAULT CHOSEN: the registration simply does not happen -- the ECID is
-//       absent from EC_ID, so a host S2F13 query for it returns no data and an
-//       S2F15 write for it takes SecsSvEcRegistration's IndexOf-miss path.
-//       FAITHFUL BECAUSE the alternative (binding the ECID to a substitute
-//       address) would let a host silently write bin-routing parameters into
-//       the wrong memory -- worse than "unsupported constant".
-//       BEHAVIOUR DELTA ON A REAL MACHINE: a SECS host cannot read or set any
-//       bin-select parameter (bin->tray routing, per-bin contact/type/retest).
-//       SECS-driven download of bin maps is unavailable; every other EC is
-//       unaffected.
+//       WHY IT UNGATES NOW: forms/fBinSel.h + cBinSel.cpp (AI(W906-FW-BinSel-WA)
+//       20260819, commit e4060a6) landed a non-VCL facade -- `class TfBinSel`
+//       with all 27 `TStringList*[eBinTypeTotal]` members real, ctor-allocated,
+//       and `extern TfBinSel *fBinSel;` (forms/fBinSel.h:504) backed by a real
+//       global instance.  Re-verified this wave that every one of the 19
+//       distinct member names these 17 blocks reference actually exists on
+//       that class (sBinTraySetT3Pos, sBinDoubleContact, sBinType,
+//       sBinConsFail, sT3TrayType, sT6Retest, sBinEnableFail, sBinFailPercent,
+//       sBinFailIgnore, sBinCountEnable, sBinCountNumber, sBinCountIgnore,
+//       sSpecialBinByArm, sSpecialBinCountByArm, sSpecialBinBySocket,
+//       sSpecialBinCountBySocket, sLowYield, sArmYield, sSiteYield,
+//       sBySiteClean, sByBinClean):
+//         grep -n "TStringList \*s" forms/fBinSel.h
+//         RE-RUN 2026-08-19 -> forms/fBinSel.h:428-455, all 19 present (plus 8
+//         more fBinSel members this file's blocks happen not to use).
+//       CHANGE MADE: `#include "forms/fBinSel.h"` added to the include block
+//       below; all 17 `#if 0`/`#endif` gate pairs deleted; the 147
+//       `SetECDataPointer` call lines they wrapped are UNCHANGED TEXT
+//       (golden-verbatim, identical to what the gate held) -- this is
+//       un-gating, not a rewrite.
+//       RUNTIME CAVEAT (pre-existing, not this wave's concern -- recorded per
+//       project practice): `fBinSel`'s TStringList members are populated by
+//       TfBinSel's ctor from `iTestBinCount`; if config has not loaded by the
+//       time that ctor runs, iTestBinCount is 0 and these lists start empty --
+//       a golden WinMain construction-order question, not introduced or fixed
+//       here.
+//       BEHAVIOUR DELTA ON A REAL MACHINE: a SECS host can now read/set every
+//       bin-select parameter this file registers (bin->tray routing, per-bin
+//       contact/type/continuous-fail/retest, yield/count alarm thresholds,
+//       special-bin-by-arm/by-socket, low/arm/site-yield flags, per-bin
+//       cleaning triggers) across FT/RT/OffLine/ART-FT/ART-RT/MRT-FT/MRT-RT.
+//       Previously NONE of these were host-visible (S2F13 read no data, S2F15
+//       write took SecsSvEcRegistration's IndexOf-miss path).
 //
 //  [C2] TfSCKART lot-information members -- 14 registrations, 2 blocks:
 //       g2 (:80, sInfo_Customer), g3 (:82-94, 13 x sInfo_*).
@@ -364,10 +398,10 @@
 //  csystem.cpp first.
 //
 //  =============================================================================
-//  INCLUDES -- golden's 41-header include block (golden :1-46) reduces to the 13
+//  INCLUDES -- golden's 41-header include block (golden :1-46) reduces to the 14
 //  headers this unit's surviving expressions actually need.  Golden's others are
 //  there because BCB6 units habitually included the world; every name they would
-//  supply is either unused here or supplied by one of the 13.  Deliberately NOT
+//  supply is either unused here or supplied by one of the 14.  Deliberately NOT
 //  included, with reasons (both matter for the port's known duplicate-class
 //  hazards): atester_shims.h (its only consumer here, ECID 2632's
 //  fContact->chkShuttle, is gated -- [C7]) and forms/fSetup.h (ditto ECID 3540
@@ -377,6 +411,9 @@
 //  (`g++ -E | grep -c "class TMyKitSuck"` -> 1 definition + 2
 //  elaborated-type-specifier uses, and `class TInLaserCheck` -> 1), and this
 //  unit never names either type, so it takes no position in that ODR dispute.
+//  forms/fBinSel.h ADDED 20260819 (AI(W906-FW-BinSelUnlock)) -- see [C1] below:
+//  it did not exist when the 13-header list above was first written, so its
+//  absence there was correct at the time, not an oversight.
 //  =============================================================================
 #include "MachineDefine.h"                 // golden :1  (machine/customer build defines)
 #include "MachineType.h"                   // golden :6  (tcHotPlate1.., eTempControll)
@@ -390,6 +427,7 @@
 #include "CosFunction.h"                   // CosFunction.bEnable_SECS_GEM / .bGPIBUseSECSGENData (golden :56-57 guard)
 #include "aHotPlateSubstrate.h"            // golden :41 fRotate.h equivalent -- tRotate (tRotateShim)
 #include "FormsFacade.h"                   // golden :8/:17/:45 -- fMain, fLotInfo, fSCKART
+#include "forms/fBinSel.h"                 // golden cBinSel.h -- TfBinSel, extern fBinSel (AI(W906-FW-BinSelUnlock) 20260819, see [C1])
 #include "Automation/AGV_PortScan.h"       // golden :46 AGV.h -- sDCC_ATK
 
 // -----------------------------------------------------------------------------
@@ -764,13 +802,14 @@ void HT9045Gem_AddEC(HT9045Gem *self)
         HGemPtr->SetECDataPointer(3582 , HType.INT_4_TYPE,   "Boost temperature offset (°C, 0 to 30)",                                         "Celsius",    &Temperature.iChamberBoostOffset,                         "2",      "0",  "30",      "Boost temperature offset (°C, 0 to 30)"                                                                                                                                                                   );
 
         HGemPtr->SetECDataPointer(3616 , HType.INT_4_TYPE,   "Error Bin Tray Select",                                                           "",           &BinSelect[eBinFT].IfErrorT3,                             "33",     "0",    "0",     "0:Auto1; 1:Auto2; 2:Auto3; 3:Fix1; 4:Fix2; 5:Fix3; 6:Fix4; 7:Fix5; 8:Fix6; 9:Bulk Box 10:Magazine 1; 11:Magazine 2; 12:Magazine 3; 13:Magazine 4; 14:Magazine 5; 15:Magazine 6; 16:Magazine 7; 17:Magazine 8; 18:Magazine 9; 19:Magazine 10; 20:Magazine 11; 21:Magazine 12; 22:Magazine 13; 23:Magazine 14; 24:Auto 4; 25:Auto 5; 26:Auto 6; 27:Fix 7; 28:Fix 8; 29:Fix 9; 30:Fix 10; 31:Fix 11; 32:Fix 12;");
-#if 0   // GATE g7 -- golden :390-390 (fBinSel); see GATE REGISTER above
+        //AI(W906-FW-BinSelUnlock) 20260819: GATE g7 DISSOLVED -- fBinSel is now
+        //a real facade (forms/fBinSel.h); sBinTraySetT3Pos verified present.
+        //See GATE REGISTER [C1] above.
         HGemPtr->SetECDataPointer(3617 , HType.ASCII_TYPE,   "Bin 0-255 Tray Select",                                                           "",           fBinSel->sBinTraySetT3Pos[eBinFT],                        "",       "",     "",      "0:Not In Use; 1:Auto1; 2:Auto2; 3:Auto3; 4:Fix1; 5:Fix2; 6:Fix3; 7:Fix4; 8:Fix5; 9:Fix6; 10:Bulk Box 11:Magazine 1; 12:Magazine 2; 13:Magazine 3; 14:Magazine 4; 15:Magazine 5; 16:Magazine 6; 17:Magazine 7; 18:Magazine 8; 19:Magazine 9; 20:Magazine 10; 21:Magazine 11; 22:Magazine 12; 23:Magazine 13; 24:Magazine 14; 25:Auto 4; 26:Auto 5; 27:Auto 6; 28:Fix 7; 29:Fix 8; 30:Fix 9; 31:Fix 10; 32:Fix 11; 33:Fix 12; CSV Format for Bin 0 to 255");
-#endif
         HGemPtr->SetECDataPointer(3618 , HType.ASCII_TYPE,   "Bin tray select for all",                                                         "",           &sBinMap,                                                  "",       "",     "",      "Bin tray select for all"                                                                                                                                                                                );     //JerryYang 20250120 : add
-#if 0   // GATE g8 -- golden :392-392 (fBinSel); see GATE REGISTER above
+        //AI(W906-FW-BinSelUnlock) 20260819: GATE g8 DISSOLVED (fBinSel facade
+        //landed, forms/fBinSel.h) -- see [C1] above.
         HGemPtr->SetECDataPointer(3636 , HType.ASCII_TYPE,   "Bin 0-255 Contact",                                                               "",           fBinSel->sBinDoubleContact[eBinFT],                       "",       "",     "",      "0:Single; 1:Double; CSV Format for Bin 0 to 255"                                                                                                                                                        );
-#endif
 
         //Steven 20210723 : Add ECID 3640~3655
         HGemPtr->SetECDataPointer(3640 , HType.INT_4_TYPE,   "Bin 0 Type",                                                                      "",           &Prod.iIsFailBin[0],                                         "",       "",     "",      "0:Pass; 1:Fail;"                                                                                                                                                            );
@@ -790,21 +829,22 @@ void HT9045Gem_AddEC(HT9045Gem *self)
         HGemPtr->SetECDataPointer(3654 , HType.INT_4_TYPE,   "Bin 14 Type",                                                                     "",           &Prod.iIsFailBin[14],                                        "",       "",     "",      "0:Pass; 1:Fail;"                                                                                                                                                            );
         HGemPtr->SetECDataPointer(3655 , HType.INT_4_TYPE,   "Bin 15 Type",                                                                     "",           &Prod.iIsFailBin[15],                                        "",       "",     "",      "0:Pass; 1:Fail;"                                                                                                                                                            );
 
-#if 0   // GATE g9 -- golden :412-415 (fBinSel); see GATE REGISTER above
+        //AI(W906-FW-BinSelUnlock) 20260819: GATE g9 DISSOLVED (fBinSel facade
+        //landed, forms/fBinSel.h) -- see [C1] above.
         HGemPtr->SetECDataPointer(3656 , HType.ASCII_TYPE,   "Bin 0-255 Type",                                                                  "",           fBinSel->sBinType[eBinFT],                                "",       "",     "",      "0:Pase; 1:Fail; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(3676 , HType.ASCII_TYPE,   "Bin 0-255 Continut Error Alarm Select",                                           "",           fBinSel->sBinConsFail[eBinFT],                            "",       "",     "",      "0:Disable; 1:Enable; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(3677 , HType.ASCII_TYPE,   "Tray for Fail Bin",                                                               "",           fBinSel->sT3TrayType[eBinFT],                             "",       "",     "",      "0:Pass; 1:Fail; CSV Format Data for Auto1; Auto2; Auto3; Fix1; Fix2; Fix3; Fix4; Fix5; Fix6; Bulk Box; Magazine 1; Magazine 2; Magazine 3; Magazine 4; Magazine 5; Magazine 6; Magazine 7; Magazine 8; Magazine 9; Magazine 10; Magazine 11; Magazine 12; Magazine 13; Magazine 14; Auto4; Auto5; Auto6; Fix 7; Fix 8; Fix 9; Fix 10; Fix 11; Fix 12;");
         HGemPtr->SetECDataPointer(3678 , HType.ASCII_TYPE,   "Tray for Need Auto Retest",                                                       "",           fBinSel->sT6Retest[eBinFT],                               "",       "",     "",      "0:Disable; 1: Enable; CSV Format Data for Auto1; Auto2; Auto3; Auto4; Auto5; Auto6;");
-#endif
         HGemPtr->SetECDataPointer(3716 , HType.INT_4_TYPE,   "Error Bin Tray Select for RT",                                                    "",           &BinSelect[eBinRT].IfErrorT3,                             "33",     "0",    "0",     "0:Auto1; 1:Auto2; 2:Auto3; 3:Fix1; 4:Fix2; 5:Fix3; 6:Fix4; 7:Fix5; 8:Fix6; 9:Bulk Box 10:Magazine 1; 11:Magazine 2; 12:Magazine 3; 13:Magazine 4; 14:Magazine 5; 15:Magazine 6; 16:Magazine 7; 17:Magazine 8; 18:Magazine 9; 19:Magazine 10; 20:Magazine 11; 21:Magazine 12; 22:Magazine 13; 23:Magazine 14; 24:Auto 4; 25:Auto 5; 26:Auto 6; 27:Fix 7; 28:Fix 8; 29:Fix 9; 30:Fix 10; 31:Fix 11; 32:Fix 12;");
-#if 0   // GATE g10 -- golden :417-420 (fBinSel); see GATE REGISTER above
+        //AI(W906-FW-BinSelUnlock) 20260819: GATE g10 DISSOLVED (fBinSel facade
+        //landed, forms/fBinSel.h) -- see [C1] above.
         HGemPtr->SetECDataPointer(3717 , HType.ASCII_TYPE,   "Bin 0-255 Tray Select for RT",                                                    "",           fBinSel->sBinTraySetT3Pos[eBinRT],                        "",       "",     "",      "0:Not In Use; 1:Auto1; 2:Auto2; 3:Auto3; 4:Fix1; 5:Fix2; 6:Fix3; 7:Fix4; 8:Fix5; 9:Fix6; 10:Bulk Box 11:Magazine 1; 12:Magazine 2; 13:Magazine 3; 14:Magazine 4; 15:Magazine 5; 16:Magazine 6; 17:Magazine 7; 18:Magazine 8; 19:Magazine 9; 20:Magazine 10; 21:Magazine 11; 22:Magazine 12; 23:Magazine 13; 24:Magazine 14; 25:Auto 4; 26:Auto 5; 27:Auto 6; 28:Fix 7; 29:Fix 8; 30:Fix 9; 31:Fix 10; 32:Fix 11; 33:Fix 12; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(3718 , HType.ASCII_TYPE,   "Bin 0-255 Contact RT",                                                            "",           fBinSel->sBinDoubleContact[eBinRT],                       "",       "",     "",      "0:Single; 1:Double; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(3719 , HType.ASCII_TYPE,   "Bin 0-255 Type for RT",                                                           "",           fBinSel->sBinType[eBinRT],                                "",       "",     "",      "0:Pase; 1:Fail; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(3720 , HType.ASCII_TYPE,   "Bin 0-255 Continut Error Alarm Select for RT",                                    "",           fBinSel->sBinConsFail[eBinRT],                            "",       "",     "",      "Continut Error Alarm 0:Disable; 1:Enable; CSV Format for Bin 0 to 255");
-#endif
         HGemPtr->SetECDataPointer(3721 , HType.INT_4_TYPE,   "Error Bin Tray Select for OFF-Line",                                              "",           &BinSelect[eBinOffLine].IfErrorT3,                        "33",     "0",    "0",     "0:Auto1; 1:Auto2; 2:Auto3; 3:Fix1; 4:Fix2; 5:Fix3; 6:Fix4; 7:Fix5; 8:Fix6; 9:Bulk Box 10:Magazine 1; 11:Magazine 2; 12:Magazine 3; 13:Magazine 4; 14:Magazine 5; 15:Magazine 6; 16:Magazine 7; 17:Magazine 8; 18:Magazine 9; 19:Magazine 10; 20:Magazine 11; 21:Magazine 12; 22:Magazine 13; 23:Magazine 14; 24:Auto 4; 25:Auto 5; 26:Auto 6; 27:Fix 7; 28:Fix 8; 29:Fix 9; 30:Fix 10; 31:Fix 11; 32:Fix 12;");
-#if 0   // GATE g11 -- golden :422-429 (fBinSel); see GATE REGISTER above
+        //AI(W906-FW-BinSelUnlock) 20260819: GATE g11 DISSOLVED (fBinSel facade
+        //landed, forms/fBinSel.h) -- see [C1] above.
         HGemPtr->SetECDataPointer(3722 , HType.ASCII_TYPE,   "Bin 0-255 Tray Select for OFF-Line",                                              "",           fBinSel->sBinTraySetT3Pos[eBinOffLine],                   "",       "",     "",      "0:Not In Use; 1:Auto1; 2:Auto2; 3:Auto3; 4:Fix1; 5:Fix2; 6:Fix3; 7:Fix4; 8:Fix5; 9:Fix6; 10:Bulk Box 11:Magazine 1; 12:Magazine 2; 13:Magazine 3; 14:Magazine 4; 15:Magazine 5; 16:Magazine 6; 17:Magazine 7; 18:Magazine 8; 19:Magazine 9; 20:Magazine 10; 21:Magazine 11; 22:Magazine 12; 23:Magazine 13; 24:Magazine 14; 25:Auto 4; 26:Auto 5; 27:Auto 6; 28:Fix 7; 29:Fix 8; 30:Fix 9; 31:Fix 10; 32:Fix 11; 33:Fix 12; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(3723 , HType.ASCII_TYPE,   "Bin 0-255 Contact for OFF-Line",                                                  "",           fBinSel->sBinDoubleContact[eBinOffLine],                  "",       "",     "",      "0:Single; 1:Double; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(3724 , HType.ASCII_TYPE,   "Bin 0-255 Type for OFF-Line",                                                     "",           fBinSel->sBinType[eBinOffLine],                           "",       "",     "",      "0:Pase; 1:Fail; CSV Format for Bin 0 to 255");
@@ -813,49 +853,48 @@ void HT9045Gem_AddEC(HT9045Gem *self)
         HGemPtr->SetECDataPointer(3727 , HType.ASCII_TYPE,   "Tray for Need Auto Retest (RT)",                                                  "",           fBinSel->sT6Retest[eBinRT],                               "",       "",     "",      "0:Disable; 1:Enable; CSV Format Data for Auto1; Auto2; Auto3; Auto4; Auto5; Auto6;");
         HGemPtr->SetECDataPointer(3728 , HType.ASCII_TYPE,   "Tray for Fail Bin (Off Line)",                                                    "",           fBinSel->sT3TrayType[eBinOffLine],                        "",       "",     "",      "0:Pass; 1:Fail; CSV Format Data for Auto1; Auto2; Auto3; Fix1; Fix2; Fix3; Fix4; Fix5; Fix6; Bulk Box; Magazine 1; Magazine 2; Magazine 3; Magazine 4; Magazine 5; Magazine 6; Magazine 7; Magazine 8; Magazine 9; Magazine 10; Magazine 11; Magazine 12; Magazine 13; Magazine 14; Auto4; Auto5; Auto6; Fix 7; Fix 8; Fix 9; Fix 10; Fix 11; Fix 12;");
         HGemPtr->SetECDataPointer(3729 , HType.ASCII_TYPE,   "Tray for Need Auto Retest (Off Line)",                                            "",           fBinSel->sT6Retest[eBinOffLine],                          "",       "",     "",      "0:Disable; 1:Enable; CSV Format Data for Auto1; Auto2; Auto3; Auto4; Auto5; Auto6;");
-#endif
         HGemPtr->SetECDataPointer(3800 , HType.INT_4_TYPE,   "Error Bin Tray Select for ART_FT",                                                "",           &BinSelect[eBinFT_ART].IfErrorT3,                         "33",     "0",    "0",     "0:Auto1; 1:Auto2; 2:Auto3; 3:Fix1; 4:Fix2; 5:Fix3; 6:Fix4; 7:Fix5; 8:Fix6; 9:Bulk Box 10:Magazine 1; 11:Magazine 2; 12:Magazine 3; 13:Magazine 4; 14:Magazine 5; 15:Magazine 6; 16:Magazine 7; 17:Magazine 8; 18:Magazine 9; 19:Magazine 10; 20:Magazine 11; 21:Magazine 12; 22:Magazine 13; 23:Magazine 14; 24:Auto 4; 25:Auto 5; 26:Auto 6; 27:Fix 7; 28:Fix 8; 29:Fix 9; 30:Fix 10; 31:Fix 11; 32:Fix 12;");
-#if 0   // GATE g12 -- golden :431-436 (fBinSel); see GATE REGISTER above
+        //AI(W906-FW-BinSelUnlock) 20260819: GATE g12 DISSOLVED (fBinSel facade
+        //landed, forms/fBinSel.h) -- see [C1] above.
         HGemPtr->SetECDataPointer(3801 , HType.ASCII_TYPE,   "Bin 0-255 Tray Select for ART_FT",                                                "",           fBinSel->sBinTraySetT3Pos[eBinFT_ART],                    "",       "",     "",      "0:Not In Use; 1:Auto1; 2:Auto2; 3:Auto3; 4:Fix1; 5:Fix2; 6:Fix3; 7:Fix4; 8:Fix5; 9:Fix6; 10:Bulk Box 11:Magazine 1; 12:Magazine 2; 13:Magazine 3; 14:Magazine 4; 15:Magazine 5; 16:Magazine 6; 17:Magazine 7; 18:Magazine 8; 19:Magazine 9; 20:Magazine 10; 21:Magazine 11; 22:Magazine 12; 23:Magazine 13; 24:Magazine 14; 25:Auto 4; 26:Auto 5; 27:Auto 6; 28:Fix 7; 29:Fix 8; 30:Fix 9; 31:Fix 10; 32:Fix 11; 33:Fix 12; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(3802 , HType.ASCII_TYPE,   "Bin 0-255 Contact for ART_FT",                                                    "",           fBinSel->sBinDoubleContact[eBinFT_ART],                   "",       "",     "",      "0:Single; 1:Double; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(3803 , HType.ASCII_TYPE,   "Bin 0-255 Type for ART_FT",                                                       "",           fBinSel->sBinType[eBinFT_ART],                            "",       "",     "",      "0:Pase; 1:Fail; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(3804 , HType.ASCII_TYPE,   "Bin 0-255 Continut Error Alarm Select for ART_FT",                                "",           fBinSel->sBinConsFail[eBinFT_ART],                        "",       "",     "",      "Continut Error Alarm 0:Disable; 1:Enable; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(3805 , HType.ASCII_TYPE,   "Tray for Fail Bin (ART_FT)",                                                      "",           fBinSel->sT3TrayType[eBinFT_ART],                         "",       "",     "",      "0: Pass; 1:Fail; CSV Format Data for Auto1; Auto2; Auto3; Fix1; Fix2; Fix3; Fix4; Fix5; Fix6; Bulk Box; Magazine 1; Magazine 2; Magazine 3; Magazine 4; Magazine 5; Magazine 6; Magazine 7; Magazine 8; Magazine 9; Magazine 10; Magazine 11; Magazine 12; Magazine 13; Magazine 14; Auto4; Auto5; Auto6; Fix 7; Fix 8; Fix 9; Fix 10; Fix 11; Fix 12;");
         HGemPtr->SetECDataPointer(3806 , HType.ASCII_TYPE,   "Tray for Need Auto Retest (ART_FT)",                                              "",           fBinSel->sT6Retest[eBinFT_ART],                           "",       "",     "",      "0: Disable; 1:Enable; CSV Format Data for Auto1; Auto2; Auto3; Auto4; Auto5; Auto6;");
-#endif
         HGemPtr->SetECDataPointer(3900 , HType.INT_4_TYPE,   "Error Bin Tray Select for ART_RT",                                                "",           &BinSelect[eBinRT_ART].IfErrorT3,                         "33",     "0",    "0",     "0:Auto1; 1:Auto2; 2:Auto3; 3:Fix1; 4:Fix2; 5:Fix3; 6:Fix4; 7:Fix5; 8:Fix6; 9:Bulk Box 10:Magazine 1; 11:Magazine 2; 12:Magazine 3; 13:Magazine 4; 14:Magazine 5; 15:Magazine 6; 16:Magazine 7; 17:Magazine 8; 18:Magazine 9; 19:Magazine 10; 20:Magazine 11; 21:Magazine 12; 22:Magazine 13; 23:Magazine 14; 24:Auto 4; 25:Auto 5; 26:Auto 6; 27:Fix 7; 28:Fix 8; 29:Fix 9; 30:Fix 10; 31:Fix 11; 32:Fix 12;");
 
-#if 0   // GATE g13 -- golden :439-444 (fBinSel); see GATE REGISTER above
+        //AI(W906-FW-BinSelUnlock) 20260819: GATE g13 DISSOLVED (fBinSel facade
+        //landed, forms/fBinSel.h) -- see [C1] above.
         HGemPtr->SetECDataPointer(3901 , HType.ASCII_TYPE,   "Bin 0-255 Tray Select for ART_RT",                                                "",           fBinSel->sBinTraySetT3Pos[eBinRT_ART],                    "",       "",     "",      "0:Not In Use; 1:Auto1; 2:Auto2; 3:Auto3; 4:Fix1; 5:Fix2; 6:Fix3; 7:Fix4; 8:Fix5; 9:Fix6; 10:Bulk Box 11:Magazine 1; 12:Magazine 2; 13:Magazine 3; 14:Magazine 4; 15:Magazine 5; 16:Magazine 6; 17:Magazine 7; 18:Magazine 8; 19:Magazine 9; 20:Magazine 10; 21:Magazine 11; 22:Magazine 12; 23:Magazine 13; 24:Magazine 14; 25:Auto 4; 26:Auto 5; 27:Auto 6; 28:Fix 7; 29:Fix 8; 30:Fix 9; 31:Fix 10; 32:Fix 11; 33:Fix 12; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(3902 , HType.ASCII_TYPE,   "Bin 0-255 Contact for ART_RT",                                                    "",           fBinSel->sBinDoubleContact[eBinRT_ART],                   "",       "",     "",      "0:Single; 1:Double; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(3903 , HType.ASCII_TYPE,   "Bin 0-255 Type for ART_RT",                                                       "",           fBinSel->sBinType[eBinRT_ART],                            "",       "",     "",      "0:Pase; 1:Fail; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(3904 , HType.ASCII_TYPE,   "Bin 0-255 Continut Error Alarm Select for ART_RT",                                "",           fBinSel->sBinConsFail[eBinRT_ART],                        "",       "",     "",      "Continut Error Alarm 0:Disable; 1:Enable; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(3905 , HType.ASCII_TYPE,   "Tray for Fail Bin (ART_RT)",                                                      "",           fBinSel->sT3TrayType[eBinRT_ART],                         "",       "",     "",      "0: Pass; 1: Fail; CSV Format Data for Auto1; Auto2; Auto3; Fix1; Fix2; Fix3; Fix4; Fix5; Fix6; Bulk Box; Magazine 1; Magazine 2; Magazine 3; Magazine 4; Magazine 5; Magazine 6; Magazine 7; Magazine 8; Magazine 9; Magazine 10; Magazine 11; Magazine 12; Magazine 13; Magazine 14; Auto4; Auto5; Auto6; Fix 7; Fix 8; Fix 9; Fix 10; Fix 11; Fix 12;");
         HGemPtr->SetECDataPointer(3906 , HType.ASCII_TYPE,   "Tray for Need Auto Retest (ART_RT)",                                              "",           fBinSel->sT6Retest[eBinRT_ART],                           "",       "",     "",      "0: Disable; 1: Enable; CSV Format Data for Auto1; Auto2; Auto3; Auto4; Auto5; Auto6;");
-#endif
         //Ifor 20170316 add KYEC MRT Mode
         //==>
         HGemPtr->SetECDataPointer(4000 , HType.INT_4_TYPE,   "Error Bin Tray Select for MRT_FT",                                                "",           &BinSelect[eBinFT_MRT].IfErrorT3,                         "33",     "0",    "0",     "0:Auto1; 1:Auto2; 2:Auto3; 3:Fix1; 4:Fix2; 5:Fix3; 6:Fix4; 7:Fix5; 8:Fix6; 9:Bulk Box 10:Magazine 1; 11:Magazine 2; 12:Magazine 3; 13:Magazine 4; 14:Magazine 5; 15:Magazine 6; 16:Magazine 7; 17:Magazine 8; 18:Magazine 9; 19:Magazine 10; 20:Magazine 11; 21:Magazine 12; 22:Magazine 13; 23:Magazine 14; 24:Auto 4; 25:Auto 5; 26:Auto 6; 27:Fix 7; 28:Fix 8; 29:Fix 9; 30:Fix 10; 31:Fix 11; 32:Fix 12;");
-#if 0   // GATE g14 -- golden :448-453 (fBinSel); see GATE REGISTER above
+        //AI(W906-FW-BinSelUnlock) 20260819: GATE g14 DISSOLVED (fBinSel facade
+        //landed, forms/fBinSel.h) -- see [C1] above.
         HGemPtr->SetECDataPointer(4001 , HType.ASCII_TYPE,   "Bin 0-255 Tray Select for MRT_FT",                                                "",           fBinSel->sBinTraySetT3Pos[eBinFT_MRT],                    "",       "",     "",      "0:Not In Use; 1:Auto1; 2:Auto2; 3:Auto3; 4:Fix1; 5:Fix2; 6:Fix3; 7:Fix4; 8:Fix5; 9:Fix6; 10:Bulk Box 11:Magazine 1; 12:Magazine 2; 13:Magazine 3; 14:Magazine 4; 15:Magazine 5; 16:Magazine 6; 17:Magazine 7; 18:Magazine 8; 19:Magazine 9; 20:Magazine 10; 21:Magazine 11; 22:Magazine 12; 23:Magazine 13; 24:Magazine 14; 25:Auto 4; 26:Auto 5; 27:Auto 6; 28:Fix 7; 29:Fix 8; 30:Fix 9; 31:Fix 10; 32:Fix 11; 33:Fix 12; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(4002 , HType.ASCII_TYPE,   "Bin 0-255 Contact for MRT_FT",                                                    "",           fBinSel->sBinDoubleContact[eBinFT_MRT],                   "",       "",     "",      "0:Single; 1:Double; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(4003 , HType.ASCII_TYPE,   "Bin 0-255 Type for MRT_FT",                                                       "",           fBinSel->sBinType[eBinFT_MRT],                            "",       "",     "",      "0:Pase; 1:Fail; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(4004 , HType.ASCII_TYPE,   "Bin 0-255 Continut Error Alarm Select for MRT_FT",                                "",           fBinSel->sBinConsFail[eBinFT_MRT],                        "",       "",     "",      "Continut Error Alarm 0:Disable; 1:Enable; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(4005 , HType.ASCII_TYPE,   "Tray for Fail Bin (MRT_FT)",                                                      "",           fBinSel->sT3TrayType[eBinFT_MRT],                         "",       "",     "",      "0: Pass; 1:Fail; CSV Format Data for Auto1; Auto2; Auto3; Fix1; Fix2; Fix3; Fix4; Fix5; Fix6; Bulk Box; Magazine 1; Magazine 2; Magazine 3; Magazine 4; Magazine 5; Magazine 6; Magazine 7; Magazine 8; Magazine 9; Magazine 10; Magazine 11; Magazine 12; Magazine 13; Magazine 14; Auto4; Auto5; Auto6; Fix 7; Fix 8; Fix 9; Fix 10; Fix 11; Fix 12;");
         HGemPtr->SetECDataPointer(4006 , HType.ASCII_TYPE,   "Tray for Need Auto Retest (MRT_FT)",                                              "",           fBinSel->sT6Retest[eBinFT_MRT],                           "",       "",     "",      "0: Disable; 1:Enable; CSV Format Data for Auto1; Auto2; Auto3; Auto4; Auto5; Auto6;");
-#endif
 
         HGemPtr->SetECDataPointer(4009 , HType.BOOLEAN_TYPE, "Use MRT Bin Tray Mode",                                                           "",           &TestIF_File.bEnableMRTMode,                              "1",      "0",    "0",     "Use MRT Bin Tray Mode");
 
         HGemPtr->SetECDataPointer(4100 , HType.INT_4_TYPE,   "Error Bin Tray Select for MRT_RT",                                                "",           &BinSelect[eBinRT_MRT].IfErrorT3,                         "33",     "0",    "0",     "0:Auto1; 1:Auto2; 2:Auto3; 3:Fix1; 4:Fix2; 5:Fix3; 6:Fix4; 7:Fix5; 8:Fix6; 9:Bulk Box 10:Magazine 1; 11:Magazine 2; 12:Magazine 3; 13:Magazine 4; 14:Magazine 5; 15:Magazine 6; 16:Magazine 7; 17:Magazine 8; 18:Magazine 9; 19:Magazine 10; 20:Magazine 11; 21:Magazine 12; 22:Magazine 13; 23:Magazine 14; 24:Auto 4; 25:Auto 5; 26:Auto 6; 27:Fix 7; 28:Fix 8; 29:Fix 9; 30:Fix 10; 31:Fix 11; 32:Fix 12;");
-#if 0   // GATE g15 -- golden :458-463 (fBinSel); see GATE REGISTER above
+        //AI(W906-FW-BinSelUnlock) 20260819: GATE g15 DISSOLVED (fBinSel facade
+        //landed, forms/fBinSel.h) -- see [C1] above.
         HGemPtr->SetECDataPointer(4101 , HType.ASCII_TYPE,   "Bin 0-255 Tray Select for MRT_RT",                                                "",           fBinSel->sBinTraySetT3Pos[eBinRT_MRT],                    "",       "",     "",      "0:Not In Use; 1:Auto1; 2:Auto2; 3:Auto3; 4:Fix1; 5:Fix2; 6:Fix3; 7:Fix4; 8:Fix5; 9:Fix6; 10:Bulk Box 11:Magazine 1; 12:Magazine 2; 13:Magazine 3; 14:Magazine 4; 15:Magazine 5; 16:Magazine 6; 17:Magazine 7; 18:Magazine 8; 19:Magazine 9; 20:Magazine 10; 21:Magazine 11; 22:Magazine 12; 23:Magazine 13; 24:Magazine 14; 25:Auto 4; 26:Auto 5; 27:Auto 6; 28:Fix 7; 29:Fix 8; 30:Fix 9; 31:Fix 10; 32:Fix 11; 33:Fix 12; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(4102 , HType.ASCII_TYPE,   "Bin 0-255 Contact for MRT_RT",                                                    "",           fBinSel->sBinDoubleContact[eBinRT_MRT],                   "",       "",     "",      "0:Single; 1:Double; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(4103 , HType.ASCII_TYPE,   "Bin 0-255 Type for MRT_RT",                                                       "",           fBinSel->sBinType[eBinRT_MRT],                            "",       "",     "",      "0:Pase; 1:Fail; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(4104 , HType.ASCII_TYPE,   "Bin 0-255 Continut Error Alarm Select for MRT_RT",                                "",           fBinSel->sBinConsFail[eBinRT_MRT],                        "",       "",     "",      "Continut Error Alarm 0:Disable; 1:Enable; CSV Format for Bin 0 to 255");
         HGemPtr->SetECDataPointer(4105 , HType.ASCII_TYPE,   "Tray for Fail Bin (MRT_RT)",                                                      "",           fBinSel->sT3TrayType[eBinRT_MRT],                         "",       "",     "",      "0:Pass; 1:Fail; CSV Format Data for Auto1; Auto2; Auto3; Fix1; Fix2; Fix3; Fix4; Fix5; Fix6; Bulk Box; Magazine 1; Magazine 2; Magazine 3; Magazine 4; Magazine 5; Magazine 6; Magazine 7; Magazine 8; Magazine 9; Magazine 10; Magazine 11; Magazine 12; Magazine 13; Magazine 14; Auto4; Auto5; Auto6; Fix 7; Fix 8; Fix 9; Fix 10; Fix 11; Fix 12;");
         HGemPtr->SetECDataPointer(4106 , HType.ASCII_TYPE,   "Tray for Need Auto Retest (MRT_RT)",                                              "",           fBinSel->sT6Retest[eBinRT_MRT],                           "",       "",     "",      "0:Disable; 1 Enable; CSV Format Data for Auto1; Auto2; Auto3; Auto4; Auto5; Auto6;");
-#endif
         //<==
         //Ifor 20170316 add KYEC MRT Mode
         HGemPtr->SetECDataPointer(4201 , HType.ASCII_TYPE,   "In Arm to Loader Offset",                                                         "mm",         InArmOffSet_File[InOfsLoader]->tArmOffset,                "",       "",     "",      "CSV Format with 7 data: X; Y; Pitch; Pick; Place; PitchY; PitchX2;");
@@ -1411,7 +1450,8 @@ void HT9045Gem_AddEC(HT9045Gem *self)
         HGemPtr->SetECDataPointer(10639 ,HType.BOOLEAN_TYPE, "Alarm1 Normal Bin 15 Yield over Limit Enable",                                    "",           &TestIF_File.bByBinFailureEnable[FT][15],                 "1",      "0",    "0",     "Alarm1 Normal Bin 15 Yield over Limit Enable"                                                                                                                                                           );
         HGemPtr->SetECDataPointer(10640 ,HType.FT_8_TYPE,    "Alarm1 Normal Bin 15 Yield over Limit",                                           "Percentage",&TestIF_File.dByBinFailurePercent[FT][15],                 "100",    "0",    "0",     "Alarm1 Normal Bin 15 Yield over Limit"                                                                                                                                                                  );
 
-#if 0   // GATE g20 -- golden :1011-1020 (fBinSel); see GATE REGISTER above
+        //AI(W906-FW-BinSelUnlock) 20260819: GATE g20 DISSOLVED (fBinSel facade
+        //landed, forms/fBinSel.h) -- see [C1] above.
         HGemPtr->SetECDataPointer(10641, HType.ASCII_TYPE,   "Alarm Normal Bin 0-255 Yield Over Limit Enable",                                  "",           fBinSel->sBinEnableFail[eBinFT],                          "",       "",     "",      "Alarm Normal Bin 0-255 Yield Over Limit Enable; CSV Format for Bin 0 to 255"                                                                                                                            );
         HGemPtr->SetECDataPointer(10642, HType.ASCII_TYPE,   "Alarm Normal Bin 0-255 Yield Over Limit",                                         "Percentage", fBinSel->sBinFailPercent[eBinFT],                         "",       "",     "",      "Alarm Normal Bin 0-255 Yield Over Limit; CSV Format for Bin 0 to 255"                                                                                                                                   );
         HGemPtr->SetECDataPointer(10643, HType.ASCII_TYPE,   "Alarm Normal Bin 0-255 Yield Over Limit Ignore",                                  "Percentage", fBinSel->sBinFailIgnore[eBinFT],                          "",       "",     "",      "Alarm Normal Bin 0-255 Yield Over Limit Ignore; CSV Format for Bin 0 to 255"                                                                                                                            );
@@ -1422,15 +1462,14 @@ void HT9045Gem_AddEC(HT9045Gem *self)
         HGemPtr->SetECDataPointer(10648, HType.ASCII_TYPE,   "Alarm Normal Bin 0-255 Special Bin Count By Arm",                                 "",           fBinSel->sSpecialBinCountByArm[eBinFT],                   "",       "",     "",      "Alarm Normal Bin 0-255 Yield Special Bin Count By Arm; CSV Format for Bin 0 to 255"                                                                                                                     );
         HGemPtr->SetECDataPointer(10649, HType.ASCII_TYPE,   "Alarm Normal Bin 0-255 Special Bin By Socket",                                    "",           fBinSel->sSpecialBinBySocket[eBinFT],                     "",       "",     "",      "Alarm Normal Bin 0-255 Yield Special Bin By Socket; CSV Format for Bin 0 to 255"                                                                                                                        );
         HGemPtr->SetECDataPointer(10650, HType.ASCII_TYPE,   "Alarm Normal Bin 0-255 Special Bin Count By Socket",                              "",           fBinSel->sSpecialBinCountBySocket[eBinFT],                "",       "",     "",      "Alarm Normal Bin 0-255 Yield Special Bin Count By Socket; CSV Format for Bin 0 to 255"                                                                                                                  );
-#endif
 
-#if 0   // GATE g21 -- golden :1022-1026 (fBinSel); see GATE REGISTER above
+        //AI(W906-FW-BinSelUnlock) 20260819: GATE g21 DISSOLVED (fBinSel facade
+        //landed, forms/fBinSel.h) -- see [C1] above.
         HGemPtr->SetECDataPointer(10680, HType.BOOLEAN_TYPE, "LowYield",                                                                        "",           fBinSel->sLowYield[eBinFT],                               "",       "",     "",      "LowYield; CSV Format for Bin 0 to 255"                                                                                                                                                                  );
         HGemPtr->SetECDataPointer(10681, HType.BOOLEAN_TYPE, "ArmYield",                                                                        "",           fBinSel->sArmYield[eBinFT],                               "",       "",     "",      "ArmYield; CSV Format for Bin 0 to 255"                                                                                                                                                                  );
         HGemPtr->SetECDataPointer(10682, HType.BOOLEAN_TYPE, "SiteYield",                                                                       "",           fBinSel->sSiteYield[eBinFT],                              "",       "",     "",      "SiteYield; CSV Format for Bin 0 to 255"                                                                                                                                                                 );
         HGemPtr->SetECDataPointer(10683, HType.ASCII_TYPE,   "By Bin per site cleaning",                                                        "",           fBinSel->sBySiteClean[eBinFT],                            "10000",  "0",    "0",     "By Bin per site cleaning; CSV Format for Bin 0 to 255"                                                                                                                                                  );
         HGemPtr->SetECDataPointer(10684, HType.ASCII_TYPE,   "By Bin count cleaning",                                                           "",           fBinSel->sByBinClean[eBinFT],                             "10000",  "0",    "0",     "By Bin count cleaning; CSV Format for Bin 0 to 255"                                                                                                                                                     );
-#endif
 
         HGemPtr->SetECDataPointer(10691, HType.INT_4_TYPE,   "Alarm1 Normal By Bin Yield over Limit Ignore count",                              "",           &TestIF_File.iByBinFailureIgnore[FT],                     "100000", "20",   "200",   "Alarm1 Normal By Bin Yield over Limit Ignore count"                                                                                                                                                     );  //JerryYang 20190325 add yield ECID
 
@@ -1467,7 +1506,8 @@ void HT9045Gem_AddEC(HT9045Gem *self)
         HGemPtr->SetECDataPointer(10739 ,HType.BOOLEAN_TYPE, "Alarm1 RT Bin 15 Yield over Limit Enable",                                        "",           &TestIF_File.bByBinFailureEnable[RT][15],                 "1",      "0",    "0",     "Alarm1 RT Bin 15 Yield over Limit Enable"                                                                                                                                                           );
         HGemPtr->SetECDataPointer(10740 ,HType.FT_8_TYPE,    "Alarm1 RT Bin 15 Yield over Limit",                                               "Percentage", &TestIF_File.dByBinFailurePercent[RT][15],                "100",    "0",    "0",     "Alarm1 RT Bin 15 Yield over Limit"                                                                                                                                                                  );
 
-#if 0   // GATE g22 -- golden :1063-1077 (fBinSel); see GATE REGISTER above
+        //AI(W906-FW-BinSelUnlock) 20260819: GATE g22 DISSOLVED (fBinSel facade
+        //landed, forms/fBinSel.h) -- see [C1] above.
         HGemPtr->SetECDataPointer(10741, HType.ASCII_TYPE,   "Alarm RT Bin 0-255 Yield Over Limit Enable",                                      "",           fBinSel->sBinEnableFail[eBinRT],                          "",       "",     "",      "Alarm RT Bin 0-255 Yield Over Limit Enable; CSV Format for Bin 0 to 255"                                                                                                                                );
         HGemPtr->SetECDataPointer(10742, HType.ASCII_TYPE,   "Alarm RT Bin 0-255 Yield Over Limit",                                             "Percentage", fBinSel->sBinFailPercent[eBinRT],                         "",       "",     "",      "Alarm RT Bin 0-255 Yield Over Limit (%); CSV Format for Bin 0 to 255"                                                                                                                                   );
         HGemPtr->SetECDataPointer(10743, HType.ASCII_TYPE,   "Alarm RT Bin 0-255 Yield Over Limit Ignore",                                      "Percentage", fBinSel->sBinFailIgnore[eBinRT],                          "",       "",     "",      "Alarm RT Bin 0-255 Yield Over Limit Ignore; CSV Format for Bin 0 to 255"                                                                                                                                );
@@ -1483,11 +1523,11 @@ void HT9045Gem_AddEC(HT9045Gem *self)
         HGemPtr->SetECDataPointer(10782, HType.BOOLEAN_TYPE, "SiteYield RT",                                                                    "",           fBinSel->sSiteYield[eBinRT],                              "",       "",     "",      "SiteYield RT; CSV Format for Bin 0 to 255"                                                                                                                                                              );    //wei 20161123 Secs資料錯誤修正
         HGemPtr->SetECDataPointer(10783, HType.ASCII_TYPE,   "By Bin per site cleaning RT",                                                     "",           fBinSel->sBySiteClean[eBinRT],                            "10000",  "0",    "0",     "By Bin per site cleaning RT; CSV Format for Bin 0 to 255"                                                                                                                                               );    //wei 20161123 Secs資料錯誤修正
         HGemPtr->SetECDataPointer(10784, HType.ASCII_TYPE,   "By Bin count cleaning RT",                                                        "",           fBinSel->sByBinClean[eBinRT],                             "10000",  "0",    "0",     "By Bin count cleaning RT; CSV Format for Bin 0 to 255"                                                                                                                                                  );    //wei 20161123 Secs資料錯誤修正
-#endif
 
         HGemPtr->SetECDataPointer(10791, HType.INT_4_TYPE,   "Alarm1 RT By Bin Yield over Limit Ignore count",                                  "",           &TestIF_File.iByBinFailureIgnore[RT],                     "100000", "20",   "200",   "Alarm1 RT By Bin Yield over Limit Ignore count"                                                                                                                                                         );    //JerryYang 20190325 add yield ECID
 
-#if 0   // GATE g23 -- golden :1081-1095 (fBinSel); see GATE REGISTER above
+        //AI(W906-FW-BinSelUnlock) 20260819: GATE g23 DISSOLVED (fBinSel facade
+        //landed, forms/fBinSel.h) -- see [C1] above.
         HGemPtr->SetECDataPointer(10941, HType.ASCII_TYPE,   "Alarm OffLine Bin 0-255 Yield Over Limit Enable",                                 "",           fBinSel->sBinEnableFail[eBinOffLine],                     "",       "",     "",      "Alarm OffLine Bin 0-255 Yield Over Limit Enable; CSV Format for Bin 0 to 255"                                                                                                                           );
         HGemPtr->SetECDataPointer(10942, HType.ASCII_TYPE,   "Alarm OffLine Bin 0-255 Yield Over Limit",                                        "Percentage", fBinSel->sBinFailPercent[eBinOffLine],                    "",       "",     "",      "Alarm OffLine Bin 0-255 Yield Over Limit (%); CSV Format for Bin 0 to 255"                                                                                                                              );
         HGemPtr->SetECDataPointer(10943, HType.ASCII_TYPE,   "Alarm OffLine Bin 0-255 Yield Over Limit Ignore",                                 "Percentage", fBinSel->sBinFailIgnore[eBinOffLine],                     "",       "",     "",      "Alarm OffLine Bin 0-255 Yield Over Limit Ignore; CSV Format for Bin 0 to 255"                                                                                                                           );
@@ -1503,9 +1543,9 @@ void HT9045Gem_AddEC(HT9045Gem *self)
         HGemPtr->SetECDataPointer(10982, HType.BOOLEAN_TYPE, "SiteYield OffLine",                                                               "",           fBinSel->sSiteYield[eBinOffLine],                         "",       "",     "",      "SiteYield OffLine; CSV Format for Bin 0 to 255"                                                                                                                                                         );    //wei 20161123 Secs資料錯誤修正
         HGemPtr->SetECDataPointer(10983, HType.ASCII_TYPE,   "By Bin per site cleaning OffLine",                                                "",           fBinSel->sBySiteClean[eBinOffLine],                       "10000",  "0",    "0",     "By Bin per site cleaning OffLine; CSV Format for Bin 0 to 255"                                                                                                                                          );    //wei 20161123 Secs資料錯誤修正
         HGemPtr->SetECDataPointer(10984, HType.ASCII_TYPE,   "By Bin count cleaning OffLine",                                                   "",           fBinSel->sByBinClean[eBinOffLine],                        "10000",  "0",    "0",     "By Bin count cleaning OffLine; CSV Format for Bin 0 to 255"                                                                                                                                             );    //wei 20161123 Secs資料錯誤修正
-#endif
 
-#if 0   // GATE g24 -- golden :1097-1111 (fBinSel); see GATE REGISTER above
+        //AI(W906-FW-BinSelUnlock) 20260819: GATE g24 DISSOLVED (fBinSel facade
+        //landed, forms/fBinSel.h) -- see [C1] above.
         HGemPtr->SetECDataPointer(11041, HType.ASCII_TYPE,   "Alarm ART_FT Bin 0-255 Yield Over Limit Enable",                                  "",           fBinSel->sBinEnableFail[eBinFT_ART],                      "",       "",     "",      "Alarm ART_FT Bin 0-255 Yield Over Limit Enable; CSV Format for Bin 0 to 255"                                                                                                                            );
         HGemPtr->SetECDataPointer(11042, HType.ASCII_TYPE,   "Alarm ART_FT Bin 0-255 Yield Over Limit",                                         "Percentage", fBinSel->sBinFailPercent[eBinFT_ART],                     "",       "",     "",      "Alarm ART_FT Bin 0-255 Yield Over Limit (%); CSV Format for Bin 0 to 255"                                                                                                                               );
         HGemPtr->SetECDataPointer(11043, HType.ASCII_TYPE,   "Alarm ART_FT Bin 0-255 Yield Over Limit Ignore",                                  "Percentage", fBinSel->sBinFailIgnore[eBinFT_ART],                      "",       "",     "",      "Alarm ART_FT Bin 0-255 Yield Over Limit Ignore; CSV Format for Bin 0 to 255"                                                                                                                            );
@@ -1521,9 +1561,9 @@ void HT9045Gem_AddEC(HT9045Gem *self)
         HGemPtr->SetECDataPointer(11082, HType.BOOLEAN_TYPE, "SiteYield ART_FT",                                                                "",           fBinSel->sSiteYield[eBinFT_ART],                          "",       "",     "",      "SiteYield ART_FT; CSV Format for Bin 0 to 255"                                                                                                                                                          );    //wei 20161123 Secs資料錯誤修正
         HGemPtr->SetECDataPointer(11083, HType.ASCII_TYPE,   "By Bin per site cleaning ART_FT",                                                 "",           fBinSel->sBySiteClean[eBinFT_ART],                        "10000",  "0",    "0",     "By Bin per site cleaning ART_FT; CSV Format for Bin 0 to 255"                                                                                                                                           );    //wei 20161123 Secs資料錯誤修正
         HGemPtr->SetECDataPointer(11084, HType.ASCII_TYPE,   "By Bin count cleaning ART_FT",                                                    "",           fBinSel->sByBinClean[eBinFT_ART],                         "10000",  "0",    "0",     "By Bin count cleaning ART_FT; CSV Format for Bin 0 to 255"                                                                                                                                              );    //wei 20161123 Secs資料錯誤修正
-#endif
 
-#if 0   // GATE g25 -- golden :1113-1127 (fBinSel); see GATE REGISTER above
+        //AI(W906-FW-BinSelUnlock) 20260819: GATE g25 DISSOLVED (fBinSel facade
+        //landed, forms/fBinSel.h) -- see [C1] above.
         HGemPtr->SetECDataPointer(11141, HType.ASCII_TYPE,   "Alarm ART_RT Bin 0-255 Yield Over Limit Enable",                                  "",           fBinSel->sBinEnableFail[eBinRT_ART],                      "",       "",     "",      "Alarm ART_RT Bin 0-255 Yield Over Limit Enable; CSV Format for Bin 0 to 255"                                                                                                                            );
         HGemPtr->SetECDataPointer(11142, HType.ASCII_TYPE,   "Alarm ART_RT Bin 0-255 Yield Over Limit",                                         "Percentage", fBinSel->sBinFailPercent[eBinRT_ART],                     "",       "",     "",      "Alarm ART_RT Bin 0-255 Yield Over Limit (%); CSV Format for Bin 0 to 255"                                                                                                                               );
         HGemPtr->SetECDataPointer(11143, HType.ASCII_TYPE,   "Alarm ART_RT Bin 0-255 Yield Over Limit Ignore",                                  "Percentage", fBinSel->sBinFailIgnore[eBinRT_ART],                      "",       "",     "",      "Alarm ART_RT Bin 0-255 Yield Over Limit Ignore; CSV Format for Bin 0 to 255"                                                                                                                            );
@@ -1539,11 +1579,11 @@ void HT9045Gem_AddEC(HT9045Gem *self)
         HGemPtr->SetECDataPointer(11182, HType.BOOLEAN_TYPE, "SiteYield ART_RT",                                                                "",           fBinSel->sSiteYield[eBinRT_ART],                          "",       "",     "",      "SiteYield ART_RT; CSV Format for Bin 0 to 255"                                                                                                                                                          );    //wei 20161123 Secs資料錯誤修正
         HGemPtr->SetECDataPointer(11183, HType.ASCII_TYPE,   "By Bin per site cleaning ART_RT",                                                 "",           fBinSel->sBySiteClean[eBinRT_ART],                        "10000",  "0",    "0",     "By Bin per site cleaning ART_RT; CSV Format for Bin 0 to 255"                                                                                                                                           );    //wei 20161123 Secs資料錯誤修正
         HGemPtr->SetECDataPointer(11184, HType.ASCII_TYPE,   "By Bin count cleaning ART_RT",                                                    "",           fBinSel->sByBinClean[eBinRT_ART],                         "10000",  "0",    "0",     "By Bin count cleaning ART_RT; CSV Format for Bin 0 to 255"                                                                                                                                              );    //wei 20161123 Secs資料錯誤修正
-#endif
 
         //Ifor 20170316 add KYEC MRT Mode
         //==>
-#if 0   // GATE g26 -- golden :1131-1145 (fBinSel); see GATE REGISTER above
+        //AI(W906-FW-BinSelUnlock) 20260819: GATE g26 DISSOLVED (fBinSel facade
+        //landed, forms/fBinSel.h) -- see [C1] above.
         HGemPtr->SetECDataPointer(11241, HType.ASCII_TYPE,   "Alarm MRT_FT Bin 0-255 Yield Over Limit Enable",                                  "",           fBinSel->sBinEnableFail[eBinFT_MRT],                      "",       "",     "",      "Alarm MRT_FT Bin 0-255 Yield Over Limit Enable; CSV Format for Bin 0 to 255"                                                                                                                            );
         HGemPtr->SetECDataPointer(11242, HType.ASCII_TYPE,   "Alarm MRT_FT Bin 0-255 Yield Over Limit",                                         "Percentage", fBinSel->sBinFailPercent[eBinFT_MRT],                     "",       "",     "",      "Alarm MRT_FT Bin 0-255 Yield Over Limit (%); CSV Format for Bin 0 to 255"                                                                                                                               );
         HGemPtr->SetECDataPointer(11243, HType.ASCII_TYPE,   "Alarm MRT_FT Bin 0-255 Yield Over Limit Ignore",                                  "Percentage", fBinSel->sBinFailIgnore[eBinFT_MRT],                      "",       "",     "",      "Alarm MRT_FT Bin 0-255 Yield Over Limit Ignore; CSV Format for Bin 0 to 255"                                                                                                                            );
@@ -1559,9 +1599,9 @@ void HT9045Gem_AddEC(HT9045Gem *self)
         HGemPtr->SetECDataPointer(11282, HType.BOOLEAN_TYPE, "SiteYield MRT_FT",                                                                "",           fBinSel->sSiteYield[eBinFT_MRT],                          "",       "",     "",      "SiteYield MRT_FT; CSV Format for Bin 0 to 255"                                                                                                                                                          );    //wei 20161123 Secs資料錯誤修正
         HGemPtr->SetECDataPointer(11283, HType.ASCII_TYPE,   "By Bin per site cleaning MRT_FT",                                                 "",           fBinSel->sBySiteClean[eBinFT_MRT],                        "10000",  "0",    "0",     "By Bin per site cleaning MRT_FT; CSV Format for Bin 0 to 255"                                                                                                                                           );    //wei 20161123 Secs資料錯誤修正
         HGemPtr->SetECDataPointer(11284, HType.ASCII_TYPE,   "By Bin count cleaning MRT_FT",                                                    "",           fBinSel->sByBinClean[eBinFT_MRT],                         "10000",  "0",    "0",     "By Bin count cleaning MRT_FT; CSV Format for Bin 0 to 255"                                                                                                                                              );    //wei 20161123 Secs資料錯誤修正
-#endif
 
-#if 0   // GATE g27 -- golden :1147-1161 (fBinSel); see GATE REGISTER above
+        //AI(W906-FW-BinSelUnlock) 20260819: GATE g27 DISSOLVED (fBinSel facade
+        //landed, forms/fBinSel.h) -- see [C1] above.
         HGemPtr->SetECDataPointer(11341, HType.ASCII_TYPE,   "Alarm MRT_RT Bin 0-255 Yield Over Limit Enable",                                  "",           fBinSel->sBinEnableFail[eBinRT_MRT],                      "",       "",     "",      "Alarm MRT_RT Bin 0-255 Yield Over Limit Enable; CSV Format for Bin 0 to 255"                                                                                                                            );
         HGemPtr->SetECDataPointer(11342, HType.ASCII_TYPE,   "Alarm MRT_RT Bin 0-255 Yield Over Limit",                                         "Percentage", fBinSel->sBinFailPercent[eBinRT_MRT],                     "",       "",     "",      "Alarm MRT_RT Bin 0-255 Yield Over Limit (%); CSV Format for Bin 0 to 255"                                                                                                                               );
         HGemPtr->SetECDataPointer(11343, HType.ASCII_TYPE,   "Alarm MRT_RT Bin 0-255 Yield Over Limit Ignore",                                  "Percentage", fBinSel->sBinFailIgnore[eBinRT_MRT],                      "",       "",     "",      "Alarm MRT_RT Bin 0-255 Yield Over Limit Ignore; CSV Format for Bin 0 to 255"                                                                                                                            );
@@ -1577,7 +1617,6 @@ void HT9045Gem_AddEC(HT9045Gem *self)
         HGemPtr->SetECDataPointer(11382, HType.BOOLEAN_TYPE, "SiteYield MRT_RT",                                                                "",           fBinSel->sSiteYield[eBinRT_MRT],                          "",       "",     "",      "SiteYield MRT_RT; CSV Format for Bin 0 to 255"                                                                                                                                                          );    //wei 20161123 Secs資料錯誤修正
         HGemPtr->SetECDataPointer(11383, HType.ASCII_TYPE,   "By Bin per site cleaning MRT_RT",                                                 "",           fBinSel->sBySiteClean[eBinRT_MRT],                        "10000",  "0",    "0",     "By Bin per site cleaning MRT_RT; CSV Format for Bin 0 to 255"                                                                                                                                           );    //wei 20161123 Secs資料錯誤修正
         HGemPtr->SetECDataPointer(11384, HType.ASCII_TYPE,   "By Bin count cleaning MRT_RT",                                                    "",           fBinSel->sByBinClean[eBinRT_MRT],                         "10000",  "0",    "0",     "By Bin count cleaning MRT_RT; CSV Format for Bin 0 to 255"                                                                                                                                              );    //wei 20161123 Secs資料錯誤修正
-#endif
         //<==
         //Ifor 20170316 add KYEC MRT Mode
         HGemPtr->SetECDataPointer(16000, HType.INT_4_TYPE,   "Consecutive Failure Alarm by Socket",                                             "",           &TestIF_File.bContsFailBySocket,                          "1",      "0",    "0",     "0: ON; 1: OFF; "                                                                                                                                                                                        );

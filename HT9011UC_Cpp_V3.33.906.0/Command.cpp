@@ -241,6 +241,7 @@
 #include "mysensor.h"                // Sen[] / SnAirIsEnough
 #include "forms/fNote.h"             // fNote->fShow / ->edErrorCode (real facade, offline fShow=false)
 #include "forms/fSecurity.h"         // AI(W906-FW-SecUnlock) 20260819: fSecurity->GetBit8 (MachineStatus Bit8 gate dissolved)
+#include "forms/fBinSel.h"           // AI(W906-FW-BinSelUnlock) 20260819: fBinSel real instance -- 11 gate blocks dissolved
 //---------------------------------------------------------------------------
 
 // AI(W906-FW3-WA) 20260817: golden Command.cpp file-scope global (golden :?, right
@@ -2633,25 +2634,15 @@ void TfMain::WriteSetBinMap(AnsiString BinData)                      //Steven 20
     if(HasICUnderMachine()==false)
     {
         TStringList *SL2=new TStringList();
-        // GATE(FW3-WA) golden :3921/:3924 `fBinSel->sBinTraySetT3Pos[eBinFT]->Clear()/Add("0")`
-        // -- fBinSel (golden TfBinSel*, the Bin-Select mapping VCL form) has NO
-        // translated home anywhere in the port; forms/fMain.h's OWN
-        // SetMainRunStartMode comment already documents this exact form as "a new
-        // fBinSel VCL form ... out of scope" (re-confirmed by grep -rn "fBinSel"
-        // --include=*.h . -- 20260817 22:39 -- the only hit is that same comment).
-        // Every fBinSel-> line in this function only ever mutates that form's OWN
-        // internal grid state (sBinTraySetT3Pos) and has no other port-visible
-        // effect; the loop's ONE real side effect on a port global,
-        // `BinSelect[eBinFT].IfErrorT3=iTray;` (SYSTEM_BIN_SELECT, cprod.h:2622,
-        // confirmed real), and the final `Data="SETTINGOK";` reply string stay
-        // ACTIVE and un-gated below.
-#if 0
+        // AI(W906-FW-BinSelUnlock) 20260819: GATE(FW3-WA) DISSOLVED --
+        // fBinSel landed as a real instance (e4060a6); sBinTraySetT3Pos is a
+        // real ctor-allocated TStringList. Original statements enabled
+        // verbatim.
         fBinSel->sBinTraySetT3Pos[eBinFT]->Clear();
         for(int i=0; i<16; i++)
         {
             fBinSel->sBinTraySetT3Pos[eBinFT]->Add("0");
         }
-#endif
 
         for(int i=0; i<10; i++)
         {
@@ -2690,29 +2681,28 @@ void TfMain::WriteSetBinMap(AnsiString BinData)                      //Steven 20
                         if(iBin>=iMaxBin)
                         {
                             iMaxBin=iBin+1;
-#if 0
+                            // AI(W906-FW-BinSelUnlock) 20260819: gate DISSOLVED -- fBinSel real (e4060a6).
                             do
                             {
                                 fBinSel->sBinTraySetT3Pos[eBinFT]->Add("0");
                             }while(fBinSel->sBinTraySetT3Pos[eBinFT]->Count<iMaxBin);
-#endif
                         }
 
                         if(iBin!=0 || sSL2j=="0")
                         {
-#if 0
+                            // AI(W906-FW-BinSelUnlock) 20260819: gate DISSOLVED -- fBinSel real (e4060a6).
                             fBinSel->sBinTraySetT3Pos[eBinFT]->Strings[iBin]=iTray;
-#endif
                         }
                     }
                 }
             }
         }
 
-#if 0
+        // AI(W906-FW-BinSelUnlock) 20260819: gate DISSOLVED -- fBinSel real (e4060a6). Save()'s
+        // own config-file WRITES are still gated inside cBinSel.cpp per the
+        // write boundary, so this is read+in-memory today.
         fBinSel->Save(3617, eBinFT);
         fBinSel->Save(3616, eBinFT);
-#endif
         SL2->Clear();
         delete SL2;
         Data="SETTINGOK";
@@ -8481,24 +8471,15 @@ int TfMain::SetTrayBinByDLL(int iTrayNum, LPSTR asCategories, int iFail)
             iBin=StrToIntDef(cBinTemp, -1);
             if(iBin>=iTestBinCount || iBin<0)
             {
-                // GATE(FW3-WC) golden :8407 `fBinSel->ReadFile(false, false, "");` --
-                // fBinSel (golden TfBinSel*) has NO translated home anywhere in the
-                // port (grep -rn "class TfBinSel" --include=*.h . -- 0 hits, 20260818;
-                // same absence already established by FW3-WA, Command.cpp:2635-2646).
-                // The line only refreshes that form's OWN grid; the function's real,
-                // observable effect is the `return -3` immediately after it, which
-                // stays ACTIVE un-gated.
-#if 0
+                // AI(W906-FW-BinSelUnlock) 20260819: gate DISSOLVED -- fBinSel real (e4060a6).
                 fBinSel->ReadFile(false, false, "");
-#endif
                 return -3;   //Parameter Error
             }
 
             if(cBinTemp[0]=='0' && iFail==0)
             {
-#if 0 // GATE(FW3-WC): fBinSel absent -- see golden :8407's GATE above for the full citation
+                // AI(W906-FW-BinSelUnlock) 20260819: gate DISSOLVED -- fBinSel real (e4060a6).
                 fBinSel->ReadFile(false, false, "");
-#endif
                 return -3;
             }
 
@@ -8536,9 +8517,8 @@ int TfMain::SetTrayBinByDLL(int iTrayNum, LPSTR asCategories, int iFail)
             else
             {
                 bSetByDLL=false;
-#if 0 // GATE(FW3-WC): fBinSel absent -- see golden :8407's GATE above for the full citation
+                // AI(W906-FW-BinSelUnlock) 20260819: gate DISSOLVED -- fBinSel real (e4060a6).
                 fBinSel->ReadFile(false, false, "");
-#endif
                 return -3;      //Parameter Error
             }
         }
@@ -8555,12 +8535,8 @@ int TfMain::SetTrayBinByDLL(int iTrayNum, LPSTR asCategories, int iFail)
     // function's real state mutation (BinSelect[iTestRunMode].IfErrorT3 /
     // .iStackDefFailCate) already happened, ACTIVE, in the loops above.
     // `RT`/`FT` below are golden's bare bin-run-mode literals; the port names
-    // the same MachineType.h enum `eBinRT`/`eBinFT` (MachineType.h:627-628),
-    // exactly as FW3-WA's WriteSetBinMap already spells it (Command.cpp:2648
-    // `eBinFT`) -- so even inside this #if 0 the identifiers are respelled to
-    // eBinRT/eBinFT rather than left as bare RT/FT (which do not exist in this
-    // tree under those names) for anyone who un-gates this block later.
-#if 0
+    // the same MachineType.h enum `eBinRT`/`eBinFT` (MachineType.h:627-628).
+    // AI(W906-FW-BinSelUnlock) 20260819: gate DISSOLVED -- fBinSel real (e4060a6).
     for(i=0; i<fBinSel->sBinTraySetT3Pos[iTestRunMode]->Count; i++)
     {
         if(fBinSel->sBinTraySetT3Pos[iTestRunMode]->Strings[i]==iTrayNum)
@@ -8613,8 +8589,7 @@ int TfMain::SetTrayBinByDLL(int iTrayNum, LPSTR asCategories, int iFail)
         }
     }
 
-    fBinSel->spbSaveClick(this);
-#endif
+    fBinSel->spbSaveClick(NULL);   // S: golden passes `this` (TfMain*->TObject* in VCL); port TfMain has no vclcompat::TObject base and spbSaveClick ignores Sender entirely (cBinSel.cpp: `TObject * /*Sender*/`) -- NULL is semantics-identical. Config-file WRITES inside are still gated (write boundary).
     DoStructUnitConvert();
     // GATE(FW3-WC) golden :8513 `fShowBinSelect->ShowBinSel();` -- ShowBinSel is
     // explicitly forms/fShowBinSelect.h's own documented "WAVE B QUEUE" item
@@ -12289,7 +12264,7 @@ AnsiString TfMain::BinPosChange(char *str) //KaiChen 20190706 ：Add GPIB BINPOS
 
         // GATE(FW3-WD) golden :11535-11543 -- see GATE REGISTER items 14-15
         // above and the RISK NOTE at the top of this wave's banner.
-#if 0
+        // AI(W906-FW-BinSelUnlock) 20260819: gate DISSOLVED -- fBinSel real (e4060a6).
         for(int i=0; i<TEST_MAX_BIN; i++)
         {
             if(i<fBinSel->sBinTraySetT3Pos[iTestRunMode]->Count)
@@ -12298,7 +12273,10 @@ AnsiString TfMain::BinPosChange(char *str) //KaiChen 20190706 ：Add GPIB BINPOS
             }
         }
         fBinSel->ChangeActivePageIndex();   //Sam 20230711 : 修正 OLP SetCategroy 異常
-        fBinSel->spbSaveClick(this);
+        fBinSel->spbSaveClick(NULL);   // S: same Sender-ignored NULL substitution as SetTrayBinByDLL's call above
+        // GATE (kept): fShowBinSelect->ShowBinSel() -- Wave B queue item
+        // (forms/fShowBinSelect.h:62), still untranslated.
+#if 0
         fShowBinSelect->ShowBinSel();
 #endif
     }
@@ -12673,10 +12651,9 @@ void TfMain::SetBINCOUNT()                                                      
             bSetBINCOUNT=true;
             // GATE(FW3-WD) golden :11875-11876 -- see GATE REGISTER item 20
             // above and the RISK NOTE at the top of this wave's banner.
-#if 0
+            // AI(W906-FW-BinSelUnlock) 20260819: gate DISSOLVED -- fBinSel real (e4060a6).
             fBinSel->ChangeActivePageIndex();   //Sam 20230711 : 修正 OLP SetCategroy 異常 Mark
-            fBinSel->spbSaveClick(this);                                                 //寫入 FT SetupFile
-#endif
+            fBinSel->spbSaveClick(NULL);                                                 //寫入 FT SetupFile  // S: Sender-ignored NULL substitution
             bSetBINCOUNT=false;
 
             WriteIniData(sCheckListFilePath, "Tester_Control", "BINCOUNT", asCmd);
@@ -13957,16 +13934,11 @@ void TfMain::SetOSBIN()                                                         
     strncpy(str, HGpib2Handler->cReturn, sizeof(str));
     asCmd=AnsiString(str).Trim();
 
-    // GATE(FW3-WE) golden :14678-14681 -- see GATE REGISTER item 15 above.
-    // Substituted with golden's own failure-path text.
-#if 0
+    // AI(W906-FW-BinSelUnlock) 20260819: gate DISSOLVED -- fBinSel real (e4060a6).
     if(fBinSel->SetOSBin(atoi(asCmd.c_str())))
         asRet="OK";
     else
         asRet="NG";
-#else
-    asRet="NG";
-#endif
     SendMSG_CMD(MSG_CMD_SETOSBIN, asRet);
 }
 //---------------------------------------------------------------------------
