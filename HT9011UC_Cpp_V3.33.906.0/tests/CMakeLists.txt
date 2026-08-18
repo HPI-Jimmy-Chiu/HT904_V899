@@ -3085,6 +3085,17 @@ target_link_libraries(test_observer_core PRIVATE
 )
 add_test(NAME ObserverCore COMMAND test_observer_core)
 
+# AI(W906-FW3-TemperFrom-WA) 20260818: FW-3 cTemperFrom Wave A oracle --
+# ShowThermo's not-installed/in-band/over-band/under-band classification,
+# TempRunShowAlarmHigh/Low true+false, SetShowYield/ShowYieldFuntion,
+# ShowHotName, FormClose. cTemperFrom.cpp lives in ht9045_sm, same RESCAN
+# group as cObserver/uYieldMonitoring above.
+add_executable(test_temperfrom_core test_temperfrom_core.cpp)
+target_link_libraries(test_temperfrom_core PRIVATE
+    "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"
+)
+add_test(NAME TemperFromCore COMMAND test_temperfrom_core)
+
 add_executable(test_wb_tags test_wb_tags.cpp ../WebBridgeTags.cpp)
 target_link_libraries(test_wb_tags PRIVATE
     "$<LINK_GROUP:RESCAN,ht9045_sm,ht9045_secsgem,ht9045_forms,ht9045_automation,ht9045_comms,ht9045_io,ht9045_motor,ht9045_db,ht9045_core,ht9045_globals,ht9045_public,vclcompat>"

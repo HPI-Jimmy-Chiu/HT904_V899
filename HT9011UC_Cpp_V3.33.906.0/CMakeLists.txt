@@ -1856,6 +1856,16 @@ add_library(ht9045_sm STATIC
     # fYieldMonitoring global swap is a queued, deliberate wave; the safety
     # ACTION methods DoAutoCloseSite/DoRTAutoSocketOff are NOT translated).
     uYieldMonitoring.cpp
+    # AI(W906-FW3-TemperFrom-WA) 20260818: cTemperFrom.cpp -- FW-3 cTemperFrom
+    # Wave A (temperature-display data core: ctor channel/panel maps, the
+    # 885-line ShowThermo classifier, TempRunShowAlarmHigh/Low, the small
+    # function-status strip) against the new forms/fTemperFrom.h facade. No
+    # existing stand-in shares the class name TfTemperFrom (only the
+    # differently-named TempCtrl/TriTemp.cpp W7TT_TfTemperFrom, no ODR
+    # contact); the live fTemperFrom global is not declared this wave --
+    # both known consumers (csystem.cpp GATE G02, PowerSavingMode.cpp
+    # GATE (4)) stay gated, integration is a separate, deliberate wave.
+    cTemperFrom.cpp
     # --- W6.6 HUB cross-module offline shims (DoInArm->DoInArm_9045 /
     #     DoOutArm->DoOutArm_9045 / DoLoad / DoSortArm / bShuttleShake +
     #     InitLoadTask / InitOutArmTask / InitialDoLockUnloader /
