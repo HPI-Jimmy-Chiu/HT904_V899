@@ -8286,17 +8286,30 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   fShowBinSelect->ShowBinSel() ×2 維持 gate（Wave B）。
 - **驗收**：合併全新雙 gate Debug 142/3＋Release 142/3、guard IDENTICAL。
 
+## 20260819 清晨 III — FW-SBWB2（0637599）：ShowBinSel 落地＋死分支 B13
+
+- ShowBinSel（370 golden 行）FULL；66 具名 widget 陣列化（結構偏差記錄）；
+  新 TfShowBinSelectLabel 補 Font。GOLDEN BUG B12（bUnloadHasBin 覆蓋）＋
+  **ODDITY B13：blank-tray 灰分支自 2014 起死碼**（87 字空白開頭 Pos 針
+  無寫入者，實測坐實）——代理測試首稿斷言死分支被 gate 抓到，改斷言
+  真實 else 分支後 25/25。
+- **風格警示**：本波代理偏離逐字翻譯（英譯註解＋重排空白），語句級比對
+  311/326 過但 normalized-diff 工具失效——下波 brief 要重申 cp950 逐字
+  ＋保留原註解。
+- **驗收**：全新雙 gate Debug 142/3＋Release 142/3、guard IDENTICAL。
+
 ### 🔖 RESUME（最新）
 
-- **完成**：核可佇列 1-6、Command.cpp 159/164、良率引擎全清、FW-SecCC、
-  FW-SecUnlock、FW-BinSel-WA＋proxy 拆彈、**FW-BinSelUnlock（255ae7a）**。
+- **完成**：核可佇列 1-6、Command.cpp 159/164、良率引擎全清、SecCC/
+  SecUnlock、BinSel-WA＋proxy 拆彈、BinSelUnlock、**SBWB2（0637599）**。
   基線 142/3。
 - **下一波（自主佇列）**：
-  a. cShowBinSelect Wave B（ShowBinSel ~250-widget ctor-population，
-     golden :388-757；解鎖最後 2 個 ShowBinSel gate＋B7 chkShow0Xbin）；
-  b. cBinSel Wave B（ReadFunctionData 861 行純轉錄＋SaveFunctionData
-     342 行＋SetPrimeButton/mtTrayNameSetColor）；
-  c. FW-3 batch 3+ 表單（BinDisplay 等）；FW-1 tag 批次；
-  d. 小項：auto9045.cpp 的 W5FA_FBinSel TU-local 替身退役評估。
+  a. cBinSel Wave B（ReadFunctionData 861 行＋SaveFunctionData 342 行
+     純轉錄＋SetPrimeButton/mtTrayNameSetColor；brief 要重申逐字風格）；
+  b. cShowBinSelect Wave C（ShowBinSel_ARTNor/ARTRT 真本體 ~430 行；
+     FormShow；TimerAutoCleanCountTimer）；
+  c. FW-3 batch 3+ 表單；FW-1 tag 批次；
+  d. 小項：auto9045.cpp W5FA_FBinSel 替身退役評估；Command.cpp 既有
+     fBinSel/fCounterClear stale gate 掃描（SecCC 落地後可能還有可解的）。
 - **設計面（等使用者）**：write path 設計輪；硬體架構題（index/1203、
   MN200、gclib）；B4 GPIB site-map 修不修。
