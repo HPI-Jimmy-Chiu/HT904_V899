@@ -8116,18 +8116,31 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   且 ⊆ 常駐；guard 552 檔 IDENTICAL（含爆紅那輪也 IDENTICAL——system/ 全程
   無汙染）。
 
+## 20260818 傍晚 — FW-Q3：DoAutoCloseSite/DoRTAutoSocketOff 真本體（e0f14cd）
+
+- **交付**：佇列 3 完成。DoAutoCloseSite 還原 golden 簽名 int iAllSiteOn，
+  26 個 call site 零編輯（帶的本來就是 golden 原文引數）；DoRTAutoSocketOff
+  全新翻譯，忠實保留三處 ==true 打字錯（死碼掃描）與 dYield[1] 不對稱。
+  兩 gate：FormHS（facade 不存在，純 log）、CC_Greatek fProductionInfo
+  （stand-in 缺方法）。bHasCloseSite 補成員（golden 檔案域那份是被遮蔽的
+  死碼，鏡射註明）。
+- **未接線**：DoRTAutoSocketOff 的 port 呼叫點 csystem.cpp:10152 仍在
+  #if 0（golden 另一呼叫點 main.cpp:1083 未翻）；解 gate 屬 csystem 波。
+- **oracle**：+16 → 52/52（含 ==true 死碼忠實性：低良率站不被標記；
+  既有標記經 (2) 委派走全域實例真的關站；SCKART 否決早退）。
+- **驗收**：全新雙 gate Debug 139/3＋Release 139/3、guard 552 檔 IDENTICAL。
+
 ### 🔖 RESUME（最新）
 
-- **完成**：佇列 1（ObsSwap+YMSwap+啟用）、佇列 2（CTBS）、**良率引擎 39-gate
-  啟用波（cae07bb）**。基線 **139 測試/3 常駐**（config_db/config_loaders/
-  GA1_ReadGeneralIni）。
-- **下一步＝佇列 3**：DoAutoCloseSite/DoRTAutoSocketOff 真本體翻譯
-  （uYieldMonitoring.cpp 現為文件化 no-op；行為變更獨立 commit＋雙 gate）。
-- **佇列後續**：4=Command.cpp Wave C（WIDGET+ByDLL；never-wave 清單不動）；
-  5=StatisticalJamCount 家族（W906_EVENTLOG_ROOT redirect）；6=小項
-  （W906_Trace G6、cMyDB.h/canary_support.h __fastcall 稽核、HAVE_PCI1203
-  MOTION_IO 衝突）。表單佇列：cShowBinSelect Wave B（含補 8 個缺件成員後
-  解 Y2 剩餘 10 站點）、fSecurity/fCounterClear/fBinSel facades、fLotInfo
-  5 成員補齊後解 Y3、FW-3 batch 3+。
+- **完成**：佇列 1、2、良率引擎 39-gate 啟用波（cae07bb）、**佇列 3
+  （FW-Q3, e0f14cd）**。基線 **139 測試/3 常駐**。
+- **下一步＝佇列 4**：Command.cpp Wave C（WIDGET+ByDLL 家族；never-wave
+  清單不動：TCPCommandServerClientRead overflow、RemoteControl、
+  ChangeTo* 家族）。
+- **佇列後續**：5=StatisticalJamCount 家族（W906_EVENTLOG_ROOT redirect）；
+  6=小項（W906_Trace G6、__fastcall 稽核、HAVE_PCI1203 MOTION_IO 衝突）。
+  表單佇列：cShowBinSelect Wave B（含補 8 缺件成員後解 Y2 剩餘 10 站點）、
+  fSecurity/fCounterClear/fBinSel facades、fLotInfo 5 成員補齊後解 Y3、
+  FW-3 batch 3+。
 - **設計面（最後提醒使用者）**：write path 設計輪；硬體架構題（index 上不上
   1203、MN200 保留 vs 併入 EtherCAT、gclib 是否因 1203 統一而免做）。
