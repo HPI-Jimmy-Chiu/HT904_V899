@@ -80,19 +80,18 @@
 #include <cstring>   // (none currently, kept for parity with sibling translation units)
 
 //---------------------------------------------------------------------------
-// AI(W906-FW3-ContactCT-WA) 20260818: the task brief forbids DEFINING the
-// live global instance this wave ("不准定義 fContactCT 全域") -- main-loop
-// homecoming decides when/if a real TfContactCT is constructed and wired
-// (same posture forms/fYieldMonitoring.h/forms/fObserver.h took pre-swap).
-// This TU still needs to PROVIDE the definition for the `extern TfContactCT
-// *fContactCT;` declared in forms/fContactCT.h (so other already-translated
-// TUs that merely reference the pointer, e.g. cMyDB.cpp's gated TODO, link
-// cleanly once un-gated) -- defined here as `nullptr`, mirroring golden's own
-// storage-duration shape (`TfContactCT *fContactCT;` at file scope,
-// zero-initialized until the VCL runtime constructs the real form) more
-// closely than omitting the definition entirely would. There is still NO
-// live TfContactCT INSTANCE anywhere (nothing `new`s one).
-TfContactCT *fContactCT = nullptr;
+// AI(W906-FW-YEnable) 20260818: homecoming -- the live global is now backed
+// by a real instance. Re-verified this wave (re-reading the ctor below in
+// full, per this wave's own task brief): the ctor is `bShow=false;` and
+// nothing else (the two GDI-acquisition lines, `pCanvas=new TCanvas;`/
+// `hDC=GetDC(...)`, are dropped, not merely deferred -- see forms/
+// fContactCT.h "DEVIATION -- GDI members dropped entirely"). It reads no
+// config/ini, opens no file, and touches no OTHER class's global (unlike
+// forms/fShowBinSelect.h's TfShowBinSelect, whose ctor transitively
+// dereferences ArmData[]/fContact -- see cShowBinSelect.cpp's own homecoming
+// note on that class). Static-init construction here is trivially safe: a
+// pure field bootstrap has no cross-TU ordering dependency to race.
+TfContactCT *fContactCT = new TfContactCT();
 int iMouseX = 0, iMouseY = 0;   // golden :23
 
 //---------------------------------------------------------------------------

@@ -68,12 +68,28 @@
 #include <algorithm> // (kept for parity; no direct use this wave)
 
 //---------------------------------------------------------------------------
-// AI(W906-FW3-ShowBinSelect-WA) 20260818: global NOT defined as a live
-// instance this wave (task brief: "不准定義 fShowBinSelect 全域") -- only the
-// pointer itself is given a definition (nullptr) so other TUs that merely
-// reference `extern TfShowBinSelect *fShowBinSelect;` link cleanly. Same
-// posture as cContactCT.cpp's own fContactCT definition this wave.
-TfShowBinSelect *fShowBinSelect = nullptr;
+// AI(W906-FW-YEnable) 20260818: homecoming -- the live global is now backed
+// by a real instance, BUT this ctor is NOT the same "pure field bootstrap"
+// shape as cContactCT.cpp's TfContactCT (re-verified this wave, per task
+// brief, by reading the full chain): the ctor calls ShowInitialString(),
+// whose own tail statement unconditionally calls ShowCategoryBin(), which
+// dereferences `fContact->fShow` (golden :1729) and, on the common
+// `LastSet.iTester != _2D_SORT` path, `ArmData[0]/ArmData[1]->GetSelBin()`
+// (golden :1802 onward, unconditional inside that path -- not gated behind
+// any flag). `fContact` (atester_shims.cpp) and `ArmData[0..2]`
+// (cSocket.cpp's own file-scope `ArmDataBootstrap`, see that file's banner)
+// are BOTH raw pointers populated by a DIFFERENT translation unit's dynamic
+// initializer -- C++ gives no cross-TU dynamic-initialization-order
+// guarantee (the exact invariant cSocket.cpp's ArmDataBootstrap banner
+// documents: "read from ordinary runtime functions and NEVER from another
+// TU's static initialiser"). Unlike golden, where the VCL form is
+// constructed inside WinMain strictly after every global already exists,
+// this port's `fShowBinSelect` is a plain static-storage global whose own
+// dynamic initializer could in principle run before either of those two --
+// see the SIOF guard inside ShowInitialString() (this file) added
+// specifically for this homecoming, which makes this constructor safe
+// regardless of link/init order.
+TfShowBinSelect *fShowBinSelect = new TfShowBinSelect();
 
 //---------------------------------------------------------------------------
 //  DelDot (free function) -- golden :178-205
@@ -143,12 +159,34 @@ TfShowBinSelect::TfShowBinSelect()
         tsUPH->Add("");
     }
 
-    for (int i = 0; i < eTrayCount; i++)
+    // AI(W906-FW-YEnable) 20260818: SIOF guard #2 (measured, not speculative) --
+    // this ctor now runs as a static initializer in EVERY god-stack exe (the
+    // dissolved (Y2) gates in uYieldMonitoring.cpp make the linker pull this
+    // TU everywhere), and the first FW-YEnable gate went 64/139 red on it in
+    // two link-order-dependent shapes (gdb backtraces, build_fwyeng):
+    //   (a) SEGV -- sBinCode_ATK[] lives in cmydef.cpp; assigning another
+    //       TU's not-yet-constructed AnsiString reaches std::string::
+    //       _M_replace through a null _M_p (test_cUnitConvert).
+    //   (b) out_of_range -- when the bootstrap TUs happened to init first,
+    //       the tail guard inside ShowInitialString() PASSED and
+    //       ShowCategoryBin() indexed default-sized TStringGrid Cells with
+    //       config-dependent dimensions still zero (test_contactct_core).
+    // golden runs this ctor inside WinMain, strictly after every global AND
+    // after config load; INIFileGeneral != 0 reproduces exactly that
+    // precondition (nullptr constant-init, set only by LoadMachineConfig,
+    // common.cpp:1459 -- the same sentinel cObserver.cpp's ctor already
+    // uses). Skipping the priming at static init is self-healing: every
+    // dissolved (Y2) call site plus uHGemHT9045.cpp's SECS handlers re-run
+    // ShowCategoryBin() from the runtime loop, strictly after static init.
+    if (INIFileGeneral != 0)
     {
-        sBinCode_ATK[i] = "";
-    }
+        for (int i = 0; i < eTrayCount; i++)
+        {
+            sBinCode_ATK[i] = "";
+        }
 
-    ShowInitialString();
+        ShowInitialString();
+    }
 
     if (SPIL_FOR_QLE == 1)   // JerryYang 20251020: partial device-ejection feature
     {
@@ -336,7 +374,31 @@ void TfShowBinSelect::ShowInitialString()
         }
         StrARTSkipICCount->Cells[0][21] = "Total";
     }
-    ShowCategoryBin();
+
+    // AI(W906-FW-YEnable) 20260818: SIOF guard, NOT a golden deviation --
+    // PORT-ONLY safety net for the new static-init `fShowBinSelect` global
+    // (see this file's homecoming note on that definition for the full
+    // reasoning). golden's ctor chain reaches this exact point strictly
+    // after WinMain has already brought up every other global, so golden
+    // never needed this check. `fContact` and `ArmData[0]/ArmData[1]` are
+    // each a raw pointer owned by a DIFFERENT translation unit's own dynamic
+    // initializer (atester_shims.cpp / cSocket.cpp respectively); cross-TU
+    // dynamic-init order is unspecified, so if this ctor's call happens to
+    // run first, `ShowCategoryBin()` would dereference a still-null pointer
+    // (`fContact->fShow` at golden :1729 unconditionally, `ArmData[0]/
+    // ArmData[1]->GetSelBin()` at golden :1802 on the common
+    // `LastSet.iTester != _2D_SORT` path -- verified this wave by reading
+    // ShowCategoryBin()'s full body). Skipping this ONE priming call when
+    // either isn't bootstrapped yet is self-healing, not a behaviour change:
+    // every dissolved fYieldMonitoring (Y2) gate call site
+    // (uYieldMonitoring.cpp, this wave) plus uHGemHT9045.cpp's SECS handlers
+    // call ShowCategoryBin() again on the next real tick, all from main()'s
+    // own runtime loop -- strictly after every TU's static initialization
+    // has finished. Every statement ABOVE this guard (the grid header/
+    // RowCount setup) touches no cross-TU pointer and is unaffected either
+    // way.
+    if (fContact != 0 && ArmData[0] != 0 && ArmData[1] != 0)
+        ShowCategoryBin();
 }
 
 //---------------------------------------------------------------------------

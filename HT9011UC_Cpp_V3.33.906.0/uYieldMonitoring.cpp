@@ -121,6 +121,13 @@
 #include "atester_ProcessCount.h" // DoLowYieldAlarm
 #include "AutoClean/AutoClean.h" // InitialAutoCleanAllTask
 #include "FormsFacade.h"         // fMain (CleanOut -- see DESIGN NOTE, forms/fYieldMonitoring.h)
+// AI(W906-FW-YEnable) 20260818: fContactCT (Y1)/fShowBinSelect (Y2) gate
+// enablement -- these two facades landed (ecf6154) but this TU never included
+// their headers while every touch was still `#if 0`'d. Added here (this
+// wave's own write boundary, not forms/fYieldMonitoring.h) so the now-live
+// fContactCT->/fShowBinSelect-> call sites below resolve.
+#include "forms/fContactCT.h"    // fContactCT (Y1)
+#include "forms/fShowBinSelect.h" // fShowBinSelect (Y2)
 
 #include <cstdlib>               // atof
 #include <cmath>                 // fabs(double) -- see DESIGN NOTE below
@@ -160,9 +167,11 @@ void TfYieldMonitoring::CalculateSiteYield()
     {
         // GATE (Y1)+(Y3): fLotInfo->Label17/18/21->Caption + fLotInfo->
         // edtAutoCleanLowYield/edtAutoCleanSiteYieldDiff->Text (golden :3647-3654)
-        // -- fLotInfo exists but carries none of these 5 members, AND the two
-        // ->Text RHS values need fContactCT->GetLowYield_AutoClean (completely
-        // unported). See forms/fYieldMonitoring.h GATE REGISTER (Y1)/(Y3).
+        // -- fLotInfo exists but carries none of these 5 members; that is the
+        // ONLY remaining blocker (fContactCT->GetLowYield_AutoClean itself IS
+        // ported and ACTIVE, called live elsewhere in this file -- kept inside
+        // this gate only because its output has nowhere to go).
+        // See forms/fYieldMonitoring.h GATE REGISTER (Y1)/(Y3).
 #if 0
         fLotInfo->Label17->Caption = "User set : " + AnsiString(TestIF.iAutoClean_LowYieldLimit) + "%" +
                                     (TestIF.bAutoClean_FailAlarmLowYield?" Enable":" Disable");
@@ -344,16 +353,11 @@ void TfYieldMonitoring::CheckBySiteYieldAlarm()
                             IniConfig.bI44_LowYieldAlarmIntervalTimeBySetting)?IniConfig.iI44_LowYieldAlarmIntervalTime:60;
 
     bool bYieldDiffOver=false, bNeedToCheck=false, bNeedToCloseSite=false;
-    // AI(W906-FW3-YieldMon-WA) 20260818: golden's only reader of `sum`/
-    // `dYield` is the fContactCT-gated `if(sum>0){...}` block just below
-    // (GATE (Y1)) -- `(void)sum;`/`(void)dYield;` here silence
-    // -Wunused-but-set-variable now that block is #if 0'd, matching
-    // cObserver.cpp's WriteContactKind precedent
-    // (initializing iArm/iRow to silence -Wmaybe-uninitialized) for the same
-    // class of "gate makes an otherwise-real local go quiet" situation.
+    // AI(W906-FW-YEnable) 20260818: gate dissolved -- fContactCT landed
+    // (ecf6154), `sum`/`dYield` are real reads again (see the un-gated
+    // `if(sum>0){...}` block below); the `(void)` suppressions this wave's
+    // predecessor needed while that block was `#if 0`'d are gone.
     double dYield=0.0;
-    (void)dYield;
-    (void)sum;
     double IndexZ1Yield=0.0, IndexZ2Yield=0.0;                                  //wei 20180709 (steven) BySiteYieldAlarm不作動異常
     AnsiString ErrPart="";
     AnsiString aLowYield="";
@@ -393,12 +397,7 @@ void TfYieldMonitoring::CheckBySiteYieldAlarm()
             else
                 sum=iAutoClean_FailAlarmSiteYieldIntervalCount;
 
-            // GATE (Y1): golden's ENTIRE `if(sum>0){...}` body needs
-            // fContactCT->GetLowYield_AutoClean(1) (golden :3861); every
-            // statement inside is downstream of that one gapped value, so
-            // the whole block is #if 0'd rather than gating just the RHS.
-            // See forms/fYieldMonitoring.h GATE REGISTER (Y1).
-#if 0
+            // AI(W906-FW-YEnable) 20260818: gate dissolved -- fContactCT/fShowBinSelect landed (ecf6154)
             if(sum>0)
             {
                 dYield=fContactCT->GetLowYield_AutoClean(1);
@@ -411,7 +410,6 @@ void TfYieldMonitoring::CheckBySiteYieldAlarm()
                     iAutoClean_FailAlarmSiteYieldIntervalCount=0;
                 }
             }
-#endif
         }
 
         if((TestIF_File.iAutoClean_Function==false &&
@@ -468,13 +466,8 @@ void TfYieldMonitoring::CheckBySiteYieldAlarm()
                             iSiteCount--;
                             ErrPart+=IndexSuckName[i][j];
                             bShowSiteYield[j+i*NEW_MAX_Index_Col]=true;         //Steven 20111115 : 8-> NEW_MAX_Index_Col
-                            // GATE (Y1): fContactCT->sgYield->Refresh() (golden
-                            // :3927) -- pure GDI repaint trigger, no observable
-                            // non-GUI effect to preserve even if it weren't
-                            // gapped. See forms/fYieldMonitoring.h GATE REGISTER (Y1).
-#if 0
+                            // AI(W906-FW-YEnable) 20260818: gate dissolved -- fContactCT/fShowBinSelect landed (ecf6154)
                             fContactCT->sgYield->Refresh();
-#endif
                             bYieldDiffOver=true;
                         }
                         else
@@ -570,8 +563,25 @@ void TfYieldMonitoring::CheckBySiteYieldAlarm()
                     iFailAlarmSiteYieldIntervalCount=0;
             }
 
-            // GATE (Y2): fShowBinSelect->labArmDiff->Caption (golden :4024).
-            // See forms/fYieldMonitoring.h GATE REGISTER (Y2).
+            // GATE (Y2) STAYS -- re-verified, NOT dissolved this wave, despite the
+            // Y1 fContactCT sites above this one being real. `fShowBinSelect->
+            // labArmDiff` (golden :4023) does not exist: forms/fShowBinSelect.h's
+            // own ROLE banner (lines 16-18) LISTS `labArmDiff`/`labSiteDiff`/
+            // `labLowYield`/`labTotalYield`/`labTotalYieldTotal`/`lblSpeciallYield`/
+            // `lblSpeciallYieldTotal`/`IntervalByTotal` as landed, but the actual
+            // TfShowBinSelect class body (same file, lines 302-382) declares NONE
+            // of those eight -- confirmed this wave by attempting to compile this
+            // exact site (`g++ -fsyntax-only`: "class TfShowBinSelect has no member
+            // named labArmDiff") and by grepping the header/cpp for each of the
+            // eight names (0 hits outside the ROLE banner's own prose). Only
+            // `ShowCategoryBin()` and `iLowYieldBinSelectContactCount` are real --
+            // this wave dissolves those. This site was ALSO absent from the (Y2)
+            // GATE REGISTER's own enumerated function list (which never mentions
+            // CheckBySiteYieldAlarm at all) even though its "14 sites total" count
+            // already included it. forms/fShowBinSelect.h is out of this wave's
+            // write boundary (only uYieldMonitoring.cpp/cContactCT.cpp/
+            // cShowBinSelect.cpp/tests/test_yieldmon_core.cpp are) -- adding the
+            // missing 8 widgets there is main-loop's call, flagged in hand-off.
 #if 0
             if(CosFunction.bYieldControlUseEACount)
                 fShowBinSelect->labArmDiff->Caption=RunInfo.iUnloadCount-iYeildCT[0];
@@ -800,8 +810,9 @@ void TfYieldMonitoring::CheckByPickerYieldAlarm()                               
                     iPickerYieldIntervalCount=0;
             }
 
-            // GATE (Y2): fShowBinSelect->labArmDiff->Caption (golden :4247).
-            // See forms/fYieldMonitoring.h GATE REGISTER (Y2).
+            // GATE (Y2) STAYS -- `fShowBinSelect->labArmDiff` (golden :4247) does
+            // not exist on the landed TfShowBinSelect (see CheckBySiteYieldAlarm's
+            // sibling site above for the full re-verification note).
 #if 0
             if(CosFunction.bYieldControlUseEACount)
                 fShowBinSelect->labArmDiff->Caption=RunInfo.iUnloadCount-iYeildCT[7];
@@ -1075,8 +1086,9 @@ void TfYieldMonitoring::CheckBySiteByArmYieldAlarm()
             }
         }
 
-        // GATE (Y2): fShowBinSelect->labSiteDiff->Caption, both arms (golden
-        // :4511-4518). See forms/fYieldMonitoring.h GATE REGISTER (Y2).
+        // GATE (Y2) STAYS -- `fShowBinSelect->labSiteDiff` (golden :4511/:4517)
+        // does not exist on the landed TfShowBinSelect (see CheckBySiteYieldAlarm's
+        // own labArmDiff site for the full re-verification note).
 #if 0
         if(CosFunction.bYieldControlUseEACount)                                 //Steven 20170605 (wei) : 修正畫面顯示 //wei 20151111  //wei 20180606 Yield控制使用EA Count
         {
@@ -1147,11 +1159,7 @@ void TfYieldMonitoring::CheckLowYieldAlarm()
                    TestIF.bAutoClean_FailAlarmLowYield)
                 {
                     sum=ArmData_AutoClean[0]->GetTotalCT()+ArmData_AutoClean[1]->GetTotalCT();                          //Sam 20230104 : 修正 LowYield AutoClean
-                    // GATE (Y1): golden's `if(sum>0){...}` body needs
-                    // fContactCT->GetLowYield_AutoClean(0) (golden :4577);
-                    // every statement inside depends on that gapped value.
-                    // See forms/fYieldMonitoring.h GATE REGISTER (Y1).
-#if 0
+                    // AI(W906-FW-YEnable) 20260818: gate dissolved -- fContactCT/fShowBinSelect landed (ecf6154)
                     if(sum>0)
                     {
                         dYield1=fContactCT->GetLowYield_AutoClean(0);
@@ -1162,7 +1170,6 @@ void TfYieldMonitoring::CheckLowYieldAlarm()
                             InitialAutoCleanAllTask();                          //Sam 20230504 : 整理 InitialAutoCleanTask
                         }
                     }
-#endif
                 }
 
                 if(IniConfig.bLowYieldAlarmSameNS==true &&                      //jou    2011-07-16 : Low Yield Alarm模式與NS機台相同,skip會清除單獨Site.
@@ -1174,12 +1181,7 @@ void TfYieldMonitoring::CheckLowYieldAlarm()
                         {
                             if(RunInfo.iUnloadCount-iYeildCT[1]>=Prod.iLowYieldCount)
                             {
-                                // GATE (Y1): both branches' inner bodies need
-                                // fContactCT->ReturnSiteDataArray(false,i,j)
-                                // (golden :4604/:4623) to decide bIsLowYield;
-                                // whole for-loops gated together. See
-                                // forms/fYieldMonitoring.h GATE REGISTER (Y1).
-#if 0
+                                // AI(W906-FW-YEnable) 20260818: gate dissolved -- fContactCT/fShowBinSelect landed (ecf6154)
                                 if(bUseTwoArm32Site==true)                      //Steven 20220418 : NN mode Yield alarm
                                 {
                                     for(int i=0; i<TestSocket.iShtRow; i++)
@@ -1217,26 +1219,23 @@ void TfYieldMonitoring::CheckLowYieldAlarm()
                                         }
                                     }
                                 }
-#endif
                             }
                         }
                         else
                         {
                             iYeildCT[1]=RunInfo.iUnloadCount;
                         }
-                        // GATE (Y2): fShowBinSelect->labLowYield->Caption
-                        // (golden :4639). See GATE REGISTER (Y2).
+                        // GATE (Y2) STAYS -- `fShowBinSelect->labLowYield` (golden
+                        // :4639) does not exist on the landed TfShowBinSelect (see
+                        // CheckBySiteYieldAlarm's own labArmDiff site for the full
+                        // re-verification note).
 #if 0
                         fShowBinSelect->labLowYield->Caption=RunInfo.iUnloadCount-iYeildCT[1];
 #endif
                     }
                     else
                     {
-                        // GATE (Y1): both branches need
-                        // fContactCT->ReturnSiteDataArray(true/false,i,j)
-                        // (golden :4653/:4656/:4676/:4679) to compute sum and
-                        // decide bIsLowYield. See GATE REGISTER (Y1).
-#if 0
+                        // AI(W906-FW-YEnable) 20260818: gate dissolved -- fContactCT/fShowBinSelect landed (ecf6154)
                         if(Prod.bFailAlarmLowYield && Prod.dLowYieldLimit!=0)   //JerryYang 20160530 LowYieldLimit要能設定到小數點
                         {
                             if(bUseTwoArm32Site==true)                          //Steven 20220418 : NN mode Yield alarm
@@ -1285,7 +1284,6 @@ void TfYieldMonitoring::CheckLowYieldAlarm()
                                 }
                             }
                         }
-#endif
                     }
 
                     if(bIsLowYield==true)
@@ -1318,10 +1316,7 @@ void TfYieldMonitoring::CheckLowYieldAlarm()
                             }
                             else
                             {
-                                // GATE (Y1): fContactCT->ReturnSiteDataArray
-                                // (golden :4727) + ->ClearData (golden :4730).
-                                // See GATE REGISTER (Y1).
-#if 0
+                                // AI(W906-FW-YEnable) 20260818: gate dissolved -- fContactCT/fShowBinSelect landed (ecf6154)
                                 for(int i=0; i<TestSocket.iShtRow; i++)
                                 {
                                     for(int j=0; j<TestSocket.iShtCol; j++)
@@ -1333,15 +1328,11 @@ void TfYieldMonitoring::CheckLowYieldAlarm()
                                         }
                                     }
                                 }
-#endif
                                 bIsLowYield=false;
                             }
                         }
 
-                        // GATE (Y1): fContactCT->ReturnSiteDataArray (golden
-                        // :4742) -- the ONLY input this loop reads. See GATE
-                        // REGISTER (Y1).
-#if 0
+                        // AI(W906-FW-YEnable) 20260818: gate dissolved -- fContactCT/fShowBinSelect landed (ecf6154)
                         for(int i=0; i<TestSocket.iShtRow; i++)
                         {
                             for(int j=0; j<TestSocket.iShtCol; j++)
@@ -1357,7 +1348,6 @@ void TfYieldMonitoring::CheckLowYieldAlarm()
                                 }
                             }
                         }
-#endif
                     }
 
                     //-------------------
@@ -1404,10 +1394,7 @@ void TfYieldMonitoring::CheckLowYieldAlarm()
                 }
                 else if(IniConfig.bE53LowYieldAutoClean)                        //wei 20141201 Low Yield Auto Clean(%) start
                 {
-                    // GATE (Y1): every branch here needs
-                    // fContactCT->ReturnSiteDataArray (golden :4809/:4812/
-                    // :4832/:4835) to decide bIsLowYield. See GATE REGISTER (Y1).
-#if 0
+                    // AI(W906-FW-YEnable) 20260818: gate dissolved -- fContactCT/fShowBinSelect landed (ecf6154)
                     if(Prod.bFailAlarmLowYield_AutoClean && Prod.iLowYieldLimit_AutoClean!=0)
                     {
                         if(bUseTwoArm32Site==true)                              //Steven 20220418 : NN mode Yield alarm
@@ -1456,7 +1443,6 @@ void TfYieldMonitoring::CheckLowYieldAlarm()
                             }
                         }
                     }
-#endif
 
                     if(bIsLowYield==true)
                     {
@@ -1465,10 +1451,7 @@ void TfYieldMonitoring::CheckLowYieldAlarm()
 
                         if(CUSTOMER_CODE!=CC_HANA_MICRON)                       //Steven 20210428 : Hana說Low Yield不要清除資料
                         {
-                            // GATE (Y1): fContactCT->ReturnSiteData (golden
-                            // :4859) + ->ClearData (golden :4862). See GATE
-                            // REGISTER (Y1).
-#if 0
+                            // AI(W906-FW-YEnable) 20260818: gate dissolved -- fContactCT/fShowBinSelect landed (ecf6154)
                             for(int i=0; i<TestSocket.iShtRow; i++)
                             {
                                 for(int j=0; j<TestSocket.iShtCol; j++)
@@ -1480,7 +1463,6 @@ void TfYieldMonitoring::CheckLowYieldAlarm()
                                     }
                                 }
                             }
-#endif
                         }
 
                         if(IniConfig.bEnableAutoCleanFunction &&
@@ -1560,19 +1542,28 @@ void TfYieldMonitoring::CheckLowYieldAlarm()
         }
         else
         {
-            // GATE (Y2): fShowBinSelect->labLowYield->Caption (golden :4946).
-            // See GATE REGISTER (Y2).
+            // GATE (Y2) STAYS -- `fShowBinSelect->labLowYield` (golden :4946)
+            // does not exist on the landed TfShowBinSelect (see
+            // CheckBySiteYieldAlarm's own labArmDiff site for the full
+            // re-verification note).
 #if 0
             if(Prod.bFailAlarmLowYield==false)
                 fShowBinSelect->labLowYield->Caption=0;
 #endif
         }
 
-        // GATE (Y1): fContactCT->SaveTotalYield("") -- unconditional tail
-        // call (golden :4949). See GATE REGISTER (Y1).
-#if 0
+        // AI(W906-FW-YEnable) 20260818: gate dissolved -- fContactCT/fShowBinSelect landed (ecf6154).
+        // SaveTotalYield write-path re-verified this wave by reading cContactCT.cpp's actual
+        // body (not just forms/fContactCT.h's WRITE-PATH NOTE prose): it early-returns unless
+        // `IniConfig.bI29YieldRecordIntervalIC` is true (cContactCT.cpp:1589-1590 -- the
+        // header's own WRITE-PATH NOTE also names a SECOND flag, bI29EnableYieldRecord, that
+        // the actual code does not check; only bI29YieldRecordIntervalIC gates it), then
+        // appends a CSV under `asYieldRecordPath` (common.cpp:136, defaults to
+        // "D:\HT9045_Log\Yield" -- a distinct log tree, NOT the shared production
+        // system\Gerneral.ini/teach-data path this repo's known-risk list warns about). Left
+        // ACTIVE (not re-gated) per this task's file-write disposition rule -- default-off
+        // ini flag, writes outside the shared machine-config tree.
         fContactCT->SaveTotalYield("");                                         //Sam 20231106 : 紀錄 Total yield
-#endif
     }
     else
     {
@@ -1613,11 +1604,8 @@ void TfYieldMonitoring::CheckLowYieldAlarmByTotal()
        LastSet.iRunStartMode!=rsmAutoSiteMap)                                   //Steven 20230313 : 做Auto Site Map的時候不要檢查Yield
     {
         bReflash=false;
-        // GATE (Y2): fShowBinSelect->ShowCategoryBin() (golden :4987). See
-        // forms/fYieldMonitoring.h GATE REGISTER (Y2).
-#if 0
+        // AI(W906-FW-YEnable) 20260818: gate dissolved -- fContactCT/fShowBinSelect landed (ecf6154)
         fShowBinSelect->ShowCategoryBin();
-#endif
         if(Prod.bFailAlarmLowYieldByTotal &&
            Prod.dLowYieldLimitByTotal!=0 &&                                     //JerryYang 20160530 LowYieldLimit要能設定到小數點
            CosFunction.bLowYeildByTotal)
@@ -1713,10 +1701,14 @@ void TfYieldMonitoring::CheckLowYieldAlarmByTotal()
                     }
                 }
 
-                // GATE (Y2): str.sprintf(...) computed ONLY to feed the
-                // gated fShowBinSelect->labTotalYield->Caption (golden
-                // :5083-5089) -- gating the compute+assign together so `str`
-                // is not left write-only. See GATE REGISTER (Y2).
+                // GATE (Y2) STAYS -- `fShowBinSelect->labTotalYield`/
+                // `labTotalYieldTotal` (golden :5084/:5087/:5089) do not exist on
+                // the landed TfShowBinSelect (see CheckBySiteYieldAlarm's own
+                // labArmDiff site for the full re-verification note). `str` is
+                // computed only to feed the gated Caption write, so it is gated
+                // alongside (same "gate made a real local go quiet" posture as
+                // this function's own pre-existing precedent) -- `(void)str;`
+                // restored.
 #if 0
                 str.sprintf("%0.2f", iYieldByTotal);
                 fShowBinSelect->labTotalYield->Caption=str.c_str();
@@ -1731,8 +1723,10 @@ void TfYieldMonitoring::CheckLowYieldAlarmByTotal()
         }
         else
         {
-            // GATE (Y2): fShowBinSelect->labTotalYield/labTotalYieldTotal
-            // ->Caption=0 (golden :5094-5095). See GATE REGISTER (Y2).
+            // GATE (Y2) STAYS -- `fShowBinSelect->labTotalYield`/
+            // `labTotalYieldTotal` (golden :5094/:5095) do not exist on the
+            // landed TfShowBinSelect (see CheckBySiteYieldAlarm's own labArmDiff
+            // site for the full re-verification note).
 #if 0
             fShowBinSelect->labTotalYield->Caption=0;
             fShowBinSelect->labTotalYieldTotal->Caption=0;
@@ -1817,11 +1811,8 @@ void TfYieldMonitoring::ClearYieldCount()                                       
         iFailAlarmSiteYieldIntervalCount=0;
         iPickerYieldIntervalCount=0;                                            //Steven 20230223 : 根據Index吸嘴比較良率
         iFailAlarmSiteMaxYieldIntervalCount=0;
-        // GATE (Y2): fShowBinSelect->iLowYieldBinSelectContactCount=0 (golden
-        // :5171). See forms/fYieldMonitoring.h GATE REGISTER (Y2).
-#if 0
+        // AI(W906-FW-YEnable) 20260818: gate dissolved -- fContactCT/fShowBinSelect landed (ecf6154)
         fShowBinSelect->iLowYieldBinSelectContactCount=0;                       //KaiChen 20181115 : BinSelect裡面 Yield控制使用 Contact Count
-#endif
 
         for(int i=0; i<MAX_SOCKET_ROW; i++)
         {
@@ -1920,11 +1911,8 @@ void TfYieldMonitoring::CheckIntervalLowYieldAlarmBySite()                      
        bZ2PickShuttle==false)                                                   //Steven 20180521 : 避免吸料的時候發Low Yield Alarm
     {
         memset(iYieldSiteBinpass, 0, sizeof(iYieldSiteBinpass));
-        // GATE (Y2): fShowBinSelect->ShowCategoryBin() (golden :5515). See
-        // forms/fYieldMonitoring.h GATE REGISTER (Y2).
-#if 0
+        // AI(W906-FW-YEnable) 20260818: gate dissolved -- fContactCT/fShowBinSelect landed (ecf6154)
         fShowBinSelect->ShowCategoryBin();
-#endif
         if(Prod.bFailAlarmIntervalLowYieldBySite &&
            Prod.dIntervalLowYieldLimitBySite!=0 &&                              //JerryYang 20160530 LowYieldLimit要能設定到小數點
            CosFunction.IntervalYieldCount)
@@ -1975,11 +1963,8 @@ void TfYieldMonitoring::CheckIntervalLowYieldAlarmBySite()                      
                         }
                     }
                 }
-                // GATE (Y1): fContactCT->sgYield->Refresh() (golden :5566) --
-                // pure GDI repaint trigger. See GATE REGISTER (Y1).
-#if 0
+                // AI(W906-FW-YEnable) 20260818: gate dissolved -- fContactCT/fShowBinSelect landed (ecf6154)
                 fContactCT->sgYield->Refresh();
-#endif
 
                 if((bYieldSiteBin[0] || bYieldSiteBin[1]) && bYieldSiteBinCheck)
                 {
@@ -2032,11 +2017,8 @@ void TfYieldMonitoring::CheckIntervalLowYieldAlarmByTotal()                     
        bRunAutoClean==false)                                                    //ChungHung 20131223 add for SCK Autoclean
     {
         iYieldTotalBinpass=0;
-        // GATE (Y2): fShowBinSelect->ShowCategoryBin() (golden :5649). See
-        // forms/fYieldMonitoring.h GATE REGISTER (Y2).
-#if 0
+        // AI(W906-FW-YEnable) 20260818: gate dissolved -- fContactCT/fShowBinSelect landed (ecf6154)
         fShowBinSelect->ShowCategoryBin();
-#endif
         if(Prod.bFailAlarmIntervalLowYieldByTotal &&
            Prod.dIntervalLowYieldLimitByTotal!=0 &&
            CosFunction.IntervalYieldCount)                                      //JerryYang 20160530 LowYieldLimit要能設定到小數點
@@ -2057,10 +2039,11 @@ void TfYieldMonitoring::CheckIntervalLowYieldAlarmByTotal()                     
                     }
                 }
                 dYield1=ChangeToFloatNonPcnt((double)(iYieldTotalBinpass*100), (double)(Prod.iIntervalLowYieldCountByTotal));
-                // GATE (Y2): fShowBinSelect->IntervalByTotal->Caption (golden
-                // :5670). dYield1 keeps being read for real below (the
-                // bLowYieldbyTotal decision), so only THIS one assignment
-                // line is gated. See GATE REGISTER (Y2).
+                // GATE (Y2) STAYS -- `fShowBinSelect->IntervalByTotal` (golden
+                // :5670) does not exist on the landed TfShowBinSelect (see
+                // CheckBySiteYieldAlarm's own labArmDiff site for the full
+                // re-verification note). `dYield1` keeps being read for real below
+                // (the bLowYieldbyTotal decision) regardless.
 #if 0
                 fShowBinSelect->IntervalByTotal->Caption=dYield1;
 #endif
@@ -2186,9 +2169,12 @@ void TfYieldMonitoring::CheckLowYieldAlarmSpecial()
                     }
                 }
 
-                // GATE (Y2): str.sprintf(...) computed ONLY to feed the
-                // gated fShowBinSelect->lblSpeciallYield/lblSpeciallYieldTotal
-                // ->Caption (golden :5790-5792). See GATE REGISTER (Y2).
+                // GATE (Y2) STAYS -- `fShowBinSelect->lblSpeciallYield`/
+                // `lblSpeciallYieldTotal` (golden :5791/:5792) do not exist on the
+                // landed TfShowBinSelect (see CheckBySiteYieldAlarm's own
+                // labArmDiff site for the full re-verification note). `str` is
+                // computed only to feed the gated Caption write, gated alongside
+                // -- `(void)str;` restored.
 #if 0
                 str.sprintf("%0.2f", dYield1);
                 fShowBinSelect->lblSpeciallYield->Caption=str.c_str();
@@ -2199,8 +2185,10 @@ void TfYieldMonitoring::CheckLowYieldAlarmSpecial()
         }
         else
         {
-            // GATE (Y2): fShowBinSelect->lblSpeciallYield/lblSpeciallYieldTotal
-            // ->Caption=0 (golden :5797-5798). See GATE REGISTER (Y2).
+            // GATE (Y2) STAYS -- `fShowBinSelect->lblSpeciallYield`/
+            // `lblSpeciallYieldTotal` (golden :5797/:5798) do not exist on the
+            // landed TfShowBinSelect (see CheckBySiteYieldAlarm's own labArmDiff
+            // site for the full re-verification note).
 #if 0
             fShowBinSelect->lblSpeciallYield->Caption=0;
             fShowBinSelect->lblSpeciallYieldTotal->Caption=0;

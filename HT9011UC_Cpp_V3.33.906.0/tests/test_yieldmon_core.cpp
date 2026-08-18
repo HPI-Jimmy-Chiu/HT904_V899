@@ -44,6 +44,12 @@
 #include "cSocket.h"             // TArm/TMySocket, ArmData[3]
 #include "atester_shims.h"       // fContact (TfContactShim)
 #include "canary_support.h"      // W906_ShowErrorMessage_Count/_Reset -- the alarm-fired observability seam
+// AI(W906-FW-YEnable) 20260818: fContactCT/fShowBinSelect gate-enablement
+// oracle -- these two facades are now real globals (ecf6154 + this wave's own
+// gate dissolution); pull their headers in to exercise ClearData/
+// ReturnSiteDataArray's real side effects (see test (e) below).
+#include "forms/fContactCT.h"    // fContactCT
+#include "forms/fShowBinSelect.h" // fShowBinSelect
 
 #include <cstdio>
 
@@ -222,6 +228,91 @@ static void Test_CheckLowYieldAlarm_SW_JudgeStates()
 }
 
 // =============================================================================
+//  (e) AI(W906-FW-YEnable) 20260818: gate-enablement oracle -- fContactCT/
+//  fShowBinSelect ARE NOW REAL (ecf6154 landed them, this wave dissolved the
+//  Y1 gates that reference them). Two things this test proves that no prior
+//  test in this file could:
+//   (1) the two homecoming globals are non-NULL (a static-init sanity check
+//       -- see cContactCT.cpp/cShowBinSelect.cpp's own homecoming notes on
+//       why fContactCT is trivially safe but fShowBinSelect needed a SIOF
+//       guard);
+//   (2) CheckLowYieldAlarm's `IniConfig.bLowYieldAlarmSameNS` branch
+//       (golden :4653-4679, the `CosFunction.bYieldControlUseEACount==false`
+//       arm) now genuinely CALLS fContactCT->ReturnSiteDataArray(true/false,
+//       i,j) and lets its return value drive real control flow -- not just
+//       "compiles", but the returned sum/percentage actually decides
+//       bIsLowYield, which downstream (golden :4727/:4730, also dissolved
+//       this wave) drives a REAL fContactCT->ClearData(i,j) call. ClearData's
+//       observable side effect (TArm::ClearALLCT zeroing Pass/Fail/Total,
+//       cSocket.cpp:271-276) is asserted directly on the seeded socket --
+//       proof the gate is not just syntactically dissolved but semantically
+//       wired end to end.
+// =============================================================================
+static void Test_FContactCT_And_FShowBinSelect_AreRealNonNullGlobals()
+{
+    CHECK(fContactCT != 0, "FW-YEnable homecoming: fContactCT is a real, non-NULL global (cContactCT.cpp)");
+    CHECK(fShowBinSelect != 0, "FW-YEnable homecoming: fShowBinSelect is a real, non-NULL global (cShowBinSelect.cpp, SIOF-guarded ctor)");
+}
+
+static void Test_CheckLowYieldAlarm_SameNS_UsesRealContactCT()
+{
+    TfYieldMonitoring y;
+    ResetCommonGuards();
+
+    // Bypass the 60-tick alarm-interval throttle and the Sliding-Window
+    // diversion (golden :4536-4542, `return`s before ever reaching the
+    // bLowYieldAlarmSameNS branch this test targets) so this FIRST-EVER call
+    // to CheckLowYieldAlarm() in this test binary reaches the real body on
+    // its first invocation (iCount2 is a function-local static starting at 0).
+    CosFunction.bYieldAlarmNoWait1Min = true;
+    Prod.bSlidingWindowYield = false;
+    IniConfig.bEnableAutoCleanFunction = false;   // skip the unrelated AutoClean sub-block above (golden :4569-4586)
+    TestIF.iAutoClean_Function = false;
+
+    Prod.bFailAlarmLowYield = true;
+    Prod.dLowYieldLimit = 20.0;
+    IniConfig.bLowYieldAlarmSameNS = true;         // golden :4653 -- the branch this test targets
+    CosFunction.bYieldControlUseEACount = false;   // -> golden's `else` arm (:4676-4679): ReturnSiteDataArray(true,..)/(false,..)
+    bUseTwoArm32Site = false;                       // -> the OR-of-both-arms inner loop, not the NN-mode one
+    Prod.iLowYieldCount = 150;
+
+    TestIF_File.iTestMode = 0;                      // IsNNMode()==None_NN (same convention as CalculateSiteYield's own test)
+    TestIF.iShuttleMode = 0;
+    IniConfig.bA09_ByArmCloseSite = false;           // ReturnSiteDataArray(false,..) averages both arms' GetPCA()
+
+    TestSocket.iShtRow = 1;
+    TestSocket.iShtCol = 1;
+    LastSet.bUseTestSocket[0][0][0] = true;
+    LastSet.bUseTestSocket[1][0][0] = true;
+
+    // Arm0: 20/100 == 20.00% pass.  Arm1: 10/100 == 10.00% pass.  Both exact
+    // in double (no float-rounding risk, same "avoid the x.0 cutoff" care as
+    // this file's other tests).
+    ArmData[0]->ArmSKET[0][0]->Pass = 20;
+    ArmData[0]->ArmSKET[0][0]->Fail = 80;
+    ArmData[0]->ArmSKET[0][0]->Total = 100;
+    ArmData[1]->ArmSKET[0][0]->Pass = 10;
+    ArmData[1]->ArmSKET[0][0]->Fail = 90;
+    ArmData[1]->ArmSKET[0][0]->Total = 100;
+
+    // Expected: ReturnSiteDataArray(true,0,0) = GetTotal()+GetTotal() = 100+100 = 200
+    //   -> 200 >= Prod.iLowYieldCount(150) -> true
+    // ReturnSiteDataArray(false,0,0) = (20.00+10.00)/2 = 15.00
+    //   -> Prod.dLowYieldLimit(20) > 15.00 -> true -> bIsLowYield=true
+    // -> DoLowYieldAlarm("WAR0701",...); ClearYieldCount(); ret(0)!=K_ONECYCLE(0x0200)
+    //    and CUSTOMER_CODE(0)!=CC_HANA_MICRON -> the dissolved ClearData loop
+    //    runs: dYield1=ReturnSiteDataArray(false,0,0)=15.00, 20>15 -> true ->
+    //    fContactCT->ClearData(0,0) -> TArm::ClearALLCT(0,0) on ArmData[0..2]
+    //    -> ArmSKET[0][0]->Pass/Fail/Total all zeroed.
+    y.CheckLowYieldAlarm();
+
+    CHECK(ArmData[0]->ArmSKET[0][0]->Pass == 0, "CheckLowYieldAlarm(SameNS): fContactCT->ClearData(0,0) really ran -- arm0 Pass zeroed (cSocket.cpp TArm::ClearALLCT)");
+    CHECK(ArmData[0]->ArmSKET[0][0]->Fail == 0, "CheckLowYieldAlarm(SameNS): fContactCT->ClearData(0,0) really ran -- arm0 Fail zeroed");
+    CHECK(ArmData[0]->ArmSKET[0][0]->Total == 0, "CheckLowYieldAlarm(SameNS): fContactCT->ClearData(0,0) really ran -- arm0 Total zeroed");
+    CHECK(ArmData[1]->ArmSKET[0][0]->Pass == 0, "CheckLowYieldAlarm(SameNS): fContactCT->ClearData(0,0) really ran -- arm1 (2nd arm in the k<3 loop) also cleared");
+}
+
+// =============================================================================
 //  (c) CanAutoCloseSite -- iAllSiteOn==0 ("Low Yield 關") branch, true/false
 // =============================================================================
 static void Test_CanAutoCloseSite_TrueAndFalse()
@@ -288,6 +379,8 @@ int main()
     Test_CalculateSiteYield_AverageBothArms_And_DisabledSite();
     Test_SWRing_FillAndWrap();
     Test_CheckLowYieldAlarm_SW_JudgeStates();
+    Test_FContactCT_And_FShowBinSelect_AreRealNonNullGlobals();
+    Test_CheckLowYieldAlarm_SameNS_UsesRealContactCT();
     Test_CanAutoCloseSite_TrueAndFalse();
     Test_CheckSettingNo_Boundaries();
 
