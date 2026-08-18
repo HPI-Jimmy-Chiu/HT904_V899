@@ -8228,17 +8228,25 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   （fLotInfo 5 缺件）留。oracle 54/54。
 - **驗收**：全新雙 gate Debug 139/3＋Release 139/3、guard 552 檔 IDENTICAL。
 
+## 20260819 凌晨 II — FW-Y3：fLotInfo 5 成員，Y3 解 gate（6f18ad4）——良率引擎全清
+
+- 主迴圈自做。fLotInfo 補 Label17/18/21＋edtAutoClean 兩欄（golden
+  uLotInfo.h:48-55），CalculateSiteYield 兩臂 #if 0 原句啟用。
+  **良率引擎 Y1/Y2/Y3 gate 帳全數清零**（FW-YEnable→SBWB→Y3 三波收完）。
+  oracle 57/57（含 if 臂「User set : 77% Enable」逐字）。
+- **驗收**：全新雙 gate Debug 139/3＋Release 139/3、guard 552 檔 IDENTICAL。
+
 ### 🔖 RESUME（最新）
 
-- **完成**：核可佇列 1-6＋FW3-WD/WE/WF（Command.cpp 收官 159/164）＋
-  **FW-SBWB（af06409，Y2 全解）**。基線 139/3。
+- **完成**：核可佇列 1-6、FW3-WD/WE/WF（Command.cpp 159/164 收官）、
+  FW-SBWB（Y2 清零）、**FW-Y3（6f18ad4，良率引擎 gate 帳全清）**。
+  基線 139/3。
 - **下一步（自主佇列）**：
-  c. fLotInfo 5 成員（Label17/18/21＋edtAutoCleanLowYield/
-     edtAutoCleanSiteYieldDiff）→ 解 Y3（uYieldMonitoring
-     CalculateSiteYield 兩塊 #if 0，原句保留）——小波，主迴圈可自做；
-  d. fSecurity/fCounterClear/fBinSel facades（Command.cpp 大量 gate 的
-     解鎖鑰匙，量大屬代理波）；
+  d. fSecurity/fCounterClear/fBinSel facades（Command.cpp/uYieldMonitoring
+     大量 gate 的解鎖鑰匙；fBinSel 是 SetTrayBinByDLL/BinPosChange/
+     SetBINCOUNT/SetOSBIN 共同缺件——代理波，先 recon golden 三表單
+     規模再切）；
   e. cShowBinSelect 家族真本體擴充（ShowBinSel ~250-widget，代理波）；
-  f. FW-3 batch 3+ 表單；FW-1 tag 批次。
+  f. FW-3 batch 3+ 表單（BinDisplay 等）；FW-1 tag 批次。
 - **設計面（等使用者）**：write path 設計輪；硬體架構題（index/1203、
   MN200、gclib）；B4 GPIB site-map 修不修。
