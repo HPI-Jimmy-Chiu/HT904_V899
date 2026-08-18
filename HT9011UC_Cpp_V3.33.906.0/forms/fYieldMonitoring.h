@@ -286,6 +286,14 @@ public:
 
     virtual void SetClosedSiteBin();                                 // golden :5972-5980
 
+    // AI(W906-FW-YMSwap) 20260818: DOCUMENTED NO-OP (body in
+    // uYieldMonitoring.cpp). The REAL golden body (:5340-5401, actually
+    // closes sites on low yield) is the user-approved queue's own
+    // behaviour-change wave -- the shim->facade swap must be
+    // behaviour-neutral, so the ~26 live arm-variant call sites keep the
+    // exact no-op they had against TfYieldMonitoring_2x4_16 (retired).
+    virtual void DoAutoCloseSite(bool bRT);
+
     // PORT-ONLY: no user-declared ctor/dtor this wave (see banner "NO
     // CONSTRUCTOR THIS WAVE" above) -- NSDMI on every member does the work a
     // ctor would, and no method needs virtual-dispatch-through-delete
@@ -293,13 +301,13 @@ public:
     // TfYieldMonitoring* base pointer, only ever a concrete-typed local).
 };
 
-// AI(W906-FW3-YieldMon-WA) 20260818: integration-pending -- NO `extern
-// TfYieldMonitoring *fYieldMonitoring;` here. The live global `fYieldMonitoring`
-// (golden uYieldMonitoring.h's own `extern PACKAGE TfYieldMonitoring
-// *fYieldMonitoring;`) is already `TfYieldMonitoring_2x4_16*`
-// (aHotPlateSubstrate.h:1146-1150). Declaring a second, differently-typed
-// `fYieldMonitoring` here would collide with that global exactly like the
-// two-TMyKitSuck-headers trap (docs/KNOWLEDGE.md) -- picking which facade
-// backs the live global is the main loop's integration call, not this wave's.
+// AI(W906-FW-YMSwap) 20260818: the integration call was made (user-approved
+// queue): the live global is backed by THIS facade. TfYieldMonitoring_2x4_16
+// retired from aHotPlateSubstrate.h / ainarm9045_2x4_16_shims.{h,cpp}; the
+// global's definition homecame to uYieldMonitoring.cpp (golden
+// uYieldMonitoring.h declares `extern PACKAGE TfYieldMonitoring
+// *fYieldMonitoring;`). Static-init construction is trivially safe: this
+// class has NO user ctor (NSDMI only) and touches no config layer.
+extern TfYieldMonitoring *fYieldMonitoring;      // golden uYieldMonitoring.h (extern PACKAGE)
 
 #endif // FORMS_FYIELDMONITORING_H

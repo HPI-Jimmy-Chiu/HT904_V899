@@ -103,7 +103,8 @@ int  iAutoSiteMapHPRow  = 0;     // JCET ASM HP row (0)
 int  iAutoSiteMapHPCol  = 0;     // JCET ASM HP col (0)
 
 // ---- Yield-monitoring facade ------------------------------------------------
-static TfYieldMonitoring_2x4_16 g_fYieldMonitoring_2x4_16;
-TfYieldMonitoring_2x4_16 *fYieldMonitoring = &g_fYieldMonitoring_2x4_16;
+// AI(W906-FW-YMSwap) 20260818: static shim instance + global RETIRED -- the
+// live fYieldMonitoring is the REAL TfYieldMonitoring, defined at its golden
+// home (uYieldMonitoring.cpp). DoAutoCloseSite stays a documented no-op there.
 
 #endif // HT9045_2x4_16_SHIMS_DEFINED

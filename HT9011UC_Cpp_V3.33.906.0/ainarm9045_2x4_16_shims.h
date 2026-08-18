@@ -103,14 +103,11 @@ extern int  iAutoSiteMapHPCol;                                                  
 //  2000 calls fYieldMonitoring->DoAutoCloseSite(..)).  Minimal offline stand-in.
 //  W6.2c: dedicated guard so aHotPlateSubstrate.h can mirror the SAME definition
 //  without a double-definition when a TU includes both headers in either order.
+// AI(W906-FW-YMSwap) 20260818: shim class RETIRED -- see the mirror note in
+// aHotPlateSubstrate.h. Real facade, DoAutoCloseSite stays a documented no-op.
 #ifndef HT9045_YIELDMON_FACADE_DECLARED
 #define HT9045_YIELDMON_FACADE_DECLARED
-class TfYieldMonitoring_2x4_16
-{
-public:
-    void DoAutoCloseSite(bool /*bFlag*/) {}   // offline: no low-yield auto site-off
-};
-extern TfYieldMonitoring_2x4_16 *fYieldMonitoring;                              // golden uYieldMonitoring.h:fYieldMonitoring
+#include "forms/fYieldMonitoring.h"
 #endif // HT9045_YIELDMON_FACADE_DECLARED
 
 #endif // HT9045_2x4_16_SHIMS_DECLARED

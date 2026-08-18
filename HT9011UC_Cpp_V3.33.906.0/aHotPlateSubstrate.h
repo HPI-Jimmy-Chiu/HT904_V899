@@ -1140,13 +1140,15 @@ extern void AdjustShuttlePlaceOrder_AutoSiteMapping();                      // g
 extern void InitInArmTryPickFromHotPlateTask100();                          // golden ainarm2.h (def ainarm9045_2x4_16_shims.cpp)
 extern void DoJudgeInputShuttleNeedChangeToNullIC();                        // golden (def ainarm9045_2x4_16_shims.cpp)
 extern DWORD MyTickCount();                                                 // golden common.h:259 (def ainarm9045_2x4_16_shims.cpp)
-// fYieldMonitoring: the live def (ainarm9045_2x4_16_shims.cpp) is typed
-// TfYieldMonitoring_2x4_16*.  Mirror that exact type + decl so the variant
-// `fYieldMonitoring->DoAutoCloseSite(..)` call binds to the same symbol.
+// AI(W906-FW-YMSwap) 20260818: TfYieldMonitoring_2x4_16 RETIRED -- the live
+// fYieldMonitoring is the REAL TfYieldMonitoring facade (forms/
+// fYieldMonitoring.h, FW-3 Wave A), whose DoAutoCloseSite is a DOCUMENTED
+// no-op until its own behaviour-change wave -- the ~26 arm-variant call
+// sites keep today's exact behaviour. Same macro guard kept so the sibling
+// mirror in ainarm9045_2x4_16_shims.h stays double-include-safe.
 #ifndef HT9045_YIELDMON_FACADE_DECLARED
 #define HT9045_YIELDMON_FACADE_DECLARED
-class TfYieldMonitoring_2x4_16 { public: void DoAutoCloseSite(bool /*bFlag*/) {} };
-extern TfYieldMonitoring_2x4_16 *fYieldMonitoring;                          // golden uYieldMonitoring.h:fYieldMonitoring
+#include "forms/fYieldMonitoring.h"
 #endif // HT9045_YIELDMON_FACADE_DECLARED
 // Shuttle-soak start ticks (golden atester.h:81/:83; DEFINED in atester.cpp).
 extern DWORD dwStartShuttle1Soak;                                           // golden atester.h:81

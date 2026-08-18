@@ -2242,3 +2242,23 @@ void TfYieldMonitoring::SetClosedSiteBin()
     }
     cbbClosedSiteBin->Items->Add("Error");
 }
+
+// =============================================================================
+// AI(W906-FW-YMSwap) 20260818: the live global comes HOME (golden
+// uYieldMonitoring.h declares `extern PACKAGE TfYieldMonitoring
+// *fYieldMonitoring;`; the VCL runtime constructs it in WinMain's CreateForm
+// chain). Static-init here is trivially safe: no user ctor, NSDMI only,
+// zero config-layer touches. The TfYieldMonitoring_2x4_16 stand-in
+// (aHotPlateSubstrate.h / ainarm9045_2x4_16_shims) retired the same commit.
+// =============================================================================
+TfYieldMonitoring *fYieldMonitoring = new TfYieldMonitoring();
+
+// AI(W906-FW-YMSwap) 20260818: DOCUMENTED NO-OP -- behaviour-neutral swap.
+// The REAL body (golden uYieldMonitoring.cpp:5340-5401) actually closes
+// sites on low yield; translating it is the user-approved queue's own
+// behaviour-change wave with its own gate and commit. Until then the ~26
+// live arm-variant call sites keep the exact no-op the retired shim gave
+// them.
+void TfYieldMonitoring::DoAutoCloseSite(bool /*bRT*/)
+{
+}
