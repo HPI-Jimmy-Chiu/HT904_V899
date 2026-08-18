@@ -8236,17 +8236,34 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   oracle 57/57（含 if 臂「User set : 77% Enable」逐字）。
 - **驗收**：全新雙 gate Debug 139/3＋Release 139/3、guard 552 檔 IDENTICAL。
 
+## 20260819 凌晨 III — FW-SecCC：cSecurity＋cCounterClear（4626bd1）
+
+- **交付**：兩表單完整翻譯＋真實例 homecoming（SIOF 鐵律逐行複核）＋
+  csystem W7C1 fCounterClear seam 退役（LowYieldSpecialInitail :5921
+  活呼叫點綁真本體——純記憶體已驗證）。基線 **141 測試/3 常駐**。
+  oracle 24/24＋130/130。
+- **整併推翻代理豁免 1 筆**：system\levelset.dat 寫入按邊界 gate
+  （SEC-W1/W2），「小檔」不是豁免理由。
+- **gate 抓到 Obs2fix 同型缺陷**：sgStatisticsJam 裸預設 5 欄 vs .dfm 8 欄
+  →SecurityCore out_of_range；hydration 修復。教訓再確認：**代理只做
+  -fsyntax-only 不實跑，oracle 的第一次真執行永遠在整併 gate**——
+  grid 類 facade 落地時 .dfm 尺寸 hydration 是 checklist 項不是選項。
+- **W7C2_FCOUNTER_WRITECTINFO 不翻轉**（WriteCTInfo 寫 system\*.dat）；
+  fSecurity 消費端（Insufficient×5/GetBit8×1）仍全 gate——解鎖屬後續波
+  （GetBit8 還缺 fNote 兩成員）。
+- **驗收**：最終全新雙 gate Debug 141/3＋Release 141/3、guard IDENTICAL。
+
 ### 🔖 RESUME（最新）
 
-- **完成**：核可佇列 1-6、FW3-WD/WE/WF（Command.cpp 159/164 收官）、
-  FW-SBWB（Y2 清零）、**FW-Y3（6f18ad4，良率引擎 gate 帳全清）**。
-  基線 139/3。
+- **完成**：核可佇列 1-6、FW3-WD/WE/WF（Command.cpp 159/164）、FW-SBWB、
+  FW-Y3（良率引擎全清）、**FW-SecCC（4626bd1）**。基線 141/3。
 - **下一步（自主佇列）**：
-  d. fSecurity/fCounterClear/fBinSel facades（Command.cpp/uYieldMonitoring
-     大量 gate 的解鎖鑰匙；fBinSel 是 SetTrayBinByDLL/BinPosChange/
-     SetBINCOUNT/SetOSBIN 共同缺件——代理波，先 recon golden 三表單
-     規模再切）；
-  e. cShowBinSelect 家族真本體擴充（ShowBinSel ~250-widget，代理波）；
-  f. FW-3 batch 3+ 表單（BinDisplay 等）；FW-1 tag 批次。
+  e. fSecurity 消費端解鎖小波（主迴圈可自做）：cContactCT GATE C3、
+     cShowBinSelect B5/B6 的 Insufficient 呼叫點解 gate；fNote 補
+     Edit3/edUnitName 兩成員→解 Command.cpp MachineStatus Bit8 的
+     GetBit8 站點；
+  f. fBinSel facade（6,652 行 golden，代理波，解鎖 SetTrayBinByDLL/
+     BinPosChange/SetBINCOUNT/SetOSBIN 的 21+ 站點）；
+  g. cShowBinSelect 家族真本體擴充；FW-3 batch 3+；FW-1 tag 批次。
 - **設計面（等使用者）**：write path 設計輪；硬體架構題（index/1203、
   MN200、gclib）；B4 GPIB site-map 修不修。
