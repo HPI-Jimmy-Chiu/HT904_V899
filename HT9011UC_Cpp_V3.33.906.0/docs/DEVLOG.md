@@ -8165,17 +8165,29 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   程式本體比引用可靠，與歷史一致）。
 - **驗收**：全新雙 gate Debug 139/3＋Release 139/3、guard 552 檔 IDENTICAL。
 
+## 20260818 夜 — FW-Q5：StatisticalJamCount 家族（58c6699）——核可佇列全清
+
+- **交付**：JamCount 五函式＋兩 handler 真本體（~330 golden 行，主迴圈自翻）。
+  四處寫檔字面量走 W906_EVENTLOG_ROOT redirect；slEventLog->Path 讀取端
+  忠實（InitialOK 早退護 NULL）；FTP 尾段 gate（Q5a）。替代 2 筆
+  （RowCount++ proxy 無 ++、Rows[i]->Clear 無 Rows 視圖）。labLoaderCount
+  補 TPanel stand-in。oracle +12 → 96/96（含 EventLog CSV 引號承重回歸驗）。
+- **自己犯的錯**：Rate 斷言首稿預期商值 0.02——ChangeToFloat 是百分比助手
+  （MachineType.h:1593「取出 float %」），正確是 "2.00"；修測試非修碼。
+- **驗收**：全新雙 gate Debug 139/3＋Release 139/3、guard 552 檔 IDENTICAL。
+- **里程碑**：使用者 20260817 核可的佇列（1/2/3/4/5/6）**全數完成**。
+
 ### 🔖 RESUME（最新）
 
-- **完成**：佇列 1、2、39-gate 啟用波、佇列 3、佇列 6 三小項、
-  **佇列 4（FW3-WC, 5232a55）**。基線 139 測試/3 常駐。
-- **下一步＝佇列 5**：StatisticalJamCount 家族（cObserver 側，寫檔走
-  W906_EVENTLOG_ROOT redirect、FTP 照 golden 旗標；行為變更獨立 commit）。
-- **佇列後續**：Wave D=Command.cpp 其餘 WIDGET 類（剩 72/164 未翻，
-  never-wave 3 項在內）；表單佇列（cShowBinSelect Wave B＋8 缺件成員→
-  解 Y2 剩 10 站、fSecurity/fCounterClear/fBinSel、fLotInfo 5 成員→解 Y3、
-  FW-3 batch 3+）。
-- **設計面（最後提醒使用者）**：write path 設計輪；硬體架構題（index 上不上
-  1203、MN200 保留 vs 併入 EtherCAT——MOTION_IO 撞名修法掛此題、gclib
-  是否因 1203 統一而免做）；**新增：B4 要不要修**（GPIB 多站 site-map
-  只回站 1 是 golden 行為，修=行為變更）。
+- **使用者核可佇列 1-6 全清**（末筆=FW-Q5 58c6699）。基線 139 測試/3 常駐
+  （config_db/config_loaders/GA1_ReadGeneralIni）。
+- **下一步（自主佇列，按計畫書 §4 優先序）**：
+  a. Command.cpp Wave D（其餘 WIDGET 類 72/164；never-wave 3 項不動）；
+  b. cShowBinSelect Wave B（~250-widget ShowBinSel 家族＋8 缺件成員→
+     解 Y2 剩 10 站）；
+  c. fSecurity/fCounterClear/fBinSel facades（fail-closed 按鈕解鎖）；
+  d. fLotInfo 5 成員→解 Y3；
+  e. FW-3 batch 3+（BinDisplay 等）；FW-1 tag 批次。
+- **設計面（等使用者，做完自主佇列後提醒）**：write path 設計輪；硬體架構題
+  （index 上不上 1203、MN200 保留 vs 併入 EtherCAT＋MOTION_IO 撞名修法、
+  gclib 免做與否）；B4 GPIB 多站 site-map 只回站 1 要不要修。
