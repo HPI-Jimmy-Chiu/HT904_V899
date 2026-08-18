@@ -801,6 +801,52 @@ public:
     virtual void WriteNowAllTempData();               // golden main.h:1419 (body Command.cpp:5378-6539)
     virtual void GetCZAllMassTemp();                  // golden main.h:1467 (body Command.cpp:6542-8201)
     // -- end FW3-WB ADD --------------------------------------------------------
+    // -- FW3-WC ADD: Command.cpp wave-C declarations ---------------------------
+    // AI(W906-FW3-WC) 20260818: FW-3 Wave C ADD -- the ByDLL family. 26 golden
+    // TfMain:: member declarations (golden main.h :1440-1458 / :1527-1537 /
+    // :1692-1695) whose bodies are translated in Command.cpp's new "FW3-WC
+    // GROUP" section (golden Command.cpp :8311-9994). RemoteControl (golden
+    // Command.cpp :9673-9717, golden main.h :1455) is EXCLUDED per this wave's
+    // never-wave list -- not declared, not translated, no stand-in, no call
+    // site anywhere in this tree. Per contract rule 1 every declaration below
+    // is `virtual`; per rule 4 each cites its golden home. Signatures re-read
+    // from the cp950-decoded golden main.h this pass (golden line numbers
+    // cited per member).
+    HANDLE hFileMapping;                          // [DATA] golden main.h:1525 `HANDLE hFileMapping;` -- the
+                                    //   named-mapping handle CreateAndOpenMap's own else-branch creates and
+                                    //   later closes; golden's own class member has no ctor initialiser
+                                    //   either (VCL zero-inits it), so this stays whatever the OS/loader
+                                    //   leaves it until CreateAndOpenMap runs -- same "no golden ctor
+                                    //   assignment" posture as LastSet.cpp's `INFO *CmdData;`. Not a widget
+                                    //   (plain Win32 HANDLE), so it does not fall under the widget-facade
+                                    //   GATE rule.
+    virtual bool   CreateAndOpenMap();                                    // golden main.h:1440 (body Command.cpp:8311-8358)
+    virtual int    SetTrayBinByDLL(int iTrayNum, LPSTR asCategories, int iFail); // golden main.h:1442 (body Command.cpp:8360-8515)
+    virtual int    GetTrayBinByDLL(int iTrayNum);                         // golden main.h:1443 (body Command.cpp:8517-8564)
+    virtual int    SetSiteMapByDLL(LPSTR cSiteMap, int iNoOfSites);       // golden main.h:1444 (body Command.cpp:8566-8998)
+    virtual int    GetSiteMappingByDLL(LPSTR cSiteMap);                   // golden main.h:1445 (body Command.cpp:9000-9213)
+    virtual void   GetSiteMappingForSIGURD(LPSTR cSiteMap);               // golden main.h:1692 (body Command.cpp:9215-9236)
+    virtual bool   GetSiteOnOffByChannel(int iCh, int iTolRow, int iTolCol); // golden main.h:1694 (body Command.cpp:9237-9257)
+    virtual bool   SetSiteOnOffByChannel(int iCh, bool bSwitch);          // golden main.h:1695 (body Command.cpp:9258-9283)
+    virtual void   SetSiteOnOff(AnsiString hexStr);                       // golden main.h:1535 (body Command.cpp:9284-9303)
+    virtual bool   ParseHexToBoolArray(AnsiString hexStr, bool* bArr);    // golden main.h:1536 (body Command.cpp:9304-9326)
+    virtual void   HexCharToBits(char hexChar, bool* bArr, int startIndex); // golden main.h:1537 (body Command.cpp:9327-9343)
+    virtual int    SetTempByDLL(int iTempModeEPSON, double dTempVal);     // golden main.h:1446 (body Command.cpp:9344-9425)
+    virtual int    GetTempSettingByDLL();                                 // golden main.h:1447 (body Command.cpp:9426-9456)
+    virtual int    FTPDownloadByDLL(LPSTR cRecipeName);                   // golden main.h:1452 (body Command.cpp:9457-9494)
+    virtual int    GetBinCountByDLL(int iCategNum);                       // golden main.h:1448 (body Command.cpp:9495-9525)
+    virtual int    ClearBinCountByDLL();                                  // golden main.h:1449 (body Command.cpp:9526-9541)
+    virtual int    GetSortCountByDLL(int nTrayNum);                       // golden main.h:1450 (body Command.cpp:9542-9566)
+    virtual int    ClearSortCountByDLL();                                 // golden main.h:1451 (body Command.cpp:9567-9582)
+    virtual int    GetHandlerStatusByDll();                               // golden main.h:1453 (body Command.cpp:9583-9636)
+    virtual double GetAlarmStatusByDll();                                 // golden main.h:1454 (body Command.cpp:9637-9672)
+    virtual int    GetBinCountPerSiteByDLL(int iCategNum, int iSiteNum);  // golden main.h:1456 (body Command.cpp:9718-9777)
+    virtual int    GetTempActualByDLL();                                  // golden main.h:1457 (body Command.cpp:9778-9938)
+    virtual bool   SettingsIsWindowOpened();                              // golden main.h:1458 (body Command.cpp:9939-9964)
+    virtual void   WriteSiteOnOff();                                      // golden main.h:1527 (body Command.cpp:9965-9978)
+    virtual void   AutoSiteOnOff(AnsiString buffer);                      // golden main.h:1528 (body Command.cpp:9979-9985)
+    virtual void   WriteNumOfSites();                                     // golden main.h:1529 (body Command.cpp:9986-9994)
+    // -- end FW3-WC ADD --------------------------------------------------------
     TfMain();
     virtual ~TfMain() {}
 };

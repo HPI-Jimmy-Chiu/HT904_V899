@@ -8201,3 +8201,2068 @@ void TfMain::GetCZAllMassTemp()                                      //JerryYang
 }
 
 // -- FW3-WB APPEND -- end (WriteTemp_NS / WriteNowAllTempData / GetCZAllMassTemp) --
+
+// AI(W906-FW3-WC) 20260818: additional #includes for symbols the FW3-WC GROUP
+// below needs that no earlier Command.cpp #include (see top of file) pulls
+// in. Placed here rather than sorted into the top block because this file's
+// contract is append-only past "-- FW3-WB APPEND -- end" -- existing lines
+// (including the existing #include block) are not to be touched. All four
+// are header-guarded, so this is safe regardless of what else already
+// (transitively) included them.
+#include "cUnitConvert.h"    // DoStructUnitConvert (SetTrayBinByDLL / SetSiteMapByDLL)
+#include "forms/fContactCT.h" // fContactCT->ShowFormComp (SetSiteMapByDLL)
+#include "forms/fHome.h"      // fHome->fShow (SettingsIsWindowOpened)
+#include "forms/fSetup.h"     // fSetup->fShow (SettingsIsWindowOpened; also SetSiteMapByDLL's GATE comment)
+#include "atester_shims.h"    // fContact->fShow (SettingsIsWindowOpened)
+#include "cSocket.h"          // TastCategory (GetBinCountByDLL / GetBinCountPerSiteByDLL)
+#include "MainCalcCore.h"     // GetShtModeFlag / ComputeCanChangeRealDummy
+
+// =============================================================================
+//  FW3-WC GROUP -- the ByDLL family
+//
+//  Translation wave: FW-3 Wave C
+//  Translator: AI(W906-FW3-WC) 20260818
+//  Golden source: HT9011UC_Code_V3.33.906.0_20260618/Command.cpp (15,273 lines, cp950)
+//
+//  ROLE
+//  ----
+//  26 golden TfMain:: methods, golden Command.cpp :8311-9994, declared in
+//  forms/fMain.h's new "FW3-WC ADD" block. These are the external-DLL
+//  get/set entry points (Epson-style ATP DLL bridge): tray-bin map, site
+//  map, temperature set/get, bin/sort counters, handler/alarm status, and
+//  the GPIB site-on-off helpers layered on top of them. Per the task brief:
+//  bodies are translated, NO caller (TCP dispatch / DLL export table) is
+//  wired up.
+//
+//  NEVER-WAVE EXCLUSION: RemoteControl (golden :9673-9717) is deliberately
+//  skipped -- not declared in fMain.h, not translated here, no stand-in.
+//
+//  WAVE SCOPE (every golden method, golden line span, ACTIVE or GATED-partial)
+//  ------------------------------------------------------------------------------
+//    CreateAndOpenMap         :8311-8358  ACTIVE (2 GOLDEN BUGs, see below)
+//    SetTrayBinByDLL          :8360-8515  GATED-partial (fBinSel x6, fShowBinSelect x1)
+//    GetTrayBinByDLL          :8517-8564  ACTIVE (1 vclcompat-surface substitution)
+//    SetSiteMapByDLL          :8566-8998  GATED-partial (fSetup x3, fTestCategory x1)
+//    GetSiteMappingByDLL      :9000-9213  ACTIVE (1 vclcompat-surface substitution; 1 GOLDEN BUG)
+//    GetSiteMappingForSIGURD  :9215-9236  ACTIVE
+//    GetSiteOnOffByChannel    :9237-9257  ACTIVE (1 MainCalcCore substitution)
+//    SetSiteOnOffByChannel    :9258-9283  ACTIVE (1 MainCalcCore substitution)
+//    SetSiteOnOff             :9284-9303  ACTIVE
+//    ParseHexToBoolArray      :9304-9326  ACTIVE (1 vclcompat-surface substitution)
+//    HexCharToBits            :9327-9343  ACTIVE
+//    SetTempByDLL             :9344-9425  GATED-partial (ChangeTempMode x2, same absence as FW3-WA)
+//    GetTempSettingByDLL      :9426-9456  ACTIVE
+//    FTPDownloadByDLL         :9457-9494  GATED-partial (fFTPClient, whole body)
+//    GetBinCountByDLL         :9495-9525  ACTIVE
+//    ClearBinCountByDLL       :9526-9541  ACTIVE
+//    GetSortCountByDLL        :9542-9566  ACTIVE
+//    ClearSortCountByDLL      :9567-9582  GATED-partial (fCounterClear)
+//    GetHandlerStatusByDll    :9583-9636  GATED-partial (MyMessageBox, header-conflict; 1 MainCalcCore substitution)
+//    GetAlarmStatusByDll      :9637-9672  ACTIVE
+//    [RemoteControl           :9673-9717  EXCLUDED -- never-wave]
+//    GetBinCountPerSiteByDLL  :9718-9777  ACTIVE
+//    GetTempActualByDLL       :9778-9938  ACTIVE
+//    SettingsIsWindowOpened   :9939-9964  GATED-partial (29 of 33 OR-terms absent, see function banner)
+//    WriteSiteOnOff           :9965-9978  ACTIVE
+//    AutoSiteOnOff            :9979-9985  ACTIVE
+//    WriteNumOfSites          :9986-9994  ACTIVE
+//
+//  VCLCOMPAT-SURFACE SUBSTITUTIONS (behavior-preserving, not gates -- flagged
+//  per pt-wave policy so the integration pass can review/veto each)
+//  ------------------------------------------------------------------------------
+//  (S1) GetTrayBinByDLL golden :8494 `cTemp=asBinSetting.AnsiLastChar();` --
+//       vclcompat::AnsiString has no AnsiLastChar() (grep -rn "AnsiLastChar"
+//       . -- 0 hits tree-wide, 20260818). Substituted with the equivalent
+//       1-based `asBinSetting[asBinSetting.Length()]` (vclcompat/AnsiString.h:100
+//       -- "operator[](i): i==1 is the first char"), which reads the exact same
+//       last character golden's own AnsiLastChar() pointer would have
+//       dereferenced. asBinSetting is never empty at this call site (seeded
+//       with `AnsiString(iTrayNum)+":"` before the loop), so the 1-based
+//       index is always in range.
+//  (S2) GetSiteMappingByDLL's 17 `sprintf(cSiteInfo[i], "...%s...", asSiteTemp[...], ...)`
+//       calls -- these are the real C-library ::sprintf (destination is a
+//       plain `char cSiteInfo[32][10]`, not an AnsiString), not
+//       AnsiString::sprintf's variadic-template overload (vclcompat/AnsiString.h:142,
+//       which type-converts its args via `conv()` before formatting). Passing
+//       a vclcompat::AnsiString object (a `std::string`-backed class, NOT
+//       BCB6's single-pointer-layout AnsiString) through real C varargs is
+//       undefined behaviour -- BCB6's own AnsiString only worked here because
+//       of an ABI coincidence vclcompat does not share. Every `asSiteTemp[i][j]`
+//       argument to a bare `sprintf(...)` call below is passed as
+//       `asSiteTemp[i][j].c_str()` instead; this produces the byte-identical
+//       formatted output golden intended, it does not change golden's string
+//       content. Same posture as Command.cpp:2675-2680's SL2->Strings[j]
+//       materialization (FW3-WA).
+//  (S3) ParseHexToBoolArray golden :9316 `StrToIntDef("$" + hexStr, 0)` --
+//       port StrToIntDef (vclcompat/SysUtils.cpp:72) is a plain
+//       AnsiString::ToIntDef() wrapper, decimal-only; it does not honour
+//       BCB6's native '$'-prefix hex parsing the way golden's own StrToIntDef
+//       did, so translating this literally would silently return the 0
+//       default instead of the intended hex value. Substituted with this
+//       tree's own HexStrToInt() (vclcompat/SysUtils.cpp:81), which explicitly
+//       documents accepting both "0x" and "$" hex prefixes for exactly this
+//       reason. hexStr is length-checked to exactly 8 hex digits immediately
+//       above, so HexStrToInt's own -1-on-unparseable-input path is
+//       unreachable at this call site.
+//  (S4) GetHandlerStatusByDll golden :9628 `fMain->CheckCanChangeRealDummy()==false`
+//       -- CheckCanChangeRealDummy is NOT a declared TfMain member anywhere in
+//       forms/fMain.h (grep -rn "CheckCanChangeRealDummy" forms/fMain.h -- 0
+//       hits, 20260818); MainCalcCore.h:152-165 documents
+//       `ComputeCanChangeRealDummy(bPlate1HasIC, bPlate2HasIC, bShuttleHasIC,
+//       bIndexHasIC, bInArmSuckHasIC, bOutArmSuckHasIC)` as the deliberate
+//       "Portable replacement for TfMain::CheckCanChangeRealDummy()" (its own
+//       comment, verbatim), with every one of its six boolean parameters
+//       already a confirmed-real, side-effect-free port symbol
+//       (MOT[MMPlate1/MMPlate2].HasIC(), ShuttleHasIC(), IndexHasIC(),
+//       InArmSuck/OutArmSuck.HasIC()). This is this tree's own established
+//       "extract-calc-core" convention (KNOWLEDGE.md), not an invented
+//       behavior -- flagged here because it is a substitution, not a literal
+//       spelling match, so the integration pass can veto it in favor of a
+//       GATE if it disagrees.
+//  (S5) GetSiteOnOffByChannel golden :9241 / SetSiteOnOffByChannel golden
+//       :9262, both `GetShtModeFlag()` -- not a declared TfMain member either
+//       (grep -rn "GetShtModeFlag" forms/fMain.h -- 0 hits, 20260818).
+//       MainCalcCore.h:137-150 documents `ComputeShtModeFlag(iShuttleMode,
+//       iShuttle_Sel)` as the "Portable replacement for
+//       TfMain::GetShtModeFlag()" (its own comment, verbatim), with both
+//       parameters resolved from the real, confirmed `TestIF.iShuttleMode`/
+//       `TestIF.iShuttle_Sel` (cprod.h SYSTEM_TEST_IF). Same posture as (S4).
+//
+//  HEADER-CONFLICT GATE (not an absence -- a real facade this TU cannot
+//  safely #include)
+//  ------------------------------------------------------------------------------
+//  GetHandlerStatusByDll golden :9611 `MyMessageBox->fShow` -- MyMessageBox
+//  (TMyMessageBoxShim, acatchtray_shims.h) is a real, populated facade, but
+//  that header's `NewRecordProcess(AnsiString,AnsiString,AnsiString="")`
+//  declaration conflicts with the different 3rd-parameter default
+//  (`Debug=" "`) canary_support.h already puts on the same function, already
+//  visible in this TU -- a hard "default argument given for parameter 3"
+//  compile error the moment both are included together (confirmed by
+//  actually trying it this pass). Pre-existing conflict between two
+//  already-committed headers, neither of which is one of this wave's two
+//  writable files; gated at the call site instead of pulling in the
+//  conflicting #include. See that function's own GATE comment for the full
+//  detail.
+//
+//  GOLDEN BUGS / ODDITIES (translated literally, not "fixed")
+//  ------------------------------------------------------------------------------
+//  (B1) CreateAndOpenMap golden :8316/:8317/:8330/:8331 `memset(CmdData, 0x00,
+//       sizeof(CmdData))` -- CmdData is `INFO *`, so sizeof(CmdData) is
+//       sizeof(a pointer) (4 or 8 bytes), not sizeof(INFO). This memset only
+//       ever zeroes the pointer-sized prefix of the mapped INFO block, never
+//       the whole struct. Translated literally (both occurrences).
+//  (B2) CreateAndOpenMap golden :8327 `CreateFileMapping(..., sizeof(CmdData), "HandlerMemory")`
+//       -- same sizeof(CmdData) mistake sizes the mapping OBJECT itself
+//       (requesting only a pointer-sized backing region), while the very next
+//       lines' MapViewOfFile calls request a `sizeof(INFO)`-sized VIEW of that
+//       undersized mapping. Translated literally; this is a real
+//       memory-safety hazard the moment any caller actually invokes
+//       CreateAndOpenMap on a real OS (untested here -- ByDLL callers are
+//       explicitly out of this wave's scope).
+//  (B3) GetSiteMappingByDLL golden :8437-8899's format strings (e.g.
+//       `"[01,%s,%02d]"`) each produce exactly 10 printable characters plus a
+//       NUL terminator (11 bytes), but `cSiteInfo` is declared
+//       `char cSiteInfo[32][10]` (golden :9003, a function LOCAL -- the :693
+//       citation this banner first carried was wrong, corrected at
+//       integration 20260818) -- 10 bytes per row. Every
+//       `sprintf(cSiteInfo[i], ...)` call golden makes overflows its
+//       destination row by exactly 1 byte. Translated literally (array
+//       dimensions and format strings both copied verbatim); flagged as a
+//       real stack-buffer-overflow hazard for the same reason as (B2).
+//  (B4) GetSiteMappingByDLL golden :8899-8901 builds a full `cSiteInfo[0..31]`
+//       table (one formatted entry per site) but the function's only output
+//       write is `strcpy(cSiteMap, cSiteInfo[0]);` -- ONLY site 1's entry is
+//       ever copied to the caller's buffer; cSiteInfo[1..31] are computed and
+//       discarded. Every caller of this function (WriteSiteOnOff below,
+//       golden :9973) therefore reports site 1 only over GPIB for any
+//       machine with more than 1 site. Translated literally.
+// =============================================================================
+
+/* ---- golden Command.cpp:8311-8358 ---- */
+bool TfMain::CreateAndOpenMap()
+{
+    HANDLE hFileMap=OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, "HandlerMemory");            //Open Map
+    if(hFileMap!=NULL)
+    {
+        // GOLDEN BUG (B1)/(B2) -- see FW3-WC GROUP banner above for the full citation.
+        CmdData=(INFO *)MapViewOfFile(hFileMap, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(INFO));    //映射到CmdData結構
+        memset(CmdData, 0x00, sizeof(CmdData));
+        for(int i=0; i<eCommandTotal; i++)
+        {
+            CmdData->bCommandList[i]=false;
+        }
+        sprintf(CmdData->cVersion,"%s" , ATPDLLVersion);    //JerryYang 20230721 : dll版本卡控
+        return true;
+    }
+    else
+    {
+        // GOLDEN BUG (B2) -- see FW3-WC GROUP banner above for the full citation.
+        hFileMapping=CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, sizeof(CmdData), "HandlerMemory");
+
+        if(hFileMapping!=NULL)
+        {
+            if (GetLastError()==ERROR_ALREADY_EXISTS)
+            {
+                ShowMyMessage("Mapping file already created!");
+                CloseHandle(hFileMapping);
+            }
+
+            hFileMap=OpenFileMapping(FILE_MAP_ALL_ACCESS, FALSE, "HandlerMemory");            //Open Map
+            if (hFileMap!=NULL)
+            {
+                // GOLDEN BUG (B1) -- see FW3-WC GROUP banner above for the full citation.
+                CmdData=(INFO *)MapViewOfFile(hFileMap, FILE_MAP_ALL_ACCESS, 0, 0, sizeof(INFO));    //映射到CmdData結構
+                memset(CmdData, 0x00, sizeof(CmdData));
+                for(int i=0; i<eCommandTotal; i++)
+                {
+                    CmdData->bCommandList[i]=false;
+                }
+                sprintf(CmdData->cVersion,"%s" , ATPDLLVersion);    //JerryYang 20230721 : dll版本卡控
+                return true;
+            }
+            else
+            {
+                memset(CmdData, 0x00, sizeof(CmdData));
+                ShowMyMessage("Open File Mapping Fail!");
+            }
+        }
+    }
+
+    return false;
+}
+//---------------------------------------------------------------------------
+
+/* ---- golden Command.cpp:8360-8515 ---- */
+int TfMain::SetTrayBinByDLL(int iTrayNum, LPSTR asCategories, int iFail)
+{
+    char cBinTemp[3];
+    int i, j, iTrayBin[256],iBin;
+    char cTemp[256];
+    memset(iTrayBin,'\0', sizeof(iTrayBin));
+    memset(cTemp,'\0', sizeof(cTemp));
+
+    strncpy(cTemp, asCategories, sizeof(cTemp));
+    if(InitialOK==false)
+    {
+         return -4;  //Operation not Allowed
+    }
+
+    if(SystemStart==true)   //保護
+    {
+        return -4;  //Operation not Allowed
+    }
+
+    if(SettingsIsWindowOpened()==true)
+    {
+        return -6;  //Settings Window is Opened
+    }
+
+    if(HasICUnderMachine() || HasAnyICInMachine() || LastSet.iTester==OFF_LINE)
+    {
+        return -4;  //Operation not Allowed
+    }
+
+    if(iTrayNum<0 || iTrayNum>6)
+        return -3;   //Parameter Error
+
+    if(iFail>0 || iFail<-1)
+        return -3;   //Parameter Error
+
+    if(IniConfig.bFTBin2RTBin==false)
+        return -4;
+
+    for(i=0; i<iTestBinCount; i++)
+    {
+        if(cTemp[0]!='\0')
+        {
+            SplitStrByDotSpaceOnly(cTemp, cBinTemp, 4);
+
+            iBin=StrToIntDef(cBinTemp, -1);
+            if(iBin>=iTestBinCount || iBin<0)
+            {
+                // GATE(FW3-WC) golden :8407 `fBinSel->ReadFile(false, false, "");` --
+                // fBinSel (golden TfBinSel*) has NO translated home anywhere in the
+                // port (grep -rn "class TfBinSel" --include=*.h . -- 0 hits, 20260818;
+                // same absence already established by FW3-WA, Command.cpp:2635-2646).
+                // The line only refreshes that form's OWN grid; the function's real,
+                // observable effect is the `return -3` immediately after it, which
+                // stays ACTIVE un-gated.
+#if 0
+                fBinSel->ReadFile(false, false, "");
+#endif
+                return -3;   //Parameter Error
+            }
+
+            if(cBinTemp[0]=='0' && iFail==0)
+            {
+#if 0 // GATE(FW3-WC): fBinSel absent -- see golden :8407's GATE above for the full citation
+                fBinSel->ReadFile(false, false, "");
+#endif
+                return -3;
+            }
+
+            if(cBinTemp[0]=='0' && iFail==-1)  //比照EPSON的指令, Bin0當作是Error bin
+            {
+                BinSelect[iTestRunMode].IfErrorT3=iTrayNum-1;
+            }
+            else
+            {
+                if(iFail==0 && BinSelect[iTestRunMode].IfErrorT3==iTrayNum-1)
+                {
+                    BinSelect[iTestRunMode].IfErrorT3=5;
+                }
+                iTrayBin[i]=atoi(cBinTemp);
+            }
+
+            strcpy(cBinTemp,"");
+        }
+    }
+
+    for(i=0; i<eTrayCount; i++)
+    {
+        if(i==iTrayNum-1)
+        {
+            if(iFail==0)    //Pass Tray
+            {
+                BinSelect[iTestRunMode].iStackDefFailCate[i]=0;
+                bSetByDLL=true;
+            }
+            else if(iFail==-1)   //Fail Tray
+            {
+                BinSelect[iTestRunMode].iStackDefFailCate[i]=1;
+                bSetByDLL=true;
+            }
+            else
+            {
+                bSetByDLL=false;
+#if 0 // GATE(FW3-WC): fBinSel absent -- see golden :8407's GATE above for the full citation
+                fBinSel->ReadFile(false, false, "");
+#endif
+                return -3;      //Parameter Error
+            }
+        }
+    }
+
+    // GATE(FW3-WC) golden :8437-8483 `fBinSel->sBinTraySetT3Pos[...]->Count / ->Strings[i] /
+    // ->spbSaveClick(this)` -- fBinSel (golden TfBinSel*, the whole Bin-Select
+    // mapping VCL form) has NO translated home anywhere in the port (see the
+    // :8407 GATE above for the grep citation; same absence FW3-WA's own
+    // WriteSetBinMap gate already established, Command.cpp:2635-2646). Every
+    // fBinSel-> line in this block only ever mutates that form's OWN internal
+    // grid state (sBinTraySetT3Pos) and has no other port-visible effect --
+    // `iTrayBin[]`'s only reader is inside this same gated block, and the
+    // function's real state mutation (BinSelect[iTestRunMode].IfErrorT3 /
+    // .iStackDefFailCate) already happened, ACTIVE, in the loops above.
+    // `RT`/`FT` below are golden's bare bin-run-mode literals; the port names
+    // the same MachineType.h enum `eBinRT`/`eBinFT` (MachineType.h:627-628),
+    // exactly as FW3-WA's WriteSetBinMap already spells it (Command.cpp:2648
+    // `eBinFT`) -- so even inside this #if 0 the identifiers are respelled to
+    // eBinRT/eBinFT rather than left as bare RT/FT (which do not exist in this
+    // tree under those names) for anyone who un-gates this block later.
+#if 0
+    for(i=0; i<fBinSel->sBinTraySetT3Pos[iTestRunMode]->Count; i++)
+    {
+        if(fBinSel->sBinTraySetT3Pos[iTestRunMode]->Strings[i]==iTrayNum)
+        {
+            if(iTestRunMode==eBinRT)
+            {
+                if((IniConfig.bA02BinModelPrime && IniConfig.bFTBin2RTBin==true && (iBinModelPrime==0 || CosFunction.bDisableRTBinSet)) ||
+                (IniConfig.bA02BinModelPrime==false && (IniConfig.bFTBin2RTBin==true || CosFunction.bDisableRTBinSet)))
+                {
+                    fBinSel->sBinTraySetT3Pos[eBinFT]->Strings[i]=AnsiString(0);
+                }
+                else
+                {
+                    fBinSel->sBinTraySetT3Pos[iTestRunMode]->Strings[i]=AnsiString(0);
+                }
+            }
+            else
+            {
+                fBinSel->sBinTraySetT3Pos[iTestRunMode]->Strings[i]=AnsiString(0);
+            }
+        }
+    }
+
+    for(i=0; i<iTestBinCount; i++)
+    {
+        for(j=0; j<iTestBinCount; j++)
+        {
+            if(i<fBinSel->sBinTraySetT3Pos[iTestRunMode]->Count)
+            {
+                if(i==iTrayBin[j] && iTrayBin[j]!=0)
+                {
+                    if(iTestRunMode==eBinRT)
+                    {
+                        if((IniConfig.bA02BinModelPrime && IniConfig.bFTBin2RTBin==true && (iBinModelPrime==0 || CosFunction.bDisableRTBinSet)) ||
+                        (IniConfig.bA02BinModelPrime==false && (IniConfig.bFTBin2RTBin==true || CosFunction.bDisableRTBinSet)))
+                        {
+                            fBinSel->sBinTraySetT3Pos[eBinFT]->Strings[i]=AnsiString(iTrayNum);
+                        }
+                        else
+                        {
+                            fBinSel->sBinTraySetT3Pos[iTestRunMode]->Strings[i]=AnsiString(iTrayNum);
+                        }
+                    }
+                    else
+                    {
+                        fBinSel->sBinTraySetT3Pos[iTestRunMode]->Strings[i]=AnsiString(iTrayNum);
+                    }
+                }
+            }
+        }
+    }
+
+    fBinSel->spbSaveClick(this);
+#endif
+    DoStructUnitConvert();
+    // GATE(FW3-WC) golden :8513 `fShowBinSelect->ShowBinSel();` -- ShowBinSel is
+    // explicitly forms/fShowBinSelect.h's own documented "WAVE B QUEUE" item
+    // (golden span :388-757, ~250-widget ctor-population surface; see that
+    // header's line 62) -- not yet translated, no stand-in.
+#if 0
+    fShowBinSelect->ShowBinSel();
+#endif
+    SetWorkParameter();                                                         //Steven 20120130 : 存檔後要重新load參數
+    bSetByDLL=false;
+    return 0;
+}
+//------------------------------------------------------------------------------
+int TfMain::GetTrayBinByDLL(int iTrayNum)
+{
+    AnsiString asBinSetting="";
+    asBinSetting=AnsiString(iTrayNum)+":";
+    int i;
+
+    if(InitialOK==false)
+    {
+         return -4;  //Operation not Allowed
+    }
+
+    if(iTrayNum<1 || iTrayNum>6)    //tray is not defined
+        return -1;
+
+    for(i=1; i<iTestBinCount; i++)  //從Bin1開始, 比照Epson所定義的格式
+    {
+        if(Prod.iT6PosCate[i]==iTrayNum)
+        {
+            // AI(W906-FW3-WC) 20260818: substitution (S1) -- see FW3-WC GROUP
+            // banner above for the full citation. golden declares
+            // `char *cTemp="A";` once before the loop and reassigns it via
+            // `cTemp=asBinSetting.AnsiLastChar();` on every iteration before
+            // ever dereferencing it -- the initial "A" is dead in golden too.
+            // Dropped the now-purposeless pointer declaration entirely and
+            // read the last character directly into a fresh local each
+            // iteration instead of carrying an unused `char *cTemp`.
+            char cLastChar = asBinSetting[asBinSetting.Length()];
+            if(cLastChar==':')
+            {
+                asBinSetting=asBinSetting+AnsiString(i);
+            }
+            else
+            {
+                asBinSetting=asBinSetting+","+AnsiString(i);
+            }
+        }
+    }
+
+    if(Prod.iIfErrorT6==iTrayNum) //比照EPSON的指令, Bin0當作是Error bin
+    {
+        asBinSetting=asBinSetting+",0";
+    }
+    asBinSetting+=";";
+
+    if(BinSelect[iTestRunMode].iStackDefFailCate[iTrayNum-1]==0)                //QQQ
+    {
+        asBinSetting+="0";
+    }
+    else
+    {
+        asBinSetting+="-1";
+    }
+    strcpy(CmdData->cGetBinCategories_Cmd3, asBinSetting.c_str());
+    return 0;
+}
+//---------------------------------------------------------------------------
+
+/* ---- golden Command.cpp:8566-8998 ---- */
+int TfMain::SetSiteMapByDLL(LPSTR cSiteMap, int iNoOfSites)
+{
+    int i, j;
+    int iMode=TestIF_File.iTestMode;
+    int iSiteCnt=SiteData[iMode].Cnt;
+//    char *szSiteMap="[01,01,01][02,03,00][03,02,01][04,--,00]";
+    AnsiString strTemp[32]; //最大32site
+    bool bTempDutOnOff[MAX_SOCKET_ROW][MAX_SOCKET_COL];
+    bool bSiteOnOff[32];
+    char *cSiteMapSplit[32];
+    int iCount=0;
+    char cSiteTemp[2];
+    int iSiteMap[32];
+    int iTemp=0;
+
+    char cTemp[256];
+    memset(cTemp, '\0', sizeof(cTemp));
+    strncpy(cTemp, cSiteMap, sizeof(cTemp));
+
+    if(SystemStart==true)   //保護
+    {
+        return -4;  //Operation not Allowed
+    }
+
+    if(InitialOK==false)
+    {
+         return -4;  //Operation not Allowed
+    }
+
+    if(SettingsIsWindowOpened()==true)
+    {
+        return -6;  //Settings Window is Opened
+    }
+
+    if(HasICUnderMachine() || HasAnyICInMachine())
+    {
+        return -4;  //Operation not Allowed
+    }
+
+    if(iNoOfSites!=iSiteCnt)
+    {
+        return -3;   //Parameter Error
+    }
+
+    char *temp=strtok(cTemp, " []");
+    while(temp!=NULL)
+    {
+        cSiteMapSplit[iCount]=temp;
+
+        temp = strtok(NULL, " []");
+
+        if(iCount>=iNoOfSites)
+        {
+            //資料異常
+            return -3;   //Parameter Error
+        }
+        iCount++;
+    }
+
+    for(i=0; i<iNoOfSites; i++)
+    {
+        for(j=0; j<3; j++)
+        {
+            SplitStrByDotSpaceOnly(cSiteMapSplit[i], cSiteTemp, 3);
+            if(j==0)        //表示site的位置
+            {
+                iTemp=atoi(cSiteTemp);
+                if(iTemp!=i+1)
+                {
+                    return -3;
+                }
+
+                if(iTemp>iSiteCnt || iTemp<0)
+                {
+                    return -3;   //Parameter Error
+                }
+            }
+            else if(j==1)   //表示Site map的設定
+            {
+                if(cSiteTemp[0]=='-' && cSiteTemp[1]=='-')
+                {
+                    iSiteMap[i]=0;
+                }
+                else
+                {
+                    iSiteMap[i]=atoi(cSiteTemp);
+                }
+            }
+            else if(j==2)   //表示開關site
+            {
+                iTemp=StrToIntDef(cSiteTemp, -1);
+                if(iTemp<0 || iTemp>1)
+                    return -3;   //Parameter Error
+
+                bSiteOnOff[i]=atoi(cSiteTemp);
+                if(iSiteMap[i]==0 && bSiteOnOff[i]==true)
+                {
+                    return -3;   //Parameter Error
+                }
+            }
+        }
+    }
+
+    for(int i=0; i<iSiteCnt; i++)   //JerryYang 20160113 Sitemap防護
+    {
+        if(iSiteMap[i]>iSiteCnt || iSiteMap[i]<0)
+        {
+            return -3;  //Parameter Error
+        }
+        for(int j=i+1; j<iSiteCnt; j++)
+        {
+            if(iSiteMap[i]==iSiteMap[j] && iSiteMap[i]!=0)
+            {
+                return -3;  //Parameter Error
+            }
+        }
+    }
+
+    if(TestIF.iTestMode==SingleSite)//*   SingleSite
+    {
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+
+        bTempDutOnOff[0][0]=bSiteOnOff[0];
+    }
+    else if(TestIF.iTestMode==DualSite)//*   DualSite
+    {
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[1];
+
+        bTempDutOnOff[0][0]=bSiteOnOff[0];
+        bTempDutOnOff[0][1]=bSiteOnOff[1];
+    }
+    else if(TestIF_File.iTestMode==TriSite1X3)//
+    {
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[1];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[2];
+
+        bTempDutOnOff[0][0]=bSiteOnOff[0];
+        bTempDutOnOff[0][1]=bSiteOnOff[1];
+        bTempDutOnOff[0][2]=bSiteOnOff[2];
+    }
+    else if(TestIF.iTestMode==QualSite1X4)//*     QualSite1X4    _8Site1X4
+    {
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[1];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[2];
+        TestIF_File.iSiteMap[0][3]=iSiteMap[3];
+
+        bTempDutOnOff[0][0]=bSiteOnOff[0];
+        bTempDutOnOff[0][1]=bSiteOnOff[1];
+        bTempDutOnOff[0][2]=bSiteOnOff[2];
+        bTempDutOnOff[0][3]=bSiteOnOff[3];
+    }
+    else if(TestIF_File.iTestMode==DualSite2x1) //*    DualSite2x1
+    {
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+
+        bTempDutOnOff[0][0]=bSiteOnOff[0];
+        bTempDutOnOff[1][0]=bSiteOnOff[1];
+    }
+    else if(TestIF.iTestMode==QualSite2X2 || //*    QualSite2X2
+            TestIF.iTestMode==QualSite2X2N)
+    {
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[2];
+        TestIF_File.iSiteMap[1][1]=iSiteMap[3];
+
+        bTempDutOnOff[0][0]=bSiteOnOff[0];
+        bTempDutOnOff[1][0]=bSiteOnOff[1];
+        bTempDutOnOff[0][1]=bSiteOnOff[2];
+        bTempDutOnOff[1][1]=bSiteOnOff[3];
+    }
+    else if(TestIF_File.iTestMode==_6Site2X3 || //*      _6Site2X3
+            TestIF_File.iTestMode==_6Site2X3N)
+    {
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[2];
+        TestIF_File.iSiteMap[1][1]=iSiteMap[3];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[4];
+        TestIF_File.iSiteMap[1][2]=iSiteMap[5];
+
+        bTempDutOnOff[0][0]=bSiteOnOff[0];
+        bTempDutOnOff[1][0]=bSiteOnOff[1];
+        bTempDutOnOff[0][1]=bSiteOnOff[2];
+        bTempDutOnOff[1][1]=bSiteOnOff[3];
+        bTempDutOnOff[0][2]=bSiteOnOff[4];
+        bTempDutOnOff[1][2]=bSiteOnOff[5];
+    }
+    else if(TestIF_File.iTestMode==_8Site2X4 ||//*    _8Site2X4
+            TestIF_File.iTestMode==_8Site2X4N) //Wei 20231211 : 2X4NN Mode
+    {
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[2];
+        TestIF_File.iSiteMap[1][1]=iSiteMap[3];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[4];
+        TestIF_File.iSiteMap[1][2]=iSiteMap[5];
+        TestIF_File.iSiteMap[0][3]=iSiteMap[6];
+        TestIF_File.iSiteMap[1][3]=iSiteMap[7];
+
+        bTempDutOnOff[0][0]=bSiteOnOff[0];
+        bTempDutOnOff[1][0]=bSiteOnOff[1];
+        bTempDutOnOff[0][1]=bSiteOnOff[2];
+        bTempDutOnOff[1][1]=bSiteOnOff[3];
+        bTempDutOnOff[0][2]=bSiteOnOff[4];
+        bTempDutOnOff[1][2]=bSiteOnOff[5];
+        bTempDutOnOff[0][3]=bSiteOnOff[6];
+        bTempDutOnOff[1][3]=bSiteOnOff[7];
+    }
+    else if(TestIF_File.iTestMode==_10Site2X5)
+    {
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[2];
+        TestIF_File.iSiteMap[1][1]=iSiteMap[3];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[4];
+        TestIF_File.iSiteMap[1][2]=iSiteMap[5];
+        TestIF_File.iSiteMap[0][3]=iSiteMap[6];
+        TestIF_File.iSiteMap[1][3]=iSiteMap[7];
+        TestIF_File.iSiteMap[0][4]=iSiteMap[8];
+        TestIF_File.iSiteMap[1][4]=iSiteMap[9];
+
+        bTempDutOnOff[0][0]=bSiteOnOff[0];
+        bTempDutOnOff[1][0]=bSiteOnOff[1];
+        bTempDutOnOff[0][1]=bSiteOnOff[2];
+        bTempDutOnOff[1][1]=bSiteOnOff[3];
+        bTempDutOnOff[0][2]=bSiteOnOff[4];
+        bTempDutOnOff[1][2]=bSiteOnOff[5];
+        bTempDutOnOff[0][3]=bSiteOnOff[6];
+        bTempDutOnOff[1][3]=bSiteOnOff[7];
+        bTempDutOnOff[0][4]=bSiteOnOff[8];
+        bTempDutOnOff[1][4]=bSiteOnOff[9];
+    }
+    else if(TestIF_File.iTestMode==_12Site2X6)//*    _12Site2X6
+    {
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[2];
+        TestIF_File.iSiteMap[1][1]=iSiteMap[3];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[4];
+        TestIF_File.iSiteMap[1][2]=iSiteMap[5];
+        TestIF_File.iSiteMap[0][3]=iSiteMap[6];
+        TestIF_File.iSiteMap[1][3]=iSiteMap[7];
+        TestIF_File.iSiteMap[0][4]=iSiteMap[8];
+        TestIF_File.iSiteMap[1][4]=iSiteMap[9];
+        TestIF_File.iSiteMap[0][5]=iSiteMap[10];
+        TestIF_File.iSiteMap[1][5]=iSiteMap[11];
+
+        bTempDutOnOff[0][0]=bSiteOnOff[0];
+        bTempDutOnOff[1][0]=bSiteOnOff[1];
+        bTempDutOnOff[0][1]=bSiteOnOff[2];
+        bTempDutOnOff[1][1]=bSiteOnOff[3];
+        bTempDutOnOff[0][2]=bSiteOnOff[4];
+        bTempDutOnOff[1][2]=bSiteOnOff[5];
+        bTempDutOnOff[0][3]=bSiteOnOff[6];
+        bTempDutOnOff[1][3]=bSiteOnOff[7];
+        bTempDutOnOff[0][4]=bSiteOnOff[8];
+        bTempDutOnOff[1][4]=bSiteOnOff[9];
+        bTempDutOnOff[0][5]=bSiteOnOff[10];
+        bTempDutOnOff[1][5]=bSiteOnOff[11];
+    }
+    else if(TestIF_File.iTestMode==_16Site2X8) //*     _16Site2X8
+    {
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[2];
+        TestIF_File.iSiteMap[1][1]=iSiteMap[3];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[4];
+        TestIF_File.iSiteMap[1][2]=iSiteMap[5];
+        TestIF_File.iSiteMap[0][3]=iSiteMap[6];
+        TestIF_File.iSiteMap[1][3]=iSiteMap[7];
+        TestIF_File.iSiteMap[0][4]=iSiteMap[8];
+        TestIF_File.iSiteMap[1][4]=iSiteMap[9];
+        TestIF_File.iSiteMap[0][5]=iSiteMap[10];
+        TestIF_File.iSiteMap[1][5]=iSiteMap[11];
+        TestIF_File.iSiteMap[0][6]=iSiteMap[12];
+        TestIF_File.iSiteMap[1][6]=iSiteMap[13];
+        TestIF_File.iSiteMap[0][7]=iSiteMap[14];
+        TestIF_File.iSiteMap[1][7]=iSiteMap[15];
+
+        bTempDutOnOff[0][0]=bSiteOnOff[0];
+        bTempDutOnOff[1][0]=bSiteOnOff[1];
+        bTempDutOnOff[0][1]=bSiteOnOff[2];
+        bTempDutOnOff[1][1]=bSiteOnOff[3];
+        bTempDutOnOff[0][2]=bSiteOnOff[4];
+        bTempDutOnOff[1][2]=bSiteOnOff[5];
+        bTempDutOnOff[0][3]=bSiteOnOff[6];
+        bTempDutOnOff[1][3]=bSiteOnOff[7];
+        bTempDutOnOff[0][4]=bSiteOnOff[8];
+        bTempDutOnOff[1][4]=bSiteOnOff[9];
+        bTempDutOnOff[0][5]=bSiteOnOff[10];
+        bTempDutOnOff[1][5]=bSiteOnOff[11];
+        bTempDutOnOff[1][6]=bSiteOnOff[12];
+        bTempDutOnOff[0][6]=bSiteOnOff[13];
+        bTempDutOnOff[1][7]=bSiteOnOff[14];
+        bTempDutOnOff[0][7]=bSiteOnOff[15];
+    }
+    else if(TestIF_File.iTestMode==_16Site4X4)
+    {
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+        TestIF_File.iSiteMap[2][0]=iSiteMap[2];
+        TestIF_File.iSiteMap[3][0]=iSiteMap[3];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[4];
+        TestIF_File.iSiteMap[1][1]=iSiteMap[5];
+        TestIF_File.iSiteMap[2][1]=iSiteMap[6];
+        TestIF_File.iSiteMap[3][1]=iSiteMap[7];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[8];
+        TestIF_File.iSiteMap[1][2]=iSiteMap[9];
+        TestIF_File.iSiteMap[2][2]=iSiteMap[10];
+        TestIF_File.iSiteMap[3][2]=iSiteMap[11];
+        TestIF_File.iSiteMap[0][3]=iSiteMap[12];
+        TestIF_File.iSiteMap[1][3]=iSiteMap[13];
+        TestIF_File.iSiteMap[2][3]=iSiteMap[14];
+        TestIF_File.iSiteMap[3][3]=iSiteMap[15];
+
+        bTempDutOnOff[0][0]=bSiteOnOff[0];
+        bTempDutOnOff[1][0]=bSiteOnOff[1];
+        bTempDutOnOff[2][0]=bSiteOnOff[2];
+        bTempDutOnOff[3][0]=bSiteOnOff[3];
+        bTempDutOnOff[0][1]=bSiteOnOff[4];
+        bTempDutOnOff[1][1]=bSiteOnOff[5];
+        bTempDutOnOff[2][1]=bSiteOnOff[6];
+        bTempDutOnOff[3][1]=bSiteOnOff[7];
+        bTempDutOnOff[0][2]=bSiteOnOff[8];
+        bTempDutOnOff[1][2]=bSiteOnOff[9];
+        bTempDutOnOff[2][2]=bSiteOnOff[10];
+        bTempDutOnOff[3][2]=bSiteOnOff[11];
+        bTempDutOnOff[0][3]=bSiteOnOff[12];
+        bTempDutOnOff[1][3]=bSiteOnOff[13];
+        bTempDutOnOff[2][3]=bSiteOnOff[14];
+        bTempDutOnOff[3][3]=bSiteOnOff[15];
+    }
+    else if(TestIF_File.iTestMode==_32Site4X8N)
+    {
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+        TestIF_File.iSiteMap[2][0]=iSiteMap[2];
+        TestIF_File.iSiteMap[3][0]=iSiteMap[3];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[4];
+        TestIF_File.iSiteMap[1][1]=iSiteMap[5];
+        TestIF_File.iSiteMap[2][1]=iSiteMap[6];
+        TestIF_File.iSiteMap[3][1]=iSiteMap[7];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[8];
+        TestIF_File.iSiteMap[1][2]=iSiteMap[9];
+        TestIF_File.iSiteMap[2][2]=iSiteMap[10];
+        TestIF_File.iSiteMap[3][2]=iSiteMap[11];
+        TestIF_File.iSiteMap[0][3]=iSiteMap[12];
+        TestIF_File.iSiteMap[1][3]=iSiteMap[13];
+        TestIF_File.iSiteMap[2][3]=iSiteMap[14];
+        TestIF_File.iSiteMap[3][3]=iSiteMap[15];
+        TestIF_File.iSiteMap[0][4]=iSiteMap[16];
+        TestIF_File.iSiteMap[1][4]=iSiteMap[17];
+        TestIF_File.iSiteMap[2][4]=iSiteMap[18];
+        TestIF_File.iSiteMap[3][4]=iSiteMap[19];
+        TestIF_File.iSiteMap[0][5]=iSiteMap[20];
+        TestIF_File.iSiteMap[1][5]=iSiteMap[21];
+        TestIF_File.iSiteMap[2][5]=iSiteMap[22];
+        TestIF_File.iSiteMap[3][5]=iSiteMap[23];
+        TestIF_File.iSiteMap[0][6]=iSiteMap[24];
+        TestIF_File.iSiteMap[1][6]=iSiteMap[25];
+        TestIF_File.iSiteMap[2][6]=iSiteMap[26];
+        TestIF_File.iSiteMap[3][6]=iSiteMap[27];
+        TestIF_File.iSiteMap[0][7]=iSiteMap[28];
+        TestIF_File.iSiteMap[1][7]=iSiteMap[29];
+        TestIF_File.iSiteMap[2][7]=iSiteMap[30];
+        TestIF_File.iSiteMap[3][7]=iSiteMap[31];
+
+        bTempDutOnOff[0][0]=bSiteOnOff[0];
+        bTempDutOnOff[1][0]=bSiteOnOff[1];
+        bTempDutOnOff[2][0]=bSiteOnOff[2];
+        bTempDutOnOff[3][0]=bSiteOnOff[3];
+        bTempDutOnOff[0][1]=bSiteOnOff[4];
+        bTempDutOnOff[1][1]=bSiteOnOff[5];
+        bTempDutOnOff[2][1]=bSiteOnOff[6];
+        bTempDutOnOff[3][1]=bSiteOnOff[7];
+        bTempDutOnOff[0][2]=bSiteOnOff[8];
+        bTempDutOnOff[1][2]=bSiteOnOff[9];
+        bTempDutOnOff[2][2]=bSiteOnOff[10];
+        bTempDutOnOff[3][2]=bSiteOnOff[11];
+        bTempDutOnOff[0][3]=bSiteOnOff[12];
+        bTempDutOnOff[1][3]=bSiteOnOff[13];
+        bTempDutOnOff[2][3]=bSiteOnOff[14];
+        bTempDutOnOff[3][3]=bSiteOnOff[15];
+        bTempDutOnOff[0][4]=bSiteOnOff[16];
+        bTempDutOnOff[1][4]=bSiteOnOff[17];
+        bTempDutOnOff[2][4]=bSiteOnOff[18];
+        bTempDutOnOff[3][4]=bSiteOnOff[19];
+        bTempDutOnOff[0][5]=bSiteOnOff[20];
+        bTempDutOnOff[1][5]=bSiteOnOff[21];
+        bTempDutOnOff[2][5]=bSiteOnOff[22];
+        bTempDutOnOff[3][5]=bSiteOnOff[23];
+        bTempDutOnOff[0][6]=bSiteOnOff[24];
+        bTempDutOnOff[1][6]=bSiteOnOff[25];
+        bTempDutOnOff[2][6]=bSiteOnOff[26];
+        bTempDutOnOff[3][6]=bSiteOnOff[27];
+        bTempDutOnOff[0][7]=bSiteOnOff[28];
+        bTempDutOnOff[1][7]=bSiteOnOff[29];
+        bTempDutOnOff[2][7]=bSiteOnOff[30];
+        bTempDutOnOff[3][7]=bSiteOnOff[31];
+    }
+    else
+    {
+        return -3;   //Parameter Error
+    }
+
+    // GATE(FW3-WC) golden :8977-8979 `fSetup->ScrollBar1Change(this);
+    // fSetup->DoIniDataToForm(); fSetup->sbUpdateClick(this);` -- forms/fSetup.h's
+    // TfSetup facade carries exactly ONE member (`bool fShow`, landed by the
+    // W7-L2 substrate pass for a single unrelated ckernel.cpp call site,
+    // forms/fSetup.h:17-25); none of these three methods exist on it (grep -n
+    // "ScrollBar1Change\|DoIniDataToForm\|sbUpdateClick" forms/fSetup.h -- 0
+    // hits, 20260818). `fMain->ShowTestHeadComp(true)` right after IS a real
+    // TfMain method (forms/fMain.h:156, empty body from an earlier wave) and
+    // stays ACTIVE un-gated.
+#if 0
+    fSetup->ScrollBar1Change(this);
+    fSetup->DoIniDataToForm();
+    fSetup->sbUpdateClick(this);
+#endif
+    fMain->ShowTestHeadComp(true);
+
+    for(int i=0; i<4; i++)
+    {
+        for(int j=0; j<8; j++)
+        {
+           bTestSiteUse[0][i][j]=bTempDutOnOff[i][j];
+           LastSet.bUseTestSocket[0][i][j]=bTempDutOnOff[i][j];
+           bTestSiteUse[1][i][j]=bTempDutOnOff[i][j];
+           LastSet.bUseTestSocket[1][i][j]=bTempDutOnOff[i][j];
+        }
+    }
+
+    fMain->ShowTestHeadComp(false);
+    DoStructUnitConvert();
+    // GATE(FW3-WC) golden :8993 `fTestCategory->AdjFormData();` -- fTestCategory
+    // (golden TfTestCategory*, cTestCategory.h) has no port-wide facade;
+    // Automation/auto9045.cpp:18 lists it by name among the forms this tree
+    // explicitly documents as "untranslated" and builds its own TU-local
+    // `W5FA_TfTestCategoryExt W5FA_FTestCategory` stand-in (auto9045.cpp:358-362)
+    // used only inside that one file -- not exported as `fTestCategory` here
+    // (grep -rn "TfTestCategory \*fTestCategory\|extern.*fTestCategory"
+    // --include=*.h . -- 0 hits, 20260818). `fContactCT->ShowFormComp()`
+    // immediately after IS a real, ACTIVE translated method (forms/fContactCT.h:43,
+    // ":293 void ShowFormComp();") and stays un-gated.
+#if 0
+    fTestCategory->AdjFormData();
+#endif
+    fContactCT->ShowFormComp();
+    SetWorkParameter();
+    return 0;   //Success
+}
+//---------------------------------------------------------------------------
+
+/* ---- golden Command.cpp:9000-9213 ---- */
+// AI(W906-FW3-WC) 20260818: substitution (S2) applied throughout this
+// function's body -- see FW3-WC GROUP banner above for the full citation.
+// Every `asSiteTemp[i][j]` argument to a bare `sprintf(cSiteInfo[k], "...%s...", ...)`
+// call below is spelled `asSiteTemp[i][j].c_str()` (golden has no `.c_str()`
+// there because BCB6's own AnsiString could pass through C varargs directly;
+// vclcompat's cannot). Also see GOLDEN BUG (B3) (10-byte `cSiteInfo` rows vs.
+// 11-byte formatted output) and (B4) (only `cSiteInfo[0]` is ever returned)
+// in that same banner -- both reproduced literally below.
+int TfMain::GetSiteMappingByDLL(LPSTR cSiteMap)
+{
+    int i, j;
+    char cSiteInfo[32][10];
+    AnsiString asSiteTemp[MAX_SOCKET_ROW][MAX_SOCKET_COL];
+    int iMode=TestIF_File.iTestMode;
+    int iSiteCnt=SiteData[iMode].Cnt;
+
+    if(InitialOK==false)
+    {
+         return -4;  //Operation not Allowed
+    }
+
+    for(i=0; i<MAX_SOCKET_ROW; i++)
+    {
+        for(j=0; j<MAX_SOCKET_COL; j++)
+        {
+            if(TestIF_File.iSiteMap[i][j]<=0)
+            {
+                asSiteTemp[i][j].sprintf("--");
+            }
+            else
+            {
+                asSiteTemp[i][j].sprintf("%02d", TestIF_File.iSiteMap[i][j]);
+            }
+        }
+    }
+
+    if(TestIF_File.iTestMode==SingleSite)       // Single Site 1x1
+    {
+        sprintf(cSiteInfo[0], "[01,%s,%02d]", asSiteTemp[0][0].c_str(), bTestSiteUse[0][0][0]);
+    }
+    else if(TestIF_File.iTestMode==DualSite)       // Dual Site 1x2
+    {
+        sprintf(cSiteInfo[0], "[01,%s,%02d]", asSiteTemp[0][0].c_str(), bTestSiteUse[0][0][0]);
+        sprintf(cSiteInfo[1], "[02,%s,%02d]", asSiteTemp[0][1].c_str(), bTestSiteUse[0][0][1]);
+    }
+    else if(TestIF_File.iTestMode==TriSite1X3)
+    {
+        sprintf(cSiteInfo[0], "[01,%s,%02d]", asSiteTemp[0][0].c_str(), bTestSiteUse[0][0][0]);
+        sprintf(cSiteInfo[1], "[02,%s,%02d]", asSiteTemp[0][1].c_str(), bTestSiteUse[0][0][1]);
+        sprintf(cSiteInfo[2], "[03,%s,%02d]", asSiteTemp[0][2].c_str(), bTestSiteUse[0][0][2]);
+    }
+    else if(TestIF_File.iTestMode==QualSite1X4)  // Qual Site 1x4
+    {
+        sprintf(cSiteInfo[0], "[01,%s,%02d]", asSiteTemp[0][0].c_str(), bTestSiteUse[0][0][0]);
+        sprintf(cSiteInfo[1], "[02,%s,%02d]", asSiteTemp[0][1].c_str(), bTestSiteUse[0][0][1]);
+        sprintf(cSiteInfo[2], "[03,%s,%02d]", asSiteTemp[0][2].c_str(), bTestSiteUse[0][0][2]);
+        sprintf(cSiteInfo[3], "[04,%s,%02d]", asSiteTemp[0][3].c_str(), bTestSiteUse[0][0][3]);
+    }
+    else if(TestIF_File.iTestMode==DualSite2x1)  // Dual Site 2x1
+    {
+        sprintf(cSiteInfo[0], "[01,%s,%02d]", asSiteTemp[0][0].c_str(), bTestSiteUse[0][0][0]);
+        sprintf(cSiteInfo[1], "[02,%s,%02d]", asSiteTemp[1][0].c_str(), bTestSiteUse[0][1][0]);
+    }
+    else if(TestIF_File.iTestMode==QualSite2X2)  // Qual Site 2x2
+    {
+        sprintf(cSiteInfo[0], "[01,%s,%02d]", asSiteTemp[0][0].c_str(), bTestSiteUse[0][0][0]);
+        sprintf(cSiteInfo[1], "[02,%s,%02d]", asSiteTemp[1][0].c_str(), bTestSiteUse[0][1][0]);
+        sprintf(cSiteInfo[2], "[03,%s,%02d]", asSiteTemp[0][1].c_str(), bTestSiteUse[0][0][1]);
+        sprintf(cSiteInfo[3], "[04,%s,%02d]", asSiteTemp[1][1].c_str(), bTestSiteUse[0][1][1]);
+    }
+    else if(TestIF_File.iTestMode==QualSite2X2N)
+    {
+        sprintf(cSiteInfo[0], "[01,%s,%02d]", asSiteTemp[0][0].c_str(), bTestSiteUse[1][0][0]);
+        sprintf(cSiteInfo[1], "[02,%s,%02d]", asSiteTemp[1][0].c_str(), bTestSiteUse[0][0][0]);
+        sprintf(cSiteInfo[2], "[03,%s,%02d]", asSiteTemp[0][1].c_str(), bTestSiteUse[1][0][1]);
+        sprintf(cSiteInfo[3], "[04,%s,%02d]", asSiteTemp[1][1].c_str(), bTestSiteUse[0][0][1]);
+    }
+    else if(TestIF_File.iTestMode==_6Site2X3)      //ChungHung 20140115 add for 2x3_6
+    {
+        sprintf(cSiteInfo[0], "[01,%s,%02d]", asSiteTemp[0][0].c_str(), bTestSiteUse[0][0][0]);
+        sprintf(cSiteInfo[1], "[02,%s,%02d]", asSiteTemp[1][0].c_str(), bTestSiteUse[0][1][0]);
+        sprintf(cSiteInfo[2], "[03,%s,%02d]", asSiteTemp[0][1].c_str(), bTestSiteUse[0][0][1]);
+        sprintf(cSiteInfo[3], "[04,%s,%02d]", asSiteTemp[1][1].c_str(), bTestSiteUse[0][1][1]);
+        sprintf(cSiteInfo[4], "[05,%s,%02d]", asSiteTemp[0][2].c_str(), bTestSiteUse[0][0][2]);
+        sprintf(cSiteInfo[5], "[06,%s,%02d]", asSiteTemp[1][2].c_str(), bTestSiteUse[0][1][2]);
+    }
+    else if(TestIF_File.iTestMode==_6Site2X3N)
+    {
+        sprintf(cSiteInfo[0], "[01,%s,%02d]", asSiteTemp[0][0].c_str(), bTestSiteUse[1][0][0]);
+        sprintf(cSiteInfo[1], "[02,%s,%02d]", asSiteTemp[1][0].c_str(), bTestSiteUse[0][0][0]);
+        sprintf(cSiteInfo[2], "[03,%s,%02d]", asSiteTemp[0][1].c_str(), bTestSiteUse[1][0][1]);
+        sprintf(cSiteInfo[3], "[04,%s,%02d]", asSiteTemp[1][1].c_str(), bTestSiteUse[0][0][1]);
+        sprintf(cSiteInfo[4], "[05,%s,%02d]", asSiteTemp[0][2].c_str(), bTestSiteUse[1][0][2]);
+        sprintf(cSiteInfo[5], "[06,%s,%02d]", asSiteTemp[1][2].c_str(), bTestSiteUse[0][0][2]);
+    }
+    else if(TestIF_File.iTestMode==_8Site2X4N)  //Wei 20231211 : 2X4NN Mode
+    {
+        sprintf(cSiteInfo[0], "[01,%s,%02d]", asSiteTemp[0][0].c_str(), bTestSiteUse[1][0][0]);
+        sprintf(cSiteInfo[1], "[02,%s,%02d]", asSiteTemp[1][0].c_str(), bTestSiteUse[0][0][0]);
+        sprintf(cSiteInfo[2], "[03,%s,%02d]", asSiteTemp[0][1].c_str(), bTestSiteUse[1][0][1]);
+        sprintf(cSiteInfo[3], "[04,%s,%02d]", asSiteTemp[1][1].c_str(), bTestSiteUse[0][0][1]);
+        sprintf(cSiteInfo[4], "[05,%s,%02d]", asSiteTemp[0][2].c_str(), bTestSiteUse[1][0][2]);
+        sprintf(cSiteInfo[5], "[06,%s,%02d]", asSiteTemp[1][2].c_str(), bTestSiteUse[0][0][2]);
+        sprintf(cSiteInfo[6], "[07,%s,%02d]", asSiteTemp[0][3].c_str(), bTestSiteUse[1][0][3]);
+        sprintf(cSiteInfo[7], "[08,%s,%02d]", asSiteTemp[1][3].c_str(), bTestSiteUse[0][0][3]);
+    }
+    else if(TestIF_File.iTestMode==_8Site2X4)      // 8 Site 2x4
+    {
+        sprintf(cSiteInfo[0], "[01,%s,%02d]", asSiteTemp[0][0].c_str(), bTestSiteUse[0][0][0]);
+        sprintf(cSiteInfo[1], "[02,%s,%02d]", asSiteTemp[1][0].c_str(), bTestSiteUse[0][1][0]);
+        sprintf(cSiteInfo[2], "[03,%s,%02d]", asSiteTemp[0][1].c_str(), bTestSiteUse[0][0][1]);
+        sprintf(cSiteInfo[3], "[04,%s,%02d]", asSiteTemp[1][1].c_str(), bTestSiteUse[0][1][1]);
+        sprintf(cSiteInfo[4], "[05,%s,%02d]", asSiteTemp[0][2].c_str(), bTestSiteUse[0][0][2]);
+        sprintf(cSiteInfo[5], "[06,%s,%02d]", asSiteTemp[1][2].c_str(), bTestSiteUse[0][1][2]);
+        sprintf(cSiteInfo[6], "[07,%s,%02d]", asSiteTemp[0][3].c_str(), bTestSiteUse[0][0][3]);
+        sprintf(cSiteInfo[7], "[08,%s,%02d]", asSiteTemp[1][3].c_str(), bTestSiteUse[0][1][3]);
+    }
+    else if(TestIF_File.iTestMode==_10Site2X5)
+    {
+        sprintf(cSiteInfo[0],  "[01,%s,%02d]", asSiteTemp[0][0].c_str(), bTestSiteUse[0][0][0]);
+        sprintf(cSiteInfo[1],  "[02,%s,%02d]", asSiteTemp[1][0].c_str(), bTestSiteUse[0][1][0]);
+        sprintf(cSiteInfo[2],  "[03,%s,%02d]", asSiteTemp[0][1].c_str(), bTestSiteUse[0][0][1]);
+        sprintf(cSiteInfo[3],  "[04,%s,%02d]", asSiteTemp[1][1].c_str(), bTestSiteUse[0][1][1]);
+        sprintf(cSiteInfo[4],  "[05,%s,%02d]", asSiteTemp[0][2].c_str(), bTestSiteUse[0][0][2]);
+        sprintf(cSiteInfo[5],  "[06,%s,%02d]", asSiteTemp[1][2].c_str(), bTestSiteUse[0][1][2]);
+        sprintf(cSiteInfo[6],  "[07,%s,%02d]", asSiteTemp[0][3].c_str(), bTestSiteUse[0][0][3]);
+        sprintf(cSiteInfo[7],  "[08,%s,%02d]", asSiteTemp[1][3].c_str(), bTestSiteUse[0][1][3]);
+        sprintf(cSiteInfo[8],  "[09,%s,%02d]", asSiteTemp[0][4].c_str(), bTestSiteUse[0][0][4]);
+        sprintf(cSiteInfo[9],  "[10,%s,%02d]", asSiteTemp[1][4].c_str(), bTestSiteUse[0][1][4]);
+    }
+    else if(TestIF_File.iTestMode==_12Site2X6)
+    {
+        sprintf(cSiteInfo[0],  "[01,%s,%02d]", asSiteTemp[0][0].c_str(), bTestSiteUse[0][0][0]);
+        sprintf(cSiteInfo[1],  "[02,%s,%02d]", asSiteTemp[1][0].c_str(), bTestSiteUse[0][1][0]);
+        sprintf(cSiteInfo[2],  "[03,%s,%02d]", asSiteTemp[0][1].c_str(), bTestSiteUse[0][0][1]);
+        sprintf(cSiteInfo[3],  "[04,%s,%02d]", asSiteTemp[1][1].c_str(), bTestSiteUse[0][1][1]);
+        sprintf(cSiteInfo[4],  "[05,%s,%02d]", asSiteTemp[0][2].c_str(), bTestSiteUse[0][0][2]);
+        sprintf(cSiteInfo[5],  "[06,%s,%02d]", asSiteTemp[1][2].c_str(), bTestSiteUse[0][1][2]);
+        sprintf(cSiteInfo[6],  "[07,%s,%02d]", asSiteTemp[0][3].c_str(), bTestSiteUse[0][0][3]);
+        sprintf(cSiteInfo[7],  "[08,%s,%02d]", asSiteTemp[1][3].c_str(), bTestSiteUse[0][1][3]);
+        sprintf(cSiteInfo[8],  "[09,%s,%02d]", asSiteTemp[0][4].c_str(), bTestSiteUse[0][0][4]);
+        sprintf(cSiteInfo[9],  "[10,%s,%02d]", asSiteTemp[1][4].c_str(), bTestSiteUse[0][1][4]);
+        sprintf(cSiteInfo[10], "[11,%s,%02d]", asSiteTemp[0][5].c_str(), bTestSiteUse[0][0][5]);
+        sprintf(cSiteInfo[11], "[12,%s,%02d]", asSiteTemp[1][5].c_str(), bTestSiteUse[0][1][5]);
+    }
+    else if(TestIF_File.iTestMode==_16Site2X8)     //16Site 2x8
+    {
+        sprintf(cSiteInfo[0],   "[01,%s,%02d]", asSiteTemp[0][0].c_str(), bTestSiteUse[0][0][0]);
+        sprintf(cSiteInfo[1],   "[02,%s,%02d]", asSiteTemp[1][0].c_str(), bTestSiteUse[0][1][0]);
+        sprintf(cSiteInfo[2],   "[03,%s,%02d]", asSiteTemp[0][1].c_str(), bTestSiteUse[0][0][1]);
+        sprintf(cSiteInfo[3],   "[04,%s,%02d]", asSiteTemp[1][1].c_str(), bTestSiteUse[0][1][1]);
+        sprintf(cSiteInfo[4],   "[05,%s,%02d]", asSiteTemp[0][2].c_str(), bTestSiteUse[0][0][2]);
+        sprintf(cSiteInfo[5],   "[06,%s,%02d]", asSiteTemp[1][2].c_str(), bTestSiteUse[0][1][2]);
+        sprintf(cSiteInfo[6],   "[07,%s,%02d]", asSiteTemp[0][3].c_str(), bTestSiteUse[0][0][3]);
+        sprintf(cSiteInfo[7],   "[08,%s,%02d]", asSiteTemp[1][3].c_str(), bTestSiteUse[0][1][3]);
+        sprintf(cSiteInfo[8],   "[09,%s,%02d]", asSiteTemp[0][4].c_str(), bTestSiteUse[0][0][4]);
+        sprintf(cSiteInfo[9],   "[10,%s,%02d]", asSiteTemp[1][4].c_str(), bTestSiteUse[0][1][4]);
+        sprintf(cSiteInfo[10],  "[11,%s,%02d]", asSiteTemp[0][5].c_str(), bTestSiteUse[0][0][5]);
+        sprintf(cSiteInfo[11],  "[12,%s,%02d]", asSiteTemp[1][5].c_str(), bTestSiteUse[0][1][5]);
+        sprintf(cSiteInfo[12],  "[13,%s,%02d]", asSiteTemp[0][6].c_str(), bTestSiteUse[0][0][6]);
+        sprintf(cSiteInfo[13],  "[14,%s,%02d]", asSiteTemp[1][6].c_str(), bTestSiteUse[0][1][6]);
+        sprintf(cSiteInfo[14],  "[15,%s,%02d]", asSiteTemp[0][7].c_str(), bTestSiteUse[0][0][7]);
+        sprintf(cSiteInfo[15],  "[16,%s,%02d]", asSiteTemp[1][7].c_str(), bTestSiteUse[0][1][7]);
+    }
+    else if(TestIF_File.iTestMode==_16Site4X4)
+    {
+        sprintf(cSiteInfo[0],   "[01,%s,%02d]", asSiteTemp[0][0].c_str(), bTestSiteUse[1][0][0]);
+        sprintf(cSiteInfo[1],   "[02,%s,%02d]", asSiteTemp[1][0].c_str(), bTestSiteUse[1][1][0]);
+        sprintf(cSiteInfo[2],   "[03,%s,%02d]", asSiteTemp[2][0].c_str(), bTestSiteUse[0][0][0]);
+        sprintf(cSiteInfo[3],   "[04,%s,%02d]", asSiteTemp[3][0].c_str(), bTestSiteUse[0][1][0]);
+        sprintf(cSiteInfo[4],   "[05,%s,%02d]", asSiteTemp[0][1].c_str(), bTestSiteUse[1][0][1]);
+        sprintf(cSiteInfo[5],   "[06,%s,%02d]", asSiteTemp[1][1].c_str(), bTestSiteUse[1][1][1]);
+        sprintf(cSiteInfo[6],   "[07,%s,%02d]", asSiteTemp[2][1].c_str(), bTestSiteUse[0][0][1]);
+        sprintf(cSiteInfo[7],   "[08,%s,%02d]", asSiteTemp[3][1].c_str(), bTestSiteUse[0][1][1]);
+        sprintf(cSiteInfo[8],   "[09,%s,%02d]", asSiteTemp[0][2].c_str(), bTestSiteUse[1][0][2]);
+        sprintf(cSiteInfo[9],   "[10,%s,%02d]", asSiteTemp[1][2].c_str(), bTestSiteUse[1][1][2]);
+        sprintf(cSiteInfo[10],  "[11,%s,%02d]", asSiteTemp[2][2].c_str(), bTestSiteUse[0][0][2]);
+        sprintf(cSiteInfo[11],  "[12,%s,%02d]", asSiteTemp[3][2].c_str(), bTestSiteUse[0][1][2]);
+        sprintf(cSiteInfo[12],  "[13,%s,%02d]", asSiteTemp[0][3].c_str(), bTestSiteUse[1][0][3]);
+        sprintf(cSiteInfo[13],  "[14,%s,%02d]", asSiteTemp[1][3].c_str(), bTestSiteUse[1][1][3]);
+        sprintf(cSiteInfo[14],  "[15,%s,%02d]", asSiteTemp[2][3].c_str(), bTestSiteUse[0][0][3]);
+        sprintf(cSiteInfo[15],  "[16,%s,%02d]", asSiteTemp[3][3].c_str(), bTestSiteUse[0][1][3]);
+    }
+    else if(TestIF_File.iTestMode==_32Site4X8N)
+    {
+        sprintf(cSiteInfo[0],   "[01,%s,%02d]", asSiteTemp[0][0].c_str(), bTestSiteUse[1][0][0]);
+        sprintf(cSiteInfo[1],   "[02,%s,%02d]", asSiteTemp[1][0].c_str(), bTestSiteUse[1][1][0]);
+        sprintf(cSiteInfo[2],   "[03,%s,%02d]", asSiteTemp[2][0].c_str(), bTestSiteUse[0][0][0]);
+        sprintf(cSiteInfo[3],   "[04,%s,%02d]", asSiteTemp[3][0].c_str(), bTestSiteUse[0][1][0]);
+        sprintf(cSiteInfo[4],   "[05,%s,%02d]", asSiteTemp[0][1].c_str(), bTestSiteUse[1][0][1]);
+        sprintf(cSiteInfo[5],   "[06,%s,%02d]", asSiteTemp[1][1].c_str(), bTestSiteUse[1][1][1]);
+        sprintf(cSiteInfo[6],   "[07,%s,%02d]", asSiteTemp[2][1].c_str(), bTestSiteUse[0][0][1]);
+        sprintf(cSiteInfo[7],   "[08,%s,%02d]", asSiteTemp[3][1].c_str(), bTestSiteUse[0][1][1]);
+        sprintf(cSiteInfo[8],   "[09,%s,%02d]", asSiteTemp[0][2].c_str(), bTestSiteUse[1][0][2]);
+        sprintf(cSiteInfo[9],   "[10,%s,%02d]", asSiteTemp[1][2].c_str(), bTestSiteUse[1][1][2]);
+        sprintf(cSiteInfo[10],  "[11,%s,%02d]", asSiteTemp[2][2].c_str(), bTestSiteUse[0][0][2]);
+        sprintf(cSiteInfo[11],  "[12,%s,%02d]", asSiteTemp[3][2].c_str(), bTestSiteUse[0][1][2]);
+        sprintf(cSiteInfo[12],  "[13,%s,%02d]", asSiteTemp[0][3].c_str(), bTestSiteUse[1][0][3]);
+        sprintf(cSiteInfo[13],  "[14,%s,%02d]", asSiteTemp[1][3].c_str(), bTestSiteUse[1][1][3]);
+        sprintf(cSiteInfo[14],  "[15,%s,%02d]", asSiteTemp[2][3].c_str(), bTestSiteUse[0][0][3]);
+        sprintf(cSiteInfo[15],  "[16,%s,%02d]", asSiteTemp[3][3].c_str(), bTestSiteUse[0][1][3]);
+        sprintf(cSiteInfo[16],  "[17,%s,%02d]", asSiteTemp[0][4].c_str(), bTestSiteUse[1][0][4]);
+        sprintf(cSiteInfo[17],  "[18,%s,%02d]", asSiteTemp[1][4].c_str(), bTestSiteUse[1][1][4]);
+        sprintf(cSiteInfo[18],  "[19,%s,%02d]", asSiteTemp[2][4].c_str(), bTestSiteUse[0][0][4]);
+        sprintf(cSiteInfo[19],  "[20,%s,%02d]", asSiteTemp[3][4].c_str(), bTestSiteUse[0][1][4]);
+        sprintf(cSiteInfo[20],  "[21,%s,%02d]", asSiteTemp[0][5].c_str(), bTestSiteUse[1][0][5]);
+        sprintf(cSiteInfo[21],  "[22,%s,%02d]", asSiteTemp[1][5].c_str(), bTestSiteUse[1][1][5]);
+        sprintf(cSiteInfo[22],  "[23,%s,%02d]", asSiteTemp[2][5].c_str(), bTestSiteUse[0][0][5]);
+        sprintf(cSiteInfo[23],  "[24,%s,%02d]", asSiteTemp[3][5].c_str(), bTestSiteUse[0][1][5]);
+        sprintf(cSiteInfo[24],  "[25,%s,%02d]", asSiteTemp[0][6].c_str(), bTestSiteUse[1][0][6]);
+        sprintf(cSiteInfo[25],  "[26,%s,%02d]", asSiteTemp[1][6].c_str(), bTestSiteUse[1][1][6]);
+        sprintf(cSiteInfo[26],  "[27,%s,%02d]", asSiteTemp[2][6].c_str(), bTestSiteUse[0][0][6]);
+        sprintf(cSiteInfo[27],  "[28,%s,%02d]", asSiteTemp[3][6].c_str(), bTestSiteUse[0][1][6]);
+        sprintf(cSiteInfo[28],  "[29,%s,%02d]", asSiteTemp[0][7].c_str(), bTestSiteUse[1][0][7]);
+        sprintf(cSiteInfo[29],  "[30,%s,%02d]", asSiteTemp[1][7].c_str(), bTestSiteUse[1][1][7]);
+        sprintf(cSiteInfo[30],  "[31,%s,%02d]", asSiteTemp[2][7].c_str(), bTestSiteUse[0][0][7]);
+        sprintf(cSiteInfo[31],  "[32,%s,%02d]", asSiteTemp[3][7].c_str(), bTestSiteUse[0][1][7]);
+    }
+
+    strcpy(cSiteMap, cSiteInfo[0]);
+    return iSiteCnt;
+}
+//---------------------------------------------------------------------------
+
+/* ---- golden Command.cpp:9215-9236 ---- */
+void TfMain::GetSiteMappingForSIGURD(LPSTR cSiteMap)                            //Jimmychiu 20241203 : add get site on off for SIGURD_PeiXing
+{
+    if(InitialOK==false)
+    {
+         return;
+    }
+    bool bSites[MAX_SOCKET_ROW*MAX_SOCKET_COL];
+    ZeroMemory(bSites , sizeof(bSites));
+    unsigned long ulvalue=0;
+    int iTolCh=0;
+
+    iTolCh=TestSocket.iShtRow*TestSocket.iShtCol;
+    for(int i=0;i<iTolCh;i++)
+    {
+        if(GetSiteOnOffByChannel((i+1),TestSocket.iShtRow,TestSocket.iShtCol))
+        {
+            ulvalue|=(1<<i);
+        }
+    }
+    sprintf(cSiteMap, "%08X", ulvalue);
+}
+//---------------------------------------------------------------------------
+bool TfMain::GetSiteOnOffByChannel(int iCh,int iTolRow,int iTolCol)             //Jimmychiu 20241203 : add get site on off for SIGURD_PeiXing
+{
+    // AI(W906-FW3-WC) 20260818: substitution (S5) -- see FW3-WC GROUP banner
+    // above for the full citation. `GetShtModeFlag()` is not a declared
+    // TfMain member in this port; replaced with MainCalcCore.h's own
+    // documented portable replacement, ComputeShtModeFlag(TestIF.iShuttleMode,
+    // TestIF.iShuttle_Sel).
+    int iFlag=ComputeShtModeFlag(TestIF.iShuttleMode, TestIF.iShuttle_Sel);
+    for(int icol=0;icol<iTolCol;icol++)
+    {
+        for(int irow=0;irow<iTolRow;irow++)
+        {
+            if(TestIF_File.iSiteMap[irow][icol]==iCh)
+            {
+                if(iFlag==2)
+                {
+                    return bTestSiteUse[0][irow][icol];
+                }
+                else
+                 return bTestSiteUse[iFlag][irow][icol];
+            }
+        }
+    }
+    return false;
+}
+//---------------------------------------------------------------------------
+bool TfMain::SetSiteOnOffByChannel(int iCh, bool bSwitch)
+{
+    // AI(W906-FW3-WC) 20260818: substitution (S5) -- see GetSiteOnOffByChannel
+    // above / FW3-WC GROUP banner for the full citation.
+    int iFlag=ComputeShtModeFlag(TestIF.iShuttleMode, TestIF.iShuttle_Sel);
+    for(int icol=0;icol<TestSocket.iShtCol;icol++)
+    {
+        for(int irow=0;irow<TestSocket.iShtRow;irow++)
+        {
+            if(TestIF_File.iSiteMap[irow][icol]==iCh)
+            {
+                if(iFlag==2)
+                {
+                    bLowYieldCloseSite[0][irow][icol]=bSwitch;
+                    bLowYieldCloseSite[1][irow][icol]=bSwitch;
+                    return true;
+                }
+                else
+                {
+                    bLowYieldCloseSite[iFlag][irow][icol]=bSwitch;
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+//---------------------------------------------------------------------------
+void TfMain::SetSiteOnOff(AnsiString hexStr)
+{
+    if(InitialOK==false)
+    {
+         return;
+    }
+    bool bChSwitch[MAX_SOCKET_ROW*MAX_SOCKET_COL];
+    ZeroMemory(bChSwitch, sizeof(bChSwitch));
+    if(ParseHexToBoolArray(hexStr, bChSwitch)==true)
+    {
+        int iTolCh=TestSocket.iShtRow*TestSocket.iShtCol;
+        for(int i=0; i<iTolCh; i++)
+        {
+            SetSiteOnOffByChannel((i+1), bChSwitch[i]);
+        }
+        ShowTestHeadComp(false);
+    }
+    fYieldMonitoring->bGetGPIBAutoSiteOff=true;
+}
+//---------------------------------------------------------------------------
+bool TfMain::ParseHexToBoolArray(AnsiString hexStr, bool* bArr)
+{
+    hexStr=hexStr.Trim();
+    if(hexStr.Length()!=8)
+    {
+        return false;                                                           //字串長度必須為 8
+    }
+    int iTotalChNum=MAX_SOCKET_ROW*MAX_SOCKET_COL;
+    // AI(W906-FW3-WC) 20260818: substitution (S3) -- see FW3-WC GROUP banner
+    // above for the full citation.
+    unsigned int hexValue = static_cast<unsigned int>(HexStrToInt(hexStr));
+    for (int i=0; i<iTotalChNum; i++)
+    {
+        if ((hexValue & (1 << i)) != 0)
+        {
+            bArr[i] = true;
+        }
+        else
+        {
+            bArr[i] = false;
+        }
+    }
+    return true;
+}
+//---------------------------------------------------------------------------
+void TfMain::HexCharToBits(char hexChar, bool* bArr, int startIndex)
+{
+    int value;
+    if(hexChar>='0' && hexChar<='9')
+        value=hexChar-'0';                                                      // 0-9
+    else if(hexChar>='A' && hexChar<='F')
+        value=hexChar-'A'+10;                                                   // A-F
+    else if(hexChar>='a' && hexChar<='f')
+        value=hexChar-'a'+10;                                                   // a-f
+    else
+        return;
+    bArr[startIndex]  =(value&0x8)!=0;                                          // 最高位
+    bArr[startIndex+1]=(value&0x4)!=0;
+    bArr[startIndex+2]=(value&0x2)!=0;
+    bArr[startIndex+3]=(value&0x1)!=0;                                          // 最低位
+}
+//---------------------------------------------------------------------------
+
+/* ---- golden Command.cpp:9344-9425 ---- */
+int TfMain::SetTempByDLL(int iTempModeEPSON, double dTempVal)
+{
+    int ret, iTempMode;
+
+    if(SystemStart==true)                                                       //保護
+    {
+        return -4;                                                              //Operation not Allowed
+    }
+
+    if(InitialOK==false)
+    {
+         return -4;                                                             //Operation not Allowed
+    }
+
+    if(SettingsIsWindowOpened()==true)
+    {
+        return -6;                                                              //Settings Window is Opened
+    }
+
+    if(HasICUnderMachine() || HasAnyICInMachine())
+    {
+        return -4;                                                              //Operation not Allowed
+    }
+
+    if(iTempModeEPSON>2 || iTempModeEPSON<1)
+    {
+        return -3;                                                              //Parameter Error
+    }
+
+    if(iTempModeEPSON==2 && (dTempVal<dTempMin || dTempVal>dTempMax))
+    {
+        return -3;                                                              //Parameter Error
+    }
+
+    if(iTempModeEPSON==2)                                                       //高溫iTempMode=2, EPSON定義的指令
+    {
+        iTempMode=Tempture_Hot;
+        Temperature.iMachineTempMode=0;
+        LastSet.iTemperature=Tempture_Hot;
+    }
+    else
+    {
+        iTempMode=Tempture_Ambient;
+        Temperature.iMachineTempMode=1;
+        LastSet.iTemperature=Tempture_Ambient;
+        dTempVal=25;
+    }
+
+    edWorkTemperBase->Text=CheckRange(dTempVal, dTempMax, dTempMin);
+
+    ret=SetTemp(false, atof(edWorkTemperBase->Text.c_str()), atof(edSoakTime->Text.c_str()));
+
+    if(ret==0)
+    {
+        if(iTempModeEPSON==2)                                                   //高溫iTempMode=2, EPSON定義的指令
+        {
+            iTempMode=Tempture_Hot;
+            Temperature.iMachineTempMode=0;
+        }
+        else
+        {
+            iTempMode=Tempture_Ambient;
+            Temperature.iMachineTempMode=1;
+        }
+
+        // GATE(FW3-WC) golden :9410 `ret=ChangeTempMode(iTempMode, false,
+        // bRefreshFunction, true, true);` -- ChangeTempMode is golden
+        // main.h:1323, a TfMain MEMBER function, NOT present in forms/fMain.h
+        // (grep -rn "ChangeTempMode" forms/*.h -- 0 declarations, 20260818) --
+        // same absence FW3-WA already established for WriteSetTempStatus's two
+        // ChangeTempMode call sites (Command.cpp:1852-1867/:1883-1888).
+        // Faithful offline default: `ret` stays whatever SetTemp() returned
+        // above (0 on the offline-success path), driving the same "0 -> return 0"
+        // path below exactly as if ChangeTempMode had itself succeeded.
+#if 0
+        ret=ChangeTempMode(iTempMode, false, bRefreshFunction, true, true);
+#endif
+
+        if(ret==0)
+        {
+            return 0;
+        }
+        else
+        {
+            return -1;                                                          //General Error
+        }
+    }
+    else
+    {
+        return -1;
+    }
+}
+//---------------------------------------------------------------------------
+int TfMain::GetTempSettingByDLL()
+{
+    AnsiString asTemp;
+    if(InitialOK==false)
+    {
+         return -4;                                                             //Operation not Allowed
+    }
+
+    if(LastSet.iTemperature==Tempture_Hot)                                      //配合EPSON的定義,  Temperature Mode (1 = Ambient; 2 = High Temp)
+    {
+        asTemp="2";
+    }
+    else
+    {
+        asTemp="1";
+    }
+
+    AnsiString asWorkTemperBase;
+    asWorkTemperBase.sprintf("%.1f", Temperature.fWorkTemperBase);
+    if(Temperature.fWorkTemperBase>=0)
+    {
+        asTemp=asTemp+",+"+asWorkTemperBase;
+    }
+    else
+    {
+        asTemp=asTemp+",-"+asWorkTemperBase;
+    }
+    strcpy(CmdData->cGetTempSettings_Cmd5, asTemp.c_str());
+    return 0;
+}
+//----------------------------------------------------------------------------
+int TfMain::FTPDownloadByDLL(LPSTR cRecipeName)
+{
+    AnsiString Msg;
+    if(SystemStart==true)                                                       //保護
+    {
+        return -4;                                                              //Operation not Allowed
+    }
+
+    if(SettingsIsWindowOpened()==true)
+    {
+        return -6;                                                              //Settings Window is Opened
+    }
+
+    if(HasICUnderMachine() || HasAnyICInMachine() || LastSet.iTester==OFF_LINE)
+    {
+        return -4;                                                              //Operation not Allowed
+    }
+
+    if(InitialOK==false)
+    {
+         return -4;                                                             //Operation not Allowed
+    }
+
+    // GATE(FW3-WC) golden :9481-9491 `fFTPClient->...` (whole remaining body)
+    // -- fFTPClient (golden TfFTPClient*, KYECFTP/FTPClient.h) has NO
+    // port-wide facade anywhere in this tree; KYECFTP/FTPClient_EventHandlers.h:94
+    // says so explicitly in its own words ("No `TfFTPClient` facade exists
+    // anywhere yet"), and the only two things that DO exist under that name
+    // (FTPClient_Transfer.h's 4 free "session" functions and
+    // FTPClient_EventHandlers.h's `bListOk`/`bError` demoted-to-extern globals)
+    // are the golden CLASS's members demoted to file-scope, not a `fFTPClient`
+    // object with `bControlBySECSGEM`/`aSetUpNameBySECSGEM`/`ShowFTPModal`/
+    // `iErrorBySECSGEM` (grep -rn "fFTPClient" --include=*.h . -- every hit is
+    // a citation comment, 0 real declarations, 20260818). `fLotInfo->SetLotStart`
+    // and `GetCriticalParaAuth()` inside golden's success `else` are BOTH real,
+    // translated, ACTIVE symbols (forms/fLotInfo.h:48; cAuthority.h:84) but are
+    // unreachable without a real `fFTPClient->iErrorBySECSGEM` to branch on, so
+    // they are quoted here inside the same gate rather than split out.
+    // ACTIVE DEFAULT: -1 (General Error) -- an FTP download genuinely cannot
+    // happen offline with no FTP-client form; this is a translator decision
+    // (not a golden-observed value) documented here per pt-wave policy, not a
+    // silent invention.
+#if 0
+    fFTPClient->bControlBySECSGEM=true;
+    fFTPClient->aSetUpNameBySECSGEM=cRecipeName;
+    fFTPClient->ShowFTPModal(0);
+    if(fFTPClient->iErrorBySECSGEM!=0)
+    {
+        fFTPClient->iErrorBySECSGEM=-1;
+    }
+    else                                                                        //JerryYang 20220311 : ATP鎖定Critical parameter
+    {
+        fLotInfo->SetLotStart(__FUNC__, false);
+        GetCriticalParaAuth();
+    }
+    return fFTPClient->iErrorBySECSGEM;
+#else
+    return -1;
+#endif
+}
+//---------------------------------------------------------------------------
+
+/* ---- golden Command.cpp:9495-9525 ---- */
+int TfMain::GetBinCountByDLL(int iCategNum)
+{
+    int ret=-1;
+
+    if(InitialOK==false)
+    {
+         return -4;                                                             //Operation not Allowed
+    }
+
+    if(iCategNum>=iTestBinCount || iCategNum<0)
+    {
+        return -3;                                                              //Parameter Error
+    }
+
+    TastCategory.UpdataCount(true);                                             //Steven 20250514 : 統一計算數量
+
+    if(iCategNum>0)
+    {
+        if(Prod.iT6CatData[iCategNum]<0)                                        //QQQ
+        {
+            ret=-1;
+        }
+        else
+        {
+            ret=TastCategory.iTotalCategory[iCategNum];
+        }
+    }
+
+    return ret;
+}
+//---------------------------------------------------------------------------
+int TfMain::ClearBinCountByDLL()
+{
+    if(SystemStart==true)                                                       //保護
+    {
+        return -4;                                                              //Operation not Allowed
+    }
+
+    if(InitialOK==false)
+    {
+         return -4;                                                             //Operation not Allowed
+    }
+    fMain->Clarn_Data(1, "ClearBinCountByDLL");
+
+    return 0;
+}
+//---------------------------------------------------------------------------
+int TfMain::GetSortCountByDLL(int nTrayNum)
+{
+    int ret=0;
+    if(nTrayNum<0 || nTrayNum>6)
+    {
+        return -1;                                                              //the tray is not defined
+    }
+
+    if(InitialOK==false)
+    {
+         return -4;                                                             //Operation not Allowed
+    }
+
+    if(nTrayNum==0)                                                             //0: total count for all trays
+    {
+        ret=RunInfo.iUnloadCount;
+    }
+    else
+    {
+        ret=LastSet.BinCT[0][iTo3Unload[nTrayNum-1]];
+    }
+
+    return ret;
+}
+//---------------------------------------------------------------------------
+int TfMain::ClearSortCountByDLL()
+{
+    if(SystemStart==true)                                                       //保護
+    {
+        return -4;                                                              //Operation not Allowed
+    }
+
+    if(InitialOK==false)
+    {
+         return -4;                                                             //Operation not Allowed
+    }
+    // GATE(FW3-WC) golden :9578 `fCounterClear->ClearCount(ctTraySortCount);` --
+    // `fCounterClear` is NOT a real symbol in Command.cpp's translation unit.
+    // csystem.cpp:4852-4854 defines a TU-LOCAL `#define fCounterClear
+    // W7C1_fCounterClear` (a `struct W7C1_TfCounterClearSeam { void
+    // LowYieldSpecialInitail(){} };` stand-in with no `ClearCount` member at
+    // all) inside csystem.cpp itself -- a #define in a .cpp file, not a
+    // header, so it is invisible to every other translation unit including
+    // this one (grep -rn "fCounterClear" --include=*.h . -- 0 hits, 20260818;
+    // "class TfCounterClear" -- 0 hits tree-wide). `ctTraySortCount` itself
+    // IS a real enum value (cmydef.h) but has no real ClearCount() to receive
+    // it here. ACTIVE DEFAULT: return 0 unconditionally, exactly as golden's
+    // own body does immediately after the (gated) clear call -- there is no
+    // separate success/failure branch to preserve.
+#if 0
+    fCounterClear->ClearCount(ctTraySortCount);
+#endif
+
+    return 0;
+}
+//---------------------------------------------------------------------------
+
+/* ---- golden Command.cpp:9583-9636 ---- */
+int TfMain::GetHandlerStatusByDll()
+{
+    int ret=6;
+//INIT=0        Breaker is ON but Power is OFF
+//IDLE=1        Power is ON but handler display status is HALT
+//RUNNING=2     Operator or remote control has started the handler
+//PAUSE=3       Operator or remote control has paused the handler
+//SYSERROR=4    Temporarily paused by an ALARM
+//MANUAL=5      Operator has opened a setting window
+//UNDEFINED=6  (Undefined)
+
+    if(InitialOK==false)
+    {
+         return -4;                                                             //Operation not Allowed
+    }
+
+    if(SystemStart)
+    {
+        ret=2;
+    }
+    else
+    {
+        // GATE(FW3-WC) golden :9611 `MyMessageBox->fShow==true` -- MyMessageBox
+        // (golden TMyMessageBox*, mymessbox.h) IS a real translated facade
+        // (TMyMessageBoxShim, acatchtray_shims.h:319-327, real `bool fShow;`
+        // field) -- but that header's own `NewRecordProcess(AnsiString,
+        // AnsiString, AnsiString="")` declaration conflicts with the DIFFERENT
+        // default argument (`Debug=" "`) canary_support.h already puts on the
+        // same function's 3rd parameter, already visible in this TU (Command.cpp:264)
+        // -- "default argument given for parameter 3" is a hard C++ error the
+        // moment both headers are included in one TU (confirmed by actually
+        // trying it, 20260818: `g++ -std=c++17 -fsyntax-only` on this exact
+        // file). This is a PRE-EXISTING latent conflict between two already-committed
+        // headers, not something this wave introduces or is in scope to fix
+        // (acatchtray_shims.h is not one of this wave's two writable files).
+        // Gating the term instead of the #include: `iUnLoaderCount==0` is also
+        // ANDed in, so the whole first disjunct only ever contributes when a
+        // buffer-place pre-alarm dialog AND zero-in-unloader coincide -- same
+        // "no such subsystem is live offline" posture as every other GATE in
+        // this wave. `fNote->fShow` (the second disjunct) is real and ACTIVE.
+#if 0
+        if(((MyMessageBox->fShow==true && iUnLoaderCount==0) || fNote->fShow==true) && bAlarmReset==false)
+#else
+        if((fNote->fShow==true) && bAlarmReset==false)
+#endif
+        {
+            ret=4;
+        }
+        //----------判斷是否在設定參數
+        else if(SettingsIsWindowOpened()==true)
+        {
+            ret=5;
+        }
+        else if(Sen[SnMotorPower].IsOff())
+        {
+            ret=0;
+        }
+        else
+        {
+            // AI(W906-FW3-WC) 20260818: substitution (S4) -- see FW3-WC GROUP
+            // banner above for the full citation. `fMain->CheckCanChangeRealDummy()`
+            // is not a declared TfMain member in this port; replaced with
+            // MainCalcCore.h's own documented portable replacement,
+            // ComputeCanChangeRealDummy(), fed the same six HasIC() reads
+            // golden's own body would have resolved internally.
+            if(ComputeCanChangeRealDummy(MOT[MMPlate1].HasIC(), MOT[MMPlate2].HasIC(),
+                                          ShuttleHasIC(), IndexHasIC(),
+                                          InArmSuck.HasIC(), OutArmSuck.HasIC())==false)
+            {
+                ret=3;
+            }
+            else if(fMain->palMainStatus->Caption=="HALT")
+            {
+                ret=1;
+            }
+            else
+            {
+                ret=6;
+            }
+        }
+    }
+    return ret;
+}
+//---------------------------------------------------------------------------
+double TfMain::GetAlarmStatusByDll()
+{
+    //JAMCode Format:
+    //xx.yyy
+    //xx = Unit Code
+    //yyy = Alarm Code
+    AnsiString asJamCode, asAlarmCode,asUnit, asResult;
+    asJamCode=fNote->edErrorCode->Text;
+    double ret=00.000;
+
+    if(InitialOK==false)
+    {
+         return -4;                                                             //Operation not Allowed
+    }
+
+    if(fNote->fShow==true)
+    {
+        if(asJamCode.Pos("JAM")>0)
+        {
+            asAlarmCode=asJamCode.SubString(4, 2);
+            asUnit=asJamCode.SubString(6, 3);
+            asResult.sprintf("%s.%03d", asAlarmCode, asUnit.ToInt());
+            ret=atof(asResult.c_str());
+        }
+        else
+        {
+            ret=00.000;
+        }
+    }
+    else
+    {
+        ret=00.000;
+    }
+    return ret;
+}
+//---------------------------------------------------------------------------
+
+/* ---- golden Command.cpp:9718-9777 ---- */
+int TfMain::GetBinCountPerSiteByDLL(int iCategNum, int iSiteNum)
+{
+    int iSocketCT=0;
+    int iMode=TestIF_File.iTestMode;
+    int iSiteCnt=SiteData[iMode].Cnt;
+    int iRowCnt, iColCnt;
+    int ret=-1;
+
+//        a  b  c  d  e  f  g  h     **        a  b  c  d
+//     A  1  3  5  7  9 11 13 15     **     A  1  2  3  4
+//     B  2  4  6  8 10 12 14 16     **
+
+    if(iCategNum>15 || iCategNum<0)
+    {
+        ret=-3;
+        return ret;
+    }
+
+    if(iSiteNum>iSiteCnt || iSiteNum<0)
+    {
+        ret=-3;
+        return ret;
+    }
+
+    if(InitialOK==false)
+    {
+         return -4;                                                             //Operation not Allowed
+    }
+    TastCategory.UpdataCount(true);                                             //Steven 20250514 : 統一計算數量
+
+    if(TestSocket.iShtRow==1)
+    {
+        iRowCnt=0;
+        iColCnt=iSiteNum-1;
+    }
+    else if(TestSocket.iShtRow==2)
+    {
+        if(iSiteNum%2==0)     //Row B
+        {
+            iRowCnt=1;
+            iColCnt=(iSiteNum/2)-1;
+            if(iColCnt<0)
+                iColCnt=0;
+        }
+        else                  //Row A
+        {
+            iRowCnt=0;
+            iColCnt=iSiteNum/2;
+        }
+    }
+    else
+    {
+        ret=-3;
+        return ret;
+    }
+
+    iSocketCT=TastCategory.iCountCategory[0][iRowCnt][iColCnt][iCategNum]+TastCategory.iCountCategory[1][iRowCnt][iColCnt][iCategNum];
+    return iSocketCT;
+}
+//---------------------------------------------------------------------------
+int TfMain::GetTempActualByDLL()
+{
+    AnsiString t;
+    AnsiString asSite="NULL";
+
+    if(InitialOK==false)
+    {
+         return -4;  //Operation not Allowed
+    }
+
+    RefreshTempData();
+
+    if(TestIF.iTestMode==SingleSite)
+    {
+            t.sprintf("1,%+03.1f",
+                         (asTempArmOrder[0][0]!="ERR" && asTempArmOrder[0][0]!="NULL")?atof(asTempArmOrder[0][0].c_str()):0.0,
+                         (asTempArmOrder[1][0]!="ERR" && asTempArmOrder[1][0]!="NULL")?atof(asTempArmOrder[1][0].c_str()):0.0);
+    }
+    else if(TestIF.iTestMode==DualSite || TestIF.iTestMode==DualSite2x1)       // Dual Site 1x2
+    {
+            t.sprintf("1,%+03.1f,2,%+03.1f,3,%+03.1f,4,%+03.1f",
+                         (asTempArmOrder[0][0]!="ERR" && asTempArmOrder[0][0]!="NULL")?atof(asTempArmOrder[0][0].c_str()):0.0,
+                         (asTempArmOrder[0][1]!="ERR" && asTempArmOrder[0][1]!="NULL")?atof(asTempArmOrder[0][1].c_str()):0.0,
+                         (asTempArmOrder[1][0]!="ERR" && asTempArmOrder[1][0]!="NULL")?atof(asTempArmOrder[1][0].c_str()):0.0,
+                         (asTempArmOrder[1][1]!="ERR" && asTempArmOrder[1][1]!="NULL")?atof(asTempArmOrder[1][1].c_str()):0.0);
+    }
+    else if(TestIF.iTestMode==TriSite1X3)
+    {
+            t.sprintf("1,%+03.1f,2,%+03.1f,3,%+03.1f,4,%+03.1f,5,%+03.1f,6,%+03.1f",
+                         (asTempArmOrder[0][0]!="ERR" && asTempArmOrder[0][0]!="NULL")?atof(asTempArmOrder[0][0].c_str()):0.0,
+                         (asTempArmOrder[0][1]!="ERR" && asTempArmOrder[0][1]!="NULL")?atof(asTempArmOrder[0][1].c_str()):0.0,
+                         (asTempArmOrder[0][2]!="ERR" && asTempArmOrder[0][2]!="NULL")?atof(asTempArmOrder[0][2].c_str()):0.0,
+                         (asTempArmOrder[1][0]!="ERR" && asTempArmOrder[1][0]!="NULL")?atof(asTempArmOrder[1][0].c_str()):0.0,
+                         (asTempArmOrder[1][1]!="ERR" && asTempArmOrder[1][1]!="NULL")?atof(asTempArmOrder[1][1].c_str()):0.0,
+                         (asTempArmOrder[1][2]!="ERR" && asTempArmOrder[1][2]!="NULL")?atof(asTempArmOrder[1][2].c_str()):0.0);
+    }
+    else if(TestIF.iTestMode==QualSite1X4 || TestIF.iTestMode==QualSite2X2) // Qual Site 1x4
+    {
+            t.sprintf("1,%+03.1f,2,%+03.1f,3,%+03.1f,4,%+03.1f,5,%+03.1f,6,%+03.1f,7,%+03.1f,8,%+03.1f",
+                         (asTempArmOrder[0][0]!="ERR" && asTempArmOrder[0][0]!="NULL")?atof(asTempArmOrder[0][0].c_str()):0.0,
+                         (asTempArmOrder[0][1]!="ERR" && asTempArmOrder[0][1]!="NULL")?atof(asTempArmOrder[0][1].c_str()):0.0,
+                         (asTempArmOrder[0][2]!="ERR" && asTempArmOrder[0][2]!="NULL")?atof(asTempArmOrder[0][2].c_str()):0.0,
+                         (asTempArmOrder[0][3]!="ERR" && asTempArmOrder[0][3]!="NULL")?atof(asTempArmOrder[0][3].c_str()):0.0,
+                         (asTempArmOrder[1][0]!="ERR" && asTempArmOrder[1][0]!="NULL")?atof(asTempArmOrder[1][0].c_str()):0.0,
+                         (asTempArmOrder[1][1]!="ERR" && asTempArmOrder[1][1]!="NULL")?atof(asTempArmOrder[1][1].c_str()):0.0,
+                         (asTempArmOrder[1][2]!="ERR" && asTempArmOrder[1][2]!="NULL")?atof(asTempArmOrder[1][2].c_str()):0.0,
+                         (asTempArmOrder[1][3]!="ERR" && asTempArmOrder[1][3]!="NULL")?atof(asTempArmOrder[1][3].c_str()):0.0);
+    }
+    //QQ 20230214 : 2x2N
+    else if(TestIF.iTestMode==_6Site2X3)
+    {
+            t.sprintf("1,%+03.1f,2,%+03.1f,3,%+03.1f,4,%+03.1f,5,%+03.1f,6,%+03.1f,7,%+03.1f,8,%+03.1f,9,%+03.1f,10,%+03.1f,11,%+03.1f,12,%+03.1f",
+                         (asTempArmOrder[0][0]!="ERR" && asTempArmOrder[0][0]!="NULL")?atof(asTempArmOrder[0][0].c_str()):0.0,
+                         (asTempArmOrder[0][1]!="ERR" && asTempArmOrder[0][1]!="NULL")?atof(asTempArmOrder[0][1].c_str()):0.0,
+                         (asTempArmOrder[0][2]!="ERR" && asTempArmOrder[0][2]!="NULL")?atof(asTempArmOrder[0][2].c_str()):0.0,
+                         (asTempArmOrder[0][3]!="ERR" && asTempArmOrder[0][3]!="NULL")?atof(asTempArmOrder[0][3].c_str()):0.0,
+                         (asTempArmOrder[0][4]!="ERR" && asTempArmOrder[0][4]!="NULL")?atof(asTempArmOrder[0][4].c_str()):0.0,
+                         (asTempArmOrder[0][5]!="ERR" && asTempArmOrder[0][5]!="NULL")?atof(asTempArmOrder[0][5].c_str()):0.0,
+                         (asTempArmOrder[1][0]!="ERR" && asTempArmOrder[1][0]!="NULL")?atof(asTempArmOrder[1][0].c_str()):0.0,
+                         (asTempArmOrder[1][1]!="ERR" && asTempArmOrder[1][1]!="NULL")?atof(asTempArmOrder[1][1].c_str()):0.0,
+                         (asTempArmOrder[1][2]!="ERR" && asTempArmOrder[1][2]!="NULL")?atof(asTempArmOrder[1][2].c_str()):0.0,
+                         (asTempArmOrder[1][3]!="ERR" && asTempArmOrder[1][3]!="NULL")?atof(asTempArmOrder[1][3].c_str()):0.0,
+                         (asTempArmOrder[1][4]!="ERR" && asTempArmOrder[1][4]!="NULL")?atof(asTempArmOrder[1][4].c_str()):0.0,
+                         (asTempArmOrder[1][5]!="ERR" && asTempArmOrder[1][5]!="NULL")?atof(asTempArmOrder[1][5].c_str()):0.0);
+    }
+    //QQ 20230214 : 2x3N
+    else if(TestIF.iTestMode==_8Site2X4)      // 8 Site 2x4
+    {
+            t.sprintf("1,%+03.1f,2,%+03.1f,3,%+03.1f,4,%+03.1f,5,%+03.1f,6,%+03.1f,7,%+03.1f,8,%+03.1f,9,%+03.1f,10,%+03.1f,11,%+03.1f,12,%+03.1f,13,%+03.1f,14,%+03.1f,15,%+03.1f,16,%+03.1f",
+                         (asTempArmOrder[0][0]!="ERR" && asTempArmOrder[0][0]!="NULL")?atof(asTempArmOrder[0][0].c_str()):0.0,
+                         (asTempArmOrder[0][1]!="ERR" && asTempArmOrder[0][1]!="NULL")?atof(asTempArmOrder[0][1].c_str()):0.0,
+                         (asTempArmOrder[0][2]!="ERR" && asTempArmOrder[0][2]!="NULL")?atof(asTempArmOrder[0][2].c_str()):0.0,
+                         (asTempArmOrder[0][3]!="ERR" && asTempArmOrder[0][3]!="NULL")?atof(asTempArmOrder[0][3].c_str()):0.0,
+                         (asTempArmOrder[0][4]!="ERR" && asTempArmOrder[0][4]!="NULL")?atof(asTempArmOrder[0][4].c_str()):0.0,
+                         (asTempArmOrder[0][5]!="ERR" && asTempArmOrder[0][5]!="NULL")?atof(asTempArmOrder[0][5].c_str()):0.0,
+                         (asTempArmOrder[0][6]!="ERR" && asTempArmOrder[0][6]!="NULL")?atof(asTempArmOrder[0][6].c_str()):0.0,
+                         (asTempArmOrder[0][7]!="ERR" && asTempArmOrder[0][7]!="NULL")?atof(asTempArmOrder[0][7].c_str()):0.0,
+                         (asTempArmOrder[1][0]!="ERR" && asTempArmOrder[1][0]!="NULL")?atof(asTempArmOrder[1][0].c_str()):0.0,
+                         (asTempArmOrder[1][1]!="ERR" && asTempArmOrder[1][1]!="NULL")?atof(asTempArmOrder[1][1].c_str()):0.0,
+                         (asTempArmOrder[1][2]!="ERR" && asTempArmOrder[1][2]!="NULL")?atof(asTempArmOrder[1][2].c_str()):0.0,
+                         (asTempArmOrder[1][3]!="ERR" && asTempArmOrder[1][3]!="NULL")?atof(asTempArmOrder[1][3].c_str()):0.0,
+                         (asTempArmOrder[1][4]!="ERR" && asTempArmOrder[1][4]!="NULL")?atof(asTempArmOrder[1][4].c_str()):0.0,
+                         (asTempArmOrder[1][5]!="ERR" && asTempArmOrder[1][5]!="NULL")?atof(asTempArmOrder[1][5].c_str()):0.0,
+                         (asTempArmOrder[1][6]!="ERR" && asTempArmOrder[1][6]!="NULL")?atof(asTempArmOrder[1][6].c_str()):0.0,
+                         (asTempArmOrder[1][7]!="ERR" && asTempArmOrder[1][7]!="NULL")?atof(asTempArmOrder[1][7].c_str()):0.0);
+    }
+    //QQ 20230214 : 2x5
+    else if(TestIF.iTestMode==_12Site2X6)   //12 Site                       //wei 20150702
+    {
+            t.sprintf("1,%+03.1f,2,%+03.1f,3,%+03.1f,4,%+03.1f,5,%+03.1f,6,%+03.1f,7,%+03.1f,8,%+03.1f,9,%+03.1f,10,%+03.1f,11,%+03.1f,12,%+03.1f,13,%+03.1f,14,%+03.1f,15,%+03.1f,16,%+03.1f,17,%+03.1f,18,%+03.1f,19,%+03.1f,20,%+03.1f,21,%+03.1f,22,%+03.1f,23,%+03.1f,24,%+03.1f",
+                         (asTempArmOrder[0][0]!="ERR"  && asTempArmOrder[0][0] !="NULL")?atof(asTempArmOrder[0][0].c_str()):0.0,
+                         (asTempArmOrder[0][1]!="ERR"  && asTempArmOrder[0][1] !="NULL")?atof(asTempArmOrder[0][1].c_str()):0.0,
+                         (asTempArmOrder[0][2]!="ERR"  && asTempArmOrder[0][2] !="NULL")?atof(asTempArmOrder[0][2].c_str()):0.0,
+                         (asTempArmOrder[0][3]!="ERR"  && asTempArmOrder[0][3] !="NULL")?atof(asTempArmOrder[0][3].c_str()):0.0,
+                         (asTempArmOrder[0][4]!="ERR"  && asTempArmOrder[0][4] !="NULL")?atof(asTempArmOrder[0][4].c_str()):0.0,
+                         (asTempArmOrder[0][5]!="ERR"  && asTempArmOrder[0][5] !="NULL")?atof(asTempArmOrder[0][5].c_str()):0.0,
+                         (asTempArmOrder[0][6]!="ERR"  && asTempArmOrder[0][6] !="NULL")?atof(asTempArmOrder[0][6].c_str()):0.0,
+                         (asTempArmOrder[0][7]!="ERR"  && asTempArmOrder[0][7] !="NULL")?atof(asTempArmOrder[0][7].c_str()):0.0,
+                         (asTempArmOrder[0][8]!="ERR"  && asTempArmOrder[0][8] !="NULL")?atof(asTempArmOrder[0][8].c_str()):0.0,
+                         (asTempArmOrder[0][9]!="ERR"  && asTempArmOrder[0][9] !="NULL")?atof(asTempArmOrder[0][9].c_str()):0.0,
+                         (asTempArmOrder[0][10]!="ERR" && asTempArmOrder[0][10]!="NULL")?atof(asTempArmOrder[0][10].c_str()):0.0,
+                         (asTempArmOrder[0][11]!="ERR" && asTempArmOrder[0][11]!="NULL")?atof(asTempArmOrder[0][11].c_str()):0.0,
+                         (asTempArmOrder[1][0]!="ERR"  && asTempArmOrder[1][0] !="NULL")?atof(asTempArmOrder[1][0].c_str()):0.0,
+                         (asTempArmOrder[1][1]!="ERR"  && asTempArmOrder[1][1] !="NULL")?atof(asTempArmOrder[1][1].c_str()):0.0,
+                         (asTempArmOrder[1][2]!="ERR"  && asTempArmOrder[1][2] !="NULL")?atof(asTempArmOrder[1][2].c_str()):0.0,
+                         (asTempArmOrder[1][3]!="ERR"  && asTempArmOrder[1][3] !="NULL")?atof(asTempArmOrder[1][3].c_str()):0.0,
+                         (asTempArmOrder[1][4]!="ERR"  && asTempArmOrder[1][4] !="NULL")?atof(asTempArmOrder[1][4].c_str()):0.0,
+                         (asTempArmOrder[1][5]!="ERR"  && asTempArmOrder[1][5] !="NULL")?atof(asTempArmOrder[1][5].c_str()):0.0,
+                         (asTempArmOrder[1][6]!="ERR"  && asTempArmOrder[1][6] !="NULL")?atof(asTempArmOrder[1][6].c_str()):0.0,
+                         (asTempArmOrder[1][7]!="ERR"  && asTempArmOrder[1][7] !="NULL")?atof(asTempArmOrder[1][7].c_str()):0.0,
+                         (asTempArmOrder[1][8]!="ERR"  && asTempArmOrder[1][8] !="NULL")?atof(asTempArmOrder[1][8].c_str()):0.0,
+                         (asTempArmOrder[1][9]!="ERR"  && asTempArmOrder[1][9] !="NULL")?atof(asTempArmOrder[1][9].c_str()):0.0,
+                         (asTempArmOrder[1][10]!="ERR" && asTempArmOrder[1][10]!="NULL")?atof(asTempArmOrder[1][10].c_str()):0.0,
+                         (asTempArmOrder[1][11]!="ERR" && asTempArmOrder[1][11]!="NULL")?atof(asTempArmOrder[1][11].c_str()):0.0);
+    }
+    else if(TestIF.iTestMode==_16Site2X8)   //16 Site
+    {
+            t.sprintf("1,%+03.1f,2,%+03.1f,3,%+03.1f,4,%+03.1f,5,%+03.1f,6,%+03.1f,7,%+03.1f,8,%+03.1f,9,%+03.1f,10,%+03.1f,11,%+03.1f,12,%+03.1f,13,%+03.1f,14,%+03.1f,15,%+03.1f,16,%+03.1f,17,%+03.1f,18,%+03.1f,19,%+03.1f,20,%+03.1f,21,%+03.1f,22,%+03.1f,23,%+03.1f,24,%+03.1f,25,%+03.1f,26,%+03.1f,27,%+03.1f,28,%+03.1f,29,%+03.1f,30,%+03.1f,31,%+03.1f,32,%+03.1f",
+                         (asTempArmOrder[0][0]!="ERR"  && asTempArmOrder[0][0] !="NULL")?atof(asTempArmOrder[0][0].c_str()):0.0,
+                         (asTempArmOrder[0][1]!="ERR"  && asTempArmOrder[0][1] !="NULL")?atof(asTempArmOrder[0][1].c_str()):0.0,
+                         (asTempArmOrder[0][2]!="ERR"  && asTempArmOrder[0][2] !="NULL")?atof(asTempArmOrder[0][2].c_str()):0.0,
+                         (asTempArmOrder[0][3]!="ERR"  && asTempArmOrder[0][3] !="NULL")?atof(asTempArmOrder[0][3].c_str()):0.0,
+                         (asTempArmOrder[0][4]!="ERR"  && asTempArmOrder[0][4] !="NULL")?atof(asTempArmOrder[0][4].c_str()):0.0,
+                         (asTempArmOrder[0][5]!="ERR"  && asTempArmOrder[0][5] !="NULL")?atof(asTempArmOrder[0][5].c_str()):0.0,
+                         (asTempArmOrder[0][6]!="ERR"  && asTempArmOrder[0][6] !="NULL")?atof(asTempArmOrder[0][6].c_str()):0.0,
+                         (asTempArmOrder[0][7]!="ERR"  && asTempArmOrder[0][7] !="NULL")?atof(asTempArmOrder[0][7].c_str()):0.0,
+                         (asTempArmOrder[0][8]!="ERR"  && asTempArmOrder[0][8] !="NULL")?atof(asTempArmOrder[0][8].c_str()):0.0,
+                         (asTempArmOrder[0][9]!="ERR"  && asTempArmOrder[0][9] !="NULL")?atof(asTempArmOrder[0][9].c_str()):0.0,
+                         (asTempArmOrder[0][10]!="ERR" && asTempArmOrder[0][10]!="NULL")?atof(asTempArmOrder[0][10].c_str()):0.0,
+                         (asTempArmOrder[0][11]!="ERR" && asTempArmOrder[0][11]!="NULL")?atof(asTempArmOrder[0][11].c_str()):0.0,
+                         (asTempArmOrder[0][12]!="ERR" && asTempArmOrder[0][12]!="NULL")?atof(asTempArmOrder[0][12].c_str()):0.0,
+                         (asTempArmOrder[0][13]!="ERR" && asTempArmOrder[0][13]!="NULL")?atof(asTempArmOrder[0][13].c_str()):0.0,
+                         (asTempArmOrder[0][14]!="ERR" && asTempArmOrder[0][14]!="NULL")?atof(asTempArmOrder[0][14].c_str()):0.0,
+                         (asTempArmOrder[0][15]!="ERR" && asTempArmOrder[0][15]!="NULL")?atof(asTempArmOrder[0][15].c_str()):0.0,
+                         (asTempArmOrder[1][0]!="ERR"  && asTempArmOrder[1][0] !="NULL")?atof(asTempArmOrder[1][0].c_str()):0.0,
+                         (asTempArmOrder[1][1]!="ERR"  && asTempArmOrder[1][1] !="NULL")?atof(asTempArmOrder[1][1].c_str()):0.0,
+                         (asTempArmOrder[1][2]!="ERR"  && asTempArmOrder[1][2] !="NULL")?atof(asTempArmOrder[1][2].c_str()):0.0,
+                         (asTempArmOrder[1][3]!="ERR"  && asTempArmOrder[1][3] !="NULL")?atof(asTempArmOrder[1][3].c_str()):0.0,
+                         (asTempArmOrder[1][4]!="ERR"  && asTempArmOrder[1][4] !="NULL")?atof(asTempArmOrder[1][4].c_str()):0.0,
+                         (asTempArmOrder[1][5]!="ERR"  && asTempArmOrder[1][5] !="NULL")?atof(asTempArmOrder[1][5].c_str()):0.0,
+                         (asTempArmOrder[1][6]!="ERR"  && asTempArmOrder[1][6] !="NULL")?atof(asTempArmOrder[1][6].c_str()):0.0,
+                         (asTempArmOrder[1][7]!="ERR"  && asTempArmOrder[1][7] !="NULL")?atof(asTempArmOrder[1][7].c_str()):0.0,
+                         (asTempArmOrder[1][8]!="ERR"  && asTempArmOrder[1][8] !="NULL")?atof(asTempArmOrder[1][8].c_str()):0.0,
+                         (asTempArmOrder[1][9]!="ERR"  && asTempArmOrder[1][9] !="NULL")?atof(asTempArmOrder[1][9].c_str()):0.0,
+                         (asTempArmOrder[1][10]!="ERR" && asTempArmOrder[1][10]!="NULL")?atof(asTempArmOrder[1][10].c_str()):0.0,
+                         (asTempArmOrder[1][11]!="ERR" && asTempArmOrder[1][11]!="NULL")?atof(asTempArmOrder[1][11].c_str()):0.0,
+                         (asTempArmOrder[1][12]!="ERR" && asTempArmOrder[1][12]!="NULL")?atof(asTempArmOrder[1][12].c_str()):0.0,
+                         (asTempArmOrder[1][13]!="ERR" && asTempArmOrder[1][13]!="NULL")?atof(asTempArmOrder[1][13].c_str()):0.0,
+                         (asTempArmOrder[1][14]!="ERR" && asTempArmOrder[1][14]!="NULL")?atof(asTempArmOrder[1][14].c_str()):0.0,
+                         (asTempArmOrder[1][15]!="ERR" && asTempArmOrder[1][15]!="NULL")?atof(asTempArmOrder[1][15].c_str()):0.0);
+    }
+    //QQ 20230214 : 4x4
+    //QQ 20230214 : 4x8
+    else
+    {
+        return -3;
+    }
+    strncpy(CmdData->cGetTempActual_Cmd6, t.c_str(), sizeof(CmdData->cGetTempActual_Cmd6));
+    return 0;
+}
+//---------------------------------------------------------------------------
+
+/* ---- golden Command.cpp:9939-9964 ---- */
+// GATE(FW3-WC) golden :9939-9964, the whole 16-term OR-chain (33 dereferences
+// across 32 distinct golden form pointers) -- grep-verified 20260818, command
+// by command:
+//   `grep -rn "class Tf(Teach|MotorTest|HotPlate|TrayAssignment|Speed|BinSel|
+//    Security|CCLink|Temp_Set|CounterClear|TowerLight|QAMode|CounterSel|
+//    Builder|StartCondition|FTPClient)\b" --include=*.h .` -- 0 hits for every
+//   one of: fTeach, fMotorTest, fHotPlate, fTrayAssignment, fSpeed, fBinSel,
+//   fSecurity, fCCLink, fTemp_Set, fCounterClear, fTowerLight, fQAMode,
+//   fCounterSel, fBuilder, fStartCondition, fFTPClient (13 of the 16 terms
+//   golden ORs) -- confirmed absent, cross-referenced against
+//   docs/RECON_GateA_FormRegistry.md's own "ABSENT" column for the same
+//   names, and against per-file absence banners already in this tree
+//   (cinitial.cpp:15865-15872 for fTeach; bthermo.cpp:3913-3920 -- GATE
+//   W7-UI-G26a -- for fOmron; csystem.cpp:28434-28437 for
+//   fTrayAssignment/FTestIF/fLd_ULd/fHotPlate/fSpeed; MyEtherCAT.cpp:37 for
+//   fCCLink; ProductionInfo/uPAT_Function.cpp:292-294 for fHotPlate/fTemp_Set;
+//   KYECFTP/FTPClient_EventHandlers.h:94 for fFTPClient).
+//   The remaining 3 objects DO exist as real facades, but the exact `fShow`/
+//   `bShow` field golden reads on each does NOT (read each header's full
+//   class body this pass, 20260818): fShuttleMove (forms/fShuttleMove.h:35
+//   explicitly documents `bool fShow` as "Notably NOT landed"), fOffSet
+//   (forms/fOffSet.h -- 2 methods only, no data members at all), fiosetview
+//   (atester_shims.h:348-353 `class TfiosetviewShim` -- only
+//   `bIndexSuck[2][4][8]`), fCleaning (forms/fCleaning.h -- 4 members, none
+//   named fShow), fYieldMonitoring (forms/fYieldMonitoring.h:205-291 -- ~30
+//   members read in full, none named fShow; `bShowSiteYield[32]` is a
+//   different, unrelated array), fTrayForm (forms/fTrayForm.h:30-47 -- only
+//   `asErrorMsg`/`IsEnableColorSensor()`), FrmRotate (forms/fRotate.h:47-XX --
+//   only `bRotateInHome`/`bRotateOutHome` + 2 methods), fBarCode
+//   (aHotPlateSubstrate.h:984-1026 `class TfBarCode_Shim` -- no `bShow`
+//   member), fLtcSensor (acarry_shims.h:76-90 -- 10 LatchDataCnt* ints + 10
+//   LatchDataTable* arrays + 3 methods, no `bShow`). fConfiguration DOES
+//   exist under that exact global name but as `W5SckArtRem_ConfigStub`
+//   (Automation/SCK_ART_Remainder.h:594-599), a narrow single-purpose stand-in
+//   with exactly one member (`mmoN04_IP`) for an unrelated SCK-ART feature --
+//   not golden's TfConfiguration settings dialog, so it carries no `fShow`
+//   either.
+// Of the 33 OR-terms, only 3 read a real, populated field: fHome->fShow
+// (forms/fHome.h:101, real `bool fShow;`), fSetup->fShow (forms/fSetup.h:69,
+// real `bool fShow;`), and fContact->fShow (atester_shims.h:157, real
+// `bool fShow;`). ACTIVE DEFAULT below is the OR of exactly those three --
+// every absent term is equivalent to "that subsystem is not live offline"
+// (false), the same posture already established throughout this tree for
+// every other lone `->fShow` GATE (e.g. PERSITETemperatureStrings' fContact
+// gate, Command.cpp:1162-1196).
+bool TfMain::SettingsIsWindowOpened()
+{
+#if 0
+    if(fTeach->fShow     || fMotorTest->fShow    || fShuttleMove->fShow      ||
+      fHome->fShow       || fLtcSensor->bShow    || fOmron->bShow            ||
+      fContact->fShow    || fiosetview->fShow    || fContact->fShow          ||
+      fSetup->fShow      || fOffSet->fShow       || fConfiguration->fShow    ||
+      fSpeed->fShow      || fDIOFrom->fShow      || fYieldMonitoring->fShow  ||
+      fTrayForm->fShow   || fHotPlate->fShow     || fTrayAssignment->fShow   ||
+      fTemp_Set->fShow   || FTestIF->fShow       || fCounterClear->fShow     ||
+      fLd_ULd->fShow     || fCCLink->bShow       || fTowerLight->fShow       ||
+      fCleaning->fShow   || fQAMode->fShow       || fCounterSel->fShow       ||
+      FrmRotate->fShow   || fBuilder->fShow      || fStartCondition->fShow   ||
+      fBarCode->bShow    || fSecurity->fShow     || fBinSel->bShow           ||
+      fFTPClient->bShow)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+#else
+    if(fHome->fShow || fSetup->fShow || fContact->fShow)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+#endif
+}
+//---------------------------------------------------------------------------
+//<==
+//JerryYang 20181126 (Steven) : support Epson DLL function
+//---------------------------------------------------------------------------
+
+/* ---- golden Command.cpp:9965-9978 ---- */
+void TfMain::WriteSiteOnOff()                                                   //JerryYang 20190627 回傳開關site狀態
+{
+    char cSiteOnOff[256];
+    if(CUSTOMER_CODE==CC_SIGURD_PeiXing)                                        //Jimmychiu 20241203 : add get site on off for SIGURD_PeiXing
+    {
+        GetSiteMappingForSIGURD(cSiteOnOff);
+    }
+    else
+    {
+        GetSiteMappingByDLL(cSiteOnOff);
+    }
+    SendMSG_CMD(MSG_CMD_GetSiteOnOff, cSiteOnOff);
+}
+//---------------------------------------------------------------------------
+
+/* ---- golden Command.cpp:9979-9985 ---- */
+void TfMain::AutoSiteOnOff(AnsiString buffer)                                   //JimmyChiu 20250715 : Auto site on/off by GPIB
+{
+    SetSiteOnOff(buffer);
+    AnsiString sRet="OK";
+    SendMSG_CMD(MSG_CMD_GetSiteOnOff, sRet);
+}
+//---------------------------------------------------------------------------
+
+/* ---- golden Command.cpp:9986-9994 ---- */
+void TfMain::WriteNumOfSites()                                                  //JerryYang 20190627 回傳site count
+{
+    AnsiString sNumOfSite="";
+    int iSiteCnt=0;
+    iSiteCnt=GetSiteCount();
+    sNumOfSite.sprintf("%d", iSiteCnt);
+    SendMSG_CMD(MSG_CMD_GetNumOfSites, sNumOfSite);
+}
+
+// -- FW3-WC APPEND -- end (ByDLL family, golden Command.cpp :8311-9994; RemoteControl :9673-9717 excluded per never-wave) --
+
