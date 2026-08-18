@@ -8263,13 +8263,31 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   B6 modal 半邊、B5 整段（缺 fCleaning->btnResetCleanCountClick）。
 - **驗收**：全新雙 gate Debug 141/3＋Release 141/3、guard IDENTICAL。
 
+## 20260819 清晨 — FW-BinSel-WA（e4060a6）：cBinSel Wave A＋vclcompat 全樹級拆彈
+
+- **交付**：cBinSel Wave A（ACTIVE 1,593 行/19 方法，Wave B stub 4 個；
+  21+ gate 消費站點成員全齊；寫檔全 gate）。基線 **142 測試/3 常駐**。
+  oracle 173/173。
+- **全樹級 bug（gate 紅燈挖出）**：vclcompat 四個 TStringList property
+  proxy 缺 proxy-to-proxy operator= → 預設拷貝賦值靜默 no-op，
+  `a->CommaText=b->CommaText` 慣用式整類中招（33 站點，含 PordRec
+  production-log 搬運自落地以來從未真正拷貝）。一行文字語意 overload
+  ×4 全治，142 測試零回歸。**教訓入長期記憶：新 proxy 的 checklist 項。**
+- **測試前置條件教訓**：TfBinSel ctor 填充迴圈 j<iTestBinCount——
+  golden WinMain 前置條件要在測試建構前重現（iTestBinCount=256
+  save/restore），否則 27 個清單全空。
+- **驗收**：最終全新雙 gate Debug 142/3＋Release 142/3、guard IDENTICAL。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列 1-6、Command.cpp 159/164、良率引擎全清、FW-SecCC、
-  **FW-SecUnlock（a666193）**。基線 141/3。
-- **下一波（自主佇列）**：fBinSel facade（golden cBinSel.cpp 6,652 行＋
-  cBinSel.h 285 行，代理波；解鎖 SetTrayBinByDLL/BinPosChange/SetBINCOUNT/
-  SetOSBIN/SetConFail/chkShow0Xbin 等 21+ gate 站點；量大可切 Wave A/B）。
-  之後：cShowBinSelect 家族擴充、FW-3 batch 3+、FW-1 tag 批次。
+  FW-SecUnlock、**FW-BinSel-WA＋proxy 拆彈（e4060a6）**。基線 142/3。
+- **下一波（自主佇列）**：fBinSel 消費端解鎖（主迴圈可自做）：
+  Command.cpp 的 SetTrayBinByDLL/BinPosChange/SetBINCOUNT/SetOSBIN/
+  SetConFail 各 gate 站點逐一解（成員已全齊；注意 spbSaveClick 內部的
+  寫檔仍 gate 故解鎖後行為=讀+記憶體操作）；csystem.cpp:11525
+  SetConFail；SECSGEM/uHGemHT9045_EC g7-g27（60+ SetECDataPointer，
+  量大可派代理）。之後：cShowBinSelect/cBinSel Wave B、FW-3 batch 3+、
+  FW-1 tag 批次。
 - **設計面（等使用者）**：write path 設計輪；硬體架構題（index/1203、
   MN200、gclib）；B4 GPIB site-map 修不修。
