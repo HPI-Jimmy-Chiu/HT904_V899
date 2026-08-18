@@ -8205,16 +8205,32 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   並在報告誠實揭露——brief 裡把「absence 宣稱會腐爛」寫成教條有效。
 - **驗收**：全新雙 gate Debug 139/3＋Release 139/3、guard 552 檔 IDENTICAL。
 
+## 20260818 深夜 II — FW3-WF：Command.cpp 收尾（12e522b）——可譯集合到頂
+
+- **交付**：SetSiteMapData/SetAlarmSetup/MachineStatus（293 行）。
+  Command.cpp **159/164**；剩 5 個方法名全屬 never-wave
+  （TCPCommandServerClientRead 巨型溢位 dispatcher、RemoteControl、
+  ChangeToSiteMap、ChangeToAlarmSetup、ChangeToAlarmSetup_SG）。
+  **Command.cpp 翻譯戰役（FW3-WA→WF）收官。**
+- **brief 錯誤被代理抓到**：我把 SetAlarmSetup 範圍寫成 :5341-7303
+  （從「剩餘方法 index 的間隙」推的）——實際 :5389-7303 是 7 個已翻方法。
+  教訓：**間隙推範圍會把已翻方法算進去**；範圍要用 golden 全文的
+  TfMain:: 定義 index 重建，不是拿剩餘清單的相鄰行號相減。
+- **新型 absence 失誤（代理自抓）**：grep 命中躺在別波的 #if 0 裡也算
+  命中——absence 查證要確認命中行的前處理器狀態。
+- **驗收**：全新雙 gate Debug 139/3＋Release 139/3、guard 552 檔 IDENTICAL。
+
 ### 🔖 RESUME（最新）
 
-- **完成**：核可佇列 1-6＋FW3-WD（46fb957）＋**FW3-WE（97ce6b7）**。
-  基線 139/3。Command.cpp 156/164。
+- **完成**：核可佇列 1-6＋FW3-WD/WE/WF——**Command.cpp 戰役收官
+  （159/164，never-wave 5 除外）**。基線 139/3。
 - **下一步（自主佇列）**：
-  a. Command.cpp 收尾波＝SetSiteMapData（:5301-5339）＋MachineStatus
-     （:7304-7509）＋SetAlarmSetup（:5341-7303，~1,963 行巨型單函式，
-     建議獨立一波）→ 翻完即 160/164，只剩 never-wave 4 項；
-  b. cShowBinSelect Wave B（8 缺件成員→解 Y2 剩 10 站）；
-  c. fSecurity/fCounterClear/fBinSel facades；d. fLotInfo 5 成員→解 Y3；
-  e. FW-3 batch 3+ 表單；FW-1 tag 批次。
+  b. cShowBinSelect Wave B：先補 TfShowBinSelect 的 8 個缺件 widget 成員
+     （labArmDiff/labSiteDiff/labLowYield/labTotalYield(Total)/
+     lblSpeciallYield(Total)/IntervalByTotal，TPanel/TLabel stand-in 照
+     labModel 先例）→ 解 uYieldMonitoring Y2 剩 10 站（原句在 #if 0）→
+     視量力再擴 ShowBinSel 家族真本體；
+  c. fSecurity/fCounterClear/fBinSel facades（大量 Command.cpp gate 的
+     解鎖鑰匙）；d. fLotInfo 5 成員→解 Y3；e. FW-3 batch 3+；FW-1 tag。
 - **設計面（等使用者）**：write path 設計輪；硬體架構題（index/1203、
   MN200、gclib）；B4 GPIB site-map 修不修。
