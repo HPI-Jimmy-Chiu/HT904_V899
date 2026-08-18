@@ -8298,18 +8298,29 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   ＋保留原註解。
 - **驗收**：全新雙 gate Debug 142/3＋Release 142/3、guard IDENTICAL。
 
+## 20260819 早晨 — FW-BinSel-WB（14d209d）：ReadFunctionData 落地＋防毒 flake 定讞
+
+- 4 個 Wave B stub 換真本體（讀取 ACTIVE、~90 筆 recipe 寫入 gate、
+  兩個整體 gate 含健全的「不半填充」判斷）；FormSysTools→顯式路徑參數
+  替代（順帶成為測試縫）；B14-B17 golden bug 帳；Wave A 的 Tray256Core
+  stale claim 更正。替代感知比對 485/485；oracle 184/184。
+- **防毒 flake 定讞紀錄**：Release 三輪——第一輪 Shuttle2Scan SEGV、
+  第二輪換 GridOccupancy/Bottom2DID8CCD、單跑全綠、第三輪全輪 142/3
+  乾淨。失敗集合隨機游移＋單跑不重現＝環境干擾（晨間 AV 掃描窗）。
+  **判定準則沿用：加測輪次直到拿到乾淨全輪，勿只憑單跑綠就收。**
+- **驗收**：Debug 142/3＋Release（第三輪）142/3、guard IDENTICAL。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列 1-6、Command.cpp 159/164、良率引擎全清、SecCC/
-  SecUnlock、BinSel-WA＋proxy 拆彈、BinSelUnlock、**SBWB2（0637599）**。
-  基線 142/3。
+  SecUnlock、BinSel-WA＋proxy 拆彈、BinSelUnlock、SBWB2、
+  **BinSel-WB（14d209d）**。基線 142/3。
 - **下一波（自主佇列）**：
-  a. cBinSel Wave B（ReadFunctionData 861 行＋SaveFunctionData 342 行
-     純轉錄＋SetPrimeButton/mtTrayNameSetColor；brief 要重申逐字風格）；
-  b. cShowBinSelect Wave C（ShowBinSel_ARTNor/ARTRT 真本體 ~430 行；
-     FormShow；TimerAutoCleanCountTimer）；
-  c. FW-3 batch 3+ 表單；FW-1 tag 批次；
-  d. 小項：auto9045.cpp W5FA_FBinSel 替身退役評估；Command.cpp 既有
-     fBinSel/fCounterClear stale gate 掃描（SecCC 落地後可能還有可解的）。
+  a. cShowBinSelect Wave C（ShowBinSel_ARTNor/ARTRT 真本體 ~430 行＋
+     FormShow＋TimerAutoCleanCountTimer）；
+  b. cBinSel Wave C（InitDataToEdit golden :4142-4784＋TMyBinPanel
+     widget 半＋mtTrayName/mtTrayItem 接線）；
+  c. FW-3 batch 3+ 表單（BinDisplay 等）；FW-1 tag 批次；
+  d. 小項：auto9045 W5FA_FBinSel 替身退役、stale gate 全樹掃描。
 - **設計面（等使用者）**：write path 設計輪；硬體架構題（index/1203、
   MN200、gclib）；B4 GPIB site-map 修不修。
