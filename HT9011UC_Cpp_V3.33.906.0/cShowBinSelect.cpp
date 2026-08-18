@@ -41,9 +41,32 @@
 //                            ChangeBinDispStatus/DoShowBinDigital are Wave B,
 //                            not gated-in-place: >90% of each body is this
 //                            one pointer.
+//
+//  WAVE B (SBWB2) UPDATE, 20260819 -- three of the above absence claims are now
+//  STALE (landed by later waves than the 20260818 date on each original claim,
+//  same failure mode as the tree-wide "wave-agents-stale-absence-claims" gotcha
+//  -- re-checked fresh this wave, not trusted from the old banner text above):
+//    fBinSel      : `grep -n "class TfBinSel" forms/fBinSel.h` -- 1 hit, REAL
+//                   (forms/fBinSel.h:396). ShowBinSel() below uses
+//                   `fBinSel->chkShow0Xbin->Checked` for real, not gated.
+//    fAGV         : `grep -n "IsATK_AMR" forms/fAGV.h` -- REAL (delegates to
+//                   Automation/AGV_predicates.cpp, W5-Automation-Integrate).
+//                   ShowBinSel() below calls `fAGV->IsATK_AMR()` for real.
+//    fCounterClear: `grep -n "class TfCounterClear" forms/fCounterClear.h` --
+//                   REAL (landed FW-SecCC, 20260819) -- NOT exercised by
+//                   ShowBinSel (this wave's target never calls ClearCount),
+//                   so GATE (B1) in ShowCategoryBin above is untouched by this
+//                   wave -- flagged here so it is not mistaken for still-
+//                   absent by a future reader of this file.
+//  NEW absence this wave: fSortCT->myCountPanel[i].pnlYield/.pnlCount -- `grep
+//  -n "myCountPanel" forms/fSortCT.h` -- 0 hits, 20260819 (fSortCT itself is
+//  real; this ONE member array is not on its facade). See GATE (B9).
 // =============================================================================
 #include "forms/fShowBinSelect.h"
 #include "forms/fSecurity.h"   // AI(W906-FW-SecUnlock) 20260819: fSecurity->Insufficient (B6 permission half dissolved)
+#include "forms/fBinSel.h"    // AI(W906-FW-SBWB2) 20260819: fBinSel->chkShow0Xbin (ShowBinSel, real -- see banner UPDATE below)
+#include "SECSGEM/SecsEventType.h"     // AI(W906-FW-SBWB2) 20260819: SECS_EVENT.OutputPort1BinCode (ShowBinSel)
+#include "SECSGEM/SecsEventReport.h"   // AI(W906-FW-SBWB2) 20260819: EventReport() (ShowBinSel)
 
 #include "MachineType.h"           // enums, CC_* customer codes, ChangeToPercentage<T>/ChangeToFloat<T>
 #include "cmydef.h"                  // SystemStart/iHome/InitialOK/iTestBinCount/iByBinCnt[]/
@@ -67,6 +90,15 @@
 
 #include <cstdlib>   // atoi
 #include <algorithm> // (kept for parity; no direct use this wave)
+
+// AI(W906-FW-SBWB2) 20260819: golden Graphics.hpp clGray -- this tree has no
+// shared Graphics-compat header (confirmed this wave: `grep -rn "const TColor
+// clGray" --include=*.h .` finds it defined LOCALLY, once per consuming TU, in
+// ATC/ATCInterface.h, EJ1N/MyOmronPanel.h and VacuumUnit/MyVacuumPanel.h, each
+// with the identical value below and each with its own "this file adds its own
+// const TColor clGray locally" note) -- ShowBinSel is this TU's first user of
+// the name, so it gets its own copy, same established idiom.
+const TColor clGray = TColor(0x00808080);   // golden Graphics.hpp clGray
 
 //---------------------------------------------------------------------------
 // AI(W906-FW-YEnable) 20260818: homecoming -- the live global is now backed
@@ -133,13 +165,18 @@ TfShowBinSelect::TfShowBinSelect()
 {
     for (int i = 0; i < e3TrayCount; i++)
     {
-        MyBinSel[i]         = new TLabel();
+        MyBinSel[i]         = new TfShowBinSelectLabel();   // AI(W906-FW-SBWB2) 20260819: Font->Color (ShowBinSel)
         MyBinSelLab[i]      = new TLabel();
         MyBinSelARTFT[i]    = new TLabel();
         MyBinSelARTFTLab[i] = new TLabel();
         MyBinSelARTRT[i]    = new TLabel();
         MyBinSelARTRTLab[i] = new TLabel();
         grpBinDisp[i]       = new TGroupBox();
+        // AI(W906-FW-SBWB2) 20260819: UnLoadPanel[]/UnLoadLabel[] --
+        // see forms/fShowBinSelect.h member-declaration comment for why
+        // these are member arrays, not ~33 individually-named pointers.
+        UnLoadPanel[i] = new TPanel();
+        UnLoadLabel[i] = new TfShowBinSelectLabel();   // AI(W906-FW-SBWB2) 20260819: Font->Color (ShowBinSel)
     }
     for (int i = 0; i < eTrayCount; i++)
     {
@@ -1013,4 +1050,446 @@ void TfShowBinSelect::PageControl1Change(TObject * /*Sender*/)
     // WAVE B: real body (golden :1479-1633) touches ~15 more widgets
     // (pnlShowBin, ScrollBox1, iFixMax-bounded loops, ...) not in this
     // facade yet. See forms/fShowBinSelect.h WAVE B QUEUE.
+}
+
+//---------------------------------------------------------------------------
+//  ShowBinSel -- golden :388-756 (JerryYang 20220909: BinTrayTotal->eTrayCount)
+//  AI(W906-FW-SBWB2) 20260819: FW-3 Wave B, primary target.
+//
+//  DEVIATION: golden builds two LOCAL arrays right at function entry,
+//  `TPanel *UnLoadPanel[]={pnlAuto1,pnlAuto2,...}` / `TLabel *UnLoadLabel[]=
+//  {lblAuto1,lblAuto2,...}` (golden :394-404), out of 33 individually-named
+//  .dfm widgets. Absence-claim grep this wave (`grep -n "\bpnlAuto1\b"
+//  cShowBinSelect.cpp`, `grep -n "\blblAuto1\b" cShowBinSelect.cpp`,
+//  20260819): each of the 33 names is referenced in exactly ONE other place
+//  in the whole golden class besides this literal-array line -- the still-
+//  BLOCKED Wave C `ChangeBinDispStatus`'s OWN local array (golden :210-215,
+//  opaque HSys.BinDisCtrl body). No golden method ever names e.g. `pnlAuto1`
+//  a THIRD time. Same "array member, not ~33 individually named pointers"
+//  shape as this file's own WAVE A ctor DEVIATION note for MyBinSel/
+//  MyBinSelLab/etc -- `UnLoadPanel[]`/`UnLoadLabel[]` are therefore
+//  TfShowBinSelect MEMBER arrays (forms/fShowBinSelect.h), populated once in
+//  the ctor, referenced directly here (no local re-declaration).
+//
+//  HYDRATION: no per-slot .dfm geometry/Caption/Color hydrated for
+//  UnLoadPanel[]/UnLoadLabel[]/pnlEmpty/pnlColor -- see forms/
+//  fShowBinSelect.h HYDRATION section for the grep evidence (ShowBinSel
+//  itself unconditionally overwrites ->Color for every slot with
+//  Prod.iTrayType[i]!=tNotUse before anything in this wave's scope ever
+//  reads it back; the tNotUse slots it skips are exactly the slots
+//  SetAutoVisible/SetLabelVisible (Wave A, already ACTIVE) hides via
+//  grpBinDisp[i]->Visible=false).
+//
+//  GATE (B9): fSortCT->myCountPanel[i].pnlYield/.pnlCount->Font->Color
+//  (golden :640/:642/:648/:650) -- see forms/fShowBinSelect.h GATE REGISTER.
+//  GATE (B10)/(B11): ShowBinSel_ARTNor()/ShowBinSel_ARTRT() (golden :752-753)
+//  -- each still WAVE B QUEUE, declared below as documented no-ops (same
+//  established shape as this file's existing (B8) PageControl1Change).
+//  GOLDEN BUG (B12): see forms/fShowBinSelect.h GATE REGISTER -- kept
+//  verbatim at its own line below.
+//---------------------------------------------------------------------------
+void TfShowBinSelect::ShowBinSel()
+{
+    int Data, iLengh = 0, i2 = 0;
+    bool iRecord[100] = {false};
+    AnsiString S[eTrayCount], asBuf;
+
+    if (IniConfig.bVTESTFunction == true)   // RogerYang 20250224: Weitest requested 3 more columns
+    {
+        UPH_StringGrid->ColCount = 7;
+    }
+
+    for (int i = 0; i < eTrayCount; i++)   // JerryYang 20220909: BinTrayTotal -> eTrayCount
+    {
+        S[i] = "";                          // JerryYang 20230512: default blank string
+        BinAssign[i] = "";
+        bUnloadHasBin[i] = false;           // kevin 20180705: mark whether the tray has a BIN set
+        iTrayLastBin[i] = 0;                // kevin 20180705: each tray's last bin
+    }
+
+    for (int j = 0; j < eTrayCount; j++)   // JerryYang 20220909: iBinSelCT -> eTrayCount
+        iBinTray[j] = false;                // kevin 20170328 (Steven): whether TRAY uses BIN
+
+    for (int i = 0; i < iTestBinCount; i++)
+    {
+        Data = Prod.iT6CatData[i];
+        if (Data < 0)   // kevin 20140317: 256 bin, 0-start
+            continue;
+
+        for (int j = 0; j < eTrayCount; j++)
+        {
+            if (grpBinDisp[j]->Visible == false)
+                continue;
+
+            if (j == Data)
+            {
+                if (fBinSel->chkShow0Xbin->Checked)   // jou 20220719: show 0X bin
+                {
+                    asBuf.sprintf("%02d ", i);
+                    S[j] += asBuf;
+                }
+                else
+                {
+                    if (IniConfig.bSPILFunction == true &&
+                        CosFunction.bSortingBy2DList == true &&
+                        LastSet.iTester == _2D_SORT &&
+                        TestIF_File.bSortingBy2DIDList == true)   // JerryYang 20230322: SPIL re-IT requirement
+                    {
+                        if (S[j] == "")
+                        {
+                            S[j] = AnsiString(i);   // kevin 20140317: bin 0-start
+                        }
+                        else
+                        {
+                            S[j] += " " + AnsiString(i);   // kevin 20140317: bin 0-start
+                        }
+                    }
+                    else
+                    {
+                        S[j] += AnsiString(i) + " ";   // kevin 20140317: bin 0-start
+                    }
+                }
+
+                sBinData[j]      = AnsiString(i) + " ";   // kevin 20180202: record bin
+                iBinTray[j]      = true;                   // kevin 20170328 (Steven)
+                iLengh           = S[j].Length();
+                BinAssign[j]    += AnsiString(i) + ",";    // kevin 20180705
+                bUnloadHasBin[j] = true;                    // kevin 20180705
+                iTrayLastBin[j]  = i;                       // kevin 20180705
+                i2               = iLengh / 460;
+                if (i2 != 0)
+                {
+                    if (iRecord[i2] == false)
+                    {
+                        iRecord[i2]   = true;
+                        S[j]         += "\n\r";
+                        sBinData[j]   = "\n\r";              // kevin 20180202
+                        BinAssign[j] += "\n\r";               // kevin 20180705
+                    }
+                }
+            }
+            else
+            {
+                if (CosFunction.bSortingBy2DList == true &&
+                    LastSet.iTester == _2D_SORT &&
+                    TestIF_File.bSortingBy2DIDList == true)   // Frank 20221122: 2DID sorting for ATK
+                {
+                }
+                else if (IniConfig.bSPILFunction == true)   // JerryYang 20250320: SPIL shared-tray convention
+                {
+                }
+                else
+                {
+                    if (iTestBinCount <= 16)   // jou 2014-04-30: 15-bin repeat readability
+                    {
+                        S[j]         += ". ";
+                        BinAssign[j] += ",";     // kevin 20180705
+                    }
+                }
+            }
+        }
+    }
+
+    Data = Prod.iIfErrorT6;
+    if (TestIF_File.iTestType == RS232_MODE &&
+        TestIF_File.iRs232Mode == eRs23232Bin)   // Steven 20121112: RS232 supports 32-bin
+    {
+        if (Data > 0)
+        {
+            S[Data]             = " E" + S[Data];
+            sBinData[Data]      = " E" + S[Data];   // kevin 20180202
+            iBinTray[Data]      = true;               // kevin 20170328 (Steven)
+            BinAssign[Data]    += "E";                 // kevin 20180705
+            bUnloadHasBin[Data] = true;                 // kevin 20180705
+            iTrayLastBin[Data]  = 999;                  // kevin 20180705: Error bin
+        }
+    }
+    else
+    {
+        if (iHWFix_BinBox == 1 || Data == -1)   // kevin 20160819 // Steven 20230929: && -> ||
+        {
+            S[eBulkBox]            += "E ";
+            sBinData[eBulkBox]     += "E ";    // kevin 20180202
+            iBinTray[eBulkBox]      = true;     // kevin 20170328 (Steven)
+            BinAssign[eBulkBox]    += "E";      // kevin 20180705
+            bUnloadHasBin[eBulkBox] = true;     // kevin 20180705
+            iTrayLastBin[eBulkBox]  = 999;      // kevin 20180705: Error bin
+        }
+        else if (Data > 0)
+        {
+            if (IniConfig.bSPILFunction == true &&
+                CosFunction.bSortingBy2DList == true &&
+                LastSet.iTester == _2D_SORT &&
+                TestIF_File.bSortingBy2DIDList == true)   // JerryYang 20230322: SPIL re-IT requirement
+            {
+                S[Data] += "ERR";
+            }
+            else
+            {
+                S[Data] += "E ";
+            }
+            sBinData[Data]      += "E ";   // kevin 20180202
+            iBinTray[Data]       = true;    // kevin 20170328 (Steven)
+            BinAssign[Data]     += "E";     // kevin 20180705
+            bUnloadHasBin[Data]  = true;     // kevin 20180705
+            iTrayLastBin[Data]   = 999;      // kevin 20180705: Error bin
+            // GOLDEN BUG (B12): the very next statement (golden :545, kevin
+            // 20220906) immediately overwrites the `=true` two lines above
+            // back to `false` -- for this specific "Data>0, non-BulkBox
+            // error-bin reroute" arm, bUnloadHasBin[Data] therefore ALWAYS
+            // ends up false, making golden :543's `=true` dead code. Kept
+            // verbatim (translation-fidelity policy) -- not "fixed" to
+            // `=true` since that would change observable behaviour without
+            // user sign-off. See forms/fShowBinSelect.h GATE REGISTER (B12).
+            bUnloadHasBin[Data] = false;   // kevin 20220906
+        }
+    }
+
+    if (iTestBinCount <= 16)
+    {
+        for (int i = 0; i < eTrayCount; i++)   // JerryYang 20220909: BinTrayTotal -> eTrayCount
+        {
+            S[i] += ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
+            if (IniConfig.bSPILFunction == true)   // JerryYang 20250320: SPIL shared-tray convention
+            {
+                AnsiString strTemp = BinAssign[i];
+                int len = strTemp.Length();
+
+                if (len > 0 && strTemp[len] == ',')
+                {
+                    BinAssign[i] = BinAssign[i].SubString(1, len - 1);
+                }
+            }
+            else
+            {
+                BinAssign[i] += ",";   // kevin 20180705
+            }
+        }
+    }
+
+    for (int i = eFix2; i <= iFixMax; i++)
+    {
+        if (Prod.bLinkTo6Tray[i] == true)
+        {
+            if (S[i - 1].AnsiPos("LINK") == 0)
+                S[i] = AnsiString("LINK ") + S[i - 1];
+            else
+                S[i] = S[i - 1];
+            BinAssign[i] = BinAssign[i - 1];
+        }
+    }
+
+    // Ifor 20231122: add Magazine Link
+    if (AUTO3_IS_MAGAZINE == 1)
+    {
+        for (int i = 1; i < 14; i++)
+        {
+            if (BinSelect[iTestRunMode].bMagazineLink[i] == true)
+            {
+                for (int j = 0; j < 14; j++)
+                {
+                    // GOLDEN NOTE (not separately numbered -- see forms/
+                    // fShowBinSelect.h GATE REGISTER (B12) note): if
+                    // bMagazineLink[i..0] were ALL true, this inner loop
+                    // would index bMagazineLink[i-j] with a negative
+                    // subscript once j>i (out-of-bounds read). Unreachable in
+                    // practice because bMagazineLink[eAuto1] (index 0) is
+                    // never set true by any writer this tree ports, so the
+                    // loop always breaks at/before j==i. Kept verbatim.
+                    if (BinSelect[iTestRunMode].bMagazineLink[i - j] == false)
+                    {
+                        S[eMag1 + i] = AnsiString("LINK ") + S[eMag1 + (i - j)];
+                        BinAssign[eMag1 + i] = BinAssign[eMag1 + (i - j)];
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < eTrayCount; i++)   // JerryYang 20220909: 10 -> eTrayCount // kevin 20160819/20110901: use FIX for 2 trays
+    {
+        MyBinSel[i]->Caption = S[i];
+        if (S[i].Pos("LINK ") > 0)
+        {
+            UnLoadLabel[i]->Caption = DelDot(MyBinSel[i]->Caption.SubString(6, MyBinSel[i]->Caption.Length()));
+        }
+        else
+        {
+            UnLoadLabel[i]->Caption = DelDot(MyBinSel[i]->Caption);
+        }
+
+        // GOLDEN ODDITY (B13, integration 20260819): this gray-out branch is DEAD
+        // in golden itself -- the 87-char SPACE-led needle below appears ONLY in
+        // Pos() checks (golden :628 and both ART siblings :2543/:2762); the only
+        // dots writer is the 80-char DOT-led literal (:561), and no code path
+        // ever produces a caption BEGINNING with the needle (measured: needle not
+        // in write, not in "0 "+write; j==1 unreachable). The colored else-branch
+        // always runs for non-tNotUse trays. Translated verbatim, not simplified.
+        int j = MyBinSel[i]->Caption.Pos(" . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");
+
+        if (iHWFix_BinBox == 1 && i == eBulkBox)   // kevin 20160825
+            continue;
+
+        if (Prod.iTrayType[i] == tNotUse)
+            continue;
+
+        if (iTestBinCount <= 16 && j == 1)
+        {
+            UnLoadPanel[i]->Color       = clGray;
+            UnLoadLabel[i]->Font->Color = clGray;
+            // GATE (B9): fSortCT->myCountPanel[i].pnlYield->Font->Color=clGray;
+            MyBinSel[i]->Font->Color    = clGray;
+            // GATE (B9): fSortCT->myCountPanel[i].pnlCount->Font->Color=clGray;  // kevin 20150615
+        }
+        else
+        {
+            UnLoadPanel[i]->Color       = tcBinColor[Prod.iIsFailT6[i]];
+            UnLoadLabel[i]->Font->Color = tcBinColor[Prod.iIsFailT6[i]];
+            // GATE (B9): fSortCT->myCountPanel[i].pnlYield->Font->Color=tcBinColor[Prod.iIsFailT6[i]];
+            MyBinSel[i]->Font->Color    = tcBinColor[Prod.iIsFailT6[i]];
+            // GATE (B9): fSortCT->myCountPanel[i].pnlCount->Font->Color=tcBinColor[Prod.iIsFailT6[i]];  // kevin 20150615
+        }
+
+        MyBinSel[i]->Caption = S[i];   // JerryYang 20250320: SPIL shared-tray convention (redundant re-write, same value as above -- kept verbatim)
+        if (IniConfig.bSPILFunction == true)
+        {
+            sSVBinAssign[i] = BinAssign[i];
+        }
+        else if (fAGV->IsATK_AMR())
+        {
+            int iLen = BinAssign[i].Length();   // RogerYang 20260403: remove trailing comma
+            AnsiString sGetCommas = BinAssign[i].SubString(iLen, iLen);
+            if (sGetCommas == ",")
+                sSVBinAssign[i] = BinAssign[i].SubString(0, iLen - 1);
+            else
+                sSVBinAssign[i] = BinAssign[i];
+
+            sSVBinAssign[i] = StringReplace(sSVBinAssign[i], "\r", "", TReplaceFlags() << rfReplaceAll);   // AI(ht9045-atk-amr-flow) 20260423 (RogerYang): strip CR/LF
+            sSVBinAssign[i] = StringReplace(sSVBinAssign[i], "\n", "", TReplaceFlags() << rfReplaceAll);
+
+            if (sBinCode_ATK[i] != BinAssign[i])
+            {
+                sBinCode_ATK[i] = BinAssign[i];
+                EventReport(SECS_EVENT.OutputPort1BinCode + i);
+            }
+        }
+        else
+        {
+            sSVBinAssign[i] = MyBinSel[i]->Caption;
+        }
+    }
+
+    if (fAGV->IsATK_AMR())   // AI(ht9045-atk-amr-flow) 20260423 (RogerYang): sync BinAssign to Fix(Auto4~6)
+    {
+        for (int k = 0; k < 3; k++)
+            sSVBinAssign[eAuto4 + k] = sSVBinAssign[eFix1 + k];
+    }
+
+    if (AUTO3_IS_MAGAZINE != 1)
+    {
+        for (int i = eMag1; i < eMag1 + 14; i++)
+        {
+            UnLoadLabel[i]->Caption = ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
+            UnLoadPanel[i]->Caption = "X";
+            if (NUMBER_PANEL_TYPE == 3)   // 3-digit display
+            {
+                UnLoadPanel[i]->Color       = (TColor)0x000080FF;
+                UnLoadLabel[i]->Font->Color = (TColor)0x000080FF;
+            }
+            else
+            {
+                UnLoadPanel[i]->Color       = clGray;
+                UnLoadLabel[i]->Font->Color = clGray;
+            }
+        }
+    }
+
+    if (TrayForm.iFixTrayMode == false)   // remaining 3 Fix trays only when not split in half
+    {
+        for (int i = iFixRight + 1; i <= iFixRightHalf; i++)
+        {
+            UnLoadLabel[i]->Caption = ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
+            UnLoadPanel[i]->Caption = "X";
+            if (NUMBER_PANEL_TYPE == 3 ||   // 3-digit display
+                NUMBER_PANEL_TYPE == 4)      // Sam 20240604: new BinDisplay TFT
+            {
+                UnLoadPanel[i]->Color       = (TColor)0x000080FF;
+                UnLoadLabel[i]->Font->Color = (TColor)0x000080FF;
+            }
+            else
+            {
+                UnLoadPanel[i]->Color       = clGray;
+                UnLoadLabel[i]->Font->Color = clGray;
+            }
+        }
+    }
+
+    if (AUTO_EMPTY_COLOR != 0)   // has Empty/Color trays
+    {
+        pnlEmpty->Color = (TColor)0x000080FF;
+        pnlColor->Color = (TColor)0x000080FF;
+    }
+    else
+    {
+        pnlEmpty->Color = clGray;
+        pnlColor->Color = clGray;
+    }
+
+    if (IniConfig.bAutoTrayLink == true)   // jou 2012-06-14: Auto Tray Link
+    {
+        for (int i = eAuto2; i <= iAutoRight; i++)
+        {
+            if (Prod.bLinkTo6Tray[i] == true)
+            {
+                if (MyBinSel[i - 1]->Caption.AnsiPos("LINK") == 0)
+                    MyBinSel[i]->Caption = AnsiString("LINK ") + MyBinSel[i - 1]->Caption;
+                else
+                    MyBinSel[i]->Caption = MyBinSel[i - 1]->Caption;
+            }
+        }
+    }
+
+    // GATE (B10)/(B11): ShowBinSel_ARTNor()/ShowBinSel_ARTRT() -- each still
+    // WAVE B QUEUE (golden :2365-2580 / :2581-2799), declared as documented
+    // no-ops below (see forms/fShowBinSelect.h GATE REGISTER).
+    ShowBinSel_ARTNor();   // JerryYang 20220331: also show ART bin
+    ShowBinSel_ARTRT();
+
+    // S: golden passes `this` (TfShowBinSelect*->TObject* in VCL);
+    // TfShowBinSelect has no vclcompat::TObject base (same shape as every
+    // other facade in this family -- see forms/fContactCT.h's own note) and
+    // PageControl1Change ignores Sender entirely (GATE (B8), documented
+    // no-op) -- nullptr is semantics-identical. Same substitution shape as
+    // this file's own btReturnClick, which already calls
+    // `PageControl1Change(nullptr)` for the identical reason.
+    PageControl1Change(nullptr);
+}
+
+//---------------------------------------------------------------------------
+//  ShowBinSel_ARTNor -- GATE (B10): documented no-op this wave. Real body is
+//  WAVE B QUEUE (golden :2365-2580, ~216 lines, guarded by
+//  `if(IniConfig.bSPILFunction && bCanRunSCKART)` -- both default false on a
+//  non-SPIL/non-ART machine). Declared so ShowBinSel's call site (golden
+//  :752) compiles/links; its own widget surface (tsARTNormalBin, palARTNor,
+//  s6TrayName[], bCanRunSCKART, Prod.bTo6AutoRetest[], Prod.iTo6CatData[]) is
+//  not yet on this facade -- left for a later sub-wave per this wave's
+//  "large form, slice it" scoping (see forms/fShowBinSelect.h WAVE B QUEUE).
+//---------------------------------------------------------------------------
+void TfShowBinSelect::ShowBinSel_ARTNor()
+{
+    // WAVE B QUEUE: real body is golden :2365-2580. See forms/
+    // fShowBinSelect.h GATE REGISTER (B10).
+}
+
+//---------------------------------------------------------------------------
+//  ShowBinSel_ARTRT -- GATE (B11): documented no-op this wave. Real body is
+//  WAVE B QUEUE (golden :2581-2799, ~219 lines), same shape/guard as
+//  ShowBinSel_ARTNor. Declared so ShowBinSel's call site (golden :753)
+//  compiles/links.
+//---------------------------------------------------------------------------
+void TfShowBinSelect::ShowBinSel_ARTRT()
+{
+    // WAVE B QUEUE: real body is golden :2581-2799. See forms/
+    // fShowBinSelect.h GATE REGISTER (B11).
 }

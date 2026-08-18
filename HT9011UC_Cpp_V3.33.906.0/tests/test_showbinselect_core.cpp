@@ -1,13 +1,14 @@
 // =============================================================================
-//  test_showbinselect_core.cpp -- FW-3 queue item 2: TfShowBinSelect Wave A
-//                                   test coverage
+//  test_showbinselect_core.cpp -- FW-3 queue item 2: TfShowBinSelect Wave A +
+//                                   Wave B test coverage
 //
-//  AI(W906-FW3-ShowBinSelect-WA) 20260818: new file.
+//  AI(W906-FW3-ShowBinSelect-WA) 20260818: new file (Wave A).
+//  AI(W906-FW-SBWB2) 20260819: added ShowBinSel coverage (Wave B).
 //
-//  Covers the main DATA methods this wave translated (per task brief
+//  Covers the main DATA methods these waves translated (per task brief
 //  "涵蓋主要資料方法"): DelDot (pure), ShowInitialString/ShowCategoryBin (the
 //  fYieldMonitoring GATE (Y2)-unblocking target), SetAutoVisible/
-//  SetLabelVisible.
+//  SetLabelVisible, ShowBinSel (Wave B primary target).
 //
 //  NOT COVERED this wave (documented, not silently dropped): CaculateUPH's
 //  UPH>0 increment branch (needs OutArmSuck/ShuttleHasIC/IndexHasIC forced
@@ -18,7 +19,10 @@
 //  btnClearCountClick/ed_AutoCleanCountClick/btnCleanResetClick (click
 //  handlers whose entire live body is GATED this wave, see forms/
 //  fShowBinSelect.h GATE REGISTER -- nothing observable to assert on beyond
-//  "does not crash").
+//  "does not crash"); ShowBinSel's RS232/BulkBox error-bin arms, the
+//  Magazine-Link block, and the AutoTrayLink tail loop (all separately
+//  guarded no-ops in the scenario below -- exercising them needs a second,
+//  differently-configured test scenario left for a future pass).
 // =============================================================================
 #include "forms/fShowBinSelect.h"
 
@@ -31,6 +35,7 @@
 #include "aHotPlateSubstrate.h"       // TestSocket
 #include "cSocket.h"                   // ArmData[3] (StrGrdCategoryContCT's GetSelBin source)
 #include "atester_shims.h"               // fContact (TfContactShim)
+#include "forms/fBinSel.h"                // AI(W906-FW-SBWB2) 20260819: fBinSel->chkShow0Xbin (ShowBinSel)
 
 #include <cstdio>
 #include <cstring>
@@ -40,6 +45,14 @@
 // .cpp, which declares it file-local with external linkage and no header
 // prototype). Forward-declared here since no forms/ header carries it.
 AnsiString DelDot(AnsiString asBuffer);
+
+// AI(W906-FW-SBWB2) 20260819: golden Graphics.hpp clGray -- `const TColor
+// clGray` at namespace scope has internal linkage per-TU (C++, unlike C), so
+// cShowBinSelect.cpp's own copy is not visible here; this TU gets its own,
+// same established "each consuming TU defines it locally" idiom (see
+// cShowBinSelect.cpp's matching comment / ATC/ATCInterface.h /
+// EJ1N/MyOmronPanel.h / VacuumUnit/MyVacuumPanel.h).
+const TColor clGray = TColor(0x00808080);
 
 // ---------------------------------------------------------------------------
 //  Minimal CHECK harness (matches tests/test_yieldmon_core.cpp precedent)
@@ -166,11 +179,69 @@ static void Test_SetAutoVisible_DrivesPerTrayAndGroupVisibility()
     CHECK(f.MyBinSelARTFT[eBulkBox]->Caption == "E", "SetAutoVisible: MyBinSelARTFT[eBulkBox]->Caption==\"E\"");
 }
 
+// ---------------------------------------------------------------------------
+//  (4) ShowBinSel -- golden :388-756, FW-3 Wave B primary target.
+//
+//  Scenario: exactly 2 "used" trays (eAuto1/eAuto2), everything else
+//  tNotUse/hidden (same convention as Test_SetAutoVisible... above -- must
+//  call f.SetAutoVisible() first so grpBinDisp[]->Visible is set up, since
+//  ShowBinSel's own first loop skips every `grpBinDisp[j]->Visible==false`
+//  slot per this tree's vclcompat DEFAULT-VALUE RULE, golden :430). Bin 0 is
+//  mapped onto eAuto1 (Prod.iT6CatData[0]); eAuto2 gets no bin at all, which
+//  golden's own "j==1" dot-pattern-position check (golden :636) uses to
+//  detect and grey out an "used but empty" tray -- see forms/
+//  fShowBinSelect.h HYDRATION note.
+// ---------------------------------------------------------------------------
+static void Test_ShowBinSel_PopulatesCaptionAndColorFromBinAssignment()
+{
+    ResetGlobals();
+    TfShowBinSelect f;
+
+    // -- neutralise every OTHER branch ShowBinSel touches, so eAuto1/eAuto2
+    //    are the only observable effect (see file banner NOT COVERED note).
+    iHWFix_BinBox = 0;
+    Prod.iIfErrorT6 = 0;
+    TestIF_File.iTestType = 0;             // != RS232_MODE(2)
+    IniConfig.bSPILFunction = false;
+    IniConfig.bAutoTrayLink = false;
+    AUTO3_IS_MAGAZINE = 0;
+    AUTO_EMPTY_COLOR = 0;
+    NUMBER_PANEL_TYPE = 0;
+    TrayForm.iFixTrayMode = 1;             // skip the iFixRight+1..iFixRightHalf loop
+    fBinSel->chkShow0Xbin->Checked = false;
+    for (int i = 0; i < e3TrayCount; i++)
+        Prod.bLinkTo6Tray[i] = false;
+
+    iTestBinCount = 2;
+    Prod.iT6CatData[0] = eAuto1;   // bin 0 -> eAuto1
+    Prod.iT6CatData[1] = -1;       // unmapped -- skipped (golden :425-426)
+
+    Prod.iTrayType[eAuto1] = 5;    // "used"
+    Prod.iTrayType[eAuto2] = 5;    // "used", but gets no bin (stays blank)
+
+    Prod.iIsFailT6[eAuto1] = 0;
+    tcBinColor[0] = (TColor)0x00ABCDEF;   // sentinel -- ShowBinSel reads this back live
+
+    f.SetAutoVisible();   // sets grpBinDisp[eAuto1]/[eAuto2]->Visible=true, all others false
+    f.ShowBinSel();
+
+    CHECK(f.MyBinSel[eAuto1]->Caption.Pos("0") > 0, "ShowBinSel: MyBinSel[eAuto1]->Caption reflects assigned bin 0");
+    CHECK(f.UnLoadPanel[eAuto1]->Color == tcBinColor[0], "ShowBinSel: UnLoadPanel[eAuto1]->Color == tcBinColor[Prod.iIsFailT6[eAuto1]] (non-blank tray)");
+    CHECK(f.UnLoadLabel[eAuto1]->Font->Color == tcBinColor[0], "ShowBinSel: UnLoadLabel[eAuto1]->Font->Color == tcBinColor[Prod.iIsFailT6[eAuto1]]");
+    // AI(W906-FW-SBWB2-integrate) 20260819: first draft asserted the clGray
+    // branch here -- integration proved that branch DEAD IN GOLDEN (ODDITY
+    // B13, see cShowBinSelect.cpp at the Pos() check: the 87-char space-led
+    // needle has no writer, j==1 is unreachable). Golden's real behaviour for
+    // a "used" no-bin tray is the colored else-branch; assert exactly that.
+    CHECK(f.UnLoadPanel[eAuto2]->Color == tcBinColor[Prod.iIsFailT6[eAuto2]], "ShowBinSel: UnLoadPanel[eAuto2] takes the colored else-branch even with no bin (golden's gray j==1 branch is DEAD -- ODDITY B13)");
+}
+
 int main()
 {
     Test_DelDot();
     Test_ShowInitialString_And_ShowCategoryBin_FillsGridsFromBinData();
     Test_SetAutoVisible_DrivesPerTrayAndGroupVisibility();
+    Test_ShowBinSel_PopulatesCaptionAndColorFromBinAssignment();
 
     std::printf("%d/%d checks passed (test_showbinselect_core)\n", g_pass, g_pass + g_fail);
     return g_fail == 0 ? 0 : 1;

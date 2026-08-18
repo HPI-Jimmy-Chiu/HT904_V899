@@ -57,12 +57,26 @@
 //    btnClearCountClick     golden :2262-2277 ACTIVE, 2 GATEs (fSecurity, fCounterClear)
 //    DelDot (free function) golden :178-205  ACTIVE (pure)
 //
+//  WAVE B SCOPE (this wave, AI(W906-FW-SBWB2) 20260819 -- golden line spans)
+//  --------------------------------------------------------------------------
+//    ShowBinSel             golden :388-756  ACTIVE, 3 GATEs -- (B9)
+//                             fSortCT->myCountPanel, (B10)/(B11)
+//                             ShowBinSel_ARTNor/ShowBinSel_ARTRT (each
+//                             declared below as a documented no-op, see
+//                             WAVE B QUEUE); 1 GOLDEN BUG (B12).
+//
 //  WAVE B QUEUE (explicit, NOT translated this wave -- golden line spans)
 //  --------------------------------------------------------------------------
-//    ShowBinSel              golden :388-757   (widget population, ~250-widget
-//                              surface; fAGV/SECS EventReport touches)
-//    ShowBinSel_ARTNor        golden :2365-2580 (ART bin display, same shape)
+//    ShowBinSel_ARTNor        golden :2365-2580 (ART bin display, same shape
+//                              as ShowBinSel; guarded by
+//                              `IniConfig.bSPILFunction && bCanRunSCKART`,
+//                              both default false) -- DECLARED here as a
+//                              documented no-op GATE (B10) so ShowBinSel's
+//                              own call site has something to bind to (same
+//                              posture as PageControl1Change/(B8) below).
 //    ShowBinSel_ARTRT         golden :2581-2799 (ART bin display, same shape)
+//                              -- DECLARED here as a documented no-op GATE
+//                              (B11), same reasoning as ShowBinSel_ARTNor.
 //    FormShow                 golden :758-866   (~15 more widgets, many
 //                              customer-code branches)
 //    PageControl1Change       golden :1479-1633 (page-layout geometry, many
@@ -205,12 +219,56 @@
 //       is also this tree's established "default false" convention for
 //       boolean widget state -- see forms/FormWidgets.h's own DEFAULT-VALUE
 //       RULE banner), so the `else` arm (`Width=331`) is taken.
+//       STALE as of 20260819 (FW-SBWB2, not fixed here since labAuto1Click
+//       itself is Wave A/out of this wave's scope): fBinSel is now REAL
+//       (forms/fBinSel.h, `class TfBinSel` with a real `chkShow0Xbin`
+//       member) -- ShowBinSel() (this wave, below) uses it unguarded. This
+//       (B7) gate on labAuto1Click could be dissolved by a future pass; not
+//       done here to keep this wave's diff to its own target.
 //  (B8) btReturnClick's `PageControl1Change(this)` call (golden :2250) --
 //       PageControl1Change itself is WAVE B (golden :1479-1633, ~154 lines,
 //       many more widgets). Declared here with a documented no-op body
 //       (cShowBinSelect.cpp) so the call site compiles and links; every
 //       OTHER statement in btReturnClick (the two Left/Top assignments) is
 //       real and ACTIVE.
+//  (B9) ShowBinSel's `fSortCT->myCountPanel[i].pnlYield->Font->Color` /
+//       `.pnlCount->Font->Color` (golden :640/:642 grey arm, :648/:650
+//       colour arm) -- fSortCT itself is real (forms/fSortCT.h), but that
+//       facade declares no `myCountPanel` member (`grep -n "myCountPanel"
+//       forms/fSortCT.h` -- 0 hits, 20260819; golden's own member is
+//       `_MyCountPanel myCountPanel[eTrayCount]`, cSortCT.h:335). Gated
+//       exactly those 2 lines per arm (4 total); the other 3 statements in
+//       each arm (UnLoadPanel[i]->Color, UnLoadLabel[i]->Font->Color,
+//       MyBinSel[i]->Font->Color) are real and ACTIVE -- same "gate the
+//       missing call, not the surrounding logic" idiom as (B1)/(B3).
+//  (B10) ShowBinSel's `ShowBinSel_ARTNor()` call (golden :752) --
+//        ShowBinSel_ARTNor's real body is golden :2365-2580 (~216 lines,
+//        guarded by `IniConfig.bSPILFunction && bCanRunSCKART`, both default
+//        false), explicitly left WAVE B QUEUE (see above) rather than
+//        translated this wave -- declared with a documented no-op body
+//        (cShowBinSelect.cpp) so ShowBinSel's call site compiles/links, same
+//        posture as (B8)/PageControl1Change.
+//  (B11) ShowBinSel's `ShowBinSel_ARTRT()` call (golden :753) -- same
+//        reasoning/posture as (B10), real body golden :2581-2799.
+//  (B12) GOLDEN BUG, ShowBinSel (golden :541-545): `bUnloadHasBin[Data]=true`
+//        (golden :543, kevin 20180705) is immediately overwritten to `false`
+//        two lines later (golden :545, kevin 20220906) with NO intervening
+//        read of the variable -- for the "Data>0, non-BulkBox error-bin
+//        reroute" arm, `bUnloadHasBin[Data]` therefore ALWAYS ends up
+//        `false` and golden's own `=true` statement is dead code. Kept
+//        verbatim (translation-fidelity policy: "看到 golden 裡不合理的邏輯：
+//        照翻，並在 //AI 註解寫下它為什麼看起來錯") -- NOT "fixed" to `=true`,
+//        since that would change observable behaviour (a real downstream
+//        reader of bUnloadHasBin[] would then see this tray as "has a bin"
+//        after an error-bin reroute) without user sign-off. Translated at
+//        its own line in cShowBinSelect.cpp with a matching comment. A
+//        SECOND, smaller golden oddity in the same function (golden
+//        :602-609, Ifor 20231122 Magazine-Link inner loop) is documented
+//        in-line at its own site rather than separately numbered here: a
+//        pathological all-true `bMagazineLink[]` chain down to index 0 would
+//        walk `bMagazineLink[i-j]` to a negative subscript -- unreachable in
+//        practice (index 0/eAuto1 is never written true by any port'd
+//        writer), kept verbatim.
 //
 //  DESIGN NOTE -- facade-only widget wrapper shapes
 //  --------------------------------------------------------------------------
@@ -232,6 +290,31 @@
 //    facade-only stand-in is declared here (same "PART 2 -- DEFERRED
 //    STAND-INS" posture as forms/FormWidgets.h's own bespoke types for
 //    golden classes vclcompat/Controls.h does not carry).
+//  TfShowBinSelectLabel : public vclcompat::TLabel -- AI(W906-FW-SBWB2)
+//    20260819, WAVE B ADD.
+//    Adds a `TFont *Font` member. vclcompat::TLabel (vclcompat/Controls.h)
+//    deliberately carries no Font surface at all (that header's own SCOPE
+//    note: "Only ... LabelPtr->Caption ... is touched" by every prior
+//    consumer) -- but ShowBinSel (golden :638-650) is the first golden
+//    method this tree translates that reads/writes `->Font->Color` on a
+//    TLabel-shaped widget (`UnLoadLabel[i]->Font->Color=...` /
+//    `MyBinSel[i]->Font->Color=...`). Verified this wave (`grep -n "class
+//    TLabel" vclcompat/Controls.h`, 20260819) that adding a `Font` field to
+//    the real vclcompat::TLabel is out of this wave's write boundary (only
+//    cShowBinSelect.cpp/forms/fShowBinSelect.h/tests/
+//    test_showbinselect_core.cpp are writable) -- same "facade-only
+//    subclass, not an upstream vclcompat change" shape as
+//    TfShowBinSelectGrid/TfShowBinSelectPanel above. `MyBinSel[e3TrayCount]`
+//    (Wave A, previously `TLabel*`) and the new `UnLoadLabel[e3TrayCount]`
+//    are BOTH retyped to `TfShowBinSelectLabel*` -- safe for every existing
+//    Wave A reader (SetAutoVisible/SetLabelVisible/ShowCategoryBin/tests)
+//    since TfShowBinSelectLabel IS-A TLabel and every one of their reads is
+//    through the TLabel base (->Caption/->Visible), never through a `TLabel*`
+//    variable that would need the reverse (derived-to-base is implicit,
+//    base-to-derived is not, and nothing does the latter). Font->Color
+//    defaults 0 (TFont's own ctor), i.e. black, matching real VCL's TLabel
+//    default font colour (clWindowText, which is black on the tree's own
+//    stock colour scheme).
 //
 //  HYDRATION (dfm IR: tools/dfm2rc/ir_out/cShowBinSelect.dfm.ir.json, this
 //  wave)
@@ -246,8 +329,26 @@
 //      SPIL_FOR_QLE branch when that flag is set, exactly as golden does.
 //    grpBinDisp[]/MyBinSel[]/... arrays: no per-slot dfm geometry hydrated
 //      (golden's OWN ctor never reads geometry off these either -- only
-//      ->Caption/->Visible/->Font->Color, all zero/false/black-default
-//      correct via each element's own default constructor).
+//      ->Caption/->Visible/->Font->Color, all zero/false/black-default via
+//      each element's own default constructor -- MyBinSel[]'s ->Font is a
+//      real `TFont*` as of AI(W906-FW-SBWB2) 20260819, see DESIGN NOTE
+//      TfShowBinSelectLabel below; TFont::Color defaults 0, i.e. black,
+//      matching this note's original claim).
+//    UnLoadPanel[]/UnLoadLabel[]/pnlEmpty/pnlColor (AI(W906-FW-SBWB2)
+//      20260819, WAVE B ADD): same "no per-slot geometry" posture --
+//      ShowBinSel (this wave) never reads ->Left/->Top/->Width/->Height off
+//      any of the 33 UnLoadPanel[]/UnLoadLabel[] slots, only ->Caption/
+//      ->Color/->Font->Color, and it unconditionally OVERWRITES ->Color for
+//      every slot with `Prod.iTrayType[i]!=tNotUse` before this wave's tests
+//      ever read it back (the `.dfm` design-time Caption/Color, e.g.
+//      pnlAuto1's `Caption="Auto1"`/`Color=clGreen` per
+//      tools/dfm2rc/ir_out/cShowBinSelect.dfm.ir.json, is therefore cosmetic
+//      pre-population for golden's OWN real VCL render only -- not hydrated
+//      here). The slots ShowBinSel SKIPS (`continue` on
+//      `Prod.iTrayType[i]==tNotUse`) are exactly the slots Wave A's
+//      SetAutoVisible/SetLabelVisible already hide via
+//      `grpBinDisp[i]->Visible=false`, so the un-hydrated cosmetic default
+//      is never user-visible either.
 // =============================================================================
 #ifndef FORMS_FSHOWBINSELECT_H
 #define FORMS_FSHOWBINSELECT_H
@@ -267,6 +368,7 @@ using vclcompat::TEdit;
 using vclcompat::TLabeledEdit;
 using vclcompat::TPageControl;
 using vclcompat::TStringList;
+using vclcompat::TFont;   // AI(W906-FW-SBWB2) 20260819: TfShowBinSelectLabel's Font member
 
 // -- facade-only widget extensions (see DESIGN NOTE above) -------------------
 class TfShowBinSelectGrid : public vclcompat::TStringGrid
@@ -296,6 +398,13 @@ public:
     TfShowBinSelectTimer() : Enabled(false) {}
 };
 
+// vclcompat::TLabel + Font -- see DESIGN NOTE (TfShowBinSelectLabel) above.
+class TfShowBinSelectLabel : public vclcompat::TLabel
+{
+public:
+    TFont *Font = new TFont();
+};
+
 // =============================================================================
 //  TfShowBinSelect -- non-VCL facade (golden cShowBinSelect.h), WAVE A subset
 // =============================================================================
@@ -311,7 +420,10 @@ public:
 
     // -- unloader bin-select label arrays (golden ctor, see CTOR NOTE) -------
     // Sized e3TrayCount (33): 6 Auto + 12 Fix + 1 BulkBox + 14 Magazine.
-    TLabel    *MyBinSel[e3TrayCount];
+    // MyBinSel[] retyped TfShowBinSelectLabel* by AI(W906-FW-SBWB2) 20260819
+    // (Wave A had it as plain TLabel*) -- see DESIGN NOTE (TfShowBinSelectLabel)
+    // above for why (ShowBinSel's `MyBinSel[i]->Font->Color=...`).
+    TfShowBinSelectLabel *MyBinSel[e3TrayCount];
     TLabel    *MyBinSelLab[e3TrayCount];
     TLabel    *MyBinSelARTFT[e3TrayCount];
     TLabel    *MyBinSelARTFTLab[e3TrayCount];
@@ -353,6 +465,29 @@ public:
     TfShowBinSelectTimer *TimerAutoCleanCount = new TfShowBinSelectTimer();
     TPageControl *PageControl1 = new TPageControl();
 
+    // AI(W906-FW-SBWB2) 20260819, WAVE B ADD: golden's ShowBinSel (golden
+    // :394-404) builds two LOCAL arrays out of 33 individually-named `.dfm`
+    // widgets each (pnlAuto1..6/pnlFix1..12/pnlBinBox/pnlMag1..14 ->
+    // UnLoadPanel[]; lblAuto1..6/lblFix1..12/lblBinBox/lblMag1..14 ->
+    // UnLoadLabel[]). Absence-claim grep this wave (`grep -n "\bpnlAuto1\b"
+    // cShowBinSelect.cpp` / `grep -n "\blblAuto1\b" cShowBinSelect.cpp`,
+    // 20260819): each of the 33 names appears in exactly ONE other place in
+    // the whole golden class -- the still-BLOCKED Wave C ChangeBinDispStatus
+    // (golden :210-215)'s own, separate local array -- so, same "array
+    // member, not ~33 individually named pointers" shape as MyBinSel/
+    // MyBinSelLab/etc above (see CTOR NOTE), these are declared as member
+    // arrays and populated once in the ctor rather than as 33 named
+    // pointers. Sized e3TrayCount (33), same convention as MyBinSel[] etc.
+    // UnLoadLabel[] is TfShowBinSelectLabel* (not plain TLabel*) for the
+    // same `->Font->Color` reason as MyBinSel[] above.
+    TPanel *UnLoadPanel[e3TrayCount];
+    TfShowBinSelectLabel *UnLoadLabel[e3TrayCount];
+
+    // golden pnlEmpty/pnlColor (cShowBinSelect.h:362/364) -- read/written
+    // directly by ShowBinSel (golden :727-736), not via an array.
+    TPanel *pnlEmpty = new TPanel();
+    TPanel *pnlColor = new TPanel();
+
     // -- data (golden cShowBinSelect.h:492-517) -------------------------------
     bool bShow;
     bool bUpdateBinDigital;
@@ -389,6 +524,16 @@ public:
     void btnClearCountClick(TObject *Sender);
 
     int iLowYieldBinSelectContactCount;   // KaiChen 20181115: BinSelect Yield control uses Contact Count
+
+    // AI(W906-FW-SBWB2) 20260819, WAVE B primary target: ACTIVE, 3 GATEs
+    // ((B9)/(B10)/(B11)), 1 GOLDEN BUG (B12) -- see GATE REGISTER above.
+    void ShowBinSel();
+
+    // GATE (B10)/(B11): documented no-op this wave -- real bodies are WAVE B
+    // QUEUE (golden :2365-2580 / :2581-2799). Declared so ShowBinSel's own
+    // call sites compile/link, same posture as PageControl1Change/(B8) below.
+    void ShowBinSel_ARTNor();
+    void ShowBinSel_ARTRT();
 
     // GATE (B8): documented no-op this wave -- real body is WAVE B (golden
     // :1479-1633). Declared so btReturnClick's call site compiles/links.
