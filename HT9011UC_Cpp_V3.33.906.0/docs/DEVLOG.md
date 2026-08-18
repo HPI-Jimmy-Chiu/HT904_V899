@@ -8177,17 +8177,34 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - **驗收**：全新雙 gate Debug 139/3＋Release 139/3、guard 552 檔 IDENTICAL。
 - **里程碑**：使用者 20260817 核可的佇列（1/2/3/4/5/6）**全數完成**。
 
+## 20260818 夜 II — FW3-WD：Command.cpp Wave D（46fb957）
+
+- **交付**：SamSung/SIGURD/TTL/StartMode/SG 家族 29 方法（golden :9995-
+  :12539，+2,628 行）。Command.cpp 現載 **121/164** golden TfMain 方法。
+  16 處共用 config WriteIniData 全 gate（代理自主把範圍延伸到 IniData\，
+  與寫入邊界表一致，採納）；ChangeToSiteMap 呼叫點 gate（never-wave）。
+- **整併抓到的坑（新型）**：代理誤認 Command.cpp 未進 CMakeLists，留下
+  GetSamSungMap/GetSamSungSoakTime 與 fMain.cpp offline stub 並存＝
+  multiple definition。29 方法全掃只兩個撞，stub 退役。教訓：**波次代理
+  對「檔案是否已註冊」的認知會過期**，stub-collision 掃描是整併必做步驟
+  （這次靠代理自己在報告裡標了 STUB COLLISION，但它的處置建議
+  「加進 CMakeLists 時再刪」前提已死）。
+- **GOLDEN BUG 帳**：B5（未初始化 char[10]）、B6（ContsFailByHead 漏 !，
+  gate 內惰性——fYieldMonitoring widget facade 落地波要一併記得）。
+- **驗收**：全新雙 gate Debug 139/3＋Release 139/3、guard 552 檔 IDENTICAL。
+
 ### 🔖 RESUME（最新）
 
-- **使用者核可佇列 1-6 全清**（末筆=FW-Q5 58c6699）。基線 139 測試/3 常駐
-  （config_db/config_loaders/GA1_ReadGeneralIni）。
-- **下一步（自主佇列，按計畫書 §4 優先序）**：
-  a. Command.cpp Wave D（其餘 WIDGET 類 72/164；never-wave 3 項不動）；
-  b. cShowBinSelect Wave B（~250-widget ShowBinSel 家族＋8 缺件成員→
-     解 Y2 剩 10 站）；
-  c. fSecurity/fCounterClear/fBinSel facades（fail-closed 按鈕解鎖）；
-  d. fLotInfo 5 成員→解 Y3；
-  e. FW-3 batch 3+（BinDisplay 等）；FW-1 tag 批次。
-- **設計面（等使用者，做完自主佇列後提醒）**：write path 設計輪；硬體架構題
-  （index 上不上 1203、MN200 保留 vs 併入 EtherCAT＋MOTION_IO 撞名修法、
-  gclib 免做與否）；B4 GPIB 多站 site-map 只回站 1 要不要修。
+- **完成**：核可佇列 1-6 全清＋自主佇列首波 **FW3-WD（46fb957）**。
+  基線 139 測試/3 常駐。Command.cpp 121/164。
+- **下一步（自主佇列）**：
+  a. Command.cpp Wave E＝TCP server 家族 :12540-:12762（排除
+     TCPCommandServerClientRead never-wave）＋尾段 :14302-:15263
+     （ByDll 補遺/2DID/OSBIN/MultiZone 等 26 方法，~1,960 行）；
+     之後只剩 SetSiteMapData :5301／SetAlarmSetup :5341-7303（~2k 行巨型）
+     ／MachineStatus :7304／never-wave 3 項；
+  b. cShowBinSelect Wave B（8 缺件成員→解 Y2 剩 10 站）；
+  c. fSecurity/fCounterClear/fBinSel facades；d. fLotInfo 5 成員→解 Y3；
+  e. FW-3 batch 3+ 表單；FW-1 tag 批次。
+- **設計面（等使用者）**：write path 設計輪；硬體架構題（index/1203、
+  MN200、gclib）；B4 GPIB site-map 只回站 1 修不修。
