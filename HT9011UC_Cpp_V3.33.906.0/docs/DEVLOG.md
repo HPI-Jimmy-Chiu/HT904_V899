@@ -8068,3 +8068,35 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
      HAVE_PCI1203 的 MOTION_IO 衝突診斷。
 - **設計面（最後提醒使用者）**：WebBridge write path 設計輪；
   硬體架構題（index 馬達上不上 1203、MN200 保留 vs 併入 EtherCAT）。
+
+---
+
+## 2026-08-18（下午，YMSwap＋啟用＋CTBS）— 佇列 1、2 完成
+
+四顆 commit：`800c591`（YMSwap）、`c58b313`（YMSwap 啟用）、`ecf6154`（CTBS）＋本則。
+
+- **YMSwap（800c591）**：TfYieldMonitoring_2x4_16 雙鏡射宣告＋靜態實體全退役，全域
+  homecoming 到 uYieldMonitoring.cpp（無 ctor，static-init 平凡安全）；facade 補
+  **文件化 no-op** DoAutoCloseSite——交換零行為變更，~26 個 arm 呼叫點語意不動。
+  動了 177-TU god header 仍一次收斂。
+- **啟用（c58b313）**：csystem 兩個 seam 接真身——W7C2_FYIELD_CLEARCOUNT→真
+  ClearYieldCount（兩個 yield-alarm 站點）；W7G3 IniRecordMonitoringIndexCycleTime
+  遮蔽拆除（兩站點照 golden 重新武裝 index cycle-time 監控，關閉既有行為差註記）。
+- **CTBS（ecf6154）**：cContactCT **全檔**（21 方法，含 Y1 gate 等的四個依賴）＋
+  cShowBinSelect Wave A（18/29；ShowBinSel 家族 ~250 widget 入 Wave B 佇列；
+  真 AutoClean 啟動/退盤切 OFF_LINE/手動 JAM 注入入**安全佇列**）。facade 出生即
+  hydrate dfm 尺寸（Obs2fix 教訓前置化）。**兩全域=nullptr 佔位**（消費端解參考
+  全部還 gated）；cmydef 四全域照「首個真消費者」慣例解 gate。oracle 12/12＋21/21。
+- 驗收鏈：三輪全新雙 gate 全綠（137/3→137/3→139/3），guard 全程 552 檔全等。
+
+### 🔖 RESUME（最新）
+
+- **完成**：佇列 1（ObsSwap+YMSwap+啟用）、佇列 2（CTBS 翻譯與註冊）。基線 **139 測試/3 常駐**。
+- **進行中**：良率引擎 39-gate 啟用波（fContactCT/fShowBinSelect 實體 homecoming＋
+  uYieldMonitoring 的 Y1×25/Y2×14/Y3 解 gate；TfShowBinSelect ctor 安全複驗
+  ——代理稱只讀資料全域，homecoming 前主迴圈驗證）。
+- **佇列後續**：3=DoAutoCloseSite/DoRTAutoSocketOff 真本體；4=Command.cpp Wave C；
+  5=StatisticalJamCount 家族；6=小項（W906_Trace G6、__fastcall 稽核、
+  HAVE_PCI1203 的 MOTION_IO 衝突）。cShowBinSelect Wave B 併入表單佇列。
+- **設計面（最後提醒使用者）**：write path 設計輪；硬體架構題（index 上不上 1203、
+  MN200 保留 vs 併入 EtherCAT）。
