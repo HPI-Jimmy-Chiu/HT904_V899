@@ -1,7 +1,22 @@
 // =============================================================================
-//  test_binsel_core.cpp -- FW-BinSel-WA: TfBinSel data-core test coverage
+//  test_binsel_core.cpp -- FW-BinSel-WA/WB: TfBinSel data-core test coverage
 //
 //  AI(W906-FW-BinSel-WA) 20260819: new file.
+//
+//  AI(W906-FW-BinSel-WB) 20260819: adds ReadFunctionData oracle coverage now
+//  that WAVE B lands its real body. Seam used: `ReadFunctionData(tag,szDir)`
+//  takes `szDir` as an explicit PARAMETER (WAVE B's own DEVIATION from golden,
+//  see cBinSel.cpp's banner on that method) -- this IS the test-mode redirect
+//  seam the WAVE A banner above says doesn't exist ("none of the three has a
+//  test-mode redirect seam reachable from TfBinSel's own public surface");
+//  that was true for the WAVE-A-era methods this file already covers, not for
+//  ReadFunctionData post-WAVE-B. Tests below write a SCRATCH ini under
+//  TEMP/TMP (same `tmpIniPath` idiom as tests/test_IniFiles.cpp) and pass its
+//  path directly -- never GetRecipePath()/GetLastOpenFN()/DataPath, so no
+//  production config path is ever touched. `SaveFunctionData`/
+//  `SetPrimeButton`/`mtTrayNameSetColor` stay OUT of scope here: WAVE B gates
+//  100% (or, for the latter two, the entire body) of their real effect, so
+//  there is nothing to observe -- see forms/fBinSel.h GATE REGISTER G7-G9.
 //
 //  Covers the ACTIVE, file-I/O-free surface of TfBinSel: the ctor's
 //  TStringList/MyBinPanelData bootstrap (the state the 21+ SECSGEM EC gate
@@ -27,10 +42,13 @@
 //      one code path (verified by reading all four bodies in full this
 //      wave); `SetOSBin` is ALSO excluded for this reason since its own body
 //      calls `ReadWriteMRTMode` twice.
-//    * The 27 `TStringList*[eBinTypeTotal]` arrays' PERSISTED content
-//      (ReadFunctionData/SaveFunctionData) -- WAVE B stubs this wave, see
-//      forms/fBinSel.h WAVE B QUEUE; nothing to test yet beyond the ctor's
-//      own "0"-placeholder state, which IS covered below.
+//    * SaveFunctionData/SetPrimeButton/mtTrayNameSetColor -- WAVE B lands
+//      real bodies for all 3, but WAVE B's own policy gates 100% (or, for
+//      the latter two, the ENTIRE body) of their real effect (see
+//      forms/fBinSel.h GATE REGISTER G7-G9) -- nothing observable to assert.
+//      ReadFunctionData is DIFFERENT: WAVE B gives it an explicit `szDir`
+//      parameter (see this file's own WAVE B banner above), so it DOES get
+//      scratch-ini oracle coverage below now.
 //    * CheckFix2Tray's "found a Fix2 tray" TRUE branch -- the column index
 //      that would trigger it depends on `eBinNotUse`'s numeric value, which
 //      is TU-LOCAL to cBinSel.cpp (`enum eBinSettingItems`, not exposed via
@@ -41,14 +59,30 @@
 #include "forms/fBinSel.h"
 
 #include "MachineType.h"      // eBinType (eBinFT/eBinRT/...), eartInstall, USE_AUTO_RETEST
-#include "cmydef.h"            // s3TrayName[], iTestRunMode
+#include "cmydef.h"            // s3TrayName[], iTestRunMode, CUSTOMER_CODE
 #include "cprod.h"              // Prod, BinSelect[], tAOISetup
 #include "LastSet.h"             // LastSet
 #include "Config.h"               // IniConfig
 #include "CosFunction.h"           // CosFunction
+#include "common.h"                // CheckAndReadIniData/WriteIniData -- scratch-ini seeding only,
+                                    // see ReadFunctionData oracle tests below (never a production path)
 
 #include <cstdio>
+#include <cstdlib>   // std::getenv (scratch path)
 #include <cstring>
+
+// ---------------------------------------------------------------------------
+//  Scratch ini path -- SAME idiom as tests/test_IniFiles.cpp's tmpIniPath():
+//  TEMP/TMP env var, falling back to cwd. Never a GetRecipePath()/DataPath/
+//  production path.
+// ---------------------------------------------------------------------------
+static AnsiString BinSelScratchIniPath(const char* leaf)
+{
+    const char* t = std::getenv("TEMP");
+    if (!t || !*t) t = std::getenv("TMP");
+    if (!t || !*t) t = ".";
+    return AnsiString(t) + AnsiString("\\") + AnsiString(leaf);
+}
 
 // ---------------------------------------------------------------------------
 //  Minimal CHECK harness (matches tests/test_counterclear_core.cpp precedent)
@@ -339,6 +373,106 @@ static void Test_ChangeActivePageIndex_InvalidModeLeavesIndexUntouched()
     CHECK(f.PageControl1->ActivePageIndex == 4, "ChangeActivePageIndex: invalid iTestRunMode leaves ActivePageIndex untouched");
 }
 
+// =============================================================================
+//  (8) ReadFunctionData -- golden :4807-5667, FW-BinSel-WB oracle coverage.
+//      Both tests target eBinFT (golden :4933-4986 new-format / the shared
+//      OLD FORMAT block) -- the SIMPLEST tag branch, no bA02BinModelPrime/
+//      bFTBin2RTBin nesting the way eBinRT has. Oracle field is
+//      Cons.Fail/bConsFail: a clean, single-shot `atoi(Strings[i])` -> bool
+//      conversion with NO dependency on any prior BinSelect[] state.
+//
+//      (B17) NOTE (not asserted by either test below, flagged for whoever
+//      next touches this method): the SAME new-format postprocessing loop's
+//      OWN iCatDataT3Pos/sBinTraySetT3Pos handling (golden :5552-5588,
+//      ported cBinSel.cpp verbatim) computes `iT3=BinSelect[tag].
+//      iCatDataT3Pos[i]-1` from the STALE (pre-call) `BinSelect[tag].
+//      iCatDataT3Pos[i]` -- NOT from `iData` (the value just parsed from the
+//      ini string this call) -- and only commits `iData` at the very end
+//      regardless of which branch fired. On a cold/zero-initialized
+//      BinSelect[] (e3Auto1==0, so iT3=0-1=-1 fails the `>=e3Auto1` guard),
+//      this means a FIRST-EVER ReadFunctionData call discards whatever
+//      iCatDataT3Pos value the ini actually held and forces e3PosNoUse,
+//      regardless of the seeded ini content -- which is why this field was
+//      deliberately NOT chosen as either test's oracle (it would need a
+//      pre-seeded, ALREADY-VALID BinSelect[eBinFT].iCatDataT3Pos[i] to
+//      observe anything, i.e. testing golden's quirk, not the read itself).
+// =============================================================================
+static void Test_ReadFunctionData_NewFormat_ReadsFromScratchIni()
+{
+    ResetGlobals();
+
+    AnsiString scratch = BinSelScratchIniPath("test_binsel_readfunctiondata_new.ini");
+    DeleteFile(scratch);
+
+    // Seed a "new format" [Bin Func FT] section (golden :4933-4986's own
+    // literal GroupName/ECID-key strings for eBinFT) -- CheckSectionExist
+    // finds it, and CUSTOMER_CODE below is neither CC_ASE_KaohSiung nor
+    // CC_AMKOR_China, so golden's own `else { bHasNewSetupData=true; }` arm
+    // fires unconditionally (no "NewBinFormat" key needed to force it).
+    WriteIniData(scratch, "Bin Func FT", "3676 BinConsFail", AnsiString("1,0,1"));
+
+    int savedTestBinCount = iTestBinCount;
+    int savedCustomerCode = CUSTOMER_CODE;
+    iTestBinCount = 3;                 // matches the 3-entry CommaText above
+    CUSTOMER_CODE = 0;                 // != CC_AMKOR_China(972), != CC_ASE_KaohSiung(936)
+    {
+        TfBinSel f;
+
+        f.ReadFunctionData(eBinFT, scratch);
+
+        CHECK(AnsiString(f.sBinConsFail[eBinFT]->CommaText) == "1,0,1",
+              "ReadFunctionData (new format): sBinConsFail[eBinFT] reads the seeded ini CommaText");
+        CHECK(BinSelect[eBinFT].bConsFail[0] == true,  "ReadFunctionData (new format): BinSelect[eBinFT].bConsFail[0] true from ini \"1\"");
+        CHECK(BinSelect[eBinFT].bConsFail[1] == false, "ReadFunctionData (new format): BinSelect[eBinFT].bConsFail[1] false from ini \"0\"");
+        CHECK(BinSelect[eBinFT].bConsFail[2] == true,  "ReadFunctionData (new format): BinSelect[eBinFT].bConsFail[2] true from ini \"1\"");
+        CHECK(f.MyBinPanel[eBinFT]->bConFail[0] == true,  "ReadFunctionData (new format): MyBinPanel[eBinFT]->bConFail[0] mirrors BinSelect");
+        CHECK(f.MyBinPanel[eBinFT]->bConFail[1] == false, "ReadFunctionData (new format): MyBinPanel[eBinFT]->bConFail[1] mirrors BinSelect");
+    }
+    CUSTOMER_CODE = savedCustomerCode;
+    iTestBinCount = savedTestBinCount;
+    DeleteFile(scratch);
+}
+
+static void Test_ReadFunctionData_OldFormat_FallsBackToPerCategoryRead()
+{
+    ResetGlobals();
+
+    AnsiString scratch = BinSelScratchIniPath("test_binsel_readfunctiondata_old.ini");
+    DeleteFile(scratch);
+
+    // Deliberately NO "[Bin Func FT]" section at all -- CheckSectionExist(...)
+    // is false, bHasNewSetupData stays false, so golden's OLD FORMAT branch
+    // (golden :5356 onward, "這裡是為了跟舊版的相容") runs instead, reading
+    // each Category<i>'s own "Cons.Fail" key directly.
+    WriteIniData(scratch, "Category0", "Cons.Fail", 1);
+    WriteIniData(scratch, "Category1", "Cons.Fail", 0);
+    WriteIniData(scratch, "Category2", "Cons.Fail", 1);
+
+    int savedTestBinCount = iTestBinCount;
+    int savedCustomerCode = CUSTOMER_CODE;
+    iTestBinCount = 3;
+    CUSTOMER_CODE = 0;
+    {
+        TfBinSel f;
+
+        f.ReadFunctionData(eBinFT, scratch);
+
+        CHECK(BinSelect[eBinFT].bConsFail[0] == true,  "ReadFunctionData (old format): BinSelect[eBinFT].bConsFail[0] true from Category0");
+        CHECK(BinSelect[eBinFT].bConsFail[1] == false, "ReadFunctionData (old format): BinSelect[eBinFT].bConsFail[1] false from Category1");
+        CHECK(BinSelect[eBinFT].bConsFail[2] == true,  "ReadFunctionData (old format): BinSelect[eBinFT].bConsFail[2] true from Category2");
+        CHECK(f.MyBinPanel[eBinFT]->bConFail[0] == true, "ReadFunctionData (old format): MyBinPanel[eBinFT]->bConFail[0] mirrors BinSelect");
+        // golden's own OLD-FORMAT sync-back loop (golden :5473 onward)
+        // mirrors BinSelect[tag] back into sBinConsFail[tag]->Strings[i]
+        // when i<sBinConsFail[tag]->Count (true here: ctor sized it to
+        // iTestBinCount==3) -- verify the round-trip landed there too.
+        CHECK(AnsiString(f.sBinConsFail[eBinFT]->Strings[0]) == "1",
+              "ReadFunctionData (old format): sBinConsFail[eBinFT]->Strings[0] synced back from BinSelect");
+    }
+    CUSTOMER_CODE = savedCustomerCode;
+    iTestBinCount = savedTestBinCount;
+    DeleteFile(scratch);
+}
+
 int main()
 {
     Test_Ctor_PopulatesBinTypeStringLists();
@@ -355,6 +489,8 @@ int main()
     Test_CheckOSBin_FalseWhenSelectedBinNotInCatData();
     Test_ChangeActivePageIndex_MapsEveryBinTypeToItsOwnTab();
     Test_ChangeActivePageIndex_InvalidModeLeavesIndexUntouched();
+    Test_ReadFunctionData_NewFormat_ReadsFromScratchIni();
+    Test_ReadFunctionData_OldFormat_FallsBackToPerCategoryRead();
 
     std::printf("%d/%d checks passed (test_binsel_core)\n", g_pass, g_pass + g_fail);
     return g_fail == 0 ? 0 : 1;

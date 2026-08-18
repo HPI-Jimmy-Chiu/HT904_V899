@@ -7,6 +7,13 @@
 //  `python3 -c "open(path,'rb').read().decode('cp950')"`, 0 U+FFFD measured
 //  before any line below was written).
 //
+//  AI(W906-FW-BinSel-WB) 20260819: FW-3 表單波 WAVE B -- lands real bodies for
+//  the 4 methods WAVE A queued as documented no-op stubs (ReadFunctionData,
+//  SaveFunctionData, SetPrimeButton, mtTrayNameSetColor). See the updated
+//  WAVE A/WAVE B SPLIT and GATE REGISTER below; per-line golden-bug/GATE
+//  citations live next to each method in cBinSel.cpp (not duplicated here,
+//  same "avoid the two files drifting apart" policy as WAVE A's own banner).
+//
 //  ROLE
 //  ----
 //  TfBinSel is golden's Bin-Select setup dialog: per-bin-type (RT/FT/OffLine/
@@ -46,8 +53,50 @@
 //    TransferBinTrayStrToName golden :6404-6423 ACTIVE (pure TStringList)
 //    ReadFile                golden :1119-1596  ACTIVE, several GATEs (see
 //                             GATE REGISTER) -- the MUST-HAVE method
+//    ReadFunctionData(tag,szDir)  golden :4807-5667  WAVE B (this wave).
+//                             ACTIVE: all CheckAndReadIniData/CheckSectionExist
+//                             reads + the full old/new-format BinSelect[tag]/
+//                             MyBinPanel[tag] post-processing (golden
+//                             :5356-5636 -- real validation logic, not
+//                             mechanical reads). GATE: `MyBinPanel[tag]->
+//                             ed*->Text=...` widget-mirror block (22 sites,
+//                             see GATE REGISTER G7). DEVIATION: gains an
+//                             `AnsiString szDir` parameter (see cBinSel.cpp
+//                             banner) -- ReadFile's call site updated to
+//                             match.
+//    SaveFunctionData(tag,FileName) golden :5668-6009  WAVE B (this wave).
+//                             GATE: 100% WriteIniData writes, per
+//                             WRITE-PATH GATE TABLE. ACTIVE:
+//                             TransferBinTrayStrToName(tag) calls + the
+//                             if/else-if tag-selection structure (kept so a
+//                             future wave can un-gate write-by-write).
+//                             DEVIATION: gains an `AnsiString FileName`
+//                             parameter, same substitution as
+//                             ReadFunctionData above -- SaveOther's call site
+//                             updated to match, and ReadFunctionData's own 2
+//                             internal calls pass their `szDir` as this
+//                             `FileName` (same file, same golden
+//                             FormSysTools object).
+//    SetPrimeButton()        golden :6010-6042  WAVE B (this wave). GATE:
+//                             entire body -- "純 widget", spbNormal/
+//                             spbPrime/tsRetest/fMain->SetNormalOrPrime()
+//                             all absent from the facade (see GATE REGISTER
+//                             G8).
+//    mtTrayNameSetColor(tag) golden :4033-4140  WAVE B (this wave). GATE:
+//                             entire body -- see GATE REGISTER G9 (the
+//                             corrected Tray256Core absence claim + the
+//                             coupled-ctor-population reason it stays gated
+//                             this wave) and (B16) in cBinSel.cpp (golden
+//                             quirk: 2 of its calls target TfBinSel's OWN
+//                             mtTrayName/mtTrayItem, not MyBinPanel[tag]'s).
 //
-//  WAVE B QUEUE (declared with a documented no-op/stub body, NOT silently
+//  WAVE B QUEUE -- CLOSED this wave (FW-BinSel-WB landed all 4 items WAVE A
+//  queued below). Kept verbatim as a historical record of WAVE A's own
+//  reasoning for QUEUING rather than dropping these 4 (still accurate as
+//  the reasoning that applied BEFORE this wave; the SPLIT table above is the
+//  current, authoritative status).
+//  -----------------------------------------------------------------------
+//  (declared with a documented no-op/stub body, NOT silently
 //  dropped -- golden line spans)
 //  -----------------------------------------------------------------------
 //    ReadFunctionData(tag)   golden :4807-5667 (861 lines). 100% mechanical
@@ -269,6 +318,38 @@
 //       `RefreshYieldMonitor` -- not checked against forms/fLotInfo.h this
 //       wave) -- gated together as one block rather than risk a wrong guess
 //       at fLotInfo's shape.
+//  (G7) FW-BinSel-WB (this wave). `ReadFunctionData`'s `MyBinPanel[tag]->
+//       ed*->Text=...` block (golden :5637-5661, 22 sites) -- `grep -n
+//       "edBinSetT3Pos\\|edBinSettingConFail\\|edSpecBinByArmPerSiteComparePercent\\|
+//       edBinSetT6Link" forms/fBinSel.h` -- 0 hits (20260819); `TMyBinPanelData`
+//       is WAVE A's data-only stand-in (CTOR NOTE), no `TEdit *ed*` members.
+//  (G8) FW-BinSel-WB (this wave). `SetPrimeButton`'s ENTIRE body --
+//       `spbNormal`/`spbPrime`/`tsRetest` (`grep -n "spbNormal\\|spbPrime\\|
+//       tsRetest" forms/fBinSel.h` -- only comment hits, 20260819) and
+//       `fMain->SetNormalOrPrime()` (`grep -n "SetNormalOrPrime"
+//       forms/fMain.h` -- 0 hits, 20260819) are all absent from the facade.
+//  (G9) FW-BinSel-WB (this wave). `mtTrayNameSetColor`'s ENTIRE body --
+//       `MyBinPanel[tag]->mtTrayName`/`mtTrayItem` (needs `TMyBinPanelData`
+//       members of type `vclcompat::Tray256Core`, not yet added) and
+//       `TfBinSel`'s OWN `mtTrayName`/`mtTrayItem` (golden cBinSel.h:73-74,
+//       type `vclcompat::TrayCore`, not yet added either) are both absent
+//       from the facade, plus `InitDataToEdit(tag)` (`grep -rn
+//       "InitDataToEdit" --include=*.h --include=*.cpp .` -- only comment
+//       hits, 20260819). CORRECTED ABSENCE CLAIM: `vclcompat::Tray256Core`/
+//       `vclcompat::TrayCore` (vclcompat/TrayCore.h/.cpp, linked into
+//       ht9045_sm per CMakeLists.txt:256) DO exist as of W7-C1 (20260728,
+//       BEFORE this file's own WAVE A banner date) -- WAVE A's STUB
+//       COLLISION SCAN below searched the literal string `"class
+//       TTMyTray256"` (golden's own type name) and correctly got 0 hits, but
+//       missed that vclcompat/Controls.h:79 already documents the RENAME
+//       ("TTMyTray / TTMyTray256 -> vclcompat/TrayCore.* (W7-C1)"). The TYPE
+//       exists; the MEMBER declarations + the ~90-line ctor-side cell-text
+//       population golden's own `TMyBinPanel::TMyBinPanel` ctor does for
+//       them (golden cBinSel.cpp :420-509) do not, and landing just this
+//       method without that ctor-side population would half-populate the
+//       grid (colour right, text stale) -- see cBinSel.cpp's own banner on
+//       this method for the full reasoning. Flagged precisely for whichever
+//       wave lands `TMyBinPanel`'s widget half.
 //
 //  STUB COLLISION SCAN (`grep -rn "TfBinSel\\b" --include=*.cpp
 //  --include=*.h .` / `grep -rn "\\bfBinSel\\b" --include=*.cpp
@@ -491,10 +572,12 @@ public:
     void ARTBinCheck(int tag);
     void TransferBinTrayStrToName(int iTag);
 
-    // -- WAVE B: declared, documented no-op body this wave (see WAVE B QUEUE
-    // above) -- present so this wave's ACTIVE methods' call sites compile.
-    void ReadFunctionData(int tag);
-    void SaveFunctionData(int tag);
+    // -- FW-BinSel-WB (this wave): real bodies landed in cBinSel.cpp -- see
+    // WAVE A/WAVE B SPLIT above and GATE REGISTER G7-G9 for what's gated
+    // inside each. `szDir`/`FileName` are DEVIATION parameters (golden's own
+    // signature has neither -- see cBinSel.cpp banners on both methods).
+    void ReadFunctionData(int tag, AnsiString szDir);
+    void SaveFunctionData(int tag, AnsiString FileName);
     void SetPrimeButton();
     void mtTrayNameSetColor(int tag);
 };
