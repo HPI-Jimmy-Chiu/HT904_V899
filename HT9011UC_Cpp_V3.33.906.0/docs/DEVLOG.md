@@ -8278,16 +8278,25 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   save/restore），否則 27 個清單全空。
 - **驗收**：最終全新雙 gate Debug 142/3＋Release 142/3、guard IDENTICAL。
 
+## 20260819 清晨 II — FW-BinSelUnlock（255ae7a）：28 個消費端 gate 全解
+
+- 兩線並行（檔案不重疊）：主迴圈解 Command.cpp 11 塊（含 SetOSBIN 去
+  #else 替代、3 個 Sender-ignored NULL 替代）；代理解 SECSGEM
+  uHGemHT9045_EC 17 區塊 147 條 SetECDataPointer（語句零觸碰、EOL 保持）。
+  fShowBinSelect->ShowBinSel() ×2 維持 gate（Wave B）。
+- **驗收**：合併全新雙 gate Debug 142/3＋Release 142/3、guard IDENTICAL。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列 1-6、Command.cpp 159/164、良率引擎全清、FW-SecCC、
-  FW-SecUnlock、**FW-BinSel-WA＋proxy 拆彈（e4060a6）**。基線 142/3。
-- **下一波（自主佇列）**：fBinSel 消費端解鎖（主迴圈可自做）：
-  Command.cpp 的 SetTrayBinByDLL/BinPosChange/SetBINCOUNT/SetOSBIN/
-  SetConFail 各 gate 站點逐一解（成員已全齊；注意 spbSaveClick 內部的
-  寫檔仍 gate 故解鎖後行為=讀+記憶體操作）；csystem.cpp:11525
-  SetConFail；SECSGEM/uHGemHT9045_EC g7-g27（60+ SetECDataPointer，
-  量大可派代理）。之後：cShowBinSelect/cBinSel Wave B、FW-3 batch 3+、
-  FW-1 tag 批次。
+  FW-SecUnlock、FW-BinSel-WA＋proxy 拆彈、**FW-BinSelUnlock（255ae7a）**。
+  基線 142/3。
+- **下一波（自主佇列）**：
+  a. cShowBinSelect Wave B（ShowBinSel ~250-widget ctor-population，
+     golden :388-757；解鎖最後 2 個 ShowBinSel gate＋B7 chkShow0Xbin）；
+  b. cBinSel Wave B（ReadFunctionData 861 行純轉錄＋SaveFunctionData
+     342 行＋SetPrimeButton/mtTrayNameSetColor）；
+  c. FW-3 batch 3+ 表單（BinDisplay 等）；FW-1 tag 批次；
+  d. 小項：auto9045.cpp 的 W5FA_FBinSel TU-local 替身退役評估。
 - **設計面（等使用者）**：write path 設計輪；硬體架構題（index/1203、
   MN200、gclib）；B4 GPIB site-map 修不修。
