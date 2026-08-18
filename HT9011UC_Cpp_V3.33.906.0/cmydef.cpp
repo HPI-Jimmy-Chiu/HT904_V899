@@ -6154,7 +6154,9 @@ int iThisPortNo;
 int iThisPortStatus;
 int iPortStatus[ePortTotal];
 int iLastPortStatus[ePortTotal];
+#endif // AI(W906-FW-CTBS-integrate) 20260818: ungate ONE definition -- cShowBinSelect.cpp (landed this wave) binds sBinCode_ATK (ShowCategoryBin ATK bin-code table); plain AnsiString array, no NULL-global ctor risk (PT_CAMPAIGN_PLAN.md section 8)
 AnsiString sBinCode_ATK[eTrayCount];
+#if 0 // ...resume the TODO(W6) gate
 bool bWaitingAMR=false;                                                         //RogerYang 20250617 Load已清空但還沒滿bundle，等料車來
 bool bForceSendLoaderIsEmpty;                                                   //JerryYang 20250618 : add
 bool bIsPlacingToBuffer;                                                        //JerryYang 20250828 : fix color誤退TRAY
@@ -6220,11 +6222,12 @@ int iWhoTrigerASV=0;
 #if 0 // ...resume the TODO(W6) gate
 #endif // AI(W906-PT-W5b-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045.cpp binds it; see this block's head note
 bool bNeedDoRunCheck;
-#if 0 // ...resume the TODO(W6) gate
+// AI(W906-FW-CTBS-integrate) 20260818: gate around these three DISSOLVED --
+// cShowBinSelect.cpp (landed this wave) is their first real consumer
+// (CaculateUPH/pause bookkeeping); plain ints, PT_CAMPAIGN_PLAN.md section 8.
 int iPauseTime=0;
 int iNetUPH=0;
 int iGrossUPH=0;
-#endif // AI(W906-PT-W5b-integrate) 20260809: ungate ONE definition -- SECSGEM/uHGemHT9045.cpp binds it; see this block's head note
 bool bSECSPause=false;
 #if 0 // ...resume the TODO(W6) gate
 #endif // AI(W906-PT-W5c-integrate) 20260809: ungate -- csystem.cpp / bthermo.cpp / uHeaterThread.cpp bind bHasChangePlate; plain data, no ctor that touches a NULL global (PT_CAMPAIGN_PLAN.md section 8); see this block's head note

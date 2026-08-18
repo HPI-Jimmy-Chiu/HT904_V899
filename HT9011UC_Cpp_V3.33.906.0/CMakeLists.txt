@@ -1863,6 +1863,14 @@ add_library(ht9045_sm STATIC
     # fYieldMonitoring global swap is a queued, deliberate wave; the safety
     # ACTION methods DoAutoCloseSite/DoRTAutoSocketOff are NOT translated).
     uYieldMonitoring.cpp
+    # AI(W906-FW-CTBS) 20260818: cContactCT.cpp (full, 21 methods) +
+    # cShowBinSelect.cpp (Wave A, 18/29 -- widget-heavy Wave B and the
+    # machine-action safety set are queued, see forms/fShowBinSelect.h).
+    # Their globals are DEFINED nullptr in their own TUs: every consumer
+    # dereference is still gated; real instances land with the yield-engine
+    # 39-gate enablement wave.
+    cContactCT.cpp
+    cShowBinSelect.cpp
     # AI(W906-FW3-TemperFrom-WA) 20260818: cTemperFrom.cpp -- FW-3 cTemperFrom
     # Wave A (temperature-display data core: ctor channel/panel maps, the
     # 885-line ShowThermo classifier, TempRunShowAlarmHigh/Low, the small

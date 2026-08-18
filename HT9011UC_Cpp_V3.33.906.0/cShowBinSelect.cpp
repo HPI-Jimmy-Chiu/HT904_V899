@@ -1,0 +1,951 @@
+// =============================================================================
+//  cShowBinSelect.cpp  --  FW-3 queue item 2: TfShowBinSelect, WAVE A subset
+//
+//  Translation wave: FW-3 ShowBinSelect Wave A
+//  Translator: AI(W906-FW3-ShowBinSelect-WA) 20260818
+//  Golden source: HT9011UC_Code_V3.33.906.0_20260618/cShowBinSelect.cpp
+//  (3,016 lines) + cShowBinSelect.h (524 lines), cp950/Big5. Decoded this
+//  wave with `python3 -c "open(path,'rb').read().decode('cp950')"` -- 0
+//  U+FFFD over both files (measured before any line below was written).
+//
+//  See forms/fShowBinSelect.h for the full WAVE A / WAVE B split, GATE
+//  REGISTER, DEVIATION list (bootstrap ctor) and facade shape -- not
+//  duplicated here to avoid the two files drifting apart.
+//
+//  ABSENCE-CLAIM TIMESTAMPS (commands + when run, this wave, before writing
+//  the citing code below -- re-run at hand-off per project policy)
+//  --------------------------------------------------------------------------
+//    fCounterClear facade : `grep -rn "fCounterClear" --include=*.h .` --
+//                            1 hit, Automation/SCK_ART_Remainder.h:71, itself
+//                            a comment recording the same gap (20260818).
+//    fSecurity facade     : `grep -rn "class TfSecurity" --include=*.h .` --
+//                            0 hits anywhere (20260818).
+//    fBinSel facade       : `grep -rn "fBinSel" --include=*.h .` -- only
+//                            comment-only hits in forms/fMain.h (20260818).
+//    fCleaning->btnResetCleanCountClick : `grep -n
+//                            "btnResetCleanCountClick" forms/fCleaning.h` --
+//                            0 hits (20260818).
+//    fFixAICCD->UnloadAICntNG : `grep -n "UnloadAICntNG" forms/fFixAICCD.h`
+//                            -- 0 hits (20260818).
+//    fMain->StatusBar1    : `grep -n "StatusBar1" forms/fMain.h` -- 0 hits
+//                            (20260818).
+//    Application->MessageBoxA / MB_OKCANCEL / IDOK : no TApplication surface
+//                            anywhere in vclcompat (same absence as
+//                            forms/fContactCT.h's GATE (C2); 20260818).
+//    ShowMyMessageBox_YES_NO : Automation/AGV_E84.h:58's own comment already
+//                            records it "untranslated" (20260818).
+//    HSys.BinDisCtrl (opaque): `grep -n BinDisCtrl database.h` -- declared
+//                            `TMyBinDispCtrl *BinDisCtrl; // opaque; NULL
+//                            until UI wave wires InstallColorBinDisplay`
+//                            (database.h:300, 20260818) -- this is WHY
+//                            ChangeBinDispStatus/DoShowBinDigital are Wave B,
+//                            not gated-in-place: >90% of each body is this
+//                            one pointer.
+// =============================================================================
+#include "forms/fShowBinSelect.h"
+
+#include "MachineType.h"           // enums, CC_* customer codes, ChangeToPercentage<T>/ChangeToFloat<T>
+#include "cmydef.h"                  // SystemStart/iHome/InitialOK/iTestBinCount/iByBinCnt[]/
+                                       // iSV_ErrBinCnt/iSVByBinCount[]/AccessLevel/iDefHonPrecLevel/
+                                       // StipulateInputCount/iNetUPH/iGrossUPH/iPauseTime/bRefreshFunction
+#include "cprod.h"                    // Prod/TestIF/TestIF_File/RunInfo/BinSelect/TastCategory
+#include "LastSet.h"                   // LastSet
+#include "Config.h"                     // IniConfig
+#include "CosFunction.h"                 // CosFunction
+#include "aHotPlateSubstrate.h"           // TestSocket (TMyKitSuck header choice -- see KNOWLEDGE.md)
+#include "cSocket.h"                       // TArm/TMySocket, ArmData[3]/ArmHistory[3]
+#include "cinitial.h"                       // IsNNMode()/NN_1Row/NN_2Row
+#include "csystem.h"                          // ShuttleHasIC()/IndexHasIC()
+#include "common.h"                          // MyTickCount()
+#include "cMyDB.h"                            // MyDBIProcess
+#include "atester_shims.h"                     // fContact (TfContactShim)
+#include "atester_ProcessCount.h"                // DoLowYieldAlarm
+#include "AutoClean/AutoClean.h"                  // InitialAutoCleanAllTask
+#include "FormsFacade.h"                           // fMain
+#include "forms/fYieldMonitoring.h"                 // fYieldMonitoring
+
+#include <cstdlib>   // atoi
+#include <algorithm> // (kept for parity; no direct use this wave)
+
+//---------------------------------------------------------------------------
+// AI(W906-FW3-ShowBinSelect-WA) 20260818: global NOT defined as a live
+// instance this wave (task brief: "不准定義 fShowBinSelect 全域") -- only the
+// pointer itself is given a definition (nullptr) so other TUs that merely
+// reference `extern TfShowBinSelect *fShowBinSelect;` link cleanly. Same
+// posture as cContactCT.cpp's own fContactCT definition this wave.
+TfShowBinSelect *fShowBinSelect = nullptr;
+
+//---------------------------------------------------------------------------
+//  DelDot (free function) -- golden :178-205
+//---------------------------------------------------------------------------
+AnsiString DelDot(AnsiString asBuffer)
+{
+    AnsiString asReturn;
+    int iBegin = 0;
+    for (int i = 0; i < iTestBinCount; i++)   // kevin 20140317: 256 bin
+    {
+        if (i == 1)
+        {
+            iBegin = asBuffer.Pos(AnsiString(i) + " ");
+            if (iBegin != 1)
+                continue;
+        }
+        else
+            iBegin = asBuffer.Pos(" " + AnsiString(i) + " ");
+        if (iBegin > 0)
+        {
+            break;
+        }
+    }
+
+    if (iBegin == 0)
+    {
+        iBegin = asBuffer.Pos(AnsiString("E"));
+    }
+
+    asReturn = asBuffer.Delete(1, iBegin - 1);
+    return asReturn;
+}
+
+//---------------------------------------------------------------------------
+//  TfShowBinSelect::TfShowBinSelect -- DEVIATION bootstrap ctor.
+//  See forms/fShowBinSelect.h CTOR NOTE for why this is NOT a verbatim
+//  translation of golden's ctor body (golden :44-161).
+//---------------------------------------------------------------------------
+TfShowBinSelect::TfShowBinSelect()
+{
+    for (int i = 0; i < e3TrayCount; i++)
+    {
+        MyBinSel[i]         = new TLabel();
+        MyBinSelLab[i]      = new TLabel();
+        MyBinSelARTFT[i]    = new TLabel();
+        MyBinSelARTFTLab[i] = new TLabel();
+        MyBinSelARTRT[i]    = new TLabel();
+        MyBinSelARTRTLab[i] = new TLabel();
+        grpBinDisp[i]       = new TGroupBox();
+    }
+    for (int i = 0; i < eTrayCount; i++)
+    {
+        EditAi[i] = new TLabeledEdit();
+        // GATE (cosmetic): tempAi[i]->Align=alTop; -- golden :132. No Align
+        // field exists on vclcompat::TLabeledEdit and nothing reads it back.
+    }
+
+    ColorRed = 1;      // 1:red, 2:green, 3:orange
+    ColorGreen = 2;
+    ColorOrange = 3;
+
+    bShow = false;
+    tsUPH = new TStringList();
+
+    for (int i = 0; i < 20; i++)   // Steven 20140621: For SECS GEM
+    {
+        tsUPH->Add("");
+    }
+
+    for (int i = 0; i < eTrayCount; i++)
+    {
+        sBinCode_ATK[i] = "";
+    }
+
+    ShowInitialString();
+
+    if (SPIL_FOR_QLE == 1)   // JerryYang 20251020: partial device-ejection feature
+    {
+        palAutoDeviceEjection->Visible = true;
+        palAutoDeviceEjection->Top = 230;
+    }
+    else
+    {
+        palAutoDeviceEjection->Visible = false;
+    }
+
+    // GATE (cosmetic): btReturn->Align=alBottom; -- golden :160. No Align
+    // field exists on vclcompat::TButton and nothing reads it back.
+
+    bUpdateBinDigital = false;
+    iShowBinDigitalTask = 0;
+    iLowYieldBinSelectContactCount = 0;
+    Left = 0; Top = 0; Width = 0; Height = 0;
+}
+
+//---------------------------------------------------------------------------
+//  FormDestroy -- golden :163-176
+//---------------------------------------------------------------------------
+void TfShowBinSelect::FormDestroy(TObject * /*Sender*/)
+{
+    try
+    {
+        TimerAutoCleanCount->Enabled = false;   // Steven 20160727
+        tsUPH->Clear();                          // Ifor 20170603 (wei): clear TStringList before deleting
+        delete tsUPH;                            // Steven 20160108: release memory
+    }
+    catch (...)
+    {
+        // NOTE: explicit 3-arg form disambiguates two overlapping
+        // MyDBIProcess declarations both visible in this TU (same
+        // pre-existing tree-wide overload shape as cContactCT.cpp's
+        // identical FormDestroy fix -- see that file's note).
+        MyDBIProcess("Exception", "TfShowBinSelect::FormDestroy", "");
+    }
+    LogSoftwareOffTime("TfShowBinSelect, FormDestroy");   // Steven 20210526: record software run time
+}
+
+//---------------------------------------------------------------------------
+//  FormClose -- golden :868-873
+//---------------------------------------------------------------------------
+void TfShowBinSelect::FormClose(TObject * /*Sender*/)
+{
+    bShow = false;
+}
+
+//---------------------------------------------------------------------------
+//  InitShowBinDigital -- golden :874-878
+//---------------------------------------------------------------------------
+void TfShowBinSelect::InitShowBinDigital()
+{
+    iShowBinDigitalTask = 1;
+    bUpdateBinDigital = true;
+}
+
+//---------------------------------------------------------------------------
+//  SetLabelVisible -- golden :1425-1434
+//---------------------------------------------------------------------------
+void TfShowBinSelect::SetLabelVisible(int iTag, bool bVisible)
+{
+    MyBinSel[iTag]->Visible         = bVisible;
+    MyBinSelLab[iTag]->Visible      = bVisible;
+    MyBinSelARTFT[iTag]->Visible    = bVisible;
+    MyBinSelARTFTLab[iTag]->Visible = bVisible;
+    MyBinSelARTRT[iTag]->Visible    = bVisible;
+    MyBinSelARTRTLab[iTag]->Visible = bVisible;
+    grpBinDisp[iTag]->Visible       = bVisible;
+}
+
+//---------------------------------------------------------------------------
+//  SetAutoVisible -- golden :1436-1477
+//---------------------------------------------------------------------------
+void TfShowBinSelect::SetAutoVisible()
+{
+    gbBinBox->Visible   = (iHWFix_BinBox == 1);
+    pnlMag123->Visible  = (AUTO3_IS_MAGAZINE > 0);
+    pnlFix789->Visible  = (AUTO_EMPTY_COLOR >= 3);
+    pnlAuto456->Visible = (AUTO_EMPTY_COLOR >= 3);
+    gbAuto6->Visible    = (AUTO_EMPTY_COLOR >= 4);
+
+    for (int i = eAuto1; i < eTrayCount; i++)
+    {
+        if (Prod.iTrayType[i] == tNotUse)
+        {
+            SetLabelVisible(i, false);
+        }
+        else
+        {
+            SetLabelVisible(i, true);
+        }
+    }
+
+    if (AUTO3_IS_MAGAZINE > 0)
+        SetLabelVisible(iMagAtAuto, false);
+
+    if (AUTO_EMPTY_COLOR >= 3)   // Steven 20230907: For HT-9011UC
+    {
+        if (CosFunction.bUseTrayUpDownSet)   // wei 20160224: TSMC fix up/down
+        {
+            pnlFix789->Visible = true;
+        }
+        else
+        {
+            pnlFix789->Visible = false;
+        }
+    }
+
+    if (iHWFix_BinBox == 1)   // kevin 20160819: error bin box
+    {
+        MyBinSel[eBulkBox]->Caption      = "E";
+        MyBinSelARTFT[eBulkBox]->Caption = "E";
+        MyBinSelARTRT[eBulkBox]->Caption = "E";
+    }
+}
+
+//---------------------------------------------------------------------------
+//  ShowInitialString -- golden :1634-1700
+//---------------------------------------------------------------------------
+void TfShowBinSelect::ShowInitialString()
+{
+    if (CosFunction.bSortingBy2DList == true &&
+        LastSet.iTester == _2D_SORT &&
+        TestIF_File.bSortingBy2DIDList == true)   // JerryYang 20230322: 2DID expect count
+    {
+        StrGrdCategory->ColCount = 4;
+        StrGrdCategory->Cells[1][0] = "expect count";
+        StrGrdCategory->Cells[2][0] = "Count";
+        StrGrdCategory->Cells[3][0] = "Percent";
+    }
+    else
+    {
+        StrGrdCategory->Cells[1][0] = "Count";
+        StrGrdCategory->Cells[2][0] = "Percent";
+    }
+    StrGrdCategory->RowCount = iTestBinCount + 2;
+
+    if (LastSet.iTester == _2D_SORT)   // Frank 20221122: 2DID sorting for ATK
+    {
+        for (int i = 0; i < iTestBinCount; i++)   // JerryYang 20220425: Nvidia Ryan requested "Bin" wording
+            StrGrdCategory->Cells[0][1 + i] = "BIN " + AnsiString(i);
+    }
+    else
+    {
+        for (int i = 0; i < iTestBinCount; i++)
+            StrGrdCategory->Cells[0][1 + i] = "Category " + AnsiString(i);
+    }
+
+    StrGrdCategory->Cells[0][iTestBinCount + 1] = "Error Bin";
+
+    if (CosFunction.bCategoryInfoByContactCT)   // Sam 20240131: new CategoryInfo record set using ContactCT
+    {
+        StrGrdCategoryContCT->Cells[1][0] = "Count";
+        StrGrdCategoryContCT->Cells[2][0] = "Percent";
+        StrGrdCategoryContCT->RowCount = iTestBinCount + 2;
+        for (int i = 0; i < iTestBinCount; i++)
+            StrGrdCategoryContCT->Cells[0][1 + i] = "Category " + AnsiString(i);
+        StrGrdCategoryContCT->Cells[0][iTestBinCount + 1] = "Error Bin";
+    }
+
+    if (USE_AUTO_RETEST == eartInstall || CosFunction.bUseARTSortCount)   // wei 20150923: add ART count
+                                                                             // Ifor 20170316 (wei): add MRT Mode
+    {
+        StrGrdCategoryART->Cells[1][0] = "Count";
+        StrGrdCategoryART->Cells[2][0] = "Percent";
+        StrGrdCategoryART->RowCount = iTestBinCount + 2;
+        for (int i = 0; i < iTestBinCount; i++)
+            StrGrdCategoryART->Cells[0][1 + i] = "Category " + AnsiString(i);
+
+        StrGrdCategoryART->Cells[0][iTestBinCount + 1] = "Error Bin";
+
+        StrARTSkipICCount->Cells[1][0] = "Count";   // Frank 20160819
+        StrARTSkipICCount->RowCount = 22;
+        StrARTSkipICCount->ColCount = 2;
+
+        for (int i = 0; i < 20; i++)
+        {
+            if (i == 0)
+                StrARTSkipICCount->Cells[0][1 + i] = "FT " + AnsiString(1);
+            else
+                StrARTSkipICCount->Cells[0][1 + i] = "RT " + AnsiString(i);
+        }
+        StrARTSkipICCount->Cells[0][21] = "Total";
+    }
+    ShowCategoryBin();
+}
+
+//---------------------------------------------------------------------------
+//  ShowCategoryBin -- golden :1701-2052
+//  GATE (B1): fCounterClear->ClearCount(ctBinCount) x3, see forms/
+//  fShowBinSelect.h GATE REGISTER.
+//---------------------------------------------------------------------------
+void TfShowBinSelect::ShowCategoryBin()
+{
+    int i = 0, sum = 0, Sum_ART = 0, iTemp = 0, Sum_ConCT = 0;   // Sam 20240131: ContCT CategoryInfo
+    double f = 0.0, fSPBin = 0.0;                                 // Isaac 20171113 (Steven): ATK Special Bin Yield alarm
+    AnsiString S1, S2;
+    (void)S2;   // golden local, never assigned/read in this function body (verified this wave) -- kept verbatim
+    static bool bFirstTime = true;
+
+    if (bFirstTime == true)
+    {
+        bFirstTime = false;
+        for (i = 0; i < TEST_MAX_BIN; i++)
+        {
+            iLoadPersentCT[i] = 0;
+            iLoadCountCT[i] = 0;
+            iYeildCT[i] = 0;   // wei 20151111
+        }
+    }
+
+    if (CUSTOMER_CODE == CC_ASE_CL)
+    {
+    }
+    else
+    {
+        iSV_ErrBinCnt = LastSet.iBinData32[0][iTestBinCount];
+        for (i = 0; i < TEST_MAX_BIN; i++)
+            iSVByBinCount[i] = LastSet.iBinData32[0][i];
+    }
+
+    if (fContact->fShow == false)
+    {
+        if (CosFunction.bLowYieldUseContactCounts)   // Sam 20230620: optimise Smart Auto Clean
+        {
+            for (i = 0; i < iTestBinCount; i++)
+                sum += LastSet.iBinData32[0][i];
+        }
+        else
+        {
+            for (i = 0; i < eTrayCount; i++)
+            {
+                sum     += LastSet.BinCT[0][iTo3Unload[i]];
+                Sum_ART += LastSet.BinCT_ART[0][iTo3Unload[i]];   // wei 20150923: add ART count
+            }
+        }
+
+        if (CosFunction.bCategoryInfoByContactCT)   // Sam 20240131: ContCT CategoryInfo
+            Sum_ConCT = ArmData[0]->GetTotalCT() + ArmData[1]->GetTotalCT();
+
+        if (LastSet.iTester == _2D_SORT)   // Frank 20221122: 2DID sorting for ATK
+        {
+            for (i = 0; i < iTestBinCount + 1; i++)   // Steven 20121112: RS232 supports 32Bin
+            {
+                fShowBinSelect->StrGrdCategory->Cells[0][1 + i] = "";
+                fShowBinSelect->StrGrdCategory->Cells[1][1 + i] = "";
+                fShowBinSelect->StrGrdCategory->Cells[2][1 + i] = "";
+                fShowBinSelect->StrGrdCategory->Cells[3][1 + i] = "";
+                if (iByBinCnt[i] > 0 || i == iTestBinCount)
+                {
+                    if (i == iTestBinCount)
+                    {
+                        fShowBinSelect->StrGrdCategory->Cells[0][1 + iTemp] = "Error Bin";
+                    }
+                    else
+                    {
+                        fShowBinSelect->StrGrdCategory->Cells[0][1 + iTemp] = "BIN " + AnsiString(i);
+                    }
+                    fShowBinSelect->StrGrdCategory->Cells[2][1 + iTemp] = LastSet.iBinData32[0][i];
+                    fShowBinSelect->StrGrdCategoryART->Cells[1][1 + iTemp] = LastSet.iBinData32_ART[0][i];   // wei 20150923: add ART count
+                    fShowBinSelect->StrGrdCategory->Cells[1][1 + iTemp] = iByBinCnt[i];
+                    if (sum > 0)
+                    {
+                        f = ChangeToFloat((double)LastSet.iBinData32[0][i], (double)sum);   // Steven 20250820: guard against divide-by-0
+                        fShowBinSelect->StrGrdCategory->Cells[3][1 + iTemp] = ChangeToPercentage((double)LastSet.iBinData32[0][i], (double)sum);
+                    }
+                    else
+                    {
+                        fShowBinSelect->StrGrdCategory->Cells[3][1 + iTemp] = "0.00%";
+                    }
+
+                    if ((USE_AUTO_RETEST == eartInstall && IniConfig.bA10_AutoReTest) ||
+                        CosFunction.bUseARTSortCount)   // wei 20150923: add ART count / Ifor 20170316 (wei): add MRT Mode
+                    {
+                        if (Sum_ART > 0)
+                        {
+                            fShowBinSelect->StrGrdCategoryART->Cells[2][1 + iTemp] = ChangeToPercentage((double)LastSet.iBinData32_ART[0][i], (double)Sum_ART);
+                        }
+                        else
+                        {
+                            fShowBinSelect->StrGrdCategoryART->Cells[2][1 + iTemp] = "0.00%";
+                        }
+                    }
+                    iTemp++;
+                }
+            }
+        }
+        else
+        {
+            for (i = 0; i < iTestBinCount + 1; i++)   // Steven 20121112: RS232 supports 32Bin
+            {
+                StrGrdCategory->Cells[1][1 + i] = LastSet.iBinData32[0][i];
+                StrGrdCategoryART->Cells[1][1 + i] = LastSet.iBinData32_ART[0][i];   // wei 20150923: add ART count
+                StrGrdCategoryContCT->Cells[1][1 + i] = (unsigned int)(ArmData[0]->GetSelBin(i) + ArmData[1]->GetSelBin(i));   // Sam 20240131 -- cast disambiguates AnsiString::operator= (unsigned long)
+
+                if (sum > 0)
+                {
+                    f = ChangeToFloat((double)LastSet.iBinData32[0][i], (double)sum);
+                    StrGrdCategory->Cells[2][1 + i] = ChangeToPercentage((double)LastSet.iBinData32[0][i], (double)sum);
+                }
+                else
+                {
+                    StrGrdCategory->Cells[2][1 + i] = "0.00%";
+                }
+
+                if (CosFunction.bCategoryInfoByContactCT)
+                {
+                    if (Sum_ConCT > 0)
+                    {
+                        StrGrdCategoryContCT->Cells[2][1 + i] = ChangeToPercentage((double)(ArmData[0]->GetSelBin(i) + ArmData[1]->GetSelBin(i)), (double)Sum_ConCT);
+                    }
+                    else
+                    {
+                        StrGrdCategoryContCT->Cells[2][1 + i] = "0.00%";
+                    }
+                }
+
+                if ((USE_AUTO_RETEST == eartInstall && IniConfig.bA10_AutoReTest) ||
+                    CosFunction.bUseARTSortCount)   // wei 20150923: add ART count / Ifor 20170316 (wei): add MRT Mode
+                {
+                    if (Sum_ART > 0)
+                    {
+                        StrGrdCategoryART->Cells[2][1 + i] = ChangeToPercentage((double)LastSet.iBinData32_ART[0][i], (double)Sum_ART);
+                    }
+                    else
+                    {
+                        StrGrdCategoryART->Cells[2][1 + i] = "0.00%";
+                    }
+                }
+            }
+
+            if (LastSet.iTester != _2D_SORT)   // JerryYang 20230322: 2DID sort doesn't need this
+            {
+                for (i = 0; i < iTestBinCount; i++)   // Steven 20121112: RS232 supports 32Bin
+                {
+                    if (RunInfo.iUnloadCount < iLoadPersentCT[i])   // Steven 20140905: LastSet.SendCT[0] -> RunInfo.iUnloadCount
+                        iLoadPersentCT[i] = RunInfo.iUnloadCount;
+
+                    if (RunInfo.iUnloadCount < iLoadCountCT[i])
+                        iLoadCountCT[i] = RunInfo.iUnloadCount;
+
+                    if (RunInfo.iUnloadCount < iYeildCT[i])   // wei 20151111
+                        iYeildCT[i] = RunInfo.iUnloadCount;
+
+                    StrGrdCategory->Cells[1][1 + i] = LastSet.iBinData32[0][i];
+                    StrGrdCategoryART->Cells[1][1 + i] = LastSet.iBinData32_ART[0][i];   // wei 20150923: add ART count
+                    StrGrdCategoryContCT->Cells[1][1 + i] = (unsigned int)(ArmData[0]->GetSelBin(i) + ArmData[1]->GetSelBin(i));   // Sam 20240131 -- cast disambiguates AnsiString::operator= (unsigned long)
+
+                    if (sum > 0)
+                    {
+                        f = ChangeToFloat((double)LastSet.iBinData32[0][i], (double)sum);
+                        fSPBin = ChangeToFloat((double)LastSet.iBinData32[0][Prod.iSCKART_SPBinSelect], (double)sum);   // Isaac 20171113 (Steven): ATK Special Bin Yield alarm
+
+                        StrGrdCategory->Cells[2][1 + i] = ChangeToPercentage((double)LastSet.iBinData32[0][i], (double)sum);
+
+                        if (CosFunction.bCategoryInfoByContactCT)   // Sam 20240131
+                        {
+                            if (Sum_ConCT > 0)
+                            {
+                                f = ChangeToFloat((double)(ArmData[0]->GetSelBin(i) + ArmData[1]->GetSelBin(i)), (double)Sum_ConCT);
+                                StrGrdCategoryContCT->Cells[2][1 + i] = ChangeToPercentage((double)(ArmData[0]->GetSelBin(i) + ArmData[1]->GetSelBin(i)), (double)Sum_ConCT);
+                            }
+                            else
+                            {
+                                f = 0.0;
+                            }
+                        }
+
+                        if ((USE_AUTO_RETEST == eartInstall && IniConfig.bA10_AutoReTest) ||
+                            CosFunction.bUseARTSortCount)   // wei 20150923: add ART count / Ifor 20170316 (wei): add MRT Mode
+                        {
+                            StrGrdCategoryART->Cells[2][1 + i] = ChangeToPercentage((double)LastSet.iBinData32_ART[0][i], (double)Sum_ART);
+                        }
+
+                        if (TestIF_File.bSCKART_EnableSPBinAlarm == true &&
+                            TestIF_File.bSCKART_EnableART == true)   // Isaac 20171113 (Steven): ATK Special Bin Yield alarm
+                        {
+                            if (Prod.dSCKART_SPBinAlarmYield != 0.0 && fSPBin >= Prod.dSCKART_SPBinAlarmYield)
+                            {
+                                bSPBinYieldAlarm = true;
+                            }
+                            else
+                            {
+                                bSPBinYieldAlarm = false;
+                            }
+                        }
+                        else
+                        {
+                            bSPBinYieldAlarm = false;
+                        }
+
+                        if (SystemStart && iHome == 0)
+                        {
+                            if (Prod.bFailure[i] == true)
+                            {
+                                if (IniConfig.bI30ContFailBin)   // kevin 20160407: add Fail-bin-over-limit warning
+                                {
+                                    if (Prod.dFailureLimit[i] != 0.0 && f >= Prod.dFailureLimit[i])
+                                    {
+                                        fYieldMonitoring->ClearYieldCount();
+
+                                        if (CUSTOMER_CODE != CC_KYEC_LEE)   // wei 20151111
+                                            iLoadPersentCT[i] = RunInfo.iUnloadCount;
+
+                                        if (IniConfig.bEnableAutoCleanFunction &&   // JerryYang 20161121: fix Yield alarm needing to
+                                                                                      // finish ONE CYCLE first, affecting auto clean
+                                            TestIF.iAutoClean_Function == true &&
+                                            (TestIF.iAutoClean_Mode & M_SOCKET_ALARM))
+                                        {
+                                            InitialAutoCleanAllTask();   // Sam 20230504: tidy InitialAutoCleanTask
+                                        }
+                                        S1.sprintf("Category %d count over limit %2.1f%% ", i, Prod.dFailureLimit[i]);
+                                        DoLowYieldAlarm("WAR07357", S1);
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    if (CosFunction.bYieldControlBinSelectUseContactCount == true)   // KaiChen 20181115:
+                                                                                                         // BinSelect Yield control uses Contact Count
+                                    {
+                                        if (iLowYieldBinSelectContactCount > Prod.iPersentIgnore[i] &&
+                                            Prod.dFailureLimit[i] != 0 &&
+                                            f >= Prod.dFailureLimit[i])
+                                        {
+                                            fShowBinSelect->iLowYieldBinSelectContactCount = 0;   // KaiChen 20181115
+                                            fYieldMonitoring->ClearYieldCount();
+
+                                            if (CUSTOMER_CODE != CC_KYEC_LEE)   // wei 20151111
+                                                iLoadPersentCT[i] = RunInfo.iUnloadCount;
+                                            if (IniConfig.bEnableAutoCleanFunction && TestIF.iAutoClean_Function == true && (TestIF.iAutoClean_Mode & M_SOCKET_ALARM))
+                                            {
+                                                InitialAutoCleanAllTask();   // Sam 20230504: tidy InitialAutoCleanTask
+                                            }
+                                            S1.sprintf("Category %d count over limit %2.1f%% ", i, Prod.dFailureLimit[i]);
+                                            DoLowYieldAlarm("WAR07357", S1);   // Steven 20180627 (wei): consolidate Low Yield Alarm
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        bool bNeedCheck = false;
+                                        if (CosFunction.bLowYieldUseContactCounts &&   // Sam 20230620: optimise Smart Auto Clean
+                                            CUSTOMER_CODE != CC_PTI)                    // Sam 20250102: fix PTI AI Clean
+                                        {
+                                            if (Sum_ConCT > Prod.iPersentIgnore[i])   // Sam 20250102: fix PTI AI Clean
+                                                bNeedCheck = true;
+                                        }
+                                        else
+                                        {
+                                            if (RunInfo.iUnloadCount - iLoadPersentCT[i] > Prod.iPersentIgnore[i])   // Steven 20140905
+                                                bNeedCheck = true;
+                                        }
+
+                                        if (bNeedCheck &&
+                                            Prod.dFailureLimit[i] != 0 &&
+                                            f >= Prod.dFailureLimit[i])
+                                        {
+                                            fYieldMonitoring->ClearYieldCount();
+
+                                            if (CUSTOMER_CODE != CC_KYEC_LEE)   // wei 20151111
+                                                iLoadPersentCT[i] = RunInfo.iUnloadCount;
+                                            if (IniConfig.bEnableAutoCleanFunction && TestIF.iAutoClean_Function == true && (TestIF.iAutoClean_Mode & M_SOCKET_ALARM))
+                                            {
+                                                InitialAutoCleanAllTask();   // Sam 20230504: tidy InitialAutoCleanTask
+                                            }
+                                            S1.sprintf("Category %d count over limit %2.1f%% ", i, Prod.dFailureLimit[i]);
+                                            DoLowYieldAlarm("WAR07357", S1);   // Steven 20180627 (wei): consolidate Low Yield Alarm
+                                            if (CosFunction.bSmartAutoClean)
+                                            {
+                                                // Smart Auto Clean clears the data once it finishes running
+                                            }
+                                            else
+                                            {
+                                                // GATE (B1): fCounterClear->ClearCount(ctBinCount); -- see
+                                                // forms/fShowBinSelect.h GATE REGISTER (B1).
+                                            }
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            else if (Prod.bFailCountEnable[i] == true)
+                            {
+                                if (IniConfig.bI30ContFailBin)   // kevin 20160407: add Fail-bin-over-limit warning
+                                {
+                                    if (Prod.iFailCountLimit[i] != 0 && LastSet.iBinData32[0][i] >= Prod.iFailCountLimit[i])
+                                    {
+                                        fYieldMonitoring->ClearYieldCount();
+                                        if (CUSTOMER_CODE != CC_KYEC_LEE)   // wei 20151111
+                                            iLoadCountCT[i] = RunInfo.iUnloadCount;
+                                        // GATE (B1): fCounterClear->ClearCount(ctBinCount);
+                                        if (IniConfig.bEnableAutoCleanFunction && TestIF.iAutoClean_Function == true && (TestIF.iAutoClean_Mode & M_SOCKET_ALARM))
+                                        {
+                                            InitialAutoCleanAllTask();   // Sam 20230504: tidy InitialAutoCleanTask
+                                        }
+                                        S1.sprintf("BIN %d over limit count %d ", i, Prod.iFailCountLimit[i]);
+                                        DoLowYieldAlarm("WAR07358", S1);   // Steven 20180627 (wei): consolidate Low Yield Alarm
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    bool bNeedCheck = false;
+                                    if (CosFunction.bLowYieldUseContactCounts &&   // Sam 20230620: optimise Smart Auto Clean
+                                        CUSTOMER_CODE != CC_PTI)                    // Sam 20250102: fix PTI AI Clean
+                                    {
+                                        if (Sum_ConCT > Prod.iFailCountIgnore[i])   // Sam 20250102: fix PTI AI Clean
+                                            bNeedCheck = true;
+                                    }
+                                    else
+                                    {
+                                        if (RunInfo.iUnloadCount - iLoadCountCT[i] > Prod.iFailCountIgnore[i])   // Steven 20140905
+                                            bNeedCheck = true;
+                                    }
+
+                                    if (bNeedCheck &&
+                                        Prod.iFailCountLimit[i] != 0 &&
+                                        LastSet.iBinData32[0][i] >= Prod.iFailCountLimit[i])
+                                    {
+                                        fYieldMonitoring->ClearYieldCount();
+                                        if (CUSTOMER_CODE != CC_KYEC_LEE)   // wei 20151111
+                                            iLoadCountCT[i] = RunInfo.iUnloadCount;
+                                        S1.sprintf("BIN %d over limit count %d ", i, Prod.iFailCountLimit[i]);
+                                        DoLowYieldAlarm("WAR07358", S1);   // Steven 20180627 (wei): consolidate Low Yield Alarm
+                                        if (CosFunction.bSmartAutoClean)
+                                        {
+                                            // Smart Auto Clean clears the data once it finishes running
+                                        }
+                                        else
+                                        {
+                                            // GATE (B1): fCounterClear->ClearCount(ctBinCount);
+                                        }
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------------------------
+//  UPH_StringGridDblClick -- golden :2054-2099 (20090720 Steven: Delete 1 UPH Record)
+//  GATE (B2): Application->MessageBoxA(...)==IDOK -- see forms/
+//  fShowBinSelect.h GATE REGISTER.
+//---------------------------------------------------------------------------
+void TfShowBinSelect::UPH_StringGridDblClick(TObject * /*Sender*/)
+{
+    int iRow = 0, iTotalUPH = 0, iCount = 0;
+    if (!SystemStart && AccessLevel >= iDefHonPrecLevel &&
+        PageControl1->ActivePageIndex == 2)   // jou 2014-06-19: Security has 5 levels, 3 -> iDefHonPrecLevel
+    {
+        iRow = UPH_StringGrid->Selection.Top;
+        if (iRow > 0 && iRow < 11)   // Row is between 1 and 10
+        {
+            // GATE (B2): fail-closed -- the destructive row-delete loop below
+            // does not run without a real confirm dialog.
+#if 0
+            if (Application->MessageBoxA("Do you want to delete this record?", "Confirm", MB_OKCANCEL) == IDOK)
+            {
+                for (int i = iRow; i <= 10; i++)   // shift row[i+1]'s value into row[i]
+                {
+                    UPH_StringGrid->Cells[0][i] = UPH_StringGrid->Cells[0][i + 1];
+                    UPH_StringGrid->Cells[1][i] = UPH_StringGrid->Cells[1][i + 1];
+                    UPH_StringGrid->Cells[2][i] = UPH_StringGrid->Cells[2][i + 1];
+                    UPH_StringGrid->Cells[3][i] = UPH_StringGrid->Cells[3][i + 1];
+                    if (IniConfig.bVTESTFunction == true)   // RogerYang 20250224: Weitest requested 3 more columns
+                    {
+                        UPH_StringGrid->Cells[4][i] = UPH_StringGrid->Cells[4][i + 1];
+                        UPH_StringGrid->Cells[5][i] = UPH_StringGrid->Cells[5][i + 1];
+                        UPH_StringGrid->Cells[6][i] = UPH_StringGrid->Cells[6][i + 1];
+                    }
+                }
+
+                for (int i = 1; i <= 10; i++)   // recompute the UPH average
+                {
+                    try
+                    {
+                        if (UPH_StringGrid->Cells[3][i] != "")
+                        {
+                            iTotalUPH += atoi(AnsiString(UPH_StringGrid->Cells[3][i]).c_str());
+                            iCount++;
+                        }
+                    }
+                    catch (...)
+                    {
+                        MyDBIProcess("Exception", "UPH_StringGridDblClick");
+                    }
+                }
+                RunInfo.iAvgUPH = (iCount == 0) ? 0 : iTotalUPH / iCount;
+                UPH_StringGrid->Cells[3][12] = RunInfo.iAvgUPH;
+            }
+#endif
+            (void)iTotalUPH; (void)iCount;
+        }
+    }
+}
+
+//---------------------------------------------------------------------------
+//  CaculateUPH -- golden :2279-2333 (Steven 20160727: show immediate UPH)
+//  GATE (B3): fMain->StatusBar1->Panels->Items[7]->Text=... -- see forms/
+//  fShowBinSelect.h GATE REGISTER. The UPH numbers themselves (iNetUPH/
+//  iGrossUPH/iRecordEventLogUPH) are computed and stored regardless.
+//---------------------------------------------------------------------------
+void TfShowBinSelect::CaculateUPH()
+{
+    static int iOldSum = -1, PassSum = 0;
+    static int UPH = 0, UPH2 = 0;
+    static DWORD NowTickCount = (DWORD)-1, LastTimeTick = 1, PassSec = 0, PassSec2 = 0;
+    int sum = 0;
+
+    for (int i = 0; i < eTrayCount; i++)
+    {
+        if (Prod.iTrayType[i] != tNotUse)
+            sum += LastSet.BinCT[0][iTo3Unload[i]];
+    }
+
+    if ((OutArmSuck.HasIC() || ShuttleHasIC() || IndexHasIC()) && sum > iOldSum)
+    {
+        NowTickCount = MyTickCount();
+        if (NowTickCount < LastTimeTick)
+        {
+            iOldSum = sum;
+            LastTimeTick = MyTickCount();
+        }
+        else
+        {
+            PassSec = (NowTickCount - LastTimeTick) / 1000;
+            PassSec2 = PassSec - (iPauseTime / 1000);
+            PassSum = sum - iOldSum;
+            if (PassSec > 0)
+            {
+                UPH = PassSum * 3600 / PassSec;
+                iNetUPH = UPH;
+
+                if (PassSec2 > 0)   // Steven 20260421: add zero-guard for PassSec2
+                    UPH2 = PassSum * 3600 / PassSec2;
+                iGrossUPH = UPH2;
+                // GATE (B3): fMain->StatusBar1->Panels->Items[7]->Text=
+                // "Net UPH: "+...  /  "Curr UPH: "+... (golden :2313-2320,
+                // both CC_ASE_CL and the general customer-code arms).
+            }
+        }
+    }
+    else
+    {
+        iPauseTime = 0;
+        iOldSum = sum;
+        LastTimeTick = MyTickCount();
+        UPH = 0;
+    }
+    iRecordEventLogUPH = UPH;
+}
+
+//---------------------------------------------------------------------------
+//  edSLT01Change -- golden :2334-2337
+//  GATE (B3): the RHS itself (fMain->StatusBar1->Panels->Items[6]->Text)
+//  needs the same missing StatusBar1 -- whole statement gated, no
+//  independently computable value.
+//---------------------------------------------------------------------------
+void TfShowBinSelect::edSLT01Change(TObject * /*Sender*/)
+{
+    // GATE (B3): strcpy(LastSet.szJamClearData[0], fMain->StatusBar1->
+    // Panels->Items[6]->Text.c_str());  // Alick 20160920 add for JCET
+}
+
+//---------------------------------------------------------------------------
+//  btnSetInpputCntClick -- golden :2339-2352
+//---------------------------------------------------------------------------
+void TfShowBinSelect::btnSetInpputCntClick(TObject * /*Sender*/)
+{
+    if (IniConfig.bG15LoadInputCount)   // kevin 20211106: clean out once input count reached
+    {
+        try
+        {
+            StipulateInputCount = StrToInt(EdLoadCount->Text.c_str());   // kevin 20211106
+        }
+        catch (...)
+        {
+            StipulateInputCount = 0;
+        }
+    }
+}
+
+//---------------------------------------------------------------------------
+//  RefreshAiCnt -- golden :2354-2364 (Sam 20210609: Fix AOI software upgrade)
+//  GATE (B4): fFixAICCD->UnloadAICntNG[i] -- see forms/fShowBinSelect.h GATE
+//  REGISTER. Safe default: blank text, same as the existing tNotUse else-arm.
+//---------------------------------------------------------------------------
+void TfShowBinSelect::RefreshAiCnt()
+{
+    for (int i = 0; i < eTrayCount; i++)
+    {
+        if (Prod.iTrayType[i] != tNotUse)
+            EditAi[i]->Text = "";   // GATE (B4): should be IntToStr(fFixAICCD->UnloadAICntNG[i])
+        else
+            EditAi[i]->Text = "";
+    }
+}
+
+//---------------------------------------------------------------------------
+//  ed_AutoCleanCountClick -- golden :2216-2223
+//  GATE (B5): fSecurity->Insufficient(43) forced false (fail-closed) +
+//  fCleaning->btnResetCleanCountClick (moot while the outer gate is closed).
+//---------------------------------------------------------------------------
+void TfShowBinSelect::ed_AutoCleanCountClick(TObject * /*Sender*/)
+{
+    // GATE (B5): if(fSecurity->Insufficient(43)) { fCleaning->
+    // btnResetCleanCountClick(Owner); ed_AutoCleanCount->Text=0; }
+}
+
+//---------------------------------------------------------------------------
+//  labAuto1Click -- golden :2225-2242
+//  GATE (B7): fBinSel->chkShow0Xbin->Checked forced false (Delphi's own
+//  real-VCL checkbox default) -- the `else` arm (Width=331) is taken.
+//---------------------------------------------------------------------------
+void TfShowBinSelect::labAuto1Click(TObject * /*Sender*/)
+{
+    fShowBinSelect->Left = 10;
+    fShowBinSelect->Top = 130;
+    SetAutoVisible();
+
+    if (PageControl1->ActivePageIndex == 0)   // tsTestBin
+    {
+        fShowBinSelect->Width = 1024;
+    }
+    else
+    {
+        // GATE (B7): fBinSel->chkShow0Xbin->Checked -- forced false, so the
+        // else arm below always fires.
+        fShowBinSelect->Width = 331;   // kevin 20140317: was 280
+    }
+}
+
+//---------------------------------------------------------------------------
+//  btReturnClick -- golden :2244-2251
+//  GATE (B8): PageControl1Change(this) -- Wave B (no-op this wave, see below).
+//---------------------------------------------------------------------------
+void TfShowBinSelect::btReturnClick(TObject * /*Sender*/)
+{
+    fShowBinSelect->Left = 756;
+    fShowBinSelect->Top = 412;
+    fShowBinSelect->Left = 756;
+    fShowBinSelect->Top = 420;
+    PageControl1Change(nullptr);
+}
+
+//---------------------------------------------------------------------------
+//  btnCleanResetClick -- golden :2253-2260
+//  GATE (B5): same shape as ed_AutoCleanCountClick.
+//---------------------------------------------------------------------------
+void TfShowBinSelect::btnCleanResetClick(TObject * /*Sender*/)
+{
+    // GATE (B5): if(fSecurity->Insufficient(97)) { fCleaning->
+    // btnResetCleanCountClick(Owner); ed_AutoCleanCount->Text=0; }
+}
+
+//---------------------------------------------------------------------------
+//  btnClearCountClick -- golden :2262-2277
+//  GATE (B6): fSecurity->Insufficient(108) forced false (fail-closed) for
+//  every non-Greatek customer code; ShowMyMessageBox_YES_NO forced to "No";
+//  fCounterClear->ClearCount(ctIndexCount) gated regardless (see (B1)).
+//---------------------------------------------------------------------------
+void TfShowBinSelect::btnClearCountClick(TObject * /*Sender*/)
+{
+    if (CUSTOMER_CODE != CC_Greatek)   // Sam 201700915 (Steven): Greatek's clear doesn't need permission
+    {
+        // GATE (B6): fSecurity->Insufficient(108)==false -- forced true
+        // (fail-closed: permission not verified), so this ALWAYS returns for
+        // every customer code except CC_Greatek.
+        return;
+    }
+
+    // GATE (B6): int ret=ShowMyMessageBox_YES_NO(...); if(ret==2) return; --
+    // untranslated modal (Automation/AGV_E84.h:58's own comment). Forced to
+    // "No"/cancel:
+    return;
+
+    // GATE (B1): fCounterClear->ClearCount(ctIndexCount); -- unreachable
+    // while the two gates above return early; recorded so it is not missed
+    // when either lands.
+}
+
+//---------------------------------------------------------------------------
+//  PageControl1Change -- GATE (B8): documented no-op, WAVE B (golden
+//  :1479-1633). Declared only so btReturnClick's call site compiles/links.
+//---------------------------------------------------------------------------
+void TfShowBinSelect::PageControl1Change(TObject * /*Sender*/)
+{
+    // WAVE B: real body (golden :1479-1633) touches ~15 more widgets
+    // (pnlShowBin, ScrollBox1, iFixMax-bounded loops, ...) not in this
+    // facade yet. See forms/fShowBinSelect.h WAVE B QUEUE.
+}
