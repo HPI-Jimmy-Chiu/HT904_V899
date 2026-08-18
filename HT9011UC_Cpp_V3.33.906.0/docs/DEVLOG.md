@@ -8193,18 +8193,28 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   gate 內惰性——fYieldMonitoring widget facade 落地波要一併記得）。
 - **驗收**：全新雙 gate Debug 139/3＋Release 139/3、guard 552 檔 IDENTICAL。
 
+## 20260818 深夜 — FW3-WE：Command.cpp Wave E（97ce6b7）
+
+- **交付**：TCP server 家族 9＋尾段 26 方法（+1,675 行）。Command.cpp
+  **156/164**；剩 SetSiteMapData :5301／SetAlarmSetup :5341-7303（~2k 行
+  巨型）／MachineStatus :7304／never-wave 4 項（Read dispatcher/
+  RemoteControl/ChangeTo* ×3... 準確說 never-wave 佔 4、可翻剩 3＋1 巨型）。
+- **整併修正**：bHandlerResultConnect 補 NSDMI（VCL 零填 vs port new 不歸零
+  ——與 SIOF 同族的「golden 隱含前置條件」）；B8 引用 off-by-N 改正。
+- **好徵兆**：代理自抓自修兩個 absence 誤判（String/MOT[] grep 錯型別名）
+  並在報告誠實揭露——brief 裡把「absence 宣稱會腐爛」寫成教條有效。
+- **驗收**：全新雙 gate Debug 139/3＋Release 139/3、guard 552 檔 IDENTICAL。
+
 ### 🔖 RESUME（最新）
 
-- **完成**：核可佇列 1-6 全清＋自主佇列首波 **FW3-WD（46fb957）**。
-  基線 139 測試/3 常駐。Command.cpp 121/164。
+- **完成**：核可佇列 1-6＋FW3-WD（46fb957）＋**FW3-WE（97ce6b7）**。
+  基線 139/3。Command.cpp 156/164。
 - **下一步（自主佇列）**：
-  a. Command.cpp Wave E＝TCP server 家族 :12540-:12762（排除
-     TCPCommandServerClientRead never-wave）＋尾段 :14302-:15263
-     （ByDll 補遺/2DID/OSBIN/MultiZone 等 26 方法，~1,960 行）；
-     之後只剩 SetSiteMapData :5301／SetAlarmSetup :5341-7303（~2k 行巨型）
-     ／MachineStatus :7304／never-wave 3 項；
+  a. Command.cpp 收尾波＝SetSiteMapData（:5301-5339）＋MachineStatus
+     （:7304-7509）＋SetAlarmSetup（:5341-7303，~1,963 行巨型單函式，
+     建議獨立一波）→ 翻完即 160/164，只剩 never-wave 4 項；
   b. cShowBinSelect Wave B（8 缺件成員→解 Y2 剩 10 站）；
   c. fSecurity/fCounterClear/fBinSel facades；d. fLotInfo 5 成員→解 Y3；
   e. FW-3 batch 3+ 表單；FW-1 tag 批次。
 - **設計面（等使用者）**：write path 設計輪；硬體架構題（index/1203、
-  MN200、gclib）；B4 GPIB site-map 只回站 1 修不修。
+  MN200、gclib）；B4 GPIB site-map 修不修。
