@@ -8220,17 +8220,25 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   命中——absence 查證要確認命中行的前處理器狀態。
 - **驗收**：全新雙 gate Debug 139/3＋Release 139/3、guard 552 檔 IDENTICAL。
 
+## 20260819 凌晨 — FW-SBWB：8 缺件標籤落地，Y2 十站全解（af06409）
+
+- 主迴圈自做（非代理波）。TfShowBinSelect 補 8 個 TLabel*（NSDMI），
+  uYieldMonitoring 的 10 個 (Y2) STAYS 站點全解（#if 0 原句直接啟用），
+  (Y2) 登記簿加 STATUS UPDATE（史料保留）。Y1/Y2 帳清零，僅 Y3
+  （fLotInfo 5 缺件）留。oracle 54/54。
+- **驗收**：全新雙 gate Debug 139/3＋Release 139/3、guard 552 檔 IDENTICAL。
+
 ### 🔖 RESUME（最新）
 
-- **完成**：核可佇列 1-6＋FW3-WD/WE/WF——**Command.cpp 戰役收官
-  （159/164，never-wave 5 除外）**。基線 139/3。
+- **完成**：核可佇列 1-6＋FW3-WD/WE/WF（Command.cpp 收官 159/164）＋
+  **FW-SBWB（af06409，Y2 全解）**。基線 139/3。
 - **下一步（自主佇列）**：
-  b. cShowBinSelect Wave B：先補 TfShowBinSelect 的 8 個缺件 widget 成員
-     （labArmDiff/labSiteDiff/labLowYield/labTotalYield(Total)/
-     lblSpeciallYield(Total)/IntervalByTotal，TPanel/TLabel stand-in 照
-     labModel 先例）→ 解 uYieldMonitoring Y2 剩 10 站（原句在 #if 0）→
-     視量力再擴 ShowBinSel 家族真本體；
-  c. fSecurity/fCounterClear/fBinSel facades（大量 Command.cpp gate 的
-     解鎖鑰匙）；d. fLotInfo 5 成員→解 Y3；e. FW-3 batch 3+；FW-1 tag。
+  c. fLotInfo 5 成員（Label17/18/21＋edtAutoCleanLowYield/
+     edtAutoCleanSiteYieldDiff）→ 解 Y3（uYieldMonitoring
+     CalculateSiteYield 兩塊 #if 0，原句保留）——小波，主迴圈可自做；
+  d. fSecurity/fCounterClear/fBinSel facades（Command.cpp 大量 gate 的
+     解鎖鑰匙，量大屬代理波）；
+  e. cShowBinSelect 家族真本體擴充（ShowBinSel ~250-widget，代理波）；
+  f. FW-3 batch 3+ 表單；FW-1 tag 批次。
 - **設計面（等使用者）**：write path 設計輪；硬體架構題（index/1203、
   MN200、gclib）；B4 GPIB site-map 修不修。
