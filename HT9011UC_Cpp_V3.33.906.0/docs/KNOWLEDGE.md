@@ -255,3 +255,13 @@ FW-3 cObserver recon 判定（vclcompat/TStringList.cpp:163-225 vs BCB6 classes.
 
 另：MSVC 已於 20260817 自 build.bat 移除且本機無 cl.exe → 目前專案沒有任何工具鏈能連
 64-bit 函式庫；要動 gclib（或任何 x64-only SDK）先解 64-bit 工具鏈前置。
+
+## MN200：MN200DLL.lib 是 COFF 不是 OMF——CMakeLists 舊註解搞混兩個檔（20260818）
+
+CMakeLists.txt:50-53 寫「shipped MN200DLL.lib 是 32-bit OMF、MinGW 無可用」——**實測推翻**：
+`Lib/MN200DLL.lib` 是 MS-COFF import library（`!<arch>` magic），MinGW.org 6.3 的 nm
+列得出全部 906 用的 35 個 `_name@N` 符號，探針編譯+連結 exit 0。真 OMF 的是
+**`MN200BCB.lib`**（`f0 0d` magic，BCB6 專用）——兩檔被混為一談。
+**但 offline stub（vendor_offline_motionnet.cpp）仍有獨立價值**（無卡可建置、免執行期
+vendor DLL 依賴），真連結可行≠該退役 stub；改註解/接真 lib 屬設計取捨，動之前讀
+docs/RECON_MN200_PISO.md。另：x64 SDK 與 x86 同批同版（1.0.18.1，exports 各 192）。
