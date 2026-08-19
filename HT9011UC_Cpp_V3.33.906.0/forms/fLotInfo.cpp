@@ -31,6 +31,7 @@
 #include "vclcompat/IniFiles.h" // TIniFile (TransformTemperature_AirStream)
 #include "vclcompat/FileListBox.h" // TFileListBox (bCheckOnlyOneFile)
 #include "forms/fMain.h"        // fMain->edWorkTemperBase (TransformTemperature_AirStream)
+#include "forms/fSetup.h"       // AI(W906-FW3-Setup-WA) 20260820: fSetup->edOcrText (WC-27 retired)
 
 // AI(W906-FW3-LotInfo-WB) 20260819: Wave B includes -- see forms/fLotInfo.h's
 // WB banner for the per-dependency existence citations gathered this wave.
@@ -4152,12 +4153,11 @@ void TfLotInfo::Timer2Timer()
     {
         fLotInfo->palHandlerwithTester->Caption="No Connection";
         fLotInfo->palHandlerwithTester->Color=clRed;
-        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-27 -- see forms/fLotInfo.h
-        // GATE REGISTER WC-27 (fSetup->edOcrText lives only on OCRInsp.cpp's
-        // TU-local shim, unreachable here).
-#if 0
+        // AI(W906-FW3-Setup-WA) 20260820: WC-27 RETIRED -- the cSetUp display
+        // wave landed the real fSetup->edOcrText (forms/fSetup.h:271), so the
+        // gate's cause is gone and golden :7027 is live again. History in
+        // forms/fLotInfo.h's GATE REGISTER.
         lblTester_LotID->Caption=fSetup->edOcrText->Text;
-#endif
     }
 
     // -- T8 (golden :7030-7034) --

@@ -8732,6 +8732,32 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - 逐行重讀 28/28 未發現 recon 遺漏（本檔顯示側乾淨——與 recon
   「顯示側只剩安全殘餘」的判定互證）。
 
+## 20260820 凌晨 III — 批 5 收官：cSetUp 顯示側＋WC-27 拆閘
+
+- cSetUp（4,858 行/47 方法——代理自己更正過一次算漏並記錄在 banner）
+  骨子裡是編輯器不是監控頁：顯示側只有 15 方法/133 行，全落地
+  （擴充既有 forms/fSetup.{h,cpp}，既有 bool fShow 與 OCRInsp 的
+  TU-local seam 零觸碰——OCRInsp 不 include fSetup.h，#define 導向
+  自己的類，重驗 syntax 綠）。新 facade-only TfSetupLabel 子類
+  （TLabel 無 Width——第五處同款擴充，收斂待辦+1）。
+- **ReadFile↔ReadWriteStartCondition 雙向耦合契約全記錄**：
+  fSetup::ReadFile（golden :2932）在讀完 X-Center-Pitch 後才委派
+  fStartCondition->ReadWriteStartCondition(true)；反向 cStartCondition
+  開啟流程 :167 又呼叫 fSetup->ReadFile()；:888 的 RogerYang 20260203
+  歷史修復證實錯位=HeadContactCount 異常真 bug。未來翻 ReadFile
+  （830L，內含 WriteIniData×3/SendMSG_CMD×4——「Read 但寫」重量級）
+  時呼叫點位置與方向都承重。
+- SetOffsetToTech 定位：cinitial.cpp:13925 定義、cConfiguration.cpp
+  :5980 唯一呼叫、**cSetUp 零命中**——teach 毀損風險與本檔無關。
+- 新缺口登記：Barcode_Reader 全樹零移植（首遇，3 處延後）；
+  TWMKey（FormShortCut）vclcompat 基礎缺口。
+- **WC-27 拆閘**（integrator 自做）：fSetup->edOcrText 真身落地後
+  gate 成因消失——fLotInfo.cpp :4159 原句復活＋include＋兩處
+  GATE REGISTER 標 RETIRED（本樹第一個「gate 因後續波次自然解除」
+  的完整案例：前提死≠退役，這次是前提活了）。
+- **批 5 全清**：cSpeed／cStartCondition／HandlerSys／cConfiguration
+  ／cSetUp 顯示側全落地。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8740,15 +8766,17 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   FW-W4（4999e2e）、FW-W5a（83b4251）、FW-FE1（57e3c03）、
   **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
-- **下一波**：依脈絡擇一——(a) cSetUp 檢視側（4,858 行；fSetup
-  facade 現只有 bool fShow——批 5 最後一顆）；(b) user.level 解鎖：
+- **批 5 全清**（cSpeed/cStartCondition/HandlerSys/cConfiguration/
+  cSetUp 顯示側）。**下一波**依脈絡擇一：(a) user.level 解鎖：
   main.cpp DoChangeLevel（:15127）＋cbUserSelect stand-in 補進
-  forms/fMain.h（來源鏈已定位，缺口小）；(c) bin.* 解鎖
-  （SetTechDataToProd_Yield 呼叫者決策）；(d) 1203 HAL MOTION_IO
-  pimpl；(e) cShowBinSelect Wave D；(f) BinDisplay 的 BinDisCtrl
-  （elec\Component 查證）；(g) 過期 gate 註解清理波；
-  (h) rgCustomerList dfm 自動抽取波；(i) TStringGrid 擴充欄位
-  收斂回共用層（四處同款 subclass 複製中）。真機類依 §7 仍佇列。
+  forms/fMain.h（來源鏈已定位，缺口小，接通 tagmap user.level）；
+  (b) bin.* 解鎖（SetTechDataToProd_Yield 呼叫者決策）；
+  (c) 1203 HAL MOTION_IO pimpl；(d) cShowBinSelect Wave D；
+  (e) BinDisplay 的 BinDisCtrl（elec\Component 查證）；
+  (f) 過期 gate 註解清理波（nm 已證三處）；(g) rgCustomerList dfm
+  自動抽取波；(h) vclcompat 擴充收斂波（TStringGrid 欄位五處
+  subclass 複製＋TScrollBar/TImage/TWMKey 缺口評估）。
+  真機類依 §7 仍佇列。
 - **FW-1 備忘**：pct 六顆等 sort.total 站穩後接；recipe.current/
   user.level 來源鏈未查（可能落在未翻的 cConfiguration）；
   tagmap.js 的 data-cmd 十筆結構性缺口要跟 web 前端波一起解；

@@ -495,18 +495,19 @@
 //                                       Command.cpp); ->Text is a stock
 //                                       TComboBox field (Controls.h). -> REAL,
 //                                       T6 needs no gate.
-//    fSetup->edOcrText                 ABSENT on the real facade. forms/
-//                                       fSetup.h's `TfSetup` (landed W7-L2)
-//                                       carries EXACTLY ONE member (`bool
-//                                       fShow`) -- the file's own banner
-//                                       states this explicitly ("Growing the
-//                                       facade past its measured need is how
-//                                       facades rot"). `edOcrText` exists only
-//                                       on OCRInsp.cpp's TU-LOCAL
-//                                       `W906OCR_TfSetupSeam` shim (macro-
-//                                       scoped `#define fSetup` inside that
-//                                       ONE translation unit), unreachable
-//                                       from fLotInfo.cpp. -> GATE (WC-27).
+//    fSetup->edOcrText                 [WC-27 RETIRED 20260820] Was ABSENT on
+//                                       the real facade when Wave C landed
+//                                       (TfSetup carried only `bool fShow`;
+//                                       edOcrText lived only on OCRInsp.cpp's
+//                                       TU-local W906OCR_TfSetupSeam). The
+//                                       cSetUp display wave (W906-FW3-Setup-WA
+//                                       20260820) added the real `edOcrText`
+//                                       member to forms/fSetup.h (:271), so
+//                                       the gate's cause is gone -- the line
+//                                       is live again in the .cpp (integrator
+//                                       flip, same day). OCRInsp.cpp is
+//                                       unaffected: it never includes
+//                                       forms/fSetup.h and keeps its own seam.
 //    LastSet.strSocketID                PRESENT: `LastSet.h` declares it
 //                                       (already used, S23's 4x8 loop bounds
 //                                       match `edSocket[MAX_SOCKET_ROW]
