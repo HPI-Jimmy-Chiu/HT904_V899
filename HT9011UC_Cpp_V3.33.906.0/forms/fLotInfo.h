@@ -13,6 +13,7 @@
 
 #include "forms/FormWidgets.h"
 #include "MachineType.h"   // AI(W906-FW3-LotInfo-WA) 20260819: ATC_HEAD_COUNT (32) sizes ATCChPal[]/ATCPtr[]/ATCReferPtr[] below
+#include "vclcompat/FileListBox.h"   // AI(W906-FW3-LotInfo-WC) 20260819: TFileListBox (FileListBox1, FormShow S9 SPILFunction branch)
 
 // =============================================================================
 //  AI(W906-FW3-LotInfo-WA) 20260819: uLotInfo displayside Wave A.
@@ -433,6 +434,339 @@
 //      ATCPtrWinWay/pnlWinwayPVCH1-4 wiring) is REAL.
 // =============================================================================
 
+// =============================================================================
+//  AI(W906-FW3-LotInfo-WC) 20260819: uLotInfo MIXED-split Wave C.
+//
+//  Golden ref: same file as Wave A/B above. Source recon:
+//  docs/RECON_uLotInfo_mixed_split.md -- the two MIXED giants that recon
+//  explicitly did NOT translate (FormShow, golden :316-1233, 918L, 35
+//  segments; Timer2Timer, golden :6934-7191, 258L, 18 segments), left as a
+//  segment-table blueprint for a follow-on wave to assemble. That recon's own
+//  S3 note (section 4, point 3) listed 9 facade dependencies as
+//  "existence unverified" -- this wave's step 0 checked all 9 (plus several
+//  more found only by re-reading every line, same "recon's keyword/visual
+//  pass cannot see this" pattern Wave A's WA-2/WA-6 and Wave B's own banner
+//  both already document). Every body below was re-read in full from the
+//  golden cp950 decode before translating.
+//
+//  STEP 0 -- THE 9 RECON-FLAGGED DEPENDENCIES, VERIFIED 20260819
+//  --------------------------------------------------------------------------
+//    FormBarcodeReader                 ABSENT. `grep -rn FormBarcodeReader`
+//                                       tree-wide (excluding docs/ and
+//                                       tools/dfm2rc/ generated metadata): 1
+//                                       hit, SECSGEM/uHGemHT9045.cpp, itself a
+//                                       comment. No class/global anywhere. ->
+//                                       GATE (WC-4).
+//    fBarCode->mtBarcodeSetDefaultView  ABSENT. `grep -rn mtBarcodeSetDefaultView`
+//                                       tree-wide: 0 hits outside this recon
+//                                       doc. -> GATE (WC-9).
+//    DewPoint_Hardware_Install          PRESENT. `extern int
+//                                       DewPoint_Hardware_Install;`
+//                                       (cmydef.h:3725), already reachable via
+//                                       cmydef.h (Wave A include). -> REAL,
+//                                       S27 needs no gate (recon's "顯示*" is
+//                                       resolved to plain 顯示).
+//    myInShuttleLotInfo/mtBarcodeInShLotInfo  ABSENT as TfLotInfo members.
+//                                       Every one of the 15 tree-wide hits
+//                                       (BarCode/BarCode_Bottom2DID.cpp,
+//                                       BarCode_Shuttle{1,2}_*.cpp/.h) is
+//                                       ITSELF inside a `#if 0` block or a
+//                                       `//` comment referencing this exact
+//                                       "separate not-yet-translated TfLotInfo
+//                                       grid" gap. -> GATE (WC-18).
+//    FrmAOI                            PRESENT as a global (forms/fAOI.h,
+//                                       `extern TFrmAOI *FrmAOI;`) but the
+//                                       class carries EXACTLY ONE member
+//                                       (`bool bSimulateTopBtm`) -- no
+//                                       `AOIFailCountRefresh()`. -> the global
+//                                       exists, the METHOD does not -> GATE
+//                                       (WC-17), only that one call.
+//    fAGV->IsSPIL_AMR()                PRESENT and REAL: `virtual bool
+//                                       IsSPIL_AMR();` (forms/fAGV.h:32),
+//                                       forwarding to the real
+//                                       Automation/AGV_predicates.cpp
+//                                       predicate (W5-Automation INTEGRATE,
+//                                       already used 18+ call sites
+//                                       tree-wide, e.g. csystem.cpp:2978).
+//                                       -> REAL, T4 needs no gate.
+//    fMain->cbSetupFileName            PRESENT: fMain.h declares it as a
+//                                       TComboBox-family member (already used
+//                                       tree-wide, e.g. csystem.cpp,
+//                                       Command.cpp); ->Text is a stock
+//                                       TComboBox field (Controls.h). -> REAL,
+//                                       T6 needs no gate.
+//    fSetup->edOcrText                 ABSENT on the real facade. forms/
+//                                       fSetup.h's `TfSetup` (landed W7-L2)
+//                                       carries EXACTLY ONE member (`bool
+//                                       fShow`) -- the file's own banner
+//                                       states this explicitly ("Growing the
+//                                       facade past its measured need is how
+//                                       facades rot"). `edOcrText` exists only
+//                                       on OCRInsp.cpp's TU-LOCAL
+//                                       `W906OCR_TfSetupSeam` shim (macro-
+//                                       scoped `#define fSetup` inside that
+//                                       ONE translation unit), unreachable
+//                                       from fLotInfo.cpp. -> GATE (WC-27).
+//    LastSet.strSocketID                PRESENT: `LastSet.h` declares it
+//                                       (already used, S23's 4x8 loop bounds
+//                                       match `edSocket[MAX_SOCKET_ROW]
+//                                       [MAX_SOCKET_COL]`, already a real
+//                                       TfLotInfo member). -> REAL, S23 needs
+//                                       no gate.
+//
+//  ADDITIONAL DEPENDENCY GAPS FOUND BY THE MANDATORY LINE-BY-LINE RE-READ
+//  (none of these 6 were on recon's 9-item list -- same "a scan only flags
+//  known bad-word patterns" gap Wave B's own banner names)
+//  --------------------------------------------------------------------------
+//    fOCR->sTesterLotId       ABSENT on the real global. Same shape as
+//                             fSetup->edOcrText above: `sTesterLotId` lives
+//                             only on OCRInsp.cpp's TU-local
+//                             `W906OCR_TfOCRSeam` shim; the real `TfOCR`
+//                             (forms/fOCR.h, landed for an earlier wave)
+//                             carries only `ChangeLightValue(int,int)` -- the
+//                             SAME finding Wave B's WB-6 already made for
+//                             `OCRChangeFile()`, a different absent member on
+//                             the identical shim. -> GATE (WC-26).
+//    pgcLotInfo->ActivePage   `pgcLotInfo` (this file:689) is declared as the
+//                             STOCK `vclcompat::TPageControl` (only
+//                             ->ActivePageIndex, an int) -- NOT the composed
+//                             `TfLotInfoPageControl` that `pgLotinfo` (the
+//                             OTHER page control in this same form) uses.
+//                             Cannot retype an existing Wave A/B member from
+//                             this wave. -> GATE (WC-12).
+//    ATC_TYPE_61              Not a defined identifier anywhere in this tree
+//                             (`grep -rn ATC_TYPE_61`, 20260819, 0 hits
+//                             including ATC/ATCInterface.h). -> GATE (WC-10).
+//    ReadWriteFTPAutomationData  Has ZERO real declaration/definition
+//                             anywhere in this tree -- the only 2 tree-wide
+//                             hits are this recon doc and
+//                             RECON_uLotInfo_displayside.md, both prose. This
+//                             OVERTURNS recon's own S34 note ("bRead=true
+//                             分支單獨看是 (a)，不需要 GATE"): that note
+//                             reasoned about the function's BEHAVIOUR
+//                             assuming it exists, but the function itself has
+//                             never been ported, independent of which of its
+//                             own branches would run. -> GATE (WC-16).
+//    TFileListBox has no ->Visible  `class TFileListBox : public TObject`
+//                             (vclcompat/FileListBox.h:84) -- carries only
+//                             Mask/Directory/Items, no Visible (it never
+//                             inherits TControl). FormShow's SPILFunction
+//                             branch writes `FileListBox1->Visible=false;`
+//                             two lines before `FileListBox1->Directory=
+//                             DataPath;`, which DOES compile. -> GATE (WC-6),
+//                             one line only; the Directory line stays REAL.
+//    JCET 2DID white-list guard depends on a gated call  S19's
+//                             `if(CUSTOMER_CODE==CC_JCET){ bFlag=fBarCode->
+//                             JCETUseMakeWhite2DIDList(); ... }` sub-block:
+//                             `bFlag` (the guard for every line inside) comes
+//                             ONLY from the same portless
+//                             JCETUseMakeWhite2DIDList() Wave A's WA-7 already
+//                             gates -- per the WB-13 precedent ("guard depends
+//                             on a gated member -> the whole guarded section
+//                             gates, not just the call"), the ENTIRE CC_JCET
+//                             sub-block gates, not only its 2 call lines.
+//                             -> GATE (WC-11).
+//
+//  WAVE SCOPE -- the 2 MIXED functions (golden span, this file's status)
+//  --------------------------------------------------------------------------
+//    FormShow        golden :316-1233 (918L, 35 segments per recon) -- 30 of
+//                     35 segments REAL (several with 1-3 lines individually
+//                     gated inside them); 5 segments (S5, S8, S14's call,
+//                     S28, S30's 2 calls, S32) fully or almost-fully gated.
+//    Timer2Timer     golden :6934-7191 (258L, 18 segments per recon) -- 15 of
+//                     18 segments REAL; T9 (51L, WinWay ATC hardware) and T11
+//                     (24L, WAR16123 3-hour alarm) fully gated per the task's
+//                     explicit safety red line (not re-evaluated); T7 has 2
+//                     lines individually gated.
+//
+//  GATE REGISTER (in FormShow/Timer2Timer reading order; WC-8 is one finding
+//  reused at 2 call sites, matching Wave A's WA-3/Wave B's WB-1 style of
+//  reusing a gate number for the identical dependency)
+//  --------------------------------------------------------------------------
+//  (WC-1) FormShow, golden :373 and :427 -- `ResetLotInfo()`, called once
+//      inside the `IniConfig.bShowLotInfo` branch and once more,
+//      unconditionally, 47 lines later (RECON ODDITY: golden calls the same
+//      function twice with no state change between the calls). RECON item
+//      #149, classified (b) write-path (writes `LastSet.bHasDownloadFile`),
+//      not translated by any prior wave. Both call sites gated; everything
+//      else in S3/S8 stays REAL.
+//  (WC-2) FormShow, golden :392 -- `cbPATModeChange(cbPATMode);` inside the
+//      CC_PANTHER branch. RECON item #169, (b) write-path dispatcher, not
+//      translated. Gated; `tsLotID->TabVisible=...`, `cbPATMode->ItemIndex=0`
+//      and the `#ifdef SOFT_SIMULTE` widget-visibility block around it stay
+//      REAL.
+//  (WC-3) FormShow, golden :399 -- `ShowXMLOnLine();`. RECON item #103: a
+//      RecordProcess-backed function that writes files x4 despite the
+//      "Show" name (the SAME "Show/Refresh prefix is not a reliability
+//      signal" pattern this file's own banners already document twice).
+//      Whole call gated.
+//  (WC-4) FormShow, golden :418-419 -- `edtSysLotID->PopupMenu=
+//      FormBarcodeReader->pmBarcode;` (x2, for edtSysLotID and
+//      edtSysOperatorID). `FormBarcodeReader` has no port anywhere in this
+//      tree (see STEP 0 above); `PopupMenu` is also not a modeled TControl
+//      property (Controls.h's TControl carries only Visible/Enabled/hCtl).
+//      Two independent reasons, one gate. `palCurrFailRate->Visible=false`/
+//      `Panel27->Visible=false` above and `LotKeyInTime->Enabled=...` below
+//      stay REAL.
+//  (WC-5) FormShow, golden :486 and :513 -- `btnSaveClick(this);` (once in
+//      the bSPILFunction branch, once in the AMKOR_China/QUALCOMM branch).
+//      RECON item #38, (b) write-path (`WriteIniData` x19 inside). Both call
+//      sites gated; every other line in both branches stays REAL.
+//  (WC-6) FormShow, golden :467 -- `FileListBox1->Visible=false;` inside the
+//      bSPILFunction branch. See "ADDITIONAL DEPENDENCY GAPS" above
+//      (TFileListBox has no Visible). One line gated; `FileListBox1->
+//      Directory=DataPath;` two lines later stays REAL.
+//  (WC-7) FormShow, golden :553-562 -- the `MachineTypeChoice==
+//      Type_HT9046_LS` block's entire payload is `imgRTCFullView1..4->
+//      Width=.../2`. Same established WB-1 finding (TImage/TCanvas have zero
+//      port anywhere in this tree), re-confirmed 20260819. `COM2-
+//      >bCCDDummyRum` (the guard) is ALSO unverified/unneeded once the body
+//      is gated. Whole block gated; the `tsBarCode`/`btChangeFile`/
+//      `tsESDMonitor`/`ts_OCRInterface`/`ts_SocketInterface` lines
+//      immediately before and after stay REAL.
+//  (WC-8) FormShow golden :597 and Timer2Timer golden :7143 --
+//      `RefreshYieldMonitor();`. Reuses Wave A's WA-3 gate verbatim (same
+//      target, same "not one of this wave's translated methods" reason,
+//      re-verified 20260819). Both call sites gated; the tab-visibility
+//      lines around each stay REAL.
+//  (WC-9) FormShow, golden :604 -- `fBarCode->mtBarcodeSetDefaultView();`.
+//      See STEP 0 above. Gated; the `chkTestMode->Visible=.../
+//      labLevelMode->Visible=.../coLevelMode->Visible=...` lines immediately
+//      after stay REAL.
+//  (WC-10) FormShow, golden :329 -- `ts_ATC6_1->TabVisible=(Tri_Temp_Machine
+//      ==1 || (ATC_SYSTEM==eNewATCSystem && ATC_InterfaceForm->
+//      iATC_MODE_TYPE==ATC_TYPE_61));`. See "ADDITIONAL DEPENDENCY GAPS"
+//      above (`ATC_TYPE_61` undefined tree-wide). Whole line gated rather
+//      than dropping just the `ATC_TYPE_61` clause, because that would
+//      silently change the `||`'s truth table (a real behaviour change, not
+//      a faithful subset) -- same reasoning this file's own S30/WC-19 note
+//      uses for not splitting a compound condition.
+//  (WC-11) FormShow, golden :874-896 -- the CC_JCET sub-block inside the
+//      `TestIF_File.b2DIDAllowList` branch. See "ADDITIONAL DEPENDENCY GAPS"
+//      above (guard depends on the WA-7-gated `fBarCode->
+//      JCETUseMakeWhite2DIDList()`). Whole sub-block gated; its sibling
+//      `else` branch (golden :897-903, plain visibility writes with no such
+//      dependency) and the unconditional `labDeviceName->Visible=false;
+//      edtDevice->Visible=false; lbProcess->Visible=false; cbProcess-
+//      >Visible=false;` tail (golden :904-907, applies regardless of which
+//      branch ran) both stay REAL.
+//  (WC-12) FormShow, golden :732 -- `pgcLotInfo->ActivePage=tsVTest;` inside
+//      the bVTESTFunction branch. See "ADDITIONAL DEPENDENCY GAPS" above
+//      (pgcLotInfo is the stock TPageControl, no ->ActivePage). One line
+//      gated; the entire rest of the (264-line) bVTESTFunction branch stays
+//      REAL apart from WC-13/WC-14/WC-15 below.
+//  (WC-13) FormShow, golden :788 and :794 -- `edtProcessName->Parent=
+//      tsVTest;` / `edtProduct->Parent=tsVTest;`. VCL control re-parenting
+//      has no model anywhere in vclcompat/Controls.h (`TControl` carries
+//      only Visible/Enabled/hCtl -- confirmed by reading the class
+//      definition this wave). Both lines gated; the immediately following
+//      `->EditLabel->Caption=...` (translated as ->EditLabelCaption=...,
+//      the SAME flattened-property idiom TLabeledEdit's own header comment
+//      already documents), `->Left=`, `->Top=`, `->Enabled=true` writes on
+//      both widgets stay REAL.
+//  (WC-14) FormShow, golden :800-801 -- `sbSECSLotStart->Top=...;
+//      sbSECSLotEnd->Top=...;`. Both are Wave A/B-declared `TSpeedButton*`
+//      members (this file, "->Click()/->Down only" per WB-12's own
+//      comment) with no geometry field; this wave cannot retype an existing
+//      Wave A/B member. Both lines gated together (one decision block in
+//      golden).
+//  (WC-15) FormShow, golden :811 and :815 -- `WriteIniData(AuthPath+
+//      "Security_new.def", "Network", "Temp Offset", false);` /
+//      `WriteIniData(..., "Auto Clean", false);` inside the bVTESTFunction
+//      branch. Recon already flags these as embedded writes (VTEST branch
+//      locking Temp Offset/Auto Clean); same write-path class as WC-1/
+//      WC-2/WC-5. Both gated; the `chkTempOffset->Enabled=false;
+//      ->Checked=false;` / `checkbAutoClean->Enabled=false; ->Checked=
+//      false;` pairs immediately before each stay REAL.
+//  (WC-16) FormShow, golden :1228 -- `ReadWriteFTPAutomationData(true);`.
+//      See "ADDITIONAL DEPENDENCY GAPS" above (function has zero port,
+//      overturning recon's own S34 note). Gated; `AdjtsYieldMonitiorSize();`
+//      and `InitialRefrigerantSystem();` on the same golden line group (both
+//      already-real Tier 1 methods) stay REAL.
+//  (WC-17) FormShow, golden :1231-1232 -- `if(USE_Scanner_AOI_Inspection==
+//      (int)eBtnAOI_TopBottomInstall && IniConfig.
+//      bA74AOIFailCountLinkLotRunMode) FrmAOI->AOIFailCountRefresh();`. See
+//      STEP 0 above (`FrmAOI` exists, the method does not). Whole
+//      single-statement `if` gated (there is no other payload to keep).
+//  (WC-18) FormShow, golden :1125-1146 -- `myInShuttleLotInfo`/
+//      `mtBarcodeInShLotInfo` SetColorMap/SetCellNumber/SetCellColorIndex
+//      calls. See STEP 0 above. Whole segment gated;
+//      `grpBarcodeDisplayLotInfo->Visible=...` immediately after stays REAL.
+//  (WC-19) FormShow, golden :1156 and :1158 -- `tmrChamberBoost->Enabled=
+//      (CosFunction.bUseChamberBoostMode);` and `SetLotStart("fLotInfo::
+//      FormShow", true);`. SAFETY RED LINE per the task brief -- SetLotStart
+//      is the 399-line SECS Lot-Start main control function (RECON #10),
+//      not re-evaluated. DEVIATION FROM RECON'S OWN "gate all 3 lines as one
+//      block" RECOMMENDATION: this wave keeps golden :1157 (`AnsiString
+//      sPath=AuthPath+"config.ini";`) REAL and OUTSIDE the gate, because (a)
+//      it is a pure local-variable construction with zero side effects, (b)
+//      re-reading the raw golden text this wave confirms the three
+//      statements are NOT inside a shared `if` in FormShow itself -- they
+//      are three unconditional, sequential top-level statements; recon's
+//      "同一個決策區塊" phrase describes logic INSIDE SetLotStart's own
+//      body, not a surrounding conditional here -- and (c) S31 (golden
+//      :1160, `edtJobSeq->Text=ReadIniData(sPath,...)`, already recon-
+//      classified 顯示/純讀) hard-depends on `sPath` existing. Gating the
+//      declaration along with its two neighbours would have silently broken
+//      S31 too.
+//  (WC-20) FormShow, golden :1166-1192 -- the `CosFunction.
+//      bLotStartLockCriticalPara` access-control block (`fMain->
+//      CheckCanChangeRealDummy()`/`HasICUnderMachine()` plus the
+//      bEPLogStart_KYEC/bTempLogStart_KYEC/bESDLogStart_KYEC/
+//      bArmTestInfoEvenLogStart_KYEC audit-flag cluster). SAFETY RED LINE per
+//      the task brief, not re-evaluated. Whole segment gated.
+//  (WC-21) FormShow, golden :664-678 -- the `CUSTOMER_CODE==CC_JSCC_OS`
+//      branch. Writes `->Top`/`->Left` on `edtSysLotID`/`labLotID`/
+//      `edtDevice`/`labDeviceName`/`btnFTPDownLoadbyDeviceID` (Wave A/B
+//      members or plain-typed new members with no geometry field) and reads
+//      `fTesterTCP->rgUnloader->ItemIndex` (unverified/out of this wave's
+//      scope -- `fTesterTCP` is a Wave-A/B member, its `rgUnloader` shape
+//      was not checked). Whole branch gated; the sibling `CC_ONSEMI_M`
+//      branch immediately above and `CC_SIGURD_ChungXing` branch immediately
+//      below both stay REAL.
+//  (WC-22) FormShow, golden :1077-1078 -- `edtSysLotID->Width=150;
+//      edtSysLotID->Left=150;` inside the SPIL EQC-mode (non-2DID-allowlist)
+//      branch. `edtSysLotID` is a Wave A/B member with no geometry field
+//      (same WC-14 reasoning: cannot retype an existing member from this
+//      wave). Both lines gated; `palQAMode->Visible=true;`, `labLotID->
+//      Caption=...`, `lbLotRunMode->Visible=false; cbRunMode->Visible=
+//      false;` around them stay REAL.
+//  (WC-23) FormShow, golden :1108 -- `labQACount->Font->Size=8;` inside the
+//      KYEC_LEE&&bQAMode branch. `TLabel` (Controls.h) carries only Caption+
+//      Color, no Font member. One line gated; `labQACount->Caption=...`,
+//      `edQAMode->Left=136;`, `btnQAmodeSave->Left=210;` (both given
+//      Left-carrying composed types this wave, see below) and `palQAMode->
+//      Visible=true;` all stay REAL.
+//  (WC-24) Timer2Timer, golden :7035-7085 (51L) -- the `ATC_SYSTEM==eWinWay`
+//      WinWay ATC block (`fWinway->OpenCommPort()`/`arrATC_Site[i]->
+//      GetST()`/`SetTempratureAll()`/`WinwayCOM->StopComm()`/`SetPT()`).
+//      SAFETY RED LINE per the task brief (real hardware temperature/comm
+//      control), not re-evaluated, gated verbatim as one 51-line block
+//      exactly as recon specifies.
+//  (WC-25) Timer2Timer, golden :7096-7119 (24L) -- the bVTESTFunction
+//      3-hour send-for-inspection alarm (`ShowErrorMessage("WAR16123",
+//      K_SKIP, MMSystem)`). SAFETY RED LINE per the task brief, not
+//      re-evaluated, gated verbatim as one 24-line block exactly as recon
+//      specifies (this also covers `Panel29->Caption="Server";` and
+//      `labConfigL04->Caption=...`, both inside this same golden if-block).
+//  (WC-26) Timer2Timer, golden :7021 -- `lblTester_LotID->Caption=
+//      fOCR->sTesterLotId;`. See "ADDITIONAL DEPENDENCY GAPS" above. One
+//      line gated; the `palHandlerwithTester->Caption="Connection";
+//      ->Color=clLime;` above it (bGetLotIDFormTester==true arm) stays REAL.
+//  (WC-27) Timer2Timer, golden :7027 -- `lblTester_LotID->Caption=
+//      fSetup->edOcrText->Text;`. See STEP 0 above. One line gated; the
+//      `palHandlerwithTester->Caption="No Connection"; ->Color=clRed;`
+//      above it (the else arm) stays REAL.
+//  (WC-28) FormShow, golden :987/:1008/:1012 -- `BtnPause->Visible=...` (x3,
+//      inside S20's CC_GIGAS/CC_KYEC_LEE/else branches). Found only by the
+//      MinGW syntax-check, not by reading: `BtnPause` is an existing member
+//      typed `TfMainSpeedButton*` (FormWidgets.h) by an earlier wave, which
+//      carries only `bool Down` -- no `Visible`. Same "cannot retype an
+//      existing member from this wave" reasoning as WC-14/WC-22. All 3
+//      writes gated; every other line in S20 (the CC_GIGAS 17-TCheckBox
+//      loop, `tsLotID->TabVisible=false`, etc.) stays REAL.
+// =============================================================================
+
 // ===========================================================================
 //  AI(W906-FW3-LotInfo-WA) 20260819 -- Wave A composed widget stand-ins.
 //  vclcompat's stock TPanel/TSpeedButton/TPageControl carry no raw pixel
@@ -504,6 +838,55 @@ public:
     TfLotInfoOpenDialog() {}
     virtual ~TfLotInfoOpenDialog() {}
     bool Execute() { return false; }
+};
+
+// ===========================================================================
+//  AI(W906-FW3-LotInfo-WC) 20260819 -- Wave C composed widget stand-ins
+//  (FormShow / Timer2Timer). Same "compose, don't fork" idiom as the Wave A
+//  block above: vclcompat's stock TGroupBox/TLabeledEdit/TEdit/TButton carry
+//  no raw pixel geometry (Left/Top/Width/Height). Golden FormShow writes
+//  Left/Top on 4 widgets this wave introduces for the first time (so
+//  composing a Layout variant costs nothing -- unlike WC-14/WC-22, which hit
+//  Wave A/B members this wave cannot retype). None of these fields is read
+//  back anywhere in this wave's scope, so every geometry int defaults to 0
+//  (write-only), matching the Wave A TfLotInfoLayoutPanel precedent exactly.
+// ===========================================================================
+
+// golden TGroupBox* GroupBox3 (->Left/->Top, FormShow S10 ASE_KaohSiung/else
+// ART-panel-vs-GroupBox swap) and grpOEEState (->Left only, FormShow S19
+// bVTESTFunction branch). One reusable type for both.
+class TfLotInfoLayoutGroupBox : public vclcompat::TGroupBox
+{
+public:
+    int Left, Top, Width, Height;
+    TfLotInfoLayoutGroupBox() : Left(0), Top(0), Width(0), Height(0) {}
+};
+
+// golden TLabeledEdit* edtProcessName/edtProduct (->Left/->Top, FormShow S19
+// bVTESTFunction branch). ->EditLabel->Caption is translated as
+// ->EditLabelCaption= directly on the base vclcompat::TLabeledEdit, the same
+// flattened-property idiom that type's own Controls.h comment documents.
+class TfLotInfoLayoutLabeledEdit : public vclcompat::TLabeledEdit
+{
+public:
+    int Left, Top;
+    TfLotInfoLayoutLabeledEdit() : Left(0), Top(0) {}
+};
+
+// golden TEdit* edQAMode (->Left, FormShow S25 KYEC_LEE&&bQAMode branch).
+class TfLotInfoLayoutEdit : public vclcompat::TEdit
+{
+public:
+    int Left;
+    TfLotInfoLayoutEdit() : Left(0) {}
+};
+
+// golden TButton* btnQAmodeSave (->Left, same S25 branch as edQAMode above).
+class TfLotInfoLayoutPushButton : public vclcompat::TButton
+{
+public:
+    int Left;
+    TfLotInfoLayoutPushButton() : Left(0) {}
 };
 
 // ===========================================================================
@@ -1074,6 +1457,154 @@ public:
 
     // -- Timer4Timer (golden :16487-16493) -- WB-18 gates CheckAMRAction() --
     virtual void Timer4Timer();                       // golden uLotInfo.cpp:16487-16493
+
+    // =======================================================================
+    //  AI(W906-FW3-LotInfo-WC) 20260819: Wave C ADD -- see file banner above
+    //  for STEP 0 / WAVE SCOPE / GATE REGISTER. Grouped per FormShow (S#)/
+    //  Timer2Timer (T#) segment per docs/RECON_uLotInfo_mixed_split.md.
+    // =======================================================================
+
+    // -- FormShow S1/S7/S12/S24 -- TTabSheet members, ->TabVisible only -----
+    TTabSheet *tsPATSetUp;                            // golden uLotInfo.h:960
+    TTabSheet *tsBundle;                              // golden uLotInfo.h:797
+    TTabSheet *tsSetupFileCheck;                      // golden uLotInfo.h:986
+    TTabSheet *tsESDMonitor;                          // golden uLotInfo.h:81
+    TTabSheet *tsBarCode;                             // golden uLotInfo.h:37
+    TTabSheet *ts_OCRInterface;                       // golden uLotInfo.h:34
+    TTabSheet *ts_SocketInterface;                    // golden uLotInfo.h:36
+    TTabSheet *tsKYEC_AMR;                            // golden uLotInfo.h:1048
+    TTabSheet *tsRTCFullViewImg;                      // golden uLotInfo.h:29
+
+    // -- FormShow S9 -- grpRFID (TGroupBox) + SPILFunction branch widgets ---
+    TGroupBox *grpRFID;                               // golden uLotInfo.h:471
+    TTabSheet *ts_AutoCleanMonitor;                   // golden uLotInfo.h:41
+    TLabel    *Label5;                                // golden uLotInfo.h:311
+    TButton   *btDownload;                            // golden uLotInfo.h:314
+    TButton   *btnFtpTester;                          // golden uLotInfo.h:291
+    TLabel    *Label153;                              // golden uLotInfo.h:310
+    vclcompat::TFileListBox *FileListBox1;            // golden uLotInfo.h:318 -- WC-6 gates ->Visible only, ->Directory REAL
+    TCheckBox *cbRTCASTD;                             // golden uLotInfo.h:634
+
+    // -- FormShow S10 -- ASE_KaohSiung/else ART/GroupBox swap ---------------
+    TfLotInfoLayoutPanel     *ART_Panel;               // golden uLotInfo.h:59 (TPanel*) -- Left/Top layout
+    TfLotInfoLayoutGroupBox  *GroupBox3;                // golden uLotInfo.h:191 (TGroupBox*) -- Left/Top layout
+
+    // -- FormShow S13 -- CC_TSMC_TAINAN vs else --------------------------
+    TButton      *btnDataFTPSaveToData;               // golden uLotInfo.h:293
+    TLabel       *lblOPID;                            // golden uLotInfo.h:304
+    TSpeedButton *spSECSLotCheck;                     // golden uLotInfo.h:301
+    TfLotInfoLayoutPanel *Panel6;                      // golden uLotInfo.h:173 (TPanel*) -- Top/Left layout
+
+    // -- FormShow S14 -- tsTPW/tsSigurd (RefreshYieldMonitor itself WC-8) ---
+    TTabSheet *tsTPW;                                 // golden uLotInfo.h:528
+    TTabSheet *tsSigurd;                              // golden uLotInfo.h:477
+
+    // -- FormShow S15 -- coLevelMode (WC-9 gates mtBarcodeSetDefaultView) ---
+    TLabel    *labLevelMode;                          // golden uLotInfo.h:312
+    TComboBox *coLevelMode;                           // golden uLotInfo.h:320
+
+    // -- FormShow S16 -- 3 StringGrids, dims from golden uLotInfo.dfm -------
+    TStringGrid *sgBarcode;                           // golden uLotInfo.h:264 -- dfm ColCount=6 RowCount=7
+    TStringGrid *sgOCR;                               // golden uLotInfo.h:190 -- dfm ColCount=3, RowCount default(5)
+    TStringGrid *sgATRCount;                          // golden uLotInfo.h:172 -- dfm ColCount=3 RowCount=4
+
+    // -- FormShow S17 -- pl_ATC_Online (TPanel, ->Color/->Caption) ----------
+    TPanel *pl_ATC_Online;                            // golden uLotInfo.h -- (TPanel*)
+
+    // -- FormShow S18 -- ONSEMI_M/SIGURD_ChungXing/bOEEFunction -------------
+    // (JSCC_OS branch wholly gated, WC-21 -- no new members needed for it)
+    TLabel    *labDeviceName;                         // golden uLotInfo.h:622
+    TLabel    *lbLotRunMode;                          // golden uLotInfo.h:305
+    TLabel    *labLotID;                              // golden uLotInfo.h:298
+    TButton   *btnFtpServer;                          // golden uLotInfo.h:289
+    TButton   *btnFtpHD;                              // golden uLotInfo.h:290
+    TSpeedButton *sb_RunExecutFile;                   // golden uLotInfo.h:603
+
+    // -- FormShow S19 -- Murata/VTest mega-branch ---------------------------
+    TLabeledEdit *edtLine;                            // golden uLotInfo.h:584 -- ->Visible only, no geometry needed
+    TfLotInfoLayoutLabeledEdit *edtProcessName;        // golden uLotInfo.h:585 -- Left/Top layout, WC-13 gates ->Parent=
+    TfLotInfoLayoutLabeledEdit *edtProduct;            // golden uLotInfo.h:586 -- Left/Top layout, WC-13 gates ->Parent=
+    TLabel    *lbProcess;                             // golden uLotInfo.h:469
+    TLabel    *labConfigL04;                           // golden uLotInfo.h:787
+    TfLotInfoLayoutGroupBox *grpOEEState;               // golden uLotInfo.h:793 (TGroupBox*) -- Left layout
+    TStringGrid *sgOEEState;                          // golden uLotInfo.h:795 -- dfm ColCount=2 RowCount=10
+    TLabel    *labCusDevGrp;                          // golden uLotInfo.h:621
+    TLabel    *labCusStep;                            // golden uLotInfo.h:1037
+
+    // -- FormShow S20 -- CC_GIGAS FTP panel ----------------------------------
+    TButton *btnFTPTryConnect;                        // golden uLotInfo.h:429
+    TLabel  *lbFTPStatus;                             // golden uLotInfo.h:430
+
+    // -- FormShow S21 -- ASEMARMS/ASECL panels ------------------------------
+    TTabSheet *tsASEMARMS;                            // golden uLotInfo.h:223
+    TPanel    *pnlLotInfo_ASECL;                      // golden uLotInfo.h:569
+    TPanel    *pnlLotStart_ASECL;                     // golden uLotInfo.h:240
+
+    // -- FormShow S25 -- SPIL EQC-mode / KYEC_LEE QA Mode -------------------
+    TLabel    *lblPage;                               // golden uLotInfo.h:419
+    TLabel    *labJobSeq;                             // golden uLotInfo.h:595
+    TEdit     *edtJobSeq;                             // golden uLotInfo.h:596
+    TLabel    *labQACount;                            // golden uLotInfo.h:413 -- WC-23 gates ->Font->Size=8
+    TfLotInfoLayoutEdit       *edQAMode;                // golden uLotInfo.h:412 (TEdit*) -- Left layout
+    TfLotInfoLayoutPushButton *btnQAmodeSave;           // golden uLotInfo.h:411 (TButton*) -- Left layout
+    TPanel    *palQAMode;                             // golden uLotInfo.h:410
+
+    // -- FormShow S27 -- DewPoint_Hardware_Install (confirmed REAL) --------
+    TPanel *pan_DewPoint;                             // golden uLotInfo.h:857
+    TPanel *pl_DewPoint;                              // golden uLotInfo.h:858
+
+    // -- FormShow S29 -- 2DID format group -----------------------------------
+    TGroupBox *grpBarcodeDisplayLotInfo;              // golden uLotInfo.h:414
+
+    // -- FormShow S1/S12 -- tsBarCode's paired btChangeFile ------------------
+    TButton *btChangeFile;                            // golden uLotInfo.h:267
+
+    // -- FormShow S33 -- ASE_SG/LEADYO --------------------------------------
+    TButton *btnClearTemperature;                     // golden uLotInfo.h:853
+    // -- FormShow S33/S34 boundary (golden :1220-1221, connective content --
+    // recon's own S33/S34 segment table doesn't cover these 2 real lines;
+    // see docs/RECON_uLotInfo_mixed_split.md section 0's own disclosure that
+    // segment-boundary connective lines aren't all individually enumerated).
+    TLabel *lbShowDevName;                            // golden uLotInfo.h:964
+
+    // -- FormShow S34 -- AQL bin/count labels (ReadWriteFTPAutomationData GATE WC-16) --
+    TLabel *lbLotAQLSetCount;                         // golden uLotInfo.h:1114
+    TLabel *lbLotAQLSetBin;                           // golden uLotInfo.h:1115
+
+    // -- FormShow S3/S4/S6 -- MTI/bShowLotInfo/PANTHER/SECS panel -----------
+    TTabSheet *tsDeviceInfo;                          // golden uLotInfo.h:26
+    TPanel    *palSecsGem;                            // golden uLotInfo.h:297
+    TComboBox *cbPATMode;                             // golden uLotInfo.h:962
+
+    // -- FormShow S7 -- KYEC_LEE/AMD_M (WC-4 gates the PopupMenu lines) -----
+    TPanel *palCurrFailRate;                          // golden uLotInfo.h:210
+    TPanel *Panel27;                                  // golden uLotInfo.h:295
+    TfLotInfoTimer *LotKeyInTime;                     // golden uLotInfo.h:417 (TTimer*) -- ->Enabled only
+
+    // -- FormShow S4 -- CC_TSI branch --
+    TSpeedButton *btnSaveData;                        // golden uLotInfo.h:431
+
+    virtual void FormShow();                          // golden uLotInfo.cpp:316-1233 (Sender dropped, unused)
+
+    // -- Timer2Timer T4/T6/T7/T16 --------------------------------------------
+    TLabel *labLoaderBundleID;                        // golden uLotInfo.h:830
+    TLabel *lblLoaderCarBundleID;                     // golden uLotInfo.h:832
+    TLabel *lbOCRNowFile;                             // golden uLotInfo.h:187
+    TLabel *Label41;                                  // golden uLotInfo.h:179
+    TPanel *palHandlerwithTester;                     // golden uLotInfo.h:286 -- ->Caption/->Color
+    TLabel *lblTester_LotID;                          // golden uLotInfo.h:281 -- WC-26/WC-27 gate both assignments
+    TLabel *lblAutoCount;                             // golden uLotInfo.h:833
+    TLabel *lblAutoCount2;                            // golden uLotInfo.h:834
+    TLabel *lblAutoCount3;                            // golden uLotInfo.h:835
+    TLabel *labBarcodeRecipe;                         // golden uLotInfo.h:1117
+    TEdit  *edtBarcodeRecipe;                         // golden uLotInfo.h:1118
+    TSpeedButton *spOCRCleanList;                     // golden uLotInfo.h:636
+    TTabSheet *tsTesterLog;                           // golden uLotInfo.h:463
+    TTabSheet *ts_AutoRetestMonitor;                  // golden uLotInfo.h:57
+    TTabSheet *tsOtherTool;                           // golden uLotInfo.h:1024
+    TPanel *palAQLMode;                               // golden uLotInfo.h:1111
+
+    virtual void Timer2Timer();                       // golden uLotInfo.cpp:6934-7191
 
     TfLotInfo();
     virtual ~TfLotInfo() {}

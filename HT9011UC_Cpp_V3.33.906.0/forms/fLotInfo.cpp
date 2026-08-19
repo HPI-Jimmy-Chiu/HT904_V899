@@ -37,6 +37,10 @@
 #include "Automation/AMR.h"      // real TTeraPowerAMR AMR (RefreshAMR: CheckLoaderCount/CheckUnloaderCount)
 #include "SortingBinTray/SortingBinTray.h"  // SaveTrayRecord (btnSaveDataClick)
 
+// AI(W906-FW3-LotInfo-WC) 20260819: Wave C include -- fAGV->IsSPIL_AMR()
+// (Timer2Timer T4, confirmed REAL by this wave's step 0).
+#include "forms/fAGV.h"
+
 // AI(W906-FW3-LotInfo-WB) 20260819: TU-local forward decl of MyDBIProcess
 // (FormDestroy's exception log). Its only declaration in this tree is
 // aHotPlateSubstrate.h:933, but that header transitively drags in
@@ -533,6 +537,119 @@ TfLotInfo::TfLotInfo()
     iART=0;
     iIndexHeatingMode=0;
     iProduceTimeCT=0;                                                           //jou 20221125 : 機台添加三小時送檢報警，從lot start時間開始計算
+
+    // AI(W906-FW3-LotInfo-WC) 20260819: Wave C ADD -- FormShow/Timer2Timer
+    // widget allocations. See forms/fLotInfo.h's WC banner for WAVE SCOPE /
+    // GATE REGISTER; grouped in the same order as the header declarations.
+    tsPATSetUp        = new TTabSheet();
+    tsBundle          = new TTabSheet();
+    tsSetupFileCheck  = new TTabSheet();
+    tsESDMonitor      = new TTabSheet();
+    tsBarCode         = new TTabSheet();
+    ts_OCRInterface   = new TTabSheet();
+    ts_SocketInterface= new TTabSheet();
+    tsKYEC_AMR        = new TTabSheet();
+    tsRTCFullViewImg  = new TTabSheet();
+
+    grpRFID           = new TGroupBox();
+    ts_AutoCleanMonitor = new TTabSheet();
+    Label5            = new TLabel();
+    btDownload        = new TButton();
+    btnFtpTester      = new TButton();
+    Label153          = new TLabel();
+    FileListBox1      = new vclcompat::TFileListBox();
+    cbRTCASTD         = new TCheckBox();
+
+    ART_Panel         = new TfLotInfoLayoutPanel();
+    GroupBox3         = new TfLotInfoLayoutGroupBox();
+
+    btnDataFTPSaveToData = new TButton();
+    lblOPID           = new TLabel();
+    spSECSLotCheck    = new TSpeedButton();
+    Panel6            = new TfLotInfoLayoutPanel();
+
+    tsTPW             = new TTabSheet();
+    tsSigurd          = new TTabSheet();
+
+    labLevelMode      = new TLabel();
+    coLevelMode       = new TComboBox();
+
+    sgBarcode         = new TStringGrid(6, 7);        // dfm: ColCount=6 RowCount=7
+    sgOCR             = new TStringGrid(3, 5);        // dfm: ColCount=3, RowCount default(5)
+    sgATRCount        = new TStringGrid(3, 4);        // dfm: ColCount=3 RowCount=4
+
+    pl_ATC_Online     = new TPanel();
+
+    labDeviceName     = new TLabel();
+    lbLotRunMode      = new TLabel();
+    labLotID          = new TLabel();
+    btnFtpServer      = new TButton();
+    btnFtpHD          = new TButton();
+    sb_RunExecutFile  = new TSpeedButton();
+
+    edtLine           = new TLabeledEdit();
+    edtProcessName    = new TfLotInfoLayoutLabeledEdit();
+    edtProduct        = new TfLotInfoLayoutLabeledEdit();
+    lbProcess         = new TLabel();
+    labConfigL04      = new TLabel();
+    grpOEEState       = new TfLotInfoLayoutGroupBox();
+    sgOEEState        = new TStringGrid(2, 10);       // dfm: ColCount=2 RowCount=10
+    labCusDevGrp      = new TLabel();
+    labCusStep        = new TLabel();
+
+    btnFTPTryConnect  = new TButton();
+    lbFTPStatus       = new TLabel();
+
+    tsASEMARMS        = new TTabSheet();
+    pnlLotInfo_ASECL  = new TPanel();
+    pnlLotStart_ASECL = new TPanel();
+
+    lblPage           = new TLabel();
+    labJobSeq         = new TLabel();
+    edtJobSeq         = new TEdit();
+    labQACount        = new TLabel();
+    edQAMode          = new TfLotInfoLayoutEdit();
+    btnQAmodeSave     = new TfLotInfoLayoutPushButton();
+    palQAMode         = new TPanel();
+
+    pan_DewPoint      = new TPanel();
+    pl_DewPoint       = new TPanel();
+
+    grpBarcodeDisplayLotInfo = new TGroupBox();
+
+    btChangeFile      = new TButton();
+
+    btnClearTemperature = new TButton();
+    lbShowDevName     = new TLabel();
+
+    lbLotAQLSetCount  = new TLabel();
+    lbLotAQLSetBin    = new TLabel();
+
+    tsDeviceInfo      = new TTabSheet();
+    palSecsGem        = new TPanel();
+    cbPATMode         = new TComboBox();
+
+    palCurrFailRate   = new TPanel();
+    Panel27           = new TPanel();
+    LotKeyInTime      = new TfLotInfoTimer();
+    btnSaveData       = new TSpeedButton();
+
+    labLoaderBundleID     = new TLabel();
+    lblLoaderCarBundleID  = new TLabel();
+    lbOCRNowFile      = new TLabel();
+    Label41           = new TLabel();
+    palHandlerwithTester = new TPanel();
+    lblTester_LotID   = new TLabel();
+    lblAutoCount      = new TLabel();
+    lblAutoCount2     = new TLabel();
+    lblAutoCount3     = new TLabel();
+    labBarcodeRecipe  = new TLabel();
+    edtBarcodeRecipe  = new TEdit();
+    spOCRCleanList    = new TSpeedButton();
+    tsTesterLog       = new TTabSheet();
+    ts_AutoRetestMonitor = new TTabSheet();
+    tsOtherTool       = new TTabSheet();
+    palAQLMode        = new TPanel();
 }
 // AI(W906-AutoCleanFoundation) 20260721: golden uLotInfo.cpp:16250-16253 --
 // REAL one-line body (was a total no-op stub before that wave). See
@@ -2836,6 +2953,1394 @@ void TfLotInfo::Timer4Timer()
 #endif
 
     ReflashInfo();
+}
+
+// =============================================================================
+//  AI(W906-FW3-LotInfo-WC) 20260819: uLotInfo MIXED-split Wave C -- FormShow
+//  and Timer2Timer. See forms/fLotInfo.h's WC banner for STEP 0 / WAVE SCOPE
+//  / GATE REGISTER. Segment numbers (S#/T#) follow
+//  docs/RECON_uLotInfo_mixed_split.md's own segment table.
+// =============================================================================
+
+// -- FormShow (golden uLotInfo.cpp:316-1233) ---------------------------------
+void TfLotInfo::FormShow()
+{
+    // -- S1 (golden :316-346) -- WC-10 gates the ts_ATC6_1 ATC_TYPE_61 clause --
+    bShow=true;
+
+    AnsiString sConfigPath=AuthPath+"Security_new.def";                         //JerryYang 20241019 : 矽品二林 耀仁要求Auto clean高度可選擇不覆蓋
+
+    GetTimeInfo();
+    ts_FTPAutomation->TabVisible=false;                                         //KaiChen 20190530 ：Sigurd FTP Automation
+    tsSigurd_CX->TabVisible =(CUSTOMER_CODE==CC_SIGURD_ChungXing);              //Sam 20220223 : 矽格中興廠新增 Lot 資料
+    tsMurata->TabVisible    =(CUSTOMER_CODE==CC_Murata);
+    tsSPIL_SZ->TabVisible   =(CUSTOMER_CODE==CC_SPIL_CHINA_SUZHOU);
+    tsOEE->TabVisible       =(CosFunction.bOEEFunction);                        //Steven 20221225 : 整理LotInfo畫面
+    SettsChipAdvVisible();                                                      //Steven 20221225 : add for CyuEan
+    // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-10 -- see forms/fLotInfo.h
+    // GATE REGISTER WC-10 (ATC_TYPE_61 is not a defined identifier anywhere
+    // in this tree).
+#if 0
+    ts_ATC6_1->TabVisible   =(Tri_Temp_Machine==1 || (ATC_SYSTEM==eNewATCSystem && ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_61));
+#endif
+    tsPATSetUp->TabVisible  =(CUSTOMER_CODE==CC_PANTHER);
+    tsBundle->TabVisible    =(USE_COVER_TRAYID!=tCIDNotUse);
+    tsSetupFileCheck->TabVisible=(IniConfig.bEnableRmsCheckSetupFile==true);    //Ifor 20230516 add: TFAMD 要求工作檔驗證
+
+    lblPage->Visible=CosFunction.bUseSCKART;
+    edPage->Visible=CosFunction.bUseSCKART;
+
+    labCusLotID->Visible=false;                                                 //JerryYang 20230322 : 2D sort lot info UI修改
+    labCusDevGrp->Visible=false;
+    labDeviceName->Visible=false;
+    edtCusLotID->Visible=false;
+    edtCusDevGrp->Visible=false;
+    edtDevice->Visible=false;
+    labCusStep->Visible=false;                                                  //JerryYang 20260201 : add
+    edtCusStep->Visible=false;
+
+    pgLotinfo->ActivePage=tsLotID;
+
+    // -- S2 (golden :348-362) --
+    if(CUSTOMER_CODE==CC_CYUEAN ||                                              //Steven 20240122 : CyuEan要FT/RT
+       CUSTOMER_CODE==CC_JSI_HAOXING)                                           //Steven 20230302 : Add for 紹興長電
+    {
+        lbLotRunMode->Visible   =true;
+        cbRunMode->Visible      =true;
+        cbRunMode->Items->Clear();
+        cbRunMode->Items->Add("FT");
+        cbRunMode->Items->Add("RT");
+        cbRunMode->Text="FT";
+    }
+    else if(CUSTOMER_CODE==CC_NEXPERIA_Guangdong)                               //Steven 20230301 : Add for 安世
+    {
+        lbLotRunMode->Visible   =false;
+        cbRunMode->Visible      =false;
+    }
+
+    // -- S3 (golden :364-380) -- WC-1 gates ResetLotInfo() --
+    if(CUSTOMER_CODE==CC_MTI)
+    {
+        tsDeviceInfo->TabVisible=false;
+        tsFTP->TabVisible=false;
+        palSecsGem->Visible=false;                                              //Steven 20140701
+    }
+    else if(IniConfig.bShowLotInfo)
+    {
+        tsDeviceInfo->TabVisible=(IniConfig.bEnableRms==true);
+        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-1 -- see forms/fLotInfo.h
+        // GATE REGISTER WC-1 (ResetLotInfo() is RECON item #149, (b)
+        // write-path, not yet translated).
+#if 0
+        ResetLotInfo();
+#endif
+        if(tsDeviceInfo->TabVisible==true)
+        {
+            pgLotinfo->ActivePage=tsDeviceInfo;
+        }
+    }
+    SetSelectionVisible();                                                      //Steven 20250519 : 統一Selection的顯示設定
+
+    // -- S4 (golden :381-398) -- WC-2 gates cbPATModeChange(cbPATMode) --
+    if(CUSTOMER_CODE==CC_TSI)                                                   //frank 20200814 : 每10盤記錄一次summary log
+    {
+        lblOPID->Caption        ="Tester ID";
+        lbLotRunMode->Visible   =false;
+        cbRunMode->Visible      =false;
+        btnSaveData->Visible    =true;
+    }
+    else if(CUSTOMER_CODE==CC_PANTHER)
+    {
+        tsLotID->TabVisible=IniConfig.bB12UsePATSetup;
+        cbPATMode->ItemIndex=0;
+        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-2 -- see forms/fLotInfo.h
+        // GATE REGISTER WC-2 (cbPATModeChange() is RECON item #169, (b)
+        // write-path dispatcher, not yet translated).
+#if 0
+        cbPATModeChange(cbPATMode);
+#endif
+        #ifdef SOFT_SIMULTE
+        btnRealTime->Visible=true;
+        btnpatHourly->Visible=true;
+        btnpatEndLot->Visible=true;
+        #endif
+    }
+    // -- S5 (golden :399) -- WC-3 gates ShowXMLOnLine() --
+    // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-3 -- see forms/fLotInfo.h
+    // GATE REGISTER WC-3 (ShowXMLOnLine() is RECON item #103, a
+    // RecordProcess-backed function that writes files x4 despite the "Show"
+    // name).
+#if 0
+    ShowXMLOnLine();                                                            //Steven 20200706 : 移到外面
+#endif
+
+    // -- S6 (golden :401-410) --
+    if(CUSTOMER_CODE==CC_JCET)                                                  //Steven 20170605 (wei) : For長電
+        tsFTP->TabVisible=IniConfig.bEnableFTP;
+    else
+        tsFTP->TabVisible=(CosFunction.bFTPFunction);
+
+    if(IniConfig.bEnable_SECS_GEM ||                                            //Steven 20140701
+       CosFunction.bLotStartLockCriticalPara)                                   //JerryYang 20220311 : ATP鎖定Critical parameter
+    {
+        palSecsGem->Visible=true;
+    }
+
+    // -- S7 (golden :412-425) -- WC-4 gates the FormBarcodeReader PopupMenu lines --
+    if(CUSTOMER_CODE==CC_KYEC_LEE ||
+       (CUSTOMER_CODE==CC_AMD_M && CosFunction.bHiSiliconFunction==true))       //wei 20150826 Lot 強制顯示
+    {
+        palCurrFailRate->Visible=false;
+        Panel27->Visible=false;                                                 //Ifor 20190517 KYEC 不顯示
+
+        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-4 -- see forms/fLotInfo.h
+        // GATE REGISTER WC-4 (FormBarcodeReader has no port anywhere in this
+        // tree; PopupMenu is also not a modeled TControl property).
+#if 0
+        edtSysLotID->PopupMenu=FormBarcodeReader->pmBarcode;
+        edtSysOperatorID->PopupMenu=FormBarcodeReader->pmBarcode;
+#endif
+        #ifdef SOFT_SIMULTE
+            LotKeyInTime->Enabled = false;
+        #else
+            LotKeyInTime->Enabled = true;                                       //Ifor 20190919 add Lot Info Sacn Time
+        #endif
+    }
+
+    // -- S8 (golden :427) -- WC-1 (2nd call site, see S3) --
+    // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-1 -- see forms/fLotInfo.h
+    // GATE REGISTER WC-1 (same ResetLotInfo() gate as S3; golden calls it
+    // twice with no state change between the calls -- a golden oddity, not a
+    // translation choice).
+#if 0
+    fLotInfo->ResetLotInfo();                                                   //Steven 20240925 : 重開軟體時, 要讀回lot info
+#endif
+
+    // -- S9 (golden :429-522) -- WC-5 gates btnSaveClick(this) x2; WC-6 gates
+    // FileListBox1->Visible=false --
+    grpRFID->Visible=(USE_RFID_READER);                                         //Steven 20220713 : RFID Reader for SJSEMI
+
+    if(CUSTOMER_CODE==CC_PTI ||                                                 //RogerYang 20170329 (Steven) 力成 LotID卡關
+       CUSTOMER_CODE==CC_TFME_CHINA)
+    {
+        tsFTP->TabVisible=false;                                                //不知道幹嘛用，先藏起來
+    }
+
+    if(CUSTOMER_CODE==CC_SCK)                                                   //ChungHung 20131225 add
+    {
+        ts_AutoCleanMonitor->TabVisible=true;
+    }
+    else
+    {
+        ts_AutoCleanMonitor->TabVisible=false;
+    }
+
+    if(CUSTOMER_CODE==CC_AMKOR_Korea)                                           //Steven 20150923
+    {
+        Label5->Visible=false;
+        edTemp->Visible=false;
+    }
+    else if(CUSTOMER_CODE==CC_SCC ||
+            CUSTOMER_CODE==CC_SCK)                                              //ChungHung 20130621 add SCK RMS
+    {
+        Label5->Visible=false;
+        edTemp->Visible=false;
+        btDownload->Caption="Download from Handler";
+    }
+    else if(IniConfig.bSPILFunction==true)                                      //JerryYang 20170328 (Jou) 矽品客戶碼統一用SPILFunction
+    {
+        chkAutoCleanContactHeight->Checked=CheckAndReadIniData(sConfigPath, "Network", "Auto Clean Contact Height",      false);                                //JerryYang 20241019 : 矽品二林 耀仁要求Auto clean高度可選擇不覆蓋
+        btnFtpTester->Visible       =false;
+        Label153->Visible           =false;
+        edDeviceName->Visible       =false;
+        Label5->Visible             =false;
+        edTemp->Visible             =false;
+        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-6 -- see forms/fLotInfo.h
+        // GATE REGISTER WC-6 (TFileListBox derives from bare TObject, no
+        // ->Visible member).
+#if 0
+        FileListBox1->Visible       =false;
+#endif
+        tsDeviceInfo->TabVisible    =true;
+        FileListBox1->Directory     =DataPath;
+        chkTempOffset->Checked      =false;                                     //JerryYang 20180212 (Steven) SPIL要求鎖死不得修改
+        chkContactHigh->Checked     =false;
+        chkContactForce->Checked    =true;
+        chkContactMode->Checked     =true;
+        checkbAutoClean->Checked    =false;                                     //JerryYang 20191003 矽品只還原auto clean offset
+        chkHotPlate->Checked        =true;
+        chkLoadUnload->Checked      =true;
+        chkSpeedSetting->Checked    =true;
+        chkShuttleMode->Checked     =true;
+        chkTestMode->Checked        =true;
+        cbBottom2DOffset->Checked   =false;                                     //JerryYang 20201122 Bottom 2D offset不覆蓋
+        chkTestMode->Visible        =false;                                     //JerryYang 20170214 (Steven) 此三項無作用,先不顯示
+        chkBinasgn->Visible         =false;
+        chkBinasgnOff->Visible      =false;
+        groupbDownloadItem->Enabled =false;
+        cbRTCASTD->Visible          =true;
+        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-5 -- see forms/fLotInfo.h
+        // GATE REGISTER WC-5 (btnSaveClick() is RECON item #38, (b)
+        // write-path, WriteIniData x19 inside).
+#if 0
+        btnSaveClick(this);                                                     //JerryYang 20180212 (Steven) SPIL要求鎖死不得修改
+#endif
+    }
+    else if(CUSTOMER_CODE==CC_TERAPOWER)
+    {
+        btnFtpTester->Visible=false;
+    }
+    else if(CUSTOMER_CODE==CC_AMD_M)
+    {
+        btnFtpTester->Visible=false;                                            //不顯示
+    }
+    else if(CUSTOMER_CODE==CC_AMKOR_China ||                                    //jou 2016-06-13 修正 Amkor china download recipe 參數會參照本機
+            CUSTOMER_CODE==CC_QUALCOMM)                                         //JerryYang 20170412 (Steven) add QUALCOMM
+    {
+        chkTempOffset->Checked  =false;
+        chkContactHigh->Checked =false;
+        chkContactForce->Checked=true;
+        chkContactMode->Checked =true;
+        chkBinasgn->Visible     =false;                                         //jou 2014-08-26 安靠要求 Auto download Binasgn不顯示並且強制開啟
+        chkBinasgnOff->Visible  =false;
+        chkBinasgn->Checked     =true;
+        chkBinasgnOff->Checked  =true;
+
+        chkContactHigh->Enabled =false;
+        chkTempOffset->Enabled  =false;
+        chkContactForce->Enabled=false;
+        chkContactMode->Enabled =false;
+
+        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-5 (2nd call site) --
+#if 0
+        btnSaveClick(this);
+#endif
+    }
+    else if(CUSTOMER_CODE==CC_ChipMos_ZHUBEI)                                   //Jimmychiu 20250430 : ChipMos 關閉Device info 溫度欄位
+    {
+        edTemp->Visible=false;
+    }
+    else
+    {
+        ART_Panel->Visible=false;
+    }
+    tsRTCFullViewImg->TabVisible=REAL_TIME_CCD;                                 //Steven 20110825 : Real time CCD - 顯示Full View Image
+
+    // -- S10 (golden :523-541) --
+    if(!TrayForm.bEnableAMR) //Eastsun 20260515 F020
+        tsKYEC_AMR->TabVisible=false;
+
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung)                                         //kevin 20150706 ART
+    {
+        GroupBox3->Visible=false;
+        ART_Panel->Visible=true;
+        ART_Panel->Left=3;
+        ART_Panel->Top=5;
+    }
+    else
+    {
+        ART_Panel->Visible=false;
+        GroupBox3->Visible=true;
+        GroupBox3->Left=3;
+        GroupBox3->Top=5;
+    }
+
+    // -- S11 (golden :543) --
+    SetATCFormVisible();                                                        //Steven 20160217 : For ATC7.0  //Ifor 20160516 往下移動，避免ATC頁面關閉後又被打開
+
+    // -- S12 (golden :545-562) -- WC-7 gates the HT9046_LS imgRTCFullView block --
+    tsBarCode->TabVisible=(BAR_CODE_INSTALL==ebctUseCCDMode || BAR_CODE_INSTALL==ebctInShtIntel || BAR_CODE_INSTALL==ebctEtherNetCCD);                          //Ifor 20190129 : add Cognex EtherNet 通訊
+    btChangeFile->Visible=(BAR_CODE_INSTALL==ebctInShtIntel || BAR_CODE_INSTALL==ebctEtherNetCCD || (BAR_CODE_INSTALL==ebctUseCCDMode && CosFunction.b2DUseSubJobFunction==true));  //wei 20160728 Barcode File切換 //add Sub Job
+
+    tsESDMonitor->TabVisible=false;                                             //Ifor 20160308 ESD 畫面顯示
+
+    ts_OCRInterface->TabVisible=(INSTALL_OCR!=eocrUninstal && CosFunction.bTrayOCR==false);
+    ts_SocketInterface->TabVisible=IniConfig.bSocketCommunication;              //ChungHung 20130112 add for ASE_KR Socket Tester
+
+    // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-7 -- see forms/fLotInfo.h
+    // GATE REGISTER WC-7 (TImage/TCanvas have zero port anywhere in this
+    // tree, same established WB-1 finding, re-confirmed 20260819).
+#if 0
+    if(MachineTypeChoice==Type_HT9046_LS)                                       //2013-01-15    Dell
+    {
+        if(REAL_TIME_CCD==true && COM2->bCCDDummyRum == false)
+        {
+            imgRTCFullView1->Width = imgRTCFullView1->Width/2;
+            imgRTCFullView2->Width = imgRTCFullView2->Width/2;
+            imgRTCFullView3->Width = imgRTCFullView3->Width/2;
+            imgRTCFullView4->Width = imgRTCFullView4->Width/2;
+        }
+    }
+#endif
+
+    // -- S13 (golden :564-590) --
+    tsBarCode->TabVisible=(BAR_CODE_INSTALL==ebctUseCCDMode || BAR_CODE_INSTALL==ebctInShtIntel || BAR_CODE_INSTALL==ebctEtherNetCCD);                          //Ifor 20190129 : add Cognex EtherNet 通訊
+
+    if(CUSTOMER_CODE==CC_TSMC_TAINAN)                                           //ChungHung 20150413 add for TSMC
+    {
+        IniConfig.bShowLotInfo=true;
+        btnDataFTPSaveToData->Visible=true;
+        edtSysOperatorID->Visible=false;
+        lblOPID->Visible=false;
+        spSECSLotCheck->Visible=true;
+        sbSECSLotStart->Enabled=false;
+        Panel6->Visible=true;
+        Panel6->Top=144;
+        Panel6->Left=3;
+    }
+    else
+    {
+        btnDataFTPSaveToData->Visible=false;
+        edtSysOperatorID->Visible=true;
+        lblOPID->Visible=true;
+        spSECSLotCheck->Visible=false;
+        sbSECSLotStart->Enabled=true;
+        sbSECSLotEnd->Down=true;
+        sbSECSLotStart->Down=false;
+        Panel6->Visible=false;
+        Panel6->Top=320;
+        Panel6->Left=3;
+    }
+
+    // -- S14 (golden :592-602) -- WC-8 gates RefreshYieldMonitor() (1st site) --
+    if(IniConfig.bSIGURDFunction || CosFunction.bShowYieldMonitor)              //Sam 20210916 : 新增 Yiled Monitor 到畫面上 //Sam 20210324 : 新增 Yield Monitor
+    {
+        tsYieldMonitior->TabVisible=true;
+        tsTPW->TabVisible   =(CUSTOMER_CODE==CC_TERAPOWER || CUSTOMER_CODE==CC_PTI);
+        tsSigurd->TabVisible=(CUSTOMER_CODE==CC_SIGURD_PeiXing);
+        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-8 -- see forms/fLotInfo.h
+        // GATE REGISTER WC-8 (reuses Wave A's WA-3 RefreshYieldMonitor()
+        // gate verbatim).
+#if 0
+        RefreshYieldMonitor();
+#endif
+    }
+    else
+    {
+        tsYieldMonitior->TabVisible=false;
+    }
+
+    // -- S15 (golden :604-608) -- WC-9 gates fBarCode->mtBarcodeSetDefaultView() --
+    // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-9 -- see forms/fLotInfo.h
+    // GATE REGISTER WC-9 (mtBarcodeSetDefaultView has no port anywhere in
+    // this tree).
+#if 0
+    fBarCode->mtBarcodeSetDefaultView();
+#endif
+    chkTestMode->Visible=CosFunction.bLastSetInSetUpFile;                       //jou 2014-08-25 修正未開啟 CosFunction.bLastSetInSetUpFile LotInfo 顯示錯誤
+
+    labLevelMode->Visible=CosFunction.bDownloadRecipeLevelMode;                 //jou 2016-01-06 download recipe 增加權限模式選擇
+    coLevelMode->Visible=CosFunction.bDownloadRecipeLevelMode;                  //jou 2016-01-06 download recipe 增加權限模式選擇
+
+    // -- S16 (golden :610-641) -- zero customer-code branches --------------
+    sgBarcode->Cells[ 0][ 0]="Shuttle";
+    sgBarcode->Cells[ 1][ 0]="1_A";
+    sgBarcode->Cells[ 2][ 0]="1_B";
+    sgBarcode->Cells[ 3][ 0]="2_A";
+    sgBarcode->Cells[ 4][ 0]="2_B";
+    sgBarcode->Cells[ 5][ 0]="Total";
+    sgBarcode->Cells[ 0][ 1]="Load";
+    sgBarcode->Cells[ 0][ 2]="Pass";
+    sgBarcode->Cells[ 0][ 3]="Fail";
+    sgBarcode->Cells[ 0][ 4]="Rate(%)";
+    sgBarcode->Cells[ 0][ 5]="Retry";
+    sgBarcode->Cells[ 0][ 6]="Duplicate";
+
+    sgOCR->Cells[ 0][ 0]="OCR";
+    sgOCR->Cells[ 1][ 0]="Tray";
+    sgOCR->Cells[ 2][ 0]="Lot";
+    sgOCR->Cells[ 0][ 1]="Pass";
+    sgOCR->Cells[ 0][ 2]="Key In";
+    sgOCR->Cells[ 0][ 3]="No IC";
+    sgOCR->Cells[ 0][ 4]="Total";
+
+    sgATRCount->Cells[ 0][ 0]="ATR";
+    sgATRCount->Cells[ 1][ 0]="FT";
+    sgATRCount->Cells[ 2][ 0]="RT";
+    sgATRCount->Cells[ 0][ 1]="Pass";
+    sgATRCount->Cells[ 0][ 2]="Fail";
+    sgATRCount->Cells[ 0][ 3]="Total";
+
+    // -- S17 (golden :643-649) --
+    ShowATCTempPanel();                                                         //Steven 20241112 : 調整ATC溫度顯示
+    if(Temperature.bATCActiveCooling==false || CUSTOMER_CODE==CC_KYEC_LEE)      //Ifor 20160902 add 未啟動ATC功能 顯示ATC off line //Ifor 20170609 (wei) add KYEC ATC 不開啟自動連線由人員啟動
+    {
+        bStartATCRun=false;
+        fLotInfo->pl_ATC_Online->Color=clRed;                                   //Ifor 20170609 (wei) add KYEC ATC 不開啟自動連線由人員啟動   //Color 改紅色
+        fLotInfo->pl_ATC_Online->Caption="ATC Off Line";                        //Ifor 20170609 (wei) add KYEC ATC 不開啟自動連線由人員啟動   //顯示 ATC Offline
+    }
+
+    // -- S18 (golden :651-713) -- WC-21 gates the whole CC_JSCC_OS branch --
+    if(CUSTOMER_CODE==CC_PTI &&                                                 //RogerYang 20170417 LotInfo更新至FT Mode
+       IniConfig.bB03_TesterReport==false)                                      //Sam 20240809 : PTI ART 模式
+    {
+        cbRunMode->Enabled=false;
+    }
+
+    if(CUSTOMER_CODE==CC_ONSEMI_M)
+    {
+        labDeviceName->Caption="Device ID";
+        labDeviceName->Visible=true;
+        edtDevice->Visible=true;
+    }
+
+    // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-21 -- see forms/fLotInfo.h
+    // GATE REGISTER WC-21 (edtSysLotID/labLotID/edtDevice/labDeviceName/
+    // btnFTPDownLoadbyDeviceID geometry + fTesterTCP->rgUnloader, all
+    // unavailable/unverified this wave).
+#if 0
+    if(CUSTOMER_CODE==CC_JSCC_OS)                                               //RogerYang 20260127 : Add For JSCC_OS download by Device list
+    {
+        int iTopTmp=edtSysLotID->Top;
+        edtSysLotID->Top=Panel28->Top+2;
+        labLotID->Top=edtSysLotID->Top+4;
+        edtDevice->Top=iTopTmp;
+        labDeviceName->Top=edtDevice->Top+4;
+        btnFTPDownLoadbyDeviceID->Top=edtDevice->Top-2;
+        Panel28->Top=edtSysLotID->Top+20;
+        labDeviceName->Caption="Device ID";
+        labDeviceName->Visible=true;
+        edtDevice->Visible=true;
+        btnFTPDownLoadbyDeviceID->Visible=true;
+        rgUnloader->ItemIndex=fTesterTCP->rgUnloader->ItemIndex;
+    }
+#endif
+
+    if(CUSTOMER_CODE==CC_SIGURD_ChungXing)                                      //Ifor 20170505 (wei) add 矽格中興使用LotID不顯示Run Mode
+    {
+        cbRunMode->Visible      =false;
+        lbLotRunMode->Visible   =false;
+    }
+
+    if(CosFunction.bOEEFunction)                                                //Steven 20180417 (Jou) : OEE功能
+    {
+        labLotID->Visible=false;                                                //JerryYang 20220923 : add
+        edtSysLotID->Visible=false;
+        lblOPID->Visible=false;
+        edtSysOperatorID->Visible=false;
+        lbLotRunMode->Visible=false;
+        cbRunMode->Visible=false;
+
+        sbSECSLotStart->Caption="Start Lot";                                    //Sam 20170925 : 顯示名稱修改
+        sbSECSLotEnd->Caption="End Lot";
+        btnFtpTester->Visible=false;                                            //Sam 20171006 (wei) : 超豐用不到隱藏起來
+        btnFtpServer->Caption ="Download To Handler";                           //Sam 20171006 (wei) : 超豐要求顯示名稱修改
+        btnFtpHD->Caption="Upload To Server";                                   //Sam 20171006 (wei) : 超豐要求顯示名稱修改
+        sb_RunExecutFile->Visible=true;
+        if(IniConfig.asA25RunExecutButtonName!="")
+        {
+            sb_RunExecutFile->Caption=IniConfig.asA25RunExecutButtonName;
+        }
+        else
+        {
+            sb_RunExecutFile->Caption="Run Execut";
+        }
+    }
+
+    // -- S19 (golden :715-978) -- WC-11/WC-12/WC-13/WC-14/WC-15 (see header) --
+    tsMurata->TabVisible    =(CUSTOMER_CODE==CC_Murata);
+    edtLine->Visible        =(CUSTOMER_CODE==CC_Murata);
+
+    edtProcessName->Visible =(CUSTOMER_CODE==CC_Murata || IniConfig.bVTESTFunction==true);
+    edtProduct->Visible     =(CUSTOMER_CODE==CC_Murata || IniConfig.bVTESTFunction==true);
+    tsVTest->TabVisible     =(IniConfig.bVTESTFunction==true);
+
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung_K12)                                     //jou 20191008 : (Steven) add SCC使用Lot ID
+    {
+        cbRunMode->Items->Clear();
+        cbRunMode->Items->Add("FT");
+        cbRunMode->Items->Add("RT1");
+        cbRunMode->Items->Add("RT2");
+        cbRunMode->Text="FT";
+    }
+    else if(IniConfig.bVTESTFunction==true)
+    {
+        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-12 -- see forms/fLotInfo.h
+        // GATE REGISTER WC-12 (pgcLotInfo is the stock TPageControl, no
+        // ->ActivePage pointer member).
+#if 0
+        pgcLotInfo->ActivePage=tsVTest;
+#endif
+        cbRunMode->Items->Clear();
+        cbRunMode->Items->Add("FT0");                                           //RogerYang 20260420 : 何航航要求增加站點(第二次修改)
+        cbRunMode->Items->Add("FT1");
+        cbRunMode->Items->Add("FT2");
+        cbRunMode->Items->Add("FT3");
+        cbRunMode->Items->Add("FT4");
+        cbRunMode->Items->Add("FT5");
+        cbRunMode->Items->Add("FT6");
+        cbRunMode->Items->Add("FT7");
+        cbRunMode->Items->Add("FT8");
+        cbRunMode->Items->Add("FT9");
+        cbRunMode->Items->Add("FT10");
+        cbRunMode->Items->Add("FT11");
+        cbRunMode->Items->Add("FT12");
+        cbRunMode->Items->Add("FT13");
+        cbRunMode->Items->Add("FT14");
+        cbRunMode->Items->Add("FT15");
+        cbRunMode->Items->Add("RT0");                                           //RogerYang 20260420 : 何航航要求增加站點
+        cbRunMode->Items->Add("RT1");
+        cbRunMode->Items->Add("RT2");
+        cbRunMode->Items->Add("RT3");
+        cbRunMode->Items->Add("RT4");
+        cbRunMode->Items->Add("RT5");
+        cbRunMode->Items->Add("EQC0");                                          //RogerYang 20260420 : 何航航要求增加站點
+        cbRunMode->Items->Add("EQC1");
+        cbRunMode->Items->Add("EQC2");
+        cbRunMode->Items->Add("EQC3");
+        cbRunMode->Items->Add("EQC4");
+        cbRunMode->Items->Add("EQC5");
+        cbRunMode->Text="FT1";
+
+        cbTestTimes->Items->Clear();                                            //RogerYang 20250809 偉測Summary文件修改
+        cbTestTimes->Items->Add("RP0");
+        cbTestTimes->Items->Add("RP1");
+        cbTestTimes->Items->Add("RP2");
+        cbTestTimes->Items->Add("RP3");
+        cbTestTimes->Items->Add("RP4");
+        cbTestTimes->Items->Add("RP5");
+        cbTestTimes->Items->Add("RP6");
+        cbTestTimes->Items->Add("RP7");
+        cbTestTimes->Items->Add("RP8");
+        cbTestTimes->Items->Add("RP9");
+        cbTestTimes->Items->Add("RP10");
+        cbTestTimes->Items->Add("RP11");
+        cbTestTimes->Items->Add("RP12");
+        cbTestTimes->Items->Add("RP13");
+        cbTestTimes->Items->Add("RP14");
+        cbTestTimes->Items->Add("RP15");
+        cbTestTimes->Text="RP0";
+
+        lbProcess->Visible=true;
+        cbProcess->Visible=true;
+
+        grpMesCheck->Visible=true;
+
+        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-13 -- see forms/fLotInfo.h
+        // GATE REGISTER WC-13 (control re-parenting via ->Parent= has no
+        // model anywhere in vclcompat/Controls.h).
+#if 0
+        edtProcessName->Parent=tsVTest;
+#endif
+        edtProcessName->EditLabelCaption="CustPart";
+        edtProcessName->Left=70;
+        edtProcessName->Top=5;
+        edtProcessName->Enabled=true;
+
+#if 0
+        edtProduct->Parent=tsVTest;
+#endif
+        edtProduct->EditLabelCaption="CustLotNum";
+        edtProduct->Left=70;
+        edtProduct->Top=edtProcessName->Top+27;
+        edtProduct->Enabled=true;
+
+        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-14 -- see forms/fLotInfo.h
+        // GATE REGISTER WC-14 (sbSECSLotStart/sbSECSLotEnd are Wave A/B
+        // TSpeedButton* members with no geometry field).
+#if 0
+        sbSECSLotStart->Top=lbLotRunMode->Top+lbLotRunMode->Height+55;
+        sbSECSLotEnd->Top=sbSECSLotStart->Top+35;
+#endif
+
+        btnFtpTester->Visible=false;
+
+        labConfigL04->Visible=true;
+
+        chkTempOffset->Enabled=false;
+        chkTempOffset->Checked=false;
+        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-15 -- see forms/fLotInfo.h
+        // GATE REGISTER WC-15 (WriteIniData embedded write-path, same class
+        // as WC-1/WC-2/WC-5).
+#if 0
+        WriteIniData(AuthPath+"Security_new.def", "Network", "Temp Offset",     false);
+#endif
+        checkbAutoClean->Enabled=false;
+        checkbAutoClean->Checked=false;
+#if 0
+        WriteIniData(AuthPath+"Security_new.def", "Network", "Auto Clean",     false);
+#endif
+
+        grpOEEState->Visible=true;
+        grpOEEState->Left=0;
+        sgOEEState->Cells[0][0]="OEE";
+        sgOEEState->Cells[0][1]="TimeOEE";
+        sgOEEState->Cells[0][2]="Jam";
+        sgOEEState->Cells[0][3]="Retest";
+        sgOEEState->Cells[0][4]="Down";
+        sgOEEState->Cells[0][5]="Setup";
+        sgOEEState->Cells[0][6]="Idle";
+        sgOEEState->Cells[0][7]="ENG";
+        sgOEEState->Cells[0][8]="PM";
+        sgOEEState->Cells[0][9]="Stop";
+    }
+    else if(CUSTOMER_CODE==CC_Murata)
+    {
+        cbRunMode->Items->Clear();
+        cbRunMode->Items->Add("FT");
+        cbRunMode->Items->Add("RT");
+    }
+    else if(IniConfig.bSPILFunction==true && LastSet.iTester==_2D_SORT)         //JerryYang 20230322 : 2D sort lot info UI修改
+    {
+        cbRunMode->Items->Clear();
+        cbRunMode->Items->Add("VS");
+        cbRunMode->Items->Add("RC1");
+        cbRunMode->Items->Add("RC2");
+        labCusLotID->Visible=true;
+        labCusDevGrp->Visible=true;
+        labDeviceName->Visible=true;
+        edtCusLotID->Visible=true;
+        edtCusDevGrp->Visible=true;
+        edtDevice->Visible=true;
+        edtCusLotID->Enabled=false;                                             //JerryYang 20230322 : 2D sort lot info UI修改
+        edtCusDevGrp->Enabled=false;
+        labCusStep->Visible=true;                                               //JerryYang 20260201 : add
+        edtCusStep->Visible=true;
+        edtCusStep->Enabled=true;
+    }
+    else if(CUSTOMER_CODE==CC_PANTHER)
+    {
+        cbRunMode->Items->Clear();
+        cbRunMode->Items->Add("Normal Test");
+        cbRunMode->Items->Add("Pre-Test");
+        cbRunMode->Items->Add("Re-Test");
+        cbRunMode->Items->Add("GD");
+        cbRunMode->Items->Add("EQC");
+        labLotID->Visible=false;
+        edtSysLotID->Visible=false;
+        lblOPID->Visible=false;
+        edtSysOperatorID->Visible=false;
+        lbLotRunMode->Visible=false;
+        cbRunMode->Visible=false;
+        pgLotinfo->ActivePage=tsLotID;
+    }
+    else if(TestIF_File.b2DIDAllowList &&                                       //JerryYang 20241104 : 支援2DID白名單功能
+            IniConfig.iN23DownloadMethod!=2)                                    //JerryYang 20250320 : 2DID白名單功能
+    {
+        if(CUSTOMER_CODE==CC_JCET)                                              //RogerYang 20251208 : JCET 2D FT1白名單/FT2比對功能
+        {
+            // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-11 -- see
+            // forms/fLotInfo.h GATE REGISTER WC-11 (guard `bFlag` depends
+            // entirely on the WA-7-gated fBarCode->
+            // JCETUseMakeWhite2DIDList()).
+#if 0
+            bool bFlag=false;
+            bFlag=fBarCode->JCETUseMakeWhite2DIDList();
+            if(bFlag==true && cbRunMode->Enabled==true)
+            {
+                cbRunMode->Items->Clear();
+                cbRunMode->Items->Add("FT1");
+                cbRunMode->Items->Add("FT2");
+                cbRunMode->Items->Add("FT3");
+                cbRunMode->Items->Add("FT4");
+                cbRunMode->Items->Add("FT5");
+                cbRunMode->Items->Add("FT6");
+                cbRunMode->Items->Add("FT7");
+                cbRunMode->Items->Add("FT8");
+                cbRunMode->Items->Add("FT9");
+            }
+            edtSysOperatorID->Visible=true;
+            lblOPID->Visible=true;
+            bFlag=fBarCode->JCETUseMakeWhite2DIDList();
+            labCusLotID->Visible=bFlag;
+            edtCusLotID->Visible=bFlag;
+#endif
+        }
+        else
+        {
+            edtSysOperatorID->Visible=false;
+            lblOPID->Visible=false;
+            labCusLotID->Visible=false;                                         //RogerYang 20251215 : JCET 2D FT1白名單/FT2比對功能
+            edtCusLotID->Visible=false;                                         //RogerYang 20251215 : JCET 2D FT1白名單/FT2比對功能
+        }
+        labDeviceName->Visible=false;
+        edtDevice->Visible=false;
+        lbProcess->Visible=false;
+        cbProcess->Visible=false;
+    }
+    else if(CUSTOMER_CODE==CC_SCC ||                                            //Steven 20250314 : add for JSCC
+            CUSTOMER_CODE==CC_SJ_Semiconductor)
+    {
+        cbRunMode->Items->Clear();
+        cbRunMode->Items->Add("P1");
+        cbRunMode->Items->Add("P2");
+        cbRunMode->Items->Add("P3");
+        cbRunMode->Items->Add("P4");
+        cbRunMode->Items->Add("P5");
+        cbRunMode->Items->Add("P6");
+        cbRunMode->Items->Add("P7");
+        cbRunMode->Items->Add("P8");
+        cbRunMode->Items->Add("P9");
+        cbRunMode->Items->Add("P10");
+        cbRunMode->Items->Add("P11");
+        cbRunMode->Items->Add("P12");
+        cbRunMode->Items->Add("P13");
+        cbRunMode->Items->Add("P14");
+        cbRunMode->Items->Add("P15");
+        cbRunMode->Items->Add("RT1");
+        cbRunMode->Items->Add("RT2");
+        cbRunMode->Items->Add("RT3");
+        cbRunMode->Items->Add("RT4");
+        cbRunMode->Items->Add("RT5");
+        cbRunMode->Items->Add("RT6");
+        cbRunMode->Items->Add("RT7");
+        cbRunMode->Items->Add("RT8");
+        cbRunMode->Items->Add("RT9");
+        cbRunMode->Items->Add("RT10");
+        cbRunMode->Items->Add("RT11");
+        cbRunMode->Items->Add("RT12");
+        cbRunMode->Items->Add("RT13");
+        cbRunMode->Items->Add("RT14");
+        cbRunMode->Items->Add("RT15");
+        cbRunMode->Text="P1";
+    }
+    else if(CUSTOMER_CODE==CC_PTI && IniConfig.bB03_TesterReport)               //Sam 20240809 : PTI ART 模式
+    {
+        lbProcess->Visible=true;
+        cbProcess->Visible=true;
+        cbProcess->Items->Clear();
+        cbProcess->Items->Add("Sample");
+        cbProcess->Items->Add("100%");
+        cbProcess->Text="100%";
+
+        cbRunMode->Items->Clear();
+        cbRunMode->Items->Add("1'st");
+        cbRunMode->Items->Add("2'nd");
+        cbRunMode->Items->Add("3'th");
+        cbRunMode->Items->Add("4'th");
+        cbRunMode->Items->Add("5'th");
+        cbRunMode->Items->Add("6'th");
+        cbRunMode->Items->Add("7'th");
+        cbRunMode->Items->Add("8'th");
+        cbRunMode->Items->Add("9'th");
+        cbRunMode->Items->Add("10'th");
+        cbRunMode->Items->Add("11'th");
+        cbRunMode->Items->Add("12'th");
+        cbRunMode->Items->Add("13'th");
+        cbRunMode->Items->Add("14'th");
+        cbRunMode->Items->Add("15'th");
+        cbRunMode->Items->Add("16'th");
+        cbRunMode->Items->Add("17'th");
+        cbRunMode->Items->Add("18'th");
+        cbRunMode->Items->Add("19'th");
+        cbRunMode->Items->Add("20'th");
+        cbRunMode->Text="1'st";
+    }
+
+    // -- S20 (golden :980-1013) --
+    if(CUSTOMER_CODE==CC_GIGAS)
+    {
+        btnFtpTester->Visible=false;                                            //沒用到
+        btnFTPTryConnect->Visible=true;                                         //測試FTP是否有連線(按鈕)
+        lbFTPStatus->Visible=true;                                              //測試FTP是否有連線(狀態顯示)
+        btnFtpServer->Caption ="Barcode Download";                              //Server->Barcode Download
+        btnFtpHD->Caption="HD Upload";                                          //HD->HD Upload
+        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-28 -- see forms/fLotInfo.h
+        // GATE REGISTER WC-28 (BtnPause is TfMainSpeedButton*, no ->Visible).
+#if 0
+        BtnPause->Visible=false;
+#endif
+        if(IniConfig.bEnableFTP==true)
+        {
+            TCheckBox *tempTCheckBox[17]=
+            {
+                chkContactHigh,chkContactForce,chkContactMode,checkbAutoClean,chkART,
+                chkART_RTCount,chkCleanCount,chkHotPlate,chkLoadUnload,chkSpeedSetting,
+                chkShuttleMode,chkTestMode,chkBinasgn,chkBinasgnOff,chkIndexHeatingMode,
+                cbBottom2DOffset,chkAutoCleanContactHeight
+            };
+            for(int i=0;i<17;i++)
+            {
+                tempTCheckBox[i]->Visible=false;
+                tempTCheckBox[i]->Checked=true;
+            }
+            grpMesCheck->Visible=false;
+        }
+        tsLotID->TabVisible=false;
+    }
+    else if(CUSTOMER_CODE==CC_KYEC_LEE)                                         //Ifor 20251028 add: KLT 要求不顯示畫面
+    {
+        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-28 (2nd site) --
+#if 0
+        BtnPause->Visible=false;
+#endif
+    }
+    else
+    {
+        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-28 (3rd site) --
+#if 0
+        BtnPause->Visible=(CUSTOMER_CODE==CC_FOREHOPE_NINGBO);                  //Steven 20251125 : change
+#endif
+    }
+
+    // -- S21 (golden :1014-1021) --
+    tsASEMARMS->TabVisible=CosFunction.bUseARMSFunction;                        //Ifor 20170621 (wei) add ARMS Function
+    tsASECLEventLog->TabVisible=(CUSTOMER_CODE==CC_ASE_CL ||
+                                 CUSTOMER_CODE==CC_HANA_MICRON ||               //JimmyChiu 20211008 R211005-Hana-H9-01
+                                 CUSTOMER_CODE==CC_SJ_Semiconductor ||          //Steven 20221128 : Add Socket Id for SJSM
+                                 CosFunction.bUseSocketContactCount);
+
+    pnlLotInfo_ASECL->Visible=(CUSTOMER_CODE==CC_ASE_CL);                       //Steven 20221214 : fixed for SJSM
+    pnlLotStart_ASECL->Visible=(CUSTOMER_CODE==CC_ASE_CL);
+
+    // -- S22 (golden :1023-1032) -- RefreshAMR/ShowAMRCategoryBin already Tier1 real (Wave B) --
+    if(CosFunction.bEnableHandlerResultServer)
+    {
+        tsAMR->TabVisible=true;
+        RefreshAMR();
+        ShowAMRCategoryBin(true);
+    }
+    else
+    {
+        tsAMR->TabVisible=false;
+    }
+
+    // -- S23 (golden :1034-1043) -- edSocket/LastSet.strSocketID confirmed REAL --
+    if(CUSTOMER_CODE==CC_ASE_CL)                                                //JerryYang 20250120 : add
+    {
+         for(int i=0; i<4; i++)
+        {
+            for(int j=0; j<8; j++)
+            {
+                edSocket[i][j]->Text=AnsiString(LastSet.strSocketID[i][j]);
+            }
+        }
+    }
+
+    // -- S24 (golden :1045-1067) --
+    if(IniConfig.bEnableFTP)
+    {
+        if((CUSTOMER_CODE==CC_JSCC_OS))                                         //RogerYang 20260127 : Add For JSCC_OS 田揚志說LOTInfo擺第一頁
+        {
+            pgLotinfo->ActivePage=tsLotID;
+        }
+        else
+        {
+            pgLotinfo->ActivePage=tsFTP;
+        }
+    }
+    else if(IniConfig.bEnableRms==true)
+        pgLotinfo->ActivePage=tsDeviceInfo;
+    else if(CosFunction.bOEEFunction)
+        pgLotinfo->ActivePage=tsLotID;
+    else if(REAL_TIME_CCD)
+        pgLotinfo->ActivePage=tsRTCFullViewImg;
+    else if(ATC_SYSTEM==eWinWay && Temperature.bATCActiveCooling==true)         //jimmychiu 20210906
+        pgLotinfo->ActivePage=ATC_WinWay;
+    else if(ATC_SYSTEM!=eATCUninstall && ATC_SYSTEM!=eNonChamber)
+        pgLotinfo->ActivePage=tsATC;
+    else if(Tri_Temp_Machine==1)                                                //Ztex 2023.04.19 Add HT-1032 TriTemp Function
+        pgLotinfo->ActivePage=ts_ATC6_1;
+
+    // -- S25 (golden :1069-1118) -- WC-22 gates edtSysLotID->Width/->Left;
+    // WC-23 gates labQACount->Font->Size=8 --
+    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20190701 SPIL要求主畫面可切換EQC mode
+    {
+        lblPage->Visible=false;
+        edPage->Visible=false;
+        if(LastSet.iTester!=_2D_SORT && TestIF_File.b2DIDAllowList==false)      //JerryYang 20241104 : 支援2DID白名單功能  //JerryYang 20230322 : 2D sort lot info UI修改
+        {
+            palQAMode->Visible=true;
+            labLotID->Caption="SPIL LOT ID-STAGE-STEP";
+            // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-22 -- see
+            // forms/fLotInfo.h GATE REGISTER WC-22 (edtSysLotID is a Wave
+            // A/B member with no geometry field).
+#if 0
+            edtSysLotID->Width=150;
+            edtSysLotID->Left=150;
+#endif
+            lbLotRunMode->Visible=false;
+            cbRunMode->Visible=false;
+        }
+        else
+        {
+            if(TestIF_File.b2DIDAllowList==true)                                //JerryYang 20241104 : 支援2DID白名單功能
+            {
+                lbLotRunMode->Visible=true;
+                cbRunMode->Visible=true;
+                cbRunMode->Items->Clear();
+                cbRunMode->Items->Add("Normal");
+                cbRunMode->Items->Add("RT");
+                cbRunMode->Items->Add("EQC");
+                cbRunMode->Items->Add("CORR");
+            }
+            else
+            {
+                lbLotRunMode->Visible=true;
+                cbRunMode->Visible=true;
+            }
+
+            labJobSeq->Visible=false;
+            edtJobSeq->Visible=false;
+        }
+    }
+    else if(CUSTOMER_CODE==CC_KYEC_LEE && IniConfig.bQAMode==true)
+    {
+        labQACount->Caption="EQC Mode Device Counts:";
+        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-23 -- see
+        // forms/fLotInfo.h GATE REGISTER WC-23 (TLabel carries no Font
+        // member).
+#if 0
+        labQACount->Font->Size=8;
+#endif
+        edQAMode->Left=136;
+        btnQAmodeSave->Left=210;
+        palQAMode->Visible=true;
+    }
+    else
+    {
+        palQAMode->Visible=false;
+        labLotID->Caption="Lot ID : ";                                          //JerryYang 20220923 : add
+    }
+
+    // -- S26 (golden :1120) --
+    ShowSocketID();                                                             //JerryYang 20190702 ASE-CL顯示SocketID
+
+    // -- S27 (golden :1122-1123) -- DewPoint_Hardware_Install confirmed REAL --
+    pan_DewPoint->Visible=(DewPoint_Hardware_Install>0);                        //Steven 20191017 : 露點計
+    pl_DewPoint->Visible=(DewPoint_Hardware_Install>0);                         //Steven 20191017 : 露點計
+
+    // -- S28 (golden :1125-1146) -- WC-18 gates the whole segment --
+    // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-18 -- see forms/fLotInfo.h
+    // GATE REGISTER WC-18 (myInShuttleLotInfo/mtBarcodeInShLotInfo are not
+    // members of any ported TfLotInfo instance anywhere in this tree).
+#if 0
+    myInShuttleLotInfo->SetColorMap(0, TColor(0x00DFD9CC));
+    myInShuttleLotInfo->SetColorMap(1, clGreen);
+    myInShuttleLotInfo->SetColorMap(2, clRed);
+    myInShuttleLotInfo->SetColorMap(3, clBtnFace);
+
+    mtBarcodeInShLotInfo->SetColorMap(0, TColor(0x00DFD9CC));
+    mtBarcodeInShLotInfo->SetColorMap(1, clGreen);
+    mtBarcodeInShLotInfo->SetColorMap(2, clRed);
+    mtBarcodeInShLotInfo->SetColorMap(3, clBtnFace);
+
+    myInShuttleLotInfo->SetCellNumber(0, 0, "In Shuttle");
+    myInShuttleLotInfo->SetCellColorIndex(0, 0, 3);
+    myInShuttleLotInfo->SetCellNumber(0, 1, "a");
+    myInShuttleLotInfo->SetCellColorIndex(0, 1, 3);
+    myInShuttleLotInfo->SetCellNumber(0, 2, "b");
+    myInShuttleLotInfo->SetCellColorIndex(0, 2, 3);
+    myInShuttleLotInfo->SetCellNumber(0, 3, "c");
+
+    mtBarcodeInShLotInfo->SetCellNumber(0, 0, "Shuttle1");
+    mtBarcodeInShLotInfo->SetCellColorIndex(0, 0, 3);
+    mtBarcodeInShLotInfo->SetCellNumber(1, 0, "Shuttle2");
+    mtBarcodeInShLotInfo->SetCellColorIndex(1, 0, 3);
+#endif
+
+    // -- S29 (golden :1147-1154) --
+    if(TestIF_File.i2DIDFormat==eAMD)                                           //JerryYang 20200422 2DID format選項改用下拉選單
+    {
+        grpBarcodeDisplayLotInfo->Visible=true;
+    }
+    else
+    {
+        grpBarcodeDisplayLotInfo->Visible=false;
+    }
+
+    // -- S30 (golden :1156-1158) -- WC-19 gates tmrChamberBoost->Enabled and
+    // SetLotStart(); sPath (golden :1157) stays REAL between them -- see
+    // forms/fLotInfo.h GATE REGISTER WC-19's own note on why. --
+    // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-19 -- SAFETY RED LINE,
+    // SetLotStart is the 399-line SECS Lot-Start main control function
+    // (RECON #10); not re-evaluated.
+#if 0
+    tmrChamberBoost->Enabled=(CosFunction.bUseChamberBoostMode);                //Steven 20191128 : Chamber Boost Function
+#endif
+    AnsiString sPath=AuthPath+"config.ini";
+#if 0
+    SetLotStart("fLotInfo::FormShow", true);                                    //Steven 20250515 : 整合Open Short測試報表
+#endif
+
+    // -- S31 (golden :1160) --
+    edtJobSeq->Text=ReadIniData(sPath, "Lot Info", "Job Sequence", AnsiString(""));                                     //JerryYang 20220923 : add
+
+    // -- S32 (golden :1166-1192) -- WC-20 gates the whole segment (SAFETY) --
+    // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-20 -- SAFETY RED LINE,
+    // critical-para access-control + audit-flag cluster; not re-evaluated.
+#if 0
+    if(edtSysLotID->Text!="" ||
+       (CosFunction.bLotStartLockCriticalPara &&                                //JerryYang 20220311 : ATP鎖定Critical parameter
+        LastSet.iTester==ON_LINE &&
+        (fMain->CheckCanChangeRealDummy()==false ||
+         HasICUnderMachine())))
+    {
+        fMain->cbRunStartMode->Enabled=false;
+        edtBarcodeRecipe->Enabled=false;                                        //Ifor 20241108 add:Barcode Multi Recipe   //Eastsun 20260527 整合 #027-2.MR.U1 edtBarcodeRecipe disable :KYEC
+
+        if(CosFunction.bUseLogUploadToFTPFunction==true)                        //Steven 20240925 : Fixed for log uoload
+        {
+            bSysLotStart      =true;                                            //Ifor 20160302 add for KYEC_HS LotStart
+            bEPLogStart_KYEC  =true;                                            //Ifor 20160302 add for KYEC_HS EPLogStart
+            bTempLogStart_KYEC=true;                                            //Ifor 20160302 add for KYEC_HS TempLogStart
+            if(USE_NOVX3360==true)
+            {
+                bESDLogStart_KYEC=true;                                         //Ifor 20160302 add for KYEC_HS ESD
+            }
+            asATCEvenLotID=fLotInfo->edtSysLotID->Text;                         //Ifor 20170124 (Steven) :add LotID By ATC Even Log
+            bArmTestInfoEvenLogStart_KYEC=true;                                 //Ifor 20190912 :add 海思 V02.30 版 Record Torque
+        }
+    }
+
+    if(CosFunction.bLotStartLockCriticalPara && RunInfo.bLotStart)              //JerryYang 20220311 : ATP鎖定Critical parameter
+    {
+        edQAMode->Enabled=!bAuthCriticalPara[14];
+    }
+#endif
+
+    // -- S33 (golden :1194-1219) --
+    if(CUSTOMER_CODE==CC_ASE_SG)
+    {
+        btnClearTemperature->Visible=true;
+    }
+    else
+    {
+        btnClearTemperature->Visible=false;
+    }
+
+    if(CUSTOMER_CODE==CC_LEADYO)                                                //KenHsieh 20230406 : 新增OCR Data + Bin Log功能
+    {
+        lblPage->Visible=false;
+        edPage->Visible =false;
+        Panel28->Visible=false;
+    }
+
+    if(CosFunction.bFirstTrayCheckOnUnloader)                                   //Jimmychiu 20251205 : First Tray Check On Unloader
+    {
+        tsOtherTool->TabVisible=true;
+        cbFirstTrayCheckOnUnloader->Visible=true;
+    }
+    else
+    {
+        tsOtherTool->TabVisible=false;
+        cbFirstTrayCheckOnUnloader->Visible=false;
+    }
+    // -- connective (golden :1220-1221) -- see forms/fLotInfo.h's note on the
+    // S33/S34 boundary (2 real lines recon's own segment table doesn't cover) --
+    lbShowDevName->Visible=CosFunction.bScanBarcodeAndDownloadFileInRMS;
+    lbShowDevName->Caption="";
+
+    // -- S34 (golden :1223-1229) -- WC-16 gates ReadWriteFTPAutomationData() --
+    if(iAQLBin==0)                                                              //Eastsun 20260520 整合
+        iAQLBin=-1;                                                             //Eastsun 20260520 整合
+    fLotInfo->lbLotAQLSetCount->Caption=IntToStr(iAQLCount);                    //Eastsun 20260520 整合
+    fLotInfo->lbLotAQLSetBin->Caption=IntToStr(iAQLBin);                        //Eastsun 20260520 整合
+
+    // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-16 -- see forms/fLotInfo.h
+    // GATE REGISTER WC-16 (ReadWriteFTPAutomationData has zero port anywhere
+    // in this tree, overturning recon's own S34 note).
+#if 0
+    ReadWriteFTPAutomationData(true);                                           //KaiChen 20190530 ：Sigurd FTP Automation
+#endif
+    AdjtsYieldMonitiorSize();                                                   //Steven 20221225 : 統一Lot Info尺寸調整
+    InitialRefrigerantSystem();                                                 //Ztex 2023.04.19 Add HT-1032 TriTemp Function
+
+    // -- S35 (golden :1231-1233) -- WC-17 gates FrmAOI->AOIFailCountRefresh() --
+    // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-17 -- see forms/fLotInfo.h
+    // GATE REGISTER WC-17 (FrmAOI carries only bSimulateTopBtm, no
+    // AOIFailCountRefresh() method).
+#if 0
+    if(USE_Scanner_AOI_Inspection==(int)eBtnAOI_TopBottomInstall && IniConfig.bA74AOIFailCountLinkLotRunMode)
+        FrmAOI->AOIFailCountRefresh();                 //Eastsun 20260408 :
+#endif
+}
+
+// -- Timer2Timer (golden uLotInfo.cpp:6934-7191) -----------------------------
+void TfLotInfo::Timer2Timer()
+{
+    // -- T1 (golden :6936-6939) -- iTempSetTimer moved into the WC-24 gate --
+    static bool bOldFTPAutomation=false;
+    if(InitialOK==false)                                                        //Steven 20160912 : Add InitialOK in Timer
+        return;
+
+    // -- T2 (golden :6941-6945) --
+    if(CUSTOMER_CODE==CC_TSMC_TAINAN && bSecsGemDownloadFTP==true)              //wei 20170119 (Steven) DownLoad 沒有馬上按掉會Time Out
+    {
+        if(IniConfig.bEnable_SECS_GEM==true)
+            ShowMyMessage("DOWNLOAD_RECIPE_BY_EA Finish!!");
+    }
+
+    // -- T3 (golden :6947-6950) --
+    if(CUSTOMER_CODE==CC_KYEC_XILINX)                                           //Frank 20171030 (Steven) add Clear Barcode List新增權限 Xilinx
+    {
+        btClearBarcodeList->Visible=(AccessLevel>=iDefHonPrecLevel)?true:false;
+    }
+
+    // -- T4 (golden :6952-6956) -- fAGV->IsSPIL_AMR() confirmed REAL, step 0 --
+    if(fAGV->IsSPIL_AMR())
+    {
+        labLoaderBundleID->Caption=asBundleTrayID[ePortLoader];
+        lblLoaderCarBundleID->Caption=asBundleTrayID[ePortEmpty];
+    }
+
+    // -- T5 (golden :6958-6985) --
+    bSecsGemDownloadFTP=false;
+
+    if(INSTALL_OCR!=eocrUninstal && TestIF.bOcrFunction==true && bOCRConnectTest==true)                                 //wei 20160613 ocr連線測試
+    {
+        bOCRConnectTestCount++;
+
+        if(bOCRConnectTestCount>3)                                              //wei 20161028 ocr連線測試
+        {
+            if(bOCRConnectOK)
+            {
+                ShowMyMessage("OCR Connect Test OK");
+                bSignIn=true;
+                bOCRConnect=true;
+            }
+            else
+            {
+                ShowMyMessage("OCR Connect Test NG");
+                bSignIn=false;
+                bOCRConnect=false;
+            }
+            bOCRConnectTest=false;
+            bOCRConnectTestCount=0;
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    // -- T6 (golden :6987-7016) -- fMain->cbSetupFileName confirmed REAL --
+    lbOCRUseFile->Caption="";
+    lbOCRNowFile->Caption="";
+
+    lblAutoCount->Caption=iUnloaderTrayCountCal[0];
+    lblAutoCount2->Caption=iUnloaderTrayCountCal[1];
+    lblAutoCount3->Caption=iUnloaderTrayCountCal[2];
+
+    if(INSTALL_OCR!=eocrUninstal && TestIF.bOcrFunction==true)
+    {
+        if(bSignIn)
+        {
+            Label41->Caption="Log In";
+        }
+        else
+        {
+            Label41->Caption="Log Out";
+        }
+        lbOCRUseFile->Caption=fMain->cbSetupFileName->Text;
+        if(asCheckFileName!="")
+            lbOCRNowFile->Caption=asCheckFileName;
+        else
+            lbOCRNowFile->Caption="";
+    }
+    else
+    {
+        Label41->Caption="Log Out";
+        lbOCRUseFile->Caption=fMain->cbSetupFileName->Text;
+        lbOCRNowFile->Caption="";
+    }
+
+    // -- T7 (golden :7017-7029) -- WC-26/WC-27 gate the fOCR/fSetup lines --
+    if(bGetLotIDFormTester)
+    {
+        fLotInfo->palHandlerwithTester->Caption="Connection";
+        fLotInfo->palHandlerwithTester->Color=clLime;
+        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-26 -- see forms/fLotInfo.h
+        // GATE REGISTER WC-26 (fOCR->sTesterLotId lives only on OCRInsp.cpp's
+        // TU-local shim, unreachable here -- same TfOCR shape as WB-6, a
+        // different absent member).
+#if 0
+        lblTester_LotID->Caption= fOCR->sTesterLotId;
+#endif
+    }
+    else
+    {
+        fLotInfo->palHandlerwithTester->Caption="No Connection";
+        fLotInfo->palHandlerwithTester->Color=clRed;
+        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-27 -- see forms/fLotInfo.h
+        // GATE REGISTER WC-27 (fSetup->edOcrText lives only on OCRInsp.cpp's
+        // TU-local shim, unreachable here).
+#if 0
+        lblTester_LotID->Caption=fSetup->edOcrText->Text;
+#endif
+    }
+
+    // -- T8 (golden :7030-7034) --
+    ts_AutoRetestMonitor->TabVisible=(CosFunction.bUseSCKART==false &&
+                                      USE_AUTO_RETEST==eartInstall &&
+                                      ((IniConfig.bA10_AutoReTest && (CosFunction.bAutoRetestGPIBmode==false || CUSTOMER_CODE==CC_KYEC_XILINX)) || bAutoReTest_ART));  //kevin 20150601);       //wei 20150331 打開功能就顯示        //Steven 20161201 : For SCK 93K ART  //Frank 20161212 (Jou) For Xilinx 打開功能顯示
+    tsOCRBarCode        ->TabVisible=(INSTALL_OCR!=eocrUninstal && CosFunction.bTrayOCR);                               //wei 20150720  打開功能就顯示
+
+    // -- T9 (golden :7035-7085) -- WC-24 SAFETY GATE (WinWay ATC hardware) --
+    if(ATC_SYSTEM==eWinWay)                                                     //jimmychiu 2021
+        ATC_WinWay->TabVisible=true;
+    else
+        ATC_WinWay->TabVisible=false;
+
+    // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-24 -- SAFETY RED LINE, WinWay
+    // ATC hardware temperature/comm control; not re-evaluated, gated
+    // verbatim per the task brief. iTempSetTimer (golden :6937) moved here
+    // since this gated block is its only use.
+#if 0
+    static int iTempSetTimer=0;                                                 //jimmychiu 2021
+    if(ATC_SYSTEM==eWinWay && Temperature.bATCActiveCooling==true)
+    {
+        fWinway->OpenCommPort();
+
+        double dbGetAtcSetTemp=0.0;
+        double dbSetATCTemp=0.0;
+        bool bHasErr=false;
+
+        if(LastSet.iTemperature==Tempture_Hot || LastSet.iTemperature==Tempture_AmbientHot)
+            dbSetATCTemp=Temperature.fWorkTemperBase;
+        else
+            dbSetATCTemp=IniConfig.dATCAmbientTemperature;
+        iTempSetTimer++;
+        for(int i=0;i<4;i++)
+        {
+            dbGetAtcSetTemp=fWinway->arrATC_Site[i]->GetST();
+            if(dbSetATCTemp!=dbGetAtcSetTemp || iTempSetTimer>=3)
+            {
+                fWinway->SetTempratureAll(dbSetATCTemp);
+                iTempSetTimer=0;
+            }
+
+            if(SystemStart==true && fWinway->arrATC_Site[i]->iWinWaySendCount >=6)
+            {
+                fWinway->arrATC_Site[i]->WinwayCOM->StopComm();
+                fWinway->arrATC_Site[i]->bCommConnect=false;
+                fWinway->arrATC_Site[i]->SetPT((double)9999);
+                fWinway->arrATC_Site[i]->iWinWaySendCount=0;
+                bHasErr=true;
+            }
+
+            ATCPtrWinWay[i]->Caption=FormatFloat(L"0.0" ,fWinway->arrATC_Site[i]->GetPT_NoCommand()) ;
+        }
+
+        if(bHasErr)
+        {
+            ShowMyMessage("WinWay ATC System Connect Error!");
+        }
+    }
+#endif
+
+    // -- T10 (golden :7087-7094) --
+    if(CUSTOMER_CODE==CC_GIGAS ||                                               //Isaac 20210129 : FTP頁面，關閉功能要不顯示畫面，但視窗不要關掉
+       IniConfig.bVTESTFunction==true)
+    {
+    }
+    else
+    {
+        tsFTP               ->TabVisible=IniConfig.bEnableFTP;                  //Ifor 20180822 : Add 關閉ftp功能關閉顯示頁面
+    }
+
+    // -- T11/T12 (golden :7096-7123) -- WC-25 SAFETY GATE (WAR16123 3hr alarm);
+    // T12 is this same if-statement's `else` arm, kept REAL --
+    if(IniConfig.bVTESTFunction==true)
+    {
+        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-25 -- SAFETY RED LINE,
+        // WAR16123 3-hour send-for-inspection alarm; not re-evaluated, gated
+        // verbatim per the task brief.
+#if 0
+        if(IniConfig.bEnableRms)
+        {
+            fLotInfo->Panel29->Caption="Server";
+        }
+
+        if(RunInfo.bLotStart==true &&                                           //RogerYang 20260424 : 陳永恆說不再需要，等趙坤鵬同意  //jou 20230203 : 無錫偉測 機台添加三小時送檢報警，從lot start時間開始計算
+           SystemStart==true && iHome==0 &&
+           fNote->fShow==false && MyMessageBox->fShow==false )
+        {
+            iProduceTimeCT++;
+            if(iProduceTimeCT>=(3600*3))
+            {
+                int ret=ShowErrorMessage("WAR16123", K_SKIP , MMSystem);        //RogerYang 20251030 : 袁林要把Retry拿掉
+                if(ret==K_RETRY)
+                    iProduceTimeCT=9000;
+                else
+                    iProduceTimeCT=0;
+            }
+        }
+
+        labConfigL04->Caption="[L04] Temperature range : " + AnsiString(IniConfig.iL04TemptureRange);
+#endif
+    }
+    else
+    {
+        tsDeviceInfo        ->TabVisible=IniConfig.bEnableRms;                  //Ifor 20181029 : Add 關閉RMS功能關閉顯示頁面
+    }
+
+    // -- T13 (golden :7124-7125) --
+    tsTesterLog         ->TabVisible=(TestIF_File.iTestType==TCP_IP_MODE);
+    grpBarcodeDisplayLotInfo->Visible=(TestIF_File.i2DIDFormat==eAMD);          //JerryYang 20200422 2DID format選項改用下拉選單 //Ifor 20200422 :add 2D主畫面顯示
+
+    // -- T14 (golden :7127-7149) -- WC-8 gates RefreshYieldMonitor() (2nd site) --
+    ts_FTPAutomation    ->TabVisible=IniConfig.bA32EnableFTPAutomation;
+    if(bOldFTPAutomation!=ts_FTPAutomation->TabVisible)
+    {
+        bOldFTPAutomation=ts_FTPAutomation->TabVisible;
+        if(ts_FTPAutomation->TabVisible)
+        {
+            pgLotinfo->ActivePage=ts_FTPAutomation;
+            fLotInfo->ShowInformation(false);
+            fLotInfo->Height=150;
+            fLotInfo->Width=150;
+            sbTest->Top=50;
+        }
+        else
+        {
+            pgLotinfo->ActivePage=tsYieldMonitior;
+            // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-8 -- see
+            // forms/fLotInfo.h GATE REGISTER WC-8 (2nd call site).
+#if 0
+            RefreshYieldMonitor();
+#endif
+        }
+    }
+    else
+    {
+        AdjtsYieldMonitiorSize();                                               //Steven 20221225 : 統一Lot Info尺寸調整
+    }
+
+    // -- T15 (golden :7152-7164) --
+    if(TestIF_File.bEnableBarCode==true &&
+       BAR_CODE_INSTALL==ebctUseCCDMode &&
+       TestIF_File.bBarCodeMultiRecipe==true)
+    {
+        labBarcodeRecipe->Visible=true;
+        edtBarcodeRecipe->Visible=true;
+    }
+    else
+    {
+        labBarcodeRecipe->Visible=false;
+        edtBarcodeRecipe->Visible=false;
+    }
+
+    // -- T16 (golden :7166-7187) --
+    spOCRCleanList->Visible=(INSTALL_OCR!=eocrUninstal && CosFunction.bTrayOCR && IniConfig.bCompareOCRData);           //KenHsieh 20220825 : 新增OCR比對功能
+    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20241104 : 支援2DID白名單功能
+    {
+        if(TestIF_File.b2DIDAllowList)
+        {
+            if(RunInfo.bLotStart==false)
+            {
+                if(AccessLevel>=iDefEngineerLevel ||
+                   SPIL_FOR_QLE==1)                                             // KevinC 20250912 渠梁OP權限
+                {
+                    cbRunMode->Enabled=true;
+                }
+                else
+                {
+                    cbRunMode->Enabled=false;
+                }
+            }
+        }
+        else
+        {
+           cbRunMode->Enabled=true;
+        }
+    }
+
+    // -- T17 (golden :7189) --
+    ScanRefrigerantSystem();                                                    //Ztex 2023.04.19 Add HT-1032 TriTemp Function
+
+    // -- T18 (golden :7190) --
+    fLotInfo->palAQLMode->Visible=IniConfig.bI52_bAQLSortMode;                  //Eastsun 20260520 整合//Ifor 20210713 add: AQL Sor tMode
 }
 
 TfLotInfo *fLotInfo = new TfLotInfo();

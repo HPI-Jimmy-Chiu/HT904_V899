@@ -8620,6 +8620,26 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   （FormShow/bInitial 類 hydration），要嘛 fixture 重放、要嘛
   ctor 帶 .dfm 維度——兩者都做才穩。
 
+## 20260819 夜間 — uLotInfo Wave C（FormShow＋Timer2Timer 落地）
+
+- 照 RECON_uLotInfo_mixed_split.md 翻譯：FormShow 815/918 行 real
+  （88.8%，gated 119）、Timer2Timer 200/258（77.5%，高於提案估的
+  65%——步驟 0 證實 fAGV->IsSPIL_AMR 是真身免 gate）。GATE 登記
+  WC-1..WC-28。四個安全紅線段（SetLotStart、critical-para 稽核、
+  WinWay ATC 硬體控制 51L、WAR16123 警報）照提案原樣 GATE 未重評。
+- 步驟 0 的 9 項依賴查證：3 存在（DewPoint_Hardware_Install/
+  IsSPIL_AMR/strSocketID）、6 缺（FormBarcodeReader/
+  mtBarcodeSetDefaultView/myInShuttleLotInfo 族/FrmAOI 缺方法/
+  fSetup 只有 fShow/edOcrText 是 OCRInsp TU-local shim）。
+- 逐行重讀又抓 6 個 recon 未列缺口，**其中 WC-16 推翻 recon 自己
+  S34「不需要 GATE」的結論**（ReadWriteFTPAutomationData 全樹零
+  存在——主迴圈 Grep 獨立坐實）；WC-28（BtnPause 只有 Down）是
+  -fsyntax-only 才抓到的，證明自檢步驟承重。
+- 兩函式未接線（無 OnShow/OnTimer 分派、grep 全樹 0 呼叫點），
+  對既有 ctest 零行為影響；接線歸後續 tag-publish/接線波。
+- 主迴圈複驗：邊界 2 檔、WC-16 absence、:1027/:1228/:7035/:7096
+  四個 golden 行號逐字坐實、句法綠、0 NUL/0 U+FFFD。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8628,13 +8648,12 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   FW-W4（4999e2e）、FW-W5a（83b4251）、FW-FE1（57e3c03）、
   **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
-- **下一波**：uLotInfo Wave C——照 docs/RECON_uLotInfo_mixed_split.md
-  翻 FormShow（35 段、估 ~90% 可落地）＋Timer2Timer（18 段、~65%），
-  開工先 grep 驗 9 個「facade 依賴存在性未驗」項（FormBarcodeReader/
-  fAGV->IsSPIL_AMR/myInShuttleLotInfo 族/FrmAOI…）。
-  之後：1203 HAL MOTION_IO pimpl；批 5 設定檢視表單；
-  cShowBinSelect Wave D；BinDisplay 卡 opaque BinDisCtrl
-  （元件套件 D:\HT9045\elec\Component 方向查證待做）。
+- **下一波**：uLotInfo 顯示側三波全清（A 39fn＋B 39fn＋C 兩巨頭）。
+  下一個標的依脈絡擇一：批 5 設定檢視表單（cConfiguration/cSetUp/
+  cSpeed/cStartCondition/HandlerSys 唯讀現值展示）；1203 HAL
+  MOTION_IO pimpl；cShowBinSelect Wave D；BinDisplay 卡 opaque
+  BinDisCtrl（elec\Component 方向查證待做）；FW-1 tag 接線波
+  （fLotInfo 顯示側現在有大片可發布的 lot/batch tag 來源）。
   真機類指令依 §7 仍佇列。
 - **之後**：1203 HAL MOTION_IO pimpl；FW-3 batch 3+ 表單；
   cShowBinSelect Wave D；台帳二輪 QUIRK 補掃。
