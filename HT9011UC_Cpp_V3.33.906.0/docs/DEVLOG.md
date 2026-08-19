@@ -8662,6 +8662,29 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   全數對帳。排除項照 recon：nowTrayId 三顆（golden 本身零寫入＝死
   Label）、pct 六顆（同地雷＋依賴 sort.total 先接）。
 
+## 20260819 深夜 II — 五 family 偵察＋批 5 cSpeed 顯示側
+
+- **五 family 偵察**（178e83e）：arm.*/cat.*/contact.*/speed.*/bin.*
+  合計 130 tags **零個立即可接**——各卡一個非接線前置（ATC 表單戰役／
+  gated 填值點＋索引未驗／佔位字串設計未定案／整表單 0%／
+  SetTechDataToProd_Yield 無呼叫者）。優先序 bin>cat>arm>speed≈contact。
+  **跨檔發現：至少四處過期 gate 註解**（cSocket.h:40-61 等）——波次
+  推進了註解沒撤；用 nm/git log 驗現況，絕不信註解文字（nm 已坐實
+  TastCategory 真連結）。
+- **cSpeed 顯示側**（本顆）：0%→display bucket 全翻。新檔
+  forms/fSpeed.h＋cSpeed.cpp；6/57 方法（ctor/FormShow/ReadFile/
+  ReadWriteFile 讀臂/DoIniDataToForm/FormClose），約 1,191 golden 行；
+  47 個 write 側不宣告（fTemperFrom 姿態）、3 個 TWinControl 遞迴
+  方法結構性 GATE（vclcompat 無 Controls[]/ControlCount；handlerlog.h
+  的同名 TWinControl 是手足非祖先——兩個 TMyKitSuck 同型態陷阱）。
+  ReadWriteFile 寫臂進入點 bRead=true 強制防禦。dmTrayMotor 全樹
+  無 port（主迴圈坐實：cinitial 命中在 #if 0/註解內＝N1-G2g 既有
+  gate）。GOLDEN ODDITY：FormClose 其實是「丟棄未存檔編輯」
+  （重讀刷新，golden 註解自證刻意）。
+- CheckAndReadIniData 懶 seed 落點=recipe 專屬 ArmCondition.Data
+  （非共用 Gerneral.ini），18 個已翻檔同用法之既有行為，登記不 GATE。
+- CMake 接線主迴圈自做（ht9045_sm，cTemperFrom 旁）。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8670,14 +8693,17 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   FW-W4（4999e2e）、FW-W5a（83b4251）、FW-FE1（57e3c03）、
   **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
-- **下一波**：依脈絡擇一——(a) FW-1 五大未知 family 偵察
-  （arm.*/cat.*/contact.*/speed.*/bin.* 合計 130 tags，crosswalk 完全
-  未深入的最大塊）；(b) 批 5 設定檢視表單；(c) 1203 HAL MOTION_IO
-  pimpl；(d) cShowBinSelect Wave D；(e) BinDisplay 的 opaque
-  BinDisCtrl（elec\Component 查證）。真機類指令依 §7 仍佇列。
+- **下一波**：依脈絡擇一——(a) 批 5 續：cStartCondition／HandlerSys
+  ／cConfiguration 檢視側（cSpeed 已收，同 playbook）；(b) bin.* 解鎖
+  （SetTechDataToProd_Yield 呼叫者決策——最淺缺口）；(c) 1203 HAL
+  MOTION_IO pimpl；(d) cShowBinSelect Wave D；(e) BinDisplay 的
+  opaque BinDisCtrl（elec\Component 查證）；(f) 過期 gate 註解
+  清理波（cSocket.h:40-61／atester_ProcessCount.cpp:642-649／
+  Command.cpp:12277-12281，nm 已證現況）。真機類指令依 §7 仍佇列。
 - **FW-1 備忘**：pct 六顆等 sort.total 站穩後接；recipe.current/
   user.level 來源鏈未查（可能落在未翻的 cConfiguration）；
-  tagmap.js 的 data-cmd 十筆結構性缺口要跟 web 前端波一起解。
+  tagmap.js 的 data-cmd 十筆結構性缺口要跟 web 前端波一起解；
+  五 family 130 tags 全數前置未解（RECON_FW1_five_families.md）。
 - **之後**：1203 HAL MOTION_IO pimpl；FW-3 batch 3+ 表單；
   cShowBinSelect Wave D；台帳二輪 QUIRK 補掃。
 - **設計面**：無待答（10 分鐘閒置逾時＝預設值沿用）。

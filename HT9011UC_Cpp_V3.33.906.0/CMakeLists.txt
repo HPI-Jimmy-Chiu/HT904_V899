@@ -1893,6 +1893,15 @@ add_library(ht9045_sm STATIC
     # both known consumers (csystem.cpp GATE G02, PowerSavingMode.cpp
     # GATE (4)) stay gated, integration is a separate, deliberate wave.
     cTemperFrom.cpp
+    # AI(W906-FW3-Speed-WA) 20260819: cSpeed.cpp -- batch-5 cSpeed display
+    # side (ctor, FormShow, ReadFile, ReadWriteFile read-arm with the write
+    # arm forced off at entry, DoIniDataToForm, FormClose's re-read-refresh)
+    # against the new forms/fSpeed.h facade. 47 write-path methods and the
+    # 3 TWinControl-recursive RPDefault methods are not declared at all;
+    # the live fSpeed global is not declared -- cprod.cpp's GA1-B2 gate
+    # stays gated, integration is a separate, deliberate wave (the
+    # fTemperFrom posture).
+    cSpeed.cpp
     # --- W6.6 HUB cross-module offline shims (DoInArm->DoInArm_9045 /
     #     DoOutArm->DoOutArm_9045 / DoLoad / DoSortArm / bShuttleShake +
     #     InitLoadTask / InitOutArmTask / InitialDoLockUnloader /
