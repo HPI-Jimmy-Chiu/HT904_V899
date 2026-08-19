@@ -8310,17 +8310,34 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   **判定準則沿用：加測輪次直到拿到乾淨全輪，勿只憑單跑綠就收。**
 - **驗收**：Debug 142/3＋Release（第三輪）142/3、guard IDENTICAL。
 
+## 20260819 上午 — 使用者三項設計面裁決全數到位
+
+1. **Write path 核可**（原文意）：瀏覽器要能操作機台；登入/權限比照 BCB6
+   既有體系（fSecurity/AccessLevel/Insufficient）；同時只允許一個瀏覽器
+   操作；golden 沒有的二次確認不加。→ 設計文件
+   **docs/WEBBRIDGE_WRITEPATH_DESIGN.md**（波次 FW-W1~W5），計畫書 FW-W
+   條款已改指向它。
+2. **硬體線**：906 優先完善 PCIE-1203，Galil/MN200 後續補；控制邏輯與
+   馬達分類由 mot_table.csv 決定。→ gclib/MN200 兩條研究線暫緩（RECON
+   文件留檔），MOTION_IO 撞名修法定向=MN200 wrapper 側 pimpl。
+3. **Golden bug 不修、照翻**，但要統籌台帳（表格化、md＋html）。→
+   docs/GOLDEN_DEFECT_LEDGER.{md,html} 彙整代理進行中（全樹掃描，
+   基準=已 commit 內容；in-flight 三檔用 git show HEAD:）。
+   **維護規則：之後每波新 golden bug 註記要同步加列台帳。**
+
+三份 memory 已更新（writepath-ruling 新增、pcie1203/galil/mn200 追加）。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列 1-6、Command.cpp 159/164、良率引擎全清、SecCC/
-  SecUnlock、BinSel-WA＋proxy 拆彈、BinSelUnlock、SBWB2、
-  **BinSel-WB（14d209d）**。基線 142/3。
-- **下一波（自主佇列）**：
-  a. cShowBinSelect Wave C（ShowBinSel_ARTNor/ARTRT 真本體 ~430 行＋
-     FormShow＋TimerAutoCleanCountTimer）；
-  b. cBinSel Wave C（InitDataToEdit golden :4142-4784＋TMyBinPanel
-     widget 半＋mtTrayName/mtTrayItem 接線）；
-  c. FW-3 batch 3+ 表單（BinDisplay 等）；FW-1 tag 批次；
-  d. 小項：auto9045 W5FA_FBinSel 替身退役、stale gate 全樹掃描。
-- **設計面（等使用者）**：write path 設計輪；硬體架構題（index/1203、
-  MN200、gclib）；B4 GPIB site-map 修不修。
+  SecUnlock、BinSel-WA/Unlock/WB、SBWB2。基線 142/3。
+  **三項設計裁決 20260819 全數到位（見上一節）。**
+- **進行中**：a. cShowBinSelect Wave C 翻譯代理（ARTNor/ARTRT/FormShow/
+  Timer）；b. GOLDEN_DEFECT_LEDGER 彙整代理。
+- **下一波（裁決後的新優先序）**：
+  1. FW-W1 指令通道 e2e（設計文件 §6；主迴圈自做或代理）；
+  2. PCIE-1203 HAL 完善線開工（mot_table.csv 驅動；先修 HAVE_PCI1203=1
+     的 MOTION_IO 撞名——MN200 wrapper pimpl 方向已定）；
+  3. cBinSel Wave C／FW-3 batch 3+ 表單線照排。
+- **佇列**：FW-W4+ 的動真機/寫 config 指令（真機環境才有意義）；B4 依裁決
+  不修（台帳記錄）。

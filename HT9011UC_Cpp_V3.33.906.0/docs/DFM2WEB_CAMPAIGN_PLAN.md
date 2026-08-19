@@ -113,7 +113,10 @@
 | 5 | 設定「檢視」：`cConfiguration`／`cSetUp`／`cSpeed`／`cStartCondition`／`HandlerSys` | 唯讀現值展示（寫入留 FW-W） |
 | 佇列 | `uteach`、`uMotorTest`、`iosetview` 操作側、`login`/`Password`、對話框族 | **需 write path，夜間不做** |
 
-### FW-W 指令通道（write path）——**不在夜間 loop 範圍**
+### FW-W 指令通道（write path）——**20260819 使用者已裁決核可，設計見 docs/WEBBRIDGE_WRITEPATH_DESIGN.md**
+（裁決三邊界：登入/權限比照 BCB6 fSecurity 體系；單一瀏覽器操作權；golden 沒有的二次確認不加。
+原「不在夜間範圍」條款由該設計文件的波次切分 FW-W1~W5 取代；動真機類指令仍屬佇列段。）
+#### [歷史條款]
 瀏覽器→CommandQueue→UI thread 重過互鎖。安全關鍵設計輪，需使用者在場逐項過
 （wire protocol 的 cmd/ack 已在 ARCHITECTURE.md §4，缺的是 handler 側互鎖設計）。
 夜間波次撞到「沒有寫入就沒有意義」的表單 → 跳過排佇列，換下一個。
