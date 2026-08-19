@@ -376,6 +376,7 @@ WebBridgeConfig::WebBridgeConfig()
       pingIntervalMs(15000),
       idleTimeoutMs(45000),
       pollIntervalMs(50),
+      controlIdleTimeoutMs(600000),   // AI(W906-FW-W3) 20260819: 10 min, design doc section 3
       maxSendBacklog(256u * 1024u)
 {
 }
@@ -408,6 +409,11 @@ public:
     TagSnapshot*         snapshot;
     CommandQueue*        queue;
     std::atomic<bool>    readOnly;
+    // AI(W906-FW-W3) 20260819: single-operator control token. Owned by the
+    // socket thread (all writes happen there); atomic so the UI thread's
+    // ControlOwner() read is race-free. 0 = nobody holds it.
+    std::atomic<unsigned long long> ctrlOwner_{0};
+    unsigned long long              ctrlLastCmdMs_ = 0;   // socket thread only
     std::atomic<bool>    running;
     std::atomic<bool>    stopFlag;
     std::atomic<unsigned short> boundPort;
@@ -831,6 +837,9 @@ void WebBridgeServer::Impl::AcceptNew()
 void WebBridgeServer::Impl::CloseConn(size_t index)
 {
     if (index >= conns_.size()) return;
+    // AI(W906-FW-W3) 20260819: the control token dies with its connection
+    // (design doc section 3, "持有權隨 ws 連線生命週期").
+    if (conns_[index].id == ctrlOwner_.load()) ctrlOwner_.store(0);
     if (conns_[index].s != INVALID_SOCKET) closesocket(conns_[index].s);
     conns_.erase(conns_.begin() + static_cast<long>(index));
     WbGuard sl(statsMx);
@@ -1192,6 +1201,39 @@ void WebBridgeServer::Impl::HandleTextMessage(Conn& c, const std::string& text)
     if (reject.empty() && readOnly.load()) reject = "bridge is read-only";
     if (reject.empty() && !queue)          reject = "no command queue attached";
 
+    // AI(W906-FW-W3) 20260819: single-operator control token (design doc
+    // section 3). control.acquire/release are answered HERE, from the socket
+    // thread -- they touch nothing but server state, same in-thread rule as
+    // "ping". Every other command except the auth.* family requires the
+    // caller to BE the holder. Sits after the read-only gate on purpose: a
+    // read-only bridge stays uniformly fail-closed for every cmd.
+    if (reject.empty() && cmdName == "control.acquire") {
+        const unsigned long long owner = ctrlOwner_.load();
+        if (owner == 0 || owner == c.id) {
+            ctrlOwner_.store(c.id);
+            ctrlLastCmdMs_ = NowMs();
+            SendAck(c, id, true, std::string());
+        } else {
+            SendAck(c, id, false, "control-held");
+        }
+        cJSON_Delete(root);
+        return;
+    }
+    if (reject.empty() && cmdName == "control.release") {
+        if (ctrlOwner_.load() == c.id) {
+            ctrlOwner_.store(0);
+            SendAck(c, id, true, std::string());
+        } else {
+            SendAck(c, id, false, "not-operator");
+        }
+        cJSON_Delete(root);
+        return;
+    }
+    if (reject.empty() && cmdName.compare(0, 5, "auth.") != 0) {
+        if (ctrlOwner_.load() != c.id) reject = "not-operator";
+        else                           ctrlLastCmdMs_ = NowMs();
+    }
+
     if (!reject.empty()) {
         {
             WbGuard sl(statsMx);
@@ -1304,6 +1346,13 @@ void WebBridgeServer::Impl::PumpOutgoing()
 void WebBridgeServer::Impl::PumpLiveness()
 {
     const unsigned long long now = NowMs();
+
+    // AI(W906-FW-W3) 20260819: idle operator forfeits the token (design doc
+    // section 3, default 10 min without an accepted command).
+    if (ctrlOwner_.load() != 0 && cfg.controlIdleTimeoutMs > 0 &&
+        now - ctrlLastCmdMs_ > static_cast<unsigned long long>(cfg.controlIdleTimeoutMs)) {
+        ctrlOwner_.store(0);
+    }
     for (size_t i = conns_.size(); i-- > 0;) {
         Conn& c = conns_[i];
         if (!c.isWs) continue;
@@ -1390,6 +1439,7 @@ void WebBridgeServer::SetSnapshot(TagSnapshot* snapshot)   { impl_->snapshot = s
 void WebBridgeServer::SetCommandQueue(CommandQueue* queue) { impl_->queue = queue; }
 void WebBridgeServer::SetReadOnly(bool ro)                 { impl_->readOnly.store(ro); }
 bool WebBridgeServer::IsReadOnly() const                   { return impl_->readOnly.load(); }
+unsigned long long WebBridgeServer::ControlOwner() const   { return impl_->ctrlOwner_.load(); }   // AI(W906-FW-W3) 20260819
 bool WebBridgeServer::Start(std::string* errOut)           { return impl_->Start(errOut); }
 void WebBridgeServer::Stop()                               { impl_->Stop(); }
 bool WebBridgeServer::IsRunning() const                    { return impl_->running.load(); }

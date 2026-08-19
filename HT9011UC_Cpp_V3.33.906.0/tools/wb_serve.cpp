@@ -204,6 +204,7 @@ int main(int argc, char** argv)
             }
         }
 
+        ht9045::SetWebControlOwner(server.ControlOwner());   // AI(W906-FW-W3) 20260819: control.owner tag feed
         ht9045::PublishHandlerTags(snap);
         server.Wake();
 

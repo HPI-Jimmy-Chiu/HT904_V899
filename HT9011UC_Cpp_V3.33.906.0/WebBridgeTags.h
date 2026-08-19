@@ -75,6 +75,12 @@ namespace ht9045 {
 // UI THREAD ONLY. Returns the number of tags staged.
 std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap);
 
+// AI(W906-FW-W3) 20260819: the web server's control-token holder, injected by
+// the serving loop before each PublishHandlerTags() call so the snapshot can
+// carry it as the `control.owner` tag (design doc section 3). 0 = nobody.
+// Published as "conn-<id>" / "" -- every browser sees who operates.
+void SetWebControlOwner(unsigned long long connId);
+
 // ---------------------------------------------------------------------------
 //  PUMP MODE  (wb_publish --pump)
 //

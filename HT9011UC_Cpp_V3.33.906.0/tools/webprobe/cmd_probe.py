@@ -123,7 +123,50 @@ def main():
     # containing USER's entry. Sequence: bad pw -> ok:false("bad credentials"),
     # good pw -> ok:true, auth.logout -> ok:true.
     ap.add_argument('--auth', default=None)
+    # AI(W906-FW-W3) 20260819: two-connection mutual-exclusion scenario:
+    # A acquires -> B acquire fails("control-held") -> B ping fails
+    # ("not-operator") -> A releases -> B acquires ok.
+    ap.add_argument('--control', action='store_true')
     args = ap.parse_args()
+
+    if args.control:
+        deadline = time.monotonic() + args.seconds
+        sockA, loA = ws_handshake(args.host, args.port, args.path, deadline)
+        sockB, loB = ws_handshake(args.host, args.port, args.path, deadline)
+        print('ws handshakes ok (A, B)')
+
+        send_text(sockA, json.dumps({'type': 'cmd', 'id': 301, 'cmd': 'control.acquire'}))
+        a = wait_ack(sockA, loA, 301, deadline)
+        print('A acquire: %s' % json.dumps(a))
+        if a is None or a.get('ok') is not True:
+            print('CONTROL FAIL: A acquire expected ok:true'); return 7
+
+        send_text(sockB, json.dumps({'type': 'cmd', 'id': 302, 'cmd': 'control.acquire'}))
+        b = wait_ack(sockB, loB, 302, deadline)
+        print('B acquire(held): %s' % json.dumps(b))
+        if b is None or b.get('ok') is not False or 'control-held' not in str(b.get('error', '')):
+            print('CONTROL FAIL: B acquire expected control-held'); return 7
+
+        send_text(sockB, json.dumps({'type': 'cmd', 'id': 303, 'cmd': 'sys.ping'}))
+        b = wait_ack(sockB, b'', 303, deadline)
+        print('B ping(not-op): %s' % json.dumps(b))
+        if b is None or b.get('ok') is not False or 'not-operator' not in str(b.get('error', '')):
+            print('CONTROL FAIL: B ping expected not-operator'); return 7
+
+        send_text(sockA, json.dumps({'type': 'cmd', 'id': 304, 'cmd': 'control.release'}))
+        a = wait_ack(sockA, b'', 304, deadline)
+        print('A release: %s' % json.dumps(a))
+        if a is None or a.get('ok') is not True:
+            print('CONTROL FAIL: A release expected ok:true'); return 7
+
+        send_text(sockB, json.dumps({'type': 'cmd', 'id': 305, 'cmd': 'control.acquire'}))
+        b = wait_ack(sockB, b'', 305, deadline)
+        print('B acquire(after release): %s' % json.dumps(b))
+        if b is None or b.get('ok') is not True:
+            print('CONTROL FAIL: B acquire after release expected ok:true'); return 7
+
+        print('CONTROL PROBE PASS: exclusivity, refusal, release handover all proven')
+        return 0
 
     deadline = time.monotonic() + args.seconds
     try:
@@ -132,6 +175,17 @@ def main():
         print('HANDSHAKE FAIL: %s' % e)
         return 2
     print('ws handshake ok')
+
+    # --- 0. acquire the control token (FW-W3: every non-auth/control cmd
+    #        needs it; skipped in --expect-readonly where cmds die earlier) ---
+    if not args.expect_readonly:
+        send_text(sock, json.dumps({'type': 'cmd', 'id': 100, 'cmd': 'control.acquire'}))
+        acq = wait_ack(sock, leftover, 100, deadline)
+        leftover = b''
+        if acq is None or acq.get('ok') is not True:
+            print('CONTROL FAIL: control.acquire expected ok:true, got %s' % json.dumps(acq))
+            return 6
+        print('ack(control.acquire): %s' % json.dumps(acq))
 
     # --- 1. sys.ping ---------------------------------------------------------
     send_text(sock, json.dumps({'type': 'cmd', 'id': 101, 'cmd': 'sys.ping'}))

@@ -358,6 +358,10 @@ PumpStats PumpTelemetry()
 }
 
 // ---------------------------------------------------------------------------
+// AI(W906-FW-W3) 20260819: see WebBridgeTags.h SetWebControlOwner.
+static unsigned long long g_webControlOwner = 0;
+void SetWebControlOwner(unsigned long long connId) { g_webControlOwner = connId; }
+
 std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap)
 {
     const bool strs  = IniConfigStringsLoaded();
@@ -380,6 +384,17 @@ std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap)
     // pre-config snapshot publishes auth.level as null; post-config it is
     // live, and 0 there is the real Operator state.
     stageInt(snap, "auth.level", cust, AccessLevel);
+
+    // AI(W906-FW-W3) 20260819: control-token mirror (see SetWebControlOwner).
+    // Same liveness key as auth.level; "" = nobody holds the token.
+    {
+        char ownerBuf[32];
+        if (g_webControlOwner != 0)
+            std::snprintf(ownerBuf, sizeof(ownerBuf), "conn-%llu",
+                          (unsigned long long)g_webControlOwner);
+        else ownerBuf[0] = '\0';
+        stageStr(snap, "control.owner", cust, AnsiString(ownerBuf));
+    }
 
     // --- LastSet-derived scalars --------------------------------------------
     // These read ONLY LastSet, so the blob's liveness settles them. Their
@@ -594,8 +609,9 @@ TagCoverage HandlerTagCoverage()
     // about SOURCES -- the blob either loaded or it did not; startmode's
     // per-value range guard is a publish-time concern, not a liveness one.
     //AI(W906-FW-W2) 20260819: +1 = auth.level (always-live login mirror).
-    c.total = 3 + 1 + 1 + 4 + 33 + kUnloadedCount;
-    c.live  = (strs ? 3u : 0u) + (cust ? (1u + 1u /*auth.level*/) : 0u) + (lastS ? (4u + 33u) : 0u);
+    //AI(W906-FW-W3) 20260819: +1 more = control.owner (same cust key).
+    c.total = 3 + 1 + 2 + 4 + 33 + kUnloadedCount;
+    c.live  = (strs ? 3u : 0u) + (cust ? (1u + 2u /*auth.level + control.owner*/) : 0u) + (lastS ? (4u + 33u) : 0u);
 
     //AI(W906-FW1b) 20260817: the 6 sort counters are gated per station
     // (LastSet blob AND Prod.iTrayType configured), so their live count is

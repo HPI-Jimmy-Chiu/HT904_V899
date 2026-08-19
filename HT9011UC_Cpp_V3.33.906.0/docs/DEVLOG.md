@@ -8433,15 +8433,49 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   token（單一瀏覽器裁決的落地，設計 §3——需 WebBridgeServer 端每連線
   身分＋token 狀態，比 W1/W2 深入 server 內部）。
 
+## 20260819 下午 II — FW-W3 操作權 token 落地
+
+- 「同時只允許一個瀏覽器操作」裁決的落地（設計 §3）。全部在
+  WebBridgeServer 內部＋wb_serve tick，不碰機台邏輯：
+  - WebBridgeServer.{h,cpp}：`controlIdleTimeoutMs`（預設 600000）、
+    atomic `ctrlOwner_`（socket thread 唯一寫者，UI 讀走 atomic）；
+    control.acquire/release 在 socket thread 就地答（同 ping 的
+    in-thread 規則，位置在 read-only 閘之後——read-only bridge 對
+    一切 cmd 均勻 fail-closed）；非 auth.*、非 control.* 指令非持有者
+    一律 reject "not-operator"；CloseConn 斷線釋放；PumpLiveness 閒置
+    逾時釋放；`ControlOwner()` accessor。
+  - WebBridgeTags.{h,cpp}：`SetWebControlOwner` ＋ `control.owner` tag
+    （"conn-<id>"／""＝無人持有；liveness 綁 cust 同 auth.level，
+    保住 test_wb_tags 全 null 不變量）；coverage 分母 +1。
+  - wb_serve.cpp：tick 於 Publish 前注入 owner。
+  - cmd_probe.py：default/auth 模式先 control.acquire 再 ping；
+    新 --control 雙連線劇本（A 取得→B 被拒 control-held→B ping 被拒
+    not-operator→A 釋放→B 取得）。
+- **e2e 實測**：default／auth／--control 三劇本全 PASS；auth 探針在
+  default 探針斷線後能立刻取得 token＝斷線釋放順帶實證；
+  --expect-readonly 迴歸 PASS。
+- **gate**（全新 dir ×2）：Debug 137/142、Release 136/142；失敗集合
+  Debug＝常駐五項；Release 多 CounterClearCore SEGFAULT——link.txt
+  0 筆 WebBridge 參照（與本波零依賴）＋同 dir solo ×3 全綠→環境
+  flake 定讞，有效集合兩側逐項相同 ⊆ 常駐。guard 552 檔 IDENTICAL。
+- **坑（自己犯的）**：python heredoc 寫檔把 `'\0'` 寫成真 NUL byte
+  進 WebBridgeTags.cpp（g++ 只給 warning 照編）；第一次修復又因
+  printf 解跳脫把 NUL 寫進修復腳本本身；寫本 DEVLOG 條目時**第三次**
+  中招——python 字串字面值的 `\0` 是八進位跳脫＝真 NUL。教訓：
+  byte-level 修檔一律 Write 工具落腳本檔，不走 shell 內嵌；寫完
+  含跳脫序列的檔案一律回掃 NUL。
+- 閒置逾時 10 分鐘為預設值（使用者未答＝沿用預設，可 config 改）。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
   Sec/BinSel 全系列、cShowBinSelect A/B/C、cBinSel A/B/C、台帳 552、
-  FW-W1（5e4b30d）、**FW-W2（0553449）**。基線 142/5。
-- **下一波**：FW-W3 操作權 token（設計 §3：viewer/operator 兩級、
-  control.acquire/release、斷線釋放、10 分鐘閒置逾時、control.owner tag、
-  非持有者指令回 not-operator——實作在 WebBridgeServer.cpp per-conn 狀態
-  ＋wb_serve dispatch，主迴圈自做）。
-- **之後**：FW-W4 首批真指令（fCounterClear ClearCount 族候選）；
-  1203 HAL MOTION_IO pimpl；FW-3 batch 3+ 表單；cShowBinSelect Wave D。
-- **設計面**：無待答。
+  FW-W1（5e4b30d）、FW-W2（0553449）、**FW-W3（本顆）**。基線 142/5。
+- **下一波**：FW-W4 首批真指令（fCounterClear ClearCount 族候選＝
+  使用者未答時的預設；WebAuth 已就位、token 已就位，剩 dispatch 加
+  cmd＋權限位階對照 golden fCounterClear 的 AccessLevel 檢查＋e2e）。
+  **注意 §7 邊界**：ClearCount 動的是統計計數不是運動控制，屬可做側；
+  任何動真機類（motor/IO/互鎖）仍佇列。
+- **之後**：FW-W5 modal 往返；1203 HAL MOTION_IO pimpl；
+  FW-3 batch 3+ 表單；cShowBinSelect Wave D；台帳二輪 QUIRK 補掃。
+- **設計面**：無待答（10 分鐘閒置逾時＝預設值沿用）。

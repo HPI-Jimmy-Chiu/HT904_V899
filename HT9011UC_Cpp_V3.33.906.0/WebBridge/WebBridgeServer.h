@@ -94,6 +94,14 @@ struct WebBridgeConfig {
     int            idleTimeoutMs;    // silence before drop        (default 45000)
     int            pollIntervalMs;   // select() timeout           (default 50)
 
+    // AI(W906-FW-W3) 20260819: single-operator control token (design doc
+    // section 3, per the 20260819 ruling "同時只允許一個瀏覽器操作").
+    // A cmd-capable connection must hold the token (control.acquire) before
+    // any non-auth.*, non-control.* command is accepted; the token releases
+    // on disconnect and after this idle window with no accepted command.
+    // <= 0 disables the idle timeout (disconnect release still applies).
+    int            controlIdleTimeoutMs;   // default 600000 (10 min)
+
     // A connection whose unsent backlog exceeds this is dropped rather than
     // allowed to stall the single socket thread for every other client.
     size_t         maxSendBacklog;   // default 256 KiB
@@ -163,6 +171,11 @@ public:
     // connection that sent it; if that connection has since gone, the result is
     // dropped silently. Non-blocking.
     void CompleteCommand(unsigned long long ticket, bool ok, const std::string& error);
+
+    // AI(W906-FW-W3) 20260819: the current control-token holder's connection
+    // id (0 = nobody). Safe from the UI thread (atomic read); the UI tick
+    // stages it into the snapshot as the `control.owner` tag.
+    unsigned long long ControlOwner() const;
 
     // Broadcast {"type":"alarm","code":...,"text":...,"at":...} to every
     // connected browser. Non-blocking. `at` should be ISO-8601; when empty the
