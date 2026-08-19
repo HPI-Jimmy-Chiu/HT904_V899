@@ -100,6 +100,16 @@
 // the name, so it gets its own copy, same established idiom.
 const TColor clGray = TColor(0x00808080);   // golden Graphics.hpp clGray
 
+// AI(W906-FW-SBWC) 20260819: golden Graphics.hpp clGreen/clBtnFace -- same
+// "each consuming TU defines it locally" idiom as clGray above (confirmed
+// this wave: `grep -rn "const TColor clGreen" --include=*.h .` finds it
+// LOCALLY defined, identical value, in mykitsuck.h/VacuumUnit/MyVacuumPanel.h
+// via `using vclcompat::clGreen;`, and as its own const in vclcompat/
+// TrayCore.h/LedCore.h/BtnPanelCore.h -- ShowBinSel_ARTNor/ShowBinSel_ARTRT
+// are this TU's first users of either name).
+const TColor clGreen   = TColor(0x00008000);   // golden Graphics.hpp clGreen
+const TColor clBtnFace = TColor(0x8000000F);   // golden Graphics.hpp clBtnFace (COLOR_BTNFACE)
+
 //---------------------------------------------------------------------------
 // AI(W906-FW-YEnable) 20260818: homecoming -- the live global is now backed
 // by a real instance, BUT this ctor is NOT the same "pure field bootstrap"
@@ -167,9 +177,9 @@ TfShowBinSelect::TfShowBinSelect()
     {
         MyBinSel[i]         = new TfShowBinSelectLabel();   // AI(W906-FW-SBWB2) 20260819: Font->Color (ShowBinSel)
         MyBinSelLab[i]      = new TLabel();
-        MyBinSelARTFT[i]    = new TLabel();
+        MyBinSelARTFT[i]    = new TfShowBinSelectLabel();   // AI(W906-FW-SBWC) 20260819: Font->Color (ShowBinSel_ARTNor)
         MyBinSelARTFTLab[i] = new TLabel();
-        MyBinSelARTRT[i]    = new TLabel();
+        MyBinSelARTRT[i]    = new TfShowBinSelectLabel();   // AI(W906-FW-SBWC) 20260819: Font->Color (ShowBinSel_ARTRT)
         MyBinSelARTRTLab[i] = new TLabel();
         grpBinDisp[i]       = new TGroupBox();
         // AI(W906-FW-SBWB2) 20260819: UnLoadPanel[]/UnLoadLabel[] --
@@ -1467,29 +1477,677 @@ void TfShowBinSelect::ShowBinSel()
 }
 
 //---------------------------------------------------------------------------
-//  ShowBinSel_ARTNor -- GATE (B10): documented no-op this wave. Real body is
-//  WAVE B QUEUE (golden :2365-2580, ~216 lines, guarded by
-//  `if(IniConfig.bSPILFunction && bCanRunSCKART)` -- both default false on a
-//  non-SPIL/non-ART machine). Declared so ShowBinSel's call site (golden
-//  :752) compiles/links; its own widget surface (tsARTNormalBin, palARTNor,
-//  s6TrayName[], bCanRunSCKART, Prod.bTo6AutoRetest[], Prod.iTo6CatData[]) is
-//  not yet on this facade -- left for a later sub-wave per this wave's
-//  "large form, slice it" scoping (see forms/fShowBinSelect.h WAVE B QUEUE).
+//  ShowBinSel_ARTNor -- golden :2365-2580. GATE (B10) DISSOLVED by
+//  AI(W906-FW-SBWC) 20260819 -- real body lands this wave (tsARTNormalBin/
+//  palARTNor/MyBinSelARTFT[] now real, see forms/fShowBinSelect.h WAVE C
+//  SCOPE). 0 residual GATEs.
+//
+//  NOTES (translation-fidelity, not GATEs):
+//  * GOLDEN ODDITY (not separately numbered -- informational, not a GATE):
+//    `iBinTray[9]`/`S[9]`/`sBinData[9]`/`BinAssign[9]`/`bUnloadHasBin[9]`/
+//    `iTrayLastBin[9]` below use the LITERAL `9`, exactly as golden writes
+//    it here -- but `9` is NOT the same slot as the sibling, already-ported
+//    ShowBinSel's `eBulkBox` (golden :531-538). Checked this wave
+//    (MachineType.h:1089): `eBulkBox==18`, not `9` -- `9` is one past this
+//    function's OWN `BinTrayTotal` (9 default / 10 when `iHWFix_BinBox==1`,
+//    i.e. 6 Auto + Fix1-3), which in the modern `eTrayCount`-wide numbering
+//    this function's `S[eTrayCount]`/`MyBinSelARTFT[e3TrayCount]` arrays
+//    actually use lands on `eFix4`'s slot (index 9), NOT the Magazine-era
+//    `eBulkBox` slot (index 18) ShowBinSel writes to for the identical
+//    "iHWFix_BinBox error-bin fallback" concept. Kept verbatim either way
+//    (translation-fidelity policy) -- this is a genuine behavioural
+//    divergence between the two sibling functions in golden itself, not a
+//    porting choice.
+//  * Unlike ShowBinSel (golden :622, `if(Prod.iTrayType[i]==tNotUse)
+//    continue;`), this function's own colouring loop has NO such check --
+//    every slot 0..eTrayCount-1 gets a real Caption/Font->Color write
+//    regardless of whether that tray is actually in use. Kept verbatim.
+//  * The `Pos(" . . . ")` gray/colour check a few lines below is the SAME
+//    dead branch as ShowBinSel's own (GATE (B13), forms/fShowBinSelect.h
+//    GATE REGISTER / cShowBinSelect.cpp's ShowBinSel banner) -- no writer
+//    ever produces a caption beginning with the 87-char space-led needle,
+//    so the `clGray` arm is unreachable and the coloured `else` always runs.
 //---------------------------------------------------------------------------
-void TfShowBinSelect::ShowBinSel_ARTNor()
+void TfShowBinSelect::ShowBinSel_ARTNor()                            //JerryYang 20220331 : 緯平要求show ART BIN
 {
-    // WAVE B QUEUE: real body is golden :2365-2580. See forms/
-    // fShowBinSelect.h GATE REGISTER (B10).
+    if(IniConfig.bSPILFunction && bCanRunSCKART)
+    {
+        tsARTNormalBin->TabVisible=true;
+        int Data, BinTrayTotal=9;
+        AnsiString S[eTrayCount], Str;
+        if(iHWFix_BinBox==1)                                                    //kevin 20160819
+        {
+            BinTrayTotal=10;
+        }
+
+        if(iTestRunMode==FT)
+        {
+            palARTNor->Color=clGreen;
+        }
+        else
+        {
+            palARTNor->Color=clBtnFace;
+        }
+
+        for(int i=eAuto1; i<=iAutoRight; i++)
+        {
+            if(Prod.bTo6AutoRetest[FT][i]==true)
+                Str.sprintf("%s (R)", s6TrayName[i]);
+            else
+                Str.sprintf("%s", s6TrayName[i]);
+            MyBinSelARTFT[i]->Caption=Str;
+        }
+
+        for(int i=0; i<BinTrayTotal; i++)
+        {
+            S[i]=" ";
+            BinAssign[i]="";
+            bUnloadHasBin[i]=false;                                             //kevin 20180705 有BIN TRAY set true
+            iTrayLastBin[i]=0;                                                  //kevin 20180705 每一個TRAY最後一個BIN
+        }
+
+        int iLengh=0, i2=0;
+        bool iRecord[100]={false};
+        for(int i=0; i<eTrayCount; i++)
+            iBinTray[i]=false;                                                  //kevin 20170328 (Steven) add 判斷TRAY 是否使用 BIN
+
+        for(int i=0; i<iTestBinCount; i++)
+        {
+            Data=Prod.iTo6CatData[FT][i];
+            if(Data<0)                                                         //JerryYang 20251020 : fix ART顯示錯誤  //kevin 20140317 256 bin 0 start
+                continue;
+
+            for(int j=0; j<eTrayCount; j++)                                     //JerryYang 20251020 : fix ART顯示錯誤
+            {
+                if(j==Data)
+                {
+                    S[j]+=AnsiString(i)+" ";                                    //kevin 20140317 bin 0 start
+                    sBinData[j]=AnsiString(i)+" ";                              //kevin 20180202 record bin
+                    iBinTray[j]=true;                                           //kevin 20170328 (Steven) add 判斷TRAY 是否使用 BIN
+                    iLengh=S[j].Length();
+                    i2=iLengh/460;
+
+                    BinAssign[j]+=AnsiString(i)+",";                            //kevin 20180705 add Auto 123 fix 123 bin data
+                    bUnloadHasBin[j]=true;                                      //kevin 20180705 有BIN TRAY set true
+                    iTrayLastBin[j]=i;                                          //kevin 20180705 每一個TRAY最後一個BIN
+
+                    if(i2!=0)
+                    {
+                        if(iRecord[i2]==false)
+                        {
+                            iRecord[i2]=true;
+                            S[j]+="\n\r";
+                            sBinData[j]="\n\r";                                 //kevin 20180202 record bin
+                            BinAssign[j]+="\n\r";                               //kevin 20180705 add Auto 123 fix 123 bin data
+                        }
+                    }
+                }
+                else
+                {
+                    if(iTestBinCount<=16)                                       //jou 2014-04-30 15 Bin 回復 ... 比較好閱讀
+                    {
+                        S[j]+=". ";
+                        BinAssign[j]+=",";                                      //kevin 20180705 add Auto 123 fix 123 bin data
+                    }
+                }
+            }
+        }
+
+        Data=Prod.iTo6IfError[FT];
+
+        if(TestIF_File.iTestType==RS232_MODE && TestIF_File.iRs232Mode==eRs23232Bin)    //Steven 20121112 : RS232支援32Bin
+        {
+            if(Data>=0)
+            {
+                S[Data]=" E"+S[Data];
+                sBinData[Data]=" E"+S[Data];                                    //kevin 20180202 record bin
+                iBinTray[9]=true;                                               //kevin 20170328 (Steven) add 判斷Fix TRAY 是否使用 BIN
+                BinAssign[Data]+="E";                                           //kevin 20180705 add Auto 123 fix 123 bin data
+                bUnloadHasBin[Data]=true;                                       //kevin 20180705 有BIN TRAY set true
+                iTrayLastBin[Data]=999;                                         //kevin 20180705 每一個TRAY最後一個BIN  Error bin
+            }
+        }
+        else
+        {
+            if(iHWFix_BinBox==1 && Data==-1)                                    //kevin 20160819
+            {
+                S[9]+="E ";
+                sBinData[9]+="E ";                                              //kevin 20180202 record bin
+                iBinTray[9]=true;                                               //kevin 20170328 (Steven) add 判斷Fix TRAY 是否使用 BIN
+                BinAssign[9]+="E";                                              //kevin 20180705 add Auto 123 fix 123 bin data
+                bUnloadHasBin[9]=true;                                          //kevin 20180705 有BIN TRAY set true
+                iTrayLastBin[9]=999;                                            //kevin 20180705 每一個TRAY最後一個BIN  Error bin
+            }
+            else if(Data>=0)
+            {
+                S[Data]+="E ";
+                sBinData[Data]+="E ";                                           //kevin 20180202 record bin
+                iBinTray[9]=true;                                               //kevin 20170328 (Steven) add 判斷Fix TRAY 是否使用 BIN
+                BinAssign[Data]+="E";                                           //kevin 20180705 add Auto 123 fix 123 bin data
+                bUnloadHasBin[Data]=true;                                       //kevin 20180705 有BIN TRAY set true
+                iTrayLastBin[Data]=999;                                         //kevin 20180705 每一個TRAY最後一個BIN  Error bin
+            }
+        }
+
+        //jou 2014-04-30 15 Bin 回復 ... 比較好閱讀
+        if(iTestBinCount<=16)
+        {
+            for(int i=0; i<BinTrayTotal; i++)                                   //kevin 20140317 bin
+            {
+                S[i]+=". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
+                BinAssign[i]+=",";                                              //kevin 20180705 add Auto 123 fix 123 bin data
+            }
+        }
+
+        //Steven 20181113 : 修正Fix Link顯示問題
+        //==>
+        if(Prod.bTo6AutoLink[FT][eFix2]==true)
+        {
+            S[4]=AnsiString("LINK ")+S[3];
+            BinAssign[4]=BinAssign[3];
+        }
+
+        if(Prod.bTo6AutoLink[FT][eFix2]==true &&
+           Prod.bTo6AutoLink[FT][eFix3]==true)
+        {
+            S[5]=AnsiString("LINK ")+S[3];
+            BinAssign[5]=BinAssign[3];
+        }
+        else if(Prod.bTo6AutoLink[FT][eFix2]==false &&
+                Prod.bTo6AutoLink[FT][eFix3]==true)
+        {
+            S[5]=AnsiString("LINK ")+S[4];
+            BinAssign[5]=BinAssign[4];
+        }
+        //<==
+        //Steven 20181113 : 修正Fix Link顯示問題
+        //Ifor 20231122 add Magazine Link
+        //==>
+        if(AUTO3_IS_MAGAZINE==1)
+        {
+            for(int i=1; i<14; i++)
+            {
+                if(BinSelect[FT].bMagazineLink[i]==true)
+                {
+                    for(int j=0; j<14; j++)
+                    {
+                        if(BinSelect[FT].bMagazineLink[i-j]==false)
+                        {
+                            S[eMag1+i]=AnsiString("LINK ")+S[eMag1+(i-j)];
+                            BinAssign[eMag1+i]=BinAssign[eMag1+(i-j)];
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        //<==
+        //Ifor 20231122 add Magazine Link
+        for(int i=0; i<eTrayCount; i++)                                         //JerryYang 20251020 : fix ART顯示錯誤
+        {
+            MyBinSelARTFT[i]->Caption=S[i];
+            int j=MyBinSelARTFT[i]->Caption.Pos(" . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");    //kevin 20140317 bin
+            if(iHWFix_BinBox==1 && i==eBulkBox)                                 //kevin 20160825
+                continue;
+            if(iTestBinCount<=16 && j==1)
+            {
+                MyBinSelARTFT[i]->Font->Color                    =clGray;
+            }
+            else
+            {
+                MyBinSelARTFT[i]->Font->Color                    =tcBinColor[Prod.iTo6StackDefFailCate[FT][i]];
+            }
+        }
+
+        if(IniConfig.bAutoTrayLink==true)                                       //jou 2012-06-14 Auto Tray Link
+        {
+            if(Prod.bTo6AutoLink[FT][eFix2]==true)
+            {
+                MyBinSelARTFT[1]->Caption=MyBinSelARTFT[0]->Caption;
+            }
+
+            if(Prod.bTo6AutoLink[FT][eFix2]==true &&
+               Prod.bTo6AutoLink[FT][eFix3]==true)
+            {
+                MyBinSelARTFT[2]->Caption=MyBinSelARTFT[0]->Caption;
+            }
+            else if(Prod.bTo6AutoLink[FT][eFix2]==false &&
+                    Prod.bTo6AutoLink[FT][eFix3]==true)
+            {
+                MyBinSelARTFT[2]->Caption=MyBinSelARTFT[1]->Caption;
+            }
+        }
+    }
+    else
+    {
+        tsARTNormalBin->TabVisible=false;
+    }
 }
 
 //---------------------------------------------------------------------------
-//  ShowBinSel_ARTRT -- GATE (B11): documented no-op this wave. Real body is
-//  WAVE B QUEUE (golden :2581-2799, ~219 lines), same shape/guard as
-//  ShowBinSel_ARTNor. Declared so ShowBinSel's call site (golden :753)
-//  compiles/links.
+//  ShowBinSel_ARTRT -- golden :2581-2799. GATE (B11) DISSOLVED by
+//  AI(W906-FW-SBWC) 20260819 -- real body lands this wave (tsARTRTBin/
+//  palARTRT/MyBinSelARTRT[] now real). Same shape/notes as
+//  ShowBinSel_ARTNor above (literal `9` for the error-bin slot; no
+//  `tNotUse` skip in the colouring loop; shares GATE (B13)'s dead branch).
 //---------------------------------------------------------------------------
-void TfShowBinSelect::ShowBinSel_ARTRT()
+void TfShowBinSelect::ShowBinSel_ARTRT()                             //JerryYang 20220331 : 緯平要求show ART BIN
 {
-    // WAVE B QUEUE: real body is golden :2581-2799. See forms/
-    // fShowBinSelect.h GATE REGISTER (B11).
+    if(IniConfig.bSPILFunction && bCanRunSCKART)
+    {
+        tsARTRTBin->TabVisible=true;
+        int Data, iBinSelCT=0, BinTrayTotal=9;
+        AnsiString S[eTrayCount];
+
+        if(iHWFix_BinBox==1)                                                    //kevin 20160819
+        {
+            BinTrayTotal=10;
+        }
+
+        for(int i=0; i<BinTrayTotal; i++)
+        {
+            S[i]=" ";
+            BinAssign[i]="";
+            bUnloadHasBin[i]=false;                             //kevin 20180705 有BIN TRAY set true
+            iTrayLastBin[i]=0;                                  //kevin 20180705 每一個TRAY最後一個BIN
+        }
+
+        if(iTestRunMode==RT)
+        {
+            palARTRT->Color=clGreen;
+        }
+        else
+        {
+            palARTRT->Color=clBtnFace;
+        }
+
+        if(TrayForm.iFixTrayMode)
+        {
+            iBinSelCT=9;                                                        //use up down
+        }
+        else
+        {
+            iBinSelCT=6;
+        }
+        int iLengh=0,i2=0;
+        bool iRecord[100]={false};
+        for(int j=0; j<iBinSelCT; j++)
+            iBinTray[j]=false;                                                  //kevin 20170328 (Steven) add 判斷TRAY 是否使用 BIN
+
+        for(int i=0; i<iTestBinCount; i++)
+        {
+            Data=Prod.iTo6CatData[RT][i];
+            if(Data<0)                                                          //JerryYang 20251020 : fix ART顯示錯誤  //kevin 20140317 256 bin 0 start
+              continue;
+
+            for(int j=0; j<eTrayCount; j++)                                     //JerryYang 20251020 : fix ART顯示錯誤
+            {
+                if(j==Data)
+                {
+                    S[j]+=AnsiString(i)+" ";                                    //kevin 20140317 bin 0 start
+                    sBinData[j]=AnsiString(i)+" ";                              //kevin 20180202 record bin
+                    iBinTray[j]=true;                                           //kevin 20170328 (Steven) add 判斷TRAY 是否使用 BIN
+                    iLengh=S[j].Length();
+                    i2=iLengh/460;
+
+                    BinAssign[j]+=AnsiString(i)+",";                            //kevin 20180705 add Auto 123 fix 123 bin data
+                    bUnloadHasBin[j]=true;                                      //kevin 20180705 有BIN TRAY set true
+                    iTrayLastBin[j]=i;                                          //kevin 20180705 每一個TRAY最後一個BIN
+
+                    if(i2 !=0)
+                    {
+                        if(iRecord[i2]==false)
+                        {
+                            iRecord[i2]=true;
+                            S[j]+="\n\r";
+                            sBinData[j]="\n\r";                                 //kevin 20180202 record bin
+                            BinAssign[j]+="\n\r";                               //kevin 20180705 add Auto 123 fix 123 bin data
+                        }
+                    }
+                }
+                else
+                {
+                    //jou 2014-04-30 15 Bin 回復 ... 比較好閱讀
+                    if(iTestBinCount<=16)
+                    {
+                        S[j]+=". ";
+                        BinAssign[j]+=",";                                      //kevin 20180705 add Auto 123 fix 123 bin data
+                    }
+                }
+            }
+        }
+
+        Data=Prod.iTo6IfError[RT];
+
+        if(TestIF_File.iTestType==RS232_MODE &&
+           TestIF_File.iRs232Mode==eRs23232Bin)                                 //Steven 20121112 : RS232支援32Bin
+        {
+            if(Data>=0)
+            {
+                S[Data]=" E"+S[Data];
+                sBinData[Data]=" E"+S[Data];                    //kevin 20180202 record bin
+                iBinTray[9]=true;                               //kevin 20170328 (Steven) add 判斷Fix TRAY 是否使用 BIN
+                BinAssign[Data]+="E";                           //kevin 20180705 add Auto 123 fix 123 bin data
+                bUnloadHasBin[Data]=true;                       //kevin 20180705 有BIN TRAY set true
+                iTrayLastBin[Data]=999;                         //kevin 20180705 每一個TRAY最後一個BIN  Error bin
+            }
+        }
+        else
+        {
+            if(iHWFix_BinBox==1 && Data==-1)                    //kevin 20160819
+            {
+                S[9]+="E ";
+                sBinData[9]+="E ";                              //kevin 20180202 record bin
+                iBinTray[9]=true;                               //kevin 20170328 (Steven) add 判斷Fix TRAY 是否使用 BIN
+                BinAssign[9]+="E";                              //kevin 20180705 add Auto 123 fix 123 bin data
+                bUnloadHasBin[9]=true;                          //kevin 20180705 有BIN TRAY set true
+                iTrayLastBin[9]=999;                            //kevin 20180705 每一個TRAY最後一個BIN  Error bin
+            }
+            else if(Data>=0)
+            {
+                S[Data]+="E ";
+                sBinData[Data]+="E ";                           //kevin 20180202 record bin
+                iBinTray[9]=true;                               //kevin 20170328 (Steven) add 判斷Fix TRAY 是否使用 BIN
+                BinAssign[Data]+="E";                           //kevin 20180705 add Auto 123 fix 123 bin data
+                bUnloadHasBin[Data]=true;                       //kevin 20180705 有BIN TRAY set true
+                iTrayLastBin[Data]=999;                         //kevin 20180705 每一個TRAY最後一個BIN  Error bin
+            }
+        }
+
+        //jou 2014-04-30 15 Bin 回復 ... 比較好閱讀
+        if(iTestBinCount<=16)
+        {
+            for(int i=0; i<BinTrayTotal; i++)                                   //kevin 20140317 bin
+            {
+                S[i]+=". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ";
+                BinAssign[i]+=",";                                              //kevin 20180705 add Auto 123 fix 123 bin data
+            }
+        }
+
+        //Steven 20181113 : 修正Fix Link顯示問題
+        //==>
+        if(Prod.bTo6AutoLink[RT][eFix2]==true)
+        {
+            S[4]=AnsiString("LINK ")+S[3];
+            BinAssign[4]=BinAssign[3];
+        }
+
+        if(Prod.bTo6AutoLink[RT][eFix2]==true &&
+           Prod.bTo6AutoLink[RT][eFix3]==true)
+        {
+            S[5]=AnsiString("LINK ")+S[3];
+            BinAssign[5]=BinAssign[3];
+        }
+        else if(Prod.bTo6AutoLink[RT][eFix2]==false &&
+                Prod.bTo6AutoLink[RT][eFix3]==true)
+        {
+            S[5]=AnsiString("LINK ")+S[4];
+            BinAssign[5]=BinAssign[4];
+        }
+        //<==
+        //Steven 20181113 : 修正Fix Link顯示問題
+        //Ifor 20231122 add Magazine Link
+        //==>
+        if(AUTO3_IS_MAGAZINE==1)
+        {
+            for(int i=1; i<14; i++)
+            {
+                if(BinSelect[RT].bMagazineLink[i]==true)
+                {
+                    for(int j=0; j<14; j++)
+                    {
+                        if(BinSelect[RT].bMagazineLink[i-j]==false)
+                        {
+                            S[eMag1+i]=AnsiString("LINK ")+S[eMag1+(i-j)];
+                            BinAssign[eMag1+i]=BinAssign[eMag1+(i-j)];
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        //<==
+        //Ifor 20231122 add Magazine Link
+
+        for(int i=0; i<eTrayCount; i++)                                         //JerryYang 20251020 : fix ART顯示錯誤
+        {
+            MyBinSelARTRT[i]->Caption=S[i];
+            int j=MyBinSelARTRT[i]->Caption.Pos(" . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ");    //kevin 20140317 bin
+            if(iHWFix_BinBox==1 && i==eBulkBox)                                 //kevin 20160825
+                continue;
+            if(iTestBinCount<=16 && j==1)
+            {
+                MyBinSelARTRT[i]->Font->Color                    =clGray;
+            }
+            else
+            {
+                MyBinSelARTRT[i]->Font->Color                    =tcBinColor[Prod.iTo6StackDefFailCate[RT][i]];
+            }
+        }
+
+        if(IniConfig.bAutoTrayLink==true)                                       //jou 2012-06-14 Auto Tray Link
+        {
+            if(Prod.bTo6AutoLink[RT][eFix2]==true)
+            {
+                MyBinSelARTRT[1]->Caption=MyBinSelARTRT[0]->Caption;
+            }
+
+            if(Prod.bTo6AutoLink[RT][eFix2]==true &&
+               Prod.bTo6AutoLink[RT][eFix3]==true)
+            {
+                MyBinSelARTRT[2]->Caption=MyBinSelARTRT[0]->Caption;
+            }
+            else if(Prod.bTo6AutoLink[RT][eFix2]==false &&
+                    Prod.bTo6AutoLink[RT][eFix3]==true)
+            {
+                MyBinSelARTRT[2]->Caption=MyBinSelARTRT[1]->Caption;
+            }
+        }
+    }
+    else
+    {
+        tsARTRTBin->TabVisible=false;
+    }
+}
+
+//---------------------------------------------------------------------------
+//  TimerAutoCleanCountTimer -- golden :2168-2214. AI(W906-FW-SBWC) 20260819:
+//  FW-3 Wave C. FULL, 0 GATEs (10 new widgets: rg_FixBinBox,
+//  ed_FixBinBoxAlarmCount, LabErrorBinNowCount, PageControl1_ART,
+//  Tab_ARTSkipICCount, AutocleanlifeTime, btnCleanReset, BulkBox,
+//  labScheduleNAME, labInQty -- see forms/fShowBinSelect.h WAVE C SCOPE).
+//  The golden :2207-2213 `CUSTOMER_CODE==CC_JCET` block is commented out IN
+//  GOLDEN ITSELF (dead code, not a translation gap) -- kept as a comment
+//  below, exactly as golden has it.
+//---------------------------------------------------------------------------
+void TfShowBinSelect::TimerAutoCleanCountTimer(TObject * /*Sender*/)
+{
+    if(InitialOK==false)
+        return;
+
+    if(IniConfig.bG10ShowImmediateUPH && SystemStart)
+        CaculateUPH();                                                          //Steven 20160727 : Show immediate UPH
+
+    if(IniConfig.bEnableAutoCleanFunction==true)                                //Alick 20160624 修改成判斷INI是否啟用AUTO CLEAN功能
+    {
+        btnCleanReset->Enabled     = true;                                      //Steven 20140514
+        ed_AutoCleanCount->Enabled = false;
+
+        if(CUSTOMER_CODE==CC_KYEC_LEE)                                          //Ifor 20160902 add 京元要求Autoclean life time
+        {
+            AutocleanlifeTime->Caption="Clean Device LifeTime: "+ed_AutoCleanCount->Text+"/"+ IntToStr(TestIF_File.iAutoClean_AlarmCount);
+        }
+        else
+        {
+            AutocleanlifeTime->Visible=false;
+        }
+    }
+
+    BulkBox->Visible=IniConfig.bI33ErrorBinBox;                                 //kevin 20160824 add error bin box
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+    {
+        labScheduleNAME->Caption=ASET_ScheduleNAME;
+        labInQty->Caption=ASET_INTQTY;
+    }
+
+    if(CosFunction.bHWBinBox && iHWFix_BinBox==1)                               //kevin 20160822 error bin box 清除
+    {
+        rg_FixBinBox->ItemIndex=iHWFix_BinBox;                                  //kevin 20160819 error bin 要放到 Bin Box "\\Binasgn.Data";
+        ed_FixBinBoxAlarmCount->Text=iErrorBinBoxAlarm;                         //kevin 20160819
+        LabErrorBinNowCount->Caption=LastSet.iBinBoxCount;
+    }
+    PageControl1_ART->TabVisible  =((USE_AUTO_RETEST==eartInstall && IniConfig.bA10_AutoReTest) || CosFunction.bUseARTSortCount);   //kevin 201506016  //wei 20150331 打開功能就顯示
+    Tab_ARTSkipICCount->TabVisible=((USE_AUTO_RETEST==eartInstall && IniConfig.bA10_AutoReTest && bForKyecBu3RunART==true) || CosFunction.bUseARTSortCount);  //Frank 20160819    //wei 20161118 bRunART-->bForKyecBu3RunART
+
+//    if(CUSTOMER_CODE==CC_JCET)
+//    {                                                                           //jou 20180130 (Steven) : JCET 如春要求機台在生產時SLT lot no不能修改
+//        if(HasICUnderMachine())
+//            edSLT04->Enabled=false;
+//        else
+//            edSLT04->Enabled=true;
+//    }
+}
+
+//---------------------------------------------------------------------------
+//  FormShow -- golden :758-866. AI(W906-FW-SBWC) 20260819: FW-3 Wave C.
+//  ACTIVE, 1 GATE (B18) -- see forms/fShowBinSelect.h GATE REGISTER.
+//
+//  SUBSTITUTIONS (S, behaviour-preserving):
+//  * `fShowBinSelect->tsUnloadMap`/`fShowBinSelect->palUnloader` (golden
+//    :764/:778) kept AS-WRITTEN (the global-pointer-from-within-its-own-
+//    method idiom) -- same posture as this file's own btReturnClick
+//    (`fShowBinSelect->Left=756;` etc), not `this->`-substituted, for
+//    consistency with that established precedent.
+//  * `labAuto1`/`labAuto2`/`labAuto3`/`labFix1`/`labFix2`/`labFix3` (golden
+//    :779-784, CC_Greatek branch) -> `MyBinSelLab[eAuto1]`/[eAuto2]/[eAuto3]/
+//    [eFix1]/[eFix2]/[eFix3]. NOT new facade members -- golden's OWN ctor
+//    (golden :56-63, `tempMyBinSelLab[]={labAuto1,labAuto2,labAuto3,...,
+//    labFix1,labFix2,labFix3,...}`) assigns these exact pointers into
+//    `MyBinSelLab[i]` (golden :124, `MyBinSelLab[i]=tempMyBinSelLab[i];`),
+//    so `MyBinSelLab[eAuto1]` IS `labAuto1` in golden -- same object
+//    identity, zero new members (see CTOR NOTE / WAVE C SCOPE, forms/
+//    fShowBinSelect.h).
+//  * `PageControl1Change(this)` (golden :801) -> `PageControl1Change(nullptr)`
+//    -- same substitution/reasoning as this file's own btReturnClick/
+//    ShowBinSel tail (PageControl1Change ignores Sender entirely, GATE (B8),
+//    documented no-op).
+//
+//  GATE (B18): the CC_GIGAS/SPIL_FOR_QLE inner Top-stacking calculation
+//  (`palAutoDeviceEjection->Top=btnASM->Top+btnASM->Height+10;` / the
+//  `gbAutoCleanCount` else-arm) -- see forms/fShowBinSelect.h GATE REGISTER.
+//  The outer Visible toggle and the `if(palAutoDeviceEjection && ...)` guard
+//  are REAL/ACTIVE.
+//---------------------------------------------------------------------------
+void TfShowBinSelect::FormShow(TObject * /*Sender*/)
+{
+    if(NUMBER_PANEL_TYPE==3 ||
+       NUMBER_PANEL_TYPE==4)                                                    //Sam 20240604 : 新增 BinDisplay TFT
+        bUpdateBinDigital=true;
+    else
+        fShowBinSelect->tsUnloadMap->TabVisible=false;                          //Steven 20110411
+
+    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //wei 20150904
+        ed_AutoCleanCount->Visible=false;
+    else
+        ed_AutoCleanCount->Visible=true;
+
+    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //wei 20151111 不顯示clean
+        btnClearCount->Visible=false;
+    else
+        btnClearCount->Visible=true;
+
+    if(CUSTOMER_CODE==CC_Greatek)                                               //JimmyChiu 20220124 : 超豐要求改變顯示名稱
+    {
+        fShowBinSelect->palUnloader->Width=110;
+        MyBinSelLab[eAuto1]->Caption="Auto1 (CAT A)";
+        MyBinSelLab[eAuto2]->Caption="Auto2 (CAT B)";
+        MyBinSelLab[eAuto3]->Caption="Auto3 (CAT C)";
+        MyBinSelLab[eFix1]->Caption ="Fix1 (CAT D)";
+        MyBinSelLab[eFix2]->Caption ="Fix2 (CAT E)";
+        MyBinSelLab[eFix3]->Caption ="Fix3 (JAM)";
+    }
+
+    tsFxiAI->TabVisible=USE_Fix_AI_CCD;
+
+    if(CUSTOMER_CODE==CC_ASE_CL)
+    {
+        tsSECS_Category->TabVisible=true;
+    }
+    else
+    {
+        tsSECS_Category->TabVisible=false;
+    }
+
+    ShowBinSel();
+    bShow=true;
+    PageControl1->ActivePage=tsTestBin;
+    PageControl1Change(nullptr);   // S: golden passes `this`, see banner note above
+    Tab_UPH->TabVisible         =IniConfig.bShowUPH;                            //Steven 20100827
+    btnAutoClean->Visible       =IniConfig.bEnableAutoCleanFunction;
+    tsASE->TabVisible           =IniConfig.bASE_Report;                         //kevin 20141106 高雄日月光 秀Schedule NUM
+    PageControl1_ART->TabVisible=(USE_AUTO_RETEST==eartInstall &&               //kevin 201506016
+                                  IniConfig.bA10_AutoReTest);                   //wei 20150331 打開功能就顯示
+
+    if(CosFunction.bUseARTSortCount==true)                                      //Ifor 20170321 add MRT Mode
+    {
+        PageControl1_ART->TabVisible=true;
+        PageControl1_ART->Caption="Category Info AUTO";
+    }
+
+    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //Ifor 20180313 :add 京元喬智要求 Clean Reset 隱藏 需求 Auto Clean 設定頁面清除
+    {
+        btnCleanReset->Visible=false;
+    }
+    else
+    {
+        btnCleanReset->Visible=IniConfig.bEnableAutoCleanFunction;
+    }
+
+    if(CUSTOMER_CODE==CC_UNISEM_M)
+    {
+        labJamrate->Visible =true;
+        Jamrate->Visible    =true;
+    }
+    Panel1->Visible=CosFunction.IntervalYieldCount;                             //wei 20180606 Interval Low Yield By Site
+
+    pnlSpeciallYield->Visible  =CosFunction.bSpecailLowYeild;                   //Sam 20210505 : PTI 要求的兩段 Low Yeild
+
+    if(IniConfig.bG15LoadInputCount)                                            //kevin 20211106 輸入顆數達成就 Clean out    //JimmyChiu 20220124 fix name
+    {
+        PLoadInput->Visible=true;
+        PLoadInput->Top =120;
+        PLoadInput->Left=14;
+    }
+    else
+    {
+        PLoadInput->Visible=false;
+    }
+
+    tsCategoryInfoContCT->TabVisible=CosFunction.bCategoryInfoByContactCT;       //Sam 20240131 : 新增一組 CategoryInfo 紀錄資料使用 ContactCT
+    gbTriggerAlm->Visible=IniConfig.bSPILFunction;                              //RogerYang 20260105 Jimmy Add.
+    SetAutoVisible();
+    if(CUSTOMER_CODE==CC_GIGAS || SPIL_FOR_QLE==1)                              //JerryYang 20251020 : 渠梁半清機功能
+    {
+        if(palAutoDeviceEjection)
+            palAutoDeviceEjection->Visible=true;
+
+        if(palAutoDeviceEjection &&
+           Panel1->Visible==false &&
+           pnlSpeciallYield->Visible==false)
+        {
+            // GATE (B18): if(SPIL_FOR_QLE==1)
+            //     palAutoDeviceEjection->Top=btnASM->Top+btnASM->Height+10;   //KevinCheng 20260415 : 避免遮住按鈕
+            // else
+            //     palAutoDeviceEjection->Top=gbAutoCleanCount->Top+gbAutoCleanCount->Height+10;
+            // -- btnASM/gbAutoCleanCount are not on this facade and neither
+            // TSpeedButton nor TGroupBox carries ->Top/->Height (pure
+            // cosmetic pixel-stacking, never read back); see forms/
+            // fShowBinSelect.h GATE REGISTER (B18).
+        }
+    }
+    else
+    {
+        if(palAutoDeviceEjection)
+            palAutoDeviceEjection->Visible=false;
+    }
 }

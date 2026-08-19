@@ -8,6 +8,18 @@
 //  `python3 -c "open(path,'rb').read().decode('cp950')"`, 0 U+FFFD, this
 //  wave).
 //
+//  AI(W906-FW-SBWC) 20260819: FW-3 Wave C -- lands ShowBinSel_ARTNor/
+//  ShowBinSel_ARTRT/TimerAutoCleanCountTimer/FormShow real bodies (WAVE B
+//  QUEUE items). Re-decoded golden this wave with the same cp950 command,
+//  0 U+FFFD, per-line-range (`text.split('\n')`, 1-based golden line ==
+//  `lines[N-1]`) -- see WAVE C SCOPE below for exact spans. STYLE NOTE: the
+//  prior FW-SBWB2 wave translated Chinese attribution comments into English
+//  prose and reflowed whitespace; DEVLOG 20260819 flagged this as a
+//  deviation from cp950-verbatim policy ("風格警示：本波代理偏離逐字翻譯"). This
+//  wave follows FW-BinSel-WB's precedent instead: original Chinese
+//  attribution comments (`//kevin 20180705 有BIN TRAY set true` etc) are
+//  kept BYTE-VERBATIM (only `__fastcall` removed), not translated/reflowed.
+//
 //  ROLE
 //  ----
 //  TfShowBinSelect is golden's Unloader Bin-Select / Category-Info dialog:
@@ -57,28 +69,52 @@
 //    btnClearCountClick     golden :2262-2277 ACTIVE, 2 GATEs (fSecurity, fCounterClear)
 //    DelDot (free function) golden :178-205  ACTIVE (pure)
 //
-//  WAVE B SCOPE (this wave, AI(W906-FW-SBWB2) 20260819 -- golden line spans)
+//  WAVE B SCOPE (AI(W906-FW-SBWB2) 20260819 -- golden line spans)
 //  --------------------------------------------------------------------------
 //    ShowBinSel             golden :388-756  ACTIVE, 3 GATEs -- (B9)
 //                             fSortCT->myCountPanel, (B10)/(B11)
-//                             ShowBinSel_ARTNor/ShowBinSel_ARTRT (each
-//                             declared below as a documented no-op, see
-//                             WAVE B QUEUE); 1 GOLDEN BUG (B12).
+//                             ShowBinSel_ARTNor/ShowBinSel_ARTRT DISSOLVED
+//                             by WAVE C (see below); 1 GOLDEN BUG (B12).
 //
-//  WAVE B QUEUE (explicit, NOT translated this wave -- golden line spans)
+//  WAVE C SCOPE (this wave, AI(W906-FW-SBWC) 20260819 -- golden line spans)
 //  --------------------------------------------------------------------------
-//    ShowBinSel_ARTNor        golden :2365-2580 (ART bin display, same shape
-//                              as ShowBinSel; guarded by
-//                              `IniConfig.bSPILFunction && bCanRunSCKART`,
-//                              both default false) -- DECLARED here as a
-//                              documented no-op GATE (B10) so ShowBinSel's
-//                              own call site has something to bind to (same
-//                              posture as PageControl1Change/(B8) below).
-//    ShowBinSel_ARTRT         golden :2581-2799 (ART bin display, same shape)
-//                              -- DECLARED here as a documented no-op GATE
-//                              (B11), same reasoning as ShowBinSel_ARTNor.
-//    FormShow                 golden :758-866   (~15 more widgets, many
-//                              customer-code branches)
+//    ShowBinSel_ARTNor      golden :2365-2580 ACTIVE, 0 GATEs. GATE (B10)
+//                             DISSOLVED -- widget surface (tsARTNormalBin,
+//                             palARTNor, MyBinSelARTFT[] retyped
+//                             TfShowBinSelectLabel*) all real now.
+//    ShowBinSel_ARTRT       golden :2581-2799 ACTIVE, 0 GATEs. GATE (B11)
+//                             DISSOLVED, same shape as ShowBinSel_ARTNor
+//                             (tsARTRTBin, palARTRT, MyBinSelARTRT[]).
+//    TimerAutoCleanCountTimer golden :2168-2214 ACTIVE, 0 GATEs (10 new
+//                             widgets: rg_FixBinBox, ed_FixBinBoxAlarmCount,
+//                             LabErrorBinNowCount, PageControl1_ART,
+//                             Tab_ARTSkipICCount, AutocleanlifeTime,
+//                             btnCleanReset, BulkBox, labScheduleNAME,
+//                             labInQty). The golden :2207-2213 `CC_JCET`
+//                             block is commented out IN GOLDEN ITSELF (dead,
+//                             not a translation gap) -- kept as a comment.
+//    FormShow               golden :758-866 ACTIVE, 1 GATE (B18) -- see
+//                             GATE REGISTER. `labAuto1/2/3`/`labFix1/2/3`
+//                             (golden :779-784, CC_Greatek branch) are NOT
+//                             new facade members -- see CTOR NOTE below,
+//                             which already proved these ALIAS
+//                             MyBinSelLab[eAuto1..eAuto3]/[eFix1..eFix3]
+//                             (golden ctor :56-63/:124, `tempMyBinSelLab[]=
+//                             {labAuto1,labAuto2,labAuto3,...,labFix1,
+//                             labFix2,labFix3,...}` assigned verbatim into
+//                             `MyBinSelLab[i]`) -- translated as
+//                             `MyBinSelLab[eAuto1]->Caption=...` etc, same
+//                             object identity as golden, zero new members.
+//                             `PageControl1->ActivePage` (golden :800) is
+//                             new: PageControl1 retyped
+//                             TfShowBinSelectPageControl* (adds ->ActivePage,
+//                             a TTabSheet*; vclcompat::TPageControl only
+//                             carries ->ActivePageIndex).
+//
+//  WAVE B QUEUE (explicit, NOT translated -- golden line spans; ShowBinSel_
+//  ARTNor/ShowBinSel_ARTRT/TimerAutoCleanCountTimer/FormShow MOVED to WAVE C
+//  above, closed)
+//  --------------------------------------------------------------------------
 //    PageControl1Change       golden :1479-1633 (page-layout geometry, many
 //                              widgets) -- DECLARED here as a documented
 //                              no-op GAP so btReturnClick's call site has
@@ -89,10 +125,6 @@
 //                              driver (SW[] switch coupling + fiosetview)
 //    DoShowBinDigital         golden :998-1423  BLOCKED: dominant body is
 //                              `HSys.BinDisCtrl->...`
-//    TimerAutoCleanCountTimer golden :2168-2214 (~6 more widgets: rg_FixBinBox,
-//                              ed_FixBinBoxAlarmCount, LabErrorBinNowCount,
-//                              PageControl1_ART, Tab_ARTSkipICCount,
-//                              AutocleanlifeTime)
 //  SAFETY-QUEUED (per project policy -- machine-mode-switching actions,
 //  queued for user sign-off, NOT translated as a "widget surface" deferral):
 //    btnAutoCleanClick             golden :2101-2166 (starts a REAL Auto
@@ -123,8 +155,10 @@
 //  handful of scalar inits (ColorRed/Green/Orange, tsUPH, sBinCode_ATK[],
 //  ShowInitialString(), an SPIL_FOR_QLE branch, btReturn->Align).  VERIFIED
 //  this wave (`grep -n "<name>" <utf8-decoded-cpp>` for a sample of the ~190
-//  names): apart from `labAuto1/2/3`/`labFix1/2/3` (read again in the
-//  DEFERRED FormShow, golden :779-784, Greatek customer code only) and each
+//  names): apart from `labAuto1/2/3`/`labFix1/2/3` (read again by FormShow,
+//  golden :779-784, CC_Greatek customer code only -- translated by
+//  AI(W906-FW-SBWC) 20260819 as `MyBinSelLab[eAuto1..eAuto3/eFix1..eFix3]`,
+//  see WAVE C SCOPE above; NOT new facade members) and each
 //  name's own `<name>Click` event-handler declaration, NONE of the ~190
 //  individually-named widgets is ever read anywhere outside the ctor -- only
 //  the 7 ARRAYS are. This facade therefore constructs the 7 arrays directly
@@ -159,6 +193,14 @@
 //  needed. This is flagged for the main loop to VERIFY (not asserted as
 //  proven-safe by this wave) before defining a live global from this class,
 //  per this wave's task brief.
+//
+//  STALE as of 20260819 (FW-SBWB2/FW-SBWC, not fixed here since it predates
+//  this wave and the correction belongs beside the code it describes): the
+//  global WAS defined by FW-SBWB2 (`cShowBinSelect.cpp:125, TfShowBinSelect
+//  *fShowBinSelect = new TfShowBinSelect();`) with its own SIOF guard
+//  (`INIFileGeneral!=0`, see that file's banner ahead of the ctor) -- this
+//  section's "NOT decided this wave" framing is historical record of WAVE A's
+//  own reasoning, not the current state.
 //
 //  GATE REGISTER
 //  --------------------------------------------------------------------------
@@ -269,6 +311,27 @@
 //        walk `bMagazineLink[i-j]` to a negative subscript -- unreachable in
 //        practice (index 0/eAuto1 is never written true by any port'd
 //        writer), kept verbatim.
+//  (B13) GOLDEN ODDITY (not a gate -- dead branch in golden itself), lives
+//        inline at ShowBinSel's own Pos()-check site in cShowBinSelect.cpp
+//        (integration 20260819). ShowBinSel_ARTNor/ShowBinSel_ARTRT (this
+//        wave, FW-SBWC) each carry the IDENTICAL 87-char-needle Pos() check
+//        (golden :2543/:2762) -- same dead branch, same reasoning, cross-
+//        referenced at each site rather than re-derived.
+//  (B18) FormShow's CC_GIGAS/SPIL_FOR_QLE inner Top-stacking calculation
+//        (golden :855-858: `palAutoDeviceEjection->Top=btnASM->Top+
+//        btnASM->Height+10;` / `...=gbAutoCleanCount->Top+gbAutoCleanCount->
+//        Height+10;`) -- `btnASM`/`gbAutoCleanCount` are NOT on this facade
+//        (`grep -n "btnASM\|gbAutoCleanCount" forms/fShowBinSelect.h` -- 0
+//        hits before this wave, 20260819) and neither vclcompat::TSpeedButton
+//        nor vclcompat::TGroupBox carries `->Top`/`->Height` (pure cosmetic
+//        pixel-stacking geometry, never read back by anything this tree
+//        tests) -- gated rather than growing two more facade-only geometry
+//        subclasses for a calculation with zero behavioural effect. The
+//        OUTER `palAutoDeviceEjection->Visible=true/false` toggle (golden
+//        :848-849/:863-864) and the `if(palAutoDeviceEjection && ...)` guard
+//        are REAL/ACTIVE -- only the inner `->Top=` assignment is gated, same
+//        "gate the missing call, not the surrounding logic" idiom as (B1)/
+//        (B3)/(B9).
 //
 //  DESIGN NOTE -- facade-only widget wrapper shapes
 //  --------------------------------------------------------------------------
@@ -281,7 +344,20 @@
 //    extension in this tree.
 //  TfShowBinSelectPanel : public vclcompat::TPanel
 //    Adds `Top` (int) for palAutoDeviceEjection->Top (ctor's SPIL_FOR_QLE
-//    branch) -- vclcompat::TPanel carries no geometry.
+//    branch) -- vclcompat::TPanel carries no geometry. AI(W906-FW-SBWC)
+//    20260819, WAVE C ADD: also adds `Left`/`Width` (both int, default 0) --
+//    reused (not a new subclass) for `palUnloader->Width` (FormShow, CC_
+//    Greatek) and `PLoadInput->Top`/`->Left` (FormShow, bG15LoadInputCount).
+//  TfShowBinSelectPageControl : public vclcompat::TPageControl -- AI(W906-
+//    FW-SBWC) 20260819, WAVE C ADD.
+//    Adds `ActivePage` (a `TTabSheet*`, default nullptr) for
+//    `PageControl1->ActivePage=tsTestBin;` (FormShow, golden :800) --
+//    vclcompat::TPageControl carries only `->ActivePageIndex` (int), no
+//    tab-sheet pointer surface. PageControl1 retyped from plain
+//    `TPageControl*` to this subclass; safe for every existing reader (the
+//    only prior touch anywhere in this file is the ctor's implicit default-
+//    construction, `grep -n "PageControl1" cShowBinSelect.cpp` before this
+//    wave -- 0 hits besides the member declaration).
 //  TfShowBinSelectTimer
 //    golden `TTimer *TimerAutoCleanCount;` -- ONLY `->Enabled` is ever
 //    written (FormDestroy, golden :167) among this wave's scope; no
@@ -323,8 +399,25 @@
 //      ColCount=3, RowCount=16 (dfm design-time default -- ShowInitialString/
 //      ShowCategoryBin overwrite both at runtime, exactly as golden does).
 //    UPH_StringGrid: ColCount=4, RowCount=14 (dfm design-time default;
-//      FormShow -- Wave B -- overwrites ColCount to 7 when
-//      IniConfig.bVTESTFunction; not reachable from Wave A's own methods).
+//      CORRECTED by AI(W906-FW-SBWC) 20260819 -- the `IniConfig.bVTESTFunction`
+//      ColCount=7 override actually lives in ShowBinSel (golden :397-400,
+//      landed FW-SBWB2), NOT FormShow as this note previously claimed;
+//      FormShow itself never touches UPH_StringGrid. Both ShowBinSel and
+//      FormShow are ACTIVE as of this wave, so the override IS reachable
+//      (FormShow calls ShowBinSel() -- golden :798/:2365-2799 region).
+//    tsARTNormalBin/tsARTRTBin/palARTNor/palARTRT/PageControl1_ART/
+//      Tab_ARTSkipICCount/tsFxiAI/tsSECS_Category/tsTestBin/Tab_UPH/tsASE/
+//      tsCategoryInfoContCT/BulkBox/rg_FixBinBox/ed_FixBinBoxAlarmCount/
+//      LabErrorBinNowCount/AutocleanlifeTime/btnCleanReset/labScheduleNAME/
+//      labInQty/tsUnloadMap/btnClearCount/palUnloader/btnAutoClean/
+//      labJamrate/Jamrate/Panel1/pnlSpeciallYield/PLoadInput/gbTriggerAlm
+//      (AI(W906-FW-SBWC) 20260819, WAVE C ADD): no per-slot dfm geometry/
+//      Caption/Color hydrated, same "cosmetic pre-population for golden's
+//      own real VCL render only" posture as UnLoadPanel[]/UnLoadLabel[]
+//      below -- every one of ShowBinSel_ARTNor/ShowBinSel_ARTRT/
+//      TimerAutoCleanCountTimer/FormShow's writes to these widgets is an
+//      unconditional runtime OVERWRITE (->TabVisible=/->Caption=/->Color=)
+//      before this wave's tests ever read any of them back.
 //    palAutoDeviceEjection: Top=473 (dfm) -- overwritten to 230 by the ctor's
 //      SPIL_FOR_QLE branch when that flag is set, exactly as golden does.
 //    grpBinDisp[]/MyBinSel[]/... arrays: no per-slot dfm geometry hydrated
@@ -369,6 +462,9 @@ using vclcompat::TLabeledEdit;
 using vclcompat::TPageControl;
 using vclcompat::TStringList;
 using vclcompat::TFont;   // AI(W906-FW-SBWB2) 20260819: TfShowBinSelectLabel's Font member
+using vclcompat::TSpeedButton;   // AI(W906-FW-SBWC) 20260819: btnCleanReset/btnAutoClean
+using vclcompat::TTabSheet;      // AI(W906-FW-SBWC) 20260819: tsARTNormalBin/PageControl1_ART/etc
+using vclcompat::TRadioGroup;    // AI(W906-FW-SBWC) 20260819: rg_FixBinBox
 
 // -- facade-only widget extensions (see DESIGN NOTE above) -------------------
 class TfShowBinSelectGrid : public vclcompat::TStringGrid
@@ -387,7 +483,18 @@ class TfShowBinSelectPanel : public vclcompat::TPanel
 {
 public:
     int Top;
-    TfShowBinSelectPanel() : Top(0) {}
+    int Left;    // AI(W906-FW-SBWC) 20260819: PLoadInput->Left (FormShow)
+    int Width;   // AI(W906-FW-SBWC) 20260819: palUnloader->Width (FormShow, CC_Greatek)
+    TfShowBinSelectPanel() : Top(0), Left(0), Width(0) {}
+};
+
+// golden TPageControl->ActivePage (a TTabSheet*) -- vclcompat::TPageControl only
+// carries ->ActivePageIndex (int), see DESIGN NOTE. AI(W906-FW-SBWC) 20260819:
+// FormShow (golden :800) is this tree's first reader of ->ActivePage itself.
+class TfShowBinSelectPageControl : public vclcompat::TPageControl
+{
+public:
+    TTabSheet *ActivePage = nullptr;
 };
 
 // golden TTimer -- see DESIGN NOTE above.
@@ -425,9 +532,13 @@ public:
     // above for why (ShowBinSel's `MyBinSel[i]->Font->Color=...`).
     TfShowBinSelectLabel *MyBinSel[e3TrayCount];
     TLabel    *MyBinSelLab[e3TrayCount];
-    TLabel    *MyBinSelARTFT[e3TrayCount];
+    // MyBinSelARTFT[]/MyBinSelARTRT[] retyped TfShowBinSelectLabel* by
+    // AI(W906-FW-SBWC) 20260819 (Wave A/B had them as plain TLabel*) -- same
+    // ->Font->Color reason as MyBinSel[] above (ShowBinSel_ARTNor/ARTRT,
+    // golden :2548/:2552/:2767/:2771).
+    TfShowBinSelectLabel *MyBinSelARTFT[e3TrayCount];
     TLabel    *MyBinSelARTFTLab[e3TrayCount];
-    TLabel    *MyBinSelARTRT[e3TrayCount];
+    TfShowBinSelectLabel *MyBinSelARTRT[e3TrayCount];
     TLabel    *MyBinSelARTRTLab[e3TrayCount];
     TGroupBox *grpBinDisp[e3TrayCount];
 
@@ -463,7 +574,49 @@ public:
     TEdit     *EdLoadCount     = new TEdit();
     TEdit     *ed_AutoCleanCount = new TEdit();
     TfShowBinSelectTimer *TimerAutoCleanCount = new TfShowBinSelectTimer();
-    TPageControl *PageControl1 = new TPageControl();
+    // PageControl1 retyped TfShowBinSelectPageControl* by AI(W906-FW-SBWC)
+    // 20260819 for ->ActivePage (FormShow, golden :800) -- see DESIGN NOTE.
+    TfShowBinSelectPageControl *PageControl1 = new TfShowBinSelectPageControl();
+
+    // AI(W906-FW-SBWC) 20260819, WAVE C ADD: ShowBinSel_ARTNor/ShowBinSel_ARTRT
+    // widget surface (golden :2365-2580 / :2581-2799) -- both real bodies land
+    // this wave, see GATE REGISTER (B10)/(B11) DISSOLVED note below.
+    TTabSheet *tsARTNormalBin = new TTabSheet();
+    TTabSheet *tsARTRTBin     = new TTabSheet();
+    TPanel    *palARTNor      = new TPanel();
+    TPanel    *palARTRT       = new TPanel();
+
+    // AI(W906-FW-SBWC) 20260819, WAVE C ADD: TimerAutoCleanCountTimer widget
+    // surface (golden :2168-2214, real body lands this wave).
+    TRadioGroup  *rg_FixBinBox           = new TRadioGroup();
+    TEdit        *ed_FixBinBoxAlarmCount = new TEdit();
+    TLabel       *LabErrorBinNowCount    = new TLabel();
+    TTabSheet    *PageControl1_ART       = new TTabSheet();   // also read by FormShow
+    TTabSheet    *Tab_ARTSkipICCount     = new TTabSheet();
+    TLabel       *AutocleanlifeTime      = new TLabel();
+    TSpeedButton *btnCleanReset          = new TSpeedButton();   // also written by FormShow
+    TPanel       *BulkBox                = new TPanel();
+    TLabel       *labScheduleNAME        = new TLabel();
+    TLabel       *labInQty               = new TLabel();
+
+    // AI(W906-FW-SBWC) 20260819, WAVE C ADD: FormShow widget surface (golden
+    // :758-866, real body lands this wave).
+    TTabSheet    *tsUnloadMap          = new TTabSheet();
+    TButton      *btnClearCount        = new TButton();
+    TfShowBinSelectPanel *palUnloader  = new TfShowBinSelectPanel();
+    TTabSheet    *tsFxiAI              = new TTabSheet();
+    TTabSheet    *tsSECS_Category      = new TTabSheet();
+    TTabSheet    *tsTestBin            = new TTabSheet();
+    TTabSheet    *Tab_UPH              = new TTabSheet();
+    TSpeedButton *btnAutoClean         = new TSpeedButton();
+    TTabSheet    *tsASE                = new TTabSheet();
+    TLabel       *labJamrate           = new TLabel();
+    TLabel       *Jamrate              = new TLabel();
+    TPanel       *Panel1               = new TPanel();
+    TPanel       *pnlSpeciallYield     = new TPanel();
+    TfShowBinSelectPanel *PLoadInput   = new TfShowBinSelectPanel();
+    TTabSheet    *tsCategoryInfoContCT = new TTabSheet();
+    TGroupBox    *gbTriggerAlm         = new TGroupBox();
 
     // AI(W906-FW-SBWB2) 20260819, WAVE B ADD: golden's ShowBinSel (golden
     // :394-404) builds two LOCAL arrays out of 33 individually-named `.dfm`
@@ -529,15 +682,20 @@ public:
     // ((B9)/(B10)/(B11)), 1 GOLDEN BUG (B12) -- see GATE REGISTER above.
     void ShowBinSel();
 
-    // GATE (B10)/(B11): documented no-op this wave -- real bodies are WAVE B
-    // QUEUE (golden :2365-2580 / :2581-2799). Declared so ShowBinSel's own
-    // call sites compile/link, same posture as PageControl1Change/(B8) below.
+    // GATE (B10)/(B11) DISSOLVED by AI(W906-FW-SBWC) 20260819 -- real bodies
+    // land this wave (golden :2365-2580 / :2581-2799), see WAVE C SCOPE above.
     void ShowBinSel_ARTNor();
     void ShowBinSel_ARTRT();
 
     // GATE (B8): documented no-op this wave -- real body is WAVE B (golden
     // :1479-1633). Declared so btReturnClick's call site compiles/links.
     void PageControl1Change(TObject *Sender);
+
+    // AI(W906-FW-SBWC) 20260819, WAVE C primary targets: ACTIVE.
+    // TimerAutoCleanCountTimer -- golden :2168-2214, FULL, 0 GATEs.
+    void TimerAutoCleanCountTimer(TObject *Sender);
+    // FormShow -- golden :758-866, ACTIVE, 1 GATE (B18) -- see GATE REGISTER.
+    void FormShow(TObject *Sender);
 };
 
 // AI(W906-FW3-ShowBinSelect-WA) 20260818: global NOT defined here -- main-loop

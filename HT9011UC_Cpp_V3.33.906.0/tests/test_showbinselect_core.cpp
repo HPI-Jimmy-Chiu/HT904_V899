@@ -1,14 +1,18 @@
 // =============================================================================
 //  test_showbinselect_core.cpp -- FW-3 queue item 2: TfShowBinSelect Wave A +
-//                                   Wave B test coverage
+//                                   Wave B + Wave C test coverage
 //
 //  AI(W906-FW3-ShowBinSelect-WA) 20260818: new file (Wave A).
 //  AI(W906-FW-SBWB2) 20260819: added ShowBinSel coverage (Wave B).
+//  AI(W906-FW-SBWC) 20260819: added ShowBinSel_ARTNor/ShowBinSel_ARTRT/
+//  TimerAutoCleanCountTimer/FormShow coverage (Wave C).
 //
 //  Covers the main DATA methods these waves translated (per task brief
 //  "涵蓋主要資料方法"): DelDot (pure), ShowInitialString/ShowCategoryBin (the
 //  fYieldMonitoring GATE (Y2)-unblocking target), SetAutoVisible/
-//  SetLabelVisible, ShowBinSel (Wave B primary target).
+//  SetLabelVisible, ShowBinSel (Wave B primary target), ShowBinSel_ARTNor/
+//  ShowBinSel_ARTRT/TimerAutoCleanCountTimer/FormShow (Wave C primary
+//  targets).
 //
 //  NOT COVERED this wave (documented, not silently dropped): CaculateUPH's
 //  UPH>0 increment branch (needs OutArmSuck/ShuttleHasIC/IndexHasIC forced
@@ -22,7 +26,15 @@
 //  "does not crash"); ShowBinSel's RS232/BulkBox error-bin arms, the
 //  Magazine-Link block, and the AutoTrayLink tail loop (all separately
 //  guarded no-ops in the scenario below -- exercising them needs a second,
-//  differently-configured test scenario left for a future pass).
+//  differently-configured test scenario left for a future pass);
+//  ShowBinSel_ARTNor/ARTRT's own RS232/BulkBox-error/Magazine-Link/
+//  AutoTrayLink arms (same reasoning, same "future pass" posture);
+//  TimerAutoCleanCountTimer's `CosFunction.bHWBinBox && iHWFix_BinBox==1`
+//  arm (rg_FixBinBox/ed_FixBinBoxAlarmCount/LabErrorBinNowCount -- simple
+//  ItemIndex/Text/Caption mirrors, left untested to keep this wave's diff
+//  proportionate); FormShow's GATE (B18) inner Top-stacking calculation
+//  (nothing to assert -- the whole statement is a comment, see
+//  cShowBinSelect.cpp).
 // =============================================================================
 #include "forms/fShowBinSelect.h"
 
@@ -53,6 +65,12 @@ AnsiString DelDot(AnsiString asBuffer);
 // cShowBinSelect.cpp's matching comment / ATC/ATCInterface.h /
 // EJ1N/MyOmronPanel.h / VacuumUnit/MyVacuumPanel.h).
 const TColor clGray = TColor(0x00808080);
+
+// AI(W906-FW-SBWC) 20260819: golden Graphics.hpp clGreen -- same per-TU-local
+// idiom as clGray above (see cShowBinSelect.cpp's matching definition/note);
+// this TU's first use is ShowBinSel_ARTNor/ShowBinSel_ARTRT's palARTNor/
+// palARTRT->Color assertions below.
+const TColor clGreen = TColor(0x00008000);
 
 // ---------------------------------------------------------------------------
 //  Minimal CHECK harness (matches tests/test_yieldmon_core.cpp precedent)
@@ -236,12 +254,219 @@ static void Test_ShowBinSel_PopulatesCaptionAndColorFromBinAssignment()
     CHECK(f.UnLoadPanel[eAuto2]->Color == tcBinColor[Prod.iIsFailT6[eAuto2]], "ShowBinSel: UnLoadPanel[eAuto2] takes the colored else-branch even with no bin (golden's gray j==1 branch is DEAD -- ODDITY B13)");
 }
 
+// =============================================================================
+//  (5) ShowBinSel_ARTNor -- golden :2365-2580, FW-3 Wave C primary target.
+//
+//  Scenario: bin 0 mapped onto eAuto1 (Prod.iTo6CatData[FT][0]) -- mirrors
+//  Test_ShowBinSel_PopulatesCaptionAndColorFromBinAssignment's shape, but for
+//  the FT-indexed [8][...] arrays this sibling function reads instead of
+//  ShowBinSel's own single-dimension iT6CatData[]/iIsFailT6[]. Also exercises
+//  the gate-off `else` arm (tsARTNormalBin->TabVisible=false).
+// ---------------------------------------------------------------------------
+static void Test_ShowBinSel_ARTNor_PopulatesCaptionAndColor()
+{
+    ResetGlobals();
+    TfShowBinSelect f;
+
+    IniConfig.bSPILFunction = true;
+    bCanRunSCKART = true;
+    iHWFix_BinBox = 0;               // BinTrayTotal stays 9
+    iTestRunMode = FT;                // -> palARTNor->Color == clGreen
+    iTestBinCount = 2;
+    TestIF_File.iTestType = 0;        // != RS232_MODE
+    AUTO3_IS_MAGAZINE = 0;            // skip Magazine-Link block
+    IniConfig.bAutoTrayLink = false;  // skip AutoTrayLink tail loop
+
+    for (int i = 0; i < eTrayCount; i++)
+    {
+        Prod.bTo6AutoRetest[FT][i] = false;   // no " (R)" suffix
+        Prod.bTo6AutoLink[FT][i] = false;
+    }
+    Prod.iTo6CatData[FT][0] = eAuto1;   // bin 0 -> eAuto1
+    Prod.iTo6CatData[FT][1] = -1;       // unmapped -- skipped (golden :2411-2412)
+    Prod.iTo6IfError[FT] = -1;          // neither RS232 nor Data>=0 error-bin arm fires
+
+    Prod.iTo6StackDefFailCate[FT][eAuto1] = 0;
+    tcBinColor[0] = (TColor)0x00ABCDEF;   // sentinel -- read back live below
+
+    f.ShowBinSel_ARTNor();
+
+    CHECK(f.tsARTNormalBin->TabVisible == true, "ShowBinSel_ARTNor: tsARTNormalBin->TabVisible==true when bSPILFunction&&bCanRunSCKART");
+    CHECK(f.palARTNor->Color == clGreen, "ShowBinSel_ARTNor: palARTNor->Color==clGreen when iTestRunMode==FT");
+    CHECK(f.MyBinSelARTFT[eAuto1]->Caption.Pos("0") > 0, "ShowBinSel_ARTNor: MyBinSelARTFT[eAuto1]->Caption reflects assigned bin 0");
+    // ODDITY (B13, see cShowBinSelect.cpp's ShowBinSel_ARTNor banner): the
+    // gray `Pos()`-match branch is dead in golden -- assert the colored else
+    // branch actually runs.
+    CHECK(f.MyBinSelARTFT[eAuto1]->Font->Color == tcBinColor[0], "ShowBinSel_ARTNor: MyBinSelARTFT[eAuto1]->Font->Color==tcBinColor[Prod.iTo6StackDefFailCate[FT][eAuto1]] (colored else branch, B13 dead branch not taken)");
+
+    IniConfig.bSPILFunction = false;   // gate-off else arm
+    f.ShowBinSel_ARTNor();
+    CHECK(f.tsARTNormalBin->TabVisible == false, "ShowBinSel_ARTNor: tsARTNormalBin->TabVisible==false when bSPILFunction==false");
+}
+
+// =============================================================================
+//  (6) ShowBinSel_ARTRT -- golden :2581-2799, same shape as ShowBinSel_ARTNor
+//  above but RT-indexed. Bin 0 mapped onto eAuto2 this time (deliberately a
+//  different slot than the ARTNor test, so the two tests can't pass by
+//  accident off shared leftover global state).
+// ---------------------------------------------------------------------------
+static void Test_ShowBinSel_ARTRT_PopulatesCaptionAndColor()
+{
+    ResetGlobals();
+    TfShowBinSelect f;
+
+    IniConfig.bSPILFunction = true;
+    bCanRunSCKART = true;
+    iHWFix_BinBox = 0;
+    iTestRunMode = RT;                // -> palARTRT->Color == clGreen
+    iTestBinCount = 2;
+    TestIF_File.iTestType = 0;
+    AUTO3_IS_MAGAZINE = 0;
+    IniConfig.bAutoTrayLink = false;
+    TrayForm.iFixTrayMode = 0;        // -> iBinSelCT=6 arm (not separately asserted)
+
+    for (int i = 0; i < eTrayCount; i++)
+        Prod.bTo6AutoLink[RT][i] = false;
+    Prod.iTo6CatData[RT][0] = eAuto2;   // bin 0 -> eAuto2
+    Prod.iTo6CatData[RT][1] = -1;
+    Prod.iTo6IfError[RT] = -1;
+
+    Prod.iTo6StackDefFailCate[RT][eAuto2] = 1;
+    tcBinColor[1] = (TColor)0x00123456;
+
+    f.ShowBinSel_ARTRT();
+
+    CHECK(f.tsARTRTBin->TabVisible == true, "ShowBinSel_ARTRT: tsARTRTBin->TabVisible==true when bSPILFunction&&bCanRunSCKART");
+    CHECK(f.palARTRT->Color == clGreen, "ShowBinSel_ARTRT: palARTRT->Color==clGreen when iTestRunMode==RT");
+    CHECK(f.MyBinSelARTRT[eAuto2]->Caption.Pos("0") > 0, "ShowBinSel_ARTRT: MyBinSelARTRT[eAuto2]->Caption reflects assigned bin 0");
+    CHECK(f.MyBinSelARTRT[eAuto2]->Font->Color == tcBinColor[1], "ShowBinSel_ARTRT: MyBinSelARTRT[eAuto2]->Font->Color==tcBinColor[Prod.iTo6StackDefFailCate[RT][eAuto2]] (colored else branch, B13 dead branch not taken)");
+
+    IniConfig.bSPILFunction = false;
+    f.ShowBinSel_ARTRT();
+    CHECK(f.tsARTRTBin->TabVisible == false, "ShowBinSel_ARTRT: tsARTRTBin->TabVisible==false when bSPILFunction==false");
+}
+
+// =============================================================================
+//  (7) TimerAutoCleanCountTimer -- golden :2168-2214, FW-3 Wave C. Two calls:
+//  CC_KYEC_LEE (AutocleanlifeTime populated) then CC_ASE_KaohSiung
+//  (AutocleanlifeTime hidden instead, labScheduleNAME/labInQty populated).
+// ---------------------------------------------------------------------------
+static void Test_TimerAutoCleanCountTimer_TogglesWidgetsFromConfig()
+{
+    ResetGlobals();
+    TfShowBinSelect f;
+
+    InitialOK = true;
+    IniConfig.bG10ShowImmediateUPH = false;   // skip CaculateUPH (needs live motor/sensor state)
+    IniConfig.bEnableAutoCleanFunction = true;
+    IniConfig.bI33ErrorBinBox = true;
+    CosFunction.bHWBinBox = false;            // skip rg_FixBinBox/ed_FixBinBoxAlarmCount block
+    USE_AUTO_RETEST = 0;                      // != eartInstall
+    CosFunction.bUseARTSortCount = false;
+    bForKyecBu3RunART = false;
+
+    CUSTOMER_CODE = CC_KYEC_LEE;
+    f.ed_AutoCleanCount->Text = "5";
+    TestIF_File.iAutoClean_AlarmCount = 10;
+
+    f.TimerAutoCleanCountTimer(nullptr);
+
+    CHECK(f.btnCleanReset->Enabled == true, "TimerAutoCleanCountTimer: btnCleanReset->Enabled==true when bEnableAutoCleanFunction");
+    CHECK(f.ed_AutoCleanCount->Enabled == false, "TimerAutoCleanCountTimer: ed_AutoCleanCount->Enabled==false when bEnableAutoCleanFunction");
+    CHECK(f.AutocleanlifeTime->Caption.Pos("Clean Device LifeTime") > 0, "TimerAutoCleanCountTimer: AutocleanlifeTime->Caption populated for CC_KYEC_LEE");
+    CHECK(f.BulkBox->Visible == true, "TimerAutoCleanCountTimer: BulkBox->Visible mirrors IniConfig.bI33ErrorBinBox");
+    CHECK(f.PageControl1_ART->TabVisible == false, "TimerAutoCleanCountTimer: PageControl1_ART hidden (ART not installed, bUseARTSortCount false)");
+
+    CUSTOMER_CODE = CC_ASE_KaohSiung;   // else-arm for AutocleanlifeTime + the ASE branch
+    ASET_ScheduleNAME = "LOT123";
+    ASET_INTQTY = "500";
+
+    f.TimerAutoCleanCountTimer(nullptr);
+
+    CHECK(f.AutocleanlifeTime->Visible == false, "TimerAutoCleanCountTimer: AutocleanlifeTime->Visible==false for non-CC_KYEC_LEE");
+    CHECK(f.labScheduleNAME->Caption == "LOT123", "TimerAutoCleanCountTimer: labScheduleNAME->Caption==ASET_ScheduleNAME for CC_ASE_KaohSiung");
+    CHECK(f.labInQty->Caption == "500", "TimerAutoCleanCountTimer: labInQty->Caption==ASET_INTQTY for CC_ASE_KaohSiung");
+}
+
+// =============================================================================
+//  (8) FormShow -- golden :758-866, FW-3 Wave C primary target. Three calls
+//  isolate the CC_Greatek / CC_KYEC_LEE / CC_GIGAS customer-code branches
+//  (FormShow checks CUSTOMER_CODE against 5 different constants across its
+//  body, so one call per branch keeps each assertion unambiguous).
+// ---------------------------------------------------------------------------
+static void Test_FormShow_TogglesTabsAndAppliesCustomerCodeBranches()
+{
+    ResetGlobals();
+    TfShowBinSelect f;
+
+    // -- neutralise ShowBinSel()'s own body (FormShow calls it for real) --
+    iHWFix_BinBox = 0;
+    Prod.iIfErrorT6 = 0;
+    TestIF_File.iTestType = 0;
+    IniConfig.bAutoTrayLink = false;
+    AUTO3_IS_MAGAZINE = 0;
+    AUTO_EMPTY_COLOR = 0;
+    TrayForm.iFixTrayMode = 1;
+    fBinSel->chkShow0Xbin->Checked = false;
+    for (int i = 0; i < e3TrayCount; i++)
+        Prod.bLinkTo6Tray[i] = false;
+    iTestBinCount = 0;   // simplest: skip ShowBinSel's main bin-assignment loop entirely
+
+    NUMBER_PANEL_TYPE = 0;   // -> else arm: fShowBinSelect->tsUnloadMap->TabVisible=false
+    IniConfig.bShowUPH = true;
+    IniConfig.bEnableAutoCleanFunction = true;
+    IniConfig.bASE_Report = false;
+    USE_AUTO_RETEST = 0;
+    CosFunction.bUseARTSortCount = false;
+    USE_Fix_AI_CCD = 0;
+    CosFunction.IntervalYieldCount = false;
+    CosFunction.bSpecailLowYeild = false;
+    IniConfig.bG15LoadInputCount = true;
+    CosFunction.bCategoryInfoByContactCT = false;
+    IniConfig.bSPILFunction = false;   // also keeps ShowBinSel_ARTNor/ARTRT's own gate off
+    SPIL_FOR_QLE = 0;
+
+    CUSTOMER_CODE = CC_Greatek;
+    f.FormShow(nullptr);
+
+    CHECK(fShowBinSelect->tsUnloadMap->TabVisible == false, "FormShow: fShowBinSelect->tsUnloadMap->TabVisible==false when NUMBER_PANEL_TYPE not 3/4 (writes the GLOBAL fShowBinSelect, same idiom as golden's own fShowBinSelect->tsUnloadMap, not `f`)");
+    CHECK(fShowBinSelect->palUnloader->Width == 110, "FormShow: fShowBinSelect->palUnloader->Width==110 for CC_Greatek");
+    CHECK(f.MyBinSelLab[eAuto1]->Caption == "Auto1 (CAT A)", "FormShow: MyBinSelLab[eAuto1]->Caption==\"Auto1 (CAT A)\" for CC_Greatek (S: golden's labAuto1, same object per ctor tempMyBinSelLab[] mapping)");
+    CHECK(f.MyBinSelLab[eFix3]->Caption == "Fix3 (JAM)", "FormShow: MyBinSelLab[eFix3]->Caption==\"Fix3 (JAM)\" for CC_Greatek (S: golden's labFix3)");
+    CHECK(f.tsSECS_Category->TabVisible == false, "FormShow: tsSECS_Category hidden for non-CC_ASE_CL");
+    CHECK(f.bShow == true, "FormShow: bShow==true");
+    CHECK(f.PageControl1->ActivePage == f.tsTestBin, "FormShow: PageControl1->ActivePage==tsTestBin");
+    CHECK(f.Tab_UPH->TabVisible == true, "FormShow: Tab_UPH->TabVisible mirrors IniConfig.bShowUPH");
+    CHECK(f.btnAutoClean->Visible == true, "FormShow: btnAutoClean->Visible mirrors IniConfig.bEnableAutoCleanFunction");
+    CHECK(f.tsASE->TabVisible == false, "FormShow: tsASE->TabVisible mirrors IniConfig.bASE_Report");
+    CHECK(f.btnCleanReset->Visible == true, "FormShow: btnCleanReset->Visible==bEnableAutoCleanFunction for non-CC_KYEC_LEE");
+    CHECK(f.PLoadInput->Visible == true && f.PLoadInput->Top == 120 && f.PLoadInput->Left == 14, "FormShow: PLoadInput positioned when bG15LoadInputCount");
+    CHECK(f.palAutoDeviceEjection->Visible == false, "FormShow: palAutoDeviceEjection->Visible==false for non-CC_GIGAS/SPIL_FOR_QLE!=1");
+
+    CUSTOMER_CODE = CC_KYEC_LEE;
+    f.FormShow(nullptr);
+
+    CHECK(f.ed_AutoCleanCount->Visible == false, "FormShow: ed_AutoCleanCount hidden for CC_KYEC_LEE");
+    CHECK(f.btnClearCount->Visible == false, "FormShow: btnClearCount hidden for CC_KYEC_LEE");
+    CHECK(f.btnCleanReset->Visible == false, "FormShow: btnCleanReset forced hidden for CC_KYEC_LEE regardless of bEnableAutoCleanFunction");
+
+    CUSTOMER_CODE = CC_GIGAS;   // outer palAutoDeviceEjection->Visible toggle -- ACTIVE even though
+                                 // the inner Top-stacking calc is GATE (B18)
+    f.FormShow(nullptr);
+
+    CHECK(f.palAutoDeviceEjection->Visible == true, "FormShow: palAutoDeviceEjection->Visible==true for CC_GIGAS (outer toggle ACTIVE, GATE (B18) is inner-only)");
+}
+
 int main()
 {
     Test_DelDot();
     Test_ShowInitialString_And_ShowCategoryBin_FillsGridsFromBinData();
     Test_SetAutoVisible_DrivesPerTrayAndGroupVisibility();
     Test_ShowBinSel_PopulatesCaptionAndColorFromBinAssignment();
+    Test_ShowBinSel_ARTNor_PopulatesCaptionAndColor();
+    Test_ShowBinSel_ARTRT_PopulatesCaptionAndColor();
+    Test_TimerAutoCleanCountTimer_TogglesWidgetsFromConfig();
+    Test_FormShow_TogglesTabsAndAppliesCustomerCodeBranches();
 
     std::printf("%d/%d checks passed (test_showbinselect_core)\n", g_pass, g_pass + g_fail);
     return g_fail == 0 ? 0 : 1;
