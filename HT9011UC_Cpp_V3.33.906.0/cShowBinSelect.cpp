@@ -87,6 +87,21 @@
 #include "AutoClean/AutoClean.h"                  // InitialAutoCleanAllTask
 #include "FormsFacade.h"                           // fMain
 #include "forms/fYieldMonitoring.h"                 // fYieldMonitoring
+#include "forms/fHome.h"                            // AI(W906-FW3-SBS-WD) 20260820: fHome->fShow (ChangeBinDispStatus)
+
+// AI(W906-FW3-SBS-WD) 20260820: ChangeBinDispStatus/DoShowBinDigital need
+// HSys.BinDisCtrl's now-CONCRETE type (BinDisplay/MyBinDisp.h landed this
+// same day, AI(W906-BinDisp-WA)) -- database.h alone only forward-declares
+// `class TMyBinDispCtrl;` (database.h:63), which is enough for a pointer
+// field but not for calling any of its methods. Both direct derefs stay
+// GATEd (see WAVE D SCOPE / GATE REGISTER, forms/fShowBinSelect.h) because
+// HSys.BinDisCtrl is permanently NULL in this port regardless of this
+// header's presence -- it is included purely so the GATEd comments can cite
+// real method signatures and so any future un-gating has the type on hand.
+#include "database.h"              // HSys / SYSTEM_MODULAR::BinDisCtrl
+#include "BinDisplay/MyBinDisp.h"  // TMyBinDispCtrl (concrete, W906-BinDisp-WA)
+#include "myswitch.h"              // SW[] / TMySwitch (DoShowBinDigital's digital-panel switch machine)
+#include "myTimer.h"               // TQPF_Timer (AlarmDelay/BinTimer file-scope globals, matching golden)
 
 #include <cstdlib>   // atoi
 #include <algorithm> // (kept for parity; no direct use this wave)
@@ -109,6 +124,15 @@ const TColor clGray = TColor(0x00808080);   // golden Graphics.hpp clGray
 // are this TU's first users of either name).
 const TColor clGreen   = TColor(0x00008000);   // golden Graphics.hpp clGreen
 const TColor clBtnFace = TColor(0x8000000F);   // golden Graphics.hpp clBtnFace (COLOR_BTNFACE)
+
+// AI(W906-FW3-SBS-WD) 20260820: golden Graphics.hpp clRed/clBlack -- same
+// "each consuming TU defines it locally" idiom as clGray/clGreen above
+// (confirmed this wave: `grep -rn "const TColor clRed" vclcompat/` finds it
+// LOCALLY defined, identical value 0x000000FF, in vclcompat/BtnPanelCore.h/
+// LedCore.h/TrayCore.h; clBlack likewise 0x00000000) -- ChangeBinDispStatus
+// is this TU's first user of either name (its local `ColorMap[]` literal).
+const TColor clRed   = TColor(0x000000FF);   // golden Graphics.hpp clRed
+const TColor clBlack = TColor(0x00000000);   // golden Graphics.hpp clBlack
 
 //---------------------------------------------------------------------------
 // AI(W906-FW-YEnable) 20260818: homecoming -- the live global is now backed
@@ -2150,4 +2174,575 @@ void TfShowBinSelect::FormShow(TObject * /*Sender*/)
         if(palAutoDeviceEjection)
             palAutoDeviceEjection->Visible=false;
     }
+}
+
+// =============================================================================
+//  WAVE D (AI(W906-FW3-SBS-WD) 20260820) -- ChangeBinDispStatus /
+//  DoShowBinDigital, previously WAVE B QUEUE (BLOCKED by opaque BinDisCtrl).
+//  Full rationale, precondition analysis and the (D1)-(D11) GATE REGISTER
+//  live in forms/fShowBinSelect.h (WAVE D SCOPE) -- not duplicated here,
+//  same "avoid the two files drifting apart" policy as this file's own top
+//  banner. Golden ref: cShowBinSelect.cpp golden :207-386 / :997-1423,
+//  cp950-decoded this wave (`python3 -c "open(path,'rb').read().decode(
+//  'cp950')"`, 0 U+FFFD over the decoded spans, re-verified 20260820).
+// =============================================================================
+//---------------------------------------------------------------------------
+TQPF_Timer AlarmDelay;   // golden :207 -- file-scope global (NOT a class member), matches golden exactly
+void TfShowBinSelect::ChangeBinDispStatus()                                     //Steven 20110411 : 顯示目前顯示器的狀態
+{
+    TPanel *UnLoadPanel[]={pnlLoader, pnlEmpty, pnlColor,
+                           pnlAuto1,  pnlAuto2, pnlAuto3,
+                           pnlFix1,   pnlFix2,  pnlFix3,  pnlFix4,  pnlFix5,  pnlFix6,  pnlBinBox,
+                           pnlMag1,   pnlMag2,  pnlMag3,  pnlMag4,  pnlMag5,  pnlMag6,  pnlMag7,
+                           pnlMag8,   pnlMag9,  pnlMag10, pnlMag11, pnlMag12, pnlMag13, pnlMag14,
+                           pnlAuto4,  pnlAuto5, pnlAuto6,
+                           pnlFix7,   pnlFix8,  pnlFix9,  pnlFix10, pnlFix11, pnlFix12};  //JerryYang 20220909 : add magazine
+
+    TColor ColorMap[]={clGray, clRed, clGreen, (TColor)0x000080FF, clBlack};
+    int iColor, iBin;
+    AnsiString sTempEng="", sTempChi="";
+    static bool bChangeColor=false;
+    static int iAlarmFlag=0;
+    bool bHasError=false, bErrFlag[eBinDispTotal];                              //JerryYang 20220909 : 12->eBinDispTotal
+
+    if(InitialOK==false)
+    {
+        return;
+    }
+
+    for(int i=0; i<eBinDispTotal; i++)                                          //JerryYang 20220909 : 12->eBinDispTotal
+    {
+        // GATE (D1): golden `if(HSys.BinDisCtrl->UnitHasInstall(i)) bErrFlag[i]
+        // =HSys.BinDisCtrl->GerErrNow(i); else bErrFlag[i]=false;` -- see
+        // forms/fShowBinSelect.h GATE REGISTER (D1). Substituted with
+        // golden's own "not installed" outcome, true for every unit in this
+        // port.
+        bErrFlag[i]=false;
+    }
+    (void)bErrFlag;   // GATE (D2): its only READ (the final else-if condition below) is gated whole
+    sTempChi="";                                                                //Jimmychiu 20231031 : add Bin display error record
+    for(int i=0; i<eBinDispTotal; i++)                                          //JerryYang 20220909 : 12->eBinDispTotal
+    {
+        if(AUTO3_IS_MAGAZINE==0 && i>=eBinDispMag1 && i<=eBinDispMag14)         //JerryYang 20230515 : 沒有Magazine就不要顯示
+        {
+        }
+        else if(AUTO3_IS_MAGAZINE==1 && i==eBinDispAuto3)
+        {
+        }
+        else if(i==eBinDispBulkBox ||                                           //Jimmychiu 20231030 : bin Box not display
+                i>=eBinDispAuto4)
+        {
+        }
+        else if(TrayForm.bEnableAMR==true && (i>=eBinDispLoader && i<=eBinDispAuto2)) //Eastsun 20260515 F019 AMR hide BinDisplay
+        {
+        }
+        else
+        {
+            // GATE (D2): golden `if(bErrFlag[i] || (i>=3 && HSys.BinDisCtrl->
+            // UnitHasInstall(i)==false)) { bHasError=true; sTempChi=sTempChi
+            // +" "+UnLoadPanel[i]->Name; if(iAlarmFlag==0) iAlarmFlag=1; }` --
+            // see forms/fShowBinSelect.h GATE REGISTER (D2). Gated whole (not
+            // substituted -- see that entry for why a fabricated value would
+            // be wrong here).
+        }
+    }
+
+    if(bHasError)
+    {
+        bChangeColor=!bChangeColor;
+        (void)(PageControl1->ActivePageIndex==3);                              //tsUnloadMap -- GOLDEN ODDITY: `==` not `=`, a no-op comparison (golden :272); kept verbatim per translation-fidelity policy, see forms/fShowBinSelect.h WAVE D SCOPE. (void) cast avoids -Wunused-value without changing the (already no-op) behaviour.
+    }
+    else
+    {
+        iAlarmFlag=0;                                                           //Steven 20211130 : JSCC要求Bin顯示器異常要alarm
+    }
+
+    if(IniConfig.bG16BinDispNeedAlarm)                                          //Steven 20211220 : 修正G16, Bin顯示器異常要alarm
+    {
+        ;
+    }
+    else if(PageControl1->ActivePage!=tsUnloadMap)
+    {
+        if(CUSTOMER_CODE==CC_KYEC_LEE || CUSTOMER_CODE==CC_AMD_M)               //Ifor 20221026 add: KYEC要求一直顯示
+        {
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    for(int i=0; i<eBinDispTotal; i++)                                          //JerryYang 20220909 : 12->eBinDispTotal
+    {
+        // GATE (D3): golden's `if(HSys.BinDisCtrl->UnitHasInstall(i))`
+        // true-arm (GetColorNow/GetBinNow + Caption) is unreachable in this
+        // port -- see forms/fShowBinSelect.h GATE REGISTER (D3). Golden's own
+        // ELSE arm below is real/ACTIVE and is this port's correct outcome
+        // for every slot.
+        UnLoadPanel[i]->Color=clGray;
+        UnLoadPanel[i]->Caption="X";
+    }
+    (void)iColor; (void)iBin; (void)ColorMap;   // GATE (D3): only ever read/assigned inside the now-unreachable true-arm above
+
+    if((CUSTOMER_CODE==CC_KYEC_LEE || CUSTOMER_CODE==CC_AMD_M) && bBinDispAlarm==false)//Ifor 20220714 add:Bin Disp 異常報警 每次Onecycle 檢查一次
+    {
+        if(bHasError && fHome->fShow==false)
+        {
+            bBinDispAlarm=true;
+            #ifndef SOFT_SIMULTE
+            // GATE (D4): golden `HSys.BinDisCtrl->CommBin->StopComm();
+            // HSys.BinDisCtrl->bFirstInit=true; HSys.BinDisCtrl->
+            // ProcessStopStart(true); ShowMyMessage("Please check bin
+            // display. It have communication error!", "請確認Bin顯示器狀態。");`
+            // -- see forms/fShowBinSelect.h GATE REGISTER (D4). Currently
+            // dormant (bHasError is always false, GATE (D2)) but gated
+            // regardless -- defense in depth against a direct BinDisCtrl
+            // deref.
+            #endif
+        }
+    }
+    else if(IniConfig.bG16BinDispNeedAlarm)                                          //Steven 20211130 : JSCC要求Bin顯示器異常要alarm
+    {
+        if(iAlarmFlag==1)
+        {
+            AlarmDelay.SetSecAndOn(60);
+            iAlarmFlag=2;
+        }
+
+        if(iAlarmFlag==2 && AlarmDelay.Off())
+        {
+            #ifndef SOFT_SIMULTE
+            // GATE (D5): golden `sTempEng=AnsiString().sprintf("%s Error
+            // part:%s", "Please check bin display. It have communication
+            // error!", sTempChi); sTempChi=AnsiString().sprintf("%s 錯誤位置:
+            // %s", "請確認Bin顯示器狀態!", sTempChi); HSys.BinDisCtrl->CommBin->
+            // StopComm(); HSys.BinDisCtrl->bFirstInit=true; HSys.BinDisCtrl->
+            // ProcessStopStart(true); ShowMyMessage(sTempEng,sTempChi);
+            // AlarmDelay.SetSecAndOn(60); iAlarmFlag=0;` -- see forms/
+            // fShowBinSelect.h GATE REGISTER (D5). Currently dormant
+            // (iAlarmFlag is only ever set 1 inside GATE (D2)'s gated arm).
+            #endif
+        }
+    }
+
+    if(bHasError)
+    {
+        sbRunStatus->Panels->Items[0]->Text="Bin display got error!!";
+        sbRunStatus->Color=clRed;
+    }
+    else
+    {
+        // GATE (D6): golden `HSys.BinDisCtrl->GetRunStatus()` -- see forms/
+        // fShowBinSelect.h GATE REGISTER (D6). Safe-default substitute: "".
+        sbRunStatus->Panels->Items[0]->Text="";
+        sbRunStatus->Color=clBtnFace;
+    }
+}
+//---------------------------------------------------------------------------
+TQPF_Timer BinTimer;   // golden :997 -- file-scope global (NOT a class member), matches golden exactly
+void TfShowBinSelect::DoShowBinDigital()
+{
+    if(bUpdateBinDigital==true &&
+       (NUMBER_PANEL_TYPE==3 ||                                                 //Steven : 純顯示器
+        NUMBER_PANEL_TYPE==4))                                                  //Sam 20240604 : 新增 BinDisplay TFT
+    {
+        int Data;//, iBinSelCT=0;
+        int iBinSet[MAX_BIN_UNIT][TEST_MAX_BIN];                                //iBinSet[0~2][20] 是Loader, Empty, Color，所以不設定     //Steven 20140402 : Fixed 記憶體亂寫
+        int iBinCount[TEST_MAX_BIN]={-1};                                       //每個位置被分配到幾個Bin                                 //Steven 20140402 : Fixed 記憶體亂寫
+        int iBinColor[TEST_MAX_BIN]={-1};                                       //1:red, 2:green, 3:orange                                //Steven 20140402 : Fixed 記憶體亂寫
+
+        //初始化
+        for(int i=0; i<MAX_BIN_UNIT; i++)                                       //Steven 20140402 : Fixed 記憶體亂寫
+        {
+            iBinColor[i]=ColorOrange;
+            iBinCount[i]=0;
+            for(int j=0; j<TEST_MAX_BIN; j++)                                   //Steven 20140402 : Fixed 記憶體亂寫
+                iBinSet[i][j]=-1;
+        }
+
+        AddBinDisp[eBinDispLoader    ]=eBinDispLoader;
+        AddBinDisp[eBinDispEmpty     ]=eBinDispEmpty;
+        AddBinDisp[eBinDispColor     ]=eBinDispColor;
+        AddBinDisp[eBinDispAuto1     ]=eBinDispAuto1;
+        AddBinDisp[eBinDispAuto2     ]=eBinDispAuto2;
+        AddBinDisp[eBinDispAuto3     ]=eBinDispAuto3;
+        AddBinDisp[eBinDispFix1      ]=eBinDispFix1 ;
+        AddBinDisp[eBinDispFix2      ]=eBinDispFix2 ;
+        AddBinDisp[eBinDispFix3      ]=eBinDispFix3 ;
+        AddBinDisp[eBinDispFix4      ]=eBinDispFix4 ;
+        AddBinDisp[eBinDispFix5      ]=eBinDispFix5 ;
+        AddBinDisp[eBinDispFix6      ]=eBinDispFix6 ;
+        AddBinDisp[eBinDispBulkBox   ]=eBinDispBulkBox;
+        AddBinDisp[eBinDispMag1      ]=eBinDispMag1;
+        AddBinDisp[eBinDispMag2      ]=eBinDispMag2;
+        AddBinDisp[eBinDispMag3      ]=eBinDispMag3;
+        AddBinDisp[eBinDispMag4      ]=eBinDispMag4;
+        AddBinDisp[eBinDispMag5      ]=eBinDispMag5;
+        AddBinDisp[eBinDispMag6      ]=eBinDispMag6;
+        AddBinDisp[eBinDispMag7      ]=eBinDispMag7;
+        AddBinDisp[eBinDispMag8      ]=eBinDispMag8;
+        AddBinDisp[eBinDispMag9      ]=eBinDispMag9;
+        AddBinDisp[eBinDispMag10     ]=eBinDispMag10;
+        AddBinDisp[eBinDispMag11     ]=eBinDispMag11;
+        AddBinDisp[eBinDispMag12     ]=eBinDispMag12;
+        AddBinDisp[eBinDispMag13     ]=eBinDispMag13;
+        AddBinDisp[eBinDispMag14     ]=eBinDispMag14;
+        AddBinDisp[eBinDispAuto4     ]=eBinDispAuto4;
+        AddBinDisp[eBinDispAuto5     ]=eBinDispAuto5;
+        AddBinDisp[eBinDispAuto6     ]=eBinDispAuto6;
+        AddBinDisp[eBinDispFix7      ]=eBinDispFix7;
+        AddBinDisp[eBinDispFix8      ]=eBinDispFix8;
+        AddBinDisp[eBinDispFix9      ]=eBinDispFix9;
+        AddBinDisp[eBinDispFix10     ]=eBinDispFix10;
+        AddBinDisp[eBinDispFix11     ]=eBinDispFix11;
+        AddBinDisp[eBinDispFix12     ]=eBinDispFix12;
+
+        if(AUTO_EMPTY_COLOR>=3)                                                 //Fix 1-6 Addr從0開始, 使用第二組COM PORT
+        {
+            AddBinDisp[eBinDispFix1  ]=0;
+            AddBinDisp[eBinDispFix2  ]=1;
+            AddBinDisp[eBinDispFix3  ]=2;
+            AddBinDisp[eBinDispFix4  ]=3;
+            AddBinDisp[eBinDispFix5  ]=4;
+            AddBinDisp[eBinDispFix6  ]=5;
+            AddBinDisp[eBinDispFix7  ]=6;
+            AddBinDisp[eBinDispFix8  ]=7;
+            AddBinDisp[eBinDispFix9  ]=8;
+            AddBinDisp[eBinDispFix10 ]=9;
+            AddBinDisp[eBinDispFix11 ]=10;
+            AddBinDisp[eBinDispFix12 ]=11;
+
+            AddBinDisp[eBinDispAuto4 ]=3+eAuto4;                                // L=0 E=1 C=2 A1=3 A2=4 A3=5 A4=6 A5=7 A6=8
+            AddBinDisp[eBinDispAuto5 ]=3+eAuto5;
+            AddBinDisp[eBinDispAuto6 ]=3+eAuto6;
+        }
+
+        if(TestIF_File.iMagDisplayOrder==1)
+        {
+            AddBinDisp[eBinDispMag1      ]=1;                                   //BIN顯示器有做15顆, addr 0不使用,從addr1開始
+            AddBinDisp[eBinDispMag2      ]=2;
+            AddBinDisp[eBinDispMag3      ]=3;
+            AddBinDisp[eBinDispMag4      ]=4;
+            AddBinDisp[eBinDispMag5      ]=5;
+            AddBinDisp[eBinDispMag6      ]=6;
+            AddBinDisp[eBinDispMag7      ]=7;
+            AddBinDisp[eBinDispMag8      ]=8;
+            AddBinDisp[eBinDispMag9      ]=9;
+            AddBinDisp[eBinDispMag10     ]=10;
+            AddBinDisp[eBinDispMag11     ]=11;
+            AddBinDisp[eBinDispMag12     ]=12;
+            AddBinDisp[eBinDispMag13     ]=13;
+            AddBinDisp[eBinDispMag14     ]=14;
+        }
+        else
+        {
+            AddBinDisp[eBinDispMag1      ]=14;                                  //JerryYang 20250919 : Magazine 1在最下面, addr是14
+            AddBinDisp[eBinDispMag2      ]=13;
+            AddBinDisp[eBinDispMag3      ]=12;
+            AddBinDisp[eBinDispMag4      ]=11;
+            AddBinDisp[eBinDispMag5      ]=10;
+            AddBinDisp[eBinDispMag6      ]=9;
+            AddBinDisp[eBinDispMag7      ]=8;
+            AddBinDisp[eBinDispMag8      ]=7;
+            AddBinDisp[eBinDispMag9      ]=6;
+            AddBinDisp[eBinDispMag10     ]=5;
+            AddBinDisp[eBinDispMag11     ]=4;
+            AddBinDisp[eBinDispMag12     ]=3;
+            AddBinDisp[eBinDispMag13     ]=2;
+            AddBinDisp[eBinDispMag14     ]=1;
+        }
+
+        iBinSet[0][0]=111;  //Loader
+        iBinSet[1][0]=104;  //Empty Tray
+        iBinSet[2][0]=102;  //Color Tray
+        iBinSet[0][1]=-1;   //Loader
+        iBinSet[1][1]=-1;   //Empty Tray
+        iBinSet[2][1]=-1;   //Color Tray
+        iBinColor[0]=ColorOrange;     //橘色
+        iBinColor[1]=ColorOrange;
+        iBinColor[2]=ColorOrange;
+
+        //設定Bin的位置
+        for(int i=0; i<iTestBinCount; i++)                                      //Steven 20121112 : RS232支援32Bin 15 --> iTestBinCount
+        {
+            Data=iTo3PosUnload[Prod.iT6PosCate[i]];                             //JerryYang 20230926
+            if(Data<=0 || Data>e3TrayCount) continue;                           //JerryYang 20220909 : 修正是一    //Steven 20121112 : RS232支援32Bin 15 --> iTestBinCount
+            for(int j=1; j<=e3TrayCount; j++)                                   //RogerYang 20250825 : "<" -> "<=" 修正最後一顆顯示器沒寫入 //Steven 20140404 Start : Fixed 256Bin
+            {
+                if(j==Data)                                                     //Steven 20140402 : Data-1 --> Data
+                {
+                    iBinSet[Data+2][iBinCount[Data+2]]=i;                       //Steven 20140402 : i+1 --> i
+                    iBinCount[Data+2]++;
+                }
+            }
+        }
+
+        if(IniConfig.bAutoTrayLink==true)                                       //jou 2012-06-14 Auto Tray Link
+        {
+            if(Prod.bLinkTo6Tray[1]==true)
+            {
+                iBinCount[4]=iBinCount[3];
+                for(int i=0; i<MAX_BIN_UNIT; i++)                               //Steven 20140402 : Fixed 記憶體亂寫
+                    iBinSet[4][i]=iBinSet[3][i];
+            }
+
+            if(Prod.bLinkTo6Tray[1]==true && Prod.bLinkTo6Tray[2]==true)
+            {
+                iBinCount[5]=iBinCount[3];
+                for(int i=0; i<MAX_BIN_UNIT; i++)                               //Steven 20140402 : Fixed 記憶體亂寫
+                    iBinSet[5][i]=iBinSet[3][i];
+            }
+            else if(Prod.bLinkTo6Tray[1]==false && Prod.bLinkTo6Tray[2]==true)
+            {
+                iBinCount[5]=iBinCount[4];
+                for(int i=0; i<MAX_BIN_UNIT; i++)                               //Steven 20140402 : Fixed 記憶體亂寫
+                    iBinSet[5][i]=iBinSet[4][i];
+            }
+        }
+
+        //Steven 20181113 : 修正Fix Link顯示問題
+        //==>
+        if(Prod.bLinkTo6Tray[eFix2]==true)
+        {
+            iBinCount[7]=iBinCount[6];
+            for(int i=0; i<MAX_BIN_UNIT; i++)                                   //Steven 20140402 : Fixed 記憶體亂寫
+                iBinSet[7][i]=iBinSet[6][i];
+        }
+
+        if(Prod.bLinkTo6Tray[eFix2]==true && Prod.bLinkTo6Tray[eFix3]==true)
+        {
+            iBinCount[8]=iBinCount[6];
+            for(int i=0; i<MAX_BIN_UNIT; i++)                                   //Steven 20140402 : Fixed 記憶體亂寫
+                iBinSet[8][i]=iBinSet[6][i];
+        }
+        else if(Prod.bLinkTo6Tray[eFix2]==false && Prod.bLinkTo6Tray[eFix3]==true)
+        {
+            iBinCount[8]=iBinCount[7];
+            for(int i=0; i<MAX_BIN_UNIT; i++)                                   //Steven 20140402 : Fixed 記憶體亂寫
+                iBinSet[8][i]=iBinSet[7][i];
+        }
+        //<==
+        //Steven 20181113 : 修正Fix Link顯示問題
+        //Ifor 20231122 add Magazine Link
+        //==>
+        if(AUTO3_IS_MAGAZINE==1)
+        {
+            for(int i=0; i<14; i++)
+            {
+                if(BinSelect[iTestRunMode].bMagazineLink[i]==true)
+                {
+                    for(int j=0; j<14; j++)
+                    {
+                        // GOLDEN ODDITY (same shape as GATE (B12)'s second
+                        // note, ShowBinSel's own Magazine-Link inner loop):
+                        // a pathological all-true bMagazineLink[] chain down
+                        // to i==j would walk `bMagazineLink[i-j]` to index 0,
+                        // still in-bounds, but a chain reaching PAST index 0
+                        // is unreachable in practice (index 0/eAuto1 slot is
+                        // never written true by any port'd writer) -- kept
+                        // verbatim.
+                        if(BinSelect[iTestRunMode].bMagazineLink[i-j]==false)
+                        {
+                            iBinCount[13+i]=iBinCount[13+i-j];
+                            for(int k=0; k<MAX_BIN_UNIT; k++)
+                                iBinSet[13+i][k]=iBinSet[13+i-j][k];
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        //<==
+        //Ifor 20231122 add Magazine Link
+        if(TestIF_File.bEnableQASampling && TestIF_File.iQASamplingT3Pos!=0)     //Steven 20190326 : QA Sampling
+        {
+            iBinSet[TestIF_File.iQASamplingT3Pos-1][0]=116;
+        }
+
+        //設定Error Bin的位置
+        Data=iTo3Unload[Prod.iIfErrorT6];
+        if(Data>=0 && Data<e3TrayCount)                                         //JerryYang 20220909 : 9->iBinSelCT
+        {
+            if(Data>=eBinDispMag1 && Data<=eBinDispMag14)                       //JerryYang 20220909 : add magazine
+            {
+                if(AUTO3_IS_MAGAZINE==1)
+                {
+                   int iSort=Data-9;
+                   int iLinkCount=0;    //Ifor 20240909 Fix:記錄鍊條的位置
+                    for(int i=iSort; i<14; i++)
+                    {
+                        if(BinSelect[iTestRunMode].bMagazineLink[i]==true)
+                        {
+                            iLinkCount++;
+                            iBinSet[Data+iLinkCount+3][iBinCount[Data+iLinkCount+3]]=999;    //Magazine bin不支援錯誤顯示, 999當成ERROR BIN
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                }
+                iBinSet[Data+3][iBinCount[Data+3]]=999;                         //Magazine bin不支援錯誤顯示, 999當成ERROR BIN
+            }
+            else
+            {
+                iBinSet[Data+3][iBinCount[Data+3]]=104;
+            }
+            iBinCount[Data+3]++;
+        }
+
+        //設定顏色
+        for(int j=0; j<eTrayCount; j++)
+        {
+            if(Prod.iIsFailT6[j]>0)                                             //Steven 20240105 : Prod.bIsPass --> Prod.iIsFailT6   //Steven 20240709 : ==1 --> >0
+                iBinColor[iTo3Unload[j]+3]=ColorRed;
+            else
+                iBinColor[iTo3Unload[j]+3]=ColorGreen;
+        }
+
+        //Steven 20181113 : 修正Fix Link顯示問題
+        //==>
+        if(Prod.bLinkTo6Tray[eFix2]==true)
+        {
+            iBinColor[7]=iBinColor[6];
+        }
+
+        if(Prod.bLinkTo6Tray[eFix2]==true && Prod.bLinkTo6Tray[eFix3]==true)
+        {
+            iBinColor[8]=iBinColor[6];
+        }
+        else if(Prod.bLinkTo6Tray[eFix2]==false && Prod.bLinkTo6Tray[eFix3]==true)
+        {
+            iBinColor[8]=iBinColor[7];
+        }
+        //<==
+        //Steven 20181113 : 修正Fix Link顯示問題
+
+        for(int i=3; i<MAX_BIN_UNIT; i++)                                       //Steven 20140402 : Fixed 記憶體亂寫
+            if(iBinSet[i][0]==-1)
+                iBinColor[i]=ColorOrange;                                       //沒用到的就顯示橘色
+
+        //jou 2014-03-28 SPIL Handler  On-line & Offline Switch Flow
+        if(IniConfig.bSPILFunction==true && LastSet.iTester==OFF_LINE)          //JerryYang 20170328 (Jou) 矽品客戶碼統一用SPILFunction
+        {
+            for(int i=0; i<MAX_BIN_UNIT; i++)
+            {
+                iBinColor[i]=ColorRed;
+                iBinCount[i]=2;
+                for(int j=0; j<MAX_BIN_UNIT; j++)
+                {
+                    if(j==0)
+                        iBinSet[i][j]=123;
+                    else if(j==1)
+                        iBinSet[i][j]=0;
+                    else
+                        iBinSet[i][j]=-1;
+                }
+            }
+        }
+
+        //開始設定顯示器上
+        for(int i=0; i<MAX_BIN_UNIT; i++)                                       //Steven 20140402 : Fixed 記憶體亂寫
+        {
+            //==> Eastsun 20260513 KYEC Auto change tray flash guard
+            if(IniConfig.bP66AutoChangingFlashWarn)
+            {
+                if(i==eBinDispAuto1 && bAutoChangingWarn[0]) continue;
+                if(i==eBinDispAuto2 && bAutoChangingWarn[1]) continue;
+                if(i==eBinDispAuto3 && bAutoChangingWarn[2]) continue;
+            }
+            //<== Eastsun 20260513
+            // GATE (D7): golden `HSys.BinDisCtrl->WriteTargetBin(i,
+            // iBinSet[i], iBinColor[i]);` -- see forms/fShowBinSelect.h GATE
+            // REGISTER (D7). iBinSet[][]/iBinColor[] above are computed IN
+            // FULL regardless (only this sink is gated).
+        }
+
+        bUpdateBinDigital=false;
+
+        // GATE (D8): golden `HSys.BinDisCtrl->ProcessStopStart(true);` --
+        // see forms/fShowBinSelect.h GATE REGISTER (D8).
+        return;
+    }
+
+    if(NUMBER_PANEL_TYPE==0)
+        return;                                                                 //Steven 20100512 : 沒有安裝
+    if(bUpdateBinDigital==false)
+        return;
+
+    int &Task=iShowBinDigitalTask;
+    bool bFlag;
+    static int iCount=0;
+    switch(Task)
+    {
+        case 1:
+            // GATE (D9): golden `if(fiosetview->fShow) { SW[iNumPanelDown]
+            // .On(); Task=400; } else {...}` -- see forms/fShowBinSelect.h
+            // GATE REGISTER (D9). Forced false; golden's own ELSE arm below
+            // is real/ACTIVE and needs no unavailable facade.
+            {
+                for(int i=0; i<12; i++)
+                {
+                    SW[SwLoaderBin+i].On();
+                }
+                iCount=0;
+                Task=100;
+            }
+            ShowBinDigital();                                                  // GATE (D10): still-QUEUED sibling, documented no-op stub below
+            BinTimer.SetSecAndOn(2);
+            break;
+        case 100:
+            if(BinTimer.Off())
+            {
+                for(int i=0; i<12; i++)
+                {
+                    SW[SwLoaderBin+i].Off();
+                }
+                Task=200;
+                BinTimer.SetSecAndOn(0.1);
+            }
+            break;
+        case 200:
+            if(BinTimer.Off())
+            {
+                iCount++;
+                bFlag=false;
+                for(int i=0; i<12; i++)
+                {
+                    if(iCount<=iShowAutoBin[i])
+                    {
+                        SW[SwLoaderBin+i].On();
+                        bFlag=true;
+                    }
+                }
+                BinTimer.SetSecAndOn(0.1);
+                Task=100;
+                if(bFlag==false)
+                {
+                    Task=300;
+                }
+            }
+            break;
+        case 300:
+            bUpdateBinDigital=false;                                            //Steven 20260612 : Fix == to = (was comparison, not assignment)
+            break;
+        case 400:                                                               //Steven 20090919 Start
+            // GATE (D11): unreachable in this port (GATE (D9) forces case 1
+            // to always take the else-arm, so Task can never become 400) --
+            // body also needs iNumPanelDown/bNumPanelDown/fiosetview->fShow,
+            // none of which have a facade or a true home in this wave's
+            // write boundary. See forms/fShowBinSelect.h GATE REGISTER (D11).
+            break;
+        case 500:
+            // GATE (D11): same reasoning as case 400.
+            break;
+    }
+}
+//---------------------------------------------------------------------------
+// GATE (D10): ShowBinDigital (golden :880-996) stays QUEUED -- NOT this
+// wave's target (see forms/fShowBinSelect.h WAVE D SCOPE). Documented no-op
+// stub only, so DoShowBinDigital's call site above compiles/links -- same
+// idiom as GATE (B8)'s PageControl1Change.
+void TfShowBinSelect::ShowBinDigital()
+{
 }

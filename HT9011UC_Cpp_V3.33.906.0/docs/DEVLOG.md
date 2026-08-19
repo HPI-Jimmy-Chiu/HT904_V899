@@ -8853,6 +8853,26 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   子類未翻）與 cShowBinSelect Wave D（ChangeBinDispStatus/
   DoShowBinDigital 兩支未翻方法）留後續波。
 
+## 20260820 清晨 III — cShowBinSelect Wave D（BinDisCtrl 消費端收尾）
+
+- ChangeBinDispStatus（150/179 行）＋DoShowBinDigital（398/426 行）
+  落地，GATE (D1)-(D11)。**兩支 golden 本體都無 !=NULL 守衛**——
+  全靠呼叫端前提（NUMBER_PANEL_TYPE 3/4 ⇒ InstallColorBinDisplay
+  已 new 實例），該前提本 port 不成立→deref 段逐一 GATE。
+- **D2 的安靜選擇值得記**：若把 UnitHasInstall 到處代入 false，
+  「i>=3 且未安裝」的警報 arm 會恆真→翻譯缺口變假警報連鎖
+  （ShowMyMessage 風暴）。整支 arm 留白讓 bHasError 穩定 false，
+  各分支落在單一良定義的安靜路徑——**gate 的替代值不是「隨便給
+  個 false」，要追它的下游消費鏈**。
+- GOLDEN ODDITY：golden :272 `ActivePageIndex==3;`（==應為=、
+  no-op 比較——主迴圈坐實）照翻＋(void) 消警告。
+- 附帶更正：Wave B QUEUE 對 ShowBinDigital 的描述有誤（它與
+  SW[]/fiosetview 無關，是純 iShowAutoBin 運算）——header 已留
+  更正註記，它是未來低風險小波。
+- 34 個 eBinDispName 序 TPanel 具名成員（刻意不重用 e6TrayName 序
+  的 UnLoadPanel——兩索引序不同）；3 個 StatusBar facade 類。
+  純追加：946 insertions / 0 deletions。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8862,10 +8882,10 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
 - **批 5 全清＋user.level（FW-1d）＋recipe.current（FW-1e）接通**。
-  BinDisCtrl 鏈全收（recon→基底→integrator 四拆兩留）。
-  **下一波**依脈絡擇一：(a) cShowBinSelect Wave D（ChangeBinDispStatus
-  /DoShowBinDigital 兩支——型別障礙已除，翻譯波可開）；
-  (b) bin.* 解鎖（SetTechDataToProd 呼叫者 harness 決策）；
+  BinDisCtrl 鏈全收（recon→基底→integrator→Wave D 消費端）。
+  **下一波**依脈絡擇一：(a) ShowBinDigital 小波（golden :880-996，
+  純 iShowAutoBin/MyBinSel 運算——Wave B QUEUE 舊描述有誤已更正，
+  低風險）；(b) bin.* 解鎖（SetTechDataToProd 呼叫者 harness 決策）；
   (c) 1203 HAL MOTION_IO pimpl；(d) rgCustomerList dfm 自動抽取波；
   (e) vclcompat 擴充收斂波；(f) InstallColorBinDisplay＋MN200 c/e
   同波接線（需先決定 offline 用 TMyBinDispOffline 或維持 NULL）。

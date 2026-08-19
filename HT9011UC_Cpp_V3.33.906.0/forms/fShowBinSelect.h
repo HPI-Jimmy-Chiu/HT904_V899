@@ -333,6 +333,223 @@
 //        "gate the missing call, not the surrounding logic" idiom as (B1)/
 //        (B3)/(B9).
 //
+//  WAVE D SCOPE (AI(W906-FW3-SBS-WD) 20260820 -- golden line spans)
+//  --------------------------------------------------------------------------
+//  Translates the two methods the WAVE B QUEUE above listed as BLOCKED by an
+//  opaque `HSys.BinDisCtrl` (`class TMyBinDispCtrl;` forward-decl only,
+//  database.h:63). That pointer is no longer opaque -- BinDisplay/MyBinDisp.h
+//  landed the real `TMyBinDispCtrl` data-layer class this same day (AI(W906-
+//  BinDisp-WA) 20260820) -- but it is STILL permanently NULL in this port:
+//  `SYSTEM_MODULAR::InstallColorBinDisplay` (the golden method that `new`s it,
+//  database.cpp golden :1684-1729) stays `#if 0`-gated (database.cpp:227-229),
+//  and `SystemModularInitial`'s own call into it is ALSO `#if 0`-gated
+//  (database.cpp:192-196, "NUMBER_PANEL_TYPE defaults 0 offline (cmydef.cpp)
+//  so the branch is dead here anyway"). `HSys` is a global with NO active
+//  user-declared ctor (SYSTEM_MODULAR's real ctor is itself `#if 0`-gated,
+//  database.h:236-239) -- `BinDisCtrl` is NULL purely via C++'s static
+//  zero-init of that global, and nothing ACTIVE in this build ever assigns it
+//  (verified this wave: `grep -n "BinDisCtrl\s*=" database.cpp` -- the only
+//  hit, database.cpp:145 `BinDisCtrl = NULL;`, is itself inside the `#if 0`
+//  ctor).
+//
+//  PRECONDITION ANALYSIS (why this is a GATE, not a bare `!=NULL` guard)
+//  Golden's OWN two methods carry NO `if(BinDisCtrl==NULL)` guard anywhere
+//  (unlike golden's InstallColorBinDisplay, database.cpp golden :1688-1689,
+//  which does) -- they rely entirely on an EXECUTION-TIME precondition
+//  established by their caller: ChangeBinDispStatus's only golden call site
+//  (main.cpp golden :25239-25241) and DoShowBinDigital's own internal check
+//  (golden :1000-1002) both gate on `NUMBER_PANEL_TYPE==3||4`, the EXACT SAME
+//  condition InstallColorBinDisplay itself checks (golden :1691) before
+//  `new`-ing BinDisCtrl from SystemModularInitial. In golden's real
+//  production builds that precondition holds (by the time either method's
+//  guard condition is true, InstallColorBinDisplay has already run once, at
+//  startup). In THIS port the precondition is BROKEN: NUMBER_PANEL_TYPE==3||4
+//  no longer implies BinDisCtrl!=NULL, because the allocating half
+//  (InstallColorBinDisplay) never runs at all. Per this wave's own dictated
+//  rule ("golden 無守衛直接 deref 的段 -> 逐段判 golden 執行期前提，前提在本
+//  port 不成立就 GATE＋登記，不准裸拆"), every direct `HSys.BinDisCtrl->...`
+//  deref in these two methods is GATEd below (GATE (D1)-(D8)), not
+//  translated as reachable code that would deref a permanently-NULL pointer.
+//  Where a gated CONDITION's outcome is unambiguous given "nothing is ever
+//  installed" (`UnitHasInstall(i)` can only ever mean false in this port,
+//  since `InstalledUnit()` -- the only writer -- is never reached either),
+//  golden's OWN matching branch for that outcome is kept as real, ACTIVE
+//  code (see (D1)/(D3)); where a gated call's return value drives further
+//  computation with no golden-provided "not installed" branch to fall back
+//  on (e.g. `GetRunStatus()`), a documented safe-default substitute is used
+//  instead (see (D6)), same "safe default, not fabricated behaviour"
+//  convention as (B4)/(B7).
+//
+//    ChangeBinDispStatus  golden :208-386   ACTIVE, 6 GATEs -- (D1)-(D6).
+//                          Dissolves the WAVE B QUEUE entry above (not edited
+//                          in place). New local widget array (golden :210-
+//                          216, `TPanel *UnLoadPanel[]={pnlLoader,pnlEmpty,
+//                          pnlColor,pnlAuto1..6,pnlFix1..12,pnlBinBox,
+//                          pnlMag1..14}`) needs 34 new individually-named
+//                          TPanel* members (pnlEmpty/pnlColor already existed,
+//                          WAVE B) -- see HYDRATION note below for why these
+//                          are dedicated members rather than reusing
+//                          ShowBinSel's own `UnLoadPanel[e3TrayCount]` member
+//                          array. GOLDEN ODDITY: `PageControl1->
+//                          ActivePageIndex==3;` (golden :272) is a `==` where
+//                          golden almost certainly meant `=` -- a no-op
+//                          comparison-statement, translated as `(void)(...)`
+//                          to keep the exact no-op behaviour without an
+//                          `-Wunused-value` warning; NOT "fixed" to `=`,
+//                          same "照翻，並在 //AI 註解寫下它為什麼看起來錯"
+//                          policy as GATE (B12).
+//    DoShowBinDigital     golden :998-1423 ACTIVE, 5 GATEs -- (D7)-(D11).
+//                          Dissolves the WAVE B QUEUE entry above. The
+//                          NUMBER_PANEL_TYPE==3||4 branch (golden :1000-1329)
+//                          touches BinDisCtrl in exactly 2 places (recon-
+//                          confirmed this wave by re-reading the whole span
+//                          cp950-decoded): the `WriteTargetBin` call inside
+//                          the final for-loop (:1318, GATE (D7)) and the
+//                          trailing `ProcessStopStart(true)` (:1323, GATE
+//                          (D8)) -- every OTHER statement in that ~330-line
+//                          block (iBinSet[][]/iBinCount[]/iBinColor[]/
+//                          AddBinDisp[] computation) is pure local/global
+//                          arithmetic with NO BinDisCtrl touch and NO other
+//                          missing facade, so it is translated in FULL,
+//                          faithfully, even though its only consumer
+//                          (WriteTargetBin) is gated -- same "computed and
+//                          stored regardless, only the missing sink is
+//                          gated" posture as GATE (B3)'s UPH numbers. The
+//                          REST of the function (the digital-7-segment
+//                          Task-1/100/200/300/400/500 switch machine, golden
+//                          :1331-1422) does NOT touch BinDisCtrl at all --
+//                          gates (D9)-(D11) there are for a DIFFERENT,
+//                          unrelated absence (fiosetview->fShow / iosetview.h
+//                          globals), not BinDisCtrl.
+//    ShowBinDigital       golden :880-996 -- STILL QUEUED, NOT this wave's
+//                          target (see WAVE B QUEUE above, unedited). Its
+//                          call site inside DoShowBinDigital's case 1 is
+//                          satisfied by a documented no-op stub, GATE (D10),
+//                          same "declare the missing callee" idiom as GATE
+//                          (B8)'s PageControl1Change. CORRECTION to the WAVE
+//                          B QUEUE's own description of this method ("physical
+//                          7-segment display driver (SW[] switch coupling +
+//                          fiosetview)"): re-read cp950-decoded this wave --
+//                          ShowBinDigital's actual golden body (:880-996) has
+//                          ZERO SW[]/fiosetview references (`grep -n "SW\[\|
+//                          fiosetview" <decoded golden>` restricted to that
+//                          span -- 0 hits); it is pure iShowAutoBin[]/
+//                          MyBinSel[]/Prod arithmetic. The SW[]/fiosetview
+//                          coupling the prior note was describing actually
+//                          lives in DoShowBinDigital's OWN switch machine
+//                          (confirmed (D9)/(D11) below) -- left uncorrected in
+//                          the WAVE B QUEUE text itself (append-only policy),
+//                          flagged here for whichever wave eventually
+//                          translates ShowBinDigital for real.
+//
+//  GATE REGISTER (WAVE D, continues from (B18) above)
+//  --------------------------------------------------------------------------
+//  (D1) ChangeBinDispStatus's first loop (golden :230-240): `if(HSys.
+//       BinDisCtrl->UnitHasInstall(i)) bErrFlag[i]=HSys.BinDisCtrl->
+//       GerErrNow(i); else bErrFlag[i]=false;` -- the CONDITION itself derefs
+//       BinDisCtrl (see PRECONDITION ANALYSIS above). Substituted with
+//       golden's OWN "not installed" else-arm value (`false`), which is
+//       genuinely this port's true state for every unit (nothing is ever
+//       registered installed -- InstallColorBinDisplay never runs).
+//  (D2) ChangeBinDispStatus's second loop's FINAL else-if arm (golden :257-
+//       266): `else if(bErrFlag[i] || (i>=3 && HSys.BinDisCtrl->
+//       UnitHasInstall(i)==false)) { bHasError=true; sTempChi=sTempChi+"
+//       "+UnLoadPanel[i]->Name; if(iAlarmFlag==0) iAlarmFlag=1; }` -- reads
+//       (D1)'s gated bErrFlag[] AND derefs BinDisCtrl a second time; also
+//       reads `UnLoadPanel[i]->Name`, itself unavailable (vclcompat::TPanel
+//       carries no ->Name, confirmed this wave, out of this wave's write
+//       boundary regardless). Gated as a whole arm -- NOT substituted with an
+//       invented "not installed = error" value, because doing so would make
+//       `bHasError` unconditionally true for nearly every configuration
+//       (golden's own intent: for real hardware, "not installed" on an
+//       Auto/Fix/Mag slot genuinely IS an alarm-worthy condition) and cascade
+//       into the ShowMyMessage/status-bar side effects below with FABRICATED
+//       urgency this port has no basis for. The preceding skip-condition arms
+//       in the same if/else-if chain (AUTO3_IS_MAGAZINE/BulkBox+Auto4+/AMR
+//       hide) touch none of this and are real/ACTIVE. Net effect: `bHasError`
+//       stays deterministically `false` throughout this port's translation,
+//       which is what makes (D3)-(D6) below each resolve to a single,
+//       well-defined, quiet branch instead of requiring their own guesswork.
+//  (D3) ChangeBinDispStatus's third loop (golden :294-338): the `if(HSys.
+//       BinDisCtrl->UnitHasInstall(i))` true-arm (GetColorNow/GetBinNow +
+//       Caption "L"/"E"/"C"/"X"/AnsiString(iBin), or the bErrFlag[i] flash-
+//       colour arm) is unreachable (same BinDisCtrl as (D1)/(D2)). Golden's
+//       own ELSE arm (`UnLoadPanel[i]->Color=clGray; ->Caption="X";`) is
+//       real, ACTIVE, and translated UNCONDITIONALLY for every slot --
+//       "every unloader bin panel shows gray/X" is this port's genuinely
+//       correct, deterministic state (no bin-display hardware wired yet).
+//  (D4) ChangeBinDispStatus's KYEC/AMD alarm block (golden :345-350, inside
+//       `#ifndef SOFT_SIMULTE`): `HSys.BinDisCtrl->bFirstInit=true;
+//       HSys.BinDisCtrl->ProcessStopStart(true); ShowMyMessage(...);` --
+//       gated (direct BinDisCtrl derefs). The OUTER structure (`if((
+//       CUSTOMER_CODE==CC_KYEC_LEE||CC_AMD_M) && bBinDispAlarm==false)` /
+//       `if(bHasError && fHome->fShow==false) { bBinDispAlarm=true; ... }`)
+//       is real/ACTIVE -- (D2) makes `bHasError` always false, so this whole
+//       branch is currently dormant, but the STRUCTURE is translated
+//       faithfully (defense in depth: if a future wave changes how
+//       bHasError is computed, this gate still holds).
+//  (D5) ChangeBinDispStatus's bG16BinDispNeedAlarm alarm block (golden :363-
+//       372, inside `#ifndef SOFT_SIMULTE`): `sTempEng=...; sTempChi=...;
+//       HSys.BinDisCtrl->CommBin->StopComm(); HSys.BinDisCtrl->bFirstInit=
+//       true; HSys.BinDisCtrl->ProcessStopStart(true); ShowMyMessage(
+//       sTempEng,sTempChi); AlarmDelay.SetSecAndOn(60); iAlarmFlag=0;` --
+//       gated in full (every line either derefs BinDisCtrl or exists only to
+//       feed the gated ShowMyMessage call). The OUTER `iAlarmFlag==1`/`==2`
+//       structure is real/ACTIVE but currently dormant, same reasoning as
+//       (D4) (`iAlarmFlag` is only ever set 1 inside (D2)'s gated arm).
+//  (D6) ChangeBinDispStatus's tail (golden :383): the `else` arm's `HSys.
+//       BinDisCtrl->GetRunStatus()` (feeding `sbRunStatus->Panels->Items[0]
+//       ->Text=`) -- direct BinDisCtrl deref, gated. Safe-default substitute:
+//       `""` (blank), same "blank text, not a fabricated status string"
+//       convention as GATE (B4). `sbRunStatus->Color=clBtnFace;` (same arm)
+//       and the `if(bHasError){...}` true-arm (`Text="Bin display got
+//       error!!"; Color=clRed;`) need no gate (no BinDisCtrl, no missing
+//       facade -- TfShowBinSelectStatusBar, this wave's own new facade-only
+//       type, covers them) and are translated verbatim.
+//  (D7) DoShowBinDigital's `HSys.BinDisCtrl->WriteTargetBin(i, iBinSet[i],
+//       iBinColor[i]);` (golden :1318, inside the per-unit for-loop) --
+//       direct BinDisCtrl deref, gated. The loop's OWN `IniConfig.
+//       bP66AutoChangingFlashWarn` continue-guard (golden :1311-1317) is
+//       real/ACTIVE and precedes the gated call, translated as-is (it simply
+//       never gets to skip anything useful in this port, since the gated
+//       call is the loop body's only other statement).
+//  (D8) DoShowBinDigital's `HSys.BinDisCtrl->ProcessStopStart(true);` (golden
+//       :1323) -- direct BinDisCtrl deref, gated. `bUpdateBinDigital=false;`
+//       (golden :1321, same block) and the trailing `return;` (golden :1324)
+//       are real/ACTIVE, translated verbatim.
+//  (D9) DoShowBinDigital case 1's `if(fiosetview->fShow)` (golden :1338) --
+//       UNRELATED to BinDisCtrl. `fiosetview` in this port is
+//       `TfiosetviewShim` (atester_shims.h), which carries only
+//       `bIndexSuck[2][4][8]` -- no `->fShow` member (`grep -n "fShow"
+//       atester_shims.h`, restricted to the shim's own class body -- 0 hits,
+//       20260820); adding one is out of this wave's write boundary
+//       (atester_shims.h is not cShowBinSelect.cpp/forms/fShowBinSelect.h).
+//       Forced `false` (this tree's established "unshown form defaults
+//       false" convention, forms/FormWidgets.h's DEFAULT-VALUE RULE) --
+//       golden's own ELSE arm (`for i<12: SW[SwLoaderBin+i].On(); iCount=0;
+//       Task=100;`) is real, ACTIVE, needs no unavailable facade, and is
+//       this port's correct behaviour for "the debug IO-set-view window is
+//       not open" (which, absent a real translated iosetview.cpp, is always
+//       true here). The forced-unreachable true-arm (`SW[iNumPanelDown].On();
+//       Task=400;`) additionally needs `iNumPanelDown` (golden `extern int`,
+//       iosetview.h:3042 -- same absent-true-home issue as (D11)).
+//  (D10) DoShowBinDigital case 1's `ShowBinDigital();` call (golden :356) --
+//        ShowBinDigital itself stays QUEUED this wave (see WAVE D SCOPE
+//        above). Declared in this header with an empty-stub body in the .cpp
+//        so this call site compiles/links -- same "declare the missing
+//        callee as a documented no-op" idiom as GATE (B8)'s
+//        PageControl1Change.
+//  (D11) DoShowBinDigital cases 400/500 (golden :1390-1421) -- their bodies
+//        need `iNumPanelDown`/`bNumPanelDown` (golden `extern int`/`extern
+//        bool`, iosetview.h:3042-3043) and `fiosetview->fShow` a second time;
+//        none of the three has a facade or a true home inside this wave's
+//        write boundary (their real home, iosetview.h, is a DIFFERENT form's
+//        header). Also PROVABLY UNREACHABLE in this port regardless: (D9)
+//        forces case 1 to always take the else-arm (`Task=100`), so `Task`
+//        can never become 400 or 500 in the first place. Case labels are
+//        kept (golden's full switch shape, faithfully structural) with
+//        gated, empty bodies.
+//
 //  DESIGN NOTE -- facade-only widget wrapper shapes
 //  --------------------------------------------------------------------------
 //  TfShowBinSelectGrid : public vclcompat::TStringGrid
@@ -442,6 +659,42 @@
 //      SetAutoVisible/SetLabelVisible already hide via
 //      `grpBinDisp[i]->Visible=false`, so the un-hydrated cosmetic default
 //      is never user-visible either.
+//    pnlLoader/pnlAuto1..6/pnlFix1..12/pnlBinBox/pnlMag1..14 (AI(W906-FW3-
+//      SBS-WD) 20260820, WAVE D ADD): same "no per-slot geometry" posture as
+//      UnLoadPanel[]/UnLoadLabel[] above -- these are ChangeBinDispStatus's
+//      OWN local array (golden :210-216), a SEPARATE, differently-ordered
+//      33+3 set of widgets from ShowBinSel's `UnLoadPanel[e3TrayCount]`
+//      member array (WAVE B) even though both draw from overlapping golden
+//      `.dfm` leaf names -- confirmed this wave the two are NOT the same
+//      ordinal scheme: ShowBinSel's own local array (golden :394-398) orders
+//      Auto1..Auto6 CONSECUTIVELY (matching MachineType.h's `e6TrayName`/
+//      `eTrayCount`, the enum this port's WAVE B ctor actually indexes
+//      `UnLoadPanel[e3TrayCount]` with -- `grep -n "for (int i = eAuto1"
+//      cShowBinSelect.cpp`), while ChangeBinDispStatus's own local array
+//      (golden :210-216) splits Auto1-3/Auto4-6 apart, prefixed with Loader/
+//      Empty/Color (matching MachineType.h's `eBinDispName`/`eBinDispTotal`).
+//      Reusing WAVE B's member array's object identity for the overlapping
+//      33 slots would need a non-trivial index REMAPPING (eBinDispXxx <->
+//      e6TrayName-ordinal, not a constant offset); given ChangeBinDispStatus
+//      ends up writing the SAME `clGray`/"X" to every slot unconditionally
+//      regardless of identity (GATE (D3) -- no bin-display hardware is wired
+//      in this port), object-identity sharing between the two methods has
+//      NO observable behavioural consequence in this wave's scope (terminal
+//      UI writes, nothing reads either array back). Dedicated new members
+//      are therefore the lower-risk choice; a future wave that needs the two
+//      methods to visibly share panel state (e.g. once a physical Bin
+//      display exists to validate against) should reconcile this then, not
+//      guess at it here. pnlEmpty/pnlColor (WAVE B, already members) are
+//      reused, not redeclared.
+//    sbRunStatus (WAVE D ADD): TfShowBinSelectStatusBar, this wave's own new
+//      facade type (see its own doc comment above) -- ->Panels->Items[0]
+//      ->Text defaults "" (AnsiString's own default ctor) and ->Color
+//      defaults 0, both overwritten unconditionally by ChangeBinDispStatus's
+//      own tail (golden :376-385, this wave) before anything could read the
+//      un-hydrated default.
+//    iShowAutoBin[12] (WAVE D ADD): zero-initialized (`= {}`) -- see its own
+//      doc comment at the member declaration for why (no golden counterpart,
+//      reproduces BCB6's zero-fill-before-ctor semantic).
 // =============================================================================
 #ifndef FORMS_FSHOWBINSELECT_H
 #define FORMS_FSHOWBINSELECT_H
@@ -510,6 +763,32 @@ class TfShowBinSelectLabel : public vclcompat::TLabel
 {
 public:
     TFont *Font = new TFont();
+};
+
+// AI(W906-FW3-SBS-WD) 20260820: golden TStatusBar (sbRunStatus, cShowBinSelect.h:26
+// `TStatusBar *sbRunStatus;`) -- see WAVE D SCOPE / DESIGN NOTE below. No
+// TStatusBar/TStatusPanel(s) facade exists anywhere in vclcompat (`grep -rn
+// "class TStatusBar" vclcompat/` -- 0 hits, 20260820) -- same "declare the
+// missing widget shape locally in this TU's own facade header" idiom as
+// TfShowBinSelectPageControl/TfShowBinSelectTimer above. Minimal surface only:
+// ChangeBinDispStatus (this wave's only consumer) never indexes ->Panels->
+// Items[] beyond [0].
+class TfShowBinSelectStatusPanel
+{
+public:
+    AnsiString Text;
+};
+class TfShowBinSelectStatusPanels
+{
+public:
+    TfShowBinSelectStatusPanel *Items[1];
+    TfShowBinSelectStatusPanels() { Items[0] = new TfShowBinSelectStatusPanel(); }
+};
+class TfShowBinSelectStatusBar
+{
+public:
+    int Color = 0;
+    TfShowBinSelectStatusPanels *Panels = new TfShowBinSelectStatusPanels();
 };
 
 // =============================================================================
@@ -696,6 +975,78 @@ public:
     void TimerAutoCleanCountTimer(TObject *Sender);
     // FormShow -- golden :758-866, ACTIVE, 1 GATE (B18) -- see GATE REGISTER.
     void FormShow(TObject *Sender);
+
+    // AI(W906-FW3-SBS-WD) 20260820, WAVE D ADD: ChangeBinDispStatus's OWN
+    // local widget array (golden :210-216) -- dedicated members, NOT shared
+    // identity with ShowBinSel's `UnLoadPanel[e3TrayCount]` -- see WAVE D
+    // SCOPE / HYDRATION above for why. Names are golden's own `.dfm` leaf
+    // names. pnlEmpty/pnlColor (WAVE B, above) are reused for this array too.
+    TPanel *pnlLoader = new TPanel();
+    TPanel *pnlAuto1  = new TPanel();
+    TPanel *pnlAuto2  = new TPanel();
+    TPanel *pnlAuto3  = new TPanel();
+    TPanel *pnlAuto4  = new TPanel();
+    TPanel *pnlAuto5  = new TPanel();
+    TPanel *pnlAuto6  = new TPanel();
+    TPanel *pnlFix1   = new TPanel();
+    TPanel *pnlFix2   = new TPanel();
+    TPanel *pnlFix3   = new TPanel();
+    TPanel *pnlFix4   = new TPanel();
+    TPanel *pnlFix5   = new TPanel();
+    TPanel *pnlFix6   = new TPanel();
+    TPanel *pnlFix7   = new TPanel();
+    TPanel *pnlFix8   = new TPanel();
+    TPanel *pnlFix9   = new TPanel();
+    TPanel *pnlFix10  = new TPanel();
+    TPanel *pnlFix11  = new TPanel();
+    TPanel *pnlFix12  = new TPanel();
+    TPanel *pnlBinBox = new TPanel();
+    TPanel *pnlMag1   = new TPanel();
+    TPanel *pnlMag2   = new TPanel();
+    TPanel *pnlMag3   = new TPanel();
+    TPanel *pnlMag4   = new TPanel();
+    TPanel *pnlMag5   = new TPanel();
+    TPanel *pnlMag6   = new TPanel();
+    TPanel *pnlMag7   = new TPanel();
+    TPanel *pnlMag8   = new TPanel();
+    TPanel *pnlMag9   = new TPanel();
+    TPanel *pnlMag10  = new TPanel();
+    TPanel *pnlMag11  = new TPanel();
+    TPanel *pnlMag12  = new TPanel();
+    TPanel *pnlMag13  = new TPanel();
+    TPanel *pnlMag14  = new TPanel();
+
+    // AI(W906-FW3-SBS-WD) 20260820, WAVE D ADD: sbRunStatus (golden
+    // cShowBinSelect.h:26 `TStatusBar *sbRunStatus;`) -- see
+    // TfShowBinSelectStatusBar's own doc comment above.
+    TfShowBinSelectStatusBar *sbRunStatus = new TfShowBinSelectStatusBar();
+
+    // AI(W906-FW3-SBS-WD) 20260820, WAVE D ADD: DoShowBinDigital's rotating-
+    // display work array (golden cShowBinSelect.h:495 `int
+    // iShowAutoBin[12];`). Zero-initialized here (NO golden counterpart for
+    // the initializer) -- golden's own populator is ShowBinDigital() (golden
+    // :880-996, still QUEUED, see WAVE D SCOPE), so nothing this wave
+    // translates ever assigns these 12 ints; without an explicit initializer
+    // they would be indeterminate heap garbage (`new TfShowBinSelect()` does
+    // not zero-fill a plain member array), which DoShowBinDigital's case-200
+    // `iCount<=iShowAutoBin[i]` comparison would then read as UB. Same
+    // "reproduce BCB6 zero-fill" rationale as BinDisplay/MyBinDisp.h's
+    // ZeroInitVclFields()/DEVIATION (b).
+    int iShowAutoBin[12] = {};
+
+    // AI(W906-FW3-SBS-WD) 20260820, WAVE D primary targets: ACTIVE (partial --
+    // see WAVE D SCOPE / GATE REGISTER above for the (D1)-(D11) gates each
+    // carries). Dissolves the WAVE B QUEUE entries above (not edited in
+    // place -- see WAVE D SCOPE for the reconciliation).
+    void ChangeBinDispStatus();
+    void DoShowBinDigital();
+
+    // GATE (D10): ShowBinDigital itself (golden :880-996) stays QUEUED --
+    // NOT this wave's target (see WAVE D SCOPE). Declared here, empty-stub
+    // body in the .cpp, so DoShowBinDigital's own call site (golden :356)
+    // compiles/links -- same "declare the missing callee as a documented
+    // no-op" idiom as GATE (B8)'s PageControl1Change.
+    void ShowBinDigital();
 };
 
 // AI(W906-FW3-ShowBinSelect-WA) 20260818: global NOT defined here -- main-loop
