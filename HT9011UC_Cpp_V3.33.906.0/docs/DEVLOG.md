@@ -8776,6 +8776,23 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   後 "Operator"（str[0]，4-level 表——bSecurityHave5Level 未載
   ＝false 走 4-level，正確）。tagmap 綁定 user.level 至此接通。
 
+## 20260820 凌晨 V — FW-1e：recipe.current 解鎖（主迴圈自做）
+
+- 比 LookForFile 更對的路：LookForFile（main.cpp:9016）其實有落盤
+  （MoveFile offset 遷移/DeleteFile 123aaa.ini/MyForceDirectories）
+  ＝清單掃描＋管家；而 recipe.current 的值只是 golden :9440 的啟動
+  鏡射 `cbSetupFileName->Text=GetLastOpenFN()`——GetLastOpenFN 在
+  V906 已是真身（common.h:301，唯讀 setup.inf）。wb_serve 啟動時
+  做一次鏡射（**放在 modal hook 安裝前**——缺 setup.inf 時
+  ShowMyMessage 只上 stdout 一次，不會每 tick 廣播 modal）；
+  "Fail Open" 照 golden 原字發布。
+- e2e：recipe.current="SNI120120B0333AMB08ACN0"（本機真實工作檔名）；
+  發布 109→111、coverage 88→90、live 47→49 全對帳。
+- **補帳**：FW-1d 的 user.level 漏了 coverage +1——本波 +2（user.level
+  ＋recipe.current）一併補正並在註解記明。
+- tagmap 綁定側 recipe.current/user.level 至此都接通；LookForFile
+  本體（含落盤管家段）留給未來 recipe 清單波（write 側）。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8784,15 +8801,14 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   FW-W4（4999e2e）、FW-W5a（83b4251）、FW-FE1（57e3c03）、
   **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
-- **批 5 全清＋user.level 接通（FW-1d）**。**下一波**依脈絡擇一：
-  (a) bin.* 解鎖（SetTechDataToProd_Yield 呼叫者決策）；
-  (b) 1203 HAL MOTION_IO pimpl；(c) cShowBinSelect Wave D；
-  (d) BinDisplay 的 BinDisCtrl（elec\Component 查證）；
+- **批 5 全清＋user.level（FW-1d）＋recipe.current（FW-1e）接通**。
+  **下一波**依脈絡擇一：(a) bin.* 解鎖（SetTechDataToProd_Yield
+  呼叫者決策）；(b) 1203 HAL MOTION_IO pimpl；(c) cShowBinSelect
+  Wave D；(d) BinDisplay 的 BinDisCtrl（elec\Component 查證）；
   (e) 過期 gate 註解清理波（nm 已證三處）；(f) rgCustomerList dfm
   自動抽取波；(g) vclcompat 擴充收斂波（TStringGrid 欄位五處
-  subclass 複製＋TScrollBar/TImage/TWMKey 缺口評估）；
-  (h) recipe.current 解鎖（LookForFile main.cpp:9016——比照
-  user.level 的 FW-1d 手法，缺口在 fMain）。真機類依 §7 仍佇列。
+  subclass 複製＋TScrollBar/TImage/TWMKey 缺口評估）。
+  真機類依 §7 仍佇列。
 - **FW-1 備忘**：pct 六顆等 sort.total 站穩後接；recipe.current/
   user.level 來源鏈未查（可能落在未翻的 cConfiguration）；
   tagmap.js 的 data-cmd 十筆結構性缺口要跟 web 前端波一起解；

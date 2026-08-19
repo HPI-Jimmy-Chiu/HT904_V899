@@ -394,6 +394,14 @@ std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap)
     // startup pass). Same cust key as auth.level.
     stageStr(snap, "user.level", cust, fMain->cbUserSelect->Text);
 
+    // AI(W906-FW1e) 20260820: recipe.current -- the active setup name, golden
+    // main.cpp:9440's startup mirror (cbSetupFileName->Text=GetLastOpenFN(),
+    // one read of setup.inf done by the host process at boot; wb_serve does
+    // it before installing the modal hook). "" = the host never mirrored;
+    // "Fail Open" = golden's own text for an unreadable setup.inf, published
+    // as-is. Same cust key as the other identity mirrors.
+    stageStr(snap, "recipe.current", cust, fMain->cbSetupFileName->Text);
+
     // AI(W906-FW-W3) 20260819: control-token mirror (see SetWebControlOwner).
     // Same liveness key as auth.level; "" = nobody holds the token.
     {
@@ -690,6 +698,12 @@ TagCoverage HandlerTagCoverage()
     // flatter `live` without a new source being read.
     c.total += 2 + 2;
     c.live  += (lastS ? 2u : 0u) + (cust ? 2u : 0u);
+
+    //AI(W906-FW1e) 20260820: +2 cust-keyed identity mirrors -- user.level
+    // (FW-1d, whose commit missed this ledger line; corrected here) and
+    // recipe.current (this wave).
+    c.total += 2;
+    c.live  += (cust ? 2u : 0u);
 
     //AI(W906-SimPump) 20260813: the 18 clock/state/pump tags are DELIBERATELY NOT
     // counted here, and the reason is the same one this file exists for.

@@ -200,6 +200,15 @@ int main(int argc, char** argv)
         return 1;
     }
 
+    // AI(W906-FW1e) 20260820: golden's startup mirror (main.cpp:9440
+    // cbSetupFileName->Text=GetLastOpenFN()) -- the CURRENT recipe name, read
+    // once from setup.inf (LastDataPath, read-only). Done here, BEFORE the
+    // ShowMyMessage hook is installed, so a missing setup.inf logs once to
+    // stdout instead of broadcasting a modal every tick. "Fail Open" on
+    // failure is golden's own combo text, published as-is.
+    fMain->cbSetupFileName->Text = GetLastOpenFN();
+    std::printf("recipe.current = %s\n", fMain->cbSetupFileName->Text.c_str());
+
     webbridge::TagSnapshot snap;
     const std::size_t staged = ht9045::PublishHandlerTags(snap);
     const ht9045::TagCoverage cov = ht9045::HandlerTagCoverage();
