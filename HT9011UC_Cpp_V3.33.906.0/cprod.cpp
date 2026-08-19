@@ -2653,13 +2653,18 @@ void ProcessLastSetIni_Tray(bool bRead)
     if(CUSTOMER_CODE==CC_ASE_CL)
         IniConfig.bRecordSkipPosition                       =ReadWriteIni(sPath, "Tray", "bRecordSkipPosition",                      IniConfig.bRecordSkipPosition,                         false,  bRead);  //jou 2013-05-30 Record Skip position
 
-#if 0 // TODO(GA1-B2): blocked by fSpeed@not declared anywhere in ported tree (golden form,
-      // no forms/fSpeed.h port exists)
+#if 0 // TODO(GA1-B2): blocked by TfSpeed::ReadFile -- the fSpeed FACADE now
+      // exists (forms/fSpeed.h, W906-FW3-Speed-WA 20260820) but deliberately
+      // does NOT declare ReadFile: it is an 830-line "Read but writes"
+      // function (WriteIniData x3 / SendMSG_CMD x4) queued as write path.
+      // Gate stays until that wave lands. (Original premise "no forms/
+      // fSpeed.h port exists" is stale as of 20260820 -- updated so nobody
+      // re-derives it.)
     if(LoaderUnload_StepMotor)                                                  //Sam 20201221 : Tray y step motor by machine
     {
         fSpeed->ReadFile();
     }
-#endif // TODO(GA1-B2): fSpeed
+#endif // TODO(GA1-B2): fSpeed->ReadFile (write path)
 }
 //---------------------------------------------------------------------------
 void ProcessLastSetIni_Index(bool bRead)

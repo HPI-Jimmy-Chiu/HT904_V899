@@ -16977,8 +16977,11 @@ void SaveMachineRecord(bool bSpare)
 //  transcribed; note the enclosing guard reads TestIF.iAutoClean_* while the
 //  same block above reads IniConfig/TestIF -- that TestIF vs TestIF_File
 //  inconsistency is golden's own and is left alone.
-//  No caller yet (SetTechDataToProd, golden :11636, is not in this slice and is
-//  itself gated at :7040 of this file as N3-G9) -- lands reachable but uncalled.
+//  AI(W906-StaleGates) 20260820: the "No caller yet" note that stood here is
+//  RETIRED -- SetTechDataToProd (golden :11636) has since been translated in
+//  THIS file (:15249) and its battery calls this function live (:15280).
+//  Whether any exe's boot path reaches SetTechDataToProd() is a separate,
+//  per-harness question (wb_serve's LoadMachineConfig does not).
 //------------------------------------------------------------------------------
 void SetTechDataToProd_Yield()
 {

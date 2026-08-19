@@ -8793,6 +8793,26 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - tagmap 綁定側 recipe.current/user.level 至此都接通；LookForFile
   本體（含落盤管家段）留給未來 recipe 清單波（write 側）。
 
+## 20260820 凌晨 VI — 過期 gate/註解清理波（主迴圈自做）
+
+- 五處全數處置（每處先驗現況再動，nm/Grep 佐證）：
+  1. **atester_ProcessCount.cpp:642 拆閘**：TastCategory.UpdataCount
+     計數呼叫復活（cSocket.cpp:1258 真身、stub 已刪——nm 坐實）；
+     補 cSocket.h include。
+  2. **同檔 :829 前提更新、gate 保留**：舊前提（無翻譯 home）已死，
+     但該段是 WAR07335-07337 低良率警報升級迴圈（golden :764-936）
+     ——改以安全類理由續 gate（fTemperFrom T1 同類）。
+     **教訓：拆閘不是二元的——前提死了要重新給理由，不是自動開。**
+  3. **Command.cpp:12277 拆閘**：fShowBinSelect->ShowBinSel() 復活
+     （cShowBinSelect.cpp:1101 真身＋:135 真實例）；補 include。
+  4. **cinitial.cpp:16980**：「No caller yet」更新（SetTechDataToProd
+     已在 :15249、電池呼叫 :15280 皆活；是否被 boot path 走到是
+     per-harness 問題）。
+  5. **cSocket.h:40 衝突警告標 [RESOLVED]**（原文保留為歷史）。
+  6. **cprod.cpp GA1-B2 前提更新、gate 保留**（fSpeed facade 已在，
+     但 ReadFile 是「Read 但寫」write path 未宣告——封鎖理由換新）。
+- 兩處拆閘=行為變更→全新雙 gate。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8802,12 +8822,13 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
 - **批 5 全清＋user.level（FW-1d）＋recipe.current（FW-1e）接通**。
-  **下一波**依脈絡擇一：(a) bin.* 解鎖（SetTechDataToProd_Yield
-  呼叫者決策）；(b) 1203 HAL MOTION_IO pimpl；(c) cShowBinSelect
-  Wave D；(d) BinDisplay 的 BinDisCtrl（elec\Component 查證）；
-  (e) 過期 gate 註解清理波（nm 已證三處）；(f) rgCustomerList dfm
-  自動抽取波；(g) vclcompat 擴充收斂波（TStringGrid 欄位五處
-  subclass 複製＋TScrollBar/TImage/TWMKey 缺口評估）。
+  過期 gate 清理波已收（兩拆閘＋兩前提更新＋一標記 RESOLVED）。
+  **下一波**依脈絡擇一：(a) bin.* 解鎖（SetTechDataToProd 已翻在
+  cinitial.cpp:15249——剩「哪個 boot path 呼叫它」的 harness 決策；
+  cat.* 的 UpdataCount 呼叫點本波已拆閘，資料鏈進一步接近）；
+  (b) 1203 HAL MOTION_IO pimpl；(c) cShowBinSelect Wave D；
+  (d) BinDisplay 的 BinDisCtrl（elec\Component 查證）；
+  (e) rgCustomerList dfm 自動抽取波；(f) vclcompat 擴充收斂波。
   真機類依 §7 仍佇列。
 - **FW-1 備忘**：pct 六顆等 sort.total 站穩後接；recipe.current/
   user.level 來源鏈未查（可能落在未翻的 cConfiguration）；

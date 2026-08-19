@@ -109,6 +109,7 @@
 #include "CosFunction.h"            // CosFunction (HT9045_COUSTOMER_FUNCTION)
 #include "canary_support.h"         // LastSet / ShowErrorMessage / RecordProcess
 #include "aHotPlateSubstrate.h"     // TestSocket / FTestSuck / MyDBIProcess / fYieldMonitoring
+#include "cSocket.h"                // AI(W906-StaleGates) 20260820: TastCategory (real home landed; gate #1 retired)
 #include "csystem.h"                // InitOneCycle
 #include "atester_shims.h"          // IsNNMode() / fContact (TfContactShim)
 #include "FormsFacade.h"            // fMain (BtnOneCycleClick / BtnOneCycle->Down already present)
@@ -639,14 +640,16 @@ void CheckContinuoussFail(int Index)                                            
         }
     }
 
-    // AI(W5-ProcessCount-Translate) 20260710: gate #1 (TastCategory / cSocket.cpp,
-    // golden :588-591) -- see file header.
-#if 0 // TODO(cSocket-module): TastCategory (TEST_CATEGORY, golden cSocket.h:144-174) has no translated home yet.
+    // AI(W906-StaleGates) 20260820: gate #1 RETIRED -- its premise ("TastCategory
+    // has no translated home yet", W5-ProcessCount 20260710) died when
+    // cSocket.cpp landed: nm on libht9045_sm.a shows cSocket.cpp.obj OWNS the
+    // real `TEST_CATEGORY TastCategory` (UpdataCount body cSocket.cpp:1258)
+    // and SCK_ART_Remainder.cpp's old stub was deleted at integration
+    // (SCK_ART_Remainder.cpp:361 records the removal). Golden :588-591 live.
     if(CosFunction.bBySiteByBinPercentCompare==true)                            //JerryYang 20170712 (Steven) by site by bin compare percent
     {
         TastCategory.UpdataCount(true);                                         //Steven 20250514 : 統一計算數量
     }
-#endif
 
     if(CosFunction.bAllSiteSameFailBinShowAlarm==true &&                        //kevin 20170825 (Steven) add all site fail
        IniConfig.bI34AllSiteAreSameFailBinShowAlarm==true)                      //JerryYang 20160913 矽品要求當測試結果中所有site的bin都是所設定一樣的fail bin要跳alarm
@@ -824,7 +827,14 @@ void CheckContinuoussFail(int Index)                                            
     // alarms WAR07335/07336/07337) -- see file header.  ENTIRE golden for(iCat...)
     // loop below is dormant offline (matches CosFunction.bBySiteByBinPercentCompare's
     // own default==false baseline).
-#if 0 // TODO(cSocket-module): TastCategory (TEST_CATEGORY, golden cSocket.h:144-174) has no translated home yet.
+#if 0 // AI(W906-StaleGates) 20260820: PREMISE UPDATED, GATE KEPT. The old
+      // premise ("TastCategory has no translated home yet") is stale --
+      // cSocket.cpp owns the real definition now. This block STAYS gated on a
+      // different, still-true ground: it is the WAR07335/07336/07337 low-yield
+      // ALARM ESCALATION loop (golden :764-936), the same safety class as
+      // fTemperFrom GATE (T1) -- a real alarm channel starting to fire is an
+      // operational behaviour change reserved for explicit sign-off, not a
+      // missing-dependency question.
     if(CosFunction.bBySiteByBinPercentCompare==true)                            //JerryYang 20170712 (Steven) by site by bin compare percent
     {
         for(int iCat=0; iCat<iTestBinCount; iCat++)                             //Site by Bin

@@ -38,8 +38,15 @@
 //    * AnsiString (vclcompat), not std::string, for Name/FileName (golden :77/:89).
 //
 //  ***************************************************************************
-//  KNOWN INTEGRATION CONFLICT -- READ BEFORE WIRING THIS FILE INTO THE BUILD
+//  [RESOLVED 20260820] INTEGRATION CONFLICT -- kept for history, no longer live
 //  ***************************************************************************
+//  AI(W906-StaleGates) 20260820: the integrate step this warning demanded has
+//  HAPPENED -- SCK_ART_Remainder.cpp's stub definition was deleted (its :361
+//  comment records the removal) and nm on libht9045_sm.a confirms
+//  cSocket.cpp.obj owns the one real `TEST_CATEGORY TastCategory` while
+//  SCK_ART_Remainder.cpp.obj only references it. The paragraph below is the
+//  original warning, preserved as history; do not re-act on it.
+//  ---------------------------------------------------------------------------
 //  This header's `extern TEST_CATEGORY TastCategory;` (golden :177, mirrored
 //  below) COLLIDES at link time with Automation/SCK_ART_Remainder.cpp:346's
 //  PRE-EXISTING real definition:

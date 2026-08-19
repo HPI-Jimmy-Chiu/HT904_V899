@@ -8206,6 +8206,7 @@ void TfMain::GetCZAllMassTemp()                                      //JerryYang
 #include "forms/fSetup.h"     // fSetup->fShow (SettingsIsWindowOpened; also SetSiteMapByDLL's GATE comment)
 #include "atester_shims.h"    // fContact->fShow (SettingsIsWindowOpened)
 #include "cSocket.h"          // TastCategory (GetBinCountByDLL / GetBinCountPerSiteByDLL)
+#include "forms/fShowBinSelect.h"  // AI(W906-StaleGates) 20260820: fShowBinSelect->ShowBinSel() (gate retired)
 #include "MainCalcCore.h"     // GetShtModeFlag / ComputeCanChangeRealDummy
 
 // =============================================================================
@@ -12274,11 +12275,11 @@ AnsiString TfMain::BinPosChange(char *str) //KaiChen 20190706 ：Add GPIB BINPOS
         }
         fBinSel->ChangeActivePageIndex();   //Sam 20230711 : 修正 OLP SetCategroy 異常
         fBinSel->spbSaveClick(NULL);   // S: same Sender-ignored NULL substitution as SetTrayBinByDLL's call above
-        // GATE (kept): fShowBinSelect->ShowBinSel() -- Wave B queue item
-        // (forms/fShowBinSelect.h:62), still untranslated.
-#if 0
+        // AI(W906-StaleGates) 20260820: gate RETIRED -- "still untranslated"
+        // stopped being true when the cShowBinSelect waves landed ShowBinSel()
+        // (cShowBinSelect.cpp:1101, real instance cShowBinSelect.cpp:135,
+        // display-only chain marked ACTIVE). Golden line live again.
         fShowBinSelect->ShowBinSel();
-#endif
     }
 
     return asReturn;
