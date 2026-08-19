@@ -94,6 +94,8 @@
 #include "Config.h"                  // IniConfig (bF06InitialICCheck / ...)
 #include "CosFunction.h"             // CosFunction (parity)
 #include "Motor/mymotor.h"           // MOT[] (CheckMotorHome: HomeFlag / TOTAL_MOTOR)
+#include "database.h"                // AI(W906-BinDispInt) 20260820: HSys (G13/G17 flips need it)
+#include "BinDisplay/MyBinDisp.h"    // AI(W906-BinDispInt) 20260820: complete TMyBinDispCtrl for ->FlashPro/->ClearAutoChangingWarn
 #include "myswitch.h"                // SW[]  (SwSocketClean.Off in the gated ladder)
 //AI(W906-W7-L2-substrate) 20260803: added for IsSafeLockCheck (golden
 // csystem.cpp:16461-16508), which reads Sen[SnRKCoverOpen] / Sen[SnRKSafeLock].
@@ -13354,20 +13356,12 @@ bool DoReceiveAutoTray(int Pos)
         bAutoDuplicateErr[Pos]=false;
     }
 
-#if 0   // GATE(g3-G13)  golden csystem.cpp:6739  --  HSys.BinDisCtrl->FlashPro(Pos) -- the colour bin-display 'this Auto is changing' flash.
+    // AI(W906-BinDispInt) 20260820: GATE(g3-G13) RETIRED -- TMyBinDispCtrl's
+    // real base landed (BinDisplay/MyBinDisp.{h,cpp}); golden's own !=NULL
+    // guard keeps this dead while BinDisCtrl stays NULL (until
+    // InstallColorBinDisplay is wired), so the flip is behaviour-preserving.
     if(HSys.BinDisCtrl!=NULL)
         HSys.BinDisCtrl->FlashPro(Pos);                                             //Eastsun 20260514
-#else
-//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
-//  WHY THE DEFAULT IS FAITHFUL : acatchtray_shims.h:24-25 already records this exact pair as
-//      GATED-at-the-call-site ('database.h TMyBinDispCtrl is forward-decl-only;
-//      HSys.BinDisCtrl==NULL offline so the calls never run'); THIS is that single call site.
-//      golden's own if(HSys.BinDisCtrl!=NULL) guard makes the call dead whenever the display is
-//      absent, which is every offline run.
-//  BEHAVIOUR DELTA ON A REAL MACHINE : On a machine with a colour bin display fitted, the per-Auto
-//      'changing' lamp does not flash while the tray is being received. Indicator only -- no
-//      motion, no interlock, no alarm.
-#endif  // GATE(g3-G13)
 
     switch(Task)
     {
@@ -14064,16 +14058,11 @@ bool DoReceiveAutoTray(int Pos)
                 bNeedTakeTray[Pos]=true;
             }
 
-#if 0   // GATE(g3-G17)  golden csystem.cpp:7412  --  HSys.BinDisCtrl->ClearAutoChangingWarn(Pos) -- clears the flash G13 would have started.
+            // AI(W906-BinDispInt) 20260820: GATE(g3-G17) RETIRED -- paired
+            // with G13's flip above, same ground (real base landed, golden's
+            // own !=NULL guard preserves offline behaviour).
             if(HSys.BinDisCtrl!=NULL)
                 HSys.BinDisCtrl->ClearAutoChangingWarn(Pos);                        //Eastsun 20260514 : Clear Flash
-#else
-//  DEFAULT CHOSEN : statement omitted (no substitute emitted)
-//  WHY THE DEFAULT IS FAITHFUL : same as G13 (same object, same documented gate, same golden NULL
-//      guard).
-//  BEHAVIOUR DELTA ON A REAL MACHINE : Paired with G13: nothing is flashed, so nothing needs
-//      clearing. Indicator only.
-#endif  // GATE(g3-G17)
             return true;
     }
     return false;

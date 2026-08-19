@@ -1497,10 +1497,17 @@ void ResetMNet(int iRingNo, AnsiString EngMessage, AnsiString ChtMessage, bool b
             if(NUMBER_PANEL_TYPE==3 ||                                          //Steven 20120106 : 不是使用七段顯示器的話，Reset Ring會記憶體破壞
                NUMBER_PANEL_TYPE==4)                                            //Sam 20240604 : 新增 BinDisplay TFT
             {
-                // AI(W906-PT-W3) 20260807 GATE (c): HSys.BinDisCtrl->bFirstInit /
-                // ProcessStopStart(true) dropped -- database.h's own BinDisCtrl is a
-                // forward-declared opaque TMyBinDispCtrl*, documented NULL until a UI
-                // wave wires InstallColorBinDisplay.  See file banner GATE (c).
+                // AI(W906-BinDispInt) 20260820: GATE (c) PREMISE UPDATED, GATE
+                // KEPT. The old ground ("opaque forward-decl") died --
+                // TMyBinDispCtrl's real base landed in BinDisplay/MyBinDisp.h.
+                // This stays gated on a different, still-true ground: golden
+                // has NO !=NULL guard here (unlike acatchtray/csystem's
+                // flipped sites) -- it derefs unconditionally whenever
+                // NUMBER_PANEL_TYPE is 3/4, surviving only because
+                // InstallColorBinDisplay news the instance in those configs.
+                // With BinDisCtrl still NULL in this port, opening this is a
+                // NULL deref, not fidelity. Flip it together with the
+                // InstallColorBinDisplay wiring, not before.
 #if 0
                 HSys.BinDisCtrl->bFirstInit=true;                               //Steven 20110621 Start : 關電後要重新Init Bin Disp & Power Off On一次
                 HSys.BinDisCtrl->ProcessStopStart(true);
@@ -2419,9 +2426,10 @@ int CheckPCI_MN200State()
         }
 
         bCheckPCI_L112StateRun=false;
-        // AI(W906-PT-W3) 20260807 GATE (e): HSys.BinDisCtrl->ProcessStopStart(true)
-        // dropped -- same opaque/NULL BinDisCtrl reason as GATE (c) above.  The
-        // guarding condition and iWriteErrorLogCT reset are both preserved verbatim.
+        // AI(W906-BinDispInt) 20260820: GATE (e) PREMISE UPDATED, GATE KEPT --
+        // same re-justification as GATE (c) above: type is real now, but
+        // golden derefs without a NULL guard here; opening it before
+        // InstallColorBinDisplay is wired is a crash, not fidelity.
         if(iWriteErrorLogCT!=0) //Sam 20230508 : 修正24V斷電後 Bin顯示器顯示異常。
         {
 #if 0

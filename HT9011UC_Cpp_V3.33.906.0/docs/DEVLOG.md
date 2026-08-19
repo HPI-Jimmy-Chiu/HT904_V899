@@ -8837,6 +8837,22 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - 9 個既有 #if 0 gate 與 database.h 接線**刻意留給獨立 integrator
   波**（一顆 commit 一件事）。CMake 已由主迴圈接進 ht9045_sm。
 
+## 20260820 清晨 II — BinDisCtrl integrator 波（主迴圈自做）
+
+- 六個 gate 逐一複驗分流：**四拆**（acatchtray FlashPro/
+  ClearAutoChangingWarn、csystem G13/G17——golden 自帶 !=NULL 守衛，
+  BinDisCtrl 離線恆 NULL→行為保持；補 database.h/MyBinDisp.h
+  include，csystem.cpp 原本連 database.h 都沒含）；**兩留**（MN200
+  GATE c/e——golden 在 NUMBER_PANEL_TYPE 3/4 **無守衛直接 deref**，
+  靠 InstallColorBinDisplay 先 new 出實例才活；拆了是 NULL crash
+  不是忠實。換理由續 gate，與 InstallColorBinDisplay 接線同波再拆）。
+- **同一課的第三次應用**：拆閘的判準不是「型別有了沒」而是「golden
+  的執行期前提在本 port 成不成立」——有 NULL 守衛的照拆、沒守衛的
+  等實例接線。
+- InstallColorBinDisplay 本體（會 new TMyBinDispHT9046——硬體協定
+  子類未翻）與 cShowBinSelect Wave D（ChangeBinDispStatus/
+  DoShowBinDigital 兩支未翻方法）留後續波。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8846,13 +8862,14 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
 - **批 5 全清＋user.level（FW-1d）＋recipe.current（FW-1e）接通**。
-  過期 gate 清理波＋BinDisCtrl 基底波已收。**下一波**依脈絡擇一：
-  (a) **BinDisCtrl integrator 波**：database.h 接線＋9 個 #if 0 逐一
-  複驗拆閘（cShowBinSelect Wave D 的 ChangeBinDispStatus/
-  DoShowBinDigital 也在此解鎖）——前提已備（基底已進 ht9045_sm）；
+  BinDisCtrl 鏈全收（recon→基底→integrator 四拆兩留）。
+  **下一波**依脈絡擇一：(a) cShowBinSelect Wave D（ChangeBinDispStatus
+  /DoShowBinDigital 兩支——型別障礙已除，翻譯波可開）；
   (b) bin.* 解鎖（SetTechDataToProd 呼叫者 harness 決策）；
   (c) 1203 HAL MOTION_IO pimpl；(d) rgCustomerList dfm 自動抽取波；
-  (e) vclcompat 擴充收斂波。真機類依 §7 仍佇列。
+  (e) vclcompat 擴充收斂波；(f) InstallColorBinDisplay＋MN200 c/e
+  同波接線（需先決定 offline 用 TMyBinDispOffline 或維持 NULL）。
+  真機類依 §7 仍佇列。
 - **FW-1 備忘**：pct 六顆等 sort.total 站穩後接；recipe.current/
   user.level 來源鏈未查（可能落在未翻的 cConfiguration）；
   tagmap.js 的 data-cmd 十筆結構性缺口要跟 web 前端波一起解；

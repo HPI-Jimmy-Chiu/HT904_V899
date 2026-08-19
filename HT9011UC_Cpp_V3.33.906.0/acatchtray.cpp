@@ -95,6 +95,7 @@
 #include "csystem.h"                // HasICUnderMachine / IndexHasIC / ReadWriteTrayID / DoLockUnloader / iReceiveAutoTrayTask
 #include "common.h"                 // asTrayIDByLot
 #include "database.h"               // HSys (SYSTEM_MODULAR) + BinDisCtrl
+#include "BinDisplay/MyBinDisp.h"   // AI(W906-BinDispInt) 20260820: complete TMyBinDispCtrl (FlashPro/ClearAutoChangingWarn flips)
 #include "FormsFacade.h"            // fMain / fAGV / fSortCT / fLotInfo / fSCKART offline stand-ins
 #include "canary_support.h"         // LastSet (+ART fields) / ShowErrorMessage / ShowMyMessage / RecordProcess / ShowUnloaderTrayMessage
 #include "myTimer.h"                // TQPF_Timer
@@ -3951,10 +3952,13 @@ bool DoPlaceTrayToAuto(int AutoTarget)
     bool bflag1=false, bflag2=false, bflag3=false, bflag4=false;
     TColor cPtr[2]  ={clWhite, clYellow};
     AnsiString str1 ="";
-#if 0 // TODO(W7-UI): golden HSys.BinDisCtrl->FlashPro (TMyBinDispCtrl, MyBinDisp.h UI wave); BinDisCtrl==NULL offline -> guard false, behaviour-preserving
+    // AI(W906-BinDispInt) 20260820: gate RETIRED -- TMyBinDispCtrl's real
+    // data-layer base landed (BinDisplay/MyBinDisp.{h,cpp}, in ht9045_sm).
+    // Golden's own !=NULL guard keeps this dead offline (BinDisCtrl stays
+    // NULL until InstallColorBinDisplay is wired), so the flip is
+    // behaviour-preserving today and golden-faithful the day it is not.
     if(HSys.BinDisCtrl!=NULL)
         HSys.BinDisCtrl->FlashPro(AutoTarget);                                      //Eastsun 20260514
-#endif
 
     if(Task==1150)                                                              //標配,改以sensor Enable作判斷
     {
@@ -7191,10 +7195,11 @@ void DoCatchTray()
             }
             else if(DoPlaceTrayToAuto(Target))
             {
-#if 0 // TODO(W7-UI): golden HSys.BinDisCtrl->ClearAutoChangingWarn (TMyBinDispCtrl, MyBinDisp.h UI wave); BinDisCtrl==NULL offline -> guard false, behaviour-preserving
+                // AI(W906-BinDispInt) 20260820: gate RETIRED -- same ground
+                // as the FlashPro flip above (real base landed, golden's own
+                // !=NULL guard preserves offline behaviour).
                 if(HSys.BinDisCtrl!=NULL)
                     HSys.BinDisCtrl->ClearAutoChangingWarn(Target-1); //Eastsun 20260513 : 顯示器閃爍功能
-#endif
                 ret=WhichAutoNeedTray();
                 if(USE_LdUldCassetteMode==1)                                    //RogerYang 20260203 : Add for HT9046CR
                 {
