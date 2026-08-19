@@ -8873,6 +8873,17 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   的 UnLoadPanel——兩索引序不同）；3 個 StatusBar facade 類。
   純追加：946 insertions / 0 deletions。
 
+## 20260820 早晨 — ShowBinDigital 小波（Wave E，cShowBinSelect 顯示側收官）
+
+- golden :880-995（116 行）真身落地，GATE (D10) 退役。逐行重讀證實
+  Wave D 的描述（純 iShowAutoBin/MyBinSel/Prod 運算，零 BinDisCtrl/
+  SW[]/fiosetview/落盤）——**零新 gate、零新欄位**。
+- 兩個照翻＋加註：AUTO3_IS_MAGAZINE 迴圈 i=0 起跳（姊妹迴圈 i=1；
+  bMagazineLink[0] 全樹唯一 writer 從未寫 true→負索引路徑不可達，
+  GOLDEN NOTE 交叉引用既有 :1325 註記）；`Caption=Caption` 自我賦值
+  no-op（讀起來像刻意的「未連結維持原值」空分支，照翻含原縮排）。
+- cShowBinSelect 顯示側至此全清（A/B/C/D/E）。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8882,13 +8893,12 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
 - **批 5 全清＋user.level（FW-1d）＋recipe.current（FW-1e）接通**。
-  BinDisCtrl 鏈全收（recon→基底→integrator→Wave D 消費端）。
-  **下一波**依脈絡擇一：(a) ShowBinDigital 小波（golden :880-996，
-  純 iShowAutoBin/MyBinSel 運算——Wave B QUEUE 舊描述有誤已更正，
-  低風險）；(b) bin.* 解鎖（SetTechDataToProd 呼叫者 harness 決策）；
-  (c) 1203 HAL MOTION_IO pimpl；(d) rgCustomerList dfm 自動抽取波；
-  (e) vclcompat 擴充收斂波；(f) InstallColorBinDisplay＋MN200 c/e
-  同波接線（需先決定 offline 用 TMyBinDispOffline 或維持 NULL）。
+  BinDisCtrl 鏈與 cShowBinSelect 顯示側全收（A-E）。
+  **下一波**依脈絡擇一：(a) bin.* 解鎖（SetTechDataToProd 呼叫者
+  harness 決策）；(b) 1203 HAL MOTION_IO pimpl；(c) rgCustomerList
+  dfm 自動抽取波；(d) vclcompat 擴充收斂波；
+  (e) InstallColorBinDisplay＋MN200 c/e 同波接線（需先決定 offline
+  用 TMyBinDispOffline 或維持 NULL——半設計面，宜留使用者裁決）。
   真機類依 §7 仍佇列。
 - **FW-1 備忘**：pct 六顆等 sort.total 站穩後接；recipe.current/
   user.level 來源鏈未查（可能落在未翻的 cConfiguration）；

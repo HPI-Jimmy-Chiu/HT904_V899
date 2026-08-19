@@ -2688,7 +2688,7 @@ void TfShowBinSelect::DoShowBinDigital()
                 iCount=0;
                 Task=100;
             }
-            ShowBinDigital();                                                  // GATE (D10): still-QUEUED sibling, documented no-op stub below
+            ShowBinDigital();                                                  // AI(W906-FW3-SBS-WE) 20260820: GATE (D10) RETIRED -- real body now below (was: documented no-op stub)
             BinTimer.SetSecAndOn(2);
             break;
         case 100:
@@ -2739,10 +2739,155 @@ void TfShowBinSelect::DoShowBinDigital()
     }
 }
 //---------------------------------------------------------------------------
-// GATE (D10): ShowBinDigital (golden :880-996) stays QUEUED -- NOT this
-// wave's target (see forms/fShowBinSelect.h WAVE D SCOPE). Documented no-op
-// stub only, so DoShowBinDigital's call site above compiles/links -- same
-// idiom as GATE (B8)'s PageControl1Change.
+// AI(W906-FW3-SBS-WE) 20260820: GATE (D10) RETIRED -- ShowBinDigital (golden
+// :880-996) was left as a documented no-op stub by WAVE D (see forms/
+// fShowBinSelect.h WAVE D SCOPE / former GATE (D10)); this wave gives it its
+// real body. WAVE D's own recon note already corrected the record on what
+// this function actually touches (pure iShowAutoBin[]/MyBinSel[]/Prod
+// arithmetic, ZERO SW[]/fiosetview) -- re-verified again this wave (`grep -n
+// "SW\[\|fiosetview"` restricted to the cp950-decoded golden :880-996 span,
+// 0 hits), and it held up: no BinDisCtrl deref, no disk write, no motor/IO
+// call anywhere in this function, so it needs NO new GATE of its own. Golden
+// ref: cShowBinSelect.cpp golden :880-996, cp950-decoded this wave
+// (`python3 -c "open(path,'rb').read().decode('cp950')"`), 0 U+FFFD over the
+// decoded span (re-verified 20260820).
+//---------------------------------------------------------------------------
 void TfShowBinSelect::ShowBinDigital()
 {
+    if(NUMBER_PANEL_TYPE==3 ||
+       (NUMBER_PANEL_TYPE==4 && MAGAZINE_BIN_DISP_TYPE!=eMagBinUninstall))      //Sam 20240604 : 新增 BinDisplay TFT
+
+        return;
+
+    if(NUMBER_PANEL_TYPE!=0)                                                    //Steven 20091001
+    {
+        int i, j;
+        int iArray[12];
+        //Steven 20090917 Start
+        for(i=0; i<12; i++)
+            iArray[i]=-1;
+        if(NUMBER_PANEL_TYPE==2)        //2 Digital
+        {
+            iArray[0]=111;     //L
+            iArray[1]=104;     //E
+            iArray[2]=102;     //C
+        }
+        else if(NUMBER_PANEL_TYPE==1)   //1 Digital
+        {
+            iArray[0]=21;      //L
+            iArray[1]=14;      //E
+            iArray[2]=12;      //C
+        }
+        //Steven 20090917 End
+        for(i=0; i<12; i++)
+            iShowAutoBin[i]=iArray[i];
+        for(i=3; i<12; i++)
+        {
+            for(j=0; j<iTestBinCount; j++)
+            {
+                if(iShowAutoBin[i]==-1)
+                {
+                    if(Prod.iT6PosCate[j]==(i-2))
+                       // iShowAutoBin[i]=j+1;
+                        iShowAutoBin[i]=j;//kevin 20140324 bin 0
+                }
+            }
+        }
+
+        if(IniConfig.bAutoTrayLink==true)                                       //jou 2012-06-14 Auto Tray Link
+        {
+            if(Prod.bLinkTo6Tray[1]==true)
+            {
+                iShowAutoBin[4]=iShowAutoBin[3];
+            }
+
+            if(Prod.bLinkTo6Tray[1]==true && Prod.bLinkTo6Tray[2]==true)
+            {
+                iShowAutoBin[5]=iShowAutoBin[3];
+            }
+            else if(Prod.bLinkTo6Tray[1]==false && Prod.bLinkTo6Tray[2]==true)
+            {
+                iShowAutoBin[5]=iShowAutoBin[4];
+            }
+        }
+
+        //Steven 20181113 : 修正Fix Link顯示問題
+        //==>
+        if(Prod.bLinkTo6Tray[eFix2]==true)
+        {
+            iShowAutoBin[7]=iShowAutoBin[6];
+        }
+
+        if(Prod.bLinkTo6Tray[eFix2]==true && Prod.bLinkTo6Tray[eFix3]==true)
+        {
+            iShowAutoBin[8]=iShowAutoBin[6];
+        }
+        else if(Prod.bLinkTo6Tray[eFix2]==false && Prod.bLinkTo6Tray[eFix3]==true)
+        {
+            iShowAutoBin[8]=iShowAutoBin[7];
+        }
+        //<==
+        //Steven 20181113 : 修正Fix Link顯示問題
+
+        //Ifor 20231122 add Magazine Link
+        //==>
+        if(AUTO3_IS_MAGAZINE==1)
+        {
+            for(i=0; i<14; i++)
+            {
+                if(BinSelect[iTestRunMode].bMagazineLink[i]==true)
+                {
+                    for(j=0; j<14; j++)
+                    {
+                        // AI(W906-FW3-SBS-WE) 20260820, GOLDEN NOTE (same
+                        // negative-subscript shape as this file's OWN
+                        // cShowBinSelect.cpp:1325-1332 GOLDEN NOTE, in
+                        // ShowBinSel's sibling AUTO3_IS_MAGAZINE block): this
+                        // outer loop starts at i=0 (not i=1 like the
+                        // sibling), so taken alone the i==0 iteration would
+                        // already index bMagazineLink[i-j]==bMagazineLink[-1]
+                        // at j==1 if bMagazineLink[0] alone were true. In
+                        // practice the outer `if` above never even enters for
+                        // i==0, because bMagazineLink[0] (the exact same slot
+                        // the sibling note documents, written only by
+                        // cBinSel.cpp:1722) is never set true by any writer
+                        // this tree ports -- so this loop behaves as if it
+                        // started at i=1 in practice, same invariant as the
+                        // sibling, kept verbatim.
+                        if(BinSelect[iTestRunMode].bMagazineLink[i-j]==false)
+                        {
+                            MyBinSel[eMag1+i]->Caption=MyBinSel[eMag1+(i-j)]->Caption;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    // AI(W906-FW3-SBS-WE) 20260820, GOLDEN ODDITY:
+                    // `MyBinSel[eMag1+i]->Caption=MyBinSel[eMag1+i]->
+                    // Caption;` below is a redundant self-assignment (a=a),
+                    // a harmless no-op. Reads as an explicit "not linked ->
+                    // leave Caption unchanged" else-arm rather than a typo
+                    // (unlike GATE (B12)'s `==` comparison-statement in
+                    // ChangeBinDispStatus) -- kept verbatim, including
+                    // golden's own extra leading space on this one line.
+                     MyBinSel[eMag1+i]->Caption=MyBinSel[eMag1+i]->Caption;
+                }
+            }
+        }
+        //<==
+        //Ifor 20231122 add Magazine Link
+
+        //jou 2010-01-12 start : E bin show "E"   (E=R)
+        if(CUSTOMER_CODE==CC_ASE_KaohSiung || CUSTOMER_CODE==CC_ASE_KaohSiung_K12)     //Steven 20131101 : Add ASE-K12
+        {
+            iShowAutoBin[Prod.iIfErrorT6+3]=104; //E
+        }
+        else
+        {
+            //Steven 20100224 無法顯示"R"
+            //iShowAutoBin[Prod.iIfErrorT6+3]=117; //R
+        }
+        //jou 2010-01-12 end
+    }
 }

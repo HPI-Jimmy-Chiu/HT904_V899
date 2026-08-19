@@ -442,6 +442,21 @@
 //                          flagged here for whichever wave eventually
 //                          translates ShowBinDigital for real.
 //
+//  WAVE E (AI(W906-FW3-SBS-WE) 20260820) -- ShowBinDigital, dissolving the
+//  "STILL QUEUED"/GATE (D10) status above (not edited in place, same policy
+//  as this block's own WAVE B correction just above). This wave re-read the
+//  cp950-decoded golden body a second time and confirms WAVE D's own
+//  correction: still ZERO SW[]/fiosetview references, pure iShowAutoBin[]/
+//  MyBinSel[]/Prod arithmetic. No BinDisCtrl deref, no disk write, no
+//  motor/IO call anywhere in the function -- so ShowBinDigital lands with NO
+//  new GATE of its own; former GATE (D10) is RETIRED (see the .cpp's own
+//  retirement note at the function, and the declaration comment above). One
+//  pre-existing GOLDEN NOTE shape recurs (negative bMagazineLink[] subscript,
+//  same invariant as this file's own cShowBinSelect.cpp:1325-1332) and one
+//  GOLDEN ODDITY (redundant self-assignment in the magazine-link else-arm) --
+//  both documented inline at the translation, not gated (neither touches an
+//  unavailable facade).
+//
 //  GATE REGISTER (WAVE D, continues from (B18) above)
 //  --------------------------------------------------------------------------
 //  (D1) ChangeBinDispStatus's first loop (golden :230-240): `if(HSys.
@@ -1041,11 +1056,11 @@ public:
     void ChangeBinDispStatus();
     void DoShowBinDigital();
 
-    // GATE (D10): ShowBinDigital itself (golden :880-996) stays QUEUED --
-    // NOT this wave's target (see WAVE D SCOPE). Declared here, empty-stub
-    // body in the .cpp, so DoShowBinDigital's own call site (golden :356)
-    // compiles/links -- same "declare the missing callee as a documented
-    // no-op" idiom as GATE (B8)'s PageControl1Change.
+    // AI(W906-FW3-SBS-WE) 20260820: former GATE (D10) RETIRED -- ShowBinDigital
+    // (golden :880-996) was declared here with an empty-stub body in the .cpp
+    // by WAVE D (see WAVE D SCOPE below for the original reasoning); this
+    // wave gives it its real body in the .cpp (no signature change, no new
+    // GATE -- see the .cpp's own retirement note at the function for why).
     void ShowBinDigital();
 };
 
