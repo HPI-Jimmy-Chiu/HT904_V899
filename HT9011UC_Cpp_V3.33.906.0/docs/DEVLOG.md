@@ -8400,17 +8400,25 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   成員（純顯示、沒有 sXxx 目標的 4 個維持 gate）、`InitmtBinSelectData()`
   未呼叫。留給下一波（若要把 InitDataToEdit 的 grid 渲染也點亮）。
 
+## 20260819 中午 — cBinSel Wave C 整併複驗（38b19e1 事後驗收）
+
+- 代理**越權自行 commit**（brief 只准 3 檔且未授權 commit，DEVLOG 也是
+  它寫的）——內容經主迴圈事後驗收全數成立：S20 elision 的核心宣稱
+  （golden :4685-4711 確實是 25 條 ed*→sXxx 回讀塊，直寫 sXxx 位元等價）
+  親自對 golden 坐實；SIOF 守衛用法正確；oracle 201/201 單測綠
+  （gate-free 模式）。commit 保留不重做。
+- **規則追加**：波次代理 brief 加一條「不准 git commit／不准寫 DEVLOG，
+  一律交回主迴圈整併」——這次是品質好運，不是流程對。
+- 正式雙 gate 依環境規則欠帳中（連同 FW-W1 的乾淨補 gate），
+  量產程式關閉後一起補。
+
 ### 🔖 RESUME（最新）
 
-- **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
-  Sec/BinSel/SBW 全系列、FW-W1（5e4b30d）、台帳 552 筆（49ea369）、
-  **FW-BinSel-WC**（InitDataToEdit 真本體＋mtTrayNameSetColor 全解鎖，
-  cBinSel.h/cpp 的 TfBinSel 系列翻譯至此告一段落，只剩 mtBinSelect 格子
-  渲染／22 個 ed* TEdit／mouse handler 等純 UI 大宗待後續波次）。
-- **⚠ 環境狀態**：量產 HT9045.exe 在本機執行中 → gate 暫停；
-  FW-BinSel-WC／FW-W1 的乾淨補 gate 等量產程式關閉。
-- **gate-free 可做**：FW-W2 auth.login 程式碼準備（不跑 gate 只
-  -fsyntax-only＋探針對 --dry server）；1203 HAL 的 MOTION_IO pimpl 修
-  （syntax 級驗證）；文件線；cBinSel 剩餘大宗（mtBinSelect widget 化，
-  需再加 22 個 TEdit + 1 個 Tray256Core 成員）可繼續程式碼準備。
-- **設計面**：三項裁決已全落地執行；B4 依裁決不修（台帳在冊）。
+- **完成**：核可佇列全清、FW-W1、台帳 552 筆、cBinSel Wave A/B/C
+  （38b19e1——G9 關、G10 新增 mtBinSelect）。
+- **⚠ 環境**：量產 HT9045.exe 執行中 → gate 暫停。**欠帳補 gate 清單**：
+  FW-W1（5e4b30d）＋cBinSel WC（38b19e1）共用一次全新雙 gate，
+  量產程式關閉後執行。
+- **gate-free 下一波**：FW-W2 auth.login 程式碼準備（主迴圈；探針對
+  --dry server 可測）；或 1203 HAL 的 MOTION_IO pimpl 修（syntax 級）。
+- **設計面**：無待答（兩個小預設值已告知使用者，不回=照預設）。
