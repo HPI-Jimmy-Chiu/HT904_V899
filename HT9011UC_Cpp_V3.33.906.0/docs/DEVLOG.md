@@ -8813,6 +8813,30 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
      但 ReadFile 是「Read 但寫」write path 未宣告——封鎖理由換新）。
 - 兩處拆閘=行為變更→全新雙 gate。
 
+## 20260820 清晨 — BinDisCtrl 解謎＋TMyBinDispCtrl 基底落地
+
+- **recon**（b052f40＋更正 ae3516c）：BinDisCtrl＝樹內純 C++ 資料層
+  基底（BinDisplay/MyBinDisp.{h,cpp}，非 halarm 型樹外元件、非
+  design-time）。V906 是自己 forward-declare 延後（database.h:63），
+  不是找不到料。17 個生產呼叫點全部只碰基底資料層、零個碰硬體協定
+  子類。recon 自我更正一次（spcomm.hpp 其實在 elec\Component——
+  截斷背景輸出當完整驗證的教訓）。
+- **翻譯波**（本顆）：BinDisplay/MyBinDisp.{h,cpp} 新檔——基底
+  忠實翻譯（17 介面全覆蓋、零 stub）＋TMyBinDispOffline no-op 具體
+  子類＋namespaced TTimer stand-in（TRAP 5 前例，避免第 5 個全域
+  TTimer 撞名）。GATE(1)=Timer1Timer 硬體 bring-up 分派器（~320 行
+  空殼、ctor 有接 OnTimer 但無泵不 tick）；GATE(2)=HT9046 協定族
+  不翻。GOLDEN DEFECT 登記：WriteTargetBin 邊界 `>MAX_BIN_UNIT`
+  off-by-one（主迴圈對 golden 坐實）照翻。ZeroInitVclFields 補
+  BCB6 NewInstance 零填語意（MyStringList 前例）。
+- **第二個 recon 錯誤由翻譯波抓到**：vclcompat/Comm.h 早有完整
+  SIM 版 Spcomm::TComm（199272d，2026-06-26）——recon 的「TComm
+  facade ~20-30 行」一步不需要，直接對準真身。recon 文件已回填
+  兩次更正（同檔兩次 absence 宣稱都栽在掃描範圍——grep 模式沒
+  蓋到 namespace 內宣告）。
+- 9 個既有 #if 0 gate 與 database.h 接線**刻意留給獨立 integrator
+  波**（一顆 commit 一件事）。CMake 已由主迴圈接進 ht9045_sm。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8822,14 +8846,13 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
 - **批 5 全清＋user.level（FW-1d）＋recipe.current（FW-1e）接通**。
-  過期 gate 清理波已收（兩拆閘＋兩前提更新＋一標記 RESOLVED）。
-  **下一波**依脈絡擇一：(a) bin.* 解鎖（SetTechDataToProd 已翻在
-  cinitial.cpp:15249——剩「哪個 boot path 呼叫它」的 harness 決策；
-  cat.* 的 UpdataCount 呼叫點本波已拆閘，資料鏈進一步接近）；
-  (b) 1203 HAL MOTION_IO pimpl；(c) cShowBinSelect Wave D；
-  (d) BinDisplay 的 BinDisCtrl（elec\Component 查證）；
-  (e) rgCustomerList dfm 自動抽取波；(f) vclcompat 擴充收斂波。
-  真機類依 §7 仍佇列。
+  過期 gate 清理波＋BinDisCtrl 基底波已收。**下一波**依脈絡擇一：
+  (a) **BinDisCtrl integrator 波**：database.h 接線＋9 個 #if 0 逐一
+  複驗拆閘（cShowBinSelect Wave D 的 ChangeBinDispStatus/
+  DoShowBinDigital 也在此解鎖）——前提已備（基底已進 ht9045_sm）；
+  (b) bin.* 解鎖（SetTechDataToProd 呼叫者 harness 決策）；
+  (c) 1203 HAL MOTION_IO pimpl；(d) rgCustomerList dfm 自動抽取波；
+  (e) vclcompat 擴充收斂波。真機類依 §7 仍佇列。
 - **FW-1 備忘**：pct 六顆等 sort.total 站穩後接；recipe.current/
   user.level 來源鏈未查（可能落在未翻的 cConfiguration）；
   tagmap.js 的 data-cmd 十筆結構性缺口要跟 web 前端波一起解；

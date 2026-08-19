@@ -1919,6 +1919,13 @@ add_library(ht9045_sm STATIC
     # facade subclass per the TfObserverGrid convention; fConfiguration
     # global not declared -- ctor is write-path, integration deferred.
     cConfiguration.cpp
+    # AI(W906-BinDisp-WA) 20260820: BinDisplay/MyBinDisp.cpp -- the
+    # TMyBinDispCtrl data-layer base (recon docs/RECON_BinDisCtrl.md path 1),
+    # plus TMyBinDispOffline no-op concrete child. Hardware protocol subclass
+    # (~2,500 lines) deliberately unscheduled; the 9 existing BinDisCtrl
+    # #if 0 gates stay gated until a separate integrator wave wires
+    # database.h and flips them one by one.
+    BinDisplay/MyBinDisp.cpp
     # --- W6.6 HUB cross-module offline shims (DoInArm->DoInArm_9045 /
     #     DoOutArm->DoOutArm_9045 / DoLoad / DoSortArm / bShuttleShake +
     #     InitLoadTask / InitOutArmTask / InitialDoLockUnloader /

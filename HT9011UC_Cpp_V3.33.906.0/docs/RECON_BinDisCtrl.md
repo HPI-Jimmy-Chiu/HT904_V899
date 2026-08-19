@@ -50,8 +50,15 @@ StopComm/WriteCommData/GetModemState` + 屬性 + `OnReceiveData` 等事件）重
 `StartComm/StopComm/WriteCommData/GetModemState` + `CommName/BaudRate/Parity/
 ByteSize/StopBits/...` property + 事件 `OnReceiveData/OnReceiveError/
 OnModemStateChange/OnRequestHangup/OnSendDataEmpty`。
-本樹目前完全沒有動過 `Spcomm.pas`/`spcomm.hpp`（`grep -rn "TComm\b" HT9011UC_Cpp_V3.33.906.0`
-排除 build 目錄，只命中 forward-decl 相關的 database.h 系列，無實作，2026-08-20 04:05 驗證）。
+~~本樹目前完全沒有動過 `Spcomm.pas`/`spcomm.hpp`~~
+**[第二次更正，20260820 翻譯波]**：上句也是錯的——`vclcompat/Comm.h`＋`.cpp`
+早在 199272d（2026-06-26）就落地了**完整、可 SIM 的 `Spcomm::TComm`**
+（真 StartComm/StopComm/WriteCommData＋自動 sim fallback），已進 CMakeLists
+並被 OmronLaser/LaserSensor 等消費。本檔 §3 的「~20-30 行 TComm facade」
+一步因此**不需要**：翻譯波直接把 `CommBin`/`CommBin2` 型別對準既有的
+`Spcomm::TComm`。原 grep 假陰性的根因：模式 `"TComm\b"` 沒掃到
+`vclcompat/`（該檔在 namespace 內宣告）——同一份文件兩次 absence
+宣稱都栽在掃描範圍上，第三次別再犯。
 
 ---
 
