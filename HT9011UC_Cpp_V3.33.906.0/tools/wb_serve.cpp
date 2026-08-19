@@ -49,6 +49,14 @@
 #include "cAuthority.h"               // GetCountClrAuth(), authCounterClr[]
 #include "cMyDB.h"                    // MyDBIProcess (recording sim in this tree)
 #include "LastSet.h"                  // LastSet (post-clear observable printed to the serve log)
+// AI(W906-FW-W5a) 20260819: ShowMyMessage + its forward hook live in
+// canary_support.{h,cpp} -- but that header re-defaults RecordProcess/
+// MyDBIProcessNew parameters that common.h (already included above) also
+// defaults, which is ill-formed in one TU. Local forward-decls instead,
+// the same idiom database.cpp already uses for ShowMyMessage; no defaults
+// here, every argument is passed explicitly at the call site.
+void ShowMyMessage(AnsiString S1, AnsiString S2, AnsiString S3, bool Ok, bool bServoOff);
+extern void (*W906_ShowMyMessage_Hook)(const char* S1, const char* S2);
 
 #include <vector>
 
@@ -60,6 +68,19 @@
 #include <cstring>
 #include <cstdlib>
 #include <string>
+
+// AI(W906-FW-W5a) 20260819: ShowMyMessage -> browser info modal. The hook is a
+// raw function pointer (canary_support.h keeps zero includes), so the server
+// handle rides a file-scope static. Display-only by design: golden's
+// ShowMyMessage returns void, nothing flows back (design doc section 4).
+static webbridge::WebBridgeServer* g_modalServer = 0;
+static void ForwardShowMyMessage(const char* s1, const char* s2)
+{
+    if (!g_modalServer) return;
+    std::string text(s1 ? s1 : "");
+    if (s2 && s2[0]) { text += " | "; text += s2; }
+    g_modalServer->PostModal("Message", text);
+}
 
 int main(int argc, char** argv)
 {
@@ -157,6 +178,11 @@ int main(int argc, char** argv)
         return 1;
     }
 
+    // AI(W906-FW-W5a) 20260819: from here on, every ShowMyMessage anywhere in
+    // the linked machine code also reaches the browser as an info modal.
+    g_modalServer = &server;
+    W906_ShowMyMessage_Hook = &ForwardShowMyMessage;
+
     std::printf("\n  http://127.0.0.1:%u/?src=ws     (live handler data)\n",
                 (unsigned)server.BoundPort());
     std::printf("  serving %s\n", root.c_str());
@@ -183,6 +209,16 @@ int main(int argc, char** argv)
         for (size_t i = 0; i < drained.size(); ++i) {
             const webbridge::WebCommand& wc = drained[i];
             if (wc.cmd == "sys.ping") {
+                server.CompleteCommand((unsigned long long)wc.id, true, std::string());
+            } else if (wc.cmd == "sys.echoModal") {
+                // AI(W906-FW-W5a) 20260819: probe surface for the modal path,
+                // sys.ping's sibling -- drives the REAL ShowMyMessage (capture
+                // seam included), whose hook then broadcasts the modal frame.
+                // Text rides `value` (free-form JSON string), not `tag` (the
+                // server's tag-name charset rejects spaces).
+                AnsiString mtext = (wc.hasValue && wc.value.isString())
+                                   ? AnsiString(wc.value.asString().c_str()) : AnsiString("");
+                ShowMyMessage(mtext, AnsiString(""), AnsiString(""), false, false);
                 server.CompleteCommand((unsigned long long)wc.id, true, std::string());
             } else if (wc.cmd == "auth.login") {
                 // AI(W906-FW-W2) 20260819: tag = user name, value = password
@@ -264,7 +300,7 @@ int main(int argc, char** argv)
                 }
             } else {
                 server.CompleteCommand((unsigned long long)wc.id, false,
-                                       "unknown cmd (dispatch: sys.ping, auth.login, auth.logout, counter.clear)");
+                                       "unknown cmd (dispatch: sys.ping, sys.echoModal, auth.login, auth.logout, counter.clear)");
             }
         }
 
@@ -277,6 +313,10 @@ int main(int argc, char** argv)
             break;
         }
     }
+
+    // AI(W906-FW-W5a) 20260819: unhook before the server object dies.
+    W906_ShowMyMessage_Hook = 0;
+    g_modalServer = 0;
 
     server.Stop();
 

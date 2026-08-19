@@ -132,7 +132,51 @@ def main():
     # refused. The post-clear state observable (SendCT[0]/iIndexCount == 0)
     # is printed by wb_serve itself; the gate script greps the serve log.
     ap.add_argument('--counter', action='store_true')
+    # AI(W906-FW-W5a) 20260819: display-only modal path -- sys.echoModal drives
+    # the real ShowMyMessage, whose hook broadcasts {"type":"modal",...}; the
+    # probe must see BOTH the ack and a modal frame carrying the echoed text.
+    ap.add_argument('--modal', action='store_true')
     args = ap.parse_args()
+
+    if args.modal:
+        deadline = time.monotonic() + args.seconds
+        sock, lo = ws_handshake(args.host, args.port, args.path, deadline)
+        print('ws handshake ok')
+
+        send_text(sock, json.dumps({'type': 'cmd', 'id': 500, 'cmd': 'control.acquire'}))
+        a = wait_ack(sock, lo, 500, deadline)
+        print('acquire: %s' % json.dumps(a))
+        if a is None or a.get('ok') is not True:
+            print('MODAL FAIL: acquire expected ok:true'); return 9
+
+        text = 'modal probe FW-W5a'
+        # text rides `value`: the server's tag-name charset rejects spaces
+        send_text(sock, json.dumps({'type': 'cmd', 'id': 501, 'cmd': 'sys.echoModal',
+                                    'value': text}))
+        got_ack = None
+        got_modal = None
+        for op, payload in read_frames(sock, b'', deadline):
+            if op != 1:
+                continue
+            try:
+                j = json.loads(payload.decode('utf-8', 'replace'))
+            except ValueError:
+                continue
+            if j.get('type') == 'ack' and j.get('id') == 501:
+                got_ack = j
+                print('ack(echoModal): %s' % json.dumps(j))
+            elif j.get('type') == 'modal':
+                got_modal = j
+                print('modal frame: %s' % json.dumps(j))
+            if got_ack is not None and got_modal is not None:
+                break
+        if got_ack is None or got_ack.get('ok') is not True:
+            print('MODAL FAIL: echoModal expected ok:true ack'); return 9
+        if got_modal is None or text not in str(got_modal.get('text', '')):
+            print('MODAL FAIL: expected a modal frame carrying %r' % text); return 9
+
+        print('MODAL PROBE PASS: ack received and modal frame carried the text')
+        return 0
 
     if args.counter:
         deadline = time.monotonic() + args.seconds

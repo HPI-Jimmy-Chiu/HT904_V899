@@ -8495,19 +8495,42 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   golden 本來就有的 ShowMyMessage 類 modal 對瀏覽器的等價轉譯，設計
   §4）。
 
+## 20260819 下午 IV — FW-W5a modal 透傳（顯示型）
+
+- 設計 §4 的第一半。關鍵定調：golden `ShowMyMessage` 回傳 **void**
+  ——顯示型、無答案回流；真正問答型是 `ShowErrorMessage`
+  （K_RETRY/K_SKIP/K_CLEAN_OUT），留給 FW-W5b（需要 tick 側
+  阻塞等答案的泵）。本波只做顯示型透傳，不發明 golden 沒有的語意。
+- 四件套：canary_support `W906_ShowMyMessage_Hook`（raw char* fn ptr，
+  預設 null＝行為不變；錄製先、hook 後，hook 壞不掉 capture）；
+  WebBridgeServer `PostModal`（PostAlarm 鏡射，broadcast
+  {"type":"modal",...}＋stats.modalsSent）；wb_serve 裝 hook＋
+  `sys.echoModal` 探測面（收工先解 hook 再 Stop）；cmd_probe
+  `--modal`（要求 ack 與 modal frame 兩者都到、frame 帶原文）。
+- **兩個當場撞到的坑**：(1) canary_support.h 對 RecordProcess/
+  MyDBIProcessNew 的預設參數與 common.h 重複宣告＝同 TU ill-formed
+  ——照 database.cpp 前例改局部前向宣告（無預設、呼叫點全參數）；
+  (2) server 的 tag 名字元集拒空白（"illegal tag name"）——自由文字
+  一律走 `value` 欄，探針與 dispatch 同步改。
+- **e2e**：--modal PASS；六劇本全迴歸 PASS（default/auth/control/
+  counter/modal/readonly）；Security_new.def MD5 前後一致。
+- 前端 modal 渲染（formview.js 收 "modal" frame 畫對話框）歸 web
+  面板波，未做——瀏覽器現在會安靜忽略未知 frame 型別（防禦式）。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
   Sec/BinSel 全系列、cShowBinSelect A/B/C、cBinSel A/B/C、台帳 552、
   FW-W1（5e4b30d）、FW-W2（0553449）、FW-W3（eb7c4f9）、
-  **FW-W4（本顆）**。基線 142/5。
-- **下一波**：FW-W5 modal 往返（設計 §4——golden 本來就有的
-  ShowMyMessage 類 modal 轉瀏覽器等價；**golden 沒有的二次確認
-  不准加**是使用者硬裁決）。起手式：盤點 golden ShowMyMessage／
-  MessageBox 家族的呼叫形狀與回傳語意，挑一個唯讀安全的先接。
+  FW-W4（4999e2e）、**FW-W5a（本顆）**。基線 142/5。
+- **下一波**：FW-W5b 問答型 modal（`ShowErrorMessage` 的
+  K_RETRY/K_SKIP/K_CLEAN_OUT 回流——需要「modal push＋
+  modal.answer cmd＋tick 側泵著等答案」三件；答案只收 token 持有者。
+  W906_ShowErrorMessage_SimReturn seam 已在，hook 形狀照 W5a 前例）。
+  或改做 web 前端面板波（login/token/counter/modal 渲染，
+  formview.js 側）——依當時脈絡擇一。
 - **之後**：1203 HAL MOTION_IO pimpl；FW-3 batch 3+ 表單；
-  cShowBinSelect Wave D；台帳二輪 QUIRK 補掃；web 前端 login/token/
-  counter 面板接 UI（formview.js 側，等 write path 指令面穩定）。
+  cShowBinSelect Wave D；台帳二輪 QUIRK 補掃。
 - **設計面**：無待答（10 分鐘閒置逾時＝預設值沿用）。
 - **counter.clear 授權備忘**：authCounterClr 索引=funCounterClr 順序；
   Security_new.def 缺 key 會被 CheckAndReadIniData 回寫 seed

@@ -119,6 +119,7 @@ struct WebBridgeStats {
     unsigned long long snapshotsSent;
     unsigned long long patchesSent;
     unsigned long long alarmsSent;
+    unsigned long long modalsSent;       // AI(W906-FW-W5a) 20260819
     unsigned long long acksSent;
     unsigned long long cmdAccepted;      // validated and enqueued
     unsigned long long cmdRejected;      // refused, ack ok:false sent
@@ -181,6 +182,14 @@ public:
     // connected browser. Non-blocking. `at` should be ISO-8601; when empty the
     // server fills in the current local time.
     void PostAlarm(const std::string& code, const std::string& text,
+                   const std::string& at = std::string());
+
+    // AI(W906-FW-W5a) 20260819: broadcast {"type":"modal","title":...,
+    // "text":...,"at":...} -- the browser face of golden's display-only
+    // dialogs (ShowMyMessage returns void, so nothing flows back; an
+    // answer-carrying modal is a separate, future surface). Same threading
+    // contract as PostAlarm: UI thread, non-blocking.
+    void PostModal(const std::string& title, const std::string& text,
                    const std::string& at = std::string());
 
     // Nudge the socket thread to re-check the snapshot now instead of at the

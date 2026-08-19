@@ -383,7 +383,7 @@ WebBridgeConfig::WebBridgeConfig()
 
 WebBridgeStats::WebBridgeStats()
     : httpRequests(0), wsAccepted(0), wsRejected(0), snapshotsSent(0),
-      patchesSent(0), alarmsSent(0), acksSent(0), cmdAccepted(0),
+      patchesSent(0), alarmsSent(0), modalsSent(0), acksSent(0), cmdAccepted(0),
       cmdRejected(0), pingsSent(0), pongsReceived(0), slowClientDrops(0),
       connectionsAccepted(0), connectionsClosed(0), liveConnections(0)
 {
@@ -403,6 +403,7 @@ public:
 
     void CompleteCommand(unsigned long long ticket, bool ok, const std::string& error);
     void PostAlarm(const std::string& code, const std::string& text, const std::string& at);
+    void PostModal(const std::string& title, const std::string& text, const std::string& at);   // AI(W906-FW-W5a) 20260819
 
     WebBridgeConfig      cfg;
     HttpStatic           files;
@@ -1422,6 +1423,30 @@ void WebBridgeServer::Impl::PostAlarm(const std::string& code, const std::string
     Wake();
 }
 
+// AI(W906-FW-W5a) 20260819: PostAlarm's sibling for display-only dialogs --
+// same broadcast queue, same thread contract (see header).
+void WebBridgeServer::Impl::PostModal(const std::string& title, const std::string& text,
+                                      const std::string& at)
+{
+    std::ostringstream os;
+    os << "{\"type\":\"modal\",\"title\":" << sib::QuoteString(title)
+       << ",\"text\":" << sib::QuoteString(text)
+       << ",\"at\":" << sib::QuoteString(at.empty() ? IsoLocalNow() : at)
+       << "}";
+    {
+        WbGuard ol(outMx_);
+        Outgoing o;
+        o.connId = 0;              // broadcast
+        o.frame  = os.str();
+        outQ_.push_back(o);
+    }
+    {
+        WbGuard sl(statsMx);
+        ++stats.modalsSent;
+    }
+    Wake();
+}
+
 // =============================================================================
 //  WebBridgeServer -- thin forwarding shell
 // =============================================================================
@@ -1456,6 +1481,12 @@ void WebBridgeServer::PostAlarm(const std::string& code, const std::string& text
                                 const std::string& at)
 {
     impl_->PostAlarm(code, text, at);
+}
+
+void WebBridgeServer::PostModal(const std::string& title, const std::string& text,
+                                const std::string& at)   // AI(W906-FW-W5a) 20260819
+{
+    impl_->PostModal(title, text, at);
 }
 
 WebBridgeStats WebBridgeServer::Stats() const

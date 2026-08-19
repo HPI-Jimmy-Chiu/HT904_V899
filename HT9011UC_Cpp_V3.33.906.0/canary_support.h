@@ -123,6 +123,13 @@ void W906_ShowErrorMessage_Reset();                 // restore SimReturn to K_RE
 extern AnsiString W906_ShowMyMessage_LastS1;        // last `S1` argument seen; "" when never called
 extern int        W906_ShowMyMessage_Count;         // call count
 void W906_ShowMyMessage_Reset();                    // clear capture + count
+//  AI(W906-FW-W5a) 20260819: optional forward hook -- lets a host process
+//  (today: tools/wb_serve) SEE each ShowMyMessage as it happens, e.g. to push
+//  it to a browser as an info modal (design doc section 4; golden returns
+//  void, so this stays display-only -- no answer flows back).  Raw char*
+//  on purpose: zero new includes on a header 123 TUs carry.  Null (the
+//  default) = recording behaviour unchanged.
+extern void (*W906_ShowMyMessage_Hook)(const char* S1, const char* S2);
 
 // ---------------------------------------------------------------------------
 //  5. AI(W906-W7-L2) 20260803 -- the three golden note.h FREE FUNCTIONS that

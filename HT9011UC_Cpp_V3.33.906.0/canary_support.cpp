@@ -127,6 +127,9 @@ void ShowUnloaderTrayMessage(AnsiString S1, AnsiString S2)
 // ---------------------------------------------------------------------------
 //  ShowMyMessage -- golden mymessbox.h:58.  Sim: log (no modal dialog).
 // ---------------------------------------------------------------------------
+// AI(W906-FW-W5a) 20260819: forward hook, null by default (see canary_support.h).
+void (*W906_ShowMyMessage_Hook)(const char* S1, const char* S2) = 0;
+
 void ShowMyMessage(AnsiString S1, AnsiString S2, AnsiString /*S3*/,
                    bool /*Ok*/, bool /*bServoOff*/)
 {
@@ -138,6 +141,10 @@ void ShowMyMessage(AnsiString S1, AnsiString S2, AnsiString /*S3*/,
         std::printf("  [ShowMyMessage] %s | %s\n", S1.c_str(), S2.c_str());
     else
         std::printf("  [ShowMyMessage] %s\n", S1.c_str());
+    // AI(W906-FW-W5a) 20260819: forward AFTER recording, so hook failures can
+    // never lose the capture the tests assert on.
+    if (W906_ShowMyMessage_Hook)
+        W906_ShowMyMessage_Hook(S1.c_str(), S2.c_str());
 }
 
 // ---------------------------------------------------------------------------
