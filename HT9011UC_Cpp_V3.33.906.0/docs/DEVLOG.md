@@ -8685,6 +8685,29 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   （非共用 Gerneral.ini），18 個已翻檔同用法之既有行為，登記不 GATE。
 - CMake 接線主迴圈自做（ht9045_sm，cTemperFrom 旁）。
 
+## 20260820 凌晨 — 批 5 雙表單：cStartCondition＋HandlerSys 顯示側
+
+- 4 新檔（forms/fStartCondition.h＋cStartCondition.cpp、
+  forms/fHandlerSys.h＋HandlerSys.cpp），全新 facade（先驗無同名
+  stand-in，零 ODR 風險）。翻譯 8/35＋3/44 方法（FormShow 431 行、
+  LoaderSystemSet 378 行為大宗）。
+- **本波新藏雷（主迴圈逐字坐實）**：FormShow「Show 卻寫
+  LastSet.iStartMode」兩處（golden :145/:171，gate＋揭露下游 radio
+  顯示落差）；UpdateCylinderScreen 的「更新畫面順手清零+SaveCylinderLife」
+  自癒段（:1565-1572，gate）；SocketIDLog 名為 Log 實為 fopen 寫檔
+  （歸 (b)）；**新 gate 類別**：指標型 TPageControl::ActivePage 比較
+  （vclcompat 只有 ActivePageIndex）——擋 FormShow ~40 行＋
+  pgLifeTimeChange 整支。
+- **MAJOR RISK 登記**：HandlerSys::LoaderSystemSet ~150 次
+  CheckAndReadIniDataGeneral 全落共用 Gerneral.ini——全樹對
+  common.cpp:89 風險密度最高的單一函式（既有家族行為，揭露不擋）。
+- **刻意留白**：rgCustomerList ~200 筆 cp950 十進位跳脫客戶碼表
+  未手謄（客戶身分誤判前科；建議未來用 dfm 字串自動抽取）；
+  ReadWriteStartCondition 整支佇列（golden 註解自證對 fSetup->ReadFile
+  順序敏感，不拆讀臂）。
+- TMyKitSuck 雙標頭陷阱遵守（用 aHotPlateSubstrate.h 177-TU 版）。
+  CMake 接線主迴圈自做。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8693,13 +8716,14 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   FW-W4（4999e2e）、FW-W5a（83b4251）、FW-FE1（57e3c03）、
   **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
-- **下一波**：依脈絡擇一——(a) 批 5 續：cStartCondition／HandlerSys
-  ／cConfiguration 檢視側（cSpeed 已收，同 playbook）；(b) bin.* 解鎖
-  （SetTechDataToProd_Yield 呼叫者決策——最淺缺口）；(c) 1203 HAL
-  MOTION_IO pimpl；(d) cShowBinSelect Wave D；(e) BinDisplay 的
-  opaque BinDisCtrl（elec\Component 查證）；(f) 過期 gate 註解
-  清理波（cSocket.h:40-61／atester_ProcessCount.cpp:642-649／
-  Command.cpp:12277-12281，nm 已證現況）。真機類指令依 §7 仍佇列。
+- **下一波**：依脈絡擇一——(a) 批 5 收尾：cConfiguration 檢視側
+  （7,808 行，需切 2 波；recipe.current/user.level 來源鏈可能在此）
+  ＋cSetUp 檢視側（4,858 行；fSetup facade 現只有 bool fShow）；
+  (b) bin.* 解鎖（SetTechDataToProd_Yield 呼叫者決策——最淺缺口）；
+  (c) 1203 HAL MOTION_IO pimpl；(d) cShowBinSelect Wave D；
+  (e) BinDisplay 的 opaque BinDisCtrl（elec\Component 查證）；
+  (f) 過期 gate 註解清理波（nm 已證現況）；(g) rgCustomerList
+  200 筆客戶碼表的 dfm 自動抽取波。真機類指令依 §7 仍佇列。
 - **FW-1 備忘**：pct 六顆等 sort.total 站穩後接；recipe.current/
   user.level 來源鏈未查（可能落在未翻的 cConfiguration）；
   tagmap.js 的 data-cmd 十筆結構性缺口要跟 web 前端波一起解；

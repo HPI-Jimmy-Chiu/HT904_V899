@@ -1902,6 +1902,16 @@ add_library(ht9045_sm STATIC
     # stays gated, integration is a separate, deliberate wave (the
     # fTemperFrom posture).
     cSpeed.cpp
+    # AI(W906-FW3-StartCond-WA) 20260819: cStartCondition.cpp + HandlerSys.cpp
+    # -- batch-5 display sides (8/35 and 3/44 methods; write paths undeclared,
+    # the fTemperFrom posture). New findings live in their facade banners:
+    # FormShow's two hidden LastSet.iStartMode writes gated (golden :145/:171),
+    # UpdateCylinderScreen's clear-and-save self-heal gated (golden :1565-1572),
+    # and the pointer-typed TPageControl::ActivePage comparison class of gate
+    # (vclcompat only has ActivePageIndex). Live globals not declared --
+    # integration is a separate wave.
+    cStartCondition.cpp
+    HandlerSys.cpp
     # --- W6.6 HUB cross-module offline shims (DoInArm->DoInArm_9045 /
     #     DoOutArm->DoOutArm_9045 / DoLoad / DoSortArm / bShuttleShake +
     #     InitLoadTask / InitOutArmTask / InitialDoLockUnloader /
