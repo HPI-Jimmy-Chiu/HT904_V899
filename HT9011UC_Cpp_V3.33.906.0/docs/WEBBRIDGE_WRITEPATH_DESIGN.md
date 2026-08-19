@@ -47,6 +47,24 @@ AI(W906-FW-W-Design) 20260819。依 20260819 使用者裁決成文；本檔是 w
   灰化按鈕（鏡射 golden 的按鈕 Enabled 邏輯），但灰化只是 UX，authoritative
   的擋在 handler。
 
+### 2.1 FW-W2 recon 補充（20260819，golden main.cpp 實測）
+
+golden 登入真核心在 `TfMain::cbUserSelectChange`（main.cpp:14395-14800+，
+2 萬行檔的深水區），結構＝多密碼源選擇（Login.dat／N15 txt-by-FTP／
+編碼密碼檔→DecodeStr→PassList）＋fPassword modal 取輸入＋
+`edPassword.UpperCase()==PassList[..].UpperCase()` 比對→`AccessLevel=l`
+→`ChangeLevelAttr()`。web 版免 modal 的抽取形：
+
+    int WebAuthVerify(user, password)  // 回 level 或 -1
+      = golden 的密碼源載入（同一組 PassList 建構邏輯，讀取類 ACTIVE）
+      + golden 的 UpperCase 比對語意（逐字）
+      + 成功側效果：AccessLevel=level（ChangeLevelAttr 是 UI 鏡射，web 版
+        由 auth.level tag 取代）
+
+實作波（FW-W2）交付：WebAuth.cpp（抽取翻譯，golden 行號逐段引用）＋
+wb_serve dispatch `auth.login/logout`＋`auth.level` tag＋cmd_probe 擴充。
+客製分支（N15/Greatek/LoginDat）逐臂 gate-or-translate 照缺件現況。
+
 ## 3. 單一操作權（裁決 3 的落地形）
 
 - 連線分兩級：**viewer**（預設，唯讀）與 **operator**（同時最多 1 個）。
