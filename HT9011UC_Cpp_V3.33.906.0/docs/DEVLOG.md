@@ -8422,14 +8422,26 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   非任何 commit 造成；機台 config 回原值時會自動轉綠。
 - FW-W1（5e4b30d）與 cBinSel WC（38b19e1）就此有乾淨 gate 背書。
 
+## 20260819 下午 — FW-W2 auth 落地（0553449）
+
+- WebAuth.{h,cpp}＝golden cbUserSelectChange 預設密碼本臂抽取（三欄切分
+  ＋可選 DecodeStr＋UpperCase 比對→AccessLevel）；wb_serve dispatch
+  auth.login/logout；auth.level tag（liveness 綁 config-loaded，保住
+  test_wb_tags 全 null 不變量——首稿 always-live 在 publish 前自抓改正）；
+  cmd_probe --auth。e2e 實測三段全過。gate 142/5×2 全綠、guard IDENTICAL。
+- write path 進度：FW-W1 通道 ✅、FW-W2 auth ✅；下一波 FW-W3 操作權
+  token（單一瀏覽器裁決的落地，設計 §3——需 WebBridgeServer 端每連線
+  身分＋token 狀態，比 W1/W2 深入 server 內部）。
+
 ### 🔖 RESUME（最新）
 
-- **完成**：核可佇列全清、FW-W1（含補 gate）、台帳 552 筆、cBinSel A/B/C
-  （含補 gate）。**基線 142 測試/5 常駐**（config_db/IniFiles/ini_helpers/
-  config_loaders/GA1_ReadGeneralIni——後兩者隨機台 config 值浮動）。
-- **下一波＝FW-W2 auth.login 實作**（主迴圈；規格已備：pwPath 密碼本
-  `<user> <level> <password>` 點空白切分＋可選 DecodeStr＋UpperCase 比對
-  →AccessLevel；交付 WebAuth.cpp＋wb_serve dispatch＋auth.level tag＋
-  cmd_probe 擴充；測試用 scratch 密碼本不碰真 pwPath）。
-- **之後**：FW-W3 操作權 token；1203 HAL MOTION_IO pimpl；FW-3 batch 3+。
+- **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
+  Sec/BinSel 全系列、cShowBinSelect A/B/C、cBinSel A/B/C、台帳 552、
+  FW-W1（5e4b30d）、**FW-W2（0553449）**。基線 142/5。
+- **下一波**：FW-W3 操作權 token（設計 §3：viewer/operator 兩級、
+  control.acquire/release、斷線釋放、10 分鐘閒置逾時、control.owner tag、
+  非持有者指令回 not-operator——實作在 WebBridgeServer.cpp per-conn 狀態
+  ＋wb_serve dispatch，主迴圈自做）。
+- **之後**：FW-W4 首批真指令（fCounterClear ClearCount 族候選）；
+  1203 HAL MOTION_IO pimpl；FW-3 batch 3+ 表單；cShowBinSelect Wave D。
 - **設計面**：無待答。
