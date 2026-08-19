@@ -27,14 +27,31 @@ golden 樹內** (`HT9011UC_Code_V3.33.906.0_20260618\BinDisplay\`)，不在
 
 **唯一真正的樹外元件套件依賴**：`TComm`/`CommBin`/`CommBin2` 這個型別本身，來自
 `D:\HT9045\elec\Component\Spcomm.pas`（1944 行 Delphi Pascal，`SPCOMM.DCR` 是它的
-design-time 圖示）。BCB6 build 時會從 `.pas` 合成 `SPComm.hpp`，此檔**不存在於任何原始碼樹**
-（`find`/`Glob` 對 `D:\HT9045` 搜 `SPComm*` 只命中 `elec\Component\Spcomm.pas`+`SPCOMM.DCR`，
-2026-08-20 03:55 驗證），這正是「BCB6 由 .pas 產生 C++ header」的標準模式，不是遺漏。
-`TComm` 公開介面（`Spcomm.pas:149-281` 解碼確認）：`StartComm/StopComm/WriteCommData/
-GetModemState` + `CommName/BaudRate/Parity/ByteSize/StopBits/...` property + 事件
-`OnReceiveData/OnReceiveError/OnModemStateChange/OnRequestHangup/OnSendDataEmpty`。
-本樹目前完全沒有動過 `Spcomm.pas`（`grep -rn "TComm\b" HT9011UC_Cpp_V3.33.906.0` 排除
-build 目錄，只命中 forward-decl 相關的 database.h 系列，無實作，2026-08-20 04:05 驗證）。
+design-time 圖示）。
+
+**更正（2026-08-20 04:11，背景 `find` 任務跑完後才拿到完整結果）**：本檔案稍早版本曾誤述
+「`SPComm.hpp` 不存在於任何原始碼樹」——這是背景指令逾時、只憑部分輸出下的錯誤 absence
+宣稱。事後補驗證：`elec\Component\spcomm.hpp`（連同 `aled.hpp`、`gwiopm.hpp`）**確實存在**，
+是 BCB6 IDE 為套件裡每個 `.pas` 單元機生並簽入原始碼樹的標準 C++ 橋接頭（檔頭原文
+`// (DO NOT EDIT: machine generated header) 'SPComm.pas' rev: 6.00`），已用 Read 逐行讀完
+（301 行）。
+
+**這個更正不影響 §3 的翻譯路徑建議**，原因：`spcomm.hpp` 裡的 `TComm` 宣告全部是 BCB6
+專屬語法（`__property`/`__fastcall`/`__closure`/`DELPHICLASS`/`PASCALIMPLEMENTATION`/
+`namespace Spcomm`），MinGW g++ 與 MSVC 都不認得這些擴充字（除非透過 V906 自己的
+`vclcompat` 巨集/型別重新定義），所以**即使頭檔案存在，也不能直接 `#include`**——真的要
+把 `TMyBinDispHT9046` 的硬體協定本體搬進 V906，仍然要把 `TComm` 的行為（`StartComm/
+StopComm/WriteCommData/GetModemState` + 屬性 + `OnReceiveData` 等事件）重新用標準 C++
+表達，工作量估計不變。`spcomm.hpp` 存在的實際好處是：**確認介面簽章不必再靠 `.pas` 反推**
+（`spcomm.hpp:236-276` 與 `Spcomm.pas:149-281` 解碼結果逐項核對一致），未來真的要做
+「UI/hardware wave」時可以直接照這份頭檔案的簽章翻，不用再解 cp950。
+
+`TComm` 公開介面（`spcomm.hpp:236-276` 與 `Spcomm.pas:149-281` 交叉核對）：
+`StartComm/StopComm/WriteCommData/GetModemState` + `CommName/BaudRate/Parity/
+ByteSize/StopBits/...` property + 事件 `OnReceiveData/OnReceiveError/
+OnModemStateChange/OnRequestHangup/OnSendDataEmpty`。
+本樹目前完全沒有動過 `Spcomm.pas`/`spcomm.hpp`（`grep -rn "TComm\b" HT9011UC_Cpp_V3.33.906.0`
+排除 build 目錄，只命中 forward-decl 相關的 database.h 系列，無實作，2026-08-20 04:05 驗證）。
 
 ---
 
