@@ -277,6 +277,21 @@ public:
     TfMainPanel       *palMainStatus;                         // [DATA] golden main.h:669 (TPanel*)
     TfLotInfoRunMode  *cbSetupFileName;                       // [DATA] golden main.h:875 (TComboBox*) -- only ->Text used
     TfLotInfoEdit     *edWorkTemperBase;                      // [DATA] golden main.h:732 (TEdit*)
+    // -- W906-FW1d ADD (20260820): the login-level mirror pair --------------
+    //    cbUserSelect reuses TfLotInfoRunMode (same only-`->Text` shape as
+    //    cbSetupFileName above; golden main.h TComboBox*). DoChangeLevel is
+    //    golden main.cpp:15127-15148 translated FAITHFULLY (clamp AccessLevel,
+    //    then mirror it into cbUserSelect->Text via one of golden's three
+    //    name tables). ChangeLevelAttr above STAYS the documented no-op --
+    //    golden's ChangeLevelAttr calls DoChangeLevel as its first line
+    //    (main.cpp:12410) and then does level-attr UI work this facade does
+    //    not model; callers that need the mirror (tools/wb_serve auth
+    //    dispatch) call DoChangeLevel directly. Text starts "" (facade ctor
+    //    default): golden always runs DoChangeLevel early via
+    //    ChangeLevelAttr, so pre-login "" is the honest offline state, the
+    //    same posture as control.owner's empty string.
+    TfLotInfoRunMode  *cbUserSelect;                          // [DATA] golden main.h (TComboBox*) -- only ->Text used
+    virtual void DoChangeLevel();                              // [METHOD] golden main.cpp:15127-15148, faithful
     virtual bool Home(AnsiString Func);                        // [METHOD] golden main.h:1276 -- offline: no real Home cycle to run -> false
     // -- W906-TesterTCPTimer ADD (20260720): members Interface/TesterTCP_Socket.cpp's
     //    TimerProcessTCPDataTimer/SimulateBin deref -------------------------------

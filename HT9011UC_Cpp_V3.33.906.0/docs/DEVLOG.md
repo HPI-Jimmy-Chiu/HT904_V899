@@ -8758,6 +8758,24 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - **批 5 全清**：cSpeed／cStartCondition／HandlerSys／cConfiguration
   ／cSetUp 顯示側全落地。
 
+## 20260820 凌晨 IV — FW-1d：user.level 解鎖（主迴圈自做）
+
+- 缺口照 cConfiguration recon 定位：main.cpp DoChangeLevel（:15127-
+  15148）＋cbUserSelect。落地：forms/fMain.h 補 cbUserSelect
+  （TfLotInfoRunMode 重用，只 ->Text）＋DoChangeLevel 忠實翻譯
+  （clamp AccessLevel 進 [0,iDefHonPrecLevel]＋三張名表：4-level/
+  5-level/KYEC_LEE 變體）；ChangeLevelAttr 維持 no-op（golden 它第一
+  句就是 DoChangeLevel :12410——需要鏡射的呼叫端直接呼叫）。
+  wb_serve auth.login 成功/auth.logout 後呼叫 DoChangeLevel；
+  WebBridgeTags 發布 user.level（cust 鍵，同 auth.level）。
+- **忠實 clamp 的行為註記**：登入 level 5 現在會被 DoChangeLevel
+  照 golden clamp 到 iDefHonPrecLevel——這是 golden 自己的行為
+  （AccessLevel 永不超過 HonPrec 上限），非退化。
+- e2e：登入前 user.level=""（誠實空——golden 靠啟動早期
+  ChangeLevelAttr 初始化，本程序沒有該啟動段）；login+logout 循環
+  後 "Operator"（str[0]，4-level 表——bSecurityHave5Level 未載
+  ＝false 走 4-level，正確）。tagmap 綁定 user.level 至此接通。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8766,17 +8784,15 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   FW-W4（4999e2e）、FW-W5a（83b4251）、FW-FE1（57e3c03）、
   **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
-- **批 5 全清**（cSpeed/cStartCondition/HandlerSys/cConfiguration/
-  cSetUp 顯示側）。**下一波**依脈絡擇一：(a) user.level 解鎖：
-  main.cpp DoChangeLevel（:15127）＋cbUserSelect stand-in 補進
-  forms/fMain.h（來源鏈已定位，缺口小，接通 tagmap user.level）；
-  (b) bin.* 解鎖（SetTechDataToProd_Yield 呼叫者決策）；
-  (c) 1203 HAL MOTION_IO pimpl；(d) cShowBinSelect Wave D；
-  (e) BinDisplay 的 BinDisCtrl（elec\Component 查證）；
-  (f) 過期 gate 註解清理波（nm 已證三處）；(g) rgCustomerList dfm
-  自動抽取波；(h) vclcompat 擴充收斂波（TStringGrid 欄位五處
-  subclass 複製＋TScrollBar/TImage/TWMKey 缺口評估）。
-  真機類依 §7 仍佇列。
+- **批 5 全清＋user.level 接通（FW-1d）**。**下一波**依脈絡擇一：
+  (a) bin.* 解鎖（SetTechDataToProd_Yield 呼叫者決策）；
+  (b) 1203 HAL MOTION_IO pimpl；(c) cShowBinSelect Wave D；
+  (d) BinDisplay 的 BinDisCtrl（elec\Component 查證）；
+  (e) 過期 gate 註解清理波（nm 已證三處）；(f) rgCustomerList dfm
+  自動抽取波；(g) vclcompat 擴充收斂波（TStringGrid 欄位五處
+  subclass 複製＋TScrollBar/TImage/TWMKey 缺口評估）；
+  (h) recipe.current 解鎖（LookForFile main.cpp:9016——比照
+  user.level 的 FW-1d 手法，缺口在 fMain）。真機類依 §7 仍佇列。
 - **FW-1 備忘**：pct 六顆等 sort.total 站穩後接；recipe.current/
   user.level 來源鏈未查（可能落在未翻的 cConfiguration）；
   tagmap.js 的 data-cmd 十筆結構性缺口要跟 web 前端波一起解；

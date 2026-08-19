@@ -15,6 +15,7 @@
 // machine-shape enums the guard fixture pins (eartUninstall/NonVibration), and
 // bShuttleShake, whose home is the shims TU rather than a golden header.
 #include "csystem.h"
+#include "forms/fMain.h"      // AI(W906-FW1d) 20260820: fMain->cbUserSelect (user.level mirror)
 #include "csystem_shims.h"
 #include "MachineType.h"
 
@@ -384,6 +385,14 @@ std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap)
     // pre-config snapshot publishes auth.level as null; post-config it is
     // live, and 0 there is the real Operator state.
     stageInt(snap, "auth.level", cust, AccessLevel);
+
+    // AI(W906-FW1d) 20260820: user.level -- the level NAME the dashboard
+    // binds (tagmap.js: fMain.cbUserSelect mirror). fMain->DoChangeLevel()
+    // (golden main.cpp:15127, translated this wave) writes it on every
+    // login/logout; before the first call it is the honest "" (golden always
+    // runs DoChangeLevel early via ChangeLevelAttr; this process has no such
+    // startup pass). Same cust key as auth.level.
+    stageStr(snap, "user.level", cust, fMain->cbUserSelect->Text);
 
     // AI(W906-FW-W3) 20260819: control-token mirror (see SetWebControlOwner).
     // Same liveness key as auth.level; "" = nobody holds the token.

@@ -307,12 +307,17 @@ int main(int argc, char** argv)
                 const int level = WebAuthVerify(book, u, p);
                 if (level >= 0) {
                     AccessLevel = level;                 // golden: AccessLevel=l;
+                    // AI(W906-FW1d) 20260820: golden's login path reaches
+                    // ChangeLevelAttr whose FIRST act is DoChangeLevel
+                    // (main.cpp:12410) -- mirror the level name the same way.
+                    fMain->DoChangeLevel();
                     server.CompleteCommand((unsigned long long)wc.id, true, std::string());
                 } else {
                     server.CompleteCommand((unsigned long long)wc.id, false, "bad credentials");
                 }
             } else if (wc.cmd == "auth.logout") {
                 AccessLevel = 0;                          // golden: back to Operator
+                fMain->DoChangeLevel();                   // AI(W906-FW1d) 20260820: same mirror on logout
                 server.CompleteCommand((unsigned long long)wc.id, true, std::string());
             } else if (wc.cmd == "counter.clear") {
                 // AI(W906-FW-W4) 20260819: tag = counter family, mirroring one

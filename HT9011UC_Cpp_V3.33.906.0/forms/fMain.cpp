@@ -83,6 +83,7 @@ TfMain::TfMain()
     palMainStatus   = new TfMainPanel();
     cbSetupFileName = new TfLotInfoRunMode();
     edWorkTemperBase = new TfLotInfoEdit();
+    cbUserSelect    = new TfLotInfoRunMode();  // W906-FW1d 20260820: login-level mirror (see fMain.h)
     // -- W906-TesterTCPTimer ADD (20260720) ------------------------------------
     tTestResult   = new TStringList();
     tBarCodeList  = new TStringList();
@@ -274,6 +275,36 @@ void TfMain::ProcessSensorScan() {}                            // W6.6: HUB main
 // -- W7-C1 ADD: end-of-lot clean-out finish-check fMain methods (all offline no-op) --
 void TfMain::Start(AnsiString /*Func*/) {}                     // W7-C1: offline do NOT auto re-start
 void TfMain::ChangeLevelAttr() {}                              // W7-C1: offline level-attr UI no-op
+
+// AI(W906-FW1d) 20260820: golden main.cpp:15127-15148, faithful -- clamp
+// AccessLevel into [0, iDefHonPrecLevel], then mirror it into
+// cbUserSelect->Text via golden's three name tables (5-level vs 4-level
+// security, with the CC_KYEC_LEE variant spelling). Golden's ChangeLevelAttr
+// calls this first (main.cpp:12410); the facade's ChangeLevelAttr above stays
+// a no-op, so callers needing the mirror call this directly (see fMain.h).
+void TfMain::DoChangeLevel()
+{
+    AnsiString str[4]    ={"Operator", "Engineer", "Supervisor", "HonPrec"};
+    AnsiString cLevel[5] ={"Open", "Operator", "Engineer", "Supervisor", "HonPrec"};
+    AnsiString cLevel2[5]={"Operator", "Engineer", "PEngineer", "Supervisor", "HonPrec"};
+
+    if(AccessLevel<=0)
+        AccessLevel=0;
+    if(AccessLevel>=iDefHonPrecLevel)                                           //jou 2014-06-19
+        AccessLevel=iDefHonPrecLevel;                                           //jou 2014-06-19
+
+    if(CosFunction.bSecurityHave5Level==true)                                   //jou 2014-06-19
+    {
+        if(CUSTOMER_CODE==CC_KYEC_LEE)                                          //wei 20160505
+            cbUserSelect->Text=cLevel2[AccessLevel];
+        else
+            cbUserSelect->Text=cLevel[AccessLevel];
+    }
+    else
+    {
+        cbUserSelect->Text=str[AccessLevel];
+    }
+}
 void TfMain::ModifyTester(int /*iWhich*/) {}                   // W7-C1: offline QA tester-modify no-op
 void TfMain::CleanYieldCount() {}                              // W7-C1: offline yield-count clear no-op
 // -- W5-Automation ADD: HANA_ART.cpp method sinks (all offline no-op / empty) --
