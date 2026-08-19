@@ -71,21 +71,47 @@ FW 系列 / `GOLDEN BUG #N` / `k7-B1` 類區域編號等標記寫在程式碼裡
 
 | 項目 | 數值 |
 |---|---|
-| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **552 筆**（以表格內 `#` 編號列實際計數） |
+| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **628 筆**（以表格內 `#` 編號列實際計數，20260819 二輪 QUIRK 補掃後） |
 | 其中 BUG 類（`GOLDEN BUG` / `GOLDEN BUGS` / `GOLDEN BUG #N` / `(Bx) GOLDEN BUG`） | 251 筆 |
-| 其中 QUIRK 類（`GOLDEN QUIRK` / `GOLDEN QUIRKS`） | 167 筆（含 SECSGEM 三檔補撈的 39 筆） |
-| 其中 DEFECT 類（`GOLDEN DEFECT` / `GOLDEN DEFECTS`） | 64 筆 |
+| 其中 QUIRK 類（`GOLDEN QUIRK` / `GOLDEN QUIRKS`） | 238 筆（含 SECSGEM 三檔補撈的 39 筆；含二輪補掃新增 71 筆，見下方「二輪 QUIRK 補掃紀錄」） |
+| 其中 DEFECT 類（`GOLDEN DEFECT` / `GOLDEN DEFECTS`） | 69 筆（含二輪補掃新增 5 筆） |
 | 其中 ODDITY 類（`GOLDEN ODDITY` / `GOLDEN ODDITIES`） | 41 筆 |
 | 其中 ASYMMETRY 類（`GOLDEN ASYMMETRY` / `GOLDEN ASYMMETRIES`） | 14 筆 |
 | 其中 DIVERGENCE 類（port 自身偏離 golden，已揭露，非 golden 本身缺陷；csystem.cpp/SCK_ART.cpp 各 1 筆合計 2） | 2 筆 |
-| 其中 GAP / LEAK / NOTE / INCONSISTENCY / GOTCHA / SPELLINGS / TYPO / DEAD CODE / INVARIANT / RACE 等罕見詞彙（各 1-2 筆） | 12 筆 |
-| 涉及檔案數 | 118 個 `### ` 分節（含少數純交叉參照的 stub 分節；扣除 stub 後約 100 個檔案有實際列出的筆數） |
+| 其中 GAP / LEAK / NOTE / INCONSISTENCY / GOTCHA / SPELLINGS / TYPO / DEAD CODE / INVARIANT / RACE 等罕見詞彙（各 1-2 筆） | 13 筆（原文件記載 12 筆，本次二輪複算時發現為既有的 ±1 落差，非本次新增所致，已一併更正為實測值） |
+| 涉及檔案數 | 118 個 `### ` 分節（含少數純交叉參照的 stub 分節；扣除 stub 後約 100 個檔案有實際列出的筆數；二輪補掃未新增檔案，只在既有 7 個檔案分節後追加子分節） |
 | 標示 ⚠️存疑（agent 或 orchestrator 本人判讀信心不足） | 見文末「無法判讀/存疑清單」 |
 
 > 上列數字為 `python3 -c "..."` 對本檔表格列直接計數所得（見文末補撈紀錄的量測方式），
 > 非估算值。多筆同一缺陷在不同呼叫點重複提及時，以「主要定義處」算一筆；同一缺陷若橫跨
 > `.cpp`/`.h` 兩個檔案各有一段完整說明，也算一筆並在該筆的 port 位置欄列出兩個檔案。
 > **逐一精確複算的權威來源永遠是本檔案下方各分節的表格本身**，此處統計僅供快速瀏覽。
+
+### 二輪 QUIRK 補掃紀錄（20260819）
+
+第一輪委派後，`ainarm2.cpp`（14 筆原始 QUIRK grep 命中）、`ainarm9045.cpp`（10 筆）、
+`aTester_Rear.cpp`（9 筆）、`aoutarm9045.cpp`（3 筆）、`cinitial.cpp`（3 筆）、
+`Public/MyStringList.cpp`（4 筆）、`OCRInsp.cpp`（2 筆）七個檔案的 QUIRK 覆蓋度被記錄為
+「未經第二輪複查」的已知缺口（見上方補撈紀錄段落）。本次逐檔對這 7 個檔案重新以
+`grep -inw quirk` 掃描並逐一讀取上下文判讀，結果：
+
+- 新增 76 筆（71 QUIRK + 5 DEFECT，DEFECT 出現於 `aTester_Rear.cpp` 的
+  `DoBTestSuckTestIC` 一個 banner 與 `cinitial.cpp` 的 `SetTechDataToProd_InArm` 一筆，
+  這兩處原始標記是 `GOLDEN DEFECT(S)` 而非 `GOLDEN QUIRK`，但同樣是第一輪未涵蓋、
+  掃描中順帶讀到即收錄）。
+- 各檔新增筆數：`ainarm2.cpp` +26、`ainarm9045.cpp` +11、`aTester_Rear.cpp` +24（含 4 筆
+  DEFECT）、`aoutarm9045.cpp` +4、`cinitial.cpp` +6（含 1 筆 DEFECT）、
+  `Public/MyStringList.cpp` +4、`OCRInsp.cpp` +1。
+- `OCRInsp.cpp` 的 3 筆原始 grep 命中中，2 筆（:493、:1056）經讀取上下文確認只是既有
+  第 4 項（banner (d) 的 static/global `iOCRPosition` 遮蔽缺陷）在另外兩個引用點的重複
+  提及，非獨立新缺陷，未收錄——是本次補掃過程中唯一的「排除案例」。
+- 各檔新增內容集中在少數幾個先前完全沒有被讀到的函式（例如 `aTester_Rear.cpp` 的
+  `DoBRTCAutoModelVerify`、`DoIndexArm1PickUpErrNeedPiggyback`、`CheckAnyCaseNeedToDoArm2`、
+  `DoRearTestPurgBeforePickShuttle` 四個函式合計貢獻了 20 筆），而非均勻分散在既有已收
+  錄的函式中——這與「原始 grep 樣式漏掉了整段 banner」的假設一致。
+- 本次補掃**未回頭複查 BUG / ODDITY / ASYMMETRY 等其他詞彙**在這 7 個檔案是否也有類似
+  缺口；範圍嚴格限定在使用者指定的 QUIRK 補掃（DEFECT 兩筆屬掃描中順帶讀到，非系統性複查
+  DEFECT 詞彙覆蓋度）。
 
 ### 補撈紀錄（依使用者/協調者指示，對全樹跑 `grep -rniE "GOLDEN [A-Z]+[ ,]"` 供詞彙缺口複查）
 
@@ -217,6 +243,39 @@ TOTAL for ainarm2.cpp: 24
 | 26 | GOLDEN ODDITIES PRESERVED 項2 | ODDITY | ainarm2.cpp:2678-2681 | golden（同函式） | 兩個方向分支刻意掃描不同的列範圍：Direction 0/1 用 `j<YItem-1`，Direction 2/3 用 `j=1...YItem`，各自排除剛重試完的那一列 | 此不對稱是刻意設計的特性，不可「對稱化」，否則會重複處理已重試過的列 | 20260811 |
 | 27 | GOLDEN ODDITIES PRESERVED 項3 | ODDITY | ainarm2.cpp:2682-2684 | golden ainarm2.h:220 | golden 標頭宣告 `RestoreLoadeIC(int iLoaderY=0)` 帶預設參數，但定義本身不帶預設值，港版比照保留（預設值只該出現在宣告） | 純撰寫慣例差異，不影響行為 | 20260811 |
 
+### ainarm2.cpp QUIRK 二輪補掃（承續上表編號，續 28-53；來源：orchestrator 對本檔全樹重跑 `grep -inw quirk`，補齊第一輪 grep 樣式未涵蓋的 14 個 QUIRK banner）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 28 | FIDELITY NOTES (golden quirks kept) 項1 | QUIRK | ainarm2.cpp:613（`MoveInArmZToPlateSafeAndCheckLoaderTray`） | golden :1140-1184 | `int ret=0;` 在每一條不會走到 JAM 的路徑上都是死值 | 純冗餘賦值，不影響行為 | 20260811 |
+| 29 | FIDELITY NOTES (golden quirks kept) 項2 | QUIRK | ainarm2.cpp:614-618 | golden :1162,:1168 | `bfirstIn=true` 在 SKIP 路徑被寫兩次（:1162 在警報之前、:1168 在 SKIP 分支內），且因 :1162 在警報之前就設 true，RETRY 的回答會讓 3 振次計數從零重新起算而非接續累計 | 呼叫端依賴這個重新起算的行為，忠實保留不改 | 20260811 |
+| 30 | FIDELITY NOTES (golden quirks kept) 項3 | QUIRK | ainarm2.cpp:619-620 | golden（同函式） | `LastSet.iRealDummy>=HAS_TRAY` 對 dummy-mode enum 用大於等於比較而非相等比較 | 逐字重現，不影響目前唯一使用的列舉值 | 20260811 |
+| 31 | GOLDEN QUIRK PRESERVED（未編號） | QUIRK | ainarm2.cpp:789-793（`MoveInArm2XYToLoaderWait`） | golden :1396-1399 | RogerYang 20250820 把 `if(...) return false; else` 註解掉，只留下仍保持 else 縮排的 ShowMyMessage，該行現在無條件執行 | 該分支原本應被跳過的 ShowMyMessage 呼叫現在每次都會執行 | 20260811 |
+| 32 | GOLDEN QUIRKS PRESERVED 項1 | QUIRK | ainarm2.cpp:1019-1024（`TransferLoaderRatio`） | golden :2161 | 於 `bInArmUseDifferentScaleBySetupFile` 分支內重新宣告 `double fi`，遮蔽 :2121 的外層 `fi` | 預期會觸發本專案 `-Wshadow` 警告；該警告屬 golden 自身，非本次翻譯引入的缺陷 | 20260811 |
+| 33 | GOLDEN QUIRKS PRESERVED 項2 | QUIRK | ainarm2.cpp:1025-1027 | golden :2124 | `&&LastSet.iTemperature==Tempture_Hot`（& 前無空格）重複測試外層 if 已經測過的同一條件 | 純冗餘判斷，不改變結果 | 20260811 |
+| 34 | GOLDEN QUIRKS PRESERVED 項3 | QUIRK | ainarm2.cpp:1028-1030 | golden :2122,:2159,:2172 | Hot 溫度分支 (:2122) 吞掉整段三溫機判斷，使 setup 檔 scale(:2159) 與一般 scale(:2172) 在 `iTemperature==Tempture_Hot` 時永遠不可達 | Hot 模式下這兩種 Loader scale 永遠不會被套用，維持 golden 既有行為 | 20260811 |
+| 35 | GOLDEN QUIRKS PRESERVED 項4 | QUIRK | ainarm2.cpp:1031-1034 | golden :2121,同函式 | 外層 `double fi`(:2121) 宣告時未初始化但每條讀取路徑都先賦值；`*iXPos=`/`*iYPos=` 的 double 轉 int 窄化截斷是承重行為，函式內無 int/int 除法 | 兩者皆為安全的既有寫法，忠實保留不「清理」 | 20260811 |
+| 36 | GOLDEN QUIRK（未編號） | QUIRK | ainarm2.cpp:2384-2389（`PreciserPitchCalculate`） | golden :3441-3444 | `else if(TestIF.iTestMode==DualSite2x1)` 分支是空的 void 函式內只剩註解掉的 `// return false;`，唯一作用是擋住 DualSite2x1 落入下面的 DualSite 分支 | `iXPitch` 因此維持 :3427 賦的一般值，含被註解的 return 都逐字保留 | 20260811 |
+| 37 | GOLDEN QUIRKS PRESERVED 項1 | QUIRK | ainarm2.cpp:2475-2479（`DoVibrateOutShuttle`） | golden :3551,:3555 | `int(IniConfig.iF25VibrateTime/10.0)` 是刻意的浮點除以 10.0 後才截斷成 int，非整數除法 | 逐字保留，不因既有的 float-helper 替換回歸而改寫 | 20260811 |
+| 38 | GOLDEN QUIRKS PRESERVED 項2 | QUIRK | ainarm2.cpp:2480-2481 | golden :3568-3573 | case 150 是死碼，golden 全樹沒有任何地方把 150 賦給 `iVibrateOutShuttleTask` | 逐字保留含 break，不刪除不可達分支 | 20260811 |
+| 39 | GOLDEN QUIRKS PRESERVED 項3 | QUIRK | ainarm2.cpp:2482-2484 | golden :3539,:3558,:3577 | `iShuttleVibraCount` 會被遞增與歸零，但從未被讀取 | 純死狀態保存，含其函式局部 static 儲存方式一併保留 | 20260811 |
+| 40 | GOLDEN QUIRKS PRESERVED 項4 | QUIRK | ainarm2.cpp:2485-2489 | golden :3537 | `AnsiString str;` 宣告後從未被使用 | 因 AnsiString 建構子非平凡，-Wall -Wextra 下不會產生 unused-variable 警告，純冗餘 | 20260811 |
+| 41 | GOLDEN QUIRKS PRESERVED（未編號） | QUIRK | ainarm2.cpp:2784-2789（`VacuumOnOffLog`） | golden :3727-3744(:3739-3740) | `s.sprintf("%s", sLog)` 是無意義的字串複製；`Path` 被格式化兩次且第一次的值只用於 `MyForceDirectories`；CSV 表頭字串「Vacuum On」前的空白不一致；if 區塊本體用 3 個空白縮排而非 4 個 | 皆為既有撰寫瑕疵，不影響輸出資料正確性 | 20260811 |
+| 42 | GOLDEN QUIRKS PRESERVED 項1 | QUIRK | ainarm2.cpp:3201-3204（`SetInArmUseSuckToHasTrySuckIC`） | golden :261-318 vs 姊妹函式 :201 | else 分支用寫死的 2x4（`i<2, j<4`）而非 `InArmSuck.iPickRow`/`iPickCol`，姊妹函式 `SetInArmUseSuckToHasNullIC` 卻用後者 | 2x8 格局的機台在此分支下只有第 0..3 欄會被標記 | 20260811 |
+| 43 | GOLDEN QUIRKS PRESERVED 項2 | QUIRK | ainarm2.cpp:3205-3207 | golden :284-285 | JerryYang 20251013 把 `Prod.fInArmSuck4x8[iSht][i][j2]==true` 的保護判斷註解掉，使除 `CC_TSMC_TAINAN` 以外的所有客戶碼，連未使用的噴嘴也會被標成 `HAS_TRY_SUCK_IC` | 非 TSMC-Tainan 客戶碼的機台，未使用噴嘴也會被誤標 | 20260811 |
+| 44 | GOLDEN QUIRKS PRESERVED 項3 | QUIRK | ainarm2.cpp:3208-3209 | golden（同函式） | `iKit32`/`iSht` 兩個計算值只在 `CC_TSMC_TAINAN` 分支內被消耗 | 非 TSMC-Tainan 客戶碼下純屬多算，不影響行為 | 20260811 |
+| 45 | GOLDEN QUIRKS PRESERVED 項1 | QUIRK | ainarm2.cpp:3422-3426（`CloseSiteState`） | golden :445-462,:464-481 | Auto-Clean 分流的兩個 else 分支都只處理 `IsNNMode()==NN_2Row` 的情況，非 NN 機台若 :484-499 沒觸發，梯狀判斷會落到底端回傳初始值 0 | 非 NN 機台在特定分流下永遠得到「不需關站」的結果 | 20260811 |
+| 46 | GOLDEN QUIRKS PRESERVED 項2 | QUIRK | ainarm2.cpp:3427 | golden :509,:522 | 兩處把 `iState` 賦值為 0，而 0 正是它宣告時的初始值 | 純死賦值，不改變任何行為 | 20260811 |
+| 47 | GOLDEN QUIRKS PRESERVED 項3 | QUIRK | ainarm2.cpp:3428-3430 | golden :392-393 | `bCanAutoCloseSite && bPlace==false` 讓執行期關站路徑對 PICK 側刻意回報兩列都在用 | golden 既有設計，非誤判 | 20260811 |
+| 48 | GOLDEN QUIRK（未編號） | QUIRK | ainarm2.cpp:3615-3619（`CheckClearAllHotICThenPickLoadIC`） | golden :542 | `HotPlateForm.iPlateSelect & 2-i` 因減法優先權高於位元 and，實際解析成 `iPlateSelect & (2-i)`，golden 自己的行內註解寫「MMPlate1+0=NO 2 HP」 | 迴圈對 i==0 測 bit1、i==1 測 bit0，刻意不加括號、逐字保留 | 20260811 |
+| 49 | GOLDEN QUIRK（未編號） | QUIRK | ainarm2.cpp:3620-3623 | golden（同函式） | `iLimit` 只有在 `iPickRow==2` 且 `HotPlateYPitchCanPutAll()` 才非 0，`if(iLimit<=iCT) return true;` 在 iLimit==0 時對任何 `iCT>=0` 皆為真 | 1-row 與「無法整批放入」的情況會無條件回傳 true，屬 golden 既有行為非筆誤 | 20260811 |
+| 50 | GOLDEN QUIRK（未編號） | QUIRK | ainarm2.cpp:6339-6340（`IsHotPlateCheckFinsih`） | golden :2234 | 與 part 00533（`CheckClearAllHotICThenPickLoadIC`）相同的 `iPlateSelect & 2-i` 運算子優先權巧合，在此檔的另一個函式再度出現 | 兩處互為獨立但同型的 golden 既有寫法 | 20260811 |
+| 51 | GOLDEN QUIRK（未編號） | QUIRK | ainarm2.cpp:6341-6343 | golden :2236-2237 | `if(HotPlateForm.iPlateSelect==3 && i==0) continue;` 使兩盤都選取時，plate 1 整個被跳過，只有 plate 2 被計數 | golden 既有行為，不予修正 | 20260811 |
+| 52 | GOLDEN QUIRK（未編號） | QUIRK | ainarm2.cpp:6344-6346 | golden :2251,:2297 | `iDiscount` 初始化為 0 且僅被賦值為 0，使 `iCT-iDiscount<iCheckCT` 等同 `iCT<iCheckCT`，是死算式 | 純冗餘運算，不改變比較結果 | 20260811 |
+| 53 | GOLDEN QUIRK（未編號） | QUIRK | ainarm2.cpp:6347-6350 | golden :2260,:2265,:2267,:2271 | `bOneTimeHotPlateCheckAll` 為 false 時，函式會從 else 區塊內部直接 return，永遠不會走到 `iCheckCT` 比較，使前面整段計算在此路徑上是死碼 | golden 既有的路徑分岔，忠實保留 | 20260811 |
+
+TOTAL for ainarm2.cpp（含二輪 QUIRK 補掃）: 53
+
 ### ainarm9045.cpp
 | # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話,繁中) | 潛在影響(一句話,繁中) | 發現波次/日期 |
 |---|---|---|---|---|---|---|---|
@@ -262,12 +321,41 @@ TOTAL for ainarm2.cpp: 24
 
 TOTAL for ainarm9045.cpp: 39
 
+### ainarm9045.cpp QUIRK 二輪補掃（另起新序號 40-50，避免與上方主表 1-39 及檔頭「ainarm9045.cpp 補充」1-2 兩段既有編號混淆；來源：orchestrator 對本檔全樹重跑 `grep -inw quirk`，補齊第一輪 grep 樣式未涵蓋的 12 個 QUIRK banner）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 40 | GOLDEN QUIRK kept（未編號） | QUIRK | ainarm9045.cpp:2598-2601（`ArmXCanSuck4IC_1032`） | golden :117（對照姊妹函式 `ArmXCanSuck4IC_9045` golden :90） | golden :117 的行內註解寫「3750」是從姊妹函式複製過來，姊妹函式那裡確實用來守 `iXpitchMax`，但這裡實際守的是 `iXpitchMaxX2`，數字已與常數脫鉤 | 純註解過時，不影響判斷邏輯 | 20260811 |
+| 41 | GOLDEN QUIRK PRESERVED, NOT FIXED（未編號） | QUIRK | ainarm9045.cpp:3302-3307（`CheckShuttleSensor_9045_2x5`） | golden :1027 | `static bool bDuplicateErr[2][8]={false, false};` 用 2 個元素的初始化列表初始化 2x8 陣列（其餘語言自動補 0），讀起來像是每個 shuttle 一個初始值而非每個 cell 一個；`bDuplicateErr[Index]`/`bSensorOn[Index]` 也沒有對 Index 做邊界檢查 | Index 落在 [0,2) 之外會讀到範圍外記憶體 | 20260811 |
+| 42 | GOLDEN QUIRKS kept as-is（未編號） | QUIRK | ainarm9045.cpp:3366-3368（`CheckShuttleSensor_9045_2x6`） | golden :1042 | `bDuplicateErr` 宣告為 `static`，使重複警報鎖存刻意跨呼叫持續；16 個元素中只有 2 個被明確初始化，其餘由語言補 0 | 兩者皆為既有設計，忠實保留 | 20260811 |
+| 43 | GOLDEN QUIRK kept as-is（未編號） | QUIRK | ainarm9045.cpp:4525-4527（`CheckPlaceToShuttle`） | golden :2316 | `int iCenter;` 未初始化，但唯一會讀取它的 `_16Site2X8`/`_12Site2X6`/`_32Site4X8N` 路徑一定先賦值(:2332-2335)，golden 本身結構上是安全的 | 現況無害，忠實保留未初始化寫法 | 20260811 |
+| 44 | GOLDEN QUIRK kept as-is（未編號） | QUIRK | ainarm9045.cpp:4622-4625（`AutoTrayEndMusic`） | golden :2527-2538 | 全域旗標拼字為 `bNeedMusicFinishLighAndAlarmOn`（"Ligh" 少一個 t），且此函式只 SET `...AndAlarmOn`、只 READ `...FinishLighAndAlarmOn`，兩者是不同物件 | 拼字與讀寫不對稱皆為 golden 既有設計，不予修正 | 20260811 |
+| 45 | GOLDEN QUIRK KEPT (not a translation choice)（未編號） | QUIRK | ainarm9045.cpp:5691-5695（`DoRecordSkipPosition_9045`） | golden（同函式） | iTrayDir 0/1 的「保留最後一列」分支把 `iAutotrayEndYEnd` 設成 `YItem-1`，等最後一列已搜過又還原成 `YItem`（視窗重新變寬）；其他方向的鏡像程式碼則是移動 `iAutotrayEndYStart` 從 1 到 0 | 兩個方向的處理方式不對稱，屬 golden 既有設計 | 20260811 |
+| 46 | GOLDEN QUIRK PRESERVED（未編號） | QUIRK | ainarm9045.cpp:6024-6025（`InArmSideAllCloseWithKit`） | golden :4251-4271 | 內層邊界是寫死的 `j<4`，不是 `InArmSuck.iMaxCol`，這個寫死的 4 正是讓 `iKit32` 形成 4 欄視窗的關鍵 | 逐字保留，不用變數化 | 20260811 |
+| 47 | GOLDEN QUIRK PRESERVED (do not "fix")（未編號） | QUIRK | ainarm9045.cpp:7164-7170（`LotRecordUPH`） | golden :5372 vs :5366 | golden :5372 把 `AnsiString` 物件直接傳進 `%s` 可變參數槽（在 BCB6 下是潛在 UB，但因 AnsiString 是單一指標而恰好可用）；同函式 golden :5366 卻對兩個參數都用 `.c_str()`，兩種寫法在同一函式內並存 | port 的 vclcompat sprintf 有意支援這個 BCB6 慣用法，逐字保留這處不一致 | 20260811 |
+| 48 | GOLDEN QUIRK kept as-is（未編號） | QUIRK | ainarm9045.cpp:7837-7840（`MoveInArmXYToLoader_9045`） | golden :5657-5660,:5705-5713 | golden 的 `else` 縮排整整少一階（比它自己的大括號更靠左），出現在一段攸關安全的 Y-pitch 搶救分支中；另外 golden :5705-5713 是 Eastsun 20251231 註解掉的死區塊 | 兩者皆逐字保留，重排縮排會是對安全相關分支的無聲改動 | 20260811 |
+| 49 | GOLDEN QUIRK kept verbatim（未編號） | QUIRK | ainarm9045.cpp:10119-10123（`MoveInArmZToLoaderPick`） | golden :7018 | `return bResult=false;`（先賦值再回傳）逐字保留；SingleSite 分支只靠單一次 `MotorMove2Speed...` 呼叫寫 `bResult` 而不查 `flag[][]`，else 分支則忽略 `bResult` 的初始值 true，直到走完 flag 掃描才採信 | 兩分支對 `bResult` 的來源邏輯不對稱，屬 golden 既有設計 | 20260811 |
+| 50 | GOLDEN LADDER QUIRKS（未編號） | QUIRK | ainarm9045.cpp:11329-11333（`DoInArmPlaceToShuttle_9045`） | golden :8723-8839(:8732-8733) | 32 支 `iInArmType` 分派梯全樹沒有 `e9045_2x4_16` 的分支（與 port 已記錄的「該檔案本就死碼」一致）；`e9045_1x4_1_Ac` 被併入 `1x1_1` 分支（golden :8732-8733）；分派順序沿用 golden 順序，含 `1x4_4_13` 排在 `1x4_2_14` 之前 | 逐字保留 golden 的分派順序與併入決定 | 20260811 |
+
+TOTAL for ainarm9045.cpp（含二輪 QUIRK 補掃）: 50（主表39 + 檔頭補充2 + 本節11，惟三段編號互不相通，見各節標題說明）
+
 ### aoutarm9045.cpp
 | # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話,繁中) | 潛在影響(一句話,繁中) | 發現波次/日期 |
 |---|---|---|---|---|---|---|---|
 | 1 | GOLDEN BUG PRESERVED, NOT FIXED | BUG | aoutarm9045.cpp:3365 | golden :3995-4079 (:3999) | GetOutOffsetFromWhichAuto 在無效輸入分支中，sprintf 對整數 iWhichAuto 誤用字串格式符而非整數格式符。 | 在真正 BCB6 執行環境下該診斷訊息會印出亂碼甚至造成例外，但只在輸入已無效的分支才觸發。 | 20260811 (PT-W8) |
 
 TOTAL for aoutarm9045.cpp: 1
+
+### aoutarm9045.cpp QUIRK 二輪補掃（承續上表編號，續 2-5；來源：orchestrator 對本檔全樹重跑 `grep -inw quirk`，補齊第一輪 grep 樣式未涵蓋的 4 個 QUIRK banner）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 2 | GOLDEN QUIRK PRESERVED, NOT FIXED（未編號） | QUIRK | aoutarm9045.cpp:2629-2631（`GetOutArmXToShuttleOffset_9045`） | golden :1290-1301(:1295-1298) | `if(iSht==0)` 的兩個分支內容完全相同（都是 `OutArmOffSet[iOffsetPos]->GetX()`），使這個判斷式是無效分支 | 純冗餘判斷，不影響回傳值 | 20260811 (PT-W8) |
+| 3 | 同一 golden quirk（X 孿生函式，未編號） | QUIRK | aoutarm9045.cpp:2648（`GetOutArmYToShuttleOffset_9045`） | golden :1303-1314 | 與 X 版同型缺陷：`if(iSht==0)` 兩分支同樣完全相同 | 純冗餘判斷，不影響回傳值 | 20260811 (PT-W8) |
+| 4 | GOLDEN QUIRK PRESERVED（未編號） | QUIRK | aoutarm9045.cpp:3523-3526（`HasGapsInTheTray`） | golden :4127-4165(:4134-4135) | `GetTrayDirection()` 先把結果寫進 `Direction`，緊接著下一行就被 `AutoForm[iWhichAuto]->Direction` 覆蓋 | `GetTrayDirection` 呼叫本身仍是必要的（它同時填了六個迴圈邊界），只有 `Direction` 這個輸出被覆蓋，逐字保留 | 20260811 (PT-W8) |
+| 5 | GOLDEN QUIRK PRESERVED（未編號） | QUIRK | aoutarm9045.cpp:3611-3614（`GetWhichAutoPickZ`） | golden :4208-4219(:4217) | Fix 臂分支扣掉的是 AUTO 的 place-offset（`OutArmOffSet[OutOfsAuto1+iWhichAuto]->GetPlace()`），卻加上 FIX 的 pick-up offset（`OutArmOffSet[OutOfsFix1+iWhichAuto]->GetPickUp()`），兩個 offset 基準對不上 | golden 既有的基準不一致，非本次翻譯引入，不予「修正」 | 20260811 (PT-W8) |
+
+TOTAL for aoutarm9045.cpp（含二輪 QUIRK 補掃）: 5
 
 ### atester_ProcessCount.cpp
 | # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話,繁中) | 潛在影響(一句話,繁中) | 發現波次/日期 |
@@ -336,6 +424,37 @@ TOTAL for aTester_Front.cpp: 9
 
 TOTAL for aTester_Rear.cpp: 12
 
+### aTester_Rear.cpp QUIRK 二輪補掃（承續上表編號，續 13-36；來源：orchestrator 對本檔全樹重跑 `grep -inw quirk`，補齊第一輪 grep 樣式未涵蓋的 10 個 QUIRK/DEFECT banner，橫跨 5 個函式）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 13 | GOLDEN DEFECTS PRESERVED 項1 | DEFECT | aTester_Rear.cpp:2904-2911（`DoBTestSuckTestIC`） | golden :2342-2359(:2348) | `ErrPart+=BTestSuck.Item[i][j]+", ";` 的 `Item` 是 `int`，這其實是對 3-byte 字串常量 ", " 做指標運算（`const char*+int`）而非「附加數字」，`Item==TEST_PASS+n` 時會讀到常量字串範圍外的記憶體 | 只在 `bAlreadyTested` 中止路徑觸發的未定義行為；逐字保留是因為相同運算式在標準 C++ 下編譯結果與 golden 一致 | 20260810 |
+| 14 | GOLDEN DEFECTS PRESERVED 項2 | DEFECT | aTester_Rear.cpp:2912-2918 | golden :3070 | `Task=3200;`（[P65] ARM QA Mode ReTest, Arm2）跳到整個 switch（golden :2222-3878 範圍內搜尋確認）根本不存在的 `case 3200:` | 一旦被觸發，之後每次呼叫都會落到 switch 尾端 `return false`，rear test 狀態機永久卡死；僅在 `bP65EnableArmQAMode && iP65ArmQAModeValue>0` 且全站 bin1 且 `BTestSuck.HasRealIC()` 時可達 | 20260810 |
+| 15 | GOLDEN DEFECTS PRESERVED 項3 | DEFECT | aTester_Rear.cpp:2919-2921 | golden :2232,:2237 | `int &Task=iBTestSuckTestICTask, ret, iMaxDoubleContact, ret2;` 與 `bool bAlreadyTested;` 均未初始化，golden 依賴每條可達路徑都先賦值 | 目前無害，忠實保留未初始化寫法 | 20260810 |
+| 16 | GOLDEN DEFECTS PRESERVED 項4（cosmetic） | DEFECT | aTester_Rear.cpp:2922-2923 | golden :3322 | case 2410 的 else 區塊收尾大括號縮排在第 17 欄而非第 13 欄 | 純排版瑕疵，不影響編譯或行為 | 20260810 |
+| 17 | GOLDEN FALL-THROUGH PRESERVED（未編號） | QUIRK | aTester_Rear.cpp:5914-5917（`DoBRTCAutoModelVerify`） | golden :4548 | case 12310 結尾設 `Task=12320;` 且無 `break;`，落穿進入 case 12320 | 開真空的那一拍會立刻連帶執行 12320 本體，golden 刻意如此，不予「修正」 | 20260810 |
+| 18 | GOLDEN QUIRK KEPT, NOT FIXED（未編號） | QUIRK | aTester_Rear.cpp:5918-5922 | golden :4520,:4636-4641 | case 12220 先把 Z2 移到 12300 的 `TestZ2_Test+1000`，case 12390 又重新發出 case 12320 早已在 :4560 完成過的同一句 `Gali_MotMove(Prod.TestZ2_Safe, iSpeedSlow)` | 多做一次相同的安全移動，逐字保留 | 20260810 |
+| 19 | GOLDEN QUIRK KEPT（未編號） | QUIRK | aTester_Rear.cpp:5923-5927 | golden :4623 | case 12340 重新測試 `if(bHasErr)`，但 case 12330 只在 `bHasErr` 早已為 true 時才會轉進 12340（:4586 設值,:4600-4602 分流），故該測試永遠不會是 false，:4635 的無錯誤 `break;` 路徑不可達 | 沒有 else 分支可以移除，逐字保留死路徑 | 20260810 |
+| 20 | GOLDEN QUIRK KEPT（未編號） | QUIRK | aTester_Rear.cpp:5928-5932 | golden :4732-4733,:4756-4757 | case 12900 清零 `bRealTimeCom_ReceiveOK[rtOPENVERIFYOK]` 卻送出 `rtOPENVERIFYNG`；case 13100 清零 `[rtALLFAILNG]` 卻送出 `rtALLFAILOK`，兩處清零與送出的通道對調 | golden 兩次都把清空通道與送出通道弄反，逐字保留 | 20260810 |
+| 21 | GOLDEN QUIRK KEPT（未編號） | QUIRK | aTester_Rear.cpp:5933-5935 | golden :4475 | case 12100 的 `DoTestYRearDelay.SetSecAndOn(0.3)` 放在 i/j 雙層迴圈內，每個站都重新武裝一次而非整個 case 一次 | 逐字保留，不改成迴圈外呼叫一次 | 20260810 |
+| 22 | GOLDEN QUIRK KEPT（未編號） | QUIRK | aTester_Rear.cpp:5936-5938 | golden :5081 | case 15200 最後一個測試的 `if(...)` 分支是空區塊 `{ }`，真正動作寫在 `else` | 邏輯上等同條件反過來寫，行為不變，僅風格怪異 | 20260810 |
+| 23 | GOLDEN QUIRK KEPT（未編號） | QUIRK | aTester_Rear.cpp:5939-5942 | golden :4805-4809 vs :4717-4722 | case 13220 的 `bRTCRetry==true` 分支重新開啟 RTC port 並顯示逾時訊息，但不像它的孿生 :4717-4722 那樣呼叫 `COM2->DoReleaseAndInspEnd()` 就直接回到 13210 | golden 兩處孿生處理不對稱，逐字保留 | 20260810 |
+| 24 | GOLDEN QUIRKS PRESERVED, NOT FIXED 項1 | QUIRK | aTester_Rear.cpp:6943（`DoIndexArm1PickUpErrNeedPiggyback`，k8-Arm2-decide 標籤下的 Rear/Arm2 版本） | golden :5093-5254 | case 1 沒有 `break`：設 `Task=1030` 後直接落穿進入 case 1030 | 刻意的單一 tick 連續動作設計 | 20260810 |
+| 25 | GOLDEN QUIRKS PRESERVED, NOT FIXED 項2 | QUIRK | aTester_Rear.cpp:6944-6945 | golden :5136 | case 1030 結尾是 golden 自己註解掉的 `//            break;`，因此落穿進入 case 1040 | 與項1 同一種刻意連續動作設計 | 20260810 |
+| 26 | GOLDEN QUIRKS PRESERVED, NOT FIXED 項3 | QUIRK | aTester_Rear.cpp:6946 | golden（同函式，switch 最後一個 label） | case 2200 沒有結尾 break（因為它是 switch 最後一個 case） | 語法上無害 | 20260810 |
+| 27 | GOLDEN QUIRKS PRESERVED, NOT FIXED 項4 | QUIRK | aTester_Rear.cpp:6947-6950 | golden Config.h:83 | `int iIndexCheckOffSet=IniConfig.fIndexCheckOffset*100;` 把 double 乘積截斷成 int | 逐字保留既有截斷行為，不得改寫成四捨五入或浮點運算 | 20260810 |
+| 28 | GOLDEN QUIRKS PRESERVED, NOT FIXED 項5 | QUIRK | aTester_Rear.cpp:6951 | golden :5164,:5235 | `ErrPart=" "`（單一空白字元而非空字串）於 golden :5164，:5235 才重設為 `""` | 屬既有字串初值慣例差異 | 20260810 |
+| 29 | GOLDEN QUIRKS PRESERVED, NOT FIXED 項6 | QUIRK | aTester_Rear.cpp:6952 | golden（同函式） | `bIndexCheckNoStopVaccum=true` 在逐站迴圈內被重複賦值 | 純冗餘賦值，不影響最終旗標值 | 20260810 |
+| 30 | GOLDEN QUIRKS PRESERVED, NOT FIXED 項7 | QUIRK | aTester_Rear.cpp:6953 | golden（同函式） | `ErrPart` 是函式內的 function-static `AnsiString`，跨多次掃描持續存活 | 狀態會跨呼叫殘留，屬既有設計而非疏漏 | 20260810 |
+| 31 | GOLDEN QUIRKS PRESERVED, NOT FIXED 項1 | QUIRK | aTester_Rear.cpp:7230-7234（`CheckAnyCaseNeedToDoArm2`） | golden :5288-5291 | `else { bRTCAutoVerifyControlEP=false; }` 掛在最外層 RTC `if` 底下，使外層條件皆真但內層 `UseSiteHasIC`/`AlreadyTest`/`SendSiteMapToRTC` 檢查失敗時，該旗標不會被清除、維持前值 | 看似寫錯位置的 else，逐字保留 | 20260810 |
+| 32 | GOLDEN QUIRKS PRESERVED, NOT FIXED 項2 | QUIRK | aTester_Rear.cpp:7236-7238 | golden :5315-5321,:5341-5347 | `bIndexArm2SupplyLight`/`bForEgisTecTest`/`bD58..` 三條件區塊在 VacuumMode 開/關兩分支中被重複貼上，使真空-OFF 分支可能用 11040 覆蓋自己剛設的 211/215 | golden 既有的複製貼上重複，逐字保留 | 20260810 |
+| 33 | GOLDEN QUIRKS PRESERVED, NOT FIXED 項3 | QUIRK | aTester_Rear.cpp:7239-7241 | golden :5307,:5339 | `iHangupCTArm2=0;` 在 ON 分支放在燈號檢查「之前」(:5307)，在 OFF 分支卻放在 211/215 賦值「之後」(:5339) | golden 刻意如此的位置不對稱 | 20260810 |
+| 34 | GOLDEN QUIRKS preserved verbatim 項(a) | QUIRK | aTester_Rear.cpp:11536-11538（`DoRearTestPurgBeforePickShuttle`） | golden :9242-9321 | case 100 在間隔計時器未到期時把 `Task=200` 且無 break，直接落穿進入 case 200；只有 else 分支才有 break | 刻意的連續動作設計，逐字保留 | 20260810 |
+| 35 | GOLDEN QUIRKS preserved verbatim 項(b) | QUIRK | aTester_Rear.cpp:11539-11541 | golden :9265-9269,:9286-9290,:9308-9312 | `if(...HAS_IC \|\| ...HAS_HOT_IC) ;`（空的 then）搭配 else 才真正 Off 的寫法，同一種樣式在此函式出現三次 | 純風格怪異，行為上等價於條件反過來寫 | 20260810 |
+| 36 | GOLDEN QUIRKS preserved verbatim 項(c) | QUIRK | aTester_Rear.cpp:11542-11545 | golden（同函式） | `static int iCT=0;` 是函式局部 static，只有 case 1 會將它歸零，case 100 到 400 之間若中止，計數會停留在中止當下的值 | 忠實保留，不在函式進入時重置 | 20260810 |
+
+TOTAL for aTester_Rear.cpp（含二輪 QUIRK/DEFECT 補掃）: 36
+
 ### 【主控/溫控叢集】涵蓋：ckernel.cpp / ckernel.h / cinitial.cpp / common.cpp / csystem.cpp / cTemperFrom.cpp / forms/fTemperFrom.h / bthermo.cpp / TempCtrl/TriTemp.cpp / MyTempPanel.cpp / uHeaterThread.cpp / EJ1N/MyOmronPanel.cpp / uYieldMonitoring.cpp
 
 ### ckernel.cpp
@@ -401,6 +520,19 @@ TOTAL(本檔): 1
 | 1 | GOLDEN ASYMMETRY KEPT, NOT "FIXED" | ASYMMETRY | cinitial.cpp:16087 | InitialHT9045SModule USE_PICKER_COUNT==0分支(自20161117) | 該分支停用MOT[MInArmZC/ZD/ZG/ZH](注意是ZD、ZH)但實際停用噴嘴是兩列第1、3欄，下方ep1Picker分支用規則的ZB..ZH全集，兩者對不上疑ZD/ZH為ZE/ZF之誤植 | 若確為誤植，HT-9045S/1-picker機型停用的軸與被關閉噴嘴欄位可能不完全對應 | 20260810(W906-PT-W6-n5) |
 
 TOTAL(本檔): 1
+
+### cinitial.cpp QUIRK 二輪補掃（承續上表編號，續 2-7；來源：orchestrator 對本檔全樹重跑 `grep -inw quirk`，補齊第一輪 grep 樣式未涵蓋的 4 個 QUIRK/DEFECT banner，橫跨 3 個函式）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 2 | TWO GOLDEN QUIRKS KEPT 項1 | QUIRK | cinitial.cpp:14378-14382（`SetTechDataToProd_Tray`） | golden :8513-8519 vs :8537-8555 | `TrayForm.LodareType==0` 分支對 `UserDefForm[iTrayType[0]]` 做 memcpy 時沒有 0..3 範圍夾限，else 分支則透過 `iTypeBuffer` 先夾限每個索引才用 | 若 `TrayForm.Loader.iTrayType` 超出範圍且 `LodareType==0`，golden 本身就會讀取越界記憶體 | 20260810(W906-PT-W6-n5) |
+| 3 | TWO GOLDEN QUIRKS KEPT 項2 | QUIRK | cinitial.cpp:14383-14384 | golden（`cprod.h` 欄位本身） | golden 把欄位名拼成 `LodareType`（應為 Loader），此樹的 `cprod.h` 也確實使用這個拼法 | 純拼字沿用，非本次翻譯引入 | 20260810(W906-PT-W6-n5) |
+| 4 | GOLDEN DEFECT, PRESERVED AND REPORTED（未編號） | DEFECT | cinitial.cpp:14518-14528（`SetTechDataToProd_InArm`） | golden :8786（對照 :8745-8752,:8749） | `Prod.YInArm_Plate1_Pick[i][j]=Prod.YInArm_Plate2_Pick[iInArmYBase][iInArmXBase]+InArmOffSet[InOfsHP2]->GetArmY(i, j);` 位於 HotPlate-2 的 Y 扇出迴圈內，卻用 Plate2 的基準與 offset 表寫入 Plate1 | 前一個迴圈(:8745-8752)算好的 HotPlate-1 每噴嘴 Y 值會被 HotPlate-2 幾何覆蓋，且 Plate2 自己的每噴嘴 Y 扇出從未真正被寫入；在 HP1/HP2 的 Y 不同且噴嘴數 >1 的機台上是真實的定位缺陷，本波次僅忠實翻譯、不修正 | 20260810(W906-PT-W6-n5) |
+| 5 | GOLDEN TYPE QUIRK KEPT（未編號） | QUIRK | cinitial.cpp:14530-14533 | golden :8578,:8677-8681 | `dbTrayThick` 宣告為 `double`，卻與 int 常數 600 比較、重設為 `600.0`，再被加進一個 int 欄位（`+=dbTrayThick-635`），賦值當下會朝零截斷 | 逐字保留型別與截斷行為，不「清理」型別 | 20260810(W906-PT-W6-n5) |
+| 6 | GOLDEN QUIRK KEPT（未編號） | QUIRK | cinitial.cpp:15843-15847（`ReadTechData`） | golden :13586,:13612 | `bool ret=true;` 只在宣告時賦值一次，之後從未被重新賦值，使 golden 無論教導檔是否遺失都一律回傳 true；golden 自己註解掉的 `ReadData()` 呼叫(:13587)以註解形式一併保留，記錄該函式過去曾經做過的事 | 忠實保留，不「改進」成真正檢查讀檔結果 | 20260810(W906-PT-W6-n5) |
+| 7 | GOLDEN QUIRK PRESERVED, NOT FIXED（未編號） | QUIRK | cinitial.cpp:16973-16979（`SetTechDataToProd_Yield`） | golden :11627 | golden :11627 自帶行內註解「Fix == to = (was comparison, not assignment)」，記錄這行過去是無作用的比較式，現在確實是賦值 `TestIF.iAutoClean_Function=false`；同一段程式碼內 `TestIF` 與 `TestIF_File` 混用的不一致也是 golden 自己造成的 | 逐字保留這段 golden 自我修正過的賦值，以及混用型別來源的不一致 | 20260810(W906-PT-W6-n5) |
+
+TOTAL(本檔，含二輪 QUIRK/DEFECT 補掃): 7
 
 ### common.cpp
 | # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話,繁中) | 潛在影響(一句話,繁中) | 發現波次/日期 |
@@ -526,6 +658,14 @@ TOTAL(本檔): 3
 | 7 | GOLDEN BUG (banner g) | BUG | OCRInsp.cpp:1887(banner200-204) | golden :1463-1464 | case 450 的 CHECK-MAP 重試梯寫入 iBarCodeErrorC/R=iOCRPosC/R，但 check-map 真正的游標是 iTrayCol/iTrayRow。 | 錯誤訊息回報的座標會是最後一次主掃描格而非實際失敗的 check-map 格，可能誤導維修人員排查方向。 | 20260807 |
 | 8 | GOLDEN BUG (banner h) | BUG | OCRInsp.cpp:210-213(僅 banner) | golden :1042 | asBarCode.Pos("?")!=0 分支與 Pos("T")==1 / Pos("F")==1 共用同一個 Delete(1,1)，導致字串任何位置出現 ? 都會被裁掉開頭字元。 | 條碼字串內含 ? 字元時，即使不在開頭也會被誤裁切第一個字元，可能造成條碼解析錯誤。 | 20260807 |
 
+### OCRInsp.cpp QUIRK 二輪補掃（承續上表編號，續 9；來源：orchestrator 對本檔全樹重跑 `grep -inw quirk`。註：檔頭 banner 中另外兩處 `GOLDEN QUIRK` 命中點（:493,:1056）分別是既有第 4 項"banner (d)"缺陷在其另外兩個引用點的重複標註，非新缺陷，未收錄）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 9 | INTENTIONAL FALL-THROUGH（檔頭 banner 內未單獨編字母，其餘 a-h 為既有第1-8項） | QUIRK | OCRInsp.cpp:750-756（`CheckOCRInArmSuckIC`） | golden :352-354 | `case 1:` 執行 `InArmSuck.ResetAll()` 後沒有 `break`，直接落穿進入 `case 50:` 的吸取輪詢；banner 註明這是全檔唯一一處 fall-through（其餘每個 case 都有 break，經自動掃描驗證過） | 刻意設計：同一拍內先重置整組真空再輪詢吸取狀態，逐字保留不補 break | 20260807 |
+
+TOTAL(本檔，含二輪 QUIRK 補掃): 9
+
 ### BarCode/BarCode_Shuttle1_SFCAutoTune.cpp
 | # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話,繁中) | 潛在影響(一句話,繁中) | 發現波次/日期 |
 |---|---|---|---|---|---|---|---|
@@ -590,6 +730,17 @@ TOTAL(本檔): 3
 | 4 | FOUR GOLDEN BUGS preserved VERBATIM (2) | BUG | MyStringList.cpp:1104,1109-1112 | golden :927-940 | str3 重建迴圈寫在列迴圈外面，導致沒有任何列命中時序列化的是 list2D 最後載入的內容（檔案最後一列），而非真正比對到的列。 | 因為與 bug(1) 的 iCol>0 測試同樣失敗而暫時無害，但兩者疊加使錯誤更難察覺與除錯。 | 20260807 |
 | 5 | FOUR GOLDEN BUGS preserved VERBATIM (3) | BUG | MyStringList.cpp:1104,1113-1118 | golden :872 | list2D->Strings[0] 在檢查 Count 之前就被讀取，BCB6 原版對空白或空行會丟出 EStringListError，而 vclcompat 的 TStringList::GetString 對越界改為回傳空字串而非拋例外。 | 屬於移植框架與原版行為的落差：golden 遇到此情況會丟例外，port 版則靜默降級為無比對命中，此差異被記錄但未修補。 | 20260807 |
 | 6 | FOUR GOLDEN BUGS preserved VERBATIM (4) | BUG | MyStringList.cpp:1104,1119-1122 | golden :959 | 當對應檔案尚不存在時，File 從未被載入，File->SaveToFile(sFileName) 會寫出一個空檔案，把原本要寫入的 s2DID 整筆丟棄。 | 對一個全新客戶或全新批次首次寫入 2D-ID 對應檔時，該筆資料會完全遺失。 | 20260807 |
+
+### Public/MyStringList.cpp QUIRK 二輪補掃（承續上表編號，續 7-10；來源：orchestrator 對本檔全樹重跑 `grep -inw quirk`，補齊第一輪 grep 樣式未涵蓋的 4 個 QUIRK banner）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 7 | GOLDEN QUIRK preserved VERBATIM（未編號） | QUIRK | MyStringList.cpp:359-365（`SetLotData`） | golden :118-137 | `SetLotData` 把 `SystemYear`/`SystemMonth`/`SystemDate` 格式化進 ByLotID 資料夾路徑，卻沒有先呼叫 `GetTimeInfo()`，用的是上一次 Add*/MySave*/GetFileName 呼叫留下的值（全新物件則是 0/0/0，變成路徑「0000\00\00」） | 本檔其餘每個方法都會先呼叫 `GetTimeInfo()`，唯獨這個不會 | 20260807 |
+| 8 | GOLDEN QUIRK preserved VERBATIM（未編號） | QUIRK | MyStringList.cpp:388-394（`AddText`/`AddTextWithDateTime*` 家族） | golden :143-144 | `if(FileName=="") FileName="";` 在四個 Add* 方法裡都是無作用陳述句；另外 `AddText` 用 `>=HTMaxLineCount`（加入後才 flush），三個 `AddTextWithDateTime*` 變體卻用 `>HTMaxLineCount`（加入前就 flush），golden 本身在此不對稱 | 保留是為了與 golden 逐行對應，移除不會改變行為但會破壞對應關係 | 20260807 |
+| 9 | GOLDEN QUIRK preserved VERBATIM（未編號） | QUIRK | MyStringList.cpp:905-910（`GetLastLine`） | golden :648-651 | 檔案先用 `CreateFile(GENERIC_READ)` 開一次純粹當存在性/鎖定探測，立刻 `CloseHandle`，再用 `std::ifstream` 重新開檔計算行數；上一行已經呼叫過 `FileExists`，這次探測看似多餘 | 這個探測是唯一能讓「檔案被鎖定」時跳過計數（而非回傳 0）的機制，是行為而非死碼，保留 | 20260807 |
+| 10 | GOLDEN QUIRK preserved VERBATIM（未編號） | QUIRK | MyStringList.cpp:1032-1038（`MySaveSGJamCountToFile`） | golden :750 | 提早返回的判斷式是 `HTAutoSave==false && bDelete==false`（AND），本檔其餘每個存檔方法用的都是 OR，使刪除請求即使 AutoSave 關閉也一定會執行；沿用自姊妹方法的註解「沒資料就不用存檔」讓這行讀起來像寫錯 | 對刪除路徑而言是刻意行為；另外區域變數 `Word Date;` 遮蔽了 vclcompat 全域的 `Date()` 函式，無害但與 BCB6 SysUtils 的 `Date()` 同名巧合 | 20260807 |
+
+TOTAL(本檔，含二輪 QUIRK 補掃): 10
 
 ### 【SECS/GEM 叢集】涵蓋：SECSGEM/uHGemClass.cpp / SECSGEM/uHGemHT9045.cpp / SECSGEM/uHGemEquipment.cpp(+.h) / SECSGEM/SecsWireCodec.cpp / SECSGEM/SecsSvEcRegistration.h
 
