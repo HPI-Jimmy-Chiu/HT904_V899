@@ -8640,6 +8640,28 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - 主迴圈複驗：邊界 2 檔、WC-16 absence、:1027/:1228/:7035/:7096
   四個 golden 行號逐字坐實、句法綠、0 NUL/0 U+FFFD。
 
+## 20260819 深夜 — FW-1 crosswalk recon＋FW-1c 接線（+7 tags）
+
+- **crosswalk recon**（e1c73cf）：實測綁定 296／發布 102／交集 76
+  （非 null 33，全在 site map＋startmode）。結構性發現：tagmap.js 與
+  bind.js 是兩套互不校驗的 tag 定義——nav.*/ui.language/app.exit/
+  temp.apply 十筆在 tagmap 有 dfm 對照，但 DOM 產生碼只發 data-cmd
+  從不發 data-tag，「結構性不存在於 registry」而非「還沒接」。
+  snap_dump.py 收編為常設探針。
+- **FW-1c 接線**（主迴圈自做，本顆）：+7 tags——sort.loading
+  （LastSet.SendCT[0]，e2e 實測 2280 真值）；sort.total（**繞
+  iTo3Unload[] 地雷**，沿 FW-1b 拍板的 e3 常數直取、只加 golden 會計
+  的已配置站，誠實 0）；lot.auto{1,2,3}.trayCount（pumping 閘——
+  runtime 累加器，「沒在跑」≠「沒載入」；遞增保真度先驗：asendic_Auto
+  5/5 ++ 點、25/25 refs 對 golden 一致——**recon 引用的 :545/:561
+  其實是 ART/TrayID 行，不是遞增點，主迴圈全域重掃才定位到真點**）；
+  lot.loaderLastBundleId/loadercarBundleId（cust 閘，SPIL_AMR 限定，
+  非 SPIL 機台誠實空字串）。
+- coverage 84→88（trayCount 三顆照 SimPump 規則刻意不計——pumping
+  是本程序自己開的 run 不是載入的資料源）；發布 102→109、live 43→47，
+  全數對帳。排除項照 recon：nowTrayId 三顆（golden 本身零寫入＝死
+  Label）、pct 六顆（同地雷＋依賴 sort.total 先接）。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8648,13 +8670,14 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   FW-W4（4999e2e）、FW-W5a（83b4251）、FW-FE1（57e3c03）、
   **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
-- **下一波**：uLotInfo 顯示側三波全清（A 39fn＋B 39fn＋C 兩巨頭）。
-  下一個標的依脈絡擇一：批 5 設定檢視表單（cConfiguration/cSetUp/
-  cSpeed/cStartCondition/HandlerSys 唯讀現值展示）；1203 HAL
-  MOTION_IO pimpl；cShowBinSelect Wave D；BinDisplay 卡 opaque
-  BinDisCtrl（elec\Component 方向查證待做）；FW-1 tag 接線波
-  （fLotInfo 顯示側現在有大片可發布的 lot/batch tag 來源）。
-  真機類指令依 §7 仍佇列。
+- **下一波**：依脈絡擇一——(a) FW-1 五大未知 family 偵察
+  （arm.*/cat.*/contact.*/speed.*/bin.* 合計 130 tags，crosswalk 完全
+  未深入的最大塊）；(b) 批 5 設定檢視表單；(c) 1203 HAL MOTION_IO
+  pimpl；(d) cShowBinSelect Wave D；(e) BinDisplay 的 opaque
+  BinDisCtrl（elec\Component 查證）。真機類指令依 §7 仍佇列。
+- **FW-1 備忘**：pct 六顆等 sort.total 站穩後接；recipe.current/
+  user.level 來源鏈未查（可能落在未翻的 cConfiguration）；
+  tagmap.js 的 data-cmd 十筆結構性缺口要跟 web 前端波一起解。
 - **之後**：1203 HAL MOTION_IO pimpl；FW-3 batch 3+ 表單；
   cShowBinSelect Wave D；台帳二輪 QUIRK 補掃。
 - **設計面**：無待答（10 分鐘閒置逾時＝預設值沿用）。

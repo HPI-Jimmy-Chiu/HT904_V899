@@ -485,7 +485,42 @@ std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap)
             const bool binLive = lastS && Prod.iTrayType[kSort[i].typeIdx] != tNotUse;
             stageInt(snap, kSort[i].tag, binLive, LastSet.BinCT[0][kSort[i].binIdx]);
         }
+
+        // --- FW-1c: sort.loading + sort.total --------------------------------
+        //AI(W906-FW1c) 20260819: sort.loading = LastSet.SendCT[0], the exact
+        // cell golden's fSortCT shows as the Loader count (cSortCT.cpp:214
+        // pnlLoader->Caption=LastSet.SendCT[0]) -- same blob, same lastS key as
+        // the station counters above.
+        stageInt(snap, "sort.loading", lastS, LastSet.SendCT[0]);
+
+        //AI(W906-FW1c) 20260819: sort.total. Golden's Sum (cSortCT.cpp:355-380)
+        // walks LastSet.BinCT[0][iTo3Unload[i]] -- the SAME uninitialized
+        // iTo3Unload[] mine the block comment above records (all-zero in the
+        // port, every station would collapse onto Auto1's cell). This tag
+        // therefore reuses FW-1b's already-ruled shape instead of the golden
+        // loop: sum the six e3-constant cells directly, and only over stations
+        // golden itself would count (iTrayType configured). Live whenever the
+        // blob is, like sort.loading; an all-unconfigured machine publishes an
+        // honest 0, mirroring golden's Sum staying 0 when nothing accumulates.
+        {
+            long long total = 0;
+            for (int i = 0; i < 6; ++i) {
+                if (Prod.iTrayType[kSort[i].typeIdx] != tNotUse)
+                    total += LastSet.BinCT[0][kSort[i].binIdx];
+            }
+            stageInt(snap, "sort.total", lastS, total);
+        }
     }
+
+    // --- FW-1c: SPIL_AMR bundle tray IDs -------------------------------------
+    //AI(W906-FW1c) 20260819: asBundleTrayID[] (cmydef.h:5684) is written only
+    // on fAGV->IsSPIL_AMR() customer stations (fLotInfo.cpp Wave C, golden
+    // uLotInfo.cpp FormShow S28-adjacent). On every other machine it stays the
+    // AnsiString default "" -- an honest empty, not a defect (RECON_FW1 §6#6).
+    // cust is the liveness proxy: the value only means anything once the
+    // customer identity is loaded.
+    stageStr(snap, "lot.loaderLastBundleId", cust, asBundleTrayID[ePortLoader]);
+    stageStr(snap, "lot.loadercarBundleId",  cust, asBundleTrayID[ePortEmpty]);
 
     // --- everything whose source is measurably dead --------------------------
     for (std::size_t i = 0; i < kUnloadedCount; ++i) {
@@ -588,6 +623,19 @@ std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap)
     stageInt(snap, "pump.task.testHead",  pumping, iTestHeadMotorTask);
     stageInt(snap, "pump.task.catchTray", pumping, CatchTrayTask);
 
+    // --- FW-1c: unloader tray counters ---------------------------------------
+    //AI(W906-FW1c) 20260819: iUnloaderTrayCountCal[] (cmydef.h:5216) is a
+    // RUNTIME accumulator -- incremented by the asendic_Auto spine as trays
+    // fill (increment fidelity re-verified this wave: 5/5 ++ sites, 25/25 refs
+    // match golden asendic_Auto.cpp), zeroed by acatchtray on tray exchange.
+    // Without a pump there is no run and the number has no meaning, so it
+    // gates on `pumping` like the task cursors above -- "not loaded" and
+    // "not running" are different questions, and this source answers the
+    // second (RECON_FW1 §6#3).
+    stageInt(snap, "lot.auto1.trayCount", pumping, iUnloaderTrayCountCal[0]);
+    stageInt(snap, "lot.auto2.trayCount", pumping, iUnloaderTrayCountCal[1]);
+    stageInt(snap, "lot.auto3.trayCount", pumping, iUnloaderTrayCountCal[2]);
+
     const std::size_t staged = snap.stagedTagCount();
     snap.commitPublish();
     return staged;
@@ -624,6 +672,15 @@ TagCoverage HandlerTagCoverage()
             if (lastS && Prod.iTrayType[kSortTypeIdx[i]] != tNotUse) c.live += 1;
         }
     }
+
+    //AI(W906-FW1c) 20260819: +2 lastS blob tags (sort.loading, sort.total)
+    // and +2 cust-keyed strings (lot.loaderLastBundleId/loadercarBundleId).
+    // The 3 lot.auto*.trayCount tags are DELIBERATELY NOT counted, same rule
+    // as the pump.* block below: they gate on `pumping`, a run this process
+    // started, not a machine data source it loaded -- counting them would
+    // flatter `live` without a new source being read.
+    c.total += 2 + 2;
+    c.live  += (lastS ? 2u : 0u) + (cust ? 2u : 0u);
 
     //AI(W906-SimPump) 20260813: the 18 clock/state/pump tags are DELIBERATELY NOT
     // counted here, and the reason is the same one this file exists for.
