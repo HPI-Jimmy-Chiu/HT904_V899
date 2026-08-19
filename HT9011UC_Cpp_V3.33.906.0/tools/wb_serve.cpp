@@ -41,6 +41,14 @@
 #include "WebBridge/CommandQueue.h"   // AI(W906-FW-W1) 20260819: cmd channel e2e (--allow-cmd)
 #include "WebAuth.h"                  // AI(W906-FW-W2) 20260819: auth.login verification core
 #include "cmydef.h"                   // AccessLevel, pwPath (golden globals the auth commands drive)
+// AI(W906-FW-W4) 20260819: first real command family -- counter.clear drives
+// the translated TfCounterClear::ClearCount core (test_counterclear_core
+// covers it) behind golden's own Security_new.def per-item authorization.
+#include "forms/fCounterClear.h"      // fCounterClear global + ClearCount (MachineType.h: eClearType)
+#include "forms/fMain.h"              // fMain->Clarn_Data (golden spbExeClick bracket)
+#include "cAuthority.h"               // GetCountClrAuth(), authCounterClr[]
+#include "cMyDB.h"                    // MyDBIProcess (recording sim in this tree)
+#include "LastSet.h"                  // LastSet (post-clear observable printed to the serve log)
 
 #include <vector>
 
@@ -198,9 +206,65 @@ int main(int argc, char** argv)
             } else if (wc.cmd == "auth.logout") {
                 AccessLevel = 0;                          // golden: back to Operator
                 server.CompleteCommand((unsigned long long)wc.id, true, std::string());
+            } else if (wc.cmd == "counter.clear") {
+                // AI(W906-FW-W4) 20260819: tag = counter family, mirroring one
+                // checkbox of golden spbExeClick (cCounterClear.cpp golden
+                // :394-450). Authorization is golden's OWN gate replayed: the
+                // FormShow rule "an unauthorized checkbox can never be checked"
+                // becomes a per-family refusal here, read from the same
+                // Security_new.def via GetCountClrAuth() (cAuthority.cpp
+                // golden :379-384). WRITE CAVEAT, stated not discovered:
+                // golden's own readers seed defaults back into that file --
+                // CheckFile when the FILE is missing, and CheckAndReadIniData
+                // (common.cpp:409) when a KEY is missing. Faithful, but it
+                // means this dispatch can write config\Security_new.def on a
+                // machine with a stale def; every e2e run MD5-checks the file
+                // stayed untouched.
+                // Deliberately NOT called (documented deviations):
+                //   * MyDBIProductionData -- golden runs it with the sqlite
+                //     production DB open; wb_serve never brings the DB layer
+                //     up, so its precondition does not exist here (and
+                //     MyDBExecSQL on a null dbReadWrite is a crash, not a row).
+                //   * the CC_KYEC_LEE re-auth branch -- already GATE CC3
+                //     (#if 0) in the translated core itself.
+                struct FamilyRow { const char* key; int authIdx; int ct1; int ct2; };
+                static const FamilyRow kFamilies[] = {
+                    // authIdx = funCounterClr[] order (cAuthority.cpp:203);
+                    // ct pairing = golden spbExeClick, incl. loadingCount's
+                    // ctIndexCount rider (golden :433 kevin 20130125).
+                    { "alarmData",      0, ctAlarmData,       -1           },
+                    { "testerCategory", 1, ctTesterCategory,  -1           },
+                    { "loadingCount",   3, ctLoadingCounts,   ctIndexCount },
+                    { "contactCurr",    4, ctContactCounts,   -1           },
+                    { "contactHis",     5, ctContactCountsHis,-1           },
+                    { "sortingCount",   6, ctTraySortCount,   -1           },
+                    { "timeData",       7, ctTimeData,        -1           },
+                };
+                const FamilyRow* row = 0;
+                for (size_t f = 0; f < sizeof(kFamilies)/sizeof(kFamilies[0]); ++f)
+                    if (wc.hasTag && wc.tag == kFamilies[f].key) { row = &kFamilies[f]; break; }
+                if (!row) {
+                    server.CompleteCommand((unsigned long long)wc.id, false,
+                                           "unknown counter family");
+                } else {
+                    GetCountClrAuth();                       // golden FormShow gate
+                    if (!authCounterClr[row->authIdx]) {
+                        server.CompleteCommand((unsigned long long)wc.id, false,
+                                               "not-authorized");
+                    } else {
+                        fMain->Clarn_Data(10, "Manual clear count");      // golden :421
+                        fCounterClear->ClearCount(row->ct1);
+                        if (row->ct2 >= 0) fCounterClear->ClearCount(row->ct2);
+                        fMain->Clarn_Data(10, "Manual clear count done"); // golden :448
+                        MyDBIProcess("Process", "Counter Clear has been executed!!"); // golden :449
+                        std::printf("counter.clear[%s] done (SendCT[0]=%d iIndexCount=%d)\n",
+                                    row->key, LastSet.SendCT[0], LastSet.iIndexCount);
+                        server.CompleteCommand((unsigned long long)wc.id, true, std::string());
+                    }
+                }
             } else {
                 server.CompleteCommand((unsigned long long)wc.id, false,
-                                       "unknown cmd (dispatch: sys.ping, auth.login, auth.logout)");
+                                       "unknown cmd (dispatch: sys.ping, auth.login, auth.logout, counter.clear)");
             }
         }
 

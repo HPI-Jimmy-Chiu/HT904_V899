@@ -127,7 +127,40 @@ def main():
     # A acquires -> B acquire fails("control-held") -> B ping fails
     # ("not-operator") -> A releases -> B acquires ok.
     ap.add_argument('--control', action='store_true')
+    # AI(W906-FW-W4) 20260819: counter.clear round trip -- loadingCount family
+    # accepted (default Security_new.def authorization is 1), bogus family
+    # refused. The post-clear state observable (SendCT[0]/iIndexCount == 0)
+    # is printed by wb_serve itself; the gate script greps the serve log.
+    ap.add_argument('--counter', action='store_true')
     args = ap.parse_args()
+
+    if args.counter:
+        deadline = time.monotonic() + args.seconds
+        sock, lo = ws_handshake(args.host, args.port, args.path, deadline)
+        print('ws handshake ok')
+
+        send_text(sock, json.dumps({'type': 'cmd', 'id': 400, 'cmd': 'control.acquire'}))
+        a = wait_ack(sock, lo, 400, deadline)
+        print('acquire: %s' % json.dumps(a))
+        if a is None or a.get('ok') is not True:
+            print('COUNTER FAIL: acquire expected ok:true'); return 8
+
+        send_text(sock, json.dumps({'type': 'cmd', 'id': 401, 'cmd': 'counter.clear',
+                                    'tag': 'loadingCount'}))
+        a = wait_ack(sock, b'', 401, deadline)
+        print('clear(loadingCount): %s' % json.dumps(a))
+        if a is None or a.get('ok') is not True:
+            print('COUNTER FAIL: loadingCount expected ok:true'); return 8
+
+        send_text(sock, json.dumps({'type': 'cmd', 'id': 402, 'cmd': 'counter.clear',
+                                    'tag': 'noSuchFamily'}))
+        a = wait_ack(sock, b'', 402, deadline)
+        print('clear(bogus): %s' % json.dumps(a))
+        if a is None or a.get('ok') is not False or 'unknown counter family' not in str(a.get('error', '')):
+            print('COUNTER FAIL: bogus family expected unknown-counter-family refusal'); return 8
+
+        print('COUNTER PROBE PASS: loadingCount cleared, bogus family refused')
+        return 0
 
     if args.control:
         deadline = time.monotonic() + args.seconds

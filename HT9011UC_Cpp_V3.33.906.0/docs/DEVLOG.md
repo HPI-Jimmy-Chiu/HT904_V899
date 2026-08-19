@@ -8466,16 +8466,49 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   含跳脫序列的檔案一律回掃 NUL。
 - 閒置逾時 10 分鐘為預設值（使用者未答＝沿用預設，可 config 改）。
 
+## 20260819 下午 III — FW-W4 首批真指令：counter.clear
+
+- 使用者未覆寫＝沿用預設候選：fCounterClear 的 ClearCount 族。
+  §7 邊界確認：清的是統計計數（LastSet 欄位＋ArmData 記憶體計數），
+  非運動控制／IO／互鎖，屬可做側。
+- wb_serve dispatch `counter.clear`（tag＝族名，7 族）：授權＝golden
+  自己的閘重放——GetCountClrAuth() 讀真 config\Security_new.def，
+  authCounterClr 索引照 funCounterClr 順序；FormShow「未授權的
+  checkbox 永遠勾不了」語意轉成 per-family 拒絕 "not-authorized"；
+  loadingCount 帶 ctIndexCount rider（golden spbExeClick 對映照抄，
+  含 Clarn_Data 前後括號與收尾 MyDBIProcess）。
+- **記錄在案的兩個省略**：MyDBIProductionData（golden 前提＝production
+  sqlite DB 已開；wb_serve 不起 DB 層，null dbReadWrite 下 MyDBExecSQL
+  是 crash 不是資料列）；CC_KYEC_LEE 再驗證分支（翻譯核心本來就
+  GATE CC3 #if 0）。
+- **落盤安全（第一版寫錯，已補正）**：不只 CheckFile 缺檔 seed——
+  CheckAndReadIniData（common.cpp:409）**缺 key 也會回寫預設值**進
+  config\Security_new.def（golden 自己的行為，忠實；舊設計筆記
+  DESIGN_DoDLRequest_test_seam.md 早記過這坑）。防護＝每次 e2e 前後
+  MD5 對帳，本波 OK（SECDEF_UNTOUCHED）。ClearCount 內的 BinCount.txt
+  DeleteFile 本來就是 GATE CC1（#if 0）。
+- **e2e**：--counter 劇本 PASS（loadingCount ok:true＋server log 坐實
+  SendCT[0]=0/iIndexCount=0；bogus 族拒 "unknown counter family"）；
+  default／auth／control／readonly 四舊劇本迴歸全 PASS。
+- write path 進度：FW-W1 通道✅ W2 auth✅ W3 token✅ **W4 首指令✅**；
+  下一波 FW-W5 modal 往返（golden 沒有的二次確認不准加——W5 做的是
+  golden 本來就有的 ShowMyMessage 類 modal 對瀏覽器的等價轉譯，設計
+  §4）。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
   Sec/BinSel 全系列、cShowBinSelect A/B/C、cBinSel A/B/C、台帳 552、
-  FW-W1（5e4b30d）、FW-W2（0553449）、**FW-W3（本顆）**。基線 142/5。
-- **下一波**：FW-W4 首批真指令（fCounterClear ClearCount 族候選＝
-  使用者未答時的預設；WebAuth 已就位、token 已就位，剩 dispatch 加
-  cmd＋權限位階對照 golden fCounterClear 的 AccessLevel 檢查＋e2e）。
-  **注意 §7 邊界**：ClearCount 動的是統計計數不是運動控制，屬可做側；
-  任何動真機類（motor/IO/互鎖）仍佇列。
-- **之後**：FW-W5 modal 往返；1203 HAL MOTION_IO pimpl；
-  FW-3 batch 3+ 表單；cShowBinSelect Wave D；台帳二輪 QUIRK 補掃。
+  FW-W1（5e4b30d）、FW-W2（0553449）、FW-W3（eb7c4f9）、
+  **FW-W4（本顆）**。基線 142/5。
+- **下一波**：FW-W5 modal 往返（設計 §4——golden 本來就有的
+  ShowMyMessage 類 modal 轉瀏覽器等價；**golden 沒有的二次確認
+  不准加**是使用者硬裁決）。起手式：盤點 golden ShowMyMessage／
+  MessageBox 家族的呼叫形狀與回傳語意，挑一個唯讀安全的先接。
+- **之後**：1203 HAL MOTION_IO pimpl；FW-3 batch 3+ 表單；
+  cShowBinSelect Wave D；台帳二輪 QUIRK 補掃；web 前端 login/token/
+  counter 面板接 UI（formview.js 側，等 write path 指令面穩定）。
 - **設計面**：無待答（10 分鐘閒置逾時＝預設值沿用）。
+- **counter.clear 授權備忘**：authCounterClr 索引=funCounterClr 順序；
+  Security_new.def 缺 key 會被 CheckAndReadIniData 回寫 seed
+  （golden 行為），e2e 必附 MD5 對帳。
