@@ -8534,18 +8534,39 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - 坑：cwd 漂移——連續波次後 shell 工作目錄在 repo 根，`./build_*`
   相對路徑撲空；工具呼叫一律絕對路徑。
 
+## 20260819 下午 VI — FW-W5b 問答型 modal（ShowErrorMessage 回流）
+
+- 設計 §4 的後半、write path 主線收官波。golden `ShowErrorMessage`
+  的操作員三擇（K_RETRY=1/K_SKIP=2/K_CLEAN_OUT=4 位遮罩）流進瀏覽器
+  再流回 C++ 回傳值。
+- 五件套：canary hook `W906_ShowErrorMessage_Hook`（回 0＝退回
+  SimReturn seam——既有測試在 hook 裝著時也不變行為；錄製先 hook 後）；
+  server `PostQuery`（{"type":"query",qid,code,kcode,options[]}，
+  遮罩就地解碼成按鈕名）；wb_serve **泵**（阻塞 tick 自己 drain 佇列，
+  非 matching 指令一律回 "modal-pending"＝VCL modality 的傳輸層等價；
+  無 timeout，golden 等到天荒地老照翻；泵期間 tag 凍結＝golden UI
+  thread 被擋的等價）；dispatch `sys.echoErrorModal` 探測面＋游離
+  `modal.answer` 回 "no query pending"；operator.html overlay 加
+  按鈕組（query 無本地關閉——golden 對話框不答不散）。
+- **e2e**：--query 劇本六斷言全過（遮罩解碼 [RETRY,SKIP]、未提供
+  選項拒、modality 拒 ping、SKIP 收、原指令 ack、游離答案拒），
+  server log 坐實 `ShowErrorMessage returned K=2`＝真回傳值回流；
+  七劇本全迴歸 PASS；Security_new.def MD5 前後一致；node --check 綠。
+- write path 主線：FW-W1 通道✅ W2 auth✅ W3 token✅ W4 首指令✅
+  W5a 顯示 modal✅ FE1 操作台✅ **W5b 問答 modal✅——設計 §6 波次表
+  全數落地**。真機類指令（motor/IO/互鎖）依 §7 仍佇列，等真機環境。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
   Sec/BinSel 全系列、cShowBinSelect A/B/C、cBinSel A/B/C、台帳 552、
   FW-W1（5e4b30d）、FW-W2（0553449）、FW-W3（eb7c4f9）、
-  FW-W4（4999e2e）、FW-W5a（83b4251）、**FW-FE1（本顆）**。
+  FW-W4（4999e2e）、FW-W5a（83b4251）、FW-FE1（57e3c03）、
+  **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
-- **下一波**：FW-W5b 問答型 modal（`ShowErrorMessage` 的
-  K_RETRY/K_SKIP/K_CLEAN_OUT 回流——需要「modal push＋
-  modal.answer cmd＋tick 側泵著等答案」三件；答案只收 token 持有者。
-  W906_ShowErrorMessage_SimReturn seam 已在，hook 形狀照 W5a 前例；
-  operator.html 的 overlay 屆時加按鈕組）。
+- **下一波**：write path 主線收官後回 FW-3 表單翻譯佇列（計畫書 §4
+  優先序，每波開工重評）或 1203 HAL MOTION_IO pimpl——依脈絡擇一。
+  真機類指令依 §7 仍佇列。
 - **之後**：1203 HAL MOTION_IO pimpl；FW-3 batch 3+ 表單；
   cShowBinSelect Wave D；台帳二輪 QUIRK 補掃。
 - **設計面**：無待答（10 分鐘閒置逾時＝預設值沿用）。

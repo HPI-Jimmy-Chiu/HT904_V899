@@ -57,6 +57,9 @@
 // here, every argument is passed explicitly at the call site.
 void ShowMyMessage(AnsiString S1, AnsiString S2, AnsiString S3, bool Ok, bool bServoOff);
 extern void (*W906_ShowMyMessage_Hook)(const char* S1, const char* S2);
+// AI(W906-FW-W5b) 20260819: the ANSWER-carrying dialog (same local-decl idiom).
+int  ShowErrorMessage(AnsiString Code, int KCode, int Pos, bool bDuplicateErr, AnsiString errPart);
+extern int (*W906_ShowErrorMessage_Hook)(const char* Code, int KCode, int Pos);
 
 #include <vector>
 
@@ -80,6 +83,55 @@ static void ForwardShowMyMessage(const char* s1, const char* s2)
     std::string text(s1 ? s1 : "");
     if (s2 && s2[0]) { text += " | "; text += s2; }
     g_modalServer->PostModal("Message", text);
+}
+
+// AI(W906-FW-W5b) 20260819: ShowErrorMessage -> browser query, ANSWER flows
+// back. Golden blocks its UI thread in a modal loop until the operator picks
+// RETRY / SKIP / CLEAN_OUT; the equivalent here is this pump: it blocks the
+// tick thread, drains the queue itself, and refuses every command except the
+// matching modal.answer with "modal-pending" -- the transport-level rendering
+// of VCL modality (everything behind the dialog is inert until it is
+// answered). No timeout, faithfully: golden waits forever. Tag publishing
+// also freezes while pumping, exactly as golden's blocked UI thread would.
+static webbridge::CommandQueue* g_pumpQueue = 0;
+static unsigned long long       g_nextQid  = 1;
+
+static int ForwardShowErrorMessage(const char* code, int kcode, int /*pos*/)
+{
+    if (!g_modalServer || !g_pumpQueue) return 0;   // unattended -> sim answer
+    const unsigned long long qid = g_nextQid++;
+    char qidStr[24];
+    std::snprintf(qidStr, sizeof(qidStr), "%llu", qid);
+    g_modalServer->PostQuery(qid, code ? code : "", kcode);
+    std::printf("query qid=%s code=%s kcode=%d -- waiting for modal.answer\n",
+                qidStr, code ? code : "", kcode);
+
+    std::vector<webbridge::WebCommand> local;
+    for (;;) {
+        ::Sleep(100);
+        local.clear();
+        g_pumpQueue->drain(local);
+        for (size_t i = 0; i < local.size(); ++i) {
+            const webbridge::WebCommand& wc = local[i];
+            if (wc.cmd == "modal.answer" && wc.hasTag && wc.tag == qidStr) {
+                const std::string ans = (wc.hasValue && wc.value.isString())
+                                        ? wc.value.asString() : std::string();
+                int k = 0;
+                if      (ans == "RETRY")     k = K_RETRY;
+                else if (ans == "SKIP")      k = K_SKIP;
+                else if (ans == "CLEAN_OUT") k = K_CLEAN_OUT;
+                if (k != 0 && (k & kcode) != 0) {
+                    g_modalServer->CompleteCommand((unsigned long long)wc.id, true, std::string());
+                    std::printf("query qid=%s answered %s (K=%d)\n", qidStr, ans.c_str(), k);
+                    return k;
+                }
+                g_modalServer->CompleteCommand((unsigned long long)wc.id, false,
+                                               "not an offered option");
+            } else {
+                g_modalServer->CompleteCommand((unsigned long long)wc.id, false, "modal-pending");
+            }
+        }
+    }
 }
 
 int main(int argc, char** argv)
@@ -182,6 +234,10 @@ int main(int argc, char** argv)
     // the linked machine code also reaches the browser as an info modal.
     g_modalServer = &server;
     W906_ShowMyMessage_Hook = &ForwardShowMyMessage;
+    // AI(W906-FW-W5b) 20260819: and every ShowErrorMessage becomes a browser
+    // query whose K answer flows back (pump above).
+    g_pumpQueue = &cmdQueue;
+    W906_ShowErrorMessage_Hook = &ForwardShowErrorMessage;
 
     std::printf("\n  http://127.0.0.1:%u/?src=ws     (live handler data)\n",
                 (unsigned)server.BoundPort());
@@ -220,6 +276,22 @@ int main(int argc, char** argv)
                                    ? AnsiString(wc.value.asString().c_str()) : AnsiString("");
                 ShowMyMessage(mtext, AnsiString(""), AnsiString(""), false, false);
                 server.CompleteCommand((unsigned long long)wc.id, true, std::string());
+            } else if (wc.cmd == "sys.echoErrorModal") {
+                // AI(W906-FW-W5b) 20260819: probe surface for the ANSWER path.
+                // tag = alarm code (sane charset), value = golden K button
+                // mask (default RETRY|SKIP). This call BLOCKS in the pump
+                // until a browser answers -- that is the point.
+                AnsiString qcode = wc.hasTag ? AnsiString(wc.tag.c_str()) : AnsiString("WAR0000");
+                int qmask = (wc.hasValue && wc.value.isNumber())
+                            ? (int)wc.value.asInt(K_RETRY | K_SKIP) : (K_RETRY | K_SKIP);
+                const int k = ShowErrorMessage(qcode, qmask, 0, false, AnsiString(""));
+                std::printf("sys.echoErrorModal: ShowErrorMessage returned K=%d\n", k);
+                server.CompleteCommand((unsigned long long)wc.id, true, std::string());
+            } else if (wc.cmd == "modal.answer") {
+                // AI(W906-FW-W5b) 20260819: an answer with no query pending --
+                // the pump consumes matching answers itself, so reaching the
+                // normal dispatch means nobody is asking.
+                server.CompleteCommand((unsigned long long)wc.id, false, "no query pending");
             } else if (wc.cmd == "auth.login") {
                 // AI(W906-FW-W2) 20260819: tag = user name, value = password
                 // (both strings). Verification = golden's password-book arm
@@ -300,7 +372,8 @@ int main(int argc, char** argv)
                 }
             } else {
                 server.CompleteCommand((unsigned long long)wc.id, false,
-                                       "unknown cmd (dispatch: sys.ping, sys.echoModal, auth.login, auth.logout, counter.clear)");
+                                       "unknown cmd (dispatch: sys.ping, sys.echoModal, sys.echoErrorModal, "
+                                       "auth.login, auth.logout, counter.clear, modal.answer)");
             }
         }
 
@@ -316,6 +389,8 @@ int main(int argc, char** argv)
 
     // AI(W906-FW-W5a) 20260819: unhook before the server object dies.
     W906_ShowMyMessage_Hook = 0;
+    W906_ShowErrorMessage_Hook = 0;   // AI(W906-FW-W5b) 20260819
+    g_pumpQueue = 0;
     g_modalServer = 0;
 
     server.Stop();

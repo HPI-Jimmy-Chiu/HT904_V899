@@ -82,6 +82,9 @@ void W906_ShowMyMessage_Reset()
 //  UNCONDITIONAL -- the return now comes from W906_ShowErrorMessage_SimReturn so
 //  a test can drive the K_SKIP / K_CLEAN_OUT arms.  See the seam block above.
 // ---------------------------------------------------------------------------
+// AI(W906-FW-W5b) 20260819: answer hook, null by default (see canary_support.h).
+int (*W906_ShowErrorMessage_Hook)(const char* Code, int KCode, int Pos) = 0;
+
 int ShowErrorMessage(AnsiString Code, int KCode, int Pos,
                      bool /*bDuplicateErr*/, AnsiString /*errPart*/)
 {
@@ -94,6 +97,13 @@ int ShowErrorMessage(AnsiString Code, int KCode, int Pos,
     W906_ShowErrorMessage_LastCode  = Code;
     W906_ShowErrorMessage_LastKCode = KCode;
     W906_ShowErrorMessage_Count++;
+    // AI(W906-FW-W5b) 20260819: record FIRST, then offer the question to a
+    // live operator; hook returning 0 (or no hook) keeps the sim answer.
+    if (W906_ShowErrorMessage_Hook)
+    {
+        int k = W906_ShowErrorMessage_Hook(Code.c_str(), KCode, Pos);
+        if (k != 0) return k;
+    }
     return W906_ShowErrorMessage_SimReturn;   // defaults to K_RETRY (unattended-sim posture, unchanged)
 }
 

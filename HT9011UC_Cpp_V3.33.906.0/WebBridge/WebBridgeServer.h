@@ -120,6 +120,7 @@ struct WebBridgeStats {
     unsigned long long patchesSent;
     unsigned long long alarmsSent;
     unsigned long long modalsSent;       // AI(W906-FW-W5a) 20260819
+    unsigned long long queriesSent;      // AI(W906-FW-W5b) 20260819
     unsigned long long acksSent;
     unsigned long long cmdAccepted;      // validated and enqueued
     unsigned long long cmdRejected;      // refused, ack ok:false sent
@@ -191,6 +192,17 @@ public:
     // contract as PostAlarm: UI thread, non-blocking.
     void PostModal(const std::string& title, const std::string& text,
                    const std::string& at = std::string());
+
+    // AI(W906-FW-W5b) 20260819: broadcast {"type":"query","qid":...,
+    // "code":...,"kcode":...,"options":[...],"at":...} -- the ANSWER-carrying
+    // dialog (golden ShowErrorMessage). `kcodeMask` is golden's K_* button
+    // mask (K_RETRY=1, K_SKIP=2, K_CLEAN_OUT=4); the frame carries both the
+    // raw mask and the decoded option names. The answer comes back as a
+    // normal `modal.answer` command through the CommandQueue (token holder
+    // only, like every non-auth command); this method itself is one-way and
+    // non-blocking -- the CALLER owns the waiting (wb_serve pumps the queue).
+    void PostQuery(unsigned long long qid, const std::string& code,
+                   int kcodeMask, const std::string& at = std::string());
 
     // Nudge the socket thread to re-check the snapshot now instead of at the
     // next poll tick. Cheap; safe to call from the UI timer after Publish().

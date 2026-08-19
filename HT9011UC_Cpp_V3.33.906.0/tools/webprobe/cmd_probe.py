@@ -136,7 +136,79 @@ def main():
     # the real ShowMyMessage, whose hook broadcasts {"type":"modal",...}; the
     # probe must see BOTH the ack and a modal frame carrying the echoed text.
     ap.add_argument('--modal', action='store_true')
+    # AI(W906-FW-W5b) 20260819: ANSWER-carrying path -- sys.echoErrorModal
+    # blocks in the wb_serve pump until modal.answer arrives. Sequence proves:
+    # query frame broadcast (options decode the K mask), un-offered answer
+    # refused, OTHER commands refused "modal-pending" while the query is up
+    # (VCL modality equivalent), offered answer accepted, original command
+    # acked, and a stray late answer refused "no query pending".
+    ap.add_argument('--query', action='store_true')
     args = ap.parse_args()
+
+    if args.query:
+        deadline = time.monotonic() + args.seconds
+        sock, lo = ws_handshake(args.host, args.port, args.path, deadline)
+        print('ws handshake ok')
+
+        send_text(sock, json.dumps({'type': 'cmd', 'id': 600, 'cmd': 'control.acquire'}))
+        a = wait_ack(sock, lo, 600, deadline)
+        print('acquire: %s' % json.dumps(a))
+        if a is None or a.get('ok') is not True:
+            print('QUERY FAIL: acquire expected ok:true'); return 10
+
+        send_text(sock, json.dumps({'type': 'cmd', 'id': 601, 'cmd': 'sys.echoErrorModal',
+                                    'tag': 'WAR0001', 'value': 3}))
+        qid = None
+        for op, payload in read_frames(sock, b'', deadline):
+            if op != 1:
+                continue
+            try:
+                j = json.loads(payload.decode('utf-8', 'replace'))
+            except ValueError:
+                continue
+            if j.get('type') == 'query':
+                print('query frame: %s' % json.dumps(j))
+                if j.get('options') != ['RETRY', 'SKIP']:
+                    print('QUERY FAIL: kcode 3 should decode to [RETRY, SKIP]'); return 10
+                qid = j.get('qid')
+                break
+        if qid is None:
+            print('QUERY FAIL: no query frame before deadline'); return 10
+
+        send_text(sock, json.dumps({'type': 'cmd', 'id': 602, 'cmd': 'modal.answer',
+                                    'tag': str(qid), 'value': 'CLEAN_OUT'}))
+        a = wait_ack(sock, b'', 602, deadline)
+        print('answer(unoffered): %s' % json.dumps(a))
+        if a is None or a.get('ok') is not False or 'not an offered option' not in str(a.get('error', '')):
+            print('QUERY FAIL: CLEAN_OUT (not in mask 3) expected refusal'); return 10
+
+        send_text(sock, json.dumps({'type': 'cmd', 'id': 603, 'cmd': 'sys.ping'}))
+        a = wait_ack(sock, b'', 603, deadline)
+        print('ping(during modal): %s' % json.dumps(a))
+        if a is None or a.get('ok') is not False or 'modal-pending' not in str(a.get('error', '')):
+            print('QUERY FAIL: ping during modal expected modal-pending'); return 10
+
+        send_text(sock, json.dumps({'type': 'cmd', 'id': 604, 'cmd': 'modal.answer',
+                                    'tag': str(qid), 'value': 'SKIP'}))
+        a = wait_ack(sock, b'', 604, deadline)
+        print('answer(SKIP): %s' % json.dumps(a))
+        if a is None or a.get('ok') is not True:
+            print('QUERY FAIL: SKIP expected ok:true'); return 10
+
+        a = wait_ack(sock, b'', 601, deadline)
+        print('ack(echoErrorModal): %s' % json.dumps(a))
+        if a is None or a.get('ok') is not True:
+            print('QUERY FAIL: original command expected ok:true after answer'); return 10
+
+        send_text(sock, json.dumps({'type': 'cmd', 'id': 605, 'cmd': 'modal.answer',
+                                    'tag': str(qid), 'value': 'SKIP'}))
+        a = wait_ack(sock, b'', 605, deadline)
+        print('answer(stray): %s' % json.dumps(a))
+        if a is None or a.get('ok') is not False or 'no query pending' not in str(a.get('error', '')):
+            print('QUERY FAIL: stray late answer expected no-query-pending'); return 10
+
+        print('QUERY PROBE PASS: mask decode, refusal, modality, answer, completion, stray all proven')
+        return 0
 
     if args.modal:
         deadline = time.monotonic() + args.seconds

@@ -119,6 +119,14 @@ extern AnsiString W906_ShowErrorMessage_LastCode;   // last `Code` argument seen
 extern int        W906_ShowErrorMessage_LastKCode;  // last `KCode` mask seen (which buttons golden offered); 0 when never called
 extern int        W906_ShowErrorMessage_Count;      // call count -- distinguishes "not called" from "called and returned K_RETRY"
 void W906_ShowErrorMessage_Reset();                 // restore SimReturn to K_RETRY, clear capture + count
+//  AI(W906-FW-W5b) 20260819: optional ANSWER hook -- lets a host process
+//  (today: tools/wb_serve) put the K_RETRY/K_SKIP/K_CLEAN_OUT question to a
+//  real operator (browser modal) and return the chosen K code.  Returning 0
+//  means "no answer taken" and falls back to W906_ShowErrorMessage_SimReturn,
+//  so every existing test keeps its settable-seam behaviour even with a hook
+//  installed.  Raw char* + ints: zero new includes (same rule as the
+//  ShowMyMessage hook above).  Null (the default) = unattended sim unchanged.
+extern int (*W906_ShowErrorMessage_Hook)(const char* Code, int KCode, int Pos);
 //  ShowMyMessage seam
 extern AnsiString W906_ShowMyMessage_LastS1;        // last `S1` argument seen; "" when never called
 extern int        W906_ShowMyMessage_Count;         // call count

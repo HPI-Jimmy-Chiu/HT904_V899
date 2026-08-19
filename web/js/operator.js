@@ -67,6 +67,31 @@ function showModal(msg) {
   $("modal-title").textContent = String(msg.title || "Message");
   $("modal-text").textContent = String(msg.text || "");
   $("modal-at").textContent = String(msg.at || "");
+  $("modal-ok").style.display = "";
+  $("modal-answers").innerHTML = "";
+  $("overlay").style.display = "flex";
+}
+
+/* AI(W906-FW-W5b) 20260819: answer-carrying query (golden ShowErrorMessage).
+   The offered buttons are exactly the server-decoded K mask options; each
+   sends modal.answer with the query's qid. No local dismiss: golden's dialog
+   stays up until an offered answer is taken. */
+function showQuery(msg) {
+  $("modal-title").textContent = "Alarm " + String(msg.code || "");
+  $("modal-text").textContent = "Operator decision required (kcode " + String(msg.kcode) + ")";
+  $("modal-at").textContent = String(msg.at || "");
+  $("modal-ok").style.display = "none";
+  var row = $("modal-answers");
+  row.innerHTML = "";
+  (msg.options || []).forEach(function (opt) {
+    var b = document.createElement("button");
+    b.textContent = opt;
+    b.addEventListener("click", function () {
+      send("modal.answer", String(msg.qid), opt, "modal.answer[" + opt + "]");
+      $("overlay").style.display = "none";
+    });
+    row.appendChild(b);
+  });
   $("overlay").style.display = "flex";
 }
 
@@ -104,6 +129,11 @@ function onMessage(ev) {
     case "modal":
       logLine("modal", "MODAL: " + String(msg.text || ""));
       showModal(msg);
+      break;
+    case "query":
+      logLine("modal", "QUERY " + String(msg.code || "") + " qid=" + String(msg.qid) +
+                       " options=" + JSON.stringify(msg.options || []));
+      showQuery(msg);
       break;
     case "alarm":
       logLine("err", "ALARM " + String(msg.code || "") + ": " + String(msg.text || ""));
