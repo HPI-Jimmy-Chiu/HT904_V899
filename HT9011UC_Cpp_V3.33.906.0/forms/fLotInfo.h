@@ -216,6 +216,223 @@
 //  already used the bare/this-> spelling explicitly, translated verbatim.
 // =============================================================================
 
+// =============================================================================
+//  AI(W906-FW3-LotInfo-WB) 20260819: uLotInfo displayside Wave B.
+//
+//  Golden ref: same file as Wave A above. Source recon: docs/
+//  RECON_uLotInfo_displayside.md Tier 2 (39 methods, 993 golden lines, section
+//  5.2) -- Tier 2 had ONLY been keyword-scanned by that recon, never read
+//  line-by-line. Every one of the 39 was re-read in full this wave (python
+//  cp950 decode of the same golden files) BEFORE translating, per the task
+//  brief's mandatory step. That reread found several dependencies missing
+//  tree-wide that recon's keyword scan could not have caught (a scan only
+//  flags known bad-word patterns, not "this call target doesn't exist") --
+//  see GATE REGISTER below, especially WB-2/4/5/7/9/10 (InputBarcodeNumber has
+//  ZERO port anywhere in this tree -- `grep -rn InputBarcodeNumber` outside
+//  golden/docs, 20260819, 0 hits -- despite being the single most common
+//  dependency across this Tier's KeyUp/MouseUp customer-code branches) and
+//  WB-1 (TImage/TCanvas have zero port, matching an already-established
+//  precedent in EJ1N/MyOmronPanel.h:93 and VacuumUnit/MyVacuumPanel.h:58).
+//
+//  WAVE SCOPE -- the 39 Tier 2 methods (golden span, this file's status)
+//  --------------------------------------------------------------------------
+//    TfLotInfo (ctor)               golden :157-299  (143L) -- REAL scalars/
+//                                    Timer/TabSheet/StringList wiring, WB-19
+//                                    gates the named-widget-array wiring block
+//    FormDestroy                    golden :301-314  (14L)  -- REAL (RECON
+//                                    MISS: recon's row #2 one-line summary
+//                                    "sets bShow=false" is FormClose's body
+//                                    copy-pasted onto FormDestroy by mistake;
+//                                    the real body is TimerERMS/StringList
+//                                    cleanup + exception log + off-time log)
+//    FormClose                      golden :1235-1238 (4L)   -- REAL
+//    pgLotinfoChange                golden :7221-7266 (46L)  -- REAL
+//    LoadRTCFullViewImg             golden :5366-5448 (83L)  -- WB-1, full gate
+//    edDeviceNameMouseDown          golden :7193-7214 (22L)  -- WB-2, full gate
+//    CutTempToEdit                  golden :5225-5244 (20L)  -- REAL, no gate
+//    btChangeFileClick              golden :10213-10237(25L) -- WB-3, full gate
+//    edtSysOperatorIDKeyUp          golden :10287-10312(26L) -- REAL, WB-4 gates 1 branch
+//    edtSysLotIDKeyUp               golden :10314-10344(31L) -- REAL, WB-5 gates 1 branch
+//    spOCRChangeFileClick           golden :8458-8474 (17L)  -- REAL, no gate
+//    Timer3Timer                    golden :8476-8485 (10L)  -- REAL early-return, WB-6 gates rest
+//    edDeviceNameKeyDown            golden :10457-10473(17L) -- REAL 2nd branch, WB-7 gates 1st
+//    SetCheckCodeByLot              golden :12311-12324(14L) -- REAL, no gate
+//    edTempKeyPress                 golden :12032-12042(11L) -- REAL, no gate
+//    edTempKeyDown                  golden :12053-12063(11L) -- REAL, no gate
+//    btnSaveDataClick               golden :12285-12295(11L) -- REAL, no gate
+//    edPageMouseDown                golden :11534-11541 (8L) -- REAL early-return, WB-8 gates rest
+//    edtSysLotIDKeyDown             golden :12065-12080(16L) -- REAL, no gate
+//    edtSysOperatorIDKeyDown        golden :12082-12097(16L) -- REAL, no gate
+//    edtSysOperatorIDMouseUp        golden :11755-11794(40L) -- REAL CC_Murata branch only, WB-9 gates rest
+//    edtSysLotIDMouseUp             golden :11796-11831(36L) -- REAL CC_Murata branch only, WB-10 gates rest
+//    edQAModeMouseDown              golden :11528-11532 (5L) -- WB-11, full gate
+//    edtSysOperatorIDKeyPress       golden :11935-11963(29L) -- REAL (SetFocus() dropped, DEVIATION)
+//    cbRunModeKeyPress              golden :11965-11988(24L) -- REAL CC_Murata branch, WB-12 gates JCET check
+//    cbRunModeDropDown              golden :15928-15951(24L) -- WB-13, full gate
+//    GetFTP_SettingN06              golden :15449-15460(12L) -- REAL, no gate
+//    CheckNoRetestBinFlag           golden :14608-14630(23L) -- WB-14, full gate (returns true)
+//    edStationNumMouseDown          golden :14060-14064 (5L) -- WB-15, full gate
+//    ATC_OFFLINE_FormComInit        golden :14969-14992(24L) -- REAL, no gate
+//    ScanRefrigerantSystem          golden :14941-14967(27L) -- REAL early-return, WB-16 gates rest
+//    RefreshRefrigerantAllStatus    golden :14994-15078(85L) -- REAL early-return, WB-17 gates rest
+//    leRunCardNumberMouseDown       golden :15780-15784 (5L) -- REAL, no gate
+//    RefreshAMR                     golden :15816-15844(29L) -- REAL, no gate (was a no-op stub, now real)
+//    ShowAMRCategoryBin             golden :15846-15881(36L) -- REAL, no gate
+//    cbFirstTrayCheckOnUnloaderMouseDown golden :16029-16034(6L) -- REAL, no gate
+//    RefreshOtherTool               golden :16047-16072(26L) -- REAL, no gate
+//    labNowTrayCountClick           golden :16186-16190 (5L) -- REAL, no gate
+//    Timer4Timer                    golden :16487-16493 (7L) -- REAL x2 calls, WB-18 gates 1 call
+//
+//  GATE REGISTER
+//  --------------------------------------------------------------------------
+//  (WB-1) LoadRTCFullViewImg, golden :5368-5447 -- every line dereferences
+//      imgRTCFullView1/2/3/4 (golden TImage*) via ->Visible or
+//      ->Picture->LoadFromFile(...). `class TImage`/`class TCanvas` have ZERO
+//      port anywhere in this tree -- an ALREADY-ESTABLISHED finding cited
+//      verbatim by two sibling forms (EJ1N/MyOmronPanel.h:93,
+//      VacuumUnit/MyVacuumPanel.h:58), re-confirmed this wave
+//      (`grep -rn "class TImage\b"` tree-wide, 20260819 -- 0 hits outside
+//      those two comments). The whole function reduces to a no-op.
+//  (WB-2) edDeviceNameMouseDown, golden :7196-7213 -- both branches' only
+//      payload is `Clipboard()->Clear()` and/or
+//      `InputBarcodeNumber("Input Device Name:")`. `Clipboard()` has zero
+//      port anywhere in this tree (`grep -rn "Clipboard()"`, 20260819, 0 hits
+//      outside golden) and `InputBarcodeNumber` likewise (see banner top).
+//      `TMouseButton`/mbLeft/mbRight are also portless (fContactCT.h:78-87
+//      established this already) so the Button parameter is dropped entirely
+//      per the DEVIATION idiom -- nothing surviving translation ever reads it.
+//  (WB-3) btChangeFileClick, golden :10215-10236 -- every branch calls one of
+//      `fBarCode->btBarcodeChangeFileDisConnect/btBarcodeChangeFileConnect
+//      ->Click()`, `->InitialBarcodeScanChangeFile()`,
+//      `->TimerBarcodeChangeFile->Enabled=true`. TfBarCode_Shim
+//      (aHotPlateSubstrate.h:918-1025, re-read in full this wave) carries
+//      none of these four members (it does carry some others, e.g. the
+//      already-gated JCETUseMakeWhite2DIDList() target from WA-7 -- fBarCode
+//      is a PARTIAL shim, not absent, but none of THIS function's targets are
+//      among the members it has). Whole body gated.
+//  (WB-4) edtSysOperatorIDKeyUp, golden :10300-10303 -- the
+//      `IniConfig.bO23_InputLotIDByBarcode` branch's only statement is
+//      `edtSysOperatorID->Text=InputBarcodeNumber("Input OP ID:","UserName");`.
+//      InputBarcodeNumber has no port (banner top). The CC_Murata early
+//      return, the `bLotFirstKeyIn` flag set, and the final else-if's
+//      `edtSysOperatorID->Text="";` are all untouched by this and stay REAL.
+//  (WB-5) edtSysLotIDKeyUp, golden :10322-10328 -- the
+//      `CUSTOMER_CODE==CC_PTI || bO23_InputLotIDByBarcode` branch calls
+//      `SetLotID("")` (real no-op stub, fine) then
+//      `InputBarcodeNumber("Input Lot ID:","LotID")` (no port) then
+//      `SetLotID(sBarcodeID)`. Gated as one block since the middle call is
+//      unavailable; the CC_Murata return, the TFME/VTEST/SPIL branch's plain
+//      `edtSysLotID->Text="";`, and the trailing `bLotFirstKeyIn` set stay REAL.
+//  (WB-6) Timer3Timer, golden :8482-8484 -- `fOCR->OCRChangeFile()`. TfOCR
+//      (forms/fOCR.h:30-35, added by an earlier wave for
+//      `ChangeLightValue(int,int)` only) does not declare `OCRChangeFile()`.
+//      The `InitialOK==false` early return stays REAL; `ret`/the
+//      `Timer3->Enabled=false` write both live inside the gate since `ret`'s
+//      only origin is the gated call.
+//  (WB-7) edDeviceNameKeyDown, golden :10461-10465 -- the first branch's
+//      payload is `Clipboard()->Clear()` + `InputBarcodeNumber(...)`, same
+//      portless pair as WB-2. The second branch (`CC_AMD_M && bDeviceName_OK`)
+//      touches only local bools/Text="" and stays REAL.
+//  (WB-8) edPageMouseDown, golden :11540 -- the non-Murata branch's entire
+//      payload is `fQwertyKey->ShowQwertyKey(...)`. fQwertyKey has no port
+//      anywhere in this tree -- the SAME established tree-wide gate Wave A's
+//      WA-8 cites (labLotIDMouseDown/edtASECL_LotIDClick), re-verified again
+//      this wave. The `CUSTOMER_CODE==CC_Murata return;` guard stays REAL.
+//  (WB-9) edtSysOperatorIDMouseUp, golden :11762-11793 -- EVERY branch after
+//      the CC_Murata check ultimately calls either InputBarcodeNumber (2
+//      branches) or fQwertyKey->ShowQwertyKey (1 branch), both portless. The
+//      `TEdit *TempEdit=(TEdit*)Sender;`/`TempEdit==edtCusLotID` dispatch
+//      inside the first of those branches is therefore never reached by any
+//      surviving code either, so `Sender` needs no parameter (nothing real
+//      reads it) -- same "keep only what's read" rule as Wave A's Key-param
+//      DEVIATION. Only `if(CUSTOMER_CODE==CC_Murata){ return; }` is REAL;
+//      everything else is one gated block.
+//  (WB-10) edtSysLotIDMouseUp, golden :11799-11829 -- same shape as WB-9: the
+//      CC_Murata branch is golden's own empty `{}` (translated as a real
+//      no-op), every other branch (CC_PTI/bO23, CC_TFME_CHINA, bSPILFunction,
+//      CC_SCC, bVTESTFunction) calls InputBarcodeNumber and/or
+//      fQwertyKey->ShowQwertyKey. One gated block for all of them.
+//  (WB-11) edQAModeMouseDown, golden :11531 -- the entire one-line body is
+//      `fQwertyKey->ShowQwertyKey(...)`. Same established gate as WB-8/WA-8.
+//      Reduces to a no-op.
+//  (WB-12) cbRunModeKeyPress, golden :11984-11987 -- the trailing
+//      `if(fBarCode->JCETUseMakeWhite2DIDList()==true) cbRunMode->Text="";`
+//      is the IDENTICAL golden call Wave A's WA-7 already gates (reused
+//      verbatim, re-verified 20260819: still 0 such member on TfBarCode_Shim).
+//      The preceding CC_Murata branch (sbSECSLotStart/End Click()/Down and a
+//      SubString trim) has no such dependency and stays REAL --
+//      `TSpeedButton::Click()` is an accepted real offline no-op per the
+//      established precedent this file's own btClearBarcodeList member comment
+//      documents (PT-W3-integrate ADD, above).
+//  (WB-13) cbRunModeDropDown, golden :15930-15950 -- the ENTIRE body is inside
+//      `if(CUSTOMER_CODE==CC_JCET && fBarCode->JCETUseMakeWhite2DIDList()==true)`
+//      -- the guard itself cannot be evaluated without the WA-7-gated member,
+//      so unlike cbRunModeKeyPress there is no independent real branch to keep.
+//  (WB-14) CheckNoRetestBinFlag, golden :14613-14627 -- calls
+//      `fMesSystem->NeedNoRTBinID(i)` 2x. `fMesSystem` has NO PORT AT ALL in
+//      this tree -- csystem.cpp:9857-9861's own banner names it explicitly
+//      among "~40 objects that have no port at all" (re-verified 20260819:
+//      `grep -rn "class TfMesSystem\|TfMesSystem *fMesSystem"`, 0 hits). It
+//      also calls `ShowErrorMessage(sMES1713[i], K_RETRY|K_SKIP, ...)` -- a
+//      real alarm-raise, same SAFETY-classified category as Wave A's WA-6 /
+//      forms/fTemperFrom.h GATE (T1). Gated body returns `true` (the
+//      conservative "no violation detected" default, matching golden's own
+//      initial `flag=true`).
+//  (WB-15) edStationNumMouseDown, golden :14063 -- one-line body, same
+//      established fQwertyKey gate as WB-8/WB-11/WA-8.
+//  (WB-16) ScanRefrigerantSystem, golden :14946-14965 -- every remaining line
+//      after the early return touches `ATC_InterfaceForm->IsConnect()` /
+//      `->bReadRefrigerantMode_Send` / `->bReadRefrigerantMode_Recv` /
+//      `->Get_ATCRefrigeratorAllStatus(...)`, plus a bare `iATCOnLine` global
+//      not yet ported. `ATC_InterfaceForm` is `TATC_InterfaceFormShim*`
+//      (acarry_shims.h:109-115) which carries EXACTLY ONE member
+//      (`iATC_MODE_TYPE`) -- the SAME finding Wave A's WA-6 made for
+//      CheckAirMachineStatus, re-confirmed this wave. `if(AirStream_Select==0)
+//      return;` stays REAL.
+//  (WB-17) RefreshRefrigerantAllStatus, golden :15000-15077 -- both the `if`
+//      and `else` arms reference `ATC_InterfaceForm->
+//      bReadRefrigerantMode_AllStatus` / `->dATC_RefrigeratorAllStatus[][]` /
+//      `->iATC_RefrigeratorUserMode[][]` / `->dATC_RefrigerantMachineHighLimit`
+//      / `->dATC_RefrigerantMachineLowLimit` -- none of which exist on the
+//      1-member shim (same WB-16/WA-6 finding). `if(AirStream_Select==0)
+//      return;` stays REAL; nothing else in this 85-line function survives.
+//  (WB-18) Timer4Timer, golden :16490 -- `CheckAMRAction();`. That method is
+//      RECON item #206, classified (b) write-path, not one of this wave's 39
+//      Tier-2 methods -- per the task's dependency rule (missing sibling
+//      method -> gate, do not invent a shim) this one call is gated.
+//      `CheckActionFlag();` and `ReflashInfo();` (both real Tier-1 methods
+//      from Wave A) stay REAL and unconditional, matching golden's ordering.
+//  (WB-19) TfLotInfo ctor, golden :172-269 -- the block that wires
+//      ESD_DataPtr[18]/ESD_DECAY_DATA_Ptr[36] to 18+36 individually
+//      `__published` TPanel members (pl_ESDProx*/pl_PositiveDecay*/
+//      pl_NegativeDecay*), re-wires ATCChPal[32]/ATCReferPtr[32]/ATCPtr[32]
+//      (already populated by Wave A's ShowATCTempPanel with generic
+//      `new TPanel()` per slot) to 96 individually-named
+//      pan_ATCTempHeadNN/pl_ATCRefHeadNN/pl_ATCTempHeadNN widgets, re-wires
+//      edSocket[4][8] (already populated by Wave A's ShowSocketID) to 32
+//      individually-named edtSocketAa..edtSocketDh, and populates the
+//      file-scope SocketSiteCH_Display[][]/SocketLabCol_Display[]/
+//      SocketLabRow_Display[] statics (also already populated by Wave A) from
+//      32+8+4 more individually-named palAa..palDh/lbSocketIDColA-H/
+//      lbSocketIDRowA-D widgets. None of these ~190 individually-named
+//      widgets is EVER read by name anywhere in this wave's or Wave A's
+//      scope -- only the array slot is read (verified: every consumer in
+//      both waves indexes ATCChPal[i]/ATCPtr[i]/ATCReferPtr[i]/edSocket[r][c]/
+//      SocketSiteCH_Display[r][c], never a bare widget name), and
+//      TPanel/TEdit/TLabel here expose no per-instance identity beyond
+//      Caption/Visible/Enabled/Color, none of which golden's ctor sets
+//      differently per named widget in this block. Re-declaring ~190
+//      passthrough pointers would reproduce EXACTLY the same array contents
+//      (one distinct default-constructed widget per slot) Wave A's generic
+//      `new TPanel()` loops already produce, at the cost of ~190 lines of
+//      pure unused-identity boilerplate -- the same "don't add unused
+//      surface" call this file's own WA-4/WA-5/WA-6 gates and
+//      forms/fTemperFrom.h's banner already make. Gated as one block; every
+//      OTHER line in the ctor (scalar/flag inits, TStringList/Timer/TabSheet
+//      wiring, the 5 ZeroMemory'd arrays, the small ATC_WinWay/
+//      ATCPtrWinWay/pnlWinwayPVCH1-4 wiring) is REAL.
+// =============================================================================
+
 // ===========================================================================
 //  AI(W906-FW3-LotInfo-WA) 20260819 -- Wave A composed widget stand-ins.
 //  vclcompat's stock TPanel/TSpeedButton/TPageControl carry no raw pixel
@@ -682,6 +899,181 @@ public:
     // it in uLotInfo.h:1264 (different from these two).
     virtual void InitialLoaderTask(int iPos);          // golden uLotInfo.cpp:16259-16262
     virtual void InitialLDLevelTask(int iPos);         // golden uLotInfo.cpp:16264-16267
+
+    // =======================================================================
+    //  AI(W906-FW3-LotInfo-WB) 20260819: Wave B ADD -- see file banner above
+    //  for WAVE SCOPE / GATE REGISTER. Grouped per Tier-2 method, each member
+    //  cites the golden uLotInfo.h line it mirrors.
+    // =======================================================================
+
+    // -- TfLotInfo ctor (golden :157-299) -- WB-19 gates the named-widget-----
+    // array wiring block; these members back the REAL portion only.
+    bool bShow;                                    // golden uLotInfo.h:1286
+    TLabel *lblOCR_LotID;                           // golden uLotInfo.h:283
+    int iLotRead, iLotStart, iLotEnd;               // golden uLotInfo.h:1306-1308
+    bool bStartChamberBoost;                        // golden uLotInfo.h:1347
+    int  iXMLOnLineStatus;                          // golden uLotInfo.h:1352
+    bool bRTCChangeFileFinish;                      // golden uLotInfo.h:1289
+    AnsiString sVTestInternalLot;                   // golden uLotInfo.h:1382
+    TStringList *slASECLTestInfor;                  // golden uLotInfo.h:1331 (TStringList*)
+    TfLotInfoTimer *TimerERMS;                      // golden uLotInfo.h:174 (TTimer*) -- ->Enabled only, reuses the WA TfLotInfoTimer shape
+    TTabSheet *tsChamberBoost;                      // golden uLotInfo.h:422
+    TButton *btnCancelTestPause;                    // golden uLotInfo.h:435 -- ->Enabled only
+    TButton *btnESCFunction;                        // golden uLotInfo.h:434 -- ->Enabled only (also written by cprod.cpp:2978, currently unreachable there -- see WB banner)
+    TTabSheet *ts_FTPAutomation;                    // golden uLotInfo.h:437 -- ->Caption only
+    TTabSheet *ATC_WinWay;                          // golden uLotInfo.h:555 -- ->TabVisible only
+    TPanel *ATCPtrWinWay[4];                        // golden uLotInfo.h:1260
+    TPanel *pnlWinwayPVCH1, *pnlWinwayPVCH2, *pnlWinwayPVCH3, *pnlWinwayPVCH4;  // golden uLotInfo.h:564-567
+    bool bNeedToDeleteFile;                         // golden uLotInfo.h:1259
+    int  iWaitRtcDeleteTask;                        // golden uLotInfo.h:1283
+    bool bEventLogAlarm;                            // golden uLotInfo.h:1325
+    double fTempUserOffset[tcTotalCount];           // golden uLotInfo.h:1334
+    double fContactHeight[25];                      // golden uLotInfo.h:1335 -- also read/written by pgLotinfoChange/edDeviceNameMouseDown below
+    double fTempATCOffset[tcTotalCount];            // golden uLotInfo.h:1336
+    int iShuttleMode[2];                            // golden uLotInfo.h:1337
+    bool bART[3];                                   // golden uLotInfo.h:1339
+    int iART;                                       // golden uLotInfo.h:1340
+    int iIndexHeatingMode;                          // golden uLotInfo.h:1341
+    int iProduceTimeCT;                             // golden uLotInfo.h:1261
+
+    // -- pgLotinfoChange (golden :7221-7266) -- 20 TCheckBox widgets ---------
+    TCheckBox *chkTempOffset, *chkContactHigh, *chkContactForce, *chkContactMode;
+    TCheckBox *chkHotPlate, *chkLoadUnload, *chkSpeedSetting, *chkShuttleMode;
+    TCheckBox *chkTestMode, *chkBinasgn, *chkBinasgnOff, *checkbAutoClean;
+    TCheckBox *chkAutoCleanContactHeight, *cbBottom2DOffset, *chkART, *chkART_RTCount;
+    TCheckBox *chkIndexHeatingMode, *chkStopYield, *chkConsecutiveFailure, *chkCleanCount;
+    virtual void pgLotinfoChange();                  // golden uLotInfo.cpp:7221-7266
+
+    // -- FormDestroy / FormClose (golden :301-314 / :1235-1238) -- zero new --
+    // members beyond bShow/slASECLTestInfor/TimerERMS (all declared above).
+    virtual void FormDestroy();                      // golden uLotInfo.cpp:301-314 (Sender dropped, unused)
+    virtual void FormClose();                        // golden uLotInfo.cpp:1235-1238 (params dropped, unused)
+
+    // -- LoadRTCFullViewImg (golden :5366-5448) -- WB-1, whole body gated ----
+    // (TImage/TCanvas have no port; no widgets declared, see GATE REGISTER).
+    virtual void LoadRTCFullViewImg(bool bShowImage);
+
+    // -- edDeviceNameMouseDown (golden :7193-7214) -- WB-2, whole body gated -
+    // edDeviceName already exists (cbbDeviceNameChange, above).
+    virtual void edDeviceNameMouseDown();             // golden uLotInfo.cpp:7193-7214 (Button/Sender dropped, see WB-2)
+
+    // -- CutTempToEdit (golden :5225-5244) -- zero new members (edTemp exists) --
+    virtual void CutTempToEdit(AnsiString asString);  // golden uLotInfo.cpp:5225-5244
+
+    // -- btChangeFileClick (golden :10213-10237) -- WB-3, whole body gated --
+    virtual void btChangeFileClick();                 // golden uLotInfo.cpp:10213-10237 (Sender dropped, unused)
+
+    // -- edtSysOperatorIDKeyUp / edtSysLotIDKeyUp (golden :10287-10312 / :10314-10344) --
+    // WB-4/WB-5 gate the InputBarcodeNumber branch of each; edtSysOperatorID/
+    // edtSysLotID already exist.
+    virtual void edtSysOperatorIDKeyUp();             // golden uLotInfo.cpp:10287-10312 (params dropped, unused)
+    virtual void edtSysLotIDKeyUp();                  // golden uLotInfo.cpp:10314-10344 (params dropped, unused)
+
+    // -- spOCRChangeFileClick / Timer3Timer (golden :8458-8474 / :8476-8485) --
+    TLabel *lbOCRUseFile;                             // golden uLotInfo.h:188
+    TfLotInfoTimer *Timer3;                           // golden uLotInfo.h:79 (TTimer*) -- ->Enabled only
+    TSpeedButton *spOCRChangeFile;                    // golden uLotInfo.h -- ->Down only
+    virtual void spOCRChangeFileClick();              // golden uLotInfo.cpp:8458-8474 (Sender dropped, unused)
+    virtual void Timer3Timer();                       // golden uLotInfo.cpp:8476-8485 -- WB-6 gates fOCR->OCRChangeFile()
+
+    // -- edDeviceNameKeyDown (golden :10457-10473) -- WB-7 gates 1st branch --
+    virtual void edDeviceNameKeyDown();               // golden uLotInfo.cpp:10457-10473 (params dropped, unused)
+
+    // -- SetCheckCodeByLot (golden :12311-12324) -----------------------------
+    TPanel *lbCheckCodeByLot;                         // golden uLotInfo.h:436 (TPanel*, not TLabel -- ->Caption/->Color)
+    virtual void SetCheckCodeByLot(bool _enable);     // golden uLotInfo.cpp:12311-12324
+
+    // -- edTempKeyPress / edTempKeyDown (golden :12032-12042 / :12053-12063) --
+    // zero new members (edTemp exists; bTemp_OK is a file-scope global, see .cpp).
+    virtual void edTempKeyPress(char Key);            // golden uLotInfo.cpp:12032-12042 (Sender dropped, unused)
+    virtual void edTempKeyDown();                     // golden uLotInfo.cpp:12053-12063 (Sender/Key/Shift all dropped -- golden body never reads Key, verified this wave)
+
+    // -- btnSaveDataClick (golden :12285-12295) -- zero new members ---------
+    virtual void btnSaveDataClick();                  // golden uLotInfo.cpp:12285-12295 (Sender dropped, unused)
+
+    // -- edPageMouseDown (golden :11534-11541) -- WB-8, non-Murata branch gated --
+    virtual void edPageMouseDown();                   // golden uLotInfo.cpp:11534-11541 (params dropped, unused)
+
+    // -- edtSysLotIDKeyDown / edtSysOperatorIDKeyDown (golden :12065-12080 / :12082-12097) --
+    // zero new members (bLotID_OK/bOPID_OK are file-scope globals, see .cpp).
+    virtual void edtSysLotIDKeyDown();                // golden uLotInfo.cpp:12065-12080 (params dropped, unused)
+    virtual void edtSysOperatorIDKeyDown();           // golden uLotInfo.cpp:12082-12097 (params dropped, unused)
+
+    // -- edtSysOperatorIDMouseUp / edtSysLotIDMouseUp (golden :11755-11794 / :11796-11831) --
+    // WB-9/WB-10 gate everything past the CC_Murata branch; zero new members.
+    virtual void edtSysOperatorIDMouseUp();           // golden uLotInfo.cpp:11755-11794 (params dropped, see WB-9)
+    virtual void edtSysLotIDMouseUp();                // golden uLotInfo.cpp:11796-11831 (params dropped, see WB-10)
+
+    // -- edQAModeMouseDown (golden :11528-11532) -- WB-11, whole body gated --
+    virtual void edQAModeMouseDown();                 // golden uLotInfo.cpp:11528-11532 (params dropped, unused once gated)
+
+    // -- edtSysOperatorIDKeyPress (golden :11935-11963) -- zero new members --
+    // (cbRunMode/edtSysOperatorID exist; ->SetFocus() dropped, DEVIATION as
+    // established by edtSysLotIDKeyPress/edPageKeyPress in Wave A).
+    virtual void edtSysOperatorIDKeyPress(char Key);  // golden uLotInfo.cpp:11935-11963 (Sender dropped, unused; ->SetFocus() dropped)
+
+    // -- cbRunModeKeyPress (golden :11965-11988) -- WB-12 gates the JCET check --
+    TSpeedButton *sbSECSLotStart, *sbSECSLotEnd;      // golden uLotInfo.h -- ->Click()/->Down only
+    virtual void cbRunModeKeyPress(char Key);         // golden uLotInfo.cpp:11965-11988 (Sender dropped, unused)
+
+    // -- cbRunModeDropDown (golden :15928-15951) -- WB-13, whole body gated --
+    virtual void cbRunModeDropDown();                 // golden uLotInfo.cpp:15928-15951 (Sender dropped, unused once gated)
+
+    // -- GetFTP_SettingN06 (golden :15449-15460) -- zero new members --------
+    virtual void GetFTP_SettingN06(AnsiString &asUserID, AnsiString &asPassword, AnsiString &asHost);  // golden uLotInfo.cpp:15449-15460
+
+    // -- CheckNoRetestBinFlag (golden :14608-14630) -- WB-14, whole body gated (returns true) --
+    virtual bool CheckNoRetestBinFlag();              // golden uLotInfo.cpp:14608-14630
+
+    // -- edStationNumMouseDown (golden :14060-14064) -- WB-15, whole body gated --
+    virtual void edStationNumMouseDown();             // golden uLotInfo.cpp:14060-14064 (params dropped, unused once gated)
+
+    // -- ATC_OFFLINE_FormComInit (golden :14969-14992) -- 2 new TLabel; -----
+    // reuses Wave A's InitialRefrigerantSystem TriLab*/Tripnl* arrays and
+    // bInitFormcomponent/OldRefrigerantCommand members.
+    TLabel *labRefrigerantMachineHighLimit;           // golden uLotInfo.h:689
+    TLabel *labRefrigerantMachineLowLimit;            // golden uLotInfo.h:688
+    virtual void ATC_OFFLINE_FormComInit();           // golden uLotInfo.cpp:14969-14992
+
+    // -- ScanRefrigerantSystem / RefreshRefrigerantAllStatus (golden :14941-14967 / :14994-15078) --
+    // WB-16/WB-17 gate everything past the AirStream_Select==0 early return;
+    // zero new members (ATC_InterfaceForm's missing members are the whole point).
+    virtual void ScanRefrigerantSystem();             // golden uLotInfo.cpp:14941-14967
+    virtual void RefreshRefrigerantAllStatus();       // golden uLotInfo.cpp:14994-15078
+
+    // -- leRunCardNumberMouseDown (golden :15780-15784) ----------------------
+    TLabeledEdit *leRunCardNumber;                    // golden uLotInfo.h:961
+    virtual void leRunCardNumberMouseDown();          // golden uLotInfo.cpp:15780-15784 (params dropped, unused)
+
+    // -- RefreshAMR / ShowAMRCategoryBin (golden :15816-15844 / :15846-15881) --
+    // RefreshAMR already declared above (W5-Automation ADD) as a no-op stub;
+    // this wave gives it (and the ShowAMRCategoryBin it calls) a REAL body --
+    // see forms/fLotInfo.cpp. 15 new members below.
+    TCheckBox *cbA60_1;                               // golden uLotInfo.h:997
+    TPanel *pnlWaitTXSetLoader, *pnlWaitRXSetAuto1, *pnlWaitRXSetAuto2, *pnlWaitRXSetAuto3;  // golden uLotInfo.h:1002/1005/1006/1009
+    TPanel *pnlWaitTXTotalLoader, *pnlWaitTXCntLoader;                                        // golden uLotInfo.h:999/1003
+    TPanel *pnlWaitRXCntAuto1, *pnlWaitRXCntAuto2, *pnlWaitRXCntAuto3;                        // golden uLotInfo.h:1004/1007/1008
+    TfLedValue *aldWaitTXLoader;                      // golden uLotInfo.h:1021 (TALed*)
+    TfLedValue *aldWaitRXAuto1, *aldWaitRXAuto2, *aldWaitRXAuto3;                             // golden uLotInfo.h:1020/1019/1018 (TALed*)
+    TfLedValue *aldWaitTrayFeed;                      // golden uLotInfo.h:1017 (TALed*)
+    TfLedValue *aldLoaderLast;                        // golden uLotInfo.h:1016 (TALed*)
+    TStringGrid *StrGrdCategory;                      // golden uLotInfo.h:1023
+    virtual void ShowAMRCategoryBin(bool bInitial=false);  // golden uLotInfo.cpp:15846-15881
+
+    // -- cbFirstTrayCheckOnUnloaderMouseDown (golden :16029-16034) -----------
+    bool bP60UserClicked;                             // golden uLotInfo.h:1262
+    virtual void cbFirstTrayCheckOnUnloaderMouseDown();  // golden uLotInfo.cpp:16029-16034 (params dropped, unused)
+
+    // -- RefreshOtherTool (golden :16047-16072) ------------------------------
+    TEdit *edLoaderCountNow, *edLoaderCountAlarm;     // golden uLotInfo.h
+    virtual void RefreshOtherTool();                  // golden uLotInfo.cpp:16047-16072
+
+    // -- labNowTrayCountClick (golden :16186-16190) -- zero new members -----
+    // (labNowTrayCount exists, W7-L1-Wave0 ADD).
+    virtual void labNowTrayCountClick();              // golden uLotInfo.cpp:16186-16190 (Sender dropped, unused)
+
+    // -- Timer4Timer (golden :16487-16493) -- WB-18 gates CheckAMRAction() --
+    virtual void Timer4Timer();                       // golden uLotInfo.cpp:16487-16493
 
     TfLotInfo();
     virtual ~TfLotInfo() {}

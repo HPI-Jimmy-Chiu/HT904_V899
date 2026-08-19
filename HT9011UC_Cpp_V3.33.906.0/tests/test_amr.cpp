@@ -168,6 +168,15 @@ int main()
     TestIF_File.bSCKART_EnableART = false;
     iTrayFeed = 0;
 
+    // AI(W906-FW3-LotInfo-WBfix) 20260819: golden runtime precondition, replayed
+    // as fixture setup -- FormShow (golden uLotInfo.cpp:1027) always runs
+    // ShowAMRCategoryBin(true) before any refresh, sizing StrGrdCategory to
+    // iTestBinCount+2 rows. RefreshAMR was a no-op stub when this test was
+    // written; the LotInfo Wave B translation made it real, so Initial()'s
+    // refresh now reaches the grid and, without this, runs off the .dfm row
+    // count exactly as golden would if FormShow had never fired.
+    fLotInfo->ShowAMRCategoryBin(true);
+
     // B1: Initial() (golden :22-37)
     printf("  [B1] Initial()\n");
     {

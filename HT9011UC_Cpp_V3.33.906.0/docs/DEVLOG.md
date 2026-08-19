@@ -8579,6 +8579,47 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - Tier 2（39 函式/993 行）與 MIXED 兩巨頭（FormShow 918L、
   Timer2Timer 258L 先拆分）留 Wave B。
 
+## 20260819 晚間 — uLotInfo Wave B（Tier 2 全清＋MIXED 拆分提案）
+
+- Tier 2 的 39/39 函式、993/993 golden 行處置完畢：20 全真翻、
+  10 部分真翻（guard/分支保留，其餘 gate）、9 全 gate（依賴整缺）。
+  實落地約 480-490 行（~48%——分子是估計值，partial 函式內
+  real/gated 不到行粒度）。GATE 登記 WB-1..WB-19。
+- **逐行重讀的價值第三次證明**：39 個「信號乾淨」的 Tier 2 裡
+  19 個需要至少一個 gate。兩個全樹級新發現：`InputBarcodeNumber`
+  全樹零 port（6 個函式撞到；主迴圈 Grep 獨立坐實=僅 fLotInfo gate
+  區內出現）、`TImage`/`TCanvas` 零 port。另抓到 recon 的
+  FormDestroy 摘要是 FormClose 的複製貼上錯誤（真身是 TimerERMS/
+  StringList 清理＋例外記錄——主迴圈對 golden :301 坐實）。
+- 新增 ~90 個成員欄位＋3 個 file-scope 全域＋4 個 TU-local TColor。
+- **MIXED 拆分提案**（docs/RECON_uLotInfo_mixed_split.md）：
+  FormShow 918L 切 35 段、估 ~90% 可落地（風險集中 2 段：
+  SetLotStart 呼叫＋critical-para 稽核塊）；Timer2Timer 258L 切
+  18 段、估 ~65%（風險集中 WinWay ATC 硬體控制 51L＋WAR16123
+  警報 24L）。9 個「facade 依賴存在性未驗」項留給下一波先 grep。
+- 主迴圈複驗：邊界 3 檔、InputBarcodeNumber absence、FormDestroy
+  真身、-fsyntax-only -Wall -Wextra 綠、0 NUL/0 U+FFFD/EOL 未變。
+  另：寬 `grep -rn` 掃全 repo 會逾時（golden 樹＋.svn），absence
+  驗證一律用 Grep 工具鎖 V906 樹。
+
+### Wave B gate 第一輪抓到真回歸（AMR），已修
+
+- 第一輪 gate 兩側都紅 AMR（不在常駐清單）：`TTeraPowerAMR::Initial()
+  → RefreshAMR → ShowAMRCategoryBin(非initial)` 丟 std::out_of_range。
+  **雙因**：(1) `new TStringGrid()` 裸預設 5×5 vs golden .dfm 的
+  3×16——Obs2fix（sgStatisticsJam）同型第二例，修成 `(3,16)`；
+  (2) 修完仍炸 n=16——golden 的執行期前置是 FormShow（:1027）先跑
+  `ShowAMRCategoryBin(true)` 把 RowCount 撐到 iTestBinCount+2
+  （預設 16→18 列），非-initial 路徑寫到 row iTestBinCount+1。
+  test_amr 寫作當時 RefreshAMR 是 no-op stub，從沒踩過 grid；
+  Wave B 讓它變真的。修法＝把 golden 前置重放進測試 fixture
+  （fLotInfo->ShowAMRCategoryBin(true)），非-initial 本體照翻不動。
+- AMR solo 3/3 綠；全新雙 gate 重跑中。
+- **教訓（Obs2fix 通則升級）**：翻譯讓 stub 變真身時，所有「經由該
+  stub 到達 widget」的既有測試都繼承 golden 的執行期前置
+  （FormShow/bInitial 類 hydration），要嘛 fixture 重放、要嘛
+  ctor 帶 .dfm 維度——兩者都做才穩。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8587,9 +8628,10 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   FW-W4（4999e2e）、FW-W5a（83b4251）、FW-FE1（57e3c03）、
   **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
-- **下一波**：uLotInfo Wave B——Tier 2（39 函式/993 行，**每個都要先
-  逐行讀完本體再翻**，Tier 2 只做過信號掃描）＋MIXED 拆分提案
-  （FormShow 918L/Timer2Timer 258L 先出切割設計再翻）。
+- **下一波**：uLotInfo Wave C——照 docs/RECON_uLotInfo_mixed_split.md
+  翻 FormShow（35 段、估 ~90% 可落地）＋Timer2Timer（18 段、~65%），
+  開工先 grep 驗 9 個「facade 依賴存在性未驗」項（FormBarcodeReader/
+  fAGV->IsSPIL_AMR/myInShuttleLotInfo 族/FrmAOI…）。
   之後：1203 HAL MOTION_IO pimpl；批 5 設定檢視表單；
   cShowBinSelect Wave D；BinDisplay 卡 opaque BinDisCtrl
   （元件套件 D:\HT9045\elec\Component 方向查證待做）。
