@@ -8412,13 +8412,24 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - 正式雙 gate 依環境規則欠帳中（連同 FW-W1 的乾淨補 gate），
   量產程式關閉後一起補。
 
+## 20260819 中午 II — 欠帳 gate 清償（FW-W1＋cBinSel WC 合併補驗）
+
+- 量產程式關閉後全新雙 gate：Debug 142/5＋Release 142/5，失敗集合逐項
+  相同且 ⊆ 歷史常駐六項；guard 本 gate 窗 552 檔 IDENTICAL。
+- **基線位移 3→5 常駐**：IniFiles/ini_helpers 翻回紅——驗屍確認是斷言
+  Gerneral.ini 字面值（MOTION_CARD_TYPE==1/IO==2/HEATER==4...），上午
+  量產作業改了真實 config 值所致（這正是它們歷史上是常駐項的原因）。
+  非任何 commit 造成；機台 config 回原值時會自動轉綠。
+- FW-W1（5e4b30d）與 cBinSel WC（38b19e1）就此有乾淨 gate 背書。
+
 ### 🔖 RESUME（最新）
 
-- **完成**：核可佇列全清、FW-W1、台帳 552 筆、cBinSel Wave A/B/C
-  （38b19e1——G9 關、G10 新增 mtBinSelect）。
-- **⚠ 環境**：量產 HT9045.exe 執行中 → gate 暫停。**欠帳補 gate 清單**：
-  FW-W1（5e4b30d）＋cBinSel WC（38b19e1）共用一次全新雙 gate，
-  量產程式關閉後執行。
-- **gate-free 下一波**：FW-W2 auth.login 程式碼準備（主迴圈；探針對
-  --dry server 可測）；或 1203 HAL 的 MOTION_IO pimpl 修（syntax 級）。
-- **設計面**：無待答（兩個小預設值已告知使用者，不回=照預設）。
+- **完成**：核可佇列全清、FW-W1（含補 gate）、台帳 552 筆、cBinSel A/B/C
+  （含補 gate）。**基線 142 測試/5 常駐**（config_db/IniFiles/ini_helpers/
+  config_loaders/GA1_ReadGeneralIni——後兩者隨機台 config 值浮動）。
+- **下一波＝FW-W2 auth.login 實作**（主迴圈；規格已備：pwPath 密碼本
+  `<user> <level> <password>` 點空白切分＋可選 DecodeStr＋UpperCase 比對
+  →AccessLevel；交付 WebAuth.cpp＋wb_serve dispatch＋auth.level tag＋
+  cmd_probe 擴充；測試用 scratch 密碼本不碰真 pwPath）。
+- **之後**：FW-W3 操作權 token；1203 HAL MOTION_IO pimpl；FW-3 batch 3+。
+- **設計面**：無待答。
