@@ -8708,6 +8708,30 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - TMyKitSuck 雙標頭陷阱遵守（用 aHotPlateSubstrate.h 177-TU 版）。
   CMake 接線主迴圈自做。
 
+## 20260820 凌晨 II — cConfiguration recon＋Wave A
+
+- **recon**（80ebbb2）：129 方法四分類。頭條：InitConfigEdtList_Item
+  [A-P]（13 函式、4,131 行＝檔案 55%）不是 UI init，是 per-customer
+  的參數政策註冊層（決定哪些參數讀 config.ini、哪些被靜默鎖死）
+  ——整叢集改判 (b)。顯示側殘餘只有 46 方法/626 行。
+  **FW-1 懸案解**：recipe.current/user.level 源頭在 main.cpp
+  （LookForFile :9016／DoChangeLevel :15127），非 cConfiguration；
+  V906 有 cbSetupFileName stand-in、零 cbUserSelect。
+  另录 golden 真 bug：sbUpdateHPClick 存 HP 卻重載 Tray（複製貼上）。
+  未追風險：btnSetToTechClick→SetOffsetToTech（teach 資料毀損類）。
+- **Wave A**（本顆）：28/28 函式（289 行——**代理重加總更正 recon
+  自己的 354**，算式進 banner）。新檔 forms/fConfiguration.h＋
+  cConfiguration.cpp。唯一 gate 類＝fQwertyKey（全樹既有先例）；
+  edA22 欄位互算保留活碼只 gate 鍵盤呼叫。**基礎建設發現**：
+  vclcompat::TStringGrid 無 Font/ColWidths/FixedRows/FixedCols/Row
+  ——照 TfObserverGrid 慣例新增 facade-only TfConfigurationGrid
+  子類（共用頭檔未動；此類擴充已四處各自複製，收斂歸共用層是
+  待辦）。strngrdTray/HP 的 .dfm（:21204/:22475）無明確維度＝
+  真 VCL 5×5 預設，banner 記載。TrayTablePath/PlateTablePath
+  已是 common.h:77-78 活全域（主迴圈坐實）。
+- 逐行重讀 28/28 未發現 recon 遺漏（本檔顯示側乾淨——與 recon
+  「顯示側只剩安全殘餘」的判定互證）。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8716,14 +8740,15 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   FW-W4（4999e2e）、FW-W5a（83b4251）、FW-FE1（57e3c03）、
   **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
-- **下一波**：依脈絡擇一——(a) 批 5 收尾：cConfiguration 檢視側
-  （7,808 行，需切 2 波；recipe.current/user.level 來源鏈可能在此）
-  ＋cSetUp 檢視側（4,858 行；fSetup facade 現只有 bool fShow）；
-  (b) bin.* 解鎖（SetTechDataToProd_Yield 呼叫者決策——最淺缺口）；
-  (c) 1203 HAL MOTION_IO pimpl；(d) cShowBinSelect Wave D；
-  (e) BinDisplay 的 opaque BinDisCtrl（elec\Component 查證）；
-  (f) 過期 gate 註解清理波（nm 已證現況）；(g) rgCustomerList
-  200 筆客戶碼表的 dfm 自動抽取波。真機類指令依 §7 仍佇列。
+- **下一波**：依脈絡擇一——(a) cSetUp 檢視側（4,858 行；fSetup
+  facade 現只有 bool fShow——批 5 最後一顆）；(b) user.level 解鎖：
+  main.cpp DoChangeLevel（:15127）＋cbUserSelect stand-in 補進
+  forms/fMain.h（來源鏈已定位，缺口小）；(c) bin.* 解鎖
+  （SetTechDataToProd_Yield 呼叫者決策）；(d) 1203 HAL MOTION_IO
+  pimpl；(e) cShowBinSelect Wave D；(f) BinDisplay 的 BinDisCtrl
+  （elec\Component 查證）；(g) 過期 gate 註解清理波；
+  (h) rgCustomerList dfm 自動抽取波；(i) TStringGrid 擴充欄位
+  收斂回共用層（四處同款 subclass 複製中）。真機類依 §7 仍佇列。
 - **FW-1 備忘**：pct 六顆等 sort.total 站穩後接；recipe.current/
   user.level 來源鏈未查（可能落在未翻的 cConfiguration）；
   tagmap.js 的 data-cmd 十筆結構性缺口要跟 web 前端波一起解；

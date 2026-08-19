@@ -1912,6 +1912,13 @@ add_library(ht9045_sm STATIC
     # integration is a separate wave.
     cStartCondition.cpp
     HandlerSys.cpp
+    # AI(W906-FW3-Config-WA) 20260820: cConfiguration.cpp -- batch-5 Wave A
+    # (28 display-side methods, 289 golden lines -- the wave corrected the
+    # recon's own 354 sum; the 4,131-line InitConfigEdtList policy cluster
+    # and every (b)/(c) method stay undeclared). New TfConfigurationGrid
+    # facade subclass per the TfObserverGrid convention; fConfiguration
+    # global not declared -- ctor is write-path, integration deferred.
+    cConfiguration.cpp
     # --- W6.6 HUB cross-module offline shims (DoInArm->DoInArm_9045 /
     #     DoOutArm->DoOutArm_9045 / DoLoad / DoSortArm / bShuttleShake +
     #     InitLoadTask / InitOutArmTask / InitialDoLockUnloader /
