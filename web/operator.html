@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<!-- =========================================================================
+  operator.html - write-path operator console (FW-FE1).
+  AI(W906-FW-FE1) 20260819: new file. Browser face of FW-W1..W5a: login,
+  single-operator control token, counter.clear, display-only modals.
+  Serve from wb_serve (or any static host at the same origin as the ws
+  endpoint) and open  /operator.html .  index.html stays the faithful DFM
+  shell; this page is deliberately separate -- it is also the manual rig for
+  proving the "second browser is refused" rule.
+========================================================================== -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>HT9045 operator console</title>
+<style>
+  body { margin: 0; padding: 16px; background: #1c1f24; color: #ddd;
+         font: 13px/1.45 "Segoe UI", sans-serif; }
+  h1 { font-size: 15px; margin: 0 0 4px; color: #9fc3e8; }
+  .conn { font-weight: 600; }
+  .conn-online { color: #7fd18a; }
+  .conn-offline, .conn-connecting { color: #e0a15c; }
+  fieldset { border: 1px solid #444; margin: 12px 0 0; padding: 8px 12px 12px; }
+  legend { color: #9fc3e8; font-size: 12px; padding: 0 6px; }
+  input { background: #14161a; color: #ddd; border: 1px solid #555;
+          padding: 4px 6px; font: inherit; width: 140px; }
+  button { background: #2a3038; color: #ddd; border: 1px solid #566;
+           padding: 5px 12px; font: inherit; cursor: pointer; margin: 2px; }
+  button:hover { background: #38414c; }
+  .kv { color: #999; margin-left: 10px; }
+  .kv b { color: #ddd; font-weight: 600; }
+  #counters { display: flex; flex-wrap: wrap; gap: 2px; }
+  #log { margin-top: 12px; border: 1px solid #444; background: #14161a;
+         height: 220px; overflow-y: auto; padding: 6px 8px;
+         font: 12px/1.5 Consolas, monospace; }
+  .log-ok    { color: #7fd18a; }
+  .log-err   { color: #e07a7a; }
+  .log-out   { color: #8ab6e0; }
+  .log-modal { color: #e0c85c; }
+  .log-info  { color: #999; }
+  #overlay { display: none; position: fixed; inset: 0;
+             background: rgba(0,0,0,.55); align-items: center; justify-content: center; }
+  #modal { background: #d4d0c8; color: #000; min-width: 320px; max-width: 60%;
+           border: 2px outset #fff; font: 12px "Segoe UI", sans-serif; }
+  #modal-title { background: #0a246a; color: #fff; padding: 4px 8px; font-weight: 600; }
+  #modal-text { padding: 16px 14px; white-space: pre-wrap; }
+  #modal-at { padding: 0 14px; color: #555; font-size: 11px; }
+  #modal-btnrow { text-align: center; padding: 10px; }
+  #modal-ok { background: #e6e2da; color: #000; border: 1px outset #fff; padding: 4px 28px; }
+</style>
+</head>
+<body>
+<h1>HT9045 operator console <span id="conn" class="conn">--</span></h1>
+<div style="color:#888">write-path console (FW-W1..W5a) &mdash; the faithful form shell stays at <a href="/index.html" style="color:#9fc3e8">/index.html</a></div>
+
+<fieldset>
+  <legend>Login (auth.login / auth.logout)</legend>
+  <input id="user" placeholder="user">
+  <input id="password" type="password" placeholder="password">
+  <button id="btn-login">Login</button>
+  <button id="btn-logout">Logout</button>
+  <span class="kv">auth.level = <b id="level">--</b></span>
+</fieldset>
+
+<fieldset>
+  <legend>Control token (one browser drives)</legend>
+  <button id="btn-acquire">Acquire</button>
+  <button id="btn-release">Release</button>
+  <span class="kv">control.owner = <b id="owner">--</b></span>
+</fieldset>
+
+<fieldset>
+  <legend>Counter Clear (counter.clear, per-family Security_new.def authorization)</legend>
+  <div id="counters"></div>
+</fieldset>
+
+<div id="log"></div>
+
+<div id="overlay">
+  <div id="modal">
+    <div id="modal-title">Message</div>
+    <div id="modal-text"></div>
+    <div id="modal-at"></div>
+    <div id="modal-btnrow"><button id="modal-ok">OK</button></div>
+  </div>
+</div>
+
+<script src="/js/operator.js"></script>
+</body>
+</html>

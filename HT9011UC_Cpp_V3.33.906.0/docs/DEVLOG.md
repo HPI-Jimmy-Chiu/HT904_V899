@@ -8517,18 +8517,35 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - 前端 modal 渲染（formview.js 收 "modal" frame 畫對話框）歸 web
   面板波，未做——瀏覽器現在會安靜忽略未知 frame 型別（防禦式）。
 
+## 20260819 下午 V — FW-FE1 操作台前端（web/ 純前端波）
+
+- write path 的瀏覽器臉：`web/operator.html`＋`web/js/operator.js`。
+  刻意**不動忠實 DFM shell**（index.html 原樣）——操作台獨立成頁，
+  同時充當「第二個瀏覽器被拒」的手動試驗台。
+- 涵蓋 FW-W1..W5a 全面向：login/logout（auth.level tag 即時顯示）、
+  Acquire/Release（control.owner tag）、七族 counter.clear 按鈕
+  （key 與 wb_serve kFamilies 逐字一致）、modal overlay（顯示型，
+  OK 只關本地——golden void 忠實）、ack log 全量逐字列出 server
+  的 ok/error。
+- 驗證：`node --check` 句法綠；wb_serve HttpStatic 實測兩檔 200＋
+  marker；互動線路與 cmd_probe 六劇本同一 wire 契約（已在 W5a gate
+  全綠背書）。**純 web/ 波、C++ 樹零變更**→依兩級制不重跑雙 gate
+  （W5a gate＝現樹狀態）。
+- 坑：cwd 漂移——連續波次後 shell 工作目錄在 repo 根，`./build_*`
+  相對路徑撲空；工具呼叫一律絕對路徑。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
   Sec/BinSel 全系列、cShowBinSelect A/B/C、cBinSel A/B/C、台帳 552、
   FW-W1（5e4b30d）、FW-W2（0553449）、FW-W3（eb7c4f9）、
-  FW-W4（4999e2e）、**FW-W5a（本顆）**。基線 142/5。
+  FW-W4（4999e2e）、FW-W5a（83b4251）、**FW-FE1（本顆）**。
+  基線 142/5。
 - **下一波**：FW-W5b 問答型 modal（`ShowErrorMessage` 的
   K_RETRY/K_SKIP/K_CLEAN_OUT 回流——需要「modal push＋
   modal.answer cmd＋tick 側泵著等答案」三件；答案只收 token 持有者。
-  W906_ShowErrorMessage_SimReturn seam 已在，hook 形狀照 W5a 前例）。
-  或改做 web 前端面板波（login/token/counter/modal 渲染，
-  formview.js 側）——依當時脈絡擇一。
+  W906_ShowErrorMessage_SimReturn seam 已在，hook 形狀照 W5a 前例；
+  operator.html 的 overlay 屆時加按鈕組）。
 - **之後**：1203 HAL MOTION_IO pimpl；FW-3 batch 3+ 表單；
   cShowBinSelect Wave D；台帳二輪 QUIRK 補掃。
 - **設計面**：無待答（10 分鐘閒置逾時＝預設值沿用）。
