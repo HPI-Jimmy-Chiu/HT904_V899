@@ -42,19 +42,31 @@
 //      one code path (verified by reading all four bodies in full this
 //      wave); `SetOSBin` is ALSO excluded for this reason since its own body
 //      calls `ReadWriteMRTMode` twice.
-//    * SaveFunctionData/SetPrimeButton/mtTrayNameSetColor -- WAVE B lands
-//      real bodies for all 3, but WAVE B's own policy gates 100% (or, for
-//      the latter two, the ENTIRE body) of their real effect (see
-//      forms/fBinSel.h GATE REGISTER G7-G9) -- nothing observable to assert.
-//      ReadFunctionData is DIFFERENT: WAVE B gives it an explicit `szDir`
-//      parameter (see this file's own WAVE B banner above), so it DOES get
-//      scratch-ini oracle coverage below now.
+//    * SaveFunctionData/SetPrimeButton -- WAVE B's own policy gates 100%
+//      (SaveFunctionData) or the ENTIRE body (SetPrimeButton) of their real
+//      effect (see forms/fBinSel.h GATE REGISTER G7-G8) -- nothing
+//      observable to assert. `mtTrayNameSetColor` is NO LONGER in this list
+//      -- FW-BinSel-WC unlocks its full body (GATE G9 CLOSED) and gets its
+//      own coverage below. ReadFunctionData is likewise DIFFERENT: WAVE B
+//      gives it an explicit `szDir` parameter (see this file's own WAVE B
+//      banner above), so it DOES get scratch-ini oracle coverage below now.
 //    * CheckFix2Tray's "found a Fix2 tray" TRUE branch -- the column index
 //      that would trigger it depends on `eBinNotUse`'s numeric value, which
 //      is TU-LOCAL to cBinSel.cpp (`enum eBinSettingItems`, not exposed via
 //      forms/fBinSel.h) -- only the "no match" paths (AOI disabled; AOI
 //      enabled but the ctor's all-zero table) are constructible from outside
 //      that TU and are covered below.
+//
+//  AI(W906-FW-BinSel-WC) 20260819: adds coverage for WAVE C's own additions --
+//  (2b) the ctor's mtTrayName/mtTrayItem cell-fill (including its ONE
+//  SIOF-guarded line, unlocked via the SAME OpenGeneralIniFile()/
+//  asGeneralPath redirect idiom tests/test_observer_core.cpp already
+//  established for INIFileGeneral), (9) mtTrayNameSetColor's now-FULL body,
+//  and (10) InitDataToEdit -- which, unlike ReadFunctionData, needs NO
+//  scratch-ini or path seam at all (verified this wave by reading its full
+//  643-line body against golden: zero CheckAndReadIniData/WriteIniData
+//  calls anywhere in it -- pure in-memory MyBinPanel[tag]-field-to-
+//  sXxx[tag] reshuffling, see that method's own S20 banner in cBinSel.cpp).
 // =============================================================================
 #include "forms/fBinSel.h"
 
@@ -65,7 +77,9 @@
 #include "Config.h"               // IniConfig
 #include "CosFunction.h"           // CosFunction
 #include "common.h"                // CheckAndReadIniData/WriteIniData -- scratch-ini seeding only,
-                                    // see ReadFunctionData oracle tests below (never a production path)
+                                    // see ReadFunctionData oracle tests below (never a production path);
+                                    // also asGeneralPath/OpenGeneralIniFile/CloseGeneralIniFile -- SIOF-guard
+                                    // unlock for the ctor's s6TrayName[] line, see (2b) below
 
 #include <cstdio>
 #include <cstdlib>   // std::getenv (scratch path)
@@ -157,6 +171,73 @@ static void Test_Ctor_MyBinPanelZeroInitialized()
         CHECK(f.MyBinPanel[tag]->BackT6PosTray[0][0] == 0, "ctor: MyBinPanel[tag]->BackT6PosTray[0][0] == 0");
         CHECK(f.MyBinPanel[tag]->BackT6PosTray[TEST_MAX_BIN-1][TEST_MAX_BIN-1] == 0, "ctor: MyBinPanel[tag]->BackT6PosTray last cell == 0");
     }
+}
+
+// =============================================================================
+//  (2b) ctor -- MyBinPanel[tag]->mtTrayName/mtTrayItem cell-fill (golden
+//       TMyBinPanel ctor :386-387/:417-418/:421-511, FW-BinSel-WC). Cell
+//       coordinates below are RAW INTEGER LITERALS, not the TU-local
+//       `eItemXxx`/`eBinNo`/`eBinSetting` enum names (cBinSel.cpp's own
+//       `enum eTrayNameFunc`/`eBinSettingItems`, not exposed via
+//       forms/fBinSel.h) -- same "constructible subset" posture as
+//       CheckFix2Tray's own test banner above. eItemLink=0/eItemPass=1/
+//       eItemError=2/eItemName=0 and eBinSetting=26 (24 explicit
+//       eBinSettingItems entries 0..24, +eBinNotUse auto=25, +eBinSetting
+//       auto=26) are read directly off golden's own enum literals, not
+//       guessed.
+// =============================================================================
+static void Test_Ctor_PopulatesMtTrayNameAndItemStaticLabels()
+{
+    ResetGlobals();
+    TfBinSel f;
+
+    // "Col Name" header row (row eBinNo==0) on mtTrayName (golden :422-423).
+    CHECK(f.MyBinPanel[eBinFT]->mtTrayName->GetCellText(0 /*eItemLink*/, 0 /*eBinNo*/) == "Link",
+          "ctor: mtTrayName[eItemLink][eBinNo] == \"Link\"");
+    CHECK(f.MyBinPanel[eBinFT]->mtTrayName->GetCellText(1 /*eItemPass*/, 0) == "Failed",
+          "ctor: mtTrayName[eItemPass][eBinNo] == \"Failed\" (column HEADER label, not a live Pass/Fail cell)");
+
+    // "Row Name" header column (col eItemName==0) on mtTrayItem (golden :429).
+    CHECK(f.MyBinPanel[eBinFT]->mtTrayItem->GetCellText(0 /*eItemName*/, 0 /*eBinNo*/) == "Items",
+          "ctor: mtTrayItem[eItemName][eBinNo] == \"Items\"");
+
+    // per-tray-row loop (golden :480-511): row eBinSetting(26)+0 == first
+    // tray row (eAuto1) -- "Error" column text+colour is unconditional
+    // (golden :485-486, no CosFunction/IniConfig gate).
+    CHECK(f.MyBinPanel[eBinFT]->mtTrayName->GetCellText(2 /*eItemError*/, 26) == "Error",
+          "ctor: mtTrayName[eItemError][eBinSetting+0] == \"Error\" (every tray row)");
+    CHECK(f.MyBinPanel[eBinFT]->mtTrayName->CellColorIndex[2][26] == 0 /*eCLWhite*/,
+          "ctor: mtTrayName[eItemError][eBinSetting+0] colour == eCLWhite (golden :486)");
+
+    // sizing prerequisite for mtTrayNameSetColor's own FYItem bound check
+    // (golden :386, translated alongside the cell-fill span since that
+    // method's loop is a total no-op without it -- see cBinSel.cpp's ctor
+    // banner).
+    CHECK(f.MyBinPanel[eBinFT]->mtTrayName->FYItem == 26 + eTrayCount,
+          "ctor: MyBinPanel[tag]->mtTrayName sized to eBinSetTotal (golden :386)");
+}
+
+// AI(W906-FW-BinSel-WC) 20260819: SIOF guard oracle -- `s6TrayName[iT6]`
+// (golden :483) is the ONE ctor-cell-fill line reading a cross-TU global
+// with a non-trivial ctor (cmydef.cpp:44); gated `if(INIFileGeneral!=0)`
+// in TfBinSel::TfBinSel (see forms/fBinSel.h STATIC-INIT SAFETY UPDATE).
+// Unlocked here exactly like tests/test_observer_core.cpp's own
+// INIFileGeneral redirect precedent -- scratch path, never production
+// system\Gerneral.ini.
+static void Test_Ctor_MtTrayItemRowLabelPopulatesOnlyWhenGeneralIniOpen()
+{
+    ResetGlobals();
+
+    AnsiString savedGeneralPath = asGeneralPath;
+    asGeneralPath = BinSelScratchIniPath("test_binsel_general.ini");
+    OpenGeneralIniFile();
+    {
+        TfBinSel f;
+        CHECK(f.MyBinPanel[eBinFT]->mtTrayItem->GetCellText(0 /*eItemName*/, 26) == s6TrayName[0],
+              "ctor: mtTrayItem[eItemName][eBinSetting+0] == s6TrayName[eAuto1] when INIFileGeneral is open");
+    }
+    CloseGeneralIniFile();
+    asGeneralPath = savedGeneralPath;
 }
 
 // =============================================================================
@@ -473,10 +554,116 @@ static void Test_ReadFunctionData_OldFormat_FallsBackToPerCategoryRead()
     DeleteFile(scratch);
 }
 
+// =============================================================================
+//  (9) mtTrayNameSetColor -- golden :4033-4140, FW-BinSel-WC full unlock
+//      (GATE G9 CLOSED). Cell coordinates below are raw literals for the
+//      SAME "TU-local enum" reason as (2b) above -- eItemPass=1, colour
+//      indices eCLRed=2/eCLGreen=1 read directly off golden's own
+//      `eTrayColorMap` enum literals (cBinSel.cpp).
+// =============================================================================
+static void Test_MtTrayNameSetColor_MarksFailingAndPassingSitesWithCorrectColor()
+{
+    ResetGlobals();
+    TfBinSel f;
+
+    Prod.iTrayType[0] = 1;   // != tNotUse(0) -- Auto1 must be a REAL tray for its row to be processed (golden :4198)
+    Prod.iTrayType[1] = 1;   // != tNotUse(0) -- Auto2 likewise
+    f.MyBinPanel[eBinFT]->iT6IsFail[0] = 1;    // Auto1 fails
+    f.MyBinPanel[eBinFT]->iT6IsFail[1] = 0;    // Auto2 passes
+    f.MyBinPanel[eBinFT]->iErrorT6 = -1;       // no error site (golden :4214)
+    TestIF_File.bEnableQASampling = false;     // golden :4225 QA-sampling branch stays off
+
+    f.mtTrayNameSetColor(eBinFT);
+
+    CHECK(f.MyBinPanel[eBinFT]->mtTrayName->GetCellText(1 /*eItemPass*/, 26+0) == "Failed",
+          "mtTrayNameSetColor: failing site (Auto1) -> \"Failed\" text (golden :4233)");
+    CHECK(f.MyBinPanel[eBinFT]->mtTrayName->CellColorIndex[1][26] == 2 /*eCLRed*/,
+          "mtTrayNameSetColor: failing site -> eCLRed colour index (golden :4234, iT6IsFail[0]+1==2)");
+    CHECK(f.MyBinPanel[eBinFT]->mtTrayName->GetCellText(1, 26+1) == "Pass",
+          "mtTrayNameSetColor: passing site (Auto2) -> \"Pass\" text (golden :4238)");
+    CHECK(f.MyBinPanel[eBinFT]->mtTrayName->CellColorIndex[1][27] == 1 /*eCLGreen*/,
+          "mtTrayNameSetColor: passing site -> eCLGreen colour index (golden :4239)");
+
+    Prod.iTrayType[0] = 0;
+    Prod.iTrayType[1] = 0;
+}
+
+// =============================================================================
+//  (10) InitDataToEdit -- golden :4142-4784, FW-BinSel-WC (newly declared).
+//       No scratch-ini/path seam needed (see this file's own head banner) --
+//       pure in-memory MyBinPanel[tag]-field-to-sXxx[tag] reshuffling (S20,
+//       see cBinSel.cpp's own banner on this method).
+// =============================================================================
+static void Test_InitDataToEdit_DoubleContactAndConsFailRoundTripToSXxx()
+{
+    ResetGlobals();
+    int savedTestBinCount = iTestBinCount;
+    iTestBinCount = 3;
+    {
+        TfBinSel f;
+        f.MyBinPanel[eBinFT]->i2Contact[0] = 1;
+        f.MyBinPanel[eBinFT]->i2Contact[1] = 0;
+        f.MyBinPanel[eBinFT]->i2Contact[2] = 1;
+        f.MyBinPanel[eBinFT]->bConFail[0]  = true;
+        f.MyBinPanel[eBinFT]->bConFail[1]  = false;
+        f.MyBinPanel[eBinFT]->bConFail[2]  = true;
+
+        f.InitDataToEdit(eBinFT);
+
+        CHECK(AnsiString(f.sBinDoubleContact[eBinFT]->CommaText) == "1,0,1",
+              "InitDataToEdit: sBinDoubleContact[tag] mirrors MyBinPanel[tag]->i2Contact[] (golden :4265, S20 elision)");
+        CHECK(AnsiString(f.sBinConsFail[eBinFT]->CommaText) == "1,0,1",
+              "InitDataToEdit: sBinConsFail[tag] mirrors MyBinPanel[tag]->bConFail[] (golden :4284, S20 elision)");
+    }
+    iTestBinCount = savedTestBinCount;
+}
+
+static void Test_InitDataToEdit_AutoCleanRoundTripsOnlyWhenFunctionEnabled()
+{
+    ResetGlobals();
+    int savedTestBinCount = iTestBinCount;
+    iTestBinCount = 2;
+    {
+        TfBinSel f;
+        f.MyBinPanel[eBinFT]->iAutoCleanByBin[0]  = 5;
+        f.MyBinPanel[eBinFT]->iAutoCleanByBin[1]  = 0;
+        f.MyBinPanel[eBinFT]->iAutoCleanBySite[0] = 7;
+        f.MyBinPanel[eBinFT]->iAutoCleanBySite[1] = 0;
+
+        // seed a KNOWN prior value to prove the disabled branch leaves it
+        // untouched -- golden's own `else` arm (golden :4519-4528) touches
+        // ONLY mtBinSelect (GATE G10), setting neither ed*, so the read-back
+        // this method's S20 elision stands in for is a no-op there.
+        f.sBySiteClean[eBinFT]->CommaText = "9,9";
+        f.sByBinClean[eBinFT]->CommaText  = "8,8";
+
+        TestIF_File.iAutoClean_Function = 0;
+        f.InitDataToEdit(eBinFT);
+        CHECK(AnsiString(f.sBySiteClean[eBinFT]->CommaText) == "9,9",
+              "InitDataToEdit: AutoClean disabled -> sBySiteClean[tag] left UNCHANGED (golden's else arm is mtBinSelect-only)");
+        CHECK(AnsiString(f.sByBinClean[eBinFT]->CommaText) == "8,8",
+              "InitDataToEdit: AutoClean disabled -> sByBinClean[tag] left UNCHANGED");
+
+        TestIF_File.iAutoClean_Function = 1;
+        f.InitDataToEdit(eBinFT);
+        // NOTE golden's own ByBin/BySite NAME SWAP (not a new bug, see this
+        // method's own banner in cBinSel.cpp): iAutoCleanByBin feeds
+        // sBySiteClean, iAutoCleanBySite feeds sByBinClean.
+        CHECK(AnsiString(f.sBySiteClean[eBinFT]->CommaText) == "5,0",
+              "InitDataToEdit: AutoClean enabled -> sBySiteClean[tag] mirrors MyBinPanel[tag]->iAutoCleanByBin[] (golden :4503, S20)");
+        CHECK(AnsiString(f.sByBinClean[eBinFT]->CommaText) == "7,0",
+              "InitDataToEdit: AutoClean enabled -> sByBinClean[tag] mirrors MyBinPanel[tag]->iAutoCleanBySite[] (golden :4513, S20)");
+    }
+    TestIF_File.iAutoClean_Function = 0;
+    iTestBinCount = savedTestBinCount;
+}
+
 int main()
 {
     Test_Ctor_PopulatesBinTypeStringLists();
     Test_Ctor_MyBinPanelZeroInitialized();
+    Test_Ctor_PopulatesMtTrayNameAndItemStaticLabels();
+    Test_Ctor_MtTrayItemRowLabelPopulatesOnlyWhenGeneralIniOpen();
     Test_TransferBinTrayStrToName_ConvertsIndexToTrayName();
     Test_TransferBinTrayStrToName_OutOfRangeIndexIsNotUse();
     Test_ARTBinCheck_ForcesRetestWhenAllThreeSitesPassOrNoneAreART();
@@ -491,6 +678,9 @@ int main()
     Test_ChangeActivePageIndex_InvalidModeLeavesIndexUntouched();
     Test_ReadFunctionData_NewFormat_ReadsFromScratchIni();
     Test_ReadFunctionData_OldFormat_FallsBackToPerCategoryRead();
+    Test_MtTrayNameSetColor_MarksFailingAndPassingSitesWithCorrectColor();
+    Test_InitDataToEdit_DoubleContactAndConsFailRoundTripToSXxx();
+    Test_InitDataToEdit_AutoCleanRoundTripsOnlyWhenFunctionEnabled();
 
     std::printf("%d/%d checks passed (test_binsel_core)\n", g_pass, g_pass + g_fail);
     return g_fail == 0 ? 0 : 1;

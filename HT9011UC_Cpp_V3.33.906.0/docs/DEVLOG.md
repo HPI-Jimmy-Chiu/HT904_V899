@@ -8361,3 +8361,56 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   -fsyntax-only＋探針對 --dry server）；cBinSel Wave C 翻譯（代理只產碼
   自檢）；1203 HAL 的 MOTION_IO pimpl 修（syntax 級驗證）；文件線。
 - **設計面**：三項裁決已全落地執行；B4 依裁決不修（台帳在冊）。
+
+## 20260819 — FW-BinSel-WC：InitDataToEdit 落地＋mtTrayNameSetColor 全解鎖
+
+- **標的**：Wave B 留下的最後大宗 InitDataToEdit（golden :4142-4784，643
+  行）＋ TMyBinPanelData/TfBinSel 的 mtTrayName/mtTrayItem widget 半
+  （golden ctor :386-387/:417-418/:421-511）＋ mtTrayNameSetColor 整體
+  gate 解鎖（GATE REGISTER G9 CLOSED）。gate 暫停中，只做 `-fsyntax-only`。
+- **關鍵發現（改變了原本「純 UI」的分類）**：InitDataToEdit 幾乎每一段的
+  `ed*->Text=` 其實只是暫存 buffer——golden 自己在函式尾端
+  （:4685-4711）又把同一批 ed*->Text 讀回 `TfBinSel::sXxx[tag]`。既然
+  ed* 本身沒有其他讀者，S20：直接在 golden 算出該值的地方寫
+  `sXxx[tag]->CommaText=<value>`，跳過 ed* 這個不存在的中介——與 golden
+  的最終 sXxx[tag] 內容逐位元相同。這讓本波實際落地的「真邏輯」遠多於
+  「純 widget 鏡射」表面看起來的樣子：22+ 個 sXxx[tag] 陣列、兩個
+  SpecialBinByArm/BySocket 過期旗標重置的資料 mutation、以及整段
+  Link-chain 運算（golden :4712-4775，純 TStringList 算術）全部 ACTIVE。
+  只有 `MyBinPanel[tag]->mtBinSelect` 格子渲染（新 GATE G10，第三個
+  Tray256Core*，仍缺）與 4 個沒有 sXxx 目標的純顯示 ed*（Error/PassFail/
+  AutoRetest/AutoRetestCateR/Scan，沿用 G7）維持 gate。
+- **mtTrayNameSetColor**：`.YItem` 讀取翻成 `.FYItem`（vclcompat 無
+  property emulation）；(B16) golden bug 原句照翻保留。
+- **SIOF 新坑**：ctor 新增的 `s6TrayName[iT6]` 列標籤讀取是跨 TU 動態初
+  始化全域（cmydef.cpp:44），`fBinSel` 是靜態期建構——`INIFileGeneral!=0`
+  guard 比照 cObserver.cpp 的 GetObserAuth() 先例，只包這一行（其餘皆
+  literal/plain extern global，同既有 STATIC-INIT SAFETY 分類）。量產
+  `fBinSel` 因此永久跳過這一行（ctor 只建構一次），測試側用
+  OpenGeneralIniFile()+asGeneralPath scratch 重導解鎖驗證。
+- **golden bug 台帳**：本波未新增（B14-B18 維持不變）——ByBin/BySite 命名
+  互換（iAutoCleanByBin→sBySiteClean）是 ReadFunctionData 早已確立的既有
+  慣例，非新發現，沿用不重複記帳。
+- **驗收**：cBinSel.cpp／forms/fBinSel.h／tests/test_binsel_core.cpp 三檔
+  `-fsyntax-only` 全乾淨（@build_fww1g includes_CXX.rsp）。新增 7 個測試
+  （ctor 靜態標籤×2、mtTrayNameSetColor Pass/Fail 顏色×1、InitDataToEdit
+  Double Contact/Cons.Fail 及 AutoClean 啟停×2）。build.bat/ctest 未跑
+  （量產程式執行中，遵照暫停規則）。
+- **刻意沒做**：`MyBinPanel[tag]->mtBinSelect`（G10）、22 個 ed* TEdit
+  成員（純顯示、沒有 sXxx 目標的 4 個維持 gate）、`InitmtBinSelectData()`
+  未呼叫。留給下一波（若要把 InitDataToEdit 的 grid 渲染也點亮）。
+
+### 🔖 RESUME（最新）
+
+- **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
+  Sec/BinSel/SBW 全系列、FW-W1（5e4b30d）、台帳 552 筆（49ea369）、
+  **FW-BinSel-WC**（InitDataToEdit 真本體＋mtTrayNameSetColor 全解鎖，
+  cBinSel.h/cpp 的 TfBinSel 系列翻譯至此告一段落，只剩 mtBinSelect 格子
+  渲染／22 個 ed* TEdit／mouse handler 等純 UI 大宗待後續波次）。
+- **⚠ 環境狀態**：量產 HT9045.exe 在本機執行中 → gate 暫停；
+  FW-BinSel-WC／FW-W1 的乾淨補 gate 等量產程式關閉。
+- **gate-free 可做**：FW-W2 auth.login 程式碼準備（不跑 gate 只
+  -fsyntax-only＋探針對 --dry server）；1203 HAL 的 MOTION_IO pimpl 修
+  （syntax 級驗證）；文件線；cBinSel 剩餘大宗（mtBinSelect widget 化，
+  需再加 22 個 TEdit + 1 個 Tray256Core 成員）可繼續程式碼準備。
+- **設計面**：三項裁決已全落地執行；B4 依裁決不修（台帳在冊）。

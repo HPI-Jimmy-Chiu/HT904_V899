@@ -14,6 +14,19 @@
 //  citations live next to each method in cBinSel.cpp (not duplicated here,
 //  same "avoid the two files drifting apart" policy as WAVE A's own banner).
 //
+//  AI(W906-FW-BinSel-WC) 20260819: FW-3 表單波 WAVE C -- lands (1) InitDataToEdit
+//  (golden :4142-4784, WAVE B's own "last big backlog item", declared here
+//  for the first time), (2) TMyBinPanelData's mtTrayName/mtTrayItem widget
+//  pair + golden TMyBinPanel ctor's own cell-fill population (golden
+//  :386-387/:417-418/:421-511, landed in TfBinSel::TfBinSel's per-tag loop)
+//  + TfBinSel's OWN class-level mtTrayName/mtTrayItem pair (golden
+//  cBinSel.h:73-74), and (3) mtTrayNameSetColor's full unlock (WAVE B gated
+//  its entire body pending exactly this widget pair -- see that method's own
+//  banner in cBinSel.cpp). GATE REGISTER G9 is CLOSED this wave; G10 opens
+//  for `MyBinPanel[tag]->mtBinSelect` (a THIRD, still-absent Tray256Core*,
+//  InitDataToEdit's own remaining gap). See cBinSel.cpp's per-method banners
+//  for the full ACTIVE/GATE split (not duplicated here).
+//
 //  ROLE
 //  ----
 //  TfBinSel is golden's Bin-Select setup dialog: per-bin-type (RT/FT/OffLine/
@@ -82,13 +95,43 @@
 //                             spbPrime/tsRetest/fMain->SetNormalOrPrime()
 //                             all absent from the facade (see GATE REGISTER
 //                             G8).
-//    mtTrayNameSetColor(tag) golden :4033-4140  WAVE B (this wave). GATE:
-//                             entire body -- see GATE REGISTER G9 (the
-//                             corrected Tray256Core absence claim + the
-//                             coupled-ctor-population reason it stays gated
-//                             this wave) and (B16) in cBinSel.cpp (golden
-//                             quirk: 2 of its calls target TfBinSel's OWN
-//                             mtTrayName/mtTrayItem, not MyBinPanel[tag]'s).
+//    mtTrayNameSetColor(tag) golden :4033-4140  WAVE C (this wave) unlocks
+//                             the FULL body -- WAVE B gated it whole pending
+//                             the widget pair WAVE C now lands (see GATE
+//                             REGISTER G9, CLOSED). `.YItem` READ (golden's
+//                             own __published property getter) translates to
+//                             `.FYItem` (the underlying field vclcompat
+//                             exposes directly -- no property emulation, see
+//                             vclcompat/TrayCore.h). (B16) golden quirk (2
+//                             calls target TfBinSel's OWN mtTrayName/
+//                             mtTrayItem, not MyBinPanel[tag]'s) preserved
+//                             verbatim, not "fixed".
+//    InitDataToEdit(tag)     golden :4142-4784  WAVE C (this wave), newly
+//                             declared. ACTIVE/GATE split (see cBinSel.cpp's
+//                             own banner for the full block-by-block table):
+//                             every `MyBinPanel[tag]->ed*` widget this method
+//                             writes either (a) has NO sXxx[tag] tail
+//                             consumer at all (Error/PassFail/AutoRetest/
+//                             AutoRetestCateR/Scan) -- GATE (G7), pure
+//                             display text, or (b) is a pure scratch buffer
+//                             carrying a value from where golden computes it
+//                             to where golden's OWN tail (:4685-4711) reads
+//                             it back into `TfBinSel::sXxx[tag]` a few
+//                             hundred lines later IN THE SAME CALL -- ported
+//                             ACTIVE by writing `sXxx[tag]->CommaText`
+//                             DIRECTLY at the point golden computes the
+//                             value (S20, elides the ed* round-trip, same
+//                             final `sXxx[tag]` content bit-for-bit).
+//                             `MyBinPanel[tag]->mtBinSelect` grid-cell writes
+//                             are GATE (G10, new this wave). Two genuine DATA
+//                             mutations (bSpecialBinByArm/bSpecialBinBySocket
+//                             stale-flag resets, golden :4404-4420/
+//                             :4442-4458) and the entire tail Link-chain
+//                             computation (golden :4712-4775, pure
+//                             TStringList arithmetic over sBinTraySetT3Pos
+//                             [tag]/sBinTrayLinked[tag] -> sBinLinked[tag])
+//                             are ACTIVE unconditionally -- not widget
+//                             mirrors at all.
 //
 //  WAVE B QUEUE -- CLOSED this wave (FW-BinSel-WB landed all 4 items WAVE A
 //  queued below). Kept verbatim as a historical record of WAVE A's own
@@ -152,13 +195,12 @@
 //  fShowBinSelect.h's WAVE B QUEUE / cShowBinSelect.cpp's ChangeBinDispStatus)
 //  -----------------------------------------------------------------------
 //    FormShow (:1663-1994, 332 lines), cbTestModeChange (:2109-2192),
-//    ShowChangeBinMessage (:1598-1662), InitDataToEdit (:4142-4784, 643
-//    lines), the 27 `Sete*` grid-edit predicates (:3280-3833, e.g.
+//    ShowChangeBinMessage (:1598-1662), the 27 `Sete*` grid-edit predicates (:3280-3833, e.g.
 //    SeteDoubleContact/SeteConsFail/.../SeteSpecBinByArmPerSiteComparePercent),
 //    every mouse handler (mtTrayNameMouseDown/mtBinSelectMouseDown/
 //    mtBinSelectMouseMove/mtBinSelectMouseUp/mtTrayItemMouseUp/
 //    sgSpecificBinMouseDown/ed_FixBinBoxAlarmCountMouseDown), SetBinTray/
-//    ShowBinTray/Change/mtTrayNameSetColor's own callee InitDataToEdit,
+//    ShowBinTray/Change,
 //    sbtExitClick/spbNormalClick/spbPrimeClick/CancelErrorBinClick/
 //    rg_FixBinBoxClick/btnSettingSpecificBinClick/palSpecificBinClick/
 //    btnSetAll2NotUseClick/spbAOIBinClick/AOI_SplitToInt, FormShortCut.
@@ -196,14 +238,16 @@
 //  tree (see KNOWLEDGE.md's "S" numbering), tagged S18 (S1-S17 already used by
 //  earlier waves per those waves' own headers; this file does not renumber
 //  them). This is a BEHAVIOUR-PRESERVING end-state for every ACTIVE method in
-//  this wave -- none of them ever reads a `MyBinPanel[tag]->` WIDGET field
-//  (confirmed by reading every one of this wave's method bodies against
-//  golden before writing the port below) -- not a scope reduction of THIS
-//  wave's own methods, though it DOES mean `MyBinPanel[tag]->mtTrayName/
-//  mtBinSelect/mtTrayItem/Panel/sbBinSetScroll/...` (the widget half) has no
-//  home yet; `mtTrayNameSetColor`/`InitDataToEdit`/the mouse handlers that DO
-//  read those fields are exactly the methods this wave declares Wave B or
-//  omits entirely (see split table above).
+//  WAVE A/WAVE B -- none of them ever reads a `MyBinPanel[tag]->` WIDGET field
+//  (confirmed by reading every one of those waves' method bodies against
+//  golden before writing the port). WAVE A's own claim that the widget half
+//  "has no home yet" is now PARTIALLY STALE: WAVE C lands `MyBinPanel[tag]->
+//  mtTrayName/mtTrayItem` (see TMyBinPanelData above) and TfBinSel's OWN
+//  `mtTrayName/mtTrayItem` (see the class body below) -- `MyBinPanel[tag]->
+//  mtBinSelect/Panel/sbBinSetScroll/...` (everything else in that list)
+//  REMAINS absent; the mouse handlers and the rest of InitDataToEdit's own
+//  mtBinSelect-touching statements (GATE G10) are exactly the surface still
+//  missing a home (see split table above).
 //
 //  `cbTestMode->Items->Delete(1)`/`->Add(...)` (golden :1078-1096, populating
 //  the test-mode combo per CosFunction flags) IS translated verbatim (cheap,
@@ -239,11 +283,32 @@
 //  ctor would produce, which is cosmetic (Wave-B territory, `cbTestMode` has
 //  no ACTIVE reader this wave) and self-heals the moment any later,
 //  config-load-order-independent code path re-populates it. NO
-//  `INIFileGeneral!=0` guard is therefore needed (verified this wave by
-//  reading the full ctor body above, unlike cObserver.cpp's ctor which reads
-//  INI files directly and DOES need the guard) -- flagged here, per project
-//  convention, for the main loop to re-verify before/при this wave's
-//  integration, not asserted as unconditionally proven.
+//  `INIFileGeneral!=0` guard is therefore needed for WAVE A/WAVE B's own
+//  ctor additions (verified by reading the full ctor body above, unlike
+//  cObserver.cpp's ctor which reads INI files directly and DOES need the
+//  guard) -- flagged here, per project convention, for the main loop to
+//  re-verify before/при this wave's integration, not asserted as
+//  unconditionally proven.
+//
+//  AI(W906-FW-BinSel-WC) 20260819 UPDATE: this claim no longer covers the
+//  WHOLE ctor -- WAVE C's own addition (per-tag `mtTrayItem` row-label
+//  population, golden :483) reads `s6TrayName[iT6]`, a CROSS-TU global with
+//  a real dynamic initialiser (`AnsiString s6TrayName[eTrayCount]={...}`,
+//  cmydef.cpp:44 -- a DIFFERENT translation unit than cBinSel.cpp, unlike
+//  every symbol the paragraph above covers). Inter-TU dynamic-init order is
+//  unspecified, so reading it unconditionally from `fBinSel`'s own
+//  static-init-time ctor body is a genuine SIOF risk -- guarded with
+//  `if(INIFileGeneral!=0)` around JUST that one line (same "we are past
+//  static-init, real runtime" proxy as cObserver.cpp's GetObserAuth() guard,
+//  AI(W906-FW-ObsSwap) 20260818), NOT the whole cell-fill block (every other
+//  statement in it is a literal string or a plain-old extern global, same
+//  safe category as the paragraph above). For the PRODUCTION `fBinSel`
+//  global this means that ONE row-label text is permanently skipped (same
+//  accepted trade-off as cObserver's GetObserAuth(), not re-litigated here
+//  -- `fBinSel`'s ctor runs exactly once, at static init, and is never
+//  re-invoked); tests unlock it explicitly via `OpenGeneralIniFile()` against
+//  a scratch path (see tests/test_binsel_core.cpp), the SAME idiom
+//  tests/test_observer_core.cpp already established.
 //
 //  DESIGN NOTE -- PageControl1 ActivePageIndex convention (Wave-A-invented)
 //  -----------------------------------------------------------------------
@@ -328,28 +393,35 @@
 //       tsRetest" forms/fBinSel.h` -- only comment hits, 20260819) and
 //       `fMain->SetNormalOrPrime()` (`grep -n "SetNormalOrPrime"
 //       forms/fMain.h` -- 0 hits, 20260819) are all absent from the facade.
-//  (G9) FW-BinSel-WB (this wave). `mtTrayNameSetColor`'s ENTIRE body --
-//       `MyBinPanel[tag]->mtTrayName`/`mtTrayItem` (needs `TMyBinPanelData`
-//       members of type `vclcompat::Tray256Core`, not yet added) and
+//  (G9) CLOSED FW-BinSel-WC (this wave). Was: `mtTrayNameSetColor`'s ENTIRE
+//       body gated on `MyBinPanel[tag]->mtTrayName`/`mtTrayItem` (needed
+//       `TMyBinPanelData` members of type `vclcompat::Tray256Core`) and
 //       `TfBinSel`'s OWN `mtTrayName`/`mtTrayItem` (golden cBinSel.h:73-74,
-//       type `vclcompat::TrayCore`, not yet added either) are both absent
-//       from the facade, plus `InitDataToEdit(tag)` (`grep -rn
-//       "InitDataToEdit" --include=*.h --include=*.cpp .` -- only comment
-//       hits, 20260819). CORRECTED ABSENCE CLAIM: `vclcompat::Tray256Core`/
-//       `vclcompat::TrayCore` (vclcompat/TrayCore.h/.cpp, linked into
-//       ht9045_sm per CMakeLists.txt:256) DO exist as of W7-C1 (20260728,
-//       BEFORE this file's own WAVE A banner date) -- WAVE A's STUB
-//       COLLISION SCAN below searched the literal string `"class
-//       TTMyTray256"` (golden's own type name) and correctly got 0 hits, but
-//       missed that vclcompat/Controls.h:79 already documents the RENAME
-//       ("TTMyTray / TTMyTray256 -> vclcompat/TrayCore.* (W7-C1)"). The TYPE
-//       exists; the MEMBER declarations + the ~90-line ctor-side cell-text
-//       population golden's own `TMyBinPanel::TMyBinPanel` ctor does for
-//       them (golden cBinSel.cpp :420-509) do not, and landing just this
-//       method without that ctor-side population would half-populate the
-//       grid (colour right, text stale) -- see cBinSel.cpp's own banner on
-//       this method for the full reasoning. Flagged precisely for whichever
-//       wave lands `TMyBinPanel`'s widget half.
+//       type `vclcompat::TrayCore`) both being absent from the facade, plus
+//       `InitDataToEdit(tag)` not being declared at all. WAVE C lands all
+//       three (see TMyBinPanelData/TfBinSel class bodies + InitDataToEdit's
+//       own declaration below) -- `mtTrayNameSetColor` is now ACTIVE (full
+//       body, see its own banner in cBinSel.cpp). CORRECTED ABSENCE CLAIM
+//       (kept verbatim as historical record of WAVE A's own miss):
+//       `vclcompat::Tray256Core`/`vclcompat::TrayCore` (vclcompat/
+//       TrayCore.h/.cpp, linked into ht9045_sm per CMakeLists.txt:256) DO
+//       exist as of W7-C1 (20260728, BEFORE this file's own WAVE A banner
+//       date) -- WAVE A's STUB COLLISION SCAN below searched the literal
+//       string `"class TTMyTray256"` (golden's own type name) and correctly
+//       got 0 hits, but missed that vclcompat/Controls.h:79 already
+//       documents the RENAME ("TTMyTray / TTMyTray256 -> vclcompat/
+//       TrayCore.* (W7-C1)").
+//  (G10) FW-BinSel-WC (this wave). `InitDataToEdit`'s `MyBinPanel[tag]->
+//       mtBinSelect` grid-cell writes (golden :4206-4249 and every
+//       `mtBinSelect->SetCellNumber`/`SetCellColorIndex` call in the rest of
+//       that method) -- `grep -n "mtBinSelect" forms/fBinSel.h` -- 0 hits
+//       (20260819, before this wave's own G9 additions); a THIRD
+//       `vclcompat::Tray256Core*`, distinct from the `mtTrayName`/
+//       `mtTrayItem` pair G9 closes this wave. `InitmtBinSelectData()`
+//       (golden :513, `TMyBinPanel`'s own ctor-side populator for this same
+//       widget) is correspondingly not called either. Every `MyBinPanel
+//       [tag]->ed*->Text=` site InitDataToEdit ALSO writes reuses G7 (same
+//       absent-member class, already registered) rather than a new number.
 //
 //  STUB COLLISION SCAN (`grep -rn "TfBinSel\\b" --include=*.cpp
 //  --include=*.h .` / `grep -rn "\\bfBinSel\\b" --include=*.cpp
@@ -397,6 +469,7 @@
 #include "vclcompat/vcl_compat.h"    // AnsiString, TObject, TStringList
 #include "vclcompat/Controls.h"      // TLabel, TPanel, TCheckBox, TComboBox, TRadioGroup, TEdit, TSpeedButton, TPageControl
 #include "vclcompat/StringGrid.h"    // TStringGrid
+#include "vclcompat/TrayCore.h"      // TrayCore, Tray256Core -- AI(W906-FW-BinSel-WC) 20260819
 #include "MachineType.h"             // eBinType/eBinTypeTotal, e3TrayCount, eTrayCount
 
 using vclcompat::TObject;
@@ -410,6 +483,8 @@ using vclcompat::TEdit;
 using vclcompat::TSpeedButton;
 using vclcompat::TPageControl;
 using vclcompat::TStringGrid;
+using vclcompat::TrayCore;
+using vclcompat::Tray256Core;
 
 // =============================================================================
 //  TMyBinPanelData -- Wave-A-invented, data-only stand-in for golden's
@@ -462,6 +537,19 @@ struct TMyBinPanelData
     double dSpecBinByArmPerSiteComparePercent[TEST_MAX_BIN] = {};
 
     bool bCancelErrorBin = false;
+
+    // AI(W906-FW-BinSel-WC) 20260819: widget half, golden TMyBinPanel::
+    // mtTrayName/mtTrayItem (cBinSel.cpp :129-130, type TTMyTray256*).
+    // vclcompat::Tray256Core is this tree's W7-C1 rename (see GATE REGISTER
+    // G9's CORRECTED ABSENCE CLAIM below) -- landed this wave together with
+    // the ctor's own cell-fill population (TfBinSel::TfBinSel, cBinSel.cpp)
+    // so mtTrayNameSetColor (this wave) reads a fully-populated grid, not a
+    // half-filled one (see that method's own "解鎖鑰匙" banner in
+    // cBinSel.cpp). `MyBinPanel[tag]->mtBinSelect` (a THIRD Tray256Core*,
+    // golden :131) stays absent -- InitDataToEdit's own GATE (G10), separate
+    // scope from this wave's mtTrayName/mtTrayItem pair.
+    Tray256Core *mtTrayName = new Tray256Core();
+    Tray256Core *mtTrayItem = new Tray256Core();
 
     TMyBinPanelData()
     {
@@ -551,6 +639,18 @@ public:
     // -- Wave-A data-only stand-in for golden's `vector<TMyBinPanel*>` -------
     TMyBinPanelData *MyBinPanel[eBinTypeTotal];
 
+    // AI(W906-FW-BinSel-WC) 20260819: golden cBinSel.h:73-74 -- TfBinSel's OWN
+    // class-level (tag-invariant) pair, type TTMyTray* -> vclcompat::TrayCore
+    // (NOT Tray256Core -- a smaller, DIFFERENT class; see vclcompat/
+    // TrayCore.h's own "same shape... MAX_ITEM=100 vs 300" banner). In golden
+    // these are real, pixel-placed, .dfm-adjacent widgets (never populated by
+    // this wave's ACTIVE code); the only reader anywhere in this file is
+    // mtTrayNameSetColor's own (B16) golden bug -- 2 calls that OMIT the
+    // `MyBinPanel[tag]->` prefix every sibling call in that method has, and
+    // so land here instead. Preserved verbatim (not "fixed").
+    TrayCore *mtTrayName = new TrayCore();
+    TrayCore *mtTrayItem = new TrayCore();
+
     TfBinSel();   // DEVIATION bootstrap ctor -- see CTOR NOTE above
 
     void FormDestroy(TObject *Sender);
@@ -580,6 +680,10 @@ public:
     void SaveFunctionData(int tag, AnsiString FileName);
     void SetPrimeButton();
     void mtTrayNameSetColor(int tag);
+
+    // -- FW-BinSel-WC (this wave): real (ACTIVE/GATE-split) body landed in
+    // cBinSel.cpp -- see that method's own banner and GATE REGISTER G7/G10.
+    void InitDataToEdit(int tag);
 };
 
 // AI(W906-FW-BinSel-WA) 20260819: SIOF homecoming -- real instance (see

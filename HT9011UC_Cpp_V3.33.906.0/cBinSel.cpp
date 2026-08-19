@@ -114,6 +114,33 @@ const AnsiString sTrayName[eTrayCount]={"Auto1", "Auto2", "Auto3",              
     "Magazine8", "Magazine9","Magazine10", "Magazine11", "Magazine12", "Magazine13", "Magazine14"
 };
 
+// AI(W906-FW-BinSel-WC) 20260819: golden :97-118 (TU-local) -- the mtTrayName/
+// mtTrayItem cell-index and colour-index enums. Needed by this wave's ctor
+// cell-fill addition and by mtTrayNameSetColor's unlock (see forms/fBinSel.h
+// GATE REGISTER G9, CLOSED this wave).
+const int eItemName   =0;                                                       // golden :97 -- mtTrayItem's ONLY column
+enum eTrayNameFunc                                                              // golden :98-105 -- mtTrayName's columns
+{   eItemLink   =0,
+    eItemPass   =1,
+    eItemError  =2,
+    eItemCateR  =3,
+    eItemART    =4,
+    eItemTotal
+};
+
+enum eTrayColorMap                                                              // golden :107-118
+{   eCLWhite        =0,
+    eCLGreen        =1,
+    eCLRed          =2,
+    eCLYellow       =3,
+    eCLPurple       =4,
+    eCLBlue         =5,
+    eCLGray         =6,
+    eCLSilver       =7,
+    eCLBtnFace      =8,
+    eCLOlive        =9
+};
+
 //---------------------------------------------------------------------------
 // AI(W906-FW-BinSel-WA) 20260819: SIOF homecoming -- real instance (see
 // forms/fBinSel.h STATIC-INIT SAFETY -- this ctor's own body was read in
@@ -223,12 +250,136 @@ TfBinSel::TfBinSel()
         }
     }
 
-    // golden :1098-1102/:1104-1115 -- MyBinPanel population. Data-only this
-    // wave (see forms/fBinSel.h CTOR NOTE); `->mtBinSelect->Width/XItem`,
-    // `InitmtBinSelectData()` and the KYEC `->Panel->Color` tint are all
-    // widget-half, no reader in this wave's ACTIVE methods -- dropped.
+    // golden :1098-1102/:1104-1115 -- MyBinPanel population. `->mtBinSelect->
+    // Width/XItem`, `InitmtBinSelectData()` and the KYEC `->Panel->Color`
+    // tint remain widget-half, no reader anywhere in this tree yet (GATE
+    // G10) -- dropped. `->mtTrayName/mtTrayItem`'s own cell-fill (golden
+    // TMyBinPanel::TMyBinPanel ctor :386-387/:417-418/:421-511) is FW-
+    // BinSel-WC (this wave): the "解鎖鑰匙" mtTrayNameSetColor needed (see
+    // that method's own banner) -- landed here, inline, per-tag, since this
+    // tree's TMyBinPanelData is a plain struct (no per-instance ctor of its
+    // own to carry this the way golden's TMyBinPanel::TMyBinPanel(index,...)
+    // does).
     for (int tag = 0; tag < eBinTypeTotal; tag++)
+    {
         MyBinPanel[tag] = new TMyBinPanelData();
+
+        MyBinPanel[tag]->mtTrayName->SetYItem(eBinSetTotal);                    // golden :386
+        MyBinPanel[tag]->mtTrayName->SetXItem(eItemTotal);                      // golden :387
+        MyBinPanel[tag]->mtTrayItem->SetYItem(eBinSetTotal);                    // golden :417
+        MyBinPanel[tag]->mtTrayItem->SetXItem(eItemName);                       // golden :418
+
+        //Col Name----
+        MyBinPanel[tag]->mtTrayName->SetCellNumber(eItemLink,  eBinNo,       "Link"    );
+        MyBinPanel[tag]->mtTrayName->SetCellNumber(eItemPass,  eBinNo,       "Failed"  );
+        MyBinPanel[tag]->mtTrayName->SetCellNumber(eItemError, eBinNo,       "Error"   );
+        MyBinPanel[tag]->mtTrayName->SetCellNumber(eItemART,   eBinNo,       "Retest"  );            //ChungHung 20140317 add Auto Retest
+        MyBinPanel[tag]->mtTrayName->SetCellNumber(eItemCateR, eBinNo,       "CateR"   );            //Steven 20161221 (wei) : Cate R for ART
+
+        //Row Name----
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eBinNo,           "Items"         );
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eScanning,        "Scanning"      );
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eDoubleContact,   "Double Contact");
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eConsFail,        "Cons. Fail"    );
+
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  ePersentEnable,   "Yield % Bin");     //Steven 20140925 : SPIL鄭世明說Pass也要設定 Fail --> Yield
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  ePersentIgnore,   "Yield Ignore Cnt");//JerryYang 20160802 修正文字避免誤解,Yield % Ignore改成Yield Ignore Cnt
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  ePersentNumber,   "Yield % Number");
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eCountEnable,     "Count Bin" );      //Steven 20140925 : SPIL鄭世明說Pass也要設定 Fail --> Count
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eCountIgnore,     "Count Ignored");
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eCountNumber,     "Count Number");
+
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eSpecialBinByArm,           "Spc. Bin By Arm");
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eSpecialBinCountByArm,      "Spc. Cnt By Arm") ;
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eSpecialBinBySocket,        "Spc. Bin By Socket");
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eSpecialBinCountBySocket,   "Spc. Cnt By Socket");
+
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eLowYield,    "Low Yield") ;          //Steven 20140828 : By Bin Yield Monitor
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eArmYield,    "By Arm Yield");        //Steven 20140828 : By Bin Arm Yield Monitor
+
+        if (CUSTOMER_CODE==CC_Greatek)                                               //Sam 20201221 : 修正 Control Bin 顯示
+        {
+            MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,    eSiteYield,         "Control Bin Yield%");
+            MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,    eAutoCleanByBin,    "Control Bin Count");
+            MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,    eAutoCleanBySite,   "Control Bin S/S%");
+        }
+        else
+        {
+            MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,    eSiteYield,         "By Site Yield");   //Steven 20140828 : By Bin Site Yield Monitor
+            MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,    eAutoCleanByBin,    "By Bin Cleaning"); //Steven 20160308 : By Bin count do auto clean
+            MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,    eAutoCleanBySite,   "By Site Cleaning");//Steven 20160308 : By Bin pre site count do auto clean
+        }
+
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eSpecBinBySiteCompareEnable,       "By Bin Site Gap");
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eSpecBinBySiteCompareIgnore,       "Count Ignore") ;
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eSpecBinBySiteComparePercent,      "Site Gap %");
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eSpecBinByArmPerSiteCompareEnable, "By Arm By Bin Site Gap");
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eSpecBinByArmPerSiteCompareIgnore, "Count Ignore") ;
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eSpecBinByArmPerSiteComparePercent,"By Arm Site Gap%");
+
+        MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  eBinNotUse,    "Not in use");
+
+        for (int j = eBinNo; j < eBinSetting; j++)
+        {
+            for (int k = eItemLink; k < eItemTotal; k++)
+            {
+                MyBinPanel[tag]->mtTrayName->SetCellColorIndex(k,  j, eCLGray);
+            }
+            MyBinPanel[tag]->mtTrayItem->SetCellColorIndex(eItemName, j, eCLGray);
+        }
+
+        for (int j = eBinSetting; j < eBinSetTotal; j++)
+        {
+            int iT6=j-eBinSetting;
+
+            // AI(W906-FW-BinSel-WC) 20260819: SIOF guard -- `s6TrayName[]` is
+            // a cross-TU global with a non-trivial ctor (AnsiString array,
+            // defined in cmydef.cpp:44, cmydef.h:138) and this ctor runs at
+            // STATIC INIT (`fBinSel = new TfBinSel();` below, see forms/
+            // fBinSel.h STATIC-INIT SAFETY). Inter-TU dynamic-init order is
+            // unspecified, so reading it unconditionally here risks the SAME
+            // class of bug cObserver.cpp's GetObserAuth() guard prevents
+            // (AI(W906-FW-ObsSwap) 20260818) -- `INIFileGeneral!=0` is this
+            // tree's "we are past static-init, real runtime" proxy (only
+            // ever set non-null from inside main()/WinMain's own body).
+            // Every OTHER statement in this loop is a literal string or a
+            // plain-old extern global (same safe category as this ctor's
+            // existing STATIC-INIT SAFETY note) -- only THIS one line needs
+            // the guard.
+            if (INIFileGeneral != 0)
+                MyBinPanel[tag]->mtTrayItem->SetCellNumber(eItemName,  j, s6TrayName[iT6].c_str());
+            MyBinPanel[tag]->mtTrayItem->SetCellColorIndex(eItemName,  j, eCLGray);
+            MyBinPanel[tag]->mtTrayName->SetCellNumber    (eItemError, j, "Error");
+            MyBinPanel[tag]->mtTrayName->SetCellColorIndex(eItemError, j, eCLWhite);
+
+            if (USE_AUTO_RETEST==eartInstall || IniConfig.bA38_SLT_Summary)          //JerryYang 20220923 : add for SLT lot summary
+            {
+                MyBinPanel[tag]->mtTrayName->SetCellNumber    (eItemART, j, "Retest");               //ChungHung 20140317 add Auto Retest
+                MyBinPanel[tag]->mtTrayName->SetCellColorIndex(eItemART, j, eCLWhite);               //ChungHung 20140317 add Auto Retest
+
+                if (CosFunction.bUseSCKART)                                          //Steven 20161221 (wei) : Cate R for ART
+                {
+                    MyBinPanel[tag]->mtTrayName->SetCellNumber    (eItemCateR, j, "CateR");
+                    MyBinPanel[tag]->mtTrayName->SetCellColorIndex(eItemCateR, j, eCLWhite);
+                }
+                else
+                {
+                    MyBinPanel[tag]->mtTrayName->SetCellNumber    (eItemCateR, j, "");
+                    MyBinPanel[tag]->mtTrayName->SetCellColorIndex(eItemCateR, j, eCLGray);          //Steven 20161221 (wei) : Cate R for ART
+                }
+            }
+            else
+            {
+                MyBinPanel[tag]->mtTrayName->SetCellNumber    (eItemART, j, "");                     //ChungHung 20140317 add Auto Retest
+                MyBinPanel[tag]->mtTrayName->SetCellColorIndex(eItemART, j, eCLGray);                //ChungHung 20140317 add Auto Retest
+                MyBinPanel[tag]->mtTrayName->SetCellNumber    (eItemCateR, j, "");
+                MyBinPanel[tag]->mtTrayName->SetCellColorIndex(eItemCateR, j, eCLGray);              //Steven 20161221 (wei) : Cate R for ART
+            }
+        }
+
+        // GATE (G10): InitmtBinSelectData() (golden :513) -- populates
+        // MyBinPanel[tag]->mtBinSelect, still absent this wave.
+    }
 
     if (CosFunction.bDisableRTBinSet)                                          // golden :1078-1079
         cbTestMode->Items->Delete(1);
@@ -3134,62 +3285,54 @@ void TfBinSel::SetPrimeButton()
 }
 
 //---------------------------------------------------------------------------
-//  mtTrayNameSetColor -- golden :4033-4140 (108 lines). FW-BinSel-WB (this
-//  wave). GATE: entire body.
+//  mtTrayNameSetColor -- golden :4033-4140 (108 lines). FW-BinSel-WC (this
+//  wave) unlocks the FULL body -- FW-BinSel-WB gated it whole pending the
+//  widget pair FW-BinSel-WC now lands (see forms/fBinSel.h GATE REGISTER
+//  G9, CLOSED this wave). `.YItem` (golden's own __published property READ)
+//  translates to `.FYItem` (the underlying field vclcompat exposes directly
+//  -- Tray256Core has no property-getter emulation, see vclcompat/
+//  TrayCore.h; property WRITES already translate to `Set*()` calls
+//  elsewhere in this file, e.g. this wave's own ctor addition).
 //
-//  CORRECTED ABSENCE CLAIM (re-verify-before-relying-on rule, see
-//  KNOWLEDGE.md "wave-agents-stale-absence-claims"): WAVE A's own STUB
-//  COLLISION SCAN asserted `grep -rn "class TTMyTray256" vclcompat/` -- 0
-//  hits (20260819) and concluded "no vclcompat stand-in exists anywhere in
-//  the tree". That literal-string grep was correct but MISLEADING -- W7-C1
-//  (20260728, BEFORE WAVE A's own banner date) already added
-//  `vclcompat::Tray256Core`/`vclcompat::TrayCore` (vclcompat/TrayCore.h/.cpp,
-//  linked into ht9045_sm per CMakeLists.txt:256) as this tree's RENAMED
-//  stand-in for golden's TTMyTray256/TTMyTray (vclcompat/Controls.h:79's own
-//  cross-reference: "TTMyTray / TTMyTray256 -> vclcompat/TrayCore.*
-//  (W7-C1)"). Re-verified this wave: `grep -rln "Tray256Core" --include=*.h
-//  --include=*.cpp .` -- 3 hits, 20260819 (TrayCore.h/.cpp +
-//  test_traycore.cpp only) -- the TYPE exists, but no form anywhere in this
-//  tree yet declares a `Tray256Core`/`TrayCore` MEMBER.
+//  HISTORICAL (WAVE B's own reasoning for gating -- kept for context, no
+//  longer the current status): WAVE A's STUB COLLISION SCAN asserted `grep
+//  -rn "class TTMyTray256" vclcompat/` -- 0 hits (20260819) and concluded
+//  "no vclcompat stand-in exists anywhere in the tree". That literal-string
+//  grep was correct but MISLEADING -- W7-C1 (20260728, BEFORE WAVE A's own
+//  banner date) already added `vclcompat::Tray256Core`/`vclcompat::TrayCore`
+//  (vclcompat/TrayCore.h/.cpp, linked into ht9045_sm per CMakeLists.txt:256)
+//  as this tree's RENAMED stand-in for golden's TTMyTray256/TTMyTray
+//  (vclcompat/Controls.h:79's own cross-reference). WAVE B wiring THIS
+//  method alone would have needed the SAME three additions FW-BinSel-WC now
+//  makes: (1) `TMyBinPanelData::mtTrayName`/`mtTrayItem` (per-tag
+//  Tray256Core widgets), (2) `TfBinSel::mtTrayName`/`mtTrayItem` (the
+//  SEPARATE class-level TrayCore pair; see (B16) below), (3) the ~90-line
+//  cell-text population golden's OWN `TMyBinPanel::TMyBinPanel` ctor does
+//  for these widgets (golden :420-509, landed this wave in `TfBinSel::
+//  TfBinSel`'s own per-tag loop) -- wiring only this method without (3)
+//  would have left eItemART/eItemCateR/eItemPass's cell TEXT blank forever
+//  while COLOUR rendered fine, a half-populated grid WAVE B judged worse
+//  than a documented gate.
 //
-//  WHY STILL GATED (not wired up this wave): wiring this method alone would
-//  need THREE additions this wave does not make -- (1) `TMyBinPanelData::
-//  mtTrayName`/`mtTrayItem` (`Tray256Core`, per-tag widgets), (2) `TfBinSel::
-//  mtTrayName`/`mtTrayItem` (`TrayCore`, golden cBinSel.h:73-74 -- a
-//  SEPARATE, class-level pair; see (B16) below), AND (3) the ~90-line
-//  cell-text population golden's OWN `TMyBinPanel::TMyBinPanel` ctor does for
-//  these widgets (golden cBinSel.cpp :420-509, e.g. `mtTrayName->
-//  SetCellNumber(eItemLink,eBinNo,"Link")`) -- which WAVE A's own CTOR NOTE
-//  explicitly deferred ("widget wiring dropped"). Wiring only THIS method's
-//  body without also landing (3) would leave eItemART/eItemCateR/eItemPass's
-//  cell TEXT blank forever (set by the ctor loop, not by this method, for
-//  the per-tag `MyBinPanel[tag]->mtTrayName` widget) while COLOUR renders
-//  fine -- a half-populated grid that LOOKS wired but silently shows wrong
-//  content is worse than a documented gate. (1)+(2)+(3) together are a
-//  larger, separate unit of work than this wave's 4-method scope; flagged
-//  here with exact golden line spans so a future wave does not have to
-//  rediscover this.
-//
-//  (B16) GOLDEN QUIRK: the two calls at golden :4094/:4106
+//  (B16) GOLDEN QUIRK (unaffected by this wave's unlock -- preserved
+//  verbatim, not "fixed"): the two calls at golden :4094/:4106
 //  (`mtTrayName->SetCellNumber(eItemART,j,"Retest")` / `mtTrayName->
 //  SetCellNumber(eItemCateR,j,"CateR")`) omit the `MyBinPanel[tag]->` prefix
 //  every sibling call in this SAME method has. Confirmed against golden
 //  cBinSel.h:73-74: `TfBinSel` has its OWN `TTMyTray *mtTrayName`/
 //  `*mtTrayItem` (a DIFFERENT, class-level, tag-invariant pair -- NOT
-//  `MyBinPanel[tag]`'s per-tag one) -- so these two calls write the
-//  (tag-invariant) label text "Retest"/"CateR" onto that shared widget
-//  instead of the per-tag one that every other line in this method targets.
-//  Preserved verbatim (not "fixed" -- see project translation policy); a
-//  separate finding from the ReadFunctionData (B14)/(B15) AOI-key bugs above.
+//  `MyBinPanel[tag]`'s per-tag one, see this class's own TrayCore members) --
+//  so these two calls write the (tag-invariant) label text "Retest"/"CateR"
+//  onto that shared widget instead of the per-tag one that every other line
+//  in this method targets. A separate finding from the ReadFunctionData
+//  (B14)/(B15) AOI-key bugs above.
 //---------------------------------------------------------------------------
 void TfBinSel::mtTrayNameSetColor(int tag)
 {
-    (void)tag;   // only feeds the entirely-gated body below in this wave
-#if 0
     int iT6, iT6Pos;
     for(int j=eBinSetting; j<eBinSetTotal; j++)
     {
-        if(j>=MyBinPanel[tag]->mtTrayName->YItem)
+        if(j>=MyBinPanel[tag]->mtTrayName->FYItem)
             continue;
 
         iT6   =j-eBinSetting;
@@ -3290,11 +3433,777 @@ void TfBinSel::mtTrayNameSetColor(int tag)
         }
     }
 
-    // GATE: InitDataToEdit(tag) -- not translated anywhere this wave
-    // (`grep -rn "InitDataToEdit" --include=*.h --include=*.cpp .` -- only
-    // comment hits, this file's own banner above and forms/fBinSel.h's WAVE
-    // B QUEUE, 20260819; golden :4142-4784, 643 lines, its own Wave-B-queue
-    // item, same Edit-widget-population shape as this method).
-    InitDataToEdit(tag);
+    InitDataToEdit(tag);   // golden :4139 -- FW-BinSel-WC lands its real body below
+}
+
+//---------------------------------------------------------------------------
+//  InitDataToEdit -- golden :4142-4784 (643 lines). FW-BinSel-WC (this
+//  wave), newly declared (WAVE B's own "最後大宗" backlog item).
+//
+//  ACTIVE/GATE SPLIT (per-block; see forms/fBinSel.h GATE REGISTER G7/G10):
+//  every golden statement here either (a) writes a `MyBinPanel[tag]->ed*`
+//  TEdit widget that ONLY ever feeds `TfBinSel::sXxx[tag]->CommaText` at
+//  THIS SAME function's own tail (golden :4685-4711) -- ported ACTIVE, S20
+//  (see below), by writing the computed CommaText DIRECTLY into `sXxx[tag]`
+//  at the point golden itself computes it, instead of round-tripping
+//  through the (absent) `ed*->Text` scratch buffer; (b) writes an ed* with
+//  NO sXxx[tag] tail consumer at all (edBinSetT6Error/edBinSetT6PassFail/
+//  edT6BinART/edT6CateR/edBinSettingEnableScan) -- pure widget display
+//  text, GATE (G7), nothing to elide TO; or (c) writes `MyBinPanel[tag]->
+//  mtBinSelect` (grid-cell rendering) -- GATE (G10): a THIRD Tray256Core*,
+//  distinct from the mtTrayName/mtTrayItem pair this wave's ctor addition
+//  DOES land (see TfBinSel::TfBinSel's own banner). A few statements are
+//  neither -- genuine DATA mutations independent of any widget
+//  (bSpecialBinByArm/bSpecialBinBySocket stale-flag resets, golden
+//  :4404-4420/:4442-4458) and the entire tail Link-chain computation
+//  (golden :4712-4775, pure TStringList arithmetic over
+//  sBinTraySetT3Pos[tag]/sBinTrayLinked[tag] -- both real members, already
+//  set earlier in THIS SAME call -- into sBinLinked[tag]) -- these are
+//  ACTIVE unconditionally, the same as any other pure-data golden logic in
+//  this file.
+//
+//  (S20) DEVIATION: golden's own `MyBinPanel[tag]->ed*->Text=<value>;` ..
+//  (a few hundred lines later, SAME function call) .. `sXxx[tag]->
+//  CommaText=MyBinPanel[tag]->ed*->Text;` two-step round-trip collapses to
+//  one `sXxx[tag]->CommaText=<value>;` at the point golden itself computes
+//  <value> -- BIT-FOR-BIT the same final `sXxx[tag]` content golden's own
+//  two-step assignment produces. Verified by grepping every ed* name this
+//  function touches against the FULL golden cBinSel.cpp text: each has
+//  exactly ONE writer (this function, or ReadFunctionData's own
+//  already-gated G7 mirror) and AT MOST the one tail reader golden
+//  :4685-4711 itself (the 4 names under GATE (b) above have no tail reader
+//  at all, per forms/fBinSel.h GATE REGISTER G7's own citation list).
+//  golden's `ZeroMemory(asBinLinked, sizeof(asBinLinked));` (golden :4148)
+//  is dropped: `vclcompat::AnsiString` wraps a `std::string` (see
+//  AnsiString.h) -- raw-memory-zeroing a non-POD C++ object is undefined
+//  behaviour here (unlike BCB6's own reference-counted AnsiString, where
+//  this was a harmless, if redundant, defensive idiom) -- every element's
+//  default ctor already produces "" (AnsiString.h:58), the SAME end state
+//  golden's ZeroMemory call was defensively ensuring.
+//
+//  golden's ByBin/BySite tray-clean NAME SWAP (`iAutoCleanByBin` feeds
+//  `sBySiteClean`, `iAutoCleanBySite` feeds `sByBinClean` -- golden
+//  :4503-4517 below) is NOT a new finding: ReadFunctionData's own ALREADY-
+//  ACTIVE code in this file (its `BinSelect[tag].iAutoCleanByBin[i]=...
+//  sBySiteClean[tag]...` / `...iAutoCleanBySite[i]=...sByBinClean[tag]...`
+//  pairing) established the identical convention first -- confusingly
+//  named, but self-consistent throughout golden, not re-flagged here.
+//---------------------------------------------------------------------------
+void TfBinSel::InitDataToEdit(int tag)
+{
+    AnsiString Str="", Temp="";
+    TStringList *sList=new TStringList();
+    TStringList *sLinkedList=new TStringList();
+    AnsiString asBinLinked[eTrayCount];   // golden ZeroMemory dropped -- see banner above (S20 area)
+
+    // GATE (G7): edBinSetT6Error absent, no sXxx[tag] tail consumer either
+    // (see banner above) -- pure widget display text.
+#if 0
+    //Error-----------
+    Str.sprintf("%d", MyBinPanel[tag]->iErrorT6);
+    MyBinPanel[tag]->edBinSetT6Error->Text=Str;
+
+    //Pass Fail-------
+    sList->Clear();
+    for(int i=0; i<eTrayCount; i++)
+    {
+        sList->Add(MyBinPanel[tag]->iT6IsFail[i]);
+    }
+    MyBinPanel[tag]->edBinSetT6PassFail->Text=sList->CommaText;
+
+    //AutoRetest------
+    sList->Clear();
+    for(int i=eAuto1; i<=iAutoRight; i++)
+    {
+        sList->Add((MyBinPanel[tag]->bT6ART[i])?"1":"0");
+    }
+    MyBinPanel[tag]->edT6BinART->Text=sList->CommaText;
+
+    //AutoRetest Cate R------                                                   //Steven 20161221 (wei) : for SCK only Auto 2 has ART
+    sList->Clear();
+    for(int i=0; i<eTrayCount; i++)
+    {
+        sList->Add((MyBinPanel[tag]->bT6CateR[i])?"1":"0");
+    }
+    MyBinPanel[tag]->edT6CateR->Text=sList->CommaText;
 #endif
+
+    //Link------- (golden :4180-4189) ACTIVE: edBinSetT6Link's ONLY tail
+    // consumer is sBinTrayLinked[tag] (golden :4711, unconditional) -- S20.
+    sList->Clear();
+    for(int i=0; i<eTrayCount; i++)
+    {
+        if(bCanLinkT6[i]==false)
+            sList->Add("0");
+        else
+            sList->Add((MyBinPanel[tag]->bT6Link[i])?"1":"0");
+    }
+    sBinTrayLinked[tag]->CommaText=sList->CommaText;   // S20: was edBinSetT6Link->Text, read back at golden :4711
+#if 0
+    // GATE (G7): the widget mirror itself.
+    MyBinPanel[tag]->edBinSetT6Link->Text=sList->CommaText;
+#endif
+
+    //Bin------------- (golden :4191-4249)
+    // part 1 (:4192-4204) ACTIVE: edBinSetT3Pos's ONLY tail consumer is
+    // sBinTraySetT3Pos[tag] (golden :4685, unconditional) -- S20.
+    sList->Clear();
+    for(int i=0; i<iTestBinCount; i++)                                          //Steven 20251104 : iBinCount --> iTestBinCount
+    {
+        for(int j=eBinNotUse; j<eBinSetTotal; j++)
+        {
+            if(MyBinPanel[tag]->BackT6PosTray[i][j]==1)
+            {
+                Temp.sprintf("%d", iTo3PosUnload[j-eBinNotUse]);                //第一排不算,所以要-1
+                sList->Add(Temp);
+            }
+        }
+    }
+    sBinTraySetT3Pos[tag]->CommaText=sList->CommaText;   // S20: was edBinSetT3Pos->Text, read back at golden :4685
+#if 0
+    // GATE (G7)
+    MyBinPanel[tag]->edBinSetT3Pos->Text=sList->CommaText;
+#endif
+
+    // part 2 (:4206-4249) GATE (G10): pure mtBinSelect grid-cell colouring,
+    // no ed*, no other consumer.
+#if 0
+    for(int i=0; i<iTestBinCount; i++)                                          //Steven 20251104 : iBinCount --> iTestBinCount
+    {
+        for(int j=eBinNotUse; j<eBinSetTotal; j++)
+        {
+            iT6=j-eBinSetting;
+            if(j>MyBinPanel[tag]->mtBinSelect->YItem)
+                continue;
+
+            if(MyBinPanel[tag]->BackT6PosTray[i][j])
+            {
+                if(j==eBinNotUse)                                               //No USE
+                {
+                    MyBinPanel[tag]->mtBinSelect->SetCellColorIndex(i, j, eCLSilver);
+                }
+                else
+                {
+                    if(MyBinPanel[tag]->iT6IsFail[iT6]>0)
+                    {
+                        MyBinPanel[tag]->mtBinSelect->SetCellColorIndex(i, j, eCLRed);
+                    }
+                    else
+                    {
+                        MyBinPanel[tag]->mtBinSelect->SetCellColorIndex(i, j, eCLGreen);
+                    }
+                }
+            }
+            else if(AUTO3_IS_MAGAZINE==1 && iT6==eAuto3)                        //JerryYang 20221207 : Magazine not use AUTO3
+            {
+                MyBinPanel[tag]->mtBinSelect->SetCellColorIndex(i, j, eCLBtnFace);
+            }
+            else if(CosFunction.bLoaderTrayToAuto1 && TrayForm.LoaderToEmptyColor[iRunStartMode]==2 && iT6==eAuto1)
+            {
+                MyBinPanel[tag]->mtBinSelect->SetCellColorIndex(i, j, eCLBtnFace);
+            }
+            else if(Prod.iTrayType[iT6]==tNotUse)                               //JerryYang 20221215 : Magazine當fix區當buffer使用功能
+            {
+                MyBinPanel[tag]->mtBinSelect->SetCellColorIndex(i, j, eCLBtnFace);
+            }
+            else
+            {
+                MyBinPanel[tag]->mtBinSelect->SetCellColorIndex(i, j, eCLWhite);
+            }
+        }
+    }
+#endif
+
+    // GATE (G7)+(G10): Scan block (golden :4251-4259) -- unconditionally
+    // "0" for every bin, edBinSettingEnableScan has NO sXxx[tag] tail
+    // consumer -- pure dead-end widget churn, nothing to elide TO.
+#if 0
+    //Scan-------------
+    sList->Clear();
+    for(int i=0; i<iTestBinCount; i++)                                          //Steven 20251104 : iBinCount --> iTestBinCount
+    {
+        sList->Add("0");
+        MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eScanning, "");
+        MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eScanning, eCLGray);
+    }
+    MyBinPanel[tag]->edBinSettingEnableScan->Text=sList->CommaText;
+#endif
+
+    //Double Contact--- (golden :4261-4278) ACTIVE sList compute -> S20 ->
+    // sBinDoubleContact[tag] (golden :4686). GATE (G10) mtBinSelect writes.
+    sList->Clear();
+    for(int i=0; i<iTestBinCount; i++)                                          //Steven 20251104 : iBinCount --> iTestBinCount
+    {
+        sList->Add(MyBinPanel[tag]->i2Contact[i]);                              //Steven 20231205 : b2Contact --> i2Contact
+#if 0
+        if(Prod.bD22SupportMultiDoubleContact)
+        {
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eDoubleContact, MyBinPanel[tag]->i2Contact[i]);
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eDoubleContact, (MyBinPanel[tag]->i2Contact[i])?eCLOlive:eCLBtnFace);
+        }
+        else
+        {
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eDoubleContact, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eDoubleContact, eCLGray);
+        }
+#endif
+    }
+    sBinDoubleContact[tag]->CommaText=sList->CommaText;
+
+    //Con. Fail-------- (golden :4280-4288) ACTIVE -> S20 -> sBinConsFail[tag]
+    // (golden :4687). GATE (G10) mtBinSelect writes.
+    sList->Clear();
+    for(int i=0; i<iTestBinCount; i++)                                          //Steven 20251104 : iBinCount --> iTestBinCount
+    {
+        sList->Add((MyBinPanel[tag]->bConFail[i])?"1":"0");
+#if 0
+        MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eConsFail, (MyBinPanel[tag]->bConFail[i])?"V":"");
+        MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eConsFail, (MyBinPanel[tag]->bConFail[i])?eCLOlive:eCLBtnFace);
+#endif
+    }
+    sBinConsFail[tag]->CommaText=sList->CommaText;
+
+    // Persent Enable/Ignore/Number (golden :4290-4354) ACTIVE per-branch ->
+    // S20 -> sBinEnableFail[tag]/sBinFailIgnore[tag]/sBinFailPercent[tag]
+    // (golden :4688-4690). GATE (G10) mtBinSelect writes, both branches.
+    if(CosFunction.bByBinAlarmFromYieldForm)                                    //jou 20180113 (Steven) : By Site By Bin Percent Compare From Yield form
+    {
+#if 0
+        for(int i=0; i<iTestBinCount; i++)                                      //Steven 20251104 : iBinCount --> iTestBinCount
+        {
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, ePersentEnable, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, ePersentEnable, eCLGray);
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, ePersentIgnore, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, ePersentIgnore, eCLGray);
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, ePersentNumber, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, ePersentNumber, eCLGray);
+        }
+#endif
+        sBinEnableFail[tag]->CommaText  ="";
+        sBinFailIgnore[tag]->CommaText  ="";
+        sBinFailPercent[tag]->CommaText ="";
+    }
+    else
+    {
+        //Persent Enable------
+        sList->Clear();
+        for(int i=0; i<iTestBinCount; i++)                                      //Steven 20251104 : iBinCount --> iTestBinCount
+        {
+            sList->Add((MyBinPanel[tag]->bPersentEnable[i])?"1":"0");
+#if 0
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, ePersentEnable, (MyBinPanel[tag]->bPersentEnable[i])?"V":"");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, ePersentEnable, (MyBinPanel[tag]->bPersentEnable[i])?eCLOlive:eCLBtnFace);
+#endif
+        }
+        sBinEnableFail[tag]->CommaText=sList->CommaText;
+
+        //Persent Ignore------
+        sList->Clear();
+        for(int i=0; i<iTestBinCount; i++)                                      //Steven 20251104 : iBinCount --> iTestBinCount
+        {
+            sList->Add(MyBinPanel[tag]->iPersentIgnore[i]);
+#if 0
+            if(MyBinPanel[tag]->bPersentEnable[i])
+            {
+                MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, ePersentIgnore, MyBinPanel[tag]->iPersentIgnore[i]);
+                MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, ePersentIgnore, eCLOlive);
+            }
+            else
+            {
+                MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, ePersentIgnore, "");
+                MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, ePersentIgnore, eCLBtnFace);
+            }
+#endif
+        }
+        sBinFailIgnore[tag]->CommaText=sList->CommaText;
+
+        //Persent Number------
+        sList->Clear();
+        for(int i=0; i<iTestBinCount; i++)                                      //Steven 20251104 : iBinCount --> iTestBinCount
+        {
+            sList->Add(MyBinPanel[tag]->dPersentNumber[i]);
+#if 0
+            if(MyBinPanel[tag]->bPersentEnable[i])
+            {
+                MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, ePersentNumber, MyBinPanel[tag]->dPersentNumber[i]);
+                MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, ePersentNumber, eCLOlive);
+            }
+            else
+            {
+                MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, ePersentNumber, "");
+                MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, ePersentNumber, eCLBtnFace);
+            }
+#endif
+        }
+        sBinFailPercent[tag]->CommaText=sList->CommaText;
+    }
+
+    //Count Enable------ (golden :4356-4364) ACTIVE -> S20 -> sBinCountEnable[tag]
+    sList->Clear();
+    for(int i=0; i<iTestBinCount; i++)                                          //Steven 20251104 : iBinCount --> iTestBinCount
+    {
+        sList->Add((MyBinPanel[tag]->bCountEnable[i])?"1":"0");
+#if 0
+        MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eCountEnable, (MyBinPanel[tag]->bCountEnable[i])?"V":"");
+        MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eCountEnable, (MyBinPanel[tag]->bCountEnable[i])?eCLOlive:eCLBtnFace);
+#endif
+    }
+    sBinCountEnable[tag]->CommaText=sList->CommaText;
+
+    //Count Ignore------ (golden :4366-4383) ACTIVE -> S20 -> sBinCountIgnore[tag]
+    sList->Clear();
+    for(int i=0; i<iTestBinCount; i++)                                          //Steven 20251104 : iBinCount --> iTestBinCount
+    {
+        sList->Add(MyBinPanel[tag]->iCountIgnore[i]);
+#if 0
+        if(MyBinPanel[tag]->bCountEnable[i])
+        {
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eCountIgnore, MyBinPanel[tag]->iCountIgnore[i]);
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eCountIgnore, eCLOlive);
+        }
+        else
+        {
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eCountIgnore, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eCountIgnore, eCLBtnFace);
+        }
+#endif
+    }
+    sBinCountIgnore[tag]->CommaText=sList->CommaText;
+
+    //Count Number------ (golden :4385-4402) ACTIVE -> S20 -> sBinCountNumber[tag]
+    sList->Clear();
+    for(int i=0; i<iTestBinCount; i++)                                          //Steven 20251104 : iBinCount --> iTestBinCount
+    {
+        sList->Add(MyBinPanel[tag]->iCountNumber[i]);
+#if 0
+        if(MyBinPanel[tag]->bCountEnable[i])
+        {
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eCountNumber, MyBinPanel[tag]->iCountNumber[i]);
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eCountNumber, eCLOlive);
+        }
+        else
+        {
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eCountNumber, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eCountNumber, eCLBtnFace);
+        }
+#endif
+    }
+    sBinCountNumber[tag]->CommaText=sList->CommaText;
+
+    //Special Bin By Arm Enable------ (golden :4404-4421) ACTIVE: the
+    // stale-flag-reset mutation is real data logic (no widget involved) +
+    // sList -> S20 -> sSpecialBinByArm[tag]. GATE (G10) mtBinSelect writes.
+    sList->Clear();
+    for(int i=0; i<iTestBinCount; i++)                                          //Steven 20251104 : iBinCount --> iTestBinCount
+    {
+        for(int j=eBinSetting; j<eBinSetTotal; j++)
+        {
+            if(MyBinPanel[tag]->BackT6PosTray[i][j]==1)
+            {
+                if(MyBinPanel[tag]->iT6IsFail[j-eBinSetting]==0)
+                    MyBinPanel[tag]->bSpecialBinByArm[i]=false;
+            }
+        }
+
+        sList->Add((MyBinPanel[tag]->bSpecialBinByArm[i])?"1":"0");
+#if 0
+        MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecialBinByArm, (MyBinPanel[tag]->bSpecialBinByArm[i])?"V":"");
+        MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecialBinByArm, (MyBinPanel[tag]->bSpecialBinByArm[i])?eCLOlive:eCLBtnFace);
+#endif
+    }
+    sSpecialBinByArm[tag]->CommaText=sList->CommaText;
+
+    //Special Bin Count by Arm ------ (golden :4423-4440) ACTIVE -> S20 -> sSpecialBinCountByArm[tag]
+    sList->Clear();
+    for(int i=0; i<iTestBinCount; i++)                                          //Steven 20251104 : iBinCount --> iTestBinCount
+    {
+        sList->Add(MyBinPanel[tag]->iSpecialBinCountByArm[i]);
+#if 0
+        if(MyBinPanel[tag]->bSpecialBinByArm[i])
+        {
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecialBinCountByArm, int(MyBinPanel[tag]->iSpecialBinCountByArm[i]));
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecialBinCountByArm, eCLOlive);
+        }
+        else
+        {
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecialBinCountByArm, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecialBinCountByArm, eCLBtnFace);
+        }
+#endif
+    }
+    sSpecialBinCountByArm[tag]->CommaText=sList->CommaText;
+
+    //Special Bin By Socket Enable------ (golden :4442-4459) ACTIVE: same
+    // stale-flag-reset shape as "By Arm" above, for Socket -> S20 ->
+    // sSpecialBinBySocket[tag].
+    sList->Clear();
+    for(int i=0; i<iTestBinCount; i++)                                          //Steven 20251104 : iBinCount --> iTestBinCount
+    {
+        for(int j=eBinSetting; j<eBinSetTotal; j++)
+        {
+            if(MyBinPanel[tag]->BackT6PosTray[i][j]==1)
+            {
+                if(MyBinPanel[tag]->iT6IsFail[j-eBinSetting]==0)
+                    MyBinPanel[tag]->bSpecialBinBySocket[i]=false;
+            }
+        }
+
+        sList->Add((MyBinPanel[tag]->bSpecialBinBySocket[i])?"1":"0");
+#if 0
+        MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecialBinBySocket, (MyBinPanel[tag]->bSpecialBinBySocket[i])?"V":"");
+        MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecialBinBySocket, (MyBinPanel[tag]->bSpecialBinBySocket[i])?eCLOlive:eCLBtnFace);
+#endif
+    }
+    sSpecialBinBySocket[tag]->CommaText=sList->CommaText;
+
+    //Special Bin Count by Socket ------ (golden :4461-4478) ACTIVE -> S20 -> sSpecialBinCountBySocket[tag]
+    sList->Clear();
+    for(int i=0; i<iTestBinCount; i++)                                          //Steven 20251104 : iBinCount --> iTestBinCount
+    {
+        sList->Add(MyBinPanel[tag]->iSpecialBinCountBySocket[i]);
+#if 0
+        if(MyBinPanel[tag]->bSpecialBinBySocket[i])
+        {
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecialBinCountBySocket, int(MyBinPanel[tag]->iSpecialBinCountBySocket[i]));
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecialBinCountBySocket, eCLOlive);
+        }
+        else
+        {
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecialBinCountBySocket, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecialBinCountBySocket, eCLBtnFace);
+        }
+#endif
+    }
+    sSpecialBinCountBySocket[tag]->CommaText=sList->CommaText;
+
+    //Low Yield (golden :4480-4496) ACTIVE: BOTH branches feed the SAME
+    // sLowYield[tag] with DIFFERENT content (Prod.bLowYieldAlarmByBin gates
+    // whether the real bLowYield[] flag or a hardcoded "0" is used) -> S20.
+    sList->Clear();
+    for(int i=0; i<iTestBinCount; i++)                                          //Steven 20140828 : By Bin Yield Monitor
+    {
+        if(Prod.bLowYieldAlarmByBin)
+        {
+            sList->Add((MyBinPanel[tag]->bLowYield[i])?"1":"0");
+#if 0
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eLowYield, (MyBinPanel[tag]->bLowYield[i])?"V":"");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eLowYield, (MyBinPanel[tag]->bLowYield[i])?eCLOlive:eCLBtnFace);
+#endif
+        }
+        else
+        {
+            sList->Add("0");
+#if 0
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eLowYield, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eLowYield, eCLGray);
+#endif
+        }
+    }
+    sLowYield[tag]->CommaText=sList->CommaText;
+
+    //AutoClean (golden :4498-4528) ACTIVE only in the iAutoClean_Function
+    // branch -> S20 -> sBySiteClean[tag]/sByBinClean[tag] (ByBin/BySite NAME
+    // SWAP -- see banner above, not a new bug). The `else` arm touches ONLY
+    // mtBinSelect (GATE, G10) and sets neither ed*, so golden's own tail
+    // read-back is a no-op there -- ported as "leave sBySiteClean[tag]/
+    // sByBinClean[tag] unchanged" (no assignment in that branch).
+    if(TestIF_File.iAutoClean_Function)
+    {
+        sList->Clear();
+        for(int i=0; i<iTestBinCount; i++)
+        {
+            sList->Add(MyBinPanel[tag]->iAutoCleanByBin[i]);
+#if 0
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eAutoCleanByBin, (MyBinPanel[tag]->iAutoCleanByBin[i]!=0)?AnsiString(MyBinPanel[tag]->iAutoCleanByBin[i]).c_str():"");    //Steven 20160308 : By Bin pre site count do auto clean
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eAutoCleanByBin, (MyBinPanel[tag]->iAutoCleanByBin[i]!=0)?eCLOlive:eCLBtnFace);
+#endif
+        }
+        sBySiteClean[tag]->CommaText=sList->CommaText;
+
+        sList->Clear();
+        for(int i=0; i<iTestBinCount; i++)
+        {
+            sList->Add(MyBinPanel[tag]->iAutoCleanBySite[i]);
+#if 0
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eAutoCleanBySite, (MyBinPanel[tag]->iAutoCleanBySite[i]!=0)?AnsiString(MyBinPanel[tag]->iAutoCleanBySite[i]).c_str():""); //Steven 20160308 : By Bin pre site count do auto clean
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eAutoCleanBySite, (MyBinPanel[tag]->iAutoCleanBySite[i]!=0)?eCLOlive:eCLBtnFace);
+#endif
+        }
+        sByBinClean[tag]->CommaText=sList->CommaText;
+    }
+#if 0
+    else
+    {
+        for(int i=0; i<iTestBinCount; i++)
+        {
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eAutoCleanByBin, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eAutoCleanBySite, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eAutoCleanByBin, eCLGray);      //Steven 20160308 : By Bin count do auto clean
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eAutoCleanBySite, eCLGray);     //Steven 20160308 : By Bin pre site count do auto clean
+        }
+    }
+#endif
+
+    //By Arm Yield (golden :4530-4546) ACTIVE, same Prod.bLowYieldAlarmByBin
+    // shape as Low Yield above -> S20 -> sArmYield[tag]
+    sList->Clear();
+    for(int i=0; i<iTestBinCount; i++)                                          //Steven 20140828 : By Bin Arm Yield Monitor
+    {
+        if(Prod.bLowYieldAlarmByBin)
+        {
+            sList->Add((MyBinPanel[tag]->bArmYield[i])?"1":"0");
+#if 0
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eArmYield, (MyBinPanel[tag]->bArmYield[i])?"V":"");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eArmYield, (MyBinPanel[tag]->bArmYield[i])?eCLOlive:eCLBtnFace);
+#endif
+        }
+        else
+        {
+            sList->Add("0");
+#if 0
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eArmYield, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eArmYield, eCLGray);
+#endif
+        }
+    }
+    sArmYield[tag]->CommaText=sList->CommaText;
+
+    //By Site Yield (golden :4548-4564) ACTIVE, same shape -> S20 -> sSiteYield[tag]
+    sList->Clear();
+    for(int i=0; i<iTestBinCount; i++)                                          //Steven 20140828 : By Bin Site Yield Monitor
+    {
+        if(Prod.bLowYieldAlarmByBin)
+        {
+            sList->Add((MyBinPanel[tag]->bSiteYield[i])?"1":"0");
+#if 0
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSiteYield, (MyBinPanel[tag]->bSiteYield[i])?"V":"");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSiteYield, (MyBinPanel[tag]->bSiteYield[i])?eCLOlive:eCLBtnFace);
+#endif
+        }
+        else
+        {
+            sList->Add("0");
+#if 0
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSiteYield, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSiteYield, eCLGray);
+#endif
+        }
+    }
+    sSiteYield[tag]->CommaText=sList->CommaText;
+
+    //SpecBin BySite/ByArm Compare (golden :4566-4683) ACTIVE both arms ->
+    // S20 -> the 6 sSpecBinXxx[tag] members.
+    if(CosFunction.bBySiteByBinPercentCompare==false ||                         //JerryYang 20170712 (Steven) by site by bin compare percent
+       (CosFunction.bBySiteByBinPercentCompare==true &&                         //jou 20180113 (Steven) : By Site By Bin Percent Compare From Yield form
+        CosFunction.bByBinAlarmFromYieldForm))
+    {
+#if 0
+        for(int i=0; i<iTestBinCount; i++)
+        {
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecBinBySiteCompareEnable, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecBinBySiteCompareEnable, eCLGray);
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecBinBySiteCompareIgnore, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecBinBySiteCompareIgnore, eCLGray);
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecBinBySiteComparePercent, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecBinBySiteComparePercent, eCLGray);
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecBinByArmPerSiteCompareEnable, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecBinByArmPerSiteCompareEnable, eCLGray);
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecBinByArmPerSiteCompareIgnore, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecBinByArmPerSiteCompareIgnore, eCLGray);
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecBinByArmPerSiteComparePercent, "");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecBinByArmPerSiteComparePercent, eCLGray);
+        }
+#endif
+        sSpecBinBySiteCompareEnable[tag]->CommaText        ="";
+        sSpecBinBySiteCompareIgnore[tag]->CommaText        ="";
+        sSpecBinBySiteComparePercent[tag]->CommaText       ="";
+        sSpecBinByArmPerSiteCompareEnable[tag]->CommaText  ="";
+        sSpecBinByArmPerSiteCompareIgnore[tag]->CommaText  ="";
+        sSpecBinByArmPerSiteComparePercent[tag]->CommaText ="";
+    }
+    else
+    {
+        sList->Clear();
+        for(int i=0; i<iTestBinCount; i++)
+        {
+            sList->Add((MyBinPanel[tag]->bSpecBinBySiteCompareEnable[i])?"1":"0");
+#if 0
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecBinBySiteCompareEnable, (MyBinPanel[tag]->bSpecBinBySiteCompareEnable[i])?"V":"");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecBinBySiteCompareEnable, (MyBinPanel[tag]->bSpecBinBySiteCompareEnable[i])?eCLOlive:eCLBtnFace);
+#endif
+        }
+        sSpecBinBySiteCompareEnable[tag]->CommaText=sList->CommaText;
+
+        //Ignore
+        sList->Clear();
+        for(int i=0; i<iTestBinCount; i++)
+        {
+            sList->Add(MyBinPanel[tag]->iSpecBinBySiteCompareIgnore[i]);
+#if 0
+            if(MyBinPanel[tag]->bSpecBinBySiteCompareEnable[i])
+            {
+                MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecBinBySiteCompareIgnore, MyBinPanel[tag]->iSpecBinBySiteCompareIgnore[i]);
+                MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecBinBySiteCompareIgnore, eCLOlive);
+            }
+            else
+            {
+                MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecBinBySiteCompareIgnore, "");
+                MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecBinBySiteCompareIgnore, eCLBtnFace);
+            }
+#endif
+        }
+        sSpecBinBySiteCompareIgnore[tag]->CommaText=sList->CommaText;
+
+        sList->Clear();
+        for(int i=0; i<iTestBinCount; i++)
+        {
+            sList->Add(MyBinPanel[tag]->dSpecBinBySiteComparePercent[i]);
+#if 0
+            if(MyBinPanel[tag]->bSpecBinBySiteCompareEnable[i])
+            {
+                MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecBinBySiteComparePercent, MyBinPanel[tag]->dSpecBinBySiteComparePercent[i]);
+                MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecBinBySiteComparePercent, eCLOlive);
+            }
+            else
+            {
+                MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecBinBySiteComparePercent, "");
+                MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecBinBySiteComparePercent, eCLBtnFace);
+            }
+#endif
+        }
+        sSpecBinBySiteComparePercent[tag]->CommaText=sList->CommaText;
+
+        //Percent Enable------
+        sList->Clear();
+        for(int i=0; i<iTestBinCount; i++)
+        {
+            sList->Add((MyBinPanel[tag]->bSpecBinByArmPerSiteCompareEnable[i])?"1":"0");
+#if 0
+            MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecBinByArmPerSiteCompareEnable, (MyBinPanel[tag]->bSpecBinByArmPerSiteCompareEnable[i])?"V":"");
+            MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecBinByArmPerSiteCompareEnable, (MyBinPanel[tag]->bSpecBinByArmPerSiteCompareEnable[i])?eCLOlive:eCLBtnFace);
+#endif
+        }
+        sSpecBinByArmPerSiteCompareEnable[tag]->CommaText=sList->CommaText;
+
+        //Ignore
+        sList->Clear();
+        for(int i=0; i<iTestBinCount; i++)
+        {
+            sList->Add(MyBinPanel[tag]->iSpecBinByArmPerSiteCompareIgnore[i]);
+#if 0
+            if(MyBinPanel[tag]->bSpecBinByArmPerSiteCompareEnable[i])
+            {
+                MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecBinByArmPerSiteCompareIgnore, MyBinPanel[tag]->iSpecBinByArmPerSiteCompareIgnore[i]);
+                MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecBinByArmPerSiteCompareIgnore, eCLOlive);
+            }
+            else
+            {
+                MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecBinByArmPerSiteCompareIgnore, "");
+                MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecBinByArmPerSiteCompareIgnore, eCLBtnFace);
+            }
+#endif
+        }
+        sSpecBinByArmPerSiteCompareIgnore[tag]->CommaText=sList->CommaText;
+
+        //Percent Number------
+        sList->Clear();
+        for(int i=0; i<iTestBinCount; i++)
+        {
+            sList->Add(MyBinPanel[tag]->dSpecBinByArmPerSiteComparePercent[i]);
+#if 0
+            if(MyBinPanel[tag]->bSpecBinByArmPerSiteCompareEnable[i])
+            {
+                MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecBinByArmPerSiteComparePercent, MyBinPanel[tag]->dSpecBinByArmPerSiteComparePercent[i]);
+                MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecBinByArmPerSiteComparePercent, eCLOlive);
+            }
+            else
+            {
+                MyBinPanel[tag]->mtBinSelect->SetCellNumber     (i, eSpecBinByArmPerSiteComparePercent, "");
+                MyBinPanel[tag]->mtBinSelect->SetCellColorIndex (i, eSpecBinByArmPerSiteComparePercent, eCLBtnFace);
+            }
+#endif
+        }
+        sSpecBinByArmPerSiteComparePercent[tag]->CommaText=sList->CommaText;
+    }
+
+    // golden :4685-4711's own tail round-trip block is now REDUNDANT (every
+    // sXxx[tag] it sets is already set directly above, S20) EXCEPT for the
+    // 4 GATE (G7)-only ed*/sXxx pairs which have no sXxx target at all (see
+    // banner above) -- nothing further to do here.
+
+    //Link chain (golden :4712-4775) ACTIVE: pure TStringList arithmetic
+    // over sBinTraySetT3Pos[tag]/sBinTrayLinked[tag] (both real members,
+    // already set above in THIS SAME call, same order golden itself uses)
+    // -> sBinLinked[tag]. No widget involved anywhere in this block.
+    sList->Clear();
+    sLinkedList->Clear();
+
+    sList->CommaText=sBinTraySetT3Pos[tag]->CommaText;
+    sLinkedList->CommaText=sBinTrayLinked[tag]->CommaText;
+
+    int iadd=0;
+    for(int i=0; i<eTrayCount; i++)
+    {
+        if(sLinkedList->Strings[i]!=0)
+        {
+            Str="";
+            for(int j=i; j<eTrayCount; j++)
+            {
+                 if(sLinkedList->Strings[j]!=0)
+                 {
+                    if(j+1>=eTrayCount || sLinkedList->Strings[j+1]==0)
+                    {
+                        Str=Str+IntToStr(j+1)+";";
+                        asBinLinked[i]=Str;
+                        i=j;
+                        break;
+                    }
+                    else
+                    {
+                        Str=Str+IntToStr(j+1)+",";
+                    }
+                 }
+                 else
+                 {
+                    asBinLinked[i]=Str;
+                    i=j;
+                    break;
+                 }
+            }
+        }
+    }
+
+    Str="";
+    for(int i=0; i<sList->Count; i++)
+    {
+        if(sList->Strings[i]!=0)
+        {
+            iadd=StrToInt(sList->Strings[i]);
+
+            if(iadd>=eTrayCount)
+            {
+                Str=Str+"0;";
+            }
+            else if(sLinkedList->Strings[iadd]!=0)
+            {
+                Str=Str+asBinLinked[iadd];
+            }
+            else
+            {
+                Str=Str+"0;";
+            }
+        }
+        else
+        {
+            Str=Str+"0;";
+        }
+    }
+    sBinLinked[tag]->CommaText          =Str;                                   //Ifor 20240730 add : BinTrayLinked
+
+    sList->Clear();                                                             //Ifor 20170603 (wei) TStringList 刪除前先 Clean
+    delete sList;
+    sList=NULL;                                                                 //kevin 20161108
+    sLinkedList->Clear();
+    delete sLinkedList;
+    sLinkedList=NULL;//kevin 20161108
 }
