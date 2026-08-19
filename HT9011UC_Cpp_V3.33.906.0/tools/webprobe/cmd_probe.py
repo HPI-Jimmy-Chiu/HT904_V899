@@ -118,6 +118,11 @@ def main():
     ap.add_argument('--path', default='/ht9045')
     ap.add_argument('--seconds', type=float, default=10.0)
     ap.add_argument('--expect-readonly', action='store_true')
+    # AI(W906-FW-W2) 20260819: auth round trip -- "USER:GOODPW:BADPW". Server
+    # must run --allow-cmd with W906_PWBOOK_PATH pointing at a scratch book
+    # containing USER's entry. Sequence: bad pw -> ok:false("bad credentials"),
+    # good pw -> ok:true, auth.logout -> ok:true.
+    ap.add_argument('--auth', default=None)
     args = ap.parse_args()
 
     deadline = time.monotonic() + args.seconds
@@ -147,6 +152,36 @@ def main():
     if ack.get('ok') is not True:
         print('CMD FAIL: sys.ping expected ok:true')
         return 4
+
+    # --- auth mode: bad pw -> fail, good pw -> ok, logout -> ok --------------
+    if args.auth:
+        user, goodpw, badpw = args.auth.split(':', 2)
+
+        send_text(sock, json.dumps({'type': 'cmd', 'id': 201, 'cmd': 'auth.login',
+                                    'tag': user, 'value': badpw}))
+        a = wait_ack(sock, b'', 201, deadline)
+        print('ack(login bad): %s' % json.dumps(a))
+        if a is None or a.get('ok') is not False or 'bad credentials' not in str(a.get('error', '')):
+            print('AUTH FAIL: bad password expected ok:false("bad credentials")')
+            return 5
+
+        send_text(sock, json.dumps({'type': 'cmd', 'id': 202, 'cmd': 'auth.login',
+                                    'tag': user, 'value': goodpw}))
+        a = wait_ack(sock, b'', 202, deadline)
+        print('ack(login good): %s' % json.dumps(a))
+        if a is None or a.get('ok') is not True:
+            print('AUTH FAIL: good password expected ok:true')
+            return 5
+
+        send_text(sock, json.dumps({'type': 'cmd', 'id': 203, 'cmd': 'auth.logout'}))
+        a = wait_ack(sock, b'', 203, deadline)
+        print('ack(logout): %s' % json.dumps(a))
+        if a is None or a.get('ok') is not True:
+            print('AUTH FAIL: logout expected ok:true')
+            return 5
+
+        print('AUTH PROBE PASS: bad refused, good accepted, logout ok')
+        return 0
 
     # --- 2. unknown command must ack ok:false --------------------------------
     send_text(sock, json.dumps({'type': 'cmd', 'id': 102, 'cmd': 'no.such.cmd'}))

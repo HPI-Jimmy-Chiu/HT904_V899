@@ -2353,6 +2353,7 @@ endif()
 add_executable(wb_serve
     tools/wb_serve.cpp
     WebBridgeTags.cpp
+    WebAuth.cpp   # AI(W906-FW-W2) 20260819: auth.login verification core
 )
 
 target_link_libraries(wb_serve PRIVATE

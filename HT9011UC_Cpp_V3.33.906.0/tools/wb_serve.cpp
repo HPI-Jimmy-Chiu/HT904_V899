@@ -39,6 +39,8 @@
 #include "WebBridge/WebBridgeServer.h"
 #include "WebBridge/TagSnapshot.h"
 #include "WebBridge/CommandQueue.h"   // AI(W906-FW-W1) 20260819: cmd channel e2e (--allow-cmd)
+#include "WebAuth.h"                  // AI(W906-FW-W2) 20260819: auth.login verification core
+#include "cmydef.h"                   // AccessLevel, pwPath (golden globals the auth commands drive)
 
 #include <vector>
 
@@ -174,9 +176,31 @@ int main(int argc, char** argv)
             const webbridge::WebCommand& wc = drained[i];
             if (wc.cmd == "sys.ping") {
                 server.CompleteCommand((unsigned long long)wc.id, true, std::string());
+            } else if (wc.cmd == "auth.login") {
+                // AI(W906-FW-W2) 20260819: tag = user name, value = password
+                // (both strings). Verification = golden's password-book arm
+                // (WebAuth.cpp); success drives the SAME global golden's
+                // btLogin drives: AccessLevel. Book path: golden's pwPath
+                // global, test-overridable via W906_PWBOOK_PATH (call-time
+                // getenv, the tree's established env-seam shape).
+                AnsiString book = getenv("W906_PWBOOK_PATH")
+                                  ? AnsiString(getenv("W906_PWBOOK_PATH")) : pwPath;
+                AnsiString u = wc.hasTag   ? AnsiString(wc.tag.c_str())   : AnsiString("");
+                AnsiString p = (wc.hasValue && wc.value.isString())
+                                  ? AnsiString(wc.value.asString().c_str()) : AnsiString("");
+                const int level = WebAuthVerify(book, u, p);
+                if (level >= 0) {
+                    AccessLevel = level;                 // golden: AccessLevel=l;
+                    server.CompleteCommand((unsigned long long)wc.id, true, std::string());
+                } else {
+                    server.CompleteCommand((unsigned long long)wc.id, false, "bad credentials");
+                }
+            } else if (wc.cmd == "auth.logout") {
+                AccessLevel = 0;                          // golden: back to Operator
+                server.CompleteCommand((unsigned long long)wc.id, true, std::string());
             } else {
                 server.CompleteCommand((unsigned long long)wc.id, false,
-                                       "unknown cmd (FW-W1 dispatch: sys.ping only)");
+                                       "unknown cmd (dispatch: sys.ping, auth.login, auth.logout)");
             }
         }
 

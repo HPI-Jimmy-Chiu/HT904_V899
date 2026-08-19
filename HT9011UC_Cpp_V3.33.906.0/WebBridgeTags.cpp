@@ -372,6 +372,15 @@ std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap)
     stageStr(snap, "machine.id.tester", strs, IniConfig.RMSTesterID);
     stageInt(snap, "machine.customerCode", cust, CUSTOMER_CODE);
 
+    // AI(W906-FW-W2) 20260819: the browser's login state mirror (design doc
+    // section 2 -- replaces golden's ChangeLevelAttr widget-enable pass).
+    // AccessLevel is a plain int global (cmydef.h:3503). Liveness keys on
+    // the config-loaded signal (cust) to PRESERVE test_wb_tags' load-bearing
+    // invariant "every tag is null before the data layer is loaded": a
+    // pre-config snapshot publishes auth.level as null; post-config it is
+    // live, and 0 there is the real Operator state.
+    stageInt(snap, "auth.level", cust, AccessLevel);
+
     // --- LastSet-derived scalars --------------------------------------------
     // These read ONLY LastSet, so the blob's liveness settles them. Their
     // meaning is deliberately not interpreted here (no "Real"/"Dummy" label):
@@ -584,8 +593,9 @@ TagCoverage HandlerTagCoverage()
     //AI(W906-FW1) 20260817: the 33 count under lastS because coverage asks
     // about SOURCES -- the blob either loaded or it did not; startmode's
     // per-value range guard is a publish-time concern, not a liveness one.
-    c.total = 3 + 1 + 4 + 33 + kUnloadedCount;
-    c.live  = (strs ? 3u : 0u) + (cust ? 1u : 0u) + (lastS ? (4u + 33u) : 0u);
+    //AI(W906-FW-W2) 20260819: +1 = auth.level (always-live login mirror).
+    c.total = 3 + 1 + 1 + 4 + 33 + kUnloadedCount;
+    c.live  = (strs ? 3u : 0u) + (cust ? (1u + 1u /*auth.level*/) : 0u) + (lastS ? (4u + 33u) : 0u);
 
     //AI(W906-FW1b) 20260817: the 6 sort counters are gated per station
     // (LastSet blob AND Prod.iTrayType configured), so their live count is
