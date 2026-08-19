@@ -8327,17 +8327,29 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 
 三份 memory 已更新（writepath-ruling 新增、pcie1203/galil/mn200 追加）。
 
+## 20260819 上午 II — FW-SBWC（fad5c59）：cShowBinSelect Wave C 收波
+
+- ARTNor/ARTRT 真本體（B10/B11 解除）＋Timer＋FormShow（B18 幾何 gate）。
+  忠實性發現：error-bin fallback 字面 9 vs eBulkBox(18) 的姊妹函式分歧。
+  複驗 191/191、oracle 60/60。cShowBinSelect 只剩 Wave D 大宗
+  （ChangeBinDispStatus/DoShowBinDigital 卡 opaque BinDisCtrl、
+  SAFETY-QUEUED 按鈕組）。
+- **AV flake 第二例**（BarCode_Shuttle2Scan SEGV→單跑 3/3＋全輪重跑
+  142/3 定讞）——晨掃窗模式成立，定讞程序照 SOP 走完即可，不恐慌。
+- 台帳線：11 個抽取叢集全數到齊（~470 筆）轉交母代理組稿中（子代理
+  SendMessage 全彈到主迴圈的架構故障已用「輸出檔路徑轉交」繞過）。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列 1-6、Command.cpp 159/164、良率引擎全清、SecCC/
-  SecUnlock、BinSel-WA/Unlock/WB、SBWB2。基線 142/3。
-  **三項設計裁決 20260819 全數到位（見上一節）。**
-- **進行中**：a. cShowBinSelect Wave C 翻譯代理（ARTNor/ARTRT/FormShow/
-  Timer）；b. GOLDEN_DEFECT_LEDGER 彙整代理。
-- **下一波（裁決後的新優先序）**：
-  1. FW-W1 指令通道 e2e（設計文件 §6；主迴圈自做或代理）；
-  2. PCIE-1203 HAL 完善線開工（mot_table.csv 驅動；先修 HAVE_PCI1203=1
-     的 MOTION_IO 撞名——MN200 wrapper pimpl 方向已定）；
-  3. cBinSel Wave C／FW-3 batch 3+ 表單線照排。
-- **佇列**：FW-W4+ 的動真機/寫 config 指令（真機環境才有意義）；B4 依裁決
-  不修（台帳記錄）。
+  SecUnlock/BinSel-WA+Unlock+WB/SBWB2/**SBWC（fad5c59）**。基線 142/3。
+  設計裁決三項全落地（write path 設計文件/1203 優先/golden bug 台帳）。
+- **進行中**：GOLDEN_DEFECT_LEDGER 母代理組稿（11 叢集 ~470 筆＋詞彙
+  補撈）。
+- **下一波（自主佇列）**：
+  1. FW-W1 指令通道 e2e（WEBBRIDGE_WRITEPATH_DESIGN.md §6 首波）；
+  2. 1203 HAL 完善線（mot_table.csv 驅動＋MOTION_IO pimpl 修）；
+  3. cBinSel Wave C（InitDataToEdit＋TMyBinPanel widget 半）；
+  4. FW-3 batch 3+ 表單；FW-1 tag 批次。
+- **佇列**：FW-W4+ 動真機指令（真機環境）；cShowBinSelect SAFETY-QUEUED
+  按鈕組；B4 依裁決不修（台帳記錄）。
