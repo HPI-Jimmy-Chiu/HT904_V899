@@ -8339,17 +8339,25 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - 台帳線：11 個抽取叢集全數到齊（~470 筆）轉交母代理組稿中（子代理
   SendMessage 全彈到主迴圈的架構故障已用「輸出檔路徑轉交」繞過）。
 
+## 20260819 上午 III — FW-W1 通道打通（5e4b30d）＋台帳落地（49ea369）＋環境轉換
+
+- **FW-W1**：wb_serve --allow-cmd 接線（基建早已到位，純接線），
+  cmd_probe 雙模式實測全過（round trip＋唯讀預設拒絕）。
+- **GOLDEN_DEFECT_LEDGER**：552 筆/118 分節 md＋html 落地。
+- **⚠ 環境轉換（10:05 起）**：量產 HT9045.exe＋bcb.exe IDE 在本機執行中
+  ——system/ guard 首次紅（100 檔，teach.ini 等=量產程式正當寫入，非本側；
+  探針全程 --dry，前一 gate 09:08 仍 IDENTICAL）。CounterClearCore 的
+  Debug/Release SEGV 疑同源（量產程式鎖 system\*.dat）。
+  **新規則：量產程式執行期間暫停 gate 類驗收**（結果不可判讀），改做
+  不需 gate 的工作（翻譯/文件/程式碼準備），乾淨 gate 排量產程式關閉後。
+
 ### 🔖 RESUME（最新）
 
-- **完成**：核可佇列 1-6、Command.cpp 159/164、良率引擎全清、SecCC/
-  SecUnlock/BinSel-WA+Unlock+WB/SBWB2/**SBWC（fad5c59）**。基線 142/3。
-  設計裁決三項全落地（write path 設計文件/1203 優先/golden bug 台帳）。
-- **進行中**：GOLDEN_DEFECT_LEDGER 母代理組稿（11 叢集 ~470 筆＋詞彙
-  補撈）。
-- **下一波（自主佇列）**：
-  1. FW-W1 指令通道 e2e（WEBBRIDGE_WRITEPATH_DESIGN.md §6 首波）；
-  2. 1203 HAL 完善線（mot_table.csv 驅動＋MOTION_IO pimpl 修）；
-  3. cBinSel Wave C（InitDataToEdit＋TMyBinPanel widget 半）；
-  4. FW-3 batch 3+ 表單；FW-1 tag 批次。
-- **佇列**：FW-W4+ 動真機指令（真機環境）；cShowBinSelect SAFETY-QUEUED
-  按鈕組；B4 依裁決不修（台帳記錄）。
+- **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
+  Sec/BinSel/SBW 全系列、FW-W1（5e4b30d）、台帳 552 筆（49ea369）。
+- **⚠ 環境狀態**：量產 HT9045.exe 在本機執行中 → gate 暫停；
+  FW-W1 的乾淨補 gate＋任何新波的雙 gate 等量產程式關閉。
+- **gate-free 可做**：FW-W2 auth.login 程式碼準備（不跑 gate 只
+  -fsyntax-only＋探針對 --dry server）；cBinSel Wave C 翻譯（代理只產碼
+  自檢）；1203 HAL 的 MOTION_IO pimpl 修（syntax 級驗證）；文件線。
+- **設計面**：三項裁決已全落地執行；B4 依裁決不修（台帳在冊）。
