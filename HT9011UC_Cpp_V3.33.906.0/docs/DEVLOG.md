@@ -8556,6 +8556,29 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   W5a 顯示 modal✅ FE1 操作台✅ **W5b 問答 modal✅——設計 §6 波次表
   全數落地**。真機類指令（motor/IO/互鎖）依 §7 仍佇列，等真機環境。
 
+## 20260819 傍晚 — 台帳二輪＋uLotInfo recon＋Wave A（三箭齊發）
+
+- **台帳二輪**（5fd8e66）：7 個薄掃檔補 76 列（71 QUIRK＋5 DEFECT），
+  552→628。主迴圈抽驗 28-30 列對 ainarm2.cpp:612-620 逐字坐實。
+- **uLotInfo recon**（1bbba74）：210 個 TfLotInfo 方法四分類
+  （Tier1 顯示側 39/1,199 行已逐行覆核；write path 105/8,715；
+  安全 24/3,577；MIXED 2）。**跨檔教訓：Show/Refresh 前綴會騙人**
+  ——四個實證反例（ShowATC70Thermo 藏 SetRunATC :5790、
+  RefreshYieldMonitor_TERAPOWER 在預設分支改 AutoClean 週期 :13618
+  等），此檔任何唯讀波都必須逐行讀完本體才能排入。
+- **Wave A**（本顆）：Tier1 39/39 函式、1,199/1,199 行入
+  forms/fLotInfo.{h,cpp}；~140 個 widget/state 欄位、9 gates。
+  翻譯代理照 brief 步驟 4 逐行重讀，**抓到 recon 自己漏的兩個真缺口**：
+  CheckAirMachineStatus 有 WAR1611 ShowErrorMessage 升級（同
+  fTemperFrom GATE T1 類、SAFETY gate 掉）、TransformTemperature_
+  AirStream 有 config\AirStream.ini 懶初始化 WriteString 區塊
+  （config 寫入政策 gate 掉）——主迴圈在 golden 定義處
+  （:14805/:15080）獨立坐實兩者（第一次抽驗抓到宣告處差點誤判，
+  改鎖定 TfLotInfo:: 定義行後坐實）。mmo2DLotInfo TEdit→TMemo
+  放寬：全樹消費端只讀 ->Text，FormWidgets.h:183 早已預告。
+- Tier 2（39 函式/993 行）與 MIXED 兩巨頭（FormShow 918L、
+  Timer2Timer 258L 先拆分）留 Wave B。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8564,8 +8587,12 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   FW-W4（4999e2e）、FW-W5a（83b4251）、FW-FE1（57e3c03）、
   **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
-- **下一波**：write path 主線收官後回 FW-3 表單翻譯佇列（計畫書 §4
-  優先序，每波開工重評）或 1203 HAL MOTION_IO pimpl——依脈絡擇一。
+- **下一波**：uLotInfo Wave B——Tier 2（39 函式/993 行，**每個都要先
+  逐行讀完本體再翻**，Tier 2 只做過信號掃描）＋MIXED 拆分提案
+  （FormShow 918L/Timer2Timer 258L 先出切割設計再翻）。
+  之後：1203 HAL MOTION_IO pimpl；批 5 設定檢視表單；
+  cShowBinSelect Wave D；BinDisplay 卡 opaque BinDisCtrl
+  （元件套件 D:\HT9045\elec\Component 方向查證待做）。
   真機類指令依 §7 仍佇列。
 - **之後**：1203 HAL MOTION_IO pimpl；FW-3 batch 3+ 表單；
   cShowBinSelect Wave D；台帳二輪 QUIRK 補掃。
