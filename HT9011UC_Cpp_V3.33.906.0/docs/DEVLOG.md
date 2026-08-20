@@ -9210,3 +9210,30 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   cprod 那段解鎖前置=TRadioGroup Controls[] port＋archive 分層問題，兩者
   都是獨立工程。
 - **設計面**：無待答。
+
+## 20260820 深夜 II — FW-CMD-C：Command.cpp 批 1 收尾 164/164（ece9626）
+
+- 最後 5 個指令通道方法落地：三個 GPIB 解析器（純解析零 gate）、
+  RemoteControl（Start/Pause 掛 S1）、TCPCommandServerClientRead
+  （1,792 行、100+ 分支 HTSET dispatcher；S1×2＋S2×15 config 寫入＋S3
+  WriteLastDataFile；15 項 ABSENCE GATE REGISTER 附新鮮 grep）。
+  fBinSel/fShowBinSelect 呼叫點因表單已真實而 ACTIVE 不掛閘。
+- 主迴圈獨立對帳：golden=port=164 個 TfMain:: 定義、零缺零多；
+  雙全新 dir 137/142×2 常駐五項；guard 552 IDENTICAL。
+- **前提已死清單（留待解閘波）**：GATE 8（SetSiteMapData_SIGURD 引
+  ChangeToSiteMap）、GATE 3-5（WriteSetTempStatus_SIGURD 引 fTemp_Set）。
+- **風險備忘**：SAFETY-gated 位點仍回 golden 的 OK 字串但動作惰性——
+  接真呼叫者前必先解對應 gate。
+
+### 🔖 RESUME（最新）
+
+- **完成**：批 1 Command.cpp **164/164 全清**（ece9626）；temp.* 全故事
+  六 commit 收斂如前段。今日 20260820 共 14 顆 commit。基線 142/5。
+- **下一波候選**（20260820 深夜 II）：
+  (h) **Command.cpp 解閘波**：GATE 8＋GATE 3-5 前提已死（本波量測），
+      照 FW-TEMP3 的解閘形狀做（NULL guard＋內層 SAFETY 引用＋雙 gate）；
+  (e) FW 前端波：temp.mode 原始碼值 vs mock 字串的格式化決策＋
+      layout 渲染驗證（人工 F5 誠實回報）；
+  (f) 台帳二輪 QUIRK 補掃；
+  (d) 設計面（InstallColorBinDisplay＋MN200、mot_table HAL）留使用者。
+- **設計面**：無待答。
