@@ -16,6 +16,7 @@
 // bShuttleShake, whose home is the shims TU rather than a golden header.
 #include "csystem.h"
 #include "forms/fMain.h"      // AI(W906-FW1d) 20260820: fMain->cbUserSelect (user.level mirror)
+#include "forms/fShowBinSelect.h" // AI(W906-FW-BIN1) 20260820: fShowBinSelect->MyBinSel (bin.* captions)
 #include "csystem_shims.h"
 #include "MachineType.h"
 
@@ -363,6 +364,10 @@ PumpStats PumpTelemetry()
 static unsigned long long g_webControlOwner = 0;
 void SetWebControlOwner(unsigned long long connId) { g_webControlOwner = connId; }
 
+// AI(W906-FW-BIN1) 20260820: see WebBridgeTags.h SetWebBinSelLoaded.
+static bool g_webBinSelLoaded = false;
+void SetWebBinSelLoaded(bool loaded) { g_webBinSelLoaded = loaded; }
+
 std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap)
 {
     const bool strs  = IniConfigStringsLoaded();
@@ -526,6 +531,24 @@ std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap)
                     total += LastSet.BinCT[0][kSort[i].binIdx];
             }
             stageInt(snap, "sort.total", lastS, total);
+        }
+    }
+
+    // --- FW-BIN1: recipe bin assignments -------------------------------------
+    //AI(W906-FW-BIN1) 20260820: MyBinSel[].Caption after the host ran the
+    // BinSelect->SetTechDataToProd_Yield->ShowBinSel chain (wb_serve boot,
+    // DataPath dry-redirected -- docs/RECON_binstar_datasource.md section 4).
+    // Same e6TrayName station indices as the sort counters above. Null until
+    // the host marks the chain loaded; the captions are golden's own display
+    // strings (bin lists, "LINK ..." forms, "X" for unconfigured).
+    {
+        static const struct { const char* tag; int idx; } kBin[6] = {
+            {"bin.auto1", eAuto1}, {"bin.auto2", eAuto2}, {"bin.auto3", eAuto3},
+            {"bin.fix1",  eFix1 }, {"bin.fix2",  eFix2 }, {"bin.fix3",  eFix3 },
+        };
+        for (int i = 0; i < 6; ++i) {
+            stageStr(snap, kBin[i].tag, g_webBinSelLoaded,
+                     fShowBinSelect->MyBinSel[kBin[i].idx]->Caption);
         }
     }
 
@@ -704,6 +727,12 @@ TagCoverage HandlerTagCoverage()
     // recipe.current (this wave).
     c.total += 2;
     c.live  += (cust ? 2u : 0u);
+
+    //AI(W906-FW-BIN1) 20260820: +6 bin.* recipe assignments, keyed on the
+    // host's bin-chain-loaded marker -- a real machine data source (the
+    // recipe's Binasgn table), unlike pump telemetry, so it IS counted.
+    c.total += 6;
+    c.live  += (g_webBinSelLoaded ? 6u : 0u);
 
     //AI(W906-SimPump) 20260813: the 18 clock/state/pump tags are DELIBERATELY NOT
     // counted here, and the reason is the same one this file exists for.

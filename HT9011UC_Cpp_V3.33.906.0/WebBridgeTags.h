@@ -81,6 +81,13 @@ std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap);
 // Published as "conn-<id>" / "" -- every browser sees who operates.
 void SetWebControlOwner(unsigned long long connId);
 
+// AI(W906-FW-BIN1) 20260820: host-process marker that the BinSelect->
+// SetTechDataToProd_Yield->ShowBinSel chain actually ran (wb_serve does it at
+// boot under the DataPath dry-redirect). The six bin.* tags publish null
+// until this says true -- "the recipe's bin table was loaded" is a source
+// question, same philosophy as every other liveness key here.
+void SetWebBinSelLoaded(bool loaded);
+
 // ---------------------------------------------------------------------------
 //  PUMP MODE  (wb_publish --pump)
 //

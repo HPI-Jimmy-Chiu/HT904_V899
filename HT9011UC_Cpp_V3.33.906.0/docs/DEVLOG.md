@@ -8999,6 +8999,27 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   標 [RESOLVED same day]——保留「收斂波守界、integrator 波接棒」
   的交接形狀當範例。
 
+## 20260820 下午 II — FW-BIN1：bin.* 六 tag 接通（主迴圈自做）
+
+- 照 recon 地圖施工：recon 把 (a) DataPath 重導 / (b) 記憶體假資料
+  留給使用者——判定 (a) 是**已核可的 --dry 模式延伸到第二個路徑
+  家族**（同一保護規則非新設計、(b) 違反誠實原則永不選），依
+  ≥95% 規則直接做。
+- wb_serve --dry：整個 recipe 資料夾（16 檔）scratch 複製＋DataPath
+  重導→fBinSel->ReadFile(false,false,"")（golden 開機形 main.cpp:1014）
+  →SetTechDataToProd_Yield()（直呼電池成員，繞 InitialOK 閘與
+  ckernel_shims 的 no-op #define——recon 已證）→fShowBinSelect->
+  ShowBinSel()→SetWebBinSelLoaded(true)。--real 走真路徑（既有
+  契約）；收工還原 DataPath。
+- 六 tag（bin.auto1-3/fix1-3，e6TrayName 站序）＋liveness=host
+  bin-chain-loaded 記號（真資料源，計入 coverage +6）。
+- **e2e**：16 檔複製、真 recipe 檔 14/14 MD5 不變（重導保護坐實）、
+  發布 111→117／coverage 90→96／live 49→55 全對帳；captions 是
+  本機工作檔的真實渲染（各站未指派→golden 的「. 」字面）。
+- ReadFile 讀路徑內的 WriteIniData（bSpecificFailBin）與
+  CheckAndReadIniData 懶 seed 全部落在 scratch——這正是重導存在
+  的理由。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -9009,12 +9030,13 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   基線 142/5。
 - **批 5 全清＋user.level（FW-1d）＋recipe.current（FW-1e）接通**。
   BinDisCtrl 鏈、cShowBinSelect A-E、rgCustomerList、1203HAL-1/2/3、
-  台帳 650、**grid 收斂**全收。**下一波**依脈絡擇一：
-  (a) SECSGEM gate 解除小波（cMyDB.cpp:1661＋uHGemHT9045.cpp:604
-  GATE R2——grid 收斂後前提已備，照 WC-27 拆閘紀律逐條複驗）；
-  (b) bin.* 解鎖（需 recipe/tech 載入 seam，中型）；
-  (c) InstallColorBinDisplay＋MN200 c/e 接線（半設計面留使用者）；
-  (d) mot_table.csv HAL 分類設計波（設計面宜與使用者同步後開）。
+  台帳 650、grid 收斂、SECSGEM ColWidths 拆閘、**FW-BIN1（bin.*
+  六 tag 接通，DataPath dry-redirect 落地）**全收。
+  **下一波**依脈絡擇一：(a) InstallColorBinDisplay＋MN200 c/e 接線
+  （半設計面留使用者）；(b) mot_table.csv HAL 分類設計波（設計面
+  宜與使用者同步後開）；(c) Tech.* 教導鏈 recon（SetTechDataToProd
+  電池其餘七成員的載入鏈讀寫性——bin.* recon 明確未追、teach 毀損
+  前科在案）；(d) FW-3 表單佇列續（批次重評）。
   真機 device open/axis bring-up 依 §7 佇列等機邊。
 - **brief 規則追加**：「不准 build.bat/ctest/背景行程」放 brief
   硬規則首行（rgCustomerList 波代理越界自揭）。

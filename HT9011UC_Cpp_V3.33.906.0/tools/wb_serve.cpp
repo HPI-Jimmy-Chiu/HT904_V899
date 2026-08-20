@@ -49,6 +49,9 @@
 #include "cAuthority.h"               // GetCountClrAuth(), authCounterClr[]
 #include "cMyDB.h"                    // MyDBIProcess (recording sim in this tree)
 #include "LastSet.h"                  // LastSet (post-clear observable printed to the serve log)
+#include "forms/fBinSel.h"            // AI(W906-FW-BIN1) 20260820: fBinSel->ReadFile (BinSelect loader)
+#include "forms/fShowBinSelect.h"     // AI(W906-FW-BIN1) 20260820: fShowBinSelect->ShowBinSel (MyBinSel captions)
+#include "cinitial.h"                 // AI(W906-FW-BIN1) 20260820: SetTechDataToProd_Yield
 // AI(W906-FW-W5a) 20260819: ShowMyMessage + its forward hook live in
 // canary_support.{h,cpp} -- but that header re-defaults RecordProcess/
 // MyDBIProcessNew parameters that common.h (already included above) also
@@ -208,6 +211,63 @@ int main(int argc, char** argv)
     // failure is golden's own combo text, published as-is.
     fMain->cbSetupFileName->Text = GetLastOpenFN();
     std::printf("recipe.current = %s\n", fMain->cbSetupFileName->Text.c_str());
+
+    // AI(W906-FW-BIN1) 20260820: the bin.* display chain
+    // (docs/RECON_binstar_datasource.md). BinSelect's loader is translated and
+    // faithful, but it reads recipe Binasgn*.Data through CheckAndReadIniData,
+    // whose missing-key seeding WRITES the file it reads (and ReadFile itself
+    // carries one WriteIniData) -- against DataPath, a THIRD hardcoded shared
+    // production path family --dry did not yet cover. Same protection pattern
+    // as asGeneralPath, extended: copy the recipe folder to scratch and point
+    // DataPath there for the whole run. --real keeps golden's true paths, the
+    // same explicit-opt-in contract as the Gerneral.ini handling above.
+    const AnsiString savedDataPath = DataPath;
+    AnsiString recipeScratchRoot;
+    bool binSelLoaded = false;
+    {
+        const AnsiString recipe = fMain->cbSetupFileName->Text;
+        bool pathReady = (recipe.Length() > 0 && recipe != "Fail Open");
+        if (pathReady && dry) {
+            char tmp[MAX_PATH];
+            ::GetTempPathA(MAX_PATH, tmp);
+            recipeScratchRoot = AnsiString(tmp) + "wb_serve_recipe\\";
+            const AnsiString src = savedDataPath + recipe;
+            const AnsiString dst = recipeScratchRoot + recipe;
+            ::CreateDirectoryA(recipeScratchRoot.c_str(), 0);
+            ::CreateDirectoryA(dst.c_str(), 0);
+            WIN32_FIND_DATAA fd;
+            HANDLE h = ::FindFirstFileA((src + "\\*").c_str(), &fd);
+            int copied = 0;
+            if (h != INVALID_HANDLE_VALUE) {
+                do {
+                    if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) continue;
+                    if (::CopyFileA((src + "\\" + fd.cFileName).c_str(),
+                                    (dst + "\\" + fd.cFileName).c_str(), FALSE)) ++copied;
+                } while (::FindNextFileA(h, &fd));
+                ::FindClose(h);
+            }
+            if (copied > 0) {
+                DataPath = recipeScratchRoot;
+                std::printf("--dry: recipe folder scratch-copied (%d files), DataPath redirected\n", copied);
+            } else {
+                pathReady = false;
+                std::printf("--dry: recipe folder empty/missing (%s) -- bin.* stays null\n", src.c_str());
+            }
+        }
+        if (pathReady) {
+            // golden boot shape main.cpp:1014: fBinSel->ReadFile(false,false,"")
+            fBinSel->ReadFile(false, false, AnsiString(""));
+            // battery member called directly, NOT the SetTechDataToProd
+            // orchestrator: the orchestrator is InitialOK-gated AND shadowed
+            // by ckernel_shims' no-op #define; _Yield itself is neither
+            // (recon section 4, both verified there).
+            SetTechDataToProd_Yield();
+            fShowBinSelect->ShowBinSel();
+            binSelLoaded = true;
+            std::printf("bin.* chain loaded: BinSelect -> iT6CatData -> MyBinSel captions\n");
+        }
+    }
+    ht9045::SetWebBinSelLoaded(binSelLoaded);
 
     webbridge::TagSnapshot snap;
     const std::size_t staged = ht9045::PublishHandlerTags(snap);
@@ -413,6 +473,10 @@ int main(int argc, char** argv)
         CloseGeneralIniFile();
         asGeneralPath = savedGeneralPath;
         ::DeleteFileA(scratch.c_str());
+        // AI(W906-FW-BIN1) 20260820: restore the recipe-path redirect too.
+        // The scratch folder is left for the OS temp cleaner (it may hold
+        // seeded keys useful for post-mortem diffing against the real one).
+        DataPath = savedDataPath;
     }
 
     std::printf("stopped\n");
