@@ -8955,6 +8955,22 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
     Public/ADVMOT.lib（x86）即可解全部符號。易混淆旁支：
     Public/AdvMotAPI.dll（2.1.2.4）不是同一元件勿選錯。
 
+## 20260820 上午 III — 1203HAL-3：真 SDK link+load 打通（主迴圈自做）
+
+- **里程碑**：`pci1203_linkprobe.exe`——真 Acm_* import、真
+  ADVMOT.lib（x86 COFF）、釘死 MinGW 直連**建置成功且執行通過**
+  （no-arg 瞬回路徑印出 import thunk 位址＝ADVMOT.dll 載入成功）。
+  1203 鏈三級全通：編譯（HAL-1）→防退化（HAL-2）→link+load（HAL-3）。
+- CMake：find_library 找到 SDK 才建 target（無 SDK 機器優雅跳過、
+  compile 探針仍在）；**build-only 永不進 ctest**（無卡 enumerate
+  阻塞 ≥15s；--enumerate 旗標保留給有卡的那天）。
+- 過程小坑：vendor 標頭假設 windows.h 型別已在 scope（六個生產 TU
+  靠傳遞 include 供給）——探針明式補上。
+- **1203 HAL 下一階**：真硬體到位後的 device open/axis bring-up
+  屬動真機類，照 §7 佇列等機邊驗收；軟體側剩 mot_table.csv 驅動的
+  HAL 分類設計（使用者 20260818 裁決：控制邏輯與馬達分類由
+  mot_table.csv 決定）——設計波，宜與使用者同步後開。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8965,12 +8981,12 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   基線 142/5。
 - **批 5 全清＋user.level（FW-1d）＋recipe.current（FW-1e）接通**。
   BinDisCtrl 鏈、cShowBinSelect A-E、rgCustomerList、
-  **1203HAL-1（HAVE_PCI1203=1 六 TU 編譯打通）**全收。
-  **下一波**依脈絡擇一：(a) 1203HAL-2：CMake 掛 -DHAVE_PCI1203=1
-  探針 target 常態防退化＋SDK lib（ADVMOTBCB/X64）MinGW 可連性
-  稽核；(b) bin.* 解鎖；(c) vclcompat 擴充收斂波；
-  (d) InstallColorBinDisplay＋MN200 c/e 接線（半設計面留使用者）。
-  真機類依 §7 仍佇列。
+  **1203HAL-1/2/3 全收（編譯→防退化→真 SDK link+load 三級打通）**。
+  **下一波**依脈絡擇一：(a) bin.* 解鎖；(b) vclcompat 擴充收斂波；
+  (c) InstallColorBinDisplay＋MN200 c/e 接線（半設計面留使用者）；
+  (d) 1203 的 mot_table.csv HAL 分類設計波（20260818 裁決方向，
+  設計面宜與使用者同步後開）。真機 device open/axis bring-up 依
+  §7 佇列等機邊。
 - **brief 規則追加**：「不准 build.bat/ctest/背景行程」放 brief
   硬規則首行（rgCustomerList 波代理越界自揭）。
 - **使用者新規（20260820，已入 memory）**：執行過程有問題且解決

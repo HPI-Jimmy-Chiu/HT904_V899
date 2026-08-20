@@ -2345,6 +2345,35 @@ target_include_directories(ht9045_pci1203_probe PRIVATE
 )
 
 # ---------------------------------------------------------------------------
+# Link probe: pci1203_linkprobe
+#   AI(W906-1203HAL-3) 20260820: the x86 ADVMOT.lib is a standard COFF import
+#   library MinGW links directly (docs/RECON_1203_SDK_linkability.md). This
+#   tiny exe proves it on every build of a machine that has the SDK: real
+#   Acm_* imports resolved by the real vendor .lib. BUILD-ONLY -- never a
+#   ctest (without a card the enumerate call blocks 15+ s, and running needs
+#   ADVMOT.dll on PATH). Machines without the SDK skip the target entirely.
+#   Beware the decoy: Public/AdvMotAPI.dll is a DIFFERENT component;
+#   the header-matching library is ADVMOT.lib / ADVMOT.dll.
+# ---------------------------------------------------------------------------
+find_library(ADVMOT_X86_LIB
+    NAMES ADVMOT
+    PATHS "C:/Program Files (x86)/Advantech/Common Motion/Public"
+    NO_DEFAULT_PATH
+)
+if(ADVMOT_X86_LIB)
+    add_executable(pci1203_linkprobe tools/pci1203_linkprobe.cpp)
+    target_compile_definitions(pci1203_linkprobe PRIVATE HAVE_PCI1203=1)
+    target_include_directories(pci1203_linkprobe PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/EtherCAT/vendor
+    )
+    target_link_libraries(pci1203_linkprobe PRIVATE ${ADVMOT_X86_LIB})
+    message(STATUS "PCIE-1203 link probe enabled: ${ADVMOT_X86_LIB}")
+else()
+    message(STATUS "PCIE-1203 SDK not found -- pci1203_linkprobe skipped (compile probe still active)")
+endif()
+
+# ---------------------------------------------------------------------------
 # Library: ht9045_webbridge
 #   AI(W906-WebBridge) 20260805: the C++ side of the browser HMI seam --
 #   D:\HT9045\web talks to the handler through this. Design and wire protocol:
