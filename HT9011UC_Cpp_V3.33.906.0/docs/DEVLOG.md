@@ -8990,6 +8990,15 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   原因「基底沒有 ColWidths」的 gate **技術上已可解**——留給
   SECSGEM gate 專門波（StringGrid.h 有 RESIDUAL GATE NOTE）。
 
+## 20260820 下午 — SECSGEM ColWidths gate 拆閘（grid 收斂的接棒）
+
+- 兩處「基底沒有 ColWidths[]」的 gate 前提死於 grid 收斂→照 WC-27
+  拆閘紀律逐條複驗後開：cMyDB.cpp GetAlarmCodeList 的七行欄寬
+  （golden :1416-1422）＋uHGemHT9045.cpp GATE [R2]（golden :403）。
+  純欄寬 cosmetics、零資料影響。StringGrid.h 的 RESIDUAL GATE NOTE
+  標 [RESOLVED same day]——保留「收斂波守界、integrator 波接棒」
+  的交接形狀當範例。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、

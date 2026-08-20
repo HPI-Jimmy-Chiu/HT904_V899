@@ -1658,10 +1658,10 @@ void  __fastcall GetAlarmCodeList(TStringGrid *strGrid)                         
     AnsiString Code,Mess,Desc;
     AnsiString asQuery;
 
-#if 0 // TODO(GA1-B4): vclcompat::TStringGrid deliberately has no ColWidths[]
-      // (documented out-of-scope in vclcompat/StringGrid.h -- "NO rendering...
-      // ColWidths/RowHeights") -- golden :1416-1422 column-width cosmetics,
-      // no effect on data content.
+    // AI(W906-VclGrid-1) 20260820: gate RETIRED -- its premise ("the base has
+    // no ColWidths[]") died when the grid consolidation moved the auto-grow
+    // ColWidths proxy into vclcompat::TStringGrid itself. Golden :1416-1422
+    // live again; still pure column-width cosmetics with no data effect.
     strGrid->ColWidths[0]=50;
     strGrid->ColWidths[1]=50;                                                   //ID_AlarmList
     strGrid->ColWidths[2]=80;                                                   //Alarm Code
@@ -1669,7 +1669,6 @@ void  __fastcall GetAlarmCodeList(TStringGrid *strGrid)                         
     strGrid->ColWidths[4]=80;                                                   //Unit Name
     strGrid->ColWidths[5]=40;                                                   //Type
     strGrid->ColWidths[6]=500;                                                  //Message
-#endif
 
     for(int i=0; i<strGrid->RowCount; i++)
     {

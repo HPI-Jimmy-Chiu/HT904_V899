@@ -42,14 +42,14 @@
 //  no rendering -- these are the same plain-data/no-op members the two
 //  subclasses already carried, moved, not upgraded.
 //
-//  RESIDUAL GATE NOTE: this addition also means the two SECSGEM call sites
-//  that were previously gated specifically because "vclcompat::TStringGrid
-//  has no ColWidths[]" (cMyDB.cpp:1661 GetAlarmCodeList's `#if 0` block, and
-//  SECSGEM/uHGemHT9045.cpp:604-608 AddAlarmList's GATE [R2]) COULD now
-//  compile if un-gated. NOT done as part of this wave (its stated scope is
-//  this header plus the five form facades, not SECSGEM consumers) -- flagged
-//  here so the next reader of either GATE comment does not have to re-derive
-//  that the premise changed.
+//  RESIDUAL GATE NOTE [RESOLVED same day]: this addition meant the two
+//  SECSGEM call sites gated specifically on "vclcompat::TStringGrid has no
+//  ColWidths[]" (cMyDB.cpp GetAlarmCodeList's block, and SECSGEM/
+//  uHGemHT9045.cpp AddAlarmList's GATE [R2]) could compile if un-gated --
+//  and the follow-up integrator flip (AI(W906-VclGrid-1) 20260820, the very
+//  next commit) opened both. Kept as history of the handoff shape: the
+//  consolidation wave stayed inside its file scope and planted this note,
+//  the integrator wave acted on it.
 //
 //  A future UI-facing wave that needs actual grid RENDERING (drawing rows/
 //  columns/fonts sized per these properties) should extend this class

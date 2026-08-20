@@ -601,15 +601,10 @@ void HT9045Gem::AddAlarmList()
 //        MyDBVProcess(asQuery, HGem->strGrdAlarm);
 
         GetAlarmCodeList(HGem->strGrdAlarm);
-// GATE [R2] -- golden :403.  vclcompat::TStringGrid has no ColWidths[] by design
-// (vclcompat/StringGrid.h:19-20); same gate cMyDB.cpp:1657 already applies to
-// golden's identical cosmetics inside GetAlarmCodeList, called on golden :402.
-#if 0
+        // AI(W906-VclGrid-1) 20260820: GATE [R2] RETIRED -- same ground as
+        // cMyDB.cpp's GetAlarmCodeList flip: the grid consolidation gave the
+        // base class the ColWidths proxy, so golden :403 is live again.
         HGem->strGrdAlarm->ColWidths[7]=50;                                     //Enable
-#else
-        // R2 DEFAULT: column-width cosmetic dropped; the Cells[7][0]="Enable"
-        // header text on the next golden line is ACTIVE and unchanged.
-#endif
         HGem->strGrdAlarm->Cells[7][0]="Enable";
         HGem->strGrdAlarm->Cells[8][0]="AlarmID";
         HGem->strGrdAlarm->Cells[9][0]="Class";
