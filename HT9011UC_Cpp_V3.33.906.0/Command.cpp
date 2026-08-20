@@ -11329,19 +11329,11 @@ void TfMain::WriteSetTempStatus_SIGURD()                                        
             {
                 TempMode=0;
             }
-            // AI(W906-FW-CMD-D) 20260820: GATE REGISTER item 4 RE-CONFIRMED, golden
-            // :10559 -- still gated, premise still alive. `edATCAmbientTemper` is
-            // golden main.h:737's TfMain widget (a TEdit member of fMain itself, NOT
-            // fTemp_Set), confirmed by re-reading golden main.h this pass; the
-            // fTemp_Set landing this wave re-checked for (commit c60e9f4) does not
-            // carry it -- forms/fTemp_Set.h's OWN GATE REGISTER independently notes
-            // the identical absence at its `(dep-fMain-edATCAmbientTemper)` entry
-            // (`fMain->edATCAmbientTemper` -- no member on the current fMain facade).
-            // `grep -n "edATCAmbientTemper" forms/fMain.h forms/fTemp_Set.h` --
-            // 0 declaration hits in either, re-run 20260820. Not unlocked.
-#if 0
+            // AI(W906-FW-CMD-F) 20260821: GATE REGISTER item 4 (write side) UNLOCKED,
+            // golden :10559 verbatim -- the premise died with FW-CMD-E (commit
+            // fd1bb48): forms/fMain.h now carries edATCAmbientTemper (golden
+            // main.h:737). Direct member access inside TfMain, no guard needed.
             edATCAmbientTemper->Text=d;
-#endif
         }
         else
         {
@@ -11362,29 +11354,22 @@ void TfMain::WriteSetTempStatus_SIGURD()                                        
         //<==
         //Sam 20210510 : 先回傳 OK，再來寫入，不然寫入太慢對方會 TimeOut
         if(Temperature.bATCActiveCooling)                                       //Sam 20250214 : RMS 新增 ATC 判斷
-            // AI(W906-FW-CMD-D) 20260820: GATE REGISTER item 4 RE-CONFIRMED, golden
-            // :10580 -- `edATCAmbientTemper` still absent (see the write-side gate
-            // above, re-checked against forms/fTemp_Set.h too this pass); `d` (its
-            // would-be mirror, set two lines above in this same arm) is used
-            // directly instead.
-            ret=SetTemp(false, d, atof(edSoakTime->Text.c_str()));
+            // AI(W906-FW-CMD-F) 20260821: GATE REGISTER item 4 (read side) UNLOCKED,
+            // golden :10580 verbatim -- FW-CMD-D's `d` stand-in retired now that the
+            // widget exists (fd1bb48). Faithful nuance kept: if this arm runs without
+            // the write-side arm having executed this call, golden reads whatever the
+            // widget last held -- same as golden.
+            ret=SetTemp(false, atof(edATCAmbientTemper->Text.c_str()), atof(edSoakTime->Text.c_str()));
         else
             ret=SetTemp(false, atof(edWorkTemperBase->Text.c_str()), atof(edSoakTime->Text.c_str()));
         if(ret==0)
         {
-            // AI(W906-FW-CMD-D) 20260820: GATE REGISTER item 5 RE-CONFIRMED, golden
-            // :10585 -- still gated, premise still alive. `ChangeTempMode` is golden
-            // main.h:1323's TfMain member (int __fastcall ChangeTempMode(int Mode,
-            // bool Msg, bool bRefresh=false, bool bGPIB=false, bool
-            // bSetTempByDLL=false)), NOT a fTemp_Set method -- the fTemp_Set landing
-            // this wave re-checked for (commit c60e9f4) does not carry it either
-            // (`grep -n "ChangeTempMode" forms/fMain.h forms/fTemp_Set.h
-            // uTemp_Set.cpp` -- 0 declaration/definition hits anywhere, only a prose
-            // mention at forms/fMain.h:549, re-run 20260820). `ret` is left at
-            // SetTemp()'s own return value. Not unlocked.
-#if 0
+            // AI(W906-FW-CMD-F) 20260821: GATE REGISTER item 5 UNLOCKED, golden
+            // :10585 verbatim -- premise died with FW-CMD-E (fd1bb48):
+            // TfMain::ChangeTempMode now has a real body (MainTempMode.cpp, 173/177
+            // golden lines ACTIVE; its own machine-action sites carry their own
+            // SAFETY gates, so this call cannot move hardware). Direct member call.
             ret=ChangeTempMode(TempMode, false, bRefreshFunction, true);
-#endif
         }
 
         if(ret!=0)
@@ -11450,33 +11435,28 @@ void TfMain::WriteSetSoakTimeStatus_SIGURD()                                    
                 }
                 else
                 {
-                    // AI(W906-FW-CMD-D) 20260820: GATE REGISTER items 6 and 7
-                    // RE-CONFIRMED, golden :10651-10652 -- still gated, both
-                    // premises still alive. Item 6 (ChangeTempMode absence): same
-                    // re-check as WriteSetTempStatus_SIGURD's GATE 5 above --
-                    // ChangeTempMode is golden main.h:1323's TfMain member, not a
-                    // fTemp_Set method, and forms/fMain.h still has 0 declaration
-                    // hits (only a prose mention at :549, re-run 20260820). Item 7
-                    // (shared machine config write, `DataPath`-rooted) is a SAFETY-
-                    // layer gate, independent of any dependency landing -- left
-                    // gated per this wave's own "本波解的是依賴缺失層,不是安全層"
-                    // scope. Neither line is unlocked.
-#if 0
+                    // AI(W906-FW-CMD-F) 20260821: block SPLIT -- GATE 6's premise
+                    // died with FW-CMD-E (fd1bb48, ChangeTempMode has a real body
+                    // whose machine-action sites carry their own SAFETY gates), so
+                    // the golden :10651 call is UNLOCKED (fMain is a real instance
+                    // in this port; golden calls through the same pointer). GATE 7
+                    // (golden :10652, shared machine-config write under DataPath)
+                    // stays a SAFETY-layer gate, untouched.
                     fMain->ChangeTempMode(0, false, true);
-                    WriteIniData(szDir, "Mode", "Mode", 1);                     // shared machine config write -- queued for redirect-seam design
+#if 0
+                    WriteIniData(szDir, "Mode", "Mode", 1);                     // GATE 7: shared machine config write -- queued for redirect-seam design
 #endif
                 }
             }
             else      //高溫
             {
-                // AI(W906-FW-CMD-D) 20260820: GATE REGISTER items 6 and 7
-                // RE-CONFIRMED, golden :10657-10658 -- same re-check and same
-                // outcome as the :10651-10652 arm above (ChangeTempMode absence
-                // still alive; IniData\ shared config write is a SAFETY-layer gate
-                // independent of dependency landings). Neither line is unlocked.
-#if 0
+                // AI(W906-FW-CMD-F) 20260821: block SPLIT, same ruling as the
+                // :10651-10652 arm above -- GATE 6 unlocked (golden :10657
+                // verbatim, ChangeTempMode real per fd1bb48), GATE 7 stays (golden
+                // :10658, SAFETY-layer shared config write).
                 fMain->ChangeTempMode(1, false, true);
-                WriteIniData(szDir, "Mode", "Mode", 0);                         // shared machine config write -- queued for redirect-seam design
+#if 0
+                WriteIniData(szDir, "Mode", "Mode", 0);                         // GATE 7: shared machine config write -- queued for redirect-seam design
 #endif
             }
         }
