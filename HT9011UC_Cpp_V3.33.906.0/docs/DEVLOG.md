@@ -9149,11 +9149,23 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 
 - **完成**：FW-3 批 1-5 全清；temp.* 家族收斂（3 接通＋9 誠實 null 附證據）。
   最新 commit：ca4b03a。基線 142/5（g/r 皆 137/142 常駐五項）。
-- **下一波候選**（20260820 夜間重評）：
-  (a) **SIOF 地雷修復波**——ATCInterface.cpp:207 eager-new＋NewSocket 未初始化
-      成員（上節），行為變更獨立 commit，含「哪些 exe 抽取該 TU」的 nm 量測；
-  (b) Tech.* 教導鏈 recon（SetTechDataToProd 其餘七成員載入鏈讀寫性）；
-  (c) TempSet 後續（GATE 6 解閘＋stand-in 收斂，見上節備忘）；
+- ~~(a) SIOF 地雷修復波~~ **已收（b91e210）**：查明 golden 靠 VCL
+  TObject::InitInstance 零填（by-value 成員 ATCInterface.h:231），port 的
+  plain-C++ eager-new 丟失保證；`clientsocket(NULL)` init-list 一行還原，
+  gdb debug heap 下 boot 全程正常，雙組態 re-gate 137/142×2 常駐五項。
+- ~~(b) Tech.* recon~~ **已收（ef3f1a0，docs/RECON_techstar_datasource.md）**：
+  七成員全數已翻（「可能未翻」premise 被推翻）、零寫風險、orchestrator 的
+  InitialOK 閘永不開（tests 之外）、唯一可行 boot 形狀＝照 golden 順序直呼
+  七成員；但 Prod.* 輸出**目前零 WebBridgeTags 消費者**，tag 化先停牌，
+  價值排序 AutoClean＞Index（Index 還需 DoSetupSystemToProd 前置 recon）＞
+  位置表四件＞AOI。
+- **下一波候選**（20260820 深夜重評）：
+  (c) TempSet 後續行為變更（GATE 6 解閘＋auto9045 stand-in 收斂＋
+      cprod.cpp:3989-4003 解閘，一顆獨立 commit）；
+  (e) FW 前端波：formview.js 對 uTemp_Set.layout.json 的渲染驗證＋
+      temp.sv/soak/mode 三顆 tag 的畫面綁定（web/js 側，防禦式渲染，
+      「渲染回歸靠人工 F5」照政策誠實回報）；
+  (f) 台帳二輪 QUIRK 補掃；
   (d) 設計面（InstallColorBinDisplay＋MN200、mot_table HAL）留使用者。
 - **教訓入政策**：表單波 brief 要加「StringGrid/尺寸類 widget 從 dfm 抄
   尺寸」；稽核「X 不依賴 Y」必須含呼叫鏈被呼叫者。
