@@ -1047,6 +1047,26 @@ public:
     virtual void SetAlarmSetup();    // golden main.h:1433 (body Command.cpp new FW3-WF GROUP, golden Command.cpp :5341-5388)
     virtual void MachineStatus();    // golden main.h:1430 (body Command.cpp new FW3-WF GROUP, golden Command.cpp :7304-7509)
     // -- end FW3-WF ADD --------------------------------------------------------
+    // -- FW-CMD-C ADD: Command.cpp batch-1 closeout declarations ---------------
+    // AI(W906-FW-CMD-C) 20260820: the 5 golden TfMain:: methods this file's own
+    // FW3-WF banner (line ~1042-1045 above) flagged as "the never-wave
+    // ChangeToSiteMap/ChangeToAlarmSetup/ChangeToAlarmSetup_SG trio" plus
+    // RemoteControl (flagged EXCLUDED at line ~838-840 above) plus
+    // TCPCommandServerClientRead (never previously declared anywhere). Bodies
+    // in Command.cpp's new "FW-CMD-C" section (golden Command.cpp
+    // :7511-7849/:7852-8046/:8048-8307/:9673-9716/:12762-14301). Per contract
+    // rule 1 every declaration below is `virtual`; per rule 4 each cites its
+    // golden home. `__fastcall` dropped from TCPCommandServerClientRead's
+    // signature, matching this file's own established convention for every
+    // other TCP event-handler declaration above (TCPCommandServerClientConnect/
+    // Disconnect, HanderTcpIp, etc. -- `grep -c "__fastcall" Command.cpp` is 1
+    // tree-wide, re-verified this pass).
+    virtual bool ChangeToSiteMap(char *str);                                    // golden main.h:1432 (body Command.cpp :7511-7849)
+    virtual bool ChangeToAlarmSetup(char *str);                                 // golden main.h:1434 (body Command.cpp :7852-8046)
+    virtual bool ChangeToAlarmSetup_SG(char *str);                              // golden main.h:1435 (body Command.cpp :8048-8307)
+    virtual int  RemoteControl(int iMode);                                      // golden main.h:1455 (body Command.cpp :9673-9716)
+    virtual void TCPCommandServerClientRead(TObject *Sender, TCustomWinSocket *Socket); // golden main.h:1089 (body Command.cpp :12762-14301)
+    // -- end FW-CMD-C ADD --------------------------------------------------------
     TfMain();
     virtual ~TfMain() {}
 };

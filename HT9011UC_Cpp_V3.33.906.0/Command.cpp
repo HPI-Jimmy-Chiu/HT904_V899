@@ -242,6 +242,22 @@
 #include "forms/fNote.h"             // fNote->fShow / ->edErrorCode (real facade, offline fShow=false)
 #include "forms/fSecurity.h"         // AI(W906-FW-SecUnlock) 20260819: fSecurity->GetBit8 (MachineStatus Bit8 gate dissolved)
 #include "forms/fBinSel.h"           // AI(W906-FW-BinSelUnlock) 20260819: fBinSel real instance -- 11 gate blocks dissolved
+// AI(W906-FW-CMD-C) 20260820: 9 new includes for this wave's ACTIVE (non-gated)
+// facade/global calls in RemoteControl/ChangeToSiteMap/ChangeToAlarmSetup(_SG)/
+// TCPCommandServerClientRead -- none of these were needed by the prior
+// 159-method Command.cpp because every existing fLotInfo->/fSCKART->/
+// fCleaning-> reference in this file sits inside an established #if 0 gate
+// (verified: `grep -n "fLotInfo->SetLotStart" Command.cpp` -- the one
+// pre-existing hit is inside GetSiteMappingByDLL's #if 0 block, Command.cpp
+// :9655-9671).
+#include "forms/fLotInfo.h"          // fLotInfo->edtSysLotID/edtSysOperatorID/SetLotID/SetLotStart/RefreshAMR/btClearBarcodeList (real, ACTIVE this wave)
+#include "forms/fSCKART.h"           // fSCKART-> (real facade; iLOTSTATUS_A/_R/Show()/btnExit are NOT members -- see GATE REGISTER item A11)
+#include "forms/fCleaning.h"         // fCleaning->edCleaningCount (real; the other 6 widgets used by golden are NOT members -- see GATE REGISTER item A10)
+#include "forms/fContactCT.h"        // fContactCT->ShowFormComp() (real, ACTIVE)
+#include "forms/fShowBinSelect.h"    // fShowBinSelect->ShowBinSel() (real, ACTIVE -- landed 20260819)
+#include "Automation/AMR.h"          // extern TTeraPowerAMR AMR (real, ACTIVE)
+#include "cSocket.h"                 // extern TArm *ArmData[3] (ArmSKET[][]->GetTotal()/GetPCA()), TLotSummary LotSummary
+#include "atester.h"                 // extern bool bDoubleContact (real, ACTIVE)
 //---------------------------------------------------------------------------
 
 // AI(W906-FW3-WA) 20260817: golden Command.cpp file-scope global (golden :?, right
@@ -264,6 +280,29 @@ AnsiString asTempArmOrder[2][16];
 // documents) -- pulling in the whole of either shim header is unnecessary just for
 // this one declaration.
 void NewRecordProcess(AnsiString AlarmCode, AnsiString S, AnsiString Debug=" ");
+
+// AI(W906-FW-CMD-C) 20260820: same "declare just the one symbol needed,
+// don't pull the whole header" posture as the NewRecordProcess declaration
+// immediately above (and for the SAME reason: including
+// "acatchtray_shims.h" directly reintroduces ITS OWN `NewRecordProcess`
+// declaration, colliding with this TU-local one on parameter 3's default
+// argument -- reproduced this pass, `g++ -fsyntax-only`, "default argument
+// given for parameter 3 of 'void NewRecordProcess(...)'"). `MyMessageBox`
+// (golden mymessbox.h TMyMessageBox*) is RemoteControl's/HTGR,801's only
+// need from acatchtray_shims.h; its real definition lives in
+// acatchtray_shims.h:319-327 (`class TMyMessageBoxShim { bool Visible; bool
+// fShow; void Close(); TMyMessageBoxShim(); }; extern TMyMessageBoxShim
+// *MyMessageBox;`) -- reproduced byte-for-byte here (member order/types
+// identical, so the layout this TU sees for `->fShow` matches exactly).
+class TMyMessageBoxShim
+{
+public:
+    bool Visible;
+    bool fShow;
+    void Close();
+    TMyMessageBoxShim();
+};
+extern TMyMessageBoxShim *MyMessageBox;
 
 // AI(W906-FW3-WA) 20260817: golden cContact.cpp:77 "const int CONTACT_TEST=3;".
 // Port's cContact.h (already included above) carries CONTACT_NORMAL/
@@ -15059,3 +15098,2921 @@ void TfMain::MachineStatus() //JerryYang 20151109 回覆tester機台狀態
 
 // -- FW3-WF APPEND -- end (SetSiteMapData golden Command.cpp :5301-5339; SetAlarmSetup :5341-5388; MachineStatus :7304-7509) --
 
+// =============================================================================
+//  Command.cpp  --  FW-CMD-C: batch-1 closeout, the last 5 golden TfMain::
+//  methods (指令通道類: GPIB site-map/alarm-setup change, remote control, TCP
+//  command-server dispatcher)
+//
+//  Translation wave: W906-FW-CMD-C
+//  Translator: AI(W906-FW-CMD-C) 20260820
+//  Golden source: HT9011UC_Code_V3.33.906.0_20260618/Command.cpp (15,273 lines,
+//  cp950 -- decoded this pass with `iconv -f CP950 -t UTF-8//TRANSLIT`, 0 errors,
+//  20260820).
+//
+//  ROLE
+//  ----
+//  Closes the census gap the main loop measured before this wave: golden has
+//  164 top-level `TfMain::` definitions, the port mirrored 159 before this
+//  wave. The 5 missing are all "command-channel" methods -- external code
+//  (GPIB bridge / TCP command server / DLL RemoteControl) reaching INTO the
+//  handler and asking it to change site map, alarm setup, start/pause, or
+//  answering a TCP query. Per this wave's brief: body translated FAITHFULLY;
+//  every point that would actually (a) start/pause the machine, (b) persist a
+//  shared machine-config file, or (c) send the TCP reply is left UNWIRED
+//  behind a SAFETY GATE (#if 0) -- a SEPARATE register from the tree's
+//  existing absence-based GATE REGISTER convention (callee doesn't exist).
+//  Both registers are below, distinctly labelled.
+//
+//  WAVE SCOPE (every golden method, golden line span, translated status)
+//  ------------------------------------------------------------------------------
+//    ChangeToSiteMap             golden :7511-7849   (339L) ACTIVE, ABSENCE GATE A1/A2
+//    ChangeToAlarmSetup          golden :7852-8046   (195L) ACTIVE, ABSENCE GATE A3
+//    ChangeToAlarmSetup_SG       golden :8048-8307   (260L) ACTIVE, ABSENCE GATE A3, 1 vclcompat substitution (S6-class)
+//    RemoteControl               golden :9673-9716   (44L)  ACTIVE, SAFETY GATE S1
+//    TCPCommandServerClientRead  golden :12762-14301 (1540L) ACTIVE, ABSENCE GATES A1,A3-A15, SAFETY GATES S1-S3
+//  TOTALS: 5 methods, 2,378 raw golden lines. Every golden TfMain:: method now
+//  has a port body -- see this wave's final report for the 164/164 diff
+//  measurement.
+//
+//  ABSENCE GATE REGISTER (callee/member does not exist anywhere in this tree;
+//  every grep below re-run 20260820 from tree root, excluding ./tools/ and
+//  ./build*/)
+//  ------------------------------------------------------------------------------
+//   A1. fSetup->ScrollBar1Change / ->DoIniDataToForm / ->sbUpdateClick --
+//       forms/fSetup.h lists all three ONLY inside its own "queued, not yet
+//       landed" comment (forms/fSetup.h:131-133); `grep -n "ScrollBar1Change\|
+//       DoIniDataToForm\|sbUpdateClick" forms/fSetup.h` -- 3 hits, all prose,
+//       0 declarations. Site: ChangeToSiteMap golden :7826-7828.
+//   A2. fTestCategory (golden TfTestCategory, cTestCategory.h) -- no class, no
+//       global, anywhere. `grep -rn "class TfTestCategory" --include=*.h .`
+//       -- 0 hits. Site: ChangeToSiteMap golden :7844 `fTestCategory->
+//       AdjFormData();`.
+//   A3. fYieldMonitoring widget members (`btnApplyClick`, `cbLowYield_FT`,
+//       `rbContsFailBySocket_FTOn/FTOff/RTOn/RTOff`, `rbContsFailByHead_*`,
+//       `edContsFailSocketAlarmCT_FT/_RT`, `edContsFailHeadAlarmCT_FT/_RT`) --
+//       forms/fYieldMonitoring.h's TfYieldMonitoring carries exactly one
+//       widget (`cbbClosedSiteBin`) plus plain data fields; `grep -n
+//       "btnApplyClick\|cbLowYield_FT\|rbContsFail\|edContsFail"
+//       forms/fYieldMonitoring.h` -- 0 hits. SAME absence FW3-WD already
+//       recorded for SetSGCONTFAIL (that wave's GATE REGISTER items 22-23),
+//       reused here. Sites: ChangeToAlarmSetup golden :8040;
+//       ChangeToAlarmSetup_SG golden :8287; TCP dispatcher HTSET,306/307
+//       golden :13210-13214/13219-13223, HTSET,312/313 golden
+//       :13259-13260/13265-13266.
+//   A4. fContact (golden TfContact, cContact.h) -- the GLOBAL itself does not
+//       exist anywhere in this tree (established, forms/fLotInfo.h:79-83,
+//       20260819: "grepped `class TfContact\b` and `\bfContact\b` tree-wide --
+//       0 hits outside this comment"; re-verified this pass, still 0 hits).
+//       Sites: TCP dispatcher HTGR,211/212 golden :12992-12999
+//       (`edAirForce`/`edForcePerDeviceKG`), HTSET,354 golden :13433/13436/
+//       13443 (`edForcePerPinG`/`edForcePerPinN`).
+//   A5. fFTPClient (golden TfFTPClient) -- no class, no global, anywhere.
+//       Established, FW3-WD GATE REGISTER item 9 ("0 hits, any header or
+//       source, tree-wide"), re-verified this pass. Site: TCP dispatcher
+//       HTSET,301 golden :13151-13153.
+//   A6. fTrayAssignment (golden TfTrayAssignment, cTrayAssignment.h) -- no
+//       class, no global. `grep -rn "class TfTrayAssignment" --include=*.h .`
+//       -- 0 hits. Sites: TCP dispatcher HTSET,308/309 golden :13228/13235
+//       (`RGLoader`/`rgLoad_RT`) and :13230/13237 (`spbSaveClick`).
+//   A7. spbUserName -- not a declared TfMain member. Established,
+//       forms/fCounterClear.h:60 / forms/fContactCT.h:140 ("spbUserName --
+//       none exist on ..."), re-verified this pass (`grep -n "spbUserName"
+//       forms/fMain.h` -- 0 hits). Sites: TCP dispatcher HTSET,310/311 golden
+//       :13246/13254.
+//   A8. fConfiguration->cbD22_1 / ->coD22 / ->cbA60_1 -- none of the three is
+//       a declared TfConfiguration member (`grep -n "cbD22_1\|coD22\|cbA60_1"
+//       forms/fConfiguration.h` -- 0 hits). `cbA32`'s absence is the SAME
+//       class (already FW3-WD GATE REGISTER item 16, a different function,
+//       not re-derived). Sites: TCP dispatcher HTSET,314/315/316 golden
+//       :13272/13280/13288, HTSET,804 golden :14117.
+//   A9. fObserver->TimeInfoGrid -- the facade `fObserver` global THIS TU
+//       resolves against is atester_shims.h's `TfObserverShim` (~7 members:
+//       labFactory/memoLotSummary/etc, no TimeInfoGrid). A separate, newer
+//       forms/fObserver.h class `TfObserver` DOES declare `TimeInfoGrid`, but
+//       that header's own banner states it "has no live instance anywhere in
+//       the tree ... exercised only by tests/test_observer_core.cpp"
+//       (forms/fObserver.h:27-29, 20260818) -- the shim-vs-facade swap is an
+//       unmade integration decision. Re-verified this pass: still true (NOT
+//       dead, unlike GATE 8 below). Established, FW3-WD GATE REGISTER item
+//       10. Site: TCP dispatcher HTGR,208/209 golden :12978/12982.
+//  A10. fCleaning widget members (`rgAutoCleanOnOff`, `edContactTime`,
+//       `edACContactCount`, `edIntervalContact`, `edAlarmCount`,
+//       `btnResetCleanCountClick`) -- forms/fCleaning.h's TfCleaning carries
+//       exactly one widget (`edCleaningCount`, real, used ACTIVE at HTGR,413
+//       below); `grep -n "rgAutoCleanOnOff\|edContactTime\|edACContactCount\|
+//       edIntervalContact\|edAlarmCount\|btnResetCleanCountClick"
+//       forms/fCleaning.h` -- 0 hits. Sites: TCP dispatcher HTGR,411 golden
+//       :13560, HTSET,461/463/464/466/468/469 golden
+//       :13586/13608/13619/13630/13647/13661. The real `TestIF`/
+//       `TestIF_File` field writes beside every one of these
+//       (`iAutoClean_Function`/`_ContactTime`/`_ContactCount`/
+//       `_IntervalContact`/`_AlarmCount`, all confirmed real cprod.h fields)
+//       stay ACTIVE.
+//  A11. fSCKART->iLOTSTATUS_A / ->iLOTSTATUS_R / ->Show() / ->btnExit --
+//       forms/fSCKART.h declares `iLOTSTATUS_W` (real) but no `_A`/`_R`
+//       sibling, and no `Show()`/`btnExit` member (`grep -n "iLOTSTATUS_A\|
+//       iLOTSTATUS_R\|\bShow(\|btnExit" forms/fSCKART.h` -- 0 hits). Sites:
+//       TCP dispatcher HTSET,701 golden :13723/13766 (the enum comparisons
+//       gate the WHOLE if/else -- see DEVIATION note at that call site),
+//       HTSET,712 golden :13926-13927 (`Show()`/`btnExit->Click()`).
+//  A12. fNote->bNeedTCPAlarm / ->bNeedPassWord / ->bCloseShowMsg /
+//       ->BtnSkipClick / ->BtnRetry -- none declared on forms/fNote.h (`grep
+//       -rn "bNeedTCPAlarm\|bNeedPassWord\|bCloseShowMsg\|BtnSkipClick\|
+//       BtnRetry" --include=*.h .` -- 0 hits tree-wide). `fShow`/`edErrorCode`
+//       (used in the SAME branches) are real and stay ACTIVE; `fShow` is also
+//       ESTABLISHED offline-always-false (forms/fNote.h:112-129), which makes
+//       every gated true-arm below doubly unreachable offline, not just
+//       uncompilable. Sites: TCP dispatcher HTSET,519/520 golden
+//       :13678-13683/13692-13699, HTSET,706 golden :13867-13870.
+//  A13. fLotInfo->SetLotEnd -- forms/fLotInfo.h declares `SetLotStart` but no
+//       `SetLotEnd` (established, THIS FILE's own earlier gate,
+//       SetProdModeByDll golden :14339; re-verified this pass: `grep -n
+//       "SetLotEnd" forms/fLotInfo.h` -- 0 hits). Site: TCP dispatcher
+//       HTSET,721 golden :14021.
+//  A14. fMain->DoFTRTClick / cbRunStartMode -- established, FW3-WD GATE
+//       REGISTER item 12 ("`grep -n "DoFTRTClick" forms/fMain.h` -- 0 hits"),
+//       re-verified this pass, still 0 hits. Site: TCP dispatcher HTSET,317
+//       golden :13297/13302.
+//  A15. fLotInfo->btUpload -- not a declared TfLotInfo member (`grep -n
+//       "btUpload" forms/fLotInfo.h` -- 0 hits). Site: TCP dispatcher
+//       HTSET,310 golden :13242.
+//
+//  GATE 8 PREMISE NOW DEAD (report, per this wave's own instruction, NOT
+//  fixed here) -- FW3-WD's GATE REGISTER item 8 (Command.cpp banner above,
+//  SetSiteMapData_SIGURD golden :10715 `ret=ChangeToSiteMap(str);`) reads:
+//  "`ChangeToSiteMap` ... has NO port anywhere in this tree ... 0 hits". This
+//  wave adds that exact port (below), so the premise is now FALSE -- the
+//  callee exists. SetSiteMapData_SIGURD's own `#if 0` is explicitly OUT of
+//  this wave's write scope (append-only mandate; that body was committed by a
+//  prior wave, earlier in this same file) and is NOT reopened here. The NEXT
+//  wave that touches SetSiteMapData_SIGURD should dissolve GATE 8 and wire the
+//  real call.
+//
+//  SAFETY GATE REGISTER (callee IS real/callable -- gated by explicit WAVE
+//  POLICY, not absence: a command-channel entry point (GPIB/TCP/DLL callers
+//  reaching INTO the handler from outside, not an operator's own UI click)
+//  must not autonomously (a) start/pause the machine, (b) persist a SHARED
+//  machine-config file, or (c) persist the shared production data file.)
+//  ------------------------------------------------------------------------------
+//   S1. `fMain->Start(AnsiString)` / `fMain->Pause(AnsiString)` -- both are
+//       REAL, declared virtual members (forms/fMain.h:230/157) and already
+//       "offline: do NOT auto re-start (no-op)" / "offline never pauses ->
+//       false" by their OWN established contract -- even wired, they do
+//       nothing hardware-relevant in THIS build today. Gated anyway per this
+//       wave's explicit "指令通道...一律不接線" instruction: these are the
+//       textbook "真正發出機台動作" call shapes the instruction names, and a
+//       remote command channel is a qualitatively different caller than an
+//       operator's own button click (today's no-op-ness is an offline
+//       accident, not a safety property). Sites: RemoteControl golden :9700
+//       (`fMain->Start("RemoteControl Start");`), :9706/:9712 (`fMain->
+//       Pause(...)`, the Reset and Pause arms); TCP dispatcher HTSET,333
+//       golden :13381, HTSET,334 golden :13400.
+//   S2. Shared-machine-config-file writes -- extends FW3-WD's own "SHARED
+//       CONFIG WRITE GATES" policy (Command.cpp banner above: any write
+//       toward `D:\HT9045\config\` / `D:\HT9045\IniData\Data\` is gated, no
+//       redirect seam exists, shared with the production machine) to every
+//       write this wave's dispatcher makes, INCLUDING `ReadWriteIni(...)`
+//       (not just bare `WriteIniData(...)`) -- `ReadWriteIni` performs a
+//       write-back when the queried key is absent (TIniFile idiom), so it is
+//       the same write surface under a different name. `ReadIniData(...)`
+//       (no bIsRead flag, common.h:235-238, pure read-with-default) is NOT
+//       gated by this item -- it never writes. Sites (szDir/sPath is always
+//       `AuthPath+"config.ini"` [config\] or `DataPath+...+"...Data"`
+//       [IniData\Data\]): HTSET,314/315/316 golden :13274/13282/13290
+//       (config.ini), HTSET,331/332 golden :13360/13367 (config.ini),
+//       HTSET,461/463/464/466/468/470 golden
+//       :13596/13609/13620/13631/13648/13673 (HandlerCondition.Data),
+//       HTSET,710/712/713 golden :13902/13925/13937 (Tester.Data), HTSET,804
+//       golden :14119 (config.ini). The REAL in-memory `TestIF`/
+//       `TestIF_File`/`IniConfig` field writes immediately beside every one
+//       of these stay ACTIVE -- only the file persistence is gated.
+//   S3. `WriteLastDataFile(false)` -- TCP dispatcher HTSET,701 golden :13754.
+//       Real, linkable (cprod.h:3237), but per docs/KNOWLEDGE.md's own
+//       recorded hazard and this agent's own brief ("`ReadLastDataFile`/
+//       `WriteLastDataFile` 的路徑是硬編字面值...`--dry` 重導不到") it writes
+//       the SHARED hardcoded-path production `lastdata.dat` file with no
+//       redirect seam -- same "寫共用參數檔" category as S2, called out
+//       separately because the hazard is independently documented and the
+//       path is hardcoded (not even DataPath-relative). This entire branch is
+//       ALSO gated whole-block for A11 reasons (see that call site's own
+//       DEVIATION note) -- S3 is recorded here for completeness/citation even
+//       though A11's wider gate already suppresses it.
+//
+//  RISK NOTE -- reply strings that no longer prove the action happened (per
+//  project rule: describe risk before verification, not after)
+//  ------------------------------------------------------------------------------
+//  Every SAFETY-GATE site above sits inside a branch whose `sSendMes`/`sData1`
+//  reply is built EXACTLY as golden would build it (e.g. HTSET,333/334 still
+//  reply "OK", HTSET,317 still reply "RT"/"Normal", HTSET,469/721 still reply
+//  "OK") -- this is the SAME "reply reflects golden's own declared outcome,
+//  independent of whether the gated action fired" posture FW3-WD's own GATE
+//  REGISTER item 12 already established (ChangeHandlerStartMode, that wave's
+//  RISK NOTE). Consequence, stated once here rather than per-site: a
+//  HTSET,333/334/317/469/701/721/712 reply of "OK" from THIS PORT does not
+//  mean the machine actually started/paused/switched mode/reset/cleared a
+//  lot/enabled ART -- only that golden's OWN branch logic would have said so.
+//  Anyone wiring a real caller against these replies must dissolve the
+//  matching SAFETY GATE first.
+//
+//  NOTE ON THE StringsProxy .c_str() CHAIN (S6-class substitution, continuing
+//  this tree's numbering; NOT a gate) -- ChangeToAlarmSetup_SG golden
+//  :8103/8112/8114 (`atof(tSetup->Strings[i].c_str())` /
+//  `atoi(tCondition->Strings[0].c_str())` / `atof(tCondition->
+//  Strings[2].c_str())`): vclcompat's `TStringList::Strings[i]` returns a
+//  `StringsProxy` with only an implicit `operator AnsiString()`, no `.c_str()`
+//  member (established, this file's own FW3-WD S6 note). Each such call site
+//  is wrapped `AnsiString(tSetup->Strings[i]).c_str()` -- byte-identical
+//  result. Plain assignments to an AnsiString l-value (`asCondition=tSetup->
+//  Strings[i];`) need only the implicit conversion and are left unwrapped,
+//  matching golden's own literal shape (golden itself has no `.c_str()` on
+//  that one).
+//
+//  GOLDEN ODDITY (recorded, NOT fixed, per "golden 不合理處照翻並註記")
+//  ------------------------------------------------------------------------------
+//  (B-CMDC-1) ChangeToAlarmSetup golden :7910-7917: `sBinName`/`sPassOrFail`/
+//      `fYield` are declared `[TEST_MAX_BIN]` (=256, MachineType.h:414) but
+//      the init loop right above is hardcoded `for(int i=0;i<15;i++)`, not
+//      `<TEST_MAX_BIN` and not `<iTestBinCount`. On any config with
+//      iTestBinCount>15 (e.g. 16-site/32-site), slots 15..iTestBinCount-1 are
+//      read later (the `for(int i=0;i<iTestBinCount;i++)` loops just below)
+//      without ever being zero-initialized this call. Translated verbatim
+//      (bare `for(i<15)`) -- reproduces golden's own latent bug, not a new one.
+//  (B-CMDC-2) ChangeToAlarmSetup_SG golden :8051-8052/entire function: `new
+//      TStringList()` x2 (`tSetup`/`tCondition`) are never `delete`d on ANY
+//      return path (re-read the full golden function this pass to confirm --
+//      no `delete` anywhere in :8048-8307). A per-call heap leak golden
+//      itself has; translated verbatim, not fixed.
+// =============================================================================
+bool TfMain::ChangeToSiteMap(char *str)                                         //wei 20151127 GPIB Change Site Map
+{
+    if(SystemStart==true)
+    {
+        return false;
+    }
+
+    AnsiString sSiteMap=AnsiString(str);
+    int iSiteMap[32];                                                           //Jimmychiu 20230307 修正陣列大小16->32
+    ZeroMemory(iSiteMap, 32);
+    AnsiString sSiteMode="";
+
+    int iDashPos=sSiteMap.Pos("-");
+    int iSiteNum;//JerryYang 20160113
+
+    sSiteMode =sSiteMap.SubString(1, iDashPos-1);
+    sSiteMap  =sSiteMap.SubString(iDashPos, sSiteMap.Length());
+
+    for(int i=0; i<16; i++)
+    {
+        AnsiString sBin="";
+        int iBin=-1;
+
+        if(i<9)
+        {
+            sBin=sSiteMap.SubString(2, 1);
+            sSiteMap=sSiteMap.SubString(3, sSiteMap.Length());
+        }
+        else
+        {
+            sBin=sSiteMap.SubString(2, 2);
+            sSiteMap=sSiteMap.SubString(4, sSiteMap.Length());
+        }
+
+        iBin=atoi(sBin.c_str());
+
+        if(iBin>=1 && iBin<=16)
+        {
+            iSiteMap[i]=iBin;
+        }
+        else
+        {
+            return false;
+        }
+
+        if(sSiteMap.Pos("_")==1)
+        {
+            break;
+        }
+    }
+
+    if(sSiteMode=="SINGLE1X1")                                                  //JerryYang 20160113 Sitemap防護
+    {
+        iSiteNum=1;
+    }
+    else if(sSiteMode=="DUAL1X2" || sSiteMode=="DUAL2X1")
+    {
+        iSiteNum=2;
+    }
+    else if(sSiteMode=="TRI1X3")
+    {
+        iSiteNum=3;
+    }
+    else if(sSiteMode=="QUAD1X4" || sSiteMode=="QUAD2X2" || sSiteMode=="QAD2X2N")
+    {
+        iSiteNum=4;
+    }
+    else if(sSiteMode=="6SITE2X3" || sSiteMode=="6SITE2X3N")
+    {
+        iSiteNum=6;
+    }
+    else if(sSiteMode=="8SITE2X4")
+    {
+        iSiteNum=8;
+    }
+    else if(sSiteMode=="10SITE2X5")
+    {
+        iSiteNum=10;
+    }
+    else if(sSiteMode=="12SITE2X6")
+    {
+        iSiteNum=12;
+    }
+    else if(sSiteMode=="16SITE2X8" || sSiteMode=="16SITE4X4")
+    {
+        iSiteNum=16;
+    }
+    else if(sSiteMode=="32SITE4X8")
+    {
+        iSiteNum=32;
+    }
+    else
+    {
+        return false;
+    }
+
+    for(int i=0; i<iSiteNum; i++)                                               //JerryYang 20160113 Sitemap防護
+    {
+        if(iSiteMap[i]>iSiteNum || iSiteMap[i]<1)
+        {
+            return false;
+        }
+        for(int j=i+1; j<iSiteNum; j++)
+        {
+            if(iSiteMap[i]==iSiteMap[j])
+            {
+                return false;
+            }
+        }
+    }
+
+    if(sSiteMode=="SINGLE1X1")//*   SingleSite
+    {
+        TestIF_File.iTestMode=SingleSite;
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+    }
+    else if(sSiteMode=="DUAL1X2")//*   DualSite
+    {
+        TestIF_File.iTestMode=DualSite;
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[1];
+    }
+    else if(sSiteMode=="TRI1X3")//
+    {
+        TestIF_File.iTestMode=TriSite1X3;
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[1];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[2];
+    }
+    else if(sSiteMode=="QUAD1X4")//*     QualSite1X4    _8Site1X4
+    {
+        TestIF_File.iTestMode=QualSite1X4;
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[1];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[2];
+        TestIF_File.iSiteMap[0][3]=iSiteMap[3];
+    }
+    else if(sSiteMode=="DUAL2X1")//*    DualSite2x1
+    {
+        TestIF_File.iTestMode=DualSite2x1;
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+    }
+    else if(sSiteMode=="QUAD2X2")//*    QualSite2X2
+    {
+        TestIF_File.iTestMode=QualSite2X2;
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[2];
+        TestIF_File.iSiteMap[1][1]=iSiteMap[3];
+    }
+    else if(sSiteMode=="QAD2X2N")                                               //Steven 20230214 : 補上GPIB set site map
+    {
+        TestIF_File.iTestMode=QualSite2X2N;
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[2];
+        TestIF_File.iSiteMap[1][1]=iSiteMap[3];
+    }
+    else if(sSiteMode=="6SITE2X3")//*      _6Site2X3
+    {
+        TestIF_File.iTestMode=_6Site2X3;
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[2];
+        TestIF_File.iSiteMap[1][1]=iSiteMap[3];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[4];
+        TestIF_File.iSiteMap[1][2]=iSiteMap[5];
+    }
+    else if(sSiteMode=="6Site2X3N")                                             //Steven 20230214 : 補上GPIB set site map
+    {
+        TestIF_File.iTestMode=_6Site2X3N;
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[2];
+        TestIF_File.iSiteMap[1][1]=iSiteMap[3];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[4];
+        TestIF_File.iSiteMap[1][2]=iSiteMap[5];
+    }
+    else if(sSiteMode=="8Site2X4N")                                             //Wei 20231211 : 2X4NN Mode
+    {
+        TestIF_File.iTestMode=_8Site2X4;
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[2];
+        TestIF_File.iSiteMap[1][1]=iSiteMap[3];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[4];
+        TestIF_File.iSiteMap[1][2]=iSiteMap[5];
+        TestIF_File.iSiteMap[0][3]=iSiteMap[6];
+        TestIF_File.iSiteMap[1][3]=iSiteMap[7];
+    }
+    else if(sSiteMode=="8SITE2X4")//*    _8Site2X4
+    {
+        TestIF_File.iTestMode=_8Site2X4;
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[2];
+        TestIF_File.iSiteMap[1][1]=iSiteMap[3];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[4];
+        TestIF_File.iSiteMap[1][2]=iSiteMap[5];
+        TestIF_File.iSiteMap[0][3]=iSiteMap[6];
+        TestIF_File.iSiteMap[1][3]=iSiteMap[7];
+    }
+    else if(sSiteMode=="10SITE2X5")//*    _10Site2X5      //wei 20190614 10 site
+    {
+        TestIF_File.iTestMode=_10Site2X5;
+        TestIF_File.iSiteMap[0][0] = iSiteMap[0];
+        TestIF_File.iSiteMap[1][0] = iSiteMap[1];
+        TestIF_File.iSiteMap[0][1] = iSiteMap[2];
+        TestIF_File.iSiteMap[1][1] = iSiteMap[3];
+        TestIF_File.iSiteMap[0][2] = iSiteMap[4];
+        TestIF_File.iSiteMap[1][2] = iSiteMap[5];
+        TestIF_File.iSiteMap[0][3] = iSiteMap[6];
+        TestIF_File.iSiteMap[1][3] = iSiteMap[7];
+        TestIF_File.iSiteMap[0][4] = iSiteMap[8];
+        TestIF_File.iSiteMap[1][4] = iSiteMap[9];
+    }
+    else if(sSiteMode=="12SITE2X6")//*    _12Site2X6
+    {
+        TestIF_File.iTestMode=_12Site2X6;
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[2];
+        TestIF_File.iSiteMap[1][1]=iSiteMap[3];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[4];
+        TestIF_File.iSiteMap[1][2]=iSiteMap[5];
+        TestIF_File.iSiteMap[0][3]=iSiteMap[6];
+        TestIF_File.iSiteMap[1][3]=iSiteMap[7];
+        TestIF_File.iSiteMap[0][4]=iSiteMap[8];
+        TestIF_File.iSiteMap[1][4]=iSiteMap[9];
+        TestIF_File.iSiteMap[0][5]=iSiteMap[10];
+        TestIF_File.iSiteMap[1][5]=iSiteMap[11];
+    }
+    else if(sSiteMode=="16SITE2X8") //*     _16Site2X8
+    {
+        TestIF_File.iTestMode=_16Site2X8;
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[2];
+        TestIF_File.iSiteMap[1][1]=iSiteMap[3];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[4];
+        TestIF_File.iSiteMap[1][2]=iSiteMap[5];
+        TestIF_File.iSiteMap[0][3]=iSiteMap[6];
+        TestIF_File.iSiteMap[1][3]=iSiteMap[7];
+        TestIF_File.iSiteMap[0][4]=iSiteMap[8];
+        TestIF_File.iSiteMap[1][4]=iSiteMap[9];
+        TestIF_File.iSiteMap[0][5]=iSiteMap[10];
+        TestIF_File.iSiteMap[1][5]=iSiteMap[11];
+        TestIF_File.iSiteMap[0][6]=iSiteMap[12];
+        TestIF_File.iSiteMap[1][6]=iSiteMap[13];
+        TestIF_File.iSiteMap[0][7]=iSiteMap[14];
+        TestIF_File.iSiteMap[1][7]=iSiteMap[15];
+    }
+    else if(sSiteMode=="16Site4X4")                                             //Steven 20230214 : 補上GPIB set site map
+    {
+        TestIF_File.iTestMode=_16Site4X4;
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+        TestIF_File.iSiteMap[2][0]=iSiteMap[2];
+        TestIF_File.iSiteMap[3][0]=iSiteMap[3];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[4];
+        TestIF_File.iSiteMap[1][1]=iSiteMap[5];
+        TestIF_File.iSiteMap[2][1]=iSiteMap[6];
+        TestIF_File.iSiteMap[3][1]=iSiteMap[7];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[8];
+        TestIF_File.iSiteMap[1][2]=iSiteMap[9];
+        TestIF_File.iSiteMap[2][2]=iSiteMap[10];
+        TestIF_File.iSiteMap[3][2]=iSiteMap[11];
+        TestIF_File.iSiteMap[0][3]=iSiteMap[12];
+        TestIF_File.iSiteMap[1][3]=iSiteMap[13];
+        TestIF_File.iSiteMap[2][3]=iSiteMap[14];
+        TestIF_File.iSiteMap[3][3]=iSiteMap[15];
+    }
+    else if(sSiteMode=="32Site4X8N")                                            //Steven 20230214 : 補上GPIB set site map
+    {
+        TestIF_File.iTestMode=_32Site4X8N;
+        TestIF_File.iSiteMap[0][0]=iSiteMap[0];
+        TestIF_File.iSiteMap[1][0]=iSiteMap[1];
+        TestIF_File.iSiteMap[2][0]=iSiteMap[2];
+        TestIF_File.iSiteMap[3][0]=iSiteMap[3];
+        TestIF_File.iSiteMap[0][1]=iSiteMap[4];
+        TestIF_File.iSiteMap[1][1]=iSiteMap[5];
+        TestIF_File.iSiteMap[2][1]=iSiteMap[6];
+        TestIF_File.iSiteMap[3][1]=iSiteMap[7];
+        TestIF_File.iSiteMap[0][2]=iSiteMap[8];
+        TestIF_File.iSiteMap[1][2]=iSiteMap[9];
+        TestIF_File.iSiteMap[2][2]=iSiteMap[10];
+        TestIF_File.iSiteMap[3][2]=iSiteMap[11];
+        TestIF_File.iSiteMap[0][3]=iSiteMap[12];
+        TestIF_File.iSiteMap[1][3]=iSiteMap[13];
+        TestIF_File.iSiteMap[2][3]=iSiteMap[14];
+        TestIF_File.iSiteMap[3][3]=iSiteMap[15];
+        TestIF_File.iSiteMap[0][4]=iSiteMap[16];
+        TestIF_File.iSiteMap[1][4]=iSiteMap[17];
+        TestIF_File.iSiteMap[2][4]=iSiteMap[18];
+        TestIF_File.iSiteMap[3][4]=iSiteMap[19];
+        TestIF_File.iSiteMap[0][5]=iSiteMap[20];
+        TestIF_File.iSiteMap[1][5]=iSiteMap[21];
+        TestIF_File.iSiteMap[2][5]=iSiteMap[22];
+        TestIF_File.iSiteMap[3][5]=iSiteMap[23];
+        TestIF_File.iSiteMap[0][6]=iSiteMap[24];
+        TestIF_File.iSiteMap[1][6]=iSiteMap[25];
+        TestIF_File.iSiteMap[2][6]=iSiteMap[26];
+        TestIF_File.iSiteMap[3][6]=iSiteMap[27];
+        TestIF_File.iSiteMap[0][7]=iSiteMap[28];
+        TestIF_File.iSiteMap[1][7]=iSiteMap[29];
+        TestIF_File.iSiteMap[2][7]=iSiteMap[30];
+        TestIF_File.iSiteMap[3][7]=iSiteMap[31];
+    }
+    else
+    {
+        return false;
+    }
+
+    bGPIBChangeSiteMap =true;
+    // GATE(W906-FW-CMD-C) golden :7826-7828 -- see ABSENCE GATE REGISTER item A1.
+#if 0
+    fSetup->ScrollBar1Change(this);
+    fSetup->DoIniDataToForm();
+    fSetup->sbUpdateClick(this);
+#endif
+    fMain->ShowTestHeadComp(true);
+    if(iBackupTestMode==TestIF_File.iTestMode)//JerryYang 20160519沒有切換Test mode就照原本的開關site
+    {
+        for(int i=0; i<4; i++)
+        {
+            for(int j=0; j<8; j++)
+            {
+               bTestSiteUse[0][i][j]=iBackupDutOnOff[i][j];
+               LastSet.bUseTestSocket[0][i][j]=iBackupDutOnOff[i][j];
+            }
+        }
+    }
+    fMain->ShowTestHeadComp(false);
+    //JerryYang 20160113 START:切換sitemap後要重新載入
+    DoStructUnitConvert();
+    // GATE(W906-FW-CMD-C) golden :7844 -- see ABSENCE GATE REGISTER item A2.
+#if 0
+    fTestCategory->AdjFormData();
+#endif
+    fContactCT->ShowFormComp();
+    SetWorkParameter();
+    //JerryYang 20160113 END
+    return true;
+}
+//20150901 Mylin GPIB Setup Site Map }
+//---------------------------------------------------------------------------
+bool TfMain::ChangeToAlarmSetup(char *str)          //wei 20151127 GPIB Change Site Map
+{
+    if(SystemStart==true)
+    {
+        return false;
+    }
+
+    AnsiString sAlarmData=AnsiString(str);
+    AnsiString sTemp="";
+
+    int iPosStart=0;
+    int iPosEnd=0, iCate;
+    double dValue=0;      //JerryYang 20160530 LowYieldLimit要能設定到小數點
+    bool bFlag[eTrayCount]={false};
+    bool bFlag1[eTrayCount]={false};
+    AnsiString sBinName[TEST_MAX_BIN];
+    AnsiString sPassOrFail[TEST_MAX_BIN];
+    double fYield[TEST_MAX_BIN];
+
+    //SiteDiff
+    iPosStart=1;
+    iPosEnd=sAlarmData.Pos("_");
+    if(iPosEnd==0)
+        iPosEnd=sAlarmData.Pos("\r\n");
+    if(iPosEnd==0)
+        return false;
+    sTemp=sAlarmData.SubString(iPosStart, iPosEnd-iPosStart);
+    dValue=atof(sTemp.c_str());
+    sAlarmData=sAlarmData.SubString(iPosEnd+1, sAlarmData.Length());
+
+    if(dValue>0)
+    {
+        Prod.bFailAlarmSiteYieldDifferent=true;
+        TestIF_File.bFailAlarmSiteYieldDifferent=true;
+        Prod.dFailAlarmSiteYield=dValue;        //JerryYang 20160530 LowYieldLimit要能設定到小數點
+        TestIF_File.dFailAlarmSiteYield=dValue; //JerryYang 20160530 LowYieldLimit要能設定到小數點
+    }
+    else
+    {
+        Prod.bFailAlarmSiteYieldDifferent=false;
+        TestIF_File.bFailAlarmSiteYieldDifferent=false;
+//        TestIF_File.iLowYieldLimit=0;    //JerryYang 20151207 MARK,不清除Yield
+        TestIF_File.bFailAlarmLowYield=false;//JerryYang 20151207
+    }
+
+    if(sAlarmData=="\n")
+    {
+        for(int i=0; i<iTestBinCount; i++)
+        {
+            iCate=Prod.iT6CatData[i];
+            if(iCate>=0)
+                BinSelect[iTestRunMode].iStackDefFailCate[iCate]=1;     //QQQ
+        }
+        for(int i=0; i<eTrayCount; i++)
+            BinSelect[iTestRunMode].iStackDefFailCate[i]=1;
+    }
+
+    //Bin Alarm Yield
+    // AI(W906-FW-CMD-C) 20260820: GOLDEN ODDITY (B-CMDC-1) -- this loop is
+    // hardcoded <15, not <TEST_MAX_BIN(256) and not <iTestBinCount, even
+    // though sBinName/sPassOrFail/fYield above are sized TEST_MAX_BIN and the
+    // loops below iterate <iTestBinCount. On iTestBinCount>15 configs, slots
+    // 15..iTestBinCount-1 are read later uninitialized. Preserved verbatim.
+    for(int i=0; i<15; i++)
+    {
+        sBinName[i]="";
+        sPassOrFail[i]="";
+        fYield[i]=0;
+        Prod.bIsPassBin[i]=true;
+        Prod.bFailure[i]=false;
+    }
+    sAlarmData=sAlarmData+"_";
+    for(int i=0; i<iTestBinCount; i++)
+    {
+        iPosStart=1;
+        iPosEnd=sAlarmData.Pos("_");
+        sTemp=sAlarmData.SubString(iPosStart, iPosEnd-iPosStart);
+        sAlarmData=sAlarmData.SubString(iPosEnd+1, sAlarmData.Length());
+
+        //sTemp is 1|P|90
+        //BinName
+        iPosStart=1;
+        iPosEnd=sTemp.Pos("|");
+        sBinName[i]=sTemp.SubString(iPosStart, iPosEnd-iPosStart);
+        int iBinNum=atoi(sBinName[i].c_str())-1;
+        sTemp=sTemp.SubString(iPosEnd+1, sTemp.Length());
+
+        //sTemp is P|90
+        //PassOrFail
+        iPosStart=1;
+        iPosEnd=sTemp.Pos("|");
+        sPassOrFail[iBinNum]=sTemp.SubString(iPosStart,iPosEnd-iPosStart);
+        sTemp=sTemp.SubString(iPosEnd+1, sTemp.Length());
+
+        //sTemp is 90
+        fYield[iBinNum]=atof(sTemp.c_str());
+
+        if(sAlarmData.Length()<=0)
+        {
+            break;
+        }
+    }
+
+    for(int i=0; i<iTestBinCount; i++)
+    {
+        iCate=Prod.iT6CatData[i+1];
+        if(iCate<0)
+            continue;
+
+        if(sPassOrFail[i]=="P")
+        {
+            Prod.bIsPassBin[i]=true;
+            if(Prod.iT6CatData[i+1]==Prod.iIfErrorT6)//JerryYang 20151211 Tray被設為Error時,不能改成Pass
+            {
+                ShowMyMessage("Setup Error", "有Bin被設為Error,不能改為PASS");
+                return false;
+            }
+//            MyBinPanel[tag]->iError=Y;
+        }
+        else if(sPassOrFail[i]=="F")
+        {
+            Prod.bIsPassBin[i]=false;
+            Prod.bFailure[i]=true;
+        }
+
+        if(fYield[i]>0 && Prod.bIsPassBin[i]==true)
+        {
+            BinSelect[iTestRunMode].bFailure[i+1]=true;
+        }
+        else
+        {
+            BinSelect[iTestRunMode].bFailure[i+1]=false;
+        }
+
+        if(Prod.bIsPassBin[i]==true && Prod.bFailure[i]==true) //20150827
+        {
+            if(fYield[i]==0) //JerryYang 20151207 Bin設F 但yield設0,要把Enable改成False
+            {
+                Prod.dFailureLimit[i+1]=fYield[i];
+                BinSelect[iTestRunMode].bFailure[i+1]=false;
+            }
+            else if(fYield[i]>0) //JerryYang 20151207 Bin設F 但yield設0,要把Enable改成False
+            {
+                Prod.dFailureLimit[i+1]=fYield[i];
+                BinSelect[iTestRunMode].bFailure[i+1]=true;
+            }
+            else
+            {
+                BinSelect[iTestRunMode].bFailure[i+1]=false;
+            }
+        }
+        else if(Prod.bIsPassBin[i]==false)
+        {
+            Prod.bFailAlarmLowYield=true;
+            TestIF_File.bFailAlarmLowYield=true;
+            Prod.dLowYieldLimit=fYield[i];        //JerryYang 20160530 LowYieldLimit要能設定到小數點
+            TestIF_File.dLowYieldLimit=fYield[i]; //JerryYang 20160530 LowYieldLimit要能設定到小數點
+        }
+
+        if(iCate!=0) //JerryYang 20160202 此Bin有對應的Tray盤
+        {
+            if(Prod.bIsPassBin[i]==true && Prod.bFailure[i]==true)
+            {
+                if(bFlag1[iCate]==true)
+                {
+                    ShowMyMessage("Setup Error", "設定錯誤,同一個Tray盤不能被設為PASS又FAIL");
+                    return false;
+                }
+                BinSelect[iTestRunMode].iStackDefFailCate[iCate]=1;
+                bFlag[iCate]=true;//JerryYang 20151211 用來判斷同一個Tray是否被設為PASS後又設Fail
+            }
+            else if(Prod.bIsPassBin[i]==false)
+            {
+                if(bFlag[iCate]==true)
+                {
+                    ShowMyMessage("Setup Error", "設定錯誤,同一個Tray盤不能同時設定PASS和FAIL");
+                    return false;
+                }
+                BinSelect[iTestRunMode].iStackDefFailCate[iCate]=0;
+                bFlag1[iCate]=true;;//JerryYang 20151211 用來判斷同一個Tray是否被設為Fail後又設PASS
+            }
+        }
+    }
+
+    if(TrayForm.iFixTrayMode==1 &&
+       ((BinSelect[iTestRunMode].iStackDefFailCate[e3Fix1]!=BinSelect[iTestRunMode].iStackDefFailCate[e3Fix4]) || //JerryYang 20160202 選擇上下盤才判斷Fix盤的PASS FAIL是否設定相同
+        (BinSelect[iTestRunMode].iStackDefFailCate[e3Fix2]!=BinSelect[iTestRunMode].iStackDefFailCate[e3Fix5]) ||
+        (BinSelect[iTestRunMode].iStackDefFailCate[e3Fix3]!=BinSelect[iTestRunMode].iStackDefFailCate[e3Fix6])))
+    {
+        ShowMyMessage("Setup Error", "設定錯誤,Fix盤上下必須設定相同為PASS或FAIL");
+        return false;
+    }
+    bGPIBChangeAlarm=true;
+    // GATE(W906-FW-CMD-C) golden :8040 -- see ABSENCE GATE REGISTER item A3.
+#if 0
+    fYieldMonitoring->btnApplyClick(this);
+#endif
+    fBinSel->ChangeActivePageIndex();   //Sam 20230711 : 修正 OLP SetCategroy 異常
+    fBinSel->spbSaveClick(NULL);   // S: golden passes `this` (TfMain*->TObject* in VCL); port TfMain has no vclcompat::TObject base and spbSaveClick ignores Sender entirely -- same established substitution as Command.cpp:8609.
+    fShowBinSelect->ShowBinSel();
+    bGPIBChangeAlarm=false;
+    return true;
+}
+//---------------------------------------------------------------------------
+bool TfMain::ChangeToAlarmSetup_SG(char *str)          //wei 20151127 GPIB Change Site Map
+{
+    AnsiString asCmd="",str1="",str2="",asCondition="";
+    // AI(W906-FW-CMD-C) 20260820: GOLDEN ODDITY (B-CMDC-2) -- golden never
+    // `delete`s tSetup/tCondition on any return path (re-checked the full
+    // golden :8048-8307 body this pass); a per-call heap leak golden itself
+    // has. Preserved verbatim, not fixed.
+    TStringList *tSetup=new TStringList();
+    TStringList *tCondition=new TStringList();
+    double dSiteYieldCmp=0.0,dLowYield=0.0;
+    int i=0,iSetBinNum=0,iBin=0,iCateg=0;
+    bool bCondition=true,bYieldInitail=false;
+    AnsiString sCategPassFail[eTrayCount];
+    AnsiString sBinPassFail[TEST_MAX_BIN];
+    int iBinNum[TEST_MAX_BIN];
+    double fYield[TEST_MAX_BIN];
+    bool bBinOverlapping[TEST_MAX_BIN];
+
+    for(i=0;i<TEST_MAX_BIN;i++)
+    {
+        sBinPassFail[i]="";
+        iBinNum[i]=0;
+        fYield[i]=0.0;
+        bBinOverlapping[i]=false;
+    }
+
+    for(i=0;i<eTrayCount;i++)
+    {
+        sCategPassFail[i]="";
+    }
+
+    asCmd=AnsiString(str).Trim();  //asCmd="5_1|P|95_4|F|0.1"
+                                   //      "NULL_1|P|0_4|F|0_6|F|0";
+
+                                   //NULL_1|P|0_2|P|0_3|P|0_4|F|0_5|F|0_6|F|0
+                                   //NULL_1|P|90_2|P|90_3|P|90_4|F|0.3
+
+    str1=StringReplace(asCmd,"_", ",", TReplaceFlags()<<rfReplaceAll);
+    tSetup->CommaText=str1;
+    iSetBinNum=tSetup->Count; //幾個 Bin 被設定
+
+    if(CUSTOMER_CODE==CC_SIGURD_HUKOU)
+    {
+        //矽格湖口廠不要用 bYieldInitail
+    }
+    else
+    {
+        if(asCmd.Pos("NULL")!=0)
+            bYieldInitail=true; //將 Yiled 設定清空
+    }
+
+    if(iSetBinNum>1)
+    {
+        for(i=0;i<iSetBinNum;i++)
+        {
+            if(tSetup->Strings[i]!="")
+            {
+                if(i==0)
+                {
+                    // AI(W906-FW-CMD-C) 20260820: vclcompat-surface
+                    // substitution (S6-class, see this wave's banner NOTE) --
+                    // StringsProxy has no .c_str(), only an implicit
+                    // AnsiString conversion.
+                    dSiteYieldCmp=atof(AnsiString(tSetup->Strings[i]).c_str()); //取得 dSiteYieldCmp 設定值
+                }
+                else
+                {
+                    asCondition=tSetup->Strings[i];//1|P|95
+                    str2=StringReplace(asCondition,"|", ",", TReplaceFlags()<<rfReplaceAll);
+                    tCondition->CommaText=str2;
+                    if(tCondition->Count==3)   //1|P|95
+                    {
+                        iBin=atoi(AnsiString(tCondition->Strings[0]).c_str());          //1         4
+                        sBinPassFail[iBin]=tCondition->Strings[1];          //P         F
+                        fYield[iBin]=atof(AnsiString(tCondition->Strings[2]).c_str());  //95        0.1
+
+                        //檢查所有 Pass Bin LowYiled 數值有沒一樣。
+                        if(sBinPassFail[iBin]=="P")
+                        {
+                            if(dLowYield==0.0)
+                            {
+                                dLowYield=fYield[iBin];  //取得 LowYield 值
+                            }
+                            else
+                            {
+                                if(dLowYield!=fYield[iBin])
+                                {
+                                    iRecordSigurdGPIBFlag=3;
+                                    bCondition=false;
+                                }
+                            }
+                        }
+
+                        //檢查 Bin 是否有重複設定
+                        if(bBinOverlapping[iBin]==false)
+                        {
+                            bBinOverlapping[iBin]=true;
+                        }
+                        else
+                        {
+                            iRecordSigurdGPIBFlag=4;
+                            bCondition=false;
+                        }
+
+                        //檢查 Bin Pass/Fail 設定 Tray 有沒重疊
+                        iCateg=Prod.iT6CatData[iBin];
+                        if(iCateg>=0)
+                        {
+                            if(sCategPassFail[iCateg]=="")
+                            {
+                                sCategPassFail[iCateg]=sBinPassFail[iBin];
+                            }
+                            else
+                            {
+                                if(sCategPassFail[iCateg]!=sBinPassFail[iBin])
+                                {
+                                    iRecordSigurdGPIBFlag=5;
+                                    bCondition=false;
+                                }
+                            }
+                        }
+
+                        //檢查 Error Tray 有沒被設定到 Pass Bin
+                        if(sBinPassFail[iBin]=="P")
+                        {
+                            if(iCateg==Prod.iIfErrorT6)
+                            {
+                                iRecordSigurdGPIBFlag=6;
+                                bCondition=false;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        iRecordSigurdGPIBFlag=2;
+                        bCondition=false;
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        if(iSetBinNum==0 && bYieldInitail==false)
+        {
+            iRecordSigurdGPIBFlag=1;
+            return false;
+        }
+    }
+
+    if(bCondition==false)
+    {
+        return false;
+    }
+
+    //設定 Low Yields%(By Total) /  By Site Compare Yield% (1min)
+    if(iTestRunMode==FT)
+    {
+        if(bYieldInitail || dSiteYieldCmp<=0.0)
+        {
+            TestIF_File.bFailAlarmSiteYieldCmp=false;
+            TestIF_File.dFailAlarmSiteYieldCmp=0.0;
+        }
+        else
+        {
+            TestIF_File.bFailAlarmSiteYieldCmp=true;
+            TestIF_File.dFailAlarmSiteYieldCmp=dSiteYieldCmp;
+        }
+
+        if(bYieldInitail || dLowYield<=0.0 )
+        {
+            TestIF_File.bFailAlarmLowYieldByTotal=false;
+            TestIF_File.dLowYieldLimitByTotal=0.0;
+        }
+        else
+        {
+            TestIF_File.bFailAlarmLowYieldByTotal=true;
+            TestIF_File.dLowYieldLimitByTotal=dLowYield;
+        }
+    }
+    else
+    {
+        if(bYieldInitail || dSiteYieldCmp<=0.0)
+        {
+            TestIF_File.bFailAlarmSiteYieldCmp_RT=false;
+            TestIF_File.dFailAlarmSiteYieldCmp_RT=0.0;
+        }
+        else
+        {
+            TestIF_File.bFailAlarmSiteYieldCmp_RT=true;
+            TestIF_File.dFailAlarmSiteYieldCmp_RT=dSiteYieldCmp;
+        }
+
+        if(bYieldInitail || dLowYield<=0.0 )
+        {
+            TestIF_File.bFailAlarmLowYieldByTotal_RT=false;
+            TestIF_File.dLowYieldLimitByTotal_RT=dLowYield=0.0;
+        }
+        else
+        {
+            TestIF_File.bFailAlarmLowYieldByTotal_RT=true;
+            TestIF_File.dLowYieldLimitByTotal_RT=dLowYield;
+        }
+    }
+
+    //設定 Failure / dFailureLimit / bConsFail
+    for(i=0; i<TEST_MAX_BIN; i++)
+    {
+        iCateg=Prod.iT6CatData[i];
+        if(iCateg<0)
+            continue;
+
+        if(sBinPassFail[i]=="P")
+        {
+            BinSelect[iTestRunMode].iStackDefFailCate[iTo3Unload[iCateg]]=0;    //Sam 20250303 : 修正 RMS SetAlarmSetup Category Pass/Fail 異常問題。
+            BinSelect[iTestRunMode].bConsFail[i]=false;
+            BinSelect[iTestRunMode].bFailure[i]=false;
+            BinSelect[iTestRunMode].dFailureLimit[i]=0;
+        }
+        else if(sBinPassFail[i]=="F")
+        {
+            BinSelect[iTestRunMode].iStackDefFailCate[iTo3Unload[iCateg]]=1;    //Sam 20250303 : 修正 RMS SetAlarmSetup Category Pass/Fail 異常問題。
+            BinSelect[iTestRunMode].bConsFail[i]=true;
+             BinSelect[iTestRunMode].dFailureLimit[i]=fYield[i];
+            if(fYield[i]<=0.0)
+                BinSelect[iTestRunMode].bFailure[i]=false;
+            else
+                BinSelect[iTestRunMode].bFailure[i]=true;
+        }
+        else
+        {
+            if(iCateg!=0 && BinSelect[iTestRunMode].iStackDefFailCate[iTo3Unload[iCateg]]==1)   //Sam 20250303 : 修正 RMS SetAlarmSetup Category Pass/Fail 異常問題。
+            {
+                if(bYieldInitail)
+                {
+                    BinSelect[iTestRunMode].bConsFail[i]=false;     //將其他 Fail Bin bConsFail 預設為關閉
+                    BinSelect[iTestRunMode].bFailure[i]=false;
+                    BinSelect[iTestRunMode].dFailureLimit[i]=0.0;
+                }
+                else
+                {
+                    BinSelect[iTestRunMode].bConsFail[i]=true;      //將其他 Fail Bin bConsFail 預設為開啟
+                }
+            }
+        }
+    }
+
+    // GATE(W906-FW-CMD-C) golden :8287 -- see ABSENCE GATE REGISTER item A3.
+#if 0
+    fYieldMonitoring->btnApplyClick(this);
+#endif
+    /*
+    if(iTestRunMode==FT)
+        fBinSel->PageControl1->ActivePage=fBinSel->tsNormal;
+    else
+        fBinSel->PageControl1->ActivePage=fBinSel->tsRetest;
+    */
+    /*   //Sam 20230711 : 修正 OLP SetCategroy 異常 Mark
+    if(iTestRunMode==FT)
+        fBinSel->PageControl1->ActivePageIndex=0;
+    else
+        fBinSel->PageControl1->ActivePageIndex=1;
+    */
+    bGPIBChangeAlarm=true;
+    fBinSel->ChangeActivePageIndex();   //Sam 20230711 : 修正 OLP SetCategroy 異常
+    fBinSel->spbSaveClick(NULL);   // S: golden passes `this` (TfMain*->TObject* in VCL); port TfMain has no vclcompat::TObject base and spbSaveClick ignores Sender entirely -- same established substitution as Command.cpp:8609.
+    fShowBinSelect->ShowBinSel();
+    bGPIBChangeAlarm=false;
+
+    return true;
+}
+//---------------------------------------------------------------------------
+int TfMain::RemoteControl(int iMode)
+{
+    int ret=0;
+
+    if(InitialOK==false)
+    {
+         return -1;                                                             //Operation not Allowed
+    }
+
+    if(SettingsIsWindowOpened() || IsIndexMotorOutOfPower() || MyMessageBox->fShow==true ||
+       fNote->fShow==true || fAllMotorHome==false || iHome==1)
+    {
+        return -1;                                                              //Operation not Allowed
+    }
+
+    if(iMode==2)                                                                //Start
+    {
+        if(SystemStart)
+        {
+            ret=0;
+        }
+        else
+        {
+            if(CheckSafeDoorIsClosed()==false)
+            {
+                return -1;
+            }
+            // SAFETY-GATE(W906-FW-CMD-C) golden :9700 -- see SAFETY GATE
+            // REGISTER item S1. Remote command channel must not autonomously
+            // start the machine; not wired.
+#if 0
+            fMain->Start("RemoteControl Start");
+#endif
+            ret=0;
+        }
+    }
+    else if(iMode==0)                                                           //Reset
+    {
+        // SAFETY-GATE(W906-FW-CMD-C) golden :9706 -- see SAFETY GATE REGISTER
+        // item S1.
+#if 0
+        fMain->Pause("RemoteControl Reset");
+#endif
+        ret=0;
+//        fMain->BtnResetClick(fMain);
+    }
+    else                                                                        //Pause
+    {
+        // SAFETY-GATE(W906-FW-CMD-C) golden :9712 -- see SAFETY GATE REGISTER
+        // item S1.
+#if 0
+        fMain->Pause("RemoteControl Pause");
+#endif
+        ret=0;
+    }
+    return ret;
+}
+//---------------------------------------------------------------------------
+void TfMain::TCPCommandServerClientRead(TObject *Sender,
+      TCustomWinSocket *Socket)
+{
+    int iPoint=0;
+    int iData1=0, iData2=0;
+    int iBufferLenght=Socket->ReceiveLength();
+    char EthernetBuffer[100];
+    double dData1=0.0;
+    AnsiString sTemp="", sData[4], sSendMes="", sMemoMes="";
+    AnsiString sData1="", sData2="", sData3="", sData4="", szDir="";;
+
+    for(int i=0; i<100; i++)
+        EthernetBuffer[i]=NULL;
+
+    if(iBufferLenght>0)
+    {
+        Socket->ReceiveBuf(EthernetBuffer, iBufferLenght);
+        sTemp=AnsiString(EthernetBuffer);
+        sMemoMes.sprintf("[%4d][%4d][ #Receive#  ] %s", Socket->SocketHandle, Socket->LocalPort, sTemp);    //Sam 20230417 : Log 新增 SocketHandle 資料
+        TCPIPCommunicationLog(sMemoMes);
+        iPoint=sTemp.Pos(",");
+        if(iPoint>0)
+        {
+            sData[0]=sTemp.SubString(1, iPoint-1);
+            sTemp=sTemp.SubString(iPoint+1, sTemp.Length());
+            iPoint=sTemp.Pos(",");
+            if(iPoint>0)
+            {
+                sData[1]=sTemp.SubString(1, iPoint-1);
+                sTemp=sTemp.SubString(iPoint+1, sTemp.Length());
+                iPoint=sTemp.Pos(",");
+                if(iPoint>0)
+                {
+                    sData[2]=sTemp.SubString(1,iPoint-1);
+                    sTemp=sTemp.SubString(iPoint+1, sTemp.Length());
+                    iPoint=sTemp.Pos(",");
+                    if(iPoint>0)
+                    {
+                        sData[3]=sTemp.SubString(1,iPoint-1);
+                    }
+                }
+            }
+        }
+    }
+
+    if(sData[0]=="HTGR" && sData[1]=="101")                                     //Input Loader Qty
+    {
+        sSendMes.sprintf("HTSR,101,%d,",LastSet.SendCT[0]);
+    }//ex. HTSR,101,13546,
+    else if(sData[0]=="HTGR" && sData[1]=="102")                                //Pass Qty
+    {
+        sSendMes.sprintf("HTSR,102,%d,",iSECSGEMPass);
+    }//ex. HTSR,102,10849,
+    else if(sData[0]=="HTGR" && sData[1]=="103")                                //Fail Qty
+    {
+        sSendMes.sprintf("HTSR,103,%d,",iSECSGEMFail);
+    }//ex. HTSR,103,0,
+    else if(sData[0]=="HTGR" && sData[1]=="104" )                               //Open Bin Qty
+    {
+        iData1=BinSelect[iTestRunMode].IfErrorT3;
+        if(iData1>=0)
+            iData2=LastSet.BinCT[0][iTo3Unload[iData1]];
+        sSendMes.sprintf("HTSR,104,%d,",iData2);
+    }//ex. HTSR,104,0,
+    else if(sData[0]=="HTGR" && sData[1]=="105" )                               //Short Qty
+    {
+        iData1=BinSelect[iTestRunMode].IfErrorT3;
+        if(iData1>=0)
+            iData2=LastSet.BinCT[0][iTo3Unload[iData1]];
+        sSendMes.sprintf("HTSR,105,%d,",iData2);
+    }//ex. HTSR,105,0,
+    else if(sData[0]=="HTGR" && sData[1]=="106")                                //Open Site Count
+    {
+        for(int i=0; i<MAX_SOCKET_ROW; i++)
+            for(int j=0; j< MAX_SOCKET_COL; j++)
+                if(bTestSiteUse[0][i][j]==true)
+                    iData1++;
+        sSendMes.sprintf("HTSR,106,%d,",iData1);
+    }//ex. HTSR,106,29,
+    else if(sData[0]=="HTGR" && sData[1]=="107")                                //Average UPH
+    {
+        sSendMes.sprintf("HTSR,107,%d,",atoi(RunInfo.iAvgUPH.c_str()));
+    }//ex. HTSR,107,9131,
+    else if(sData[0]=="HTGR" && sData[1]=="108")                                //Auto1-3 Fix1-3 Qty & Auto1 Yield
+    {
+        for(int i=0; i<6; i++)
+        {
+            iData1+=LastSet.BinCT[0][iTo3Unload[i]];
+            sData1+=IntToStr(LastSet.BinCT[0][iTo3Unload[i]])+",";
+        }
+
+        if(iData1>0)
+            dData1=ChangeToFloat((double)(LastSet.BinCT[0][iTo3Unload[0]]), (double)iData1);    //Steven 20250820 : 針對除以0加上保護
+
+        sSendMes.sprintf("HTSR,108,%s%0.1f,", sData1, dData1);
+    }//ex. HTSR,108,10849,0,0,0,0,0,100.0,
+    else if(sData[0]=="HTGR" && sData[1]=="109")                                //Tester Online/Offline
+    {
+        if(LastSet.iTester==OFF_LINE)
+            sData1="Off Line";
+        else
+            sData1="On Line";
+         sSendMes.sprintf("HTSR,109,%s,", sData1);
+    }//ex. HTSR,109,Off Line,
+    else if(sData[0]=="HTGR" && sData[1]=="201")                                //Lot ID
+    {
+        sSendMes.sprintf("HTSR,201,%s,", fLotInfo->edtSysLotID->Text.c_str());
+    }//ex. HTSR,201,,
+    else if(sData[0]=="HTGR" && sData[1]=="202")                                 //Operator ID
+    {
+        sSendMes.sprintf("HTSR,202,%s,", fLotInfo->edtSysOperatorID->Text.c_str());
+    }//ex. HTSR,202,,
+    else if(sData[0]=="HTGR" && sData[1]=="203")                                //Machine ID
+    {
+        sSendMes.sprintf("HTSR,203,%s,", IniConfig.sGPIBMachineID);
+    }//ex. HTSR,203,PJLY1027,
+    else if(sData[0]=="HTGR" && sData[1]=="204")                                //Initail Start 開始時間 & Initail Stat 開始後目前所生產的時間
+    {
+        TDateTime sj1;
+        if(InitialStartTime!="")
+        {
+            sData1=InitialStartTime;
+            sj1=StrToDateTime(InitialStartTime)-Now();
+            // AI(W906-FW-CMD-C) 20260820: vclcompat-surface substitution --
+            // vclcompat::TDateTime has no `.FormatString()` member (golden's
+            // BCB6 TDateTime does); the equivalent free function is
+            // `FormatDateTime(fmt, dt)` (vclcompat/TDateTime.h:67).
+            sData2=FormatDateTime("hh:nn:ss", sj1);
+        }
+        else
+        {
+            sData1=FormatDateTime("yyyy/mm/dd hh:nn:ss", Now());
+            sData2="00:00:00";
+        }
+        sSendMes.sprintf("HTSR,204,%s,%s,",sData1,sData2);
+    }//ex. HTSR,204,2023/04/26 13:17:09,00:01:12,
+    else if(sData[0]=="HTSET" && sData[1]=="205" )                              //Handler status (Running , halt ,Alarm ,Pause, Lock, etc..)
+    {
+        sSendMes.sprintf("HTSR,205,%s,",fMain->palMainStatus->Caption.c_str());
+    }//ex. HTSR,205,HALT,
+    else if(sData[0]=="HTGR" && sData[1]=="206")       //Site State             //Site State  SiteMap：Use=1, close=0, not use=-1。
+    {
+        int iCount=0, iMaxSite=0;
+
+        if(MachineTypeChoice==Type_HT9045) //9045
+            iMaxSite=8;
+        else if(MachineTypeChoice==Type_HT9046_LS)
+            iMaxSite=32;
+        else if(MachineTypeChoice==Type_HT9045_12Site)
+            iMaxSite=12;
+        else
+            iMaxSite=16;
+
+        iCount=iMaxSite-TestSocket.iShtCnt;
+        for(int i=0; i<TestSocket.iShtRow; i++)
+        {
+            for(int j=0; j<TestSocket.iShtCol; j++)
+            {
+                if(TestIF_File.iSiteMap[i][j]>0)
+                {
+                    if(TestIF_File.iShuttleMode==1 && TestIF_File.iShuttle_Sel==1)
+                    {
+                        if(bTestSiteUse[1][i][j])
+                            sData1+="1,";
+                        else
+                            sData1+="0,";
+                    }
+                    else
+                    {
+                        if(bTestSiteUse[0][i][j])
+                            sData1+="1,";
+                        else
+                            sData1+="0,";
+                    }
+                }
+                else
+                {
+                    sData1+="-1,";
+                }
+            }
+        }
+        while(iCount>0)
+        {
+            sData1+="-1,";
+            iCount--;
+        }
+        sSendMes.sprintf("HTSR,206,%s",sData1);
+    }//ex. HTSR,206,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,0,
+    else if(sData[0]=="HTGR" && sData[1]=="207")                                //Site Map
+    {
+        int iCount=0,iMaxSite=0;
+        if(MachineTypeChoice==Type_HT9045) //9045
+            iMaxSite=8;
+        else if(MachineTypeChoice==Type_HT9046_LS)
+            iMaxSite=32;
+        else if(MachineTypeChoice==Type_HT9045_12Site)
+            iMaxSite=12;
+        else
+            iMaxSite=16;
+
+        iCount=iMaxSite-TestSocket.iShtCnt;
+        for(int i=0; i<TestSocket.iShtRow; i++)
+        {
+            for(int j=0; j<TestSocket.iShtCol; j++)
+            {
+                if(TestIF_File.iSiteMap[i][j]>0)
+                    sData1+=IntToStr(int(TestIF_File.iSiteMap[i][j]))+",";
+                else
+                    sData1+="-1,";
+            }
+        }
+        while(iCount>0)
+        {
+            sData1+="-1,";
+            iCount--;
+        }
+        sSendMes.sprintf("HTSR,207,%s",sData1);
+    }//ex. HTSR,207,1,5,9,13,17,21,25,29,2,6,10,14,18,22,26,30,3,7,11,15,19,23,27,31,4,8,12,16,20,24,28,32,
+    else if(sData[0]=="HTGR" && sData[1]=="208")                                //Test Time
+    {
+        // GATE(W906-FW-CMD-C) golden :12978 -- see ABSENCE GATE REGISTER item A9.
+#if 0
+        sSendMes.sprintf("HTSR,208,TestTime,%0.1f,",atof(fObserver->TimeInfoGrid->Cells[3][14].c_str()));
+#endif
+    }//ex. HTSR,208,TestTime,0.0,
+    else if(sData[0]=="HTGR" && sData[1]=="209")                                //Index Time
+    {
+        // GATE(W906-FW-CMD-C) golden :12982 -- see ABSENCE GATE REGISTER item A9.
+#if 0
+        sSendMes.sprintf("HTSR,209,IndexTime,%0.1f,",atof(fObserver->TimeInfoGrid->Cells[5][11].c_str()));
+#endif
+    }//ex. HTSR,209,IndexTime,0.0,
+    else if(sData[0]=="HTGR" && sData[1]=="210")                                //Reply Normal or RT
+    {
+        if(eRunStartMode(LastSet.iRunStartMode)==0 || eRunStartMode(LastSet.iRunStartMode)==1 || eRunStartMode(LastSet.iRunStartMode)==8 || eRunStartMode(LastSet.iRunStartMode)==9) //FT->RT
+            sData1="Normal";
+        else if(eRunStartMode(LastSet.iRunStartMode)==2 || eRunStartMode(LastSet.iRunStartMode)==3 || eRunStartMode(LastSet.iRunStartMode)==10) //RT->FT
+            sData1="RT";
+        sSendMes.sprintf("HTSR,210,%s,",sData1);
+    }//ex. HTSR,210,Normal,
+    else if(sData[0]=="HTGR" && sData[1]=="211")                                //AirForce
+    {
+        // GATE(W906-FW-CMD-C) golden :12994 -- see ABSENCE GATE REGISTER item A4.
+#if 0
+        sSendMes.sprintf("HTSR,211,%0.2f,",atof(fContact->edAirForce->Text.c_str()));
+#endif
+    }//ex. HTSR,211,163.84,
+    else if(sData[0]=="HTGR" && sData[1]=="212")                                //Contact KG
+    {
+        // GATE(W906-FW-CMD-C) golden :12998 -- see ABSENCE GATE REGISTER item A4.
+#if 0
+        sSendMes.sprintf("HTSR,212,%0.2f,",atof(fContact->edForcePerDeviceKG->Text.c_str()));
+#endif
+    }//ex. HTSR,212,5.12,
+    else if(sData[0]=="HTGR" && sData[1]=="213")                                //Socket Time
+    {
+        if(LastSet.iTemperature==Tempture_Ambient)
+            sData1="OFF";
+        else
+            sData1=edSoakTime->Text;
+        sSendMes.sprintf("HTSR,213,%s,",sData1);
+    }//ex. HTSR,213,OFF, or HTSR,213,5,
+    else if(sData[0]=="HTGR" && sData[1]=="215")                                //Handler State
+    {
+        if(bIsAutoOneCycle)
+        {
+            sData1="WaitOneCycle";
+        }
+        else if(fMain->palMainStatus->Caption=="HALT" && SystemStart==false)
+        {
+            sData1="HALT";
+        }
+        else
+        {
+            if(fMain->palMainStatus->Caption=="HALT")
+                sData1="PAUSE";
+            else
+                sData1=fMain->palMainStatus->Caption;
+        }
+        sSendMes.sprintf("HTSR,215,%s,",sData1);
+    }//ex. HTSR,215,HALT,
+    else if(sData[0]=="HTGR" && sData[1]=="250")                                 //Contact heigh
+    {
+        if(TestIF_File.iShuttleMode==0) //Double Suttle
+        {
+            sData1=AnsiString(DeviceForm_File.IndexContact[0]);
+            sData2=AnsiString(DeviceForm_File.IndexContact[1]);
+        }
+        else    //Single Suttle
+        {
+            if(TestIF_File.iShuttle_Sel==0) //Only Suttle1
+                sData1=AnsiString(DeviceForm_File.IndexContact[0]);
+            else //Only Suttle2
+                sData2=AnsiString(DeviceForm_File.IndexContact[1]);
+        }
+        sSendMes.sprintf("HTSR,250,%s,%s,",sData1,sData2);
+    }//ex. HTSR,250,-117.88,-118.18,
+    else if(sData[0]=="HTGR" && sData[1]=="251")                                //Qty by Socket
+    {
+        int iSocketQty[32];
+        for(int i=0; i<32; i++)
+            iSocketQty[i]=-1;
+
+        for(int i=0; i<TestSocket.iShtRow; i++)
+        {
+            for(int j=0; j<TestSocket.iShtCol; j++)
+            {
+                if(TestIF_File.iSiteMap[i][j]>0)
+                {
+                    if(TestIF.iTestMode==_32Site4X8N)
+                    {
+                        iSocketQty[TestIF_File.iSiteMap[i][j]-1]=ArmData[2]->ArmSKET[i][j]->GetTotal();
+                    }
+                    else
+                    {
+                        iSocketQty[TestIF_File.iSiteMap[i][j]-1]=ArmData[0]->ArmSKET[i][j]->GetTotal()+ArmData[1]->ArmSKET[i][j]->GetTotal();
+                    }
+                }
+            }
+        }
+
+        for(int i=0; i<TestSocket.iShtCnt; i++)
+        {
+            if(iSocketQty[i]!=-1)
+            {
+                sData1+="S"+AnsiString(i+1)+"="+IntToStr(iSocketQty[i])+",";
+            }
+        }
+        sSendMes.sprintf("HTSR,251,%s",sData1);
+    }//ex. HTSR,251,S1=3,S2=3,S3=3,S4=3,S5=3,S6=3,S7=3,S8=3,S9=3,S10=3,S11=3,S12=3,S13=3,S14=3,S15=3,S16=3,S17=3,S18=3,S19=0,S20=3,S21=3,S22=3,S23=3,S24=3,S25=3,S26=0,S27=3,S28=3,S29=3,S30=3,S31=3,S32=0,
+    else if(sData[0]=="HTGR" && sData[1]=="252")                                //SetupFile
+    {
+        sSendMes.sprintf("HTSR,252,%s,",GetLastOpenFN());
+    }//ex. HTSR,252,013-HTQFP64-10X10-000_125-8-E8-AA,
+    else if(sData[0]=="HTGR" && sData[1]=="253")                                //Yield by Socket
+    {
+        double dSocketYield[32];
+        for(int i=0; i<32; i++)
+            dSocketYield[i]=-1.0;
+
+        for(int i=0; i<TestSocket.iShtRow; i++)
+        {
+            for(int j=0; j<TestSocket.iShtCol; j++)
+            {
+                if(TestIF_File.iSiteMap[i][j]>0)
+                    dSocketYield[TestIF_File.iSiteMap[i][j]-1]=ArmData[2]->ArmSKET[i][j]->GetPCA();
+            }
+        }
+
+        for(int i=0; i<TestSocket.iShtCnt; i++)
+        {
+            if(dSocketYield[i]!=-1)
+                sData1+="S"+AnsiString(i+1)+"="+AnsiString(FormatFloat("0.0",dSocketYield[i]))+",";
+        }
+        sSendMes.sprintf("HTSR,253,%s", sData1);
+    }//ex. HTSR,253,S1=0.0,S2=0.0,S3=0.0,S4=0.0,S5=0.0,S6=0.0,S7=0.0,S8=0.0,S9=0.0,S10=0.0,S11=0.0,S12=0.0,S13=0.0,S14=0.0,S15=0.0,S16=0.0,S17=0.0,S18=0.0,S19=0.0,S20=0.0,S21=0.0,S22=0.0,S23=0.0,S24=0.0,S25=0.0,S26=0.0,S27=0.0,S28=0.0,S29=0.0,S30=0.0,S31=0.0,S32=0.0,
+    else if(sData[0]=="HTGR" && sData[1]=="254")                                //ForcePerPinG
+    {
+        sSendMes.sprintf("HTSR,254,%0.4f,", DeviceForm_File.ForcePerPinG);
+    }//ex. HTSR,254,40.0000,
+    else if(sData[0]=="HTGR" && sData[1]=="255")                                //Bin Qty
+    {
+        for(int i=0; i<iTestBinCount; i++)
+        {
+            if(BinSelect[iTestRunMode].iCatDataT3Pos[i]!=0)
+            {
+                if(BinSelect[iTestRunMode].bConsFail[i])
+                    sData1="F";
+                else
+                    sData1="P";
+                sData2.sprintf("%s-Bin%d=%d,",sData1,i,LastSet.iBinData32[2][i]); //Sam 20230913 : 0 > 2 修正回傳異常
+                sData3+=sData2;
+            }
+        }
+        sSendMes.sprintf("HTSR,255,%s",sData3);
+    }//ex. HTSR,255,P-Bin1=144,F-Bin2=0,F-Bin3=0,F-Bin4=0,F-Bin5=0,
+    else if(sData[0]=="HTGR" && sData[1]=="256")                                //Bin Yield
+    {
+        for(int i=eAuto1; i<=iAutoRight; i++)
+            dData1+=LastSet.BinCT[0][iTo3Unload[i]];
+
+        for(int i=0; i<iTestBinCount; i++)
+        {
+            if(BinSelect[iTestRunMode].iCatDataT3Pos[i]!=0)
+            {
+                if(BinSelect[iTestRunMode].bConsFail[i])
+                    sData1="F";
+                else
+                    sData1="P";
+
+                if(dData1>0)
+                    sData2.sprintf("%0.2f",LastSet.iBinData32[2][i]*100.0/dData1);  //Sam 20230913 : 0 > 2 修正回傳異常
+                else
+                    sData2="0.00";
+
+                sData3.sprintf("%s-Bin%d=%s,",sData1,i,sData2);
+                sData4+=sData3;
+            }
+        }
+        sSendMes.sprintf("HTSR,256,%s",sData4);
+    }//ex. HTSR,256,P-Bin1=100.00,F-Bin2=0.00,F-Bin3=0.00,F-Bin4=0.00,F-Bin5=0.00,
+    else if(sData[0]=="HTSET" && sData[1]=="301")                               //Change StupFile
+    {
+        if(SystemStart==false)
+        {
+            // GATE(W906-FW-CMD-C) golden :13151-13153 -- see ABSENCE GATE
+            // REGISTER item A5.
+#if 0
+            fFTPClient->bControlBySECSGEM=true;
+            fFTPClient->aSetUpNameBySECSGEM=sData[2];
+            fFTPClient->ShowFTPModal(0);
+#endif
+            bSecsGemDownloadFTP=true;
+            sData1="OK";
+        }
+        else
+        {
+            sData1="BUSY";
+        }
+         sSendMes.sprintf("HTSR,301,%s,",sData1);
+    }//ex. QQ
+    else if(sData[0]=="HTSET" && sData[1]=="302")                               //Fail Bin setting DoubleContact On
+    {
+        /*  //Sam 20230711 : 修正 OLP SetCategroy 異常 Mark
+        if(eRunStartMode(LastSet.iRunStartMode)==0 || eRunStartMode(LastSet.iRunStartMode)==1)          //FT
+            fBinSel->PageControl1->ActivePageIndex=0;
+        else if(eRunStartMode(LastSet.iRunStartMode)==2 || eRunStartMode(LastSet.iRunStartMode)==3)     //RT
+            fBinSel->PageControl1->ActivePageIndex=1;
+        */
+        for(int i=0; i<16; i++)                    //Initial
+            BinSelect[iTestRunMode].iDBContact[i]=0;
+
+        for(int j=0; j<6 ;j++)
+        {
+            if(BinSelect[iTestRunMode].iStackDefFailCate[j]==1)
+            {
+                for(int i=0; i<16; i++)
+                {
+                    if(BinSelect[iTestRunMode].iCatDataT3Pos[i]==(j+1))
+                        BinSelect[iTestRunMode].iDBContact[i]=1;
+                }
+            }
+        }
+        bTCPIPChangeAlarm=true;
+        fBinSel->ChangeActivePageIndex();   //Sam 20230711 : 修正 OLP SetCategroy 異常
+        fBinSel->spbSaveClick(NULL);   // S: golden passes `this` (TfMain*->TObject* in VCL); port TfMain has no vclcompat::TObject base and spbSaveClick ignores Sender entirely -- same established substitution as Command.cpp:8609.
+        bTCPIPChangeAlarm=false;
+        sSendMes.sprintf("HTSR,302,DoubleContact_On,");
+    }//ex. HTSR,302,DoubleContact_On,
+    else if(sData[0]=="HTSET" && sData[1]=="303")                               //All Bin setting DoubleContact Off
+    {
+        bDoubleContact=false;
+        /*  //Sam 20230711 : 修正 OLP SetCategroy 異常 Mark
+        if(eRunStartMode(LastSet.iRunStartMode)==0 || eRunStartMode(LastSet.iRunStartMode)==1)      //FT
+            fBinSel->PageControl1->ActivePageIndex=0;
+        else if(eRunStartMode(LastSet.iRunStartMode)==2 || eRunStartMode(LastSet.iRunStartMode)==3) //RT
+            fBinSel->PageControl1->ActivePageIndex=1;
+        */
+        for(int i=0; i<16; i++)
+            BinSelect[iTestRunMode].iDBContact[i]=0;
+        bTCPIPChangeAlarm=true;
+        fBinSel->ChangeActivePageIndex();   //Sam 20230711 : 修正 OLP SetCategroy 異常
+        fBinSel->spbSaveClick(NULL);   // S: golden passes `this` (TfMain*->TObject* in VCL); port TfMain has no vclcompat::TObject base and spbSaveClick ignores Sender entirely -- same established substitution as Command.cpp:8609.
+        bTCPIPChangeAlarm=false;
+        sSendMes.sprintf("HTSR,303,DoubleContact_Off,");
+    }//ex. HTSR,303,DoubleContact_Off,
+    else if(sData[0]=="HTSET" && sData[1]=="306")                               //Continue fail turn on
+    {
+        // GATE(W906-FW-CMD-C) golden :13210-13214 -- see ABSENCE GATE
+        // REGISTER item A3.
+#if 0
+        fYieldMonitoring->rbContsFailBySocket_FTOn->Checked=true;
+        fYieldMonitoring->rbContsFailByHead_FTOn->Checked=true;
+#endif
+        TestIF_File.bContsFailBySocket=true;
+        TestIF_File.bContsFailByHead=true;
+#if 0
+        fYieldMonitoring->btnApplyClick(fYieldMonitoring);
+#endif
+        sSendMes.sprintf("HTSR,306,ContinuefailON,");
+    }//ex. HTSR,306,ContinuefailON,
+    else if(sData[0]=="HTSET" && sData[1]=="307")                               //Continue fail  off
+    {
+        // GATE(W906-FW-CMD-C) golden :13219-13223 -- see ABSENCE GATE
+        // REGISTER item A3.
+#if 0
+        fYieldMonitoring->rbContsFailBySocket_FTOff->Checked=true;
+        fYieldMonitoring->rbContsFailByHead_FTOff->Checked=true;
+#endif
+        TestIF_File.bContsFailBySocket=false;
+        TestIF_File.bContsFailByHead=false;
+#if 0
+        fYieldMonitoring->btnApplyClick(fYieldMonitoring);
+#endif
+        sSendMes.sprintf("HTSR,307,ContinuefailOFF,");
+    }//ex. HTSR,307,ContinuefailOFF,
+    else if(sData[0]=="HTSET" && sData[1]=="308")                                //Set Loader to Empty
+    {
+        // GATE(W906-FW-CMD-C) golden :13228/13230 -- see ABSENCE GATE
+        // REGISTER item A6. `RGLoader->ItemIndex=0;` is a literal write golden
+        // itself sets one line above the read; substituted with the same
+        // literal `0` directly into TrayForm.LoaderToEmptyColor[FT] (same
+        // "mirror is missing, literal survives" shape as this tree's own
+        // established gate precedent, e.g. FW3-WD GATE REGISTER item 4).
+#if 0
+        fTrayAssignment->RGLoader->ItemIndex=0;
+        TrayForm.LoaderToEmptyColor[FT]=fTrayAssignment->RGLoader->ItemIndex;
+        fTrayAssignment->spbSaveClick(fTrayAssignment);
+#endif
+        TrayForm.LoaderToEmptyColor[FT]=0;
+        sSendMes.sprintf("HTSR,308,Empty,");
+    }//ex. HTSR,308,Empty,
+    else if(sData[0]=="HTSET" && sData[1]=="309")                                //Ser Loader to Color
+    {
+        // GATE(W906-FW-CMD-C) golden :13235/13237 -- see ABSENCE GATE
+        // REGISTER item A6, same literal-mirror shape as HTSET,308 above.
+#if 0
+        fTrayAssignment->rgLoad_RT->ItemIndex=1;
+        TrayForm.LoaderToEmptyColor[RT]=fTrayAssignment->rgLoad_RT->ItemIndex;
+        fTrayAssignment->spbSaveClick(fTrayAssignment);
+#endif
+        TrayForm.LoaderToEmptyColor[RT]=1;
+        sSendMes.sprintf("HTSR,309,Color,");
+    }//ex. HTSR,308,Empty,
+    else if(sData[0]=="HTSET" && sData[1]=="310")                               //Level to Supervisor
+    {
+        // GATE(W906-FW-CMD-C) golden :13242 -- see ABSENCE GATE REGISTER item
+        // A15 (fLotInfo->btUpload).
+#if 0
+        fLotInfo->btUpload->Visible=false;  //Eliot 2011_0815  // 2011.10.20 Q_Q Transplant form Eliot
+#endif
+        AccessLevel=2;
+        ChangeLevelAttr();
+        cbUserSelect->Text="Supervisor";
+        // GATE(W906-FW-CMD-C) golden :13246 -- see ABSENCE GATE REGISTER item A7.
+#if 0
+        spbUserName->Caption="Supervisor";
+#endif
+        sSendMes.sprintf("HTSR,310,Supervisor,");
+    }//ex. HTSR,310,Supervisor,
+    else if(sData[0]=="HTSET" && sData[1]=="311")                               //Level to Operator
+    {
+        AccessLevel=0;
+        ChangeLevelAttr();
+        cbUserSelect->Text="Operator";
+        // GATE(W906-FW-CMD-C) golden :13254 -- see ABSENCE GATE REGISTER item A7.
+#if 0
+        spbUserName->Caption="Operator";
+#endif
+        sSendMes.sprintf("HTSR,311,Operator,");
+    }//ex. HTSR,311,Operator,
+    else if(sData[0]=="HTSET" && sData[1]=="312")                               //Low Yield Open
+    {
+        // GATE(W906-FW-CMD-C) golden :13259-13260 -- see ABSENCE GATE
+        // REGISTER item A3.
+#if 0
+        fYieldMonitoring->cbLowYield_FT->Checked=true;
+        fYieldMonitoring->btnApplyClick(fYieldMonitoring);
+#endif
+        sSendMes.sprintf("HTSR,312,LowYieldOpen,");
+    }//ex. HTSR,312,LowYieldOpen,
+    else if(sData[0]=="HTSET" && sData[1]=="313")                               //Low Yield Close
+    {
+        // GATE(W906-FW-CMD-C) golden :13265-13266 -- see ABSENCE GATE
+        // REGISTER item A3.
+#if 0
+        fYieldMonitoring->cbLowYield_FT->Checked=false;
+        fYieldMonitoring->btnApplyClick(fYieldMonitoring);
+#endif
+        sSendMes.sprintf("HTSR,313,LowYieldClose,");
+    }//ex. HTSR,313,LowYieldClose,
+    else if(sData[0]=="HTSET" && sData[1]=="314")                               //Config D22 On
+    {
+        szDir.sprintf("%sconfig.ini",AuthPath);
+        // GATE(W906-FW-CMD-C) golden :13272 -- see ABSENCE GATE REGISTER item A8.
+#if 0
+        fConfiguration->cbD22_1->Checked=true;
+#endif
+        IniConfig.bD22SupportMultiDoubleContact=true;
+        // SAFETY-GATE(W906-FW-CMD-C) golden :13274 -- see SAFETY GATE
+        // REGISTER item S2 (config.ini write).
+#if 0
+        IniConfig.bD22SupportMultiDoubleContact=ReadWriteIni(szDir, "Index", "bD22SupportMultiDoubleContact",IniConfig.bD22SupportMultiDoubleContact,false,false);
+#endif
+        sSendMes.sprintf("HTSR,314,DoubleContactD22Ture,");
+    }//ex. HTSR,314,DoubleContactD22Ture,
+    else if(sData[0]=="HTSET" && sData[1]=="315")                               //Config D22 Off
+    {
+        szDir.sprintf("%sconfig.ini",AuthPath);
+        // GATE(W906-FW-CMD-C) golden :13280 -- see ABSENCE GATE REGISTER item A8.
+#if 0
+        fConfiguration->cbD22_1->Checked=false;
+#endif
+        IniConfig.bD22SupportMultiDoubleContact=false;
+        // SAFETY-GATE(W906-FW-CMD-C) golden :13282 -- see SAFETY GATE
+        // REGISTER item S2 (config.ini write).
+#if 0
+        IniConfig.bD22SupportMultiDoubleContact=ReadWriteIni(szDir, "Index", "bD22SupportMultiDoubleContact",IniConfig.bD22SupportMultiDoubleContact,false,false);
+#endif
+        sSendMes.sprintf("HTSR,315,DoubleContactD22False,");
+    }//ex. HTSR,315,DoubleContactD22False,
+    else if(sData[0]=="HTSET" && sData[1]=="316")                               //Config D22 count change
+    {
+        szDir.sprintf("%sconfig.ini",AuthPath);
+        // GATE(W906-FW-CMD-C) golden :13288 -- see ABSENCE GATE REGISTER item A8.
+#if 0
+        fConfiguration->coD22->ItemIndex=atoi(sData[2].c_str())-2;
+#endif
+        IniConfig.iD22DoubleContactCount=atoi(sData[2].c_str())-2;
+        // SAFETY-GATE(W906-FW-CMD-C) golden :13290 -- see SAFETY GATE
+        // REGISTER item S2 (config.ini write).
+#if 0
+        IniConfig.iD22DoubleContactCount=ReadWriteIni(szDir, "Index", "iD22DoubleContactCount",IniConfig.iD22DoubleContactCount,0,false);
+#endif
+        sSendMes.sprintf("HTSR,316,SetOK,");
+    }//ex. HTSR,316,SetOK,
+    else if(sData[0]=="HTSET" && sData[1]=="317")                               //FT <> RT
+    {
+        if(eRunStartMode(LastSet.iRunStartMode)==0 || eRunStartMode(LastSet.iRunStartMode)==1)      //FT->RT
+        {
+            // GATE(W906-FW-CMD-C) golden :13297 -- see ABSENCE GATE REGISTER
+            // item A14. See this wave's RISK NOTE: sData1 still reports "RT"
+            // even though the mode flip itself did not fire.
+#if 0
+            fMain->DoFTRTClick(true, false);                                    //RogerYang 20260410 : 整合並區分手動按下還是程式按下
+#endif
+            sData1="RT";
+        }
+        else if(eRunStartMode(LastSet.iRunStartMode)==2 || eRunStartMode(LastSet.iRunStartMode)==3) //RT->FT
+        {
+            // GATE(W906-FW-CMD-C) golden :13302 -- see ABSENCE GATE REGISTER item A14.
+#if 0
+            fMain->DoFTRTClick(false, false);                                    //RogerYang 20260410 : 整合並區分手動按下還是程式按下
+#endif
+            sData1="Normal";
+        }
+        sSendMes.sprintf("HTSET,317,%s,",sData1);
+    }//ex. HTSET,317,Normal,
+    else if(sData[0]=="HTSET" && sData[1]=="318")                               //FT <> RT 時強制 Initail
+    {
+        if(eRunStartMode(LastSet.iRunStartMode)==0 || eRunStartMode(LastSet.iRunStartMode)==1) //FT->RT
+        {
+            SetRunStartMode(rsmCInitialRetest);
+            fBinSel->PageControl1->ActivePageIndex=1;
+            sData1="RT";
+        }
+        else if(eRunStartMode(LastSet.iRunStartMode)==2 || eRunStartMode(LastSet.iRunStartMode)==3) //RT->FT
+        {
+            SetRunStartMode(rsmInitialStart);
+            fBinSel->PageControl1->ActivePageIndex=0;
+            sData1="Normal";
+        }
+        else
+        {
+            sData1="NG";
+        }
+        sSendMes.sprintf("HTSET,318,%s,",sData1);
+    }//ex. HTSET,318,Normal,
+    else if(sData[0]=="HTSET" && sData[1]=="322")                               //指定 Bin Double Contact On
+    {
+        iData1=atoi(sData[2].c_str());
+        /*  //Sam 20230711 : 修正 OLP SetCategroy 異常 Mark
+        if(eRunStartMode(LastSet.iRunStartMode)==0 || eRunStartMode(LastSet.iRunStartMode)==1)      //FT(normal)
+            fBinSel->PageControl1->ActivePageIndex=0;
+        else if(eRunStartMode(LastSet.iRunStartMode)==2 || eRunStartMode(LastSet.iRunStartMode)==3)   //RT
+            fBinSel->PageControl1->ActivePageIndex=1;
+        */
+        BinSelect[iTestRunMode].iDBContact[iData1]=1;
+        bTCPIPChangeAlarm=true;
+        fBinSel->ChangeActivePageIndex();   //Sam 20230711 : 修正 OLP SetCategroy 異常
+        fBinSel->spbSaveClick(NULL);   // S: golden passes `this` (TfMain*->TObject* in VCL); port TfMain has no vclcompat::TObject base and spbSaveClick ignores Sender entirely -- same established substitution as Command.cpp:8609.
+        bTCPIPChangeAlarm=false;
+        sSendMes.sprintf("HTSR,322,DoubleContact_On,%d,",iData1);
+    }//ex. HTSR,322,DoubleContact_On,2,
+    else if(sData[0]=="HTSET" && sData[1]=="323")                               //指定 Bin Double Contact Off
+    {
+        iData1=atoi(sData[2].c_str());
+        if(eRunStartMode(LastSet.iRunStartMode)==0 || eRunStartMode(LastSet.iRunStartMode)==1)  //FT(normal)
+            fBinSel->PageControl1->ActivePageIndex=0;
+        else if(eRunStartMode(LastSet.iRunStartMode)==2 || eRunStartMode(LastSet.iRunStartMode)==3)   //RT
+            fBinSel->PageControl1->ActivePageIndex=1;
+        BinSelect[iTestRunMode].iDBContact[iData1]=0;
+        bTCPIPChangeAlarm=true;
+        fBinSel->spbSaveClick(NULL);   // S: golden passes `this` (TfMain*->TObject* in VCL); port TfMain has no vclcompat::TObject base and spbSaveClick ignores Sender entirely -- same established substitution as Command.cpp:8609.
+        bTCPIPChangeAlarm=false;
+        sSendMes.sprintf("HTSR,323,DoubleContact_Off,%d,",iData1);
+    }//ex. HTSR,323,DoubleContact_Off,2,
+    else if(sData[0]=="HTSET" && sData[1]=="331")                                //Config I31 On
+    {
+        szDir.sprintf("%sconfig.ini",AuthPath);
+        IniConfig.bI31_1GPIBLotEnd=true;
+        // SAFETY-GATE(W906-FW-CMD-C) golden :13360 -- see SAFETY GATE
+        // REGISTER item S2 (config.ini write).
+#if 0
+        IniConfig.bI31_1GPIBLotEnd=ReadWriteIni(szDir, "Specific", "I31_GPIBLotEnd",IniConfig.bI31_1GPIBLotEnd,false,false);
+#endif
+        sSendMes.sprintf("HTSR,331,GpibLotEndI31_True,");
+    }//ex. HTSR,331,GpibLotEndI31_True,
+    else if(sData[0]=="HTSET" && sData[1]=="332")                               //Config I31 Off
+    {
+        szDir.sprintf("%sconfig.ini",AuthPath);
+        IniConfig.bI31_1GPIBLotEnd=false;
+        // SAFETY-GATE(W906-FW-CMD-C) golden :13367 -- see SAFETY GATE
+        // REGISTER item S2 (config.ini write).
+#if 0
+        IniConfig.bI31_1GPIBLotEnd=ReadWriteIni(szDir, "Specific", "I31_GPIBLotEnd",IniConfig.bI31_1GPIBLotEnd,false,false);
+#endif
+        sSendMes.sprintf("HTSR,332,GpibLotEndI31_Off,");
+    }//ex. HTSR,332,GpibLotEndI31_Off,
+    //Sam 20181003 : TCP Command 自動啟測
+    //==>
+    //AI(ht9045-v899) 20260331: 擴展支援 bRemoteLotStart (Greatek/OEE)
+    else if(sData[0]=="HTSET" && sData[1]=="333")                               //TCP Start
+    {
+        //Format: HTSET,333
+        //Respond: HTSR,333,OK or HTSR,333,NG
+        if(CUSTOMER_CODE==CC_TERAPOWER || CosFunction.bRemoteLotStart)
+        {
+            if(fMain->palMainStatus->Caption=="HALT" && SystemStart==false)
+            {
+                // SAFETY-GATE(W906-FW-CMD-C) golden :13381 -- see SAFETY GATE
+                // REGISTER item S1. See this wave's RISK NOTE: sData1 still
+                // reports "OK" even though Start did not fire.
+#if 0
+                fMain->Start("TCP Command Start!!");
+#endif
+                RecordProcess("TCP Remote Start");
+                sData1="OK";
+            }
+            else
+            {
+                sData1="NG";
+            }
+        }
+        else
+        {
+            sData1="NG";
+        }
+        sSendMes.sprintf("HTSR,333,%s,",sData1);
+    }//ex. HTSR,333,OK,
+    else if(sData[0]=="HTSET" && sData[1]=="334")                               //TCP Pause
+    {
+        if(SystemStart==true && CUSTOMER_CODE==CC_TERAPOWER)                    //Sam 20181003 : 卡只有晶兆成可以接收停止通訊
+        {
+            // SAFETY-GATE(W906-FW-CMD-C) golden :13400 -- see SAFETY GATE
+            // REGISTER item S1.
+#if 0
+            fMain->Pause("TCP Command Pause");
+#endif
+            sData1="OK";
+        }
+        else
+        {
+            sData1="NG";
+        }
+        sSendMes.sprintf("HTSR,334,%s,",sData1);
+    }//ex. HTSR,334,OK,
+    //<==
+    //Sam 20181003 : TCP Command 自動啟測
+    else if(sData[0]=="HTSET" && sData[1]=="350")                               //Setting Contact Heigh
+    {
+        szDir.sprintf("%s%s\\Contact.Data",DataPath,GetLastOpenFN());
+        if(SystemStart==false)
+        {
+            // SAFETY-GATE(W906-FW-CMD-C) golden :13416-13419 -- see SAFETY
+            // GATE REGISTER item S2 (Contact.Data under DataPath). No plain
+            // literal exists to substitute for DeviceForm_File.IndexContact[]
+            // here (unlike HTSET,308/309's ItemIndex case) -- gating leaves
+            // it at whatever it already held; the live TCP payload is not
+            // reflected until this gate is dissolved.
+#if 0
+            WriteIniData(szDir, "Test Arm1", "Contact",  sData[2]);
+            WriteIniData(szDir, "Test Arm2", "Contact",  sData[3]);
+            DeviceForm_File.IndexContact[0]  =ReadWriteIni(szDir, "Test Arm1", "Contact", 1.0, 1.0, true, true, 1.0, -148.0);
+            DeviceForm_File.IndexContact[1]  =ReadWriteIni(szDir, "Test Arm2", "Contact", 1.0, 1.0, true, true, 1.0, -148.0);
+#endif
+            sData1="OK";
+        }
+        else
+        {
+            sData1="Fail";
+        }
+        sSendMes.sprintf("HTSR,350,%s,",sData1);
+    }//ex. HTSR,350,OK,
+    else if(sData[0]=="HTSET" && sData[1]=="354")                               //Setting ForcePerPinN
+    {
+        szDir.sprintf("%s%s\\Contact.Data", DataPath, GetLastOpenFN());
+        if(SystemStart==false)
+        {
+            // GATE(W906-FW-CMD-C) golden :13433 -- see ABSENCE GATE REGISTER item A4.
+#if 0
+            fContact->edForcePerPinG->Text=sData[2];
+#endif
+            if(CosFunction.bFixNameOfForcePerPinG)                              //Steven 20240821 : 凌中心說要修正存檔名稱
+            {
+                // SAFETY-GATE(W906-FW-CMD-C) golden :13436-13437 -- see
+                // SAFETY GATE REGISTER item S2 (Contact.Data under DataPath;
+                // also references fContact, ABSENCE GATE item A4, moot inside
+                // this #if 0).
+#if 0
+                WriteIniData(szDir, "Torque Control", "Force Per Pin N",    fContact->edForcePerPinN->Text);
+                WriteIniData(szDir, "Torque Control", "Force Per Pin G",    fContact->edForcePerPinG->Text);
+#endif
+                DeviceForm_File.ForcePerPinN=ReadIniData(szDir, "Torque Control", "Force Per Pin N", 0.0);
+                DeviceForm_File.ForcePerPinG=ReadIniData(szDir, "Torque Control", "Force Per Pin G", DeviceForm_File.ForcePerPinN*1000.0/9.8);
+            }
+            else
+            {
+                // SAFETY-GATE(W906-FW-CMD-C) golden :13443-13444 -- see
+                // SAFETY GATE REGISTER item S2 (same as above, other branch).
+#if 0
+                WriteIniData(szDir, "Torque Control", "Force Per Pin",      fContact->edForcePerPinN->Text);
+                WriteIniData(szDir, "Torque Control", "Force Per Pin Kg",   fContact->edForcePerPinG->Text);
+#endif
+                DeviceForm_File.ForcePerPinN=ReadIniData(szDir, "Torque Control", "Force Per Pin", 0.0);
+                DeviceForm_File.ForcePerPinG=ReadIniData(szDir, "Torque Control", "Force Per Pin Kg", DeviceForm_File.ForcePerPinN*1000.0/9.8);
+            }
+            sData1="OK";
+        }
+        else
+        {
+            sData1="Fail";
+        }
+        sSendMes.sprintf("HTSR,354,%s,",sData1);
+    }//ex. HTSR,354,OK,
+    else if(sData[0]=="HTGR" && sData[1]=="401")                                 //Tempture
+    {
+        if(LastSet.iTemperature==Tempture_Ambient)
+            sData1="OFF";
+        else
+            sData1=edWorkTemperBase->Text;
+        sSendMes.sprintf("HTSR,401,%s,",sData1);
+    }//ex. HTSR,401,125,
+    else if(sData[0]=="HTSET" && sData[1]=="403")                               //Show message
+    {
+        if(sData[2]!=NULL && (sData[2].Length()<1023 && sData[2].Length()!=0))
+            sData1=sData[2]+",OK";
+        else
+            sData1="Fail";
+         sSendMes.sprintf("HTSR,403,%s,",sData1);
+         ShowMyMessage(sData[2]);
+    }//ex. HTSR,403,124,OK,
+    else if(sData[0]=="HTSET" && sData[1]=="404")                               //Close Site
+    {
+        bool bFlag=false;
+        int iArm=0, ct1=0, iSiteStatus=0;
+        if(SystemStart)
+        {
+            sData1="NG,Running,";
+        }
+        else if(CanChangeSite(false)==false)
+        {
+            if(LastSet.iTemperature==Tempture_Hot)
+                sData1="NG,NeedCleanOut,";
+            else
+                sData1="NG,NeedOneCycle,";
+        }
+        else
+        {
+            //Sam 20210219 : TCP 開關 Site 最後一個不能關
+            //==>
+            if(TestIF_File.iShuttleMode==1 && TestIF_File.iShuttle_Sel==1)  //Sam 20210720 :  關 Amr 關 Site 異常
+                iArm=1;   //只開 Arm2
+            else
+                iArm=0;
+
+            for(int i=0; i<TestSocket.iMaxRow; i++)
+            {
+                for(int j=0; j<TestSocket.iMaxCol; j++)
+                {
+                    if(LastSet.bUseTestSocket[iArm][i][j])
+                        ct1++;
+                }
+            }
+            //<==
+            //Sam 20210219 : TCP 開關 Site 最後一個不能關
+
+            for(int i=0; i<TestSocket.iShtRow; i++)
+            {
+                for(int j=0; j<TestSocket.iShtCol; j++)
+                {
+                    if(atoi(sData[2].c_str())==int(TestIF_File.iSiteMap[i][j]))
+                    {
+                        if(LastSet.bUseTestSocket[iArm][i][j] && ct1==1)        //Sam 20200219 : TCP 開關 Site 最後一個不能關
+                        {
+                            iSiteStatus=1;
+                            sData1+="NG,";
+                        }
+                        else
+                        {
+                            bFlag=!LastSet.bUseTestSocket[iArm][i][j];          //Sam 20210720 :  關 Amr 關 Site 異常
+                            LastSet.bUseTestSocket[0][i][j]=bFlag;
+                            LastSet.bUseTestSocket[1][i][j]=bFlag;
+                            bTestSiteUse[0][i][j]=bFlag;
+                            bTestSiteUse[1][i][j]=bFlag;
+                            iSiteStatus=bFlag;
+                            fMain->ShowTestHeadComp(false);
+                            sData1+="OK,";
+                        }
+                        break;
+                    }
+                }
+            }
+            sData1+=sData[2]+",";
+            sData1+=IntToStr(iSiteStatus)+",";
+        }
+        sSendMes.sprintf("HTSR,404,%s", sData1);
+    }//ex. HTSR,404,OK,2,0,
+    ////Sam 20230426 : 通知系統 Handler 已經密碼鎖定
+    //Sam 20230613 : 通知系統 Handler 已經密碼鎖定，改為被詢問。 Mark
+    /*
+    else if(sData[0]=="HTSET" && sData[1]=="502")                               //TCP Unlock Alarm Password
+    {
+        if(fNote->bNeedPassWord)
+        {
+            MyDBIProcess("Message","TCP Command Unlock Password!!");
+            fNote->bNeedPassWord=false;
+        }
+        return;
+    }
+    */
+    else if(sData[0]=="HTGR" && sData[1]=="411")    //Sam 20230802 : Add new TCP command
+    {
+        if(TestIF.iAutoClean_Function)
+        {
+            sData1="On";
+        }
+        else
+        {
+            // GATE(W906-FW-CMD-C) golden :13560 -- see ABSENCE GATE REGISTER item A10.
+#if 0
+            fCleaning->rgAutoCleanOnOff->ItemIndex=0;
+#endif
+            sData1="Off";
+        }
+        sSendMes.sprintf("HTSR,411,%s,",sData1);
+    }
+    else if(sData[0]=="HTGR" && sData[1]=="413")    //Sam 20230802 : Add new TCP command
+    {
+        sSendMes.sprintf("HTSR,413,%d,",atoi(fCleaning->edCleaningCount->Text.c_str()));    //Sam 20240726 : AI Clean
+    }
+    else if(sData[0]=="HTGR" && sData[1]=="415")                                //Sam 20250820 : AutoClean 在 Index Arm 下壓清潔一次就++
+    {
+         sSendMes.sprintf("HTSR,415,%d,",TestIF_File.iIndexArmAutoCleanCnt);
+    }
+    else if(sData[0]=="HTSET" && sData[1]=="461")    //Sam 20230802 : Add new TCP command
+    {
+        if(bRunAutoClean)
+        {
+            sData1="NG";
+        }
+        else
+        {
+            AnsiString szDir="", S="";
+            S=GetLastOpenFN();
+            szDir.sprintf("%s%s\\HandlerCondition.Data", DataPath, S);
+            if(sData[2]=="On")
+            {
+                // GATE(W906-FW-CMD-C) golden :13586 -- see ABSENCE GATE
+                // REGISTER item A10.
+#if 0
+                fCleaning->rgAutoCleanOnOff->ItemIndex=1;
+#endif
+                TestIF.iAutoClean_Function=1;
+                TestIF_File.iAutoClean_Function=1;
+            }
+            else
+            {
+                // GATE(W906-FW-CMD-C) golden :13592 -- see ABSENCE GATE
+                // REGISTER item A10.
+#if 0
+                fCleaning->rgAutoCleanOnOff->ItemIndex=0;
+#endif
+                TestIF.iAutoClean_Function=0;
+                TestIF_File.iAutoClean_Function=0;
+            }
+            // SAFETY-GATE(W906-FW-CMD-C) golden :13596 -- see SAFETY GATE
+            // REGISTER item S2 (HandlerCondition.Data under DataPath).
+#if 0
+            WriteIniData(szDir, "Configuration", "iAutoClean_Function", TestIF.iAutoClean_Function);
+#endif
+            sData1="OK";
+        }
+        sSendMes.sprintf("HTSR,461,%s,",sData1);
+    }
+    else if(sData[0]=="HTSET" && sData[1]=="463")    //Sam 20230802 : Add new TCP command
+    {
+        AnsiString szDir="", S="";
+        S=GetLastOpenFN();
+        szDir.sprintf("%s%s\\HandlerCondition.Data", DataPath, S);
+        TestIF.iAutoClean_ContactTime=atof(sData[2].c_str())*10.0;
+        TestIF_File.iAutoClean_ContactTime=atof(sData[2].c_str())*10.0;
+        // GATE(W906-FW-CMD-C) golden :13608 -- see ABSENCE GATE REGISTER item A10.
+#if 0
+        fCleaning->edContactTime->Text=sData[2];
+#endif
+        // SAFETY-GATE(W906-FW-CMD-C) golden :13609 -- see SAFETY GATE
+        // REGISTER item S2 (HandlerCondition.Data under DataPath).
+#if 0
+        WriteIniData(szDir, "Configuration", "iAutoClean_ContactTime",TestIF.iAutoClean_ContactTime);
+#endif
+        sSendMes.sprintf("HTSR,463,OK,");
+    }
+    else if(sData[0]=="HTSET" && sData[1]=="464")    //Sam 20230802 : Add new TCP command
+    {
+        AnsiString szDir="", S="";
+        S=GetLastOpenFN();
+        szDir.sprintf("%s%s\\HandlerCondition.Data", DataPath, S);
+        TestIF.iAutoClean_ContactCount=atoi(sData[2].c_str());
+        TestIF_File.iAutoClean_ContactCount=atoi(sData[2].c_str());
+        // GATE(W906-FW-CMD-C) golden :13619 -- see ABSENCE GATE REGISTER item A10.
+#if 0
+        fCleaning->edACContactCount->Text=sData[2];
+#endif
+        // SAFETY-GATE(W906-FW-CMD-C) golden :13620 -- see SAFETY GATE
+        // REGISTER item S2 (HandlerCondition.Data under DataPath).
+#if 0
+        WriteIniData(szDir, "Configuration", "iAutoClean_ContactCount",TestIF.iAutoClean_ContactCount);
+#endif
+        sSendMes.sprintf("HTSR,464,OK,");
+    }
+    else if(sData[0]=="HTSET" && sData[1]=="466")    //Sam 20230802 : Add new TCP command
+    {
+        AnsiString szDir="", S="";
+        S=GetLastOpenFN();
+        szDir.sprintf("%s%s\\HandlerCondition.Data", DataPath, S);
+        TestIF.iAutoClean_IntervalContact=atoi(sData[2].c_str());
+        TestIF_File.iAutoClean_IntervalContact=atoi(sData[2].c_str());
+        // GATE(W906-FW-CMD-C) golden :13630 -- see ABSENCE GATE REGISTER item A10.
+#if 0
+        fCleaning->edIntervalContact->Text=sData[2];
+#endif
+        // SAFETY-GATE(W906-FW-CMD-C) golden :13631 -- see SAFETY GATE
+        // REGISTER item S2 (HandlerCondition.Data under DataPath).
+#if 0
+        WriteIniData(szDir, "Configuration", "iAutoClean_IntervalContact",TestIF.iAutoClean_IntervalContact);
+#endif
+        sSendMes.sprintf("HTSR,466,OK,");
+    }
+    else if(sData[0]=="HTSET" && sData[1]=="468")    //Sam 20230802 : Add new TCP command
+    {
+        if(bRunAutoClean)
+        {
+            sData1="NG";
+        }
+        else
+        {
+            AnsiString szDir="", S="";
+            S=GetLastOpenFN();
+            szDir.sprintf("%s%s\\HandlerCondition.Data", DataPath, S);
+            TestIF.iAutoClean_AlarmCount=atoi(sData[2].c_str());
+            TestIF_File.iAutoClean_AlarmCount=atoi(sData[2].c_str());
+            // GATE(W906-FW-CMD-C) golden :13647 -- see ABSENCE GATE REGISTER item A10.
+#if 0
+            fCleaning->edAlarmCount->Text=sData[2];
+#endif
+            // SAFETY-GATE(W906-FW-CMD-C) golden :13648 -- see SAFETY GATE
+            // REGISTER item S2 (HandlerCondition.Data under DataPath).
+#if 0
+            WriteIniData(szDir, "Configuration", "iAutoClean_AlarmCount",TestIF.iAutoClean_AlarmCount);
+#endif
+            sData1="OK";
+        }
+        sSendMes.sprintf("HTSR,468,%s,",sData1);
+    }
+    else if(sData[0]=="HTSET" && sData[1]=="469")    //Sam 20230802 : Add new TCP command
+    {
+        if(bRunAutoClean)
+        {
+            sData1="NG";
+        }
+        else
+        {
+            // GATE(W906-FW-CMD-C) golden :13661 -- see ABSENCE GATE REGISTER
+            // item A10. See this wave's RISK NOTE: sData1 still reports "OK"
+            // even though the reset click did not fire.
+#if 0
+            fCleaning->btnResetCleanCountClick(fCleaning);
+#endif
+            sData1="OK";
+        }
+        sSendMes.sprintf("HTSR,469,%s,",sData1);
+    }
+    else if(sData[0]=="HTSET" && sData[1]=="470")    //Sam 20230802 : Add new TCP command
+    {
+        AnsiString szDir="", S="";
+        S=GetLastOpenFN();
+        szDir.sprintf("%s%s\\HandlerCondition.Data", DataPath, S);
+        TestIF.fAutoClean_DevicePinForceGf=atof(sData[2].c_str());
+        TestIF_File.fAutoClean_DevicePinForceGf=atof(sData[2].c_str());
+        // SAFETY-GATE(W906-FW-CMD-C) golden :13673 -- see SAFETY GATE
+        // REGISTER item S2 (HandlerCondition.Data under DataPath).
+#if 0
+        WriteIniData(szDir, "Configuration", "fAutoClean_DevicePinForceGf",TestIF.fAutoClean_DevicePinForceGf);
+#endif
+        sSendMes.sprintf("HTSR,470,OK,");
+    }
+    else if(sData[0]=="HTSET" && sData[1]=="519")   //Sam 20230613 : 通知系統 Handler 已經密碼鎖定，改為被詢問
+    {
+        // GATE(W906-FW-CMD-C) golden :13678-13683 -- see ABSENCE GATE
+        // REGISTER item A12 (fNote->bNeedTCPAlarm/bNeedPassWord). fNote->fShow
+        // is real and offline-always-false (forms/fNote.h's own established
+        // contract), so this whole true-arm is unreachable offline
+        // regardless; gated as one unit rather than fabricating a
+        // compileable stand-in for the absent flags.
+#if 0
+        if(fNote->fShow && fNote->bNeedTCPAlarm)
+        {
+            MyDBIProcess("Message","TCP Command Unlock Password!!");
+            fNote->bNeedTCPAlarm=false;
+            fNote->bNeedPassWord=false;
+            sSendMes.sprintf("HTSR,519,OK,");
+        }
+        else
+#endif
+        {
+            sSendMes.sprintf("HTSR,519,NG,");
+        }
+    }
+    else if(sData[0]=="HTSET" && sData[1]=="520")   //Sam 20230613 : 通知系統 Handler 已經密碼鎖定，改為被詢問
+    {
+        // GATE(W906-FW-CMD-C) golden :13692-13699 -- see ABSENCE GATE
+        // REGISTER item A12, same fShow-always-false reasoning as HTSET,519
+        // above.
+#if 0
+        if(fNote->fShow && fNote->bNeedTCPAlarm)
+        {
+            fNote->bNeedTCPAlarm=false;
+            fNote->bCloseShowMsg=true;
+            sSendMes.sprintf("HTSR,520,OK,");
+            HandlerTCPIPResultSendProcess(sSendMes);
+            fNote->BtnSkipClick(fNote->BtnRetry);
+            return;
+        }
+        else
+#endif
+        {
+            sSendMes.sprintf("HTSR,520,NG,");
+        }
+    }
+    else if(sData[0]=="HTSET" && sData[1]=="700")                               //TCP ART LOTCLEAR?
+    {
+        fSCKART->iWaitGPIBLotR=0;
+        ZeroMemory(iAutoTrayCount, sizeof(iAutoTrayCount));
+        if(HasICUnderMachine()==false)
+        {
+            LastSet.iTCPModeLotState=0;
+            LastSet.bBreakSCKART=false;
+            Clarn_Data(1, "ART_LOTCLEARED");
+            fSCKART->ClearLotInfo();                                            //LOTCLEARED
+            RecordProcess("ART LOTCLEARED.");
+            fLotInfo->btClearBarcodeList->Click();
+        }
+         sSendMes.sprintf("HTSR,700,OK,");
+    }//ex. HTSR,700,OK,
+    else if(sData[0]=="HTSET" && sData[1]=="701")                               //TCP ART LOTRETESTCLEAR?
+    {
+        // GATE(W906-FW-CMD-C) golden :13723-13781, WHOLE if/else -- see
+        // ABSENCE GATE REGISTER item A11 (`iLOTSTATUS_A`/`iLOTSTATUS_R` do not
+        // exist on the real fSCKART facade). DEVIATION: unlike the other
+        // absence gates in this wave, the two branches here are NOT
+        // equivalent-under-absence (one clears the lot, the other rejects
+        // it) -- per this wave's "不可捏造行為" rule, gating only the
+        // condition and guessing an arm would be fabricating which one
+        // golden intended. The whole selection is gated as one unit instead;
+        // `sData1` keeps its function-top declared default (empty AnsiString)
+        // so the reply is an honest "nothing decided" rather than a
+        // fabricated OK/NG. This ALSO covers SAFETY GATE item S3
+        // (`WriteLastDataFile(false)`, golden :13754) and the `fSCKART->
+        // Show()`/`->btnExit` absence (also item A11) inside the gated arm --
+        // both are moot dead code under this #if 0.
+#if 0
+        if(fSCKART->iTesterType==1 || fSCKART->iCurrentStatus!=fSCKART->iLOTSTATUS_A)
+        {
+            Clarn_Data(2, "ART_LOTRETESTCLEARED");
+            if(LastSet.iTester==OFF_LINE)
+            {
+                if(BinSelect[OffT].bAutoRetest[0])
+                    LastSet.BinCT[0][0]=0;
+                if(BinSelect[OffT].bAutoRetest[1])
+                    LastSet.BinCT[0][1]=0;
+                if(BinSelect[OffT].bAutoRetest[2])
+                    LastSet.BinCT[0][2]=0;
+            }
+            else
+            {
+                if(BinSelect[FT].bAutoRetest[0])
+                    LastSet.BinCT[0][0]=0;
+                if(BinSelect[FT].bAutoRetest[1])
+                    LastSet.BinCT[0][1]=0;
+                if(BinSelect[FT].bAutoRetest[2])
+                    LastSet.BinCT[0][2]=0;
+            }
+
+            for(int i=0; i<10; i++)
+            {
+                LastSet.lSCKARTBinCT[i]=0;
+            }
+            AMR.ARTReset();                                                     //Sam 20240304 : 新增 AMR 功能
+            LastSet.iSCKARTInputCT=0;
+            LastSet.lShuttleCount=0;
+            LotSummary.ClearRTData();
+
+            WriteLastDataFile(false);//kevin 20141030
+            fSortCT->ShowLoadingIC();
+            fSortCT->ShowSortIC();
+
+            if(fSCKART->iTesterType==0)
+            {
+                fSCKART->iInputCount=LastSet.iSCKART_RTUnitCount;
+                LastSet.iSCKART_RTUnitCount=0;
+            }
+            fSCKART->iInputJamCnt    =0;
+            fSCKART->iOutputJamCnt   =0;
+
+            if(fSCKART->iCurrentStatus==fSCKART->iLOTSTATUS_R)
+            {
+                fSCKART->SetLotStatus(fSCKART->iLOTSTATUS_W);
+                fSCKART->iWaitGPIBLotR=3;
+            }
+            fSCKART->AccessFile(false, -1);
+            RecordProcess("ART LOTRETESTCLEARED.");
+            fLotInfo->btClearBarcodeList->Click();
+            sData1="OK";                                                        //LOTRETESTCLEAR
+        }
+        else
+        {
+            fSCKART->SetLotStatus(fSCKART->iLOTSTATUS_W);
+            fSCKART->iCurrentFlexARTStep=10;
+            sData1="NG";                                                        //SETTINGNG
+        }
+#endif
+         sSendMes.sprintf("HTSR,701,%s,",sData1);
+    }//ex. HTSR,701,OK,
+    else if(sData[0]=="HTSET" && sData[1]=="702")                               //TCP ART INPUTQTY
+    {
+        bool bChangeLotID=false;
+        if(HasICUnderMachine()==false && HasAnyICInMachine()==false) //Sam 20191124 : 也要檢查 Auto tray
+        {
+            bChangeLotID=true;
+        }
+        else
+        {
+            sData2.sprintf("%s", sData[3]);
+            if(sData2==fSCKART->sLotID && (sData2!="" && sData2!=" "))
+                bChangeLotID=false;
+            else
+                bChangeLotID=true;
+        }
+
+        if(bChangeLotID==true)
+        {
+            fSCKART->iCurrent93KARTStep=1;
+            fSCKART->iCurrentFlexARTStep=4;
+            Clarn_Data(1, "ART_INPUTQTY");
+            fSCKART->ClearLotInfo();
+            RecordProcess("ART INPUTQTY.");
+            fLotInfo->btClearBarcodeList->Click();
+            fSCKART->SetLotStatus(fSCKART->iLOTSTATUS_W);
+            fSCKART->sLotID.sprintf("%s", sData[3]);
+            // AI(W906-FW-CMD-C) 20260820: vclcompat-surface substitution,
+            // same FormatDateTime reasoning as HTGR,204 above.
+            fSCKART->sLotStartTime=FormatDateTime("yyyymmdd_hhnnss", Now());
+            if(bQAModeFlag==true)
+            {
+                fSCKART->iLotCount  =TestIF_File.iQAModeCount;
+                fSCKART->iInputCount=TestIF_File.iQAModeCount;
+                fSCKART->AccessFile(false, 1);                                  //必須在轉換模式前先存檔一次, 不然轉模式的裡面會讀取到舊的資料
+                SetRunStartMode(rsmInitial_ART);
+                bQAModeFlag=false;
+            }
+            else
+            {
+                fSCKART->iLotCount  =StrToInt(sData[2]);
+                fSCKART->iInputCount=StrToInt(sData[2]);
+                fSCKART->AccessFile(false, 1);
+            }
+            sData3.sprintf("Lot start: %s, %d", fSCKART->sLotID, fSCKART->iLotCount);
+            RecordProcess(sData3);
+            sData1="OK";                                                        //SETTINGOK
+        }
+        else
+        {
+            sData1="NG";                                                        //SETTINGNG
+        }
+        sSendMes.sprintf("HTSR,702,%s,",sData1);
+        HandlerTCPIPResultSendProcess(sSendMes);
+        if(fSCKART->iTesterType==1)// && CosFunction.bAutoRetestGPIBmode==true)
+        {
+            fSCKART->iNeedRT=0;
+            fMain->SetLotState(2);                                              //TCP ART Lot Start
+            HandlerTCPIPResultSendProcess(sSendMes);
+            LastSet.bEndLotAutoRetestGPIB=false;
+            LastSet.bWaitStartLotAutoRetestGPIB=false;
+            LastSet.bFirstTestAutoRetestGPIB=true;
+        }
+        return;
+    }//ex. HTSR,702,OK,
+    else if(sData[0]=="HTSET" && sData[1]=="703")                               //TCP ART
+    {
+        if(fSCKART->iFTRTCount==0)
+            fSCKART->iCurrent93KARTStep=3;
+        else
+            fSCKART->iCurrent93KARTStep=9;
+        LastSet.bWaitStartLotAutoRetestGPIB=true;                               //TCP ART RT Start
+        sSendMes.sprintf("HTSR,703,OK,");
+    }//ex. HTSR,703,OK,
+    else if(sData[0]=="HTSET" && sData[1]=="704")                               //TCP ART
+    {
+        if(fSCKART->iCurrent93KARTStep>=10)
+            fSCKART->iCurrent93KARTStep=12;
+        LastSet.bWaitEndLotAutoRetestGPIB=true;
+        sSendMes.sprintf("HTSR,704,OK,");
+    }//ex. HTSR,704,OK,
+    //TCP ART  SRQKIND?
+    else if(sData[0]=="HTSET" && sData[1]=="706")
+    {
+        // GATE(W906-FW-CMD-C) golden :13867-13870 -- see ABSENCE GATE
+        // REGISTER item A12. fNote->fShow is real and offline-always-false,
+        // so this whole outer if(fNote->fShow) true-arm (which is where the
+        // absent bNeedTCPAlarm/bNeedPassWord live) is unreachable offline
+        // regardless -- gated as one unit; the real `edErrorCode` checks
+        // inside it are moot dead code under this #if 0, not a separate loss.
+        if(fNote->fShow)
+        {
+#if 0
+            if(fNote->bNeedTCPAlarm && fNote->bNeedPassWord)                    //Sam 20230613 : 通知系統 Handler 已經密碼鎖定，改為被詢問
+            {
+                iData1=99;                                                      //當有 bNeedTCPAlarm 時 IT詢問要回傳 99
+            }
+            else if(fNote->edErrorCode->Text=="WAR16104" ||                     //Sam 20250820 : 706 在 TrayFeed 與 Fix 滿盤時要回覆101
+                    fNote->edErrorCode->Text=="MES1720"  ||
+                    fNote->edErrorCode->Text=="MES1820"  ||
+                    fNote->edErrorCode->Text=="MES1920")
+            {
+                iData1=101;
+            }
+            else
+#endif
+            {
+                iData1=LastSet.iTCPModeLotState;
+            }
+        }
+        else
+        {
+            iData1=LastSet.iTCPModeLotState;
+        }
+        sSendMes.sprintf("HTSR,706,%d,",iData1);                                //SRQKIND
+    }//ex. HTSR,706,2,
+    else if(sData[0]=="HTSET" && sData[1]=="709")                               //TCP ART Break 強制中斷 ART
+    {
+        LastSet.iSCKART_RTUnitCount=0;
+        fSCKART->CheckNeedRT();                                                 //For TCP ART
+        fMain->SetLotState(10);                                                 //TCP ART Final Lot End
+        sSendMes.sprintf("HTSR,709,OK,");
+    }//ex. HTSR,709,OK,
+    else if(sData[0]=="HTSET" && sData[1]=="710")                               //TCP ART RT Count Setting
+    {
+        szDir.sprintf("%s%s", DataPath, GetLastOpenFN());
+        MyForceDirectories(szDir);
+        szDir+="\\Tester.Data";
+        TestIF_File.iSCKART_TryCnt=atoi(sData[2].c_str());
+        // SAFETY-GATE(W906-FW-CMD-C) golden :13902 -- see SAFETY GATE
+        // REGISTER item S2 (Tester.Data under DataPath). The range-clamp
+        // (1..20) golden's own ReadWriteIni call would have applied is
+        // skipped along with the persist -- `iSCKART_TryCnt` keeps the raw
+        // atoi() value set one line above instead.
+#if 0
+        TestIF_File.iSCKART_TryCnt=ReadWriteIni(szDir,"AutoRetest","Try Count",TestIF_File.iSCKART_TryCnt,3,false,true,1,20);
+#endif
+        sSendMes.sprintf("HTSR,710,OK,");
+    }//ex. HTSR,710,OK,
+    else if(sData[0]=="HTSET" && sData[1]=="711")                               //TCP ART Initail ART
+    {
+        if(HasICUnderMachine()==false)
+        {
+            fSCKART->AccessFile(false, 1);                                      //必須在轉換模式前先存檔一次, 不然轉模式的裡面會讀取到舊的資料
+            SetRunStartMode(rsmInitial_ART);
+            sData1="OK";
+        }
+        else
+        {
+            sData1="NG";
+        }
+        sSendMes.sprintf("HTSR,711,%s,",sData1);
+    }//ex. HTSR,711,OK,
+    else if(sData[0]=="HTSET" && sData[1]=="712")                               //TCP ART 設定開啟或關閉
+    {
+        szDir.sprintf("%s%s", DataPath, GetLastOpenFN());
+        MyForceDirectories(szDir);
+        szDir+="\\Tester.Data";
+        TestIF_File.bSCKART_EnableART=atoi(sData[2].c_str());  //0 Close; 1 Open
+        // SAFETY-GATE(W906-FW-CMD-C) golden :13925 -- see SAFETY GATE
+        // REGISTER item S2 (Tester.Data under DataPath).
+#if 0
+        TestIF_File.bSCKART_EnableART=ReadWriteIni(szDir,"AutoRetest","Enable ART",TestIF_File.bSCKART_EnableART,IniConfig.bA10_AutoReTest,false);
+#endif
+        // GATE(W906-FW-CMD-C) golden :13926-13927 -- see ABSENCE GATE
+        // REGISTER item A11 (fSCKART->Show()/->btnExit).
+#if 0
+        fSCKART->Show();
+        fSCKART->btnExit->Click();
+#endif
+        fMain->SetStartModeData();
+        sSendMes.sprintf("HTSR,712,OK,");
+    }//ex. HTSR,712,OK,
+    else if(sData[0]=="HTSET" && sData[1]=="713")                               //TCP ART 設定開啟或關閉 Auto Socket Off Function
+    {
+        szDir.sprintf("%s%s", DataPath, GetLastOpenFN());
+        MyForceDirectories(szDir);
+        szDir+="\\Tester.Data";
+        TestIF_File.bSCKART_AutoSocketOff=atoi(sData[2].c_str());  //0 Close; 1 Open
+        // SAFETY-GATE(W906-FW-CMD-C) golden :13937 -- see SAFETY GATE
+        // REGISTER item S2 (Tester.Data under DataPath).
+#if 0
+        TestIF_File.bSCKART_AutoSocketOff=ReadWriteIni(szDir, "AutoRetest","Auto Socket Off",TestIF_File.bSCKART_AutoSocketOff,IniConfig.bA10_AutoReTest,false);
+#endif
+        sSendMes.sprintf("HTSR,713,OK,");
+    }//ex. HTSR,713,OK,
+    //AI(ht9045-v899) 20260331: Greatek TCP Remote Start Lot
+    else if(sData[0]=="HTSET" && sData[1]=="720")                               //TCP Remote Start Lot (Greatek/OEE)
+    {
+        //Format: HTSET,720,<LotID>,<OPID>
+        //Respond: HTSR,720,OK,<LotID> or HTSR,720,NG,<ErrorCode>
+        if(CosFunction.bRemoteLotStart==false)
+        {
+            sSendMes.sprintf("HTSR,720,NG,NOT_SUPPORTED");
+            HandlerTCPIPResultSendProcess(sSendMes);
+            return;
+        }
+
+        if(RunInfo.bLotStart==true)
+        {
+            sSendMes.sprintf("HTSR,720,NG,ALREADY_STARTED");
+            HandlerTCPIPResultSendProcess(sSendMes);
+            return;
+        }
+
+        if(HasICUnderMachine()==true || HasAnyICInMachine()==true)
+        {
+            sSendMes.sprintf("HTSR,720,NG,IC_IN_MACHINE");
+            HandlerTCPIPResultSendProcess(sSendMes);
+            return;
+        }
+
+        if(sData[2]=="" || sData[2]==" ")
+        {
+            sSendMes.sprintf("HTSR,720,NG,EMPTY_LOTID");
+            HandlerTCPIPResultSendProcess(sSendMes);
+            return;
+        }
+        //Set LotID
+        fLotInfo->edtSysLotID->Text = sData[2];
+        //Set OPID (optional)
+        if(sData[3]!="" && sData[3]!=" ")
+        {
+            fLotInfo->edtSysOperatorID->Text = sData[3];
+        }
+        //Execute Lot Start
+        fLotInfo->SetLotID(sData[2], false);
+        fLotInfo->SetLotStart(__FUNC__);
+        RecordProcess("TCP Remote Lot Start: " + sData[2]);
+        sSendMes.sprintf("HTSR,720,OK,%s", sData[2]);
+        HandlerTCPIPResultSendProcess(sSendMes);
+        return;
+    }//ex. HTSR,720,OK,LOT001
+    //AI(ht9045-v899) 20260331: Greatek TCP Remote End Lot
+    else if(sData[0]=="HTSET" && sData[1]=="721")                               //TCP Remote End Lot (Greatek/OEE)
+    {
+        //Format: HTSET,721
+        //Respond: HTSR,721,OK,<LotID> or HTSR,721,NG,<ErrorCode>
+        if(CosFunction.bRemoteLotStart==false)
+        {
+            sSendMes.sprintf("HTSR,721,NG,NOT_SUPPORTED");
+            HandlerTCPIPResultSendProcess(sSendMes);
+            return;
+        }
+
+        if(RunInfo.bLotStart==false)
+        {
+            sSendMes.sprintf("HTSR,721,NG,NOT_STARTED");
+            HandlerTCPIPResultSendProcess(sSendMes);
+            return;
+        }
+
+        if(SystemStart==true)
+        {
+            sSendMes.sprintf("HTSR,721,NG,SYSTEM_RUNNING");
+            HandlerTCPIPResultSendProcess(sSendMes);
+            return;
+        }
+
+        if(HasICUnderMachine()==true || HasAnyICInMachine()==true)
+        {
+            sSendMes.sprintf("HTSR,721,NG,IC_IN_MACHINE");
+            HandlerTCPIPResultSendProcess(sSendMes);
+            return;
+        }
+        //Execute Lot End
+        AnsiString sLotID = fLotInfo->edtSysLotID->Text;
+        // GATE(W906-FW-CMD-C) golden :14021 -- see ABSENCE GATE REGISTER item
+        // A13. See this wave's RISK NOTE: the reply below still reports "OK"
+        // even though SetLotEnd did not fire.
+#if 0
+        fLotInfo->SetLotEnd(__FUNC__);
+#endif
+        RecordProcess("TCP Remote Lot End: " + sLotID);
+        sSendMes.sprintf("HTSR,721,OK,%s", sLotID);
+        HandlerTCPIPResultSendProcess(sSendMes);
+        return;
+    }//ex. HTSR,721,OK,LOT001
+    else if(sData[0]=="HTGR" && sData[1]=="732")                                //TCP ART 詢問啟動狀態
+    {
+        if(TestIF_File.bSCKART_EnableART)
+            sData1="Open";
+        else
+            sData1="Close";
+        sSendMes.sprintf("HTSR,732,%s,",sData1);
+    }//ex. HTSR,732,Open,
+    else if(sData[0]=="HTGR" && sData[1]=="733")                                //詢問是否有設定 ART 位置
+    {
+        if(Prod.bART6Tray[0] ||
+           Prod.bART6Tray[1] ||
+           Prod.bART6Tray[2] )
+        {
+            sData1="OK";
+        }
+        else
+        {
+            sData1="NG";
+        }
+        sSendMes.sprintf("HTSR,733,%s,",sData1);
+    }//ex. HTSR,733,OK,
+    //Sam 20240304 : 新增 AMR 功能
+    //==>
+    else if(sData[0]=="HTGR" && sData[1]=="801")                                //詢問是否有 Alarm 停機
+    {
+        if(fNote->fShow)
+        {
+            //if(fNote->edErrorCode->Text=="WAR16104" || fNote->edErrorCode->Text=="MES1640")
+            if(fNote->edErrorCode->Text=="MES1640")
+                sData1="Normal";
+            else if(fNote->edErrorCode->Text=="WAR16104" ||
+                    fNote->edErrorCode->Text=="MES1720"  ||                     //Sam 202500701 : AMR Fix Tray Feed
+                    fNote->edErrorCode->Text=="MES1820"  ||
+                    fNote->edErrorCode->Text=="MES1920")
+                sData1="Fix full";
+            else
+                sData1="Down";
+        }
+        else if(MyMessageBox->fShow)
+        {
+            sData1="Down";
+        }
+        else
+        {
+            sData1="Normal";
+        }
+        sSendMes.sprintf("HTSR,801,%s,",sData1);
+    }//ex. HTSR,801,Down
+    else if(sData[0]=="HTGR" && sData[1]=="802")                                //詢問是否在 Tray Feed
+    {
+        AnsiString sLoader="Loader",sEmpty="NA",sColor="NA";
+        if(LastSet.bAMRTrayFeedWait)
+            sData1="true";
+        else
+            sData1="false";
+//        if(Sen[SnLoaderTrayHasTray].IsOn())   //Loader 強制都要收料
+//            sLoader="Loader";
+        if(Sen[SenEmptySelectHasTray].IsOn())
+            sEmpty="Empty";
+        if(Sen[SenColorSelectHasTray].IsOn())
+            sColor="Color";
+
+        sData2.sprintf("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+                                                    sLoader,
+                                                     sEmpty,
+                                                     sColor,
+                                     AMR.GetTrackBinData(0),
+                                     AMR.GetTrackBinData(1),
+                                     AMR.GetTrackBinData(2),
+                                     AMR.GetTrackBinData(3),
+                                     AMR.GetTrackBinData(4),
+                                     AMR.GetTrackBinData(5),
+                                     AMR.GetTrackBinData(6),
+                                     AMR.GetTrackBinData(7),
+                                     AMR.GetTrackBinData(8));
+        sSendMes.sprintf("HTSR,802,%s,%s,",sData1,sData2);
+    }//ex. HTSR,801,Down
+    else if(sData[0]=="HTSET" && sData[1]=="803")                               //AMR Tray Feed 完成
+    {
+        AMR.Initial();
+        sSendMes="HTSR,803,OK,";
+    }//ex. HTSR,803,OK,
+    else if(sData[0]=="HTSET" && sData[1]=="804")                               //設定 AMR 開啟
+    {
+        szDir.sprintf("%sconfig.ini",AuthPath);
+        int iSet=atoi(sData[2].c_str());
+        bool bOnOff=(iSet==1)?true:false;
+        if(iSet==0 || iSet==1)
+        {
+            // GATE(W906-FW-CMD-C) golden :14117 -- see ABSENCE GATE REGISTER item A8.
+#if 0
+            fConfiguration->cbA60_1->Checked=bOnOff;
+#endif
+            IniConfig.bA60EnableAMR=bOnOff;
+            // SAFETY-GATE(W906-FW-CMD-C) golden :14119 -- see SAFETY GATE
+            // REGISTER item S2 (config.ini write).
+#if 0
+            WriteIniData(szDir, "Function", "bA60EnableAMR",bOnOff);
+#endif
+            sData1="OK";
+        }
+        else
+        {
+            sData1="NG";
+        }
+        fLotInfo->RefreshAMR();
+        sSendMes.sprintf("HTSR,804,%s,",sData1);
+    }//ex. HTSR,804,OK,
+    else if(sData[0]=="HTGR" && sData[1]=="805")                                //詢問 AMR 開關狀態
+    {
+        sData1=(IniConfig.bA60EnableAMR)?1:0;
+        sSendMes.sprintf("HTSR,805,%s,",sData1);
+    }//ex. HTSR,805,0,  HTSR,805,1,
+    else if(sData[0]=="HTGR" && sData[1]=="810")                                //詢問 Loader 進盤量是否達到設定值
+    {
+        fLotInfo->RefreshAMR();
+        if(AMR.CheckLoaderCount())
+            sData1="true";
+        else
+            sData1="false";
+        if(IniConfig.bA10_AutoReTest && TestIF_File.bSCKART_EnableART)          //Sam 20250423 : AMR + ART Retest 修改滿 Tray 也要收盤
+        {
+            if(fSCKART->iFTRTCount==0)                                          //AMR 模式補盤需要提示 FT or RT
+                sSendMes.sprintf("HTSR,810,%s,FT,",sData1);
+            else
+                sSendMes.sprintf("HTSR,810,%s,RT,",sData1);
+        }
+        else
+        {
+            sSendMes.sprintf("HTSR,810,%s,",sData1);
+        }
+    }//ex. HTSR,810,true, (達到) HTSR,810,false (未達到)
+    else if(sData[0]=="HTSET" && sData[1]=="811")                               //AMR Loader 已經補盤完成累加 Loader 計數
+    {
+        if(sData[2]=="Last")
+            LastSet.bAMRLoaderLast=true;
+        LastSet.bAMRRequestSupplyTray=false;//Sam 20240827 : 新增 AMR 功能
+        AMR.LoaderCarryIn();
+        sSendMes="HTSR,811,OK,";
+    }//ex. "HTSR,811,OK,
+    else if(sData[0]=="HTSET" && sData[1]=="812")                               //AMR 詢問 Loader 汽缸狀態是否可以補盤
+    {
+        if(bLoadingNewICTray || LastSet.bAMRLoaderLast)     //有進盤中或者收到最後補盤指令後都要回 NO
+        {
+            sData1="NO";
+        }
+        else
+        {
+            sData1="OK";
+            LastSet.bAMRRequestSupplyTray=true; //Loader 進盤流程會被鎖定，直到收到 AMR 補完盤，收到 HTSET,811, 命令後才會解除
+            fLotInfo->RefreshAMR();
+        }
+        sSendMes.sprintf("HTSR,812,%s,",sData1);
+    }
+    else if(sData[0]=="HTGR" && sData[1]=="840")                                //詢問 Auto1 出盤量是否達到設定值
+    {
+        fLotInfo->RefreshAMR();
+        if(AMR.CheckUnloaderCount(0))
+            sData1="true";
+        else
+            sData1="false";
+        if(IniConfig.bA10_AutoReTest && TestIF_File.bSCKART_EnableART)          //Sam 20250423 : AMR + ART Retest 修改滿 Tray 也要收盤
+        {
+            if(AMR.IsAutoReTestTray(0))
+            {
+                if(fSCKART->iNeedRT==2)
+                    sData2=AMR.GetTrackBinData(0);                              //最後測試就丟正常的 Bin
+                else
+                    sData2=AMR.GetTrackBinDataCateR(0);                         //還需要 RT 就丟有設定 CateR & Retest 的 Category 的 Bin count
+            }
+            else if(BinSelect[iTestRunMode].bCateR[0])
+            {
+                if(fSCKART->iNeedRT==2)
+                    sData2=AMR.GetTrackBinData(0);                              //最後測試就丟正常的 Bin
+                else
+                    sData2="CateR";
+            }
+            else
+            {
+                sData2=AMR.GetTrackBinData(0);
+            }
+        }
+        else
+        {
+            sData2=AMR.GetTrackBinData(0);
+        }
+        sSendMes.sprintf("HTSR,840,%s,%s,",sData1,sData2);
+    }//ex. HTSR,840,true, (達到) HTSR,840,false (未達到)
+    else if(sData[0]=="HTSET" && sData[1]=="841")                               //AMR Auto1 已經收盤完成清除 Auto 計數
+    {
+        AMR.UnloaderCarryOut(0);
+        sSendMes="HTSR,841,OK,";
+    }//ex. "HTSR,841,OK,
+    else if(sData[0]=="HTGR" && sData[1]=="850")                                //詢問 Auto2 出盤量是否達到設定值
+    {
+        fLotInfo->RefreshAMR();
+        if(AMR.CheckUnloaderCount(1))
+            sData1="true";
+        else
+            sData1="false";
+        if(IniConfig.bA10_AutoReTest && TestIF_File.bSCKART_EnableART)          //Sam 20250423 : AMR + ART Retest 修改滿 Tray 也要收盤
+        {
+            if(AMR.IsAutoReTestTray(1))
+            {
+                if(fSCKART->iNeedRT==2)
+                    sData2=AMR.GetTrackBinData(1);                              //最後測試就丟正常的 Bin
+                else
+                    sData2=AMR.GetTrackBinDataCateR(1);                         //還需要 RT 就丟有設定 CateR & Retest 的 Category 的 Bin count
+            }
+            else if(BinSelect[iTestRunMode].bCateR[1])
+            {
+                if(fSCKART->iNeedRT==2)
+                    sData2=AMR.GetTrackBinData(1);                              //最後測試就丟正常的 Bin
+                else
+                    sData2="CateR";
+            }
+            else
+            {
+                sData2=AMR.GetTrackBinData(1);
+            }
+        }
+        else
+        {
+            sData2=AMR.GetTrackBinData(1);
+        }
+
+        sSendMes.sprintf("HTSR,850,%s,%s,",sData1,sData2);
+    }//ex. HTSR,850,true, (達到) HTSR,850,false (未達到)
+    else if(sData[0]=="HTSET" && sData[1]=="851")                               //AMR Auto2 已經收盤完成清除 Auto 計數
+    {
+        AMR.UnloaderCarryOut(1);
+        //AMR.ClearTrackBinData(1);
+        sSendMes="HTSR,851,OK,";
+    }//ex. "HTSR,851,OK,
+    else if(sData[0]=="HTGR" && sData[1]=="860")                                //詢問 Auto3 出盤量是否達到設定值
+    {
+        fLotInfo->RefreshAMR();
+        if(AMR.CheckUnloaderCount(2))
+            sData1="true";
+        else
+            sData1="false";
+
+        if(IniConfig.bA10_AutoReTest && TestIF_File.bSCKART_EnableART)          //Sam 20250423 : AMR + ART Retest 修改滿 Tray 也要收盤
+        {
+            if(AMR.IsAutoReTestTray(2))
+            {
+                if(fSCKART->iNeedRT==2)
+                    sData2=AMR.GetTrackBinData(2);                              //最後測試就丟正常的 Bin
+                else
+                    sData2=AMR.GetTrackBinDataCateR(2);                         //還需要 RT 就丟有設定 CateR & Retest 的 Category 的 Bin count
+            }
+            else if(BinSelect[iTestRunMode].bCateR[2])
+            {
+                if(fSCKART->iNeedRT==2)
+                    sData2=AMR.GetTrackBinData(2);                              //最後測試就丟正常的 Bin
+                else
+                    sData2="CateR";
+            }
+            else
+            {
+                sData2=AMR.GetTrackBinData(2);
+            }
+        }
+        else
+        {
+            sData2=AMR.GetTrackBinData(2);
+        }
+
+        sSendMes.sprintf("HTSR,860,%s,%s,",sData1,sData2);
+    }//ex. HTSR,860,true, (達到) HTSR,860,false (未達到)
+    else if(sData[0]=="HTSET" && sData[1]=="861")                               //AMR Auto3 已經收盤完成清除 Auto 計數
+    {
+        AMR.UnloaderCarryOut(2);
+        //AMR.ClearTrackBinData(2);
+        sSendMes="HTSR,861,OK,";
+    }//ex. "HTSR,861,OK,
+    //<==
+    //Sam 20240304 : 新增 AMR 功能
+    HandlerTCPIPResultSendProcess(sSendMes);
+}
