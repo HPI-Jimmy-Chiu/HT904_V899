@@ -703,7 +703,14 @@ target_include_directories(ht9045_forms PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-target_link_libraries(ht9045_forms PUBLIC vclcompat ht9045_globals)
+target_link_libraries(ht9045_forms PUBLIC vclcompat ht9045_globals
+    # AI(W906-FW-SETUP-C2) 20260821: ht9045_core DECLARED -- forms/fSetup.cpp's
+    # XPitchKeyPress (Wave A) calls OnlyNumberAndDotInPut, whose body is
+    # common.cpp (ht9045_core). The edge existed undeclared and linked only by
+    # GNU ld's lazy extraction (the exact AGV_predicates shape :614-646 fixed
+    # once before). Unlike forms->sm (a documented cycle), core links only
+    # vclcompat+ht9045_public (:296/:420) and reaches nothing upward -- legal.
+    ht9045_core)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     # Same warning posture as ht9045_globals / ht9045_sm: the facade sees the
