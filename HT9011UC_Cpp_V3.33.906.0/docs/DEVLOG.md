@@ -9241,10 +9241,17 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   章程故另立檔）；fMain.h 補 edATCAmbientTemper＋宣告；入 ht9045_sm。
   雙 gate 137/142×2、guard IDENTICAL。**新知**：ATC/ATCInterface.h 與
   acatchtray_shims.h 不可同 TU（都在全域宣告 clWhite）。
-- **下一波候選**（20260821 凌晨 II）：
-  (j) **GATE 4/5/6 解閘波**：前提已死（fd1bb48），照 FW-CMD-D 形狀，
-      解完 SIGURD SETTEMP_/SETSOAK_ 鏈全通（GATE 7 安全層仍不動）；
-  (e) FW 前端波：temp.mode 格式化決策＋layout 渲染驗證；
+- ~~(j) GATE 4/5/6 解閘波~~ **已收（e745fad，FW-CMD-F，主迴圈自做五處外科
+  編輯）**：GATE 4 兩側＋GATE 5＋GATE 6 兩臂全還原 golden 原句；GATE 6/7
+  同綁的 #if 0 拆塊，GATE 7 安全層寫檔單獨續掛（各剩一行）。
+  **SIGURD SETTEMP_/SETSOAK_ 鏈至此端到端接通**（僅剩 GATE 7 共用
+  config 寫檔一點，等 redirect-seam 設計）。雙 gate 137/142×2、
+  guard IDENTICAL。今日（0820-0821 通宵班）累計 21 顆 commit。
+- **下一波候選**（20260821 凌晨 III）：
+  (e) FW 前端波：temp.mode 原始碼值 vs mock 字串格式化決策＋
+      uTemp_Set/DynamicTemp layout 渲染驗證（人工 F5 誠實回報）；
   (f) 台帳二輪 QUIRK 補掃；
+  (k) fSetup 顯示側補洞（ReadUseSuckModeFile 等 32/47 未宣告方法的
+      重評——MainTempMode 的兩個 gate 卡它）；
   (d) 設計面（InstallColorBinDisplay＋MN200、mot_table HAL）留使用者。
 - **設計面**：無待答。
