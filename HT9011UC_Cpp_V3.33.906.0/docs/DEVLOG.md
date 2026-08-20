@@ -9170,3 +9170,43 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - **教訓入政策**：表單波 brief 要加「StringGrid/尺寸類 widget 從 dfm 抄
   尺寸」；稽核「X 不依賴 Y」必須含呼叫鏈被呼叫者。
 - **設計面**：無待答。
+
+## 20260820 深夜 — FW-TEMP3：消費端解閘＋兩道連結過路費（0eba42f）
+
+- **解閘**：uHeaterThread GATE 6 ×4 拆 `#if 0`（NULL-guard 照 port 慣例；
+  動作端仍在 S13 SAFETY gate 內＋離線 iATC_MODE_TYPE 恆 0，雙重惰性）；
+  auto9045 W5FA_FTemp_Set stand-in 退役（符號 5→0，值流向 golden 同欄位）。
+- **cprod.cpp:4013-4027 裁決不動**：真前提活著——vclcompat::TRadioGroup 無
+  Controls[]（uTemp_Set.cpp:2383 自己同句也掛 gate）＋ globals→sm 會反轉
+  archive 分層（打斷 test_globals 等三個測試）。「前提死掉≠退役」範例。
+- **兩道過路費（解閘讓測試 exe 開始抽取 uTemp_Set.obj 才曝露）**：
+  1. **extern-flip 陷阱（新形狀入政策）**：uHeaterThread 新 include
+     forms/fTemp_Set.h 帶進 `extern const int` 宣告，把原 internal linkage 的
+     `const int InitTempOffset=8;` 副本靜默翻成 external 定義→與
+     uTemp_Set.cpp:232 對撞。修：退役副本（值同 8/9）。**政策：file-local
+     常數副本一律寫顯式 `static`**（bthermo/cTemperFrom 的顯式 static 免疫）。
+  2. **sm→comms 承重化**：uTemp_Set 活呼叫 ATC60System::*（本體在
+     ht9045_comms/ATCSystem.cpp）。直接 PUBLIC 邊會讓 CMake LINK_GROUP 成環
+     （comms 依賴 group 成員）——已試已回退；正解照 test_lane_io_sim 前例把
+     ht9045_comms 加進 tests 的 RESCAN group（replace_all 一次改 ~70 組）。
+- **gate**：本波 dir（build_fwtemp3g/r）雙組態 137/142，失敗集合逐項＝常駐五項
+  （先前連結爆掉的 test_motor_w4＋四個 w6 canary 全過）；wb_serve --dry boot
+  兩鏈皆載入、117 tags/58 live；guard 552 IDENTICAL。
+
+### 🔖 RESUME（最新）
+
+- **完成**：temp.* 全故事收斂——FW3-TempSet（c60e9f4）→FW-TEMP1 recon
+  （7e2384a）→FW-TEMP2 接線（ca4b03a）→SIOF 修復（b91e210）→Tech recon
+  （ef3f1a0）→FW-TEMP3 解閘（0eba42f）。基線 142/5 維持。
+- **下一波候選**（20260820 深夜）：
+  (e) FW 前端波：temp.mode 發 golden 原始碼值（2）但 web mock 期望字串
+      （"Hot Mode"）——formview/bind 層格式化決策＋uTemp_Set.layout.json
+      渲染驗證（「渲染回歸靠人工 F5」照政策誠實回報）；
+  (f) 台帳二輪 QUIRK 補掃；
+  (g) FW-3 佇列已清空，dfm2web 產生器批次擴大（emit_web 對剩餘 layout 的
+      覆蓋）或 Command.cpp 最後 5 方法收尾；
+  (d) 設計面（InstallColorBinDisplay＋MN200、mot_table HAL）留使用者。
+- **新政策**：file-local 常數副本一律顯式 static（extern-flip 陷阱）；
+  cprod 那段解鎖前置=TRadioGroup Controls[] port＋archive 分層問題，兩者
+  都是獨立工程。
+- **設計面**：無待答。
