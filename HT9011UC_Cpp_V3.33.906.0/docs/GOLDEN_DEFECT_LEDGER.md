@@ -71,15 +71,15 @@ FW 系列 / `GOLDEN BUG #N` / `k7-B1` 類區域編號等標記寫在程式碼裡
 
 | 項目 | 數值 |
 |---|---|
-| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **650 筆**（以表格內 `#` 編號列實際計數，20260820 三輪增補後；`python3` 逐列計數，見下方「三輪增補紀錄」） |
+| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **656 筆**（以表格內 `#` 編號列實際計數，20260821 四輪補掃後；`python3` 逐列計數，見下方「四輪補掃紀錄」） |
 | 其中 BUG 類（`GOLDEN BUG` / `GOLDEN BUGS` / `GOLDEN BUG #N` / `(Bx) GOLDEN BUG` / golden copy-paste bug） | 252 筆（含三輪新增 1 筆，`cConfiguration.h` 的 `sbUpdateHPClick` copy-paste bug） |
 | 其中 QUIRK 類（`GOLDEN QUIRK` / `GOLDEN QUIRKS`） | 238 筆（含 SECSGEM 三檔補撈的 39 筆；含二輪補掃新增 71 筆，見下方「二輪 QUIRK 補掃紀錄」；三輪未新增 QUIRK 類） |
 | 其中 DEFECT 類（`GOLDEN DEFECT` / `GOLDEN DEFECTS`） | 70 筆（含二輪補掃新增 5 筆；含三輪新增 1 筆，`BinDisplay/MyBinDisp.cpp` 的 `WriteTargetBin` off-by-one） |
-| 其中 ODDITY 類（`GOLDEN ODDITY` / `GOLDEN ODDITIES`） | 57 筆（含三輪新增 16 筆，集中在 batch-5 顯示側叢集，見下方「三輪增補紀錄」） |
+| 其中 ODDITY 類（`GOLDEN ODDITY` / `GOLDEN ODDITIES`） | 63 筆（含三輪新增 16 筆，集中在 batch-5 顯示側叢集，見下方「三輪增補紀錄」；含四輪補掃新增 6 筆，集中在溫控表單 uTemp_Set.cpp/DynamicTemp.cpp 與 Command.cpp FW-CMD-C 段，見下方「四輪補掃紀錄」） |
 | 其中 ASYMMETRY 類（`GOLDEN ASYMMETRY` / `GOLDEN ASYMMETRIES`） | 15 筆（含三輪新增 1 筆，`BinDisplay/MyBinDisp.h` 的 `ComPort`/`ComPort2` 初始化不對稱） |
 | 其中 DIVERGENCE 類（port 自身偏離 golden，已揭露，非 golden 本身缺陷；csystem.cpp/SCK_ART.cpp 各 1 筆合計 2） | 2 筆 |
 | 其中 GAP / LEAK / NOTE / INCONSISTENCY / GOTCHA / SPELLINGS / TYPO / DEAD CODE / INVARIANT / RACE 等罕見詞彙 | 16 筆（NOTE 4／GOTCHA 2／GAP 2／LEAK 2／INCONSISTENCY 1／SPELLINGS 1／TYPO 1／DEAD CODE 1／INVARIANT 1／RACE 1；含三輪新增 NOTE +2、GOTCHA +1，皆在 `cShowBinSelect.cpp`/`BinDisplay/MyBinDisp.h`） |
-| 涉及檔案數 | 126 個 `### ` 分節（含少數純交叉參照的 stub 分節；三輪增補新增 8 個分節：`forms/fLotInfo.cpp`、`forms/fSpeed.h+cSpeed.cpp`、`forms/fStartCondition.h+cStartCondition.cpp`、`forms/fConfiguration.h+cConfiguration.cpp`、`forms/fSetup.h+fSetup.cpp`、`BinDisplay/MyBinDisp.h+.cpp`、`forms/fHandlerSys.h+HandlerSys.cpp`(stub)、`tests/test_amr.cpp`(stub)；`cShowBinSelect.cpp`/`forms/fShowBinSelect.h` 的 WAVE D/E 補充是既有分節的延伸子分節，不重複計檔案數） |
+| 涉及檔案數 | 130 個 `### ` 分節（含少數純交叉參照的 stub 分節；三輪增補新增 8 個分節：`forms/fLotInfo.cpp`、`forms/fSpeed.h+cSpeed.cpp`、`forms/fStartCondition.h+cStartCondition.cpp`、`forms/fConfiguration.h+cConfiguration.cpp`、`forms/fSetup.h+fSetup.cpp`、`BinDisplay/MyBinDisp.h+.cpp`、`forms/fHandlerSys.h+HandlerSys.cpp`(stub)、`tests/test_amr.cpp`(stub)；四輪補掃新增 4 個分節：`uTemp_Set.cpp+forms/fTemp_Set.h`、`DynamicTemp.cpp+forms/fDynamicTemp.h`、`MainTempMode.cpp`(stub)、`cSetUp.cpp`(stub)；`cShowBinSelect.cpp`/`forms/fShowBinSelect.h` 的 WAVE D/E 補充是既有分節的延伸子分節，不重複計檔案數；Command.cpp 本輪只新增 2 列（B-CMDC-1/2），沿用既有分節，非新分節） |
 | 標示 ⚠️存疑（agent 或 orchestrator 本人判讀信心不足） | 見文末「無法判讀/存疑清單」 |
 
 > 上列數字為 `python3 -c "..."` 對本檔表格列直接計數所得（見文末補撈紀錄的量測方式），
@@ -155,6 +155,71 @@ FW 系列 / `GOLDEN BUG #N` / `k7-B1` 類區域編號等標記寫在程式碼裡
   (b)（ctor 隱式依賴 BCB6 零值填充）判定為翻譯適配技術說明而非缺陷標記，未收錄——
   這是本輪唯一一處「同一 banner 下部分收、部分不收」的情況，供日後複核。
 
+### 四輪補掃紀錄（20260821，orchestrator 對外工作代號 W906-LEDGER-R2）
+
+本輪是 orchestrator 指定的「二輪 QUIRK 補掃」（外部工作代號 `W906-LEDGER-R2`），對象是
+20260818-20260821 新落地的溫控/GPIB 鏡射檔：`uTemp_Set.cpp`＋`forms/fTemp_Set.h`、
+`DynamicTemp.cpp`＋`forms/fDynamicTemp.h`、`Command.cpp` 的 FW-CMD-C/D/F 新段（`AI(W906-FW-CMD-C/D/F)`
+標籤，:245 起、:11290 起、:15196 起）、`MainTempMode.cpp`、`cSetUp.cpp`。就本台帳自身的內部
+編年順序而言，這是繼二輪（20260819）、三輪（20260820）之後的第四輪；沿用內部編年只是為了
+避免跟既有段落編號衝突，跟 orchestrator 對外使用的 `R2` 代號不是同一序列，兩者對照關係在此
+說明一次，供日後查找。
+
+- 新增 6 筆，全數為 **ODDITY 類**：`Command.cpp` +2（`(B-CMDC-1)`/`(B-CMDC-2)`，皆已在
+  20260820 落地當下原地標註於 `//AI(W906-FW-CMD-C)` 註解，本輪是把既有標註併入台帳，非
+  本輪新發現）、`uTemp_Set.cpp` +1（`rb1PointClick`）、`DynamicTemp.cpp` +3
+  （`edMaxMouseDown`/`edUpperMouseDown`/`FormShow`）。
+- 任務標題雖稱「QUIRK 補掃」，但實際掃描結果顯示這批檔案使用的缺陷詞彙清一色是
+  `GOLDEN ODDITY`，全樹搜尋未在這 6 個檔案內找到任何字面 `GOLDEN QUIRK` 命中——已依掃描
+  範圍聲明的完整詞彙表逐一核對過（見下方各檔排除清單），非疏漏。
+- 掃描樣式：任務指定的 `GOLDEN ODDITY`/`GOLDEN QUIRK`/`golden 不合理`/`照翻`/`faithful`+
+  `bug`/`oddity`，另加本檔既有詞彙表全集（`GOLDEN BUG/BUGS/DEFECT(S)/ASYMMETRY/ASYMMETRIES/
+  NOTE/GAP/RACE/LEAK/INVARIANT/GOTCHA/TYPO/SPELLINGS/DEAD CODE/DIVERGENCE/INCONSISTENCY`）
+  逐檔 `grep -inE` 交叉核對，並額外用 `FAITHFULLY KEPT`/`kept verbatim`/`PRESERVED, NOT
+  FIXED`/`not a translation artifact`/`golden itself`/`copy-paste` 等本檔已知的非標準措辭
+  補一輪，避免只靠字面 `GOLDEN <詞>` 正則漏網（`ainarm9045.cpp` 的
+  `ONE STRUCTURAL TRAP IN GOLDEN, FAITHFULLY KEPT` 就是這類非標準措辭的既有先例）。
+- `Command.cpp` 的 FW-CMD-D（:326 起）與 FW-CMD-F（:11332 起）兩段「解閘」新段逐段核對：
+  兩段目前的 `GOLDEN xxx` 標記全部是既有的 B1~B8 系列（`GOLDEN BUG (B6)` 等），已在本檔
+  既有的「Command.cpp（9 筆）」分節收錄過，本輪核對後**沒有新增項目**；唯一的新標記
+  （`B-CMDC-1`/`B-CMDC-2`）落在 FW-CMD-C 段（`ChangeToAlarmSetup`/`_SG`），已併入上表。
+- **`Command.cpp`／`uTemp_Set.cpp`／`DynamicTemp.cpp` 的 golden 來源澄清（重要，附教訓）**：
+  這三個檔案頂端的「Golden source:」/「Golden ref:」banner（`Command.cpp`:6,:3769,:8282,
+  :10330,:13062,:14682,:15197；`forms/fTemp_Set.h`:6；`forms/fDynamicTemp.h`:6）明確寫的都是
+  `HT9011UC_Code_V3.33.906.0_20260618`，**不是**本台帳其餘多數分節預設對照的
+  `HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422`（V899）。本輪驗證 `(B-CMDC-1)`/
+  `(B-CMDC-2)` 時起初誤用 V899 樹核對 golden 行號，得出「port 引用的 :7910-7917／:8048-8307
+  行號跟 V899 對不上」的假結論（V899 裡 `ChangeToAlarmSetup`/`_SG` 因中間程式碼差異整體位移
+  約 -70 行，`ChangeToAlarmSetup_SG` 在 V899 是 :7973 而非 :8048）；改用正確的
+  906_20260618 樹重新核對後，兩筆的 golden 行號引用**逐字核對完全正確**（:7910-7917 的
+  `for(i=0;i<15;i++)` 清零迴圈、:8051-8052 的兩個 `new TStringList()`、函式全範圍
+  :8048-8310 內查無 `delete` 皆核實無誤）。記錄此教訓：這三個 FW-3/FW-CMD 系列檔案要對照
+  906_20260618 樹，不是 V899；下次維護此區的人若沒注意頂端 banner 的「Golden source」
+  聲明就照本台帳「未特別指名檔案者預設是 V899」的通則去核對，會核對錯樹並得出假的
+  行號不符結論。
+- **排除的邊界案例**（判定為「非 golden 缺陷」，未收錄）：
+  1. `uTemp_Set.cpp:4339` 的 `Key=NULL;`（`edSoakTimeKeyPress`）——純粹是「吃掉非法按鍵
+     輸入」的常見 VCL 慣用寫法，該處逐行核對後**未附任何 `GOLDEN xxx` 字樣**，不符合本
+     台帳收錄判準；任務提示詞舉例的「Key=NULL 型」在本檔查無實際標註案例。
+  2. `uTemp_Set.cpp:7033-7034,7068-7069` 兩處「NOT gated -- golden's own body is ...
+     marked "No Use" by golden itself」——這是翻譯者說明「為什麼這個函式沒被 GATE」的
+     技術備註（引用 golden 原始碼裡的 `//No Use` 行內註解，屬機台既有的功能狀態標記，
+     不是缺陷用語），全句未使用任何 `GOLDEN <缺陷詞>` 字樣，未收錄。
+  3. `forms/fTemp_Set.h`／`uTemp_Set.cpp` 近 30 處 `DEVIATION`
+     （`*MouseDown`/`FormClose`/`*KeyUp` 等事件處理常式的簽名精簡，拿掉未被讀取的
+     `TMouseButton`/`TShiftState`/`TCloseAction` 參數）——這是港版自己的**簽名層級翻譯
+     決策**說明，跟本台帳收錄的 `GOLDEN DIVERGENCE`（port 刻意偏離 golden *行為*，如
+     `SCK_ART.cpp` 那兩筆）是不同概念；全數未使用 `GOLDEN` 字樣，未收錄。
+  4. `MainTempMode.cpp`、`cSetUp.cpp` 全檔逐行核對（含上述擴充詞彙表與非標準措辭），
+     **0 個命中**——`MainTempMode.cpp` 是新翻譯的 `TfMain::ChangeTempMode` facade 缺口
+     收斂檔；`cSetUp.cpp`（cSetUp Wave B，是既有「forms/fSetup.h + fSetup.cpp」分節同一
+     `TfSetup` 類別的延續翻譯波次、20260821 新落地檔案，非全新類別）本輪只翻了 47 個
+     golden 方法中的 3 個，皆未帶 golden 缺陷標記。兩檔各自留下 stub 分節說明「查過，
+     沒有」，而非略過不提。
+- 本輪**未回頭複查** BUG / QUIRK / DEFECT / ASYMMETRY 等其他詞彙在這批檔案是否有類似的
+  漏網之魚（除了上述 FW-CMD-D/F 的既有 B1~B8 順帶核對外）；範圍嚴格限定在任務指定的這
+  6 個檔案。
+
 ### 補撈紀錄（依使用者/協調者指示，對全樹跑 `grep -rniE "GOLDEN [A-Z]+[ ,]"` 供詞彙缺口複查）
 
 - 第一輪委派用的搜尋樣式集中在 `GOLDEN BUG/BUGS/ODDITY/ODDITIES/ASYMMETRY/ASYMMETRIES/DEFECT/DEFECTS/QUIRK/QUIRKS/INCONSISTENCY/NOTE`，SECSGEM 子代理事後自我複查發現此樣式漏掉了「`GOLDEN <名詞>, preserved`」這種名詞在前、`GOLDEN`後面直接接非上述詞彙的變體（`GOLDEN RACE`、`GOLDEN LEAK (a)/(b)`、`GOLDEN INVARIANT`），已自行補齊 4 筆並回報。
@@ -186,7 +251,7 @@ FW 系列 / `GOLDEN BUG #N` / `k7-B1` 類區域編號等標記寫在程式碼裡
 
 > 以下分節由 orchestrator（本代理）直接讀取原始碼驗證後寫入，未經子代理轉手。
 
-### Command.cpp（9 筆）
+### Command.cpp（11 筆）
 
 | # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
 |---|---|---|---|---|---|---|---|
@@ -199,6 +264,8 @@ FW 系列 / `GOLDEN BUG #N` / `k7-B1` 類區域編號等標記寫在程式碼裡
 | 7 | GOLDEN BUG (B6)（FW3-WD group） | BUG | Command.cpp:10633-10645,12808,12847 | golden :12024,:12051 | `SetSGCONTFAIL` 對 Head 版 `rbContsFailByHead_FTOff`/`_RTOff` 的 `Checked` 賦值少了顯示用的 `!` 負號，Socket 版兩行以上正確加了負號，屬 FT+RT 一致的複製貼上疏漏 | 一旦 `fYieldMonitoring` 群組解除 GATE 上線，Head Off checkbox 永遠不會正確顯示「已關閉」狀態 | 約20260818 |
 | 8 | GOLDEN BUG (B7)（FW3-WE group） | BUG | Command.cpp:13056-13065,13364 | golden :12625-12626 | `HanderTcpIp` 關閉 `TCPCommandServer` 前的保護判斷式第二行 `TCPCommandServer->Active==false;` 把賦值誤打成比較，整段判斷變成無作用的空比較 | golden 自己「先關閉閒置伺服器」的保護機制形同虛設；本 port 因 `TCPCommandServer` 本身也不存在而雙重無效，保留註記避免未來實作真正的該物件時繼承此 typo | 約20260818 |
 | 9 | GOLDEN BUG (B8)（FW3-WE group） | BUG | Command.cpp:13066-13083,14039 | golden :14778-14781 | `WriteHeadContactCount` 的例外處理區塊誤重置了另一個全域變數 `asChangeSetupFileName`（`cmydef.h:5729`，原本追蹤「GPIB剛送的setup檔名」），研判是從其他 setup 檔案相關函式複製貼上未改 | 若 `WriteHeadContactCount` 解析例外恰好在其他 setup-file 變更函式與其自身下一次讀取之間發生，會靜默清空該追蹤值 | 約20260818 |
+| 10 | GOLDEN ODDITY (B-CMDC-1)（FW-CMD-C group） | ODDITY | Command.cpp:15421-15428（banner）,15839-15845（inline，`ChangeToAlarmSetup` 函式內） | golden :7867-7869（`sBinName`/`sPassOrFail`/`fYield` 宣告 `[TEST_MAX_BIN]`）,:7910-7917（Bin Alarm Yield 清零迴圈寫死 `for(i=0;i<15;i++)`） | `ChangeToAlarmSetup` 的清零迴圈硬編 `<15`，不是 `<TEST_MAX_BIN`(256) 也不是 `<iTestBinCount`，但緊接著的兩個迴圈都跑到 `iTestBinCount` | `iTestBinCount>15` 的機型（16/32-site）第 15 格之後的槽位從未被這段清零就被下面迴圈讀取；此函式本身翻譯完整（ACTIVE、無內部 gate），但目前唯一呼叫端 `SetAlarmSetup`（Command.cpp:14925）仍被 `GATE(FW3-WF)` 整段 `#if 0`，缺口暫不可達 | AI(W906-FW-CMD-C) 20260820（併入台帳 W906-LEDGER-R2 20260821） |
+| 11 | GOLDEN ODDITY (B-CMDC-2)（FW-CMD-C group） | ODDITY | Command.cpp:15429-15433（banner）,15989-15992（inline，`ChangeToAlarmSetup_SG` 函式內） | golden :8051-8052（`new TStringList()` x2）；函式全範圍 :8048-8310（3 個 return 路徑皆查無 `delete`） | `ChangeToAlarmSetup_SG` 每次呼叫都 `new` 兩個 `TStringList`（`tSetup`/`tCondition`），全函式 3 個 return 路徑皆無對應 `delete`，golden 自己就帶這個 per-call heap leak | 函式本身翻譯完整、無內部 gate，但與 (B-CMDC-1) 同一個呼叫端 `SetAlarmSetup` 仍被 gate 擋住；一旦解 gate，SIGURD 分支每次收到 Site-Map alarm setup 指令都會洩漏兩個 `TStringList` 物件 | AI(W906-FW-CMD-C) 20260820（併入台帳 W906-LEDGER-R2 20260821） |
 
 ### cShowBinSelect.cpp / forms/fShowBinSelect.h（3 筆，取自 `git show HEAD:` 已提交內容，見上方掃描範圍聲明）
 
@@ -1547,6 +1614,34 @@ GATE 依賴缺口說明，非 golden 缺陷紀錄。
 （無符合條件的項目）— 全檔以任務指定樣式與擴充詞彙表逐行核對，0 個 `GOLDEN BUG/ODDITY/QUIRK/
 DEFECT/NOTE/...` 命中；fixture 內的所有 `golden :NNNN` 引註都只是客觀對照 golden 行號/行為，
 未使用任何缺陷類詞彙。
+
+### uTemp_Set.cpp / forms/fTemp_Set.h（1 筆，W906-LEDGER-R2 20260821 新增分節）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 1 | GOLDEN ODDITY（未編號） | ODDITY | uTemp_Set.cpp:620-638（`rb1PointClick`） | golden（`HT9011UC_Code_V3.33.906.0_20260618`）uTemp_Set.cpp:421-425；宣告 uTemp_Set.h:66-68,80,815 | `rb1PointClick` 把 `Sender` 轉型成 `TRadioGroup*` 再讀 `Ptr->Tag`，但 `rb1Point`~`rb6Point` 在 golden 標頭裡實際各自宣告成獨立的 `TRadioButton*` 成員，並非某個真正 `TRadioGroup` 底下的子元件——轉型型別與實際物件型別不符 | 在真實 VCL 裡因 `Tag` 屬性繼承自共同基底 `TComponent`、讀取結果與宣告時的靜態轉型型別無關，恰好無害；本 port 因這 5 顆按鈕全是裸 `TRadioButton`（非帶 `Tag` 的 `TfTemp_SetTagButton` 包裝元件），此呼叫連同其唯一消費者 `SetBasePointIMG`（自身也全 gate）一併被 GATE(dep-Tag) 整段擋住，尚不可達 | AI(W906-FW3-TempSet-WA) 20260820（併入台帳 W906-LEDGER-R2 20260821） |
+
+### DynamicTemp.cpp / forms/fDynamicTemp.h（3 筆，W906-LEDGER-R2 20260821 新增分節）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 1 | GOLDEN ODDITY（未編號） | ODDITY | DynamicTemp.cpp:259-263,265-272（`edMaxMouseDown`） | golden（`HT9011UC_Code_V3.33.906.0_20260618`）DynamicTemp.cpp:152-158 | `edMaxMouseDown`（gate 中）呼叫 `ShowQwertyKey` 時，「目前值」引數讀的是 `edMin->Text` 而非 `edMax->Text`——golden 自己從 `edMinMouseDown` 複製貼上時忘了改欄位 | 整段呼叫目前被 GATE(Q1) 擋住（`fQwertyKey` 全樹無 port），暫不可達；一旦解 gate，使用者點 Max 欄位彈出的數字鍵盤會帶入 Min 欄位的舊值而非 Max 自己的值 | AI(W906-FW3-DynTemp-WA) 20260820（併入台帳 W906-LEDGER-R2 20260821） |
+| 2 | GOLDEN ODDITY（未編號） | ODDITY | DynamicTemp.cpp:307-314,318-330（`edUpperMouseDown`） | golden（`HT9011UC_Code_V3.33.906.0_20260618`）DynamicTemp.cpp:189-201 | `edUpperMouseDown` 幫 `Chart1->Series[17]` 畫線時色彩引數用 `TC[16]`（Series 16 的顏色）而非 `TC[17]`——golden 從姊妹函式 `edLowerMouseDown` 複製貼上時漏改索引；同檔 `btTempICLoadClick` 對 Series[16]/[17] 的呼叫確實正確分別使用 `TC[16]`/`TC[17]` | Series[17]（Upper 上限線）在圖表上會被畫成跟 Series[16]（Lower 下限線）同一顏色，兩條線在圖上難以分辨；純顯示層瑕疵，不影響溫度量測邏輯本身 | AI(W906-FW3-DynTemp-WA) 20260820（併入台帳 W906-LEDGER-R2 20260821） |
+| 3 | GOLDEN ODDITY（未編號） | ODDITY | DynamicTemp.cpp:402-420（`FormShow`） | golden（`HT9011UC_Code_V3.33.906.0_20260618`）DynamicTemp.cpp:261-273 | `FormShow` 只用 `atoi(edMax->Text)<Chart1->LeftAxis->Minimum` 一個條件判斷要不要重設座標軸，但兩個分支接下來都會同時改寫 `Minimum` 與 `Maximum`——比較式只跟即將被覆寫的 `Minimum` 比、跟 `Maximum` 完全無關，是不對稱的判斷式 | 兩分支寫入 `Minimum`/`Maximum` 的先後順序相反（true 分支先設 Minimum、false 分支先設 Maximum），但因兩行是各自獨立賦值、中間無讀取，最終數值結果與寫入順序無關，純粹是 golden 自己寫法不對稱、無實際功能影響 | AI(W906-FW3-DynTemp-WA) 20260820（併入台帳 W906-LEDGER-R2 20260821） |
+
+### MainTempMode.cpp（W906-LEDGER-R2 20260821 新增 stub 分節）
+（無符合條件的項目）— 全檔（本輪新落地的 `TfMain::ChangeTempMode` facade 缺口收斂檔）以任務
+指定樣式與本檔既有詞彙表全集逐行核對，0 個 `GOLDEN BUG/ODDITY/QUIRK/DEFECT/NOTE/...` 命中；
+檔案內大量 `golden :NNNN` 引註都是客觀對照 golden 行號、或 `GATE(dep-...)` 依賴缺口說明，
+未使用任何缺陷類詞彙。
+
+### cSetUp.cpp（W906-LEDGER-R2 20260821 新增 stub 分節）
+（無符合條件的項目）— `cSetUp.cpp`（cSetUp Wave B，是既有「forms/fSetup.h + fSetup.cpp」分節
+同一 `TfSetup` 類別的延續翻譯波次、本輪新落地，非全新類別）本輪翻譯 3 個 golden `TfSetup::`
+方法（`ReadUseSuckModeFile`/`CheckSTMMode`/`cbI21Click`），以任務指定樣式與本檔既有詞彙表
+全集逐行核對，0 個 `GOLDEN BUG/ODDITY/QUIRK/DEFECT/NOTE/...` 命中；既有的
+「forms/fSetup.h + fSetup.cpp（1 筆）」分節（`RadioButton1KeyDown` DFM-孤兒事件處理常式）
+維持不變，本檔本輪未貢獻額外筆數。
 
 ---
 
