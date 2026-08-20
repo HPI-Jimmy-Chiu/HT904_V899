@@ -9052,3 +9052,60 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - **counter.clear 授權備忘**：authCounterClr 索引=funCounterClr 順序；
   Security_new.def 缺 key 會被 CheckAndReadIniData 回寫 seed
   （golden 行為），e2e 必附 MD5 對帳。
+
+## 20260820 傍晚 — FW3-TempSet：批 3 收尾（uTemp_Set＋DynamicTemp 雙表單翻譯波）
+
+- **交付**（c60e9f4，兩個平行 Sonnet agent，檔案不相交）：
+  - `uTemp_Set.cpp`（golden 6,970 行→鏡射 7,414 行）＋`forms/fTemp_Set.h`（1,540 行）。
+    106/108 方法（分母=108 個定義點含 ctor；FormShortCut 整支省略——TWMKey 全樹無 port
+    且 Msg.CharCode 真的被讀；ATC_Power/CheckAirMachineStatus 是 golden「宣告即死」照實重現）。
+    ctor 清空搬 `Init()`；SAFETY GATE S1-S16 共 71 處標記（SaveSetupFile 整體、
+    spbSaveClick 尾段、SendATCSelfTest、defrost 全家、Handler_Send_To_ATC_DewPoint 等），
+    任何 ATC 送指令/寫檔路徑在本波都是惰性的。
+  - `DynamicTemp.cpp`（golden .h+.cpp 508 行→鏡射 1,208 行）＋`forms/fDynamicTemp.h`。
+    26/26 方法。溫度 IC 量測鏈掛窄 gate（C1：COM2->TempComm6 shim 無此成員；
+    D1/D2：LoadFromFile/SaveToFile 真磁碟 IO 留使用者）；兩個 GOLDEN ODDITY
+    照翻留註（TC[16] 重用、FormShow 兩分支同比 Minimum）。
+- **gate（全新 dir ×2，最後一次整併之後量）**：build_fwtsg 137/142、
+  build_fwtsr（Release）137/142，失敗集合逐項相同＝常駐五項
+  （config_db/IniFiles/ini_helpers/config_loaders/GA1_ReadGeneralIni）。
+  guard 552 IDENTICAL（_fwts_sys_before/after.json）。
+- **nm 量測**：兩 obj 都在 libht9045_sm.a；fTemp_Set/fDynamicTemp 是 BSS 零初始化
+  指標（golden 忠實、SIOF 免疫）。兩 TU 各有一個 __GLOBAL__sub_I：uTemp_Set 是
+  golden 原句 `sATC_CH_Tj=new TStringList()`（vclcompat 自足）、DynamicTemp 是
+  TU-local iostream 型 init——皆不碰 §8 NULL 全域。**誠實聲明：目前零消費者
+  抽取這兩個 obj，「進 archive」≠「接上了」**；等待中的消費者三處
+  （uHeaterThread GATE 6 ×4、cprod.cpp:3989-4003、auto9045 W5FA_FTemp_Set
+  stand-in）解閘/收斂＝獨立行為變更波。
+- **brief 錯誤與更正**：主迴圈 brief 把 lblRealTime*Click 列「純顯示不掛 gate」，
+  agent 用 -fsyntax-only 證明 COM2->TempComm6 根本編不過，改窄 gate 該行——
+  brief 錯、agent 對，照實記。SetSingleWorkTemperature 原計畫「決策留活動作 gate」
+  因 TriTemp_Ch 全樹無 port 收斂為整體 gate。
+- **本波新知**：dep-FormHS——golden `FormHS`/`CheckTempOffset` 屬 HS_Function.h/.cpp，
+  與 forms/fHandlerSys.h 的 THandlerSystem 是**同名不同類**（陷阱 #5 新形狀）。
+  9 個 KYEC barcode-guard 站點 gate 展開後留下 `Buffer` 宣告後未用
+  （-Wall 會報 -Wunused-variable，刻意保留 golden 行結構）。
+- **刻意沒做**：CMakeLists 之外零既有檔改動；tag 匯出（fTemp_Set 的
+  temp.* liveness tags）與 formview 渲染驗證留下一波；e2e webprobe 未跑
+  （本波無 tag/web 變更）。
+
+### 🔖 RESUME（最新）
+
+- **完成**：FW-3 批 3 全清（cTemperFrom WA→ObsSwap→**FW3-TempSet c60e9f4**）。
+  批 1（Command.cpp 159/164）、批 2、批 4（uLotInfo A/B/C）、批 5 全清如前。
+  基線仍 142/5（g/r 皆 137/142 常駐五項）。
+- **下一波候選**（依脈絡擇一，20260820 傍晚重評）：
+  (a) **temp.* tag 接線波**——fTemp_Set/fDynamicTemp 已入 archive，
+      Temperature 結構已翻，把溫控顯示值經 WebBridgeTags 匯出（機械性、唯讀、
+      夜間可做；分母規則照 test_wb_tags.cpp）；
+  (b) Tech.* 教導鏈 recon（SetTechDataToProd 其餘七成員載入鏈讀寫性）；
+  (c) FW-3 佇列重評（批次表已清空，剩「需 write path」佇列段——
+      uteach/uMotorTest/iosetview/login 夜間不做）；
+  (d) InstallColorBinDisplay＋MN200 c/e、mot_table.csv HAL 分類——設計面留使用者。
+- **TempSet 後續備忘**：uHeaterThread GATE 6 解閘（ControlATC60AirFlow ×4，
+  離線不可達故行為中性）＋ auto9045 W5FA_FTemp_Set stand-in 收斂＋
+  cprod.cpp:3989-4003 解閘＝一顆獨立行為變更 commit，量測後做。
+  dep-* 六缺口（FormHS/asATC_SW_Ver/edATCAmbientTemper/SetATCOffset/
+  ATCInitialTask/IsConnect）都在別的檔寫入邊界，逐一補齊時要動
+  fMain.h/fLotInfo.h/acarry_shims.h/atester_shims.h。
+- **設計面**：無待答。
