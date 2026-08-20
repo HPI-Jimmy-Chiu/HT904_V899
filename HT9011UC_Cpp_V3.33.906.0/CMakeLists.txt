@@ -1907,6 +1907,13 @@ add_library(ht9045_sm STATIC
     # convergence is a separate behaviour-change wave).
     uTemp_Set.cpp
     DynamicTemp.cpp
+    # AI(W906-FW-CMD-E) 20260821: MainTempMode.cpp -- TfMain::ChangeTempMode
+    # (golden main.cpp:21749-21925), the temperature-mode switcher extracted
+    # from main.cpp. NOT MainCalcCore material (that file's charter is pure
+    # computation; this method has machine-facing side effects, all behind
+    # SAFETY gates: fSetup/fOffSet/COM2 sites gated on real absences,
+    # SendCommToATC7 and heater actions inert). Declaration in forms/fMain.h.
+    MainTempMode.cpp
     # AI(W906-FW3-Speed-WA) 20260819: cSpeed.cpp -- batch-5 cSpeed display
     # side (ctor, FormShow, ReadFile, ReadWriteFile read-arm with the write
     # arm forced off at entry, DoIniDataToForm, FormClose's re-read-refresh)

@@ -1067,6 +1067,47 @@ public:
     virtual int  RemoteControl(int iMode);                                      // golden main.h:1455 (body Command.cpp :9673-9716)
     virtual void TCPCommandServerClientRead(TObject *Sender, TCustomWinSocket *Socket); // golden main.h:1089 (body Command.cpp :12762-14301)
     // -- end FW-CMD-C ADD --------------------------------------------------------
+    // -- FW-CMD-E ADD: MainTempMode.cpp's TfMain::ChangeTempMode + its own
+    //    edATCAmbientTemper widget gap -------------------------------------------
+    // AI(W906-FW-CMD-E) 20260821: the 2 golden TfMain:: facade gaps this task
+    // closes -- both were blocking Command.cpp's WriteSetTempStatus_SIGURD /
+    // WriteSetSoakTimeStatus_SIGURD GATE REGISTER items 4/5/6 (see that file's
+    // FW3-WD banner + the FW-CMD-D re-confirmations, Command.cpp :10356-10360 /
+    // :10458-10494): `edATCAmbientTemper` (golden main.h:737 `TEdit
+    // *edATCAmbientTemper;`) and `ChangeTempMode` (golden main.h:1323, body
+    // golden main.cpp:21749-21925, now translated FAITHFULLY in the new file
+    // MainTempMode.cpp). Per this task's own scope boundary, closing these two
+    // gaps does NOT un-gate Command.cpp's #if 0 sites this wave -- that is a
+    // SEPARATE, later task; MainTempMode.cpp's own report lists the
+    // un-gating pre-conditions for whoever does that pass.
+    //
+    // edATCAmbientTemper: golden is a bare TEdit* (main.h:737); re-grepped this
+    // pass (`grep -n "edATCAmbientTemper" .` over the golden tree, 20260821) --
+    // every one of its golden call sites touches only ->Text (read via
+    // atof(...c_str()) or written as `=d`/`=IniConfig.dATCAmbientTemperature`/
+    // `=fWorkTemp`), ->Enabled or ->Visible -- the SAME shape as
+    // edWorkTemperBase/edSoakTime/edHPX/edHPY/edtAuto1..6 above, so this reuses
+    // TfLotInfoEdit (the established cross-form ->Text-only alias), not a new
+    // widget type (per contract rule 3). ChangeTempMode's OWN body below does
+    // NOT touch it at all (re-verified: `grep -n "edATCAmbientTemper"` over
+    // golden main.cpp:21749-21925 -- 0 hits) -- it is added here because it is
+    // the OTHER half of this task's brief, not because ChangeTempMode needs it.
+    //
+    // NSDMI DEVIATION, NOTED: every sibling TfLotInfoEdit* member above
+    // (edWorkTemperBase/edSoakTime/edHPX/edHPY/edtAuto1..6) is `new`'d in
+    // forms/fMain.cpp's TfMain constructor body, NOT here in the header -- but
+    // this task's file scope is exactly {MainTempMode.cpp (new),
+    // forms/fMain.h}, and explicitly excludes forms/fMain.cpp. Per the
+    // facade's own NSDMI-everywhere rule (an indeterminate pointer read is a
+    // real bug the moment anything dereferences it -- see the
+    // W906-FW3-WE-integrate `bHandlerResultConnect = false` precedent above),
+    // the initializer is given HERE instead, as a header NSDMI. Functionally
+    // identical construction (`new TfLotInfoEdit()`), just a different physical
+    // location; purely cosmetic for whoever next touches forms/fMain.cpp to
+    // fold it into the ctor alongside its siblings.
+    TfLotInfoEdit *edATCAmbientTemper = new TfLotInfoEdit();  // [DATA] golden main.h:737 (TEdit*) -- ->Text/->Enabled/->Visible only, same idiom as edWorkTemperBase/edSoakTime
+    virtual int ChangeTempMode(int Mode, bool Msg, bool bRefresh=false, bool bGPIB=false, bool bSetTempByDLL=false); // golden main.h:1323 (body MainTempMode.cpp, golden main.cpp:21749-21925) -- FAITHFUL, 3 SAFETY GATEs (fSetup->ReadUseSuckModeFile / fOffSet->ReadFile / COM2->ATCInitialTask, all absent tree-wide), see MainTempMode.cpp's own banner
+    // -- end FW-CMD-E ADD --------------------------------------------------------
     TfMain();
     virtual ~TfMain() {}
 };
