@@ -1893,6 +1893,20 @@ add_library(ht9045_sm STATIC
     # both known consumers (csystem.cpp GATE G02, PowerSavingMode.cpp
     # GATE (4)) stay gated, integration is a separate, deliberate wave.
     cTemperFrom.cpp
+    # AI(W906-FW3-TempSet-WA) 20260820: uTemp_Set.cpp + DynamicTemp.cpp --
+    # FW-3 batch-3 close-out (temperature-set dialog: 106/108 methods vs
+    # golden's 108 definition points, ctor emptied into explicit Init(); and
+    # the temp-IC calibration dialog: 26/26) against new forms/fTemp_Set.h /
+    # forms/fDynamicTemp.h facades. Globals are golden-faithful ZERO-INIT
+    # pointers (TfTemp_Set *fTemp_Set; TfDynamicTemp *fDynamicTemp; -- no
+    # static-init ctor, SIOF-safe by construction). All hardware/file writes
+    # sit behind SAFETY gates (S1-S16 in the .cpp banner). Known waiting
+    # consumers stay gated this commit: uHeaterThread.cpp GATE 6
+    # (ControlATC60AirFlow x4), cprod.cpp:3989-4003, and auto9045.cpp's
+    # TU-local W5FA_FTemp_Set stand-in (differently named, no symbol clash;
+    # convergence is a separate behaviour-change wave).
+    uTemp_Set.cpp
+    DynamicTemp.cpp
     # AI(W906-FW3-Speed-WA) 20260819: cSpeed.cpp -- batch-5 cSpeed display
     # side (ctor, FormShow, ReadFile, ReadWriteFile read-arm with the write
     # arm forced off at entry, DoIniDataToForm, FormClose's re-read-refresh)
