@@ -2311,6 +2311,40 @@ endif()
 
 
 # ---------------------------------------------------------------------------
+# Probe library: ht9045_pci1203_probe
+#   AI(W906-1203HAL-2) 20260820: compile-only regression guard for the
+#   user-ruled PCIE-1203 direction. 1203HAL-1 made -DHAVE_PCI1203=1 compile
+#   for the first time (MOTION_IO rename wrap + EtherCAT/AdvMotCompat.h's
+#   ADVCMNAPI/#undef-Direct shims); this target recompiles the six
+#   vendor-consumer TUs under that flag on every build so a future edit
+#   cannot silently regress it back to "explodes on contact".
+#
+#   STATIC on purpose and linked into NOTHING: an archive does not resolve
+#   symbols, so the unresolved Acm_* vendor imports are fine -- linking the
+#   real SDK .lib is 1203HAL-3's problem, compilability is this target's.
+#   The object files are duplicates of ht9045_sm members under a different
+#   flag; because no executable links this archive, no ODR/duplicate-symbol
+#   contact exists.
+# ---------------------------------------------------------------------------
+add_library(ht9045_pci1203_probe STATIC
+    cinitial.cpp
+    IOBackend.cpp
+    MyLaneIo.cpp
+    Motor/myEthercatmotor.cpp
+    EtherCAT/MyEtherCAT.cpp
+    EtherCAT/MyNUEC1.cpp
+    VacuumUnit/MyVacuumPanel.cpp
+)
+target_compile_definitions(ht9045_pci1203_probe PRIVATE HAVE_PCI1203=1)
+target_include_directories(ht9045_pci1203_probe PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/EtherCAT/vendor
+    ${CMAKE_CURRENT_SOURCE_DIR}/Motor/vendor
+    ${CMAKE_CURRENT_SOURCE_DIR}/SECSGEM
+    ${CMAKE_CURRENT_SOURCE_DIR}/third_party/sqlite3
+)
+
+# ---------------------------------------------------------------------------
 # Library: ht9045_webbridge
 #   AI(W906-WebBridge) 20260805: the C++ side of the browser HMI seam --
 #   D:\HT9045\web talks to the handler through this. Design and wire protocol:

@@ -8930,6 +8930,31 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   -DHAVE_PCI1203=1 掛進一個 CMake 探針 target 常態防退化，
   再往 SDK link（ADVMOTBCB.lib→X64 lib 的 MinGW 可連性）走。
 
+## 20260820 上午 II — 1203HAL-2：防退化探針＋SDK 可連性稽核
+
+- **CMake 探針 target**（主迴圈自做）：`ht9045_pci1203_probe` STATIC
+  ——六個 vendor 消費 TU 掛 -DHAVE_PCI1203=1 重編、archive 不連進
+  任何 exe（未解析的 Acm_* 合法、零 ODR 接觸）。進 ALL：每次 gate
+  自動防「1203 編譯路退化」。兩組態 gate 全綠（Debug/Release 各
+  137/142 常駐五項、guard 552 IDENTICAL）。
+- **SDK 稽核**（agent，docs/RECON_1203_SDK_linkability.md）：
+  - SDK＝C:\Program Files (x86)\Advantech\Common Motion，
+    ADVMOT.dll 2.0.15.2（x86＋X64）。**x86 ADVMOT.lib 是標準 COFF
+    import lib，818 匯出中 787 個 _Name@N stdcall 裝飾與 GNU ld
+    慣例逐位元組相同——MinGW 直接可連，零轉檔**。
+  - ADVMOTBCB.lib=Borland OMF（MinGW 讀不懂）但根本不需要；
+    gendef/動態載入備援評估過、用不到。
+  - X64 lib 格式健康（COFF）但釘死的 binutils 2.28 不認 0x8664
+    ——64-bit 牆的具體佐證，不動（x87 忠實度優先）。
+  - 樹內 vendor 標頭與 SDK **逐位元組相同**（僅 SDK 多 BOM）——
+    20260818 recon 的「版本落差」警語已失效（同日稍後已同步）。
+  - runtime：KMDF 驅動套件在（pcie1203s.sys 1.0.21.1）；無卡時
+    Acm_GetAvailableDevs/DevOpen 阻塞 ≥15s（沿用 0818 實測），
+    probe 必包 timeout。
+  - **1203HAL-3 形狀定案**：target_link_libraries 直指
+    Public/ADVMOT.lib（x86）即可解全部符號。易混淆旁支：
+    Public/AdvMotAPI.dll（2.1.2.4）不是同一元件勿選錯。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
