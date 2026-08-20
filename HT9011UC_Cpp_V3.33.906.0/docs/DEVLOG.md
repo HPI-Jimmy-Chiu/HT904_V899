@@ -9270,14 +9270,21 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 
 - **完成**：見上節總結。最新 commit a260b13。基線 142/5（實測 137/142
   常駐五項 ×12 輪雙 gate）。
-- **下一波候選**（20260821 白天）：
+- ~~(f) 台帳補掃~~ **已收（8509e67，LEDGER-R2）**：六筆 ODDITY 入帳
+  （650→656、ODDITY 57→63），md＋html 雙檔逐列一致（656/656 機械計數、
+  標籤配平、CRLF 無損）。**教訓入台帳四輪紀錄**：20260818 後的新鏡射
+  對照樹是 906_20260618 非 V899（同函式兩樹位移 ~70 行，agent 先誤後正
+  據實揭露）。
+- ~~(m) forms→core 連結邊~~ **已收（73255ec）**：宣告化 PUBLIC 邊
+  （AGV_predicates 同型；core 只達 vclcompat/public，無環）。
+- ~~(k) FW-SETUP-C 解閘~~ **已收（a260b13）**。
+- **下一波候選（20260821 白天，夜間可自動項已清空）**：
   (e) FW 前端波：temp.mode 原始碼值（2）vs web mock 字串（"Hot Mode"）
       的格式化決策＋uTemp_Set/DynamicTemp layout 渲染驗證（人工 F5）；
-  (f) 台帳二輪 QUIRK 補掃；
-  (l) fSetup 佇列 29 方法的下一批（ctor 陣列建置波是解鎖大宗的前置：
-      TestSiteCH[][]/MyTempRGBox[]——需 Init() 慣例＋TScrollBar 設計決策，
-      後者半設計面）；
-  (m) forms→core 未宣告連結邊修正（CMakeLists，AGV_predicates 同型）；
+  (l) fSetup 佇列 29 方法下一批（前置＝ctor 陣列建置波：TestSiteCH[][]/
+      MyTempRGBox[]，卡 TScrollBar 元件設計＝半設計面）；
   (d) 設計面（InstallColorBinDisplay＋MN200、mot_table HAL、TScrollBar
       vclcompat 元件設計）留使用者。
-- **設計面**：無待答（TScrollBar 元件設計建議與使用者同步後開）。
+- **設計面**：TScrollBar 元件設計、temp.mode 顯示格式化——建議與使用者
+  同步後開；其餘無待答。
+- **loop 狀態**：夜間佇列全清，loop 轉待命（心跳續掛守衛）。
