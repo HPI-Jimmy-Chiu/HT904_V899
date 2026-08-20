@@ -62,7 +62,7 @@
 //  entries (this is real, reachable substrate whose OWN header is
 //  build-flag-conditional, not a missing-type/missing-member gap).
 #if HAVE_PCI1203
-#include "AdvMotApi.h"               // READ-ONLY vendor header (pulls in AdvMotDev.h/AdvMotDrv.h/
+#include "EtherCAT/AdvMotCompat.h"            // AI(W906-1203HAL-1) 20260820: ADVCMNAPI shim -> vendor AdvMotApi.h (pulls in AdvMotDev.h/AdvMotDrv.h/
                                     //   AdvMotPropID.h/AdvMotErr.h itself) -- Acm_DaqDoSetBitEx/
                                     //   Acm_DaqDoGetBitEx/Acm_DaqDiGetBitEx/Acm_DevWriteSDOData/
                                     //   ECAT_TYPE_I16, same single-include idiom EtherCAT/

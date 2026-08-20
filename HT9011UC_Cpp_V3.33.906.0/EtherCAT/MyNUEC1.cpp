@@ -42,7 +42,7 @@
 //  explains why the "EtherCAT/"-prefixed form is wrong). This file and
 //  IOBackend.cpp/MyLaneIo.cpp had independently kept the wrong form; all
 //  three fixed together, see those files' own AI(W906-PCI1203-IncludeFix) notes.
-#include "AdvMotApi.h"           // READ-ONLY vendor header (Acm_Dev*/Acm_Daq*, SUCCESS,
+#include "EtherCAT/AdvMotCompat.h"        // AI(W906-1203HAL-1) 20260820: ADVCMNAPI shim -> vendor AdvMotApi.h (Acm_Dev*/Acm_Daq*, SUCCESS,
                                  // ECAT_TYPE_I16/U16/BOOL -- pulled in transitively from
                                  // AdvMotDev.h/AdvMotDrv.h/AdvMotPropID.h/AdvMotErr.h)
 #endif

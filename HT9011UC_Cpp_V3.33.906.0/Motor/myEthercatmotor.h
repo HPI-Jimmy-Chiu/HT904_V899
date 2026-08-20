@@ -66,8 +66,11 @@
 #include "myTimer.h"                // TQPF_Timer -- substitutes golden's HTimer (see banner above)
 
 #if HAVE_PCI1203
-#include "AdvMotDrv.h"
-#include "AdvMotApi.h"
+// AI(W906-1203HAL-1) 20260820: single compat include -- AdvMotApi.h pulls
+// AdvMotDrv.h in itself, and the shim supplies ADVCMNAPI for MinGW and
+// #undef's the vendor's poisonous generic-name macro (`Direct`). Golden's
+// two-line include pair (:8-9) is preserved semantically, not textually.
+#include "EtherCAT/AdvMotCompat.h"
 #else
 #include <windows.h>                // UINT_PTR
 #ifndef HAND

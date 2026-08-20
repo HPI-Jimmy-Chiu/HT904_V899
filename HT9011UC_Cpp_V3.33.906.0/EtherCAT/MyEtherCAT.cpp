@@ -111,7 +111,7 @@
 //  and unresolvable here: this tree stages the read-only Advantech headers under
 //  EtherCAT/vendor/ to keep them visibly separate from ported code, and that
 //  directory is on the include path (root CMakeLists.txt, ht9045_motor).
-#include "AdvMotApi.h"           // READ-ONLY vendor header (Acm_Dev*/Acm_Daq*, SUCCESS,
+#include "EtherCAT/AdvMotCompat.h"        // AI(W906-1203HAL-1) 20260820: ADVCMNAPI shim -> vendor AdvMotApi.h (Acm_Dev*/Acm_Daq*, SUCCESS,
                                  // DEVLIST, U32/U16/ULONG, EC_SLAVE_STATE_OP,
                                  // EVT_DEV_DISCONNET/EVT_DEV_IO_DISCONNET,
                                  // FT_MasCyclicCnt_R0/R1, FT_DevAxesCount,

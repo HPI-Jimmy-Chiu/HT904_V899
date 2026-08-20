@@ -87,7 +87,14 @@
 #define myMN200motorH
 
 #include "HTMotor.h"
+// AI(W906-1203HAL-1) 20260820: MOTION_IO rename wrap -- see MachineDefine.h's
+// note (the MN200 side yields the global typedef name to Advantech per the
+// 20260819 1203-first ruling). Tree code spells it MN200_MOTION_IO.
+#define MOTION_IO  MN200_MOTION_IO
+#define PMOTION_IO MN200_PMOTION_IO
 #include "MN200.h"
+#undef MOTION_IO
+#undef PMOTION_IO
 #include "database.h"
 const int MAXRing=4;      //Steven 20140828 : 2 --> 4 for XY-Pitch
 const int MAXIP=64;

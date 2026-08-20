@@ -92,7 +92,16 @@
 // The vendor headers are READ-ONLY (AGENTS.md forbidden-to-modify list).  They
 // are included, never edited: including them is exactly what makes the compiler
 // check every signature below against the declaration the CALLERS see.
+// AI(W906-1203HAL-1) 20260820: MOTION_IO rename wrap -- see Motor/myMN200motor.h's
+// note (MN200 yields the global typedef name to Advantech per the 20260819
+// 1203-first ruling). This TU includes the vendor header DIRECTLY (the
+// MachineDefine.h umbrella's vendor block is #if 0 in this tree), so the wrap
+// must live here for the mn_get_mdio_status stub signature below.
+#define MOTION_IO  MN200_MOTION_IO
+#define PMOTION_IO MN200_PMOTION_IO
 #include "Motor/vendor/mn200.h"      // mn_*/mn200_* + SUCCESS/ERROR_NO_CARD_FOUND
+#undef MOTION_IO
+#undef PMOTION_IO
 #include "Motor/vendor/CMNet.h"      // _mnet_* ring/M4/M204 API
 #include "Motor/vendor/CMNETError.h" // ERR_Invalid_Hardware
 #include "Motor/vendor/PCI_L112.h"   // _l112_open
@@ -122,7 +131,7 @@ short __stdcall mn_get_dev_info(BYTE bLineNo, BYTE bDevNo, BYTE* pData) { return
 short __stdcall mn_get_enccounter(BYTE bLineNo, BYTE bDevNo, long* pData) { return ERROR_NO_CARD_FOUND; }
 short __stdcall mn_get_error_status(BYTE bLineNo, BYTE bDevNo, DWORD* pData) { return ERROR_NO_CARD_FOUND; }
 short __stdcall mn_get_line_status(BYTE bLineNo, WORD* pData) { return ERROR_NO_CARD_FOUND; }
-short __stdcall mn_get_mdio_status(BYTE bLineNo, BYTE bDevNo, MOTION_IO* MotionIO) { return ERROR_NO_CARD_FOUND; }
+short __stdcall mn_get_mdio_status(BYTE bLineNo, BYTE bDevNo, MN200_MOTION_IO* MotionIO) { return ERROR_NO_CARD_FOUND; }   //AI(W906-1203HAL-1) 20260820: renamed typedef (MachineDefine.h wrap)
 short __stdcall mn_get_slave_error_table(BYTE bLineNo, DWORD ErrorTable[]) { return ERROR_NO_CARD_FOUND; }
 short __stdcall mn_home_search(BYTE bLineNo, BYTE bDevNo, SPEED_PAR SpeedPar, BYTE bDirection, long OrgWidth, BYTE bHomeMode, BYTE bEZcount) { return ERROR_NO_CARD_FOUND; }
 short __stdcall mn_linen_move(BYTE bLineNo, BYTE bDevNo[], SPEED_PAR SpeedPar, long DevPos[], BYTE bNumDev) { return ERROR_NO_CARD_FOUND; }

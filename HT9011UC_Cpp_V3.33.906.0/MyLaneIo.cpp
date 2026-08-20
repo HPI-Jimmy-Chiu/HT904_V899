@@ -117,7 +117,7 @@ extern bool bPLCIO[2048][8];
 //  probe build 20260818. Same fix applied to EtherCAT/MyNUEC1.cpp and
 //  IOBackend.cpp, which had the identical typo; EtherCAT/MyEtherCAT.cpp:114
 //  already used the correct bare form.
-#include "AdvMotApi.h"            // READ-ONLY vendor header
+#include "EtherCAT/AdvMotCompat.h"         // AI(W906-1203HAL-1) 20260820: ADVCMNAPI shim -> vendor AdvMotApi.h
 #ifndef SUCCESS
 #define SUCCESS 0UL
 #endif

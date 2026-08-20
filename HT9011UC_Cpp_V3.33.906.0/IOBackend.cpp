@@ -77,7 +77,15 @@ int TSimIOBackend::ReadByte(int Ring, int IP, int Port, unsigned char *Value)
 //  (MyLaneIo.cpp:151-158 / .cpp:218-224 / .cpp:287-289 / .cpp:405-408 / .cpp:474-476)
 // ---------------------------------------------------------------------------
 #if HAVE_MN200
+// AI(W906-1203HAL-1) 20260820: MOTION_IO rename wrap -- this TU is the one
+// place that legitimately includes BOTH vendor stacks (MN200 above,
+// AdvMotApi below under HAVE_PCI1203), which is exactly where the global
+// typedef collision fires. See MachineDefine.h's note; MN200 yields the name.
+#define MOTION_IO  MN200_MOTION_IO
+#define PMOTION_IO MN200_PMOTION_IO
 #include "Motor/mn200.h"    // READ-ONLY vendor header
+#undef MOTION_IO
+#undef PMOTION_IO
 
 int TMN200Backend::WriteBit(int Ring, int IP, int Port, int Bit, int Value)
 {
@@ -125,7 +133,7 @@ int TMN200Backend::ReadByte (int /*Ring*/, int /*IP*/, int /*Port*/, unsigned ch
 //  build 20260818. Same fix applied to EtherCAT/MyNUEC1.cpp and MyLaneIo.cpp,
 //  which had the identical typo; EtherCAT/MyEtherCAT.cpp:114 already used the
 //  correct bare form.
-#include "AdvMotApi.h"           // READ-ONLY vendor header
+#include "EtherCAT/AdvMotCompat.h"        // AI(W906-1203HAL-1) 20260820: ADVCMNAPI shim -> vendor AdvMotApi.h
 
 int TPci1203Backend::WriteBit(int Ring, int IP, int Port, int Bit, int Value)
 {

@@ -8902,6 +8902,34 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - THandlerSystem 仍 INTEGRATION-PENDING（無 extern 實例）——
   GetCustomerName 尚無消費者，未來接 SECS/GEM 或 web tag。
 
+## 20260820 上午 — 1203HAL-1：HAVE_PCI1203=1 編譯之路打通（主迴圈自做）
+
+- 使用者優先方向（20260819「906 優先完善 PCIE-1203」）的第一顆：
+  先前 `-DHAVE_PCI1203=1` 秒炸，剝了三層洋蔥後**六個 vendor 消費
+  TU 全綠**（cinitial/IOBackend/myEthercatmotor/MyEtherCAT/MyLaneIo/
+  MyVacuumPanel）：
+  1. **MOTION_IO 撞名**（KNOWLEDGE 既有診斷）：兩家 vendor 都在全域
+     typedef MOTION_IO/PMOTION_IO。修法＝MN200 include 點 rename wrap
+     （`#define MOTION_IO MN200_MOTION_IO` 夾 include；struct tag
+     _MOTION_DEV_IO 不動＝跨 TU 型別同一性保持）。**量測更正了
+     裁決時的 pimpl 定向**：IOBackend.cpp 是「合法同時要兩家 API」
+     的雙後端 TU，pimpl 救不了它，rename 是必要機制（仍在 MN200
+     側讓名，符合 1203-first 裁決精神）。附帶發現：MachineDefine.h
+     的傘狀 vendor 區整段在 #if 0（golden 歷史紀錄）——第一版 wrap
+     改在它裡面是無效編輯，已撤回；真正餵入點是各 TU 直接 include。
+  2. **ADVCMNAPI**：AdvMotApi.h:137 守衛只認 _MSC_VER→MinGW 下
+     657 個 `U32 ADVCMNAPI Acm_*` 全爆。vendor 檔自帶 #ifndef 尊重
+     預定義→新 shim `EtherCAT/AdvMotCompat.h`（唯一核可 include 點，
+     六處換裝；注意 EtherCAT/ 不在 include path，要用 root 相對拼法）。
+  3. **`#define Direct 3` 毒巨集**（AdvMotDrv.h:858）：generic 名
+     撞 csystem.h:162/atester_shims.h:66 的參數名。樹內零 vendor
+     常數用途（grep 坐實）→shim 收尾 #undef Direct，兄弟三個
+     （AbsSwitch/LmtSwitch/RefPulse）同類陷阱留註記。
+- 預設組態（HAVE_PCI1203=0）行為零變更（rename 只是拼法、shim 內容
+  等價）；雙 gate 驗證中。下一步（1203HAL-2）：真的把
+  -DHAVE_PCI1203=1 掛進一個 CMake 探針 target 常態防退化，
+  再往 SDK link（ADVMOTBCB.lib→X64 lib 的 MinGW 可連性）走。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8911,14 +8939,17 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
 - **批 5 全清＋user.level（FW-1d）＋recipe.current（FW-1e）接通**。
-  BinDisCtrl 鏈、cShowBinSelect A-E、rgCustomerList 全收。
-  **下一波**依脈絡擇一：(a) bin.* 解鎖（SetTechDataToProd 呼叫者
-  harness 決策）；(b) 1203 HAL MOTION_IO pimpl；(c) vclcompat 擴充
-  收斂波（TStringGrid 欄位五處 subclass＋TScrollBar/TImage/TWMKey）；
-  (d) InstallColorBinDisplay＋MN200 c/e 同波接線（半設計面，
-  宜留使用者裁決）。真機類依 §7 仍佇列。
-- **brief 規則追加**：「不准 build.bat/ctest/背景行程」要放 brief
-  硬規則首行（rgCustomerList 波代理越界跑了 build+gate 後自揭）。
+  BinDisCtrl 鏈、cShowBinSelect A-E、rgCustomerList、
+  **1203HAL-1（HAVE_PCI1203=1 六 TU 編譯打通）**全收。
+  **下一波**依脈絡擇一：(a) 1203HAL-2：CMake 掛 -DHAVE_PCI1203=1
+  探針 target 常態防退化＋SDK lib（ADVMOTBCB/X64）MinGW 可連性
+  稽核；(b) bin.* 解鎖；(c) vclcompat 擴充收斂波；
+  (d) InstallColorBinDisplay＋MN200 c/e 接線（半設計面留使用者）。
+  真機類依 §7 仍佇列。
+- **brief 規則追加**：「不准 build.bat/ctest/背景行程」放 brief
+  硬規則首行（rgCustomerList 波代理越界自揭）。
+- **使用者新規（20260820，已入 memory）**：執行過程有問題且解決
+  信心 ≥95% 就直接修復再回報，不停下請示。
 - **FW-1 備忘**：pct 六顆等 sort.total 站穩後接；recipe.current/
   user.level 來源鏈未查（可能落在未翻的 cConfiguration）；
   tagmap.js 的 data-cmd 十筆結構性缺口要跟 web 前端波一起解；

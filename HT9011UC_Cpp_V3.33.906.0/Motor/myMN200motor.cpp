@@ -619,7 +619,7 @@ int TMyMN200Motor::ReadPos()                                                    
 //==============================================================================
 void TMyMN200Motor::ScanMotorStatus(bool *Led)                                  // motor status //
 {
-    MOTION_IO MotionIO;
+    MN200_MOTION_IO MotionIO;                                                    //AI(W906-1203HAL-1) 20260820: renamed typedef, see myMN200motor.h wrap
     int ret;
 
     if(Enable==true)                                                            //Steven 20141016 : Disable時,不要掃LED
@@ -788,7 +788,7 @@ bool TMyMN200Motor::MN200MotHome()
 {
     int &Task=iHomeObjectTask;
     int Status=0;
-//    MOTION_IO MotionIO;
+//    MN200_MOTION_IO MotionIO;
     switch(Task)
     {
         case 1:
@@ -1006,7 +1006,7 @@ void TMyMN200Motor::SetEncodeMultiple(int iMultiple)
 //==============================================================================
 bool TMyMN200Motor::HomeFlag(void)
 {
-    MOTION_IO Status;
+    MN200_MOTION_IO Status;                                                      //AI(W906-1203HAL-1) 20260820: renamed typedef, see myMN200motor.h wrap
     int ret=0;
     ret=mn_get_mdio_status(iBoardID, iPortID, &Status);
     GetMN200ErrorMessage(ret, "mn_get_mdio_status");
