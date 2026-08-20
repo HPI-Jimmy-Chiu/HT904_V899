@@ -9109,3 +9109,52 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   ATCInitialTask/IsConnect）都在別的檔寫入邊界，逐一補齊時要動
   fMain.h/fLotInfo.h/acarry_shims.h/atester_shims.h。
 - **設計面**：無待答。
+
+## 20260820 夜間 — FW-TEMP1＋FW-TEMP2：temp.* tag 家族（recon → 三顆接通）
+
+- **FW-TEMP1（7e2384a，recon-only）**：12 顆 temp 家族 tag 逐一量測。
+  「nothing writes it」宣稱在 FW3-TempSet 後已過期——真相是「來源層有寫入者、
+  可達性層全斷」：heater thread 從未啟動（Resume() 是文件化 no-op）、
+  其餘寫入端在 #if 0。宣稱全數改寫附 20260820 量測；test_wb_tags
+  mustBeNull 3→12 顆全家族。agent 依 brief「不准繞」字面不接線——
+  **brief 比已 commit 的 FW-BIN1 前例更嚴，是 brief 錯**（scratch-redirect
+  是既定保護模式），照實記入 commit。
+- **FW-TEMP2（ca4b03a，接線）**：temp.sv/soak/mode 在 FW-BIN1 的 DataPath
+  scratch-redirect 窗內接通（fTemp_Set 實例化＋Init()＋ReadTempFile(true)，
+  liveness=golden 自己的 iSendChangeTempError 缺檔信號；stageDouble 用現成
+  makeDouble）。temp.pv／zone.* 8 顆維持誠實 null。
+- **e2e 抓到兩顆 gate 抓不到的雷**（ctest 不 boot wb_serve 鏈）：
+  1. SEGV @ DoIniDataToForm——agent 的 Init() 稽核只掃 ReadTempFile 自身
+     span，漏掉它鏈到 DoIniDataToForm（myTempPal 20 處＋全部 Init() 陣列）。
+     修：boot 鏈補 fTemp_Set->Init()（稽核證實純記憶體）。
+     **教訓：呼叫鏈稽核必須含被呼叫者，不能只掃自身 span。**
+  2. vector::at out_of_range @ TStringGrid——golden 用 .dfm streaming 給
+     sgTjMap 17×2／sgDefrostStatus 2×7，facade 預設 ctor 是 5×5。
+     修：ctor 尺寸照 fBinSel.h:576 慣例。**教訓：表單波的 StringGrid 類
+     widget 一律要從 dfm 抄尺寸進 NSDMI，預設尺寸是靜默地雷。**
+- **第三顆雷記錄未修（佇列）**：gdb 的 NT debug heap 讓
+  ATCInterface.cpp:207 的 eager `new TATCInterfaceForm(NULL)`（PT-W3 改編，
+  golden 是裸指標）在靜態初始化跑 ATC60System::NewSocket()，讀**未初始化**
+  的 clientsocket 成員→SEGV；正常跑靠新鮮零頁存活（SIOF 樂透實錄）。
+  除錯 workaround：`_NO_DEBUG_HEAP=1`。修法候選：ctor 成員零初始化
+  （fidelity 問題，golden 同樣潛在未初始化）或 eager-new 退回裸指標＋
+  消費端 NULL guard——留獨立波。
+- **gate**：雙全新 dir（build_fwtemp2g/r）＋修復後 re-gate：兩組態皆
+  137/142，失敗集合逐項＝常駐五項。guard 552 IDENTICAL（含兩次崩潰 boot）。
+  e2e：ws_probe 200＋101＋accept-key 重算相符＋snapshot 117 tags/58 live；
+  temp.sv=25／soak=90／mode=2 真值上線。
+- **活 tag 數**：58/96（機器來源，wb_serve --dry 快照實測）＋3 本波。
+
+### 🔖 RESUME（最新）
+
+- **完成**：FW-3 批 1-5 全清；temp.* 家族收斂（3 接通＋9 誠實 null 附證據）。
+  最新 commit：ca4b03a。基線 142/5（g/r 皆 137/142 常駐五項）。
+- **下一波候選**（20260820 夜間重評）：
+  (a) **SIOF 地雷修復波**——ATCInterface.cpp:207 eager-new＋NewSocket 未初始化
+      成員（上節），行為變更獨立 commit，含「哪些 exe 抽取該 TU」的 nm 量測；
+  (b) Tech.* 教導鏈 recon（SetTechDataToProd 其餘七成員載入鏈讀寫性）；
+  (c) TempSet 後續（GATE 6 解閘＋stand-in 收斂，見上節備忘）；
+  (d) 設計面（InstallColorBinDisplay＋MN200、mot_table HAL）留使用者。
+- **教訓入政策**：表單波 brief 要加「StringGrid/尺寸類 widget 從 dfm 抄
+  尺寸」；稽核「X 不依賴 Y」必須含呼叫鏈被呼叫者。
+- **設計面**：無待答。
