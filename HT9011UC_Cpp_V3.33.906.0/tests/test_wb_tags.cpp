@@ -116,17 +116,21 @@ int main()
         check(cust.isInt() && cust.asInt() != 0,
               "machine.customerCode carries a REAL value");
 
-        // The load-bearing negative. Temperature.* now HAS a translated loader
-        // (ReadTempFile) but it is unsafe to call from host boot (disk-write
-        // risk -- WebBridgeTags.h AI(W906-FW-TEMP1) 20260820), and UN150Read[]
-        // stays measurably unreachable offline (same block), so all 12 of the
-        // temp/zone family MUST be null. If this ever reports 0 instead, the
-        // browser will draw "0.00" for a heater zone nobody read.
-        //AI(W906-FW-TEMP1) 20260820: widened from a 3-of-8 zone.* spot-check to
-        // all 8, plus the 4 temp.* tags -- full coverage of the family this
-        // wave re-audited, not a partial sample of it.
+        // The load-bearing negative. UN150Read[] stays measurably unreachable
+        // offline (WebBridgeTags.h AI(W906-FW-TEMP1)/(FW-TEMP2) blocks), so
+        // temp.pv and all 8 zone.* tags MUST be null here -- LoadMachineConfig()
+        // alone does not touch them (that needs g_webTempLoaded/SetWebTempLoaded,
+        // exercised separately in section 6 below). If this ever reports 0
+        // instead, the browser will draw "0.00" for a heater zone nobody read.
+        //AI(W906-FW-TEMP2) 20260820: temp.sv/temp.soak/temp.mode REMOVED from
+        // this array -- they are no longer a dead-source claim, they are a
+        // gated-but-not-yet-gated-open one in THIS test flow (g_webTempLoaded
+        // defaults false here since nothing in this section calls
+        // SetWebTempLoaded). Testing them here would conflate "genuinely
+        // unreachable source" with "reachable source, not loaded in this
+        // flow" -- section 6 below is the correct, separate test for them.
         const char* mustBeNull[] = {
-            "temp.pv", "temp.sv", "temp.soak", "temp.mode",
+            "temp.pv",
             "zone.hotplate.1", "zone.hotplate.2",
             "zone.shuttle.1",  "zone.shuttle.2",
             "zone.index.1",    "zone.index.2",
@@ -214,6 +218,57 @@ int main()
               "sort.fix2.count reads BinCT[0][e3Fix2==4] gated by iTrayType[eFix2==7] (cSortCT.cpp:396/:399)");
         check(a2.isNull(),
               "an unconfigured station (iTrayType==tNotUse) publishes null even with a live blob");
+    }
+
+    // --- 6. FW-TEMP2: temp.sv/soak/mode gate on g_webTempLoaded --------------
+    //AI(W906-FW-TEMP2) 20260820: direct-write oracle, same shape as sections 4
+    // and 5 -- tests may write machine globals directly; production code may
+    // not. Pins three things: (a) temp.sv/temp.soak carry the REAL double
+    // values, not truncated ints; (b) temp.mode carries the RAW ini code
+    // (not a decoded label -- this file never had one to decode, see
+    // WebBridgeTags.h); (c) the gate is a real gate -- flipping
+    // g_webTempLoaded back to false must return all three to null even
+    // though the underlying globals still hold the values, proving liveness
+    // is keyed on the flag wb_serve sets, not on the fields being nonzero.
+    {
+        Temperature.fWorkTemperBase = 82.5;
+        Temperature.fSoakTime       = 12.0;
+        Temperature.iMachineTempMode = 1;             // Ambient, ReadTempFile :2248-2264
+        ht9045::SetWebTempLoaded(true);
+
+        TagSnapshot snap;
+        ht9045::PublishHandlerTags(snap);
+        const TagSnapshotView v = snap.read();
+
+        const TagValue& sv   = v.tags.find("temp.sv")->second;
+        const TagValue& soak = v.tags.find("temp.soak")->second;
+        const TagValue& mode = v.tags.find("temp.mode")->second;
+        std::printf("\n-- 6. FW-TEMP2 oracle: temp.sv=%s temp.soak=%s temp.mode=%s\n",
+                    sv.debugString().c_str(), soak.debugString().c_str(),
+                    mode.debugString().c_str());
+        check(sv.isDouble() && sv.asDouble() == 82.5,
+              "temp.sv carries the REAL double (Temperature.fWorkTemperBase), not truncated to int");
+        check(soak.isDouble() && soak.asDouble() == 12.0,
+              "temp.soak carries the REAL double (Temperature.fSoakTime)");
+        check(mode.isInt() && mode.asInt() == 1,
+              "temp.mode carries the RAW ini code (iMachineTempMode), not a guessed label");
+
+        ht9045::SetWebTempLoaded(false);
+        TagSnapshot snap2;
+        ht9045::PublishHandlerTags(snap2);
+        const TagSnapshotView v2 = snap2.read();
+        check(v2.tags.find("temp.sv")->second.isNull() &&
+              v2.tags.find("temp.soak")->second.isNull() &&
+              v2.tags.find("temp.mode")->second.isNull(),
+              "temp.sv/soak/mode go back to null when g_webTempLoaded is false, "
+              "even though the underlying globals still hold real values -- "
+              "the GATE is what publishes, not the field's own nonzero-ness");
+
+        // hygiene: don't leave a nonzero Temperature struct behind for any
+        // later coverage/canary check in this same process to trip over.
+        Temperature.fWorkTemperBase = 0.0;
+        Temperature.fSoakTime       = 0.0;
+        Temperature.iMachineTempMode = 0;
     }
 
     CloseGeneralIniFile();

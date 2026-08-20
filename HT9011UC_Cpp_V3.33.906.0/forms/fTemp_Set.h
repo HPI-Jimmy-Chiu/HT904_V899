@@ -1377,7 +1377,11 @@ public:
     TLabel *Label42 = new TLabel();
     TEdit *edtInputVLow = new TEdit();
     TEdit *edtInputVHigh = new TEdit();
-    TStringGrid *sgTjMap = new TStringGrid();
+    //AI(W906-FW-TEMP2) 20260820: dims from golden uTemp_Set.dfm (ColCount=17,
+    // RowCount=2) -- golden streamed them; the default-ctor grid was 5x5 and
+    // DoIniDataToForm's Cells[TjMap] writes threw vector::at out_of_range at
+    // wb_serve e2e (gdb bt). Same ctor-dims convention as fBinSel.h:576.
+    TStringGrid *sgTjMap = new TStringGrid(/*cols*/17, /*rows*/2);
     TRadioGroup *rgTjMapType = new TRadioGroup();
     TRadioGroup *rgATC60AirOn = new TRadioGroup();
     TLabel *labReadyTempRange = new TLabel();
@@ -1399,7 +1403,9 @@ public:
     TTabSheet *tsTriTempSet = new TTabSheet();
     TGroupBox *gbDefrostFunction = new TGroupBox();
     TGroupBox *GroupBox3 = new TGroupBox();
-    TStringGrid *sgDefrostStatus = new TStringGrid();
+    //AI(W906-FW-TEMP2) 20260820: dims from golden uTemp_Set.dfm (ColCount=2,
+    // RowCount=7, FixedCols=0) -- same streamed-dims gap as sgTjMap above.
+    TStringGrid *sgDefrostStatus = new TStringGrid(/*cols*/2, /*rows*/7);
     TGroupBox *GroupBox4 = new TGroupBox();
     TButton *btnDefrostStart = new TButton();
     TButton *btnDefrostEnd = new TButton();

@@ -40,14 +40,25 @@
 //                                               (12,358 non-zero bytes)
 //            HSys.*                             420 keys from Gerneral.ini
 //
-//    DEAD    Temperature.*                      HAS a translated loader now
-//                                               (ReadTempFile, uTemp_Set.cpp
-//                                               :2172-3143) but it is UNSAFE
-//                                               to call from host boot -- see
-//                                               AI(W906-FW-TEMP1) 20260820
-//                                               below. Not "nothing writes
-//                                               it" any more; "no safe writer
-//                                               reaches it from a boot chain".
+//    LIVE    Temperature.fWorkTemperBase/       via ReadTempFile, called at
+//            fSoakTime/iMachineTempMode         wb_serve boot inside the SAME
+//                                               DataPath-redirected window
+//                                               bin.* already uses -- see
+//                                               AI(W906-FW-TEMP2) 20260820
+//                                               below. FW-TEMP1's "unsafe,
+//                                               do not wire" verdict for
+//                                               THESE THREE fields was
+//                                               overruled by the main loop:
+//                                               it was stricter than the
+//                                               already-shipped bin.*
+//                                               precedent, which protects
+//                                               the exact same shared write
+//                                               risk the same way.
+//    DEAD    every other Temperature.* field    ReadTempFile writes ~90
+//                                               fields; only the 3 above are
+//                                               staged. The rest have a real
+//                                               loader too now but no tag
+//                                               reads them yet.
 //            IniConfig numeric/bool flags       loaded by cConfiguration.cpp,
 //                                               which is untranslated (7,808
 //                                               golden lines).  Only the few
@@ -70,37 +81,22 @@
 //  the previous wave's blanket claim -- measured this wave, not assumed:
 //
 //   (a) temp.sv/soak/mode  (Temperature.fWorkTemperBase/fSoakTime/
-//       iMachineTempMode, cprod.h:1377/1378/1392) -- FW3-TempSet (commit
-//       c60e9f4) landed uTemp_Set.cpp's ReadTempFile as a FAITHFUL, ACTIVE
-//       translation (golden :1976-3143 -> port uTemp_Set.cpp:2172-3143), so
-//       these fields ARE assignable today. But ReadTempFile is not a safe
-//       thing to call from a host boot chain:
-//         * uTemp_Set.cpp:2191 `MyForceDirectories(szDir)` unconditionally
-//           creates a directory on disk, before even the FileExists check
-//           three lines later -- not gated on any missing-key condition, it
-//           just always runs.
-//         * dozens of fields (fSoakTime :2331, bUseAbitCHK :2275, fAbitTemp
-//           :2278/:2280, ...) are read via `CheckAndReadIniData`
-//           (common.cpp:432-464), the SAME missing-key-seeds-a-WriteXxx
-//           pattern already on record for Gerneral.ini and for BinSelect's
-//           Binasgn*.Data (docs/RECON_binstar_datasource.md section 2g) --
-//           this repo's "counter.clear precedent" for real file writes.
-//         * The target file is `DataPath+recipe+"Temperature.Data"`, a THIRD
-//           hardcoded shared production path (DataPath="D:\\HT9045\\IniData\\
-//           Data\\", common.cpp:104) that --dry does not redirect for this
-//           tool the way it redirects asGeneralPath.
-//       Per this wave's explicit brief, any chain with counter.clear-style
-//       write-on-missing-key behaviour does NOT get wired into host boot,
-//       full stop -- no scratch-redirect workaround this time (contrast
-//       bin.*, which got one). Verified NO OTHER reachable path sets these
-//       three fields without an external trigger: the only other writers are
-//       Automation/auto9045.cpp:902/923 and Command.cpp:9526-9551 and
-//       SECSGEM/uHGemHT9045.cpp:3443-3447 (all parse an incoming command/SECS
-//       message -- a live round-trip, not a boot-time load) and
-//       ProductionInfo/uPAT_Function.cpp:1829-1830 (reads a `temp` struct
-//       from a PAT-function source, also not a boot load). So temp.sv/soak/
-//       mode stay null -- but the honest reason is "no safe loader exists
-//       yet", not "nothing writes it".
+//       iMachineTempMode, cprod.h:1377/1378/1392) -- SUPERSEDED 20260820, see
+//       AI(W906-FW-TEMP2) below. FW3-TempSet (commit c60e9f4) landed
+//       uTemp_Set.cpp's ReadTempFile as a FAITHFUL, ACTIVE translation
+//       (golden :1976-3143 -> port uTemp_Set.cpp:2172-3143). This wave's
+//       first pass (FW-TEMP1) found real write risk in it -- unconditional
+//       `MyForceDirectories(szDir)` (:2191) before even the FileExists check,
+//       and dozens of fields read via `CheckAndReadIniData`'s missing-key-
+//       seeds-a-write pattern -- and refused to wire it on that basis alone.
+//       That refusal was ITSELF WRONG, per the main-loop's same-day review:
+//       FW-BIN1's recipe-folder scratch-copy (already shipped, wb_serve.cpp)
+//       redirects `DataPath` for the WHOLE run, and Temperature.Data lives in
+//       that exact same folder -- so ReadTempFile's writes already land in
+//       scratch, identically to BinSelect's. FW-TEMP1's "no scratch-redirect
+//       workaround this time" was a stricter bar than the shipped precedent,
+//       not a new, independently-justified one. See AI(W906-FW-TEMP2) for the
+//       corrected wiring and the Init()-dependency audit that went with it.
 //
 //   (b) temp.pv + the 8 zone.* tags (UN150Read[tc*], cmydef.cpp:2768) --
 //       genuinely dead, confirmed three independent ways:
@@ -129,6 +125,48 @@
 //  tests/test_temperfrom_core.cpp); `Grep "SOFT_SIMULTE" MachineType.h`
 //  (commented at :48); `Read uTemp_Set.cpp:2172-2340` (ReadTempFile head);
 //  `Read uHeaterThread.cpp:330-415` (THeaterThread::Execute/Resume).
+//
+//  AI(W906-FW-TEMP2) 20260820: temp.sv/soak/mode WIRED, per the main-loop
+//  ruling in AI(W906-FW-TEMP1)(a) above. wb_serve.cpp calls
+//  `fTemp_Set->ReadTempFile(true)` inside the SAME `if (pathReady)` /
+//  DataPath-redirected block bin.* already uses (golden boot shape:
+//  main.cpp:8868, `TfMain::DoReadLastData`'s `fTemp_Set->ReadTempFile(true)`;
+//  the wb_serve.cpp call site carries the full evidence, not repeated here).
+//
+//  `fTemp_Set` is lazily `new`'d there (`TfTemp_Set *fTemp_Set;` is a
+//  zero-initialized BSS global, uTemp_Set.cpp:220-274 -- the ctor is
+//  fields-only, matching this tree's established
+//  new-a-facade-global-at-first-use idiom, e.g. fBinSel/fShowBinSelect,
+//  cBinSel.cpp:150 / cShowBinSelect.cpp:159).
+//
+//  Init() (uTemp_Set.cpp:281-597, golden ctor body :95-408) is DELIBERATELY
+//  NOT CALLED -- audited both directions this wave: Init() itself does zero
+//  file/hardware I/O and zero fMain/other-form dereferences (safe to call),
+//  but ReadTempFile does not read anything Init() populates (myTempPal[]/
+//  listNormal/listArm1/listArm2/ATCOffsetEdit[]/etc. -- zero hits grepping
+//  ReadTempFile's span for any of them); every widget ReadTempFile DOES touch
+//  (rgTemperatureMode/edChillerTemp/cbbATC_RecipeFile/rgIndexHeatMode) is
+//  NSDMI'd in forms/fTemp_Set.h (`= new T...()`), so each is already live the
+//  moment `new TfTemp_Set()` runs. Calling Init() anyway would be unused
+//  surface, against the same minimal-footprint precedent bin.* set.
+//
+//  Liveness: `g_webTempLoaded` (SetWebTempLoaded), set from golden's OWN
+//  "file missing" signal `iSendChangeTempError` (uTemp_Set.cpp:2200) rather
+//  than from "did we reach the call" -- Temperature.Data can be absent from
+//  an otherwise-valid recipe folder even when Binasgn.Data is present, so
+//  bin.*'s cruder `pathReady` signal is not precise enough to reuse here.
+//
+//  Types: fWorkTemperBase/fSoakTime are `double` (cprod.h:1392/1378) ->
+//  `TagValue::makeDouble` via a new `stageDouble` helper (WebBridge/TagValue.h
+//  already carries a Double alternative; no workaround needed).
+//  iMachineTempMode is `int` -> `stageInt`, published as golden's RAW ini
+//  code (0=Hot/1=Ambient/3=AmbientHot, ReadTempFile :2248-2264) -- NOT
+//  decoded into the "Hot Mode"/"Ambient Mode" text tagmap.js's
+//  lblTemperatureMode expects, because that label lives on fMain (a
+//  DIFFERENT form, outside TfTemp_Set entirely -- grepped uTemp_Set.cpp and
+//  forms/fTemp_Set.h for "Hot Mode"/"Ambient Mode"/"lblTemperatureMode": 0
+//  hits) and guessing its exact caption format would be exactly the
+//  "confidently wrong label" this file's own rule refuses.
 //
 //  So the live tag set is small on purpose. It grows when the sources do, and
 //  every addition has to answer "is this source loaded?" with a measurement.
@@ -164,6 +202,13 @@ void SetWebControlOwner(unsigned long long connId);
 // until this says true -- "the recipe's bin table was loaded" is a source
 // question, same philosophy as every other liveness key here.
 void SetWebBinSelLoaded(bool loaded);
+
+// AI(W906-FW-TEMP2) 20260820: host-process marker that fTemp_Set->
+// ReadTempFile(true) actually ran AND found Temperature.Data (wb_serve calls
+// it in the SAME DataPath-redirected window as bin.* above, then reads
+// golden's own iSendChangeTempError signal to tell "ran and found the file"
+// from "ran, file missing, Temperature.* untouched"). Gates temp.sv/soak/mode.
+void SetWebTempLoaded(bool loaded);
 
 // ---------------------------------------------------------------------------
 //  PUMP MODE  (wb_publish --pump)

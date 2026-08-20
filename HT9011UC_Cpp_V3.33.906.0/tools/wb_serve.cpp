@@ -52,6 +52,7 @@
 #include "forms/fBinSel.h"            // AI(W906-FW-BIN1) 20260820: fBinSel->ReadFile (BinSelect loader)
 #include "forms/fShowBinSelect.h"     // AI(W906-FW-BIN1) 20260820: fShowBinSelect->ShowBinSel (MyBinSel captions)
 #include "cinitial.h"                 // AI(W906-FW-BIN1) 20260820: SetTechDataToProd_Yield
+#include "forms/fTemp_Set.h"          // AI(W906-FW-TEMP2) 20260820: fTemp_Set->ReadTempFile (temp.sv/soak/mode loader)
 // AI(W906-FW-W5a) 20260819: ShowMyMessage + its forward hook live in
 // canary_support.{h,cpp} -- but that header re-defaults RecordProcess/
 // MyDBIProcessNew parameters that common.h (already included above) also
@@ -224,6 +225,7 @@ int main(int argc, char** argv)
     const AnsiString savedDataPath = DataPath;
     AnsiString recipeScratchRoot;
     bool binSelLoaded = false;
+    bool tempLoaded = false;   // AI(W906-FW-TEMP2) 20260820: see the temp.* block below
     {
         const AnsiString recipe = fMain->cbSetupFileName->Text;
         bool pathReady = (recipe.Length() > 0 && recipe != "Fail Open");
@@ -265,22 +267,82 @@ int main(int argc, char** argv)
             fShowBinSelect->ShowBinSel();
             binSelLoaded = true;
             std::printf("bin.* chain loaded: BinSelect -> iT6CatData -> MyBinSel captions\n");
+
+            // AI(W906-FW-TEMP2) 20260820: temp.sv/soak/mode, SAME redirected-
+            // DataPath window as bin.* directly above -- main-loop ruling
+            // supersedes FW-TEMP1's "no wire" verdict (WebBridgeTags.h's
+            // AI(W906-FW-TEMP1) block, part (a), now corrected there too):
+            // FW-BIN1's scratch-copy above copies the WHOLE recipe folder,
+            // and Temperature.Data lives in that SAME folder, so
+            // ReadTempFile's MyForceDirectories()/CheckAndReadIniData()/
+            // WriteIniData() calls all land in scratch here -- the identical
+            // protection bin.* already relies on, not a new exemption.
+            // golden boot shape: main.cpp:8868 (TfMain::DoReadLastData)
+            // `fTemp_Set->ReadTempFile(true);` -- called TWICE there (the
+            // second time is ordering-dependent on fSetup->ReadFile(), which
+            // this tool never brings up), so ONE call is the faithful subset;
+            // FormShow's own `ReadTempFile(true);` (uTemp_Set.cpp:872) is the
+            // same single-call shape.
+            //
+            // Init() NOT called -- audited, not assumed (20260820): Init()
+            // (uTemp_Set.cpp:281-597) does zero file/hardware I/O and zero
+            // fMain/other-form dereferences (grepped its whole body for
+            // ReadIniData/WriteIniData/CheckAndReadIniData/MyForceDirectories/
+            // FileExists/CopyFile/DeleteFile/"fMain->"/"fLotInfo->"/
+            // "ATC_InterfaceForm->": 0 hits), so it WOULD be safe to call --
+            // but ReadTempFile does not need it: grepping ReadTempFile's own
+            // span (uTemp_Set.cpp:2172-3354) for every global Init() populates
+            // (myTempPal[]/listNormal/listArm1/listArm2/ATCOffsetEdit[]/
+            // ATCPackageOffsetEdit[]/ATCPackageTempEdit[]/ATC_FFCOffset*Edit
+            // [][]/ATC_FFCPointUse[][]/ZoneTempUse[]/ZoneTempSetting[]/
+            // MultiSensorOffsetUse[]/ATC_MultiSensorOffsetEdit[]) is 0 hits.
+            // Every WIDGET ReadTempFile does touch (rgTemperatureMode,
+            // edChillerTemp, cbbATC_RecipeFile, rgIndexHeatMode) is NSDMI'd in
+            // forms/fTemp_Set.h (`= new T...()` at the member declaration), so
+            // each is already a live object the moment `new TfTemp_Set()`
+            // below runs -- Init() is not in the dependency chain for these 3
+            // tags. Calling it anyway would be pure unused surface, the
+            // opposite of the minimal-footprint bin.* precedent set
+            // (SetTechDataToProd_Yield() called directly, not the
+            // InitialOK-gated SetTechDataToProd orchestrator).
+            //
+            // fDynamicTemp stays NULL (never `new`'d) -- ReadTempFile's own
+            // `if(fDynamicTemp!=NULL)` guard (uTemp_Set.cpp:2266) skips that
+            // block entirely, golden-faithful.
+            //
+            // THIRD write mechanism found, beyond MyForceDirectories/
+            // CheckAndReadIniData (both already on record): a bare
+            // `WriteIniData(szDir,"ATC","Chiller Temp",...)` at
+            // uTemp_Set.cpp:2795, gated behind
+            // `ATC_SYSTEM>eATC30 && ATC_SYSTEM==eNewATCSystem` (:2733/:2746).
+            // Whether it fires depends on this box's ATC_SYSTEM config; either
+            // way it lands in the SAME redirected scratch folder, so it does
+            // not change the go/no-go call -- recorded here for completeness.
+            //
+            // Liveness: golden's OWN "file missing" signal, iSendChangeTempError
+            // (uTemp_Set.cpp:2200, `iSendChangeTempError=1; return;` on the
+            // unconditional FileExists() check that gates the WHOLE function
+            // before bUpdateAll is even tested) -- reset it first so a stale
+            // value from an earlier call cannot be mistaken for this one.
+            if (fTemp_Set == NULL) fTemp_Set = new TfTemp_Set();   // ctor is fields-only, uTemp_Set.cpp:272-274
+            //AI(W906-FW-TEMP2) 20260820: Init() IS required before ReadTempFile
+            // after all -- the wave's audit grepped ReadTempFile's own span only,
+            // but ReadTempFile chains into DoIniDataToForm (uTemp_Set.cpp:3355),
+            // which reads myTempPal[] (20 sites) and every other Init()-populated
+            // array. Measured: gdb bt on the e2e SEGV lands in DoIniDataToForm;
+            // Init() itself is pure in-memory widget wiring (the audit's own
+            // 0-hit grep for file/hw/global-form calls stands).
+            fTemp_Set->Init();
+            iSendChangeTempError = 0;
+            fTemp_Set->ReadTempFile(true);
+            tempLoaded = (iSendChangeTempError != 1);
+            std::printf(tempLoaded
+                ? "temp.* chain loaded: ReadTempFile -> fWorkTemperBase/fSoakTime/iMachineTempMode\n"
+                : "temp.* chain: Temperature.Data missing in the recipe folder -- stays null\n");
         }
     }
     ht9045::SetWebBinSelLoaded(binSelLoaded);
-
-    // AI(W906-FW-TEMP1) 20260820: temp.*/zone.* (12 tags) evaluated for a
-    // bin.*-style boot load this wave and DELIBERATELY NOT WIRED. Unlike
-    // BinSelect, ReadTempFile (uTemp_Set.cpp:2172-3143) unconditionally calls
-    // MyForceDirectories() (creates a directory on disk before it even checks
-    // the file exists) and reads most fields via CheckAndReadIniData, whose
-    // missing-key branch WRITES the recipe's Temperature.Data -- the same
-    // write-on-missing-key shape this repo already refuses for counter.clear,
-    // against a path family (DataPath+recipe+"Temperature.Data") --dry does
-    // not redirect here the way it redirects asGeneralPath. Per this wave's
-    // brief, that rules it out of a boot chain outright (no scratch-redirect
-    // workaround this time). Full evidence: WebBridgeTags.h's
-    // AI(W906-FW-TEMP1) block. All 12 tags stay null; nothing added here.
+    ht9045::SetWebTempLoaded(tempLoaded);   // AI(W906-FW-TEMP2) 20260820
 
     webbridge::TagSnapshot snap;
     const std::size_t staged = ht9045::PublishHandlerTags(snap);

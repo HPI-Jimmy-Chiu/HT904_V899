@@ -98,20 +98,20 @@ bool LastSetLoaded()
     return false;
 }
 
-// AI(W906-FW-TEMP1) 20260820: re-measured, and the reason changed even though
-// the answer (false) did not. uTemp_Set.cpp's ReadTempFile (golden :1976-3143)
-// landed FW3-TempSet as an ACTIVE, faithful translation -- so this struct DOES
-// have a real loader now. It is just not one this file may call from a host
-// boot chain: ReadTempFile unconditionally calls MyForceDirectories (creates a
-// directory, uTemp_Set.cpp:2191) and reads most fields via CheckAndReadIniData
-// (common.cpp:432-464), whose missing-key branch WRITES the recipe's
-// Temperature.Data -- the same class of risk this repo already refuses for
-// counter.clear. See WebBridgeTags.h's AI(W906-FW-TEMP1) block for the full
-// evidence (including the other, non-boot writers this wave ruled out).
-// Kept as a named predicate rather than a comment so the day a safe loader
-// exists, one line moves.
+// AI(W906-FW-TEMP2) 20260820: the answer flips from hardcoded false to a real
+// raw-byte scan (same idiom as CosFunctionLoaded/LastSetLoaded below) now that
+// wb_serve actually calls fTemp_Set->ReadTempFile(true) -- see
+// WebBridgeTags.h's AI(W906-FW-TEMP2) block for the wiring and the Init()
+// audit that cleared it. This predicate answers "has ANYTHING written to the
+// SYSTEM_TEMPERATURE struct", which is broader than the 3 fields this file
+// stages (ReadTempFile touches ~90 of them) -- see its one caller below for
+// why that breadth is exactly the point.
 bool TemperatureLoaded()
 {
+    const unsigned char* raw = reinterpret_cast<const unsigned char*>(&Temperature);
+    for (std::size_t i = 0; i < sizeof(SYSTEM_TEMPERATURE); ++i) {
+        if (raw[i] != 0) return true;
+    }
     return false;
 }
 
@@ -163,6 +163,18 @@ void stageInt(webbridge::TagSnapshot& s, const char* tag, bool live, long long v
                       : TagValue::makeNull());
 }
 
+//AI(W906-FW-TEMP2) 20260820: double needs its own stager -- temp.sv/temp.soak
+// (Temperature.fWorkTemperBase/fSoakTime, both `double`, cprod.h:1392/1378)
+// are the first fields this file publishes that are not int/bool/string.
+// TagValue already carries a Double alternative (WebBridge/TagValue.h) so no
+// int/string workaround is needed; routing a double through stageInt would
+// truncate a fractional degree, which is exactly the kind of silently-wrong
+// number this file's whole design exists to prevent.
+void stageDouble(webbridge::TagSnapshot& s, const char* tag, bool live, double v)
+{
+    s.stage(tag, live ? TagValue::makeDouble(v) : TagValue::makeNull());
+}
+
 void stageNull(webbridge::TagSnapshot& s, const char* tag)
 {
     s.stage(tag, TagValue::makeNull());
@@ -181,20 +193,15 @@ void stageBool(webbridge::TagSnapshot& s, const char* tag, bool live, bool v)
 // as null is not a placeholder -- it is the correct value, and it makes the
 // extent of the gap visible on the screen instead of hiding it behind zeros.
 const char* const kUnloadedTags[] = {
-    // AI(W906-FW-TEMP1) 20260820: temp.sv/soak/mode's source (Temperature.
-    // fWorkTemperBase/fSoakTime/iMachineTempMode) now HAS a faithful loader
-    // (ReadTempFile, uTemp_Set.cpp:2172-3143) but it is unsafe to call from
-    // host boot -- MyForceDirectories() unconditionally creates a directory
-    // and most fields go through CheckAndReadIniData's missing-key-seeds-a-
-    // write pattern (same class as the counter.clear precedent), against a
-    // THIRD hardcoded shared path family (DataPath+recipe+"Temperature.Data")
-    // --dry does not redirect here. temp.pv + the 8 zone.* tags key on
-    // UN150Read[], which stays genuinely dead: its only writer thread never
-    // starts offline, its other two write sites are `#if 0`'d out, and its
-    // SOFT_SIMULTE debug-fill branch is both unreachable and compiled out.
-    // Full evidence + verification commands: WebBridgeTags.h's
-    // AI(W906-FW-TEMP1) block. Not wired this wave; recorded, not fixed.
-    "temp.pv", "temp.sv", "temp.soak", "temp.mode",
+    // AI(W906-FW-TEMP2) 20260820: temp.sv/soak/mode WIRED this wave (see the
+    // dedicated block in PublishHandlerTags below) -- moved OUT of this
+    // array. temp.pv + the 8 zone.* tags key on UN150Read[], which stays
+    // genuinely dead: its only writer thread never starts offline, its other
+    // two write sites are `#if 0`'d out, and its SOFT_SIMULTE debug-fill
+    // branch is both unreachable and compiled out. Full evidence +
+    // verification commands: WebBridgeTags.h's AI(W906-FW-TEMP1)/(FW-TEMP2)
+    // blocks.
+    "temp.pv",
     "zone.hotplate.1", "zone.hotplate.2",
     "zone.shuttle.1",  "zone.shuttle.2",
     "zone.index.1",    "zone.index.2",
@@ -398,6 +405,10 @@ void SetWebControlOwner(unsigned long long connId) { g_webControlOwner = connId;
 static bool g_webBinSelLoaded = false;
 void SetWebBinSelLoaded(bool loaded) { g_webBinSelLoaded = loaded; }
 
+// AI(W906-FW-TEMP2) 20260820: see WebBridgeTags.h SetWebTempLoaded.
+static bool g_webTempLoaded = false;
+void SetWebTempLoaded(bool loaded) { g_webTempLoaded = loaded; }
+
 std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap)
 {
     const bool strs  = IniConfigStringsLoaded();
@@ -582,6 +593,22 @@ std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap)
         }
     }
 
+    // --- FW-TEMP2: recipe temperature setpoint/soak/mode ---------------------
+    //AI(W906-FW-TEMP2) 20260820: after fTemp_Set->ReadTempFile(true) (wb_serve
+    // boot, SAME DataPath dry-redirect as FW-BIN1 above -- WebBridgeTags.h's
+    // AI(W906-FW-TEMP2) block has the full ruling and evidence). Null until
+    // the host marks the chain loaded (g_webTempLoaded, keyed off golden's own
+    // iSendChangeTempError "file missing" signal, not merely "we tried").
+    //
+    // temp.mode publishes the RAW ini code (0=Hot/1=Ambient/3=AmbientHot,
+    // ReadTempFile uTemp_Set.cpp:2248-2264) rather than a decoded label: the
+    // "Hot Mode"/"Ambient Mode" text tagmap.js's lblTemperatureMode expects is
+    // set on fMain, a form this file does not touch, and this file does not
+    // guess captions it has not read.
+    stageDouble(snap, "temp.sv",   g_webTempLoaded, Temperature.fWorkTemperBase);
+    stageDouble(snap, "temp.soak", g_webTempLoaded, Temperature.fSoakTime);
+    stageInt   (snap, "temp.mode", g_webTempLoaded, Temperature.iMachineTempMode);
+
     // --- FW-1c: SPIL_AMR bundle tray IDs -------------------------------------
     //AI(W906-FW1c) 20260819: asBundleTrayID[] (cmydef.h:5684) is written only
     // on fAGV->IsSPIL_AMR() customer stations (fLotInfo.cpp Wave C, golden
@@ -764,6 +791,12 @@ TagCoverage HandlerTagCoverage()
     c.total += 6;
     c.live  += (g_webBinSelLoaded ? 6u : 0u);
 
+    //AI(W906-FW-TEMP2) 20260820: +3 temp.sv/soak/mode, keyed on the host's
+    // temp-chain-loaded marker -- a real machine data source (the recipe's
+    // Temperature.Data), same accounting rule as bin.* above.
+    c.total += 3;
+    c.live  += (g_webTempLoaded ? 3u : 0u);
+
     //AI(W906-SimPump) 20260813: the 18 clock/state/pump tags are DELIBERATELY NOT
     // counted here, and the reason is the same one this file exists for.
     //
@@ -784,9 +817,20 @@ TagCoverage HandlerTagCoverage()
     // (61 before 20260817; +33 FW-1a LastSet tags; +6 FW-1b sort counters).
     // Coverage and wire-count are different questions; this struct answers the first.
 
-    // Referenced so the currently-always-false predicates cannot rot into
-    // unused code and silently stop being checked when their sources land.
-    if (TemperatureLoaded() || TemperaturePvLoaded() || CosFunctionLoaded()) {
+    //AI(W906-FW-TEMP2) 20260820: TemperatureLoaded() is EXPECTED to agree
+    // with g_webTempLoaded now that ReadTempFile is wired -- that is no
+    // longer a "dead source came alive" surprise, it is this wave's own
+    // intended effect. The genuinely interesting case is the mismatch: raw
+    // Temperature bytes set while g_webTempLoaded is false means something
+    // OTHER than wb_serve's own chain wrote to the struct, and THIS file's
+    // inventory (which still only credits the one chain it knows about) has
+    // gone stale again.
+    //
+    // TemperaturePvLoaded()/CosFunctionLoaded() keep the original rot check:
+    // both are still expected to be false, and reaching here for either one
+    // still means a source WebBridgeTags.h calls dead has come alive.
+    if ((TemperatureLoaded() && !g_webTempLoaded) ||
+        TemperaturePvLoaded() || CosFunctionLoaded()) {
         // Deliberately empty: reaching here means a source listed as dead in
         // WebBridgeTags.h has come alive, and that header's inventory -- plus
         // the kUnloadedTags table -- needs updating.
