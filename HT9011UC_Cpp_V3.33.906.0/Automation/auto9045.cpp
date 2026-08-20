@@ -15,7 +15,7 @@
 //  TU-LOCAL GATES (see the "GATED DEPENDENCIES" block just below the includes
 //  for the full rationale of each): this file reaches a wide set of VCL forms
 //  that have NO translated home yet (fBinSel/fShowBinSelect/fTrayAssignment/
-//  fTestCategory/fContactCT/fCounterClear/fMonitor/fProductionInfo/fTemp_Set --
+//  fTestCategory/fContactCT/fCounterClear/fMonitor/fProductionInfo --
 //  zero pre-existing shims anywhere in the tree), PLUS additional member
 //  surface on forms that DO already have a partial shim but not these specific
 //  members (fMain/fLotInfo in FormsFacade.h; fAutomation/fObserver/fContact in
@@ -26,6 +26,9 @@
 //  candidate for folding into the real shared shim once that is safe -- see
 //  the translate report's "FormsFacade / atester_shims extension candidates"
 //  section for the exact member list per class.
+//  fTemp_Set is NO LONGER on this list -- AI(W906-FW-TEMP3) 20260820 retired
+//  its `W5FA_FTemp_Set` stand-in in favour of the real forms/fTemp_Set.h
+//  facade (commit c60e9f4), see the "GATED DEPENDENCIES" block's own note.
 //
 //  Big5: Chinese comments decoded via cp950 (python open(...,encoding='cp950')),
 //  reproduced here as real UTF-8. ZERO U+FFFD (checked before hand-off).
@@ -48,6 +51,7 @@
 #include "csystem.h"                // HasICUnderMachine (REAL), InitOneCycle (REAL)
 #include "aHotPlateSubstrate.h"     // TestSocket (TMyKitSuck: iShtRow/iShtCol/iShtCnt/Item[][])
 #include "FormsFacade.h"            // fMain (REAL: ShowTestHeadComp), fLotInfo (REAL: cbRunMode/edtSysLotID/SetLotID/SetLotStart)
+#include "forms/fTemp_Set.h"        // AI(W906-FW-TEMP3) 20260820: TfTemp_Set + extern fTemp_Set (REAL: edSoakTime/edWorkTemp) -- retires the TU-local W5FA_FTemp_Set stand-in below, see its own note
 
 // =============================================================================
 //  GATED DEPENDENCIES -- TU-local stand-ins for substrate/forms not yet in the
@@ -396,12 +400,28 @@ struct W5FA_TfProductionInfoExt
 W5FA_TfProductionInfoExt W5FA_FProductionInfo;
 
 // -- fTemp_Set (golden uTemp_Set.h, TfTemp_Set) ------------------------------
-struct W5FA_TfTemp_SetExt
-{
-    TEdit *edSoakTime, *edWorkTemp;                  // golden uTemp_Set.h:172 / :135 (TEdit*)
-    W5FA_TfTemp_SetExt() { edSoakTime = new TEdit(); edWorkTemp = new TEdit(); }
-};
-W5FA_TfTemp_SetExt W5FA_FTemp_Set;
+// AI(W906-FW-TEMP3) 20260820: RETIRED -- the TU-local `W5FA_TfTemp_SetExt
+// W5FA_FTemp_Set` stand-in (edSoakTime/edWorkTemp only) that used to live here
+// is deleted. Premise dead: forms/fTemp_Set.h + uTemp_Set.cpp landed commit
+// c60e9f4 (`TfTemp_Set *fTemp_Set;` global, extern'd at forms/fTemp_Set.h:1544,
+// defined uTemp_Set.cpp:220) -- the REAL facade carries both members with the
+// exact golden shape (`TEdit *edSoakTime` forms/fTemp_Set.h:799, `TEdit
+// *edWorkTemp` forms/fTemp_Set.h:762), grep-confirmed this wave before
+// retiring the stand-in. The 2 call sites below (SetSoakTime/SetTemperature)
+// now write through the real global with a NULL guard (this port never `new`s
+// fTemp_Set -- no VCL CreateForm-equivalent runs offline, unlike golden where
+// the form-creation list guarantees non-NULL). `auto9045.cpp` and
+// `uTemp_Set.cpp` are both compiled into the SAME archive (ht9045_sm,
+// CMakeLists.txt), so this introduces no new cross-archive link edge --
+// test_auto9045 (tests/CMakeLists.txt:2086) already links ht9045_sm whole.
+// Other files' banner comments (Command.cpp:10368-10369, MyTempPanel.cpp:
+// 751-753, ProductionInfo/uPAT_Function.cpp:308-309, TempCtrl/TriTemp.cpp:
+// 131-133) still describe the now-retired stand-in as "the only thing that
+// exists" -- those files are outside this wave's write boundary (uHeaterThread.
+// cpp/cprod.cpp/Automation/auto9045.cpp/tests/ only), so their text is now
+// stale and a follow-up wave should refresh it; none of them reference the
+// `W5FA_FTemp_Set` SYMBOL (grep-verified, see this wave's report), only cite it
+// in prose, so nothing fails to compile or link.
 
 } // namespace
 
@@ -901,7 +921,8 @@ int SetSoakTime(AnsiString *Data)
 
     Temperature.fSoakTime=atof(Data[0].c_str());
     W5FA_FMain.edSoakTime->Text     =Temperature.fSoakTime;                    // golden fMain->edSoakTime->Text -- TU-local gate
-    W5FA_FTemp_Set.edSoakTime->Text =Temperature.fSoakTime;                    // golden fTemp_Set->edSoakTime->Text -- TU-local gate
+    if(fTemp_Set)                                                              // AI(W906-FW-TEMP3) 20260820: real fTemp_Set (see GATED DEPENDENCIES note above), NULL-guarded -- retires W5FA_FTemp_Set
+        fTemp_Set->edSoakTime->Text  =Temperature.fSoakTime;                   // golden fTemp_Set->edSoakTime->Text
 
     AnsiString S="";
     S=GetLastOpenFN();
@@ -922,7 +943,8 @@ int SetTemperature(AnsiString *Data)
 
     Temperature.fWorkTemperBase=atof(Data[0].c_str());
     W5FA_FMain.edWorkTemperBase->Text   = Temperature.fWorkTemperBase;         // golden fMain->edWorkTemperBase->Text -- TU-local gate
-    W5FA_FTemp_Set.edWorkTemp->Text     = Temperature.fWorkTemperBase;         // golden fTemp_Set->edWorkTemp->Text -- TU-local gate
+    if(fTemp_Set)                                                              // AI(W906-FW-TEMP3) 20260820: real fTemp_Set (see GATED DEPENDENCIES note above), NULL-guarded -- retires W5FA_FTemp_Set
+        fTemp_Set->edWorkTemp->Text     = Temperature.fWorkTemperBase;         // golden fTemp_Set->edWorkTemp->Text
 
     AnsiString S="";
 

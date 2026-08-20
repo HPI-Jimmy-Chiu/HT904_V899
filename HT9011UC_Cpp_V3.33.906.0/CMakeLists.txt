@@ -2207,6 +2207,14 @@ target_link_libraries(ht9045_sm PUBLIC
     # because ht9045_sm's own sources are the direct consumers -- if the secsgem
     # edge is ever narrowed, this must not silently break.)
     ht9045_forms)
+    # AI(W906-FW-TEMP3) 20260820: an sm->comms PUBLIC edge was TRIED here and
+    # REVERTED same evening -- uTemp_Set.cpp (this archive) calls ATC60System::*
+    # whose bodies live in ht9045_comms (ATC/ATCSystem.cpp, :1283 above), but a
+    # direct edge makes CMake's LINK_GROUP graphs cyclic (comms itself depends
+    # on group members like ht9045_globals, so group->sm->comms->group). The
+    # repo's convention for this is the one test_lane_io_sim already uses:
+    # ht9045_comms goes INSIDE each consuming test's RESCAN group
+    # (tests/CMakeLists.txt, five groups updated this wave).
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     # The SM carries BCB6 idioms inherited from the global headers (AnsiString

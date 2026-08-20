@@ -83,12 +83,37 @@
 //   5. DoSwCoolingFan(false)    golden :173. csystem.h:224 / golden csystem.cpp:20434.
 //      GATED; golden discards the bool, so there is nothing to default.
 //   6. fTemp_Set->ControlATC60AirFlow(int)   golden :1096, :1212, :1217, :1281.
-//      TfTemp_Set is golden uTemp_Set.h; the port has no forms/fTemp_Set.h --
-//      cprod.cpp:3989-4003 gates the same form for the same reason.  All four
-//      sites sit under `ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_60` and the
-//      shim reports 0 (acarry_shims.cpp:72), so they are unreachable offline and
-//      gating them is behaviour-neutral.  The bFlagBelowTurnOfValve /
-//      bFlagBelowTurnOfValve1 assignments around them stay ACTIVE.
+//      RETIRED AT FW-TEMP3 -- AI(W906-FW-TEMP3) 20260820.  The entry claimed
+//      "TfTemp_Set is golden uTemp_Set.h; the port has no forms/fTemp_Set.h",
+//      i.e. the whole class had no port.  That premise is DEAD: forms/
+//      fTemp_Set.h + uTemp_Set.cpp landed commit c60e9f4 (`TfTemp_Set
+//      *fTemp_Set;` global, zero-init BSS, declared `extern` at
+//      forms/fTemp_Set.h:1544, defined uTemp_Set.cpp:220; `ControlATC60AirFlow
+//      (int iStatus=-1)` is a real public member, uTemp_Set.cpp:6454, kept the
+//      exact golden default-argument signature specifically so this call could
+//      be un-gated later -- see forms/fTemp_Set.h:516-522's own note).  All four
+//      call sites below are un-gated to a real, NULL-guarded call.  The NULL
+//      guard is needed because `fTemp_Set` is a plain global pointer this port
+//      never `new`s (no VCL CreateForm-equivalent runs offline, unlike golden
+//      where the VCL form-creation list guarantees non-NULL) -- same idiom as
+//      this tree's established "port a global pointer -> guard every caller"
+//      convention (trap #4).  Runtime shape is UNCHANGED either way: all four
+//      sites still sit under `ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_60`
+//      and the shim reports 0 (acarry_shims.cpp:72), so they stay unreachable
+//      offline regardless of the NULL guard's outcome; AND even if reached,
+//      `ControlATC60AirFlow`'s own body has every `ATC_InterfaceForm->
+//      SetAirValve(...)` call behind SAFETY GATE (S13) (uTemp_Set.cpp:6460 etc,
+//      forms/fTemp_Set.h:276-278) -- so this un-gate can never reach hardware,
+//      only the (currently unreachable) `iATC60Air`/`fWorkTemperBase` branch
+//      SELECTION logic runs.  The bFlagBelowTurnOfValve/bFlagBelowTurnOfValve1
+//      assignments around each call stay ACTIVE (unchanged from before).
+//      NOT retired this wave: cprod.cpp:3989-4003/4013-4027 -- see that file's
+//      own gate; its blocking premise is DIFFERENT (vclcompat::TRadioGroup has
+//      no Controls[] child-widget accessor, still alive -- confirmed by
+//      uTemp_Set.cpp's OWN internal GATE(dep-RadioGroup-Controls) at
+//      uTemp_Set.cpp:2383 gating the identical golden `rgIndexHeatMode->
+//      Controls[i]->Visible` idiom inside the newly-ported class itself), NOT
+//      "TfTemp_Set unported" -- so cprod.cpp is intentionally left untouched.
 //   7. HasAreaOverAmbientTemp() golden :1136, :1259.  csystem.h:153 / golden
 //      csystem.cpp:772.  Unlike 1/3/4/5 this one FEEDS A VALUE, so it gets an
 //      ACTIVE DEFAULT of `false` -- golden's own fall-through result ("no heater
@@ -222,6 +247,7 @@
 #include "canary_support.h"         // ShowErrorMessage, RecordProcess, MyDBIProcessNew, LastSet (LastSet.h)
 #include "acatchtray_shims.h"       // NewRecordProcess(3-arg)
 #include "acarry_shims.h"           // ATC_InterfaceForm (+ MySleep / MySleepEx decls); pulls aHotPlateSubstrate.h -> Zteach
+#include "forms/fTemp_Set.h"        // AI(W906-FW-TEMP3) 20260820: TfTemp_Set + extern fTemp_Set -- GATE 6 retirement, see banner above
 // NOT included, deliberately:
 //   FormsFacade.h  -- the only fMain reference in this file is inside the
 //                     `#ifdef SOFT_SIMULTE` early-return (golden :138-144),
@@ -235,8 +261,10 @@
 //  Everything here has INTERNAL LINKAGE, so none of it can ever collide with the
 //  real symbol when the owning unit (bthermo.cpp / csystem.cpp / uTemp_Set.cpp /
 //  ATC_Handler_Side.cpp) is translated.  Each entry is a numbered gate in the
-//  register above.  Same TU-local-facade idiom as Automation/auto9045.cpp:398-404
-//  (`W5FA_TfTemp_SetExt W5FA_FTemp_Set`).
+//  register above.  Same TU-local-facade idiom Automation/auto9045.cpp used to
+//  carry at :398-404 for its own `W5FA_TfTemp_SetExt W5FA_FTemp_Set` -- since
+//  RETIRED, AI(W906-FW-TEMP3) 20260820, when uTemp_Set.cpp landed for real
+//  (commit c60e9f4); GATE 6 below is retired for the identical reason.
 // =============================================================================
 
 // -- GATE 10: RETIRED AT INTEGRATION -- AI(W906-PT-W1-integrate) 20260807 ------
@@ -289,13 +317,16 @@ static W906HT_ALedSeam      W906HT_fLotInfo_ALed3;
 #define ATC_TYPE_70   70
 #endif
 
-// golden uTemp_Set.h:34-35 (`extern const int`), values from golden
-// uTemp_Set.cpp:56-57.  Row indices into Temperature.fTempOffSet[19][tcTotalCount]
-// (cprod.h:1388).  `const int` at namespace scope without a prior `extern`
-// declaration has INTERNAL linkage in C++, so these cannot collide with
-// uTemp_Set.cpp's future definitions.
-const int InitTempOffset=8;                                                     //Steven 20141117 : 起測時溫度要補Offset
-const int TestOverTimeTempOffset=9;                                             //20160312 : 距離上一次測試時間超過所設定時間要補Offset
+//AI(W906-FW-TEMP3) 20260820: the file-local `const int InitTempOffset=8;` /
+// `TestOverTimeTempOffset=9;` copies that used to live here are RETIRED. The
+// old banner's "internal linkage, cannot collide" reasoning was true only
+// while this TU had no prior extern declaration -- this wave's new
+// #include "forms/fTemp_Set.h" (for fTemp_Set) brings golden uTemp_Set.h:34-35's
+// `extern const int` declarations into scope, which FLIPS a subsequent
+// `const int X=8;` to an external-linkage definition and collided with
+// uTemp_Set.cpp:232-233's real ones at test_lane_io_sim/test_sim_io link
+// (identical values 8/9, so semantics are unchanged; the real home now
+// provides them, exactly as golden's own include graph does).
 
 // golden VCL Classes::TThread::TPriority enumerator, read once at golden :83.
 // Internal linkage, exactly as MyPLC/MyPLC_IO_Modbus.cpp:72 already does.
@@ -1425,9 +1456,15 @@ void CheckHeater()
                     {
                         if(bFlagBelowTurnOfValve1)
                         {
-#if 0 // TODO(W7-UI) GATE 6 (site 1 of 4): golden :1096 fTemp_Set->ControlATC60AirFlow(0) -- TfTemp_Set is golden uTemp_Set.h; there is NO forms/fTemp_Set.h in the port (cprod.cpp:3989-4003 gates the same form for the same reason).  UNREACHABLE offline anyway: every one of the four call sites sits under `ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_60` and the shim's iATC_MODE_TYPE is 0 (acarry_shims.cpp:72), so gating is behaviour-neutral.  The surrounding bFlagBelowTurnOfValve* assignments stay ACTIVE.
-                            fTemp_Set->ControlATC60AirFlow(0);
-#endif
+// AI(W906-FW-TEMP3) 20260820: GATE 6 RETIRED (site 1 of 4), golden :1096. Premise
+// dead (commit c60e9f4 -- forms/fTemp_Set.h + uTemp_Set.cpp landed, see banner
+// above).  NULL guard because `fTemp_Set` is a never-`new`'d global pointer in
+// this port.  Still unreachable offline: ATC_InterfaceForm->iATC_MODE_TYPE is
+// 0, never ATC_TYPE_60 (acarry_shims.cpp:72).  Even if reached, inert: every
+// ATC_InterfaceForm->SetAirValve(...) inside ControlATC60AirFlow is behind
+// SAFETY GATE (S13) (uTemp_Set.cpp:6460 etc).
+                            if(fTemp_Set)
+                                fTemp_Set->ControlATC60AirFlow(0);
                         }
                         bFlagBelowTurnOfValve1=false;
                     }
@@ -1547,16 +1584,22 @@ void CheckHeater()
                                     if(flagOverOk==false && bFlagBelowTurnOfValve1==false)
                                     {
                                         bFlagBelowTurnOfValve1=true;
-#if 0 // TODO(W7-UI) GATE 6 (site 2 of 4): golden :1212 fTemp_Set->ControlATC60AirFlow(1) -- TfTemp_Set is golden uTemp_Set.h; there is NO forms/fTemp_Set.h in the port (cprod.cpp:3989-4003 gates the same form for the same reason).  UNREACHABLE offline anyway: every one of the four call sites sits under `ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_60` and the shim's iATC_MODE_TYPE is 0 (acarry_shims.cpp:72), so gating is behaviour-neutral.  The surrounding bFlagBelowTurnOfValve* assignments stay ACTIVE.
-                                        fTemp_Set->ControlATC60AirFlow(1);
-#endif
+// AI(W906-FW-TEMP3) 20260820: GATE 6 RETIRED (site 2 of 4), golden :1212. Same
+// retirement as site 1 of 4 above (premise dead, commit c60e9f4; NULL guard;
+// still unreachable via ATC_InterfaceForm->iATC_MODE_TYPE==0; ControlATC60AirFlow's
+// SetAirValve calls stay behind SAFETY GATE (S13) regardless).
+                                        if(fTemp_Set)
+                                            fTemp_Set->ControlATC60AirFlow(1);
                                     }
 
                                     if(flagOverOk && flagBellowOk==false)
                                     {
-#if 0 // TODO(W7-UI) GATE 6 (site 3 of 4): golden :1217 fTemp_Set->ControlATC60AirFlow(0) -- TfTemp_Set is golden uTemp_Set.h; there is NO forms/fTemp_Set.h in the port (cprod.cpp:3989-4003 gates the same form for the same reason).  UNREACHABLE offline anyway: every one of the four call sites sits under `ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_60` and the shim's iATC_MODE_TYPE is 0 (acarry_shims.cpp:72), so gating is behaviour-neutral.  The surrounding bFlagBelowTurnOfValve* assignments stay ACTIVE.
-                                        fTemp_Set->ControlATC60AirFlow(0);
-#endif
+// AI(W906-FW-TEMP3) 20260820: GATE 6 RETIRED (site 3 of 4), golden :1217. Same
+// retirement as site 1 of 4 above (premise dead, commit c60e9f4; NULL guard;
+// still unreachable via ATC_InterfaceForm->iATC_MODE_TYPE==0; ControlATC60AirFlow's
+// SetAirValve calls stay behind SAFETY GATE (S13) regardless).
+                                        if(fTemp_Set)
+                                            fTemp_Set->ControlATC60AirFlow(0);
                                     }
                                 }
 
@@ -1624,9 +1667,12 @@ void CheckHeater()
                                         if(ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_60 && bFlagBelowTurnOfValve)
                                         {
                                             bFlagBelowTurnOfValve=false;
-#if 0 // TODO(W7-UI) GATE 6 (site 4 of 4): golden :1281 fTemp_Set->ControlATC60AirFlow(0) -- TfTemp_Set is golden uTemp_Set.h; there is NO forms/fTemp_Set.h in the port (cprod.cpp:3989-4003 gates the same form for the same reason).  UNREACHABLE offline anyway: every one of the four call sites sits under `ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_60` and the shim's iATC_MODE_TYPE is 0 (acarry_shims.cpp:72), so gating is behaviour-neutral.  The surrounding bFlagBelowTurnOfValve* assignments stay ACTIVE.
-                                            fTemp_Set->ControlATC60AirFlow(0);
-#endif
+// AI(W906-FW-TEMP3) 20260820: GATE 6 RETIRED (site 4 of 4), golden :1281. Same
+// retirement as site 1 of 4 above (premise dead, commit c60e9f4; NULL guard;
+// still unreachable via ATC_InterfaceForm->iATC_MODE_TYPE==0; ControlATC60AirFlow's
+// SetAirValve calls stay behind SAFETY GATE (S13) regardless).
+                                            if(fTemp_Set)
+                                                fTemp_Set->ControlATC60AirFlow(0);
                                         }
                                     }
                                 }
