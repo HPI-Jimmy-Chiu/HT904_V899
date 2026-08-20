@@ -269,6 +269,19 @@ int main(int argc, char** argv)
     }
     ht9045::SetWebBinSelLoaded(binSelLoaded);
 
+    // AI(W906-FW-TEMP1) 20260820: temp.*/zone.* (12 tags) evaluated for a
+    // bin.*-style boot load this wave and DELIBERATELY NOT WIRED. Unlike
+    // BinSelect, ReadTempFile (uTemp_Set.cpp:2172-3143) unconditionally calls
+    // MyForceDirectories() (creates a directory on disk before it even checks
+    // the file exists) and reads most fields via CheckAndReadIniData, whose
+    // missing-key branch WRITES the recipe's Temperature.Data -- the same
+    // write-on-missing-key shape this repo already refuses for counter.clear,
+    // against a path family (DataPath+recipe+"Temperature.Data") --dry does
+    // not redirect here the way it redirects asGeneralPath. Per this wave's
+    // brief, that rules it out of a boot chain outright (no scratch-redirect
+    // workaround this time). Full evidence: WebBridgeTags.h's
+    // AI(W906-FW-TEMP1) block. All 12 tags stay null; nothing added here.
+
     webbridge::TagSnapshot snap;
     const std::size_t staged = ht9045::PublishHandlerTags(snap);
     const ht9045::TagCoverage cov = ht9045::HandlerTagCoverage();

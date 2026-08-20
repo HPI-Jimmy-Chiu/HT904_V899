@@ -40,7 +40,14 @@
 //                                               (12,358 non-zero bytes)
 //            HSys.*                             420 keys from Gerneral.ini
 //
-//    DEAD    Temperature.*                      nothing writes it
+//    DEAD    Temperature.*                      HAS a translated loader now
+//                                               (ReadTempFile, uTemp_Set.cpp
+//                                               :2172-3143) but it is UNSAFE
+//                                               to call from host boot -- see
+//                                               AI(W906-FW-TEMP1) 20260820
+//                                               below. Not "nothing writes
+//                                               it" any more; "no safe writer
+//                                               reaches it from a boot chain".
 //            IniConfig numeric/bool flags       loaded by cConfiguration.cpp,
 //                                               which is untranslated (7,808
 //                                               golden lines).  Only the few
@@ -50,8 +57,78 @@
 //                                               CustomerFunctionSelect runs but
 //                                               every branch tests an IniConfig
 //                                               flag that is not loaded yet
-//            UN150Read (all temperature PVs)    0 of 71 zones -- no controller
-//                                               polling in the port
+//            UN150Read (all temperature PVs)    genuinely dead, re-measured
+//                                               20260820 (AI(W906-FW-TEMP1)):
+//                                               its one writer thread never
+//                                               starts offline, and its other
+//                                               two write sites are compiled
+//                                               out. See the block below.
+//
+//  AI(W906-FW-TEMP1) 20260820: temp.* / zone.* recon (12 tags: temp.pv/sv/
+//  soak/mode, zone.{hotplate,shuttle,index,heatgun}.{1,2}). Both halves of
+//  "DEAD Temperature.*" above turned out to need a MORE careful answer than
+//  the previous wave's blanket claim -- measured this wave, not assumed:
+//
+//   (a) temp.sv/soak/mode  (Temperature.fWorkTemperBase/fSoakTime/
+//       iMachineTempMode, cprod.h:1377/1378/1392) -- FW3-TempSet (commit
+//       c60e9f4) landed uTemp_Set.cpp's ReadTempFile as a FAITHFUL, ACTIVE
+//       translation (golden :1976-3143 -> port uTemp_Set.cpp:2172-3143), so
+//       these fields ARE assignable today. But ReadTempFile is not a safe
+//       thing to call from a host boot chain:
+//         * uTemp_Set.cpp:2191 `MyForceDirectories(szDir)` unconditionally
+//           creates a directory on disk, before even the FileExists check
+//           three lines later -- not gated on any missing-key condition, it
+//           just always runs.
+//         * dozens of fields (fSoakTime :2331, bUseAbitCHK :2275, fAbitTemp
+//           :2278/:2280, ...) are read via `CheckAndReadIniData`
+//           (common.cpp:432-464), the SAME missing-key-seeds-a-WriteXxx
+//           pattern already on record for Gerneral.ini and for BinSelect's
+//           Binasgn*.Data (docs/RECON_binstar_datasource.md section 2g) --
+//           this repo's "counter.clear precedent" for real file writes.
+//         * The target file is `DataPath+recipe+"Temperature.Data"`, a THIRD
+//           hardcoded shared production path (DataPath="D:\\HT9045\\IniData\\
+//           Data\\", common.cpp:104) that --dry does not redirect for this
+//           tool the way it redirects asGeneralPath.
+//       Per this wave's explicit brief, any chain with counter.clear-style
+//       write-on-missing-key behaviour does NOT get wired into host boot,
+//       full stop -- no scratch-redirect workaround this time (contrast
+//       bin.*, which got one). Verified NO OTHER reachable path sets these
+//       three fields without an external trigger: the only other writers are
+//       Automation/auto9045.cpp:902/923 and Command.cpp:9526-9551 and
+//       SECSGEM/uHGemHT9045.cpp:3443-3447 (all parse an incoming command/SECS
+//       message -- a live round-trip, not a boot-time load) and
+//       ProductionInfo/uPAT_Function.cpp:1829-1830 (reads a `temp` struct
+//       from a PAT-function source, also not a boot load). So temp.sv/soak/
+//       mode stay null -- but the honest reason is "no safe loader exists
+//       yet", not "nothing writes it".
+//
+//   (b) temp.pv + the 8 zone.* tags (UN150Read[tc*], cmydef.cpp:2768) --
+//       genuinely dead, confirmed three independent ways:
+//         * DoThermo() (bthermo.cpp:1262, writes UN150Read across ~80 sites)
+//           is called only from THeaterThread::HeaterThreadProcess
+//           (uHeaterThread.cpp:342/375), which is called only from
+//           THeaterThread::Execute (:366) -- and Execute() is NEVER invoked
+//           offline: Resume() is a documented no-op (uHeaterThread.cpp:
+//           389-392, "offline: no real OS thread to resume").
+//         * The other two UN150Read writers -- uTemp_Set.cpp:7228-7229 and
+//           forms/fLotInfo.cpp:1291-1297 -- both sit inside `#if 0` blocks
+//           (dep-ATC-IsConnect / the fLotInfo AirMachine display gate), so
+//           they do not even compile in.
+//         * ShowThermo's own SOFT_SIMULTE debug-fill branch
+//           (cTemperFrom.cpp:338-348, `UN150Read[Addr]=Addr`) is call-site
+//           unreachable outside tests/test_temperfrom_core.cpp (grepped, 0
+//           production callers) AND compiled out anyway --
+//           `//#define SOFT_SIMULTE` is commented at MachineType.h:48.
+//       zone.* channel mapping (for whenever a writer lands): tcHotPlate1/2=0/1,
+//       tcShuttle1/2=2/3, tcHead1/2=4/5 ("index" = the test-head channels),
+//       tcHeatGun1/2=27/28 (MachineType.h:637-641) -- one UN150Read[] cell
+//       each, same predicate as temp.pv.
+//
+//  Verification commands (20260820): `Grep "DoThermo\(\)\|HeaterThreadProcess\|
+//  THeaterThread::Execute" *.cpp`; `Grep "ShowThermo\s*\(" *.cpp` (4 hits, all
+//  tests/test_temperfrom_core.cpp); `Grep "SOFT_SIMULTE" MachineType.h`
+//  (commented at :48); `Read uTemp_Set.cpp:2172-2340` (ReadTempFile head);
+//  `Read uHeaterThread.cpp:330-415` (THeaterThread::Execute/Resume).
 //
 //  So the live tag set is small on purpose. It grows when the sources do, and
 //  every addition has to answer "is this source loaded?" with a measurement.

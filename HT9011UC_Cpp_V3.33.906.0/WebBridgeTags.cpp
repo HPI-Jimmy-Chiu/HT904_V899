@@ -98,17 +98,35 @@ bool LastSetLoaded()
     return false;
 }
 
-// Nothing in the ported tree writes SYSTEM_TEMPERATURE. Measured 20260806: every
-// field reads 0 after a full LoadMachineConfig(). Kept as a named predicate
-// rather than a comment so the day it changes, one line moves.
+// AI(W906-FW-TEMP1) 20260820: re-measured, and the reason changed even though
+// the answer (false) did not. uTemp_Set.cpp's ReadTempFile (golden :1976-3143)
+// landed FW3-TempSet as an ACTIVE, faithful translation -- so this struct DOES
+// have a real loader now. It is just not one this file may call from a host
+// boot chain: ReadTempFile unconditionally calls MyForceDirectories (creates a
+// directory, uTemp_Set.cpp:2191) and reads most fields via CheckAndReadIniData
+// (common.cpp:432-464), whose missing-key branch WRITES the recipe's
+// Temperature.Data -- the same class of risk this repo already refuses for
+// counter.clear. See WebBridgeTags.h's AI(W906-FW-TEMP1) block for the full
+// evidence (including the other, non-boot writers this wave ruled out).
+// Kept as a named predicate rather than a comment so the day a safe loader
+// exists, one line moves.
 bool TemperatureLoaded()
 {
     return false;
 }
 
-// UN150Read[] holds every temperature present-value. Nothing writes it either --
-// there is no controller polling in the port. Checked at runtime rather than
-// hard-coded false, because this one will light up as soon as TempCtrl lands.
+// UN150Read[] holds every temperature present-value. AI(W906-FW-TEMP1)
+// 20260820 re-measured this rather than trust the prior wave's "no controller
+// polling in the port" -- bthermo.cpp DOES write it in ~80 places now, but
+// every path to those writes is unreachable offline: the owning thread
+// (THeaterThread::Execute, uHeaterThread.cpp:366) is never started (Resume()
+// is a documented no-op, :389-392); the two other writers (uTemp_Set.cpp:
+// 7228-7229, forms/fLotInfo.cpp:1291-1297) are both `#if 0`'d out; and
+// ShowThermo's SOFT_SIMULTE debug-fill branch (cTemperFrom.cpp:338-348) is
+// both call-unreachable outside tests/ and compiled out (SOFT_SIMULTE is
+// commented at MachineType.h:48). Checked at runtime rather than hard-coded
+// false, because this one will light up the moment any of those three
+// reachability gaps closes.
 bool TemperaturePvLoaded()
 {
     for (int i = 0; i < tcTotalCount; ++i) {
@@ -163,7 +181,19 @@ void stageBool(webbridge::TagSnapshot& s, const char* tag, bool live, bool v)
 // as null is not a placeholder -- it is the correct value, and it makes the
 // extent of the gap visible on the screen instead of hiding it behind zeros.
 const char* const kUnloadedTags[] = {
-    // temperature: Temperature.* and UN150Read[] are both dead
+    // AI(W906-FW-TEMP1) 20260820: temp.sv/soak/mode's source (Temperature.
+    // fWorkTemperBase/fSoakTime/iMachineTempMode) now HAS a faithful loader
+    // (ReadTempFile, uTemp_Set.cpp:2172-3143) but it is unsafe to call from
+    // host boot -- MyForceDirectories() unconditionally creates a directory
+    // and most fields go through CheckAndReadIniData's missing-key-seeds-a-
+    // write pattern (same class as the counter.clear precedent), against a
+    // THIRD hardcoded shared path family (DataPath+recipe+"Temperature.Data")
+    // --dry does not redirect here. temp.pv + the 8 zone.* tags key on
+    // UN150Read[], which stays genuinely dead: its only writer thread never
+    // starts offline, its other two write sites are `#if 0`'d out, and its
+    // SOFT_SIMULTE debug-fill branch is both unreachable and compiled out.
+    // Full evidence + verification commands: WebBridgeTags.h's
+    // AI(W906-FW-TEMP1) block. Not wired this wave; recorded, not fixed.
     "temp.pv", "temp.sv", "temp.soak", "temp.mode",
     "zone.hotplate.1", "zone.hotplate.2",
     "zone.shuttle.1",  "zone.shuttle.2",

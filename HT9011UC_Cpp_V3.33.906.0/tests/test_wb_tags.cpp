@@ -116,13 +116,21 @@ int main()
         check(cust.isInt() && cust.asInt() != 0,
               "machine.customerCode carries a REAL value");
 
-        // The load-bearing negative. Temperature.* and UN150Read[] are both
-        // measurably unwritten in this port, so these MUST be null. If this ever
-        // reports 0 instead, the browser will draw "0.00" for a heater zone
-        // nobody read.
+        // The load-bearing negative. Temperature.* now HAS a translated loader
+        // (ReadTempFile) but it is unsafe to call from host boot (disk-write
+        // risk -- WebBridgeTags.h AI(W906-FW-TEMP1) 20260820), and UN150Read[]
+        // stays measurably unreachable offline (same block), so all 12 of the
+        // temp/zone family MUST be null. If this ever reports 0 instead, the
+        // browser will draw "0.00" for a heater zone nobody read.
+        //AI(W906-FW-TEMP1) 20260820: widened from a 3-of-8 zone.* spot-check to
+        // all 8, plus the 4 temp.* tags -- full coverage of the family this
+        // wave re-audited, not a partial sample of it.
         const char* mustBeNull[] = {
             "temp.pv", "temp.sv", "temp.soak", "temp.mode",
-            "zone.hotplate.1", "zone.shuttle.1", "zone.heatgun.1",
+            "zone.hotplate.1", "zone.hotplate.2",
+            "zone.shuttle.1",  "zone.shuttle.2",
+            "zone.index.1",    "zone.index.2",
+            "zone.heatgun.1",  "zone.heatgun.2",
             "tower.red", "tester.name", "status.uph"
         };
         bool allNull = true;
