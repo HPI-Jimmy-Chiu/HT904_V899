@@ -9229,11 +9229,20 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 
 - **完成**：批 1 Command.cpp **164/164 全清**（ece9626）；temp.* 全故事
   六 commit 收斂如前段。今日 20260820 共 14 顆 commit。基線 142/5。
-- **下一波候選**（20260820 深夜 II）：
-  (h) **Command.cpp 解閘波**：GATE 8＋GATE 3-5 前提已死（本波量測），
-      照 FW-TEMP3 的解閘形狀做（NULL guard＋內層 SAFETY 引用＋雙 gate）；
+- ~~(h) Command.cpp 解閘波~~ **已收（37ec95b，FW-CMD-D）**：GATE 3＋GATE 8
+  解閘（被呼叫者重讀全函式確認純運算、NULL guard 照慣例）；GATE 4/5/6
+  裁決不動——原 gate 文字引錯擁有者（edATCAmbientTemper/ChangeTempMode
+  是 TfMain 自己的成員，golden main.h:737/:1323，fTemp_Set 落地根本沒碰到）；
+  GATE 7 安全層不在依賴層範圍。extern-flip 又拆一顆（UserOffSet→static＋
+  include 刻意放定義後：g++ 拒 extern-then-static、收 static-then-extern，
+  檔內雙處註記）。gate 站點 135→133。雙 gate 137/142×2、guard IDENTICAL。
+- **下一波候選**（20260821 凌晨）：
   (e) FW 前端波：temp.mode 原始碼值 vs mock 字串的格式化決策＋
       layout 渲染驗證（人工 F5 誠實回報）；
   (f) 台帳二輪 QUIRK 補掃；
+  (i) SIGURD 溫控鏈補洞：GATE 4/5/6 的真缺口是 TfMain 的
+      edATCAmbientTemper（main.h:737）與 ChangeTempMode（main.h:1323）
+      ——前者是 facade 補成員的小事、後者是 TfMain 方法翻譯（golden
+      main.cpp 找本體），補完可讓 SIGURD SETTEMP_/SETSOAK_ 鏈全通；
   (d) 設計面（InstallColorBinDisplay＋MN200、mot_table HAL）留使用者。
 - **設計面**：無待答。
