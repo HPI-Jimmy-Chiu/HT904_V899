@@ -41,6 +41,8 @@
 #include "bthermo.h"                 // ClearAllHotBuffer()
 #include "ATC/ATCInterface.h"        // ATCInterfaceForm / SendCommToATC7 / ATC_SET_TEMP / ATC_RUN /
                                      // ATC_STOP (real, ACTIVE)
+#include "forms/fSetup.h"            //AI(W906-FW-SETUP-C) 20260821: fSetup->ReadUseSuckModeFile
+                                     // (real since 6e2d75e; eager instance, forms/fSetup.cpp:21)
 #include "forms/fTemp_Set.h"         // fTemp_Set->ReadTempFile(bool) (real, ACTIVE; NULL-guarded,
                                      // same idiom as Command.cpp's WriteSetTempStatus_SIGURD)
 
@@ -202,20 +204,14 @@ int TfMain::ChangeTempMode(int Mode, bool Msg, bool bRefresh, bool bGPIB, bool b
                 bEnableTempLess30degShowLight=true;
             }
 
-            // golden :21879-21896 -- SAFETY GATE (dep-fSetup-ReadUseSuckModeFile).
-            // `fSetup->ReadUseSuckModeFile()` (golden cSetUp.h, TfSetup member) has
-            // NO port anywhere in this tree: forms/fSetup.h's own file-head banner
-            // explicitly lists ReadUseSuckModeFile among the "remaining 32 methods"
-            // NOT translated (deferred (b)/(c)/cross-file-gap-blocked), and its class
-            // body declares only 15 (a) methods, none named ReadUseSuckModeFile
-            // (`grep -n "ReadUseSuckModeFile" forms/fSetup.h` -- 1 hit, inside that
-            // deferred-methods LIST comment, 0 declaration hits; re-run 20260821).
-            // The switch/case dispatch itself is real computation over real globals
-            // (TestIF_File.iTestMode / USE_IN_OUT_ARM_Y_PITCH / iXYPitch16Picker /
-            // iXYPitch16Bd_Be, all present) and stays ACTIVE; only the two
-            // ReadUseSuckModeFile() calls are gated. ReadUseSuckModeFile is a void
-            // UI-refresh call in golden (re-reads the suck-mode radio-group state
-            // from a file into the Setup dialog) -- no return value is lost.
+            //AI(W906-FW-SETUP-C) 20260821: GATE(dep-fSetup-ReadUseSuckModeFile)
+            // UNLOCKED at both sites -- the premise died with FW-SETUP-B (commit
+            // 6e2d75e): TfSetup::ReadUseSuckModeFile now has a real body
+            // (cSetUp.cpp, golden :2133-2146) and that wave's audit measured it
+            // READ-ONLY (per-recipe HandlerCondition.Data via plain ReadIniData;
+            // no missing-key write-back, no MyForceDirectories, no WriteIniData).
+            // fSetup is a REAL eager instance (forms/fSetup.cpp:21), no guard
+            // needed. Golden :21886/:21893 restored verbatim.
             switch(TestIF_File.iTestMode)                                       //jou 2010-09-03 加熱暫時先關閉使用1x2-4,1x4-8,2x2-8
             {
                 case DualSite:                                                  //1x2
@@ -223,18 +219,14 @@ int TfMain::ChangeTempMode(int Mode, bool Msg, bool bRefresh, bool bGPIB, bool b
                 case QualSite2X2:                                               //2x2
                 case DualSite2x1:                                               //2x1
                 case _8Site1X4:                                                 //ChungHung 20150528 add for 海思 _8Site1x4
-#if 0 // GATE(dep-fSetup-ReadUseSuckModeFile): golden :21886, see banner above
                     fSetup->ReadUseSuckModeFile();
-#endif // GATE(dep-fSetup-ReadUseSuckModeFile)
                     break;
                 case _8Site2X4:
                 case _16Site4X4:
                     if(USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Picker ||              //Steven for HT1032
                        USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Bd_Be)                 //Ztex 2023.12.06 Add HT-1032
                     {
-#if 0 // GATE(dep-fSetup-ReadUseSuckModeFile): golden :21893, see banner above
                         fSetup->ReadUseSuckModeFile();
-#endif // GATE(dep-fSetup-ReadUseSuckModeFile)
                     }
                     break;
             }
