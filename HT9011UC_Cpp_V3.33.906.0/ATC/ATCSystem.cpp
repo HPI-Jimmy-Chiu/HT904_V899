@@ -1372,7 +1372,17 @@ void ATC60System::NewSocket()                                                   
     _socket_thread.Initial(_socket_execute ,this);
 }
 //---------------------------------------------------------------------------
-ATC60System::ATC60System()
+//AI(W906-FW-TEMP2) 20260820: clientsocket(NULL) restores a guarantee golden had
+// and this port silently lost: golden's ATC60System is a BY-VALUE member of
+// TATCInterfaceForm (golden ATCInterface.h:231), a VCL TForm whose TObject::
+// InitInstance zero-fills the whole instance -- so golden's NewSocket() entry
+// check `if(clientsocket!=NULL)` always saw NULL on first construction. The
+// port's plain-C++ `new TATCInterfaceForm(NULL)` (ATCInterface.cpp:207, eager,
+// static-init) gives NO zero-fill: clientsocket is indeterminate, and under
+// the NT debug heap's fill pattern the first NewSocket() call deletes a wild
+// pointer -> SEGV before main (gdb bt, wb_serve e2e 20260820). Normal runs
+// survived only on fresh zeroed pages. Fidelity-restoring, not new behaviour.
+ATC60System::ATC60System() : clientsocket(NULL)
 {
     NewSocket();                                                                //ChungHung 20141211 add
 
