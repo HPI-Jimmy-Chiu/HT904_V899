@@ -1907,6 +1907,12 @@ add_library(ht9045_sm STATIC
     # convergence is a separate behaviour-change wave).
     uTemp_Set.cpp
     DynamicTemp.cpp
+    # AI(W906-FW-SETUP-B) 20260821: cSetUp.cpp -- TfSetup's sm-reaching trio
+    # (ReadUseSuckModeFile / CheckSTMMode / cbI21Click). NOT forms/fSetup.cpp
+    # material: these bodies need InArmSuck/MOT[]/IndexHasIC/per-arm dispatch,
+    # all ht9045_sm residents, and ht9045_forms cannot link sm (documented
+    # cycle at :589-593). Same root-file split as cTemperFrom/MainTempMode.
+    cSetUp.cpp
     # AI(W906-FW-CMD-E) 20260821: MainTempMode.cpp -- TfMain::ChangeTempMode
     # (golden main.cpp:21749-21925), the temperature-mode switcher extracted
     # from main.cpp. NOT MainCalcCore material (that file's charter is pure

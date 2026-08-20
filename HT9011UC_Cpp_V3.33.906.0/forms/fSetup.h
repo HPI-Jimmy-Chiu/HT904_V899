@@ -151,6 +151,60 @@
 //  behaviour decision, not a neutral cleanup. Retiring it is the user's call,
 //  not this pass's.
 // =============================================================================
+// =============================================================================
+//  AI(W906-FW-SETUP-B) 20260821: cSetUp Wave B -- MainTempMode.cpp's two
+//  SAFETY GATEs (dep-fSetup-ReadUseSuckModeFile, golden :21886/:21893) named
+//  ReadUseSuckModeFile as the missing piece. This wave audits ReadUseSuckModeFile
+//  (golden cSetUp.cpp:2133-2146) plus the full 47-method table, then translates
+//  3 more (a) 顯示/讀取側 methods on top of Wave A's 15 -- now 18/47. Full
+//  47-row classification table is in this wave's hand-off report (not
+//  reproduced here -- same "avoid a second copy drifting" rule Wave A's own
+//  banner already states); queued-method reasons for the other 29 are also
+//  there.
+//
+//  KEY DISCOVERY THIS WAVE -- A LINK-LAYER WALL, NOT A MISSING-CODE GAP:
+//  ReadUseSuckModeFile/CheckSTMMode/cbI21Click all need REAL bodies for
+//  InArmSuck/OutArmSuck/MOT[]/ResetShuttleWhichKit (aHotPlateSubstrate.h),
+//  IndexHasIC/ShuttleHasIC (csystem.h), CheckSTMMode_2x6_8/CheckSTMMode_2x8_8/
+//  CheckCloseSiteMode_1x3_14/_2x3N_14/_1x4_4 (ainarm9045_2x6_8.h/2x8_8.h/
+//  1x4_4.h/1x3_2_14.h), and ReadIniData/GetRecipeFileName (common.h) -- ALL of
+//  which live in the `ht9045_sm` CMake target. forms/fSetup.cpp (THIS file's
+//  sibling .cpp, where Wave A's 15 methods live) is compiled into
+//  `ht9045_forms`, which CMakeLists.txt:706 declares links ONLY `vclcompat
+//  ht9045_globals` -- and CMakeLists.txt:589-593 documents that adding
+//  `ht9045_forms PUBLIC ht9045_sm` was TRIED and FAILS TO CONFIGURE (a real
+//  cycle: ht9045_sm already PUBLIC-links ht9045_forms, CMakeLists.txt:2216).
+//  So these 3 methods' BODIES do NOT live in forms/fSetup.cpp -- they live in
+//  a NEW root file `cSetUp.cpp` (this tree's root, NOT forms/), which this
+//  wave adds and which mirrors the ALREADY-ESTABLISHED cTemperFrom.cpp /
+//  MainTempMode.cpp split (root .cpp for a form facade's ht9045_sm-dependent
+//  methods; forms/fXxx.cpp stays on the ht9045_globals-only diet). `cSetUp.cpp`
+//  is written to belong to `ht9045_sm` (same target as cTemperFrom.cpp/
+//  MainTempMode.cpp, CMakeLists.txt's `add_library(ht9045_sm ...)` block,
+//  ~line 1338) -- confirmed by symbol provenance: aHotPlateSubstrate.cpp/
+//  csystem.cpp/ainarm2.cpp/canary_support.cpp (ShowMyMessage) are ALL already
+//  IN that target, and ht9045_sm reaches ReadIniData/GetRecipeFileName
+//  (common.cpp, `ht9045_core`) transitively via its own declared PUBLIC edge
+//  to `ht9045_secsgem` (CMakeLists.txt:2209), which itself PUBLIC-links
+//  `ht9045_core` (CMakeLists.txt:1165) -- the exact path csystem.cpp's own 59
+//  ReadIniData/GetRecipeFileName call sites already rely on. THIS FILE gains
+//  NO new #include for any of the above -- only the 3 method declarations
+//  (void, no parameters) and the `cbI21` widget field, none of which need the
+//  heavy headers in a class declaration. CMakeLists.txt is OUT OF THIS WAVE'S
+//  EDIT BOUNDARY -- `cSetUp.cpp` is NOT YET added to `ht9045_sm`'s source
+//  list; see the hand-off report for the exact one-line insertion point.
+//
+//  PRE-EXISTING RISK DISCLOSED (NOT introduced or fixed this wave): Wave A's
+//  own XPitchKeyPress (forms/fSetup.cpp) calls `OnlyNumberAndDotInPut`, whose
+//  real body is common.cpp (`ht9045_core`) -- but `ht9045_forms` (XPitchKeyPress's
+//  own target) does not declare `ht9045_core` as a link dependency by any
+//  path. This compiles fine (declaration-only from common.h) and evidently
+//  links today (Wave A shipped), so `ht9045_core` must already be reaching
+//  `ht9045_forms`-linking executables some other way in practice -- but it is
+//  an UNDECLARED edge of the exact shape CMakeLists.txt:614-646 already
+//  documents fixing once (the AGV_predicates incident). Flagged for the main
+//  loop; not this wave's boundary to fix (would require editing CMakeLists.txt).
+// =============================================================================
 #ifndef FORMS_FSETUP_H
 #define FORMS_FSETUP_H
 
@@ -285,6 +339,11 @@ public:
     TRadioButton *rgUseSht2           = new TRadioButton();  // golden cSetUp.h:25
     TRadioGroup  *rgUseSuckMode       = new TRadioGroup();   // golden cSetUp.h:36
 
+    // -- AI(W906-FW-SETUP-B) 20260821: golden cSetUp.h:93 `TCheckBox *cbI21;`,
+    //    dfm Caption='Enable auto site mapping function' (cSetUp.dfm, decoded
+    //    cp950, 20260821) -- cbI21Click's only widget dependency.
+    TCheckBox   *cbI21                = new TCheckBox();     // golden cSetUp.h:93
+
     // -- 15 (a) methods, see file-head banner for golden spans/classification --
     int  GetTestMode(AnsiString sTestMode);
     void rgShtModeNormalClick();
@@ -301,6 +360,16 @@ public:
     void edDelayTimeClick();
     void edAuto1CountClick();
     void edtGetValueDelayTimeClick();
+
+    // -- AI(W906-FW-SETUP-B) 20260821: 3 more (a) methods, Wave B. UNLIKE the
+    //    15 above, these 3 BODIES live in the root `cSetUp.cpp` (ht9045_sm),
+    //    NOT forms/fSetup.cpp (ht9045_forms) -- see this file's Wave B banner
+    //    for the link-layer reason. Declared here exactly like any other
+    //    member; callers (ckernel.cpp/Command.cpp/handlerlog.cpp/
+    //    MainTempMode.cpp) do not need to know or care which .cpp defines them.
+    void ReadUseSuckModeFile();   // golden cSetUp.cpp:2133-2146 (14L)
+    void CheckSTMMode();          // golden cSetUp.cpp:2148-2177 (30L)
+    void cbI21Click();            // golden cSetUp.cpp:4804-4828 (25L)
 
     TfSetup();
     virtual ~TfSetup() {}
