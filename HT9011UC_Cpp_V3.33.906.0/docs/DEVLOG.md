@@ -9247,11 +9247,37 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   **SIGURD SETTEMP_/SETSOAK_ 鏈至此端到端接通**（僅剩 GATE 7 共用
   config 寫檔一點，等 redirect-seam 設計）。雙 gate 137/142×2、
   guard IDENTICAL。今日（0820-0821 通宵班）累計 21 顆 commit。
-- **下一波候選**（20260821 凌晨 III）：
-  (e) FW 前端波：temp.mode 原始碼值 vs mock 字串格式化決策＋
-      uTemp_Set/DynamicTemp layout 渲染驗證（人工 F5 誠實回報）；
+- ~~(k) fSetup 補洞~~ **已收兩顆**：FW-SETUP-B（6e2d75e）新根檔 cSetUp.cpp
+  三方法（ReadUseSuckModeFile/CheckSTMMode/cbI21Click，forms↛sm 分層故
+  照 cTemperFrom/MainTempMode 同型根檔分割；47 方法普查 18/47 翻、29 佇列
+  各附阻塞原因；**ReadUseSuckModeFile 稽核＝唯讀安全**）＋FW-SETUP-C
+  （a260b13）MainTempMode 兩處解閘 golden 原句還原。雙 gate 皆
+  137/142×2、guard IDENTICAL。**披露未修**：ht9045_forms→ht9045_core
+  是靠運氣活著的未宣告連結邊（AGV_predicates 同型）。
+
+## 20260821 凌晨總結 — 通宵班收官
+
+- 20260820 15:40 起連續推進：**26 顆 commit**。主線：FW-3 批 3 收尾
+  （uTemp_Set＋DynamicTemp 翻譯）→temp.* tag 三顆上瀏覽器（e2e 抓出
+  SEGV＋out_of_range 兩雷）→SIOF 修復→Tech recon→批 1 Command.cpp
+  164/164→兩輪前提死閘解鎖（SIGURD SETTEMP_/SETSOAK_ 鏈端到端）→
+  fSetup 補洞＋解閘。
+- 入政策的新陷阱三顆：extern-flip（file-local 常數一律顯式 static）、
+  StringGrid 尺寸從 dfm 抄、稽核必含呼叫鏈被呼叫者。
+- 常駐失敗集合全程 5 項不動；guard 552 全程 IDENTICAL。
+
+### 🔖 RESUME（最新）
+
+- **完成**：見上節總結。最新 commit a260b13。基線 142/5（實測 137/142
+  常駐五項 ×12 輪雙 gate）。
+- **下一波候選**（20260821 白天）：
+  (e) FW 前端波：temp.mode 原始碼值（2）vs web mock 字串（"Hot Mode"）
+      的格式化決策＋uTemp_Set/DynamicTemp layout 渲染驗證（人工 F5）；
   (f) 台帳二輪 QUIRK 補掃；
-  (k) fSetup 顯示側補洞（ReadUseSuckModeFile 等 32/47 未宣告方法的
-      重評——MainTempMode 的兩個 gate 卡它）；
-  (d) 設計面（InstallColorBinDisplay＋MN200、mot_table HAL）留使用者。
-- **設計面**：無待答。
+  (l) fSetup 佇列 29 方法的下一批（ctor 陣列建置波是解鎖大宗的前置：
+      TestSiteCH[][]/MyTempRGBox[]——需 Init() 慣例＋TScrollBar 設計決策，
+      後者半設計面）；
+  (m) forms→core 未宣告連結邊修正（CMakeLists，AGV_predicates 同型）；
+  (d) 設計面（InstallColorBinDisplay＋MN200、mot_table HAL、TScrollBar
+      vclcompat 元件設計）留使用者。
+- **設計面**：無待答（TScrollBar 元件設計建議與使用者同步後開）。
