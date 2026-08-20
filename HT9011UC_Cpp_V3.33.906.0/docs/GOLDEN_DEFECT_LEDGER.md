@@ -71,15 +71,15 @@ FW 系列 / `GOLDEN BUG #N` / `k7-B1` 類區域編號等標記寫在程式碼裡
 
 | 項目 | 數值 |
 |---|---|
-| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **628 筆**（以表格內 `#` 編號列實際計數，20260819 二輪 QUIRK 補掃後） |
-| 其中 BUG 類（`GOLDEN BUG` / `GOLDEN BUGS` / `GOLDEN BUG #N` / `(Bx) GOLDEN BUG`） | 251 筆 |
-| 其中 QUIRK 類（`GOLDEN QUIRK` / `GOLDEN QUIRKS`） | 238 筆（含 SECSGEM 三檔補撈的 39 筆；含二輪補掃新增 71 筆，見下方「二輪 QUIRK 補掃紀錄」） |
-| 其中 DEFECT 類（`GOLDEN DEFECT` / `GOLDEN DEFECTS`） | 69 筆（含二輪補掃新增 5 筆） |
-| 其中 ODDITY 類（`GOLDEN ODDITY` / `GOLDEN ODDITIES`） | 41 筆 |
-| 其中 ASYMMETRY 類（`GOLDEN ASYMMETRY` / `GOLDEN ASYMMETRIES`） | 14 筆 |
+| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **650 筆**（以表格內 `#` 編號列實際計數，20260820 三輪增補後；`python3` 逐列計數，見下方「三輪增補紀錄」） |
+| 其中 BUG 類（`GOLDEN BUG` / `GOLDEN BUGS` / `GOLDEN BUG #N` / `(Bx) GOLDEN BUG` / golden copy-paste bug） | 252 筆（含三輪新增 1 筆，`cConfiguration.h` 的 `sbUpdateHPClick` copy-paste bug） |
+| 其中 QUIRK 類（`GOLDEN QUIRK` / `GOLDEN QUIRKS`） | 238 筆（含 SECSGEM 三檔補撈的 39 筆；含二輪補掃新增 71 筆，見下方「二輪 QUIRK 補掃紀錄」；三輪未新增 QUIRK 類） |
+| 其中 DEFECT 類（`GOLDEN DEFECT` / `GOLDEN DEFECTS`） | 70 筆（含二輪補掃新增 5 筆；含三輪新增 1 筆，`BinDisplay/MyBinDisp.cpp` 的 `WriteTargetBin` off-by-one） |
+| 其中 ODDITY 類（`GOLDEN ODDITY` / `GOLDEN ODDITIES`） | 57 筆（含三輪新增 16 筆，集中在 batch-5 顯示側叢集，見下方「三輪增補紀錄」） |
+| 其中 ASYMMETRY 類（`GOLDEN ASYMMETRY` / `GOLDEN ASYMMETRIES`） | 15 筆（含三輪新增 1 筆，`BinDisplay/MyBinDisp.h` 的 `ComPort`/`ComPort2` 初始化不對稱） |
 | 其中 DIVERGENCE 類（port 自身偏離 golden，已揭露，非 golden 本身缺陷；csystem.cpp/SCK_ART.cpp 各 1 筆合計 2） | 2 筆 |
-| 其中 GAP / LEAK / NOTE / INCONSISTENCY / GOTCHA / SPELLINGS / TYPO / DEAD CODE / INVARIANT / RACE 等罕見詞彙（各 1-2 筆） | 13 筆（原文件記載 12 筆，本次二輪複算時發現為既有的 ±1 落差，非本次新增所致，已一併更正為實測值） |
-| 涉及檔案數 | 118 個 `### ` 分節（含少數純交叉參照的 stub 分節；扣除 stub 後約 100 個檔案有實際列出的筆數；二輪補掃未新增檔案，只在既有 7 個檔案分節後追加子分節） |
+| 其中 GAP / LEAK / NOTE / INCONSISTENCY / GOTCHA / SPELLINGS / TYPO / DEAD CODE / INVARIANT / RACE 等罕見詞彙 | 16 筆（NOTE 4／GOTCHA 2／GAP 2／LEAK 2／INCONSISTENCY 1／SPELLINGS 1／TYPO 1／DEAD CODE 1／INVARIANT 1／RACE 1；含三輪新增 NOTE +2、GOTCHA +1，皆在 `cShowBinSelect.cpp`/`BinDisplay/MyBinDisp.h`） |
+| 涉及檔案數 | 126 個 `### ` 分節（含少數純交叉參照的 stub 分節；三輪增補新增 8 個分節：`forms/fLotInfo.cpp`、`forms/fSpeed.h+cSpeed.cpp`、`forms/fStartCondition.h+cStartCondition.cpp`、`forms/fConfiguration.h+cConfiguration.cpp`、`forms/fSetup.h+fSetup.cpp`、`BinDisplay/MyBinDisp.h+.cpp`、`forms/fHandlerSys.h+HandlerSys.cpp`(stub)、`tests/test_amr.cpp`(stub)；`cShowBinSelect.cpp`/`forms/fShowBinSelect.h` 的 WAVE D/E 補充是既有分節的延伸子分節，不重複計檔案數） |
 | 標示 ⚠️存疑（agent 或 orchestrator 本人判讀信心不足） | 見文末「無法判讀/存疑清單」 |
 
 > 上列數字為 `python3 -c "..."` 對本檔表格列直接計數所得（見文末補撈紀錄的量測方式），
@@ -112,6 +112,48 @@ FW 系列 / `GOLDEN BUG #N` / `k7-B1` 類區域編號等標記寫在程式碼裡
 - 本次補掃**未回頭複查 BUG / ODDITY / ASYMMETRY 等其他詞彙**在這 7 個檔案是否也有類似
   缺口；範圍嚴格限定在使用者指定的 QUIRK 補掃（DEFECT 兩筆屬掃描中順帶讀到，非系統性複查
   DEFECT 詞彙覆蓋度）。
+
+### 三輪增補紀錄（20260820）
+
+第三輪針對 20260819 晚間至 20260820 上午新落地的 FW3 batch-5 顯示側波次逐檔掃描：
+`forms/fLotInfo.{h,cpp}`、`forms/fSpeed.h`＋`cSpeed.cpp`、`forms/fStartCondition.h`＋
+`cStartCondition.cpp`、`forms/fHandlerSys.h`＋`HandlerSys.cpp`、`forms/fConfiguration.h`＋
+`cConfiguration.cpp`、`forms/fSetup.{h,cpp}`、`cShowBinSelect.cpp`＋`forms/fShowBinSelect.h`
+（僅掃 WAVE D/E 新段，WAVE A/B/C 已在原始快照與二輪收錄過）、`BinDisplay/MyBinDisp.{h,cpp}`、
+`tests/test_amr.cpp`。
+
+- 新增 22 筆：ODDITY 16、NOTE 2、GOTCHA 1、ASYMMETRY 1、BUG 1、DEFECT 1。
+- 各檔新增筆數：`forms/fLotInfo.cpp` +2、`forms/fSpeed.h`+`cSpeed.cpp` +2、
+  `forms/fStartCondition.h`+`cStartCondition.cpp` +5、`forms/fConfiguration.h`+
+  `cConfiguration.cpp` +4、`forms/fSetup.h`+`fSetup.cpp` +1、`cShowBinSelect.cpp`+
+  `forms/fShowBinSelect.h`（WAVE D/E）+4、`BinDisplay/MyBinDisp.h`+`.cpp` +4。
+  `forms/fHandlerSys.h`+`HandlerSys.cpp` 與 `tests/test_amr.cpp` 各 +0（逐行核對後確認無
+  符合條件項目，已在各自分節留下排除說明，而非略過不提）。
+- 掃描樣式：任務指定的 `GOLDEN ODDITY`/`GOLDEN QUIRK`/`GOLDEN DEFECT`/`GOLDEN NOTE`/
+  `preserved verbatim`/`off-by`/`照翻`/`copy-paste`/`no-op`，另加本檔「掃描範圍聲明」
+  已建立的完整詞彙表交叉核對（`golden's own`/`golden itself`/`kept verbatim`/`misleading`/
+  `landmine`/`typo`/`mistake`/`wrong`/`incorrect` 等），逐一讀取上下文人工判讀，非機械式
+  關鍵字計數。
+- **排除的邊界案例**（判定為「非 golden 缺陷」，詳細理由見各自分節的排除說明，此處僅列摘要）：
+  1. `forms/fLotInfo.h:246` 的「recon's row #2 ... copy-pasted onto FormDestroy by mistake」
+     ——這是先前 RECON 文件本身的摘要寫錯，不是 golden 缺陷。
+  2. `forms/fLotInfo.cpp:421` 的「Same defect class ... as cObserver's sgStatisticsJam」
+     ——這是 port 自己的 `TStringGrid` 建構尺寸 bug（已修正），不是 golden 缺陷。
+  3. `forms/fLotInfo.h` GATE (WC-3)（`ShowXMLOnLine` 儘管名叫 Show 卻寫檔 x4）——內容類別
+     符合這棵樹已知的「Show/Read/Close 前綴會騙人」現象，但該處全文查無任何 `GOLDEN xxx`
+     字樣，純屬 GATE REGISTER 的依賴缺口說明，依掃描範圍聲明的判準不收錄；與確有收錄的
+     `forms/fStartCondition.h` (SC1)/(SC2)/(SC4) 不同——那三筆 banner 原文明確寫出
+     「GOLDEN ODDITY」字樣。
+  4. `cStartCondition.cpp:843` 的「DEVIATION: golden's own ... self-reference」——描述的是
+     golden 用全域指標自我參照的翻譯適配說明，非缺陷/怪異標記。
+  5. 使用者原提示詞列出的「cSetUp FormClose『Close 其實是丟棄未存檔』」一例：經查
+     `forms/fSetup.h`/`.cpp` 全文，`FormClose` 本波仍是 32 個 queued（未翻譯）方法之一，
+     未附任何 golden 缺陷註記（不同於 `cSpeed.cpp` 已翻譯並附註記的同款 `FormClose` 現象）
+     ——本輪未收錄，留待該函式真正翻譯時再記錄，不可與 `forms/fSpeed.h` 的同名現象混淆。
+- `BinDisplay/MyBinDisp.h` 的「DEVIATION / GOLDEN ODDITY」banner 下有 3 個子項 (a)(b)(c)，
+  僅 (a)（`FlashPro` 的全域自我呼叫）與 (c)（`ComPort`/`ComPort2` 初始化不對稱）收錄；
+  (b)（ctor 隱式依賴 BCB6 零值填充）判定為翻譯適配技術說明而非缺陷標記，未收錄——
+  這是本輪唯一一處「同一 banner 下部分收、部分不收」的情況，供日後複核。
 
 ### 補撈紀錄（依使用者/協調者指示，對全樹跑 `grep -rniE "GOLDEN [A-Z]+[ ,]"` 供詞彙缺口複查）
 
@@ -165,6 +207,15 @@ FW 系列 / `GOLDEN BUG #N` / `k7-B1` 類區域編號等標記寫在程式碼裡
 | 1 | **GOLDEN BUG (B12)（使用者指定的已知大案）** | BUG | forms/fShowBinSelect.h:253-271；cShowBinSelect.cpp:1088,1236,1243,1292 | golden :541-545 | `ShowBinSel` 對 non-BulkBox 錯誤盤重新導向的分支，先把 `bUnloadHasBin[Data]` 設 `true`（golden :543），兩行後又無條件蓋回 `false`（golden :545），中間完全沒有讀取，使前面的 `=true` 變成死碼 | 該分支下 `bUnloadHasBin[Data]` 恆為 `false`；忠實保留不修，因為改成 `=true` 會改變下游讀者（若存在）觀察到的行為，需使用者裁決 | 整併 20260819 |
 | 2 | GOLDEN NOTE（未編號，附於 B12 說明中） | NOTE | cShowBinSelect.cpp:1291-1298 | golden :602-609 | `ShowBinSel` 的 Magazine-Link 內層迴圈在 `bMagazineLink[]` 全鏈為 `true` 的病態情況下會以負數索引存取 `bMagazineLink[i-j]`，形成陣列越界讀取 | 因索引 0（`eAuto1`）從未被任何 port 寫入者設為 `true`，實務上無法觸發，屬理論風險 | 整併 20260819 |
 | 3 | **GOLDEN ODDITY (B13)（使用者指定的已知大案）** | ODDITY | cShowBinSelect.cpp:1322-1328 | golden :628,:2543,:2762（Pos()檢查）vs :561（真正的dots寫入器） | 判斷是否要把 bin 顯示灰階的 `Pos()` 檢查所用的 87 字元前導空格字串，實際上從未出現在任何寫入來源（dots 寫入器用的是另一個 80 字元前導點字串），`j==1` 這個條件在 golden 自身就永遠不成立，灰階分支是死碼 | 對所有 non-tNotUse 的 tray，永遠走彩色顯示分支，灰階顯示邏輯形同虛設但無害；忠實翻譯保留，未簡化刪除 | 整併 20260819 |
+
+### cShowBinSelect.cpp / forms/fShowBinSelect.h WAVE D/E 補充（4 筆，承續上表編號 4-7；取自目前 working tree 20260820 落地的 WAVE D/E，見上方掃描範圍聲明——這兩個 Wave 是三輪增補時新落地的內容，不在原始 `git show HEAD:c590952` 快照範圍內）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 4 | GOLDEN ODDITY（WAVE D，未編號） | ODDITY | cShowBinSelect.cpp:2253；forms/fShowBinSelect.h:393-400 | golden :272 | `ChangeBinDispStatus` 對 `PageControl1->ActivePageIndex==3` 用 `==` 而非 `=`，是一個沒有任何效果的比較敘述句（golden 幾乎可以肯定是想寫 `=`） | 純粹是無效的比較敘述，對顯示行為無影響；忠實翻譯成 `(void)(...)` 保留這個 no-op，未「修正」成 `=` | AI(W906-FW3-SBS-WD) 20260820 |
+| 5 | GOLDEN NOTE（同 B12 說明中 NOTE 之第二現場，未獨立編號） | NOTE | cShowBinSelect.cpp:2536-2544 | golden `ChangeBinDispStatus` :207-386（Magazine-Link 迴圈） | `ChangeBinDispStatus` 自己的 Magazine-Link 內層迴圈與 `ShowBinSel`（既有 NOTE，cShowBinSelect.cpp:1291-1298）同樣手法，在 `bMagazineLink[]` 全鏈為 `true` 的病態情況下會以負數索引存取 `bMagazineLink[i-j]` | 因索引 0（`eAuto1`）從未被任何 port 寫入者設為 `true`，實務上無法觸發，屬理論風險；與既有 NOTE 同一 golden 手法在第二個函式重現 | AI(W906-FW3-SBS-WD) 20260820 |
+| 6 | GOLDEN NOTE（同上手法之第三現場，i=0 變體，未獨立編號） | NOTE | cShowBinSelect.cpp:2842-2856；forms/fShowBinSelect.h:454-455 | golden `ShowBinDigital` :880-996（Magazine-Link 迴圈） | `ShowBinDigital` 自己的 Magazine-Link 迴圈外圈從 `i=0` 起算（不像手足迴圈是 `i=1`），理論上 `i==0` 時會索引到 `bMagazineLink[-1]`；但因外層 `if` 需要 `bMagazineLink[0]==true` 才會進入、而該欄位從未被任何 port 寫入者設為 `true`，實務行為與手足迴圈相同 | 同上，理論風險、實務不可觸發；忠實保留，未「對稱化」成從 i=1 起算 | AI(W906-FW3-SBS-WE) 20260820 |
+| 7 | GOLDEN ODDITY（WAVE E，未編號） | ODDITY | cShowBinSelect.cpp:2866-2874；forms/fShowBinSelect.h:456-457 | golden `ShowBinDigital`（同函式，緊鄰上一列的迴圈 else 分支） | `MyBinSel[eMag1+i]->Caption=MyBinSel[eMag1+i]->Caption;` 是一個自我賦值（a=a）的無效敘述，讀起來像是刻意表達「未連動則維持原 Caption」的 else 分支，而非單純打字錯誤 | 純粹無效敘述，不影響顯示行為；連 golden 原本多出來的一個前導空格都逐字保留，未清理 | AI(W906-FW3-SBS-WE) 20260820 |
 
 ### Automation/SCK_ART.cpp + csystem.cpp（GOLDEN DIVERGENCE，2 筆，⚠️性質特殊，見掃描範圍聲明）
 
@@ -1402,6 +1453,100 @@ Note: rows marked "cross-ref"/"（見 ...，同一缺陷）" (FTPClient_Transfer
 
 ### cCounterClear.cpp
 （無符合條件的項目）— 唯一 `(Bx)` 命中（line 560）引用「cShowBinSelect.cpp GATE (B1)」，屬另一檔案的 GATE 登錄交叉參照，僅說明 `fCounterClear->ClearCount(...)` 呼叫點目前是否可達，非本檔缺陷發現。
+
+---
+
+## 三輪增補（20260820）：FW3 batch-5 表單顯示側叢集
+
+以下由 orchestrator（本代理）直接讀取原始碼掃描、未經子代理轉手，涵蓋 20260819 晚間至
+20260820 上午新落地的 batch-5 顯示側波次：`forms/fLotInfo.{h,cpp}`、`forms/fSpeed.h`＋
+`cSpeed.cpp`、`forms/fStartCondition.h`＋`cStartCondition.cpp`、`forms/fHandlerSys.h`＋
+`HandlerSys.cpp`、`forms/fConfiguration.h`＋`cConfiguration.cpp`、`forms/fSetup.{h,cpp}`、
+`BinDisplay/MyBinDisp.{h,cpp}`、`tests/test_amr.cpp`。搜尋樣式含任務指定的
+`GOLDEN ODDITY`/`GOLDEN QUIRK`/`GOLDEN DEFECT`/`GOLDEN NOTE`/`preserved verbatim`/
+`off-by`/`照翻`/`copy-paste`/`no-op`，另加本檔既有詞彙表全集（`golden's own`/`golden itself`/
+`kept verbatim`/`misleading`/`landmine`/`typo`/`mistake`等）交叉核對，逐一讀取上下文判讀。
+
+**排除的邊界案例（判定為「非 golden 缺陷」，未收錄）：**
+- `forms/fLotInfo.h:246`「recon's row #2 ... copy-pasted onto FormDestroy by mistake」——
+  這是先前 RECON 文件本身的摘要寫錯（把 FormClose 的摘要複製貼到 FormDestroy 列），
+  是本專案文件的錯誤，不是 golden 原始碼的缺陷。
+- `forms/fLotInfo.cpp:421`「Same defect class and same fix shape as cObserver's
+  sgStatisticsJam」——這是 port 自己在 Wave B 發現並修正的**建構元件尺寸**bug
+  （`TStringGrid` 預設 5x5 未依 golden .dfm 尺寸放大），是 port 的翻譯缺陷、已修正，
+  不是 golden 缺陷。
+- `forms/fLotInfo.h` GATE (WC-3)「ShowXMLOnLine 儘管名叫 Show 卻寫檔 x4」——內容雖符合
+  這棵樹「Show/Read/Close 前綴會騙人」的已知現象類別，但該處註解全文查無任何
+  `GOLDEN xxx` 字樣（純粹是 GATE REGISTER 的依賴缺口說明），依本檔「掃描範圍聲明」
+  的判準（註解文字本身要明確使用 GOLDEN-缺陷詞彙）不收錄；與下面確有收錄的
+  (SC1)/(SC2)/(SC4) 不同，那三筆的 banner 原文明確寫出「GOLDEN ODDITY」字樣。
+- `cStartCondition.cpp:843`「DEVIATION: golden's own `fStartCondition->
+  strngrdCylinderView` self-reference」——描述的是 golden 用全域指標自我參照（BCB6
+  常見寫法），純屬翻譯適配說明，非缺陷/怪異標記。
+- 使用者原提示詞列出的「cSetUp FormClose『Close 其實是丟棄未存檔』」一例，經查
+  `forms/fSetup.h`/`forms/fSetup.cpp` 全文：`FormClose` 本身在這一波仍是**queued（未翻譯）**
+  的 32 個方法之一，未附任何 golden 缺陷註記——現象本身可能是真的（cSpeed 的
+  `FormClose` 已證實同款設計），但 cSetUp 這一份目前尚未有對應的 port 端文字紀錄，
+  故本輪未收錄，留待該函式真正翻譯時再記錄。
+
+### forms/fLotInfo.cpp（2 筆）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 1 | GOLDEN ODDITY（未編號） | ODDITY | forms/fLotInfo.cpp:1204-1211 | golden `ShowSocketID` :11443-11516 | `ShowSocketID` 透過 3 個客戶別分支算出 `iTestCHCT`，但全函式其餘部分（含下方迴圈）從未再讀取這個變數，是 golden 自己的死儲存 | 純粹白算，不影響顯示行為；`(void)iTestCHCT;` 消掉 `-Wall` 警告但不改變行為 | AI(W906-FW3-LotInfo-WA) 20260819 |
+| 2 | GOLDEN ODDITY（GATE (WC-1) 附帶說明） | ODDITY | forms/fLotInfo.h:587-593（GATE REGISTER (WC-1)）；forms/fLotInfo.cpp:3111-3118 | golden `FormShow` :373,:427 | `FormShow` 在 `IniConfig.bShowLotInfo` 分支內呼叫一次 `ResetLotInfo()`，47 行後又無條件再呼叫一次，兩次呼叫之間沒有任何狀態改變——golden 自己的重複呼叫，非翻譯選擇 | `ResetLotInfo()` 本身是 (b) write-path、本波未翻譯，兩次呼叫皆整段 `#if 0` gate；一旦未來翻譯，需注意這是刻意重現的重複呼叫而非遺漏合併 | AI(W906-FW3-LotInfo-WC) 20260819 |
+
+### forms/fSpeed.h + cSpeed.cpp（2 筆）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 1 | GOLDEN ODDITY（未編號） | ODDITY | forms/fSpeed.h:50-52,227-236；cSpeed.cpp:1309-1314 | golden `FormClose` :1272-1280 | 名叫 `FormClose` 的方法實際上呼叫 `ReadFile(); DoIniDataToForm();`，等於從磁碟重新讀回並蓋掉畫面上任何未存檔的編輯——是「丟棄」不是「儲存」；golden 自己的行內註解（JerryYang 20250411：離開頁面要刷新一次,避免誤存檔）證實是刻意設計 | 忠實翻譯保留（唯讀顯示側翻譯範圍內即為如此）；未來若有人望文生義以為 `FormClose` 會存檔，需以此記錄糾正 | AI(W906-FW3-Speed-WA) 20260819 |
+| 2 | GOLDEN ODDITY（未編號） | ODDITY | forms/fSpeed.h:282-285,331 | golden :540-541（`private` 欄位宣告） | 私有欄位 `OrgStr`（`AnsiString`）在 golden `cSpeed.cpp` 全檔 0 處被讀取，golden 自己就是死欄位；port 仍保留只為讓 header 私有區段與 golden 佈局逐一對應 | 純粹無用欄位，不影響行為；保留是為結構忠實而非誤譯 | AI(W906-FW3-Speed-WA) 20260819 |
+
+### forms/fStartCondition.h + cStartCondition.cpp（5 筆）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 1 | GOLDEN ODDITY (SC1) | ODDITY | forms/fStartCondition.h:119-125；cStartCondition.cpp:217-223 | golden `FormShow` :142-147（寫入在 :145） | 名叫 `FormShow` 的方法裡藏了一個真正的 WRITE：`if(IniConfig.bShowFTandRTButtonCanClick==true && CUSTOMER_CODE!=CC_SCC){ LastSet.iStartMode=2; ...}`，這棵樹已追蹤的「Show/Read/Close 前綴會騙人」手法第 5 個實例 | `LastSet.iStartMode=2;` 目前整段 `#if 0`；配合 (SC2) 一起被 gate 後，下方 :174-179 的顯示判斷讀到的是 FormShow 呼叫前既有的 `iStartMode`，而非 golden 原本會強制寫入的值——已揭露，非靜默吸收 | AI(W906-FW3-StartCond-WA) 20260819 |
+| 2 | GOLDEN ODDITY (SC2) | ODDITY | forms/fStartCondition.h:126-140；cStartCondition.cpp:252-258 | golden `FormShow` :169-172（寫入在 :171） | 同一函式內第二處隱藏 WRITE：`if(cbStartModeOnlyFT->Checked==true){ LastSet.iStartMode=1; }`，與 (SC1) 同類 | 同 (SC1)，兩者合計效應已在 banner 揭露：顯示可能與 golden 當下強制值不同步 | AI(W906-FW3-StartCond-WA) 20260819 |
+| 3 | GOLDEN ODDITY (SC4) | ODDITY | forms/fStartCondition.h:152-163；cStartCondition.cpp:810-822 | golden `UpdateCylinderScreen` :1565-1572 | 名叫 `UpdateCylinderScreen`（顯示更新）的方法裡藏了一個自我修復性質的 WRITE：偵測到 `Cylinder[i].iOnOffCount<0`（計數器溢位變負值）時記錄、歸零並呼叫 `SaveCylinderLife()` 落盤，「UpdateScreen」名稱完全看不出會落盤 | 该 clamp+persist 整段 `#if 0`；周圍顯示這個計數欄位的敘述保持 ACTIVE，故溢位時會照原樣顯示負數，直到真正翻譯這段 | AI(W906-FW3-StartCond-WA) 20260819 |
+| 4 | GOLDEN ODDITY（RogerYang 20260203 comment，golden :888） | ODDITY | forms/fStartCondition.h:68-79（banner 說明；`ReadWriteStartCondition` 本身本波整段未翻譯） | golden `ReadWriteStartCondition` :760-924，comment at :888 | golden 自己的行內註解記錄了一次歷史 bugfix：「修正formshow裡的fSetup->ReadFile()又調用ReadWriteFile()會造成銦片計數異常」，代表這個函式的讀取臂對呼叫順序（相對於 FormShow 的 `fSetup->ReadFile()`）敏感，golden 作者曾為此修過 race condition | 本波選擇整段排入 write-path 佇列、不拆讀寫臂，正是因為這段歷史記錄顯示拆開翻譯有重演舊 bug 的風險；記錄本身供未來真正翻譯此函式時提醒 | AI(W906-FW3-StartCond-WA) 20260819 |
+| 5 | GOLDEN ODDITY（死碼，未編號） | ODDITY | cStartCondition.cpp:646-651 | golden `FormShow` 尾段 :534-535 | `FormShow` 結尾的 `myLog.Do_Log(...)` 呼叫在 golden 原始碼裡自己就已經被 `//` 註解掉（非 port 造成的翻譯缺口），port 原樣保留成註解文字 | 無行為影響，純粹是 golden 自身已死的一行，保留註解供未來讀者確認並非漏翻 | AI(W906-FW3-StartCond-WA) 20260819 |
+
+### forms/fHandlerSys.h + HandlerSys.cpp
+（無符合條件的項目）— 全檔以任務指定樣式與本檔既有詞彙表全集逐行核對，0 個 `GOLDEN BUG/ODDITY/
+QUIRK/DEFECT/NOTE/...` 命中。檔案內「(d) GOLDEN-DEAD or STRUCTURALLY GATED」字樣是這一波
+四分類（(a)/(b)/(c)/(d)）方法分類表的自訂分類標題本身，其下內容（4 個方法本波未宣告）是純
+GATE 依賴缺口說明，非 golden 缺陷紀錄。
+
+### forms/fSetup.h + fSetup.cpp（1 筆）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 1 | GOLDEN ODDITY（未編號） | ODDITY | forms/fSetup.h:70,143-152；forms/fSetup.cpp:78（`RadioButton1KeyDown` 翻譯處的交叉參照註解） | golden `RadioButton1KeyDown` :4443-4449 | `RadioButton1KeyDown` 在 golden `cSetUp.h`/`cSetUp.cpp` 裡有宣告與定義，但目前的 `cSetUp.dfm` 裡找不到任何元件的 `OnKeyDown` 接到它（甚至連叫 `RadioButton1` 的元件都不存在，.dfm 裡只有 `RadioButton6`）——是 golden 自己的 DFM-孤兒事件處理常式 | 該方法在目前的 .dfm 佈局下永遠不會被呼叫；仍依「照翻，並在//AI 註解寫下它為什麼看起來錯」政策原樣翻譯，是否退休留待使用者決定 | AI(W906-FW3-Setup-WA) 20260820 |
+
+### forms/fConfiguration.h + cConfiguration.cpp（4 筆）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 1 | GOLDEN ODDITY（未編號） | ODDITY | cConfiguration.cpp:105-114 | golden `edtC15Click` :7675-7678 | `edtC15Click` 的（gate 中）`ShowQwertyKey(...,true,1440,30)` 呼叫，Min/Max 兩個參數順序顛倒，golden 自己就是這樣寫 | 此呼叫整段 `#if 0`（write-path，本波未翻譯），記錄供未來真正接上數字鍵盤時比對 | AI(W906-FW3-Config-WA) 20260820 |
+| 2 | GOLDEN ODDITY（未編號） | ODDITY | cConfiguration.cpp:116-124 | golden `edL09_Sh1LClick` :7680-7683 | 同一手法第二例：`ShowQwertyKey(...,true,1000,-1000)`，Min/Max 顛倒 | 同上 | AI(W906-FW3-Config-WA) 20260820 |
+| 3 | GOLDEN ODDITY（未編號） | ODDITY | cConfiguration.cpp:153-161 | golden `edtSetIPSCQtyClick` :7700-7703 | 同一手法第三例：`ShowQwertyKey(...,true,60000,0)`，Min/Max 顛倒 | 同上 | AI(W906-FW3-Config-WA) 20260820 |
+| 4 | golden copy-paste bug（未編號，RECON 4.3 記載） | BUG | forms/fConfiguration.h:67-74（banner 揭露；`sbUpdateHPClick` 本身本波未宣告） | golden `sbUpdateHPClick` :7088-7111（RECON #98） | `sbUpdateHPClick`（儲存 HP 表格的按鈕）複製貼上自 `sbUpdateTrayClick`，實際執行的卻是重新載入 TRAY 格與清除 TRAY 按鈕的 Down 狀態，而非 HP 格自己的對應動作 | `sbUpdateHPClick`/`sbUpdateTrayClick` 皆屬 (b) write-path，本波依 RECON 6.2 指示刻意不排入顯示側波次，未翻譯；記錄供未來寫入波次處理時得知這是 golden 既有瑕疵、需照翻 | RECON_cConfiguration_displayside.md §4.3（引用於 AI(W906-FW3-Config-WA) 20260820） |
+
+### BinDisplay/MyBinDisp.h + MyBinDisp.cpp（4 筆）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 1 | GOLDEN ODDITY（DEVIATION (a)，未編號） | ODDITY | BinDisplay/MyBinDisp.h:128-138；MyBinDisp.cpp:581-587 | golden `FlashPro`/`ClearAutoChangingWarn` :3129-3168 | `FlashPro` 透過全域單例 `HSys.BinDisCtrl->GetColorNow(...)`/`->StartFlash(...)` 呼叫「自己」，而不是直接 `this->...`——在正式機上 `HSys.BinDisCtrl` 本來就是 `this`，是多餘的全域間接呼叫；golden 自己的寫法，非翻譯產物 | 純粹是不必要的間接呼叫，行為與 `this->` 完全相同；忠實保留未「修正」 | AI(W906-BinDisp-WA) 20260820 |
+| 2 | GOLDEN GOTCHA（DEVIATION (b)，未編號） | GOTCHA | BinDisplay/MyBinDisp.h:139-153 | golden 建構子 :39-129 | golden 建構子本身有多個 scalar/array 欄位從未賦值，隱含依賴 BCB6 `TObject::NewInstance` 在建構子執行前先把整塊實例記憶體歸零——這個「零值」從未在 golden 建構子裡明講，是隱性的 VCL 平台語意 | 若 port 不額外補一個 `ZeroInitVclFields()` 手動歸零，這些欄位在標準 C++ 下會是未初始化的隨機值而非 golden 實際的 0/false/NULL——已補上等效初始化以維持行為對等，記錄供未來比對 | AI(W906-BinDisp-WA) 20260820 |
+| 3 | GOLDEN ASYMMETRY（DEVIATION (c)，未編號） | ASYMMETRY | BinDisplay/MyBinDisp.h:154-161 | golden 建構子 :86（`ComPort=4;`） | `ComPort` 在建構子裡被賦值字串 `"4"`，但同類的 `ComPort2` 在建構子裡完全沒被賦值（僅靠 `AnsiString` 自己的預設建構子變成 `""`）——這個不對稱是 golden 自己的寫法 | 兩個看似成對的欄位初始值不同源；忠實保留該不對稱，未「補齊」`ComPort2` 的預設值 | AI(W906-BinDisp-WA) 20260820 |
+| 4 | **GOLDEN DEFECT（使用者指定的已知案例）** | DEFECT | MyBinDisp.cpp:89-97,451 | golden `WriteTargetBin` :608 | `WriteTargetBin` 的邊界檢查 `if(Index>MAX_BIN_UNIT) return;` 應該是 `>=MAX_BIN_UNIT`（`MAX_BIN_UNIT` 本身就是「最後一個合法索引之後」那個哨兵值，`iSetBin[MAX_BIN_UNIT][...]`/`bSetBin[MAX_BIN_UNIT]` 等陣列大小恰好是 `MAX_BIN_UNIT`）——`>` 讓 `Index==MAX_BIN_UNIT` 這個 off-by-one 值溜過檢查 | `Index==MAX_BIN_UNIT` 時會寫到 `iSetBin[Index][...]`/`bSetBin[Index]=true;`，越界寫入陣列尾端後一個元素；忠實翻譯保留 `>`（未改成 `>=`），留供使用者裁決是否修正 | AI(W906-BinDisp-WA) 20260820 |
+
+### tests/test_amr.cpp
+（無符合條件的項目）— 全檔以任務指定樣式與擴充詞彙表逐行核對，0 個 `GOLDEN BUG/ODDITY/QUIRK/
+DEFECT/NOTE/...` 命中；fixture 內的所有 `golden :NNNN` 引註都只是客觀對照 golden 行號/行為，
+未使用任何缺陷類詞彙。
 
 ---
 
