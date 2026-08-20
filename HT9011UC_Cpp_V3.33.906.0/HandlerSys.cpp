@@ -22,6 +22,13 @@
 //  Strings[i]);` -- entirely about the DEFERRED rgCustomerList/
 //  slCustomerCode machinery, see forms/fHandlerSys.h's DEFERRAL note; this
 //  facade's ctor is implicit/default, all widgets already NSDMI-constructed).
+
+//  WAVE B ADDENDUM (W906-FW3-HandlerSys-WB, 20260820): the ctor +
+//  GetCustomerName ARE NOW translated below -- this resolves the DEFERRAL
+//  note in forms/fHandlerSys.h (rgCustomerList/slCustomerCode wiring via
+//  automated dfm-string extraction, 211/211 items, 0 tokenizer anomalies,
+//  cross-counted two independent ways). See the ctor/GetCustomerName
+//  banners below for the extraction method and verification detail.
 // =============================================================================
 #include "MachineDefine.h"     // de-VCL'd include hub: vclcompat umbrella + portable STL
 #pragma hdrstop
@@ -506,4 +513,336 @@ void THandlerSystem::LoaderSafeDoorSet()
     SafeDoor10->Checked=Sen[SnSafeDoor10].Enable;
     HeaterDoor1->Checked=Sen[SnHeaterDoor].Enable;
     HeaterDoor2->Checked=Sen[SnHeaterDoor2].Enable;
+}
+
+//---------------------------------------------------------------------------
+//  rgCustomerList Items.Strings -- golden HandlerSys.dfm, verbatim
+//  "NNN ShortName<pad>FullDescription" customer-code list (211 entries).
+//
+//  AI(W906-FW3-HandlerSys-WB) 20260820: DEFERRAL RESOLVED. This data was
+//  NOT hand-transcribed (see forms/fHandlerSys.h's DEFERRAL note for why
+//  that would have been dangerous -- a single dropped/mis-decoded entry
+//  would misreport a REAL customer's identity). It was machine-extracted
+//  by a one-time Python script (session scratchpad only, not checked into
+//  this tree) that:
+//    1. read HandlerSys.dfm in BINARY mode (never text/cp950-decoded via
+//       Read/Edit -- see this tree's own Big5-edit-corruption gotcha),
+//    2. located the `Items.Strings = ( ... )` block for
+//       HandlerSystem.Panel2.pcSetting.tsCustomerCode.rgCustomerList,
+//    3. tokenized each physical line as an Object Pascal character-string
+//       constant: a run of 'quoted' segments (with '' as an escaped
+//       literal quote, decoded via .decode('cp950') -- the file's raw
+//       quoted bytes ARE cp950) concatenated with #NNNNN decimal escapes.
+//       #NNNNN IS A UNICODE CODEPOINT (chr(NNNNN)), NOT a cp950 byte pair
+//       -- confirmed empirically: #40251#21185 -> U+9D3B U+52C1 -> the
+//       vendor's own Chinese name for the "000 HonPrec" self-entry, and
+//       #39640#36890 -> U+9AD8 U+901A -> Qualcomm's real Chinese brand
+//       name for the "999 Qualcomm" entry (interpreting the same digits
+//       as raw cp950 lead/trail bytes instead produces invalid/nonsense
+//       byte pairs, ruling that reading out),
+//    4. VALIDATED the one-line-per-dfm-item hypothesis by requiring the
+//       tokenizer consume every byte of every physical line with ZERO
+//       leftover (0 anomalies across all 211 item lines, including the
+//       terminator line where the block's closing ')' sits glued onto the
+//       LAST item's final token with no separator or whitespace:
+//       `...'999 Qualcomm             '#39640#36890)`),
+//    5. cross-COUNTED two independent ways from the same raw dfm bytes:
+//       the tokenizer's own item count (211) AND an independent regex
+//       count of physical lines matching the block's fixed 12-space
+//       indent + opening-quote prefix (also 211) -- both agree,
+//    6. spot-checked (raw dfm bytes vs. decoded UTF-8, 5 entries):
+//    [0] '000 HonPrec              鴻勁'
+//    [1] '731 Carsem_Thai          Carsem 泰國'
+//    [9] '764 Elmos Germany        Elmos德國'
+//    [208] '997 Altera_USA           Altera 美國'
+//    [210] '999 Qualcomm             高通'
+//       -- each decodes to the semantically correct real-world
+//       company/country name for that row (own name, 2x Thailand, USA,
+//       Germany, Qualcomm's brand), not coincidental mojibake.
+//  Order is LOAD-BEARING: GetCustomerName below walks this array by
+//  POSITION exactly as golden walks rgCustomerList->Items by position
+//  (the match itself is on the embedded 3-digit code via SubString, not
+//  array index, but a dropped/reordered/duplicated entry would still
+//  change which row wins or silently drop a customer) -- do not
+//  alphabetize, resort, or dedupe this table.
+//---------------------------------------------------------------------------
+static const char* const kCustomerListItems[] = {
+    "000 HonPrec              鴻勁",
+    "731 Carsem_Thai          Carsem 泰國",
+    "730 IFXTH                IFXTH泰國",
+    "740 Ramos                Ramos Technology",
+    "741 TechL_Vitenam        TechL-Vitenam",
+    "742 TechL_Korea          TechL-Korea",
+    "751 Mellanox_Israel      Mellanox 以色列",
+    "743 SFA_Semicon          SFA_Semicon",
+    "763 CC_UTAC_Indonesia    聯測科技 印尼",
+    "764 Elmos Germany        Elmos德國",
+    "765 Allegro Philippines  Allegro菲律賓",
+    "766 Morningcore          宸芯 ",
+    "767 Paceis               航芯源 ",
+    "768 Sigmastar            銳力 ",
+    "769 BRAVETEK             博發電子 ",
+    "770 DJI_SZ               大疆創新 深圳",
+    "771 JSCC_OS              長電微電子",
+    "772 TYTAN                成都態坦",
+    "773 CAPCON               北京華封",
+    "780 NXP_TJ               恩智浦 天津",
+    "781 XINYUN               杭州芯云",
+    "783 SCX                  深測芯",
+    "787 TAIJI_SEMI           太極半導體(蘇州)",
+    "790 Forehope_NINGBO      甬矽 寧波",
+    "791 SJ_Semiconductor     盛合晶微",
+    "792 SJ_Semiconductor_OS  盛合晶微Open Short",
+    "793 30JAVEE              成都三零嘉微電子",
+    "794 CAMBRICON            上海寒武紀",
+    "795 VATE                 立衛",
+    "796 ASIAOPTICAL          亞洲光學",
+    "797 HXYSEMI              浙江航源芯",
+    "800 Broadcom US          博通 美國",
+    "801 Tessolve_US          Tessolve-US",
+    "802 Infineon             英飛凌",
+    "803 TERADYNE_US          泰瑞達 美國",
+    "804 TeraProbe            TeraProbe 日本",
+    "805 TATA                 塔塔-印度",
+    "806 STM                  意法半導體 馬爾他",
+    "809 IMEC                 愛美科",
+    "810 AVAGO_Korea          安華高 韓國",
+    "812 PTI                  力成3C廠",
+    "813 SFA_Semicon          SFA Semicon",
+    "820 TSMC_TAINAN          台積電 台南 ",
+    "825 TSMC_HSINCHU         台積電 新竹",
+    "828 ChenYuanXiang_CHINA  晨元翔 西安",
+    "829 EUROFINS             歐陸",
+    "830 HTKJXA_CHINA         西安 天水華天",
+    "831 RF360                RF360",
+    "832 LBSH                 上海祿比",
+    "833 Realtek              瑞昱半導體",
+    "834 RIGGER_MICRO         鄭州銳傑微",
+    "835 XINITECH             北京芯力",
+    "836 GIGA_FORCE_Zhejiang  季豐 浙江 ",
+    "837 GIGA_FORCE_Shanghai  季豐 上海",
+    "838 CSAMQ                長沙安牧泉",
+    "839 GONGJIN_SHANGHAI     上海共進",
+    "840 SANDISK_CHINA        上海新帝",
+    "841 GONGJIN_SUZHOU       蘇州共進",
+    "842 Mathilda             馬舍科技",
+    "843 DoosanTesna          DOOSAN TESNA",
+    "844 Renesas Malaysia     Renesas 馬來西亞",
+    "845 STK                  STK 日本",
+    "846 Renesas              Renesas 日本",
+    "847 THINE                Thine 日本",
+    "848 SINOICTECH           上海華嶺",
+    "849 ChipOn               上海芯旺",
+    "850 ChipMos_TAINAN       南茂 台南",
+    "851 ChipMos_ZHUBEI       南茂 竹北",
+    "852 ITS                  創量科技",
+    "853 NEXPERIA             安世 廣東",
+    "854 Atec_Semiconductor   上海旻艾半導體",
+    "855 JSSI_Semiconductor   江蘇芯德半導體",
+    "856 Microchip_FR         Microchip 法國",
+    "857 Indie_US             Indie 美國.",
+    "858 CETC                 中國電子-第58研究所 ",
+    "859 XDXCT                象帝先              ",
+    "860 MAXIM_TAILAND        MAXIM 泰國",
+    "861 Microchip_Thailand   Microchip 泰國",
+    "862 Microchip_Philippines Microchip 菲律賓",
+    "863 Microchip_China      Microchip 中國",
+    "864 Microchip_US         Microchip 美國",
+    "865 HANA Micron",
+    "866 iTest_Inc            iTest,Inc. 美國",
+    "867 EMemory              EMemory 力旺電子",
+    "868 CYUEAN               CYUEAN 确安科技",
+    "869 PANTHER              PANTHER 鴻谷科技",
+    "870 ARDENTEC             欣詮",
+    "871 FULCAP               詮容",
+    "872 AOSL                 萬有半導體",
+    "873 Nuvoton_Israel       新唐 以色列",
+    "874 GT                   寰邦科技",
+    "875 Novatek              聯詠科技",
+    "876 Sunplus              凌陽科技",
+    "877 Amlogic              晶晨半導體",
+    "878 Higon                海光 成都",
+    "879 Kingston             金士頓",
+    "880 Spreadtrum           展訊 上海",
+    "881 Amazon               Amazon",
+    "882 Murata               Murata",
+    "883 Goertek              歌爾微電子",
+    "884 FMSH                 上海復旦微電子 ",
+    "885 HDSC                 華大半導體",
+    "886 SANECHIPS            中興微電子 深圳",
+    "887 Habana Labs          Habana Labs",
+    "889 CENTER               中芯國際",
+    "890 UMC                  聯電",
+    "891 ATEC                 艾科",
+    "892 Winstek              台星科",
+    "893 Sanan                三安",
+    "894 UTAC_TW              聯測科技 台灣",
+    "895 BARUN",
+    "897 SILTERRA_CHINKIANG   矽佳 鎮江",
+    "898 AMD_SUZHOU           AMD  蘇州",
+    "899 YTEC                 久元",
+    "900 SPIL                 矽品 中山",
+    "901 ISE_USA              ISE",
+    "902 HYGEIA_SUZHOU        海京 蘇州",
+    "903 JSI_HAOXING          長電 紹興",
+    "904 JINGJIAWEI_CHANGSHA  長沙景嘉微",
+    "905 ISE_SH               上海月芯半導體科技",
+    "906 INTEL_IL             INTEL 以色列",
+    "907 IBM_CANADA           IBM 加拿大",
+    "908 PGC                  巨有科",
+    "909 ITESTSEMI            安測半導體    ",
+    "910 SPIL SHINCHU         矽品 新竹",
+    "911 SPIL TAICHUNG_LOGIC  矽品 台中",
+    "912 SPIL CHINA_SUZHOU    矽品 蘇州",
+    "913 HUAWEI               華為",
+    "914 ANST                 蘇州安盛",
+    "915 V-Test               無錫 偉測半導體",
+    "916 TFME CHINA           通富微電",
+    "918 BOJIAN               蘇州 博劍",
+    "919 V-Test Shanghai      上海 偉測半導體",
+    "920 KYEC CHEN            京元 記憶體",
+    "921 KYEC LEE             京元 邏輯",
+    "922 KYEC JCTHIU          京元",
+    "923 DL_TEK               東琳.",
+    "924 KYEC XILINX          京元 Xilinx",
+    "925 KYEC STM             京元 STM ",
+    "926 Advantest_GE         Advantest 德國",
+    "927 LATTICESEMI          萊迪思半導體",
+    "928 ITRI                 工業技術研究院 ",
+    "929 ASE KaohSiung_K12    日月光 高雄K12",
+    "930 ASE SG               日月光 新加坡",
+    "931 ASE JP               日月光 日本",
+    "932 ASE Korea            日月光 韓國",
+    "933 ASE CL               日月光 中壢",
+    "934 ASE SH               日月光 上海",
+    "935 ASE N                日月光 NXP",
+    "937 ASE Malaysia　　　　 日月光 馬來西亞",
+    "938 ASE KaohSiung_K3　   日月光 高雄K3",
+    "939 ASE KaohSiung_K11    日月光 高雄K11",
+    "940 UTAC                 Open/Short",
+    "941 SIGURD HUKOU         矽格 湖口",
+    "942 RFMD BEIJING         RFMD 北京",
+    "943 JSCC                 SC 江陰",
+    "944 JSCS                 SC 新加坡",
+    "945 SIGURD ChungXing     矽格 中興",
+    "946 SIGURD PeiXing       矽格 北興",
+    "947 JSCK                 SC 韓國",
+    "948 RFMD USA             RFMD美國　　",
+    "949 ASE KS               日月光 崑山",
+    "950 APTOS                群豐",
+    "951 WINBOND              華邦",
+    "952 G-Link               G Link",
+    "953 AMKOR                艾克爾",
+    "954 GIGA                 GIGA",
+    "955 LINGSEN              菱生",
+    "956 Greatek              超豐",
+    "957 PTI                  力成",
+    "958 THAILIN              泰林",
+    "959 JCET                 江蘇長電",
+    "960 OSE                  華泰",
+    "961 MTI                  聚成",
+    "962 NUVOTON              新唐",
+    "964 Eutrend              聿勤  ",
+    "965 TICP                 高雄典範.  ",
+    "966 THEIL                同欣電子",
+    "967 TERAPOWER            晶兆成",
+    "968 RICHTEK              立錡",
+    "969 TSI                  誠遠科技",
+    "970 GIGAS　　　　　　　　全智",
+    "971 AMKOR Korea          安靠韓國.",
+    "972 AMKOR China          安靠上海.",
+    "973 AMKOR Japan          安靠日本.",
+    "974 AMKOR Philippines    安靠菲律賓",
+    "975 UTAC_TH              聯測科技 泰國",
+    "976 ANALOG DEVICES PH    亞德諾半導體菲律賓",
+    "977 ONSEMI_CA            On Semi CANADA",
+    "978 INTEL_US             INTEL US",
+    "979 INTEL_M              INTEL Malaysia",
+    "980 CARSEM M             Carsem Malaysia",
+    "981 UNISEM M             Unisem Malaysia",
+    "982 AMD M                AMD Malaysia",
+    "983 INARI M              INARI Malaysia ",
+    "984 OnSemi M             On Semi Malaysia ",
+    "985 MAXIM ",
+    "986 MARVELL ",
+    "987 ATMEL ",
+    "988 USI                  環鴻科技",
+    "989 DYNACARD             新東亞微電子",
+    "990 CYPRESS ",
+    "991 GERADTECH            智瑞達",
+    "992 GM-Test ",
+    "993 I-Tech ",
+    "994 WinPac ",
+    "995 Silicon_Labs SG      Silicon_Labs新加坡",
+    "996 Silicon_Labs SZ      Silicon_Labs深圳",
+    "997 Altera_USA           Altera 美國",
+    "998 ETRENDTECH           逸昌科技",
+    "999 Qualcomm             高通",
+};
+static const int kCustomerListItemCount =
+    static_cast<int>(sizeof(kCustomerListItems) / sizeof(kCustomerListItems[0]));
+
+//---------------------------------------------------------------------------
+//  THandlerSystem ctor -- golden :18-24
+//  DEVIATION: golden's ctor body only copies rgCustomerList->Items into
+//  slCustomerCode, because BCB6's TForm(Owner) base ctor already streamed
+//  the .dfm's Items.Strings into rgCustomerList BEFORE this body ever runs.
+//  This non-VCL facade has no such streaming step, so this ctor performs
+//  that hydration explicitly first (from kCustomerListItems above), THEN
+//  runs golden's own copy loop verbatim.
+//---------------------------------------------------------------------------
+THandlerSystem::THandlerSystem()
+{
+    // DEVIATION (see banner above): golden gets this for free from the
+    // .dfm resource stream; this facade must hydrate it explicitly.
+    rgCustomerList->Items = new TStringList();
+    for (int i = 0; i < kCustomerListItemCount; i++)
+        rgCustomerList->Items->Add(kCustomerListItems[i]);
+
+    // golden :21-23, verbatim from here down
+    for (int i = 0; i < rgCustomerList->Items->Count; i++)
+        slCustomerCode->Add(rgCustomerList->Items->Strings[i]);
+}
+
+//---------------------------------------------------------------------------
+//  GetCustomerName -- golden :1100-1130
+//  DEVIATION: golden calls .SubString()/.AnsiPos()/.Length() directly on
+//  `rgCustomerList->Items->Strings[i]`, a real VCL AnsiString reference.
+//  vclcompat's Strings[i] returns a StringsProxy (vclcompat/TStringList.h)
+//  exposing only `operator AnsiString() const` for reads -- no forwarded
+//  SubString/AnsiPos/Length -- so this translation binds it to a local
+//  AnsiString first via that conversion operator. Same value, same order
+//  of operations as golden.
+//---------------------------------------------------------------------------
+AnsiString THandlerSystem::GetCustomerName()                                   //Steven 20120524 : 使用迴圈找出客戶名稱
+{
+    AnsiString Str="HonPrec", tmp;
+    int iCustomerCode;
+    for(int i=0; i<rgCustomerList->Items->Count; i++)
+    {
+        AnsiString item=rgCustomerList->Items->Strings[i];   // DEVIATION: see banner above (StringsProxy has no SubString/AnsiPos/Length)
+        iCustomerCode=atoi(item.SubString(1, 3).c_str());     //取出前三碼的客戶代碼
+        if(iCustomerCode==CUSTOMER_CODE)
+        {
+            if(CUSTOMER_CODE==CC_SPIL_CHINA_SUZHOU && SPIL_FOR_QLE==1)          //Steven 20230110 : For渠梁
+            {
+                Str="QLE";
+            }
+            else if(CUSTOMER_CODE==CC_IFXTH_Thai)                               //Ifor 20251113 add:客戶要求改為Infineon
+            {
+                Str="Infineon";
+            }
+            else if(CUSTOMER_CODE==CC_Carsem_Thai)                              //Ifor 20260331 add:客戶要求改為CARSEM
+            {
+                Str="CARSEM";
+            }
+            else
+            {
+                tmp=item.SubString(5, item.Length());   //去除前四碼的客戶代碼+空白
+                Str=tmp.SubString(1, tmp.AnsiPos(" ")-1);                       //取得從第一個字元到第一個空白的字串
+            }
+            return Str;
+        }
+    }
+    return Str;
 }

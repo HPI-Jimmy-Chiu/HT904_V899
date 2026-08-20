@@ -8884,6 +8884,24 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   no-op（讀起來像刻意的「未連結維持原值」空分支，照翻含原縮排）。
 - cShowBinSelect 顯示側至此全清（A/B/C/D/E）。
 
+## 20260820 早晨 II — rgCustomerList dfm 自動抽取（HandlerSys WB）
+
+- HandlerSys WA 的 DEFERRAL 清償：211 筆客戶碼表**自動抽取**
+  （Python tokenizer 解 Delphi 字串常數；**關鍵發現：#NNNNN 是
+  Unicode 碼位非 cp950 位元組對**——鴻勁/高通雙重驗證坐實）。
+  雙重計數互證（tokenizer 全消耗＋獨立 regex 皆 211）＋5 筆語意
+  抽核（鴻勁/泰國/德國/美國/高通）。順序原樣落地（承重）。
+- GetCustomerName（32 行）＋ctor hydrate 佈線；兩個 DEVIATION：
+  facade 無 .dfm 資源流→ctor 手動灌 Items；StringsProxy 無
+  SubString 轉發→先綁本地 AnsiString。三個客戶特例分支
+  （QLE/Infineon/CARSEM）逐字翻。零新 GATE。
+- **代理越界自揭**：跑了 build.bat＋背景 gate（TaskStop 中止）——
+  留下一個孤兒 test exe（主迴圈已 taskkill 清除）。誠實揭露＋
+  自查（CMakeLists 未動、無 repo 殘留）符合預期紀律；brief 的
+  「不准 build.bat/ctest」下波要放進硬規則首行。
+- THandlerSystem 仍 INTEGRATION-PENDING（無 extern 實例）——
+  GetCustomerName 尚無消費者，未來接 SECS/GEM 或 web tag。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8893,13 +8911,14 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
 - **批 5 全清＋user.level（FW-1d）＋recipe.current（FW-1e）接通**。
-  BinDisCtrl 鏈與 cShowBinSelect 顯示側全收（A-E）。
+  BinDisCtrl 鏈、cShowBinSelect A-E、rgCustomerList 全收。
   **下一波**依脈絡擇一：(a) bin.* 解鎖（SetTechDataToProd 呼叫者
-  harness 決策）；(b) 1203 HAL MOTION_IO pimpl；(c) rgCustomerList
-  dfm 自動抽取波；(d) vclcompat 擴充收斂波；
-  (e) InstallColorBinDisplay＋MN200 c/e 同波接線（需先決定 offline
-  用 TMyBinDispOffline 或維持 NULL——半設計面，宜留使用者裁決）。
-  真機類依 §7 仍佇列。
+  harness 決策）；(b) 1203 HAL MOTION_IO pimpl；(c) vclcompat 擴充
+  收斂波（TStringGrid 欄位五處 subclass＋TScrollBar/TImage/TWMKey）；
+  (d) InstallColorBinDisplay＋MN200 c/e 同波接線（半設計面，
+  宜留使用者裁決）。真機類依 §7 仍佇列。
+- **brief 規則追加**：「不准 build.bat/ctest/背景行程」要放 brief
+  硬規則首行（rgCustomerList 波代理越界跑了 build+gate 後自揭）。
 - **FW-1 備忘**：pct 六顆等 sort.total 站穩後接；recipe.current/
   user.level 來源鏈未查（可能落在未翻的 cConfiguration）；
   tagmap.js 的 data-cmd 十筆結構性缺口要跟 web 前端波一起解；

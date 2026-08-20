@@ -164,6 +164,26 @@
 //  hydrate" discipline extended to "text CONTENT hydration", not just
 //  numeric dimensions.
 //
+//
+//  ADDENDUM -- RESOLVED (W906-FW3-HandlerSys-WB, 20260820)
+//  --------------------------------------------------------------------------
+//  The DEFERRAL above is RESOLVED. rgCustomerList/slCustomerCode/
+//  GetCustomerName are now declared/translated (this header + HandlerSys.cpp).
+//  The ~200-entry text WAS NOT hand-transcribed -- a one-time Python script
+//  (session scratchpad, not checked into this tree) parsed HandlerSys.dfm's
+//  `Items.Strings = (...)` block in BINARY mode, decoding quoted segments as
+//  cp950 and `#NNNNN` escapes as Unicode codepoints (chr(NNNNN), verified
+//  NOT cp950 byte pairs -- see the data-table banner in HandlerSys.cpp for
+//  the full method). Result: 211 items, 0 tokenizer anomalies (every one of
+//  211 physical lines -- including the terminator line, where the block's
+//  closing ')' sits glued onto the last item's final token with no
+//  separator -- fully round-tripped with zero leftover bytes), item count
+//  cross-checked two independent ways (tokenizer count vs. independent
+//  regex line count, both 211), and 5 entries spot-checked against both raw
+//  dfm bytes and real-world semantic plausibility (own company name +
+//  Thailand x2 + Germany + USA + Qualcomm's actual Chinese brand name). See
+//  HandlerSys.cpp's data-table banner for the itemized spot-check list.
+//
 //  DEPENDENCY AUDIT (this wave, 20260819) -- confirmed present with matching
 //  field/function names:
 //    common.h/.cpp : CheckAndReadIniDataGeneral (4 overloads, common.h:229-232),
@@ -240,6 +260,12 @@ public:
     //  (unlike cStartCondition); the omission here is purely "not touched by
     //  the 3 in-scope methods", same DEVIATION rationale as
     //  forms/fStartCondition.h's leaner-subset note.
+    //
+    //  UPDATE (W906-FW3-HandlerSys-WB, 20260820): the "`rgCustomerList`/
+    //  `slCustomerCode` NOT declared" sentence above is now STALE -- both
+    //  ARE declared below (see the DEFERRAL ADDENDUM further up this file).
+    //  `TempComp` remains NOT declared (still GATE (H1), unaffected by this
+    //  wave's data-fidelity fix).
     // -----------------------------------------------------------------------
     TGroupBox    *GroupBox1  = new TGroupBox();
     TGroupBox    *GroupBox2  = new TGroupBox();
@@ -481,6 +507,10 @@ public:
     TComboBox   *coNudn1Macid13 = new TComboBox();
     TComboBox   *coCanBusNudn1 = new TComboBox();
     TRadioGroup *rgLBTemp2 = new TRadioGroup();
+    TRadioGroup *rgCustomerList = new TRadioGroup();  // golden :422 -- Items hydrated in ctor
+                                                     //   (HandlerSys.cpp), NOT via NSDMI; see
+                                                     //   ctor DEVIATION banner there. DEFERRAL
+                                                     //   RESOLVED, see ADDENDUM below.
     TComboBox   *coNudn1Macid14 = new TComboBox();
     TComboBox   *cbSocketSenAmpCnt2nd = new TComboBox();
     TRadioGroup *rgInShtAutoLatch = new TRadioGroup();
@@ -518,6 +548,16 @@ public:
     void FormShow();          // golden :34-77 (Sender dropped, see below)
     void LoaderSystemSet();   // golden :79-457
     void LoaderSafeDoorSet(); // golden :990-1004
+
+    // -----------------------------------------------------------------------
+    //  Wave B translated member/method (body: HandlerSys.cpp, this wave) --
+    //  resolves the DEFERRAL note above. See ADDENDUM below and the ctor/
+    //  GetCustomerName banners in HandlerSys.cpp for extraction method +
+    //  verification detail (211/211 items, 0 tokenizer anomalies).
+    // -----------------------------------------------------------------------
+    TStringList *slCustomerCode = new TStringList();  // golden :506; populated in
+                                                       //   ctor (HandlerSys.cpp)
+    AnsiString   GetCustomerName();                    // golden :1100-1130
 };
 
 // DEVIATION: FormShow drops its golden TObject* Sender parameter -- matches
