@@ -574,6 +574,16 @@
 //    SCOPE note). Offline default 0 (no cell selected), same "cosmetic/
 //    interaction-state, offline inert" posture as every other facade-only
 //    extension in this tree.
+//    AI(W906-VclGrid-1) 20260820: the 5-subclass TStringGrid-extension
+//    consolidation wave (vclcompat/StringGrid.h) moved Visible/Font/
+//    DefaultColWidth/FixedRows/FixedCols/Row/ColWidths[]/ClearRow(i) from
+//    forms/fObserver.h's TfObserverGrid and forms/fConfiguration.h's
+//    TfConfigurationGrid to the shared base. TfShowBinSelectGrid was READ in
+//    full as part of that wave's survey and is DELIBERATELY LEFT AS-IS: its
+//    only addition, `Selection.Top`, shares no member name with that union,
+//    so there is nothing here to shadow or collapse. It still inherits the
+//    new base members for free (unused, harmless) same as every other
+//    TStringGrid subclass in the tree.
 //  TfShowBinSelectPanel : public vclcompat::TPanel
 //    Adds `Top` (int) for palAutoDeviceEjection->Top (ctor's SPIL_FOR_QLE
 //    branch) -- vclcompat::TPanel carries no geometry. AI(W906-FW-SBWC)

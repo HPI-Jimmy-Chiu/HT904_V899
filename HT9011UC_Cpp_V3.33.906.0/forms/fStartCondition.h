@@ -212,18 +212,36 @@
 //
 //  DESIGN NOTE -- TfStartConditionGrid (1 new local widget type)
 //  --------------------------------------------------------------------------
-//  vclcompat::TStringGrid (vclcompat/StringGrid.h) deliberately carries ONLY
-//  Cells[][]/RowCount/ColCount (its own file-head SCOPE note: "NO rendering,
-//  NO FixedRows/.../ColWidths/RowHeights"). golden's sgContactCount ALSO
-//  needs ->Width= (FormShow :190/:218, dynamic column-count-driven resize)
-//  and strngrdCylinderView ALSO needs ->ColWidths[i]= (UpdateCylinderScreen's
-//  one-time header setup, golden :1505-1517), ->Height= (LoadCylinderLife's
-//  one-time RowCount-driven resize, golden :1650) and ->Refresh() (end of
-//  UpdateCylinderScreen, golden :1588). Same "compose, don't fork the shared
-//  header" posture as forms/fContactCT.h's TfContactCTGrid: Width/Height/
-//  ColWidths[] are COSMETIC LAYOUT ONLY (nothing in this wave's 8 translated
-//  methods reads any of them back) and Refresh() is a documented GATE (SC5)
-//  sibling no-op.
+//  golden's sgContactCount ALSO needs ->Width= (FormShow :190/:218, dynamic
+//  column-count-driven resize) and strngrdCylinderView ALSO needs
+//  ->ColWidths[i]= (UpdateCylinderScreen's one-time header setup, golden
+//  :1505-1517), ->Height= (LoadCylinderLife's one-time RowCount-driven
+//  resize, golden :1650) and ->Refresh() (end of UpdateCylinderScreen,
+//  golden :1588). Width/Height are COSMETIC LAYOUT ONLY (nothing in this
+//  wave's 8 translated methods reads either back) and stay LOCAL to this
+//  class (this form is the only one of the 5 TStringGrid-extension facades
+//  that needs plain geometry ints under these names); Refresh() is a
+//  documented GATE (SC5) sibling no-op and also stays local (StartCondition/
+//  ContactCT/Observer each carry their own near-identical GDI Refresh()
+//  no-op -- a real but SEPARATE duplication from the ColWidths one below,
+//  evaluated and deliberately left alone this wave, see file-tail note).
+//
+//  AI(W906-VclGrid-1) 20260820: ->ColWidths[i]= used to be this class's own
+//  FIXED-SIZE `int ColWidths[16]` array (16 >= eCylPrAlarmItemTotal(13); only
+//  indices 0..12 were ever assigned) -- a DIFFERENTLY-SHAPED, independent
+//  implementation of the same property name that forms/fObserver.h's
+//  TfObserverGrid and forms/fConfiguration.h's TfConfigurationGrid ALSO each
+//  carried (as an auto-growing proxy, not a fixed array). Now that the
+//  proxy shape lives on the shared vclcompat::TStringGrid base (see that
+//  header's own SCOPE banner), keeping a local fixed-array `ColWidths` here
+//  too would SHADOW the inherited member -- name-identical, type-different,
+//  silently picking whichever one a given expression happens to bind to.
+//  Removed in favour of the inherited proxy: verified behaviour-preserving
+//  by reading every `strngrdCylinderView->ColWidths[...]` site in
+//  cStartCondition.cpp (13 lines, :750-762, one WRITE per eCylPrAlarmItemTotal
+//  enumerator, 0 reads) -- the base proxy's write-through semantics for
+//  `ColWidths[idx]=value` are identical to a plain array's for every index
+//  ever touched here.
 //
 //  HYDRATION (dfm: HT9011UC_Code_V3.33.906.0_20260618/cStartCondition.dfm,
 //  this wave -- see project's own "TStringGrid default 5x5 already broke
@@ -278,8 +296,9 @@ class TfStartConditionGrid : public vclcompat::TStringGrid
 public:
     int Width  = 0;
     int Height = 0;
-    int ColWidths[16] = {0};   // 16 >= eCylPrAlarmItemTotal (13); only index
-                               // this wave ever assigns is 0..12
+    // AI(W906-VclGrid-1) 20260820: ColWidths[] REMOVED from here -- now
+    // inherited from vclcompat::TStringGrid (see DESIGN NOTE above for the
+    // shadow-avoidance rationale and the behaviour-preservation check).
 
     explicit TfStartConditionGrid(int initialColCount = 5, int initialRowCount = 5)
         : vclcompat::TStringGrid(initialColCount, initialRowCount) {}

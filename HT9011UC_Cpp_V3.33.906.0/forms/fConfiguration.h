@@ -154,23 +154,24 @@
 //  verification, and the answer is "no, it doesn't, for 6 of the members
 //  6.2's own functions touch".
 //
-//  Rather than edit the shared vclcompat header (outside this wave's write
-//  boundary; ~15 other TUs already depend on vclcompat::TStringGrid's exact
-//  current shape per that header's own note), this file follows the SAME
-//  additive facade-only subclass idiom ALREADY established by forms/
-//  fObserver.h's TfObserverGrid, forms/fShowBinSelect.h's
-//  TfShowBinSelectGrid, forms/fStartCondition.h's TfStartConditionGrid,
-//  forms/fContactCT.h's TfContactCTGrid: TfConfigurationGrid PUBLICLY
-//  INHERITS vclcompat::TStringGrid (so it still converts for free to any
-//  `vclcompat::TStringGrid*` parameter, should a future wave need that) and
-//  ADDS Font (TFont*)/DefaultColWidth/FixedRows/FixedCols/Row as plain
-//  facade-only data, plus a ColWidths[] auto-growing proxy (byte-for-byte
-//  the same proxy shape as TfObserverGrid::ColWidthsProxy). NOT a GATE:
-//  every one of these properties compiles and holds the exact value golden
-//  assigns; only the RENDERING implied by a real Font/DefaultColWidth/
-//  FixedRows/Row (i.e. actually drawing rows/columns/fonts sized
-//  accordingly) is out of scope -- the same "no renderer this wave" posture
-//  every other headless facade grid in this tree already carries.
+//  AI(W906-VclGrid-1) 20260820: Font/DefaultColWidth/FixedRows/FixedCols/Row/
+//  the ColWidths[] auto-growing proxy MOVED to the shared vclcompat header
+//  (vclcompat/StringGrid.h) as part of the 5-subclass TStringGrid-extension
+//  consolidation wave -- this facade's own copy of the ColWidths proxy was
+//  byte-for-byte identical to forms/fObserver.h's TfObserverGrid::
+//  ColWidthsProxy, and the two were about to become a THIRD independent
+//  fork the next time a form needed the same set, so they collapsed home
+//  instead. TfConfigurationGrid PUBLICLY INHERITS vclcompat::TStringGrid (so
+//  it still converts for free to any `vclcompat::TStringGrid*` parameter,
+//  should a future wave need that) and now keeps ONLY a pass-through
+//  hydration ctor -- see vclcompat/StringGrid.h's own updated SCOPE banner
+//  for the base's full current member set, defaults, and the verified-inert
+//  reasoning behind dropping the ctor's old eager ColWidths pre-sizing. NOT
+//  a GATE: every one of these properties still compiles and holds the exact
+//  value golden assigns; only the RENDERING implied by a real Font/
+//  DefaultColWidth/FixedRows/Row (i.e. actually drawing rows/columns/fonts
+//  sized accordingly) remains out of scope -- unchanged from before this
+//  wave.
 //
 //  DFM HYDRATION -- neither strngrdTray (cConfiguration.dfm:21204-21214) nor
 //  strngrdHP (cConfiguration.dfm:22475-22485) sets an explicit ColCount=/
@@ -202,7 +203,9 @@
 #include "vclcompat/vcl_compat.h"   // AnsiString, TStringList, StringReplace/TReplaceFlags/rfReplaceAll -- brought to global scope
 #include "vclcompat/Controls.h"     // TEdit, TSpeedButton, TFont, TControl (stock widgets, reused as-is)
 #include "vclcompat/StringGrid.h"   // vclcompat::TStringGrid -- TfConfigurationGrid's base
-#include <vector>                   // TfConfigurationGrid::colWidths_
+// AI(W906-VclGrid-1) 20260820: <vector> dropped -- it was only for
+// TfConfigurationGrid::colWidths_, which moved to the base (StringGrid.h
+// owns that vector now).
 
 using vclcompat::TEdit;
 using vclcompat::TSpeedButton;
@@ -219,37 +222,16 @@ public:
     // neither strngrdTray nor strngrdHP sets either property explicitly, so
     // both use real VCL's design-time default (5x5), matching the base
     // class's own default arguments.
+    //
+    // AI(W906-VclGrid-1) 20260820: Font/DefaultColWidth/FixedRows/FixedCols/
+    // Row/ColWidths already collapsed to the base (this class's own SCOPE-
+    // comment above has the provenance) -- this class now only remains as a
+    // pass-through hydration ctor. Base ctor's default DefaultColWidth (64)
+    // matches this form's own historical value exactly, so nothing needs
+    // re-setting here.
     explicit TfConfigurationGrid(int initialColCount = 5, int initialRowCount = 5)
-        : vclcompat::TStringGrid(initialColCount, initialRowCount),
-          Font(new TFont()), DefaultColWidth(64), FixedRows(0), FixedCols(0), Row(0)
-    {
-        colWidths_.assign(initialColCount > 16 ? initialColCount : 16, DefaultColWidth);
-    }
-    ~TfConfigurationGrid() { delete Font; }
-
-    TFont *Font;            // golden ->Font->Size (sbtReloadTrayClick/sbtReloadHPClick)
-    int    DefaultColWidth; // golden ->DefaultColWidth
-    int    FixedRows;       // golden ->FixedRows -- plain data, no renderer this wave
-    int    FixedCols;       // golden ->FixedCols -- plain data, no renderer this wave
-    int    Row;             // golden ->Row (btnAddTrayClick/btnAddHPClick "select the new row") -- plain data, no renderer this wave
-
-    // golden ->ColWidths[i]= -- proxy so `grid->ColWidths[i]=w;` keeps
-    // golden's property-assignment spelling. Auto-grows on write past
-    // current size (same idiom as TfObserverGrid::ColWidthsProxy).
-    struct ColWidthsProxy
-    {
-        TfConfigurationGrid *owner;
-        int &operator[](int idx)
-        {
-            if (idx >= static_cast<int>(owner->colWidths_.size()))
-                owner->colWidths_.resize(idx + 1, owner->DefaultColWidth);
-            return owner->colWidths_[idx];
-        }
-    };
-    ColWidthsProxy ColWidths{this};
-
-private:
-    std::vector<int> colWidths_;
+        : vclcompat::TStringGrid(initialColCount, initialRowCount)
+    {}
 };
 
 // ===========================================================================

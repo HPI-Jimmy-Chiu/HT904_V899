@@ -133,25 +133,27 @@
 //  DESIGN NOTES -- the four facade-only widget wrapper shapes
 //  --------------------------------------------------------------------------
 //  TfObserverGrid : public vclcompat::TStringGrid
-//    vclcompat::TStringGrid (built for SECSGEM's SV/EC grids) deliberately
-//    carries ONLY Cells[][]/RowCount/ColCount ("NO rendering, NO FixedRows/
-//    FixedCols/.../ColWidths" -- its own file-head SCOPE note). Golden's
-//    TStringGrid ALSO exposes ->ColWidths[i]= (used ~30 times across Wave 1's
-//    ctor/GetEventLogText/BtnQueryClick/btReportClick), ->DefaultColWidth=,
-//    ->FixedRows=, ->Visible (strngrdMDBQuery only), ->Rows[i]->Clear() (a
-//    whole-row wipe with no Cells-level equivalent) and ->Repaint()/
-//    ->Refresh() (StringGrid2/3, GDI-rendering-only, no-op this wave -- see
-//    the "GDI methods not this wave" project rule). Rather than fork a second
-//    grid type or edit the shared vclcompat header (out of this wave's write
-//    boundary; ~15 other TUs already depend on its exact current shape),
-//    TfObserverGrid PUBLICLY INHERITS vclcompat::TStringGrid (so it converts
-//    for free to every `TStringGrid*` cMyDB.h function -- MyDBVProcess/
-//    MyDBVProcessFilter/MyDBVEventFreq/MyDBQTimeData all take
-//    `vclcompat::TStringGrid*`, i.e. these ARE ISA-compatible, not merely
-//    similar) and ADDS the extra golden properties as new facade-only
-//    members. `ClearRow(i)` is the ->Rows[i]->Clear() substitute (loops
-//    Cells[c][i]="" for c in [0,ColCount) -- identical observable effect,
-//    vclcompat has no TStrings-shaped Rows[] to return).
+//    golden TStringGrid ALSO exposes ->ColWidths[i]= (used ~30 times across
+//    Wave 1's ctor/GetEventLogText/BtnQueryClick/btReportClick),
+//    ->DefaultColWidth=, ->FixedRows=, ->Visible (strngrdMDBQuery only),
+//    ->Rows[i]->Clear() (a whole-row wipe with no Cells-level equivalent)
+//    and ->Repaint()/->Refresh() (StringGrid2/3, GDI-rendering-only, no-op
+//    this wave -- see the "GDI methods not this wave" project rule).
+//    AI(W906-VclGrid-1) 20260820: Visible/DefaultColWidth/FixedRows/
+//    ColWidths[]/ClearRow(i) MOVED to the shared vclcompat::TStringGrid base
+//    (vclcompat/StringGrid.h) as part of the 5-subclass TStringGrid-extension
+//    consolidation wave -- this facade's own copies were a byte-for-byte
+//    duplicate of forms/fConfiguration.h's TfConfigurationGrid, so they
+//    collapsed home instead of risking a third fork. TfObserverGrid PUBLICLY
+//    INHERITS vclcompat::TStringGrid (so it still converts for free to every
+//    `TStringGrid*` cMyDB.h function -- MyDBVProcess/MyDBVProcessFilter/
+//    MyDBVEventFreq/MyDBQTimeData all take `vclcompat::TStringGrid*`) and now
+//    keeps ONLY its two GDI no-ops (Repaint()/Refresh(), StringGrid2/3 --
+//    out of scope for the base, which carries no rendering surface at all)
+//    plus a pass-through hydration ctor. See vclcompat/StringGrid.h's own
+//    updated SCOPE banner for the base's full current member set and the
+//    verified-inert reasoning behind dropping the ctor's old eager
+//    ColWidths pre-sizing.
 //
 //  TfObserverTray : public vclcompat::TObject, composing vclcompat::TrayCore
 //    golden TTMyTray (HTray.h/.cpp) already has a real, tested, framework-free
@@ -255,52 +257,19 @@ public:
     // tools/dfm2rc/ir_out/cObserver.dfm.ir.json this wave (see per-member call
     // sites in cObserver.cpp for the exact citation of which grid gets which
     // pair) -- NOT guessed: real values recorded at form-design time.
+    //
+    // AI(W906-VclGrid-1) 20260820: members already collapsed to the base
+    // (this class's own SCOPE-comment above has the provenance) -- this
+    // class only remains as a hydration ctor plus two GDI no-op overrides.
     explicit TfObserverGrid(int initialColCount = 5, int initialRowCount = 5)
-        : vclcompat::TStringGrid(initialColCount, initialRowCount),
-          Visible(false), DefaultColWidth(64), FixedRows(0)
-    {
-        colWidths_.assign(initialColCount > 32 ? initialColCount : 32, DefaultColWidth);
-    }
-
-    bool Visible;          // golden TStringGrid->Visible (strngrdMDBQuery only) -- offline default false
-    int  DefaultColWidth;  // golden TStringGrid->DefaultColWidth
-    int  FixedRows;        // golden TStringGrid->FixedRows -- plain data, no renderer this wave
-
-    // golden ->ColWidths[i]= -- proxy so `grid->ColWidths[i]=w;` keeps golden's
-    // property-assignment spelling. Auto-grows on write past current size
-    // (mirrors real VCL: assigning ColCount first, then ColWidths[hi], is the
-    // dominant call order in golden, but a couple of sites -- e.g.
-    // strngrdIndeAirOn1's implicit column count -- rely on ColWidths growing
-    // to fit rather than a prior explicit resize).
-    struct ColWidthsProxy
-    {
-        TfObserverGrid *owner;
-        int &operator[](int idx)
-        {
-            if (idx >= static_cast<int>(owner->colWidths_.size()))
-                owner->colWidths_.resize(idx + 1, owner->DefaultColWidth);
-            return owner->colWidths_[idx];
-        }
-    };
-    ColWidthsProxy ColWidths{this};
-
-    // golden ->Rows[i]->Clear() substitute (vclcompat::TStringGrid has no
-    // TStrings-shaped Rows[] accessor to return) -- same observable effect,
-    // wipe every cell in row `row` to "".
-    void ClearRow(int row)
-    {
-        for (int c = 0; c < ColCount; ++c)
-            Cells[c][row] = AnsiString("");
-    }
+        : vclcompat::TStringGrid(initialColCount, initialRowCount)
+    {}
 
     // golden ->Repaint()/->Refresh() -- GDI repaint triggers (StringGrid2/3's
     // 4 rgContactCount*Click handlers). Out of scope this wave (DrawCell*/
     // DrawCenterLine family exclusion) -- no-op, matching that exclusion.
     void Repaint() {}
     void Refresh() {}
-
-private:
-    std::vector<int> colWidths_;
 };
 
 // ===========================================================================

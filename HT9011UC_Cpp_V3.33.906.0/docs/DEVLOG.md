@@ -8971,6 +8971,25 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   HAL 分類設計（使用者 20260818 裁決：控制邏輯與馬達分類由
   mot_table.csv 決定）——設計波，宜與使用者同步後開。
 
+## 20260820 中午 — 台帳三輪＋vclcompat grid 收斂
+
+- **台帳三輪**（86ab9d3）：24 小時內波次的 golden 缺陷收錄 +22
+  （628→650）。排除紀律照舊：我方 recon 的錯不算 golden 缺陷、
+  無 GOLDEN 詞彙的 gate note 不收、自我撤回的宣稱維持撤回。
+- **grid 收斂**（本顆）：五個 TStringGrid facade subclass 的擴充
+  聯集（Visible/Font/DefaultColWidth/FixedRows/FixedCols/Row/
+  ColWidths proxy/ClearRow）收進 vclcompat 基底；TFont 用前向宣告
+  ＋.cpp 補完整型別（共用標頭 include 集不變）。**代理更正了
+  brief 的前提**：五家只有 Observer/Configuration 真有 proxy；
+  StartCondition 是固定 int[16]（型別置換、13 個索引全寫入無讀取
+  ——逐行證明）；ContactCT/ShowBinSelect 本就沒有聯集成員。
+  shadow 零殘留（主迴圈逐類坐實——三個 pattern 命中都在
+  Tray/Chart/Label 別的類）。「建構時預撐大」證明為觀察不變的
+  無效操作後省略。
+- **副產品**：cMyDB.cpp:1661 與 uHGemHT9045.cpp:604（GATE R2）兩處
+  原因「基底沒有 ColWidths」的 gate **技術上已可解**——留給
+  SECSGEM gate 專門波（StringGrid.h 有 RESIDUAL GATE NOTE）。
+
 ### 🔖 RESUME（最新）
 
 - **完成**：核可佇列全清、Command.cpp 159/164、良率引擎全清、
@@ -8980,13 +8999,14 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   **FW-W5b（本顆）——write path 設計 §6 波次表全數落地**。
   基線 142/5。
 - **批 5 全清＋user.level（FW-1d）＋recipe.current（FW-1e）接通**。
-  BinDisCtrl 鏈、cShowBinSelect A-E、rgCustomerList、
-  **1203HAL-1/2/3 全收（編譯→防退化→真 SDK link+load 三級打通）**。
-  **下一波**依脈絡擇一：(a) bin.* 解鎖；(b) vclcompat 擴充收斂波；
+  BinDisCtrl 鏈、cShowBinSelect A-E、rgCustomerList、1203HAL-1/2/3、
+  台帳 650、**grid 收斂**全收。**下一波**依脈絡擇一：
+  (a) SECSGEM gate 解除小波（cMyDB.cpp:1661＋uHGemHT9045.cpp:604
+  GATE R2——grid 收斂後前提已備，照 WC-27 拆閘紀律逐條複驗）；
+  (b) bin.* 解鎖（需 recipe/tech 載入 seam，中型）；
   (c) InstallColorBinDisplay＋MN200 c/e 接線（半設計面留使用者）；
-  (d) 1203 的 mot_table.csv HAL 分類設計波（20260818 裁決方向，
-  設計面宜與使用者同步後開）。真機 device open/axis bring-up 依
-  §7 佇列等機邊。
+  (d) mot_table.csv HAL 分類設計波（設計面宜與使用者同步後開）。
+  真機 device open/axis bring-up 依 §7 佇列等機邊。
 - **brief 規則追加**：「不准 build.bat/ctest/背景行程」放 brief
   硬規則首行（rgCustomerList 波代理越界自揭）。
 - **使用者新規（20260820，已入 memory）**：執行過程有問題且解決

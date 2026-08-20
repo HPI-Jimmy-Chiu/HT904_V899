@@ -5,13 +5,22 @@
 //  policy notes).
 //
 //  AI(W906-uHGemEquipment) 20260716: new file.
+//
+//  AI(W906-VclGrid-1) 20260820: Controls.h include added -- needed for
+//  TFont's COMPLETE type (StringGrid.h only forward-declares `class TFont;`,
+//  see that header's own note) so the ctor can `new TFont()` and the dtor
+//  can `delete Font` below. This is the ONE TU that pays that include cost;
+//  StringGrid.h itself still does not.
 // ===========================================================================
 #include "vclcompat/StringGrid.h"
+#include "vclcompat/Controls.h"   // TFont complete type (Font member, W906-VclGrid-1)
 
 namespace vclcompat {
 
 TStringGrid::TStringGrid(int initialColCount, int initialRowCount)
     : RowCount(this), ColCount(this),
+      Visible(false), Font(new TFont()), DefaultColWidth(64), FixedRows(0),
+      FixedCols(0), Row(0),
       rowCount_(initialRowCount < 1 ? 1 : initialRowCount),
       colCount_(initialColCount < 1 ? 1 : initialColCount)
 {
@@ -19,6 +28,14 @@ TStringGrid::TStringGrid(int initialColCount, int initialRowCount)
     data_.resize(static_cast<size_t>(rowCount_));
     for (size_t r = 0; r < data_.size(); ++r)
         data_[r].resize(static_cast<size_t>(colCount_));
+}
+
+// AI(W906-VclGrid-1) 20260820: deletes the owned Font (see StringGrid.h's
+// TFont forward-decl note for why this must live here, not inline in the
+// header).
+TStringGrid::~TStringGrid()
+{
+    delete Font;
 }
 
 // ---------------------------------------------------------------------------

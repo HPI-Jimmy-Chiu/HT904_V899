@@ -176,6 +176,19 @@
 //    Width/Height/RowHeights[] are COSMETIC LAYOUT ONLY and offline INERT
 //    (nothing reads them back), and MouseToCell/Refresh are documented
 //    GDI/mouse-hit-testing no-ops (GATE (C1) sibling -- see class comment).
+//    AI(W906-VclGrid-1) 20260820: the 5-subclass TStringGrid-extension
+//    consolidation wave (vclcompat/StringGrid.h) moved Visible/Font/
+//    DefaultColWidth/FixedRows/FixedCols/Row/ColWidths[]/ClearRow(i) from
+//    forms/fObserver.h's TfObserverGrid and forms/fConfiguration.h's
+//    TfConfigurationGrid to the shared base -- TfContactCTGrid was READ in
+//    full as part of that wave's survey and is DELIBERATELY LEFT AS-IS: its
+//    Top/Width/Height/RowHeights[]/MouseToCell/Refresh set shares no member
+//    NAME with that union (RowHeights indexes ROWS, not columns, and this
+//    class has no Visible/Font/DefaultColWidth/FixedRows/FixedCols/Row/
+//    ColWidths/ClearRow of its own to begin with), so there is nothing here
+//    to shadow or collapse. TfContactCTGrid still inherits the new base
+//    members for free (unused, harmless) same as every other TStringGrid
+//    subclass in the tree.
 //  TfContactCTRadioGroup : public vclcompat::TRadioGroup
 //    Adds ->Height/->Columns (FormShow layout math), same cosmetic-inert
 //    rationale.
