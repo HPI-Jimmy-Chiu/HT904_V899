@@ -323,7 +323,33 @@ const int CONTACT_TEST = 3;
 // layout artifacts for the FORM, no translated logic header). Not a GATE -- this is
 // just the missing named literal for a real array index, same idiom as CONTACT_TEST
 // above.
-const int UserOffSet = 3;
+// AI(W906-FW-CMD-D) 20260820: premise above is now DEAD -- uTemp_Set.cpp:227 has the
+// real `const int UserOffSet=3;` (identical value), and forms/fTemp_Set.h:395 now
+// declares `extern const int UserOffSet;`, just #include'd above this TU for GATE
+// REGISTER item 3's retirement. Left `const` -> `static const` HERE (added keyword,
+// value unchanged) so this TU's own copy keeps internal linkage regardless of that
+// extern declaration now being in scope -- without `static`, C++'s extern-flip rule
+// (a prior `extern` declaration in scope promotes a subsequent `const` definition to
+// external linkage) would make this line collide with uTemp_Set.cpp's real external
+// definition at link time, the exact landmine FW-TEMP3 (commit 0eba42f) hit and fixed
+// the same way in uHeaterThread.cpp/cTemperFrom.cpp/bthermo.cpp.
+static const int UserOffSet = 3;
+
+// AI(W906-FW-CMD-D) 20260820: GATE REGISTER item 3 retirement (WriteSetTempStatus_SIGURD,
+// `fTemp_Set->MaxTempSetting()`/`->MinTempSetting()`) -- forms/fTemp_Set.h + uTemp_Set.cpp
+// landed commit c60e9f4, after this file's FW3-WD wave wrote the original UserOffSet gate
+// above. That header declares `extern const int UserOffSet;` (and 15 siblings) at file
+// scope; this #include is placed HERE, AFTER the `static const int UserOffSet=3;` above,
+// not up in the main include block -- ordering is load-bearing: a plain/static `const`
+// definition establishes internal linkage on its FIRST declaration in a TU, and a LATER
+// `extern` declaration of the same name is accepted as still-internal (verified empirically,
+// g++ -std=c++17, exit 0), but the REVERSE order (extern first, static/const second) is a
+// hard error ("declared 'extern' and later 'static'", reproduced this pass when the include
+// was first placed in the main block above `UserOffSet`'s definition) -- same extern-flip
+// landmine class FW-TEMP3 (commit 0eba42f) hit in uHeaterThread.cpp, but a stricter variant:
+// there the fix was just adding `static`; here `static` alone was insufficient without also
+// fixing the include's POSITION relative to the local definition it must follow.
+#include "forms/fTemp_Set.h"         // fTemp_Set->MaxTempSetting()/MinTempSetting() (real, GATE REGISTER item 3)
 
 /* ===================== GROUP A1 ===================== */
 
@@ -10327,9 +10353,14 @@ void TfMain::WriteNumOfSites()                                                  
 //    GetSamSungSoakTime         :10305-10322 ACTIVE
 //    GetTTLState                :10324-10500 GATED-partial (Handle/HVisionWnd, GATE REGISTER 1-2)
 //    Send_Command_TTL           :10502-10511 ACTIVE (1 vclcompat-surface substitution, S8)
-//    WriteSetTempStatus_SIGURD  :10513-10594 GATED-partial (fTemp_Set / edATCAmbientTemper / ChangeTempMode, GATE REGISTER 3-5)
-//    WriteSetSoakTimeStatus_SIGURD :10596-10668 GATED-partial (ChangeTempMode / IniData write, GATE REGISTER 6-7)
-//    SetSiteMapData_SIGURD      :10670-10728 GATED-partial (ChangeToSiteMap, GATE REGISTER 8) (1 vclcompat-surface substitution, S7)
+//    WriteSetTempStatus_SIGURD  :10513-10594 GATED-partial (edATCAmbientTemper / ChangeTempMode,
+//                               GATE REGISTER 4-5 -- item 3 RETIRED at W906-FW-CMD-D 20260820,
+//                               fTemp_Set->MaxTempSetting()/MinTempSetting() now real)
+//    WriteSetSoakTimeStatus_SIGURD :10596-10668 GATED-partial (ChangeTempMode / IniData write, GATE REGISTER 6-7
+//                               -- both RE-CONFIRMED still alive at W906-FW-CMD-D 20260820)
+//    SetSiteMapData_SIGURD      :10670-10728 ACTIVE (1 vclcompat-surface substitution, S7)
+//                               -- GATE REGISTER 8 RETIRED at W906-FW-CMD-D 20260820,
+//                               ChangeToSiteMap now real, Command.cpp:15346 (commit ece9626)
 //    GetTestIFSiteMap           :10730-10954 ACTIVE
 //    ChkStatus                  :10956-11013 ACTIVE (1 GOLDEN ODDITY, B5)
 //    GetBinCategory             :11015-11024 ACTIVE
@@ -10351,7 +10382,13 @@ void TfMain::WriteNumOfSites()                                                  
 //    SetBINCOUNT                :11726-11891 GATED-partial (IniData write / fBinSel, GATE REGISTER 19-20) (1 vclcompat-surface substitution, S6) -- SAFETY-RELEVANT, see RISK note below
 //    SetSGOSBIN                 :11893-11947 GATED-partial (fLotInfo, GATE REGISTER 21)
 //    SetSGCONTFAIL              :11949-12061 GATED-partial (IniData write / fYieldMonitoring / fLotInfo, GATE REGISTER 22-24) (1 GOLDEN BUG, B6)
-//  TOTALS: 29 methods, 2,067 raw golden lines extracted; 12 ACTIVE, 17 GATED-partial.
+//  TOTALS: 29 methods, 2,067 raw golden lines extracted; 12 ACTIVE, 17 GATED-partial
+//  AS ORIGINALLY WRITTEN (FW3-WD, 20260818). AI(W906-FW-CMD-D) 20260820 update: GATE
+//  REGISTER items 3 and 8 retired (fTemp_Set / ChangeToSiteMap dependencies landed by
+//  later waves) -- SetSiteMapData_SIGURD is now fully ACTIVE, WriteSetTempStatus_SIGURD
+//  stays GATED-partial (items 4-5 still alive). Revised totals: 13 ACTIVE, 16
+//  GATED-partial. See GATE REGISTER items 3/8 below and the three call sites for the
+//  full re-decision (items 4/5/6/7 re-confirmed still alive, not touched).
 //
 //  RISK NOTE -- machine-mode-switching / persistence methods (per project rule:
 //  describe risk before verification, not after)
@@ -10398,55 +10435,78 @@ void TfMain::WriteNumOfSites()                                                  
 //      bit-length branch tree and the `asBuffer->Add(...)` message-content
 //      build) is real computation over real globals and stays ACTIVE.
 //   3. WriteSetTempStatus_SIGURD, golden :10530-10531 `dTempMax=fTemp_Set->
-//      MaxTempSetting(); dTempMin=fTemp_Set->MinTempSetting();` -- `fTemp_Set`
-//      (golden uTemp_Set.h TfTemp_Set) has NO port anywhere in this tree.
-//      ESTABLISHED precedent, not a fresh finding: MyTempPanel.cpp's own GATE
-//      (W8-3) already gates this EXACT golden idiom for the same reason.
-//      `grep -rn --include=*.h --include=*.cpp -E
-//       "fTemp_Set[[:space:]]*(;|=)|\*[[:space:]]*fTemp_Set|TfTemp_Set" .`
-//      -- only Automation/auto9045.cpp's TU-local stand-in `W5FA_TfTemp_SetExt
-//      W5FA_FTemp_Set` (carries `edSoakTime`/`edWorkTemp` only, no
-//      MaxTempSetting/MinTempSetting), plus ./build/* generated layout tables.
-//      `dTempMax`/`dTempMin` THEMSELVES are real (cmydef.h:3437-3438, default
-//      135.0/20.0) -- the ACTIVE arm leaves both at whatever the rest of the
-//      system last wrote, same as W8-3's own reasoning.
+//      MaxTempSetting(); dTempMin=fTemp_Set->MinTempSetting();` --
+//      RETIRED AT W906-FW-CMD-D 20260820. Original premise ("`fTemp_Set`
+//      (golden uTemp_Set.h TfTemp_Set) has NO port anywhere in this tree",
+//      ESTABLISHED against MyTempPanel.cpp's own GATE W8-3) is DEAD: forms/
+//      fTemp_Set.h + uTemp_Set.cpp landed commit c60e9f4, declaring
+//      MaxTempSetting()/MinTempSetting() as real public TfTemp_Set members with
+//      real bodies at uTemp_Set.cpp:5949/6017 -- pure computation over real
+//      globals, no hardware or shared-config write inside either. Unlocked to a
+//      real, NULL-guarded call (`fTemp_Set` is a never-`new`'d global pointer in
+//      this port, same idiom as FW-TEMP3 commit 0eba42f); the NULL-arm fallback
+//      (dTempMax/dTempMin keep whatever the rest of the system last wrote) is
+//      identical to this gate's own prior ACTIVE-arm behavior, so no reply
+//      semantics changed. `#include "forms/fTemp_Set.h"` added right AFTER this
+//      file's own pre-existing `const int UserOffSet=3;` (added by FW3-WA,
+//      immediately above the `GROUP A1` marker) rather than in the main include
+//      block, and that constant marked `static` -- that header's `extern const
+//      int UserOffSet;` (and 15 siblings) creates an extern-flip hazard, and
+//      ORDER matters: `static`+extern-after is fine, extern-before+`static` is
+//      a hard compile error (reproduced this pass) -- see that declaration
+//      site's own updated comment for the full citation.
 //   4. WriteSetTempStatus_SIGURD, golden :10559 `edATCAmbientTemper->Text=d;`
-//      and :10580 `atof(edATCAmbientTemper->Text.c_str())` -- `edATCAmbientTemper`
-//      is not a declared TfMain member anywhere (`grep -rn "edATCAmbientTemper"
-//      .` -- 0 hits, any header or source, tree-wide). Since the widget's only
-//      role here is to MIRROR `d` (set two lines above the read, in the exact
-//      same `if(Temperature.bATCActiveCooling)` arm), the `SetTemp(...)` call
+//      and :10580 `atof(edATCAmbientTemper->Text.c_str())` -- RE-CONFIRMED STILL
+//      ALIVE at W906-FW-CMD-D 20260820 (fTemp_Set landing does not help: golden
+//      main.h:737 declares `edATCAmbientTemper` as a TfMain widget, not a
+//      TfTemp_Set one). `edATCAmbientTemper` is not a declared TfMain member
+//      anywhere (`grep -rn "edATCAmbientTemper" .` -- 0 hits, any header or
+//      source, tree-wide, re-run 20260820); forms/fTemp_Set.h's OWN GATE
+//      REGISTER independently notes the identical absence at its
+//      `(dep-fMain-edATCAmbientTemper)` entry. Since the widget's only role
+//      here is to MIRROR `d` (set two lines above the read, in the exact same
+//      `if(Temperature.bATCActiveCooling)` arm), the `SetTemp(...)` call
 //      substitutes `d` directly in place of the missing mirror -- the
 //      identical numeric value golden's own widget would have held, not a
 //      fabricated one.
 //   5. WriteSetTempStatus_SIGURD, golden :10585 `ret=ChangeTempMode(TempMode,
-//      false, bRefreshFunction, true);` -- ChangeTempMode absence, ESTABLISHED
+//      false, bRefreshFunction, true);` -- RE-CONFIRMED STILL ALIVE at
+//      W906-FW-CMD-D 20260820 (fTemp_Set landing does not help: golden
+//      main.h:1323 declares `ChangeTempMode` as a TfMain member, not a
+//      TfTemp_Set one -- `grep -n "ChangeTempMode" forms/fMain.h
+//      forms/fTemp_Set.h uTemp_Set.cpp`, 0 declaration/definition hits
+//      anywhere, re-run 20260820). ChangeTempMode absence, ESTABLISHED
 //      precedent (this file's own FW3-WA GATE #2, Command.cpp:1852-1867/
 //      1883-1888: golden main.h:1323 TfMain member, not in forms/fMain.h, no
 //      facade path). `ret` is left at whatever `SetTemp()` (a real,
 //      already-GATED-leaf fMain member) returned above, same posture as GATE #2.
 //   6. WriteSetSoakTimeStatus_SIGURD, golden :10651/:10657 `fMain->
 //      ChangeTempMode(0, false, true);` / `fMain->ChangeTempMode(1, false,
-//      true);` -- same ChangeTempMode absence as item 5.
+//      true);` -- RE-CONFIRMED STILL ALIVE at W906-FW-CMD-D 20260820, same
+//      ChangeTempMode absence as item 5.
 //   7. WriteSetSoakTimeStatus_SIGURD, golden :10652/:10658 `WriteIniData(szDir,
 //      "Mode", "Mode", 1/0);` where `szDir=DataPath+S+"\Temperature.Data"` --
 //      SHARED MACHINE CONFIG WRITE (`DataPath` = `D:\HT9045\IniData\Data\`,
 //      common.cpp:104). See "SHARED CONFIG WRITE GATES" list below for the
-//      full policy citation; not re-derived per-site.
+//      full policy citation; not re-derived per-site. This is a SAFETY-layer
+//      gate independent of any dependency landing, so it is NOT re-evaluated
+//      for retirement by this wave (W906-FW-CMD-D's brief is dependency-layer
+//      only) even though item 6 above sits in the same two call sites.
 //   8. SetSiteMapData_SIGURD, golden :10715 `ret=ChangeToSiteMap(str);` --
-//      `ChangeToSiteMap` (golden main.h:1432, body golden Command.cpp:7511) has
-//      NO port anywhere in this tree (`grep -rn "ChangeToSiteMap" --include=*.h
-//      --include=*.cpp .` -- 0 hits). It is a genuine golden dependency this
-//      wave's 29-method list does NOT include (golden :7511 sits inside golden
-//      Command.cpp's earlier :6542-8201 span, already claimed by FW3-WB's
-//      GetCZAllMassTemp, and was not itself translated by that wave either --
-//      re-verified this pass). `ret` keeps its OWN declared initial value
-//      (`bool ret=true;`, golden :10672) rather than being reset to `false` --
-//      per this wave's "不可順手修好" rule, golden's own default is preserved
-//      even though it means a SETTINGOK reply is sent without the site map
-//      having actually changed. The backup bookkeeping
-//      (`iBackupDutOnOff`/`iBackupTestMode`) and the CRLF-strip/reply-building
-//      logic around it are real and stay ACTIVE.
+//      RETIRED AT W906-FW-CMD-D 20260820. Original premise ("`ChangeToSiteMap`
+//      ... has NO port anywhere in this tree ... a genuine golden dependency
+//      this wave's 29-method list does NOT include") is DEAD: `ChangeToSiteMap`
+//      (golden main.h:1432) landed commit ece9626 as a real TfMain member,
+//      declared forms/fMain.h:1064, body Command.cpp:15346-15692 (this same
+//      file) -- classified by that commit's own message as "GPIB parsers, pure
+//      parsing+state, no gates needed", re-read in full this pass to confirm no
+//      WriteIniData/shared-config-write/hardware call exists inside it. Direct
+//      member call (`this->ChangeToSiteMap`), no NULL guard needed (unlike item
+//      3's `fTemp_Set->`, this is not a global-pointer indirection). The
+//      previous `ret` default-preservation note (`bool ret=true;`, golden
+//      :10672) is now moot -- `ret` is set for real by the unlocked call, same
+//      as golden. The backup bookkeeping (`iBackupDutOnOff`/`iBackupTestMode`)
+//      and the CRLF-strip/reply-building logic around it stay ACTIVE, unchanged.
 //   9. SetSetupFileName, golden :11086 `if(fFTPClient->
 //      CheckSetupFileNameFromServer(asChangeSetupFileName)==true) ret=true;`
 //      -- `fFTPClient` (golden TfFTPClient, KYECFTP's FTP-download dialog) has
@@ -11227,12 +11287,21 @@ void TfMain::WriteSetTempStatus_SIGURD()                                        
     }
 
     d=atof(HGpib2Handler->cReturn);
-    // GATE(FW3-WD) golden :10530-10531 -- see GATE REGISTER item 3 above.
-    // dTempMax/dTempMin keep whatever value the rest of the system last wrote.
-#if 0
-    dTempMax=fTemp_Set->MaxTempSetting();
-    dTempMin=fTemp_Set->MinTempSetting();
-#endif
+    // AI(W906-FW-CMD-D) 20260820: GATE REGISTER item 3 RETIRED, golden :10530-10531.
+    // Premise dead -- forms/fTemp_Set.h:514-515 declares MaxTempSetting()/MinTempSetting()
+    // as real TfTemp_Set public members with bodies at uTemp_Set.cpp:5949/6017 (commit
+    // c60e9f4), pure computation over real globals (CUSTOMER_CODE/LastSet/Temperature/
+    // Tri_Temp_Machine/iTempLimitation/ATC_SYSTEM/CosFunction/MachineTypeChoice), no
+    // hardware or shared-config write inside either -- no new SAFETY gate needed at
+    // this call site. NULL guard because `fTemp_Set` is a never-`new`'d global pointer
+    // in this port (same idiom as FW-TEMP3, commit 0eba42f); when NULL, dTempMax/
+    // dTempMin keep whatever value the rest of the system last wrote -- identical
+    // fallback to the previous #if 0's own behavior.
+    if(fTemp_Set)
+    {
+        dTempMax=fTemp_Set->MaxTempSetting();
+        dTempMin=fTemp_Set->MinTempSetting();
+    }
     if(d<=dTempMax)                                                             // 檢查是否超出最大值
     {
         bValueOK=true;
@@ -11260,7 +11329,16 @@ void TfMain::WriteSetTempStatus_SIGURD()                                        
             {
                 TempMode=0;
             }
-            // GATE(FW3-WD) golden :10559 -- see GATE REGISTER item 4 above.
+            // AI(W906-FW-CMD-D) 20260820: GATE REGISTER item 4 RE-CONFIRMED, golden
+            // :10559 -- still gated, premise still alive. `edATCAmbientTemper` is
+            // golden main.h:737's TfMain widget (a TEdit member of fMain itself, NOT
+            // fTemp_Set), confirmed by re-reading golden main.h this pass; the
+            // fTemp_Set landing this wave re-checked for (commit c60e9f4) does not
+            // carry it -- forms/fTemp_Set.h's OWN GATE REGISTER independently notes
+            // the identical absence at its `(dep-fMain-edATCAmbientTemper)` entry
+            // (`fMain->edATCAmbientTemper` -- no member on the current fMain facade).
+            // `grep -n "edATCAmbientTemper" forms/fMain.h forms/fTemp_Set.h` --
+            // 0 declaration hits in either, re-run 20260820. Not unlocked.
 #if 0
             edATCAmbientTemper->Text=d;
 #endif
@@ -11284,16 +11362,26 @@ void TfMain::WriteSetTempStatus_SIGURD()                                        
         //<==
         //Sam 20210510 : 先回傳 OK，再來寫入，不然寫入太慢對方會 TimeOut
         if(Temperature.bATCActiveCooling)                                       //Sam 20250214 : RMS 新增 ATC 判斷
-            // GATE(FW3-WD) golden :10580 -- see GATE REGISTER item 4 above:
-            // `edATCAmbientTemper->Text` is skipped; `d` (its would-be mirror,
-            // set two lines above in this same arm) is used directly instead.
+            // AI(W906-FW-CMD-D) 20260820: GATE REGISTER item 4 RE-CONFIRMED, golden
+            // :10580 -- `edATCAmbientTemper` still absent (see the write-side gate
+            // above, re-checked against forms/fTemp_Set.h too this pass); `d` (its
+            // would-be mirror, set two lines above in this same arm) is used
+            // directly instead.
             ret=SetTemp(false, d, atof(edSoakTime->Text.c_str()));
         else
             ret=SetTemp(false, atof(edWorkTemperBase->Text.c_str()), atof(edSoakTime->Text.c_str()));
         if(ret==0)
         {
-            // GATE(FW3-WD) golden :10585 -- see GATE REGISTER item 5 above.
-            // `ret` is left at SetTemp()'s own return value.
+            // AI(W906-FW-CMD-D) 20260820: GATE REGISTER item 5 RE-CONFIRMED, golden
+            // :10585 -- still gated, premise still alive. `ChangeTempMode` is golden
+            // main.h:1323's TfMain member (int __fastcall ChangeTempMode(int Mode,
+            // bool Msg, bool bRefresh=false, bool bGPIB=false, bool
+            // bSetTempByDLL=false)), NOT a fTemp_Set method -- the fTemp_Set landing
+            // this wave re-checked for (commit c60e9f4) does not carry it either
+            // (`grep -n "ChangeTempMode" forms/fMain.h forms/fTemp_Set.h
+            // uTemp_Set.cpp` -- 0 declaration/definition hits anywhere, only a prose
+            // mention at forms/fMain.h:549, re-run 20260820). `ret` is left at
+            // SetTemp()'s own return value. Not unlocked.
 #if 0
             ret=ChangeTempMode(TempMode, false, bRefreshFunction, true);
 #endif
@@ -11362,9 +11450,17 @@ void TfMain::WriteSetSoakTimeStatus_SIGURD()                                    
                 }
                 else
                 {
-                    // GATE(FW3-WD) golden :10651-10652 -- see GATE REGISTER
-                    // items 6 and 7 above (ChangeTempMode absence; IniData
-                    // shared config write).
+                    // AI(W906-FW-CMD-D) 20260820: GATE REGISTER items 6 and 7
+                    // RE-CONFIRMED, golden :10651-10652 -- still gated, both
+                    // premises still alive. Item 6 (ChangeTempMode absence): same
+                    // re-check as WriteSetTempStatus_SIGURD's GATE 5 above --
+                    // ChangeTempMode is golden main.h:1323's TfMain member, not a
+                    // fTemp_Set method, and forms/fMain.h still has 0 declaration
+                    // hits (only a prose mention at :549, re-run 20260820). Item 7
+                    // (shared machine config write, `DataPath`-rooted) is a SAFETY-
+                    // layer gate, independent of any dependency landing -- left
+                    // gated per this wave's own "本波解的是依賴缺失層,不是安全層"
+                    // scope. Neither line is unlocked.
 #if 0
                     fMain->ChangeTempMode(0, false, true);
                     WriteIniData(szDir, "Mode", "Mode", 1);                     // shared machine config write -- queued for redirect-seam design
@@ -11373,9 +11469,11 @@ void TfMain::WriteSetSoakTimeStatus_SIGURD()                                    
             }
             else      //高溫
             {
-                // GATE(FW3-WD) golden :10657-10658 -- see GATE REGISTER items
-                // 6 and 7 above (ChangeTempMode absence; IniData\ shared
-                // config write).
+                // AI(W906-FW-CMD-D) 20260820: GATE REGISTER items 6 and 7
+                // RE-CONFIRMED, golden :10657-10658 -- same re-check and same
+                // outcome as the :10651-10652 arm above (ChangeTempMode absence
+                // still alive; IniData\ shared config write is a SAFETY-layer gate
+                // independent of dependency landings). Neither line is unlocked.
 #if 0
                 fMain->ChangeTempMode(1, false, true);
                 WriteIniData(szDir, "Mode", "Mode", 0);                         // shared machine config write -- queued for redirect-seam design
@@ -11436,11 +11534,22 @@ void TfMain::SetSiteMapData_SIGURD()                                            
             }
         }
         iBackupTestMode=TestIF_File.iTestMode;
-        // GATE(FW3-WD) golden :10715 -- see GATE REGISTER item 8 above. `ret`
-        // keeps its declared initial value (`true`) rather than being reset.
-#if 0
+        // AI(W906-FW-CMD-D) 20260820: GATE REGISTER item 8 RETIRED, golden :10715.
+        // Premise dead -- `ChangeToSiteMap` (golden main.h:1432) is now a real
+        // TfMain member with a real body at this file's own Command.cpp:15346
+        // (`bool TfMain::ChangeToSiteMap(char *str)`, forms/fMain.h:1064, landed
+        // commit ece9626). Direct member call, no facade/global-pointer indirection
+        // and so no NULL guard needed (unlike GATE REGISTER item 3's fTemp_Set-> --
+        // this is `this->ChangeToSiteMap`, always valid when TfMain itself exists).
+        // No new SAFETY gate needed at this call site either: ece9626's own commit
+        // message classifies ChangeToSiteMap as "GPIB parsers, pure parsing+state,
+        // no gates needed", and the body's own top-of-function `if(SystemStart==
+        // true) return false;` guard (Command.cpp:15348-15351) mirrors the SAME
+        // SystemStart precondition SetSiteMapData_SIGURD's own bStatusOK check
+        // already requires before reaching this line -- re-read the full function
+        // body this pass (Command.cpp:15346-15692) to confirm no WriteIniData/
+        // shared-config-write/hardware call exists inside it.
         ret=ChangeToSiteMap(str);
-#endif
 
         // AI(W906-FW3-WD) 20260818: substitution (S7) -- see FW3-WD GROUP
         // banner above for the full citation.
