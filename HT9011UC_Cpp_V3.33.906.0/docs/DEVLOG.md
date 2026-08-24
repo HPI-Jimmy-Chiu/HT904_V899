@@ -9322,3 +9322,24 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   GATE 7 共用 Temperature.Data 寫檔的 redirect-seam 設計；
   Tech.* 電池等 tag 消費者出現再接線。
 - **loop 狀態**：使用者在場，轉互動模式；守衛心跳續掛。
+
+## 20260824 II — GATE7-V：redirect-seam 佇列複驗（唯讀，主迴圈自做）
+
+- **問題**：GATE 7 等「redirect-seam 設計」——複驗後結論是 **DataPath
+  家族根本不需要新設計**，FW-BIN1 的重導已涵蓋。
+- **證據鏈**：wb_serve.cpp:225-254 在 boot 期 `DataPath=recipeScratchRoot`、
+  shutdown 才還原→重導窗＝整個 serve 會期。Command.cpp 佇列 9 站點逐一
+  對路徑根：
+  * :11447/:11459（GATE 7，SETSOAK_→`<recipe>\Temperature.Data`）＋
+    :12694-:12709（良率警報 ×4）＋:12924/:12925（HeadCT/SocketCT）
+    →全部 `szDir/sLastFilePath = sprintf(DataPath, GetLastOpenFN())`
+    **呼叫當下現組**→--dry 下天然落 scratch。✅ 7 站點涵蓋。
+  * :12458/:12470（bA32EnableFTPAutomation→config.ini）→
+    **`AuthPath` 硬寫 `D:\HT9045\config\`（common.cpp:102），不經
+    DataPath，重導救不到**。❌ 2 站點需自己的 seam 或 --real-only。
+- **結論**：「GATE 7 系列」實為兩個家族——DataPath 7 站點拆閘只差使用者
+  點頭（寫入已被 --dry 保護）；AuthPath 2 站點另案。
+- **候選 ODDITY（入帳前對 golden 字面）**：ReadTempFile 有
+  bSaveTemperatureByMachine 讀取變體（uTemp_Set.cpp:2182-2190 檔在
+  sSaveByMachine），但 SETSOAK 寫入點無條件寫 DataPath+recipe——
+  by-machine 機台上寫的檔沒人讀（讀寫不對稱，照翻未修）。
