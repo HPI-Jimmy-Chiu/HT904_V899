@@ -10625,9 +10625,14 @@ void TfMain::WriteNumOfSites()                                                  
 //  SHARED CONFIG WRITE GATES (per this wave's own "共用 config 寫檔一律 gate"
 //  rule: any write toward setup.inf / CurrentSetupData.txt / D:\HT9045\system
 //  / config / CFG is `#if 0`-gated with the fixed comment "shared machine
-//  config write -- queued for redirect-seam design", because unlike the
+//  config write" family label (rewritten 20260824), because unlike the
 //  W906_EVENTLOG_ROOT log-path seam, there is NO redirect seam for these paths
 //  and they are shared with the production machine.)
+//  20260824 UPDATE (GATE7-V + user ruling): the family was audited -- 14 of
+//  16 sites build their path at call time from DataPath (dry-redirect DOES
+//  cover them); 2 sites (:12465/:12477) use hardcoded AuthPath (NOT covered).
+//  User ruled 20260824: ALL stay gated -- remote commands do the non-write
+//  steps only. Do not re-open without a new user ruling.
 //  ------------------------------------------------------------------------------
 //  SCOPE NOTE (read before the list): the wave brief's own enumeration named
 //  setup.inf / CurrentSetupData.txt / system\ / config\ / CFG\ verbatim, and
@@ -11451,7 +11456,7 @@ void TfMain::WriteSetSoakTimeStatus_SIGURD()                                    
                     // stays a SAFETY-layer gate, untouched.
                     fMain->ChangeTempMode(0, false, true);
 #if 0
-                    WriteIniData(szDir, "Mode", "Mode", 1);                     // GATE 7: shared machine config write -- queued for redirect-seam design
+                    WriteIniData(szDir, "Mode", "Mode", 1);                     // GATE 7: shared config write (DataPath family) -- user ruling 20260824: stays gated, steps 1-4 only (GATE7-V: call-time DataPath, --dry redirect would cover it)
 #endif
                 }
             }
@@ -11463,7 +11468,7 @@ void TfMain::WriteSetSoakTimeStatus_SIGURD()                                    
                 // :10658, SAFETY-layer shared config write).
                 fMain->ChangeTempMode(1, false, true);
 #if 0
-                WriteIniData(szDir, "Mode", "Mode", 0);                         // GATE 7: shared machine config write -- queued for redirect-seam design
+                WriteIniData(szDir, "Mode", "Mode", 0);                         // GATE 7: shared config write (DataPath family) -- user ruling 20260824: stays gated, steps 1-4 only (GATE7-V: call-time DataPath, --dry redirect would cover it)
 #endif
             }
         }
@@ -12462,7 +12467,7 @@ void TfMain::SetSGFTP()                                                         
             // 16-17 above (config\ shared config write; fConfiguration
             // absence).
 #if 0
-            WriteIniData(sPath, "Function", "bA32EnableFTPAutomation", 1);      // shared machine config write -- queued for redirect-seam design
+            WriteIniData(sPath, "Function", "bA32EnableFTPAutomation", 1);      // shared config write (hardcoded AuthPath, NOT dry-covered -- GATE7-V) -- user ruling 20260824: stays gated
             fConfiguration->cbA32->Checked=true;
 #endif
             IniConfig.bA32EnableFTPAutomation=true;
@@ -12474,7 +12479,7 @@ void TfMain::SetSGFTP()                                                         
             // 16-17 above (config\ shared config write; fConfiguration
             // absence).
 #if 0
-            WriteIniData(sPath, "Function", "bA32EnableFTPAutomation", 0);      // shared machine config write -- queued for redirect-seam design
+            WriteIniData(sPath, "Function", "bA32EnableFTPAutomation", 0);      // shared config write (hardcoded AuthPath, NOT dry-covered -- GATE7-V) -- user ruling 20260824: stays gated
 #endif
             IniConfig.bA32EnableFTPAutomation=false;
 #if 0
@@ -12698,22 +12703,22 @@ void TfMain::SetBINCOUNT()                                                      
                             if(iTestRunMode==FT)
                             {
 #if 0
-                                WriteIniData(sLastFilePath, "Site Yield Alarm", "Site Yield Compare Count",iCount);     // shared machine config write -- queued for redirect-seam design
+                                WriteIniData(sLastFilePath, "Site Yield Alarm", "Site Yield Compare Count",iCount);     // shared config write (DataPath family) -- user ruling 20260824: stays gated (GATE7-V: call-time DataPath, --dry redirect would cover it)
 #endif
                                 TestIF_File.iLowYieldCountByTotal=iCount;
 #if 0
-                                WriteIniData(sLastFilePath, "Low Yield Alarm", "By Total Count",iCount);                // shared machine config write -- queued for redirect-seam design
+                                WriteIniData(sLastFilePath, "Low Yield Alarm", "By Total Count",iCount);                // shared config write (DataPath family) -- user ruling 20260824: stays gated (GATE7-V: call-time DataPath, --dry redirect would cover it)
 #endif
                                 TestIF_File.iFailAlarmSiteYieldCmpCount=iCount;
                             }
                             else if(iTestRunMode==RT)
                             {
 #if 0
-                                WriteIniData(sLastFilePath, "Site Yield Alarm", "Site Yield Compare Count RT",iCount);  // shared machine config write -- queued for redirect-seam design
+                                WriteIniData(sLastFilePath, "Site Yield Alarm", "Site Yield Compare Count RT",iCount);  // shared config write (DataPath family) -- user ruling 20260824: stays gated (GATE7-V: call-time DataPath, --dry redirect would cover it)
 #endif
                                 TestIF.iLowYieldCountByTotal_RT=iCount;
 #if 0
-                                WriteIniData(sLastFilePath, "Low Yield Alarm", "By Total Count RT",iCount);             // shared machine config write -- queued for redirect-seam design
+                                WriteIniData(sLastFilePath, "Low Yield Alarm", "By Total Count RT",iCount);             // shared config write (DataPath family) -- user ruling 20260824: stays gated (GATE7-V: call-time DataPath, --dry redirect would cover it)
 #endif
                                 TestIF_File.iFailAlarmSiteYieldCmpCount_RT=iCount;
                             }
@@ -12928,8 +12933,8 @@ void TfMain::SetSGCONTFAIL()                                                    
                     // items 22-23 above (IniData\ shared config write;
                     // fYieldMonitoring absence).
 #if 0
-                    WriteIniData(szDir, "Alarm", "HeadCT",   iFailCount);       // shared machine config write -- queued for redirect-seam design
-                    WriteIniData(szDir, "Alarm", "SocketCT", iFailCount);       // shared machine config write -- queued for redirect-seam design
+                    WriteIniData(szDir, "Alarm", "HeadCT",   iFailCount);       // shared config write (DataPath family) -- user ruling 20260824: stays gated (GATE7-V: call-time DataPath, --dry redirect would cover it)
+                    WriteIniData(szDir, "Alarm", "SocketCT", iFailCount);       // shared config write (DataPath family) -- user ruling 20260824: stays gated (GATE7-V: call-time DataPath, --dry redirect would cover it)
                     fYieldMonitoring->edContsFailSocketAlarmCT_FT->Text=iFailCount;
                     fYieldMonitoring->edContsFailHeadAlarmCT_FT->Text=iFailCount;
 #endif
@@ -12946,8 +12951,8 @@ void TfMain::SetSGCONTFAIL()                                                    
                 // bContsFailByHead;` (no `!`) is preserved verbatim inside
                 // this (already-gated) block -- see the banner's B6 citation.
 #if 0
-                WriteIniData(szDir, "Alarm", "SocketEnable", iOn);              // shared machine config write -- queued for redirect-seam design
-                WriteIniData(szDir, "Alarm", "HeadEnable",   iOn);              // shared machine config write -- queued for redirect-seam design
+                WriteIniData(szDir, "Alarm", "SocketEnable", iOn);              // shared config write (DataPath family) -- user ruling 20260824: stays gated (GATE7-V: call-time DataPath, --dry redirect would cover it)
+                WriteIniData(szDir, "Alarm", "HeadEnable",   iOn);              // shared config write (DataPath family) -- user ruling 20260824: stays gated (GATE7-V: call-time DataPath, --dry redirect would cover it)
                 fYieldMonitoring->rbContsFailBySocket_FTOn->Checked=TestIF_File.bContsFailBySocket;
                 fYieldMonitoring->rbContsFailBySocket_FTOff->Checked=!TestIF_File.bContsFailBySocket;
                 fYieldMonitoring->rbContsFailByHead_FTOn->Checked=TestIF_File.bContsFailByHead;
@@ -12967,8 +12972,8 @@ void TfMain::SetSGCONTFAIL()                                                    
                     // items 22-23 above (IniData\ shared config write;
                     // fYieldMonitoring absence).
 #if 0
-                    WriteIniData(szDir, "Alarm", "HeadCT RT",   iFailCount);    // shared machine config write -- queued for redirect-seam design
-                    WriteIniData(szDir, "Alarm", "SocketCT RT", iFailCount);    // shared machine config write -- queued for redirect-seam design
+                    WriteIniData(szDir, "Alarm", "HeadCT RT",   iFailCount);    // shared config write (DataPath family) -- user ruling 20260824: stays gated (GATE7-V: call-time DataPath, --dry redirect would cover it)
+                    WriteIniData(szDir, "Alarm", "SocketCT RT", iFailCount);    // shared config write (DataPath family) -- user ruling 20260824: stays gated (GATE7-V: call-time DataPath, --dry redirect would cover it)
                     fYieldMonitoring->edContsFailSocketAlarmCT_RT->Text=iFailCount;
                     fYieldMonitoring->edContsFailHeadAlarmCT_RT->Text=iFailCount;
 #endif
@@ -12985,8 +12990,8 @@ void TfMain::SetSGCONTFAIL()                                                    
                 // bContsFailByHead_RT;` (no `!`) is preserved verbatim inside
                 // this (already-gated) block -- see the banner's B6 citation.
 #if 0
-                WriteIniData(szDir, "Alarm", "SocketEnable RT", iOn);           // shared machine config write -- queued for redirect-seam design
-                WriteIniData(szDir, "Alarm", "HeadEnable RT",   iOn);           // shared machine config write -- queued for redirect-seam design
+                WriteIniData(szDir, "Alarm", "SocketEnable RT", iOn);           // shared config write (DataPath family) -- user ruling 20260824: stays gated (GATE7-V: call-time DataPath, --dry redirect would cover it)
+                WriteIniData(szDir, "Alarm", "HeadEnable RT",   iOn);           // shared config write (DataPath family) -- user ruling 20260824: stays gated (GATE7-V: call-time DataPath, --dry redirect would cover it)
                 fYieldMonitoring->rbContsFailBySocket_RTOn->Checked=TestIF_File.bContsFailBySocket_RT;
                 fYieldMonitoring->rbContsFailBySocket_RTOff->Checked=!TestIF_File.bContsFailBySocket_RT;
                 fYieldMonitoring->rbContsFailByHead_RTOn->Checked=TestIF_File.bContsFailByHead_RT;
