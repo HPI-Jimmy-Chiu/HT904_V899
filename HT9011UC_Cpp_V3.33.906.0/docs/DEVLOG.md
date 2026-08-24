@@ -9529,6 +9529,37 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   CommBin 生命週期、DEFECT (i) 裁決、TDataModule3 去留、真 RS-232 對板。
 - 今日累計 **24 顆 commit**。
 
+## 20260824 XI — FW-QWKEY2 收案：84 個 fQwertyKey gate 解鎖（主迴圈自做）
+
+- **84 塊 #if 0 解鎖**（commit 0361b4f 83 塊＋補掃 VacuumUnit.cpp 1 塊）：
+  uTemp_Set 50（G-Qwerty）、cConfiguration 21（WA-1）、fLotInfo 5
+  （WA-8×2/WB-8 else 臂/WB-11/WB-15）、DynamicTemp 4（Q1）、
+  MyVacuumPanel/MyOmronPanel/MyTempPanel/VacuumUnit 各 1。
+  78 塊走形狀斷言腳本（單一 ShowQwertyKey 陳述、無共同阻塞者）、
+  6 塊逐讀裁定（uTemp_Set 4 個客戶/ATC 分支樹＋fLotInfo else 臂＋
+  VacuumUnit 補掃）。全部 latent：執行期實例 NULL 直到 HTEdit GATE (6)。
+- **syntax gate 先於 build 抓到三類**：(1) 23 個 DEVIATION 方法
+  （cConfiguration 15/DynamicTemp 4/fLotInfo 4）gated 時砍掉的
+  `TObject *Sender` 被活化呼叫讀取——定義＋facade 宣告補回；
+  (2) MyVacuumPanel 的 include 插進 `#if HAVE_PCI1203` 條件塊（anchor
+  在條件內）——搬到塊外；(3) 一則 OPENED 註記誤標到 MyTempPanel 仍
+  gated 的塊（:1026）——還原 ACTIVE-arm 文字。
+- **過期論證同波更新**：7 個 TU＋8 個 facade header 的「fQwertyKey has
+  no port」現在式假宣稱全改 OPENED/EXPIRED 註記（wave-agents-stale-
+  absence-claims 政策）。**刻意不動**（自身 gate 仍鎖、留給 GATE (6)
+  接線波）：ATCInterface.h/.cpp、AGV_PortScan.h、automation.h、
+  SCK_ART_Remainder.h、OmronLaser/LaserSensor.h、Public/HTEdit.cpp、
+  forms/fSpeed.h（純描述）。
+- **殘餘 gated fQwertyKey 呼叫**（樹掃量測 20260824）：fLotInfo 2
+  （WB-9/WB-10，InputBarcodeNumber 共阻塞）、MyTempPanel 21（三個分支
+  樹塊：W8-2 Tag/W8-3 fTemp_Set setters/W8-5 Barcode_Reader）、
+  HTEdit 10（GATE (6) 鍵盤建構核心）。
+- gate：0361b4f 這批＝全新雙 dir build_qw2g/qw2r **137/142×2** 常駐
+  五項逐項同；VacuumUnit 補塊＝build_qw3g/qw3r 進行中（綠燈才 commit）。
+  guard 代理 0 檔。
+- 教訓：檔案級站點清冊要用**樹掃**收尾（grep -rln + #if 0 深度計數），
+  不能只信 RESUME/計畫書點名——VacuumUnit.cpp 就是點名清單外撿回來的。
+
 ### 🔖 RESUME（20260824 日終）
 
 - **今日全收（27 顆 commit）**：FW-TEMP3／GATE7-V＋裁決落地＋計數更正／
@@ -9541,12 +9572,16 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - **等使用者（三項）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
   HAL-MOT1 十問（Q1/Q9/Q4 擋新表起草，其餘有預設）；TImage headless
   准駁（解 fSetup 2 方法）。
-- **下一波（刻意批次）**：WA-1 家族解鎖波——fDynamicTemp GATE(Q1)×4、
-  fConfiguration WA-1×13、fLotInfo/fSpeed/MyTempPanel/MyVacuumPanel/
-  ATCInterface/MyOmronPanel 的 fQwertyKey 站點逐點解鎖＋過期論證文字
-  同波更新（QWKEY1 波建議「接線時逐檔更新」，避免同批檔案被動兩次）；
-  **若 TImage 獲准，chkOffCenterkitClick/cbQualSite2X2ShiftClick 併入
-  同波**，一次 gate。SECSGEM G23 需先給 fPassword facade 加 Visible 欄。
+- **下一波**：FW-QWKEY2 已收（84 塊解鎖，見 XI）。候選序：
+  (1) HTEdit GATE (6) 接線波——鍵盤建構核心 Public/HTEdit.cpp:298-353，
+  10 個 gated fQwertyKey 呼叫，開波前先查 Barcode_Reader 共阻塞邊界；
+  這波同時要回頭更新 ATCInterface/AGV_PortScan/automation.h/
+  SCK_ART_Remainder/LaserSensor/HTEdit 自己的過期 no-port 論證。
+  (2) SECSGEM G23——先給 fPassword facade 加 Visible 欄。
+  (3) TImage 若獲准：chkOffCenterkitClick/cbQualSite2X2ShiftClick。
+  註：MyTempPanel 三個分支樹塊的 W8-3（fTemp_Set setters）已死
+  （MaxTempSetting/MinTempSetting 20260824 起在 uTemp_Set 為真身），
+  但 W8-2（TEdit 無 Tag）＋W8-5（Barcode_Reader 無 port）仍鎖，維持 gated。
 - **安全佇列（不做不問）**：GATE 7 家族（20260824 裁決維持）；AuthPath
   2 站點；P-R1/P-S1 密碼檔（接 login 前必解 P-R1，SECURITY DELTA）；
   GOLDEN DEFECT (i) 21-into-20 overflow（上真硬體前裁決）；
