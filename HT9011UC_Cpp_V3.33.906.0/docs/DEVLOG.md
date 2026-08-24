@@ -9454,3 +9454,41 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   重跑的 rm -rf 撞上 live ctest，38 個 Not Run，整側作廢重跑。
   教訓已入 memory（絕對路徑檢查；rm gate dir 前先看
   LastTest.log.tmp* 是否存在）。
+
+## 20260824 VIII — FW-QWKEY1 收案：fQwertyKey＋fPassword 落地接線
+
+- 六新檔：facades（forms/fQwertyKey.*、forms/fPassword.*，ht9045_forms）＋
+  sm 側根檔（myQwertyKeyBoard.cpp、Password.cpp，ht9045_sm）——cSetUp 分層
+  前例。TfQwertyKey 20/20、TfPassword 24/24（18 ACTIVE＋5 MIXED＋
+  SavePasswordFile 全 gated）。機械保真對照零未解釋漏譯。
+- **⚠ SECURITY DELTA（顯著記錄）**：(P-R1) ReadPasswordFile gate 關閉期間
+  PassWord[] 全空字串→CheckPassword 會接受空密碼。今日不可達（無人建構、
+  handler 未接線），但**任何接 EventLog login 的波次必須先解 P-R1**
+  （它有六個 CheckAndReadIniData 會把預設密碼種進
+  System\EvenLogLevel.ini——共用 config＋密碼語意雙重命中 gate 規則）。
+- 主迴圈複驗：G-P1 golden 字面（:89/:96 重複條件死 else-if）坐實；
+  csystem.cpp:2728/:2953 消費點以 preprocessor-stack walk 證實在 :598
+  的 #if 0 內；6 檔對帳精確。
+- gate：全新雙 dir 137/142×2、常駐五項、guard 代理 0 檔。
+- **台帳 R6 候選 6 筆**（G-P1/P2/P3/P4、G-a、G-b）待下輪維護。
+- **解鎖影響**：fSetup 佇列 7 個 fQwertyKey/fPassword 類方法——2 可解
+  （cbAaDropDown、XPitch/XShiftPitchMouseDown 的計算翻盤）、3 大致可解
+  （DoPassword/DoPasswordCheck 需對 fMain facade 逐項驗，AccessLevel
+  權限語意建議與 WebAuth 對齊）、2 部分可解（Barcode_Reader 留窄 gate）；
+  另有跨檔 WA-1 家族的「TfQwertyKey 無實體」gate 論證文字自本波起過期，
+  接線波逐檔更新。SECSGEM G23 要 fPassword->Visible，facade 依量測需求
+  原則未帶，解閘波自行加欄。
+
+### 🔖 RESUME（最新）
+
+- **今日（20260824）全收**：FW-TEMP3、GATE7-V＋裁決＋台帳 657、
+  FW-BINDISP1/2、HAL-MOT1、FW-SETUP-D、台帳 R5（662）、FW-QWKEY1（本節）。
+  共 18 顆 commit。基線 142/5（實測 137/142 常駐五項 ×8 輪雙 gate）。
+- **等使用者**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp 版面）；
+  HAL-MOT1 十問（Q1/Q9/Q4 擋起草）；TImage headless 准駁。
+- **下一波候選（夜間可自動）**：(a) fSetup 解鎖批（cbAaDropDown＋
+  XPitch/XShiftPitchMouseDown 計算翻盤，2-3 方法）；(b) 台帳 R6
+  （6 筆 QWKEY 候選）；(c) TMyBinDispHT9046 協定子類翻譯波；
+  (d) WA-1 家族 gate 論證文字過期更新（純註解）。
+- **安全佇列（不做不問）**：P-R1/P-S1 密碼檔 gate；GATE 7 家族
+  （使用者 20260824 裁決維持 gated）；AuthPath 2 站點。
