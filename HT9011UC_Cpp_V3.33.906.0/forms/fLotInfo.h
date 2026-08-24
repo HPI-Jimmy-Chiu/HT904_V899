@@ -298,12 +298,12 @@
 //      those two comments). The whole function reduces to a no-op.
 //  (WB-2) edDeviceNameMouseDown, golden :7196-7213 -- both branches' only
 //      payload is `Clipboard()->Clear()` and/or
-//      `InputBarcodeNumber("Input Device Name:")`. `Clipboard()` has zero
-//      port anywhere in this tree (`grep -rn "Clipboard()"`, 20260819, 0 hits
-//      outside golden) and `InputBarcodeNumber` likewise (see banner top).
-//      `TMouseButton`/mbLeft/mbRight are also portless (fContactCT.h:78-87
-//      established this already) so the Button parameter is dropped entirely
-//      per the DEVIATION idiom -- nothing surviving translation ever reads it.
+//      `InputBarcodeNumber("Input Device Name:")`. PARTIALLY OPENED 20260825
+//      (FW-BARCODE4): the SCC branch is live (InputBarcodeNumber real since
+//      FW-BARCODE1; its Clipboard line narrowed to GATE (CLIP)); the AMKOR/
+//      QUALCOMM branch stays gated as GATE (WB-2-BTN) -- it reads the
+//      dropped TMouseButton `Button` param (mbLeft/mbRight portless,
+//      fContactCT.h:78-87), which nothing translated can spell.
 //  (WB-3) btChangeFileClick, golden :10215-10236 -- every branch calls one of
 //      `fBarCode->btBarcodeChangeFileDisConnect/btBarcodeChangeFileConnect
 //      ->Click()`, `->InitialBarcodeScanChangeFile()`,
@@ -346,18 +346,17 @@
 //      branches; still portless) or fQwertyKey->ShowQwertyKey (1 branch;
 //      real since 20260824, but the block STAYS gated on the
 //      InputBarcodeNumber co-blocker). The
-//      `TEdit *TempEdit=(TEdit*)Sender;`/`TempEdit==edtCusLotID` dispatch
-//      inside the first of those branches is therefore never reached by any
-//      surviving code either, so `Sender` needs no parameter (nothing real
-//      reads it) -- same "keep only what's read" rule as Wave A's Key-param
-//      DEVIATION. Only `if(CUSTOMER_CODE==CC_Murata){ return; }` is REAL;
-//      everything else is one gated block.
+//      OPENED 20260825 (FW-BARCODE4): InputBarcodeNumber real since
+//      FW-BARCODE1 (e7b4bf8), fQwertyKey since FW-QWKEY1 -- the whole
+//      else-if chain is live and `Sender` is restored to the signature
+//      (the TempEdit==edtCusLotID dispatch reads it).
 //  (WB-10) edtSysLotIDMouseUp, golden :11799-11829 -- same shape as WB-9: the
 //      CC_Murata branch is golden's own empty `{}` (translated as a real
 //      no-op), every other branch (CC_PTI/bO23, CC_TFME_CHINA, bSPILFunction,
 //      CC_SCC, bVTESTFunction) calls InputBarcodeNumber and/or
-//      fQwertyKey->ShowQwertyKey. One gated block for all of them (still
-//      gated 20260824: InputBarcodeNumber co-blocker remains).
+//      fQwertyKey->ShowQwertyKey. OPENED 20260825 (FW-BARCODE4): both
+//      entities real; chain live, Sender restored (the CC_SCC branch's
+//      ShowQwertyKey reads it).
 //  (WB-11) edQAModeMouseDown, golden :11531 -- the entire one-line body is
 //      `fQwertyKey->ShowQwertyKey(...)`. OPENED 20260824 with WB-8/WA-8
 //      (FW-QWKEY2): call live, latent until keyboard wiring.
@@ -1391,8 +1390,8 @@ public:
 
     // -- edtSysOperatorIDMouseUp / edtSysLotIDMouseUp (golden :11755-11794 / :11796-11831) --
     // WB-9/WB-10 gate everything past the CC_Murata branch; zero new members.
-    virtual void edtSysOperatorIDMouseUp();           // golden uLotInfo.cpp:11755-11794 (params dropped, see WB-9)
-    virtual void edtSysLotIDMouseUp();                // golden uLotInfo.cpp:11796-11831 (params dropped, see WB-10)
+    virtual void edtSysOperatorIDMouseUp(TObject *Sender); // golden uLotInfo.cpp:11755-11794 (Sender restored 20260825, FW-BARCODE4; other params still dropped)
+    virtual void edtSysLotIDMouseUp(TObject *Sender); // golden uLotInfo.cpp:11796-11831 (Sender restored 20260825, FW-BARCODE4; other params still dropped)
 
     // -- edQAModeMouseDown (golden :11528-11532) -- WB-11, whole body gated --
     virtual void edQAModeMouseDown(TObject *Sender);  // golden uLotInfo.cpp:11528-11532 (Sender restored 20260824, FW-QWKEY2; other params still dropped)

@@ -2121,10 +2121,11 @@ void TfLotInfo::LoadRTCFullViewImg(bool /*bShowImage*/)
 // -- edDeviceNameMouseDown (golden uLotInfo.cpp:7193-7214) -- WB-2 ----------
 void TfLotInfo::edDeviceNameMouseDown()
 {
-    // AI(W906-FW3-LotInfo-WB) 20260819: GATE WB-2 -- see forms/fLotInfo.h
-    // GATE REGISTER WB-2 (Clipboard()/InputBarcodeNumber/TMouseButton have no
-    // port anywhere in this tree).
-#if 0
+    // AI(W906-FW-BARCODE4) 20260825: GATE WB-2 PARTIALLY OPENED -- the SCC
+    // branch is live (InputBarcodeNumber real since FW-BARCODE1; Clipboard
+    // line narrowed to GATE (CLIP)); the AMKOR/QUALCOMM branch stays gated
+    // as GATE (WB-2-BTN): it reads the dropped TMouseButton `Button` param.
+#if 0 // GATE (WB-2-BTN) -- golden reads `Button` (TMouseButton param, dropped: no port)
 #ifndef SOFT_SIMULTE
     if(CUSTOMER_CODE==CC_AMKOR_China ||                                     //jou 2013-01-04 防止OP使用複製貼上的方式讀取工作檔
        CUSTOMER_CODE==CC_QUALCOMM)                                          //JerryYang 20170412 (Steven) add QUALCOMM
@@ -2135,14 +2136,16 @@ void TfLotInfo::edDeviceNameMouseDown()
         }
     }
 #endif
+#endif // GATE (WB-2-BTN)
     if((CUSTOMER_CODE==CC_SCC && AccessLevel<iDefHonPrecLevel))
     {
         edDeviceName->Text="";
+#if 0 // GATE (CLIP) -- VCL Clipboard() has no port anywhere in this tree (grep 20260825)
         Clipboard()->Clear();
+#endif // GATE (CLIP)
         AnsiString sBarcodeID=InputBarcodeNumber("Input Device Name:");
         edDeviceName->Text=sBarcodeID;
     }
-#endif
 }
 
 // -- CutTempToEdit (golden uLotInfo.cpp:5225-5244) ---------------------------
@@ -2419,16 +2422,15 @@ void TfLotInfo::edtSysOperatorIDKeyDown()
 }
 
 // -- edtSysOperatorIDMouseUp (golden uLotInfo.cpp:11755-11794) -- WB-9 -----
-void TfLotInfo::edtSysOperatorIDMouseUp()
+void TfLotInfo::edtSysOperatorIDMouseUp(TObject *Sender)
 {
     if(CUSTOMER_CODE==CC_Murata)
     {
         return;
     }
-    // AI(W906-FW3-LotInfo-WB) 20260819: GATE WB-9 -- see forms/fLotInfo.h
-    // GATE REGISTER WB-9 (every remaining branch needs InputBarcodeNumber
-    // and/or fQwertyKey, neither of which has a port).
-#if 0
+    // AI(W906-FW-BARCODE4) 20260825: GATE WB-9 OPENED -- InputBarcodeNumber
+    // real since FW-BARCODE1 (e7b4bf8), fQwertyKey since FW-QWKEY1; Sender
+    // restored (TempEdit dispatch + SCC ShowQwertyKey read it).
     else if(IniConfig.bO23_InputLotIDByBarcode)                                 //Steven 20241224 : LotID只能用Barcode
     {
         AnsiString str, str2;
@@ -2461,19 +2463,16 @@ void TfLotInfo::edtSysOperatorIDMouseUp()
             edtSysOperatorID->Text="";
         }
     }
-#endif
 }
 
 // -- edtSysLotIDMouseUp (golden uLotInfo.cpp:11796-11831) -- WB-10 --------
-void TfLotInfo::edtSysLotIDMouseUp()
+void TfLotInfo::edtSysLotIDMouseUp(TObject *Sender)
 {
     if(CUSTOMER_CODE==CC_Murata)
     {
     }
-    // AI(W906-FW3-LotInfo-WB) 20260819: GATE WB-10 -- see forms/fLotInfo.h
-    // GATE REGISTER WB-10 (every remaining branch needs InputBarcodeNumber
-    // and/or fQwertyKey, neither of which has a port).
-#if 0
+    // AI(W906-FW-BARCODE4) 20260825: GATE WB-10 OPENED -- see WB-9 above;
+    // Sender restored (the CC_SCC branch's ShowQwertyKey reads it).
     else if(CUSTOMER_CODE==CC_PTI ||                                            //RogerYang 20170327 (Steven) 力成使用條碼機
             IniConfig.bO23_InputLotIDByBarcode)                                 //Steven 20241224 : LotID只能用Barcode
     {
@@ -2503,7 +2502,6 @@ void TfLotInfo::edtSysLotIDMouseUp()
         edtSysLotID->Text=InputBarcodeNumber("Input Lot ID:", "LotID");
         edtSysOperatorID->Text=InputBarcodeNumber("Input OP ID:", "UserName");
     }
-#endif
 }
 
 // -- edQAModeMouseDown (golden uLotInfo.cpp:11528-11532) -- WB-11 --------
