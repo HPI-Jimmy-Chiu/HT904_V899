@@ -600,11 +600,14 @@ std::size_t PublishHandlerTags(webbridge::TagSnapshot& snap)
     // the host marks the chain loaded (g_webTempLoaded, keyed off golden's own
     // iSendChangeTempError "file missing" signal, not merely "we tried").
     //
-    // temp.mode publishes the RAW ini code (0=Hot/1=Ambient/3=AmbientHot,
+    // temp.mode publishes the RAW ini code (0=Hot/1=Ambient/2=ATC/3=AmbientHot,
     // ReadTempFile uTemp_Set.cpp:2248-2264) rather than a decoded label: the
     // "Hot Mode"/"Ambient Mode" text tagmap.js's lblTemperatureMode expects is
     // set on fMain, a form this file does not touch, and this file does not
     // guess captions it has not read.
+    //AI(W906-FW-TEMP3) 20260824: user ruled the decode lives browser-side --
+    // web/js/ui/bind.js `tempMode` formatter maps the code to the caption.
+    // This file keeps publishing the raw int; wire contract unchanged.
     stageDouble(snap, "temp.sv",   g_webTempLoaded, Temperature.fWorkTemperBase);
     stageDouble(snap, "temp.soak", g_webTempLoaded, Temperature.fSoakTime);
     stageInt   (snap, "temp.mode", g_webTempLoaded, Temperature.iMachineTempMode);

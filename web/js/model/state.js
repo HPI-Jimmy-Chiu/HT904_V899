@@ -76,7 +76,9 @@ export function initialState() {
 
     /* --- temperature ---------------------------------------------------- */
     "temp.pv":         130,
-    "temp.mode":       "Hot Mode",
+    /* raw recipe mode code, as the real wire sends it (0=Hot; bind.js
+       tempMode formatter renders "Hot Mode" -- same visual as before) */
+    "temp.mode":       0,
     "temp.sv":         130,
     "temp.soak":       50,
 

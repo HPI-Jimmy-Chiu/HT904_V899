@@ -42,7 +42,7 @@ function temperatureCard() {
         h("div.readout__v", { "data-tag": "temp.pv", "data-fmt": "int" }),
         h("div.readout__u", null, "Deg"),
       ),
-      h("div.readout__mode", { "data-tag": "temp.mode" }),
+      h("div.readout__mode", { "data-tag": "temp.mode", "data-fmt": "tempMode" }),
       hr(),
       field({ label: "Temperature", tag: "temp.sv",   cmd: "temp.setSV",   unit: "Deg" }),
       field({ label: "Soak Time",   tag: "temp.soak", cmd: "temp.setSoak", unit: "Sec" }),

@@ -70,6 +70,27 @@ const formatters = {
     const p = n => String(n).padStart(2, "0");
     return `${p(Math.floor(s / 3600))}:${p(Math.floor(s / 60) % 60)}:${p(s % 60)}`;
   },
+  /**
+   * temp.mode: the wire carries the RAW recipe ini code
+   * (Temperature.iMachineTempMode, ReadTempFile uTemp_Set.cpp:2240) and the
+   * browser decodes it here -- user ruling 20260824, format follows the mock.
+   * Code -> caption is golden UpdateMainOperateMode (main.cpp:12885-12980)
+   * joined with the rgTemperatureMode radio items (uTemp_Set.dfm):
+   *   0 "High"          -> "Hot Mode"
+   *   1 "Ambient"       -> "Ambient Mode"
+   *   2 "Temp control"  -> "ATC Mode"
+   *   3 "Ambient/High/Temp control" -> "None HotPlate_mode"  (golden's literal,
+   *                                     kevin 20180811 -- not prettified here)
+   * NOT reproduced: the state-driven overrides golden layers on top
+   * (bATCActiveCooling forcing "ATC Mode", HiSilicon per-customer "ATC_nnC",
+   * Tri-Temp colour). Those read fMain state that is not on the wire; they
+   * need their own tags before the web can show them.
+   */
+  tempMode: v => {
+    if (v === null || v === undefined || v === "") return EM_DASH;
+    const m = { 0: "Hot Mode", 1: "Ambient Mode", 2: "ATC Mode", 3: "None HotPlate_mode" }[Number(v)];
+    return m !== undefined ? m : `Mode ${v}`;   // unknown code: show it, don't guess
+  },
 };
 
 /**

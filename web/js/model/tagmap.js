@@ -63,7 +63,8 @@ export const TAGMAP = {
   "temp.pv":         { dfm: null, cls: null, dir: "r",
                        note: "big present-value readout; not a pnlTempSetting child -- unresolved" },
   "temp.mode":       { dfm: `${M}.palSetting.pnlTempSetting.lblTemperatureMode`, cls: "TLabel", dir: "r",
-                       note: 'design-time caption is "Ambient Mode"; the mock shows "Hot Mode"' },
+                       note: "wire carries the raw recipe code (0=Hot 1=Ambient 2=ATC 3=AmbientHot); " +
+                             "bind.js tempMode formatter decodes it (user ruling 20260824)" },
   "temp.sv":         { dfm: `${M}.palSetting.pnlTempSetting.edWorkTemperBase`, cls: "TEdit", dir: "rw",
                        note: "edATCAmbientTemper is the separate ambient setpoint" },
   "temp.soak":       { dfm: `${M}.palSetting.pnlTempSetting.edSoakTime`, cls: "TEdit", dir: "rw",
