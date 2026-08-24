@@ -9643,6 +9643,27 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - gate：全新雙 dir build_qw7g/qw7r **137/142×2** 常駐五項逐項同；
   guard 代理 0 檔。
 
+## 20260824 XVI — FW-QWKEY6 收案：十個省略滑鼠 handler 落地（主迴圈自做）
+
+- **翻譯債清償**（commit c6e3861）：TfLaserSensor 7 個（edICThickness＋
+  4 個 Device/OutDevice offset＋mtPlate1/2_Golden——後兩個有真工作：
+  ConvertIndexCells→edTemp→鍵盤→SetCellNumber→dLaserValueIn 回寫）、
+  TfAGV 3 個（golden AGV.cpp:1133-1143/:1309-1313）。trimmed 簽名照
+  keep-only-what's-read 規則；表面先驗全真才動筆。
+- **gate 模板凍結（cd bug 犯三次的收斂）**：qw5、qw8 兩輪 nohup 鏈的
+  Release 段都少了絕對路徑 cd（nested build 目錄＋cfg 必敗）——寫過教訓
+  隔天再犯。自此雙 gate 鏈一律用這個形（每段開頭絕對路徑 cd）：
+  ```
+  nohup bash -c 'cd <ABS>/HT9011UC_Cpp_V3.33.906.0 && mkdir -p build_Xg && cd build_Xg && cmake ... ;
+                 echo G_EXIT=$? > <ABS>/_X_gate_g.txt;
+                 cd <ABS>/HT9011UC_Cpp_V3.33.906.0 && mkdir -p build_Xr && cd build_Xr && cmake ... ;
+                 echo R_EXIT=$? > <ABS>/_X_gate_done.txt' &
+  ```
+  復原程序（已演練兩次）：驗無 LastTest.log.tmp → rm nested 殘渣 →
+  絕對路徑補發 r2。
+- gate：Debug build_qw8g＋Release build_qw8r2 **137/142×2** 常駐五項
+  逐項同；guard 代理 0 檔。
+
 ### 🔖 RESUME（20260824 日終）
 
 - **今日全收（27 顆 commit）**：FW-TEMP3／GATE7-V＋裁決落地＋計數更正／
@@ -9655,12 +9676,16 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - **等使用者（三項）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
   HAL-MOT1 十問（Q1/Q9/Q4 擋新表起草，其餘有預設）；TImage headless
   准駁（解 fSetup 2 方法）。
-- **下一波**：QWKEY 五波＋G24 三連開全收（XI-XV）。候選序：
-  (1) 翻譯債小波：LaserSensor 6 個 MouseDown＋AGV_PortScan 3 個
-  MouseDown（純 ShowQwertyKey 體，前提已活）。
-  (2) TImage 若獲准：chkOffCenterkitClick/cbQualSite2X2ShiftClick。
-  (3) shims 收斂波（選配）：clYellow/NewRecordProcess 預設值三處
-  （acatchtray_shims.h／automation.cpp:62）向 golden 形靠攏。
+- **下一波**：XI-XVI 全收（QWKEY2-6＋G24；20260824 晚間七波，主迴圈
+  自做零 agent）。候選序：
+  (1) TImage 若獲准：chkOffCenterkitClick/cbQualSite2X2ShiftClick。
+  (2) shims 收斂波（選配）：clYellow/NewRecordProcess 預設值三處
+  （acatchtray_shims.h 不忠實的 S2=""/S3=""／automation.cpp:62 第三處
+  extern）向 golden 形（cMyDB.h Debug=" "）靠攏。
+  (3) fLotInfo WB-9/WB-10 與 MyTempPanel W8 大塊的下一個真阻塞者是
+  Barcode_Reader（全樹無 port）——若要開是一個 BarcodeReader 翻譯波。
+  (4) 台帳確認：本晚七波無新 GOLDEN 缺陷（QWKEY6 是純翻譯、其餘是
+  解鎖），惟 ledger 677 之後未加列——下次 ledger 輪先複掃 XI-XVI。
   註：MyTempPanel 三個分支樹塊的 W8-3（fTemp_Set setters）已死
   （MaxTempSetting/MinTempSetting 20260824 起在 uTemp_Set 為真身），
   但 W8-2（TEdit 無 Tag）＋W8-5（Barcode_Reader 無 port）仍鎖，維持 gated。
