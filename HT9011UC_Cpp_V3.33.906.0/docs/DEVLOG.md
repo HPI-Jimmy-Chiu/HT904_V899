@@ -9376,3 +9376,18 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   維護與 FW-SETUP-D 的新發現一起收）。
 - 並行中：FW-SETUP-D（TScrollBar headless＋ctor 陣列＋解鎖批）、
   HAL-MOT1（mot_table 紙上分類，唯讀）兩個背景 agent。
+
+## 20260824 V — HAL-MOT1：mot_table 紙上分類文件落地（唯讀波）
+
+- `docs/HAL_MOTTABLE_CLASSIFICATION.md`：29 欄欄位字典（欄名解析、
+  last-wins、缺一欄容忍）＋45 列逐軸分類（現況 CardModel 45/45 SMC、
+  PCI1203 0/45；提議 Enable=1 的 33 列轉 PCI1203，M13-M16 Index 四軸
+  待裁決）＋IO 側現狀＋**10 個開放問題**（HT9050 軸配置沿用性、EtherCAT
+  站號拓撲、IO_CARD_TYPE 選值、ENI 檔誰產誰載、模板起本檔等）。
+- 主迴圈抽核坐實：IO_CARD_TYPE=0（Gerneral.ini:41，本機 CSV 臂休眠）、
+  45 列、CardModel 全 SMC。
+- 值得記的坑（文件內詳）：`HomeDirectior` 拼錯是**承重的**（修正會讓
+  Direction 的 last-wins 掃描誤中）；`Mot_Table-new.csv` 是 TAB 分隔
+  （CommaText 會塌欄）；AGENTS.md「欄位順序敏感」對此檔應精緻化為
+  「欄名/欄數敏感」。
+- 全程唯讀（僅一個新 doc），零程式碼變更，不需 gate。
