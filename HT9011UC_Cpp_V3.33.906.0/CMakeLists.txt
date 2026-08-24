@@ -1934,6 +1934,11 @@ add_library(ht9045_sm STATIC
     # ShowMyMessage) -- same root-file split as cSetUp.cpp above.
     myQwertyKeyBoard.cpp
     Password.cpp
+    # AI(W906-FW-BARCODE1) 20260824: TFormBarcodeReader + Barcode_Reader/
+    # InputBarcodeNumber -- the last shared blocker behind every remaining
+    # gated keyboard/barcode site (entity wave; gate openings are the next
+    # wave's separate commit).
+    BarcodeReader.cpp
     # AI(W906-FW-CMD-E) 20260821: MainTempMode.cpp -- TfMain::ChangeTempMode
     # (golden main.cpp:21749-21925), the temperature-mode switcher extracted
     # from main.cpp. NOT MainCalcCore material (that file's charter is pure
