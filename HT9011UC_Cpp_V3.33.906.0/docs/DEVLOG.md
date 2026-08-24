@@ -9719,6 +9719,22 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - fLotInfo 殘餘（下一波手術）：WB-2（Button 參數分支）、WB-9/WB-10
   （需 Sender 復原）、WB-13（fBarCode 成員，WA-7 鎖）。
 
+## 20260825 III — FW-BARCODE4 收案：fLotInfo 條碼家族收尾（主迴圈自做）
+
+- **WB-9/WB-10 全開**（commit adcf9b6）：兩條 else-if 鏈整鏈活化、
+  `TObject *Sender` 復原（TempEdit 派發與 CC_SCC ShowQwertyKey 分支
+  讀它；改前 grep 驗證零外部呼叫者）。**WB-2 部分開**：SCC 支活
+  （Clipboard 行 GATE (CLIP)）、AMKOR/QUALCOMM 支縮成 GATE (WB-2-BTN)
+  （讀已刪除的 TMouseButton Button 參數，無法拼寫）。
+- fLotInfo 條碼家族僅剩 WB-13（fBarCode 成員，WA-7 鎖）。
+- gate：**dualgate.sh 首航全程無人工介入**——build_qw12g/qw12r
+  **137/142×2** 常駐五項逐項同；guard 代理 0 檔。
+- **BARCODE 家族四波總結**：BARCODE1 實體（表單+30 行 dispatcher）→
+  BARCODE2 4 純站→BARCODE3 9 個 Clipboard 混合塊→BARCODE4 fLotInfo
+  收尾。全樹殘餘 gated 條碼/鍵盤站的阻塞者只剩三種不可拼寫表面：
+  Buffer->Tag（uTemp_Set 9＋MyTempPanel）、TMouseButton Button
+  （WB-2-BTN）、Clipboard()（GATE (CLIP) 逐行）＋WB-13 的 fBarCode。
+
 ### 🔖 RESUME（20260824 日終）
 
 - **今日全收（27 顆 commit）**：FW-TEMP3／GATE7-V＋裁決落地＋計數更正／
@@ -9733,8 +9749,8 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   准駁（解 fSetup 2 方法）。
 - **下一波**：XI-XVII 全收（20260824 晚間八波：QWKEY2-6＋G24＋
   BARCODE1，主迴圈自做零 agent，八輪雙 gate 全綠）。候選序：
-  (1) FW-BARCODE2/3 已收（20260825 I/II）。**FW-BARCODE4**：fLotInfo
-  WB-2（Button 分支手術）＋WB-9/WB-10（Sender 參數復原＋塊頭複驗）。
+  (1) BARCODE 家族四波全收（20260825 I/II/III）。剩餘阻塞者=不可拼寫
+  表面（Tag/TMouseButton/Clipboard）＋WB-13 fBarCode，皆非行為 gate。
   (2) 台帳輪：複掃 XI-XVII＋20260825 I（BR-q1/n1/n2 三筆＋掃描器教訓）。
   (3) TImage 若獲准：chkOffCenterkitClick/cbQualSite2X2ShiftClick。
   (4) shims 收斂波（選配）：clYellow/NewRecordProcess 預設值三處。
