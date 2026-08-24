@@ -71,15 +71,15 @@ FW 系列 / `GOLDEN BUG #N` / `k7-B1` 類區域編號等標記寫在程式碼裡
 
 | 項目 | 數值 |
 |---|---|
-| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **662 筆**（以表格內 `#` 編號列實際計數，20260821 四輪補掃後＋20260824 GATE7-V 增 1 筆＋20260824 五輪同步 5 筆（FW-BINDISP1/SETUP-D/BINDISP2 當波入帳，維護規則 1）；`python3` 逐列計數，見下方「四輪補掃紀錄」） |
+| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **670 筆**（以表格內 `#` 編號列實際計數，20260824 R6 同步 8 筆（FW-QWKEY1 當波入帳）＋20260821 四輪補掃後＋20260824 GATE7-V 增 1 筆＋20260824 五輪同步 5 筆（FW-BINDISP1/SETUP-D/BINDISP2 當波入帳，維護規則 1）；`python3` 逐列計數，見下方「四輪補掃紀錄」） |
 | 其中 BUG 類（`GOLDEN BUG` / `GOLDEN BUGS` / `GOLDEN BUG #N` / `(Bx) GOLDEN BUG` / golden copy-paste bug） | 252 筆（含三輪新增 1 筆，`cConfiguration.h` 的 `sbUpdateHPClick` copy-paste bug） |
 | 其中 QUIRK 類（`GOLDEN QUIRK` / `GOLDEN QUIRKS`） | 239 筆（含 SECSGEM 三檔補撈的 39 筆；含二輪補掃新增 71 筆，見下方「二輪 QUIRK 補掃紀錄」；三輪未新增 QUIRK 類；含 20260824 五輪 +1，`cSetUp.cpp` CHSetError int>63.5） |
 | 其中 DEFECT 類（`GOLDEN DEFECT` / `GOLDEN DEFECTS`） | 70 筆（含二輪補掃新增 5 筆；含三輪新增 1 筆，`BinDisplay/MyBinDisp.cpp` 的 `WriteTargetBin` off-by-one） |
 | 其中 ODDITY 類（`GOLDEN ODDITY` / `GOLDEN ODDITIES`） | 63 筆（含三輪新增 16 筆，集中在 batch-5 顯示側叢集，見下方「三輪增補紀錄」；含四輪補掃新增 6 筆，集中在溫控表單 uTemp_Set.cpp/DynamicTemp.cpp 與 Command.cpp FW-CMD-C 段，見下方「四輪補掃紀錄」；含 20260824 五輪 +3：`cSetUp.cpp` ×2（pitch switch 缺 N-mode case、CoSocketComboChange 無視 Sender）＋`database.cpp` ICBD-1） |
 | 其中 ASYMMETRY 類（`GOLDEN ASYMMETRY` / `GOLDEN ASYMMETRIES`） | 16 筆（含三輪新增 1 筆，`BinDisplay/MyBinDisp.h` 的 `ComPort`/`ComPort2` 初始化不對稱；含 20260824 GATE7-V 新增 1 筆，Command.cpp SETSOAK_ 寫入路徑不對稱） |
 | 其中 DIVERGENCE 類（port 自身偏離 golden，已揭露，非 golden 本身缺陷；csystem.cpp/SCK_ART.cpp 各 1 筆合計 2） | 2 筆 |
-| 其中 GAP / LEAK / NOTE / INCONSISTENCY / GOTCHA / SPELLINGS / TYPO / DEAD CODE / INVARIANT / RACE 等罕見詞彙 | 17 筆（NOTE 5／GOTCHA 2／GAP 2／LEAK 2／INCONSISTENCY 1／SPELLINGS 1／TYPO 1／DEAD CODE 1／INVARIANT 1／RACE 1；含三輪新增 NOTE +2、GOTCHA +1，皆在 `cShowBinSelect.cpp`/`BinDisplay/MyBinDisp.h`；含 20260824 五輪 NOTE +1，`Motor/myMN200motor.cpp` BINDISP2-e） |
-| 涉及檔案數 | 132 個 `### ` 分節（20260824 五輪新增 2 個分節：`database.cpp`、`Motor/myMN200motor.cpp`；`cSetUp.cpp` 由 stub 分節升級為 3 筆實表不重複計；含少數純交叉參照的 stub 分節；三輪增補新增 8 個分節：`forms/fLotInfo.cpp`、`forms/fSpeed.h+cSpeed.cpp`、`forms/fStartCondition.h+cStartCondition.cpp`、`forms/fConfiguration.h+cConfiguration.cpp`、`forms/fSetup.h+fSetup.cpp`、`BinDisplay/MyBinDisp.h+.cpp`、`forms/fHandlerSys.h+HandlerSys.cpp`(stub)、`tests/test_amr.cpp`(stub)；四輪補掃新增 4 個分節：`uTemp_Set.cpp+forms/fTemp_Set.h`、`DynamicTemp.cpp+forms/fDynamicTemp.h`、`MainTempMode.cpp`(stub)、`cSetUp.cpp`(stub)；`cShowBinSelect.cpp`/`forms/fShowBinSelect.h` 的 WAVE D/E 補充是既有分節的延伸子分節，不重複計檔案數；Command.cpp 本輪只新增 2 列（B-CMDC-1/2），沿用既有分節，非新分節） |
+| 其中 GAP / LEAK / NOTE / INCONSISTENCY / GOTCHA / SPELLINGS / TYPO / DEAD CODE / INVARIANT / RACE 等罕見詞彙 | 25 筆（NOTE 13／GOTCHA 2／GAP 2／LEAK 2／INCONSISTENCY 1／SPELLINGS 1／TYPO 1／DEAD CODE 1／INVARIANT 1／RACE 1；含三輪新增 NOTE +2、GOTCHA +1，皆在 `cShowBinSelect.cpp`/`BinDisplay/MyBinDisp.h`；含 20260824 五輪 NOTE +1，`Motor/myMN200motor.cpp` BINDISP2-e；含 20260824 R6 NOTE +8，fQwertyKey G-a..d ×4＋fPassword G-P1..P4 ×4） |
+| 涉及檔案數 | 134 個 `### ` 分節（20260824 R6 新增 2 個分節：fQwertyKey 家族、fPassword 家族；20260824 五輪新增 2 個分節：`database.cpp`、`Motor/myMN200motor.cpp`；`cSetUp.cpp` 由 stub 分節升級為 3 筆實表不重複計；含少數純交叉參照的 stub 分節；三輪增補新增 8 個分節：`forms/fLotInfo.cpp`、`forms/fSpeed.h+cSpeed.cpp`、`forms/fStartCondition.h+cStartCondition.cpp`、`forms/fConfiguration.h+cConfiguration.cpp`、`forms/fSetup.h+fSetup.cpp`、`BinDisplay/MyBinDisp.h+.cpp`、`forms/fHandlerSys.h+HandlerSys.cpp`(stub)、`tests/test_amr.cpp`(stub)；四輪補掃新增 4 個分節：`uTemp_Set.cpp+forms/fTemp_Set.h`、`DynamicTemp.cpp+forms/fDynamicTemp.h`、`MainTempMode.cpp`(stub)、`cSetUp.cpp`(stub)；`cShowBinSelect.cpp`/`forms/fShowBinSelect.h` 的 WAVE D/E 補充是既有分節的延伸子分節，不重複計檔案數；Command.cpp 本輪只新增 2 列（B-CMDC-1/2），沿用既有分節，非新分節） |
 | 標示 ⚠️存疑（agent 或 orchestrator 本人判讀信心不足） | 見文末「無法判讀/存疑清單」 |
 
 > 上列數字為 `python3 -c "..."` 對本檔表格列直接計數所得（見文末補撈紀錄的量測方式），
@@ -1658,6 +1658,24 @@ DEFECT/NOTE/...` 命中；fixture 內的所有 `golden :NNNN` 引註都只是客
 | # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
 |---|---|---|---|---|---|---|---|
 | 1 | GOLDEN NOTE (BINDISP2-e) | NOTE | Motor/myMN200motor.cpp:2426-2433（GATE (e) 開閘註記） | golden Motor/myMN200motor.cpp:2076-2077 | 24V 斷電恢復路徑對 BinDisCtrl 的 deref 沒有 NUMBER_PANEL_TYPE 3/4 守衛（GATE (c) 那側 :1497-1498 有）——非 3/4 機型走到即 NULL deref，golden 同炸 | 非 3/4 機型且 MN200 ring 錯誤令 iWriteErrorLogCT!=0 時當機；實務未爆研判因 MN200 機型多配 3/4 面板 | AI(W906-FW-BINDISP2) 20260824 |
+
+### forms/fQwertyKey.h + fQwertyKey.cpp + myQwertyKeyBoard.cpp（4 筆，20260824 FW-QWKEY1 當波入帳）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 1 | GOLDEN NOTE (G-a) | NOTE | forms/fQwertyKey.h:126-131 | golden myQwertyKeyBoard.cpp:290 | ShowQwertyKey 的 `CheckRange(d,min,max)` 實參順序對形參 (Value,Maximum,Minimum) 顛倒 | 行為無差（CheckRange 自身對調界處理對稱），純閱讀陷阱；照翻 | AI(W906-FW-QWKEY1) 20260824 |
+| 2 | GOLDEN NOTE (G-b) | NOTE | forms/fQwertyKey.h:132-135 | golden myQwertyKeyBoard.cpp:307 | spbChangeCaseClick 迴圈 `i<47` 排除 space＋數字鍵於大小寫切換之外 | 設計如此（caption 大小寫不變），照翻 | AI(W906-FW-QWKEY1) 20260824 |
+| 3 | GOLDEN NOTE (G-c) | NOTE | forms/fQwertyKey.h:136-138 | golden myQwertyKeyBoard.cpp:79-82,:93-94 | 9/0 與 -/=/[/] 被重分類 eKeyNumAndSymbol→eKeyalphabet（Steven 20210805） | N_NO_SYMBOL 不再停用/強制大寫這些鍵；照翻 | AI(W906-FW-QWKEY1) 20260824 |
+| 4 | GOLDEN NOTE (G-d) | NOTE | forms/fQwertyKey.h:139-147 | golden myQwertyKeyBoard.cpp:171-178 | ShowQwertyKey 由成員函式內解參考 fQwertyKey/fQwertyKey2 雙全域——golden 靠先 CreateForm 保證非 NULL | port 內兩全域接線前呼叫＝NULL deref（與 golden pre-CreateForm 同曝險）；今日零呼叫者 | AI(W906-FW-QWKEY1) 20260824 |
+
+### forms/fPassword.h + fPassword.cpp + Password.cpp（4 筆，20260824 FW-QWKEY1 當波入帳）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 1 | GOLDEN NOTE (G-P1) | NOTE | forms/fPassword.h:174-180 | golden Password.cpp:89-102 | FormShow `if(bShowTab==0){...} else if(bShowTab==0){...}`——第二條件重複 ==0，EventLog 分頁分支是不可達死碼（應為 ==1；主迴圈對 golden :89/:96 字面坐實） | bShowTab==1 時兩支都不跑，EventLog 分頁永不被 FormShow 啟用；照翻 | AI(W906-FW-QWKEY1) 20260824 |
+| 2 | GOLDEN NOTE (G-P2) | NOTE | forms/fPassword.h:181-184 | golden Password.h:92 | bShowTab 宣告 bool 卻以 0/1 整數書寫 | cosmetic，靠 bool 轉換運作；照翻 | AI(W906-FW-QWKEY1) 20260824 |
+| 3 | GOLDEN NOTE (G-P3) | NOTE | forms/fPassword.h:185-189 | golden Password.cpp:118-121＋Password.dfm | SpeedButton1Click 是 dfm 孤兒 handler（dfm 零接線、無 SpeedButton1 成員） | 死碼；照翻（fSetup RadioButton1KeyDown 同型前例） | AI(W906-FW-QWKEY1) 20260824 |
+| 4 | GOLDEN NOTE (G-P4) | NOTE | forms/fPassword.h:190-192 | golden Password.cpp:325-326 | CheckPassword 在 JCET_FOR_EVAN==1 時 ID 比對於迴圈內被旁路→授予「最低 index 密碼相符」的等級（order-dependent） | 等級授予依表序而非帳號；照翻 | AI(W906-FW-QWKEY1) 20260824 |
 
 ---
 
