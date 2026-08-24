@@ -316,15 +316,11 @@ extern TfTrayMapping *fTrayMapping;             // golden cTrayMapping.h: extern
 //  MyMessageBox  -- golden mymessbox.h (TMyMessageBox*).  The buffer-place SM
 //  closes it before raising a pre-alarm.  Offline: never visible -> Close() no-op.
 // ===========================================================================
-class TMyMessageBoxShim
-{
-public:
-    bool Visible;       // golden -- dialog visible?  (offline false)
-    bool fShow;         // golden -- show flag        (offline false)
-    void Close();       // golden -- offline no-op
-    TMyMessageBoxShim();
-};
-extern TMyMessageBoxShim *MyMessageBox;         // golden mymessbox.h
+// AI(W906-FW-G24) 20260824: class body EXTRACTED to mymessbox_shim.h so
+// SECSGEM/uHGemHT9045.cpp can reach MyMessageBox without this header's
+// TColor consts / NewRecordProcess defaults (probe-verified conflicts).
+// Same single definition, included back -- consumers unchanged.
+#include "mymessbox_shim.h"
 
 // ===========================================================================
 //  LoadCCD  -- golden LoadCCDMap.h (TLoadCCD*).  DoCatchTray case 150/160 reads

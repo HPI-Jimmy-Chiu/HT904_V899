@@ -4277,6 +4277,11 @@ void HT9045Gem::S125F4_LevelSettingChangeAcknowledge()                          
 //    so they are declaration-only: legal C++, zero link demand.  Do not add a
 //    call to either without also providing a body.
 //
+//  INCLUDE CONFLICT -- RESOLVED 20260824 (FW-G24) by narrowing the seam:
+//  TMyMessageBoxShim extracted to mymessbox_shim.h; this TU includes only
+//  that. The clYellow/NewRecordProcess duplications in acatchtray_shims.h
+//  itself remain (probe-verified still real), just no longer in our path.
+//  G24/G26/G45 are OPENED. Original note kept below for the record.
 //  INCLUDE CONFLICT THIS BLOCK COULD NOT WORK AROUND (integration TODO)
 //    `MyMessageBox` (golden mymessbox.h) exists in this port ONLY as
 //    `TMyMessageBoxShim` in acatchtray_shims.h:319-327, and that header CANNOT
@@ -4351,7 +4356,7 @@ void HT9045Gem::S125F4_LevelSettingChangeAcknowledge()                          
 //        THGem    : EventReport(unsigned,unsigned) (golden
 //                   uHGemEquipment.h:552) -- absent from the port's THGem
 //        THGemSpeedButton : Click() (uHGemEquipment.h:486-490 has Enabled only)
-//    reachable object, UNREACHABLE HEADER: MyMessageBox (see INCLUDE CONFLICT)
+//    reachable object, header now reachable 20260824: MyMessageBox (mymessbox_shim.h)
 //    declared-but-DEFINED-NOWHERE globals: SECS_GEM_PPMUSIC_CONTROL_flag,
 //        iSECS_GEM_PPMUSIC_CONTROL_CLASS, SECS_GEM_PPSIGNALTOWER_CONTROL_flag,
 //        iSECS_GEM_PPSIGNALTOWER_CONTROL_{RED,GREEN,YELLOW} (extern'd only at
@@ -4386,9 +4391,9 @@ void HT9045Gem::S125F4_LevelSettingChangeAcknowledge()                          
 //    G21  2845-2850      WHOLE ARM  LOTSTART                      falls to final else -> HCACK=1
 //    G22  2856-2859      AUTHORITY_CHECK FormBarcodeReader close   barcode form left open
 //    G23  2861-2864      AUTHORITY_CHECK fPassword close           OPENED 20260824 (FW-QWKEY4)
-//    G24  2866-2869      AUTHORITY_CHECK MyMessageBox close        message box left open
+//    G24  2866-2869      AUTHORITY_CHECK MyMessageBox close        OPENED 20260824 (FW-G24)
 //    G25  2875           AUTHORITY_CHECK PPSIGNALTOWER flag clear  flag not cleared (undefined sym)
-//    G26  2921           AUTHORITY_CHECK MyMessageBox->fShow test  test degraded to fNote->fShow only
+//    G26  2921           AUTHORITY_CHECK MyMessageBox->fShow test  OPENED 20260824 (FW-G24)
 //    G27  3029           SET_TEST_FLOW fLotInfo->edCustomerDevice  device not stored
 //    G28  3031-3032      SET_TEST_FLOW ASE-CL lot-start button     HCACK=0 but NO lot start
 //    G29  3110           SET_LOT_INFO  ProcessLotInfo()            bHasFile=false -> HCACK=3
@@ -4407,7 +4412,7 @@ void HT9045Gem::S125F4_LevelSettingChangeAcknowledge()                          
 //    G42  3787           START_AGV   InitialLoaderTask(1)          Empty  action flag set, no task
 //    G43  3792           START_AGV   InitialLoaderTask(2)          Color  action flag set, no task
 //    G44  3877-3881      SKIP        fNote dialog dismissal        HCACK=0, dialog left open
-//    G45  3886-3889      TERMINAL_DISPLAY MyMessageBox close       HCACK=0, message box left open
+//    G45  3886-3889      TERMINAL_DISPLAY MyMessageBox close       OPENED 20260824 (FW-G24)
 //    G46  3990           SET_RECIPE  HGemPtr->EventReport CEID 15  recipe switched, host NOT notified
 //    G47  4049           START       fLotInfo->CheckActionFlag     AMR start flag set, no dispatch
 //    G48  4112-4113      PAUSE/STOP  fNote pause+close (MAXIM)     fMain->BtnPauseClick still runs
@@ -4454,6 +4459,7 @@ void HT9045Gem::S125F4_LevelSettingChangeAcknowledge()                          
 #include "AutoRetest.h"                     // PORT: DoAutoRetest (golden reaches it via csystem.h/main.h)
 #include "FormsFacade.h"                    // PORT equivalent of golden :8 "main.h" (fMain), :17 "uLotInfo.h"
 #include "forms/fPassword.h"            // AI(W906-FW-QWKEY4) 20260824: fPassword extern (real since FW-QWKEY1 fc08e09) -- GATE G23 opened, Visible/Close() on the facade
+#include "mymessbox_shim.h"             // AI(W906-FW-G24) 20260824: MyMessageBox via the narrow seam -- G24/G26/G45 opened (full acatchtray_shims.h still conflicts, see its note)
                                             //       (fLotInfo), :45 "SCK_ART.h" (fSCKART), cSortCT.h (fSortCT)
 #include "SECSGEM/SecsEventType.h"          // PORT: SECS_EVENT (golden declares it in uHGemHT9045.h itself)
 #include "SECSGEM/uHGemEquipment.h"         // THGem complete type (HGemPtr->StringOut, ->WireCodec via ActiveWire)
@@ -6423,23 +6429,14 @@ int HT9045Gem::S2F42_Host_Command_Acknowledge()
                     fPassword->Close();
                 }
 
-#if 0   // ===== GATE G24 -- golden SECSGEM/uHGemHT9045.cpp:2866-2869 =====
-//   WHY GATED : MyMessageBox is real and non-NULL in this port
-//               (acatchtray_shims.cpp:98) but its header cannot be included here --
-//               see the INCLUDE CONFLICT note in the banner.  This is a HEADER
-//               reachability gate, not a missing-surface gate: TMyMessageBoxShim has
-//               both fShow and Close().
-//   DELTA     : A displayed message box is not closed before the Employee-ID check.
-//               THIS GATE IS THE CHEAPEST ONE TO REMOVE in the whole block: fixing the
-//               clYellow/NewRecordProcess duplication in acatchtray_shims.h un-gates
-//               G24, G26 and G45 at once with no new translation work.
+                // ===== GATE G24 OPENED 20260824 (FW-G24) -- golden :2866-2869 =====
+                //   MyMessageBox reachable via mymessbox_shim.h (narrow seam); real
+                //   non-NULL instance since acatchtray_shims.cpp:98. Offline fShow
+                //   stays false, so the close branch is faithfully unreached.
                 if(MyMessageBox->fShow && bSECSGEMAlarm==false)                 //Ifor 20180911 :Add 啟動 Employee ID Check
                 {
                     MyMessageBox->Close();
                 }
-#else
-        // (gated -- no port substitute; see WHY/DELTA above)
-#endif  // GATE G24
 
                 if(ActiveWire->GetDataItemLenAndTypeAndDelete(SVlen, HType.LIST_TYPE)==1)                                     //wei 20150630
                 {
@@ -6502,19 +6499,9 @@ int HT9045Gem::S2F42_Host_Command_Acknowledge()
                         }
                     }
                     bWaitSecsGemReply=false;                                    //Ifor 20180302 Time Out 判斷旗標
-#if 0   // ===== GATE G26 -- golden SECSGEM/uHGemHT9045.cpp:2921 =====
-//   WHY GATED : MyMessageBox header not reachable from this TU (see GATE G24).  The
-//               condition is a two-term OR; only the MyMessageBox term is unavailable.
-//   DELTA     : The test degrades to `if(fNote->fShow)`, i.e. the authority reply is
-//               applied only when the NOTE dialog is up, not when a plain message box
-//               is up.  When neither is up golden takes the else and sets
-//               iShowAUTHORITY=0 -- unchanged.  On a real machine an AUTHORITY_CHECK
-//               arriving while a message box (but no note) is displayed would leave
-//               iShowAUTHORITY at 0 instead of 1/2.
+                    // ===== GATE G26 OPENED 20260824 (FW-G24) -- golden :2921 =====
+                    //   Two-term OR restored; MyMessageBox via mymessbox_shim.h.
                     if(MyMessageBox->fShow || fNote->fShow)
-#else
-                    if(fNote->fShow)   // GATE G26 default -- MyMessageBox->fShow term dropped
-#endif  // GATE G26
                     {
                         if(uint1EC==0)
                         {
@@ -7649,20 +7636,14 @@ int HT9045Gem::S2F42_Host_Command_Acknowledge()
         }
         else if(S.AnsiPos("TERMINAL_DISPLAY")==1)                               //Ifor 20251018 add:Analog 泰國客戶要求新增同1028 SECS GEM 命令關閉視窗
         {
-#if 0   // ===== GATE G45 -- golden SECSGEM/uHGemHT9045.cpp:3886-3889 =====
-//   WHY GATED : MyMessageBox header not reachable from this TU (see GATE G24).
-//               TMyMessageBoxShim does have both Visible and Close().
-//   DELTA     : TERMINAL_DISPLAY becomes a pure acknowledgement: HCACK=0 on :3890 still
-//               runs but the message box is NOT closed, which is the entire point of
-//               the command for the Analog/Thailand customer that asked for it.
-//               Un-gated together with G24/G26 by the same header fix.
+            // ===== GATE G45 OPENED 20260824 (FW-G24) -- golden :3886-3889 =====
+            //   TERMINAL_DISPLAY closes the message box again (the entire point of
+            //   the command for the Analog/Thailand customer). MyMessageBox via
+            //   mymessbox_shim.h; offline Visible stays false -> branch unreached.
             if(MyMessageBox->Visible==true)
             {
                 MyMessageBox->Close();
             }
-#else
-        // (gated -- no port substitute; see WHY/DELTA above)
-#endif  // GATE G45
             HCACK=0;
         }
         // ======================================================================
