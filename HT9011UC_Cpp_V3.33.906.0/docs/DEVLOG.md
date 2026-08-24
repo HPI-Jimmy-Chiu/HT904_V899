@@ -9358,3 +9358,21 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   **AuthPath 家族 2 站點**（:12465/:12477 config.ini）＝16。
   結論不變（DataPath 全部呼叫當下現組、--dry 涵蓋；AuthPath 不涵蓋），
   只有分母錯。教訓＝枚舉宣稱不可用 head 截斷的輸出當完整清單。
+
+## 20260824 IV — FW-BINDISP1：InstallColorBinDisplay 落地（Offline DEVIATION）
+
+- 使用者裁決（20260824）：實驗機**有** color bin display 面板；port 先以
+  TMyBinDispOffline 取代未翻的 TMyBinDispHT9046 讓「BinDisCtrl 是真實例」
+  的執行期前提成立（MN200 GATE c/e 與 NUMBER_PANEL_TYPE 3/4 deref 家族
+  都在等它）；HT9046 協定子類翻譯＋真面板 bring-up 留後續波。
+- golden database.cpp:1684-1729 逐字（含 Big5 註解原文）；唯一 DEVIATION
+  ＝new 的型別。GOLDEN ODDITY (ICBD-1) 登記：型別檢查前配置＋new 後
+  NULL 測試，唯一呼叫點自帶 3/4 守衛故實務不可達，照翻。
+- database.h 宣告解 #if 0（無呼叫者＝零行為）；**ctor 路呼叫點仍 gated**
+  ——解鎖＝行為變更，單獨波（與 MN200 GATE c/e 同波拆，需完整雙 gate，
+  排在 FW-SETUP-D 整併之後）。
+- 驗收（零行為 tier）：-fsyntax-only＋單檔 -O3 探雷綠；增量 Debug build
+  exit 0（build_last.log 09:09:17 對帳）。台帳 ICBD-1 待入帳（下次台帳
+  維護與 FW-SETUP-D 的新發現一起收）。
+- 並行中：FW-SETUP-D（TScrollBar headless＋ctor 陣列＋解鎖批）、
+  HAL-MOT1（mot_table 紙上分類，唯讀）兩個背景 agent。
