@@ -82,10 +82,10 @@
 //      Public/HTEdit.cpp GATE (6) -- all cite "fQwertyKey has no port
 //      anywhere in this tree"). Re-verified this wave (20260820):
 //      `Grep "class TfQwertyKey|TfQwertyKey\s*\*|fQwertyKey\s*="` tree-wide
-//      -- 0 compiled (non-#if 0) hits; the one surviving textual reference
-//      (Public/HTEdit.cpp:302, `fQwertyKey==NULL`) is itself inside that
-//      file's own #if 0 GATE (6) block, confirmed by reading the surrounding
-//      lines. This wave's own recon (RECON_cConfiguration_displayside.md
+//      -- 0 compiled (non-#if 0) hits AT THAT TIME. [Superseded 20260824:
+//      FW-QWKEY1 landed the entity and FW-QWKEY3 opened HTEdit GATE (6), so
+//      `fQwertyKey==NULL` there is now LIVE lazy-construction code.]
+//      This wave's own recon (RECON_cConfiguration_displayside.md
 //      section 6.1) already named this as the shared dependency for the
 //      entire 6.1 bucket; per task instruction 4 ("依賴缺就 GATE，本體照
 //      翻") the call is gated, the surrounding body stays real.

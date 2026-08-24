@@ -38,7 +38,7 @@
 //    with nothing in this substrate to bind to; every gate keeps golden's call
 //    VERBATIM in the `#if 0` arm):
 //      THTEdit::OnWriteEdit              golden :60-128   -- GATE (5)
-//      THTEdit::EditClick                golden :193-242  -- GATE (6)
+//      THTEdit::EditClick                golden :193-242  -- GATE (6) OPENED 20260824 (FW-QWKEY3); Barcode_Reader line narrowed to (6-B)
 //      THTEdit::GetDefaultPosition       golden :596-603  -- GATE (7)
 //      THTEdit::SetToDefaultPosition     golden :605-616  -- GATE (8)
 //    NOT TRANSLATED: the entire commented-out THTCheckBox class (golden
@@ -51,9 +51,9 @@
 //  Parent/Name/Tag/Top/Left/Height/Width/Align (verified: read the whole file,
 //  Controls.h's own MEASURED PROPERTY COVERAGE note lists exactly which
 //  properties are modeled, and none of these are on it) -- and because
-//  Barcode_Reader/TfQwertyKey/fQwertyKey/fQwertyKey2 (myQwertyKeyBoard.h /
-//  BarcodeReader.h) have NO compiled body anywhere in the port tree (grepped
-//  20260807, only .rc/.json/.md hits). Since real VCL never constructs any of
+//  Barcode_Reader (BarcodeReader.h) has NO compiled body anywhere in the port
+//  tree (grepped 20260807, re-checked 20260824). TfQwertyKey/fQwertyKey/
+//  fQwertyKey2 are REAL since FW-QWKEY1 (fc08e09, forms/fQwertyKey.{h,cpp}). Since real VCL never constructs any of
 //  these widget stand-ins as EC/SV-registered objects either (see Controls.h's
 //  own SCOPE BOUNDARY (1)), every one of golden's dynamic_cast branches here is
 //  reachable-but-always-NULL today -- these gates cost nothing until the W7 UI
@@ -93,13 +93,13 @@
 //       themselves empty in golden); offline, with no window subsystem, there
 //       is no click/keypress event stream to wire in the first place, so the
 //       delta is unobservable until the W7 UI substrate exists.
-//   (6) EditClick (golden :193-242): pops golden's on-screen keypad
-//       (fQwertyKey->ShowQwertyKey(...)) after checking iBarcodeReadType via
-//       Barcode_Reader(). Both symbols have NO compiled body anywhere in the
-//       port tree (grepped 20260807: only tools/dfm2rc/*.json and *.md hits).
-//       FAITHFUL DEFAULT: no-op body that still forwards to FOldOnClickEvent
-//       if non-NULL (matching golden's own trailing behaviour) -- which, per
-//       GATE (5), is always NULL today, so the net effect is a true no-op.
+//   (6) EditClick (golden :193-242): OPENED 20260824 (FW-QWKEY3). The body is
+//       LIVE: lazy-constructs fQwertyKey/fQwertyKey2 (DEVIATION: new+Init()
+//       replaces BCB Application->CreateForm/__classid, which have no port)
+//       and dispatches ShowQwertyKey by Content. Only the
+//       Barcode_Reader(iBarcodeReadType) pre-check stays gated -- GATE (6-B),
+//       Barcode_Reader still has no port. Reachability unchanged: OnClick is
+//       never wired (GATE 5), so nothing calls EditClick headless today.
 //   (7)/(8) GetDefaultPosition / SetToDefaultPosition (golden :596-616): read/
 //       write SourceControl->Parent/Top/Left/Height/Width/Align, none of which
 //       exist on vclcompat::TControl (verified: TControl's whole surface is
@@ -115,6 +115,7 @@
 #include "HTEdit.h"
 #include "cMyDB.h"          // MyDBIProcess(AnsiString,AnsiString) -- aHotPlateSubstrate.cpp:1030 body; declared cMyDB.h
 #include "cmydef.h"         // bcTotal (MachineType.h enum, pulled transitively) -- ctor default for iBarcodeReadType
+#include "forms/fQwertyKey.h"  // AI(W906-FW-QWKEY3) 20260824: TfQwertyKey/fQwertyKey/fQwertyKey2 real since FW-QWKEY1 (fc08e09) -- GATE (6) OPENED
 //---------------------------------------------------------------------------
 THTEdit::THTEdit()                                                              // golden :13-18
 {
@@ -295,46 +296,63 @@ void THTEdit::ChangeProperty(bool Visible, bool Enable, bool ReadFromFile, bool 
 //---------------------------------------------------------------------------
 void THTEdit::EditClick(TObject * /*Sender*/)                                  // golden :193-242 -- GATE (6)
 {
-#if 0
+#if 0 // GATE (6-B) NARROWED 20260824 (FW-QWKEY3): Barcode_Reader alone still has no port
     if(iBarcodeReadType!=bcTotal)
         Barcode_Reader(iBarcodeReadType);
+#endif // GATE (6-B)
 
+    // AI(W906-FW-QWKEY3) 20260824: golden `Application->CreateForm(__classid(
+    //   TfQwertyKey), &fQwertyKey)` -- BCB Application/__classid have no port.
+    //   DEVIATION: lazy new + explicit Init() (ctor is fields-only per forms/
+    //   fQwertyKey.h DEVIATION (D-2); golden ctor body lives in Init()).
+    //   Same lazy-on-first-click timing as golden; nothing constructs at
+    //   static init (forms/fQwertyKey.h:54 posture preserved).
     if(fQwertyKey==NULL)
-        Application->CreateForm(__classid(TfQwertyKey), &fQwertyKey);
+    {
+        fQwertyKey=new TfQwertyKey();
+        fQwertyKey->Init();
+    }
     if(fQwertyKey2==NULL)
-        Application->CreateForm(__classid(TfQwertyKey), &fQwertyKey2);         //Steven 20150505 : 剛好在輸入時,Alarm會卡死
+    {
+        fQwertyKey2=new TfQwertyKey();                                          //Steven 20150505 : 剛好在輸入時,Alarm會卡死
+        fQwertyKey2->Init();
+    }
 
-    if(HTContentType==ECText)                                                  //純文字
+    // AI(W906-FW-QWKEY3) 20260824: golden's private backing-field names
+    //   (HTContentType/HTCustomMax/HTCustomMin) adapted to this port's plain
+    //   public fields (Content/CustomMaxValue/CustomMinValue) -- same
+    //   property-collapse the file header documents; values identical.
+    if(Content==ECText)                                                  //純文字
     {
         fQwertyKey->ShowQwertyKey((TEdit*)SourceControl, N_NO_SYMBOL|N_NO_SPACE);
     }
-    else if(HTContentType==ECInteger || HTContentType==ECPosInt || HTContentType==ECNegInt || HTContentType==ECPort)        //數字
+    else if(Content==ECInteger || Content==ECPosInt || Content==ECNegInt || Content==ECPort)        //數字
     {
         if(iTransformType==EUuMToMM)                                           //顯示為MM, 存檔為uM //Steven 20230905 : HTEditList加入型態轉換的Flag
-            fQwertyKey->ShowQwertyKey((TEdit*)SourceControl, N_DOUBLE, 3, CheckRange, atof(HTCustomMax.c_str()), atof(HTCustomMin.c_str()));
+            fQwertyKey->ShowQwertyKey((TEdit*)SourceControl, N_DOUBLE, 3, CheckRange, atof(CustomMaxValue.c_str()), atof(CustomMinValue.c_str()));
         else if(iTransformType==EUMSToSec)                                     //顯示為Sec, 存檔為MS
-            fQwertyKey->ShowQwertyKey((TEdit*)SourceControl, N_DOUBLE, 3, CheckRange, atof(HTCustomMax.c_str()), atof(HTCustomMin.c_str()));
+            fQwertyKey->ShowQwertyKey((TEdit*)SourceControl, N_DOUBLE, 3, CheckRange, atof(CustomMaxValue.c_str()), atof(CustomMinValue.c_str()));
         else
-            fQwertyKey->ShowQwertyKey((TEdit*)SourceControl, N_INTEGER, 0, CheckRange, atoi(HTCustomMax.c_str()), atoi(HTCustomMin.c_str()));
+            fQwertyKey->ShowQwertyKey((TEdit*)SourceControl, N_INTEGER, 0, CheckRange, atoi(CustomMaxValue.c_str()), atoi(CustomMinValue.c_str()));
     }
-    else if(HTContentType==ECDouble || HTContentType==ECPosDouble || HTContentType==ECNegDouble || HTContentType==ECPercent)         //浮點數
+    else if(Content==ECDouble || Content==ECPosDouble || Content==ECNegDouble || Content==ECPercent)         //浮點數
     {
         if(iTransformType==EUuMToMM)                                           //顯示為MM, 存檔為uM //Steven 20230905 : HTEditList加入型態轉換的Flag
-            fQwertyKey->ShowQwertyKey((TEdit*)SourceControl, N_DOUBLE, 3, CheckRange, atof(HTCustomMax.c_str()), atof(HTCustomMin.c_str()));
+            fQwertyKey->ShowQwertyKey((TEdit*)SourceControl, N_DOUBLE, 3, CheckRange, atof(CustomMaxValue.c_str()), atof(CustomMinValue.c_str()));
         else if(iTransformType==EUMSToSec)                                     //顯示為Sec, 存檔為MS
-            fQwertyKey->ShowQwertyKey((TEdit*)SourceControl, N_DOUBLE, 3, CheckRange, atof(HTCustomMax.c_str()), atof(HTCustomMin.c_str()));
+            fQwertyKey->ShowQwertyKey((TEdit*)SourceControl, N_DOUBLE, 3, CheckRange, atof(CustomMaxValue.c_str()), atof(CustomMinValue.c_str()));
         else
-            fQwertyKey->ShowQwertyKey((TEdit*)SourceControl, N_DOUBLE, 3, CheckRange, atof(HTCustomMax.c_str()), atof(HTCustomMin.c_str()));
+            fQwertyKey->ShowQwertyKey((TEdit*)SourceControl, N_DOUBLE, 3, CheckRange, atof(CustomMaxValue.c_str()), atof(CustomMinValue.c_str()));
     }
-    else if(HTContentType==ECIPAddr)
+    else if(Content==ECIPAddr)
     {
         fQwertyKey->ShowQwertyKey((TEdit*)SourceControl, N_IP_ADDR);
     }
-    else if(HTContentType==ECFileName)                                         //檔案名稱或路徑
+    else if(Content==ECFileName)                                         //檔案名稱或路徑
     {
         fQwertyKey->ShowQwertyKey((TEdit*)SourceControl, N_NO_SYMBOL);
     }
-    else if(HTContentType==ECPassword)
+    else if(Content==ECPassword)
     {
         fQwertyKey->ShowQwertyKey((TEdit*)SourceControl, N_PASSWORD);
     }
@@ -343,14 +361,6 @@ void THTEdit::EditClick(TObject * /*Sender*/)                                  /
     {
         FOldOnClickEvent(this);
     }
-#else
-    // GATE (6): see file banner. Barcode_Reader/TfQwertyKey/fQwertyKey/
-    // fQwertyKey2 have no compiled body anywhere in the port tree. Faithful
-    // default: forward to the previous click handler if one was ever wired
-    // (per GATE (5) it never is today, so this is a true no-op).
-    if(FOldOnClickEvent!=NULL)
-        FOldOnClickEvent(this);
-#endif
 }
 //---------------------------------------------------------------------------
 void THTEdit::DisableEventOverlap()                                            // golden :244-266 -- GATE (2)
