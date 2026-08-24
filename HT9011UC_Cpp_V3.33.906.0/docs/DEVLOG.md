@@ -9492,3 +9492,19 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   (d) WA-1 家族 gate 論證文字過期更新（純註解）。
 - **安全佇列（不做不問）**：P-R1/P-S1 密碼檔 gate；GATE 7 家族
   （使用者 20260824 裁決維持 gated）；AuthPath 2 站點。
+
+## 20260824 IX — FW-SETUP-E 收案：fQwertyKey/fPassword 解鎖批（主迴圈自做）
+
+- 三方法落地（XPitchMouseDown/XShiftPitchMouseDown 各 13L、cbAaDropDown
+  34L，golden 原句）；TfSetup **28/47**。golden :55-56 兩個檔內全域以
+  explicit static 落地（extern-flip 政策）；:53-54/:121 三個續留佇列。
+- GATE (E-B1)/(E-B2)：Barcode_Reader(bcSetup) 守衛續鎖（全樹無 port
+  複驗；另一呼叫點 MyTempPanel.cpp:840 自身在 #if 0）——KYEC 條碼機上
+  golden 會拒開鍵盤、port 不會拒；handler 未接線故 latent。
+- vclcompat/Controls.h：TControl 增 golden TWinControl::SetFocus 離線
+  no-op（首消費者 cbAaDropDown 的 ScrollBar1/XPitch；facade 局部 no-op
+  自此只是 shadow）。
+- gate：全新雙 dir 137/142×2、常駐五項；guard 代理 0 檔。
+- 今日累計 **21 顆 commit**。下一波候選不變：TMyBinDispHT9046 翻譯波、
+  WA-1 過期論證文字更新（純註解）、DoPassword/DoPasswordCheck
+  （建議與 WebAuth 對齊後開）。
