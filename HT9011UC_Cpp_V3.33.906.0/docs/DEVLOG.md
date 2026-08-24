@@ -9508,3 +9508,23 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - 今日累計 **21 顆 commit**。下一波候選不變：TMyBinDispHT9046 翻譯波、
   WA-1 過期論證文字更新（純註解）、DoPassword/DoPasswordCheck
   （建議與 WebAuth 對齊後開）。
+
+## 20260824 X — FW-BINDISP3 收案：TMyBinDispHT9046 協定子類全翻
+
+- +2,740 行 append-only（MyBinDisp.h +118／.cpp +2,622，bare-LF 保持）；
+  全方法 ACTIVE 零 stub；機械保真稽核 43,740 字元逐字相同（三類已宣告
+  adaptation 之外）。實例化**不變**——database.cpp 仍 new Offline
+  （20260824 裁決），子類備 bring-up 用。
+- 仍 gated：Timer1Timer（泵浦，~320 行）＋TDataModule3；無 tick 源則
+  Do* 家族永不執行；CommBin 維持 NULL 至 bring-up 建 Spcomm::TComm。
+- **GOLDEN DEFECT (i)（主迴圈對 golden 字面坐實）**：SetBackGround_TFT/
+  SetNoBackGround_TFT 以 sprintf 寫 20 個 %c＋NUL 進 char[20]
+  （golden :1105/:1119-1123）——真 1-byte stack overflow，**上真硬體前
+  必須裁決**（忠實保留 vs 擴 buffer）。另六筆（j 過期 buffer 記 log、
+  k log 無上限增長、l 死全域、m 負索引、n 裸數字狀態、o 永不賦值的
+  static bFirst）待台帳 R7。
+- gate：全新雙 dir 137/142×2 常駐五項；**Release -O3 編 3,212 行 TU
+  無 OOM**（大 TU 風險實測排除）；guard 代理 0 檔。
+- bring-up 差距清單（子 agent 交接）：實例化切換、Timer1Timer＋tick 源、
+  CommBin 生命週期、DEFECT (i) 裁決、TDataModule3 去留、真 RS-232 對板。
+- 今日累計 **24 顆 commit**。
