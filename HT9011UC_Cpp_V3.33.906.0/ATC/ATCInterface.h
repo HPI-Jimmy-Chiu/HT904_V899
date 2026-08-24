@@ -96,13 +96,12 @@
 //   (4) `fQwertyKey->ShowQwertyKey(...)` (golden pl_ATCSetTempChillerClick
 //       :1851-1855, edATCChillerCheckTimeClick :1857-1861, edtOffsetClick
 //       :1863-1866, edATC7_TempClick :1868-1871, edtPortClick :1873-1876) --
-//       fQwertyKey (the on-screen numeric-entry keyboard form) has NO port
-//       anywhere in this tree; this is an ALREADY-ESTABLISHED deferred
-//       surface, cited verbatim by EJ1N/MyOmronPanel.h's own GATE (3) and
-//       Automation/AGV_PortScan.h's own banner for the identical golden
-//       idiom. N_DOUBLE/N_INTEGER/N_PORT themselves ARE real (cmydef.h/.cpp)
-//       -- only the form pointer is missing. ACTIVE arm: no-op (a virtual
-//       keyboard cannot show without a live window regardless).
+//       OPENED 20260824 (FW-QWKEY5): fQwertyKey real since FW-QWKEY1
+//       (fc08e09, forms/fQwertyKey.{h,cpp}); all 5 calls restored live in
+//       ATCInterface.cpp. N_DOUBLE/N_INTEGER/N_PORT were always real
+//       (cmydef.h/.cpp). Latent: handlers unwired, runtime instance NULL
+//       until a real event stream reaches THTEdit::EditClick (GATE (6),
+//       itself opened 20260824 by FW-QWKEY3).
 //   (5) `fLotInfo->aldATCPower` / `fLotInfo->aldATC7Status` (golden
 //       ATC7_ServerSocketClientConnect/Disconnect :1489,1509-1510) -- grepped
 //       forms/fLotInfo.h directly: it has no member named aldATCPower or

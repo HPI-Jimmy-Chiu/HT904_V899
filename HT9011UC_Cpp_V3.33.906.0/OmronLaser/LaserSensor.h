@@ -105,12 +105,12 @@
 //     edOutDeviceXOffsetMouseDown   golden :1653-1660
 //     edOutDeviceYOffsetMouseDown   golden :1663-1670
 //   BEHAVIOUR DELTA: none observable today -- every one of these bodies only
-//   ever called `fQwertyKey->ShowQwertyKey(...)`, and fQwertyKey (the
-//   on-screen numeric keypad form) is ITSELF an already-established deferred
-//   surface with zero port anywhere in this tree (same citation
-//   EJ1N/MyOmronPanel.h uses). A manual operator editing a calibration cell
-//   value by mouse-clicking it cannot happen without a live window regardless
-//   of this gate. Retire together with fQwertyKey's own eventual port.
+//   ever called `fQwertyKey->ShowQwertyKey(...)`. [UPDATE 20260824: the
+//   "zero port" citation EXPIRED -- FW-QWKEY1 (fc08e09) landed the keyboard;
+//   these handlers are still UNTRANSLATED (translation debt, queued), which
+//   is a different thing from a dead dependency.] A manual operator editing
+//   a calibration cell by mouse-click still cannot happen without a live
+//   window, so the observable delta remains none today.
 //
 //   FormClose signature TRIMMED (not gated -- SAME established precedent as
 //   SECSGEM/uHGemEquipment.h's THGem::FormClose, golden's OWN comment there

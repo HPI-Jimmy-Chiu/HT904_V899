@@ -125,6 +125,9 @@
 //      edAGVWorryingwattingtimeMouseDown   golden :1133-1148,:1309-1313 --
 //                                       TEdit MouseDown -> fQwertyKey virtual
 //                                       keyboard popup (VCL input helper, W7).
+//                                       [20260824: fQwertyKey real since
+//                                       FW-QWKEY1; the 3 handlers remain
+//                                       untranslated -- queued, not dead.]
 //
 //  FREE-FUNCTION DEMOTION (same judgment-call convention as AGV_E84.h/
 //  AGV_predicates.h): golden TfAGV::NowE84Status/E84StatusChange/ScanLoadPort/

@@ -115,7 +115,8 @@
 //       file's `(TATCBitBtn*)`/`(TATCButton*)`/`(TATCCheckBox*)` -- MINIMAL
 //       NECESSARY ADAPTATION per header GATE (3), not a behaviour change
 //       (the derived types ARE-A their vclcompat base with one added field).
-//   (4) fQwertyKey->ShowQwertyKey -- no port, 5 call sites, all no-op.
+//   (4) fQwertyKey->ShowQwertyKey -- OPENED 20260824 (FW-QWKEY5): entity real
+//       since FW-QWKEY1; all 5 calls restored live, latent (handlers unwired).
 //   (5) fLotInfo->aldATCPower / ->aldATC7Status -- no such members on the
 //       ported forms/fLotInfo.h TfLotInfo; writes dropped.
 //   (6) clGray/clNavy -- header-level, see .h.
@@ -194,6 +195,7 @@
 #include "atester_shims.h"           // fContact (TfContactShim*, real ->fShow)
 #include "aHotPlateSubstrate.h"      // MyDBIProcess(AnsiString,AnsiString) reach
 #include "canary_support.h"          // ShowErrorMessage / ShowMyMessage (sim bodies)
+#include "forms/fQwertyKey.h"       // AI(W906-FW-QWKEY5) 20260824: fQwertyKey extern (real since FW-QWKEY1 fc08e09) -- GATE (4) calls restored
 #include "Public/WinSocketErrorCode.h" // GetErrorMsg -- ATCSystem.cpp's own ATC60System::ClientSocket1Error already needs it; not re-declared here (see that file)
 
 // See GATE REGISTER (nothing) -- CONTACT_NORMAL is a plain `const int` golden
@@ -2295,27 +2297,32 @@ void TATCInterfaceForm::TimerATCTimer(TObject *Sender)
 void TATCInterfaceForm::pl_ATCSetTempChillerClick(
       TObject *Sender)
 {
-    //GATE (4): golden `fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_DOUBLE, 0, true, 5.0, 50.0);` -- fQwertyKey has no port anywhere in this tree (already-established deferred surface).
+    //GATE (4) OPENED 20260824 (FW-QWKEY5): fQwertyKey real since FW-QWKEY1 (fc08e09); call restored from the gate comment, latent until a real event stream.
+    fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_DOUBLE, 0, true, 5.0, 50.0);
 }
 //---------------------------------------------------------------------------
 void TATCInterfaceForm::edATCChillerCheckTimeClick(
       TObject *Sender)
 {
-    //GATE (4): golden `fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_INTEGER, 0, true, 120, 0);`
+    //GATE (4) OPENED 20260824 (FW-QWKEY5) -- see pl_ATCSetTempChillerClick above.
+    fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_INTEGER, 0, true, 120, 0);
 }
 //---------------------------------------------------------------------------
 void TATCInterfaceForm::edtOffsetClick(TObject *Sender)
 {
-    //GATE (4): golden `fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_DOUBLE, 0, true, (double)InputLimit.iTempHigh, (double)InputLimit.iTempLow);`
+    //GATE (4) OPENED 20260824 (FW-QWKEY5) -- see pl_ATCSetTempChillerClick above.
+    fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_DOUBLE, 0, true, (double)InputLimit.iTempHigh, (double)InputLimit.iTempLow);
 }
 //---------------------------------------------------------------------------
 void TATCInterfaceForm::edATC7_TempClick(TObject *Sender)
 {
-    //GATE (4): golden `fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_DOUBLE, 1, true, dTempMax, dTempMin);`
+    //GATE (4) OPENED 20260824 (FW-QWKEY5) -- see pl_ATCSetTempChillerClick above.
+    fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_DOUBLE, 1, true, dTempMax, dTempMin);
 }
 //---------------------------------------------------------------------------
 void TATCInterfaceForm::edtPortClick(TObject *Sender)
 {
-    //GATE (4): golden `fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_PORT);`
+    //GATE (4) OPENED 20260824 (FW-QWKEY5) -- see pl_ATCSetTempChillerClick above.
+    fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_PORT);
 }
 //---------------------------------------------------------------------------
