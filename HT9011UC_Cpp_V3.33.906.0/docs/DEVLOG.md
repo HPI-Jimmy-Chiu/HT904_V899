@@ -9606,6 +9606,25 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - gate：Debug build_qw5g＋Release build_qw5r2 **137/142×2** 常駐五項
   逐項同；guard 代理 0 檔。
 
+## 20260824 XIV — FW-QWKEY5 收案：ATCInterface GATE (4) 寫回＋兩檔引文更新（主迴圈自做）
+
+- **第三種 gate 形狀現形**：ATCInterface 的 5 站是「golden 呼叫存在 //
+  註解裡、本體空」——#if 0 樹掃（FW-QWKEY2 的收尾工具）看不見這種形；
+  是 RESUME 的點名清單抓回來的。**兩種清冊互補，缺一都漏**：樹掃漏
+  註解保存形、點名清單漏 VacuumUnit.cpp。5 呼叫逐字寫回活化
+  （commit 70a67aa），include 補上，.h/.cpp GATE (4) 台帳改 OPENED。
+- LaserSensor.h（6 個 MouseDown）與 AGV_PortScan.h（3 個）的「zero
+  port」引文標 EXPIRED，並明確標示這些 handler 是**排隊中的翻譯債**，
+  不是死依賴——省略決策當年合理，前提死了但答案不是自動變「要寫」。
+- gate：全新雙 dir build_qw6g/qw6r **137/142×2** 常駐五項逐項同；
+  guard 代理 0 檔。
+- **QWKEY 家族五波總結（本日）**：FW-QWKEY1 實體（20/20＋24/24）→
+  QWKEY2 84 塊 #if 0 解鎖 → QWKEY3 GATE (6) 建構核心 → QWKEY4 G23＋
+  Visible → QWKEY5 註解保存形 5 站。樹內 fQwertyKey 殘餘 gated 呼叫
+  只剩：fLotInfo 2（barcode 混合）、MyTempPanel 21（W8-2 Tag＋W8-5
+  Barcode 仍鎖）、HTEdit GATE (6-B) 1 行（Barcode_Reader）——全部同一
+  個真阻塞者：**Barcode_Reader 無 port**。
+
 ### 🔖 RESUME（20260824 日終）
 
 - **今日全收（27 顆 commit）**：FW-TEMP3／GATE7-V＋裁決落地＋計數更正／
@@ -9618,12 +9637,11 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - **等使用者（三項）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
   HAL-MOT1 十問（Q1/Q9/Q4 擋新表起草，其餘有預設）；TImage headless
   准駁（解 fSetup 2 方法）。
-- **下一波**：QWKEY 家族全收（XI 84 塊／XII GATE (6)／XIII G23）。候選序：
-  (1) 過期 no-port 論證回頭更新：ATCInterface.h/.cpp、AGV_PortScan.h、
-  automation.h、SCK_ART_Remainder.h、OmronLaser/LaserSensor.h（gate 仍鎖
-  但「fQwertyKey 無 port」引文已過期，純註解波，g++ -E 比對即可）。
-  (2) SECSGEM G24/G26/G45 三連開——修 acatchtray_shims.h 的 clYellow/
+- **下一波**：QWKEY 家族五波全收（XI-XIV）。候選序：
+  (1) SECSGEM G24/G26/G45 三連開——修 acatchtray_shims.h 的 clYellow/
   NewRecordProcess 重複（uHGemHT9045.cpp G24 註解自述為最便宜解鎖）。
+  (2) 翻譯債小波：LaserSensor 6 個 MouseDown＋AGV_PortScan 3 個
+  MouseDown（純 ShowQwertyKey 體，前提已活）。
   (3) TImage 若獲准：chkOffCenterkitClick/cbQualSite2X2ShiftClick。
   註：MyTempPanel 三個分支樹塊的 W8-3（fTemp_Set setters）已死
   （MaxTempSetting/MinTempSetting 20260824 起在 uTemp_Set 為真身），
