@@ -316,6 +316,7 @@
 // =============================================================================
 #include "MachineDefine.h"          // de-VCL'd include hub (vclcompat umbrella incl. AnsiString + portable STL + using namespace std); windows.h supplies BYTE/DWORD/WORD/ZeroMemory
 #include "myMN200motor.h"           // this unit's own contract (TMyMN200Motor : HTMotor) + MN200.h (vendor) + database.h
+#include "BinDisplay/MyBinDisp.h"   // AI(W906-FW-BINDISP2) 20260824: completes database.h:63's forward-decl -- GATE (c)/(e) now call through HSys.BinDisCtrl
 #include "canary_support.h"         // AI(W906-PT-W3) 20260807: replaces golden's "mymessbox.h" -- ShowMyMessage/ShowErrorMessage (sim bodies in canary_support.cpp); MyMessageBox itself has no port anywhere (see GATE (d))
 #include "cmydef.h"                 // SYN_TEK_MOTION_MODULE / MOTOR_DRIVER_TYPE / IO_CARD_TYPE / MOTION_CARD_TYPE / MotionnetIO_MN200 / NewIO_MN200 / SubMachineType / NUMBER_PANEL_TYPE / i24V_PULSE_COUNT / iSynTekCardType+eSCTPcil112/122 / InitialOK / fAllMotorHome / MOTIONNET_SPEED (already ported W0-tail)
 #include "acarry_shims.h"           // AI(W906-PT-W3) 20260807: replaces golden's "LtcSensor.h" -- TfLtcSensor *fLtcSensor (real SetLtcSensor(int), already ported W6.5)
@@ -1497,21 +1498,15 @@ void ResetMNet(int iRingNo, AnsiString EngMessage, AnsiString ChtMessage, bool b
             if(NUMBER_PANEL_TYPE==3 ||                                          //Steven 20120106 : 不是使用七段顯示器的話，Reset Ring會記憶體破壞
                NUMBER_PANEL_TYPE==4)                                            //Sam 20240604 : 新增 BinDisplay TFT
             {
-                // AI(W906-BinDispInt) 20260820: GATE (c) PREMISE UPDATED, GATE
-                // KEPT. The old ground ("opaque forward-decl") died --
-                // TMyBinDispCtrl's real base landed in BinDisplay/MyBinDisp.h.
-                // This stays gated on a different, still-true ground: golden
-                // has NO !=NULL guard here (unlike acatchtray/csystem's
-                // flipped sites) -- it derefs unconditionally whenever
-                // NUMBER_PANEL_TYPE is 3/4, surviving only because
-                // InstallColorBinDisplay news the instance in those configs.
-                // With BinDisCtrl still NULL in this port, opening this is a
-                // NULL deref, not fidelity. Flip it together with the
-                // InstallColorBinDisplay wiring, not before.
-#if 0
+                // AI(W906-FW-BINDISP2) 20260824: GATE (c) OPENED -- the wait
+                // condition its 20260820 note named ("flip it together with
+                // the InstallColorBinDisplay wiring") is satisfied this wave:
+                // database.cpp's ctor-path call is un-gated, so whenever
+                // NUMBER_PANEL_TYPE is 3/4 BinDisCtrl is a real instance
+                // (TMyBinDispOffline, user-ruled DEVIATION) exactly as
+                // golden's runtime premise requires. Golden verbatim below.
                 HSys.BinDisCtrl->bFirstInit=true;                               //Steven 20110621 Start : 關電後要重新Init Bin Disp & Power Off On一次
                 HSys.BinDisCtrl->ProcessStopStart(true);
-#endif
             }
 
             fLtcSensor->SetLtcSensor(0);                                        //Steven 20120202 : 斷電重開後要重新Set     //JerryYang 20230223 : 清除latch函式拆成shuttle 1,2
@@ -2426,15 +2421,18 @@ int CheckPCI_MN200State()
         }
 
         bCheckPCI_L112StateRun=false;
-        // AI(W906-BinDispInt) 20260820: GATE (e) PREMISE UPDATED, GATE KEPT --
-        // same re-justification as GATE (c) above: type is real now, but
-        // golden derefs without a NULL guard here; opening it before
-        // InstallColorBinDisplay is wired is a crash, not fidelity.
+        // AI(W906-FW-BINDISP2) 20260824: GATE (e) OPENED, same wave as GATE
+        // (c) (InstallColorBinDisplay ctor-path call un-gated in
+        // database.cpp). GOLDEN NOTE (BINDISP2-e): unlike (c), golden's own
+        // deref here (:2076-2077) has NO NUMBER_PANEL_TYPE 3/4 guard around
+        // it -- on a non-3/4 machine where this MN200 24V-loss recovery path
+        // fires with iWriteErrorLogCT!=0, golden NULL-derefs (BinDisCtrl is
+        // only ever newed for 3/4). Reproduced verbatim, not fixed; the
+        // exposure is unchanged from golden and unreachable offline (no
+        // MN200 ring ever pumps here).
         if(iWriteErrorLogCT!=0) //Sam 20230508 : 修正24V斷電後 Bin顯示器顯示異常。
         {
-#if 0
             HSys.BinDisCtrl->ProcessStopStart(true);
-#endif
         }
         iWriteErrorLogCT=0;
         return 1;

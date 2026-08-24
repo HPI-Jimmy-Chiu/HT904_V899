@@ -187,15 +187,17 @@ _fastcall SYSTEM_MODULAR::~SYSTEM_MODULAR()
 void SYSTEM_MODULAR::SystemModularInitial()
 {
     MyGem=new HT9045Gem("HT9045", HGem);                                        //20140213  wei   KYEC SECS/GEM
-    // AI(W906-SysModWire) 20260720: NUMBER_PANEL_TYPE branch stays gated --
-    // InstallColorBinDisplay needs TMyBinDispHT9046/TMyBinDispCtrl (W7-UI,
-    // golden database.cpp:1684-1729). NUMBER_PANEL_TYPE defaults 0 offline
-    // (cmydef.cpp) so the branch is dead here anyway.
-#if 0 // TODO(W7-UI): InstallColorBinDisplay -- golden database.cpp:1543-1545; body is REAL now (below, FW-BINDISP1) but the ctor-path call stays gated for the separate un-gate wave (behavior change: BinDisCtrl goes non-NULL for every consumer with a !=NULL guard)
+    // AI(W906-FW-BINDISP2) 20260824: UN-GATED (behavior wave). The body is
+    // real since FW-BINDISP1 (Offline DEVIATION per user ruling 20260824).
+    // Safety chain for opening this: NUMBER_PANEL_TYPE defaults 0 offline
+    // (cmydef.cpp) so the branch is dead on this dev machine and in every
+    // test that never runs ReadGeneralIni; when it IS 3/4 (real HT9050
+    // config), the seed-writing CheckAndReadIniDataGeneral calls inside the
+    // body are golden's own behavior, and INIFileGeneral is necessarily open
+    // by then (only ReadGeneralIni can have set NUMBER_PANEL_TYPE to 3/4).
     if(NUMBER_PANEL_TYPE==3 ||
        NUMBER_PANEL_TYPE==4)                                                    //Sam 20240604: new BinDisplay TFT
         InstallColorBinDisplay(NUMBER_PANEL_TYPE);
-#endif
 }
 
 // ---------------------------------------------------------------------------
