@@ -220,6 +220,12 @@ public:
     virtual void PullFromControl() {} // offline: nothing to read back from
     virtual void PushToControl()   {} // offline: nothing to write out to
     virtual void Click()           {} // golden TControl::Click -- offline no-op
+    // AI(W906-FW-SETUP-E) 20260824: golden TWinControl::SetFocus -- offline
+    // no-op (no HWND), hoisted to the base so every stock widget carries it;
+    // same semantics as the facade-local no-ops in forms/fQwertyKey.h:269/:287
+    // (which now merely shadow this). First consumer: TfSetup::cbAaDropDown
+    // (ScrollBar1->SetFocus()/XPitch->SetFocus(), golden cSetUp.cpp:4423/:4425).
+    void SetFocus() {}
 };
 
 // --- Static / label family -------------------------------------------------

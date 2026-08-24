@@ -544,6 +544,11 @@ public:
     void rgUseSuckModeClick();    // golden cSetUp.cpp:3423-3450 (28L)
     bool CheckShuttlePitch();     // golden cSetUp.cpp:4645-4706 (62L)
     void CoSocketComboChange();   // golden cSetUp.cpp:4752-4770 (19L)
+    // AI(W906-FW-SETUP-E) 20260824: the fQwertyKey/fPassword unlock batch
+    // (bodies in cSetUp.cpp tail; Sender typed per the D-3 convention).
+    void XPitchMouseDown(TEdit *Sender);       // golden cSetUp.cpp:3409-3421 (13L)
+    void XShiftPitchMouseDown(TEdit *Sender);  // golden cSetUp.cpp:4738-4750 (13L)
+    void cbAaDropDown(TComboBox *Sender);      // golden cSetUp.cpp:4408-4441 (34L)
 
     TfSetup();
     virtual ~TfSetup() {}

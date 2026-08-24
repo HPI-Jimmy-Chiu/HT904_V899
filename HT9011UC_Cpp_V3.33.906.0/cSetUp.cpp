@@ -155,6 +155,9 @@
 //      OrgTestMode :121) are NOT defined this wave -- their only consumers
 //      are still-queued methods (FormShow/cbAaChange/cbAaDropDown/
 //      sbtExitClick); defining them now would be surface with no reader.
+//      [FW-SETUP-E 20260824 update: bNeedEnterPassword/sSigPassword are now
+//       defined at this file's tail (explicit static) -- cbAaDropDown landed;
+//       iASMTestMode/iASMSiteMap/OrgTestMode remain undefined as stated.]
 //    * TfSetup::Init() -- golden's ctor :123-216, per the fTemp_Set.h:483
 //      "ctor only fields, real logic -> explicit Init()" convention (the
 //      global `fSetup = new TfSetup()` in forms/fSetup.cpp:21 is a static
@@ -211,7 +214,8 @@
 //        fMain/COM2.
 //    FormClose             :3339-3401 (63L)  myLog.Do_Log (handlerlog wiring
 //        not landed) + VCL close-action lifecycle.
-//    XPitchMouseDown       :3409-3421 (13L)  Barcode_Reader + fQwertyKey (WA-1).
+//    XPitchMouseDown       :3409-3421 (13L)  LANDED (FW-SETUP-E 20260824;
+//        Barcode_Reader guard gated E-B1, fQwertyKey real since FW-QWKEY1).
 //    sbtExitClick          :3452-3466 (15L)  Close() lifecycle + fOCR->
 //        sTesterLotId + fMain->GetCZSiteMap + bGetLotIDFormTester.
 //    sbUpdateClick         :3468-3628 (161L) WRITE-PATH (calls SaveSetupFile +
@@ -227,7 +231,8 @@
 //        IndexStatus + fMain->CheckCanChangeRealDummy.
 //    cbAaChange            :4368-4406 (39L)  fPassword/fQwertyKey +
 //        Barcode_Reader + SetFocus/Repaint (no port).
-//    cbAaDropDown          :4408-4441 (34L)  fPassword/fQwertyKey + SetFocus.
+//    cbAaDropDown          :4408-4441 (34L)  LANDED (FW-SETUP-E 20260824;
+//        fPassword/fQwertyKey real, SetFocus = TControl offline no-op).
 //    rgShtModeNormalMouseDown:4451-4462 (12L) Barcode_Reader.
 //    cbOctal12SiteClick    :4476-4488 (13L)  its ENTIRE payload is calling
 //        ScrollBar1Change(this) -- blocked solely on that method staying
@@ -238,7 +243,8 @@
 //    DoPasswordCheck       :4577-4629 (53L)  fQwertyKey/fPassword/fMain login
 //        chain + writes global AccessLevel.
 //    btAutoShuttlePitchClick:4732-4736 (5L)  fMain->Timer9 (TTimer zero-port).
-//    XShiftPitchMouseDown  :4738-4750 (13L)  Barcode_Reader + fQwertyKey.
+//    XShiftPitchMouseDown  :4738-4750 (13L)  LANDED (FW-SETUP-E 20260824;
+//        Barcode_Reader guard gated E-B2).
 //    FormShortCut          :4830-4837 (8L)   TWMKey (zero-port, Msg.CharCode
 //        IS read -- not a droppable param) + form Left/Top members.
 //
@@ -268,6 +274,8 @@
                                      // iCloseSiteModeFor2x6 / iCloseSiteModeFor2x8 / iCloseSiteModeFor1x4
 #include "csystem.h"                 // IndexHasIC() / ShuttleHasIC()
 #include "canary_support.h"          // LastSet (-> LastSet.h) / ShowMyMessage
+#include "forms/fQwertyKey.h"        // AI(W906-FW-SETUP-E) 20260824: fQwertyKey extern (:406) + ShowQwertyKey -- the unlock batch at this file's tail
+#include "forms/fPassword.h"         // AI(W906-FW-SETUP-E) 20260824: fPassword extern (:406) + edPassword
 
 // AI(W906-FW-SETUP-B) 20260821: same "declare just the one symbol needed"
 // posture Command.cpp (:282) and MainTempMode.cpp (:57) already established
@@ -1078,5 +1086,104 @@ void TfSetup::CoSocketComboChange()
             MyTempRGBox[i]->Visible=false;
             MyTempRGBox[i]->ItemIndex=0;
         }
+    }
+}
+
+// ============================================================================
+//  FW-SETUP-E (20260824) -- the fQwertyKey/fPassword unlock batch
+//  --------------------------------------------------------------------------
+//  AI(W906-FW-SETUP-E) 20260824: three queued methods whose blocker
+//  ("TfQwertyKey/TfPassword have no compiled entity") died with FW-QWKEY1
+//  (fc08e09, forms/fQwertyKey.* + forms/fPassword.* wired into the build).
+//  Golden file-scope globals :55-56 land here too, spelled explicit `static`
+//  per the extern-flip policy (golden writes them without static; golden has
+//  no extern for either -- single-file, verified 20260824). The remaining
+//  golden file-scope globals (:53-54 iASMTestMode/iASMSiteMap, :121
+//  OrgTestMode) stay undefined with their still-queued consumers.
+//
+//  GATE (E-B1)/(E-B2): the Barcode_Reader(bcSetup) early-return guards in
+//  XPitchMouseDown/XShiftPitchMouseDown -- Barcode_Reader has NO port
+//  tree-wide (re-verified 20260824: Grep for an int Barcode_Reader definition
+//  over *.h/*.cpp = 0 hits; the only other caller, MyTempPanel.cpp:840, sits
+//  inside its own #if 0). Gating the guard drops its early-return: on a KYEC
+//  barcode-reader machine golden can REFUSE the keyboard popup; this port
+//  never refuses. Latent today -- the handlers are not wired to any event
+//  source.
+// ============================================================================
+static bool bNeedEnterPassword=false;                                           //JerryYang 20160425 修改Site map需要密碼
+static AnsiString sSigPassword;                                                 //Alick 20160602 矽格Password用
+//------------------------------------------------------------------------------
+//AI(W906-FW-SETUP-E) 20260824: golden :3409-3421. D-3 glue params dropped
+// (Button/Shift/X/Y unread); Sender typed TEdit* (golden casts (TEdit*)Sender,
+// forms/fQwertyKey.cpp spbKeyClick precedent). fQwertyKey deref is faithful
+// golden shape (NULL until a wiring wave constructs it -- G-d exposure).
+void TfSetup::XPitchMouseDown(TEdit *Sender)
+{
+#if 0
+    if(Barcode_Reader(bcSetup)==0)                                              // 20140103 wei KYEC Barcode Reader
+    {
+        return;
+    }
+#endif // GATE (E-B1) -- see banner
+
+    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20170328 (Jou) 矽品客戶碼統一用SPILFunction
+        fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, 0.0, 1000.0);
+    else
+        fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 3, true, 0.0, 1000.0);
+}
+//------------------------------------------------------------------------------
+//AI(W906-FW-SETUP-E) 20260824: golden :4738-4750, byte-identical twin of
+// XPitchMouseDown above except the CheckRange bounds (-4000..4000).
+void TfSetup::XShiftPitchMouseDown(TEdit *Sender)
+{
+#if 0
+    if(Barcode_Reader(bcSetup)==0)
+    {
+        return;
+    }
+#endif // GATE (E-B2) -- see banner
+
+    if(IniConfig.bSPILFunction==true)
+        fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, -4000.0, 4000.0);
+    else
+        fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 3, true, -4000.0, 4000.0);
+}
+//------------------------------------------------------------------------------
+//AI(W906-FW-SETUP-E) 20260824: golden :4408-4441 verbatim. Sender typed
+// TComboBox* (golden casts (TComboBox*)Sender); the local Ptr kept so the
+// body reads like golden. SetFocus is the new TControl offline no-op
+// (vclcompat/Controls.h, this wave).
+void TfSetup::cbAaDropDown(TComboBox *Sender)
+{
+    if(IniConfig.bG09NeedPasswordWhenEditSiteMap==true)                         //Alick 20160603 Site Map 需要密碼
+    {
+        if(bNeedEnterPassword==true)
+        {
+            fPassword->edPassword->Text="";
+            fQwertyKey->ShowQwertyKey(fPassword->edPassword, N_NO_SYMBOL|N_NO_SPACE|N_PASSWORD);
+            if(sSigPassword==fPassword->edPassword->Text)
+            {
+                bNeedEnterPassword=false;
+            }
+            else
+            {
+                if(TestIF_File.iTestMode==SingleSite)                           //Alick 20161216 add modify for PeiXing 用鍵盤選擇SITE別沒輸入密碼卻可以變更的Bug
+                    ScrollBar1->SetFocus();
+                else
+                    XPitch->SetFocus();
+                return;
+            }
+        }
+    }
+    else
+    {
+        bNeedEnterPassword=false;
+    }
+
+    if(bNeedEnterPassword==false)
+    {
+        TComboBox *Ptr;
+        Ptr=Sender;
+        SitCH=Ptr->ItemIndex;
     }
 }
