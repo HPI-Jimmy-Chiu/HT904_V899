@@ -416,3 +416,121 @@ public:
 };
 
 #endif
+
+// =============================================================================
+//  APPENDED SECTION -- TMyBinDispHT9046: the real hardware-protocol subclass.
+//  Translator: AI(W906-FW-BINDISP3) 20260824
+//  Golden ref: HT9011UC_Code_V3.33.906.0_20260618\BinDisplay\MyBinDisp.h
+//              :160-194 (subclass declaration; cp950, 0 U+FFFD on decode,
+//              re-verified this wave with the same command as the base banner).
+//  Method bodies: this directory's MyBinDisp.cpp, appended section (golden
+//              .cpp :648-3068 -- see that section's own GOLDEN LINE MAP).
+//
+//  WHY THIS SECTION SITS AFTER THE BASE GUARD'S #endif: this wave's edit
+//  boundary for this file is APPEND-ONLY, so the subclass cannot be inserted
+//  before the existing #endif. The section carries its own include guard
+//  (MyBinDispHT9046_AppendH), so repeated inclusion stays safe: the first
+//  include defines base+subclass, later includes skip both via their
+//  respective guards; TMyBinDispCtrl is always complete at this point because
+//  it is defined above in this same file.
+//
+//  ================= GATE-REGISTER UPDATES (supersede the base banner) ========
+//  * GATE (2) above is LIFTED for the TMyBinDispHT9046 method family: all of
+//    golden .cpp :657-3068 is now translated (28 subclass methods + the 2
+//    hoisted command_TFT_* helpers + the golden TU-scope protocol state; see
+//    the .cpp appended banner). The GATE (2) text above is kept as history
+//    (this file is append-only); THIS note is the current state.
+//  * GATE (1) (Timer1Timer stub) REMAINS. Timer1Timer is still the ONLY code
+//    path that calls DoStartSetBin/DoStartSetColor/DoStartGetStatus/DoOnce/
+//    DoCycle (verified over the cp950-decoded golden .cpp 2026-08-24: each of
+//    those five is invoked only from Timer1Timer's dispatcher, golden
+//    :284-604), so every hardware-touching body in the appended .cpp section
+//    has ZERO runtime callers in this build. Combined with the instantiation
+//    fact below, translating the COM-port writes verbatim carries zero
+//    execution risk today.
+//  * GATE (3) REMAINS and is now the load-bearing one: the only instantiation
+//    in this tree stays `new TMyBinDispOffline` (database.cpp:225, user ruling
+//    20260824 -- the experiment rig HAS a color-bin panel, but bring-up waits
+//    for machine-side validation). NOTHING news TMyBinDispHT9046 yet; this
+//    class is translated-and-parked for that bring-up wave.
+//  * NOTE B above is PARTIALLY superseded: command_TFT_Input/command_TFT_Font
+//    are now translated -- but as members of THIS subclass, not the base (see
+//    DEVIATION (d) just below). TDataModule3 (incl. golden .cpp :21
+//    `TDataModule3 *DataModule3;`, ctor :32-35, and DataModuleDestroy
+//    :3070-3073) stays omitted: still design-time harness surface, still
+//    unreferenced by anything ported.
+//
+//  =========================== DEVIATION (d) ==================================
+//  command_TFT_Input / command_TFT_Font are declared PUBLIC members of
+//  TMyBinDispCtrl in golden (MyBinDisp.h:146-147). The base class body above
+//  is frozen by this wave's append-only boundary, so they are HOISTED onto
+//  this subclass instead (public, same access as golden). Behaviourally
+//  identical by construction: every golden call site of either function is
+//  inside a TMyBinDispHT9046 method (verified 2026-08-24 by grep over the
+//  cp950-decoded golden .cpp -- command_TFT_Input called at :894/:912/:930/
+//  :950, command_TFT_Font at :995/:1028/:1059/:1091, zero call sites outside
+//  golden :866-1094), and neither body touches any member field (both are
+//  pure buffer formatters over their char* out-param plus the TU-scope
+//  iAddArrayTFT table). A future non-append wave MAY move them back onto the
+//  base verbatim.
+//
+//  ZeroInitVclFields note: golden's TMyBinDispHT9046 declares NO data members
+//  (only virtuals, golden :161-194), so there is nothing for a subclass
+//  ZeroInitVclFields to zero -- the base ctor's helper already covers the
+//  whole object. Function-local `static` state inside the .cpp bodies is
+//  zero-initialized by C++ static-storage rules, same as BCB6.
+// =============================================================================
+#ifndef MyBinDispHT9046_AppendH
+#define MyBinDispHT9046_AppendH
+
+// Borland RTL System.hpp `Byte` (= unsigned char), needed by command_TFT_Font's
+// golden signature. Same file-local global-typedef precedent as
+// Interface/InterfaceSYS.h:36 and MyPLC/MyPLC_IO_Modbus.h:32 (a TU that sees
+// more than one of these is fine -- identical typedef redefinition is legal).
+typedef unsigned char Byte;
+
+//----------------------------------------------------------------------------
+// golden MyBinDisp.h:161-194 -- member list and order verbatim; __fastcall
+// dropped per this tree's blanket convention (see base banner).
+//----------------------------------------------------------------------------
+class TMyBinDispHT9046:public TMyBinDispCtrl
+{
+    private:
+    protected:
+        virtual void WriteBin(int Addr, int Command, short Value);
+        virtual void WriteBin2(int Addr, int Command, short Value);
+        virtual void MagazineWriteBin_HTA18(int index,int ivalue);              //JerryYang 20230515 : 二位數BIN DISP, HTA18
+        virtual void MagazineWriteBin_BT008(int index,int ivalue);              //JerryYang 20230515 : 三位數BIN DISP, HT-BT008
+        virtual void MagazineWriteBin_TFT(int index,int ivalue, bool bmulti=false);   //JerryYang 20231106 : TFT
+        virtual void MagazineWriteBinFont_TFT(int index, int iColor, bool binitial=false, bool bmulti=false);   //JerryYang 20231106 : TFT
+        virtual void WriteColor(int Addr, short Value);
+        virtual void WriteColor2(int Addr, short Value);
+        virtual void ReadVersion(int Addr);
+        virtual void ReadVersion2(int Addr);
+        virtual void ReadVersion_TFT(int index);
+        virtual bool DoStartSetBin();
+        virtual bool DoStartSetColor();
+        virtual bool DoStartGetStatus();
+        virtual void InitialTask();                                             //Sam 20240604 : 新增 BinDisplay TFT
+        virtual void SetNoBackGround_TFT(int index);                            //清空背景
+        virtual void SetBackGround_TFT(int index);                              //設定背景
+        virtual void SetFontBin_TFT(int index, int iColor, int iValue);         //設定 Bin 別字型
+        virtual void SetFontBinWord_TFT(int index, int iColor, int iValue);     //設定 "Bin" 字型
+        virtual void SetFontEA_TFT(int index, int iColor, int iValue);          //設定 "EA" 字型
+        virtual void SetFontCount_TFT(int index, int iColor, int iValue);       //設定 "Count" 字型
+        virtual void WriteBinWord_TFT(int index,int ivalue);                    //顯示 "Bin"
+        virtual void WriteEA_TFT(int index,int ivalue);                         //顯示 "EA"
+        virtual void WriteCount_TFT(int index,int ivalue, int iCount);          //顯示 Count 數量
+        virtual void WriteBin_TFT(int index,int ivalue);                        //顯示Bin別 By TFT
+        virtual bool DoOnce();
+        virtual bool DoOnceTFT(bool bReset, int iSetType);
+        virtual bool DoCycle();
+        virtual bool DoCycleTFT(bool bReset, int iWriteType);
+
+    public:
+        // DEVIATION (d) -- golden BASE-class public members (MyBinDisp.h:
+        // 146-147), hoisted onto this subclass; see the section banner above.
+        void command_TFT_Input(char *cStr, int index, int iDisplabel, AnsiString sValue);
+        void command_TFT_Font (char *cStr, int index, int iDisplabel, Byte iXPos, Byte iYPos, Byte iWidth, Byte iHeigh, Byte iFontSize, Byte iFill, int iColor);
+};
+#endif
