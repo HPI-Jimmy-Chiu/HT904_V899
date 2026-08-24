@@ -9288,3 +9288,37 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - **設計面**：TScrollBar 元件設計、temp.mode 顯示格式化——建議與使用者
   同步後開；其餘無待答。
 - **loop 狀態**：夜間佇列全清，loop 轉待命（心跳續掛守衛）。
+
+## 20260824 — FW-TEMP3：temp.mode 解碼定案並落地（233bde4）
+
+- **使用者裁決**：temp.mode 在 bind 層轉字串，格式照 mock 的 "Hot Mode"。
+- 落點 `web/js/ui/bind.js` 新 `tempMode` formatter（bind.js 本來就是
+  state↔DOM 唯一接縫，formatter 表是既有機制，零新架構）。
+  對照表＝golden UpdateMainOperateMode（main.cpp:12885-12980）× rgTemperatureMode
+  dfm 選項（High/Ambient/Temp control/Ambient/High/Temp control）：
+  **0→"Hot Mode"、1→"Ambient Mode"、2→"ATC Mode"、3→"None HotPlate_mode"**
+  （3 用 golden 字面 kevin 20180811，不美化）；null→"---"、未知碼→"Mode n"
+  （防禦式，不猜）。
+- **誠實邊界**：golden 疊在上面的狀態驅動覆寫（bATCActiveCooling 強制
+  "ATC Mode"、HiSilicon 客製 "ATC_nnC"、Tri-Temp 變色）讀的是 fMain 狀態，
+  不在 wire 上——註解記載、不假造；要顯示得先開自己的 tag。
+- mock（state.js）改發原始碼值 0 對齊真 wire 契約（真後端發 int），
+  畫面輸出不變；tagmap.js note 更新；WebBridgeTags.cpp 加交叉參照
+  （**純註解**，-fsyntax-only 綠、wire 契約不動仍發 raw int）。
+- **驗收**：node --check ×4、formatter 冒煙 9 案例全過（含字串數字、
+  null、未知碼）；bind.js 以 ES module 乾淨載入。C++ 零行為變更故
+  不跑雙 gate。**渲染回歸照政策靠人工 F5（未做）**。
+
+### 🔖 RESUME（最新）
+
+- **完成**：FW-TEMP3（233bde4）。(e) 的格式化決策半邊已收；
+  剩 (e) 後半＝uTemp_Set/DynamicTemp layout 渲染驗證＋本次 temp.mode
+  顯示，皆靠人工 F5（`python web/serve.py` 或 wb_serve --dry）。
+- **下一波候選**：
+  (l) fSetup 佇列 29 方法——前置是 ctor 陣列建置波（TestSiteCH[][]/
+      MyTempRGBox[]），卡 TScrollBar vclcompat 元件設計；
+  (d) 設計面：InstallColorBinDisplay＋MN200 c/e 接線、mot_table.csv HAL
+      分類、TScrollBar 元件設計——20260824 已向使用者展開解說待裁決；
+  GATE 7 共用 Temperature.Data 寫檔的 redirect-seam 設計；
+  Tech.* 電池等 tag 消費者出現再接線。
+- **loop 狀態**：使用者在場，轉互動模式；守衛心跳續掛。
