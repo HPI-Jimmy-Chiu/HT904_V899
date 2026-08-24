@@ -25,15 +25,14 @@
 //  shape of dependency (root .cpp for the ht9045_sm-heavy methods; the
 //  forms/fXxx.cpp sibling stays on the ht9045_globals-only diet).
 //
-//  CMAKE STATUS -- NOT YET WIRED. This wave's edit boundary is `cSetUp.cpp`
-//  (this file, append-only) + forms/fSetup.h only; CMakeLists.txt is out of
-//  scope. This file compiles (verified with `g++ -fsyntax-only` against the
-//  ht9045_sm target's own includes_CXX.rsp, see hand-off report for the
-//  exact command) but is UNREACHABLE from any build until a future pass adds
-//  it to `add_library(ht9045_sm STATIC ...)`'s source list, immediately
-//  after `cTemperFrom.cpp` (CMakeLists.txt:1895) and before `MainTempMode.cpp`
-//  (:1916) -- both siblings in the exact same split, so the insertion point
-//  is contiguous with its own kind.
+//  CMAKE STATUS -- WIRED into ht9045_sm (CMakeLists.txt:1922) by the
+//  FW-SETUP-B integration pass, 20260821.
+//  AI(W906-FW-SETUP-D-integ) 20260824: the paragraph that stood here
+//  ("NOT YET WIRED ... UNREACHABLE") was the Wave B agent's own edit-boundary
+//  note and went stale the same day it was written -- and it then misled the
+//  Wave D agent into re-reporting the file as unwired. Everything in this
+//  file is LIVE code in the ht9045_sm archive; new methods compile into every
+//  build, so wave acceptance for this file is a real build, not syntax-only.
 //
 //  WAVE SCOPE -- 3 of 47 golden TfSetup:: methods (all (a) 顯示/讀取側,
 //  read line-by-line in full):
@@ -139,6 +138,129 @@
 //  logging-sink stub at acatchtray_shims.cpp:145 (MainTempMode.cpp's own
 //  banner already documents this as the accepted current behaviour, not a
 //  gap introduced here).
+// =============================================================================
+// =============================================================================
+//  AI(W906-FW-SETUP-D) 20260824: Wave D -- the ctor-array / TScrollBar unlock
+//  wave (appended to this banner region; everything above is verbatim Wave B).
+//  Golden re-decoded this wave: cSetUp.cpp 4,858 lines, cp950, 0 U+FFFD.
+//
+//  WHAT LANDS THIS WAVE (bodies appended at this file's tail):
+//    * golden cSetUp.cpp:49-57's ctor-built control arrays as file-scope
+//      globals (TestSiteCH[][]/TestLabCol[]/TestLabRow[]/iTestSiteCh[][]/
+//      MyTempRGBox[]) -- ZERO users outside cSetUp.cpp in golden (walked all
+//      golden .cpp/.h via python cp950 scan, 20260824: every one of the 5
+//      names hits only cSetUp.cpp), so they stay file-scope here exactly as
+//      in golden. The OTHER file-scope globals of that block (iASMTestMode/
+//      iASMSiteMap :53-54, bNeedEnterPassword :55, sSigPassword :56,
+//      OrgTestMode :121) are NOT defined this wave -- their only consumers
+//      are still-queued methods (FormShow/cbAaChange/cbAaDropDown/
+//      sbtExitClick); defining them now would be surface with no reader.
+//    * TfSetup::Init() -- golden's ctor :123-216, per the fTemp_Set.h:483
+//      "ctor only fields, real logic -> explicit Init()" convention (the
+//      global `fSetup = new TfSetup()` in forms/fSetup.cpp:21 is a static
+//      initializer; this body reads MachineTypeChoice/USE_IN_OUT_ARM_Y_PITCH
+//      -- other TUs' globals -- so it must NOT run at static-init time).
+//      NOT CALLED anywhere yet (same posture as TfTemp_Set::Init pre-wiring):
+//      FormDestroy/CompChange/CHSetError/CoSocketComboChange below dereference
+//      what Init() builds, so the future wiring wave must call Init() first
+//      -- golden got that ordering for free from the VCL ctor.
+//    * 6 more methods: FormDestroy/CompChange/CHSetError/rgUseSuckModeClick/
+//      CheckShuttlePitch/CoSocketComboChange (spans in the ledger below).
+//
+//  GATE REGISTER -- Wave D additions (Wave B's audit sections above unchanged)
+//  ---------------------------------------------------------------------------
+//  (G-Align)    Init(): golden :213 `MyTempRGBox[i]->Align=alTop;` -- gated,
+//      same gate forms/fTemp_Set.h's register established (no Align port on
+//      any vclcompat control, by design: rendering = web).
+//  (G-Delegate) Init(): golden :214 `MyTempRGBox[i]->OnClick=rgSensor1Click;`
+//      -- gated, same gate forms/fTemp_Set.h's register established (stock
+//      vclcompat widgets carry no assignable OnClick delegate slot; the
+//      OnChange/OnScroll slots on the NEW vclcompat::TScrollBar are the
+//      user-ruled 20260824 exception, deliberately confined to that type).
+//  NO config-write gates were needed in any Wave D body: grepped each golden
+//  span for WriteIniData/CheckAndReadIniData/SaveToFile/MyForceDirectories,
+//  20260824 -- 0 hits in :123-216/:218-230/:1195-1262/:1284-1605/:3423-3450/
+//  :4645-4706/:4752-4770 (the write-heavy members of this class are exactly
+//  the still-queued ones, see ledger).
+//
+//  47-METHOD LEDGER (rebuilt this wave against golden, spans re-measured;
+//  single authoritative copy -- forms/fSetup.h's banners cite this table)
+//  ---------------------------------------------------------------------------
+//  TRANSLATED 25/47 (15 Wave A, forms/fSetup.cpp; 3 Wave B + 7 Wave D, here):
+//    A GetTestMode:2179-2189  A SetShtMode:4708-4715  A VertifyShtModeisDiff:4717-4730
+//    A XPitchKeyPress:3403-3407  A RadioButton1KeyDown:4443-4449 (dfm-orphaned, see fSetup.h)
+//    A rgSensor1Click:4772-4777  A rgShtModeNormalClick:1264-1282
+//    A Arm1PickArm2TestClick:4464-4474  A cbUseSLKClampClick:4637-4643
+//    A rgYPitchOffsetModeClick:4779-4802  A edOcrTextMouseDown:4631-4635 (WA-1 gate, empty)
+//    A edOverRangeClick:4839-4842  A edDelayTimeClick:4844-4847
+//    A edAuto1CountClick:4849-4852  A edtGetValueDelayTimeClick:4854-4857 (all WA-1)
+//    B ReadUseSuckModeFile:2133-2146  B CheckSTMMode:2148-2177  B cbI21Click:4804-4828
+//    D Init(=ctor):123-216  D FormDestroy:218-230  D CompChange:1195-1262
+//    D CHSetError:1284-1605  D rgUseSuckModeClick:3423-3450
+//    D CheckShuttlePitch:4645-4706  D CoSocketComboChange:4752-4770
+//  QUEUED 22/47, per-method reason (every span read/signal-scanned this wave):
+//    ScrollBar1Change      : 232-1193 (962L) MIXED -- Barcode_Reader guard (:242,
+//        zero-port tree-wide) + 17 writes to global iSiteTotal + a widget
+//        surface far beyond this facade; ctor-array/TScrollBar were only two
+//        of its blockers, so Wave D does NOT unlock it.
+//    FormShow              :1607-2131 (525L) fSecurity x14 + TImage
+//        (Image1->...->LoadFromFile) + myLog.Do_Log + fMain deps.
+//    ReadFile              :2191-3020 (830L) WRITE-PATH (5x WriteIniData) +
+//        COM2/fMain/fOCR/fTemp/fCleaning/ChangeHotPlateData.
+//    DoIniDataToForm       :3022-3337 (316L) WRITE-PATH (2x WriteIniData) +
+//        fMain/COM2.
+//    FormClose             :3339-3401 (63L)  myLog.Do_Log (handlerlog wiring
+//        not landed) + VCL close-action lifecycle.
+//    XPitchMouseDown       :3409-3421 (13L)  Barcode_Reader + fQwertyKey (WA-1).
+//    sbtExitClick          :3452-3466 (15L)  Close() lifecycle + fOCR->
+//        sTesterLotId + fMain->GetCZSiteMap + bGetLotIDFormTester.
+//    sbUpdateClick         :3468-3628 (161L) WRITE-PATH (calls SaveSetupFile +
+//        fMain->BackupSetupFile) + Close().
+//    SaveSetupFile         :3630-4165 (536L) THE WRITE-PATH: 130x WriteIniData
+//        into the recipe file family. Stays queued until the user's
+//        write-path wave (safety-critical by campaign rule).
+//    btnLUpToRDownNClick   :4167-4290 (124L) fPassword x3 + fQwertyKey +
+//        Barcode_Reader.
+//    DoPassword            :4292-4329 (38L)  fQwertyKey->bShow + fPassword +
+//        fMain login chain (fPassword-unported).
+//    cbEnableRealTimeCCDClick:4331-4366 (36L) COM2->SendCommToVision +
+//        IndexStatus + fMain->CheckCanChangeRealDummy.
+//    cbAaChange            :4368-4406 (39L)  fPassword/fQwertyKey +
+//        Barcode_Reader + SetFocus/Repaint (no port).
+//    cbAaDropDown          :4408-4441 (34L)  fPassword/fQwertyKey + SetFocus.
+//    rgShtModeNormalMouseDown:4451-4462 (12L) Barcode_Reader.
+//    cbOctal12SiteClick    :4476-4488 (13L)  its ENTIRE payload is calling
+//        ScrollBar1Change(this) -- blocked solely on that method staying
+//        queued (first entry above).
+//    chkOffCenterkitClick  :4490-4538 (49L)  TImage-zero-port (7x
+//        Image1->Picture->LoadFromFile).
+//    cbQualSite2X2ShiftClick:4540-4575 (36L) TImage-zero-port (6x).
+//    DoPasswordCheck       :4577-4629 (53L)  fQwertyKey/fPassword/fMain login
+//        chain + writes global AccessLevel.
+//    btAutoShuttlePitchClick:4732-4736 (5L)  fMain->Timer9 (TTimer zero-port).
+//    XShiftPitchMouseDown  :4738-4750 (13L)  Barcode_Reader + fQwertyKey.
+//    FormShortCut          :4830-4837 (8L)   TWMKey (zero-port, Msg.CharCode
+//        IS read -- not a droppable param) + form Left/Top members.
+//
+//  GOLDEN NOTES logged this wave (faithful-translation discipline: photograph,
+//  don't fix):
+//    GOLDEN QUIRK  -- CHSetError :1559/:1590 `if(iYpitch>63.5)`: iYpitch is
+//        int, compared against 63.5; behaviourally identical to >=64.
+//        Translated verbatim.
+//    GOLDEN ODDITY -- CHSetError's pitch switch (:1348-1603) has NO case for
+//        QualSite2X2N/_6Site2X3N/_8Site2X4N/_32Site4X8N/_16Site4X4-as-itself
+//        beyond its shared _8Site2X4 case label, and no default: the N-mode
+//        variants fall through the switch entirely un-range-checked (their
+//        X/Y pitch is validated nowhere in this function). Preserved verbatim.
+//    GOLDEN ODDITY -- CoSocketComboChange :4752-4770 ignores its Sender and
+//        reads CoSocketCombo directly (Sender IS CoSocketCombo at every
+//        golden wiring site); Sender dropped per the established
+//        unused-VCL-glue rule.
+//    PRE-EXISTING vclcompat nuance (not new, recorded for CompChange's
+//        readers): vclcompat::TComboBox::Clear() clears Items only; real VCL
+//        also clears Text. CompChange's Clear() sites only care about Items
+//        (they re-Add the CH list immediately), so no behaviour differs on
+//        any translated path.
 // =============================================================================
 #include "forms/fSetup.h"
 
@@ -254,6 +376,707 @@ void TfSetup::cbI21Click()
                     ShowMyMessage("Device remain in machine, do onecycle first, and can close AutoSiteMapping!","裝置remain device，請先執行onecycle才能夠關閉AutoSiteMapping");
                 }
             }
+        }
+    }
+}
+
+// ===========================================================================
+//  AI(W906-FW-SETUP-D) 20260824: Wave D -- everything below this line. See
+//  this file's Wave D banner section for the ledger, gates and deviations.
+// ===========================================================================
+#include <stdlib.h>   // AI(W906-FW-SETUP-D) 20260824: atoi/atof (CHSetError/CheckShuttlePitch) -- golden got these via vcl.h
+
+// ---------------------------------------------------------------------------
+//  File-scope control arrays -- golden cSetUp.cpp:49-52,:57. File-scope in
+//  golden, file-scope here (ZERO users outside cSetUp.cpp in golden -- see
+//  Wave D banner). Zero-initialized statics (no dynamic initializer -> no
+//  static-init-order exposure); Init() populates them.
+//  MyTempRGBox's element type is the facade's TfSetupSensorRadioGroup, not
+//  golden's bare TRadioGroup -- DEVIATION D-2 (S18 type-substitution idiom),
+//  so Init()'s ->Name/->Caption/->Height/->Columns/->Parent writes stay
+//  spellable. Every golden expression over these arrays ports unchanged.
+// ---------------------------------------------------------------------------
+TComboBox   *TestSiteCH[MAX_SOCKET_ROW][MAX_SOCKET_COL];
+TLabel      *TestLabCol[MAX_SOCKET_COL];
+TLabel      *TestLabRow[MAX_SOCKET_ROW];
+int  iTestSiteCh[MAX_SOCKET_ROW][MAX_SOCKET_COL];
+TfSetupSensorRadioGroup *MyTempRGBox[iSnSocketCnt];                             //Steven 20200420 : Socket Sensor功能可以選
+
+// ---------------------------------------------------------------------------
+// TfSetup::Init
+//   BCB6 source: cSetUp.cpp:123-216 (94 lines) -- golden's
+//   `__fastcall TfSetup::TfSetup(TComponent* Owner) : TForm(Owner)`.
+//   DEVIATION D-3: explicit Init(), not a ctor (fTemp_Set.h:483 convention;
+//   forms/fSetup.cpp:21 news the global fSetup at static-init time and this
+//   body reads other TUs' globals). Owner param + TForm base call dropped
+//   (VCL glue). NOT CALLED anywhere yet -- future wiring wave's job.
+// ---------------------------------------------------------------------------
+void TfSetup::Init()
+{
+    bSiteMapHasChange=true;                                                     //Steven 20250102 : 紀錄test mode與site map是否有變更
+    iTestMode=TotalTestMode;
+    AnsiString Str;
+    TComboBox *tempTestSiteCBox[MAX_SOCKET_ROW][MAX_SOCKET_COL]=
+    {
+        {cbAa, cbAb, cbAc, cbAd, cbAe, cbAf, cbAg, cbAh},
+        {cbBa, cbBb, cbBc, cbBd, cbBe, cbBf, cbBg, cbBh},
+        {cbCa, cbCb, cbCc, cbCd, cbCe, cbCf, cbCg, cbCh},
+        {cbDa, cbDb, cbDc, cbDd, cbDe, cbDf, cbDg, cbDh}
+    };
+    TLabel *tempTestLabCol[MAX_SOCKET_COL]=
+    {
+        labColA, labColB, labColC, labColD, labColE, labColF, labColG, labColH
+    };
+    TLabel *tempTestLabRow[MAX_SOCKET_ROW]={labRowA, labRowB, labRowC, labRowD};
+
+    int iCol, iRow;
+    for(int i=0; i<MAX_SOCKET_TOTAL; i++)
+    {
+        iRow=i/MAX_SOCKET_COL;
+        iCol=i%MAX_SOCKET_COL;
+
+        if(i<MAX_SOCKET_ROW)
+        {
+            TestLabRow[i]=tempTestLabRow[i];
+            TestLabRow[i]->Visible=false;
+        }
+
+        if(i<MAX_SOCKET_COL)
+        {
+            TestLabCol[i]=tempTestLabCol[i];
+            TestLabCol[i]->Visible=false;
+        }
+        iTestSiteCh[iRow][iCol]=-1;
+        TestSiteCH[iRow][iCol]=tempTestSiteCBox[iRow][iCol];
+        TestSiteCH[iRow][iCol]->Visible=false;
+    }
+    fShow=false;
+
+    if(MachineTypeChoice==Type_HT9045)
+    {
+        ScrollBar1->Max=_8Site2X4;
+    }
+    else if(MachineTypeChoice==Type_HT9046_LS ||
+            MachineTypeChoice==Type_HT1032)
+    {
+        ScrollBar1->Max=_32Site4X8N;
+    }
+    else if(MachineTypeChoice==Type_HT9045_12Site)                              //ChungHung 20130507 add HT9045 updata for 12site 517
+    {
+        ScrollBar1->Max=_12Site2X6;
+    }
+    else
+    {
+        ScrollBar1->Max=_16Site2X8;
+    }
+
+    iTestModeOcr=-1;                                                            //Steven 20120716 : OCR
+
+    tSiteMap=new TStringList();                                                 //Steven 20140510 : Secs Gem
+    for(int i=0; i<MAX_SOCKET_ROW; i++)
+    {
+        for(int j=0; j<MAX_SOCKET_COL; j++)
+        {
+            tSiteMap->Add("0");
+        }
+    }
+
+    // AI(W906-FW-SETUP-D) 20260824: DEVIATION D-1 -- real VCL TRadioGroup
+    // allocates Items in its ctor; the shared vclcompat base deliberately
+    // leaves it NULL (Controls.h's verbatim-kept default), so golden's
+    // Clear()/Add() below would deref NULL without this line. Allocated
+    // unconditionally (real VCL owns Items whether or not the branch runs).
+    rgInOutArmYPitch->Items=new TStringList();
+
+    if(USE_IN_OUT_ARM_Y_PITCH==iXPitchManual360)                                //Steven 20140819 : Y-Pitch 36mm
+    {
+        rgInOutArmYPitch->Items->Clear();
+        rgInOutArmYPitch->Items->Add("60.0 mm");
+        rgInOutArmYPitch->Items->Add("36.0 mm");
+    }
+
+    for(int i=0; i<iSnSocketCnt; i++)                                           //Steven 20200610 : Socket sensor 改成16顆
+    {
+        MyTempRGBox[i]=new TfSetupSensorRadioGroup();                           //AI(W906-FW-SETUP-D) 20260824: DEVIATION D-2 -- golden `new TRadioGroup(this)`; Owner dropped (VCL glue), facade type substituted (Items self-allocated in its ctor, D-1)
+        MyTempRGBox[i]->Parent=scrlbxSocketSensor;
+        MyTempRGBox[i]->Name=AnsiString("rgSensor")+AnsiString(i+1);
+        MyTempRGBox[i]->Height=36;
+        Str.sprintf("Sensor %d usage", i+1);
+        MyTempRGBox[i]->Caption=Str;
+        MyTempRGBox[i]->Columns=3;
+        MyTempRGBox[i]->Items->Add("No use");
+        MyTempRGBox[i]->Items->Add("Has IC");
+        MyTempRGBox[i]->Items->Add("Floating");
+        // AI(W906-FW-SETUP-D) 20260824: GATE(G-Align) -- golden :213
+        // `MyTempRGBox[i]->Align=alTop;` -- no Align port on any vclcompat
+        // control (rendering = web; forms/fTemp_Set.h's established gate).
+#if 0 // GATE(G-Align)
+        MyTempRGBox[i]->Align=alTop;
+#endif // GATE(G-Align)
+        // AI(W906-FW-SETUP-D) 20260824: GATE(G-Delegate) -- golden :214
+        // `MyTempRGBox[i]->OnClick=rgSensor1Click;` -- stock vclcompat
+        // widgets carry no OnClick delegate slot (forms/fTemp_Set.h's
+        // established gate; the OnChange/OnScroll slots on the new
+        // vclcompat::TScrollBar are the user-ruled exception, on that type
+        // only). The future web write-path wiring calls
+        // fSetup->rgSensor1Click(box) directly.
+#if 0 // GATE(G-Delegate)
+        MyTempRGBox[i]->OnClick=rgSensor1Click;
+#endif // GATE(G-Delegate)
+    }
+}
+
+// ---------------------------------------------------------------------------
+// TfSetup::FormDestroy
+//   BCB6 source: cSetUp.cpp:218-230 (13 lines)
+//   golden `TObject *Sender` dropped, never read. MyDBIProcess: real decl
+//   aHotPlateSubstrate.h:933 (already included); LogSoftwareOffTime: decl
+//   cmydef.h:5032, offline no-op body acarry_shims.cpp:255.
+//   NOTE: dereferences tSiteMap, which only Init() allocates -- golden could
+//   never run FormDestroy before its ctor; the wiring wave owns that order.
+// ---------------------------------------------------------------------------
+void TfSetup::FormDestroy()
+{
+    try
+    {
+        tSiteMap->Clear();                                                      //Ifor 20170603 (wei) TStringList 刪除前先 Clean
+        delete tSiteMap;                                                        //Steven 20140510 : Secs Gem
+    }
+    catch(...)
+    {
+        MyDBIProcess("Exception", "TfSetup::FormDestroy");
+    }
+    LogSoftwareOffTime("TfSetup, FormDestroy");                                 //Steven 20210526 : 紀錄軟體執行時間
+}
+
+// ---------------------------------------------------------------------------
+// TfSetup::CompChange
+//   BCB6 source: cSetUp.cpp:1195-1262 (68 lines)
+// ---------------------------------------------------------------------------
+void TfSetup::CompChange(int iMode)
+{
+    int iTestCHCT=SiteData[iMode].Cnt;
+
+    if(IniConfig.bDualSiteSupply4CH==true)                                      //jou 2012-11-20 Dual Site supply 4's Channel
+    {
+        if(iMode==DualSite)
+        {
+            iTestCHCT+=2;
+        }
+    }
+
+    if(IniConfig.bSPILFunction==true ||                                         //JerryYang 20170328 (Jou) 矽品客戶碼統一用SPILFunction
+       CUSTOMER_CODE==CC_ASE_KaohSiung)
+    {
+        if(iMode==_8Site2X4 &&
+           CosFunction.bEnableOctal_12Kit==true &&
+           cbOctal12Site->Checked==true)
+        {
+            iTestCHCT+=4;
+        }
+        else if(iMode==_8Site2X4 &&
+                CosFunction.bEnableOctal_12Kit==true &&
+                cbOctal12Site->Checked==false)
+        {
+            iTestCHCT=SiteData[iMode].Cnt;
+        }
+    }
+
+    if(CosFunction.bUse32ChanelSiteMap)                                         //Steven 20170530 (wei) : Use 32CH site map
+    {
+        iTestCHCT=32;
+
+        if(IniConfig.bVTESTFunction)                                            //RogerYang 20260529 : 偉測趙坤鵬說開放到最多16site
+        {
+            iTestCHCT=16;
+        }
+    }
+
+    for(int i=0; i<MAX_SOCKET_ROW; i++)
+    {
+        TestLabRow[i]->Visible=false;
+        for(int j=0; j<MAX_SOCKET_COL; j++)
+        {
+            TestSiteCH[i][j]->Clear();
+            TestSiteCH[i][j]->Visible=false;
+            TestLabCol[j]->Visible=false;
+        }
+    }
+
+    for(int i=0; i<SiteData[iMode].XItem; i++)
+    {
+        TestLabCol[i]->Visible=true;
+        for(int j=0; j<SiteData[iMode].YItem; j++)
+        {
+            TestSiteCH[j][i]->Visible=true;
+            TestSiteCH[j][i]->Enabled=true;
+            for(int k=0; k<=iTestCHCT; k++)
+            {
+                if(k==0)
+                    TestSiteCH[j][i]->Items->Add("- - -");
+                else
+                    TestSiteCH[j][i]->Items->Add("CH "+AnsiString (k));
+            }
+            TestLabRow[j]->Visible=true;
+        }
+    }
+}
+
+// ---------------------------------------------------------------------------
+// TfSetup::CHSetError
+//   BCB6 source: cSetUp.cpp:1284-1605 (322 lines)
+//   GOLDEN QUIRK (:1559/:1590): `if(iYpitch>63.5)` -- int compared against
+//   63.5, behaviourally identical to >=64. Verbatim.
+//   GOLDEN ODDITY: the switch has no case for QualSite2X2N/_6Site2X3N/
+//   _8Site2X4N/_32Site4X8N and no default -- those modes' pitches leave this
+//   validator entirely unchecked. Verbatim.
+// ---------------------------------------------------------------------------
+bool TfSetup::CHSetError()
+{
+    bool bSelOne=false;
+    int iXpitch, iYpitch;
+    int iRow1, iCol1, iRow2, iCol2;
+
+    for(int i=0; i<MAX_SOCKET_TOTAL; i++)
+    {
+        for(int j=i+1; j<MAX_SOCKET_TOTAL; j++)
+        {
+            iRow1=i/MAX_SOCKET_COL;
+            iCol1=i%MAX_SOCKET_COL;
+            iRow2=j/MAX_SOCKET_COL;
+            iCol2=j%MAX_SOCKET_COL;
+            if(TestSiteCH[iRow1][iCol1]->ItemIndex==-1 &&
+               TestSiteCH[iRow1][iCol1]->Visible)
+            {
+                ShowMyMessage("Test Site Not Select");
+                return true;
+            }
+
+            if(TestSiteCH[iRow1][iCol1]->Visible &&
+               TestSiteCH[iRow2][iCol2]->Visible)
+            {
+                if(TestSiteCH[iRow1][iCol1]->ItemIndex==TestSiteCH[iRow2][iCol2]->ItemIndex &&
+                   TestSiteCH[iRow1][iCol1]->ItemIndex!=0)
+                {
+                    ShowMyMessage("Test Site Set Same CH");
+                    return true;
+                }
+
+                if(TestSiteCH[iRow1][iCol1]->ItemIndex>=1 ||
+                   TestSiteCH[iRow2][iCol2]->ItemIndex>=1)
+                {
+                    bSelOne=true;
+                }
+            }
+        }
+    }
+
+    if(ScrollBar1->Position==SingleSite)
+    {
+        TestSiteCH[0][0]->ItemIndex=1;
+        bSelOne=true;
+    }
+
+    if(bSelOne==false)
+    {
+        ShowMyMessage("Test Site Not Select");
+        return true;
+    }
+
+    iXpitch=atoi(XPitch->Text.c_str());                                         //jou 980725 start : set over limit
+    iYpitch=atoi(YPitch->Text.c_str());
+
+    if(ScrollBar1->Position!=SingleSite &&
+       ScrollBar1->Position!=DualSite2x1)
+    {
+        if(iXpitch<20)
+        {
+            ShowMyMessage("X Pitch can not < 20mm!!");
+            return true;
+        }
+    }
+
+    switch(ScrollBar1->Position)
+    {
+        case SingleSite:
+            break;
+        case DualSite2x1:
+            if(iYpitch>80)
+            {
+                ShowMyMessage("Y Pitch can not over 80mm");
+                return true;
+            }
+
+            if(iYpitch<20)
+            {
+                ShowMyMessage("Y Pitch can not < 20mm");
+                return true;
+            }
+            break;
+        case DualSite:                                                          //1x2
+            if(MachineTypeChoice==Type_HT9046_LS)                               //Steven 20200114 : SCK新的SLK
+            {
+                if(iXpitch<40 || iXpitch>240)
+                {
+                    ShowMyMessage("X Pitch Must Between 40~240mm");
+                    return true;
+                }
+            }
+            else if(USE_IN_OUT_ARM_X_PITCH==iXPitch40mm)                        //Isaac 20171204 (Steven) : Xpitch40->50mm 可選擇X Pitch機構模式
+            {
+                if(iXpitch<40 || iXpitch>120)                                   //Steven 20150505 : 1x2加大支援X-Pitch 120mm
+                {
+                    ShowMyMessage("X Pitch Must Between 40~120mm");
+                    return true;
+                }
+            }
+            else
+            {
+                if(iXpitch<40 || iXpitch>150)
+                {
+                    ShowMyMessage("X Pitch Must Between 40~150mm");
+                    return true;
+                }
+            }
+            break;
+        case QualSite1X4:                                                       //1x4
+        case _8Site1X4:                                                         //ChungHung 20150528 add for 海思 _8Site1x4
+            if(USE_IN_OUT_ARM_X_PITCH==iXPitch40mm)                             //Isaac 20171204 (Steven) : Xpitch40->50mm 可選擇X Pitch機構模式
+            {
+                if(iXpitch>80)                                                  //Steven 20100617 : 60 -> 80
+                {
+                    ShowMyMessage("X Pitch can not over 80mm");
+                    return true;
+                }
+            }
+            else
+            {
+                if(iXpitch>100)
+                {
+                    ShowMyMessage("X Pitch can not over 100mm");
+                    return true;
+                }
+            }
+            break;
+        case QualSite2X2:                                                       //2x2
+            if(iXpitch>200)                                                     //Steven 20150224 : 韓國Danny說要180的Pitch
+            {
+                ShowMyMessage("X Pitch can not over 200mm");
+                return true;
+            }
+
+            if(iYpitch>80)
+            {
+                ShowMyMessage("Y Pitch can not over 80mm");
+                return true;
+            }
+
+            if(iYpitch<20)
+            {
+                ShowMyMessage("Y Pitch can not < 20mm");
+                return true;
+            }
+            break;
+        case _6Site2X3:                                                         //ChungHung 20140115 add for 2x3_6
+            if(USE_IN_OUT_ARM_X_PITCH==iXPitch40mm)                             //Isaac 20171204 (Steven) : Xpitch40->50mm 可選擇X Pitch機構模式
+            {
+                if(iXpitch>120)                                                 //Steven 20200211 : 80 --> 120 for SCK
+                {
+                    ShowMyMessage("X Pitch can not over 120mm");
+                    return true;
+                }
+            }
+            else
+            {
+                if(iXpitch>100)
+                {
+                    ShowMyMessage("X Pitch can not over 100mm");
+                    return true;
+                }
+            }
+
+            if(iYpitch>80)
+            {
+                ShowMyMessage("Y Pitch can not over 80mm");
+                return true;
+            }
+
+            if(iYpitch<20)
+            {
+                ShowMyMessage("Y Pitch can not < 20mm");
+                return true;
+            }
+            break;
+        case _8Site2X4:                                                         //2x4
+        case _16Site4X4:                                                        //Sam 20190226 : 16Site4X4
+            if(USE_IN_OUT_ARM_X_PITCH==iXPitch40mm)                             //Isaac 20171204 (Steven) : Xpitch40->50mm 可選擇X Pitch機構模式
+            {
+                if(iXpitch>80)                                                  //Steven 20100825 : 60 -> 80
+                {
+                    ShowMyMessage("X Pitch can not over 80mm");
+                    return true;
+                }
+            }
+            else
+            {
+                if(iXpitch>100)
+                {
+                    ShowMyMessage("X Pitch can not over 100mm");
+                    return true;
+                }
+            }
+
+            if(iYpitch>80)                                                      //Steven 20100617 : 60 -> 80
+            {
+                ShowMyMessage("Y Pitch can not over 80mm");
+                return true;
+            }
+
+            if(iYpitch<20)
+            {
+                ShowMyMessage("Y Pitch can not < 20mm");
+                return true;
+            }
+            break;
+        case _10Site2X5:                                                        //wei 20190614 10 site
+        case _12Site2X6:
+            if(USE_IN_OUT_ARM_X_PITCH==iXPitch40mm)                             //Isaac 20171204 (Steven) : Xpitch40->50mm 可選擇X Pitch機構模式
+            {
+                if(iXpitch>80)
+                {
+                    ShowMyMessage("X Pitch can not over 80mm");
+                    return true;
+                }
+            }
+            else
+            {
+                if(iXpitch>100)
+                {
+                    ShowMyMessage("X Pitch can not over 100mm");
+                    return true;
+                }
+            }
+
+            if(iYpitch>80)
+            {
+                ShowMyMessage("Y Pitch can not over 80mm");
+                return true;
+            }
+
+            if(iYpitch<30)                                                      //Steven 20170530 (wei) : 35 --> 30
+            {
+                ShowMyMessage("Y Pitch can not < 30mm");
+                return true;
+            }
+            break;
+        case _16Site2X8:                                                        //2x8
+            if(USE_IN_OUT_ARM_X_PITCH==iXPitch50mm)                             //Isaac 20171204 (Steven) : Xpitch40->50mm 可選擇X Pitch機構模式
+            {
+                if(iXpitch>50)
+                {
+                    ShowMyMessage("X Pitch can not over 50mm");
+                    return true;
+                }
+            }
+            else
+            {
+                if(MachineTypeChoice==Type_HT9046_LS ||
+                   SubMachineType==Type_HT9046LA)                               //Steven 20190307 : Add for HT-9046LA
+                {
+                    if(iXpitch>45)                                              //JerryYang 20171101 (wei) 16 site X-pitch最大值40->45
+                    {
+                        ShowMyMessage("X Pitch can not over 45mm");
+                        return true;
+                    }
+                }
+                else if(MachineTypeChoice==Type_HT1032)
+                {
+                    if(iXpitch>40)
+                    {
+                        ShowMyMessage("X Pitch can not over 40mm");
+                        return true;
+                    }
+                }
+                else
+                {
+                    if(iXpitch>30)
+                    {
+                        ShowMyMessage("X Pitch can not over 30mm");
+                        return true;
+                    }
+                }
+            }
+
+            if(iYpitch>63.5)
+            {
+                ShowMyMessage("Y Pitch can not over 63.5mm");
+                return true;
+            }
+
+            if(iYpitch<20)
+            {
+                ShowMyMessage("Y Pitch can not < 20mm");
+                return true;
+            }
+            break;
+        case _32Site4X8M:
+            if(USE_IN_OUT_ARM_X_PITCH==iXPitch40mm ||                           //Isaac 20171204 (Steven) : Xpitch40->50mm 可選擇X Pitch機構模式
+               MachineTypeChoice==Type_HT1032)
+            {
+                if(iXpitch>40)
+                {
+                    ShowMyMessage("X Pitch can not over 40mm");
+                    return true;
+                }
+            }
+            else
+            {
+                if(iXpitch>50)
+                {
+                    ShowMyMessage("X Pitch can not over 50mm");
+                    return true;
+                }
+            }
+
+            if(iYpitch>63.5)
+            {
+                ShowMyMessage("Y Pitch can not over 63.5mm");
+                return true;
+            }
+
+            if(iYpitch<35)
+            {
+                ShowMyMessage("Y Pitch can not < 35mm");
+                return true;
+            }
+            break;
+    }
+    return false;
+}
+
+// ---------------------------------------------------------------------------
+// TfSetup::rgUseSuckModeClick
+//   BCB6 source: cSetUp.cpp:3423-3450 (28 lines)
+//   golden `TObject *Sender` dropped, never read.
+// ---------------------------------------------------------------------------
+void TfSetup::rgUseSuckModeClick()
+{
+    int iPos=ScrollBar1->Position;
+
+    switch(iPos)
+    {
+        case DualSite:
+        case QualSite1X4:
+        case _8Site1X4:                                                         //ChungHung 20150528 add for 海思 _8Site1x4
+            if(rgUseSuckMode->ItemIndex==1)
+            {
+                if(IniConfig.bDisableSelectSearchLast==true)                    //jou 2012-01-10 取消Setup，Search Last Mode功能。
+                {
+                    rgSelectSearchLast->Visible=false;
+                    rgSelectSearchLast->ItemIndex=0;
+                }
+                else
+                {
+                    rgSelectSearchLast->Visible=true;
+                }
+            }
+            else
+            {
+                rgSelectSearchLast->Visible=false;
+            }
+            break;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// TfSetup::CheckShuttlePitch
+//   BCB6 source: cSetUp.cpp:4645-4706 (62 lines)                               //wei 20160914 Auto Shuttle Sensor
+// ---------------------------------------------------------------------------
+bool TfSetup::CheckShuttlePitch()                                               //wei 20160914 Auto Shuttle Sensor
+{
+    bool bShuttleSensorCanMove=false;
+    double iShuttlePitch=0.0;
+    double iXpitch=atof(XPitch->Text.c_str());
+
+    if(AUTO_SENSOR_INSTALL)
+    {
+        if(ScrollBar1->Position==DualSite     ||                                //1x2 //sensor 2 4
+           ScrollBar1->Position==QualSite2X2  ||
+           ScrollBar1->Position==QualSite2X2N)                                  //2x2
+        {
+            iShuttlePitch=iXpitch*100;
+            if(iShuttlePitch*3>=12000 && iShuttlePitch*3<=24000)
+            {
+                bShuttleSensorCanMove=true;
+            }
+            else if(iShuttlePitch>=9000 && iShuttlePitch<=18000)
+            {
+                bShuttleSensorCanMove=true;
+            }
+        }
+        else if(ScrollBar1->Position==TriSite1X3 ||                             //1x3  //Frank 20160329 add for 1x3_4    //sensor 1 3 5
+                ScrollBar1->Position==_6Site2X3  ||                             //ChungHung 20140115 add for 2x3_6
+                ScrollBar1->Position==_6Site2X3N )                              //Steven 20220425 : 2x3 NN mode
+        {
+            iShuttlePitch=iXpitch*2*100;
+            if(iShuttlePitch*3>=12000 && iShuttlePitch*3<=24000)
+            {
+                bShuttleSensorCanMove=true;
+            }
+            else if(iShuttlePitch>=8759 && iShuttlePitch<=24000)                //20170213
+            {
+                bShuttleSensorCanMove=true;
+            }
+        }
+        else if(ScrollBar1->Position==QualSite1X4 ||                            //1x4                       //sensor 1 2 4 5
+                ScrollBar1->Position==_8Site1X4   ||                            //ChungHung 20150528 add for 海思 _8Site1x4
+                ScrollBar1->Position==_8Site2X4   ||
+                ScrollBar1->Position==_16Site4X4  ||                            //Sam 20190226 : 16Site4X4 //2x4
+                ScrollBar1->Position==_8Site2X4N  )                             //Wei 20231211 : 2X4NN Mode
+        {
+            iShuttlePitch=iXpitch*3*100;
+            if(iShuttlePitch>=12000 && iShuttlePitch<=24000)
+            {
+                bShuttleSensorCanMove=true;
+            }
+        }
+
+        if(bShuttleSensorCanMove==false)
+        {
+            ShowMyMessage("Auto Shuttle Sensor 不支援此Pitch!!");
+            return false;
+        }
+    }
+    else
+    {
+        return true;
+    }
+
+    return bShuttleSensorCanMove;
+}
+
+// ---------------------------------------------------------------------------
+// TfSetup::CoSocketComboChange
+//   BCB6 source: cSetUp.cpp:4752-4770 (19 lines)
+//   golden `TObject *Sender` dropped -- GOLDEN ODDITY: golden itself ignores
+//   Sender and reads CoSocketCombo directly (see this file's Wave D banner).
+// ---------------------------------------------------------------------------
+void TfSetup::CoSocketComboChange()
+{
+    for(int i=0; i<iSnSocketCnt; i++)                                           //Steven 20200420 : Socket Sensor功能可以選
+    {
+        if(i<atoi(CoSocketCombo->Text.c_str()))
+        {
+            MyTempRGBox[i]->Visible=true;
+            if(TestIF_File.bSocketSensorCheckFloating)
+                MyTempRGBox[i]->ItemIndex=2;
+            else
+                MyTempRGBox[i]->ItemIndex=1;
+        }
+        else
+        {
+            MyTempRGBox[i]->Visible=false;
+            MyTempRGBox[i]->ItemIndex=0;
         }
     }
 }

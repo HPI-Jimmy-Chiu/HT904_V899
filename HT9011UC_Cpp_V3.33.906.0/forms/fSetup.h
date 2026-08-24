@@ -205,6 +205,73 @@
 //  documents fixing once (the AGV_predicates incident). Flagged for the main
 //  loop; not this wave's boundary to fix (would require editing CMakeLists.txt).
 // =============================================================================
+// =============================================================================
+//  AI(W906-FW-SETUP-D) 20260824: cSetUp Wave D -- the ctor-array / TScrollBar
+//  unlock wave. Golden ref: HT9011UC_Code_V3.33.906.0_20260618/cSetUp.cpp
+//  (4,858 lines, cp950, decoded `open(p,'rb').read().decode('cp950')`, 0
+//  U+FFFD, 20260824) + cSetUp.h (295 lines). Wave A/B banners above left
+//  VERBATIM (append-only).
+//
+//  WHAT THIS WAVE ADDS (bodies all in root cSetUp.cpp, ht9045_sm -- same
+//  link-layer split Wave B's banner documents; forms/fSetup.cpp untouched):
+//    Init()                golden ctor :123-216 (94L) -- the dynamic control-
+//        array construction (TestSiteCH[][]/TestLabCol[]/TestLabRow[]/
+//        iTestSiteCh[][]/MyTempRGBox[], all file-scope globals in cSetUp.cpp
+//        :49-57, ZERO users outside cSetUp.cpp in golden -- walked all golden
+//        .cpp/.h 20260824), ScrollBar1->Max selection, tSiteMap seeding,
+//        rgInOutArmYPitch item swap, MyTempRGBox[] build. Placed in an
+//        EXPLICIT Init(), NOT the ctor, per the established fTemp_Set.h:483
+//        "ctor only fields, real logic -> explicit Init()" convention (the
+//        static-initialization-order trap: forms/fSetup.cpp:21 news the
+//        global fSetup at static-init time, and this body reads
+//        MachineTypeChoice/USE_IN_OUT_ARM_Y_PITCH -- other TUs' globals).
+//        NOT CALLED BY ANYTHING YET (same posture as TfTemp_Set::Init before
+//        wb_serve wired it) -- callers of the array-dependent methods below
+//        must run Init() first; golden got this ordering for free from the
+//        VCL ctor.
+//    FormDestroy()         golden :218-230 (13L) -- tSiteMap teardown
+//    CompChange(int)       golden :1195-1262 (68L) -- site-CH combo rebuild
+//    CHSetError()          golden :1284-1605 (322L) -- site-map/pitch validator
+//    rgUseSuckModeClick()  golden :3423-3450 (28L) -- suck-mode widget cascade
+//    CheckShuttlePitch()   golden :4645-4706 (62L) -- auto-shuttle-sensor guard
+//    CoSocketComboChange() golden :4752-4770 (19L) -- MyTempRGBox[] show/hide
+//  Now 25/47 TfSetup:: methods have real bodies (15 Wave A + 3 Wave B + 7
+//  here, counting Init() as golden's ctor). The other 22 stay queued -- see
+//  cSetUp.cpp's file-head GATE REGISTER / QUEUE LEDGER (single copy, per the
+//  no-second-drifting-copy rule).
+//
+//  NEW FACADE SURFACE THIS WAVE (all verified against golden cSetUp.h line
+//  numbers cited inline below): ScrollBar1 (vclcompat::TScrollBar -- NEW
+//  vclcompat/ScrollBar.h, headless field bag per user ruling 20260824; NOT
+//  global-using'd, handlerlog.h:122 owns global ::TScrollBar and
+//  handlerlog.cpp includes this header), the 32 site-CH combos cbAa..cbDh,
+//  the 12 site labels labColA-H/labRowA-D, rgInOutArmYPitch,
+//  rgSelectSearchLast, cbOctal12Site, XPitch/YPitch, CoSocketCombo,
+//  scrlbxSocketSensor, and data members bSiteMapHasChange/iTestMode/
+//  iTestModeOcr/tSiteMap.
+//
+//  DEVIATIONS (each also marked inline at its site):
+//    (D-1) vclcompat::TRadioGroup::Items defaults NULL (Controls.h's own
+//          documented verbatim-kept default); real VCL allocates Items in
+//          the TRadioGroup ctor. Init() therefore allocates
+//          rgInOutArmYPitch->Items, and TfSetupSensorRadioGroup's ctor
+//          allocates its own Items, before golden's Clear()/Add() lines run
+//          -- the rgCustomerList "facade has no dfm/VCL resource stream ->
+//          hand-seed, record DEVIATION" precedent.
+//    (D-2) golden `new TRadioGroup(this)` -> `new TfSetupSensorRadioGroup()`:
+//          Owner arg dropped (VCL glue, established convention), type
+//          substituted (S18 "keep the golden expression, substitute the
+//          type" idiom, forms/fBinSel.h) so ->Name/->Caption/->Height/
+//          ->Columns/->Parent stay spellable.
+//    (D-3) golden ctor param `TComponent* Owner` and the `: TForm(Owner)`
+//          base call dropped (VCL glue; Init() is not a ctor).
+//  GATES inside Init() (cited to forms/fTemp_Set.h's established register):
+//    GATE(G-Align)    MyTempRGBox[i]->Align=alTop (no Align port, by design)
+//    GATE(G-Delegate) MyTempRGBox[i]->OnClick=rgSensor1Click (stock widgets
+//                     carry no OnClick delegate slot; the TScrollBar
+//                     OnChange/OnScroll slots are the user-ruled exception
+//                     and live on vclcompat::TScrollBar only)
+// =============================================================================
 #ifndef FORMS_FSETUP_H
 #define FORMS_FSETUP_H
 
@@ -217,6 +284,7 @@
 #include "common.h"              // OnlyNumberAndDotInPut (XPitchKeyPress)
 #include "vclcompat/Controls.h"  // TEdit/TCheckBox/TRadioGroup/TRadioButton/TGroupBox/TLabel
 #include "vclcompat/SysUtils.h"  // FormatFloat (rgYPitchOffsetModeClick)
+#include "vclcompat/ScrollBar.h" // AI(W906-FW-SETUP-D) 20260824: vclcompat::TScrollBar (ScrollBar1) -- NOT global-using'd, see that header's NAME COLLISION note (handlerlog.h:122)
 
 using vclcompat::TEdit;
 using vclcompat::TCheckBox;
@@ -244,6 +312,48 @@ class TfSetupLabel : public vclcompat::TLabel
 {
 public:
     int Width = 0;   // golden TLabel->Width -- vclcompat::TLabel carries no Width
+};
+
+// ===========================================================================
+//  AI(W906-FW-SETUP-D) 20260824: two facade-local helper types for Init()'s
+//  MyTempRGBox[] build (golden cSetUp.cpp:201-215). Same "compose, don't
+//  fork the shared vclcompat type" idiom as TfSetupLabel above /
+//  forms/fTemp_Set.h's TfTemp_SetTagEdit.
+// ===========================================================================
+
+// golden cSetUp.h:84 `TScrollBox *scrlbxSocketSensor;` -- `class TScrollBox`
+// has ZERO port anywhere in this tree (grep "class TScrollBox" *.h/*.cpp
+// tree-wide, 20260824: only comment/gated hits -- forms/fBinSel.h's is inside
+// its gated widget half). Its ONLY ported use is as the MyTempRGBox[i]->Parent
+// target (a write; nothing reads it back), so a minimal TControl-derived
+// stand-in carries the golden member without inventing scroll surface.
+class TfSetupScrollBox : public vclcompat::TControl
+{
+};
+
+// golden's ctor-built sensor radio groups (`new TRadioGroup(this)`, golden
+// cSetUp.cpp:203). vclcompat::TRadioGroup carries only ItemIndex/Items
+// (+TControl's Visible/Enabled); golden's build loop also writes Parent/Name/
+// Height/Caption/Columns -- plain data here so those lines port verbatim.
+// Align=alTop / OnClick=rgSensor1Click are GATED at the call site instead
+// (G-Align / G-Delegate, forms/fTemp_Set.h's established register) -- neither
+// property belongs on a facade data bag.
+class TfSetupSensorRadioGroup : public vclcompat::TRadioGroup
+{
+public:
+    vclcompat::TControl *Parent = nullptr;  // golden TWinControl::Parent -- write-only in golden cSetUp.cpp (only :204 assigns; nothing reads it back)
+    AnsiString Name;                        // golden TComponent::Name ("rgSensor<i+1>")
+    AnsiString Caption;                     // golden TRadioGroup Caption ("Sensor %d usage")
+    int Height = 0;                         // golden ->Height (36 at build time)
+    int Columns = 0;                        // golden TRadioGroup->Columns (3 at build time)
+
+    // DEVIATION (D-1, see file-head banner): real VCL TRadioGroup allocates
+    // Items in its ctor; the shared vclcompat base deliberately leaves it
+    // NULL (Controls.h's own verbatim-kept default). Golden's build loop
+    // calls Items->Add() unconditionally, so this facade type must own a
+    // real Items.
+    TfSetupSensorRadioGroup() { Items = new vclcompat::TStringList(); }
+    virtual ~TfSetupSensorRadioGroup() { delete Items; Items = nullptr; }
 };
 
 class TfSetup
@@ -370,6 +480,70 @@ public:
     void ReadUseSuckModeFile();   // golden cSetUp.cpp:2133-2146 (14L)
     void CheckSTMMode();          // golden cSetUp.cpp:2148-2177 (30L)
     void cbI21Click();            // golden cSetUp.cpp:4804-4828 (25L)
+
+    // =========================================================================
+    //  AI(W906-FW-SETUP-D) 20260824: Wave D additions -- see this file's
+    //  Wave D banner for scope/DEVIATIONS/GATES. Bodies in root cSetUp.cpp
+    //  (ht9045_sm), same split as Wave B's 3 methods above.
+    // =========================================================================
+
+    // -- data members (golden cSetUp.h line cited each; NSDMI value = golden
+    //    ctor value, since forms/fSetup.cpp's ctor is out of this wave's edit
+    //    boundary and Init() re-asserts each verbatim anyway) ----------------
+    bool bSiteMapHasChange = true;          // golden cSetUp.h:289, ctor :126 sets true
+    int  iTestMode = TotalTestMode;         // golden cSetUp.h:290, ctor :127 sets TotalTestMode
+    int  iTestModeOcr = -1;                 // golden cSetUp.h:252 (private there; facade is flat, same as SitCH above), ctor :183 sets -1
+    TStringList *tSiteMap = nullptr;        // golden cSetUp.h:266 -- new'd + "0"-seeded by Init() (golden ctor :185-192); nullptr until Init() runs (golden could not be observed pre-ctor)
+
+    // -- widget fields (dfm leaf names; golden cSetUp.h line cited each) -----
+    vclcompat::TScrollBar *ScrollBar1 = new vclcompat::TScrollBar();  // golden cSetUp.h:44 -- fully qualified on purpose (no global using; handlerlog.h:122)
+    TRadioGroup *rgInOutArmYPitch = new TRadioGroup();   // golden cSetUp.h:48 -- Items allocated by Init() (DEVIATION D-1)
+    TRadioGroup *rgSelectSearchLast = new TRadioGroup(); // golden cSetUp.h:37
+    TCheckBox   *cbOctal12Site = new TCheckBox();        // golden cSetUp.h:33
+    TEdit       *XPitch = new TEdit();                   // golden cSetUp.h:46
+    TEdit       *YPitch = new TEdit();                   // golden cSetUp.h:47
+    TComboBox   *CoSocketCombo = new TComboBox();        // golden cSetUp.h:88
+    TfSetupScrollBox *scrlbxSocketSensor = new TfSetupScrollBox();  // golden cSetUp.h:84 (TScrollBox -- see helper-class note)
+
+    // the 4x8 site-CH combo grid (golden cSetUp.h:114-145) + its labels
+    // (:96-113) -- Init() wires these into the file-scope TestSiteCH[][] /
+    // TestLabCol[] / TestLabRow[] arrays in cSetUp.cpp, exactly as golden's
+    // ctor does.
+    TComboBox *cbAa = new TComboBox(); TComboBox *cbAb = new TComboBox();
+    TComboBox *cbAc = new TComboBox(); TComboBox *cbAd = new TComboBox();
+    TComboBox *cbAe = new TComboBox(); TComboBox *cbAf = new TComboBox();
+    TComboBox *cbAg = new TComboBox(); TComboBox *cbAh = new TComboBox();
+    TComboBox *cbBa = new TComboBox(); TComboBox *cbBb = new TComboBox();
+    TComboBox *cbBc = new TComboBox(); TComboBox *cbBd = new TComboBox();
+    TComboBox *cbBe = new TComboBox(); TComboBox *cbBf = new TComboBox();
+    TComboBox *cbBg = new TComboBox(); TComboBox *cbBh = new TComboBox();
+    TComboBox *cbCa = new TComboBox(); TComboBox *cbCb = new TComboBox();
+    TComboBox *cbCc = new TComboBox(); TComboBox *cbCd = new TComboBox();
+    TComboBox *cbCe = new TComboBox(); TComboBox *cbCf = new TComboBox();
+    TComboBox *cbCg = new TComboBox(); TComboBox *cbCh = new TComboBox();
+    TComboBox *cbDa = new TComboBox(); TComboBox *cbDb = new TComboBox();
+    TComboBox *cbDc = new TComboBox(); TComboBox *cbDd = new TComboBox();
+    TComboBox *cbDe = new TComboBox(); TComboBox *cbDf = new TComboBox();
+    TComboBox *cbDg = new TComboBox(); TComboBox *cbDh = new TComboBox();
+    TLabel *labColA = new TLabel(); TLabel *labColB = new TLabel();
+    TLabel *labColC = new TLabel(); TLabel *labColD = new TLabel();
+    TLabel *labColE = new TLabel(); TLabel *labColF = new TLabel();
+    TLabel *labColG = new TLabel(); TLabel *labColH = new TLabel();
+    TLabel *labRowA = new TLabel(); TLabel *labRowB = new TLabel();
+    TLabel *labRowC = new TLabel(); TLabel *labRowD = new TLabel();
+
+    // -- Wave D methods (golden spans; classification in cSetUp.cpp's ledger).
+    //    Init() carries golden's ctor body :123-216 (DEVIATION D-3: not a
+    //    ctor here -- fTemp_Set.h:483 convention; MUST run before any of
+    //    FormDestroy/CompChange/CHSetError/CoSocketComboChange below touch
+    //    the arrays/tSiteMap it builds).
+    void Init();                  // golden cSetUp.cpp:123-216 (94L, the ctor)
+    void FormDestroy();           // golden cSetUp.cpp:218-230 (13L)
+    void CompChange(int iMode);   // golden cSetUp.cpp:1195-1262 (68L)
+    bool CHSetError();            // golden cSetUp.cpp:1284-1605 (322L)
+    void rgUseSuckModeClick();    // golden cSetUp.cpp:3423-3450 (28L)
+    bool CheckShuttlePitch();     // golden cSetUp.cpp:4645-4706 (62L)
+    void CoSocketComboChange();   // golden cSetUp.cpp:4752-4770 (19L)
 
     TfSetup();
     virtual ~TfSetup() {}
