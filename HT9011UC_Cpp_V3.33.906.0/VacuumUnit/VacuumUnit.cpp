@@ -99,10 +99,10 @@
 //   definition is not needed by this TU (every TMySucker-touching body is
 //   GATE (1), whose `#if 0` spans need no live definition; the header-level
 //   `class TMySucker &` parameters resolve via VacuumUnit.h's own forward
-//   declaration); "myQwertyKeyBoard.h"/"mymessbox.h" -- fQwertyKey has no
-//   port (edSetInArmClick's GATE 3, matching MyVacuumPanel.cpp's own
-//   precedent) and ShowMyMessage's real declaration lives in
-//   canary_support.h, already pulled in below.
+//   declaration); "myQwertyKeyBoard.h"/"mymessbox.h" -- fQwertyKey is real
+//   since FW-QWKEY1 (fc08e09) via forms/fQwertyKey.h, included 20260824
+//   (edSetInArmClick's GATE 3 OPENED, FW-QWKEY2), and ShowMyMessage's real
+//   declaration lives in canary_support.h, already pulled in below.
 // =============================================================================
 #include "MachineDefine.h"          // de-VCL'd include hub (vclcompat umbrella)
 #include "VacuumUnit/VacuumUnit.h"        // this unit's own contract (also pulls MyVacuumPanel.h + Public/HTEditList.h)
@@ -115,6 +115,7 @@
 #include "forms/fMain.h"            // fMain->BackupSetupFile()
 #include "SECSGEM/SecsEventType.h"  // SECS_EVENT.SaveRecipe
 #include "SECSGEM/SecsEventReport.h"// EventReport(unsigned)
+#include "forms/fQwertyKey.h"  // AI(W906-FW-QWKEY2) 20260824: fQwertyKey extern for un-gated ShowQwertyKey site (real since FW-QWKEY1 fc08e09; latent until HTEdit GATE (6) wiring)
 
 //AI(W906-PT-W3) 20260807: `aHotPlateSubstrate.h` is deliberately NOT #include-d
 //  whole here (unlike MyVacuumPanel.cpp's sibling functions, which never
@@ -893,12 +894,10 @@ void TfVacuumUnit::edSetInArmClick(TObject *Sender)
 {
     //AI(W906-PT-W3) 20260807: GATE (3) -- golden `fQwertyKey->ShowQwertyKey(
     //  (TEdit*)Sender, N_DOUBLE, 0, true, -116.0, 148.0);` (golden :599).
-    //  fQwertyKey has no port anywhere in this tree (already-established
-    //  deferred surface -- see MyVacuumPanel.h/.cpp GATE (3) for the same
-    //  idiom on the same tree-wide gap). ACTIVE arm: no-op.
-#if 0
+    //  fQwertyKey real since FW-QWKEY1 (fc08e09) -- GATE (3) OPENED 20260824
+    //  (FW-QWKEY2); call live below, headless no-op until HTEdit GATE (6)
+    //  wires the runtime keyboard instance (see MyVacuumPanel.h GATE (3)).
     fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_DOUBLE, 0, true, -116.0, 148.0); //小鍵盤
-#endif
     (void)Sender;
 }
 //---------------------------------------------------------------------------
