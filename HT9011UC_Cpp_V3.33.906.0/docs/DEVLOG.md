@@ -9584,6 +9584,28 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - HTEdit 殘餘 gate：(1)(2)(3)(5)(7)(8) 全數維持（OnClick/OnKeyPress/
   OnChange/PopupMenu/Parent/Top/Left 等 vclcompat 無此表面）＋(6-B)。
 
+## 20260824 XIII — FW-QWKEY4 收案：SECSGEM G23 解鎖＋fPassword.Visible（主迴圈自做）
+
+- **facade 量測性生長的教科書案例**：fPassword.h 翻譯時就寫明「Visible
+  刻意不加，等 uHGemHT9045.cpp:6419 那一站自己的波」——本波即該波。
+  `bool Visible=false` 落地（Close() 歸 false；ShowModal 維持 instant-
+  submit no-op 永不升起），G23 的
+  `if(fPassword->Visible==true) fPassword->Close();` 活化且 headless
+  忠實不可達（commit b064bce）。
+- uHGemHT9045.cpp 帳面同步：fPassword 移出「無 port 表單」清單、G23
+  台帳列改 OPENED；include 插在**第三個** FormsFacade.h 後（此檔是波次
+  append 結構，有三個 include 區——斷言 len==1 會炸，len==3 才對）。
+- 鄰居維持 gated：G22（FormBarcodeReader 無 port）、G24（MyMessageBox
+  include 衝突——全檔最便宜的下一個解鎖：修 acatchtray_shims.h 重複
+  可一次開 G24/G26/G45）。
+- **自述缺陷（qw5 鏈 cd bug）**：nohup 兩段式腳本第二段少了絕對路徑
+  `cd`，Release 段在 build_qw5g 內建 nested dir 且 cfg 必敗（R_EXIT=1）。
+  處置：Debug 結果保留、殘渣 rm（先驗無 LastTest.log.tmp）、Release 以
+  build_qw5r2 重發。**教訓：多段 nohup 鏈每段開頭都要絕對路徑 cd**——
+  qw2/qw3/qw4 三輪僥倖是因為第二段恰好接在第一段的 cd 之後寫了絕對路徑。
+- gate：Debug build_qw5g＋Release build_qw5r2 **137/142×2** 常駐五項
+  逐項同；guard 代理 0 檔。
+
 ### 🔖 RESUME（20260824 日終）
 
 - **今日全收（27 顆 commit）**：FW-TEMP3／GATE7-V＋裁決落地＋計數更正／
@@ -9596,11 +9618,12 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - **等使用者（三項）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
   HAL-MOT1 十問（Q1/Q9/Q4 擋新表起草，其餘有預設）；TImage headless
   准駁（解 fSetup 2 方法）。
-- **下一波**：FW-QWKEY2（84 塊，XI）＋FW-QWKEY3（GATE (6)，XII）已收。
-  候選序：(1) SECSGEM G23——先給 fPassword facade 加 Visible 欄。
-  (2) 過期 no-port 論證回頭更新：ATCInterface.h/.cpp、AGV_PortScan.h、
-  automation.h、SCK_ART_Remainder.h、OmronLaser/LaserSensor.h（其 gate
-  仍鎖但引文已過期，純註解波）。
+- **下一波**：QWKEY 家族全收（XI 84 塊／XII GATE (6)／XIII G23）。候選序：
+  (1) 過期 no-port 論證回頭更新：ATCInterface.h/.cpp、AGV_PortScan.h、
+  automation.h、SCK_ART_Remainder.h、OmronLaser/LaserSensor.h（gate 仍鎖
+  但「fQwertyKey 無 port」引文已過期，純註解波，g++ -E 比對即可）。
+  (2) SECSGEM G24/G26/G45 三連開——修 acatchtray_shims.h 的 clYellow/
+  NewRecordProcess 重複（uHGemHT9045.cpp G24 註解自述это最便宜解鎖）。
   (3) TImage 若獲准：chkOffCenterkitClick/cbQualSite2X2ShiftClick。
   註：MyTempPanel 三個分支樹塊的 W8-3（fTemp_Set setters）已死
   （MaxTempSetting/MinTempSetting 20260824 起在 uTemp_Set 為真身），
