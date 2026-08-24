@@ -9560,6 +9560,30 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - 教訓：檔案級站點清冊要用**樹掃**收尾（grep -rln + #if 0 深度計數），
   不能只信 RESUME/計畫書點名——VacuumUnit.cpp 就是點名清單外撿回來的。
 
+## 20260824 XII — FW-QWKEY3 收案：HTEdit GATE (6) 鍵盤建構核心解鎖（主迴圈自做）
+
+- **THTEdit::EditClick（golden :193-242）活化**（commit 5a42f3e）——所有
+  latent ShowQwertyKey 站點等的那一塊。三個 adaptation 全部行內記錄：
+  (1) DEVIATION：`Application->CreateForm(__classid(TfQwertyKey), &x)` 無
+  port（BCB 專屬）→ lazy `new TfQwertyKey()`＋顯式 `Init()`（D-2 慣例；
+  接線前已驗 Init() 為 public 且自足、不碰 §8 NULL 全域）；建構時機與
+  golden 同為首次點擊，靜態初始化態勢（fQwertyKey.h:54）不變。
+  (2) GATE (6-B) 縮窄：只剩 `Barcode_Reader(iBarcodeReadType)` 前置檢查
+  仍 gated（Barcode_Reader 全樹仍無 port）。(3) golden 私有 backing-field
+  名（HTContentType/HTCustomMax/HTCustomMin）適配 port 公開欄位
+  （Content/CustomMaxValue/CustomMinValue）——檔頭已記錄的 property 收攏。
+- **自抓錯誤**：檔案級名稱取代同時改到 GATE (5) golden-VERBATIM #if 0 塊
+  內的兩行 switch(HTContentType)——已還原並加斷言（兩處都在 #if 0 內）。
+  教訓：**verbatim gated 文本不做現代化**；名稱適配只准動活碼。
+- **可達性不變**：OnClick 從未接線（GATE 5），headless 下 EditClick 零
+  呼叫者——「能建構」≠「已建構」，fQwertyKey/fQwertyKey2 執行期仍 NULL
+  直到真的有事件流。
+- fConfiguration.h 對 HTEdit:302 的「在 #if 0 內」陳述已標 Superseded。
+- gate：全新雙 dir build_qw4g/qw4r **137/142×2** 常駐五項逐項同；
+  guard 代理 0 檔。
+- HTEdit 殘餘 gate：(1)(2)(3)(5)(7)(8) 全數維持（OnClick/OnKeyPress/
+  OnChange/PopupMenu/Parent/Top/Left 等 vclcompat 無此表面）＋(6-B)。
+
 ### 🔖 RESUME（20260824 日終）
 
 - **今日全收（27 顆 commit）**：FW-TEMP3／GATE7-V＋裁決落地＋計數更正／
@@ -9572,12 +9596,11 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - **等使用者（三項）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
   HAL-MOT1 十問（Q1/Q9/Q4 擋新表起草，其餘有預設）；TImage headless
   准駁（解 fSetup 2 方法）。
-- **下一波**：FW-QWKEY2 已收（84 塊解鎖，見 XI）。候選序：
-  (1) HTEdit GATE (6) 接線波——鍵盤建構核心 Public/HTEdit.cpp:298-353，
-  10 個 gated fQwertyKey 呼叫，開波前先查 Barcode_Reader 共阻塞邊界；
-  這波同時要回頭更新 ATCInterface/AGV_PortScan/automation.h/
-  SCK_ART_Remainder/LaserSensor/HTEdit 自己的過期 no-port 論證。
-  (2) SECSGEM G23——先給 fPassword facade 加 Visible 欄。
+- **下一波**：FW-QWKEY2（84 塊，XI）＋FW-QWKEY3（GATE (6)，XII）已收。
+  候選序：(1) SECSGEM G23——先給 fPassword facade 加 Visible 欄。
+  (2) 過期 no-port 論證回頭更新：ATCInterface.h/.cpp、AGV_PortScan.h、
+  automation.h、SCK_ART_Remainder.h、OmronLaser/LaserSensor.h（其 gate
+  仍鎖但引文已過期，純註解波）。
   (3) TImage 若獲准：chkOffCenterkitClick/cbQualSite2X2ShiftClick。
   註：MyTempPanel 三個分支樹塊的 W8-3（fTemp_Set setters）已死
   （MaxTempSetting/MinTempSetting 20260824 起在 uTemp_Set 為真身），
