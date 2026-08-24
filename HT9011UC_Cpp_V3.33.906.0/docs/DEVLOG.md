@@ -9625,6 +9625,24 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   Barcode 仍鎖）、HTEdit GATE (6-B) 1 行（Barcode_Reader）——全部同一
   個真阻塞者：**Barcode_Reader 無 port**。
 
+## 20260824 XV — FW-G24 收案：mymessbox_shim.h 窄縫＋SECSGEM G24/G26/G45 三連開（主迴圈自做）
+
+- **比「最便宜」更便宜**：banner 標價是「修 acatchtray_shims.h 的
+  clYellow／NewRecordProcess 重複」；探針 TU（equip＋cMyDB＋shims 同
+  включ）實證兩衝突都仍真（clYellow 重定義；default-arg 重述——且 shim
+  的 S2=""/S3="" 預設對 golden 不忠實，cMyDB.h 的 Debug=" " 才是 golden
+  形）。但 TMyMessageBoxShim 零依賴 → 逐字抽到 mymessbox_shim.h、shims
+  include 回去（單一定義、消費者零變動）、uHGemHT9045.cpp 只包窄標頭。
+  **兩個衝突一個都沒修——只是不再在路徑上**（commit 3e5d029）。
+- 開了三站：G24（Employee-ID 檢查前關 message box）、G26（AUTHORITY
+  測試找回 MyMessageBox->fShow OR 項）、G45（TERMINAL_DISPLAY 關盒——
+  Analog/泰國客戶要這指令的全部意義）。headless fShow/Visible 恆 false
+  → 分支忠實不可達。
+- **留下且記帳**：shims 的 clYellow ／不忠實 NewRecordProcess 預設值＋
+  automation.cpp:62 第三處自帶預設值的 extern——若要收斂是獨立一波。
+- gate：全新雙 dir build_qw7g/qw7r **137/142×2** 常駐五項逐項同；
+  guard 代理 0 檔。
+
 ### 🔖 RESUME（20260824 日終）
 
 - **今日全收（27 顆 commit）**：FW-TEMP3／GATE7-V＋裁決落地＋計數更正／
@@ -9637,12 +9655,12 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - **等使用者（三項）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
   HAL-MOT1 十問（Q1/Q9/Q4 擋新表起草，其餘有預設）；TImage headless
   准駁（解 fSetup 2 方法）。
-- **下一波**：QWKEY 家族五波全收（XI-XIV）。候選序：
-  (1) SECSGEM G24/G26/G45 三連開——修 acatchtray_shims.h 的 clYellow/
-  NewRecordProcess 重複（uHGemHT9045.cpp G24 註解自述為最便宜解鎖）。
-  (2) 翻譯債小波：LaserSensor 6 個 MouseDown＋AGV_PortScan 3 個
+- **下一波**：QWKEY 五波＋G24 三連開全收（XI-XV）。候選序：
+  (1) 翻譯債小波：LaserSensor 6 個 MouseDown＋AGV_PortScan 3 個
   MouseDown（純 ShowQwertyKey 體，前提已活）。
-  (3) TImage 若獲准：chkOffCenterkitClick/cbQualSite2X2ShiftClick。
+  (2) TImage 若獲准：chkOffCenterkitClick/cbQualSite2X2ShiftClick。
+  (3) shims 收斂波（選配）：clYellow/NewRecordProcess 預設值三處
+  （acatchtray_shims.h／automation.cpp:62）向 golden 形靠攏。
   註：MyTempPanel 三個分支樹塊的 W8-3（fTemp_Set setters）已死
   （MaxTempSetting/MinTempSetting 20260824 起在 uTemp_Set 為真身），
   但 W8-2（TEdit 無 Tag）＋W8-5（Barcode_Reader 無 port）仍鎖，維持 gated。
