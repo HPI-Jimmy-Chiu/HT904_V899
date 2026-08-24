@@ -9528,3 +9528,28 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - bring-up 差距清單（子 agent 交接）：實例化切換、Timer1Timer＋tick 源、
   CommBin 生命週期、DEFECT (i) 裁決、TDataModule3 去留、真 RS-232 對板。
 - 今日累計 **24 顆 commit**。
+
+### 🔖 RESUME（20260824 日終）
+
+- **今日全收（27 顆 commit）**：FW-TEMP3／GATE7-V＋裁決落地＋計數更正／
+  FW-BINDISP1（Offline DEVIATION）／HAL-MOT1（紙上分類＋10 問）／
+  FW-SETUP-D（TScrollBar headless＋ctor 陣列＋7 方法）／FW-BINDISP2
+  （解鎖波，BinDisplay 鏈活）／FW-QWKEY1（fQwertyKey 20/20＋fPassword
+  24/24＋CMake 接線）／FW-SETUP-E（解鎖批 3 方法，TfSetup **28/47**）／
+  FW-BINDISP3（TMyBinDispHT9046 全翻 +2,740 行）／台帳 R5+R6+R7
+  （**677 筆**）。八輪雙 gate 全部 137/142×2 常駐五項；guard 全程 0 檔。
+- **等使用者（三項）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
+  HAL-MOT1 十問（Q1/Q9/Q4 擋新表起草，其餘有預設）；TImage headless
+  准駁（解 fSetup 2 方法）。
+- **下一波（刻意批次）**：WA-1 家族解鎖波——fDynamicTemp GATE(Q1)×4、
+  fConfiguration WA-1×13、fLotInfo/fSpeed/MyTempPanel/MyVacuumPanel/
+  ATCInterface/MyOmronPanel 的 fQwertyKey 站點逐點解鎖＋過期論證文字
+  同波更新（QWKEY1 波建議「接線時逐檔更新」，避免同批檔案被動兩次）；
+  **若 TImage 獲准，chkOffCenterkitClick/cbQualSite2X2ShiftClick 併入
+  同波**，一次 gate。SECSGEM G23 需先給 fPassword facade 加 Visible 欄。
+- **安全佇列（不做不問）**：GATE 7 家族（20260824 裁決維持）；AuthPath
+  2 站點；P-R1/P-S1 密碼檔（接 login 前必解 P-R1，SECURITY DELTA）；
+  GOLDEN DEFECT (i) 21-into-20 overflow（上真硬體前裁決）；
+  SaveSetupFile 130 寫入（write-path 波等使用者）。
+- **bring-up 佇列（等機邊）**：BinDisplay 實例化切換＋Timer1Timer＋
+  CommBin 生命週期；mot_table 新表（等 Q1/Q9/Q4）；1203 ENI 檔。
