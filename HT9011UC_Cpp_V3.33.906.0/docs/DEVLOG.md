@@ -9629,7 +9629,7 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 
 - **比「最便宜」更便宜**：banner 標價是「修 acatchtray_shims.h 的
   clYellow／NewRecordProcess 重複」；探針 TU（equip＋cMyDB＋shims 同
-  включ）實證兩衝突都仍真（clYellow 重定義；default-arg 重述——且 shim
+  TU 共含）實證兩衝突都仍真（clYellow 重定義；default-arg 重述——且 shim
   的 S2=""/S3="" 預設對 golden 不忠實，cMyDB.h 的 Debug=" " 才是 golden
   形）。但 TMyMessageBoxShim 零依賴 → 逐字抽到 mymessbox_shim.h、shims
   include 回去（單一定義、消費者零變動）、uHGemHT9045.cpp 只包窄標頭。
