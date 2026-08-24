@@ -4331,7 +4331,7 @@ void HT9045Gem::S125F4_LevelSettingChangeAcknowledge()                          
 //    uHGemHT9045_EC.cpp block.
 //
 //  GATE REGISTER -- 48 gates.  Missing-in-port surfaces, listed once:
-//    forms with NO port object at all : fShowBinSelect, fContactCT, fPassword,
+//    forms with NO port object at all : fShowBinSelect, fContactCT,
 //        fFTPClient, fTemp_Set, FormBarcodeReader
 //    port object exists, member does NOT:
 //        fLotInfo : sbSECSLotStartClick, ClearAllSetupFile, edCustomerDevice,
@@ -4385,7 +4385,7 @@ void HT9045Gem::S125F4_LevelSettingChangeAcknowledge()                          
 //    G20  2831           PP_SELECT   fConfiguration checkbox       ini written, UI box not ticked
 //    G21  2845-2850      WHOLE ARM  LOTSTART                      falls to final else -> HCACK=1
 //    G22  2856-2859      AUTHORITY_CHECK FormBarcodeReader close   barcode form left open
-//    G23  2861-2864      AUTHORITY_CHECK fPassword close           password form left open
+//    G23  2861-2864      AUTHORITY_CHECK fPassword close           OPENED 20260824 (FW-QWKEY4)
 //    G24  2866-2869      AUTHORITY_CHECK MyMessageBox close        message box left open
 //    G25  2875           AUTHORITY_CHECK PPSIGNALTOWER flag clear  flag not cleared (undefined sym)
 //    G26  2921           AUTHORITY_CHECK MyMessageBox->fShow test  test degraded to fNote->fShow only
@@ -4453,6 +4453,7 @@ void HT9045Gem::S125F4_LevelSettingChangeAcknowledge()                          
                                             //       TRAP above) + SetRunStartMode
 #include "AutoRetest.h"                     // PORT: DoAutoRetest (golden reaches it via csystem.h/main.h)
 #include "FormsFacade.h"                    // PORT equivalent of golden :8 "main.h" (fMain), :17 "uLotInfo.h"
+#include "forms/fPassword.h"            // AI(W906-FW-QWKEY4) 20260824: fPassword extern (real since FW-QWKEY1 fc08e09) -- GATE G23 opened, Visible/Close() on the facade
                                             //       (fLotInfo), :45 "SCK_ART.h" (fSCKART), cSortCT.h (fSortCT)
 #include "SECSGEM/SecsEventType.h"          // PORT: SECS_EVENT (golden declares it in uHGemHT9045.h itself)
 #include "SECSGEM/uHGemEquipment.h"         // THGem complete type (HGemPtr->StringOut, ->WireCodec via ActiveWire)
@@ -6412,17 +6413,15 @@ int HT9045Gem::S2F42_Host_Command_Acknowledge()
         // (gated -- no port substitute; see WHY/DELTA above)
 #endif  // GATE G22
 
-#if 0   // ===== GATE G23 -- golden SECSGEM/uHGemHT9045.cpp:2861-2864 =====
-//   WHY GATED : fPassword has NO port object (nothing declares it).
-//   DELTA     : The password form is not auto-closed before the Employee-ID check.
-//               Same shape as GATE G22.
+                // ===== GATE G23 OPENED 20260824 (FW-QWKEY4) -- golden :2861-2864 =====
+                //   fPassword real since FW-QWKEY1 (fc08e09); Visible added to the
+                //   facade for this exact site. Headless Visible stays false, so the
+                //   auto-close branch is faithfully unreached until a real window
+                //   subsystem raises it.
                 if(fPassword->Visible==true)
                 {
                     fPassword->Close();
                 }
-#else
-        // (gated -- no port substitute; see WHY/DELTA above)
-#endif  // GATE G23
 
 #if 0   // ===== GATE G24 -- golden SECSGEM/uHGemHT9045.cpp:2866-2869 =====
 //   WHY GATED : MyMessageBox is real and non-NULL in this port

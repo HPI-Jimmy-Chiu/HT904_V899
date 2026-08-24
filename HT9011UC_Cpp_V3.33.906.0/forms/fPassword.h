@@ -221,10 +221,10 @@
 //  EXCLUDED WIDGETS (no method dereferences them by name): Label2..Label9,
 //  lbPasswordUserName, lbPasswordPassWord, sbPasswordModify,
 //  sbPasswordModifyOK, sbPasswordModifyCancel, sbPasswordCancel,
-//  sbPasswordOK, btnOK, spbCancel.  `Visible` on the FORM itself is also
-//  deliberately absent: SECSGEM/uHGemHT9045.cpp:6419's gated
-//  `fPassword->Visible` site will need it, but that un-gate belongs to its
-//  own wave -- growing this facade past its measured need is how facades rot.
+//  sbPasswordOK, btnOK, spbCancel.  `Visible` on the FORM itself was
+//  deliberately absent at translation time; ADDED 20260824 (FW-QWKEY4) for
+//  its single measured consumer, SECSGEM/uHGemHT9045.cpp G23 -- see the
+//  field's own note near ShowModal()/Close().
 //
 //  DEPENDENCY AUDIT (this wave, 20260824) -- all grepped before translating:
 //    CUSTOMER_CODE            REAL  cmydef.h:3181; CC_Greatek/CC_SCC/
@@ -335,7 +335,12 @@ public:
     int Height = 336;   // .dfm Height (READ by FormShow's centering math)
 
     void ShowModal() {}  // golden TForm::ShowModal -- offline no-op (see NULL-GLOBAL note)
-    void Close()     {}  // golden TForm::Close    -- offline no-op (fTemp_Set.h precedent)
+    void Close()     { Visible=false; }  // golden TForm::Close -- offline no-op + Visible drop (fTemp_Set.h precedent)
+    // AI(W906-FW-QWKEY4) 20260824: golden TForm::Visible, added for its single
+    //   measured consumer (SECSGEM/uHGemHT9045.cpp G23 `fPassword->Visible`).
+    //   Headless it stays false (ShowModal is an instant-submit no-op that
+    //   never raises it), so G23's auto-close branch is faithfully unreached.
+    bool Visible = false;
 
     // -- golden private: User declarations (h:65-73), public collapse (D-4) --
     int  iNowEvenLogUserLevel = 0;      //帳號帶入,下拉是選單顯示用 -- ZeroInitVclFields: golden never initializes it
