@@ -9623,7 +9623,7 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   automation.h、SCK_ART_Remainder.h、OmronLaser/LaserSensor.h（gate 仍鎖
   但「fQwertyKey 無 port」引文已過期，純註解波，g++ -E 比對即可）。
   (2) SECSGEM G24/G26/G45 三連開——修 acatchtray_shims.h 的 clYellow/
-  NewRecordProcess 重複（uHGemHT9045.cpp G24 註解自述это最便宜解鎖）。
+  NewRecordProcess 重複（uHGemHT9045.cpp G24 註解自述為最便宜解鎖）。
   (3) TImage 若獲准：chkOffCenterkitClick/cbQualSite2X2ShiftClick。
   註：MyTempPanel 三個分支樹塊的 W8-3（fTemp_Set setters）已死
   （MaxTempSetting/MinTempSetting 20260824 起在 uTemp_Set 為真身），
