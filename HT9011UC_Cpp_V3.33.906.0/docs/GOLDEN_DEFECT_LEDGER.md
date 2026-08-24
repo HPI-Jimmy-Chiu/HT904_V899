@@ -71,15 +71,15 @@ FW 系列 / `GOLDEN BUG #N` / `k7-B1` 類區域編號等標記寫在程式碼裡
 
 | 項目 | 數值 |
 |---|---|
-| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **657 筆**（以表格內 `#` 編號列實際計數，20260821 四輪補掃後＋20260824 GATE7-V 增 1 筆；`python3` 逐列計數，見下方「四輪補掃紀錄」） |
+| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **662 筆**（以表格內 `#` 編號列實際計數，20260821 四輪補掃後＋20260824 GATE7-V 增 1 筆＋20260824 五輪同步 5 筆（FW-BINDISP1/SETUP-D/BINDISP2 當波入帳，維護規則 1）；`python3` 逐列計數，見下方「四輪補掃紀錄」） |
 | 其中 BUG 類（`GOLDEN BUG` / `GOLDEN BUGS` / `GOLDEN BUG #N` / `(Bx) GOLDEN BUG` / golden copy-paste bug） | 252 筆（含三輪新增 1 筆，`cConfiguration.h` 的 `sbUpdateHPClick` copy-paste bug） |
-| 其中 QUIRK 類（`GOLDEN QUIRK` / `GOLDEN QUIRKS`） | 238 筆（含 SECSGEM 三檔補撈的 39 筆；含二輪補掃新增 71 筆，見下方「二輪 QUIRK 補掃紀錄」；三輪未新增 QUIRK 類） |
+| 其中 QUIRK 類（`GOLDEN QUIRK` / `GOLDEN QUIRKS`） | 239 筆（含 SECSGEM 三檔補撈的 39 筆；含二輪補掃新增 71 筆，見下方「二輪 QUIRK 補掃紀錄」；三輪未新增 QUIRK 類；含 20260824 五輪 +1，`cSetUp.cpp` CHSetError int>63.5） |
 | 其中 DEFECT 類（`GOLDEN DEFECT` / `GOLDEN DEFECTS`） | 70 筆（含二輪補掃新增 5 筆；含三輪新增 1 筆，`BinDisplay/MyBinDisp.cpp` 的 `WriteTargetBin` off-by-one） |
-| 其中 ODDITY 類（`GOLDEN ODDITY` / `GOLDEN ODDITIES`） | 63 筆（含三輪新增 16 筆，集中在 batch-5 顯示側叢集，見下方「三輪增補紀錄」；含四輪補掃新增 6 筆，集中在溫控表單 uTemp_Set.cpp/DynamicTemp.cpp 與 Command.cpp FW-CMD-C 段，見下方「四輪補掃紀錄」） |
+| 其中 ODDITY 類（`GOLDEN ODDITY` / `GOLDEN ODDITIES`） | 63 筆（含三輪新增 16 筆，集中在 batch-5 顯示側叢集，見下方「三輪增補紀錄」；含四輪補掃新增 6 筆，集中在溫控表單 uTemp_Set.cpp/DynamicTemp.cpp 與 Command.cpp FW-CMD-C 段，見下方「四輪補掃紀錄」；含 20260824 五輪 +3：`cSetUp.cpp` ×2（pitch switch 缺 N-mode case、CoSocketComboChange 無視 Sender）＋`database.cpp` ICBD-1） |
 | 其中 ASYMMETRY 類（`GOLDEN ASYMMETRY` / `GOLDEN ASYMMETRIES`） | 16 筆（含三輪新增 1 筆，`BinDisplay/MyBinDisp.h` 的 `ComPort`/`ComPort2` 初始化不對稱；含 20260824 GATE7-V 新增 1 筆，Command.cpp SETSOAK_ 寫入路徑不對稱） |
 | 其中 DIVERGENCE 類（port 自身偏離 golden，已揭露，非 golden 本身缺陷；csystem.cpp/SCK_ART.cpp 各 1 筆合計 2） | 2 筆 |
-| 其中 GAP / LEAK / NOTE / INCONSISTENCY / GOTCHA / SPELLINGS / TYPO / DEAD CODE / INVARIANT / RACE 等罕見詞彙 | 16 筆（NOTE 4／GOTCHA 2／GAP 2／LEAK 2／INCONSISTENCY 1／SPELLINGS 1／TYPO 1／DEAD CODE 1／INVARIANT 1／RACE 1；含三輪新增 NOTE +2、GOTCHA +1，皆在 `cShowBinSelect.cpp`/`BinDisplay/MyBinDisp.h`） |
-| 涉及檔案數 | 130 個 `### ` 分節（含少數純交叉參照的 stub 分節；三輪增補新增 8 個分節：`forms/fLotInfo.cpp`、`forms/fSpeed.h+cSpeed.cpp`、`forms/fStartCondition.h+cStartCondition.cpp`、`forms/fConfiguration.h+cConfiguration.cpp`、`forms/fSetup.h+fSetup.cpp`、`BinDisplay/MyBinDisp.h+.cpp`、`forms/fHandlerSys.h+HandlerSys.cpp`(stub)、`tests/test_amr.cpp`(stub)；四輪補掃新增 4 個分節：`uTemp_Set.cpp+forms/fTemp_Set.h`、`DynamicTemp.cpp+forms/fDynamicTemp.h`、`MainTempMode.cpp`(stub)、`cSetUp.cpp`(stub)；`cShowBinSelect.cpp`/`forms/fShowBinSelect.h` 的 WAVE D/E 補充是既有分節的延伸子分節，不重複計檔案數；Command.cpp 本輪只新增 2 列（B-CMDC-1/2），沿用既有分節，非新分節） |
+| 其中 GAP / LEAK / NOTE / INCONSISTENCY / GOTCHA / SPELLINGS / TYPO / DEAD CODE / INVARIANT / RACE 等罕見詞彙 | 17 筆（NOTE 5／GOTCHA 2／GAP 2／LEAK 2／INCONSISTENCY 1／SPELLINGS 1／TYPO 1／DEAD CODE 1／INVARIANT 1／RACE 1；含三輪新增 NOTE +2、GOTCHA +1，皆在 `cShowBinSelect.cpp`/`BinDisplay/MyBinDisp.h`；含 20260824 五輪 NOTE +1，`Motor/myMN200motor.cpp` BINDISP2-e） |
+| 涉及檔案數 | 132 個 `### ` 分節（20260824 五輪新增 2 個分節：`database.cpp`、`Motor/myMN200motor.cpp`；`cSetUp.cpp` 由 stub 分節升級為 3 筆實表不重複計；含少數純交叉參照的 stub 分節；三輪增補新增 8 個分節：`forms/fLotInfo.cpp`、`forms/fSpeed.h+cSpeed.cpp`、`forms/fStartCondition.h+cStartCondition.cpp`、`forms/fConfiguration.h+cConfiguration.cpp`、`forms/fSetup.h+fSetup.cpp`、`BinDisplay/MyBinDisp.h+.cpp`、`forms/fHandlerSys.h+HandlerSys.cpp`(stub)、`tests/test_amr.cpp`(stub)；四輪補掃新增 4 個分節：`uTemp_Set.cpp+forms/fTemp_Set.h`、`DynamicTemp.cpp+forms/fDynamicTemp.h`、`MainTempMode.cpp`(stub)、`cSetUp.cpp`(stub)；`cShowBinSelect.cpp`/`forms/fShowBinSelect.h` 的 WAVE D/E 補充是既有分節的延伸子分節，不重複計檔案數；Command.cpp 本輪只新增 2 列（B-CMDC-1/2），沿用既有分節，非新分節） |
 | 標示 ⚠️存疑（agent 或 orchestrator 本人判讀信心不足） | 見文末「無法判讀/存疑清單」 |
 
 > 上列數字為 `python3 -c "..."` 對本檔表格列直接計數所得（見文末補撈紀錄的量測方式），
@@ -1636,13 +1636,28 @@ DEFECT/NOTE/...` 命中；fixture 內的所有 `golden :NNNN` 引註都只是客
 檔案內大量 `golden :NNNN` 引註都是客觀對照 golden 行號、或 `GATE(dep-...)` 依賴缺口說明，
 未使用任何缺陷類詞彙。
 
-### cSetUp.cpp（W906-LEDGER-R2 20260821 新增 stub 分節）
-（無符合條件的項目）— `cSetUp.cpp`（cSetUp Wave B，是既有「forms/fSetup.h + fSetup.cpp」分節
-同一 `TfSetup` 類別的延續翻譯波次、本輪新落地，非全新類別）本輪翻譯 3 個 golden `TfSetup::`
-方法（`ReadUseSuckModeFile`/`CheckSTMMode`/`cbI21Click`），以任務指定樣式與本檔既有詞彙表
-全集逐行核對，0 個 `GOLDEN BUG/ODDITY/QUIRK/DEFECT/NOTE/...` 命中；既有的
-「forms/fSetup.h + fSetup.cpp（1 筆）」分節（`RadioButton1KeyDown` DFM-孤兒事件處理常式）
-維持不變，本檔本輪未貢獻額外筆數。
+### cSetUp.cpp（3 筆，20260824 FW-SETUP-D 波當波入帳；R2 時為 0 筆 stub 分節）
+
+（Wave B 三方法 0 命中的原始紀錄保留於歷史：R2 時本檔尚無任何 GOLDEN 標記；FW-SETUP-D
+波次翻譯 7 個方法時登記以下 3 筆，banner 彙整於 cSetUp.cpp:245-257。）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 1 | GOLDEN QUIRK（FW-SETUP-D） | QUIRK | cSetUp.cpp:247-249（banner）,628-629（inline，`CHSetError` 內） | golden cSetUp.cpp:1559,:1590 | `if(iYpitch>63.5)`：int 對 63.5 比較，行為等同 `>=64`，研判是 63/64 邊界的手誤寫法 | 行為與 `>=64` 完全相同故無實際差異，純可讀性陷阱；照翻 | AI(W906-FW-SETUP-D) 20260824 |
+| 2 | GOLDEN ODDITY（FW-SETUP-D） | ODDITY | cSetUp.cpp:250-254（banner）,630-631（inline） | golden cSetUp.cpp:1348-1603 | CHSetError 的 pitch switch 無 QualSite2X2N/_6Site2X3N/_8Site2X4N/_32Site4X8N 各 case 也無 default——N 模式的 pitch 完全不經此層驗證 | N 模式機型的錯誤 pitch 設定不會被這層防呆擋下 | AI(W906-FW-SETUP-D) 20260824 |
+| 3 | GOLDEN ODDITY（FW-SETUP-D） | ODDITY | cSetUp.cpp:255-257（banner）,1061（inline） | golden cSetUp.cpp:4752-4770 | CoSocketComboChange 無視 Sender 參數，直接讀 CoSocketCombo 成員 | 事件若被綁到其他控制，讀的仍是 CoSocketCombo；照翻 | AI(W906-FW-SETUP-D) 20260824 |
+
+### database.cpp（1 筆，20260824 新增分節）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 1 | GOLDEN ODDITY (ICBD-1) | ODDITY | database.cpp:216-221（`InstallColorBinDisplay` banner） | golden database.cpp:1686-1697 | golden 在 iType 檢查前就 `new`，非 3/4 呼叫會經 early return 洩漏該實例；且 new 後的 `BinDisCtrl==NULL` 測試在標準 C++ 永不成立 | 兩者實務不可達——唯一呼叫點（golden :1543-1545）自帶 NUMBER_PANEL_TYPE 3/4 守衛；照翻 | AI(W906-FW-BINDISP1) 20260824 |
+
+### Motor/myMN200motor.cpp（1 筆，20260824 新增分節）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 1 | GOLDEN NOTE (BINDISP2-e) | NOTE | Motor/myMN200motor.cpp:2426-2433（GATE (e) 開閘註記） | golden Motor/myMN200motor.cpp:2076-2077 | 24V 斷電恢復路徑對 BinDisCtrl 的 deref 沒有 NUMBER_PANEL_TYPE 3/4 守衛（GATE (c) 那側 :1497-1498 有）——非 3/4 機型走到即 NULL deref，golden 同炸 | 非 3/4 機型且 MN200 ring 錯誤令 iWriteErrorLogCT!=0 時當機；實務未爆研判因 MN200 機型多配 3/4 面板 | AI(W906-FW-BINDISP2) 20260824 |
 
 ---
 
