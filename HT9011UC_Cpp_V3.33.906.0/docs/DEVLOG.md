@@ -9685,6 +9685,23 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - gate：全新雙 dir build_qw9g/qw9r（凍結模板首航，兩段皆絕對 cd 無事故）
   **137/142×2** 常駐五項逐項同；guard 代理 0 檔。
 
+## 20260825 I — FW-BARCODE2 收案：4 個純 Barcode_Reader 守衛解鎖（主迴圈自做）
+
+- **逐站共阻塞者稽核**（commit 1e14757）：全樹 36 個 gated 呼叫站，
+  只有 4 站以 Barcode_Reader 為唯一阻塞者——HTEdit GATE (6-B)（配上
+  FW-QWKEY3 的建構核心，golden EditClick 全文自此活化）、cSetUp
+  E-B1/E-B2、uTemp_Set rgTemperatureModeClick（該檔唯一無 Buffer->Tag
+  的 G-Barcode 守衛）。headless 忠實惰性：非 KYEC 組態回 2 不早退。
+- 維持 gated＋前提就地更新：uTemp_Set 其餘 9 個 G-Barcode（只剩
+  Buffer->Tag——vclcompat TEdit 無 Tag）、MyTempPanel W8 分支樹、
+  fPassword P-B1/B3/B4 與 fLotInfo WB 塊（Clipboard() 共阻塞——
+  FW-BARCODE3 候選：Clipboard 行單獨留 gate、其餘活化）。
+- **工具教訓**：#if 0 深度掃描器把任何 #endif 都記到 #if 0 疊上——
+  巢狀 #ifndef 的 #endif 會偽造 LIVE 分類（fLotInfo:2141 看似 live
+  實為 gated）。掃描器只當定位器，判定一律逐站開檔讀。
+- gate：全新雙 dir build_qw10g/qw10r **137/142×2** 常駐五項逐項同；
+  guard 代理 0 檔。
+
 ### 🔖 RESUME（20260824 日終）
 
 - **今日全收（27 顆 commit）**：FW-TEMP3／GATE7-V＋裁決落地＋計數更正／
@@ -9699,11 +9716,10 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   准駁（解 fSetup 2 方法）。
 - **下一波**：XI-XVII 全收（20260824 晚間八波：QWKEY2-6＋G24＋
   BARCODE1，主迴圈自做零 agent，八輪雙 gate 全綠）。候選序：
-  (1) **FW-BARCODE2 解鎖波**：uTemp_Set G-Barcode／fSetup E-B1,E-B2／
-  HTEdit GATE (6-B)／fLotInfo WB-9,WB-10／MyTempPanel W8 塊——逐站複驗
-  共阻塞者（WB-9/WB-10 另有 InputBarcodeNumber 已活；W8 塊還鎖
-  W8-2 Tag）後開；行為變更單獨 commit。
-  (2) 台帳輪：複掃 XI-XVII（BR-q1/n1/n2 三筆＋確認 QWKEY 波無漏）。
+  (1) FW-BARCODE2 已收（20260825 I，4 純站開）。**FW-BARCODE3**：
+  fPassword P-B1/B3/B4＋fLotInfo WB-2/4/9/10 等 Clipboard 混合塊窄化
+  （Clipboard()->Clear() 行單獨留 gate，InputBarcodeNumber 流活化）。
+  (2) 台帳輪：複掃 XI-XVII＋20260825 I（BR-q1/n1/n2 三筆＋掃描器教訓）。
   (3) TImage 若獲准：chkOffCenterkitClick/cbQualSite2X2ShiftClick。
   (4) shims 收斂波（選配）：clYellow/NewRecordProcess 預設值三處。
   註：MyTempPanel 三個分支樹塊的 W8-3（fTemp_Set setters）已死
