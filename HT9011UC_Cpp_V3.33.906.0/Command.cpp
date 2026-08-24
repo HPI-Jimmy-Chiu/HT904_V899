@@ -11424,6 +11424,13 @@ void TfMain::WriteSetSoakTimeStatus_SIGURD()                                    
         ret=SetTemp(false, atof(edWorkTemperBase->Text.c_str()), atof(edSoakTime->Text.c_str()));     //Steven 20120730
         if(ret==0)
         {
+            //AI(W906-GATE7V) 20260824: GOLDEN ASYMMETRY -- this remote SETSOAK_
+            // write path builds its target unconditionally as DataPath+recipe
+            // (golden Command.cpp:10640-10642), yet every other Temperature.Data
+            // access carries the bSaveTemperatureByMachine variant (ReadTempFile
+            // golden uTemp_Set.cpp:1986-1989, spbSaveClick :4214, SaveSetupFile
+            // :4540). On by-machine stations this write lands in a file nothing
+            // reads. Translated faithfully, not fixed.
             S=GetLastOpenFN();
             szDir.sprintf("%s%s", DataPath, S);
             szDir+="\\Temperature.Data";

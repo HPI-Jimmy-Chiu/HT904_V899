@@ -71,12 +71,12 @@ FW 系列 / `GOLDEN BUG #N` / `k7-B1` 類區域編號等標記寫在程式碼裡
 
 | 項目 | 數值 |
 |---|---|
-| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **656 筆**（以表格內 `#` 編號列實際計數，20260821 四輪補掃後；`python3` 逐列計數，見下方「四輪補掃紀錄」） |
+| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **657 筆**（以表格內 `#` 編號列實際計數，20260821 四輪補掃後＋20260824 GATE7-V 增 1 筆；`python3` 逐列計數，見下方「四輪補掃紀錄」） |
 | 其中 BUG 類（`GOLDEN BUG` / `GOLDEN BUGS` / `GOLDEN BUG #N` / `(Bx) GOLDEN BUG` / golden copy-paste bug） | 252 筆（含三輪新增 1 筆，`cConfiguration.h` 的 `sbUpdateHPClick` copy-paste bug） |
 | 其中 QUIRK 類（`GOLDEN QUIRK` / `GOLDEN QUIRKS`） | 238 筆（含 SECSGEM 三檔補撈的 39 筆；含二輪補掃新增 71 筆，見下方「二輪 QUIRK 補掃紀錄」；三輪未新增 QUIRK 類） |
 | 其中 DEFECT 類（`GOLDEN DEFECT` / `GOLDEN DEFECTS`） | 70 筆（含二輪補掃新增 5 筆；含三輪新增 1 筆，`BinDisplay/MyBinDisp.cpp` 的 `WriteTargetBin` off-by-one） |
 | 其中 ODDITY 類（`GOLDEN ODDITY` / `GOLDEN ODDITIES`） | 63 筆（含三輪新增 16 筆，集中在 batch-5 顯示側叢集，見下方「三輪增補紀錄」；含四輪補掃新增 6 筆，集中在溫控表單 uTemp_Set.cpp/DynamicTemp.cpp 與 Command.cpp FW-CMD-C 段，見下方「四輪補掃紀錄」） |
-| 其中 ASYMMETRY 類（`GOLDEN ASYMMETRY` / `GOLDEN ASYMMETRIES`） | 15 筆（含三輪新增 1 筆，`BinDisplay/MyBinDisp.h` 的 `ComPort`/`ComPort2` 初始化不對稱） |
+| 其中 ASYMMETRY 類（`GOLDEN ASYMMETRY` / `GOLDEN ASYMMETRIES`） | 16 筆（含三輪新增 1 筆，`BinDisplay/MyBinDisp.h` 的 `ComPort`/`ComPort2` 初始化不對稱；含 20260824 GATE7-V 新增 1 筆，Command.cpp SETSOAK_ 寫入路徑不對稱） |
 | 其中 DIVERGENCE 類（port 自身偏離 golden，已揭露，非 golden 本身缺陷；csystem.cpp/SCK_ART.cpp 各 1 筆合計 2） | 2 筆 |
 | 其中 GAP / LEAK / NOTE / INCONSISTENCY / GOTCHA / SPELLINGS / TYPO / DEAD CODE / INVARIANT / RACE 等罕見詞彙 | 16 筆（NOTE 4／GOTCHA 2／GAP 2／LEAK 2／INCONSISTENCY 1／SPELLINGS 1／TYPO 1／DEAD CODE 1／INVARIANT 1／RACE 1；含三輪新增 NOTE +2、GOTCHA +1，皆在 `cShowBinSelect.cpp`/`BinDisplay/MyBinDisp.h`） |
 | 涉及檔案數 | 130 個 `### ` 分節（含少數純交叉參照的 stub 分節；三輪增補新增 8 個分節：`forms/fLotInfo.cpp`、`forms/fSpeed.h+cSpeed.cpp`、`forms/fStartCondition.h+cStartCondition.cpp`、`forms/fConfiguration.h+cConfiguration.cpp`、`forms/fSetup.h+fSetup.cpp`、`BinDisplay/MyBinDisp.h+.cpp`、`forms/fHandlerSys.h+HandlerSys.cpp`(stub)、`tests/test_amr.cpp`(stub)；四輪補掃新增 4 個分節：`uTemp_Set.cpp+forms/fTemp_Set.h`、`DynamicTemp.cpp+forms/fDynamicTemp.h`、`MainTempMode.cpp`(stub)、`cSetUp.cpp`(stub)；`cShowBinSelect.cpp`/`forms/fShowBinSelect.h` 的 WAVE D/E 補充是既有分節的延伸子分節，不重複計檔案數；Command.cpp 本輪只新增 2 列（B-CMDC-1/2），沿用既有分節，非新分節） |
@@ -251,7 +251,7 @@ FW 系列 / `GOLDEN BUG #N` / `k7-B1` 類區域編號等標記寫在程式碼裡
 
 > 以下分節由 orchestrator（本代理）直接讀取原始碼驗證後寫入，未經子代理轉手。
 
-### Command.cpp（11 筆）
+### Command.cpp（12 筆）
 
 | # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
 |---|---|---|---|---|---|---|---|
@@ -266,6 +266,7 @@ FW 系列 / `GOLDEN BUG #N` / `k7-B1` 類區域編號等標記寫在程式碼裡
 | 9 | GOLDEN BUG (B8)（FW3-WE group） | BUG | Command.cpp:13066-13083,14039 | golden :14778-14781 | `WriteHeadContactCount` 的例外處理區塊誤重置了另一個全域變數 `asChangeSetupFileName`（`cmydef.h:5729`，原本追蹤「GPIB剛送的setup檔名」），研判是從其他 setup 檔案相關函式複製貼上未改 | 若 `WriteHeadContactCount` 解析例外恰好在其他 setup-file 變更函式與其自身下一次讀取之間發生，會靜默清空該追蹤值 | 約20260818 |
 | 10 | GOLDEN ODDITY (B-CMDC-1)（FW-CMD-C group） | ODDITY | Command.cpp:15421-15428（banner）,15839-15845（inline，`ChangeToAlarmSetup` 函式內） | golden :7867-7869（`sBinName`/`sPassOrFail`/`fYield` 宣告 `[TEST_MAX_BIN]`）,:7910-7917（Bin Alarm Yield 清零迴圈寫死 `for(i=0;i<15;i++)`） | `ChangeToAlarmSetup` 的清零迴圈硬編 `<15`，不是 `<TEST_MAX_BIN`(256) 也不是 `<iTestBinCount`，但緊接著的兩個迴圈都跑到 `iTestBinCount` | `iTestBinCount>15` 的機型（16/32-site）第 15 格之後的槽位從未被這段清零就被下面迴圈讀取；此函式本身翻譯完整（ACTIVE、無內部 gate），但目前唯一呼叫端 `SetAlarmSetup`（Command.cpp:14925）仍被 `GATE(FW3-WF)` 整段 `#if 0`，缺口暫不可達 | AI(W906-FW-CMD-C) 20260820（併入台帳 W906-LEDGER-R2 20260821） |
 | 11 | GOLDEN ODDITY (B-CMDC-2)（FW-CMD-C group） | ODDITY | Command.cpp:15429-15433（banner）,15989-15992（inline，`ChangeToAlarmSetup_SG` 函式內） | golden :8051-8052（`new TStringList()` x2）；函式全範圍 :8048-8310（3 個 return 路徑皆查無 `delete`） | `ChangeToAlarmSetup_SG` 每次呼叫都 `new` 兩個 `TStringList`（`tSetup`/`tCondition`），全函式 3 個 return 路徑皆無對應 `delete`，golden 自己就帶這個 per-call heap leak | 函式本身翻譯完整、無內部 gate，但與 (B-CMDC-1) 同一個呼叫端 `SetAlarmSetup` 仍被 gate 擋住；一旦解 gate，SIGURD 分支每次收到 Site-Map alarm setup 指令都會洩漏兩個 `TStringList` 物件 | AI(W906-FW-CMD-C) 20260820（併入台帳 W906-LEDGER-R2 20260821） |
+| 12 | GOLDEN ASYMMETRY (GATE7-V) | ASYMMETRY | Command.cpp:11427-11433（inline，`WriteSetSoakTimeStatus_SIGURD` 函式內，寫入點 :11454/:11466） | golden Command.cpp:10640-10642；對照 golden uTemp_Set.cpp:1986-1989（ReadTempFile）、:4214（spbSaveClick）、:4540（SaveSetupFile） | 遠端 SETSOAK_ 命令的 Temperature.Data 寫入無條件以 DataPath+recipe 組路徑，但該檔的讀取與表單自家兩條存檔路都帶 bSaveTemperatureByMachine 變體 | 開啟 by-machine 的機台上，遠端命令寫的 Temperature.Data 落在沒人讀的路徑——模式變更只活在 ChangeTempMode 的記憶體狀態，重開機後讀回 sSaveByMachine 的舊值 | AI(W906-GATE7V) 20260824 |
 
 ### cShowBinSelect.cpp / forms/fShowBinSelect.h（3 筆，取自 `git show HEAD:` 已提交內容，見上方掃描範圍聲明）
 
