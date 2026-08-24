@@ -71,15 +71,15 @@ FW 系列 / `GOLDEN BUG #N` / `k7-B1` 類區域編號等標記寫在程式碼裡
 
 | 項目 | 數值 |
 |---|---|
-| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **677 筆**（以表格內 `#` 編號列實際計數，20260824 R7 同步 7 筆（FW-BINDISP3 當波入帳）＋20260824 R6 同步 8 筆（FW-QWKEY1 當波入帳）＋20260821 四輪補掃後＋20260824 GATE7-V 增 1 筆＋20260824 五輪同步 5 筆（FW-BINDISP1/SETUP-D/BINDISP2 當波入帳，維護規則 1）；`python3` 逐列計數，見下方「四輪補掃紀錄」） |
+| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **680 筆**（以表格內 `#` 編號列實際計數，20260825 R8 同步 3 筆（FW-BARCODE1 當波入帳）＋20260824 R7 同步 7 筆（FW-BINDISP3 當波入帳）＋20260824 R6 同步 8 筆（FW-QWKEY1 當波入帳）＋20260821 四輪補掃後＋20260824 GATE7-V 增 1 筆＋20260824 五輪同步 5 筆（FW-BINDISP1/SETUP-D/BINDISP2 當波入帳，維護規則 1）；`python3` 逐列計數，見下方「四輪補掃紀錄」） |
 | 其中 BUG 類（`GOLDEN BUG` / `GOLDEN BUGS` / `GOLDEN BUG #N` / `(Bx) GOLDEN BUG` / golden copy-paste bug） | 252 筆（含三輪新增 1 筆，`cConfiguration.h` 的 `sbUpdateHPClick` copy-paste bug） |
-| 其中 QUIRK 類（`GOLDEN QUIRK` / `GOLDEN QUIRKS`） | 239 筆（含 SECSGEM 三檔補撈的 39 筆；含二輪補掃新增 71 筆，見下方「二輪 QUIRK 補掃紀錄」；三輪未新增 QUIRK 類；含 20260824 五輪 +1，`cSetUp.cpp` CHSetError int>63.5） |
+| 其中 QUIRK 類（`GOLDEN QUIRK` / `GOLDEN QUIRKS`） | 240 筆（含 SECSGEM 三檔補撈的 39 筆；含二輪補掃新增 71 筆，見下方「二輪 QUIRK 補掃紀錄」；三輪未新增 QUIRK 類；含 20260824 五輪 +1，`cSetUp.cpp` CHSetError int>63.5；含 20260825 R8 +1，`BarcodeReader.cpp` BR-q1 15-of-16 初始器） |
 | 其中 DEFECT 類（`GOLDEN DEFECT` / `GOLDEN DEFECTS`） | 71 筆（含二輪補掃新增 5 筆；含三輪新增 1 筆，`BinDisplay/MyBinDisp.cpp` 的 `WriteTargetBin` off-by-one；含 20260824 R7 +1，同檔 (i) 21-into-20 sprintf stack overflow） |
 | 其中 ODDITY 類（`GOLDEN ODDITY` / `GOLDEN ODDITIES`） | 63 筆（含三輪新增 16 筆，集中在 batch-5 顯示側叢集，見下方「三輪增補紀錄」；含四輪補掃新增 6 筆，集中在溫控表單 uTemp_Set.cpp/DynamicTemp.cpp 與 Command.cpp FW-CMD-C 段，見下方「四輪補掃紀錄」；含 20260824 五輪 +3：`cSetUp.cpp` ×2（pitch switch 缺 N-mode case、CoSocketComboChange 無視 Sender）＋`database.cpp` ICBD-1；含 20260824 R7 +6，`BinDisplay/MyBinDisp.cpp` (j)(k)(l)(m)(n)(o)） |
 | 其中 ASYMMETRY 類（`GOLDEN ASYMMETRY` / `GOLDEN ASYMMETRIES`） | 16 筆（含三輪新增 1 筆，`BinDisplay/MyBinDisp.h` 的 `ComPort`/`ComPort2` 初始化不對稱；含 20260824 GATE7-V 新增 1 筆，Command.cpp SETSOAK_ 寫入路徑不對稱） |
 | 其中 DIVERGENCE 類（port 自身偏離 golden，已揭露，非 golden 本身缺陷；csystem.cpp/SCK_ART.cpp 各 1 筆合計 2） | 2 筆 |
-| 其中 GAP / LEAK / NOTE / INCONSISTENCY / GOTCHA / SPELLINGS / TYPO / DEAD CODE / INVARIANT / RACE 等罕見詞彙 | 25 筆（NOTE 13／GOTCHA 2／GAP 2／LEAK 2／INCONSISTENCY 1／SPELLINGS 1／TYPO 1／DEAD CODE 1／INVARIANT 1／RACE 1；含三輪新增 NOTE +2、GOTCHA +1，皆在 `cShowBinSelect.cpp`/`BinDisplay/MyBinDisp.h`；含 20260824 五輪 NOTE +1，`Motor/myMN200motor.cpp` BINDISP2-e；含 20260824 R6 NOTE +8，fQwertyKey G-a..d ×4＋fPassword G-P1..P4 ×4） |
-| 涉及檔案數 | 134 個 `### ` 分節（20260824 R6 新增 2 個分節：fQwertyKey 家族、fPassword 家族；20260824 五輪新增 2 個分節：`database.cpp`、`Motor/myMN200motor.cpp`；`cSetUp.cpp` 由 stub 分節升級為 3 筆實表不重複計；含少數純交叉參照的 stub 分節；三輪增補新增 8 個分節：`forms/fLotInfo.cpp`、`forms/fSpeed.h+cSpeed.cpp`、`forms/fStartCondition.h+cStartCondition.cpp`、`forms/fConfiguration.h+cConfiguration.cpp`、`forms/fSetup.h+fSetup.cpp`、`BinDisplay/MyBinDisp.h+.cpp`、`forms/fHandlerSys.h+HandlerSys.cpp`(stub)、`tests/test_amr.cpp`(stub)；四輪補掃新增 4 個分節：`uTemp_Set.cpp+forms/fTemp_Set.h`、`DynamicTemp.cpp+forms/fDynamicTemp.h`、`MainTempMode.cpp`(stub)、`cSetUp.cpp`(stub)；`cShowBinSelect.cpp`/`forms/fShowBinSelect.h` 的 WAVE D/E 補充是既有分節的延伸子分節，不重複計檔案數；Command.cpp 本輪只新增 2 列（B-CMDC-1/2），沿用既有分節，非新分節） |
+| 其中 GAP / LEAK / NOTE / INCONSISTENCY / GOTCHA / SPELLINGS / TYPO / DEAD CODE / INVARIANT / RACE 等罕見詞彙 | 27 筆（NOTE 15／GOTCHA 2／GAP 2／LEAK 2／INCONSISTENCY 1／SPELLINGS 1／TYPO 1／DEAD CODE 1／INVARIANT 1／RACE 1；含三輪新增 NOTE +2、GOTCHA +1，皆在 `cShowBinSelect.cpp`/`BinDisplay/MyBinDisp.h`；含 20260824 五輪 NOTE +1，`Motor/myMN200motor.cpp` BINDISP2-e；含 20260824 R6 NOTE +8，fQwertyKey G-a..d ×4＋fPassword G-P1..P4 ×4；含 20260825 R8 NOTE +2，BarcodeReader BR-n1/n2） |
+| 涉及檔案數 | 135 個 `### ` 分節（20260825 R8 新增 1 個分節：BarcodeReader；20260824 R6 新增 2 個分節：fQwertyKey 家族、fPassword 家族；20260824 五輪新增 2 個分節：`database.cpp`、`Motor/myMN200motor.cpp`；`cSetUp.cpp` 由 stub 分節升級為 3 筆實表不重複計；含少數純交叉參照的 stub 分節；三輪增補新增 8 個分節：`forms/fLotInfo.cpp`、`forms/fSpeed.h+cSpeed.cpp`、`forms/fStartCondition.h+cStartCondition.cpp`、`forms/fConfiguration.h+cConfiguration.cpp`、`forms/fSetup.h+fSetup.cpp`、`BinDisplay/MyBinDisp.h+.cpp`、`forms/fHandlerSys.h+HandlerSys.cpp`(stub)、`tests/test_amr.cpp`(stub)；四輪補掃新增 4 個分節：`uTemp_Set.cpp+forms/fTemp_Set.h`、`DynamicTemp.cpp+forms/fDynamicTemp.h`、`MainTempMode.cpp`(stub)、`cSetUp.cpp`(stub)；`cShowBinSelect.cpp`/`forms/fShowBinSelect.h` 的 WAVE D/E 補充是既有分節的延伸子分節，不重複計檔案數；Command.cpp 本輪只新增 2 列（B-CMDC-1/2），沿用既有分節，非新分節） |
 | 標示 ⚠️存疑（agent 或 orchestrator 本人判讀信心不足） | 見文末「無法判讀/存疑清單」 |
 
 > 上列數字為 `python3 -c "..."` 對本檔表格列直接計數所得（見文末補撈紀錄的量測方式），
@@ -1633,7 +1633,7 @@ DEFECT/NOTE/...` 命中；fixture 內的所有 `golden :NNNN` 引註都只是客
 
 | # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
 |---|---|---|---|---|---|---|---|
-| 1 | GOLDEN ODDITY（未編號） | ODDITY | DynamicTemp.cpp:259-263,265-272（`edMaxMouseDown`） | golden（`HT9011UC_Code_V3.33.906.0_20260618`）DynamicTemp.cpp:152-158 | `edMaxMouseDown`（gate 中）呼叫 `ShowQwertyKey` 時，「目前值」引數讀的是 `edMin->Text` 而非 `edMax->Text`——golden 自己從 `edMinMouseDown` 複製貼上時忘了改欄位 | 整段呼叫目前被 GATE(Q1) 擋住（`fQwertyKey` 全樹無 port），暫不可達；一旦解 gate，使用者點 Max 欄位彈出的數字鍵盤會帶入 Min 欄位的舊值而非 Max 自己的值 | AI(W906-FW3-DynTemp-WA) 20260820（併入台帳 W906-LEDGER-R2 20260821） |
+| 1 | GOLDEN ODDITY（未編號） | ODDITY | DynamicTemp.cpp:259-263,265-272（`edMaxMouseDown`） | golden（`HT9011UC_Code_V3.33.906.0_20260618`）DynamicTemp.cpp:152-158 | `edMaxMouseDown`（gate 中）呼叫 `ShowQwertyKey` 時，「目前值」引數讀的是 `edMin->Text` 而非 `edMax->Text`——golden 自己從 `edMinMouseDown` 複製貼上時忘了改欄位 | GATE(Q1) 已於 20260824（FW-QWKEY2）解鎖、呼叫已活（handler 未接線故 runtime 尚不可達）；一旦事件流接上，使用者點 Max 欄位彈出的數字鍵盤會帶入 Min 欄位的舊值而非 Max 自己的值（20260825 校正：解鎖後行號已位移，port 位置欄未重校） | AI(W906-FW3-DynTemp-WA) 20260820（併入台帳 W906-LEDGER-R2 20260821） |
 | 2 | GOLDEN ODDITY（未編號） | ODDITY | DynamicTemp.cpp:307-314,318-330（`edUpperMouseDown`） | golden（`HT9011UC_Code_V3.33.906.0_20260618`）DynamicTemp.cpp:189-201 | `edUpperMouseDown` 幫 `Chart1->Series[17]` 畫線時色彩引數用 `TC[16]`（Series 16 的顏色）而非 `TC[17]`——golden 從姊妹函式 `edLowerMouseDown` 複製貼上時漏改索引；同檔 `btTempICLoadClick` 對 Series[16]/[17] 的呼叫確實正確分別使用 `TC[16]`/`TC[17]` | Series[17]（Upper 上限線）在圖表上會被畫成跟 Series[16]（Lower 下限線）同一顏色，兩條線在圖上難以分辨；純顯示層瑕疵，不影響溫度量測邏輯本身 | AI(W906-FW3-DynTemp-WA) 20260820（併入台帳 W906-LEDGER-R2 20260821） |
 | 3 | GOLDEN ODDITY（未編號） | ODDITY | DynamicTemp.cpp:402-420（`FormShow`） | golden（`HT9011UC_Code_V3.33.906.0_20260618`）DynamicTemp.cpp:261-273 | `FormShow` 只用 `atoi(edMax->Text)<Chart1->LeftAxis->Minimum` 一個條件判斷要不要重設座標軸，但兩個分支接下來都會同時改寫 `Minimum` 與 `Maximum`——比較式只跟即將被覆寫的 `Minimum` 比、跟 `Maximum` 完全無關，是不對稱的判斷式 | 兩分支寫入 `Minimum`/`Maximum` 的先後順序相反（true 分支先設 Minimum、false 分支先設 Maximum），但因兩行是各自獨立賦值、中間無讀取，最終數值結果與寫入順序無關，純粹是 golden 自己寫法不對稱、無實際功能影響 | AI(W906-FW3-DynTemp-WA) 20260820（併入台帳 W906-LEDGER-R2 20260821） |
 
@@ -1683,6 +1683,14 @@ DEFECT/NOTE/...` 命中；fixture 內的所有 `golden :NNNN` 引註都只是客
 | 2 | GOLDEN NOTE (G-P2) | NOTE | forms/fPassword.h:181-184 | golden Password.h:92 | bShowTab 宣告 bool 卻以 0/1 整數書寫 | cosmetic，靠 bool 轉換運作；照翻 | AI(W906-FW-QWKEY1) 20260824 |
 | 3 | GOLDEN NOTE (G-P3) | NOTE | forms/fPassword.h:185-189 | golden Password.cpp:118-121＋Password.dfm | SpeedButton1Click 是 dfm 孤兒 handler（dfm 零接線、無 SpeedButton1 成員） | 死碼；照翻（fSetup RadioButton1KeyDown 同型前例） | AI(W906-FW-QWKEY1) 20260824 |
 | 4 | GOLDEN NOTE (G-P4) | NOTE | forms/fPassword.h:190-192 | golden Password.cpp:325-326 | CheckPassword 在 JCET_FOR_EVAN==1 時 ID 比對於迴圈內被旁路→授予「最低 index 密碼相符」的等級（order-dependent） | 等級授予依表序而非帳號；照翻 | AI(W906-FW-QWKEY1) 20260824 |
+
+### BarcodeReader.h + BarcodeReader.cpp（3 筆，20260825 FW-BARCODE1 當波入帳）
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 1 | GOLDEN QUIRK (BR-q1) | QUIRK | BarcodeReader.cpp:9-12,43-47 | golden BarcodeReader.cpp:18-21 | BarcodeChange[bcTotal] 以 15 個初始器對 bcTotal==16（MachineType.h:933）——BarcodeChange[bcSECSGEM==15] 是預設空字串 | SECSGEM 觸發的登入紀錄行「... Change 」無後綴；照翻 | AI(W906-FW-BARCODE1) 20260825 |
+| 2 | GOLDEN NOTE (BR-n1) | NOTE | BarcodeReader.cpp:14-15,79-80 | golden BarcodeReader.cpp:54-55 | FormShow 以寫死的 1280×1024 置中視窗，不讀實際螢幕解析度 | 非 1280×1024 螢幕上視窗偏離中心；照翻 | AI(W906-FW-BARCODE1) 20260825 |
+| 3 | GOLDEN NOTE (BR-n2) | NOTE | BarcodeReader.cpp:17-22,419 | golden BarcodeReader.cpp:389 | TimerKeyIn 的 KYEC 尾段：6 碼條碼取 2 位頭碼再驗 85..120，但 2 位數上限 99——100..120 只有 7 碼/3 位頭碼臂可達（golden 自己的註解就寫「85~120 (85~120)」） | 6 碼條碼頭碼 100..120 的驗證分支永不成立；照翻 | AI(W906-FW-BARCODE1) 20260825 |
 
 ---
 
