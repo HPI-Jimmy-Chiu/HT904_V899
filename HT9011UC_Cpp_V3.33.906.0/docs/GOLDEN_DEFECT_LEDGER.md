@@ -71,11 +71,11 @@ FW 系列 / `GOLDEN BUG #N` / `k7-B1` 類區域編號等標記寫在程式碼裡
 
 | 項目 | 數值 |
 |---|---|
-| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **670 筆**（以表格內 `#` 編號列實際計數，20260824 R6 同步 8 筆（FW-QWKEY1 當波入帳）＋20260821 四輪補掃後＋20260824 GATE7-V 增 1 筆＋20260824 五輪同步 5 筆（FW-BINDISP1/SETUP-D/BINDISP2 當波入帳，維護規則 1）；`python3` 逐列計數，見下方「四輪補掃紀錄」） |
+| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **677 筆**（以表格內 `#` 編號列實際計數，20260824 R7 同步 7 筆（FW-BINDISP3 當波入帳）＋20260824 R6 同步 8 筆（FW-QWKEY1 當波入帳）＋20260821 四輪補掃後＋20260824 GATE7-V 增 1 筆＋20260824 五輪同步 5 筆（FW-BINDISP1/SETUP-D/BINDISP2 當波入帳，維護規則 1）；`python3` 逐列計數，見下方「四輪補掃紀錄」） |
 | 其中 BUG 類（`GOLDEN BUG` / `GOLDEN BUGS` / `GOLDEN BUG #N` / `(Bx) GOLDEN BUG` / golden copy-paste bug） | 252 筆（含三輪新增 1 筆，`cConfiguration.h` 的 `sbUpdateHPClick` copy-paste bug） |
 | 其中 QUIRK 類（`GOLDEN QUIRK` / `GOLDEN QUIRKS`） | 239 筆（含 SECSGEM 三檔補撈的 39 筆；含二輪補掃新增 71 筆，見下方「二輪 QUIRK 補掃紀錄」；三輪未新增 QUIRK 類；含 20260824 五輪 +1，`cSetUp.cpp` CHSetError int>63.5） |
-| 其中 DEFECT 類（`GOLDEN DEFECT` / `GOLDEN DEFECTS`） | 70 筆（含二輪補掃新增 5 筆；含三輪新增 1 筆，`BinDisplay/MyBinDisp.cpp` 的 `WriteTargetBin` off-by-one） |
-| 其中 ODDITY 類（`GOLDEN ODDITY` / `GOLDEN ODDITIES`） | 63 筆（含三輪新增 16 筆，集中在 batch-5 顯示側叢集，見下方「三輪增補紀錄」；含四輪補掃新增 6 筆，集中在溫控表單 uTemp_Set.cpp/DynamicTemp.cpp 與 Command.cpp FW-CMD-C 段，見下方「四輪補掃紀錄」；含 20260824 五輪 +3：`cSetUp.cpp` ×2（pitch switch 缺 N-mode case、CoSocketComboChange 無視 Sender）＋`database.cpp` ICBD-1） |
+| 其中 DEFECT 類（`GOLDEN DEFECT` / `GOLDEN DEFECTS`） | 71 筆（含二輪補掃新增 5 筆；含三輪新增 1 筆，`BinDisplay/MyBinDisp.cpp` 的 `WriteTargetBin` off-by-one；含 20260824 R7 +1，同檔 (i) 21-into-20 sprintf stack overflow） |
+| 其中 ODDITY 類（`GOLDEN ODDITY` / `GOLDEN ODDITIES`） | 63 筆（含三輪新增 16 筆，集中在 batch-5 顯示側叢集，見下方「三輪增補紀錄」；含四輪補掃新增 6 筆，集中在溫控表單 uTemp_Set.cpp/DynamicTemp.cpp 與 Command.cpp FW-CMD-C 段，見下方「四輪補掃紀錄」；含 20260824 五輪 +3：`cSetUp.cpp` ×2（pitch switch 缺 N-mode case、CoSocketComboChange 無視 Sender）＋`database.cpp` ICBD-1；含 20260824 R7 +6，`BinDisplay/MyBinDisp.cpp` (j)(k)(l)(m)(n)(o)） |
 | 其中 ASYMMETRY 類（`GOLDEN ASYMMETRY` / `GOLDEN ASYMMETRIES`） | 16 筆（含三輪新增 1 筆，`BinDisplay/MyBinDisp.h` 的 `ComPort`/`ComPort2` 初始化不對稱；含 20260824 GATE7-V 新增 1 筆，Command.cpp SETSOAK_ 寫入路徑不對稱） |
 | 其中 DIVERGENCE 類（port 自身偏離 golden，已揭露，非 golden 本身缺陷；csystem.cpp/SCK_ART.cpp 各 1 筆合計 2） | 2 筆 |
 | 其中 GAP / LEAK / NOTE / INCONSISTENCY / GOTCHA / SPELLINGS / TYPO / DEAD CODE / INVARIANT / RACE 等罕見詞彙 | 25 筆（NOTE 13／GOTCHA 2／GAP 2／LEAK 2／INCONSISTENCY 1／SPELLINGS 1／TYPO 1／DEAD CODE 1／INVARIANT 1／RACE 1；含三輪新增 NOTE +2、GOTCHA +1，皆在 `cShowBinSelect.cpp`/`BinDisplay/MyBinDisp.h`；含 20260824 五輪 NOTE +1，`Motor/myMN200motor.cpp` BINDISP2-e；含 20260824 R6 NOTE +8，fQwertyKey G-a..d ×4＋fPassword G-P1..P4 ×4） |
@@ -1602,11 +1602,18 @@ GATE 依賴缺口說明，非 golden 缺陷紀錄。
 | 3 | GOLDEN ODDITY（未編號） | ODDITY | cConfiguration.cpp:153-161 | golden `edtSetIPSCQtyClick` :7700-7703 | 同一手法第三例：`ShowQwertyKey(...,true,60000,0)`，Min/Max 顛倒 | 同上 | AI(W906-FW3-Config-WA) 20260820 |
 | 4 | golden copy-paste bug（未編號，RECON 4.3 記載） | BUG | forms/fConfiguration.h:67-74（banner 揭露；`sbUpdateHPClick` 本身本波未宣告） | golden `sbUpdateHPClick` :7088-7111（RECON #98） | `sbUpdateHPClick`（儲存 HP 表格的按鈕）複製貼上自 `sbUpdateTrayClick`，實際執行的卻是重新載入 TRAY 格與清除 TRAY 按鈕的 Down 狀態，而非 HP 格自己的對應動作 | `sbUpdateHPClick`/`sbUpdateTrayClick` 皆屬 (b) write-path，本波依 RECON 6.2 指示刻意不排入顯示側波次，未翻譯；記錄供未來寫入波次處理時得知這是 golden 既有瑕疵、需照翻 | RECON_cConfiguration_displayside.md §4.3（引用於 AI(W906-FW3-Config-WA) 20260820） |
 
-### BinDisplay/MyBinDisp.h + MyBinDisp.cpp（4 筆）
+### BinDisplay/MyBinDisp.h + MyBinDisp.cpp（11 筆，20260824 R7 增 7 筆——FW-BINDISP3 協定子類波）
 
 | # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
 |---|---|---|---|---|---|---|---|
 | 1 | GOLDEN ODDITY（DEVIATION (a)，未編號） | ODDITY | BinDisplay/MyBinDisp.h:128-138；MyBinDisp.cpp:581-587 | golden `FlashPro`/`ClearAutoChangingWarn` :3129-3168 | `FlashPro` 透過全域單例 `HSys.BinDisCtrl->GetColorNow(...)`/`->StartFlash(...)` 呼叫「自己」，而不是直接 `this->...`——在正式機上 `HSys.BinDisCtrl` 本來就是 `this`，是多餘的全域間接呼叫；golden 自己的寫法，非翻譯產物 | 純粹是不必要的間接呼叫，行為與 `this->` 完全相同；忠實保留未「修正」 | AI(W906-BinDisp-WA) 20260820 |
+| 5 | GOLDEN DEFECT (i) | DEFECT | MyBinDisp.cpp:1189-1191（SetBackGround_TFT）,1226-1228（SetNoBackGround_TFT） | golden MyBinDisp.cpp:1105,:1119-1123（及 :1139 同型） | sprintf 以 20 個 %c 寫進 `char cSendCommand[20]`——20 字元＋NUL＝21 bytes，**1-byte stack overflow**（TFT Magazine 版正確用 char[21]；主迴圈對 golden 字面坐實） | 每次設定背景色都越界寫 1 byte；x86 疊框下通常吃進 padding 未爆——**真面板 bring-up 前必須裁決**（忠實保留 vs 擴 buffer） | AI(W906-FW-BINDISP3) 20260824 |
+| 6 | GOLDEN ODDITY (j) | ODDITY | MyBinDisp.cpp:1258,1320,1326,1412 | golden :1218,:1308 | MagazineWriteBin_HTA18/_BT008 的 log 記到過期的 SendBuffer 而非實際送出的 cSendCommand（golden 20240906 只修了 TFT 路徑） | 通訊除錯 log 內容與實際線上封包不符，誤導除錯 | AI(W906-FW-BINDISP3) 20260824 |
+| 7 | GOLDEN ODDITY (k) | ODDITY | MyBinDisp.cpp:1803 | golden :1684-2240 | `anSendCommandBuf` 永不清空——multi-send 每輪追加 hex dump | log 行單調變長、記憶體無上限成長（長時運轉的慢性洩漏形狀） | AI(W906-FW-BINDISP3) 20260824 |
+| 8 | GOLDEN ODDITY (l) | ODDITY | MyBinDisp.cpp:728 | golden :29 | `anSendBinCommandBuf` 宣告後全 golden 零引用 | 死全域；照翻 | AI(W906-FW-BINDISP3) 20260824 |
+| 9 | GOLDEN ODDITY (m) | ODDITY | MyBinDisp.cpp:1804 | golden :1684-2240（閃爍搜尋段） | `bMagazineLink[iAuto3MagazineIndex-i]` 無下界檢查，iAuto3MagazineIndex<13 時可讀負索引 | 越界讀（UB）；實務依 magazine 配置未爆；照翻 | AI(W906-FW-BINDISP3) 20260824 |
+| 10 | GOLDEN ODDITY (n) | ODDITY | MyBinDisp.cpp:2375,2479,2504,2615,2637 | golden 對應行 | `iRusStatus=2/4/1` 裸數字（實為狀態 enum 別名） | 可讀性陷阱；照翻 | AI(W906-FW-BINDISP3) 20260824 |
+| 11 | GOLDEN ODDITY (o) | ODDITY | MyBinDisp.cpp:705-707（banner）,2373 | golden :2248 | DoStartSetColor 的 `static bool bFirst=false` 全檔零賦值——「只跑一次」的 Task=10 detour 其實每次 case-1 都跑 | 意圖是一次性初始化、實際每輪重跑；行為穩定但與註解意圖不符；照翻 | AI(W906-FW-BINDISP3) 20260824 |
 | 2 | GOLDEN GOTCHA（DEVIATION (b)，未編號） | GOTCHA | BinDisplay/MyBinDisp.h:139-153 | golden 建構子 :39-129 | golden 建構子本身有多個 scalar/array 欄位從未賦值，隱含依賴 BCB6 `TObject::NewInstance` 在建構子執行前先把整塊實例記憶體歸零——這個「零值」從未在 golden 建構子裡明講，是隱性的 VCL 平台語意 | 若 port 不額外補一個 `ZeroInitVclFields()` 手動歸零，這些欄位在標準 C++ 下會是未初始化的隨機值而非 golden 實際的 0/false/NULL——已補上等效初始化以維持行為對等，記錄供未來比對 | AI(W906-BinDisp-WA) 20260820 |
 | 3 | GOLDEN ASYMMETRY（DEVIATION (c)，未編號） | ASYMMETRY | BinDisplay/MyBinDisp.h:154-161 | golden 建構子 :86（`ComPort=4;`） | `ComPort` 在建構子裡被賦值字串 `"4"`，但同類的 `ComPort2` 在建構子裡完全沒被賦值（僅靠 `AnsiString` 自己的預設建構子變成 `""`）——這個不對稱是 golden 自己的寫法 | 兩個看似成對的欄位初始值不同源；忠實保留該不對稱，未「補齊」`ComPort2` 的預設值 | AI(W906-BinDisp-WA) 20260820 |
 | 4 | **GOLDEN DEFECT（使用者指定的已知案例）** | DEFECT | MyBinDisp.cpp:89-97,451 | golden `WriteTargetBin` :608 | `WriteTargetBin` 的邊界檢查 `if(Index>MAX_BIN_UNIT) return;` 應該是 `>=MAX_BIN_UNIT`（`MAX_BIN_UNIT` 本身就是「最後一個合法索引之後」那個哨兵值，`iSetBin[MAX_BIN_UNIT][...]`/`bSetBin[MAX_BIN_UNIT]` 等陣列大小恰好是 `MAX_BIN_UNIT`）——`>` 讓 `Index==MAX_BIN_UNIT` 這個 off-by-one 值溜過檢查 | `Index==MAX_BIN_UNIT` 時會寫到 `iSetBin[Index][...]`/`bSetBin[Index]=true;`，越界寫入陣列尾端後一個元素；忠實翻譯保留 `>`（未改成 `>=`），留供使用者裁決是否修正 | AI(W906-BinDisp-WA) 20260820 |
