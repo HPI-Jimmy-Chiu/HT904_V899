@@ -9343,3 +9343,18 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   bSaveTemperatureByMachine 讀取變體（uTemp_Set.cpp:2182-2190 檔在
   sSaveByMachine），但 SETSOAK 寫入點無條件寫 DataPath+recipe——
   by-machine 機台上寫的檔沒人讀（讀寫不對稱，照翻未修）。
+
+## 20260824 III — GATE 7 使用者裁決落地＋計數更正（純註解）
+
+- **使用者裁決（20260824）**：GATE 7 家族**維持現況只做 1-4**——遠端
+  SETTEMP/SETSOAK 命令執行回覆/改欄位/SetTemp/ChangeTempMode，
+  **寫共用 config 那步全部續鎖**。16 個站點標籤由「queued for
+  redirect-seam design」改寫為「user ruling 20260824: stays gated」，
+  banner 加「Do not re-open without a new user ruling」。純註解，
+  -fsyntax-only 綠。
+- **計數更正（誠實揭露）**：GATE7-V 那節報「DataPath 7 站點」是錯的
+  ——當時 grep 被 head 截斷。逐站分類的真值：**DataPath 家族 14 站點**
+  （GATE 7 Temperature.Data ×2＋Tester.Data 良率/警報 ×12）＋
+  **AuthPath 家族 2 站點**（:12465/:12477 config.ini）＝16。
+  結論不變（DataPath 全部呼叫當下現組、--dry 涵蓋；AuthPath 不涵蓋），
+  只有分母錯。教訓＝枚舉宣稱不可用 head 截斷的輸出當完整清單。
