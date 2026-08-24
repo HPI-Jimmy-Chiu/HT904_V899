@@ -690,6 +690,14 @@ add_library(ht9045_forms STATIC
     forms/fShuttleMove.cpp
     forms/fHome.cpp
     forms/fSetup.cpp
+    # AI(W906-FW-QWKEY1-integ) 20260824: fQwertyKey/fPassword facades -- the
+    # four globals (fQwertyKey/fQwertyKey2/fPassword/fPassword2) must live in
+    # the forms layer so queued ht9045_forms consumers can un-gate without
+    # re-creating the undeclared forms->sm archive edge (:618-626). Their
+    # sm-reaching methods live in root myQwertyKeyBoard.cpp/Password.cpp
+    # (same split as cSetUp.cpp/cTemperFrom.cpp).
+    forms/fQwertyKey.cpp
+    forms/fPassword.cpp
     forms/fRotate.cpp
     forms/fAOI.cpp
     # AI(W906-W7-F0-fix) 20260728: MOVED here from ht9045_sm -- the 3 AMR-mode
@@ -1920,6 +1928,12 @@ add_library(ht9045_sm STATIC
     # all ht9045_sm residents, and ht9045_forms cannot link sm (documented
     # cycle at :589-593). Same root-file split as cTemperFrom/MainTempMode.
     cSetUp.cpp
+    # AI(W906-FW-QWKEY1-integ) 20260824: the sm-reaching halves of the
+    # fQwertyKey/fPassword pair (TfQwertyKey::FormDestroy needs MyDBIProcess/
+    # LogSoftwareOffTime; TfPassword::sbPasswordModifyOKClick needs
+    # ShowMyMessage) -- same root-file split as cSetUp.cpp above.
+    myQwertyKeyBoard.cpp
+    Password.cpp
     # AI(W906-FW-CMD-E) 20260821: MainTempMode.cpp -- TfMain::ChangeTempMode
     # (golden main.cpp:21749-21925), the temperature-mode switcher extracted
     # from main.cpp. NOT MainCalcCore material (that file's charter is pure
