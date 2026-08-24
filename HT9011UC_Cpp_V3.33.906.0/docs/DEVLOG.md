@@ -9391,3 +9391,45 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   （CommaText 會塌欄）；AGENTS.md「欄位順序敏感」對此檔應精緻化為
   「欄名/欄數敏感」。
 - 全程唯讀（僅一個新 doc），零程式碼變更，不需 gate。
+
+## 20260824 VI — FW-SETUP-D 收案：TScrollBar headless＋ctor 陣列＋7 方法
+
+- 交付：vclcompat/ScrollBar.h（新檔 119 行，headless 欄位袋照 20260824
+  裁決；**不入全域 namespace**——handlerlog.h:122 已有 ::TScrollBar，
+  以 handlerlog.cpp 實編證明共存）；cSetUp.cpp +824／forms/fSetup.h +174
+  全 append-only；golden ctor :123-216 → 顯式 Init()（fTemp_Set 前例）、
+  5 個檔內全域陣列、7 方法 606 golden 行（Init/FormDestroy/CompChange/
+  CHSetError/rgUseSuckModeClick/CheckShuttlePitch/CoSocketComboChange）。
+- 台帳分類帳更新：TfSetup 25/47 翻譯（A15+B3+D7）；佇列 22/47
+  （write-path 4、fQwertyKey/fPassword 7、TImage 2、ScrollBar1Change
+  962 行 MIXED 大戶、生命週期 5、其他）。「ctor-array-blocked」
+  「TScrollBar-zero-port」兩個佇列理由**清零退役**。
+- **主迴圈抓到的錯**：Wave B banner「NOT YET WIRED」是過時宣稱
+  （CMakeLists.txt:1922 早在 20260821 接線），把 Wave D agent 也帶偏
+  ——banner 已改寫，且後果被尊重：本波驗收跑**真雙 gate**
+  （137/142×2、失敗集逐項＝常駐五項）而非 syntax-only。
+  7 個 span 零 config 寫入的宣稱主迴圈獨立重驗（0 hits）。
+- guard：system/ 三小時 mtime 代理＝0 檔變動。
+- 三筆 GOLDEN 新發現（CHSetError int>63.5、pitch switch 缺 N-mode case、
+  CoSocketComboChange 無視 Sender）＋FW-BINDISP1 的 ICBD-1，**待下次
+  台帳維護一起入帳**。
+- 殘留（誠實）：Init() 尚無呼叫者（接線波保序：Init 先於其餘方法）；
+  golden :53-56/:121 其餘全域未定義（消費者全在佇列方法內）。
+
+### 🔖 RESUME（最新）
+
+- **今日（20260824）已收**：FW-TEMP3（temp.mode bind 層解碼）、GATE7-V
+  複驗＋台帳 657、GATE 7 使用者裁決落地（全 16 站點續鎖）、FW-BINDISP1
+  （InstallColorBinDisplay Offline DEVIATION）、HAL-MOT1（mot_table 紙上
+  分類＋10 開放問題）、FW-SETUP-D（本節）。
+- **下一波（進行中）**：FW-BINDISP2 解鎖波（行為變更單獨 commit）——
+  database.cpp:193 ctor 路呼叫點解 #if 0＋MN200 GATE c/e 拆閘；
+  前置審計：CheckAndReadIniDataGeneral 在 Install 內的 write-back 語意
+  （既有 :293-303 gate note 已論證同類無新害，須複驗）＋
+  NUMBER_PANEL_TYPE 本機=0 的死分支事實；驗收=全新雙 gate。
+- **佇列（等使用者/後續）**：fSetup 剩 22 方法各原因；TMyBinDispHT9046
+  協定子類翻譯波；HAL-MOT1 的 10 個開放問題（等使用者回）；台帳第五輪
+  維護（ICBD-1＋SETUP-D 三筆）；temp.mode 渲染 F5 人工驗證。
+- **裁決記錄（20260824）**：GATE 7 全家族維持 gated 只做 1-4；TScrollBar
+  headless；實驗機（HT9050）有 color bin display；V906=軟體版號、
+  Model=HT9050、主用 PCIE-1203 控馬達與 IO。
