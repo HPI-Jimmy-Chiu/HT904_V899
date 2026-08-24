@@ -38,7 +38,7 @@
 //     ~TMyVacuumPanel (golden body IS empty -- see below)  golden :274-283
 //     ShowCurectVal/ShowThreshold/SetEvent's Visible guard golden :285-371 (guard only)
 //     SetBG                                                golden :373-378 (100% gated, see below)
-//     edSVClick                                            golden :380-383 (gated, fQwertyKey has no port)
+//     edSVClick                                            golden :380-383 (un-gated 20260824, fQwertyKey real since FW-QWKEY1)
 //     btnSVClick                                           golden :385-389 -- 100% ACTIVE
 //     btnVaccumOnOffOnClick                                golden :391-416 (gated, see GATE 3)
 //     RefreshCurrectVal/RefreshThresholdVal                golden :418-445 -- 100% ACTIVE
@@ -96,10 +96,10 @@
 //   (3) `fQwertyKey->ShowQwertyKey(...)` (golden edSVClick :382) and the
 //       ENTIRE golden `btnVaccumOnOffOnClick` body (golden :391-416, which
 //       casts `Sender` to `TBtnPanelLane*` -- GATE(2)'s type, unspellable
-//       here) -- fQwertyKey has NO port anywhere in this tree, an
-//       ALREADY-ESTABLISHED deferred surface (EJ1N/MyOmronPanel.h GATE (3),
-//       Automation/AGV_PortScan.h's own banner, both cited there). ACTIVE
-//       arm of edSVClick: no-op (matches MyOmronPanel precedent exactly).
+//       here) -- fQwertyKey real since FW-QWKEY1 (fc08e09); GATE (3)
+//       OPENED 20260824 (FW-QWKEY2) for edSVClick, whose call is now live
+//       (latent until HTEdit GATE (6) wires the keyboard instance).
+//       btnVaccumOnOffOnClick is unchanged (still gated on GATE(2)'s type):
 //       ACTIVE arm of btnVaccumOnOffOnClick: no-op -- it is wired only as
 //       bplOn/bplOff's OnClick in golden, and those members do not exist
 //       here (GATE 2), so it is unreachable in this build either way; kept

@@ -23,8 +23,8 @@
 //  full 129-method inventory), 289 golden lines by this wave's own per-
 //  method accounting (the recon's section 6.4 rollup states 354; see this
 //  file's facade header for the reconciliation of that discrepancy). 17 of
-//  the 28 touch GATE WA-1 (fQwertyKey, an already-established tree-wide
-//  gate, not a new finding); the remaining 11 are fully real.
+//  the 28 touch GATE WA-1 (fQwertyKey; OPENED 20260824 by FW-QWKEY2 --
+//  entity real since FW-QWKEY1); the remaining 11 are fully real.
 //
 //  fConfiguration global is NOT declared this wave -- see forms/
 //  fConfiguration.h's own INTEGRATION STATUS note (same posture as
@@ -40,144 +40,117 @@
 #include "common.h"      // TrayTablePath/PlateTablePath (sbtReloadTrayClick/sbtReloadHPClick)
 
 #include <cstdlib>       // atoi/atof
+#include "forms/fQwertyKey.h"  // AI(W906-FW-QWKEY2) 20260824: fQwertyKey extern for un-gated ShowQwertyKey sites (real since FW-QWKEY1 fc08e09; latent until HTEdit GATE (6) wiring)
 
 // -----------------------------------------------------------------------------
 //  6.1 bucket -- pure ShowQwertyKey one-liners, GATE WA-1 (see forms/
-//  fConfiguration.h banner). The 13 pure one-liners below reduce to empty
-//  bodies while gated.
+//  fConfiguration.h banner; OPENED 20260824). The 13 one-liners below are
+//  live, latent until HTEdit GATE (6) wires the keyboard instance.
 // -----------------------------------------------------------------------------
 
 // -- edSetTempClick (golden cConfiguration.cpp:5962-5965) -- WA-1 -----------
-void TfConfiguration::edSetTempClick()
+void TfConfiguration::edSetTempClick(TObject *Sender)
 {
-    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 -- see forms/fConfiguration.h
-    // GATE REGISTER WA-1 (fQwertyKey has no port, established tree-wide gate).
-#if 0
+    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 (OPENED 20260824) -- see forms/fConfiguration.h
+    // GATE WA-1 OPENED 20260824 (FW-QWKEY2): fQwertyKey real since FW-QWKEY1 (fc08e09).
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 0.0, 300.0);
-#endif
 }
 
 // -- edSetTempKeyDown (golden cConfiguration.cpp:5967-5971) -- WA-1 ---------
-void TfConfiguration::edSetTempKeyDown()
+void TfConfiguration::edSetTempKeyDown(TObject *Sender)
 {
-    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1, see edSetTempClick above.
-#if 0
+    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 (OPENED 20260824), see edSetTempClick above.
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 0.0, 300.0);
-#endif
 }
 
 // -- edE31_Fi1XClick (golden cConfiguration.cpp:5983-5986) -- WA-1 ----------
-void TfConfiguration::edE31_Fi1XClick()
+void TfConfiguration::edE31_Fi1XClick(TObject *Sender)
 {
-    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1, see edSetTempClick above.
-#if 0
+    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 (OPENED 20260824), see edSetTempClick above.
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 6, true, 0.95, 1.05);
-#endif
 }
 
 // -- edD25_60mmClick (golden cConfiguration.cpp:6440-6443) -- WA-1 ----------
-void TfConfiguration::edD25_60mmClick()
+void TfConfiguration::edD25_60mmClick(TObject *Sender)
 {
-    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1, see edSetTempClick above.
-#if 0
+    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 (OPENED 20260824), see edSetTempClick above.
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 0.5, -0.5);   //2014-06-26 Dell for TSMC high-temp Load cell offset
-#endif
 }
 
 // -- edD60_56mmClick (golden cConfiguration.cpp:6580-6583) -- WA-1 ----------
-void TfConfiguration::edD60_56mmClick()
+void TfConfiguration::edD60_56mmClick(TObject *Sender)
 {
-    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1, see edSetTempClick above.
-#if 0
+    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 (OPENED 20260824), see edSetTempClick above.
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 0.5, -0.5);   //2014-06-26 Dell for TSMC high-temp Load cell offset
-#endif
 }
 
 // -- edA32_1Click (golden cConfiguration.cpp:7611-7614) -- WA-1 -------------
-void TfConfiguration::edA32_1Click()
+void TfConfiguration::edA32_1Click(TObject *Sender)
 {
-    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1, see edSetTempClick above.
-#if 0
+    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 (OPENED 20260824), see edSetTempClick above.
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_NO_SYMBOL|N_NO_SPACE);
-#endif
 }
 
 // -- edtC15Click (golden cConfiguration.cpp:7675-7678) -- WA-1 --------------
-void TfConfiguration::edtC15Click()
+void TfConfiguration::edtC15Click(TObject *Sender)
 {
-    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1, see edSetTempClick above.
+    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 (OPENED 20260824), see edSetTempClick above.
     // GOLDEN ODDITY (recorded, not "fixed"): Min/Max args are reversed
     // (1440, 30) exactly as golden wrote them -- preserved verbatim.
-#if 0
     fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_DOUBLE, 0, true, 1440, 30);
-#endif
 }
 
 // -- edL09_Sh1LClick (golden cConfiguration.cpp:7680-7683) -- WA-1 ----------
-void TfConfiguration::edL09_Sh1LClick()
+void TfConfiguration::edL09_Sh1LClick(TObject *Sender)
 {
-    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1, see edSetTempClick above.
+    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 (OPENED 20260824), see edSetTempClick above.
     // GOLDEN ODDITY: Min/Max reversed (1000, -1000), preserved verbatim.
-#if 0
     fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_INTEGER, 0, true, 1000, -1000);
-#endif
 }
 
 // -- edN05_AmbTempClick (golden cConfiguration.cpp:7685-7688) -- WA-1 -------
-void TfConfiguration::edN05_AmbTempClick()
+void TfConfiguration::edN05_AmbTempClick(TObject *Sender)
 {
-    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1, see edSetTempClick above.
-#if 0
+    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 (OPENED 20260824), see edSetTempClick above.
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 15.0, 50.0);
-#endif
 }
 
 // -- edN06_PortClick (golden cConfiguration.cpp:7690-7693) -- WA-1 ----------
-void TfConfiguration::edN06_PortClick()
+void TfConfiguration::edN06_PortClick(TObject *Sender)
 {
-    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1, see edSetTempClick above.
-#if 0
+    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 (OPENED 20260824), see edSetTempClick above.
     fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_PORT);
-#endif
 }
 
 // -- edN06_PasswordClick (golden cConfiguration.cpp:7695-7698) -- WA-1 ------
-void TfConfiguration::edN06_PasswordClick()
+void TfConfiguration::edN06_PasswordClick(TObject *Sender)
 {
-    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1, see edSetTempClick above.
-#if 0
+    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 (OPENED 20260824), see edSetTempClick above.
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_PASSWORD);
-#endif
 }
 
 // -- edtSetIPSCQtyClick (golden cConfiguration.cpp:7700-7703) -- WA-1 -------
-void TfConfiguration::edtSetIPSCQtyClick()
+void TfConfiguration::edtSetIPSCQtyClick(TObject *Sender)
 {
-    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1, see edSetTempClick above.
+    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 (OPENED 20260824), see edSetTempClick above.
     // GOLDEN ODDITY: Min/Max reversed (60000, 0), preserved verbatim.
-#if 0
     fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_INTEGER, 0, true, 60000, 0);
-#endif
 }
 
 // -- edN04_ModelClick (golden cConfiguration.cpp:7705-7708) -- WA-1 ---------
-void TfConfiguration::edN04_ModelClick()
+void TfConfiguration::edN04_ModelClick(TObject *Sender)
 {
-    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1, see edSetTempClick above.
-#if 0
+    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 (OPENED 20260824), see edSetTempClick above.
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_NO_SPACE);
-#endif
 }
 
 // -- edA22_2Click (golden cConfiguration.cpp:6593-6601) -- WA-1 (partial) ---
 // Frank 20161109 add magnetic scale
-void TfConfiguration::edA22_2Click()
+void TfConfiguration::edA22_2Click(TObject *Sender)
 {
-    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 -- see forms/fConfiguration.h
-    // GATE REGISTER WA-1. The edA22_3 nudge below is REAL and unaffected.
-#if 0
+    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 (OPENED 20260824) -- see forms/fConfiguration.h
+    // GATE WA-1 OPENED 20260824. The edA22_3 nudge below is REAL and unaffected.
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 0.01, 10.0);
-#endif
 
     if(atof(edA22_3->Text.c_str())<atof(edA22_2->Text.c_str()))
     {
@@ -187,14 +160,12 @@ void TfConfiguration::edA22_2Click()
 
 // -- edA22_3Click (golden cConfiguration.cpp:6603-6607) -- WA-1 (partial) ---
 // Frank 20161109 add magnetic scale
-void TfConfiguration::edA22_3Click()
+void TfConfiguration::edA22_3Click(TObject *Sender)
 {
     double dCount=atof(edA22_2->Text.c_str())+0.01;
-    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1, see edSetTempClick above.
-#if 0
+    // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 (OPENED 20260824), see edSetTempClick above.
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, dCount, 10.0);
-#endif
-    (void)dCount;   // gate made this real local go quiet -- see forms/fConfiguration.h GATE WA-1
+    (void)dCount;   // AI(W906-FW-QWKEY2) 20260824: gate opened, dCount consumed again; harmless cast kept
 }
 
 // -- EnableRMSFunc (golden cConfiguration.cpp:7726-7735) -- REAL, no gate ---
@@ -242,25 +213,19 @@ void TfConfiguration::btnModifyTrayClick()
            strngrdTray->Cells[iSelTrayCol][0].AnsiPos(AnsiString("Group"))!=0     ||
            strngrdTray->Cells[iSelTrayCol][0].AnsiPos(AnsiString("Memo"))!=0)
         {
-            // AI(W906-FW3-Config-WA) 20260820: GATE WA-1, see forms/fConfiguration.h.
-#if 0
+            // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 (OPENED 20260824), see forms/fConfiguration.h.
             fQwertyKey->ShowQwertyKey(edtTemp, N_NO_SYMBOL);
-#endif
         }
         else if(strngrdTray->Cells[iSelTrayCol][0].AnsiPos(AnsiString("Columns (X)"))!=0 ||
                 strngrdTray->Cells[iSelTrayCol][0].AnsiPos(AnsiString("Rows (Y)"))!=0     ||
                 strngrdTray->Cells[iSelTrayCol][0].AnsiPos(AnsiString("BlockNumberX"))!=0 ||
                 strngrdTray->Cells[iSelTrayCol][0].AnsiPos(AnsiString("BlockNumberY"))!=0)
         {
-#if 0
             fQwertyKey->ShowQwertyKey(edtTemp, N_INTEGER, 0, true, 0, 1000);
-#endif
         }
         else
         {
-#if 0
             fQwertyKey->ShowQwertyKey(edtTemp, N_DOUBLE, 2, true, 0.00, 1000.00);
-#endif
         }
         strngrdTray->Cells[iSelTrayCol][iSelTrayRow]=edtTemp->Text;
     }
@@ -368,23 +333,17 @@ void TfConfiguration::btnModifyHPClick()
            strngrdHP->Cells[iSelHPCol][0].AnsiPos(AnsiString("Group"))!=0     ||
            strngrdHP->Cells[iSelHPCol][0].AnsiPos(AnsiString("Memo"))!=0)
         {
-            // AI(W906-FW3-Config-WA) 20260820: GATE WA-1, see forms/fConfiguration.h.
-#if 0
+            // AI(W906-FW3-Config-WA) 20260820: GATE WA-1 (OPENED 20260824), see forms/fConfiguration.h.
             fQwertyKey->ShowQwertyKey(edtTemp, N_NO_SYMBOL);
-#endif
         }
         else if(strngrdHP->Cells[iSelHPCol][0].AnsiPos(AnsiString("Columns (X)"))!=0 ||
                 strngrdHP->Cells[iSelHPCol][0].AnsiPos(AnsiString("Rows (Y)"))!=0)
         {
-#if 0
             fQwertyKey->ShowQwertyKey(edtTemp, N_INTEGER, 0, true, 0, 1000);
-#endif
         }
         else
         {
-#if 0
             fQwertyKey->ShowQwertyKey(edtTemp, N_DOUBLE, 2, true, 0.00, 1000.00);
-#endif
         }
         strngrdHP->Cells[iSelHPCol][iSelHPRow]=edtTemp->Text;
     }

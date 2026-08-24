@@ -767,11 +767,16 @@ AnsiString TMyTempPanel::GetCaption()
 //
 //   (W8-4) `fQwertyKey->ShowQwertyKey(...)` -- the ONLY leaf action in all
 //       four handlers (golden :435,449,454,461,466,473,478,491,496,503,508,
-//       518,522,531,545,549,553,558,580,584,592,596).  fQwertyKey has no port.
+//       518,522,531,545,549,553,558,580,584,592,596).  fQwertyKey has no port. [EXPIRED 20260824, see UPDATE]
 //         cmd:  grep -rn --include=*.h --include=*.cpp -E
 //               'fQwertyKey|ShowQwertyKey' .   (excluding ./tools/, ./build/)
 //         run:  2026-08-11 11:24:21  -> zero declarations/definitions; only
 //               comments and generated .dfm layout tables under ./build/.
+//         UPDATE 20260824 (FW-QWKEY2): claim EXPIRED -- FW-QWKEY1 (fc08e09)
+//         landed forms/fQwertyKey.{h,cpp}. The single-call site
+//         edLimitMouseDown is un-gated and live; the branch-tree blocks
+//         below STAY gated on their other co-blockers (W8-2 Buffer->Tag /
+//         W8-3 fTemp_Set setters / W8-5 Barcode_Reader).
 //       WHY FAITHFUL: this is the "keyboard/dialog interaction with no
 //       offline equivalent" case, and the faithful offline default is
 //       USER DID NOTHING.  ShowQwertyKey's entire contract is "pop a modal
@@ -811,6 +816,7 @@ AnsiString TMyTempPanel::GetCaption()
                            //   InputLimit (INPUT_LIMIT, :3058) -- both REAL
 #include "CosFunction.h"   // CosFunction (:488) -- REAL
 #include "MachineType.h"   // eTempControll tcXxx (:637-652), CC_ASE_KaohSiung
+#include "forms/fQwertyKey.h"  // AI(W906-FW-QWKEY2) 20260824: fQwertyKey extern for un-gated ShowQwertyKey sites (real since FW-QWKEY1 fc08e09; latent until HTEdit GATE (6) wiring)
                            //   (:308), bcTemperature (:921) -- ALL REAL
 //---------------------------------------------------------------------------
 //  golden MyTempPanel.cpp:417-526  --  TMyTempPanel::edBaseMouseDown
@@ -823,7 +829,7 @@ void TMyTempPanel_edBaseMouseDown(TMyTempPanel *Self, TObject *Sender, int X, in
 
     //AI(W906-PT-W8) 20260811: GATES (W8-2)/(W8-3)/(W8-4)/(W8-5) -- golden's
     //  whole body is a `Buffer->Tag` branch tree (no Tag member here) whose
-    //  every leaf is `fQwertyKey->ShowQwertyKey(...)` (no port), fed by
+    //  every leaf is `fQwertyKey->ShowQwertyKey(...)` (real since FW-QWKEY1), fed by
     //  `fTemp_Set->MaxTempSetting()/MinTempSetting()` (no port) and guarded by
     //  `Barcode_Reader(...)` (no port).  ACTIVE arm: the Sender downcast above
     //  (real -- vclcompat TEdit:TCustomEdit:TControl:TObject is a single
@@ -943,7 +949,7 @@ void TMyTempPanel_edBaseMouseDown(TMyTempPanel *Self, TObject *Sender, int X, in
 //  golden MyTempPanel.cpp:528-532  --  TMyTempPanel::edLimitMouseDown
 void TMyTempPanel_edLimitMouseDown(TMyTempPanel *Self, TObject *Sender, int X, int Y)
 {
-    //AI(W906-PT-W8) 20260811: GATE (W8-4) -- golden's ENTIRE body is one
+    //AI(W906-PT-W8) 20260811: GATE (W8-4) OPENED 20260824 -- golden's ENTIRE body is one
     //  ShowQwertyKey call, with hard-coded bounds 0.0 / 12.0.
     //  CORRECTION TO A CLAIM THIS COMMENT ORIGINALLY MADE, recorded rather
     //  than silently deleted: an earlier draft of this note called the
@@ -959,10 +965,8 @@ void TMyTempPanel_edLimitMouseDown(TMyTempPanel *Self, TObject *Sender, int X, i
     //  the callee.  0.0/12.0 here, and the (High, Low) pairs the other three
     //  handlers pass, are all correct as written.  No bug; nothing to preserve
     //  or correct.
-    //  ACTIVE arm: faithful "user did nothing" no-op.
-#if 0
+    //  Live since 20260824 (FW-QWKEY2); headless no-op until keyboard wiring.
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 0.0, 12.0);
-#endif
     (void)Self; (void)Sender; (void)X; (void)Y;
 }
 //---------------------------------------------------------------------------
@@ -1010,15 +1014,16 @@ void TMyTempPanel_edinitialMouseDown(TMyTempPanel *Self, TObject *Sender, int X,
     Buffer=(TEdit *)Sender;
 
     //AI(W906-PT-W8) 20260811: GATES (W8-2)/(W8-4)/(W8-5) -- `Buffer->Tag`
-    //  (no Tag member), `fQwertyKey` (no port) and `Barcode_Reader` (no port).
+    //  (no Tag member), `fQwertyKey` (real since FW-QWKEY1) and `Barcode_Reader` (no port).
     //  NOTE for whoever un-gates this: golden's CUSTOMER_CODE==CC_ASE_KaohSiung
     //  branch and its `else` branch differ ONLY in which InputLimit pair the
     //  non-heat-gun arm uses (iIlitialTempHigh/Low vs iTempHigh/Low); the
     //  heat-gun arm is byte-identical in both.  That duplication is golden's
     //  own and is preserved, not folded.  CUSTOMER_CODE, CC_ASE_KaohSiung,
     //  INSTALL_HEAT_GUN, tcHeatGun1/2 and the whole InputLimit struct are ALL
-    //  REAL in this port -- ONLY Tag/Barcode_Reader/fQwertyKey are missing, so
-    //  this handler is the closest of the four to being un-gateable.
+    //  REAL in this port -- ONLY Tag/Barcode_Reader are still missing
+    //  (fQwertyKey real since FW-QWKEY1, 20260824), so this handler is the
+    //  closest of the four to being un-gateable.
     //  ACTIVE arm: faithful "user did nothing" no-op.  Golden VERBATIM:
 #if 0
     if(Buffer->Tag==1)

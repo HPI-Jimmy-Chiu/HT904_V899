@@ -22,13 +22,13 @@
 //   DoIniDataToForm                     :3145-3669 translated, GATE(G-FTestIF)
 //   UpDateEdit                          :3671-4101 translated, GATE(G-RGColor x2, G-Image, G-Align)
 //   edSoakTimeKeyPress                  :4103-4107 translated
-//   edSoakTimeClick                     :4109-4121 translated, GATE(G-Barcode,G-Qwerty)
-//   edJamSoakTimeClick                  :4123-4135 translated, GATE(G-Barcode,G-Qwerty)
-//   edLHP1MouseDown                     :4137-4151 DEVIATION sig, GATE(G-Barcode,G-Qwerty)
-//   edLHeatGun1MouseDown                :4153-4157 DEVIATION sig, GATE(G-Qwerty)
+//   edSoakTimeClick                     :4109-4121 translated, GATE(G-Barcode); G-Qwerty OPENED
+//   edJamSoakTimeClick                  :4123-4135 translated, GATE(G-Barcode); G-Qwerty OPENED
+//   edLHP1MouseDown                     :4137-4151 DEVIATION sig, GATE(G-Barcode); G-Qwerty OPENED
+//   edLHeatGun1MouseDown                :4153-4157 DEVIATION sig, G-Qwerty OPENED
 //   FormClose                           :4159-4169 DEVIATION sig, translated
-//   edLHP1KeyUp                         :4171-4175 DEVIATION sig, GATE(G-Qwerty)
-//   edLowBaseMouseDown                  :4177-4193 DEVIATION sig, GATE(G-Barcode,G-Qwerty)
+//   edLHP1KeyUp                         :4171-4175 DEVIATION sig, G-Qwerty OPENED
+//   edLowBaseMouseDown                  :4177-4193 DEVIATION sig, GATE(G-Barcode); G-Qwerty OPENED
 //   rgIndexHeatModeClick                :4195-4199 translated
 //   spbSaveClick                        :4201-4528 translated, SAFETY GATE (S2)
 //   SaveSetupFile                       :4532-5099 SAFETY GATE (S1), whole body
@@ -37,69 +37,69 @@
 //   DisableOffset                       :5137-5148 translated
 //   pgcTempOffsetChange                 :5150-5188 translated
 //   rgTemperatureModeClick              :5190-5223 translated, GATE(G-Barcode)
-//   edTargetHP1MouseDown                :5225-5231 DEVIATION sig, GATE(G-Qwerty)
+//   edTargetHP1MouseDown                :5225-5231 DEVIATION sig, G-Qwerty OPENED
 //   DisplayTargetTempEdit               :5233-5311 translated
 //   cbEnableIndividualModeClick         :5313-5316 translated
-//   edAmbHotGuartbentClick              :5318-5331 translated, GATE(G-Barcode,G-Qwerty)
+//   edAmbHotGuartbentClick              :5318-5331 translated, GATE(G-Barcode); G-Qwerty OPENED
 //   rbATC70ActiveOnClick                :5333-5354 translated
 //   rbATCActiveOnClick                  :5356-5377 translated
-//   edtATCInPC1MouseDown                :5379-5396 DEVIATION sig, GATE(G-Barcode,G-Qwerty)
-//   edAtcFileNameMouseDown              :5398-5402 DEVIATION sig, GATE(G-Qwerty)
-//   edATCAmbTempMouseDown               :5404-5428 DEVIATION sig, GATE(G-Barcode,G-Qwerty)
-//   edArm1OffsetMouseDown               :5430-5437 DEVIATION sig, translated+GATE(G-Qwerty)
-//   edATCTestTimeOffsetMouseDown        :5439-5443 DEVIATION sig, GATE(G-Qwerty)
-//   edATCTempAlwaysSameAlarmMouseDown   :5445-5449 DEVIATION sig, GATE(G-Qwerty)
-//   edATCChillerTempMouseDown           :5451-5472 DEVIATION sig, GATE(G-Qwerty x4)
-//   edATCInitialOffset1MouseDown        :5474-5488 DEVIATION sig, GATE(G-Barcode,G-Qwerty)
-//   edArm1NoFullsiteOffset_1MouseDown   :5490-5495 DEVIATION sig, GATE(G-Qwerty)
-//   edTSDTimeOutMouseDown               :5497-5501 DEVIATION sig, GATE(G-Qwerty)
+//   edtATCInPC1MouseDown                :5379-5396 DEVIATION sig, GATE(G-Barcode); G-Qwerty OPENED
+//   edAtcFileNameMouseDown              :5398-5402 DEVIATION sig, G-Qwerty OPENED
+//   edATCAmbTempMouseDown               :5404-5428 DEVIATION sig, GATE(G-Barcode); G-Qwerty OPENED
+//   edArm1OffsetMouseDown               :5430-5437 DEVIATION sig, translated+G-Qwerty OPENED
+//   edATCTestTimeOffsetMouseDown        :5439-5443 DEVIATION sig, G-Qwerty OPENED
+//   edATCTempAlwaysSameAlarmMouseDown   :5445-5449 DEVIATION sig, G-Qwerty OPENED
+//   edATCChillerTempMouseDown           :5451-5472 DEVIATION sig, G-Qwerty OPENED (x4)
+//   edATCInitialOffset1MouseDown        :5474-5488 DEVIATION sig, GATE(G-Barcode); G-Qwerty OPENED
+//   edArm1NoFullsiteOffset_1MouseDown   :5490-5495 DEVIATION sig, G-Qwerty OPENED
+//   edTSDTimeOutMouseDown               :5497-5501 DEVIATION sig, G-Qwerty OPENED
 //   SendATCSelfTest                     :5503-5548 SAFETY GATE (S5), whole body
 //   sbSafeTestATCClick                  :5550-5553 translated (calls S5)
 //   CheckTempSettingChange              :5555-5615 translated (pure compare)
 //   MaxTempSetting                      :5619-5685 translated (pure calc)
 //   MinTempSetting                      :5687-5721 translated (pure calc)
-//   edAmbTempClick                      :5728-5734 translated, GATE(G-Qwerty)
-//   edtIdleTime_LongClick                :5736-5747 translated, GATE(G-Qwerty)
-//   edtBoostOffset_LongClick            :5749-5752 GATE(G-Qwerty)
-//   edtBoostOffsetClick                 :5754-5757 GATE(G-Qwerty)
-//   edtInitialDelay_1Click              :5759-5762 GATE(G-Qwerty)
+//   edAmbTempClick                      :5728-5734 translated, G-Qwerty OPENED
+//   edtIdleTime_LongClick                :5736-5747 translated, G-Qwerty OPENED
+//   edtBoostOffset_LongClick            :5749-5752 G-Qwerty OPENED
+//   edtBoostOffsetClick                 :5754-5757 G-Qwerty OPENED
+//   edtInitialDelay_1Click              :5759-5762 G-Qwerty OPENED
 //   btnSortClick                        :5764-5781 translated
-//   edLimitHP1MouseDown                 :5783-5787 DEVIATION sig, GATE(G-Qwerty)
-//   edtLBTimeOutClick                   :5789-5792 GATE(G-Qwerty)
+//   edLimitHP1MouseDown                 :5783-5787 DEVIATION sig, G-Qwerty OPENED
+//   edtLBTimeOutClick                   :5789-5792 G-Qwerty OPENED
 //   FormDestroy                         :5794-5821 translated
 //   ShowLineOnTop                       :5823-5854 GATE(G-Align), whole body
 //   SaveRemoteTempOffset                :5856-5973 SAFETY GATE (S3, partial)
 //   SaveRemoteTempOffsetFromGPIB        :5975-6059 SAFETY GATE (S4, delegates)
 //   ReadRemoteTempOffset                :6061-6115 translated (read-only)
-//   edTJTempRange_HighClick             :6117-6120 GATE(G-Qwerty)
-//   edAmbGuardbandClick                 :6122-6125 GATE(G-Qwerty)
-//   edTJTempRange_LowClick              :6127-6130 GATE(G-Qwerty)
+//   edTJTempRange_HighClick             :6117-6120 G-Qwerty OPENED
+//   edAmbGuardbandClick                 :6122-6125 G-Qwerty OPENED
+//   edTJTempRange_LowClick              :6127-6130 G-Qwerty OPENED
 //   ControlATC60AirFlow                 :6132-6160 SAFETY GATE (S13, partial)
-//   edtThresholdClick                   :6162-6165 GATE(G-Qwerty)
-//   edDewPointRangeMouseDown            :6167-6170 DEVIATION sig, GATE(G-Qwerty)
-//   edDewPointAlarmIntervalMouseDown    :6172-6175 DEVIATION sig, GATE(G-Qwerty)
+//   edtThresholdClick                   :6162-6165 G-Qwerty OPENED
+//   edDewPointRangeMouseDown            :6167-6170 DEVIATION sig, G-Qwerty OPENED
+//   edDewPointAlarmIntervalMouseDown    :6172-6175 DEVIATION sig, G-Qwerty OPENED
 //   btnSameAsArm1Click                  :6177-6186 translated
-//   edtChamberBoostTimeClick            :6188-6191 GATE(G-Qwerty)
-//   edtChamberBoostOffsetClick          :6193-6196 GATE(G-Qwerty)
-//   edTempOffsetCountClick              :6198-6201 GATE(G-Qwerty)
-//   edTempDownContactDelayClick         :6203-6206 GATE(G-Qwerty)
-//   edtHeatGunTempATCMouseDown          :6208-6222 DEVIATION sig, GATE(G-Barcode,G-Qwerty)
+//   edtChamberBoostTimeClick            :6188-6191 G-Qwerty OPENED
+//   edtChamberBoostOffsetClick          :6193-6196 G-Qwerty OPENED
+//   edTempOffsetCountClick              :6198-6201 G-Qwerty OPENED
+//   edTempDownContactDelayClick         :6203-6206 G-Qwerty OPENED
+//   edtHeatGunTempATCMouseDown          :6208-6222 DEVIATION sig, GATE(G-Barcode); G-Qwerty OPENED
 //   chkTempCalByRecipeClick             :6225-6233 translated
 //   FormShortCut                        :6235-6242 OMITTED (TWMKey no port, see header)
-//   edLBTempAlarmTimeMouseDown          :6244-6248 DEVIATION sig, GATE(G-Qwerty)
-//   edtLBAirOnTempMouseDown             :6250-6254 DEVIATION sig, GATE(G-Qwerty)
-//   edtATCPIDOffset_MinPClick           :6256-6259 GATE(G-Qwerty)
-//   edFFC_Arm1TimeOn_01Click            :6261-6264 GATE(G-Qwerty)
-//   edtATC_HotGunTimeClick              :6266-6269 GATE(G-Qwerty)
-//   edtLBTempMinClick                   :6271-6274 GATE(G-Qwerty)
+//   edLBTempAlarmTimeMouseDown          :6244-6248 DEVIATION sig, G-Qwerty OPENED
+//   edtLBAirOnTempMouseDown             :6250-6254 DEVIATION sig, G-Qwerty OPENED
+//   edtATCPIDOffset_MinPClick           :6256-6259 G-Qwerty OPENED
+//   edFFC_Arm1TimeOn_01Click            :6261-6264 G-Qwerty OPENED
+//   edtATC_HotGunTimeClick              :6266-6269 G-Qwerty OPENED
+//   edtLBTempMinClick                   :6271-6274 G-Qwerty OPENED
 //   rgBasePointClick                    :6276-6279 translated
-//   edtSetTJ_OffsetClick                :6281-6284 GATE(G-Qwerty)
-//   edtSetTJ_SlopeChange                :6286-6289 GATE(G-Qwerty)
+//   edtSetTJ_OffsetClick                :6281-6284 G-Qwerty OPENED
+//   edtSetTJ_SlopeChange                :6286-6289 G-Qwerty OPENED
 //   sgTjMapMouseDown                    :6291-6309 GATE(G-Grid), whole body
 //   rgTjMapTypeClick                    :6311-6321 translated
-//   edTempReadyRangeMouseDown           :6323-6327 DEVIATION sig, GATE(G-Qwerty)
+//   edTempReadyRangeMouseDown           :6323-6327 DEVIATION sig, G-Qwerty OPENED
 //   InitialAddrToATC                    :6329-6662 translated (pure data calc)
-//   edATCOfsTimeMouseDown               :6664-6668 DEVIATION sig, GATE(G-Qwerty)
+//   edATCOfsTimeMouseDown               :6664-6668 DEVIATION sig, G-Qwerty OPENED
 //   SwitchOnOffRefrigeratorNo           :6672-6683 SAFETY GATE (S7, partial)
 //   UseCloseSiteTemperatureCtrl         :6685-6688 translated (golden "No Use")
 //   SetSingleWorkTemperature            :6690-6698 SAFETY GATE (S9, partial)
@@ -113,11 +113,11 @@
 //   Tri_Temp_Low_Temperature_Use_Heater :6850-6871 translated (Click() inert, see S18)
 //   Tri_Temp_High_Temperature_UseNo_Heater :6873-6889 translated (Click() inert, see S19)
 //   Handler_Send_To_ATC_DewPoint        :6891-6894 SAFETY GATE (S14), whole body
-//   edt_SetAirstreamTemperatureRang_SocketClick :6897-6901 GATE(G-Qwerty)
-//   edtSetTempature2AirMachineClick     :6903-6929 translated, GATE(G-Qwerty)
-//   edt_AirVolumeLmt_IndexClick         :6931-6934 GATE(G-Qwerty)
+//   edt_SetAirstreamTemperatureRang_SocketClick :6897-6901 G-Qwerty OPENED
+//   edtSetTempature2AirMachineClick     :6903-6929 translated, G-Qwerty OPENED
+//   edt_AirVolumeLmt_IndexClick         :6931-6934 G-Qwerty OPENED
 //   btn_DefrostAllUseStartClick         :6936-6943 SAFETY GATE (S15), whole body
-//   edt_Defrost_Time_Too_LowerClick     :6945-6948 GATE(G-Qwerty)
+//   edt_Defrost_Time_Too_LowerClick     :6945-6948 G-Qwerty OPENED
 //   btn_DefrostAllUseEndClick           :6951-6956 SAFETY GATE (S16), whole body
 //   cbATCReferTempSensorClick           :6958-6969 translated
 //   ATC_Power / CheckAirMachineStatus   -- declared, no golden body exists (see header)
@@ -159,6 +159,7 @@
 #include "cinitial.h"          // InitialHeaterDoor
 #include "SECSGEM/SecsEventType.h"   // SECS_EVENT
 #include "SECSGEM/SecsEventReport.h" // EventReport(unsigned)
+#include "forms/fQwertyKey.h"  // AI(W906-FW-QWKEY2) 20260824: fQwertyKey extern for un-gated ShowQwertyKey sites (real since FW-QWKEY1 fc08e09; latent until HTEdit GATE (6) wiring)
 
 // AI(W906-FW3-TempSet-WA) 20260820: LOCALLY PROVIDED, matching this tree's
 // established per-TU convention for these exact golden constants (see
@@ -4339,7 +4340,7 @@ void TfTemp_Set::edSoakTimeKeyPress(TObject *Sender, char &Key)
         Key=NULL;
 }
 //---------------------------------------------------------------------------
-// AI(W906-FW3-TempSet-WA) 20260820: GATE(G-Barcode,G-Qwerty) -- see facade
+// AI(W906-FW3-TempSet-WA) 20260820: GATE(G-Barcode); G-Qwerty OPENED -- see facade
 // header. Barcode_Reader/fQwertyKey have zero port anywhere in this tree.
 //---------------------------------------------------------------------------
 void TfTemp_Set::edSoakTimeClick(TObject *Sender)
@@ -4355,9 +4356,7 @@ void TfTemp_Set::edSoakTimeClick(TObject *Sender)
         }
     }
 #endif // GATE(G-Barcode)
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 10000, 0);   //Steven 20240719 : 5 --> 0
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edJamSoakTimeClick(TObject *Sender)
@@ -4373,9 +4372,7 @@ void TfTemp_Set::edJamSoakTimeClick(TObject *Sender)
         }
     }
 #endif // GATE(G-Barcode)
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 10000, 0);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 // DEVIATION: golden `(TObject*, TMouseButton, TShiftState, int X, int Y)` --
@@ -4395,16 +4392,12 @@ void TfTemp_Set::edLHP1MouseDown(TObject *Sender)
     }
 #endif // GATE(G-Barcode)
 
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)InputLimit.iTempHigh, (double)InputLimit.iTempLow);                                   //Steven 20141120 : Modify
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edLHeatGun1MouseDown(TObject *Sender)                          // DEVIATION
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)InputLimit.iHeaterGunH, (double)InputLimit.iHeaterGunL);                              //Steven 20141120 : Modify
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 // DEVIATION: golden `FormClose(TObject *Sender, TCloseAction &Action)` --
@@ -4420,9 +4413,7 @@ void TfTemp_Set::FormClose(TObject *Sender)
 //---------------------------------------------------------------------------
 void TfTemp_Set::edLHP1KeyUp(TObject *Sender)                                   // DEVIATION: WORD&/TShiftState dropped
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)InputLimit.iTempHigh, (double)InputLimit.iTempLow);                                   //Steven 20141120 : Modify
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edLowBaseMouseDown(TObject *Sender)                            // DEVIATION
@@ -4441,9 +4432,7 @@ void TfTemp_Set::edLowBaseMouseDown(TObject *Sender)                            
 
     dTempMax=MaxTempSetting();                                                  //Steven 20170427 : 回傳機台可以用的最大溫度值
     dTempMin=MinTempSetting();
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, dTempMax, dTempMin);                                  //Steven 20141120 : Modify
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::rgIndexHeatModeClick(TObject *Sender)
@@ -5528,9 +5517,7 @@ void TfTemp_Set::edTargetHP1MouseDown(TObject *Sender)                         /
 {
     dTempMax=MaxTempSetting();                                                  //Steven 20170427 : 回傳機台可以用的最大溫度值
     dTempMin=MinTempSetting();
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, dTempMax, dTempMin);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::DisplayTargetTempEdit(bool Visible)
@@ -5632,9 +5619,7 @@ void TfTemp_Set::edAmbHotGuartbentClick(TObject *Sender)
     }
 #endif // GATE(G-Barcode)
 
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 1, true, 1.0, 30.0);  //JerryYang 20181001 (Steven) : 20->30
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::rbATC70ActiveOnClick(TObject *Sender)
@@ -5698,19 +5683,15 @@ void TfTemp_Set::edtATCInPC1MouseDown(TObject *Sender)                          
     }
 #endif // GATE(G-Barcode)
 
-#if 0 // GATE(G-Qwerty)
     if(CUSTOMER_CODE==CC_ASE_KaohSiung)                                         //kevin 20180215 (Steven) ADD atc
         fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 1, true, (double)60.0, (double)-60.0);
     else
         fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 1, true, (double)20.0, (double)-20.0);                     //wei 20150427  SPIL   ATC Temperature Offset 20 ~ -20
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edAtcFileNameMouseDown(TObject *Sender)                        // DEVIATION
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_NO_SYMBOL);                    //Steven 20150810 : add for ATC
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edATCAmbTempMouseDown(TObject *Sender)                         // DEVIATION
@@ -5727,7 +5708,6 @@ void TfTemp_Set::edATCAmbTempMouseDown(TObject *Sender)                         
     }
 #endif // GATE(G-Barcode)
 
-#if 0 // GATE(G-Qwerty)
     if(ATC_SYSTEM==eNewATCSystem &&
        (ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_33 ||
         ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_35 ||
@@ -5739,7 +5719,6 @@ void TfTemp_Set::edATCAmbTempMouseDown(TObject *Sender)                         
     {
         fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 30.00, 25.00);                                    //Steven 20141120 : Modify
     }
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edArm1OffsetMouseDown(TObject *Sender)                         // DEVIATION
@@ -5747,28 +5726,21 @@ void TfTemp_Set::edArm1OffsetMouseDown(TObject *Sender)                         
     if(AccessLevel<LevelSet.AccessLevel[17])
         return;
 
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, -2.00, 2.00);                                         //Steven 20141120 : Modify
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edATCTestTimeOffsetMouseDown(TObject *Sender)                  // DEVIATION
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 0, 1000);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edATCTempAlwaysSameAlarmMouseDown(TObject *Sender)             // DEVIATION
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 20, 600);    //Ifor 20170907 (wei) 60000 -> 600
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edATCChillerTempMouseDown(TObject *Sender)                     // DEVIATION
 {
-#if 0 // GATE(G-Qwerty)
     if(ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_33)                          //Ifor 20240301 add: Chiller 設定小鍵盤
     {
         fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, -20, 30);
@@ -5785,7 +5757,6 @@ void TfTemp_Set::edATCChillerTempMouseDown(TObject *Sender)                     
     {
         fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 5, 40);  //Ifor 20161103 add Chiller 溫度 最低5度 最高 40度
     }
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edATCInitialOffset1MouseDown(TObject *Sender)                  // DEVIATION
@@ -5802,23 +5773,17 @@ void TfTemp_Set::edATCInitialOffset1MouseDown(TObject *Sender)                  
     }
 #endif // GATE(G-Barcode)
 
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 1, true, (double)40.0, 0.0);                                   //Steven 20160227 : for ATC 7.0
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edArm1NoFullsiteOffset_1MouseDown(TObject *Sender)             // DEVIATION
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 20.0, -20.00);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edTSDTimeOutMouseDown(TObject *Sender)                         // DEVIATION
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 1, true, (double)100.0, 0.0);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 // AI(W906-FW3-TempSet-WA) 20260820: SAFETY GATE (S5) -- whole body: its
@@ -6052,19 +6017,15 @@ double TfTemp_Set::MinTempSetting()                                             
 //---------------------------------------------------------------------------
 void TfTemp_Set::edAmbTempClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     if(CUSTOMER_CODE==CC_ChipMos_ZHUBEI)                                        //Steven 20230410 : 南茂鍾永生要求修改
         fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 23.0, 30.0);                                      //Sam 20240424 : 修改南茂鍾永生要求修改 25 > 23
     else
         fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 50.0, 10.0);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edtIdleTime_LongClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 0.0, 1200.0);
-#endif // GATE(G-Qwerty)
     double d1, d2;
     d1=atof(edtLBTempMin->Text.c_str());
     d2=atof(edtBoostTempMin->Text.c_str());
@@ -6077,23 +6038,17 @@ void TfTemp_Set::edtIdleTime_LongClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void TfTemp_Set::edtBoostOffset_LongClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, -30.0, 30.0);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edtBoostOffsetClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, -5.0, 5.0);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edtInitialDelay_1Click(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 0.0, 3000.0);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::btnSortClick(TObject *Sender)
@@ -6117,16 +6072,12 @@ void TfTemp_Set::btnSortClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void TfTemp_Set::edLimitHP1MouseDown(TObject *Sender)                           // DEVIATION
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 0.0, 10.0);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edtLBTimeOutClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 300.0, 1200.0);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::FormDestroy(TObject *Sender)
@@ -6428,23 +6379,17 @@ void TfTemp_Set::ReadRemoteTempOffset()                                         
 //---------------------------------------------------------------------------
 void TfTemp_Set::edTJTempRange_HighClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 20.0, 1.0);   //JerryYang 20251201 : 放寬到20
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edAmbGuardbandClick(TObject *Sender)                           //Richard 20230322 : limit修改
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 2, true, 10, 1);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edTJTempRange_LowClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 30.0, 1.0);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 // AI(W906-FW3-TempSet-WA) 20260820: SAFETY GATE (S13) -- decision logic
@@ -6493,23 +6438,17 @@ void TfTemp_Set::ControlATC60AirFlow(int iStatus)
 //---------------------------------------------------------------------------
 void TfTemp_Set::edtThresholdClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 0.0, 30.0);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edDewPointRangeMouseDown(TObject *Sender)                      // DEVIATION
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 1.0, 30.0);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edDewPointAlarmIntervalMouseDown(TObject *Sender)              // DEVIATION
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 2, true, 1, 30);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::btnSameAsArm1Click(TObject *Sender)
@@ -6525,30 +6464,22 @@ void TfTemp_Set::btnSameAsArm1Click(TObject *Sender)
 //---------------------------------------------------------------------------
 void TfTemp_Set::edtChamberBoostTimeClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 2, true, 1, 30);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edtChamberBoostOffsetClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 2, true, 0, 30);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edTempOffsetCountClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 2, true, 0, 30);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edTempDownContactDelayClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 2, true, 1, 300);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edtHeatGunTempATCMouseDown(TObject *Sender)                    // DEVIATION
@@ -6565,9 +6496,7 @@ void TfTemp_Set::edtHeatGunTempATCMouseDown(TObject *Sender)                    
     }
 #endif // GATE(G-Barcode)
 
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 70.00, 30.00);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 //jou 20220725 : Temperature calibration by recipe
@@ -6587,44 +6516,32 @@ void TfTemp_Set::chkTempCalByRecipeClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void TfTemp_Set::edLBTempAlarmTimeMouseDown(TObject *Sender)                    // DEVIATION
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 2, true, 30, 300);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edtLBAirOnTempMouseDown(TObject *Sender)                       // DEVIATION
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 40.0, 100.0);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edtATCPIDOffset_MinPClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 99999, 0);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edFFC_Arm1TimeOn_01Click(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 10000, 0);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edtATC_HotGunTimeClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 30.0, 0.0);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edtLBTempMinClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 1, true, 0.0, 100.0);  //Frank 20241231 : add
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::rgBasePointClick(TObject *Sender)
@@ -6634,16 +6551,12 @@ void TfTemp_Set::rgBasePointClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void TfTemp_Set::edtSetTJ_OffsetClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)99999.0, (double)-99999.0);   //RogerYang 20260318 : ATK P260303-ATK-H9-01
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edtSetTJ_SlopeChange(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)99999.0, (double)-99999.0);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 // AI(W906-FW3-TempSet-WA) 20260820: GATE(G-Grid) -- whole body. Its only
@@ -6686,9 +6599,7 @@ void TfTemp_Set::rgTjMapTypeClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void TfTemp_Set::edTempReadyRangeMouseDown(TObject *Sender)                     //Sam 20231214 : Temp offset use ready temp range, DEVIATION
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 0, 10);
-#endif // GATE(G-Qwerty)
 }
 
 //---------------------------------------------------------------------------
@@ -7003,9 +6914,7 @@ int TfTemp_Set::InitialAddrToATC()                                              
 //---------------------------------------------------------------------------
 void TfTemp_Set::edATCOfsTimeMouseDown(TObject *Sender)                         // DEVIATION
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 0, 60000);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 //Ztex 2023.04.19 Add HT-1032 TriTemp Function
@@ -7322,9 +7231,7 @@ void TfTemp_Set::Handler_Send_To_ATC_DewPoint(double dDewPoint_Index, double dDe
 //---------------------------------------------------------------------------
 void TfTemp_Set::edt_SetAirstreamTemperatureRang_SocketClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_INTEGER, 0, true, 10.0, 0.0);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 void TfTemp_Set::edtSetTempature2AirMachineClick(TObject *Sender)
@@ -7337,9 +7244,7 @@ void TfTemp_Set::edtSetTempature2AirMachineClick(TObject *Sender)
     double dsum=0.0;
     double dbSetTemp=atof(fMain->edWorkTemperBase->Text.c_str());
 
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_INTEGER, 0, true, 20.0, -20.0);
-#endif // GATE(G-Qwerty)
 
     dsum=dbSetTemp+atof(edt[Tag]->Text.c_str());
     if(dsum<-70)
@@ -7358,9 +7263,7 @@ void TfTemp_Set::edtSetTempature2AirMachineClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void TfTemp_Set::edt_AirVolumeLmt_IndexClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 1000.00, 350.00);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 // AI(W906-FW3-TempSet-WA) 20260820: SAFETY GATE (S15) -- whole body (pure
@@ -7378,9 +7281,7 @@ void TfTemp_Set::btn_DefrostAllUseStartClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void TfTemp_Set::edt_Defrost_Time_Too_LowerClick(TObject *Sender)
 {
-#if 0 // GATE(G-Qwerty)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 1200.00, 600.00);
-#endif // GATE(G-Qwerty)
 }
 //---------------------------------------------------------------------------
 // AI(W906-FW3-TempSet-WA) 20260820: SAFETY GATE (S16) -- whole body.

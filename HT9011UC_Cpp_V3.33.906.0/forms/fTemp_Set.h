@@ -120,6 +120,11 @@
 //      `#if 0` line at its call site; the handler's OTHER real logic (guard
 //      returns, AccessLevel checks, dTempMax/dTempMin recompute, Tag-indexed
 //      branch selection) stays ACTIVE.
+//      OPENED 20260824 (FW-QWKEY2): FW-QWKEY1 (fc08e09) landed forms/
+//      fQwertyKey.{h,cpp} + myQwertyKeyBoard.cpp, so the absence-claim
+//      above EXPIRED; all 50 G-Qwerty sites in uTemp_Set.cpp are un-gated
+//      and live (latent: runtime instance NULL until HTEdit GATE (6)
+//      wiring). G-Barcode / G-Image remain CLOSED -- their absences hold.
 //   (G-Barcode) `Barcode_Reader(bcTemperature)` -- ALREADY AN ESTABLISHED
 //      tree-wide finding (forms/fSetup.h's own note on the identical golden
 //      idiom): `Barcode_Reader` has ZERO port anywhere in this tree
@@ -352,7 +357,9 @@
 //      this tree's own two-TMyKitSuck-headers gotcha).
 //   * `fQwertyKey`/`ShowQwertyKey`/`Barcode_Reader`/`FTestIF`/`class TImage`/
 //      `TWMKey` -- see GATE REGISTER above; each is an ALREADY-ESTABLISHED
-//      tree-wide absence, re-confirmed (not re-discovered) this wave.
+//      tree-wide absence at translation time. fQwertyKey/ShowQwertyKey
+//      EXPIRED 20260824 (FW-QWKEY1 fc08e09) -- see G-Qwerty OPENED note;
+//      the others still hold.
 //   * `fMain`/`fLotInfo`/`fContact` (via atester_shims.h's `TfContactShim`)
 //      all already have real facades (forms/fMain.h:1053, forms/
 //      fLotInfo.h:1613). ONE genuine gap found: `fMain->palIndivisual`

@@ -44,12 +44,12 @@
 //   TMyOmronPanel::SetSV           golden :211-215 -- ACTIVE: dSV assignment
 //     + the SetSP(...) call (itself 100% gated, see above).
 //   TMyOmronPanel::setEditValueClick golden :217-220 -- GATE (3): fQwertyKey
-//     has no port (established deferred surface, see .h banner GATE 3).
+//     real since FW-QWKEY1; GATE (3) OPENED 20260824 (see .h banner GATE 3).
 //
 //  VCL/Borland conversions: #pragma hdrstop + #pragma package(smart_init)
 //  dropped (golden :2 and :8). `__fastcall` dropped from every definition.
 //  `myQwertyKeyBoard.h` (golden :5) not included -- its only referenced
-//  symbol, fQwertyKey, is gated (GATE 3); `cmydef.h` (golden :6) IS included,
+//  symbol, fQwertyKey, now comes from forms/fQwertyKey.h (GATE 3 OPENED 20260824); `cmydef.h` (golden :6) IS included,
 //  for the real N_INTEGER constant cited (unreachable) inside that same gate.
 //
 //  Big5: every Chinese comment decoded via cp950 and preserved as UTF-8.
@@ -58,12 +58,13 @@
 // BCB6 ORIGINAL include block (mirrored as a comment for provenance):
 //   #include "MachineDefine.h" ; #pragma hdrstop
 //   #include "MyOmronPanel.h"
-//   #include "myQwertyKeyBoard.h"   -- NOT included, see banner above
+//   #include "myQwertyKeyBoard.h"   -- ported as forms/fQwertyKey.h, included 20260824
 //   #include "cmydef.h" ; #pragma package(smart_init)
 // =============================================================================
 #include "MachineDefine.h"          // de-VCL'd include hub (vclcompat umbrella)
 #include "EJ1N/MyOmronPanel.h"      // this unit's own contract
 #include "cmydef.h"                 // N_INTEGER (real) -- cited inside GATE (3) only
+#include "forms/fQwertyKey.h"  // AI(W906-FW-QWKEY2) 20260824: fQwertyKey extern for un-gated ShowQwertyKey sites (real since FW-QWKEY1 fc08e09; latent until HTEdit GATE (6) wiring)
 //---------------------------------------------------------------------------
 TMyOmronPanel::TMyOmronPanel(TComponent* Owner) : TComponent(Owner)
 {
@@ -335,12 +336,10 @@ void TMyOmronPanel::setEditValueClick(TObject *Sender)
 {
     //AI(W906-PT-W2) 20260807: GATE (3) -- golden `fQwertyKey->ShowQwertyKey(
     //  (TEdit*)Sender, N_INTEGER, 0, true, 0, 180);` (golden :219). fQwertyKey
-    //  has no port anywhere in this tree (an already-established deferred
-    //  surface -- see MyOmronPanel.h banner GATE (3)). ACTIVE arm: no-op (a
-    //  virtual keyboard cannot show without a live window regardless).
-#if 0
+    //  real since FW-QWKEY1 (fc08e09) -- GATE (3) OPENED 20260824 (FW-QWKEY2);
+    //  call live below, headless no-op until HTEdit GATE (6) wires the
+    //  runtime keyboard instance (see MyOmronPanel.h banner GATE (3)).
     fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_INTEGER, 0, true, 0, 180);      //小鍵盤
-#endif
 }
 //---------------------------------------------------------------------------
 

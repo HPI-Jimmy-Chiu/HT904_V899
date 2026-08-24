@@ -74,7 +74,7 @@
 //     DESIGN, see GATE (1)), the 3 mouse-drag handlers (GATE (2): their
 //     parameter types TMouseButton/TShiftState do not exist anywhere in this
 //     port), and setEditValueClick's virtual-keyboard popup (GATE (3):
-//     fQwertyKey has no port, an already-established deferred surface).
+//     fQwertyKey real since FW-QWKEY1; GATE (3) OPENED 20260824).
 //
 //  GATE REGISTER -- 3 gates, all grounded in an exhaustive tree-wide grep
 //  (not guessed), all pre-existing-substrate-scope facts, not new gaps this
@@ -117,13 +117,13 @@
 //       offline, with no window anyway -- zero consumers construct one).
 //   (3) `fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_INTEGER, 0, true, 0,
 //       180);` (golden :219, setEditValueClick) -- fQwertyKey (the on-screen
-//       numeric-entry keyboard form) has NO port anywhere in this tree; this
-//       is an ALREADY-ESTABLISHED deferred surface, cited verbatim by
+//       numeric-entry keyboard form) is real since FW-QWKEY1 (fc08e09);
+//       GATE (3) OPENED 20260824 (FW-QWKEY2), superseding the citation by
 //       Automation/AGV_PortScan.h's own banner ("fQwertyKey virtual keyboard
 //       popup (VCL input helper, W7)") for the identical golden idiom on a
 //       different TEdit. N_INTEGER itself IS real (cmydef.h/.cpp) -- only
-//       the form pointer is missing. ACTIVE arm: no-op (a virtual keyboard
-//       cannot show without a live window regardless).
+//       the form pointer was missing until 20260824. Call live below;
+//       headless no-op until HTEdit GATE (6) wires the keyboard instance.
 //
 //  VCL/Borland conversions: `__fastcall` dropped from every method (this
 //  header drops it from declarations; golden's own .cpp still shows it on

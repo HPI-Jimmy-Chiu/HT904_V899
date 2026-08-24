@@ -51,8 +51,8 @@
 //       `->OnMouseDown=edBaseMouseDown;` (etc) wiring, which has no substrate
 //       either (vclcompat::TCustomEdit carries no OnMouseDown delegate slot).
 //       Every one of these 4 handlers exists SOLELY to compute bounds for a
-//       `fQwertyKey->ShowQwertyKey(...)` popup (an ALREADY-ESTABLISHED
-//       deferred surface, cited by EJ1N/MyOmronPanel.h GATE (3) and
+//       `fQwertyKey->ShowQwertyKey(...)` popup (fQwertyKey real since
+//       FW-QWKEY1, 20260824; formerly cited by EJ1N/MyOmronPanel.h and
 //       MyVacuumPanel.h GATE (3) for the identical golden idiom) -- so even
 //       had their signature been spellable, their body would still have
 //       reduced to a no-op. BEHAVIOUR DELTA: none observable (zero

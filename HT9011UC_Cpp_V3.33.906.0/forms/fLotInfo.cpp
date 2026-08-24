@@ -41,6 +41,7 @@
 // AI(W906-FW3-LotInfo-WC) 20260819: Wave C include -- fAGV->IsSPIL_AMR()
 // (Timer2Timer T4, confirmed REAL by this wave's step 0).
 #include "forms/fAGV.h"
+#include "forms/fQwertyKey.h"  // AI(W906-FW-QWKEY2) 20260824: fQwertyKey extern for un-gated ShowQwertyKey sites (real since FW-QWKEY1 fc08e09; latent until HTEdit GATE (6) wiring)
 
 // AI(W906-FW3-LotInfo-WB) 20260819: TU-local forward decl of MyDBIProcess
 // (FormDestroy's exception log). Its only declaration in this tree is
@@ -1872,11 +1873,9 @@ void TfLotInfo::labLotIDMouseDown()
 {
     if(CUSTOMER_CODE==CC_KYEC_LEE && AccessLevel==iDefHonPrecLevel)
     {
-        // AI(W906-FW3-LotInfo-WA) 20260819: GATE WA-8 -- see forms/fLotInfo.h
-        // GATE REGISTER WA-8 (fQwertyKey has no port anywhere in this tree).
-#if 0
+        // AI(W906-FW3-LotInfo-WA) 20260819: GATE WA-8 (OPENED 20260824) -- see forms/fLotInfo.h
+        // GATE WA-8 OPENED 20260824 (FW-QWKEY2): fQwertyKey real since FW-QWKEY1 (fc08e09).
         fQwertyKey->ShowQwertyKey(edtSysLotID, N_NO_SYMBOL|N_NO_SPACE);
-#endif
     }
 }
 
@@ -1927,12 +1926,10 @@ void TfLotInfo::btStartCountClick()
 }
 
 // -- edtASECL_LotIDClick (golden uLotInfo.cpp:10491-10494) -- WA-8 ----------
-void TfLotInfo::edtASECL_LotIDClick()
+void TfLotInfo::edtASECL_LotIDClick(TObject *Sender)
 {
-    // AI(W906-FW3-LotInfo-WA) 20260819: GATE WA-8, see labLotIDMouseDown above.
-#if 0
+    // AI(W906-FW3-LotInfo-WA) 20260819: GATE WA-8 (OPENED 20260824), see labLotIDMouseDown above.
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_NO_SYMBOL|N_NO_SPACE);
-#endif
 }
 
 // -- btTesterTCPShowClick (golden uLotInfo.cpp:13841-13844) -- WA-9 --------
@@ -2382,16 +2379,14 @@ void TfLotInfo::btnSaveDataClick()
 }
 
 // -- edPageMouseDown (golden uLotInfo.cpp:11534-11541) -- WB-8 -------------
-void TfLotInfo::edPageMouseDown()
+void TfLotInfo::edPageMouseDown(TObject *Sender)
 {
     if(CUSTOMER_CODE==CC_Murata)
         return;
-    // AI(W906-FW3-LotInfo-WB) 20260819: GATE WB-8 -- see forms/fLotInfo.h
-    // GATE REGISTER WB-8 (fQwertyKey has no port, established tree-wide gate).
-#if 0
+    // AI(W906-FW3-LotInfo-WB) 20260819: GATE WB-8 (OPENED 20260824) -- see forms/fLotInfo.h
+    // GATE WB-8 OPENED 20260824 (FW-QWKEY2): fQwertyKey real since FW-QWKEY1 (fc08e09).
     else
         fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 1, 20);
-#endif
 }
 
 // -- edtSysLotIDKeyDown (golden uLotInfo.cpp:12065-12080) --------------------
@@ -2517,13 +2512,11 @@ void TfLotInfo::edtSysLotIDMouseUp()
 }
 
 // -- edQAModeMouseDown (golden uLotInfo.cpp:11528-11532) -- WB-11 --------
-void TfLotInfo::edQAModeMouseDown()
+void TfLotInfo::edQAModeMouseDown(TObject *Sender)
 {
-    // AI(W906-FW3-LotInfo-WB) 20260819: GATE WB-11 -- see forms/fLotInfo.h
-    // GATE REGISTER WB-11 (fQwertyKey has no port, established tree-wide gate).
-#if 0
+    // AI(W906-FW3-LotInfo-WB) 20260819: GATE WB-11 (OPENED 20260824) -- see forms/fLotInfo.h
+    // GATE WB-11 OPENED 20260824 (FW-QWKEY2): fQwertyKey real since FW-QWKEY1 (fc08e09).
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 10000, 5);
-#endif
 }
 
 // -- edtSysOperatorIDKeyPress (golden uLotInfo.cpp:11935-11963) -------------
@@ -2666,13 +2659,11 @@ bool TfLotInfo::CheckNoRetestBinFlag()                                          
 }
 
 // -- edStationNumMouseDown (golden uLotInfo.cpp:14060-14064) -- WB-15 ----
-void TfLotInfo::edStationNumMouseDown()
+void TfLotInfo::edStationNumMouseDown(TObject *Sender)
 {
-    // AI(W906-FW3-LotInfo-WB) 20260819: GATE WB-15 -- see forms/fLotInfo.h
-    // GATE REGISTER WB-15 (fQwertyKey has no port, established tree-wide gate).
-#if 0
+    // AI(W906-FW3-LotInfo-WB) 20260819: GATE WB-15 (OPENED 20260824) -- see forms/fLotInfo.h
+    // GATE WB-15 OPENED 20260824 (FW-QWKEY2): fQwertyKey real since FW-QWKEY1 (fc08e09).
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 1, 99);
-#endif
 }
 
 // -- ATC_OFFLINE_FormComInit (golden uLotInfo.cpp:14969-14992) ---------------

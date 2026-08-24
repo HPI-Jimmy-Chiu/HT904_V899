@@ -61,6 +61,7 @@
 //  whole functions -- this is NOT one of MyVacuumPanel.h's 3 GATE-REGISTER
 //  entries (this is real, reachable substrate whose OWN header is
 //  build-flag-conditional, not a missing-type/missing-member gap).
+#include "forms/fQwertyKey.h"  // AI(W906-FW-QWKEY2) 20260824: fQwertyKey extern for un-gated ShowQwertyKey sites (real since FW-QWKEY1 fc08e09; latent until HTEdit GATE (6) wiring)
 #if HAVE_PCI1203
 #include "EtherCAT/AdvMotCompat.h"            // AI(W906-1203HAL-1) 20260820: ADVCMNAPI shim -> vendor AdvMotApi.h (pulls in AdvMotDev.h/AdvMotDrv.h/
                                     //   AdvMotPropID.h/AdvMotErr.h itself) -- Acm_DaqDoSetBitEx/
@@ -513,12 +514,10 @@ void TMyVacuumPanel::edSVClick(TObject *Sender)                      //輸入下
 {
     //AI(W906-PT-W3) 20260807: GATE (3) -- golden `fQwertyKey->ShowQwertyKey(
     //  (TEdit*)Sender, N_DOUBLE, 0, true, -116.0, 148.0);` (golden :382).
-    //  fQwertyKey has no port anywhere in this tree (an already-established
-    //  deferred surface -- see MyVacuumPanel.h GATE (3)). ACTIVE arm: no-op
-    //  (a virtual keyboard cannot show without a live window regardless).
-#if 0
+    //  fQwertyKey real since FW-QWKEY1 (fc08e09) -- GATE (3) OPENED 20260824
+    //  (FW-QWKEY2); call live below, headless no-op until HTEdit GATE (6)
+    //  wires the runtime keyboard instance (see MyVacuumPanel.h GATE (3)).
     fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_DOUBLE, 0, true, -116.0, 148.0); //小鍵盤
-#endif
     (void)Sender;
 }
 //---------------------------------------------------------------------------

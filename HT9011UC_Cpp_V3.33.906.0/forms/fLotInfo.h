@@ -175,7 +175,9 @@
 //      (3), Public/HTEdit.cpp GATE (6) -- all cite "fQwertyKey has no port
 //      anywhere in this tree"). Re-verified this wave (20260819): still 0
 //      compiled (non-`#if 0`) definitions of `class TfQwertyKey` or a real
-//      `fQwertyKey` global tree-wide. Both handlers reduce to a no-op.
+//      `fQwertyKey` global tree-wide. OPENED 20260824 (FW-QWKEY2):
+//      fQwertyKey real since FW-QWKEY1 (fc08e09); both handlers' calls
+//      are live (latent until HTEdit GATE (6) keyboard wiring).
 //  (WA-9) btTesterTCPShowClick, golden :13843 -- `fTesterTCP->Show();`.
 //      Interface/TesterTCP.h's own file banner (line 59) states plainly this
 //      TU is "NOT a TfTesterTCP class or facade at all, only free functions".
@@ -335,13 +337,15 @@
 //      portless pair as WB-2. The second branch (`CC_AMD_M && bDeviceName_OK`)
 //      touches only local bools/Text="" and stays REAL.
 //  (WB-8) edPageMouseDown, golden :11540 -- the non-Murata branch's entire
-//      payload is `fQwertyKey->ShowQwertyKey(...)`. fQwertyKey has no port
-//      anywhere in this tree -- the SAME established tree-wide gate Wave A's
+//      payload is `fQwertyKey->ShowQwertyKey(...)`. OPENED 20260824
+//      (FW-QWKEY2): fQwertyKey real since FW-QWKEY1 -- same opening as
 //      WA-8 cites (labLotIDMouseDown/edtASECL_LotIDClick), re-verified again
 //      this wave. The `CUSTOMER_CODE==CC_Murata return;` guard stays REAL.
 //  (WB-9) edtSysOperatorIDMouseUp, golden :11762-11793 -- EVERY branch after
 //      the CC_Murata check ultimately calls either InputBarcodeNumber (2
-//      branches) or fQwertyKey->ShowQwertyKey (1 branch), both portless. The
+//      branches; still portless) or fQwertyKey->ShowQwertyKey (1 branch;
+//      real since 20260824, but the block STAYS gated on the
+//      InputBarcodeNumber co-blocker). The
 //      `TEdit *TempEdit=(TEdit*)Sender;`/`TempEdit==edtCusLotID` dispatch
 //      inside the first of those branches is therefore never reached by any
 //      surviving code either, so `Sender` needs no parameter (nothing real
@@ -352,10 +356,11 @@
 //      CC_Murata branch is golden's own empty `{}` (translated as a real
 //      no-op), every other branch (CC_PTI/bO23, CC_TFME_CHINA, bSPILFunction,
 //      CC_SCC, bVTESTFunction) calls InputBarcodeNumber and/or
-//      fQwertyKey->ShowQwertyKey. One gated block for all of them.
+//      fQwertyKey->ShowQwertyKey. One gated block for all of them (still
+//      gated 20260824: InputBarcodeNumber co-blocker remains).
 //  (WB-11) edQAModeMouseDown, golden :11531 -- the entire one-line body is
-//      `fQwertyKey->ShowQwertyKey(...)`. Same established gate as WB-8/WA-8.
-//      Reduces to a no-op.
+//      `fQwertyKey->ShowQwertyKey(...)`. OPENED 20260824 with WB-8/WA-8
+//      (FW-QWKEY2): call live, latent until keyboard wiring.
 //  (WB-12) cbRunModeKeyPress, golden :11984-11987 -- the trailing
 //      `if(fBarCode->JCETUseMakeWhite2DIDList()==true) cbRunMode->Text="";`
 //      is the IDENTICAL golden call Wave A's WA-7 already gates (reused
@@ -380,7 +385,8 @@
 //      conservative "no violation detected" default, matching golden's own
 //      initial `flag=true`).
 //  (WB-15) edStationNumMouseDown, golden :14063 -- one-line body, same
-//      established fQwertyKey gate as WB-8/WB-11/WA-8.
+//      established fQwertyKey gate as WB-8/WB-11/WA-8. OPENED 20260824
+//      (FW-QWKEY2): call live, latent until keyboard wiring.
 //  (WB-16) ScanRefrigerantSystem, golden :14946-14965 -- every remaining line
 //      after the early return touches `ATC_InterfaceForm->IsConnect()` /
 //      `->bReadRefrigerantMode_Send` / `->bReadRefrigerantMode_Recv` /
@@ -1270,7 +1276,7 @@ public:
     virtual void btStartCountClick();                  // golden uLotInfo.cpp:8418-8421 (Sender dropped, unused)
 
     // -- edtASECL_LotIDClick (golden :10491-10494) -- WA-8, edtASECL_LotID exists --
-    virtual void edtASECL_LotIDClick();               // golden uLotInfo.cpp:10491-10494 (Sender dropped -- moot once gated)
+    virtual void edtASECL_LotIDClick(TObject *Sender); // golden uLotInfo.cpp:10491-10494 (Sender restored 20260824, FW-QWKEY2)
 
     // -- btTesterTCPShowClick (golden :13841-13844) -- WA-9, whole body gated --
     virtual void btTesterTCPShowClick();               // golden uLotInfo.cpp:13841-13844 (Sender dropped, unused)
@@ -1376,7 +1382,7 @@ public:
     virtual void btnSaveDataClick();                  // golden uLotInfo.cpp:12285-12295 (Sender dropped, unused)
 
     // -- edPageMouseDown (golden :11534-11541) -- WB-8, non-Murata branch gated --
-    virtual void edPageMouseDown();                   // golden uLotInfo.cpp:11534-11541 (params dropped, unused)
+    virtual void edPageMouseDown(TObject *Sender);    // golden uLotInfo.cpp:11534-11541 (Sender restored 20260824, FW-QWKEY2; other params still dropped)
 
     // -- edtSysLotIDKeyDown / edtSysOperatorIDKeyDown (golden :12065-12080 / :12082-12097) --
     // zero new members (bLotID_OK/bOPID_OK are file-scope globals, see .cpp).
@@ -1389,7 +1395,7 @@ public:
     virtual void edtSysLotIDMouseUp();                // golden uLotInfo.cpp:11796-11831 (params dropped, see WB-10)
 
     // -- edQAModeMouseDown (golden :11528-11532) -- WB-11, whole body gated --
-    virtual void edQAModeMouseDown();                 // golden uLotInfo.cpp:11528-11532 (params dropped, unused once gated)
+    virtual void edQAModeMouseDown(TObject *Sender);  // golden uLotInfo.cpp:11528-11532 (Sender restored 20260824, FW-QWKEY2; other params still dropped)
 
     // -- edtSysOperatorIDKeyPress (golden :11935-11963) -- zero new members --
     // (cbRunMode/edtSysOperatorID exist; ->SetFocus() dropped, DEVIATION as
@@ -1410,7 +1416,7 @@ public:
     virtual bool CheckNoRetestBinFlag();              // golden uLotInfo.cpp:14608-14630
 
     // -- edStationNumMouseDown (golden :14060-14064) -- WB-15, whole body gated --
-    virtual void edStationNumMouseDown();             // golden uLotInfo.cpp:14060-14064 (params dropped, unused once gated)
+    virtual void edStationNumMouseDown(TObject *Sender); // golden uLotInfo.cpp:14060-14064 (Sender restored 20260824, FW-QWKEY2; other params still dropped)
 
     // -- ATC_OFFLINE_FormComInit (golden :14969-14992) -- 2 new TLabel; -----
     // reuses Wave A's InitialRefrigerantSystem TriLab*/Tripnl* arrays and

@@ -93,6 +93,10 @@
 //      ("跨檔缺口 GATE 不自建 shim") no local stand-in is built here either.
 //      `N_INTEGER` itself IS real (cmydef.h:289, `extern const int N_INTEGER;`)
 //      but becomes unreferenced once gated -- cited for completeness only.
+//      OPENED 20260824 (FW-QWKEY2): FW-QWKEY1 (fc08e09) landed forms/
+//      fQwertyKey.{h,cpp}; all 4 Q1 sites in DynamicTemp.cpp are un-gated
+//      and live (latent: runtime instance NULL until HTEdit GATE (6)
+//      wiring). N_INTEGER is referenced again.
 //      Since the ONLY use of each function's `Sender` parameter was inside
 //      the gated call, all four MouseDown handlers reduce to a
 //      zero-parameter signature (nothing surviving reads Button/Shift/X/Y
@@ -205,11 +209,12 @@
 //   * `FormatFloat` -- REAL, `vclcompat/SysUtils.h:41`, brought to GLOBAL
 //     scope by vcl_compat.h:279.
 //   * `COM2`/`TCOM2Shim` -- REAL but missing `TempComm6` -- see GATE (C1).
-//   * `fQwertyKey` -- NO port anywhere -- see GATE (Q1).
+//   * `fQwertyKey` -- real since FW-QWKEY1 (fc08e09) -- GATE (Q1) OPENED
+//     20260824.
 //   * `rs232.h`/`myQwertyKeyBoard.h` (golden's own includes) -- NEITHER is
-//     ported (no header of either name exists in this tree); DROPPED rather
-//     than included, matching the established "don't build a shim for a
-//     portless header, just gate its call sites" convention cited above.
+//     ported UNDER THOSE NAMES; since 20260824 the keyboard lives at
+//     forms/fQwertyKey.h (FW-QWKEY1) and IS included; rs232.h remains
+//     dropped per the "don't shim a portless header" convention above.
 //   * `cprod.h` (golden's own include) -- grepped this wave: DynamicTemp.cpp
 //     touches nothing from it (no `Prod.`/`TestIF.`/`Temperature.` reference
 //     anywhere in the file) -- DROPPED as unused, not a gap.
@@ -668,11 +673,11 @@ public:
     void sbTempICClearClick();                                // golden :111-121 (no gate)
     void lblRealTime2Click();                                 // golden :123-128 GATE (C1)
     void btShowClick();                                       // golden :130-142
-    void edMinMouseDown();                                    // golden :144-150 GATE (Q1)
-    void edMaxMouseDown();                                    // golden :152-158 GATE (Q1)
+    void edMinMouseDown(TObject *Sender);        // +Sender 20260824 (FW-QWKEY2): read by the live Q1 call                                    // golden :144-150 GATE (Q1)
+    void edMaxMouseDown(TObject *Sender);        // +Sender 20260824 (FW-QWKEY2): read by the live Q1 call                                    // golden :152-158 GATE (Q1)
     void FormResize();                                        // golden :160-173
-    void edLowerMouseDown();                                  // golden :175-187 GATE (Q1)
-    void edUpperMouseDown();                                  // golden :189-201 GATE (Q1)
+    void edLowerMouseDown(TObject *Sender);        // +Sender 20260824 (FW-QWKEY2): read by the live Q1 call                                  // golden :175-187 GATE (Q1)
+    void edUpperMouseDown(TObject *Sender);        // +Sender 20260824 (FW-QWKEY2): read by the live Q1 call                                  // golden :189-201 GATE (Q1)
     void btSelectAllClick();                                  // golden :203-209
     void gbA1MouseUp(void *Sender);                           // golden :211-220
     void gbA1MouseDown(void *Sender, int X, int Y);           // golden :222-231

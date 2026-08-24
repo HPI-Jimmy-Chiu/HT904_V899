@@ -14,8 +14,8 @@
 //
 //  GATE REGISTER -- 4 narrow gates, full rationale in forms/fDynamicTemp.h:
 //   (Q1) fQwertyKey->ShowQwertyKey -- 4 sites (edMin/edMax/edLower/
-//        edUpperMouseDown). Missing-dependency: fQwertyKey has no port
-//        anywhere in this tree (established tree-wide gate).
+//        edUpperMouseDown). OPENED 20260824 (FW-QWKEY2): fQwertyKey real
+//        since FW-QWKEY1 (fc08e09); latent until HTEdit GATE (6) wiring.
 //   (C1) COM2->TempComm6->{WriteCommData,StopComm,StartComm} -- 5 sites
 //        (lblRealTime6Click, lblRealTime2Click, gbUpperDblClick,
 //        gbLowerDblClick, Button1Click). Missing-dependency: TCOM2Shim
@@ -35,14 +35,15 @@
 //  not missing), `bTempComm6ReceiveOK` (cmydef.h:3187/cmydef.cpp:3418, real),
 //  `InitialOK` (cmydef.h:220, real). `COM2`/`TCOM2Shim` exists
 //  (atester_shims.h:364-405) but lacks `TempComm6` -- GATE (C1). `fQwertyKey`
-//  has no port at all -- GATE (Q1). Full citations in forms/fDynamicTemp.h.
+//  is real since FW-QWKEY1 -- GATE (Q1) OPENED 20260824. Full citations in forms/fDynamicTemp.h.
 // =============================================================================
 #include "MachineDefine.h"     // de-VCL'd include hub: vclcompat umbrella + portable STL
 #pragma hdrstop
 
 #include "forms/fDynamicTemp.h"
 
-#include "cmydef.h"            // InitialOK / bTempComm6ReceiveOK / N_INTEGER (cited, unused once GATE (Q1) fires)
+#include "cmydef.h"            // InitialOK / bTempComm6ReceiveOK / N_INTEGER (N_INTEGER live: GATE (Q1) OPENED 20260824)
+#include "forms/fQwertyKey.h"  // AI(W906-FW-QWKEY2) 20260824: fQwertyKey extern for un-gated ShowQwertyKey sites (real since FW-QWKEY1 fc08e09; latent until HTEdit GATE (6) wiring)
 
 // AI(W906-FW3-DynTemp-WA) 20260820: golden DynamicTemp.cpp:15-18, file scope,
 // verbatim shape and position. `fDynamicTemp` is zero-initialized (NOT
@@ -243,30 +244,26 @@ void TfDynamicTemp::btShowClick()
     iTempICTask=1;    //kevin 20130812
 }
 //---------------------------------------------------------------------------
-// golden :144-150. GATE (Q1) narrow (golden :147) -- see file banner.
+// golden :144-150. GATE (Q1) OPENED 20260824, was narrow (golden :147) -- see file banner.
 // DEVIATION: zero-parameter signature -- Sender's only read was inside the
 // gated call; Button/Shift/X/Y never read (see forms/fDynamicTemp.h).
 //---------------------------------------------------------------------------
-void TfDynamicTemp::edMinMouseDown()
+void TfDynamicTemp::edMinMouseDown(TObject *Sender)
 {
-#if 0 // GATE (Q1) -- golden :147, fQwertyKey has no port anywhere in this tree (see forms/fDynamicTemp.h)
     fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_INTEGER, 2, true, 20, atoi(edMin->Text.c_str()));
-#endif // GATE (Q1)
     int min=atoi(edMin->Text.c_str());
     Chart1->LeftAxis->Minimum=min;
 }
 //---------------------------------------------------------------------------
-// golden :152-158. GATE (Q1) narrow (golden :155) -- see file banner.
+// golden :152-158. GATE (Q1) OPENED 20260824, was narrow (golden :155) -- see file banner.
 // GOLDEN ODDITY, not a translation artifact: the gated ShowQwertyKey call
 // reads `edMin->Text` (not `edMax`) as its "current value" argument -- a
 // golden copy-paste artifact from edMinMouseDown, preserved verbatim inside
-// the gate text (inert either way while GATE (Q1) stays closed).
+// the gate text (now LIVE 20260824: still reads edMin, golden artifact preserved verbatim).
 //---------------------------------------------------------------------------
-void TfDynamicTemp::edMaxMouseDown()
+void TfDynamicTemp::edMaxMouseDown(TObject *Sender)
 {
-#if 0 // GATE (Q1) -- golden :155, fQwertyKey has no port anywhere in this tree (see forms/fDynamicTemp.h)
     fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_INTEGER, 2, true, 200, atoi(edMin->Text.c_str()));
-#endif // GATE (Q1)
     int max=atoi(edMax->Text.c_str());
     Chart1->LeftAxis->Maximum=max;
 }
@@ -288,13 +285,11 @@ void TfDynamicTemp::FormResize()
     btDefaultPos    ->Top    =Panel1->Height/2;
 }
 //---------------------------------------------------------------------------
-// golden :175-187. GATE (Q1) narrow (golden :178) -- see file banner.
+// golden :175-187. GATE (Q1) OPENED 20260824, was narrow (golden :178) -- see file banner.
 //---------------------------------------------------------------------------
-void TfDynamicTemp::edLowerMouseDown()
+void TfDynamicTemp::edLowerMouseDown(TObject *Sender)
 {
-#if 0 // GATE (Q1) -- golden :178, fQwertyKey has no port anywhere in this tree (see forms/fDynamicTemp.h)
     fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_INTEGER, 2, true, 20, atoi(edLower->Text.c_str()));
-#endif // GATE (Q1)
 
     int count=Chart1->Series[16]->Count();
     Chart1->Series[16]->Clear();
@@ -305,7 +300,7 @@ void TfDynamicTemp::edLowerMouseDown()
     }
 }
 //---------------------------------------------------------------------------
-// golden :189-201. GATE (Q1) narrow (golden :192) -- see file banner.
+// golden :189-201. GATE (Q1) OPENED 20260824, was narrow (golden :192) -- see file banner.
 // GOLDEN ODDITY, not a translation artifact: golden :199 (`TC[16]`) reuses
 // Series[16]'s colour for Series[17] instead of `TC[17]` -- a copy-paste
 // artifact from edLowerMouseDown (which correctly uses TC[16] for
@@ -315,11 +310,9 @@ void TfDynamicTemp::edLowerMouseDown()
 // Series[17]'s colour. Translated literally per this project's "照翻，並在
 // //AI 註解寫下它為什麼看起來錯" rule -- not changed to TC[17].
 //---------------------------------------------------------------------------
-void TfDynamicTemp::edUpperMouseDown()
+void TfDynamicTemp::edUpperMouseDown(TObject *Sender)
 {
-#if 0 // GATE (Q1) -- golden :192, fQwertyKey has no port anywhere in this tree (see forms/fDynamicTemp.h)
     fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_INTEGER, 2, true, atoi(edUpper->Text.c_str()), atoi(edLower->Text.c_str()));
-#endif // GATE (Q1)
 
     int count=Chart1->Series[17]->Count();
     Chart1->Series[17]->Clear();

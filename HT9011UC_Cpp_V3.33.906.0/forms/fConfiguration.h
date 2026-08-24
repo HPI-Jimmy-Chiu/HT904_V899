@@ -35,21 +35,21 @@
 //  WAVE SCOPE -- all 28 golden methods, this file's status
 //  --------------------------------------------------------------------------
 //    [[6.1 pure-ShowQwertyKey / trivial-widget bucket, RECON section 6.1]]
-//    edSetTempClick          golden :5962-5965 (4L)  -- body gated (WA-1)
-//    edSetTempKeyDown        golden :5967-5971 (5L)  -- body gated (WA-1); Key/Shift params dropped, unread
-//    edE31_Fi1XClick         golden :5983-5986 (4L)  -- body gated (WA-1)
-//    edD25_60mmClick         golden :6440-6443 (4L)  -- body gated (WA-1)
-//    edD60_56mmClick         golden :6580-6583 (4L)  -- body gated (WA-1)
-//    edA32_1Click            golden :7611-7614 (4L)  -- body gated (WA-1)
-//    edtC15Click             golden :7675-7678 (4L)  -- body gated (WA-1)
-//    edL09_Sh1LClick         golden :7680-7683 (4L)  -- body gated (WA-1)
-//    edN05_AmbTempClick      golden :7685-7688 (4L)  -- body gated (WA-1)
-//    edN06_PortClick         golden :7690-7693 (4L)  -- body gated (WA-1)
-//    edN06_PasswordClick     golden :7695-7698 (4L)  -- body gated (WA-1)
-//    edtSetIPSCQtyClick      golden :7700-7703 (4L)  -- body gated (WA-1)
-//    edN04_ModelClick        golden :7705-7708 (4L)  -- body gated (WA-1)
-//    edA22_2Click            golden :6593-6601 (9L)  -- REAL edA22_3-nudge if-block; 1 line gated (WA-1)
-//    edA22_3Click            golden :6603-6607 (5L)  -- REAL dCount calc goes quiet; 1 line gated (WA-1)
+//    edSetTempClick          golden :5962-5965 (4L)  -- live (WA-1 OPENED 20260824)
+//    edSetTempKeyDown        golden :5967-5971 (5L)  -- live (WA-1 OPENED 20260824); Key/Shift params dropped, unread
+//    edE31_Fi1XClick         golden :5983-5986 (4L)  -- live (WA-1 OPENED 20260824)
+//    edD25_60mmClick         golden :6440-6443 (4L)  -- live (WA-1 OPENED 20260824)
+//    edD60_56mmClick         golden :6580-6583 (4L)  -- live (WA-1 OPENED 20260824)
+//    edA32_1Click            golden :7611-7614 (4L)  -- live (WA-1 OPENED 20260824)
+//    edtC15Click             golden :7675-7678 (4L)  -- live (WA-1 OPENED 20260824)
+//    edL09_Sh1LClick         golden :7680-7683 (4L)  -- live (WA-1 OPENED 20260824)
+//    edN05_AmbTempClick      golden :7685-7688 (4L)  -- live (WA-1 OPENED 20260824)
+//    edN06_PortClick         golden :7690-7693 (4L)  -- live (WA-1 OPENED 20260824)
+//    edN06_PasswordClick     golden :7695-7698 (4L)  -- live (WA-1 OPENED 20260824)
+//    edtSetIPSCQtyClick      golden :7700-7703 (4L)  -- live (WA-1 OPENED 20260824)
+//    edN04_ModelClick        golden :7705-7708 (4L)  -- live (WA-1 OPENED 20260824)
+//    edA22_2Click            golden :6593-6601 (9L)  -- REAL edA22_3-nudge if-block; 1 line live (WA-1 OPENED 20260824)
+//    edA22_3Click            golden :6603-6607 (5L)  -- dCount consumed again; 1 line live (WA-1 OPENED 20260824)
 //    EnableRMSFunc           golden :7726-7735 (10L) -- REAL, no gate, zero widget deps
 //    [[6.2 Tray/HP StringGrid cluster, RECON section 6.2]]
 //    strngrdTraySelectCell   golden :6839-6844 (6L)  -- REAL; Sender/CanSelect dropped, unread
@@ -111,6 +111,12 @@
 //      appears; every gated TEdit keeps whatever value it already had --
 //      this matches the pre-existing tree-wide fQwertyKey posture, it is
 //      not a new delta this wave introduces.
+//      OPENED 20260824 (FW-QWKEY2): FW-QWKEY1 (fc08e09) landed forms/
+//      fQwertyKey.{h,cpp}; all 21 WA-1 ShowQwertyKey sites in
+//      cConfiguration.cpp are un-gated and live (latent: runtime instance
+//      NULL until HTEdit GATE (6) wiring). The BEHAVIOUR DELTA above is
+//      superseded: the calls execute; the keypad still cannot appear
+//      until the keyboard instance is constructed.
 //
 //  DEVIATION
 //  --------------------------------------------------------------------------
@@ -280,21 +286,24 @@ public:
     int Tag         = 0;   // golden TComponent->Tag (bare `Tag=` writes in btnDeleteTrayClick/btnDeleteHPClick)
 
     // -- 6.1 methods --
-    void edSetTempClick();
-    void edSetTempKeyDown();
-    void edE31_Fi1XClick();
-    void edD25_60mmClick();
-    void edD60_56mmClick();
-    void edA32_1Click();
-    void edtC15Click();
-    void edL09_Sh1LClick();
-    void edN05_AmbTempClick();
-    void edN06_PortClick();
-    void edN06_PasswordClick();
-    void edtSetIPSCQtyClick();
-    void edN04_ModelClick();
-    void edA22_2Click();
-    void edA22_3Click();
+    // AI(W906-FW-QWKEY2) 20260824: TObject *Sender restored on all 15 WA-1
+    // methods -- the un-gated ShowQwertyKey((TEdit*)Sender,...) calls read
+    // it (the drop was only valid while the bodies were gated).
+    void edSetTempClick(TObject *Sender);
+    void edSetTempKeyDown(TObject *Sender);
+    void edE31_Fi1XClick(TObject *Sender);
+    void edD25_60mmClick(TObject *Sender);
+    void edD60_56mmClick(TObject *Sender);
+    void edA32_1Click(TObject *Sender);
+    void edtC15Click(TObject *Sender);
+    void edL09_Sh1LClick(TObject *Sender);
+    void edN05_AmbTempClick(TObject *Sender);
+    void edN06_PortClick(TObject *Sender);
+    void edN06_PasswordClick(TObject *Sender);
+    void edtSetIPSCQtyClick(TObject *Sender);
+    void edN04_ModelClick(TObject *Sender);
+    void edA22_2Click(TObject *Sender);
+    void edA22_3Click(TObject *Sender);
     bool EnableRMSFunc();
 
     // -- 6.2 methods --
