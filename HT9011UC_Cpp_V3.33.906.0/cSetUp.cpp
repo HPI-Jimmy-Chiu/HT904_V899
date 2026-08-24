@@ -276,6 +276,7 @@
 #include "canary_support.h"          // LastSet (-> LastSet.h) / ShowMyMessage
 #include "forms/fQwertyKey.h"        // AI(W906-FW-SETUP-E) 20260824: fQwertyKey extern (:406) + ShowQwertyKey -- the unlock batch at this file's tail
 #include "forms/fPassword.h"         // AI(W906-FW-SETUP-E) 20260824: fPassword extern (:406) + edPassword
+#include "BarcodeReader.h"     // AI(W906-FW-BARCODE2) 20260825: Barcode_Reader real since FW-BARCODE1 -- E-B1/E-B2 guards live
 
 // AI(W906-FW-SETUP-B) 20260821: same "declare just the one symbol needed"
 // posture Command.cpp (:282) and MainTempMode.cpp (:57) already established
@@ -1119,12 +1120,12 @@ static AnsiString sSigPassword;                                                 
 // golden shape (NULL until a wiring wave constructs it -- G-d exposure).
 void TfSetup::XPitchMouseDown(TEdit *Sender)
 {
-#if 0
+    // GATE (E-B1) OPENED 20260825 (FW-BARCODE2): Barcode_Reader real since
+    // FW-BARCODE1 (e7b4bf8); non-KYEC config returns 2, guard never fires.
     if(Barcode_Reader(bcSetup)==0)                                              // 20140103 wei KYEC Barcode Reader
     {
         return;
     }
-#endif // GATE (E-B1) -- see banner
 
     if(IniConfig.bSPILFunction==true)                                           //JerryYang 20170328 (Jou) 矽品客戶碼統一用SPILFunction
         fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, 0.0, 1000.0);
@@ -1136,12 +1137,11 @@ void TfSetup::XPitchMouseDown(TEdit *Sender)
 // XPitchMouseDown above except the CheckRange bounds (-4000..4000).
 void TfSetup::XShiftPitchMouseDown(TEdit *Sender)
 {
-#if 0
+    // GATE (E-B2) OPENED 20260825 (FW-BARCODE2) -- see E-B1 above.
     if(Barcode_Reader(bcSetup)==0)
     {
         return;
     }
-#endif // GATE (E-B2) -- see banner
 
     if(IniConfig.bSPILFunction==true)
         fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, -4000.0, 4000.0);

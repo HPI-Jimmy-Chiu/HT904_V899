@@ -160,6 +160,7 @@
 #include "SECSGEM/SecsEventType.h"   // SECS_EVENT
 #include "SECSGEM/SecsEventReport.h" // EventReport(unsigned)
 #include "forms/fQwertyKey.h"  // AI(W906-FW-QWKEY2) 20260824: fQwertyKey extern for un-gated ShowQwertyKey sites (real since FW-QWKEY1 fc08e09; latent until HTEdit GATE (6) wiring)
+#include "BarcodeReader.h"  // AI(W906-FW-BARCODE2) 20260825: Barcode_Reader real since FW-BARCODE1 (e7b4bf8) -- rgTemperatureModeClick guard live
 
 // AI(W906-FW3-TempSet-WA) 20260820: LOCALLY PROVIDED, matching this tree's
 // established per-TU convention for these exact golden constants (see
@@ -4347,7 +4348,7 @@ void TfTemp_Set::edSoakTimeClick(TObject *Sender)
 {
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
-#if 0 // GATE(G-Barcode) -- Buffer->Tag also has no port (see facade header DESIGN NOTE); whole guard gated
+#if 0 // GATE(G-Barcode) NARROWED premise 20260825: Barcode_Reader real since FW-BARCODE1; still gated on Buffer->Tag alone (vclcompat TEdit has no Tag)
     if(Buffer->Tag==1)
     {
         if(Barcode_Reader(bcTemperature)==0)                                    // 20140103 wei KYEC Barcode Reader
@@ -4363,7 +4364,7 @@ void TfTemp_Set::edJamSoakTimeClick(TObject *Sender)
 {
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
-#if 0 // GATE(G-Barcode) -- Buffer->Tag also has no port (see facade header DESIGN NOTE); whole guard gated
+#if 0 // GATE(G-Barcode) NARROWED premise 20260825: Barcode_Reader real since FW-BARCODE1; still gated on Buffer->Tag alone (vclcompat TEdit has no Tag)
     if(Buffer->Tag==1)
     {
         if(Barcode_Reader(bcTemperature)==0)                                    // 20140103 wei KYEC Barcode Reader
@@ -4382,7 +4383,7 @@ void TfTemp_Set::edLHP1MouseDown(TObject *Sender)
 {
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
-#if 0 // GATE(G-Barcode) -- Buffer->Tag also has no port (see facade header DESIGN NOTE); whole guard gated
+#if 0 // GATE(G-Barcode) NARROWED premise 20260825: Barcode_Reader real since FW-BARCODE1; still gated on Buffer->Tag alone (vclcompat TEdit has no Tag)
     if(Buffer->Tag==1)                                                          //20140320 wei
     {
         if(Barcode_Reader(bcTemperature)==0)                                    // 20140103 wei KYEC Barcode Reader
@@ -4420,7 +4421,7 @@ void TfTemp_Set::edLowBaseMouseDown(TObject *Sender)                            
 {
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
-#if 0 // GATE(G-Barcode) -- Buffer->Tag also has no port (see facade header DESIGN NOTE); whole guard gated
+#if 0 // GATE(G-Barcode) NARROWED premise 20260825: Barcode_Reader real since FW-BARCODE1; still gated on Buffer->Tag alone (vclcompat TEdit has no Tag)
     if(Buffer->Tag==1)                                                          //20140320 wei
     {
         if(Barcode_Reader(bcTemperature)==0)                                    // 20140103 wei KYEC Barcode Reader
@@ -5474,18 +5475,19 @@ void TfTemp_Set::pgcTempOffsetChange(TObject *Sender)
 #endif // GATE(dep-TabSheet-PageIndex)
 }
 //---------------------------------------------------------------------------
-// AI(W906-FW3-TempSet-WA) 20260820: GATE(G-Barcode) at the guard.
+// AI(W906-FW-BARCODE2) 20260825: G-Barcode OPENED at this site -- the ONLY
+// G-Barcode guard in this file with no Buffer->Tag co-blocker. Barcode_Reader
+// real since FW-BARCODE1 (e7b4bf8); non-KYEC config returns 2, so the guard
+// never early-returns headless (behaviour identical to the gated shape).
 //---------------------------------------------------------------------------
 void TfTemp_Set::rgTemperatureModeClick(TObject *Sender)
 {
-#if 0 // GATE(G-Barcode)
     if(rgTemperatureMode->ItemIndex!=iTempMoldSet &&
        Barcode_Reader(bcTemperature)==0)                                        // 20140103 wei KYEC Barcode Reader
     {
         rgTemperatureMode->ItemIndex=iTempMoldSet;
         return;
     }
-#endif // GATE(G-Barcode)
 
     if(CosFunction.bHiSiliconFunction==true)                                    //Ifor 20151118 海思專用版本 工作模式不可修改
     {
@@ -5609,7 +5611,7 @@ void TfTemp_Set::edAmbHotGuartbentClick(TObject *Sender)
 {
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
-#if 0 // GATE(G-Barcode) -- Buffer->Tag also has no port (see facade header DESIGN NOTE); whole guard gated
+#if 0 // GATE(G-Barcode) NARROWED premise 20260825: Barcode_Reader real since FW-BARCODE1; still gated on Buffer->Tag alone (vclcompat TEdit has no Tag)
     if(Buffer->Tag==1)                                                          //20140320 wei
     {
         if(Barcode_Reader(bcTemperature)==0)                                    // 20140103 wei KYEC Barcode Reader
@@ -5673,7 +5675,7 @@ void TfTemp_Set::edtATCInPC1MouseDown(TObject *Sender)                          
 {
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
-#if 0 // GATE(G-Barcode) -- Buffer->Tag also has no port (see facade header DESIGN NOTE); whole guard gated
+#if 0 // GATE(G-Barcode) NARROWED premise 20260825: Barcode_Reader real since FW-BARCODE1; still gated on Buffer->Tag alone (vclcompat TEdit has no Tag)
     if(Buffer->Tag==1)                                                          //20140320 wei
     {
         if(Barcode_Reader(bcTemperature)==0)                                    // 20140103 wei KYEC Barcode Reader
@@ -5698,7 +5700,7 @@ void TfTemp_Set::edATCAmbTempMouseDown(TObject *Sender)                         
 {
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
-#if 0 // GATE(G-Barcode) -- Buffer->Tag also has no port (see facade header DESIGN NOTE); whole guard gated
+#if 0 // GATE(G-Barcode) NARROWED premise 20260825: Barcode_Reader real since FW-BARCODE1; still gated on Buffer->Tag alone (vclcompat TEdit has no Tag)
     if(Buffer->Tag==1)                                                          //20140320 wei
     {
         if(Barcode_Reader(bcTemperature)==0)                                    // 20140103 wei KYEC Barcode Reader
@@ -5763,7 +5765,7 @@ void TfTemp_Set::edATCInitialOffset1MouseDown(TObject *Sender)                  
 {
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
-#if 0 // GATE(G-Barcode) -- Buffer->Tag also has no port (see facade header DESIGN NOTE); whole guard gated
+#if 0 // GATE(G-Barcode) NARROWED premise 20260825: Barcode_Reader real since FW-BARCODE1; still gated on Buffer->Tag alone (vclcompat TEdit has no Tag)
     if(Buffer->Tag==1)                                                          //20140320 wei
     {
         if(Barcode_Reader(bcTemperature)==0)                                    // 20140103 wei KYEC Barcode Reader
@@ -6486,7 +6488,7 @@ void TfTemp_Set::edtHeatGunTempATCMouseDown(TObject *Sender)                    
 {
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
-#if 0 // GATE(G-Barcode) -- Buffer->Tag also has no port (see facade header DESIGN NOTE); whole guard gated
+#if 0 // GATE(G-Barcode) NARROWED premise 20260825: Barcode_Reader real since FW-BARCODE1; still gated on Buffer->Tag alone (vclcompat TEdit has no Tag)
     if(Buffer->Tag==1)
     {
         if(Barcode_Reader(bcTemperature)==0)

@@ -51,9 +51,9 @@
 //  Parent/Name/Tag/Top/Left/Height/Width/Align (verified: read the whole file,
 //  Controls.h's own MEASURED PROPERTY COVERAGE note lists exactly which
 //  properties are modeled, and none of these are on it) -- and because
-//  Barcode_Reader (BarcodeReader.h) has NO compiled body anywhere in the port
-//  tree (grepped 20260807, re-checked 20260824). TfQwertyKey/fQwertyKey/
-//  fQwertyKey2 are REAL since FW-QWKEY1 (fc08e09, forms/fQwertyKey.{h,cpp}). Since real VCL never constructs any of
+//  Barcode_Reader is REAL since FW-BARCODE1 (e7b4bf8, BarcodeReader.{h,cpp},
+//  20260825) and TfQwertyKey/fQwertyKey/fQwertyKey2 since FW-QWKEY1 (fc08e09)
+//  -- the whole EditClick chain is live now; see GATE (6)/(6-B) notes below. Since real VCL never constructs any of
 //  these widget stand-ins as EC/SV-registered objects either (see Controls.h's
 //  own SCOPE BOUNDARY (1)), every one of golden's dynamic_cast branches here is
 //  reachable-but-always-NULL today -- these gates cost nothing until the W7 UI
@@ -97,8 +97,8 @@
 //       LIVE: lazy-constructs fQwertyKey/fQwertyKey2 (DEVIATION: new+Init()
 //       replaces BCB Application->CreateForm/__classid, which have no port)
 //       and dispatches ShowQwertyKey by Content. Only the
-//       Barcode_Reader(iBarcodeReadType) pre-check stays gated -- GATE (6-B),
-//       Barcode_Reader still has no port. Reachability unchanged: OnClick is
+//       Barcode_Reader(iBarcodeReadType) pre-check opened 20260825 by
+//       FW-BARCODE2 (GATE 6-B). Reachability unchanged: OnClick is
 //       never wired (GATE 5), so nothing calls EditClick headless today.
 //   (7)/(8) GetDefaultPosition / SetToDefaultPosition (golden :596-616): read/
 //       write SourceControl->Parent/Top/Left/Height/Width/Align, none of which
@@ -116,6 +116,7 @@
 #include "cMyDB.h"          // MyDBIProcess(AnsiString,AnsiString) -- aHotPlateSubstrate.cpp:1030 body; declared cMyDB.h
 #include "cmydef.h"         // bcTotal (MachineType.h enum, pulled transitively) -- ctor default for iBarcodeReadType
 #include "forms/fQwertyKey.h"  // AI(W906-FW-QWKEY3) 20260824: TfQwertyKey/fQwertyKey/fQwertyKey2 real since FW-QWKEY1 (fc08e09) -- GATE (6) OPENED
+#include "BarcodeReader.h"  // AI(W906-FW-BARCODE2) 20260825: Barcode_Reader real since FW-BARCODE1 -- GATE (6-B) opened
 //---------------------------------------------------------------------------
 THTEdit::THTEdit()                                                              // golden :13-18
 {
@@ -296,10 +297,10 @@ void THTEdit::ChangeProperty(bool Visible, bool Enable, bool ReadFromFile, bool 
 //---------------------------------------------------------------------------
 void THTEdit::EditClick(TObject * /*Sender*/)                                  // golden :193-242 -- GATE (6)
 {
-#if 0 // GATE (6-B) NARROWED 20260824 (FW-QWKEY3): Barcode_Reader alone still has no port
+    // GATE (6-B) OPENED 20260825 (FW-BARCODE2): Barcode_Reader real since
+    // FW-BARCODE1 (e7b4bf8).
     if(iBarcodeReadType!=bcTotal)
         Barcode_Reader(iBarcodeReadType);
-#endif // GATE (6-B)
 
     // AI(W906-FW-QWKEY3) 20260824: golden `Application->CreateForm(__classid(
     //   TfQwertyKey), &fQwertyKey)` -- BCB Application/__classid have no port.
