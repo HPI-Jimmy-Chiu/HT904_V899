@@ -36,7 +36,8 @@
 //      -> ctor calls ReadGeneralIni + SystemModularInitial (both now real,
 //         but the ctor ITSELF that would call them stays gated -- tests
 //         invoke ReadGeneralIni/SystemModularInitial directly);
-//         InstallColorBinDisplay needs TMyBinDispHT9046/TMyBinDispCtrl (W7-UI); deferred.
+//         InstallColorBinDisplay is REAL since FW-BINDISP1 (20260824, Offline
+//         DEVIATION per user ruling); its ctor-path CALL stays gated.
 //    LogSoftwareOnTime / SoftwareExeTimer globals (database.cpp:28-31, 2876-2917)
 //      -> #ifdef DEBUG_SOFTWARE_EXEC_TIME, effectively no-op; stub provided.
 //    Inside ReadGeneralIni (GA-1-B6, see that function's own comment):
@@ -83,6 +84,7 @@
 // this wave) to the permanent SECSGEM/uHGemHT9045.h -- see that header's own
 // file-head note for scope (still zero of golden's 22 overrides).
 #include "SECSGEM/uHGemHT9045.h"
+#include "BinDisplay/MyBinDisp.h"   // AI(W906-FW-BINDISP1) 20260824: TMyBinDispOffline for InstallColorBinDisplay
 
 // ---------------------------------------------------------------------------
 //  MyDBIProcess / ShowMyMessage forward declarations
@@ -189,11 +191,78 @@ void SYSTEM_MODULAR::SystemModularInitial()
     // InstallColorBinDisplay needs TMyBinDispHT9046/TMyBinDispCtrl (W7-UI,
     // golden database.cpp:1684-1729). NUMBER_PANEL_TYPE defaults 0 offline
     // (cmydef.cpp) so the branch is dead here anyway.
-#if 0 // TODO(W7-UI): InstallColorBinDisplay -- golden database.cpp:1543-1545; needs TMyBinDispHT9046 (uHGemHT9045/BinDisp surface untranslated)
+#if 0 // TODO(W7-UI): InstallColorBinDisplay -- golden database.cpp:1543-1545; body is REAL now (below, FW-BINDISP1) but the ctor-path call stays gated for the separate un-gate wave (behavior change: BinDisCtrl goes non-NULL for every consumer with a !=NULL guard)
     if(NUMBER_PANEL_TYPE==3 ||
        NUMBER_PANEL_TYPE==4)                                                    //Sam 20240604: new BinDisplay TFT
         InstallColorBinDisplay(NUMBER_PANEL_TYPE);
 #endif
+}
+
+// ---------------------------------------------------------------------------
+//  SYSTEM_MODULAR::InstallColorBinDisplay  (golden database.cpp:1684-1729)
+//
+//  AI(W906-FW-BINDISP1) 20260824: translation wave FW-BINDISP1. DEVIATION
+//  (user ruling 20260824): golden :1686 news TMyBinDispHT9046 -- the hardware
+//  protocol subclass is untranslated, and the user confirmed the experimental
+//  machine HAS the color bin display panel but ruled the port instantiates
+//  TMyBinDispOffline (the no-op concrete subclass, BinDisplay/MyBinDisp.h:403)
+//  for now so the "BinDisCtrl is a real instance" runtime premise holds
+//  (MN200 GATE c/e and the NUMBER_PANEL_TYPE 3/4 deref family wait on it).
+//  TMyBinDispHT9046 translation + real-panel bring-up are future waves.
+//  Everything below the new is golden verbatim.
+//
+//  GOLDEN ODDITY (ICBD-1): golden allocates BEFORE the iType check -- a
+//  non-3/4 caller would leak the instance via the early return (:1694-1697),
+//  and the `BinDisCtrl==NULL` test right after `new` never fires in standard
+//  C++ (operator new throws). Both are unreachable in practice: the only
+//  call site (:1543-1545) is itself guarded by NUMBER_PANEL_TYPE==3||4.
+//  Preserved verbatim, not fixed.
+// ---------------------------------------------------------------------------
+void SYSTEM_MODULAR::InstallColorBinDisplay(int iType)
+{
+    BinDisCtrl=new TMyBinDispOffline;                                           //AI(W906-FW-BINDISP1) 20260824: DEVIATION, golden news TMyBinDispHT9046 (see banner)
+
+    if(BinDisCtrl==NULL)                                                        //Sam 20240604 : 新增 BinDisplay TFT
+        return;
+
+    if(iType==3 || iType==4)                                                    //Sam 20240604 : 新增 BinDisplay TFT
+    {
+    }
+    else
+    {
+        return;
+    }
+    BinDisCtrl->SetComPort(sNumberPanelComPort);
+    BinDisCtrl->SetComPort2(sNumberPanelComPort2);
+
+    for(int i=0; i<eBinDispTotal; i++)                                          //JerryYang 20220909 : 12->eBinDispTotal  //GG Steven
+    {
+        if(AUTO3_IS_MAGAZINE==0 && i>=eBinDispMag1 && i<=eBinDispMag14)         //JerryYang 20230515 : 沒裝Magazine就不要顯示
+        {
+        }
+        else if(AUTO_EMPTY_COLOR<3 && i>=eBinDispAuto4 && i<=eBinDispFix12)
+        {
+        }
+        else if(i==eBinDispBulkBox)
+        {
+        }
+        else
+        {
+            BinDisCtrl->InstalledUnit(i);
+        }
+        BinDisCtrl->Alias[i]=asTrayForBinDisp[i];
+    }
+
+    int autoempty =CheckAndReadIniDataGeneral("System", "AUTO_EMPTY_COLOR", 1);
+    int EmptyEmpty=CheckAndReadIniDataGeneral("System", "SUPPORT_2_EMPTY_EMPTY", 0);
+
+    if(autoempty==0 && EmptyEmpty==0)
+    {
+        BinDisCtrl->CloseUnit(1);
+        BinDisCtrl->CloseUnit(2);
+    }
+
+    BinDisCtrl->SetDelayTime(dNumberPanelDelay);                                //Sam 20240604 : 顯示器輪巡時間改為 double
 }
 
 // ---------------------------------------------------------------------------

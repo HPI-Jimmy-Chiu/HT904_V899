@@ -224,9 +224,12 @@ class SYSTEM_MODULAR
         bool   bUseSocketTemp;      // 9th-axis (Socket) heater enable
 
     protected:
-#if 0 // TODO(wave-UI): InstallColorBinDisplay -- TMyBinDispHT9046 / BDE
+        // AI(W906-FW-BINDISP1) 20260824: declaration un-gated -- body lands in
+        // database.cpp this wave (golden database.cpp:1684-1729) with the
+        // user-ruled TMyBinDispOffline substitution; see the body's DEVIATION
+        // note. The old blocker (TMyBinDispHT9046 untranslated) is bypassed,
+        // not solved: the protocol subclass is still a future wave.
         void InstallColorBinDisplay(int iType);
-#endif
 
     public:
         // Ctor/dtor are #if 0 gated in database.cpp (ctor calls ReadGeneralIni
