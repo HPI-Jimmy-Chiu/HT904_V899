@@ -9664,6 +9664,27 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - gate：Debug build_qw8g＋Release build_qw8r2 **137/142×2** 常駐五項
   逐項同；guard 代理 0 檔。
 
+## 20260824 XVII — FW-BARCODE1 收案：TFormBarcodeReader 實體落地（主迴圈自做，跨午夜收）
+
+- **最後共同阻塞者的實體波**（commit e7b4bf8，+598 行）：golden
+  BarcodeReader.{h,cpp}（57＋445 行 cp950）全檔忠實翻譯——表單 facade
+  （fPassword 態勢）、8 個 handler、InputBarcodeNumber、Barcode_Reader。
+  ht9045_sm 註冊於 Password.cpp 之後。
+- DEVIATION 皆有前例並登錄 header：選單三 widget 省略（無方法 deref
+  指標）；(unsigned short &Key) trimmed 簽名；TU-local TfBarcodeTimer
+  （全樹第 4 個 local TTimer，同模式）；TfBarcodeEdit 補 PasswordChar。
+  窄 gate 僅二：(B-W1) RegisterHotKey×2（無 HWND）、(B-F1) fFTPClient×2
+  （TfFTPClient 全樹無 port，grep 20260824）。
+- **GOLDEN QUIRK (BR-q1)**：BarcodeChange[] 以 15 個初始器對 bcTotal==16
+  ——BarcodeChange[bcSECSGEM]=="" 使 SECSGEM 登入紀錄無 Change 後綴。
+  另 (BR-n1) 1280×1024 寫死置中、(BR-n2) KYEC 尾段 2 位頭碼 85~120 的
+  100~120 不可達。三筆待下輪台帳（與 XI-XVI 複掃同批）。
+- headless 語意：ShowModal 即時提交→InputBarcodeNumber 回 ctor 空字串
+  =「使用者沒輸入」；Barcode_Reader 非 KYEC 組態回 2→呼叫端不早退，
+  與 gated 行為等價——FW-BARCODE2 解鎖因此是零觀測差變更。
+- gate：全新雙 dir build_qw9g/qw9r（凍結模板首航，兩段皆絕對 cd 無事故）
+  **137/142×2** 常駐五項逐項同；guard 代理 0 檔。
+
 ### 🔖 RESUME（20260824 日終）
 
 - **今日全收（27 顆 commit）**：FW-TEMP3／GATE7-V＋裁決落地＋計數更正／
@@ -9676,16 +9697,15 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - **等使用者（三項）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
   HAL-MOT1 十問（Q1/Q9/Q4 擋新表起草，其餘有預設）；TImage headless
   准駁（解 fSetup 2 方法）。
-- **下一波**：XI-XVI 全收（QWKEY2-6＋G24；20260824 晚間七波，主迴圈
-  自做零 agent）。候選序：
-  (1) TImage 若獲准：chkOffCenterkitClick/cbQualSite2X2ShiftClick。
-  (2) shims 收斂波（選配）：clYellow/NewRecordProcess 預設值三處
-  （acatchtray_shims.h 不忠實的 S2=""/S3=""／automation.cpp:62 第三處
-  extern）向 golden 形（cMyDB.h Debug=" "）靠攏。
-  (3) fLotInfo WB-9/WB-10 與 MyTempPanel W8 大塊的下一個真阻塞者是
-  Barcode_Reader（全樹無 port）——若要開是一個 BarcodeReader 翻譯波。
-  (4) 台帳確認：本晚七波無新 GOLDEN 缺陷（QWKEY6 是純翻譯、其餘是
-  解鎖），惟 ledger 677 之後未加列——下次 ledger 輪先複掃 XI-XVI。
+- **下一波**：XI-XVII 全收（20260824 晚間八波：QWKEY2-6＋G24＋
+  BARCODE1，主迴圈自做零 agent，八輪雙 gate 全綠）。候選序：
+  (1) **FW-BARCODE2 解鎖波**：uTemp_Set G-Barcode／fSetup E-B1,E-B2／
+  HTEdit GATE (6-B)／fLotInfo WB-9,WB-10／MyTempPanel W8 塊——逐站複驗
+  共阻塞者（WB-9/WB-10 另有 InputBarcodeNumber 已活；W8 塊還鎖
+  W8-2 Tag）後開；行為變更單獨 commit。
+  (2) 台帳輪：複掃 XI-XVII（BR-q1/n1/n2 三筆＋確認 QWKEY 波無漏）。
+  (3) TImage 若獲准：chkOffCenterkitClick/cbQualSite2X2ShiftClick。
+  (4) shims 收斂波（選配）：clYellow/NewRecordProcess 預設值三處。
   註：MyTempPanel 三個分支樹塊的 W8-3（fTemp_Set setters）已死
   （MaxTempSetting/MinTempSetting 20260824 起在 uTemp_Set 為真身），
   但 W8-2（TEdit 無 Tag）＋W8-5（Barcode_Reader 無 port）仍鎖，維持 gated。
