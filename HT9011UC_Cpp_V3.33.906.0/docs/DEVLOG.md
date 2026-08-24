@@ -9702,6 +9702,23 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - gate：全新雙 dir build_qw10g/qw10r **137/142×2** 常駐五項逐項同；
   guard 代理 0 檔。
 
+## 20260825 II — FW-BARCODE3 收案：9 個 Clipboard 混合塊開＋gate 腳本化（主迴圈自做）
+
+- **逐行窄化落地**（commit 920004f）：fPassword P-B1×2/P-B2/P-B3/P-B4×2
+  ＋fLotInfo WB-4/5/7 全開；每塊只把 `Clipboard()->Clear();` 行單獨再
+  gate 成 **GATE (CLIP)**（VCL Clipboard() 全樹無 port，grep 20260825）。
+  headless 語意忠實：InputBarcodeNumber 回 ""→`if(Text!="") Close()` 臂
+  永不觸發、登入欄位保持空。P-R1 密碼檔 gate 未動——這些塊只填欄位，
+  不做驗證。
+- **cd bug 第四犯→根治**：qw11 鏈 Release 段又漏絕對 cd（同 qw5/qw8
+  復原）。結論：**重打模板就是失敗模式本身**，凍結文字沒用——已落
+  `tools/dualgate.sh`（兩段皆絕對 cd、sentinel 同慣例），自此 gate
+  一律 `nohup bash tools/dualgate.sh <tag> &`。
+- gate：Debug build_qw11g＋Release build_qw11r2 **137/142×2** 常駐五項
+  逐項同；guard 代理 0 檔。
+- fLotInfo 殘餘（下一波手術）：WB-2（Button 參數分支）、WB-9/WB-10
+  （需 Sender 復原）、WB-13（fBarCode 成員，WA-7 鎖）。
+
 ### 🔖 RESUME（20260824 日終）
 
 - **今日全收（27 顆 commit）**：FW-TEMP3／GATE7-V＋裁決落地＋計數更正／
@@ -9716,9 +9733,8 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   准駁（解 fSetup 2 方法）。
 - **下一波**：XI-XVII 全收（20260824 晚間八波：QWKEY2-6＋G24＋
   BARCODE1，主迴圈自做零 agent，八輪雙 gate 全綠）。候選序：
-  (1) FW-BARCODE2 已收（20260825 I，4 純站開）。**FW-BARCODE3**：
-  fPassword P-B1/B3/B4＋fLotInfo WB-2/4/9/10 等 Clipboard 混合塊窄化
-  （Clipboard()->Clear() 行單獨留 gate，InputBarcodeNumber 流活化）。
+  (1) FW-BARCODE2/3 已收（20260825 I/II）。**FW-BARCODE4**：fLotInfo
+  WB-2（Button 分支手術）＋WB-9/WB-10（Sender 參數復原＋塊頭複驗）。
   (2) 台帳輪：複掃 XI-XVII＋20260825 I（BR-q1/n1/n2 三筆＋掃描器教訓）。
   (3) TImage 若獲准：chkOffCenterkitClick/cbQualSite2X2ShiftClick。
   (4) shims 收斂波（選配）：clYellow/NewRecordProcess 預設值三處。
