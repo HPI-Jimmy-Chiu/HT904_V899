@@ -35,6 +35,14 @@ public:
     // -- W5-Final-AGV_E84 INTEGRATE ADD: member the E84 loader/unloader
     //    handshake engine (Automation/AGV_E84.cpp) derefs -----------------------
     TfMainMemo *mmE84Log;            // [DATA] golden AGV.h:85 (TMemo* E84 log) -- reuse existing TfMainMemo/TfMainMemoLines shape (meShuttle1/2's shape)
+    // AI(W906-FW-QWKEY6) 20260824: the 3 MouseDown handlers the original
+    // AGV_PortScan wave omitted (unspellable TMouseButton/TShiftState +
+    // fQwertyKey then had no port). Signatures trimmed to what each golden
+    // body reads (Sender only). Bodies: Automation/AGV_PortScan.cpp append
+    // block. Live, latent until a real event stream wires OnMouseDown.
+    void edAuto1CountMouseDown(TObject *Sender);             // golden AGV.cpp:1133-1137
+    void edE84_1_TP1MouseDown(TObject *Sender);              // golden AGV.cpp:1139-1143
+    void edAGVWorryingwattingtimeMouseDown(TObject *Sender); // golden AGV.cpp:1309-1313
     TfAGV();
     virtual ~TfAGV() {}
 };

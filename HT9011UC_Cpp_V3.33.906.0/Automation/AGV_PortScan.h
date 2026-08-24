@@ -126,8 +126,9 @@
 //                                       TEdit MouseDown -> fQwertyKey virtual
 //                                       keyboard popup (VCL input helper, W7).
 //                                       [20260824: fQwertyKey real since
-//                                       FW-QWKEY1; the 3 handlers remain
-//                                       untranslated -- queued, not dead.]
+//                                       FW-QWKEY1; the 3 handlers TRANSLATED
+//                                       same day by FW-QWKEY6 -- forms/fAGV.h
+//                                       decls + this file's append block.]
 //
 //  FREE-FUNCTION DEMOTION (same judgment-call convention as AGV_E84.h/
 //  AGV_predicates.h): golden TfAGV::NowE84Status/E84StatusChange/ScanLoadPort/

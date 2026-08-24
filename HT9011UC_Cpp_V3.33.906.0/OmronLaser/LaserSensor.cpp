@@ -182,6 +182,7 @@
 #include "common.h"                  // DataPath, GetLastOpenFN, MyForceDirectories, WriteIniData, CheckAndReadIniData
 #include "cmydef.h"                  // LogSoftwareOffTime, InitialOK, SystemStart, System{Year,Month,Date,Hour,Min,Sec}, USE_LASER_DISTANCE
 #include "cprod.h"                   // TestIF_File, HotPlateForm
+#include "forms/fQwertyKey.h"       // AI(W906-FW-QWKEY6) 20260824: fQwertyKey (real since FW-QWKEY1 fc08e09) -- the 7 mouse handlers below
 #include "EJ1N/TextProcess.h"        // MyDeCodeASCII, SetBCC, ConvertByte, GetCOMPortStatus
 #include "Motor/mymotor.h"           // golden "MyMotor.h" -- this tree's real path (see TriTemp.cpp precedent); MOT[]/TMyMotor for DoGetLaserValue/DoGetOutLaserValue
 #include "myTimer.h"                 // TQPF_Timer (also reachable via cmydef.h/cprod.h; included directly per this tree's per-file-states-its-own-deps convention)
@@ -2144,6 +2145,69 @@ void TfLaserSensor::btGetOutShValueClick(vclcompat::TObject * /*Sender*/)
     //==> Eastsun 20260525 laser 整合 : 從 a-side 補實作
     iLaserOutArmTask=1;
     bGetOutArm=true;
+    //<== Eastsun 20260525 laser 整合
+}
+//---------------------------------------------------------------------------
+
+// ============================================================================
+//  APPEND BLOCK -- AI(W906-FW-QWKEY6) 20260824
+//  The 7 mouse handlers the original wave OMITTED (unspellable TMouseButton/
+//  TShiftState params + fQwertyKey then had no port). fQwertyKey is real
+//  since FW-QWKEY1 (fc08e09); signatures trimmed to what each body reads
+//  (header note at the declarations). Nothing above this line is edited.
+// ============================================================================
+void TfLaserSensor::edICThicknessMouseDown(TObject *Sender)                    // golden :1283-1287
+{
+    fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_DOUBLE, 2, true, 5.0, -5.0);
+}
+//---------------------------------------------------------------------------
+void TfLaserSensor::mtPlate2_GoldenMouseDown(int X, int Y)                     // golden :1613-1621
+{
+    mtPlate2_Golden->ConvertIndexCells(X, Y);
+    edTemp->Text=mtPlate2_Golden->GetCellText(X, Y);
+    fQwertyKey->ShowQwertyKey(edTemp, N_DOUBLE, 2, true, 1.0, -1.0);
+    mtPlate2_Golden->SetCellNumber(X, Y, atof(edTemp->Text.c_str()));
+    TestIF_File.dLaserValueIn[0][X][Y]=atof(edTemp->Text.c_str());
+}
+//---------------------------------------------------------------------------
+void TfLaserSensor::mtPlate1_GoldenMouseDown(int X, int Y)                     // golden :1623-1631
+{
+    mtPlate1_Golden->ConvertIndexCells(X, Y);
+    edTemp->Text=mtPlate1_Golden->GetCellText(X, Y);
+    fQwertyKey->ShowQwertyKey(edTemp, N_DOUBLE, 2, true, 1.0, -1.0);
+    mtPlate1_Golden->SetCellNumber(X, Y, atof(edTemp->Text.c_str()));
+    TestIF_File.dLaserValueIn[1][X][Y]=atof(edTemp->Text.c_str());
+}
+//---------------------------------------------------------------------------
+void TfLaserSensor::edDeviceXOffsetMouseDown(TObject *Sender)                  // golden :1633-1640
+{
+    //==> Eastsun 20260525 laser 整合 : 從 a-side 補實作
+    int iX=DeviceForm.XDimension/2;
+    fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_INTEGER, 2, true, iX, -iX);
+    //<== Eastsun 20260525 laser 整合
+}
+//---------------------------------------------------------------------------
+void TfLaserSensor::edDeviceYOffsetMouseDown(TObject *Sender)                  // golden :1643-1650
+{
+    //==> Eastsun 20260525 laser 整合 : 從 a-side 補實作
+    int iY=DeviceForm.YDimension/2;
+    fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_INTEGER, 2, true, iY, -iY);
+    //<== Eastsun 20260525 laser 整合
+}
+//---------------------------------------------------------------------------
+void TfLaserSensor::edOutDeviceXOffsetMouseDown(TObject *Sender)               // golden :1653-1660
+{
+    //==> Eastsun 20260525 laser 整合 : 從 a-side 補實作
+    int iX=DeviceForm.XDimension/2;
+    fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_INTEGER, 2, true, iX, -iX);
+    //<== Eastsun 20260525 laser 整合
+}
+//---------------------------------------------------------------------------
+void TfLaserSensor::edOutDeviceYOffsetMouseDown(TObject *Sender)               // golden :1663-1670
+{
+    //==> Eastsun 20260525 laser 整合 : 從 a-side 補實作
+    int iY=DeviceForm.YDimension/2;
+    fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_INTEGER, 2, true, iY, -iY);
     //<== Eastsun 20260525 laser 整合
 }
 //---------------------------------------------------------------------------

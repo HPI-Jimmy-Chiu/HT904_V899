@@ -33,6 +33,8 @@
 #include "AGV_predicates.h"    // AGV_IsATK_AMR() -- golden ScanLoadPort's unqualified IsATK_AMR() call
 #include "SECSGEM/SecsEventType.h"     // SECS_EVENT (ETypeStruct)
 #include "SECSGEM/SecsEventReport.h"   // EventReport(unsigned)
+#include "forms/fAGV.h"               // AI(W906-FW-QWKEY6) 20260824: TfAGV class (3 MouseDown handlers below)
+#include "forms/fQwertyKey.h"         // AI(W906-FW-QWKEY6) 20260824: fQwertyKey (real since FW-QWKEY1 fc08e09)
 
 // =============================================================================
 //  GROUP 1a -- E84 sensor-status telemetry (golden :77-169).
@@ -889,3 +891,25 @@ void bScanLoadPortState_ATK()
         }
     }
 }
+
+// ============================================================================
+//  APPEND BLOCK -- AI(W906-FW-QWKEY6) 20260824
+//  The 3 MouseDown handlers the original wave omitted (see forms/fAGV.h
+//  declarations for the trimmed-signature note). Golden AGV.cpp verbatim
+//  bodies; N_INTEGER real (cmydef.h). Nothing above this line is edited.
+// ============================================================================
+void TfAGV::edAuto1CountMouseDown(TObject *Sender)                             // golden AGV.cpp:1133-1137
+{
+    fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 0, 20);
+}
+//---------------------------------------------------------------------------
+void TfAGV::edE84_1_TP1MouseDown(TObject *Sender)                              // golden AGV.cpp:1139-1143
+{
+    fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 0, 300);
+}
+//---------------------------------------------------------------------------
+void TfAGV::edAGVWorryingwattingtimeMouseDown(TObject *Sender)                 // golden AGV.cpp:1309-1313
+{
+    fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 0, 3600);
+}
+//---------------------------------------------------------------------------

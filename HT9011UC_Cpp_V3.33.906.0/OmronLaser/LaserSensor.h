@@ -94,9 +94,10 @@
 //   not exist anywhere in this port tree (grepped, tree-wide, this wave --
 //   the ONE other hit is EJ1N/MyOmronPanel.h's own citation of this same
 //   fact). The following 7 golden methods take one or both of those types
-//   and are therefore OMITTED from the ACTIVE class body entirely, exactly
-//   as EJ1N/MyOmronPanel.h omitted its 3 mouse handlers for the identical
-//   reason:
+//   and were therefore OMITTED from the ACTIVE class body at translation
+//   time (same call EJ1N/MyOmronPanel.h made for its 3 mouse handlers).
+//   TRANSLATED 20260824 (FW-QWKEY6): all 7 now live as trimmed-signature
+//   members -- see the declarations at the class tail:
 //     edICThicknessMouseDown        golden :1283-1287
 //     mtPlate2_GoldenMouseDown      golden :1613-1621
 //     mtPlate1_GoldenMouseDown      golden :1623-1631
@@ -107,8 +108,7 @@
 //   BEHAVIOUR DELTA: none observable today -- every one of these bodies only
 //   ever called `fQwertyKey->ShowQwertyKey(...)`. [UPDATE 20260824: the
 //   "zero port" citation EXPIRED -- FW-QWKEY1 (fc08e09) landed the keyboard;
-//   these handlers are still UNTRANSLATED (translation debt, queued), which
-//   is a different thing from a dead dependency.] A manual operator editing
+//   the handlers were then TRANSLATED same day by FW-QWKEY6.] A manual operator editing
 //   a calibration cell by mouse-click still cannot happen without a live
 //   window, so the observable delta remains none today.
 //
@@ -363,6 +363,20 @@ public:     // User declarations
     void btGetOutShuttleGoldenClick(vclcompat::TObject *Sender);
     void btGetShValueClick(vclcompat::TObject *Sender);
     void btGetOutShValueClick(vclcompat::TObject *Sender);
+    // AI(W906-FW-QWKEY6) 20260824: the 7 formerly-OMITTED mouse handlers
+    // (banner list above) land as members with trimmed signatures --
+    // TMouseButton/TShiftState still have no port, and per this tree's
+    // "keep only what's read" rule each keeps only the params its golden
+    // body reads (mtPlate pair reads cell X/Y; the rest read Sender only).
+    // fQwertyKey is real since FW-QWKEY1 (fc08e09); calls are live, latent
+    // until a real event stream (nothing wires OnMouseDown headless).
+    void edICThicknessMouseDown(TObject *Sender);        // golden :1283-1287
+    void mtPlate2_GoldenMouseDown(int X, int Y);         // golden :1613-1621
+    void mtPlate1_GoldenMouseDown(int X, int Y);         // golden :1623-1631
+    void edDeviceXOffsetMouseDown(TObject *Sender);      // golden :1633-1640
+    void edDeviceYOffsetMouseDown(TObject *Sender);      // golden :1643-1650
+    void edOutDeviceXOffsetMouseDown(TObject *Sender);   // golden :1653-1660
+    void edOutDeviceYOffsetMouseDown(TObject *Sender);   // golden :1663-1670
 };
 //---------------------------------------------------------------------------
 extern TfLaserSensor *fLaserSensor;
