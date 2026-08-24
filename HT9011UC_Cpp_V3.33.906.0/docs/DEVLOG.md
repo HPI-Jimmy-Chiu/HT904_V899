@@ -9433,3 +9433,24 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
 - **裁決記錄（20260824）**：GATE 7 全家族維持 gated 只做 1-4；TScrollBar
   headless；實驗機（HT9050）有 color bin display；V906=軟體版號、
   Model=HT9050、主用 PCIE-1203 控馬達與 IO。
+
+## 20260824 VII — FW-BINDISP2 解鎖波收案（行為變更，單獨 commit）
+
+- database.cpp ctor 路呼叫點解 #if 0（golden :1543-1545 原句）；
+  MN200 GATE (c)/(e) 依其 20260820 註記的等待條件（「與
+  InstallColorBinDisplay 接線同波拆」）開閘；myMN200motor.cpp 補
+  MyBinDisp.h include 完成 database.h:63 forward-decl。
+- **GOLDEN NOTE (BINDISP2-e) 新登記**：golden :2076-2077 的 deref
+  自己就沒有 panel-type 守衛——非 3/4 機型走到 24V 斷電恢復路徑會
+  NULL deref，golden 同炸；照翻不修。（今日台帳候選累計 5 筆：
+  ICBD-1、SETUP-D 三筆、BINDISP2-e。）
+- 安全鏈（解鎖依據）：本機 NUMBER_PANEL_TYPE=0 死分支；未跑
+  ReadGeneralIni 的測試同死；type=3/4 時 body 內 seed 寫入＝golden
+  原行為且 INIFileGeneral 必已開。
+- gate：全新 g2＋r 各 137/142、失敗集逐項＝常駐五項；guard 代理
+  system/ 五小時 0 檔變動。
+- **誠實揭露（自傷事故）**：第一輪 g 側被我自己毀掉——存在檢查用了
+  相對路徑（cwd 已在 V906 內→V906/V906/... 假陰性）誤判鏈未啟動，
+  重跑的 rm -rf 撞上 live ctest，38 個 Not Run，整側作廢重跑。
+  教訓已入 memory（絕對路徑檢查；rm gate dir 前先看
+  LastTest.log.tmp* 是否存在）。
