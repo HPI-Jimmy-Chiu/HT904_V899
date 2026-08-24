@@ -41,6 +41,7 @@
 // AI(W906-FW3-LotInfo-WC) 20260819: Wave C include -- fAGV->IsSPIL_AMR()
 // (Timer2Timer T4, confirmed REAL by this wave's step 0).
 #include "forms/fAGV.h"
+#include "BarcodeReader.h"   // AI(W906-FW-BARCODE3) 20260825: InputBarcodeNumber real since FW-BARCODE1 -- WB-4/WB-5/WB-7 opened
 #include "forms/fQwertyKey.h"  // AI(W906-FW-QWKEY2) 20260824: fQwertyKey extern for un-gated ShowQwertyKey sites (real since FW-QWKEY1 fc08e09; latent until HTEdit GATE (6) wiring)
 
 // AI(W906-FW3-LotInfo-WB) 20260819: TU-local forward decl of MyDBIProcess
@@ -2212,12 +2213,10 @@ void TfLotInfo::edtSysOperatorIDKeyUp()
 
     if(IniConfig.bO23_InputLotIDByBarcode)                                      //Steven 20241224 : LotID只能用Barcode
     {
-        // AI(W906-FW3-LotInfo-WB) 20260819: GATE WB-4 -- see forms/fLotInfo.h
-        // GATE REGISTER WB-4 (InputBarcodeNumber has no port anywhere in
-        // this tree).
-#if 0
+        // AI(W906-FW-BARCODE3) 20260825: GATE WB-4 OPENED -- InputBarcodeNumber
+        // real since FW-BARCODE1 (e7b4bf8); headless it returns "" (instant-
+        // submit), the faithful "user typed nothing" outcome.
         edtSysOperatorID->Text=InputBarcodeNumber("Input OP ID:", "UserName");
-#endif
     }
     else if(CUSTOMER_CODE==CC_TFME_CHINA ||                                     //Steven 20211112 : 通富微不可以用鍵盤輸入
             IniConfig.bVTESTFunction==true ||                                   //jou 20220912 : 增加VTEST不可以用鍵盤輸入
@@ -2240,14 +2239,10 @@ void TfLotInfo::edtSysLotIDKeyUp()
     if(CUSTOMER_CODE==CC_PTI ||                                                 //RogerYang 20170327 (Steven) 力成使用條碼機 避免利用Tab切換游標直接輸入
        IniConfig.bO23_InputLotIDByBarcode)                                      //Steven 20241224 : LotID只能用Barcode
     {
-        // AI(W906-FW3-LotInfo-WB) 20260819: GATE WB-5 -- see forms/fLotInfo.h
-        // GATE REGISTER WB-5 (InputBarcodeNumber has no port anywhere in
-        // this tree).
-#if 0
+        // AI(W906-FW-BARCODE3) 20260825: GATE WB-5 OPENED -- see WB-4 above.
         SetLotID("");
         AnsiString sBarcodeID=InputBarcodeNumber("Input Lot ID:", "LotID");
         SetLotID(sBarcodeID);
-#endif
     }
     else if(CUSTOMER_CODE==CC_TFME_CHINA ||                                     //Steven 20211112 : 通富微不可以用鍵盤輸入
             IniConfig.bVTESTFunction==true ||                                   //jou 20220912 : 增加VTEST不可以用鍵盤輸入
@@ -2304,18 +2299,18 @@ void TfLotInfo::Timer3Timer()
 // -- edDeviceNameKeyDown (golden uLotInfo.cpp:10457-10473) -- WB-7 --------
 void TfLotInfo::edDeviceNameKeyDown()
 {
-    // AI(W906-FW3-LotInfo-WB) 20260819: GATE WB-7 -- see forms/fLotInfo.h
-    // GATE REGISTER WB-7 (Clipboard()/InputBarcodeNumber have no port
-    // anywhere in this tree).
-#if 0
+    // AI(W906-FW-BARCODE3) 20260825: GATE WB-7 OPENED -- InputBarcodeNumber
+    // real since FW-BARCODE1 (e7b4bf8); only the Clipboard() line stays
+    // gated (GATE (CLIP)).
     if((CUSTOMER_CODE==CC_SCC && AccessLevel<iDefHonPrecLevel))
     {
         edDeviceName->Text="";
+#if 0 // GATE (CLIP) -- VCL Clipboard() has no port anywhere in this tree (grep 20260825)
         Clipboard()->Clear();
+#endif // GATE (CLIP)
         AnsiString sBarcodeID=InputBarcodeNumber("Input Device Name:");
         edDeviceName->Text=sBarcodeID;
     }
-#endif
 
     if(CUSTOMER_CODE==CC_AMD_M && bDeviceName_OK==true)                         //Ifor 20200827 add:避免刷兩次Barcode造成異常
     {

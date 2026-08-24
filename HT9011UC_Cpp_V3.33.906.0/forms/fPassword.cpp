@@ -15,6 +15,7 @@
 //  list (next to forms/fSetup.cpp).  See forms/fPassword.h.
 // =============================================================================
 #include "forms/fPassword.h"
+#include "BarcodeReader.h"   // AI(W906-FW-BARCODE3) 20260825: InputBarcodeNumber real since FW-BARCODE1 (e7b4bf8) -- P-B1..B4 opened, Clipboard lines narrowed
 
 #include "forms/fQwertyKey.h"   // fQwertyKey global + ShowQwertyKey (landed this same wave)
 #include "MachineType.h"        // CC_Greatek/CC_SCC/CC_KYEC_LEE (:330/:316/:292)
@@ -155,29 +156,32 @@ void TfPassword::edUserNameKeyDown(unsigned short &Key)                         
     #ifndef SOFT_SIMULTE
     if(IniConfig.bVTESTFunction==true)                                          //jou 20220912 : 增加VTEST不可以用鍵盤輸入
     {
-        // AI(W906-FW-QWKEY1) 20260824: GATE (P-B1) -- Clipboard()/
-        // InputBarcodeNumber have no port (forms/fPassword.h GATE REGISTER).
-#if 0 // GATE (P-B1)
+        // AI(W906-FW-BARCODE3) 20260825: GATE (P-B1) OPENED -- InputBarcodeNumber
+        // real since FW-BARCODE1 (e7b4bf8); only the Clipboard() lines stay
+        // gated (GATE (CLIP) in place).
         edUserName->Text="";
+#if 0 // GATE (CLIP) -- VCL Clipboard() has no port anywhere in this tree (grep 20260825)
         Clipboard()->Clear();
+#endif // GATE (CLIP)
         edUserName->Text=InputBarcodeNumber("Input User Name:", "UserName");
 
         edPassword->Text="";
+#if 0 // GATE (CLIP) -- VCL Clipboard() has no port anywhere in this tree (grep 20260825)
         Clipboard()->Clear();
+#endif // GATE (CLIP)
         edPassword->Text=InputBarcodeNumber("Input Password:", "Password");
         if(edPassword->Text!="" && edUserName->Text!="")
             Close();
-#endif // GATE (P-B1)
     }
     else if(CUSTOMER_CODE==CC_SCC ||                                            //Steven 20200302 : SCC楊恩民說只能用Barcode輸入
             CosFunction.bUseBarCoderAutoLogin)                                  //Sam 20221101 : 使用 BarCoder 自動登錄
     {
-#if 0 // GATE (P-B1)
         edUserName->Text="";
+#if 0 // GATE (CLIP) -- VCL Clipboard() has no port anywhere in this tree (grep 20260825)
         Clipboard()->Clear();
+#endif // GATE (CLIP)
         AnsiString sBarcodeID=InputBarcodeNumber("Input User Name:", "UserName");
         edUserName->Text=sBarcodeID;
-#endif // GATE (P-B1)
     }
     else
     #endif
@@ -195,15 +199,15 @@ void TfPassword::edPasswordKeyDown(unsigned short &Key)                         
     #ifndef SOFT_SIMULTE
     if(CUSTOMER_CODE==CC_SCC || IniConfig.bVTESTFunction==true)                 //Steven 20200302 : SCC楊恩民說只能用Barcode輸入  //jou 20220912 : 增加VTEST不可以用鍵盤輸入
     {
-        // AI(W906-FW-QWKEY1) 20260824: GATE (P-B2) -- see forms/fPassword.h.
-#if 0 // GATE (P-B2)
+        // AI(W906-FW-BARCODE3) 20260825: GATE (P-B2) OPENED -- see P-B1 above.
         edPassword->Text="";
+#if 0 // GATE (CLIP) -- VCL Clipboard() has no port anywhere in this tree (grep 20260825)
         Clipboard()->Clear();
+#endif // GATE (CLIP)
         AnsiString sBarcodeID=InputBarcodeNumber("Input Password:", "Password");
         edPassword->Text=sBarcodeID;
         if(edPassword->Text!="" && edUserName->Text!="")
             Close();
-#endif // GATE (P-B2)
     }
     else
     #endif
@@ -245,15 +249,15 @@ void TfPassword::edPasswordMouseDown()                                          
     else if(CUSTOMER_CODE==CC_SCC ||                                            //Steven 20200302 : SCC楊恩民說只能用Barcode輸入
        USE_BARCODE_AS_KEYBOARD!=0 || IniConfig.bVTESTFunction==true)            //jou 20220912 : 增加VTEST不可以用鍵盤輸入
     {
-        // AI(W906-FW-QWKEY1) 20260824: GATE (P-B3) -- see forms/fPassword.h.
-#if 0 // GATE (P-B3)
+        // AI(W906-FW-BARCODE3) 20260825: GATE (P-B3) OPENED -- see P-B1 above.
         edPassword->Text="";
+#if 0 // GATE (CLIP) -- VCL Clipboard() has no port anywhere in this tree (grep 20260825)
         Clipboard()->Clear();
+#endif // GATE (CLIP)
         AnsiString sBarcodeID=InputBarcodeNumber("Input Password:", "Password");
         edPassword->Text=sBarcodeID;
         if(edPassword->Text!="" && edUserName->Text!="")
             Close();
-#endif // GATE (P-B3)
     }
     else
     #endif
@@ -267,28 +271,30 @@ void TfPassword::edUserNameMouseDown()                                          
     #ifndef SOFT_SIMULTE
     if(IniConfig.bVTESTFunction==true)                                          //jou 20220912 : 增加VTEST不可以用鍵盤輸入
     {
-        // AI(W906-FW-QWKEY1) 20260824: GATE (P-B4) -- see forms/fPassword.h.
-#if 0 // GATE (P-B4)
+        // AI(W906-FW-BARCODE3) 20260825: GATE (P-B4) OPENED -- see P-B1 above.
         edUserName->Text="";
+#if 0 // GATE (CLIP) -- VCL Clipboard() has no port anywhere in this tree (grep 20260825)
         Clipboard()->Clear();
+#endif // GATE (CLIP)
         edUserName->Text=InputBarcodeNumber("Input User Name:", "UserName");
 
         edPassword->Text="";
+#if 0 // GATE (CLIP) -- VCL Clipboard() has no port anywhere in this tree (grep 20260825)
         Clipboard()->Clear();
+#endif // GATE (CLIP)
         edPassword->Text=InputBarcodeNumber("Input Password:", "Password");
         if(edPassword->Text!="" && edUserName->Text!="")
             Close();
-#endif // GATE (P-B4)
     }
     else if(CUSTOMER_CODE==CC_SCC ||                                            //Steven 20200302 : SCC楊恩民說只能用Barcode輸入
             CosFunction.bUseBarCoderAutoLogin)                                  //Sam 20221101 : 使用 BarCoder 自動登錄
     {
-#if 0 // GATE (P-B4)
         edUserName->Text="";
+#if 0 // GATE (CLIP) -- VCL Clipboard() has no port anywhere in this tree (grep 20260825)
         Clipboard()->Clear();
+#endif // GATE (CLIP)
         AnsiString sBarcodeID=InputBarcodeNumber("Input User Name:", "UserName");
         edUserName->Text=sBarcodeID;
-#endif // GATE (P-B4)
     }
     else
     #endif
