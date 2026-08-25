@@ -7644,3 +7644,464 @@ void THGem::EventReport(unsigned iDataID, unsigned iCeid)
     //<==
     //Ifor 20170428 (Steven) add 關閉程式前送出SECS GEM離線要求
 }
+
+// =============================================================================
+// FW-GEM-W10 -- THGem 的 Alarm 回報 / 連線與終端按鈕 / SV/EC 查詢（20 支）
+//
+// 全部經 screen_methods（含跟進自由函式的 deep pass）判乾淨，且名字帶
+// Report/Set 的四支（ReportAlarm、ReportAlarmWithMessage、
+// SetReceipeDirectoryAndGlobalName、SetDefaultAddressAndPort）逐支開 golden 讀過。
+//
+// ReportAlarm / ReportAlarmWithMessage 會組 S5F1（與 S100F1 延伸警報）並
+// SendLocalData 送給 host。與 FW-GEM-W8 的 TerminalRequest、W9 的 EventReport
+// 同一裁決：SECS 訊息組裝在本樹屬 in-scope，不是機台動作指令，
+// 且本波不接線任何 event handler。
+// =============================================================================
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:6276-6369, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::ReportAlarm(AnsiString AlarmCode, bool bIsJam, int iDuplicateError, AnsiString SubMessage, bool bReleaseAlm, AnsiString sRecovery)       //JerryYang 20170504 (Steven) bReleaseAlm為true表示解除alarm需上報0x00
+{
+    unsigned int iALID,iALClass;
+    unsigned char cALClass;
+    AnsiString aALClass, aMessType="";
+    AnsiString str;
+    TDateTime dtPresent;
+    if(CUSTOMER_CODE==CC_TFME_CHINA && GemControlState<=1)                      //JerryYang 20200527 Offline不上報
+        return;
+
+    dtPresent=Now();
+    DecodeDate(dtPresent, SystemYear, SystemMonth, SystemDate);
+    DecodeTime(dtPresent, SystemHour, SystemMin, SystemSec, SystemMSec);
+    str.sprintf("%04d%02d%02d%02d%02d%02d", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec);
+
+    for(int i=1; i<strGrdAlarm->RowCount; i++)
+    {
+        if(strGrdAlarm->Cells[2][i]==AlarmCode)
+        {
+            if(strGrdAlarm->Cells[7][i]=="1")
+            {
+                InitLocalHead(5, 1, 1);                                         //S5F1
+                if(CUSTOMER_CODE==CC_KYEC_JCTHIU ||
+                   CUSTOMER_CODE==CC_KYEC_CHEN ||
+                   CUSTOMER_CODE==CC_KYEC_LEE ||
+                   CUSTOMER_CODE==CC_DL_TEK)                                    //JerryYang 20170317 (wei) 只有京元的Alarm Report才回傳6項
+                {
+                    DataItemOut(6, HType.LIST_TYPE, NULL);
+                    DataItemOut(HType.ASCII_TYPE, str);                         //時間
+
+                    iALClass=atoi(strGrdAlarm->Cells[9][i].c_str());            //Alarm Class
+                    DataItemOut(1, HType.UINT_4_TYPE, &iALClass);
+
+                    iALID=atoi(strGrdAlarm->Cells[8][i].c_str());               //Alarm Code 九碼
+                    DataItemOut(1, HType.UINT_4_TYPE, &iALID);
+
+                    DataItemOut(HType.ASCII_TYPE, strGrdAlarm->Cells[6][i]);    //Alarm Text
+                    DataItemOut(HType.ASCII_TYPE, strGrdAlarm->Cells[10][i]);   //Alarm Position
+
+                    aMessType+=(bIsJam)?"1,":"0,";
+                    aMessType+=AnsiString(iDuplicateError)+",";
+                    aMessType+=SubMessage;
+                    DataItemOut(HType.ASCII_TYPE, aMessType);                   //Alarm Sub Message
+                }
+                else                                                            //wei 20161102 TSMC ReportAlarm回傳3項
+                {
+                    DataItemOut(3, HType.LIST_TYPE, NULL);
+
+                    if(bReleaseAlm)                                             //JerryYang (Steven) 20170504 bReleaseAlm為true表示解除alarm需上報0x00
+                        cALClass=0x00;
+                    else
+                        cALClass=0x80;                                          //JerryYang (Steven) 20170504 表示發生alarm需上報0x80
+
+                    if(CUSTOMER_CODE==CC_ASE_CL && AlarmCode=="MES0101")        //JerryYang 20250120 : modify
+                        cALClass=0x80;
+
+                    DataItemOut(1, HType.BINARY_TYPE, &cALClass);               //ALCD
+                    iALID=atoi(strGrdAlarm->Cells[8][i].c_str());               //ALID 九碼
+
+                    if(CUSTOMER_CODE==CC_ASE_CL && AlarmCode=="MES0101")        //JerryYang 20250120 : modify
+                    {
+                        if(sRecovery=="SKIP")
+                        {
+                            iALID+=4;
+                        }
+                        else if(sRecovery=="TRAY_END")
+                        {
+                            iALID+=5;
+                        }
+                    }
+
+                    DataItemOut(1, HType.UINT_4_TYPE, &iALID);                  //ALID 九碼
+                    if(CosFunction.bS5F1UseJamRate)                             //Steven 20220331 : S5F1的ALTX裡面加上JAM Rate判斷
+                    {
+                        aMessType.sprintf("%d,%d,%s", bIsJam, iDuplicateError, SubMessage);
+                    }
+                    else
+                    {
+                        aMessType=SubMessage;                                   //ALTX
+                    }
+
+                    if(CUSTOMER_CODE==CC_ASE_CL && AlarmCode=="MES0101")        //JerryYang 20250120 : modify
+                    {
+                        aMessType+=","+sRecovery;
+                    }
+
+                    DataItemOut(aMessType.Length(), HType.ASCII_TYPE, (void *)aMessType.c_str());   //AI(W906-FW-GEM-W10) 20260826: golden 沒有這個轉型——BCB6 的 AnsiString::c_str() 回 char*，本樹回 const char*。只補型別，值不變。                               //ALTX Alarm Sub Message
+                }
+                SendLocalData();
+            }
+            return;
+        }
+    }
+}
+
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:6386-6420, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::ReportAlarmWithMessage(AnsiString ALID, AnsiString ALTX, AnsiString sHappenedTime, AnsiString sProcessKey, bool SameCase)
+{
+    bool ret;
+    if(bReportSECS_GEM_Message)
+    {
+    }
+    else
+    {
+        ret=CheckNeedReportAlarm(ALID);
+        if(ret==false)
+            return;
+
+        if(GemCheckBoxUseExtendedAlarm->Checked)
+        {
+            InitLocalHead(100, 1, 0);
+            DataItemOut(5, HType.LIST_TYPE, NULL);
+            DataItemOut(HType.ASCII_TYPE, ALID);
+            DataItemOut(HType.ASCII_TYPE, ALTX);
+            DataItemOut(HType.ASCII_TYPE, sHappenedTime);
+            DataItemOut(HType.ASCII_TYPE, sProcessKey);
+            DataItemOut(1, HType.BOOLEAN_TYPE, &SameCase);
+            SendLocalData();
+        }
+        else
+        {
+            unsigned int ALCD=1;
+            InitLocalHead(5, 1, 1);
+            DataItemOut(3, HType.LIST_TYPE, NULL);
+            DataItemOut(1, HType.UINT_4_TYPE, &ALCD);
+            DataItemOut(HType.ASCII_TYPE, ALID);
+            DataItemOut(HType.ASCII_TYPE, ALTX);
+            SendLocalData();
+        }
+    }
+}
+
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:2207-2214, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::LocalAcknowledge(unsigned char SCode, unsigned char FCode , unsigned char Command)
+{
+    unsigned char C;
+    C=Command;
+    InitLocalHead(SCode, FCode, 0);
+    DataItemOut(1, HType.BINARY_TYPE, &C);
+    SendLocalData();
+}
+
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:6033-6036, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::SetTimeFormat(int Format)                                           // 0:12-bytes, 1:16-bytes, 2:14-bytes, 3:ISO8601 format
+{
+    iTimeFormat=Format;
+}
+
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:6427-6489, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+int THGem::SetReceipeDirectoryAndGlobalName(AnsiString Path, AnsiString FileMask, int Type)
+{
+    int ct;
+    (void)ct;   //AI(W906-FW-GEM-W10) 20260826: ct 只在 GATE (W10-DirList) 停用的 Type==2 分支裡用到，
+                // golden 的宣告照留（忠實），這一行只是讓 -Wall 不報 unused。
+    AnsiString S="", S1;
+    Path=Path.UpperCase();
+    FileMask=FileMask.UpperCase();
+    UpLoadPath=Path;
+    SV_71_ASCII_FilenameExtened=FileMask;
+    SV_70_UNT1_ReceipeStruct=Type;
+    if(Type==2)
+    {
+        // GATE (W10-DirList) 把 golden 這個分支的內容整段停用了（見下），
+        // 而 golden 的 if 本來就帶大括號，這裡補一組空的維持語法與控制流。
+    }
+#if 0 // GATE (W10-DirList) -- golden 原文保留
+    // golden 這個分支把 `DirectoryListBox1->Directory=Path` 設進一個活的 VCL
+    // TDirectoryListBox，再走它已被 OS 填好的 ->Items 目錄樹清單算出 ct，
+    // 然後用 ct 之後的項目填 UploadFileString。
+    // 本樹沒有 TDirectoryListBox 也沒有等價物——這一點**已經有人量過並寫下來**：
+    // SECSGEM/uHGemClass.cpp:3309-3336 為了 S7F20_CurrentEPPDData 做過同一份分析，
+    // 結論是「需要一個真的會走檔案系統目錄樹的 vclcompat stand-in，
+    // 不是加個資料成員就好」，且 grep "DirectoryListBox"/"TDirectoryListBox"
+    // 在 vclcompat/ 是零命中。20260826 複查仍然為零。
+    // Type==0/1 兩個分支（只組檔名遮罩字串）保持 live，所以本方法對那兩種
+    // 呼叫型態是完整的；只有 Type==2 這條沒有作用並回傳 golden 的預設值。
+    // 連帶：uHGemClass.cpp 的 S7F20_CurrentEPPDData 仍然卡在同一件事上。
+    {
+        DirectoryListBox1->Directory=Path;
+        UpLoadPath=DirectoryListBox1->Directory;
+        for(int i=0; i<DirectoryListBox1->Items->Count; i++)
+        {
+            S+=DirectoryListBox1->Items->Strings[i];
+            S=S.UpperCase();
+            S1=S+"\\";
+            if(S==Path || S1==Path)
+            {
+                ct=i+1;
+                break;
+            }
+
+            if(i!=0)
+                S=S1;
+        }
+        UploadFileString->Clear();
+        for(int i=ct; i<DirectoryListBox1->Items->Count; i++)
+        {
+            UploadFileString->Add(DirectoryListBox1->Items->Strings[i]);
+        }
+        return 0;
+    }
+#endif
+    else if(Type==1)
+    {
+        FileListBox2->Mask=Path+FileMask;
+        FileListBox2->Update();
+        FileListBox2->Refresh();
+        UploadFileString->Clear();
+        for(int i=0; i<FileListBox2->Items->Count; i++)
+        {
+            S=FileListBox2->Items->Strings[i];
+            int j=S.LastDelimiter(".");
+            S=S.SubString(1, j-1);
+            UploadFileString->Add(S);
+        }
+        return FileListBox2->Items->Count;
+    }
+    else
+    {
+        FileListBox2->Mask=Path+FileMask;
+        FileListBox2->Update();
+        FileListBox2->Refresh();
+        UploadFileString->Clear();
+        for(int i=0; i<FileListBox2->Items->Count; i++)
+        {
+            S=FileListBox2->Items->Strings[i];
+            UploadFileString->Add(S);
+        }
+        return FileListBox2->Items->Count;
+    }
+}
+
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:6493-6497, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GemBtnSendTerminalMessageClick(TObject *Sender)
+{
+    TerminalRequest(GemTerminalSendEdit->Text);
+    GemTerminalSendEdit->Text="";
+}
+
+// AI(W906-FW-GEM-W10) 20260826: GemTerminalSendEditKeyDown（golden :6501-6506）
+// 本波刻意不翻。它的本體只有兩行（Key==0x0d 就轉呼叫
+// GemBtnSendTerminalMessageClick(this)），但簽章第三個參數是 `TShiftState`
+// ——VCL 的「集合」型別（Delphi set of TShiftStateEnum），本樹零 port。
+// 量測 20260826: grep -rn "TShiftState" 於 vclcompat/ -> 0 命中。
+// 它不是「補個資料成員」等級的東西：要嘛做一個真的集合語意 stand-in，
+// 要嘛改簽章（就不忠實了）。留給之後有其他 KeyDown handler 一起處理時再做。
+// 附帶：golden 這裡傳的是 `this`，而本樹的 THGem 不繼承 TObject，
+// 所以就算補了 TShiftState，這個呼叫點也還要另外處置。
+
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:6518-6521, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::BtnEnableCommClick(TObject *Sender)
+{
+     Connect();
+}
+
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:6525-6528, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::BtnDisableCommClick(TObject *Sender)
+{
+    DisConnect();
+}
+
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:6532-6535, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GemBtnOnlineRequestClick(TObject *Sender)
+{
+    OnLine(HGem->GetOnLineMode());
+}
+
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:6539-6542, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GemBtnOfflineRequestClick(TObject *Sender)
+{
+    OffLine();
+}
+
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:6546-6549, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GemBtnOnlineRemoteClick(TObject *Sender)
+{
+    OnLineRemote();
+}
+
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:6553-6556, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GemBtnOnlineLocalClick(TObject *Sender)
+{
+    OnLineLocal();
+}
+
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:7099-7106, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+int THGem::GetDataItemLenAndTypeAndDelete(int &len, unsigned char &Type)
+{
+    int ret;
+    ret=WireCodec.GetDataItemLenAndTypeAndDeleteSub(len, Type);   //AI(W906-FW-GEM-W10) 20260826: golden 是裸呼叫；本樹這支住在 SecsWireCodec（SecsWireCodec.cpp:1012），THGem 以 `SecsWireCodec WireCodec;`（uHGemEquipment.h:747）by-value 持有，故走 forwarder。
+    if(iReturnCode==1)
+        iReturnCode=ret;
+    return ret;
+}
+
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:7304-7310, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::SetDefaultAddressAndPort(AnsiString Address, AnsiString Port, AnsiString DeviceID)
+{
+    DefaultAddress  =Address;
+    DefaultPort     =Port;
+    DefaultDeviceID =DeviceID;
+    bOpenCommuncation=true;
+}
+
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:7312-7351, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+bool THGem::CheckSFFormatDataRequest(AnsiString ErrString)
+{
+    int ret, len, iTotalItem;
+    unsigned char Type;
+
+    ret=GetDataItemLenAndTypeAndDelete(len, Type);                              // L,2
+    if(ret!=1 || Type!=HType.LIST_TYPE)                                         // data error
+    {
+        StringOut(ErrString);
+        SendInvalidDataMessageToHost(ErrString);                                //2013_09_06  steven
+        return false;
+    }
+    else
+    {
+        iTotalItem=len;
+        for(int i=0; i<iTotalItem; i++)
+        {
+            ret=GetDataItemLenAndTypeAndDelete(len, Type);                      // 2. L,n # of parameters
+            if(ret!=1)
+            {
+                StringOut(ErrString);
+                SendInvalidDataMessageToHost(ErrString);
+                return false;
+            }
+            else
+            {
+                if(Type==HType.ASCII_TYPE)
+                {
+                    SReceiveData->Delete(0);                                    // 資料拿走
+                }
+                else
+                {
+                    for(int j=0; j<len; j++)
+                        SReceiveData->Delete(0);                                // 資料拿走
+                }
+            }
+        }
+    }
+    return true;
+}
+
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:7353-7358, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::SendInvalidDataMessageToHost(AnsiString S)
+{
+    InitLocalHead(9, 7, 0);
+    DataItemOut(HType.ASCII_TYPE, S);
+    SendLocalData();
+}
+
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:8225-8268, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GetAllSVInformation(THGemMemo *Ptr)   //AI(W906-FW-GEM-W10) 20260826: golden 是 TMemo*；本樹的 TMemo 對應 stand-in 是 THGemMemo（uHGemEquipment.h:503）。本體只用到 Ptr->Lines->Clear()/Add()，兩者都在。
+{
+    // ID   SV  EC  SV Name     Type    Length  Unit    說明
+    AnsiString ID="", IsSV="V", IsEC="", Name="", Type="", Length="", Unit="", Max="", Min="", Default="", Remark="";
+    int i, Index;
+
+    unsigned char t;
+    AnsiString S;
+    Ptr->Lines->Clear();
+    for(i=0; i<SV_ID->Count; i++)
+    {
+        ID=SV_ID->Strings[i];
+        Index=EC_ID->IndexOf(ID);
+        if(Index>=0)
+        {
+//            GetECInformation(Ptr,Index);                      //20140213   wei
+            continue;
+        }
+
+        //IsSV="V";
+        t=atoi(SV_TYPE->Strings[i].c_str());
+        if(t==HType.LIST_TYPE)            Type="LIST";
+        else if(t==HType.ASCII_TYPE)      Type="ASCII";
+        else if(t==HType.BOOLEAN_TYPE)    Type="BOOLEAN";
+        else if(t==HType.BINARY_TYPE)     Type="BINARY";
+        else if(t==HType.UINT_1_TYPE)     Type="UINT_1";
+        else if(t==HType.UINT_2_TYPE)     Type="UINT_2";
+        else if(t==HType.UINT_4_TYPE)     Type="UINT_4";
+        else if(t==HType.UINT_8_TYPE)     Type="UINT_8";
+        else if(t==HType.INT_1_TYPE)      Type="INT_1";
+        else if(t==HType.INT_2_TYPE)      Type="INT_2";
+        else if(t==HType.INT_4_TYPE)      Type="INT_4";
+        else if(t==HType.INT_8_TYPE)      Type="INT_8";
+        else if(t==HType.FT_4_TYPE)       Type="FT_4";
+        else if(t==HType.FT_8_TYPE)       Type="FT_8";
+
+        Name=SV_NAME->Strings[i];
+        Unit=SV_UNIT->Strings[i];
+        Remark=SV_Remark->Strings[i];
+
+        S=ID+'\t'+IsSV+'\t'+IsEC+'\t'+Name+'\t'+Type+'\t'+Length+'\t'+Unit+'\t'+Max+'\t'+Min+'\t'+Default+'\t'+Remark;
+        Ptr->Lines->Add(S);
+    }
+}
+
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:8270-8276, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GetALLECInformation(TObject * Ptr)
+{
+    for(int i=0; i<HGem->EC_ID->Count; i++)
+    {
+#if 0 // GATE (W10-ECInfo) -- golden 原文保留
+        // GetECInformation（golden :8278-8597，320 行）本波未翻——它是本檔
+        // 目前最大的單一缺口，且要 IsVCL 的 dynamic_cast 串接（見
+        // SecsSvEcRegistration.cpp:21 已記錄的同型分析）。單獨一波處理。
+        // 影響：GetALLECInformation 會走完迴圈但不填任何 EC 欄位。
+        // 量測 20260826: survey_file 的「真正缺」清單裡 GetECInformation 仍缺。
+        GetECInformation(Ptr, i);
+#endif
+    }
+}
+
+// AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:9210-9220, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GemRemoteReceipeListClick(TObject *Sender)
+{
+    int y=GemRemoteReceipeList->ItemIndex;
+    for(int i=0; i<GemRemoteReceipeList->Items->Count; i++)
+    {
+        if(i==y)
+            continue;
+        else
+            GemRemoteReceipeList->Checked[i]=false;
+    }
+}

@@ -576,6 +576,10 @@ struct THGemListBox
     THGemListBox(const THGemListBox&) = delete;
     THGemListBox& operator=(const THGemListBox&) = delete;
     void Clear() { Items->Clear(); }
+    // AI(W906-FW-GEM-W10) 20260826: golden GemRemoteReceipeListClick 讀
+    // `GemRemoteReceipeList->ItemIndex`（uHGemEquipment.cpp:9212）。VCL 的語意是
+    // -1 代表沒有選取項，這裡照用；沒有任何載入路徑會設它，所以本樹恆為 -1。
+    int ItemIndex = -1;
 };
 
 // AI(W906-uHGemEquipment-BucketC) 20260717: TFixedCriticalSection --
@@ -1719,6 +1723,47 @@ public:
 
     // AI(W906-FW-GEM-W9) 20260826: 退役 GATE (W8-ECEvent) 用。
     void EventReport(unsigned iDataID, unsigned iCeid);   // golden :7703-7761   // golden :9323-9334
+
+    // ======================================================================
+    // AI(W906-FW-GEM-W10) 20260826: Alarm 回報 / 連線與終端按鈕 / SV/EC 查詢，19 支（原排 20，GemTerminalSendEditKeyDown 因 TShiftState 退出，理由見 .cpp）。
+    // 簽章由定義生成（golden 的 __fastcall 已剝除；跨行簽章壓成一行）。
+    // ======================================================================
+
+    // AI(W906-FW-GEM-W10) 20260826: 本波方法用到的 golden 成員。
+    bool bReportSECS_GEM_Message = false;         // golden uHGemEquipment.h:455
+    int  iReturnCode = 0;                         // golden :453
+    THGemEdit *GemTerminalSendEdit = new THGemEdit();   // golden :403（golden 是 TEdit*）
+    TStringList *SReceiveData = new TStringList();      // golden :672
+
+    // golden uHGemEquipment.h:654。GetAllSVInformation 逐筆讀它填 SV 說明欄。
+    // SV_ID/SV_TYPE/SV_NAME/SV_UNIT/SV_Remark 是五條平行清單，GetAllSVInformation
+    // 用同一個 Index 逐筆取出來組成一行 SV 說明。golden 由 out-of-scope 的
+    // FormCreate SV/EC 註冊填充（見檔頭 :161），本樹保持空清單 -> 迴圈不會有項目。
+    TStringList *SV_ID     = new TStringList();   // golden :647
+    TStringList *SV_TYPE   = new TStringList();   // golden :648
+    TStringList *SV_NAME   = new TStringList();   // golden :649
+    TStringList *SV_UNIT   = new TStringList();   // golden :650
+    TStringList *SV_Remark = new TStringList();   // golden :654
+
+    void ReportAlarm(AnsiString AlarmCode, bool bIsJam, int iDuplicateError, AnsiString SubMessage, bool bReleaseAlm, AnsiString sRecovery);   // golden :6276-6369
+    void ReportAlarmWithMessage(AnsiString ALID, AnsiString ALTX, AnsiString sHappenedTime, AnsiString sProcessKey, bool SameCase);   // golden :6386-6420
+    void LocalAcknowledge(unsigned char SCode, unsigned char FCode , unsigned char Command);   // golden :2207-2214
+    void SetTimeFormat(int Format);   // golden :6033-6036
+    int SetReceipeDirectoryAndGlobalName(AnsiString Path, AnsiString FileMask, int Type);   // golden :6427-6489
+    void GemBtnSendTerminalMessageClick(TObject *Sender);   // golden :6493-6497
+    void BtnEnableCommClick(TObject *Sender);   // golden :6518-6521
+    void BtnDisableCommClick(TObject *Sender);   // golden :6525-6528
+    void GemBtnOnlineRequestClick(TObject *Sender);   // golden :6532-6535
+    void GemBtnOfflineRequestClick(TObject *Sender);   // golden :6539-6542
+    void GemBtnOnlineRemoteClick(TObject *Sender);   // golden :6546-6549
+    void GemBtnOnlineLocalClick(TObject *Sender);   // golden :6553-6556
+    int GetDataItemLenAndTypeAndDelete(int &len, unsigned char &Type);   // golden :7099-7106
+    void SetDefaultAddressAndPort(AnsiString Address, AnsiString Port, AnsiString DeviceID);   // golden :7304-7310
+    bool CheckSFFormatDataRequest(AnsiString ErrString);   // golden :7312-7351
+    void SendInvalidDataMessageToHost(AnsiString S);   // golden :7353-7358
+    void GetAllSVInformation(THGemMemo *Ptr);   // golden 是 TMemo*，本樹的對應 stand-in 是 THGemMemo   // golden :8225-8268
+    void GetALLECInformation(TObject * Ptr);   // golden :8270-8276
+    void GemRemoteReceipeListClick(TObject *Sender);   // golden :9210-9220
 };
 
 //---------------------------------------------------------------------------

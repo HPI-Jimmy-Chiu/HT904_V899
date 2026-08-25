@@ -10825,6 +10825,91 @@ W9PROBE count=7
 `cat` 失敗時會短路，於是 g++ 根本沒執行卻印出「檢查完畢」，看起來像編譯乾淨。
 兩個教訓都不新（絕對路徑、別讓 `&&` 吃掉失敗），但這次是兩個疊在一起才騙過我。
 
+## 20260826 III — FW-GEM-W10：Alarm 回報 / 連線與終端按鈕 / SV/EC 查詢
+
+### 交付
+
+`SECSGEM/uHGemEquipment.cpp` +461 行、`SECSGEM/uHGemEquipment.h` +45 行
+（`git diff --numstat` 量的，純新增 0 刪除）。**19 支方法**（原排 20，退掉一支）。
+
+| 群組 | 方法 |
+|---|---|
+| Alarm 回報 | `ReportAlarm`（golden :6276-6369，94 行）、`ReportAlarmWithMessage`（:6386-6420） |
+| 連線與終端按鈕 | `GemBtnSendTerminalMessageClick`、`BtnEnableCommClick`、`BtnDisableCommClick`、`GemBtnOnlineRequestClick`、`GemBtnOfflineRequestClick`、`GemBtnOnlineRemoteClick`、`GemBtnOnlineLocalClick` |
+| SV/EC 查詢 | `GetAllSVInformation`（:8225-8268）、`GetALLECInformation` |
+| 其他 | `LocalAcknowledge`、`SetTimeFormat`、`SetReceipeDirectoryAndGlobalName`（63 行）、`GetDataItemLenAndTypeAndDelete`、`SetDefaultAddressAndPort`、`CheckSFFormatDataRequest`（40 行）、`SendInvalidDataMessageToHost`、`GemRemoteReceipeListClick` |
+
+忠實度複驗：**LIVE 敘述 212 條，golden 無逐字對應 15 條**——11 條簽章行
+（`__fastcall` 剝除）、`GetAllSVInformation` 的 `THGemMemo*` 替換，
+以及 3 條各自標註的替換（`(void*)` 轉型、`(void)ct;`、`WireCodec.` forwarder）。
+gated 43 行。
+
+`ReportAlarm` / `ReportAlarmWithMessage` 會組 S5F1（與 S100F1 延伸警報）並
+`SendLocalData` 送給 host。與 W8 的 `TerminalRequest`、W9 的 `EventReport`
+同一裁決：SECS 訊息組裝在本樹屬 in-scope，不是機台動作指令，
+且本波不接線任何 event handler。
+
+### 兩個 gate、一個 forwarder、一支退出
+
+- **`GATE (W10-DirList)`** — `SetReceipeDirectoryAndGlobalName` 的 `Type==2` 分支。
+  golden 把 `DirectoryListBox1->Directory=Path` 設進一個活的 VCL `TDirectoryListBox`，
+  再走它被 OS 填好的 `->Items` 目錄樹算出索引。
+  **這一點已經有人量過並寫下來**：`SECSGEM/uHGemClass.cpp:3309-3336` 為了
+  `S7F20_CurrentEPPDData` 做過同一份分析，結論是「需要一個真的會走檔案系統目錄樹的
+  vclcompat stand-in，不是加個資料成員就好」，且 grep `DirectoryListBox` 在
+  `vclcompat/` 零命中（20260826 複查仍為零）。
+  `Type==0/1` 兩個分支保持 live，所以本方法對那兩種呼叫型態是完整的。
+  連帶：`S7F20_CurrentEPPDData` 仍卡在同一件事上。
+- **`GATE (W10-ECInfo)`** — `GetALLECInformation` 呼叫的 `GetECInformation`
+  （golden :8278-8597，**320 行**）本波未翻，是本檔目前最大的單一缺口。
+- **`GetDataItemLenAndTypeAndDeleteSub` 走 `WireCodec.` forwarder**：
+  它住在 `SecsWireCodec.cpp:1012`，THGem 以 `SecsWireCodec WireCodec;`
+  （`uHGemEquipment.h:747`）by-value 持有。
+- **`GemTerminalSendEditKeyDown`（golden :6501-6506）退出**。本體只有兩行
+  （`Key==0x0d` 就轉呼叫 `GemBtnSendTerminalMessageClick(this)`），但第三個參數是
+  `TShiftState`——VCL 的集合型別（Delphi `set of`），本樹零 port
+  （grep `TShiftState` 於 `vclcompat/` = 0）。不是補資料成員等級的東西。
+  附帶：golden 這裡傳 `this`，而本樹的 THGem 不繼承 `TObject`，
+  就算補了 `TShiftState`，這個呼叫點也還要另外處置。
+
+### 兩個 facade 補件
+
+- `THGemListBox` 補 `ItemIndex`（VCL 語意 -1 = 未選取；本樹沒有載入路徑會設它，恆為 -1）。
+- 新增成員：`bReportSECS_GEM_Message`、`iReturnCode`、`GemTerminalSendEdit`、
+  `SReceiveData`、`SV_ID`/`SV_TYPE`/`SV_NAME`/`SV_UNIT`/`SV_Remark` 五條平行清單。
+  那五條由 out-of-scope 的 FormCreate SV/EC 註冊填充，本樹保持空 → 迴圈不會有項目。
+
+### 驗收
+
+`tools/dualgate.sh gem10b`（全新 dir）：Debug **137/142**、Release **137/142**，
+失敗集合逐項相同且等於常駐五項
+`config_db` / `IniFiles` / `ini_helpers` / `config_loaders` / `GA1_ReadGeneralIni`。
+`D:\HT9045\system` 552 檔本晚零變動。
+
+### 自己犯的錯：一個孤立 CR 讓 `git diff` 變成整檔 churn
+
+套完之後 `git diff --numstat` 對 header 顯示 **1798 增 / 1753 刪**——整檔重寫，
+但目視 diff 每一行內容都一樣。
+
+根因：我用 `re.sub(r'\n? *void GemTerminalSendEditKeyDown\(...', '', h)` 刪那一條宣告，
+開頭的 `\n?` 吃掉了**前一行** `\r\n` 的 `\n`，留下 `\r\r\n`。
+git 對含孤立 CR 的檔不做 CRLF↔LF 正規化，所以整檔都算變更。
+
+**更值得記的是：我的 EOL assert 抓不到這種。** 我檢查的是
+`crlf_count == lf_count`，而少掉一個 `\n` 會讓兩個計數**同時各減一**，等式仍然成立。
+這是今晚第二個「看起來在驗證、實際上驗不到」的檢查（第一個是
+`grep -c $'\r$'` 回總行數）。檢查要多一條：
+
+```python
+b = io.open(p, 'rb').read()
+assert b.count(b'\r') - b.count(b'\r\n') == 0, '有孤立 CR'
+```
+
+移掉那一個 CR 之後 diff 立刻回到 **+45/−0**。
+gate 才跑了兩分鐘，直接殺掉改用 `dualgate.sh gem10b` 從全新 dir 重跑
+（孤立 CR 在 C++ 只是空白、不影響編譯，但**驗收數字要在最後一次整併之後量**，
+不留模糊空間）。
+
 ### 🔖 RESUME（20260825 日終）
 
 - **今日全收（本節之前的 20260825 I-VII，共 7 波）**：FW-BARCODE2／FW-BARCODE3
