@@ -10461,8 +10461,20 @@ census：該檔 2,044 → **1,735 行**（缺的方法 84 → **67**）；全樹
   `SW[SwHeaterRelay].OnOff()` 加上加熱風扇與冷却風扇，**切真實硬體輸出**。
   未翻並且不宣告 stub，等使用者在場時一次處理。
   同批待議：`cbA09Click`（發 MES1645/1646 警報）、`cbC12Click`（KYEC 密碼閘）。
-- **下一步建議**：`FormClose`（208 行，這批裡最完整且無寫入），
-  再回頭看 `SECSGEM/uHGemEquipment.cpp`（2,935 行，header 有 2 個排除段要先讀）。
+- ⚠ **`FormClose`（208 行）經篩選後排除**（本來被指定為下一波）：
+  它送 TTL 硬體指令 `fMain->Send_Command_TTL("@00WDUTS00000000")`（golden :5806-5810）、
+  呼叫 `SaveEventLogAutoSaveInfo()`（寫 config.ini）與 `InitShuttleThreadParameter()`，
+  而且 golden :5790 本身就掛著 `//AI(safety-critical-change)` 標記。進安全佇列。
+- ⚠ **UT150 溫控器通訊家族一併佇列**：`UT150Polling`（golden :5682-5692）武裝
+  `bPollingUT150[]` 輪詢旗標，`sbSendTempClick`（:5655-5680）是它的 Send/Read Temp 按鈕，
+  `UpdateUT150Comm`（:5486-5653）同家族。純勾選 UI 的 `btHeaterSelectAllClick` /
+  `btHeaterClearSelectClick` 不在此列。
+- **開波前的五個檢查已入版控**：`tools/wavescan/`（README 寫了每一支是
+  因為什麼代價而存在）。**下一個標的一律先跑完那五步再動手。**
+- **下一步建議**：用 `screen_methods.py` 的 68 個「乾淨」名單交集 census 的 64 個缺口，
+  取其中純 UI 的一批（keypad 啟動器 `ed*Click`、grid 選取、`EnableRMSFunc`
+  這種純述詞）；名字帶 Manual/Test/Send/Update 的一律先開 golden 看。
+  之後再評估 `SECSGEM/uHGemEquipment.cpp`（2,935 行，header 有 2 個排除段要先讀）。
 - **等使用者（本波未動，只是重列）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
   HAL-MOT1 十問（Q1/Q9/Q4 擋新 mot_table 起草）；TImage headless 准駁；
   GOLDEN BUG (TAG1-a) edSHighBase；GOLDEN DEFECT (i) 21-into-20 sprintf overflow。
