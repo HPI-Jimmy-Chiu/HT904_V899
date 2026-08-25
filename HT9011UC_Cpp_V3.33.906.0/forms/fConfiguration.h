@@ -209,6 +209,7 @@
 #include "vclcompat/vcl_compat.h"   // AnsiString, TStringList, StringReplace/TReplaceFlags/rfReplaceAll -- brought to global scope
 #include "vclcompat/Controls.h"     // TEdit, TSpeedButton, TFont, TControl (stock widgets, reused as-is)
 #include "vclcompat/StringGrid.h"   // vclcompat::TStringGrid -- TfConfigurationGrid's base
+#include "cmydef.h"                 // AI(W906-FW-CFG-W5) 20260825: TOTAL_MOTOR (:46) -- sizes edSoftSpeed[]/labSoftSpeed[]
 // AI(W906-VclGrid-1) 20260820: <vector> dropped -- it was only for
 // TfConfigurationGrid::colWidths_, which moved to the base (StringGrid.h
 // owns that vector now).
@@ -246,6 +247,93 @@ public:
 //  No base class, matching the plain-facade convention already used by
 //  forms/fLotInfo.h's TfLotInfo (no `: public TObject`/`: public TForm`).
 // ===========================================================================
+// ===========================================================================
+//  AI(W906-FW-CFG-W5) 20260825: five form-local widget stand-ins.
+//
+//  FormShow needs five golden VCL types this facade has never carried. Each
+//  one is modelled to EXACTLY the surface FormShow uses and no more -- the
+//  usage was counted before these were written, not guessed:
+//      TTimer          -> ->Enabled only        (1 site)
+//      TDateTimePicker -> ->Date, ->Time        (1 + 1)
+//      TImage          -> ->Tag, ->Picture      (1 + 1; Picture is gated at
+//                                                its single site, see the
+//                                                LoadFromFile gate in FormShow)
+//      TTrackBar       -> ->Position, ->Visible (8 + 4)
+//      TUpDown         -> ->Position            (1)
+//  Form-local rather than added to vclcompat, matching the precedent this
+//  tree already set for one-form widget shapes (forms/fObserver.h's
+//  TfObserverDateTimePicker, forms/fLotInfo.h's TfLotInfoOpenDialog).
+//  Enabled/Visible/Tag come from vclcompat::TControl, so only the genuinely
+//  new fields are declared here.
+// ===========================================================================
+class TfConfigurationPageControl : public vclcompat::TPageControl
+{
+public:
+    // golden TPageControl->ActivePage (a TTabSheet*) and ->Pages[i]. vclcompat
+    // models only ->ActivePageIndex. Same shape forms/fObserver.h's
+    // TfObserverPageControl and forms/fLotInfo.h's TfLotInfoPageControl use.
+    // ->Pages is NOT modelled: its two use sites are gated at the call, because
+    // a page list needs a real parent/child tree, which this facade has none of
+    // (the ControlCount/Controls[] gap forms/fSpeed.h GATE (S4),
+    // forms/fHandlerSys.h GATE (H1) and forms/fLotInfo.h GATE (WA-4) all
+    // document).
+    vclcompat::TTabSheet *ActivePage;
+    TfConfigurationPageControl() : ActivePage(0) {}
+    virtual ~TfConfigurationPageControl() {}
+};
+
+class TfConfigurationGroupBox : public vclcompat::TGroupBox
+{
+public:
+    // golden TGroupBox->Color (2 FormShow sites). vclcompat::TGroupBox carries
+    // Caption/Visible/Enabled only; Color is a plain TColor field elsewhere in
+    // the facade (TPanel/TLabel both have one), so it is modelled the same way.
+    int Color;
+    TfConfigurationGroupBox() : Color(0) {}
+    virtual ~TfConfigurationGroupBox() {}
+};
+
+class TfConfigurationTimer : public vclcompat::TControl
+{
+public:
+    // golden TTimer -- FormShow only writes ->Enabled, which TControl carries.
+    virtual ~TfConfigurationTimer() {}
+};
+
+class TfConfigurationDateTimePicker : public vclcompat::TObject
+{
+public:
+    TDateTime Date;
+    TDateTime Time;
+    TfConfigurationDateTimePicker() {}
+    virtual ~TfConfigurationDateTimePicker() {}
+};
+
+class TfConfigurationImage : public vclcompat::TControl
+{
+public:
+    // golden TImage->Picture is a TPicture with LoadFromFile(); there is no
+    // image subsystem in a headless build, so Picture is NOT modelled and its
+    // single use site is gated instead. ->Tag comes from TControl.
+    virtual ~TfConfigurationImage() {}
+};
+
+class TfConfigurationTrackBar : public vclcompat::TControl
+{
+public:
+    int Position;
+    TfConfigurationTrackBar() : Position(0) {}
+    virtual ~TfConfigurationTrackBar() {}
+};
+
+class TfConfigurationUpDown : public vclcompat::TControl
+{
+public:
+    int Position;
+    TfConfigurationUpDown() : Position(0) {}
+    virtual ~TfConfigurationUpDown() {}
+};
+
 class TfConfiguration
 {
 public:
@@ -329,6 +417,10 @@ public:
     virtual void InitConfigEdtList_ItemL();   // golden :2873-3118
     virtual void InitConfigEdtList_ItemM();   // golden :3120-3161
     virtual void InitConfigEdtList_ItemO();   // golden :3921-4095
+
+    // -- Wave FW-CFG-W5 methods (bodies: cConfiguration.cpp) --------------
+    TfConfiguration();                        // PORT-ONLY bootstrap, see cConfiguration.cpp
+    virtual void FormShow(void *Sender);      // golden :4514-5365
 
     // -- Wave FW-CFG-W4b methods (bodies: cConfiguration.cpp) -------------
     virtual void ReadLockByFile();            // golden :230-261
@@ -1600,6 +1692,284 @@ public:
     TTabSheet     *tsN32   = new TTabSheet();           // golden cConfiguration.h:1243
     TTabSheet     *tsN33   = new TTabSheet();           // golden cConfiguration.h:1373
     TTabSheet     *tsN34   = new TTabSheet();           // golden cConfiguration.h:1664
+
+    // ========================================================================
+    // AI(W906-FW-CFG-W5) 20260825: the 191 widgets FormShow dereferences.
+    // Types read out of golden cConfiguration.h and cited per line. Ownership
+    // was checked before adding any of them (scratchpad/owner_report.py): of
+    // the 197 identifiers FormShow reaches through `->`, 191 are this form's,
+    // one (`Picture`) belongs to imgI37_3 and is gated, and five are bare
+    // globals reached by include.
+    //
+    // THREE ARE ARRAYS and deliberately carry NO in-class initializer:
+    // golden creates their elements in its own constructor (golden :109-225,
+    // "dynamic widget alloc"), which is still untranslated. They are
+    // allocated by the PORT-ONLY constructor in cConfiguration.cpp instead --
+    // the same shape forms/fLotInfo.cpp:250-255 already uses for
+    // SocketSiteCH_Display/edSocket.
+    // ========================================================================
+    // golden TButton (13)
+    TButton                        *btN06_TesterList       = new TButton();  // golden cConfiguration.h:214
+    TButton                        *btN06_TesterMap        = new TButton();  // golden cConfiguration.h:217
+    TButton                        *btN06_UpdateTesterList = new TButton();  // golden cConfiguration.h:215
+    TButton                        *btResume               = new TButton();  // golden cConfiguration.h:766
+    TButton                        *btnAdd1000             = new TButton();  // golden cConfiguration.h:30
+    TButton                        *btnAdd10000            = new TButton();  // golden cConfiguration.h:44
+    TButton                        *btnDec1000             = new TButton();  // golden cConfiguration.h:31
+    TButton                        *btnMesSystem           = new TButton();  // golden cConfiguration.h:1191
+    TButton                        *btnOpenEP              = new TButton();  // golden cConfiguration.h:482
+    TButton                        *btnSave                = new TButton();  // golden cConfiguration.h:2190
+    TButton                        *btnSetTo1000           = new TButton();  // golden cConfiguration.h:32
+    TButton                        *btnSetToTech           = new TButton();  // golden cConfiguration.h:38
+    TButton                        *btnUploadAll           = new TButton();  // golden cConfiguration.h:2077
+
+    // golden TCheckBox (11)
+    TCheckBox                      *cbL38                = new TCheckBox();  // golden cConfiguration.h:1568
+    TCheckBox                      *cbN05_1              = new TCheckBox();  // golden cConfiguration.h:441
+    TCheckBox                      *cbN05_CheckFile      = new TCheckBox();  // golden cConfiguration.h:194
+    TCheckBox                      *cbN05_EnableRMS      = new TCheckBox();  // golden cConfiguration.h:191
+    TCheckBox                      *cbN06_1              = new TCheckBox();  // golden cConfiguration.h:1237
+    TCheckBox                      *cbN06_EnableFTP      = new TCheckBox();  // golden cConfiguration.h:212
+    TCheckBox                      *cbN06_UseSystemCall  = new TCheckBox();  // golden cConfiguration.h:218
+    TCheckBox                      *cbO08                = new TCheckBox();  // golden cConfiguration.h:365
+    TCheckBox                      *checkbN05_RTC        = new TCheckBox();  // golden cConfiguration.h:479
+    TCheckBox                      *chkHeater            = new TCheckBox();  // golden cConfiguration.h:854
+    TCheckBox                      *chkN05_TrayFeedClear = new TCheckBox();  // golden cConfiguration.h:1637
+
+    // golden TComboBox (1)
+    TComboBox                      *cbbN06_Mode = new TComboBox();  // golden cConfiguration.h:1350
+
+    // golden TEdit (62)
+    TEdit                          *edD25_30mm               = new TEdit();  // golden cConfiguration.h:144
+    TEdit                          *edD25_40mm               = new TEdit();  // golden cConfiguration.h:143
+    TEdit                          *edE30_1_HP1X             = new TEdit();  // golden cConfiguration.h:2023
+    TEdit                          *edE30_1_HP1Y             = new TEdit();  // golden cConfiguration.h:2024
+    TEdit                          *edE30_1_HP2X             = new TEdit();  // golden cConfiguration.h:2029
+    TEdit                          *edE30_1_HP2Y             = new TEdit();  // golden cConfiguration.h:2028
+    TEdit                          *edE30_1_LodX             = new TEdit();  // golden cConfiguration.h:2018
+    TEdit                          *edE30_1_LodY             = new TEdit();  // golden cConfiguration.h:2019
+    TEdit                          *edE30_2_HP1X             = new TEdit();  // golden cConfiguration.h:2040
+    TEdit                          *edE30_2_HP1Y             = new TEdit();  // golden cConfiguration.h:2041
+    TEdit                          *edE30_2_HP2X             = new TEdit();  // golden cConfiguration.h:2046
+    TEdit                          *edE30_2_HP2Y             = new TEdit();  // golden cConfiguration.h:2045
+    TEdit                          *edE30_2_LodX             = new TEdit();  // golden cConfiguration.h:2035
+    TEdit                          *edE30_2_LodY             = new TEdit();  // golden cConfiguration.h:2036
+    TEdit                          *edE30_HP1X               = new TEdit();  // golden cConfiguration.h:1744
+    TEdit                          *edE30_HP1Y               = new TEdit();  // golden cConfiguration.h:1745
+    TEdit                          *edE30_HP2X               = new TEdit();  // golden cConfiguration.h:1750
+    TEdit                          *edE30_HP2Y               = new TEdit();  // golden cConfiguration.h:1749
+    TEdit                          *edE30_LodX               = new TEdit();  // golden cConfiguration.h:1739
+    TEdit                          *edE30_LodY               = new TEdit();  // golden cConfiguration.h:1740
+    TEdit                          *edE32_1_IS1X             = new TEdit();  // golden cConfiguration.h:1781
+    TEdit                          *edE32_1_IS1Y             = new TEdit();  // golden cConfiguration.h:1782
+    TEdit                          *edE32_1_IS2X             = new TEdit();  // golden cConfiguration.h:1787
+    TEdit                          *edE32_1_IS2Y             = new TEdit();  // golden cConfiguration.h:1786
+    TEdit                          *edE32_1_OS1X             = new TEdit();  // golden cConfiguration.h:1791
+    TEdit                          *edE32_1_OS1Y             = new TEdit();  // golden cConfiguration.h:1792
+    TEdit                          *edE32_1_OS2X             = new TEdit();  // golden cConfiguration.h:1797
+    TEdit                          *edE32_1_OS2Y             = new TEdit();  // golden cConfiguration.h:1796
+    TEdit                          *edE32_2_IS1X             = new TEdit();  // golden cConfiguration.h:1996
+    TEdit                          *edE32_2_IS1Y             = new TEdit();  // golden cConfiguration.h:1997
+    TEdit                          *edE32_2_IS2X             = new TEdit();  // golden cConfiguration.h:2002
+    TEdit                          *edE32_2_IS2Y             = new TEdit();  // golden cConfiguration.h:2001
+    TEdit                          *edE32_2_OS1X             = new TEdit();  // golden cConfiguration.h:2006
+    TEdit                          *edE32_2_OS1Y             = new TEdit();  // golden cConfiguration.h:2007
+    TEdit                          *edE32_2_OS2X             = new TEdit();  // golden cConfiguration.h:2012
+    TEdit                          *edE32_2_OS2Y             = new TEdit();  // golden cConfiguration.h:2011
+    TEdit                          *edE32_IS1X               = new TEdit();  // golden cConfiguration.h:1756
+    TEdit                          *edE32_IS1Y               = new TEdit();  // golden cConfiguration.h:1757
+    TEdit                          *edE32_IS2X               = new TEdit();  // golden cConfiguration.h:1762
+    TEdit                          *edE32_IS2Y               = new TEdit();  // golden cConfiguration.h:1761
+    TEdit                          *edE32_OS1X               = new TEdit();  // golden cConfiguration.h:1766
+    TEdit                          *edE32_OS1Y               = new TEdit();  // golden cConfiguration.h:1767
+    TEdit                          *edE32_OS2X               = new TEdit();  // golden cConfiguration.h:1772
+    TEdit                          *edE32_OS2Y               = new TEdit();  // golden cConfiguration.h:1771
+    TEdit                          *edL09_Sh1R               = new TEdit();  // golden cConfiguration.h:165
+    TEdit                          *edL09_Sh2L               = new TEdit();  // golden cConfiguration.h:166
+    TEdit                          *edL09_Sh2R               = new TEdit();  // golden cConfiguration.h:167
+    TEdit                          *edN04_ID                 = new TEdit();  // golden cConfiguration.h:765
+    TEdit                          *edN05_1                  = new TEdit();  // golden cConfiguration.h:443
+    TEdit                          *edN05_DownPath           = new TEdit();  // golden cConfiguration.h:195
+    TEdit                          *edN05_RmsPath            = new TEdit();  // golden cConfiguration.h:192
+    TEdit                          *edN06_1                  = new TEdit();  // golden cConfiguration.h:1238
+    TEdit                          *edN06_DownPath           = new TEdit();  // golden cConfiguration.h:206
+    TEdit                          *edN06_HostName           = new TEdit();  // golden cConfiguration.h:205
+    TEdit                          *edN06_TestList           = new TEdit();  // golden cConfiguration.h:213
+    TEdit                          *edN06_TesterMap          = new TEdit();  // golden cConfiguration.h:216
+    TEdit                          *edN06_UpLdPath           = new TEdit();  // golden cConfiguration.h:207
+    TEdit                          *edN06_UserName           = new TEdit();  // golden cConfiguration.h:210
+    TEdit                          *edOCRTrayLot[10];          // golden cConfiguration.h:2364  （陣列，元素由 FormShow 動態 new）
+    TEdit                          *edSoftSpeed[TOTAL_MOTOR];  // golden cConfiguration.h:2362  （陣列，元素由 FormShow 動態 new）
+    TEdit                          *editN05_RTC              = new TEdit();  // golden cConfiguration.h:480
+    TEdit                          *edtN04_TesterID          = new TEdit();  // golden cConfiguration.h:2075
+
+    // golden TGroupBox (20)
+    TfConfigurationGroupBox                      *gbD25            = new TfConfigurationGroupBox();  // golden cConfiguration.h:132
+    TfConfigurationGroupBox                      *gbD60            = new TfConfigurationGroupBox();  // golden cConfiguration.h:947
+    TGroupBox                      *gbL09            = new TGroupBox();  // golden cConfiguration.h:158
+    TGroupBox                      *gbL11            = new TGroupBox();  // golden cConfiguration.h:175
+    TGroupBox                      *gbM01            = new TGroupBox();  // golden cConfiguration.h:219
+    TGroupBox                      *gbN05            = new TGroupBox();  // golden cConfiguration.h:187
+    TGroupBox                      *gbN05_1          = new TGroupBox();  // golden cConfiguration.h:440
+    TGroupBox                      *gbN05_WebService = new TGroupBox();  // golden cConfiguration.h:459
+    TGroupBox                      *gbO06            = new TGroupBox();  // golden cConfiguration.h:366
+    TGroupBox                      *gbP23_OCR        = new TGroupBox();  // golden cConfiguration.h:1012
+    TGroupBox                      *gbP26_OCRCheck   = new TGroupBox();  // golden cConfiguration.h:1020
+    TGroupBox                      *gbUnloadMode     = new TGroupBox();  // golden cConfiguration.h:1229
+    TGroupBox                      *groupbN05_RTC    = new TGroupBox();  // golden cConfiguration.h:477
+    TGroupBox                      *grpL31           = new TGroupBox();  // golden cConfiguration.h:1504
+    TGroupBox                      *grpL32           = new TGroupBox();  // golden cConfiguration.h:1512
+    TGroupBox                      *grpL33           = new TGroupBox();  // golden cConfiguration.h:1534
+    TGroupBox                      *grpL34           = new TGroupBox();  // golden cConfiguration.h:1545
+    TGroupBox                      *grpL35           = new TGroupBox();  // golden cConfiguration.h:1554
+    TGroupBox                      *grpL37           = new TGroupBox();  // golden cConfiguration.h:1562
+    TGroupBox                      *grpL39           = new TGroupBox();  // golden cConfiguration.h:1569
+
+    // golden TLabel (22)
+    TLabel                         *labD25_1_NS               = new TLabel();  // golden cConfiguration.h:259
+    TLabel                         *labD25_2_NS               = new TLabel();  // golden cConfiguration.h:261
+    TLabel                         *labD25_3_NS               = new TLabel();  // golden cConfiguration.h:263
+    TLabel                         *labD25_4                  = new TLabel();  // golden cConfiguration.h:136
+    TLabel                         *labD25_5                  = new TLabel();  // golden cConfiguration.h:137
+    TLabel                         *labD25_6                  = new TLabel();  // golden cConfiguration.h:138
+    TLabel                         *labD53                    = new TLabel();  // golden cConfiguration.h:241
+    TLabel                         *labD60_1                  = new TLabel();  // golden cConfiguration.h:949
+    TLabel                         *labD60_NS                 = new TLabel();  // golden cConfiguration.h:950
+    TLabel                         *labL40                    = new TLabel();  // golden cConfiguration.h:1560
+    TLabel                         *labL41                    = new TLabel();  // golden cConfiguration.h:1561
+    TLabel                         *labN05_1                  = new TLabel();  // golden cConfiguration.h:188
+    TLabel                         *labN05_AmbTemp            = new TLabel();  // golden cConfiguration.h:189
+    TLabel                         *labN05_DownPath           = new TLabel();  // golden cConfiguration.h:190
+    TLabel                         *labN06_DownloadPath       = new TLabel();  // golden cConfiguration.h:199
+    TLabel                         *labN06_FileName           = new TLabel();  // golden cConfiguration.h:483
+    TLabel                         *labN06_TesterList         = new TLabel();  // golden cConfiguration.h:203
+    TLabel                         *labN06_TesterMap          = new TLabel();  // golden cConfiguration.h:204
+    TLabel                         *labN06_UploadPath         = new TLabel();  // golden cConfiguration.h:200
+    TLabel                         *labN07_5                  = new TLabel();  // golden cConfiguration.h:572
+    TLabel                         *labSoftSpeed[TOTAL_MOTOR];  // golden cConfiguration.h:2363  （陣列，元素由 FormShow 動態 new）
+    TLabel                         *lblUploadRealPath         = new TLabel();  // golden cConfiguration.h:2149
+
+    // golden TListBox (1)
+    TListBox                       *listHeaterMonitor = new TListBox();  // golden cConfiguration.h:853
+
+    // golden TPageControl (5)
+    TfConfigurationPageControl                   *PageControl1 = new TfConfigurationPageControl();  // golden cConfiguration.h:27
+    TfConfigurationPageControl                   *pcConfig     = new TfConfigurationPageControl();  // golden cConfiguration.h:36
+    TfConfigurationPageControl                   *pcN00        = new TfConfigurationPageControl();  // golden cConfiguration.h:185
+    TfConfigurationPageControl                   *pgcE31       = new TfConfigurationPageControl();  // golden cConfiguration.h:1798
+    TfConfigurationPageControl                   *pgcScale     = new TfConfigurationPageControl();  // golden cConfiguration.h:1729
+
+    // golden TPanel (32)
+    TPanel                         *paLifeTime  = new TPanel();  // golden cConfiguration.h:429
+    TPanel                         *palD01      = new TPanel();  // golden cConfiguration.h:537
+    TPanel                         *palE30      = new TPanel();  // golden cConfiguration.h:1735
+    TPanel                         *palE31      = new TPanel();  // golden cConfiguration.h:1804
+    TPanel                         *palE32      = new TPanel();  // golden cConfiguration.h:1752
+    TPanel                         *pal_A1      = new TPanel();  // golden cConfiguration.h:399
+    TPanel                         *pal_A2      = new TPanel();  // golden cConfiguration.h:408
+    TPanel                         *pal_D1      = new TPanel();  // golden cConfiguration.h:112
+    TPanel                         *pal_D2      = new TPanel();  // golden cConfiguration.h:111
+    TPanel                         *pal_D3      = new TPanel();  // golden cConfiguration.h:110
+    TPanel                         *pal_D4      = new TPanel();  // golden cConfiguration.h:103
+    TPanel                         *pal_D5      = new TPanel();  // golden cConfiguration.h:92
+    TPanel                         *pal_D6      = new TPanel();  // golden cConfiguration.h:240
+    TPanel                         *pal_E2      = new TPanel();  // golden cConfiguration.h:299
+    TPanel                         *pal_F00     = new TPanel();  // golden cConfiguration.h:273
+    TPanel                         *pal_F10     = new TPanel();  // golden cConfiguration.h:283
+    TPanel                         *pal_G       = new TPanel();  // golden cConfiguration.h:88
+    TPanel                         *pal_I       = new TPanel();  // golden cConfiguration.h:331
+    TPanel                         *pal_L1      = new TPanel();  // golden cConfiguration.h:149
+    TPanel                         *pal_L2      = new TPanel();  // golden cConfiguration.h:89
+    TPanel                         *pal_M       = new TPanel();  // golden cConfiguration.h:91
+    TPanel                         *pal_N       = new TPanel();  // golden cConfiguration.h:90
+    TPanel                         *pal_O1      = new TPanel();  // golden cConfiguration.h:358
+    TPanel                         *pal_O2      = new TPanel();  // golden cConfiguration.h:390
+    TPanel                         *pnlE30_Cold = new TPanel();  // golden cConfiguration.h:2030
+    TPanel                         *pnlE30_Hot  = new TPanel();  // golden cConfiguration.h:2013
+    TPanel                         *pnlE32_Cold = new TPanel();  // golden cConfiguration.h:1775
+    TPanel                         *pnlE32_Hot  = new TPanel();  // golden cConfiguration.h:1774
+    TPanel                         *pnlF14      = new TPanel();  // golden cConfiguration.h:826
+    TPanel                         *pnlN07_2    = new TPanel();  // golden cConfiguration.h:264
+    TPanel                         *pnlP13      = new TPanel();  // golden cConfiguration.h:983
+    TPanel                         *pnlP16      = new TPanel();  // golden cConfiguration.h:996
+
+    // golden TRadioButton (2)
+    TRadioButton                   *rgP23_OCRByInitialStart = new TRadioButton();  // golden cConfiguration.h:1018
+    TRadioButton                   *rgP23_OCRByNewTray      = new TRadioButton();  // golden cConfiguration.h:1015
+
+    // golden TRadioGroup (2)
+    TRadioGroup                    *gbN06_HddLevel = new TRadioGroup();  // golden cConfiguration.h:208
+    TRadioGroup                    *gbN06_ServerLv = new TRadioGroup();  // golden cConfiguration.h:209
+
+    // golden TTabSheet (6)
+    TTabSheet                      *tsE31_Cold = new TTabSheet();  // golden cConfiguration.h:1801
+    TTabSheet                      *tsE31_Hot  = new TTabSheet();  // golden cConfiguration.h:1800
+    TTabSheet                      *tsN05      = new TTabSheet();  // golden cConfiguration.h:186
+    TTabSheet                      *tsN06      = new TTabSheet();  // golden cConfiguration.h:196
+    TTabSheet                      *tsN07      = new TTabSheet();  // golden cConfiguration.h:233
+    TTabSheet                      *tsTempComm = new TTabSheet();  // golden cConfiguration.h:34
+
+    // golden TfConfigurationDateTimePicker (2)
+    TfConfigurationDateTimePicker  *dtO06_LastDate = new TfConfigurationDateTimePicker();  // golden cConfiguration.h:371
+    TfConfigurationDateTimePicker  *dtpO06NextTime = new TfConfigurationDateTimePicker();  // golden cConfiguration.h:376
+
+    // golden TfConfigurationGrid (1)
+    TfConfigurationGrid            *strngrdAutoSaveLog = new TfConfigurationGrid();  // golden cConfiguration.h:374
+
+    // golden TfConfigurationImage (1)
+    TfConfigurationImage           *imgI37_3 = new TfConfigurationImage();  // golden cConfiguration.h:638
+
+    // golden TfConfigurationTimer (1)
+    TfConfigurationTimer           *Timer1 = new TfConfigurationTimer();  // golden cConfiguration.h:43
+
+    // golden TfConfigurationTrackBar (8)
+    TfConfigurationTrackBar        *tbD25_Index30mm    = new TfConfigurationTrackBar();  // golden cConfiguration.h:140
+    TfConfigurationTrackBar        *tbD25_Index30mm_NS = new TfConfigurationTrackBar();  // golden cConfiguration.h:262
+    TfConfigurationTrackBar        *tbD25_Index40mm    = new TfConfigurationTrackBar();  // golden cConfiguration.h:141
+    TfConfigurationTrackBar        *tbD25_Index40mm_NS = new TfConfigurationTrackBar();  // golden cConfiguration.h:260
+    TfConfigurationTrackBar        *tbD25_Index60mm    = new TfConfigurationTrackBar();  // golden cConfiguration.h:139
+    TfConfigurationTrackBar        *tbD25_Index60mm_NS = new TfConfigurationTrackBar();  // golden cConfiguration.h:258
+    TfConfigurationTrackBar        *tbD60_Index56mm    = new TfConfigurationTrackBar();  // golden cConfiguration.h:951
+    TfConfigurationTrackBar        *tbD60_Index56mm_NS = new TfConfigurationTrackBar();  // golden cConfiguration.h:953
+
+    // golden TfConfigurationUpDown (1)
+    TfConfigurationUpDown          *udD46 = new TfConfigurationUpDown();  // golden cConfiguration.h:99
+
+    // AI(W906-FW-CFG-W5) 20260825: second pass -- widgets the compiler named
+    // that the `->` scan missed because FormShow uses them as VALUES
+    // (e.g. `pgcConfig->ActivePage=tsConfig;`). Types from golden's header.
+    TGroupBox                      *gbN04                    = new TGroupBox();   // golden cConfiguration.h:757
+    TGroupBox                      *grpN20                   = new TGroupBox();   // golden cConfiguration.h:512
+    TPanel                         *pal_A3                   = new TPanel();   // golden cConfiguration.h:798
+    TPanel                         *pal_A4                   = new TPanel();   // golden cConfiguration.h:834
+    TPanel                         *pal_C1                   = new TPanel();   // golden cConfiguration.h:1194
+    TPanel                         *pal_C2                   = new TPanel();   // golden cConfiguration.h:1222
+    TPanel                         *pal_D7                   = new TPanel();   // golden cConfiguration.h:944
+    TPanel                         *pal_D8                   = new TPanel();   // golden cConfiguration.h:967
+    TPanel                         *pal_E5                   = new TPanel();   // golden cConfiguration.h:575
+    TPanel                         *pal_F20                  = new TPanel();   // golden cConfiguration.h:543
+    TPanel                         *pal_I01                  = new TPanel();   // golden cConfiguration.h:336
+    TPanel                         *pal_I20                  = new TPanel();   // golden cConfiguration.h:345
+    TPanel                         *pal_I30                  = new TPanel();   // golden cConfiguration.h:631
+    TPanel                         *pal_I40                  = new TPanel();   // golden cConfiguration.h:884
+    TPanel                         *pal_L3                   = new TPanel();   // golden cConfiguration.h:606
+    TPanel                         *pal_P0                   = new TPanel();   // golden cConfiguration.h:974
+    TPanel                         *pal_P1                   = new TPanel();   // golden cConfiguration.h:982
+    TPanel                         *pal_P2                   = new TPanel();   // golden cConfiguration.h:1007
+    TPanel                         *pal_P3                   = new TPanel();   // golden cConfiguration.h:1030
+    TPanel                         *pnlHP                    = new TPanel();   // golden cConfiguration.h:1048
+    TPanel                         *pnlTray                  = new TPanel();   // golden cConfiguration.h:1041
+    TTabSheet                      *tsConfig                 = new TTabSheet();   // golden cConfiguration.h:35
+    TTabSheet                      *tsE30                    = new TTabSheet();   // golden cConfiguration.h:1730
+    TTabSheet                      *tsE31_1                  = new TTabSheet();   // golden cConfiguration.h:1799
+    TTabSheet                      *tsN00                    = new TTabSheet();   // golden cConfiguration.h:61
+    TTabSheet                      *tsSearchFunction         = new TTabSheet();   // golden cConfiguration.h:940
+
+    // AI(W906-FW-CFG-W5) 20260825: FormShow 的四個狀態旗標（golden cConfiguration.h）。
+    bool fShow = false;         // 表單是否顯示中；DoPassword 也讀它
+    bool bStopChange = false;   // 抑制 OnChange 連鎖的閘
+    bool bM01Enter = false;
+    bool bSave = false;
 };
 
 #endif // FORMS_FCONFIGURATION_H

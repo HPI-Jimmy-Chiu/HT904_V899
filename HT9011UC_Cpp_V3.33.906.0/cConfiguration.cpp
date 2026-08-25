@@ -45,6 +45,8 @@
 #include "Public/HTEditList.h"  // HTEditList + the elConfig / elConfig_byRecipe / cbLastSet globals (:247/:252/:253) and the TEditContent enum (ECBool/ECInteger/ECText)
 #include "LastSet.h"            // LAST_GENERAL_SET LastSet (:587) -- ItemA registers several fields against it
 #include "mycylin.h"            // AI(W906-FW-CFG-W4b) 20260825: TMyCylinder Cylinder[] (:176) -- ChangeCBListProperty gates two checkbox groups on Cylinder[C_Shuttle_Knocker_1/2].Enable and Cylinder[C_HotplateVibration].Enable
+#include "Motor/mymotor.h"      // AI(W906-FW-CFG-W5) 20260825: TTrayMotor MOT[] (:385) -- FormShow 用 MOT[i].Alias 當 soft-speed 標籤
+#include "cMyDB.h"              // AI(W906-FW-CFG-W5) 20260825: MyDBIProcess -- FormShow 的 catch(...) 診斷沉澱點
 // AI(W906-FW-CFG-W2) 20260825: TU-LOCAL FORWARD DECLARATION -- CheckFile.
 // ItemD reads the Security_new.def input limit for D41IndexCheckOffset through
 // it. The real declaration is cAuthority.h:83 and the real body
@@ -58,6 +60,31 @@
 // and cObserver.cpp carries the identical pattern. Signature copied verbatim
 // from cAuthority.h:83 so the two cannot disagree.
 AnsiString CheckFile(AnsiString szDir, AnsiString str);
+
+// ---------------------------------------------------------------------------
+//  AI(W906-FW-CFG-W5) 20260825: TU-LOCAL FORWARD DECLARATIONS.
+//  cAuthority.h cannot be included here -- it pulls in language.h, whose
+//  `class TWinControl` collides with Public/HTEdit.h:140's, and HTEdit.h
+//  arrives via HTEditList.h above. Measured in FW-CFG-W2, unchanged.
+//  Signatures copied verbatim from cAuthority.h so the two cannot disagree.
+//  NOTE on ChangeCompomentEnabled: its BODY is gated in cAuthority.cpp (that
+//  header's own :32 note) because it walks a TWinControl control tree this
+//  facade has none of -- so calling it is a documented no-op, not an effect.
+// ---------------------------------------------------------------------------
+extern bool authConfig[5];        // cAuthority.h:59
+extern bool authConf[14];         // cAuthority.h:60  (JerryYang 20180511 12 -> 14)
+void GetConfAuth();               // cAuthority.h:75
+void ChangeCompomentEnabled(TWinControl *PCtrl, bool bEnable, bool bMustEnable=false);  // cAuthority.h:82
+void ShowMyMessage(AnsiString S1, AnsiString S2="", AnsiString S3="",
+                   bool Ok=false, bool bServoOff=false);   // canary_support.h:80-81
+
+#ifndef HT9045_W906_FWCFG_TCOLOR_SHIM
+#define HT9045_W906_FWCFG_TCOLOR_SHIM
+// AI(W906-FW-CFG-W5) 20260825: TU-local standard-colour constants. Same
+// convention cObserver.cpp:117-135 states: no shared umbrella colour header;
+// each TU that needs a colour name not already visible declares its own.
+static const TColor clRed = 0x000000FF;
+#endif // HT9045_W906_FWCFG_TCOLOR_SHIM
 
 #include <cstdlib>       // atoi/atof
 #include "forms/fQwertyKey.h"  // AI(W906-FW-QWKEY2) 20260824: fQwertyKey extern for un-gated ShowQwertyKey sites (real since FW-QWKEY1 fc08e09; latent until HTEdit GATE (6) wiring)
@@ -4924,4 +4951,1093 @@ void TfConfiguration::InitConfigEdtList()                                       
     InitConfigEdtList_ItemP();
 
     ChangeCBListProperty();
+}
+
+// =============================================================================
+// FW-CFG-W5 -- PORT-ONLY ctor + FormShow (merged 20260825)
+// =============================================================================
+// AI(W906-FW-CFG-W5) 20260825: PORT-ONLY constructor -- NOT golden's.
+// golden's TfConfiguration ctor is :109-225 and is still untranslated (it calls
+// ReadLockByFile/InitConfigEdtList/ReadConfigStandard/WriteContactData, does a
+// WinSock hostname lookup, and is write-path; forms/fConfiguration.h's own
+// INTEGRATION STATUS note defers it). This one exists for a single reason: the
+// three widget ARRAYS FormShow dereferences have no .dfm streaming and no
+// in-class initializer, so something has to allocate their elements before
+// FormShow touches them. golden allocates them inside that deferred ctor.
+// Same shape forms/fLotInfo.cpp:250-255 uses for SocketSiteCH_Display/edSocket.
+// When golden's ctor is translated, its body belongs BELOW this block, exactly
+// as cObserver.cpp separates its port-only section (A) from golden's body (B).
+TfConfiguration::TfConfiguration()
+{
+    for (int i = 0; i < TOTAL_MOTOR; i++)
+    {
+        edSoftSpeed[i]  = new TEdit();
+        labSoftSpeed[i] = new TLabel();
+    }
+    for (int i = 0; i < 10; i++)
+        edOCRTrayLot[i] = new TEdit();
+}
+
+// AI(W906-FW-CFG-W5) 20260825: golden cConfiguration.cpp:4514-5365, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::FormShow(void *Sender)
+{
+    AnsiString str;
+    int iATCVerBuf=0;                                                           //KenHsieh 20240216 : add ATC Power Follow Function
+
+    // GATE (W5-Pages) -- `pcConfig->PageCount` / `->Pages[i]` enumerate a
+    // TPageControl's child pages. TfConfigurationPageControl models
+    // ActivePage and ActivePageIndex only; a page LIST needs the parent/child
+    // tree this facade does not have -- forms/fSpeed.h GATE (S4),
+    // forms/fHandlerSys.h GATE (H1) and forms/fLotInfo.h GATE (WA-4) all
+    // document that same gap. ACTIVE ARM: nothing; the loop body is itself a
+    // ChangeCompomentEnabled call, which GATE (W5-CCE) closes anyway.
+#if 0 // GATE (W5-Pages)
+    for(int i=0; i<pcConfig->PageCount; i++)                                    //Steven 20210810 : 快速搜尋Config加上權限控制
+    {
+        if(pcConfig->Pages[i]!=tsSearchFunction)
+    // ------------------------------------------------------------------
+    // GATE (W5-CCE) -- every ChangeCompomentEnabled(...) call in this method.
+    // golden's signature is `ChangeCompomentEnabled(TWinControl *PCtrl, ...)`
+    // and it walks PCtrl's child controls. In this port every widget class
+    // (TPanel / TGroupBox / TTabSheet / TRadioGroup) derives DIRECTLY from
+    // vclcompat::TControl -- none has a TWinControl-shaped ancestor. That is
+    // the component-tree gap forms/fSpeed.h GATE (S4), forms/fHandlerSys.h
+    // GATE (H1) and forms/fLotInfo.h GATE (WA-4) already document, and this
+    // project's rule for it is 「跨檔缺口 GATE 不自建 shim」 -- so the calls are
+    // gated rather than forced through with a cast.
+    // COSTS NOTHING OBSERVABLE TODAY: the function's own BODY is already gated
+    // in cAuthority.cpp for the identical reason (cAuthority.h:32), so every
+    // one of these calls is a documented no-op even where it would compile.
+    // WHAT IS LOST once a real control tree lands: the per-access-level
+    // enable/disable pass over the Config tabs. The AccessLevel comparisons
+    // themselves are preserved verbatim inside the gate.
+    // ------------------------------------------------------------------
+#if 0 // GATE (W5-CCE)
+            ChangeCompomentEnabled(pcConfig->Pages[i], true, true);
+#endif // GATE (W5-CCE)
+    }                                                                           //Steven 20120807 End: 先在最上面Enable全部畫面
+#endif // GATE (W5-Pages)
+
+    ReadLastSetIni();
+    fShow=true;
+    tsTempComm->TabVisible=(CUSTOMER_CODE==CC_HONPREC_QC)?true:false;
+    if(CUSTOMER_CODE==CC_KYEC_LEE || CUSTOMER_CODE==CC_KYEC_XILINX)             //Steven 20110818
+    {
+        tsTempComm->TabVisible=true;
+    }
+
+    listHeaterMonitor->Items->Clear();
+    chkHeater->Checked=false;
+    bStopChange=true;
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+    {
+        if(PageControl1->ActivePageIndex==2)                                    //kevin 20180411 key in password
+        {
+            PageControl1->ActivePageIndex=0;
+        }
+    }
+    else
+    {
+        PageControl1->ActivePage=tsConfig;
+    }
+
+    for(int i=0; i<TOTAL_MOTOR; i++)
+    {
+        edSoftSpeed[i]->Text=(LastSet.SoftSpeed[i]==0)?10000:LastSet.SoftSpeed[i];   //JerryYang 20161129 軟體模擬speed 1000->10000 //Steven 20160816 : provide initial soft speed as 1000
+        edSoftSpeed[i]->Tag=i;
+        labSoftSpeed[i]->Caption=MOT[i].Alias;
+        if(MOT[i].Alias=="")                                                    //Steven 20150910 : 改成動態產生
+        {
+            edSoftSpeed[i]->Visible=false;
+            labSoftSpeed[i]->Visible=false;
+        }
+        edSoftSpeed[i]->Enabled=authConfig[0];                                  //Steven 20090731
+    }
+
+    btnAdd1000  ->Enabled=authConfig[0];
+    btnDec1000  ->Enabled=authConfig[0];
+    btnSetTo1000->Enabled=authConfig[0];
+    btnAdd10000 ->Enabled=authConfig[0];
+    btnSetToTech->Enabled=authConfig[0];
+
+//#ifndef Carry4
+    edSoftSpeed[17] ->Visible=false;
+    labSoftSpeed[17]->Visible=false;
+    edSoftSpeed[18] ->Visible=false;
+    labSoftSpeed[18]->Visible=false;
+//#endif
+
+    bStopChange=false;
+
+    if(bHasTrayCSV)                                                             //Steven 20210629 : Tray Form改成CSV
+    {
+        sbtReloadTray->Click();
+    }
+
+    if(bHasPlateCSV)                                                            //Steven 20210629 : Plate Form改成CSV
+    {
+        sbtReloadHP->Click();
+    }
+
+    GetConfAuth();                                                              //Steven 20090731
+
+//[A]-------------------------
+    if(IniConfig.bA09_ByArmCloseSite)                                           //ChungHung 20140505 add 加強保護
+        CosFunction.bOneCycleCanChangeArm=false;
+
+//[C]-------------------------
+    cbC07->Checked=!bGetLotIDFormTester;                                        //ChungHung 20150615 反向
+
+//[D]-------------------------
+    double temp;
+    temp=LastSet.dIndexLoadRate[1][0]*100;
+    tbD25_Index60mm_NS->Position=int(temp);                                     //wei 20150303   京元NS浮動頭
+
+    temp=LastSet.dIndexLoadRate[1][2]*100;
+    tbD25_Index40mm_NS->Position=int(temp);
+
+    temp=LastSet.dIndexLoadRate[1][3]*100;
+    tbD25_Index30mm_NS->Position=int(temp);
+
+    temp=LastSet.dIndexLoadRate[0][0]*100;
+    tbD25_Index60mm->Position   =int(temp);
+
+    temp=LastSet.dIndexLoadRate[0][2]*100;
+    tbD25_Index40mm->Position   =int(temp);
+
+    temp=LastSet.dIndexLoadRate[0][3]*100;
+    tbD25_Index30mm->Position   =int(temp);
+
+    edD25_60mm->Text            =LastSet.dIndexLoadRate[2][0];                  //2014-06-26    Dell    for TSMC 高溫Load cell offset
+    edD25_40mm->Text            =LastSet.dIndexLoadRate[2][2];                  //2014-06-26    Dell    for TSMC 高溫Load cell offset
+    edD25_30mm->Text            =LastSet.dIndexLoadRate[2][3];                  //2014-06-26    Dell    for TSMC 高溫Load cell offset
+
+    edD25_60mm->Visible         =(CosFunction.bUseLoadCellOffsetByHeater);      //2014-06-26    Dell    for TSMC 高溫Load cell offset
+    edD25_40mm->Visible         =(CosFunction.bUseLoadCellOffsetByHeater);
+    edD25_30mm->Visible         =(CosFunction.bUseLoadCellOffsetByHeater);
+    labD25_4->Visible           =(CosFunction.bUseLoadCellOffsetByHeater);
+    labD25_5->Visible           =(CosFunction.bUseLoadCellOffsetByHeater);
+    labD25_6->Visible           =(CosFunction.bUseLoadCellOffsetByHeater);
+    tbD25_Index60mm_NS->Visible =(CosFunction.bEPUseNSSLK);                     //wei 20150303   京元NS浮動頭
+    tbD25_Index40mm_NS->Visible =(CosFunction.bEPUseNSSLK);
+    tbD25_Index30mm_NS->Visible =(CosFunction.bEPUseNSSLK);
+    labD25_1_NS->Visible        =(CosFunction.bEPUseNSSLK);
+    labD25_2_NS->Visible        =(CosFunction.bEPUseNSSLK);
+    labD25_3_NS->Visible        =(CosFunction.bEPUseNSSLK);
+
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung || CosFunction.bHiSiliconFunction==true) //kevin 20170328 (Steven) EP 密碼輸入   //Ifor 20170803 (wei) add KYEC EP 密碼  //JerryYang 20170921 (Steven) Hisi版本 EP offset鎖定
+    {
+        gbD25->Enabled=false;
+        gbD25->Color =clRed;
+    }
+
+    gbD25->Visible              =(CosFunction.bUseDynamicKitDiameter==false);   //Steven 20170605 : 可以自定義Kit直徑
+    btnOpenEP->Visible          =(CosFunction.bUseDynamicKitDiameter==false);   //Ifor 20170911 (Steven) : 無自訂Kit不需顯示Open EP 開關
+
+    if(CosFunction.bLockD41ByFile)                                              //Steven 20140627 : Add for ASE-CL
+    {
+        edD41->Enabled  =IniConfig.bD41_Enable;
+        coD41->Enabled  =IniConfig.bD41_Enable;
+    }
+
+    udD46->Position     =IniConfig.iD46WaitIndexDestroyTime;
+
+    // GATE (W5-COM2) -- same missing member as GATE (CFG2-COM2) earlier in
+    // this file: COM2 is TCOM2Shim (atester_shims.h:405) and bCCDDummyRum is
+    // not one of its members. UNLIKE CFG2-COM2 there is no half to keep here:
+    // that one was a DISJUNCTION so dropping an operand narrowed it, this one
+    // is a CONJUNCTION so dropping an operand would WIDEN the branch -- the
+    // wrong direction. The `else` keyword is gated with it.
+    // ACTIVE ARM: golden's else body runs. That is the arm golden itself takes
+    // on every machine without real-time CCD (REAL_TIME_CCD==false), so it is
+    // the faithful landing, not an arbitrary default: labD53/edD53 stay visible.
+#if 0 // GATE (W5-COM2)
+    if(REAL_TIME_CCD==true && !COM2->bCCDDummyRum)                              //Steven 20110907 : Real Time CCD - 燈光Start後不是On就是Off
+    {
+        labD53->Visible=false;
+        edD53->Visible=false;
+        edD53->Text=0;
+    }
+    else
+#endif // GATE (W5-COM2)
+    {
+        labD53->Visible=true;
+        edD53->Visible=true;
+    }
+
+    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //wei 20151005 add 56mm
+    {
+        gbD60->Visible=true;
+        temp=LastSet.dIndexLoadRate[1][1]*100;
+        tbD60_Index56mm_NS->Position=int(temp);
+        temp=LastSet.dIndexLoadRate[0][1]*100;
+        tbD60_Index56mm->Position   =int(temp);
+
+        edD60_56mm->Text            =LastSet.dIndexLoadRate[2][1];
+        edD60_56mm->Visible         =(CosFunction.bUseLoadCellOffsetByHeater);
+        labD60_1->Visible           =(CosFunction.bUseLoadCellOffsetByHeater);
+        tbD60_Index56mm_NS->Visible =(CosFunction.bEPUseNSSLK);
+        labD60_NS->Visible          =(CosFunction.bEPUseNSSLK);
+        gbD60->Visible              =(CosFunction.bUseDynamicKitDiameter==false);   //Steven 20170605 : 可以自定義Kit直徑
+    }
+    else
+    {
+        gbD60->Visible=false;
+    }
+
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung)                                         //kevin 20170328 (Steven) EP 密碼輸入
+    {
+        gbD60->Enabled=false;
+        gbD60->Color  =clRed;
+    }
+
+//[E]-------------------------
+    //Steven 20090710 Start
+    palE30->Visible=(cbE30->Checked)?true:false;  //Steven 20090904
+    palE31->Visible=(cbE31->Checked)?true:false;  //Steven 20090904
+    palE32->Visible=(cbE32->Checked)?true:false;  //Steven 20090904
+    edE30_LodX->Text=FormatFloat("0.0000", LastSet.fLoaderTrayXScale);
+    edE30_HP1X->Text=FormatFloat("0.0000", LastSet.fHotPlateXScale[0]);
+    edE30_HP2X->Text=FormatFloat("0.0000", LastSet.fHotPlateXScale[1]);
+    edE30_LodY->Text=FormatFloat("0.0000", LastSet.fLoaderTrayYScale);
+    edE30_HP1Y->Text=FormatFloat("0.0000", LastSet.fHotPlateYScale[0]);
+    edE30_HP2Y->Text=FormatFloat("0.0000", LastSet.fHotPlateYScale[1]);
+//    edE31_Au1X->Text=FormatFloat("0.0000", LastSet.fTrayXScale[0]);
+//    edE31_Au2X->Text=FormatFloat("0.0000", LastSet.fTrayXScale[1]);
+//    edE31_Au3X->Text=FormatFloat("0.0000", LastSet.fTrayXScale[2]);
+//    edE31_Fi1X->Text=FormatFloat("0.0000", LastSet.fTrayXScale[3]);
+//    edE31_Fi2X->Text=FormatFloat("0.0000", LastSet.fTrayXScale[4]);
+//    edE31_Fi3X->Text=FormatFloat("0.0000", LastSet.fTrayXScale[5]);
+//    edE31_Au1Y->Text=FormatFloat("0.0000", LastSet.fTrayYScale[0]);
+//    edE31_Au2Y->Text=FormatFloat("0.0000", LastSet.fTrayYScale[1]);
+//    edE31_Au3Y->Text=FormatFloat("0.0000", LastSet.fTrayYScale[2]);
+//    edE31_Fi1Y->Text=FormatFloat("0.0000", LastSet.fTrayYScale[3]);
+//    edE31_Fi2Y->Text=FormatFloat("0.0000", LastSet.fTrayYScale[4]);
+//    edE31_Fi3Y->Text=FormatFloat("0.0000", LastSet.fTrayYScale[5]);
+    edE32_IS1X->Text=FormatFloat("0.0000", LastSet.fInShuttleXScale[0]);
+    edE32_IS2X->Text=FormatFloat("0.0000", LastSet.fInShuttleXScale[1]);
+    edE32_IS1Y->Text=FormatFloat("0.0000", LastSet.fInShuttleYScale[0]);
+    edE32_IS2Y->Text=FormatFloat("0.0000", LastSet.fInShuttleYScale[1]);
+    edE32_OS1X->Text=FormatFloat("0.0000", LastSet.fOutShuttleXScale[0]);
+    edE32_OS2X->Text=FormatFloat("0.0000", LastSet.fOutShuttleXScale[1]);
+    edE32_OS1Y->Text=FormatFloat("0.0000", LastSet.fOutShuttleYScale[0]);
+    edE32_OS2Y->Text=FormatFloat("0.0000", LastSet.fOutShuttleYScale[1]);
+    //Steven 20090717 End
+
+    pgcScale->ActivePage=tsE30;
+    pgcE31->ActivePage=tsE31_1;
+
+    if(Tri_Temp_Machine==1)                                                     //Ztex 2024.11.18 Add In\Out\Sht Different Scale By Temperature -->
+    {
+        edE30_1_LodX->Text=FormatFloat("0.0000", LastSet.fLoaderTrayXScale_Hot) ;
+        edE30_1_HP1X->Text=FormatFloat("0.0000", LastSet.fHotPlateXScale_Hot[0]);
+        edE30_1_HP2X->Text=FormatFloat("0.0000", LastSet.fHotPlateXScale_Hot[1]);
+        edE30_1_LodY->Text=FormatFloat("0.0000", LastSet.fLoaderTrayYScale_Hot) ;
+        edE30_1_HP1Y->Text=FormatFloat("0.0000", LastSet.fHotPlateYScale_Hot[0]);
+        edE30_1_HP2Y->Text=FormatFloat("0.0000", LastSet.fHotPlateYScale_Hot[1]);
+
+        edE32_1_IS1X->Text=FormatFloat("0.0000", LastSet.fInShuttleXScale_Hot[0]) ;
+        edE32_1_IS2X->Text=FormatFloat("0.0000", LastSet.fInShuttleXScale_Hot[1]) ;
+        edE32_1_IS1Y->Text=FormatFloat("0.0000", LastSet.fInShuttleYScale_Hot[0]) ;
+        edE32_1_IS2Y->Text=FormatFloat("0.0000", LastSet.fInShuttleYScale_Hot[1]) ;
+        edE32_1_OS1X->Text=FormatFloat("0.0000", LastSet.fOutShuttleXScale_Hot[0]);
+        edE32_1_OS2X->Text=FormatFloat("0.0000", LastSet.fOutShuttleXScale_Hot[1]);
+        edE32_1_OS1Y->Text=FormatFloat("0.0000", LastSet.fOutShuttleYScale_Hot[0]);
+        edE32_1_OS2Y->Text=FormatFloat("0.0000", LastSet.fOutShuttleYScale_Hot[1]);
+
+        edE30_2_LodX->Text=FormatFloat("0.0000", LastSet.fLoaderTrayXScale_Cold) ;
+        edE30_2_HP1X->Text=FormatFloat("0.0000", LastSet.fHotPlateXScale_Cold[0]);
+        edE30_2_HP2X->Text=FormatFloat("0.0000", LastSet.fHotPlateXScale_Cold[1]);
+        edE30_2_LodY->Text=FormatFloat("0.0000", LastSet.fLoaderTrayYScale_Cold) ;
+        edE30_2_HP1Y->Text=FormatFloat("0.0000", LastSet.fHotPlateYScale_Cold[0]);
+        edE30_2_HP2Y->Text=FormatFloat("0.0000", LastSet.fHotPlateYScale_Cold[1]);
+
+        edE32_2_IS1X->Text=FormatFloat("0.0000", LastSet.fInShuttleXScale_Cold[0]) ;
+        edE32_2_IS2X->Text=FormatFloat("0.0000", LastSet.fInShuttleXScale_Cold[1]) ;
+        edE32_2_IS1Y->Text=FormatFloat("0.0000", LastSet.fInShuttleYScale_Cold[0]) ;
+        edE32_2_IS2Y->Text=FormatFloat("0.0000", LastSet.fInShuttleYScale_Cold[1]) ;
+        edE32_2_OS1X->Text=FormatFloat("0.0000", LastSet.fOutShuttleXScale_Cold[0]);
+        edE32_2_OS2X->Text=FormatFloat("0.0000", LastSet.fOutShuttleXScale_Cold[1]);
+        edE32_2_OS1Y->Text=FormatFloat("0.0000", LastSet.fOutShuttleYScale_Cold[0]);
+        edE32_2_OS2Y->Text=FormatFloat("0.0000", LastSet.fOutShuttleYScale_Cold[1]);
+    }
+    else
+    {
+        pnlE30_Hot->Visible =false;
+        pnlE30_Cold->Visible=false;
+        tsE31_Hot->TabVisible=false;
+        tsE31_Cold->TabVisible=false;
+        pnlE32_Hot->Visible=false;
+        pnlE32_Cold->Visible=false;
+    }
+
+//[F]-------------------------
+    if(Cylinder[C_Shuttle_Knocker_1].Enable==false &&
+       Cylinder[C_Shuttle_Knocker_2].Enable==false)                             //Steven 20200522 : 氣缸沒裝就不要啟用功能
+    {
+        pnlF14->Visible=false;
+    }
+
+//[G]-------------------------
+
+//[H]-------------------------
+
+//[I]-------------------------
+    if(CosFunction.bHaveFIFOMode)
+    {
+        AnsiString Dir;
+        imgI37_3->Tag=IniConfig.iI37_LockLoaderDirection;
+        Dir.sprintf("%stype%d.bmp", BmpPath, IniConfig.iI37_LockLoaderDirection);
+        try
+        {
+            // GATE (W5-Picture) -- golden TImage->Picture is a TPicture with
+            // LoadFromFile(). A headless build has no image subsystem, so
+            // TfConfigurationImage models ->Tag only. Display-only; the file
+            // path calculation above it stays live.
+#if 0 // GATE (W5-Picture)
+            imgI37_3->Picture->LoadFromFile(Dir);
+#endif // GATE (W5-Picture)
+        }
+        catch(...)
+        {
+            MyDBIProcess("Exception", "TfConfiguration::FormShow", "");   // AI(W906-FW-CFG-W5): 顯式尾引數消歧義（兩個 2-arg 宣告可見），同 cObserver.cpp 的裁定
+            ShowMyMessage("''Path :D:\\HT9045\\IMG\\BMP\\'' be delete");
+        }
+    }
+
+    if(CosFunction.bTestTimeOutShowSkipAndHome)
+    {
+        // GATE (W5-Controls) -- `rgI22->Controls[1]` reaches a TRadioGroup's
+        // design-time child. Same component-tree gap as GATE (W5-CCE);
+        // vclcompat::TRadioGroup carries ItemIndex/Items only.
+#if 0 // GATE (W5-Controls)
+        rgI22->Controls[1]->Enabled=false;
+#endif // GATE (W5-Controls)
+        // GATE (W5-Controls) -- `rgI22->Controls[1]` reaches a TRadioGroup's
+        // design-time child. Same component-tree gap as GATE (W5-CCE);
+        // vclcompat::TRadioGroup carries ItemIndex/Items only.
+#if 0 // GATE (W5-Controls)
+        rgI22->Controls[2]->Enabled=false;
+#endif // GATE (W5-Controls)
+    }
+//[J]-------------------------
+
+//[K]-------------------------
+
+//[L]-------------------------
+    //jou 980928 start : High tempture 130 deg Position shift
+    for(int i=0; i<2; i++)
+    {
+        for(int j=0; j<2; j++)
+        {
+            if(abs(LastSet.TempPosShift_Shuttle[i][j])>1001)
+                LastSet.TempPosShift_Shuttle[i][j]=0;
+        }
+    }
+    edL09_Sh1L->Text=LastSet.TempPosShift_Shuttle[0][0];
+    edL09_Sh1R->Text=LastSet.TempPosShift_Shuttle[0][1];
+    edL09_Sh2L->Text=LastSet.TempPosShift_Shuttle[1][0];
+    edL09_Sh2R->Text=LastSet.TempPosShift_Shuttle[1][1];
+
+    //Steven 20110214 Start
+    if(FIX3_FULL_PLACE==Fix3K_ShortShuttle)
+    {
+        edL09_Sh1L->Text=15;
+        edL09_Sh1R->Text=90;
+        edL09_Sh2L->Text=15;
+        edL09_Sh2R->Text=90;
+    }
+    else if(ATC_SYSTEM>eATCUninstall)                                           //wei 20160329 ATC模式 Shuttle偏移
+    {
+        edL09_Sh1L->Text=15;
+        edL09_Sh1R->Text=60;
+        edL09_Sh2L->Text=15;
+        edL09_Sh2R->Text=60;
+    }
+    else
+    {
+        edL09_Sh1L->Text=40;
+        edL09_Sh1R->Text=130;
+        edL09_Sh2L->Text=40;
+        edL09_Sh2R->Text=130;
+    }
+    //Steven 20110214 End
+    //jou 980928 end
+    gbL11->Visible=(ATC_SYSTEM>eATC30 && ATC_SYSTEM!=eNonChamber);              //20141204 ChungHung add for ATC3.0  //2014-05-30    Dell    for ATC6.0
+    if(Temperature.bUseTC2Offset)                                               //KenHsieh 20240311 : add Tc2 Offset
+    {
+        cbL11_6->Checked=false;
+        cbL11_7->Checked=false;
+        cbL11_8->Checked=false;
+        IniConfig.bL11_6ATCUseTemperatureOutsideAlarm=false;
+        IniConfig.bL11_7ATCUseMaxSurgeAlarm=false;
+        IniConfig.bL11_8ATCUseTemperatureCompare=false;
+    }
+
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+    {
+        // GATE (W5-ATCVer) -- `ATC_InterfaceForm->asATC_SW_Ver`. The global is
+        // real (acarry_shims.h:115, TATC_InterfaceFormShim*) but that shim does
+        // not carry asATC_SW_Ver -- and including acarry_shims.h here is
+        // impossible anyway: it pulls in aHotPlateSubstrate.h, which redefines
+        // `class TList` and `class uPlateInfo` against Public/HTEditList.h
+        // :128/:321. Measured this wave: that include produced exactly those
+        // two redefinitions and nothing else.
+#if 0 // GATE (W5-ATCVer)
+        if(ATC_SYSTEM==eNewATCSystem &&
+           ATC_InterfaceForm->asATC_SW_Ver!="")                                 //KenHsieh 20240216 : add ATC Power Follow Function
+        {
+            iATCVerBuf=ATC_InterfaceForm->asATC_SW_Ver.Length()-5;
+            str=ATC_InterfaceForm->asATC_SW_Ver.SubString(1, 3+iATCVerBuf);
+            if(atof(str.c_str())>=2.5)
+            {
+                cbL43->Visible=true;
+            }
+            else
+            {
+                IniConfig.bL43EnableATCPowerFollow=false;
+                cbL43->Checked=IniConfig.bL43EnableATCPowerFollow;
+                cbL43->Visible=false;
+            }
+        }
+        else                                                                  // AI(W906-FW-CFG-W5): 連 else 關鍵字一起 gate
+#endif // GATE (W5-ATCVer)
+        // ACTIVE ARM: golden 的 else 主體照跑。那是「沒有新版 ATC 版本字串」
+        // 時的預設，對本 port 恆真（版本字串取不到），所以這是忠實的落點，
+        // 不是隨便挑的預設值。
+        {
+            IniConfig.bL43EnableATCPowerFollow=false;
+            cbL43->Checked=IniConfig.bL43EnableATCPowerFollow;
+            cbL43->Visible=false;
+        }
+    }
+
+    if(Tri_Temp_Machine!=1)
+    {
+        grpL31->Visible=false;
+        grpL32->Visible=false;
+        grpL33->Visible=false;
+        grpL34->Visible=false;
+        grpL35->Visible=false;
+        grpL37->Visible=false;
+        cbL37 ->Visible=false;
+        cbL38 ->Visible=false;
+        grpL39->Visible=false;
+        labL40->Visible=false;
+        edL40 ->Visible=false;
+        labL41->Visible=false;
+        edL41 ->Visible=false;
+        cbL42 ->Visible=false;
+        edtL42->Visible=false;
+        cbL46 ->Visible=false;
+        cbL44 ->Visible=false;
+        edtL44->Visible=false;
+        cbL45 ->Visible=false;
+        edtL45->Visible=false;
+        edtL09_1->Visible=false;
+        edtL09_2->Visible=false;
+    }
+//[M]-------------------------
+    bM01Enter=true;
+    gbM01->Visible=cbM01->Checked;
+    bM01Enter=false;
+
+//[N]-------------------------
+    pcN00->Visible                  =false;                                     //Steven 20110421
+
+    if(CosFunction.bHiSiliconFunction  ||
+       CosFunction.bUseLogUploadToFTPFunction ||
+       CosFunction.bHisiLogUploadNetwork ||
+       CUSTOMER_CODE==CC_ASE_KaohSiung ||                                       //kevin 20131009 高雄日月光強制TRUE
+       CUSTOMER_CODE==CC_GM_TEST       ||                                       //Steven 20220520 : Add GM Test
+       CUSTOMER_CODE==CC_ChipMos_ZHUBEI)
+    {
+        pcN00->Visible              =true;
+    }
+
+    tsN05->TabVisible               =false;                                     //wei 20150511
+    gbN05_WebService->Visible       =(CUSTOMER_CODE==CC_SCK);                   //Steven 20161201 : For SCK Web Service
+    tsN06->TabVisible               =false;                                     //wei 20150511
+    tsN07->TabVisible               =false;                                     //wei 20150511
+
+    edN04_Model->Text=IniConfig.sMachineType;
+    edN04_ID->Text   =IniConfig.SocketHandlerID;
+    edtN04_TesterID->Text           =IniConfig.RMSTesterID;                     //Ifor 20231219 add Tester ID
+
+    if(CUSTOMER_CODE==CC_ASE_CL || IniConfig.bFTPJamCodeUpload)                 //Steven 20110210
+    {
+        if(MachineTypeChoice==Type_HT9045)                                      //Steven 20110708
+            edN04_Model->Text="HT9045";
+        else if(MachineTypeChoice==Type_HT9045_12Site)                          //ChungHung 20130507 add HT9045 updata for 12site 517
+            edN04_Model->Text="HT9045_12Site";
+        else
+            edN04_Model->Text="HT9046";
+
+        edN04_Model->Enabled=false;
+        edN04_ID->Text=AnsiString(PC_NAME);
+        edN04_ID->Enabled=false;
+    }
+
+    cbN05_EnableRMS->Checked=false;                                             //Steven 20110304 : 防呆
+    gbN05_1->Visible        =(CosFunction.bUseERMS);                            //Steven 20160711 : 使用進階版RMS
+
+    groupbN05_RTC->Visible=CosFunction.bRTCalarmUnload;                         //jou 20170210 (Steven) : RTC alarm image unload
+
+    cbN06_EnableFTP->Checked=false;                                             //Steven 20110304 : 防呆
+
+    if(EnableRMSFunc())
+    {
+        pcN00->Visible          =true;                                          //Steven 20110421
+        tsN05->TabVisible       =true;
+        gbN05->Caption          ="[N05] RMS Setting for Recipe File";
+        labN05_1->Caption       ="Upload Path:";
+        cbN05_EnableRMS->Caption="Enable RMS Connection";
+        cbN05_EnableRMS->Checked=IniConfig.bEnableRms;
+        edN05_RmsPath->Text     =IniConfig.sRmsPath;
+        edN05_DownPath->Text    =IniConfig.sRmsDownPath;
+
+        edN05_AmbTemp->Text     =IniConfig.fAmbientTemp;                        //Steven 20110421
+        cbN05_CheckFile->Checked=IniConfig.bCheckFile;                          //Steven 20110421
+        chkN05_TrayFeedClear->Checked=IniConfig.bClearLotInfoWhenTrayFeed;      //Steven 20240916 : Tray Feed之後, 要不要清除Device Name
+        btnUploadAll->Caption="Upload All";
+    }
+    else if(IniConfig.bShowLotInfo)
+    {
+        pcN00->Visible          =true;                                          //Steven 20110421
+        if(CUSTOMER_CODE!=CC_TSMC_TAINAN &&                                     //wei 20161102 TSMC N05不顯示
+           CUSTOMER_CODE!=CC_ASE_M &&                                           //Ifor 20170703 (wei) add ASEM 不顯示N05
+           CUSTOMER_CODE!=CC_GIGAS)                                             //Isaac 20210128 : add 全智不顯示N05
+            tsN05->TabVisible       =true;
+
+        if(CosFunction.bDownloadRecipeLevelMode==true)                          //jou 2016-01-06 download recipe 增加權限模式選擇
+        {
+            labN05_DownPath->Caption="Engineer Path:";
+        }
+        else
+        {
+            edN05_DownPath->Visible =false;
+            labN05_DownPath->Visible=false;
+        }
+
+        gbN05->Caption          ="[N05] Server Setting for Recipe File";
+        labN05_1->Caption       ="Server Path:";
+        cbN05_EnableRMS->Caption="Enable Network Connection";
+        cbN05_EnableRMS->Checked=IniConfig.bEnableRms;
+
+        edN05_RmsPath->Text     =IniConfig.sRmsPath;
+        edN05_AmbTemp->Text     =IniConfig.fAmbientTemp;
+        cbN05_CheckFile->Checked=IniConfig.bCheckFile;
+
+        if(IniConfig.bVTESTFunction==true)
+        {
+            labN05_AmbTemp->Visible=false;
+            edN05_AmbTemp->Visible=false;
+            btnMesSystem->Visible=true;
+            #ifndef SOFT_SIMULTE                                                //RogerYang 20250218 軟體模擬可以修改
+            cbN05_EnableRMS->Enabled=false;
+            cbN05_CheckFile->Enabled=false;
+            #endif
+        }
+
+        cbN05_1->Checked        =IniConfig.bEnableErms;
+        edN05_1->Text           =IniConfig.sErmsPath;
+
+        checkbN05_RTC->Checked  =IniConfig.bN05_RTCalarmUnload;                 //jou 20170210 (Steven) : RTC alarm image unload
+        editN05_RTC->Text       =IniConfig.asN05_RTCalarmUnload;                //jou 20170210 (Steven) : RTC alarm image unload
+
+        if(CosFunction.bDownloadRecipeLevelMode)                                //jou 2016-01-06 download recipe 增加權限模式選擇
+            edN05_DownPath->Text=IniConfig.sRmsDownPath;
+
+        chkN05_TrayFeedClear->Checked=IniConfig.bClearLotInfoWhenTrayFeed;      //Steven 20240916 : Tray Feed之後, 要不要清除Device Name
+    }
+
+    if(CUSTOMER_CODE==CC_KYEC_LEE)
+    {
+        tsN05->TabVisible     =false;                                           //Ifor 20161229 (Steven) KYEC 喬智要求關閉N05 頁面及功能
+        labN07_5->Visible     =true;
+        edN07_5->Visible      =true;
+    }
+    else
+    {
+        labN07_5->Visible     =false;
+        edN07_5->Visible      =false;
+    }
+
+    if(CosFunction.bFTPFunction)                                                //Steven 20091004 for KYEC 29818 : [I16] Never Enable and Always True    //Steven 20140609 : else if --> if
+    {
+        pcN00->Visible              =true;                                      //Steven 20110421
+        tsN06->TabVisible           =true;
+        cbN06_EnableFTP->Checked    =IniConfig.bEnableFTP;
+        edN06_UserName->Text        =IniConfig.FtpUserName;
+        edN06_Password->Text        =IniConfig.FtpPassword;
+        edN06_HostName->Text        =IniConfig.FtpHost;
+        edN06_DownPath->Text        =IniConfig.FtpDownloadPath;
+        edN06_UpLdPath->Text        =IniConfig.FtpUplaodPath;
+        gbN06_HddLevel->ItemIndex   =IniConfig.iHDEnable;
+        gbN06_ServerLv->ItemIndex   =IniConfig.iServerEnable;
+        if(CUSTOMER_CODE==CC_JSCC_OS)                                           //長電微電子 (JSCC OS部門)
+        {
+            edN06_TesterMap->Text   =IniConfig.asN06_TesterPath;
+        }
+        else
+        {
+            edN06_TestList->Text    =IniConfig.N06_TasterListFile;
+            edN06_TesterMap->Text   =IniConfig.N06_TasterListMap;
+        }
+        edN06_Port->Text            =IniConfig.N06_FtpPort;                     //Ifor 20201015 add:使用者自定義 FTP Port
+        cbbN06_Mode->ItemIndex      =IniConfig.FtpTransMode;                    //Steven 20230719 : 加入FTP傳輸模式
+
+        if(CosFunction.PassworDownloadByFTP)                                    //Sam 20210526 : 從 N06 DownloadPath 下載密碼本
+        {
+            cbN06_1->Visible=true;
+            cbN06_1->Checked=IniConfig.bFtpPasswordDownload;
+            edN06_1->Visible=true;
+            edN06_1->Text=IniConfig.FtpPasswordDownloadPath;
+        }
+        else
+        {
+            cbN06_1->Visible=false;
+            cbN06_1->Checked=false;
+            edN06_1->Visible=false;
+        }
+
+        labN06_TesterMap->Visible           =false;
+        edN06_TesterMap->Visible            =false;
+        btN06_TesterMap->Visible            =false;
+        labN06_TesterList->Visible          =false;
+        edN06_TestList->Visible             =false;
+        btN06_TesterList->Visible           =false;
+        btN06_UpdateTesterList->Visible     =false;
+
+        if(IniConfig.bSPILFunction==true)                                       //JerryYang 20170328 (Jou) 矽品客戶碼統一用SPILFunction
+        {
+            labN05_1->Visible               =false;
+            edN05_RmsPath->Visible          =false;
+            cbN05_CheckFile->Visible        =false;
+            cbN05_CheckFile->Enabled        =false;
+            labN05_AmbTemp->Visible         =false;
+            edN05_AmbTemp->Visible          =false;
+        }
+        else if(CUSTOMER_CODE==CC_JSCC_OS)                                      //長電微電子 (JSCC OS部門)
+        {
+            labN06_TesterMap->Visible       =true;
+            labN06_TesterMap->Caption       ="OS Tester Path:";
+            edN06_TesterMap->Visible        =true;
+        }
+        else if(CUSTOMER_CODE==CC_PTI)                                          //RogerYang 20170406 (Steven) 力成 add FTP upload for Jam Alarm Data
+        {
+            gbN06_HddLevel->Visible         =false;
+            gbN06_ServerLv->Visible         =false;
+            labN06_DownloadPath->Visible    =false;
+            edN06_DownPath->Visible         =false;
+            labN06_FileName->Visible        =true;
+            edN06_FileName->Visible         =true;
+            edN06_FileName->Text            =IniConfig.asN06_FileName;
+        }
+        else if(CUSTOMER_CODE==CC_Greatek)                                      //Sam 20170815 (Steven) add 超豐不顯示TesterMap
+        {
+            gbN06_HddLevel->Visible         =false;
+            gbN06_ServerLv->Visible         =false;
+        }
+    }
+
+    cbN06_UseSystemCall->Visible=false;
+
+    if(IniConfig.bFTPJamCodeUpload)                                             //ChungHung 20140108 add FTP unload jam code
+    {
+        pcN00->Visible              =true;                                      //Steven 20110421
+        tsN06->TabVisible           =true;
+        cbN06_EnableFTP->Checked    =IniConfig.bEnableFTP;
+        edN06_UserName->Text        =IniConfig.FtpUserName;
+        edN06_Password->Text        =IniConfig.FtpPassword;
+        edN06_HostName->Text        =IniConfig.FtpHost;
+        edN06_DownPath->Text        =IniConfig.FtpDownloadPath;
+        edN06_UpLdPath->Text        =IniConfig.FtpUplaodPath;
+        gbN06_HddLevel->ItemIndex   =IniConfig.iHDEnable;
+        gbN06_ServerLv->ItemIndex   =IniConfig.iServerEnable;
+        edN06_Port->Text            =IniConfig.N06_FtpPort;                     //Ifor 20201015 add:使用者自定義 FTP Port
+
+        gbN06_HddLevel->Visible         =false;                                 //ChungHung 20140108 add FTP unload jam code
+        gbN06_ServerLv->Visible         =false;                                 //ChungHung 20140108 add FTP unload jam code
+        btN06_UpdateTesterList->Visible =false;                                 //ChungHung 20140108 add FTP unload jam code
+        labN06_DownloadPath->Visible    =false;                                 //ChungHung 20140108 add FTP unload jam code
+        edN06_DownPath->Visible         =false;                                 //ChungHung 20140108 add FTP unload jam code
+        labN06_UploadPath->Caption      = "Server Path:";                       //ChungHung 20140108 add FTP unload jam code
+    }
+
+    if(CosFunction.bEnable_SECS_GEM)                                            //ChungHung 20150515 add for SECS GEM 顯示
+    {
+        bSecsGemStatus=IniConfig.bEnable_SECS_GEM;                              //wei 20160308 開啟SECSGEM功能
+        pcN00->Visible                  =true;                                  //wei 20150511
+        tsN07->TabVisible               =(CosFunction.bEnable_SECS_GEM);        //Steven 20141006 : SECS GEM使用Remote Start功能
+        pnlN07_2->Visible               =(CosFunction.bRCMDStart);
+    }
+    // GATE (W5-FormHS) -- `FormHS` is another form entirely and
+    // GetUploadServerByFTPPath has no port anywhere in the tree. The caption
+    // it would fill (lblUploadRealPath) simply stays empty.
+#if 0 // GATE (W5-FormHS)
+    lblUploadRealPath->Caption=FormHS->GetUploadServerByFTPPath("EventLog", true);
+#endif // GATE (W5-FormHS)
+
+//[O]-------------------------
+    gbO06->Visible=false;
+    if(IniConfig.bEventLogAutoSaveFunction)                                     //Steven 20110221 Start : EventLogAutoSave
+    {
+        gbO06->Visible              =true;
+        dtO06_LastDate->Date        =IniConfig.dtEventLogLastRecordDate;
+        dtpO06NextTime->Time        =IniConfig.dtEventLogLastRecordDate;
+        for(int i=0; i<7; i++)
+        {
+            if(IniConfig.bAutoSaveLogWeek[i]==true)
+                strngrdAutoSaveLog->Cells[i][1]="On";
+            else
+                strngrdAutoSaveLog->Cells[i][1]="";
+        }
+    }
+    cbO08->Visible=false;                                                       //Steven 20140221 : Mark
+
+    if(CosFunction.bUseHeadContactCount==true)                                  //Ifor 20191128 : Fix 銦片 Life Time 功能無顯示
+    {
+        paLifeTime->Visible=!(CUSTOMER_CODE==CC_SCC);
+    }
+
+//[P]-------------------------
+    #ifndef SOFT_SIMULTE
+    pnlP13->Visible=(CosFunction.bKnockerSetBySetupFile==false);                //Steven 20160329 : 敲擊汽缸參數調整可搭配工作檔處理
+    pnlP16->Visible=(CosFunction.bKnockerSetBySetupFile==false &&               //Steven 20160329 : 敲擊汽缸參數調整可搭配工作檔處理
+                     Cylinder[C_HotplateVibration].Enable==true);               //Steven 20120510 : 全部改用汽缸的Enable判斷
+    #endif
+
+    // GATE (W5-WriteContact) -- TfConfiguration::WriteContactData is not
+    // translated yet (it is part of the deferred golden ctor cluster, golden
+    // :109-225). Calling it is what golden does here; the method lands with
+    // that ctor wave.
+#if 0 // GATE (W5-WriteContact)
+    WriteContactData();                                                         //kevin 20170329 (Steven) 將CONTRACT 資料寫到INI 給 客戶檢查
+#endif // GATE (W5-WriteContact)
+
+    if(INSTALL_OCR!=eocrUninstal)                                               //ChungHung 20121002 add OCR Function
+        gbP23_OCR->Visible=true;
+    else
+        gbP23_OCR->Visible=false;
+
+    if(IniConfig.iOCRConditions==0)
+        rgP23_OCRByNewTray->Checked=true;
+    else if(IniConfig.iOCRConditions==1)
+        rgP23_OCRByInitialStart->Checked=true;
+    else
+        rgP23_OCRByNewTray->Checked=true;
+
+    gbP26_OCRCheck->Visible=CosFunction.bTrayOCR;                               //wei 20161125 因修改不使用IniConfig.iOCRConditions判斷OCR模式，所以移除
+    for(int i=0; i<10; i++)                                                     //wei 20151117 OCR Lot check
+    {
+        edOCRTrayLot[i]->Text=LastSet.TrayCount[i];
+        edOCRTrayLot[i]->Tag=i;
+    }
+
+    gbUnloadMode->Visible=(CosFunction.bUnloadTrayModeByRecipe);                //Steven 20220710 : 甬矽要求Unload Tray Mode by機台設置
+//------------------------------------------------------------------------------
+
+    // GATE (W5-Geometry) -- form position. `class TfConfiguration` has no TForm
+    // base and declares no geometry member; identical to cObserver.cpp GATE
+    // (FW3A-3). Nothing in this port reads a form position back.
+#if 0 // GATE (W5-Geometry)
+    Left=75;                                                                    //Steven 20091103
+    Top=10;                                                                     //Steven 20091103
+#endif // GATE (W5-Geometry)
+    bEnterOffset=true;
+
+    if(CUSTOMER_CODE==CC_MTI)                                                   //Steven 20110131
+    {
+        btResume->Visible=true;
+    }
+    else
+    {
+        btResume->Visible=false;
+    }
+
+    Timer1->Enabled=true;
+
+//請保持在最下面--------------------------------------------------------------
+    // GATE (W5-ShowMemo) -- TfConfiguration::ShowMemo is not translated. Its
+    // own content source, InitialMemo, walks a TWinControl control tree this
+    // facade does not have (the same gap as GATE (W5-CCE)), so translating it
+    // would produce empty memos anyway. Deliberately deferred, see DEVLOG.
+#if 0 // GATE (W5-ShowMemo)
+    ShowMemo();                                                                 //Steven 20120218 : 這行得在所有的Visible完成後才能執行
+#endif // GATE (W5-ShowMemo)
+    //Steven 20120807 Start: 在最下面決定權限能不能Enable                       //Steven 20140805 : 低權限可以看不能改
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_A1, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);  //JerryYang 20190928 為了讓[A30] Setup function不被鎖住
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_A2, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_A3, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_A4, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_C1, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[68])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_C2, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[68])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_D3, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[69])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_D4, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[69])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_D5, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[69])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_D6, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[69])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_D7, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[69])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_D8, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[69])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pgcScale, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[70] || authConf[3]==false)?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_E2, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[70] || authConf[11]==false)?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_E5, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[70] || authConf[11]==false)?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_F00,(AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[71])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_F10,(AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[71])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_F20,(AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[71])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_G,  (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[72])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_I01,(AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[73])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_I20,(AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[73])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_I30,(AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[73])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_I40,(AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[73])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_L1, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[74])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_L2, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[74])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_L3, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[74])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_O1, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[75])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_O2, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[75])?false:true);
+#endif // GATE (W5-CCE)
+    if(CUSTOMER_CODE==CC_GIGAS)                                                 //Isaac 20210128 : 為了讓Enable FTP不被鎖住
+    {
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(gbN04  , (AccessLevel<LevelSet.AccessLevel[76])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(tsN05  , (AccessLevel<LevelSet.AccessLevel[76])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(edN06_UserName  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(edN06_Password  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(edN06_HostName  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(edN06_DownPath  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(edN06_UpLdPath  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(edN06_Port      , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(edN06_TesterMap , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(edN06_TestList  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(gbN06_HddLevel  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(gbN06_ServerLv  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(tsN07  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(tsN08  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(tsN09  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(tsN10  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(tsN11  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(tsN12  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(tsN13  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(tsN14  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(tsN15  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(tsN16  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(grpN20 , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(tsN22  , (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[67])?false:true);
+#endif // GATE (W5-CCE)
+    }
+    else
+    {
+#if 0 // GATE (W5-CCE)
+        ChangeCompomentEnabled(tsN00,  (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[76])?false:true);
+#endif // GATE (W5-CCE)
+    }
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_P0, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[77])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_P1, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[77])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_P2, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[77])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_P3, (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[77])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pnlTray,(AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[78])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pnlHP,  (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[79])?false:true);
+#endif // GATE (W5-CCE)
+#if 0 // GATE (W5-CCE)
+    ChangeCompomentEnabled(pal_M,  (AccessLevel<LevelSet.AccessLevel[30] || AccessLevel<LevelSet.AccessLevel[96])?false:true);
+#endif // GATE (W5-CCE)
+    //Steven 20120807 End: 在最下面決定權限能不能Enable
+//    CheckEnabled(); //jou 2012-06-27 必須在ChangeCompomentEnabled之後         //Steven 20120912 : 會發生被Disable後,無法Enable的狀況
+
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung ||
+       (CUSTOMER_CODE==CC_KYEC_XILINX && IniConfig.bChangeKitNoHardStop==true && IniConfig.bRemeberAutoHeight==true))   //Frank 20170626 (Steven) add Xilinx 浮動Shuttle Kit 強制開啟[D01]
+    {
+        palD01->Visible=true;
+    }
+    else
+    {
+        palD01->Visible=false;
+    }
+//    gbL09->Enabled=false;                                                     //JerryYang 20230131 : L09功能可以開關
+    edL09_Sh1L->Enabled=false;
+    edL09_Sh1R->Enabled=false;
+    edL09_Sh2L->Enabled=false;
+    edL09_Sh2R->Enabled=false;
+
+//    pal_A1->Enabled =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_A2->Enabled =(AccessLevel<LevelSet.AccessLevel[30])?false:true;       //wei 20160225 分頁
+//    pal_C->Enabled  =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_D1->Enabled =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_D2->Enabled =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_D3->Enabled =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_D4->Enabled =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_D5->Enabled =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_D6->Enabled =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_E1->Enabled =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_E2->Enabled =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_F00->Enabled=(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_F10->Enabled=(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_G->Enabled  =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_I->Enabled  =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_L1->Enabled =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_L2->Enabled =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_O1->Enabled =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_O2->Enabled =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_N->Enabled  =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_P->Enabled  =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+//    pal_M->Enabled  =(AccessLevel<LevelSet.AccessLevel[30])?false:true;
+
+    strngrdAutoSaveLog->Cells[0][0]="Sun";
+    strngrdAutoSaveLog->Cells[1][0]="Mon";
+    strngrdAutoSaveLog->Cells[2][0]="Tue";
+    strngrdAutoSaveLog->Cells[3][0]="Wed";
+    strngrdAutoSaveLog->Cells[4][0]="Thu";
+    strngrdAutoSaveLog->Cells[5][0]="Fri";
+    strngrdAutoSaveLog->Cells[6][0]="Sat";
+
+    if(CosFunction.bHiSiliconFunction==true)                                    //Ifor 20160101 海思專用版本 顯示不可修改溫度
+    {
+        pal_L1->Enabled=false;
+        pal_L2->Enabled=false;
+    }
+
+    if(CUSTOMER_CODE==CC_JCET)
+    {
+        btN06_UpdateTesterList->Visible=false;
+    }
+
+    if(CUSTOMER_CODE==CC_SIGURD_PeiXing)                                        //KaiChen 20200623 ：矽格北興，不給修改
+    {
+        //Sam 20220706 : 北興俊堯說可以再打開修改 Mark
+        //==>
+        //cbP13       ->Enabled=false;
+        //edP13_1     ->Enabled=false;
+        //edP13_2     ->Enabled=false;
+        //<==
+        //Sam 20220706 : 北興俊堯說可以再打開修改 Mark
+        cbP14       ->Enabled=false;
+        edP14_1     ->Enabled=false;
+        edP14_2     ->Enabled=false;
+    }
+
+    if(CosFunction.bUseConfigSaveButton)    //JerryYang 20230215 : ASE-CL 尚智要求follow 7000軟體新增config存檔按鈕
+    {
+        btnSave->Visible=true;
+        bSave=false;
+    }
+    else
+    {
+        btnSave->Visible=false;
+    }
+    //這一行請保持在最下面!!-----------------
+//    myLog.Do_Log(Sender, "fConfiguration", asLogPath);                        //kevin 20181025 change//Steven 20100629
 }
