@@ -108,11 +108,14 @@
 //       false, and grepped: nothing in this file ever sets it true), so today
 //       none of them fire at all regardless of this gate.
 //   (2) `Item->SourceControl->Tag=FEditList->Count-1;` (golden :149/272/298/
-//       323/346, one per widget-type branch of Add()). Tag does not exist on
-//       vclcompat::TControl. FAITHFUL DEFAULT: dropped -- `Item->iTag=...`
-//       (golden's OWN data-model field, same value) is kept ACTIVE immediately
-//       above each site, so the value is not lost, only the (nonexistent)
-//       widget-side mirror of it.
+//       323/346, one per widget-type branch of Add()). RESTORED 20260825 by
+//       AI(W906-FW-CFG-W4a). It had been dropped because vclcompat::TControl
+//       carried no Tag; AI(W906-FW-TAG1) added one the same day
+//       (Controls.h:255), so all five sites now write golden's own line and
+//       the widget-side mirror is real again. cConfiguration's
+//       ChangeCBListProperty indexes this list THROUGH the widget Tag, so the
+//       mirror is load-bearing, not decorative. `Item->iTag` still carries the
+//       same value alongside it, exactly as golden does.
 //   (3) `Temp->SourceControl->Parent`/`->Name` (TWinControl* Parent, AnsiString
 //       Name) -- golden :601-609/610/1032-1040/1042/1505-1509/1649-1650, used
 //       to build a diagnostic "FormName::WidgetName" label and (in
@@ -288,8 +291,21 @@ void HTEditList::Add(TControl  *SoureCtrl,                                      
         Item->bEnable           =bEnable;
         Item->bReadFromFile     =bReadFromFile;
         Item->iTag              =FEditList->Count-1;
-        // GATE (2): golden also mirrors the tag onto `Item->SourceControl->Tag`
-        // (TControl has no Tag) -- Item->iTag above already carries it.
+        // AI(W906-FW-CFG-W4a) 20260825: GATE (2) RETIRED. It said "TControl has
+        // no Tag", which was true when it was written and stopped being true
+        // EARLIER THE SAME DAY -- AI(W906-FW-TAG1) added `int Tag` to
+        // vclcompat::TControl (Controls.h:255). The premise was invalidated by
+        // this project's own change, which is why it survived that wave's sweep.
+        //
+        // Restoring it is not tidiness. cConfiguration's ChangeCBListProperty
+        // (golden :266-363) looks its entries up as
+        // `elConfig->FEditList->Items[cbA09->Tag]` -- through the WIDGET's Tag,
+        // not through Item->iTag. With the mirror dropped every one of those 14
+        // lookups reads Tag==0 and rewrites the properties of list item 0
+        // instead of its own control. That is the "0 is not a neutral value"
+        // failure the Tag substrate note warns about, and it would have been
+        // silent: correct types, clean link, wrong widget.
+        Item->SourceControl->Tag=FEditList->Count-1;                            //Steven 20230218 : Edit List改支援多型態元件
     }
     else if(CEd!=NULL)
     {
@@ -410,7 +426,8 @@ void HTEditList::Add(TControl  *SoureCtrl,                                      
         Item->bReadFromFile     =bReadFromFile;
         Item->iTransformType    =iTransform;
         Item->iTag              =FEditList->Count-1;
-        // GATE (2): see above.
+        // AI(W906-FW-CFG-W4a) 20260825: GATE (2) retired -- see the first site.
+        Item->SourceControl->Tag=FEditList->Count-1;                            //Steven 20230218 : Edit List改支援多型態元件
     }
     else if(Cbb!=NULL)                                                          //Steven 20230224 : Edit List改支援多型態元件
     {
@@ -436,7 +453,8 @@ void HTEditList::Add(TControl  *SoureCtrl,                                      
         Item->bReadFromFile     =bReadFromFile;
         Item->iTransformType    =iTransform;
         Item->iTag              =FEditList->Count-1;
-        // GATE (2): see above.
+        // AI(W906-FW-CFG-W4a) 20260825: GATE (2) retired -- see the first site.
+        Item->SourceControl->Tag=FEditList->Count-1;                            //Steven 20230218 : Edit List改支援多型態元件
     }
     else if(RdG!=NULL)                                                          //Steven 20230224 : Edit List改支援多型態元件
     {
@@ -461,7 +479,8 @@ void HTEditList::Add(TControl  *SoureCtrl,                                      
         Item->bReadFromFile     =bReadFromFile;
         Item->iTransformType    =iTransform;
         Item->iTag              =FEditList->Count-1;
-        // GATE (2): see above.
+        // AI(W906-FW-CFG-W4a) 20260825: GATE (2) retired -- see the first site.
+        Item->SourceControl->Tag=FEditList->Count-1;                            //Steven 20230218 : Edit List改支援多型態元件
     }
     else if(Ttp!=NULL)
     {
@@ -484,7 +503,8 @@ void HTEditList::Add(TControl  *SoureCtrl,                                      
         Item->bReadFromFile     =bReadFromFile;
         Item->iTransformType    =iTransform;
         Item->iTag              =FEditList->Count-1;
-        // GATE (2): see above.
+        // AI(W906-FW-CFG-W4a) 20260825: GATE (2) retired -- see the first site.
+        Item->SourceControl->Tag=FEditList->Count-1;                            //Steven 20230218 : Edit List改支援多型態元件
     }
 }
 //---------------------------------------------------------------------------

@@ -3675,6 +3675,26 @@ void TfConfiguration::InitConfigEdtList_ItemN()
             edtN10_6->Visible=false;
 
             cbL11_1->Caption="[L11-1] ATC temperature range(1..3)";             //jou 20240426 : VTEST 要求 ATC 溫度限制設定1~3度
+            // ------------------------------------------------------------
+            // GOLDEN ODDITY (CFG-L11tag), golden cConfiguration.cpp:3314 vs
+            // :2932/:2937/:2939. `edL11_1` is the ONLY widget in this file whose
+            // Tag has two different owners writing two different meanings:
+            //   ItemL registers it three times with elConfig->Add(), and Add
+            //   mirrors the widget's LIST INDEX onto ->Tag (golden
+            //   Public/HTEditList.cpp:149 and its four siblings);
+            //   then ItemN, which the dispatcher runs AFTER ItemL (golden
+            //   :4505 then :4507), overwrites it with the literal 3.
+            // So once InitConfigEdtList() finishes, edL11_1->Tag is 3, not its
+            // index -- the later write simply wins. Reproduced exactly, because
+            // this port now performs both writes in golden's own order.
+            // Measured before assuming it was harmless: a tree-wide scan for
+            // widgets that are BOTH Add()-registered and directly Tag-assigned
+            // returned exactly one name, this one, and nothing anywhere looks
+            // edL11_1 up through elConfig->FEditList->Items[...->Tag]
+            // (ChangeCBListProperty's thirteen lookups use cbA09/cbD42/cbD44/
+            // cbF06/cbF11/cbF14/cbF14_1/cbF17/rgF26/cbI04/cbI06/cbP16/cbP24).
+            // So the collision is latent in golden too -- an ODDITY, not a BUG.
+            // ------------------------------------------------------------
             edL11_1->Tag=3;
         }
         else
