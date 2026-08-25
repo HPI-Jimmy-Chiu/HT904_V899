@@ -6467,3 +6467,256 @@ void TfConfiguration::udD46Click(void *Sender)                    // AI(W906-FW-
     edD46->Text=udD46->Position;
     IniConfig.iD46WaitIndexDestroyTime=udD46->Position;
 }
+
+// AI(W906-FW-CFG-W7) 20260825: golden cConfiguration.cpp:60 的檔案層陣列。
+// golden 在建構子 :153 用 `new TCheckBox(this)` 逐一配置，然後 :154 立刻
+// `->Parent=gbSendTemp`——那條路走 TWinControl 控制項樹，本 facade 沒有
+// （同 GATE (W5-CCE)），所以本樹保持零初始化。
+// 這不是新加的降級：golden 自己的 btHeaterSelectAll/ClearSelect 就寫了
+// `if(cbTempSelsct[i]!=NULL)`（golden :5470、:5481），對 NULL 的容忍是 golden 的。
+TCheckBox *cbTempSelsct[tcTotalCount];
+
+// =============================================================================
+// FW-CFG-W7 -- 16 個 UI 處理器（merged 20260825；
+//              btnSetToTechClick 與 LoadConfiguration 退出，理由見各自位置）
+// =============================================================================
+// AI(W906-FW-CFG-W7) 20260825: golden cConfiguration.cpp:7113-7146, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::edtSearchFunctionChange(void *Sender)       //Steven 20210730 : 快速搜尋Config
+{
+    if(edtSearchFunction->Text.Length()==0)
+    {
+        for(int i=0; i<elConfig->FEditList->Count; i++)
+        {
+            THTEdit *Temp;
+            Temp=(THTEdit*)elConfig->FEditList->Items[i];
+            Temp->SetToDefaultPosition();
+        }
+    }
+    else if(edtSearchFunction->Text.Length()>=2)
+    {
+        for(int i=0; i<elConfig->FEditList->Count; i++)
+        {
+            THTEdit *Temp;
+            Temp=(THTEdit*)elConfig->FEditList->Items[i];
+            TCheckBox    *Chb = dynamic_cast <TCheckBox   *>(Temp->SourceControl);
+            if(Chb!=NULL)
+            {
+                AnsiString Str=Chb->Caption.UpperCase();
+                if(Str.AnsiPos(edtSearchFunction->Text.UpperCase())!=0)
+                {
+#if 0 // GATE (W7-Search) -- golden 原文保留
+                    // `class TScrollBox` 全樹零 port（forms/fSetup.h:324-325 為了
+                    // golden cSetUp.h:84 的 scrlbxSocketSensor 已經量過同一件事），
+                    // 而 vclcompat::TControl 沒有 Parent / Align，`alTop` 也沒有。
+                    // 量測 20260825:
+                    //   grep -rn "class TScrollBox" --include=*.h --include=*.cpp  -> 0
+                    //   grep -rn "alTop"            --include=*.h                 -> 0
+                    // 這兩行是「把命中搜尋字串的控制項搬進搜尋捲軸並靠上排列」，
+                    // 純版面。不命中的那一支 SetToDefaultPosition() 保持 live，
+                    // 所以搜尋框仍會把不符的項目歸位，只是不會把符合的搬過去。
+                    Temp->SourceControl->Parent=scrlbxSearch;
+                    Temp->SourceControl->Align=alTop;
+#endif
+                }
+                else
+                {
+                    Temp->SetToDefaultPosition();
+                }
+            }
+        }
+    }
+}
+
+// AI(W906-FW-CFG-W7) 20260825: golden cConfiguration.cpp:5444-5466, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::SetSoftSpeedSpeed(bool clear,int value)
+{
+    if(clear)
+    {
+        for(int i=0; i<TOTAL_MOTOR; i++)
+        {
+            edSoftSpeed[i]->Text="1000";
+            LastSet.SoftSpeed[i]=1000;
+        }
+    }
+    else
+    {
+        for(int i=0; i<TOTAL_MOTOR; i++)
+        {
+            LastSet.SoftSpeed[i]+=value;
+            if(LastSet.SoftSpeed[i]>100000)
+                LastSet.SoftSpeed[i]=100000;
+            if(LastSet.SoftSpeed[i]<1000)
+                LastSet.SoftSpeed[i]=1000;
+            edSoftSpeed[i]->Text=LastSet.SoftSpeed[i];
+        }
+    }
+}
+
+// AI(W906-FW-CFG-W7) 20260825: golden cConfiguration.cpp:6687-6698, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::sbN15UserLevelByTxtReadFilePathClick(
+      void *Sender)                                                          //Sam 20170824 (Steven) 移植超豐 ESD Control 功能 form HT-7045
+{
+    OpenDialog2->Filter="*.TXT|*.TXT";
+    OpenDialog2->DefaultExt="TXT";
+    OpenDialog2->InitialDir="c:\\";
+
+    if(OpenDialog2->Execute())
+    {
+        edtN15_1->Text=OpenDialog2->FileName;
+    }
+}
+
+// AI(W906-FW-CFG-W7) 20260825: golden cConfiguration.cpp:6705-6716, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::spbA25_RunExecutFilePathChoiceClick(
+      void *Sender)
+{
+    OpenDialog3->Filter="*.EXE|*.EXE";
+    OpenDialog3->DefaultExt="EXE";
+    OpenDialog3->InitialDir="c:\\";
+
+    if(OpenDialog3->Execute())
+    {
+        edA25_1->Text=OpenDialog3->FileName;
+    }
+}
+
+// AI(W906-FW-CFG-W7) 20260825: golden cConfiguration.cpp:5468-5475, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::btHeaterSelectAllClick(void *Sender)
+{
+    for(int i=0; i<tcTotalCount; i++)
+    {
+        if(cbTempSelsct[i]!=NULL)                                               //Steven 20200609 : 加上保護
+            cbTempSelsct[i]->Checked=true;
+    }
+}
+
+// AI(W906-FW-CFG-W7) 20260825: golden cConfiguration.cpp:5477-5484, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::btHeaterClearSelectClick(void *Sender)
+{
+    for(int i=0; i<tcTotalCount; i++)
+    {
+        if(cbTempSelsct[i]!=NULL)                                               //Steven 20200609 : 加上保護
+            cbTempSelsct[i]->Checked=false;
+    }
+}
+
+// AI(W906-FW-CFG-W7) 20260825: golden cConfiguration.cpp:6585-6591, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::btnRecordJamRateByTimeClearClick(void *Sender)      // 2015.11.11 , Joye , Add Jam Rate Record
+{
+    iRecordJamRateByTime_LoaderCount    = 0;
+    iRecordJamRateByTime_JamCount       = 0;
+
+    bRecordJamRateByTime_Clear = true;
+}
+
+// AI(W906-FW-CFG-W7) 20260825: golden cConfiguration.cpp:5956-5960, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::btD47Click(void *Sender)
+{
+    LastSet.iD47SocketTestedCount=0;
+    edD47_3->Text=LastSet.iD47SocketTestedCount;
+}
+
+// AI(W906-FW-CFG-W7) 20260825: golden cConfiguration.cpp:7148-7152, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::btnSetIPSCQtyClick(void *Sender)
+{
+#if 0 // GATE (W7-IPSC) -- golden 原文保留
+    // 跨表單：`fProductionInfo` 是 ProductionInfo/ProductionInfo.h:572 的
+    // `extern PACKAGE TfProductionInfo *fProductionInfo`，本樹沒有對應的 port
+    // 全域（forms/fCounterClear.h:47-53 為了同一個物件已經開過 gate）。
+    // 量測 20260825: grep -rn "TfProductionInfo \*fProductionInfo" 於 port 樹 -> 0
+    fProductionInfo->iIPSCFlag_TriggerMode=1;
+    fProductionInfo->iIPSCFlag_CountdownQty=atoi(edtSetIPSCQty->Text.c_str());
+#endif
+}
+
+// AI(W906-FW-CFG-W7) 20260825: LoadConfiguration (golden :7591-7595) 本波刻意不翻。
+// 本體只有兩行 `ReadLastDataFile(); ReadLastSetIni();`，名字全是 Read，但
+// ReadLastSetIni（cprod.cpp:2958-3071）**會寫回產線設定檔**：
+//     :2993 WriteIniData(szDir, "Hotplate Form", "Using Flag", ...)
+//     :2998 WriteIniData(sPath, "Tray", "bRecordSkipPosition", ...)
+//     :3037 WriteIniDataGeneral("System", "USE_SOCKET_SENSOR", ...)   <- system\Gerneral.ini
+// 最後那個就是本樹 20260817 被整檔重寫過的那支檔案。write path，佇列。
+// （ReadLastDataFile 本身三個 CreateFile 都是 GENERIC_READ/OPEN_EXISTING，
+//   對檔案是唯讀的；但它 :1769 呼叫 fMain->ModifyTester(OFF_LINE) 切 tester 上下線。）
+//
+// 這條是新加的 deep pass（tools/wavescan/freefunc_index.py）抓到的，
+// 人工讀本體讀不出來——兩行都叫 Read。
+
+// AI(W906-FW-CFG-W7) 20260825: golden cConfiguration.cpp:5434-5437, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::btnDec1000Click(void *Sender)
+{
+    SetSoftSpeedSpeed(false, -1000);
+}
+
+// AI(W906-FW-CFG-W7) 20260825: golden cConfiguration.cpp:5439-5442, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::btnSetTo1000Click(void *Sender)
+{
+    SetSoftSpeedSpeed(true, 0);
+}
+
+// AI(W906-FW-CFG-W7) 20260825: btnSetToTechClick (golden :5978-5981) 本波刻意不翻。
+// 它整個本體就是呼叫 cinitial.cpp:13925 的自由函式 SetOffsetToTech()，而那支會
+//     Tech.iInArmLoadStageX += InArmOffSet[InOfsLoader]->GetX();   (golden :13958 起)
+// 把目前的 offset 累加進 Tech.*——那是入料/出料手臂與 shuttle 的教導座標，
+// 馬達實際會走到的位置。golden 自己也知道，:13950 先跳一個
+// MessageDlg("Sure to Set Offset To Tech?") 要人按確認。
+// 安全項，佇列等使用者，不自己做。
+//
+// 順帶記一筆篩選器的第三個缺口：screen_methods.py 只掃 handler 自己的本體，
+// **不跟進自由函式**，所以這支的本體「只有一行函式呼叫」被判成乾淨。
+// 前兩個缺口是跨表單呼叫（btnN31_Manual 那批）與 CopyFile（ReadConfigStandard）。
+
+// AI(W906-FW-CFG-W7) 20260825: golden cConfiguration.cpp:5429-5432, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::btnAdd1000Click(void *Sender)
+{
+    SetSoftSpeedSpeed(false, 1000);
+}
+
+// AI(W906-FW-CFG-W7) 20260825: golden cConfiguration.cpp:5973-5976, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::btnAdd10000Click(void *Sender)
+{
+    SetSoftSpeedSpeed(false, 10000);
+}
+
+// AI(W906-FW-CFG-W7) 20260825: golden cConfiguration.cpp:6331-6337, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::btnAutoSaveSetAllClick(void *Sender)
+{
+    for(int i=0; i<7; i++)
+    {
+        strngrdAutoSaveLog->Cells[i][1]="On";
+    }
+}
+
+// AI(W906-FW-CFG-W7) 20260825: golden cConfiguration.cpp:6157-6163, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::btN06_TesterListClick(void *Sender)
+{
+    if(OpenDialog1->Execute())
+    {
+        edN06_TestList->Text=OpenDialog1->FileName;
+    }
+}
+
+// AI(W906-FW-CFG-W7) 20260825: golden cConfiguration.cpp:6339-6345, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::btN06_TesterMapClick(void *Sender)
+{
+    if(OpenDialog1->Execute())
+    {
+        edN06_TesterMap->Text=OpenDialog1->FileName;
+    }
+}

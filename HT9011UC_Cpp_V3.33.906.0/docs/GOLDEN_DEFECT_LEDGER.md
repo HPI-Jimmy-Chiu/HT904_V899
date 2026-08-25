@@ -71,11 +71,11 @@ FW 系列 / `GOLDEN BUG #N` / `k7-B1` 類區域編號等標記寫在程式碼裡
 
 | 項目 | 數值 |
 |---|---|
-| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **725 筆**（以表格內 `#` 編號列實際計數，20260825 FW-OBS-W2 當波入帳 42 筆（`cObserver.cpp` 新增分節，該檔本波前為 0 筆）＋20260825 FW-TAG1 當波入帳 1 筆（`MyTempPanel.cpp` TAG1-a，維護規則 1）＋20260825 R8 同步 3 筆（FW-BARCODE1 當波入帳）＋20260824 R7 同步 7 筆（FW-BINDISP3 當波入帳）＋20260824 R6 同步 8 筆（FW-QWKEY1 當波入帳）＋20260821 四輪補掃後＋20260824 GATE7-V 增 1 筆＋20260824 五輪同步 5 筆（FW-BINDISP1/SETUP-D/BINDISP2 當波入帳，維護規則 1）；`python3` 逐列計數，見下方「四輪補掃紀錄」） |
+| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **726 筆**（以表格內 `#` 編號列實際計數，20260825 FW-CFG-W7 當波入帳 1 筆（cConfiguration.cpp 分節 4->5 筆）＋20260825 FW-OBS-W2 當波入帳 42 筆（`cObserver.cpp` 新增分節，該檔本波前為 0 筆）＋20260825 FW-TAG1 當波入帳 1 筆（`MyTempPanel.cpp` TAG1-a，維護規則 1）＋20260825 R8 同步 3 筆（FW-BARCODE1 當波入帳）＋20260824 R7 同步 7 筆（FW-BINDISP3 當波入帳）＋20260824 R6 同步 8 筆（FW-QWKEY1 當波入帳）＋20260821 四輪補掃後＋20260824 GATE7-V 增 1 筆＋20260824 五輪同步 5 筆（FW-BINDISP1/SETUP-D/BINDISP2 當波入帳，維護規則 1）；`python3` 逐列計數，見下方「四輪補掃紀錄」） |
 | 其中 BUG 類（`GOLDEN BUG` / `GOLDEN BUGS` / `GOLDEN BUG #N` / `(Bx) GOLDEN BUG` / golden copy-paste bug） | 265 筆（含 20260825 FW-CFG-W3 +1，`cConfiguration.cpp` CFG-N14esc；含 20260825 FW-OBS-W2 +11，`cObserver.cpp` 新分節；含 20260825 FW-TAG1 +1，`MyTempPanel.cpp` TAG1-a edSHighBase 漏設 Tag；含三輪新增 1 筆，`cConfiguration.h` 的 `sbUpdateHPClick` copy-paste bug） |
 | 其中 QUIRK 類（`GOLDEN QUIRK` / `GOLDEN QUIRKS`） | 248 筆（含 20260825 FW-OBS-W2 +8，`cObserver.cpp` 新分節；含 SECSGEM 三檔補撈的 39 筆；含二輪補掃新增 71 筆，見下方「二輪 QUIRK 補掃紀錄」；三輪未新增 QUIRK 類；含 20260824 五輪 +1，`cSetUp.cpp` CHSetError int>63.5；含 20260825 R8 +1，`BarcodeReader.cpp` BR-q1 15-of-16 初始器） |
 | 其中 DEFECT 類（`GOLDEN DEFECT` / `GOLDEN DEFECTS`） | 71 筆（含二輪補掃新增 5 筆；含三輪新增 1 筆，`BinDisplay/MyBinDisp.cpp` 的 `WriteTargetBin` off-by-one；含 20260824 R7 +1，同檔 (i) 21-into-20 sprintf stack overflow） |
-| 其中 ODDITY 類（`GOLDEN ODDITY` / `GOLDEN ODDITIES`） | 74 筆（含 20260825 FW-CFG-W4a +1，`cConfiguration.cpp` CFG-L11tag；含 20260825 FW-OBS-W2 +10，`cObserver.cpp` 新分節；含三輪新增 16 筆，集中在 batch-5 顯示側叢集，見下方「三輪增補紀錄」；含四輪補掃新增 6 筆，集中在溫控表單 uTemp_Set.cpp/DynamicTemp.cpp 與 Command.cpp FW-CMD-C 段，見下方「四輪補掃紀錄」；含 20260824 五輪 +3：`cSetUp.cpp` ×2（pitch switch 缺 N-mode case、CoSocketComboChange 無視 Sender）＋`database.cpp` ICBD-1；含 20260824 R7 +6，`BinDisplay/MyBinDisp.cpp` (j)(k)(l)(m)(n)(o)） |
+| 其中 ODDITY 類（`GOLDEN ODDITY` / `GOLDEN ODDITIES`） | 75 筆（含 20260825 FW-CFG-W7 +1，cConfiguration.cpp edtSearchFunctionChange 只認 0 與 >=2 字；含 20260825 FW-CFG-W4a +1，`cConfiguration.cpp` CFG-L11tag；含 20260825 FW-OBS-W2 +10，`cObserver.cpp` 新分節；含三輪新增 16 筆，集中在 batch-5 顯示側叢集，見下方「三輪增補紀錄」；含四輪補掃新增 6 筆，集中在溫控表單 uTemp_Set.cpp/DynamicTemp.cpp 與 Command.cpp FW-CMD-C 段，見下方「四輪補掃紀錄」；含 20260824 五輪 +3：`cSetUp.cpp` ×2（pitch switch 缺 N-mode case、CoSocketComboChange 無視 Sender）＋`database.cpp` ICBD-1；含 20260824 R7 +6，`BinDisplay/MyBinDisp.cpp` (j)(k)(l)(m)(n)(o)） |
 | 其中 ASYMMETRY 類（`GOLDEN ASYMMETRY` / `GOLDEN ASYMMETRIES`） | 16 筆（含三輪新增 1 筆，`BinDisplay/MyBinDisp.h` 的 `ComPort`/`ComPort2` 初始化不對稱；含 20260824 GATE7-V 新增 1 筆，Command.cpp SETSOAK_ 寫入路徑不對稱） |
 | 其中 DIVERGENCE 類（port 自身偏離 golden，已揭露，非 golden 本身缺陷；csystem.cpp/SCK_ART.cpp 各 1 筆合計 2） | 2 筆 |
 | 其中 GAP / LEAK / NOTE / INCONSISTENCY / GOTCHA / SPELLINGS / TYPO / DEAD CODE / INVARIANT / RACE 等罕見詞彙 | 40 筆（NOTE 28／GOTCHA 2／GAP 2／LEAK 2／INCONSISTENCY 1／SPELLINGS 1／TYPO 1／DEAD CODE 1／INVARIANT 1／RACE 1；含三輪新增 NOTE +2、GOTCHA +1，皆在 `cShowBinSelect.cpp`/`BinDisplay/MyBinDisp.h`；含 20260824 五輪 NOTE +1，`Motor/myMN200motor.cpp` BINDISP2-e；含 20260824 R6 NOTE +8，fQwertyKey G-a..d ×4＋fPassword G-P1..P4 ×4；含 20260825 R8 NOTE +2，BarcodeReader BR-n1/n2；含 20260825 FW-OBS-W2 NOTE +13，cObserver.cpp 新分節） |
@@ -1598,7 +1598,7 @@ GATE 依賴缺口說明，非 golden 缺陷紀錄。
 |---|---|---|---|---|---|---|---|
 | 1 | GOLDEN ODDITY（未編號） | ODDITY | forms/fSetup.h:70,143-152；forms/fSetup.cpp:78（`RadioButton1KeyDown` 翻譯處的交叉參照註解） | golden `RadioButton1KeyDown` :4443-4449 | `RadioButton1KeyDown` 在 golden `cSetUp.h`/`cSetUp.cpp` 裡有宣告與定義，但目前的 `cSetUp.dfm` 裡找不到任何元件的 `OnKeyDown` 接到它（甚至連叫 `RadioButton1` 的元件都不存在，.dfm 裡只有 `RadioButton6`）——是 golden 自己的 DFM-孤兒事件處理常式 | 該方法在目前的 .dfm 佈局下永遠不會被呼叫；仍依「照翻，並在//AI 註解寫下它為什麼看起來錯」政策原樣翻譯，是否退休留待使用者決定 | AI(W906-FW3-Setup-WA) 20260820 |
 
-### forms/fConfiguration.h + cConfiguration.cpp（4 筆）
+### forms/fConfiguration.h + cConfiguration.cpp（5 筆）
 
 | # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
 |---|---|---|---|---|---|---|---|
@@ -1606,6 +1606,7 @@ GATE 依賴缺口說明，非 golden 缺陷紀錄。
 | 2 | GOLDEN ODDITY（未編號） | ODDITY | cConfiguration.cpp:116-124 | golden `edL09_Sh1LClick` :7680-7683 | 同一手法第二例：`ShowQwertyKey(...,true,1000,-1000)`，Min/Max 顛倒 | 同上 | AI(W906-FW3-Config-WA) 20260820 |
 | 3 | GOLDEN ODDITY（未編號） | ODDITY | cConfiguration.cpp:153-161 | golden `edtSetIPSCQtyClick` :7700-7703 | 同一手法第三例：`ShowQwertyKey(...,true,60000,0)`，Min/Max 顛倒 | 同上 | AI(W906-FW3-Config-WA) 20260820 |
 | 4 | golden copy-paste bug（未編號，RECON 4.3 記載） | BUG | forms/fConfiguration.h:67-74（banner 揭露；`sbUpdateHPClick` 本身本波未宣告） | golden `sbUpdateHPClick` :7088-7111（RECON #98） | `sbUpdateHPClick`（儲存 HP 表格的按鈕）複製貼上自 `sbUpdateTrayClick`，實際執行的卻是重新載入 TRAY 格與清除 TRAY 按鈕的 Down 狀態，而非 HP 格自己的對應動作 | `sbUpdateHPClick`/`sbUpdateTrayClick` 皆屬 (b) write-path，本波依 RECON 6.2 指示刻意不排入顯示側波次，未翻譯；記錄供未來寫入波次處理時得知這是 golden 既有瑕疵、需照翻 | RECON_cConfiguration_displayside.md §4.3（引用於 AI(W906-FW3-Config-WA) 20260820） |
+| 5 | GOLDEN ODDITY（本輪新增，FW-CFG-W7） | ODDITY | cConfiguration.cpp:6484-6512 | golden `edtSearchFunctionChange` :7113-7146 | 搜尋框只處理 0 字與 >=2 字兩種長度：`if(Length()==0){全部歸位}` `else if(Length()>=2){過濾}`。**打第一個字時兩個分支都不進**，畫面停在前一次的過濾狀態。 | 使用者刪到剩一個字時看到的仍是上一輪的過濾結果，直到刪光或再打一個字才更新；純顯示，不影響設定值。 | FW-CFG-W7 逐句忠實度複驗時發現（Steven 20210730 加的快速搜尋 Config 功能） |
 
 ### BinDisplay/MyBinDisp.h + MyBinDisp.cpp（11 筆，20260824 R7 增 7 筆——FW-BINDISP3 協定子類波）
 

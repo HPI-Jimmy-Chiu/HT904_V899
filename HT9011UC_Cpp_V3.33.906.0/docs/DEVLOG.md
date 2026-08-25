@@ -10382,6 +10382,107 @@ golden 把這三個放在**檔案層**（golden cConfiguration.cpp:58/:63/:86）
 全新雙 dir `build_cfg6g` / `build_cfg6r`。**Debug 137/142、Release 137/142，常駐五項。**
 census：該檔 2,044 → **1,735 行**（缺的方法 84 → **67**）；全樹 → **52,743 行**。
 
+## 20260825 XV — FW-CFG-W7：cConfiguration 16 個 UI 處理器，外加篩選器的第三個缺口
+
+### 交付
+
+`cConfiguration.cpp` +253 行、`forms/fConfiguration.h` +65 行。golden 的 16 個
+`TfConfiguration` 方法翻進來：
+
+| 方法 | golden | 做什麼 |
+|---|---|---|
+| `edtSearchFunctionChange` | :7113-7146 | Config 快速搜尋框（Steven 20210730） |
+| `SetSoftSpeedSpeed` | :5967-5989 | soft speed 全體加減，夾在 1000~100000 |
+| `btnAdd1000Click` / `btnAdd10000Click` / `btnDec1000Click` / `btnSetTo1000Click` | :5429 起四支 | 上一支的四個按鈕外皮 |
+| `btHeaterSelectAllClick` / `btHeaterClearSelectClick` | :5468-5484 | heater 勾選全選/全清 |
+| `sbN15UserLevelByTxtReadFilePathClick` / `spbA25_RunExecutFilePathChoiceClick` / `btN06_TesterListClick` / `btN06_TesterMapClick` | :6585 起四支 | 四個檔案選擇按鈕 |
+| `btnRecordJamRateByTimeClearClick` | :7148-7152 | 清 Jam Rate 計數 |
+| `btD47Click` | :5490-5494 | 清 D47 socket 測試數 |
+| `btnSetIPSCQtyClick` | :7700-7703 | 設 IPSC 倒數數量 |
+| `btnAutoSaveSetAllClick` | :6690 起 | AutoSaveLog 七欄全設 On |
+
+忠實度複驗：**LIVE 敘述 76 條，golden 無逐字對應 18 條**，18 條全部是簽章行
+（`__fastcall` 剝除 ＋ `TObject *` → `void *`，其中兩支簽章跨兩行故 16 支出 18 行），
+與 W6 的 17 條同一形狀，無其他偏離。
+
+### 三個新 gate
+
+- **`GATE (W7-Search)`** — `edtSearchFunctionChange` 裡兩行
+  `Temp->SourceControl->Parent=scrlbxSearch; ->Align=alTop;`。
+  `class TScrollBox` 全樹零 port（`forms/fSetup.h:324-325` 為了 golden `cSetUp.h:84`
+  的 `scrlbxSocketSensor` 已經量過同一件事），`vclcompat::TControl` 也沒有
+  `Parent`/`Align`，`alTop` 不存在。只 gate 這兩行、不 gate 整支：不命中的那一支
+  `SetToDefaultPosition()` 保持 live，方向是**收窄**（少做搬移，不多做任何事）。
+- **`GATE (W7-IPSC)`** — `btnSetIPSCQtyClick` 兩行寫 `fProductionInfo->`。
+  跨表單全域，本樹沒有 port（`forms/fCounterClear.h:47-53` 為同一物件已開過 gate）。
+- `cbTempSelsct[tcTotalCount]`（golden 檔案層 :60）以零初始化加入。golden 在建構子
+  :153 `new TCheckBox(this)` 後 :154 立刻 `->Parent=gbSendTemp`，那條路本 facade 沒有
+  （同 `GATE (W5-CCE)`）。**這不是新降級**：golden 自己的兩支 heater 按鈕就寫了
+  `if(cbTempSelsct[i]!=NULL)`（:5470、:5481），對 NULL 的容忍是 golden 的。
+
+### 兩個安全項退出，其中一個是工具抓的
+
+原本排 18 支，最後交 16 支。
+
+1. **`btnSetToTechClick`（golden :5978-5981）** — 本體只有 `SetOffsetToTech();`。
+   那支自由函式在 `cinitial.cpp:13925-14265`，把目前 offset 累加進 `Tech.*`：
+   `Tech.iInArmLoadStageX += InArmOffSet[InOfsLoader]->GetX();`（:13958 起，340 行）。
+   那是入料/出料手臂與 shuttle 的教導座標，馬達實際會走到的位置。
+   golden 自己在 :13950 先跳 `MessageDlg("Sure to Set Offset To Tech?")` 要人確認。
+   → 安全項，佇列。
+
+2. **`LoadConfiguration`（golden :7591-7595）** — 本體是
+   `ReadLastDataFile(); ReadLastSetIni();`。**兩個都叫 Read**，但
+   `ReadLastSetIni`（`cprod.cpp:2958-3071`）會寫回產線設定檔：
+   - :2993 `WriteIniData(szDir, "Hotplate Form", "Using Flag", ...)`
+   - :2998 `WriteIniData(sPath, "Tray", "bRecordSkipPosition", ...)`
+   - :3037 `WriteIniDataGeneral("System", "USE_SOCKET_SENSOR", ...)` → `system\Gerneral.ini`
+
+   最後那支就是本樹 20260817 被整檔重寫過的那個檔案。→ write path，佇列。
+   （`ReadLastDataFile` 本身三個 `CreateFile` 全是 `GENERIC_READ`/`OPEN_EXISTING`，
+   對檔案是唯讀的；但它 :1769 呼叫 `fMain->ModifyTester(OFF_LINE)` 切 tester 上下線。）
+
+第 2 條**人工讀不出來**——兩行都叫 Read，本體五行，看起來無害。是新加的工具抓的。
+
+### 篩選器的第三個缺口：只掃本體，不跟自由函式
+
+`screen_methods.py` 到今天為止只掃 handler **自己的本體**。所以「本體只有一行函式呼叫」
+的那種一律判乾淨。這是同一種病的第三個器官：
+
+| # | 漏掉的類別 | 誤判實例 |
+|---|---|---|
+| 1 | 跨表單呼叫 | `btnN31_ManualClick`（FTP 上傳）、`btnN25_3_ManualClick`（EventLog 命令）、`btnN35_TestClick`（存檔上傳）、`btnA71ManuallyClick`（批次複製 recipe） |
+| 2 | `CopyFile` 一族 | `ReadConfigStandard`（`CopyFile(config_Standard.ini -> config.ini)`） |
+| 3 | 自由函式 | `btnSetToTechClick`、`LoadConfiguration`（本波） |
+
+新增 `tools/wavescan/freefunc_index.py`：掃 golden 全樹 `.cpp`，建
+**2,429 個自由函式**的「名稱 → (檔, 起行, 迄行)」索引，存 `.freefunc_cache.tsv`
+（衍生檔，已進 `.gitignore`；golden 是唯讀樹所以不會過期）。
+`screen_methods.py` 對每個 handler 本體裡呼叫到的自由函式各掃一次同一組風險樣式。
+
+兩個設計選擇，都寫在工具註解裡：
+
+- **只跟一層。** 兩層以上幾乎把全樹染紅，篩選就失去鑑別力。
+- **`CreateFile` 只認寫模式**（`(?![^)]*GENERIC_READ)`）。Win32 讀寫共用同一支 API，
+  不加這個負向前瞻的話每個讀檔函式都亮紅燈——`ReadLastDataFile` 就是活例子，
+  它被正確地**不**判為寫檔，只留下「跨表單呼叫」那一條。
+
+### ledger
+
+`GOLDEN_DEFECT_LEDGER.md` / `.html` 各 +1 列（725 → 726）：
+`edtSearchFunctionChange` 只處理 0 字與 >=2 字兩種長度，
+**打第一個字時兩個分支都不進**，畫面停在前一次的過濾狀態。
+`cConfiguration.cpp` 分節 4 → 5 筆，ODDITY 小計 74 → 75。
+
+> html 那兩個統計格本來就比 md 舊（缺 FW-CFG-W4a / FW-OBS-W2 的說明文字），
+> 本次只把數字往前推一格並標明來源，**沒有假裝把整份渲染差異補齊**。
+
+### 一個過程上的錯
+
+第一次 gate 在跑到 192 個檔時被我停掉——因為 deep pass 是在 gate 開跑之後才寫完的，
+`LoadConfiguration` 退出讓樹變了。**數字必須在最後一次整併之後量**，所以停掉、
+刪 `build_cfg7g`、重跑。停在 192 檔比事後發現量的是舊樹便宜。
+
 ### 🔖 RESUME（20260825 日終）
 
 - **今日全收（本節之前的 20260825 I-VII，共 7 波）**：FW-BARCODE2／FW-BARCODE3
@@ -10453,14 +10554,29 @@ census：該檔 2,044 → **1,735 行**（缺的方法 84 → **67**）；全樹
   `Interface/TesterTCP.cpp`（剩餘明確是 UI 軸，要先立 TfTesterTCP facade）。
   **這是戰役層級的訊號**：容易且自足的缺口已經取完，剩下的 census 缺口
   大多需要裁定（安全、write path、UI 軸、狀態分裂債）而不只是翻譯工。
-- **cConfiguration 進度**：W1〜W6 全收，缺的方法 129 → **67**，缺行 7,101 → **1,735**。
+- **cConfiguration 進度**：W1〜**W7** 全收。`survey_file.py` 20260825 量：
+  golden 方法 **129**，port 已有 **81**、缺 **48**，缺行 **1,514**。
+  （W7 前是 65 個定義／缺 64 支——**上一版 RESUME 寫的「67」是錯的**，
+  同段下方「census 的 64 個缺口」才是對的。W7 新增剛好 16 個定義，
+  用 `git show HEAD:` 對兩份檔案取 `TfConfiguration::\w+(` 集合差驗過。）
   剩下的大塊：CheckConfigurationBeforeSave（393）、FormClose（208）、
   UpdateUT150Comm（168）、InitialMemo（85）、golden 的 ctor（117，寫入路徑）。
+- **FW-CFG-W7 交付**（本節上方 20260825 XV）：16 個 UI 處理器，
+  `cConfiguration.cpp` +253 行、`forms/fConfiguration.h` +65 行；
+  新 gate 三個（W7-Search／W7-IPSC／`cbTempSelsct` 零初始化）；
+  忠實度 76 條 LIVE／18 條無逐字對應（全是簽章行）。台帳 725 → **726**。
 - ⚠ **安全佇列新增一筆（20260825 XIV）**：`TfConfiguration::chkHeaterClick`
   （golden cConfiguration.cpp:5694-5708）——整個本體是
   `SW[SwHeaterRelay].OnOff()` 加上加熱風扇與冷却風扇，**切真實硬體輸出**。
   未翻並且不宣告 stub，等使用者在場時一次處理。
   同批待議：`cbA09Click`（發 MES1645/1646 警報）、`cbC12Click`（KYEC 密碼閘）。
+- ⚠ **安全佇列再增兩筆（20260825 XV，FW-CFG-W7）**：
+  `btnSetToTechClick`（golden :5978）——本體只有 `SetOffsetToTech()`，那支
+  `cinitial.cpp:13925-14265` 把 offset 累加進 `Tech.*` 教導座標（手臂與 shuttle
+  實際會走到的位置），golden 自己 :13950 先跳 MessageDlg 要人確認；
+  `LoadConfiguration`（golden :7591）——`ReadLastSetIni()`（`cprod.cpp:2993/2998/3037`）
+  會 `WriteIniData` 與 `WriteIniDataGeneral` 寫回 `system\Gerneral.ini`，是 write path。
+  兩支都**未翻、未宣告 stub**，理由寫在 `forms/fConfiguration.h` 的排除登記裡。
 - ⚠ **`FormClose`（208 行）經篩選後排除**（本來被指定為下一波）：
   它送 TTL 硬體指令 `fMain->Send_Command_TTL("@00WDUTS00000000")`（golden :5806-5810）、
   呼叫 `SaveEventLogAutoSaveInfo()`（寫 config.ini）與 `InitShuttleThreadParameter()`，
@@ -10471,10 +10587,17 @@ census：該檔 2,044 → **1,735 行**（缺的方法 84 → **67**）；全樹
   `btHeaterClearSelectClick` 不在此列。
 - **開波前的五個檢查已入版控**：`tools/wavescan/`（README 寫了每一支是
   因為什麼代價而存在）。**下一個標的一律先跑完那五步再動手。**
-- **下一步建議**：用 `screen_methods.py` 的 68 個「乾淨」名單交集 census 的 64 個缺口，
-  取其中純 UI 的一批（keypad 啟動器 `ed*Click`、grid 選取、`EnableRMSFunc`
-  這種純述詞）；名字帶 Manual/Test/Send/Update 的一律先開 golden 看。
-  之後再評估 `SECSGEM/uHGemEquipment.cpp`（2,935 行，header 有 2 個排除段要先讀）。
+- **篩選器 20260825 第三次補強**：新增 `tools/wavescan/freefunc_index.py`
+  （golden 全樹 2,429 個自由函式的名稱→檔行索引），`screen_methods.py` 現在會
+  **跟進自由函式一層**。當波就抓到兩個：`btnSetToTechClick`（→`SetOffsetToTech`
+  改 `Tech.*` 教導座標）與 `LoadConfiguration`（→`ReadLastSetIni` 寫
+  `system\Gerneral.ini`）。**名字裡有 Read 的也會寫檔**，這是第 3 個缺口的教訓。
+  同時把 `CreateFile` 收斂成只認寫模式，否則每個讀檔函式都亮紅燈。
+- **下一步建議**：cConfiguration 剩 48 支／1,514 行，其中大塊都已知有阻塞
+  （見上）。建議先跑 `screen_methods.py cConfiguration.cpp TfConfiguration`
+  取新的「乾淨」名單（deep pass 會讓這份名單比上一輪短），挑純 UI 的一批做 W8；
+  若剩下的都帶阻塞，就換 `SECSGEM/uHGemEquipment.cpp`
+  （2,935 行，header 有 2 個排除段要先讀）。
 - **等使用者（本波未動，只是重列）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
   HAL-MOT1 十問（Q1/Q9/Q4 擋新 mot_table 起草）；TImage headless 准駁；
   GOLDEN BUG (TAG1-a) edSHighBase；GOLDEN DEFECT (i) 21-into-20 sprintf overflow。

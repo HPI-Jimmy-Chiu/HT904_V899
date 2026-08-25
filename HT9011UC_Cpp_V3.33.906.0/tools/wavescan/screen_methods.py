@@ -14,6 +14,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from goldenscan import load, code_only
+import freefunc_index
 
 GOLD = 'D:/HT9045/HT9011UC_Code_V3.33.906.0_20260618/'
 
@@ -25,7 +26,11 @@ RISK = [
     # 20260825 二次加強：第一版漏了 CopyFile 這一族，於是 ReadConfigStandard
     # 被判成「乾淨」——它其實會 CopyFile(config_Standard.ini -> config.ini)，
     # 直接覆蓋產線設定檔。檔案搬移／刪除與寫入同級。
-    ('寫檔/寫ini', r'\bWriteIniData\s*\(|\bSaveToFile\s*\(|\bWriteFile\s*\(|\bCreateFile\s*\('
+    # CreateFile 在 Win32 讀寫共用，所以只認寫模式；不然每個讀檔函式都會亮紅燈，
+    # deep pass 會失去鑑別力（實例：ReadLastDataFile 三個 CreateFile 全是
+    # GENERIC_READ/OPEN_EXISTING，cprod.cpp:1642/1654/1675）。
+    ('寫檔/寫ini', r'\bWriteIniData\w*\s*\(|\bSaveToFile\s*\(|\bWriteFile\s*\('
+                   r'|\bCreateFile\s*\((?![^)]*GENERIC_READ)'
                    r'|SaveEventLogAutoSaveInfo\s*\(|\bCopyFile\w*\s*\(|\bMoveFile\w*\s*\('
                    r'|\bDeleteFile\w*\s*\(|\bRemoveDir\w*\s*\(|\bRenameFile\s*\('),
     ('緒/參數初始化', r'\bInit\w*ThreadParameter\s*\('),
@@ -63,6 +68,37 @@ def span(a):
     return nxt - 1
 
 
+# 20260825 三次加強：只掃 handler 自己的本體會漏掉「本體只有一行函式呼叫」的那種。
+# btnSetToTechClick 的全部內容就是 `SetOffsetToTech();`，而那支（cinitial.cpp:13925）
+# 會把 offset 累加進 Tech.* 教導座標。所以再跟**一層**自由函式。
+# 只跟一層：兩層以上幾乎全樹染紅，篩選就沒有鑑別力了。
+FFIDX = freefunc_index.get()
+CALL = re.compile(r'(?<![\w>.])([A-Za-z_]\w*)\s*\(')
+SKIPCALL = {'if', 'for', 'while', 'switch', 'return', 'sizeof', 'atoi', 'atof',
+            'sprintf', 'strcpy', 'strlen', 'memset', 'int', 'double', 'float',
+            'bool', 'char', 'dynamic_cast', 'static_cast'}
+_bodycache = {}
+
+
+def deep_hits(body_text):
+    """對本體裡呼叫到的自由函式各掃一次風險，回傳 [(函式名, 風險)]。"""
+    out = []
+    for nm in sorted(set(CALL.findall(body_text))):
+        if nm in SKIPCALL or nm not in FFIDX:
+            continue
+        if nm not in _bodycache:
+            try:
+                _bodycache[nm] = freefunc_index.body(nm, FFIDX) or ''
+            except Exception:
+                _bodycache[nm] = ''
+        sub = _bodycache[nm]
+        h = [k for k, p in RISK if re.search(p, sub)]
+        if h:
+            f, s, e = FFIDX[nm]
+            out.append(('%s (%s:%d)' % (nm, f, s), h))
+    return out
+
+
 print('%-38s %5s  %s' % ('方法', '行數', '風險'))
 print('-' * 96)
 clean = []
@@ -72,9 +108,12 @@ for a, name in defs:
     b = span(a)
     body = '\n'.join(l for i, l in enumerate(lines[a:b + 1]) if not l.strip().startswith('//'))
     hits = [k for k, p in RISK if re.search(p, body)]
-    mark = '、'.join(hits) if hits else '—'
+    deep = deep_hits(body)
+    mark = '、'.join(hits) if hits else ('—' if not deep else '')
     print('%-38s %5d  %s' % (name, b - a + 1, mark))
-    if not hits:
+    for fnm, h in deep:
+        print('%-38s %5s  [deep] %s -> %s' % ('', '', fnm, '、'.join(h)))
+    if not hits and not deep:
         clean.append(name)
 
 print()

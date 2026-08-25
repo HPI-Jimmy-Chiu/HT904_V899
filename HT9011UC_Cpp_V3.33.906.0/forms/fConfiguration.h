@@ -293,6 +293,24 @@ public:
     virtual ~TfConfigurationGroupBox() {}
 };
 
+class TfConfigurationOpenDialog : public vclcompat::TObject
+{
+public:
+    // golden TOpenDialog -- FormShow's file-choice buttons call ->Execute() and
+    // then read ->FileName. There is no modal file picker in a headless build,
+    // so Execute() always returns false ("user cancelled") and FileName stays
+    // empty. Exactly the shape forms/fLotInfo.h's TfLotInfoOpenDialog already
+    // uses, and this tree's stated convention: "no UI -> the interactive path
+    // never completes".
+    AnsiString FileName;
+    AnsiString Title;
+    AnsiString Filter;       // golden 設 "*.TXT|*.TXT" 之類，headless 下純紀錄
+    AnsiString DefaultExt;
+    AnsiString InitialDir;
+    bool Execute() { return false; }
+    virtual ~TfConfigurationOpenDialog() {}
+};
+
 class TfConfigurationTimer : public vclcompat::TControl
 {
 public:
@@ -2006,6 +2024,53 @@ public:
     TLabel        *labD25_2               = new TLabel();   // golden cConfiguration.h:135
     TLabel        *labD25_3               = new TLabel();   // golden cConfiguration.h:134
     TLabel        *labD60                 = new TLabel();   // golden cConfiguration.h:948
+
+    // ========================================================================
+    // AI(W906-FW-CFG-W7) 20260825: 18 個 UI 處理器（keypad 啟動、soft-speed
+    // 調整、heater 勾選、檔案選擇、搜尋框過濾）。簽章由定義生成。
+    //
+    // 本波刻意排除，理由記在這裡（tools/wavescan 的五步篩出來的）：
+    //   ReadConfigStandard (golden :7597-7609) -- 整個函式的作用就是
+    //     CopyFile(config_Standard.ini -> config.ini)，直接覆蓋產線設定檔。
+    //     write path，佇列。
+    //   UT150Polling / sbSendTempClick / UpdateUT150Comm -- UT150 溫控器
+    //     通訊家族，UT150Polling 會武裝輪詢執行緒讀的 bPollingUT150[]。佇列。
+    //   InitialMemo / ShowMemo -- InitialMemo 走 TWinControl 控制項樹，
+    //     本 facade 沒有（同 GATE (W5-CCE) 的缺口）；ShowMemo 的內容全靠它。
+    //   FormDestroy -- 刪的是 golden 建構子建的 widget 陣列，且用 ->Parent=NULL。
+    //   btnSetToTechClick (golden :5978) -- 本體只有 SetOffsetToTech()，那支
+    //     (cinitial.cpp:13925-14265) 把 offset 累加進 Tech.* 教導座標；golden 自己
+    //     在 :13950 先跳 MessageDlg 要人確認。安全項，佇列。
+    //   LoadConfiguration (golden :7591) -- 本體是 ReadLastDataFile()+ReadLastSetIni()，
+    //     名字全是 Read，但 ReadLastSetIni (cprod.cpp:2993/2998/3037) 會 WriteIniData
+    //     與 WriteIniDataGeneral 寫回 system\Gerneral.ini。write path，佇列。
+    //     這兩條是 tools/wavescan 新增的 deep pass 抓的（跟進自由函式一層），
+    //     人工只讀 handler 本體讀不出來。
+    // ========================================================================
+    virtual void edtSearchFunctionChange(void *Sender);   // golden :7113-7146
+    virtual void SetSoftSpeedSpeed(bool clear,int value);   // golden :5444-5466
+    virtual void sbN15UserLevelByTxtReadFilePathClick(void *Sender);   // golden :6687-6698
+    virtual void spbA25_RunExecutFilePathChoiceClick(void *Sender);   // golden :6705-6716
+    virtual void btHeaterSelectAllClick(void *Sender);   // golden :5468-5475
+    virtual void btHeaterClearSelectClick(void *Sender);   // golden :5477-5484
+    virtual void btnRecordJamRateByTimeClearClick(void *Sender);   // golden :6585-6591
+    virtual void btD47Click(void *Sender);   // golden :5956-5960
+    virtual void btnSetIPSCQtyClick(void *Sender);   // golden :7148-7152
+    virtual void btnDec1000Click(void *Sender);   // golden :5434-5437
+    virtual void btnSetTo1000Click(void *Sender);   // golden :5439-5442
+    virtual void btnAdd1000Click(void *Sender);   // golden :5429-5432
+    virtual void btnAdd10000Click(void *Sender);   // golden :5973-5976
+    virtual void btnAutoSaveSetAllClick(void *Sender);   // golden :6331-6337
+    virtual void btN06_TesterListClick(void *Sender);   // golden :6157-6163
+    virtual void btN06_TesterMapClick(void *Sender);   // golden :6339-6345
+
+    // golden cConfiguration.h:943 `TLabeledEdit *edtSearchFunction;`
+    // （Steven 20210730 加的 Config 快速搜尋框）
+    TLabeledEdit  *edtSearchFunction        = new TLabeledEdit();
+
+    TfConfigurationOpenDialog *OpenDialog1 = new TfConfigurationOpenDialog();
+    TfConfigurationOpenDialog *OpenDialog2 = new TfConfigurationOpenDialog();
+    TfConfigurationOpenDialog *OpenDialog3 = new TfConfigurationOpenDialog();
 };
 
 #endif // FORMS_FCONFIGURATION_H

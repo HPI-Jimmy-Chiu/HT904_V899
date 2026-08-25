@@ -65,12 +65,22 @@ python tools/wavescan/screen_methods.py cConfiguration.cpp TfConfiguration [方�
 緒參數初始化、警報/對話框、golden 自帶的 `AI(safety` 標記、**跨表單呼叫**、送命令/上傳。
 
 ⚠ **「乾淨」的意思是「這些樣式沒命中」，不是「安全」。**
-第一版少了「跨表單呼叫」那一類，於是 `btnN31_ManualClick`（觸發 FTP 溫度補償上傳）、
-`btnN25_3_ManualClick`（送 EventLog 上傳命令）、`btnN35_TestClick`（存檔並上傳）、
-`btnA71ManuallyClick`（批次複製 recipe）全被判成乾淨。補上那一類之後，
-同一個檔的「乾淨」從 110 個掉到 68 個。
+這支被同一種病補過三次，每次都是「風險在別的地方，本體看起來很乾淨」：
 
-**名字裡有 Manual / Test / Send / Update 的，一律親眼開 golden 看過再決定。**
+| # | 漏掉的類別 | 被誤判成乾淨的實例 |
+|---|---|---|
+| 1 | 跨表單呼叫 | `btnN31_ManualClick`（FTP 溫度補償上傳）、`btnN25_3_ManualClick`（送 EventLog 上傳命令）、`btnN35_TestClick`（存檔並上傳）、`btnA71ManuallyClick`（批次複製 recipe） |
+| 2 | `CopyFile` 一族 | `ReadConfigStandard` —— 整支的作用就是 `CopyFile(config_Standard.ini -> config.ini)`，覆蓋產線設定檔 |
+| 3 | **自由函式（跟一層）** | `btnSetToTechClick` 本體只有 `SetOffsetToTech();`，那支在 `cinitial.cpp:13925` 把 offset 累加進 `Tech.*` 教導座標；`LoadConfiguration` 本體是 `ReadLastDataFile(); ReadLastSetIni();`，**兩個都叫 Read**，但 `ReadLastSetIni`（`cprod.cpp:3037`）會 `WriteIniDataGeneral` 寫回 `system\Gerneral.ini` |
+
+補第 1 類之後同一個檔的「乾淨」從 110 掉到 68。
+
+第 3 類由 `freefunc_index.py` 支援（golden 全樹 2,429 個自由函式的名稱→檔行索引，
+建一次存 `.freefunc_cache.tsv`）。**只跟一層**：兩層以上幾乎全樹染紅，篩選失去鑑別力。
+`CreateFile` 只認寫模式（Win32 讀寫共用同一支 API），否則每個讀檔函式都會亮紅燈。
+
+**名字騙人是常態，不是例外。** 名字裡有 Manual / Test / Send / Update 的一律親眼看過；
+第 3 類的教訓是**名字裡有 Read 的也一樣**。
 
 ## 4. `wave_extract.py` —— 抽出本體並列出缺的識別字
 

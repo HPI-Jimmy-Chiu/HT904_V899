@@ -13,3 +13,4 @@ cmake_install.cmake
 Makefile
 CTestTestfile.cmake
 Testing/
+tools/wavescan/.freefunc_cache.tsv
