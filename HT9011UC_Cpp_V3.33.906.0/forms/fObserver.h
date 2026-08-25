@@ -77,6 +77,32 @@
 //                                                                     BtnQueryClick's AMKOR/Microchip MTBF tail --
 //                                                                     documented no-op stub, see GATE REGISTER 3)
 //
+//  AI(W906-FW3-Observer-W2) 20260825 -- SCOPE OF THE TABLE ABOVE, stated so it
+//  is not mistaken for a full inventory: it lists WAVE 1 ONLY. Wave 2's eleven
+//  methods (GetMachineData .. RecordIndexCycle) were declared without being
+//  added here, and Wave 3's fifty-eight are not here either. Rather than let a
+//  hand-kept table drift a third time, the authoritative per-method record now
+//  lives ON THE DECLARATIONS themselves: every Wave-2 and Wave-3 declaration
+//  below carries its golden line span in a trailing comment, and Wave 3's spans
+//  were MEASURED out of golden rather than transcribed (19 of the 58 the
+//  translation chunks cited were wrong). ACTIVE/GATED status likewise lives at
+//  each method's own banner in cObserver.cpp, which is the only place that
+//  cannot drift from the code.
+//
+//  WAVE 3 SUMMARY (the numbers, so this header still answers "how much"):
+//    58 methods merged 20260825 -- 13 display/lifecycle, 28 Precaution /
+//    MajorMaintenance record, 17 event-log & misc handlers.
+//    95 new members here = 88 widget pointers (20 tab/page + 68 that live
+//    translated statements dereference) + 7 scalars (bChangeRow[2],
+//    bIsLoaded[13] and the five Precaution-record flags). bTabVisible[20] is
+//    NOT among them: golden declares it at file scope (golden cObserver.cpp:57)
+//    and it is translated there, in cObserver.cpp.
+//    Gates: chunk A came with 40 blocks and ends with 24 -- FW3A-2, FW3A-5,
+//    FW3A-6 and FW3A-9 were all retired at integration after their premises
+//    were re-measured and failed (details in that chunk's own register).
+//    C-log-7/C-log-8 retired via a 4-field LeftAxis model; C-log-1 narrowed
+//    from a whole branch down to one ShowModal call.
+//
 //  DEVIATION -- CalculateStopTime/UnCalculateStopTime made public+static
 //  --------------------------------------------------------------------------
 //  Golden declares both `private` and non-static (cObserver.h:486-487). Read
@@ -213,6 +239,7 @@
 #include "vclcompat/vcl_compat.h"     // AnsiString, TStringList, TDateTime -- brought to global scope
 #include "vclcompat/Controls.h"       // TComboBox/TListBox/TRadioGroup/TPanel/TRadioButton (stock widgets, reused as-is)
 #include "vclcompat/StringGrid.h"     // vclcompat::TStringGrid -- TfObserverGrid's base
+#include "vclcompat/FileListBox.h"    // AI(W906-FW3-Observer-W2) 20260825: vclcompat::TFileListBox -- FileListBoxPrecautionLog / FileListBoxMajorMaintenance (golden cObserver.h:283/:257)
 #include "vclcompat/TrayCore.h"       // vclcompat::TrayCore -- TfObserverTray's composed core
 // AI(W906-FW3-Observer-W2) 20260818: myTimer.h -- TQPF_Timer, golden TfObserver::
 // tRecordInArmTimer (cObserver.h:549). Real, already-ported class (RecordInArmTime,
@@ -319,11 +346,30 @@ public:
         ~TitleHolder() { delete Text; }
     };
 
+    // AI(W906-FW3-Observer-W2) 20260825: golden TeeChart TChart->LeftAxis, used
+    // by edYieldMaxClick/edYieldMinClick (golden :3210/:3216) to rescale the
+    // Yield chart from two operator-editable fields. Only Maximum/Minimum are
+    // touched anywhere in golden's cObserver, so only those two are modelled.
+    // Write-only in this port -- no renderer reads them back yet -- but that is
+    // exactly the state a web view will need, and keeping the writes live is
+    // what makes the two handlers faithful instead of half-translated.
+    struct AxisHolder
+    {
+        double Maximum;
+        double Minimum;
+        AxisHolder() : Maximum(0.0), Minimum(0.0) {}
+    };
+
     bool        Visible;
     TitleHolder Title;
+    // Heap-allocated rather than a pointer to an inline member: golden spells it
+    // `->LeftAxis->Maximum`, so a pointer is required, and a pointer INTO this
+    // object would silently alias the original if the chart were ever copied.
+    // Same ownership idiom as TitleHolder::Text just above.
+    AxisHolder *LeftAxis;
 
-    TfObserverChart() : Visible(false) {}
-    virtual ~TfObserverChart() { for (size_t i = 0; i < seriesList_.size(); ++i) delete seriesList_[i]; }
+    TfObserverChart() : Visible(false), LeftAxis(new AxisHolder()) {}
+    virtual ~TfObserverChart() { delete LeftAxis; for (size_t i = 0; i < seriesList_.size(); ++i) delete seriesList_[i]; }
 
     // golden ->AddSeries(new TLineSeries(...)) -- this facade drops the VCL
     // owner-ctor-arg (no .dfm ownership tree offline); appends and returns
@@ -372,6 +418,35 @@ public:
 
     TfObserverDateTimePicker() {}
     virtual ~TfObserverDateTimePicker() {}
+};
+
+// ===========================================================================
+//  TfObserverPageControl -- golden TPageControl, plus the ->ActivePage pointer.
+//
+//  AI(W906-FW3-Observer-W2) 20260825: vclcompat::TPageControl models only
+//  ->ActivePageIndex (Controls.h:478-483). golden's cObserver ALSO uses
+//  ->ActivePage, the TTabSheet POINTER, in both directions:
+//      write  golden cObserver.cpp:608  pgcObserv->ActivePage=tsHanderMajorMaintenance;
+//      write  golden cObserver.cpp:671  pgcPrecautions->ActivePage=tsPrecautionsRecord;
+//      READ   golden cObserver.cpp:2384 pgcObserv->ActivePage==tsOEE_ProductionInfor
+//  In real VCL the two are views of one selection; this headless facade has no
+//  tab strip to reconcile them against, so ActivePage is an independent stored
+//  pointer -- exactly the shape forms/fLotInfo.h:815-820 already established
+//  for TfLotInfoPageControl, and for the same reason (that class's own note).
+//
+//  Defaults NULL: offline, no tab is "definitively active" until something
+//  assigns one, so the :2384 read falls through to its else -- the same
+//  conservative-default posture as every Visible/Enabled default in this
+//  facade. Note the two are NOT kept in sync with each other: nothing in the
+//  translated code ever writes one and reads the other, which is what makes
+//  two independent fields safe here rather than merely convenient.
+// ===========================================================================
+class TfObserverPageControl : public vclcompat::TPageControl
+{
+public:
+    vclcompat::TTabSheet *ActivePage;
+    TfObserverPageControl() : ActivePage(0) {}
+    virtual ~TfObserverPageControl() {}
 };
 
 // ===========================================================================
@@ -786,6 +861,260 @@ public:
     virtual bool StatisticalJamCountEnable(AnsiString asJamCode);    // golden :5301-5329
     virtual void btnSG_QueryNowClick(TObject *Sender);               // golden :5361-5364 (body translated, NOT wired)
     virtual void btnSG_QueryYesterdayClick(TObject *Sender);         // golden :5366-5369 (body translated, NOT wired)
+
+    // ========================================================================
+    // AI(W906-FW3-Observer-W2) 20260825: Wave 3's 58 methods.
+    //
+    // These declarations are GENERATED FROM THE DEFINITIONS the three chunks
+    // delivered, not transcribed from the method lists the chunks wrote for
+    // themselves -- a list can drift from the code beside it, a generator
+    // cannot. The golden ranges were then re-measured directly out of golden
+    // (locate `TfObserver::<name>(`, brace-match to the closing `}`): 19 of the
+    // 58 ranges the chunks cited were wrong, including two that both pointed at
+    // WriteCategoryData's :3274-3547 and one that made ShowVer look like a
+    // 3-line function when it is 81. The ranges below are the measured ones.
+    //
+    // `void *Sender` (not `TObject *Sender`) is this facade's convention -- the
+    // parameter is kept, named, wherever golden has it, so a future wiring
+    // layer has something to pass; see this file's own Wave-2 declarations.
+    // ========================================================================
+    // -- Wave 3 chunk A (display: form lifecycle + grid drawing), 13 methods
+    virtual void FormShow(void *Sender);                                           // golden :347-652
+    virtual void FormClose(void *Sender);                                          // golden :654-674
+    virtual void FormDestroy(void *Sender);                                        // golden :676-695
+    virtual void BtnExitClick(void *Sender);                                       // golden :697-706
+    virtual void StringGrid2DrawCell(void *Sender, int ACol, int ARow);            // golden :952-984
+    virtual void StringGrid3DrawCell(void *Sender, int ACol, int ARow);            // golden :988-1019
+    virtual void DrawCenterLine(int Mode, int iLeft, int iCellWidth);              // golden :1021-1076
+    virtual void DrawCellCounter(int iCol, int iRow, int iLeft, int iCellWidth);   // golden :1080-1132
+    virtual void DrawCellCategory(int iCol, int iRow, int Mode);                   // golden :1136-1299
+    virtual void StringGrid2MouseDown(void *Sender);                               // golden :1649-1654
+    virtual void StringGrid3MouseDown(void *Sender);                               // golden :1658-1663
+    virtual void rgRowNoClick(void *Sender);                                       // golden :1665-1668
+    virtual void StringGrid5DrawCell(void *Sender, int ACol, int ARow);            // golden :1672-1682
+
+    // -- Wave 3 chunk B (Precaution / MajorMaintenance records), 28 methods
+    virtual bool CheckKeyInPrecautionMemoInformation(int iType);      // golden :3973-4035
+    virtual void LoadPrecautionMenu();                                // golden :4037-4076
+    virtual void SavePrecautionMemoInformation();                     // golden :4078-4152
+    virtual void SavePrecautionParameter();                           // golden :4154-4183
+    virtual void LoadPrecautionParameter();                           // golden :4185-4225
+    virtual void LoadMajorMaintenanceMenu();                          // golden :4227-4261
+    virtual void LoadPrecautionLogMenu();                             // golden :4263-4285
+    virtual void LoadMajorMaintenanceLogMenu();                       // golden :4287-4309
+    virtual void SaveMajorMaintenanceInformation();                   // golden :4311-4389
+    virtual bool CheckKeyInMajorMaintenanceInformation(int iType);    // golden :4391-4421
+    virtual void sbScreenkeyboardClick(void *Sender);                 // golden :4431-4450
+    virtual void cobNoteContentsSetClick(void *Sender);               // golden :4452-4458
+    virtual void sbHandlerPrecautionRecordSetClick(void *Sender);     // golden :4460-4465
+    virtual void sbHandlerPrecautionRecordClearClick(void *Sender);   // golden :4467-4471
+    virtual void sbHandlerPrecautionFormShowClick(void *Sender);      // golden :4473-4492
+    virtual void sbPrecautionSaveClick(void *Sender);                 // golden :4494-4521
+    virtual void sbPRFinishDateClick(void *Sender);                   // golden :4523-4527
+    virtual void sbPRStartDateClick(void *Sender);                    // golden :4529-4533
+    virtual void sbMajorMaintenanceDateClick(void *Sender);           // golden :4535-4538
+    virtual void sbMajorMaintenanceStartTimeClick(void *Sender);      // golden :4540-4544
+    virtual void sbUndesirablePhenomenonClick(void *Sender);          // golden :4546-4550
+    virtual void sbCountermeasureClick(void *Sender);                 // golden :4552-4556
+    virtual void sbUndesirablePhenomenonClearClick(void *Sender);     // golden :4558-4562
+    virtual void sbCountermeasureClearClick(void *Sender);            // golden :4564-4567
+    virtual void sbMajorMaintenanceEndTimeClick(void *Sender);        // golden :4569-4572
+    virtual void sbMajorMaintenanceSaveClick(void *Sender);           // golden :4574-4594
+    virtual void sbMajorMaintenanceSearchClick(void *Sender);         // golden :4596-4678
+    virtual void sbSearchPrecautionLogClick(void *Sender);            // golden :4680-4753
+
+    // -- Wave 3 chunk C (event log / save / misc handlers), 17 methods
+    virtual void pgcObservChange(void *Sender);               // golden :2335-2389
+    virtual void BtnSaveClick(void *Sender);                  // golden :2393-2419
+    virtual void DateTimePicker1CloseUp(void *Sender);        // golden :2777-2784
+    virtual void Image1DblClick(void *Sender);                // golden :2786-2812
+    virtual void bAutoSaveEventLog(bool flag);                // golden :3001-3170
+    virtual void btAutoSaveClick(void *Sender);               // golden :3172-3175
+    virtual void lbltTotalLoaderMouseDown(void *Sender);      // golden :3177-3184
+    virtual void edYieldMaxClick(void *Sender);               // golden :3207-3211
+    virtual void edYieldMinClick(void *Sender);               // golden :3213-3217
+    virtual void mtRowAMouseUp(void *Sender, int X, int Y);   // golden :3243-3272
+    virtual void ShowVer();                                   // golden :3549-3629
+    virtual void btOpenLoadLogClick(void *Sender);            // golden :3638-3681
+    virtual void pgcMessageChange(void *Sender);              // golden :4766-4793
+    virtual void lstTimeDataClick(void *Sender);              // golden :4841-4844
+    virtual void btnBackupLogYearClick(void *Sender);         // golden :5371-5391
+    virtual void btnClearTimeClick(void *Sender);             // golden :5393-5399
+    virtual void btnLot1Click(void *Sender);                  // golden :5401-5424
+
+    // ========================================================================
+    // AI(W906-FW3-Observer-W2) 20260825: TAB SURFACE + Precaution-record state.
+    //
+    // WHY NOW, AND WHY THESE. Wave 3's three translation chunks arrived with
+    // gates FW3A-2 / FW3A-5 / FW3A-6 covering all of this. Re-measuring the
+    // gate PREMISES during integration found two different failures:
+    //
+    //   FW3A-2 claimed `rg "TTabSheet|TPageControl" -g '*.h' vclcompat/ forms/`
+    //   returned 0 hits. That is simply false -- vclcompat/Controls.h:478/:487
+    //   have carried both classes since commit 1a74870 (W7-A1 + W7-F0), long
+    //   before this wave. What was genuinely missing was the MEMBERS, below.
+    //
+    //   FW3A-5/FW3A-6 claimed the Precaution-record members and the five
+    //   Load*/Save* methods exist nowhere. True when each chunk agent ran, and
+    //   stale by the time they landed: chunk B defines LoadPrecautionMenu,
+    //   LoadMajorMaintenanceMenu, LoadPrecautionLogMenu,
+    //   LoadMajorMaintenanceLogMenu and SavePrecautionParameter; chunk C
+    //   defines ShowVer and reads bIsLoaded on 10 lines. Wave 1's own ctor note
+    //   (cObserver.cpp:497-503) deferred these members to "the wave that
+    //   translates the Precautions tab" -- this is that wave.
+    //
+    // NSDMI throughout, for the same reason the block above states: Wave 1's
+    // ctor body is append-only content this wave does not reorder.
+    //
+    // NOT a member: golden's `bool bTabVisible[20]` is FILE-SCOPE in golden
+    // cObserver.cpp:57, not a class member -- it lands as a TU-local static in
+    // cObserver.cpp beside bShowYieldAll, matching this port's handling of
+    // golden's other file-scope arrays. (The gate text called it
+    // `bTabVisible[8]`; only indices 0..7 are ever used, but the declaration is
+    // 20 wide and is translated at its real width.)
+    // ========================================================================
+    TTabSheet *tsScanner                = new TTabSheet();   // golden cObserver.h:36
+    TTabSheet *tsCounter                = new TTabSheet();   // golden cObserver.h:34
+    TTabSheet *tsTestCate               = new TTabSheet();   // golden cObserver.h:35
+    TTabSheet *tsMDBQuery               = new TTabSheet();   // golden cObserver.h:37
+    TTabSheet *tsYield                  = new TTabSheet();   // golden cObserver.h:50
+    TTabSheet *tsTestInfo               = new TTabSheet();   // golden cObserver.h:52
+    TTabSheet *tsTemperature            = new TTabSheet();   // golden cObserver.h:57
+    TTabSheet *tsMDB                    = new TTabSheet();   // golden cObserver.h:153
+    TTabSheet *tsOEE_ProductionInfor    = new TTabSheet();   // golden cObserver.h:186
+    TTabSheet *tsDataRecord             = new TTabSheet();   // golden cObserver.h:189
+    TTabSheet *tsPrecautionsRecord      = new TTabSheet();   // golden cObserver.h:191
+    TTabSheet *tsHanderMajorMaintenance = new TTabSheet();   // golden cObserver.h:225
+    TTabSheet *tsPrecautionLog          = new TTabSheet();   // golden cObserver.h:258
+    TTabSheet *tsIndexAirOn1            = new TTabSheet();   // golden cObserver.h:302
+    TTabSheet *tsIndexAirOn2            = new TTabSheet();   // golden cObserver.h:303
+    TTabSheet *tsLotInfo                = new TTabSheet();   // golden cObserver.h:306
+
+    // pgcObserv/pgcPrecautions need ->ActivePage (golden :608/:671/:2384) so they
+    // take the TfObserverPageControl subclass; the other two only ever touch
+    // ->ActivePageIndex, so they stay on the plain vclcompat type -- the same
+    // mixed usage forms/fLotInfo.h:1078 already established.
+    TfObserverPageControl *pgcObserv      = new TfObserverPageControl();  // golden cObserver.h:33
+    TfObserverPageControl *pgcPrecautions = new TfObserverPageControl();  // golden cObserver.h:190
+    TPageControl          *pgcTestInfo    = new TPageControl();           // golden cObserver.h:53
+    TPageControl          *pgcMessage     = new TPageControl();           // golden cObserver.h:152
+
+    bool bChangeRow[2] = {false, false};           // golden cObserver.h:483
+    bool bIsLoaded[13] = {};                       // golden cObserver.h:491
+    bool bSavePrecautionRecordFinish = false;      // golden cObserver.h:523
+    bool bStartPrecautionRecord = false;           // golden cObserver.h:524
+    bool bChangeReciepeSaveMajorMaintenanceRecord = false;   // golden cObserver.h:525
+    bool bShowMajorMaintenanceRecord = false;      // golden cObserver.h:526
+    AnsiString asStartPrecautionRecordMOId;        // golden cObserver.h:527 (self-defaults to "")
+
+    // ========================================================================
+    // AI(W906-FW3-Observer-W2) 20260825: the 68 widget members chunks B and C
+    // dereference. Derived MECHANICALLY, not from either chunk's own list: the
+    // merged file was compiled, every "was not declared in this scope" name
+    // collected, and each looked up in golden cObserver.h for its real VCL type
+    // (the golden line is cited on every line below). Nothing here is a guess
+    // about what the form "probably has".
+    //
+    // WHERE THE LINE IS. This wave adds a member when a LIVE translated
+    // statement dereferences it -- i.e. when the tree does not compile without
+    // it. It does NOT add members whose only call sites sit inside a gate: the
+    // ~34 caption sinks behind GATE FW3A-4 (labDeviceName, APHeadLabel13/14/18,
+    // labReleaseDate, Button7, btAutoSave, CheckBox1, grpATCSerialNumber,
+    // labDayJamRate, RadioButton17..20, the 17 SPIL pal* panels) are equally
+    // addable and are deliberately QUEUED, because adding them means un-gating
+    // as well, which is a decision with its own acceptance gate rather than a
+    // side effect of making this merge build.
+    //
+    // Type mapping: golden TPanel/TEdit/TMemo/TComboBox/TSpeedButton/TButton go
+    // to the vclcompat classes of the same name; golden TFileListBox to
+    // vclcompat::TFileListBox; golden TDateTimePicker to this file's own
+    // TfObserverDateTimePicker (the same stand-in DateTimePicker1..4 use).
+    // NSDMI for the same reason as every block above -- Wave 1's ctor body is
+    // append-only content this wave does not reorder.
+    // ========================================================================
+    // golden TPanel (33)
+    TPanel                     *labVersion                       = new TPanel(); // golden cObserver.h:379
+    TPanel                     *pnApprovedManager                = new TPanel(); // golden cObserver.h:265
+    TPanel                     *pnCountermeasure                 = new TPanel(); // golden cObserver.h:249
+    TPanel                     *pnDOCUMENTNO                     = new TPanel(); // golden cObserver.h:263
+    TPanel                     *pnEndTime                        = new TPanel(); // golden cObserver.h:274
+    TPanel                     *pnFinishName                     = new TPanel(); // golden cObserver.h:269
+    TPanel                     *pnFinishType                     = new TPanel(); // golden cObserver.h:268
+    TPanel                     *pnMMSpecificationNO              = new TPanel(); // golden cObserver.h:252
+    TPanel                     *pnMajorMaintenanceCheckNo        = new TPanel(); // golden cObserver.h:242
+    TPanel                     *pnMajorMaintenanceCheckPersonnel = new TPanel(); // golden cObserver.h:244
+    TPanel                     *pnMajorMaintenanceClassType      = new TPanel(); // golden cObserver.h:238
+    TPanel                     *pnMajorMaintenanceDate           = new TPanel(); // golden cObserver.h:237
+    TPanel                     *pnMajorMaintenanceEndTime        = new TPanel(); // golden cObserver.h:241
+    TPanel                     *pnMajorMaintenancePersonnel      = new TPanel(); // golden cObserver.h:243
+    TPanel                     *pnMajorMaintenanceStartTime      = new TPanel(); // golden cObserver.h:240
+    TPanel                     *pnNoteContents                   = new TPanel(); // golden cObserver.h:284
+    TPanel                     *pnNoteLog                        = new TPanel(); // golden cObserver.h:264
+    TPanel                     *pnPRSpecificationNO              = new TPanel(); // golden cObserver.h:224
+    TPanel                     *pnPrecautionEndTime              = new TPanel(); // golden cObserver.h:218
+    TPanel                     *pnPrecautionLogApprovedManager   = new TPanel(); // golden cObserver.h:276
+    TPanel                     *pnPrecautionLogDocumentNo        = new TPanel(); // golden cObserver.h:271
+    TPanel                     *pnPrecautionLogEndTime           = new TPanel(); // golden cObserver.h:280
+    TPanel                     *pnPrecautionLogFinishName        = new TPanel(); // golden cObserver.h:270
+    TPanel                     *pnPrecautionLogFinishType        = new TPanel(); // golden cObserver.h:278
+    TPanel                     *pnPrecautionLogNoteContents      = new TPanel(); // golden cObserver.h:272
+    TPanel                     *pnPrecautionLogPromptDay         = new TPanel(); // golden cObserver.h:267
+    TPanel                     *pnPrecautionLogStartTime         = new TPanel(); // golden cObserver.h:275
+    TPanel                     *pnPrecautionLogWatchmakers       = new TPanel(); // golden cObserver.h:277
+    TPanel                     *pnPrecautionStartTime            = new TPanel(); // golden cObserver.h:213
+    TPanel                     *pnPromptDay                      = new TPanel(); // golden cObserver.h:279
+    TPanel                     *pnStartTime                      = new TPanel(); // golden cObserver.h:273
+    TPanel                     *pnUndesirablePhenomenon          = new TPanel(); // golden cObserver.h:248
+    TPanel                     *pnWatchmakers                    = new TPanel(); // golden cObserver.h:266
+
+    // golden TEdit (11)
+    TEdit                      *edApprovedManager                = new TEdit(); // golden cObserver.h:210
+    TEdit                      *edFinishName                     = new TEdit(); // golden cObserver.h:216
+    TEdit                      *edMajorMaintenanceCheckNo        = new TEdit(); // golden cObserver.h:245
+    TEdit                      *edMajorMaintenanceCheckPersonnel = new TEdit(); // golden cObserver.h:247
+    TEdit                      *edMajorMaintenancePersonnel      = new TEdit(); // golden cObserver.h:246
+    TEdit                      *edNoteContents                   = new TEdit(); // golden cObserver.h:208
+    TEdit                      *edPrecautionRecordDocumentNo     = new TEdit(); // golden cObserver.h:205
+    TEdit                      *edPromptDay                      = new TEdit(); // golden cObserver.h:221
+    TEdit                      *edWatchmakers                    = new TEdit(); // golden cObserver.h:212
+    TEdit                      *edYieldMax                       = new TEdit(); // golden cObserver.h:60
+    TEdit                      *edYieldMin                       = new TEdit(); // golden cObserver.h:61
+
+    // golden TMemo (8)
+    TMemo                      *Memo1                       = new TMemo();  // golden cObserver.h:380
+    TMemo                      *Memo2                       = new TMemo();  // golden cObserver.h:144
+    TMemo                      *Memo3                       = new TMemo();  // golden cObserver.h:147
+    TMemo                      *Memo4                       = new TMemo();  // golden cObserver.h:148
+    TMemo                      *MemoCountermeasure          = new TMemo();  // golden cObserver.h:251
+    TMemo                      *MemoHandlerPrecautionRecord = new TMemo();  // golden cObserver.h:203
+    TMemo                      *MemoNoteLog                 = new TMemo();  // golden cObserver.h:262
+    TMemo                      *MemoUndesirablePhenomenon   = new TMemo();  // golden cObserver.h:250
+
+    // golden TComboBox (8)
+    TComboBox                  *cobCountermeasure            = new TComboBox(); // golden cObserver.h:254
+    TComboBox                  *cobHandlerPrecautionRecord   = new TComboBox(); // golden cObserver.h:202
+    TComboBox                  *cobMajorMaintenanceClassType = new TComboBox(); // golden cObserver.h:239
+    TComboBox                  *cobMajorMaintenanceSearch    = new TComboBox(); // golden cObserver.h:256
+    TComboBox                  *cobNoteContents              = new TComboBox(); // golden cObserver.h:219
+    TComboBox                  *cobPRFinishType              = new TComboBox(); // golden cObserver.h:217
+    TComboBox                  *cobSearchPrecautionLog       = new TComboBox(); // golden cObserver.h:282
+    TComboBox                  *cobUndesirablePhenomenon     = new TComboBox(); // golden cObserver.h:253
+
+    // golden TSpeedButton (3)
+    TSpeedButton               *sbMajorMaintenanceDate      = new TSpeedButton(); // golden cObserver.h:227
+    TSpeedButton               *sbMajorMaintenanceEndTime   = new TSpeedButton(); // golden cObserver.h:229
+    TSpeedButton               *sbMajorMaintenanceStartTime = new TSpeedButton(); // golden cObserver.h:228
+
+    // golden TButton (1)
+    TButton                    *btnQueryEventLogTxt = new TButton();        // golden cObserver.h:183
+
+    // golden TFileListBox (2)
+    vclcompat::TFileListBox    *FileListBoxMajorMaintenance = new vclcompat::TFileListBox(); // golden cObserver.h:257
+    vclcompat::TFileListBox    *FileListBoxPrecautionLog    = new vclcompat::TFileListBox(); // golden cObserver.h:283
+
+    // golden TDateTimePicker (2)
+    TfObserverDateTimePicker   *DateTimePickerEnd   = new TfObserverDateTimePicker(); // golden cObserver.h:222
+    TfObserverDateTimePicker   *DateTimePickerStart = new TfObserverDateTimePicker(); // golden cObserver.h:223
 
     // -- PORT-ONLY, NOT a golden member -- see W906Obs2_InstanceRegistrar's
     //    banner above. Declared LAST so `this` is fully constructed (every
