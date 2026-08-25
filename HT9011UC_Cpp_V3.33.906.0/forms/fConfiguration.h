@@ -238,6 +238,7 @@ public:
     explicit TfConfigurationGrid(int initialColCount = 5, int initialRowCount = 5)
         : vclcompat::TStringGrid(initialColCount, initialRowCount)
     {}
+
 };
 
 // ===========================================================================
@@ -319,6 +320,259 @@ public:
     void btnAddHPClick();
     void btnDeleteHPClick();
     void sbtReloadHPClick();
+
+    // -- Wave FW-CFG-W1 methods (bodies: cConfiguration.cpp) --------------
+    virtual void InitConfigEdtList_ItemA();   // golden :378-977
+    virtual void InitConfigEdtList_ItemB();   // golden :979-1035
+    virtual void InitConfigEdtList_ItemC();   // golden :1037-1242
+
+    // ========================================================================
+    // AI(W906-FW-CFG-W1) 20260825: the widgets InitConfigEdtList_ItemA/B/C
+    // register. 212 members, every type taken from golden cConfiguration.h and
+    // cited per line -- nothing guessed.
+    //
+    // These are NOT inert surface: each one is the FIRST argument of an
+    // `elConfig->Add(widget, &IniConfig.field, ECBool/ECInteger/ECText,
+    // section, key, ...)` call, i.e. the registration table that binds a screen
+    // control to a config field and its ini section/key. That table IS the
+    // Configuration screen's schema, which is exactly what the web HMI needs to
+    // render it, so landing it is the point of the wave rather than a side
+    // effect of it.
+    //
+    // The port's HTEditList (Public/HTEditList.h:178-228) and the elConfig /
+    // elConfig_byRecipe / cbLastSet globals (:247/:252/:253) already exist and
+    // its Add signature is argument-for-argument golden's, so the 863
+    // translated lines needed no adaptation.
+    // ========================================================================
+    // golden TCheckBox (121)
+    TCheckBox     *cbA01         = new TCheckBox();           // golden cConfiguration.h:498
+    TCheckBox     *cbA01_1       = new TCheckBox();           // golden cConfiguration.h:500
+    TCheckBox     *cbA01_2       = new TCheckBox();           // golden cConfiguration.h:2189
+    TCheckBox     *cbA02         = new TCheckBox();           // golden cConfiguration.h:404
+    TCheckBox     *cbA03         = new TCheckBox();           // golden cConfiguration.h:400
+    TCheckBox     *cbA04         = new TCheckBox();           // golden cConfiguration.h:401
+    TCheckBox     *cbA05         = new TCheckBox();           // golden cConfiguration.h:402
+    TCheckBox     *cbA08         = new TCheckBox();           // golden cConfiguration.h:405
+    TCheckBox     *cbA09         = new TCheckBox();           // golden cConfiguration.h:406
+    TCheckBox     *cbA10         = new TCheckBox();           // golden cConfiguration.h:585
+    TCheckBox     *cbA10_3       = new TCheckBox();           // golden cConfiguration.h:474
+    TCheckBox     *cbA10_5       = new TCheckBox();           // golden cConfiguration.h:549
+    TCheckBox     *cbA10_6       = new TCheckBox();           // golden cConfiguration.h:1657
+    TCheckBox     *cbA10_7       = new TCheckBox();           // golden cConfiguration.h:2137
+    TCheckBox     *cbA11         = new TCheckBox();           // golden cConfiguration.h:411
+    TCheckBox     *cbA12         = new TCheckBox();           // golden cConfiguration.h:415
+    TCheckBox     *cbA14         = new TCheckBox();           // golden cConfiguration.h:418
+    TCheckBox     *cbA15         = new TCheckBox();           // golden cConfiguration.h:419
+    TCheckBox     *cbA15_1       = new TCheckBox();           // golden cConfiguration.h:2245
+    TCheckBox     *cbA17_1       = new TCheckBox();           // golden cConfiguration.h:1057
+    TCheckBox     *cbA17_2       = new TCheckBox();           // golden cConfiguration.h:1058
+    TCheckBox     *cbA19         = new TCheckBox();           // golden cConfiguration.h:421
+    TCheckBox     *cbA20_1       = new TCheckBox();           // golden cConfiguration.h:626
+    TCheckBox     *cbA20_2       = new TCheckBox();           // golden cConfiguration.h:627
+    TCheckBox     *cbA20_3       = new TCheckBox();           // golden cConfiguration.h:628
+    TCheckBox     *cbA20_4       = new TCheckBox();           // golden cConfiguration.h:629
+    TCheckBox     *cbA20_5       = new TCheckBox();           // golden cConfiguration.h:630
+    TCheckBox     *cbA21         = new TCheckBox();           // golden cConfiguration.h:800
+    TCheckBox     *cbA22_1       = new TCheckBox();           // golden cConfiguration.h:806
+    TCheckBox     *cbA23         = new TCheckBox();           // golden cConfiguration.h:809
+    TCheckBox     *cbA24         = new TCheckBox();           // golden cConfiguration.h:810
+    TCheckBox     *cbA26         = new TCheckBox();           // golden cConfiguration.h:819
+    TCheckBox     *cbA27         = new TCheckBox();           // golden cConfiguration.h:821
+    TCheckBox     *cbA27_1       = new TCheckBox();           // golden cConfiguration.h:820
+    TCheckBox     *cbA29         = new TCheckBox();           // golden cConfiguration.h:822
+    TCheckBox     *cbA30         = new TCheckBox();           // golden cConfiguration.h:2056
+    TCheckBox     *cbA31         = new TCheckBox();           // golden cConfiguration.h:933
+    TCheckBox     *cbA31_1       = new TCheckBox();           // golden cConfiguration.h:938
+    TCheckBox     *cbA32         = new TCheckBox();           // golden cConfiguration.h:1088
+    TCheckBox     *cbA32_01      = new TCheckBox();           // golden cConfiguration.h:1092
+    TCheckBox     *cbA32_02      = new TCheckBox();           // golden cConfiguration.h:1093
+    TCheckBox     *cbA32_03      = new TCheckBox();           // golden cConfiguration.h:1094
+    TCheckBox     *cbA32_04      = new TCheckBox();           // golden cConfiguration.h:1095
+    TCheckBox     *cbA32_05      = new TCheckBox();           // golden cConfiguration.h:1096
+    TCheckBox     *cbA32_06      = new TCheckBox();           // golden cConfiguration.h:1097
+    TCheckBox     *cbA32_07      = new TCheckBox();           // golden cConfiguration.h:1098
+    TCheckBox     *cbA32_08      = new TCheckBox();           // golden cConfiguration.h:1099
+    TCheckBox     *cbA32_09      = new TCheckBox();           // golden cConfiguration.h:1100
+    TCheckBox     *cbA32_10      = new TCheckBox();           // golden cConfiguration.h:1101
+    TCheckBox     *cbA32_2       = new TCheckBox();           // golden cConfiguration.h:1090
+    TCheckBox     *cbA32_3       = new TCheckBox();           // golden cConfiguration.h:1173
+    TCheckBox     *cbA33         = new TCheckBox();           // golden cConfiguration.h:1102
+    TCheckBox     *cbA35         = new TCheckBox();           // golden cConfiguration.h:1104
+    TCheckBox     *cbA36         = new TCheckBox();           // golden cConfiguration.h:1241
+    TCheckBox     *cbA37         = new TCheckBox();           // golden cConfiguration.h:1282
+    TCheckBox     *cbA38         = new TCheckBox();           // golden cConfiguration.h:1294
+    TCheckBox     *cbA39         = new TCheckBox();           // golden cConfiguration.h:1327
+    TCheckBox     *cbA40         = new TCheckBox();           // golden cConfiguration.h:1594
+    TCheckBox     *cbA51         = new TCheckBox();           // golden cConfiguration.h:1318
+    TCheckBox     *cbA55         = new TCheckBox();           // golden cConfiguration.h:1323
+    TCheckBox     *cbA56_1       = new TCheckBox();           // golden cConfiguration.h:1073
+    TCheckBox     *cbA57_1       = new TCheckBox();           // golden cConfiguration.h:1268
+    TCheckBox     *cbA57_2       = new TCheckBox();           // golden cConfiguration.h:1269
+    TCheckBox     *cbA57_3       = new TCheckBox();           // golden cConfiguration.h:1270
+    TCheckBox     *cbA58         = new TCheckBox();           // golden cConfiguration.h:1581
+    TCheckBox     *cbA60_1       = new TCheckBox();           // golden cConfiguration.h:2124
+    TCheckBox     *cbA61         = new TCheckBox();           // golden cConfiguration.h:1716
+    TCheckBox     *cbA62         = new TCheckBox();           // golden cConfiguration.h:1717
+    TCheckBox     *cbA65         = new TCheckBox();           // golden cConfiguration.h:1627
+    TCheckBox     *cbA66         = new TCheckBox();           // golden cConfiguration.h:1628
+    TCheckBox     *cbA67         = new TCheckBox();           // golden cConfiguration.h:1718
+    TCheckBox     *cbA68         = new TCheckBox();           // golden cConfiguration.h:1719
+    TCheckBox     *cbA69         = new TCheckBox();           // golden cConfiguration.h:2099
+    TCheckBox     *cbA71         = new TCheckBox();           // golden cConfiguration.h:2187
+    TCheckBox     *cbA72         = new TCheckBox();           // golden cConfiguration.h:2226
+    TCheckBox     *cbA73         = new TCheckBox();           // golden cConfiguration.h:2227
+    TCheckBox     *cbA74         = new TCheckBox();           // golden cConfiguration.h:2229
+    TCheckBox     *cbA75         = new TCheckBox();           // golden cConfiguration.h:2246
+    TCheckBox     *cbA81WaitSECS = new TCheckBox();           // golden cConfiguration.h:2225
+    TCheckBox     *cbB01         = new TCheckBox();           // golden cConfiguration.h:559
+    TCheckBox     *cbB02         = new TCheckBox();           // golden cConfiguration.h:565
+    TCheckBox     *cbB03         = new TCheckBox();           // golden cConfiguration.h:1464
+    TCheckBox     *cbB05         = new TCheckBox();           // golden cConfiguration.h:1672
+    TCheckBox     *cbB11Enable   = new TCheckBox();           // golden cConfiguration.h:2096
+    TCheckBox     *cbB12Enable   = new TCheckBox();           // golden cConfiguration.h:2082
+    TCheckBox     *cbC01         = new TCheckBox();           // golden cConfiguration.h:1219
+    TCheckBox     *cbC02         = new TCheckBox();           // golden cConfiguration.h:1196
+    TCheckBox     *cbC03         = new TCheckBox();           // golden cConfiguration.h:1197
+    TCheckBox     *cbC04         = new TCheckBox();           // golden cConfiguration.h:1198
+    TCheckBox     *cbC05_ATC     = new TCheckBox();           // golden cConfiguration.h:1610
+    TCheckBox     *cbC05_Motor   = new TCheckBox();           // golden cConfiguration.h:1605
+    TCheckBox     *cbC05_Temp    = new TCheckBox();           // golden cConfiguration.h:1604
+    TCheckBox     *cbC05_Vacuum  = new TCheckBox();           // golden cConfiguration.h:1608
+    TCheckBox     *cbC06_01      = new TCheckBox();           // golden cConfiguration.h:1202
+    TCheckBox     *cbC06_02      = new TCheckBox();           // golden cConfiguration.h:1203
+    TCheckBox     *cbC06_03      = new TCheckBox();           // golden cConfiguration.h:1204
+    TCheckBox     *cbC06_04      = new TCheckBox();           // golden cConfiguration.h:1205
+    TCheckBox     *cbC06_05      = new TCheckBox();           // golden cConfiguration.h:1206
+    TCheckBox     *cbC06_06      = new TCheckBox();           // golden cConfiguration.h:1207
+    TCheckBox     *cbC06_07      = new TCheckBox();           // golden cConfiguration.h:1208
+    TCheckBox     *cbC06_08      = new TCheckBox();           // golden cConfiguration.h:1209
+    TCheckBox     *cbC06_09      = new TCheckBox();           // golden cConfiguration.h:1210
+    TCheckBox     *cbC06_10      = new TCheckBox();           // golden cConfiguration.h:1211
+    TCheckBox     *cbC06_11      = new TCheckBox();           // golden cConfiguration.h:1212
+    TCheckBox     *cbC06_12      = new TCheckBox();           // golden cConfiguration.h:1213
+    TCheckBox     *cbC07         = new TCheckBox();           // golden cConfiguration.h:1214
+    TCheckBox     *cbC08         = new TCheckBox();           // golden cConfiguration.h:1215
+    TCheckBox     *cbC08_1       = new TCheckBox();           // golden cConfiguration.h:1242
+    TCheckBox     *cbC09         = new TCheckBox();           // golden cConfiguration.h:1217
+    TCheckBox     *cbC10         = new TCheckBox();           // golden cConfiguration.h:1218
+    TCheckBox     *cbC11         = new TCheckBox();           // golden cConfiguration.h:1224
+    TCheckBox     *cbC12         = new TCheckBox();           // golden cConfiguration.h:1226
+    TCheckBox     *cbC13         = new TCheckBox();           // golden cConfiguration.h:1225
+    TCheckBox     *cbC16         = new TCheckBox();           // golden cConfiguration.h:1324
+    TCheckBox     *cbC17         = new TCheckBox();           // golden cConfiguration.h:2115
+    TCheckBox     *cbC17_1       = new TCheckBox();           // golden cConfiguration.h:2117
+    TCheckBox     *cbC24         = new TCheckBox();           // golden cConfiguration.h:2224
+    TCheckBox     *chA16         = new TCheckBox();           // golden cConfiguration.h:420
+    TCheckBox     *chkA09_1      = new TCheckBox();           // golden cConfiguration.h:1235
+    TCheckBox     *chkA50        = new TCheckBox();           // golden cConfiguration.h:1319
+    TCheckBox     *chkC14        = new TCheckBox();           // golden cConfiguration.h:1220
+
+    // golden TComboBox (2)
+    TComboBox     *cbA10_3_ARTTestMode  = new TComboBox();           // golden cConfiguration.h:473
+    TComboBox     *cbA10_6_HANA_ARTMode = new TComboBox();           // golden cConfiguration.h:1658
+
+    // golden TEdit (59)
+    TEdit         *edA01               = new TEdit();               // golden cConfiguration.h:499
+    TEdit         *edA10_2             = new TEdit();               // golden cConfiguration.h:471
+    TEdit         *edA10_3             = new TEdit();               // golden cConfiguration.h:472
+    TEdit         *edA10_4             = new TEdit();               // golden cConfiguration.h:476
+    TEdit         *edA11               = new TEdit();               // golden cConfiguration.h:412
+    TEdit         *edA12               = new TEdit();               // golden cConfiguration.h:417
+    TEdit         *edA15_ESDReportTime = new TEdit();               // golden cConfiguration.h:424
+    TEdit         *edA25_1             = new TEdit();               // golden cConfiguration.h:814
+    TEdit         *edA25_2             = new TEdit();               // golden cConfiguration.h:815
+    TEdit         *edA39               = new TEdit();               // golden cConfiguration.h:1326
+    TEdit         *edA56_2             = new TEdit();               // golden cConfiguration.h:1075
+    TEdit         *edA56_3             = new TEdit();               // golden cConfiguration.h:1074
+    TEdit         *edA60_1             = new TEdit();               // golden cConfiguration.h:2125
+    TEdit         *edA60_2             = new TEdit();               // golden cConfiguration.h:2126
+    TEdit         *edA60_3             = new TEdit();               // golden cConfiguration.h:2127
+    TEdit         *edA60_4             = new TEdit();               // golden cConfiguration.h:2128
+    TEdit         *edA60_5             = new TEdit();               // golden cConfiguration.h:2129
+    TEdit         *edA71               = new TEdit();               // golden cConfiguration.h:2186
+    TEdit         *edB01               = new TEdit();               // golden cConfiguration.h:560
+    TEdit         *edB01_1             = new TEdit();               // golden cConfiguration.h:561
+    TEdit         *edB02               = new TEdit();               // golden cConfiguration.h:564
+    TEdit         *edB03_1             = new TEdit();               // golden cConfiguration.h:1465
+    TEdit         *edB03_2             = new TEdit();               // golden cConfiguration.h:1466
+    TEdit         *edB11PATServerPath  = new TEdit();               // golden cConfiguration.h:2097
+    TEdit         *edB12Path           = new TEdit();               // golden cConfiguration.h:2083
+    TEdit         *edB13DownloadPath   = new TEdit();               // golden cConfiguration.h:2093
+    TEdit         *edB13UploadPath     = new TEdit();               // golden cConfiguration.h:2092
+    TEdit         *edB14IntervalTime   = new TEdit();               // golden cConfiguration.h:2087
+    TEdit         *edB14ReportRealTime = new TEdit();               // golden cConfiguration.h:2088
+    TEdit         *edC05_ATC           = new TEdit();               // golden cConfiguration.h:1611
+    TEdit         *edC05_Motor         = new TEdit();               // golden cConfiguration.h:1606
+    TEdit         *edC05_Temp          = new TEdit();               // golden cConfiguration.h:1607
+    TEdit         *edC05_Vacuum        = new TEdit();               // golden cConfiguration.h:1609
+    TEdit         *edC09               = new TEdit();               // golden cConfiguration.h:1216
+    TEdit         *edtA12_1            = new TEdit();               // golden cConfiguration.h:416
+    TEdit         *edtA28_1            = new TEdit();               // golden cConfiguration.h:818
+    TEdit         *edtB05              = new TEdit();               // golden cConfiguration.h:1673
+    TEdit         *edtC17              = new TEdit();               // golden cConfiguration.h:2116
+    TEdit         *edtC21_Auto1        = new TEdit();               // golden cConfiguration.h:1396
+    TEdit         *edtC21_Auto1_b      = new TEdit();               // golden cConfiguration.h:1426
+    TEdit         *edtC21_Auto1_m      = new TEdit();               // golden cConfiguration.h:1411
+    TEdit         *edtC21_Auto2        = new TEdit();               // golden cConfiguration.h:1397
+    TEdit         *edtC21_Auto2_b      = new TEdit();               // golden cConfiguration.h:1427
+    TEdit         *edtC21_Auto2_m      = new TEdit();               // golden cConfiguration.h:1412
+    TEdit         *edtC21_Auto3        = new TEdit();               // golden cConfiguration.h:1398
+    TEdit         *edtC21_Auto3_b      = new TEdit();               // golden cConfiguration.h:1428
+    TEdit         *edtC21_Auto3_m      = new TEdit();               // golden cConfiguration.h:1413
+    TEdit         *edtC21_HP1          = new TEdit();               // golden cConfiguration.h:1392
+    TEdit         *edtC21_HP1_b        = new TEdit();               // golden cConfiguration.h:1422
+    TEdit         *edtC21_HP1_m        = new TEdit();               // golden cConfiguration.h:1407
+    TEdit         *edtC21_HP2          = new TEdit();               // golden cConfiguration.h:1393
+    TEdit         *edtC21_HP2_b        = new TEdit();               // golden cConfiguration.h:1423
+    TEdit         *edtC21_HP2_m        = new TEdit();               // golden cConfiguration.h:1408
+    TEdit         *edtC21_SHT1         = new TEdit();               // golden cConfiguration.h:1394
+    TEdit         *edtC21_SHT1_b       = new TEdit();               // golden cConfiguration.h:1424
+    TEdit         *edtC21_SHT1_m       = new TEdit();               // golden cConfiguration.h:1409
+    TEdit         *edtC21_SHT2         = new TEdit();               // golden cConfiguration.h:1395
+    TEdit         *edtC21_SHT2_b       = new TEdit();               // golden cConfiguration.h:1425
+    TEdit         *edtC21_SHT2_m       = new TEdit();               // golden cConfiguration.h:1410
+
+    // golden TGroupBox (18)
+    TGroupBox     *gbA10    = new TGroupBox();           // golden cConfiguration.h:466
+    TGroupBox     *gbA22    = new TGroupBox();           // golden cConfiguration.h:801
+    TGroupBox     *gbA31    = new TGroupBox();           // golden cConfiguration.h:932
+    TGroupBox     *gbA56    = new TGroupBox();           // golden cConfiguration.h:1070
+    TGroupBox     *gbA57    = new TGroupBox();           // golden cConfiguration.h:1267
+    TGroupBox     *gbC05    = new TGroupBox();           // golden cConfiguration.h:1199
+    TGroupBox     *gbC06    = new TGroupBox();           // golden cConfiguration.h:1201
+    TGroupBox     *grpA25   = new TGroupBox();           // golden cConfiguration.h:811
+    TGroupBox     *grpA28   = new TGroupBox();           // golden cConfiguration.h:816
+    TGroupBox     *grpA32   = new TGroupBox();           // golden cConfiguration.h:1085
+    TGroupBox     *grpA32_1 = new TGroupBox();           // golden cConfiguration.h:1091
+    TGroupBox     *grpA55   = new TGroupBox();           // golden cConfiguration.h:1321
+    TGroupBox     *grpA60   = new TGroupBox();           // golden cConfiguration.h:2118
+    TGroupBox     *grpB01   = new TGroupBox();           // golden cConfiguration.h:556
+    TGroupBox     *grpB02   = new TGroupBox();           // golden cConfiguration.h:562
+    TGroupBox     *grpB03   = new TGroupBox();           // golden cConfiguration.h:1460
+    TGroupBox     *grpC17   = new TGroupBox();           // golden cConfiguration.h:2113
+    TGroupBox     *grpC21   = new TGroupBox();           // golden cConfiguration.h:1382
+
+    // golden TLabel (6)
+    TLabel        *lblA16   = new TLabel();              // golden cConfiguration.h:409
+    TLabel        *lblA60_1 = new TLabel();              // golden cConfiguration.h:2119
+    TLabel        *lblA60_2 = new TLabel();              // golden cConfiguration.h:2120
+    TLabel        *lblA60_3 = new TLabel();              // golden cConfiguration.h:2121
+    TLabel        *lblA60_4 = new TLabel();              // golden cConfiguration.h:2122
+    TLabel        *lblA60_5 = new TLabel();              // golden cConfiguration.h:2123
+
+    // golden TPanel (3)
+    TPanel        *palA10_ART = new TPanel();              // golden cConfiguration.h:467
+    TPanel        *pal_B11    = new TPanel();              // golden cConfiguration.h:2079
+    TPanel        *pnlA12     = new TPanel();              // golden cConfiguration.h:413
+
+    // golden TRadioGroup (1)
+    TRadioGroup   *rgC05 = new TRadioGroup();         // golden cConfiguration.h:1200
+
+    // golden TSpeedButton (1)
+    TSpeedButton  *spbA27 = new TSpeedButton();        // golden cConfiguration.h:799
+
+    // golden TTabSheet (1)
+    TTabSheet     *tsb00 = new TTabSheet();           // golden cConfiguration.h:552
 };
 
 #endif // FORMS_FCONFIGURATION_H
