@@ -10117,6 +10117,60 @@ A/B/C 三個範圍本來就對，所以 W1 的 commit 不受影響（已用修�
 `tools` 外的 `scratchpad/cfg_wave2.py` 是那個修正版。
 （順帶一個：ItemN 的收尾 `}` 是**縮排的**，所以「第 0 欄的 `}`」這種結構化規則也不能單獨使用。）
 
+## 20260825 X — FW-CFG-W2 / W3 收案：13 個 Item 函式全數落地（主迴圈自做）
+
+| 波次 | 函式 | golden 行 | widget 成員 | LIVE 敘述 / 不符 | commit |
+|---|---|---|---|---|---|
+| W1 | ItemA/B/C | 863 | 212 | 533 / **0** | `e6fe41f` |
+| W2 | ItemD/E/F/G/L/M/O | 1,636 | 495 | 1,003 / 2（都是 gate 自己拆開的） | `79abd67` |
+| W3 | ItemI/N/P | 1,605 | 467 | 1,076 / **0** | `ccefc6d` |
+
+三波共 **4,104 行**＋census：`cConfiguration.cpp` 缺口 **7,101 → 3,157 行**，
+全樹 58,109 → 54,165，表單組 **14.5% → 16.0%**（分母：golden 表單 code 行數）。
+每一波都是全新雙 dir、Debug 與 Release 各 137/142 常駐五項。
+
+### W2 差點出事：抽取器對 ItemE 說謊
+
+詳情已記在 20260825 IX。結果一句話：golden `:1950` 的**行尾註解裡有一個 `}`**，
+天真括號配對因此少抓 160 行。這次是編譯器抱怨下一個函式定義才暴露的——
+**那是運氣不是保護**。工具已改成「先剥字串→再剥 `//`→才數括號」＋以「下一個頂層定義」
+當硬上界；還原壞掉的嘗試是用**外科切除＋ assert**，不是 `git checkout`（家規），
+還原後 `git diff` 對 W1 commit 是空的。
+
+### W2 的兩個 gate，都取最窄形式
+
+- **(CFG2-COM2)**：golden 條件是 `REAL_TIME_CCD==false || (COM2!=NULL && COM2->bCCDDummyRum)`。
+  `COM2` 在本樹是 `TCOM2Shim`（atester_shims.h:405），但 `bCCDDummyRum` **不是它的成員**
+  （只在註解裡出現）。**整條 arm 關掉是錯的**——`REAL_TIME_CCD==false` 是沒有即時 CCD
+  的機台的日常情況，所以只關第二個析取項。
+- **CheckFile 不能用 include 取得**：`cAuthority.h` 會拉進 `language.h`，其 `class TWinControl`
+  與 `Public/HTEdit.h` 已有的重定義，而 HTEdit.h 是經 HTEditList.h 進來的。
+  量過才寫：加 include 產生的錯誤**只有**那一個。改用 TU-local 前置宣告（database.cpp:96 先例）。
+
+### W3 的收穫：編譯器幫忙找到一個 golden 缺陷
+
+MinGW 的 `unknown escape sequence` 警告指出：ItemN 裡三個預設路徑寫成
+`"C:\\GTK\EMG.exe"`——**第一個反斜線有加倍、第二個沒有**，於是 `\E` / `\L` / `\I`
+被當成跳脫序列，目錄分隔符被吃掉。同區塊其他路徑都寫對，所以是三個手誤。
+對 golden 全檔字串常值做「單一反斜線後接非法跳脫字元」掃描複驗：**全檔正好只有這三處**。
+
+代價是實質的：這三個是 ini 鍵不存在時寫入的**預設值**，而且是要被啟動的**執行檔路徑**
+（N14_14 警報控制／N14_15 Socket 壽命／N14_16 IPSC）。新機台會拿到不存在的
+`C:\GTKEMG.exe`，功能就安靜地不會啟動。
+
+**移植差異（誠實揭露）**：`\L` 與 `\I` 在兩個編譯器都是未知跳脫、都產生裸字母，
+與 BCB6 逐位元組相同；但 `\E` 不同——GCC 把它實作成 GNU 擴充的 ESC(0x1B)，BCB6 給普通 `E`。
+所以第一個預設值與 BCB6 差一個位元組。**兩者都錯**，都指不到真實檔案。
+照原樣翻譯並完整註記；**修 golden 的手誤是行為變更，等使用者裁決**。
+台帳 723 → 724（BUG 類 264 → 265，分節 136 → 137，md 與 html 已同步）。
+
+### 下一步（已量好）
+
+`InitConfigEdtList()` dispatcher（golden :4495-4512）——它還呼叫 `ChangeCBListProperty()`
+（:266-363，98 行），所以兩個要同波。**接的時候必須帶 `elConfig` 空指標守衛**：
+那個全域是 golden `main.cpp:1484` 才 `new` 的，距離 `elLaser` 一行，而 `elLaser` 的
+static-init 解參考在 PT-W2 代價是 88 個 SEGFAULT。
+
 ### 🔖 RESUME（20260825 日終）
 
 - **今日全收（本節之前的 20260825 I-VII，共 7 波）**：FW-BARCODE2／FW-BARCODE3
@@ -10135,7 +10189,25 @@ A/B/C 三個範圍本來就對，所以 W1 的 commit 不受影響（已用修�
 - **cObserver 這條線的剩餘 gate 都不是「補個成員就好」的**：54 個區塊裡
   FW3A-10（canvas，8 塊）要 TCanvas/TRect/MyDrawText 整組、B-SAFETY-*（12 塊）
   與 C-log-5/10 是 write path（安全佇列）、C-log-2/9 要 TSaveDialog/TOpenDialog。
-  **下一個標的要換檔，不要在 cObserver 上繼續挖。**
+  已換檔，不再在 cObserver 上挖。
+
+- **進行中的戰役 = cConfiguration（FW-CFG）**。已收 W1/W2/W3，**13 個
+  `InitConfigEdtList_Item*` 全數落地**（共 4,104 行、1,174 個 widget 成員）；
+  commit `e6fe41f` → `79abd67` → `ccefc6d`，三輪雙 gate 全綠。
+  census：該檔 7,101 → **3,157 行**；全樹 58,109 → **54,165 行**；
+  表單組 14.5% → **16.0%**（分母：golden 表單 code 行數）。
+- **下一波（FW-CFG-W4，已量好可直接開工）**：
+  `InitConfigEdtList()` dispatcher（golden :4495-4512）＋它呼叫的
+  `ChangeCBListProperty()`（golden :266-363，98 行）——兩個必須同波，
+  否則 dispatcher 編不過。
+  ⭐ **接的時候必須帶 `elConfig` 空指標守衛**：那個全域是 golden
+  `main.cpp:1484` 才 `new` 的，距離 `elLaser` 一行；`elLaser` 的 static-init
+  解參考在 PT-W2 代價是 88 個 SEGFAULT。
+  之後依序：FormShow（852）、CheckConfigurationBeforeSave（393）、
+  FormClose（208）、ctor（117）、UpdateUT150Comm（168）、InitialMemo（85）。
+- **FW-CFG 的工具鏈（scratchpad，下一人直接用）**：
+  `cfg_wave2.py gen <TAG> <字母...>` 抽取（**修正版括號配對**）、
+  `cfg_apply.py <TAG> <字母...>` 套用、`cfg_fidelity.py <方法名...>` 逐字複驗。
 - **等使用者（本波未動，只是重列）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
   HAL-MOT1 十問（Q1/Q9/Q4 擋新 mot_table 起草）；TImage headless 准駁；
   GOLDEN BUG (TAG1-a) edSHighBase；GOLDEN DEFECT (i) 21-into-20 sprintf overflow。
