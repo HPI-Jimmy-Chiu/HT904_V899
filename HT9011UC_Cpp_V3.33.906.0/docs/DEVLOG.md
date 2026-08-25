@@ -10053,6 +10053,70 @@ grep -n "sInfo_\|iInfo_MultiLotCnt" forms/fSCKART.h  ->  0 hits (20260825)
 全新雙 dir `build_obs3g` / `build_obs3r`。**Debug 137/142、Release 137/142，
 兩段失敗集合逐項相同且等於常駐五項。** 本波零新增 GOLDEN 標記，台帳維持 723 筆。
 
+## 20260825 IX — FW-CFG-W1 收案：cConfiguration 的欄位登錄表開始落地（主迴圈自做）
+
+cObserver 這條線的剩餘 gate 都不是「補個成員就好」的（canvas、write path、TSaveDialog），
+所以換檔。選 `cConfiguration.cpp` 是量出來的，不是感覺：
+
+| 候選 | 缺口(行) | WriteIniData | SaveToFile | 裁定 |
+|---|---|---|---|---|
+| cContact.cpp | 22,324 | — | — | 早已排除（馬達/教導 write path）|
+| **cConfiguration.cpp** | **7,101** | **6** | **2** | **選它** |
+| cSetUp.cpp | 4,046 | 137 | 0 | 寫入重 |
+| uYieldMonitoring.cpp | 3,740 | 243 | 0 | 寫入重 |
+| cBinSel.cpp | 2,772 | 306 | 0 | 寫入最重 |
+| cSpeed.cpp | 1,232 | 256 | 0 | 寫入重 |
+
+cConfiguration 那 148 個 `IniConfig.<欄位> =` 與 56 個 `CosFunction.<欄位> =` **全是記憶體內**，
+真正落盤集中在 `SaveConfiguration`/`btnSaveClick`。
+
+### 這一家族到底是什麼
+
+`InitConfigEdtList_Item{A..P}` 共 13 個函式，每一行都是
+`elConfig->Add(widget, &IniConfig.欄位, ECBool/ECInteger/ECText, ini 區段, 鍵名, ...)`。
+**這張表就是 Configuration 畫面的 schema**——也就是 web HMI 要拿來畫畫面的東西，
+所以它是本波的目的，不是副產品。
+
+### 可行性先量，結果意外地好
+
+- 13 個 Item 函式引用的 **963 個 `IniConfig` 欄位，port 的 `Config.h` 一個不缺**。
+- `HTEditList`（Public/HTEditList.h:178-228）已翻譯，`Add` 簽章與 golden **逐引數相同**；
+  `elConfig` / `elConfig_byRecipe` / `cbLastSet` 三個全域也都在（:247/:252/:253）。
+- 所以真正的成本只有 widget 成員。
+
+### 本波交什麼
+
+ItemA/B/C（golden :378-977 / :979-1035 / :1037-1242，共 863 行）＋它們登錄的 **212 個 widget 成員**。
+
+因為 port 的 API 與 golden 完全相同，本體是**逐字搬移**（cp950→UTF-8）而不是重打——
+863 行表格資料重打是在製造抄寫錯誤，不是在翻譯。驗證：**533 行 LIVE 敘述逐句回 golden
+找逐字對應，零筆不符**。
+
+兩個窄 gate：`fMain->cbRunStartMode` 無 port（ACTIVE 臂是 golden 自己的 else）；
+`TLabel->Font->Color` 是純渲染。
+
+**誠實註記**：這三個函式目前**沒有呼叫者**。dispatcher `InitConfigEdtList()`（golden
+:4495-4512）一次呼叫 13 個，所以它要等最後一個 Item 落地才能接。接的時候需要守衛：
+`elConfig` 是 golden `main.cpp:1484` 才 `new` 的——**距離 `elLaser` 一行**，而那個全域的
+static-init 解參考在 PT-W2 代價是 88 個 SEGFAULT。
+
+### gate
+
+全新雙 dir `build_cfg1g` / `build_cfg1r`。**Debug 137/142、Release 137/142，兩段失敗集合逐項相同。**
+census：cConfiguration.cpp 7,101 → 6,238 行（129 個函式還缺 98）；全樹 58,109 → 57,246。
+兩個檔純新增（920 + 254 insertions, 0 deletions），零新增 GOLDEN 標記，台帳維持 723 筆。
+
+### 一個量測陷阱（在 FW-CFG-W2 才被抳到，值得寫在這裡）
+
+抽取函式範圍的**天真括號配對會被騙**：golden `cConfiguration.cpp:1950` 的**行尾註解裡有一個 `}`**，
+讓計數器以為 `InitConfigEdtList_ItemE` 在 :1951 就結束了，**實際到 :2111，少抓 160 行**。
+後果是抽出來的函式語法不完整（編譯器抱怨下一個函式定義）——這次是編譯器抓到的，
+**但它完全可能安靜地成功**：假如被截斷的位置剛好括號平衡，就會默默少翻一段。
+A/B/C 三個範圍本來就對，所以 W1 的 commit 不受影響（已用修正版重驗）。
+工具已改成「先剥字串常值→再剥 `//` 註解→才數括號」，並以「下一個頂層定義」當上界做交叉檢查；
+`tools` 外的 `scratchpad/cfg_wave2.py` 是那個修正版。
+（順帶一個：ItemN 的收尾 `}` 是**縮排的**，所以「第 0 欄的 `}`」這種結構化規則也不能單獨使用。）
+
 ### 🔖 RESUME（20260825 日終）
 
 - **今日全收（本節之前的 20260825 I-VII，共 7 波）**：FW-BARCODE2／FW-BARCODE3
