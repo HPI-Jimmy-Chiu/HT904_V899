@@ -330,6 +330,11 @@ public:
     virtual void InitConfigEdtList_ItemM();   // golden :3120-3161
     virtual void InitConfigEdtList_ItemO();   // golden :3921-4095
 
+    // -- Wave FW-CFG-W4b methods (bodies: cConfiguration.cpp) -------------
+    virtual void ReadLockByFile();            // golden :230-261
+    virtual void ChangeCBListProperty();      // golden :266-363
+    virtual void InitConfigEdtList();         // golden :4495-4512
+
     // -- Wave FW-CFG-W3 methods (bodies: cConfiguration.cpp) --------------
     virtual void InitConfigEdtList_ItemI();   // golden :2421-2871
     virtual void InitConfigEdtList_ItemN();   // golden :3163-3919

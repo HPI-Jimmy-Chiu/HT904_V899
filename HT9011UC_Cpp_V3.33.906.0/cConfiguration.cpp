@@ -44,6 +44,7 @@
 // TU simply had no reason to see them until now.
 #include "Public/HTEditList.h"  // HTEditList + the elConfig / elConfig_byRecipe / cbLastSet globals (:247/:252/:253) and the TEditContent enum (ECBool/ECInteger/ECText)
 #include "LastSet.h"            // LAST_GENERAL_SET LastSet (:587) -- ItemA registers several fields against it
+#include "mycylin.h"            // AI(W906-FW-CFG-W4b) 20260825: TMyCylinder Cylinder[] (:176) -- ChangeCBListProperty gates two checkbox groups on Cylinder[C_Shuttle_Knocker_1/2].Enable and Cylinder[C_HotplateVibration].Enable
 // AI(W906-FW-CFG-W2) 20260825: TU-LOCAL FORWARD DECLARATION -- CheckFile.
 // ItemD reads the Security_new.def input limit for D41IndexCheckOffset through
 // it. The real declaration is cAuthority.h:83 and the real body
@@ -4731,4 +4732,196 @@ void TfConfiguration::InitConfigEdtList_ItemP()
     {
         elConfig->Add(cbP66,    &IniConfig.bP66AutoChangingFlashWarn,         ECBool,     "Function", "bP66AutoChangingFlashWarn",                  bShow, bEnable, bReadFromFile, 0);
     }
+}
+
+// =============================================================================
+// FW-CFG-W4b -- ReadLockByFile / ChangeCBListProperty / InitConfigEdtList
+// =============================================================================
+// AI(W906-FW-CFG-W4b) 20260825: golden cConfiguration.cpp:230-261, transcribed
+// VERBATIM (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::ReadLockByFile()                                          //Sam 20221018 : 修正 LockByFile 問題
+{
+    /*
+    Enabled=0 , Active=0
+    Checked鎖起來，不勾關閉
+    Enabled=0 , Active=1
+    Checked鎖起來，打勾啟動
+    Enabled=1 , Active=0 or 1(Active無作用)
+    由 Config 畫面直接設定開關
+    */
+    AnsiString sPath=AuthPath+"config.ini";
+
+    IniConfig.bF06_Active=ReadIniData(sPath, "Specific", "F06_Active",  true);  //Steven 20140627 : Add for ASE-CL -- F06 打勾
+    IniConfig.bF06_Enable=ReadIniData(sPath, "Specific", "F06_Enabled", false); //Steven 20140627 : Add for ASE-CL -- F06 Enable
+
+    IniConfig.bF11_Active       =ReadIniData(sPath, "Specific", "F11_Active",   true);      //Sam 20240202 : 新增 F11 Lock by file 功能
+    IniConfig.bF11_Enable       =ReadIniData(sPath, "Specific", "F11_Enabled",  false);     //Sam 20240202 : 新增 F11 Lock by file 功能
+
+    IniConfig.bI06_Active=ReadIniData(sPath, "Specific", "I06_Active",  true);  //Sam 20220527 : for 矽格北興 -- I06 打勾
+    IniConfig.bI06_Enable=ReadIniData(sPath, "Specific", "I06_Enabled", false); //Sam 20220527 : for 矽格北興 -- I06 Enable
+
+    IniConfig.bP24_Active=ReadIniData(sPath, "Specific", "P24_Active",  true);  //JerryYang 20160220 add for 矽格北興 -- P24 打勾
+    IniConfig.bP24_Enable=ReadIniData(sPath, "Specific", "P24_Enabled", false); //JerryYang 20160220 add for 矽格北興 -- P24 Enable
+
+    IniConfig.bRTC_Active       =ReadIniData(sPath, "Specific", "RTC_Active",  true);       //Sam 20240311 : 新增 RTC Lock by file 功能
+    IniConfig.bRTC_Enable       =ReadIniData(sPath, "Specific", "RTC_Enabled",  false);     //Sam 20240311 : 新增 RTC Lock by file 功能
+    IniConfig.bI02_Enable       =ReadIniData(sPath, "Specific", "I02_Enabled", true);     //JerryYang 20260504 : for SPIL -- I02 Enable
+    IniConfig.bA03_Enable       =ReadIniData(sPath, "Specific", "A03_Enabled", true);
+
+    // AI(W906-FW-CFG-W4b) 20260825: GATE (CFG4-seed). Everything above this
+    // point is a READ and stays LIVE; these two lines are the method's only
+    // WRITES, and they write AuthPath+"config.ini" -- i.e. the shared
+    // D:\HT9045\config\config.ini. This campaign does not open write paths
+    // unattended, so they are gated and queued.
+    // WHY THIS IS NOT THE SAME AS THE CheckAndReadIniData PRECEDENT: that one
+    // is a READ whose implementation happens to seed a missing key, and this
+    // tree keeps those live (cObserver.cpp:549 and its siblings). These are
+    // explicit WriteIniData calls whose whole purpose is to create a key.
+    // CONSEQUENCE, stated exactly: the in-memory values are unaffected -- the
+    // ReadIniData calls above have already assigned IniConfig.bI02_Enable /
+    // bA03_Enable their defaults for this run. What is lost is only the
+    // PERSISTENCE: on a machine whose config.ini lacks those two keys, golden
+    // would add them and this port will not, so the same defaults are
+    // re-derived on every start instead of being written once.
+#if 0 // GATE (CFG4-seed) -- writes D:\HT9045\config\config.ini (see above)
+    if(!CheckKeyExist(sPath, "Specific", "I02_Enabled")) WriteIniData(sPath, "Specific", "I02_Enabled", IniConfig.bI02_Enable);
+    if(!CheckKeyExist(sPath, "Specific", "A03_Enabled")) WriteIniData(sPath, "Specific", "A03_Enabled", IniConfig.bA03_Enable);
+#endif // GATE (CFG4-seed)
+}
+
+// AI(W906-FW-CFG-W4b) 20260825: golden cConfiguration.cpp:266-363, transcribed
+// VERBATIM (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::ChangeCBListProperty()
+{
+    bool bShow=true, bNoShow=false;
+    bool bEnable=true, bDisable=false;
+    bool bReadFromFile=true, bFixedValue=false;
+
+    ReadLockByFile();                                                           //Sam 20221018 : 修正 LockByFile 問題
+
+    if(CUSTOMER_CODE==CC_KYEC_LEE && Tri_Temp_Machine!=1)                       //Wenqi 20240516 Use by Arm Close Site Function
+        ((THTEdit*)elConfig->FEditList->Items[cbA09->Tag])->ChangeProperty(bNoShow, bDisable, bFixedValue, false);
+    else if(CosFunction.bHaveFIFOMode &&
+            IniConfig.bI37_EnableFIFOMode &&
+            IniConfig.bI37_EnableFIFOSiteOrder)                                 //Steven 20170302 (wei) : FIFO MODE 跟 By Arm Close Site功能衝突
+        ((THTEdit*)elConfig->FEditList->Items[cbA09->Tag])->ChangeProperty(bShow, bDisable, bFixedValue, false);
+    else
+        ((THTEdit*)elConfig->FEditList->Items[cbA09->Tag])->ChangeProperty(bShow, bEnable, bReadFromFile, false);
+
+    if(CosFunction.bLockD42ByFile)                                              //JerryYang 20160220 add for Amkor-Philipine
+        ((THTEdit*)elConfig->FEditList->Items[cbD42->Tag])->ChangeProperty(bShow, IniConfig.bD42_Enable, !IniConfig.bD42_Enable, IniConfig.bD42_Active);
+    else if(CUSTOMER_CODE==CC_ASE_KaohSiung ||
+            CUSTOMER_CODE==CC_ASE_KaohSiung_K12)
+        ((THTEdit*)elConfig->FEditList->Items[cbD42->Tag])->ChangeProperty(bShow, bDisable, bFixedValue, true);
+    else
+        ((THTEdit*)elConfig->FEditList->Items[cbD42->Tag])->ChangeProperty(bShow, bEnable, bReadFromFile, false);
+
+    if(CosFunction.bLockD44ByFile)                                              //JerryYang 20160220 add for Amkor-Philipine
+        ((THTEdit*)elConfig->FEditList->Items[cbD44->Tag])->ChangeProperty(bShow, IniConfig.bD44_Enable, !IniConfig.bD44_Enable, IniConfig.bD44_Active);
+    else if(CUSTOMER_CODE==CC_ASE_CL         ||                                 //JerryYang 20210129 : ASE-CL松諭要求強制開啟
+            CUSTOMER_CODE==CC_SIGURD_HUKOU   ||                                 //Sam 20220527 : 矽格湖口 Jonas 要求強制開啟
+            CUSTOMER_CODE==CC_SIGURD_PeiXing ||                                 //Sam 20240606 : 北興廠也要強制開啟
+            CUSTOMER_CODE==CC_KYEC_LEE && Tri_Temp_Machine==1)                  //Wenqi 20240516 KYEC要求強制反灰開啟
+        ((THTEdit*)elConfig->FEditList->Items[cbD44->Tag])->ChangeProperty(bShow, bDisable, bFixedValue, true);
+    else
+        ((THTEdit*)elConfig->FEditList->Items[cbD44->Tag])->ChangeProperty(bShow, bEnable, bReadFromFile, false);
+
+    if(CosFunction.bLockF06ByFile)
+        ((THTEdit*)elConfig->FEditList->Items[cbF06->Tag])->ChangeProperty(bShow, IniConfig.bF06_Enable, IniConfig.bF06_Enable, IniConfig.bF06_Active);    //Sam 20221018 : 修正 LockByFile 問題
+    else
+        ((THTEdit*)elConfig->FEditList->Items[cbF06->Tag])->ChangeProperty(bShow, bEnable, bReadFromFile, false);
+
+    if(CosFunction.bLockF11ByFile)  //Sam 20240202 : 新增 F11 Lock by file 功能
+        ((THTEdit*)elConfig->FEditList->Items[cbF11->Tag])->ChangeProperty(bShow, IniConfig.bF11_Enable, IniConfig.bF11_Enable, IniConfig.bF11_Active); //Sam 20250814 : 修正 Lock 錯誤
+    else
+        ((THTEdit*)elConfig->FEditList->Items[cbF11->Tag])->ChangeProperty(bShow, bEnable, bReadFromFile, false);
+
+    if(Cylinder[C_Shuttle_Knocker_1].Enable==false && Cylinder[C_Shuttle_Knocker_2].Enable==false)  //Steven 20160509 : 氣缸沒裝就不要啟用功能
+    {
+        ((THTEdit*)elConfig->FEditList->Items[cbF14->Tag])->ChangeProperty(bNoShow, bDisable, bFixedValue, false);
+        ((THTEdit*)elConfig->FEditList->Items[cbF14_1->Tag])->ChangeProperty(bNoShow, bDisable, bFixedValue, false);
+    }
+    else
+    {
+        ((THTEdit*)elConfig->FEditList->Items[cbF14->Tag])->ChangeProperty(bShow, bEnable, bReadFromFile, false);
+        ((THTEdit*)elConfig->FEditList->Items[cbF14_1->Tag])->ChangeProperty(bShow, bEnable, bReadFromFile, false);
+    }
+
+    if((IniConfig.bA09_ByArmCloseSite ||
+        bCanAutoCloseSite==true) &&                                             //Steven 20200420 : 整合Auto Site Off
+       IniConfig.bL17HeadHeaterOnWhenCloseSite==false)                          //Steven 20160926 : 避免這幾個功能同時開,會導致IC換邊擺,然後可能發生沒加熱就生產
+    {
+        ((THTEdit*)elConfig->FEditList->Items[cbF17->Tag])->ChangeProperty(bShow, bDisable, bFixedValue, false);
+    }
+    else
+    {
+        ((THTEdit*)elConfig->FEditList->Items[cbF17->Tag])->ChangeProperty(bShow, bEnable, bReadFromFile, false);
+    }
+
+    if(CosFunction.bLockF26ByFile)                                              //Sam 20220527 : for 矽格湖口 -- F26 Enable
+    {
+        ((THTEdit*)elConfig->FEditList->Items[rgF26->Tag])->ChangeProperty(bShow, IniConfig.bF26_Enable, bReadFromFile, false);
+    }
+    else
+    {
+        ((THTEdit*)elConfig->FEditList->Items[rgF26->Tag])->ChangeProperty(bShow, bEnable, bReadFromFile, false);
+    }
+
+    if(IniConfig.bShowLotInfo)
+        ((THTEdit*)elConfig->FEditList->Items[cbI04->Tag])->ChangeProperty(bShow, bDisable, bFixedValue, false);
+    else
+        ((THTEdit*)elConfig->FEditList->Items[cbI04->Tag])->ChangeProperty(bShow, bEnable, bReadFromFile, false);
+
+    if(CosFunction.bLockI06ByFile)                                              //Sam 20220527 : for 矽格北興
+        ((THTEdit*)elConfig->FEditList->Items[cbI06->Tag])->ChangeProperty(bShow, IniConfig.bI06_Enable, IniConfig.bI06_Enable, IniConfig.bI06_Active); //Sam 20250814 : 修正 Lock 錯誤
+    else
+        ((THTEdit*)elConfig->FEditList->Items[cbI06->Tag])->ChangeProperty(bShow, bEnable, bReadFromFile, false);
+
+    #ifndef SOFT_SIMULTE
+    if(CosFunction.bKnockerSetBySetupFile==false && Cylinder[C_HotplateVibration].Enable==true)
+        ((THTEdit*)elConfig->FEditList->Items[cbP16->Tag])->ChangeProperty(bShow, bEnable, bReadFromFile, false);
+    else
+        ((THTEdit*)elConfig->FEditList->Items[cbP16->Tag])->ChangeProperty(bNoShow, bDisable, bFixedValue, false);
+    #endif
+
+    if(CosFunction.bLockP24ByFile)                                              //JerryYang 20160425 lock P24
+        ((THTEdit*)elConfig->FEditList->Items[cbP24->Tag])->ChangeProperty(bShow, IniConfig.bP24_Enable, IniConfig.bP24_Enable, IniConfig.bP24_Active); //Sam 20250814 : 修正 Lock 錯誤
+    else
+        ((THTEdit*)elConfig->FEditList->Items[cbP24->Tag])->ChangeProperty(bShow, bEnable, bReadFromFile, false);
+}
+
+// AI(W906-FW-CFG-W4b) 20260825: golden cConfiguration.cpp:4495-4512, transcribed
+// VERBATIM (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::InitConfigEdtList()                                       //Steven 20190614 : 重新整理Edit to 變數的方式
+{
+    // AI(W906-FW-CFG-W4b) 20260825: DEVIATION -- an `elConfig` null guard golden
+    // does not have, for a reason golden does not have either. golden creates
+    // that global in WinMain (`elConfig=new HTEditList;`, golden main.cpp:1484)
+    // and only ever reaches this form afterwards, so it cannot be NULL there.
+    // In this port the global is declared (Public/HTEditList.h:247) but nothing
+    // has created it yet, and every one of the thirteen Item functions below
+    // dereferences it on its first line. That is the exact shape that cost
+    // PT-W2 88 SEGFAULTs: `elLaser` lives one line away, at golden
+    // main.cpp:1483, and fLaserSensor's constructor dereferenced it at static
+    // init. Guarding on the pointer reproduces golden's own precondition
+    // instead of crashing when it is not met; once an owner creates elConfig,
+    // this runs exactly like golden.
+    if(elConfig == 0 || elConfig_byRecipe == 0 || cbLastSet == 0 || elUdUld == 0)
+        return;
+
+    InitConfigEdtList_ItemA();
+    InitConfigEdtList_ItemB();
+    InitConfigEdtList_ItemC();
+    InitConfigEdtList_ItemD();
+    InitConfigEdtList_ItemE();
+    InitConfigEdtList_ItemF();
+    InitConfigEdtList_ItemG();
+    InitConfigEdtList_ItemI();
+    InitConfigEdtList_ItemL();
+    InitConfigEdtList_ItemM();
+    InitConfigEdtList_ItemN();
+    InitConfigEdtList_ItemO();
+    InitConfigEdtList_ItemP();
+
+    ChangeCBListProperty();
 }
