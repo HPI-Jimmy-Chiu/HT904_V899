@@ -10000,6 +10000,59 @@ Height/SetYItem` 這組 facade property→mutator 路由（golden 原文是 `->X
   CommBin 生命週期；mot_table 新表（等 Q1/Q9/Q4）；1203 ENI 檔。
 
 
+## 20260825 VIII — FW-OBS-W3 收案：FW3A-4 拆成三堆（主迴圈自做）
+
+FW-OBS-W2 刻意把 FW3A-4 的 31 個 widget 全部留在佇列，理由是「修錯的 gate」與
+「擴張 facade」是兩件事。本波做第二件。**動手前先逐族量值來源**（FW-TAG1 的規矩：
+型別存不存在是簡單的一半，值從哪來才是會咬人的那一半），結果不是預期的兩堆，是三堆。
+
+### 補上並解鎖（9 個）——值來源都活著
+
+| widget | 值從哪來 |
+|---|---|
+| `labDeviceName` | `GetLastOpenFN()` |
+| `APHeadLabel18` | `MyDBQClearDT()`（cMyDB.h:110，終於有消費者了） |
+| `labReleaseDate` | `RunInfo.SoftwareDate`（cprod.h:2726） |
+| `Button7` | `!SystemStart`（cmydef.h:221，機器在跑時不能存檔的閂） |
+| `APHeadLabel13/14` | DrawCell 那兩個**本來就 ACTIVE** 的累加迴圈算出來的欄位小計 |
+| `labDayJamRate` / `btAutoSave` / `CheckBox1` | 單純的顯示切換 |
+
+解開 8 個區塊；FW3A-4 從 11 塊收到 3 塊，整檔 gate 62 → 54。
+
+### 續鎖，值來源不存在（4 個）
+
+`RadioButton17..20`。補四個成員是最容易的事，問題在 `->Checked` 的值：golden 是
+**`.dfm` 設計期屬性**，本 port 沒有 .dfm 載入路徑，四個都會讀到 false。而 golden 是
+**四個沒有 else 的 `if`**，所以「全 false」不等於選 row 0，是讓 `RowNo` **沿用上一個
+寫入者留下的值**。打開等於把一個刻意的選擇變成靜默沿用。與 VacuumUnit 的 Tag 分派同族。
+
+### 續鎖，而且原本的 gate 說法是錯的（17 個）
+
+SPIL 的 `pal*` 面板。FW3A-4 只怪「面板不是 facade 成員」，這讓它看起來像一波就能修完。
+**右邊也缺**：`forms/fSCKART.h` 的 `TfSCKART` 是刻意的量測子集，**完全沒有 `sInfo_*` 欄位**。
+
+```
+grep -n "sInfo_\|iInfo_MultiLotCnt" forms/fSCKART.h  ->  0 hits (20260825)
+```
+
+只補面板會造出 17 個沒有任何程式能寫入的成員。十七個來源裡只有 `sLotID` 是真的
+（fSCKART.h:86）。要等 SCK_ART.cpp 補完波，跟 chunk C 的 `C-log-11` 同一批
+（那個還多需要 `sInfoArr_*` 陣列版）。
+
+### 兩處誠實話
+
+- `btAutoSave`/`CheckBox1` 在 golden 自己的 `#ifdef SOFT_SIMULTE` 裡，而
+  `MachineType.h:48` 在本樹是註解掉的，所以解 gate **只還原形狀、不還原行為**，
+  註解已寫明。
+- `APHeadLabel13->Caption=iTotal;` 照抄不加轉型：`AnsiString` 有非 explicit 的 int
+  建構子（vclcompat/AnsiString.h:67），BCB6 在這裡也是這樣。旁邊的 `APHeadLabel14`
+  自己寫了明轉型——**那個不對稱是 golden 的，不是 port 加的**。
+
+### gate
+
+全新雙 dir `build_obs3g` / `build_obs3r`。**Debug 137/142、Release 137/142，
+兩段失敗集合逐項相同且等於常駐五項。** 本波零新增 GOLDEN 標記，台帳維持 723 筆。
+
 ### 🔖 RESUME（20260825 日終）
 
 - **今日全收（本節之前的 20260825 I-VII，共 7 波）**：FW-BARCODE2／FW-BARCODE3
@@ -10010,13 +10063,15 @@ Height/SetYItem` 這組 facade property→mutator 路由（golden 原文是 `->X
   - `cObserver.cpp` **3,504 → 7,124 行**；`forms/fObserver.h` +95 個成員、+58 條宣告。
   - commit：`dcd55f1`（TRadioGroup facade 正規化）→ `077c4ce`（合併）→ `2d9e7c1`（台帳 R9）。
   - 台帳 **681 → 723 筆**（cObserver.cpp 新分節 42 筆，該檔本波前為 0 筆）。
-- **下一波（已備妥，可直接開工）＝ FW-OBS-W3：補 GATE (FW3A-4) 的 31 個 widget**。
-  已量好型別與 golden 行號：22 TPanel／4 TRadioButton／2 TButton／1 TCheckBox／
-  1 TGroupBox／1 TLabel（清單見 `forms/fObserver.h` 那段 WHERE THE LINE IS 註解）。
-  可解 chunk A 的 11 個 FW3A-4 區塊中的 10 個
-  （`grpATCSerialNumber` 那塊還卡 `ATC_TYPE_31`，全樹 0 命中，維持 gated）。
-  順帶清掉 chunk C `C-log-11` 的 (b) 半邊；該 gate 仍卡
-  (a) `fSCKART->sInfoArr_*` 與 (c) `.dfm` Tag 沒有載入路徑。
+- **FW-OBS-W3 已收案**（commit `4a3f711`，雙 gate 137/142×2）。當初估「11 塊可解 10 塊」
+  是**估錯的**：實際只解得了 8 塊 / 9 個 widget。剩下 22 個各有各的硬阻塞——
+  4 個 RadioButton 卡「`.dfm` 沒有載入路徑」、17 個 `pal*` 卡「`fSCKART` 連
+  `sInfo_*` 欄位都沒有」（原 gate 文字漏講了這半邊，已更正）、
+  `grpATCSerialNumber` 卡 `ATC_TYPE_31`。
+- **cObserver 這條線的剩餘 gate 都不是「補個成員就好」的**：54 個區塊裡
+  FW3A-10（canvas，8 塊）要 TCanvas/TRect/MyDrawText 整組、B-SAFETY-*（12 塊）
+  與 C-log-5/10 是 write path（安全佇列）、C-log-2/9 要 TSaveDialog/TOpenDialog。
+  **下一個標的要換檔，不要在 cObserver 上繼續挖。**
 - **等使用者（本波未動，只是重列）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
   HAL-MOT1 十問（Q1/Q9/Q4 擋新 mot_table 起草）；TImage headless 准駁；
   GOLDEN BUG (TAG1-a) edSHighBase；GOLDEN DEFECT (i) 21-into-20 sprintf overflow。
