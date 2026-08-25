@@ -10171,6 +10171,77 @@ MinGW 的 `unknown escape sequence` 警告指出：ItemN 裡三個預設路徑�
 那個全域是 golden `main.cpp:1484` 才 `new` 的，距離 `elLaser` 一行，而 `elLaser` 的
 static-init 解參考在 PT-W2 代價是 88 個 SEGFAULT。
 
+## 20260825 XI — FW-CFG-W4a / W4b 收案，以及 W5 的主動退場（主迴圈自做）
+
+### W4a：一個被我自己弄假的 gate
+
+`HTEditList::Add` 有 5 個 `GATE (2)`，理由是「`vclcompat::TControl` 沒有 `Tag`」。
+那在寫的時候是對的，而 **FW-TAG1（同一天稍早）把 `Tag` 補進了 `TControl`**。
+一個波次的掃描能找出「已經過期」的 gate，找不出「它正在弄假」的 gate——
+這就是它活下來的原因。
+
+**它是承重的**：`ChangeCBListProperty` 用 `elConfig->FEditList->Items[cbA09->Tag]`
+查表，走的是 **widget 的 Tag**，不是 `Item->iTag`。少了回寫，13 個查表全讀 0，
+全去改清單第 0 項。型別對、連結乾淨、改錯 widget、沒有徵狀。
+
+因為動到共用元件，把明顯的風險量了：全樹掃「有沒有 widget 兩個擁有者搶著寫 Tag」
+——**1,108 個被註冊的 widget 裡只有 1 個**（`edL11_1`），而且是 golden 自己的雙重用途：
+ItemL 的 `Add` 寫清單索引，ItemN（golden :3314）再用 `Tag=3` 蓋掉，而 dispatcher
+先跑 ItemL 再跑 ItemN。本 port 以相同順序重現。已入台帳
+GOLDEN ODDITY (CFG-L11tag)，724 → 725。
+
+自己也犯了一次：台帳那列的 port 行號是**推估的**，兩個檔各差約 17 和 20 行，
+commit 前實測更正。這正是我整場在別人身上糾正的同一個毛病。
+
+### W4b：dispatcher 落地
+
+`ReadLockByFile` / `ChangeCBListProperty` / `InitConfigEdtList`，共 148 行。
+忠實度：108 行 LIVE 敘述，107 行逐字命中。
+
+- **DEVIATION：`elConfig` 空指標守衛**（golden 沒有，理由 golden 也沒有）。
+  golden 在 WinMain 建那個全域（`main.cpp:1484`），本 port 還沒有人建，而 13 個
+  Item 函式第一行就解參考。**`elLaser` 就在隔壁一行（:1483）**，當年 static-init
+  解參考代價是 88 個 SEGFAULT。守衛覆蓋四個清單，不只第一個。
+- **GATE (CFG4-seed)**：`ReadLockByFile` 全是讀取，只有最後兩行寫產線的
+  `config\config.ini`。只關那兩行。與 `CheckAndReadIniData` 先例的差別已寫明：
+  那是「讀取剛好會種 key」，這是「明確為了建 key 而寫」；代價只是持久化。
+
+兩波雙 gate 全綠（各 Debug 137/142、Release 137/142 常駐五項）。
+census：`cConfiguration.cpp` 3,157 → **3,009 行**；全樹 → **54,017 行**。
+
+### W5：開了又主動退掉（這個判斷本身值得記）
+
+選了四個小方法（ShowMemo/InitialMemo/FormDestroy/DoPassword，209 行），
+但它們**不是前四波那種「逐字搬移」型的標的**：
+
+- 簽章帶 `__fastcall` 與 `TObject *Sender`，需要本樹的態轉換慣例；
+- `strList->Strings[j].SubString(...)` —— proxy 上不能直接呼叫成員，要包 `AnsiString(...)`；
+- `InitialMemo(TWinControl*, TStringList*)` 的 `TWinControl` 在 `Public/HTEdit.h:140`，
+  但 `forms/fConfiguration.h` 看不到它（宣告被解成 `int*`）；
+- `fMain->cbUserSelectChange` / `stOperatorClick` 要 gate；`ts*00` 一批 TTabSheet 要補。
+
+而且我的成員產生器**把 `Label3`/`Label4` 加進了 `TfConfiguration`**——它們其實是
+`fPassword->Label3` ，屬於另一個表單。這是**我自己造出的類別歸屬錯誤**，
+也是該停下來的信號。
+
+**已以外科切除＋assert 完整退回**（不用 `git checkout`），
+`git diff` 對 W4b commit 是空的，編譯 0 error。
+
+### FormShow 的完整偵察（已量好，下一人直接用）
+
+`FormShow` golden :4514-5365（852 行），缺 238 個識別字，分四類：
+
+| 類 | 數量 | 處置 |
+|---|---|---|
+| TfConfiguration 自己的方法 | 2（FormShow、ShowMemo） | 跟 W5 一起翻 |
+| golden header 的 widget | **188** | 補成員；TEdit 60、TPanel 32、TLabel 21、TGroupBox 20、TButton 13、TCheckBox 11、TTrackBar 8、TTabSheet 6、TPageControl 5、其餘零星 |
+| 樹裡別處已有 | 38 | 只差 include |
+| 真的不存在 | 10 | 要 gate |
+
+**需要新的 facade 型別：**TTimer、TDateTimePicker、TImage、TTrackBar、TUpDown
+（TStringGrid 已有）。先例：`forms/fObserver.h` 的 `TfObserverDateTimePicker`、
+`forms/fLotInfo.h` 的 `TfLotInfoOpenDialog`——都是表單局部的小 stand-in。
+
 ### 🔖 RESUME（20260825 日終）
 
 - **今日全收（本節之前的 20260825 I-VII，共 7 波）**：FW-BARCODE2／FW-BARCODE3
@@ -10191,20 +10262,29 @@ static-init 解參考在 PT-W2 代價是 88 個 SEGFAULT。
   與 C-log-5/10 是 write path（安全佇列）、C-log-2/9 要 TSaveDialog/TOpenDialog。
   已換檔，不再在 cObserver 上挖。
 
-- **進行中的戰役 = cConfiguration（FW-CFG）**。已收 W1/W2/W3，**13 個
-  `InitConfigEdtList_Item*` 全數落地**（共 4,104 行、1,174 個 widget 成員）；
-  commit `e6fe41f` → `79abd67` → `ccefc6d`，三輪雙 gate 全綠。
-  census：該檔 7,101 → **3,157 行**；全樹 58,109 → **54,165 行**；
-  表單組 14.5% → **16.0%**（分母：golden 表單 code 行數）。
-- **下一波（FW-CFG-W4，已量好可直接開工）**：
-  `InitConfigEdtList()` dispatcher（golden :4495-4512）＋它呼叫的
-  `ChangeCBListProperty()`（golden :266-363，98 行）——兩個必須同波，
-  否則 dispatcher 編不過。
-  ⭐ **接的時候必須帶 `elConfig` 空指標守衛**：那個全域是 golden
-  `main.cpp:1484` 才 `new` 的，距離 `elLaser` 一行；`elLaser` 的 static-init
-  解參考在 PT-W2 代價是 88 個 SEGFAULT。
-  之後依序：FormShow（852）、CheckConfigurationBeforeSave（393）、
-  FormClose（208）、ctor（117）、UpdateUT150Comm（168）、InitialMemo（85）。
+- **進行中的戰役 = cConfiguration（FW-CFG）**。已收 **W1/W2/W3/W4a/W4b**：
+  13 個 `InitConfigEdtList_Item*` 全數落地，dispatcher 也接上了。
+  commit `e6fe41f` → `79abd67` → `ccefc6d` → `8871eda` → `34fbd03`，五輪雙 gate 全綠。
+  census：該檔 7,101 → **3,009 行**；全樹 58,109 → **54,017 行**；
+  表單組 14.5% → **16.0%**（分母：golden 表單 code 行數）。台帳 **725 筆**。
+- **W5 開了又主動退掉**（外科切除還原，`git diff` 對 W4b 是空的）。原因寫在
+  20260825 XI：那四個小方法不是「逐字搬移」型的標的，需要 `__fastcall`/
+  `TObject *Sender` 的態轉換、proxy 上不能直接呼叫 `SubString`、`TWinControl`
+  在 `forms/fConfiguration.h` 看不到、以及 `fMain` 兩個方法要 gate；
+  而且我的成員產生器把 `fPassword->Label3` 的 `Label3` 加成了 `TfConfiguration`
+  的成員（類別歸屬錯誤）。**下一波要先處理這些慣例，不要再用純搬移腳本。**
+- **下一波（FW-CFG-W5，偵察已完成）**：
+  (a) 先補五個 facade 型別 stand-in：**TTimer / TDateTimePicker / TImage /
+      TTrackBar / TUpDown**（TStringGrid 已有）。先例：`forms/fObserver.h` 的
+      `TfObserverDateTimePicker`、`forms/fLotInfo.h` 的 `TfLotInfoOpenDialog`。
+  (b) 再翻 ShowMemo / InitialMemo / FormDestroy / DoPassword（209 行），
+      注意上面那四個慣例問題。
+  (c) 然後 FormShow（852 行）：缺 238 個識別字＝2 個自家方法＋**188 個 widget**
+      （TEdit 60／TPanel 32／TLabel 21／TGroupBox 20／TButton 13／TCheckBox 11／
+      TTrackBar 8／TTabSheet 6／TPageControl 5／其餘零星）＋38 個只差 include
+      ＋10 個要 gate。
+  之後：CheckConfigurationBeforeSave（393）、FormClose（208）、ctor（117）、
+  UpdateUT150Comm（168）。
 - **FW-CFG 的工具鏈（scratchpad，下一人直接用）**：
   `cfg_wave2.py gen <TAG> <字母...>` 抽取（**修正版括號配對**）、
   `cfg_apply.py <TAG> <字母...>` 套用、`cfg_fidelity.py <方法名...>` 逐字複驗。
