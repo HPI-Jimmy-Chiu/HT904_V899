@@ -132,6 +132,15 @@
 #include <cstdlib>               // atof
 #include <cmath>                 // fabs(double) -- see DESIGN NOTE below
 #include <cstring>               // memset
+// AI(W906-FW-YM-W14) 20260826: 本波的 MouseUp handler 保留 golden 的
+// `TMouseButton Button, TShiftState Shift` 完整簽章，需要這個 stand-in。
+#include "vclcompat/ShiftState.h"
+// AI(W906-FW-YM-W14) 20260826: 本波的 MouseUp handler 呼叫 Barcode_Reader（golden
+// BarcodeReader.h:50，本樹已翻好在同名檔），這個 TU 之前沒有 include 它。
+#include "BarcodeReader.h"
+// AI(W906-FW-YM-W14) 20260826: edFailYieldRate_ARTFTFileKeyPress 呼叫
+// OnlyNumberInPut（golden common.h:104，本樹已翻好在 common.h:403）。
+#include "common.h"
 
 // AI(W906-FW3-YieldMon-WA) 20260818: TU-local forward decl for
 // MyDBIProductionData (golden cMyDB.h:87, real body cMyDB.cpp:642) instead of
@@ -2368,4 +2377,270 @@ void TfYieldMonitoring::DoAutoCloseSite(int iAllSiteOn)                         
             bGetGPIBAutoSiteOff=false;                                          //JimmyChiu 20250715 : Auto site on/off by GPIB
         }
     }
+}
+
+// =============================================================================
+// FW-YM-W14 -- TfYieldMonitoring 的 UI 事件處理器（19 支）
+//
+// 這一波是 vclcompat/ShiftState.h 的**第一個 consumer**。
+// FW-YM-W13 偵察時，這批裡有 15 支因為簽章帶 `TMouseButton`/`TShiftState`
+// 而編不過（本樹當時沒有這兩個型別），整波退掉；stand-in 落地（commit
+// f184093，量測先行：golden 全樹 358 支帶該參數、只有 1 支真的讀它）之後，
+// 這 15 支就可以**保留 golden 的完整簽章**翻進來。
+//
+// 依 ShiftState.h 檔頭記錄的裁決：新翻的 handler 保留完整簽章，
+// 既有那些已丟掉參數的**不在本波回頭改**（那是獨立的機械式 pass，還沒做）。
+//
+// 本波未含（FW-YM-W13 已查明的阻塞，理由不變）：
+//   SearchRecipeParameter / ChangeData      -- 簽章帶 TWinControl（控制項樹，
+//                                              同 GATE (W5-CCE) 的缺口）
+//   DoReplyDefaultToForm                    -- 讀 fRPDefault->RP_*（別的表單）
+//   mtBinSelectYieldMouseDown               -- 用 MyYieldPanel，而 TMyYieldPanel
+//                                              是 forms/fYieldMonitoring.h:74-80
+//                                              明列排除的
+//   DoFormToData / btn*Click / Save* / FormCreate / FormShow / DoIniDataToForm
+//                                           -- 同上 header 的 EXPLICITLY EXCLUDED
+//   ctor                                    -- 同 header :40-54 的 NSDMI 慣例
+// =============================================================================
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:5442-5456, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::cbLowYieldByTotal_FTMouseUp(
+      TObject *Sender, TMouseButton Button, TShiftState Shift, int X,
+      int Y)
+{
+    if(Barcode_Reader(bcYield)==0)                                              // 20140103 wei KYEC Barcode Reader
+    {
+        cbLowYieldByTotal_FT->Checked=TestIF_File.bFailAlarmLowYieldByTotal;
+        return;
+    }
+
+    if(IniConfig.bSIGURDFunction)                                               //KaiChen 20190626 ：矽格要求 LowYieldByTotal & SiteYieldCmp 開關同步
+    {
+        cbSiteYieldCmp_FT->Checked=cbLowYieldByTotal_FT->Checked;
+    }
+}
+
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:3301-3310, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::rbContsFailBySocket_FTOnMouseUp(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+    if(Barcode_Reader(bcYield)==0)                                              // 20140103 wei KYEC Barcode Reader
+    {
+        rbContsFailBySocket_FTOn ->Checked=TestIF_File.bContsFailBySocket;
+        rbContsFailBySocket_FTOff->Checked=!TestIF_File.bContsFailBySocket;
+        return;
+    }
+}
+
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:3312-3321, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::rbContsFailByHead_FTOnMouseUp(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+    if(Barcode_Reader(bcYield)==0)                                              // 20140103 wei KYEC Barcode Reader
+    {
+        rbContsFailByHead_FTOn->Checked=TestIF_File.bContsFailByHead;
+        rbContsFailByHead_FTOff->Checked=!TestIF_File.bContsFailByHead;
+        return;
+    }
+}
+
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:3323-3332, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::rbContsFailBySocket_RTOnMouseUp(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+    if(Barcode_Reader(bcYield)==0)                                              // 20140103 wei KYEC Barcode Reader
+    {
+        rbContsFailBySocket_RTOn ->Checked=TestIF_File.bContsFailBySocket_RT;
+        rbContsFailBySocket_RTOff->Checked=!TestIF_File.bContsFailBySocket_RT;
+        return;
+    }
+}
+
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:3334-3343, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::rbContsFailByHead_RTOnMouseUp(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+    if(Barcode_Reader(bcYield)==0)                                              // 20140103 wei KYEC Barcode Reader
+    {
+        rbContsFailByHead_RTOn ->Checked=TestIF_File.bContsFailByHead_RT;
+        rbContsFailByHead_RTOff->Checked=!TestIF_File.bContsFailByHead_RT;
+        return;
+    }
+}
+
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:5431-5440, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::cbIntervalLowYieldBySite_FTMouseUp(
+      TObject *Sender, TMouseButton Button, TShiftState Shift, int X,
+      int Y)
+{
+    if(Barcode_Reader(bcYield)==0)                                              // 20140103 wei KYEC Barcode Reader
+    {
+        cbIntervalLowYieldBySite_FT->Checked=TestIF_File.bFailAlarmIntervalLowYieldBySite;
+        return;
+    }
+}
+
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:5458-5467, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::cbSiteYieldCmp_RTMouseUp(
+      TObject *Sender, TMouseButton Button, TShiftState Shift, int X,
+      int Y)
+{
+    if(Barcode_Reader(bcYield)==0)                                              // 20140103 wei KYEC Barcode Reader
+    {
+        cbSiteYieldCmp_RT->Checked=TestIF_File.bFailAlarmSiteYieldCmp_RT;
+        return;
+    }
+}
+
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:5479-5488, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::cbIntervalLowYieldBySite_RTMouseUp(
+      TObject *Sender, TMouseButton Button, TShiftState Shift, int X,
+      int Y)
+{
+    if(Barcode_Reader(bcYield)==0)                                              // 20140103 wei KYEC Barcode Reader
+    {
+        cbIntervalLowYieldBySite_RT->Checked=TestIF_File.bFailAlarmIntervalLowYieldBySite_RT;
+        return;
+    }
+}
+
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:5605-5614, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::cbIntervalLowYieldByTotal_FTMouseUp(
+      TObject *Sender, TMouseButton Button, TShiftState Shift, int X,
+      int Y)
+{
+    if(Barcode_Reader(bcYield)==0)                                              // 20140103 wei KYEC Barcode Reader
+    {
+        cbIntervalLowYieldByTotal_FT->Checked=TestIF_File.bFailAlarmIntervalLowYieldByTotal;
+        return;
+    }
+}
+
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:5616-5625, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::cbIntervalLowYieldByTotal_RTMouseUp(
+      TObject *Sender, TMouseButton Button, TShiftState Shift, int X,
+      int Y)
+{
+    if(Barcode_Reader(bcYield)==0)                                              // 20140103 wei KYEC Barcode Reader
+    {
+        cbIntervalLowYieldByTotal_RT->Checked=TestIF_File.bFailAlarmIntervalLowYieldByTotal_RT;
+        return;
+    }
+}
+
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:3281-3289, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::cbLowYield_FTMouseUp(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+    if(Barcode_Reader(bcYield)==0)                                              // 20140103 wei KYEC Barcode Reader
+    {
+        cbLowYield_FT->Checked=TestIF_File.bFailAlarmLowYield;
+        return;
+    }
+}
+
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:3291-3299, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::cbSiteYieldDifferent_FTMouseUp(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+    if(Barcode_Reader(bcYield)==0)                                              // 20140103 wei KYEC Barcode Reader
+    {
+        cbSiteYieldDifferent_FT->Checked=TestIF_File.bFailAlarmSiteYieldDifferent;
+        return;
+    }
+}
+
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:3345-3353, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::cbLowYield_RTMouseUp(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+    if(Barcode_Reader(bcYield)==0)                                              // 20140103 wei KYEC Barcode Reader
+    {
+        cbLowYield_RT->Checked=TestIF_File.bFailAlarmLowYield_RT;
+        return;
+    }
+}
+
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:3355-3363, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::cbSiteYieldDifferent_RTMouseUp(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+    if(Barcode_Reader(bcYield)==0)                                              // 20140103 wei KYEC Barcode Reader
+    {
+        cbSiteYieldDifferent_RT->Checked=TestIF_File.bFailAlarmSiteYieldDifferent_RT;
+        return;
+    }
+}
+
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:5469-5477, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::cbLowYieldByTotal_RTMouseUp(
+      TObject *Sender, TMouseButton Button, TShiftState Shift, int X,
+      int Y)
+{
+    if(IniConfig.bSIGURDFunction)                                               //KaiChen 20190626 ：矽格要求 LowYieldByTotal & SiteYieldCmp 開關同步
+    {
+        cbSiteYieldCmp_RT->Checked=cbLowYieldByTotal_RT->Checked;
+    }
+}
+
+// AI(W906-FW-YM-W14) 20260826: edContactCountFTChange（golden :3176-3194）本波不翻。
+// 它靠 `TEdit *TempEdit=(TEdit *)Sender; if(TempEdit->Name=="edLowYieldByTotalIg_FT")`
+// 比對 **.dfm 設計期的元件名**來決定要同步哪一組欄位。
+// 本樹沒有 .dfm 載入路徑，`Name` 會是空字串 -> 兩個 if 都不成立 -> 那段鏡射
+// 靜默不執行。這正是「解 gate 前先查值從哪來」那條規則講的形狀：
+// 補一個恆為空的成員能讓它「編得過」，但行為是錯的而且看不出來。
+//
+// 真正的解法有跡可循：本戰役的 widget 命名慣例就是 **dfm leaf name**，
+// 所以 port 的成員名字本身就是 golden 的 Name。要做的是給 vclcompat 的
+// TControl 一個 `AnsiString Name`，並在 facade 建立 widget 時把成員名字填進去
+// （不是憑空捏資料，是把已經存在的對應關係寫出來）。那會動到全樹共用的
+// vclcompat/Controls.h，值得單獨一波，本波不順手做。
+
+// AI(W906-FW-YM-W14) 20260826: FormShortCut（golden :5950-5957）本波不翻。
+// 簽章是 `FormShortCut(TWMKey &Msg, bool &Handled)`——`TWMKey` 是 Windows
+// 訊息結構，本樹零 port。forms/fTemp_Set.h:82 對同名方法已經有先例：
+// 「OMITTED ENTIRELY -- FormShortCut(TWMKey &Msg, bool &Handled)」。照辦。
+
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:3554-3559, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::edFailYieldRate_ARTFTFileKeyPress(
+      TObject *Sender, char &Key)
+{
+    if(OnlyNumberInPut(Key)==false)
+        Key=NULL;
+}
+
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:3147-3150, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::rgPiggyBack_FTClick(TObject *Sender)
+{
+    btnApply->Enabled=true;
+}
+
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:3233-3236, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::rgQARunModeClick(TObject *Sender)
+{
+    btnApply->Enabled=true;
+}
+
+// AI(W906-FW-YM-W14) 20260826: golden uYieldMonitoring.cpp:3276-3279, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfYieldMonitoring::rgBinAlarmByClick(TObject *Sender)
+{
+    btnApply->Enabled=true;
 }

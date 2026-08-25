@@ -11282,6 +11282,62 @@ uYieldMonitoring 的 15 支與 THGem 的 `GemTerminalSendEditKeyDown`。
 - **註（誠實揭露）**：`forms/fObserver.h:1021` 把「~34」改成量到的「31」是**雙 gate 跑完之後**
   才做的純註解修正，兩段 gate 編到的是改之前的樹；差異僅註解，不影響任何驗收數字。
 
+## 20260826 VII — FW-YM-W14：ShiftState stand-in 的第一個 consumer，19 支落地
+
+### 交付
+
+`uYieldMonitoring.cpp` +275 行、`forms/fYieldMonitoring.h` +57 行
+（`git diff --numstat`，純新增 0 刪除）。**19 支 UI 事件處理器**，
+其中 **15 支保留 golden 完整的 `TMouseButton Button, TShiftState Shift` 簽章**。
+
+忠實度複驗：**LIVE 敘述 97 條，golden 無逐字對應 19 條**——19 條全部是簽章行
+（`__fastcall` 剝除），**gated 0 行**。沒有任何降級。
+
+這是 `vclcompat/ShiftState.h`（commit `f184093`）的第一個 consumer。
+FW-YM-W13 就是因為這 15 支編不過而整波退掉的；stand-in 落地後它們原樣翻進來。
+
+### 驗收
+
+`tools/dualgate.sh ym14`（全新 dir）：Debug **137/142**、Release **137/142**，
+失敗集合逐項相同且等於常駐五項。`D:\HT9045\system` 552 檔本晚零變動。
+
+### 三個 include 缺口（不是缺功能，是這個 TU 沒引到）
+
+- `vclcompat/ShiftState.h` —— 新的。
+- `BarcodeReader.h` —— `Barcode_Reader(bcYield)` 早就翻好在同名檔（`:50`），
+  只是 `uYieldMonitoring.cpp` 沒 include 它。
+- `common.h` —— `OnlyNumberInPut(Key)` 同理（`common.h:403`）。
+
+「找不到符號」不等於「還沒翻」，這一波三次都是後者。
+
+### 兩支退出，理由都是**值從哪來**而不是型別
+
+- **`edContactCountFTChange`（golden :3176-3194）** —— 它靠
+  `TEdit *TempEdit=(TEdit *)Sender; if(TempEdit->Name=="edLowYieldByTotalIg_FT")`
+  比對 **.dfm 設計期的元件名**來決定同步哪一組欄位。
+  本樹沒有 .dfm 載入路徑，`Name` 會是空字串 → 兩個 `if` 都不成立 → 那段鏡射
+  靜默不執行。**補一個恆為空的 `Name` 成員能讓它編得過，但行為是錯的而且看不出來**
+  ——正是「解 gate 前先查值從哪來」那條規則的形狀。
+  真正的解法有跡可循：本戰役的 widget 命名慣例就是 **dfm leaf name**，
+  所以 port 的成員名字**本身就是** golden 的 `Name`。要做的是給 `vclcompat` 的
+  `TControl` 一個 `AnsiString Name`，並在建立 widget 時把成員名字填進去——
+  不是憑空捏資料，是把已經存在的對應關係寫出來。
+  那會動到全樹共用的 `vclcompat/Controls.h`，值得單獨一波。
+- **`FormShortCut`（golden :5950-5957）** —— `TWMKey` 是 Windows 訊息結構，
+  本樹零 port。`forms/fTemp_Set.h:82` 對同名方法已有先例
+  （「OMITTED ENTIRELY」），照辦。
+
+### 一個順帶確認：`Key=NULL` 的警告專案早就處理過了
+
+`edFailYieldRate_ARTFTFileKeyPress` 的 golden 原文是
+`if(OnlyNumberInPut(Key)==false) Key=NULL;`——`Key` 是 `char&`，
+所以 `-Wall` 會報 `converting to non-pointer type 'char' from NULL`。
+我一度以為要處理，查了才發現 **CMakeLists.txt:728/800 早就掛了
+`-Wno-conversion-null`**，正是為了 golden 這個慣用法。
+在專案實際旗標下這個檔是 **0 error 0 warning**。
+（教訓：手動下 `-Wall` 跟專案真正用的旗標不是同一組，判斷「有沒有警告」
+要用專案的旗標，不是自己順手加的。）
+
 ### 🔖 RESUME（20260826 清晨）
 
 - **今晚全收（20260825 XV 起算，共 6 波 + 2 次工具修正）**：

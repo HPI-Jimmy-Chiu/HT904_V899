@@ -210,6 +210,8 @@
 
 #include "vclcompat/Controls.h"   // vclcompat::TComboBox (cbbClosedSiteBin)
 #include "MachineType.h"          // MAX_SOCKET_ROW/MAX_SOCKET_COL (array sizing, matches golden's own 4/8 literals)
+// AI(W906-FW-YM-W14) 20260826: 下面的 handler 宣告帶 TMouseButton/TShiftState。
+#include "vclcompat/ShiftState.h"
 
 using vclcompat::TComboBox;
 
@@ -317,6 +319,61 @@ public:
     // ctor would, and no method needs virtual-dispatch-through-delete
     // (nothing in this wave or its test ever deletes through a
     // TfYieldMonitoring* base pointer, only ever a concrete-typed local).
+
+    // ======================================================================
+    // AI(W906-FW-YM-W14) 20260826: 19 支 UI 事件處理器（原排 21，兩支退出見 .cpp） + 它們解參照的 25 個
+    // widget。widget 擁有者用 tools/wavescan/owner_report.py 對 golden header
+    // 逐個查過（本波回報「屬於別的物件: 0 個」）——不是從 `x->y` 猜的。
+    // 15 支帶 golden 完整的 `TMouseButton Button, TShiftState Shift` 簽章，
+    // 靠 vclcompat/ShiftState.h（commit f184093）才成立；見該檔檔頭的裁決。
+    // 依本 header :40-54 的慣例全部用 NSDMI，不寫建構子。
+    // ======================================================================
+
+    TButton        *btnApply                       = new TButton();   // golden uYieldMonitoring.h:19
+    TCheckBox      *cbIntervalLowYieldBySite_FT    = new TCheckBox();   // golden uYieldMonitoring.h:135
+    TCheckBox      *cbIntervalLowYieldBySite_RT    = new TCheckBox();   // golden uYieldMonitoring.h:148
+    TCheckBox      *cbIntervalLowYieldByTotal_FT   = new TCheckBox();   // golden uYieldMonitoring.h:141
+    TCheckBox      *cbIntervalLowYieldByTotal_RT   = new TCheckBox();   // golden uYieldMonitoring.h:154
+    TCheckBox      *cbLowYieldByTotal_FT           = new TCheckBox();   // golden uYieldMonitoring.h:197
+    TCheckBox      *cbLowYieldByTotal_RT           = new TCheckBox();   // golden uYieldMonitoring.h:259
+    TCheckBox      *cbLowYield_FT                  = new TCheckBox();   // golden uYieldMonitoring.h:180
+    TCheckBox      *cbLowYield_RT                  = new TCheckBox();   // golden uYieldMonitoring.h:245
+    TCheckBox      *cbSiteYieldCmp_FT              = new TCheckBox();   // golden uYieldMonitoring.h:193
+    TCheckBox      *cbSiteYieldCmp_RT              = new TCheckBox();   // golden uYieldMonitoring.h:254
+    TCheckBox      *cbSiteYieldDifferent_FT        = new TCheckBox();   // golden uYieldMonitoring.h:186
+    TCheckBox      *cbSiteYieldDifferent_RT        = new TCheckBox();   // golden uYieldMonitoring.h:251
+    TEdit          *edLowYieldByTotalIg_FT         = new TEdit();   // golden uYieldMonitoring.h:199
+    TEdit          *edLowYieldByTotalIg_RT         = new TEdit();   // golden uYieldMonitoring.h:262
+    TEdit          *edSiteYieldCmpIg_FT            = new TEdit();   // golden uYieldMonitoring.h:191
+    TEdit          *edSiteYieldCmpIg_RT            = new TEdit();   // golden uYieldMonitoring.h:257
+    TRadioButton   *rbContsFailByHead_FTOff        = new TRadioButton();   // golden uYieldMonitoring.h:110
+    TRadioButton   *rbContsFailByHead_FTOn         = new TRadioButton();   // golden uYieldMonitoring.h:109
+    TRadioButton   *rbContsFailByHead_RTOff        = new TRadioButton();   // golden uYieldMonitoring.h:236
+    TRadioButton   *rbContsFailByHead_RTOn         = new TRadioButton();   // golden uYieldMonitoring.h:235
+    TRadioButton   *rbContsFailBySocket_FTOff      = new TRadioButton();   // golden uYieldMonitoring.h:105
+    TRadioButton   *rbContsFailBySocket_FTOn       = new TRadioButton();   // golden uYieldMonitoring.h:104
+    TRadioButton   *rbContsFailBySocket_RTOff      = new TRadioButton();   // golden uYieldMonitoring.h:231
+    TRadioButton   *rbContsFailBySocket_RTOn       = new TRadioButton();   // golden uYieldMonitoring.h:230
+
+    void cbLowYieldByTotal_FTMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);   // golden :5442-5456
+    void rbContsFailBySocket_FTOnMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);   // golden :3301-3310
+    void rbContsFailByHead_FTOnMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);   // golden :3312-3321
+    void rbContsFailBySocket_RTOnMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);   // golden :3323-3332
+    void rbContsFailByHead_RTOnMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);   // golden :3334-3343
+    void cbIntervalLowYieldBySite_FTMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);   // golden :5431-5440
+    void cbSiteYieldCmp_RTMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);   // golden :5458-5467
+    void cbIntervalLowYieldBySite_RTMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);   // golden :5479-5488
+    void cbIntervalLowYieldByTotal_FTMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);   // golden :5605-5614
+    void cbIntervalLowYieldByTotal_RTMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);   // golden :5616-5625
+    void cbLowYield_FTMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);   // golden :3281-3289
+    void cbSiteYieldDifferent_FTMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);   // golden :3291-3299
+    void cbLowYield_RTMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);   // golden :3345-3353
+    void cbSiteYieldDifferent_RTMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);   // golden :3355-3363
+    void cbLowYieldByTotal_RTMouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);   // golden :5469-5477
+    void edFailYieldRate_ARTFTFileKeyPress(TObject *Sender, char &Key);   // golden :3554-3559
+    void rgPiggyBack_FTClick(TObject *Sender);   // golden :3147-3150
+    void rgQARunModeClick(TObject *Sender);   // golden :3233-3236
+    void rgBinAlarmByClick(TObject *Sender);   // golden :3276-3279
 };
 
 // AI(W906-FW-YMSwap) 20260818: the integration call was made (user-approved
