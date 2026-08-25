@@ -10348,6 +10348,40 @@ Release build 期間我用 `tasklist | grep -c "cc1plus|ctest"` 查到 **0 個�
 沒有 `cc1plus`，而我沒數 `mingw32-make`。**可靠的判準是 `build.log` 的 mtime**
 （與「`LastTest.log.tmp` 存在≠ctest 在跑」同一個道理）。先查證再下結論是對的。
 
+## 20260825 XIV — FW-CFG-W6 收案：17 個 UI 處理器，三個讀完就排掉（主迴圈自做）
+
+交 17 個（track-bar Change 家族、簡單 checkbox Click、兩個 page-control Change、udD46Click），
+golden 約 360 行。忠實度：**172 行 LIVE 敘述，155 行逐字命中**；不符的 17 行
+**正好就是 17 個函式的簽章行**（`__fastcall`／`TObject*` 轉成本 port 慣例）。
+
+### 三個「讀了 golden 才知道不能翻」的排除
+
+| 方法 | golden | 排除理由 |
+|---|---|---|
+| **`chkHeaterClick`** | :5694-5708 | **安全項**。整個本體就是 `SW[SwHeaterRelay].OnOff(chkHeater->Checked)` 加上加熱風扇與冷却風扇——**切真實硬體輸出**。佇列，不在無人時做。 |
+| `cbA09Click` | :6347-6374 | 讀 InArmSuck/MOT[]/Index 是否有 IC 並發 MES1645/1646 警報。純讀＋警報，但屬於有人在場才該碰的一批。 |
+| `cbC12Click` | :6669-6685 | KYEC 密碼閘，跨 `fPassword`／`fQwertyKey`。 |
+
+三個都照 `forms/fTemperFrom.h` 的慣例：**不翻、也不宣告 stub**，理由寫在 header 裡。
+這是本 session **第四個**靠「動手前先讀」擋下的安全項（前三個在 cTemperFrom）。
+
+### 更正 FW-CFG-W5 的一個擺放錯誤
+
+W5 把 `bStopChange` / `bM01Enter` / `bSave` 加成了 `TfConfiguration` 的成員。
+golden 把這三個放在**檔案層**（golden cConfiguration.cpp:58/:63/:86），
+**只有 `fShow` 才是類別成員**（golden cConfiguration.h:2368）。
+已移到 `.cpp` 的 TU-local static 區塊，並把同一區塊剩下的 18 個檔案層全域
+（track-bar 處理器讀寫的 EP change-log 那批）一併補齊。
+單一實例下行為相同，但**port 應該鏡射 golden 的擺放，不是静静地搬家**。
+
+`udD46Click` 的第二個參數 `TUDBtnType Button` 全函式從未被讀，依「只留有讀到的參數」
+規則移除——`TUDBtnType` 的 stand-in 也就不必造了。
+
+### gate
+
+全新雙 dir `build_cfg6g` / `build_cfg6r`。**Debug 137/142、Release 137/142，常駐五項。**
+census：該檔 2,044 → **1,735 行**（缺的方法 84 → **67**）；全樹 → **52,743 行**。
+
 ### 🔖 RESUME（20260825 日終）
 
 - **今日全收（本節之前的 20260825 I-VII，共 7 波）**：FW-BARCODE2／FW-BARCODE3
@@ -10419,7 +10453,15 @@ Release build 期間我用 `tasklist | grep -c "cc1plus|ctest"` 查到 **0 個�
   `Interface/TesterTCP.cpp`（剩餘明確是 UI 軸，要先立 TfTesterTCP facade）。
   **這是戰役層級的訊號**：容易且自足的缺口已經取完，剩下的 census 缺口
   大多需要裁定（安全、write path、UI 軸、狀態分裂債）而不只是翻譯工。
-- **下一步建議**：先把 cConfiguration 剩下可做的收尾（FormClose 208 行最完整），
+- **cConfiguration 進度**：W1〜W6 全收，缺的方法 129 → **67**，缺行 7,101 → **1,735**。
+  剩下的大塊：CheckConfigurationBeforeSave（393）、FormClose（208）、
+  UpdateUT150Comm（168）、InitialMemo（85）、golden 的 ctor（117，寫入路徑）。
+- ⚠ **安全佇列新增一筆（20260825 XIV）**：`TfConfiguration::chkHeaterClick`
+  （golden cConfiguration.cpp:5694-5708）——整個本體是
+  `SW[SwHeaterRelay].OnOff()` 加上加熱風扇與冷却風扇，**切真實硬體輸出**。
+  未翻並且不宣告 stub，等使用者在場時一次處理。
+  同批待議：`cbA09Click`（發 MES1645/1646 警報）、`cbC12Click`（KYEC 密碼閘）。
+- **下一步建議**：`FormClose`（208 行，這批裡最完整且無寫入），
   再回頭看 `SECSGEM/uHGemEquipment.cpp`（2,935 行，header 有 2 個排除段要先讀）。
 - **等使用者（本波未動，只是重列）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
   HAL-MOT1 十問（Q1/Q9/Q4 擋新 mot_table 起草）；TImage headless 准駁；
