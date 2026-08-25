@@ -71,8 +71,8 @@ FW 系列 / `GOLDEN BUG #N` / `k7-B1` 類區域編號等標記寫在程式碼裡
 
 | 項目 | 數值 |
 |---|---|
-| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **680 筆**（以表格內 `#` 編號列實際計數，20260825 R8 同步 3 筆（FW-BARCODE1 當波入帳）＋20260824 R7 同步 7 筆（FW-BINDISP3 當波入帳）＋20260824 R6 同步 8 筆（FW-QWKEY1 當波入帳）＋20260821 四輪補掃後＋20260824 GATE7-V 增 1 筆＋20260824 五輪同步 5 筆（FW-BINDISP1/SETUP-D/BINDISP2 當波入帳，維護規則 1）；`python3` 逐列計數，見下方「四輪補掃紀錄」） |
-| 其中 BUG 類（`GOLDEN BUG` / `GOLDEN BUGS` / `GOLDEN BUG #N` / `(Bx) GOLDEN BUG` / golden copy-paste bug） | 252 筆（含三輪新增 1 筆，`cConfiguration.h` 的 `sbUpdateHPClick` copy-paste bug） |
+| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **681 筆**（以表格內 `#` 編號列實際計數，20260825 FW-TAG1 當波入帳 1 筆（`MyTempPanel.cpp` TAG1-a，維護規則 1）＋20260825 R8 同步 3 筆（FW-BARCODE1 當波入帳）＋20260824 R7 同步 7 筆（FW-BINDISP3 當波入帳）＋20260824 R6 同步 8 筆（FW-QWKEY1 當波入帳）＋20260821 四輪補掃後＋20260824 GATE7-V 增 1 筆＋20260824 五輪同步 5 筆（FW-BINDISP1/SETUP-D/BINDISP2 當波入帳，維護規則 1）；`python3` 逐列計數，見下方「四輪補掃紀錄」） |
+| 其中 BUG 類（`GOLDEN BUG` / `GOLDEN BUGS` / `GOLDEN BUG #N` / `(Bx) GOLDEN BUG` / golden copy-paste bug） | 253 筆（含 20260825 FW-TAG1 +1，`MyTempPanel.cpp` TAG1-a edSHighBase 漏設 Tag；含三輪新增 1 筆，`cConfiguration.h` 的 `sbUpdateHPClick` copy-paste bug） |
 | 其中 QUIRK 類（`GOLDEN QUIRK` / `GOLDEN QUIRKS`） | 240 筆（含 SECSGEM 三檔補撈的 39 筆；含二輪補掃新增 71 筆，見下方「二輪 QUIRK 補掃紀錄」；三輪未新增 QUIRK 類；含 20260824 五輪 +1，`cSetUp.cpp` CHSetError int>63.5；含 20260825 R8 +1，`BarcodeReader.cpp` BR-q1 15-of-16 初始器） |
 | 其中 DEFECT 類（`GOLDEN DEFECT` / `GOLDEN DEFECTS`） | 71 筆（含二輪補掃新增 5 筆；含三輪新增 1 筆，`BinDisplay/MyBinDisp.cpp` 的 `WriteTargetBin` off-by-one；含 20260824 R7 +1，同檔 (i) 21-into-20 sprintf stack overflow） |
 | 其中 ODDITY 類（`GOLDEN ODDITY` / `GOLDEN ODDITIES`） | 63 筆（含三輪新增 16 筆，集中在 batch-5 顯示側叢集，見下方「三輪增補紀錄」；含四輪補掃新增 6 筆，集中在溫控表單 uTemp_Set.cpp/DynamicTemp.cpp 與 Command.cpp FW-CMD-C 段，見下方「四輪補掃紀錄」；含 20260824 五輪 +3：`cSetUp.cpp` ×2（pitch switch 缺 N-mode case、CoSocketComboChange 無視 Sender）＋`database.cpp` ICBD-1；含 20260824 R7 +6，`BinDisplay/MyBinDisp.cpp` (j)(k)(l)(m)(n)(o)） |
@@ -712,10 +712,15 @@ TOTAL(本檔): 6
 
 TOTAL(本檔): 4
 
-### MyTempPanel.cpp
-（無符合條件的項目 -- 唯一相關文字為 line 946-961，原註解自稱GOLDEN BUG後在同一則註解中已自我撤回並確認非真實缺陷，經查證ShowQwertyKey簽名為(min,max)且callee自帶正規化，不計入）
+### MyTempPanel.cpp（1 筆，20260825 FW-TAG1 當波入帳；R2 時為 0 筆）
 
-TOTAL(本檔): 0
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 1 | GOLDEN BUG (TAG1-a) | BUG | MyTempPanel.cpp:554-569（ctor Tag 區塊，解鎖後） | golden MyTempPanel.cpp:325-346（漏），:32/:203-214（該欄位確實建立並接上讀 Tag 的 handler） | ctor 對 19 個 TEdit 中的 18 個寫 `->Tag=iTag;`，獨漏 `edSHighBase`（2024.07.27 新增的第 6 點溫度欄），但該欄位仍 `OnMouseDown=edBaseMouseDown`——與另外 16 個共用那個讀 Tag 的 handler | 該欄位在每個通道都以 VCL 預設 Tag==0 執行；因 `tcHotPlate1==0`（MachineType.h:637），Tri-Temp 機台上它會命中 `(Tag>=tcHotPlate1 && Tag<=tcShuttle2)` 臂，鍵盤上下限取 `Temperature.fWorkTemperBase` ±30 而非該通道的 `SetHeaterTemp_Max*`——上真機前需裁決 | AI(W906-FW-TAG1) 20260825 |
+
+TOTAL(本檔): 1
+
+（原本的 0 筆說明保留供備查：唯一相關文字為 line 946-961，原註解自稱 GOLDEN BUG 後在同一則註解中已自我撤回並確認非真實缺陷，經查證 ShowQwertyKey 簽名為 (min,max) 且 callee 自帶正規化，不計入。該撤回仍然成立，與本列無關。）
 
 ### uHeaterThread.cpp
 | # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話,繁中) | 潛在影響(一句話,繁中) | 發現波次/日期 |
