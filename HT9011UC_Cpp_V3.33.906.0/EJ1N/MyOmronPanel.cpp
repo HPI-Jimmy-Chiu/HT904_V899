@@ -431,17 +431,15 @@ void TMyOmronPanel_GroupBox1MouseUp(TMyOmronPanel *Self, TObject *Sender, int X,
     TGroupBox *Ptr;
     Ptr=(TGroupBox *)Sender;
 
-    //AI(W906-PT-W8) 20260811: GATE (W8-6) -- golden clears the drag-in-progress
-    //  latch `Ptr->Tag`, which has no substrate.  ACTIVE arm: the Sender
-    //  downcast above (real) then a no-op -- with no pointer device the latch
-    //  is never set in the first place, so clearing it is already a no-op.
-    //  Golden preserved VERBATIM:
-#if 0
+    // AI(W906-FW-TAG1) 20260825: GATE (W8-6) OPENED here. Tag is real since
+    //   this wave (vclcompat::TControl) and this latch is SELF-PROVENANCED:
+    //   the only writer is GroupBox1MouseDown below, also opened, so the pair
+    //   needs no .dfm value. Offline the latch is simply never set, which is
+    //   the faithful "no drag in progress" state golden starts from.
     if(Ptr->Tag!=0)
     {
         Ptr->Tag=0;
     }
-#endif
     (void)Self; (void)Ptr; (void)X; (void)Y;
 }
 //---------------------------------------------------------------------------
@@ -455,10 +453,14 @@ void TMyOmronPanel_GroupBox1MouseMove(TMyOmronPanel *Self, TObject *Sender, int 
 
     //AI(W906-PT-W8) 20260811: GATE (W8-6) -- golden moves the frame by the
     //  pointer delta since MouseDown.  All three properties it needs
-    //  (`Tag` latch, `Left`, `Top`) have no substrate; `Self->iStartX/iStartY`
+    //  (`Tag` latch, `Left`, `Top`) had no substrate; `Self->iStartX/iStartY`
     //  ARE real but are only READ here, so with the surrounding `if` gated
     //  there is no active remainder.  ACTIVE arm: no-op ("no drag in
     //  progress" -- the faithful offline value of the latch).
+    //  AI(W906-FW-TAG1) 20260825: PARTIALLY EXPIRED -- `Tag` is real now (the
+    //  latch pair MouseUp/MouseDown opened this wave), but `Left`/`Top` still
+    //  have no port on vclcompat::TControl and `iStartX`/`iStartY` are
+    //  unqualified here inside a free function, so this one STAYS SHUT.
     //  Golden preserved VERBATIM:
 #if 0
     if(Ptr->Tag==1)
@@ -476,15 +478,11 @@ void TMyOmronPanel_GroupBox1MouseDown(TMyOmronPanel *Self, TObject *Sender, int 
     TGroupBox *Ptr;
     Ptr=(TGroupBox *)Sender;
 
-    //AI(W906-PT-W8) 20260811: GATE (W8-6) -- ONLY golden's `Ptr->Tag` latch
-    //  set (golden :99-100) is gated; it has no substrate.  The two lines
-    //  BELOW it are REAL and stay ACTIVE: iStartX/iStartY are public ints on
-    //  this class (EJ1N/MyOmronPanel.h:218-219), and they are the drag
-    //  origin a future wave will need already recorded.  Golden VERBATIM:
-#if 0
+    // AI(W906-FW-TAG1) 20260825: GATE (W8-6) OPENED here -- the latch SET half.
+    //   Tag is real since this wave; the matching clear is in GroupBox1MouseUp
+    //   above. iStartX/iStartY below were already ACTIVE and stay so.
     if(Ptr->Tag!=1)
         Ptr->Tag=1;
-#endif
     Self->iStartX=X;
     Self->iStartY=Y;
     (void)Ptr;

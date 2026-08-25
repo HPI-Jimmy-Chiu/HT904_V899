@@ -18,6 +18,15 @@
 //  this port (the identical class of omission EJ1N/MyOmronPanel.cpp and
 //  MyVacuumPanel.cpp already apply to their own mouse/click handlers of the
 //  same golden shape).
+//  AI(W906-FW-TAG1) 20260825 -- THE PARAGRAPH ABOVE IS STALE, kept for
+//  provenance: PT-W8 landed all four on 20260811 as file-scope free functions
+//  with trimmed signatures (TMyTempPanel_edBaseMouseDown :825,
+//  _edLimitMouseDown :950, _edIndiviMouseDown :974, _edinitialMouseDown
+//  :1011), so ported_fns is 11/11, not 7/11. Their BODIES are still gated,
+//  but on co-blockers other than the parameter types: a duplicate
+//  `TEdit *Buffer`, an unqualified `edOffset` inside a free function, a null
+//  `fTemp_Set`, and two missing includes. Tag stopped being one of those
+//  blockers this wave.
 //
 //  Big5: every Chinese comment decoded via cp950 and preserved as UTF-8.
 //  Final gate: ZERO U+FFFD.
@@ -518,16 +527,46 @@ TMyTempPanel::TMyTempPanel(AnsiString Alias, int iTag)
     palLine->Align=alBottom;
 #endif
 
-    //AI(W906-PT-W3) 20260807: golden's 19 `->Tag=iTag;` writes (golden
-    //  :325-346) have no substrate (no Tag member anywhere in this port's
-    //  TControl chain) AND their sole consumer (the 4 omitted mouse-down
-    //  handlers, GATE 1) does not exist either -- kept verbatim, fully gated:
-#if 0
+    // AI(W906-FW-TAG1) 20260825: OPENED, and with REAL values.
+    //   Tag exists on vclcompat::TControl since this wave, and the argument
+    //   side was already live: uTemp_Set.cpp:339-341 builds one panel per
+    //   channel passing the channel index (`new TMyTempPanel(asTempCtrl[i], i)`,
+    //   golden uTemp_Set.cpp:152-155, same loop), so every edit below receives
+    //   its eTempControll id exactly as golden does. This is the ONE Tag family
+    //   in the tree whose provenance is C++ ctor assignment rather than the
+    //   .dfm designer -- see the provenance note in vclcompat/Controls.h.
+    //
+    //   TWO CORRECTIONS to the note this replaces, recorded rather than
+    //   silently dropped:
+    //     * it said "19" writes -- golden has 18 (counted in the opened file,
+    //       golden :325-346). `edSHighBase` deliberately never gets one, so
+    //       golden itself runs that one widget at Tag==0.
+    //     * it said the consumer handlers "do not exist" -- PT-W8 superseded
+    //       that on 20260811: all four MouseDown handlers exist as file-scope
+    //       free functions (:825, :950, :974, :1011). Their bodies stay gated,
+    //       but on co-blockers OTHER than Tag (duplicate `TEdit *Buffer`,
+    //       unqualified `edOffset`, a null `fTemp_Set`, missing includes).
     edLow->Tag           =iTag;
     edMid->Tag           =iTag;
     edLowbase->Tag       =iTag;
     edBase->Tag          =iTag;
     edHighBase->Tag      =iTag;
+    // GOLDEN BUG (TAG1-a) -- edSHighBase is MISSING from this list, and it is
+    //   the only one of the 19 edits that is.  Golden creates it (golden
+    //   MyTempPanel.cpp:32), configures it fully (:203-213) and wires it to
+    //   the SAME Tag-reading handler as its 16 siblings
+    //   (`edSHighBase->OnMouseDown=edBaseMouseDown;`, golden :214) -- but
+    //   golden's Tag block (:325-346) never assigns it, so it runs at the VCL
+    //   default Tag==0 on every channel.  Since MachineType.h:637 makes
+    //   tcHotPlate1==0, edBaseMouseDown's Tri-Temp arm then matches
+    //   `(Tag>=tcHotPlate1 && Tag<=tcShuttle2)` for EVERY panel, and the
+    //   6th-point offset field gets the HotPlate/Shuttle +/-30 clamp computed
+    //   from Temperature.fWorkTemperBase instead of its own channel's
+    //   SetHeaterTemp_Max* clamp.  Almost certainly an oversight when the
+    //   6-point feature was added (golden's own marker on :32/:203/:214 is
+    //   "Ztex 2024.07.27 Add 6 Point Temperature Offset", years after this
+    //   Tag block).  Reproduced faithfully: this port does not assign it
+    //   either.  Ruling needed before real hardware, like DEFECT (i).
     //==> Eastsun 20260526 #026-4.A7 Ifor 20241101 add :KYEC
     edPreOffset->Tag     =iTag;
     edPreOfsTime->Tag    =iTag;
@@ -545,7 +584,6 @@ TMyTempPanel::TMyTempPanel(AnsiString Alias, int iTag)
     edIndiTemp->Tag      =iTag;
     edInitTempOffset->Tag=iTag;
     edEOTTempOffset->Tag =iTag;
-#endif
     (void)Str;
     iOffsetByRecipeMaxLimit = 60;
     iOffsetByRecipeMinLimit = -60;
@@ -716,10 +754,17 @@ AnsiString TMyTempPanel::GetCaption()
 //
 //   (W8-2) `Buffer->Tag` -- every branch CONDITION in edBaseMouseDown
 //       (golden :425,433,441-445,457,482-485) and edIndiviMouseDown
-//       (golden :543,547).  vclcompat::TControl (and therefore TEdit) carries
+//       (golden :543,547).  vclcompat::TControl (and therefore TEdit) carried
 //       NO `Tag` member.
 //         cmd:  grep -rn 'Tag' vclcompat/Controls.h
 //         run:  2026-08-11 11:23:06  -> 0 hits
+//       EXPIRED 20260825 (FW-TAG1): Tag is now a real member on
+//       vclcompat::TControl, and this panel's 18 ctor writes above are LIVE
+//       with golden's own per-channel values.  What still keeps THIS block
+//       shut is everything else the note below lists (W8-3 fTemp_Set setters,
+//       W8-5 Barcode_Reader) plus three port-side obstacles: a duplicate
+//       `TEdit *Buffer`, an unqualified `edOffset` inside a free function,
+//       and two missing includes.
 //       WHY FAITHFUL: this is a branch selector, not a leaf, so it cannot be
 //       reduced -- but EVERY leaf it selects between is itself a
 //       `fQwertyKey->ShowQwertyKey(...)` call (GATE W8-4), i.e. all arms have
@@ -730,7 +775,9 @@ AnsiString TMyTempPanel::GetCaption()
 //       drop-in for `Buffer->Tag`, because golden's ctor sets BOTH from the
 //       same `iTag` argument (golden :53 and :325-346).  IT IS NOT.
 //       golden uTemp_Set.cpp:154 constructs each panel as
-//       `new TMyTempPanel(asTempCtrl[i], i)` -- so the 19 widgets' `->Tag`
+//       `new TMyTempPanel(asTempCtrl[i], i)` -- so the 18 widgets' `->Tag`
+//       (18, not 19: edSHighBase never gets one -- GOLDEN BUG (TAG1-a) at the
+//       ctor block above)
 //       hold the eTempControll CHANNEL index -- and then uTemp_Set.cpp:267-283
 //       calls `SetIndexTag(-1)` / `SetIndexTag(0..N)` on the same panels,
 //       which (golden :606-609) rewrites `iIndexTag` ONLY and never touches

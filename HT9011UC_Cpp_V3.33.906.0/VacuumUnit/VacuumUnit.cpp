@@ -843,6 +843,19 @@ void TfVacuumUnit::btnSetInArmClick(TObject *Sender)
     (void)Sender;
     //AI(W906-PT-W3) 20260807: GATE (2) -- see this file's own banner GATE
     //  REGISTER entry (2). Golden body preserved verbatim:
+    // AI(W906-FW-TAG1) 20260825: STAYS SHUT, and the reason is now much
+    //   stronger than "no substrate". Tag compiles since this wave, but the
+    //   VALUES come from the designer: golden VacuumUnit/VacuumUnit.dfm gives
+    //   btnSetInArm no Tag line (=0, :223), btnSetIndexArm `Tag = 1` (:251)
+    //   and btnSetOutArm `Tag = 2` (:261), and all three share
+    //   `OnClick = btnSetInArmClick` (:230/:258/:268). This port has no
+    //   .dfm->C++ Tag loader, so all three would read 0 and ALL THREE BUTTONS
+    //   WOULD TAKE THE InArm ARM below -- i.e. pressing "set Index" or "set
+    //   OutArm" would write the InArm threshold into the InArm vacuum units
+    //   via WriteVaccumThreshold(). That is a machine-control defect, not a
+    //   cosmetic one. It is latent only because nothing wires OnClick yet;
+    //   the write-path wave MUST supply these Tags (or dispatch another way)
+    //   before this block is opened.
 #if 0
     TButton *Ptr;
     double dValue=0.0;

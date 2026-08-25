@@ -4348,7 +4348,16 @@ void TfTemp_Set::edSoakTimeClick(TObject *Sender)
 {
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
-#if 0 // GATE(G-Barcode) NARROWED premise 20260825: Barcode_Reader real since FW-BARCODE1; still gated on Buffer->Tag alone (vclcompat TEdit has no Tag)
+// AI(W906-FW-TAG1) 20260825: GATE(G-Barcode) STAYS SHUT -- premise re-stated,
+//   because the old one ("no Tag member") expired this wave and a compilable
+//   block is not a faithful one. Golden sets Tag=1 on exactly ONE of the 1
+//   widget(s) it wires to this handler (edSoakTime, golden uTemp_Set.dfm:439)
+//   and it does so through the .dfm DESIGNER. This port has no .dfm->C++ Tag
+//   loader (dfm2rc keeps Tag in the stage-1 IR and web/forms/*.layout.json;
+//   the .rc/layout/uimap emitters drop it), so Tag would read 0 here and the
+//   KYEC operator-ID barcode interlock would be silently skipped for that
+//   widget. Re-open when the values are supplied, not when it compiles.
+#if 0 // GATE(G-Barcode)
     if(Buffer->Tag==1)
     {
         if(Barcode_Reader(bcTemperature)==0)                                    // 20140103 wei KYEC Barcode Reader
@@ -4364,7 +4373,16 @@ void TfTemp_Set::edJamSoakTimeClick(TObject *Sender)
 {
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
-#if 0 // GATE(G-Barcode) NARROWED premise 20260825: Barcode_Reader real since FW-BARCODE1; still gated on Buffer->Tag alone (vclcompat TEdit has no Tag)
+// AI(W906-FW-TAG1) 20260825: GATE(G-Barcode) STAYS SHUT -- premise re-stated,
+//   because the old one ("no Tag member") expired this wave and a compilable
+//   block is not a faithful one. Golden sets Tag=1 on exactly ONE of the 8
+//   widget(s) it wires to this handler (edAbitInitWaitTime, golden uTemp_Set.dfm:1286)
+//   and it does so through the .dfm DESIGNER. This port has no .dfm->C++ Tag
+//   loader (dfm2rc keeps Tag in the stage-1 IR and web/forms/*.layout.json;
+//   the .rc/layout/uimap emitters drop it), so Tag would read 0 here and the
+//   KYEC operator-ID barcode interlock would be silently skipped for that
+//   widget. Re-open when the values are supplied, not when it compiles.
+#if 0 // GATE(G-Barcode)
     if(Buffer->Tag==1)
     {
         if(Barcode_Reader(bcTemperature)==0)                                    // 20140103 wei KYEC Barcode Reader
@@ -4383,7 +4401,11 @@ void TfTemp_Set::edLHP1MouseDown(TObject *Sender)
 {
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
-#if 0 // GATE(G-Barcode) NARROWED premise 20260825: Barcode_Reader real since FW-BARCODE1; still gated on Buffer->Tag alone (vclcompat TEdit has no Tag)
+// AI(W906-FW-TAG1) 20260825: GATE(G-Barcode) OPENED. Tag is real since this
+//   wave (vclcompat::TControl) and Barcode_Reader since FW-BARCODE1 (e7b4bf8).
+//   Tag==0 is FAITHFUL here, which is why this one may open while its six
+//   siblings may not: golden wires NO widget at all to this handler (measured over uTemp_Set.dfm
+//   20260825), so the guard is unreachable in golden too.
     if(Buffer->Tag==1)                                                          //20140320 wei
     {
         if(Barcode_Reader(bcTemperature)==0)                                    // 20140103 wei KYEC Barcode Reader
@@ -4391,7 +4413,6 @@ void TfTemp_Set::edLHP1MouseDown(TObject *Sender)
             return;
         }
     }
-#endif // GATE(G-Barcode)
 
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)InputLimit.iTempHigh, (double)InputLimit.iTempLow);                                   //Steven 20141120 : Modify
 }
@@ -4421,7 +4442,16 @@ void TfTemp_Set::edLowBaseMouseDown(TObject *Sender)                            
 {
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
-#if 0 // GATE(G-Barcode) NARROWED premise 20260825: Barcode_Reader real since FW-BARCODE1; still gated on Buffer->Tag alone (vclcompat TEdit has no Tag)
+// AI(W906-FW-TAG1) 20260825: GATE(G-Barcode) STAYS SHUT -- premise re-stated,
+//   because the old one ("no Tag member") expired this wave and a compilable
+//   block is not a faithful one. Golden sets Tag=1 on exactly ONE of the 13
+//   widget(s) it wires to this handler (edWorkTemp, golden uTemp_Set.dfm:10212)
+//   and it does so through the .dfm DESIGNER. This port has no .dfm->C++ Tag
+//   loader (dfm2rc keeps Tag in the stage-1 IR and web/forms/*.layout.json;
+//   the .rc/layout/uimap emitters drop it), so Tag would read 0 here and the
+//   KYEC operator-ID barcode interlock would be silently skipped for that
+//   widget. Re-open when the values are supplied, not when it compiles.
+#if 0 // GATE(G-Barcode)
     if(Buffer->Tag==1)                                                          //20140320 wei
     {
         if(Barcode_Reader(bcTemperature)==0)                                    // 20140103 wei KYEC Barcode Reader
@@ -5611,7 +5641,16 @@ void TfTemp_Set::edAmbHotGuartbentClick(TObject *Sender)
 {
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
-#if 0 // GATE(G-Barcode) NARROWED premise 20260825: Barcode_Reader real since FW-BARCODE1; still gated on Buffer->Tag alone (vclcompat TEdit has no Tag)
+// AI(W906-FW-TAG1) 20260825: GATE(G-Barcode) STAYS SHUT -- premise re-stated,
+//   because the old one ("no Tag member") expired this wave and a compilable
+//   block is not a faithful one. Golden sets Tag=1 on exactly ONE of the 2
+//   widget(s) it wires to this handler (edATCContFailOffsetCnt, golden uTemp_Set.dfm:7275)
+//   and it does so through the .dfm DESIGNER. This port has no .dfm->C++ Tag
+//   loader (dfm2rc keeps Tag in the stage-1 IR and web/forms/*.layout.json;
+//   the .rc/layout/uimap emitters drop it), so Tag would read 0 here and the
+//   KYEC operator-ID barcode interlock would be silently skipped for that
+//   widget. Re-open when the values are supplied, not when it compiles.
+#if 0 // GATE(G-Barcode)
     if(Buffer->Tag==1)                                                          //20140320 wei
     {
         if(Barcode_Reader(bcTemperature)==0)                                    // 20140103 wei KYEC Barcode Reader
@@ -5675,7 +5714,11 @@ void TfTemp_Set::edtATCInPC1MouseDown(TObject *Sender)                          
 {
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
-#if 0 // GATE(G-Barcode) NARROWED premise 20260825: Barcode_Reader real since FW-BARCODE1; still gated on Buffer->Tag alone (vclcompat TEdit has no Tag)
+// AI(W906-FW-TAG1) 20260825: GATE(G-Barcode) OPENED. Tag is real since this
+//   wave (vclcompat::TControl) and Barcode_Reader since FW-BARCODE1 (e7b4bf8).
+//   Tag==0 is FAITHFUL here, which is why this one may open while its six
+//   siblings may not: golden wires 101 widgets to this handler and NOT ONE carries a dfm Tag
+//   line, so golden also always takes the Tag!=1 path.
     if(Buffer->Tag==1)                                                          //20140320 wei
     {
         if(Barcode_Reader(bcTemperature)==0)                                    // 20140103 wei KYEC Barcode Reader
@@ -5683,7 +5726,6 @@ void TfTemp_Set::edtATCInPC1MouseDown(TObject *Sender)                          
             return;
         }
     }
-#endif // GATE(G-Barcode)
 
     if(CUSTOMER_CODE==CC_ASE_KaohSiung)                                         //kevin 20180215 (Steven) ADD atc
         fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 1, true, (double)60.0, (double)-60.0);
@@ -5700,7 +5742,16 @@ void TfTemp_Set::edATCAmbTempMouseDown(TObject *Sender)                         
 {
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
-#if 0 // GATE(G-Barcode) NARROWED premise 20260825: Barcode_Reader real since FW-BARCODE1; still gated on Buffer->Tag alone (vclcompat TEdit has no Tag)
+// AI(W906-FW-TAG1) 20260825: GATE(G-Barcode) STAYS SHUT -- premise re-stated,
+//   because the old one ("no Tag member") expired this wave and a compilable
+//   block is not a faithful one. Golden sets Tag=1 on exactly ONE of the 1
+//   widget(s) it wires to this handler (edATCAmbTemp, golden uTemp_Set.dfm:5426)
+//   and it does so through the .dfm DESIGNER. This port has no .dfm->C++ Tag
+//   loader (dfm2rc keeps Tag in the stage-1 IR and web/forms/*.layout.json;
+//   the .rc/layout/uimap emitters drop it), so Tag would read 0 here and the
+//   KYEC operator-ID barcode interlock would be silently skipped for that
+//   widget. Re-open when the values are supplied, not when it compiles.
+#if 0 // GATE(G-Barcode)
     if(Buffer->Tag==1)                                                          //20140320 wei
     {
         if(Barcode_Reader(bcTemperature)==0)                                    // 20140103 wei KYEC Barcode Reader
@@ -5765,7 +5816,11 @@ void TfTemp_Set::edATCInitialOffset1MouseDown(TObject *Sender)                  
 {
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
-#if 0 // GATE(G-Barcode) NARROWED premise 20260825: Barcode_Reader real since FW-BARCODE1; still gated on Buffer->Tag alone (vclcompat TEdit has no Tag)
+// AI(W906-FW-TAG1) 20260825: GATE(G-Barcode) OPENED. Tag is real since this
+//   wave (vclcompat::TControl) and Barcode_Reader since FW-BARCODE1 (e7b4bf8).
+//   Tag==0 is FAITHFUL here, which is why this one may open while its six
+//   siblings may not: golden wires 16 widgets to this handler and none carries a dfm Tag line,
+//   so golden also always takes the Tag!=1 path.
     if(Buffer->Tag==1)                                                          //20140320 wei
     {
         if(Barcode_Reader(bcTemperature)==0)                                    // 20140103 wei KYEC Barcode Reader
@@ -5773,7 +5828,6 @@ void TfTemp_Set::edATCInitialOffset1MouseDown(TObject *Sender)                  
             return;
         }
     }
-#endif // GATE(G-Barcode)
 
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 1, true, (double)40.0, 0.0);                                   //Steven 20160227 : for ATC 7.0
 }
@@ -6488,7 +6542,16 @@ void TfTemp_Set::edtHeatGunTempATCMouseDown(TObject *Sender)                    
 {
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
-#if 0 // GATE(G-Barcode) NARROWED premise 20260825: Barcode_Reader real since FW-BARCODE1; still gated on Buffer->Tag alone (vclcompat TEdit has no Tag)
+// AI(W906-FW-TAG1) 20260825: GATE(G-Barcode) STAYS SHUT -- premise re-stated,
+//   because the old one ("no Tag member") expired this wave and a compilable
+//   block is not a faithful one. Golden sets Tag=1 on exactly ONE of the 2
+//   widget(s) it wires to this handler (edtHeatGunTempATC, golden uTemp_Set.dfm:5640)
+//   and it does so through the .dfm DESIGNER. This port has no .dfm->C++ Tag
+//   loader (dfm2rc keeps Tag in the stage-1 IR and web/forms/*.layout.json;
+//   the .rc/layout/uimap emitters drop it), so Tag would read 0 here and the
+//   KYEC operator-ID barcode interlock would be silently skipped for that
+//   widget. Re-open when the values are supplied, not when it compiles.
+#if 0 // GATE(G-Barcode)
     if(Buffer->Tag==1)
     {
         if(Barcode_Reader(bcTemperature)==0)
