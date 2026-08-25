@@ -10242,6 +10242,62 @@ census：`cConfiguration.cpp` 3,157 → **3,009 行**；全樹 → **54,017 行*
 （TStringGrid 已有）。先例：`forms/fObserver.h` 的 `TfObserverDateTimePicker`、
 `forms/fLotInfo.h` 的 `TfLotInfoOpenDialog`——都是表單局部的小 stand-in。
 
+## 20260825 XII — 一個沒有落地的波次，以及它拉出來的兩個洞（主迴圈自做，唯讀收場）
+
+本輪本來要開 `cTemperFrom.cpp`（census 說缺 759 行、15 個方法，且幾乎零 write path）。
+套用就被自己的 assert 擋下來，**樹未被動到一個字元**。而擋下來的原因比波次本身重要。
+
+### 洞一：census 的「缺」不是待辦清單
+
+`forms/fTemperFrom.h` 裡有一段
+**「EXPLICITLY EXCLUDED（per task brief, not even a stub declared here）」**，
+點名的正是我選的那 15 個方法，而且附了理由——**其中三個是安全項**：
+
+| 方法 | 排除理由 |
+|---|---|
+| `Timer1Timer` | 驅動真實硬體開關 `SW[SwCCDCooling]`，並呼叫 `RecordTemp()` |
+| `Panel71/72/73MouseDown` | 隱藏密碼的硬體重置手勢，帶 `HandlerSystem->ShowModal()` 這個 StopAllMotor 側門 |
+| `Check_Tri_Temp_All_Temperature` | 進 ShowMyMessage / StopAllMotor 領域 |
+| 其餘（FormShow/ArrangeFormWidth/ChangeFormSize/…） | MFC/.dfm 版面管線，無 web 對應物 |
+
+也就是說，我差一點就去**重打一場已經有結論的仗**，而且其中三個是安全佇列的東西。
+**規則：選標的時先讀該檔對應 header 的 EXCLUDED／GATE REGISTER 段落，再看 census 數字。**
+
+### 洞二：抽取器不認得 `/* */`
+
+`cTemperFrom.cpp:1904-1915` 與 `:1941-1948` 兩個函式**整段包在區塊註解裡**，
+golden 根本沒編譯它們；但 `TfXxx::Name(` 這種 regex 照樣命中，census 也把它們算進「缺的方法」。
+照抽下去就是**把 golden 停用的碼加進 port**。
+
+這是括號陷阱（20260825 IX）之後**同一天的第二個同類洞**。
+已把兩個都收進 `scratchpad/goldenscan.py`：`load()` 回傳 `live[]`，
+標出每一行是否在 `/* */` 內（字串裡的 `/*` 不會誤判）。
+
+**回驗已交付的波次**：`cConfiguration.cpp` 的區塊註解裡**沒有任何函式定義**，
+所以 FW-CFG W1〜W4b 五波不受影響。
+
+### 順手補上的守衛：owner_check.py
+
+W5 那次把 `fPassword->Label3` 的 `Label3` 加成了 `TfConfiguration` 的成員。
+這次先跑 `owner_check.py`，它把每個 `OWNER->NAME` 的擁有者列出來：
+cTemperFrom 那 29 個缺失識別字裡，**只有 6 個是本表單的**，
+另有 5 個明確屬於 `fPassword` / `fQwertyKey` / `fAutoTeach` / `Memo1` / `palLed`。
+
+### 下一個標的的篩選（這次先讀 header）
+
+| 候選 | 缺行 | WriteIni | SaveTo | header 排除段 | 判定 |
+|---|---|---|---|---|---|
+| **Automation/SCK_ART.cpp** | **3,811** | 6 | 23 | **無** | **選它** |
+| Interface/TesterTCP.cpp | 974 | 3 | 8 | 無 | 備位 |
+| SECSGEM/uHGemEquipment.cpp | 2,935 | 21 | 4 | 有 x2＋區塊註解內定義 1 | 先讀排除段 |
+| HandlerSys.cpp | 836 | 4 | 0 | 有 x11 | 大多已裁定 |
+| cStartCondition.cpp | 897 | 29 | 0 | 有 x4 | — |
+| cSpeed.cpp / cBinSel.cpp | 1,232 / 2,772 | 256 / 306 | 0 | — | write path 太重 |
+
+選 `Automation/SCK_ART.cpp` 還有一個額外的理由：它**解開兩個已記錄的 cObserver gate**
+——FW3A-4 那 17 個 SPIL `pal*` 面板需要 `fSCKART->sInfo_*`，C-log-11 需要 `sInfoArr_*`，
+而 `forms/fSCKART.h` 目前兩組都沒有。
+
 ### 🔖 RESUME（20260825 日終）
 
 - **今日全收（本節之前的 20260825 I-VII，共 7 波）**：FW-BARCODE2／FW-BARCODE3
@@ -10285,9 +10341,25 @@ census：`cConfiguration.cpp` 3,157 → **3,009 行**；全樹 → **54,017 行*
       ＋10 個要 gate。
   之後：CheckConfigurationBeforeSave（393）、FormClose（208）、ctor（117）、
   UpdateUT150Comm（168）。
-- **FW-CFG 的工具鏈（scratchpad，下一人直接用）**：
-  `cfg_wave2.py gen <TAG> <字母...>` 抽取（**修正版括號配對**）、
-  `cfg_apply.py <TAG> <字母...>` 套用、`cfg_fidelity.py <方法名...>` 逐字複驗。
+- **工具鏈（scratchpad，下一人直接用；兩個已付代價的洞都補在裡面了）**：
+  - `goldenscan.py` — **掃 golden 前一律先過這個**。`load(path)` 回傳 `live[]`，
+    標出每行是否在 `/* */` 內；`code_only(line)` 剝字串與 `//`。
+    洞 1：行尾註解裡的 `}` 騙過括號配對（ItemE 少抓 160 行）。
+    洞 2：整段包在 `/* */` 的函式會被當真函式抽出來（cTemperFrom 兩個）。
+  - `owner_check.py <TAG> <golden header>` — 列出每個 `OWNER->NAME` 的擁有者，
+    **避免把別的表單的 widget 加進本表單**（W5 就是在這裡出錯的）。
+  - `survey_file.py <檔> <類別>` / `wave_extract.py <TAG> <檔> <類別> <方法...>` — 通用盤點與抽取。
+  - `screen_targets.py` — 選標的前的篩選（header 排除段＋write path＋區塊註解定義）。
+  - FW-CFG 專用：`cfg_wave2.py` / `cfg_apply.py` / `cfg_fidelity.py`。
+- ⚠ **選標的規則（20260825 XII 付過代價）**：**census 的「缺」不是待辦清單**。
+  先讀該檔對應 header 的 `EXPLICITLY EXCLUDED` / `GATE REGISTER` 段落。
+  `forms/fTemperFrom.h` 就把該檔全部 15 個「缺」的方法列為刻意排除，**三個是安全項**。
+- **下一波 = FW-SCKART-W1（`Automation/SCK_ART.cpp`）**，已篩選：
+  缺 3,811 行、6 個 WriteIniData、23 個 SaveToFile、**header 無排除段**、
+  區塊註解內無函式定義。額外理由：它**解開兩個已記錄的 cObserver gate**——
+  FW3A-4 的 17 個 SPIL `pal*` 面板要 `fSCKART->sInfo_*`，C-log-11 要 `sInfoArr_*`，
+  而 `forms/fSCKART.h` 目前兩組都沒有。
+  備位：`Interface/TesterTCP.cpp`（974 行、3 WriteIni、無排除段）。
 - **等使用者（本波未動，只是重列）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
   HAL-MOT1 十問（Q1/Q9/Q4 擋新 mot_table 起草）；TImage headless 准駁；
   GOLDEN BUG (TAG1-a) edSHighBase；GOLDEN DEFECT (i) 21-into-20 sprintf overflow。
