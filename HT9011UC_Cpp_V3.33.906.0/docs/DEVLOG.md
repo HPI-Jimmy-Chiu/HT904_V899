@@ -9803,9 +9803,20 @@ tasklist //FI "IMAGENAME eq ctest.exe"                # 才是真的判準
 「需 write path，夜間不做」。**教訓：census 給的是大小，不是可做性；
 選標的要「數字 × 計畫書約束」兩個一起看。**
 
-**因此下一個表單波標的**＝計畫書批2 的餘量（純顯示、零互鎖、客訴常用）：
-`uYieldMonitoring.cpp`（3,740 行、85 個方法缺 66）與
-`cObserver.cpp`（2,016 行、104 缺 58）。批5 的
+**因此下一個表單波標的**＝計畫書批2 的餘量。但批2 那句「純顯示、零互鎖」
+**對其中一個檔是錯的**，同一輪勘查就打掉了自己 20 分鐘前寫的順序：
+
+- `uYieldMonitoring.cpp`（golden 5,981 行／60 方法；port 缺 3,740 行）——
+  **243 個 `WriteIniData` 呼叫**。這是設定寫檔表單，不是純顯示；與
+  `SaveSetupFile` 那 130 個寫入同一類，寫入側要照既有姿態 gate 起來等
+  FW-W。**排在後面。**
+- `cObserver.cpp`（golden 5,425 行／83 方法；port 缺 2,016 行）——
+  `WriteIniData`×1、`SaveToFile`×6、`ShellExecute`×1，其餘是
+  `Timer1Timer`／`GetMachineData`／`SetSiteYieldDiagram` 這類讀取與繪圖。
+  **這才是真的顯示側，下一波做它。**
+
+（教訓同上一段：計畫書的分類標籤也是一種未經量測的宣稱，開波前要自己
+用 golden 關鍵字掃一次，別照抄表格裡的形容詞。）批5 的
 `cConfiguration.cpp`（7,101）／`cSetUp.cpp`（4,046，FW-SETUP 已推到 28/47）
 排其後。批1 `Command.cpp` 只剩 813 行、批3 的 `uTemp_Set.cpp` 只剩 8 行，
 實質已收。
