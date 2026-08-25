@@ -10298,6 +10298,56 @@ cTemperFrom 那 29 個缺失識別字裡，**只有 6 個是本表單的**，
 ——FW3A-4 那 17 個 SPIL `pal*` 面板需要 `fSCKART->sInfo_*`，C-log-11 需要 `sInfoArr_*`，
 而 `forms/fSCKART.h` 目前兩組都沒有。
 
+## 20260825 XIII — FW-CFG-W5 收案：FormShow（主迴圈自做）
+
+這是前一晚開了又主動退掉的那一波。退的時候寫下來的理由，就是這一波逐項處理的清單。
+
+### 交什麼
+
+golden **852 行**＋**191 個 widget 成員**＋**5 個表單局部 stand-in 型別**＋一個 port-only 建構子。
+忠實度：**455 行 LIVE 敘述，453 行逐字命中**（不符的兩行是函式簽章與
+`MyDBIProcess` 的顯式尾引數，都有標記）。
+
+census：該檔 3,009 → **2,044 行**；全樹 54,017 → **53,052 行**；表單組 16.0% → **16.4%**。
+
+### 三個「先量再動」的點
+
+1. **擁有者先查再加成員**。197 個以 `->` 引用的識別字裡，191 個屬本表單、
+   1 個是 `imgI37_3->Picture`、5 個是裸全域。這個檢查（`scratchpad/owner_report.py`）
+   就是為了 W5 那次把 `fPassword->Label3` 加錯類別而寫的。
+2. **陣列維度保留**。golden 有 `TEdit *edSoftSpeed[TOTAL_MOTOR]`，第一版的產生器
+   會把 `TOTAL_MOTOR` 也當成成員名。改成逐宣告解析後，三個陣列的維度原樣帶過來；
+   它們的**元素**由一個 **port-only 建構子**配置（golden 是在它自己那個尚未翻譯的
+   建構子裡配的，`forms/fLotInfo.cpp:250-255` 早有先例）。
+3. **stand-in 只做用得到的表面**，而且是先數過才寫：TTimer 只要 `Enabled`、
+   TTrackBar 只要 `Position`＋`Visible`、TUpDown 只要 `Position`、
+   TDateTimePicker 要 `Date`／`Time`、TImage 只要 `Tag`。
+
+### 兩個 gate 的「方向判斷」
+
+- **(W5-COM2)** golden 這裡是 **合取**（`REAL_TIME_CCD==true && !COM2->bCCDDummyRum`）。
+  同一個檔案裡的 `GATE (CFG2-COM2)` 是拿掉一個運算元來**收窄**條件，
+  因為那是**析取**；在這裡做同樣的事會讓分支**變寬**——方向錯了。
+  所以整個 `if` 連 `else` 關鍵字一起 gate，保留 golden 自己的 else 主體——
+  那是 golden 在所有沒有即時 CCD 的機台上本來就會走的臂。
+- **(W5-CCE)** 全部 **61 個** `ChangeCompomentEnabled` 呼叫。golden 的參數是
+  `TWinControl*`，而本 port 的 widget 全部直接繼承 `vclcompat::TControl`——
+  正是 `fSpeed.h` GATE (S4)／`fHandlerSys.h` GATE (H1)／`fLotInfo.h` GATE (WA-4)
+  記錄的同一個祖先缺口，規則是「跨檔缺口 GATE 不自建 shim」。
+  **代價是零**：該函式本體在 `cAuthority.cpp` 本來就是 gated 的 no-op。
+
+其餘七個：W5-Pages、W5-ATCVer（`asATC_SW_Ver` 不存在，而且 `acarry_shims.h` **不能** include——
+它會與 `Public/HTEditList.h:128/:321` 的 `TList`／`uPlateInfo` 重定義，實測確認）、
+W5-Picture、W5-Controls、W5-FormHS、W5-WriteContact／W5-ShowMemo（兩個尚未翻譯的同伴）、
+W5-Geometry（`Left`／`Top`，無 TForm 基底，同 cObserver 的 GATE (FW3A-3)）。
+
+### 順手記一個監控的假警報
+
+Release build 期間我用 `tasklist | grep -c "cc1plus|ctest"` 查到 **0 個進程**，
+差點判定 build 中斷。實際上它活得好好的——那一瞬間正在 target 轉換／連結階段，
+沒有 `cc1plus`，而我沒數 `mingw32-make`。**可靠的判準是 `build.log` 的 mtime**
+（與「`LastTest.log.tmp` 存在≠ctest 在跑」同一個道理）。先查證再下結論是對的。
+
 ### 🔖 RESUME（20260825 日終）
 
 - **今日全收（本節之前的 20260825 I-VII，共 7 波）**：FW-BARCODE2／FW-BARCODE3
@@ -10354,12 +10404,23 @@ cTemperFrom 那 29 個缺失識別字裡，**只有 6 個是本表單的**，
 - ⚠ **選標的規則（20260825 XII 付過代價）**：**census 的「缺」不是待辦清單**。
   先讀該檔對應 header 的 `EXPLICITLY EXCLUDED` / `GATE REGISTER` 段落。
   `forms/fTemperFrom.h` 就把該檔全部 15 個「缺」的方法列為刻意排除，**三個是安全項**。
-- **下一波 = FW-SCKART-W1（`Automation/SCK_ART.cpp`）**，已篩選：
-  缺 3,811 行、6 個 WriteIniData、23 個 SaveToFile、**header 無排除段**、
-  區塊註解內無函式定義。額外理由：它**解開兩個已記錄的 cObserver gate**——
-  FW3A-4 的 17 個 SPIL `pal*` 面板要 `fSCKART->sInfo_*`，C-log-11 要 `sInfoArr_*`，
-  而 `forms/fSCKART.h` 目前兩組都沒有。
-  備位：`Interface/TesterTCP.cpp`（974 行、3 WriteIni、無排除段）。
+- **FW-CFG 進度**：W1/W2/W3/W4a/W4b/W5 全收，**13 個 Item 函式＋dispatcher＋FormShow**
+  都落地了。commit `e6fe41f` → `79abd67` → `ccefc6d` → `8871eda` → `34fbd03` → `7878cf2`，
+  六輪雙 gate 全綠。census：該檔 7,101 → **2,044 行**；全樹 58,109 → **53,052 行**；
+  表單組 14.5% → **16.4%**。
+- **cConfiguration 剩下的**：CheckConfigurationBeforeSave（393）、FormClose（208）、
+  golden 的 ctor（117，寫入路徑）、UpdateUT150Comm（168）、InitialMemo／ ShowMemo／
+  DoPassword／FormDestroy（前三個卡在 TWinControl 控制項樹與跨表單表面，
+  FormDestroy 删的是 golden ctor 建的陣列）。
+- ⚠ **前三個候選都被 header 擋下來了**（選標新規則的成果）：
+  `cTemperFrom`（EXPLICITLY EXCLUDED，3 個安全項）、
+  `Automation/SCK_ART.cpp`（fSCKART.h 的 RECONCILIATION DEBT：五個宣告點、
+  兩處已釘住的行為分歧，「這是分析工作不是機械對齊」）、
+  `Interface/TesterTCP.cpp`（剩餘明確是 UI 軸，要先立 TfTesterTCP facade）。
+  **這是戰役層級的訊號**：容易且自足的缺口已經取完，剩下的 census 缺口
+  大多需要裁定（安全、write path、UI 軸、狀態分裂債）而不只是翻譯工。
+- **下一步建議**：先把 cConfiguration 剩下可做的收尾（FormClose 208 行最完整），
+  再回頭看 `SECSGEM/uHGemEquipment.cpp`（2,935 行，header 有 2 個排除段要先讀）。
 - **等使用者（本波未動，只是重列）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
   HAL-MOT1 十問（Q1/Q9/Q4 擋新 mot_table 起草）；TImage headless 准駁；
   GOLDEN BUG (TAG1-a) edSHighBase；GOLDEN DEFECT (i) 21-into-20 sprintf overflow。
