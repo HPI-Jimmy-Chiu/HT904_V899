@@ -223,12 +223,16 @@ public:
 
 // See GATE (3): golden's per-channel TBitBtn*/TButton*/TCheckBox* members
 // have their ->Tag GENUINELY read back (channel-dispatch index) by the click
-// handlers -- vclcompat's stock types carry no ->Tag by design, so these tiny
-// subclasses add exactly that one field, matching the identical precedent
-// vclcompat/ClientSocket.h already set for TClientSocket::Tag.
-class TATCBitBtn : public TBitBtn   { public: int Tag; TATCBitBtn()   : Tag(0) {} };
-class TATCButton  : public TButton  { public: int Tag; TATCButton()  : Tag(0) {} };
-class TATCCheckBox : public TCheckBox { public: int Tag; TATCCheckBox() : Tag(0) {} };
+// handlers.  AI(W906-FW-TAG1) 20260825: these three subclasses existed ONLY to
+// add `int Tag`, which now lives on vclcompat::TControl (Controls.h) for every
+// widget.  The duplicate members are removed rather than left to shadow the
+// base one -- see the provenance note at that declaration.  The classes stay:
+// the member declarations below and the `(TATCBitBtn*)Sender` casts in
+// ATCInterface.cpp name these types, and an empty derived class keeps those
+// spellings valid with identical semantics (Tag now resolves to the base).
+class TATCBitBtn : public TBitBtn     { public: TATCBitBtn()   {} };
+class TATCButton  : public TButton    { public: TATCButton()  {} };
+class TATCCheckBox : public TCheckBox { public: TATCCheckBox() {} };
 
 extern DWORD MySleepEx(DWORD dwMilliseconds, bool bAlertable);
 

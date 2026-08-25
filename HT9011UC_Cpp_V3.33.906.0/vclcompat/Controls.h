@@ -215,7 +215,45 @@ public:
     bool  Visible;
     bool  Enabled;
     void *hCtl;                       // lazy HWND binding slot (NULL offline)
-    TControl() : Visible(false), Enabled(false), hCtl(0) {}
+    // AI(W906-FW-TAG1) 20260825: golden TComponent::Tag, hoisted to the base.
+    //
+    //   WHY THE BASE AND NOT ANOTHER WRAPPER. Six facade-local classes exist
+    //   in this tree for the sole purpose of adding this one int (ATC/
+    //   ATCInterface.h TATCBitBtn/TATCButton/TATCCheckBox, forms/
+    //   fDynamicTemp.h TfDynamicTempGroupBox, forms/fTemp_Set.h
+    //   TfTemp_SetTagEdit/TfTemp_SetTagButton). In real VCL Tag is on
+    //   TComponent, i.e. on EVERY component -- reproducing that once here
+    //   retires the workaround instead of adding a seventh copy of it. Same
+    //   call, same file, as SetFocus() below (20260824).
+    //
+    //   THE SIX DUPLICATES ARE RETIRED IN THE SAME CHANGE, deliberately: a
+    //   surviving derived `int Tag` would SHADOW this one, and shadowing here
+    //   is worse than redundant. Today every access to those members goes
+    //   through the derived type, so the two would agree -- but the moment a
+    //   base-typed write meets a derived-typed read (exactly what the W7 UI
+    //   wiring will introduce) they diverge silently. Before this member
+    //   existed a base-typed `->Tag` was a COMPILE ERROR; adding it converts
+    //   that error into a silent wrong read, so the duplicates go now.
+    //
+    //   VALUE PROVENANCE -- read this before un-gating anything on Tag.
+    //   Declaring the member does NOT supply golden's values. Golden fills Tag
+    //   two different ways and only one of them survives the port today:
+    //     (a) runtime ctor assignment -- golden MyTempPanel.cpp:325-346 writes
+    //         18 `->Tag=iTag;` with the per-channel index. The port keeps that
+    //         loop live (uTemp_Set.cpp:339-341), so un-gating those writes
+    //         restores REAL values.
+    //     (b) .dfm designer property -- golden uTemp_Set.dfm carries 25 Tag
+    //         lines, golden VacuumUnit/VacuumUnit.dfm:251/:261 carries
+    //         Tag=1/Tag=2. NOTHING in this port reads a .dfm Tag: dfm2rc keeps
+    //         it in the stage-1 IR and in web/forms/*.layout.json, but the
+    //         .rc/layout/uimap emitters drop it and no C++ loads a layout.
+    //   So for every (b) widget this member reads 0, and 0 is NOT a neutral
+    //   "else": MachineType.h:637 makes tcHotPlate1==0, and golden dispatches
+    //   `Tag==1`/`Tag==2` arms that a zero silently redirects. Un-gate only
+    //   where the provenance is (a), or where golden's own widgets carry no
+    //   Tag -- each such block states which, with its .dfm citation.
+    int   Tag;                        // golden TComponent::Tag (see note above)
+    TControl() : Visible(false), Enabled(false), hCtl(0), Tag(0) {}
     virtual ~TControl() {}
     virtual void PullFromControl() {} // offline: nothing to read back from
     virtual void PushToControl()   {} // offline: nothing to write out to

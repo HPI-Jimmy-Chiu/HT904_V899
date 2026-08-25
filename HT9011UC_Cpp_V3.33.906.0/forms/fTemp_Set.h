@@ -442,11 +442,12 @@ struct TfTemp_SetTimer
 
 // ---------------------------------------------------------------------------
 //  TfTemp_SetTagEdit / TfTemp_SetTagButton -- golden TComponent->Tag (a
-// property EVERY VCL component has) has no port on `vclcompat::TControl`
-// (verified against vclcompat/Controls.h directly this wave -- 0 hits for a
-// `Tag` member anywhere in that header). This tree's own established
+// property EVERY VCL component has) had no port on `vclcompat::TControl` when
+// this wave ran (0 hits for a `Tag` member in that header).  SUPERSEDED
+// 20260825 (FW-TAG1): Tag is now a base member on vclcompat::TControl and the
+// two wrappers below no longer carry their own. This tree's own established
 // convention for a genuinely-needed Tag (forms/fObserver.h:283 `int Tag;`,
-// forms/fConfiguration.h:280 `int Tag = 0;`) adds it as a plain member on a
+// forms/fConfiguration.h:286 `int Tag = 0;`) adds it as a plain member on a
 // facade-local wrapper, NOT on the shared vclcompat type -- same "compose,
 // don't fork" idiom as TfTemperFromPanel/TfTemp_SetTimer above. Two thin
 // wrappers, each used ONLY where golden's own Tag read is REAL business
@@ -454,22 +455,30 @@ struct TfTemp_SetTimer
 // uTemp_Set.cpp's own GATE(G-Barcode) notes for those):
 //   * `edtSetTempature2AirMachineClick` (golden :6903-6929) dispatches on
 //     `((TEdit*)Sender)->Tag` to pick between `edt_SetIndexAirstreamTemp`/
-//     `edtSetTempature2AirMachine` (Tag 0/1 at golden design-time) -- the
+//     `edtSetTempature2AirMachine`.  CORRECTION 20260825 (FW-TAG1), this
+//     comment used to say "(Tag 0/1 at golden design-time)" and that is
+//     FALSE: all FOUR widgets golden wires to that handler
+//     (edt_SetIndexAirstreamTemp dfm:4894, edt_SetAirstreamTemperatureRang_
+//     Index dfm:4905, edtSetTempature2AirMachine dfm:5024, edt_SetAirstream
+//     TemperatureRang_Socket dfm:5035) carry NO Tag line, and golden's
+//     uTemp_Set.cpp writes Tag exactly once in the whole file (btnSort->Tag=0
+//     at golden :5768).  Golden therefore always evaluates Tag==0 here and
+//     always writes edt[0]; the port reproduces that exactly.  -- the
 //     ONLY 2 TEdit members in this whole file where Tag is genuinely read as
 //     data, not a guard.
 //   * `btnSort` (golden :5764-5781, :3671-4101) cycles a 3-state sort mode
 //     through its own Tag (0/1/2) -- read back by UpDateEdit to choose the
 //     Align/sort branch.
 // ---------------------------------------------------------------------------
+// AI(W906-FW-TAG1) 20260825: both `int Tag = 0;` members removed -- Tag now
+// lives on vclcompat::TControl for every widget (provenance note there); a
+// copy here would shadow it.  The two classes stay because the member
+// declarations below and their casts name these types.
 class TfTemp_SetTagEdit : public vclcompat::TEdit
 {
-public:
-    int Tag = 0;
 };
 class TfTemp_SetTagButton : public vclcompat::TSpeedButton
 {
-public:
-    int Tag = 0;
 };
 
 // ===========================================================================

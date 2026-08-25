@@ -485,11 +485,14 @@ public:
 class TfDynamicTempGroupBox : public vclcompat::TGroupBox
 {
 public:
-    int Tag;
+    // AI(W906-FW-TAG1) 20260825: `int Tag;` removed -- it now lives on
+    // vclcompat::TControl for every widget (see the provenance note there);
+    // keeping a copy here would shadow it.  Top/Left stay: vclcompat models
+    // no geometry, so those two are still this wrapper's reason to exist.
     int Top;
     int Left;
 
-    TfDynamicTempGroupBox() : Tag(0), Top(0), Left(0) {}
+    TfDynamicTempGroupBox() : Top(0), Left(0) {}
 };
 
 // ---------------------------------------------------------------------------
