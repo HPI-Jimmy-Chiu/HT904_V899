@@ -21,6 +21,15 @@ void AnsiString::assignInt(long long v) {
     data_ = std::to_string(v);
 }
 
+// AI(W906-FW-GEM-W11) 20260826: unsigned 專用路徑。golden THGem::GetECInformation
+// （uHGemEquipment.cpp:8272-8288）把 EC 值指標讀出的 unsigned __int64 直接指派給
+// AnsiString。**不能借道 assignInt**：>2^63-1 的值轉成 long long 會印成負數。
+// 用 std::to_string 的 unsigned long long 多載，理由同上面那行（MinGW MSVCRT 的
+// printf 家族對 %llu 不可靠）。
+void AnsiString::assignUInt(unsigned long long v) {
+    data_ = std::to_string(v);
+}
+
 // BCB6 FloatToStr: "general" format, 15 significant digits, trailing zeros and
 // a trailing decimal point stripped. 3.0 -> "3", 1.5 -> "1.5",
 // 141.3 -> "141.3", 25371.828 -> "25371.828".

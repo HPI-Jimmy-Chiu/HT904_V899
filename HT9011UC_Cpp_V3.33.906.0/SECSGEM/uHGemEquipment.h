@@ -1762,7 +1762,28 @@ public:
     bool CheckSFFormatDataRequest(AnsiString ErrString);   // golden :7312-7351
     void SendInvalidDataMessageToHost(AnsiString S);   // golden :7353-7358
     void GetAllSVInformation(THGemMemo *Ptr);   // golden 是 TMemo*，本樹的對應 stand-in 是 THGemMemo   // golden :8225-8268
-    void GetALLECInformation(TObject * Ptr);   // golden :8270-8276
+    void GetALLECInformation(TObject * Ptr);
+
+    // AI(W906-FW-GEM-W11) 20260826: 退役 GATE (W10-ECInfo) 用。
+    void GetECInformation(TObject * Ptr, int Index);   // golden :8278-8597
+    // golden uHGemEquipment.h（EC_* 平行清單的說明欄）。
+    // EC_* 平行清單：GetECInformation 用同一個 Index 逐筆取出來組一行 EC 說明。
+    // golden uHGemEquipment.h:657-668。三條 TList 存的是「指向真實 EC 變數的指標」，
+    // 由 out-of-scope 的 FormCreate SV/EC 註冊填入（見檔頭 :161），本樹保持空，
+    // 所以 GetECInformation 讀到的 Items[i] 會是 NULL，走 golden 自己的 NULL 分支。
+    TStringList *EC_TYPE   = new TStringList();          // golden :657
+    TStringList *EC_NAME   = new TStringList();          // golden :658
+    TStringList *EC_UNIT   = new TStringList();          // golden :659
+    // 三條 TList 一律全限定成 vclcompat::TList，照本檔 :644-649 已訂的慣例：
+    // aHotPlateSubstrate.h 有另一個**無關的**全域 class TList，這個 header
+    // 刻意不把 vclcompat::TList 帶進全域命名空間，避免選錯型別。
+    vclcompat::TList *EC_Ptr_Min     = new vclcompat::TList();   // golden :661
+    vclcompat::TList *EC_Ptr_Max     = new vclcompat::TList();   // golden :662
+    vclcompat::TList *EC_Ptr_Default = new vclcompat::TList();   // golden :663
+    TStringList *EC_Ptr_Min_Value     = new TStringList();   // golden :666
+    TStringList *EC_Ptr_Max_Value     = new TStringList();   // golden :667
+    TStringList *EC_Ptr_Default_Value = new TStringList();   // golden :668
+    TStringList *EC_Remark = new TStringList();   // golden :8270-8276
     void GemRemoteReceipeListClick(TObject *Sender);   // golden :9210-9220
 };
 

@@ -10910,6 +10910,70 @@ gate 才跑了兩分鐘，直接殺掉改用 `dualgate.sh gem10b` 從全新 dir 
 （孤立 CR 在 C++ 只是空白、不影響編譯，但**驗收數字要在最後一次整併之後量**，
 不留模糊空間）。
 
+## 20260826 IV — FW-GEM-W11：GetECInformation，本檔最大單一缺口，零 gate 落地
+
+### 交付
+
+`SECSGEM/uHGemEquipment.cpp` +341/−7、`.h` +22/−1、
+`vclcompat/AnsiString.h` +9、`vclcompat/AnsiString.cpp` +9。
+
+`THGem::GetECInformation`（golden :8278-8597，**320 行**）——W10 收工時本檔最大的
+單一缺口，也是 `GATE (W10-ECInfo)` 的唯一阻塞物。本波翻完並**退役該 gate**。
+
+忠實度複驗：**LIVE 敘述 251 條，golden 無逐字對應 1 條**（簽章行，`__fastcall`
+剝除），**gated 0 行**。這一支是完整落地，沒有任何降級。
+
+### 為什麼這支的 dynamic_cast 可以照翻，而 W8 的 SetTerminalWindows 不行
+
+兩支都用 `dynamic_cast` 對傳進來的 `TObject*` 做執行期型別判別，結論卻相反——
+**差別在目標型別是不是多型階層**：
+
+| | W8 `SetTerminalWindows` | W11 `GetECInformation` |
+|---|---|---|
+| 目標 | `THGemEdit`(:436) / `THGemPanel`(:470) / `THGemMemo`(:503) / `THGemListBox`(:570) | `TMemo` / `TStringGrid` |
+| 是什麼 | 四個彼此無關的 **plain struct**，無共同基底、無虛擬函式 | `TMemo`(Controls.h:354) : `TCustomEdit`(:306) : `TControl`(:213) : `TObject`；`TStringGrid`(StringGrid.h:129) : `TObject` |
+| `dynamic_cast` | **不合法**（非 polymorphic 型別） | 合法（`TObject` 有 `virtual ~TObject()`，TStringList.h:34） |
+| 處置 | `GATE (W8-TermCast)` | 照翻 |
+
+同一份判斷 `SecsSvEcRegistration.cpp:21-28` 已經為 `GetECDataValue` 的
+IsVCL cascade 做過（那邊也是靠 `vclcompat/Controls.h` 的 stand-in 才編得起來）。
+**「golden 用了 dynamic_cast」不等於「本樹翻不了」，要看它 cast 到哪一組型別。**
+
+### 三件補件
+
+1. **9 個 `EC_*` 平行清單成員**（golden `uHGemEquipment.h:657-668`）：
+   `EC_TYPE`/`EC_NAME`/`EC_UNIT`（TStringList）、
+   `EC_Ptr_Min`/`EC_Ptr_Max`/`EC_Ptr_Default`（TList，存指向真實 EC 變數的指標）、
+   `EC_Ptr_Min_Value`/`EC_Ptr_Max_Value`/`EC_Ptr_Default_Value`（TStringList）。
+   由 out-of-scope 的 FormCreate SV/EC 註冊填入，本樹保持空 → `Items[i]` 讀到 NULL，
+   走 golden 自己的 NULL 分支。
+
+2. **三條 TList 全限定成 `vclcompat::TList`**，照本檔 `:644-649` 已訂的慣例：
+   `aHotPlateSubstrate.h` 有另一個**無關的**全域 `class TList`，這個 header
+   刻意不把 `vclcompat::TList` 帶進全域命名空間。
+   我一度加了 `#include "vclcompat/TList.h"` 想讓非限定名可見——**那是錯的方向**，
+   會把慣例刻意擋掉的東西放進來；已撤掉（型別本來就可見，本檔 :651 早就在用）。
+
+3. **`AnsiString` 補 `unsigned long long` 的 ctor 與 `operator=`**。
+   golden :8272-8288 從 EC 值指標讀出 `unsigned __int64` 直接指派給 `AnsiString`；
+   本樹只有 `operator=(unsigned int)` 與 `operator=(long long)`，
+   `unsigned long long` 在兩者之間 **ambiguous**。
+   新增的路徑走 `assignUInt`，**不借道 `assignInt`**——轉成 `long long` 會讓
+   大於 2^63−1 的值印成負數。實作用 `std::to_string` 的 unsigned 多載，
+   理由同該檔既有註解（MinGW MSVCRT 的 printf 家族對 `%llu` 不可靠）。
+
+### 驗收
+
+`tools/dualgate.sh gem11`（全新 dir）：Debug **137/142**、Release **137/142**，
+失敗集合逐項相同且等於常駐五項。`D:\HT9045\system` 552 檔本晚零變動。
+
+### 這一波是行為變更
+
+退役 `GATE (W10-ECInfo)` 後，`GetALLECInformation` 會真的逐筆填 EC 說明欄
+（雖然在本樹 `EC_ID` 是空的，所以迴圈不會有項目——但那是資料面的事，不是碼的事）。
+`AnsiString` 是全樹共用型別，新增多載會影響所有 TU 的多載解析，
+所以雙 gate 是必要的，不是形式。
+
 ### 🔖 RESUME（20260825 日終）
 
 - **今日全收（本節之前的 20260825 I-VII，共 7 波）**：FW-BARCODE2／FW-BARCODE3

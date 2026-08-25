@@ -8081,14 +8081,9 @@ void THGem::GetALLECInformation(TObject * Ptr)
 {
     for(int i=0; i<HGem->EC_ID->Count; i++)
     {
-#if 0 // GATE (W10-ECInfo) -- golden 原文保留
-        // GetECInformation（golden :8278-8597，320 行）本波未翻——它是本檔
-        // 目前最大的單一缺口，且要 IsVCL 的 dynamic_cast 串接（見
-        // SecsSvEcRegistration.cpp:21 已記錄的同型分析）。單獨一波處理。
-        // 影響：GetALLECInformation 會走完迴圈但不填任何 EC 欄位。
-        // 量測 20260826: survey_file 的「真正缺」清單裡 GetECInformation 仍缺。
+        //AI(W906-FW-GEM-W11) 20260826: GATE (W10-ECInfo) 已退役——
+        // GetECInformation 本波翻好了（見檔尾），golden 原文回復為 live。
         GetECInformation(Ptr, i);
-#endif
     }
 }
 
@@ -8103,5 +8098,344 @@ void THGem::GemRemoteReceipeListClick(TObject *Sender)
             continue;
         else
             GemRemoteReceipeList->Checked[i]=false;
+    }
+}
+
+// =============================================================================
+// FW-GEM-W11 -- THGem::GetECInformation（golden :8278-8597，320 行）
+//
+// 本檔在 W10 收工時最大的單一缺口，也是 GATE (W10-ECInfo) 的唯一阻塞物。
+//
+// 它用 `dynamic_cast<TMemo*>(Ptr)` 與 `dynamic_cast<TStringGrid*>(Ptr)` 做
+// 執行期型別判別。**這一次可以照翻**，和 W8 的 SetTerminalWindows 不同：
+//   * SetTerminalWindows 的目標是 THGemEdit/THGemPanel/THGemMemo/THGemListBox
+//     四個彼此無關的 plain struct（uHGemEquipment.h:436/470/503/570），
+//     沒有共同基底也沒有虛擬函式 -> dynamic_cast 不合法。
+//   * 這裡的目標是 vclcompat 的真型別：TMemo(Controls.h:354) : TCustomEdit(:306)
+//     : TControl(:213) : TObject，而 TStringGrid(StringGrid.h:129) : TObject，
+//     TObject 有 `virtual ~TObject()`（TStringList.h:34）-> 多型，dynamic_cast 合法。
+// 同一份判斷 SecsSvEcRegistration.cpp:21-28 已經為 GetECDataValue 的
+// IsVCL cascade 做過（那邊也是靠 vclcompat/Controls.h 的 stand-in 才編得起來）。
+// =============================================================================
+// AI(W906-FW-GEM-W11) 20260826: golden SECSGEM/uHGemEquipment.cpp:8278-8597, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GetECInformation(TObject * Ptr, int Index)
+{
+    AnsiString ID="", IsSV="", IsEC="", Name="", Type="", Length="", Unit="", Max="", Min="", Default="", Remark="";
+    int i, iRow;
+    unsigned char t;
+    AnsiString S;
+
+    i=Index;
+    TMemo       *memoPtr  = dynamic_cast <TMemo *>(Ptr);
+    TStringGrid *sgPtr    = dynamic_cast <TStringGrid *>(Ptr);
+
+    //Ptr->Lines->Clear();
+    //for(i=0; i<EC_ID->Count; i++)
+    {
+        ID=EC_ID->Strings[i];
+        IsEC="V";
+        IsSV="V";
+
+        t=atoi(EC_TYPE->Strings[i].c_str());
+        if(t==HType.LIST_TYPE)            Type="LIST";
+        else if(t==HType.ASCII_TYPE)      Type="ASCII";
+        else if(t==HType.BOOLEAN_TYPE)    Type="BOOLEAN";
+        else if(t==HType.BINARY_TYPE)     Type="BINARY";
+        else if(t==HType.UINT_1_TYPE)     Type="UINT_1";
+        else if(t==HType.UINT_2_TYPE)     Type="UINT_2";
+        else if(t==HType.UINT_4_TYPE)     Type="UINT_4";
+        else if(t==HType.UINT_8_TYPE)     Type="UINT_8";
+        else if(t==HType.INT_1_TYPE)      Type="INT_1";
+        else if(t==HType.INT_2_TYPE)      Type="INT_2";
+        else if(t==HType.INT_4_TYPE)      Type="INT_4";
+        else if(t==HType.INT_8_TYPE)      Type="INT_8";
+        else if(t==HType.FT_4_TYPE)       Type="FT_4";
+        else if(t==HType.FT_8_TYPE)       Type="FT_8";
+
+        Name=EC_NAME->Strings[i];
+        Unit=EC_UNIT->Strings[i];
+
+        if(t==HType.ASCII_TYPE)
+        {
+            char *P;
+            P=(char *)EC_Ptr_Min->Items[i];
+            if(P==NULL)
+                Min="";
+            else
+                Min=*P;
+
+            P=(char *)EC_Ptr_Max->Items[i];
+            if(P==NULL)
+                Max="";
+            else
+                Max=*P;
+
+            P=(char *)EC_Ptr_Default->Items[i];
+            if(P==NULL)
+                Default="";
+            else
+                Default=*P;
+        }
+        else if(t==HType.BOOLEAN_TYPE)
+        {
+            unsigned char *P;
+            P=(unsigned char *)EC_Ptr_Min->Items[i];
+            if(P!=NULL)
+                Min=*P;
+            else
+                Min=EC_Ptr_Min_Value->Strings[i];
+
+            P=(unsigned char *)EC_Ptr_Max->Items[i];
+            if(P!=NULL)
+                Max=*P;
+            else
+                Max=EC_Ptr_Max_Value->Strings[i];
+
+            P=(unsigned char *)EC_Ptr_Default->Items[i];
+            if(P!=NULL)
+            {
+                if((*P)==0)
+                    Default="FALSE";
+                else
+                    Default="TRUE";
+            }
+            else
+            {
+                Default=EC_Ptr_Default_Value->Strings[i];
+            }
+        }
+        else if(t==HType.BINARY_TYPE || t==HType.UINT_1_TYPE)
+        {
+            unsigned char *P;
+            P=(unsigned char *)EC_Ptr_Min->Items[i];
+            if(P!=NULL)
+                Min=*P;
+            else
+                Min=EC_Ptr_Min_Value->Strings[i];
+
+            P=(unsigned char *)EC_Ptr_Max->Items[i];
+            if(P!=NULL)
+                Max=*P;
+            else
+                Max=EC_Ptr_Max_Value->Strings[i];
+
+            P=(unsigned char *)EC_Ptr_Default->Items[i];
+            if(P!=NULL)
+                Default=*P;
+            else
+                Default=EC_Ptr_Default_Value->Strings[i];
+        }
+        else if(t==HType.UINT_2_TYPE)
+        {
+            unsigned short *P;
+            P=(unsigned short *)EC_Ptr_Min->Items[i];
+            if(P!=NULL)
+                Min=*P;
+            else
+                Min=EC_Ptr_Min_Value->Strings[i];
+
+            P=(unsigned short *)EC_Ptr_Max->Items[i];
+            if(P!=NULL)
+                Max=*P;
+            else
+                Max=EC_Ptr_Max_Value->Strings[i];
+
+            P=(unsigned short *)EC_Ptr_Default->Items[i];
+            if(P!=NULL)
+                Default=*P;
+            else
+                Default=EC_Ptr_Default_Value->Strings[i];
+        }
+        else if(t==HType.UINT_4_TYPE)
+        {
+            unsigned *P;
+            P=(unsigned *)EC_Ptr_Min->Items[i];
+            if(P!=NULL)
+                Min=*P;
+            else
+                Min=EC_Ptr_Min_Value->Strings[i];
+
+            P=(unsigned *)EC_Ptr_Max->Items[i];
+            if(P!=NULL)
+                Max=*P;
+            else
+                Max=EC_Ptr_Max_Value->Strings[i];
+
+            P=(unsigned *)EC_Ptr_Default->Items[i];
+            if(P!=NULL)
+                Default=*P;
+            else
+                Default=EC_Ptr_Default_Value->Strings[i];
+        }
+        else if(t==HType.UINT_8_TYPE)
+        {
+            unsigned __int64 *P;
+            P=(unsigned __int64*)EC_Ptr_Min->Items[i];
+            if(P!=NULL)
+                Min=*P;
+            else
+                Min=EC_Ptr_Min_Value->Strings[i];
+
+            P=(unsigned __int64*)EC_Ptr_Max->Items[i];
+            if(P!=NULL)
+                Max=*P;
+            else
+                Max=EC_Ptr_Max_Value->Strings[i];
+
+            P=(unsigned __int64*)EC_Ptr_Default->Items[i];
+            if(P!=NULL)
+                Default=*P;
+            else
+                Default=EC_Ptr_Default_Value->Strings[i];
+        }
+        else if(t==HType.INT_1_TYPE)
+        {
+            char *P;
+            P=(char*)EC_Ptr_Min->Items[i];
+            if(P!=NULL)
+                Min=*P;
+            else
+                Min=EC_Ptr_Min_Value->Strings[i];
+
+            P=(char*)EC_Ptr_Max->Items[i];
+            if(P!=NULL)
+                Max=*P;
+            else
+                Max=EC_Ptr_Max_Value->Strings[i];
+
+            P=(char*)EC_Ptr_Default->Items[i];
+            if(P!=NULL)
+                Default=*P;
+            else
+                Default=EC_Ptr_Default_Value->Strings[i];
+        }
+        else if(t==HType.INT_2_TYPE)
+        {
+            short *P;
+            P=(short *)EC_Ptr_Min->Items[i];
+            if(P!=NULL)
+                Min=*P;
+            else
+                Min=EC_Ptr_Min_Value->Strings[i];
+
+            P=(short *)EC_Ptr_Max->Items[i];
+            if(P!=NULL)
+                Max=*P;
+            else
+                Max=EC_Ptr_Max_Value->Strings[i];
+
+            P=(short *)EC_Ptr_Default->Items[i];
+            if(P!=NULL)
+                Default=*P;
+            else
+                Default=EC_Ptr_Default_Value->Strings[i];
+        }
+        else if(t==HType.INT_4_TYPE)
+        {
+            int *P;
+            P=(int *)EC_Ptr_Min->Items[i];
+            if(P!=NULL)
+                Min=*P;
+            else
+                Min=EC_Ptr_Min_Value->Strings[i];
+
+            P=(int *)EC_Ptr_Max->Items[i];
+            if(P!=NULL)
+                Max=*P;
+            else
+                Max=EC_Ptr_Max_Value->Strings[i];
+
+            P=(int *)EC_Ptr_Default->Items[i];
+            if(P!=NULL)
+                Default=*P;
+            else
+                Default=EC_Ptr_Default_Value->Strings[i];
+        }
+        else if(t==HType.INT_8_TYPE)
+        {
+            __int64 *P;                                                         //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+            P=(__int64 *)EC_Ptr_Min->Items[i];
+            if(P!=NULL)
+                Min=*P;
+            else
+                Min=EC_Ptr_Min_Value->Strings[i];
+
+            P=(__int64 *)EC_Ptr_Max->Items[i];                                  //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+            if(P!=NULL)
+                Max=*P;
+            else
+                Max=EC_Ptr_Max_Value->Strings[i];
+
+            P=(__int64 *)EC_Ptr_Default->Items[i];                              //Steven 20140911 : 修正INT_8_TYPE & UINT_8_TYPE
+            if(P!=NULL)
+                Default=*P;
+            else
+                Default=EC_Ptr_Default_Value->Strings[i];
+        }
+        else if(t==HType.FT_4_TYPE)                                             //Steven 20130730 ADD
+        {
+            float *P;
+            P=(float *)EC_Ptr_Min->Items[i];
+            if(P!=NULL)
+                Min=*P;
+            else
+                Min=EC_Ptr_Min_Value->Strings[i];
+
+            P=(float *)EC_Ptr_Max->Items[i];
+            if(P!=NULL)
+                Max=*P;
+            else
+                Max=EC_Ptr_Max_Value->Strings[i];
+
+            P=(float *)EC_Ptr_Default->Items[i];
+            if(P!=NULL)
+                Default=*P;
+            else
+                Default=EC_Ptr_Default_Value->Strings[i];
+        }
+        else if(t==HType.FT_8_TYPE)                                             //Steven 20130730 ADD
+        {
+            double *P;
+            P=(double *)EC_Ptr_Min->Items[i];
+            if(P!=NULL)
+                Min=*P;
+            else
+                Min=EC_Ptr_Min_Value->Strings[i];
+
+            P=(double *)EC_Ptr_Max->Items[i];
+            if(P!=NULL)
+                Max=*P;
+            else
+                Max=EC_Ptr_Max_Value->Strings[i];
+
+            P=(double *)EC_Ptr_Default->Items[i];
+            if(P!=NULL)
+                Default=*P;
+            else
+                Default=EC_Ptr_Default_Value->Strings[i];
+        }
+
+        Remark=EC_Remark->Strings[i];
+
+        if(memoPtr!=NULL)
+        {
+            S=ID+'\t'+IsSV+'\t'+IsEC+'\t'+Name+'\t'+Type+'\t'+Length+'\t'+Unit+'\t'+Max+'\t'+Min+'\t'+Default+'\t'+Remark;
+            memoPtr->Lines->Add(S);
+        }
+        else if(sgPtr!=NULL)
+        {
+            iRow=sgPtr->RowCount;
+            sgPtr->RowCount=sgPtr->RowCount+1;
+            sgPtr->Cells[0][iRow]=ID;
+            sgPtr->Cells[1][iRow]=Name;
+            sgPtr->Cells[2][iRow]=Length;
+            sgPtr->Cells[3][iRow]=Type;
+            sgPtr->Cells[4][iRow]=Min;
+            sgPtr->Cells[5][iRow]=Max;
+            sgPtr->Cells[6][iRow]=Unit;
+            sgPtr->Cells[7][iRow]=Default;
+            sgPtr->Cells[8][iRow]=Remark;
+        }
     }
 }

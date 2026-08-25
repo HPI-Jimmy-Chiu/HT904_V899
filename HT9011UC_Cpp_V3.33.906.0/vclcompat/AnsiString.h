@@ -68,6 +68,12 @@ public:
     AnsiString(unsigned int v) { assignInt(static_cast<long long>(v)); }
     AnsiString(long v)         { assignInt(static_cast<long long>(v)); }
     AnsiString(long long v)    { assignInt(v); }
+    // AI(W906-FW-GEM-W11) 20260826: golden THGem::GetECInformation
+    // （uHGemEquipment.cpp:8272-8288）從 EC 的值指標讀出 `unsigned __int64` 再
+    // 直接指派給 AnsiString。少了這個 overload，`unsigned long long` 會在
+    // operator=(unsigned int) 與 operator=(long long) 之間 ambiguous。
+    // **不能轉成 long long**：>2^63-1 的值會印成負數。走 unsigned 專用路徑。
+    AnsiString(unsigned long long v) { assignUInt(v); }
     AnsiString(double v)       { assignDouble(v); }
 
     AnsiString& operator=(const AnsiString& o) { data_ = o.data_; return *this; }
@@ -86,6 +92,8 @@ public:
     AnsiString& operator=(unsigned int v) { assignInt(static_cast<long long>(v)); return *this; }
     AnsiString& operator=(long v)         { assignInt(static_cast<long long>(v)); return *this; }
     AnsiString& operator=(long long v)    { assignInt(v); return *this; }
+    AnsiString& operator=(unsigned long v)      { assignUInt(static_cast<unsigned long long>(v)); return *this; }
+    AnsiString& operator=(unsigned long long v) { assignUInt(v); return *this; }   // 見上面 ctor 的說明
     AnsiString& operator=(double v)       { assignDouble(v); return *this; }
 
     // ---- basics ------------------------------------------------------------
@@ -167,6 +175,7 @@ private:
     std::string data_;
 
     void assignInt(long long v);
+    void assignUInt(unsigned long long v);
     void assignDouble(double v);
     int  posImpl(const std::string& sub) const;
     int  lastDelimImpl(const std::string& delims) const;
