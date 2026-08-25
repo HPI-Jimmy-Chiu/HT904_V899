@@ -545,6 +545,18 @@ struct THGemCheckedArray
             Values[(size_t)Index] = val;
             return *this;
         }
+        // AI(W906-FW-GEM-W12) 20260826: 這個 stand-in 原本是**唯寫**的
+        //（見上方 :530-531 的 scope 說明）。golden 的檔案傳輸 UI 家族會**讀**它：
+        //   if(GemRemoteReceipeList->Checked[i])   (uHGemEquipment.cpp:6588/6595)
+        //   if(GemLocalFileLixtBox->Checked[i])    (:6624)
+        // 沒有讀取路徑時那三行編不過。補一個 operator bool()：
+        // 索引超出已寫入範圍時回 false，與 VCL TCheckListBox 未勾選的預設一致。
+        operator bool() const
+        {
+            if (Index < 0 || (int)Values.size() <= Index)
+                return false;
+            return Values[(size_t)Index];
+        }
     };
     Proxy operator[](int i) { return Proxy(Values, i); }
 };
@@ -1785,6 +1797,24 @@ public:
     TStringList *EC_Ptr_Default_Value = new TStringList();   // golden :668
     TStringList *EC_Remark = new TStringList();   // golden :8270-8276
     void GemRemoteReceipeListClick(TObject *Sender);   // golden :9210-9220
+
+    // ======================================================================
+    // AI(W906-FW-GEM-W12) 20260826: 檔案傳輸 UI 家族 + 三支雜項，12 支。
+    // 本檔可翻譯表面的收尾波；未翻的 3 支理由見 .cpp 的 banner。
+    // ======================================================================
+
+    void SetDisplayPtr(THGemMemo *DispBox);   // golden 是 TMemo*；DB 成員是 THGemMemo*   // golden :2093-2096
+    void GemListRemoteFileNameClick(TObject *Sender);   // golden :6560-6577
+    void GemDownLoadRemoteFileNameClick(TObject *Sender);   // golden :6583-6606
+    void GemDeleteRemoteFileNameClick(TObject *Sender);   // golden :6612-6614
+    void GemUpLoadLocalFileNameClick(TObject *Sender);   // golden :6620-6627
+    void GemRefreshLocalFileClick(TObject *Sender);   // golden :6633-6691
+    void GemSelectAllRemoteFileClick(TObject *Sender);   // golden :6697-6703
+    void GemDisSelectAllRemoteFileClick(TObject *Sender);   // golden :6709-6715
+    void GemSelectAllLocalFileClick(TObject *Sender);   // golden :6721-6727
+    void GemDisSelectAllLocalFileClick(TObject *Sender);   // golden :6733-6739
+    void GemSBSetupClick(TObject *Sender);   // golden :6879-6882
+    void edtT3TimeOutClick(TObject *Sender);   // golden :9341-9344
 };
 
 //---------------------------------------------------------------------------

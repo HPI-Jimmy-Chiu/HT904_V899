@@ -10974,6 +10974,81 @@ IsVCL cascade 做過（那邊也是靠 `vclcompat/Controls.h` 的 stand-in 才�
 `AnsiString` 是全樹共用型別，新增多載會影響所有 TU 的多載解析，
 所以雙 gate 是必要的，不是形式。
 
+## 20260826 V — FW-GEM-W12：THGem 可翻譯表面收尾
+
+### 交付
+
+12 支方法，把 `SECSGEM/uHGemEquipment.cpp` 的 THGem 可翻譯表面收尾。
+
+| 群組 | 方法 |
+|---|---|
+| 檔案傳輸 UI | `GemListRemoteFileNameClick`、`GemDownLoadRemoteFileNameClick`、`GemDeleteRemoteFileNameClick`、`GemUpLoadLocalFileNameClick`、`GemRefreshLocalFileClick`（59 行）、`GemSelectAllRemoteFileClick`／`GemDisSelectAll…`／`GemSelectAllLocal…`／`GemDisSelectAllLocal…` |
+| 雜項 | `SetDisplayPtr`、`GemSBSetupClick`、`edtT3TimeOutClick` |
+
+忠實度複驗：**LIVE 敘述 81 條，golden 無逐字對應 13 條**——12 條簽章行
+（`__fastcall` 剝除，其中 `SetDisplayPtr` 另有 `THGemMemo*` 替換）
+＋ 1 條 `(void)ct;`。gated 41 行。
+
+### 未翻的三支，各有理由
+
+- **`WriteALED`**（golden :837-842）—— `WriteIniData(FileName, "ALID", ...)` 寫
+  `ALID_ALED.ini`。write path，佇列。
+- **`btnExportClick`**（:9346-9351）—— `SGDToXLS(strGrdAlarm, SaveDialog1->FileName)`
+  把警報表寫成 `D:\AlarmList.xls`，而且需要 `TSaveDialog`（本樹無 port）。
+- **`GemTerminalSendEditKeyDown`**（:6501-6506）—— `TShiftState`，理由已寫在
+  FW-GEM-W10 的位置。
+
+### 兩個 gate、一個 facade 補件
+
+- **`GATE (W12-Modal)`** — `GemSBSetupClick` 的 `ShowModal()`。那是 `TForm::ShowModal`，
+  而 THGem「is not modeled as a real window」（本檔 header :95-96）。
+  純 UI 入口，不彈視窗的後果就是這個按鈕沒作用，不影響任何協定行為。
+- **`GATE (W12-DirList)`** — `GemRefreshLocalFileClick` 的 `Type==2` 分支，
+  與 `GATE (W10-DirList)` 同一個阻塞物（`DirectoryListBox1`）。
+  **`Type==0`／`Type==1` 兩條是完整 live 的**——它們用的是 `FileListBox2`
+  （`TFileListBox`），那個本樹**有** port（`vclcompat/FileListBox.h`，
+  本檔 header :331 早就 `using`）。所以「列本地檔案」能用，只有「列子目錄」不能。
+- **`THGemCheckedArray::Proxy` 補 `operator bool()`**。這個 stand-in 原本是
+  **唯寫**的（它自己 :530-531 的 scope 說明就這麼寫）。golden 的檔案傳輸家族要**讀**它
+  （`if(GemRemoteReceipeList->Checked[i])`，:6588/:6595；`GemLocalFileLixtBox`，:6624）。
+  索引超出已寫入範圍時回 `false`，與 VCL `TCheckListBox` 未勾選的預設一致。
+  補上之後 golden 那三行逐字成立（我一度先在呼叫點加 `bool(...)` 轉型，
+  補好 facade 後撤掉了——**修 facade 比改 golden 原文好**）。
+
+### 兩個量測更正
+
+1. **`SaveTCPIPRecieveData` 不是缺口。** 它整支包在 `/* */` 裡（golden :6958 起，54 行），
+   golden 根本沒編譯。`survey_file.py` 一直用自帶的、不懂區塊註解的 `code_only`，
+   所以把它列進「真正缺」——這正是 `tools/wavescan/README.md` 的「陷阱二」，
+   抽取器早就修過，**這支漏了**。
+   `screen_methods.py` 用的是 `goldenscan.load()`，所以它正確地跳過那一支——
+   **兩支工具對同一個方法給出相反答案，才把這個缺陷逼出來**。已改成共用同一份實作。
+2. 因此 golden 的方法總數從 **215 更正為 214**，
+   本檔「真正缺」從 16 支／224 行更正為 **15 支／170 行**。
+
+### 驗收
+
+`tools/dualgate.sh gem12`（全新 dir）：Debug **137/142**、Release **137/142**，
+失敗集合逐項相同且等於常駐五項。`D:\HT9045\system` 552 檔本晚零變動。
+
+### 自己犯的錯：gate 套到了另一個方法身上
+
+我用 `re.search(r'^ *else if\(SV_70_UNT1_ReceipeStruct==2\)...')` 去找
+`GemRefreshLocalFileClick` 的目錄分支——但**同一批抽出來的
+`GemListRemoteFileNameClick` 裡有一模一樣的 `else if(SV_70_UNT1_ReceipeStruct==2)`**
+（golden :6572），而 `re.search` 回傳第一個命中。
+結果 gate 停掉的是那支的 S101F3 送訊分支，真正該停的目錄分支原封不動地留著 live。
+
+`assert m` 只確認「有找到」，**沒有確認「找對」**——今晚第三個這種形狀的檢查
+（前兩個：`grep -c $'\r$'` 回總行數、EOL 計數等式抓不到孤立 CR）。
+是編譯器報 `'DirectoryListBox1' was not declared` 才把它抓出來，
+不然這會是一個「編得過、測得過、行為錯掉」的缺陷。
+
+修法：把 regex 錨定在**目標區塊獨有的東西**上（`DirectoryListBox1` 必須出現在
+匹配範圍內），並在套完之後 assert
+「gate 區塊內確實含有 `DirectoryListBox1`」。
+**通則：批次套用時，pattern 要對「這一批」唯一，不是對「這個檔」唯一。**
+
 ### 🔖 RESUME（20260825 日終）
 
 - **今日全收（本節之前的 20260825 I-VII，共 7 波）**：FW-BARCODE2／FW-BARCODE3

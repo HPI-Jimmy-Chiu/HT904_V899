@@ -22,17 +22,22 @@ try:
 except FileNotFoundError:
     port = ''
 
-STR = re.compile(r'"(?:\\.|[^"\\])*"')
-CHR = re.compile(r"'(?:\\.|[^'\\])*'")
+# 20260826：本檔原本自帶一份不懂 /* */ 的 code_only，於是**整支包在區塊註解裡的
+# 函式會被列成缺口**——golden 根本沒編譯它們，照著翻就是把停用的碼加進 port
+# （README 的「陷阱二」，抽取器早就修過，這支漏了）。
+# 實例：THGem::SaveTCPIPRecieveData（golden uHGemEquipment.cpp:6958 起整段包在
+# /* */ 內，54 行），一度出現在「真正缺 16 支」的清單裡。
+# screen_methods.py 早就用 goldenscan.load() 所以正確地跳過它——**兩支工具對同一個
+# 方法給出相反答案**才被抓到。現在共用同一份實作。
+import os as _os
+sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+from goldenscan import load as _load, code_only
 
-def code_only(line):
-    line = STR.sub('""', line)
-    line = CHR.sub("''", line)
-    i = line.find('//')
-    return line if i < 0 else line[:i]
+_lines, _live = _load(GOLD_ROOT + fn)
 
 DEF = re.compile(r'^[A-Za-z_][\w :\*&]*\b%s::(\w+)\s*\(' % cls)
-defs = [(i, DEF.match(l).group(1)) for i, l in enumerate(g) if DEF.match(l)]
+defs = [(i, DEF.match(l).group(1))
+        for i, l in enumerate(g) if DEF.match(l) and i < len(_live) and _live[i]]
 order = [i for i, _ in defs]
 
 rows = []

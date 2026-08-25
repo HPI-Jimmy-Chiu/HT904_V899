@@ -32,6 +32,9 @@
 //  established by the KYECFTP/FTPClient_Transfer.cpp precedent).
 //---------------------------------------------------------------------------
 #include "SECSGEM/uHGemEquipment.h"
+// AI(W906-FW-GEM-W12) 20260826: edtT3TimeOutClick 走 fQwertyKey->ShowQwertyKey，
+// 與 cConfiguration 各波已翻的 keypad 啟動器同一個形狀。
+#include "forms/fQwertyKey.h"
 // AI(W906-VCW1) 20260721: DataItemOutSV/DataItemOutEC's IsVCL==1 dynamic_cast
 // cascade (below) needs the 6 VCL-widget stand-ins this header supplies
 // (TPanel/TCustomEdit/TComboBox/TLabel/TCheckBox/TRadioGroup) -- see that
@@ -8438,4 +8441,230 @@ void THGem::GetECInformation(TObject * Ptr, int Index)
             sgPtr->Cells[8][iRow]=Remark;
         }
     }
+}
+
+// =============================================================================
+// FW-GEM-W12 -- THGem 的檔案傳輸 UI 家族 + 三支雜項（12 支）
+//
+// 這一波把 THGem 可翻譯的表面收尾。survey_file（20260826，已改成區塊註解感知）
+// 量到本檔真正缺 15 支／170 行，本波翻 12 支，其餘 3 支各有理由不做：
+//   WriteALED (golden :837-842)        -- WriteIniData 寫 ALID_ALED.ini，write path
+//   btnExportClick (golden :9346-9351) -- SGDToXLS 寫 D:\AlarmList.xls，且需要
+//                                         TSaveDialog（本樹無 port）
+//   GemTerminalSendEditKeyDown (:6501) -- TShiftState（VCL 集合型別，本樹無 port），
+//                                         理由已寫在 FW-GEM-W10 的位置
+//
+// 順帶更正一個量測：`SaveTCPIPRecieveData`（golden :6959-7012，54 行）**不是缺口**
+// ——它整支包在 /* */ 裡，golden 根本沒編譯。survey_file.py 本波才改成用
+// goldenscan.load() 的區塊註解旗標，之前把它算進「真正缺」。
+// golden 的方法總數也因此從 215 更正為 214。
+// =============================================================================
+// AI(W906-FW-GEM-W12) 20260826: golden SECSGEM/uHGemEquipment.cpp:2093-2096, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::SetDisplayPtr(THGemMemo *DispBox)   //AI(W906-FW-GEM-W12) 20260826: golden 是 TMemo*；本樹的 DB 成員是 THGemMemo*（uHGemEquipment.h:870），同 W10 GetAllSVInformation 的替換。
+{
+    DB=DispBox;
+}
+
+// AI(W906-FW-GEM-W12) 20260826: golden SECSGEM/uHGemEquipment.cpp:6560-6577, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GemListRemoteFileNameClick(TObject *Sender)
+{
+    if(SV_70_UNT1_ReceipeStruct==0)
+    {
+        InitLocalHead(7, 19, 1);
+        SendLocalData();
+    }
+    else if(SV_70_UNT1_ReceipeStruct==1)
+    {
+        InitLocalHead(101, 1, 1);
+        SendLocalData();
+    }
+    else if(SV_70_UNT1_ReceipeStruct==2)
+    {
+        InitLocalHead(101, 3, 1);
+        SendLocalData();
+    }
+}
+
+// AI(W906-FW-GEM-W12) 20260826: golden SECSGEM/uHGemEquipment.cpp:6583-6606, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GemDownLoadRemoteFileNameClick(TObject *Sender)
+{
+    int count=0;
+    AnsiString S;
+    for(int i=0; i<GemRemoteReceipeList->Items->Count; i++)
+        if(GemRemoteReceipeList->Checked[i])
+            count++;
+    if(count<=0)
+        return;
+
+    for(int i=0; i<GemRemoteReceipeList->Items->Count; i++)
+    {
+        if(GemRemoteReceipeList->Checked[i])
+        {
+            S=GemRemoteReceipeList->Items->Strings[i];
+            InitLocalHead(7, 5, 1);
+            DataItemOut(1, HType.LIST_TYPE, NULL);
+            DataItemOut(HType.ASCII_TYPE, S);
+            bReceiveS7F6=false;
+            SendLocalData();
+            break;
+        }
+    }
+}
+
+// AI(W906-FW-GEM-W12) 20260826: golden SECSGEM/uHGemEquipment.cpp:6612-6614, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GemDeleteRemoteFileNameClick(TObject *Sender)
+{
+}
+
+// AI(W906-FW-GEM-W12) 20260826: golden SECSGEM/uHGemEquipment.cpp:6620-6627, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GemUpLoadLocalFileNameClick(TObject *Sender)
+{
+    for(int i=0; i<GemLocalFileLixtBox->Items->Count; i++)
+    {
+        if(GemLocalFileLixtBox->Checked[i])
+            UploadFileName->Add(GemLocalFileLixtBox->Items->Strings[i]);
+    }
+}
+
+// AI(W906-FW-GEM-W12) 20260826: golden SECSGEM/uHGemEquipment.cpp:6633-6691, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GemRefreshLocalFileClick(TObject *Sender)
+{
+    AnsiString S,S1;
+    int i, j,ct;
+    (void)ct;   //AI(W906-FW-GEM-W12) 20260826: ct 只在 GATE (W12-DirList) 停用的
+                // Type==2 分支裡用到；golden 的宣告照留，這行只是讓 -Wall 不報 unused。
+    if(SV_70_UNT1_ReceipeStruct==0)
+    {
+        S=UpLoadPath+"\\"+SV_71_ASCII_FilenameExtened;
+        FileListBox2->Mask=S;
+        FileListBox2->Refresh();
+        FileListBox2->Update();
+        GemLocalFileLixtBox->Clear();
+        for(i=0; i<FileListBox2->Items->Count; i++)
+        {
+            GemLocalFileLixtBox->Items->Add(FileListBox2->Items->Strings[i]);
+        }
+    }
+    else if(SV_70_UNT1_ReceipeStruct==1)
+    {
+        S=UpLoadPath+"\\"+SV_71_ASCII_FilenameExtened;
+        FileListBox2->Mask=S;
+        FileListBox2->Refresh();
+        FileListBox2->Update();
+        GemLocalFileLixtBox->Clear();
+        for(i=0; i<FileListBox2->Items->Count; i++)
+        {
+            S=FileListBox2->Items->Strings[i];
+            j=S.LastDelimiter(".");
+            S=S.SubString(1,j-1);
+            GemLocalFileLixtBox->Items->Add(S);
+        }
+    }
+    else if(SV_70_UNT1_ReceipeStruct==2)
+    {
+        // GATE (W12-DirList) 把 golden 這個分支的內容整段停用了（見下）；
+        // golden 的 else-if 本來就帶大括號，這裡補一組空的維持語法與控制流。
+    }
+#if 0 // GATE (W12-DirList) -- golden 原文保留
+    // 與 GATE (W10-DirList) 同一個阻塞物：`DirectoryListBox1` 是活的 VCL
+    // TDirectoryListBox，本樹沒有等價物（uHGemClass.cpp:3309-3336 已為
+    // S7F20_CurrentEPPDData 做過完整分析並下結論；20260826 複查 grep
+    // "DirectoryListBox" 於 vclcompat/ 仍為零）。
+    // 注意 Type==0 與 Type==1 兩個分支用的是 `FileListBox2`（TFileListBox），
+    // 那個**本樹有** port（vclcompat/FileListBox.h，本檔 header :331 已 using），
+    // 所以那兩條路是完整 live 的——只有列「子目錄」這條沒有。
+    {
+        DirectoryListBox1->Directory=UpLoadPath;
+        DirectoryListBox1->Refresh();
+        DirectoryListBox1->Update();
+        S="";
+        UpLoadPath=UpLoadPath.UpperCase();
+        for(i=0; i<DirectoryListBox1->Items->Count; i++)
+        {
+            S+=DirectoryListBox1->Items->Strings[i];
+            S=S.UpperCase();
+            S1=S+"\\";
+            if(S==UpLoadPath || S1==UpLoadPath)
+            {
+                ct=i+1;
+                break;
+            }
+
+            if(i!=0)
+                S=S1;
+        }
+        GemLocalFileLixtBox->Clear();
+        for(i=ct; i<DirectoryListBox1->Items->Count; i++)
+        {
+            GemLocalFileLixtBox->Items->Add(DirectoryListBox1->Items->Strings[i]);
+        }
+    }
+#endif
+}
+
+// AI(W906-FW-GEM-W12) 20260826: golden SECSGEM/uHGemEquipment.cpp:6697-6703, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GemSelectAllRemoteFileClick(TObject *Sender)
+{
+    if(GemRemoteReceipeList==NULL)
+        return;
+    for(int i=0; i<GemRemoteReceipeList->Items->Count; i++)
+        GemRemoteReceipeList->Checked[i]=true;
+}
+
+// AI(W906-FW-GEM-W12) 20260826: golden SECSGEM/uHGemEquipment.cpp:6709-6715, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GemDisSelectAllRemoteFileClick(TObject *Sender)
+{
+    if(GemRemoteReceipeList==NULL)
+        return;
+    for(int i=0; i<GemRemoteReceipeList->Items->Count; i++)
+        GemRemoteReceipeList->Checked[i]=false;
+}
+
+// AI(W906-FW-GEM-W12) 20260826: golden SECSGEM/uHGemEquipment.cpp:6721-6727, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GemSelectAllLocalFileClick(TObject *Sender)
+{
+    if(GemLocalFileLixtBox==NULL)
+        return;
+    for(int i=0; i<GemLocalFileLixtBox->Items->Count; i++)
+        GemLocalFileLixtBox->Checked[i]=true;
+}
+
+// AI(W906-FW-GEM-W12) 20260826: golden SECSGEM/uHGemEquipment.cpp:6733-6739, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GemDisSelectAllLocalFileClick(TObject *Sender)
+{
+    if(GemLocalFileLixtBox==NULL)
+        return;
+    for(int i=0; i<GemLocalFileLixtBox->Items->Count; i++)
+        GemLocalFileLixtBox->Checked[i]=false;
+}
+
+// AI(W906-FW-GEM-W12) 20260826: golden SECSGEM/uHGemEquipment.cpp:6879-6882, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::GemSBSetupClick(TObject *Sender)
+{
+#if 0 // GATE (W12-Modal) -- golden 原文保留
+    // golden 這裡呼叫的是 TForm::ShowModal —— THGem 在本樹「is not modeled as a
+    // real window」（本檔 header :95-96 的原話），沒有這個方法也沒有視窗可以彈。
+    // 量測 20260826: grep -n "THGem::ShowModal" 於 port -> 0
+    // 這是「按下 Setup 按鈕跳出 SECS/GEM 設定視窗」，純 UI 入口；
+    // 不彈視窗的後果就是這個按鈕沒有作用，不影響任何協定行為。
+    ShowModal();
+#endif
+}
+
+// AI(W906-FW-GEM-W12) 20260826: golden SECSGEM/uHGemEquipment.cpp:9341-9344, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::edtT3TimeOutClick(TObject *Sender)
+{
+    fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 10, 2000);
 }
