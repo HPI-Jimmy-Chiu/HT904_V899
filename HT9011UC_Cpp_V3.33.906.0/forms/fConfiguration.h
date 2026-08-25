@@ -1965,11 +1965,47 @@ public:
     TTabSheet                      *tsN00                    = new TTabSheet();   // golden cConfiguration.h:61
     TTabSheet                      *tsSearchFunction         = new TTabSheet();   // golden cConfiguration.h:940
 
-    // AI(W906-FW-CFG-W5) 20260825: FormShow 的四個狀態旗標（golden cConfiguration.h）。
+    // AI(W906-FW-CFG-W5) 20260825，AI(W906-FW-CFG-W6) 20260825 更正：
+    // fShow 是 golden 的類別成員（golden cConfiguration.h:2368），留在這裡。
+    // 同批曾誤放在此的 bStopChange / bM01Enter / bSave 其實是 golden 的
+    // 檔案層全域（golden cConfiguration.cpp:58/:63/:86），W6 已移到 .cpp
+    // 的 TU-local static 區塊，與本樹處理 golden 檔案層資料的慣例一致。
     bool fShow = false;         // 表單是否顯示中；DoPassword 也讀它
-    bool bStopChange = false;   // 抑制 OnChange 連鎖的閘
-    bool bM01Enter = false;
-    bool bSave = false;
+
+    // ========================================================================
+    // AI(W906-FW-CFG-W6) 20260825: 17 個純 UI 事件處理器（track bar / checkbox /
+    // page-control 切換）。簽章由定義生成；golden 行號由括號配對直接量。
+    //
+    // 刻意不翻，且不宣告 stub（同 forms/fTemperFrom.h 的 EXCLUDED 慣例）：
+    //   chkHeaterClick (golden :5694-5708) -- 直接切換加熱器繼電器
+    //     `SW[SwHeaterRelay].OnOff(chkHeater->Checked)`，另動加熱風扇與冷卻風扇。
+    //     這是動到真機輸出的安全項，依戰役規則累積到佇列、不在無人時做。
+    //   cbA09Click (golden :6347-6374) -- 讀 InArmSuck/MOT[]/Index 是否有 IC 並發
+    //     MES1645/MES1646 警報。純讀＋警報，但屬於有人在場才該碰的一批。
+    //   cbC12Click (golden :6669-6685) -- KYEC 密碼閘，跨 fPassword/fQwertyKey。
+    // ========================================================================
+    virtual void tbD25_Index60mmChange(void *Sender);   // golden :6165-6195
+    virtual void tbD25_Index40mmChange(void *Sender);   // golden :6197-6228
+    virtual void tbD25_Index30mmChange(void *Sender);   // golden :6230-6261
+    virtual void tbD25_Index60mm_NSChange(void *Sender);   // golden :6454-6483
+    virtual void tbD25_Index40mm_NSChange(void *Sender);   // golden :6485-6514
+    virtual void tbD25_Index30mm_NSChange(void *Sender);   // golden :6516-6544
+    virtual void tbD60_Index56mmChange(void *Sender);   // golden :6546-6561
+    virtual void tbD60_Index56mm_NSChange(void *Sender);   // golden :6563-6578
+    virtual void cbD55Click(void *Sender);   // golden :6286-6297
+    virtual void cbE38Click(void *Sender);   // golden :6299-6310
+    virtual void cbE39Click(void *Sender);   // golden :6263-6275
+    virtual void cbD36Click(void *Sender);   // golden :6445-6452
+    virtual void cbM01Click(void *Sender);   // golden :6425-6438
+    virtual void cbE30Click(void *Sender);   // golden :6019-6024
+    virtual void pcConfigChange(void *Sender);   // golden :6010-6017
+    virtual void PageControl1Change(void *Sender);   // golden :5995-6008
+    virtual void udD46Click(void *Sender);   // golden :5988-5993
+
+    TLabel        *labD25_1               = new TLabel();   // golden cConfiguration.h:133
+    TLabel        *labD25_2               = new TLabel();   // golden cConfiguration.h:135
+    TLabel        *labD25_3               = new TLabel();   // golden cConfiguration.h:134
+    TLabel        *labD60                 = new TLabel();   // golden cConfiguration.h:948
 };
 
 #endif // FORMS_FCONFIGURATION_H

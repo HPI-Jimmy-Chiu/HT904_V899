@@ -86,6 +86,40 @@ void ShowMyMessage(AnsiString S1, AnsiString S2="", AnsiString S3="",
 static const TColor clRed = 0x000000FF;
 #endif // HT9045_W906_FWCFG_TCOLOR_SHIM
 
+// ---------------------------------------------------------------------------
+//  AI(W906-FW-CFG-W6) 20260825: golden cConfiguration.cpp:58-86 的檔案層資料。
+//  `static`（內部連結）——golden cConfiguration.h 沒有把其中任何一個宣告成
+//  extern，所以 TU 外沒有合法的引用者；static 只是少一個多餘的外部符號，
+//  不改變任何可觀察行為。同 cObserver.cpp:151-156 的處理方式。
+//
+//  更正紀錄：bStopChange / bM01Enter / bSave 在 FW-CFG-W5 被誤加成
+//  TfConfiguration 的成員。golden 把它們放在這裡（:58 / :63 / :86），
+//  只有 fShow 才是類別成員（golden cConfiguration.h:2368）。W6 更正。
+// ---------------------------------------------------------------------------
+static bool bStopChange = false;                                                // golden :58
+static bool bM01Enter = false;                                                  // golden :63  (ChungHung 20131009)
+// JerryYang 20170922 (Steven) add for EP change log
+static AnsiString aEP60OldData = "";                                            // golden :67  (Ifor 20170807)
+static AnsiString aEP40OldData = "";                                            // golden :68
+static AnsiString aEP30OldData = "";                                            // golden :69
+static AnsiString aEP60OldData_NS = "";                                         // golden :70
+static AnsiString aEP40OldData_NS = "";                                         // golden :71
+static AnsiString aEP30OldData_NS = "";                                         // golden :72
+static bool bEP60DataChange = false;                                            // golden :73
+static bool bEP40DataChange = false;                                            // golden :74
+static bool bEP30DataChange = false;                                            // golden :75
+static bool bEP60DataChange_NS = false;                                         // golden :76  (Ifor 20170807)
+static bool bEP40DataChange_NS = false;                                         // golden :77
+static bool bEP30DataChange_NS = false;                                         // golden :78
+static int  old60data = 0;                                                      // golden :79
+static int  old40data = 0;                                                      // golden :80
+static int  old30data = 0;                                                      // golden :81
+static int  old60data_NS = 0;                                                   // golden :82
+static int  old40data_NS = 0;                                                   // golden :83
+static int  old30data_NS = 0;                                                   // golden :84
+static double dTemp = 0.0;                                                      // golden :85
+static bool bSave = false;                                                      // golden :86
+
 #include <cstdlib>       // atoi/atof
 #include "forms/fQwertyKey.h"  // AI(W906-FW-QWKEY2) 20260824: fQwertyKey extern for un-gated ShowQwertyKey sites (real since FW-QWKEY1 fc08e09; latent until HTEdit GATE (6) wiring)
 
@@ -4995,7 +5029,6 @@ void TfConfiguration::FormShow(void *Sender)
 #if 0 // GATE (W5-Pages)
     for(int i=0; i<pcConfig->PageCount; i++)                                    //Steven 20210810 : 快速搜尋Config加上權限控制
     {
-        if(pcConfig->Pages[i]!=tsSearchFunction)
     // ------------------------------------------------------------------
     // GATE (W5-CCE) -- every ChangeCompomentEnabled(...) call in this method.
     // golden's signature is `ChangeCompomentEnabled(TWinControl *PCtrl, ...)`
@@ -5014,6 +5047,7 @@ void TfConfiguration::FormShow(void *Sender)
     // themselves are preserved verbatim inside the gate.
     // ------------------------------------------------------------------
 #if 0 // GATE (W5-CCE)
+        if(pcConfig->Pages[i]!=tsSearchFunction)
             ChangeCompomentEnabled(pcConfig->Pages[i], true, true);
 #endif // GATE (W5-CCE)
     }                                                                           //Steven 20120807 End: 先在最上面Enable全部畫面
@@ -6040,4 +6074,396 @@ void TfConfiguration::FormShow(void *Sender)
     }
     //這一行請保持在最下面!!-----------------
 //    myLog.Do_Log(Sender, "fConfiguration", asLogPath);                        //kevin 20181025 change//Steven 20100629
+}
+
+// =============================================================================
+// FW-CFG-W6 -- 17 個 UI 事件處理器（merged 20260825）
+// =============================================================================
+// AI(W906-FW-CFG-W6) 20260825: golden cConfiguration.cpp:6165-6195, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::tbD25_Index60mmChange(void *Sender)
+{
+    AnsiString buffer="60mm : ";                                                //kevin 20170328 (Steven) add 顯示 layout kit 浮動頭外徑
+    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //wei 20151005 add 56mm
+        buffer="58 : ";
+    else if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+        buffer="75mm : ";
+    else
+        buffer="60mm : ";
+    labD25_1->Caption=buffer+AnsiString(tbD25_Index60mm->Position/100.0);
+
+    if(old60data==0.0)
+        old60data=tbD25_Index60mm->Position;
+
+    if(old60data!=tbD25_Index60mm->Position)
+    {
+        aEP60OldData.sprintf("EP %s mm : %4d -> %4d", buffer, old60data, tbD25_Index60mm->Position); //Ifor 20170807 (wei) Sb1 =>aEPOldData  //JerryYang 20170922 (Steven) add for EP change log
+        bEP60DataChange=true;                                                   //Ifor 20170807 (wei) add EP Data Change Flag
+        if(old60data>115)                                                       //jou 20171227 (Steven) : >= -> > 修正海思EP 拉霸無法調整
+        {
+            old60data=115;
+            tbD25_Index60mm->Position=115;                                      //Ifor 20170807 (wei) tbD25_Index30mm => tbD25_Index60mm
+        }
+
+        if(old60data<85)
+        {
+            old60data=85;
+            tbD25_Index60mm->Position=85;                                       //Ifor 20170807 (wei) tbD25_Index30mm => tbD25_Index60mm
+        }
+    }
+}
+
+// AI(W906-FW-CFG-W6) 20260825: golden cConfiguration.cpp:6197-6228, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::tbD25_Index40mmChange(void *Sender)
+{
+    AnsiString buffer="40mm : ";                                                //kevin 20170328 (Steven) add 顯示 layout kit 浮動頭外徑
+    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //wei 20151005 add 56mm
+        buffer="40mm : ";
+    else if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+        buffer="55mm : ";
+    else
+        buffer="40mm : ";
+    labD25_2->Caption=buffer+AnsiString(tbD25_Index40mm->Position/100.0);
+
+    if(old40data==0.0)
+        old40data=tbD25_Index40mm->Position;
+
+    if(old40data!=tbD25_Index40mm->Position)
+    {
+        aEP40OldData.sprintf("EP %s mm : %4d -> %4d", buffer, old40data, tbD25_Index40mm->Position); //Ifor 20170807 (wei) Sb1 =>aEPOldData
+        bEP40DataChange=true;                                                   //Ifor 20170807 (wei) add EP Data Change Flag
+
+        if(old40data>115)                                                       //jou 20171227 (Steven) : >= -> > 修正海思EP 拉霸無法調整
+        {
+            old40data=115;
+            tbD25_Index40mm->Position=115;                                      //kevin 20170609 (wei) add EP 保護
+        }
+
+        if(old40data<85)
+        {
+            old40data=85;
+            tbD25_Index40mm->Position=85;                                       //kevin 20170609 (wei) add EP 保護
+        }
+    }
+}
+
+// AI(W906-FW-CFG-W6) 20260825: golden cConfiguration.cpp:6230-6261, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::tbD25_Index30mmChange(void *Sender)
+{
+    AnsiString buffer="30mm : ";                                                //kevin 20170328 (Steven) add 顯示 layout kit 浮動頭外徑
+    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //wei 20151005 add 56mm
+        buffer="28mm : ";
+    else if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+        buffer="40mm : ";
+    else
+        buffer="30mm : ";
+
+   labD25_3->Caption=buffer+AnsiString(tbD25_Index30mm->Position/100.0);
+    if(old30data==0.0)
+        old30data=tbD25_Index30mm->Position;
+
+    if(old30data!=tbD25_Index30mm->Position)
+    {
+        aEP30OldData.sprintf("EP %s mm : %4d -> %4d", buffer, old30data, tbD25_Index30mm->Position);   //Ifor 20170807 (wei) Sb1 =>aEPOldData
+        bEP30DataChange=true;                                                   //Ifor 20170807 (wei) add EP Data Change Flag
+
+        if(old30data>115)                                                       //jou 20171227 (Steven) : >= -> > 修正海思EP 拉霸無法調整
+        {
+            old30data=115;
+            tbD25_Index30mm->Position=115;                                      //kevin 20170609 (wei) add EP 保護
+        }
+
+        if(old30data<85)
+        {
+            old30data=85;
+            tbD25_Index30mm->Position=85;                                       //kevin 20170609 (wei) add EP 保護
+        }
+    }
+}
+
+// AI(W906-FW-CFG-W6) 20260825: golden cConfiguration.cpp:6454-6483, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::tbD25_Index60mm_NSChange(void *Sender)
+{
+    AnsiString buffer="60mm for NS:";                                           //kevin 20170328 (Steven) add 顯示 layout kit 浮動頭外徑
+    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //wei 20151005 add 56mm
+        buffer="58mm for NS:";
+    else if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+        buffer="75mm for NS:";
+
+    labD25_1_NS->Caption=buffer+AnsiString(tbD25_Index60mm_NS->Position/100.0);
+
+    if(old60data_NS==0.0)
+        old60data_NS=tbD25_Index60mm_NS->Position;
+
+    if(old60data_NS!=tbD25_Index60mm_NS->Position)
+    {
+        aEP60OldData_NS.sprintf("EP %s mm : %4d -> %4d", buffer, old60data_NS, tbD25_Index60mm_NS->Position);   //Ifor 20170807 (wei) Sb1 =>aEPOldData
+        bEP60DataChange_NS=true;                                                //Ifor 20170807 (wei) add EP Data Change Flag
+        if(old60data_NS>=115)
+        {
+            old60data_NS=115;
+            tbD25_Index60mm_NS->Position=115;                                   //kevin 20170609 (wei) add EP 保護
+        }
+
+        if(old60data_NS<=85)
+        {
+            old60data_NS=85;
+            tbD25_Index60mm_NS->Position=85;                                    //kevin 20170609 (wei) add EP 保護
+        }
+    }
+}
+
+// AI(W906-FW-CFG-W6) 20260825: golden cConfiguration.cpp:6485-6514, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::tbD25_Index40mm_NSChange(void *Sender)
+{
+    AnsiString buffer="40mm for NS: ";                                          //kevin 20170328 (Steven) add 顯示 layout kit 浮動頭外徑
+    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //wei 20151005 add 56mm
+        buffer="40mm for NS:";
+    else if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+        buffer="55mm for NS:";
+
+    labD25_2_NS->Caption=buffer+AnsiString(tbD25_Index40mm_NS->Position/100.0);
+
+    if(old40data_NS==0.0)
+        old40data_NS=tbD25_Index40mm_NS->Position;
+
+    if(old40data_NS!=tbD25_Index40mm_NS->Position)
+    {
+        aEP40OldData_NS.sprintf("EP %s mm : %4d -> %4d", buffer, old40data_NS, tbD25_Index40mm_NS->Position);  //Ifor 20170807 (wei) Sb1 =>aEPOldData
+        bEP40DataChange_NS=true;                                                //Ifor 20170807 (wei) add EP Data Change Flag
+        if(old40data_NS>=115)
+        {
+            old40data_NS=115;
+            tbD25_Index40mm_NS->Position=115;                                   //kevin 20170609 (wei) add EP 保護
+        }
+
+        if(old40data_NS<=85)
+        {
+            old40data_NS=85;
+            tbD25_Index40mm_NS->Position=85;                                    //kevin 20170609 (wei) add EP 保護
+        }
+    }
+}
+
+// AI(W906-FW-CFG-W6) 20260825: golden cConfiguration.cpp:6516-6544, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::tbD25_Index30mm_NSChange(void *Sender)
+{
+    AnsiString buffer="28mm for NS:";                                           //kevin 20170328 (Steven) add 顯示 layout kit 浮動頭外徑
+    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //wei 20151005 add 56mm
+        buffer="28mm for NS:";
+    else if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+        buffer="40mm for NS:";
+
+    labD25_3_NS->Caption=buffer+AnsiString(tbD25_Index30mm_NS->Position/100.0);
+    if(old30data_NS==0.0)
+        old30data_NS=tbD25_Index30mm_NS->Position;
+
+    if(old30data_NS!=tbD25_Index30mm_NS->Position)
+    {
+        aEP30OldData_NS.sprintf("EP %s mm : %4d -> %4d", buffer, old30data_NS, tbD25_Index30mm_NS->Position);  //Ifor 20170807 (wei) Sb1 =>aEPOldData
+        bEP30DataChange_NS=true;                                                //Ifor 20170807 (wei) add EP Data Change Flag
+        if(old30data_NS>=115)
+        {
+            old30data_NS=115;
+            tbD25_Index30mm_NS->Position=115;                                   //kevin 20170609 (wei) add EP 保護
+        }
+
+        if(old30data_NS<=85)
+        {
+            old30data_NS=85;
+            tbD25_Index30mm_NS->Position=85;                                    //kevin 20170609 (wei) add EP 保護
+        }
+    }
+}
+
+// AI(W906-FW-CFG-W6) 20260825: golden cConfiguration.cpp:6546-6561, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::tbD60_Index56mmChange(void *Sender)
+{
+    AnsiString buffer="56mm : ",Sb1="",Sb2="",Sb3="";                           //kevin 20170328 (Steven) add 顯示 layout kit 浮動頭外徑
+    static int olddata=0.0;
+
+    labD60->Caption=buffer+AnsiString(tbD60_Index56mm->Position/100.0);
+    if(olddata==0.0)
+        olddata=tbD60_Index56mm->Position;
+
+    if(olddata!=tbD60_Index56mm->Position)
+    {
+        Sb1.sprintf("EP %s mm : %4d -> %4d", buffer, olddata, tbD60_Index56mm->Position/100.0);
+        RecordProcess(Sb1);                                                     //kevin 20170328 (Steven) add EP修改紀錄
+        olddata=tbD60_Index56mm->Position;
+    }
+}
+
+// AI(W906-FW-CFG-W6) 20260825: golden cConfiguration.cpp:6563-6578, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::tbD60_Index56mm_NSChange(void *Sender)
+{
+    AnsiString buffer="56mm for NS : ",Sb1="",Sb2="",Sb3="";                    //kevin 20170328 (Steven) add 顯示 layout kit 浮動頭外徑
+    static int olddata=0.0;
+
+    labD60_NS->Caption=buffer+AnsiString(tbD60_Index56mm_NS->Position/100.0);
+    if(olddata==0.0)
+        olddata=tbD60_Index56mm_NS->Position;
+
+    if(olddata!=tbD60_Index56mm_NS->Position)
+    {
+        Sb1.sprintf("EP %s mm : %4d -> %4d", buffer, olddata, tbD60_Index56mm_NS->Position/100.0);
+        RecordProcess(Sb1);                                                     //kevin 20170328 (Steven) add EP修改紀錄
+        olddata=tbD60_Index56mm_NS->Position;
+    }
+}
+
+// AI(W906-FW-CFG-W6) 20260825: golden cConfiguration.cpp:6286-6297, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::cbD55Click(void *Sender)
+{
+    if(cbD55->Checked)                                                          //ChungHung 20120710 add SCK Disable IndexCheck
+    {
+        // GATE (W6-COM2) -- third site of the same missing member: COM2 is
+        // TCOM2Shim (atester_shims.h:405) and bCCDDummyRum is not one of its
+        // members. golden here is a DISJUNCTION, so in principle the
+        // REAL_TIME_CCD half could be kept as GATE (CFG2-COM2) did -- but this
+        // if exists only to pop a refusal message, and half a refusal is worse
+        // than none: it would refuse on machines golden lets through.
+        // ACTIVE ARM: nothing. cbD55 keeps whatever the operator set.
+#if 0 // GATE (W6-COM2)
+        if(COM2->bCCDDummyRum || REAL_TIME_CCD==false)                          //RTC 沒有開不能Disable IndexCheck
+        {
+            ShowMyMessage("Must cancel \"Enable Real Time CCD\" first", "");
+            cbD55->Checked=false;
+        }
+#endif // GATE (W6-COM2)
+        return;
+    }
+}
+
+// AI(W906-FW-CFG-W6) 20260825: golden cConfiguration.cpp:6299-6310, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::cbE38Click(void *Sender)
+{
+    if(cbE38->Checked)
+    {
+        cbE40->Checked=false;
+        cbE40->Visible=false;
+    }
+    else
+    {
+        cbE40->Visible=true;
+    }
+}
+
+// AI(W906-FW-CFG-W6) 20260825: golden cConfiguration.cpp:6263-6275, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::cbE39Click(void *Sender)
+{
+    if(cbE39->Checked)                                                          //ChungHung 20120206 Hotplate check
+    {
+        cbE39_1->Visible=true;
+        cbE39_1->Checked=IniConfig.bE39_1PutTheDevicesToErrorBin;
+    }
+    else
+    {
+        cbE39_1->Visible=false;
+        cbE39_1->Checked=false;
+    }
+}
+
+// AI(W906-FW-CFG-W6) 20260825: golden cConfiguration.cpp:6445-6452, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::cbD36Click(void *Sender)
+{
+    if(cbD36->Checked==true)                                                    //jou 2014-06-24 RTC 自動進行Model驗證
+    {
+        cbD33->Checked=false;
+        cbD35->Checked=true;
+    }
+}
+
+// AI(W906-FW-CFG-W6) 20260825: golden cConfiguration.cpp:6425-6438, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::cbM01Click(void *Sender)
+{
+    TCheckBox *ptr=(TCheckBox*)Sender;
+    if(bM01Enter==true || fShow==false)
+        return;
+    bM01Enter=true;
+
+    // GATE (W6-DoPassword) -- TfConfiguration::DoPassword (golden :6376-6423)
+    // is not translated: it reaches fInput / fMain / fPassword across three
+    // other forms. Deliberately deferred, see DEVLOG 20260825 XI.
+    // ACTIVE ARM: the checkbox keeps the value the operator just set -- the
+    // same outcome golden reaches when the password check PASSES.
+#if 0 // GATE (W6-DoPassword)
+    if(DoPassword()!=true)
+    {
+        ptr->Checked=!ptr->Checked;
+    }
+#endif // GATE (W6-DoPassword)
+    gbM01->Visible=cbM01->Checked;
+    bM01Enter=false;
+}
+
+// AI(W906-FW-CFG-W6) 20260825: golden cConfiguration.cpp:6019-6024, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::cbE30Click(void *Sender)                    //Steven 20090904
+{
+    palE30->Visible=(cbE30->Checked)?true:false;
+    palE31->Visible=(cbE31->Checked)?true:false;
+    palE32->Visible=(cbE32->Checked)?true:false;
+}
+
+// AI(W906-FW-CFG-W6) 20260825: golden cConfiguration.cpp:6010-6017, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::pcConfigChange(void *Sender)                //Steven 20090731
+{
+    if(AccessLevel>=LevelSet.AccessLevel[42])
+    {
+        // 同 GATE (W5-CCE)：TWinControl 祖先缺口，函式本體本來就是 gated no-op。
+#if 0 // GATE (W5-CCE)
+        if(pcConfig->ActivePage!=tsSearchFunction)                              //Steven 20210730 : 快速搜尋Config
+            ChangeCompomentEnabled(pcConfig->ActivePage, authConf[pcConfig->ActivePageIndex]);
+#endif // GATE (W5-CCE)
+    }
+}
+
+// AI(W906-FW-CFG-W6) 20260825: golden cConfiguration.cpp:5995-6008, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::PageControl1Change(void *Sender)
+{
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung && PageControl1->ActivePageIndex==2)     //kevin 20180411 key in password
+    {
+        // GATE (W6-bPassWord) -- TfConfiguration::bPassWord (golden :6781-6798)
+        // is not translated yet. Same posture as GATE (W6-DoPassword): the
+        // ACTIVE arm is the password-accepted path.
+#if 0 // GATE (W6-bPassWord)
+        if(bPassWord(2)==false)
+        {
+            PageControl1->ActivePageIndex=0;
+            return;
+        }
+#endif // GATE (W6-bPassWord)
+    }
+
+        // 同 GATE (W5-CCE)：TWinControl 祖先缺口，函式本體本來就是 gated no-op。
+#if 0 // GATE (W5-CCE)
+    if(pcConfig->ActivePage!=tsSearchFunction)                                  //Steven 20210730 : 快速搜尋Config
+        ChangeCompomentEnabled(PageControl1->ActivePage, authConfig[PageControl1->ActivePageIndex]);
+#endif // GATE (W5-CCE)
+}
+
+// AI(W906-FW-CFG-W6) 20260825: golden cConfiguration.cpp:5988-5993, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfConfiguration::udD46Click(void *Sender)                    // AI(W906-FW-CFG-W6): golden 的第二個參數
+                                                                                // TUDBtnType Button 全函式從未被讀，
+                                                                                // 依本 port「只留有讀到的參數」規則移除；
+                                                                                // TUDBtnType 本身在本樹也沒有 port。
+{
+    edD46->Text=udD46->Position;
+    IniConfig.iD46WaitIndexDestroyTime=udD46->Position;
 }
