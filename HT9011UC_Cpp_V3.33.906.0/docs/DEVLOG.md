@@ -10672,6 +10672,159 @@ polymorphic 型別本來就不合法。
    唯一可信的測法是用 Python 數 `s.count('\r\n')` 對 `s.count('\n')`。
    同一個模組內就會分家：`uHGemEquipment.h` 純 CRLF、`uHGemEquipment.cpp` 純 LF。
 
+## 20260826 II — FW-GEM-W9：EventReport 解閘，順手抓到四個掉了參數的呼叫點
+
+### 本波要做的事
+
+退役 `GATE (W8-ECEvent)`。W8 把 `ReplyECDataChange` 翻進來時，它呼叫的
+`EventReport(1, 48)` 因為 `THGem::EventReport` 還沒翻而被 gate 掉。本波把那支翻進來。
+
+開工前量到它的四個相依**已經全部在樹上**，所以本波只缺一支本體不是一整組：
+
+| 相依 | 位置（20260826 量） |
+|---|---|
+| `SendCeid` | `uHGemEquipment.cpp:2179` |
+| `SendAnnotatedCeid` | `uHGemEquipment.cpp:2194` |
+| `IsEnableEvent` | `uHGemEquipment.cpp:2547` |
+| `chkAnnotatedEventReport` | `uHGemEquipment.h`（`THGemCheckBox` stand-in） |
+
+### 真正的收穫：四個呼叫點在前面某一波掉了第一個參數
+
+加上 `THGem::EventReport(unsigned iDataID, unsigned iCeid)` 之後，編譯器立刻
+指出 `THGem::DoUpdateStatus` 裡四個呼叫點編不過：
+
+```
+6338 | no matching function for call to 'THGem::EventReport(int)'
+6346 | ...
+6350 | ...
+6354 | ...
+```
+
+port 端原文是 `EventReport(141);` / `(91);` / `(92);` / `(93);` ——**單一參數**。
+golden 對應四處是：
+
+| golden | 原文 |
+|---|---|
+| :4966 | `EventReport(1, 141);   //Ifor 20221018 add: GEM Control State Change Report` |
+| :4974 | `EventReport(1, 91);    //Offline` |
+| :4978 | `EventReport(1, 92);    //Online local` |
+| :4982 | `EventReport(1, 93);    //Online remote` |
+
+**全部是兩個參數**，第一個是 `iDataID`。而且我對 golden **全樹**掃過
+`EventReport\s*\(\s*\d+\s*\)`（單一數字參數）——**0 個命中**。
+所以那個單參數形式不是 golden 的任何寫法。
+
+掉掉第一個參數之後，那四個呼叫**沒有變成編譯錯誤**，因為
+`SECSGEM/SecsEventReport.h:55` 剛好有一支同名的**自由函式**
+`void EventReport(unsigned Ceid)` 接住了——完全不同的東西。
+編譯過、連結過、測試全綠，行為錯掉。
+
+這正是 pt-wave 五個陷阱裡「**stub 先滿足需求**」那一種的變體：
+不是 stub，是**一支剛好同名的無關函式**。`nm --undefined-only` 也看不到，
+因為符號確實被解析了——只是解析到別人。
+
+四處已回復 golden 原文，並在第一處放一則區塊註解說明來龍去脈。
+
+### `GATE (W9-ExitTail)`
+
+`EventReport` 尾段（golden :7742-7758）在 `iCeid==SECS_EVENT.DoExit` 時做離開程式
+的收尾。其中兩行要把 THGem 當成真的 VCL 表單：
+
+- `Timer1->Enabled=false;` —— `Timer1` 在本檔 header 的 out-of-scope 清單裡
+  （:92-96、:104-105），它的 `Timer1Timer` 本體要 wire-codec 整組相依。
+- `Close();` —— `TForm::Close`，而 THGem「is not modeled as a real window in this
+  port」（header :95-96 的原話）。
+
+只 gate 這兩行。同一個 `if` 裡的 `DoSeparate()` 與
+`srvGem->Close()` / `clientGem->Close()` / `Active=false` 都保持 live，
+所以「送離線要求並關掉 socket」有做到，少的是「停掉輪詢 timer 並關視窗」。
+
+忠實度複驗：**LIVE 敘述 35 條，golden 無逐字對應 1 條**（簽章行，`__fastcall` 剝除），
+gated 14 行。
+
+### 這一波是行為變更
+
+兩件事都改行為，所以獨立成一顆 commit 並跑完整雙 gate：
+
+1. 解閘之後，EC 值變動會真的組出 S6F11/S6F13 並 `SendLocalData()`。
+2. 四個呼叫點從「呼叫自由函式 `EventReport(Ceid)`」改成「呼叫 THGem 的
+   `EventReport(1, Ceid)`」——這不是等價替換，是**修正**。
+
+SECS 訊息組裝屬 in-scope 的裁決沿用 FW-GEM-W8 與本檔 header 記載的
+`ReportAcknowledge` 先例：不是機台動作指令，且沒有任何 event handler 被接線。
+
+### 第一次 gate 是紅的：`uHGemEquipment` 測試釘住了那個缺陷
+
+Debug 跑出 **6 個失敗**（多一個 `uHGemEquipment`），超出驗收線，所以停下來、
+殺掉正在跑的 Release、查根因，**沒有 commit**。
+
+失敗的兩條：
+
+```
+FAIL: DoUpdateStatus: GemControlState 0->1 transition fires EventReport(141) exactly once   (line 1139)
+FAIL: DoUpdateStatus: GemControlState 1->2 fires EventReport(141), then ... EventReport(92)  (line 1163)
+```
+
+它們用 `SECSGEM/SecsEventReport.h` 的 `g_SimLastEventReportCeid` /
+`g_SimEventReportCount` 觀察——那是**自由函式** `EventReport(unsigned Ceid)` 的
+計數器。呼叫點寫成單一參數時剛好打到它，所以測試一直是綠的。
+本波把呼叫點回復成 golden 的 `EventReport(1, N)` 之後，那組計數器不再被碰，
+斷言自然失效。
+
+**這不是回歸，是測試釘住了缺陷。** 依 pt-wave 政策的「規則二」
+（測試期望值照鷹架校準 → 同一回合重新校準，附 golden 行號證據，
+並把失去的覆蓋寫進測試自己的 NOT COVERED 區）處理。
+
+重新校準的方式是**觀察真本體**，不是把斷言刪掉：
+`THGem::EventReport` 在 `IsEnableEvent()==false` 時走 disabled 分支，
+用 `StringOut` 往 `LogDataString` 記兩行（golden :7735-7738）。
+新斷言比舊的強——它同時證明 `iDataID` 與 `iCeid` **兩個參數都傳對了**：
+
+```
+W9PROBE count=7
+[0] [Send]
+[1] Event Report(6,11) , DataID=1 , CEID=141 be disabled , abort send !!!
+[2] Connect                      <- 中間那次 DoUpdateStatus 自己記的，不是 EventReport
+[3] [Send]
+[4] Event Report(6,11) , DataID=1 , CEID=141 be disabled , abort send !!!
+[5] [Send]
+[6] Event Report(6,11) , DataID=1 , CEID=92 be disabled , abort send !!!
+```
+
+三次 EventReport 的 `DataID` 都是 1，CEID 依序 141/141/92——**與舊斷言用 Sim
+計數器數到的「累計 3 次」完全一致**，只是現在數的是真本體的輸出。
+（第一版我把行數估成 6，實測是 7，因為索引 2 那行 "Connect" 來自
+`DoUpdateStatus` 別的地方。**數字是量的，不是推的。**）
+
+測試檔頭補了 NOT COVERED 三條：本檔不再呼叫自由函式 `EventReport(unsigned)`；
+`THGem::EventReport` 的 enabled 分支（golden :7712-7732）本測試沒有進去
+（[22] 用的是空的 `strGrdCEID`）；`GATE (W9-ExitTail)` 那兩行本來就沒有活碼。
+
+同時把已經沒有意義的 `ResetSimEventReport()` 呼叫移除，`#include` 留著並改註解
+說明只是為了自由函式的宣告。
+
+### 驗收數字重跑
+
+`build_gem9g` 被我為了除錯單獨重建過一個 target，**已經不是乾淨的量測**，
+所以整組刪掉、改用 `tools/dualgate.sh gem9b` 從全新 dir 重跑。
+（`rm -rf build_gem9g` 因為目錄被佔用而失敗，`&&` 短路害第一次重啟根本沒跑起來——
+`ls` 一查就發現了。dualgate 本來就自建新 dir，不刪也不影響。）
+
+### 驗收（第二次，全新 dir）
+
+`tools/dualgate.sh gem9b`：Debug **137/142**、Release **137/142**，
+失敗集合逐項相同且等於常駐五項
+`config_db` / `IniFiles` / `ini_helpers` / `config_loaders` / `GA1_ReadGeneralIni`。
+`uHGemEquipment` 已回到綠燈——重新校準成立。
+`D:\HT9045\system` 552 檔本晚零變動。
+
+### 過程小記
+
+有一段時間 `g++` 一直說找不到 `includes_CXX.rsp`——原因是前面做 golden 全樹掃描時
+`cd` 進了 golden 目錄，**cwd 一直沒回來**。`RSP=$(cat ...) && g++ ...` 這種寫法在
+`cat` 失敗時會短路，於是 g++ 根本沒執行卻印出「檢查完畢」，看起來像編譯乾淨。
+兩個教訓都不新（絕對路徑、別讓 `&&` 吃掉失敗），但這次是兩個疊在一起才騙過我。
+
 ### 🔖 RESUME（20260825 日終）
 
 - **今日全收（本節之前的 20260825 I-VII，共 7 波）**：FW-BARCODE2／FW-BARCODE3
@@ -10797,10 +10950,14 @@ polymorphic 型別本來就不合法。
     10 支 live + 2 支 gated（`SetTerminalWindows`/`2`，`dynamic_cast` 對四個
     無關的 plain struct 不合法）。順帶補了兩個 vclcompat proxy：
     `RowCountProxy`/`ColCountProxy` 的 `++`、`StringsProxy::c_str()`。
-    **下一波（FW-GEM-W9）建議標的**：`EventReport`（golden :7703-7761，59 行）
-    連同它的 `SendCeid`/`SendAnnotatedCeid`/`chkAnnotatedEventReport`/
-    `IsEnableEvent` 相依組——解掉之後 `GATE (W8-ECEvent)` 可以退役。
-    再往後的大塊是 `GetECInformation`（320 行）與 `ReportAlarm`（94 行）。
+    **FW-GEM-W9 已交付**（見上方 20260826 II）：`EventReport` 翻好、
+    `GATE (W8-ECEvent)` 已退役，並修正四個在前面某一波掉了第一個參數、
+    因而靜默綁到同名自由函式的呼叫點（`DoUpdateStatus` 內，golden
+    :4966/:4974/:4978/:4982）。新增 `GATE (W9-ExitTail)`（Timer1/Close）。
+    **下一波（FW-GEM-W10）建議標的**：`ReportAlarm`（golden :6276-6369，94 行）
+    ＋`ReportAlarmWithMessage`（:6386-6420，35 行）＋`CheckNeedReportAlarm`
+    （W8 已翻，可當入口驗證）；再往後最大的是 `GetECInformation`（320 行）
+    與 `GetAllSVInformation`（44 行）。
     本波原始批次（供對照）：
     `InitHType`(18) `ReadALED`(12) `ReplyECDataChange`(16)
     `DoReportECDataChangeCheck`(39) `DoReportECChange`(30)

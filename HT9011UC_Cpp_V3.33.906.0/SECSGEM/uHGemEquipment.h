@@ -1715,7 +1715,10 @@ public:
     bool CheckNeedReportAlarm(AnsiString S);   // golden :6371-6384
     bool ReadECEnableData();   // golden :9226-9253
     bool GetECEnableData(AnsiString ID);   // golden :9306-9319
-    void SetECEnableData(AnsiString ECID,AnsiString Function);   // golden :9323-9334
+    void SetECEnableData(AnsiString ECID,AnsiString Function);
+
+    // AI(W906-FW-GEM-W9) 20260826: 退役 GATE (W8-ECEvent) 用。
+    void EventReport(unsigned iDataID, unsigned iCeid);   // golden :7703-7761   // golden :9323-9334
 };
 
 //---------------------------------------------------------------------------

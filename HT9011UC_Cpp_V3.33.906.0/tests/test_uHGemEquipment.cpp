@@ -120,9 +120,24 @@
 //  CC_KYEC_LEE/CC_MAXIM_THAILAND -- this test now links ht9045_core/
 //  ht9045_globals too, see tests/CMakeLists.txt's own updated comment) and
 //  SECSGEM/SecsEventReport.h (g_SimLastEventReportCeid/g_SimEventReportCount/
-//  ResetSimEventReport -- DoUpdateStatus's own EventReport(...) calls are
-//  observed through this existing Sim counter, same as csystem.cpp's already-
-//  established convention).
+//  ResetSimEventReport).
+//
+//  AI(W906-FW-GEM-W9) 20260826: test [22] 的兩條 EventReport 斷言**已改**，
+//  不再走上面那組 Sim 計數器。原因不是測試寫錯，是它釘住了一個 port 缺陷：
+//  DoUpdateStatus 當時把 golden 的 `EventReport(1, N)` 寫成 `EventReport(N)`，
+//  於是打到 SecsEventReport.h 的自由函式（同名不同物）。golden 對應四處是
+//  uHGemEquipment.cpp:4966/:4974/:4978/:4982，全部兩個參數；golden 全樹掃
+//  `EventReport\s*\(\s*\d+\s*\)` 是 0 個命中。W9 翻進 THGem::EventReport
+//  並回復 golden 原文後，改成觀察真本體的 LogDataString 輸出。
+//
+//  NOT COVERED（因上述改動而失去的覆蓋，明列以免日後誤以為有測到）：
+//    * 自由函式 EventReport(unsigned Ceid) 本身（SecsEventReport.h）在本檔
+//      **不再有任何呼叫點**。它的既有覆蓋在 csystem.cpp 那邊的測試，不在這裡。
+//    * THGem::EventReport 的 enabled 分支（IsEnableEvent()==true -> InitLocalHead
+//      + DataItemOut + SendCeid/SendAnnotatedCeid + SendLocalData，golden
+//      :7712-7732）本測試沒有進去——[22] 用的是空的 strGrdCEID。
+//    * THGem::EventReport 的 iCeid==SECS_EVENT.DoExit 收尾段（golden :7742-7758）
+//      其中 Timer1->Enabled 與 Close() 兩行是 GATE (W9-ExitTail)，本來就沒有活碼。
 //
 //  AI(W906-uHGemEquipment-BucketC) 20260717: EXTENDED again -- see this
 //  file's own T1-T10 block near the end (socket receive pump / real HTimer /
@@ -134,7 +149,7 @@
 //  see that test's own updated comment.
 // =============================================================================
 #include "SECSGEM/uHGemEquipment.h"
-#include "SECSGEM/SecsEventReport.h"   // g_SimLastEventReportCeid / g_SimEventReportCount / ResetSimEventReport
+#include "SECSGEM/SecsEventReport.h"   // 自由函式 EventReport(unsigned) 的宣告（Sim 計數器本檔已不使用，見檔頭 W9 註記）
 #include "cmydef.h"                     // CUSTOMER_CODE / CC_KYEC_LEE / CC_MAXIM_THAILAND / CosFunction
 // AI(W906-uHGemEquipment-BucketC) 20260717: D3 -- HSys.MyGem seam. Needed so
 // this test binary can exercise the null-guard sites (DoConnect/
@@ -1106,6 +1121,20 @@ static void test_do_update_status()
 {
     printf("\n[22] DoUpdateStatus\n");
 
+    // AI(W906-FW-GEM-W9) 20260826: 本測試原本用 SECSGEM/SecsEventReport.h 的
+    // g_SimLastEventReportCeid / g_SimEventReportCount 觀察 DoUpdateStatus 的
+    // EventReport 呼叫。那組計數器是**自由函式** `EventReport(unsigned Ceid)`
+    // 的，而 DoUpdateStatus 當時被寫成 `EventReport(141)`（單一參數）所以剛好
+    // 打到它。golden 那四處全是 `EventReport(1, N)`（THGem 自己的 2 參數成員，
+    // golden uHGemEquipment.cpp:4966/4974/4978/4982；golden 全樹掃
+    // `EventReport\s*\(\s*\d+\s*\)` 是 0 個命中）。FW-GEM-W9 把成員翻進來
+    // 並回復 golden 原文之後，那兩條斷言自然失效——**因為它們釘的是缺陷**。
+    // 改成觀察真本體：THGem::EventReport 在 IsEnableEvent()==false 時走
+    // disabled 分支，用 StringOut 往 LogDataString 記兩行（golden :7735-7738）。
+    // 新斷言比舊的強：它同時證明了 iDataID 與 iCeid 兩個參數都傳對了。
+    bool savedEnableSecsGem22 = IniConfig.bEnable_SECS_GEM;
+    IniConfig.bEnable_SECS_GEM = true;   // 否則 EventReport 在第一道守衛就 return
+
     THGem gem;
     gem.SECSConnectionState = new THGemPanel();
     gem.GEMCommunicatingState = new THGemPanel();
@@ -1122,7 +1151,9 @@ static void test_do_update_status()
     CHECK(gem.SECSConnectionState->Caption == "", "DoUpdateStatus: throttled (9 calls < 10) -- no refresh yet");
 
     // --- 10th call: passive (srvGem) role, disconnected, offline -----------
-    ResetSimEventReport();
+    // AI(W906-FW-GEM-W9) 20260826: 本檔不再觀察那組 Sim 計數器（見檔頭），
+    // 這裡不再需要歸零。留 include 只是因為它同時宣告自由函式 EventReport，
+    // 而 DoUpdateStatus 所在的函式庫需要那個宣告存在才編得過。
     gem.DoUpdateStatus();
     CHECK(gem.SECSConnectionState->Caption == "SECS GEM Disconnection" && gem.SECSConnectionState->Color == clRed,
           "DoUpdateStatus: srvGem inactive -> \"SECS GEM Disconnection\" / clRed");
@@ -1135,8 +1166,15 @@ static void test_do_update_status()
     CHECK(gem.GemBtnOnlineRemote->Enabled == false && gem.GemBtnOnlineLocal->Enabled == true,
           "DoUpdateStatus: GetOnLineMode()==false -> Remote button disabled, Local button enabled");
     CHECK(gem.BtnEnableComm->Enabled == true, "DoUpdateStatus: !IsConnect() -> BtnEnableComm enabled");
-    CHECK(g_SimLastEventReportCeid == 141 && g_SimEventReportCount == 1,
-          "DoUpdateStatus: GemControlState 0->1 transition fires EventReport(141) exactly once");
+    // golden :4966 `EventReport(1, 141);` -- 新建的 THGem 其 strGrdCEID 是空的，
+    // 所以 IsEnableEvent(1,141) 回 false，走 golden :7734-7739 的 disabled 分支：
+    //   StringOut("[Send]    "+TimeString);
+    //   StringOut("Event Report(6,11) , DataID=%d , CEID=%d be disabled , abort send !!!");
+    CHECK(gem.LogDataString->Count == 2 &&
+          AnsiString(gem.LogDataString->Strings[1]).AnsiPos("DataID=1") != 0 &&
+          AnsiString(gem.LogDataString->Strings[1]).AnsiPos("CEID=141") != 0,
+          "DoUpdateStatus: GemControlState 0->1 fires THGem::EventReport(1, 141) -- "
+          "disabled-event log line carries BOTH arguments (golden :4966 + :7737)");
 
     // --- switch to client-socket role, becomes Active -----------------------
     gem.bUseClientSocket = true;
@@ -1159,8 +1197,18 @@ static void test_do_update_status()
           "DoUpdateStatus: IsOnLine()==true -> Offline button enabled, Online button disabled");
     CHECK(gem.GemBtnOnlineRemote->Enabled == true && gem.GemBtnOnlineLocal->Enabled == false,
           "DoUpdateStatus: GetOnLineMode()==true -> Remote button enabled, Local button disabled");
-    CHECK(g_SimLastEventReportCeid == 92 && g_SimEventReportCount == 3,
-          "DoUpdateStatus: GemControlState 1->2 fires EventReport(141), then the OldGemControlState change fires EventReport(92) -- 2 more reports (cumulative 3)");
+    // 累計 7 行（實測，非估算）：
+    //   [0][1] 第一次 DoUpdateStatus 的 EventReport(1, 141)
+    //   [2]    中間那次 DoUpdateStatus 自己記的 "Connect"（不是 EventReport 的）
+    //   [3][4] 本次 golden :4966 的 EventReport(1, 141)
+    //   [5][6] 本次 golden :4978 的 EventReport(1, 92)
+    // 三次 EventReport 的 DataID 都是 1，CEID 依序 141/141/92——與舊斷言用
+    // Sim 計數器數到的「累計 3 次」一致，只是現在數的是真本體的輸出。
+    CHECK(gem.LogDataString->Count == 7 &&
+          AnsiString(gem.LogDataString->Strings[6]).AnsiPos("DataID=1") != 0 &&
+          AnsiString(gem.LogDataString->Strings[6]).AnsiPos("CEID=92") != 0,
+          "DoUpdateStatus: GemControlState 1->2 fires THGem::EventReport(1, 141) then "
+          "(1, 92) -- cumulative 7 log lines, last one carries DataID=1 + CEID=92 (golden :4966/:4978)");
 
     // --- KYEC 30-second forced-disconnect branch (STRUCTURAL ONLY) ---------
     // Needs 2 consecutive primed calls to observe for real: call A settles
@@ -1206,6 +1254,7 @@ static void test_do_update_status()
     delete gem.GemBtnOnlineRequest;
     delete gem.GemBtnOnlineRemote;
     delete gem.GemBtnOnlineLocal;
+    IniConfig.bEnable_SECS_GEM = savedEnableSecsGem22;
 }
 
 // =============================================================================

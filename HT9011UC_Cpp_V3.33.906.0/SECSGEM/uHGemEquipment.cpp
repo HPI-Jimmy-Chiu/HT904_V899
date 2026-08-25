@@ -6335,7 +6335,14 @@ void THGem::DoUpdateStatus()
     {
         GemControlPreState = static_cast<unsigned char>(iControlState);
         iControlState = GemControlState;
-        EventReport(141);   // Ifor 20221018 add: GEM Control State Change Report
+        //AI(W906-FW-GEM-W9) 20260826: 這四處原本寫成 `EventReport(N)`（單一參數），
+        // 那會綁到 SECSGEM/SecsEventReport.h:55 的**自由函式**
+        // `void EventReport(unsigned Ceid)`——同名不同物。golden 這四處全是
+        // `EventReport(1, N)`（THGem 自己的 2 參數成員，golden :4966/4974/4978/4982），
+        // 第一個參數是 iDataID。掉參數之後編譯與連結都乾淨，因為剛好有一支同名的
+        // 自由函式接住了——正是 pt-wave 那五個陷阱裡「stub 先滿足需求」的形狀。
+        // 本波把 THGem::EventReport 翻進來，編譯器才把這四處指出來。已回復 golden 原文。
+        EventReport(1, 141);                                                    //Ifor 20221018 add: GEM Control State Change Report
     }
 
     if (OldGemControlState != GemControlState)   // JerryYang 20230204 : SECS/GEM GControl State轉換的處理，這邊Event report
@@ -6343,15 +6350,15 @@ void THGem::DoUpdateStatus()
         OldGemControlState = GemControlState;
         if (GemControlState == 1)
         {
-            EventReport(91);   // Offline
+            EventReport(1, 91);                                                 //Offline
         }
         else if (GemControlState == 2)
         {
-            EventReport(92);   // Online local
+            EventReport(1, 92);                                                 //Online local
         }
         else if (GemControlState == 3)
         {
-            EventReport(93);   // Online remote
+            EventReport(1, 93);                                                 //Online remote
         }
     }
 }
@@ -7252,21 +7259,9 @@ void THGem::ReplyECDataChange()
         SYS_ECChangeIDNewValue     = SECSNewECValue->Strings[i];
 
         if(GetECEnableData(SYS_ECChangeID)==true)                               //pig 2014.08.27 KYEC
-#if 0 // GATE (W8-ECEvent) -- golden 原文保留
-            // 這裡要的是 THGem 自己的 2 參數 EventReport（golden
-            // uHGemEquipment.h:552 宣告、.cpp:7703-7761 本體），本樹尚未翻。
-            // 本檔目前可見的 `EventReport` 是 SECSGEM/SecsEventReport.h:55 的
-            // **自由函式** `void EventReport(unsigned Ceid)`（1 個參數）——
-            // 名字相同、東西不同，直接編會得到 "too many arguments"。
-            // THGem::EventReport 自己還相依 SendCeid / SendAnnotatedCeid /
-            // chkAnnotatedEventReport / IsEnableEvent，是獨立一波的量。
-            // 量測 20260826: survey_file 的「真正缺」清單裡
-            //   EventReport  golden :7703-7761  59 行  -> 仍缺
-            // 影響：EC 值變動時本樹不會送出 S6F11/S6F13；上面三條清單的記帳
-            // 與 Clear() 仍照 golden 執行（方向是收窄，不是多做）。
-            EventReport(1, 48);
-#endif
-            ;   //AI(W906-FW-GEM-W8) 20260826: 上面的 gate 把 if 的唯一敘述拿掉了，golden 那個 if 沒有大括號，補一個空敘述維持語法。                                                 //SECS_EVENT.ChangeEC
+            //AI(W906-FW-GEM-W9) 20260826: GATE (W8-ECEvent) 已退役——
+            // THGem::EventReport 本波翻好了（見檔尾），golden 原文回復為 live。
+            EventReport(1, 48);                                                 //SECS_EVENT.ChangeEC
     }
     SECSReportIDChange->Clear();
     SECSOriginalValue->Clear();
@@ -7557,4 +7552,95 @@ void THGem::SetECEnableData(AnsiString ECID,AnsiString Function)
     sgSECSECData->Cells[1][ct]=ECID;
     sgSECSECData->Cells[2][ct]="0";                                             // enable or disable
     sgSECSECData->Cells[3][ct]=Function;
+}
+
+// =============================================================================
+// FW-GEM-W9 -- THGem::EventReport（golden :7703-7761）
+//
+// 本波的目的是退役 GATE (W8-ECEvent)：ReplyECDataChange 需要的就是這一支。
+// 它的四個相依在 W9 開工時已全部在樹上（20260826 量）：
+//   SendCeid           uHGemEquipment.cpp:2179
+//   SendAnnotatedCeid  uHGemEquipment.cpp:2194
+//   IsEnableEvent      uHGemEquipment.cpp:2547
+//   chkAnnotatedEventReport  uHGemEquipment.h（THGemCheckBox stand-in）
+// 所以本波只缺這支本體，不是一整組。
+//
+// **這是行為變更**：解閘之後 EC 值變動會真的組出 S6F11/S6F13 並
+// SendLocalData()。與 TerminalRequest 同一裁決（見 FW-GEM-W8 的 banner 與
+// 本檔 header 記載的 ReportAcknowledge 先例）：SECS 訊息組裝在本樹屬
+// in-scope，不是機台動作指令，且沒有任何 event handler 被接線。
+// =============================================================================
+// AI(W906-FW-GEM-W9) 20260825: golden SECSGEM/uHGemEquipment.cpp:7703-7761, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::EventReport(unsigned iDataID, unsigned iCeid)
+{
+    AnsiString S;
+    if(IniConfig.bEnable_SECS_GEM==false)
+        return ;
+
+    if(CUSTOMER_CODE==CC_TFME_CHINA && GemControlState<=1)                      //JerryYang 20200527 Offline不上報
+        return;
+
+    if(IsEnableEvent(iDataID, iCeid))
+    {
+        if(chkAnnotatedEventReport->Checked)
+        {
+            InitLocalHead(6, 13, 1);
+            DataItemOut(3, HType.LIST_TYPE, NULL);
+            DataItemOut(1, HType.UINT_4_TYPE, &iDataID);
+            DataItemOut(1, HType.UINT_4_TYPE, &iCeid);
+            SendAnnotatedCeid(iCeid);
+            SendLocalData();
+        }
+        else
+        {
+            InitLocalHead(6, 11, 1);
+            DataItemOut(3, HType.LIST_TYPE, NULL);
+            DataItemOut(1, HType.UINT_4_TYPE, &iDataID);
+            DataItemOut(1, HType.UINT_4_TYPE, &iCeid);
+            SendCeid(iCeid);
+            SendLocalData();
+        }
+    }
+    else
+    {
+        S=AnsiString("[Send]    ")+TimeString;
+        StringOut(S);
+        S=S.sprintf("Event Report(6,11) , DataID=%d , CEID=%d be disabled , abort send !!!", iDataID, iCeid);           //16.10.13.01 Roy Debug
+        StringOut(S);
+    }
+    //Ifor 20170428 (Steven) add 關閉程式前送出SECS GEM離線要求
+    //==>
+    if(iCeid==SECS_EVENT.DoExit)                                                //24 Exit Pressed (SECS_EVENT.DoExit)
+    {
+        DoSeparate();
+        try
+        {
+            srvGem->Close();
+            clientGem->Close();
+        }
+        catch(...)
+        {
+            MyDBIProcess("Exception", "THGem::EventReport");
+        }
+        srvGem->Active=false;
+        clientGem->Active=false;
+#if 0 // GATE (W9-ExitTail) -- golden 原文保留
+        // 這兩行需要 THGem 被當成真的 VCL 表單看待，本樹刻意不是：
+        //   `Timer1` 在本檔 header 的 out-of-scope 清單裡（:92-96、:104-105），
+        //     它的 Timer1Timer 本體要 wire-codec 那一整組相依。
+        //   `Close()` 是 TForm::Close，THGem「is not modeled as a real window
+        //     in this port」（header :95-96 的原話）。
+        // 量測 20260826:
+        //   grep -n "Timer1" 於 port uHGemEquipment.h/.cpp -> 只有 out-of-scope 註解
+        //   grep -n "THGem::Close" 於 port -> 0（有的是 CloseCommuncation，不同東西）
+        // 這一段只在 iCeid==SECS_EVENT.DoExit（離開程式）時才走到；同一個 if 裡
+        // 前面的 DoSeparate() 與 srvGem/clientGem 的 Close()/Active=false 都是 live，
+        // 所以「送離線要求並關掉 socket」有做到，少的是「停掉輪詢 timer 並關視窗」。
+        Timer1->Enabled=false;                                                  //Ifor 20170428 add 關閉 SECS GEM Timer
+        Close();
+#endif
+    }
+    //<==
+    //Ifor 20170428 (Steven) add 關閉程式前送出SECS GEM離線要求
 }
