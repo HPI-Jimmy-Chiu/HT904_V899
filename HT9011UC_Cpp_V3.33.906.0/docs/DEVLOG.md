@@ -11049,7 +11049,81 @@ IsVCL cascade 做過（那邊也是靠 `vclcompat/Controls.h` 的 stand-in 才�
 「gate 區塊內確實含有 `DirectoryListBox1`」。
 **通則：批次套用時，pattern 要對「這一批」唯一，不是對「這個檔」唯一。**
 
-### 🔖 RESUME（20260825 日終）
+## 20260826 VI — FW-YM-W13 開了又主動退掉：`TShiftState` 是全樹層級的阻塞物
+
+### 為什麼換到 uYieldMonitoring
+
+THGem 收尾後重跑 census（20260826）：
+
+| group | goldCode | missing | done% |
+|---|---|---|---|
+| non-form | 336,509 | 13,388 | **96.0%** |
+| form | 261,862 | 217,329 | 17.0% |
+| ALL | 598,371 | 230,717 | 61.4% |
+
+（上表是「把翻到別的 port 檔的本體也算完成」的那一組數字；census 另有一組
+per-file 模型的數字，兩組都印，見 census.py 自己的說明。）
+
+最大的 mirrored-but-incomplete 是 `cContact.cpp`（102 支 / 22,324 行）——
+**第 1 步就擋下來了**：port 的 `cContact.h` 是 extract-calc-core（兩個自由函式），
+檔頭明講 `TfContact` 在本樹不存在、`CalculateTotalAirForce` 與其餘全部
+OUT OF SCOPE，指向 `MIGRATION_ROADMAP.md` 的 cContact DEFERRED 條目
+（DoTestContactFunction 的 CarlibrationTask + 6 個子狀態機，約 11,347 行）。
+**那是決策項不是翻譯項**，要做得先立一整個 TfContact facade。
+這是「先讀 header」第 4 次擋下候選。
+
+改選 `uYieldMonitoring.cpp`（66 支 / 3,740 行）。五步照跑：
+header 的 EXPLICITLY EXCLUDED 段（`forms/fYieldMonitoring.h:74-80`）先讀
+→ survey（區塊註解感知版）真正缺 53 支 / 1,153 行
+→ screen 38 支乾淨
+→ 交集扣掉 header 排除項後 25 支 / 369 行
+→ **owner_report 再擋下 2 支**：
+  `DoReplyDefaultToForm` 讀 `fRPDefault->RP_Default/RP_Name/RP_Value`（別的表單），
+  `mtBinSelectYieldMouseDown` 用 `MyYieldPanel` 的成員（`TMyYieldPanel` 正是
+  header 明列排除的那個）。
+
+### 套下去才發現：15/23 支卡在同一個型別
+
+23 支套完編譯，錯誤集中在兩個 VCL 型別：
+
+| 阻塞物 | 擋住幾支 | 是什麼 |
+|---|---|---|
+| **`TShiftState`** | **15** | Delphi 的「集合」型別（`set of TShiftStateEnum`），滑鼠／按鍵事件簽章的第 N 個參數 |
+| `TWinControl` | 2 | 控制項樹，同 `GATE (W5-CCE)` 已記錄的缺口 |
+| —（可做） | 6 | `edContactCountFTChange`／`FormShortCut`／`edFailYieldRate_ARTFTFileKeyPress`／`rgPiggyBack_FTClick`／`rgQARunModeClick`／`rgBinAlarmByClick` |
+
+為 6 支方法加 25 個 widget 成員不成比例——那些 widget 大多是服務被擋的 15 支的。
+**本波整個退掉**（兩個檔用 `git show HEAD:<path> > <path>` 還原，
+還原前先確認 `git diff --numstat` 是 +58/+396、0 刪除，即只有我的編輯）。
+
+### 真正的產出：`TShiftState` 是目前最高槓桿的 facade 缺口
+
+今晚**第三次**撞到同一個型別：
+
+| 何時 | 被擋的東西 |
+|---|---|
+| FW-GEM-W10 | `THGem::GemTerminalSendEditKeyDown`（golden :6501-6506） |
+| FW-GEM-W12 | 同上，重述於排除清單 |
+| FW-YM-W13 | `TfYieldMonitoring` 的 **15 支** MouseUp/MouseDown handler |
+
+量測 20260826：`grep -rl "TShiftState"` 於 **golden 的 .cpp** → **45 個檔**。
+`grep -rn "TShiftState"` 於 `vclcompat/` → **0**。
+
+也就是說，只要補一個 `TShiftState` stand-in，就會同時鬆開散在 45 個 golden 單元裡的
+滑鼠／按鍵事件處理器——這是目前為止投報率最高的一件基礎建設。
+
+**但本波不做它，理由是它需要設計決定而不是打字**：
+`TShiftState` 是 Delphi 的 set 型別，要決定 (a) 列舉成員取哪些
+（`ssShift/ssAlt/ssCtrl/ssLeft/ssRight/ssMiddle/ssDouble`），
+(b) 支援哪些運算（`Contains()`／`<<`／`==`），
+(c) 那 15 支 handler **實際上有沒有讀 Shift**（多數看起來只是把參數放著不用，
+若真是如此，最小 stand-in 就夠，不必模型化完整 set 語意）。
+(c) 必須先量過再決定形狀——**這正是「解 gate 前先查值從哪來」那條規則的同型問題**。
+
+下一波建議：先做 `vclcompat/TShiftState`（含 (c) 的量測），再回頭一次收掉
+uYieldMonitoring 的 15 支與 THGem 的 `GemTerminalSendEditKeyDown`。
+
+### 🔖 RESUME（20260825 日終，已被檔尾 20260826 那則取代）
 
 - **今日全收（本節之前的 20260825 I-VII，共 7 波）**：FW-BARCODE2／FW-BARCODE3
   （＋`tools/dualgate.sh` 把雙 gate 腳本化）／FW-BARCODE4／台帳 R8＋安全連鎖更正／
@@ -11207,3 +11281,74 @@ IsVCL cascade 做過（那邊也是靠 `vclcompat/Controls.h` 的 stand-in 才�
   `D:\MajorMaintenanceRecord` 與客戶設定的鏡像目錄，屬 write path。
 - **註（誠實揭露）**：`forms/fObserver.h:1021` 把「~34」改成量到的「31」是**雙 gate 跑完之後**
   才做的純註解修正，兩段 gate 編到的是改之前的樹；差異僅註解，不影響任何驗收數字。
+
+### 🔖 RESUME（20260826 清晨）
+
+- **今晚全收（20260825 XV 起算，共 6 波 + 2 次工具修正）**：
+  FW-CFG-W7（`2f7e918`）／survey_file 量測修正（`1be68ce`）／
+  FW-GEM-W8（`de089c5`）／FW-GEM-W9（`cab915e`）／FW-GEM-W10（`3dc1f45`）／
+  FW-GEM-W11（`a940cb7`）／FW-GEM-W12（`58b09c8`）。
+  **每一波都跑全新 dir 的雙 gate，全部 137/142 × 2，失敗集合逐項等於常駐五項。**
+  `D:\HT9045\system` 552 檔整晚零變動。
+
+- **`SECSGEM/uHGemEquipment.cpp`（THGem）已收尾**：從 W8 開工時的
+  「真正缺 46 支 / 1,206 行」推進到 **只剩 3 支未翻**，各有理由：
+  `WriteALED`（寫 `ALID_ALED.ini`，write path）／
+  `btnExportClick`（寫 `D:\AlarmList.xls`，且要 `TSaveDialog`）／
+  `GemTerminalSendEditKeyDown`（`TShiftState`）。
+
+- **census 20260826（全新量）**：非表單 **96.0%**、表單 17.0%、全案 **61.4%**
+  （分母＝golden code 行數；這是「翻到別的 port 檔也算完成」那一組）。
+
+- ⚠ **下一波建議：`vclcompat/TShiftState` stand-in——目前最高槓桿的 facade 缺口。**
+  今晚被它擋了三次（FW-GEM-W10／W12 的 `GemTerminalSendEditKeyDown`、
+  FW-YM-W13 的 **15 支** handler）。量測 20260826：
+  `grep -rl "TShiftState"` 於 golden 的 `.cpp` = **45 個檔**；於 `vclcompat/` = **0**。
+  **開工前必做的一步**：先量那 15 支 handler **實際上有沒有讀 `Shift`**——
+  若都只是把參數放著不用，最小 stand-in 就夠，不必模型化完整 Delphi set 語意。
+  （同「解 gate 前先查值從哪來」那條規則。）
+  做完之後可以一次收掉 uYieldMonitoring 的 15 支 + THGem 的那一支。
+
+- **FW-YM-W13 已偵察完但主動退掉**（見上方 20260826 VI）：23 支裡 15 支卡
+  `TShiftState`、2 支卡 `TWinControl`，只有 6 支可做，為 6 支加 25 個 widget
+  不成比例。兩個檔已用 `git show HEAD:` 還原，樹是乾淨的。
+  若要重來，批次清單與 owner_report 的 widget 表都還在
+  `scratchpad/FW-YM-W13_*.txt`。
+
+- **其他已知的下一個標的**（census 由大到小，各自的第 1 步結論）：
+  - `cContact.cpp`（102 支 / 22,324 行）——**決策項不是翻譯項**，
+    port 的 `cContact.h` 是 extract-calc-core，要做得先立整個 TfContact facade。
+  - `cSetUp.cpp`（35 支 / 4,046 行）、`Automation/SCK_ART.cpp`（46 / 3,811，
+    `fSCKART.h` 有 RECONCILIATION DEBT）、`cBinSel.cpp`（53 / 2,772）、
+    `cSpeed.cpp`（51 / 1,232）、`Interface/TesterTCP.cpp`（19 / 974，UI 軸）
+    ——都還沒跑五步偵察。
+  - `cConfiguration.cpp` **實質見底**：deep pass 後「乾淨 ∩ 仍缺」只剩 8 支 /
+    389 行，其中 3 支在安全佇列、3 支卡 TWinControl/ctor，真正可做 2 支 / 23 行。
+
+- **工具本晚的三個修正（都已 commit）**：
+  1. `screen_methods.py` 跟進自由函式一層（`freefunc_index.py`，golden 全樹
+     2,429 個自由函式）——當波抓到 `btnSetToTechClick` 改教導座標、
+     `LoadConfiguration` 寫 `Gerneral.ini`。
+  2. `survey_file.py` 認得「方法被搬到別的 port 類別」——
+     `uHGemEquipment.cpp` 的缺口從 3,113 行更正為 1,206 行。
+  3. `survey_file.py` 改用 `goldenscan.load()`（區塊註解感知）——
+     `SaveTCPIPRecieveData` 整支在 `/* */` 內，不是缺口；golden 方法數 215 → 214。
+
+- ⚠ **今晚三個「看起來在驗證、實際上驗不到」的檢查，已全部修好並記進記憶**：
+  `grep -c $'CR$'` 回的是總行數不是 CRLF 行數；EOL 的「CRLF 數 == LF 數」等式
+  抓不到孤立 CR（少一個 `
+` 兩邊同時減一）；`assert m`（regex 有命中）
+  不等於「命中對的地方」——同一批抽出來的兄弟方法有一模一樣的構造。
+
+- **安全佇列（不做不問，本晚新增四筆）**：
+  `btnSetToTechClick`（`SetOffsetToTech` 改 `Tech.*` 教導座標）／
+  `LoadConfiguration`（`ReadLastSetIni` 寫 `system\Gerneral.ini`）／
+  `WriteALED`（寫 `ALID_ALED.ini`）／`btnExportClick`（寫 `D:\AlarmList.xls`）。
+  舊有：GATE 7 家族、AuthPath 2 站點、P-R1/P-S1 密碼檔、SaveSetupFile 130 寫入、
+  WebBridge write path、`chkHeaterClick`、`FormClose`、UT150 家族、
+  `ReadConfigStandard`、cObserver 的 10 個 Save-path gate。
+
+- **等使用者（本晚未動，只是重列）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
+  HAL-MOT1 十問（Q1/Q9/Q4 擋新 mot_table 起草）；TImage headless 准駁；
+  GOLDEN BUG (TAG1-a) edSHighBase；GOLDEN DEFECT (i) 21-into-20 sprintf overflow。
+
