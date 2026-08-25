@@ -9821,6 +9821,79 @@ tasklist //FI "IMAGENAME eq ctest.exe"                # 才是真的判準
 排其後。批1 `Command.cpp` 只剩 813 行、批3 的 `uTemp_Set.cpp` 只剩 8 行，
 實質已收。
 
+## 20260825 VI — FW-TAG1 收案：Tag substrate 落地（主迴圈自做，決策前先派 workflow 調查）
+
+本波是**先調查再動手**的一次，而且調查改變了做法——值得完整記下來。
+
+### 為什麼不是「加個欄位就好」
+
+VCL 給每個元件一個 `int Tag`，程式員拿它當「這是哪一個欄位」的標記。
+vclcompat 當初沒做，十幾個讀 Tag 的區塊因此被 gate 鎖著。加欄位五分鐘，
+但**加了之後值從哪來**才是真問題：沒人賦值就全讀 0，而
+`MachineType.h:637` 讓 `tcHotPlate1==0`，所以 0 會**主動命中**某條臂——
+是選錯分支，不是無作用。這跟 fQwertyKey 那種「叫不出鍵盤所以什麼都沒
+發生」的 latent 完全不同性質，不能沿用同一套解鎖直覺。
+
+### 調查（9 個 agent：4 調查 ＋ 4 對抗式複驗 ＋ 1 彙整；3 個複驗判 PARTLY_WRONG）
+
+結論是**值有兩種來源，必須分開處理**：
+
+| 族 | 值來源 | port 現況 | 處置 |
+|---|---|---|---|
+| MyTempPanel 18 欄位 | golden **C++ ctor** `->Tag=iTag;`（golden :325-346） | 那 18 行原封不動在 `#if 0`，且傳值迴圈 `uTemp_Set.cpp:339-341` 是**活的** | **解鎖，值是真的** |
+| uTemp_Set / VacuumUnit / MyOmronPanel | **.dfm 設計期屬性** | 無 .dfm→C++ 載入路徑（dfm2rc 只在 stage-1 IR 與 web layout.json 留著） | **續鎖**，gate 文字改寫成帶 dfm 行號的證據 |
+
+主迴圈逐條複驗承重宣稱（家規：agent 的論證比程式碼更常錯）：
+golden 確為 **18** 個寫入而非 port 註解寫的 19；`Controls.h` 全檔 `Tag`
+出現 **0** 次；A 類三個 handler 的 **101/16/0** 個 widget 全無 dfm Tag；
+B 類六個 handler 各**正好**帶一個 `Tag=1` widget（附 dfm 行號）。
+
+### 做了什麼
+
+1. `vclcompat::TControl` 新增 `int Tag`（ctor 初始化為 0），附完整
+   provenance 註記說明「宣告不等於有值」。
+2. **退役六個影子成員**（ATC 三個 one-field 子類、fDynamicTempGroupBox、
+   fTemp_SetTagEdit/Button）。理由不是整潔：**加基底成員會把原本的
+   「編譯錯誤」變成「靜默讀錯成員」**——這是我這次改動自己造出來的風險，
+   所以同波清掉。收工複查：全樹只剩 `Controls.h:255` 一處在 TControl 鏈上。
+3. 解鎖：MyTempPanel ctor 的 18 行（真值）＋uTemp_Set 三個「Tag==0 即忠實」
+   的 G-Barcode 守衛＋MyOmronPanel 自我供值的拖曳 latch 對。
+4. 續鎖但改寫 gate 文字（從「沒有這個欄位」改成「值從哪來、打開會怎樣」）：
+   uTemp_Set 六個、MyOmronPanel MouseMove、**VacuumUnit btnSetInArmClick**。
+5. 修掉三句過期/錯誤的註解：MyTempPanel 的「19」與「consumer 不存在」
+   （PT-W8 早已落地四個自由函式）、fTemp_Set.h 的「Tag 0/1 at golden
+   design-time」（實為四個 widget 全無 Tag）、fConfiguration.h:280→:286。
+
+### 順手答掉簡報自己標為「最高價值未解問題」的那一題
+
+簡報說沒人查過 golden 的 VacuumUnit 按鈕 Tag 從哪來。我查了：
+golden **有** `VacuumUnit/VacuumUnit.dfm`（在子目錄，root 找不到），
+`btnSetInArm` 無 Tag（=0，:223）、`btnSetIndexArm` `Tag = 1`（:251）、
+`btnSetOutArm` `Tag = 2`（:261），三顆共用 `OnClick = btnSetInArmClick`。
+所以 golden 的 0/1/2 派發是設計期填好且正確的；port 若照「能編譯就解鎖」
+打開，三顆都讀 0 → 全走 InArm 臂 → **按「設定出料手臂」會把入料手臂的
+門檻寫進 InArm 硬體**。這是機台控制缺陷，已完整寫進該 gate 的註解。
+
+### 新發現 GOLDEN BUG (TAG1-a)（台帳 680→681）
+
+golden ctor 給 19 個溫度欄位中的 18 個設 Tag，**獨漏 `edSHighBase`**
+（2024.07.27 新增的第 6 點欄位），而該欄位確實 `OnMouseDown=edBaseMouseDown`
+（golden :214），與另外 16 個共用那個讀 Tag 的 handler。於是它在每個通道
+都以 Tag==0 執行；因 `tcHotPlate1==0`，Tri-Temp 機台上它會命中
+`(Tag>=tcHotPlate1 && Tag<=tcShuttle2)` 臂，鍵盤上下限取
+`Temperature.fWorkTemperBase` ±30 而非該通道的 `SetHeaterTemp_Max*`。
+忠實照翻並註記；**上真機前需裁決**（與 DEFECT (i) 同級）。
+
+### gate
+
+全新雙 dir `build_tag1g` / `build_tag1r`。**Debug 137/142 常駐五項；
+Release 137/142，兩段失敗集合逐項相同**。這是 Tag 基底改動涉及 302 個 TU
+重建後的第一次全量驗收，零回歸。guard 代理 0 檔。
+
+註：GOLDEN BUG (TAG1-a) 的註記與台帳列是在 Debug ctest 階段補寫的
+（該時段編輯原始碼安全，ctest 只跑既建二進位），所以 Debug 段編的是加註記
+前的原始碼、Release 段編的是最終樹——兩者差異僅註解。
+
 ### 🔖 RESUME（20260824 日終）
 
 - **今日全收（27 顆 commit）**：FW-TEMP3／GATE7-V＋裁決落地＋計數更正／
