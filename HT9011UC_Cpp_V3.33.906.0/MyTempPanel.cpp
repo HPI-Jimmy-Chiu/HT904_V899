@@ -20,9 +20,13 @@
 //  same golden shape).
 //  AI(W906-FW-TAG1) 20260825 -- THE PARAGRAPH ABOVE IS STALE, kept for
 //  provenance: PT-W8 landed all four on 20260811 as file-scope free functions
-//  with trimmed signatures (TMyTempPanel_edBaseMouseDown :825,
-//  _edLimitMouseDown :950, _edIndiviMouseDown :974, _edinitialMouseDown
-//  :1011), so ported_fns is 11/11, not 7/11. Their BODIES are still gated,
+//  with trimmed signatures, so ported_fns is 11/11, not 7/11.
+//  AI(W906-FW-SIG-W16) 20260826 -- 上面那段**也已經過期**了：本波把那四支
+//  收回成 TMyTempPanel 的成員（TMyTempPanel::edBaseMouseDown 等），
+//  並把簽章回填成 golden 原文（含 TMouseButton/TShiftState，靠
+//  vclcompat/ShiftState.h，commit f184093）。舊的自由函式名
+//  `TMyTempPanel_edXxxMouseDown` 已不存在；上面提到的行號也已失效，
+//  刻意不再填新行號——行號會隨每次附加而漂移，用名字搜尋即可。 Their BODIES are still gated,
 //  but on co-blockers other than the parameter types: a duplicate
 //  `TEdit *Buffer`, an unqualified `edOffset` inside a free function, a null
 //  `fTemp_Set`, and two missing includes. Tag stopped being one of those
@@ -52,6 +56,8 @@
 // =============================================================================
 #include "MachineDefine.h"          // de-VCL'd include hub (vclcompat umbrella)
 #include "MyTempPanel.h"            // this unit's own contract
+// AI(W906-FW-SIG-W16) 20260826: 四支 MouseDown 回填 golden 完整簽章。
+#include "vclcompat/ShiftState.h"
 
 // MyDBIProcess -- golden home aHotPlateSubstrate.h:924. Forward-declared
 // locally rather than pulling in that whole header, matching this tree's
@@ -735,6 +741,11 @@ AnsiString TMyTempPanel::GetCaption()
 //
 //   (W8-1) `TMouseButton Button` / `TShiftState Shift` (golden :418, :529,
 //       :535, :563) -- DROPPED FROM THE PORT SIGNATURE, not gated.
+//       ⚠ AI(W906-FW-SIG-W16) 20260826: 下面這條 absence claim **已經過期**。
+//       `vclcompat/ShiftState.h`（commit f184093）補上了這兩個型別，本波因此
+//       把四支的簽章回填成 golden 原文，參數不再被丟掉。
+//       底下的原文保留，因為它記錄的是「當時為什麼那樣做」——那個判斷在當時
+//       是對的（而且它自己就註明兩個參數在 golden 裡是死的，所以丟掉零風險）。
 //       ABSENCE CLAIM: no type of either name exists anywhere in this port.
 //         cmd:  grep -rn --include=*.h --include=*.cpp -E
 //               '^[[:space:]]*(class|struct|enum|typedef|using)[^;]*
@@ -771,7 +782,7 @@ AnsiString TMyTempPanel::GetCaption()
 //       the same, empty, ported effect.  Choosing "no arm" is therefore
 //       observationally identical to choosing any arm.
 //       A SHORTCUT THAT WAS CONSIDERED AND REJECTED, recorded so the next
-//       wave does not re-derive it wrongly: `Self->iIndexTag` looks like a
+//       wave does not re-derive it wrongly: `iIndexTag` looks like a
 //       drop-in for `Buffer->Tag`, because golden's ctor sets BOTH from the
 //       same `iTag` argument (golden :53 and :325-346).  IT IS NOT.
 //       golden uTemp_Set.cpp:154 constructs each panel as
@@ -869,8 +880,11 @@ AnsiString TMyTempPanel::GetCaption()
 //  golden MyTempPanel.cpp:417-526  --  TMyTempPanel::edBaseMouseDown
 //  Ported signature drops `TMouseButton Button, TShiftState Shift` (GATE W8-1)
 //  and takes `TMyTempPanel *Self` instead of `this` (see BANNER EXTENSION).
-void TMyTempPanel_edBaseMouseDown(TMyTempPanel *Self, TObject *Sender, int X, int Y)
+//AI(W906-FW-SIG-W16) 20260826: 收回成員並回填 golden 完整簽章。
+void TMyTempPanel::edBaseMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W16): golden 這四支也沒讀這兩個
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
 
@@ -990,12 +1004,14 @@ void TMyTempPanel_edBaseMouseDown(TMyTempPanel *Self, TObject *Sender, int X, in
         }
     }
 #endif
-    (void)Self; (void)Buffer; (void)X; (void)Y;
 }
 //---------------------------------------------------------------------------
 //  golden MyTempPanel.cpp:528-532  --  TMyTempPanel::edLimitMouseDown
-void TMyTempPanel_edLimitMouseDown(TMyTempPanel *Self, TObject *Sender, int X, int Y)
+//AI(W906-FW-SIG-W16) 20260826: 收回成員並回填 golden 完整簽章。
+void TMyTempPanel::edLimitMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W16): golden 這四支也沒讀這兩個
     //AI(W906-PT-W8) 20260811: GATE (W8-4) OPENED 20260824 -- golden's ENTIRE body is one
     //  ShowQwertyKey call, with hard-coded bounds 0.0 / 12.0.
     //  CORRECTION TO A CLAIM THIS COMMENT ORIGINALLY MADE, recorded rather
@@ -1014,12 +1030,14 @@ void TMyTempPanel_edLimitMouseDown(TMyTempPanel *Self, TObject *Sender, int X, i
     //  or correct.
     //  Live since 20260824 (FW-QWKEY2); headless no-op until keyboard wiring.
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 0.0, 12.0);
-    (void)Self; (void)Sender; (void)X; (void)Y;
 }
 //---------------------------------------------------------------------------
 //  golden MyTempPanel.cpp:534-560  --  TMyTempPanel::edIndiviMouseDown
-void TMyTempPanel_edIndiviMouseDown(TMyTempPanel *Self, TObject *Sender, int X, int Y)
+//AI(W906-FW-SIG-W16) 20260826: 收回成員並回填 golden 完整簽章。
+void TMyTempPanel::edIndiviMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W16): golden 這四支也沒讀這兩個
     TEdit *Buffer;                                                              //Ztex 2023.04.19 Add HT-1032 TriTemp Function
     Buffer=(TEdit *)Sender;                                                     //Ztex 2023.04.19 Add HT-1032 TriTemp Function
 
@@ -1050,13 +1068,15 @@ void TMyTempPanel_edIndiviMouseDown(TMyTempPanel *Self, TObject *Sender, int X, 
         fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, dTempMax, dTempMin);
     }
 #endif
-    (void)Self; (void)Buffer; (void)X; (void)Y;
 }
 //---------------------------------------------------------------------------
 //  golden MyTempPanel.cpp:562-599  --  TMyTempPanel::edinitialMouseDown
 //  golden :562 trailing comment: //kevin 20210421 獨立offset range
-void TMyTempPanel_edinitialMouseDown(TMyTempPanel *Self, TObject *Sender, int X, int Y)
+//AI(W906-FW-SIG-W16) 20260826: 收回成員並回填 golden 完整簽章。
+void TMyTempPanel::edinitialMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W16): golden 這四支也沒讀這兩個
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
 
@@ -1106,9 +1126,12 @@ void TMyTempPanel_edinitialMouseDown(TMyTempPanel *Self, TObject *Sender, int X,
         }
     }
 #endif
-    (void)Self; (void)Buffer; (void)X; (void)Y;
 }
 //---------------------------------------------------------------------------
+//  HAND-OFF TO THE INTEGRATING LOOP -- ✅ 已於 FW-SIG-W16（20260826）執行
+//  （下面原文保留。實際做法比它建議的更忠實：簽章回填成 golden 完整版，
+//   而不是這裡寫的簡化版 `(TObject *Sender, int X, int Y)`，因為
+//   vclcompat/ShiftState.h 已經讓那兩個參數拼得出來。）
 //  HAND-OFF TO THE INTEGRATING LOOP -- DESCRIBED, DELIBERATELY NOT DONE HERE
 //  (MyTempPanel.h is outside this wave's write boundary.)
 //

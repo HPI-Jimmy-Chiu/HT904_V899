@@ -97,6 +97,7 @@
 
 #include "vclcompat/vcl_compat.h"
 #include "vclcompat/Controls.h"
+#include "vclcompat/ShiftState.h"   // AI(W906-FW-SIG-W16) 20260826
 
 //---------------------------------------------------------------------------
 class TMyTempPanel
@@ -108,10 +109,16 @@ class TMyTempPanel
         //  parameter types have no port anywhere in this tree (see this
         //  header's own banner GATE (1)). Golden signatures kept here
         //  verbatim, in comment form, for provenance:
-        //    void edBaseMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
-        //    void edLimitMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
-        //    void edIndiviMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
-        //    void edinitialMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);    //kevin 20210421 initial temp 獨立範圍值
+        //AI(W906-FW-SIG-W16) 20260826: GATE (1) 的前提已經不成立——
+        //  `TMouseButton`/`TShiftState` 現在有 port（vclcompat/ShiftState.h，
+        //  commit f184093，量測先行：golden 全樹 358 支帶該參數、只有 1 支真的讀它）。
+        //  四支因此改回**真正的宣告**，簽章與 golden 逐字相同；本體早在
+        //  PT-W8（20260811）就翻好了，只是當時 header 在該波寫入邊界外，
+        //  只能落成檔案層自由函式並在 .cpp 檔尾留下交接說明。本波執行那個交接。
+        void edBaseMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
+        void edLimitMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
+        void edIndiviMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
+        void edinitialMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);   //kevin 20210421 initial temp 獨立範圍
 
     public:
         //AI(W906-PT-W3) 20260807: golden declares SetCaption/GetCaption

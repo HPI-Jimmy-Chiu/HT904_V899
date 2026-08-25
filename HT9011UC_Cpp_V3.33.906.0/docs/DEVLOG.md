@@ -11409,6 +11409,78 @@ forms/fLotInfo.cpp:2133:        if(Button==mbRight || Button==mbLeft)
 `cContactCT.cpp` 都還帶著「參數已丟」的註解。那些多半沒有連著 gate，
 純粹是簽章不忠實，可以攢成一波一次做完。
 
+## 20260826 IX — FW-SIG-W16：執行 PT-W8 留下的交接，四支收回成員
+
+### 這一波不是我發明的工作，是前一波自己留下的交接
+
+`MyTempPanel.cpp` 檔尾有一段 **HAND-OFF TO THE INTEGRATING LOOP**（:1112 起）。
+PT-W8（20260811）把 golden 的四支 MouseDown handler（`edBaseMouseDown` /
+`edLimitMouseDown` / `edIndiviMouseDown` / `edinitialMouseDown`，
+golden `MyTempPanel.cpp:417-599`）翻好了，但**當時 `MyTempPanel.h` 在該波的
+寫入邊界外**，member 定義沒有對應的 in-class 宣告就編不過，所以只能落成
+檔案層自由函式 `TMyTempPanel_edXxxMouseDown(TMyTempPanel *Self, ...)`，
+並老老實實寫下「這四支目前**有外部連結但全樹沒有任何呼叫者**」。
+
+它同時列出了要做什麼才能收回：在 header 補哪四行、改名、拿掉 `Self` 參數。
+本波執行那個交接。
+
+### 做得比交接要求的更忠實
+
+交接建議的宣告是簡化版 `(TObject *Sender, int X, int Y)`——因為它寫的時候
+`TMouseButton`/`TShiftState` 還沒有 port。現在有了
+（`vclcompat/ShiftState.h`，commit `f184093`），所以四支直接回填
+**golden 原文的完整簽章**：
+
+```
+void TMyTempPanel::edBaseMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+```
+
+並各加一行 `(void)Button; (void)Shift;`——PT-W8 自己就逐行讀過 golden 確認
+**這兩個參數在 golden 的四個本體裡從未被讀取**（只出現在參數列），
+所以保留它們是純粹的簽章忠實度，零行為差異。
+
+### 交付
+
+`MyTempPanel.cpp` +35/−12、`MyTempPanel.h` +11/−4。
+四支從自由函式變成 `TMyTempPanel` 的真正成員；舊名 `TMyTempPanel_edXxxMouseDown`
+全樹已無殘留（`Grep` 工具確認）。
+
+### 順手清掉三處已經過期的敘述（原文都保留）
+
+樹上這幾段都在描述「本檔已經走過的狀態」，不更正的話會誤導下一個讀的人：
+
+1. **`GATE (W8-1)` 的 absence claim**（`MyTempPanel.cpp`）——
+   「no type of either name exists anywhere in this port」現在是假的。
+   已在原地標明過期，並說明**當時那個判斷是對的**
+   （它自己就註明兩個參數在 golden 裡是死的，所以丟掉零風險）。
+2. **檔頭那段「PT-W8 落成自由函式」的說明**——已標明也過期了，
+   並刻意**不填新行號**：行號會隨每次附加漂移，用名字搜尋即可。
+3. **HAND-OFF 區塊本身**——標記為 ✅ 已執行，並註明實際做法比它建議的更忠實。
+
+### 驗收
+
+`tools/dualgate.sh sig16`（全新 dir）：Debug **137/142**、Release **137/142**，
+失敗集合逐項相同且等於常駐五項。`D:\HT9045\system` 552 檔本晚零變動。
+
+### 為什麼這件事值得一整波
+
+這四支本來是「翻好了但接不上」——`nm` 看得到符號，全樹卻沒有呼叫者，
+也不可能有，因為類別裡根本沒有這四個成員。
+這正是 pt-wave 陷阱清單第 1 種（**沒人引用**）的實例，
+而且是**已知且被前一波誠實記錄下來**的那種。
+收回成員之後它們才真正成為 `TMyTempPanel` 介面的一部分。
+
+（一樣要講清楚：這是「碼接回類別」，不是「功能接上了」——
+本樹沒有訊息迴圈，仍然沒有東西會呼叫這些 handler。）
+
+### 一個小坑
+
+`MyTempPanel.cpp` 裡 `#include "MyTempPanel.h"` 這個字串出現**兩次**，
+:36 那個在註解裡。我的 `assert count==1` 因此擋下第一次嘗試——
+**擋對了**，如果錨定到註解那行，include 會被插進註解區塊裡。
+改成錨定帶尾註解的實際那行（`// this unit's own contract`，唯一）才動手。
+
 ### 🔖 RESUME（20260826 清晨）
 
 - **今晚全收（20260825 XV 起算，共 6 波 + 2 次工具修正）**：
