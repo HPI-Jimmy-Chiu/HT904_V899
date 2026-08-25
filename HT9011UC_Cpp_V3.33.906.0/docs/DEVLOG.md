@@ -10483,6 +10483,77 @@ census：該檔 2,044 → **1,735 行**（缺的方法 84 → **67**）；全樹
 `LoadConfiguration` 退出讓樹變了。**數字必須在最後一次整併之後量**，所以停掉、
 刪 `build_cfg7g`、重跑。停在 192 檔比事後發現量的是舊樹便宜。
 
+## 20260825 XVI — 量測缺陷：被搬到別的 port 類別的方法，被讀成「缺」
+
+### 怎麼發現的
+
+FW-CFG-W7 收工後選 W8 標的，照 `survey_file.py` 的結果挑了
+`SECSGEM/uHGemEquipment.cpp` 的 THGem「SML/local-head 顯示與解析家族」14 支／319 行，
+`wave_extract.py` 都抽好了。動手前多問了一句「`SFCodeAndMean` 這個識別字在哪」，
+grep 出來在 `SECSGEM/SecsWireCodec.cpp:161`——**那個檔案裡已經有一份線性掃描**。
+
+逐支對過之後：**14 支裡有 13 支早就翻好了**，只是掛在 `SecsWireCodec` 而不是 `THGem`。
+
+| golden 方法 | 已在 |
+|---|---|
+| `GetLengthOfType` | `SecsWireCodec.cpp:429` |
+| `GetLengthByte` | `:454` |
+| `GetSMLLenthByte` | `:728` |
+| `ConvertLocalData` | `:1282` |
+| `CreateLocalHead` | `:1300` |
+| `StoreToReceiveString` | `:1491` |
+| `MakeSMLSpaceString` | `:1517` |
+| `ShowSMLSpaceString` | `:1538` |
+| `ShowSMLSpaceBinaryString` | `:1551` |
+| `ProcessSMLBinary` | `:1569` |
+| `ShowSMLBinary` | `:1661` |
+| `ShowSFDescription` | `:1696` |
+| `ShowSML` | `:2228` |
+
+只有 `ReadALED` 是真的還沒翻。**差一步就整波重翻。**
+
+### 根因
+
+`survey_file.py` 判斷「port 有沒有」的方式是：在**與 golden 同名的那個 port 檔**裡
+搜 `<類別>::<方法>(`。但本專案**刻意**把 golden 的大類別拆成好幾個 port 類別——
+`uHGemEquipment.h` 自己的檔頭就寫得很清楚：wire codec 抽成 `SecsWireCodec`、
+SV/EC 註冊抽成 `SecsSvEcRegistration`、S,F 協定處理在 `HTGem`。
+**凡是被搬走的方法，一律讀成「缺」。**
+
+### 修法與重量的結果
+
+`survey_file.py` 加第二輪：對真的沒在同類別找到的方法，掃全樹（跳過 `build*`、
+`tests/`、`.git`）找 `任何類別::<方法>(`，把命中的單獨列成「已在別的 port 類別」。
+
+`SECSGEM/uHGemEquipment.cpp` / `THGem` 重量：
+
+| | 修法前 | 修法後 |
+|---|---|---|
+| golden 方法 | 215 | 215 |
+| 同類別已有 | 132 | 132 |
+| **在別的 port 類別（已翻）** | — | **37 支 / 1,907 行** |
+| **真正缺** | 83 支 / 3,113 行 | **46 支 / 1,206 行** |
+
+**被高估的量（1,907 行）比真實缺口（1,206 行）還大。**
+
+### 這支修法自己的偽陽性，也寫在工具輸出裡
+
+新表會被**同名不同類**汙染：`THGem::FormDestroy` 命中的是
+`cBinSel.cpp:413` 的 `TfBinSel::FormDestroy`，那是另一個表單的方法，不是搬移。
+所以工具現在把**擁有者類別印出來**，並在表頭直接寫這個實例，
+要求逐條看擁有者再信。`FormDestroy` 實際上仍是缺的。
+
+### 這是同一族的第四個
+
+| # | 缺陷 | 徵狀 |
+|---|---|---|
+| 1 | census「缺」不是待辦清單 | header 的 EXCLUDED／RECONCILIATION DEBT 段落已經把它們排除掉了 |
+| 2 | 括號配對被行尾註解裡的 `}` 騙 | 少抓 160 行且可能安靜地過 |
+| 3 | 抽取器不懂 `/* */` | 把 golden 停用的碼加進 port |
+| 4 | **方法被搬到別的 port 類別** | **缺口被系統性高估；差點整波重翻** |
+
+共同形狀：**量測工具用「同一個名字在同一個地方」當存在的判準，而這棵樹刻意不是那樣長的。**
+
 ### 🔖 RESUME（20260825 日終）
 
 - **今日全收（本節之前的 20260825 I-VII，共 7 波）**：FW-BARCODE2／FW-BARCODE3
@@ -10593,11 +10664,33 @@ census：該檔 2,044 → **1,735 行**（缺的方法 84 → **67**）；全樹
   改 `Tech.*` 教導座標）與 `LoadConfiguration`（→`ReadLastSetIni` 寫
   `system\Gerneral.ini`）。**名字裡有 Read 的也會寫檔**，這是第 3 個缺口的教訓。
   同時把 `CreateFile` 收斂成只認寫模式，否則每個讀檔函式都亮紅燈。
-- **下一步建議**：cConfiguration 剩 48 支／1,514 行，其中大塊都已知有阻塞
-  （見上）。建議先跑 `screen_methods.py cConfiguration.cpp TfConfiguration`
-  取新的「乾淨」名單（deep pass 會讓這份名單比上一輪短），挑純 UI 的一批做 W8；
-  若剩下的都帶阻塞，就換 `SECSGEM/uHGemEquipment.cpp`
-  （2,935 行，header 有 2 個排除段要先讀）。
+- **cConfiguration 實質見底**（20260825 量）：deep pass 之後「乾淨 ∩ port 仍缺」
+  只剩 8 支／389 行，其中 `UpdateUT150Comm`／`sbSendTempClick`／`UT150Polling`
+  已在安全佇列、`InitialMemo`／`ShowMemo` 卡 TWinControl 控制項樹、
+  `FormDestroy` 刪的是 golden ctor 建的陣列。**真正可做的只剩 2 支／23 行**
+  （`strngrdAutoSaveLogMouseDown` 18、`btnSaveClick` 5）。已換檔。
+- **下一個標的 = `SECSGEM/uHGemEquipment.cpp`（THGem），已完成五步偵察**：
+  - header 兩個 out-of-scope 段落在 `:92-140`（wire-codec 相依的連線函式，
+    缺 TMemoryStream／TCriticalSection shim）與 `:161-167`（FormCreate 的
+    SV/EC 註冊、DoSpool／上傳下載）。
+  - 重量（修好 survey 之後，見上方 20260825 XVI）：golden 215 支，同類別已有 132，
+    **在別的 port 類別 37 支／1,907 行**，**真正缺 46 支／1,206 行**。
+  - **FW-GEM-W8 批次已選定並逐支親眼看過 golden**（12 支／269 行，
+    `screen_methods` 含 deep pass 全數乾淨）：
+    `InitHType`(18) `ReadALED`(12) `ReplyECDataChange`(16)
+    `DoReportECDataChangeCheck`(39) `DoReportECChange`(30)
+    `SetTerminalWindows`(28) `SetTerminalWindows2`(28) `TerminalRequest`(30)
+    `CheckNeedReportAlarm`(14) `ReadECEnableData`(28) `GetECEnableData`(14)
+    `SetECEnableData`(12)。
+  - ⚠ 兩個開工前要處理的點：(a) `TerminalRequest` 會
+    `InitLocalHead+DataItemOut+SendLocalData` **送 SECS 訊息給 host**——
+    照 `uHGemEquipment.h` 記載的先例（Report/Link Acknowledge composer 家族
+    同樣形狀、前一波已正常翻譯）屬 in-scope，但要在波次註解裡明講；
+    (b) `DoReportECChange` 呼叫 `GetECDataValue`，那支在
+    `SecsSvEcRegistration.cpp:601`，要走 forwarder 而不是重寫。
+  - ⚠ `wave_extract.py` 對非 `forms/` 的類別會猜錯 header 路徑
+    （它去找 `forms/fECSGEM/uHGemEquipment.h`），那份「缺的識別字」清單因此
+    有大量偽陽性。開波時要指定 `SECSGEM/uHGemEquipment.h`。
 - **等使用者（本波未動，只是重列）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
   HAL-MOT1 十問（Q1/Q9/Q4 擋新 mot_table 起草）；TImage headless 准駁；
   GOLDEN BUG (TAG1-a) edSHighBase；GOLDEN DEFECT (i) 21-into-20 sprintf overflow。
