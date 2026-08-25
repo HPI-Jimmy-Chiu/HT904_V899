@@ -71,15 +71,15 @@ FW 系列 / `GOLDEN BUG #N` / `k7-B1` 類區域編號等標記寫在程式碼裡
 
 | 項目 | 數值 |
 |---|---|
-| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **723 筆**（以表格內 `#` 編號列實際計數，20260825 FW-OBS-W2 當波入帳 42 筆（`cObserver.cpp` 新增分節，該檔本波前為 0 筆）＋20260825 FW-TAG1 當波入帳 1 筆（`MyTempPanel.cpp` TAG1-a，維護規則 1）＋20260825 R8 同步 3 筆（FW-BARCODE1 當波入帳）＋20260824 R7 同步 7 筆（FW-BINDISP3 當波入帳）＋20260824 R6 同步 8 筆（FW-QWKEY1 當波入帳）＋20260821 四輪補掃後＋20260824 GATE7-V 增 1 筆＋20260824 五輪同步 5 筆（FW-BINDISP1/SETUP-D/BINDISP2 當波入帳，維護規則 1）；`python3` 逐列計數，見下方「四輪補掃紀錄」） |
-| 其中 BUG 類（`GOLDEN BUG` / `GOLDEN BUGS` / `GOLDEN BUG #N` / `(Bx) GOLDEN BUG` / golden copy-paste bug） | 264 筆（含 20260825 FW-OBS-W2 +11，`cObserver.cpp` 新分節；含 20260825 FW-TAG1 +1，`MyTempPanel.cpp` TAG1-a edSHighBase 漏設 Tag；含三輪新增 1 筆，`cConfiguration.h` 的 `sbUpdateHPClick` copy-paste bug） |
+| 總筆數（逐筆列出的 golden 缺陷/怪異之處） | **724 筆**（以表格內 `#` 編號列實際計數，20260825 FW-OBS-W2 當波入帳 42 筆（`cObserver.cpp` 新增分節，該檔本波前為 0 筆）＋20260825 FW-TAG1 當波入帳 1 筆（`MyTempPanel.cpp` TAG1-a，維護規則 1）＋20260825 R8 同步 3 筆（FW-BARCODE1 當波入帳）＋20260824 R7 同步 7 筆（FW-BINDISP3 當波入帳）＋20260824 R6 同步 8 筆（FW-QWKEY1 當波入帳）＋20260821 四輪補掃後＋20260824 GATE7-V 增 1 筆＋20260824 五輪同步 5 筆（FW-BINDISP1/SETUP-D/BINDISP2 當波入帳，維護規則 1）；`python3` 逐列計數，見下方「四輪補掃紀錄」） |
+| 其中 BUG 類（`GOLDEN BUG` / `GOLDEN BUGS` / `GOLDEN BUG #N` / `(Bx) GOLDEN BUG` / golden copy-paste bug） | 265 筆（含 20260825 FW-CFG-W3 +1，`cConfiguration.cpp` CFG-N14esc；含 20260825 FW-OBS-W2 +11，`cObserver.cpp` 新分節；含 20260825 FW-TAG1 +1，`MyTempPanel.cpp` TAG1-a edSHighBase 漏設 Tag；含三輪新增 1 筆，`cConfiguration.h` 的 `sbUpdateHPClick` copy-paste bug） |
 | 其中 QUIRK 類（`GOLDEN QUIRK` / `GOLDEN QUIRKS`） | 248 筆（含 20260825 FW-OBS-W2 +8，`cObserver.cpp` 新分節；含 SECSGEM 三檔補撈的 39 筆；含二輪補掃新增 71 筆，見下方「二輪 QUIRK 補掃紀錄」；三輪未新增 QUIRK 類；含 20260824 五輪 +1，`cSetUp.cpp` CHSetError int>63.5；含 20260825 R8 +1，`BarcodeReader.cpp` BR-q1 15-of-16 初始器） |
 | 其中 DEFECT 類（`GOLDEN DEFECT` / `GOLDEN DEFECTS`） | 71 筆（含二輪補掃新增 5 筆；含三輪新增 1 筆，`BinDisplay/MyBinDisp.cpp` 的 `WriteTargetBin` off-by-one；含 20260824 R7 +1，同檔 (i) 21-into-20 sprintf stack overflow） |
 | 其中 ODDITY 類（`GOLDEN ODDITY` / `GOLDEN ODDITIES`） | 73 筆（含 20260825 FW-OBS-W2 +10，`cObserver.cpp` 新分節；含三輪新增 16 筆，集中在 batch-5 顯示側叢集，見下方「三輪增補紀錄」；含四輪補掃新增 6 筆，集中在溫控表單 uTemp_Set.cpp/DynamicTemp.cpp 與 Command.cpp FW-CMD-C 段，見下方「四輪補掃紀錄」；含 20260824 五輪 +3：`cSetUp.cpp` ×2（pitch switch 缺 N-mode case、CoSocketComboChange 無視 Sender）＋`database.cpp` ICBD-1；含 20260824 R7 +6，`BinDisplay/MyBinDisp.cpp` (j)(k)(l)(m)(n)(o)） |
 | 其中 ASYMMETRY 類（`GOLDEN ASYMMETRY` / `GOLDEN ASYMMETRIES`） | 16 筆（含三輪新增 1 筆，`BinDisplay/MyBinDisp.h` 的 `ComPort`/`ComPort2` 初始化不對稱；含 20260824 GATE7-V 新增 1 筆，Command.cpp SETSOAK_ 寫入路徑不對稱） |
 | 其中 DIVERGENCE 類（port 自身偏離 golden，已揭露，非 golden 本身缺陷；csystem.cpp/SCK_ART.cpp 各 1 筆合計 2） | 2 筆 |
 | 其中 GAP / LEAK / NOTE / INCONSISTENCY / GOTCHA / SPELLINGS / TYPO / DEAD CODE / INVARIANT / RACE 等罕見詞彙 | 40 筆（NOTE 28／GOTCHA 2／GAP 2／LEAK 2／INCONSISTENCY 1／SPELLINGS 1／TYPO 1／DEAD CODE 1／INVARIANT 1／RACE 1；含三輪新增 NOTE +2、GOTCHA +1，皆在 `cShowBinSelect.cpp`/`BinDisplay/MyBinDisp.h`；含 20260824 五輪 NOTE +1，`Motor/myMN200motor.cpp` BINDISP2-e；含 20260824 R6 NOTE +8，fQwertyKey G-a..d ×4＋fPassword G-P1..P4 ×4；含 20260825 R8 NOTE +2，BarcodeReader BR-n1/n2；含 20260825 FW-OBS-W2 NOTE +13，cObserver.cpp 新分節） |
-| 涉及檔案數 | 136 個 `### ` 分節（20260825 FW-OBS-W2 新增 1 個分節：cObserver.cpp（42 筆，本檔單一分節筆數目前最高者之一）；20260825 R8 新增 1 個分節：BarcodeReader；20260824 R6 新增 2 個分節：fQwertyKey 家族、fPassword 家族；20260824 五輪新增 2 個分節：`database.cpp`、`Motor/myMN200motor.cpp`；`cSetUp.cpp` 由 stub 分節升級為 3 筆實表不重複計；含少數純交叉參照的 stub 分節；三輪增補新增 8 個分節：`forms/fLotInfo.cpp`、`forms/fSpeed.h+cSpeed.cpp`、`forms/fStartCondition.h+cStartCondition.cpp`、`forms/fConfiguration.h+cConfiguration.cpp`、`forms/fSetup.h+fSetup.cpp`、`BinDisplay/MyBinDisp.h+.cpp`、`forms/fHandlerSys.h+HandlerSys.cpp`(stub)、`tests/test_amr.cpp`(stub)；四輪補掃新增 4 個分節：`uTemp_Set.cpp+forms/fTemp_Set.h`、`DynamicTemp.cpp+forms/fDynamicTemp.h`、`MainTempMode.cpp`(stub)、`cSetUp.cpp`(stub)；`cShowBinSelect.cpp`/`forms/fShowBinSelect.h` 的 WAVE D/E 補充是既有分節的延伸子分節，不重複計檔案數；Command.cpp 本輪只新增 2 列（B-CMDC-1/2），沿用既有分節，非新分節） |
+| 涉及檔案數 | 137 個 `### ` 分節（20260825 FW-CFG-W3 新增 1 個分節：cConfiguration.cpp；20260825 FW-OBS-W2 新增 1 個分節：cObserver.cpp（42 筆，本檔單一分節筆數目前最高者之一）；20260825 R8 新增 1 個分節：BarcodeReader；20260824 R6 新增 2 個分節：fQwertyKey 家族、fPassword 家族；20260824 五輪新增 2 個分節：`database.cpp`、`Motor/myMN200motor.cpp`；`cSetUp.cpp` 由 stub 分節升級為 3 筆實表不重複計；含少數純交叉參照的 stub 分節；三輪增補新增 8 個分節：`forms/fLotInfo.cpp`、`forms/fSpeed.h+cSpeed.cpp`、`forms/fStartCondition.h+cStartCondition.cpp`、`forms/fConfiguration.h+cConfiguration.cpp`、`forms/fSetup.h+fSetup.cpp`、`BinDisplay/MyBinDisp.h+.cpp`、`forms/fHandlerSys.h+HandlerSys.cpp`(stub)、`tests/test_amr.cpp`(stub)；四輪補掃新增 4 個分節：`uTemp_Set.cpp+forms/fTemp_Set.h`、`DynamicTemp.cpp+forms/fDynamicTemp.h`、`MainTempMode.cpp`(stub)、`cSetUp.cpp`(stub)；`cShowBinSelect.cpp`/`forms/fShowBinSelect.h` 的 WAVE D/E 補充是既有分節的延伸子分節，不重複計檔案數；Command.cpp 本輪只新增 2 列（B-CMDC-1/2），沿用既有分節，非新分節） |
 | 標示 ⚠️存疑（agent 或 orchestrator 本人判讀信心不足） | 見文末「無法判讀/存疑清單」 |
 
 > 上列數字為 `python3 -c "..."` 對本檔表格列直接計數所得（見文末補撈紀錄的量測方式），
@@ -1780,6 +1780,18 @@ DEFECT/NOTE/...` 命中；fixture 內的所有 `golden :NNNN` 引註都只是客
 | 40 | GOLDEN NOTE (:3670-3672) | NOTE | cObserver.cpp:6835 | golden :3670-3672 | Memo2 同時收下 site/index/bin 三列，Memo3 與 Memo4 各只收一列。 | Memo2 是超集而非第三個平行欄位，判讀畫面 log 時容易誤以為三個 Memo 對稱。 | AI(W906-FW3-Observer-W2) 20260825 |
 | 41 | GOLDEN NOTE（未編號） | NOTE | cObserver.cpp:6911 | —（此註記未引用任何 golden 行號） | 說明先前 Wave 2 只是把 pgcMessageChange (golden :4766-4793) 的原文當作範圍邊界證據抄錄在本檔註解中，並非翻譯，本波才是唯一定義。 | 純交接記錄，無行為影響；註記寫「near cObserver.cpp:3045」，實際那段邊界註解在 cObserver.cpp:3102-3108（原註記寫 :3045，已核對更正）。 | AI(W906-FW3-Observer-W2) 20260825 |
 | 42 | GOLDEN BUG (:3385 of the dump, golden :5385) | BUG | cObserver.cpp:6995, 7015 | golden :5385 | 1..12 迴圈結束後又多執行一次 `TestList->Add(str);`，此時 str 仍是 12 月那一行。 | 產生的 2.bat 會有兩行相同的 12 月 XCopy；實務無害（XCopy /y 重複覆蓋），且 port 中存檔與執行那一對在 GATE C-log-10 內不會執行。 | AI(W906-FW3-Observer-W2) 20260825 |
+
+
+### cConfiguration.cpp（1 筆，20260825 FW-CFG-W3 當波入帳，新增分節）
+
+> 本檔在 FW-CFG-W1/W2/W3 三波翻譯前為 0 筆。這一筆不是人工翻閱找到的，是 **MinGW 的
+> `unknown escape sequence` 警告**指出來的，隨後對 golden 全檔字串常值做「單一反斜線後接
+> 非法跳脫字元」掃描複驗，**全檔正好只有這三處**，且都在 ItemN 的 Handler_OEE 區段。
+> 依維護規則 6 併成一列（同一個缺陷、三個呼叫點）。
+
+| # | 標記/編號 | 類型 | port 位置(檔:行) | golden 位置 | 現象摘要(一句話) | 潛在影響(一句話) | 發現波次/日期 |
+|---|---|---|---|---|---|---|---|
+| 1 | GOLDEN BUG (CFG-N14esc) | BUG | cConfiguration.cpp:3846-3870（banner）,3871,3875-3876,3879-3880 | golden :3481, :3485, :3488 | 三個 GTK 整合的預設執行檔路徑寫成 `"C:\\GTK\EMG.exe"`——第一個反斜線有加倍、第二個沒有，於是 `\E` / `\L` / `\I` 被當成跳脫序列，目錄分隔符被吃掉；同區塊其他路徑（`"C:\\GTK_Control\\Message\\Alarm\\"`）都寫對，故為三個手誤而非慣例 | 這三個是 ini 鍵不存在時寫入的**預設值**，且是要被啟動的執行檔路徑，新機台會拿到不存在的 `C:\GTKEMG.exe`，N14_14 警報控制／N14_15 Socket 壽命／N14_16 IPSC 三個整合會安靜地不啟動；另 `\E` 在 GCC 是 GNU 擴充的 ESC(0x1B)、BCB6 給普通 `E`，故 port 與 BCB6 在第一個預設值差一位元組（兩者皆錯，都指不到真實檔案） | AI(W906-FW-CFG-W3) 20260825 |
 
 ## 維護規則
 

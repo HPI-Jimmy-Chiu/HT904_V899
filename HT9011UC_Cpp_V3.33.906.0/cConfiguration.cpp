@@ -3058,3 +3058,1657 @@ void TfConfiguration::InitConfigEdtList_ItemO()
     else
         elConfig->Add(chkO24,   &IniConfig.bO24_ProductionLogByLot,             ECBool,     "O_Count", "bO24_ProductionLogByLot",                       bShow, bEnable, bReadFromFile, 0);
 }
+
+// =============================================================================
+// FW-CFG-W3 -- InitConfigEdtList_ItemI / InitConfigEdtList_ItemN / InitConfigEdtList_ItemP (merged 20260825)
+// =============================================================================
+// AI(W906-FW-CFG-W3) 20260825: golden cConfiguration.cpp:2421-2871, transcribed
+// VERBATIM (cp950 -> UTF-8). Registration table only -- the port's
+// HTEditList::Add signature is argument-for-argument golden's, so no
+// adaptation was needed and none was invented. See FW-CFG-W1's banner in
+// forms/fConfiguration.h for why this family is the wave's point.
+void TfConfiguration::InitConfigEdtList_ItemI()
+{
+    bool bShow=true, bNoShow=false;
+    bool bEnable=true, bDisable=false;
+    bool bReadFromFile=true, bFixedValue=false;
+    AnsiString str;
+
+    if(CUSTOMER_CODE==CC_AMKOR_Philippines || CUSTOMER_CODE==CC_ASE_KaohSiung)  //JerryYang 20160228 for Amkor Philippines,Output Shuttle lose IC會自動回Home,所以強制開啟此功能
+    {
+        elConfig->Add(cbI01,    &IniConfig.bI01TesterFinishThenHome,            ECBool,     "Tester", "bI01TesterFinishThenHome",               bShow, bDisable, bFixedValue, 1);
+    }
+    else if(CUSTOMER_CODE==CC_KYEC_LEE)                                         //Ifor 20160922 KYEC 喬智 要求 I01 強制關閉不可修改
+    {
+        elConfig->Add(cbI01,    &IniConfig.bI01TesterFinishThenHome,            ECBool,     "Tester", "bI01TesterFinishThenHome",               bShow, bDisable, bFixedValue, 0);
+    }
+    else
+    {
+        elConfig->Add(cbI01,    &IniConfig.bI01TesterFinishThenHome,            ECBool,     "Tester", "bI01TesterFinishThenHome",               bShow, bEnable, bReadFromFile, 0);
+    }
+
+    if(CosFunction.bLockI02ByFile)                                              //JerryYang 20260504 : for SPIL -- I02 Enable
+    {
+        elConfig->Add(cbI02,    &IniConfig.bI02HomeSetSocketICToErrBin,         ECBool,     "Tester", "bI02_bHomeSetSocketICToErrBin",          bShow, IniConfig.bI02_Enable, bReadFromFile, 0);                   //JerryYang 20151026 歸零時把當下在測試的IC當ErrorBin
+    }
+    else if(CUSTOMER_CODE==CC_ASE_M ||                                               //Ifor 20190618 : add ASEM 強制 關閉[I02]功能 回HOME INDEX ARM 全部丟ERROR Bin
+       CUSTOMER_CODE==CC_ASE_SG)                                                //Ifor 20200915 add: ASE SG 強制 關閉[I02]功能 回HOME INDEX ARM 全部丟ERROR Bin
+    {
+        elConfig->Add(cbI02,    &IniConfig.bI02HomeSetSocketICToErrBin,         ECBool,     "Tester", "bI02_bHomeSetSocketICToErrBin",          bShow, bDisable, bFixedValue, 0);
+    }
+    else if(CUSTOMER_CODE==CC_ASE_CL ||                                         //JerryYang 20210129 : ASE-CL松諭要求強制開啟
+           (CUSTOMER_CODE==CC_KYEC_LEE && bEnable_KLT_Function==true))
+    {
+        elConfig->Add(cbI02,    &IniConfig.bI02HomeSetSocketICToErrBin,         ECBool,     "Tester", "bI02_bHomeSetSocketICToErrBin",          bShow, bDisable, bFixedValue, 1);
+    }
+    else
+    {
+        elConfig->Add(cbI02,    &IniConfig.bI02HomeSetSocketICToErrBin,         ECBool,     "Tester", "bI02_bHomeSetSocketICToErrBin",          bShow, bEnable, bReadFromFile, 0);                   //JerryYang 20151026 歸零時把當下在測試的IC當ErrorBin
+    }
+
+    if(CUSTOMER_CODE==CC_TERAPOWER)                                             //Sam 20210219 : 晶兆成需要開關 TempControl 模式
+        elConfig->Add(cbI03,    &IniConfig.bI03AmbientTempControl,              ECBool,     "Tester", "bI03AmbientTempControl",                 bShow, bEnable, bReadFromFile, 0);
+    else
+        elConfig->Add(cbI03,    &IniConfig.bI03AmbientTempControl,              ECBool,     "Tester", "bI03AmbientTempControl",                 bShow, bDisable, bFixedValue, 1);
+
+    elConfig->Add(cbI04,        &IniConfig.bI04EnableChangeBinDuringTesting,    ECBool,     "Tester", "bI04EnableChangeBinDuringTesting",       bShow, bEnable, bReadFromFile, LastSet.bEnableChangeBinDuringTesting?"1":"0");
+
+    if(CUSTOMER_CODE==CC_JCET)                                                  //JerryYang 20190709 JCET黃剛要求low yield不要強制one cycle
+    {
+        elConfig->Add(cbI05,    &IniConfig.bI05LowYieldForcedOneCycle,          ECBool,     "Tester", "bI05LowYieldForcedOneCycle",             bShow, bEnable, bReadFromFile, 0);
+    }
+    else
+    {
+        elConfig->Add(cbI05,    &IniConfig.bI05LowYieldForcedOneCycle,          ECBool,     "Tester", "bI05LowYieldForcedOneCycle",             bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    elConfig->Add(cbI06,        &IniConfig.bI06TurnOnI01AfterHome,              ECBool,     "Tester", "bI06TurnOnI01AfterHome",                 bShow, bEnable, bReadFromFile, 0);       //Sam 20220216 : Home 完成後強制開啟 I01 Function。
+
+    if(CUSTOMER_CODE==CC_KYEC_CHEN)                                             //jou 2015-05-27 KYEC BU6 要求 I07 ResetGPIBAfterOneCycleCleanOut 強制關閉
+        elConfig->Add(cbI07,    &IniConfig.bI07ResetGPIBAfterOneCycleCleanOut,  ECBool,     "Tester", "bI07ResetGPIBAfterOneCycleCleanOut",     bShow, bDisable, bFixedValue, 0);
+    else
+        elConfig->Add(cbI07,    &IniConfig.bI07ResetGPIBAfterOneCycleCleanOut,  ECBool,     "Tester", "bI07ResetGPIBAfterOneCycleCleanOut",     bShow, bEnable, bReadFromFile, 0);
+
+    if(BAR_CODE_INSTALL!=ebctUninstall)                                         //Steven 20190412 : Initial Start時檢查有沒有開啟2DID
+        elConfig->Add(cbI08,    &IniConfig.bI08Check2DIDEnableWhenInitialStart, ECBool,     "Tester", "bI08Check2DIDEnableWhenInitialStart",    bShow, bEnable, bReadFromFile, 0);
+    else
+        elConfig->Add(cbI08,    &IniConfig.bI08Check2DIDEnableWhenInitialStart, ECBool,     "Tester", "bI08Check2DIDEnableWhenInitialStart",    bShow, bDisable, bFixedValue, 0);
+
+    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20220923 : yield alarm時觸發half one cycle(shuttle保留IC不測試跳ONE CYCLE FINISH)
+    {
+        elConfig->Add(cbI09,    &IniConfig.bI09LowYieldOneCycleDontCleanShuttle,ECBool,     "Tester", "bI09LowYieldOneCycleDontCleanShuttle",   bShow, bEnable, bReadFromFile, 0);
+    }
+    else
+    {
+        elConfig->Add(cbI09,    &IniConfig.bI09LowYieldOneCycleDontCleanShuttle,ECBool,     "Tester", "bI09LowYieldOneCycleDontCleanShuttle",   bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CUSTOMER_CODE==CC_SCC ||                                                 //jou 2012-06-27 We meet summary issue in SCC line, so please help fix two function (no one can change the setting)
+       CUSTOMER_CODE==CC_KYEC_LEE)                                              //wei 20150903 鎖定I12
+        elConfig->Add(cbI12,    &IniConfig.bI12TesterTimerOutNotNeedReTest,     ECBool,     "Tester", "bI12TesterTimerOutNotNeedReTest",        bShow, bDisable, bFixedValue, 1);
+    else
+        elConfig->Add(cbI12,    &IniConfig.bI12TesterTimerOutNotNeedReTest,     ECBool,     "Tester", "bI12TesterTimerOutNotNeedReTest",        bShow, bEnable, bReadFromFile, LastSet.bTesterTimerOutNotNeedReTest?"1":"0");
+
+    elConfig->Add(cbI13,        &IniConfig.bI13InitStartDelayHasFTandRT,        ECBool,     "Tester", "bI13InitStartDelayHasFTandRT",           bShow, bEnable, bReadFromFile, 0);      //Steven 20190313 : Initial Start Delay use different setting in FT and RT
+    elConfig->Add(cbI16,        &IniConfig.bI16TTLSaveInSetupFile,              ECBool,     "Tester", "bI16TTLSaveInSetupFile",                 bShow, bEnable, bReadFromFile, 0);      //Steven 20180626 (wei) : TTL設定存到工作檔裡面
+    elConfig->Add(cbI18,        &IniConfig.bI18CanReceiveEchoStop,              ECBool,     "Tester", "bCanReceiveEchoStop",                    bShow, bEnable, bReadFromFile, 0);      //ChungHung 20130326 add for ASE_KR
+    elConfig->Add(cbI19,        &IniConfig.bI19AuToSitMapPauseWaitBin,          ECBool,     "Tester", "bAuToSitMapPauseWaitBin",                bShow, bEnable, bReadFromFile, 0);      //kevin 20150122 AutoSitMap 使用gpib模擬器讓機台暫停 設定 bin別
+    elConfig->Add(coI20,        &IniConfig.iI20ErrorBinAlphabet,                ECInteger,  "Tester", "iI20ErrorBinAlphabet",                   bShow, bEnable, bReadFromFile, LastSet.iErrorBinAlphabet);   //Steven 20100413
+
+    if(IniConfig.bUseAutoSiteMapping)                                           //Steven 20110421 : Auto Site Mapping
+    {
+        lbI21_6->Visible=false;
+        edI21_6->Visible=false;
+        if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+        {
+           edI21->Visible=false;
+        }
+        else if(IniConfig.bVTESTFunction==true)                                 //jou 20200707 : VTEST auto site mapping
+        {
+            lbI21_6->Visible=true;
+            edI21_6->Visible=true;
+        }
+
+        gbI21->Visible=true;
+        edI21_9->Visible=(CosFunction.bAutoSiteMappingUseFailBinSetting &&      //Ifor 20171128 (Steven) : add Auto Site Mapping Fail Bin Setting
+                          !CosFunction.bAutoSiteMappingSetOpenBIN);             //Steven 20230213 : [I21-9]的OS Bin跟著工作檔
+
+        if(CosFunction.bI21EnableASMByRecipe==false)                            //Steven 20210518 : 吳如春希望Auto site map從工作檔開關
+        {
+            if(IniConfig.bVTESTFunction==true)                                  //RogerYang 20250624 修正無法By工作檔問題
+                elConfig_byRecipe->Add(cbI21,   &IniConfig.bI21EnableASM,           ECBool,     "Auto Site Mapping", "Enable Auto Site Mapping",    bShow, bEnable, bReadFromFile, 1);
+            else
+                elConfig->Add(cbI21,            &IniConfig.bI21EnableASM,           ECBool,     "Auto Site Mapping", "Enable Auto Site Mapping",    bShow, bEnable, bReadFromFile, 0);
+        }
+        else
+        {
+            cbI21->Visible=false;
+        }
+
+        if(CUSTOMER_CODE==CC_LEADYO)                                            //KenHsieh 20251003 : LEADYO 需要設定fail次數報Alarm
+        {
+            elConfig->Add(edI21_1,              &IniConfig.iI21FailRetryCount,      ECInteger, "Auto Site Mapping", "iI21FailRetryCount",           bShow,  bEnable,   bReadFromFile, 0, false, 0, 20);
+        }
+        else
+        {
+            elConfig->Add(edI21_1,              &IniConfig.iI21FailRetryCount,      ECInteger, "Auto Site Mapping", "iI21FailRetryCount",           bNoShow, bDisable, bFixedValue,   0);
+        }
+
+        #ifdef ASE_KaohSiung                                                    //kevin 20150115
+        elConfig->Add(edI21,                &IniConfig.fI21UseSameSoakTime,           ECDouble, "Auto Site Mapping", "Use Same Soak Time Sec",              bNoShow, bDisable, bFixedValue, 0.0);
+        elConfig->Add(cbI21_SkipSoakTime,   &IniConfig.bI21SkipSoakTime,                ECBool, "Auto Site Mapping", "Skip Soak Time",                      bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbI21_SameSoakTime,   &IniConfig.bI21UseSameSoakTime,             ECBool, "Auto Site Mapping", "Use Same Soak Time",                  bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbI21_CheckOpen,      &IniConfig.bI21ASMNeedCheckEachSiteOpen,    ECBool, "Auto Site Mapping", "bASMNeedCheckEachSiteOpen",           bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbI21_5,              &IniConfig.bI21ASMRemoveLTrayManually,      ECBool, "Auto Site Mapping", "bASMRemoveLTrayManually",             bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbI21_6,              &IniConfig.bI21ASMRunTimeCHeck,             ECBool, "Auto Site Mapping", "bASMRunTimeCHeck",                    bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbI21_7,              &IniConfig.bASMAutoSiteMapBinComBine,       ECBool, "Auto Site Mapping", "bASMAutoSiteMapBinComBine",           bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbI21_8,              &IniConfig.bI21AutoSiteMappingUseHotplate,  ECBool, "Auto Site Mapping", "bI21AutoSiteMappingUseHotplate",      bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbI21_9,          &IniConfig.bI21AutoSiteMappingFailBinSetting,   ECBool, "Auto Site Mapping", "bI21AutoSiteMappingFailBinSetting",   bNoShow, bDisable, bFixedValue, 0);
+        #else
+        elConfig->Add(edI21,                &IniConfig.fI21UseSameSoakTime,           ECDouble, "Auto Site Mapping", "Use Same Soak Time Sec",              bShow, bEnable, bReadFromFile,  10.0, false, 0.0,     360.0);
+        elConfig->Add(cbI21_SkipSoakTime,   &IniConfig.bI21SkipSoakTime,                ECBool, "Auto Site Mapping", "Skip Soak Time",                      bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbI21_SameSoakTime,   &IniConfig.bI21UseSameSoakTime,             ECBool, "Auto Site Mapping", "Use Same Soak Time",                  bShow, bEnable, bReadFromFile, 0);
+        if(CUSTOMER_CODE==CC_SCS)
+            elConfig->Add(cbI21_CheckOpen,  &IniConfig.bI21ASMNeedCheckEachSiteOpen,    ECBool, "Auto Site Mapping", "bASMNeedCheckEachSiteOpen",           bShow, bDisable, bFixedValue, 1);        //Steven 20120726 : AutoSiteMapping, 當確認Open Bin時,同時也要檢查是不是所有Dut都Open
+        else if(CosFunction.bUSEJCETSiteMapMode)                                //jou 2016-11-03 JCET 要求 Auto Site Mapping 需按照他們的要求撰寫
+            elConfig->Add(cbI21_CheckOpen,  &IniConfig.bI21ASMNeedCheckEachSiteOpen,    ECBool, "Auto Site Mapping", "bASMNeedCheckEachSiteOpen",           bNoShow, bDisable, bFixedValue, 0);
+        else
+            elConfig->Add(cbI21_CheckOpen,  &IniConfig.bI21ASMNeedCheckEachSiteOpen,    ECBool, "Auto Site Mapping", "bASMNeedCheckEachSiteOpen",           bShow, bEnable, bReadFromFile, 0);
+
+        if(CosFunction.bUSEJCETSiteMapMode)                                     //jou 2016-11-03 JCET 要求 Auto Site Mapping 需按照他們的要求撰寫
+            elConfig->Add(cbI21_5,          &IniConfig.bI21ASMRemoveLTrayManually,      ECBool, "Auto Site Mapping", "bASMRemoveLTrayManually",             bNoShow, bDisable, bFixedValue, 0);     //Steven 20120830 : AutoSiteMapping, 手動移除Loader Tray
+        else
+            elConfig->Add(cbI21_5,          &IniConfig.bI21ASMRemoveLTrayManually,      ECBool, "Auto Site Mapping", "bASMRemoveLTrayManually",             bShow, bEnable, bReadFromFile, 0);      //Steven 20120830 : AutoSiteMapping, 手動移除Loader Tray
+
+        if(CUSTOMER_CODE==CC_ASE_M)                                             //Ifor 20180420 : add ASEM 要求強制開啟不可修改
+            elConfig->Add(cbI21_6,          &IniConfig.bI21ASMRunTimeCHeck,             ECBool, "Auto Site Mapping", "bASMRunTimeCHeck",                    bShow, bDisable, bFixedValue, 1);        //Steven 20140729 : AutoSiteMapping, 邊生產邊做
+        else if(IniConfig.bVTESTFunction==true)
+            elConfig->Add(cbI21_6,          &IniConfig.bI21ASMRunTimeCHeck,             ECBool, "Auto Site Mapping", "bASMRunTimeCHeck",                    bShow, bDisable, bFixedValue, 0);        //Steven 20140729 : AutoSiteMapping, 邊生產邊做
+        else if(CosFunction.bUSEJCETSiteMapMode)                                //jou 2016-11-03 JCET 要求 Auto Site Mapping 需按照他們的要求撰寫
+            elConfig->Add(cbI21_6,          &IniConfig.bI21ASMRunTimeCHeck,             ECBool, "Auto Site Mapping", "bASMRunTimeCHeck",                    bNoShow, bDisable, bFixedValue, 0);
+        else
+            elConfig->Add(cbI21_6,          &IniConfig.bI21ASMRunTimeCHeck,             ECBool, "Auto Site Mapping", "bASMRunTimeCHeck",                    bShow, bEnable, bReadFromFile, 0);
+
+        if(IniConfig.bVTESTFunction==true)
+            elConfig->Add(cbI21_7,              &IniConfig.bASMAutoSiteMapBinComBine,       ECBool, "Auto Site Mapping", "bASMAutoSiteMapBinComBine",           bNoShow, bDisable, bFixedValue, 0);      //kevin 20150115  Auto Site map 所有bin 別 放在盤FIX 2
+        else
+            elConfig->Add(cbI21_7,              &IniConfig.bASMAutoSiteMapBinComBine,       ECBool, "Auto Site Mapping", "bASMAutoSiteMapBinComBine",           bShow, bEnable, bReadFromFile, 0);      //kevin 20150115  Auto Site map 所有bin 別 放在盤FIX 2
+
+        if(CosFunction.bAutoSiteMappingUseHotPlate==true)
+        {
+            if(CosFunction.bUSEJCETSiteMapMode ||
+               CUSTOMER_CODE==CC_ASE_M)                                         //Ifor 20190624 : add ASEM 要求強制開啟不可修改
+            {
+                elConfig->Add(cbI21_8,      &IniConfig.bI21AutoSiteMappingUseHotplate,  ECBool, "Auto Site Mapping", "bI21AutoSiteMappingUseHotplate",      bShow, bDisable, bFixedValue, 1);
+            }
+            else
+            {
+                elConfig->Add(cbI21_8,      &IniConfig.bI21AutoSiteMappingUseHotplate,  ECBool, "Auto Site Mapping", "bI21AutoSiteMappingUseHotplate",      bShow, bEnable, bReadFromFile, 0);      //Ifor 20170919 (Steven) : add Auto Site Mapping Hotplate Mode
+            }
+        }
+        else
+        {
+            elConfig->Add(cbI21_8,          &IniConfig.bI21AutoSiteMappingUseHotplate,  ECBool, "Auto Site Mapping", "bI21AutoSiteMappingUseHotplate",      bNoShow, bDisable, bFixedValue, 0);
+        }
+
+        if(CosFunction.bAutoSiteMappingUseFailBinSetting==true)                 //Ifor 20171128  (Steven) : add Auto Site Mapping Fail Bin Setting
+        {
+            elConfig->Add(cbI21_9,      &IniConfig.bI21AutoSiteMappingFailBinSetting,   ECBool, "Auto Site Mapping", "bI21AutoSiteMappingFailBinSetting",   bShow, bEnable, bReadFromFile, 0);      //Ifor 20171128 (Steven) : add Auto Site Mapping Fail Bin Setting
+        }
+        else
+        {
+            elConfig->Add(cbI21_9,      &IniConfig.bI21AutoSiteMappingFailBinSetting,   ECBool, "Auto Site Mapping", "bI21AutoSiteMappingFailBinSetting",   bNoShow, bDisable, bFixedValue, 0);
+        }
+
+        if(IniConfig.bVTESTFunction==true)                                      //jou 20200707 : VTEST auto site mapping
+            elConfig->Add(edI21_6,          &IniConfig.iI21AutoSiteMappingErrCT,ECInteger,  "Auto Site Mapping", "iI21AutoSiteMappingErrCT",                bShow, bEnable, bReadFromFile,  3, false, 1,     5);
+        else
+            elConfig->Add(edI21_6,          &IniConfig.iI21AutoSiteMappingErrCT,ECInteger,  "Auto Site Mapping", "iI21AutoSiteMappingErrCT",                bNoShow, bDisable, bFixedValue,  0);
+
+        if(CosFunction.bAutoSiteMappingUseFailBinSetting &&                     //Ifor 20171128 (Steven) : add Auto Site Mapping Fail Bin Setting
+           CosFunction.bAutoSiteMappingSetOpenBIN==false)                       //Steven 20230213 : [I21-9]的OS Bin跟著工作檔
+            elConfig->Add(edI21_9,          &IniConfig.iI21UseFailBinSetting,   ECInteger,  "Auto Site Mapping", "iI21UseFailBinSetting",                   bShow, bEnable, bReadFromFile,  15, false, 2, 15);
+        else
+            elConfig->Add(edI21_9,          &IniConfig.iI21UseFailBinSetting,   ECInteger,  "Auto Site Mapping", "iI21UseFailBinSetting",                   bNoShow, bDisable, bFixedValue, 0);
+
+        if(CUSTOMER_CODE==CC_JCET)                                              //Richard 20230427 : RT mode不跑sitemapping
+        {
+            elConfig->Add(cbI21_10,    &IniConfig.bI21RTmodeDonotRunSiteMapping,ECBool, "Auto Site Mapping", "bI21RTmodeDonotRunSiteMapping",  bShow, bEnable, bReadFromFile, 0);      //Ifor 20171128 (Steven) : add Auto Site Mapping Fail Bin Setting
+        }
+        else
+        {
+            elConfig->Add(cbI21_10,    &IniConfig.bI21RTmodeDonotRunSiteMapping,ECBool, "Auto Site Mapping", "bI21RTmodeDonotRunSiteMapping",  bNoShow, bDisable, bFixedValue, 0);
+        }
+        #endif
+    }
+    else
+    {
+        gbI21->Visible=false;
+        elConfig->Add(cbI21,                &IniConfig.bI21EnableASM,                       ECBool, "Auto Site Mapping", "Enable Auto Site Mapping",            bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbI21_SkipSoakTime,   &IniConfig.bI21SkipSoakTime,                    ECBool, "Auto Site Mapping", "Skip Soak Time",                      bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbI21_SameSoakTime,   &IniConfig.bI21UseSameSoakTime,                 ECBool, "Auto Site Mapping", "Use Same Soak Time",                  bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbI21_CheckOpen,      &IniConfig.bI21ASMNeedCheckEachSiteOpen,        ECBool, "Auto Site Mapping", "bASMNeedCheckEachSiteOpen",           bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbI21_5,              &IniConfig.bI21ASMRemoveLTrayManually,          ECBool, "Auto Site Mapping", "bASMRemoveLTrayManually",             bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbI21_6,              &IniConfig.bI21ASMRunTimeCHeck,                 ECBool, "Auto Site Mapping", "bASMRunTimeCHeck",                    bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbI21_7,              &IniConfig.bASMAutoSiteMapBinComBine,           ECBool, "Auto Site Mapping", "bASMAutoSiteMapBinComBine",           bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbI21_8,              &IniConfig.bI21AutoSiteMappingUseHotplate,      ECBool, "Auto Site Mapping", "bI21AutoSiteMappingUseHotplate",      bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbI21_9,              &IniConfig.bI21AutoSiteMappingFailBinSetting,   ECBool, "Auto Site Mapping", "bI21AutoSiteMappingFailBinSetting",   bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbI21_10,             &IniConfig.bI21RTmodeDonotRunSiteMapping,       ECBool, "Auto Site Mapping", "bI21RTmodeDonotRunSiteMapping",       bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CosFunction.bTestTimeOutOnlyShowSkip ||                                  //QQ 20230303
+       CUSTOMER_CODE==CC_KYEC_LEE ||
+       CUSTOMER_CODE==CC_KYEC_XILINX ||
+       (CosFunction.bIndexAreaOnlyCanUseSkip &&
+        CosFunction.bTestTimeOutShowSkipAndHome==false))                        //Steven 20141105 : Index內的所有異常都只能用Skip
+    {
+        elConfig->Add(cbI22,    &IniConfig.bI22TimeOutCanSkip,                  ECBool,     "Tester", "TestTimeOutCanSkip",                     bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(rgI22,    &IniConfig.iI22TestTimeOutOption,               ECInteger,  "Tester", "iI22TestTimeOutOption",                  bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(edI22_1,  &IniConfig.fI22HomeDelay,                       ECDouble,   "Tester", "fI22HomeDelay",                          bNoShow, bDisable, bFixedValue, 0.0);
+    }
+    else
+    {
+        elConfig->Add(cbI22,    &IniConfig.bI22TimeOutCanSkip,                  ECBool,     "Tester", "TestTimeOutCanSkip",                     bShow, bEnable, bReadFromFile, 0);      //Steven 20111220 : 測試TimeOut可以Skip
+        elConfig->Add(rgI22,    &IniConfig.iI22TestTimeOutOption,               ECInteger,  "Tester", "iI22TestTimeOutOption",                  bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edI22_1,  &IniConfig.fI22HomeDelay,                       ECDouble,   "Tester", "fI22HomeDelay",                          bShow, bEnable, bReadFromFile, 30.0);
+    }
+
+    elConfig->Add(cbI23,        &IniConfig.bI23HotTestWaitingMode,              ECBool,     "Tester", "HotTestWaitingMode",                     bShow, bEnable, bReadFromFile, 0);      //ChungHung 20111230 Hot Test Waiting Mode
+
+    if(IniConfig.bEnableTestingNeedStopAllMotor)
+        elConfig->Add(cbI24,    &IniConfig.bI24TestingNeedStopAllMotor,         ECBool,     "Tester", "bTestingNeedStopAllMotor",               bShow, bEnable, bReadFromFile, 0);      //jou 2013-09-25 Testing Need Stop All Motor
+    else
+        elConfig->Add(cbI24,    &IniConfig.bI24TestingNeedStopAllMotor,         ECBool,     "Tester", "bTestingNeedStopAllMotor",               bNoShow, bDisable, bFixedValue, 0);
+
+    if(CosFunction.bHiSiliconFunction==true &&                                  //Steven 20160301 : For ATC     //kevin 20130705 台積電通訊規格  0:HT    1:NS   //Steven 20160301 : 改為海思格式
+       CUSTOMER_CODE!=CC_SCC)                                                   //Steven 20241029 : SCC的KL版本通訊不一樣
+    {
+        elConfig->Add(coI25,    &IniConfig.iI25UseGPIBFormat,                   ECInteger,  "Temperature", "iUseGPIBFormat",                    bShow, bDisable, bFixedValue, 1);       //Ifor 20160407 海思專用版本 GPIB 格式強制設定為1
+    }
+    else
+    {
+        elConfig->Add(coI25,    &IniConfig.iI25UseGPIBFormat,                   ECInteger,  "Temperature", "iUseGPIBFormat",                    bShow, bEnable, bReadFromFile, 0);
+    }
+
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+        elConfig->Add(cbI26,    &IniConfig.bI26TestCloseSiteHaveBin,            ECBool,     "Tester", "bTestCloseSiteHaveBin",                  bShow, bEnable, bReadFromFile, 0);      //kevin 20150202 測試時沒有 ic 出現bin資料或bin別沒設定需取出ic
+    else
+        elConfig->Add(cbI26,    &IniConfig.bI26TestCloseSiteHaveBin,            ECBool,     "Tester", "bTestCloseSiteHaveBin",                  bNoShow, bDisable, bFixedValue, 0);
+
+    if(CosFunction.bManualSortMode)
+        elConfig->Add(cbI27,    &IniConfig.bI27_ManualSortMode,                 ECBool,     "Tester", "bI27_ManualSortMode",                    bShow, bEnable, bReadFromFile, 0);      //Steven 20150915 : For TSMC 手動整盤功能
+    else
+        elConfig->Add(cbI27,    &IniConfig.bI27_ManualSortMode,                 ECBool,     "Tester", "bI27_ManualSortMode",                    bNoShow, bDisable, bFixedValue, 0);
+
+    elConfig->Add(cbI28,        &IniConfig.bI28_OnOffSiteOnTheFly,              ECBool,     "Tester", "bI28_OnOffSiteOnTheFly",                 bShow, bEnable, bReadFromFile, 0);      //Steven 20150924 : 隨時開關Site功能
+
+    elConfig->Add(cbI29,        &IniConfig.bI29EnableYieldRecord,               ECBool,     "Function", "bEnableYieldRecord",                   bShow, bEnable, bReadFromFile, 0);      //Ifor 20151221 :新增 Yield Record Function
+    elConfig->Add(chkI29_1,     &IniConfig.bI29_1SaveYieldBySocketByBin,        ECBool,     "Function", "bI29_1SaveYieldBySocketByBin",         bShow, bEnable, bReadFromFile, 0);      //Steven 20171108 (wei) : By Socket By Bin存檔
+    elConfig->Add(cbI29_3,      &IniConfig.bI29YieldRecordIntervalIC,           ECBool,     "Function", "bI29YieldRecordIntervalIC",            bShow, bEnable, bReadFromFile, 0);      //Sam 20231106 : 紀錄 Total yield
+    elConfig->Add(edI29_3,      &IniConfig.iI29YieldRecordIntervalIC,           ECInteger,  "Function", "iI29YieldRecordIntervalIC",            bShow, bEnable, bReadFromFile, 100,   false, 1,       3000);          //Sam 20231106 : 紀錄 Total yield
+    elConfig->Add(edI29,        &IniConfig.fI29YieldRecordInterval,             ECDouble,   "Function", "fYieldRecordInterval",                 bShow, bEnable, bReadFromFile, 600.0, false, 1.0,     3000.0);         //Ifor 20151221 :新增 Yield Record Interval Time
+    elConfig->Add(cbI30,        &IniConfig.bI30ContFailBin,                     ECBool,     "Tester", "I30_bContFailBin",                       bShow, bEnable, bReadFromFile, 0);      //kevin 20160407 使用Count bin  Count number 設定bin fail 數量到達就ALARM 清除計數
+
+    if(CUSTOMER_CODE==CC_TSMC_TAINAN ||
+       CUSTOMER_CODE==CC_ASE_KaohSiung)
+    {
+        grpI31->Visible=true;
+        elConfig->Add(cbI31_1,  &IniConfig.bI31_1GPIBLotEnd,                    ECBool,     "Specific", "I31_GPIBLotEnd",                       bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbI31_2,  &IniConfig.bI31_2GPIBLotStart,                  ECBool,     "Specific", "bI31_2GPIBLotStart",                   bShow, bEnable, bReadFromFile, 0);     //wei 20170607 GPIB Lot Start Command
+        elConfig->Add(cbI31_3,  &IniConfig.bI31_3GPIBReset,                     ECBool,     "Specific", "bI31_3GPIBReset",                      bShow, bEnable, bReadFromFile, 0);
+    }
+    else if(CosFunction.bGPIBLotEnd==true)
+    {
+        grpI31->Visible=true;
+        elConfig->Add(cbI31_1,  &IniConfig.bI31_1GPIBLotEnd,                    ECBool,     "Specific", "I31_GPIBLotEnd",                       bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbI31_2,  &IniConfig.bI31_2GPIBLotStart,                  ECBool,     "Specific", "bI31_2GPIBLotStart",                   bNoShow, bDisable, bFixedValue, 0);     //wei 20170607 GPIB Lot Start Command
+        elConfig->Add(cbI31_3,  &IniConfig.bI31_3GPIBReset,                     ECBool,     "Specific", "bI31_3GPIBReset",                      bNoShow, bDisable, bFixedValue, 0);     //wei 20170918 Reset Command
+    }
+    else
+    {
+        grpI31->Visible=false;
+        elConfig->Add(cbI31_1,  &IniConfig.bI31_1GPIBLotEnd,                    ECBool,     "Specific", "I31_GPIBLotEnd",                       bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbI31_2,  &IniConfig.bI31_2GPIBLotStart,                  ECBool,     "Specific", "bI31_2GPIBLotStart",                   bNoShow, bDisable, bFixedValue, 0);     //wei 20170607 GPIB Lot Start Command
+        elConfig->Add(cbI31_3,  &IniConfig.bI31_3GPIBReset,                     ECBool,     "Specific", "bI31_3GPIBReset",                      bNoShow, bDisable, bFixedValue, 0);     //wei 20170918 Reset Command
+    }
+    elConfig->Add(cbI32,        &IniConfig.bI32CanCelErrorBin,                  ECBool,     "Tester", "bI32CanCelErrorBin",                     bNoShow, bDisable, bFixedValue, 0);     //kevin 20160802 取消error bin 要手動在 outshuttle 取出
+
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung)                                         //kevin 20220902
+        elConfig->Add(cbI33,    &IniConfig.bI33ErrorBinBox,                     ECBool,     "Tester", "bI33ErrorBinBox",                        bShow, bDisable, bFixedValue, 1);       //kevin 20160819 error bin 要放到 Bin Box
+    else
+        elConfig->Add(cbI33,    &IniConfig.bI33ErrorBinBox,                     ECBool,     "Tester", "bI33ErrorBinBox",                        bShow, bEnable, bReadFromFile, 0);      //kevin 20160819 error bin 要放到 Bin Box
+
+    if(IniConfig.bSPILFunction==true)                                           //JerryYang20170329 (wei) 矽品中科,順信要求強制開啟I34功能
+    {
+        elConfig->Add(cbI34,    &IniConfig.bI34AllSiteAreSameFailBinShowAlarm,  ECBool,     "Tester", "bI34AllSiteAreSameFailBinShowAlarm",     bShow, bDisable, bFixedValue, 1);       //JerryYang 20160913 矽品要求當測試結果中所有site的bin都是所設定一樣的fail bin要跳alarm
+    }
+    else if(CosFunction.bAllSiteSameFailBinShowAlarm)                           //JerryYang 20160913 矽品要求當測試結果中所有site的bin都是所設定一樣的fail bin要跳alarm
+    {
+        elConfig->Add(cbI34,    &IniConfig.bI34AllSiteAreSameFailBinShowAlarm,  ECBool,     "Tester", "bI34AllSiteAreSameFailBinShowAlarm",     bShow, bEnable, bReadFromFile, 0);
+    }
+    else
+    {
+        elConfig->Add(cbI34,    &IniConfig.bI34AllSiteAreSameFailBinShowAlarm,  ECBool,     "Tester", "bI34AllSiteAreSameFailBinShowAlarm",     bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    elConfig->Add(cbI35,        &IniConfig.bI35UseThirdSiteControlByEngineer,   ECBool,     "Tester", "bI35UseThirdSiteControlByEngineer",      bShow, bEnable, bReadFromFile, 0);      //Alick 20160926 add for 第三組工程師用開關SITE
+    elConfig->Add(cbI36,        &IniConfig.bI36TestTimeOut,                     ECBool,     "Tester", "bI36TestTimeOut",                        bShow, bEnable, bReadFromFile, 0);      //kevin 20161105 沒有收到測試資料需手動取出ic
+
+    if(CosFunction.bHaveFIFOMode)                                               //Steven 20170302 (wei) : FIFO MODE
+    {
+        grpI37->Visible=true;
+        elConfig->Add(cbI37_1,  &IniConfig.bI37_EnableFIFOMode,                 ECBool,     "Tester", "bI37_EnableFIFOMode",                    bShow, bEnable, bReadFromFile, 0);      //Steven 20170302 (wei) : FIFO MODE
+        elConfig->Add(cbI37_2,  &IniConfig.bI37_EnableFIFOSiteOrder,            ECBool,     "Tester", "bI37_EnableFIFOSiteOrder",               bShow, bEnable, bReadFromFile, 0);      //Steven 20170302 (wei) : FIFO MODE
+        elConfig->Add(cbI37_3,  &IniConfig.bI37_LockLoaderDirection,            ECBool,     "Tester", "bI37_LockLoaderDirection",               bShow, bEnable, bReadFromFile, 0);      //Steven 20170302 (wei) : FIFO MODE
+    }
+    else
+    {
+        grpI37->Visible=false;
+        elConfig->Add(cbI37_1,  &IniConfig.bI37_EnableFIFOMode,                 ECBool,     "Tester", "bI37_EnableFIFOMode",                    bNoShow, bDisable, bFixedValue, 0);     //Steven 20170302 (wei) : FIFO MODE
+        elConfig->Add(cbI37_2,  &IniConfig.bI37_EnableFIFOSiteOrder,            ECBool,     "Tester", "bI37_EnableFIFOSiteOrder",               bNoShow, bDisable, bFixedValue, 0);     //Steven 20170302 (wei) : FIFO MODE
+        elConfig->Add(cbI37_3,  &IniConfig.bI37_LockLoaderDirection,            ECBool,     "Tester", "bI37_LockLoaderDirection",               bNoShow, bDisable, bFixedValue, 0);     //Steven 20170302 (wei) : FIFO MODE
+    }
+
+    elConfig->Add(rgI38,        &IniConfig.iI38SETTEMPRespondSetTemp,           ECInteger,  "Tester", "bI38SETTEMPRespondSetTemp",              bShow, bEnable, bReadFromFile, 0);      //kevin 20180308 Settemp? 回傳需要 Settemp +25.0.
+    elConfig->Add(cbI39,        &IniConfig.bI39SpiroxTesterLotEnd,              ECBool,     "Tester", "bI39SpiroxTesterLotEnd",                 bShow, bEnable, bReadFromFile, 0);      //JerryYang 20170515 (wei) JCET通知tester lot end command
+    elConfig->Add(cbI40,        &IniConfig.bI40_bStartProductOnLine,            ECBool,     "Tester", "bI40_bStartProductOnLine",               bShow, bEnable, bReadFromFile, 0);      //kevin 20180517 on line for operator
+
+    //Steven 20201022 : For RFMD Empty Socket Check Funstion.
+    //==>
+    elConfig->Add(cbI41,        &IniConfig.bI41EnableEmptySocketCheck,          ECBool,     "Tester", "bI41EnableEmptySocketCheck",         bShow, bEnable, bReadFromFile, 0);
+    elConfig->Add(cbbI41,       &IniConfig.iI41_BinOfESC,                       ECInteger,  "Tester", "iI44_BinOfESC",                      bShow, bEnable, bReadFromFile, 0);  //Steven 20220817 : Bin of ESC function
+    elConfig->Add(cbI41_1,      &IniConfig.bI41_1_StartOfLot,                   ECBool,     "Tester", "bI41_1_StartOfLot",                  bShow, bEnable, bReadFromFile, 0);
+    elConfig->Add(cbI41_2,      &IniConfig.bI41_2_OpenChamberDoor,              ECBool,     "Tester", "bI41_2_OpenChamberDoor",             bShow, bEnable, bReadFromFile, 0);
+    elConfig->Add(cbI41_3,      &IniConfig.bI41_3_AfterContactorTeminated,      ECBool,     "Tester", "bI41_3_AfterContactorTeminated",     bShow, bEnable, bReadFromFile, 0);
+    elConfig->Add(cbI41_4,      &IniConfig.bI41_4_AfterContactorJam,            ECBool,     "Tester", "bI41_4_AfterContactorJam",           bShow, bEnable, bReadFromFile, 0);
+    elConfig->Add(cbI41_5,      &IniConfig.bI41_5_RegularExecutionCycle,        ECBool,     "Tester", "bI41_5_RegularExecutionCycle",       bShow, bEnable, bReadFromFile, 0);
+    elConfig->Add(edtI41_5,     &IniConfig.iI41_5_RegularExecutionCycleCount,   ECInteger,  "Tester", "iI41_5_RegularExecutionCycleCount",  bShow, bEnable, bReadFromFile,  0,     false, 0,       100000);         //Steven 20201022 : For RFMD Empty Socket Check Funstion.
+    elConfig->Add(cbI41_6,      &IniConfig.bI41_6_Manual,                       ECBool,     "Tester", "bI41_6_Manual",                      bShow, bEnable, bReadFromFile, 0);
+    //<==
+    //Steven 20201022 : For RFMD Empty Socket Check Funstion.
+
+    if(CUSTOMER_CODE==CC_KYEC_LEE)
+    {
+        elConfig->Add(cbI42,    &IniConfig.bI42_bEnableBarcodeFlowErr,          ECBool,  "Tester", "bI42_bEnableBarcodeFlowErr",         bShow, bEnable, bReadFromFile, 0);          //Ifor 20211116 add: Use Barcode Flow Err Check
+    }
+    else
+    {
+        elConfig->Add(cbI42,    &IniConfig.bI42_bEnableBarcodeFlowErr,          ECBool,  "Tester", "bI42_bEnableBarcodeFlowErr",         bShow, bEnable, bReadFromFile, 1);          //Ifor 20211116 add: Use Barcode Flow Err Check
+    }
+
+    elConfig->Add(cbI43,        &IniConfig.bI43ResetGPIBAfterTrayFeedFinish,    ECBool,     "Tester", "bI06ResetGPIBAfterTrayFeedFinish",   bShow, bEnable, bReadFromFile, 0);          //Sam 20211107 : 新增 Tray Feed Finish Reset GPIB
+
+    if(CosFunction.bLowYieldAlarmIntervalTimeBySetting)
+    {
+        elConfig->Add(chkI44,   &IniConfig.bI44_LowYieldAlarmIntervalTimeBySetting, ECBool, "Tester", "bI44_LowYieldAlarmIntervalTimeBySetting", bShow, bEnable, bReadFromFile, 0);     //JimmyChiu 20220601 : 修改low yield報警時間邏輯，報警間隔時間固定1min改為可以自行設定報警間隔時間
+        elConfig->Add(edI44,    &IniConfig.iI44_LowYieldAlarmIntervalTime,      ECInteger,  "Tester", "iI44_LowYieldAlarmIntervalTime",     bShow, bEnable, bReadFromFile,  60,     false,  1,      300);            //Steven 20141212 : 使用固定的ADC
+    }
+    else
+    {
+        elConfig->Add(chkI44,   &IniConfig.bI44_LowYieldAlarmIntervalTimeBySetting, ECBool, "Tester", "bI44_LowYieldAlarmIntervalTimeBySetting", bNoShow, bDisable, bFixedValue, 0);    //JimmyChiu 20220601 : 修改low yield報警時間邏輯，報警間隔時間固定1min改為可以自行設定報警間隔時間
+        elConfig->Add(edI44,    &IniConfig.iI44_LowYieldAlarmIntervalTime,      ECInteger,  "Tester", "iI44_LowYieldAlarmIntervalTime",     bNoShow, bDisable, bFixedValue, 60,     false,  1,      300);            //Steven 20141212 : 使用固定的ADC
+    }
+
+    if(BAR_CODE_INSTALL!=ebctUninstall && CUSTOMER_CODE==CC_ASE_KaohSiung)      //KenHsieh 20230607 : ASEKH add 2D SORT
+        elConfig->Add(cbI45,    &IniConfig.bI45_Use2DIDSort,                    ECBool,     "Tester",  "bI45_Use2DIDSort",                  bShow, bEnable, bReadFromFile, 0);
+    else
+        elConfig->Add(cbI45,    &IniConfig.bI45_Use2DIDSort,                    ECBool,     "Tester",  "bI45_Use2DIDSort",                  bNoShow, bDisable, bFixedValue, 0);
+
+    if(CUSTOMER_CODE==CC_SCC)                                                   //Steven 20241018 : 錢寶龍說要強制開啟
+        elConfig->Add(rgI46,    &IniConfig.iI46_ActionWhenGpibFlowErr,          ECInteger,  "Tester", "iI46_ActionWhenGpibFlowErr",         bShow, bDisable, bFixedValue,  1);
+    else
+        elConfig->Add(rgI46,    &IniConfig.iI46_ActionWhenGpibFlowErr,          ECInteger,  "Tester", "iI46_ActionWhenGpibFlowErr",         bShow, bEnable, bReadFromFile,  1);         //Steven 20231017 : GPIB flow error need alarm
+
+    elConfig->Add(cbI49,        &IniConfig.bI49_TesterTimeOutResetAllIC,        ECBool,     "Tester", "bI49_TesterTimeOutResetAllIC",       bShow, bEnable, bReadFromFile, 0);                          //Sam 20240215 : Tester time out show reset all ic
+    elConfig->Add(edI49,        &IniConfig.fI49_ChangeAboveSocket,              ECDouble,   "Tester", "fI49_ChangeAboveSocket",             bShow, bEnable, bReadFromFile,  0.0, false, 0.0,     50.0);
+
+    if(IniConfig.bUseAutoSiteMapping)                                           //Jimmychiu 20230707 : Auto Site Mapping Trigger Function
+    {
+        gbI50->Visible=true;
+        elConfig->Add(cbI50_EnableASM_Trigger,&IniConfig.bI50_EnableAutoSiteMappingTrigger, ECBool, "Tester", "bI50_EnableAutoSiteMappingTrigger",      bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbI50_StartLot,       &IniConfig.bI50_StartLot,                       ECBool, "Tester", "bI50_StartLot",      bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbI50_InitialStart,   &IniConfig.bI50_InitialStart,                   ECBool, "Tester", "bI50_InitialStart",  bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbI50_OnyCycle,       &IniConfig.bI50_OnyCycle,                       ECBool, "Tester", "bI50_OnyCycle",      bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbI50_Pause,          &IniConfig.bI50_Pause,                          ECBool, "Tester", "bI50_Pause",         bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbI50_RT,             &IniConfig.bI50_RT,                             ECBool, "Tester", "bI50_RT",            bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbI50_TrayFeed,       &IniConfig.bI50_TrayFeed,                       ECBool, "Tester", "bI50_TrayFeed",      bShow, bEnable, bReadFromFile, 0);
+    }
+    else
+    {
+        elConfig->Add(cbI50_EnableASM_Trigger, &IniConfig.bI50_EnableAutoSiteMappingTrigger, ECBool, "Tester", "bI50_EnableAutoSiteMappingTrigger",      bNoShow, bDisable, bFixedValue, 0);
+        gbI50->Visible=false;
+    }
+
+    if(CUSTOMER_CODE==CC_KYEC_LEE)
+    {
+        if(USE_STM_Function==true)
+        {
+            elConfig->Add(cbI51,&IniConfig.bI51_bNotSetErrBinForInput,          ECBool,  "Tester", "bI51_bNotSetErrBinForInput",          bShow, bEnable, bReadFromFile, 0);
+        }
+        else
+        {
+            elConfig->Add(cbI51,&IniConfig.bI51_bNotSetErrBinForInput,          ECBool,  "Tester", "bI51_bNotSetErrBinForInput",         bNoShow, bDisable, bFixedValue, 0);      //kevin 20180517 on line for operator
+        }
+        elConfig->Add(cbI52,    &IniConfig. bI52_bAQLSortMode,                  ECBool,  "Tester", "bI52_bAQLSortMode",                  bShow, bDisable, bFixedValue, 1);
+    }
+    else
+    {
+        elConfig->Add(cbI51,    &IniConfig.bI51_bNotSetErrBinForInput,          ECBool,  "Tester", "bI51_bNotSetErrBinForInput",         bNoShow, bDisable, bFixedValue, 0);      //kevin 20180517 on line for operator
+        elConfig->Add(cbI52,    &IniConfig. bI52_bAQLSortMode,                  ECBool,  "Tester", "bI52_bAQLSortMode",                  bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CUSTOMER_CODE==CC_KYEC_LEE && bEnable_KLT_Function==true && CosFunction.bHiSiliconFunction==true)    //Ifor 20230210 add:新增 KLT 要求Onecycle Finish未超過設定時間不執行KL initial delay
+    {
+        elConfig->Add(cbI53,        &IniConfig. bI53_bKLTInitial,               ECBool,  "Tester", "bI53_bKLTInitial",      bShow, bEnable, bReadFromFile, 1);
+    }
+    else
+    {
+        elConfig->Add(cbI53,        &IniConfig. bI53_bKLTInitial,               ECBool,  "Tester", "bI53_bKLTInitial",      bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CosFunction.bCheckTempDuringIndexArmTesting)                             //Jimmychiu 20240916 : Check the temperature during index arm testing
+    {
+        elConfig->Add(cbI54_Enable,         &IniConfig.bI54_Enable,             ECBool,  "Tester", "bI54_Enable",          bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbI54_1,              &IniConfig.bI54_1_AllICErr,         ECBool,  "Tester", "bI54_1_AllICErr",      bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbI54_2,              &IniConfig.bI54_2_AbnormalICErr,    ECBool,  "Tester", "bI54_2_AbnormalICErr", bShow, bEnable, bReadFromFile, 0);
+    }
+    else                                                                        //Steven 20241108 : 加上保護
+    {
+        elConfig->Add(cbI54_Enable,         &IniConfig.bI54_Enable,             ECBool,  "Tester", "bI54_Enable",          bNoShow, bDisable, bFixedValue, 0);
+        gbI54->Visible=false;
+    }
+}
+
+// AI(W906-FW-CFG-W3) 20260825: golden cConfiguration.cpp:3163-3919, transcribed
+// VERBATIM (cp950 -> UTF-8). Registration table only -- the port's
+// HTEditList::Add signature is argument-for-argument golden's, so no
+// adaptation was needed and none was invented. See FW-CFG-W1's banner in
+// forms/fConfiguration.h for why this family is the wave's point.
+void TfConfiguration::InitConfigEdtList_ItemN()
+{
+    bool bShow=true, bNoShow=false;
+    bool bEnable=true, bDisable=false;
+    bool bReadFromFile=true, bFixedValue=false;
+    AnsiString str;
+
+    str=(CUSTOMER_CODE==CC_SCC || CUSTOMER_CODE==CC_SCK)?"RMS":"Server";
+    #ifdef SOFT_SIMULTE
+        elConfig->Add(cbN05_SCKWebService,  &IniConfig.bN05SCKWebService,       ECBool,     str, "EnableWebService",                                    bNoShow, bDisable, bFixedValue, 0);
+    #else
+    if(CUSTOMER_CODE==CC_SCK)
+        elConfig->Add(cbN05_SCKWebService,  &IniConfig.bN05SCKWebService,       ECBool,     str, "EnableWebService",                                    bShow, bEnable, bReadFromFile, 0);             //Steven 20161201 : For SCK Web Service
+    else
+        elConfig->Add(cbN05_SCKWebService,  &IniConfig.bN05SCKWebService,       ECBool,     str, "EnableWebService",                                    bNoShow, bDisable, bFixedValue, 0);
+    #endif
+    elConfig->Add(rgUpDlMethod,             &IniConfig.iN05_UpDLMethod,         ECInteger,  str, "iN05_UpDLMethod",                                     bShow, bEnable, bReadFromFile,  eByNetwork);   //Jimmychiu 20250707 : add RMS connect method
+
+    if(CosFunction.bFTPUseBarcodeReader==true)
+    {
+      #ifndef SOFT_SIMULTE
+        if(CUSTOMER_CODE==CC_CYUEAN)                                            //Sam 20230608 : 楊建軍說不要開關功能
+            elConfig->Add(cbN06_UseBarcode, &IniConfig.bN06_UseBarcode,         ECBool,     "FTP", "Use Barcode Reader",                                bNoShow, bEnable, bFixedValue, 1);
+        else
+      #endif
+            elConfig->Add(cbN06_UseBarcode, &IniConfig.bN06_UseBarcode,         ECBool,     "FTP", "Use Barcode Reader",                                bShow, bEnable, bReadFromFile, 0);
+    }
+    else
+    {
+        elConfig->Add(cbN06_UseBarcode,     &IniConfig.bN06_UseBarcode,         ECBool,     "FTP", "Use Barcode Reader",                                bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    elConfig->Add(chkN06_Tester,            &IniConfig.bN06_CopyTesterFile,     ECBool,     "FTP", "bN06_CopyTesterFile",                               bShow, bEnable, bReadFromFile, 0);   //Steven 20250327 : OS測試機的工作檔也要上傳
+    elConfig->Add(edN06_FileName,           &IniConfig.asN06_FileName,          ECText,     "FTP", "FTP File Name",                                     bShow, bEnable, bReadFromFile, "UnKnown");
+    if(CosFunction.bEnable_SECS_GEM)                                            //Steven 20141006 : SECS GEM使用Remote Start功能
+    {
+        #ifndef SOFT_SIMULTE
+        if(IniConfig.bSPILFunction==true || CUSTOMER_CODE==CC_JCET)             //JerryYang20170329 (wei) 矽品世明要求強制開啟SECS GEM  //JerryYang 20210107 : Add JCET
+            elConfig->Add(cbN07_EnableSecs, &IniConfig.bEnable_SECS_GEM,        ECBool,     "SECS GEM", "Enable SECS GEM",                              bShow, bDisable, bFixedValue, 1);
+        else if(CUSTOMER_CODE==CC_ASE_KaohSiung && MachineTypeChoice==Type_HT9046)      //kevin 20181225 add HT9046 no use SECS GEM for ASE-KH
+            elConfig->Add(cbN07_EnableSecs, &IniConfig.bEnable_SECS_GEM,        ECBool,     "SECS GEM", "Enable SECS GEM",                              bNoShow, bDisable, bFixedValue, 0);
+        else
+        #endif
+            elConfig->Add(cbN07_EnableSecs, &IniConfig.bEnable_SECS_GEM,        ECBool,     "SECS GEM", "Enable SECS GEM",                              bShow, bEnable, bReadFromFile, 0);
+
+        elConfig->Add(edN07_2,              &IniConfig.iN07RunCheckAlarmTime,   ECInteger,  "Function", "iRunCheckAlarmTime",                           bShow, bEnable, bReadFromFile,  LastSet.iRunCheckAlarmTime, false, 10, 300);    //wei 20150512  Run Check Alarm Time
+
+        if(CosFunction.bRCMDStart)
+        {
+            if(CUSTOMER_CODE==CC_ASE_KaohSiung && MachineTypeChoice==Type_HT9046)
+                elConfig->Add(cbN07_EnableHostStart, &IniConfig.bRCMDStart,     ECBool,     "SECS GEM", "Enable RCMD START",                            bNoShow, bDisable, bFixedValue, 0);
+            else
+                elConfig->Add(cbN07_EnableHostStart, &IniConfig.bRCMDStart,     ECBool,     "SECS GEM", "Enable RCMD START",                            bShow, bEnable, bReadFromFile, 0);
+        }
+        else
+        {
+            elConfig->Add(cbN07_EnableHostStart,    &IniConfig.bRCMDStart,      ECBool,     "SECS GEM", "Enable RCMD START",                            bNoShow, bDisable, bFixedValue, 0);
+        }
+
+        if(CosFunction.bSECS_GEM_OneCycle)                                      //wei 20150824 Secs_Gem 斷線Onecycle
+            elConfig->Add(cbN07_EnableSecsOneCycle, &IniConfig.bSECS_GEM_OneCycle, ECBool,  "SECS GEM", "SECS GEM OneCycle",                            bShow, bEnable, bReadFromFile, 0);
+        else
+            elConfig->Add(cbN07_EnableSecsOneCycle, &IniConfig.bSECS_GEM_OneCycle, ECBool,  "SECS GEM", "SECS GEM OneCycle",                            bNoShow, bDisable, bFixedValue, 0);
+
+        if(CosFunction.bUseN07_5==true)                                         //Steven 20200309 : [N07-5]改成by客戶開啟
+            elConfig->Add(cbN07_EnableEmployeeCheak,&IniConfig.bN07_EnableEmployeeIdCheak, ECBool, "SECS GEM", "Enable Employee ID Cheak",              bShow, bEnable, bReadFromFile, 0);    //Ifor 20180911 (Steven) : Add 啟動 Employee ID Check
+        else
+            elConfig->Add(cbN07_EnableEmployeeCheak,&IniConfig.bN07_EnableEmployeeIdCheak, ECBool, "SECS GEM", "Enable Employee ID Cheak",              bNoShow, bDisable, bFixedValue, 0);
+
+        if(CUSTOMER_CODE==CC_TSMC_TAINAN || CUSTOMER_CODE==CC_ASE_KaohSiung)
+            elConfig->Add(cbN07_EnableSecsLotCheck, &IniConfig.bN07_EnableSecsLotCheck, ECBool, "Specific", "N07_SecsLotCheck",                         bShow, bEnable, bReadFromFile, 0);       //wei 20160727 Secs Gem Lot Check
+        else
+            elConfig->Add(cbN07_EnableSecsLotCheck, &IniConfig.bN07_EnableSecsLotCheck, ECBool, "Specific", "N07_SecsLotCheck",                         bNoShow, bDisable, bFixedValue, 0);
+
+        if(CUSTOMER_CODE==CC_KYEC_LEE)                                          //Ifor 20180227 (Steven) add SECS GEM Confirm the Employee ID
+            elConfig->Add(edN07_5, &IniConfig.iN07_EmployeeIdCheakTime,         ECInteger,  "SECS GEM", "iEmployeeIdCheckTime",                         bShow, bEnable, bReadFromFile,  5, false, 10, 300);
+
+        elConfig->Add(chkN07_6, &IniConfig.bN07_6EnableUploadOSRecipe,          ECBool, "Specific", "bN07_6EnableUploadOSRecipe",                       bShow, bEnable, bReadFromFile, 0);      //Steven 20230710 : OS測試機的工作檔也要上傳
+        elConfig->Add(lbledtN07_6, &IniConfig.sN07_6OSRecipePath,               ECFileName, "SECS GEM", "sN07_6OSRecipePath",                           bShow, bEnable, bReadFromFile, "Z:\\");
+        elConfig->Add(cbN07_6CompressedFile, &IniConfig.bN07_6CompressedFile,   ECBool, "Specific", "bN07_6CompressedFile",                             bShow, bEnable, bReadFromFile, 0);      //Steven 20230710 : OS測試機的工作檔也要上傳
+        elConfig->Add(chkN07_7, &IniConfig.bN07_7SendRecipeAsBinary,            ECBool, "Specific", "bN07_7SendRecipeAsBinary",                         bShow, bEnable, bReadFromFile, 0);      //Steven 20230710 : 工作檔使用二進制上傳下載
+        elConfig->Add(edtN07_7, &IniConfig.dN07_7_DelayTime,                    ECDouble,  "SECS GEM", "iN07_7_DelayTime",                              bShow, bEnable, bReadFromFile,  1.0, false, 0.1, 10.0);
+    }
+    else
+    {
+        elConfig->Add(cbN07_EnableSecs,             &IniConfig.bEnable_SECS_GEM,        ECBool, "SECS GEM", "Enable SECS GEM",                          bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN07_EnableHostStart,        &IniConfig.bRCMDStart,              ECBool, "SECS GEM", "Enable RCMD START",                        bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN07_EnableSecsOneCycle,     &IniConfig.bSECS_GEM_OneCycle,      ECBool, "SECS GEM", "SECS GEM OneCycle",                        bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN07_EnableEmployeeCheak,    &IniConfig.bN07_EnableEmployeeIdCheak, ECBool, "SECS GEM", "Enable Employee ID Cheak",              bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN07_EnableSecsLotCheck,     &IniConfig.bN07_EnableSecsLotCheck, ECBool, "Specific", "N07_SecsLotCheck",                         bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CosFunction.bOLPFunction)                                                //Steven 20141229 : OLP的Log要存檔
+    {
+        tsN08->TabVisible=true;
+        elConfig->Add(cbN08_1,  &IniConfig.bN08_1SaveOLPLog,                    ECBool,     "Automation", "Save Log",                                   bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edN08_2,  &IniConfig.sN08OlpIP,                           ECText,     "OLP",        "OLP_IP",                                     bShow, bEnable, bReadFromFile, "192.168.120.143");
+        elConfig->Add(edN08_3,  &IniConfig.sN08OlpPort,                         ECText,     "OLP",        "OLP_Port",                                   bShow, bEnable, bReadFromFile, "6670");
+    }
+    else
+    {
+        tsN08->TabVisible=false;
+        elConfig->Add(cbN08_1,  &IniConfig.bN08_1SaveOLPLog,                    ECBool,     "Automation", "Save Log",                                   bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CosFunction.bUseTSVFunction)                                             //Steven 20240904 : for ATK的TSV功能
+    {                                                                           //Steven 20190521 : ATK lot count
+        tsN09->TabVisible=true;
+        elConfig->Add(chkN09,           &IniConfig.bN09_LotCountAutoFunc,       ECBool,     "Automation", "bN09_LotCountAutoFunc",                      bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edtN09_TSV,       &IniConfig.iN09_TSV_Port,               ECPort,     "Automation", "iN09_TSV_Port",                              bShow, bEnable, bReadFromFile, 4000,   false);
+        elConfig->Add(chkN09_2,         &IniConfig.bN09_Enable_TSV,             ECBool,     "Automation", "bN09_Enable_TSV",                            bShow, bEnable, bReadFromFile, 0);      //Steven 20231017 : add for ATK
+        elConfig->Add(edtN09_SearchTime,&IniConfig.dN09_SearchTime,             ECDouble,   "Automation", "dN09_SearchTime",                            bShow, bEnable, bReadFromFile, 0.0,    false,  1,      3000);
+        elConfig->Add(edtN09_Handler,   &IniConfig.sN09_HandlerFolder,          ECText,     "Automation", "sN09_HandlerFolder",                         bShow, bEnable, bReadFromFile, "D:\\HT9045_Log\\TestSummary");
+        elConfig->Add(rgN09_4,          &IniConfig.iN09_4_UploadMethod,         ECInteger,  "Automation", "iN09_4_UploadMethod",                        bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edtN09_5User,     &IniConfig.sN09_5_User,                 ECText,     "Automation", "sN19_5_User",                                bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edtN09_5Password, &IniConfig.sN09_5_Password,             ECPassword, "Automation", "sN19_5_Password",                            bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edtN09_5Host,     &IniConfig.sN09_5_Host,                 ECText,     "Automation", "sN19_5_Host",                                bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edtN09_5Path,     &IniConfig.sN09_5_Path,                 ECText,     "Automation", "sN19_5_Path",                                bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edtN09_7,         &IniConfig.sN09_7_SkipIP,               ECText,     "Automation", "sN19_7_SkipIP",                              bShow, bEnable, bReadFromFile, "172,192");
+    }
+    else
+    {
+        tsN09->TabVisible=false;
+        elConfig->Add(chkN09,           &IniConfig.bN09_LotCountAutoFunc,       ECBool,     "Automation", "bN09_LotCountAutoFunc",                      bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    tsN10->TabVisible=(CosFunction.bHiSiliconFunction ||                        //JerryYang 20180508 (jou) : fix N10 顯示問題
+                       CosFunction.bUseLogUploadToFTPFunction ||
+                       CosFunction.bHisiLogUploadNetwork ||
+                       CUSTOMER_CODE==CC_HANA_MICRON);                          //JimmyChiu 20211008 R211005-Hana-H9-01
+
+    if(CosFunction.bHiSiliconFunction ||
+       CosFunction.bUseLogUploadToFTPFunction ||
+       CosFunction.bHisiLogUploadNetwork)
+    {
+        if(IniConfig.bVTESTFunction==true)
+        {
+            elConfig->Add(cbN10_1,      &IniConfig.bN10Enable_FTPUpLoadLog,     ECBool,     "FTPUpLoad", "bEnable_FTPUpLoadLog",                        bNoShow, bDisable, bFixedValue, 0);
+            elConfig->Add(cbN10_2,      &IniConfig.bN10_UploadSummaryToFTP,     ECBool,     "FTPUpLoad", "bN10_UploadSummaryToFTP",                     bShow, bEnable, bReadFromFile, 0);      //JerryYang 20170804 (Steven) 日月新要求tray feed時要上傳Summary到FTP
+            elConfig->Add(cbN10_3,      &IniConfig.bN10_DailyUploadProdData,    ECBool,     "FTPUpLoad", "bN10_DailyUploadProdData",                    bNoShow, bDisable, bFixedValue, 1);
+            elConfig->Add(rgN10_3_1,    &IniConfig.iN10UploadProductMethod,     ECInteger,  "FTPUpLoad", "iN10UploadProductMethod",                     bNoShow, bDisable, bFixedValue, 1);     //JerryYang 20190131 上傳production log可選擇00:00 or 08:00
+            elConfig->Add(rgN10_4,      &IniConfig.iN10UploadMethod,            ECInteger,  "FTPUpLoad", "iN10UploadMethod",                            bNoShow, bDisable, bFixedValue, 1);
+
+            rgN10_3_1->Visible=false;
+            rgN10_4->Visible=false;
+
+            grpN10_FTP->Visible=false;
+            lblN10_6->Visible=false;
+            edtN10_6->Visible=false;
+
+            cbL11_1->Caption="[L11-1] ATC temperature range(1..3)";             //jou 20240426 : VTEST 要求 ATC 溫度限制設定1~3度
+            edL11_1->Tag=3;
+        }
+        else
+        {
+            if(CosFunction.bHiSiliconFunction==true ||                          //JerryYang 20170925 (Steven) Hisi版本強制開啟N10
+               (CUSTOMER_CODE==CC_KYEC_LEE &&
+                bEnable_KLT_Function==false))
+            {
+                if(CUSTOMER_CODE==CC_ASE_KaohSiung)                             //kevin 20200110 add 高雄不需要
+                    elConfig->Add(cbN10_1,  &IniConfig.bN10Enable_FTPUpLoadLog, ECBool,     "FTPUpLoad", "bEnable_FTPUpLoadLog",                        bShow, bEnable, bReadFromFile, 0);       //Ifor 20160302 : Add FTP Upload Log To Host
+                else
+                    elConfig->Add(cbN10_1,  &IniConfig.bN10Enable_FTPUpLoadLog, ECBool,     "FTPUpLoad", "bEnable_FTPUpLoadLog",                        bShow, bDisable, bFixedValue, 1);
+            }
+            else
+            {
+                elConfig->Add(cbN10_1,  &IniConfig.bN10Enable_FTPUpLoadLog,     ECBool,     "FTPUpLoad", "bEnable_FTPUpLoadLog",                        bShow, bEnable, bReadFromFile, 0);       //Ifor 20160302 : Add FTP Upload Log To Host
+            }
+
+            if(CUSTOMER_CODE==CC_KYEC_LEE)
+            {
+                elConfig->Add(cbN10_2,  &IniConfig.bN10_UploadSummaryToFTP,     ECBool,     "FTPUpLoad", "bN10_UploadSummaryToFTP",                     bNoShow, bDisable, bFixedValue, 0);
+                elConfig->Add(cbN10_3,  &IniConfig.bN10_DailyUploadProdData,    ECBool,     "FTPUpLoad", "bN10_DailyUploadProdData",                    bShow, bDisable, bFixedValue, 1);       //Steven 20180514 : JCET吳如春要求每日上傳Event Log Jam統計表 MTBF MUBF資料
+            }
+            else
+            {
+                elConfig->Add(cbN10_2,  &IniConfig.bN10_UploadSummaryToFTP,     ECBool,     "FTPUpLoad", "bN10_UploadSummaryToFTP",                     bShow, bEnable, bReadFromFile, 0);      //JerryYang 20170804 (Steven) 日月新要求tray feed時要上傳Summary到FTP
+                elConfig->Add(cbN10_3,  &IniConfig.bN10_DailyUploadProdData,    ECBool,     "FTPUpLoad", "bN10_DailyUploadProdData",                    bShow, bEnable, bReadFromFile, 0);      //Steven 20180514 : JCET吳如春要求每日上傳Event Log Jam統計表 MTBF MUBF資料
+            }
+
+            elConfig->Add(rgN10_3_1,    &IniConfig.iN10UploadProductMethod,     ECInteger,  "FTPUpLoad", "iN10UploadProductMethod",                     bShow, bEnable, bReadFromFile, 0);      //JerryYang 20190131 上傳production log可選擇00:00 or 08:00
+            if(CosFunction.bHisiLogUploadNetwork==true)                         //Steven 20190119 : Log上傳方式改為可選擇的
+                elConfig->Add(rgN10_4,      &IniConfig.iN10UploadMethod,        ECInteger,  "FTPUpLoad", "iN10UploadMethod",                            bShow, bEnable, bReadFromFile, 1);
+            else
+                elConfig->Add(rgN10_4,      &IniConfig.iN10UploadMethod,        ECInteger,  "FTPUpLoad", "iN10UploadMethod",                            bShow, bEnable, bReadFromFile, 0);
+        }
+
+        if(CUSTOMER_CODE==CC_SIGURD_ChungXing ||                                //Sam 20170823 (wei) : 矽格中興 FTP Log 上傳增加時間格式選擇
+           CUSTOMER_CODE==CC_SIGURD_PeiXing ||
+           CUSTOMER_CODE==CC_SIGURD_HUKOU)                                      //Ifor 20180213 : add 矽格北興使用FTP Log 上傳增加時間格式選擇
+        {
+            elConfig->Add(coN10DataType,&IniConfig.iN10DataType,                ECInteger,  "FTPUpLoad", "iN10DataType",                                bShow, bEnable, bReadFromFile, 0);
+        }
+        else
+        {
+            coN10DataType->Visible=false;
+            lblN10DataType->Visible=false;
+        }
+    }
+    else
+    {
+        elConfig->Add(cbN10_1,      &IniConfig.bN10Enable_FTPUpLoadLog,         ECBool,     "FTPUpLoad", "bEnable_FTPUpLoadLog",                        bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN10_2,      &IniConfig.bN10_UploadSummaryToFTP,         ECBool,     "FTPUpLoad", "bN10_UploadSummaryToFTP",                     bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN10_3,      &IniConfig.bN10_DailyUploadProdData,        ECBool,     "FTPUpLoad", "bN10_DailyUploadProdData",                    bNoShow, bDisable, bFixedValue, 0);
+        coN10DataType->Visible=false;
+        lblN10DataType->Visible=false;
+    }
+
+    if(CUSTOMER_CODE==CC_KYEC_LEE)
+    {
+        elConfig->Add(edN10UserName,    &IniConfig.cN10FtpUserName,             ECText,     "FTPUpLoad",       "cN10FtpUserName",                       bShow, bEnable, bReadFromFile, "eap_handler_log");
+        elConfig->Add(chkN10_Passive,   &IniConfig.bN10FtpPassive,              ECBool,     "FTPUpLoad",       "bN10FtpPassive",                        bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edtN10_Port,      &IniConfig.iN10FtpPort,                 ECPort,     "FTPUpLoad",       "iN10FtpPort",                           bShow, bEnable, bReadFromFile, 21,   false);
+        if(bEnable_KLT_Function==true)                                          //Ifor 20180813 (Steven) : Add 京隆 FTP 路徑
+        {
+            elConfig->Add(edN10Password,&IniConfig.cN10FtpPassword,             ECPassword, "FTPUpLoad",       "cN10FtpPassword",                       bShow, bEnable, bReadFromFile, "abc1234!");
+            elConfig->Add(edN10Host,    &IniConfig.cN10FtpHost,                 ECText,     "FTPUpLoad",       "cN10FtpHost",                           bShow, bEnable, bReadFromFile, "sz1ftp03.sz.com.cn");
+        }
+        else
+        {
+            elConfig->Add(edN10Password,&IniConfig.cN10FtpPassword,             ECPassword, "FTPUpLoad",       "cN10FtpPassword",                       bShow, bEnable, bReadFromFile, "!qaz2wsx");
+            elConfig->Add(edN10Host,    &IniConfig.cN10FtpHost,                 ECText,     "FTPUpLoad",       "cN10FtpHost",                           bShow, bEnable, bReadFromFile, "ch1fabfs05-ftp.kyec.com.tw");
+        }
+    }
+    else
+    {
+        elConfig->Add(edN10UserName,    &IniConfig.cN10FtpUserName,             ECText,     "FTPUpLoad",       "cN10FtpUserName",                       bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(chkN10_Passive,   &IniConfig.bN10FtpPassive,              ECBool,     "FTPUpLoad",       "bN10FtpPassive",                        bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edN10Password,    &IniConfig.cN10FtpPassword,             ECPassword, "FTPUpLoad",       "cN10FtpPassword",                       bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edN10Host,        &IniConfig.cN10FtpHost,                 ECText,     "FTPUpLoad",       "cN10FtpHost",                           bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edtN10_Port,      &IniConfig.iN10FtpPort,                 ECPort,     "FTPUpLoad",       "iN10FtpPort",                           bShow, bEnable, bReadFromFile, 21,   false);
+    }
+
+    if(IniConfig.bVTESTFunction==true && CosFunction.bHiSiliconFunction==false)
+        ;
+    else
+        elConfig->Add(edtN10_6,         &IniConfig.iN10UploadToHostIntervalTime,ECInteger,  "FTPUpLoad",       "iUploadToHostIntervalTime",             bShow, bEnable, bReadFromFile, 5, false,  5,      3600);
+
+    elConfig->Add(edtN10_8,             &IniConfig.sN10UploadDrivePath,         ECText,     "FTPUpLoad",       "sN10UploadDrivePath",                   bShow, bEnable, bReadFromFile, IniConfig.asEventLogAutoSavePath);
+
+    if(CosFunction.bSaveProductionLogByUnloaderTray==true)                      //Steven 20200409 : production log by unloader tray存檔並上傳FTP
+        elConfig->Add(chkN10_9,         &IniConfig.bN10_9_UploadUnloadTrayToFTP,ECBool,     "FTPUpLoad",        "bN10_9_UploadUnloadTrayToFTP",         bShow, bEnable, bReadFromFile, 0);
+    else
+        elConfig->Add(chkN10_9,         &IniConfig.bN10_9_UploadUnloadTrayToFTP,ECBool,     "FTPUpLoad",        "bN10_9_UploadUnloadTrayToFTP",         bNoShow, bDisable, bFixedValue, 0);
+    elConfig->Add(edN10UploadPath,      &IniConfig.cN10FtpUplaodPath,           ECText,     "FTPUpLoad",       "cN10FtpUplaodPath",                     bShow, bEnable, bReadFromFile, "\\");
+
+    elConfig->Add(cbN10_11,             &IniConfig.bN10_11_Enable_UploadFTPEventLog,ECBool, "FTPUpLoad",        "bN10_11_Enable_UploadFTPEventLog",     bShow, bEnable, bReadFromFile, 0);
+    elConfig->Add(cbN10_12,             &IniConfig.bN10_12_Enable_UploadFTPGPIBLog, ECBool, "FTPUpLoad",        "bN10_12_Enable_UploadFTPGPIBLog",      bShow, bEnable, bReadFromFile, 0);
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung)                                         //kevin 20160802 Clean Out Low Yield Close Site
+    {
+        elConfig->Add(cbN11_1,      &IniConfig.bN11_1CleanOutCloseSite,         ECBool,     "NETWORK", "bN11_1CleanOutCloseSite",                       bShow, bEnable, bReadFromFile, 0);
+    }
+    else
+    {
+        tsN11->TabVisible=false;                                                //Steven 20160804 : modify [N11] for 高雄
+        elConfig->Add(cbN11_1,      &IniConfig.bN11_1CleanOutCloseSite,         ECBool,     "NETWORK", "bN11_1CleanOutCloseSite",                       bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CUSTOMER_CODE==CC_PTI)                                                   //Sam 20170525 (wei) 力成 add Socket ID Product Data Upload To FTP
+    {
+        tsN12->TabVisible=true;
+        elConfig->Add(chkN12,  &IniConfig.bN12_EnableSocketIdProductDataFTP,    ECBool,     "FTP",     "Second Enable FTP",                             bShow, bEnable, bReadFromFile, 0);      //Sam 20170525 (wei) 力成 add Socket ID Product Data Upload To FTP
+        elConfig->Add(edN12_UserName,   &IniConfig.asN12_FtpUserName,           ECText,     "Automation",       "Second FTP User Name",                 bShow, bEnable, bReadFromFile, "UnKnown");
+        elConfig->Add(edN12_Password,   &IniConfig.asN12_FtpPassword,           ECPassword, "Automation",       "Second FTP Password",                  bShow, bEnable, bReadFromFile, "1234");
+        elConfig->Add(edN12_HostName,   &IniConfig.asN12_FtpHost,               ECText,     "Automation",       "Second FTP Host",                      bShow, bEnable, bReadFromFile, "127.0.0.1");
+        elConfig->Add(edN12_UpLdPath,   &IniConfig.asN12_FtpUplaodPath,         ECText,     "Automation",       "Second FTP Upload Path",               bShow, bEnable, bReadFromFile, "/");
+    }
+    else
+    {
+        tsN12->TabVisible=false;
+        elConfig->Add(chkN12,  &IniConfig.bN12_EnableSocketIdProductDataFTP,    ECBool,     "FTP",     "Second Enable FTP",                             bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CosFunction.bUseARMSFunction)                                            //Ifor 20170621 (wei) add ARMS Function
+    {
+        tsN13->TabVisible=true;
+        elConfig->Add(cbN13_EnableARMSFunction, &IniConfig.bN13_EnableARMSFunction, ECBool, "ARMS", "bN13_EnableARMSFunction",                          bShow, bEnable, bReadFromFile, 0);      //Ifor 20170621 (wei) add ARMS Function
+    }
+    else
+    {
+        tsN13->TabVisible=false;
+        elConfig->Add(cbN13_EnableARMSFunction, &IniConfig.bN13_EnableARMSFunction, ECBool, "ARMS", "bN13_EnableARMSFunction",                          bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CosFunction.bOEEFunction)                                                //Steven 20180417 (Jou) : OEE功能
+    {
+        tsN14->TabVisible=true;
+        elConfig->Add(cbN14_1,          &IniConfig.bN14_1_EnableOEEFunction,    ECBool,     "Handler_OEE", "N14_HandlerOEEUseFunction",                 bShow, bEnable, bReadFromFile, 0);      //Sam 20171124 (Steven) : 功能開關統一方式
+        elConfig->Add(edtN14_1, &IniConfig.iN14_1_OEERecordCycleTime,   ECInteger,  "Handler_OEE", "N14_HandlerOEERecordCycleTime",             bShow, bEnable, bReadFromFile, 1800,    false, 60,       3000);  //Sam 20220922 : 改用 elConfig 方式
+        elConfig->Add(cbN14_2,  &IniConfig.bN14_2_OEEUseSaveProdData,   ECBool,     "Handler_OEE", "N14_HandlerOEEUseSaveProductionDataToPath", bShow, bEnable, bReadFromFile, 0);      //Sam 20190129 : Bug Fix //Sam 20171124 (Steven) : 功能開關統一方式
+        elConfig->Add(edtN14_2, &IniConfig.asN14_2_OEESaveProdPath,     ECText,     "Handler_OEE", "N14_HandlerOEESaveProductionDataToPath",    bShow,bEnable, bReadFromFile, "D:\\ProductionInfoBackup");
+        elConfig->Add(cbN14_3,  &IniConfig.bN14_3_OEEFTPUpload,         ECBool,     "Handler_OEE", "N14_HandlerOEEFTPUpload",                   bShow, bEnable, bReadFromFile, 0);      //Sam 20190129 : Bug Fix //Sam 20171124 (Steven) : 功能開關統一方式
+        elConfig->Add(edtN14_3UserName, &IniConfig.asN14_3_OEEFTPUserName,      ECText,     "Handler_OEE", "N14_HandlerOEEUserName",                    bShow, bEnable, bReadFromFile, "HONPREC");
+        elConfig->Add(edtN14_3Password, &IniConfig.asN14_3_OEEFTPPassword,      ECPassword, "Handler_OEE", "N14_HandlerOEEPassword",                    bShow, bEnable, bReadFromFile, " ");
+        elConfig->Add(edtN14_3Host,     &IniConfig.asN14_3_OEEFTPHost,          ECText,     "Handler_OEE", "N14_HandlerOEEHost",                        bShow, bEnable, bReadFromFile, "127.0.0.1");
+        elConfig->Add(edtN14_3Path,     &IniConfig.asN14_3_OEEFTPUploadPath,    ECText,     "Handler_OEE", "N14_HandlerOEEUploadPath",                  bShow, bEnable, bReadFromFile, "\\OEEE\\");
+        elConfig->Add(cbN14_4,          &IniConfig.bN14_4_OEEAutoLoadMOFile,    ECBool,     "Handler_OEE", "N14_HandlerOEEAutoLoadMOFile",              bShow, bEnable, bReadFromFile, 0);      //Sam 20190129 : Bug Fix //Sam 20171124 (Steven) : 功能開關統一方式
+        elConfig->Add(edtN14_4,         &IniConfig.asN14_4_MODownloadPath,      ECText,     "Handler_OEE", "N14_HandlerMODownloadPath",                 bShow, bEnable, bReadFromFile, "\\SETUP_FILE\\");
+        elConfig->Add(edtN14_5,         &IniConfig.iN14_5_PauseIntervalTime,    ECInteger,  "Handler_OEE", "N14_PauseIntervalTimeSec",                  bShow, bEnable, bReadFromFile, 600,     false, 60,      3000);
+        elConfig->Add(edtN14_6_1,       &IniConfig.iN14_6_BySiteContactCnt,     ECInteger,  "Handler_OEE", "iN14_6_BySiteContactCnt",                   bShow, bEnable, bReadFromFile, 1800,    false, 1,       3000);
+        elConfig->Add(edtN14_6_2,       &IniConfig.dN14_6_BySiteLowYieldRate,   ECDouble,   "Handler_OEE", "dN14_6_BySiteLowYieldRate",                 bShow, bEnable, bReadFromFile, 100.0,   false, 1.0,     100.0);
+        elConfig->Add(edtN14_6_3,       &IniConfig.dN14_6_BySiteCmpYield,       ECDouble,   "Handler_OEE", "dN14_6_BySiteCmpYield",                     bShow, bEnable, bReadFromFile, 100.0,   false, 1.0,     100.0);
+        elConfig->Add(edtN14_6_4,       &IniConfig.iN14_6_BySiteAlarmYieldRate, ECInteger,  "Handler_OEE", "iN14_6_BySiteAlarmYieldRate",               bShow, bEnable, bReadFromFile, 100,     false, 1,       100);
+        elConfig->Add(cbN14_7,          &IniConfig.bN14_7_AutoMotive,           ECBool,     "Handler_OEE", "bN14_7_AutoMotive",                         bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edtN14_7,         &IniConfig.asN14_7_AutoMotivePath,      ECText,     "Handler_OEE", "asN14_7_AutoMotivePath",                    bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(cbN14_8,          &IniConfig.bN14_8_ULSetup,              ECBool,     "Handler_OEE", "bN14_8_ULSetup",                            bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edtN14_8,         &IniConfig.asN14_8_ULSetupPath,         ECText,     "Handler_OEE", "asN14_8_ULSetupPath",                       bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(cbN14_9,          &IniConfig.bN14_9_ULQtyReport,          ECBool,     "Handler_OEE", "bN14_9_ULQtyReport",                        bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edtN14_9,         &IniConfig.asN14_9_ULQtyReportPath,     ECText,     "Handler_OEE", "asN14_9_ULQtyReportPath",                  bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(cbN14_10,         &IniConfig.bN14_10_DownFileByMO,        ECBool,     "Handler_OEE", "N14_AutoDownloadSetupFileByMO",             bShow, bEnable, bReadFromFile, 0);      //Sam 20190227 : Try Catch Mo Download SetupFile
+        elConfig->Add(cbN14_11,         &IniConfig.bN14_11_CheckSiteMapByMO,    ECBool,     "Handler_OEE", "bN14_11_CheckSiteMapByMO",                  bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbN14_12,         &IniConfig.bN14_12_ULTempLogToFTP,      ECBool,     "Handler_OEE", "bN14_12_ULTempLogToFTP",                    bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edtN14_12,        &IniConfig.iN14_12_ULTempLogInterval,   ECInteger,  "Handler_OEE", "iN14_12_ULTempLogInterval",                 bShow, bEnable, bReadFromFile, 100,     false, 1,       3000);
+        elConfig->Add(edtN14_12_Path,   &IniConfig.asN14_12_ULTempLogPath,      ECText,     "Handler_OEE", "asN14_12_ULTempLogPath",                    bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(cbN14_13,         &IniConfig.bN14_13_ULBinQtyToFTP,       ECBool,     "Handler_OEE", "bN14_13_ULBinQtyToFTP",                     bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edtN14_13,        &IniConfig.iN14_13_ULBinQtyInterval,    ECInteger,  "Handler_OEE", "iN14_13_ULBinQtyInterval",                  bShow, bEnable, bReadFromFile, 100,     false, 1,       3000);
+        elConfig->Add(edtN14_13_Path,   &IniConfig.asN14_13_ULBinQtyPath,       ECText,     "Handler_OEE", "asN14_13_ULBinQtyPath",                     bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(cbN14_14,         &IniConfig.bN14_14_AlarmCtrlMachine,    ECBool,     "Handler_OEE", "bN14_14_AlarmCtrlMachine",                  bShow, bEnable, bReadFromFile, 0);
+        // ------------------------------------------------------------------
+        // GOLDEN BUG (CFG-N14esc), golden cConfiguration.cpp:3481, :3485, :3488.
+        // The three DefValue strings below each lose their directory separator:
+        // golden writes "C:\\GTK\EMG.exe" -- the FIRST backslash is doubled, the
+        // SECOND is not, so `\E` / `\L` / `\I` are escape sequences, not path
+        // separators. Every neighbouring path in this same block is written
+        // correctly ("C:\\GTK_Control\\Message\\Alarm\\"), so this is three
+        // typos, not a convention.
+        //   cmd: scanned all string literals in golden cConfiguration.cpp for a
+        //        single backslash followed by a non-escape character
+        //        -> exactly 3 hits, these three (20260825)
+        // WHAT IT COSTS: these are the DEFAULTS written when the ini key is
+        // absent, and they are EXECUTABLE PATHS the GTK integrations launch
+        // (N14_14 alarm control / N14_15 socket lifetime / N14_16 IPSC). A fresh
+        // machine gets "C:\GTKEMG.exe", which does not exist, and the feature
+        // silently never starts.
+        // PORT DIVERGENCE, stated because it is real and cannot be avoided
+        // without editing golden's text: `\L` and `\I` are unknown escapes in
+        // both compilers and both yield the bare letter, so those two are
+        // byte-identical to BCB6. `\E` is different -- GCC implements it as a
+        // GNU extension meaning ESC (0x1B), while BCB6 yields plain 'E'. So the
+        // first default differs from BCB6 by one byte. BOTH are wrong relative
+        // to the path that was intended; neither reaches a real file.
+        // Translated verbatim regardless. Repairing golden's typo is a
+        // behaviour change and belongs to the user, not to a translation wave.
+        // ------------------------------------------------------------------
+        elConfig->Add(edtN14_14_1,      &IniConfig.asN14_14_ExecutFilePath,     ECText,     "Handler_OEE", "asN14_14_ExecutFilePath",                   bShow, bEnable, bReadFromFile, "C:\\GTK\EMG.exe");
+        elConfig->Add(edtN14_14_2,      &IniConfig.asN14_14_MessageFilePath,    ECText,     "Handler_OEE", "asN14_14_MessageFilePath",                  bShow, bEnable, bReadFromFile, "C:\\GTK_Control\\Message\\Alarm\\");
+        elConfig->Add(edtN14_14_3,      &IniConfig.asN14_14_FlagFilePath,       ECText,     "Handler_OEE", "asN14_14_FlagFilePath",                     bShow, bEnable, bReadFromFile, "C:\\GTK_Control\\Flag\\");
+        elConfig->Add(cbN14_15,         &IniConfig.bN14_15_SocketLifeTime,      ECBool,     "Handler_OEE", "bN14_15_SocketLifeTime",                    bShow, bEnable, bReadFromFile, 0);
+        // GOLDEN BUG (CFG-N14esc) -- see the full note at the N14_14 site above; same missing separator.
+        elConfig->Add(edtN14_15_1,      &IniConfig.asN14_15_ExecutFilePath,     ECText,     "Handler_OEE", "asN14_15_ExecutFilePath",                   bShow, bEnable, bReadFromFile, "C:\\GTK\Lifetime_count.exe");
+        elConfig->Add(edtN14_15_2,      &IniConfig.asN14_15_MessageFilePath,    ECText,     "Handler_OEE", "asN14_15_MessageFilePath",                  bShow, bEnable, bReadFromFile, "C:\\GTK_Control\\Message\\count\\");
+        elConfig->Add(cbN14_16,         &IniConfig.bN14_16_EnableIPSC,          ECBool,     "Handler_OEE", "bN14_16_EnableIPSC",                        bShow, bEnable, bReadFromFile, 0);
+        // GOLDEN BUG (CFG-N14esc) -- see the full note at the N14_14 site above; same missing separator.
+        elConfig->Add(edtN14_16_1,      &IniConfig.asN14_16_ExecutFilePath,     ECText,     "Handler_OEE", "asN14_16_ExecutFilePath",                   bShow, bEnable, bReadFromFile, "C:\\GTK\IPSC.exe");
+        elConfig->Add(edtN14_16_2,      &IniConfig.asN14_16_FlagFilePath,       ECText,     "Handler_OEE", "asN14_16_FlagFilePath",                     bShow, bEnable, bReadFromFile, "C:\\GTK_Control\\Flag\\IPSC.ini");
+        elConfig->Add(edtN14_16_3,      &IniConfig.asN14_16_ProductionFilePath, ECText,     "Handler_OEE", "asN14_16_ProductionFilePath",               bShow, bEnable, bReadFromFile, "C:\\GTK_CONTROL\\MESSAGE\\");
+        elConfig->Add(edtN14_16_4,      &IniConfig.iN14_16_IPSCInterval,        ECInteger,  "Handler_OEE", "iN14_16_IPSCInterval",                      bShow, bEnable, bReadFromFile, 2,     false, 1,       100);
+        elConfig->Add(edtN14_17,        &IniConfig.iN14_17_AmbientULTemp,       ECInteger,  "Handler_OEE", "iN14_17_AmbientULTemp",                     bShow, bEnable, bReadFromFile, 39,     false, 1,       100);
+        elConfig->Add(cbN14_18,         &IniConfig.bN14_18_EnableTempOffset,    ECBool,     "Handler_OEE", "bN14_18_EnableTempOffset",                  bShow, bEnable, bReadFromFile, 0);  //Sam 20200806 : 溫度 By Servo
+        elConfig->Add(edtN14_18,        &IniConfig.asN14_18_TempOffsetPath,     ECText,     "Handler_OEE", "asN14_18_TempOffsetPath",                   bShow, bEnable, bReadFromFile, "\\Handler_data\\Taj_offset_Tool");
+        elConfig->Add(cbN14_19,         &IniConfig.bN14_19_TrayMappingToFTP,    ECBool,     "Handler_OEE", "bN14_19_TrayMappingToFTP",                  bShow, bEnable, bReadFromFile, 0);  //Sam 20201209 : 增加資料上傳
+        elConfig->Add(edtN14_19,        &IniConfig.asN14_19_TrayMappingPath,    ECText,     "Handler_OEE", "asN14_19_TrayMappingPath",                  bShow, bEnable, bReadFromFile, "\\TrayMapping\\");
+        elConfig->Add(cbN14_20_1,&IniConfig.bN14_20_DefaultRecipeChangeLogCycleRecord,ECBool,"Handler_OEE", "bN14_20_DefaultRecipeChangeLogCycleRecord",bNoShow, bDisable, bFixedValue, 0); //Sam 20201209 : Default Recipe ChangeLog
+        elConfig->Add(cbN14_20,  &IniConfig.bN14_20_DefaultRecipeChangeLog,     ECBool,     "Handler_OEE", "bN14_20_DefaultRecipeChangeLog",            bShow, bEnable, bReadFromFile, 0);  //Sam 20201209 : Default Recipe ChangeLog
+        elConfig->Add(rgN14_20_1,       &IniConfig.iN14_20_CycleTime,           ECInteger,  "Handler_OEE", "iN14_20_CycleTime",                         bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edN14_20,         &IniConfig.asN14_20_ChangeLogPath,      ECText,     "Handler_OEE", "asN14_20_DefaultRecipeChangeLogPath",       bShow, bEnable, bReadFromFile, "\\RecipeChangeLog\\");
+        elConfig->Add(cbN14_21,         &IniConfig.bN14_21_SetUpConfiguration,  ECBool,     "Handler_OEE", "bN14_21_SetUpConfiguration",                bShow, bEnable, bReadFromFile, 0);  //JimmyChiu 20220303 : Add class SetUpConfiguration
+        elConfig->Add(edN14_21,         &IniConfig.asN14_21_SetUpConfiguration, ECText,     "Handler_OEE", "asN14_21_SetUpConfiguration",               bShow, bDisable, bFixedValue, "//SetupFile_List//SiteMap//HT9046//");   //JimmyChiu 20220303 : Add class SetUpConfiguration
+        elConfig->Add(edN14_21_BC,      &IniConfig.asN14_21_BinCategory,        ECText,     "Handler_OEE", "asN14_21_BinCategory",                      bShow, bDisable, bFixedValue, "//SetupFile_List//BinCategory//HT9046//");  //JimmyChiu 20220303 : Add class SetUpConfiguration
+        elConfig->Add(edN14_21_HP,      &IniConfig.asN14_21_HP_SetUpConfig,     ECText,     "Handler_OEE", "asN14_21_HP_SetUpConfiguration",            bShow, bDisable, bFixedValue, "//SetupFile_List//Other//HT90XX-HotPlateForm//");  //JimmyChiu 20220303 : Add class SetUpConfiguration
+        elConfig->Add(edN14_21_TF,      &IniConfig.asN14_21_TF_SetUpConfig,     ECText,     "Handler_OEE", "asN14_21_TF_SetUpConfiguration",            bShow, bDisable, bFixedValue, "//SetupFile_List//TrayForm//");               //JimmyChiu 20220303 : Add class SetUpConfiguration
+        elConfig->Add(cbN14_22,         &IniConfig.bN14_21_ConfigUpdateFromServerExport,    ECBool,   "Handler_OEE", "bN14_21_ConfigUpdateFromServerExport",   bShow, bEnable, bReadFromFile, 0);  //JimmyChiu 20230410 : Config update from server
+        elConfig->Add(edtN14_22Exp,     &IniConfig.asN14_22_ConfigUpdateFromServerExport,   ECText,   "Handler_OEE", "asN14_22_ConfigUpdateFromServerExport",  bShow, bEnable, bReadFromFile, "//handler_data//Config//export//");             //JimmyChiu 20230410 : Config update from server
+        elConfig->Add(edtN14_22Imp,     &IniConfig.asN14_22_ConfigUpdateFromServerImport,   ECText,   "Handler_OEE", "asN14_22_ConfigUpdateFromServerImport",  bShow, bEnable, bReadFromFile, "//handler_datas//Config//import//");             //JimmyChiu 20230410 : Config update from server
+        elConfig->Add(cb14_23,          &IniConfig.bN14_23_ReadTextFileforPassword,         ECBool,   "Handler_OEE",             "bN14_23_ReadTextFileforPassword",           bShow, bEnable, bReadFromFile, 0);                                              //JimmyChiu 20240115 : Read Text File for Password
+        elConfig->Add(cb14_24,          &IniConfig.bN14_24_DynaMultiContinuPassSocket,      ECBool,   "Handler_OEE",             "bN14_24_DynaMultiContinuPassSocket",        bShow, bEnable, bReadFromFile, 0);                                              //JimmyChiu 20240411 : Dynamic multiplier for Continual Pass Bin( Socket )
+        elConfig->Add(ed14_24,          &IniConfig.iN14_24_DyMultiPassPower,                ECInteger,"Handler_OEE",             "iN14_24_DyMultiPassPower",                  bShow, bEnable, bReadFromFile, 5);                                              //JimmyChiu 20240411 : Dynamic multiplier for Continual Pass Bin( Socket )
+    }
+    else
+    {
+        tsN14->TabVisible=false;
+        elConfig->Add(cbN14_1,  &IniConfig.bN14_1_EnableOEEFunction,            ECBool,     "Handler_OEE", "N14_HandlerOEEUseFunction",                 bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN14_2,  &IniConfig.bN14_2_OEEUseSaveProdData,           ECBool,     "Handler_OEE", "N14_HandlerOEEUseSaveProductionDataToPath", bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN14_3,  &IniConfig.bN14_3_OEEFTPUpload,                 ECBool,     "Handler_OEE", "N14_HandlerOEEFTPUpload",                   bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN14_4,  &IniConfig.bN14_4_OEEAutoLoadMOFile,            ECBool,     "Handler_OEE", "N14_HandlerOEEAutoLoadMOFile",              bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN14_7,  &IniConfig.bN14_7_AutoMotive,                   ECBool,     "Handler_OEE", "bN14_7_AutoMotive",                         bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN14_8,  &IniConfig.bN14_8_ULSetup,                      ECBool,     "Handler_OEE", "bN14_8_ULSetup",                            bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN14_9,  &IniConfig.bN14_9_ULQtyReport,                  ECBool,     "Handler_OEE", "bN14_9_ULQtyReport",                        bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN14_10, &IniConfig.bN14_10_DownFileByMO,                ECBool,     "Handler_OEE", "N14_AutoDownloadSetupFileByMO",             bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN14_11, &IniConfig.bN14_11_CheckSiteMapByMO,            ECBool,     "Handler_OEE", "bN14_11_CheckSiteMapByMO",                  bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN14_12, &IniConfig.bN14_12_ULTempLogToFTP,              ECBool,     "Handler_OEE", "bN14_12_ULTempLogToFTP",                    bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN14_13, &IniConfig.bN14_13_ULBinQtyToFTP,               ECBool,     "Handler_OEE", "bN14_13_ULBinQtyToFTP",                     bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN14_14, &IniConfig.bN14_14_AlarmCtrlMachine,            ECBool,     "Handler_OEE", "bN14_14_AlarmCtrlMachine",                  bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN14_15, &IniConfig.bN14_15_SocketLifeTime,              ECBool,     "Handler_OEE", "bN14_15_SocketLifeTime",                    bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN14_16, &IniConfig.bN14_16_EnableIPSC,                  ECBool,     "Handler_OEE", "bN14_16_EnableIPSC",                        bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN14_18, &IniConfig.bN14_18_EnableTempOffset,            ECBool,     "Handler_OEE", "bN14_18_EnableTempOffset",                  bNoShow, bDisable, bFixedValue, 0); //Sam 20200806 : 溫度 By Servo
+        elConfig->Add(cbN14_19, &IniConfig.bN14_19_TrayMappingToFTP,            ECBool,     "Handler_OEE", "bN14_19_TrayMappingToFTP",                  bNoShow, bDisable, bFixedValue, 0); //Sam 20201209 : 增加資料上傳
+        elConfig->Add(cbN14_20, &IniConfig.bN14_20_DefaultRecipeChangeLog,      ECBool,     "Handler_OEE", "bN14_20_DefaultRecipeChangeLog",            bNoShow, bDisable, bFixedValue, 0); //Sam 20201209 : Default Recipe ChangeLog
+        elConfig->Add(cbN14_20_1,&IniConfig.bN14_20_DefaultRecipeChangeLogCycleRecord,ECBool,"Handler_OEE", "bN14_20_DefaultRecipeChangeLogCycleRecord",bNoShow, bDisable, bFixedValue, 0); //Sam 20201209 : Default Recipe ChangeLog
+        elConfig->Add(cbN14_21, &IniConfig.bN14_21_SetUpConfiguration,          ECBool,     "Handler_OEE", "bN14_21_SetUpConfiguration",                bNoShow, bDisable, bFixedValue, 0); //JimmyChiu 20220303 : Add class SetUpConfiguration
+    }
+
+    if(CUSTOMER_CODE==CC_Greatek)                                               //Sam 20220922 : 改用 elConfig 方式
+    {
+        tsN15->TabVisible=true;
+        elConfig->Add(cbN15_1,          &IniConfig.bN15UserLevelByTxt,          ECBool,     "ESD_Control", "N15_ESDControlUserLevelByTxt",              bShow, bEnable, bReadFromFile, 0);  //Sam 20171124 (Steven) : 功能開關統一方式
+        elConfig->Add(cbN15_2,          &IniConfig.bN15UseESDControlMachine,    ECBool,     "ESD_Control", "N15_ESDControlUseMachine",                  bShow, bEnable, bReadFromFile, 0);  //Sam 20171124 (Steven) : 功能開關統一方式
+        elConfig->Add(edtN15_1,         &IniConfig.asN15UserLevelByTxtReadFilePath,         ECText,   "ESD_Control",        "N15_ESDControlUserLevelByTxtReadFilePath", bShow, bEnable, bReadFromFile, "\\PASSWORD\\");
+        elConfig->Add(edtN15_2,         &IniConfig.asN15UseESDControlMachineReadFilePath,   ECText,   "ESD_Control",        "N15_ESDControlUseMachineReadFilePath",     bShow, bEnable, bReadFromFile, "\\FT_ESD\\");
+        elConfig->Add(edN15_UserName,   &IniConfig.asN15ESDFTP_UserName,                    ECText,   "ESD_Control",        "N15_ESDControlFTP_UserName",               bShow, bEnable, bReadFromFile, "HONPREC");
+        elConfig->Add(edN15_Password,   &IniConfig.asN15ESDFTP_Password,                    ECPassword,"ESD_Control",       "N15_ESDControlFTP_Password",               bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edN15_Host,       &IniConfig.asN15ESDFTP_Host,                        ECText,   "ESD_Control",        "N15_ESDControlFTP_Host",                   bShow, bEnable, bReadFromFile, "127.0.0.1");
+        elConfig->Add(edN15_3,          &IniConfig.asN15ESDControlMachineSaveRecordFilePath,ECText,   "ESD_Control",        "N15_ESDControlMachineSaveRecordFilePath",  bShow, bEnable, bReadFromFile, "D:\\ESDControlLog");
+        elConfig->Add(edtN15_4,         &IniConfig.asN15HandlerAUTOMOTIVEDownloadPath,      ECText,   "ESD_Control",        "N15_HandlerAUTOMOTIVEDownloadPath",        bShow, bEnable, bReadFromFile, "\\AUTOMOTIVE_FILE\\");
+    }
+    else
+    {
+        tsN15->TabVisible=false;
+        elConfig->Add(cbN15_1,  &IniConfig.bN15UserLevelByTxt,                  ECBool,     "ESD_Control", "N15_ESDControlUserLevelByTxt",              bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN15_2,  &IniConfig.bN15UseESDControlMachine,            ECBool,     "ESD_Control", "N15_ESDControlUseMachine",                  bNoShow, bDisable, bFixedValue, 0);          //JimmyChiu 20220303 : Add class SetUpConfiguration
+    }
+
+    if(CUSTOMER_CODE==CC_TSMC_TAINAN)                                           //wei 20170821 offset ftp
+    {
+        tsN16->TabVisible=true;
+        elConfig->Add(chkN16,  &IniConfig.bEnableOffsetFTP,                     ECBool,     "N16", "bEnableOffsetFTP",                                  bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(edN16_UserName,   &IniConfig.cN16FtpUserName,             ECText,     "N16", "cN16FtpUserName",                                   bShow, bEnable, bReadFromFile, "HONPREC");
+        elConfig->Add(edN16_Password,   &IniConfig.cN16FtpPassword,             ECPassword, "N16", "cN16FtpPassword",                                   bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edN16_HostName,   &IniConfig.cN16FtpHost,                 ECText,     "N16", "cN16FtpHost",                                       bShow, bEnable, bReadFromFile, "127.0.0.1");
+        elConfig->Add(edN16_DownPath,   &IniConfig.cN16FtpDownloadPath,         ECText,     "N16", "cN16FtpDownloadPath",                               bShow, bEnable, bReadFromFile, "D:\\ESDControlLog");
+        elConfig->Add(edN16_UpLdPath,   &IniConfig.cN16FtpUplaodPath,           ECText,     "N16", "cN16FtpUplaodPath",                                 bShow, bEnable, bReadFromFile, "\\AUTOMOTIVE_FILE\\");
+    }
+    else
+    {
+        tsN16->TabVisible=false;
+        elConfig->Add(chkN16,  &IniConfig.bEnableOffsetFTP,                     ECBool,     "N16", "bEnableOffsetFTP",                                  bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(IniConfig.bSPILFunction==true ||                                         //JerryYang 20220923 : [N17] upload lot summary
+       CUSTOMER_CODE==CC_QUALCOMM)                                              //JerryYang 20230131 : add Qualcomm
+    {
+        tsN17->TabVisible=true;
+        elConfig->Add(cbN17_1,          &IniConfig.bN17UploadLotSummary,        ECBool,     "Lot_Summary",      "bN17UploadLotSummary",                 bShow, bEnable, bReadFromFile, 0);  //JerryYang 20220923 : [N17] upload lot summary
+        elConfig->Add(edN17_2,          &IniConfig.asN17LotSummaryPath,         ECText,     "Lot_Summary",      "asN17LotSummaryPath",                  bShow, bEnable, bReadFromFile, "\\\\handler-hs\\HANDLER_TEMP\\RAWDATA\\JOBEND_LOG\\");  //JerryYang 20220923 : [N17] upload lot summary
+        elConfig->Add(cbN17_3,          &IniConfig.bN17UploadProdLog,           ECBool,     "Production_Log",   "bN17UploadProdLog",                    bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edN17_4,          &IniConfig.asN17ProductionLogPath,      ECText,     "Production_Log",   "asN17ProductionLogPath",               bShow, bEnable, bReadFromFile, "D:\\RMS\\");
+    }
+    else
+    {
+        tsN17->TabVisible=false;
+        elConfig->Add(cbN17_1,          &IniConfig.bN17UploadLotSummary,        ECBool,     "Lot_Summary",      "bN17UploadLotSummary",                 bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN17_3,          &IniConfig.bN17UploadProdLog,           ECBool,     "Production_Log",   "bN17UploadProdLog",                    bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    elConfig->Add(chkN20,               &IniConfig.bN20_CheckMD5,               ECBool,     "NETWORK", "bN20_CheckMD5",                                 bShow, bEnable, bReadFromFile, 0);      //Steven 20170927 (wei) : 比對工作檔的檢查碼是否正確
+
+    if(CosFunction.bHandlerStateChangeUploadServer)                             //Sam 20230511 : 機台資料變更後須上傳 FTP
+    {
+        tsN21->TabVisible=true;
+        elConfig->Add(chkN21_1, &IniConfig.bN21_HandlerChangeStateUploadServer, ECBool,     "bHandlerStateChangeUploadServer", "bN21_HandlerChangeStateUploadServer",bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edN21_1,  &IniConfig.sN21_FTPUserName,                    ECText,     "bHandlerStateChangeUploadServer", "sN21_FTPUserName",     bShow, bEnable, bReadFromFile, "SGPHANDLER");
+        elConfig->Add(edN21_2,  &IniConfig.sN21_FTPPassword,                    ECText,     "bHandlerStateChangeUploadServer", "sN21_FTPPassword",     bShow, bEnable, bReadFromFile, "CHROMA");
+        elConfig->Add(edN21_3,  &IniConfig.sN21_FTPHost,                        ECText,     "bHandlerStateChangeUploadServer", "sN21_FTPHost",         bShow, bEnable, bReadFromFile, "192.168.119.243");
+        elConfig->Add(edN21_4,  &IniConfig.sN21_FTPUploadPath,                  ECText,     "bHandlerStateChangeUploadServer", "sN21_FTPUploadPath", bShow, bEnable, bReadFromFile, "\\Handler\\HandlerStateChange\\");
+    }
+    else
+    {
+        tsN21->TabVisible=false;
+        elConfig->Add(chkN21_1, &IniConfig.bN21_HandlerChangeStateUploadServer, ECBool,     "bHandlerStateChangeUploadServer", "bN21_HandlerChangeStateUploadServer",bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CUSTOMER_CODE==CC_ASE_CL)                                                //Steven 20181224 : For ASE-CL
+    {
+        tsN22->TabVisible=true;
+        elConfig->Add(cbN22_EveltLog,       &IniConfig.bN22Enable_EventLog,     ECBool,     "ASECL_FTP", "bN22Enable_EventLog",                         bShow, bEnable, bReadFromFile, 0);      //Steven 20181224 : For ASE-CL
+        elConfig->Add(cbN22,                &IniConfig.bN22Enable_ASE_CL_FTP,   ECBool,     "ASECL_FTP", "bN22Enable_ASE_CL_FTP",                       bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(ed_N22_UserName,      &IniConfig.sN22ASE_CL_FTPUserName,  ECText,     "ASECL_FTP", "sN22ASE_CL_FTPUserName",                      bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(ed_N22_Password,      &IniConfig.sN22ASE_CL_FTPPassword,  ECPassword, "ASECL_FTP", "sN22ASE_CL_FTPPassword",                      bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(ed_N22_HostAddress,   &IniConfig.sN22ASE_CL_FTPHost,      ECText,     "ASECL_FTP", "sN22ASE_CL_FTPHostc",                         bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(ed_N22_DownloadPath,  &IniConfig.sN22ASE_CL_FTPDownlaodPath, ECText,  "ASECL_FTP", "sN22ASE_CL_FTPDownlaodPath",                  bShow, bEnable, bReadFromFile, "");
+
+        cbConfig_byRecipe->Add(cbN23,                    &IniConfig.bN23UploadJHT_Log,           ECBool,  "ASECL_FTP", "bN23UploadJHT_Log",             bShow, bEnable, bReadFromFile, 1);
+        cbConfig_byRecipe->Add(cbN35,                    &IniConfig.bN35UploadJHT_Log,           ECBool,  "ASECL_FTP", "bN35UploadJHT_Log",             bShow, bEnable, bReadFromFile, 1);
+        elConfig_byRecipe->Add(ed_N22_1_UserName,        &IniConfig.sN22_1ASE_CL_FTPUserName,    ECText,  "ASECL_FTP", "sN22_1ASE_CL_FTPUserName",      bShow, bEnable, bReadFromFile, AnsiString("cuauser"));
+        elConfig_byRecipe->Add(ed_N22_1_Password,        &IniConfig.sN22_1ASE_CL_FTPPassword,    ECText,  "ASECL_FTP", "sN22_1ASE_CL_FTPPassword",      bShow, bEnable, bReadFromFile, AnsiString("cuaasecl"));
+        elConfig_byRecipe->Add(ed_N22_1_HostAddress,     &IniConfig.sN22_1ASE_CL_FTPHost,        ECText,  "ASECL_FTP", "sN22_1ASE_CL_FTPHost",          bShow, bEnable, bReadFromFile, AnsiString("10.14.97.228"));
+        elConfig_byRecipe->Add(ed_N22_1_UploadPath,      &IniConfig.sN22_1ASE_CL_FTPUplaodPath,  ECText,  "ASECL_FTP", "sN22_1ASE_CL_FTPUplaodPath",    bShow, bEnable, bReadFromFile, AnsiString("//TestData//DATA_TRANSFER//FT//UPLOADSPACE//CUA/TRAY_MAP//DATA_IN//"));
+        elConfig_byRecipe->Add(ed_N35_1_UserName,        &IniConfig.sN35_1ASE_CL_FTPUserName,    ECText,  "ASECL_FTP", "sN35_1ASE_CL_FTPUserName",      bShow, bEnable, bReadFromFile, AnsiString("cuauser"));
+        elConfig_byRecipe->Add(ed_N35_1_Password,        &IniConfig.sN35_1ASE_CL_FTPPassword,    ECText,  "ASECL_FTP", "sN35_1ASE_CL_FTPPassword",      bShow, bEnable, bReadFromFile, AnsiString("cuaasecl"));
+        elConfig_byRecipe->Add(ed_N35_1_HostAddress,     &IniConfig.sN35_1ASE_CL_FTPHost,        ECText,  "ASECL_FTP", "sN35_1ASE_CL_FTPHost",          bShow, bEnable, bReadFromFile, AnsiString("10.14.97.228"));
+        elConfig_byRecipe->Add(ed_N35_1_UploadPath,      &IniConfig.sN35_1ASE_CL_FTPUplaodPath,  ECText,  "ASECL_FTP", "sN35_1ASE_CL_FTPUplaodPath",    bShow, bEnable, bReadFromFile, AnsiString("//TestData//DATA_TRANSFER//FT//UPLOADSPACE//SQA/TRAY_MAP//DATA_IN//"));
+    }
+    else if(CUSTOMER_CODE==CC_HANA_MICRON)                                      //Steven 20251007 : Hana Micron Tray Map
+    {
+        tsN22->TabVisible               =true;
+        cbN22_EveltLog->Visible         =false;
+        IniConfig.bN22Enable_EventLog   =false;
+        IniConfig.bN22Enable_ASE_CL_FTP =false;
+        lb_N22_DownloadPath->Caption    ="Upload Path";
+
+        elConfig->Add(cbN22,                &IniConfig.bN22_1_HANA_TrayMapFTP,  ECBool,     "HANA_FTP", "bN22_1_HANA_TrayMapFTP",                       bShow, bEnable, bReadFromFile, 0);      //Steven 20181224 : For ASE-CL
+        elConfig->Add(ed_N22_UserName,      &IniConfig.sN22_1_FTPUserName,      ECText,     "HANA_FTP", "sN22_1_FTPUserName",                           bShow, bEnable, bReadFromFile, "traymap");
+        elConfig->Add(ed_N22_Password,      &IniConfig.sN22_1_FTPPassword,      ECPassword, "HANA_FTP", "sN22_1_FTPPassword",                           bShow, bEnable, bReadFromFile, "map0206");
+        elConfig->Add(ed_N22_HostAddress,   &IniConfig.sN22_1_FTPHost,          ECText,     "HANA_FTP", "sN22_1_FTPHost",                               bShow, bEnable, bReadFromFile, "12.230.55.65");
+        elConfig->Add(ed_N22_DownloadPath,  &IniConfig.sN22_1_FTPUploadPath,    ECText,     "HANA_FTP", "sN22_1_FTPUploadPath",                         bShow, bEnable, bReadFromFile, "\\handlerid\\");
+    }
+    else
+    {
+        tsN22->TabVisible=false;
+        elConfig->Add(cbN22_EveltLog,       &IniConfig.bN22Enable_EventLog,     ECBool,     "ASECL_FTP", "bN22Enable_EventLog",                         bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN22,                &IniConfig.bN22Enable_ASE_CL_FTP,   ECBool,     "ASECL_FTP", "bN22Enable_ASE_CL_FTP",                       bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN23,                &IniConfig.bN23UploadJHT_Log,       ECBool,    "ASECL_FTP", "bN23UploadJHT_Log",                           bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN35,                &IniConfig.bN35UploadJHT_Log,       ECBool,    "ASECL_FTP", "bN35UploadJHT_Log",                           bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    tsN23->TabVisible  =(CUSTOMER_CODE==CC_Murata || CosFunction.bSortingBy2DList || IniConfig.bSPILFunction==true);
+    tsN23_1->TabVisible=(CUSTOMER_CODE==CC_Murata);
+    tsN23_2->TabVisible=(CUSTOMER_CODE==CC_Murata);
+    tsN23_3->TabVisible=(CUSTOMER_CODE==CC_Murata ||
+                        IniConfig.bSPILFunction==true ||                        //JerryYang 20250521 : add
+                        CUSTOMER_CODE==CC_SJ_Semiconductor);                    //RogerYang 2026024 : Add for SJSM白名單
+    lbledtN23_4_URL->Text=IniConfig.sN23_4_URL;                                 //JerryYang 20241104 : 支援2DID白名單功能
+    lbledtN23_5_UploadPath->Text=IniConfig.sN23_5_UploadPath;
+
+    if(CUSTOMER_CODE==CC_Murata)                                                //Steven 20200409 : Murata 2DID比對功能
+    {
+        elConfig->Add(chkN23_1,             &IniConfig.bN23_1_Enable2DIDCompare,ECBool,     "Murata Function", "bN23_1_Enable2DIDCompare",              bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(chkN23_3,             &IniConfig.bN23_3_UploadTestResult, ECBool,     "Murata Function", "bN23_3_UploadTestResult",               bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(lbledtN23_1_URL,      &IniConfig.sN23_1_URL,              ECText,     "Murata Function", "sN23_1_URL",                            bShow, bEnable, bReadFromFile, "http://172.16.83.190/sm5200/page/TrafficExecute.jsp?pptid=519149&argument=519149.args");
+        elConfig->Add(edtN23_2_LineID,      &IniConfig.sN23_2_Line,             ECText,     "Murata Function", "sN23_2_Line",                           bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edtN23_2_ProcessName, &IniConfig.sN23_2_Process,          ECText,     "Murata Function", "sN23_2_Process",                        bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edtN23_2_Product,     &IniConfig.sN23_2_Product,          ECText,     "Murata Function", "sN23_2_Product",                        bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(lbledtN23_2_URL,      &IniConfig.sN23_3_URL,              ECText,     "Murata Function", "sN23_3_URL",                            bShow, bEnable, bReadFromFile, "http://172.16.83.190/sm5200/page/TrafficExecute.jsp?pptid=519129&argument=519129.args");
+    }
+    else
+    {
+        elConfig->Add(chkN23_1,             &IniConfig.bN23_1_Enable2DIDCompare,ECBool,     "Murata Function", "bN23_1_Enable2DIDCompare",              bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(chkN23_3,             &IniConfig.bN23_3_UploadTestResult, ECBool,     "Murata Function", "bN23_3_UploadTestResult",               bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CosFunction.bSortingBy2DList)
+    {
+        tsN23->TabVisible=true;
+        elConfig->Add(edN23_2UserName,      &IniConfig.cN23FtpUserName,         ECText,     "2DSotingFunction",     "cN23FtpUserName",                  bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edN23_2Pwd,           &IniConfig.cN23FtpPassword,         ECPassword, "2DSotingFunction",     "cN23FtpPassword",                  bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edN23_2FTPHost,       &IniConfig.cN23FtpHost,             ECText,     "2DSotingFunction",     "cN23FtpHost",                      bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edN23_2FTPPath,       &IniConfig.cN23FtpDownloadPath,     ECText,     "2DSotingFunction",     "cN23FtpDownloadPath",              bShow, bEnable, bReadFromFile, "\\");
+        elConfig->Add(edN23_3NetDrivePath,  &IniConfig.sN23DownloadDrivePath,   ECText,     "2DSotingFunction",     "sN23DownloadDrivePath",            bShow, bEnable, bReadFromFile, IniConfig.asEventLogAutoSavePath);
+        elConfig->Add(rgN23_1_2DSorting,    &IniConfig.iN23DownloadMethod,      ECInteger,  "2DSotingFunction",     "iN23DownloadMethod",               bShow, bEnable, bReadFromFile, 0);  //JerryYang 20190313 : 2D sorting
+
+        elConfig->Add(edtN23_4,             &IniConfig.sN23LotInfoPath,         ECText,     "2DSotingFunction",     "sN23LotInfoPath",                  bShow, bEnable, bReadFromFile, IniConfig.asEventLogAutoSavePath);
+        elConfig->Add(chkN23_4,             &IniConfig.bN23UseLotInfoFile,      ECBool,     "2DSotingFunction",     "bN23UseLotInfoFile",               bShow, bEnable, bReadFromFile, 0);  //Steven 20240829 : Lot info從檔案讀取
+        if(IniConfig.bSPILFunction)
+            elConfig->Add(chkN23_5,         &IniConfig.bN25FolderWithoutYYMM,   ECBool,     "2DSotingFunction",     "bN25FolderWithoutYYMM",            bShow, bEnable, bReadFromFile, 1);
+        else
+            elConfig->Add(chkN23_5,         &IniConfig.bN25FolderWithoutYYMM,   ECBool,     "2DSotingFunction",     "bN25FolderWithoutYYMM",            bShow, bEnable, bReadFromFile, 0);  //Steven 20240830 : Summary資料夾不要有年月
+    }
+    else if(CosFunction.bMakeWhite2DIDList==true)                               //RogerYang 20251210 : JCET 2D FT1白名單/FT2比對功能
+    {
+        tsN23->TabVisible=true;
+        elConfig->Add(edN23_2UserName,      &IniConfig.cN23FtpUserName,         ECText,     "2DSotingFunction",     "cN23FtpUserName",                  bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edN23_2Pwd,           &IniConfig.cN23FtpPassword,         ECPassword, "2DSotingFunction",     "cN23FtpPassword",                  bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edN23_2FTPHost,       &IniConfig.cN23FtpHost,             ECText,     "2DSotingFunction",     "cN23FtpHost",                      bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edN23_2FTPPath,       &IniConfig.cN23FtpDownloadPath,     ECText,     "2DSotingFunction",     "cN23FtpDownloadPath",              bShow, bEnable, bReadFromFile, "\\");
+        elConfig->Add(edN23_3NetDrivePath,  &IniConfig.sN23DownloadDrivePath,   ECText,     "2DSotingFunction",     "sN23DownloadDrivePath",            bNoShow, bEnable, bReadFromFile, IniConfig.asEventLogAutoSavePath);
+        elConfig->Add(rgN23_1_2DSorting,    &IniConfig.iN23DownloadMethod,      ECInteger,  "2DSotingFunction",     "iN23DownloadMethod",               bShow, bDisable, bReadFromFile, 0);  //JerryYang 20190313 : 2D sorting
+        IniConfig.iN23DownloadMethod=0;
+        elConfig->Add(edtN23_4,             &IniConfig.sN23LotInfoPath,         ECText,     "2DSotingFunction",     "sN23LotInfoPath",                  bNoShow, bEnable, bReadFromFile, IniConfig.asEventLogAutoSavePath);
+        elConfig->Add(chkN23_4,             &IniConfig.bN23UseLotInfoFile,      ECBool,     "2DSotingFunction",     "bN23UseLotInfoFile",               bNoShow, bEnable, bReadFromFile, 0);  //Steven 20240829 : Lot info從檔案讀取
+        elConfig->Add(chkN23_5,             &IniConfig.bN25FolderWithoutYYMM,   ECBool,     "2DSotingFunction",     "bN25FolderWithoutYYMM",            bNoShow, bEnable, bReadFromFile, 0);  //Steven 20240830 : Summary資料夾不要有年月
+    }
+    else
+    {
+        tsN23->TabVisible=false;
+    }
+
+    if(CUSTOMER_CODE==CC_SCC)                                                   //Steven 20200409 : JSCC RTM功能
+    {
+        tsN24->TabVisible=true;
+        elConfig->Add(chk24,               &IniConfig.bN24_EnableRTM,           ECBool,     "RTM Function", "bN24_EnableRTM",                           bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(lbledtN24,           &IniConfig.iN24_RTMPort,             ECPort,     "Murata Function",      "iN24_RTMPort",                     bShow, bEnable, bReadFromFile, "");
+    }
+    else
+    {
+        tsN24->TabVisible=false;
+        elConfig->Add(chk24,               &IniConfig.bN24_EnableRTM,           ECBool,     "RTM Function", "bN24_EnableRTM",                           bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    elConfig->Add(lbledtN23_4_URL,          &IniConfig.sN23_4_URL,              ECText,     "2DID Search Function", "sN23_4_URL",                       bShow, bEnable, bReadFromFile, "D:\\RMS\\");  //JerryYang 20250521 : add
+    elConfig->Add(lbledtN23_5_UploadPath,   &IniConfig.sN23_5_UploadPath,       ECText,     "2DID White list",      "sN23_5_UploadPath",                bShow, bEnable, bReadFromFile, "D:\\RMS\\");
+
+    if(CUSTOMER_CODE==CC_ChipMos_ZHUBEI)                                        //Steven 20210413 : 南茂的自動Start功能
+    {
+        tsN25->TabVisible=true;
+        elConfig->Add(chkN25_1,         &IniConfig.bN25_1_EnableStartControl,   ECBool,     "ChipMos Function", "bN25_1_EnableStartControl",            bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(chkN25_2,         &IniConfig.bN25_2_EnableUploadLog,      ECBool,     "ChipMos Function", "bN25_2_EnableUploadLog",               bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edtN25_1_Name,        &IniConfig.sN25_1_FTPUserName,      ECText,     "ChipMos Function",     "sN25_1_FTPUserName",               bShow, bEnable, bReadFromFile, "handler");
+        elConfig->Add(edtN25_1_Password,    &IniConfig.sN25_1_FTPPassword,      ECPassword, "ChipMos Function",     "sN25_1_FTPPassword",               bShow, bEnable, bReadFromFile, "handler");
+        elConfig->Add(edtN25_1_Host,        &IniConfig.sN25_1_FTPHost,          ECText,     "ChipMos Function",     "sN25_1_FTPHost",                   bShow, bEnable, bReadFromFile, "10.20.50.3");
+        elConfig->Add(edtN25_1_Path,        &IniConfig.sN25_1_FTPPath,          ECText,     "ChipMos Function",     "sN25_1_FTPPath",                   bShow, bEnable, bReadFromFile, "/summary/Handler/TesterStatus/");
+        elConfig->Add(edtN25_2_Name,        &IniConfig.sN25_2_FTPUserName,      ECText,     "ChipMos Function",     "sN25_2_FTPUserName",               bShow, bEnable, bReadFromFile, "handler");
+        elConfig->Add(edtN25_2_Password,    &IniConfig.sN25_2_FTPPassword,      ECPassword, "ChipMos Function",     "sN25_2_FTPPassword",               bShow, bEnable, bReadFromFile, "handler");
+        elConfig->Add(edtN25_2_Host,        &IniConfig.sN25_2_FTPHost,          ECText,     "ChipMos Function",     "sN25_2_FTPHost",                   bShow, bEnable, bReadFromFile, "10.20.50.3");
+        elConfig->Add(edtN25_2_Path,        &IniConfig.sN25_2_FTPPath,          ECText,     "ChipMos Function",     "sN25_2_FTPPath",                   bShow, bEnable, bReadFromFile, "/Summary/naslfs2/Handler/");
+        elConfig->Add(edtN25_2_Interval,    &IniConfig.iN25_2_UploadInterval,   ECInteger,  "ChipMos Function",     "iN25_2_UploadInterval",            bShow, bEnable, bReadFromFile, 10,    false, 1,       100);
+        elConfig->Add(chkN25_3,             &IniConfig.bN25_3_EnableULJamLog,   ECBool,     "ChipMos Function",     "bN25_3_EnableULJamLog",            bShow, bEnable, bReadFromFile, 0);                      //JimmyChiu 20241009 : for 南茂Jam List上傳
+        elConfig->Add(edtN25_3_LogJamPath,  &IniConfig.sN25_3_JamLogFTPPath,    ECText,     "ChipMos Function",     "sN25_3_JamLogFTPPath",             bShow, bEnable, bReadFromFile, "/Summary/naslfs2/Handler/");
+        elConfig->Add(chkN25_4,             &IniConfig.bN25_4_EnableUpload,     ECBool,     "ChipMos Function",     "bN25_4_EnableUpload",              bShow, bEnable, bReadFromFile, 0);                      //JimmyChiu 20241009 : for 南茂Jam List上傳
+        elConfig->Add(edtN25_4_UploadPath,  &IniConfig.sN25_4_UploadPath,       ECText,     "ChipMos Function",     "sN25_4_UploadPath",                bShow, bEnable, bReadFromFile, "/Summary/naslfs2/Handler/");
+        elConfig->Add(chkN25_5,             &IniConfig.bN25_5_EnableUpload,     ECBool,     "ChipMos Function",     "bN25_5_EnableUpload",              bShow, bEnable, bReadFromFile, 0);                      //JimmyChiu 20241009 : for 南茂Jam List上傳
+        elConfig->Add(edtN25_5_UploadPath,  &IniConfig.sN25_5_UploadPath,       ECText,     "ChipMos Function",     "sN25_5_UploadPath",                bShow, bEnable, bReadFromFile, "/Summary/naslfs2/Handler/");
+    }
+    else
+    {
+        tsN25->TabVisible=false;
+        elConfig->Add(chkN25_1,     &IniConfig.bN25_1_EnableStartControl,       ECBool,     "ChipMos Function", "bN25_1_EnableStartControl",            bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(chkN25_2,     &IniConfig.bN25_2_EnableUploadLog,          ECBool,     "ChipMos Function", "bN25_2_EnableUploadLog",               bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CosFunction.bUseJamRawData)                                              //Sam 20220922 : 改用 elConfig 方式 //Sam 20210224 : Auto Upload FTP JAMRawData 功能
+    {
+        tsN26->TabVisible=true;
+        elConfig->Add(chkN26_1,     &IniConfig.bN26_UseJamRawDataUpdataToFTP,   ECBool,     "JamRawDataUpdataToFTP", "bN26_UseJamRawDataUpdataToFTP",   bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(chkN26_2,     &IniConfig.bN26_UseJamRawDataRecord,        ECBool,     "JamRawDataUpdataToFTP", "bN26_UseJamRawDataRecord",        bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edtN26_1,     &IniConfig.sN26_FTPUserName,                ECText,     "JamRawDataUpdataToFTP","sN26_FTPUserName",                 bShow, bEnable, bReadFromFile,  "SGPHANDLER");          //Sam 20220831 : 矽格北興俊堯要求修改預設值
+        elConfig->Add(edtN26_2,     &IniConfig.sN26_FTPPassword,                ECPassword, "JamRawDataUpdataToFTP","sN26_FTPPassword",                 bShow, bEnable, bReadFromFile,  "CHROMA");
+        elConfig->Add(edtN26_3,     &IniConfig.sN26_FTPHost,                    ECText,     "JamRawDataUpdataToFTP","sN26_FTPHost",                     bShow, bEnable, bReadFromFile,  "192.168.119.243");
+        elConfig->Add(edtN26_4,     &IniConfig.sN26_FTPUplaodPath,              ECText,     "JamRawDataUpdataToFTP","sN26_FTPUplaodPath",               bShow, bEnable, bReadFromFile,  "\\HT_JAM\\HT-9046HA-8H\\");
+    }
+    else
+    {
+        tsN26->TabVisible=false;
+        elConfig->Add(chkN26_1,     &IniConfig.bN26_UseJamRawDataUpdataToFTP,   ECBool,     "JamRawDataUpdataToFTP", "bN26_UseJamRawDataUpdataToFTP",   bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(chkN26_2,     &IniConfig.bN26_UseJamRawDataRecord,        ECBool,     "JamRawDataUpdataToFTP", "bN26_UseJamRawDataRecord",        bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CosFunction.bUseAlarmLogXml)                                             //Sam 20220922 : 改用 elConfig 方式 Mark //Sam 20210621 : 新增 Event Log xml  Updata
+    {
+        tsN27->TabVisible=true;
+        elConfig->Add(cbN27_1,      &IniConfig.bN27_UseAlarmLogXmlUpdataToFTP,  ECBool,     "bUseAlarmLogXml", "bN27_UseAlarmLogXmlUpdataToFTP",        bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edN27_1,      &IniConfig.sN27_FTPUserName,                ECText,     "bUseAlarmLogXml", "sN27_FTPUserName",                      bShow, bEnable, bReadFromFile,  "SGPHANDLER");          //Sam 20220831 : 矽格北興俊堯要求修改預設值
+        elConfig->Add(edN27_2,      &IniConfig.sN27_FTPPassword,                ECPassword, "bUseAlarmLogXml", "sN27_FTPPassword",                      bShow, bEnable, bReadFromFile,  "CHROMA");
+        elConfig->Add(edN27_3,      &IniConfig.sN27_FTPHost,                    ECText,     "bUseAlarmLogXml", "sN27_FTPHost",                          bShow, bEnable, bReadFromFile,  "192.168.119.243");
+        elConfig->Add(edN27_4,      &IniConfig.sN27_FTPUplaodPath,              ECText,     "bUseAlarmLogXml", "sN27_FTPUplaodPath",                    bShow, bEnable, bReadFromFile,  "\\HT_JAM\\HT-9046HA-8H\\");
+        elConfig->Add(edN27_6,      &IniConfig.sN27_TesterID,                   ECText,     "bUseAlarmLogXml", "sN27_TesterID",                         bShow, bEnable, bReadFromFile,  "");
+    }
+    else
+    {
+        tsN27->TabVisible=false;
+        elConfig->Add(cbN27_1,      &IniConfig.bN27_UseAlarmLogXmlUpdataToFTP,  ECBool,     "bUseAlarmLogXml", "bN27_UseAlarmLogXmlUpdataToFTP",        bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CUSTOMER_CODE==CC_SCK)                                                   //Steven 20210608 : JSCK OEE Function.
+    {
+        tsN28->TabVisible=true;
+        elConfig->Add(chkN28,       &IniConfig.bN28_SCK_OEE,                    ECBool,     "JSCK Function",        "bN26_SCK_OEE",                     bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edtN28_Path,  &IniConfig.sN28_Path,                       ECText,     "JSCK Function",        "sN26_Path",                        bShow, bEnable, bReadFromFile, "D:\\HT9045_Log\\TestLog\\");
+        elConfig->Add(edtN28_IP,    &IniConfig.sN28_IP,                         ECText,     "JSCK Function",        "sN26_IP",                          bShow, bEnable, bReadFromFile, "");
+    }
+    else
+    {
+        tsN28->TabVisible=false;
+        elConfig->Add(chkN28,       &IniConfig.bN28_SCK_OEE,                    ECBool,     "JSCK Function",        "bN26_SCK_OEE",                     bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CUSTOMER_CODE==CC_GM_TEST)                                               //Steven 20220311 : GM Test工作檔比對功能
+    {
+        tsN29->TabVisible=true;
+        elConfig->Add(chkN29,       &IniConfig.bN29_ParameterCheckForGMTest,    ECBool,     "N29", "bN29_ParameterCheck",                               bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edtN29,       &IniConfig.sN29_FilePath,                   ECText,     "N29", "sN29_FilePath",                                     bShow, bEnable, bReadFromFile, "");
+    }
+    else
+    {
+        tsN29->TabVisible=false;
+        elConfig->Add(chkN29,       &IniConfig.bN29_ParameterCheckForGMTest,    ECBool,     "N29", "bN29_ParameterCheck",                               bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CosFunction.bRecordGroundESDByTestIC)                                    //Sam 20220922 : 改用 elConfig 方式   //Sam 20211223 : 每顆 IC 測試完畢都要記錄當時的 Ground & ESD 數值。
+    {
+        tsN30->TabVisible=true;
+        elConfig->Add(cbN30_1,  &IniConfig.bN30_UseGroundESDUpdataToFTP,        ECBool,     "bRecordGroundESDByTestIC", "bN30_UseGroundESDUpdataToFTP", bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edN30_1,  &IniConfig.sN30_FTPUserName,                    ECText,     "bRecordGroundESDByTestIC", "sN30_FTPUserName",             bShow, bEnable, bReadFromFile,  "SGPHANDLER");      //Sam 20250122 : 客戶要求預設
+        elConfig->Add(edN30_2,  &IniConfig.sN30_FTPPassword,                    ECPassword, "bRecordGroundESDByTestIC", "sN30_FTPPassword",             bShow, bEnable, bReadFromFile,  "CHROMA");
+        elConfig->Add(edN30_3,  &IniConfig.sN30_FTPHost,                        ECText,     "bRecordGroundESDByTestIC", "sN30_FTPHost",                 bShow, bEnable, bReadFromFile,  "192.168.119.243");
+        elConfig->Add(edN30_4,  &IniConfig.sN30_FTPUploadPath,                  ECText,     "bRecordGroundESDByTestIC", "sN30_FTPUplaodPath",           bShow, bEnable, bReadFromFile,  "\\Handler\\GroundESDLog\\");
+        elConfig->Add(edN30_5,  &IniConfig.sN30_FTPUploadPath2,                 ECText,     "bRecordGroundESDByTestIC", "sN30_FTPUplaodPath2",          bShow, bEnable, bReadFromFile,  "\\Handler\\GroundESDLog2\\");
+    }
+    else
+    {
+        tsN30->TabVisible=false;
+        elConfig->Add(cbN30_1,  &IniConfig.bN30_UseGroundESDUpdataToFTP,        ECBool,     "bRecordGroundESDByTestIC", "bN30_UseGroundESDUpdataToFTP", bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CosFunction.bAutoTmpeOfsByFTP)                                           //Sam 20220922 : 改用 elConfig 方式   //Sam 20220406 : 溫度自動補償功能 By FTP
+    {
+        tsN31->TabVisible=true;
+        elConfig->Add(cbN31_1,  &IniConfig.iN31_UseAutoTempOfsByFTP,            ECInteger,  "bAutoTmpeOfsByFTP", "bN31_UseAutoTempOfsByFTP",            bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edN31_1,  &IniConfig.sN31_FTPUserName,                    ECText,     "bAutoTmpeOfsByFTP", "sN31_FTPUserName",                    bShow, bEnable, bReadFromFile, "SGPHANDLER");           //Sam 20220831 : 矽格北興俊堯要求修改預設值
+        elConfig->Add(edN31_2,  &IniConfig.sN31_FTPPassword,                    ECPassword, "bAutoTmpeOfsByFTP", "sN31_FTPPassword",                    bShow, bEnable, bReadFromFile, "CHROMA");
+        elConfig->Add(edN31_3,  &IniConfig.sN31_FTPHost,                        ECText,     "bAutoTmpeOfsByFTP", "sN31_FTPHost",                        bShow, bEnable, bReadFromFile, "192.168.119.243");
+        elConfig->Add(edN31_4,  &IniConfig.sN31_FTPDownloadPath,                ECText,     "bAutoTmpeOfsByFTP", "sN31_FTPDownloadPath",                bShow, bEnable, bReadFromFile, "\\Handler\\AutoTempOfs\\");
+        elConfig->Add(edN31_5,  &IniConfig.iN31_ContactCnt,                     ECInteger,  "bAutoTmpeOfsByFTP", "iN31_ContactCnt",                     bShow, bEnable, bReadFromFile, 10,    false, 1,       100);
+        elConfig->Add(edN31_MinOffset,  &IniConfig.dN31_MinOffset,ECDouble, "bAutoTmpeOfsByFTP",            "dN31_MinOffset",       bShow, bEnable, bReadFromFile, -30.0,   false, -30.0,   30.0);                               //Jimmychiu 20241226 : add N31 temp offset limit
+        elConfig->Add(edN31_MaxOffset,  &IniConfig.dN31_MaxOffset,ECDouble, "bAutoTmpeOfsByFTP",            "dN31_MaxOffset",       bShow, bEnable, bReadFromFile, 30.0,    false, -30.0,   30.0);
+        if(CUSTOMER_CODE==CC_UTAC_TW)                                           //Sam 20230815 : 聯測改為 Interval time
+            labN31_5->Caption="Intetval Time";
+    }
+    else
+    {
+        tsN31->TabVisible=false;
+        elConfig->Add(cbN31_1,  &IniConfig.iN31_UseAutoTempOfsByFTP,            ECInteger,  "bAutoTmpeOfsByFTP", "bN31_UseAutoTempOfsByFTP",         bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CosFunction.bDownloadUpdateAutomatically)                                //Sam 20220922 : 改用 elConfig 方式 //Sam 20220824 : FTP 自動下載安裝更新包
+    {
+        tsN32->TabVisible=true;
+        elConfig->Add(cbN32_1,  &IniConfig.bN32_DownloadUpdatesAutomatically,   ECBool,     "bDownloadUpdateAutomatically", "bN32_DownloadUpdatesAutomatically",bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbN32_2,  &IniConfig.bN32_CheckForUpdatesOnceDay,         ECBool,     "bDownloadUpdateAutomatically", "bN32_CheckForUpdatesOnceDay;",     bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbN32_3,  &IniConfig.bN32_CheckAtInitailStart,            ECBool,     "bDownloadUpdateAutomatically", "bN32_CheckAtInitailStart;",        bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbN32_4,  &IniConfig.bN32_CheckAtTrayFeedFinish,          ECBool,     "bDownloadUpdateAutomatically", "bN32_CheckAtTrayFeedFinish;",      bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edN32_1,  &IniConfig.sN32_FTPUserName,                    ECText,     "bDownloadUpdateAutomatically", "sN32_FTPUserName",                 bShow, bEnable, bReadFromFile, "SGPHANDLER");           //Sam 20220831 : 矽格北興俊堯要求修改預設值
+        elConfig->Add(edN32_2,  &IniConfig.sN32_FTPPassword,                    ECPassword, "bDownloadUpdateAutomatically", "sN32_FTPPassword",                 bShow, bEnable, bReadFromFile, "CHROMA");
+        elConfig->Add(edN32_3,  &IniConfig.sN32_FTPHost,                        ECText,     "bDownloadUpdateAutomatically", "sN32_FTPHost",                     bShow, bEnable, bReadFromFile, "192.168.119.243");
+        elConfig->Add(edN32_4,  &IniConfig.sN32_FTPDownloadPath,                ECText,     "bDownloadUpdateAutomatically", "sN32_FTPDownloadPath",             bShow, bEnable, bReadFromFile, "\\Handler\\Installer\\");
+        elConfig->Add(edN32_5,  &IniConfig.sN32_NetDownloadPath,                ECText,     "bDownloadUpdateAutomatically", "sN32_NetDownloadPath",             bShow, bEnable, bReadFromFile, "D:\\RMS\\");            //Steven 20221216 : 使用網路硬碟下載安裝包
+        elConfig->Add(edN32_6,  &IniConfig.sN32_FTPDownloadPath2,               ECText,     "bDownloadUpdateAutomatically", "sN32_FTPDownloadPath2",            bShow, bEnable, bReadFromFile, "\\Handler\\InstallerForAll\\"); //Sam 20230328 : 自動更新增加版本檢查
+        elConfig->Add(rgN32,    &IniConfig.iN32_DownloadMode,                   ECInteger,  "bDownloadUpdateAutomatically", "iN32_DownloadMode",                bShow, bEnable, bReadFromFile, 0);                      //Steven 20221216 : 使用網路硬碟下載安裝包
+    }
+    else
+    {
+        tsN32->TabVisible=false;
+        elConfig->Add(cbN32_1,  &IniConfig.bN32_DownloadUpdatesAutomatically,   ECBool,     "bDownloadUpdateAutomatically", "bN32_DownloadUpdatesAutomatically",bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN32_2,  &IniConfig.bN32_CheckForUpdatesOnceDay,         ECBool,     "bDownloadUpdateAutomatically", "bN32_CheckForUpdatesOnceDay",      bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN32_3,  &IniConfig.bN32_CheckAtInitailStart,            ECBool,     "bDownloadUpdateAutomatically", "bN32_CheckAtInitailStart",         bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN32_4,  &IniConfig.bN32_CheckAtTrayFeedFinish,          ECBool,     "bDownloadUpdateAutomatically", "bN32_CheckAtTrayFeedFinish",       bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    elConfig->Add(cbN35_1,      &IniConfig.bN35_Ground_ESD_Upload,              ECBool,     "Rround_ESD_Upload",       "bN35_Ground_ESD_Upload",    bShow, bEnable, bReadFromFile, 0);                          //Sam 20250609 : Record Ground and ESD at intervals and upload
+    elConfig->Add(edN35_1,      &IniConfig.sN35_FTPUserName,                    ECText,     "Rround_ESD_Upload",       "sN35_FTPUserName",          bShow, bEnable, bReadFromFile,  "SGPHANDLER");
+    elConfig->Add(edN35_2,      &IniConfig.sN35_FTPPassword,                    ECText,     "Rround_ESD_Upload",       "sN35_FTPPassword",          bShow, bEnable, bReadFromFile,  "CHROMA");
+    elConfig->Add(edN35_3,      &IniConfig.sN35_FTPHost,                        ECText,     "Rround_ESD_Upload",       "sN35_FTPHost",              bShow, bEnable, bReadFromFile,  "192.168.119.243");
+    elConfig->Add(edN35_4,      &IniConfig.sN35_FTPUploadPath,                  ECText,     "Rround_ESD_Upload",       "sN35_FTPUploadPath",        bShow, bEnable, bReadFromFile,  "\\Handler\\GroundandESD");
+    elConfig->Add(rgN35_1,      &IniConfig.iN35_Interval,                       ECInteger,  "Rround_ESD_Upload",       "iN35_Interval",             bShow, bEnable, bReadFromFile, 0);          //Sam 20250609 : Record Ground and ESD at intervals and upload
+
+    if(CUSTOMER_CODE==CC_LEADYO)                                                //KenHsieh 20230502 : 利揚要求上傳OCR + BIN Log上傳至Host
+    {
+        tsN33->TabVisible=true;
+        elConfig->Add(cbN33,    &IniConfig.bN33_UpLoadOCRBinLogByNet,           ECBool,     "LEADYO Function",   "bN33_UpLoadOCRBinLogByNet",     bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edN33,    &IniConfig.asN33_UploadLogPath,                 ECText,     "LEADYO Function",   "asN33_UploadLogPath",           bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(cbN33_1,  &IniConfig.bN33_1_NetChangeFileAndData,         ECBool,     "LEADYO Function",   "bN33_1_NetChangeFileAndData",   bShow, bEnable, bReadFromFile, 0);             //KenHsieh 20230727 : 更改工作檔與資料 By NetFile
+    }
+    else
+    {
+        tsN33->TabVisible=false;
+        elConfig->Add(cbN33,    &IniConfig.bN33_UpLoadOCRBinLogByNet,           ECBool,     "LEADYO Function",   "bN33_UpLoadOCRBinLogByNet",     bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbN33_1,  &IniConfig.bN33_1_NetChangeFileAndData,         ECBool,     "LEADYO Function",   "bN33_1_NetChangeFileAndData",   bNoShow, bDisable, bFixedValue, 0);            //KenHsieh 20230727 : 更改工作檔與資料 By NetFile
+    }
+
+    if(CUSTOMER_CODE==CC_CYUEAN)                                                //Jimmychiu 20250324 : CC_CYUEAN OEE report
+    {
+        tsN34->TabVisible=true;
+        elConfig->Add(cbN34,    &IniConfig.bN34_GenerateOEEAlarmRpt,            ECBool,     "N34 Function",   "bN34_GenerateOEEAlarmRpt",         bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(edN34,    &IniConfig.sN34_OEEAlarmRptPath,                ECText,     "N34 Function",   "sN34_OEEAlarmRptPath",             bShow, bEnable, bReadFromFile, "D:\\HT9045_Log\\Product_Loader\\OEEAlarmRpt");
+    }
+    else
+    {
+        tsN34->TabVisible=false;
+        elConfig->Add(cbN34,    &IniConfig.bN34_GenerateOEEAlarmRpt,            ECBool,     "N34 Function",   "bN34_GenerateOEEAlarmRpt",         bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(edN34,    &IniConfig.sN34_OEEAlarmRptPath,                ECText,     "N34 Function",   "sN34_OEEAlarmRptPath",             bNoShow, bDisable, bFixedValue, "D:\\HT9045_Log\\OEEAlarmRpt");
+    }
+    //==> Eastsun 20260520 整合
+    if(USE_BU5_Function==true)
+    {
+        elConfig->Add(cbN40_1,    &IniConfig.bN40_1_HandlerDataBackUpUseFunction,       ECBool,   "FTPUpLoad",         "bN40_1_HandlerDataBackUpUseFunction",          bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbN41_1,    &IniConfig.bN41_1_HandlerDataBackUpToDiskUseFunction, ECBool,   "FTPUpLoad",         "bN41_1_HandlerDataBackUpToDiskUseFunction",    bShow, bEnable, bReadFromFile, 0);
+
+        elConfig->Add(edN40_1,    &IniConfig.sN40_FTPUserName,                          ECText,   "LEADYO Function",   "sN40FtpUserName",                              bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edN40_2,    &IniConfig.sN40_FTPPassword,                          ECText,   "LEADYO Function",   "sN40_FTPPassword",                             bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edN40_3,    &IniConfig.sN40_FTPHost,                              ECText,   "LEADYO Function",   "sN40_FTPHost",                                 bShow, bEnable, bReadFromFile, "");
+        elConfig->Add(edN40_4,    &IniConfig.sN40_FTPUploadPath,                        ECText,   "LEADYO Function",   "sN40_FTPUploadPath",                           bShow, bEnable, bReadFromFile, "");
+
+        elConfig->Add(edN41_1,    &IniConfig.sN41_DiskUploadPath,                       ECText,   "LEADYO Function",   "sN41_DiskUploadPath",                          bShow, bEnable, bReadFromFile, "");
+    }
+    //<== Eastsun 20260520 整合
+    }
+
+// AI(W906-FW-CFG-W3) 20260825: golden cConfiguration.cpp:4097-4493, transcribed
+// VERBATIM (cp950 -> UTF-8). Registration table only -- the port's
+// HTEditList::Add signature is argument-for-argument golden's, so no
+// adaptation was needed and none was invented. See FW-CFG-W1's banner in
+// forms/fConfiguration.h for why this family is the wave's point.
+void TfConfiguration::InitConfigEdtList_ItemP()
+{
+    bool bShow=true, bNoShow=false;
+    bool bEnable=true, bDisable=false;
+    bool bReadFromFile=true, bFixedValue=false;
+    AnsiString str;
+
+    lblP04->Visible=(CUSTOMER_CODE==CC_SIGURD_PeiXing);                         //Sam 20211124 : 矽格北興 P04 功能開啟，必須也要開啟 P24 不然會 Hang up，北興俊堯要求顯示提示
+    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //Ifor 20230529 add:KYEC 要求 P04功能強制關閉
+    {
+        elConfig->Add(cbP04,    &IniConfig.bP04ColorIsEmptyUnloader,            ECBool,     "Tray", "bP04ColorIsEmptyUnloader",                         bShow, bDisable, bFixedValue, 0);
+    }
+    else
+    {
+        elConfig->Add(cbP04,    &IniConfig.bP04ColorIsEmptyUnloader,            ECBool,     "Tray", "bP04ColorIsEmptyUnloader",                         bShow, bEnable, bReadFromFile, 0);
+    }
+    elConfig->Add(cbP05,        &IniConfig.bP05_LoaderCylinderPreOn,            ECBool,     "Tray", "P05_LoaderCylinderPreOn",                          bShow, bEnable, bReadFromFile, 0);      //Steven 20150429 : 預先打兩下Loader汽缸
+    elConfig->Add(cbP05_1,      &IniConfig.bP05_1_UnloadCylinderPreOn,          ECBool,     "Tray", "bP05_1_UnloadCylinderPreOn",                       bShow, bEnable, bReadFromFile, 0);      //Steven 20240215 : 退tray前預先打兩下分離汽缸
+    if(IniConfig.bUseTrayBlockMode)                                             //Ifor 20181016 (Steven) : add 避免無使用Tray Block模式的客戶跑Tray Block模式
+        elConfig->Add(cbP06,    &IniConfig.bP06_LoaderUseCarrierTray,           ECBool,     "Tray", "P06_LoaderUseCarrierTray",                         bShow, bEnable, bReadFromFile, 0);      //Frank 20160921 add
+    else
+        elConfig->Add(cbP06,    &IniConfig.bP06_LoaderUseCarrierTray,           ECBool,     "Tray", "P06_LoaderUseCarrierTray",                         bNoShow, bDisable, bFixedValue, 0);     //wei 20161125 不使用Tray Block Mode不顯示，避免被誤選
+
+    if(CUSTOMER_CODE==CC_TSMC_TAINAN)
+        elConfig->Add(cbP07,    &IniConfig.bP07NoTrayaAutoTrayFeed,             ECBool,     "Tray", "bP07NoTrayaAutoTrayFeed",                          bShow, bEnable, bReadFromFile, 0);      //wei 20161125 //wei 20161121 TSMC 新增[P07]Loader No Traya Auto TrayFeed
+    else
+        elConfig->Add(cbP07,    &IniConfig.bP07NoTrayaAutoTrayFeed,             ECBool,     "Tray", "bP07NoTrayaAutoTrayFeed",                          bNoShow, bDisable, bFixedValue, 0);
+
+    elConfig->Add(cbP08,        &IniConfig.bP08TrayFeedCleanLotID,              ECBool,     "Tray", "bP08TrayFeedCleanLotID",                           bNoShow, bDisable, bFixedValue, 0);
+
+    if(CosFunction.bCleanOutCanTrayEndBySetupFile)                              //Steven 20200317 : CleanOut後,可以選擇Tray End, 且要退的Tray要在工作檔設定
+        elConfig->Add(cbP09,    &IniConfig.bP09TrayEndCanSelectTray,            ECBool,     "Tray", "bP09TrayEndCanSelectTray",                         bShow, bEnable, bReadFromFile, 0);
+    else
+        elConfig->Add(cbP09,    &IniConfig.bP09TrayEndCanSelectTray,            ECBool,     "Tray", "bP09TrayEndCanSelectTray",                         bNoShow, bDisable, bFixedValue, 0);
+
+    elConfig->Add(cbP10,    &IniConfig.bP10FixedTrayProposeTheInitialQuestion,  ECBool,     "Tray", "bP10FixedTrayProposeTheInitialQuestion",           bShow, bEnable, bReadFromFile, 0);      //Steven 20100205 Add from HT9080A
+
+    if(CUSTOMER_CODE==CC_KYEC_LEE         ||
+       CUSTOMER_CODE==CC_KYEC_XILINX      ||
+       CUSTOMER_CODE==CC_TERAPOWER        ||                                    //Sam 20191109 : Add UPH
+       CUSTOMER_CODE==CC_SIGURD_ChungXing ||                                    //Sam20210513 : 新增矽格中興
+       CUSTOMER_CODE==CC_UTAC_TW          ||
+       CUSTOMER_CODE==CC_FOREHOPE_NINGBO  )                                     //Jimmychiu 20250304 : P11新增CC_FOREHOPE_NINGBO
+        elConfig->Add(cbP11,    &IniConfig.bP11RecordUPH,                       ECBool,     "Count", "RecordUPH",                                       bShow, bEnable, bReadFromFile, 0);      //Frank 20150515
+    else
+        elConfig->Add(cbP11,    &IniConfig.bP11RecordUPH,                       ECBool,     "Count", "RecordUPH",                                       bNoShow, bDisable, bFixedValue, 0);
+
+    if(CosFunction.bKnockerSetBySetupFile==false)                               //Steven 20120510 : 全部改用汽缸的Enable判斷
+    {
+        if(CosFunction.bHiSiliconFunction)                                      //wei 20160309 強制開啟不能更改  //JerryYang 20191029 STM P14要能選擇
+        {
+            elConfig->Add(cbP13,    &IniConfig.bP13EnableAutoTrayEdgePushCylinderLoop,  ECBool,     "Tray",     "bEnableAutoTrayEdgePushCylinderLoop",  bShow, bDisable, bFixedValue, 1);
+            elConfig->Add(cbP14,    &IniConfig.bP14EnableAutoTrayRecevieDelayCount,     ECBool,     "Tray",     "bEnableAutoTrayRecevieDelayCount",     bShow, bDisable, bFixedValue, 1);
+        }
+        else
+        {
+            elConfig->Add(cbP13,    &IniConfig.bP13EnableAutoTrayEdgePushCylinderLoop,  ECBool,     "Tray",     "bEnableAutoTrayEdgePushCylinderLoop",  bShow, bEnable, bReadFromFile, 0);
+            elConfig->Add(cbP14,    &IniConfig.bP14EnableAutoTrayRecevieDelayCount,     ECBool,     "Tray",     "bEnableAutoTrayRecevieDelayCount",     bShow, bEnable, bReadFromFile, 0);
+        }
+
+        elConfig->Add(edP13_1,      &IniConfig.iP13EdgePushCylinderLoopDelay,           ECInteger,  "Tray",     "iP13EdgePushCylinderLoopDelay",        bShow, bEnable, bReadFromFile, LastSet.iEdgePushCylinderLoopDelay, false, 3000, 2);
+        elConfig->Add(edP13_2,      &IniConfig.iP13EdgePushCylinderOnDelay,             ECInteger,  "Tray",     "iP13EdgePushCylinderOnDelay",          bShow, bEnable, bReadFromFile, 10, false,  10000, 1);
+
+        elConfig->Add(edP14_1,      &IniConfig.iP14AutoTrayRecevieDelayCount,           ECInteger,  "Tray",     "iP14AutoTrayRecevieDelayCount",        bShow, bEnable, bReadFromFile, LastSet.iAutoTrayRecevieDelayCount, false, 10000, 1);
+        elConfig->Add(edP14_2,      &IniConfig.iP14AutoTrayRecevieLoopDelayTime,        ECInteger,  "Tray",     "iP14AutoTrayRecevieLoopDelayTime",     bShow, bEnable, bReadFromFile, LastSet.iAutoTrayRecevieLoopDelayTime, false, 3000, 2);
+
+        elConfig->Add(cbP16,        &IniConfig.bP16EnableHotplateEdgePushCylinderLoop,  ECBool,     "Hotplate", "bEnableHotplateEdgePushCylinderLoop",  bShow, bEnable, bReadFromFile, 0);      //kevin 20191219 開啟
+
+        if(TRAY_VIBRATION==VibrationMotor)
+        {
+            elConfig->Add(edP16_1,  &IniConfig.iP16HotplateEdgePushCylinderLoopDelay,   ECInteger,  "Hotplate", "iHotplateEdgePushCylinderLoopDelay",   bShow, bEnable, bReadFromFile, 5, false, 600, 200);
+            elConfig->Add(edP16_2,  &IniConfig.iP16HotplateEdgePushCylinderOnDelay,     ECInteger,  "Hotplate", "iHotplateEdgePushCylinderOnDelay",     bShow, bEnable, bReadFromFile, 5, false, 50, 2);
+        }
+        else
+        {
+            elUdUld->Add(edP16_1,   &IniConfig.iP16HotplateEdgePushCylinderLoopDelay,   ECInteger,  "Tray",    "iHotplateEdgePushCylinderLoopDelay",    bShow, bEnable, bReadFromFile, 10,                                          true,  2,   600);
+            elUdUld->Add(edP16_2,   &IniConfig.iP16HotplateEdgePushCylinderOnDelay,     ECInteger,  "Tray",    "iHotplateEdgePushCylinderOnDelay",      bShow, bEnable, bReadFromFile,10,                                          true,  2,   50);
+        }
+    }
+
+    if(IniConfig.bEnableUnloadTrayFree)                                         //jou 2011-05-27
+        elConfig->Add(cbP15,    &IniConfig.bUnloadTrayFree,                     ECBool,     "Tray", "bUnloadTrayFree",                                  bShow, bEnable, bReadFromFile, 0);
+    else
+        elConfig->Add(cbP15,    &IniConfig.bUnloadTrayFree,                     ECBool,     "Tray", "bUnloadTrayFree",                                  bNoShow, bDisable, bFixedValue, 0);
+
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung || CUSTOMER_CODE==CC_ASE_KaohSiung_K12)  //kevin 20190923 add
+        elConfig->Add(cbP17,    &IniConfig.bP17InArmFullPickFromLoader,         ECBool,     "Loader", "DisableLoaderFull",                              bShow, bEnable, bReadFromFile, 0);      //Steven 20111026 : In Arm Full Pick from Loader Tray //Steven 20190815 : [P17]改成always on
+    else if(CUSTOMER_CODE==CC_KYEC_LEE && USE_STM_Function==true)
+        elConfig->Add(cbP17,    &IniConfig.bP17InArmFullPickFromLoader,         ECBool,     "Loader", "DisableLoaderFull",                              bShow, bEnable, bReadFromFile, 0);      //Steven 20111026 : In Arm Full Pick from Loader Tray //Steven 20190815 : [P17]改成always on
+    else if(CUSTOMER_CODE==CC_AMKOR_Japan)                                      //RogerYang 2051110 : 瑞薩FTCT需求，先放進Shuttle後再回來做一格一格檢查
+        elConfig->Add(cbP17,    &IniConfig.bP17InArmFullPickFromLoader,         ECBool,     "Loader", "DisableLoaderFull",                              bShow, bEnable, bReadFromFile, 0);      //Steven 20111026 : In Arm Full Pick from Loader Tray //Steven 20190815 : [P17]改成always on
+    else
+        elConfig->Add(cbP17,        &IniConfig.bP17InArmFullPickFromLoader,     ECBool,     "Loader", "DisableLoaderFull",                              bShow, bDisable, bFixedValue, 1);       //Steven 20111026 : In Arm Full Pick from Loader Tray //Steven 20190815 : [P17]改成always on
+
+    elConfig->Add(cbP18,        &IniConfig.bP18FailAutoTrayManual,              ECBool,     "Tray", "FailAutoTrayManual",                               bShow, bEnable, bReadFromFile, 0);      //ChungHung 20120329 FailBin AutoTray Manual
+    elConfig->Add(cbP19,        &IniConfig.bP19CatchTrayUpThenCheck,            ECBool,     "Tray", "bCatchTrayUpThenCheck",                            bShow, bEnable, bReadFromFile, 0);      //Steven 20120727 : 夾Tray發生異常時要先把Arm上升再檢查一次如果還是沒夾到才Alarm
+    elConfig->Add(cbP20, &IniConfig.bP20ManualClearFixTrayDataAfterInitialStart,ECBool,     "Tray", "bManualClearFixTrayDataAfterInitialStart",         bShow, bEnable, bReadFromFile, 0);      //ChungHung 20130305 add for Amkor Initial Strat後不清Tray盤資料需手動清除後才可Run
+    elConfig->Add(chkP20_1, &IniConfig.bP20_1_ManualClrAutoTrayWhenInitialStart,ECBool,     "Tray", "bP20_1_ManualClrAutoTrayWhenInitialStart",         bShow, bEnable, bReadFromFile, 0);      //Steven 20210420 : add for TFME InitialStrat後不清Tray盤資料需手動清除後才可Run
+    elConfig->Add(chkP20_2, &IniConfig.bP20_2_ManualClrLoadTrayWhenInitialStart,ECBool,     "Tray", "bP20_2_ManualClrLoadTrayWhenInitialStart",         bShow, bEnable, bReadFromFile, 0);      //Steven 20230117 : add for JSCK InitialStrat後需手動清除Loader Tray後才可Run
+
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung  ||                                      //kevin 20130708 高雄日月光強制TRUE
+       CUSTOMER_CODE==CC_ASE_KaohSiung_K12 ||                                   //Steven 20131101 : Add ASE-K12
+       CosFunction.bHiSiliconFunction ||
+       CUSTOMER_CODE==CC_KYEC_LEE ||                                            //Ifor 20180625 (wei) : Fix KYEC P21ㄧ般版本未強制開啟問題
+       CUSTOMER_CODE==CC_Murata ||                                              //Steven 20200706 : Add Murata
+       IniConfig.bSPILFunction==true)                                           //JerryYang 20250220 : add
+        elConfig->Add(cbP21,    &IniConfig.bP21CheckFixTray,                    ECBool,     "Tray", "bCheckFixTray",                                    bShow, bDisable, bFixedValue, 1);       //kevin 20130430 tray feed 需先取出FIX TRAY
+    else
+        elConfig->Add(cbP21,    &IniConfig.bP21CheckFixTray,                    ECBool,     "Tray", "bCheckFixTray",                                    bShow, bEnable, bReadFromFile, 0);
+
+    elConfig->Add(chkP21_1,     &IniConfig.bP21_1_CheckFixTray,                 ECBool,     "Tray", "bP21_1_CheckFixTray",                              bShow, bEnable, bReadFromFile, 0);      //Steven 20250321 initial start時偵測fix tray需放入
+    elConfig->Add(chkP21_2,     &IniConfig.bP21_2_LoaderTrayFeed,               ECBool,     "Tray", "bP21_2_LoaderTrayFeed",                            bShow, bEnable, bReadFromFile, 0);      //Steven 20250606 : Tray Feed 包含 loader tray
+
+    elConfig->Add(cbP22,        &IniConfig.bP22EnableFirstTrayNeedAlarm,        ECBool,     "Tray", "bEnableFirstTrayNeedAlarm",                        bShow, bEnable, bReadFromFile, 0);
+    elConfig->Add(coP22,        &IniConfig.iEnableFirstTrayNeedAlarmNum,        ECInteger,  "Tray", "iEnableFirstTrayNeedAlarmNum",                     bShow, bEnable, bReadFromFile, 0);
+
+    elConfig->Add(edP23_1,      &IniConfig.iOCRByNewTrayIntrvalTray,            ECInteger,  "P23", "iOCRByNewTrayIntrvalTray",                          bShow, bEnable, bReadFromFile,  10,    false,  1,      1000);
+    elConfig->Add(edP23_2,      &IniConfig.iOCRMaxInspDevices,                  ECInteger,  "P23", "iOCRMaxInspDevices",                                bShow, bEnable, bReadFromFile,  10,    false,  1,      1000);
+
+    if(CUSTOMER_CODE==CC_SIGURD_HUKOU || IniConfig.bSPILFunction)               //JerryYang 20241122 : SPIL Disable P24                           //Sam 20230317 : 矽格湖口廠不能用會與 P39 功能起衝突
+        elConfig->Add(cbP24,    &IniConfig.bP24SkipEventNeedRemoveEmptyAndColorTray, ECBool,    "Tray", "bSkipEventNeedRemoveEmptyAndColorTray",        bNoShow, bEnable, bFixedValue, 0);
+    else
+        elConfig->Add(cbP24,    &IniConfig.bP24SkipEventNeedRemoveEmptyAndColorTray, ECBool,    "Tray", "bSkipEventNeedRemoveEmptyAndColorTray",        bShow, bEnable, bReadFromFile, 0);      //Frank 20150626 : for矽格 Loader有Skip要到Empty的位置做檢查
+
+    if(CosFunction.bManuallyRemoveForceInColor)                                 //Sam 20220530 : 當 Loader 發生 Skip/Edit 時，此盤做完後搬到 Empty 軌道後，會收盤起來並報警提示人員收盤(連兩盤)
+    {
+        elConfig->Add(cbP24_2,  &IniConfig.bP24SkipEventNeedRemoveColorTrayForIDT,   ECBool, "Tray", "bP24SkipEventNeedRemoveColorTrayForIDT",          bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbP24_3,  &IniConfig.bP24TwoTrayMustManuallyRemovedForGenernal,ECBool, "Tray", "bP24TwoTrayMustManuallyRemovedForGenernal",       bShow, bEnable, bReadFromFile, 0);      //Sam 20220817 : 一般P24功能連兩盤手動移除功能設開關
+    }
+    else
+    {
+        elConfig->Add(cbP24_2,  &IniConfig.bP24SkipEventNeedRemoveColorTrayForIDT,   ECBool, "Tray", "bP24SkipEventNeedRemoveColorTrayForIDT",          bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbP24_3,  &IniConfig.bP24TwoTrayMustManuallyRemovedForGenernal,ECBool, "Tray", "bP24TwoTrayMustManuallyRemovedForGenernal",       bNoShow, bDisable, bFixedValue, 0);     //Sam 20220817 : 一般P24功能連兩盤手動移除功能設開關
+    }
+
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+    {
+        elConfig->Add(cbP25,  &IniConfig.bP25EmptyColorNoSuppleAutoNoLoadEmpty, ECBool,     "Tray", "bEmptyColorNoSuppleAutoNoLoadEmpty",               bShow, bDisable, bFixedValue, 1);       //kevin 20220810 ASE_KH
+    }
+    else if(AUTO_EMPTY_COLOR!=0)                                                //Alick 20160803 add Empty/Color 為四軸時，[P25]不顯示
+        elConfig->Add(cbP25,  &IniConfig.bP25EmptyColorNoSuppleAutoNoLoadEmpty, ECBool,     "Tray", "bEmptyColorNoSuppleAutoNoLoadEmpty",               bShow, bEnable, bReadFromFile, 0);      //kevin 20151102  empty or color TRAY 不補AUTO 123 TRAY就不須載入一個空TRAY。
+    else
+        elConfig->Add(cbP25,  &IniConfig.bP25EmptyColorNoSuppleAutoNoLoadEmpty, ECBool,     "Tray", "bEmptyColorNoSuppleAutoNoLoadEmpty",               bNoShow, bDisable, bFixedValue, 0);
+
+    if(INSTALL_OCR!=eocrUninstal && CosFunction.bTrayOCR)
+        elConfig->Add(cbP26,    &IniConfig.bP26_OCRCheckLot,                    ECBool,     "Tray", "bP26_OCRCheckLot",                                 bShow, bEnable, bReadFromFile, 0);      //wei 20151117 OCR Lot check
+    else
+        elConfig->Add(cbP26,    &IniConfig.bP26_OCRCheckLot,                    ECBool,     "Tray", "bP26_OCRCheckLot",                                 bNoShow, bDisable, bFixedValue, 0);
+
+    if(AUTO3_IS_MAGAZINE==1)                                                    //JerryYang 20230515 : P27跟Magazine衝突，先不使用
+    {
+        elConfig->Add(cbP27,    &IniConfig.bP27AutoSortingBinTrayByOutArmwhenCleanOut, ECBool,  "Tray", "bAutoSortingBinTrayByOutArmwhenCleanOut",          bNoShow, bDisable, bFixedValue, 0);
+    }
+    else
+    {
+        if(CosFunction.bSortingBinTraywhenCleanOut ||
+           CosFunction.bSortingBinTrayWhenTrayFeed)                             //JerryYang 20170911 (Steven) 整盤功能,執行時機由clean out改至tray feed前
+            elConfig->Add(cbP27, &IniConfig.bP27AutoSortingBinTrayByOutArmwhenCleanOut, ECBool, "Tray", "bAutoSortingBinTrayByOutArmwhenCleanOut",          bShow, bEnable, bReadFromFile, 0);      //JerryYang 20150910 Auto Sorting BinTray by Out Arm when Clean Out
+        else
+            elConfig->Add(cbP27, &IniConfig.bP27AutoSortingBinTrayByOutArmwhenCleanOut, ECBool, "Tray", "bAutoSortingBinTrayByOutArmwhenCleanOut",          bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CUSTOMER_CODE==CC_UNISEM_M)
+        elConfig->Add(cbP28,    &IniConfig.bP28Auto1OnlyBin1,                   ECBool,     "Function", "bP28Auto1OnlyBin1",                            bShow, bDisable, bFixedValue, 1);
+    else if(CUSTOMER_CODE==CC_SCC || CosFunction.bUseAuto1OnlyBin1)
+        elConfig->Add(cbP28,    &IniConfig.bP28Auto1OnlyBin1,                   ECBool,     "Function", "bP28Auto1OnlyBin1",                            bShow, bEnable, bReadFromFile, 0);      //Alick 20160801 SCC可設定AUTO1 ONLY BIN1
+    else
+        elConfig->Add(cbP28,    &IniConfig.bP28Auto1OnlyBin1,                   ECBool,     "Function", "bP28Auto1OnlyBin1",                            bNoShow, bDisable, bFixedValue, 0);
+
+    elConfig->Add(cbP29,        &IniConfig.bP29LoaderCheckIsFull,               ECBool,     "Function", "bP29LoaderCheckIsFull",                        bShow, bEnable, bReadFromFile, 0);      //Steven 20160818 : CheckLoader滿盤
+    elConfig->Add(edP29,        &IniConfig.dP29LoaderCheckIsFullInterval,       ECDouble,   "Function", "dP29LoaderCheckIsFullInterval",                bShow, bEnable, bReadFromFile,  10,    false,  1.0,      1000.0);   //Steven 20160818 : CheckLoader滿盤
+
+    if(CosFunction.bUseFixTryCheckRemainingAmount)
+    {
+        elConfig->Add(cbP30,    &IniConfig.bP30FixTryCheckRemainingAmount,      ECBool,     "Function", "bP30FixTryCheckRemainingAmount",               bShow, bEnable, bReadFromFile, 0);      //Ifor 20160829 : Check Fix Try 到達設定剩餘IC數量Alarm不停機
+        elConfig->Add(edP30,    &IniConfig.iP30FixCheckRemainingAmountInterval, ECInteger,  "Function", "iP30FixCheckRemainingAmountInterval",          bShow, bEnable, bReadFromFile,  10,    false,  1,      1000);   //Ifor 20160829 : Fix Try 剩餘可放IC數量
+    }
+    else
+    {
+        elConfig->Add(cbP30,    &IniConfig.bP30FixTryCheckRemainingAmount,      ECBool,     "Function", "bP30FixTryCheckRemainingAmount",               bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(edP30,    &IniConfig.iP30FixCheckRemainingAmountInterval, ECInteger,  "Function", "iP30FixCheckRemainingAmountInterval",          bNoShow, bDisable, bFixedValue,  10,    false,  1,      1000);
+    }
+
+    elConfig->Add(cbP31,        &IniConfig.bP31LoaderTryLastOneFeedContinueRun, ECBool,     "Function", "bP31LoaderTryLastOneFeedContinueRun",          bShow, bEnable, bReadFromFile, 0);      //Ifor 20160829 : Loader Try 最後一盤入料Alarm不停機
+
+    if(CosFunction.bUseEmptyColorTrayPreAlarm)
+        elConfig->Add(cbP32,    &IniConfig.bP32EmptyColorTrayPreAlarm,          ECBool,     "Function", "bP32EmptyColorTrayPreAlarm",                   bShow, bEnable, bReadFromFile, 0);      //Ifor 20170315 (wei) add 新增Empty/Color Tray Pre Alarm 功能
+    else
+        elConfig->Add(cbP32,    &IniConfig.bP32EmptyColorTrayPreAlarm,          ECBool,     "Function", "bP32EmptyColorTrayPreAlarm",                   bNoShow, bDisable, bFixedValue, 0);
+
+    if(CosFunction.bUseAutoTrayPreAlarm)
+        elConfig->Add(cbP33,    &IniConfig.bP33AutoTrayPreAlarm,                ECBool,     "Function", "bP33AutoTrayPreAlarm",                         bShow, bEnable, bReadFromFile, 0);      //Ifor 20170315 (wei) add 新增Auto Tray Pre Alarm 功能
+    else
+        elConfig->Add(cbP33,    &IniConfig.bP33AutoTrayPreAlarm,                ECBool,     "Function", "bP33AutoTrayPreAlarm",                         bNoShow, bDisable, bFixedValue, 0);
+
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung || CUSTOMER_CODE==CC_TERAPOWER)
+        elConfig->Add(cbP34,    &IniConfig.bP34CleanOutChangeInitialMode,       ECBool,     "Function", "bP34CleanOutChangeInitialMode",                bShow, bEnable, bReadFromFile, 0);      //kevin 20170417 (wei) : CleanOut change initial Mode
+    else
+        elConfig->Add(cbP34,    &IniConfig.bP34CleanOutChangeInitialMode,       ECBool,     "Function", "bP34CleanOutChangeInitialMode",                bNoShow, bDisable, bFixedValue, 0);
+
+    if(CUSTOMER_CODE==CC_KYEC_LEE)                                              //Ifor 20230608 add:KYEC 要求[P35] Tray Arm home safe pos強制反灰由DB選擇開/關
+        elConfig->Add(cbP35,    &IniConfig.bP35TrayArm,                         ECBool,     "Function", "bP35TrayArm",                                  bShow, bDisable, bReadFromFile, 0);      //kevin 20171006 (wei) tray arm home 需遮住sensor
+    else
+        elConfig->Add(cbP35,    &IniConfig.bP35TrayArm,                         ECBool,     "Function", "bP35TrayArm",                                  bShow, bEnable, bReadFromFile, 0);      //kevin 20171006 (wei) tray arm home 需遮住sensor
+
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung)
+    {
+        elConfig->Add(cbP36,    &IniConfig.bP36BufferTrayNoSame,                ECBool,     "Function", "bP36BufferTrayNoSame",                         bShow, bEnable, bReadFromFile, 0);      //kevin 20171117 (wei) Load ,&,& Unload 強制不能使用相同軌道取放盤
+    }
+    else
+    {
+        elConfig->Add(cbP36,    &IniConfig.bP36BufferTrayNoSame,                ECBool,     "Function", "bP36BufferTrayNoSame",                         bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(USE_AUTO_RETEST==eartInstall)                                            //JerryYang 20250826 : 有ART才啟用P37
+    {
+        elConfig->Add(cbP37,    &IniConfig.bP37bAutoCylinderUP,                 ECBool,     "Function", "bP37bAutoCylinderUP" ,                         bShow, bEnable, bReadFromFile, 0);
+    }
+    else
+    {
+        elConfig->Add(cbP37,    &IniConfig.bP37bAutoCylinderUP,                 ECBool,     "Function", "bP37bAutoCylinderUP" ,                         bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    elConfig->Add(cbP38,        &IniConfig.bP38UseEmptyFullPutColor,            ECBool,     "Function", "bP38UseEmptyFullPutColor",                     bNoShow, bDisable, bFixedValue, 0);     //wei 20170504 Use Empty Full Put Color
+
+    if(CUSTOMER_CODE==CC_SIGURD_HUKOU)                                          //KaiChen 20201125 ： 矽格湖口，Loader 有 Skip 強制放Loader
+    {
+        elConfig->Add(cbP39,    &IniConfig.bP39LoaderHasSkipPlaceToEmpty,       ECBool,     "Function", "bP39LoaderHasSkipPlaceToEmpty",                bShow, bEnable, bReadFromFile, 0);
+    }
+    else
+    {
+        elConfig->Add(cbP39,    &IniConfig.bP39LoaderHasSkipPlaceToEmpty,       ECBool,     "Function", "bP39LoaderHasSkipPlaceToEmpty",                bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(LoaderUnload_StepMotor)                                                  //Sam 20201221 : Tray y step motor by machine
+    {
+        elConfig->Add(cbP40,    &IniConfig.bP40TrayYSpeedByMachine,             ECBool,     "Function", "bP40TrayYSpeedByMachine",                      bShow, bEnable, bReadFromFile, 0);
+    }
+    else
+    {
+        elConfig->Add(cbP40,    &IniConfig.bP40TrayYSpeedByMachine,             ECBool,     "Function", "bP40TrayYSpeedByMachine" ,                     bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(IniConfig.bVTESTFunction==true)                                          //jou 20240403 : Unload Tray Disable Edit
+    {
+        elConfig->Add(cbP41,        &IniConfig.bP41UnloadTrayDisableEdit,       ECBool,     "Function", "bP41UnloadTrayDisableEdit",                    bShow, bEnable, bReadFromFile, 1);
+    }
+    else
+    {
+        elConfig->Add(cbP41,        &IniConfig.bP41UnloadTrayDisableEdit,       ECBool,     "Function", "bP41UnloadTrayDisableEdit",                    bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CUSTOMER_CODE==CC_FMSH)                                                  //Ifor 20210428 add:Auto 退Tray 完成時報警停機
+    {
+        elConfig->Add(cbP42,    &IniConfig.bP42AlarmWhenExitTrayComplete,       ECBool,     "Function", "bP42AlarmWhenExitTrayComplete",                bShow, bEnable, bReadFromFile, 0);
+    }
+    else
+    {
+        elConfig->Add(cbP42,    &IniConfig.bP42AlarmWhenExitTrayComplete,       ECBool,     "Function", "bP42AlarmWhenExitTrayComplete" ,               bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CosFunction.bUnloadTrayModeByRecipe)                                     //Steven 20220710 : 甬矽要求Unload Tray Mode by機台設置
+    {
+        elConfig->Add(chkAutoTrayFeed,           &TrayForm.bAutoFeed,              ECBool,  "Flag", "Auto Feed",                                        bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbManuTakeAutoFailTray_FT, &TrayForm.bFailAutoTrayManual_FT, ECBool,  "Flag", "bFailAutoTrayManual_FT",                           bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbManuTakeAutoFailTray_RT, &TrayForm.bFailAutoTrayManual_RT, ECBool,  "Flag", "bFailAutoTrayManual_RT",                           bShow, bEnable, bReadFromFile, 0);
+    }
+
+    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20220331 : 矽品中山要求AUTO SKIP後可由TRAY ARM搬TRAY
+    {
+        elConfig->Add(cbP44,    &IniConfig.bP44LockLoaderTrayToNone,            ECBool,     "Function", "bP44LockLoaderTrayToNone" ,                    bShow, bEnable, bReadFromFile, 0);
+    }
+    else
+    {
+        elConfig->Add(cbP44,    &IniConfig.bP44LockLoaderTrayToNone,            ECBool,     "Function", "bP44LockLoaderTrayToNone" ,                    bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung)                                         //kevin 20221008 load 空盤 不TRAY
+    {
+        elConfig->Add(cbP45,    &IniConfig.bP45LastLoaderNoInSide,              ECBool,     "Function", "bP45LastLoaderNoInSide",                       bShow, bEnable, bReadFromFile, 1); //kevin 20221008
+    }
+    else
+    {
+        elConfig->Add(cbP45,    &IniConfig.bP45LastLoaderNoInSide,              ECBool,     "Function", "bP45LastLoaderNoInSide" ,                      bShow, bEnable, bReadFromFile, 0);
+    }
+    elConfig->Add(cbP46,        &IniConfig.bP46_LoadTrayModeByHandler,          ECBool,     "Tray", "bP46_LoadTrayModeByHandler" ,                      bShow, bEnable, bReadFromFile, 0);        //Steven 20221117 : Loader Tray Mode設定跟著機台變
+
+    elConfig->Add(cbP48,        &IniConfig.bP48UnloaderCylinderLoop,            ECBool,     "Tray", "bP48UnloaderCylinderLoop" ,                        bShow, bEnable, bReadFromFile, 0);        //JimmyChiu 20230512 Unloader cylinder loop
+    elConfig->Add(edP48Times,     &IniConfig.iP48UnloaderCylinderLoopTimes,     ECInteger,  "Tray", "iP48UnloaderCylinderLoopTimes",                    bShow, bEnable, bReadFromFile, 0,    false, 0,       3);
+    elConfig->Add(edP48DelayTime, &IniConfig.iP48UnloaderCylinderLoopDelay,     ECInteger,  "Tray", "iP48UnloaderCylinderLoopDelay",                    bShow, bEnable, bReadFromFile, 0,    false, 0,       2);
+
+    if(CosFunction.bUseLocalTraySpeed==true)
+    {
+        if(CUSTOMER_CODE==CC_KYEC_LEE)
+            elConfig->Add(cbP49,&IniConfig.bP49UseLocalTraySpeed,               ECBool,    "Function", "bP49UseLocalTraySpeed",                        bShow, bDisable, bFixedValue, 1);        //Ifor 20200825 add: Use Local Tray Speed   //Ifor 20200827 add: KYEC 強制開啟功能並反灰不可修改
+        else
+            elConfig->Add(cbP49,&IniConfig.bP49UseLocalTraySpeed,               ECBool,    "Function", "bP49UseLocalTraySpeed",                        bShow, bEnable, bReadFromFile, 0);     //Ifor 20200825 add: Use Local Tray Speed
+    }
+    else
+    {
+        elConfig->Add(cbP49,    &IniConfig.bP49UseLocalTraySpeed,               ECBool,    "Function", "bP49UseLocalTraySpeed",                        bNoShow, bDisable, bFixedValue, 0);    //Ifor 20200825 add: Use Local Tray Speed
+    }
+
+    if(CUSTOMER_CODE==CC_SIGURD_ChungXing)                                      //Sam 20230221 : 矽格中興國桂要求要能關閉
+        elConfig->Add(cbP50,        &IniConfig.bP50DisabledAutoTrackSensorDetect, ECBool,          "Function", "bP50DisabledAutoTrackSensorDetect",          bShow, bEnable, bReadFromFile, 0);
+    else
+        elConfig->Add(cbP50,        &IniConfig.bP50DisabledAutoTrackSensorDetect, ECBool,          "Function", "bP50DisabledAutoTrackSensorDetect" ,         bNoShow, bDisable, bFixedValue, 0);
+
+    elConfig->Add(cbP51,        &IniConfig.bP51TrayArmPutwaitUnloadOK,          ECBool,     "Function", "bP51TrayArmPutwaitUnloadOK",                   (CUSTOMER_CODE==CC_ASE_KaohSiung), bEnable, bReadFromFile, 1);      //kevin 20230331 add TRAY arm 放 auto 123 等待tray上升避免輸 送帶滑進去 夾tray.
+    if(CUSTOMER_CODE==CC_ASE_KaohSiung_K3)                                                                                                                                                                                  //KenHsieh 20230919 : Empty & Color Last Tray Check
+        elConfig->Add(cbP52,    &IniConfig.bP52EmptyColorLastTrayCheck,         ECBool,     "Function", "bP51EmptyColorLastTrayCheck",                  bShow, bEnable, bReadFromFile, 0);
+    else
+        elConfig->Add(cbP52,    &IniConfig.bP52EmptyColorLastTrayCheck,         ECBool,     "Function", "bP51EmptyColorLastTrayCheck",                  bNoShow, bDisable, bFixedValue, 0);
+
+    if(IniConfig.bSPILFunction==true)                                           //JerryYang 20231218 : P53防混功能
+    {
+        elConfig->Add(cbP53,    &IniConfig.bP53_ForcedScanBinCodeOfUnloader,    ECBool,     "Tray", "bP53_ForcedScanBinCodeOfUnloader" ,   bShow, bEnable, bReadFromFile, 0);
+    }
+    else
+    {
+        elConfig->Add(cbP53,    &IniConfig.bP53_ForcedScanBinCodeOfUnloader,    ECBool,     "Tray", "bP53_ForcedScanBinCodeOfUnloader" ,   bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CUSTOMER_CODE==CC_ASE_SG)                                                //Ifor 20251105 add: ASE SG 客戶要求[P54]強制關閉不顯示
+        elConfig->Add(cbP54,        &IniConfig.P54UnloaderTaryCheckHasErrorBinIC,   ECBool,      "Function", "P54UnloaderTaryCheckHasErrorBinIC",  bNoShow, bDisable, bFixedValue, 0);   //Sam 20240108 : 新增退 Tray 時顯示裡面有多少 Error Bin
+    else
+        elConfig->Add(cbP54,        &IniConfig.P54UnloaderTaryCheckHasErrorBinIC,   ECBool,      "Function", "P54UnloaderTaryCheckHasErrorBinIC",  bShow, bEnable, bReadFromFile, 0);    //Sam 20240108 : 新增退 Tray 時顯示裡面有多少 Error Bin
+
+    if(CUSTOMER_CODE==CC_KYEC_LEE &&                                            //Ifor 20211014 add: KYEC 要求暫時強制關閉P40功能，反灰不可修改
+            AUTO_EMPTY_COLOR==false)                                            //Ifor 20201225 add:六軌模式不顯示並強制關閉
+    {
+        elConfig->Add(cbP55,        &IniConfig.bP55LdUldUseEmptyAndColorTray,   ECBool,     "Function", "bP40LdUldUseEmptyAndColorTray",                bShow, bDisable, bFixedValue, 0);       //Ifor 20201218 add: Load & Unload Use Empty And Color Tray
+    }
+    else
+    {
+        elConfig->Add(cbP55,        &IniConfig.bP55LdUldUseEmptyAndColorTray,   ECBool,     "Function", "bP40LdUldUseEmptyAndColorTray",                bNoShow, bDisable, bFixedValue, 0);         //Ifor 20201218 add: Load & Unload Use Empty And Color Tray
+    }
+
+    elConfig->Add(chkP56,           &IniConfig.bP56TrayArmWaitAtColorTrack,     ECBool,     "Function", "bP56TrayArmWaitAtColorTrack",                bShow, bEnable, bReadFromFile, 0);            //Steven 20240516 : Tray Arm等待位置改到Color
+    elConfig->Add(cbP57,            &IniConfig.bP57LoaderAutoCleanOutByInputCT, ECBool,     "Function", "bP57LoaderAutoCleanOutByInputCT",            bShow, bEnable, bReadFromFile, 0);            //Sam 20250605 : Loader Count AutoCleanOut
+    elConfig->Add(rgP58RunModeAfterFT,&IniConfig.iP58RunModeAfterFT,            ECInteger,  "Function", "iP58RunModeAfterFT",                         bShow, bEnable, bReadFromFile,  0);           //JimmyChiu 20250905 : FT模式結束後切換模式
+
+    if(CUSTOMER_CODE==CC_TERAPOWER)                                             //Sam 20250415 : Unloader 偵測到置偏 IC 退出後再報警
+    {
+        elConfig->Add(cbP59, &IniConfig.bP59UnloaderICFloattingAlarmAfterExit,  ECBool,     "Function", "bP57UnloaderICFloattingAlarmAfterExit",                      bShow, bEnable, bReadFromFile, 1);
+    }
+    else
+    {
+        elConfig->Add(cbP59, &IniConfig.bP59UnloaderICFloattingAlarmAfterExit,  ECBool,     "Function", "bP57UnloaderICFloattingAlarmAfterExit" ,                     bShow, bEnable, bReadFromFile, 0);
+    }
+
+    if(CosFunction.bReadClipCodeFromUnloader)                                   //Jimmychiu 20250818 : Read Clip Code From Unloader(Auto1-3、Fix1-3)
+    {
+        elConfig->Add(cbP60, &IniConfig.bP60ReadClipCodeFromUnloader,           ECBool,     "Function", "bP60ReadClipCodeFromUnloader",                      bShow, bEnable, bReadFromFile, 1);
+    }
+    else
+    {
+        elConfig->Add(cbP60, &IniConfig.bP60ReadClipCodeFromUnloader,           ECBool,     "Function", "bP60ReadClipCodeFromUnloader" ,                     bNoShow, bDisable, bFixedValue, 0);
+    }
+
+    if(CosFunction.bFirstTrayCheckOnUnloader)                                   //Jimmychiu 20251205 : First Tray Check On Unloader
+    {
+        elConfig->Add(cbP62,       &IniConfig.bP62FirstTrayCheckOnUnloader,     ECBool,     "Function", "bP62FirstTrayCheckOnUnloader",   bShow, bEnable, bReadFromFile, 0);
+//        elConfig->Add(cbP62_Auto1, &IniConfig.bP62Auto1,                        ECBool,     "Function", "bP62Auto1",                      bShow, bEnable, bReadFromFile, 0);
+//        elConfig->Add(cbP62_Auto2, &IniConfig.bP62Auto2,                        ECBool,     "Function", "bP62Auto2",                      bShow, bEnable, bReadFromFile, 0);
+//        elConfig->Add(cbP62_Auto3, &IniConfig.bP62Auto3,                        ECBool,     "Function", "bP62Auto3",                      bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbP62_1,     &IniConfig.bP62AlwaysEnabledAtLotStart,      ECBool,     "Function", "bP62AlwaysEnabledAtLotStart",    bShow, bEnable, bReadFromFile, 0);
+//        elConfig->Add(cbP63,       &IniConfig.bP63MachineStopAtIntervalTime,    ECBool,     "Function", "bP63MachineStopAtIntervalTime",  bShow, bEnable, bReadFromFile, 0);
+//        elConfig->Add(edP63,       &IniConfig.iP63IntervalTime,                 ECInteger,  "Function", "iP63IntervalTime",               bShow, bEnable, bReadFromFile, 0);
+    }
+    else
+    {
+        plP62->Visible=false;
+//        cbP63->Visible=false;
+//        edP63->Visible=false;
+    }
+
+    if(CUSTOMER_CODE==CC_MAXIM_THAILAND)                                        //Ifor 20260407 : [P65] Enable ARM QA Mode
+    {
+        elConfig->Add(cbP65,    &IniConfig.bP65EnableArmQAMode,                 ECBool,     "Function", "bP65EnableArmQAMode",          bShow, bEnable, bReadFromFile, 0);    //Ifor 20260407 : [P65] Enable ARM QA Mode
+        elConfig->Add(edtP65,   &IniConfig.iP65ArmQAModeValue,                  ECInteger,  "Function", "iP65ArmQAModeValue",           bShow, bEnable, bReadFromFile,  0,     false,  0,      30);  //Ifor 20260407 : [P65] ARM QA Mode Value
+    }
+    else
+    {
+        elConfig->Add(cbP65,    &IniConfig.bP65EnableArmQAMode,                 ECBool,     "Function", "bP65EnableArmQAMode",          bNoShow, bDisable, bFixedValue, 0);  //Ifor 20260407 : [P65] Enable ARM QA Mode
+        elConfig->Add(edtP65,   &IniConfig.iP65ArmQAModeValue,                  ECInteger,  "Function", "iP65ArmQAModeValue",           bNoShow, bDisable, bFixedValue, 0);  //Ifor 20260407 : [P65] ARM QA Mode Value
+    }
+
+    if(CUSTOMER_CODE==CC_KYEC_LEE)
+    {
+        elConfig->Add(cbP66,    &IniConfig.bP66AutoChangingFlashWarn,         ECBool,     "Function", "bP66AutoChangingFlashWarn",                  bShow, bEnable, bReadFromFile, 1);
+    }
+    else
+    {
+        elConfig->Add(cbP66,    &IniConfig.bP66AutoChangingFlashWarn,         ECBool,     "Function", "bP66AutoChangingFlashWarn",                  bShow, bEnable, bReadFromFile, 0);
+    }
+}
