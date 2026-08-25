@@ -11338,6 +11338,77 @@ FW-YM-W13 就是因為這 15 支編不過而整波退掉的；stand-in 落地後
 （教訓：手動下 `-Wall` 跟專案真正用的旗標不是同一組，判斷「有沒有警告」
 要用專案的旗標，不是自己順手加的。）
 
+## 20260826 VIII — FW-SIG-W15：回填兩個被丟掉的簽章，一個 gate 退役、一個收窄
+
+### 怎麼發現的：一個跑了很久的背景 grep
+
+FW-YM-W13 那時我下了一個遞迴 grep 去確認 `ShiftState.h` 沒有同名定義，
+它撞上 build 目錄超時被丟到背景。我改用 Grep 工具得到答案就繼續往下做了。
+那個背景指令**後來才回報**，而它的輸出裡有兩行我沒預期的東西：
+
+```
+cObserver.cpp:6581:#if 0 // GATE (C-log-6) -- TMouseButton / mbRight have no port
+forms/fLotInfo.cpp:2133:        if(Button==mbRight || Button==mbLeft)
+```
+
+也就是說，樹上**早就有 gate 的理由白紙黑字寫著「這兩個型別沒有 port」**，
+而那個前提在 commit `f184093` 之後已經不成立了。
+
+（記一下：這是「慢工具的結果晚到，但仍然有用」的一次。當下改用快路徑是對的，
+沒有把它的結果丟掉也是對的。）
+
+### 逐條重問，兩個 gate 的答案不一樣
+
+依 pt-wave 的「**前提死掉不代表答案就是退役**」規則，兩個都重新問過：
+
+| gate | 前提現況 | 處置 |
+|---|---|---|
+| `GATE (C-log-6)`（`cObserver.cpp`，`lbltTotalLoaderMouseDown`） | **整個死了**——本體唯一的敘述就是 `if(Button==mbRight)` | **完全退役**，簽章與本體都回到 golden（`cObserver.cpp:3177-3184`） |
+| `GATE (WB-2-BTN)`（`forms/fLotInfo.cpp`，`edDeviceNameMouseDown`） | **只死一半**——`Button` 現在拼得出來，但那個 `if` 裡唯一的敘述是 `Clipboard()->Clear()`，而 VCL 的 `Clipboard()` 在本樹**仍然**零 port | **收窄**：簽章與 `if(Button==...)` 回填為 golden 原文，那一行改由既有的 `GATE (CLIP)` 承接（與本方法下半段 SCC 分支裡同一行用的是同一個 gate） |
+
+第二個是這條規則的教科書案例：如果只看到「前提死了」就整段打開，
+會放出一個呼叫不存在函式的 `Clipboard()->Clear()`。
+**正確答案是換一個更小的 gate，不是打開。**
+
+### 交付
+
+`cObserver.cpp` +13/−5、`forms/fObserver.h` +4/−1、
+`forms/fLotInfo.cpp` +15/−7、`forms/fLotInfo.h` +4/−1。
+
+兩支都改回 golden 的完整簽章
+`(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)`，
+並加一行 `(void)Sender; (void)Shift; (void)X; (void)Y;`
+——golden 自己也沒讀這四個，這行只是讓未使用參數不產生警告。
+
+忠實度複驗（`lbltTotalLoaderMouseDown`）：**LIVE 敘述 5 條、無逐字對應 2 條**
+（簽章行 ＋ 上面那行 `(void)` 抑制），**gated 0 行**——`C-log-6` 真的退役了。
+
+改簽章前先確認過**沒有任何呼叫點或測試**引用這兩支（全樹只有宣告）。
+
+### 驗收
+
+`tools/dualgate.sh sig15`（全新 dir）：Debug **137/142**、Release **137/142**，
+失敗集合逐項相同且等於常駐五項。`D:\HT9045\system` 552 檔本晚零變動。
+
+### 這是「碼變 live」，不是「功能接上了」
+
+`lbltTotalLoaderMouseDown` 現在會真的切換 `bFilterTheAgainData`（`cmydef.h:3343`），
+但**本樹沒有訊息迴圈**：沒有東西會呼叫這個 handler，也沒有東西會填 `Button`。
+`cObserver.cpp:6570-6575` 原本那段 STATUS/BEHAVIOUR DELTA 是 gate 還在時寫的，
+已在原地標明**不再成立**，避免下一個讀到的人被舊敘述誤導。
+
+### 這一波開了「回填被丟掉的簽章」這條線
+
+`vclcompat/ShiftState.h` 的檔頭記了一件待辦：**既有那些已經丟掉參數的 handler
+不在當波回頭改，那是獨立的機械式 pass**。本波是那個 pass 的**第一批**——
+挑的是「丟參數同時還連著一個 gate」的兩支，因為它們的收益最直接（退掉/縮小 gate）。
+
+**剩下的還沒做**：`grep "TMouseButton\|TShiftState"` 在 port 的 `.cpp` 命中 11 個檔，
+其中 `MyTempPanel.cpp` / `EJ1N/MyOmronPanel.cpp` / `uTemp_Set.cpp` /
+`OmronLaser/LaserSensor.cpp` / `forms/fSetup.cpp` / `forms/fQwertyKey.cpp` /
+`cContactCT.cpp` 都還帶著「參數已丟」的註解。那些多半沒有連著 gate，
+純粹是簽章不忠實，可以攢成一波一次做完。
+
 ### 🔖 RESUME（20260826 清晨）
 
 - **今晚全收（20260825 XV 起算，共 6 波 + 2 次工具修正）**：

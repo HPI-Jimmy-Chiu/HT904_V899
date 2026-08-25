@@ -253,6 +253,7 @@
 // pulled in by any header above; cObserver.cpp itself also includes this
 // directly (Wave 1) but a HEADER member array needs it visible right here too.
 #include "MachineType.h"
+#include "vclcompat/ShiftState.h"   // AI(W906-FW-SIG-W15) 20260826
 
 using vclcompat::TComboBox;
 using vclcompat::TListBox;
@@ -930,7 +931,9 @@ public:
     virtual void Image1DblClick(void *Sender);                // golden :2786-2812
     virtual void bAutoSaveEventLog(bool flag);                // golden :3001-3170
     virtual void btAutoSaveClick(void *Sender);               // golden :3172-3175
-    virtual void lbltTotalLoaderMouseDown(void *Sender);      // golden :3177-3184
+    // AI(W906-FW-SIG-W15) 20260826: 回填 golden 完整簽章（GATE (C-log-6) 退役）。
+    virtual void lbltTotalLoaderMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);   // golden :3177-3184
     virtual void edYieldMaxClick(void *Sender);               // golden :3207-3211
     virtual void edYieldMinClick(void *Sender);               // golden :3213-3217
     virtual void mtRowAMouseUp(void *Sender, int X, int Y);   // golden :3243-3272

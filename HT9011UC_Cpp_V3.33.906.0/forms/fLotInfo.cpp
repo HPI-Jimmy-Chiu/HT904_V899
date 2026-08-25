@@ -12,6 +12,8 @@
 //  what W7-F0's zero-behaviour-change contract requires.
 // =============================================================================
 #include "forms/fLotInfo.h"
+// AI(W906-FW-SIG-W15) 20260826: edDeviceNameMouseDown 回填 golden 完整簽章。
+#include "vclcompat/ShiftState.h"
 
 // AI(W906-FW3-LotInfo-WA) 20260819: Wave A includes -- every global these 39
 // Tier-1 methods dereference lives in one of these; see forms/fLotInfo.h's
@@ -2119,24 +2121,30 @@ void TfLotInfo::LoadRTCFullViewImg(bool /*bShowImage*/)
 }
 
 // -- edDeviceNameMouseDown (golden uLotInfo.cpp:7193-7214) -- WB-2 ----------
-void TfLotInfo::edDeviceNameMouseDown()
+// AI(W906-FW-SIG-W15) 20260826: GATE (WB-2-BTN) **收窄**，不是退役——它的前提
+// 只死了一半：`TMouseButton`/`mbRight`/`mbLeft` 現在有 port 了
+// （vclcompat/ShiftState.h，commit f184093），所以簽章與 `if(Button==...)` 回填為
+// golden 原文；但那個 if 裡唯一的敘述是 `Clipboard()->Clear()`，而 VCL 的
+// `Clipboard()` 在本樹仍然零 port——那一行改由既有的 GATE (CLIP) 承接
+// （與本方法下半段 SCC 分支裡同一行用的是同一個 gate）。
+// 依 pt-wave 的「前提死掉不代表答案就是退役」：重新問過之後，真正的答案是
+// 「換一個更小的 gate」，而不是整段打開。
+void TfLotInfo::edDeviceNameMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
 {
-    // AI(W906-FW-BARCODE4) 20260825: GATE WB-2 PARTIALLY OPENED -- the SCC
-    // branch is live (InputBarcodeNumber real since FW-BARCODE1; Clipboard
-    // line narrowed to GATE (CLIP)); the AMKOR/QUALCOMM branch stays gated
-    // as GATE (WB-2-BTN): it reads the dropped TMouseButton `Button` param.
-#if 0 // GATE (WB-2-BTN) -- golden reads `Button` (TMouseButton param, dropped: no port)
+    (void)Sender; (void)Shift; (void)X; (void)Y;   //AI(W906-FW-SIG-W15): golden 也沒讀這四個
 #ifndef SOFT_SIMULTE
     if(CUSTOMER_CODE==CC_AMKOR_China ||                                     //jou 2013-01-04 防止OP使用複製貼上的方式讀取工作檔
        CUSTOMER_CODE==CC_QUALCOMM)                                          //JerryYang 20170412 (Steven) add QUALCOMM
     {
         if(Button==mbRight || Button==mbLeft)
         {
+#if 0 // GATE (CLIP) -- VCL Clipboard() 在本樹零 port（與下方 SCC 分支同一個 gate）
             Clipboard()->Clear();
+#endif // GATE (CLIP)
         }
     }
 #endif
-#endif // GATE (WB-2-BTN)
     if((CUSTOMER_CODE==CC_SCC && AccessLevel<iDefHonPrecLevel))
     {
         edDeviceName->Text="";

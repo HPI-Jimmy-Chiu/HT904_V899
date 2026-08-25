@@ -73,6 +73,8 @@
 //  `FormatDateTime(fmt, dt)` is the real, already-used translation.
 // =============================================================================
 #include "forms/fObserver.h"
+// AI(W906-FW-SIG-W15) 20260826: lbltTotalLoaderMouseDown 回填 golden 完整簽章。
+#include "vclcompat/ShiftState.h"
 
 #include "MachineType.h"      // Type_HT9045, NN_1Row/NN_2Row, QualSite2X2N/_6Site2X3N/_8Site2X4N,
                                //   CC_SINOICTECH/CC_AMKOR_Philippines/CC_Microchip_Phil,
@@ -6574,16 +6576,22 @@ void TfObserver::btAutoSaveClick(void * /*Sender*/)
 // "filter duplicate messages" mode can never be switched from this control. The
 // flag itself is REAL and other code still reads it.
 // =============================================================================
-void TfObserver::lbltTotalLoaderMouseDown(void * /*Sender*/)
+// AI(W906-FW-SIG-W15) 20260826: GATE (C-log-6) 已退役，簽章回填為 golden 原文。
+// 上面那段 STATUS/BEHAVIOUR DELTA 是 gate 還在時寫的，現在**不再成立**：
+// `TMouseButton`/`mbRight` 有 port 了（vclcompat/ShiftState.h，commit f184093，
+// 量測先行——golden 全樹 358 支帶 TShiftState 參數、只有 1 支真的讀它）。
+// 本方法因此回到 golden 的完整簽章與完整本體：右鍵點 Total Loader 面板會
+// 切換 bFilterTheAgainData（cmydef.h:3343）。
+// 注意這只是「碼變 live」，不是「功能接上了」——本樹沒有訊息迴圈，
+// 沒有任何東西會呼叫這個 handler，也沒有東西會填 Button。
+void TfObserver::lbltTotalLoaderMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
 {
-    // GATE (C-log-6): golden :3180-3183 -- `Button==mbRight` needs TMouseButton
-    // and the mbRight enumerator, neither of which exists (grep + date above).
-#if 0 // GATE (C-log-6) -- TMouseButton / mbRight have no port (grep + date above)
+    (void)Sender; (void)Shift; (void)X; (void)Y;   //AI(W906-FW-SIG-W15): golden 也沒讀這四個
     if(Button==mbRight)
     {
         bFilterTheAgainData=!bFilterTheAgainData;                               //Steven 20120222 : 過濾掉Duplicate的訊息
     }
-#endif // GATE (C-log-6)
 }
 
 // =============================================================================

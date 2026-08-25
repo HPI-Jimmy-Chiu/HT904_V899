@@ -14,6 +14,7 @@
 #include "forms/FormWidgets.h"
 #include "MachineType.h"   // AI(W906-FW3-LotInfo-WA) 20260819: ATC_HEAD_COUNT (32) sizes ATCChPal[]/ATCPtr[]/ATCReferPtr[] below
 #include "vclcompat/FileListBox.h"   // AI(W906-FW3-LotInfo-WC) 20260819: TFileListBox (FileListBox1, FormShow S9 SPILFunction branch)
+#include "vclcompat/ShiftState.h"   // AI(W906-FW-SIG-W15) 20260826
 
 // =============================================================================
 //  AI(W906-FW3-LotInfo-WA) 20260819: uLotInfo displayside Wave A.
@@ -1344,7 +1345,9 @@ public:
 
     // -- edDeviceNameMouseDown (golden :7193-7214) -- WB-2, whole body gated -
     // edDeviceName already exists (cbbDeviceNameChange, above).
-    virtual void edDeviceNameMouseDown();             // golden uLotInfo.cpp:7193-7214 (Button/Sender dropped, see WB-2)
+    // AI(W906-FW-SIG-W15) 20260826: 回填 golden 完整簽章（GATE (WB-2-BTN) 收窄成 GATE (CLIP)）。
+    virtual void edDeviceNameMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);   // golden uLotInfo.cpp:7193-7214
 
     // -- CutTempToEdit (golden :5225-5244) -- zero new members (edTemp exists) --
     virtual void CutTempToEdit(AnsiString asString);  // golden uLotInfo.cpp:5225-5244
