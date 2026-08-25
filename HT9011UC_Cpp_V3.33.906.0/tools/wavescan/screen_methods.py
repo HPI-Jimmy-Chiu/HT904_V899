@@ -22,7 +22,12 @@ RISK = [
     ('馬達', r'\bMotorMove\b|\bStopAllMotor\b|\bSetServo\b|\bHome\s*\('),
     ('氣缸', r'\bCylinder\[[^\]]+\]\s*\.\s*(On|Off|Move)\b'),
     ('硬體指令', r'Send_Command\w*\s*\(|\bWriteCommand\b|\bSendTCPIPCommand\b'),
-    ('寫檔/寫ini', r'\bWriteIniData\s*\(|\bSaveToFile\s*\(|\bWriteFile\s*\(|\bCreateFile\s*\(|SaveEventLogAutoSaveInfo\s*\('),
+    # 20260825 二次加強：第一版漏了 CopyFile 這一族，於是 ReadConfigStandard
+    # 被判成「乾淨」——它其實會 CopyFile(config_Standard.ini -> config.ini)，
+    # 直接覆蓋產線設定檔。檔案搬移／刪除與寫入同級。
+    ('寫檔/寫ini', r'\bWriteIniData\s*\(|\bSaveToFile\s*\(|\bWriteFile\s*\(|\bCreateFile\s*\('
+                   r'|SaveEventLogAutoSaveInfo\s*\(|\bCopyFile\w*\s*\(|\bMoveFile\w*\s*\('
+                   r'|\bDeleteFile\w*\s*\(|\bRemoveDir\w*\s*\(|\bRenameFile\s*\('),
     ('緒/參數初始化', r'\bInit\w*ThreadParameter\s*\('),
     ('警報/對話框', r'\bShowErrorMessage\s*\(|\bShowMyMessage\w*\s*\(|->ShowModal\s*\('),
     ('golden 自帶安全標記', r'AI\(safety'),
