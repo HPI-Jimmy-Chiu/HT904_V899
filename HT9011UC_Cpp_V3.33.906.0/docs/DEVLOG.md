@@ -9894,7 +9894,83 @@ Release 137/142，兩段失敗集合逐項相同**。這是 Tag 基底改動涉�
 （該時段編輯原始碼安全，ctest 只跑既建二進位），所以 Debug 段編的是加註記
 前的原始碼、Release 段編的是最終樹——兩者差異僅註解。
 
-### 🔖 RESUME（20260824 日終）
+## 20260825 VII — FW-OBS-W2 收案：cObserver 58 個方法整併，以及「四個 gate 的前提是錯的」
+
+本波的翻譯是三個 chunk agent 做的，**整併全部主迴圈自做**。值得記的不是合併本身，
+是回頭複驗 gate 前提時發現的東西——而且**我自己先前的三條裁決有兩條沒撐過量測**。
+
+### 一、四個 gate 退役，死法各不相同（這區別很重要）
+
+| gate | 死法 | 證據 |
+|---|---|---|
+| **FW3A-2** | **當下就錯**，不是過期 | 它引用 `rg "TTabSheet\|TPageControl" -g '*.h' vclcompat/ forms/ -> 0 hits`。實際 `vclcompat/Controls.h:478/:487` **兩個類別都在**，`:531-532` 還 `using` 匯出。`git log -S 'class TTabSheet'` → 加在 **1a74870（W7-A1+W7-F0）**，遠早於本波。真正缺的是 20 個 ts*/pgc* **成員**。 |
+| **FW3A-5 / FW3A-6** | **同波內過期**（pt-wave 陷阱 #2 的教科書案例） | 宣稱「全樹 0 命中」在 agent 跑的當下為真，等兄弟 chunk 落地就假了：chunk B 定義了全部 5 個 Load*/Save*，chunk C 定義 ShowVer 並讀 `bIsLoaded` 10 行。Wave 1 自己的註解（cObserver.cpp:497-503）就寫著「留給翻譯 Precautions tab 的那一波」——**本波就是那一波**。 |
+| **FW3A-9** | 照它自己寫的做就好 | 一行 `#include "forms/fSCKART.h"`。 |
+
+chunk A 從 **40 個 gate 區塊收到 24 個**，**100 行 golden 敘述回到 live**。
+另外 chunk C 的 **C-log-7/C-log-8 退役**（補 `TfObserverChart::LeftAxis` 的
+Maximum/Minimum 兩個欄位就夠），**C-log-1 從整條分支收窄成只關一個 `ShowModal()`**
+——決定它的那個 active-tab 比較現在真的在跑。
+
+### 二、我自己裁錯的兩條（記法比結論重要）
+
+**(e) 「建構子重複了 FormShow 的 9 個敘述，該移出去」——完全錯，已取消。**
+我當時的依據是「port ctor 340 行 vs golden 210 行」。真正該做的是**敘述集合比對**：
+去註解、去空白、正規化 facade 拼法後，golden ctor **188 句** vs port section-B **180 句**，
+差異只有 2 個已記錄的 `INIFileGeneral` 守衛、2 句 TempChart facade 拼法、
+4 句 GDI（已記錄）、5 句 Precaution 成員初始化（本波補回）。
+**golden 自己就在 ctor（:152-159/:222-225/:335）與 FormShow（:373-403）兩邊都寫**。
+340 vs 210 的差額是 port-only 的 section (A)（`new` 配置＋dfm 尺寸補水，:223-333）。
+> 教訓：**行數差不是敘述差**。要比就比敘述集合，別用行數推論結構問題。
+
+**(c) 「刪掉 FormShow 那三句 `->Items=new TStringList()`」——會變成 NULL deref。**
+`vclcompat::TRadioGroup::Items` 預設是 0，而 golden :444-452/:489-497 對三個
+TRadioGroup 做 `Items->Clear()/->Add()`。正解是**往 facade 修**：TRadioGroup 改成
+在自己的 ctor 配置、dtor 釋放（跟 TComboBox:378 / TListBox:388 一致，也跟真 VCL 一致），
+翻譯就能逐字忠實。連帶退役三處手動補水（cSetUp DEVIATION D-1、HandlerSys、
+fSetup.h 的 TfSetupSensorRadioGroup——後者連 `delete Items` 都會跑兩次，
+只因為它先把指標設 nullptr 才沒炸）。guard 測試那條 `rg.Items == 0` 是**鷹架校準**的期望值
+（測試自己的註解就寫 "kept verbatim by the zero-change contract"），照規則二重新校準。
+
+**(d) 「移除 INIFileGeneral 守衛」——成立，但只限 FormShow 那一份。**
+`GetObserAuth()`（cAuthority.cpp:308-313）走 `AuthPath`+`CheckFile`+`CheckAndReadIniData`，
+**完全沒有 deref `INIFileGeneral`**，所以 FormShow 那個守衛什麼都沒保護。
+建構子那個要留：它在 static init 跑，而該函式會 seed 產線的 `config\Security_new.def`。
+
+### 三、宣告與成員都是「量出來的」，不是抄的
+
+- **58 條方法宣告從定義生成**，不是抄 chunk 自己寫的方法清單（清單會跟旁邊的碼漂移，
+  生成器不會）。golden 行號再用「找 `TfObserver::<name>(`＋括號配對」直接量——
+  **58 條裡有 19 條 chunk 給錯**，包含兩條都指向 WriteCategoryData 的 :3274-3547，
+  以及一條把 81 行的 ShowVer 寫成 3 行（本體其實翻完整了）。
+- **95 個新成員也是量出來的**：合併後編譯，把每一條 "was not declared in this scope"
+  收集起來，逐一到 golden `cObserver.h` 查真型別（每一行都附 golden 行號）。
+  = 88 個 widget 指標（20 個 tab/page ＋ 68 個活敘述會 deref 的）＋ 7 個純量。
+  `bTabVisible[20]` 不在其中：golden 把它宣告在**檔案層**（golden cObserver.cpp:57，
+  而且是 20 寬不是 gate 文字寫的 8），所以照樣落在 cObserver.cpp。
+
+### 四、忠實度複驗（不是「編過就算」）
+
+FormShow / FormClose / BtnExitClick 三個方法的 **203 行 LIVE 敘述**逐句回 golden 找逐字對應：
+**155 行完全命中**，48 行沒命中且**全部**是已記錄的 deviation／substitution——
+3 行是函式簽章、`(void)Str`、兩個 TDateTime 消歧義、`->Core.SetXItem/SetCellNumber/
+Height/SetYItem` 這組 facade property→mutator 路由（golden 原文是 `->XItem=8;`，
+已開 golden :455-540 逐條對照確認）、`W906_EventLogRootQ5()` 重導、`cbbMonthChange(this)` 直呼。
+**零筆無法解釋的分歧。**
+
+### 五、刻意沒做
+
+**GATE (FW3A-4) 的約 34 個「只有 caption」的 widget 維持 gated。**
+它們跟這波加的 20 個 tab 成員一樣好加——但加了就等於要解 gate，而**解 gate 是一個
+有自己驗收 gate 的決定，不該當成「讓合併編得過」的副作用**。列入佇列，
+並在 chunk A 的 FW3A-4 與 chunk C 的 C-log-11（同一批 pal* 面板）**互相加了交叉引用**，
+哪一波補齊都能同時清掉兩邊的面板半邊。
+
+### gate
+
+全新雙 dir `build_obs2g` / `build_obs2r`。**Debug 137/142 常駐五項；Release 137/142 常駐五項（與 Debug 失敗集合逐項相同）。**
+
+### 🔖 RESUME（20260824 日終，已被檔尾 20260825 那則取代）
 
 - **今日全收（27 顆 commit）**：FW-TEMP3／GATE7-V＋裁決落地＋計數更正／
   FW-BINDISP1（Offline DEVIATION）／HAL-MOT1（紙上分類＋10 問）／
@@ -9922,3 +9998,32 @@ Release 137/142，兩段失敗集合逐項相同**。這是 Tag 基底改動涉�
   SaveSetupFile 130 寫入（write-path 波等使用者）。
 - **bring-up 佇列（等機邊）**：BinDisplay 實例化切換＋Timer1Timer＋
   CommBin 生命週期；mot_table 新表（等 Q1/Q9/Q4）；1203 ENI 檔。
+
+
+### 🔖 RESUME（20260825 日終）
+
+- **今日全收（本節之前的 20260825 I-VII，共 7 波）**：FW-BARCODE2／FW-BARCODE3
+  （＋`tools/dualgate.sh` 把雙 gate 腳本化）／FW-BARCODE4／台帳 R8＋安全連鎖更正／
+  census 重量與下一標的裁決／**FW-TAG1**（Tag substrate＋退役六個影子成員）／
+  **FW-OBS-W2**（cObserver 58 個方法整併）。雙 gate 全部 137/142×2 常駐五項。
+- **FW-OBS-W2 落點（下一個人從這裡接）**：
+  - `cObserver.cpp` **3,504 → 7,124 行**；`forms/fObserver.h` +95 個成員、+58 條宣告。
+  - commit：`dcd55f1`（TRadioGroup facade 正規化）→ `077c4ce`（合併）→ `2d9e7c1`（台帳 R9）。
+  - 台帳 **681 → 723 筆**（cObserver.cpp 新分節 42 筆，該檔本波前為 0 筆）。
+- **下一波（已備妥，可直接開工）＝ FW-OBS-W3：補 GATE (FW3A-4) 的 31 個 widget**。
+  已量好型別與 golden 行號：22 TPanel／4 TRadioButton／2 TButton／1 TCheckBox／
+  1 TGroupBox／1 TLabel（清單見 `forms/fObserver.h` 那段 WHERE THE LINE IS 註解）。
+  可解 chunk A 的 11 個 FW3A-4 區塊中的 10 個
+  （`grpATCSerialNumber` 那塊還卡 `ATC_TYPE_31`，全樹 0 命中，維持 gated）。
+  順帶清掉 chunk C `C-log-11` 的 (b) 半邊；該 gate 仍卡
+  (a) `fSCKART->sInfoArr_*` 與 (c) `.dfm` Tag 沒有載入路徑。
+- **等使用者（本波未動，只是重列）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
+  HAL-MOT1 十問（Q1/Q9/Q4 擋新 mot_table 起草）；TImage headless 准駁；
+  GOLDEN BUG (TAG1-a) edSHighBase；GOLDEN DEFECT (i) 21-into-20 sprintf overflow。
+- **安全佇列（不做不問）**：GATE 7 家族；AuthPath 2 站點；P-R1/P-S1 密碼檔
+  （接 login 前必解 P-R1）；SaveSetupFile 130 寫入；WebBridge write path。
+  **本波新增一筆**：`cObserver.cpp` 的 Precaution/MajorMaintenance **10 個 Save-path gate**
+  （B-SAFETY-2a..d／3a..b／5a..d）維持關閉——它們寫 `D:\PrecautionRecord`、
+  `D:\MajorMaintenanceRecord` 與客戶設定的鏡像目錄，屬 write path。
+- **註（誠實揭露）**：`forms/fObserver.h:1021` 把「~34」改成量到的「31」是**雙 gate 跑完之後**
+  才做的純註解修正，兩段 gate 編到的是改之前的樹；差異僅註解，不影響任何驗收數字。

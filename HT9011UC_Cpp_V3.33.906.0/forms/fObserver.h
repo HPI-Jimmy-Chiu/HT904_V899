@@ -1018,7 +1018,10 @@ public:
     // WHERE THE LINE IS. This wave adds a member when a LIVE translated
     // statement dereferences it -- i.e. when the tree does not compile without
     // it. It does NOT add members whose only call sites sit inside a gate: the
-    // ~34 caption sinks behind GATE FW3A-4 (labDeviceName, APHeadLabel13/14/18,
+    // 31 caption sinks behind GATE FW3A-4 (counted, not estimated -- every one
+    // was looked up in golden cObserver.h and has a type there: 22 TPanel, 4
+    // TRadioButton, 2 TButton, 1 TCheckBox, 1 TGroupBox, 1 TLabel; namely
+    // labDeviceName, APHeadLabel13/14/18,
     // labReleaseDate, Button7, btAutoSave, CheckBox1, grpATCSerialNumber,
     // labDayJamRate, RadioButton17..20, the 17 SPIL pal* panels) are equally
     // addable and are deliberately QUEUED, because adding them means un-gating
