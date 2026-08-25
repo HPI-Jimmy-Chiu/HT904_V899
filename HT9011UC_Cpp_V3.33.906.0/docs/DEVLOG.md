@@ -9735,6 +9735,44 @@ ini 開啟後才建表單）。交換**一次連結通過、零測試需要重�
   Buffer->Tag（uTemp_Set 9＋MyTempPanel）、TMouseButton Button
   （WB-2-BTN）、Clipboard()（GATE (CLIP) 逐行）＋WB-13 的 fBarCode。
 
+## 20260825 IV — 台帳 R8＋一條安全連鎖的更正（主迴圈自做）
+
+- **台帳 R8**（commit 334341d）：677→**680 筆**。新增 `BarcodeReader.h+.cpp`
+  分節 3 列——BR-q1（QUIRK，15 個初始器對 bcTotal==16，
+  `BarcodeChange[bcSECSGEM]` 是空字串）、BR-n1（NOTE，1280×1024 寫死
+  置中）、BR-n2（NOTE，KYEC 尾段 2 位頭碼驗 85..120，100..120 不可達）。
+  計數器四處同步（總筆數／QUIRK 239→240／罕見詞彙 25→27 且 NOTE 13→15／
+  分節數 134→135），md 與 html 兩份逐列一致。
+- 順手更正一列既有台帳：DynamicTemp `edMaxMouseDown` 的 ODDITY（讀
+  `edMin->Text` 的複製貼上遺留）影響欄還寫著「被 GATE(Q1) 擋住暫不可達」
+  ——Q1 已於 20260824 FW-QWKEY2 解鎖，改成「呼叫已活、handler 未接線故
+  runtime 尚不可達」。**台帳列的『影響』欄會隨解鎖過期，解鎖波要順手回頭
+  改**，這是本輪才想到的維護缺口。
+- XI-XVII 複掃結論：QWKEY2-6 與 G24 六波都是**解鎖與註解更新**，沒有新的
+  GOLDEN-缺陷詞彙註記，故台帳無新列（QWKEY6 是純翻譯、亦無新發現）。
+  BARCODE2/3/4 同理。R8 只有 BARCODE1 實體波那 3 筆。
+
+### 安全連鎖更正：`LastTest.log.tmp` 不等於 ctest 正在跑
+
+`rm -rf build_<tag>` 前我一直用「該目錄下有沒有
+`Testing/Temporary/LastTest.log.tmp*`」當「ctest 是否在跑」的判準
+（qw5/qw8/qw11 三次殘渣清理都靠它）。20260825 冷啟動檢查時
+`build_fww1g` 命中該檔——但 mtime 是 **08-19 09:55**，是六天前被中止的
+ctest 留下的孤兒檔，當下 `tasklist` 顯示 ctest/cmake/cc1plus 全數不存在。
+
+**判準修正**：tmp 檔存在只是「可能在跑」，必須再看 mtime（新於幾分鐘）
+或直接查 process：
+
+```
+ls -la <dir>/Testing/Temporary/LastTest.log.tmp*      # 看 mtime
+tasklist //FI "IMAGENAME eq ctest.exe"                # 才是真的判準
+```
+
+原判準的方向是保守的（把死的當活的 → 不敢刪，只浪費一次補發），
+所以三次復原都沒出事；但反過來若拿它當「沒 tmp 就一定沒在跑」用，
+就會在 ctest 剛啟動、tmp 還沒建立的空窗期誤刪——這才是真正的風險窗，
+一併記在這裡。
+
 ### 🔖 RESUME（20260824 日終）
 
 - **今日全收（27 顆 commit）**：FW-TEMP3／GATE7-V＋裁決落地＋計數更正／
