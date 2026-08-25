@@ -1119,6 +1119,51 @@ public:
     TfObserverDateTimePicker   *DateTimePickerEnd   = new TfObserverDateTimePicker(); // golden cObserver.h:222
     TfObserverDateTimePicker   *DateTimePickerStart = new TfObserverDateTimePicker(); // golden cObserver.h:223
 
+    // ========================================================================
+    // AI(W906-FW3-Observer-W3) 20260825: the caption-only widgets GATE (FW3A-4)
+    // was holding, but ONLY the nine whose value source survives the port.
+    //
+    // FW3A-4 covered 31 widgets. Re-measuring them one family at a time before
+    // adding anything (the value-provenance rule this project paid for in
+    // FW-TAG1 -- "does the TYPE exist" is the easy half; "where does the VALUE
+    // come from" is the half that bites) split them three ways:
+    //
+    //   ADDED HERE (9). Every one is written from something real and live:
+    //     labDeviceName   <- GetLastOpenFN()          APHeadLabel18 <- MyDBQClearDT()
+    //     labReleaseDate  <- RunInfo.SoftwareDate     Button7       <- !SystemStart
+    //     APHeadLabel13/14 <- the DrawCell column totals the grid loops compute
+    //     labDayJamRate / btAutoSave / CheckBox1 <- plain visibility writes
+    //
+    //   STILL GATED, value source absent (4): RadioButton17..20. golden READS
+    //     ->Checked to pick RowNo (golden :1675-1678). Which radio starts
+    //     checked is a `.dfm` design-time property and this port has no .dfm
+    //     loader, so all four would read false and RowNo would silently keep
+    //     its previous value instead of being selected. Same class as the
+    //     VacuumUnit Tag dispatch -- see vclcompat/Controls.h's Tag note.
+    //
+    //   STILL GATED, right-hand side absent (17): the SPIL pal* panels. The
+    //     gate text blamed the missing panels alone; that is INCOMPLETE. The
+    //     values come from `fSCKART->sInfo_Customer` and 15 siblings, and
+    //     forms/fSCKART.h's TfSCKART -- a deliberately measured subset -- has
+    //     NO sInfo_* field at all.
+    //       cmd: grep -n "sInfo_\|iInfo_MultiLotCnt" forms/fSCKART.h -> 0 hits (20260825)
+    //     So adding the 17 panels would create 17 members with no possible
+    //     writer. They wait on the SCK_ART.cpp completion wave, exactly like
+    //     chunk C's C-log-11 (which needs the sInfoArr_* array siblings).
+    //
+    //   Also still gated for an unrelated reason: grpATCSerialNumber, whose
+    //   branch compares against ATC_TYPE_31 (0 hits tree-wide).
+    // ========================================================================
+    TPanel      *labDeviceName      = new TPanel();        // golden cObserver.h:101
+    TPanel      *APHeadLabel13      = new TPanel();        // golden cObserver.h:149
+    TPanel      *APHeadLabel14      = new TPanel();        // golden cObserver.h:150
+    TPanel      *APHeadLabel18      = new TPanel();        // golden cObserver.h:151
+    TPanel      *labReleaseDate     = new TPanel();        // golden cObserver.h:376
+    TButton     *Button7            = new TButton();       // golden cObserver.h:169
+    TButton     *btAutoSave         = new TButton();       // golden cObserver.h:170
+    TCheckBox   *CheckBox1          = new TCheckBox();     // golden cObserver.h:171
+    TLabel      *labDayJamRate      = new TLabel();        // golden cObserver.h:354
+
     // -- PORT-ONLY, NOT a golden member -- see W906Obs2_InstanceRegistrar's
     //    banner above. Declared LAST so `this` is fully constructed (every
     //    member above it already initialized) when its ctor runs.

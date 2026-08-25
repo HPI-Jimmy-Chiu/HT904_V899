@@ -3567,14 +3567,25 @@ void TfObserver::btnSG_QueryYesterdayClick(TObject * /*Sender*/)                
 //                 -> 0 hits for every one of them except labDeviceName, whose
 //                    only hits are forms/fLotInfo.cpp's OWN unrelated member
 //                    (re-run 20260825, still 0)
-//            STATUS, stated plainly so this does not read as impossible: these
-//            ARE addable, exactly the way the twenty tab members were added
-//            this wave. They are left out deliberately, to keep one line in
-//            this integration: FIX THE GATES WHOSE PREMISE IS WRONG, DO NOT
-//            EXPAND THE FACADE BEYOND WHAT THAT REQUIRED. Adding ~30 caption
-//            sinks that no translated code reads back is a separate decision
-//            with its own gate, and it spans all three chunks (see chunk C's
-//            C-log-11, the same family). QUEUED, not blocked.
+//            AI(W906-FW3-Observer-W3) 20260825 -- PARTIALLY RETIRED. FW-OBS-W2
+//            deliberately left all 31 of these queued rather than expand the
+//            facade beyond what fixing wrong gates required. FW-OBS-W3 is that
+//            follow-on, and re-measuring the 31 one family at a time split them
+//            three ways instead of the expected two:
+//              * 9 ADDED and UN-GATED (labDeviceName, APHeadLabel13/14/18,
+//                labReleaseDate, Button7, btAutoSave, CheckBox1, labDayJamRate).
+//                Every one is written from something real and live, so the
+//                caption it shows is the value golden shows. 8 blocks opened.
+//              * 4 STILL GATED -- RadioButton17..20. ->Checked comes from a
+//                `.dfm` design-time property with no loader in this port, and
+//                golden's four else-less `if`s mean "all false" carries RowNo
+//                over rather than selecting row 0. Value source, not type.
+//              * 17 STILL GATED -- the SPIL pal* panels, and NOT only for the
+//                reason this register gave. fSCKART has no sInfo_* field either
+//                (grep at that block). Both sides are missing; it waits on the
+//                SCK_ART.cpp completion wave, with chunk C's C-log-11.
+//            What remains under this id: those 21, plus grpATCSerialNumber via
+//            FW3A-8. The three call sites carry the full reasoning inline.
 //  (FW3A-7)  Timer1 (golden TTimer* on TfObserver). forms/fObserver.h declares no
 //            Timer1 and vclcompat has no TTimer usable here.
 //            cmd: rg -n "Timer1" forms/fObserver.h -> 0 hits (20260825)
@@ -3682,9 +3693,9 @@ void TfObserver::FormShow(void * /*Sender*/)
 
     WriteContactKind();
     GetMachineData();
-#if 0 // GATE (FW3A-4) -- labDeviceName (see register)
+    // AI(W906-FW3-Observer-W3) 20260825: UN-GATED -- labDeviceName is a real member now;
+    // GetLastOpenFN() was always real.
     labDeviceName->Caption=GetLastOpenFN();
-#endif // GATE (FW3A-4)
     // SUBSTITUTION (golden :370): golden writes
     // `MyDBULotEndTime((Now()+0.00001).FormatString("yyyy-mm-dd hh:nn:ss"));`.
     // vclcompat::TDateTime has no FormatString member (this file's head banner
@@ -3699,10 +3710,9 @@ void TfObserver::FormShow(void * /*Sender*/)
     if(INIFileGeneral!=0)                                                       // DEVIATION: guard, see this method's banner (ctor precedent cObserver.cpp:544-549)
         labSerialNo->Caption=CheckAndReadIniDataGeneral("Version", "Serial No", AnsiString("29818"));
     labMachineID->Caption =IniConfig.SocketHandlerID;
-#if 0 // GATE (FW3A-4) -- APHeadLabel18 (see register). MyDBQClearDT() itself is real
-      // (cMyDB.h:110) but is a pure read whose ONLY consumer is this caption.
+    // AI(W906-FW3-Observer-W3) 20260825: UN-GATED -- APHeadLabel18 is a real member now, so
+    // MyDBQClearDT() (cMyDB.h:110) finally has its consumer back.
     APHeadLabel18->Caption=MyDBQClearDT();
-#endif // GATE (FW3A-4)
 
     // AI(W906-FW3-Observer-W2) 20260825: the `if(INIFileGeneral!=0)` that stood
     // on this call is REMOVED. It was copied from the constructor's guard
@@ -3758,10 +3768,8 @@ void TfObserver::FormShow(void * /*Sender*/)
     pgcTestInfo->ActivePageIndex=0;
     ProcessRunInfo();
 
-#if 0 // GATE (FW3A-4) -- labReleaseDate (see register). RunInfo.SoftwareDate is
-      // real (cprod.h:2726) but has no other consumer here.
+    // AI(W906-FW3-Observer-W3) 20260825: UN-GATED -- labReleaseDate is a real member now.
     labReleaseDate->Caption=RunInfo.SoftwareDate;                               //Steven 20091121
-#endif // GATE (FW3A-4)
 
     // SUBSTITUTION (golden :417): `Now()-1` is ambiguous for the same reason the
     // MyDBULotEndTime line above is; cMyDB.cpp:902 established
@@ -3770,9 +3778,9 @@ void TfObserver::FormShow(void * /*Sender*/)
     DateTimePicker2->DateTime=Now();
     DateTimePicker3->Date=Now();
     DateTimePicker4->DateTime=Now();
-#if 0 // GATE (FW3A-4) -- Button7 (see register). SystemStart is real (cmydef.h:221).
+    // AI(W906-FW3-Observer-W3) 20260825: UN-GATED -- Button7 is a real member now; SystemStart
+    // (cmydef.h:221) was always real, so the run-time save lock-out is faithful.
     Button7->Enabled=!SystemStart;                                              //機器在跑的時候不可以存檔
-#endif // GATE (FW3A-4)
     strngrdMDBQuery->Visible=true;
     Chart2->Visible=false;
     cbDisplayData->ItemIndex=Event_Log;
@@ -3787,12 +3795,12 @@ void TfObserver::FormShow(void * /*Sender*/)
     ShowVer();
 
 #ifdef SOFT_SIMULTE
-#if 0 // GATE (FW3A-4) -- btAutoSave/CheckBox1 (see register). Kept nested inside
-      // golden's own #ifdef so the simulate-build shape stays visible; note that
-      // MachineType.h:48 has SOFT_SIMULTE commented out in this tree anyway.
+    // AI(W906-FW3-Observer-W3) 20260825: UN-GATED -- both are real members now. Still inside
+    // golden's own #ifdef SOFT_SIMULTE, which MachineType.h:48 leaves commented
+    // out in this tree, so this remains compiled out -- un-gating restores the
+    // shape, not the behaviour.
     btAutoSave->Visible=true;
     CheckBox1->Visible=true;
-#endif // GATE (FW3A-4)
 #endif
 #if 0 // GATE (FW3A-7) -- Timer1 (see register). CONSEQUENCE, stated plainly: the
       // periodic Timer1Timer tick that Wave 2 translated is never armed by this
@@ -4037,7 +4045,17 @@ void TfObserver::FormShow(void * /*Sender*/)
         bChangeReciepeSaveMajorMaintenanceRecord =true;
     }
 
-#if 0 // GATE (FW3A-4) -- the 17 SPIL pal* panels are not facade members.
+// AI(W906-FW3-Observer-W3) 20260825: GATE (FW3A-4) TEXT CORRECTED here. It
+// said only the 17 pal* panels were missing. That is INCOMPLETE, and it made
+// this block look like a one-wave fix. The RIGHT-hand side is missing too:
+// forms/fSCKART.h's TfSCKART is a deliberately measured subset and carries no
+// sInfo_* field at all -- not one of the sixteen below, nor iInfo_MultiLotCnt.
+//   cmd: grep -n "sInfo_\|iInfo_MultiLotCnt" forms/fSCKART.h -> 0 hits (20260825)
+// Adding the panels alone would create 17 members no code could ever write.
+// (sLotID on the second line IS real, fSCKART.h:86 -- one live source out of
+// seventeen.) Blocked on the SCK_ART.cpp completion wave, same as C-log-11
+// below, which needs that unit's sInfoArr_* array siblings.
+#if 0 // GATE (FW3A-4) -- 17 pal* panels absent AND fSCKART->sInfo_* absent (grep + date above)
     palCustomer->Caption    =fSCKART->sInfo_Customer;                           //JerryYang 20200330 : 修改SPIL LOT INFO
     palInnLotID->Caption    =fSCKART->sLotID;
     palCustLotID->Caption   =fSCKART->sInfo_CustLotID;
@@ -4066,10 +4084,9 @@ void TfObserver::FormShow(void * /*Sender*/)
 
     if(IniConfig.bVTESTFunction==true)
     {
-#if 0 // GATE (FW3A-4) -- labDayJamRate is not a facade member. pnlDayJamRate IS
-      // (forms/fObserver.h:698), so only this one line is gated.
+        // AI(W906-FW3-Observer-W3) 20260825: UN-GATED -- labDayJamRate is a real member now,
+        // so the label and the panel beside it become visible together as golden does.
         labDayJamRate->Visible=true;
-#endif // GATE (FW3A-4)
         pnlDayJamRate->Visible=true;
     }
 
@@ -4246,9 +4263,11 @@ void TfObserver::StringGrid2DrawCell(void * /*Sender*/, int ACol, int ARow)
     iTotal=0;
     for(int i=0; i<MAX_SOCKET_COL; i++)
         iTotal+=atoi(sCounterColKind[0][i].c_str());
-#if 0 // GATE (FW3A-4) -- APHeadLabel13 (see register)
+    // AI(W906-FW3-Observer-W3) 20260825: UN-GATED -- APHeadLabel13 is a real member now. The
+    // column total it shows is computed by the ACTIVE accumulation loop above;
+    // `Caption=iTotal` binds AnsiString(int) (vclcompat/AnsiString.h:67), which is
+    // what BCB6 does here too, so golden is kept verbatim.
     APHeadLabel13->Caption=iTotal;
-#endif // GATE (FW3A-4)
     (void)iTotal;   // computation kept ACTIVE (ready the moment FW3A-4 lifts)
     DrawCenterLine(0, iLeft, iCellWidth);
 }
@@ -4302,9 +4321,8 @@ void TfObserver::StringGrid3DrawCell(void * /*Sender*/, int ACol, int ARow)
     iTotal=0;
     for(int i=0; i<MAX_SOCKET_COL; i++)
         iTotal+=atoi(sCounterColKind[1][i].c_str());
-#if 0 // GATE (FW3A-4) -- APHeadLabel14 (see register)
+    // AI(W906-FW3-Observer-W3) 20260825: UN-GATED -- APHeadLabel14 is a real member now.
     APHeadLabel14->Caption=AnsiString(iTotal);
-#endif // GATE (FW3A-4)
     (void)iTotal;   // computation kept ACTIVE (ready the moment FW3A-4 lifts)
     DrawCenterLine(0, iLeft, iCellWidth);
 }
@@ -4697,7 +4715,17 @@ void TfObserver::rgRowNoClick(void * /*Sender*/)
 //  ACTIVE ARM: both dispatches (DrawCellCategory / DrawCenterLine) are real calls.
 void TfObserver::StringGrid5DrawCell(void * /*Sender*/, int ACol, int ARow)
 {
-#if 0 // GATE (FW3A-4) -- RadioButton17/18/19/20 are not facade members (see register)
+    // AI(W906-FW3-Observer-W3) 20260825: STILL GATED, and for a SECOND reason
+    // the original text did not state. Adding four TRadioButton members is
+    // trivial; the problem is where ->Checked gets its value. In golden it is a
+    // `.dfm` design-time property (which of the four starts selected), and this
+    // port has no .dfm -> C++ loader, so all four would read false. golden picks
+    // RowNo with four independent `if`s and NO else, so "all false" does not
+    // select row 0 -- it leaves RowNo at whatever the last writer set. Opening
+    // this would turn a deliberate selection into a silent carry-over. Same
+    // family as the VacuumUnit Tag dispatch; see vclcompat/Controls.h's Tag
+    // VALUE PROVENANCE note. Wait for a design-time property source.
+#if 0 // GATE (FW3A-4) -- RadioButton17..20 ->Checked has no value source in this port (see above)
     if(RadioButton17->Checked) RowNo=0;
     if(RadioButton18->Checked) RowNo=1;
     if(RadioButton19->Checked) RowNo=2;
