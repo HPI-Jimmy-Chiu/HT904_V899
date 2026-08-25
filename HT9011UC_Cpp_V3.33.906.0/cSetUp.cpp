@@ -491,12 +491,14 @@ void TfSetup::Init()
     }
 
     // AI(W906-FW-SETUP-D) 20260824: DEVIATION D-1 -- real VCL TRadioGroup
-    // allocates Items in its ctor; the shared vclcompat base deliberately
-    // leaves it NULL (Controls.h's verbatim-kept default), so golden's
-    // Clear()/Add() below would deref NULL without this line. Allocated
-    // unconditionally (real VCL owns Items whether or not the branch runs).
-    rgInOutArmYPitch->Items=new TStringList();
-
+    // allocates Items in its ctor; the shared vclcompat base deliberately left
+    // it NULL, so golden's Clear()/Add() below would deref NULL without an
+    // explicit `rgInOutArmYPitch->Items=new TStringList();` here.
+    // AI(W906-FW3-Observer-W2) 20260825: DEVIATION D-1 RETIRED -- vclcompat::
+    // TRadioGroup now allocates Items in its own constructor and frees it in
+    // its destructor (Controls.h:431-437), matching real VCL and the
+    // TComboBox/TListBox already there. Keeping this line would LEAK the
+    // constructor's list, so it is removed rather than left as a no-op.
     if(USE_IN_OUT_ARM_Y_PITCH==iXPitchManual360)                                //Steven 20140819 : Y-Pitch 36mm
     {
         rgInOutArmYPitch->Items->Clear();

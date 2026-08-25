@@ -348,12 +348,13 @@ public:
     int Columns = 0;                        // golden TRadioGroup->Columns (3 at build time)
 
     // DEVIATION (D-1, see file-head banner): real VCL TRadioGroup allocates
-    // Items in its ctor; the shared vclcompat base deliberately leaves it
-    // NULL (Controls.h's own verbatim-kept default). Golden's build loop
-    // calls Items->Add() unconditionally, so this facade type must own a
-    // real Items.
-    TfSetupSensorRadioGroup() { Items = new vclcompat::TStringList(); }
-    virtual ~TfSetupSensorRadioGroup() { delete Items; Items = nullptr; }
+    // Items in its ctor; the shared vclcompat base deliberately left it NULL,
+    // so this facade type allocated and freed its own.
+    // AI(W906-FW3-Observer-W2) 20260825: D-1 RETIRED here too. The base
+    // (Controls.h:431-437) now allocates and frees Items itself, so the
+    // ctor's `Items = new ...` would leak the base's list and the dtor's
+    // `delete Items` would run twice over. Both removed; the inherited pair
+    // does exactly what this one did.
 };
 
 class TfSetup

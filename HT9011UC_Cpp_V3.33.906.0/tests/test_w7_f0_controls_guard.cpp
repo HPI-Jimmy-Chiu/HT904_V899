@@ -347,11 +347,22 @@ int main()
               combo.Items != 0);
         check("vclcompat::TComboBox default ItemIndex==0", combo.ItemIndex == 0);
 
-        // TRadioGroup::Items is deliberately left NULL (the pre-existing
-        // W906-VCW1 behaviour, kept verbatim by the zero-change contract).
+        // AI(W906-FW3-Observer-W2) 20260825: RECALIBRATED. This used to assert
+        // `rg.Items == 0` -- an expectation calibrated to the W7-F0 refactor's
+        // own zero-change contract, not to golden. Real VCL's TRadioGroup
+        // allocates ->Items in its constructor, and cObserver's FormShow
+        // (golden :444-452, :489-497) dereferences it on three TRadioGroups, so
+        // the NULL default was a crash waiting for the first consumer rather
+        // than a property worth pinning. vclcompat::TRadioGroup now matches
+        // TComboBox/TListBox; this guard pins the NEW invariant.
         vclcompat::TRadioGroup rg;
-        check("vclcompat::TRadioGroup::Items stays NULL (pre-existing W906-VCW1 default, preserved)",
-              rg.Items == 0);
+        check("vclcompat::TRadioGroup allocates a REAL TStringList for Items",
+              rg.Items != 0);
+        check("vclcompat::TRadioGroup default ItemIndex==0", rg.ItemIndex == 0);
+        rg.Items->Add(AnsiString("Row-A"));
+        rg.Items->Add(AnsiString("Row-B"));
+        check("vclcompat::TRadioGroup::Items has REAL Add/Count semantics (Count==2)",
+              rg.Items->Count == 2);
 
         vclcompat::TCustomEdit ce;
         ce.Text = AnsiString("something");

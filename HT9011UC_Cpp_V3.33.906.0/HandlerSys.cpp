@@ -793,9 +793,13 @@ static const int kCustomerListItemCount =
 //---------------------------------------------------------------------------
 THandlerSystem::THandlerSystem()
 {
-    // DEVIATION (see banner above): golden gets this for free from the
-    // .dfm resource stream; this facade must hydrate it explicitly.
-    rgCustomerList->Items = new TStringList();
+    // DEVIATION (see banner above): golden gets the LIST CONTENTS for free from
+    // the .dfm resource stream; this facade must fill them in explicitly.
+    // AI(W906-FW3-Observer-W2) 20260825: the `rgCustomerList->Items = new
+    // TStringList();` that used to stand here is gone -- vclcompat::TRadioGroup
+    // now allocates Items in its own constructor and frees it in its destructor
+    // (Controls.h:431-437), so re-allocating here would leak that list. The
+    // hydration of the CONTENTS below is unchanged and still required.
     for (int i = 0; i < kCustomerListItemCount; i++)
         rgCustomerList->Items->Add(kCustomerListItems[i]);
 

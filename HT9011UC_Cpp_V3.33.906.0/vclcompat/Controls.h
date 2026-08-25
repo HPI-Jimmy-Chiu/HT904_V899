@@ -418,22 +418,28 @@ public:
 // DataItemOutSV/DataItemOutEC's symmetric ItemIndex>=0 read branch, golden
 // :2554-2560). Modeled here as a `TStringList*` -- satisfies both ->Count
 // and ->Strings[i] (see vclcompat/TStringList.h) without inventing a new
-// abstract-TStrings-pointer shim just for this one field. Defaults to NULL:
-// with zero real TRadioGroup instances anywhere in the object graph, golden's
-// ->Items dereference is unreachable dead code today -- allocating a real
-// (always-empty) TStringList here that no code path can ever read would be
-// pointless heap churn, not extra safety.
-// AI(W906-W7-F0) 20260728: this NULL default is KEPT VERBATIM (unlike the
-// newly-added TComboBox/TListBox::Items above, which allocate) purely because
-// W7-F0 is a zero-behaviour-change refactor and this type already existed.
-// A later wave may normalise the two; doing it here would be a change with no
-// gate able to observe it either way.
+// abstract-TStrings-pointer shim just for this one field.
+// AI(W906-W7-F0) 20260728: originally defaulted to NULL, kept verbatim because
+// W7-F0 was a zero-behaviour-change refactor -- with the note "a later wave may
+// normalise the two; doing it here would be a change with no gate able to
+// observe it either way".
+// AI(W906-FW3-Observer-W2) 20260825: THAT WAVE IS THIS ONE, and there is now a
+// gate that observes it. cObserver's FormShow (golden :444-452 and :489-497)
+// does `rgRowNo->Items->Clear(); ->Add("Arm1"); ...` on THREE TRadioGroups
+// (rgRowNo, rgContactCountKinds, rgContactCountHistory), so the NULL default is
+// no longer unreachable -- it is a NULL dereference on the first show, on both
+// arms of the branch. Real VCL's TRadioGroup allocates ->Items in its ctor,
+// which is exactly what TComboBox:378 / TListBox:388 above already model, so
+// matching them makes the translation byte-faithful instead of needing a
+// port-only hydration prologue at every call site. The two sites that hydrated
+// by hand (cSetUp.cpp DEVIATION D-1, HandlerSys.cpp:798) are retired in the
+// same commit -- with an allocating constructor they would leak the ctor's list.
 class TRadioGroup : public TControl {
 public:
     int          ItemIndex;
     TStringList *Items;
-    TRadioGroup() : ItemIndex(0), Items(0) {}
-    virtual ~TRadioGroup() {}
+    TRadioGroup() : ItemIndex(0) { Items = new TStringList(); }
+    virtual ~TRadioGroup() { delete Items; }
 };
 
 // golden TButton (725 `.dfm` instances).
