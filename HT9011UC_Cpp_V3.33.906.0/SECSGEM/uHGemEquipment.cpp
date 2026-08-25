@@ -7189,3 +7189,372 @@ bool THGem::GetSpoolActive()
 {
     return bSpoolActive;
 }
+
+// =============================================================================
+// FW-GEM-W8 -- THGem 的 EC-change / EC-enable / Terminal / Alarm 小家族（12 支）
+//
+// 選批依據（tools/wavescan 五步）：survey_file 修好「搬到別的 port 類別」的
+// 盲點之後，THGem 真正缺 46 支／1,206 行；本批是其中 screen_methods（含
+// 跟進自由函式的 deep pass）全數乾淨、且逐支親眼讀過 golden 的 12 支。
+//
+// 一個要明講的點：TerminalRequest 會 InitLocalHead + DataItemOut ×3 +
+// SendLocalData，**送 S10F1 給 host**。照本檔 header 記載的先例
+// （ReportAcknowledge / ReportLinkAcknowledgeError /
+//   EnableDisableEventReportAcknowledgeError 這一族同樣形狀，
+//   AI(W906-AlarmReportAck) 20260721 已正常翻譯），SECS 訊息組裝在本樹
+// 屬 in-scope；它不是機台動作指令，且本波不接線任何 event handler。
+// =============================================================================
+// AI(W906-FW-GEM-W8) 20260825: golden SECSGEM/uHGemEquipment.cpp:353-370, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::InitHType()
+{
+    HType.LIST_TYPE   =0x00;
+    HType.ASCII_TYPE  =0x40;
+    HType.JIS_TYPE    =0x44;
+    HType.BINARY_TYPE =0x20;
+    HType.BOOLEAN_TYPE=0x24;
+    HType.INT_1_TYPE  =0x64;
+    HType.INT_2_TYPE  =0x68;
+    HType.INT_4_TYPE  =0x70;
+    HType.INT_8_TYPE  =0x60;
+    HType.UINT_1_TYPE =0xa4;
+    HType.UINT_2_TYPE =0xa8;
+    HType.UINT_4_TYPE =0xb0;
+    HType.UINT_8_TYPE =0xa0;
+    HType.FT_4_TYPE   =0x90;
+    HType.FT_8_TYPE   =0x80;
+}
+
+// AI(W906-FW-GEM-W8) 20260825: golden SECSGEM/uHGemEquipment.cpp:824-835, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+AnsiString THGem::ReadALED(AnsiString ALID)
+{
+    AnsiString S, FileName;
+    if(bALEDflag==true)
+    {
+        bALEDflag=false;
+    }
+
+    FileName.sprintf("%sALID_ALED.ini", IncludeTrailingPathDelimiter(GemSystemPath));
+    S=ReadIniData(FileName, "ALID", ALID, AnsiString("1"));
+    return S;
+}
+
+// AI(W906-FW-GEM-W8) 20260825: golden SECSGEM/uHGemEquipment.cpp:3927-3942, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::ReplyECDataChange()
+{
+    bS1F2_OnLineData=false;
+    for(int i=0; i<SECSReportIDChange->Count; i++)
+    {
+        SYS_ECChangeID             = SECSReportIDChange->Strings[i];
+        SYS_ECChangeIDOriginaValue = SECSOriginalValue->Strings[i];
+        SYS_ECChangeIDNewValue     = SECSNewECValue->Strings[i];
+
+        if(GetECEnableData(SYS_ECChangeID)==true)                               //pig 2014.08.27 KYEC
+#if 0 // GATE (W8-ECEvent) -- golden 原文保留
+            // 這裡要的是 THGem 自己的 2 參數 EventReport（golden
+            // uHGemEquipment.h:552 宣告、.cpp:7703-7761 本體），本樹尚未翻。
+            // 本檔目前可見的 `EventReport` 是 SECSGEM/SecsEventReport.h:55 的
+            // **自由函式** `void EventReport(unsigned Ceid)`（1 個參數）——
+            // 名字相同、東西不同，直接編會得到 "too many arguments"。
+            // THGem::EventReport 自己還相依 SendCeid / SendAnnotatedCeid /
+            // chkAnnotatedEventReport / IsEnableEvent，是獨立一波的量。
+            // 量測 20260826: survey_file 的「真正缺」清單裡
+            //   EventReport  golden :7703-7761  59 行  -> 仍缺
+            // 影響：EC 值變動時本樹不會送出 S6F11/S6F13；上面三條清單的記帳
+            // 與 Clear() 仍照 golden 執行（方向是收窄，不是多做）。
+            EventReport(1, 48);
+#endif
+            ;   //AI(W906-FW-GEM-W8) 20260826: 上面的 gate 把 if 的唯一敘述拿掉了，golden 那個 if 沒有大括號，補一個空敘述維持語法。                                                 //SECS_EVENT.ChangeEC
+    }
+    SECSReportIDChange->Clear();
+    SECSOriginalValue->Clear();
+    SECSNewECValue->Clear();
+}
+
+// AI(W906-FW-GEM-W8) 20260825: golden SECSGEM/uHGemEquipment.cpp:3947-3985, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::DoReportECDataChangeCheck()
+{
+    AnsiString S;
+    bool bChange=false;
+    if(bOnLine==false)
+        return;
+    //==> Eastsun 20260526 #026-1.72 Ifor 20220125 add: KYEC 不執行EC Data Check
+    if(CUSTOMER_CODE==CC_KYEC_LEE)
+    {
+        return;
+    }
+    //<== Eastsun 20260526 #026-1.72
+    if(cbECChaneEventReport->Checked==false)                                    //JerryYang 20200520 舊電腦做DoReportECDataChangeCheck函式會影響UPH,改成功能選項
+        return;
+    if(iReportECDataChangeCheckOldSecond!=SystemSec)
+    {
+        if((SystemSec%2)==0)
+        {
+            iReportECDataChangeCheckOldSecond=SystemSec;
+            for(int i=0; i<EC_ID->Count; i++)
+            {
+                S=SvEcReg.GetECDataValue(atoi(EC_ID->Strings[i].c_str()));   //AI(W906-FW-GEM-W8) 20260826: golden 是裸呼叫；本樹的 GetECDataValue 住在 SecsSvEcRegistration（SecsSvEcRegistration.cpp:601），THGem 以 `SecsSvEcRegistration SvEcReg;`（uHGemEquipment.h:753）by-value 持有，故走 forwarder 不重寫邏輯——即檔頭 :112-116 記載的既定設計。
+                if(S!=EC_OldValue->Strings[i])
+                {
+                    SECSReportIDChange->Add(EC_ID->Strings[i].c_str());
+                    SECSOriginalValue->Add(EC_OldValue->Strings[i]);
+                    SECSNewECValue->Add(S);
+                    EC_OldValue->Strings[i]=S;
+                    bChange=true;
+                }
+            }
+        }
+    }
+
+    if(bChange)
+    {
+        ReplyECDataChange();
+    }
+}
+
+// AI(W906-FW-GEM-W8) 20260825: golden SECSGEM/uHGemEquipment.cpp:3989-4018, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+int THGem::DoReportECChange(int iIndex)
+{
+    AnsiString S;
+    bool bChange=false;
+    if(bOnLine==false || InitialOK==false)
+        return -1;
+//    if(iReportECDataChangeCheckOldSecond!=SystemSec)
+//    {
+//        if((SystemSec%2)==0)
+//        {
+            iReportECDataChangeCheckOldSecond=SystemSec;
+            S=SvEcReg.GetECDataValue(atoi(EC_ID->Strings[iIndex].c_str()));   //AI(W906-FW-GEM-W8) 20260826: golden 是裸呼叫；本樹的 GetECDataValue 住在 SecsSvEcRegistration（SecsSvEcRegistration.cpp:601），THGem 以 `SecsSvEcRegistration SvEcReg;`（uHGemEquipment.h:753）by-value 持有，故走 forwarder 不重寫邏輯——即檔頭 :112-116 記載的既定設計。
+            if(S!=EC_OldValue->Strings[iIndex])
+            {
+                SECSReportIDChange->Add(EC_ID->Strings[iIndex].c_str());
+                SECSOriginalValue->Add(EC_OldValue->Strings[iIndex]);
+                SECSNewECValue->Add(S);
+                EC_OldValue->Strings[iIndex]=S;
+                bChange=true;
+            }
+//        }
+
+        if(bChange)
+        {
+            ReplyECDataChange();
+        }
+        return 1;
+//    }
+//    return -1;
+}
+
+// AI(W906-FW-GEM-W8) 20260825: golden SECSGEM/uHGemEquipment.cpp:6040-6067, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::SetTerminalWindows(TObject *Ptr)
+{
+    // GATE (W8-TermCast) -- golden 原文保留在下面的 #if 0 內。
+    // golden 用 `dynamic_cast<TMemo*>/<TListBox*>/<TCustomEdit*>/<TPanel*>`
+    // 對傳進來的 TObject* 做執行期型別判別，決定 TerminalDisplayIndex 是 1/2/3/4。
+    // 本樹**刻意不模型化那條 VCL 階層**：golden 的四種 widget 對應到
+    // THGemEdit(uHGemEquipment.h:436)／THGemPanel(:470)／THGemMemo(:503)／
+    // THGemListBox(:570)，四個彼此無關的 plain struct，沒有共同基底、
+    // 沒有虛擬函式，所以 dynamic_cast 在這裡不是「缺個型別」而是
+    // **沒有型別關係可判別**。
+    // 量測 20260826:
+    //   grep -n "struct THGemMemo|THGemListBox|THGemEdit|THGemPanel" -> 四個獨立 struct
+    //   四者皆非 polymorphic（無 virtual），dynamic_cast 對它們不合法
+    // TerminalDisplayIndex 因此維持 ctor 設的 0，而 0 在 golden 的語意就是
+    // 「沒有指定顯示目標」——TerminalRequest（本波 live）對 index 0 不做任何
+    // 顯示動作，與 golden 一致。指定顯示目標的路徑要等 widget 階層被模型化。
+    // gated stub 慣例同 DoSpool/DoUploadFileToHost/DoDownLoadRemoteFile
+    // （見本檔 header :161-167）。
+#if 0 // GATE (W8-TermCast)
+    TerminalDisplayIndex=0;
+    TerminalMemoPtr=dynamic_cast<TMemo *>(Ptr);
+    if(TerminalMemoPtr!=NULL)
+    {
+        TerminalDisplayIndex=1;
+        return;
+    }
+    TerminalListboxPtr=dynamic_cast<TListBox*>(Ptr);
+    if(TerminalListboxPtr!=NULL)
+    {
+        TerminalDisplayIndex=2;
+        return;
+    }
+    TerminalEditPtr=dynamic_cast<TCustomEdit*>(Ptr);                            //Steven 20240604 : TEdit --> TCustomEdit
+    if(TerminalEditPtr!=NULL)
+    {
+        TerminalDisplayIndex=3;
+        return;
+    }
+    TerminalPanelPtr=dynamic_cast<TPanel*>(Ptr);
+    if(TerminalPanelPtr!=NULL)
+    {
+        TerminalDisplayIndex=4;
+        return;
+    }
+#endif
+}
+
+// AI(W906-FW-GEM-W8) 20260825: golden SECSGEM/uHGemEquipment.cpp:6069-6096, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::SetTerminalWindows2(TObject *Ptr)
+{
+    // GATE (W8-TermCast) -- golden 原文保留在下面的 #if 0 內。
+    // golden 用 `dynamic_cast<TMemo*>/<TListBox*>/<TCustomEdit*>/<TPanel*>`
+    // 對傳進來的 TObject* 做執行期型別判別，決定 TerminalDisplayIndex 是 1/2/3/4。
+    // 本樹**刻意不模型化那條 VCL 階層**：golden 的四種 widget 對應到
+    // THGemEdit(uHGemEquipment.h:436)／THGemPanel(:470)／THGemMemo(:503)／
+    // THGemListBox(:570)，四個彼此無關的 plain struct，沒有共同基底、
+    // 沒有虛擬函式，所以 dynamic_cast 在這裡不是「缺個型別」而是
+    // **沒有型別關係可判別**。
+    // 量測 20260826:
+    //   grep -n "struct THGemMemo|THGemListBox|THGemEdit|THGemPanel" -> 四個獨立 struct
+    //   四者皆非 polymorphic（無 virtual），dynamic_cast 對它們不合法
+    // TerminalDisplayIndex 因此維持 ctor 設的 0，而 0 在 golden 的語意就是
+    // 「沒有指定顯示目標」——TerminalRequest（本波 live）對 index 0 不做任何
+    // 顯示動作，與 golden 一致。指定顯示目標的路徑要等 widget 階層被模型化。
+    // gated stub 慣例同 DoSpool/DoUploadFileToHost/DoDownLoadRemoteFile
+    // （見本檔 header :161-167）。
+#if 0 // GATE (W8-TermCast)
+    TerminalDisplayIndex2=0;
+    TerminalMemoPtr2=dynamic_cast<TMemo *>(Ptr);
+    if(TerminalMemoPtr2!=NULL)
+    {
+        TerminalDisplayIndex2=1;
+        return;
+    }
+    TerminalListboxPtr2=dynamic_cast<TListBox*>(Ptr);
+    if(TerminalListboxPtr2!=NULL)
+    {
+        TerminalDisplayIndex2=2;
+        return;
+    }
+    TerminalEditPtr2=dynamic_cast<TCustomEdit*>(Ptr);                           //Steven 20240604 : TEdit --> TCustomEdit
+    if(TerminalEditPtr2!=NULL)
+    {
+        TerminalDisplayIndex2=3;
+        return;
+    }
+    TerminalPanelPtr2=dynamic_cast<TPanel*>(Ptr);
+    if(TerminalPanelPtr2!=NULL)
+    {
+        TerminalDisplayIndex2=4;
+        return;
+    }
+#endif
+}
+
+// AI(W906-FW-GEM-W8) 20260825: golden SECSGEM/uHGemEquipment.cpp:6100-6129, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::TerminalRequest(AnsiString S)
+{
+    unsigned char TID=1;
+    InitLocalHead(10,1,0);
+    DataItemOut(2, HType.LIST_TYPE, NULL);
+    DataItemOut(1, HType.BINARY_TYPE, &TID);
+    DataItemOut(HType.ASCII_TYPE, S);
+    SendLocalData();
+
+    GetTimeInfo();
+    S=TimeString+AnsiString(" [S]==>> ")+S;
+
+    if(TerminalDisplayIndex==1)
+        TerminalMemoPtr->Lines->Add(S);
+    else if(TerminalDisplayIndex==2)
+        TerminalListboxPtr->Items->Add(S);
+    else if(TerminalDisplayIndex==3)
+        TerminalEditPtr->Text=S;
+    else if(TerminalDisplayIndex==4)
+        TerminalPanelPtr->Caption=S;
+
+    if(TerminalDisplayIndex2==1)
+        TerminalMemoPtr2->Lines->Add(S);
+    else if(TerminalDisplayIndex2==2)
+        TerminalListboxPtr2->Items->Add(S);
+    else if(TerminalDisplayIndex2==3)
+        TerminalEditPtr2->Text=S;
+    else if(TerminalDisplayIndex2==4)
+        TerminalPanelPtr2->Caption=S;
+}
+
+// AI(W906-FW-GEM-W8) 20260825: golden SECSGEM/uHGemEquipment.cpp:6371-6384, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+bool THGem::CheckNeedReportAlarm(AnsiString S)
+{
+    for(int i=1; i<strGrdAlarm->RowCount; i++)
+    {
+        if(S==strGrdAlarm->Cells[1][i])
+        {
+            if(strGrdAlarm->Cells[7][i]=="1")
+                return true;
+            else
+                return false;
+        }
+    }
+    return true;
+}
+
+// AI(W906-FW-GEM-W8) 20260825: golden SECSGEM/uHGemEquipment.cpp:9226-9253, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+bool THGem::ReadECEnableData()
+{
+    TStringList *memoPtr;
+    AnsiString Filename;
+
+    memoPtr=new TStringList;
+    Filename=IncludeTrailingPathDelimiter(GemSystemPath)+AnsiString("ECEnableData.def");
+    if(FileExists(Filename)==false)
+    {
+        delete memoPtr;                                                         //16.09.14.00 Roy Add
+        return false;
+    }
+    memoPtr->LoadFromFile(Filename);
+    while(1)
+    {
+        if(memoPtr->Strings[memoPtr->Count-1]=="")
+            memoPtr->Delete(memoPtr->Count-1);
+        else
+            break;
+
+        if( memoPtr->Count==0)
+            break;
+    }
+    sgSECSECData->RowCount=memoPtr->Count;
+    PasteStringGridAsTabFormat(sgSECSECData, memoPtr);
+    delete memoPtr;
+    return true;
+}
+
+// AI(W906-FW-GEM-W8) 20260825: golden SECSGEM/uHGemEquipment.cpp:9306-9319, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+bool THGem::GetECEnableData(AnsiString ID)
+{
+    for(int i=1; i<sgSECSECData->RowCount; i++)
+    {
+        if(sgSECSECData->Cells[1][i]==ID)
+        {
+            if(sgSECSECData->Cells[2][i]=="1")
+                return true;
+            else
+                return false;
+        }
+    }
+    return false;
+}
+
+// AI(W906-FW-GEM-W8) 20260825: golden SECSGEM/uHGemEquipment.cpp:9323-9334, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void THGem::SetECEnableData(AnsiString ECID,AnsiString Function)
+{
+    int ct=sgSECSECData->RowCount;
+    sgSECSECData->RowCount++;
+    if(ct==1)
+        sgSECSECData->FixedRows=1;
+
+    sgSECSECData->Cells[0][ct]=ct;
+    sgSECSECData->Cells[1][ct]=ECID;
+    sgSECSECData->Cells[2][ct]="0";                                             // enable or disable
+    sgSECSECData->Cells[3][ct]=Function;
+}

@@ -1680,6 +1680,42 @@ public:
     void DoUploadFileToHost_ForMultiFile();      // golden :4350-4471
     void DoUploadFileToHost_ForDirectoryFile();  // golden :4477-4586
     void DoUploadFileToHost();                   // golden :4591-4599 (dispatcher)
+
+
+    // AI(W906-FW-GEM-W8) 20260826: 本波方法用到的 golden 成員。
+    bool bALEDflag = false;                       // golden uHGemEquipment.h:469
+    Word iReportECDataChangeCheckOldSecond = 0;   // golden :480
+    // EC_ID / EC_OldValue 是 EC 變動偵測的兩條平行清單：DoReportECChange 用
+    // iIndex 同時索引兩者，比對 GetECDataValue(EC_ID[i]) 與 EC_OldValue[i]。
+    // golden 由 out-of-scope 的 FormCreate SV/EC 註冊填充（見檔頭 :161），
+    // 本樹保持空清單 -> DoReportECChange 的迴圈不會有可索引的項目。
+    TStringList *EC_ID      = new TStringList();   // golden :656
+    TStringList *EC_OldValue = new TStringList();  // golden :670
+    // ========================================================================
+    // AI(W906-FW-GEM-W8) 20260826: EC-change / EC-enable / Terminal / Alarm
+    // 小家族 12 支。簽章由定義生成（golden 的 __fastcall 已剝除）。
+    // SetTerminalWindows/SetTerminalWindows2 是 gated stub，理由見 .cpp。
+    // ========================================================================
+
+    // golden uHGemEquipment.h:627-629（pig 2014.04.23 KYEC SECS）。
+    // DoReportECChange 每次偵測到 EC 值變動就往這三串各 Add 一筆，
+    // ReplyECDataChange 讀完之後清空。三者長度必須同步。
+    TStringList *SECSReportIDChange = new TStringList();   // golden :627
+    TStringList *SECSOriginalValue  = new TStringList();   // golden :628
+    TStringList *SECSNewECValue     = new TStringList();   // golden :629
+
+    void InitHType();   // golden :353-370
+    AnsiString ReadALED(AnsiString ALID);   // golden :824-835
+    void ReplyECDataChange();   // golden :3927-3942
+    void DoReportECDataChangeCheck();   // golden :3947-3985
+    int DoReportECChange(int iIndex);   // golden :3989-4018
+    void SetTerminalWindows(TObject *Ptr);   // golden :6040-6067
+    void SetTerminalWindows2(TObject *Ptr);   // golden :6069-6096
+    void TerminalRequest(AnsiString S);   // golden :6100-6129
+    bool CheckNeedReportAlarm(AnsiString S);   // golden :6371-6384
+    bool ReadECEnableData();   // golden :9226-9253
+    bool GetECEnableData(AnsiString ID);   // golden :9306-9319
+    void SetECEnableData(AnsiString ECID,AnsiString Function);   // golden :9323-9334
 };
 
 //---------------------------------------------------------------------------

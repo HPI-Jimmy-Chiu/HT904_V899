@@ -10554,6 +10554,124 @@ SV/EC 註冊抽成 `SecsSvEcRegistration`、S,F 協定處理在 `HTGem`。
 
 共同形狀：**量測工具用「同一個名字在同一個地方」當存在的判準，而這棵樹刻意不是那樣長的。**
 
+## 20260826 I — FW-GEM-W8：THGem 的 EC-change / EC-enable / Terminal / Alarm 小家族
+
+第一個離開 `cConfiguration` 的波次。標的由修好的 `survey_file.py` 選出（見 20260825 XVI）。
+
+### 交付
+
+`SECSGEM/uHGemEquipment.cpp` +369 行、`SECSGEM/uHGemEquipment.h` +36 行，
+`vclcompat/TStringList.h` +13 行、`vclcompat/StringGrid.h` +14 行
+（`git diff --numstat` 量的，全部是純新增，0 刪除）。
+
+12 支方法，其中 **10 支 live、2 支 gated stub**：
+
+| 方法 | golden | 做什麼 |
+|---|---|---|
+| `InitHType` | :353-370 | 初始化 SECS 資料型別代碼表 |
+| `ReadALED` | :824-835 | 依 ALID 查 alarm 描述 |
+| `ReplyECDataChange` | :3927-3942 | 把累積的 EC 變動逐筆回報後清空三條清單 |
+| `DoReportECDataChangeCheck` | :3947-3985 | 掃全部 EC，比對舊值 |
+| `DoReportECChange` | :3989-4018 | 單一 EC 的比對與記帳 |
+| `TerminalRequest` | :6100-6129 | 送 S10F1 終端訊息並回顯到四種顯示元件 |
+| `CheckNeedReportAlarm` | :6371-6384 | 判斷這個 alarm 要不要上報 |
+| `ReadECEnableData` | :9226-9253 | 從 `ECEnableData.def` 載入 EC 啟用表（唯讀） |
+| `GetECEnableData` | :9306-9319 | 查某個 EC 有沒有啟用 |
+| `SetECEnableData` | :9323-9334 | 往表格加一列 |
+| `SetTerminalWindows` / `SetTerminalWindows2` | :6040-6096 | **gated**，見下 |
+
+忠實度複驗：**LIVE 敘述 144 條，golden 無逐字對應 8 條**——5 條簽章行
+（`__fastcall` 剝除）、2 條 `SvEcReg.` forwarder、1 條 gate 造成的空敘述。
+全部有對應的已記錄 deviation。gated 65 行。
+
+### `SetTerminalWindows` 為什麼是 gated 而不是「補個型別」
+
+golden 用 `dynamic_cast<TMemo*>/<TListBox*>/<TCustomEdit*>/<TPanel*>` 對傳進來的
+`TObject*` 做**執行期型別判別**，決定 `TerminalDisplayIndex` 是 1/2/3/4。
+
+本樹刻意不模型化那條 VCL 階層：golden 的四種 widget 對應到
+`THGemEdit`(:436)／`THGemPanel`(:470)／`THGemMemo`(:503)／`THGemListBox`(:570)，
+**四個彼此無關的 plain struct**，沒有共同基底、沒有虛擬函式。
+所以這不是「缺一個型別」，是**沒有型別關係可以判別**——`dynamic_cast` 對非
+polymorphic 型別本來就不合法。
+
+`TerminalDisplayIndex` 因此維持 ctor 的 0，而 0 在 golden 的語意就是「沒有指定
+顯示目標」，`TerminalRequest`（本波 live）對 index 0 不做任何顯示動作，與 golden 一致。
+
+### 兩個 vclcompat proxy 的修補（讓 golden 原文逐字成立）
+
+- **`RowCountProxy` / `ColCountProxy` 補 `++`**（`vclcompat/StringGrid.h`）。
+  golden `sgSECSECData->RowCount++`（:9326）在只有 `operator int()` 的 proxy 上
+  會掉進「對 rvalue 做 ++」，g++ 只在 `-fpermissive` 下勉強過，而且**不會寫回**
+  ——grid 不會長大，是個會安靜錯的形狀。前綴後綴都補。
+- **`StringsProxy` 補 `c_str()`**（`vclcompat/TStringList.h`）。
+  golden 到處寫 `List->Strings[i].c_str()`。
+
+  ⚠ **第一版寫錯了**：`return AnsiString(*this).c_str();` ——那個暫存 AnsiString
+  在 return 這個完整運算式結束就析構，**指標當場懸空**。BCB6 的暫存活到
+  *呼叫端* 的完整運算式結束，兩者不等價。改成存進 proxy 自己的 `mutable`
+  快取：proxy 本身就是 `Strings[i]` 產生的暫存物件，生命週期正好等於呼叫端的
+  完整運算式，與 BCB6 同一個窗口。
+
+  這是 [[ht9045-v906-vclcompat-proxy-copy-assign-trap]] 那一族的第二種形狀：
+  proxy 少一個運算子時，**編譯器不一定會擋，可能只是行為錯掉**。
+
+### 兩個 gate / forwarder
+
+- **`GATE (W8-ECEvent)`** — `ReplyECDataChange` 裡的 `EventReport(1, 48)`。
+  要的是 THGem 自己的 2 參數 `EventReport`（golden .h:552 / .cpp:7703-7761），
+  本樹尚未翻；本檔目前可見的 `EventReport` 是 `SECSGEM/SecsEventReport.h:55`
+  的**自由函式** `void EventReport(unsigned Ceid)`（1 個參數）——名字相同、
+  東西不同，直接編會得到 "too many arguments"。
+  THGem::EventReport 自己還相依 `SendCeid`／`SendAnnotatedCeid`／
+  `chkAnnotatedEventReport`／`IsEnableEvent`，是獨立一波的量。
+  影響：EC 值變動時本樹不送 S6F11/S6F13，但三條清單的記帳與 `Clear()` 照跑
+  （方向是收窄）。
+- **`GetECDataValue` 走 forwarder**（2 個呼叫點）：golden 是裸呼叫，本樹的
+  `GetECDataValue` 住在 `SecsSvEcRegistration.cpp:601`，而 THGem 以
+  `SecsSvEcRegistration SvEcReg;`（.h:753）by-value 持有它。改成
+  `SvEcReg.GetECDataValue(...)`，不重寫邏輯——正是檔頭 :112-116 記載的既定設計。
+
+### 明講的一點：`TerminalRequest` 會送東西給 host
+
+`InitLocalHead` + `DataItemOut` ×3 + `SendLocalData`，送的是 S10F1。
+照本檔 header 記載的先例（`ReportAcknowledge` / `ReportLinkAcknowledgeError` /
+`EnableDisableEventReportAcknowledgeError` 同樣形狀，`AI(W906-AlarmReportAck)`
+20260721 已正常翻譯），SECS 訊息組裝在本樹屬 in-scope：它不是機台動作指令，
+且本波不接線任何 event handler。**不是偷渡，是照既有裁決辦。**
+
+### 驗收
+
+全新 build dir、Debug 與 Release 各一次（`tools/dualgate.sh gem8`），
+兩邊都 **137/142**，失敗集合逐項相同且等於常駐五項：
+`config_db` / `IniFiles` / `ini_helpers` / `config_loaders` / `GA1_ReadGeneralIni`。
+`D:\HT9045\system` 552 檔本晚零變動。
+
+`vclcompat/TStringList.h` 與 `vclcompat/StringGrid.h` 被全樹大量 include，
+所以這一波本來就非全量不可——proxy 的兩個新運算子是在 142 個測試上量的。
+
+### 兩個自己犯的錯（都在本節之前修掉了）
+
+1. **把 `uHGemEquipment.cpp` 截斷了。**
+   `io.open(C,'w').write(io.open(C).read() + ...)` ——Python 先求值
+   `io.open(C,'w')`（**當場清空檔案**），才去執行參數裡的 read，於是讀到空字串，
+   7,191 行被 279 行取代。徵狀是 `'THGem' has not been declared`，
+   **一點都不像截斷**，一開始往 header 的方向查。
+   該檔對 HEAD 是乾淨的（diff 剛好 −7,116/+279），用
+   `git show HEAD:<path> > <path>` 取回（只碰這一個檔，不是 `git checkout`），
+   還原後 `git diff --stat` 為空。
+
+2. **`grep -c $'\r$'` 不能拿來驗 EOL。** 它回的是**總行數**不是 CRLF 行數。
+   我因此誤判 `SECSGEM/uHGemEquipment.h` 是 LF，插進 26 行 bare-LF 把一個
+   純 CRLF 檔弄成混合（1714 CRLF + 26 LF），已修回純 CRLF 且 `git diff` 是
+   +26/−0（沒動到任何既有行）。
+   同一個壞測法也讓我在 FW-CFG-W7 誤報「cConfiguration.cpp／fConfiguration.h
+   EOL 全部維持純 CRLF」——**那兩個檔其實是純 LF**。W7 的內容本身沒事
+   （我的寫入一律 `newline=''` 且新行用 `\n`，與檔案原本一致），
+   但那句話是錯的，在此更正。
+   唯一可信的測法是用 Python 數 `s.count('\r\n')` 對 `s.count('\n')`。
+   同一個模組內就會分家：`uHGemEquipment.h` 純 CRLF、`uHGemEquipment.cpp` 純 LF。
+
 ### 🔖 RESUME（20260825 日終）
 
 - **今日全收（本節之前的 20260825 I-VII，共 7 波）**：FW-BARCODE2／FW-BARCODE3
@@ -10675,8 +10793,15 @@ SV/EC 註冊抽成 `SecsSvEcRegistration`、S,F 協定處理在 `HTGem`。
     SV/EC 註冊、DoSpool／上傳下載）。
   - 重量（修好 survey 之後，見上方 20260825 XVI）：golden 215 支，同類別已有 132，
     **在別的 port 類別 37 支／1,907 行**，**真正缺 46 支／1,206 行**。
-  - **FW-GEM-W8 批次已選定並逐支親眼看過 golden**（12 支／269 行，
-    `screen_methods` 含 deep pass 全數乾淨）：
+  - **FW-GEM-W8 已交付**（見上方 20260826 I；雙 gate 結果見該節）。12 支／269 行，
+    10 支 live + 2 支 gated（`SetTerminalWindows`/`2`，`dynamic_cast` 對四個
+    無關的 plain struct 不合法）。順帶補了兩個 vclcompat proxy：
+    `RowCountProxy`/`ColCountProxy` 的 `++`、`StringsProxy::c_str()`。
+    **下一波（FW-GEM-W9）建議標的**：`EventReport`（golden :7703-7761，59 行）
+    連同它的 `SendCeid`/`SendAnnotatedCeid`/`chkAnnotatedEventReport`/
+    `IsEnableEvent` 相依組——解掉之後 `GATE (W8-ECEvent)` 可以退役。
+    再往後的大塊是 `GetECInformation`（320 行）與 `ReportAlarm`（94 行）。
+    本波原始批次（供對照）：
     `InitHType`(18) `ReadALED`(12) `ReplyECDataChange`(16)
     `DoReportECDataChangeCheck`(39) `DoReportECChange`(30)
     `SetTerminalWindows`(28) `SetTerminalWindows2`(28) `TerminalRequest`(30)

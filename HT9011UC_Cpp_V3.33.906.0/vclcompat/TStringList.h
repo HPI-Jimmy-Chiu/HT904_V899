@@ -98,9 +98,22 @@ public:
     // assign was a silent no-op for the BCB6 property-to-property idiom.
     // (9 live `a->Strings[i]=b->Strings[j]` call sites measured 20260819.)
     StringsProxy& operator=(const StringsProxy& v) { return *this = AnsiString(v); }
+    // AI(W906-FW-GEM-W8) 20260826: golden 到處寫 `List->Strings[i].c_str()`
+    // （本波 uHGemEquipment.cpp:7285/7317 兩處，全樹還有更多）。BCB6 的
+    // __property 讀出來就是 AnsiString，可以直接 .c_str()；本樹的 proxy 只有
+    // `operator AnsiString()`，成員存取不會觸發使用者定義轉換，所以 .c_str()
+    // 編不過。補這一個成員讓 golden 原文逐字成立。
+    //
+    // ⚠ 第一版寫成 `return AnsiString(*this).c_str();` 是錯的：那個暫存
+    // AnsiString 在 return 這個完整運算式結束就析構，指標當場懸空。
+    // 正確做法是存進 proxy 自己的 mutable 快取——proxy 本身就是
+    // `Strings[i]` 產生的暫存物件，生命週期**正好等於呼叫端的完整運算式**，
+    // 與 BCB6 的 __property 回傳暫存 AnsiString 完全同一個窗口。
+    const char* c_str() const { c_str_cache_ = AnsiString(*this); return c_str_cache_.c_str(); }
 private:
     TStringList* owner_;
     int idx_;
+    mutable AnsiString c_str_cache_;   // 只服務上面的 c_str()
 };
 
 class ObjectsProxy {

@@ -77,12 +77,24 @@ noise = {'if', 'else', 'for', 'while', 'return', 'true', 'false', 'bool', 'int',
          'catch', 'try', 'float', 'long', 'unsigned', 'static', 'const'}
 ids = {x for x in ids if x.isascii() and not x[0].isdigit()} - noise
 
+# 20260825：原本只猜 `forms/f<檔名>.h`，那是表單波的慣例。非表單的類別
+# （THGem 在 SECSGEM/uHGemEquipment.h）會猜成 `forms/fECSGEM/uHGemEquipment.h`
+# 這種不存在的路徑，於是**該 header 宣告的成員全部被列成「缺」**，
+# 清單塞滿偽陽性而看不出真的缺什麼。現在三個候選都試，並印出實際讀到哪幾個。
+import os as _os
+_base = fn[:-4]
+cands = [fn, _base + '.h',
+         'forms/f%s.h' % _os.path.basename(_base)[1:] if _os.path.basename(_base)[:1] in 'cu'
+         else 'forms/f%s.h' % _os.path.basename(_base)]
 ptok = set()
-for p in (fn, 'forms/f%s.h' % fn[1:-4]):
+loaded = []
+for p in dict.fromkeys(cands):
     try:
         ptok |= set(re.findall(r'\w+', io.open(PORT_ROOT + p, encoding='utf-8', errors='replace').read()))
+        loaded.append(p)
     except FileNotFoundError:
-        print('  （note: %s 不存在）' % p)
+        pass
+print('  （讀到: %s）' % ('、'.join(loaded) if loaded else '無'))
 missing = sorted(x for x in ids if x not in ptok)
 print()
 print('用到 %d 個識別字；port 的 %s + 對應 header 找不到的 %d 個:' % (len(ids), fn, len(missing)))

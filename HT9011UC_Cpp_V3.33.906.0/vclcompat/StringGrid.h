@@ -151,6 +151,13 @@ public:
         explicit RowCountProxy(TStringGrid* o) : owner_(o) {}
         operator int() const;
         RowCountProxy& operator=(int v);
+        // AI(W906-FW-GEM-W8) 20260826: golden 的 `sgSECSECData->RowCount++`
+        // （uHGemEquipment.cpp:9326）需要 proxy 自己有 ++。沒有的話會掉進
+        // `operator int()` 再對 rvalue 做 ++，g++ 只在 -fpermissive 下勉強過，
+        // 而且**不會寫回**——grid 不會長大，是個會安靜錯的形狀。
+        // 前綴與後綴都給，語意照 C++ 慣例（後綴回舊值）。
+        RowCountProxy& operator++()    { *this = int(*this) + 1; return *this; }
+        int    operator++(int) { int old = int(*this); *this = old + 1; return old; }
     private:
         TStringGrid* owner_;
     };
@@ -159,6 +166,13 @@ public:
         explicit ColCountProxy(TStringGrid* o) : owner_(o) {}
         operator int() const;
         ColCountProxy& operator=(int v);
+        // AI(W906-FW-GEM-W8) 20260826: golden 的 `sgSECSECData->RowCount++`
+        // （uHGemEquipment.cpp:9326）需要 proxy 自己有 ++。沒有的話會掉進
+        // `operator int()` 再對 rvalue 做 ++，g++ 只在 -fpermissive 下勉強過，
+        // 而且**不會寫回**——grid 不會長大，是個會安靜錯的形狀。
+        // 前綴與後綴都給，語意照 C++ 慣例（後綴回舊值）。
+        ColCountProxy& operator++()    { *this = int(*this) + 1; return *this; }
+        int    operator++(int) { int old = int(*this); *this = old + 1; return old; }
     private:
         TStringGrid* owner_;
     };
