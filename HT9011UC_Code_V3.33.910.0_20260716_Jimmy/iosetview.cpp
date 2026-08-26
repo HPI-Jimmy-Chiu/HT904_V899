@@ -47,7 +47,7 @@ int  iTTLLoopCount      =0;
 int  iTTLPulseWidth     =0;                                                     //2013-05-06    Dell
 int  iNumPanelDown      =0;                                                     //Stven 20090919 : For Num Panel Test
 bool bNumPanelDown      =0;                                                     //Stven 20090919 : For Num Panel Test
-TMySucker *mySuckerTemp;                                                        //Steven 20110520 : 被打開的吸嘴
+TMySucker *mySuckerTemp=NULL;                                                   //Steven 20110520 : 被打開的吸嘴 //AI(ht9045-v899) 20260511: init NULL to prevent dangling deref in Timer1Timer when click handler did not assign
 //---------------------------------------------------------------------------
 __fastcall Tfiosetview::Tfiosetview(TComponent* Owner)
      : TForm(Owner)
@@ -108,6 +108,13 @@ void __fastcall Tfiosetview::Timer1Timer(TObject *Sender)
         return;
     }
     bTimerRun=true;
+    struct TTimerRunGuard                                                       //AI(ht9045-v899) 20260511: RAII guard - destructor always clears bTimerRun on any function exit (normal return, exception unwind, or early break), so a hardware IO exception below cannot leave reentry flag stuck true (which would freeze ScanLed and make pressed buttons stay dark)
+    {
+        bool *pFlag;
+        TTimerRunGuard(bool *p):pFlag(p){}
+        ~TTimerRunGuard(){ *pFlag=false; }
+    } _timerGuard(&bTimerRun);
+
     if(IsIndexMotorOutOfPower())
     {
         if(bCheckEMG==false)
@@ -159,7 +166,11 @@ void __fastcall Tfiosetview::Timer1Timer(TObject *Sender)
         }
     }
 
-    if(bChangeSuckStatus==SStatusSuck)                                          //手動開啟Index吸嘴
+    if(mySuckerTemp==NULL)                                                      //AI(ht9045-v899) 20260511: null-guard before deref; if pointer not assigned yet, force state Off to avoid AV that would leave bTimerRun stuck true and freeze UI
+    {
+        bChangeSuckStatus=SStatusOff;
+    }
+    else if(bChangeSuckStatus==SStatusSuck)                                     //手動開啟Index吸嘴
     {
         if(mySuckerTemp->Suck()==true || mySuckerTemp->Error==true)
             bChangeSuckStatus=SStatusOff;
@@ -212,8 +223,7 @@ void __fastcall Tfiosetview::Timer1Timer(TObject *Sender)
     {
         RefreshSafePLCLed();
     }
-
-    bTimerRun=false;                                                            //Sam 20190522 : 增加 timer 保護
+                                                                                //AI(ht9045-v899) 20260511: bTimerRun reset is handled by _timerGuard destructor above
 }
 //---------------------------------------------------------------------------
 void __fastcall Tfiosetview::FormClose(TObject *Sender,
@@ -238,6 +248,7 @@ void __fastcall Tfiosetview::FormClose(TObject *Sender,
 //---------------------------------------------------------------------------
 void __fastcall Tfiosetview::FormShow(TObject *Sender)
 {
+    bChangeSuckStatus=SStatusOff;                                               //AI(ht9045-v899) 20260511: clear residual sucker action so timer will not deref stale mySuckerTemp
     InitPairInfo_SafePLCIOLed();
     tsLoader    ->Enabled=true;                                                 //Steven 20120804 Start: 先在最上面Enable全部畫面
     tsUnLoader  ->Enabled=true;

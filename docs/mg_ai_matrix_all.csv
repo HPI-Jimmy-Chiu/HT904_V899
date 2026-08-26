@@ -51,7 +51,7 @@
 20260407,ht9045-v899,cSiteUseManager.cpp,439,same-file,//AI(ht9045-v899) 20260407: diagnostic dump on CompactSearch failure ��� log all decision params + HP grid
 20260407,ht9045-v899,cSiteUseManager.cpp,455,same-file,//AI(ht9045-v899) 20260407: fix dump to use correct struct for XPitch/YPitch
 20260407,ht9045-v899,cSiteUseManager.h,60,same-file,//AI(ht9045-v899) 20260407: diagnostic dump on CompactSearch failure
-20260407,ht9045-v899,note.cpp,1027,MISSING,"//AI(ht9045-v899) 20260407: only Pause when Note closed via BtnPauseClick (SoftStop==true), skip when closed via Start to prevent false MES2111"
+20260407,ht9045-v899,note.cpp,1027,ALLOWLISTED,"//AI(ht9045-v899) 20260407: only Pause when Note closed via BtnPauseClick (SoftStop==true), skip when closed via Start to prevent false MES2111"
 20260408,ht9045-v899,AutoClean\AutoClean.cpp,1652,other-file,//AI(ht9045-v899) 20260408: global plan instance shared across pick/move/check functions
 20260408,ht9045-v899,AutoClean\AutoClean.cpp,1941,MISSING,//AI(ht9045-v899) 20260408: check if current shuttle group has any sucker demand
 20260408,ht9045-v899,AutoClean\AutoClean.cpp,2782,MISSING,//AI(ht9045-v899) 20260408: plan-driven pick - iterate plan slots instead of hardcoded j=0..3
@@ -88,7 +88,7 @@
 20260417,ht9045-v899,database.cpp,729,same-file,//AI(ht9045-v899) 20260417: read AutoDeviceEjection flag from Gerneral.ini
 20260417,Jimmy,uTemp_Set.cpp,6440,same-file,//AI(Jimmy) 20260417: fix typo - 第二個 subscript 應為 [1][0][1] 而非重複 [1][0][0]，
 20260417,Jimmy,uTemp_Set.cpp,6441,same-file,//AI(Jimmy) 20260417: 造成 Arm2 col0 的 offset index 被 24 覆蓋成 Ba2，SingleSite/1x2 時 Arm2 改 Aa2 無效、改 Ba2 才生效
-20260420,BVL-3766,HS_Function.cpp,26,MISSING,//AI(BVL-3766) 20260420: 開關 site 時要即時重寫 GTK info.txt
+20260420,BVL-3766,HS_Function.cpp,26,ALLOWLISTED,//AI(BVL-3766) 20260420: 開關 site 時要即時重寫 GTK info.txt
 20260420,BVL-3766,ProductionInfo\ProductionInfo.cpp,4922,same-file,//AI(BVL-3766) 20260420: 本功能為超豐(GTK Loader Agent)專用，非 CC_Greatek 不寫 GTK_Control\flag\info.txt
 20260420,BVL-3766,ProductionInfo\ProductionInfo.cpp,4946,same-file,"//AI(BVL-3766) 20260420: site 編號改用欄交錯(column-major, A奇B偶)，與機台 UI/吸嘴索引慣例(i + j*iShtRow + 1)一致"
 20260421,ht9045-v899,CosFunction.cpp,1881,same-file,//AI(ht9045-v899) 20260421: 全智反饋 Auto Contact Height Calibration / Contact Test 過程若 IC drop 無偵測會壓壞 IC 與配件，啟用 Index Z 取料/下壓掉料保護
@@ -171,53 +171,53 @@
 20260429,ht9045-v899,main.cpp,10743,same-file,//AI(ht9045-v899) 20260429: gate the prompt so it only fires for the real
 20260429,ht9045-v899,note.cpp,6689,same-file,//AI(ht9045-v899) 20260429: 甬矽要求 EventLog 時間欄不加雙引號與前綴空格 (CASE-20260429-001)
 20260429,ht9045-v899,note.cpp,6702,same-file,//AI(ht9045-v899) 20260429: 其他客戶維持 Steven 20251107 新方法 (CASE-20260429-001)
-20260430,ht9045-v899,AutoClean\uCleaning.cpp,174,MISSING,//AI(ht9045-v899) 20260430: extend AutoClean DieForce to Multi EP half.
-20260430,ht9045-v899,AutoClean\uCleaning.cpp,183,MISSING,//AI(ht9045-v899) 20260430: extend AutoClean DieForce to Multi EP half.
-20260430,ht9045-v899,AutoClean\uCleaning.cpp,1146,MISSING,//AI(ht9045-v899) 20260430: extend AutoClean DieForce to Multi EP half.
+20260430,ht9045-v899,AutoClean\uCleaning.cpp,174,ALLOWLISTED,//AI(ht9045-v899) 20260430: extend AutoClean DieForce to Multi EP half.
+20260430,ht9045-v899,AutoClean\uCleaning.cpp,183,ALLOWLISTED,//AI(ht9045-v899) 20260430: extend AutoClean DieForce to Multi EP half.
+20260430,ht9045-v899,AutoClean\uCleaning.cpp,1146,ALLOWLISTED,//AI(ht9045-v899) 20260430: extend AutoClean DieForce to Multi EP half.
 20260430,ht9045-v899,AutoClean\uCleaning.cpp,1503,other-file,//AI(ht9045-v899) 20260430: extend to Multi EP half.
-20260430,ht9045-v899,ContactForce.cpp,532,MISSING,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (was 4 site outer-only); replaced by INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI half-version (2 site x 2 cyl x 2
+20260430,ht9045-v899,ContactForce.cpp,532,ALLOWLISTED,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (was 4 site outer-only); replaced by INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI half-version (2 site x 2 cyl x 2
 20260430,ht9045-v899,ContactForce.cpp,709,same-file,//AI(ht9045-v899) 20260430: also show for Multi EP half (inner cyl Die Force).
-20260430,ht9045-v899,ContactForce.cpp,710,MISSING,//AI(ht9045-v899) 20260430: 16 EP independent + Multi EP half (INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI)
-20260430,ht9045-v899,ContactForce.cpp,884,MISSING,//AI(ht9045-v899) 20260430: Multi EP half - show OneByOne tab.
-20260430,ht9045-v899,ContactForce.cpp,1432,MISSING,//AI(ht9045-v899) 20260430: ported from V874.3 Ifor.
-20260430,ht9045-v899,ContactForce.h,352,MISSING,//AI(ht9045-v899) 20260430: Multi EP half (INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI) per-site Die Force container.
-20260430,ht9045-v899,HandlerSys.cpp,421,MISSING,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 ComboBox option; INSTALL_DOUBLE_EP=3 used instead.
-20260430,ht9045-v899,HandlerSys.cpp,942,MISSING,"//AI(ht9045-v899) 20260430: removed case 2 (""8""); INSTALL_DOUBLE_EP=3 used instead."
-20260430,ht9045-v899,adam6024.cpp,407,MISSING,"//AI(ht9045-v899) 20260430: Multi EP board (Address[2]=172.16.8.112, physical 2nd board) for reg=1/33."
+20260430,ht9045-v899,ContactForce.cpp,710,ALLOWLISTED,//AI(ht9045-v899) 20260430: 16 EP independent + Multi EP half (INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI)
+20260430,ht9045-v899,ContactForce.cpp,884,ALLOWLISTED,//AI(ht9045-v899) 20260430: Multi EP half - show OneByOne tab.
+20260430,ht9045-v899,ContactForce.cpp,1432,ALLOWLISTED,//AI(ht9045-v899) 20260430: ported from V874.3 Ifor.
+20260430,ht9045-v899,ContactForce.h,352,ALLOWLISTED,//AI(ht9045-v899) 20260430: Multi EP half (INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI) per-site Die Force container.
+20260430,ht9045-v899,HandlerSys.cpp,421,ALLOWLISTED,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 ComboBox option; INSTALL_DOUBLE_EP=3 used instead.
+20260430,ht9045-v899,HandlerSys.cpp,942,ALLOWLISTED,"//AI(ht9045-v899) 20260430: removed case 2 (""8""); INSTALL_DOUBLE_EP=3 used instead."
+20260430,ht9045-v899,adam6024.cpp,407,ALLOWLISTED,"//AI(ht9045-v899) 20260430: Multi EP board (Address[2]=172.16.8.112, physical 2nd board) for reg=1/33."
 20260430,ht9045-v899,adam6024.cpp,753,other-file,//AI(ht9045-v899) 20260430: extend to Multi EP half.
-20260430,ht9045-v899,adam6024.cpp,2413,MISSING,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (rolled back).
-20260430,ht9045-v899,adam6024.cpp,2431,MISSING,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (rolled back).
-20260430,ht9045-v899,adam6024.cpp,2450,MISSING,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (rolled back).
-20260430,ht9045-v899,adam6024.cpp,2468,MISSING,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (rolled back).
-20260430,ht9045-v899,adam6024.cpp,2503,MISSING,//AI(ht9045-v899) 20260430: rolled back iIndEPCnt==8 (use INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI instead).
-20260430,ht9045-v899,cContact.cpp,189,MISSING,//AI(ht9045-v899) 20260430: extend to Multi EP half (inner cyl Die Force kit selection).
+20260430,ht9045-v899,adam6024.cpp,2413,ALLOWLISTED,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (rolled back).
+20260430,ht9045-v899,adam6024.cpp,2431,ALLOWLISTED,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (rolled back).
+20260430,ht9045-v899,adam6024.cpp,2450,ALLOWLISTED,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (rolled back).
+20260430,ht9045-v899,adam6024.cpp,2468,ALLOWLISTED,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (rolled back).
+20260430,ht9045-v899,adam6024.cpp,2503,ALLOWLISTED,//AI(ht9045-v899) 20260430: rolled back iIndEPCnt==8 (use INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI instead).
+20260430,ht9045-v899,cContact.cpp,189,ALLOWLISTED,//AI(ht9045-v899) 20260430: extend to Multi EP half (inner cyl Die Force kit selection).
 20260430,ht9045-v899,cContact.cpp,1615,other-file,//AI(ht9045-v899) 20260430: extend to Multi EP half.
 20260430,ht9045-v899,cContact.cpp,13085,same-file,//AI(ht9045-v899) 20260430: extend DoubleForce write to Multi EP half.
 20260430,ht9045-v899,cSetUp.cpp,499,same-file,//AI(ht9045-v899) 20260430: extend cbIndSLK visibility to Multi EP half.
 20260430,ht9045-v899,cSetUp.cpp,2030,same-file,//AI(ht9045-v899) 20260430: extend cbIndSLK visibility to Multi EP half.
-20260430,ht9045-v899,cmydef.cpp,4984,MISSING,//AI(ht9045-v899) 20260430: iAPAXDualEPValue[16] already defined below by Ifor 20250319; reused for Multi EP half.
-20260430,ht9045-v899,cmydef.h,4829,MISSING,//AI(ht9045-v899) 20260430: iAPAXDualEPValue[16] already declared below by Ifor 20250319; reused for Multi EP half (INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI).
-20260430,ht9045-v899,database.cpp,786,MISSING,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 path; replaced by INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI (set via Gerneral.ini).
-20260430,ht9045-v899,iosetview.cpp,157,MISSING,"//AI(ht9045-v899) 20260430: extend EP voltage display to Multi EP half (Address[2] 172.16.8.112, physical 2nd board)."
+20260430,ht9045-v899,cmydef.cpp,4984,ALLOWLISTED,//AI(ht9045-v899) 20260430: iAPAXDualEPValue[16] already defined below by Ifor 20250319; reused for Multi EP half.
+20260430,ht9045-v899,cmydef.h,4829,ALLOWLISTED,//AI(ht9045-v899) 20260430: iAPAXDualEPValue[16] already declared below by Ifor 20250319; reused for Multi EP half (INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI).
+20260430,ht9045-v899,database.cpp,786,ALLOWLISTED,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 path; replaced by INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI (set via Gerneral.ini).
+20260430,ht9045-v899,iosetview.cpp,157,ALLOWLISTED,"//AI(ht9045-v899) 20260430: extend EP voltage display to Multi EP half (Address[2] 172.16.8.112, physical 2nd board)."
 20260430,ht9045-v899,main.cpp,20150,same-file,//AI(ht9045-v899) 20260430: Auto switch SwMultiEp DO when INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI (Multi EP half).
 20260430,ht9045-v899,main.cpp,20167,same-file,//AI(ht9045-v899) 20260430: extend to Multi EP half.
 20260504,ht9045-v899,Automation\auto9045.h,169,same-file,//AI(ht9045-v899) 20260504: return Greatek OEE start result through LotInfo_REPLY without adding a new command
-20260504,ht9045-v899,ContactForce.cpp,300,MISSING,"//AI(ht9045-v899) 20260504: full port from V874.3 Ifor (撤回 20260430 砍半版); iCount=(Tag%8)+1, 1..4=Arm1, 5..8=Arm2. SPEC-V899-MultiEP-FullPort, ADR-0004."
-20260504,ht9045-v899,ContactForce.cpp,333,MISSING,"//AI(ht9045-v899) 20260504: full port V874 (Tag%8): 1..4=Arm1, 5..8=Arm2."
-20260504,ht9045-v899,ContactForce.cpp,502,MISSING,"//AI(ht9045-v899) 20260504: full port V874.3 INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI SLKIndClass: i*8+j (8 sites: Arm1_1..4, Arm2_1..4). SPEC-V899-MultiEP-FullPort, "
-20260504,ht9045-v899,ContactForce.cpp,615,MISSING,//AI(ht9045-v899) 20260504: full port V874.3 INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI OneByOne container.
-20260504,ht9045-v899,ContactForce.cpp,1103,MISSING,"//AI(ht9045-v899) 20260504: full port V874.3 OneByOne ReadFile. Per Kit 8 entries: j<4=Arm1_(j+1), j>=4=Arm2_(j-3). SPEC-V899-MultiEP-FullPort."
-20260504,ht9045-v899,ContactForce.cpp,1158,MISSING,//AI(ht9045-v899) 20260504: full port V874.3 SLKIndClass ==3 ReadFile (Arm1_1..4 / Arm2_1..4). SPEC-V899-MultiEP-FullPort.
-20260504,ht9045-v899,ContactForce.cpp,1308,MISSING,//AI(ht9045-v899) 20260504: full port V874.3 SLKIndClass ==3 WriteFile (Arm1_1..4 / Arm2_1..4). SPEC-V899-MultiEP-FullPort.
-20260504,ht9045-v899,ContactForce.cpp,1356,MISSING,"//AI(ht9045-v899) 20260504: full port V874.3 OneByOne WriteFile. Per Kit 8 entries: j<4=Arm1_(j+1), j>=4=Arm2_(j-3). SPEC-V899-MultiEP-FullPort."
+20260504,ht9045-v899,ContactForce.cpp,300,ALLOWLISTED,"//AI(ht9045-v899) 20260504: full port from V874.3 Ifor (撤回 20260430 砍半版); iCount=(Tag%8)+1, 1..4=Arm1, 5..8=Arm2. SPEC-V899-MultiEP-FullPort, ADR-0004."
+20260504,ht9045-v899,ContactForce.cpp,333,ALLOWLISTED,"//AI(ht9045-v899) 20260504: full port V874 (Tag%8): 1..4=Arm1, 5..8=Arm2."
+20260504,ht9045-v899,ContactForce.cpp,502,ALLOWLISTED,"//AI(ht9045-v899) 20260504: full port V874.3 INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI SLKIndClass: i*8+j (8 sites: Arm1_1..4, Arm2_1..4). SPEC-V899-MultiEP-FullPort, "
+20260504,ht9045-v899,ContactForce.cpp,615,ALLOWLISTED,//AI(ht9045-v899) 20260504: full port V874.3 INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI OneByOne container.
+20260504,ht9045-v899,ContactForce.cpp,1103,ALLOWLISTED,"//AI(ht9045-v899) 20260504: full port V874.3 OneByOne ReadFile. Per Kit 8 entries: j<4=Arm1_(j+1), j>=4=Arm2_(j-3). SPEC-V899-MultiEP-FullPort."
+20260504,ht9045-v899,ContactForce.cpp,1158,ALLOWLISTED,//AI(ht9045-v899) 20260504: full port V874.3 SLKIndClass ==3 ReadFile (Arm1_1..4 / Arm2_1..4). SPEC-V899-MultiEP-FullPort.
+20260504,ht9045-v899,ContactForce.cpp,1308,ALLOWLISTED,//AI(ht9045-v899) 20260504: full port V874.3 SLKIndClass ==3 WriteFile (Arm1_1..4 / Arm2_1..4). SPEC-V899-MultiEP-FullPort.
+20260504,ht9045-v899,ContactForce.cpp,1356,ALLOWLISTED,"//AI(ht9045-v899) 20260504: full port V874.3 OneByOne WriteFile. Per Kit 8 entries: j<4=Arm1_(j+1), j>=4=Arm2_(j-3). SPEC-V899-MultiEP-FullPort."
 20260504,ht9045-v899,HS_Function.cpp,819,same-file,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250417). Trigger Multi EP 16ch read
-20260504,ht9045-v899,HS_Function.cpp,835,MISSING,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||==3 to enable Dual EP read for Multi EP.
-20260504,ht9045-v899,HS_Function.cpp,909,MISSING,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||==3.
-20260504,ht9045-v899,HS_Function.cpp,946,MISSING,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||==3.
-20260504,ht9045-v899,HS_Function.cpp,973,MISSING,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250417). KYEC-only per-site EP log append.
-20260504,ht9045-v899,HS_Function.cpp,1001,MISSING,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||==3 for Multi EP DualAlarm.
+20260504,ht9045-v899,HS_Function.cpp,835,ALLOWLISTED,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||==3 to enable Dual EP read for Multi EP.
+20260504,ht9045-v899,HS_Function.cpp,909,ALLOWLISTED,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||==3.
+20260504,ht9045-v899,HS_Function.cpp,946,ALLOWLISTED,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||==3.
+20260504,ht9045-v899,HS_Function.cpp,973,ALLOWLISTED,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250417). KYEC-only per-site EP log append.
+20260504,ht9045-v899,HS_Function.cpp,1001,ALLOWLISTED,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||==3 for Multi EP DualAlarm.
 20260504,ht9045-v899,HS_Function.cpp,1014,same-file,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250417). Read Multi EP 16ch from APAX-5070.
-20260504,ht9045-v899,HS_Function.h,90,MISSING,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250417) Multi EP 16ch APAX read.
+20260504,ht9045-v899,HS_Function.h,90,ALLOWLISTED,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250417) Multi EP 16ch APAX read.
 20260504,ht9045-v899,ProductionInfo\ProductionInfo.cpp,236,same-file,//AI(ht9045-v899) 20260504: failed OEE start must not leave success flag true for remote START_REQUEST
 20260504,ht9045-v899,ProductionInfo\ProductionInfo.cpp,239,same-file,//AI(ht9045-v899) 20260504: keep manual OEE Start Lot modal behavior
 20260504,ht9045-v899,ProductionInfo\ProductionInfo.cpp,255,same-file,//AI(ht9045-v899) 20260504: expose missing OEE data to LotInfo_REPLY
@@ -228,10 +228,10 @@
 20260504,ht9045-v899,ProductionInfo\ProductionInfo.h,233,same-file,//AI(ht9045-v899) 20260504: allow OLP LotInfo to receive OEE start errors without modal dialogs
 20260504,ht9045-v899,adam6024.cpp,955,same-file,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250416). Multi EP per-site Kpa->Kg.
 20260504,ht9045-v899,adam6024.cpp,2230,same-file,//AI(ht9045-v899) 20260504: full port V874.3 INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI (撤回 20260430 砍半版)。
-20260504,ht9045-v899,adam6024.h,26,MISSING,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250416) for Multi EP per-site Kpa->Kg.
+20260504,ht9045-v899,adam6024.h,26,ALLOWLISTED,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250416) for Multi EP per-site Kpa->Kg.
 20260504,ht9045-v899,cConfiguration.cpp,1318,same-file,//AI(ht9045-v899) 20260504: V899 wrote ==true (==1) which dropped Multi EP path; restored V874 behavior.
-20260504,ht9045-v899,cContact.cpp,13247,MISSING,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||==3.
-20260504,ht9045-v899,cSetUp.cpp,2655,MISSING,//AI(ht9045-v899) 20260504: split INDIVIAL/MULTI gating per V896 (Ifor 20250416). MULTI covers <=QualSite2X2N.
+20260504,ht9045-v899,cContact.cpp,13247,ALLOWLISTED,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||==3.
+20260504,ht9045-v899,cSetUp.cpp,2655,ALLOWLISTED,//AI(ht9045-v899) 20260504: split INDIVIAL/MULTI gating per V896 (Ifor 20250416). MULTI covers <=QualSite2X2N.
 20260504,ht9045-v899,cmydef.h,4072,same-file,//AI(ht9045-v899) 20260504: INSTALL_DOUBLE_EP value constants. ADR-0004 / SPEC-V899-MultiEP-FullPort.
 20260504,ht9045-v899,uhome.cpp,1559,same-file,"//AI(ht9045-v899) 20260504: ARDENTEC OCR YMot Home Check bypass, no mechanical interference"
 20260505,ht9045-v899,Motor\mymotor.cpp,777,same-file,//AI(ht9045-v899) 20260505: MLoaderY 工作位置 iMLoaderYCarPos=-505 會誤觸發此防護，僅對 MLoaderY 豁免，其餘馬達維持原有 home sensor 防護
@@ -299,14 +299,14 @@
 20260511,ht9045-v899,OCRInsp.cpp,659,same-file,//AI(ht9045-v899) 20260511: simulation bypass - treat AOI as connected so flow can proceed without vision PC
 20260511,ht9045-v899,OCRInsp.cpp,931,same-file,//AI(ht9045-v899) 20260511: bypass-AOI also enters trigger sequence so handler motion path matches production
 20260511,ht9045-v899,OCRInsp.h,17,same-file,"//AI(ht9045-v899) 20260511: when true, OCR area simulation skips AOI socket dependency (no vision PC needed); SwOCRTigger still fires so handler motion is exerc"
-20260511,ht9045-v899,adam6024.cpp,1587,MISSING,//AI(ht9045-v899) 20260511: 把舊 Independent EP loop 限制在 DOUBLE_EP_INDIVIAL 才跑。
-20260511,ht9045-v899,adam6024.cpp,1595,MISSING,//AI(ht9045-v899) 20260511: bounds guard
-20260511,ht9045-v899,adam6024.cpp,1601,MISSING,//AI(ht9045-v899) 20260511: 防止 SLKIndClass 與 slSLKTypeInd 不同步時越界
-20260511,ht9045-v899,iosetview.cpp,47,MISSING,//AI(ht9045-v899) 20260511: init NULL to prevent dangling deref in Timer1Timer when click handler did not assign
-20260511,ht9045-v899,iosetview.cpp,108,MISSING,"//AI(ht9045-v899) 20260511: RAII guard - destructor always clears bTimerRun on any function exit (normal return, exception unwind, or early break), so a hardwar"
-20260511,ht9045-v899,iosetview.cpp,165,MISSING,"//AI(ht9045-v899) 20260511: null-guard before deref; if pointer not assigned yet, force state Off to avoid AV that would leave bTimerRun stuck true and freeze U"
-20260511,ht9045-v899,iosetview.cpp,222,MISSING,//AI(ht9045-v899) 20260511: bTimerRun reset is handled by _timerGuard destructor above
-20260511,ht9045-v899,iosetview.cpp,247,MISSING,//AI(ht9045-v899) 20260511: clear residual sucker action so timer will not deref stale mySuckerTemp
+20260511,ht9045-v899,adam6024.cpp,1587,ALLOWLISTED,//AI(ht9045-v899) 20260511: 把舊 Independent EP loop 限制在 DOUBLE_EP_INDIVIAL 才跑。
+20260511,ht9045-v899,adam6024.cpp,1595,ALLOWLISTED,//AI(ht9045-v899) 20260511: bounds guard
+20260511,ht9045-v899,adam6024.cpp,1601,ALLOWLISTED,//AI(ht9045-v899) 20260511: 防止 SLKIndClass 與 slSLKTypeInd 不同步時越界
+20260511,ht9045-v899,iosetview.cpp,47,same-file,//AI(ht9045-v899) 20260511: init NULL to prevent dangling deref in Timer1Timer when click handler did not assign
+20260511,ht9045-v899,iosetview.cpp,108,same-file,"//AI(ht9045-v899) 20260511: RAII guard - destructor always clears bTimerRun on any function exit (normal return, exception unwind, or early break), so a hardwar"
+20260511,ht9045-v899,iosetview.cpp,165,same-file,"//AI(ht9045-v899) 20260511: null-guard before deref; if pointer not assigned yet, force state Off to avoid AV that would leave bTimerRun stuck true and freeze U"
+20260511,ht9045-v899,iosetview.cpp,222,same-file,//AI(ht9045-v899) 20260511: bTimerRun reset is handled by _timerGuard destructor above
+20260511,ht9045-v899,iosetview.cpp,247,same-file,//AI(ht9045-v899) 20260511: clear residual sucker action so timer will not deref stale mySuckerTemp
 20260512,ht9045-v899,Motor\mymotor.cpp,410,same-file,//AI(ht9045-v899) 20260512: CASE-20260507-001 CC_GIGAS Z2 到位較慢導致 Y2 middle 檢查提早觸發 alarm，放寬 iCheckZ 至 11000
 20260512,ht9045-v899,aoutarm9045_2x8_8.cpp,412,same-file,//AI(ht9045-v899) 20260512: fix - 原寫成 Item[0][2+iKit] 重複檢查，row1 col2 永遠取不到 mode 20201
 20260512,ht9045-v899,aoutarm9045_2x8_8.cpp,415,same-file,//AI(ht9045-v899) 20260512: fix - 20300 對應 row0 col3+iKit (原寫成 Item[1][3+iKit] row index 反了)，導致 [0][3] 殘料時落到 fallback 20301，OutArmSuck NeedSuck 全 false 卡死
@@ -427,10 +427,10 @@
 20260525,ht9045-v899,uLotInfo.cpp,119,same-file,//AI(ht9045-v899) 20260525: restore PTI RunMode before local Lot Start gate
 20260525,ht9045-v899,uLotInfo.cpp,1612,same-file,//AI(ht9045-v899) 20260525: mark PTI tester TCP command window for StateRecord analysis
 20260525,ht9045-v899,uLotInfo.cpp,7256,same-file,//AI(ht9045-v899) 20260525: normalize PTI RunMode before local validation blocks TesterTCP Lot Start
-20260526,ht9045-v899,ContactForce.cpp,453,MISSING,"//AI(ht9045-v899) 20260526: align EP one-by-one site trim diameters with V874/general SLK types instead of legacy 20,30 only."
-20260526,ht9045-v899,ContactForce.cpp,694,MISSING,//AI(ht9045-v899) 20260526: Show Multi EP site trim page for outer EP per-site calibration.
-20260526,ht9045-v899,ContactForce.cpp,970,MISSING,//AI(ht9045-v899) 20260526: reload saved one-by-one load rates so the next TfContact SAVE uses current trim values.
-20260526,ht9045-v899,HS_Function.cpp,1040,MISSING,//AI(ht9045-v899) 20260526: do not read/log Multi EP data while common EP route is selected.
+20260526,ht9045-v899,ContactForce.cpp,453,ALLOWLISTED,"//AI(ht9045-v899) 20260526: align EP one-by-one site trim diameters with V874/general SLK types instead of legacy 20,30 only."
+20260526,ht9045-v899,ContactForce.cpp,694,ALLOWLISTED,//AI(ht9045-v899) 20260526: Show Multi EP site trim page for outer EP per-site calibration.
+20260526,ht9045-v899,ContactForce.cpp,970,same-file,//AI(ht9045-v899) 20260526: reload saved one-by-one load rates so the next TfContact SAVE uses current trim values.
+20260526,ht9045-v899,HS_Function.cpp,1040,ALLOWLISTED,//AI(ht9045-v899) 20260526: do not read/log Multi EP data while common EP route is selected.
 20260526,ht9045-v899,OCR.cpp,1892,same-file,//AI(ht9045-v899) 20260526: convert simulation trigger alarm return into a clean timer stop
 20260526,ht9045-v899,OCR.cpp,1901,same-file,//AI(ht9045-v899) 20260526: stop simulation after capture timeout alarm instead of retrying silently
 20260526,ht9045-v899,OCRInsp.cpp,888,same-file,//AI(ht9045-v899) 20260526: keep OCR light cylinder output off when no-down mode is selected
@@ -443,8 +443,8 @@
 20260526,ht9045-v899,OCRInsp.h,8,same-file,//AI(ht9045-v899) 20260526: return simulation-only alarm stops to the OCR timer without changing production retry codes
 20260526,ht9045-v899,adam6024.cpp,95,same-file,//AI(ht9045-v899) 20260526: Multi EP pressure output is valid only when the physical SwMultiEp valve is actually ON.
 20260526,ht9045-v899,adam6024.cpp,107,same-file,"//AI(ht9045-v899) 20260526: keep mode 2 independent EP behavior, but let mode 3 fall back to normal EP when SwMultiEp is OFF."
-20260526,ht9045-v899,adam6024.cpp,1627,MISSING,"//AI(ht9045-v899) 20260526: in Multi EP production, normal air force fills outer/site EP values."
-20260526,ht9045-v899,adam6024.cpp,1670,MISSING,"//AI(ht9045-v899) 20260526: in Multi EP production, DoubleForce fills inner/dual EP values."
+20260526,ht9045-v899,adam6024.cpp,1627,ALLOWLISTED,"//AI(ht9045-v899) 20260526: in Multi EP production, normal air force fills outer/site EP values."
+20260526,ht9045-v899,adam6024.cpp,1670,ALLOWLISTED,"//AI(ht9045-v899) 20260526: in Multi EP production, DoubleForce fills inner/dual EP values."
 20260526,ht9045-v899,adam6024.cpp,1778,same-file,//AI(ht9045-v899) 20260526: use actual SwMultiEp route before APAX-only output.
 20260526,ht9045-v899,adam6024.cpp,1819,same-file,//AI(ht9045-v899) 20260526: do not clear/write APAX when Multi valve is OFF.
 20260526,ht9045-v899,adam6024.cpp,1882,same-file,//AI(ht9045-v899) 20260526: route direct writes to APAX only when independent EP path is active.
@@ -459,7 +459,7 @@
 20260526,ht9045-v899,adam6024.cpp,2321,same-file,//AI(ht9045-v899) 20260526: split logical 16ch buffer into APAX S0/S1 register blocks.
 20260526,ht9045-v899,adam6024.cpp,2350,same-file,//AI(ht9045-v899) 20260526: write Arm2 to APAX-5028 S1 Modbus block.
 20260526,ht9045-v899,adam6024.h,15,same-file,//AI(ht9045-v899) 20260526: expose actual EP pressure route so Multi mode follows SwMultiEp state.
-20260526,ht9045-v899,cContact.cpp,13089,MISSING,"//AI(ht9045-v899) 20260526: Multi EP Die Force SAVE must output one-by-one dual values, not one common direct value."
+20260526,ht9045-v899,cContact.cpp,13089,ALLOWLISTED,"//AI(ht9045-v899) 20260526: Multi EP Die Force SAVE must output one-by-one dual values, not one common direct value."
 20260526,ht9045-v899,cContact.cpp,13096,same-file,//AI(ht9045-v899) 20260526: TfContact SAVE must refresh independent/Multi EP site outputs after site trim changes.
 20260526,ht9045-v899,csystem.cpp,2533,same-file,//AI(ht9045-v899) 20260526: skip SnEPDieForce only when SwMultiEp selects the Multi/APAX route.
 20260526,ht9045-v899,main.cpp,10878,same-file,//AI(ht9045-v899) 20260526: reset APAX only when the independent EP pressure route is active.

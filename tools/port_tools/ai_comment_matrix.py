@@ -60,26 +60,42 @@ def d(b):
     return b.decode("cp950", errors="replace")
 
 
+def load_allowlist():
+    """docs/mg_matrix_allowlist.csv：file,date,comment_prefix,reason,wave
+    命中（同檔同日且 comment 以 prefix 開頭）的 MISSING 改計 ALLOWLISTED。"""
+    path = os.path.join(OUTDIR, "mg_matrix_allowlist.csv")
+    if not os.path.exists(path):
+        return []
+    return list(csv.DictReader(io.open(path, encoding="utf-8-sig")))
+
+
 def main():
     src_entries = [e for e in collect_entries(SRC) if e[3] >= DATE_MIN]
     hay = build_haystacks(DST)
     blob = b"\n".join(hay.values())  # 全樹串接，做「任意檔存在」查詢
+    allow = load_allowlist()
 
     rows = []
     for rel, ln, agent, date, sig in src_entries:
         in_same = rel in hay and sig in hay[rel]
         in_any = in_same or (sig in blob)
         status = "same-file" if in_same else ("other-file" if in_any else "MISSING")
+        comment = d(sig)[:160]
+        if status == "MISSING":
+            for a in allow:
+                if a["file"] == rel and a["date"] == d(date) and comment.startswith(a["comment_prefix"]):
+                    status = "ALLOWLISTED"
+                    break
         rows.append({
             "date": d(date), "agent": d(agent), "file": rel, "line": ln,
-            "status": status, "comment": d(sig)[:160],
+            "status": status, "comment": comment,
         })
 
     # 統計：日期 × 狀態
     stat = {}
     for r in rows:
         k = r["date"]
-        stat.setdefault(k, {"same-file": 0, "other-file": 0, "MISSING": 0})
+        stat.setdefault(k, {"same-file": 0, "other-file": 0, "MISSING": 0, "ALLOWLISTED": 0})
         stat[k][r["status"]] += 1
 
     os.makedirs(OUTDIR, exist_ok=True)
@@ -90,13 +106,13 @@ def main():
                 "`other-file`=他檔命中（需人工確認）、`MISSING`=全樹未命中\n")
         f.write("- 注意：位元組級命中是強證據；**未命中≠功能一定缺**（公司可能改寫過），"
                 "缺席項仍需波次內確認。\n\n")
-        f.write("| 日期 | same-file | other-file | MISSING | 小計 |\n|---|---|---|---|---|\n")
-        tot = {"same-file": 0, "other-file": 0, "MISSING": 0}
+        f.write("| 日期 | same-file | other-file | ALLOWLISTED | MISSING | 小計 |\n|---|---|---|---|---|---|\n")
+        tot = {"same-file": 0, "other-file": 0, "MISSING": 0, "ALLOWLISTED": 0}
         for k in sorted(stat):
             s = stat[k]
-            f.write("| %s | %d | %d | %d | %d |\n" % (k, s["same-file"], s["other-file"], s["MISSING"], sum(s.values())))
+            f.write("| %s | %d | %d | %d | %d | %d |\n" % (k, s["same-file"], s["other-file"], s["ALLOWLISTED"], s["MISSING"], sum(s.values())))
             for kk in tot: tot[kk] += s[kk]
-        f.write("| **合計** | %d | %d | %d | %d |\n" % (tot["same-file"], tot["other-file"], tot["MISSING"], sum(tot.values())))
+        f.write("| **合計** | %d | %d | %d | %d | %d |\n" % (tot["same-file"], tot["other-file"], tot["ALLOWLISTED"], tot["MISSING"], sum(tot.values())))
         # 缺席檔案 top
         fmiss = {}
         for r in rows:
@@ -115,8 +131,8 @@ def main():
                 if filt(r):
                     w.writerow(r)
 
-    print("entries(V899-era)=%d  same-file=%d  other-file=%d  MISSING=%d" %
-          (len(rows), tot["same-file"], tot["other-file"], tot["MISSING"]))
+    print("entries(V899-era)=%d  same-file=%d  other-file=%d  ALLOWLISTED=%d  MISSING=%d" %
+          (len(rows), tot["same-file"], tot["other-file"], tot["ALLOWLISTED"], tot["MISSING"]))
 
 
 if __name__ == "__main__":

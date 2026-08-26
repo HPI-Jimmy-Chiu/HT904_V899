@@ -1,0 +1,50 @@
+﻿file,date,comment_prefix,reason,wave
+AutoClean\uCleaning.cpp,20260430,//AI(ht9045-v899) 20260430: extend AutoClean DieForce to Mul,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+AutoClean\uCleaning.cpp,20260430,//AI(ht9045-v899) 20260430: extend AutoClean DieForce to Mul,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+AutoClean\uCleaning.cpp,20260430,//AI(ht9045-v899) 20260430: extend AutoClean DieForce to Mul,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+ContactForce.cpp,20260430,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (was,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+ContactForce.cpp,20260430,//AI(ht9045-v899) 20260430: 16 EP independent + Multi EP hal,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+ContactForce.cpp,20260430,//AI(ht9045-v899) 20260430: Multi EP half - show OneByOne ta,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+ContactForce.cpp,20260430,//AI(ht9045-v899) 20260430: ported from V874.3 Ifor.,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+ContactForce.h,20260430,//AI(ht9045-v899) 20260430: Multi EP half (INSTALL_DOUBLE_EP,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+HandlerSys.cpp,20260430,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 ComboBox op,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+HandlerSys.cpp,20260430,"//AI(ht9045-v899) 20260430: removed case 2 (""8""); INSTALL_DO",MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+adam6024.cpp,20260430,//AI(ht9045-v899) 20260430: Multi EP board (Address[2]=172.1,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+adam6024.cpp,20260430,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (rol,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+adam6024.cpp,20260430,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (rol,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+adam6024.cpp,20260430,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (rol,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+adam6024.cpp,20260430,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (rol,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+adam6024.cpp,20260430,//AI(ht9045-v899) 20260430: rolled back iIndEPCnt==8 (use IN,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+cContact.cpp,20260430,//AI(ht9045-v899) 20260430: extend to Multi EP half (inner c,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+cmydef.cpp,20260430,//AI(ht9045-v899) 20260430: iAPAXDualEPValue[16] already def,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+cmydef.h,20260430,//AI(ht9045-v899) 20260430: iAPAXDualEPValue[16] already dec,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+database.cpp,20260430,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 path; repla,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+iosetview.cpp,20260430,//AI(ht9045-v899) 20260430: extend EP voltage display to Mul,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+ContactForce.cpp,20260504,//AI(ht9045-v899) 20260504: full port from V874.3 Ifor (撤回 2,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+ContactForce.cpp,20260504,//AI(ht9045-v899) 20260504: full port V874 (Tag%8): 1..4=Arm,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+ContactForce.cpp,20260504,//AI(ht9045-v899) 20260504: full port V874.3 INSTALL_DOUBLE_,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+ContactForce.cpp,20260504,//AI(ht9045-v899) 20260504: full port V874.3 INSTALL_DOUBLE_,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+ContactForce.cpp,20260504,//AI(ht9045-v899) 20260504: full port V874.3 OneByOne ReadFi,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+ContactForce.cpp,20260504,//AI(ht9045-v899) 20260504: full port V874.3 SLKIndClass ==3,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+ContactForce.cpp,20260504,//AI(ht9045-v899) 20260504: full port V874.3 SLKIndClass ==3,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+ContactForce.cpp,20260504,//AI(ht9045-v899) 20260504: full port V874.3 OneByOne WriteF,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+HS_Function.cpp,20260504,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||=,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+HS_Function.cpp,20260504,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||=,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+HS_Function.cpp,20260504,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||=,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+HS_Function.cpp,20260504,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250417). ,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+HS_Function.cpp,20260504,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||=,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+HS_Function.h,20260504,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250417) M,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+adam6024.h,20260504,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250416) f,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+cContact.cpp,20260504,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||=,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+cSetUp.cpp,20260504,//AI(ht9045-v899) 20260504: split INDIVIAL/MULTI gating per ,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+adam6024.cpp,20260511,//AI(ht9045-v899) 20260511: 把舊 Independent EP loop 限制在 DOUBL,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+adam6024.cpp,20260511,//AI(ht9045-v899) 20260511: bounds guard,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+adam6024.cpp,20260511,//AI(ht9045-v899) 20260511: 防止 SLKIndClass 與 slSLKTypeInd 不同,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+ContactForce.cpp,20260526,//AI(ht9045-v899) 20260526: align EP one-by-one site trim di,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+ContactForce.cpp,20260526,//AI(ht9045-v899) 20260526: Show Multi EP site trim page for,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+HS_Function.cpp,20260526,//AI(ht9045-v899) 20260526: do not read/log Multi EP data wh,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+adam6024.cpp,20260526,"//AI(ht9045-v899) 20260526: in Multi EP production, normal a",MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+adam6024.cpp,20260526,"//AI(ht9045-v899) 20260526: in Multi EP production, DoubleFo",MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+cContact.cpp,20260526,//AI(ht9045-v899) 20260526: Multi EP Die Force SAVE must out,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
+note.cpp,20260407,//AI(ht9045-v899) 20260407: only Pause when Note closed via ,假MISSING：V910:1036公司已改寫等價SoftStop guard(自家註解),MG-W3發現
+HS_Function.cpp,20260420,//AI(BVL-3766) 20260420: 開關 site 時要即時重寫 GTK info.txt,假MISSING：BVL-3766功能已在V910，僅#include行尾註解被公司改寫英文,MG-W5發現

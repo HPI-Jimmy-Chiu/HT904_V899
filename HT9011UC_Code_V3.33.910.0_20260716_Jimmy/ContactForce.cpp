@@ -957,6 +957,8 @@ void __fastcall TfContactForce::btSaveClick(TObject *Sender)
     SaveLastSetIni();
 
     WriteFile();
+    //AI(ht9045-v899) 20260526: reload saved one-by-one load rates so the next TfContact SAVE uses current trim values.
+    ReadFile();
     ADAM_WriteVoltage(DeviceForm.dPress);
 }
 //---------------------------------------------------------------------------

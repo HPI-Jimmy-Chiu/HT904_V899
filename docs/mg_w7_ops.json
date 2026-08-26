@@ -1,0 +1,62 @@
+[
+  {
+    "id": "MG-W7-OP1",
+    "desc": "20260511: init mySuckerTemp to NULL (matrix iosetview.cpp:47). V910 declares it uninitialised, so Timer1Timer can deref indeterminate memory before any button handler assigns it. Prerequisite for OP3's null-guard to be meaningful.",
+    "v910_file": "iosetview.cpp",
+    "v899_file": "iosetview.cpp",
+    "v899_lines": [47, 47],
+    "mode": "replace",
+    "replace_lines": [50, 50],
+    "anchor_expect": "TMySucker *mySuckerTemp;"
+  },
+  {
+    "id": "MG-W7-OP2",
+    "desc": "20260511: RAII TTimerRunGuard so bTimerRun is cleared on exception unwind out of Timer1Timer (matrix iosetview.cpp:108). HARD PREREQUISITE OF OP4 - OP4 removes the single-exit 'bTimerRun=false;' and relies on this destructor. splice.py is all-or-nothing per file so the pair cannot land half-applied.",
+    "v910_file": "iosetview.cpp",
+    "v899_file": "iosetview.cpp",
+    "v899_lines": [108, 114],
+    "mode": "after",
+    "anchor_line": 110,
+    "anchor_expect": "bTimerRun=true;"
+  },
+  {
+    "id": "MG-W7-OP3",
+    "desc": "20260511: null-guard mySuckerTemp before deref in Timer1Timer (matrix iosetview.cpp:165). Replaced span is exactly the 'if(bChangeSuckStatus==SStatusSuck)' head line, which becomes the 'else if' arm of the new guard; the Suck/Destory bodies below are untouched.",
+    "v910_file": "iosetview.cpp",
+    "v899_file": "iosetview.cpp",
+    "v899_lines": [165, 169],
+    "mode": "replace",
+    "replace_lines": [162, 162],
+    "anchor_expect": "if(bChangeSuckStatus==SStatusSuck)"
+  },
+  {
+    "id": "MG-W7-OP4",
+    "desc": "20260511: drop the single-exit bTimerRun reset, now owned by OP2's guard (matrix iosetview.cpp:222). Span deliberately starts at RefreshSafePLCLed(); so the anchor is unique; V910's own IsSafePLCIOInstall() gate on line 211 is OUTSIDE the span and is preserved. Requires OP2.",
+    "v910_file": "iosetview.cpp",
+    "v899_file": "iosetview.cpp",
+    "v899_lines": [220, 222],
+    "mode": "replace",
+    "replace_lines": [213, 216],
+    "anchor_expect": "RefreshSafePLCLed();"
+  },
+  {
+    "id": "MG-W7-OP5",
+    "desc": "20260511: clear residual bChangeSuckStatus on FormShow so the timer cannot act on a stale mySuckerTemp from a previous open (matrix iosetview.cpp:247). Inserted BEFORE V910's own InitPairInfo_SafePLCIOLed() so that company line stays first-in-body and untouched.",
+    "v910_file": "iosetview.cpp",
+    "v899_file": "iosetview.cpp",
+    "v899_lines": [247, 247],
+    "mode": "before",
+    "anchor_line": 241,
+    "anchor_expect": "InitPairInfo_SafePLCIOLed();"
+  },
+  {
+    "id": "MG-W7-OP6",
+    "desc": "20260526: btSaveClick re-reads the recipe after WriteFile() so the in-memory one-by-one load rates match what was just saved (matrix ContactForce.cpp:970). OUT-OF-GATE: runs for every customer and every INSTALL_DOUBLE_EP value. Span widened up to the unique SaveLastSetIni(); anchor; all 4 context lines proven byte-identical between the two trees.",
+    "v910_file": "ContactForce.cpp",
+    "v899_file": "ContactForce.cpp",
+    "v899_lines": [967, 972],
+    "mode": "replace",
+    "replace_lines": [957, 960],
+    "anchor_expect": "SaveLastSetIni();"
+  }
+]

@@ -80,20 +80,31 @@
 
 ---
 
-## 🔖 RESUME（20260826 傍晚）
+## 20260826 晚 — MG-W7 done（Multi EP 主題波，地形重大發現）
 
-- **狀態**：Phase 2 連續波次進行中。MG-W1–W6 done。儀表 MISSING=330（起點 376，
-  白名單 2 條）。
-- **進行中**：MG-W7 分析 agent（Multi EP 主題波 0430/0504/0511/0526，~45 條，
-  F1 已核可照搬休眠閘控）背景執行中（產物 docs/mg_w7_analysis.md＋mg_w7_ops.json）。
-  ⚠W7 觸及 HS_Function/CosFunction 等已動過的檔，行號要現場重定位。
+- **V910 有公司自製 Multi EP 完整實作**（Eastsun 20260525 整合＋RogerYang 8EP，部分比
+  V899 新）→ 53 條裡真搬 6 條（iosetview AV 防護 5＋ContactForce round-trip 1），
+  47 條入白名單（32 C／8 X-none 不可刪／7 條 F3–F6 皆建議不搬並照建議執行）。
+- F1「搬不搬 8ch」被地形解決＝無需裁決；矩陣升級白名單感知
+  （docs/mg_matrix_allowlist.csv，49 條）。儀表：raw 330→324、**淨 MISSING=275**。
+- 反向發現 3 筆（V899 有問題不可回搬）；ContactForce iCount<3 已開 V899 任務卡。
+
+---
+
+## 🔖 RESUME（20260826 晚）
+
+- **狀態**：Phase 2 連續波次進行中。MG-W1–W7 done。儀表**淨 MISSING=275**
+  （起點 376；白名單 49 條有據）。
+- **進行中**：MG-W8 分析 agent（Power Save 線：0804 C05 profile＋0811 PowerSavingMode
+  ＋0817:363 還原 guard；產物 docs/mg_w8_analysis.md＋mg_w8_ops.json）背景執行中。
+  ⚠CosFunction.cpp/h 已被 W6 動過，行號現場重定位；0811 的 aoutarm/aRotateKIT 不屬 W8。
 - **下一步（按序）**：
-  1. 收 MG-W7 執行（大波，逐檔分批 splice+gate 較穩）。
-  2. MG-W8 候選＝Power Save 線（0804→0811→0819/0820＋0817 殘餘 PowerSavingMode:363；
-     跨 CosFunction/PowerSavingMode/cConfiguration/aoutarm；.dfm 直接完成）。
-  3. 之後照 LEDGER：AutoClean CKPP＋PickPlanner 目錄（新增檔搬移）、0612 FTP 大波、
-     0602 InArm watchdog 線（＋0803 收回 CC_ARDENTEC 閘門，搬最終態）、0810/0811 OutArm 群。
+  1. 收 MG-W8 執行。
+  2. MG-W9 候選＝0602 InArm watchdog 線（ainarm9045 10＋acatchtray 3；與 0803 收回
+     CC_ARDENTEC 閘門同波搬最終態）。
+  3. 之後照 LEDGER：AutoClean CKPP＋PickPlanner 目錄（新增檔搬移，0407-0417 群）、
+     0612 FTP 大波（50 條）、0810/0811 OutArm 群、0819 hotair、0820 PTI 尾波、零星單條。
   4. 60 分鐘守衛 cron 已掛（每時 :23；殭屍＝先查證後處置）。
-- **量測**：`python tools/port_tools/ai_comment_matrix.py`。
+- **量測**：`python tools/port_tools/ai_comment_matrix.py`（白名單感知，看淨 MISSING）。
 - **不變量**：V899 唯讀（來源端點 b515ed5）；V910 基線 e06524a；LEDGER 手工維護；
   bcc_syntax.sh 波內 gate（錯誤集合基準比對）；全量 build 只在 Phase 3 且先關 IDE。

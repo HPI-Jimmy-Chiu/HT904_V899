@@ -18,11 +18,16 @@
 | MG-W3 | EventLog 引號相依鏈（0429 note.cpp 寫入端 CC_FOREHOPE_NINGBO 無引號分支 2 條＋0817 cObserver ParseEventLogLine 三支 static＋4 解析點，共 7 條矩陣點、6 op） | port_check PASS（15+59 全 SPLICED、removed=2+4 逐條複驗＝else 兩行與 4 個 CommaText 點）＋bcc32 PASS。寫入端 gate=執行期 CUSTOMER_CODE==790，非 790 客戶 else 主體位元組不變（實測）；解析端不加 gate 照搬（V899 已 12 客戶 64 台 100,220 列實測出貨）。**外溢記錄**：JamRawData FTP 統計為修正方向的數字變化。V899 樹內 .bak_20260817_csvquote diff＝5 hunk 與變更集完全吻合 | 570ae0f |
 | MG-W4 | BootLog 開機診斷（main.cpp 5 埋點 59 行；cBootLog.cpp/h 已在 V910 基線內免搬）＋LOAD_Y stepper（HandlerSys OK 套用 6 行含 [0] 補齊＋uMotorTest 測試列 5 行），16 條矩陣點、7 op | port_check PASS（59+6+5 全 SPLICED、removed=5 逐條複驗＝uMotorTest 舊 false 列）＋bcc32 PASS（main.cpp 3 個既有錯誤與 .mgbak 基準一致＝零回歸，見 gate 準則）。裁決：OP-A4 用 after 保留 V910 RogerYang AV 去重改寫；OP-B1 含未標記的 [0] Loader 行（整段 apply block V910 從未有過，補齊避免不對稱）。無客戶碼隔離需求（機台配置閘控） | 9c7b8e1 |
 | MG-W5 | HS_Function KYEC 上傳線（0414 trace 診斷 6 點＋0415 前置宣告與跨午夜換昨天＋0420 假 MISSING 判 C；11 條矩陣點、9 op） | port_check PASS（+35 全 SPLICED、removed=0＝V910 零損失）＋bcc32 PASS（0 errors）。目檢三要害：20260630 timeout 30000 未動、Eastsun CC_KYEC_LEE 區塊完整、connect-fail else 到位。OP9 補 connect-fail 回傳碼（全樹無消費者，可觀察面零）。跨午夜 swap 行為外溢記 F2。**閘門真相：非 KYEC 專屬**（bN10* ini 旗標閘控，函式名是歷史命名） | 59952cc |
-| MG-W6 | 0817 CC_CYUEAN 固定關閉 Auto Tray Feed（CosFunction.h 成員＋預設 false＋FUNC_CC_CYUEAN 4 行含未標記承重行＋cTrayAssignment 生效點與 UI 鎖；5 條矩陣點＋1 未標記行、5 op） | port_check PASS（+17 全 SPLICED、removed=1＝V910 死註解行）＋bcc32 雙檔 0 errors；bCleanOutCanTrayEnd 兩樹同口徑 44=44 parity。**B 類，gate=FUNC_CC_CYUEAN(868) 僅 CYUEAN 執行**；KYEC_LEE(921) AMR 漂移互斥已證。**CYUEAN 行為變更記兩項**：(A) bAutoFeed 恆 false (B) bCleanOutCanTrayEnd false→true（開 MES1642 TrayEnd 選單家族 7 讀取點）——皆 V899 出貨現狀。附帶：TfConfiguration 第二顆 chkAutoTrayFeed 可繞過鎖定＝V899 自身既有缺口（兩樹位元組同，不動） | （本次收工 commit） |
+| MG-W6 | 0817 CC_CYUEAN 固定關閉 Auto Tray Feed（CosFunction.h 成員＋預設 false＋FUNC_CC_CYUEAN 4 行含未標記承重行＋cTrayAssignment 生效點與 UI 鎖；5 條矩陣點＋1 未標記行、5 op） | port_check PASS（+17 全 SPLICED、removed=1＝V910 死註解行）＋bcc32 雙檔 0 errors；bCleanOutCanTrayEnd 兩樹同口徑 44=44 parity。**B 類，gate=FUNC_CC_CYUEAN(868) 僅 CYUEAN 執行**；KYEC_LEE(921) AMR 漂移互斥已證。**CYUEAN 行為變更記兩項**：(A) bAutoFeed 恆 false (B) bCleanOutCanTrayEnd false→true（開 MES1642 TrayEnd 選單家族 7 讀取點）——皆 V899 出貨現狀。附帶：TfConfiguration 第二顆 chkAutoTrayFeed 可繞過鎖定＝V899 自身既有缺口（兩樹位元組同，不動） | 26ec286 |
+| MG-W7 | Multi EP 主題波（0430/0504/0511/0526 共 53 條）——**地形重大發現：V910 有公司自製 Multi EP 完整實作（Eastsun 20260525 整合＋RogerYang 8EP），部分比 V899 新**。真搬 6 條（iosetview 0511 AV 防護 5 op＋ContactForce round-trip 1 op）；32 條 C 類、8 條刪除記錄不可執行（會砍掉公司 8EP 活功能）、7 條入 F3–F6（皆建議不搬並已照建議）；47 條入矩陣白名單 | port_check PASS（15+2 全 SPLICED、removed=4 逐條複驗）＋bcc32 雙檔 0 errors。反向發現 3 筆（V899 有問題 V910 沒有，不可回搬）：ContactForce iCount<3 殘留（已開 V899 任務卡）、MultiTransferKG int vs double、ReadMultiEP 未啟用 | （本次收工 commit） |
 
-## 假 MISSING 白名單（矩陣簽章比對的已知假陽性；收尾驗收準則＝MISSING 集合等於本表）
+## 假 MISSING 白名單
 
-| 矩陣條目 | 真相 |
+**權威清單＝`docs/mg_matrix_allowlist.csv`**（矩陣自動讀取，命中者計 ALLOWLISTED 不計 MISSING；
+20260826 起 49 條：MG-W7 的 47 條 C/X 類＋下表兩條先期發現）。
+收尾驗收準則＝**淨 MISSING 歸零**（即 MISSING 集合⊆白名單）。
+
+| 先期發現 | 真相 |
 |---|---|
 | note.cpp:1027（20260407 SoftStop guard） | V910:1036 公司已改寫等價（自家註解 `//Jimmychiu 20260410`），簽章不同故不命中 |
 | HS_Function.cpp:26（20260420 BVL-3766） | 功能早在 V910（Command.cpp/ProductionInfo.cpp 三條位元組相同），僅 #include 行尾註解被公司改寫成英文 |
@@ -55,17 +60,17 @@
 | 20260423 | 19 | 4 | CASE-20260423-001 | HandlerSys.cpp(5), main.cpp(5), uMotorTest.cpp(5), AutoClean\uCleaning.cpp(4) | A/C | **done**：main+HandlerSys+uMotorTest 15 條=MG-W4；uCleaning 4 條=skipped-C（MG-W1） |
 | 20260424 | 8 | 2 | — | MyLaneIo.cpp(6), MyLaneIo.h(2) | A | **done MG-W2** |
 | 20260429 | 3 | 2 | CASE-20260429-001 | note.cpp(2), main.cpp(1) | A | **done**：note.cpp 2 條=MG-W3；main.cpp:10743=MG-W4（BootLog 24V 提示 gate） |
-| 20260430 | 21 | 10 | — | adam6024.cpp(6), ContactForce.cpp(4), AutoClean\uCleaning.cpp(3), HandlerSys.cpp(2) +6檔 | pending | pending |
-| 20260504 | 17 | 6 | ADR-0004; SPEC-V899-MultiEP-FullPort | ContactForce.cpp(8), HS_Function.cpp(5), HS_Function.h(1), adam6024.h(1) +2檔 | pending | pending |
+| 20260430 | 21 | 10 | — | adam6024.cpp(6), ContactForce.cpp(4), AutoClean\uCleaning.cpp(3), HandlerSys.cpp(2) +6檔 | C/X | **resolved MG-W7**：1 條留 F6，其餘 C/X-none 入白名單 |
+| 20260504 | 17 | 6 | ADR-0004; SPEC-V899-MultiEP-FullPort | ContactForce.cpp(8), HS_Function.cpp(5), HS_Function.h(1), adam6024.h(1) +2檔 | C | **resolved MG-W7**：全數 V910 已有（含更新版），入白名單 |
 | 20260505 | 2 | 2 | — | adam6024.cpp(1), uhome.cpp(1) | pending | pending |
-| 20260511 | 8 | 2 | — | iosetview.cpp(5), adam6024.cpp(3) | pending | pending |
+| 20260511 | 8 | 2 | — | iosetview.cpp(5), adam6024.cpp(3) | A/X | **done MG-W7**：iosetview 5 條已搬（AV 防護）；adam6024 3 條 F4 不動 |
 | 20260513 | 3 | 3 | — | acatchtray.cpp(1), asendic_Auto.cpp(1), csystem.cpp(1) | pending | pending |
 | 20260514 | 8 | 2 | — | AutoClean\AutoClean.cpp(6), ainarm9045.cpp(2) | pending | pending |
 | 20260515 | 3 | 1 | — | cContactCT.cpp(3) | pending | pending |
 | 20260519 | 4 | 3 | — | uTrayEditForm.cpp(2), BarCode\BarCode.cpp(1), HS_Function.cpp(1) | pending | pending |
 | 20260520 | 1 | 1 | — | CosFunction.cpp(1) | pending | pending |
 | 20260525 | 2 | 1 | — | main.cpp(2) | pending | pending |
-| 20260526 | 7 | 4 | — | ContactForce.cpp(3), adam6024.cpp(2), HS_Function.cpp(1), cContact.cpp(1) | pending | pending |
+| 20260526 | 7 | 4 | — | ContactForce.cpp(3), adam6024.cpp(2), HS_Function.cpp(1), cContact.cpp(1) | A/X | **resolved MG-W7**：ContactForce round-trip 1 條已搬；1627/1670=F3、453=F5 不搬 |
 | 20260602 | 13 | 2 | — | ainarm9045.cpp(10), acatchtray.cpp(3) | pending | pending |
 | 20260605 | 1 | 1 | — | cSortCT.cpp(1) | pending | pending |
 | 20260609 | 4 | 1 | — | KYECFTP\FTPClient.cpp(4) | pending | pending |
