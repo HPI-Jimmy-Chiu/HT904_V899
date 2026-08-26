@@ -2258,6 +2258,20 @@ add_library(ht9045_sm STATIC
     # 該 target 的 link diet」，並建議退而 gate 掉 timerContactTimer。
     # **不採用那個備案**：落在 ht9045_sm 就沒有那條邊要撐，那支方法保持完整。
     forms/fContact.cpp
+    # AI(W906-FW-TRAYMAP-W32) 20260826: 落點同樣用 nm 量的（agent 也建議 ht9045_sm，
+    # 但這是量出來的不是採信）。72 個未定義符號裡有 10 個 ht9045_forms 拿不到：
+    #   sm    ShowMyMessage / TfAOI::~TfAOI
+    #   motor MOT / TMyMotor::ReadPos / TMyMotor::GetSpeed
+    #   io    Cylinder / TMyCylinder::OnSensor / OnStatus / OffSensor / OffStatus
+    #
+    # ⚠ 這個 facade 的類別叫 **TfTrayMappingForm** 不是 TfTrayMapping——
+    # 後者的名字已被 acatchtray_shims.h:219 的 shim 類別佔用（:313 還有
+    # `extern TfTrayMapping *fTrayMapping`），比 fContact 那次的衝突更深
+    # （那次 shim 叫 TfContactShim，golden 的類別名是空的）。
+    # 因此本 facade **完全不宣告全域指標**，fTrayMapping 仍指向 shim，全樹行為零改變。
+    #
+    # 與 acatchtray_shims.cpp（:1776，同 archive）共存是安全的：類別名不同、無共用符號。
+    forms/fTrayMapping.cpp
     forms/fTrayAssignment.cpp
     forms/fMotorTest.cpp
     forms/fTeach.cpp

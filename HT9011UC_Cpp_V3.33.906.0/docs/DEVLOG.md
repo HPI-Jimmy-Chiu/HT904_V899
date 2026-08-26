@@ -13151,7 +13151,109 @@ X-01～X-06 讀。**在不能跑 BCB6 binary 驗證的情況下不動它**，已
   ALL 61.6%（golden code 行）；tag C++ 側 66 vs 瀏覽器 37；web layout.json 133/133。
   **W28-W30 之後翻譯軸未重量。**
 
-### 🔖 RESUME（20260826 收工）
+## 20260826 XXIII — FW-TRAYMAP-W32（42 支）＋ FW-NOTE-W33（28 支）
+
+### 交付（兩個分母都報）
+
+| 波次 | 支數 | /分母 | 行數 | /分母 |
+|---|---|---|---|---|
+| `TfTrayMappingForm`（**新 facade**） | 42 | /150（28.0%） | **355** | **/6,040（5.9%）** |
+| `TfOffSet`（append-only） | 22 | /62（35.5%） | 228 | /4,179（5.5%） |
+| `TfNote`（append-only） | 6 | /62（9.7%） | 131 | /6,832（1.9%） |
+
+`TfTrayMapping` **只報支數會誇大 4.7 倍**。兩個 agent 這次都主動報了兩個分母。
+
+分母複驗（主迴圈剝註解與字串後重量）：`TfTrayMapping` raw regex **161 → 剝後 150**，
+與 agent 一致（**我給的 161 又錯了，這是第八次**）。`TfNote` / `TfOffSet` 的 62 這次是對的，
+但那是 agent 重量後的結論，不是我給對了。
+
+### 三個結構性發現
+
+**1. 類別名衝突比全域衝突更深。**
+`acatchtray_shims.h:219` 就叫 `class TfTrayMapping`，`:313` 是
+`extern TfTrayMapping *fTrayMapping`。這比 `fContact` 那次嚴重——那次 shim 叫
+`TfContactShim`，golden 的類別名是空的。
+處置：facade 命名 **`TfTrayMappingForm`**，**完全不宣告全域指標**。
+`fTrayMapping` 仍指向 shim，全樹行為零改變。主迴圈已開檔驗證兩行。
+
+**2.「宣告但不定義」的 gate 機制有一個會炸掉 build 的邊界條件。**
+W32 波次中途丟掉 2 支（計畫 44 → 實際 42）：`AddAOIMemeber` 裝的
+`RecordMsgLaser`/`RecordErrorMsgLaser` 是寫檔的 gate，而 `InitialAOIGroup` 呼叫它。
+**ACTIVE 的本體呼叫 gated 的本體 = 這個 `.o` 帶著無條件的 undefined reference，
+把 linker 互鎖從絆線變成永久 build 破。**
+這條之前沒人寫下來，已加進取批標準第 (d) 條。
+
+**3. regex 訊號掃描會漏掉真正危險的東西。**
+W33 的四支 `sb_AutoOffset{Up,Down,Right,Left}Click` 在訊號掃描下是「乾淨」的
+（本體沒有 `MotorMove`／`Write*` 字樣）。**逐行讀 golden 才看到
+`spbSaveClick(this)` 寫檔 ＋ `fMain->Start("...")` 啟動機台。**
+這是「必須實際開本體讀完」最直接的證據。
+
+### 又一個 Tag provenance 案例（O-9）
+
+`btnSortAuto1Click`：golden 的 `btnSortAuto1..6` 六顆共用同一個 handler，
+各帶不同的 **.dfm 設計期 Tag**（agent 開 `cOffSet.dfm` 確認）。
+本樹沒有 .dfm Tag 載入路徑 → **一律讀 0** → `iSortUnloadT6` 被寫成 0。
+而它初值 **-1** 配消費者 `aoutarm.cpp:4172-4174` 的 `iSortUnloadT6>=0` 守衛——
+**寫 0 等於把守衛打開並把出料一律導到 Auto1**。
+**0 不是中性 else，是主動命中錯分支**（與 W30 的 `iATC_MODE_TYPE` 恆 0 那個
+「安全降級」正好相反，兩者不可混為一談）。
+
+### 兩個 agent 都自己抓到並更正了假數字
+
+- W32：開工說「111 個 TU include `acatchtray_shims.h`」——那是「檔案文字含這個字串」
+  的數法，混進 30 個只在**註解**裡提到它的檔。收工用「真的 `#include` 指令、
+  且在 `#if 0` 外」重量是 **81 個 .cpp、0 個 .h**。
+- W33：說 `clTeal`「全樹皆無」——實際定義在 `cObserver.cpp:172` 但是
+  `static const` = **TU-local，跨 TU 拿不到**。結論不變，宣稱的精確度變了。
+  另更正 `TTMyTray`：有 18 個名字命中但**全是前向宣告**，無完整定義。
+- W33 還在波次中途抓到自己的 `#if 0` 追蹤器 bug（沒先剝掉指令行尾的註解，
+  `#if 0 // GATE ...` 沒被認出），修好後**重跑 golden**，兩個 62 不變。
+
+### CMakeLists 落點：一個要註冊、一個不用
+
+- `forms/fTrayMapping.cpp` → **`ht9045_sm`**（用 `nm` 量的）。72 個未定義符號裡有
+  **10 個 `ht9045_forms` 拿不到**：sm 的 `ShowMyMessage`／`TfAOI::~TfAOI`、
+  motor 的 `MOT`／`TMyMotor::ReadPos`／`GetSpeed`、
+  io 的 `Cylinder`／`TMyCylinder::OnSensor`／`OnStatus`／`OffSensor`／`OffStatus`。
+- `forms/fNote.cpp`／`forms/fOffSet.cpp` **不需要改 CMake**——主迴圈開檔確認
+  它們早已在 `ht9045_forms` 來源清單（`:660`／`:661`）。W33 的宣稱成立。
+
+### 主迴圈裁決：保留那個 warning
+
+`fTrayMapping.cpp:316` 的 `delete GetAOI(i)` 觸發 `-Wdelete-non-virtual-dtor`
+（`TfAOI` 有虛擬函式但非虛擬解構子，**golden 也是**）。agent 問要不要為了零 warning
+把 `ClearAllAOI` 也 gate（唯一 caller `FormDestroy` 本來就 gated，什麼都不變）。
+
+**裁決：保持 live、留著 warning。** 為了消一個如實反映 golden 缺陷的警告，
+去 gate 一支翻譯正確的方法，是把優先序倒過來。該處有 GOLDEN NOTE 說明
+「不要靠加 `virtual ~TfAOI` 消掉，那會改動已翻譯類別的 vtable」，不是無說明的雜訊。
+與 W26 保留 `-Wunused-value` 當 golden `==` 缺陷路標是同一個處置。
+
+### 驗收
+
+全新 dir、最後一次整併之後量：**Debug 與 Release 各 137/142**，失敗集合逐項相同
+且等於常駐五項。六檔全部純 LF、零孤立 CR、零 U+FFFD；`CMakeLists.txt` 保持純 CRLF。
+W33 四檔 append-only（+241/+260/+378/+287，零刪除）。
+
+### 刻意沒做
+
+- W32 退出 108 支 / 5,685 行，分七群（34 對外 TCP、28 寫檔、8 機台動作、
+  2 `ShowErrorMessage`、22 跨檔缺口、12 整支省略連宣告都沒有、2 遞移被 gate）。
+  **12 支連宣告都沒有**，因為簽章帶零-port 型別（`TCustomWinSocket` ×9、
+  `TCloseAction`、`TWMKey`、`Pointer/WORD`）——**猜錯的宣告比缺宣告更難發現**。
+- W33 退出：`TfOffSet` 12 支（含 O-5 那四支寫檔+啟動機台）、`TfNote` 34 支
+  （其中 7 支只列名不宣告，同上理由）。
+- **`TfNote` 只交 6 支是本質的**：它是警報／JAM 對話框，method 幾乎都是操作員按鈕
+  入口（`BtnStartClick`→`Start()`、`BtnResetClick`→`fMain->BtnResetClick`、
+  `TimerFTPTimer` 對外上傳、`SaveErrEventLog` 寫檔）。**「唯讀方向」在這個表單上
+  本來就是少數**，agent 選少而正確、沒有用空殼補數字。
+- **一個必須有人裁決的語意衝突（未處理）**：`DoTrayIDCheck` W32 翻的是真本體
+  （回 false = 重複 tray ID），而 `acatchtray_shims.h:296-306` 把 offline 答案
+  硬寫成 true 且註明那是刻意決定。`TestIF_File.bCheckTrayIDBylot` 關閉時兩者一致，
+  **打開且檔案裡有 match 時兩者相反**。將來接線時要挑一個。
+
+### 🔖 RESUME（20260826 收工，已被檔尾那則取代）
 
 - **今天累計 10 顆 commit，七次雙 gate 全部 137/142、失敗集合逐項等於常駐五項。**
   最後一顆是 `FW-SLK-W31`（SLK 容器 + 四支 parse-only loader，
@@ -13212,3 +13314,56 @@ X-01～X-06 讀。**在不能跑 BCB6 binary 驗證的情況下不動它**，已
 - **三軸（20260826 17:12 量測，單位不可互換）**：翻譯 non-form 96.0%／form 17.3%／
   ALL 61.6%（golden code 行）；tag C++ 側 66 vs 瀏覽器 37（兩邊不是同一組，最落後）；
   web layout.json 133/133。**W28-W31 之後翻譯軸未重量。**
+
+### 🔖 RESUME（20260827 凌晨）
+
+- **今天累計 11 顆 commit，八次雙 gate 全部 137/142、失敗集合逐項等於常駐五項。**
+  最後一顆是 `FW-TRAYMAP-W32` + `FW-NOTE-W33`（70 支方法／714 golden 行）。
+
+- **下一步（依序）**
+  1. **bootstrap 5 個**（`TFormBarcodeReader`／`TfVacuumUnit`／`TfPassword`／
+     `TfDynamicTemp`／`fLan`），ctor 已審過 NSDMI 安全。
+     **放顯式 `InitForms()`，絕不可放靜態初始化**（陷阱 #4 曾 88/134 SEGFAULT）。
+     golden `HT9045.cpp` 有 3 個全域被建兩次，port 無 `Application` 擁有者 →
+     **建一次並註解說明**。量測工具 `tools/wavescan/bootstrap_survey.py`（35 秒）。
+  2. **翻譯軸重量**（W28-W33 之後未重跑 `tools/census/census.py --detail`）。
+  3. **續推 `TfTrayMappingForm`**——剩 108 支 / 5,685 行，下一批有天然形狀：
+     CCD+Keyence socket 協定狀態機一群、laser-scan 運動引擎一群、tray log writer 一群。
+  4. 補 `ComputeTotalAirForce` / `SlkForceTable` 的 ctest。
+  5. **簽章慣例定案**（W27 保留完整簽章 vs W21/W29 丟掉未讀參數）。
+
+- **今天累積的判斷原則（八波驗證過）**
+  1. **缺符號比錯答案好**——三次（W26 退化 stub、W28 `dKitDiameter=30.0`、
+     W31 的 56mm `dContactOffset`）。**靜默地錯比大聲失敗更糟。**
+  2. **前提死掉不代表答案就是退役**——W29 的 B1 第 4 站點、W30 全部六個都重新問過。
+  3. **降級要分「安全」與「主動選錯」**——W30 的 `iATC_MODE_TYPE` 恆 0 是安全降級
+     （0 不命中任何分支）；**W33 的 `iSortUnloadT6` 寫 0 是主動選錯**
+     （初值 -1 配 `>=0` 守衛，寫 0 等於打開守衛並把出料導到 Auto1）。
+  4. **`grep` 找到字串只證明文字存在，不證明編譯器看得到**——本樹上千個 `#if 0`。
+  5. **regex 訊號掃描會漏掉真正危險的東西**——W33 的四支在掃描下「乾淨」，
+     逐行讀才看到寫檔 + `fMain->Start()` 啟動機台。**必須實際開本體讀完。**
+  6. **「宣告但不定義」的 gate 有邊界**——ACTIVE 本體呼叫 gated 本體會讓 `.o` 帶著
+     無條件 undefined reference，**把互鎖從絆線變成永久 build 破**（W32 因此丟掉 2 支）。
+
+- **主迴圈今天被 agent 推翻前提三次、分母給錯八次。** 三次推翻：W28「217 行純算術」、
+  W30「`:1280` 是 live code」、W31「`ReadFile` 填表」。
+  **都是我轉述前一份報告或憑單行閱讀就下結論。**
+  **派工裡那句「我給的數字是轉述的，你自己重量一次」今天救了三次。**
+
+- **佇列不做（安全關鍵，等使用者在場）**：`h4-G2`／`G01`（會讓入料手臂移動到教導點）；
+  `HGem` bootstrap；`clWindow`／`TCustomEdit::Color` 整併；
+  `CONTACT_TEST` 解閘（連帶 `SetContactMode` 的模式切換）；
+  `(SEC1)` 開閘時必須同波帶上 `fCleaning->btnResetCleanCountClick`；
+  X-01～X-06 + SLK loader 接線 + IO 波次（已裁決等 IO）；
+  各波退出的動作／寫檔方法。
+
+- **待裁決的語意衝突**：`DoTrayIDCheck` 的 W32 真本體（回 false = 重複 tray ID）
+  vs `acatchtray_shims.h:296-306` 硬寫 true 的 offline 答案。
+  `TestIF_File.bCheckTrayIDBylot` 打開且檔案有 match 時**兩者相反**，接線時要挑一個。
+
+- **活的潛伏警告**：`WD-5`——GA-1-B4 換手後
+  `FormShow → ShowXMLOnLine → 4× RecordProcess` 會變 DB 寫入。**要擋就那時擋。**
+
+- **三軸（20260826 17:12 量測，單位不可互換）**：翻譯 non-form 96.0%／form 17.3%／
+  ALL 61.6%（golden code 行）；tag C++ 側 66 vs 瀏覽器 37；web layout.json 133/133。
+  **W28-W33 之後翻譯軸未重量。**
