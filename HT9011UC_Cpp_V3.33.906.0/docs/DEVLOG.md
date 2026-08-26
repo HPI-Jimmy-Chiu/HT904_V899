@@ -12979,7 +12979,122 @@ W27 判「WC-10 可開」時漏了一層，我複驗時也漏了同一層。agen
   ALL 61.6%（golden code 行）；tag C++ 側 66 vs 瀏覽器 37（兩邊不是同一組，最落後）；
   web layout.json 133/133。**W28/W29 之後翻譯軸未重量。**
 
-### 🔖 RESUME（20260826 深夜 · 第二版）
+## 20260826 XXII — FW-SLK-W31：SLK 容器落地，並第三次推翻主迴圈的前提
+
+### 主迴圈的錯（今天第三次，而且這次會直接造出我明令禁止的半成品）
+
+派工時我寫「golden 的 `TfContactForce` 有一條 **ReadFile 路徑**會把設定檔讀成一組
+SLK 物件」。**不是。** 主迴圈事後逐行複驗：
+
+| | |
+|---|---|
+| `push_back(new THT*SLKClass(...))` 共 | **11 處，全在 `:469`–`:632`** |
+| `TfContactForce` 建構子起於 | `:421` |
+| `ReadFile` 起於 | `:963` |
+
+**11 個建立點全部在建構子裡，`ReadFile` 一個都沒有。** `ReadFile` 只是在**已經建好**的
+vector 上覆寫 ini 欄位。**只翻 `ReadFile` 會得到一張空表**，而空表正好讓
+`dKitDiameter` 停在 30.0——也就是我在同一份派工裡明令禁止的那種半成品
+（「寧可說不夠，也不要交付一個會讓 `dKitDiameter` 仍然停在 30.0 的半成品」）。
+
+agent 自己開檔量出來並改翻 **ctor fill + ReadFile 的 key 推導/clamp**。
+
+**今天主迴圈被推翻三次，形狀一次比一次深**：
+1. W28：「`CalculateTotalAirForce` 是 217 行純算術」→ 實際有 7 處 widget 寫入與一個全域寫入。
+2. W30：「`forms/fLotInfo.cpp:1280` 是 live code」→ 實際在 `#if 0` 裡。
+3. W31：「SLK 表由 `ReadFile` 填」→ 實際由 ctor 填。
+
+**三次都是我轉述前一份報告或憑單行閱讀下的結論，沒有自己開檔驗。**
+派工裡我每次都寫著「你自己重量一次」——這條規則救了三次。
+
+它同時修正我三個行號：`common.cpp:678`→**`:603`**（`ReadIniData` 純讀家族實際在
+`:685-757`）、`vclcompat/TStringList.cpp:186-221`→**`:188-225`**、
+`CMakeLists.txt:313`→**`:312`**。
+
+### 交付：容器 + 查詢 + 四支 parse-only loader
+
+- `SlkForceTable`：`vector<SlkForceData>` + `variant` + `bLoaded` + `bNeedWriteFile`，
+  **ctor 只塞欄位**。`SlkForceTables` 用 **function-local static、first-use 建構**，
+  不進靜態初始化期（陷阱 #4）。
+- `ResolveKitDiameter(itemText)` → `SlkKitResolve{bMatched, iTag, dKitDiameter}`，
+  逐行對 golden `cContact.cpp:18710-18727`：**無 `break`（最後一筆命中者勝）**、
+  `d2` 每輪重算、`"40x2"→402`、命中才 `402→40`。
+  預設 `iTag=-1 / 30.0` 就是 golden 未走迴圈的狀態。
+- 四支 loader 涵蓋全部 11 個 golden 建立點，含 `EP_Install==5` 一票兩筆同 tag、
+  `CC_ASE_SG` 的 `"80_Hi"` tag `i+1`、`>15.0` 過濾。
+
+**`bLoaded` 是本波防半成品的機制，理由要記下來**：golden 在
+`bUseDynamicKitDiameter==false` 時 SLKClass 本來就是空的、`dKitDiameter` 本來就是
+30.0——**那是合法行為**。要能區分的是「表根本沒載入」這個 port 缺陷。
+`bLoaded==false` 的呼叫者必須拒絕計算，**不可 fallback**。
+
+**IO 切法（照派工要求）**：全部吃「已讀入的文字」。**零 `fopen`／
+`CheckAndReadIniData`／`ReadIniData`**；`ContactForce.cpp` 的唯一專案 include 仍是
+自己的 header（`g++ -H` 實測）。ini 端的東西以純函式暴露給之後的 IO 波次
+（`Slk*Default*Csv()`、`SlkComputeNeedWriteFile`、四支 `*IniGroupName`、
+`ApplySlkIniValues`、`SlkTrackBarPosition`、`ApplyKyecDiameterRemap`）。
+
+### 忠實保留的 golden quirk
+
+- **`:534` 讀的是 `slSLKTypeVisible`（SLKClass 那份）而非 `slSLKTypeIndVisible`。**
+  介面因此刻意收兩份 visible CSV，標頭寫明「不是筆誤、不准修」。
+- `SlkClampRange` 是 `MachineType.h:1519-1540` `CheckRange` 的忠實複製，
+  **含 `Maximum<Minimum` 的交換臂**——golden 真的交換著呼叫（`CheckRange(v, 0.8, 1.5)`）。
+- `SlkComputeNeedWriteFile` 的 `Pos(...)==1` 是 **1-based「開頭」**，不是 contains。
+- `SlkTrackBarPosition` 是**截斷不是四捨五入**。
+
+**唯一的行為性偏離**：`TokenAt`——golden 在 Visible CSV 比 Type CSV 短時會丟
+`EStringListError`；port 不能丟 VCL 例外，缺的 token 視為 `""`→`bShow=false`
+（**寧可隱藏也不憑空顯示**）。已在標頭與 .cpp 標明。
+
+### agent 明說「還不夠」，而且說了兩層——這正是要的
+
+**容器這一側夠了，但差兩步，都不在它的兩個檔裡：**
+
+1. **樹上沒有任何地方呼叫 loader。** 要接到 `TfContact::Init()`（或一個 `fContactForce`
+   facade）。好消息是現成的對齊點已存在：`forms/fContact.cpp:414` 在 GATE (C-1) 下
+   已用 golden `:188` 的 no-file 臂把 `rgKitDiameter->Items->CommaText` 設成
+   `"30,40,60,56"`——只要 loader 用同一組預設 CSV，兩邊字串同源，walk 就會命中
+   （探針已驗）。**若沒接這一步，`dKitDiameter` 仍會停在 30.0。**
+2. **`dContactOffset` / `dContactOffset_NS` 來自 ContactInfo.ini**（golden `:1064-1065`），
+   那是刻意延後的 IO 半邊。它們只在 `GetMinForce` 的 else 臂被讀——在預設清單
+   `{30,40,60,56}` 裡就是**選 56mm 時**。無 ini 檔的機台兩邊都是 0.0（等價）；
+   **有 ini 檔的機台，56mm 會拿到 0.0 而不是檔案值，min force 會被低估。**
+
+### 主迴圈裁決：X-01～X-06 等 IO 波次，繼續 gated
+
+**接觸力被低估是安全相關的錯值**，最後餵給 EP 調壓閥。這與今天兩次拒絕交付
+同屬一類（W26 的 `Gali_ReadPos` 退化 stub、W28 的 `dKitDiameter=30.0`）：
+**缺符號比錯答案好。**
+
+loader 接線也一併留著——沒有消費者時接它只是多一條在 `Init()` 做工卻沒有可觀察
+效益的路徑。整包（loader 接線 + X-01～X-06 + IO 波次）留給使用者在場時一起做。
+
+### 驗收
+
+全新 dir、最後一次整併之後量：**Debug 與 Release 各 137/142**，失敗集合逐項相同
+且等於常駐五項。
+
+**`ContactForce.cpp` 屬 `ht9045_core`，帶著全樹最嚴的旗標**
+（`-Wall -Wextra -Wshadow -Wconversion -Wpedantic`）——**1,054 行新程式碼零警告**，
+`test_ContactForce` 也連結成功（build.log 裡 5 筆 `ContactForce` 全是進度行）。
+
+行為探針 51 項全過（scratchpad-only，未進 CMake/ctest），決定性的是：
+`resolve "40"→matched/tag 1/40.0`、`"60"→60.0`、`"56"→56.0`、
+`miss→!matched/-1/30.0`、`empty table→!matched/30.0/bLoaded==false`。
+
+**md5 對帳**：改前備份 `a4e898ba…`／`4f2eff5a…` 與 `git show HEAD` 逐字相同。
+純新增 +600/+454、零刪除、只有這兩檔、純 LF、零孤立 CR、零 U+FFFD。
+**沒有製造新的 archive 邊**（`g++ -H` 顯示專案 include 只有自己的 header）。
+
+### 已知既有分歧，本波刻意不改
+
+BCB6 對 TObject 衍生類 `new` 會零填，golden 的 `dLoadRate` 在無 ini 檔時是 0.0，
+而 port `SlkForceData` ctor 預設 **1.0**。安全相關的兩個
+（`dContactOffset`／`dContactOffset_NS`）兩邊都是 0.0，且 `dLoadRate` 不被
+X-01～X-06 讀。**在不能跑 BCB6 binary 驗證的情況下不動它**，已在標頭記錄。
+
+### 🔖 RESUME（20260826 深夜 · 第二版，已被檔尾那則取代）
 
 - **本段最後一顆**：`FW-LOTINFO-W30`——**行為變更波**，6 個 gate 全開 / 0 保留。
   雙 gate 137/142 全綠，兩側 build log 的 `multiple definition` 皆 **0**
@@ -13035,3 +13150,65 @@ W27 判「WC-10 可開」時漏了一層，我複驗時也漏了同一層。agen
 - **三軸（20260826 17:12 量測，單位不可互換）**：翻譯 non-form 96.0%／form 17.3%／
   ALL 61.6%（golden code 行）；tag C++ 側 66 vs 瀏覽器 37；web layout.json 133/133。
   **W28-W30 之後翻譯軸未重量。**
+
+### 🔖 RESUME（20260826 收工）
+
+- **今天累計 10 顆 commit，七次雙 gate 全部 137/142、失敗集合逐項等於常駐五項。**
+  最後一顆是 `FW-SLK-W31`（SLK 容器 + 四支 parse-only loader，
+  1,054 行新碼在 `ht9045_core` 最嚴旗標下**零警告**）。
+
+- **主迴圈今天被 agent 推翻前提三次，形狀一次比一次深**
+  1. W28：「`CalculateTotalAirForce` 是 217 行純算術」→ 有 7 處 widget 寫入 + 一個全域寫入。
+  2. W30：「`forms/fLotInfo.cpp:1280` 是 live code」→ 在 `#if 0` 裡（`:1271` 開）。
+  3. W31：「SLK 表由 `ReadFile` 填」→ 11 個 `push_back` 全在建構子 `:469-632`，
+     `ReadFile` 起於 `:963` 一個都沒有。
+  **三次都是我轉述前一份報告、或憑單行閱讀就下結論，沒自己開檔驗。**
+  三次都被同一句話救回來——每份派工裡的「我給的數字是轉述的，你自己重量一次」。
+  **W31 尤其險**：照我說的只翻 `ReadFile` 會得到空表，而空表正好讓 `dKitDiameter`
+  停在 30.0，也就是我在同一份派工裡明令禁止的那種半成品。
+
+- **下一步（依序）**
+  1. **bootstrap 5 個**（`TFormBarcodeReader`／`TfVacuumUnit`／`TfPassword`／
+     `TfDynamicTemp`／`fLan`），ctor 已審過 NSDMI 安全。
+     **放顯式 `InitForms()`，絕不可放靜態初始化**（陷阱 #4 曾 88/134 SEGFAULT）。
+     golden `HT9045.cpp` 有 3 個全域被建兩次（`fBinAOISel:278,:279`／
+     `fObserveMagazine:280,:282`／`frmFileTransfer:281,:283`），port 無 `Application`
+     擁有者，照字面翻會是真洩漏 → **建一次並註解說明**。
+     可做範圍量測工具：`tools/wavescan/bootstrap_survey.py`（35 秒可重跑）。
+  2. **翻譯軸重量**（W28-W31 之後未重跑 `tools/census/census.py --detail`）。
+  3. **再開全新 facade 翻譯波**——form 軸只有 17.3%，還有 **88 個表單檔完全沒有 port 鏡射**。
+  4. 補 `ComputeTotalAirForce` 與 `SlkForceTable` 的 ctest（目前只有 scratchpad probe 驗過）。
+  5. **簽章慣例要有人定案**（W27 保留完整簽章 vs W29/W21 丟掉未讀參數，同一天兩邊都用過）。
+
+- **已裁決、不要再問：X-01～X-06 等 IO 波次，繼續 gated。**
+  預設清單下選 56mm 會落進 `GetMinForce` 的 else 臂讀 `dContactOffset`，
+  該值目前只能是 0.0，有 ini 檔的機台會**低估 min force**，而那個值餵給 **EP 調壓閥**。
+  loader 接線也一併留著（沒有消費者時接它只是多一條沒有可觀察效益的路徑）。
+  整包（loader 接線 + X-01～X-06 + IO 波次）留給使用者在場時一起做。
+
+- **今天反覆生效的四個判斷原則**
+  1. **缺符號比錯答案好**——出現三次（W26 退化 stub、W28 `dKitDiameter=30.0`、
+     W31 的 56mm `dContactOffset`）。**靜默地錯比大聲失敗更糟。**
+  2. **前提死掉不代表答案就是退役**——W29 的 B1 第 4 站點正確保留並換上真理由。
+  3. **降級要分「安全」與「主動選錯」**——W30 的 `iATC_MODE_TYPE` 恆 0 是安全降級；
+     記憶裡 `tcHotPlate1==0` 是主動選錯行為。**兩者不可混為一談。**
+  4. **`grep` 找到字串只證明文字存在，不證明編譯器看得到**——本樹 `#if 0` 上千個區塊，
+     今天兩次因此誤判（一次 6 個 TU 報成 164 個、一次是我把 gated 行當 live）。
+
+- **absence claim 今天過期或為偽共 7 次**（其中 `AutoForm[]` 與
+  `fLotInfo.cpp:1280` 的字面值先例是**寫下當時就假的**）。**保鮮期比想像中短得多。**
+
+- **佇列不做（安全關鍵，等使用者在場）**：`h4-G2`／`G01`（會讓入料手臂移動到教導點）；
+  `HGem` bootstrap；`clWindow`／`TCustomEdit::Color` 整併；
+  `CONTACT_TEST` 解閘（連帶 `SetContactMode` 的模式切換）；
+  `(SEC1)` 開閘時必須同波帶上 `fCleaning->btnResetCleanCountClick`；
+  X-01～X-06 + loader 接線 + IO 波次（本輪已裁決）；
+  各波退出的動作／寫檔方法（`TfContact` 52 含 `ADAM_WriteVoltage` 命令 EP 調壓閥、
+  `TfMotorTest` 52、`TfTeach` 67）。
+
+- **活的潛伏警告**：`WD-5`——GA-1-B4 換手後
+  `FormShow → ShowXMLOnLine → 4× RecordProcess` 會變 DB 寫入。**要擋就那時擋。**
+
+- **三軸（20260826 17:12 量測，單位不可互換）**：翻譯 non-form 96.0%／form 17.3%／
+  ALL 61.6%（golden code 行）；tag C++ 側 66 vs 瀏覽器 37（兩邊不是同一組，最落後）；
+  web layout.json 133/133。**W28-W31 之後翻譯軸未重量。**
