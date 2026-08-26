@@ -637,6 +637,12 @@ void __fastcall THandlerSystem::SaveSystemSet()
     LOAD_Z_USE_MOTOR[6]=chkAuto4->Checked;                                      //Steven 20230907 : For HT-9011UC
     LOAD_Z_USE_MOTOR[7]=chkAuto5->Checked;
     LOAD_Z_USE_MOTOR[8]=chkAuto6->Checked;
+    LOAD_Y_USE_MOTOR[0]=chkLoaderY->Checked;                                     //Jimmychiu 20240307 : Loader Tray改用步進馬達
+    LOAD_Y_USE_MOTOR[1]=chkEmptyY->Checked;                                      //AI(ht9045-v899) 20260423: apply empty y stepper
+    LOAD_Y_USE_MOTOR[2]=chkColorY->Checked;                                      //AI(ht9045-v899) 20260423: apply color y stepper
+    LOAD_Y_USE_MOTOR[3]=chkAuto1Y->Checked;                                      //AI(ht9045-v899) 20260423: apply auto1 y stepper
+    LOAD_Y_USE_MOTOR[4]=chkAuto2Y->Checked;                                      //AI(ht9045-v899) 20260423: apply auto2 y stepper
+    LOAD_Y_USE_MOTOR[5]=chkAuto3Y->Checked;                                      //AI(ht9045-v899) 20260423: apply auto3 y stepper
 
     LOADUNLOAD_USE_CASSETTE[0]=cbLoaderCassette->Checked;
     LOADUNLOAD_USE_CASSETTE[1]=cbEmptyCassette->Checked;

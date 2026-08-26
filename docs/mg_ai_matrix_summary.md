@@ -20,10 +20,10 @@
 | 20260420 | 2 | 0 | 1 | 3 |
 | 20260421 | 10 | 0 | 0 | 10 |
 | 20260422 | 6 | 0 | 0 | 6 |
-| 20260423 | 31 | 0 | 19 | 50 |
+| 20260423 | 46 | 0 | 4 | 50 |
 | 20260424 | 8 | 0 | 0 | 8 |
 | 20260428 | 3 | 0 | 0 | 3 |
-| 20260429 | 2 | 0 | 1 | 3 |
+| 20260429 | 3 | 0 | 0 | 3 |
 | 20260430 | 6 | 3 | 21 | 30 |
 | 20260504 | 16 | 0 | 17 | 33 |
 | 20260505 | 50 | 0 | 2 | 52 |
@@ -63,15 +63,15 @@
 | 20260817 | 5 | 0 | 6 | 11 |
 | 20260819 | 0 | 0 | 10 | 10 |
 | 20260820 | 0 | 0 | 7 | 7 |
-| **合計** | 354 | 4 | 361 | 719 |
+| **合計** | 370 | 4 | 345 | 719 |
 
 ## MISSING 依檔案分布（前 40）
 
 | 檔案 | 缺席註解數 |
 |---|---|
-| main.cpp | 28 |
 | AutoClean\AutoClean.cpp | 24 |
 | FTPUpload\uFtpUploadThread.cpp | 23 |
+| main.cpp | 22 |
 | HS_Function.cpp | 20 |
 | CosFunction.cpp | 17 |
 | ainarm9045.cpp | 15 |
@@ -88,11 +88,9 @@
 | ProductionInfo\ProductionInfo.cpp | 9 |
 | FTPUpload\uFtpUploadThread.h | 8 |
 | csystem.cpp | 7 |
-| HandlerSys.cpp | 7 |
 | iosetview.cpp | 6 |
 | Interface\TesterTCP.cpp | 6 |
 | cmydef.cpp | 5 |
-| uMotorTest.cpp | 5 |
 | RotateKit\aRotateKIT_Out.cpp | 5 |
 | cmydef.h | 4 |
 | KYECFTP\FTPClient.cpp | 4 |
@@ -109,3 +107,5 @@
 | cBinSel.cpp | 2 |
 | cprod.cpp | 2 |
 | cpublic.cpp | 2 |
+| HandlerSys.cpp | 2 |
+| mymessbox.cpp | 2 |

@@ -43,22 +43,6 @@
 20260423,ht9045-v899,AutoClean\uCleaning.cpp,149,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
 20260423,ht9045-v899,AutoClean\uCleaning.cpp,150,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
 20260423,ht9045-v899,AutoClean\uCleaning.cpp,151,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
-20260423,ht9045-v899,HandlerSys.cpp,519,MISSING,//AI(ht9045-v899) 20260423: apply empty y stepper
-20260423,ht9045-v899,HandlerSys.cpp,520,MISSING,//AI(ht9045-v899) 20260423: apply color y stepper
-20260423,ht9045-v899,HandlerSys.cpp,521,MISSING,//AI(ht9045-v899) 20260423: apply auto1 y stepper
-20260423,ht9045-v899,HandlerSys.cpp,522,MISSING,//AI(ht9045-v899) 20260423: apply auto2 y stepper
-20260423,ht9045-v899,HandlerSys.cpp,523,MISSING,//AI(ht9045-v899) 20260423: apply auto3 y stepper
-20260423,ht9045-v899,main.cpp,6,MISSING,//AI(ht9045-v899) 20260423: BootLog for crash diagnosis (24V-off scenario)
-20260423,ht9045-v899,main.cpp,8567,MISSING,//AI(ht9045-v899) 20260423: BootLog checkpoint
-20260423,ht9045-v899,main.cpp,10737,MISSING,//AI(ht9045-v899) 20260423: friendly notification when 24V power not on at startup.
-20260423,ht9045-v899,main.cpp,25798,MISSING,//AI(ht9045-v899) 20260423: also write to BootLog so root cause survives
-20260423,ht9045-v899,main.cpp,25830,MISSING,//AI(ht9045-v899) 20260423: BootLog checkpoint - FormCreate finished without exception
-20260423,ht9045-v899,uMotorTest.cpp,204,MISSING,//AI(ht9045-v899) 20260423: enable empty y stepper test
-20260423,ht9045-v899,uMotorTest.cpp,205,MISSING,//AI(ht9045-v899) 20260423: enable color y stepper test
-20260423,ht9045-v899,uMotorTest.cpp,206,MISSING,//AI(ht9045-v899) 20260423: enable auto1 y stepper test
-20260423,ht9045-v899,uMotorTest.cpp,207,MISSING,//AI(ht9045-v899) 20260423: enable auto2 y stepper test
-20260423,ht9045-v899,uMotorTest.cpp,208,MISSING,//AI(ht9045-v899) 20260423: enable auto3 y stepper test
-20260429,ht9045-v899,main.cpp,10743,MISSING,//AI(ht9045-v899) 20260429: gate the prompt so it only fires for the real
 20260430,ht9045-v899,AutoClean\uCleaning.cpp,174,MISSING,//AI(ht9045-v899) 20260430: extend AutoClean DieForce to Multi EP half.
 20260430,ht9045-v899,AutoClean\uCleaning.cpp,183,MISSING,//AI(ht9045-v899) 20260430: extend AutoClean DieForce to Multi EP half.
 20260430,ht9045-v899,AutoClean\uCleaning.cpp,1146,MISSING,//AI(ht9045-v899) 20260430: extend AutoClean DieForce to Multi EP half.

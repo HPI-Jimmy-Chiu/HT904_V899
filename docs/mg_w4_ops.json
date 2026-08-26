@@ -1,0 +1,72 @@
+[
+  {
+    "id": "MG-W4-A1",
+    "desc": "[主題A BootLog] main.cpp 檔頭: 加入 cBootLog.h include (matrix main.cpp:6)",
+    "v910_file": "main.cpp",
+    "v899_file": "main.cpp",
+    "v899_lines": [6, 8],
+    "mode": "before",
+    "anchor_line": 6,
+    "anchor_expect": "#include \"InOutArmZteach.h\""
+  },
+  {
+    "id": "MG-W4-A2",
+    "desc": "[主題A BootLog] TfMain::FormShow 進入點 checkpoint (matrix main.cpp:8567)",
+    "v910_file": "main.cpp",
+    "v899_file": "main.cpp",
+    "v899_lines": [8567, 8568],
+    "mode": "before",
+    "anchor_line": 9215,
+    "anchor_expect": "bNeedClearFile=false;"
+  },
+  {
+    "id": "MG-W4-A3",
+    "desc": "[主題A BootLog] FormShow_Finish 24V/System Power 未開機友善提示 + BootLog 電源狀態 (matrix main.cpp:10737 與 20260429 的 10743 同區塊, 一次搬最終態含 bSwCutByCode gate)",
+    "v910_file": "main.cpp",
+    "v899_file": "main.cpp",
+    "v899_lines": [10736, 10778],
+    "mode": "after",
+    "anchor_line": 11436,
+    "anchor_expect": "LogSoftwareOnTime(\"TfMain, FormShow_Finish\")"
+  },
+  {
+    "id": "MG-W4-A4",
+    "desc": "[主題A BootLog] AppException 併寫 BootLog (matrix main.cpp:25798). 合併插入而非取代: 保留 V910 RogerYang 20260617 AV-log-flood 去重, 掛在 RecordProcess(sMsg) 之後 return 之前",
+    "v910_file": "main.cpp",
+    "v899_file": "main.cpp",
+    "v899_lines": [25798, 25806],
+    "mode": "after",
+    "anchor_line": 26888,
+    "anchor_expect": "RecordProcess(sMsg);"
+  },
+  {
+    "id": "MG-W4-A5",
+    "desc": "[主題A BootLog] TfMain::FormCreate 結束 checkpoint (matrix main.cpp:25830)",
+    "v910_file": "main.cpp",
+    "v899_file": "main.cpp",
+    "v899_lines": [25830, 25831],
+    "mode": "after",
+    "anchor_line": 26911,
+    "anchor_expect": "BL=new TList;"
+  },
+  {
+    "id": "MG-W4-B1",
+    "desc": "[主題B LOAD_Y] HandlerSys OK: chkLoaderY/EmptyY/ColorY/Auto1~3Y 套用到 LOAD_Y_USE_MOTOR[0..5] (matrix HandlerSys.cpp:519-523). 含未標記 AI 的 [0] Loader 行 - V910 整段 apply block 從未存在(896/906/910 皆 0 筆), 只搬 [1..5] 會留下不對稱缺口",
+    "v910_file": "HandlerSys.cpp",
+    "v899_file": "HandlerSys.cpp",
+    "v899_lines": [518, 523],
+    "mode": "after",
+    "anchor_line": 639,
+    "anchor_expect": "LOAD_Z_USE_MOTOR[8]=chkAuto6->Checked;"
+  },
+  {
+    "id": "MG-W4-B2",
+    "desc": "[主題B LOAD_Y] uMotorTest: MEmptyY/MColorY/MAuto1Y/MAuto2Y/MAuto3Y 的 enable 由 false / 僅 USE_LdUldCassetteMode 改為併入 LOAD_Y_USE_MOTOR[1..5] (matrix uMotorTest.cpp:204-208). 嚴格放寬, 不會關掉 V910 現有已啟用的列",
+    "v910_file": "uMotorTest.cpp",
+    "v899_file": "uMotorTest.cpp",
+    "v899_lines": [204, 208],
+    "mode": "replace",
+    "replace_lines": [204, 208],
+    "anchor_expect": "new TMotorTestClass(MEmptyY,"
+  }
+]

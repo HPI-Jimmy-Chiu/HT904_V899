@@ -50,17 +50,28 @@
 
 ---
 
-## 🔖 RESUME（20260826 16:45）
+## 20260826 17:05 — MG-W4 done（BootLog＋LOAD_Y stepper）
 
-- **狀態**：Phase 2 連續波次進行中。MG-W1/W2/W3 done。儀表 MISSING=361。
-- **進行中**：MG-W4 分析 agent（BootLog＋LOAD_Y stepper，main.cpp/HandlerSys/uMotorTest）
-  背景執行中——回來後照 /mg-wave 步驟執行。
+- 7 op：main.cpp 5 埋點（cBootLog 本體已在 V910 基線免搬）＋HandlerSys OK 套用
+  （含 [0] 補齊裁決）＋uMotorTest 測試列。16 條矩陣點。儀表 **361 → 345**。
+- gate 升級：bcc_syntax.sh 改「錯誤集合與 .mgbak 基準一致＝零回歸」準則——
+  main.cpp 在 -D_VER6 旗標組下有 3 個既有錯誤（非本波），比對基準後 PASS。
+- 實測警訊：bcb.exe（IDE）開著——波內單檔編譯安全，Phase 3 全量 build 前必關（A13）。
+
+---
+
+## 🔖 RESUME（20260826 17:05）
+
+- **狀態**：Phase 2 連續波次進行中。MG-W1/W2/W3/W4 done。儀表 MISSING=345（起點 376）。
+- **進行中**：MG-W5 分析 agent（HS_Function KYEC 上傳線 0414/0415/0420，11 條）
+  背景執行中——回來後照 /mg-wave 步驟執行（產物 docs/mg_w5_analysis.md＋mg_w5_ops.json）。
 - **下一步（按序）**：
-  1. 收 MG-W4（產物 docs/mg_w4_analysis.md＋mg_w4_ops.json）。
-  2. MG-W5 候選＝20260414/0415/0420 HS_Function KYEC 上傳線（同主題連波）。
-  3. 之後照 LEDGER：0817 殘餘 CC_CYUEAN AutoTrayFeed 主題（B 類）、AutoClean CKPP
-     ＋PickPlanner 目錄、Power Save 線 0804→0811→0819/0820、Multi EP、0612 FTP 大波。
+  1. 收 MG-W5 執行。
+  2. MG-W6 候選＝0817 殘餘 CC_CYUEAN AutoTrayFeed 主題（B 類，原生 gate；
+     CosFunction.cpp/h＋cTrayAssignment＋csystem 附近，對照 b515ed5 的 20260817 註解）。
+  3. 之後照 LEDGER：AutoClean CKPP＋PickPlanner 目錄（新增檔搬移）、
+     Power Save 線 0804→0811→0819/0820、Multi EP、0612 FTP 大波、0602 InArm watchdog 線。
   4. 60 分鐘守衛 cron 已掛（每時 :23；殭屍＝先查證後處置）。
-- **量測**：`python tools/port_tools/ai_comment_matrix.py`（起點 376、現 361）。
+- **量測**：`python tools/port_tools/ai_comment_matrix.py`。
 - **不變量**：V899 唯讀（來源端點 b515ed5）；V910 基線 e06524a；LEDGER 手工維護；
-  bcc32 -c 波內 gate；全量 build 只在 Phase 3。
+  bcc_syntax.sh 波內 gate（錯誤集合基準比對）；全量 build 只在 Phase 3 且先關 IDE。

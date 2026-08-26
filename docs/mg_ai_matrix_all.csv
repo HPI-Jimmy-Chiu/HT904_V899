@@ -130,11 +130,11 @@
 20260423,ht9045-v899,HandlerSys.cpp,497,same-file,//AI(ht9045-v899) 20260423: persist auto1 y stepper
 20260423,ht9045-v899,HandlerSys.cpp,498,same-file,//AI(ht9045-v899) 20260423: persist auto2 y stepper
 20260423,ht9045-v899,HandlerSys.cpp,499,same-file,//AI(ht9045-v899) 20260423: persist auto3 y stepper
-20260423,ht9045-v899,HandlerSys.cpp,519,MISSING,//AI(ht9045-v899) 20260423: apply empty y stepper
-20260423,ht9045-v899,HandlerSys.cpp,520,MISSING,//AI(ht9045-v899) 20260423: apply color y stepper
-20260423,ht9045-v899,HandlerSys.cpp,521,MISSING,//AI(ht9045-v899) 20260423: apply auto1 y stepper
-20260423,ht9045-v899,HandlerSys.cpp,522,MISSING,//AI(ht9045-v899) 20260423: apply auto2 y stepper
-20260423,ht9045-v899,HandlerSys.cpp,523,MISSING,//AI(ht9045-v899) 20260423: apply auto3 y stepper
+20260423,ht9045-v899,HandlerSys.cpp,519,same-file,//AI(ht9045-v899) 20260423: apply empty y stepper
+20260423,ht9045-v899,HandlerSys.cpp,520,same-file,//AI(ht9045-v899) 20260423: apply color y stepper
+20260423,ht9045-v899,HandlerSys.cpp,521,same-file,//AI(ht9045-v899) 20260423: apply auto1 y stepper
+20260423,ht9045-v899,HandlerSys.cpp,522,same-file,//AI(ht9045-v899) 20260423: apply auto2 y stepper
+20260423,ht9045-v899,HandlerSys.cpp,523,same-file,//AI(ht9045-v899) 20260423: apply auto3 y stepper
 20260423,ht9045-v899,HandlerSys.h,455,same-file,//AI(ht9045-v899) 20260423: auto3 y stepper checkbox
 20260423,ht9045-v899,Public\cBootLog.cpp,2,same-file,"//AI(ht9045-v899) 20260423: BootLog implementation (pure Win32, no VCL deps in hot path)"
 20260423,ht9045-v899,Public\cBootLog.h,2,same-file,"//AI(ht9045-v899) 20260423: BootLog for crash diagnosis (always-on, file-based)"
@@ -147,16 +147,16 @@
 20260423,ht9045-v899,database.cpp,762,same-file,//AI(ht9045-v899) 20260423: enable auto1 y stepper
 20260423,ht9045-v899,database.cpp,763,same-file,//AI(ht9045-v899) 20260423: enable auto2 y stepper
 20260423,ht9045-v899,database.cpp,764,same-file,//AI(ht9045-v899) 20260423: enable auto3 y stepper
-20260423,ht9045-v899,main.cpp,6,MISSING,//AI(ht9045-v899) 20260423: BootLog for crash diagnosis (24V-off scenario)
-20260423,ht9045-v899,main.cpp,8567,MISSING,//AI(ht9045-v899) 20260423: BootLog checkpoint
-20260423,ht9045-v899,main.cpp,10737,MISSING,//AI(ht9045-v899) 20260423: friendly notification when 24V power not on at startup.
-20260423,ht9045-v899,main.cpp,25798,MISSING,//AI(ht9045-v899) 20260423: also write to BootLog so root cause survives
-20260423,ht9045-v899,main.cpp,25830,MISSING,//AI(ht9045-v899) 20260423: BootLog checkpoint - FormCreate finished without exception
-20260423,ht9045-v899,uMotorTest.cpp,204,MISSING,//AI(ht9045-v899) 20260423: enable empty y stepper test
-20260423,ht9045-v899,uMotorTest.cpp,205,MISSING,//AI(ht9045-v899) 20260423: enable color y stepper test
-20260423,ht9045-v899,uMotorTest.cpp,206,MISSING,//AI(ht9045-v899) 20260423: enable auto1 y stepper test
-20260423,ht9045-v899,uMotorTest.cpp,207,MISSING,//AI(ht9045-v899) 20260423: enable auto2 y stepper test
-20260423,ht9045-v899,uMotorTest.cpp,208,MISSING,//AI(ht9045-v899) 20260423: enable auto3 y stepper test
+20260423,ht9045-v899,main.cpp,6,same-file,//AI(ht9045-v899) 20260423: BootLog for crash diagnosis (24V-off scenario)
+20260423,ht9045-v899,main.cpp,8567,same-file,//AI(ht9045-v899) 20260423: BootLog checkpoint
+20260423,ht9045-v899,main.cpp,10737,same-file,//AI(ht9045-v899) 20260423: friendly notification when 24V power not on at startup.
+20260423,ht9045-v899,main.cpp,25798,same-file,//AI(ht9045-v899) 20260423: also write to BootLog so root cause survives
+20260423,ht9045-v899,main.cpp,25830,same-file,//AI(ht9045-v899) 20260423: BootLog checkpoint - FormCreate finished without exception
+20260423,ht9045-v899,uMotorTest.cpp,204,same-file,//AI(ht9045-v899) 20260423: enable empty y stepper test
+20260423,ht9045-v899,uMotorTest.cpp,205,same-file,//AI(ht9045-v899) 20260423: enable color y stepper test
+20260423,ht9045-v899,uMotorTest.cpp,206,same-file,//AI(ht9045-v899) 20260423: enable auto1 y stepper test
+20260423,ht9045-v899,uMotorTest.cpp,207,same-file,//AI(ht9045-v899) 20260423: enable auto2 y stepper test
+20260423,ht9045-v899,uMotorTest.cpp,208,same-file,//AI(ht9045-v899) 20260423: enable auto3 y stepper test
 20260424,ht9045-v899,MyLaneIo.cpp,327,same-file,"//AI(ht9045-v899) 20260424: log 維持簡短供解析, UI 改用 BuildIOErrMessage 提供完整修法"
 20260424,ht9045-v899,MyLaneIo.cpp,359,same-file,"//AI(ht9045-v899) 20260424: log 維持簡短供解析, UI 改用 BuildIOErrMessage 提供完整修法"
 20260424,ht9045-v899,MyLaneIo.cpp,439,same-file,"//AI(ht9045-v899) 20260424: log 維持簡短供解析, UI 改用 BuildIOErrMessage 提供完整修法 (Byte 操作無 Bit, 傳 -1)"
@@ -168,7 +168,7 @@
 20260428,BVL-3766,Command.cpp,5258,same-file,//AI(BVL-3766) 20260428: GPIB SETSITEMAP_ 變更 site 後，立即重寫 GTK info.txt 的 RunSite，
 20260428,BVL-3766,ProductionInfo\ProductionInfo.cpp,4948,same-file,//AI(BVL-3766) 20260428: One Side / Use Shuttle2 模式下只用 Arm2(Z=1)，
 20260428,JimmyChiu,cSiteUseManager.cpp,265,same-file,//AI(JimmyChiu) 20260428: revert force-enable for e9045_1x4_4. CompactSearch performs
-20260429,ht9045-v899,main.cpp,10743,MISSING,//AI(ht9045-v899) 20260429: gate the prompt so it only fires for the real
+20260429,ht9045-v899,main.cpp,10743,same-file,//AI(ht9045-v899) 20260429: gate the prompt so it only fires for the real
 20260429,ht9045-v899,note.cpp,6689,same-file,//AI(ht9045-v899) 20260429: 甬矽要求 EventLog 時間欄不加雙引號與前綴空格 (CASE-20260429-001)
 20260429,ht9045-v899,note.cpp,6702,same-file,//AI(ht9045-v899) 20260429: 其他客戶維持 Steven 20251107 新方法 (CASE-20260429-001)
 20260430,ht9045-v899,AutoClean\uCleaning.cpp,174,MISSING,//AI(ht9045-v899) 20260430: extend AutoClean DieForce to Multi EP half.

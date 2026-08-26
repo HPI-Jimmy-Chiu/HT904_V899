@@ -18,6 +18,8 @@
 | A9 | SOFT_SIMULTE 與客製旗標在 V910 的現狀未查 | Phase 3 出貨檢查表必查（出貨 build 三坑） |
 | A10 | config／runtime 檔（`LastSet.ini`、`setup.inf`、`CurrentSetupData.txt` 等）目前是 M 狀態 | 非程式碼、不在搬移範圍，維持不收不動 |
 | A11 | 案件配套不在 V910 樹內：GPIB 橋接程式（d:\GPIB9045）、`Error\<語系>\*.dat` 警報說明檔、config 預設值變更 | 波次遇到時 LEDGER 標「配套另議」，程式碼部分照搬 |
+| A12 | 波內編譯 gate 的旗標組（-D_VER6 單檔隔離）下，V910 樹 main.cpp 有 3 個**既有**錯誤（Timer7Timer HWND 轉型 ×2＋edSetupFileNameKeyUp E2096）——公司 IDE 用全套專案 define 才編得過 | gate 準則改為「錯誤集合與 .mgbak 波前基準一致＝零回歸即 PASS」（bcc_syntax.sh 已自動化）；Phase 3 全量 build 用 .bpr 原生設定驗最終真相 |
+| A13 | 20260826 16:5x 實測：**BCB IDE（bcb.exe）正開著**，共用 Obj/EXE 有互撞風險 | 波內單檔 bcc32 -c（obj 進 scratchpad）不受影響；**Phase 3 全量 build 前必須先關 IDE**（已在計畫，此處記實測提醒） |
 
 ## B. 方法論邊界（告知，不需你回覆）
 

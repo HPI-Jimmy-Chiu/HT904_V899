@@ -15,7 +15,8 @@
 |---|---|---|---|
 | MG-W1 | 20260422 automation.cpp MAIN_STATUS_INQUIRE（9 行插入）＋ 20260423 uCleaning 4 條裁決 | splice+port_check PASS+bcc32 PASS；uCleaning 4 條=skipped-C（V910 已演進成 ArmSpeed 動態預設，原案「別用 60 秒荒謬預設」意圖已滿足，不搬） | b71780d |
 | MG-W2 | 20260424 MyLaneIo.cpp/.h 售服 IO 錯誤訊息（8 條矩陣點、5 op：3 個呼叫點 replace＋GetIOErrStr 中文化整段＋.h 宣告） | port_check PASS（cpp added=88 全 SPLICED/removed=34、h added=4）＋bcc32 PASS；驗證 V910 取代區與 896 基準位元組相同、公司漂移（Safe PLC 區）在取代區外不受影響；無客戶碼隔離需求。**外溢記錄**：GetIOErrStr 回傳變多行 Big5，V910 三個未動呼叫點（IOBitOn:126/IOBitOff:193/IOByteOut:260）的 MNetLog 日誌從單行變多行——與 V899 出貨行為一致（忠實搬運），客戶端若逐行 parse MNetLog*.txt 需知悉 | 0bee467 |
-| MG-W3 | EventLog 引號相依鏈（0429 note.cpp 寫入端 CC_FOREHOPE_NINGBO 無引號分支 2 條＋0817 cObserver ParseEventLogLine 三支 static＋4 解析點，共 7 條矩陣點、6 op） | port_check PASS（15+59 全 SPLICED、removed=2+4 逐條複驗＝else 兩行與 4 個 CommaText 點）＋bcc32 PASS。寫入端 gate=執行期 CUSTOMER_CODE==790，非 790 客戶 else 主體位元組不變（實測）；解析端不加 gate 照搬（V899 已 12 客戶 64 台 100,220 列實測出貨）。**外溢記錄**：JamRawData FTP 統計為修正方向的數字變化。V899 樹內 .bak_20260817_csvquote diff＝5 hunk 與變更集完全吻合 | （本次收工 commit） |
+| MG-W3 | EventLog 引號相依鏈（0429 note.cpp 寫入端 CC_FOREHOPE_NINGBO 無引號分支 2 條＋0817 cObserver ParseEventLogLine 三支 static＋4 解析點，共 7 條矩陣點、6 op） | port_check PASS（15+59 全 SPLICED、removed=2+4 逐條複驗＝else 兩行與 4 個 CommaText 點）＋bcc32 PASS。寫入端 gate=執行期 CUSTOMER_CODE==790，非 790 客戶 else 主體位元組不變（實測）；解析端不加 gate 照搬（V899 已 12 客戶 64 台 100,220 列實測出貨）。**外溢記錄**：JamRawData FTP 統計為修正方向的數字變化。V899 樹內 .bak_20260817_csvquote diff＝5 hunk 與變更集完全吻合 | 570ae0f |
+| MG-W4 | BootLog 開機診斷（main.cpp 5 埋點 59 行；cBootLog.cpp/h 已在 V910 基線內免搬）＋LOAD_Y stepper（HandlerSys OK 套用 6 行含 [0] 補齊＋uMotorTest 測試列 5 行），16 條矩陣點、7 op | port_check PASS（59+6+5 全 SPLICED、removed=5 逐條複驗＝uMotorTest 舊 false 列）＋bcc32 PASS（main.cpp 3 個既有錯誤與 .mgbak 基準一致＝零回歸，見 gate 準則）。裁決：OP-A4 用 after 保留 V910 RogerYang AV 去重改寫；OP-B1 含未標記的 [0] Loader 行（整段 apply block V910 從未有過，補齊避免不對稱）。無客戶碼隔離需求（機台配置閘控） | （本次收工 commit） |
 
 ## 相依鏈（weekly 盤點 20260826，必須同波搬，防把回歸搬進 V910）
 
@@ -42,9 +43,9 @@
 | 20260416 | 1 | 1 | — | AutoClean\AutoClean.cpp(1) | pending | pending |
 | 20260417 | 3 | 2 | — | AutoClean\AutoClean.cpp(2), cShowBinSelect.cpp(1) | pending | pending |
 | 20260420 | 1 | 1 | — | HS_Function.cpp(1) | pending | pending |
-| 20260423 | 19 | 4 | CASE-20260423-001 | HandlerSys.cpp(5), main.cpp(5), uMotorTest.cpp(5), AutoClean\uCleaning.cpp(4) | pending | pending |
+| 20260423 | 19 | 4 | CASE-20260423-001 | HandlerSys.cpp(5), main.cpp(5), uMotorTest.cpp(5), AutoClean\uCleaning.cpp(4) | A/C | **done**：main+HandlerSys+uMotorTest 15 條=MG-W4；uCleaning 4 條=skipped-C（MG-W1） |
 | 20260424 | 8 | 2 | — | MyLaneIo.cpp(6), MyLaneIo.h(2) | A | **done MG-W2** |
-| 20260429 | 3 | 2 | CASE-20260429-001 | note.cpp(2), main.cpp(1) | A | **note.cpp 2 條 done MG-W3**；main.cpp:10743 歸 MG-W4 BootLog 主題 |
+| 20260429 | 3 | 2 | CASE-20260429-001 | note.cpp(2), main.cpp(1) | A | **done**：note.cpp 2 條=MG-W3；main.cpp:10743=MG-W4（BootLog 24V 提示 gate） |
 | 20260430 | 21 | 10 | — | adam6024.cpp(6), ContactForce.cpp(4), AutoClean\uCleaning.cpp(3), HandlerSys.cpp(2) +6檔 | pending | pending |
 | 20260504 | 17 | 6 | ADR-0004; SPEC-V899-MultiEP-FullPort | ContactForce.cpp(8), HS_Function.cpp(5), HS_Function.h(1), adam6024.h(1) +2檔 | pending | pending |
 | 20260505 | 2 | 2 | — | adam6024.cpp(1), uhome.cpp(1) | pending | pending |

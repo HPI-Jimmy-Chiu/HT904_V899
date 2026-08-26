@@ -201,11 +201,11 @@ __fastcall TfMotorTest::TfMotorTest(TComponent* Owner)
                                                                   (INSTALL_OCR!=eocrUninstal && CosFunction.bTrayOCR) ||//KenHsieh 20260514 : ¸É¤WOCR+¥Ö±a
                                                                    USE_LdUldCassetteMode==1))));                        //Ifor 20251216 add:Boat Carrier
 
-    MotorTestClass.push_back(new TMotorTestClass(MEmptyY,        false));
-    MotorTestClass.push_back(new TMotorTestClass(MColorY,        false));
-    MotorTestClass.push_back(new TMotorTestClass(MAuto1Y,        USE_LdUldCassetteMode==1));                            //Ifor 20251216 add:Boat Carrier
-    MotorTestClass.push_back(new TMotorTestClass(MAuto2Y,        USE_LdUldCassetteMode==1));                            //Ifor 20251216 add:Boat Carrier
-    MotorTestClass.push_back(new TMotorTestClass(MAuto3Y,        false));
+    MotorTestClass.push_back(new TMotorTestClass(MEmptyY,        LOAD_Y_USE_MOTOR[1]));                                 //AI(ht9045-v899) 20260423: enable empty y stepper test
+    MotorTestClass.push_back(new TMotorTestClass(MColorY,        LOAD_Y_USE_MOTOR[2]));                                 //AI(ht9045-v899) 20260423: enable color y stepper test
+    MotorTestClass.push_back(new TMotorTestClass(MAuto1Y,        (USE_LdUldCassetteMode==1 || LOAD_Y_USE_MOTOR[3])));   //AI(ht9045-v899) 20260423: enable auto1 y stepper test
+    MotorTestClass.push_back(new TMotorTestClass(MAuto2Y,        (USE_LdUldCassetteMode==1 || LOAD_Y_USE_MOTOR[4])));   //AI(ht9045-v899) 20260423: enable auto2 y stepper test
+    MotorTestClass.push_back(new TMotorTestClass(MAuto3Y,        LOAD_Y_USE_MOTOR[5]));                                 //AI(ht9045-v899) 20260423: enable auto3 y stepper test
 
     MotorTestClass.push_back(new TMotorTestClass(MInArmZAe,      (InOutArmPickerUseMotor==eptUseMot && (USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Picker || USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Bd_Be))));  //Steven 20230323 : For HT1032  //Steven 20260316 : Fix operator precedence
     MotorTestClass.push_back(new TMotorTestClass(MInArmPitchX3,  (USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Picker || USE_IN_OUT_ARM_Y_PITCH==iXYPitch16Bd_Be)));

@@ -3,6 +3,9 @@
 
 #include "main.h"
 
+//AI(ht9045-v899) 20260423: BootLog for crash diagnosis (24V-off scenario)
+#include "cBootLog.h"
+
 #include "InOutArmZteach.h"
 #include "SgdToXLS.h"
 #include "MachineType.h"
@@ -9212,6 +9215,8 @@ extern void initAutoTask();
 //------------------------------------------------------------------------------
 void __fastcall TfMain::FormShow(TObject *Sender)
 {
+    //AI(ht9045-v899) 20260423: BootLog checkpoint
+    WriteBootLog("TfMain::FormShow Enter");
     bNeedClearFile=false;
     iSourceSystemHeight=1024;                                                   // 20230601 Joseph , Auto Form Size //
     iSourceSystemWidth=1280;                                                    // 20230601 Joseph , Auto Form Size //
@@ -11434,6 +11439,49 @@ void __fastcall TfMain::FormShow(TObject *Sender)
     }
 
     LogSoftwareOnTime("TfMain, FormShow_Finish");                               //Steven 20210526 : 紀錄軟體執行時間
+
+    //AI(ht9045-v899) 20260423: friendly notification when 24V power not on at startup.
+    //   Customer hit a startup crash because 24V was off; some hardware drivers may
+    //   throw or hang when 24V is missing. By the time we reach FormShow_Finish, IO
+    //   board has been initialized, so Sen[SnMotorPower]/Sen[SnSystemPower] are valid.
+    //   Existing csystem.cpp DoSystem() already protects runtime, but operator gets
+    //   no early hint. We log to BootLog and pop a one-shot message.
+    //AI(ht9045-v899) 20260429: gate the prompt so it only fires for the real
+    //   "operator forgot to press POWER ON" case. cinitial / uhome may have
+    //   intentionally turned SwMotorRelay/SwServerON OFF to protect residue ICs;
+    //   in that path the user already gets a "Please remove the IC..." dialog and
+    //   should not see a second confusing "Power Not Ready" overlay. Also skip
+    //   when IO_CARD_TYPE==0 (SYN-TEK), because CheckPCI_L112State() in main timer
+    //   handles 24V loss with ResetMNet and does not need a popup.
+    #ifndef SOFT_SIMULTE
+    {
+        bool bMotorPwrOff  = Sen[SnMotorPower].IsOff();
+        bool bSystemPwrOff = Sen[SnSystemPower].IsOff();
+        bool bSwCutByCode  = (SW[SwMotorRelay].OutValue==false) ||
+                             (SW[SwServerON  ].OutValue==false);
+        AnsiString sPwr;
+        sPwr.sprintf("SnMotorPower=%s, SnSystemPower=%s, SwMotorRelay.Out=%s, SwServerON.Out=%s",
+                     (bMotorPwrOff      ? "OFF" : "ON"),
+                     (bSystemPwrOff     ? "OFF" : "ON"),
+                     (SW[SwMotorRelay].OutValue ? "ON" : "OFF"),
+                     (SW[SwServerON  ].OutValue ? "ON" : "OFF"));
+        WriteBootLog("FormShow_Finish power-state check", sPwr);
+        if((bMotorPwrOff || bSystemPwrOff) && !bSwCutByCode)
+        {
+            WriteBootLog("WARN: 24V/System power OFF at startup, prompting operator");
+            MessageBox(Application->Handle,
+                       "24V Motor / System Power is OFF.\r\n"
+                       "Please press the POWER ON button on the operation panel\r\n"
+                       "before starting Auto / Home operations.",
+                       "Power Not Ready",
+                       MB_OK | MB_ICONWARNING | MB_TOPMOST);
+        }
+        else if(bSwCutByCode)
+        {
+            WriteBootLog("Skip Power-Not-Ready prompt: software cut relay (residue/home protection)");
+        }
+    }
+    #endif
 }
 //------------------------------------------------------------------------------
 extern HANDLEDMC  hDmc;                                                         //declare type long
@@ -26886,6 +26934,15 @@ void __fastcall TfMain::AppException(TObject *Sender, Exception *E)             
     sLastMsg=sMsg;
     iSameCount=0;
     RecordProcess(sMsg);
+    //AI(ht9045-v899) 20260423: also write to BootLog so root cause survives
+    //    even when Process log / DB is not yet ready (e.g. 24V off at startup).
+    try
+    {
+        AnsiString sDetail = AnsiString("HelpCtx=") + E->HelpContext +
+                             ", ClassName=" + AnsiString(E->ClassName());
+        WriteBootLog(AnsiString("AppException: ") + E->Message, sDetail);
+    }
+    catch(...) { /* never re-throw from exception handler */ }
     return;
 }
 //------------------------------------------------------------------------------
@@ -26909,6 +26966,8 @@ void __fastcall TfMain::FormCreate(TObject *Sender)
     Application->OnException = AppException;                                    //ChungHung 20141226 add catch exception
     BV=new TStringList;                                                         //Click Event,Auto Save log
     BL=new TList;
+    //AI(ht9045-v899) 20260423: BootLog checkpoint - FormCreate finished without exception
+    WriteBootLog("TfMain::FormCreate Done");
 }
 //------------------------------------------------------------------------------
 void __fastcall TfMain::ShowRTCState(int iState)
