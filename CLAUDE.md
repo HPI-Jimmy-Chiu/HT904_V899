@@ -46,6 +46,12 @@ Claude Code 無原生路徑範圍指令機制，故將原 `.github/instructions/
 > `HT9011UC_Code_V3.33.899.0_...`（**量產機**，BCB6 / Big5 / pre-C++11）
 > `HT9011UC_Cpp_V3.33.906.0`（**實驗機**，C++17 / UTF-8 / CMake）
 > 另注意 `HT9011UC_Code_V3.33.906.0_20260618` 是**另一棵 BCB6 樹**，同樣叫 906 但唯讀；差別在 `_Code_` 與 `_Cpp_`。
+>
+> **MG 戰役期間（使用者 20260826 授權）**：`HT9011UC_Code_V3.33.910.0_20260716_Jimmy`
+> （公司最新版）**可寫**，作為 V899→V910 功能搬移目標；規則比照 V899 那節
+> （BCB6 / Big5 / pre-C++11），AI 註解 AgentName 用 `mg899to910`。
+> 戰役計畫：`docs/MG899TO910_CAMPAIGN_PLAN.md`；總帳：`docs/MG_PORT_LEDGER.md`。
+> 搬移期間 **V899 樹轉為唯讀來源**（量產版，勿再回改）。
 
 ### 編輯 V899 C/C++（`HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422/**/*.{cpp,h,hpp}`）
 

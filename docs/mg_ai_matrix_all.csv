@@ -1,0 +1,618 @@
+﻿date,agent,file,line,status,comment
+20260422,ht9045-v899,Automation\automation.cpp,1027,MISSING,//AI(ht9045-v899) 20260422: support MAIN_STATUS_INQUIRE and normalize status reply
+20260422,ht9045-v899,Monitor\MonitorInterface.cpp,39,same-file,//AI(ht9045-v899) 20260422: initialize Greatek monitor Ch3 status slot
+20260422,ht9045-v899,Monitor\MonitorInterface.cpp,220,same-file,//AI(ht9045-v899) 20260422: reopen Greatek monitor Ch3 after reconnect
+20260422,ht9045-v899,Monitor\MonitorInterface.cpp,318,same-file,//AI(ht9045-v899) 20260422: sync Greatek monitor Ch3 close with Ch0
+20260422,ht9045-v899,Monitor\MonitorInterface.h,93,same-file,//AI(ht9045-v899) 20260422: expand monitor status array for Greatek Ch3
+20260422,ht9045-v899,csystem.cpp,4381,same-file,//AI(ht9045-v899) 20260422: sync Greatek monitor Ch3 open with Ch0
+20260423,ht9045-v899,AutoClean\uCleaning.cpp,148,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
+20260423,ht9045-v899,AutoClean\uCleaning.cpp,149,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
+20260423,ht9045-v899,AutoClean\uCleaning.cpp,150,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
+20260423,ht9045-v899,AutoClean\uCleaning.cpp,151,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
+20260423,ht9045-v899,HT9045.cpp,121,same-file,//AI(ht9045-v899) 20260423: BootLog for crash diagnosis when 24V/hardware not ready
+20260423,ht9045-v899,HT9045.cpp,126,same-file,//AI(ht9045-v899) 20260423: rotate + first checkpoint at the very entry
+20260423,ht9045-v899,HT9045.cpp,158,same-file,//AI(ht9045-v899) 20260423: log WinMain EXE path check before VCL initialize
+20260423,ht9045-v899,HT9045.cpp,161,same-file,//AI(ht9045-v899) 20260423: log VCL application initialize completion
+20260423,ht9045-v899,HT9045.cpp,276,same-file,//AI(ht9045-v899) 20260423: log form creation completion before message loop
+20260423,ht9045-v899,HT9045.cpp,278,same-file,//AI(ht9045-v899) 20260423: log normal return from VCL message loop
+20260423,ht9045-v899,HT9045.cpp,282,same-file,//AI(ht9045-v899) 20260423: capture init-phase exception (e.g. 24V not on)
+20260423,ht9045-v899,HT9045.cpp,288,same-file,//AI(ht9045-v899) 20260423: capture non-VCL exception (AV / SEH)
+20260423,ht9045-v899,HandlerSys.cpp,101,same-file,//AI(ht9045-v899) 20260423: load empty y stepper checkbox
+20260423,ht9045-v899,HandlerSys.cpp,102,same-file,//AI(ht9045-v899) 20260423: load color y stepper checkbox
+20260423,ht9045-v899,HandlerSys.cpp,103,same-file,//AI(ht9045-v899) 20260423: load auto1 y stepper checkbox
+20260423,ht9045-v899,HandlerSys.cpp,104,same-file,//AI(ht9045-v899) 20260423: load auto2 y stepper checkbox
+20260423,ht9045-v899,HandlerSys.cpp,105,same-file,//AI(ht9045-v899) 20260423: load auto3 y stepper checkbox
+20260423,ht9045-v899,HandlerSys.cpp,486,same-file,"//AI(ht9045-v899) 20260423: cassette mode (Boat Carrier) already owns MAuto1Y/MAuto2Y, force-disable LOAD_Y_USE_MOTOR[3]/[4] to avoid motor contention"
+20260423,ht9045-v899,HandlerSys.cpp,495,same-file,//AI(ht9045-v899) 20260423: persist empty y stepper
+20260423,ht9045-v899,HandlerSys.cpp,496,same-file,//AI(ht9045-v899) 20260423: persist color y stepper
+20260423,ht9045-v899,HandlerSys.cpp,497,same-file,//AI(ht9045-v899) 20260423: persist auto1 y stepper
+20260423,ht9045-v899,HandlerSys.cpp,498,same-file,//AI(ht9045-v899) 20260423: persist auto2 y stepper
+20260423,ht9045-v899,HandlerSys.cpp,499,same-file,//AI(ht9045-v899) 20260423: persist auto3 y stepper
+20260423,ht9045-v899,HandlerSys.cpp,519,MISSING,//AI(ht9045-v899) 20260423: apply empty y stepper
+20260423,ht9045-v899,HandlerSys.cpp,520,MISSING,//AI(ht9045-v899) 20260423: apply color y stepper
+20260423,ht9045-v899,HandlerSys.cpp,521,MISSING,//AI(ht9045-v899) 20260423: apply auto1 y stepper
+20260423,ht9045-v899,HandlerSys.cpp,522,MISSING,//AI(ht9045-v899) 20260423: apply auto2 y stepper
+20260423,ht9045-v899,HandlerSys.cpp,523,MISSING,//AI(ht9045-v899) 20260423: apply auto3 y stepper
+20260423,ht9045-v899,HandlerSys.h,455,same-file,//AI(ht9045-v899) 20260423: auto3 y stepper checkbox
+20260423,ht9045-v899,Public\cBootLog.cpp,2,same-file,"//AI(ht9045-v899) 20260423: BootLog implementation (pure Win32, no VCL deps in hot path)"
+20260423,ht9045-v899,Public\cBootLog.h,2,same-file,"//AI(ht9045-v899) 20260423: BootLog for crash diagnosis (always-on, file-based)"
+20260423,ht9045-v899,asendic.cpp,1290,same-file,//AI(ht9045-v899) 20260423: dispatch stepper by track
+20260423,ht9045-v899,asendic.cpp,1334,same-file,//AI(ht9045-v899) 20260423: stop dispatched stepper for empty/color/auto1~3
+20260423,ht9045-v899,asendic.cpp,1389,same-file,//AI(ht9045-v899) 20260423: dispatch stepper by track
+20260423,ht9045-v899,asendic.cpp,1434,same-file,//AI(ht9045-v899) 20260423: stop dispatched stepper for empty/color/auto1~3
+20260423,ht9045-v899,database.cpp,760,same-file,//AI(ht9045-v899) 20260423: enable empty y stepper
+20260423,ht9045-v899,database.cpp,761,same-file,//AI(ht9045-v899) 20260423: enable color y stepper
+20260423,ht9045-v899,database.cpp,762,same-file,//AI(ht9045-v899) 20260423: enable auto1 y stepper
+20260423,ht9045-v899,database.cpp,763,same-file,//AI(ht9045-v899) 20260423: enable auto2 y stepper
+20260423,ht9045-v899,database.cpp,764,same-file,//AI(ht9045-v899) 20260423: enable auto3 y stepper
+20260423,ht9045-v899,main.cpp,6,MISSING,//AI(ht9045-v899) 20260423: BootLog for crash diagnosis (24V-off scenario)
+20260423,ht9045-v899,main.cpp,8567,MISSING,//AI(ht9045-v899) 20260423: BootLog checkpoint
+20260423,ht9045-v899,main.cpp,10737,MISSING,//AI(ht9045-v899) 20260423: friendly notification when 24V power not on at startup.
+20260423,ht9045-v899,main.cpp,25798,MISSING,//AI(ht9045-v899) 20260423: also write to BootLog so root cause survives
+20260423,ht9045-v899,main.cpp,25830,MISSING,//AI(ht9045-v899) 20260423: BootLog checkpoint - FormCreate finished without exception
+20260423,ht9045-v899,uMotorTest.cpp,204,MISSING,//AI(ht9045-v899) 20260423: enable empty y stepper test
+20260423,ht9045-v899,uMotorTest.cpp,205,MISSING,//AI(ht9045-v899) 20260423: enable color y stepper test
+20260423,ht9045-v899,uMotorTest.cpp,206,MISSING,//AI(ht9045-v899) 20260423: enable auto1 y stepper test
+20260423,ht9045-v899,uMotorTest.cpp,207,MISSING,//AI(ht9045-v899) 20260423: enable auto2 y stepper test
+20260423,ht9045-v899,uMotorTest.cpp,208,MISSING,//AI(ht9045-v899) 20260423: enable auto3 y stepper test
+20260424,ht9045-v899,MyLaneIo.cpp,327,MISSING,"//AI(ht9045-v899) 20260424: log 維持簡短供解析, UI 改用 BuildIOErrMessage 提供完整修法"
+20260424,ht9045-v899,MyLaneIo.cpp,359,MISSING,"//AI(ht9045-v899) 20260424: log 維持簡短供解析, UI 改用 BuildIOErrMessage 提供完整修法"
+20260424,ht9045-v899,MyLaneIo.cpp,439,MISSING,"//AI(ht9045-v899) 20260424: log 維持簡短供解析, UI 改用 BuildIOErrMessage 提供完整修法 (Byte 操作無 Bit, 傳 -1)"
+20260424,ht9045-v899,MyLaneIo.cpp,695,MISSING,"//AI(ht9045-v899) 20260424: 加上中文說明與修法, 讓售服直接看得懂"
+20260424,ht9045-v899,MyLaneIo.cpp,726,MISSING,//AI(ht9045-v899) 20260424: 將 mn200.h 內 DEV_INF_xxx enum 翻成售服看得懂的字串
+20260424,ht9045-v899,MyLaneIo.cpp,757,MISSING,"//AI(ht9045-v899) 20260424: 統一 IO 錯誤訊息格式, 給售服 5 段資訊一次到位"
+20260424,ht9045-v899,MyLaneIo.h,40,MISSING,//AI(ht9045-v899) 20260424: 把 mn200 device type enum 翻成可讀字串給售服
+20260424,ht9045-v899,MyLaneIo.h,41,MISSING,//AI(ht9045-v899) 20260424: 統一 IO 錯誤訊息格式給售服
+20260428,BVL-3766,Command.cpp,5258,same-file,//AI(BVL-3766) 20260428: GPIB SETSITEMAP_ 變更 site 後，立即重寫 GTK info.txt 的 RunSite，
+20260428,BVL-3766,ProductionInfo\ProductionInfo.cpp,4948,same-file,//AI(BVL-3766) 20260428: One Side / Use Shuttle2 模式下只用 Arm2(Z=1)，
+20260428,JimmyChiu,cSiteUseManager.cpp,265,same-file,//AI(JimmyChiu) 20260428: revert force-enable for e9045_1x4_4. CompactSearch performs
+20260429,ht9045-v899,main.cpp,10743,MISSING,//AI(ht9045-v899) 20260429: gate the prompt so it only fires for the real
+20260429,ht9045-v899,note.cpp,6689,MISSING,//AI(ht9045-v899) 20260429: 甬矽要求 EventLog 時間欄不加雙引號與前綴空格 (CASE-20260429-001)
+20260429,ht9045-v899,note.cpp,6702,MISSING,//AI(ht9045-v899) 20260429: 其他客戶維持 Steven 20251107 新方法 (CASE-20260429-001)
+20260430,ht9045-v899,AutoClean\uCleaning.cpp,174,MISSING,//AI(ht9045-v899) 20260430: extend AutoClean DieForce to Multi EP half.
+20260430,ht9045-v899,AutoClean\uCleaning.cpp,183,MISSING,//AI(ht9045-v899) 20260430: extend AutoClean DieForce to Multi EP half.
+20260430,ht9045-v899,AutoClean\uCleaning.cpp,1146,MISSING,//AI(ht9045-v899) 20260430: extend AutoClean DieForce to Multi EP half.
+20260430,ht9045-v899,AutoClean\uCleaning.cpp,1503,other-file,//AI(ht9045-v899) 20260430: extend to Multi EP half.
+20260430,ht9045-v899,ContactForce.cpp,532,MISSING,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (was 4 site outer-only); replaced by INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI half-version (2 site x 2 cyl x 2
+20260430,ht9045-v899,ContactForce.cpp,709,same-file,//AI(ht9045-v899) 20260430: also show for Multi EP half (inner cyl Die Force).
+20260430,ht9045-v899,ContactForce.cpp,710,MISSING,//AI(ht9045-v899) 20260430: 16 EP independent + Multi EP half (INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI)
+20260430,ht9045-v899,ContactForce.cpp,884,MISSING,//AI(ht9045-v899) 20260430: Multi EP half - show OneByOne tab.
+20260430,ht9045-v899,ContactForce.cpp,1432,MISSING,//AI(ht9045-v899) 20260430: ported from V874.3 Ifor.
+20260430,ht9045-v899,ContactForce.h,352,MISSING,//AI(ht9045-v899) 20260430: Multi EP half (INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI) per-site Die Force container.
+20260430,ht9045-v899,HandlerSys.cpp,421,MISSING,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 ComboBox option; INSTALL_DOUBLE_EP=3 used instead.
+20260430,ht9045-v899,HandlerSys.cpp,942,MISSING,"//AI(ht9045-v899) 20260430: removed case 2 (""8""); INSTALL_DOUBLE_EP=3 used instead."
+20260430,ht9045-v899,adam6024.cpp,407,MISSING,"//AI(ht9045-v899) 20260430: Multi EP board (Address[2]=172.16.8.112, physical 2nd board) for reg=1/33."
+20260430,ht9045-v899,adam6024.cpp,753,other-file,//AI(ht9045-v899) 20260430: extend to Multi EP half.
+20260430,ht9045-v899,adam6024.cpp,2413,MISSING,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (rolled back).
+20260430,ht9045-v899,adam6024.cpp,2431,MISSING,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (rolled back).
+20260430,ht9045-v899,adam6024.cpp,2450,MISSING,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (rolled back).
+20260430,ht9045-v899,adam6024.cpp,2468,MISSING,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (rolled back).
+20260430,ht9045-v899,adam6024.cpp,2503,MISSING,//AI(ht9045-v899) 20260430: rolled back iIndEPCnt==8 (use INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI instead).
+20260430,ht9045-v899,cContact.cpp,189,MISSING,//AI(ht9045-v899) 20260430: extend to Multi EP half (inner cyl Die Force kit selection).
+20260430,ht9045-v899,cContact.cpp,1615,other-file,//AI(ht9045-v899) 20260430: extend to Multi EP half.
+20260430,ht9045-v899,cContact.cpp,13085,same-file,//AI(ht9045-v899) 20260430: extend DoubleForce write to Multi EP half.
+20260430,ht9045-v899,cSetUp.cpp,499,same-file,//AI(ht9045-v899) 20260430: extend cbIndSLK visibility to Multi EP half.
+20260430,ht9045-v899,cSetUp.cpp,2030,same-file,//AI(ht9045-v899) 20260430: extend cbIndSLK visibility to Multi EP half.
+20260430,ht9045-v899,cmydef.cpp,4984,MISSING,//AI(ht9045-v899) 20260430: iAPAXDualEPValue[16] already defined below by Ifor 20250319; reused for Multi EP half.
+20260430,ht9045-v899,cmydef.h,4829,MISSING,//AI(ht9045-v899) 20260430: iAPAXDualEPValue[16] already declared below by Ifor 20250319; reused for Multi EP half (INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI).
+20260430,ht9045-v899,database.cpp,786,MISSING,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 path; replaced by INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI (set via Gerneral.ini).
+20260430,ht9045-v899,iosetview.cpp,157,MISSING,"//AI(ht9045-v899) 20260430: extend EP voltage display to Multi EP half (Address[2] 172.16.8.112, physical 2nd board)."
+20260430,ht9045-v899,main.cpp,20150,same-file,//AI(ht9045-v899) 20260430: Auto switch SwMultiEp DO when INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI (Multi EP half).
+20260430,ht9045-v899,main.cpp,20167,same-file,//AI(ht9045-v899) 20260430: extend to Multi EP half.
+20260504,ht9045-v899,Automation\auto9045.h,169,same-file,//AI(ht9045-v899) 20260504: return Greatek OEE start result through LotInfo_REPLY without adding a new command
+20260504,ht9045-v899,ContactForce.cpp,300,MISSING,"//AI(ht9045-v899) 20260504: full port from V874.3 Ifor (撤回 20260430 砍半版); iCount=(Tag%8)+1, 1..4=Arm1, 5..8=Arm2. SPEC-V899-MultiEP-FullPort, ADR-0004."
+20260504,ht9045-v899,ContactForce.cpp,333,MISSING,"//AI(ht9045-v899) 20260504: full port V874 (Tag%8): 1..4=Arm1, 5..8=Arm2."
+20260504,ht9045-v899,ContactForce.cpp,502,MISSING,"//AI(ht9045-v899) 20260504: full port V874.3 INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI SLKIndClass: i*8+j (8 sites: Arm1_1..4, Arm2_1..4). SPEC-V899-MultiEP-FullPort, "
+20260504,ht9045-v899,ContactForce.cpp,615,MISSING,//AI(ht9045-v899) 20260504: full port V874.3 INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI OneByOne container.
+20260504,ht9045-v899,ContactForce.cpp,1103,MISSING,"//AI(ht9045-v899) 20260504: full port V874.3 OneByOne ReadFile. Per Kit 8 entries: j<4=Arm1_(j+1), j>=4=Arm2_(j-3). SPEC-V899-MultiEP-FullPort."
+20260504,ht9045-v899,ContactForce.cpp,1158,MISSING,//AI(ht9045-v899) 20260504: full port V874.3 SLKIndClass ==3 ReadFile (Arm1_1..4 / Arm2_1..4). SPEC-V899-MultiEP-FullPort.
+20260504,ht9045-v899,ContactForce.cpp,1308,MISSING,//AI(ht9045-v899) 20260504: full port V874.3 SLKIndClass ==3 WriteFile (Arm1_1..4 / Arm2_1..4). SPEC-V899-MultiEP-FullPort.
+20260504,ht9045-v899,ContactForce.cpp,1356,MISSING,"//AI(ht9045-v899) 20260504: full port V874.3 OneByOne WriteFile. Per Kit 8 entries: j<4=Arm1_(j+1), j>=4=Arm2_(j-3). SPEC-V899-MultiEP-FullPort."
+20260504,ht9045-v899,HS_Function.cpp,819,same-file,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250417). Trigger Multi EP 16ch read
+20260504,ht9045-v899,HS_Function.cpp,835,MISSING,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||==3 to enable Dual EP read for Multi EP.
+20260504,ht9045-v899,HS_Function.cpp,909,MISSING,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||==3.
+20260504,ht9045-v899,HS_Function.cpp,946,MISSING,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||==3.
+20260504,ht9045-v899,HS_Function.cpp,973,MISSING,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250417). KYEC-only per-site EP log append.
+20260504,ht9045-v899,HS_Function.cpp,1001,MISSING,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||==3 for Multi EP DualAlarm.
+20260504,ht9045-v899,HS_Function.cpp,1014,same-file,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250417). Read Multi EP 16ch from APAX-5070.
+20260504,ht9045-v899,HS_Function.h,90,MISSING,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250417) Multi EP 16ch APAX read.
+20260504,ht9045-v899,ProductionInfo\ProductionInfo.cpp,236,same-file,//AI(ht9045-v899) 20260504: failed OEE start must not leave success flag true for remote START_REQUEST
+20260504,ht9045-v899,ProductionInfo\ProductionInfo.cpp,239,same-file,//AI(ht9045-v899) 20260504: keep manual OEE Start Lot modal behavior
+20260504,ht9045-v899,ProductionInfo\ProductionInfo.cpp,255,same-file,//AI(ht9045-v899) 20260504: expose missing OEE data to LotInfo_REPLY
+20260504,ht9045-v899,ProductionInfo\ProductionInfo.cpp,293,same-file,//AI(ht9045-v899) 20260504: suppress modal for Greatek remote LotInfo flow
+20260504,ht9045-v899,ProductionInfo\ProductionInfo.cpp,304,same-file,//AI(ht9045-v899) 20260504: suppress modal for Greatek remote LotInfo flow
+20260504,ht9045-v899,ProductionInfo\ProductionInfo.cpp,322,same-file,//AI(ht9045-v899) 20260504: suppress modal for Greatek remote LotInfo flow
+20260504,ht9045-v899,ProductionInfo\ProductionInfo.cpp,334,same-file,//AI(ht9045-v899) 20260504: suppress modal for Greatek remote LotInfo flow
+20260504,ht9045-v899,ProductionInfo\ProductionInfo.h,233,same-file,//AI(ht9045-v899) 20260504: allow OLP LotInfo to receive OEE start errors without modal dialogs
+20260504,ht9045-v899,adam6024.cpp,955,same-file,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250416). Multi EP per-site Kpa->Kg.
+20260504,ht9045-v899,adam6024.cpp,2230,same-file,//AI(ht9045-v899) 20260504: full port V874.3 INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI (撤回 20260430 砍半版)。
+20260504,ht9045-v899,adam6024.h,26,MISSING,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250416) for Multi EP per-site Kpa->Kg.
+20260504,ht9045-v899,cConfiguration.cpp,1318,same-file,//AI(ht9045-v899) 20260504: V899 wrote ==true (==1) which dropped Multi EP path; restored V874 behavior.
+20260504,ht9045-v899,cContact.cpp,13247,MISSING,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||==3.
+20260504,ht9045-v899,cSetUp.cpp,2655,MISSING,//AI(ht9045-v899) 20260504: split INDIVIAL/MULTI gating per V896 (Ifor 20250416). MULTI covers <=QualSite2X2N.
+20260504,ht9045-v899,cmydef.h,4072,same-file,//AI(ht9045-v899) 20260504: INSTALL_DOUBLE_EP value constants. ADR-0004 / SPEC-V899-MultiEP-FullPort.
+20260504,ht9045-v899,uhome.cpp,1559,same-file,"//AI(ht9045-v899) 20260504: ARDENTEC OCR YMot Home Check bypass, no mechanical interference"
+20260505,ht9045-v899,Motor\mymotor.cpp,777,same-file,//AI(ht9045-v899) 20260505: MLoaderY 工作位置 iMLoaderYCarPos=-505 會誤觸發此防護，僅對 MLoaderY 豁免，其餘馬達維持原有 home sensor 防護
+20260505,ht9045-v899,OCR.cpp,29,same-file,//AI(ht9045-v899) 20260505: keep OCR simulation state local to OCR form and restore production tray data after test
+20260505,ht9045-v899,OCR.cpp,214,same-file,//AI(ht9045-v899) 20260505: add OCR simulation UI after dfm controls are loaded
+20260505,ht9045-v899,OCR.cpp,227,same-file,//AI(ht9045-v899) 20260505: restore tray data if simulation is closed mid-flow
+20260505,ht9045-v899,OCR.cpp,236,same-file,//AI(ht9045-v899) 20260505: put simulation UI on its own tab so it never overlaps existing Light Setup / OCR Setup controls
+20260505,ht9045-v899,OCR.cpp,1710,same-file,//AI(ht9045-v899) 20260505: run OCR simulation through Tray OCR auto-flow instead of command-only trigger loop
+20260505,ht9045-v899,OCR.h,177,same-file,//AI(ht9045-v899) 20260505: create OCR area simulation controls without editing BCB6 dfm layout
+20260505,ht9045-v899,OCRInsp.h,13,same-file,//AI(ht9045-v899) 20260505: expose current OCR tray position for OCR area simulation status and restore
+20260505,ht9045-v899,TfAOILaserScan.cpp,161,same-file,//AI(ht9045-v899) 20260505: 只記錄當下瞬間速度供 log 查看，不再用它做還原 (ReadSpeed 是瞬間速度不是設定值，會把馬達設成 0/2 龜速)
+20260505,ht9045-v899,TfAOILaserScan.cpp,167,same-file,//AI(ht9045-v899) 20260505: 參數忽略 (歷史遺留)，永遠還原為 100% 預設量產速度，避免任何後續 Home/Teach 受影響
+20260505,ht9045-v899,TfAOILaserScan.cpp,169,same-file,//AI(ht9045-v899) 20260505: 修正前版 bug — 原本把 ReadSpeed() 當設定值還原 → 馬達被設成 0 或 2 → Home 反向撞擊、form 關閉龜速漂移
+20260505,ht9045-v899,TfAOILaserScan.cpp,211,same-file,//AI(ht9045-v899) 20260505: 與 case 500 判斷的目標位置 (CarPos) 對齊；原本判斷 CarPos 卻 MoveTo OCRPos，導致到位後仍不滿足 ±5 條件 → 死迴圈一直跑到 OCRPos
+20260505,ht9045-v899,TfAOILaserScan.h,114,same-file,//AI(ht9045-v899) 20260505: 還原 raw speed (與 SetAndBackUpLoaderYSpeed 配對)
+20260505,ht9045-v899,adam6024.cpp,55,same-file,//AI(ht9045-v899) 20260505: show EP board setup guidance once per run when Num=2 cannot connect
+20260505,ht9045-v899,adam6024.cpp,73,same-file,//AI(ht9045-v899) 20260505: guide field engineer without changing Gerneral.ini automatically
+20260505,ht9045-v899,adam6024.cpp,263,MISSING,//AI(ht9045-v899) 20260505: set target IP before status check so guidance uses the field-selected address
+20260505,ht9045-v899,cTrayMapping.cpp,221,same-file,//AI(ht9045-v899) 20260505: 原本只設 Visible=true，未設 false 導致 .dfm 預設如果是 true 會一直顯示。
+20260505,ht9045-v899,cTrayMapping.cpp,300,same-file,//AI(ht9045-v899) 20260505: 關閉表單時停止模擬並重置 LaserScan 狀態，避免下次開啟該表單時?留舊狀態繼續跑
+20260505,ht9045-v899,cTrayMapping.cpp,1253,same-file,//AI(ht9045-v899) 20260505: Loop>1 時按鈕 Caption 顯示「Running n/N」進度
+20260505,ht9045-v899,cTrayMapping.cpp,1269,same-file,//AI(ht9045-v899) 20260505: Scan 異常後立即停止後續 Loop，避免使用者解除異常後自動續跑
+20260505,ht9045-v899,cTrayMapping.cpp,1296,same-file,//AI(ht9045-v899) 20260505: Tray Map 模式下 Scan 異常也立即停止 Loop
+20260505,ht9045-v899,cTrayMapping.cpp,4757,same-file,//AI(ht9045-v899) 20260505: Memo 上限放大到 100 行；Sim/AutoLearning 模式下同步寫入 D:\HT9045_Log\LaserScanSim\YYYY_MM\YYYY-MM-DD.log
+20260505,ht9045-v899,cTrayMapping.cpp,4772,same-file,//AI(ht9045-v899) 20260505: 只在 Sim/AutoLearning 模式下記錄流程細節，避免量產時 log 灌爆
+20260505,ht9045-v899,cTrayMapping.cpp,4780,same-file,//AI(ht9045-v899) 20260505: 永遠寫檔的流程 log，供客戶端量產回傳分析
+20260505,ht9045-v899,cTrayMapping.cpp,4790,same-file,//AI(ht9045-v899) 20260505: Sim/AutoLearning 模式下同步顯示在 Memo 上方便現場觀察
+20260505,ht9045-v899,cTrayMapping.cpp,4795,same-file,//AI(ht9045-v899) 20260505: 一次抓 MLoaderY/Cylinder/Sensor 狀態，方便客戶 log 還原當下情境
+20260505,ht9045-v899,cTrayMapping.cpp,4798,same-file,//AI(ht9045-v899) 20260505: 加入 MLoaderY HomeFlag 與 C_LoaderUpPress (固定機台壓桿) 狀態，協助診斷 auto-home timeout / 壓桿未退
+20260505,ht9045-v899,cTrayMapping.cpp,4957,same-file,//AI(ht9045-v899) 20260505: 錯誤中斷時也要還原 raw speed；EdgePush/TrayY_Fixer 隨台車移動不干涉但若已於 case 2500 ON 需關閉避免殘留夾盤
+20260505,ht9045-v899,cTrayMapping.cpp,4980,same-file,//AI(ht9045-v899) 20260505: 防呆 — 客戶反應未做全機 Home 就跑 Check Device，這裡先檢查 MLoaderY HomeFlag，未 Home 則自動單軸 Home
+20260505,ht9045-v899,cTrayMapping.cpp,4985,same-file,//AI(ht9045-v899) 20260505: 跳到自動 Home 子流程
+20260505,ht9045-v899,cTrayMapping.cpp,4988,same-file,//AI(ht9045-v899) 20260505: 只記 log 不做還原 (RestoreLoaderYSpeedRaw 已改為固定回 100%)
+20260505,ht9045-v899,cTrayMapping.cpp,5012,same-file,//AI(ht9045-v899) 20260505: 自動 Home MLoaderY 子流程 (case 10/15/20)，避免客戶忘了全機 Home 就直接跑模擬
+20260505,ht9045-v899,cTrayMapping.cpp,5021,same-file,//AI(ht9045-v899) 20260505: Home 前只需關 C_LoaderUpPress
+20260505,ht9045-v899,cTrayMapping.cpp,5030,same-file,//AI(ht9045-v899) 20260505: 等 2 秒到 timeout (.Off() 從 true→false 表示時間到)
+20260505,ht9045-v899,cTrayMapping.cpp,5040,same-file,//AI(ht9045-v899) 20260505: 重置 Home Task=1 並設 HomeFlag=0
+20260505,ht9045-v899,cTrayMapping.cpp,5046,same-file,//AI(ht9045-v899) 20260505: 必須呼叫 MotorHome(false) 才會跑狀態機更新 HomeFlag；之前用 Home() 會每 loop 重置 HomeReset 導致馬達抖動
+20260505,ht9045-v899,cTrayMapping.cpp,5053,same-file,//AI(ht9045-v899) 20260505: 馬達自己 retry 用完判定失敗 → 立刻報錯不用等外部 timeout
+20260505,ht9045-v899,cTrayMapping.cpp,5065,same-file,//AI(ht9045-v899) 20260505: 台車要移動前一律放開 C_LoaderUpPress (固定鎖在機台的壓桶)，避免壓著台車?機。不 Alarm。
+20260505,ht9045-v899,cTrayMapping.cpp,5127,same-file,//AI(ht9045-v899) 20260505: 台車要移動前一律放開 C_LoaderUpPress (固定鎖在機台的壓桶)，不 Alarm
+20260505,ht9045-v899,cTrayMapping.cpp,5129,same-file,//AI(ht9045-v899) 20260505: 在台車進堆疊區前先夾盤 (LoaderEdgePush + TrayY_Fixer)，避免進站途中盤面位置漂移
+20260505,ht9045-v899,cTrayMapping.cpp,5132,same-file,//AI(ht9045-v899) 20260505: 防呆：再次鎖定 MLoaderY Speed 為 iLoaderYCWSpeedPerc，防止外部干擾
+20260505,ht9045-v899,cTrayMapping.cpp,5141,same-file,//AI(ht9045-v899) 20260505: 目標位置改為 SurePos (吸料等待位)；夾盤已於 case 2500 提早 ON，此處不再重複；速度於 case 2500 已鎖定
+20260505,ht9045-v899,cTrayMapping.cpp,5202,same-file,//AI(ht9045-v899) 20260505: 防呆：DoMoveOut 內部會再驅動 MLoaderY，先再次鎖速避免被外部覆蓋
+20260505,ht9045-v899,cTrayMapping.cpp,5237,same-file,//AI(ht9045-v899) 20260505: log LaserScan cylinder off state before finish
+20260505,ht9045-v899,cTrayMapping.cpp,5244,same-file,//AI(ht9045-v899) 20260505: 用 raw speed 還原 (對應 case 1 的真備份)；舊寫法把 raw 當百分比再餵會導致速度變極小
+20260505,ht9045-v899,cTrayMapping.cpp,5250,same-file,//AI(ht9045-v899) 20260505: 異常 default 也要還原 raw speed；夬盤氣缸?在 case 2500~7999 期間才需關閉 (case 2500 才 ON)
+20260505,ht9045-v899,cTrayMapping.cpp,5509,same-file,//AI(ht9045-v899) 20260505: 與 btnMoveInClick(SurePos) 對稱，MoveOut 應退到回車位 CarPos，原來用 OCRPos 在這畫面上沒意義
+20260505,ht9045-v899,cTrayMapping.h,682,same-file,//AI(ht9045-v899) 20260505: DoLaserScanFromLoader 自動 Home MLoaderY 用 timeout
+20260505,ht9045-v899,cTrayMapping.h,686,same-file,//AI(ht9045-v899) 20260505: Sim/AutoLearning 模式下記錄流程細節 (Memo + 檔案)
+20260505,ht9045-v899,cTrayMapping.h,687,same-file,//AI(ht9045-v899) 20260505: 生產模式也永遠寫檔供客戶回傳分析
+20260505,ht9045-v899,cTrayMapping.h,688,same-file,//AI(ht9045-v899) 20260505: 一次性備份 MLoaderY/Cylinder/Sensor 現況
+20260505,ht9045-v899,uhome.cpp,1864,MISSING,//AI(ht9045-v899) 20260505: �����脖葉��� Home (�����ａ��蝔� hangup 敺���� Home All) ���嚗�
+20260506,ht9045-v899,OCR.cpp,311,same-file,//AI(ht9045-v899) 20260506: stray ckWordCount on form root bleeds across every PageControl tab; reparent it back to OCR Setup tab
+20260506,ht9045-v899,OCR.cpp,1737,same-file,//AI(ht9045-v899) 20260506: simulation must use new TrayArm-CCD + MLoaderY architecture (Frank 20250214);
+20260506,ht9045-v899,OCR.cpp,1751,same-file,//AI(ht9045-v899) 20260506: only allow OCR simulation outside of production (Lot must not be started)
+20260506,ht9045-v899,iosetview.cpp,789,same-file,//AI(ht9045-v899) 20260506: 500KG OTD label rename for all customers. Caption only; alias / Start interlock / Event log unchanged. (CASE-20260506-001)
+20260511,ht9045-v899,OCR.cpp,56,same-file,//AI(ht9045-v899) 20260511: runtime bypass flag read by OCRInsp.cpp DoOCRFlow1; non-static so OCRInsp can link to it. Default off; only set true while OCR Area 
+20260511,ht9045-v899,OCR.cpp,206,same-file,//AI(ht9045-v899) 20260511: init bypass-AOI checkbox handle
+20260511,ht9045-v899,OCR.cpp,302,same-file,"//AI(ht9045-v899) 20260511: ""Bypass AOI"" checkbox lets simulation drive only handler motion when the vision PC is not online (skips bOCRConnect / WAR09113 and f"
+20260511,ht9045-v899,OCR.cpp,483,same-file,"//AI(ht9045-v899) 20260511: clear runtime bypass flag whenever simulation stops, so production OCR flow always uses real AOI socket"
+20260511,ht9045-v899,OCR.cpp,1778,same-file,//AI(ht9045-v899) 20260511: latch bypass flag at simulation start; cleared again in StopOCRSimulation
+20260511,ht9045-v899,OCR.h,193,same-file,//AI(ht9045-v899) 20260511: bypass AOI/vision TCP traffic during simulation so handler motion can be verified without vision PC online
+20260511,ht9045-v899,OCRInsp.cpp,659,same-file,//AI(ht9045-v899) 20260511: simulation bypass - treat AOI as connected so flow can proceed without vision PC
+20260511,ht9045-v899,OCRInsp.cpp,931,same-file,//AI(ht9045-v899) 20260511: bypass-AOI also enters trigger sequence so handler motion path matches production
+20260511,ht9045-v899,OCRInsp.h,17,same-file,"//AI(ht9045-v899) 20260511: when true, OCR area simulation skips AOI socket dependency (no vision PC needed); SwOCRTigger still fires so handler motion is exerc"
+20260511,ht9045-v899,adam6024.cpp,1587,MISSING,//AI(ht9045-v899) 20260511: 把舊 Independent EP loop 限制在 DOUBLE_EP_INDIVIAL 才跑。
+20260511,ht9045-v899,adam6024.cpp,1595,MISSING,//AI(ht9045-v899) 20260511: bounds guard
+20260511,ht9045-v899,adam6024.cpp,1601,MISSING,//AI(ht9045-v899) 20260511: 防止 SLKIndClass 與 slSLKTypeInd 不同步時越界
+20260511,ht9045-v899,iosetview.cpp,47,MISSING,//AI(ht9045-v899) 20260511: init NULL to prevent dangling deref in Timer1Timer when click handler did not assign
+20260511,ht9045-v899,iosetview.cpp,108,MISSING,"//AI(ht9045-v899) 20260511: RAII guard - destructor always clears bTimerRun on any function exit (normal return, exception unwind, or early break), so a hardwar"
+20260511,ht9045-v899,iosetview.cpp,165,MISSING,"//AI(ht9045-v899) 20260511: null-guard before deref; if pointer not assigned yet, force state Off to avoid AV that would leave bTimerRun stuck true and freeze U"
+20260511,ht9045-v899,iosetview.cpp,222,MISSING,//AI(ht9045-v899) 20260511: bTimerRun reset is handled by _timerGuard destructor above
+20260511,ht9045-v899,iosetview.cpp,247,MISSING,//AI(ht9045-v899) 20260511: clear residual sucker action so timer will not deref stale mySuckerTemp
+20260512,ht9045-v899,Motor\mymotor.cpp,410,same-file,//AI(ht9045-v899) 20260512: CASE-20260507-001 CC_GIGAS Z2 到位較慢導致 Y2 middle 檢查提早觸發 alarm，放寬 iCheckZ 至 11000
+20260512,ht9045-v899,aoutarm9045_2x8_8.cpp,412,same-file,//AI(ht9045-v899) 20260512: fix - 原寫成 Item[0][2+iKit] 重複檢查，row1 col2 永遠取不到 mode 20201
+20260512,ht9045-v899,aoutarm9045_2x8_8.cpp,415,same-file,//AI(ht9045-v899) 20260512: fix - 20300 對應 row0 col3+iKit (原寫成 Item[1][3+iKit] row index 反了)，導致 [0][3] 殘料時落到 fallback 20301，OutArmSuck NeedSuck 全 false 卡死
+20260512,ht9045-v899,aoutarm9045_2x8_8.cpp,418,same-file,//AI(ht9045-v899) 20260512: fix - 補回 [1][3+iKit] 守備條件，避免全空也 fallback 回 20301
+20260513,ht9045-v899,acatchtray.cpp,520,MISSING,//AI(ht9045-v899) 20260513: dummy 空跑不要觸發 P18 人工補 Fail Auto Tray 流程
+20260513,ht9045-v899,asendic_Auto.cpp,203,MISSING,"//AI(ht9045-v899) 20260513: dummy 空跑不啟用 P18 旁路, 仍走原本 tray mismatch 處理"
+20260513,ht9045-v899,csystem.cpp,15437,MISSING,//AI(ht9045-v899) 20260513: dummy 空跑不檢查人工補 Fail Auto Tray 的 Color Sensor
+20260514,ht9045-v899,AutoClean\AutoClean.cpp,1650,MISSING,//AI(ht9045-v899) 20260514: align comment with actual default (off; legacy SearchCleanKitUpDown is in use)
+20260514,ht9045-v899,AutoClean\AutoClean.cpp,1755,MISSING,//AI(ht9045-v899) 20260514: legacy EvaluatePlan removed; enumeration delegated to cArmPickPlan
+20260514,ht9045-v899,AutoClean\AutoClean.cpp,1756,MISSING,//AI(ht9045-v899) 20260514: IArmPickPlanContext implementation begins
+20260514,ht9045-v899,AutoClean\AutoClean.cpp,1816,MISSING,"//AI(ht9045-v899) 20260514: preserve legacy ""skip plans where lead has no pad / unreachable"""
+20260514,ht9045-v899,AutoClean\AutoClean.cpp,1827,MISSING,//AI(ht9045-v899) 20260514: translate generic plan back into legacy TPickPlan/TPickSlot
+20260514,ht9045-v899,AutoClean\AutoClean.cpp,1896,MISSING,//AI(ht9045-v899) 20260514: Search() now delegates enumeration to generic cArmPickPlan
+20260514,ht9045-v899,AutoClean\cCleanKitPickPlan.h,20,same-file,//AI(ht9045-v899) 20260514: refactored to delegate enumeration to generic cArmPickPlan
+20260514,ht9045-v899,AutoClean\cCleanKitPickPlan.h,79,same-file,//AI(ht9045-v899) 20260514: generic enumeration engine; this class provides context
+20260514,ht9045-v899,AutoClean\cCleanKitPickPlan.h,86,same-file,//AI(ht9045-v899) 20260514: copy generic plan result back into legacy m_Best
+20260514,ht9045-v899,AutoClean\cCleanKitPickPlan.h,109,same-file,//AI(ht9045-v899) 20260514: IArmPickPlanContext implementation
+20260514,ht9045-v899,Common\PickPlanner\IArmPickPlanContext.h,2,same-file,//AI(ht9045-v899) 20260514: generic Arm pick/place planner context interface
+20260514,ht9045-v899,Common\PickPlanner\IArmPickPlanContext.h,59,same-file,//AI(ht9045-v899) 20260514: optional pre-filter on a candidate lead.
+20260514,ht9045-v899,Common\PickPlanner\cArmPickPlan.cpp,2,same-file,//AI(ht9045-v899) 20260514: generic Arm pick/place planner implementation
+20260514,ht9045-v899,Common\PickPlanner\cArmPickPlan.cpp,121,same-file,//AI(ht9045-v899) 20260514: respect adapter's optional lead pre-filter
+20260514,ht9045-v899,Common\PickPlanner\cArmPickPlan.h,2,same-file,//AI(ht9045-v899) 20260514: generic enumerate-and-score Arm pick/place planner
+20260514,ht9045-v899,Common\PickPlanner\cInArmLoaderPickPlanner.cpp,2,same-file,//AI(ht9045-v899) 20260514: cInArmLoaderPickPlanner Phase 3 scaffold
+20260514,ht9045-v899,Common\PickPlanner\cInArmLoaderPickPlanner.cpp,16,same-file,//AI(ht9045-v899) 20260514: runtime gate; MUST stay false in production
+20260514,ht9045-v899,Common\PickPlanner\cInArmLoaderPickPlanner.cpp,19,same-file,//AI(ht9045-v899) 20260514: shared global instance used by the dual-path hook
+20260514,ht9045-v899,Common\PickPlanner\cInArmLoaderPickPlanner.cpp,46,same-file,//AI(ht9045-v899) 20260514: Phase 3 scaffold - no globals are written.
+20260514,ht9045-v899,Common\PickPlanner\cInArmLoaderPickPlanner.cpp,56,same-file,//AI(ht9045-v899) 20260514: Phase 3.1 -> active sucker count from InArmSuckUse
+20260514,ht9045-v899,Common\PickPlanner\cInArmLoaderPickPlanner.cpp,68,same-file,//AI(ht9045-v899) 20260514: Phase 3.1 -> MOT[MMTrayY].Tray.YItem
+20260514,ht9045-v899,Common\PickPlanner\cInArmLoaderPickPlanner.cpp,73,same-file,//AI(ht9045-v899) 20260514: Phase 3.1 -> MOT[MMTrayY].Tray.XItem
+20260514,ht9045-v899,Common\PickPlanner\cInArmLoaderPickPlanner.cpp,94,same-file,//AI(ht9045-v899) 20260514: Loader has no soft-limit issue (per design)
+20260514,ht9045-v899,Common\PickPlanner\cInArmLoaderPickPlanner.cpp,99,same-file,//AI(ht9045-v899) 20260514: Phase 3.1 -> MOT[MMTrayY].Tray.Data == HAS_IC
+20260514,ht9045-v899,Common\PickPlanner\cInArmLoaderPickPlanner.cpp,104,same-file,//AI(ht9045-v899) 20260514: Phase 3.1 -> InArmSuckUse + Item==NULL_IC
+20260514,ht9045-v899,Common\PickPlanner\cInArmLoaderPickPlanner.h,2,same-file,//AI(ht9045-v899) 20260514: InArm Loader pick planner (Phase 3 scaffold)
+20260514,ht9045-v899,Common\PickPlanner\cInArmLoaderPickPlanner.h,28,same-file,"//AI(ht9045-v899) 20260514: runtime gate, default OFF. Toggle to true ONLY in"
+20260514,ht9045-v899,Common\PickPlanner\cInArmLoaderPickPlanner.h,49,same-file,//AI(ht9045-v899) 20260514: explicit gate. Returns false until Phase 3.1
+20260514,ht9045-v899,Common\PickPlanner\cOutArmPlacePlanner.cpp,2,same-file,//AI(ht9045-v899) 20260514: cOutArmPlacePlanner Phase 4 scaffold
+20260514,ht9045-v899,Common\PickPlanner\cOutArmPlacePlanner.cpp,18,same-file,//AI(ht9045-v899) 20260514: runtime gate; reserved for Phase 4.1
+20260514,ht9045-v899,Common\PickPlanner\cOutArmPlacePlanner.cpp,21,same-file,//AI(ht9045-v899) 20260514: shared global instance (currently unreachable)
+20260514,ht9045-v899,Common\PickPlanner\cOutArmPlacePlanner.cpp,48,same-file,//AI(ht9045-v899) 20260514: Phase 4 scaffold - no globals are written.
+20260514,ht9045-v899,Common\PickPlanner\cOutArmPlacePlanner.cpp,58,same-file,//AI(ht9045-v899) 20260514: Phase 4.1 -> active sucker count from OutArmSuckUse
+20260514,ht9045-v899,Common\PickPlanner\cOutArmPlacePlanner.cpp,70,same-file,//AI(ht9045-v899) 20260514: Phase 4.1 -> MOT[MMAutoX].Tray.YItem
+20260514,ht9045-v899,Common\PickPlanner\cOutArmPlacePlanner.cpp,75,same-file,//AI(ht9045-v899) 20260514: Phase 4.1 -> MOT[MMAutoX].Tray.XItem
+20260514,ht9045-v899,Common\PickPlanner\cOutArmPlacePlanner.h,2,same-file,//AI(ht9045-v899) 20260514: OutArm Place planner (Phase 4 scaffold)
+20260514,ht9045-v899,Common\PickPlanner\cOutArmPlacePlanner.h,28,same-file,"//AI(ht9045-v899) 20260514: runtime gate, default OFF. Currently unreachable"
+20260514,ht9045-v899,Common\PickPlanner\cOutArmPlacePlanner.h,49,same-file,//AI(ht9045-v899) 20260514: explicit gate. Returns false until Phase 4.1
+20260514,ht9045-v899,ainarm9045.cpp,40,MISSING,//AI(ht9045-v899) 20260514: Phase 3 Loader pick planner scaffold (default off)
+20260514,ht9045-v899,ainarm9045.cpp,6436,MISSING,//AI(ht9045-v899) 20260514: Phase 3 dual-path hook. SHADOW ONLY: when
+20260515,JimmyChiu,Automation\auto9045.cpp,1042,same-file,//AI(JimmyChiu) 20260515: F899-008 OEE_StartLot 失敗 errMsg 關鍵字分流（對齊 SPEC §6.3 / §8.5）
+20260515,JimmyChiu,Automation\auto9045.cpp,1057,same-file,//AI(JimmyChiu) 20260515: F899-008 超豐 LotInfo_REQUEST 內嵌 OEE Start Lot（v3）
+20260515,JimmyChiu,Automation\automation.cpp,1967,same-file,//AI(JimmyChiu) 20260515: F899-008 §6.2 超豐在 OEE 開啟才走內嵌 OEE Start Lot
+20260515,ht9045-v899,cContactCT.cpp,202,MISSING,"//AI(ht9045-v899) 20260515: 修正南茂回報Yield Chart左欄site標籤(Aa/Ab/Ba...)空白; ChangeToFloatNonPcnt回傳float, 'A'+float 走%c變數列引數會被當成double傳入導致印出亂碼/空白, 補強制轉int還原V897行為"
+20260515,ht9045-v899,cContactCT.cpp,242,MISSING,"//AI(ht9045-v899) 20260515: 同上修正, NN_2Row site標籤強制int"
+20260515,ht9045-v899,cContactCT.cpp,247,MISSING,"//AI(ht9045-v899) 20260515: 同上修正, NN_1Row site標籤強制int"
+20260518,ht9045-v899,cContact.cpp,10548,same-file,//AI(ht9045-v899) 20260518: reuse index drop handling during Gigas auto height place-to-shuttle
+20260518,ht9045-v899,cContact.cpp,10774,same-file,//AI(ht9045-v899) 20260518: recheck Gigas auto height drop before vacuum release
+20260519,ht9045-v899,BarCode\BarCode.cpp,4550,MISSING,//AI(ht9045-v899) 20260519: match e2x2In2CCD missing barcode check with 2x2 buffer mapping.
+20260519,ht9045-v899,HS_Function.cpp,3549,MISSING,//AI(ht9045-v899) 20260519: GTK info.txt is saved by callers after site-state synchronization.
+20260519,ht9045-v899,ProductionInfo\ProductionInfo.cpp,4952,same-file,//AI(ht9045-v899) 20260519: output RunSite from V812 channel map while keeping two-arm/runtime close-site guard.
+20260519,ht9045-v899,main.cpp,28270,same-file,//AI(ht9045-v899) 20260519: save GTK RunSite after homepage site on/off states are synchronized.
+20260519,ht9045-v899,uTrayEditForm.cpp,504,MISSING,//AI(ht9045-v899) 20260519: keep timer refresh from re-triggering Enter screenshot save.
+20260519,ht9045-v899,uTrayEditForm.cpp,707,MISSING,//AI(ht9045-v899) 20260519: keep screenshot save failures from hanging Tray Edit UI.
+20260519,ht9045-v899,uYieldMonitoring.cpp,5163,same-file,//AI(ht9045-v899) 20260519: save GTK RunSite after low-yield auto site-off state synchronization.
+20260520,ht9045-v899,CosFunction.cpp,1466,MISSING,//AI(ht9045-v899) 20260520: enable E55 Fix3 full tray gate for PTI import plan
+20260521,ht9045-v899,KYECFTP\FTPClient.cpp,3416,same-file,//AI(ht9045-v899) 20260521: limit ChipMos Chamber upload value by selected heat mode
+20260522,ht9045-v899,Config.h,264,same-file,//AI(ht9045-v899) 20260522: keep OCR capture trigger mode configurable while defaulting old machines to switch trigger
+20260522,ht9045-v899,OCR.cpp,57,same-file,//AI(ht9045-v899) 20260522: simulation-only flow log state; production OCR keeps this disabled
+20260522,ht9045-v899,OCR.cpp,62,same-file,//AI(ht9045-v899) 20260522: define OCR capture trigger modes without changing existing switch-trigger default
+20260522,ht9045-v899,OCR.cpp,422,same-file,//AI(ht9045-v899) 20260522: build one fixed current-loop log path so every simulation loop starts from a clean file
+20260522,ht9045-v899,OCR.cpp,465,same-file,//AI(ht9045-v899) 20260522: write final simulation status before disabling simulation-only logging
+20260522,ht9045-v899,OCR.cpp,1594,same-file,//AI(ht9045-v899) 20260522: capture raw OCR socket result only while OCR simulation logging is enabled
+20260522,ht9045-v899,OCR.cpp,1639,same-file,//AI(ht9045-v899) 20260522: manual reader trigger follows selected switch/SE8 mode
+20260522,ht9045-v899,OCR.cpp,1648,same-file,//AI(ht9045-v899) 20260522: keep manual trigger-off routed through the shared OCR trigger helper
+20260522,ht9045-v899,OCR.cpp,1655,same-file,//AI(ht9045-v899) 20260522: command trigger mode is exclusive and never toggles SwOCRTigger
+20260522,ht9045-v899,OCR.cpp,1696,same-file,"//AI(ht9045-v899) 20260522: SE8 mode must not touch the switch output, including trigger-off timing"
+20260522,ht9045-v899,OCR.cpp,1790,same-file,//AI(ht9045-v899) 20260522: enable and clear per-loop OCR simulation log at the first loop start
+20260522,ht9045-v899,OCR.cpp,1844,same-file,//AI(ht9045-v899) 20260522: record the simulation stop reason before StopOCRSimulation disables logging
+20260522,ht9045-v899,OCR.cpp,1863,same-file,//AI(ht9045-v899) 20260522: keep each simulation loop result in the current-loop log before preparing the next loop
+20260522,ht9045-v899,OCR.cpp,1878,same-file,//AI(ht9045-v899) 20260522: overwrite the log file when a new simulation loop begins to avoid cross-loop contamination
+20260522,ht9045-v899,OCR.cpp,1911,same-file,//AI(ht9045-v899) 20260522: record unexpected OCR simulation return code before shutdown clears the log enable flag
+20260522,ht9045-v899,OCR.cpp,2168,same-file,//AI(ht9045-v899) 20260522: persist selected switch/SE8 OCR trigger mode per setup file
+20260522,ht9045-v899,OCR.cpp,2200,same-file,//AI(ht9045-v899) 20260522: default missing OCR trigger mode to switch for old machine compatibility
+20260522,ht9045-v899,OCR.cpp,2260,same-file,"//AI(ht9045-v899) 20260522: show saved switch/SE8 OCR trigger mode, defaulting to switch"
+20260522,ht9045-v899,OCR.h,309,same-file,//AI(ht9045-v899) 20260522: centralize OCR capture trigger mode so auto flow and manual button use the same switch/SE8 behavior
+20260522,ht9045-v899,OCRInsp.cpp,107,same-file,//AI(ht9045-v899) 20260522: log simulated TrayArm X and LoaderY target after the combined OCR move completes
+20260522,ht9045-v899,OCRInsp.cpp,756,same-file,//AI(ht9045-v899) 20260522: mark InArm wait-position completion in simulation log without changing motion flow
+20260522,ht9045-v899,OCRInsp.cpp,779,same-file,//AI(ht9045-v899) 20260522: log TrayX safety-cylinder recovery during OCR simulation only
+20260522,ht9045-v899,OCRInsp.cpp,902,same-file,//AI(ht9045-v899) 20260522: log OCR light down command for simulation flow validation
+20260522,ht9045-v899,OCRInsp.cpp,916,same-file,//AI(ht9045-v899) 20260522: log OCR light ready sensor before trigger starts
+20260522,ht9045-v899,OCRInsp.cpp,934,same-file,//AI(ht9045-v899) 20260522: route OCR capture through selected switch/SE8 trigger mode
+20260522,ht9045-v899,OCRInsp.cpp,956,same-file,//AI(ht9045-v899) 20260522: mirror OCR trigger-on memo event to simulation log
+20260522,ht9045-v899,OCRInsp.cpp,979,same-file,//AI(ht9045-v899) 20260522: switch mode turns off switch; command mode leaves switch untouched
+20260522,ht9045-v899,OCRInsp.cpp,980,same-file,//AI(ht9045-v899) 20260522: keep logs accurate because SE8 mode has no switch-off action
+20260522,ht9045-v899,OCRInsp.cpp,985,same-file,//AI(ht9045-v899) 20260522: mirror OCR trigger-off memo event to simulation log
+20260522,ht9045-v899,OCRInsp.cpp,990,same-file,//AI(ht9045-v899) 20260522: bypass AOI result must override SOFT_SIMULTE NoIC so OCR Simulation can validate normal OK flow without vision PC
+20260522,ht9045-v899,OCRInsp.cpp,995,same-file,//AI(ht9045-v899) 20260522: log fabricated bypass-AOI barcode so simulation evidence shows non-socket result source
+20260522,ht9045-v899,OCRInsp.cpp,1000,same-file,//AI(ht9045-v899) 20260522: keep legacy SOFT_SIMULTE result only when Bypass AOI is not selected
+20260522,ht9045-v899,OCRInsp.cpp,1034,same-file,//AI(ht9045-v899) 20260522: record NoIC write-back path in OCR simulation log
+20260522,ht9045-v899,OCRInsp.cpp,1051,same-file,//AI(ht9045-v899) 20260522: record CheckIC OK write-back path in OCR simulation log
+20260522,ht9045-v899,OCRInsp.cpp,1063,same-file,//AI(ht9045-v899) 20260522: log NoIC retry entry for OCR simulation validation
+20260522,ht9045-v899,OCRInsp.cpp,1071,same-file,//AI(ht9045-v899) 20260522: log AOI inspection error result before retry/error handling
+20260522,ht9045-v899,OCRInsp.cpp,1078,same-file,//AI(ht9045-v899) 20260522: log unknown OCR result before retry/error handling
+20260522,ht9045-v899,OCRInsp.cpp,1146,same-file,//AI(ht9045-v899) 20260522: record normal OCR OK write-back path in simulation log
+20260522,ht9045-v899,OCRInsp.cpp,1178,same-file,//AI(ht9045-v899) 20260522: log retry count for the current OCR simulation position
+20260522,ht9045-v899,OCRInsp.cpp,1190,same-file,//AI(ht9045-v899) 20260522: log final barcode error coordinate before simulation stops
+20260522,ht9045-v899,OCRInsp.cpp,1210,same-file,//AI(ht9045-v899) 20260522: log end of one OCR simulation tray position before returning to search state
+20260522,ht9045-v899,OCRInsp.cpp,1225,same-file,//AI(ht9045-v899) 20260522: log finish handling when light is confirmed up and LoaderY speed is restored
+20260522,ht9045-v899,OCRInsp.cpp,1286,same-file,//AI(ht9045-v899) 20260522: log final TrayArm color-position return before OCR simulation loop returns
+20260522,ht9045-v899,OCRInsp.cpp,1372,same-file,//AI(ht9045-v899) 20260522: keep second OCR check trigger branch aligned with selected switch/SE8 mode
+20260522,ht9045-v899,OCRInsp.cpp,1394,same-file,//AI(ht9045-v899) 20260522: command mode leaves switch untouched; switch mode turns output off
+20260522,ht9045-v899,OCRInsp.h,19,same-file,//AI(ht9045-v899) 20260522: expose simulation-only OCR flow log hooks without enabling production logging
+20260522,ht9045-v899,cContact.cpp,10549,same-file,//AI(ht9045-v899) 20260522: extend Gigas place-to-shuttle drop guard to Contact Test before release
+20260522,ht9045-v899,cContact.cpp,10775,same-file,//AI(ht9045-v899) 20260522: keep Contact Test drop guard active until place-to-shuttle vacuum release
+20260522,ht9045-v899,cContact.cpp,18193,same-file,//AI(ht9045-v899) 20260522: check Gigas Contact Test Z1 drop before 3-axis place-to-shuttle release
+20260522,ht9045-v899,cContact.cpp,18311,same-file,//AI(ht9045-v899) 20260522: check Gigas Contact Test Z2 drop before 3-axis place-to-shuttle release
+20260525,ht9045-v899,main.cpp,24003,MISSING,//AI(ht9045-v899) 20260525: sync PASS auto positions after workfile switch
+20260525,ht9045-v899,main.cpp,25604,MISSING,//AI(ht9045-v899) 20260525: pack PTI Lot Start trace with TCP log for permission/runmode diagnosis
+20260525,ht9045-v899,uLotInfo.cpp,95,same-file,//AI(ht9045-v899) 20260525: trace PTI Lot Start context for tester TCP diagnostics
+20260525,ht9045-v899,uLotInfo.cpp,119,same-file,//AI(ht9045-v899) 20260525: restore PTI RunMode before local Lot Start gate
+20260525,ht9045-v899,uLotInfo.cpp,1612,same-file,//AI(ht9045-v899) 20260525: mark PTI tester TCP command window for StateRecord analysis
+20260525,ht9045-v899,uLotInfo.cpp,7256,same-file,//AI(ht9045-v899) 20260525: normalize PTI RunMode before local validation blocks TesterTCP Lot Start
+20260526,ht9045-v899,ContactForce.cpp,453,MISSING,"//AI(ht9045-v899) 20260526: align EP one-by-one site trim diameters with V874/general SLK types instead of legacy 20,30 only."
+20260526,ht9045-v899,ContactForce.cpp,694,MISSING,//AI(ht9045-v899) 20260526: Show Multi EP site trim page for outer EP per-site calibration.
+20260526,ht9045-v899,ContactForce.cpp,970,MISSING,//AI(ht9045-v899) 20260526: reload saved one-by-one load rates so the next TfContact SAVE uses current trim values.
+20260526,ht9045-v899,HS_Function.cpp,1040,MISSING,//AI(ht9045-v899) 20260526: do not read/log Multi EP data while common EP route is selected.
+20260526,ht9045-v899,OCR.cpp,1892,same-file,//AI(ht9045-v899) 20260526: convert simulation trigger alarm return into a clean timer stop
+20260526,ht9045-v899,OCR.cpp,1901,same-file,//AI(ht9045-v899) 20260526: stop simulation after capture timeout alarm instead of retrying silently
+20260526,ht9045-v899,OCRInsp.cpp,888,same-file,//AI(ht9045-v899) 20260526: keep OCR light cylinder output off when no-down mode is selected
+20260526,ht9045-v899,OCRInsp.cpp,937,same-file,//AI(ht9045-v899) 20260526: stop OCR simulation after trigger failure alarm so vision setup can be adjusted
+20260526,ht9045-v899,OCRInsp.cpp,963,same-file,//AI(ht9045-v899) 20260526: stop OCR simulation when real AOI is not connected during validation
+20260526,ht9045-v899,OCRInsp.cpp,1165,same-file,//AI(ht9045-v899) 20260526: stop OCR simulation immediately on capture-result timeout
+20260526,ht9045-v899,OCRInsp.cpp,1342,same-file,//AI(ht9045-v899) 20260526: keep secondary OCR check-map trigger aligned with no-down mode
+20260526,ht9045-v899,OCRInsp.cpp,1375,same-file,//AI(ht9045-v899) 20260526: stop OCR simulation after check-map trigger failure alarm
+20260526,ht9045-v899,OCRInsp.cpp,1441,same-file,//AI(ht9045-v899) 20260526: stop OCR simulation on check-map capture-result timeout
+20260526,ht9045-v899,OCRInsp.h,8,same-file,//AI(ht9045-v899) 20260526: return simulation-only alarm stops to the OCR timer without changing production retry codes
+20260526,ht9045-v899,adam6024.cpp,95,same-file,//AI(ht9045-v899) 20260526: Multi EP pressure output is valid only when the physical SwMultiEp valve is actually ON.
+20260526,ht9045-v899,adam6024.cpp,107,same-file,"//AI(ht9045-v899) 20260526: keep mode 2 independent EP behavior, but let mode 3 fall back to normal EP when SwMultiEp is OFF."
+20260526,ht9045-v899,adam6024.cpp,1627,MISSING,"//AI(ht9045-v899) 20260526: in Multi EP production, normal air force fills outer/site EP values."
+20260526,ht9045-v899,adam6024.cpp,1670,MISSING,"//AI(ht9045-v899) 20260526: in Multi EP production, DoubleForce fills inner/dual EP values."
+20260526,ht9045-v899,adam6024.cpp,1778,same-file,//AI(ht9045-v899) 20260526: use actual SwMultiEp route before APAX-only output.
+20260526,ht9045-v899,adam6024.cpp,1819,same-file,//AI(ht9045-v899) 20260526: do not clear/write APAX when Multi valve is OFF.
+20260526,ht9045-v899,adam6024.cpp,1882,same-file,//AI(ht9045-v899) 20260526: route direct writes to APAX only when independent EP path is active.
+20260526,ht9045-v899,adam6024.cpp,1886,same-file,//AI(ht9045-v899) 20260526: keep iosetview and production direct writes on the shared APAX route.
+20260526,ht9045-v899,adam6024.cpp,1913,same-file,//AI(ht9045-v899) 20260526: keep normal ADAM output untouched when SwMultiEp is OFF.
+20260526,ht9045-v899,adam6024.cpp,2225,same-file,"//AI(ht9045-v899) 20260526: SwMultiEp OFF means common EP route, so skip Multi APAX writes."
+20260526,ht9045-v899,adam6024.cpp,2242,same-file,//AI(ht9045-v899) 20260526: APAX-5028 S0 controls Arm1 AO0-AO7.
+20260526,ht9045-v899,adam6024.cpp,2243,same-file,//AI(ht9045-v899) 20260526: APAX-5028 S1 controls Arm2 AO0-AO7.
+20260526,ht9045-v899,adam6024.cpp,2252,same-file,//AI(ht9045-v899) 20260526: allow direct writes to select Arm1/Arm2 via iArm while keeping production shuttle selection.
+20260526,ht9045-v899,adam6024.cpp,2277,same-file,//AI(ht9045-v899) 20260526: direct Multi EP writes follow the installed first four Arm1 AO channels.
+20260526,ht9045-v899,adam6024.cpp,2305,same-file,//AI(ht9045-v899) 20260526: direct Multi EP writes follow the installed first four Arm2 AO channels.
+20260526,ht9045-v899,adam6024.cpp,2321,same-file,//AI(ht9045-v899) 20260526: split logical 16ch buffer into APAX S0/S1 register blocks.
+20260526,ht9045-v899,adam6024.cpp,2350,same-file,//AI(ht9045-v899) 20260526: write Arm2 to APAX-5028 S1 Modbus block.
+20260526,ht9045-v899,adam6024.h,15,same-file,//AI(ht9045-v899) 20260526: expose actual EP pressure route so Multi mode follows SwMultiEp state.
+20260526,ht9045-v899,cContact.cpp,13089,MISSING,"//AI(ht9045-v899) 20260526: Multi EP Die Force SAVE must output one-by-one dual values, not one common direct value."
+20260526,ht9045-v899,cContact.cpp,13096,same-file,//AI(ht9045-v899) 20260526: TfContact SAVE must refresh independent/Multi EP site outputs after site trim changes.
+20260526,ht9045-v899,csystem.cpp,2533,same-file,//AI(ht9045-v899) 20260526: skip SnEPDieForce only when SwMultiEp selects the Multi/APAX route.
+20260526,ht9045-v899,main.cpp,10878,same-file,//AI(ht9045-v899) 20260526: reset APAX only when the independent EP pressure route is active.
+20260526,ht9045-v899,main.cpp,20176,same-file,//AI(ht9045-v899) 20260526: Multi EP production Die Force must keep one-by-one dual output values.
+20260526,ht9045-v899,main.cpp,20183,same-file,//AI(ht9045-v899) 20260526: keep APAX inner/dual force array fresh for production APAX_WriteData(false).
+20260528,ht9045-v899,main.cpp,26575,same-file,//AI(ht9045-v899) 20260528: guard Yield Monitoring entry with security level 39
+20260528,ht9045-v899,uLotInfo.cpp,7245,same-file,//AI(ht9045-v899) 20260528: block PTI operator Lot Start while tester is offline
+20260529,ht9045-v899,uLotInfo.cpp,7252,same-file,//AI(ht9045-v899) 20260529: clarify PTI offline tester mode prompt
+20260602,ht9045-v899,acatchtray.cpp,5915,MISSING,//AI(ht9045-v899) 20260602: 殘料檢查pass後先把LoaderY送回SurePos(rear)再進取盤流程，避免LoaderY停在front(CarPos)導致TrayArm夾空JAM0604
+20260602,ht9045-v899,acatchtray.cpp,5948,MISSING,//AI(ht9045-v899) 20260602: 殘料檢查(台車模式)pass後LoaderY歸位
+20260602,ht9045-v899,acatchtray.cpp,5949,MISSING,//AI(ht9045-v899) 20260602: 雷射流程收尾DoMoveOut會把LoaderY停在front(CarPos)，這裡先放開固定壓桿並把盤送回SurePos(rear吸料位)、放開夾爪，TrayArm才夾得到盤；否則DoCatchFromLoader會夾空報JAM0604
+20260602,ht9045-v899,ainarm9045.cpp,7057,MISSING,//AI(ht9045-v899) 20260602: watchdog for InArm load-stage no-tray dead-lock (case 15) on non-auto-skip customers (e.g. CC_ARDENTEC)
+20260602,ht9045-v899,ainarm9045.cpp,7060,MISSING,//AI(ht9045-v899) 20260602: watchdog for InArm load-stage empty-tray residual dead-lock (case 15) when the empty tray is never swapped out (e.g. OP skip manual 
+20260602,ht9045-v899,ainarm9045.cpp,7080,MISSING,"//AI(ht9045-v899) 20260602: latch for case 15 no-tray watchdog (arm once, avoid restart every scan)"
+20260602,ht9045-v899,ainarm9045.cpp,7082,MISSING,"//AI(ht9045-v899) 20260602: latch for case 15 empty-tray residual watchdog (arm once, avoid restart every scan)"
+20260602,ht9045-v899,ainarm9045.cpp,7172,MISSING,"//AI(ht9045-v899) 20260602: real IC present to pick, disarm empty-tray residual watchdog"
+20260602,ht9045-v899,ainarm9045.cpp,7260,MISSING,"//AI(ht9045-v899) 20260602: tray present again, disarm no-tray watchdog before going back to pick"
+20260602,ht9045-v899,ainarm9045.cpp,7262,MISSING,//AI(ht9045-v899) 20260602: empty-tray residual watchdog - if the load-stage tray stays empty and never gets swapped (e.g. OP pressed SKIP on WAR16122 without r
+20260602,ht9045-v899,ainarm9045.cpp,7283,MISSING,"//AI(ht9045-v899) 20260602: load stage truly empty (no tray on any position), not a residual-empty-tray stall; disarm empty-tray watchdog"
+20260602,ht9045-v899,ainarm9045.cpp,7287,MISSING,"//AI(ht9045-v899) 20260602: auto-skip resolved the wait, disarm watchdog"
+20260602,ht9045-v899,ainarm9045.cpp,7298,MISSING,//AI(ht9045-v899) 20260602: no tray + no auto-skip path would dead-lock silently after OP manually removes Loader tray; arm watchdog then raise WAR09101 so OP c
+20260604,ht9045-v899,main.cpp,25304,same-file,"//AI(ht9045-v899) 20260604: 將原本內嵌在 DoStateRecord 的 MainForm 變數快照獨立成函式,"
+20260604,ht9045-v899,main.cpp,25396,same-file,//AI(ht9045-v899) 20260604: Loader / TrayArm 交接診斷區
+20260604,ht9045-v899,main.cpp,25789,same-file,//AI(ht9045-v899) 20260604: 改呼叫獨立函式 DumpMainFormSnapshot (內含 Loader/TrayArm 交接診斷區)
+20260605,ht9045-v899,KYECFTP\FTPClient.cpp,2243,same-file,//AI(ht9045-v899) 20260605: 縮短 timeout 20s->5s 避免 Lot End 主執行緒長時間阻塞
+20260605,ht9045-v899,KYECFTP\FTPClient.cpp,2260,same-file,"//AI(ht9045-v899) 20260605: FTP 連線失敗只記 log,不彈 modal 避免停機卡住消音/動作"
+20260605,ht9045-v899,KYECFTP\FTPClient.cpp,2286,same-file,"//AI(ht9045-v899) 20260605: 上傳失敗只記 log,不彈 modal 避免停機卡住消音/動作"
+20260605,ht9045-v899,KYECFTP\FTPClient.cpp,2293,same-file,"//AI(ht9045-v899) 20260605: 上傳失敗只記 log,不彈 modal 避免停機卡住消音/動作"
+20260605,ht9045-v899,cSortCT.cpp,11,MISSING,//AI(ht9045-v899) 20260605: 改用 ShowMyMessageBox_YES_NO 需引入 mymessbox.h
+20260605,ht9045-v899,cSortCT.cpp,576,same-file,"//AI(ht9045-v899) 20260605: Sender==btnClearCount 為人工按鈕觸發,程式呼叫(Lot End/SECS/MES)傳入其他物件,後續清除提示僅人工觸發才跳"
+20260605,ht9045-v899,cSortCT.cpp,611,same-file,"//AI(ht9045-v899) 20260605: 僅人工按鈕觸發才提示,程式呼叫不跳詢問避免誤清"
+20260605,ht9045-v899,cSortCT.cpp,613,same-file,//AI(ht9045-v899) 20260605: 改用 ShowMyMessageBox_YES_NO 留下操作紀錄
+20260608,ht9045-v899,cContact.cpp,3310,same-file,//AI(ht9045-v899) 20260608: 將全智 partial pick 豁免由僅 CONTACT_TEST 放寬至 AUTO_CONTACT_TEST/CONTACT_AUTO_GET_HEIGHT，保留 CUSTOMER_CODE==CC_GIGAS 前置條件確保只改變全智行為(全智雙Arm Con
+20260608,ht9045-v899,cContact.cpp,3315,same-file,//AI(ht9045-v899) 20260608: 全智改用該site IC資料是否==HAS_IC(實際吸取成功)當守護門檻，不再用recipe site開關LastSet.bUseTestSocket；HAS_IC於case3050僅在REALLY且真空sensor ON時SetItemData，代表實際吸到的
+20260608,ht9045-v899,cContact.cpp,3325,same-file,"//AI(ht9045-v899) 20260608: 非全智維持原依recipe site開關檢查行為不變(全智改用HAS_IC判斷掉料, CASE-20260608-001)"
+20260608,ht9045-v899,cContact.cpp,3336,same-file,"//AI(ht9045-v899) 20260608: 移除整臂無守護site即強制報掉料的致命fallback，全智允許整臂本輪不上料(部分手動上料)時跳過防護不報掉料，非全智不受影響(全智雙Arm Contact掉料防護放寬, CASE-20260608-001)"
+20260608,ht9045-v899,cContact.cpp,3341,same-file,"//AI(ht9045-v899) 20260608: 真實掉料中止前將全智本臂(Z1=Front)本次pick暫存資料還原回進站前狀態(iFTestBackItem)，避免殘留IC觸發IndexHasIC()互鎖鎖死contact模式，比照Exit還原寫法且僅全智路徑生效(全智雙Arm Contact掉料防護放寬, "
+20260608,ht9045-v899,cContact.cpp,4343,same-file,//AI(ht9045-v899) 20260608: 將全智 partial pick 豁免由僅 CONTACT_TEST 放寬至 AUTO_CONTACT_TEST/CONTACT_AUTO_GET_HEIGHT，保留 CUSTOMER_CODE==CC_GIGAS 前置條件確保只改變全智行為(全智雙Arm Con
+20260608,ht9045-v899,cContact.cpp,4348,same-file,//AI(ht9045-v899) 20260608: 全智改用該site IC資料是否==HAS_IC(實際吸取成功)當守護門檻，不再用recipe site開關LastSet.bUseTestSocket；HAS_IC於case3050僅在REALLY且真空sensor ON時SetItemData，代表實際吸到的
+20260608,ht9045-v899,cContact.cpp,4358,same-file,"//AI(ht9045-v899) 20260608: 非全智維持原依recipe site開關檢查行為不變(全智改用HAS_IC判斷掉料, CASE-20260608-001)"
+20260608,ht9045-v899,cContact.cpp,4369,same-file,"//AI(ht9045-v899) 20260608: 移除整臂無守護site即強制報掉料的致命fallback，全智允許整臂本輪不上料(部分手動上料)時跳過防護不報掉料，非全智不受影響(全智雙Arm Contact掉料防護放寬, CASE-20260608-001)"
+20260608,ht9045-v899,cContact.cpp,4374,same-file,"//AI(ht9045-v899) 20260608: 真實掉料中止前將全智本臂(Z2=Rear)本次pick暫存資料還原回進站前狀態(iBTestBackItem)，避免殘留IC觸發IndexHasIC()互鎖鎖死contact模式，比照Exit還原寫法且僅全智路徑生效(全智雙Arm Contact掉料防護放寬, C"
+20260609,ht9045-v899,KYECFTP\FTPClient.cpp,401,MISSING,"//AI(ht9045-v899) 20260609: PTI 縮短 timeout 5s,避免 FTP server 不可達時 Lot End 主執行緒長時間阻塞 //Landam"
+20260609,ht9045-v899,KYECFTP\FTPClient.cpp,475,MISSING,"//AI(ht9045-v899) 20260609: PTI 連線失敗只記 log,不彈阻塞 modal(避免 Lot End 卡住消音/動作)"
+20260609,ht9045-v899,KYECFTP\FTPClient.cpp,795,MISSING,"//AI(ht9045-v899) 20260609: PTI Lot End 上傳失敗只記 log,不彈阻塞 modal(避免停機卡住消音/動作),且不讀 LastErrorNo 避免存取異常 socket 觸發崩潰"
+20260609,ht9045-v899,KYECFTP\FTPClient.cpp,815,MISSING,"//AI(ht9045-v899) 20260609: PTI 上傳失敗只記 log,不讀 LastErrorNo 避免存取異常 socket 觸發崩潰"
+20260611,ht9045-v899,cTrayAssignment.cpp,358,MISSING,"//AI(ht9045-v899) 20260611(CASE-20260611-001): 上面迴圈只讀到iFixRight為止,Fix下半盤(eFix4~6 / eFix7~12)的Direction/iTrayType從未設定,預設停在0導致下半盤(如Fix5)擺放方向與上半盤不一致;此處仿bTrayUpDown"
+20260611,ht9045-v899,uLotInfo.cpp,1959,MISSING,"//AI(ht9045-v899) 20260611(CASE-20260611-001): 上傳前清旗標,作為連線失敗判斷依據"
+20260611,ht9045-v899,uLotInfo.cpp,1967,MISSING,"//AI(ht9045-v899) 20260611(CASE-20260611-001): N06/FTP 連線失敗(socket 10038)即中止整批上傳,避免每個檔重複 blocking connect/retry 在主執行緒卡住 Lot End 導致 alarm 無法消除/hang"
+20260612,ht9045-v899,Config.h,957,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): Lot End FTP上傳背景化開關, PTI預設true其餘false, 供S6/S7 uLotInfo分流(背景EnqueueUpload或原同步路徑)"
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,4,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 新增 FTP 背景上傳 thread 骨架（S1）。
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,5,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S2 完成 — UploadOneJob 改用 WinINet
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,7,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S3 完成 — Enqueue 去重（jobKind+localFile 識別鍵
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,18,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): WinINet FTP API（InternetOpen/InternetConnect/FtpPutFile）
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,22,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S4 移除此處暫時定義，改由 main.cpp 定義。
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,28,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 背景 log 改「每日一個子資料夾 + 每日一檔」，
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,41,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S3 初始無 in-flight job
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,44,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S8 結果回報佇列專用鎖
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,54,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S8 釋放結果回報鎖
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,63,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 改每日子資料夾 + 每日輪替檔，跨日自動換子資料夾+檔名。
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,101,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S3 去重識別鍵。
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,111,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S8 worker 端推入「放棄」回報（thread-safe）
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,128,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S8 主執行緒撈一筆回報（深拷貝）；空佇列回傳 false。
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,166,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 去重檢查與 in-flight key 比對必須同一把鎖
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,214,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S3 提供主執行緒方便呼叫介面，給 S6/S7 的 uLotInfo 用。
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,245,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 取出即標記為 in-flight
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,258,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S2 實作 WinINet 真實上傳。
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,273,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 連線參數與遠端路徑預設取自 job；
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,282,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 本機驗證模式,比照 GetFTP_Setting 的"
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,298,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 本機測試一律維持 PASV(與正式客戶版同一條路徑),"
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,348,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 上傳前先嘗試建立遠端目錄(正式+模擬共用)。
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,442,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S8 只有「放棄(GIVEUP)」才回報主 EventLog（訊息型、不跳 alarm）；
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,480,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 上傳結束 -> 清除 in-flight 標記（鎖內短暫更新）
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.h,4,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 新增 FTP 背景上傳 thread 骨架，
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.h,11,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): TCriticalSection 來源 header
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.h,15,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 入列前所有 AnsiString 欄位需做深拷貝，
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.h,44,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S3 去重用 — 目前正在上傳中的 job 識別鍵
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.h,48,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S8 背景上傳「放棄(GIVEUP)」結果回報佇列。
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.h,61,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S3 去重識別鍵 = (iJobKind + sLocalFile)。
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.h,71,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S3 job 組裝 helper — 給 S6/S7 的 uLotInfo 呼叫點用。
+20260612,ht9045-v899,FTPUpload\uFtpUploadThread.h,79,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S8 主執行緒撈一筆背景上傳「放棄」回報；
+20260612,ht9045-v899,cprod.cpp,2245,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 新增FTP上傳背景化開關, 預設依客戶碼(PTI=true其餘false), INI可覆寫; 供Lot End上傳走背景EnqueueUpload或原同步路徑分流"
+20260612,ht9045-v899,main.cpp,180,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): FTP 背景上傳 thread（fire-and-forget）
+20260612,ht9045-v899,main.cpp,215,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): FTP 背景上傳 thread 全域單例「唯一正式定義」
+20260612,ht9045-v899,main.cpp,2631,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S8 撈背景 FTP 上傳「放棄(GIVEUP)」回報寫主 EventLog
+20260612,ht9045-v899,main.cpp,9972,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 無條件建立 FTP 背景上傳 thread（fire-and-forget），
+20260612,ht9045-v899,main.cpp,10916,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 關閉 FTP 背景上傳 thread（無條件，所有客戶都建立）。
+20260612,ht9045-v899,main.cpp,25672,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 把 FTP 背景上傳 log 打包進 StateRecord，
+20260612,ht9045-v899,uLotInfo.cpp,76,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 背景FTP上傳執行緒(FtpUploadThd/EnqueueUpload),供Lot End上傳分流用"
+20260612,ht9045-v899,uLotInfo.cpp,1933,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 開關開(PTI預設) → 走背景FTP上傳執行緒,fire-and-forget;丟完即返回,不MySleep/不等/不break,避免Lot End主執行緒被同步上傳阻塞造成卡站或alarm無法消除"
+20260612,ht9045-v899,uLotInfo.cpp,1935,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 保險,背景執行緒未建立則略過(不退回同步,避免同一批檔重複上傳)"
+20260612,ht9045-v899,uLotInfo.cpp,1937,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 迴圈外取一次連線參數(值拷貝),對應UploadFileToServer2非Sigurd分支(FtpHost/FtpUserName/FtpPassword/N06_FtpPort)"
+20260612,ht9045-v899,uLotInfo.cpp,1946,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 遠端=FtpUplaodPath+純檔名,比照原同步UploadFileToServer2內部 str02=FtpPath+Source(Source已砍成純檔名);先前只給FtpUplaodPath會少檔名導致FtpPutF"
+20260612,ht9045-v899,uLotInfo.cpp,1957,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 開關關(非PTI/預設) → 維持原同步上傳路徑,行為一字不改"
+20260612,ht9045-v899,uLotInfo.cpp,2001,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 開關開(PTI預設) → SocketID CSV 走背景FTP上傳執行緒,fire-and-forget;丟完即返回,不MySleep/不等待,避免Lot End主執行緒被同步上傳阻塞造成卡站或alarm無法消除"
+20260612,ht9045-v899,uLotInfo.cpp,2003,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 保險,背景執行緒未建立則略過(不退回同步,避免同一檔重複上傳)"
+20260612,ht9045-v899,uLotInfo.cpp,2005,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 組本地完整路徑(asDirPath+""\\""+sFileName,比照UpSocketIdPoductDataToServerByFTP內asFileName,FTPClient.cpp L2236)與遠端完整路徑(asN12"
+20260612,ht9045-v899,uLotInfo.cpp,2011,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 丟佇列即清(決議2):不等上傳成功就清SocketID count;此段為UpSocketIdPoductDataToServerByFTP上傳成功後清除程式碼之複製(FTPClient.cpp L2271-2278),背景分"
+20260612,ht9045-v899,uLotInfo.cpp,2020,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 開關關(非PTI/預設) → 維持原同步上傳路徑,行為一字不改(MySleep+呼叫函式,SocketID count清除仍在函式內部上傳成功後執行)"
+20260618,ht9045-v899,Motor\mymotor.cpp,415,MISSING,//AI(ht9045-v899) 20260618: CASE-20260618-001 南茂(CC_ChipMos)/e360KG 落入 else 使 iCheckZ=4000 門檻過緊，Z2 到位較慢提早觸發 Z1UpZ2Down1 alarm，比照 CC_GIGAS 放寬 iCheckZ 至 11000
+20260623,ht9045-v899,MachineType.h,1631,MISSING,"//AI(ht9045-v899) 20260623: 新增整數安全除法(零防護+取整),供格線欄號/索引等整數情境使用,避免誤用浮點版造成階梯式位移"
+20260623,ht9045-v899,cConfiguration.cpp,153,MISSING,"//AI(ht9045-v899) 20260623: 改用整數安全除法還原離散欄號,修正浮點除法造成 CheckBox 階梯式位移"
+20260623,ht9045-v899,cConfiguration.cpp,4983,MISSING,"//AI(ht9045-v899) 20260623: 界外/空日期(1899-12-30)防呆,無效時回填Now()避免picker指派拋例外"
+20260623,ht9045-v899,cConfiguration.cpp,7327,MISSING,//AI(ht9045-v899) 20260623: [O]EventLog存檔包try/catch，避免單一picker例外中斷整個SaveConfiguration(原會使Enable FTP等設定全寫不進)
+20260623,ht9045-v899,cConfiguration.cpp,7330,MISSING,"//AI(ht9045-v899) 20260623: dtpO06NextTime為dtkTime picker,指派->Date在界外日期(1899-12-30)拋EDateTimeError;改用日期picker的Date加時間picker的Time組合,移除非法指派"
+20260623,ht9045-v899,main.cpp,5640,MISSING,//AI(ht9045-v899) 20260623: 移除 #ifdef SOFT_SIMULTE 包裝，使 C08_1 Socket Sensor 偵測在正式 build 也生效（原僅模擬 build 編入導致正式機失效）
+20260625,ht9045-v899,Interface\TesterTCP.cpp,1050,MISSING,//AI(ht9045-v899) 20260625: 新增去重式記錄器，N06 recipe 同步成敗寫入既有 EventLog，避免靜默失敗且不膨脹日誌
+20260625,ht9045-v899,Interface\TesterTCP.cpp,1063,MISSING,//AI(ht9045-v899) 20260625: 取 7z 完整路徑(不硬編碼)，FileExists 為 false 才 fallback
+20260625,ht9045-v899,Interface\TesterTCP.cpp,1072,MISSING,//AI(ht9045-v899) 20260625: 同步執行 7z 並取得 exit code(沿用 main.cpp ShellExecuteEx+WaitForSingleObject 模式)；回傳 false 代表失敗，pdwExit 帶回程序結束碼
+20260625,ht9045-v899,Interface\TesterTCP.cpp,1100,MISSING,//AI(ht9045-v899) 20260625: 改回傳 bool + 同步等待 + 取 exit code + 存在性檢查，避免 N06 上傳靜默失敗
+20260625,ht9045-v899,Interface\TesterTCP.cpp,1145,MISSING,//AI(ht9045-v899) 20260625: 同 CopyRecipeToTester，改 bool 回傳 + 同步取 exit code + 存在性檢查 + 去重記錄
+20260625,ht9045-v899,Interface\TesterTCP.cpp,1155,MISSING,//AI(ht9045-v899) 20260625: 原註解掉的 log 改為呼叫去重記錄器
+20260625,ht9045-v899,Interface\TesterTCP.h,258,MISSING,//AI(ht9045-v899) 20260625: 回傳型別 void->bool，配合 N06 recipe 同步成敗回報
+20260629,ht9045-v899,main.cpp,25418,MISSING,"//AI(ht9045-v899) 20260629(CASE-PTI-20260629-001): 新增 Home/Buzzer/Modal 診斷 dump,供 auto-init 回HOME hang 偶發時定位早退點與 modal 來源"
+20260630,ht9045-v899,HS_Function.cpp,1967,MISSING,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): 最外層 try/catch 加固,讓 socket 例外不再以空 UnitName 逸出到 main.cpp AppException(保留原 success 回傳碼語義)"
+20260630,ht9045-v899,HS_Function.cpp,1987,MISSING,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): connect timeout 30000->5000ms 與 PTI N06 路徑一致,降低同步阻塞最壞值"
+20260630,ht9045-v899,cpublic.cpp,655,MISSING,"//AI(ht9045-v899) 20260630: ExecZipCommand 的 handle 版,回傳子行程 process handle(失敗回 NULL),"
+20260630,ht9045-v899,cpublic.cpp,768,MISSING,//AI(ht9045-v899) 20260630: 為 PTI 在 Sort Summary 補出 Fix4-6 與 Total 出料加總欄（PTI 恆輸出，非 PTI 輸出不變）
+20260630,ht9045-v899,cpublic.h,46,MISSING,//AI(ht9045-v899) 20260630: 同 ExecZipCommand 但回傳 process handle 供非阻塞輪詢(State Record 確認 1.bat 複製完才壓縮/刪資料夾)
+20260630,ht9045-v899,csystem.cpp,21812,MISSING,"//AI(ht9045-v899) 20260630: 子目錄移除同樣重試,與最後 RemoveDir 對稱(子層已先清空檔案)"
+20260630,ht9045-v899,csystem.cpp,21823,MISSING,"//AI(ht9045-v899) 20260630: 檔案被占用時 DeleteFile 會失敗,原本直接略過會留下殘缺"
+20260630,ht9045-v899,csystem.cpp,21840,MISSING,"//AI(ht9045-v899) 20260630: 目錄移除同樣重試最多 3 次,確保被占用檔案造成的非空失敗在鎖釋放後能成功"
+20260630,ht9045-v899,main.cpp,25154,MISSING,//AI(ht9045-v899) 20260630: State Record 用—1.bat(複製)與整包壓縮 7z 各自的 process handle、
+20260630,ht9045-v899,main.cpp,25164,MISSING,//AI(ht9045-v899) 20260630: case 6 兩段非阻塞輪詢的 WaitForSingleObject 回傳暫存
+20260630,ht9045-v899,main.cpp,25165,MISSING,"//AI(ht9045-v899) 20260630: 整包壓縮 7z 結束碼(預設1=未成功;壓縮成功才設0並刪資料夾,維持原 iret==0 條件)"
+20260630,ht9045-v899,main.cpp,25226,MISSING,"//AI(ht9045-v899) 20260630: case 6 改成「分段非阻塞輪詢」收尾,全程不擋 UI/SECS/motion:"
+20260630,ht9045-v899,main.cpp,25260,MISSING,"//AI(ht9045-v899) 20260630: 整包壓縮改非同步啟動,避免大檔 7z 同步擋住 UI 而拖垮 SECS 30s timer"
+20260630,ht9045-v899,main.cpp,25727,MISSING,//AI(ht9045-v899) 20260630: 啟動前先清掉前一次未收尾的 State Record handle/stage(避免重入時洩漏
+20260630,ht9045-v899,mymessbox.cpp,344,MISSING,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): 將 MyMessageBox 拉到 z-order 最前但不搆焦點(NOACTIVATE),不用 HWND_TOPMOST 以免蓋住 app 外視窗"
+20260630,ht9045-v899,mymessbox.cpp,943,MISSING,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): Lot End 訊息框 ShowModal 前拉到 app 內 z-order 最前,避免被其他視窗搆住導致看不到"
+20260630,ht9045-v899,note.cpp,3486,MISSING,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): MyMessageBox 顯示時(Lot End/Alarm)改拉它到前,接在既有置頂鏈尾,只用 app 內 BringToFront 不用 TOPMOST/SetForegroundWindow"
+20260630,ht9045-v899,uLotInfo.cpp,1952,MISSING,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): FtpUploadThd 尚未建立時記 log 並跳過,寧可不傳也不落至同步阻塞 Lot End"
+20260703,ht9045-v899,AutoClean\uCleaning.cpp,2650,MISSING,"//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 觸發當下做非阻塞提示(原因=alarm 描述+code, 處置=自動清潔已暫停/已重新初始化偵測, 續低良率請清潔 Socket)並置位重置旗標。只做一次(bACSmartNeedReset 防重複)。提示必須留在此觸發"
+20260703,ht9045-v899,AutoClean\uCleaning.cpp,2863,MISSING,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 需求1 移除此處「重貼 alarm 擋機」ShowErrorMessage(客戶否決的鎖機行為)。改為函式尾恆放行 START。
+20260703,ht9045-v899,AutoClean\uCleaning.cpp,2867,MISSING,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 需求3 若偵測待重置(前一輪 iACUseParam==0 觸發)則於放行前呼叫 ResetSmartAutoClean 週期性重置偵測(歸零 iACSmartCount/iACSmartCount_CTF/iACUse
+20260703,ht9045-v899,acatchtray.cpp,1221,MISSING,"//AI(ht9045-v899) 20260703: case 570 JAM0610 防抖計數,比照 DoPlaceTrayToAuto_250"
+20260703,ht9045-v899,acatchtray.cpp,1729,MISSING,"//AI(ht9045-v899) 20260703: Greatek極性校正-有盤時FixOn_On不會到位,不靠FixOn確認直接進Task=310略過JAM0613;夾到與否由下游IsTrayArmCatchTrayFail(兩顆到位OFF=有盤)判定;非Greatek維持原FixOn到位檢查"
+20260703,ht9045-v899,acatchtray.cpp,2007,MISSING,"//AI(ht9045-v899) 20260703: 補 iCnt>100 防抖,避免搬運中 FixOn sensor 單次彈跳即誤報 JAM0610(頻繁 Alarm 頂層主因);比照 DoPlaceTrayToAuto_250"
+20260703,ht9045-v899,acatchtray.cpp,2020,MISSING,"//AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環"
+20260703,ht9045-v899,acatchtray.cpp,3628,MISSING,"//AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環"
+20260703,ht9045-v899,acatchtray.cpp,4591,MISSING,"//AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環"
+20260703,ht9045-v899,acatchtray.cpp,7239,MISSING,"//AI(ht9045-v899) 20260703: Greatek極性校正-夾緊有盤時FixOn_On不會到位,用On()直接驅動不等sensor,避免Push()到位逾時誤觸JAM31047(缸47);夾到與否由IsTrayArmCatchTrayFail(兩顆到位OFF=有盤)判定;非Greatek維持Push"
+20260703,ht9045-v899,acatchtray.cpp,7350,MISSING,//AI(ht9045-v899) 20260703: Greatek硬體極性校正-正常持盤=FixOn/FixOff兩顆到位皆OFF;任一到位ON即非正常持盤(FixOn ON=空夾掉盤/FixOff ON=放開)→fail;非Greatek維持原判斷
+20260703,ht9045-v899,cmydef.cpp,5457,MISSING,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 Smart Auto Clean 警報改非阻塞提示並週期性重置偵測；新增原因/處置文字(EN/CH)全域供 note.cpp 面板動態帶入。提示必須留在觸發當下/CheckSmartAutoClean，不得移到會 Sto
+20260703,ht9045-v899,cmydef.cpp,5458,MISSING,//AI(ht9045-v899) 20260703: pnlCleanSocket 動態英文提示(空=用預設)
+20260703,ht9045-v899,cmydef.cpp,5459,MISSING,//AI(ht9045-v899) 20260703: pnlCleanSocket 動態中文提示(空=用預設)
+20260703,ht9045-v899,cmydef.cpp,5460,MISSING,//AI(ht9045-v899) 20260703: iACUseParam==0 觸發時置位，於 START 閘門重置偵測計數，避免每 cycle 重複觸發同一 alarm
+20260703,ht9045-v899,cmydef.h,5508,MISSING,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 pnlCleanSocket 動態英文提示
+20260703,ht9045-v899,cmydef.h,5509,MISSING,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 pnlCleanSocket 動態中文提示
+20260703,ht9045-v899,cmydef.h,5510,MISSING,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 START 閘門重置 Smart Auto Clean 偵測旗標
+20260703,ht9045-v899,csystem.cpp,5489,MISSING,"//AI(ht9045-v899) 20260703: Greatek極性校正-啟動應在放開位;FixOn ON=空夾/掉盤→WAR0615,兩顆到位OFF=有盤→WAR0614取盤;非Greatek還原原始WAR0615"
+20260703,ht9045-v899,csystem.cpp,5570,MISSING,"//AI(ht9045-v899) 20260703: Greatek極性校正-啟動應在放開位;FixOn ON=空夾/掉盤→WAR0615,兩顆到位OFF=有盤→WAR0614取盤;非Greatek還原原始WAR0615"
+20260703,ht9045-v899,csystem.cpp,6229,MISSING,"//AI(ht9045-v899) 20260703: Greatek極性校正-啟動應在放開位;FixOn ON=空夾/掉盤→WAR0615,兩顆到位OFF=有盤→WAR0614取盤;非Greatek還原原始WAR0615"
+20260703,ht9045-v899,main.cpp,4554,MISSING,"//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 閘門已於函式端(CheckSmartAutoCleanCanStart)改為恆放行(return true), 此呼叫不再擋 START, 下一行 return false 實際不會執行；外殼與呼叫保持不動。"
+20260703,ht9045-v899,note.cpp,1995,MISSING,"//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 若觸發端有帶入動態原因+處置文字則覆寫面板(含 alarm 描述/code + 已暫停/已重新初始化偵測)；空則維持原預設。此為非阻塞常駐面板, 不會 StopAllMotor。"
+20260703,ht9045-v899,uhome.cpp,2664,MISSING,"//AI(ht9045-v899) 20260703: Greatek硬體極性校正-Home以放開為目標;有盤依軟體fHasTray維持夾持,無盤則驅動放開並確認FixOff到位(不再用FixOn sensor猜有盤,FixOn ON=空夾非有盤);非Greatek維持原邏輯"
+20260703,ht9045-v899,uhome.cpp,2706,MISSING,"//AI(ht9045-v899) 20260703: Home時FixOn讀ON但軟體無盤記錄,原邏輯不經確認即夾持+標記有盤走自動退盤,造成非預期夾爪動作;改為防抖100次後跳WAR0614由操作員確認,RETRY=已取下盤重新檢查,SKIP=確認有盤維持舊有自動退盤"
+20260706,ht9045-v899,ainarm9045.cpp,4661,MISSING,"//AI(ht9045-v899) 20260706: 系統性可達性選嘴(不寫死吸嘴代號/欄位):預設仍取最左啟用吸嘴維持原行為,"
+20260803,ht9045-v899,CosFunction.cpp,2789,MISSING,//AI(ht9045-v899) 20260803: the 20260602 InArm case-15 dead-lock watchdog was added for this customer only (CASE-GIGAS-20260729-001)
+20260803,ht9045-v899,CosFunction.cpp,4414,MISSING,//AI(ht9045-v899) 20260803: default off - the 20260602 case-15 watchdog must only run for CC_ARDENTEC (CASE-GIGAS-20260729-001)
+20260803,ht9045-v899,CosFunction.h,470,MISSING,"//AI(ht9045-v899) 20260803: InArm load-stage dead-lock watchdog (case 15), CC_ARDENTEC only (CASE-GIGAS-20260729-001)"
+20260803,ht9045-v899,ainarm9045.cpp,7263,MISSING,"//AI(ht9045-v899) 20260803: gate this 20260602 watchdog to CC_ARDENTEC only; TQPF_Timer is a pure wall clock with no stop awareness, so alarm-stop plus OP recov"
+20260803,ht9045-v899,ainarm9045.cpp,7299,MISSING,"//AI(ht9045-v899) 20260803: gate this 20260602 watchdog to CC_ARDENTEC only, same pure-wall-clock defect as the empty-tray one above (CASE-GIGAS-20260729-001)"
+20260804,ht9045-v899,CosFunction.cpp,1469,MISSING,//AI(ht9045-v899) 20260804: turn on C05 power saving for PTI; stop heating after a long HALT once the lot has ended (CASE-PTI-20260804-001)
+20260804,ht9045-v899,CosFunction.cpp,1470,MISSING,"//AI(ht9045-v899) 20260804: unhide the [C05] group, it was forced off by InitialCosFunction"
+20260804,ht9045-v899,CosFunction.cpp,1471,MISSING,//AI(ht9045-v899) 20260804: 720min=12h so 8h(480min) is reachable; EncodeTime caps the hard ceiling at 1439
+20260804,ht9045-v899,CosFunction.cpp,1472,MISSING,//AI(ht9045-v899) 20260804: temp module only; motor/vacuum/ATC/mode stay forced to 0 exactly as today
+20260804,ht9045-v899,CosFunction.cpp,1473,MISSING,"//AI(ht9045-v899) 20260804: one-cycle repair keeps lot-start, cutting the heater there would waste a re-soak"
+20260804,ht9045-v899,CosFunction.cpp,1474,MISSING,//AI(ht9045-v899) 20260804: ambient halt is out of scope per the customer remark
+20260804,ht9045-v899,CosFunction.cpp,1475,MISSING,//AI(ht9045-v899) 20260804: main-screen indication per the customer remark
+20260804,ht9045-v899,CosFunction.cpp,3875,MISSING,//AI(ht9045-v899) 20260804: C05 power-save per-customer defaults; every flag keeps the legacy behaviour when not overridden (CASE-PTI-20260804-001)
+20260804,ht9045-v899,CosFunction.cpp,3876,MISSING,//AI(ht9045-v899) 20260804: legacy C05 limit; PTI overrides this to 720
+20260804,ht9045-v899,CosFunction.h,471,MISSING,"//AI(ht9045-v899) 20260804: C05 power-save per-customer profile, added for the PTI HALT temperature saving request (CASE-PTI-20260804-001)"
+20260804,ht9045-v899,CosFunction.h,472,MISSING,//AI(ht9045-v899) 20260804: C05 halt-time upper limit in minutes; 0 keeps the built-in 200 fallback
+20260804,ht9045-v899,CosFunction.h,473,MISSING,//AI(ht9045-v899) 20260804: C05 page shows the temp module only and forces motor/vacuum/ATC/mode to 0
+20260804,ht9045-v899,CosFunction.h,474,MISSING,//AI(ht9045-v899) 20260804: C05 must not engage while RunInfo.bLotStart is true (one-cycle repair)
+20260804,ht9045-v899,CosFunction.h,475,MISSING,//AI(ht9045-v899) 20260804: C05 does not intervene when the machine halts in ambient mode
+20260804,ht9045-v899,CosFunction.h,476,MISSING,"//AI(ht9045-v899) 20260804: show ""Power Save Mode"" on pnlPowerSaving once power saving is engaged"
+20260804,ht9045-v899,PowerSavingMode.cpp,39,MISSING,//AI(ht9045-v899) 20260804: the C05 halt-time limit became per-customer (PTI 720min). MaxMinute stays as the
+20260804,ht9045-v899,PowerSavingMode.cpp,137,MISSING,//AI(ht9045-v899) 20260804: PTI power-save gates. Placed here (not in CheckSystemRun) and mirroring the
+20260804,ht9045-v899,PowerSavingMode.cpp,256,MISSING,"//AI(ht9045-v899) 20260804: set the caption once at the transition, otherwise the panel keeps showing"
+20260804,ht9045-v899,PowerSavingMode.cpp,289,MISSING,//AI(ht9045-v899) 20260804: per-customer limit (PTI 720min) instead of the fixed 200 (CASE-PTI-20260804-001)
+20260804,ht9045-v899,PowerSavingMode.cpp,406,MISSING,//AI(ht9045-v899) 20260804: restore the panel so the next count-down is readable again (CASE-PTI-20260804-001)
+20260804,ht9045-v899,PowerSavingMode.h,68,MISSING,//AI(ht9045-v899) 20260804: shared by cConfiguration for the [C05] halt-time edit limit (CASE-PTI-20260804-001)
+20260804,ht9045-v899,cConfiguration.cpp,38,MISSING,//AI(ht9045-v899) 20260804: GetPowerSaveMaxMinute() for the [C05] halt-time limit (CASE-PTI-20260804-001)
+20260804,ht9045-v899,cConfiguration.cpp,1009,MISSING,//AI(ht9045-v899) 20260804: PTI shows the temp module only. Motor/vacuum/ATC/mode keep the very same
+20260804,ht9045-v899,cConfiguration.cpp,1029,MISSING,//AI(ht9045-v899) 20260804: temp row label follows the per-customer limit
+20260804,ht9045-v899,cConfiguration.cpp,1031,MISSING,//AI(ht9045-v899) 20260804: hide the motor/vacuum/ATC row labels together with their controls
+20260810,ht9045-v899,RotateKit\aRotateKIT.cpp,114,MISSING,"//AI(ht9045-v899) 20260810: 2x4 交錯 4 站(e9045_2x4_4_13/_14)時 SetInOutArmParameter_2x4_4() 已用 CopyInitSuck 把 OutArm 資料搬到邏輯欄位 0 與 1, 但這裡仍給 3(欄位 0 與 3), 使 M_MoveOut"
+20260810,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,1131,MISSING,"//AI(ht9045-v899) 20260810: 記錄這一趟到底把哪幾支吸嘴放到旋轉站。列舉用的 stride 是 i2x2Suck_Out, 只要它跟吸嘴實際欄位對不上, 就會有 IC 沒旋轉就進 Auto tray (力成PTI DUT1/DUT3 即此)"
+20260810,ht9045-v899,aoutarm.cpp,3125,MISSING,"//AI(ht9045-v899) 20260810: 超出極限救援時, 最小階(i=1)若僅略低於機構下限則夾到下限"
+20260810,ht9045-v899,aoutarm.cpp,3126,MISSING,"//AI(ht9045-v899) 20260810: 原本會被丟棄改用下一倍數, 間距反而比原來更大而仍然超限"
+20260810,ht9045-v899,aoutarm9045.cpp,2100,MISSING,//AI(ht9045-v899) 20260810: OutArm 逐輪診斷 Log 實作。宣告與用途見 aoutarm9045.h
+20260810,ht9045-v899,aoutarm9045.cpp,2341,MISSING,"//AI(ht9045-v899) 20260810: 記錄旋轉/AOI 閘門的判定結果, 讓「為什麼沒去旋轉」有跡可循"
+20260810,ht9045-v899,aoutarm9045.h,95,MISSING,"//AI(ht9045-v899) 20260810: OutArm 逐輪診斷 Log。目的是客戶回報 OutArm 取放/旋轉異常時, 單靠 Task_ListWithTime.csv 只有 task 編號、沒有當下的 kit/座標/吸嘴結果, 無法判定走了哪個分支。這組函式在 RAM 保留最近 OUTARM_ROU"
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,40,MISSING,"//AI(ht9045-v899) 20260810: 原本這裡一律 return 2, 在判斷左右半 kit 前就早退, 使 iModeCol 恆為 0, OutArm 取右半 kit 時算出的 X 與左半同一點(差 2 個 Site X-Pitch), 右半 IC 必吸空 -> JAM0202 重複發生, SKIP"
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,155,MISSING,"//AI(ht9045-v899) 20260810: OutArm 逐輪診斷 Log 用的暫存值(純記錄, 不參與任何判斷)"
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,535,MISSING,"//AI(ht9045-v899) 20260810: 把算好的目標座標與 mode 暫存起來, 供 DoPickFromShuttle 記錄「目標 vs 實際」"
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,558,MISSING,//AI(ht9045-v899) 20260810: 逐輪診斷 Log 用。把吸嘴 -> Shuttle 欄位的對應、Shuttle 上的 Item、
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,648,MISSING,//AI(ht9045-v899) 20260810: 一趟取料開始 -> 開新的一輪紀錄(新輪會覆蓋 ring 上最舊的一輪)
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,654,MISSING,//AI(ht9045-v899) 20260810: 到位後記錄目標與實際座標。kit 沒位移這類問題只要比這兩行就看得出來
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,754,MISSING,//AI(ht9045-v899) 20260810: 吸取失敗 -> 記錄每支吸嘴對到的 Shuttle 欄位與該欄位的 Item
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,779,MISSING,"//AI(ht9045-v899) 20260810: 吸取成功 -> 同樣記一份, 才能跟失敗的那一輪對照"
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,816,MISSING,"//AI(ht9045-v899) 20260810: 發 alarm 是最需要保留現場的時刻, 記錄操作員的選擇並落地一次"
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,901,MISSING,"//AI(ht9045-v899) 20260810: 標出回 HOME 的斷點。ring 在 RAM 不會被 HOME 清掉, 所以前後輪可以接著看"
+20260810,ht9045-v899,cConfiguration.cpp,2522,MISSING,"//AI(ht9045-v899) 20260810: 甬矽要求RT複測模式可選擇不跑Site Mapping, 解鎖既有[I21-10]選項"
+20260810,ht9045-v899,cprod.cpp,2535,MISSING,"//AI(ht9045-v899) 20260810: 全智預設門檻 10 改 50 (與其他客戶原廠標準一致), 因 Y1 定位殘差恆為 10 與門檻相等造成 Index 4 Axis Need Home 誤報; 下限維持 5 保留客戶自行調緊彈性"
+20260810,ht9045-v899,main.cpp,25566,MISSING,"//AI(ht9045-v899) 20260810: 補收 Error 夾下的兩份診斷 log: BootLog.txt(含輪替的 .old, 開機/崩潰診斷)與警報當下落地的 OutArmRoundLog.txt。原本 State Record 只收 system 與 config, 這兩份都收不到, 遇到「軟體啟"
+20260810,ht9045-v899,main.cpp,25791,MISSING,"//AI(ht9045-v899) 20260810: 一併把 OutArm 逐輪診斷 Log 帶進 State Record, 交給 RD 分析"
+20260811,ht9045-v899,PowerSavingMode.cpp,32,MISSING,"//AI(ht9045-v899) 20260811: PTI 要求進入省電後狀態列要更顯眼,底色反黃並放大字型;"
+20260811,ht9045-v899,PowerSavingMode.cpp,66,MISSING,//AI(ht9045-v899) 20260811: 狀態列反黃起始為關 (CASE-PTI-20260811-001)
+20260811,ht9045-v899,PowerSavingMode.cpp,103,MISSING,"//AI(ht9045-v899) 20260811: 所有中止/重新計數的路徑都會先把 bRestart 立起來,在這裡一次還原狀態列,"
+20260811,ht9045-v899,PowerSavingMode.cpp,118,MISSING,"//AI(ht9045-v899) 20260811: C05 全關時面板會隱藏,先還原反黃與高度 (CASE-PTI-20260811-001)"
+20260811,ht9045-v899,PowerSavingMode.cpp,258,MISSING,//AI(ht9045-v899) 20260811: 反黃與放大字型一併交給 ShowPowerSaveHighlight() 處理 (CASE-PTI-20260811-001)
+20260811,ht9045-v899,PowerSavingMode.cpp,354,MISSING,//AI(ht9045-v899) 20260811: PTI 要求省電模式在主畫面要更明顯: 底色反黃 + 字型放大。
+20260811,ht9045-v899,PowerSavingMode.cpp,407,MISSING,//AI(ht9045-v899) 20260811: 反黃與放大的字型一併還原 (CASE-PTI-20260811-001)
+20260811,ht9045-v899,PowerSavingMode.h,45,MISSING,//AI(ht9045-v899) 20260811: 狀態列反黃中(避免每秒重複重繪) (CASE-PTI-20260811-001)
+20260811,ht9045-v899,PowerSavingMode.h,46,MISSING,//AI(ht9045-v899) 20260811: 進入省電後狀態列底色反黃並放大字型 (CASE-PTI-20260811-001)
+20260811,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,694,MISSING,"//AI(ht9045-v899) 20260811: 2x4 交錯 4 站(e9045_2x4_4_13/_14, 非 16 picker) 的 OutArm 資料已被"
+20260811,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,816,MISSING,"//AI(ht9045-v899) 20260811: 2x4_4_13/_14 改走下方 1,3 吸嘴分支"
+20260811,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,918,MISSING,"//AI(ht9045-v899) 20260811: 把旋轉站的 XY 目標與 X-pitch 計算結果記進診斷 Log,"
+20260811,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,2252,MISSING,//AI(ht9045-v899) 20260811: 模擬用——沿用 IC 資料轉移時才檢查的慣例
+20260811,ht9045-v899,aoutarm9045.cpp,3792,MISSING,//AI(ht9045-v899) 20260811: 新增第三種動作：放 IC 到出料旋轉站。
+20260811,ht9045-v899,aoutarm9045.cpp,3826,MISSING,//AI(ht9045-v899) 20260811: iOutPlaceToRotate 也走這條，但動作是「放」不是「取」
+20260811,ht9045-v899,aoutarm9045.cpp,3842,MISSING,//AI(ht9045-v899) 20260811: 【數值撞號】eFix12(17)==MOutShuttle1(17)、eBulkBox(18)==MOutShuttle2(18)。
+20260811,ht9045-v899,aoutarm9045.cpp,3857,MISSING,//AI(ht9045-v899) 20260811: 見上方撞號說明，放料路徑不可落入 shuttle 算式
+20260811,ht9045-v899,aoutarm9045.cpp,3866,MISSING,//AI(ht9045-v899) 20260811: BulkBox 依需求不檢查（上方已 return），整段 Mark。
+20260811,ht9045-v899,aoutarm9045.cpp,3910,MISSING,//AI(ht9045-v899) 20260811: 實際值側 GetOutArmToShtCellPos() 用的是
+20260811,ht9045-v899,aoutarm9045.cpp,3928,MISSING,//AI(ht9045-v899) 20260811: 原本只取 Prod.iOutArmRotateToUnloaderX/Y 這個單點（原標需確認），
+20260811,ht9045-v899,aoutarm9045.h,67,MISSING,//AI(ht9045-v899) 20260811: 出料旋轉站放料位置檢查
+20260817,ht9045-v899,CosFunction.cpp,2847,MISSING,"//AI(ht9045-v899) 20260817: 客戶反映 Auto Tray Feed 跟隨工作檔, 換工單就把 Clean Out 的 Tray End 選單架空, 故固定關閉"
+20260817,ht9045-v899,CosFunction.cpp,4322,MISSING,"//AI(ht9045-v899) 20260817: 預設不關閉, 只有 CC_CYUEAN 會開啟"
+20260817,ht9045-v899,CosFunction.h,354,MISSING,//AI(ht9045-v899) 20260817: CC_CYUEAN 固定關閉 Auto Tray Feed(勾選時會架空 Clean Out 的 Tray End 選單)
+20260817,ht9045-v899,PowerSavingMode.cpp,363,MISSING,"//AI(ht9045-v899) 20260817: guard 只擋「重複點亮」,還原一律要能執行。倒數字串是"
+20260817,ht9045-v899,cObserver.cpp,3790,MISSING,//AI(ht9045-v899) 20260817: EventLog CSV 顯示用斷欄。只以逗號分隔，並保留雙引號內的空白與逗號。
+20260817,ht9045-v899,cObserver.cpp,3890,MISSING,//AI(ht9045-v899) 20260817: 改用 ParseEventLogLine (CASE-FOREHOPE_NINGBO-20260813-001)
+20260817,ht9045-v899,cObserver.cpp,3934,MISSING,//AI(ht9045-v899) 20260817: 改用 ParseEventLogLine (CASE-FOREHOPE_NINGBO-20260813-001)
+20260817,ht9045-v899,cObserver.cpp,3969,MISSING,//AI(ht9045-v899) 20260817: 改用 ParseEventLogLine (CASE-FOREHOPE_NINGBO-20260813-001)
+20260817,ht9045-v899,cObserver.cpp,5177,MISSING,//AI(ht9045-v899) 20260817: 改用 ParseEventLogLine (CASE-FOREHOPE_NINGBO-20260813-001)
+20260817,ht9045-v899,cTrayAssignment.cpp,237,MISSING,"//AI(ht9045-v899) 20260817: CC_CYUEAN 固定關閉 Auto Tray Feed, 不受工作檔 Tray.Data 與 hanaART 影響"
+20260817,ht9045-v899,cTrayAssignment.cpp,727,MISSING,"//AI(ht9045-v899) 20260817: CC_CYUEAN 固定關閉 Auto Tray Feed, 取消勾選並鎖定(只鎖這一顆, 同群組其他兩項不動)"
+20260819,ht9045-v899,CosFunction.cpp,1426,MISSING,//AI(ht9045-v899) 20260819: 依 MO 工單 Temperature mode 含 HOT AIR 字眼自動開關熱風槍
+20260819,ht9045-v899,CosFunction.cpp,3881,MISSING,"//AI(ht9045-v899) 20260819: 預設關閉, 只有 CC_Greatek 開啟"
+20260819,ht9045-v899,CosFunction.h,477,MISSING,//AI(ht9045-v899) 20260819: 超豐要求依 MO 工單 Temperature mode 是否含 HOT AIR 字眼自動開關熱風槍
+20260819,ht9045-v899,ProductionInfo\ProductionInfo.cpp,339,MISSING,//AI(ht9045-v899) 20260819: 換完工作檔後再依 MO Temperature mode 自動開關熱風槍
+20260819,ht9045-v899,ProductionInfo\ProductionInfo.cpp,2052,MISSING,//AI(ht9045-v899) 20260819: 超豐要求依 MO 工單 Temperature mode 欄位自動開關熱風槍(Active Heater Gun)
+20260819,ht9045-v899,ProductionInfo\ProductionInfo.cpp,2063,MISSING,//AI(ht9045-v899) 20260819: 沒有熱風槍機構就不動作
+20260819,ht9045-v899,ProductionInfo\ProductionInfo.cpp,2067,MISSING,"//AI(ht9045-v899) 20260819: 舊工單無此欄或值為空, 保留工作檔原設定"
+20260819,ht9045-v899,ProductionInfo\ProductionInfo.cpp,2074,MISSING,//AI(ht9045-v899) 20260819: 對齊 ReadTempFile 既有互斥: 熱風槍吹冷風時不開加熱
+20260819,ht9045-v899,ProductionInfo\ProductionInfo.cpp,2083,MISSING,"//AI(ht9045-v899) 20260819: 同步畫面勾選, 讓 OP 看得到目前狀態"
+20260819,ht9045-v899,ProductionInfo\ProductionInfo.h,238,MISSING,//AI(ht9045-v899) 20260819: 依 MO 工單 Temperature mode 自動開關熱風槍(Active Heater Gun)
+20260820,ht9045-v899,ProductionInfo\ProductionInfo.cpp,1965,MISSING,"//AI(ht9045-v899) 20260820: PTI 的 Fix1 位置是 rotate module,未指派 Category 時程式會把"
+20260820,ht9045-v899,ProductionInfo\ProductionInfo.cpp,1983,MISSING,//AI(ht9045-v899) 20260820: 見上方說明
+20260820,ht9045-v899,ProductionInfo\ProductionInfo.cpp,5596,MISSING,//AI(ht9045-v899) 20260820: bound loop by asStackFail_Pass length(9); iBinSelectLength is eTrayCount(33) and overran the local array
+20260820,ht9045-v899,cBinSel.cpp,1371,MISSING,"//AI(ht9045-v899) 20260820: PTI HT-90* 的 Fix1 位置是 rotate module,不會指派 Category;"
+20260820,ht9045-v899,cBinSel.cpp,1395,MISSING,//AI(ht9045-v899) 20260820: 未指派 Category 的 Fix1/Fix4 預設為 Fail(說明見本函式上方)
+20260820,ht9045-v899,main.cpp,30011,MISSING,"//AI(ht9045-v899) 20260820: i由1改0, 原本Row A(index 0)整排未被記錄; 全樹其餘ArmSKET迴圈(cSocket/auto9045/SCK_ART等)皆由0起算"
+20260820,ht9045-v899,main.cpp,30033,MISSING,"//AI(ht9045-v899) 20260820: 標籤第二字母原誤用外層i, 同一列所有j印出同一標籤(2x4只印出4個""Aa""), 改為row='A'+i/col='a'+j; 直接取列欄索引即不需除法, 故移除20260515的ChangeToFloatNonPcnt+(int), 語意等同cContactC"

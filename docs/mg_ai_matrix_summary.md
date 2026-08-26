@@ -1,0 +1,98 @@
+# MG 盤點：V899 //AI 註解在 V910 的存在性矩陣
+
+- 產生工具：tools/port_tools/ai_comment_matrix.py（位元組級簽章比對）
+- 簽章 = `//AI(...)` 起至行尾的位元組串；`same-file`=同路徑檔命中、`other-file`=他檔命中（需人工確認）、`MISSING`=全樹未命中
+- 注意：位元組級命中是強證據；**未命中≠功能一定缺**（公司可能改寫過），缺席項仍需波次內確認。
+
+| 日期 | same-file | other-file | MISSING | 小計 |
+|---|---|---|---|---|
+| 20260422 | 5 | 0 | 1 | 6 |
+| 20260423 | 31 | 0 | 19 | 50 |
+| 20260424 | 0 | 0 | 8 | 8 |
+| 20260428 | 3 | 0 | 0 | 3 |
+| 20260429 | 0 | 0 | 3 | 3 |
+| 20260430 | 6 | 3 | 21 | 30 |
+| 20260504 | 16 | 0 | 17 | 33 |
+| 20260505 | 50 | 0 | 2 | 52 |
+| 20260506 | 4 | 0 | 0 | 4 |
+| 20260511 | 9 | 0 | 8 | 17 |
+| 20260512 | 4 | 0 | 0 | 4 |
+| 20260513 | 0 | 0 | 3 | 3 |
+| 20260514 | 32 | 0 | 8 | 40 |
+| 20260515 | 3 | 0 | 3 | 6 |
+| 20260518 | 2 | 0 | 0 | 2 |
+| 20260519 | 3 | 0 | 4 | 7 |
+| 20260520 | 0 | 0 | 1 | 1 |
+| 20260521 | 1 | 0 | 0 | 1 |
+| 20260522 | 50 | 0 | 0 | 50 |
+| 20260525 | 4 | 0 | 2 | 6 |
+| 20260526 | 31 | 0 | 7 | 38 |
+| 20260528 | 2 | 0 | 0 | 2 |
+| 20260529 | 1 | 0 | 0 | 1 |
+| 20260602 | 0 | 0 | 13 | 13 |
+| 20260604 | 3 | 0 | 0 | 3 |
+| 20260605 | 7 | 0 | 1 | 8 |
+| 20260608 | 10 | 0 | 0 | 10 |
+| 20260609 | 0 | 0 | 4 | 4 |
+| 20260611 | 0 | 0 | 3 | 3 |
+| 20260612 | 0 | 0 | 50 | 50 |
+| 20260618 | 0 | 0 | 1 | 1 |
+| 20260623 | 0 | 0 | 6 | 6 |
+| 20260625 | 0 | 0 | 7 | 7 |
+| 20260629 | 0 | 0 | 1 | 1 |
+| 20260630 | 0 | 0 | 18 | 18 |
+| 20260703 | 0 | 0 | 25 | 25 |
+| 20260706 | 0 | 0 | 1 | 1 |
+| 20260803 | 0 | 0 | 5 | 5 |
+| 20260804 | 0 | 0 | 25 | 25 |
+| 20260810 | 0 | 0 | 21 | 21 |
+| 20260811 | 0 | 0 | 21 | 21 |
+| 20260817 | 0 | 0 | 11 | 11 |
+| 20260819 | 0 | 0 | 10 | 10 |
+| 20260820 | 0 | 0 | 7 | 7 |
+| **合計** | 277 | 3 | 337 | 617 |
+
+## MISSING 依檔案分布（前 40）
+
+| 檔案 | 缺席註解數 |
+|---|---|
+| main.cpp | 27 |
+| FTPUpload\uFtpUploadThread.cpp | 23 |
+| CosFunction.cpp | 16 |
+| ainarm9045.cpp | 15 |
+| ContactForce.cpp | 15 |
+| uLotInfo.cpp | 14 |
+| PowerSavingMode.cpp | 13 |
+| acatchtray.cpp | 12 |
+| adam6024.cpp | 12 |
+| aoutarm9045_2x4_4.cpp | 10 |
+| AutoClean\uCleaning.cpp | 10 |
+| aoutarm9045.cpp | 9 |
+| cConfiguration.cpp | 9 |
+| CosFunction.h | 9 |
+| HS_Function.cpp | 9 |
+| ProductionInfo\ProductionInfo.cpp | 9 |
+| FTPUpload\uFtpUploadThread.h | 8 |
+| csystem.cpp | 7 |
+| HandlerSys.cpp | 7 |
+| iosetview.cpp | 6 |
+| MyLaneIo.cpp | 6 |
+| AutoClean\AutoClean.cpp | 6 |
+| Interface\TesterTCP.cpp | 6 |
+| cmydef.cpp | 5 |
+| cObserver.cpp | 5 |
+| uMotorTest.cpp | 5 |
+| RotateKit\aRotateKIT_Out.cpp | 5 |
+| cmydef.h | 4 |
+| note.cpp | 4 |
+| KYECFTP\FTPClient.cpp | 4 |
+| cContact.cpp | 3 |
+| cContactCT.cpp | 3 |
+| cTrayAssignment.cpp | 3 |
+| PowerSavingMode.h | 3 |
+| uhome.cpp | 3 |
+| aoutarm.cpp | 2 |
+| aoutarm9045.h | 2 |
+| cBinSel.cpp | 2 |
+| cprod.cpp | 2 |
+| cpublic.cpp | 2 |
