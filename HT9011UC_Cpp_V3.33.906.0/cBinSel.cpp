@@ -32,6 +32,8 @@
 //                         line-by-line list), 20260819.
 // =============================================================================
 #include "forms/fBinSel.h"
+// AI(W906-FW-BINSEL-W20) 20260826: 本波部分 handler 保留 golden 完整簽章。
+#include "vclcompat/ShiftState.h"
 
 #include "MachineType.h"        // eBinType enum, CC_* customer codes, TEST_MAX_BIN, e3*/e6* position enums
 #include "cmydef.h"              // AccessLevel/bCancelErrorBin/bSpecificBin[]/iBinModelPrime/iBinBoxAtFix/
@@ -4206,4 +4208,296 @@ void TfBinSel::InitDataToEdit(int tag)
     sLinkedList->Clear();
     delete sLinkedList;
     sLinkedList=NULL;//kevin 20161108
+}
+
+// =============================================================================
+// FW-BINSEL-W20 -- TfBinSel 的顯示/設定側方法（15 支）
+//
+// 選批依據（tools/wavescan 五步）：
+//   1. header（forms/fBinSel.h）的 WAVE A/B/C banner 與 GATE REGISTER 先讀過，
+//      本檔沒有整段封殺的排除區，剩下的是逐支各有理由。
+//   2. survey（區塊註解感知 + 同類別跨檔感知）：真正缺 45 支 / 1,673 行。
+//   3. screen_methods（含跟進自由函式的 deep pass）：乾淨 ∩ 真正缺 = 21 支 / 861 行。
+//   4/5. 取其中 <=48 行的 16 支，再剔除 FormShortCut（golden :6363，簽章要
+//        `TWMKey &Msg`，本樹零 port，且 Msg.CharCode 有被讀 -> 不是可丟的參數
+//        ——與 forms/fSetup.h:120-123、forms/fTemp_Set.h:82 同一個已知缺口）。
+//      -> 本波 15 支 / 297 行。
+//
+// 這一批全是「讀狀態 -> 設 widget 的 Enabled/Caption/Color」與小型判斷述詞，
+// 不觸及機台動作、不寫檔、不送命令。
+// =============================================================================
+// AI(W906-FW-BINSEL-W20) 20260826: golden cBinSel.cpp:2805-2838, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+bool TfBinSel::bCheckTrayCanUse(int iT6Tray)
+{
+    if(iT6Tray<0 || iT6Tray>=eTrayCount)                                        //保護避免超出陣列
+        return false;
+
+    if(Prod.iTrayType[iT6Tray]==tNotUse)
+        return false;
+
+    if(CosFunction.bLoaderTrayToAuto1 && TrayForm.LoaderToEmptyColor[iRunStartMode]==2)
+    {
+        if(iT6Tray==eAuto1)
+            return false;
+    }
+
+    if(AUTO3_IS_MAGAZINE==1)                                                    //JerryYang 20221215 : add Magazine
+    {
+        if(iT6Tray==iMagAtAuto)
+            return false;
+
+        if(TestIF_File.iMagFixTrayType==1)                                      //使用FIX當buffer
+        {
+            if(iT6Tray>=iFixMin && iT6Tray<=iFixRightHalf)
+                return false;
+        }
+    }
+
+    if(TestIF_File.bEnableQASampling &&                                         //Steven 20190326 : QA Sampling
+       (iT6Tray-1)==TestIF_File.iQASamplingT3Pos)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+// AI(W906-FW-BINSEL-W20) 20260826: golden cBinSel.cpp:3333-3380, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+bool TfBinSel::SeteConsFail(int X, int tag)
+{
+    static bool bEnable=true;
+    if(X>=0)
+    {
+        for(int j=eBinSetting; j<eBinSetTotal; j++)
+        {
+            if(MyBinPanel[tag]->BackT6PosTray[X][j]==1)
+            {
+                if(MyBinPanel[tag]->iT6IsFail[j-eBinSetting]>0)
+                {
+                    if(CUSTOMER_CODE==CC_KYEC_LEE &&                            //wei 20160418 強制打開continue fial
+                       bEnablePEModel==false)                                   //Ifor 20160825 add PE模式可修改
+                        MyBinPanel[tag]->bConFail[X]=true;
+                    else
+                        MyBinPanel[tag]->bConFail[X]=!MyBinPanel[tag]->bConFail[X];
+                }
+                else
+                {
+                    MyBinPanel[tag]->bConFail[X]=false;
+                }
+            }
+        }
+    }
+    else
+    {
+        for(int i=0; i<iTestBinCount; i++)
+        {
+            for(int j=eBinSetting; j<eBinSetTotal; j++)
+            {
+                if(MyBinPanel[tag]->BackT6PosTray[i][j]==1)
+                {
+                    if(MyBinPanel[tag]->iT6IsFail[j-eBinSetting]>0)
+                    {
+                        MyBinPanel[tag]->bConFail[i]=bEnable;
+                    }
+                    else
+                    {
+                        MyBinPanel[tag]->bConFail[i]=false;
+                    }
+                }
+            }
+        }
+        bEnable=false;
+    }
+
+    return true;
+}
+
+// AI(W906-FW-BINSEL-W20) 20260826: golden cBinSel.cpp:3655-3664, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+bool TfBinSel::SeteLowYield(int X, int tag)
+{
+    if(X>=0)
+    {
+        if(MyBinPanel[tag]->BackT6PosTray[X][eBinNotUse]==0)
+            MyBinPanel[tag]->bLowYield[X]=!MyBinPanel[tag]->bLowYield[X];
+    }
+
+    return true;
+}
+
+// AI(W906-FW-BINSEL-W20) 20260826: golden cBinSel.cpp:3666-3675, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+bool TfBinSel::SeteArmYield(int X, int tag)
+{
+    if(X>=0)
+    {
+        if(MyBinPanel[tag]->BackT6PosTray[X][eBinNotUse]==0)
+            MyBinPanel[tag]->bArmYield[X]=!MyBinPanel[tag]->bArmYield[X];
+    }
+
+    return true;
+}
+
+// AI(W906-FW-BINSEL-W20) 20260826: golden cBinSel.cpp:3677-3686, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+bool TfBinSel::SeteSiteYield(int X, int tag)
+{
+    if(X>=0)
+    {
+        if(MyBinPanel[tag]->BackT6PosTray[X][eBinNotUse]==0)
+            MyBinPanel[tag]->bSiteYield[X]=!MyBinPanel[tag]->bSiteYield[X];
+    }
+
+    return true;
+}
+
+// AI(W906-FW-BINSEL-W20) 20260826: mtBinSelectMouseMove（golden :3834-3858）本波不翻。
+// 它的本體走 `MyBinPanel[tag]->mtBinSelect`，而那正是本檔 header
+// （forms/fBinSel.h 的 WAVE C banner）已經登記的 **GATE G10**：
+// 「G10 opens for `MyBinPanel[tag]->mtBinSelect` (a THIRD, still-absent
+//   Tray256Core*, InitDataToEdit's own remaining gap)」。
+// 同時它還需要 `TTMyTray` 與 `bMouseDown`，兩者都是同一個未建的 tray 物件家族。
+// 這不是簽章問題，是缺一個資料結構——留給處理 G10 的那一波。
+
+// AI(W906-FW-BINSEL-W20) 20260826: golden cBinSel.cpp:3934-3971, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfBinSel::SetBinTray(int tag)                                   // set tray data //
+{
+    Change();
+    for(int i=iStartX; i<=iEndX; i++)
+    {
+        if(CosFunction.bBin1CanNotInFix && tag!=OffT)                           //Steven 20150427 : Bin1不能放到Fix盤
+        {
+            if(iStartX==1 && iStartY>=eBinSetting+ePosFix1-1)
+            {
+                iStartY=eBinNotUse;
+            }
+        }
+        MyBinPanel[tag]->BackT6PosTray[i][iStartY]=1;
+
+        for(int j=eBinNotUse; j<eBinSetTotal; j++)
+        {
+            if(j==iStartY)                                                      //如果是同一ROW
+            {
+            }
+            else
+            {
+                if(MyBinPanel[tag]->BackT6PosTray[i][iStartY]==1)               //如果選定的那一個是True, 同一Col的其他ROW都要變成False
+                    MyBinPanel[tag]->BackT6PosTray[i][j]=0;
+            }
+
+            if(MyBinPanel[tag]->BackT6PosTray[i][j]==1)
+            {
+                if(j!=eBinNotUse &&                                             //Steven 20240814 : 針對No Use要直接false
+                   MyBinPanel[tag]->iT6IsFail[j-eBinSetting]>0)                 //ChungHung 20140414 選擇fail bin 預設 continue fial 為 true
+                    MyBinPanel[tag]->bConFail[i]=true;
+                else
+                    MyBinPanel[tag]->bConFail[i]=false;
+            }
+        }
+    }
+
+    InitDataToEdit(tag);
+}
+
+// AI(W906-FW-BINSEL-W20) 20260826: ShowBinTray（golden :3973-4014）本波不翻。
+// 它的整個迴圈都在讀 `MyBinPanel[tag]->mtBinSelect->XItem/YItem` 與該物件的
+// 格子內容——那正是 forms/fBinSel.h 的 WAVE C banner 已登記的 **GATE G10**
+// （「a THIRD, still-absent Tray256Core*」）。拿掉那些讀取之後這支不剩什麼，
+// 所以整支留給處理 G10 的那一波，不做成一個空殼。
+
+// AI(W906-FW-BINSEL-W20) 20260826: golden cBinSel.cpp:4016-4031, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfBinSel::Change()                                              // check change pos //
+{
+    int iSX, iEX;
+    if(iStartX>iEndX)
+    {
+        iSX=iEndX;
+        iEX=iStartX;
+    }
+    else
+    {
+        iSX=iStartX;
+        iEX=iEndX;
+    }
+    iStartX=iSX;
+    iEndX=iEX;
+}
+
+// AI(W906-FW-BINSEL-W20) 20260826: golden cBinSel.cpp:6076-6086, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfBinSel::CancelErrorBinClick(TObject *Sender)
+{
+    for(int tag=0; tag<eBinTypeTotal; tag++)
+    {
+        if(CancelErrorBin->Checked==false)                                      //kevin 20160819 error bin 要放到 Bin Box //kevin 20160724 取消 ERROR BIN
+        {
+            MyBinPanel[tag]->iErrorT6=iFixRight;
+            BinSelect[tag].IfErrorT3 =iTo6Unload[iFixRight];
+        }
+    }
+}
+
+// AI(W906-FW-BINSEL-W20) 20260826: golden cBinSel.cpp:6088-6098, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfBinSel::rg_FixBinBoxClick(TObject *Sender)
+{
+    for(int tag=0; tag<eBinTypeTotal; tag++)
+    {
+        if(rg_FixBinBox->ItemIndex==0)                                          //kevin 20160819 error bin 要放到 Bin Box //kevin 20160724 取消 ERROR BIN
+        {
+            MyBinPanel[tag]->iErrorT6=iFixRight;
+            BinSelect[tag].IfErrorT3 =iTo6Unload[iFixRight];
+        }
+    }
+}
+
+// AI(W906-FW-BINSEL-W20) 20260826: sgSpecificBinMouseDown（golden :6100-6116）本波不翻。
+// 它的第一行就是 `sgSpecificBin->MouseToCell(X, Y, Column, Row)`，而
+// vclcompat::TStringGrid **刻意不模型化滑鼠/繪圖面**（該 facade header 自己
+// 就是這樣寫的；uTemp_Set.cpp 的 GATE(G-Grid) 為了同一個方法名做過同樣的判斷）。
+// 沒有 MouseToCell 就算不出 Column/Row，本體其餘每一行都靠那兩個值。
+
+// AI(W906-FW-BINSEL-W20) 20260826: golden cBinSel.cpp:6118-6131, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfBinSel::btnSettingSpecificBinClick(TObject *Sender)
+{
+    if(palSpecificBin->Visible==false)                                          //JerryYang 20170301 (wei) specific bin
+    {
+        palSpecificBin->Visible=true;
+    #if 0 // GATE (W20-Parent) -- golden 原文保留
+    // `vclcompat::TControl` 沒有 `Parent`（TWinControl 控制項樹本樹未模型化，
+    // 同 cConfiguration 的 GATE (W5-CCE) 與 cObserver 的 GATE (W7-Search)）。
+    // 這一行是「把設定面板掛到 PageControl1 底下」，純版面；同方法其餘各行
+    // （Visible/Left/Top/Caption 等）都保持 live，所以面板的狀態仍照 golden 設定，
+    // 只是沒有被 reparent。方向是收窄。
+    palSpecificBin->Parent=PageControl1;
+#endif
+        palSpecificBin->BringToFront();
+        palSpecificBin->Top=625;                                                //JerryYang 20220923 : 650->625
+    }
+    else
+    {
+        palSpecificBin->Visible=false;
+    }
+}
+
+// AI(W906-FW-BINSEL-W20) 20260826: golden cBinSel.cpp:6291-6294, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfBinSel::palSpecificBinClick(TObject *Sender)
+{
+    palSpecificBin->Visible=false;                                              //JerryYang 20170301 (wei) 存檔後不顯示
+}
+
+// AI(W906-FW-BINSEL-W20) 20260826: golden cBinSel.cpp:6372-6378, transcribed VERBATIM
+// (cp950 -> UTF-8) unless a deviation is marked inline.
+void TfBinSel::btnSetAll2NotUseClick(TObject *Sender)
+{
+    iStartX=0;                                                                  //JerryYang 20221215 : 一鍵把所有bin設定成Not use
+    iEndX=iTestBinCount;
+    iStartY=eBinNotUse;
+    SetBinTray(iTestRunMode);
 }

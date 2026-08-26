@@ -471,6 +471,7 @@
 #include "vclcompat/StringGrid.h"    // TStringGrid
 #include "vclcompat/TrayCore.h"      // TrayCore, Tray256Core -- AI(W906-FW-BinSel-WC) 20260819
 #include "MachineType.h"             // eBinType/eBinTypeTotal, e3TrayCount, eTrayCount
+#include "vclcompat/ShiftState.h"   // AI(W906-FW-BINSEL-W20) 20260826
 
 using vclcompat::TObject;
 using vclcompat::TStringList;
@@ -684,6 +685,35 @@ public:
     // -- FW-BinSel-WC (this wave): real (ACTIVE/GATE-split) body landed in
     // cBinSel.cpp -- see that method's own banner and GATE REGISTER G7/G10.
     void InitDataToEdit(int tag);
+
+    // ======================================================================
+    // golden cBinSel.h:179 的拖曳矩形座標組。SetBinTray/ShowBinTray 用它們
+    // 決定要對哪一段 bin 格套用/顯示 tray 設定。golden 由滑鼠拖曳事件寫入
+    // （mtBinSelectMouseDown/MouseMove/MouseUp），本樹那三支都還沒翻
+    // （前兩支卡 GATE G10），所以這組值目前恆為 0 -> 兩支方法會對「第 0 格」
+    // 操作。這是資料面缺口不是碼的缺口，翻譯照 golden 原文。
+    int iStartX = 0, iStartY = 0, iEndX = 0, iEndY = 0;   // golden cBinSel.h:179
+    int iOldStartX = 0, iOldStartY = 0;                   // golden cBinSel.h:179
+
+    // AI(W906-FW-BINSEL-W20) 20260826: 12 支顯示/設定側方法（原排 15；mtBinSelectMouseMove 與 ShowBinTray 卡 GATE G10、sgSpecificBinMouseDown 卡 TStringGrid 的滑鼠面，理由見 .cpp）。
+    // widget 擁有者用 owner_report.py 對 golden header 查過（本波回報
+    // 「屬於別的物件: 0 個」）。未含 FormShortCut，理由見 .cpp banner。
+    // ======================================================================
+
+    TLabel        *labWarning                 = new TLabel();   // golden cBinSel.h:66
+
+    bool bCheckTrayCanUse(int iT6Tray);   // golden :2805-2838
+    bool SeteConsFail(int X, int tag);   // golden :3333-3380
+    bool SeteLowYield(int X, int tag);   // golden :3655-3664
+    bool SeteArmYield(int X, int tag);   // golden :3666-3675
+    bool SeteSiteYield(int X, int tag);   // golden :3677-3686
+    void SetBinTray(int tag);   // golden :3934-3971
+    void Change();   // golden :4016-4031
+    void CancelErrorBinClick(TObject *Sender);   // golden :6076-6086
+    void rg_FixBinBoxClick(TObject *Sender);   // golden :6088-6098
+    void btnSettingSpecificBinClick(TObject *Sender);   // golden :6118-6131
+    void palSpecificBinClick(TObject *Sender);   // golden :6291-6294
+    void btnSetAll2NotUseClick(TObject *Sender);   // golden :6372-6378
 };
 
 // AI(W906-FW-BinSel-WA) 20260819: SIOF homecoming -- real instance (see

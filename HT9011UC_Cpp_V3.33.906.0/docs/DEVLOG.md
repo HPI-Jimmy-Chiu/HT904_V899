@@ -11828,6 +11828,80 @@ FW-SIG-W15 的 `GATE (C-log-6)` 完全退役）——三次的答案各不相同
 `rgShtModeOneSide` 早就在（`rgShtModeNormalClick` 在用它），
 我一度兩顆都加而撞到 redeclaration，撤掉重複的那一顆。
 
+## 20260826 XIV — FW-BINSEL-W20：cBinSel 12 支顯示/設定側方法
+
+### 選批與收斂
+
+`cBinSel.cpp` 的 header（`forms/fBinSel.h`）已有 WAVE A/B/C 與 GATE REGISTER，
+**沒有**整段封殺的排除區，所以剩下的要逐支看。量測：
+
+| | |
+|---|---|
+| golden 方法 | 71 |
+| port 同檔同類別已有 | 24 |
+| 在別的 port 類別（已翻） | 2 個 / 336 行 |
+| 真正缺 | 45 個 / 1,673 行 |
+| 其中 screen 判乾淨 | 21 個 / 861 行 |
+
+取其中 ≤48 行的 16 支，先剔除 `FormShortCut`（`TWMKey` 零 port，
+與 `forms/fSetup.h:120-123`、`forms/fTemp_Set.h:82` 同一個已知缺口）→ 排 15 支。
+
+套用時又被**三個早已登記在案的缺口**擋掉 3 支：
+
+| 方法 | 阻塞物 | 出處 |
+|---|---|---|
+| `mtBinSelectMouseMove`(25) | `MyBinPanel[tag]->mtBinSelect` | `forms/fBinSel.h` WAVE C banner 的 **GATE G10**（「a THIRD, still-absent `Tray256Core*`」） |
+| `ShowBinTray`(42) | 同上——整個迴圈都在讀它 | 同上 |
+| `sgSpecificBinMouseDown`(17) | `sgSpecificBin->MouseToCell(...)` | `vclcompat::TStringGrid` **刻意不模型化滑鼠/繪圖面**（`uTemp_Set.cpp` 的 `GATE(G-Grid)` 為同一個方法名做過同樣判斷） |
+
+三支都是「拿掉那個缺口之後不剩什麼」，所以**整支退出**而不是做成空殼。
+→ 本波 12 支 / 約 240 行。
+
+忠實度複驗：**LIVE 敘述 111 條，golden 無逐字對應 8 條**（全部是簽章行），
+**gated 0 行**（唯一的 gate 在下面那一行，不在這 12 支的本體統計內）。
+
+### 驗收
+
+`tools/dualgate.sh binsel20`（全新 dir）：Debug **137/142**、Release **137/142**，
+失敗集合逐項相同且等於常駐五項。`D:\HT9045\system` 552 檔本輪零變動。
+
+### 一行 gate：`GATE (W20-Parent)`
+
+`btnSettingSpecificBinClick` 只有一行卡住——`palSpecificBin->Parent=PageControl1;`
+（`vclcompat::TControl` 沒有 `Parent`，TWinControl 控制項樹本樹未模型化，
+同 `GATE (W5-CCE)` / `GATE (W7-Search)`）。
+只 gate 那一行，同方法其餘各行（`Visible`/`Left`/`Top`/`Caption` 等）保持 live，
+所以面板的狀態仍照 golden 設定，只是沒有被 reparent。方向是收窄。
+
+### `vclcompat::TControl` 補 `Left` / `Top` / `BringToFront`
+
+golden 的 `btnSettingSpecificBinClick` 設 `->Top` 並呼叫 `->BringToFront()`；
+同樣的東西別處也會用到（各表單 `FormShortCut` 的 `Left=/Top=`）。
+
+**必須講清楚的是它們做什麼、不做什麼**：
+
+- 只存值。本樹沒有視窗，**設了 `Top` 不會有任何東西移動**。
+- `BringToFront()` 是 no-op，**Z 序根本不存在**。
+- 價值在於讓 golden 原文逐字成立、且值可被測試觀察，
+  **不是宣稱版面行為被實作了**。這段話寫在 `Controls.h` 該處註解裡，
+  不只寫在這份 DEVLOG。
+
+`Controls.h` 是全樹共用標頭，加成員可能與別處同名成員相撞（`TControl::Tag`
+自己的註解 :220-230 就記過六個 facade-local 類別為了加一個 int 而存在、
+以及「derived `int Tag` 會 SHADOW 這一個」的教訓）。
+所以加完先對 7 個大 TU 逐一 `-fsyntax-only`：
+`cObserver` / `cConfiguration` / `uTemp_Set` / `forms/fSetup` / `forms/fLotInfo` /
+`MyTempPanel` / `uYieldMonitoring` —— **全部 0 error** 才開 gate。
+
+### 交付
+
+`cBinSel.cpp` +294、`forms/fBinSel.h` +30、`vclcompat/Controls.h` +13（純新增）。
+補了 golden `cBinSel.h:179` 的六個拖曳矩形座標成員
+（`iStartX/iStartY/iEndX/iEndY/iOldStartX/iOldStartY`）——
+它們由 golden 的滑鼠拖曳事件寫入，而本樹那三支都還沒翻（兩支卡 G10），
+所以目前恆為 0，`SetBinTray` 會對「第 0 格」操作。
+**這是資料面缺口不是碼的缺口**，翻譯照 golden 原文，並在成員上寫明。
+
 ### 🔖 RESUME（20260826 上午）
 
 - **本輪連續作業共 13 顆 commit**（`1be68ce` → `6d7f752`），

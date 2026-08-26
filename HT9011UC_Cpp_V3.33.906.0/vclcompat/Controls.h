@@ -258,6 +258,19 @@ public:
     virtual void PullFromControl() {} // offline: nothing to read back from
     virtual void PushToControl()   {} // offline: nothing to write out to
     virtual void Click()           {} // golden TControl::Click -- offline no-op
+    // AI(W906-FW-BINSEL-W20) 20260826: golden 的版面欄位／方法。
+    // TfBinSel::btnSettingSpecificBinClick（golden cBinSel.cpp:6118-6132）會設
+    // `palSpecificBin->Top` 並呼叫 `->BringToFront()`；同樣的東西在別處也會用到
+    // （例如各表單 FormShortCut 的 `Left=/Top=`）。
+    //
+    // ⚠ 這裡只存值，不做任何實際排版——本樹沒有視窗。所以：
+    //   * 設 Left/Top 之後**不會有任何東西移動**，只是把 golden 寫的數字留著；
+    //   * BringToFront() 是 no-op，**Z 序不存在**。
+    // 這樣做的價值是讓 golden 原文逐字成立、且值可被測試觀察，
+    // 不是宣稱版面行為被實作了。
+    int   Left = 0;                   // golden TControl::Left（只存值）
+    int   Top  = 0;                   // golden TControl::Top（只存值）
+    virtual void BringToFront()    {} // golden TControl::BringToFront -- offline no-op
     // AI(W906-FW-SETUP-E) 20260824: golden TWinControl::SetFocus -- offline
     // no-op (no HWND), hoisted to the base so every stock widget carries it;
     // same semantics as the facade-local no-ops in forms/fQwertyKey.h:269/:287
