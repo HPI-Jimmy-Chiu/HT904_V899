@@ -12486,7 +12486,113 @@ HEAD 就有的 8 個：`AMR` / `MyDBIProcess` / `ShowMyMessage` / `SaveTrayRecor
 - **census 尚未重量**：上一則的 96.0% / 17.0% / 61.4%（分母＝golden code 行數）
   是 THGem 收尾後量的，**不含 W13-W22**。引用前請重跑 `tools/census/census.py --detail`。
 
-### 🔖 RESUME（20260826 傍晚）
+## 20260826 XIX — FW-CONTACT-W28：解鎖 **0 / 9**，而那個 0 是對的
+
+### 這一波的產出是「推翻前提」，不是行數
+
+派工時我給了兩個前提，**兩個都錯，而且兩個都是我從 W26 的報告轉述、沒自己驗的**：
+
+| 我說的 | 實測 |
+|---|---|
+| `CalculateTotalAirForce` 是「217 行純算術」 | **不是**。除算術外有 **7 處 widget 寫入**（`:18730-18734`／`:18746-18749`／`:18874-18877`／`:18886` 的 Color、`:18738/:18742/:18756` 的 lblMaxForcePerIC、`:18881` 的 lblMinForce、`:18750-18751` 的兩個 Text）、**2 處 widget 讀取**（`scrbSLK->Position :18693`、`rgKitDiameter :18707-18714`）、**3 處非區域寫入**（member `dDutCount :18689`、member `dMinForce :18763/:18868`、**全域 `IniConfig.iEP_Min_KG :18857`**） |
+| 它是「唯一卡住 5 支」的東西 | 真正的阻塞是 **`fContactForce->SLKClass` 沒有執行期容器** |
+| contact mode 常數「10 個、fork 4 份」 | 實為 **12 個 / fork 6 處** |
+
+**教訓：轉述另一個 agent 的結論時，那個結論就變成我的宣稱。** 前五波的分母錯誤是同一個
+形狀的較輕版本；這一次錯的是「這段碼是什麼性質」，代價大得多——如果 agent 照單全收，
+會交付 5 支輸出錯誤接觸力的方法。
+
+### 為什麼「不交付」才是對的（主迴圈已複驗）
+
+port 樹有 SLK 的**元素型別**（`ContactForce.h` 的 `SlkForceData`）與**工廠**
+（`ComputeSlkForce`），但**沒有執行期容器**。收工重掃：剝除註解與字串後
+`fContactForce` 與 `SLKClass` 全樹 **0 個 token**。
+主迴圈複驗：`ContactForce.{h,cpp}` 的命中**全部是註解**，且指的是 `THTSLKClass`
+（類別型別名），不是 `fContactForce->SLKClass`（容器成員）。
+
+沒有那個 walk（golden `:18710-18727`），golden 的區域變數會停在 initializer：
+`iTag=-1`（`:18683`，`:18761` 再壓成 0）、**`dKitDiameter=30.0`**（`:18680`）。
+
+**而 30.0 不是惰性預設值——它主動選中三條路**：`ComputeMinForce` 的 30mm 分支（1.5）、
+`:18740` 的面積公式 clamp、以及 ASE 高雄的 `if(dKitDiameter==30) dMinForce=1;`
+（`:18866-18869`）。輸出是 `DeviceForm.dPress`（經 `ShowArmAndDeviceForce :1909`），
+也就是 gated 的 `edAirForceChange`(S-47) 要寫給 **EP 調壓閥**的設定值。
+
+**所以交付這 5 支等於對所有非 30mm 套件輸出一個看起來合理、實際錯誤的接觸力。**
+這比 W26 拒絕的「交付 5 支叫不動的方法」**更糟**——後者會大聲失敗，前者靜默地錯。
+同一個原則第二次出現（W26 的 `TestZ1Y2OutRandge`：`Gali_ReadPos` 是退化 stub
+`return 0`，交付會讓安全述詞永遠自信地回 false）：**缺符號比錯答案好。**
+
+### agent 自己抓到一個差兩個數量級的錯誤
+
+它第一版的 include-closure 掃描報 **164 個 TU** 看得到 `cContact.h`。**實際是 6 個。**
+原因：`MachineDefine.h:137` 確實 `#include "cContact.h"`，但 `MachineDefine.h:34-146`
+**整段包在 `#if 0` 裡**（主迴圈逐行驗過 `:34` 是 `#if 0`、`:146` 是 `#endif`）。
+
+**通則：任何對這棵樹的 include 可達性宣稱，不 honour `#if 0` 就會差兩個數量級。**
+
+修正後的數字：看得到 `cContact.h` 的 **6 個**、看得到 `BarCode_Shuttle2_CCDScan.h` 的
+**3 個**、**同時看到兩者的 0 個**。所以我事先標的 redefinition 風險是真的，
+但**不是本波的阻塞點**。
+
+### `CONTACT_TEST` 沒加——用編譯器證明，不是推論
+
+`Command.cpp:239` include `cContact.h`，`:317` 又自己定義 `const int CONTACT_TEST = 3;`。
+實測：
+
+```
+Command.cpp:317:11: error: redefinition of 'const int CONTACT_TEST'
+```
+
+探針已移除，樹維持編得起來（**安全預設值：保持現行行為 → 可逆 → 讓樹維持編得起來**）。
+`cContact.h` 現在有 12 之中的 11 個。fork 實際有 **6 處**（原記錄漏了 3 處）：
+`cContact.h`、`ATC/ATCInterface.cpp:206`、`AutoClean/AutoClean.cpp:125`、
+`Command.cpp:317`、`uTemp_Set.cpp:174`、`BarCode/BarCode_Shuttle2_CCDScan.h:187-189`。
+
+### 交付內容
+
+`ComputeTotalAirForce`（`cContact.cpp` +283/-0），沿用既有的 extract-calc-core 慣例
+（放在 `ComputeMaxIndexForceLimit` / `ComputeMinForce` 旁）：每個外部讀取是參數、
+每個外部寫入是結果欄位、SLK walk 的兩個結果由呼叫端提供。
+唯一偏離：用 input/output struct 而非 24 個平坦參數（9 個 bool 位置可互換是呼叫端地雷）。
+
+golden 兩個**沒有 default 的 switch** 保留並註記：`scrbSLK->Position` 只涵蓋 2..6；
+`TestIF.iTestMode` 涵蓋 17 個模式，未列模式會讓 `dNowKgPerHead` 停在 0.0，
+而 **0.0 會主動命中** `:18860` 的最小力道分支。
+
+**archive 落點不需要任何新的邊**：`cContact.cpp` 已在 `ht9045_core`，
+`ComputeTotalAirForce` 只呼叫同 TU 的函式，`ChangeToFloatNonPcnt` 是 header 樣板，
+11 個 `const int` 是 internal linkage、link 期零符號。
+
+### 驗收
+
+全新 dir、最後一次整併之後量：**Debug 與 Release 各 137/142**，失敗集合逐項相同
+且等於常駐五項。`cContact.cpp` 屬 `ht9045_core`（幾乎所有東西都 link 它），
+所以這次 gate 的覆蓋面比前幾波廣。
+
+三個改動檔皆純 LF、零孤立 CR、零 U+FFFD。`forms/fContact.cpp` **完全未動**
+（md5 `257f47af43f05431acd33ec5f0db85d4`，與開工時逐字相同）——因為沒有任何一支
+變成可交付。
+
+新出現一個警告（非錯誤）：`MachineType.h:1606` `ChangeToFloatNonPcnt` 樣板本體的
+`-Wfloat-conversion`，只因為這是該 TU 第一次以 `T=double` 實例化它。
+那是 golden 自己「宣告回傳 float 卻算 double」的設計，忠實保留。
+
+### 刻意沒做 / 交給整併者的兩個動作（都在該波寫入邊界外）
+
+1. **刪 `Command.cpp:317` ＋ 在 `cContact.h` 加 `CONTACT_TEST`——必須同一次改**
+   （該檔 `:1793/:1795/:1818/:1822` 還有 4 處真實使用）。這一行是 X-10／X-11／X-32
+   的全部解鎖。⚠ 但 `SetContactMode` 寫全域 `iContactMode` = **模式切換**，
+   屬 CLAUDE.md 的安全關鍵桶，解 gate 時要明講。
+2. **給樹一張真的 SLK 表**——把 golden `TfContactForce` 的 ReadFile 路徑翻成
+   `ContactForce.{h,cpp}` 能擁有的 `SlkForceData` 容器 + loader。
+   有了它，X-01..X-06 六支一起掉，`TfContact::CalculateTotalAirForce` 變成薄 wrapper。
+
+**沒有加 ctest**（`tests/` 在該波禁改清單內），所以 `ComputeTotalAirForce` 目前只有
+scratchpad probe 驗過（4 條路徑對照手算 golden 軌跡全通過），**沒有進 gate**。
+這是主迴圈可以補的一項。
+
+### 🔖 RESUME（20260826 傍晚，已被檔尾 20260826 夜間那則取代）
 
 - **本段 commit**：`0f6e96b`（三個全新 facade：TfTrayAssignment 28/31、TfTeach 48/156、
   TfMotorTest 35/93 = 111 支 / 6,025 行）→ `7871e92`／`b061d83`（.gitignore）→
@@ -12564,3 +12670,43 @@ HEAD 就有的 8 個：`AMR` / `MyDBIProcess` / `ShowMyMessage` / `SaveTrayRecor
 
 - **連續五波，波次 agent 每一次都修正了主迴圈給的分母。**
   通則：**交辦數字要標明怎麼量的，並明說「你自己重量一次」。**
+
+### 🔖 RESUME（20260826 夜間）
+
+- **本段最後一顆**：`FW-CONTACT-W28`（`cContact.{h,cpp}` + `forms/fContact.h`），
+  **解鎖 0/9 而那個 0 是對的**，理由見 20260826 XIX 分節。雙 gate 137/142 全綠。
+
+- **下一步（依序，都在主迴圈的邊界內）**
+  1. **刪 `Command.cpp:317` ＋ 在 `cContact.h` 加 `CONTACT_TEST`——必須同一次改**
+     （`Command.cpp:1793/:1795/:1818/:1822` 還有 4 處真實使用）。解 X-10／X-11／X-32。
+     ⚠ `SetContactMode` 寫全域 `iContactMode` = **模式切換**，屬安全關鍵桶，
+     解 gate 時要在 commit 訊息明講。
+  2. **SLK 容器**：golden `TfContactForce` 的 ReadFile 路徑 →
+     `ContactForce.{h,cpp}` 的 `SlkForceData` 容器 + loader。解 X-01..X-06 六支。
+     **在那之前，`CalculateTotalAirForce` 家族一支都不能交付**——`dKitDiameter`
+     會停在 30.0 並主動選中錯的分支，輸出餵給 EP 調壓閥。
+  3. 解閘波 WA-1／B1／B7／G2（**WC-10 用字面值 61**，`ATC_TYPE_61` 在
+     `MainCalcCore.cpp:252` 是函式內 local const 對 `forms/fLotInfo.cpp` 不可見）。
+  4. `fLotInfo` 的 6 個可解既有 gate（WA-3 ×2、WC-8 ×2、WC-3 ×1、WC-10 ×1）
+     ＋ `cMyDB.cpp:1929`／`:2037` 兩個 `cbbASECL_LoginMode` gate。
+  5. bootstrap 5 個，放顯式 `InitForms()`，**絕不可放靜態初始化**。
+  6. 補 `ComputeTotalAirForce` 的 ctest（目前只有 scratchpad probe 驗過，沒進 gate）。
+
+- **今天累計 7 顆 commit**，四次雙 gate 全部 137/142、失敗集合逐項等於常駐五項。
+
+- **今天最貴的一課：轉述另一個 agent 的結論時，那個結論就變成我的宣稱。**
+  我把 W26 說的「`CalculateTotalAirForce` 是 217 行純算術」直接寫進 W28 的派工，
+  沒自己開檔驗——實際它有 7 處 widget 寫入與一個全域寫入。前五波的分母錯誤是同型的
+  較輕版本。**派工的數字要標明怎麼量的，並明說「你自己重量一次」。**
+
+- **「缺符號比錯答案好」今天出現兩次**：W26 的 `TestZ1Y2OutRandge`
+  （`Gali_ReadPos` 是退化 stub `return 0`，交付會讓安全述詞永遠自信地回 false）、
+  W28 的 `CalculateTotalAirForce` 家族。**兩者都是「靜默地錯」比「大聲失敗」更糟。**
+
+- **佇列不做（安全關鍵，等使用者在場）**：`h4-G2`／`G01`（會讓入料手臂移動到教導點）；
+  `HGem` bootstrap；`clWindow`／`TCustomEdit::Color` 整併；各波退出的動作／寫檔方法
+  （`TfContact` 52 含 `ADAM_WriteVoltage` 命令 EP 調壓閥、`TfMotorTest` 52、`TfTeach` 67）。
+
+- **三軸（20260826 17:12 量測，單位不可互換）**：翻譯 non-form 96.0%／form 17.3%／
+  ALL 61.6%（golden code 行）；tag C++ 側 66 vs 瀏覽器 37（兩邊不是同一組，最落後）；
+  web layout.json 133/133。**W28 之後翻譯軸未重量。**

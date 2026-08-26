@@ -185,6 +185,289 @@ double ComputeMinForce(double dKitDiameter,
     return dMinForce;
 }
 
+// ---------------------------------------------------------------------------
+// ComputeTotalAirForce
+//   BCB6 source: cContact.cpp:18675-18891 (TfContact::CalculateTotalAirForce)
+//                //JimmyChiu 20220119 獨立計算氣壓壓力
+//
+//   AI(W906-FW-CONTACT-W28) 20260826.  See cContact.h for the parameter
+//   rationale, for the two defaultless switches that are preserved on purpose,
+//   and above all for the ONE piece of golden that is deliberately NOT here:
+//   the fContactForce->SLKClass walk at :18710-18727, whose two results
+//   (dKitDiameter, and which SLK entry's contact offsets to use) are inputs.
+// ---------------------------------------------------------------------------
+double ComputeTotalAirForce(double dBallCount,
+                            double dSingleGf,
+                            const TotalAirForceIn& in,
+                            const bool bUseTestSocket[][MAX_SOCKET_ROW][MAX_SOCKET_COL],
+                            double& dDutCount,
+                            TotalAirForceOut& out)
+{
+    // BCB6 :18677-18683 -- golden's locals with golden's initialisers.  AnsiString Str /
+    // sBuffer (:18677-18678) belong to the caption assembly and the untranslated SLK walk;
+    // this file stays free of a string dependency, so the caption CHOICE is returned as
+    // out.bMinForceCaptionPerIC instead (see cContact.h).
+    double dTotalForce     = 0.0;                    // :18679
+    double fComplianceUnit = 1.0;                    // :18680
+    double dKitDiameter    = in.dKitDiameter;        // :18680 golden inits 30.0, then :18723-18725
+                                                     //   overwrites it inside the SLK walk.
+    double dMinKgPerHead   = 1.0;                    // :18681  Ifor 20191114 : add Heat 最小力道保護
+    double dNowKgPerHead   = 0.0;                    // :18682
+    double dHeadMaxForce   = 0.0;                    // :18682
+    // iTag (:18683, init -1) belongs to the untranslated SLK walk -- see cContact.h.
+
+    // BCB6 :18684 -- device 要壓的重量   //JimmyChiu 20220119 /1000=>*0.001
+    double dDeviceGf = dBallCount * dSingleGf * 0.001;
+
+    // BCB6 :18686-18689   //kevin 20170513 (wei) add
+    // NOTE: this WRITES golden's member dDutCount, which is why it is an in/out parameter.
+    if (in.iTestMode == DualSite &&
+        in.bQualSite2X2Shift &&
+        in.bNS7000kit)
+        dDutCount = 4;
+
+    // BCB6 :18691-18692 -- golden's own commented-out
+    //   `if(CosFunction.bUseDynamicKitDiameter)` wrapper
+    //   (Steven 20170605 (wei) 可以自定義Kit口徑 / Steven 20230901 統一只取這個變數).
+    //   Dead in golden; nothing to translate.
+
+    // BCB6 :18693-18705 -- golden has NO default here; Position outside 2..6 leaves
+    // fComplianceUnit at its 1.0 initialiser.  Preserved (see cContact.h).
+    switch (in.iSlkPosition)
+    {
+        case 2:                                      // :18695  1 Device with 1 Compliance Unit
+            fComplianceUnit = 1.0;   break;          // :18696
+        case 3:                                      // :18697  2 Device with 1 Compliance Unit
+            fComplianceUnit = 0.5;   break;          // :18698
+        case 4:                                      // :18699  4 Device with 1 Compliance Unit
+            fComplianceUnit = 0.25;  break;          // :18700
+        case 5:                                      // :18701  2 Device with 4 Compliance Unit
+            fComplianceUnit = 2.0;   break;          // :18702
+        case 6:                                      // :18703  8 Device with 1 Compliance Unit
+            fComplianceUnit = 0.125; break;          // :18704
+    }
+
+    // BCB6 :18707-18728 -- NOT TRANSLATED.  golden guards on
+    //   `rgKitDiameter->ItemIndex>=0 && <Items->Count` (Ifor 20191114 : Contact最小值保護的上限)
+    //   and then walks fContactForce->SLKClass matching SLKClass[i]->dDiameter against
+    //   atof(Items->Strings[ItemIndex]), with the "40x2" -> 402 -> 40 special case, to produce
+    //   iTag and dKitDiameter.  The port has no SLK container.  Caller supplies both results.
+
+    // BCB6 :18730-18734   //Steven 20230901 : 要先重置顏色
+    out.eValueFieldColor       = efcWhite;   // edAirKPA/edSetKg/edForcePerDeviceKG/edForcePerDeviceN
+    out.bAirForceRed           = false;      // edAirForce  (:18730)
+    out.bDeviceGfClamped       = false;
+    out.fMaxForcePerCompliance = 0.0f;
+
+    // BCB6 :18736-18757   //Steven 20200813 : 用缸徑計算最大壓力
+    if (in.bD28MaxForceLimitByDiameter)
+    {
+        out.bMaxForcePerICVisible = true;                                     // :18738
+        // :18739  Jimmychiu 20211021 : #P211018-ATK-H9-01 , V3.21.701.1 ,
+        //         It does not work [D28] Maxium Force by Kit Diameter.
+        double dCoefficient = (in.dEpMaxKpa <= 500) ? 5.0 : 6.0;
+        // :18740  4 = 2*2 ;  2 = diameter to radius
+        dHeadMaxForce = (((dKitDiameter * dKitDiameter * 3.14) / 4.0) * dCoefficient * 0.0101972) * fComplianceUnit;
+        // :18741-18742  Str.sprintf("Max force per compliance: %0.2fkg", ...) -> lblMaxForcePerIC
+        //   ChangeToFloatNonPcnt (MachineType.h:1601) returns float; kept float, not widened.
+        out.fMaxForcePerCompliance = ChangeToFloatNonPcnt((double)(dHeadMaxForce), (double)(fComplianceUnit));
+        if (dDeviceGf > dHeadMaxForce)                                        // :18743
+        {
+            dDeviceGf            = dHeadMaxForce;                             // :18745
+            out.eValueFieldColor = efcRed;                                    // :18746-18749
+            // :18750-18751 -- caller rewrites edForcePerDeviceKG->Text / edForcePerDeviceN->Text
+            //   from out.dDeviceGf.  Golden's N field really is dDeviceGf*9.8 here.
+            out.bDeviceGfClamped = true;
+        }
+    }
+    else
+    {
+        out.bMaxForcePerICVisible = false;                                    // :18756
+    }
+
+    // BCB6 :18759   //JimmyChiu 20220119 模組化計算AirForce
+    dTotalForce = dDeviceGf * dDutCount;
+
+    // BCB6 :18761-18762 -- `if(iTag==-1 || iTag>SLKClass.size()) iTag=0;` belongs to the
+    //   untranslated SLK walk; the caller has already applied it when choosing which entry's
+    //   offsets to pass in.
+    // BCB6 :18763   //JimmyChiu 20220119 上限檢查最小壓力
+    //   golden: dMinForce=GetMinForce(dKitDiameter, iTag);  -- WRITES the member dMinForce,
+    //   returned here via out.dMinForce.
+    double dMinForce = ComputeMinForce(dKitDiameter,
+                                       in.dTagContactOffset,
+                                       in.dTagContactOffsetNS,
+                                       in.bNSKitPress,
+                                       in.bD04MinForceByFile,
+                                       in.dD04MinForceByFile,
+                                       in.dD04MinForceByFile_20mm,
+                                       in.dD04MinForceByFile_30mm,
+                                       in.dD04MinForceByFile_40mm,
+                                       in.dD04MinForceByFile_60mm,
+                                       in.dD04MinForceByFile_80mm);
+
+    // BCB6 :18765-18855 -- golden has NO default.  An unlisted iTestMode leaves
+    // dNowKgPerHead at 0.0 and dMinKgPerHead at 1.0, and 0.0 then satisfies the :18860
+    // test, i.e. it silently takes the minimum-force branch.  Preserved (see cContact.h).
+    switch (in.iTestMode)
+    {
+        case SingleSite:                                                      // :18767
+            // :18768-18769  Steven 20231110 : Fix for min force of 1x1
+            dNowKgPerHead = dTotalForce / (1.0 * fComplianceUnit);
+            dMinKgPerHead = dMinForce   * (1.0 * fComplianceUnit);
+            break;
+        case DualSite:                                                        // :18771  1x2
+        case QualSite2X2N:                                                    // :18772  Frank 20200520 2X2NN Mode
+            // :18773-18775  Steven 20110915 : 1x2兩Site,單Dut要可以壓到85KG
+            //               2012-01-03 Dell 在1X2模式下,單Site壓到85kg
+            if (((bUseTestSocket[0][0][1] == false && bUseTestSocket[1][0][1] == false) ||
+                 (bUseTestSocket[0][0][0] == false && bUseTestSocket[1][0][0] == false)) &&
+                in.bD27UseSingleSite85kg)
+            {
+                dNowKgPerHead = dTotalForce / (1.0 * fComplianceUnit);         // :18777
+                dMinKgPerHead = dMinForce   * (1.0 * fComplianceUnit);         // :18778
+            }
+            else
+            {
+                dNowKgPerHead = dTotalForce / (2.0 * fComplianceUnit);         // :18782
+                dMinKgPerHead = dMinForce   * (2.0 * fComplianceUnit);         // :18783
+            }
+            break;
+        case DualSite2x1:                                                     // :18786
+            // :18787-18789 -- note the DIFFERENT socket cells from the DualSite arm above.
+            if (((bUseTestSocket[0][1][0] == false && bUseTestSocket[1][1][0] == false) ||
+                 (bUseTestSocket[0][0][0] == false && bUseTestSocket[1][0][0] == false)) &&
+                in.bD27UseSingleSite85kg)
+            {
+                dNowKgPerHead = dTotalForce / (1.0 * fComplianceUnit);         // :18791
+                dMinKgPerHead = dMinForce   * (1.0 * fComplianceUnit);         // :18792
+            }
+            else
+            {
+                dNowKgPerHead = dTotalForce / (2.0 * fComplianceUnit);         // :18796
+                dMinKgPerHead = dMinForce   * (2.0 * fComplianceUnit);         // :18797
+            }
+            break;
+        case _6Site2X3N:                                                      // :18800  Steven 20220425 : 2X3NN Mode
+        case TriSite1X3:                                                      // :18801
+            dNowKgPerHead = dTotalForce / (3.0 * fComplianceUnit);             // :18802
+            dMinKgPerHead = dMinForce   * (3.0 * fComplianceUnit);             // :18803
+            break;
+        case QualSite1X4:                                                     // :18805  1x4
+        case QualSite2X2:                                                     // :18806  2x2
+        //  golden :18807 has `//                case QualSite2X2BS: //2x1 BusyShuttle`
+        //  commented out -- dead in golden, nothing to translate.
+        case _8Site1X4:                                                       // :18808  ChungHung 20150528 add for 海思 _8Site1x4
+        case _8Site2X4N:                                                      // :18809  Wei 20231211 : 2X4NN Mode
+            dNowKgPerHead = dTotalForce / (4.0 * fComplianceUnit);             // :18810
+            dMinKgPerHead = dMinForce   * (4.0 * fComplianceUnit);             // :18811
+            break;
+        case _6Site2X3:                                                       // :18813  ChungHung 20140115 add for 2x3_6
+            dNowKgPerHead = dTotalForce / (6.0 * fComplianceUnit);             // :18814
+            dMinKgPerHead = dMinForce   * (6.0 * fComplianceUnit);             // :18815
+            break;
+        case _16Site4X4:                                                      // :18817  Sam 20190226 : 16Site4X4
+        case _8Site2X4:                                                       // :18818  2x4
+            if (in.bOctal_12Kit)                                              // :18819  ChungHung 20140508 add for SCK
+            {
+                dNowKgPerHead = dTotalForce / (12.0 * fComplianceUnit);        // :18821
+                dMinKgPerHead = dMinForce   * (12.0 * fComplianceUnit);        // :18822
+            }
+            else
+            {
+                dNowKgPerHead = dTotalForce / (8.0 * fComplianceUnit);         // :18826
+                dMinKgPerHead = dMinForce   * (8.0 * fComplianceUnit);         // :18827
+            }
+            break;
+        case _10Site2X5:                                                      // :18830  wei 20190614 10 site
+            dNowKgPerHead = dTotalForce / (10.0 * fComplianceUnit);            // :18831
+            dMinKgPerHead = dMinForce   * (10.0 * fComplianceUnit);            // :18832
+            break;
+        case _12Site2X6:                                                      // :18834
+            dNowKgPerHead = dTotalForce / (12.0 * fComplianceUnit);            // :18835
+            dMinKgPerHead = dMinForce   * (12.0 * fComplianceUnit);            // :18836
+            break;
+        case _16Site2X8:                                                      // :18838  2x8
+            if (in.iCloseSiteModeFor2x8 > e2x8Standard)                       // :18839  Steven 20260420 : != --> >
+            {
+                dNowKgPerHead = dTotalForce / (8.0 * fComplianceUnit);         // :18841
+                dMinKgPerHead = dMinForce   * (8.0 * fComplianceUnit);         // :18842
+            }
+            else
+            {
+                dNowKgPerHead = dTotalForce / (16.0 * fComplianceUnit);        // :18846
+                dMinKgPerHead = dMinForce   * (16.0 * fComplianceUnit);        // :18847
+            }
+            break;
+        case _32Site4X8N:                                                     // :18850  Steven 20140619 : for 32Site
+        case _32Site4X8M:                                                     // :18851
+            // :18852-18853  KenHsieh 20230313 : NN Mode Dutcount 32 -> 16
+            dNowKgPerHead = dTotalForce / (16.0 * fComplianceUnit);
+            dMinKgPerHead = dMinForce   * (16.0 * fComplianceUnit);
+            break;
+    }
+
+    // BCB6 :18857  `IniConfig.iEP_Min_KG=dMinKgPerHead;`
+    //   Config.h:79 declares iEP_Min_KG as `int`, so golden narrows here implicitly.
+    //   Reproduced with an explicit cast (same value, no -Wconversion noise); the
+    //   untruncated double is also returned so a future caller can tell them apart.
+    out.dMinKgPerHead = dMinKgPerHead;
+    out.iEP_Min_KG    = (int)dMinKgPerHead;
+
+    // BCB6 :18858  Str.sprintf("Min force per compliance: %0.2fkg", dMinForce);
+    out.bMinForceCaptionPerIC = false;
+
+    // BCB6 :18860  1個arm要壓的重量
+    if (dNowKgPerHead <= dMinForce)
+    {
+        // :18862  Steven 20170705 (wei) : 修正最小Contact Force保護 for 連續contact模式
+        //         JimmyChiu 20220119 模組化計算AirForce
+        dTotalForce = dMinKgPerHead;
+        if (in.iCustomerCode == CC_ASE_KaohSiung && in.iTestMode == QualSite2X2)   // :18863  kevin 20191204 ASE KH Telix 2x2
+        {
+            dTotalForce = dDeviceGf * dDutCount;                              // :18865
+            if (dKitDiameter == 30)                                           // :18866
+            {
+                dMinForce = 1;                                                // :18868
+            }
+            out.bMinForceCaptionPerIC = true;                                 // :18870
+            // NOTE: this arm sets NO field colour, so a red from :18746 survives it.
+        }
+        else
+        {
+            out.eValueFieldColor      = efcYellow;                            // :18874-18877
+            out.bMinForceCaptionPerIC = false;                                // :18878
+        }
+    }
+    // :18881  lblMinForce->Caption=Str;  -- caller applies, from out.bMinForceCaptionPerIC
+    //   and out.dMinForce.
+
+    // BCB6 :18883
+    double dMaxLimit = ComputeMaxIndexForceLimit(in.indexPressType,
+                                                 dDutCount,
+                                                 in.iTestMode,
+                                                 in.bD27UseSingleSite85kg,
+                                                 in.iKitDiameterItemIndex);
+    if (dMaxLimit > 0 && dTotalForce > dMaxLimit)                             // :18884
+    {
+        out.bAirForceRed = true;                                              // :18886
+        // :18887 -- golden's own commented-out
+        //   `if(IniConfig.bD28MaxForceLimitByDiameter==false)` guard
+        //   (Steven 20200813 : 用缸徑計算最大壓力).  Dead in golden; the clamp below is
+        //   therefore UNCONDITIONAL, which is what golden actually executes.
+        dTotalForce = dMaxLimit;                                              // :18888
+    }
+
+    out.dMinForce       = dMinForce;
+    out.dNowKgPerHead   = dNowKgPerHead;
+    out.fComplianceUnit = fComplianceUnit;
+    out.dDeviceGf       = dDeviceGf;
+    out.dHeadMaxForce   = dHeadMaxForce;
+    out.dMaxLimit       = dMaxLimit;
+
+    return dTotalForce;                                                       // :18890
+}
+
 // =============================================================================
 // AI(W906-cContactLeaf) 20260721: W906 cContact leaf-function wave (Step 1 +
 // Step 2). See cContact.h for the full per-function parameter rationale; this

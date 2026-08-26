@@ -268,23 +268,76 @@
 //  shim, which task rule 5 forbids.
 //  ============================================================================
 //   (X-01) CalculateTotalAirForce  golden :18675-18891 (217L)
-//       Pure arithmetic, and therefore squarely IN SCOPE for a future wave --
-//       it is listed here only because it is not yet ported and this wave may
-//       not add it (write boundary = forms/fContact.{h,cpp} only; its golden
-//       home is cContact.cpp, and the port's cContact.h already owns the other
-//       five extracted calc-core functions).
-//       ⚠ HIGHEST-VALUE UNLOCK IN THE FILE: it is the ONLY thing blocking
-//       five otherwise-clean read-only methods --
+//       ⚠ REWRITTEN BY AI(W906-FW-CONTACT-W28) 20260826.  The version of this
+//       entry written at FW-CONTACT-W26 said "pure arithmetic ... the ONLY
+//       thing blocking five otherwise-clean read-only methods", and predicted
+//       that porting it into cContact.{h,cpp} would drop all six from this
+//       list together.  W28 did that port.  ALL SIX ARE STILL GATED, and the
+//       old prediction was wrong on both halves.  Both corrections are kept
+//       visible rather than edited away, because the reason is reusable.
+//
+//       (a) IT IS NOT PURE ARITHMETIC.  Read line by line, the golden body also
+//           does SEVEN VCL widget writes (edAirForce/edAirKPA/edSetKg/
+//           edForcePerDeviceKG/edForcePerDeviceN ->Color at :18730-18734,
+//           :18746-18749, :18874-18877, :18886; lblMaxForcePerIC ->Visible/
+//           ->Caption at :18738/:18742/:18756; lblMinForce->Caption at :18881;
+//           edForcePerDeviceKG/N ->Text at :18750-18751), TWO widget reads
+//           (scrbSLK->Position :18693, rgKitDiameter :18707-18714), and THREE
+//           non-local writes (members dDutCount :18689 and dMinForce :18763/
+//           :18868, and the GLOBAL IniConfig.iEP_Min_KG :18857).
+//
+//       (b) THE REAL BLOCKER IS `fContactForce->SLKClass`, NOT "not yet
+//           ported".  Golden :18710-18727 walks that container to turn the
+//           selected rgKitDiameter item into (iTag, dKitDiameter).  The port
+//           has the ELEMENT type and the element FACTORY -- ContactForce.h
+//           `struct SlkForceData` (dDiameter/dContactOffset/dContactOffset_NS)
+//           and `ComputeSlkForce` -- but NO runtime container and no
+//           `fContactForce` global (see (X-12) and the ABSENCE RE-RUN).
+//           Without it the loop cannot run, and golden's locals keep their
+//           initialisers: iTag=-1 (:18683), which :18761 forces to 0, and
+//           dKitDiameter=30.0 (:18680).
+//           A silent 30.0 is NOT an inert default.  It actively selects
+//           ComputeMinForce's 30mm arm (dMinForce=1.5), it feeds the :18740
+//           area formula (((30*30*3.14)/4)*coef*0.0101972) that CLAMPS the
+//           per-device force whenever IniConfig.bD28MaxForceLimitByDiameter is
+//           on, and it satisfies the ASE-Kaohsiung `if(dKitDiameter==30)
+//           dMinForce=1;` at :18866-18869.  The output is DeviceForm.dPress
+//           (via ShowArmAndDeviceForce :1909), i.e. the EP air-pressure
+//           setpoint that the gated edAirForceChange (S-47) writes to the
+//           regulator.  So shipping the six against a 30mm default would not
+//           be "slightly off" -- it would be a confident, silent, wrong
+//           contact force for every kit that is not 30mm.  That is strictly
+//           worse than W26's rejected option of shipping five methods that
+//           cannot be called: those fail loudly.
+//
+//       WHAT W28 DID DELIVER: the arithmetic itself, as
+//       `ComputeTotalAirForce` in cContact.{h,cpp}, next to
+//       ComputeMaxIndexForceLimit / ComputeMinForce and following the same
+//       extract-calc-core convention -- every external read is a parameter,
+//       every external write is a result field, and the SLK walk's two results
+//       (dKitDiameter + the chosen entry's two contact offsets) are inputs the
+//       caller must supply.  Both of golden's defaultless switches are
+//       preserved and documented there.
+//
+//       WHAT REMAINS, for the wave that finishes this: give the tree a real
+//       SLK table.  That means porting whatever fills golden's
+//       `fContactForce->SLKClass` (TfContactForce's ReadFile path) into
+//       something ContactForce.{h,cpp} can own -- a container of SlkForceData
+//       plus its loader.  ContactForce.{h,cpp} was OUTSIDE W28's write
+//       boundary, which is why it is written down here instead of done.  Once
+//       that exists, (X-01)..(X-06) fall together, and the caller-side
+//       `TfContact::CalculateTotalAirForce` becomes a thin wrapper: resolve the
+//       SLK entry, call ComputeTotalAirForce, then apply the returned colour /
+//       caption / Text / IniConfig.iEP_Min_KG effects to the real widgets.
+//       The five it still blocks --
 //           ShowArmAndDeviceForce   golden :1898-1918  (X-02)
 //           edPinCountChange        golden :1920-1925  (X-03)
 //           edForcePerPinNChange    golden :1927-1939  (X-04)
 //           edDieForcePerPinGChange golden :1941-1957  (X-05)
 //           rgOutKitDiameterClick   golden :17102-17137 (X-06)
-//       They are NOT delivered against a declared-but-undefined
-//       CalculateTotalAirForce: that would ship five methods that cannot be
-//       called, i.e. a fake delivery.  Port CalculateTotalAirForce into
-//       cContact.{h,cpp} (next to ComputeMaxIndexForceLimit / ComputeMinForce,
-//       cContact.h:110/:142) and all six drop out of this list together.
+//       -- were each re-read in full at W28 and are otherwise clean; every one
+//       of them reaches CalculateTotalAirForce through ShowArmAndDeviceForce
+//       (:1908), so they are transitively gated, nothing more.
 //   (X-07) LoadImage        golden :1803-1807  `imgIndex->Picture->LoadFromFile`
 //   (X-08) FormShow         golden :1078-1801  (724L) TImage + fSecurity x N + motion
 //   (X-09) FormClose        golden :1815-1896  writes back + closes
@@ -296,45 +349,93 @@
 //       handled without gating the whole method.
 //   (X-10) SetContactMode   golden :15341-15434
 //   (X-11) rbModeNormalClick golden :15330-15339 -> SetContactMode
-//       Golden's mode constants live at cContact.cpp FILE SCOPE (:73-85) with
-//       `extern const int` mirrors in cContact.h:20-28.  The port's cContact.h
-//       has ported only THREE of the ten (CONTACT_NORMAL :81,
-//       CONTACT_MANUAL_GET_HEIGHT :82, CONTACT_DEVICE_MAP_CHECK :83).
-//       SetContactMode needs SEVEN MORE -- CONTACT_AUTO_GET_HEIGHT(1),
-//       CONTACT_TEST(3), AUTO_CONTACT_TEST(4), STEP_CONTACT_TEST(5),
-//       CONTACT_LoadCell_AUTO_GET_HEIGHT(8), CONTACT_DEVICE_LOOP_TEST(10),
-//       K_TEMP_INDEX_MOVE(11).
+//       ⚠ UPDATED BY AI(W906-FW-CONTACT-W28) 20260826.  W26 said "port all ten
+//       into cContact.h ... that single edit un-gates (X-10), (X-11) and both
+//       halves of (X-32)".  W28 did the consolidation.  It landed EIGHT of the
+//       twelve; the ninth, CONTACT_TEST, is blocked by a file outside the write
+//       boundary, and all four of these gates need exactly that one.  So they
+//       stay.  Three separate figures in the old text were wrong; corrections
+//       below, kept visible.
 //
-//       ⚠ CORRECTION, made at wave close and kept visible rather than quietly
-//       edited: an earlier draft of this banner said "grep for each returns 0
-//       hits tree-wide".  THAT WAS WRONG, and it was wrong because the first
-//       grep did not strip comments and did not look for TU-LOCAL copies.  The
-//       re-run (see ABSENCE RE-RUN below) found that the tree has ALREADY
-//       forked this list TWICE:
-//           Command.cpp:317                       const int CONTACT_TEST = 3;
-//           BarCode/BarCode_Shuttle2_CCDScan.h:187-189
-//                                                 CONTACT_NORMAL = 0
-//                                                 CONTACT_AUTO_GET_HEIGHT = 1
-//                                                 CONTACT_TEST = 3
-//       Both carry their own "no ODR risk, this TU never includes the other
-//       header" note.  So there are now FOUR partial copies of golden's
-//       ten-constant block (cContact.h + those two + golden itself), no two of
-//       them agreeing on which subset exists.
-//       This wave deliberately does NOT add a fifth.  Two of them are `const
-//       int` at namespace scope IN A HEADER, so they have internal linkage and
-//       will not clash at link time -- but any TU that ends up including both
-//       cContact.h and BarCode_Shuttle2_CCDScan.h gets a hard redefinition
-//       error, and that is a landmine that grows with every new copy.
-//       THE FIX IS CONSOLIDATION, not another fork: port all ten into
-//       cContact.h:81-83 (golden's own values, cContact.cpp:73-85) and retire
-//       the two TU-local copies in the same change.  That single edit un-gates
-//       (X-10), (X-11) and both halves of (X-32).
-//       ⚠ RISK NOTE FOR THAT WAVE, stated rather than buried: SetContactMode
-//       WRITES the global `iContactMode` (cmydef.h:3102), which the gated
-//       motion SMs above branch on.  It is legitimately a UI-state setter and
-//       golden treats it as one -- but it is a MODE SWITCH, and CLAUDE.md puts
-//       mode switching in the safety-critical bucket.  Deliver it with that
-//       said out loud, not silently.
+//       (i) THE BLOCK IS TWELVE CONSTANTS, NOT TEN.  golden cContact.cpp:74-85,
+//           mirrored `extern const int` at golden cContact.h:20-28.  The "ten"
+//           silently dropped CONTACT_IN_SHUTTLE_CHECK(6) and
+//           CONTACT_OUT_SHUTTLE_CHECK(7).  Recounted by reading golden
+//           :73-92 directly (20260826); :73 iSuckDelay and :87-88
+//           PICK_UP_OFFSET/CONTACT_UP_OFFSET are adjacent but are not modes.
+//
+//      (ii) THE TREE HAD SIX FORK SITES, NOT "four partial copies".  W26's
+//           re-run found two; a definition-shaped scan of all 1,578 .h/.cpp
+//           files (comments AND string literals stripped by a character state
+//           machine) found three more:
+//               cContact.h                               NORMAL, MANUAL, DEVICE_MAP
+//               ATC/ATCInterface.cpp:206                  CONTACT_NORMAL
+//               AutoClean/AutoClean.cpp:125               CONTACT_DEVICE_MAP_CHECK
+//               Command.cpp:317                           CONTACT_TEST
+//               uTemp_Set.cpp:174                         CONTACT_TEST
+//               BarCode/BarCode_Shuttle2_CCDScan.h:187-189  NORMAL, AUTO_GET_HEIGHT, TEST
+//           Each carries some form of "no ODR risk, `const int` has internal
+//           linkage" note.  That is true about LINK time and irrelevant at
+//           COMPILE time: two definitions of one name at namespace scope in one
+//           TU is a hard redefinition error whatever the linkage.
+//
+//     (iii) THE ODR LANDMINE IS NOT THE ONE W26 NAMED.  W26 worried about a TU
+//           including both cContact.h and BarCode_Shuttle2_CCDScan.h.  An
+//           include-closure walk that HONOURS `#if 0` (20260826) says that pair
+//           is empty and the exposure is far smaller than it looks:
+//               cContact.h reaches SIX TUs -- Command.cpp, ainarm9045.cpp,
+//                 atester_shims.cpp, cContact.cpp, forms/fContact.cpp,
+//                 tests/test_cContact.cpp
+//               BarCode_Shuttle2_CCDScan.h reaches THREE --
+//                 BarCode/BarCode_Shuttle2_CCDScan.cpp, aHotPlateSubstrate.cpp,
+//                 tests/test_barcode_shuttle2_ccdscan.cpp
+//               BOTH: zero.
+//           ⚠ A FIRST PASS OF THIS SAME WALK SAID 164 TUs AND WAS WRONG:
+//           MachineDefine.h:137 really does `#include "cContact.h"`, but
+//           MachineDefine.h:34-146 is one `#if 0` block, so that edge does not
+//           exist.  Any future include-reachability claim about this tree has
+//           to honour `#if 0` or it will be off by two orders of magnitude.
+//           The ACTUAL blocker is Command.cpp: it includes cContact.h at its
+//           :239 AND defines its own CONTACT_TEST at its :317.
+//           Verified by compiler, not by reasoning -- with CONTACT_TEST added
+//           to cContact.h, `g++ -fsyntax-only` on Command.cpp gives
+//           `Command.cpp:317:11: error: redefinition of 'const int
+//           CONTACT_TEST'`.  It was backed out; the tree compiles.
+//
+//       STATE AFTER W28: cContact.h now defines ELEVEN of the twelve
+//       (CONTACT_NORMAL, CONTACT_AUTO_GET_HEIGHT, CONTACT_MANUAL_GET_HEIGHT,
+//       AUTO_CONTACT_TEST, STEP_CONTACT_TEST, CONTACT_IN_SHUTTLE_CHECK,
+//       CONTACT_OUT_SHUTTLE_CHECK, CONTACT_LoadCell_AUTO_GET_HEIGHT,
+//       CONTACT_DEVICE_MAP_CHECK, CONTACT_DEVICE_LOOP_TEST, K_TEMP_INDEX_MOVE).
+//       CONTACT_TEST is absent, deliberately, with the retirement order written
+//       into cContact.h's own HAZARD block.  Step 1 of that order -- delete
+//       Command.cpp:317 (which already includes cContact.h, so it inherits the
+//       value) and add the constant -- is the ONE edit that un-gates (X-10),
+//       (X-11) and both halves of (X-32).  Command.cpp was explicitly outside
+//       W28's write boundary.
+//
+//       ⚠ HONEST ACCOUNTING: the eight constants W28 did add un-gate NOTHING in
+//       this file.  Every other golden method that reads them --
+//       DoZ1/Z2PickFromShuttle, Do_Z1/Z2_AutoGetHeight, DoTestContactFunction,
+//       DoZPlaceToShuttle, DoArm1/2PlaceToShuttle, Do_LoadCellAutoHigh,
+//       CheckInShuttleSensor_Latch_Contact, FormClose -- is gated for MOTION or
+//       for a FILE WRITE, not for a missing constant.  Their value is
+//       consolidation plus being ready for those waves, and that is the whole
+//       of it.
+//
+//       ⚠ RISK NOTE, unchanged and still owed by whoever un-gates these:
+//       SetContactMode WRITES the global `iContactMode` (cmydef.h:3102), which
+//       the gated motion SMs above branch on.  Golden treats it as a UI-state
+//       setter and it issues no motion itself -- but it is a MODE SWITCH, and
+//       CLAUDE.md puts mode switching in the safety-critical bucket.  Deliver
+//       it with that said out loud, not silently.
+//       Re-read in full at W28: apart from CONTACT_TEST, both bodies are
+//       otherwise deliverable today -- SetContactMode needs only ->Checked /
+//       ->Visible / ->Enabled and Memo1->Lines->Add (vclcompat::TMemo::Lines is
+//       real, Controls.h:369), and rbModeNormalClick needs Sender->Name
+//       (TControl::Name, Controls.h:183) and the global fAllMotorHome
+//       (cmydef.h:222, real).  Both were checked this wave so the next one does
+//       not have to.
 //   (X-12) btContactForceClick golden :15012-15015 `fContactForce->Show()`
 //       `fContactForce` has NO port global: `Grep "^\s*extern\s+\w+\s*\*\s*
 //       fContactForce\s*;"` over the whole tree -> 0 (20260826).  Its 367
@@ -407,8 +508,8 @@
 //       ⚠ FOUND BY THE `-fsyntax-only` GATE, NOT BY READING -- recorded that way
 //       on purpose.  Both were planned ACTIVE and both are otherwise entirely
 //       clean; OneCycleProcess's two-line body simply needs `CONTACT_TEST`
-//       (golden cContact.cpp:77, value 3), which is one of the SEVEN mode
-//       constants the port's cContact.h has not ported (see X-10).
+//       (golden cContact.cpp:77, value 3), which is one of the mode constants
+//       the port's cContact.h has not ported (see X-10).
 //       spbOneCycleClick then falls transitively (its whole body is
 //       `OneCycleProcess(); ledOneCycle->Value=bContinueContact;`).
 //       LESSON, worth keeping: reading a body for MACHINE ACTIONS does not
@@ -416,7 +517,16 @@
 //       to be checked per-identifier, and the compiler is the only reliable
 //       checker.  This is also why the delivered count in this banner was
 //       re-measured from the finished .cpp rather than from the plan.
-//       Same one-line unlock as (X-10)/(X-11): add the seven to cContact.h.
+//       ⚠ STILL GATED AFTER AI(W906-FW-CONTACT-W28) 20260826, and now for a
+//       precisely located reason.  W28 added eight of the twelve mode constants
+//       to cContact.h, but CONTACT_TEST -- the only one these two need -- could
+//       not be added: Command.cpp includes cContact.h (its :239) and defines
+//       its own `const int CONTACT_TEST = 3;` (its :317), so adding it makes
+//       Command.cpp fail with `error: redefinition of 'const int
+//       CONTACT_TEST'` (compiler-verified, then backed out).  Command.cpp is
+//       outside W28's write boundary.  DELETING Command.cpp:317 and adding
+//       CONTACT_TEST to cContact.h -- one line removed, one line added -- is
+//       the whole unlock for (X-10), (X-11) and both halves of (X-32).
 //
 //  (The four remaining gated names not itemised above -- ShowArmAndDeviceForce
 //  and its three Change handlers -- are (X-02)..(X-05).)
@@ -649,6 +759,50 @@
 //    STEP_CONTACT_TEST | AUTO_CONTACT_TEST | CONTACT_LoadCell_AUTO_GET_HEIGHT |
 //    CONTACT_DEVICE_LOOP_TEST | K_TEMP_INDEX_MOVE
 //
+//  ============================================================================
+//  ABSENCE RE-RUN #2 -- AI(W906-FW-CONTACT-W28) 20260826 18:23
+//  ============================================================================
+//  Re-run at W28's close because absence claims expire (docs/KNOWLEDGE.md) and
+//  because a sibling session was running the V899->V910 MG port campaign in
+//  this same repo while W28 ran.  Same method as re-run #1: comments AND string
+//  literals stripped by a character state machine before matching.  Corpus:
+//  1,578 .h/.hpp/.c/.cpp files under HT9011UC_Cpp_V3.33.906.0, excluding
+//  build*/ .git/ .svn/ __pycache__/ .pti_frames/.
+//
+//  CONFIRMED STILL ABSENT -- 0 hits each, outside comments and strings:
+//    MyInputBox | MyFloatInputBox | extern *fTesterTCP | extern *fOmron |
+//    extern *fCCLink | class TImage | class TPicture | class/struct TWMKey
+//  class TfContact: 1 hit, this file -- i.e. still nothing outside it.
+//  CalculateTotalAirForce: 1 hit, this file's own gated declaration -- i.e.
+//    still no definition anywhere, which is the claim that matters.
+//
+//  ⚠ STRENGTHENED, not merely re-confirmed: `fContactForce` and `SLKClass` each
+//  return ZERO TOKENS tree-wide -- not "no extern declaration", but the
+//  identifiers do not occur at all outside comments.  W26 could only say the
+//  `extern` pattern found nothing (367 textual hits, all prose and generated
+//  layout tables).  This is the stronger form of the claim, and it is what
+//  makes (X-01)'s blocker structural rather than a naming problem: there is no
+//  SLK container under any name, so the golden :18710-18727 walk has nothing to
+//  walk.  Whoever adds one owns ContactForce.{h,cpp}.
+//
+//  CHANGED FROM ABSENT TO PRESENT -- by this wave, deliberately:
+//    AUTO_CONTACT_TEST | STEP_CONTACT_TEST | CONTACT_IN_SHUTTLE_CHECK |
+//    CONTACT_OUT_SHUTTLE_CHECK | CONTACT_LoadCell_AUTO_GET_HEIGHT |
+//    CONTACT_DEVICE_LOOP_TEST | K_TEMP_INDEX_MOVE | CONTACT_AUTO_GET_HEIGHT
+//      -> cContact.h, one definition each, no other copy anywhere except
+//         CONTACT_AUTO_GET_HEIGHT's pre-existing BarCode_Shuttle2_CCDScan.h:188
+//         (no TU sees both -- see (X-10)(iii)).
+//    ComputeTotalAirForce -> cContact.h + cContact.cpp (declaration + body).
+//
+//  STILL ABSENT AND DELIBERATELY SO: CONTACT_TEST in cContact.h.  Its 11
+//  tree-wide hits are Command.cpp (:317 definition + 4 real uses at :1793,
+//  :1795, :1818, :1822), uTemp_Set.cpp (:174 definition + :6378, :6380), and
+//  BarCode/BarCode_Shuttle2_CCDScan.h:189 (+ :2079, :2197 in its .cpp).  The
+//  four uses in Command.cpp are why its retirement must be atomic: delete
+//  Command.cpp:317 and add the constant to cContact.h in the SAME change, or
+//  Command.cpp loses the symbol it still needs.  See (X-10) and cContact.h's
+//  HAZARD block.
+//
 //  ⚠ FOUND TO BE PRESENT -- i.e. four claims an earlier draft got WRONG.  All
 //  four are corrected in place above rather than deleted, because the wrong
 //  version is the more instructive artefact:
@@ -689,7 +843,23 @@
 //                        EJ1N/TextProcess.h (MyFormatFloat),
 //                        canary_support.h (ShowMyMessage),
 //                        cContact.h (ComputeIsRun2DCheck / ComputeIndexYSpeed /
-//                        ComputeIndexZSpeed and the 3 ported mode constants)
+//                        ComputeIndexZSpeed and the ported mode constants --
+//                        ELEVEN of golden's twelve since W28, see (X-10))
+//  ⚠ AI(W906-FW-CONTACT-W28) 20260826 -- NO CHANGE TO THE LANDING DECISION.
+//  W28 added ComputeTotalAirForce to cContact.{h,cpp}, which is already in
+//  ht9045_core (build_*/CMakeFiles/ht9045_core.dir/cContact.cpp.obj).  It
+//  introduces NO new archive edge, because it is deliberately self-contained:
+//    * it calls only ComputeMinForce and ComputeMaxIndexForceLimit, both
+//      defined in the SAME TU (cContact.cpp), and
+//    * ChangeToFloatNonPcnt is a header template (MachineType.h:1601), so it
+//      needs no external symbol either.
+//  cContact.cpp still `#include`s exactly one header, "cContact.h" -- unchanged
+//  by W28, and worth keeping that way: it is the reason every global read is a
+//  parameter.  The eight new mode constants are `const int` at namespace scope,
+//  i.e. internal linkage, so they add no link-time symbol at all.
+//  forms/fContact.cpp was NOT edited by W28 (nothing became deliverable), so
+//  its ht9045_sm registration and the csystem.h diet risk flagged below are
+//  exactly as W26 left them.
 //    ht9045_forms     -- forms/fQwertyKey.h (fQwertyKey->ShowQwertyKey)
 //    Motor/mymotor.h  -- MOT[].GailSpeed  (a plain int READ; no motion call is
 //                        made from any delivered body)

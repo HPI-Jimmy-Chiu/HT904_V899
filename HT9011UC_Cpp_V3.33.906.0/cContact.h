@@ -63,24 +63,113 @@
 // values defined cContact.cpp:73-90) -- TfContact-adjacent free consts, NOT
 // class members.
 //
-// HAZARD (read before adding a #include of this header to any TU that also
-// includes BarCode/BarCode_Shuttle2_CCDScan.h): that header ALREADY carries
-// its OWN local copy of CONTACT_NORMAL/CONTACT_AUTO_GET_HEIGHT/CONTACT_TEST
-// (its :187-189, added while cContact.h/.cpp were still untranslated, "no ODR
-// risk" reasoning that assumed no TU would ever see both copies).  Following
-// that SAME precedent pattern here (plain internal-linkage `const int`, not
-// `extern`) means CONTACT_NORMAL is now defined independently in TWO headers.
-// As of this writing NO .cpp includes both (verified by grep across the whole
-// target tree); if a future wave ever makes one .cpp include both cContact.h
-// and BarCode_Shuttle2_CCDScan.h, that TU will fail to compile with a
-// redefinition error on CONTACT_NORMAL -- the fix at that point is to delete
-// the local copy in BarCode_Shuttle2_CCDScan.h and have it consume this one
-// instead (cContact.h is now the real, translated home). Not fixed proactively
-// here to keep this wave's diff minimal.
+// AI(W906-FW-CONTACT-W28) 20260826: CONSOLIDATION PASS -- 8 of golden's 12
+// contact-mode constants added here, so this header becomes the tree's single
+// real home for them.  Read the two sections below before adding a 13th copy
+// anywhere.
+//
 // ---------------------------------------------------------------------------
-const int CONTACT_NORMAL            = 0;   // golden cContact.cpp:74
-const int CONTACT_MANUAL_GET_HEIGHT = 2;   // golden cContact.cpp:76 -- added this wave for ComputeAutoHeightMaxKGTorque
-const int CONTACT_DEVICE_MAP_CHECK  = 9;   // golden cContact.cpp:83 -- added this wave for ComputeIndexYSpeed/ComputeIndexZSpeed
+// DENOMINATOR -- RE-MEASURED THIS WAVE, NOT INHERITED
+// ---------------------------------------------------------------------------
+// Golden cContact.cpp:74-85 is a block of TWELVE `const int` contact-mode
+// constants (:73 `iSuckDelay` and :87-88 PICK_UP_OFFSET/CONTACT_UP_OFFSET are
+// adjacent but are NOT contact modes and are not in scope here).  Prior notes
+// in this tree -- including forms/fContact.h's GATE (X-10) -- called it "the
+// ten-constant block".  That count was wrong: it silently dropped
+// CONTACT_IN_SHUTTLE_CHECK(6) and CONTACT_OUT_SHUTTLE_CHECK(7), which golden
+// mirrors as `extern const int` at its own cContact.h:25-26 exactly like the
+// rest.  Counted here by reading golden cContact.cpp:73-92 directly
+// (20260826).  The real figures for this file are therefore:
+//     golden contact-mode constants           12
+//     present in this header before this wave  3   (CONTACT_NORMAL,
+//                                                   CONTACT_MANUAL_GET_HEIGHT,
+//                                                   CONTACT_DEVICE_MAP_CHECK)
+//     added by this wave                       8
+//     still absent                             1   (CONTACT_TEST -- see below)
+//
+// ---------------------------------------------------------------------------
+// HAZARD -- FIVE OTHER PARTIAL COPIES EXIST, AND ONE OF THEM BLOCKS THE 12th
+// ---------------------------------------------------------------------------
+// A definition-shaped scan of all 1,578 .h/.hpp/.c/.cpp files in the port tree
+// (comments AND string literals stripped by a character state machine, not a
+// regex; 20260826 18:0x) found these copies of the family, all of them plain
+// namespace-scope `const int`:
+//
+//   cContact.h              (this file)                CONTACT_NORMAL,
+//                                                      CONTACT_MANUAL_GET_HEIGHT,
+//                                                      CONTACT_DEVICE_MAP_CHECK
+//   ATC/ATCInterface.cpp:206                           CONTACT_NORMAL
+//   AutoClean/AutoClean.cpp:125  (`static const int`)  CONTACT_DEVICE_MAP_CHECK
+//   Command.cpp:317                                    CONTACT_TEST
+//   uTemp_Set.cpp:174                                  CONTACT_TEST
+//   BarCode/BarCode_Shuttle2_CCDScan.h:187-189         CONTACT_NORMAL,
+//                                                      CONTACT_AUTO_GET_HEIGHT,
+//                                                      CONTACT_TEST
+//
+// So the fork count is SIX sites, not the "four" this tree's earlier notes
+// recorded (they missed ATCInterface.cpp, AutoClean.cpp and uTemp_Set.cpp).
+// Every one of them carries some variant of a "no ODR risk, `const int` at
+// namespace scope has internal linkage" note.  That reasoning is correct about
+// LINK time and irrelevant at COMPILE time: two definitions of the same name at
+// namespace scope in ONE translation unit is a hard redefinition error whatever
+// the linkage.
+//
+// ⚠ WHY CONTACT_TEST IS NOT IN THE LIST BELOW.
+//   Which forks actually collide depends entirely on which TUs see this header.
+//   Measured this wave with an include-closure walk that HONOURS `#if 0`
+//   (a first pass that did not honour it reported 164 TUs and was wrong --
+//   MachineDefine.h:137 does `#include "cContact.h"`, but MachineDefine.h:34-146
+//   is one big `#if 0` block, so that edge does not exist):
+//       TUs whose live include closure contains cContact.h -- SIX:
+//         Command.cpp, ainarm9045.cpp, atester_shims.cpp, cContact.cpp,
+//         forms/fContact.cpp, tests/test_cContact.cpp
+//       TUs whose closure contains BarCode/BarCode_Shuttle2_CCDScan.h -- THREE:
+//         BarCode/BarCode_Shuttle2_CCDScan.cpp, aHotPlateSubstrate.cpp,
+//         tests/test_barcode_shuttle2_ccdscan.cpp
+//       TUs containing BOTH -- ZERO.
+//   Command.cpp is in the first list (it includes this header at its :239) AND
+//   defines its own `const int CONTACT_TEST = 3;` at its :317.  Adding
+//   CONTACT_TEST here therefore BREAKS Command.cpp, which is outside this
+//   wave's write boundary.  Verified by compiler, not by reasoning: with
+//   CONTACT_TEST present, `g++ -fsyntax-only` on Command.cpp fails with
+//   `error: redefinition of 'const int CONTACT_TEST'`.  It was removed again
+//   and the tree left compiling.  uTemp_Set.cpp:174 and
+//   BarCode_Shuttle2_CCDScan.h:189 also define it but neither TU sees this
+//   header, so neither is a blocker today.
+//
+//   RETIREMENT ORDER for whoever owns those files (one line each, and the
+//   FIRST one is what un-gates forms/fContact.h's (X-10)/(X-11)/(X-32)):
+//     1. delete Command.cpp:317      -- it already includes cContact.h at :239,
+//                                       so it just inherits the value.
+//        THEN add `const int CONTACT_TEST = 3;  // golden cContact.cpp:77`
+//        to the block below, in golden's slot between
+//        CONTACT_MANUAL_GET_HEIGHT and AUTO_CONTACT_TEST.
+//     2. delete uTemp_Set.cpp:174    -- add `#include "cContact.h"` there.
+//     3. delete BarCode/BarCode_Shuttle2_CCDScan.h:187-189 -- add
+//        `#include "cContact.h"` there.  Do 3 only together with 1, or that
+//        header's CONTACT_TEST re-collides through any TU that gains both.
+//     4. delete ATC/ATCInterface.cpp:206 and AutoClean/AutoClean.cpp:125 --
+//        add `#include "cContact.h"` to each.  Neither TU sees this header
+//        today, so both are pure tidy-ups with no compile consequence.
+//   Steps 1-4 are all outside THIS wave's write boundary (cContact.{h,cpp} and
+//   forms/fContact.{h,cpp} only), which is why they are written down rather
+//   than done.
+// ---------------------------------------------------------------------------
+const int CONTACT_NORMAL                   = 0;   // golden cContact.cpp:74
+const int CONTACT_AUTO_GET_HEIGHT          = 1;   // golden cContact.cpp:75  -- added W28
+const int CONTACT_MANUAL_GET_HEIGHT        = 2;   // golden cContact.cpp:76 -- added W906-cContactLeaf for ComputeAutoHeightMaxKGTorque
+// golden cContact.cpp:77 `const int CONTACT_TEST = 3;` -- DELIBERATELY ABSENT.
+// Blocked by Command.cpp:317; see the HAZARD section above for the measurement
+// and the one-line retirement.  Do NOT add it without deleting that line in the
+// same change.
+const int AUTO_CONTACT_TEST                = 4;   // golden cContact.cpp:78  -- added W28  //Steven 20150224 : Auto Contact Test
+const int STEP_CONTACT_TEST                = 5;   // golden cContact.cpp:79  -- added W28  //Steven 20150811 : Step by Step Contact Test
+const int CONTACT_IN_SHUTTLE_CHECK         = 6;   // golden cContact.cpp:80  -- added W28
+const int CONTACT_OUT_SHUTTLE_CHECK        = 7;   // golden cContact.cpp:81  -- added W28
+const int CONTACT_LoadCell_AUTO_GET_HEIGHT = 8;   // golden cContact.cpp:82  -- added W28  //kevin 20190909 add Load cell AutoHigh
+const int CONTACT_DEVICE_MAP_CHECK         = 9;   // golden cContact.cpp:83 -- added W906-cContactLeaf for ComputeIndexYSpeed/ComputeIndexZSpeed
+const int CONTACT_DEVICE_LOOP_TEST         = 10;  // golden cContact.cpp:84  -- added W28  //Ztex 2023.11.19 Add CONTACT_DEVICE_LOOP_TEST
+const int K_TEMP_INDEX_MOVE                = 11;  // golden cContact.cpp:85  -- added W28  //Ztex 2024.03.26 Add Contact Mode K Temperature
 
 // golden cContact.cpp:90-92 (file-scope `const double`, TfContact-adjacent, NOT class members).
 const double fIndexDownPos_for9045   = -135.0;                            // golden cContact.cpp:90
@@ -150,6 +239,198 @@ double ComputeMinForce(double dKitDiameter,
                         double dD04MinForceByFile_40mm,
                         double dD04MinForceByFile_60mm,
                         double dD04MinForceByFile_80mm);
+
+// ===========================================================================
+// AI(W906-FW-CONTACT-W28) 20260826: ComputeTotalAirForce -- the calc core of
+// TfContact::CalculateTotalAirForce, golden cContact.cpp:18675-18891 (217
+// lines).  This is the EP air-force setpoint calculation: golden's caller
+// (ShowArmAndDeviceForce, :1908-1909) stores the result in `iTotalGf` and then
+// in `DeviceForm.dPress`, which the gated edAirForceChange (:2268-2273) pushes
+// to the regulator via ADAM_WriteVoltage.  Treat changes here as
+// safety-relevant even though this function itself touches no hardware.
+//
+// ---------------------------------------------------------------------------
+// ⚠ CORRECTION TO THE BRIEF THIS WAVE WAS GIVEN: NOT "217 LINES OF PURE
+//   ARITHMETIC"
+// ---------------------------------------------------------------------------
+// The golden body is arithmetic PLUS three kinds of external effect, all read
+// off the golden source line by line (20260826):
+//   (a) SEVEN VCL widget writes -- edAirForce/edAirKPA/edSetKg/
+//       edForcePerDeviceKG/edForcePerDeviceN ->Color (:18730-18734, :18746-
+//       18749, :18874-18877, :18886), lblMaxForcePerIC ->Visible/->Caption
+//       (:18738/:18742/:18756), lblMinForce->Caption (:18881), and
+//       edForcePerDeviceKG/N ->Text (:18750-18751).
+//   (b) TWO widget READS -- scrbSLK->Position (:18693) and rgKitDiameter
+//       ->ItemIndex/->Items (:18707-18714).
+//   (c) THREE non-local writes -- the members dDutCount (:18689) and dMinForce
+//       (:18763, :18868), and the GLOBAL IniConfig.iEP_Min_KG (:18857).
+// Per this file's established extract-calc-core convention every one of those
+// is a parameter or a result field here; nothing is read or written directly.
+//
+// ---------------------------------------------------------------------------
+// ⚠ THE PART THAT IS NOT TRANSLATED, AND WHY IT BLOCKS THE CALLERS
+// ---------------------------------------------------------------------------
+// Golden :18710-18727 walks `fContactForce->SLKClass` to turn the selected
+// rgKitDiameter item into (iTag, dKitDiameter):
+//     for(unsigned i=0; i<fContactForce->SLKClass.size(); i++)
+//         { d1 = SLKClass[i]->dDiameter; ... if(d1==d2) { iTag=i; dKitDiameter=d2; } }
+// The port has the ELEMENT type (ContactForce.h `struct SlkForceData`, with
+// dDiameter/dContactOffset/dContactOffset_NS) and the element FACTORY
+// (`ComputeSlkForce`), but it has NO RUNTIME CONTAINER and no `fContactForce`
+// global -- re-verified this wave, see the ABSENCE RE-RUN in forms/fContact.h.
+// So that loop cannot be translated yet, and this function takes its two
+// results -- dKitDiameter and the chosen entry's two contact offsets -- as
+// CALLER-SUPPLIED inputs.  That is the identical split ComputeMinForce already
+// uses (it takes dTagContactOffset/dTagContactOffsetNS rather than indexing
+// SLKClass[iTag]), so this file stays dependency-free.
+//
+// ⚠ DO NOT "SOLVE" THIS BY LETTING THE CALLER PASS THE DEFAULTS.  If a caller
+// simply skips the loop, golden's locals keep their initialisers -- iTag=-1
+// (:18683) which :18761 then forces to 0, and dKitDiameter=30.0 (:18680).
+// A hardcoded 30.0 is NOT an inert default: it actively selects the 30mm arm of
+// ComputeMinForce (dMinForce=1.5), it feeds the :18740 area formula
+// (((30*30*3.14)/4)*coef*0.0101972) that CLAMPS the per-device force under
+// IniConfig.bD28MaxForceLimitByDiameter, and it satisfies the ASE-Kaohsiung
+// `if(dKitDiameter==30) dMinForce=1;` at :18866-18869.  The result would be a
+// plausible-looking but wrong EP setpoint for every kit that is not 30mm.
+// This is why forms/fContact.h keeps (X-01)..(X-06) gated even now that the
+// arithmetic below exists: the five read-only callers cannot be delivered until
+// something in the tree can answer "which SLK entry is selected?".
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+// EForceFieldColor
+//   Final colour of the four "value" edits golden recolours together --
+//   edAirKPA, edSetKg, edForcePerDeviceKG, edForcePerDeviceN.
+//   Modelled as ONE last-write-wins field rather than separate red/yellow
+//   booleans because golden can genuinely write both in one call: :18746-18749
+//   paints them red inside the bD28 clamp, and :18874-18877 can then repaint
+//   the SAME four yellow inside the min-force branch.  Two booleans would lose
+//   the ordering; the enum keeps it.
+//   Note the ASE-Kaohsiung arm (:18863-18871) sets NO colour at all, so a red
+//   from :18746 survives it -- which this model reproduces.
+// ---------------------------------------------------------------------------
+enum EForceFieldColor
+{
+    efcWhite  = 0,   // golden :18731-18734 (the unconditional reset)
+    efcRed    = 1,   // golden :18746-18749
+    efcYellow = 2    // golden :18874-18877
+};
+
+// ---------------------------------------------------------------------------
+// TotalAirForceIn -- every external READ golden's body performs.
+//
+//   DEVIATION from this file's other five leaves: they take flat parameters.
+//   CalculateTotalAirForce reads 24 distinct externals, and a 24-parameter
+//   positional list is a call-site hazard (every one of the nine bools would be
+//   silently swappable).  Grouped into a struct with designated field names
+//   instead; the CONVENTION -- no global is read inside cContact.cpp -- is
+//   unchanged.
+// ---------------------------------------------------------------------------
+struct TotalAirForceIn
+{
+    // -- widget reads -------------------------------------------------------
+    int    iSlkPosition;            // scrbSLK->Position            golden :18693
+    int    iKitDiameterItemIndex;   // rgKitDiameter->ItemIndex     golden :18707 and,
+                                    //   via GetMaxIndexForceLimit, :18946-18951
+
+    // -- results of golden's untranslated fContactForce->SLKClass walk ------
+    //    (:18710-18727).  See the block comment above before supplying these.
+    double dKitDiameter;            // golden local, init 30.0      golden :18680/:18723-18725
+    double dTagContactOffset;       // SLKClass[iTag]->dContactOffset     (ContactForce.h)
+    double dTagContactOffsetNS;     // SLKClass[iTag]->dContactOffset_NS  (ContactForce.h)
+
+    // -- globals ------------------------------------------------------------
+    int    iTestMode;               // TestIF.iTestMode             golden :18686/:18765
+    bool   bQualSite2X2Shift;       // TestIF_File.bQualSite2X2Shift      golden :18687
+    bool   bNS7000kit;              // TestIF_File.bNS7000kit             golden :18688
+    bool   bOctal_12Kit;            // TestIF_File.bOctal_12Kit           golden :18819
+    bool   bNSKitPress;             // TestIF_File.bNSKitPress   (via GetMinForce :19006)
+    int    iCloseSiteModeFor2x8;    // iCloseSiteModeFor2x8               golden :18839
+    int    iCustomerCode;           // CUSTOMER_CODE                      golden :18863
+    double dEpMaxKpa;               // EP_MAXKPA (cmydef.h:2811, double)  golden :18739
+    eIndexPressType indexPressType; // INDEX_PRESS_TYPE  (via GetMaxIndexForceLimit)
+
+    bool   bD28MaxForceLimitByDiameter;  // IniConfig.  golden :18736
+    bool   bD27UseSingleSite85kg;        // IniConfig.  golden :18775/:18789 + GetMaxIndexForceLimit
+    bool   bD04MinForceByFile;           // IniConfig.  (via GetMinForce)
+    double dD04MinForceByFile;           // IniConfig.  (via GetMinForce)
+    double dD04MinForceByFile_20mm;
+    double dD04MinForceByFile_30mm;
+    double dD04MinForceByFile_40mm;
+    double dD04MinForceByFile_60mm;
+    double dD04MinForceByFile_80mm;
+};
+
+// ---------------------------------------------------------------------------
+// TotalAirForceOut -- everything golden writes somewhere other than its return
+// value, so the caller can apply it to the real widgets/globals.
+// ---------------------------------------------------------------------------
+struct TotalAirForceOut
+{
+    double dMinForce;             // golden member dMinForce  :18763, possibly :18868
+    double dMinKgPerHead;         // golden local             :18769..:18853, init 1.0 (:18681)
+    int    iEP_Min_KG;            // -> IniConfig.iEP_Min_KG  :18857.  Config.h:79 makes that
+                                  //    field an `int` while dMinKgPerHead is a double, so
+                                  //    golden TRUNCATES here.  Reproduced with an explicit
+                                  //    cast; dMinKgPerHead above keeps the untruncated value.
+    double dNowKgPerHead;         // golden local             :18768..:18852, init 0.0 (:18682)
+    double fComplianceUnit;       // golden local             :18693-18705, init 1.0 (:18680)
+    double dDeviceGf;             // golden local :18684, possibly clamped :18745
+    double dHeadMaxForce;         // golden local :18740 (0.0 unless bMaxForcePerICVisible)
+    float  fMaxForcePerCompliance;// ChangeToFloatNonPcnt(dHeadMaxForce, fComplianceUnit)
+                                  //    :18741.  float because that template returns float
+                                  //    (MachineType.h:1601) -- kept, not widened.
+    double dMaxLimit;             // GetMaxIndexForceLimit()  :18883
+
+    // -- what the caller must paint / show ----------------------------------
+    bool bMaxForcePerICVisible;   // lblMaxForcePerIC->Visible  :18738 (true) / :18756 (false)
+                                  //   when true, Caption := sprintf("Max force per compliance:
+                                  //   %0.2fkg", fMaxForcePerCompliance)      :18741-18742
+    bool bDeviceGfClamped;        // :18743 taken.  Caller then rewrites
+                                  //   edForcePerDeviceKG->Text = FormatFloat("0.0000", dDeviceGf)
+                                  //   edForcePerDeviceN ->Text = FormatFloat("0.0000", dDeviceGf*9.8)
+                                  //   -- golden :18750-18751 really does use dDeviceGf*9.8 here,
+                                  //   NOT the dDeviceN that ShowArmAndDeviceForce computes.
+    EForceFieldColor eValueFieldColor;  // edAirKPA/edSetKg/edForcePerDeviceKG/edForcePerDeviceN
+    bool bAirForceRed;            // edAirForce->Color = clRed  :18886 (else stays clWhite :18730)
+    bool bMinForceCaptionPerIC;   // lblMinForce->Caption  :18881
+                                  //   true  -> sprintf("Min force per ic: %0.2fkg",        dMinForce)  :18870
+                                  //   false -> sprintf("Min force per compliance: %0.2fkg", dMinForce) :18858/:18878
+};
+
+// ---------------------------------------------------------------------------
+// ComputeTotalAirForce
+//   Portable replacement for TfContact::CalculateTotalAirForce(double,double).
+//   BCB6 source: cContact.cpp:18675-18891  (JimmyChiu 20220119 獨立計算氣壓壓力)
+//
+//   dBallCount / dSingleGf -- unchanged golden parameters.
+//   bUseTestSocket         -- LastSet.bUseTestSocket[2][4][8] (LastSet.h:431).  Golden reads
+//                             six elements of it, at :18773-18774 and :18787-18788.  First
+//                             dimension decayed per this tree's 2D/3D-array-param convention
+//                             (see ComputeAutoHeightMaxKGTorque's iSiteMap above).
+//   dDutCount        [in/out] -- golden's TfContact member (cContact.h:552 area).  IN because
+//                             :18759 multiplies by it and GetMaxIndexForceLimit reads it; OUT
+//                             because :18689 FORCES it to 4 under
+//                             (iTestMode==DualSite && bQualSite2X2Shift && bNS7000kit), and that
+//                             write outlives the call in golden.  Do not pass a temporary.
+//   out              [out]   -- see TotalAirForceOut.
+//   returns dTotalForce, golden's own return value (:18890).
+//
+//   Faithfully preserves both DEFAULTLESS switches, which are real golden gaps:
+//     * switch(scrbSLK->Position) :18693-18705 covers 2..6 only, so any other Position leaves
+//       fComplianceUnit at 1.0.
+//     * switch(TestIF.iTestMode) :18765-18855 covers 17 modes and has NO default, so an
+//       unlisted mode leaves dNowKgPerHead at 0.0 and dMinKgPerHead at 1.0 -- and 0.0 then
+//       satisfies :18860 `dNowKgPerHead<=dMinForce`, i.e. an unknown test mode silently takes
+//       the minimum-force branch.  Preserved; do not add a default.
+// ---------------------------------------------------------------------------
+double ComputeTotalAirForce(double dBallCount,
+                            double dSingleGf,
+                            const TotalAirForceIn& in,
+                            const bool bUseTestSocket[][MAX_SOCKET_ROW][MAX_SOCKET_COL],
+                            double& dDutCount,
+                            TotalAirForceOut& out);
 
 // ===========================================================================
 // AI(W906-cContactLeaf) 20260721: W906 cContact leaf-function wave (Step 1 +
