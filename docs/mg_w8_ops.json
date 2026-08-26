@@ -1,0 +1,228 @@
+[
+  {
+    "id": "MG-W8-OP1",
+    "desc": "[0811 UI 高亮] PowerSavingMode.h: TPowerSaving private 區新增 bHighlightOn 旗標與 ShowPowerSaveHighlight() 宣告 (matrix PowerSavingMode.h:45,46)",
+    "v910_file": "PowerSavingMode.h",
+    "v899_file": "PowerSavingMode.h",
+    "v899_lines": [
+      45,
+      46
+    ],
+    "mode": "after",
+    "anchor_line": 44,
+    "anchor_expect": "TDateTime StartTmr;"
+  },
+  {
+    "id": "MG-W8-OP2",
+    "desc": "[0804 C05 profile] PowerSavingMode.h: 匯出 GetPowerSaveMaxMinute() 供 cConfiguration 的 [C05] 上限使用 (matrix PowerSavingMode.h:68)",
+    "v910_file": "PowerSavingMode.h",
+    "v899_file": "PowerSavingMode.h",
+    "v899_lines": [
+      68,
+      69
+    ],
+    "mode": "before",
+    "anchor_line": 66,
+    "anchor_expect": "extern class TPowerSaving *tPowerSaving;"
+  },
+  {
+    "id": "MG-W8-OP3",
+    "desc": "[0811 UI 高亮 + 0804 C05 profile] PowerSavingMode.cpp 檔頭: 四個高亮常數 (PSNormal/PSHighlight 面板高與字高) + GetPowerSaveMaxMinute() 本體 (matrix PowerSavingMode.cpp:32 / :39)",
+    "v910_file": "PowerSavingMode.cpp",
+    "v899_file": "PowerSavingMode.cpp",
+    "v899_lines": [
+      32,
+      54
+    ],
+    "mode": "after",
+    "anchor_line": 31,
+    "anchor_expect": "TDateTime OverDayAM=StrToTime(\"am 12:00:00\");"
+  },
+  {
+    "id": "MG-W8-OP4",
+    "desc": "[0811 UI 高亮] TPowerSaving ctor: bHighlightOn=false 初始化 (matrix PowerSavingMode.cpp:66)。取代 V910 [38,42] 以取得唯一錨點並保證與 V899 位元組相同",
+    "v910_file": "PowerSavingMode.cpp",
+    "v899_file": "PowerSavingMode.cpp",
+    "v899_lines": [
+      61,
+      66
+    ],
+    "mode": "replace",
+    "replace_lines": [
+      38,
+      42
+    ],
+    "anchor_expect": "ScanTmr->Interval=1000;"
+  },
+  {
+    "id": "MG-W8-OP5",
+    "desc": "[0811 UI 高亮] OnScanTmr 開頭: bRestart 時統一還原狀態列，不必在每個 return 前各補一次 (matrix PowerSavingMode.cpp:103)",
+    "v910_file": "PowerSavingMode.cpp",
+    "v899_file": "PowerSavingMode.cpp",
+    "v899_lines": [
+      103,
+      107
+    ],
+    "mode": "before",
+    "anchor_line": 79,
+    "anchor_expect": "if(SystemStart || IniConfig.bPowerSaveFunction==false)"
+  },
+  {
+    "id": "MG-W8-OP6",
+    "desc": "[0811 UI 高亮] C05 三項全關、面板即將隱藏前先還原反黃與高度 (matrix PowerSavingMode.cpp:118)",
+    "v910_file": "PowerSavingMode.cpp",
+    "v899_file": "PowerSavingMode.cpp",
+    "v899_lines": [
+      118,
+      118
+    ],
+    "mode": "before",
+    "anchor_line": 89,
+    "anchor_expect": "fMain->pnlPowerSaving->Visible=false;"
+  },
+  {
+    "id": "MG-W8-OP7",
+    "desc": "[0804 C05 profile] OnScanTmr: PTI 兩道省電閘門 bPowerSaveLotEndOnly(RunInfo.bLotStart) 與 bPowerSaveSkipAmbient(Tempture_Ambient) (matrix PowerSavingMode.cpp:137)。取代 V910 [101,105] 的 fContact guard 區塊以取得唯一錨點",
+    "v910_file": "PowerSavingMode.cpp",
+    "v899_file": "PowerSavingMode.cpp",
+    "v899_lines": [
+      131,
+      149
+    ],
+    "mode": "replace",
+    "replace_lines": [
+      101,
+      105
+    ],
+    "anchor_expect": "if(fContact->fShow)"
+  },
+  {
+    "id": "MG-W8-OP8",
+    "desc": "[0804 + 0811] 進入省電狀態的轉換點呼叫 ShowPowerSaveHighlight(true)，避免面板停在最後一個倒數值 (matrix PowerSavingMode.cpp:256 / :258)。取代 V910 [209,213]",
+    "v910_file": "PowerSavingMode.cpp",
+    "v899_file": "PowerSavingMode.cpp",
+    "v899_lines": [
+      252,
+      260
+    ],
+    "mode": "replace",
+    "replace_lines": [
+      209,
+      213
+    ],
+    "anchor_expect": "if(MtrModule->Enabled==false &&"
+  },
+  {
+    "id": "MG-W8-OP9",
+    "desc": "[0804 C05 profile] SetAlarmTime: 固定 MaxMinute(200) 改為 per-customer 的 GetPowerSaveMaxMinute() (matrix PowerSavingMode.cpp:289)",
+    "v910_file": "PowerSavingMode.cpp",
+    "v899_file": "PowerSavingMode.cpp",
+    "v899_lines": [
+      289,
+      290
+    ],
+    "mode": "replace",
+    "replace_lines": [
+      242,
+      243
+    ],
+    "anchor_expect": "else if(Minute>MaxMinute)"
+  },
+  {
+    "id": "MG-W8-OP10",
+    "desc": "[0811 UI 高亮 + 0817 還原 guard] ShowPowerSaveHighlight() 函式本體，含 20260817 的分離式 guard(點亮擋重複/還原改以面板實際 Caption 判定) (matrix PowerSavingMode.cpp:354 + 0817 :363)",
+    "v910_file": "PowerSavingMode.cpp",
+    "v899_file": "PowerSavingMode.cpp",
+    "v899_lines": [
+      354,
+      399
+    ],
+    "mode": "before",
+    "anchor_line": 307,
+    "anchor_expect": "void TPowerSaving::Restart()"
+  },
+  {
+    "id": "MG-W8-OP11",
+    "desc": "[0804 + 0811] Restart(): 還原面板，讓下一輪倒數字串可讀 (matrix PowerSavingMode.cpp:406 / :407)",
+    "v910_file": "PowerSavingMode.cpp",
+    "v899_file": "PowerSavingMode.cpp",
+    "v899_lines": [
+      405,
+      408
+    ],
+    "mode": "after",
+    "anchor_line": 311,
+    "anchor_expect": "tModule->iCountDown=tModule->AlarmTmr;"
+  },
+  {
+    "id": "MG-W8-OP12",
+    "desc": "[0804 C05 profile] CosFunction.h: HT9045_COUSTOMER_FUNCTION 新增 C05 per-customer 五旗標 + iPowerSaveMaxMinute (matrix CosFunction.h:471-476)。刻意不含 V899:470(0803 ARDENTEC) 與 V899:477(0819 超豐熱風槍)",
+    "v910_file": "CosFunction.h",
+    "v899_file": "CosFunction.h",
+    "v899_lines": [
+      471,
+      476
+    ],
+    "mode": "before",
+    "anchor_line": 487,
+    "anchor_expect": "} HT9045_COUSTOMER_FUNCTION;"
+  },
+  {
+    "id": "MG-W8-OP13",
+    "desc": "[0804 C05 profile] FUNC_CC_PTI(): 開 IniConfig.bPowerSaveFunction 並設定 PTI 的 C05 profile(720 分/僅溫控/僅 Lot End/略過 Ambient/主畫面提示) (matrix CosFunction.cpp:1469-1475)。取代 V910 [1507,1508] 以取得唯一錨點；刻意不含 V899:1466 的 bUseFix3FullTray(20260520，屬別波)",
+    "v910_file": "CosFunction.cpp",
+    "v899_file": "CosFunction.cpp",
+    "v899_lines": [
+      1467,
+      1475
+    ],
+    "mode": "replace",
+    "replace_lines": [
+      1507,
+      1508
+    ],
+    "anchor_expect": "CosFunction.bFirstTrayCheckOnUnloader                                       =true;  //Jimmychiu 20251205 : First Tray Check On Unloader"
+  },
+  {
+    "id": "MG-W8-OP14",
+    "desc": "[0804 C05 profile] InitialCosFunction(): C05 五旗標 + iPowerSaveMaxMinute 的預設值(=舊行為) (matrix CosFunction.cpp:3875,3876 + 未標記 AI 的 3877-3880)。刻意不含 V899:3881(0819 超豐熱風槍)",
+    "v910_file": "CosFunction.cpp",
+    "v899_file": "CosFunction.cpp",
+    "v899_lines": [
+      3875,
+      3880
+    ],
+    "mode": "after",
+    "anchor_line": 3928,
+    "anchor_expect": "IniConfig.bPowerSaveFunction                                                =false; //"
+  },
+  {
+    "id": "MG-W8-OP15",
+    "desc": "[0804 C05 profile] cConfiguration.cpp: #include \"PowerSavingMode.h\" 取得 GetPowerSaveMaxMinute() (matrix cConfiguration.cpp:38)",
+    "v910_file": "cConfiguration.cpp",
+    "v899_file": "cConfiguration.cpp",
+    "v899_lines": [
+      38,
+      38
+    ],
+    "mode": "after",
+    "anchor_line": 37,
+    "anchor_expect": "#include \"HTEditList.h\""
+  },
+  {
+    "id": "MG-W8-OP16",
+    "desc": "[0804 C05 profile] InitConfigEdtList_ItemC(): 在既有 if(bPowerSaveFunction) 之前插入 PTI 專用的 temp-only 分支，並把既有分支降級為 else if。V910 既有分支的 Eastsun 20260710 USE_BU5_Function 200/400 內容完全保留不動 (matrix cConfiguration.cpp:1009,1029,1031)。取代 V910 [1074,1076] 以取得唯一錨點",
+    "v910_file": "cConfiguration.cpp",
+    "v899_file": "cConfiguration.cpp",
+    "v899_lines": [
+      1007,
+      1035
+    ],
+    "mode": "replace",
+    "replace_lines": [
+      1074,
+      1076
+    ],
+    "anchor_expect": "\"bC04EnableTestTempIC\",             bNoShow, bEnable, bFixedValue, 0);"
+  }
+]

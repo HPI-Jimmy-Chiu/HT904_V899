@@ -35,6 +35,7 @@
 #include "UsecegemMainFrom.h"
 #include "SCK_ART.h"
 #include "HTEditList.h"
+#include "PowerSavingMode.h"                                                    //AI(ht9045-v899) 20260804: GetPowerSaveMaxMinute() for the [C05] halt-time limit (CASE-PTI-20260804-001)
 //#include "windows.h"                                                          //Ifor 20170807 (wei) add  //JerryYang 20170925 (Steven) Mark,修改EP log方式
 #include "uESDControl.h"                                                        //Sam 20170822 (Steven) 移植超豐 ESD Control 功能 form HT-7045
 #include "fShowPmSOP.h"
@@ -1073,7 +1074,33 @@ void TfConfiguration::InitConfigEdtList_ItemC()
     else
         elConfig->Add(cbC04,    &IniConfig.bC04EnableTestTempIC,                ECBool, "Index",    "bC04EnableTestTempIC",             bNoShow, bEnable, bFixedValue, 0);
 
-    if(IniConfig.bPowerSaveFunction)
+    //AI(ht9045-v899) 20260804: PTI shows the temp module only. Motor/vacuum/ATC/mode keep the very same
+    //bNoShow/bDisable/bFixedValue treatment they already get today, so nothing but the temp
+    //module is newly enabled. Mode is forced to 0 on purpose: mode 1 pops a YES/NO box and
+    //waits for an operator, which would silently defeat an unattended overnight save. (CASE-PTI-20260804-001)
+    if(IniConfig.bPowerSaveFunction && CosFunction.bPowerSaveTempOnly)
+    {
+        AnsiString asC05Max;
+
+        gbC05->Visible=true;
+        elConfig->Add(rgC05,        &IniConfig.iPowersaveMode,                  ECInteger,  "OutPowerSave", "PowersaveMode",            bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbC05_Motor,  &IniConfig.bC05_PowerSaveMotor,             ECBool,     "OutPowerSave", "UsepowerSaveMotor",        bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbC05_Temp,   &IniConfig.bC05_PowerSaveTemp,              ECBool,     "OutPowerSave", "UsepowerSaveTemp",         bShow, bEnable, bReadFromFile, 0);
+        elConfig->Add(cbC05_Vacuum, &IniConfig.bC05_PowerSaveVacuum,            ECBool,     "OutPowerSave", "UsepowerSaveVacuum",       bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(cbC05_ATC,    &IniConfig.bC05_PowerSaveATC,               ECBool,     "OutPowerSave", "UsepowerSaveATC",          bNoShow, bDisable, bFixedValue, 0);
+        elConfig->Add(edC05_Motor,  &IniConfig.iHaltTime_Motor,                 ECInteger,  "OutPowerSave", "HaltTime_Motor",           bNoShow, bDisable, bFixedValue, 1);
+        elConfig->Add(edC05_Temp,   &IniConfig.iHaltTime_Temp,                  ECInteger,  "OutPowerSave", "HaltTime_Temp",            bShow, bEnable, bReadFromFile, 1,      false,  1,      GetPowerSaveMaxMinute());
+        elConfig->Add(edC05_Vacuum, &IniConfig.iC05HaltTime_Vacuum,             ECInteger,  "OutPowerSave", "HaltTime_Vacuum",          bNoShow, bDisable, bFixedValue, 1);
+        elConfig->Add(edC05_ATC,    &IniConfig.iHaltTime_ATC,                   ECInteger,  "OutPowerSave", "HaltTime_ATC",             bNoShow, bDisable, bFixedValue, 1);
+
+        asC05Max.sprintf("Max:%d min / Unit", GetPowerSaveMaxMinute());
+        labC05_4->Caption=asC05Max;                                             //AI(ht9045-v899) 20260804: temp row label follows the per-customer limit
+        labC05_4->Visible=true;
+        labC05_2->Visible=false;                                                //AI(ht9045-v899) 20260804: hide the motor/vacuum/ATC row labels together with their controls
+        labC05_6->Visible=false;
+        labC05_8->Visible=false;
+    }
+    else if(IniConfig.bPowerSaveFunction)
     {
         gbC05->Visible=true;
         elConfig->Add(rgC05,        &IniConfig.iPowersaveMode,                  ECInteger,  "OutPowerSave", "PowersaveMode",            bShow, bEnable, bReadFromFile, 0);

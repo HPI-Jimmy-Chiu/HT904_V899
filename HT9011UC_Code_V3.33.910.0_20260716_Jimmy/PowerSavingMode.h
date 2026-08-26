@@ -42,6 +42,8 @@ class TPowerSaving
    bool flagStartTmr;                                    //機台閒置進入休眠倒數旗標
    bool flagUseFunc;                                     //休眠功能啟用旗標
    TDateTime StartTmr;
+   bool bHighlightOn;                                    //AI(ht9045-v899) 20260811: 狀態列反黃中(避免每秒重複重繪) (CASE-PTI-20260811-001)
+   void ShowPowerSaveHighlight(bool bOn);                //AI(ht9045-v899) 20260811: 進入省電後狀態列底色反黃並放大字型 (CASE-PTI-20260811-001)
 
    public:
    __fastcall TPowerSaving();
@@ -63,6 +65,8 @@ class TPowerSaving
    bool bRestart;                                        //重新計數
 };
 //---------------------------------------------------------------------------
+//AI(ht9045-v899) 20260804: shared by cConfiguration for the [C05] halt-time edit limit (CASE-PTI-20260804-001)
+extern int GetPowerSaveMaxMinute();
 extern class TPowerSaving *tPowerSaving;
 #endif
 

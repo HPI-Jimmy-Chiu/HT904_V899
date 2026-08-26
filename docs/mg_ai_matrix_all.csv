@@ -623,31 +623,31 @@
 20260803,ht9045-v899,CosFunction.h,470,MISSING,"//AI(ht9045-v899) 20260803: InArm load-stage dead-lock watchdog (case 15), CC_ARDENTEC only (CASE-GIGAS-20260729-001)"
 20260803,ht9045-v899,ainarm9045.cpp,7263,MISSING,"//AI(ht9045-v899) 20260803: gate this 20260602 watchdog to CC_ARDENTEC only; TQPF_Timer is a pure wall clock with no stop awareness, so alarm-stop plus OP recov"
 20260803,ht9045-v899,ainarm9045.cpp,7299,MISSING,"//AI(ht9045-v899) 20260803: gate this 20260602 watchdog to CC_ARDENTEC only, same pure-wall-clock defect as the empty-tray one above (CASE-GIGAS-20260729-001)"
-20260804,ht9045-v899,CosFunction.cpp,1469,MISSING,//AI(ht9045-v899) 20260804: turn on C05 power saving for PTI; stop heating after a long HALT once the lot has ended (CASE-PTI-20260804-001)
-20260804,ht9045-v899,CosFunction.cpp,1470,MISSING,"//AI(ht9045-v899) 20260804: unhide the [C05] group, it was forced off by InitialCosFunction"
-20260804,ht9045-v899,CosFunction.cpp,1471,MISSING,//AI(ht9045-v899) 20260804: 720min=12h so 8h(480min) is reachable; EncodeTime caps the hard ceiling at 1439
-20260804,ht9045-v899,CosFunction.cpp,1472,MISSING,//AI(ht9045-v899) 20260804: temp module only; motor/vacuum/ATC/mode stay forced to 0 exactly as today
-20260804,ht9045-v899,CosFunction.cpp,1473,MISSING,"//AI(ht9045-v899) 20260804: one-cycle repair keeps lot-start, cutting the heater there would waste a re-soak"
-20260804,ht9045-v899,CosFunction.cpp,1474,MISSING,//AI(ht9045-v899) 20260804: ambient halt is out of scope per the customer remark
-20260804,ht9045-v899,CosFunction.cpp,1475,MISSING,//AI(ht9045-v899) 20260804: main-screen indication per the customer remark
-20260804,ht9045-v899,CosFunction.cpp,3875,MISSING,//AI(ht9045-v899) 20260804: C05 power-save per-customer defaults; every flag keeps the legacy behaviour when not overridden (CASE-PTI-20260804-001)
-20260804,ht9045-v899,CosFunction.cpp,3876,MISSING,//AI(ht9045-v899) 20260804: legacy C05 limit; PTI overrides this to 720
-20260804,ht9045-v899,CosFunction.h,471,MISSING,"//AI(ht9045-v899) 20260804: C05 power-save per-customer profile, added for the PTI HALT temperature saving request (CASE-PTI-20260804-001)"
-20260804,ht9045-v899,CosFunction.h,472,MISSING,//AI(ht9045-v899) 20260804: C05 halt-time upper limit in minutes; 0 keeps the built-in 200 fallback
-20260804,ht9045-v899,CosFunction.h,473,MISSING,//AI(ht9045-v899) 20260804: C05 page shows the temp module only and forces motor/vacuum/ATC/mode to 0
-20260804,ht9045-v899,CosFunction.h,474,MISSING,//AI(ht9045-v899) 20260804: C05 must not engage while RunInfo.bLotStart is true (one-cycle repair)
-20260804,ht9045-v899,CosFunction.h,475,MISSING,//AI(ht9045-v899) 20260804: C05 does not intervene when the machine halts in ambient mode
-20260804,ht9045-v899,CosFunction.h,476,MISSING,"//AI(ht9045-v899) 20260804: show ""Power Save Mode"" on pnlPowerSaving once power saving is engaged"
-20260804,ht9045-v899,PowerSavingMode.cpp,39,MISSING,//AI(ht9045-v899) 20260804: the C05 halt-time limit became per-customer (PTI 720min). MaxMinute stays as the
-20260804,ht9045-v899,PowerSavingMode.cpp,137,MISSING,//AI(ht9045-v899) 20260804: PTI power-save gates. Placed here (not in CheckSystemRun) and mirroring the
-20260804,ht9045-v899,PowerSavingMode.cpp,256,MISSING,"//AI(ht9045-v899) 20260804: set the caption once at the transition, otherwise the panel keeps showing"
-20260804,ht9045-v899,PowerSavingMode.cpp,289,MISSING,//AI(ht9045-v899) 20260804: per-customer limit (PTI 720min) instead of the fixed 200 (CASE-PTI-20260804-001)
-20260804,ht9045-v899,PowerSavingMode.cpp,406,MISSING,//AI(ht9045-v899) 20260804: restore the panel so the next count-down is readable again (CASE-PTI-20260804-001)
-20260804,ht9045-v899,PowerSavingMode.h,68,MISSING,//AI(ht9045-v899) 20260804: shared by cConfiguration for the [C05] halt-time edit limit (CASE-PTI-20260804-001)
-20260804,ht9045-v899,cConfiguration.cpp,38,MISSING,//AI(ht9045-v899) 20260804: GetPowerSaveMaxMinute() for the [C05] halt-time limit (CASE-PTI-20260804-001)
-20260804,ht9045-v899,cConfiguration.cpp,1009,MISSING,//AI(ht9045-v899) 20260804: PTI shows the temp module only. Motor/vacuum/ATC/mode keep the very same
-20260804,ht9045-v899,cConfiguration.cpp,1029,MISSING,//AI(ht9045-v899) 20260804: temp row label follows the per-customer limit
-20260804,ht9045-v899,cConfiguration.cpp,1031,MISSING,//AI(ht9045-v899) 20260804: hide the motor/vacuum/ATC row labels together with their controls
+20260804,ht9045-v899,CosFunction.cpp,1469,same-file,//AI(ht9045-v899) 20260804: turn on C05 power saving for PTI; stop heating after a long HALT once the lot has ended (CASE-PTI-20260804-001)
+20260804,ht9045-v899,CosFunction.cpp,1470,same-file,"//AI(ht9045-v899) 20260804: unhide the [C05] group, it was forced off by InitialCosFunction"
+20260804,ht9045-v899,CosFunction.cpp,1471,same-file,//AI(ht9045-v899) 20260804: 720min=12h so 8h(480min) is reachable; EncodeTime caps the hard ceiling at 1439
+20260804,ht9045-v899,CosFunction.cpp,1472,same-file,//AI(ht9045-v899) 20260804: temp module only; motor/vacuum/ATC/mode stay forced to 0 exactly as today
+20260804,ht9045-v899,CosFunction.cpp,1473,same-file,"//AI(ht9045-v899) 20260804: one-cycle repair keeps lot-start, cutting the heater there would waste a re-soak"
+20260804,ht9045-v899,CosFunction.cpp,1474,same-file,//AI(ht9045-v899) 20260804: ambient halt is out of scope per the customer remark
+20260804,ht9045-v899,CosFunction.cpp,1475,same-file,//AI(ht9045-v899) 20260804: main-screen indication per the customer remark
+20260804,ht9045-v899,CosFunction.cpp,3875,same-file,//AI(ht9045-v899) 20260804: C05 power-save per-customer defaults; every flag keeps the legacy behaviour when not overridden (CASE-PTI-20260804-001)
+20260804,ht9045-v899,CosFunction.cpp,3876,same-file,//AI(ht9045-v899) 20260804: legacy C05 limit; PTI overrides this to 720
+20260804,ht9045-v899,CosFunction.h,471,same-file,"//AI(ht9045-v899) 20260804: C05 power-save per-customer profile, added for the PTI HALT temperature saving request (CASE-PTI-20260804-001)"
+20260804,ht9045-v899,CosFunction.h,472,same-file,//AI(ht9045-v899) 20260804: C05 halt-time upper limit in minutes; 0 keeps the built-in 200 fallback
+20260804,ht9045-v899,CosFunction.h,473,same-file,//AI(ht9045-v899) 20260804: C05 page shows the temp module only and forces motor/vacuum/ATC/mode to 0
+20260804,ht9045-v899,CosFunction.h,474,same-file,//AI(ht9045-v899) 20260804: C05 must not engage while RunInfo.bLotStart is true (one-cycle repair)
+20260804,ht9045-v899,CosFunction.h,475,same-file,//AI(ht9045-v899) 20260804: C05 does not intervene when the machine halts in ambient mode
+20260804,ht9045-v899,CosFunction.h,476,same-file,"//AI(ht9045-v899) 20260804: show ""Power Save Mode"" on pnlPowerSaving once power saving is engaged"
+20260804,ht9045-v899,PowerSavingMode.cpp,39,same-file,//AI(ht9045-v899) 20260804: the C05 halt-time limit became per-customer (PTI 720min). MaxMinute stays as the
+20260804,ht9045-v899,PowerSavingMode.cpp,137,same-file,//AI(ht9045-v899) 20260804: PTI power-save gates. Placed here (not in CheckSystemRun) and mirroring the
+20260804,ht9045-v899,PowerSavingMode.cpp,256,same-file,"//AI(ht9045-v899) 20260804: set the caption once at the transition, otherwise the panel keeps showing"
+20260804,ht9045-v899,PowerSavingMode.cpp,289,same-file,//AI(ht9045-v899) 20260804: per-customer limit (PTI 720min) instead of the fixed 200 (CASE-PTI-20260804-001)
+20260804,ht9045-v899,PowerSavingMode.cpp,406,same-file,//AI(ht9045-v899) 20260804: restore the panel so the next count-down is readable again (CASE-PTI-20260804-001)
+20260804,ht9045-v899,PowerSavingMode.h,68,same-file,//AI(ht9045-v899) 20260804: shared by cConfiguration for the [C05] halt-time edit limit (CASE-PTI-20260804-001)
+20260804,ht9045-v899,cConfiguration.cpp,38,same-file,//AI(ht9045-v899) 20260804: GetPowerSaveMaxMinute() for the [C05] halt-time limit (CASE-PTI-20260804-001)
+20260804,ht9045-v899,cConfiguration.cpp,1009,same-file,//AI(ht9045-v899) 20260804: PTI shows the temp module only. Motor/vacuum/ATC/mode keep the very same
+20260804,ht9045-v899,cConfiguration.cpp,1029,same-file,//AI(ht9045-v899) 20260804: temp row label follows the per-customer limit
+20260804,ht9045-v899,cConfiguration.cpp,1031,same-file,//AI(ht9045-v899) 20260804: hide the motor/vacuum/ATC row labels together with their controls
 20260810,ht9045-v899,RotateKit\aRotateKIT.cpp,114,MISSING,"//AI(ht9045-v899) 20260810: 2x4 交錯 4 站(e9045_2x4_4_13/_14)時 SetInOutArmParameter_2x4_4() 已用 CopyInitSuck 把 OutArm 資料搬到邏輯欄位 0 與 1, 但這裡仍給 3(欄位 0 與 3), 使 M_MoveOut"
 20260810,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,1131,MISSING,"//AI(ht9045-v899) 20260810: 記錄這一趟到底把哪幾支吸嘴放到旋轉站。列舉用的 stride 是 i2x2Suck_Out, 只要它跟吸嘴實際欄位對不上, 就會有 IC 沒旋轉就進 Auto tray (力成PTI DUT1/DUT3 即此)"
 20260810,ht9045-v899,aoutarm.cpp,3125,MISSING,"//AI(ht9045-v899) 20260810: 超出極限救援時, 最小階(i=1)若僅略低於機構下限則夾到下限"
@@ -669,15 +669,15 @@
 20260810,ht9045-v899,cprod.cpp,2535,MISSING,"//AI(ht9045-v899) 20260810: 全智預設門檻 10 改 50 (與其他客戶原廠標準一致), 因 Y1 定位殘差恆為 10 與門檻相等造成 Index 4 Axis Need Home 誤報; 下限維持 5 保留客戶自行調緊彈性"
 20260810,ht9045-v899,main.cpp,25566,MISSING,"//AI(ht9045-v899) 20260810: 補收 Error 夾下的兩份診斷 log: BootLog.txt(含輪替的 .old, 開機/崩潰診斷)與警報當下落地的 OutArmRoundLog.txt。原本 State Record 只收 system 與 config, 這兩份都收不到, 遇到「軟體啟"
 20260810,ht9045-v899,main.cpp,25791,MISSING,"//AI(ht9045-v899) 20260810: 一併把 OutArm 逐輪診斷 Log 帶進 State Record, 交給 RD 分析"
-20260811,ht9045-v899,PowerSavingMode.cpp,32,MISSING,"//AI(ht9045-v899) 20260811: PTI 要求進入省電後狀態列要更顯眼,底色反黃並放大字型;"
-20260811,ht9045-v899,PowerSavingMode.cpp,66,MISSING,//AI(ht9045-v899) 20260811: 狀態列反黃起始為關 (CASE-PTI-20260811-001)
-20260811,ht9045-v899,PowerSavingMode.cpp,103,MISSING,"//AI(ht9045-v899) 20260811: 所有中止/重新計數的路徑都會先把 bRestart 立起來,在這裡一次還原狀態列,"
-20260811,ht9045-v899,PowerSavingMode.cpp,118,MISSING,"//AI(ht9045-v899) 20260811: C05 全關時面板會隱藏,先還原反黃與高度 (CASE-PTI-20260811-001)"
-20260811,ht9045-v899,PowerSavingMode.cpp,258,MISSING,//AI(ht9045-v899) 20260811: 反黃與放大字型一併交給 ShowPowerSaveHighlight() 處理 (CASE-PTI-20260811-001)
-20260811,ht9045-v899,PowerSavingMode.cpp,354,MISSING,//AI(ht9045-v899) 20260811: PTI 要求省電模式在主畫面要更明顯: 底色反黃 + 字型放大。
-20260811,ht9045-v899,PowerSavingMode.cpp,407,MISSING,//AI(ht9045-v899) 20260811: 反黃與放大的字型一併還原 (CASE-PTI-20260811-001)
-20260811,ht9045-v899,PowerSavingMode.h,45,MISSING,//AI(ht9045-v899) 20260811: 狀態列反黃中(避免每秒重複重繪) (CASE-PTI-20260811-001)
-20260811,ht9045-v899,PowerSavingMode.h,46,MISSING,//AI(ht9045-v899) 20260811: 進入省電後狀態列底色反黃並放大字型 (CASE-PTI-20260811-001)
+20260811,ht9045-v899,PowerSavingMode.cpp,32,same-file,"//AI(ht9045-v899) 20260811: PTI 要求進入省電後狀態列要更顯眼,底色反黃並放大字型;"
+20260811,ht9045-v899,PowerSavingMode.cpp,66,same-file,//AI(ht9045-v899) 20260811: 狀態列反黃起始為關 (CASE-PTI-20260811-001)
+20260811,ht9045-v899,PowerSavingMode.cpp,103,same-file,"//AI(ht9045-v899) 20260811: 所有中止/重新計數的路徑都會先把 bRestart 立起來,在這裡一次還原狀態列,"
+20260811,ht9045-v899,PowerSavingMode.cpp,118,same-file,"//AI(ht9045-v899) 20260811: C05 全關時面板會隱藏,先還原反黃與高度 (CASE-PTI-20260811-001)"
+20260811,ht9045-v899,PowerSavingMode.cpp,258,same-file,//AI(ht9045-v899) 20260811: 反黃與放大字型一併交給 ShowPowerSaveHighlight() 處理 (CASE-PTI-20260811-001)
+20260811,ht9045-v899,PowerSavingMode.cpp,354,same-file,//AI(ht9045-v899) 20260811: PTI 要求省電模式在主畫面要更明顯: 底色反黃 + 字型放大。
+20260811,ht9045-v899,PowerSavingMode.cpp,407,same-file,//AI(ht9045-v899) 20260811: 反黃與放大的字型一併還原 (CASE-PTI-20260811-001)
+20260811,ht9045-v899,PowerSavingMode.h,45,same-file,//AI(ht9045-v899) 20260811: 狀態列反黃中(避免每秒重複重繪) (CASE-PTI-20260811-001)
+20260811,ht9045-v899,PowerSavingMode.h,46,same-file,//AI(ht9045-v899) 20260811: 進入省電後狀態列底色反黃並放大字型 (CASE-PTI-20260811-001)
 20260811,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,694,MISSING,"//AI(ht9045-v899) 20260811: 2x4 交錯 4 站(e9045_2x4_4_13/_14, 非 16 picker) 的 OutArm 資料已被"
 20260811,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,816,MISSING,"//AI(ht9045-v899) 20260811: 2x4_4_13/_14 改走下方 1,3 吸嘴分支"
 20260811,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,918,MISSING,"//AI(ht9045-v899) 20260811: 把旋轉站的 XY 目標與 X-pitch 計算結果記進診斷 Log,"
@@ -693,7 +693,7 @@
 20260817,ht9045-v899,CosFunction.cpp,2847,same-file,"//AI(ht9045-v899) 20260817: 客戶反映 Auto Tray Feed 跟隨工作檔, 換工單就把 Clean Out 的 Tray End 選單架空, 故固定關閉"
 20260817,ht9045-v899,CosFunction.cpp,4322,same-file,"//AI(ht9045-v899) 20260817: 預設不關閉, 只有 CC_CYUEAN 會開啟"
 20260817,ht9045-v899,CosFunction.h,354,same-file,//AI(ht9045-v899) 20260817: CC_CYUEAN 固定關閉 Auto Tray Feed(勾選時會架空 Clean Out 的 Tray End 選單)
-20260817,ht9045-v899,PowerSavingMode.cpp,363,MISSING,"//AI(ht9045-v899) 20260817: guard 只擋「重複點亮」,還原一律要能執行。倒數字串是"
+20260817,ht9045-v899,PowerSavingMode.cpp,363,same-file,"//AI(ht9045-v899) 20260817: guard 只擋「重複點亮」,還原一律要能執行。倒數字串是"
 20260817,ht9045-v899,cObserver.cpp,3790,same-file,//AI(ht9045-v899) 20260817: EventLog CSV 顯示用斷欄。只以逗號分隔，並保留雙引號內的空白與逗號。
 20260817,ht9045-v899,cObserver.cpp,3890,same-file,//AI(ht9045-v899) 20260817: 改用 ParseEventLogLine (CASE-FOREHOPE_NINGBO-20260813-001)
 20260817,ht9045-v899,cObserver.cpp,3934,same-file,//AI(ht9045-v899) 20260817: 改用 ParseEventLogLine (CASE-FOREHOPE_NINGBO-20260813-001)

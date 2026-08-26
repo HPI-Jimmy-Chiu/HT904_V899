@@ -1506,6 +1506,13 @@ void FUNC_CC_PTI()
     CosFunction.bShowYieldMonitor                                               =true;
     CosFunction.bFirstTrayCheckOnUnloader                                       =true;  //Jimmychiu 20251205 : First Tray Check On Unloader
     CosFunction.bEndLotAfterTrayFeed                                            =true;  //Jimmychiu 20250115 : Auto End Lot After Tray Feed
+    //AI(ht9045-v899) 20260804: turn on C05 power saving for PTI; stop heating after a long HALT once the lot has ended (CASE-PTI-20260804-001)
+    IniConfig.bPowerSaveFunction                                                =true;  //AI(ht9045-v899) 20260804: unhide the [C05] group, it was forced off by InitialCosFunction
+    CosFunction.iPowerSaveMaxMinute                                             =720;    //AI(ht9045-v899) 20260804: 720min=12h so 8h(480min) is reachable; EncodeTime caps the hard ceiling at 1439
+    CosFunction.bPowerSaveTempOnly                                              =true;  //AI(ht9045-v899) 20260804: temp module only; motor/vacuum/ATC/mode stay forced to 0 exactly as today
+    CosFunction.bPowerSaveLotEndOnly                                            =true;  //AI(ht9045-v899) 20260804: one-cycle repair keeps lot-start, cutting the heater there would waste a re-soak
+    CosFunction.bPowerSaveSkipAmbient                                           =true;  //AI(ht9045-v899) 20260804: ambient halt is out of scope per the customer remark
+    CosFunction.bPowerSaveShowCaption                                           =true;  //AI(ht9045-v899) 20260804: main-screen indication per the customer remark
 }
 //------------------------------------------------------------------------------
 void FUNC_CC_THAILIN()
@@ -3926,6 +3933,12 @@ void InitialCosFunction()
     IniConfig.bDutOnOffNeedASM                                                  =false; //Steven 20120628 : 開關Site, 強制啟動Auto Site Mapping
     IniConfig.bIndexEveryTimeCheckEP                                            =false; //Index每一次都確認EP是否有充飽氣。
     IniConfig.bPowerSaveFunction                                                =false; //省電模式
+    //AI(ht9045-v899) 20260804: C05 power-save per-customer defaults; every flag keeps the legacy behaviour when not overridden (CASE-PTI-20260804-001)
+    CosFunction.iPowerSaveMaxMinute                                             =200;    //AI(ht9045-v899) 20260804: legacy C05 limit; PTI overrides this to 720
+    CosFunction.bPowerSaveTempOnly                                              =false;
+    CosFunction.bPowerSaveLotEndOnly                                            =false;
+    CosFunction.bPowerSaveSkipAmbient                                           =false;
+    CosFunction.bPowerSaveShowCaption                                           =false;
     CosFunction.bFTPFunction                                                    =false; //FTP功能
     IniConfig.bEventLogAutoSaveFunction                                         =true;  //自動存EventLog
     IniConfig.bShowFunctionWindow                                               =false; //顯示在溫度值下面的功能開關畫面

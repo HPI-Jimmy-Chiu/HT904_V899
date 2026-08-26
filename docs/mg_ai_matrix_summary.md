@@ -57,13 +57,13 @@
 | 20260703 | 0 | 0 | 0 | 25 | 25 |
 | 20260706 | 0 | 0 | 0 | 1 | 1 |
 | 20260803 | 0 | 0 | 0 | 5 | 5 |
-| 20260804 | 0 | 0 | 0 | 25 | 25 |
+| 20260804 | 25 | 0 | 0 | 0 | 25 |
 | 20260810 | 0 | 0 | 0 | 21 | 21 |
-| 20260811 | 0 | 0 | 0 | 21 | 21 |
-| 20260817 | 10 | 0 | 0 | 1 | 11 |
+| 20260811 | 9 | 0 | 0 | 12 | 21 |
+| 20260817 | 11 | 0 | 0 | 0 | 11 |
 | 20260819 | 0 | 0 | 0 | 10 | 10 |
 | 20260820 | 0 | 0 | 0 | 7 | 7 |
-| **合計** | 391 | 4 | 49 | 275 | 719 |
+| **合計** | 426 | 4 | 49 | 240 | 719 |
 
 ## MISSING 依檔案分布（前 40）
 
@@ -73,19 +73,17 @@
 | FTPUpload\uFtpUploadThread.cpp | 23 |
 | main.cpp | 22 |
 | ainarm9045.cpp | 15 |
-| CosFunction.cpp | 15 |
 | uLotInfo.cpp | 14 |
-| PowerSavingMode.cpp | 13 |
 | acatchtray.cpp | 12 |
 | aoutarm9045_2x4_4.cpp | 10 |
 | aoutarm9045.cpp | 9 |
-| cConfiguration.cpp | 9 |
 | AutoClean\uCleaning.cpp | 9 |
 | ProductionInfo\ProductionInfo.cpp | 9 |
-| CosFunction.h | 8 |
 | FTPUpload\uFtpUploadThread.h | 8 |
 | csystem.cpp | 7 |
+| CosFunction.cpp | 6 |
 | Interface\TesterTCP.cpp | 6 |
+| cConfiguration.cpp | 5 |
 | RotateKit\aRotateKIT_Out.cpp | 5 |
 | cmydef.cpp | 4 |
 | KYECFTP\FTPClient.cpp | 4 |
@@ -93,12 +91,12 @@
 | cmydef.h | 3 |
 | cShowBinSelect.cpp | 3 |
 | HS_Function.cpp | 3 |
-| PowerSavingMode.h | 3 |
 | uhome.cpp | 3 |
 | ainarm9045_1x1_1.cpp | 2 |
 | aoutarm.cpp | 2 |
 | aoutarm9045.h | 2 |
 | cBinSel.cpp | 2 |
+| CosFunction.h | 2 |
 | cprod.cpp | 2 |
 | cpublic.cpp | 2 |
 | mymessbox.cpp | 2 |
@@ -109,3 +107,5 @@
 | Config.h | 1 |
 | cpublic.h | 1 |
 | cSortCT.cpp | 1 |
+| cTrayAssignment.cpp | 1 |
+| MachineType.h | 1 |

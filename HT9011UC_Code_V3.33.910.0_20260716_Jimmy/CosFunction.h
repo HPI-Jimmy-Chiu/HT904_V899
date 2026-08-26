@@ -484,6 +484,12 @@ typedef struct
     bool bConfigAddObjectName;
     bool bZHomingAfterPickErr;
     bool bInitialStartDelayCount_Init;
+    //AI(ht9045-v899) 20260804: C05 power-save per-customer profile, added for the PTI HALT temperature saving request (CASE-PTI-20260804-001)
+    int  iPowerSaveMaxMinute;                                                   //AI(ht9045-v899) 20260804: C05 halt-time upper limit in minutes; 0 keeps the built-in 200 fallback
+    bool bPowerSaveTempOnly;                                                    //AI(ht9045-v899) 20260804: C05 page shows the temp module only and forces motor/vacuum/ATC/mode to 0
+    bool bPowerSaveLotEndOnly;                                                  //AI(ht9045-v899) 20260804: C05 must not engage while RunInfo.bLotStart is true (one-cycle repair)
+    bool bPowerSaveSkipAmbient;                                                 //AI(ht9045-v899) 20260804: C05 does not intervene when the machine halts in ambient mode
+    bool bPowerSaveShowCaption;                                                 //AI(ht9045-v899) 20260804: show "Power Save Mode" on pnlPowerSaving once power saving is engaged
 } HT9045_COUSTOMER_FUNCTION;
 extern HT9045_COUSTOMER_FUNCTION CosFunction;
 extern void InitialCosFunction();

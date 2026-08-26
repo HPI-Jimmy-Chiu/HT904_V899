@@ -34,6 +34,9 @@ DEVLOG＋🔖RESUME：`docs/MG_DEVLOG.md`（檔尾 RESUME 是冷啟動唯一起�
    來源 899 註解**原樣保留**（它是矩陣驗收的簽章）。
 5. 每波 gate（缺一不可）：port_check 全綠 → 觸及檔 bcc32 -c -H- 全過 →
    主腦逐條開檔複驗（agent 論證比程式碼更常錯）→ commit。
+6. **commit 後清 V910 樹 `*.mgbak`**：port_check 與 bcc_syntax 的基準都取自
+   .mgbak（首次觸碰時建立），逐波清掉才能讓下一波的差異報告與「既有錯誤集合」
+   基準是波前狀態，而非跨波累積。
 
 ## 決策規則（使用者 20260826 裁定）
 

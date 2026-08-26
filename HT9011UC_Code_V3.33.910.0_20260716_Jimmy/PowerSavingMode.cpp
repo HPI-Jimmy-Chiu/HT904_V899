@@ -29,6 +29,29 @@ class TPowerSaving *tPowerSaving;
 const int MaxMinute=200;                                                        //Alarm 設定最大值
 TDateTime OverDayPM=StrToTime("pm 11:59:59");
 TDateTime OverDayAM=StrToTime("am 12:00:00");
+//AI(ht9045-v899) 20260811: PTI 要求進入省電後狀態列要更顯眼,底色反黃並放大字型;
+//面板要跟著加高是因為 ShowFunctions() 的列距只有 18,字放大後不加高會被下一列蓋掉 (CASE-PTI-20260811-001)
+const int PSNormalPanelHeight   =20;                                            //main.dfm pnlPowerSaving 原始高度
+const int PSNormalFontHeight    =-16;                                           //main.dfm pnlPowerSaving 原始字高
+const int PSHighlightPanelHeight=28;
+const int PSHighlightFontHeight =-20;
+//------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260804: the C05 halt-time limit became per-customer (PTI 720min). MaxMinute stays as the
+//fallback so an unset flag cannot collapse every customer to 1 minute, and the result is
+//clamped to 1439 because SetAlarmTime feeds EncodeTime(), which rejects hour>23. (CASE-PTI-20260804-001)
+//------------------------------------------------------------------------------
+int GetPowerSaveMaxMinute()
+{
+    int iLimit=MaxMinute;
+
+    if(CosFunction.iPowerSaveMaxMinute>0)
+        iLimit=CosFunction.iPowerSaveMaxMinute;
+
+    if(iLimit>1439)
+        iLimit=1439;
+
+    return iLimit;
+}
 //---------------------------------------------------------------------------
 __fastcall TPowerSaving::TPowerSaving()
 {
@@ -40,6 +63,7 @@ __fastcall TPowerSaving::TPowerSaving()
 
     flagStartTmr=false;
     bRestart=true;
+    bHighlightOn=false;                                                         //AI(ht9045-v899) 20260811: 狀態列反黃起始為關 (CASE-PTI-20260811-001)
 
     MtrModule   =new TMtrModule;
     VacuumModule=new TVacuumModule;                                             //Steven 20221215 : Power saving for vacuum pump
@@ -76,6 +100,11 @@ void __fastcall TPowerSaving::OnScanTmr(TObject *Sender)
     if(InitialOK==false)
         return;
 
+    //AI(ht9045-v899) 20260811: 所有中止/重新計數的路徑都會先把 bRestart 立起來,在這裡一次還原狀態列,
+    //不必在每一個 return 前各補一次 (CASE-PTI-20260811-001)
+    if(bRestart)
+        ShowPowerSaveHighlight(false);
+
     if(SystemStart || IniConfig.bPowerSaveFunction==false)
     {
         bRestart=true;
@@ -86,6 +115,7 @@ void __fastcall TPowerSaving::OnScanTmr(TObject *Sender)
        IniConfig.bC05_PowerSaveMotor==false &&
        IniConfig.bC05_PowerSaveVacuum==false)                                   //Steven 20221215 : Power saving for vacuum pump
     {
+        ShowPowerSaveHighlight(false);                                           //AI(ht9045-v899) 20260811: C05 全關時面板會隱藏,先還原反黃與高度 (CASE-PTI-20260811-001)
         fMain->pnlPowerSaving->Visible=false;
         return;
     }
@@ -99,6 +129,20 @@ void __fastcall TPowerSaving::OnScanTmr(TObject *Sender)
 
 //    if(CUSTOMER_CODE==CC_GIGAS &&                                               //Isaac 20200720 : 客戶要求開啟contact頁面下，不啟動省電模式
     if(fContact->fShow)                                                         //Steven 20250324 : contact頁面下，不啟動省電模式
+    {
+        bRestart=true;
+        return;
+    }
+
+    //AI(ht9045-v899) 20260804: PTI power-save gates. Placed here (not in CheckSystemRun) and mirroring the
+    //fContact guard so that a change during the count-down also restarts it. (CASE-PTI-20260804-001)
+    if(CosFunction.bPowerSaveLotEndOnly && RunInfo.bLotStart)
+    {
+        bRestart=true;
+        return;
+    }
+
+    if(CosFunction.bPowerSaveSkipAmbient && LastSet.iTemperature==Tempture_Ambient)
     {
         bRestart=true;
         return;
@@ -210,6 +254,10 @@ void __fastcall TPowerSaving::OnScanTmr(TObject *Sender)
                HotModule->Enabled==false &&
                VacuumModule->Enabled==false)        //Steven 20221215 : Power saving for vacuum pump
             {
+                //AI(ht9045-v899) 20260804: set the caption once at the transition, otherwise the panel keeps showing
+                //the last count-down value while power saving is actually engaged. (CASE-PTI-20260804-001)
+                //AI(ht9045-v899) 20260811: 反黃與放大字型一併交給 ShowPowerSaveHighlight() 處理 (CASE-PTI-20260811-001)
+                ShowPowerSaveHighlight(true);
                 Task++;
             }
             break;
@@ -239,8 +287,8 @@ void TPowerSaving::SetAlarmTime(TDateTime &Module ,int Minute)
 
     if(Minute==0)
         Minute=1;
-    else if(Minute>MaxMinute)
-        Minute=MaxMinute;
+    else if(Minute>GetPowerSaveMaxMinute())                                     //AI(ht9045-v899) 20260804: per-customer limit (PTI 720min) instead of the fixed 200 (CASE-PTI-20260804-001)
+        Minute=GetPowerSaveMaxMinute();
 
     whh=Minute/60;
     wmm=Minute%60;
@@ -304,11 +352,61 @@ void TPowerSaving::SetFunction(bool OnOff)
     VacuumModule->Enabled=IniConfig.bC05_PowerSaveVacuum;
 }
 //---------------------------------------------------------------------------
+//AI(ht9045-v899) 20260811: PTI 要求省電模式在主畫面要更明顯: 底色反黃 + 字型放大。
+//加高面板後呼叫 ShowFunctions() 重排,讓下面的狀態列讓位而不是被蓋住;
+//btnView 跟著重新定位,做法與 main.cpp 原本的 iTop=ShowFunctions() 一致 (CASE-PTI-20260811-001)
+//---------------------------------------------------------------------------
+void TPowerSaving::ShowPowerSaveHighlight(bool bOn)
+{
+    if(CosFunction.bPowerSaveShowCaption==false || fMain==NULL)
+        return;
+
+    //AI(ht9045-v899) 20260817: guard 只擋「重複點亮」,還原一律要能執行。倒數字串是
+    //  OnScanTmr case 2 每秒直接寫 pnlPowerSaving->Caption,不經過這裡也不動 bHighlightOn;
+    //  舊寫法 if(bHighlightOn==bOn) return; 在倒數中切入生產時 bOn 與 bHighlightOn 同為
+    //  false,還原被整個吃掉,Caption 就凍在最後一個倒數值 (CASE-PTI-20260811-001)
+    if(bOn)
+    {
+        if(bHighlightOn)                                                        //重複點亮才擋
+            return;
+    }
+    else if(bHighlightOn==false &&
+            fMain->pnlPowerSaving->Caption=="PowerSaving")                      //已在還原狀態才略過,否則生產中每秒都會重排狀態欄
+        return;
+
+    bHighlightOn=bOn;
+
+    if(bOn)
+    {
+        fMain->pnlPowerSaving->Caption     ="Power Save Mode";
+        fMain->pnlPowerSaving->Color       =clYellow;
+        fMain->pnlPowerSaving->Font->Color =clRed;
+        fMain->pnlPowerSaving->Font->Height=PSHighlightFontHeight;
+        fMain->pnlPowerSaving->Height      =PSHighlightPanelHeight;
+    }
+    else
+    {
+        fMain->pnlPowerSaving->Caption     ="PowerSaving";
+        fMain->pnlPowerSaving->Color       =clBtnFace;
+        fMain->pnlPowerSaving->Font->Color =clBlue;
+        fMain->pnlPowerSaving->Font->Height=PSNormalFontHeight;
+        fMain->pnlPowerSaving->Height      =PSNormalPanelHeight;
+    }
+
+    int iTop=fMain->ShowFunctions();
+    if(iTop>0)
+        fMain->btnView->Top=iTop;
+}
+//---------------------------------------------------------------------------
 void TPowerSaving::Restart()
 {
    bRestart=true;
    SetFunction(true);
    tModule->iCountDown=tModule->AlarmTmr;
+
+   //AI(ht9045-v899) 20260804: restore the panel so the next count-down is readable again (CASE-PTI-20260804-001)
+   //AI(ht9045-v899) 20260811: 反黃與放大的字型一併還原 (CASE-PTI-20260811-001)
+   ShowPowerSaveHighlight(false);
 }
 //---------------------------------------------------------------------------
 bool TPowerSaving::CheckChangeState()                                           //2013-03-05    Dell modify for ATK 在主畫面不是在最前就不能進入

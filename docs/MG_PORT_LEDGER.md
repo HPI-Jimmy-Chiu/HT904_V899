@@ -19,7 +19,8 @@
 | MG-W4 | BootLog 開機診斷（main.cpp 5 埋點 59 行；cBootLog.cpp/h 已在 V910 基線內免搬）＋LOAD_Y stepper（HandlerSys OK 套用 6 行含 [0] 補齊＋uMotorTest 測試列 5 行），16 條矩陣點、7 op | port_check PASS（59+6+5 全 SPLICED、removed=5 逐條複驗＝uMotorTest 舊 false 列）＋bcc32 PASS（main.cpp 3 個既有錯誤與 .mgbak 基準一致＝零回歸，見 gate 準則）。裁決：OP-A4 用 after 保留 V910 RogerYang AV 去重改寫；OP-B1 含未標記的 [0] Loader 行（整段 apply block V910 從未有過，補齊避免不對稱）。無客戶碼隔離需求（機台配置閘控） | 9c7b8e1 |
 | MG-W5 | HS_Function KYEC 上傳線（0414 trace 診斷 6 點＋0415 前置宣告與跨午夜換昨天＋0420 假 MISSING 判 C；11 條矩陣點、9 op） | port_check PASS（+35 全 SPLICED、removed=0＝V910 零損失）＋bcc32 PASS（0 errors）。目檢三要害：20260630 timeout 30000 未動、Eastsun CC_KYEC_LEE 區塊完整、connect-fail else 到位。OP9 補 connect-fail 回傳碼（全樹無消費者，可觀察面零）。跨午夜 swap 行為外溢記 F2。**閘門真相：非 KYEC 專屬**（bN10* ini 旗標閘控，函式名是歷史命名） | 59952cc |
 | MG-W6 | 0817 CC_CYUEAN 固定關閉 Auto Tray Feed（CosFunction.h 成員＋預設 false＋FUNC_CC_CYUEAN 4 行含未標記承重行＋cTrayAssignment 生效點與 UI 鎖；5 條矩陣點＋1 未標記行、5 op） | port_check PASS（+17 全 SPLICED、removed=1＝V910 死註解行）＋bcc32 雙檔 0 errors；bCleanOutCanTrayEnd 兩樹同口徑 44=44 parity。**B 類，gate=FUNC_CC_CYUEAN(868) 僅 CYUEAN 執行**；KYEC_LEE(921) AMR 漂移互斥已證。**CYUEAN 行為變更記兩項**：(A) bAutoFeed 恆 false (B) bCleanOutCanTrayEnd false→true（開 MES1642 TrayEnd 選單家族 7 讀取點）——皆 V899 出貨現狀。附帶：TfConfiguration 第二顆 chkAutoTrayFeed 可繞過鎖定＝V899 自身既有缺口（兩樹位元組同，不動） | 26ec286 |
-| MG-W7 | Multi EP 主題波（0430/0504/0511/0526 共 53 條）——**地形重大發現：V910 有公司自製 Multi EP 完整實作（Eastsun 20260525 整合＋RogerYang 8EP），部分比 V899 新**。真搬 6 條（iosetview 0511 AV 防護 5 op＋ContactForce round-trip 1 op）；32 條 C 類、8 條刪除記錄不可執行（會砍掉公司 8EP 活功能）、7 條入 F3–F6（皆建議不搬並已照建議）；47 條入矩陣白名單 | port_check PASS（15+2 全 SPLICED、removed=4 逐條複驗）＋bcc32 雙檔 0 errors。反向發現 3 筆（V899 有問題 V910 沒有，不可回搬）：ContactForce iCount<3 殘留（已開 V899 任務卡）、MultiTransferKG int vs double、ReadMultiEP 未啟用 | （本次收工 commit） |
+| MG-W7 | Multi EP 主題波（0430/0504/0511/0526 共 53 條）——**地形重大發現：V910 有公司自製 Multi EP 完整實作（Eastsun 20260525 整合＋RogerYang 8EP），部分比 V899 新**。真搬 6 條（iosetview 0511 AV 防護 5 op＋ContactForce round-trip 1 op）；32 條 C 類、8 條刪除記錄不可執行（會砍掉公司 8EP 活功能）、7 條入 F3–F6（皆建議不搬並已照建議）；47 條入矩陣白名單 | port_check PASS（15+2 全 SPLICED、removed=4 逐條複驗）＋bcc32 雙檔 0 errors。反向發現 3 筆（V899 有問題 V910 沒有，不可回搬）：ContactForce iCount<3 殘留（已開 V899 任務卡）、MultiTransferKG int vs double、ReadMultiEP 未啟用 | 484123a |
+| MG-W8 | Power Save 線（0804 C05 profile 25 條＋0811 UI 高亮 9 條＋0817:363 還原 guard；16 op／5 檔／170 行，含 116 行無標記新碼——矩陣盲區同型第三例） | port_check PASS（157 行全 SPLICED）＋bcc32 三檔 0 errors。PowerSavingMode.h 套用後與 V899 位元組完全相同。**B 類：gate=FUNC_CC_PTI＋bPowerSaveShowCaption（預設 false）**，非 PTI 全路徑不變；GetPowerSaveMaxMinute 非 PTI 回傳 200=原硬編碼。**PTI 行為變更記錄：IniConfig.bPowerSaveFunction=true 是 V910 上全新開關**（與 W6 bCleanOutCanTrayEnd 同型）。碰撞區 cConfiguration [C05]：PTI 分支插前、既有 if 降級 else if，V910 分支本體零位元組變動（USE_BU5_Function 實測死旗標，200/400 分岔無實機差異）。.dfm 驗證免動（gbC05/labC05_* 兩樹 94 行位元組同） | （本次收工 commit） |
 
 ## 假 MISSING 白名單
 
@@ -84,10 +85,10 @@
 | 20260703 | 25 | 8 | CASE-PTI-20260630-001 | acatchtray.cpp(8), cmydef.cpp(4), AutoClean\uCleaning.cpp(3), cmydef.h(3) +4檔 | pending | pending |
 | 20260706 | 1 | 1 | — | ainarm9045.cpp(1) | pending | pending |
 | 20260803 | 5 | 3 | CASE-GIGAS-20260729-001 | CosFunction.cpp(2), ainarm9045.cpp(2), CosFunction.h(1) | pending | pending |
-| 20260804 | 25 | 5 | CASE-PTI-20260804-001 | CosFunction.cpp(9), CosFunction.h(6), PowerSavingMode.cpp(5), cConfiguration.cpp(4) +1檔 | pending | pending |
+| 20260804 | 25 | 5 | CASE-PTI-20260804-001 | CosFunction.cpp(9), CosFunction.h(6), PowerSavingMode.cpp(5), cConfiguration.cpp(4) +1檔 | B | **done MG-W8**（C05 profile，FUNC_CC_PTI gate） |
 | 20260810 | 21 | 9 | — | aoutarm9045_2x4_4.cpp(10), aoutarm.cpp(2), aoutarm9045.cpp(2), main.cpp(2) +5檔 | pending | pending |
 | 20260811 | 21 | 5 | CASE-PTI-20260811-001 | PowerSavingMode.cpp(7), aoutarm9045.cpp(7), RotateKit\aRotateKIT_Out.cpp(4), PowerSavingMode.h(2) +1檔 | pending | pending |
-| 20260817 | 11 | 5 | CASE-FOREHOPE_NINGBO-20260813-001 | cObserver.cpp(5), CosFunction.cpp(2), cTrayAssignment.cpp(2), CosFunction.h(1) +1檔 | A/B | **10/11 done**：cObserver 5=MG-W3；CYUEAN 5=MG-W6；餘 PowerSavingMode.cpp:363（高亮還原 guard）歸 Power Save 主題波 |
+| 20260817 | 11 | 5 | CASE-FOREHOPE_NINGBO-20260813-001 | cObserver.cpp(5), CosFunction.cpp(2), cTrayAssignment.cpp(2), CosFunction.h(1) +1檔 | A/B | **done（11/11）**：cObserver 5=MG-W3；CYUEAN 5=MG-W6；PowerSavingMode:363=MG-W8 |
 | 20260819 | 10 | 4 | — | ProductionInfo\ProductionInfo.cpp(6), CosFunction.cpp(2), CosFunction.h(1), ProductionInfo\ProductionInfo.h(1) | pending | pending |
 | 20260820 | 7 | 3 | — | ProductionInfo\ProductionInfo.cpp(3), cBinSel.cpp(2), main.cpp(2) | pending | pending |
 
