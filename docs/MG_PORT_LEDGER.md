@@ -22,7 +22,8 @@
 | MG-W7 | Multi EP 主題波（0430/0504/0511/0526 共 53 條）——**地形重大發現：V910 有公司自製 Multi EP 完整實作（Eastsun 20260525 整合＋RogerYang 8EP），部分比 V899 新**。真搬 6 條（iosetview 0511 AV 防護 5 op＋ContactForce round-trip 1 op）；32 條 C 類、8 條刪除記錄不可執行（會砍掉公司 8EP 活功能）、7 條入 F3–F6（皆建議不搬並已照建議）；47 條入矩陣白名單 | port_check PASS（15+2 全 SPLICED、removed=4 逐條複驗）＋bcc32 雙檔 0 errors。反向發現 3 筆（V899 有問題 V910 沒有，不可回搬）：ContactForce iCount<3 殘留（已開 V899 任務卡）、MultiTransferKG int vs double、ReadMultiEP 未啟用 | 484123a |
 | MG-W8 | Power Save 線（0804 C05 profile 25 條＋0811 UI 高亮 9 條＋0817:363 還原 guard；16 op／5 檔／170 行，含 116 行無標記新碼——矩陣盲區同型第三例） | port_check PASS（157 行全 SPLICED）＋bcc32 三檔 0 errors。PowerSavingMode.h 套用後與 V899 位元組完全相同。**B 類：gate=FUNC_CC_PTI＋bPowerSaveShowCaption（預設 false）**，非 PTI 全路徑不變；GetPowerSaveMaxMinute 非 PTI 回傳 200=原硬編碼。**PTI 行為變更記錄：IniConfig.bPowerSaveFunction=true 是 V910 上全新開關**（與 W6 bCleanOutCanTrayEnd 同型）。碰撞區 cConfiguration [C05]：PTI 分支插前、既有 if 降級 else if，V910 分支本體零位元組變動（USE_BU5_Function 實測死旗標，200/400 分岔無實機差異）。.dfm 驗證免動（gbC05/labC05_* 兩樹 94 行位元組同） | e5589ee |
 | MG-W9 | InArm watchdog 線（0602 欣銓 13 條＋0803 全智收閘 5 條；18 條全真缺口、11 op／4 檔）——歸屬更正：0602=欣銓 CASE-20260602-001、0803=全智 CASE-GIGAS-20260729-001，「欣銓要的功能害全智誤報→收回 CC_ARDENTEC(870)」 | port_check PASS（74 行全 SPLICED、removed=1=改道 Task=148 的舊 Task=100）＋bcc32 三檔 0 errors。**B 類：gate=bUseInArmLoadStageWatchdog 僅 FUNC_CC_ARDENTEC 設 true**，非欣銓機台兩使用點恆走 disarm，V910 行為零變更。弱錨 OP10 靠同檔降序＋all-or-nothing＋md5 前提防護，落點目檢正確。F7（V910 ARDENTEC 空殼致 case 148 對欣銓不生效）/F8（acatchtray 閘外、四重閘量化）/F9（掛鐘缺陷隨行）入決策清單。反向發現 fAGV NULL 防呆不倒回 | c428a0f |
-| MG-W10 | FTP 大波（0609 KYECFTP 4＋0611 3＋0612 50＋0630:1952 保險路徑；58 條、**2 新增檔**＋16 op／6 檔＋.bpr 6 處） | **V910 完全沒有 FTPUpload 背景上傳執行緒**（uFtpUploadThread.cpp/h 整檔位元組級複製＋md5 對帳）。執行緒 15 接點齊備、不用 Synchronize（結果佇列避 WaitFor 死結）。port_check PASS（216 行全 SPLICED、removed=14 逐條複驗＝移進 else 的同步碼＋非阻塞化取代）＋bcc32 六檔 PASS（新增檔 0 錯誤；uLotInfo 9 個既有錯誤與基準一致零回歸）。開關 bFtpUploadBackground 預設=(CUSTOMER_CODE==CC_PTI)；0609 四處 CC_PTI gated。**OP12（Fix 下半盤 Direction/iTrayType 鏡像）無客戶碼閘＝V899 出貨現狀**：四項實測（enum 零重疊/無第二寫入者/與既有鏡像同構/工作檔旗標閘控）。無標記承重行 127 行全數帶入（矩陣可見率僅 3.4%） | （本次收工 commit） |
+| MG-W10 | FTP 大波（0609 KYECFTP 4＋0611 3＋0612 50＋0630:1952 保險路徑；58 條、**2 新增檔**＋16 op／6 檔＋.bpr 6 處） | **V910 完全沒有 FTPUpload 背景上傳執行緒**（uFtpUploadThread.cpp/h 整檔位元組級複製＋md5 對帳）。執行緒 15 接點齊備、不用 Synchronize（結果佇列避 WaitFor 死結）。port_check PASS（216 行全 SPLICED、removed=14 逐條複驗＝移進 else 的同步碼＋非阻塞化取代）＋bcc32 六檔 PASS（新增檔 0 錯誤；uLotInfo 9 個既有錯誤與基準一致零回歸）。開關 bFtpUploadBackground 預設=(CUSTOMER_CODE==CC_PTI)；0609 四處 CC_PTI gated。**OP12（Fix 下半盤 Direction/iTrayType 鏡像）無客戶碼閘＝V899 出貨現狀**：四項實測（enum 零重疊/無第二寫入者/與既有鏡像同構/工作檔旗標閘控）。無標記承重行 127 行全數帶入（矩陣可見率僅 3.4%） | d66defa |
+| MG-W11 | AutoClean CKPP 主題波（0407/0408/0409/0414/0416/0417＋物理相連的 0514×6；28 條→16 op 執行＋2 條 allowlist＋OP6b 留 F10） | **PickPlanner 目錄與 cCleanKitPickPlan.h 早在 V910 基線**（7 檔 md5 同、.bpr 已登錄）——公司收了新檔卻沒收 AutoClean.cpp 實作，孤兒標頭由本波補活。bUseCKPP 預設 false（無 ini/UI 綁定）＝12 op 休眠搬運；uCleaning 2 op 閘外全客戶生效（pad count 歸零防假 WAR1922＋運算子優先序修正）。**EOL 地雷：V910 AutoClean.cpp 是 100% bare-LF**，splice 跟隨目標、收工實測 CRLF=0。port_check PASS＋bcc32 雙檔 0 errors。OP6b（92%）進 F10 待裁 | （本次收工 commit） |
 
 ## 假 MISSING 白名單
 
@@ -51,14 +52,14 @@
 | 叢集(日期) | 註解數 | 檔數 | comment 內 CASE/SPEC 線索 | 主要檔案 | 分類初判 | 狀態 |
 |---|---|---|---|---|---|---|
 | 20260401 | 1 | 1 | — | SECSGEM\uHGemHT9045_SV.cpp(1) | pending | pending |
-| 20260407 | 11 | 3 | — | AutoClean\AutoClean.cpp(8), ainarm9045_1x1_1.cpp(2), note.cpp(1) | pending | pending（⚠note.cpp:1027 是假 MISSING：V910:1036 公司已改寫等價 SoftStop guard，該波直接判 C） |
-| 20260408 | 6 | 1 | — | AutoClean\AutoClean.cpp(6) | pending | pending |
-| 20260409 | 1 | 1 | — | AutoClean\AutoClean.cpp(1) | pending | pending |
+| 20260407 | 11 | 3 | — | AutoClean\AutoClean.cpp(8), ainarm9045_1x1_1.cpp(2), note.cpp(1) | A/C | **done MG-W11**（OP6b 防卡死 1 條留 F10；1x1_1 兩條＋note.cpp 假 MISSING 入白名單） |
+| 20260408 | 6 | 1 | — | AutoClean\AutoClean.cpp(6) | A | done MG-W11 |
+| 20260409 | 1 | 1 | — | AutoClean\AutoClean.cpp(1) | A | done MG-W11 |
 | 20260410 | 1 | 1 | — | CosFunction.cpp(1) | pending | pending |
-| 20260414 | 10 | 3 | — | HS_Function.cpp(7), AutoClean\uCleaning.cpp(2), main.cpp(1) | A | **HS_Function 7 條 done MG-W5**；uCleaning 2＋main 1 歸各主題波 pending |
+| 20260414 | 10 | 3 | — | HS_Function.cpp(7), AutoClean\uCleaning.cpp(2), main.cpp(1) | A | **9/10 done**：HS 7=MG-W5、uCleaning 2=MG-W11；main.cpp 1 pending（V910 無 0414 MNetLog 區塊，查證後歸波） |
 | 20260415 | 5 | 2 | — | HS_Function.cpp(3), cShowBinSelect.cpp(2) | A | **HS_Function 3 條 done MG-W5**；cShowBinSelect 2 歸 UI 主題波 pending |
-| 20260416 | 1 | 1 | — | AutoClean\AutoClean.cpp(1) | pending | pending |
-| 20260417 | 3 | 2 | — | AutoClean\AutoClean.cpp(2), cShowBinSelect.cpp(1) | pending | pending |
+| 20260416 | 1 | 1 | — | AutoClean\AutoClean.cpp(1) | A | done MG-W11 |
+| 20260417 | 3 | 2 | — | AutoClean\AutoClean.cpp(2), cShowBinSelect.cpp(1) | A | AutoClean 2=done MG-W11; cShowBinSelect 1=UI wave pending |
 | 20260420 | 1 | 1 | — | HS_Function.cpp(1) | C | **skipped-C MG-W5**（BVL-3766 假 MISSING，入白名單） |
 | 20260423 | 19 | 4 | CASE-20260423-001 | HandlerSys.cpp(5), main.cpp(5), uMotorTest.cpp(5), AutoClean\uCleaning.cpp(4) | A/C | **done**：main+HandlerSys+uMotorTest 15 條=MG-W4；uCleaning 4 條=skipped-C（MG-W1） |
 | 20260424 | 8 | 2 | — | MyLaneIo.cpp(6), MyLaneIo.h(2) | A | **done MG-W2** |
@@ -68,7 +69,7 @@
 | 20260505 | 2 | 2 | — | adam6024.cpp(1), uhome.cpp(1) | pending | pending |
 | 20260511 | 8 | 2 | — | iosetview.cpp(5), adam6024.cpp(3) | A/X | **done MG-W7**：iosetview 5 條已搬（AV 防護）；adam6024 3 條 F4 不動 |
 | 20260513 | 3 | 3 | — | acatchtray.cpp(1), asendic_Auto.cpp(1), csystem.cpp(1) | pending | pending |
-| 20260514 | 8 | 2 | — | AutoClean\AutoClean.cpp(6), ainarm9045.cpp(2) | pending | pending |
+| 20260514 | 8 | 2 | — | AutoClean\AutoClean.cpp(6), ainarm9045.cpp(2) | A | AutoClean 6=done MG-W11 (0407 gruppe); ainarm9045 2=pending |
 | 20260515 | 3 | 1 | — | cContactCT.cpp(3) | pending | pending |
 | 20260519 | 4 | 3 | — | uTrayEditForm.cpp(2), BarCode\BarCode.cpp(1), HS_Function.cpp(1) | pending | pending |
 | 20260520 | 1 | 1 | — | CosFunction.cpp(1) | pending | pending |

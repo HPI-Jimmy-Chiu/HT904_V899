@@ -1,0 +1,165 @@
+[
+  {
+    "id": "OP1",
+    "v910_file": "AutoClean\\AutoClean.cpp",
+    "v899_lines": [5, 5],
+    "mode": "after",
+    "anchor_line": 4,
+    "anchor_expect": "#include \"AutoClean.h\"",
+    "_note": "CKPP 標頭 include。V910 AutoClean.cpp 全檔 0 處 include cCleanKitPickPlan.h（標頭本身已在 V910 且與 V899 位元組相同）。"
+  },
+  {
+    "id": "OP2",
+    "v910_file": "AutoClean\\AutoClean.cpp",
+    "v899_lines": [1622, 1953],
+    "mode": "replace",
+    "replace_lines": [1661, 1682],
+    "anchor_expect": "if(FTestSuck.HasType(CLEAN_FINISH_IC))",
+    "verify_same": [[1622, 1661], [1640, 1679], [1641, 1680], [1642, 1681], [1643, 1682]],
+    "_note": "cCleanKitPickPlan 實作全體（bUseCKPP=false 定義 + g_CKPlan + 21 支成員函式，310 行新增）。取代區 22 行與 V899 1622-1643 位元組相同，等同原地重插。"
+  },
+  {
+    "id": "OP3",
+    "v910_file": "AutoClean\\AutoClean.cpp",
+    "v899_lines": [2102, 2135],
+    "mode": "replace",
+    "replace_lines": [1833, 1843],
+    "anchor_expect": "InArmSuck.SetItemData(0, 0, HAS_NULL_CLEAN_IC);",
+    "verify_same": [[2102, 1833], [2103, 1834], [2107, 1838], [2110, 1841], [2135, 1843]],
+    "_note": "SearchCleanKitUpDown 雙路開關（0407）＋ CLEAN_FINISH_IC 回收（0409）。新路整段包在 if(bUseCKPP){...return;} 內。"
+  },
+  {
+    "id": "OP4",
+    "v910_file": "AutoClean\\AutoClean.cpp",
+    "v899_lines": [2772, 2847],
+    "mode": "replace",
+    "replace_lines": [2497, 2507],
+    "anchor_expect": "if(iRowKit==1 || iRowKit==3)",
+    "verify_same": [[2772, 2497], [2779, 2504], [2780, 2505], [2847, 2507]],
+    "_note": "PickFromCleanKit plan-driven pick（0408）。新路 if(bUseCKPP && g_CKPlan.Found()){...return flag1;}，其後接回 V910 原本的 for(int j=0;j<4;j++)。"
+  },
+  {
+    "id": "OP5",
+    "v910_file": "AutoClean\\AutoClean.cpp",
+    "v899_lines": [2900, 2905],
+    "mode": "replace",
+    "replace_lines": [2560, 2564],
+    "anchor_expect": "else if(bInArmSuckActive[iSuckRow][iSuckCol]==false &&",
+    "verify_same": [[2900, 2560], [2901, 2561], [2902, 2562], [2904, 2563], [2905, 2564]],
+    "_note": "純註解（0416 Gigas 回退記錄）。取代區 5 行與 V899 2900-2902/2904-2905 位元組相同，淨新增只有第 2903 行註解。零行為。"
+  },
+  {
+    "id": "OP6a",
+    "v910_file": "AutoClean\\AutoClean.cpp",
+    "v899_lines": [3038, 3049],
+    "mode": "replace",
+    "replace_lines": [2697, 2699],
+    "anchor_expect": "if(InArmSuck.HasIC())                                           //",
+    "verify_same": [[3038, 2697], [3039, 2698]],
+    "_note": "0408：kit 空但手臂已 partial pick → 跳過 3000-3100 迴圈直接收尾（S6）。整段 if(bUseCKPP){...} else { Task=3000; }，else 分支＝V910 原行為。閘內休眠。"
+  },
+  {
+    "id": "OP6b",
+    "v910_file": "AutoClean\\AutoClean.cpp",
+    "v899_lines": [3056, 3065],
+    "mode": "replace",
+    "replace_lines": [2706, 2706],
+    "anchor_expect": "if(CUSTOMER_CODE==CC_KYEC_LEE && iCleanPadCount==0)",
+    "_note": "**本波唯一 <95% 項目（信心 92%）**。0407 iCleanPadCount==0 防卡死。閘外，全客戶生效，且改變 CC_KYEC_LEE 的 ShowMyMessage 觸發條件（==0 改成 !=0）。詳分析 §5.1，主腦可單獨刪除此 op，其餘 14 個 op 不受影響。"
+  },
+  {
+    "id": "OP6c",
+    "v910_file": "AutoClean\\AutoClean.cpp",
+    "v899_lines": [3081, 3094],
+    "mode": "replace",
+    "replace_lines": [2722, 2723],
+    "anchor_expect": "SearchCleanKitUpDown(iShuttleRowKit, iSht);",
+    "verify_same": [[3081, 2722], [3091, 2723]],
+    "_note": "0408 CKPP safety net（bUseCKPP 閘內）＋ 0407 debug log（整段 /* */ 註解）。閘內休眠。"
+  },
+  {
+    "id": "OP7",
+    "v910_file": "AutoClean\\AutoClean.cpp",
+    "v899_lines": [3369, 3413],
+    "mode": "replace",
+    "replace_lines": [2997, 3000],
+    "anchor_expect": "iInArmType==e9045_1x4_1_Ac ||",
+    "verify_same": [[3369, 2997], [3411, 2998], [3412, 2999], [3413, 3000]],
+    "_note": "case 3100 統一 plan-driven contact count + 完成度檢查（0408 S5）。整段 if(bUseCKPP && g_CKPlan.Found()){...break;}。插在 JerryYang 20260415 1x1 修正之前，該修正一個位元組不動。"
+  },
+  {
+    "id": "OP8",
+    "v910_file": "AutoClean\\AutoClean.cpp",
+    "v899_lines": [3456, 3481],
+    "mode": "replace",
+    "replace_lines": [3046, 3050],
+    "anchor_expect": "[iSuckRow][2]!=HAS_NULL_CLEAN_IC))",
+    "_note": "Fix H #1（0407，2-picker 分支）。else 分支＝V910 原邏輯逐字（僅縮排 +4）。"
+  },
+  {
+    "id": "OP9",
+    "v910_file": "AutoClean\\AutoClean.cpp",
+    "v899_lines": [3503, 3528],
+    "mode": "replace",
+    "replace_lines": [3072, 3076],
+    "anchor_expect": "[iSuckRow][3]!=HAS_NULL_CLEAN_IC))",
+    "_note": "Fix H #2（0407，AxxGPicker / 1x4 close-2-site 分支）。else 分支＝V910 原邏輯逐字。"
+  },
+  {
+    "id": "OP10",
+    "v910_file": "AutoClean\\AutoClean.cpp",
+    "v899_lines": [3556, 3583],
+    "mode": "replace",
+    "replace_lines": [3104, 3110],
+    "anchor_expect": "HAS_NULL_CLEAN_IC)  )",
+    "_note": "Fix H #3（0407，4-picker 分支）。else 分支＝V910 原邏輯逐字。"
+  },
+  {
+    "id": "OP11",
+    "v910_file": "AutoClean\\AutoClean.cpp",
+    "v899_lines": [5113, 5126],
+    "mode": "replace",
+    "replace_lines": [4646, 4650],
+    "anchor_expect": "b1ShuttleMoveToLeft==true               &&",
+    "verify_same": [[5113, 4646], [5114, 4647], [5115, 4648], [5125, 4649], [5126, 4650]],
+    "_note": "DoAutoCleanKit case 100 清除幽靈 HAS_NULL_CLEAN_IC（0408）。整段 bUseCKPP 閘內。"
+  },
+  {
+    "id": "OP12",
+    "v910_file": "AutoClean\\AutoClean.cpp",
+    "v899_lines": [5188, 5200],
+    "mode": "replace",
+    "replace_lines": [4712, 4723],
+    "anchor_expect": "if(IsFLCarrKitAllHasIC()==false)",
+    "verify_same": [[5188, 4712], [5190, 4714], [5194, 4718], [5197, 4721], [5198, 4722], [5200, 4723]],
+    "_note": "純註解（0417 ARM1 回退 V898 記錄）。取代區 12 行與 V899 5188-5198/5200 位元組相同，淨新增只有第 5199 行註解。零行為。"
+  },
+  {
+    "id": "OP13",
+    "v910_file": "AutoClean\\AutoClean.cpp",
+    "v899_lines": [5809, 5809],
+    "mode": "after",
+    "anchor_line": 5371,
+    "anchor_expect": "iShuttleRowKit=GetShuttleState(euShuttle2, bAutoPlace);",
+    "_note": "純註解（0417 ARM2 回退 V898 記錄）。零行為。"
+  },
+  {
+    "id": "OP14",
+    "v910_file": "AutoClean\\uCleaning.cpp",
+    "v899_lines": [559, 561],
+    "mode": "replace",
+    "replace_lines": [570, 571],
+    "anchor_expect": "Auto clean : reset data because DevicePices was change",
+    "verify_same": [[559, 570], [560, 571]],
+    "_note": "0414：DevicePices／tray layout 改變時把所有 pad count 歸零（ReadWriteAutoCleanCount(false,true)），避免殘值造成假 WAR1922。【閘外，全客戶行為變更，見分析 §5.1】"
+  },
+  {
+    "id": "OP15",
+    "v910_file": "AutoClean\\uCleaning.cpp",
+    "v899_lines": [1949, 1949],
+    "mode": "replace",
+    "replace_lines": [1969, 1969],
+    "anchor_expect": "iDeviceNum==12 || iDeviceNum==24",
+    "_note": "0414：運算子優先序修正——V910 的 (A && B) || C 使 iDeviceNum==24 時恆真。【閘外，全客戶行為變更，見分析 §5.2】"
+  }
+]

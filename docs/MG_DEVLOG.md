@@ -116,15 +116,30 @@
 
 ---
 
+## 20260826 19:55 — MG-W11 done ＋ 額度中斷實錄
+
+- **額度中斷自癒實戰**：17:5x 撞額度（W12 分析 agent 死亡、主迴圈凍結），19:50 重置、
+  19:51 心跳/喚醒佇列送達自動續跑——協議如設計運作，全程無人介入。
+- MG-W11：16 op（OP6b 92% 留 F10 未搬）＋2 條假 MISSING 入白名單。
+  PickPlanner 目錄早在 V910 基線（孤兒標頭由本波補活）；AutoClean.cpp 100% LF 保持。
+  gate 全綠。淨 MISSING **164 → 137**。
+- **W12 死前殘留**：docs/mg_w12_ops.json（17:58 落地）但無分析文件、無模擬驗證
+  ——按「重派勿找復原」重派，草稿只當線索不當依據。
+- **同分支並行警訊**：另一 session（V906 FW 戰役）在額度期間推了 commit 且有在製 M 檔
+  （HT9011UC_Cpp 樹＋weekly 資產）——MG commit 一律點名檔案，絕不寬 glob。
+
+---
+
 ## 🔖 RESUME（20260826 夜）
 
-- **狀態**：Phase 2 連續波次進行中。MG-W1–W10 done。儀表**淨 MISSING=164**
+- **狀態**：Phase 2 連續波次進行中。MG-W1–W11 done。儀表**淨 MISSING=137**
   （起點 376；白名單 49 條有據）。
 - **進行中**：
-  - MG-W11 分析 agent（AutoClean CKPP 主題波 0407-0417 群＋PickPlanner 目錄；
-    產物 docs/mg_w11_analysis.md＋mg_w11_ops.json）。
+  - MG-W12 分析 agent（OutArm rotate 群 0810/0811；**額度死亡後重派**，
+    死前殘留 docs/mg_w12_ops.json 只當線索；產物 docs/mg_w12_analysis.md＋
+    重派後的 ops 覆寫同名檔）。
 - **下一步（按序）**：
-  1. 收 W11 執行。
+  1. 收 W12 執行。
   2. 之後照 LEDGER：AutoClean CKPP＋PickPlanner 目錄（0407-0417 群，含新增檔）、
      0810/0811 OutArm rotate 群、0819 hotair、0820 PTI 尾波、0623 cConfiguration 群、
      0625 TesterTCP、零星單條（0401/0410/0505/0513/0514/0515/0519/0520/0525/0605/0609/0611/0618/0629/0630/0703/0706）。

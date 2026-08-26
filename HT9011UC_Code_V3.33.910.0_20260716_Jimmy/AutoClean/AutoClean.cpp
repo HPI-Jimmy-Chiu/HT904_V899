@@ -2,6 +2,7 @@
 #pragma hdrstop
 
 #include "AutoClean.h"
+#include "cCleanKitPickPlan.h"
 
 #include "aArmHeader.h"
 #include "mymotor.h"
@@ -1680,6 +1681,316 @@ bool RestoreCleanKitData()                                                      
     return true;
 }
 //------------------------------------------------------------------------------
+//==============================================================================
+//AI(ht9045-v899) 20260407: cCleanKitPickPlan implementation
+//  Replaces SearchCleanKitUpDown search+soft-limit+assign chain
+//  with exhaustive plan enumeration.
+//==============================================================================
+//AI(ht9045-v899) 20260407: runtime switch for new/old auto clean search logic
+//AI(ht9045-v899) 20260514: align comment with actual default (off; legacy SearchCleanKitUpDown is in use)
+bool bUseCKPP = false;  // default: false -> use legacy SearchCleanKitUpDown; set true to enable cCleanKitPickPlan
+//AI(ht9045-v899) 20260408: global plan instance shared across pick/move/check functions
+cCleanKitPickPlan g_CKPlan;
+cCleanKitPickPlan::cCleanKitPickPlan()
+{
+    m_iSht = 0;
+    m_iShuttleRow = 0;
+    m_iPickerCount = 0;
+    m_iXPitchStep = 0;
+    m_dMovePitchX = 0;
+    m_dKitXPitch = 0;
+    m_iBaseX = 0;
+    m_iSLimN = 0;
+    m_iSLimP = 0;
+    m_iHPXOfs = 0;
+    m_iXItem = 0;
+    m_iYItem = 0;
+    m_iRealRow = 0;
+    m_iSuckRow = 0;
+    m_iKitStep = 0;
+    m_bRowHasIC = false;
+    m_bFound = false;
+    ZeroMemory(m_bDemand, sizeof(m_bDemand));
+    ZeroMemory(&m_Best, sizeof(m_Best));
+}
+//------------------------------------------------------------------------------
+int cCleanKitPickPlan::CalcX(int iPhySuck, int iKitCol)
+{
+    return m_iBaseX +
+           (int)(m_dMovePitchX * (iInArmXBase - iPhySuck)) +
+           (int)(m_dKitXPitch * iKitCol) +
+           m_iHPXOfs;
+}
+//------------------------------------------------------------------------------
+bool cCleanKitPickPlan::IsPadAt(int iKitCol, int iKitRow)
+{
+    if(iKitCol < 0 || iKitCol >= m_iXItem) return false;
+    if(iKitRow < 0 || iKitRow >= m_iYItem) return false;
+    return (MOT[MMAutoCleanKit].Tray.Data[iKitCol][iKitRow] == HAS_CLEAN_IC);
+}
+//------------------------------------------------------------------------------
+void cCleanKitPickPlan::BuildDemand()
+{
+    ZeroMemory(m_bDemand, sizeof(m_bDemand));
+    m_bRowHasIC = false;
+
+    for(int j = 0; j < InArmSuck.iMaxCol; j++)
+    {
+        int iSuckCol = GetAutoCleanPickStep(j);
+        if(iSuckCol == -1) continue;
+
+        int iShtRow = m_iSuckRow;
+        int iShtCol = iSuckCol + m_iKitStep;
+        int iSiteCol = GetShuttleCol(iShtRow, iShtCol);
+        int iSiteRow = 0;
+
+        if(IsNNMode() == NN_2Row)
+            iSiteRow = (m_iSht == 0) ? 2 : 0;
+        else if(IsNNMode() == NN_1Row)
+            iSiteRow = (m_iSht == 0) ? 1 : 0;
+        else
+            iSiteRow = 0;
+
+        bool bSuckEmpty = (InArmSuck.Item[m_iRealRow][iSuckCol] == NULL_IC);
+
+        if(i1x2_4UseACEGPicker == 1)
+        {
+            if(CosFunction.bUseAutoCleanCloseSiteAlsoDo == true)
+                m_bDemand[iSuckCol] = (TestIF.iSiteMap[iSiteRow][iSiteCol] > 0 && bSuckEmpty);
+            else
+                m_bDemand[iSuckCol] = (Prod.bInSuckUse[m_iSht][iShtRow][iShtCol] && bSuckEmpty);
+        }
+        else if(Prod.bInSuckUse[m_iSht][iShtRow][iShtCol] == true)
+        {
+            if(CosFunction.bUseAutoCleanCloseSiteAlsoDo == true)
+                m_bDemand[iSuckCol] = (TestIF.iSiteMap[iSiteRow][iSiteCol] > 0 && bSuckEmpty);
+            else
+                m_bDemand[iSuckCol] = (Prod.fInArmSuck4x8[m_iSht][iShtRow][iShtCol] && bSuckEmpty);
+        }
+
+        if(InArmSuck.Item[m_iRealRow][iSuckCol] != NULL_IC)
+            m_bRowHasIC = true;
+    }
+
+    // second-pass: if bRowHasIC, re-evaluate demand with bRowHasIC logic
+    if(m_bRowHasIC)
+    {
+        for(int j = 0; j < InArmSuck.iMaxCol; j++)
+        {
+            int iSuckCol = GetAutoCleanPickStep(j);
+            if(iSuckCol == -1) continue;
+
+            int iShtRow = m_iSuckRow;
+            int iShtCol = iSuckCol + m_iKitStep;
+            bool bSuckEmpty = (InArmSuck.Item[m_iRealRow][iSuckCol] == NULL_IC);
+
+            if(bSuckEmpty)
+                m_bDemand[iSuckCol] = (m_bDemand[iSuckCol] || Prod.bInSuckUse[m_iSht][iShtRow][iShtCol]);
+            else
+                m_bDemand[iSuckCol] = false;
+        }
+    }
+}
+//------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260514: legacy EvaluatePlan removed; enumeration delegated to cArmPickPlan
+//AI(ht9045-v899) 20260514: IArmPickPlanContext implementation begins
+int cCleanKitPickPlan::GetLogicalPickerCount()
+{
+    return m_iPickerCount;
+}
+//------------------------------------------------------------------------------
+bool cCleanKitPickPlan::GetPhysicalSucker(int iLogical, int& rOutRow, int& rOutCol)
+{
+    int iPhys = GetAutoCleanPickStep(iLogical);
+    if(iPhys < 0) return false;
+    rOutRow = m_iRealRow;
+    rOutCol = iPhys;
+    return true;
+}
+//------------------------------------------------------------------------------
+int cCleanKitPickPlan::GetTargetRowMax()
+{
+    return m_iYItem;
+}
+//------------------------------------------------------------------------------
+int cCleanKitPickPlan::GetTargetColMax()
+{
+    return m_iXItem;
+}
+//------------------------------------------------------------------------------
+bool cCleanKitPickPlan::ComputeSlot(int iLogical,
+                                    int iLeadLogical,
+                                    int iLeadTargetRow,
+                                    int iLeadTargetCol,
+                                    int& rOutTargetRow,
+                                    int& rOutTargetCol,
+                                    int& rOutX,
+                                    int& rOutY)
+{
+    int iPhys = GetAutoCleanPickStep(iLogical);
+    if(iPhys < 0) return false;
+    rOutTargetRow = iLeadTargetRow;                                     // AutoClean: same kRow for all slots
+    rOutTargetCol = iLeadTargetCol + m_iXPitchStep * (iLogical - iLeadLogical);
+    rOutX = CalcX(iPhys, rOutTargetCol);
+    rOutY = 0;                                                          // AutoClean: no Y-pitch by plan
+    return true;
+}
+//------------------------------------------------------------------------------
+bool cCleanKitPickPlan::IsReachable(int iX, int /*iY*/)
+{
+    return (iX >= m_iSLimN && iX <= m_iSLimP);
+}
+//------------------------------------------------------------------------------
+bool cCleanKitPickPlan::IsTargetCandidate(int iTargetRow, int iTargetCol)
+{
+    return IsPadAt(iTargetCol, iTargetRow);
+}
+//------------------------------------------------------------------------------
+bool cCleanKitPickPlan::IsSuckerDemanded(int iLogical)
+{
+    int iPhys = GetAutoCleanPickStep(iLogical);
+    if(iPhys < 0 || iPhys >= 8) return false;
+    return m_bDemand[iPhys];
+}
+//------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260514: preserve legacy "skip plans where lead has no pad / unreachable"
+bool cCleanKitPickPlan::IsLeadValid(int iLeadLogical, int iLeadTargetRow, int iLeadTargetCol)
+{
+    int iLeadPhys = GetAutoCleanPickStep(iLeadLogical);
+    if(iLeadPhys < 0) return false;
+    if(!IsPadAt(iLeadTargetCol, iLeadTargetRow)) return false;
+    int iLeadX = CalcX(iLeadPhys, iLeadTargetCol);
+    if(iLeadX < m_iSLimN || iLeadX > m_iSLimP) return false;
+    return true;
+}
+//------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260514: translate generic plan back into legacy TPickPlan/TPickSlot
+void cCleanKitPickPlan::CopyGenericPlanToBest()
+{
+    ZeroMemory(&m_Best, sizeof(m_Best));
+    if(!m_Engine.Found()) return;
+
+    const TGenericPickPlan& gp = m_Engine.GetPlan();
+    int iCount = gp.iSlotCount;
+    if(iCount > CKPP_MAX_SLOTS) iCount = CKPP_MAX_SLOTS;
+
+    m_Best.iSlotCount     = iCount;
+    m_Best.iStartLogical  = gp.iLeadLogical;
+    m_Best.iKitCol        = gp.iLeadTargetCol;
+    m_Best.iKitRow        = gp.iLeadTargetRow;
+    m_Best.iActiveCount   = gp.iActiveCount;
+
+    for(int i = 0; i < iCount; i++)
+    {
+        const TGenericPickSlot& gs = gp.Slots[i];
+        TPickSlot& s = m_Best.Slots[i];
+        s.iLogical   = gs.iLogical;
+        s.iPhysical  = gs.iPhysCol;
+        s.iKitCol    = gs.iTargetCol;
+        s.iXPos      = gs.iX;
+        s.bReachable = gs.bReachable;
+        s.bHasPad    = gs.bTargetOK;
+        s.bDemanded  = gs.bDemanded;
+        s.bActive    = gs.bActive;
+    }
+}
+//------------------------------------------------------------------------------
+void cCleanKitPickPlan::Init(int iSht, int iShuttleRow)
+{
+    m_iSht = iSht;
+    m_iShuttleRow = iShuttleRow;
+    m_iPickerCount = GetAutoCleanPickCount();
+    m_iXPitchStep = iAutoCleanUseXPitch;
+    m_dKitXPitch = TestIF_File.dAutoClean_XPitch;
+    m_iBaseX = Prod.XInArm_AutoClean_Pick[iInArmYBase][iInArmXBase];
+    m_iSLimN = MOT[MInArmX].Motor->PSoftLimitN;
+    m_iSLimP = MOT[MInArmX].Motor->PSoftLimitP;
+    m_iHPXOfs = HotplatlXOffset;
+    m_iXItem = MOT[MMAutoCleanKit].Tray.XItem;
+    m_iYItem = MOT[MMAutoCleanKit].Tray.YItem;
+    m_bFound = false;
+    ZeroMemory(&m_Best, sizeof(m_Best));
+
+    // compute dMovePitchX (same as MoveInArmXYPickCleanKit)
+    int iRawPitch = GetXPitchOfCleanKit();
+    if(USE_PICKER_COUNT == ep1Picker)
+        m_dMovePitchX = 0;
+    else if(USE_PICKER_COUNT == ep16Picker)
+        m_dMovePitchX = double(iRawPitch) / 7.0;
+    else
+        m_dMovePitchX = double(iRawPitch) / 3.0;
+
+    // determine real row
+    m_iSuckRow = 0;
+    m_iKitStep = 0;
+    GetInarmSuckRow(iShuttleRow, m_iSuckRow, m_iKitStep);
+
+    if(IniConfig.bE43AutoCleanUseHotplate || bUse8Picker)
+        m_iRealRow = m_iSuckRow;
+    else
+        m_iRealRow = 1;
+
+    BuildDemand();
+}
+//------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260514: Search() now delegates enumeration to generic cArmPickPlan
+bool cCleanKitPickPlan::Search()
+{
+    m_bFound = false;
+    ZeroMemory(&m_Best, sizeof(m_Best));
+
+    m_Engine.Init(this);                                                // this implements IArmPickPlanContext
+    m_bFound = m_Engine.Search();
+    CopyGenericPlanToBest();
+
+    if(m_bFound)
+    {
+        RecordProcess(AnsiString().sprintf(
+            "CKPP_PLAN startL=%d kCol=%d kRow=%d active=%d/%d X0=%d Xn=%d",
+            m_Best.iStartLogical, m_Best.iKitCol, m_Best.iKitRow,
+            m_Best.iActiveCount, m_Best.iSlotCount,
+            m_Best.Slots[0].iXPos,
+            m_Best.Slots[m_Best.iSlotCount > 0 ? m_Best.iSlotCount-1 : 0].iXPos));
+    }
+
+    return m_bFound;
+}
+//------------------------------------------------------------------------------
+void cCleanKitPickPlan::Apply()
+{
+    if(!m_bFound) return;
+
+    iAutoCleanStart = m_Best.iStartLogical;
+    iAutoCleanPickPlateX = m_Best.iKitCol;
+    iAutoCleanPickPlateY = m_Best.iKitRow;
+
+    // clear all sucker active flags first
+    for(int r = 0; r < MAX_ARM_Row; r++)
+        for(int c = 0; c < MAX_ARM_Col; c++)
+            bInArmSuckActive[r][c] = false;
+
+    // set active flags per plan
+    for(int i = 0; i < m_Best.iSlotCount; i++)
+    {
+        TPickSlot &s = m_Best.Slots[i];
+        if(s.iPhysical >= 0 && s.iPhysical < MAX_ARM_Col)
+            bInArmSuckActive[m_iRealRow][s.iPhysical] = s.bActive;
+    }
+}
+//------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260408: check if current shuttle group has any sucker demand
+bool cCleanKitPickPlan::HasDemand()
+{
+    for(int j = 0; j < InArmSuck.iMaxCol; j++)
+    {
+        int iSuckCol = GetAutoCleanPickStep(j);
+        if(iSuckCol >= 0 && iSuckCol < MAX_ARM_Col && m_bDemand[iSuckCol])
+            return true;
+    }
+    return false;
+}
+//==============================================================================
+
 bool SearchCleanKitRowCol(int& iKRow,int& iKCol)
 {
 //    if((TestIF_File.iTestMode==_12Site2X6 &&                                  //JerryYang 20260427 : 優先找X方向   //Jimmychiu 20260109 : 依據特殊模式改變Auto Clean吸取順序
@@ -1840,6 +2151,29 @@ void SearchCleanKitUpDown(int iRow, eWhichShuttle iSht)
         }
     }
 
+    //AI(ht9045-v899) 20260407: dual-path switch  bUseCKPP selects new class vs old logic
+    if(bUseCKPP)
+    {
+        // ========== NEW PATH: cCleanKitPickPlan ==========                  
+        //AI(ht9045-v899) 20260409: recycle CLEAN_FINISH_IC -> HAS_CLEAN_IC before search so returned pads are reusable
+        for(int kY=0; kY<MOT[MMAutoCleanKit].Tray.YItem; kY++)
+            for(int kX=0; kX<MOT[MMAutoCleanKit].Tray.XItem; kX++)
+                if(MOT[MMAutoCleanKit].Tray.Data[kX][kY]==CLEAN_FINISH_IC)
+                    MOT[MMAutoCleanKit].SetTraySingleData(kX, kY, HAS_CLEAN_IC);
+        DoInArm_SuckerMap();
+        g_CKPlan.Init((int)iSht, iRow);
+        if(g_CKPlan.Search())
+        {
+            g_CKPlan.Apply();
+            RecordProcess(AnsiString().sprintf(
+                "AC_SEARCH [CKPP] iAutoCleanStart=%d iAutoCleanPickPlateX=%d Y=%d active=%d/%d XItem=%d",
+                iAutoCleanStart, iAutoCleanPickPlateX,
+                iAutoCleanPickPlateY, g_CKPlan.GetActiveCount(), g_CKPlan.GetSlotCount(), MOT[MMAutoCleanKit].Tray.XItem));
+        }
+        return;
+    }
+
+    // ========== OLD PATH: original SearchCleanKitUpDown logic ==========  
     bool bFlag[8];
     bool bRowHasIC=false;
     int iKitRow=0, iKitCol=0;
@@ -2504,6 +2838,71 @@ bool PickFromCleanKit(int iRowKit)
         iSuckRow=1;
     }
 
+    //AI(ht9045-v899) 20260408: plan-driven pick - iterate plan slots instead of hardcoded j=0..3
+    if(bUseCKPP && g_CKPlan.Found())
+    {
+        const TPickPlan &plan = g_CKPlan.GetPlan();
+        for(int i = 0; i < plan.iSlotCount; i++)
+        {
+            const TPickSlot &slot = plan.Slots[i];
+            if(slot.iPhysical < 0) continue;
+            iSuckCol = slot.iPhysical;
+            iKitCol  = slot.iKitCol;
+            iKitRow  = plan.iKitRow;
+
+            if(iKitCol < 0 || iKitRow < 0 || iKitCol >= 50 || iKitRow >= 50)
+                continue;
+
+            if(InArmSuck.Suck[iSuckRow][iSuckCol].Error == true)
+            {   // error already flagged, skip
+            }
+            else if(slot.bActive && InArmSuck.Item[iSuckRow][iSuckCol] == NULL_IC)
+            {
+                if(InArmSuck.Suck[iSuckRow][iSuckCol].Suck())
+                {
+                    if(Special_2X6_Tray_XItem7() && (iRowKit==3 || iRowKit==4))
+                    {
+                        if(iKitCol >= iAutoCleanUseXPitch)
+                            iKitCol = iKitCol - iAutoCleanUseXPitch;
+                    }
+                    InspectInArmPosition(MMAutoCleanKit, iSuckRow, iSuckCol, iKitRow, iKitCol, true);
+                    PlaceToCleanList->SetArrPlateXY(iSuckRow, iSuckCol, 0, iKitRow, iKitCol, HAS_CLEAN_IC);
+                    bInArmSuckActive[iSuckRow][iSuckCol] = false;
+                    MOT[MMAutoCleanKit].SetTraySingleData(iKitCol, iKitRow, HAS_NULL_CLEAN_IC);
+                    sTime.sprintf("%02d:%02d:%02d.%03d", SystemHour, SystemMin, SystemSec, SystemMSec);
+                    CleanKitRecord[iKitRow][iKitCol] = sTime;
+                    bCleanKitSuckDuplicateErr[iSuckRow][iSuckCol] = false;
+                    InArmSuck.SetItemData(iSuckRow, iSuckCol, HAS_CLEAN_IC);
+                    InArmSuck.iAutoCleanRecX[iSuckRow][iSuckCol] = iKitCol;
+                    InArmSuck.iAutoCleanRecY[iSuckRow][iSuckCol] = iKitRow;
+                    InArmSuck.PordRec[iSuckRow][iSuckCol].AddPickCleanPad(iSuckRow, iSuckCol, iKitRow, iKitCol, HAS_CLEAN_IC);
+                }
+                else if(InArmSuck.Suck[iSuckRow][iSuckCol].Error == false)
+                {   flag1 = false; }
+            }
+            else if(!slot.bActive && InArmSuck.Item[iSuckRow][iSuckCol] == NULL_IC)
+            {
+                // inactive slot: mark phantom (pad consumed but not picked)
+                if(slot.bHasPad && iKitCol < MOT[MMAutoCleanKit].Tray.XItem)
+                {
+                    if(Special_2X6_Tray_XItem7() && (iRowKit==3 || iRowKit==4))
+                        iKitCol = iKitCol + iAutoCleanUseXPitch * 3;
+                    PlaceToCleanList->SetArrPlateXY(iSuckRow, iSuckCol, 0, iKitRow, iKitCol, -1);
+                    MOT[MMAutoCleanKit].SetTraySingleData(iKitCol, iKitRow, HAS_NULL_CLEAN_IC);
+                    sTime.sprintf("%02d:%02d:%02d.%03d", SystemHour, SystemMin, SystemSec, SystemMSec);
+                    CleanKitRecord[iKitRow][iKitCol] = sTime;
+                    bCleanKitSuckDuplicateErr[iSuckRow][iSuckCol] = false;
+                    InArmSuck.SetItemData(iSuckRow, iSuckCol, HAS_NULL_CLEAN_IC);
+                    InArmSuck.iAutoCleanRecX[iSuckRow][iSuckCol] = iKitCol;
+                    InArmSuck.iAutoCleanRecY[iSuckRow][iSuckCol] = iKitRow;
+                    InArmSuck.PordRec[iSuckRow][iSuckCol].AddPickCleanPad(iSuckRow, iSuckCol, iKitCol, iKitRow, HAS_NULL_CLEAN_IC);
+                }
+            }
+        }
+        return flag1;
+    }
+
+    // ========== OLD PATH: original PickFromCleanKit ==========
     for(int j=0; j<4; j++)
     {
         iSuckCol=GetAutoCleanPickStep(j);                                       //Steven 20240918 : fixed for auto clean
@@ -2560,6 +2959,7 @@ bool PickFromCleanKit(int iRowKit)
         else if(bInArmSuckActive[iSuckRow][iSuckCol]==false &&
                 InArmSuck.Item[iSuckRow][iSuckCol]==NULL_IC)
         {
+            //AI(ht9045-v899) 20260416: revert phantom-marking skip per Gigas feedback - V898 did not have this guard
             if(MOT[MMAutoCleanKit].Tray.Data[iKitCol][iKitRow]==HAS_CLEAN_IC &&
                (iKitCol<MOT[MMAutoCleanKit].Tray.XItem))
             {
@@ -2696,7 +3096,16 @@ int DoAutoCleanPickfromCleanKit(eWhichShuttle iSht, bool Restart)
             {
                 if(InArmSuck.HasIC())                                           //已被In arm吸起來
                 {
-                    Task=3000;
+                    //AI(ht9045-v899) 20260408: kit empty but arm has partial pick - skip 3000-3100 loop, go finish (S6)
+                    if(bUseCKPP)
+                    {
+                        PlaceToCleanList->AddHPSuckGroup();
+                        Task=3300;
+                    }
+                    else
+                    {
+                        Task=3000;
+                    }
                 }
                 else
                 {
@@ -2720,7 +3129,19 @@ int DoAutoCleanPickfromCleanKit(eWhichShuttle iSht, bool Restart)
         case 20:                                                                //Steven 20160630 : 分開避免In arm在Auto Clean時, Index alarm讓位後,回來出現異常
             SearchiAutoCleanNum();                                              //Steven 20171212 (Wei) : 確認目前正要吸取的的Pad位置
             SearchCleanKitUpDown(iShuttleRowKit, iSht);                         //In Arm Z要不要下去吸或放 bInArmSuckActive[i][j] //ChungHung 20140709 add iSht for SCK CloseSiteByArm Autoclean
+            //AI(ht9045-v899) 20260408: safety net - if CKPP plan not found, return pick complete
+            if(bUseCKPP && !g_CKPlan.Found())
+            {
+                //RecordProcess(AnsiString().sprintf("AC_PICK20_SKIP no plan iShuttleRowKit=%d iSht=%d", iShuttleRowKit, (int)iSht));
+                PlaceToCleanList->AddHPSuckGroup();
+                Task = 1;
+                iResult = 1;
+                break;
+            }
             Task=21;
+            //AI(ht9045-v899) 20260407: AC debug log - PickfromCleanKit Task20 result
+           /* RecordProcess(AnsiString().sprintf("AC_PICK20 iShuttleRowKit=%d iSht=%d iAutoCleanStart=%d iAutoCleanPickPlateX=%d Y=%d iAutoCleanNum=%d",
+                iShuttleRowKit, (int)iSht, iAutoCleanStart, iAutoCleanPickPlateX, iAutoCleanPickPlateY, iAutoCleanNum));*/
         case 21:
             if(MoveInArmXYPickCleanKit(bAutoPick, iShuttleRowKit, iSht))        //ChungHung 20140709 add iSht for SCK CloseSiteByArm Autoclean
             {
@@ -2995,6 +3416,47 @@ int DoAutoCleanPickfromCleanKit(eWhichShuttle iSht, bool Restart)
             }
             break;
         case 3100:
+            //AI(ht9045-v899) 20260408: unified plan-driven contact count + completion check (S5)
+            if(bUseCKPP && g_CKPlan.Found())
+            {
+                const TPickPlan &plan = g_CKPlan.GetPlan();
+                bool bPickIncomplete = false;
+                for(int i = 0; i < plan.iSlotCount; i++)
+                {
+                    const TPickSlot &slot = plan.Slots[i];
+                    if(slot.iPhysical < 0) continue;
+                    // contact counting: only for slots that have IC
+                    if(InArmSuck.Item[iSuckRow][slot.iPhysical] == HAS_CLEAN_IC ||
+                       InArmSuck.Item[iSuckRow][slot.iPhysical] == HAS_NULL_CLEAN_IC)
+                    {
+                        iKitRow = iAutoCleanPickPlateY + 1;
+                        iKitCol = slot.iKitCol;
+                        iContectCount = atoi(fMain->AutoCleanStringGrid->Cells[iKitCol][iKitRow].c_str());
+                        iContectCount++;
+                        SetAutoCleanStringGrid(iKitCol, iKitRow, AnsiString(iContectCount));
+                    }
+                    // completion check: only active slots must have IC
+                    if(slot.bActive)
+                    {
+                        if(InArmSuck.Item[iSuckRow][slot.iPhysical] != HAS_CLEAN_IC &&
+                           InArmSuck.Item[iSuckRow][slot.iPhysical] != HAS_NULL_CLEAN_IC)
+                            bPickIncomplete = true;
+                    }
+                }
+                if(bPickIncomplete)
+                    Task = 10;
+
+                if(Task != 10)
+                {
+                    if(USE_PICKER_COUNT == ep1Picker)
+                        Task = 3300;
+                    else if(bUse8Picker)
+                        Task = 3200;
+                    else
+                        Task = 3300;
+                }
+                break;
+            }
             if(TestIF.iTestMode==SingleSite ||                                  //2013-09-13    Dell    for TSMC Single site
                iInArmType==e9045_1x4_1_Ac ||
                USE_PICKER_COUNT==ep1Picker)                                      //Steven 20200720 : 1x4只開site Ac
@@ -3043,10 +3505,31 @@ int DoAutoCleanPickfromCleanKit(eWhichShuttle iSht, bool Restart)
                     }
                 }
 
-                if((InArmSuck.Item[iSuckRow][0]!=HAS_CLEAN_IC && InArmSuck.Item[iSuckRow][0]!=HAS_NULL_CLEAN_IC) ||
-                   (InArmSuck.Item[iSuckRow][2]!=HAS_CLEAN_IC && InArmSuck.Item[iSuckRow][2]!=HAS_NULL_CLEAN_IC))
+                //AI(ht9045-v899) 20260407: allow partial pick when inactive suckers have no pad (Fix H)
+                if(bUseCKPP)
                 {
-                    Task=10;
+                    bool bPickIncomplete=false;
+                    for(int j=iAutoCleanStart; j<2; j++)
+                    {
+                        int sc=GetAutoCleanPickStep(j);
+                        if(sc==-1) continue;
+                        if(!bInArmSuckActive[iSuckRow][sc]) continue;
+                        if(InArmSuck.Item[iSuckRow][sc]!=HAS_CLEAN_IC &&
+                           InArmSuck.Item[iSuckRow][sc]!=HAS_NULL_CLEAN_IC)
+                        {
+                            bPickIncomplete=true;
+                            break;
+                        }
+                    }
+                    if(bPickIncomplete) Task=10;
+                }
+                else
+                {
+                    if((InArmSuck.Item[iSuckRow][0]!=HAS_CLEAN_IC && InArmSuck.Item[iSuckRow][0]!=HAS_NULL_CLEAN_IC) ||
+                       (InArmSuck.Item[iSuckRow][2]!=HAS_CLEAN_IC && InArmSuck.Item[iSuckRow][2]!=HAS_NULL_CLEAN_IC))
+                    {
+                        Task=10;
+                    }
                 }
             }
             else if(bUseAxxGPicker() ||                                         //Steven 20240515 : 往上移動
@@ -3069,10 +3552,31 @@ int DoAutoCleanPickfromCleanKit(eWhichShuttle iSht, bool Restart)
                     }
                 }
 
-                if((InArmSuck.Item[iSuckRow][0]!=HAS_CLEAN_IC && InArmSuck.Item[iSuckRow][0]!=HAS_NULL_CLEAN_IC) ||
-                   (InArmSuck.Item[iSuckRow][3]!=HAS_CLEAN_IC && InArmSuck.Item[iSuckRow][3]!=HAS_NULL_CLEAN_IC))
+                //AI(ht9045-v899) 20260407: allow partial pick when inactive suckers have no pad (Fix H)
+                if(bUseCKPP)
                 {
-                    Task=10;
+                    bool bPickIncomplete=false;
+                    for(int j=iAutoCleanStart; j<2; j++)
+                    {
+                        int sc=GetAutoCleanPickStep(j);
+                        if(sc==-1) continue;
+                        if(!bInArmSuckActive[iSuckRow][sc]) continue;
+                        if(InArmSuck.Item[iSuckRow][sc]!=HAS_CLEAN_IC &&
+                           InArmSuck.Item[iSuckRow][sc]!=HAS_NULL_CLEAN_IC)
+                        {
+                            bPickIncomplete=true;
+                            break;
+                        }
+                    }
+                    if(bPickIncomplete) Task=10;
+                }
+                else
+                {
+                    if((InArmSuck.Item[iSuckRow][0]!=HAS_CLEAN_IC && InArmSuck.Item[iSuckRow][0]!=HAS_NULL_CLEAN_IC) ||
+                       (InArmSuck.Item[iSuckRow][3]!=HAS_CLEAN_IC && InArmSuck.Item[iSuckRow][3]!=HAS_NULL_CLEAN_IC))
+                    {
+                        Task=10;
+                    }
                 }
             }
             else
@@ -3101,12 +3605,33 @@ int DoAutoCleanPickfromCleanKit(eWhichShuttle iSht, bool Restart)
                     }
                 }
 
-                if((InArmSuck.Item[iSuckRow][0]!=HAS_CLEAN_IC && InArmSuck.Item[iSuckRow][0]!=HAS_NULL_CLEAN_IC) ||
-                   (InArmSuck.Item[iSuckRow][1]!=HAS_CLEAN_IC && InArmSuck.Item[iSuckRow][1]!=HAS_NULL_CLEAN_IC) ||
-                   (InArmSuck.Item[iSuckRow][2]!=HAS_CLEAN_IC && InArmSuck.Item[iSuckRow][2]!=HAS_NULL_CLEAN_IC) ||
-                   (InArmSuck.Item[iSuckRow][3]!=HAS_CLEAN_IC && InArmSuck.Item[iSuckRow][3]!=HAS_NULL_CLEAN_IC)  )
+                //AI(ht9045-v899) 20260407: allow partial pick when inactive suckers have no pad (Fix H)
+                if(bUseCKPP)
                 {
-                    Task=10;
+                    bool bPickIncomplete=false;
+                    for(int j=iAutoCleanStart; j<4; j++)
+                    {
+                        int sc=GetAutoCleanPickStep(j);
+                        if(sc==-1) continue;
+                        if(!bInArmSuckActive[iSuckRow][sc]) continue;
+                        if(InArmSuck.Item[iSuckRow][sc]!=HAS_CLEAN_IC &&
+                           InArmSuck.Item[iSuckRow][sc]!=HAS_NULL_CLEAN_IC)
+                        {
+                            bPickIncomplete=true;
+                            break;
+                        }
+                    }
+                    if(bPickIncomplete) Task=10;
+                }
+                else
+                {
+                    if((InArmSuck.Item[iSuckRow][0]!=HAS_CLEAN_IC && InArmSuck.Item[iSuckRow][0]!=HAS_NULL_CLEAN_IC) ||
+                       (InArmSuck.Item[iSuckRow][1]!=HAS_CLEAN_IC && InArmSuck.Item[iSuckRow][1]!=HAS_NULL_CLEAN_IC) ||
+                       (InArmSuck.Item[iSuckRow][2]!=HAS_CLEAN_IC && InArmSuck.Item[iSuckRow][2]!=HAS_NULL_CLEAN_IC) ||
+                       (InArmSuck.Item[iSuckRow][3]!=HAS_CLEAN_IC && InArmSuck.Item[iSuckRow][3]!=HAS_NULL_CLEAN_IC)  )
+                    {
+                        Task=10;
+                    }
                 }
             }
 
@@ -4646,6 +5171,15 @@ void DoAutoCleanKit()                                                           
             if(CheckInArmSuckInitial()==false)                                  //In Arm 吸嘴上如果有 Device 就 Alarm
                 break;
 
+            //AI(ht9045-v899) 20260408: purge phantom HAS_NULL_CLEAN_IC from InArm before dispatch
+            if(bUseCKPP && InArmSuck.HasIC() && !InArmSuck.HasDefineIC(HAS_CLEAN_IC) && !InArmSuck.HasDefineIC(CLEAN_FINISH_IC))
+            {
+                RecordProcess("AC_PURGE_PHANTOM InArm has only HAS_NULL_CLEAN_IC, clearing");
+                for(int pr=0; pr<InArmSuck.iMaxRow; pr++)
+                    for(int pc=0; pc<InArmSuck.iMaxCol; pc++)
+                        if(InArmSuck.Item[pr][pc]==HAS_NULL_CLEAN_IC)
+                            InArmSuck.SetItemData(pr, pc, NULL_IC);
+            }
             if(InArmSuck.HasIC()==false                &&                       //Steven 20130620 : Auto Clean到一半按歸零要繼續跑
                b1ShuttleMoveToLeft==true               &&                       //ChungHung 20131120 AutoClean use Hotplate1
                (FTestSuck.HasDefineIC(HAS_CLEAN_IC)    ||
@@ -4720,6 +5254,7 @@ void DoAutoCleanKit()                                                           
                 }
                 else
                 {
+                    //AI(ht9045-v899) 20260417: revert to V898 logic - premature CLEAN_FINISH_IC recycling caused pick to restart from col 0 instead of continuing right half
                     if(iShuttleRowKit!=0)
                     {
                         Task=200;                                                   //Shuttle 沒放滿要再去Clean Kit吸Device
@@ -5369,6 +5904,7 @@ void DoAutoCleanKit()                                                           
                 else
                 {
                     iShuttleRowKit=GetShuttleState(euShuttle2, bAutoPlace);
+                    //AI(ht9045-v899) 20260417: revert to V898 logic - premature CLEAN_FINISH_IC recycling caused pick restart from col 0 (ARM2)
                     if(iShuttleRowKit!=0)
                     {
                         Task=2200;

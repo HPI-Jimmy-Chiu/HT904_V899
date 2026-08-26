@@ -569,6 +569,7 @@ void __fastcall TfCleaning::LoadAutoCleanData()
             {
                 RecordProcess("Auto clean : reset data because DevicePices was change");
                 SetAutoCleanICCount(false);
+                ReadWriteAutoCleanCount(false, true);                           //AI(ht9045-v899) 20260414: zero all pad counts when DevicePices or tray layout changes to prevent stale counts causing false WAR1922
             }
         }
     }
@@ -1966,7 +1967,7 @@ void TfCleaning::SetDeviceInTray(int iXItem, int iYItem, int iDeviceNum, int iMo
             }
 
             if(TestIF_File.iTestMode==_12Site2X6 &&
-               iDeviceNum==12 || iDeviceNum==24)                                //Steven 20241111 : for 1x4 run 3 col tray auto clean
+               (iDeviceNum==12 || iDeviceNum==24))                              //Steven 20241111 : for 1x4 run 3 col tray auto clean  //AI(ht9045-v899) 20260414: fix operator precedence - was iDeviceNum==24 always true
             {
                 if(TestIF_File.iAutoClean_XDivision==4)
                 {

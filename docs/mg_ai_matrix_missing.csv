@@ -1,31 +1,10 @@
 ﻿date,agent,file,line,status,comment
 20260401,ht9045-v899,SECSGEM\uHGemHT9045_SV.cpp,360,MISSING,//AI(ht9045-v899) 20260401: Add LB Up/Down temperature and limits for SECS collection
-20260407,ht9045-v899,AutoClean\AutoClean.cpp,1645,MISSING,//AI(ht9045-v899) 20260407: cCleanKitPickPlan implementation
-20260407,ht9045-v899,AutoClean\AutoClean.cpp,1649,MISSING,//AI(ht9045-v899) 20260407: runtime switch for new/old auto clean search logic
-20260407,ht9045-v899,AutoClean\AutoClean.cpp,2112,MISSING,//AI(ht9045-v899) 20260407: dual-path switch  bUseCKPP selects new class vs old logic
 20260407,ht9045-v899,AutoClean\AutoClean.cpp,3056,MISSING,//AI(ht9045-v899) 20260407: prevent hang when no clean pads remain
-20260407,ht9045-v899,AutoClean\AutoClean.cpp,3092,MISSING,//AI(ht9045-v899) 20260407: AC debug log - PickfromCleanKit Task20 result
-20260407,ht9045-v899,AutoClean\AutoClean.cpp,3456,MISSING,//AI(ht9045-v899) 20260407: allow partial pick when inactive suckers have no pad (Fix H)
-20260407,ht9045-v899,AutoClean\AutoClean.cpp,3503,MISSING,//AI(ht9045-v899) 20260407: allow partial pick when inactive suckers have no pad (Fix H)
-20260407,ht9045-v899,AutoClean\AutoClean.cpp,3556,MISSING,//AI(ht9045-v899) 20260407: allow partial pick when inactive suckers have no pad (Fix H)
-20260407,ht9045-v899,ainarm9045_1x1_1.cpp,894,MISSING,//AI(ht9045-v899) 20260407: align with 2x4_8 baseline — add bCheckInarmPlaceShuttle + CheckInArmDestroyICFail
-20260407,ht9045-v899,ainarm9045_1x1_1.cpp,1243,MISSING,//AI(ht9045-v899) 20260407: align with 2x4_8 baseline — add CheckInArmDestroyICFail for SHT2
-20260408,ht9045-v899,AutoClean\AutoClean.cpp,1941,MISSING,//AI(ht9045-v899) 20260408: check if current shuttle group has any sucker demand
-20260408,ht9045-v899,AutoClean\AutoClean.cpp,2782,MISSING,//AI(ht9045-v899) 20260408: plan-driven pick - iterate plan slots instead of hardcoded j=0..3
-20260408,ht9045-v899,AutoClean\AutoClean.cpp,3040,MISSING,"//AI(ht9045-v899) 20260408: kit empty but arm has partial pick - skip 3000-3100 loop, go finish (S6)"
-20260408,ht9045-v899,AutoClean\AutoClean.cpp,3082,MISSING,"//AI(ht9045-v899) 20260408: safety net - if CKPP plan not found, return pick complete"
-20260408,ht9045-v899,AutoClean\AutoClean.cpp,3370,MISSING,//AI(ht9045-v899) 20260408: unified plan-driven contact count + completion check (S5)
-20260408,ht9045-v899,AutoClean\AutoClean.cpp,5116,MISSING,//AI(ht9045-v899) 20260408: purge phantom HAS_NULL_CLEAN_IC from InArm before dispatch
-20260409,ht9045-v899,AutoClean\AutoClean.cpp,2116,MISSING,//AI(ht9045-v899) 20260409: recycle CLEAN_FINISH_IC -> HAS_CLEAN_IC before search so returned pads are reusable
 20260410,ht9045-v899,CosFunction.cpp,3381,MISSING,//AI(ht9045-v899) 20260410: enable SortingBinTray when CleanOut for FOREHOPE_NINGBO
-20260414,ht9045-v899,AutoClean\uCleaning.cpp,561,MISSING,//AI(ht9045-v899) 20260414: zero all pad counts when DevicePices or tray layout changes to prevent stale counts causing false WAR1922
-20260414,ht9045-v899,AutoClean\uCleaning.cpp,1949,MISSING,//AI(ht9045-v899) 20260414: fix operator precedence - was iDeviceNum==24 always true
 20260414,ht9045-v899,main.cpp,25658,MISSING,//AI(ht9045-v899) 20260414: pack MNetLog into StateRecord when N10-3 daily upload enabled for FTP diagnostic
 20260415,ht9045-v899,cShowBinSelect.cpp,815,MISSING,//AI(ht9045-v899) 20260415: dynamic stack layout for tsIndex tab to prevent overlapping panels
 20260415,ht9045-v899,cShowBinSelect.cpp,1491,MISSING,//AI(ht9045-v899) 20260415: dynamic height for tsIndex based on visible panel stack
-20260416,ht9045-v899,AutoClean\AutoClean.cpp,2903,MISSING,//AI(ht9045-v899) 20260416: revert phantom-marking skip per Gigas feedback - V898 did not have this guard
-20260417,ht9045-v899,AutoClean\AutoClean.cpp,5199,MISSING,//AI(ht9045-v899) 20260417: revert to V898 logic - premature CLEAN_FINISH_IC recycling caused pick to restart from col 0 instead of continuing right half
-20260417,ht9045-v899,AutoClean\AutoClean.cpp,5809,MISSING,//AI(ht9045-v899) 20260417: revert to V898 logic - premature CLEAN_FINISH_IC recycling caused pick restart from col 0 (ARM2)
 20260417,ht9045-v899,cShowBinSelect.cpp,809,MISSING,//AI(ht9045-v899) 20260417: show AutoDeviceEjection panel for QLE or by config flag
 20260423,ht9045-v899,AutoClean\uCleaning.cpp,148,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
 20260423,ht9045-v899,AutoClean\uCleaning.cpp,149,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
@@ -36,12 +15,6 @@
 20260513,ht9045-v899,acatchtray.cpp,520,MISSING,//AI(ht9045-v899) 20260513: dummy 空跑不要觸發 P18 人工補 Fail Auto Tray 流程
 20260513,ht9045-v899,asendic_Auto.cpp,203,MISSING,"//AI(ht9045-v899) 20260513: dummy 空跑不啟用 P18 旁路, 仍走原本 tray mismatch 處理"
 20260513,ht9045-v899,csystem.cpp,15437,MISSING,//AI(ht9045-v899) 20260513: dummy 空跑不檢查人工補 Fail Auto Tray 的 Color Sensor
-20260514,ht9045-v899,AutoClean\AutoClean.cpp,1650,MISSING,//AI(ht9045-v899) 20260514: align comment with actual default (off; legacy SearchCleanKitUpDown is in use)
-20260514,ht9045-v899,AutoClean\AutoClean.cpp,1755,MISSING,//AI(ht9045-v899) 20260514: legacy EvaluatePlan removed; enumeration delegated to cArmPickPlan
-20260514,ht9045-v899,AutoClean\AutoClean.cpp,1756,MISSING,//AI(ht9045-v899) 20260514: IArmPickPlanContext implementation begins
-20260514,ht9045-v899,AutoClean\AutoClean.cpp,1816,MISSING,"//AI(ht9045-v899) 20260514: preserve legacy ""skip plans where lead has no pad / unreachable"""
-20260514,ht9045-v899,AutoClean\AutoClean.cpp,1827,MISSING,//AI(ht9045-v899) 20260514: translate generic plan back into legacy TPickPlan/TPickSlot
-20260514,ht9045-v899,AutoClean\AutoClean.cpp,1896,MISSING,//AI(ht9045-v899) 20260514: Search() now delegates enumeration to generic cArmPickPlan
 20260514,ht9045-v899,ainarm9045.cpp,40,MISSING,//AI(ht9045-v899) 20260514: Phase 3 Loader pick planner scaffold (default off)
 20260514,ht9045-v899,ainarm9045.cpp,6436,MISSING,//AI(ht9045-v899) 20260514: Phase 3 dual-path hook. SHADOW ONLY: when
 20260515,ht9045-v899,cContactCT.cpp,202,MISSING,"//AI(ht9045-v899) 20260515: 修正南茂回報Yield Chart左欄site標籤(Aa/Ab/Ba...)空白; ChangeToFloatNonPcnt回傳float, 'A'+float 走%c變數列引數會被當成double傳入導致印出亂碼/空白, 補強制轉int還原V897行為"

@@ -48,3 +48,4 @@ adam6024.cpp,20260526,"//AI(ht9045-v899) 20260526: in Multi EP production, Doubl
 cContact.cpp,20260526,//AI(ht9045-v899) 20260526: Multi EP Die Force SAVE must out,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
 note.cpp,20260407,//AI(ht9045-v899) 20260407: only Pause when Note closed via ,假MISSING：V910:1036公司已改寫等價SoftStop guard(自家註解),MG-W3發現
 HS_Function.cpp,20260420,//AI(BVL-3766) 20260420: 開關 site 時要即時重寫 GTK info.txt,假MISSING：BVL-3766功能已在V910，僅#include行尾註解被公司改寫英文,MG-W5發現
+ainarm9045_1x1_1.cpp,20260407,//AI(ht9045-v899) 20260407: align with 2x4_8 baseline,"假MISSING：V910:891/:1241 已有同註解同程式碼，僅 Big5 全形破折號被公司正規化成 ASCII ""--""",MG-W11
