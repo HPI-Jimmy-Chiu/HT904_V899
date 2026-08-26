@@ -119,3 +119,7 @@ IniData/
 system/
 HT9011UC_Cpp_V3.33.906.0/build_last.log
 *.mgbak
+HT9011UC_Code_V3.33.910.0_20260716_Jimmy/Obj910/
+HT9011UC_Code_V3.33.910.0_20260716_Jimmy/Out910/
+HT9011UC_Code_V3.33.910.0_20260716_Jimmy/HT9045.mak
+HT9011UC_Code_V3.33.910.0_20260716_Jimmy/build_mg_phase3*.log

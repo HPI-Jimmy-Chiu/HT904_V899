@@ -130,21 +130,32 @@
 
 ---
 
-## 🔖 RESUME（20260826 夜）
+## 20260826 20:00–22:50 — W12–W16 連五波，Phase 2 完成（淨 MISSING=0）
 
-- **狀態**：Phase 2 連續波次進行中。MG-W1–W11 done。儀表**淨 MISSING=137**
-  （起點 376；白名單 49 條有據）。
-- **進行中**：
-  - MG-W12 分析 agent（OutArm rotate 群 0810/0811；**額度死亡後重派**，
-    死前殘留 docs/mg_w12_ops.json 只當線索；產物 docs/mg_w12_analysis.md＋
-    重派後的 ops 覆寫同名檔）。
-- **下一步（按序）**：
-  1. 收 W12 執行。
-  2. 之後照 LEDGER：AutoClean CKPP＋PickPlanner 目錄（0407-0417 群，含新增檔）、
-     0810/0811 OutArm rotate 群、0819 hotair、0820 PTI 尾波、0623 cConfiguration 群、
-     0625 TesterTCP、零星單條（0401/0410/0505/0513/0514/0515/0519/0520/0525/0605/0609/0611/0618/0629/0630/0703/0706）。
-  3. 60 分鐘守衛 cron 已掛（每時 :23；殭屍＝先查證後處置）。
-- **量測**：`python tools/port_tools/ai_comment_matrix.py`（白名單感知，看淨 MISSING）。
-- **不變量**：V899 唯讀（來源端點 b515ed5）；V910 基線 e06524a；LEDGER 手工維護；
-  bcc_syntax.sh 波內 gate（錯誤集合基準比對）；commit 後清 *.mgbak；
-  全量 build 只在 Phase 3 且先關 IDE。
+- W12（OutArm rotate 33 條/32 op，56a9815）→ W13（hotair＋PTI 尾波 17 條，3860bee）
+  → W14（PTI 0630/0703 案群 42 條/34 op，75bd43f）→ W16（雜項掃尾 20 條，b70f987）
+  → W15（機能群 20 條，596f64f）。
+- **終局帳**：719＝643 落地＋3 他檔＋73 白名單列管＋**0 缺**。16 波、~1,100 行
+  位元組級搬移、2 新增檔、.bpr 6 處、F1–F12（唯一待裁補搬項＝F10）。
+- 亮點：A5 破案（uhome 亂碼=V899 原檔天生損壞，V910 有正確版）；
+  歸屬更正三筆（0602 欣銓、0703 半數超豐、0625 欣銓）；
+  盲區實測（//AI 可見率 3.4%–29%，無標記承重行每波必有）。
+- **Phase 3 開跑**：IDE 已關（22:44 實測）；bpr2mak→.mak 改導 Obj910/Out910
+  （共用 Obj/EXE 零觸碰；PROJECT 絕對路徑 D:\HT9045\EXE 那筆也抓到）；
+  make 背景執行，log=樹內 build_mg_phase3.log。
+
+---
+
+## 🔖 RESUME（20260826 夜／Phase 3）
+
+- **狀態**：Phase 2 done（16 波、淨 MISSING=0）。**Phase 3 全量 build 背景執行中**
+  （V910 樹內 `make -f HT9045.mak`，輸出 Obj910/Out910；
+  若被 10 分鐘工具限制切斷→同指令重跑即增量續跑）。
+- **下一步**：
+  1. 收 build：link 成功→Out910\HT9045.exe＝技術收尾；錯誤→逐條歸因
+     （缺 lib/res/PCH 屬環境問題，程式錯誤才算回歸）。
+  2. SOFT_SIMULTE 確認（MachineType.h 兩樹皆註解態，已知）；版號提醒
+     （.bpr Version Info 只有 IDE 會寫）。
+  3. 收尾報告（RD5軟體_MG戰役總結_YYYYMMDD_HHMMSS）＋F 清單提交使用者（F10 為主）。
+- **不變量**：V910 建置一律 Obj910/Out910（共用 Obj/EXE 零觸碰）；V899 唯讀；
+  LEDGER＋白名單＝驗收權威；矩陣儀表隨時可重跑。
