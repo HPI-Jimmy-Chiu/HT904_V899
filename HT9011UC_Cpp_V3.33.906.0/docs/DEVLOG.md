@@ -11902,6 +11902,87 @@ golden 的 `btnSettingSpecificBinClick` 設 `->Top` 並呼叫 `->BringToFront()`
 所以目前恆為 0，`SetBinTray` 會對「第 0 格」操作。
 **這是資料面缺口不是碼的缺口**，翻譯照 golden 原文，並在成員上寫明。
 
+## 20260826 XV — 量測：118 個表單全域，77 個全樹無人建立
+
+### 怎麼撞到的
+
+FW-3 佇列的平行偵察回報 `cSpeed` / `cStartCondition` 可翻批次是 **0**，
+`HandlerSys` 只有 1 支。對抗式複驗把這個結論推翻了：`cSpeed` 的 62 條阻塞理由
+**45 條不成立**。主迴圈逐條開 golden 複驗，確認複驗方是對的——
+
+- `spbSelectAllClick`（golden :1795-1810）整個本體是 9 個 `Checked/Enabled/Down` 指派
+- `cbIndexArmClick`（:1426-1431）三行 `Enabled=true`
+- `spbSpeedAddClick`（:1414-1419）`tbAllSpeed->Position` 的整數運算
+- 42 支裡出現 `WriteIni/fopen/CreateFile/SaveSetup/MotorMove/ShowMyMessage` 的次數 = **0**
+
+被封鎖的真正理由是一條**過期的 absence claim**：「`fQwertyKey` 全樹無 port」。
+`forms/fQwertyKey.h` 已於 **20260824** 落地（FW-QWKEY1，`fc08e09`），20/20 方法全 ACTIVE。
+這是 pt-wave-loop 陷阱 #2 的教科書形狀，**而且是在只隔兩天的情況下發生的**。
+
+### 順著 provenance 查下去撞到的更大的東西
+
+「解 gate 前先查值從哪來」：`fQwertyKey` 是 `forms/fQwertyKey.cpp:41` 的裸全域指標，
+全樹**唯一**的建立點是 `Public/HTEdit.cpp:311-313` 的 lazy construction。
+往 golden 追「那 golden 自己怎麼讓它非 NULL」——
+
+**先走錯一步**：搜 `main.cpp` 只找到 2 個 `Application->CreateForm`（都是建 `fQwertyKey2`），
+一度得到「golden 從不建 fQwertyKey」這個反直覺結論。錯在找錯檔：
+golden 的 `WinMain` 在 **`HT9045.cpp`**（專案源檔，304 行），不是 `main.cpp`（TfMain 的實作）。
+
+`HT9045.cpp` 的 `CreateForm` 清單就是 golden 的表單 bootstrap。逐對抽出
+`CreateForm(__classid(C), &g)` 後與 port 樹對帳：
+
+| | |
+|---|---|
+| golden `HT9045.cpp` 建立的表單全域 | **118** |
+| port 樹裡有非註解 `g = new ...` 的 | **41** |
+| **全樹無人建立，恆為 NULL** | **77** |
+
+量法：`scratchpad/form_ctor_scan.py`（排除 `build_*`/`.git`/`third_party`/`docs`，
+略過以 `//` 開頭的行）。
+
+那 77 個裡包含 `fSpeed`、`HandlerSystem`、`fPassword`、`fStartCondition`、
+`fDynamicTemp`、`fTemperFrom`、`fHotPlate`、`HGem`、`FSECS` 等。
+
+### 這件事的意義（以及它**不**是什麼）
+
+**是什麼**：翻譯過的 handler 都是成員函式，沒有實例就永遠沒有呼叫者。
+本樹既有的「event handler 本體翻譯但不接線」政策讓這件事在離線下無害
+（`ATC/ATCInterface.cpp:2300` 自己就寫著 "latent until a real event stream"），
+但 web write path 一旦開始呼叫 handler，第一個 `ed*MouseDown` 就會對 NULL 解參考。
+**所以缺的不是「再翻幾支 handler」，是 bootstrap。**
+
+**不是什麼**：我一度假設它同時解釋 (b) 軌的「機台來源 96 個全 null」。
+**查證後不成立**——`WebBridgeTags.cpp` 只引用 12 處表單全域
+（`fMain` 8、`fTemp_Set` 2、`fLotInfo` 2），三者都在**已建立的 41 個**裡。
+兩個缺口互相獨立，不要合併敘述。
+
+### 已知的先例與限制
+
+`HT9045.cpp` 早在 Gate A 時期就被逐行解剖過（本 DEVLOG :2220、:2304、:2379-2381 的
+U0-4 / U0-5 工作項），當時的落點是 `ui/HT9045App.cpp`。**`ui/` 目錄現在不存在**
+（MFC 移除時一併移除），所以那兩個工作項等於沒有落點。
+
+真要做 bootstrap 時的硬限制，兩條都已付過代價：
+
+1. **絕不可放進靜態初始化**。陷阱 #4：`fLaserSensor` 的 ctor 呼叫 `InitLaserEdtList()`
+   而 `elLaser` 在 golden 是 `main.cpp:1483` 才 new 的 → 134 個 ctest 有 88 個 SEGFAULT。
+   必須是顯式 `Init()`，且與現有「ctor 只塞欄位」慣例一致。
+2. **`WinMain` 本體不可在測試裡跑**。golden `HT9045.cpp:153` 有一個真的
+   `MessageBox(...)`（exe 不在 `D:\HT9045\EXE` 就彈），而批次跑的程式不可有 modal 彈窗
+   （MSVC Debug CRT assert 曾卡死 ctest 94/95 且 log 全無記錄）。
+
+### 順帶更正的兩件事
+
+- 我先前用 `grep -c 'fQwertyKey'` 數「還關著的 gate」，把已寫 OPENED 的註解也算了進去，
+  因此誤報「7 個檔都還關著」。實際上 fLotInfo / fDynamicTemp / ATCInterface /
+  MyOmronPanel / HTEdit 都在 20260824-25 由 FW-QWKEY2/3/5、FW-BARCODE4 開掉了，
+  **真正還關著的只有 `forms/fSetup.h` 的 WA-1**（其 absence claim 標 20260820，過期 4 天）。
+  數提及次數 != 數 gate 狀態。
+- `tools/dualgate2.sh` 的管線化實測只省 **2 分 25 秒**（37m43 → 35m18），
+  因為 gate 成本幾乎全在兩次 build，ctest 只佔 4 分鐘。
+  **加速的槓桿不在 gate 管線化，在同時推多個波次**——我先前的建議在這一項上估錯了。
+
 ### 🔖 RESUME（20260826 上午）
 
 - **本輪連續作業共 13 顆 commit**（`1be68ce` → `6d7f752`），
