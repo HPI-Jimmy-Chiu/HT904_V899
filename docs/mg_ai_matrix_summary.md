@@ -58,27 +58,24 @@
 | 20260706 | 0 | 0 | 0 | 1 | 1 |
 | 20260803 | 5 | 0 | 0 | 0 | 5 |
 | 20260804 | 25 | 0 | 0 | 0 | 25 |
-| 20260810 | 0 | 0 | 0 | 21 | 21 |
-| 20260811 | 9 | 0 | 0 | 12 | 21 |
+| 20260810 | 21 | 0 | 0 | 0 | 21 |
+| 20260811 | 21 | 0 | 0 | 0 | 21 |
 | 20260817 | 11 | 0 | 0 | 0 | 11 |
 | 20260819 | 0 | 0 | 0 | 10 | 10 |
 | 20260820 | 0 | 0 | 0 | 7 | 7 |
-| **合計** | 528 | 3 | 51 | 137 | 719 |
+| **合計** | 561 | 3 | 51 | 104 | 719 |
 
 ## MISSING 依檔案分布（前 40）
 
 | 檔案 | 缺席註解數 |
 |---|---|
-| main.cpp | 16 |
-| aoutarm9045_2x4_4.cpp | 10 |
+| main.cpp | 14 |
 | acatchtray.cpp | 9 |
-| aoutarm9045.cpp | 9 |
 | ProductionInfo\ProductionInfo.cpp | 9 |
 | csystem.cpp | 7 |
 | AutoClean\uCleaning.cpp | 7 |
 | Interface\TesterTCP.cpp | 6 |
-| cConfiguration.cpp | 5 |
-| RotateKit\aRotateKIT_Out.cpp | 5 |
+| cConfiguration.cpp | 4 |
 | cmydef.cpp | 4 |
 | CosFunction.cpp | 4 |
 | ainarm9045.cpp | 3 |
@@ -87,8 +84,6 @@
 | cShowBinSelect.cpp | 3 |
 | HS_Function.cpp | 3 |
 | uhome.cpp | 3 |
-| aoutarm.cpp | 2 |
-| aoutarm9045.h | 2 |
 | cBinSel.cpp | 2 |
 | cpublic.cpp | 2 |
 | mymessbox.cpp | 2 |
@@ -97,7 +92,6 @@
 | adam6024.cpp | 1 |
 | asendic_Auto.cpp | 1 |
 | CosFunction.h | 1 |
-| cprod.cpp | 1 |
 | cpublic.h | 1 |
 | cSortCT.cpp | 1 |
 | MachineType.h | 1 |
@@ -106,5 +100,4 @@
 | Interface\TesterTCP.h | 1 |
 | Motor\mymotor.cpp | 1 |
 | ProductionInfo\ProductionInfo.h | 1 |
-| RotateKit\aRotateKIT.cpp | 1 |
 | SECSGEM\uHGemHT9045_SV.cpp | 1 |

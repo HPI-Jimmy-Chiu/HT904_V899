@@ -120,6 +120,12 @@ void InitSuckState()
         i2x2Suck=3;
         //i2x2Suck_Out=2;
         i2x2Suck_Out=3;                                                         //Sam 20211224 : 修正為使用 1 4 吸嘴
+        //AI(ht9045-v899) 20260810: 2x4 交錯 4 站(e9045_2x4_4_13/_14)時 SetInOutArmParameter_2x4_4() 已用 CopyInitSuck 把 OutArm 資料搬到邏輯欄位 0 與 1, 但這裡仍給 3(欄位 0 與 3), 使 M_MoveOutArmZ_ToRotateKIT_Place()/_Pick() 的列舉永遠碰不到吸嘴 (1,1), B 排那顆(DUT1/DUT3)不放旋轉站就直接進 Auto tray; 比照下方 2x2 的既有先例改為 1。i2x2Suck(InArm)維持 3, 因為 2x4_4 只搬 OutArm 的資料, InArm 未搬
+        if(USE_PICKER_COUNT!=ep16Picker &&
+           (iInArmType==e9045_2x4_4_13 || iInArmType==e9045_2x4_4_14))
+        {
+            i2x2Suck_Out=1;
+        }
     }
     else if(TestIF.iTestMode==QualSite2X2 ||
             TestIF.iTestMode==DualSite)                                         //Sam 20250428 : 修正 1X2 OutRotate 旋轉異常

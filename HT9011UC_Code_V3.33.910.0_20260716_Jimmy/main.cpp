@@ -26725,6 +26725,15 @@ void __fastcall TfMain::DoStateRecord(int iShowAlarm, bool bManual)             
     str.sprintf("XCOPY /y/a/e/c/i/h/f/r \"%s\" \"%s\"", str1, NewPath+"\\HT9045\\config");
     TestList->Add(str);
 
+    //AI(ht9045-v899) 20260810: 補收 Error 夾下的兩份診斷 log: BootLog.txt(含輪替的 .old, 開機/崩潰診斷)與警報當下落地的 OutArmRoundLog.txt。原本 State Record 只收 system 與 config, 這兩份都收不到, 遇到「軟體啟動就死」或「故障後程式已重啟」就沒有現場可看。刻意只點名這兩個檔、不整夾複製也不用 /e —— Error 夾下有 3700 多個各語系警報說明 .dat(約 5MB), 那是靜態資料, 收進來只會讓每包 State Record 白白變大
+    str1="D:\\HT9045\\Error\\BootLog.txt*";
+    str.sprintf("XCOPY /y/c/i/h/f/r \"%s\" \"%s\"", str1, NewPath+"\\HT9045\\Error");
+    TestList->Add(str);
+
+    str1="D:\\HT9045\\Error\\OutArmRoundLog.txt";
+    str.sprintf("XCOPY /y/c/i/h/f/r \"%s\" \"%s\"", str1, NewPath+"\\HT9045\\Error");
+    TestList->Add(str);
+
     str1="D:\\GPIB9045\\system";                                                //複製GPIB設定
     str.sprintf("XCOPY /y/a/e/c/i/h/f/r \"%s\" \"%s\"", str1, NewPath+"\\GPIB9045\\system");
     TestList->Add(str);
@@ -26966,6 +26975,8 @@ void __fastcall TfMain::DoStateRecord(int iShowAlarm, bool bManual)             
     LogIndexMaxMinPos("StateRecord");                                           //Isaac 20201012 : 計算Encoder和commandpos/Teaching的差值，記錄並存檔
     //AI(ht9045-v899) 20260604: 改呼叫獨立函式 DumpMainFormSnapshot (內含 Loader/TrayArm 交接診斷區)
     DumpMainFormSnapshot(NewPath);
+    //AI(ht9045-v899) 20260810: 一併把 OutArm 逐輪診斷 Log 帶進 State Record, 交給 RD 分析
+    OutArmRoundLog_Dump(NewPath);
 }
 //------------------------------------------------------------------------------
 void __fastcall TfMain::AppException(TObject *Sender, Exception *E)             //ChungHung 20141226 add catch exception

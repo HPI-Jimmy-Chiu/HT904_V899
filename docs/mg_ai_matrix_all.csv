@@ -648,27 +648,27 @@
 20260804,ht9045-v899,cConfiguration.cpp,1009,same-file,//AI(ht9045-v899) 20260804: PTI shows the temp module only. Motor/vacuum/ATC/mode keep the very same
 20260804,ht9045-v899,cConfiguration.cpp,1029,same-file,//AI(ht9045-v899) 20260804: temp row label follows the per-customer limit
 20260804,ht9045-v899,cConfiguration.cpp,1031,same-file,//AI(ht9045-v899) 20260804: hide the motor/vacuum/ATC row labels together with their controls
-20260810,ht9045-v899,RotateKit\aRotateKIT.cpp,114,MISSING,"//AI(ht9045-v899) 20260810: 2x4 交錯 4 站(e9045_2x4_4_13/_14)時 SetInOutArmParameter_2x4_4() 已用 CopyInitSuck 把 OutArm 資料搬到邏輯欄位 0 與 1, 但這裡仍給 3(欄位 0 與 3), 使 M_MoveOut"
-20260810,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,1131,MISSING,"//AI(ht9045-v899) 20260810: 記錄這一趟到底把哪幾支吸嘴放到旋轉站。列舉用的 stride 是 i2x2Suck_Out, 只要它跟吸嘴實際欄位對不上, 就會有 IC 沒旋轉就進 Auto tray (力成PTI DUT1/DUT3 即此)"
-20260810,ht9045-v899,aoutarm.cpp,3125,MISSING,"//AI(ht9045-v899) 20260810: 超出極限救援時, 最小階(i=1)若僅略低於機構下限則夾到下限"
-20260810,ht9045-v899,aoutarm.cpp,3126,MISSING,"//AI(ht9045-v899) 20260810: 原本會被丟棄改用下一倍數, 間距反而比原來更大而仍然超限"
-20260810,ht9045-v899,aoutarm9045.cpp,2100,MISSING,//AI(ht9045-v899) 20260810: OutArm 逐輪診斷 Log 實作。宣告與用途見 aoutarm9045.h
-20260810,ht9045-v899,aoutarm9045.cpp,2341,MISSING,"//AI(ht9045-v899) 20260810: 記錄旋轉/AOI 閘門的判定結果, 讓「為什麼沒去旋轉」有跡可循"
-20260810,ht9045-v899,aoutarm9045.h,95,MISSING,"//AI(ht9045-v899) 20260810: OutArm 逐輪診斷 Log。目的是客戶回報 OutArm 取放/旋轉異常時, 單靠 Task_ListWithTime.csv 只有 task 編號、沒有當下的 kit/座標/吸嘴結果, 無法判定走了哪個分支。這組函式在 RAM 保留最近 OUTARM_ROU"
-20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,40,MISSING,"//AI(ht9045-v899) 20260810: 原本這裡一律 return 2, 在判斷左右半 kit 前就早退, 使 iModeCol 恆為 0, OutArm 取右半 kit 時算出的 X 與左半同一點(差 2 個 Site X-Pitch), 右半 IC 必吸空 -> JAM0202 重複發生, SKIP"
-20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,155,MISSING,"//AI(ht9045-v899) 20260810: OutArm 逐輪診斷 Log 用的暫存值(純記錄, 不參與任何判斷)"
-20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,535,MISSING,"//AI(ht9045-v899) 20260810: 把算好的目標座標與 mode 暫存起來, 供 DoPickFromShuttle 記錄「目標 vs 實際」"
-20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,558,MISSING,//AI(ht9045-v899) 20260810: 逐輪診斷 Log 用。把吸嘴 -> Shuttle 欄位的對應、Shuttle 上的 Item、
-20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,648,MISSING,//AI(ht9045-v899) 20260810: 一趟取料開始 -> 開新的一輪紀錄(新輪會覆蓋 ring 上最舊的一輪)
-20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,654,MISSING,//AI(ht9045-v899) 20260810: 到位後記錄目標與實際座標。kit 沒位移這類問題只要比這兩行就看得出來
-20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,754,MISSING,//AI(ht9045-v899) 20260810: 吸取失敗 -> 記錄每支吸嘴對到的 Shuttle 欄位與該欄位的 Item
-20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,779,MISSING,"//AI(ht9045-v899) 20260810: 吸取成功 -> 同樣記一份, 才能跟失敗的那一輪對照"
-20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,816,MISSING,"//AI(ht9045-v899) 20260810: 發 alarm 是最需要保留現場的時刻, 記錄操作員的選擇並落地一次"
-20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,901,MISSING,"//AI(ht9045-v899) 20260810: 標出回 HOME 的斷點。ring 在 RAM 不會被 HOME 清掉, 所以前後輪可以接著看"
-20260810,ht9045-v899,cConfiguration.cpp,2522,MISSING,"//AI(ht9045-v899) 20260810: 甬矽要求RT複測模式可選擇不跑Site Mapping, 解鎖既有[I21-10]選項"
-20260810,ht9045-v899,cprod.cpp,2535,MISSING,"//AI(ht9045-v899) 20260810: 全智預設門檻 10 改 50 (與其他客戶原廠標準一致), 因 Y1 定位殘差恆為 10 與門檻相等造成 Index 4 Axis Need Home 誤報; 下限維持 5 保留客戶自行調緊彈性"
-20260810,ht9045-v899,main.cpp,25566,MISSING,"//AI(ht9045-v899) 20260810: 補收 Error 夾下的兩份診斷 log: BootLog.txt(含輪替的 .old, 開機/崩潰診斷)與警報當下落地的 OutArmRoundLog.txt。原本 State Record 只收 system 與 config, 這兩份都收不到, 遇到「軟體啟"
-20260810,ht9045-v899,main.cpp,25791,MISSING,"//AI(ht9045-v899) 20260810: 一併把 OutArm 逐輪診斷 Log 帶進 State Record, 交給 RD 分析"
+20260810,ht9045-v899,RotateKit\aRotateKIT.cpp,114,same-file,"//AI(ht9045-v899) 20260810: 2x4 交錯 4 站(e9045_2x4_4_13/_14)時 SetInOutArmParameter_2x4_4() 已用 CopyInitSuck 把 OutArm 資料搬到邏輯欄位 0 與 1, 但這裡仍給 3(欄位 0 與 3), 使 M_MoveOut"
+20260810,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,1131,same-file,"//AI(ht9045-v899) 20260810: 記錄這一趟到底把哪幾支吸嘴放到旋轉站。列舉用的 stride 是 i2x2Suck_Out, 只要它跟吸嘴實際欄位對不上, 就會有 IC 沒旋轉就進 Auto tray (力成PTI DUT1/DUT3 即此)"
+20260810,ht9045-v899,aoutarm.cpp,3125,same-file,"//AI(ht9045-v899) 20260810: 超出極限救援時, 最小階(i=1)若僅略低於機構下限則夾到下限"
+20260810,ht9045-v899,aoutarm.cpp,3126,same-file,"//AI(ht9045-v899) 20260810: 原本會被丟棄改用下一倍數, 間距反而比原來更大而仍然超限"
+20260810,ht9045-v899,aoutarm9045.cpp,2100,same-file,//AI(ht9045-v899) 20260810: OutArm 逐輪診斷 Log 實作。宣告與用途見 aoutarm9045.h
+20260810,ht9045-v899,aoutarm9045.cpp,2341,same-file,"//AI(ht9045-v899) 20260810: 記錄旋轉/AOI 閘門的判定結果, 讓「為什麼沒去旋轉」有跡可循"
+20260810,ht9045-v899,aoutarm9045.h,95,same-file,"//AI(ht9045-v899) 20260810: OutArm 逐輪診斷 Log。目的是客戶回報 OutArm 取放/旋轉異常時, 單靠 Task_ListWithTime.csv 只有 task 編號、沒有當下的 kit/座標/吸嘴結果, 無法判定走了哪個分支。這組函式在 RAM 保留最近 OUTARM_ROU"
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,40,same-file,"//AI(ht9045-v899) 20260810: 原本這裡一律 return 2, 在判斷左右半 kit 前就早退, 使 iModeCol 恆為 0, OutArm 取右半 kit 時算出的 X 與左半同一點(差 2 個 Site X-Pitch), 右半 IC 必吸空 -> JAM0202 重複發生, SKIP"
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,155,same-file,"//AI(ht9045-v899) 20260810: OutArm 逐輪診斷 Log 用的暫存值(純記錄, 不參與任何判斷)"
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,535,same-file,"//AI(ht9045-v899) 20260810: 把算好的目標座標與 mode 暫存起來, 供 DoPickFromShuttle 記錄「目標 vs 實際」"
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,558,same-file,//AI(ht9045-v899) 20260810: 逐輪診斷 Log 用。把吸嘴 -> Shuttle 欄位的對應、Shuttle 上的 Item、
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,648,same-file,//AI(ht9045-v899) 20260810: 一趟取料開始 -> 開新的一輪紀錄(新輪會覆蓋 ring 上最舊的一輪)
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,654,same-file,//AI(ht9045-v899) 20260810: 到位後記錄目標與實際座標。kit 沒位移這類問題只要比這兩行就看得出來
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,754,same-file,//AI(ht9045-v899) 20260810: 吸取失敗 -> 記錄每支吸嘴對到的 Shuttle 欄位與該欄位的 Item
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,779,same-file,"//AI(ht9045-v899) 20260810: 吸取成功 -> 同樣記一份, 才能跟失敗的那一輪對照"
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,816,same-file,"//AI(ht9045-v899) 20260810: 發 alarm 是最需要保留現場的時刻, 記錄操作員的選擇並落地一次"
+20260810,ht9045-v899,aoutarm9045_2x4_4.cpp,901,same-file,"//AI(ht9045-v899) 20260810: 標出回 HOME 的斷點。ring 在 RAM 不會被 HOME 清掉, 所以前後輪可以接著看"
+20260810,ht9045-v899,cConfiguration.cpp,2522,same-file,"//AI(ht9045-v899) 20260810: 甬矽要求RT複測模式可選擇不跑Site Mapping, 解鎖既有[I21-10]選項"
+20260810,ht9045-v899,cprod.cpp,2535,same-file,"//AI(ht9045-v899) 20260810: 全智預設門檻 10 改 50 (與其他客戶原廠標準一致), 因 Y1 定位殘差恆為 10 與門檻相等造成 Index 4 Axis Need Home 誤報; 下限維持 5 保留客戶自行調緊彈性"
+20260810,ht9045-v899,main.cpp,25566,same-file,"//AI(ht9045-v899) 20260810: 補收 Error 夾下的兩份診斷 log: BootLog.txt(含輪替的 .old, 開機/崩潰診斷)與警報當下落地的 OutArmRoundLog.txt。原本 State Record 只收 system 與 config, 這兩份都收不到, 遇到「軟體啟"
+20260810,ht9045-v899,main.cpp,25791,same-file,"//AI(ht9045-v899) 20260810: 一併把 OutArm 逐輪診斷 Log 帶進 State Record, 交給 RD 分析"
 20260811,ht9045-v899,PowerSavingMode.cpp,32,same-file,"//AI(ht9045-v899) 20260811: PTI 要求進入省電後狀態列要更顯眼,底色反黃並放大字型;"
 20260811,ht9045-v899,PowerSavingMode.cpp,66,same-file,//AI(ht9045-v899) 20260811: 狀態列反黃起始為關 (CASE-PTI-20260811-001)
 20260811,ht9045-v899,PowerSavingMode.cpp,103,same-file,"//AI(ht9045-v899) 20260811: 所有中止/重新計數的路徑都會先把 bRestart 立起來,在這裡一次還原狀態列,"
@@ -678,18 +678,18 @@
 20260811,ht9045-v899,PowerSavingMode.cpp,407,same-file,//AI(ht9045-v899) 20260811: 反黃與放大的字型一併還原 (CASE-PTI-20260811-001)
 20260811,ht9045-v899,PowerSavingMode.h,45,same-file,//AI(ht9045-v899) 20260811: 狀態列反黃中(避免每秒重複重繪) (CASE-PTI-20260811-001)
 20260811,ht9045-v899,PowerSavingMode.h,46,same-file,//AI(ht9045-v899) 20260811: 進入省電後狀態列底色反黃並放大字型 (CASE-PTI-20260811-001)
-20260811,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,694,MISSING,"//AI(ht9045-v899) 20260811: 2x4 交錯 4 站(e9045_2x4_4_13/_14, 非 16 picker) 的 OutArm 資料已被"
-20260811,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,816,MISSING,"//AI(ht9045-v899) 20260811: 2x4_4_13/_14 改走下方 1,3 吸嘴分支"
-20260811,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,918,MISSING,"//AI(ht9045-v899) 20260811: 把旋轉站的 XY 目標與 X-pitch 計算結果記進診斷 Log,"
-20260811,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,2252,MISSING,//AI(ht9045-v899) 20260811: 模擬用——沿用 IC 資料轉移時才檢查的慣例
-20260811,ht9045-v899,aoutarm9045.cpp,3792,MISSING,//AI(ht9045-v899) 20260811: 新增第三種動作：放 IC 到出料旋轉站。
-20260811,ht9045-v899,aoutarm9045.cpp,3826,MISSING,//AI(ht9045-v899) 20260811: iOutPlaceToRotate 也走這條，但動作是「放」不是「取」
-20260811,ht9045-v899,aoutarm9045.cpp,3842,MISSING,//AI(ht9045-v899) 20260811: 【數值撞號】eFix12(17)==MOutShuttle1(17)、eBulkBox(18)==MOutShuttle2(18)。
-20260811,ht9045-v899,aoutarm9045.cpp,3857,MISSING,//AI(ht9045-v899) 20260811: 見上方撞號說明，放料路徑不可落入 shuttle 算式
-20260811,ht9045-v899,aoutarm9045.cpp,3866,MISSING,//AI(ht9045-v899) 20260811: BulkBox 依需求不檢查（上方已 return），整段 Mark。
-20260811,ht9045-v899,aoutarm9045.cpp,3910,MISSING,//AI(ht9045-v899) 20260811: 實際值側 GetOutArmToShtCellPos() 用的是
-20260811,ht9045-v899,aoutarm9045.cpp,3928,MISSING,//AI(ht9045-v899) 20260811: 原本只取 Prod.iOutArmRotateToUnloaderX/Y 這個單點（原標需確認），
-20260811,ht9045-v899,aoutarm9045.h,67,MISSING,//AI(ht9045-v899) 20260811: 出料旋轉站放料位置檢查
+20260811,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,694,same-file,"//AI(ht9045-v899) 20260811: 2x4 交錯 4 站(e9045_2x4_4_13/_14, 非 16 picker) 的 OutArm 資料已被"
+20260811,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,816,same-file,"//AI(ht9045-v899) 20260811: 2x4_4_13/_14 改走下方 1,3 吸嘴分支"
+20260811,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,918,same-file,"//AI(ht9045-v899) 20260811: 把旋轉站的 XY 目標與 X-pitch 計算結果記進診斷 Log,"
+20260811,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,2252,same-file,//AI(ht9045-v899) 20260811: 模擬用——沿用 IC 資料轉移時才檢查的慣例
+20260811,ht9045-v899,aoutarm9045.cpp,3792,same-file,//AI(ht9045-v899) 20260811: 新增第三種動作：放 IC 到出料旋轉站。
+20260811,ht9045-v899,aoutarm9045.cpp,3826,same-file,//AI(ht9045-v899) 20260811: iOutPlaceToRotate 也走這條，但動作是「放」不是「取」
+20260811,ht9045-v899,aoutarm9045.cpp,3842,same-file,//AI(ht9045-v899) 20260811: 【數值撞號】eFix12(17)==MOutShuttle1(17)、eBulkBox(18)==MOutShuttle2(18)。
+20260811,ht9045-v899,aoutarm9045.cpp,3857,same-file,//AI(ht9045-v899) 20260811: 見上方撞號說明，放料路徑不可落入 shuttle 算式
+20260811,ht9045-v899,aoutarm9045.cpp,3866,same-file,//AI(ht9045-v899) 20260811: BulkBox 依需求不檢查（上方已 return），整段 Mark。
+20260811,ht9045-v899,aoutarm9045.cpp,3910,same-file,//AI(ht9045-v899) 20260811: 實際值側 GetOutArmToShtCellPos() 用的是
+20260811,ht9045-v899,aoutarm9045.cpp,3928,same-file,//AI(ht9045-v899) 20260811: 原本只取 Prod.iOutArmRotateToUnloaderX/Y 這個單點（原標需確認），
+20260811,ht9045-v899,aoutarm9045.h,67,same-file,//AI(ht9045-v899) 20260811: 出料旋轉站放料位置檢查
 20260817,ht9045-v899,CosFunction.cpp,2847,same-file,"//AI(ht9045-v899) 20260817: 客戶反映 Auto Tray Feed 跟隨工作檔, 換工單就把 Clean Out 的 Tray End 選單架空, 故固定關閉"
 20260817,ht9045-v899,CosFunction.cpp,4322,same-file,"//AI(ht9045-v899) 20260817: 預設不關閉, 只有 CC_CYUEAN 會開啟"
 20260817,ht9045-v899,CosFunction.h,354,same-file,//AI(ht9045-v899) 20260817: CC_CYUEAN 固定關閉 Auto Tray Feed(勾選時會架空 Clean Out 的 Tray End 選單)

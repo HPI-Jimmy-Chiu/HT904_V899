@@ -72,6 +72,7 @@ bool Check_QA_ModeUnloadCount();                                                
 
 extern int iOutPickFromSht;
 extern int iOutPlaceToAuto;
+extern int iOutPlaceToRotate;                                                   //AI(ht9045-v899) 20260811: 出料旋轉站放料位置檢查
 void InspectOutArmPosition(int iTarget, int iSuckRow, int iSuckCol, int iTargetRow, int iTargetCol, int iAction);
 
 extern MyFillTheTrayAfterOutArmPlace mFillTray;                                 //Jimmychiu 20240726 : Fill The Tray After Out Arm Place
@@ -99,6 +100,14 @@ bool MoveOutArmXYAndSuckUp(int iPosX, int iPosY, int iType);                    
 int GetOutOffsetFromWhichAuto(int iWhichAuto);                                  //Jimmychiu 20240731 : for out arm offset value
 void CaculateOutShtXYPos(int iSht, int &iTarX, int &iTarY);
 bool InitNewFixTrayForUnloaderClipRead(int iwhichauto,bool bOutputReport=false);                                        //Jimmychiu 20250818 : 海康智能讀碼
+//AI(ht9045-v899) 20260810: OutArm 逐輪診斷 Log。目的是客戶回報 OutArm 取放/旋轉異常時, 單靠 Task_ListWithTime.csv 只有 task 編號、沒有當下的 kit/座標/吸嘴結果, 無法判定走了哪個分支。這組函式在 RAM 保留最近 OUTARM_ROUND_LOG_MAX 輪, 回 HOME 不會清掉(只重置 task 變數), 發 alarm 與做 State Record 時各 flush 一次到檔案。純觀察, 不參與任何判斷, 且永不丟出例外
+#define OUTARM_ROUND_LOG_MAX 20
+bool OutArmRoundLog_Enabled();
+int  OutArmRoundLog_Seq();
+void OutArmRoundLog_Begin(int iSht, int iKit);
+void OutArmRoundLog_Line(AnsiString s);
+void OutArmRoundLog_Flush(AnsiString sReason);
+void OutArmRoundLog_Dump(AnsiString sBasePath);
 bool IsMotorArrival(int iMot,int iTargetPos);
 extern bool DoOutArmIonFanGiveWay();                                            //Ifor 20241126 add: OutArm Ion Fan Give Way
 extern void InitDoOutArmIonFanGiveWayTask();                                    //Ifor 20241126 add: OutArm Ion Fan Give Way

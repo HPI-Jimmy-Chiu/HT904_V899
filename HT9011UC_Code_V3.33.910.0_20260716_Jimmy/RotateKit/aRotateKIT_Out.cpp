@@ -692,6 +692,15 @@ bool DoOutArmRotateKIT()
 void CalcPosition_OutArm(int &iXpos, int &iYpos, int &iXPitch, int iYPitch, int iKit)
 {
     int OneSuckPitch;
+    //AI(ht9045-v899) 20260811: 2x4 交錯 4 站(e9045_2x4_4_13/_14, 非 16 picker) 的 OutArm 資料已被
+    //  SetInOutArmParameter_2x4_4() 搬到邏輯欄 0 與 1, 對應實體吸嘴 1 與 3(相隔 2 段 pitch);
+    //  20260810 已把 i2x2Suck_Out 改成 1 讓列舉對得上, 但幾何若仍走下面 Sam 20211224
+    //  的「1 4 吸嘴」分支, 兩支吸嘴實距只有 2*(Pitch_X_H/3), 到不了相隔 Pitch_X_H
+    //  的旋轉站第二格, 故改走「吸嘴1中心到吸嘴3中心」(Pitch_X_H*3/2) 分支;
+    //  因 iOutArmXBase=2, 兩式對實體欄 0 那支吸嘴算出來的位置完全相同,
+    //  只有遠端吸嘴由欄 3 換成欄 2, 與 2x2 既有作法同源
+    bool bOutRotateUse13Picker=(USE_PICKER_COUNT!=ep16Picker &&
+                                (iInArmType==e9045_2x4_4_13 || iInArmType==e9045_2x4_4_14));
     iYpos=Prod.iOutArm_RotateY+(iYPitch*iRotato_Out_Row);
 
     if(USE_OUT_Y_IS_AUTO_PITCH==true && iRotato_Out_Row==0)                     //JerryYang 20251218 : IN/OUT ARM支援不同模組
@@ -803,7 +812,8 @@ void CalcPosition_OutArm(int &iXpos, int &iYpos, int &iXPitch, int iYPitch, int 
             iYpos   =Prod.iOutArm_RotateY + (6000*iRotato_Out_Row);
         }
         else if((TestIF.iTestMode==_8Site2X4 || TestIF.iTestMode==_16Site2X8 || TestIF.iTestMode==_16Site4X4) &&  //Sam 20190226 : 16Site4X4
-                ArmCanSuck4IC(0)==false)
+                ArmCanSuck4IC(0)==false &&
+                bOutRotateUse13Picker==false)                                    //AI(ht9045-v899) 20260811: 2x4_4_13/_14 改走下方 1,3 吸嘴分支
         {
             if(tRotate.RotateKit_PitchX==40)                                    //20140307 wei Pitch_X 40   需*3 ，  Pitch_X 80 需要  /2*3
             {
@@ -904,6 +914,26 @@ bool M_MoveOutArmXY_ToRotateKIT(int iKit)
     }
 
     CalcPosition_OutArm(iXPos, iYPos, iMovePitchX, iMovePitchY, iKit);
+
+    //AI(ht9045-v899) 20260811: 把旋轉站的 XY 目標與 X-pitch 計算結果記進診斷 Log,
+    //  下次 State Record 可直接對「實際開的 pitch vs 旋轉站 KitPitchX」, 不用再反推
+    try
+    {
+        AnsiString sLog;
+        sLog.sprintf("ROT-XY iKit=%d Use13=%d iXPitch=%d OneSuck=%d TgtX=%d TgtY=%d "
+                     "KitPitchX=%d RotateX=%d StartXH=%d PitchXH=%d ActX=%d",
+                     iKit,
+                     (int)(USE_PICKER_COUNT!=ep16Picker &&
+                           (iInArmType==e9045_2x4_4_13 || iInArmType==e9045_2x4_4_14)),
+                     iMovePitchX, iMovePitchX/3, iXPos, iYPos,
+                     (int)tRotate.RotateKit_PitchX, Prod.iOutArm_RotateX,
+                     iRotateKIT_Start_X_H, iRotateKIT_Pitch_X_H,
+                     MOT[MOutArmX].ReadPos());
+        OutArmRoundLog_Line(sLog);
+    }
+    catch(...)
+    {
+    }
 
     iYVariable=GetOutArmPitchY_9045(iMovePitchY, iOffsetPos);
     for(int i=0; i<X_PITCH_COUNT; i++)
@@ -1096,6 +1126,27 @@ bool M_MoveOutArmZ_ToRotateKIT_Place(int iKit)
             if(flag[i][j]==false)
                 return false;
         }
+    }
+
+    //AI(ht9045-v899) 20260810: 記錄這一趟到底把哪幾支吸嘴放到旋轉站。列舉用的 stride 是 i2x2Suck_Out, 只要它跟吸嘴實際欄位對不上, 就會有 IC 沒旋轉就進 Auto tray (力成PTI DUT1/DUT3 即此)
+    try
+    {
+        AnsiString sLog, sOne;
+        sLog.sprintf("ROT-PLACE iKit=%d i2x2Suck_Out=%d iRotato_Out_Row=%d DutNum=%d Item:",
+                     iKit, i2x2Suck_Out, iRotato_Out_Row, tRotate.DutNum);
+        for(int i=0; i<MAX_ARM_Row; i++)
+        {
+            for(int j=0; j<MAX_ARM_Col; j++)
+            {
+                sOne.sprintf(" N%d%d=%d/D%d", i, j, OutArmSuck.Item[i][j],
+                             (int)OutArmSuck.Suck[i][j].GetNeedDestroyStatus());
+                sLog+=sOne;
+            }
+        }
+        OutArmRoundLog_Line(sLog);
+    }
+    catch(...)
+    {
     }
     return true;
 }
@@ -2198,6 +2249,13 @@ bool M_DoOutArmRotateKIT_Motor()
                             {
                                 bSuckDuplicateErr[iSuckR][iSuckC]=false;
                                 OutArmSuck.CopyToTray(iSuckR, iSuckC, NULL_IC, MOT[MOutRotateKit], iTrayY, iTrayX, OutArmSuck.Item[iSuckR][iSuckC]);
+                                //AI(ht9045-v899) 20260811: 模擬用——沿用 IC 資料轉移時才檢查的慣例
+                                //  (同 SwapShuttleDataToOutArm / DoPlaceToHPSwapData)。iSuckR/iSuckC 是吸嘴，
+                                //  iTrayY/iTrayX 是旋轉站孔位，四個索引這裡本來就算好了
+                                //  必須傳 iMyRow/iMyCol（實體）不能傳邏輯 i/j：GetOutArmCellPos() 用的是實體欄位，
+                                //  而本機 CopyInitSuck 把邏輯欄1映射到實體欄2，傳錯會造出一段 pitch 的假誤差
+                                InspectOutArmPosition(MOutRotateKit, OutArmSuck.Suck[iSuckR][iSuckC].iMyRow, OutArmSuck.Suck[iSuckR][iSuckC].iMyCol,
+                                                      iTrayY, iTrayX, iOutPlaceToRotate);
                                 if(OutArmSuck.Item[iSuckR][iSuckC]!=HAS_NULL_IC) //Steven 20170109 (Jou) : 沒IC的地方不檢查吹氣
                                     bOutArmCheckDestroyACT[iSuckR][iSuckC]=true; //kevin 20140220 回吸檢測 jou 981130 確認device確實destroy完成
                             }

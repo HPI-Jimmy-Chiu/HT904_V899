@@ -1,0 +1,322 @@
+[
+  {
+    "id": "MG-W12-01",
+    "desc": "[0810 CASE-PTI-20260810-001 / 6f1df8c] AutoCalculateOutArmXClosePitch() 的 device-dimension 救援路徑：最小階(i=1)若低於機構下限 iMinXPitch4Pick 就夾到下限,不再被丟棄而改用下一倍數(間距反而更大且仍超限)。矩陣 aoutarm.cpp:3125,3126。取代 V910[3230,3231](空行+16 空白縮排的 4Pick 判斷式),兩行與 V899[3124]/[3130] 位元組相同;跨行錨點全檔唯一(單獨的 if 行在本檔出現 2 次)",
+    "v910_file": "aoutarm.cpp",
+    "v899_file": "aoutarm.cpp",
+    "v899_lines": [3124, 3130],
+    "mode": "replace",
+    "anchor_expect": "\r\n                if(OutArmClose_PitchX>=iMinXPitch4Pick && OutArmClose_PitchX<=iMaxXPitch4Pick)",
+    "replace_lines": [3230, 3231]
+  },
+  {
+    "id": "MG-W12-02",
+    "desc": "[0810 CASE-PTI-20260810-002 / f715979] InitSuckState() 的 _8Site2X4 分支：2x4 交錯 4 站(e9045_2x4_4_13/_14,非 16 picker)把 i2x2Suck_Out 由 3 改 1,讓 aRotateKIT_Out 的 stride 與 SetInOutArmParameter_2x4_4 的 CopyInitSuck 重映射一致(DUT1/DUT3 才會被放到旋轉站)。矩陣 RotateKit\\aRotateKIT.cpp:114。錨點 i2x2Suck_Out=3; 全檔唯一",
+    "v910_file": "RotateKit\\aRotateKIT.cpp",
+    "v899_file": "RotateKit\\aRotateKIT.cpp",
+    "v899_lines": [114, 119],
+    "mode": "after",
+    "anchor_line": 122,
+    "anchor_expect": "i2x2Suck_Out=3;"
+  },
+  {
+    "id": "MG-W12-03",
+    "desc": "[0810 CASE-PTI-20260810-002 / 1e31f82] GetNowShuttleMode_2x4_4()：iXStep==1&&iYStep==1 不再無條件 return 2;無料仍回 2(該情境位元組不變),有料時依 LeftSideNoIC(iShtKitStep) 回 11002(右半 kit1)/10002(左半 kit0),復活 CheckOutArmXYPitch_2x4_4 既有的 iModeCol==110 分支(原為死碼)。矩陣 aoutarm9045_2x4_4.cpp:40。取代 V910[38,41],跨行錨點涵蓋整段被取代區,全檔唯一",
+    "v910_file": "aoutarm9045_2x4_4.cpp",
+    "v899_file": "aoutarm9045_2x4_4.cpp",
+    "v899_lines": [38, 47],
+    "mode": "replace",
+    "anchor_expect": "if(OutArmSuck.iXStep==1 && OutArmSuck.iYStep==1)\r\n    {\r\n        return 2;\r\n    }",
+    "replace_lines": [38, 41]
+  },
+  {
+    "id": "MG-W12-04",
+    "desc": "[0810 round log / 5d5d7d3] 檔案層暫存值 iOutArmRoundTgtX/TgtY/Mode/OfsPos/PitchX(純記錄,不參與任何判斷)。矩陣 aoutarm9045_2x4_4.cpp:155。插在 CheckOutArmXYPitch_2x4_4 定義之前,錨點為該函式簽章,全檔唯一",
+    "v910_file": "aoutarm9045_2x4_4.cpp",
+    "v899_file": "aoutarm9045_2x4_4.cpp",
+    "v899_lines": [155, 157],
+    "mode": "before",
+    "anchor_line": 149,
+    "anchor_expect": "bool CheckOutArmXYPitch_2x4_4(int *iX, int *iY, int iSht, int iKit, int iMovePitchX, int iMovePitchY)"
+  },
+  {
+    "id": "MG-W12-05",
+    "desc": "[0810 round log] MoveOutArmToShuttleIncludeZ_9045_2x4_4()：在呼叫 CheckOutArmXYPitch 之前把目標座標/mode/offset/pitch 暫存,供 DoPickFromShuttle 印「目標 vs 實際」。矩陣 aoutarm9045_2x4_4.cpp:535。錨點全檔唯一",
+    "v910_file": "aoutarm9045_2x4_4.cpp",
+    "v899_file": "aoutarm9045_2x4_4.cpp",
+    "v899_lines": [535, 540],
+    "mode": "before",
+    "anchor_line": 526,
+    "anchor_expect": "if(CheckOutArmXYPitch_2x4_4(&iXPos, &iYPos, iSht, iKit, iMovePitchX, iMovePitchY)==false && bZDown==true)"
+  },
+  {
+    "id": "MG-W12-06",
+    "desc": "[0810 round log] 新增 static OutArmRoundLog_SuckMap()：把吸嘴->Shuttle 欄位對應、Shuttle 上的 Item、真空 Error 一次寫成一行(純讀取,try/catch 包住)。矩陣 aoutarm9045_2x4_4.cpp:558。V899 區段含結尾的 //=== 分隔線(898 那行),插在 V910 既有的 //=== 之後即與 V899 版面完全一致;錨點為 DoPickFromShuttle_9045_2x4_4 簽章,全檔唯一",
+    "v910_file": "aoutarm9045_2x4_4.cpp",
+    "v899_file": "aoutarm9045_2x4_4.cpp",
+    "v899_lines": [558, 598],
+    "mode": "before",
+    "anchor_line": 543,
+    "anchor_expect": "bool DoPickFromShuttle_9045_2x4_4(int iSht)"
+  },
+  {
+    "id": "MG-W12-07",
+    "desc": "[0810 round log] DoPickFromShuttle_9045_2x4_4 case 10：一趟取料開始 -> OutArmRoundLog_Begin(iSht, iOutArmiWhichKit)。矩陣 aoutarm9045_2x4_4.cpp:648。用 replace 是因為 iWitchErrBin=0; 單獨字串會命中宣告行 static int iWitchErrBin=0;;跨行錨點 iWitchErrBin=0;+Task=200; 全檔唯一,被取代兩行與 V899[647]/[650] 位元組相同",
+    "v910_file": "aoutarm9045_2x4_4.cpp",
+    "v899_file": "aoutarm9045_2x4_4.cpp",
+    "v899_lines": [647, 650],
+    "mode": "replace",
+    "anchor_expect": "iWitchErrBin=0;\r\n            Task=200;",
+    "replace_lines": [591, 592]
+  },
+  {
+    "id": "MG-W12-08",
+    "desc": "[0810 round log] case 200 到位後記 MOVE 行：iMode/iModeRow/iModeCol/iOffsetPos/iMovePitchX + 目標 XY vs 實際 encoder XY(kit 沒位移這類問題比這兩個數就看得出來)。矩陣 aoutarm9045_2x4_4.cpp:654。錨點全檔唯一",
+    "v910_file": "aoutarm9045_2x4_4.cpp",
+    "v899_file": "aoutarm9045_2x4_4.cpp",
+    "v899_lines": [654, 664],
+    "mode": "before",
+    "anchor_line": 596,
+    "anchor_expect": "fAutoTeach->iATOutArmWhichKit=iOutArmiWhichKit;"
+  },
+  {
+    "id": "MG-W12-09",
+    "desc": "[0810 round log] 吸取失敗 -> SUCK-FAIL 行(每支吸嘴對到的 Shuttle 欄位與該欄位 Item)。矩陣 aoutarm9045_2x4_4.cpp:754。錨點 iOutShtRetryCount++; 全檔唯一",
+    "v910_file": "aoutarm9045_2x4_4.cpp",
+    "v899_file": "aoutarm9045_2x4_4.cpp",
+    "v899_lines": [754, 755],
+    "mode": "before",
+    "anchor_line": 685,
+    "anchor_expect": "iOutShtRetryCount++;"
+  },
+  {
+    "id": "MG-W12-10",
+    "desc": "[0810 round log] 吸取成功 -> SUCK-OK 行,供與失敗那一輪對照。矩陣 aoutarm9045_2x4_4.cpp:779。用 replace 是因為插入點下一行 iOutShtRetryCount=0; 在本檔命中 4 次;錨點 fFixAICCD->OutArmCycleCounterUpdate(); 全檔唯一,被取代 4 行與 V899[776,778]/[781] 位元組相同",
+    "v910_file": "aoutarm9045_2x4_4.cpp",
+    "v899_file": "aoutarm9045_2x4_4.cpp",
+    "v899_lines": [776, 781],
+    "mode": "replace",
+    "anchor_expect": "fFixAICCD->OutArmCycleCounterUpdate();",
+    "replace_lines": [705, 708]
+  },
+  {
+    "id": "MG-W12-11",
+    "desc": "[0810 round log] 發 alarm 時記 ALARM 行(JAM020n / ErrPart / 操作員 RETRY-SKIP-HOME 選擇 / retry 次數)並 Flush 落地一次。矩陣 aoutarm9045_2x4_4.cpp:816。錨點 ret=OutArmPickShuttleAlarm(...) 全檔唯一;插在其後、既有空行之前,版面與 V899 相同",
+    "v910_file": "aoutarm9045_2x4_4.cpp",
+    "v899_file": "aoutarm9045_2x4_4.cpp",
+    "v899_lines": [816, 823],
+    "mode": "after",
+    "anchor_line": 742,
+    "anchor_expect": "ret=OutArmPickShuttleAlarm(iSht, bHasDuplicateErr, ErrPart);"
+  },
+  {
+    "id": "MG-W12-12",
+    "desc": "[0810 round log] case 2200 標出回 HOME 的斷點(ring 在 RAM 不會被 HOME 清掉,前後輪可連著看)。矩陣 aoutarm9045_2x4_4.cpp:901。錨點 SetOutArmHome(); 全檔唯一",
+    "v910_file": "aoutarm9045_2x4_4.cpp",
+    "v899_file": "aoutarm9045_2x4_4.cpp",
+    "v899_lines": [901, 902],
+    "mode": "before",
+    "anchor_line": 820,
+    "anchor_expect": "SetOutArmHome();"
+  },
+  {
+    "id": "MG-W12-13",
+    "desc": "[0811 CASE-PTI-20260811-001 part2 / f641734] aoutarm9045.h 宣告 extern int iOutPlaceToRotate(InspectOutArmPosition 的第三種動作)。矩陣 aoutarm9045.h:67。錨點 extern int iOutPlaceToAuto; 全檔唯一,插入後與 V899 相對位置一致",
+    "v910_file": "aoutarm9045.h",
+    "v899_file": "aoutarm9045.h",
+    "v899_lines": [67, 67],
+    "mode": "after",
+    "anchor_line": 74,
+    "anchor_expect": "extern int iOutPlaceToAuto;"
+  },
+  {
+    "id": "MG-W12-14",
+    "desc": "[0810 round log] aoutarm9045.h 宣告 OUTARM_ROUND_LOG_MAX(20) 與 6 支 OutArmRoundLog_* API。矩陣 aoutarm9045.h:95。放在 InitNewFixTrayForUnloaderClipRead 之後＝與 V899 相對位置一致;V910 自有的 4 個宣告(IsMotorArrival/DoOutArmIonFanGiveWay/InitDoOutArmIonFanGiveWayTask/MoveOutArmXY_To_ESDSafePos)全部原封保留在其後。錨點全檔唯一",
+    "v910_file": "aoutarm9045.h",
+    "v899_file": "aoutarm9045.h",
+    "v899_lines": [95, 102],
+    "mode": "after",
+    "anchor_line": 101,
+    "anchor_expect": "bool InitNewFixTrayForUnloaderClipRead(int iwhichauto,bool bOutputReport=false);"
+  },
+  {
+    "id": "MG-W12-15",
+    "desc": "[0810 round log] OutArmRoundLog 實作本體：ring buffer(20 輪)+Enabled/Seq/Line/Begin/WriteTo/Flush/Dump,開關讀 config.ini [Debug] bOutArmRoundLog(預設 1)。矩陣 aoutarm9045.cpp:2100。V899 區段自 //=== 起、至 //=== 止,插在 bool bOutRotator; 之前即與 V899 版面完全一致;錨點 bool bOutRotator; 全檔唯一",
+    "v910_file": "aoutarm9045.cpp",
+    "v899_file": "aoutarm9045.cpp",
+    "v899_lines": [2099, 2233],
+    "mode": "before",
+    "anchor_line": 2162,
+    "anchor_expect": "bool bOutRotator;"
+  },
+  {
+    "id": "MG-W12-16",
+    "desc": "[0810 round log] CheekNeedToDoOutArmAdditionalFunction() 尾端記 ROT-GATE 行(bAlreadyRotate/bOutRotator/iOutRotateFinish/bDoAOI/bDoFixAI/結果),讓「為什麼沒去旋轉」有跡可循。矩陣 aoutarm9045.cpp:2341。用 replace 是因為插入點下一行是 return bResult;(全檔數十處);錨點 InitDoOutArmAdditionalFunction(); 全檔唯一,被取代 3 行與 V899[2338,2339]/[2350] 位元組相同",
+    "v910_file": "aoutarm9045.cpp",
+    "v899_file": "aoutarm9045.cpp",
+    "v899_lines": [2338, 2350],
+    "mode": "replace",
+    "anchor_expect": "InitDoOutArmAdditionalFunction();",
+    "replace_lines": [2270, 2272]
+  },
+  {
+    "id": "MG-W12-17",
+    "desc": "[0811] 新增 int iOutPlaceToRotate=2(第三種動作;不能重用 iOutPlaceToAuto,那條路徑 sPos=s6TrayName[iTarget] 只有 eTrayCount(33) 個元素而 MOutRotateKit=42 會越界)。矩陣 aoutarm9045.cpp:3792。錨點 int iOutPlaceToAuto=1; 全檔唯一",
+    "v910_file": "aoutarm9045.cpp",
+    "v899_file": "aoutarm9045.cpp",
+    "v899_lines": [3792, 3795],
+    "mode": "after",
+    "anchor_line": 3893,
+    "anchor_expect": "int iOutPlaceToAuto=1;"
+  },
+  {
+    "id": "MG-W12-18",
+    "desc": "[0811] InspectOutArmPosition() else 分支：把 Steven 20241220 的「暫時跳過」return 註解掉,sPlace 依 iAction 切 Place to / Pick from。矩陣 aoutarm9045.cpp:3826。取代 V910[3923,3924];錨點(含 8 空白縮排的 return 與 Steven 20241220 標記)全檔唯一。⚠ 這是本波唯一「解除既有 early return」的變更,生效條件見分析文件 §gate(production build 下 IniConfig.bE74_InspectArmPosition 恆為 0)",
+    "v910_file": "aoutarm9045.cpp",
+    "v899_file": "aoutarm9045.cpp",
+    "v899_lines": [3825, 3827],
+    "mode": "replace",
+    "anchor_expect": "        return;                                                                 //Steven 20241220",
+    "replace_lines": [3923, 3924]
+  },
+  {
+    "id": "MG-W12-19",
+    "desc": "[0811] 數值撞號處置：iAction==iOutPlaceToAuto && iTarget==eBulkBox 直接 return(eFix12(17)==MOutShuttle1(17)、eBulkBox(18)==MOutShuttle2(18);判斷式必須帶 iAction,否則 18 這個值會連 MOutShuttle2 的取料檢查一起關掉)。矩陣 aoutarm9045.cpp:3842。錨點全檔唯一",
+    "v910_file": "aoutarm9045.cpp",
+    "v899_file": "aoutarm9045.cpp",
+    "v899_lines": [3842, 3851],
+    "mode": "before",
+    "anchor_line": 3939,
+    "anchor_expect": "int XEncoder=0, YEncoder=0, HardwarePosX=0, HardwarePosY=0;"
+  },
+  {
+    "id": "MG-W12-20",
+    "desc": "[0811] GetOutArmToShtCellPos vs GetOutArmCellPos 的分流補上 iAction!=iOutPlaceToAuto,放料路徑不可落入 shuttle 算式。矩陣 aoutarm9045.cpp:3857。取代 V910[3944,3945](兩行判斷式改為三行含 iAction);跨行錨點全檔唯一",
+    "v910_file": "aoutarm9045.cpp",
+    "v899_file": "aoutarm9045.cpp",
+    "v899_lines": [3857, 3859],
+    "mode": "replace",
+    "anchor_expect": "if(iTarget==MOutShuttle1 ||\r\n           iTarget==MOutShuttle2)",
+    "replace_lines": [3944, 3945]
+  },
+  {
+    "id": "MG-W12-21",
+    "desc": "[0811] BulkBox 期望位置區塊整段 Mark(上方已 return;原式 HardwarePosY 同一符號在等號兩邊、恆為負,本來就不能當基準)。矩陣 aoutarm9045.cpp:3866。取代 V910[3952,3957](if(iTarget==eBulkBox) 整段 + else),V899 對應六行是同樣內容前面加 // ;錨點全檔唯一",
+    "v910_file": "aoutarm9045.cpp",
+    "v899_file": "aoutarm9045.cpp",
+    "v899_lines": [3866, 3874],
+    "mode": "replace",
+    "anchor_expect": "HardwarePosX=Prod.iOutArmBinBoxX+dOutArmXPitch_1Step*iTargetCol;",
+    "replace_lines": [3952, 3957]
+  },
+  {
+    "id": "MG-W12-22",
+    "desc": "[0811] picker 重映射 offset 兩邊基準對齊：期望值側改用 (iSuckCol*OutArmSuck.iPickStep-iOutArmXBase),與實際值側 GetOutArmToShtCellPos() 同一換算。矩陣 aoutarm9045.cpp:3910。取代 V910[3993];錨點全檔唯一",
+    "v910_file": "aoutarm9045.cpp",
+    "v899_file": "aoutarm9045.cpp",
+    "v899_lines": [3910, 3914],
+    "mode": "replace",
+    "anchor_expect": "HardwarePosX+=(iXoffset/3)*(iSuckCol-iOutArmXBase);",
+    "replace_lines": [3993, 3993]
+  },
+  {
+    "id": "MG-W12-23",
+    "desc": "[0811] 旋轉站期望位置由單點 Prod.iOutArmRotateToUnloaderX/Y 改由旋轉站幾何推算(iOutArm_RotateX/Y + iRotateKIT_Start_X_H/Y_H + iRotateKIT_Pitch_X_H/Y_H,含孔位項),刻意不呼叫 CalcPosition_OutArm 以免自己驗自己。矩陣 aoutarm9045.cpp:3928。取代 V910[4007,4008];錨點全檔唯一",
+    "v910_file": "aoutarm9045.cpp",
+    "v899_file": "aoutarm9045.cpp",
+    "v899_lines": [3928, 3939],
+    "mode": "replace",
+    "anchor_expect": "HardwarePosX=Prod.iOutArmRotateToUnloaderX;",
+    "replace_lines": [4007, 4008]
+  },
+  {
+    "id": "MG-W12-24",
+    "desc": "[0811] CalcPosition_OutArm() 開頭新增 bOutRotateUse13Picker 判斷式(非 16 picker 且 iInArmType 為 e9045_2x4_4_13/_14)。矩陣 RotateKit\\aRotateKIT_Out.cpp:694。錨點 int OneSuckPitch; 全檔唯一",
+    "v910_file": "RotateKit\\aRotateKIT_Out.cpp",
+    "v899_file": "RotateKit\\aRotateKIT_Out.cpp",
+    "v899_lines": [694, 702],
+    "mode": "after",
+    "anchor_line": 694,
+    "anchor_expect": "int OneSuckPitch;"
+  },
+  {
+    "id": "MG-W12-25",
+    "desc": "[0811] Sam 20211224「1 4 吸嘴」分支加上 bOutRotateUse13Picker==false,讓 2x4_4_13/_14 落到下方「吸嘴1中心到吸嘴3中心」(Pitch_X_H*3/2) 分支。矩陣 RotateKit\\aRotateKIT_Out.cpp:816。取代 V910[806] 一行為 V899 兩行;錨點 ArmCanSuck4IC(0)==false) 全檔唯一",
+    "v910_file": "RotateKit\\aRotateKIT_Out.cpp",
+    "v899_file": "RotateKit\\aRotateKIT_Out.cpp",
+    "v899_lines": [815, 816],
+    "mode": "replace",
+    "anchor_expect": "ArmCanSuck4IC(0)==false)",
+    "replace_lines": [806, 806]
+  },
+  {
+    "id": "MG-W12-26",
+    "desc": "[0811] M_MoveOutArmXY_ToRotateKIT() 記 ROT-XY 診斷行(目標 XY、選到的 X-pitch、KitPitchX、實際 encoder),try/catch 包住。矩陣 RotateKit\\aRotateKIT_Out.cpp:918。V899 區段自空行起,插在 CalcPosition_OutArm 呼叫之後即與 V899 版面一致;錨點全檔唯一",
+    "v910_file": "RotateKit\\aRotateKIT_Out.cpp",
+    "v899_file": "RotateKit\\aRotateKIT_Out.cpp",
+    "v899_lines": [917, 936],
+    "mode": "after",
+    "anchor_line": 906,
+    "anchor_expect": "CalcPosition_OutArm(iXPos, iYPos, iMovePitchX, iMovePitchY, iKit);"
+  },
+  {
+    "id": "MG-W12-27",
+    "desc": "[0810 round log] M_MoveOutArmZ_ToRotateKIT_Place() 尾端記 ROT-PLACE 行(iKit / i2x2Suck_Out / iRotato_Out_Row / DutNum / 每支吸嘴 Item+NeedDestroy)。矩陣 RotateKit\\aRotateKIT_Out.cpp:1131。用 replace 是因為插入點下一行是 return true;;錨點取下一支函式簽章 M_MoveOutArmZ_ToRotateKIT_Pick,全檔唯一,被取代 5 行與 V899[1129]/[1151,1154] 位元組相同",
+    "v910_file": "RotateKit\\aRotateKIT_Out.cpp",
+    "v899_file": "RotateKit\\aRotateKIT_Out.cpp",
+    "v899_lines": [1129, 1154],
+    "mode": "replace",
+    "anchor_expect": "bool M_MoveOutArmZ_ToRotateKIT_Pick(int iKit, int PickAngle)",
+    "replace_lines": [1099, 1103]
+  },
+  {
+    "id": "MG-W12-28",
+    "desc": "[0811] M_DoOutArmRotateKIT_Motor() case 1000 泛用 else 分支：CopyToTray 之後補 InspectOutArmPosition(MOutRotateKit, Suck.iMyRow, Suck.iMyCol, iTrayY, iTrayX, iOutPlaceToRotate)。矩陣 RotateKit\\aRotateKIT_Out.cpp:2252。CopyToTray 那行(含 32 空白縮排)在本檔命中 6 次,故不用單行錨;改用跨行錨(相對縮排承重)取代 V910[2195,2200],該跨行字串全檔唯一(實測 count=1),被取代 6 行與 V899[2246,2251] 位元組相同",
+    "v910_file": "RotateKit\\aRotateKIT_Out.cpp",
+    "v899_file": "RotateKit\\aRotateKIT_Out.cpp",
+    "v899_lines": [2246, 2258],
+    "mode": "replace",
+    "anchor_expect": " == HAS_NULL_IC)\r\n                        {\r\n                            if(OutArmSuck.Item[iSuckR][iSuckC]==HAS_NULL_IC",
+    "replace_lines": [2195, 2200]
+  },
+  {
+    "id": "MG-W12-29",
+    "desc": "[0810 / 3200884] DoStateRecord 補收 Error 夾下兩份診斷 log：BootLog.txt*(含輪替的 .old)與 OutArmRoundLog.txt,逐檔點名不整夾複製(Error 夾有 3700 多個語系 .dat)。矩陣 main.cpp:25566。錨點 str1=\"D:\\\\GPIB9045\\\\system\"; 全檔唯一;插入點在 config 複製之後、GPIB 複製之前,與 V899 相對位置一致",
+    "v910_file": "main.cpp",
+    "v899_file": "main.cpp",
+    "v899_lines": [25566, 25574],
+    "mode": "before",
+    "anchor_line": 26728,
+    "anchor_expect": "str1=\"D:\\\\GPIB9045\\\\system\";"
+  },
+  {
+    "id": "MG-W12-30",
+    "desc": "[0810 / 5d5d7d3] DoStateRecord 尾端把 OutArm 逐輪診斷 Log 一併帶進 State Record 資料夾。矩陣 main.cpp:25791。錨點 DumpMainFormSnapshot(NewPath);(0604 波已搬入 V910)全檔唯一",
+    "v910_file": "main.cpp",
+    "v899_file": "main.cpp",
+    "v899_lines": [25791, 25792],
+    "mode": "after",
+    "anchor_line": 26968,
+    "anchor_expect": "DumpMainFormSnapshot(NewPath);"
+  },
+  {
+    "id": "MG-W12-31",
+    "desc": "[0810 日期撞號,非 OutArm 主題;全智 CC_GIGAS] ProcessLastSetIni_Index()：CC_GIGAS 的 GaliPosRange 預設 10 -> 50(與其他客戶原廠標準一致,因 Y1 定位殘差恆為 10 與門檻相等造成 Index 4 Axis Need Home 誤報),下限維持 5。矩陣 cprod.cpp:2535。取代 V910[2655] 一行;錨點含 10 與 5,100 兩個界限值,全檔唯一(不會誤中 else 分支那行)。⚠ 不動 V910 自有的 Eastsun 20260710 CC_KYEC_LEE +5 兩行(V910:2662-2663)",
+    "v910_file": "cprod.cpp",
+    "v899_file": "cprod.cpp",
+    "v899_lines": [2535, 2535],
+    "mode": "replace",
+    "anchor_expect": "ReadWriteIni(sPath, \"Index\", \"GaliPosRange\",             IniConfig.GaliPosRange,                10,    bRead,true, 5, 100);",
+    "replace_lines": [2655, 2655]
+  },
+  {
+    "id": "MG-W12-32",
+    "desc": "[0810 日期撞號,非 OutArm 主題;甬矽 CC_FOREHOPE_NINGBO] InitConfigEdtList_ItemI()：[I21-10] bI21RTmodeDonotRunSiteMapping 選項對 CC_FOREHOPE_NINGBO 也解鎖(原本只有 CC_JCET 看得到),預設值仍為 0,未勾選前行為不變。矩陣 cConfiguration.cpp:2522。取代 V910[2669] 一行為 V899 兩行(AI 註解 + 加長的判斷式);錨點含 Richard 20230427 標記,全檔唯一(單獨 if(CUSTOMER_CODE==CC_JCET) 在本檔命中 7 次)",
+    "v910_file": "cConfiguration.cpp",
+    "v899_file": "cConfiguration.cpp",
+    "v899_lines": [2522, 2523],
+    "mode": "replace",
+    "anchor_expect": "if(CUSTOMER_CODE==CC_JCET)                                              //Richard 20230427",
+    "replace_lines": [2669, 2669]
+  }
+]

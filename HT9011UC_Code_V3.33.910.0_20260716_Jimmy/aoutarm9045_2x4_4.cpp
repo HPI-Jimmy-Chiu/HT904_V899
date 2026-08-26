@@ -37,7 +37,13 @@ int GetNowShuttleMode_2x4_4(int iSht)
 
     if(OutArmSuck.iXStep==1 && OutArmSuck.iYStep==1)
     {
-        return 2;
+        //AI(ht9045-v899) 20260810: 原本這裡一律 return 2, 在判斷左右半 kit 前就早退, 使 iModeCol 恆為 0, OutArm 取右半 kit 時算出的 X 與左半同一點(差 2 個 Site X-Pitch), 右半 IC 必吸空 -> JAM0202 重複發生, SKIP 又把沒去過的 Shuttle 格清成 NULL_IC -> 殘料回 Index 疊成 double IC; 改成沒料才回標準值 2, 有料時比照 iOutArmiWhichKit 的同一判斷式 LeftSideNoIC() 回 10002(左)/11002(右), 讓 CheckOutArmXYPitch_2x4_4() 既有的 iModeCol==110 分支生效(原為死碼), 行為對齊 V3.32
+        if(ptrOutSHT->UseSiteNoIC())
+            return 2;
+        else if(ptrOutSHT->LeftSideNoIC(OutArmSuck.iShtKitStep))
+            return 11002;                                                   //右半四顆(kit1)
+        else
+            return 10002;                                                   //左半四顆(kit0)
     }
     else if(ptrOutSHT->UseSiteNoIC())
     {
@@ -146,6 +152,9 @@ bool OutArmZNeedDown_2x4_4(int iSht)
     return true;
 }
 //------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260810: OutArm 逐輪診斷 Log 用的暫存值(純記錄, 不參與任何判斷)
+static int iOutArmRoundTgtX=0, iOutArmRoundTgtY=0, iOutArmRoundMode=0;
+static int iOutArmRoundOfsPos=0, iOutArmRoundPitchX=0;
 bool CheckOutArmXYPitch_2x4_4(int *iX, int *iY, int iSht, int iKit, int iMovePitchX, int iMovePitchY)
 {
     int iMode=GetNowShuttleMode_2x4_4(iSht);
@@ -523,6 +532,12 @@ bool MoveOutArmToShuttleIncludeZ_9045_2x4_4(int iSht, int iKit, bool bZDown)
     for(int i=0; i<X_PITCH_COUNT; i++)
         iXVariable[i]=GetOutArmPitchX_9045(iMovePitchX, i, iOffsetPos);
 
+    //AI(ht9045-v899) 20260810: 把算好的目標座標與 mode 暫存起來, 供 DoPickFromShuttle 記錄「目標 vs 實際」
+    iOutArmRoundTgtX   =iXPos;
+    iOutArmRoundTgtY   =iYPos;
+    iOutArmRoundMode   =iMode;
+    iOutArmRoundOfsPos =iOffsetPos;
+    iOutArmRoundPitchX =iMovePitchX;
     if(CheckOutArmXYPitch_2x4_4(&iXPos, &iYPos, iSht, iKit, iMovePitchX, iMovePitchY)==false && bZDown==true)
         return false;
 
@@ -539,6 +554,47 @@ bool MoveOutArmToShuttleIncludeZ_9045_2x4_4(int iSht, int iKit, bool bZDown)
 //==============================================================================
 // 輸出臂從 Shuttle 1 吸取 IC 流程動作
 //  Ver : 2003_07
+//==============================================================================
+//AI(ht9045-v899) 20260810: 逐輪診斷 Log 用。把吸嘴 -> Shuttle 欄位的對應、Shuttle 上的 Item、
+//  以及每支吸嘴的真空結果一次寫成一行。純讀取, 不改任何狀態
+static void OutArmRoundLog_SuckMap(int iSht, int iPickKit, AnsiString sTag)
+{
+    if(OutArmRoundLog_Enabled()==false)
+        return;
+    try
+    {
+        TMyKitSuck *ptrSht=(iSht==0)?&FRCarryKit:&BRCarryKit;
+        AnsiString sLog=sTag+" iPickKit="+IntToStr(iPickKit)+" ";
+        AnsiString sOne;
+        for(int i=0; i<OutArmSuck.iPickRow; i++)
+        {
+            for(int j=0; j<OutArmSuck.iPickCol; j++)
+            {
+                int iShtCol=j+iPickKit;
+                sOne.sprintf("[N%d%d->Sht%d%d Sht.Item=%d Arm.Item=%d Err=%d Name=%s] ",
+                             i, j, i, iShtCol,
+                             ptrSht->Item[i][iShtCol], OutArmSuck.Item[i][j],
+                             (int)OutArmSuck.Suck[i][j].Error,
+                             OutArmSuck.Suck[i][j].sName.c_str());
+                sLog+=sOne;
+            }
+        }
+        OutArmRoundLog_Line(sLog);
+        for(int i=0; i<ptrSht->iShtRow && i<MAX_ARM_Row; i++)
+        {
+            sLog.sprintf("SHT%d r%d Item:", iSht+1, i);
+            for(int j=0; j<ptrSht->iShtCol; j++)
+            {
+                sOne.sprintf(" %d", ptrSht->Item[i][j]);
+                sLog+=sOne;
+            }
+            OutArmRoundLog_Line(sLog);
+        }
+    }
+    catch(...)
+    {
+    }
+}
 //==============================================================================
 bool DoPickFromShuttle_9045_2x4_4(int iSht)
 {
@@ -589,10 +645,23 @@ bool DoPickFromShuttle_9045_2x4_4(int iSht)
             break;
         case 10:
             iWitchErrBin=0;
+            //AI(ht9045-v899) 20260810: 一趟取料開始 -> 開新的一輪紀錄(新輪會覆蓋 ring 上最舊的一輪)
+            OutArmRoundLog_Begin(iSht, iOutArmiWhichKit);
             Task=200;
         case 200:
             if(MoveOutArmToShuttleIncludeZ_9045_2x4_4(iSht, iOutArmiWhichKit, true))                                    //kevin 20210717 change function
             {
+                //AI(ht9045-v899) 20260810: 到位後記錄目標與實際座標。kit 沒位移這類問題只要比這兩行就看得出來
+                {
+                    AnsiString sLog;
+                    sLog.sprintf("MOVE iMode=%d iModeRow=%d iModeCol=%d iOffsetPos=%d iMovePitchX=%d "
+                                 "TgtX=%d TgtY=%d ActX=%d ActY=%d",
+                                 iOutArmRoundMode, iOutArmRoundMode%100, iOutArmRoundMode/100,
+                                 iOutArmRoundOfsPos, iOutArmRoundPitchX,
+                                 iOutArmRoundTgtX, iOutArmRoundTgtY,
+                                 MOT[MOutArmX].ReadPos(), MOT[MOutArmY].ReadPos());
+                    OutArmRoundLog_Line(sLog);
+                }
                 fAutoTeach->iATOutArmWhichKit=iOutArmiWhichKit;                                                         //JimmyChiu 20211020 : Auto alignment mode
                 if(OutArmNeedCheckOffset(false, iSht))                                                                  //Steven 20230531 : 簡化判斷式
                 {
@@ -682,6 +751,8 @@ bool DoPickFromShuttle_9045_2x4_4(int iSht)
                 {
                     if(OutArmSuck.Suck[i][j].Error)
                     {
+                        //AI(ht9045-v899) 20260810: 吸取失敗 -> 記錄每支吸嘴對到的 Shuttle 欄位與該欄位的 Item
+                        OutArmRoundLog_SuckMap(iSht, iPickKit, "SUCK-FAIL");
                         iOutShtRetryCount++;
                         Task=2000;
                         return false;
@@ -705,6 +776,8 @@ bool DoPickFromShuttle_9045_2x4_4(int iSht)
                 fFixAICCD->OutArmCycleCounterUpdate();
             }
 
+            //AI(ht9045-v899) 20260810: 吸取成功 -> 同樣記一份, 才能跟失敗的那一輪對照
+            OutArmRoundLog_SuckMap(iSht, iPickKit, "SUCK-OK");
             iOutShtRetryCount=0;
             Task=1;
             return true;
@@ -740,6 +813,14 @@ bool DoPickFromShuttle_9045_2x4_4(int iSht)
                             return false;
 
                         ret=OutArmPickShuttleAlarm(iSht, bHasDuplicateErr, ErrPart);
+                        //AI(ht9045-v899) 20260810: 發 alarm 是最需要保留現場的時刻, 記錄操作員的選擇並落地一次
+                        {
+                            AnsiString sLog;
+                            sLog.sprintf("ALARM JAM020%d ErrPart=%s ret=%d(1=RETRY 2=SKIP 4=HOME) RetryCT=%d",
+                                         iSht+1, ErrPart.c_str(), ret, iOutShtRetryCount);
+                            OutArmRoundLog_Line(sLog);
+                            OutArmRoundLog_Flush("OutArm pick alarm");
+                        }
 
                         for(int i=0; i<OutArmSuck.iPickRow; i++)
                         {
@@ -817,6 +898,8 @@ bool DoPickFromShuttle_9045_2x4_4(int iSht)
             }
             break;
         case 2200:
+            //AI(ht9045-v899) 20260810: 標出回 HOME 的斷點。ring 在 RAM 不會被 HOME 清掉, 所以前後輪可以接著看
+            OutArmRoundLog_Line("---- SetOutArmHome (round log continues across HOME) ----");
             SetOutArmHome();
             iOutShtRetryCount=0;
             Task=1;
