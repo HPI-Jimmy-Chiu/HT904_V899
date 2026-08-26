@@ -4336,3 +4336,689 @@ void TfLotInfo::Timer2Timer()
 }
 
 TfLotInfo *fLotInfo = new TfLotInfo();
+
+// =============================================================================
+//  AI(W906-FW-LOTINFO-W27) 20260826: uLotInfo Wave D -- 14 methods appended.
+//
+//  APPEND-ONLY.  Nothing above this line was edited; every pre-existing line
+//  in this file and in forms/fLotInfo.h is byte-identical to before this wave.
+//
+//  Read forms/fLotInfo.h's W27 banner FIRST.  It carries the re-measured
+//  denominator (96/210 golden out-of-line TfLotInfo definitions ported after
+//  this wave), the batch criterion (and why this batch is 14 and not 30-50),
+//  the GATE REGISTER WD-1..WD-5, the six recon classifications this wave
+//  overturned by reading the text, the WA/WB/WC premises re-checked on
+//  20260826, and the full EXIT REGISTER for everything deliberately absent.
+// =============================================================================
+
+// DEVIATION D-2 (see header banner): this wave's includes are placed here, at
+// the head of the appended block, rather than in the file's existing include
+// section -- the wave is strictly append-only and all four are guarded headers
+// declaring only externs/classes, so TU position is semantically irrelevant.
+#include <cstring>              // strncpy      -- RFID_ReaderReceiveData, golden :14159
+#include <cstdlib>              // atoi         -- btnAMRSetSECSClick,     golden :16229-16230
+#include "forms/fSecurity.h"    // fSecurity->GetPasswoard()  (fSecurity.h:583) -- sbTestClick, golden :13731
+#include "forms/fPassword.h"    // fPassword->edPassword (:317) / edPasswordPassWord (:326) /
+                                //   ShowEventLogLogin (:371) / CheckLoginSuccess (:369) / GetLoginLevel (:370)
+
+// -- RefreshYieldMonitor (golden uLotInfo.cpp:13310-13325) --------------------
+// RECON OVERTURN 1 (see header banner): recon #115 classified this "(b) write
+// path".  It is a dispatcher and writes nothing; the write recon is pointing
+// at is one frame down, in RefreshYieldMonitor_TERAPOWER, and is gated there
+// (WD-2).  Both branches and AdjtsYieldMonitiorSize() are real methods of this
+// file, so nothing here needs a gate.
+//
+// INTEGRATOR NOTE: this landing kills the stated reason of GATE WA-3 (the two
+// AdjtsYieldMonitiorSize call sites, golden :13671/:13678) and GATE WC-8
+// (FormShow golden :597, Timer2Timer golden :7143).  All four are openable and
+// were NOT opened here only because they are existing lines.
+void TfLotInfo::RefreshYieldMonitor()                                           //Sam 20210331
+{
+    static bool bTimerRunning=false;                                            //Sam 20230220
+    if(IniConfig.bSIGURDFunction==false &&
+       CosFunction.bShowYieldMonitor==false)                                    //Sam 20210916
+        return;
+    if(bTimerRunning)
+        return;
+     bTimerRunning=true;
+    if(IniConfig.bSIGURDFunction)
+        RefreshYieldMonitor_SIGURD();
+    else
+        RefreshYieldMonitor_TERAPOWER();
+     AdjtsYieldMonitiorSize();
+     bTimerRunning=false;
+}
+
+// -- RefreshYieldMonitor_TERAPOWER (golden uLotInfo.cpp:13547-13623) ----------
+// RECON OVERTURN 2: 76 of 77 lines are TestIF_File -> widget display fill.
+// Golden :13618 alone is the AutoClean-interval write; it is the ONLY thing
+// gated here (WD-2).
+void TfLotInfo::RefreshYieldMonitor_TERAPOWER()
+{
+    bool bLowYield=false, bContsFailBySocket=false, bContsFailByHead=false, bAllSiteFail=false, bSiteToSiteYieldEnable=false, bHeadToHeadYieldEnable=false;
+    double dLowYield=0.0, dSiteToSiteYield=0.0, dHeadToHeadYield=0.0;
+    int iLowYieldIg=0, iContsFailSocketAlarmCT=0, iContsFailHeadAlarmCT=0, iAllSiteFailCount=0, iSiteToSiteYieldCount=0, iHeadToHeadYieldCount=0;
+
+    if(iRunStartMode==FT)
+    {
+        //Low Yield
+        bLowYield               =TestIF_File.bFailAlarmLowYield;
+        dLowYield               =TestIF_File.dLowYieldLimit;
+        iLowYieldIg             =TestIF_File.iLowYieldCount;
+        //Consecutive Failure Alarm ( Socket/Head )
+        bContsFailBySocket      =TestIF_File.bContsFailBySocket;
+        bContsFailByHead        =TestIF_File.bContsFailByHead;
+        iContsFailSocketAlarmCT =TestIF_File.iContsFailSocketAlarmCT;
+        iContsFailHeadAlarmCT   =TestIF_File.iContsFailHeadAlarmCT;
+        //All Site Fial
+        bAllSiteFail            =TestIF_File.bAllSiteFail;
+        iAllSiteFailCount       =TestIF_File.iAllSiteFailCount;
+    }
+    else
+    {
+        //Low Yield
+        bLowYield               =TestIF_File.bFailAlarmLowYield_RT;
+        dLowYield               =TestIF_File.dLowYieldLimit_RT;
+        iLowYieldIg             =TestIF_File.iLowYieldCount_RT;
+        //Consecutive Failure Alarm ( Socket/Head )
+        bContsFailBySocket      =TestIF_File.bContsFailBySocket_RT;
+        bContsFailByHead        =TestIF_File.bContsFailByHead_RT;
+        iContsFailSocketAlarmCT =TestIF_File.iContsFailSocketAlarmCT_RT;
+        iContsFailHeadAlarmCT   =TestIF_File.iContsFailHeadAlarmCT_RT;
+        //All Site Fial
+        bAllSiteFail            =TestIF_File.bAllSiteFail_RT;
+        iAllSiteFailCount       =TestIF_File.iAllSiteFailCountRT;
+    }
+    //Site To Site Yield %
+    bSiteToSiteYieldEnable      =TestIF_File.bSiteToSiteYieldCmp;
+    dSiteToSiteYield            =TestIF_File.iSiteToSiteYieldCmp;
+    iSiteToSiteYieldCount       =TestIF_File.iSiteToSiteYieldCmpCount;
+    //Head To Head Yield %
+    bHeadToHeadYieldEnable      =TestIF_File.bHeadToHeadYieldCmp;
+    dHeadToHeadYield            =TestIF_File.iHeadToHeadYieldCmp;
+    iHeadToHeadYieldCount       =TestIF_File.iHeadToHeadYieldCmpCount;
+
+    cbLowYield->Checked                 =bLowYield;
+    edLowYield->Text                    =FloatToStr(dLowYield);
+    edLowYieldIg->Text                  =IntToStr(iLowYieldIg);
+    rbContsFailBySocket_On->Checked     =bContsFailBySocket;
+    rbContsFailBySocket_Off->Checked    =!bContsFailBySocket;
+    rbContsFailByHead_On->Checked       =bContsFailByHead;
+    rbContsFailByHead_Off->Checked      =!bContsFailByHead;
+    edContsFailSocketAlarmCT->Text      =IntToStr(iContsFailSocketAlarmCT);
+    edContsFailHeadAlarmCT->Text        =IntToStr(iContsFailHeadAlarmCT);
+    cbAllSiteFail->Checked              =bAllSiteFail;
+    edAllSiteFailCount->Text            =IntToStr(iAllSiteFailCount);
+    cb_SiteToSiteYieldEnable->Checked   =bSiteToSiteYieldEnable;
+    ed_SiteToSiteYield->Text            =FloatToStr(dSiteToSiteYield);
+    ed_SiteToSiteYieldCount->Text       =IntToStr(iSiteToSiteYieldCount);
+    cb_HeadToHeadYieldEnable->Checked   =bHeadToHeadYieldEnable;
+    ed_HeadToHeadYield->Text            =FloatToStr(dHeadToHeadYield);
+    ed_HeadToHeadYieldCount ->Text      =IntToStr(iHeadToHeadYieldCount);
+
+    chk_SmartAutoClean->Checked         =TestIF_File.bACSmart;                  //Sam 20230111 : Smart Auto Clean
+    edt_SmartAutoClean->Text            =TestIF_File.iACSmart_Count;
+    ed_SmartAutoCleanCTF->Text          =TestIF_File.iACSmart_Count_CTF;        //Sam 20240726 : AI Clean
+    lbl_SmartAutoCleanCount->Caption    =IntToStr(iACSmartCount);
+    lbl_SmartAutoCleanCount_CTF->Caption=IntToStr(iACSmartCount_CTF);           //Sam 20240726 : AI Clean
+
+    if(iAdaptiveACInterval<=0)
+    {
+        // AI(W906-FW-LOTINFO-W27) 20260826: GATE WD-2 -- see forms/fLotInfo.h.
+        // ESTABLISHED GATE reused verbatim from atester_ProcessCount.cpp:1534
+        // GATE D (same target, same reason, 5 other golden call sites).  The
+        // guard is kept real and the body empty so the shape stays diffable
+        // against golden.
+#if 0
+        fCleaning->ChangeACSmartInterval(2, "RefreshYieldMonitor");             //Sam 20240726 : AI Clean
+#endif
+    }
+    AnsiString s="";
+    s.sprintf("Adaptive Auto Clean Interval : %d/%d  Count", iAutoClean_IndexContactCount, iAdaptiveACInterval);
+    lblAdaptiveIntervalCount->Caption=s;
+}
+
+// -- LotKeyInTimeTimer (golden uLotInfo.cpp:11543-11660) -- WD-3 -------------
+// RECON OVERTURN 3: 118 lines of Lot-ID / Operator-ID text validation; no
+// file, no ini, no socket, no motion.  Sender dropped (unused in golden).
+void TfLotInfo::LotKeyInTimeTimer()
+{
+    static bool bRunLotKeyInTime=false;
+    static int iCount=0;
+    AnsiString sLastKeyin = "";
+    if(InitialOK==false || bRunLotKeyInTime==true)
+        return;
+    if(bLotFirstKeyIn==true)                                                    //Ifor 20190924
+    {
+        bLotFirstKeyIn=false;
+        iCount=0;
+        return;
+    }
+
+    bRunLotKeyInTime=true;
+
+    if(CUSTOMER_CODE==CC_KYEC_LEE)
+    {
+        if(edtSysLotID->Text.Length()!=10)                                      //Ifor 20190919
+        {
+            SetLotID("");
+        }
+        else
+        {
+            if(sLastKeyin=="")
+            {
+                sLastKeyin=edtSysLotID->Text;
+
+                if(sLastKeyin.Length()!=10)
+                {
+                    SetLotID("");
+                    sLastKeyin="";
+                }
+            }
+            else
+            {
+                SetLotID(sLastKeyin);
+            }
+        }
+
+        sLastKeyin="";
+        // AI(W906-FW-LOTINFO-W27) 20260826: GATE WD-3 -- golden :11584-11637,
+        // the whole Operator-ID if/else-if/else chain.  CAUSE: golden
+        // :11586-11587 reads `fMain->cbRunStartMode->Text`, and cbRunStartMode
+        // has NO PORT on TfMain (verified 20260826).  Gated as ONE chain, not
+        // as one clause, because dropping a disjunct from a compound condition
+        // rewrites the truth table -- the same reasoning this file's WC-10
+        // uses.  BEHAVIOUR DELTA: the operator-ID text is never modified here
+        // (golden could clear it for out-of-range KYEC/KLT head numbers).  A
+        // narrowing, not a divergence.  Note golden's own first arm body is a
+        // round trip through a local, i.e. already a no-op on the widget.
+#if 0
+        if(TrayForm.bEnableAMR ||                                               //Eastsun 20260515 F010 AMR/AGV Operator ID
+           (TrayForm.bEnableAMR==false && TrayForm.bEnableAMRLoader==true &&
+           (fMain->cbRunStartMode->Text=="Re-Test Continuous" ||
+           fMain->cbRunStartMode->Text=="Re-Test Initial Start")) && edtSysOperatorID->Text=="AGV")
+        {
+            sLastKeyin=edtSysOperatorID->Text;
+            edtSysOperatorID->Text=sLastKeyin;
+        }
+        else if(edtSysOperatorID->Text.Length()<6 ||                            //Ifor 20190919
+           edtSysOperatorID->Text.Length()>7)                                   // 2013.12.17 , Joye , KYEC Barcdoe Reader
+        {
+            edtSysOperatorID->Text="";
+            sLastKeyin="";
+        }
+        else
+        {
+            if(sLastKeyin=="")
+            {
+                sLastKeyin=edtSysOperatorID->Text;
+                AnsiString sHeadNum;
+                int iHeadNum=0;
+                if(sLastKeyin.Length()==6)
+                {
+                    sHeadNum=sLastKeyin.SubString(1, 2);
+                    iHeadNum=atoi(sHeadNum.c_str());
+                }
+                else if(sLastKeyin.Length()==7)
+                {
+                    sHeadNum=sLastKeyin.SubString(1,3);
+                    iHeadNum=atoi(sHeadNum.c_str());
+                }
+                                                                                //Ifor 20180517
+                if(bEnable_KLT_Function==true)                                  //Ifor 20180802
+                {
+                    if(iHeadNum<3 || iHeadNum>31)                               // KYEC 3~31 (2003~2031)
+                    {
+                        edtSysOperatorID->Text="";
+                        sLastKeyin="";
+                    }
+                }
+                else
+                {
+                    if(iHeadNum<85 || iHeadNum>120)                             // KYEC 85~120 (85~120)
+                    {
+                        edtSysOperatorID->Text="";
+                        sLastKeyin="";
+                    }
+                }
+            }
+            else
+            {
+                edtSysOperatorID->Text=sLastKeyin;
+            }
+        }
+#endif
+    }
+    else if(CUSTOMER_CODE==CC_AMD_M && CosFunction.bHiSiliconFunction==true)
+    {
+        iCount++;
+        if(iCount>=10)
+        {
+            iCount=0;
+            if(bLotID_OK==false)
+                edtSysLotID->Text="";
+
+            if(bOPID_OK==false)
+                edtSysOperatorID->Text="";
+
+            if(bDeviceName_OK==false)
+                edDeviceName->Text="";
+
+            if(bTemp_OK==false)
+                edTemp->Text="";
+        }
+    }
+
+    bRunLotKeyInTime=false;
+}
+
+// -- SetLotComponents (golden uLotInfo.cpp:2283-2320) -- WD-1 ---------------
+// RECON OVERTURN 6: 37 of 38 lines are widget ->Enabled/->Down/->Caption.
+// Golden :2285 alone is the SECS-visible global, and is the only line gated.
+void TfLotInfo::SetLotComponents(bool bLotEnd)                                  //Steven 20250515
+{
+    // AI(W906-FW-LOTINFO-W27) 20260826: GATE WD-1 -- golden :2285
+    // `RunInfo.bLotStart=!bLotEnd;`.  docs/RECON_uLotInfo_displayside.md
+    // section 4 item 4 names this line: the SECS DoLotStart de-duplication
+    // path reads the flag.  Gated so a display helper cannot silently own
+    // lot-start state.  BEHAVIOUR DELTA: RunInfo.bLotStart keeps its previous
+    // value.  Unobservable today -- SetLotComponents' only golden callers are
+    // SetLotStart/SetLotEnd, neither of which is ported.
+#if 0
+    RunInfo.bLotStart            =!bLotEnd;                                     //RogerYang 20250312
+#endif
+    edtSysLotID         ->Enabled=bLotEnd;
+    sbSECSLotStart      ->Down   =!bLotEnd;
+    sbSECSLotEnd        ->Down   =bLotEnd;
+    pnlLoader           ->Caption="";
+    edPage              ->Enabled=bLotEnd;                                      //JerryYang 20190928 SPIL lot count
+    edtSysOperatorID    ->Enabled=bLotEnd;                                      //wei 20150326
+    edCustomerLotId     ->Enabled=bLotEnd;                                      //Sam 20220223
+    coStation           ->Enabled=bLotEnd;                                      //Sam 20220223
+    edStationNum        ->Enabled=bLotEnd;                                      //Sam 20220223
+    edtJobSeq           ->Enabled=bLotEnd;                                      //JerryYang 20220923 : add
+    edtBarcodeRecipe     ->Enabled=bLotEnd;                                     //Ifor 20241108 / Eastsun 20260527
+
+    if(CUSTOMER_CODE==CC_PTI && IniConfig.bB03_TesterReport==false)             //Sam 20240809 : PTI ART
+        cbRunMode       ->Enabled=false;                                        //wei 20150326
+    else
+        cbRunMode       ->Enabled=bLotEnd;
+
+    edtCusLotID         ->Enabled=bLotEnd;                                      //JerryYang 20230322
+    edtCusDevGrp        ->Enabled=bLotEnd;
+    edtDevice           ->Enabled=bLotEnd;
+
+    lbledtStarTime      ->Enabled=bLotEnd;
+    lbledtEndTime       ->Enabled=bLotEnd;
+    lbledtTesterOsVer   ->Enabled=bLotEnd;
+    lbledtTesterID      ->Enabled=bLotEnd;
+    lbledtCustomer      ->Enabled=bLotEnd;
+    lbledtTestProg      ->Enabled=bLotEnd;
+    lbledtDeviceName    ->Enabled=bLotEnd;
+    lbledtSubLotNo      ->Enabled=bLotEnd;
+    lbledtModeCode      ->Enabled=bLotEnd;
+    lbledtTestCode      ->Enabled=bLotEnd;
+    lbledtTestBinNo     ->Enabled=bLotEnd;
+    edtStage            ->Enabled=bLotEnd;
+    edtStep             ->Enabled=bLotEnd;
+}
+
+// -- palSecsGemMouseDown (golden uLotInfo.cpp:10351-10425) -- WD-4 withdrawn -
+// A 6-click left/left/right/right/left/left unlock sequence that seeds default
+// Lot/Operator IDs.  Delivered with golden's FULL signature: TMouseButton /
+// TShiftState landed 20260826 in vclcompat/ShiftState.h, killing the premise
+// GATE (WB-2-BTN) above still cites.  SetLotID() is this file's own real
+// (no-op) method -- the same call WB-5 already accepts.
+void TfLotInfo::palSecsGemMouseDown(TObject *Sender, TMouseButton Button,
+      TShiftState Shift, int X, int Y)
+{
+    static int iStep=0;
+
+    if(SystemStart ||
+       AccessLevel<iDefHonPrecLevel ||                                          //V3.27K.538 Ifor 20170905 (wei)
+       CUSTOMER_CODE==CC_KYEC_LEE)                                              //Ifor 20191017
+        return;
+
+    switch(iStep)
+    {
+        case 0:
+            if(Button==mbLeft)
+            {
+                iStep=1;
+            }
+            else
+            {
+                iStep=0;
+            }
+            break;
+        case 1:
+            if(Button==mbLeft)
+            {
+                iStep=2;
+            }
+            else
+            {
+                iStep=0;
+            }
+            break;
+        case 2:
+            if(Button==mbRight)
+            {
+                iStep=3;
+            }
+            else
+            {
+                iStep=0;
+            }
+            break;
+        case 3:
+            if(Button==mbRight)
+            {
+                iStep=4;
+            }
+            else
+            {
+                iStep=0;
+            }
+            break;
+        case 4:
+            if(Button==mbLeft)
+            {
+                iStep=5;
+            }
+            else
+            {
+                iStep=0;
+            }
+            break;
+        case 5:
+            if(Button==mbLeft)
+            {
+                if(edtSysLotID->Text=="")
+                    SetLotID("0123456789");
+
+                if(edtSysOperatorID->Text=="")
+                    edtSysOperatorID->Text="12345";
+            }
+            iStep=0;
+            break;
+    }
+}
+
+// -- ShowXMLOnLine (golden uLotInfo.cpp:12099-12137) -- WD-5 ----------------
+// RECON OVERTURN 5: recon #103 and GATE WC-3 both call this "writes files x4".
+// Those 4 writes are RecordProcess(), which in THIS tree is
+// canary_support.cpp:109 -- a stdout printf stand-in (the DB body is #if 0 at
+// cMyDB.cpp:1832 pending the GA-1-B4 swap) and is called freely from 582
+// already-translated sites.  Translated LIVE.
+// WD-5 LATENCY WARNING: after the GA-1-B4 integrator swap these 4 lines become
+// real DB writes.  Gate them THEN if that matters -- pre-gating now would make
+// this function diverge from the 582 sites doing the same thing.
+// INTEGRATOR NOTE: this landing kills GATE WC-3's stated reason; the FormShow
+// call site (golden :399) is openable.  Not opened here (existing line).
+void TfLotInfo::ShowXMLOnLine()                                                 //Steven 20200629
+{
+    if(CUSTOMER_CODE==CC_Murata)
+    {
+        if(iXMLOnLineStatus==0)
+        {
+            if(IniConfig.bN10_9_UploadUnloadTrayToFTP ||
+               IniConfig.bN23_1_Enable2DIDCompare ||
+               IniConfig.bN23_3_UploadTestResult)
+            {
+                pnlXMLOnLine->Caption="Server On Line";
+                pnlXMLOnLine->Color=clLime;
+                RecordProcess("Server function on Line");
+            }
+            else
+            {
+                pnlXMLOnLine->Caption="Server Off Line";
+                pnlXMLOnLine->Color=clRed;
+                RecordProcess("Server function off Line");
+            }
+        }
+        else if(iXMLOnLineStatus==1)
+        {
+            pnlXMLOnLine->Caption="Server On Line";
+            pnlXMLOnLine->Color=clLime;
+            RecordProcess("Server function on Line");
+        }
+        else
+        {
+            pnlXMLOnLine->Caption="Server Off Line";
+            pnlXMLOnLine->Color=clRed;
+            RecordProcess("Server function off Line");
+        }
+    }
+    else
+    {
+        pnlXMLOnLine->Visible=false;
+    }
+}
+
+// -- sbTestClick (golden uLotInfo.cpp:13719-13752) --------------------------
+// Password prompt -> ShowInformation(true/false).  ShowInformation is already
+// a real method of this file (Wave A).  SOFT_SIMULTE is #undef'd in
+// MachineType.h, so the #else arm is what compiles -- both arms are kept
+// verbatim so the source stays diffable against golden.
+void TfLotInfo::sbTestClick(TObject *Sender)
+{
+    static bool bFirstIN=true;
+
+    AnsiString asPassword;
+
+    if(gbFTPAutomation_Download->Visible==true)
+    {
+        ShowInformation(false);
+        return;
+    }
+
+    asPassword=fSecurity->GetPasswoard();                                       //Sam 20220106
+    fPassword->edPassword->Text="";
+    if(bFirstIN)
+    {
+        bFirstIN=false;
+        #ifdef SOFT_SIMULTE
+            ShowInformation(true);
+        #else
+        fQwertyKey->ShowQwertyKey(fPassword->edPassword, N_NO_SYMBOL|N_NO_SPACE|N_PASSWORD);
+        if(asPassword==fPassword->edPassword->Text)
+        {
+            ShowInformation(true);
+        }
+        else
+        {
+            ShowInformation(false);
+        }
+        #endif
+    }
+
+    bFirstIN=true;
+}
+
+// -- cbFirstTrayCheckOnUnloaderClick (golden uLotInfo.cpp:15994-16027) ------
+// Checkbox + in-memory IniConfig.bP62Auto1..3 mirror of Prod.iIsFailT6.  No
+// persistence: the ini flush for these lives in btnSaveClick / cConfiguration,
+// both outside this function (btnSaveClick is EXITED, see header EXIT A).
+// Event handler -- translated, NOT wired.
+void TfLotInfo::cbFirstTrayCheckOnUnloaderClick(TObject *Sender)
+{
+    if(bP60UserClicked==true)
+    {
+        bP60UserClicked=false;
+        if(cbFirstTrayCheckOnUnloader->Checked==false)
+        {
+            if(AccessLevel<iDefEngineerLevel)
+            {
+                cbFirstTrayCheckOnUnloader->Checked=true;
+            }
+        }
+        else
+        {
+            if(AccessLevel<iDefEngineerLevel)
+            {
+                cbFirstTrayCheckOnUnloader->Checked=false;
+            }
+            else if(IniConfig.bP62FirstTrayCheckOnUnloader==true)
+            {
+                IniConfig.bP62Auto1=(Prod.iIsFailT6[eAuto1]==0);
+                IniConfig.bP62Auto2=(Prod.iIsFailT6[eAuto2]==0);
+                IniConfig.bP62Auto3=(Prod.iIsFailT6[eAuto3]==0);
+                cb1stCheck_Auto1->Checked=IniConfig.bP62Auto1;
+                cb1stCheck_Auto2->Checked=IniConfig.bP62Auto2;
+                cb1stCheck_Auto3->Checked=IniConfig.bP62Auto3;
+            }
+            else
+            {
+                cbFirstTrayCheckOnUnloader->Checked=false;
+            }
+        }
+    }
+}
+
+// -- SetFirstTrayCheckOnUnloader (golden uLotInfo.cpp:16036-16045) ----------
+void TfLotInfo::SetFirstTrayCheckOnUnloader()                                   //Jimmychiu 20251205
+{
+    cbFirstTrayCheckOnUnloader->Checked=true;
+    IniConfig.bP62Auto1=(Prod.iIsFailT6[eAuto1]==0);
+    IniConfig.bP62Auto2=(Prod.iIsFailT6[eAuto2]==0);
+    IniConfig.bP62Auto3=(Prod.iIsFailT6[eAuto3]==0);
+    cb1stCheck_Auto1->Checked=IniConfig.bP62Auto1;
+    cb1stCheck_Auto2->Checked=IniConfig.bP62Auto2;
+    cb1stCheck_Auto3->Checked=IniConfig.bP62Auto3;
+}
+
+// -- btnAirStreamOnOffClick (golden uLotInfo.cpp:14461-14488) ---------------
+// GOLDEN IS EMPTY.  Its entire 24-line body sits inside one /* ... */ block
+// (golden :14463-14487) -- so the faithful translation is an empty function,
+// not a gate and not a stub.  Golden's dead text is reproduced verbatim below
+// so a future reader can see WHAT was disabled (a manual Air Machine on/off
+// that would call ATC_InterfaceForm->SendAirMachineStatus) without reopening
+// the cp950 source.  If anyone ever revives it, note it is EXIT class C:
+// SendAirMachineStatus is a real outbound hardware command, and the 1-member
+// ATC_InterfaceForm shim (acarry_shims.h:109-115) has none of these members.
+void TfLotInfo::btnAirStreamOnOffClick(TObject *Sender)
+{
+   /*
+    double dSetAirMachineTemp = Temperature.fSetTempature2AirMachine;
+    double dSetAirMachineTemp2= Temperature.dSetIndexAirstreamTemp;
+    if(AccessLevel<1)
+    {
+        ShowMyMessage("Change Air Cooling Machinr Status Fail # Please Log In for executing Engineer");
+        return;
+    }
+
+    if(!SystemStart)
+    {
+        if(btnAirStreamOnOff->Caption=="Air Stream Stop")
+        {
+            ATC_InterfaceForm->bCloseAirMachine=true;
+            btnAirStreamOnOff->Caption="Air Machine Run";                       //add Manual Air Cooling On/Off
+            ATC_InterfaceForm->SendAirMachineStatus(0, dSetAirMachineTemp*10, dSetAirMachineTemp2*10);
+        }
+        else
+        {
+            ATC_InterfaceForm->bCloseAirMachine=false;
+            btnAirStreamOnOff->Caption="Air Stream Stop";                       //add Manual Air Cooling On/Off
+            ATC_InterfaceForm->SendAirMachineStatus(1, dSetAirMachineTemp*10, dSetAirMachineTemp2*10);
+        }
+    }
+    */
+}
+
+// -- UpdatePATSubMode (golden uLotInfo.cpp:15716-15743) ---------------------
+// RECON OVERTURN 4: pure TComboBox repopulation.  The one PAT-family method
+// that never touches fMain->patFunc, which is why it survives when its eight
+// siblings are EXITED (header EXIT D).
+void TfLotInfo::UpdatePATSubMode(const AnsiString& sModeName)
+{
+    cbPATSubMode->Clear();
+    if(sModeName=="Re-Test")
+    {
+        cbPATSubMode->Visible=true;
+        cbPATSubMode->Items->Add("Re-Test");
+        for(int i=1; i<=10; i++)
+        {
+            cbPATSubMode->Items->Add(AnsiString().sprintf("RT%d",i));
+        }
+        cbPATSubMode->ItemIndex=0;
+    }
+    else if(sModeName=="EQC")
+    {
+        cbPATSubMode->Visible=true;
+        cbPATSubMode->Items->Add("EQC");
+        for(int i=1; i<=6; i++)
+        {
+            cbPATSubMode->Items->Add(AnsiString().sprintf("EQCRT%d",i));
+        }
+        cbPATSubMode->ItemIndex=0;
+    }
+    else
+    {
+        cbPATSubMode->Visible=false;
+    }
+}
+
+// -- RFID_ReaderReceiveData (golden uLotInfo.cpp:14152-14173) -- D-1 --------
+// INBOUND direction only: parses a buffer the RFID reader already delivered
+// and displays it.  The OUTBOUND half (DoReadRFID :14084 WriteCommData,
+// InitRFIDRS232 :14142 StartComm) is EXITED -- see header EXIT B.
+// DEVIATION D-1: golden's `Pointer Buffer, WORD BufferLength` becomes
+// `void *Buffer, unsigned short BufferLength` -- the exact underlying types.
+// GOLDEN ODDITY, translated verbatim: strncpy's length comes straight from the
+// wire (BufferLength) with no clamp against sizeof(cStr1)==1024.
+void TfLotInfo::RFID_ReaderReceiveData(TObject *Sender,
+      void *Buffer, unsigned short BufferLength)
+{
+    char *data;                                                                 //Steven 20220713 : RFID Reader for SJSEMI
+    data=(char*)Buffer;
+    AnsiString cStr="", Log="", Log1="";
+    char cStr1[1024]={0};
+    strncpy(cStr1, data, BufferLength);
+    cStr=cStr1;
+    cStr=cStr.Delete(1, 13);
+    cStr=cStr.SubString(1, cStr.Length()-1);
+    if(cStr=="")
+    {
+        cStr="Data error-Read Fail";
+    }
+
+    fLotInfo->pnlLoader->Caption=cStr;                                          // DEVIATION D-3: golden's own spelling kept
+    Log1.sprintf("Loader : %s", cStr.c_str());
+
+    Log.sprintf("%04d-%02d-%02d, %02d:%02d:%02d.%03d, %s", SystemYear, SystemMonth, SystemDate, SystemHour, SystemMin, SystemSec, SystemMSec, Log1);
+    mmRFID->Lines->Add(Log);
+}
+
+// -- sb_Main_EvenLevelLoginClick (golden uLotInfo.cpp:10475-10489) ----------
+// Access-level display only: opens the EventLog login and mirrors the level
+// into a combo box.  fPassword's four members are all real (forms/fPassword.h
+// :317/:369/:370/:371).  Note ShowEventLogLogin() is headless-safe by that
+// header's own NULL-GLOBAL note -- there is no modal loop, so
+// CheckLoginSuccess() answers from whatever state the facade already holds.
+void TfLotInfo::sb_Main_EvenLevelLoginClick(TObject *Sender)
+{
+    fPassword->edPasswordPassWord->Text="";
+
+    fPassword->ShowEventLogLogin();
+    if(fPassword->CheckLoginSuccess()==true)
+    {
+        cbbASECL_LoginMode->ItemIndex=fPassword->GetLoginLevel();
+    }
+    else
+    {
+        cbbASECL_LoginMode->ItemIndex=0;
+    }
+    sb_Main_EvenLevelLogin->Down=false;
+}
+
+// -- btnAMRSetSECSClick (golden uLotInfo.cpp:16227-16232) -------------------
+// Three edits -> TestIF_File (cprod.h:2516/2517/2522).  In-memory only; the
+// SECS send that would consume them is btnAMRSupplementClick, EXITED under
+// header EXIT B.  Event handler -- translated, NOT wired.
+void TfLotInfo::btnAMRSetSECSClick(TObject *Sender)
+{
+    TestIF_File.iAMRTrayCount[3]=atoi(edAMRTrayCount->Text.c_str());
+    TestIF_File.iAMRDeviceCount[3]=atoi(edAMRDeviceCount->Text.c_str());
+    TestIF_File.asAMRBinSetting[0]=edAMRBinSetting->Text;
+}

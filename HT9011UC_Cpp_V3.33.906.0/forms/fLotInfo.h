@@ -774,6 +774,391 @@
 //      loop, `tsLotID->TabVisible=false`, etc.) stays REAL.
 // =============================================================================
 
+// =============================================================================
+//  AI(W906-FW-LOTINFO-W27) 20260826: uLotInfo Wave D -- 14 further methods.
+//
+//  Golden ref: HT9011UC_Code_V3.33.906.0_20260618/uLotInfo.cpp (16,613 lines,
+//  cp950) + uLotInfo.h (1,426 lines).  Every one of the 14 bodies below, and
+//  every body EXITED, was opened and read in full from the cp950 decode this
+//  wave -- the keyword pre-scan was used only to ORDER the reading, never to
+//  decide.  It had to be: the scan MISSED ReadWriteFTPAutomationData's config
+//  write entirely, because that function spells its write ReadWriteIni(...,
+//  bRead) rather than WriteIniData.
+//
+//  DENOMINATOR, RE-MEASURED THIS WAVE (20260826)
+//  --------------------------------------------------------------------------
+//  Method: decode golden cp950, blank out block/line comments AND string/char
+//  literals (line structure preserved), then count TfLotInfo::<name>( at
+//  definition sites.  Same stripper applied to this file's .cpp.
+//    golden out-of-line definitions : 210   (209 distinct names; the extra one
+//                                            is the genuine overload pair
+//                                            UploadToServer(), golden :4852,
+//                                            and UploadToServer(AnsiString,
+//                                            bool), golden :4858)
+//    ported before this wave        :  82
+//    ported after this wave         :  96   -- 96/210 = 45.7% of golden's
+//                                            out-of-line TfLotInfo method
+//                                            DEFINITIONS.  Not lines, not
+//                                            statements, not "the form".
+//  The brief's "216 golden / 83 ported" both count comment or string-literal
+//  occurrences; 6 of the 216 live inside comment or literal text.
+//
+//  BATCH CRITERION, AND WHY THIS BATCH IS 14 AND NOT 30-50
+//  --------------------------------------------------------------------------
+//  The task asked for 30-50 read-only-direction methods.  That is not
+//  reachable from what is left, and the reason is the most useful number this
+//  wave produced:
+//
+//    docs/RECON_uLotInfo_displayside.md's own classification table, crossed
+//    against this file's ported set, leaves every one of the 128 missing
+//    definitions in either "(b) write path" (103) or "(c) safety" (24), with
+//    exactly ONE still in "(a) display/read-only" (ShowATC20Thermo, 486L --
+//    and that one EXITS anyway, see the EXIT REGISTER).  Waves A+B+C already
+//    drained the display tier of TfLotInfo.  What remains is the recipe
+//    download/upload machinery, SECS lot start/end, ATC thermo control, and
+//    the ASECL/OEE logging family.
+//
+//  So the criterion here was NOT "take the next N off a list".  It was:
+//    (1) read every remaining body up to ~120 golden lines, plus every body
+//        of any size whose name suggested display (Show*/Refresh*/Update*);
+//    (2) RE-DERIVE the read-only/write classification from the text, because
+//        recon's is demonstrably over-broad on this file (6 overturns below);
+//    (3) deliver only what survives that re-derivation, with NO empty shells.
+//  Everything not delivered is EXITED WHOLE, with a per-method reason and a
+//  deciding golden line number, in the EXIT REGISTER further down.
+//  Remaining after this wave: 114 definitions (113 names + the overload).
+//
+//  SIX RECON CLASSIFICATIONS OVERTURNED BY READING THE TEXT
+//  --------------------------------------------------------------------------
+//   1. RefreshYieldMonitor (:13310-13325) -- recon #115 "(b) write path".
+//      It is a 3-way dispatcher and writes nothing itself.  The write recon
+//      is pointing at lives one frame down, inside
+//      RefreshYieldMonitor_TERAPOWER.  Delivered REAL; that write is gated at
+//      its own site instead (WD-2), which is where it can actually be seen.
+//   2. RefreshYieldMonitor_TERAPOWER (:13547-13623) -- recon #117 "(b)".
+//      76 of its 77 lines are TestIF_File -> widget display fill.  Golden
+//      :13618 alone is the AutoClean-interval write.  Delivered with ONLY
+//      that line gated -- the same shape atester_ProcessCount.cpp's own
+//      GATE D already uses for the identical target at 5 other call sites.
+//   3. LotKeyInTimeTimer (:11543-11660) -- recon "(b)".  118 lines of Lot-ID
+//      and Operator-ID text validation.  No file, no ini, no socket, no
+//      motion.  Its only outward call is SetLotID(), already a real (no-op)
+//      method in this file -- the SAME call WB-5 above already accepts.
+//   4. UpdatePATSubMode (:15716-15743) -- recon "(b)".  Pure TComboBox
+//      repopulation: Clear + Items->Add x11 + ItemIndex + Visible.
+//   5. ShowXMLOnLine (:12099-12137) -- recon #103, and WC-3 above gates its
+//      call site citing "writes files x4".  RE-CHECKED: those 4 writes are
+//      RecordProcess(), and RecordProcess in THIS tree is
+//      canary_support.cpp:109 -- a stdout printf stand-in.  The DB-writing
+//      golden body is #if 0 at cMyDB.cpp:1832 awaiting the GA-1-B4 integrator
+//      swap, and 582 already-translated call sites tree-wide call it freely.
+//      So it is not a write path today.  IT WILL BECOME ONE after that swap;
+//      that latency is recorded as WD-5 so the swap cannot land silently.
+//   6. SetLotComponents (:2283-2320) -- recon "(b)", and recon section 4
+//      item 4 explains why: golden :2285 RunInfo.bLotStart=!bLotEnd feeds
+//      SECS DoLotStart de-duplication.  That reasoning is CORRECT and is
+//      honoured -- but it covers ONE line out of 38.  The other 37 are widget
+//      ->Enabled/->Down/->Caption.  Delivered with :2285 gated (WD-1).
+//
+//  WAVE SCOPE -- the 14 delivered methods (golden span, status)
+//  --------------------------------------------------------------------------
+//    LotKeyInTimeTimer               golden :11543-11660 (118L) -- WD-3 gates
+//                                     the Operator-ID chain only
+//    RefreshYieldMonitor_TERAPOWER   golden :13547-13623 (77L)  -- WD-2, 1 line
+//    palSecsGemMouseDown             golden :10351-10425 (75L)  -- REAL, no gate
+//    ShowXMLOnLine                   golden :12099-12137 (39L)  -- REAL, WD-5
+//    SetLotComponents                golden :2283-2320   (38L)  -- WD-1, 1 line
+//    sbTestClick                     golden :13719-13752 (34L)  -- REAL, no gate
+//    cbFirstTrayCheckOnUnloaderClick golden :15994-16027 (34L)  -- REAL, no gate
+//    btnAirStreamOnOffClick          golden :14461-14488 (28L)  -- REAL, and
+//                                     golden's ENTIRE body is commented out
+//    UpdatePATSubMode                golden :15716-15743 (28L)  -- REAL, no gate
+//    RFID_ReaderReceiveData          golden :14152-14173 (22L)  -- REAL, D-1
+//    RefreshYieldMonitor             golden :13310-13325 (16L)  -- REAL, no gate
+//    sb_Main_EvenLevelLoginClick     golden :10475-10489 (15L)  -- REAL, no gate
+//    SetFirstTrayCheckOnUnloader     golden :16036-16045 (10L)  -- REAL, no gate
+//    btnAMRSetSECSClick              golden :16227-16232 (6L)   -- REAL, no gate
+//  540 golden lines total.
+//
+//  GATE REGISTER
+//  --------------------------------------------------------------------------
+//  (WD-1) SetLotComponents, golden :2285 -- RunInfo.bLotStart=!bLotEnd;.
+//      docs/RECON_uLotInfo_displayside.md section 4 item 4 names this exact
+//      line: the SECS DoLotStart de-duplication path reads that flag, so a
+//      display helper silently owning lot-start state is a real outward
+//      consequence, not a widget write.  ONE line gated; golden :2286-2319
+//      (edtSysLotID / sbSECSLotStart / sbSECSLotEnd / pnlLoader / edPage /
+//      edtSysOperatorID / edCustomerLotId / coStation / edStationNum /
+//      edtJobSeq / edtBarcodeRecipe / cbRunMode / edtCusLotID / edtCusDevGrp /
+//      edtDevice / the 11 lbledt* / edtStage / edtStep, plus the
+//      CC_PTI && bB03_TesterReport==false cbRunMode branch) all stay REAL.
+//      BEHAVIOUR DELTA while gated: RunInfo.bLotStart keeps whatever value it
+//      already had.  Nothing in this tree calls SetLotComponents today (its
+//      only golden callers are SetLotStart/SetLotEnd, neither ported), so the
+//      delta is unobservable until one of those lands.
+//  (WD-2) RefreshYieldMonitor_TERAPOWER, golden :13618 --
+//      fCleaning->ChangeACSmartInterval(2, "RefreshYieldMonitor");.
+//      ESTABLISHED GATE, reused: atester_ProcessCount.cpp:1534 GATE D gates
+//      the IDENTICAL target at 5 other golden call sites for the identical
+//      reason.  RE-VERIFIED 20260826: ChangeACSmartInterval still has zero
+//      declarations on the ported TfCleaning (forms/fCleaning.h); the only 4
+//      tree-wide hits are that GATE D text, its
+//      PCW7_CLEANING_CHANGEACSMARTINTERVAL macro, and WA-3's note above.
+//      The guard if(iAdaptiveACInterval<=0) is kept REAL (with an empty body)
+//      rather than deleted, so the shape stays diffable against golden.
+//  (WD-3) LotKeyInTimeTimer, golden :11584-11637 -- the whole Operator-ID
+//      if / else-if / else chain inside the CC_KYEC_LEE branch.
+//      CAUSE: golden :11586-11587 reads fMain->cbRunStartMode->Text.
+//      cbRunStartMode has NO PORT on TfMain -- verified 20260826: the hits in
+//      forms/fMain.h are :571 (a comment) and :174/:180/:517
+//      (SetMainRunStartMode, a different member, itself a documented no-op
+//      stub).  ⚠ AND ONE NEAR-MISS WORTH NAMING, because it is exactly the
+//      "TU-local stand-in" shape that makes absence claims go stale: there IS
+//      a real cbRunStartMode-shaped object in this tree, but it is
+//      csystem.cpp's TU-LOCAL seam W7C2_FMAIN_CBRUNSTARTMODE (csystem.cpp
+//      :6388-6400).  It is file-static to csystem.cpp and reachable only
+//      through that macro -- it does NOT put a member on TfMain, so it does
+//      not help this file and must not be mistaken for a port.
+//      cbRunStartMode is the FIRST clause of a 3-arm chain.
+//      WHY THE WHOLE CHAIN AND NOT JUST THAT CLAUSE: dropping one disjunct
+//      from a compound condition rewrites the truth table.  When golden's AMR
+//      arm would fire, a clause-only gate falls through to the
+//      Length<6 || Length>7 arm and CLEARS an operator ID that golden
+//      deliberately keeps ("AGV" is 3 characters).  That is exactly the trap
+//      this file's own WC-10 refuses to walk into.  Gating the chain instead
+//      narrows to "never touch the operator-ID text", which does strictly
+//      less rather than something different.
+//      The Lot-ID half (golden :11561-11583) and the whole
+//      CC_AMD_M && bHiSiliconFunction branch (golden :11639-11657) stay REAL.
+//      GOLDEN ODDITY, translated verbatim and NOT "fixed": the gated chain's
+//      first arm body (golden :11589-11590) is
+//      sLastKeyin=edtSysOperatorID->Text; edtSysOperatorID->Text=sLastKeyin;
+//      -- a round trip through a local, i.e. a no-op on the widget.  So even
+//      un-gated it would do nothing; the gate costs the else-if arms only.
+//  (WD-4) -- WITHDRAWN BEFORE LANDING, recorded because the withdrawal is the
+//      finding.  It was going to gate palSecsGemMouseDown's TMouseButton
+//      reads on the tree-wide "mbLeft/mbRight are portless" premise that
+//      GATE (WB-2-BTN) above still states.  THAT PREMISE IS DEAD as of
+//      20260826: vclcompat/ShiftState.h (AI(W906-FW-SHIFT), landed the same
+//      day by a sibling wave) defines TMouseButton/TShiftState and pulls
+//      mbLeft/mbRight/mbMiddle into the global namespace -- and THIS FILE
+//      ALREADY INCLUDES IT (fLotInfo.h:17, added the same day by FW-SIG-W15).
+//      palSecsGemMouseDown is therefore delivered with golden's FULL
+//      5-parameter signature and no gate at all.  WB-2-BTN's own text is left
+//      untouched here because this wave is append-only.
+//  (WD-5) ShowXMLOnLine -- NOT a gate; a LATENCY WARNING attached to a real
+//      translation.  The 4 RecordProcess(...) calls (golden :12111, :12117,
+//      :12124, :12130) are translated LIVE, because RecordProcess resolves
+//      today to canary_support.cpp:109 (stdout printf; no DB, no file) and
+//      582 translated call sites tree-wide already call it.  When the
+//      GA-1-B4 integrator swap activates cMyDB.cpp:1832's real body, these 4
+//      lines become DB writes.  If that is unacceptable at that time, gate
+//      them THEN -- pre-gating now would make this one function diverge from
+//      the 582 sites doing exactly the same thing.
+//
+//  PREMISES RE-CHECKED THIS WAVE (all commands re-run 20260826)
+//  --------------------------------------------------------------------------
+//   * (WC-10) ATC_TYPE_61.  Its stated reason ("not a defined identifier
+//     anywhere in this tree") is STILL LITERALLY TRUE for this file:
+//     MainCalcCore.cpp:252's const int ATC_TYPE_61 = 61; is FUNCTION-LOCAL
+//     and invisible outside that function body.  But it is no longer the
+//     operative reason, because this same file already spells the sibling
+//     constant as a bare literal at forms/fLotInfo.cpp:1280
+//     (ATC_InterfaceForm->iATC_MODE_TYPE==61, un-gated).  CONCLUSION: WC-10
+//     is openable, and the correct opening is the literal 61 matching :1280 --
+//     NOT a claim that the identifier exists.  NOT DONE HERE: WC-10 lives
+//     inside FormShow, i.e. inside existing lines, and this wave is
+//     append-only.  Left for the integrator with the recipe spelled out.
+//   * (WC-4) FormBarcodeReader.  Half dead, half alive: BarcodeReader.cpp:40
+//     does carry a real global, but the members WC-4 needs still have zero
+//     port -- there is no TPopupMenu class anywhere in vclcompat, and
+//     vclcompat/Controls.h's TControl carries only Visible/Enabled/hCtl/Tag/
+//     SetFocus, no PopupMenu.  STAYS GATED, on the second reason.
+//   * (WA-3 / WC-8) RefreshYieldMonitor().  Their stated reason -- "not one of
+//     this wave's translated methods" -- IS NOW DEAD: this wave translates it,
+//     and its TERAPOWER branch, for real.  All 3 gated call sites
+//     (AdjtsYieldMonitiorSize golden :13671 and :13678; FormShow golden :597;
+//     Timer2Timer golden :7143) are openable.  NOT DONE HERE (append-only --
+//     they are existing lines).  INTEGRATOR: each is a one-line #if 0
+//     removal; the AutoClean write those gates were really protecting against
+//     is now gated one frame deeper, at WD-2, where it belongs.
+//   * (WB-18) CheckAMRAction().  STILL CORRECT.  Read in full this wave: it
+//     calls LoaderAction / UnLoaderAction / CheckLDLevel (golden :16471,
+//     :16472, :16475) and all three raise SECS EventReport(SECS_EVENT.AGV*)
+//     (e.g. golden :16394, :16409).  Stays gated, and CheckAMRAction is
+//     itself EXITED below for the same reason.
+//   * (WC-3) ShowXMLOnLine().  Its stated reason ("writes files x4") is FALSE
+//     TODAY -- see overturn 5 and WD-5.  The call site is openable.  NOT DONE
+//     HERE (append-only).
+//   * (WC-1) ResetLotInfo().  STILL CORRECT, and the function is EXITED --
+//     see the EXIT REGISTER entry, which adds a reason recon did not give.
+//   * (WB-2-BTN) mbLeft/mbRight portless.  DEAD -- see WD-4.  Not edited here.
+//   * (WB-6) fOCR->OCRChangeFile / (WC-26) fOCR->sTesterLotId.  Unchanged:
+//     forms/fOCR.h still declares only ChangeLightValue(int,int).
+//
+//  EXIT REGISTER -- read whole, exited whole, with the deciding golden line.
+//  No empty shell was produced for any of these; they are simply absent.
+//  --------------------------------------------------------------------------
+//  A. WRITES A FILE / INI / PERSISTED COUNTER
+//     ReadWriteFTPAutomationData  :12401-12409 ReadWriteIni(...,bRead=false)
+//                                  x9 into AuthPath+"config.ini".  This is the
+//                                  one the keyword scan missed, and it
+//                                  CONFIRMS WC-16 must stay gated regardless
+//                                  of whether the function is ever ported.
+//     SaveLotOperatorID           :8547-8548  same ReadWriteIni shape into
+//                                  config.ini.
+//     coLevelModeChange           :9913 CheckAndReadIniData -- the named trap:
+//                                  common.cpp:602-603 WriteInteger's the key
+//                                  back when absent.  Plus :9924/:9933
+//                                  btnSaveClick().
+//     btnSaveClick                :7271-7297 WriteIniData x17 into
+//                                  AuthPath+"Security_new.def".
+//     btnQAmodeSaveClick          :11524 WriteIniData into Tester.Data.
+//     btnManualI49Click           :15918-15920 WriteIniData x3 into
+//                                  Contact.Data (contact height).
+//     WriteFTPSetupFileChangeLog  :13633 WriteDataToFile.
+//     Save_BarCodeLog             :8455 Memo3->Lines->SaveToFile.
+//     btClearBarcodeCountClick    :9995 SGDToXLS into D:\HT9045_Log.
+//     btClearBarcodeListClick     :10012 list2DByLot->SaveToFile.
+//     spOCRCleanListClick         :14189 ListOCRByLot->SaveToFile.
+//     UploadEventLogFile          :10837 CopyFile.
+//     AlarmCodeUpload             :13290 SaveToFile, then :13297 FTP upload.
+//     ClearAllSetupFile           :11866 DeleteDirectory, :11886
+//                                  WriteLastDataFN.
+//     _DelTree                    :2352/:2358/:2363 RemoveDir/DeleteFile.
+//     btnAMRClearCountClick       :16198-16199 LastSet.iLoaderTotalTray and
+//                                  iLoaderTrayCount_ART reset (persisted).
+//     ResetLotInfo                :14556 LastSet.bHasDownloadFile=true.
+//                                  WC-1's premise re-read and CONFIRMED, with
+//                                  a reason recon did not give: LastSet is
+//                                  flushed by WriteLastDataFile, whose path is
+//                                  a HARD-CODED literal (cprod.cpp:1729) that
+//                                  --dry cannot redirect.  So this is a real
+//                                  persistence risk on a dev machine, not a
+//                                  memory-only assignment.
+//     bCheckOnlyOneFileAndData    :14221/:14288 MyForceDirectories.
+//     SetAQLMode / SaveOEELog / SaveBackEventLogInfo / SaveBackEventTracker /
+//     SaveASECLTestLogInfo / SaveASECLNewTestLogInfo /
+//     SaveASECLTesterHardwareLog / SaveGroundESDByLot /
+//     SaveGroundESDData_Upolad / ProductTesterReport /
+//     WhenTestRecordTemperatureLog_3Sigma / GenerateCheckList /
+//     DoBackupSetupFile / DoOverWriteSetupFile
+//                                 -- every one a log or recipe writer named by
+//                                 its own body; several 100L+.
+//  B. SENDS AN OUTBOUND COMMAND (FTP / SECS / TCP / RS232 / Vision COM)
+//     btUploadClick :2329 DoUpload.  UploadToServer, both overloads, :4855 and
+//     :4897-4929 RMSUpload*.  DoUpload :15462-15673.  RMSUploadByNetwork
+//     :15420 and RMSDownloadByNetwork :15387 (CopyFile to the server share).
+//     RMSUploadByFTP / RMSDownloadByFTP.  DownloadFromServer /
+//     DownloadFromServer_TSMC / DownloadFromERMS / TimerERMSTimer /
+//     btDownloadClick / btnFtpServerClick.  btnFTPDownLoadbyDeviceIDClick
+//     :16076 btnFtpServer->Click() -- note this one would be INERT today
+//     (TSpeedButton::Click() is an accepted offline no-op per WB-12), but its
+//     golden meaning is "start an FTP download", so it is exited on meaning,
+//     not on today's reachability.  sbRecipeUploadClick :13770 and
+//     sbRecipeDownloadClick :13780 fFTPClient->ShowFTPModal.
+//     sbFTPAutomationSaveClick :13786 ReadWriteFTPAutomationData(false).
+//     btnFTPTryConnectClick :13838 CheckFTPConnection.
+//     ATCTransferFileTimeTimer :16606 UploadFileToServer2.  AutoTempOfsByFTP.
+//     spOCRSaveLogClick :8432 Save_BarCodeLog.  spSECSLotCheckClick :10029
+//     EventReport(DoLotStart).  btnAMRSupplementClick :16168 /
+//     btnAMRLDUnLDCheckClick :16175 / btnAMRLDUnLDFinishClick :16182
+//     EventReport(SECS_EVENT.AGV*).  LoaderAction :16270-16363 /
+//     UnLoaderAction :16394,:16409 / CheckLDLevel / CheckAMRAction
+//     :16471-16475 (via those three).  sbSECSLotStartClick /
+//     sbSECSLotEndClick / SetLotEnd / btnASECL_LotStartClick / ASECL_LotEnd /
+//     btnASECL_LotEndClick :16157.  btSaveSetupFileClick.  Timer1Timer
+//     :5310-5311, :5318, :5335-5336 COM2->SendCommToVision.  RTCChangeFile
+//     :5361 arms Timer1, i.e. arms those Vision sends AND a file delete via
+//     bNeedToDeleteFile.  DoReadRFID :14084 RFID_Reader->WriteCommData.
+//     InitRFIDRS232 :14142 StartComm.  spOCRLogInClick :8532-8539
+//     fMain->SendMSG_CMD.  ConnectNetDeviceS :7320 WNetAddConnection2.
+//     sb_RunExecutFileClick :10448 ShellExecuteEx.  sbUploadPATClick.
+//     btnPATInstallClick :14656 fMain->ChangeSetUpFile.
+//  C. DRIVES THE MACHINE / SWITCHES A MODE / RAISES AN ALARM
+//     OCRConnectTest :10280-10282 SW[SwOCRTigger].On()/Off() -- a real output
+//     point.  BtnPauseClick :14530 fMain->Pause.  btnESCFunctionClick :12307
+//     fMain->ResetForESC.  btnClearTemperatureClick :13848-13849
+//     bChangeTest_TempOffset + DoCheckHasTestTempChange.  SetCloseSiteTemp
+//     :14874 fTemp_Set->SetSingleWorkTemperature -- a real setpoint, for every
+//     ATC site.  SetATCFFCOffset :9899/:9903 ATC_InterfaceForm->SetFFCOffset /
+//     FFCOffsetEnable.  pl_ATC_OnlineClick :10249/:10267 ATC on/off-line
+//     toggle.  ReadAirMachineStatus :14750-14772 SendAirMachineStatus.
+//     btnStartChamberBoostClick :11741 and btnStopChamberBoostClick :11749
+//     write bStartChamberBoost -- consumed by bthermo.cpp:503/:512, i.e. real
+//     chamber heating, so these are NOT the harmless button-latch pair they
+//     look like.  tmrChamberBoostTimer :11696-11697
+//     btnStopChamberBoost->Click() + ShowErrorMessage("MES15401").
+//     ShowATCThermo :5516 ShowErrorMessage("WAR15243") and :5500/:5504/:5508
+//     dispatch into the three unported ShowATC*Thermo giants.  ShowATC70Thermo
+//     :5790/:5818 SetRunATC(false/true).  ShowNewATCThermo :6469
+//     SetATCOffset(true,true).  ShowATC20Thermo -- recon's LAST remaining "(a)
+//     display" row, EXITED anyway: 15 ShowErrorMessage sites, and a body that
+//     is almost entirely ATC_InterfaceForm-> members the 1-member shim
+//     (acarry_shims.h:109-115) does not have -- the same finding WA-6 made.
+//     SetATCOffset :9405-9870.  NetATCTimeTimer :8558-9350.
+//     btnManualCheckListClick :13802 ShowErrorMessage("WAR16333").
+//     cbRTCASTDClick :14702-14703 arms iRTC_AutoSTDTask.  rgOEEStateClick
+//     :14510 fMesSystem->WriteOEEState (and fMesSystem still has no port at
+//     all -- WB-14's finding, re-verified).  pnlXMLOnLineClick :12151-12162
+//     flips iXMLOnLineStatus, i.e. it is the ENABLE SWITCH for the outbound
+//     XML/FTP uploads that ShowXMLOnLine merely DISPLAYS.  The read half is
+//     delivered and the write half is not; that split is deliberate.
+//  D. DEPENDENCY ABSENT (would require a cross-file shim -- forbidden here)
+//     UpdateLotInfoPAT / cbPATModeChange / ClearLotInfoPAT / sbLotResetClick /
+//     btnRealTimeClick / btnpatHourlyClick / btnpatEndLotClick /
+//     btnPATInstallClick / sbUploadPATClick -- all reach fMain->patFunc.
+//     VERIFIED 20260826: the CLASS PAT_Function is fully ported
+//     (ProductionInfo/uPAT_Function.h), but TfMain has NO patFunc MEMBER --
+//     zero declaration-shaped hits tree-wide; the single textual hit is
+//     ProductionInfo/uPAT_Function.cpp:263, a comment.  UpdatePATSubMode is
+//     the one PAT-family method that touches only its own combo box, which is
+//     exactly why it IS delivered.
+//     DoPassword -- reaches fInput->fShow (golden :8492).  fInput has no port;
+//     the only tree-wide hit is cConfiguration.cpp:6398, which is itself
+//     GATE (W6-DoPassword) gating the IDENTICAL golden function on
+//     TfConfiguration for the IDENTICAL reason.  Same gate, second form.
+//     rgUnloaderClick :16082 fTesterTCP->rgUnloader -- fTesterTCP has no port
+//     (WA-9, re-verified).
+//     sbARMSShowClick :10348 fARMS->ShowModal() -- fARMS has no port; the only
+//     hits are tests/test_DfmLayoutGen.cpp and tools/dfm2rc layout metadata,
+//     i.e. generated data, not a class.
+//     btnGetLoaderClick :14071 DoReadRFID(Ptr->Tag) -- DoReadRFID is itself
+//     exited under B.
+//     btnManualStandardClick :14056 fMain->CheckList().
+//     edDeviceNameKeyPress :12027 btDownload->Click() (exited under B).
+//     CheckingCheckList :12417 GenerateCheckList (exited under A).
+//
+//  DEVIATIONS
+//  --------------------------------------------------------------------------
+//  D-1  RFID_ReaderReceiveData's golden signature is
+//       (TObject *Sender, Pointer Buffer, WORD BufferLength).  Pointer is
+//       BCB6's VCL alias for void* and has no port; WORD is a Win32 typedef
+//       this file does not pull in.  Translated as void *Buffer,
+//       unsigned short BufferLength -- the EXACT underlying types, so this is
+//       a spelling change, not the parameter-DROPPING simplification the WA
+//       banner's DEVIATION note describes.  The body is unaffected.
+//  D-2  This wave's new #includes sit at the TOP OF THE APPENDED BLOCK in the
+//       .cpp rather than in the file's existing include section.  Unusual but
+//       deliberate: the wave is strictly append-only, and all four
+//       (<cstring>, <cstdlib>, forms/fSecurity.h, forms/fPassword.h) are
+//       guarded headers declaring only externs and classes, so their position
+//       in the TU is semantically irrelevant.
+//  D-3  Golden spells some of its own widgets through the global, e.g.
+//       fLotInfo->pnlLoader->Caption at golden :14168, from inside a TfLotInfo
+//       method.  Kept VERBATIM rather than rewritten to bare member access,
+//       matching this file's own Timer2Timer T18 precedent
+//       (fLotInfo->palAQLMode->Visible=...).  Note the WA banner above
+//       documents the OPPOSITE choice for fLotInfo->Height/Width/Top/Left.
+//       Both spellings therefore exist in this file, as they do in golden;
+//       decide per call site by reading, not by assuming.
+//  D-4  This wave's header additions are INSERTIONS (this banner, and a member
+//       block immediately before the ctor declaration), not literal file-tail
+//       appends -- a class body cannot be extended from outside itself.  NO
+//       EXISTING LINE in either file was modified; every pre-existing line is
+//       byte-identical before and after.
+// =============================================================================
+
 // ===========================================================================
 //  AI(W906-FW3-LotInfo-WA) 20260819 -- Wave A composed widget stand-ins.
 //  vclcompat's stock TPanel/TSpeedButton/TPageControl carry no raw pixel
@@ -1615,6 +2000,149 @@ public:
 
     virtual void Timer2Timer();                       // golden uLotInfo.cpp:6934-7191
 
+
+    // =======================================================================
+    //  AI(W906-FW-LOTINFO-W27) 20260826: Wave D ADD -- see this file's W27
+    //  banner above for the batch criterion, the GATE REGISTER (WD-1..WD-5),
+    //  the re-measured denominator, the re-checked WA/WB/WC premises and the
+    //  full EXIT REGISTER.  Every golden uLotInfo.h line cited below was read
+    //  from the cp950 decode this wave.
+    //
+    //  ALLOCATION: every new pointer below uses an NSDMI (`= new T()`), NOT a
+    //  line added to the ctor.  Two reasons.  (a) The wave is append-only and
+    //  the ctor is existing lines.  (b) It is what campaign trap 4 asks for
+    //  anyway -- an NSDMI is a pure field fill: no ini read, no file, no
+    //  machine access, no dependency on any other global's construction
+    //  order, so it cannot reproduce the fLaserSensor ctor SEGFAULT shape.
+    //  The idiom is already established in this tree (forms/fPassword.h:317
+    //  and :326 do exactly this) and in this very object (the existing ctor
+    //  already `new`s TfLotInfoRunMode/TfLotInfoLabel/... at the same point
+    //  in construction).
+    // =======================================================================
+
+    // -- RefreshYieldMonitor / _TERAPOWER (golden :13310-13325, :13547-13623) -
+    TCheckBox    *cbLowYield                   = new TCheckBox();     // golden uLotInfo.h:530
+    TEdit        *edLowYieldIg                 = new TEdit();         // golden uLotInfo.h:531
+    TEdit        *edLowYield                   = new TEdit();         // golden uLotInfo.h:532
+    TRadioButton *rbContsFailByHead_On         = new TRadioButton();  // golden uLotInfo.h:535
+    TRadioButton *rbContsFailByHead_Off        = new TRadioButton();  // golden uLotInfo.h:536
+    TEdit        *edContsFailHeadAlarmCT       = new TEdit();         // golden uLotInfo.h:537
+    TRadioButton *rbContsFailBySocket_On       = new TRadioButton();  // golden uLotInfo.h:540
+    TRadioButton *rbContsFailBySocket_Off      = new TRadioButton();  // golden uLotInfo.h:541
+    TEdit        *edContsFailSocketAlarmCT     = new TEdit();         // golden uLotInfo.h:542
+    TCheckBox    *cb_HeadToHeadYieldEnable     = new TCheckBox();     // golden uLotInfo.h:544
+    TEdit        *ed_HeadToHeadYield           = new TEdit();         // golden uLotInfo.h:545
+    TEdit        *ed_HeadToHeadYieldCount      = new TEdit();         // golden uLotInfo.h:546
+    TCheckBox    *cbAllSiteFail                = new TCheckBox();     // golden uLotInfo.h:549
+    TEdit        *edAllSiteFailCount           = new TEdit();         // golden uLotInfo.h:550
+    TCheckBox    *cb_SiteToSiteYieldEnable     = new TCheckBox();     // golden uLotInfo.h:552
+    TEdit        *ed_SiteToSiteYield           = new TEdit();         // golden uLotInfo.h:553
+    TEdit        *ed_SiteToSiteYieldCount      = new TEdit();         // golden uLotInfo.h:554
+    TLabel       *lbl_SmartAutoCleanCount      = new TLabel();        // golden uLotInfo.h:627
+    TLabel       *lblAdaptiveIntervalCount     = new TLabel();        // golden uLotInfo.h:628
+    TLabel       *lbl_SmartAutoCleanCount_CTF  = new TLabel();        // golden uLotInfo.h:630
+    TCheckBox    *chk_SmartAutoClean           = new TCheckBox();     // golden uLotInfo.h:631
+    TEdit        *edt_SmartAutoClean           = new TEdit();         // golden uLotInfo.h:632
+    TEdit        *ed_SmartAutoCleanCTF         = new TEdit();         // golden uLotInfo.h:633
+    virtual void RefreshYieldMonitor();            // golden uLotInfo.cpp:13310-13325
+    virtual void RefreshYieldMonitor_TERAPOWER();  // golden uLotInfo.cpp:13547-13623 (WD-2 gates :13618)
+
+    // -- SetLotComponents (golden :2283-2320) -- WD-1 gates :2285 only -------
+    // Every widget below is touched through ->Enabled only (which
+    // vclcompat::TControl carries), except pnlLoader (->Caption).  The
+    // already-declared ones -- edtSysLotID, sbSECSLotStart/End, edPage,
+    // edtSysOperatorID, edtJobSeq, edtBarcodeRecipe, cbRunMode, edtCusLotID,
+    // edtCusDevGrp, edtDevice, lbledtCustomer -- are NOT redeclared here (a
+    // shadowing redeclaration is exactly the silent-wrong-read hazard
+    // vclcompat/Controls.h's own Tag note documents).
+    TPanel       *pnlLoader          = new TPanel();        // golden uLotInfo.h:472 -- also RFID_ReaderReceiveData
+    TEdit        *edCustomerLotId    = new TEdit();         // golden uLotInfo.h:589
+    TComboBox    *coStation          = new TComboBox();     // golden uLotInfo.h:590
+    TEdit        *edStationNum       = new TEdit();         // golden uLotInfo.h:592 -- edStationNumMouseDown (WB-15) never needed it
+    TLabeledEdit *lbledtStarTime     = new TLabeledEdit();  // golden uLotInfo.h:606
+    TLabeledEdit *lbledtEndTime      = new TLabeledEdit();  // golden uLotInfo.h:607
+    TLabeledEdit *lbledtTesterOsVer  = new TLabeledEdit();  // golden uLotInfo.h:608
+    TLabeledEdit *lbledtTestProg     = new TLabeledEdit();  // golden uLotInfo.h:610
+    TLabeledEdit *lbledtDeviceName   = new TLabeledEdit();  // golden uLotInfo.h:611
+    TLabeledEdit *lbledtTesterID     = new TLabeledEdit();  // golden uLotInfo.h:612
+    TLabeledEdit *lbledtSubLotNo     = new TLabeledEdit();  // golden uLotInfo.h:613
+    TLabeledEdit *lbledtTestCode     = new TLabeledEdit();  // golden uLotInfo.h:614
+    TLabeledEdit *lbledtTestBinNo    = new TLabeledEdit();  // golden uLotInfo.h:616
+    TLabeledEdit *lbledtModeCode     = new TLabeledEdit();  // golden uLotInfo.h:617
+    TLabeledEdit *edtStage           = new TLabeledEdit();  // golden uLotInfo.h:992
+    TLabeledEdit *edtStep            = new TLabeledEdit();  // golden uLotInfo.h:993
+    virtual void SetLotComponents(bool bLotEnd);   // golden uLotInfo.cpp:2283-2320
+
+    // -- LotKeyInTimeTimer (golden :11543-11660) -- WD-3 gates :11584-11637 --
+    // Needs no new widget: edtSysLotID/edtSysOperatorID/edDeviceName/edTemp
+    // are all Wave A/B/C members already.  Sender dropped (unused in golden).
+    // This handler carries no TMouseButton/TShiftState at all, so the
+    // 20260826 signature-policy change (vclcompat/ShiftState.h) does not
+    // apply to it -- nothing is lost by the dropped Sender.
+    virtual void LotKeyInTimeTimer();              // golden uLotInfo.cpp:11543-11660
+
+    // -- palSecsGemMouseDown (golden :10351-10425) -- WD-4 (withdrawn) -------
+    // FULL golden signature: TMouseButton/TShiftState became available
+    // 20260826 (vclcompat/ShiftState.h, already included at this file's :17),
+    // which is what killed the gate this method was going to need.
+    // No new widget: palSecsGem (the panel this hangs off) and
+    // edtSysLotID/edtSysOperatorID are all already declared above.
+    virtual void palSecsGemMouseDown(TObject *Sender, TMouseButton Button,
+                                     TShiftState Shift, int X, int Y);   // golden uLotInfo.cpp:10351-10425
+
+    // -- ShowXMLOnLine (golden :12099-12137) -- WD-5 latency note ------------
+    TPanel *pnlXMLOnLine = new TPanel();           // golden uLotInfo.h:587 -- ->Caption/->Color/->Visible
+    virtual void ShowXMLOnLine();                  // golden uLotInfo.cpp:12099-12137
+
+    // -- sbTestClick (golden :13719-13752) ----------------------------------
+    // gbFTPAutomation_Download and ShowInformation(bool) are already declared
+    // above (Wave A/C); fSecurity/fPassword/fQwertyKey are real facades.
+    virtual void sbTestClick(TObject *Sender);     // golden uLotInfo.cpp:13719-13752
+
+    // -- First-Tray-Check-On-Unloader pair (golden :15994-16027, :16036-16045)
+    // cbFirstTrayCheckOnUnloader and bP60UserClicked already exist (Wave B).
+    TCheckBox *cb1stCheck_Auto1 = new TCheckBox(); // golden uLotInfo.h:1027
+    TCheckBox *cb1stCheck_Auto2 = new TCheckBox(); // golden uLotInfo.h:1028
+    TCheckBox *cb1stCheck_Auto3 = new TCheckBox(); // golden uLotInfo.h:1029
+    virtual void cbFirstTrayCheckOnUnloaderClick(TObject *Sender);  // golden uLotInfo.cpp:15994-16027
+    virtual void SetFirstTrayCheckOnUnloader();    // golden uLotInfo.cpp:16036-16045
+
+    // -- btnAirStreamOnOffClick (golden :14461-14488) -----------------------
+    // golden's ENTIRE body is inside one block comment; the function really is
+    // empty.  btnAirStreamOnOff itself is deliberately NOT declared: nothing
+    // that compiles touches it (ReadAirMachineStatus, its only other consumer,
+    // is EXITED -- header EXIT REGISTER section C), and adding unused surface
+    // is the call WA-4/WA-5/WA-6 above already declined to make.
+    virtual void btnAirStreamOnOffClick(TObject *Sender);   // golden uLotInfo.cpp:14461-14488
+
+    // -- UpdatePATSubMode (golden :15716-15743) -----------------------------
+    // The one PAT-family method that needs no fMain->patFunc (header EXIT D).
+    TComboBox *cbPATSubMode = new TComboBox();     // golden uLotInfo.h:983
+    virtual void UpdatePATSubMode(const AnsiString& sModeName);  // golden uLotInfo.cpp:15716-15743
+
+    // -- RFID_ReaderReceiveData (golden :14152-14173) -- DEVIATION D-1 ------
+    TMemo *mmRFID = new TMemo();                   // golden uLotInfo.h:474 -- ->Lines->Add only
+    virtual void RFID_ReaderReceiveData(TObject *Sender, void *Buffer,
+                                        unsigned short BufferLength);  // golden uLotInfo.cpp:14152-14173
+
+    // -- sb_Main_EvenLevelLoginClick (golden :10475-10489) ------------------
+    // cbbASECL_LoginMode ALSO unblocks two pre-existing gates that live
+    // outside this file's write boundary: cMyDB.cpp:1929 and :2037 are both
+    // `#if 0 // TODO(GA1-B4): fLotInfo->cbbASECL_LoginMode not yet ported`.
+    // NOT opened here (out of boundary) -- integrator note only.
+    TComboBox    *cbbASECL_LoginMode     = new TComboBox();     // golden uLotInfo.h:579
+    TSpeedButton *sb_Main_EvenLevelLogin = new TSpeedButton();  // golden uLotInfo.h:574
+    virtual void sb_Main_EvenLevelLoginClick(TObject *Sender);  // golden uLotInfo.cpp:10475-10489
+
+    // -- btnAMRSetSECSClick (golden :16227-16232) ---------------------------
+    // Writes TestIF_File.iAMRTrayCount[3] / iAMRDeviceCount[3] /
+    // asAMRBinSetting[0] (cprod.h:2516/2517/2522) from three edits.  In-memory
+    // only: the SECS send that consumes them is btnAMRSupplementClick, which
+    // is EXITED (header EXIT B).
+    TEdit *edAMRTrayCount   = new TEdit();         // golden uLotInfo.h:1108
+    TEdit *edAMRDeviceCount = new TEdit();         // golden uLotInfo.h:1109
+    TEdit *edAMRBinSetting  = new TEdit();         // golden uLotInfo.h:1110
+    virtual void btnAMRSetSECSClick(TObject *Sender);   // golden uLotInfo.cpp:16227-16232
     TfLotInfo();
     virtual ~TfLotInfo() {}
 };

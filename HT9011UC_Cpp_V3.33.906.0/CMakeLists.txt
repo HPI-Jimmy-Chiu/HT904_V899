@@ -2250,6 +2250,14 @@ add_library(ht9045_sm STATIC
     #
     # 目前沒有任何已編譯的碼參照這三個類別（三個波各自收工重跑過 absence claim），
     # 所以不會產生新的 forms->sm 反向需求。
+    # AI(W906-FW-CONTACT-W26) 20260826: 同樣用 nm 量過落點。forms/fContact.cpp 的
+    # 79 個未定義符號裡有 8 個只有 ht9045_sm 提供：IndexHasIC / ShuttleHasIC /
+    # ShowMyMessage / Barcode_Reader / TMyKitSuck::HasIC / iCloseSiteModeFor2x8 /
+    # InArmSuck / OutArmSuck，另有 MOT（ht9045_motor）。
+    # 波次 agent 擔心「若落在 ht9045_forms，IndexHasIC/ShuttleHasIC 這條邊會撐破
+    # 該 target 的 link diet」，並建議退而 gate 掉 timerContactTimer。
+    # **不採用那個備案**：落在 ht9045_sm 就沒有那條邊要撐，那支方法保持完整。
+    forms/fContact.cpp
     forms/fTrayAssignment.cpp
     forms/fMotorTest.cpp
     forms/fTeach.cpp

@@ -12280,6 +12280,155 @@ golden `cTrayAssignment.cpp:178` 是 `TrayForm.bTrayUpDownSet[eFix3]==false;`—
    唯一正確：**遞迴走完整棵行程樹加總 CPU 增量，深度不可只取父+子，取樣窗 12 秒**
    （5 秒會抓到假 0）。
 
+## 20260826 XVIII — FW-CONTACT-W26（44 支）＋ FW-LOTINFO-W27（14 支）
+
+### 交付與**兩個必須一起講的數字**
+
+| 波次 | 支數 | 分母 | 行數 | 分母 |
+|---|---|---|---|---|
+| FW-CONTACT-W26（`forms/fContact.{h,cpp}` 新檔） | 44 | /134（32.8%） | **794** | **/22,213（3.6%）** |
+| FW-LOTINFO-W27（`forms/fLotInfo.{h,cpp}` append-only） | 14 | /210（96/210 = 45.7% 累計） | 540 | — |
+
+**`TfContact` 只報支數會誇大約 9 倍**，這是波次 agent 自己指出的：退出的六大狀態機
+（`Do_Z1_AutoGetHeight` 2,780 行等）合計 10,931 行。**單位是 golden 方法定義數與
+golden code 行數，兩者不可互換。**
+
+### 三個 agent、三次修正主迴圈給的分母
+
+延續 W23/24/25 的模式，這一輪又是兩次：
+
+- `TfContact`：主迴圈給 137，**實際 134**。agent 用字元狀態機剝掉 `/* */`、`//` 與
+  字串/字元字面值（**不是 regex**——golden 有註解裡的 `}`），再從每個命中往前掃第一個
+  depth-0 的 `{`／`;` 區分定義與宣告。
+- `TfLotInfo`：主迴圈給 216/83，**實際 210/82**（209 個相異名稱 + 一個真多載
+  `UploadToServer`）。多算的 6 筆落在註解或字串字面值裡。
+
+**通則：交辦數字要標明怎麼量的，並明說「你自己重量一次」。** 連續五次都是主迴圈錯。
+
+### `TfLotInfo` 的顯示層已經被抽乾——這是戰役層級的訊號
+
+把 `docs/RECON_uLotInfo_displayside.md` 的分類表與已 port 集合交叉後，剩下的 **128 支
+定義裡 103 支是 write path、24 支安全關鍵，「顯示/唯讀」只剩 1 支**
+（`ShowATC20Thermo`，486 行，實讀後仍要退出）。WA+WB+WC 三波已經把這支表單的顯示層做完，
+剩下的是 recipe 上下載、SECS lot start/end、ATC 溫控、ASECL/OEE log。
+**所以 14 支不是這一波的侷限，是這支表單唯讀方向的餘量。**
+
+agent 逐支開 golden **推翻了 6 個 recon 的分類**（`RefreshYieldMonitor` 是 dispatcher
+自己不寫、`RefreshYieldMonitor_TERAPOWER` 77 行裡只有 :13618 是寫、`LotKeyInTimeTimer`
+純文字驗證、`UpdatePATSubMode` 純 combo 重填、`SetLotComponents` 38 行裡只有 :2285 該擋）。
+
+### `ShowXMLOnLine`：gate 的理由今天不成立（主迴圈已逐字驗證）
+
+WC-3 擋它的理由是「writes files x4」。那 4 個「寫」是 `RecordProcess()`，而本樹的
+`RecordProcess` 是 `canary_support.cpp:113` 的 **stdout printf 替身**
+（該處註解自述 "Sim: log to stdout (no DB write)"），真正會 `MyDBIProcess` 寫 DB 的
+golden 本體被 `cMyDB.cpp:1831` 的 `#if 0 // TODO(GA1-B4-integrate)` 擋著，
+全樹已有 **582 個已翻呼叫點**在自由呼叫它。
+
+所以今天它不是寫入路徑——**但 GA-1-B4 換手後就會是**。agent 把這點記成 `WD-5` 潛伏警告
+掛在函式上，而**不是預先擋**（預先擋會讓這支與其他 582 個呼叫點不一致）。判斷正確。
+
+### 今天第四次抓到 absence claim 過期——而且是「撤回本身就是發現」
+
+`WD-4` 本來要用 `WB-2-BTN` 的「`mbLeft`/`mbRight` 全樹無 port」擋
+`palSecsGemMouseDown`。收工時那個前提死了：`vclcompat/ShiftState.h` 當天由兄弟波落地，
+而 `forms/fLotInfo.h:17` 當天已經 include 進來。該支因此以 golden 完整 5 參數簽章交付、
+**零 gate**。
+
+今天四次的完整清單：`fQwertyKey`（過期兩天）、`clWindow`（兄弟波在同一時間窗內造成）、
+`Barcode_Reader`、`mbLeft`/`mbRight`。**absence claim 的保鮮期比想像中短得多。**
+
+### `fContact` agent 自報並就地更正自己 4 條錯誤宣稱
+
+收工重跑（1,582 檔、剝註解＋字串字面值）抓到它自己開工時寫的 4 條是錯的：
+
+- `CONTACT_TEST` / `CONTACT_AUTO_GET_HEIGHT` **不是 0 hits**——樹裡**已經 fork 兩次**
+  （`Command.cpp:317`、`BarCode/BarCode_Shuttle2_CCDScan.h:187-189`）。
+  加上 `cContact.h` 與 golden，那個十常數區塊現在有 **4 份互不一致的局部副本**，
+  其中兩份是 header 裡的 namespace-scope `const int` → **任何同時 include
+  `cContact.h` 與 `BarCode_Shuttle2_CCDScan.h` 的 TU 會硬 redefinition error**。
+  本波**刻意不加第五份**。
+- `TBorderIcons` 有 2 個文字命中但都在 `#if 0` 內 → 宣稱從「無 hits」改寫成「無定義」。
+- `bEnterSpecialOffset` 有 TU-local 鏡像 struct（`Motor/myGALILmotor.cpp:680-684`）
+  → 宣稱範圍改寫成「`forms/fOffSet.h` 沒有這個成員」。
+
+四條都不改變任何 gate 決策，但都改變 banner 能主張什麼。
+**教訓（agent 自己寫進檔案）：「grep 沒東西」跟「這個符號沒有定義」不是同一個宣稱。**
+
+### `fContact` 全域名已被佔用——只落 class，不宣告全域指標
+
+`atester_shims.h:154-250` 的 `TfContactShim` + `:251 extern TfContactShim *fContact;`
+已經擁有這個全域，全樹有 10 個 live 成員面（`IsRun2DCheck` 60 處、`fShow` 46 處…）。
+本波只落 class，避免硬衝突；換指標是擁有 `atester_shims` 的波次的 consolidation 決策。
+agent 另跑了一個**共存證明**：同時 include `atester_shims.h` + `forms/fContact.h`
+並取 `TfContactShim* = fContact` → 0 error。
+
+另有第三個獨立鏡像 `W5FA_TfContactExt W5FA_FContact`（`Automation/auto9045.cpp:319`）
+與兩個 seam 巨集（`csystem.cpp:5133`／`:6424`）。
+
+### CMakeLists 落點：用 nm 量，並否決 agent 的備案
+
+`forms/fContact.cpp` 的 79 個未定義符號裡有 **8 個只有 `ht9045_sm` 提供**：
+`IndexHasIC` / `ShuttleHasIC` / `ShowMyMessage` / `Barcode_Reader` /
+`TMyKitSuck::HasIC` / `iCloseSiteModeFor2x8` / `InArmSuck` / `OutArmSuck`，
+另有 `MOT`（`ht9045_motor`）。
+
+agent 擔心「若落在 `ht9045_forms`，`IndexHasIC`/`ShuttleHasIC` 這條邊會撐破該 target
+的 link diet」，並建議退而 **gate 掉 `timerContactTimer`**。
+**主迴圈否決那個備案**：落在 `ht9045_sm` 就沒有那條邊要撐，那支方法保持完整。
+**問題出在落點選錯，不該用縮減功能去補。**
+
+### `fLotInfo` 的 forms→sm 反向邊：本波沒有製造新問題（量過的）
+
+`forms/fLotInfo.cpp` 註冊在 `ht9045_forms`（只 link `vclcompat + globals + core`），
+但它需要 `ht9045_sm` 的符號。**這在 HEAD 就已經存在**——把 HEAD 版本單獨編成 .o
+再比對未定義符號集合：
+
+| | HEAD | 本波後 |
+|---|---|---|
+| 未定義符號總數 | 141 | 159 |
+| 其中只有 `ht9045_sm` 提供 | **8** | **11** |
+
+HEAD 就有的 8 個：`AMR` / `MyDBIProcess` / `ShowMyMessage` / `SaveTrayRecord` /
+`InputBarcodeNumber` / `LogSoftwareOffTime` / `TTeraPowerAMR::CheckLoaderCount` /
+`CheckUnloaderCount`。**本波新增 3 個同類**：`RecordProcess` /
+`TfSecurity::GetPasswoard` / `fSecurity`。
+
+既有 8 個在最終連結時解得掉（樹是綠的），多 3 個同類也解得掉——**gate 證實了這一點**。
+量法：暫時把 `forms/fLotInfo.h` 換成 HEAD 版編譯，編完立刻還原並用行數與
+`git status` 對帳確認還原正確。
+
+### 驗收
+
+全新 dir、最後一次整併之後量：**Debug 與 Release 各 137/142**，
+失敗集合逐項相同且等於常駐五項。build log 確認兩個檔各自落在正確的 target：
+`[30%] ht9045_forms.dir/forms/fLotInfo.cpp.obj`、
+`[59%] ht9045_sm.dir/forms/fContact.cpp.obj`。
+
+四個檔皆純 LF、零孤立 CR、零 U+FFFD；`CMakeLists.txt` 保持純 CRLF（2602/2602）。
+`fLotInfo` append-only 由 `git diff --numstat` 證明：`686 0` / `528 0`。
+
+### 刻意沒做的事
+
+- **`fContact` 退出 90 支**：52 機台動作（含 `edAirForceChange` → `ADAM_WriteVoltage`
+  **命令 EP 調壓閥**，三支本來乾淨的 UI handler 純因傳遞呼叫它而全部退出）、
+  4 寫檔、32 缺 port 能力、2 由編譯器抓到。
+- **兩支「純讀」但仍退出**：`TestZ1Y2OutRandge` / `TestZ2Y1OutRandge`。本樹
+  `TMyMotor::Gali_ReadPos()` 是退化 stub `{ return 0; }`（`Motor/mymotor.cpp:1525`），
+  交付它們會讓一個「軸有沒有超出範圍」的**安全述詞永遠自信地回 false**。
+  **缺符號比錯答案好。**
+- **`fLotInfo` 退出 114 支**，逐支寫進 EXIT REGISTER 並附「決定退出的那一行」golden 行號。
+- **6 個現在可解的既有 gate 沒解**（WA-3 ×2、WC-8 ×2、WC-3 ×1、WC-10 ×1）＋
+  `cMyDB.cpp:1929`／`:2037` 兩個 `cbbASECL_LoginMode` gate。全都要改既有行，
+  超出本波 append-only 邊界，開法已寫進 W27 banner。
+
+### 下一波最高價值的解鎖（agent 指出，尚未做）
+
+`CalculateTotalAirForce`（golden `cContact.cpp:18675-18891`，217 行**純算術**）
+是**唯一**卡住 5 支乾淨唯讀方法的東西。agent **沒有**用「宣告但不定義」去假交付它們——
+那會出貨 5 支叫不動的方法。把它翻進 `cContact.{h,cpp}`，加上補齊 10 個 contact mode
+常數（**併回一份並退役其餘 3 份**，見上），可一次讓 9 支掉出退出清單。
+
 ### 🔖 RESUME（20260826 下午）
 
 - **本段 commit**：`0b292c2` dualgate2 → `0329137` 表單 bootstrap 量測 →
