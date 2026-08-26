@@ -11541,7 +11541,7 @@ header 的註解裡（`EJ1N/MyOmronPanel.h:193-195`），第三行明顯比前�
 價值比這兩波低（這兩波讓原本**不可能被呼叫**的碼變成類別介面的一部分），
 所以不急著做，記在這裡供後續排程。
 
-### 🔖 RESUME（20260826 清晨）
+### 🔖 RESUME（20260826 清晨，已被檔尾 20260826 上午那則取代）
 
 - **今晚全收（20260825 XV 起算，共 6 波 + 2 次工具修正）**：
   FW-CFG-W7（`2f7e918`）／survey_file 量測修正（`1be68ce`）／
@@ -11611,3 +11611,79 @@ header 的註解裡（`EJ1N/MyOmronPanel.h:193-195`），第三行明顯比前�
   HAL-MOT1 十問（Q1/Q9/Q4 擋新 mot_table 起草）；TImage headless 准駁；
   GOLDEN BUG (TAG1-a) edSHighBase；GOLDEN DEFECT (i) 21-into-20 sprintf overflow。
 
+### 🔖 RESUME（20260826 上午）
+
+- **本輪連續作業共 13 顆 commit**（`1be68ce` → `6d7f752`），
+  **每一顆有程式碼變更的都跑過全新 dir 的雙 gate，全部 137/142 × 2、
+  失敗集合逐項等於常駐五項**（`config_db` / `IniFiles` / `ini_helpers` /
+  `config_loaders` / `GA1_ReadGeneralIni`）。
+  `D:\HT9045\system` 552 檔整輪零變動。
+
+- **主線一：THGem（`SECSGEM/uHGemEquipment.cpp`）已收尾**
+  （W8 `de089c5` → W9 `cab915e` → W10 `3dc1f45` → W11 `a940cb7` → W12 `58b09c8`）。
+  從「真正缺 46 支 / 1,206 行」推到**只剩 3 支未翻**：
+  `WriteALED`（寫 `ALID_ALED.ini`）／`btnExportClick`（寫 `D:\AlarmList.xls` ＋
+  需要 `TSaveDialog`）／`GemTerminalSendEditKeyDown`（已於 W14 之後可解，見下）。
+
+- **主線二：`TShiftState`／`TMouseButton` 這條線**（本輪最大的結構性收穫）
+  1. `f184093` 建 `vclcompat/ShiftState.h`。**量測先行**：golden 全樹 **358 支**
+     函式帶 `TShiftState` 參數，**只有 1 支真的讀它**
+     （`Automation/SCK_ART.cpp:4327`，`Shift.Contains(ssDouble)`）；
+     全樹只用到 `mbRight`(26)／`mbLeft`(10)／`ssDouble`(1) 三個值。
+     所以 stand-in 只需要位元集合 + `Contains()`。
+  2. `a659c96` FW-YM-W14：第一個 consumer，19 支 handler、**15 支保留完整簽章**、
+     **gated 0 行**。
+  3. `60c7520` FW-SIG-W15：`GATE (C-log-6)` 完全退役、`GATE (WB-2-BTN)` 收窄成
+     `GATE (CLIP)`。
+  4. `265027e` FW-SIG-W16 / `6d7f752` FW-SIG-W17：執行 PT-W8／PT-W2 在
+     `MyTempPanel.cpp` 與 `EJ1N/MyOmronPanel.cpp` 檔尾留下的**兩份 HAND-OFF**，
+     4+3 支從檔案層自由函式收回成類別成員。
+
+- **⚠ 這條線還沒做完的部分（明文，別以為做過了）**：
+  - `ShiftState.h` 檔頭記的「**既有已丟參數的 handler 回頭改**」是一個獨立的
+    機械式 pass，本輪只做了「同時還連著 gate」或「連著 HAND-OFF」的那幾支。
+  - **還沒回填的**：`OmronLaser/LaserSensor.cpp`（7 支，**已是真成員**只是簽章
+    裁短，價值較低）、`uTemp_Set.cpp`、`forms/fSetup.cpp`、`forms/fQwertyKey.cpp`、
+    `cContactCT.cpp`、`cObserver.cpp` 其餘幾支。
+  - **`GemTerminalSendEditKeyDown`（THGem，golden :6501-6506）現在可以做了**——
+    W10/W12 排除它的唯一理由就是 `TShiftState`。附帶問題仍在：golden 那裡傳 `this`，
+    而本樹 `THGem` 不繼承 `TObject`。
+
+- **census 20260826**（THGem 收尾後量的，尚未含 W13-W17）：
+  非表單 **96.0%**、表單 17.0%、全案 **61.4%**（分母＝golden code 行數）。
+
+- **下一波候選（都還沒跑五步偵察）**：
+  - `cSetUp.cpp`（35 支 / 4,046 行）、`cBinSel.cpp`（53 / 2,772）、
+    `cSpeed.cpp`（51 / 1,232）、`Automation/SCK_ART.cpp`（46 / 3,811，
+    `fSCKART.h` 有 RECONCILIATION DEBT）、`Interface/TesterTCP.cpp`（19 / 974，UI 軸）。
+  - **`cContact.cpp`（102 支 / 22,324 行）是決策項不是翻譯項**——
+    port 的 `cContact.h` 是 extract-calc-core，要做得先立整個 TfContact facade。
+  - **`vclcompat` 的 `TControl` 加 `AnsiString Name`**：解 `edContactCountFTChange`
+    那類「比對 .dfm 設計期元件名」的方法。做法有跡可循（本戰役的 widget 命名慣例
+    就是 dfm leaf name，成員名字本身就是那個 Name），但會動到全樹共用的
+    `Controls.h`，值得單獨一波。
+
+- **本輪修好的工具（都已 commit）**：
+  1. `screen_methods.py` 跟進自由函式一層（`freefunc_index.py`，2,429 個自由函式）
+     ——抓到 `btnSetToTechClick` 改教導座標、`LoadConfiguration` 寫 `Gerneral.ini`。
+  2. `survey_file.py` 認得「方法被搬到別的 port 類別」——`uHGemEquipment.cpp`
+     的缺口從 3,113 行更正為 1,206 行。
+  3. `survey_file.py` 改用 `goldenscan.load()`（區塊註解感知）——
+     `SaveTCPIPRecieveData` 整支在 `/* */` 內不是缺口；golden 方法數 215 → 214。
+
+- **⚠ 本輪四個「看起來在驗證、實際上驗不到」的檢查，全部已修並記進記憶**：
+  `grep -c $'CR$'` 回總行數不是 CRLF 行數；EOL 的「CRLF 數 == LF 數」等式抓不到
+  孤立 CR；`assert m`（regex 有命中）不等於命中對的地方；
+  手動下的 `-Wall` 跟專案實際旗標不是同一組（`-Wno-conversion-null` 早就掛著）。
+
+- **安全佇列（不做不問，本輪新增四筆）**：
+  `btnSetToTechClick`（`SetOffsetToTech` 改 `Tech.*` 教導座標）／
+  `LoadConfiguration`（`ReadLastSetIni` 寫 `system\Gerneral.ini`）／
+  `WriteALED`（寫 `ALID_ALED.ini`）／`btnExportClick`（寫 `D:\AlarmList.xls`）。
+  舊有：GATE 7 家族、AuthPath 2 站點、P-R1/P-S1 密碼檔、SaveSetupFile 130 寫入、
+  WebBridge write path、`chkHeaterClick`、`FormClose`、UT150 家族、
+  `ReadConfigStandard`、cObserver 的 10 個 Save-path gate。
+
+- **等使用者（本輪未動，只是重列）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
+  HAL-MOT1 十問（Q1/Q9/Q4 擋新 mot_table 起草）；TImage headless 准駁；
+  GOLDEN BUG (TAG1-a) edSHighBase；GOLDEN DEFECT (i) 21-into-20 sprintf overflow。
