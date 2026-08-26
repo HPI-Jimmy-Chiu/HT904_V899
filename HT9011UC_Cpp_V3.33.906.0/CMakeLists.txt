@@ -2228,6 +2228,31 @@ add_library(ht9045_sm STATIC
     VacuumUnit/VacuumUnit.cpp
     VacuumUnit/MyVacuumPanel.cpp
     Automation/uRENESAS_Server.cpp
+    # AI(W906-FW-W23/24/25) 20260826: 三個全新的表單 facade（FW-TRAYASSIGN-W23 /
+    # FW-MOTORTEST-W24 / FW-TEACH-W25）。**這是本 list 裡的頭三個 forms/*.cpp。**
+    #
+    # 為什麼放這裡而不是 ht9045_forms —— 落點是用 nm 量的，不是採信 agent 的建議
+    # （兩個 agent 對此給了相反答案，其中一個建議 ht9045_forms 是錯的）：
+    # ht9045_forms 只 link vclcompat + ht9045_globals + ht9045_core（:714-721），
+    # 而這三個 TU 的未定義符號各自需要 forms 拿不到的東西：
+    #   fTeach.cpp          sm 5（IsEMGPressed / ShowMyMessage / ShowErrorMessage /
+    #                       fLtcSensor / InArmSuck）、motor 7（MOT / TMyMotor::ReadPos /
+    #                       ScanMotorStatus …）、io 4（Sen / Cylinder / TMySensor::IsOn …）
+    #   fMotorTest.cpp      sm 1（ShowMyMessage）、motor 6（MOT / HTMotor::ReadAcc /
+    #                       ReadDec / ReadRange …）、io 2（Sen / TMySensor::IsOff）、
+    #                       core 1（MotTablePath）
+    #   fTrayAssignment.cpp motor（MOT / TTrayMotor）、sm（HasICUnderMachine /
+    #                       HasAnyICInMachine / fShowBinSelect）
+    # 那些 motor/io 符號**全部是讀取類**（ReadPos / ScanMotorStatus / IsOn / IsOff），
+    # 與三個波宣稱的「唯讀方向」一致，可當作對該宣稱的獨立佐證。
+    # 放進 ht9045_forms 會靠 GNU ld 的 lazy extraction 偷連上，複製 :612-646 記錄過的
+    # forms->sm undeclared back-edge。
+    #
+    # 目前沒有任何已編譯的碼參照這三個類別（三個波各自收工重跑過 absence claim），
+    # 所以不會產生新的 forms->sm 反向需求。
+    forms/fTrayAssignment.cpp
+    forms/fMotorTest.cpp
+    forms/fTeach.cpp
 )
 
 target_include_directories(ht9045_sm PUBLIC

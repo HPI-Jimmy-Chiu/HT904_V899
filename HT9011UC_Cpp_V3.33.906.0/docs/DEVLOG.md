@@ -12155,6 +12155,131 @@ port 翻譯時把 `__fastcall` 拿掉成 `TfSpeed::TfSpeed()`（不匹配）。
   HAL-MOT1 十問（Q1/Q9/Q4 擋新 mot_table 起草）；TImage headless 准駁；
   GOLDEN BUG (TAG1-a) edSHighBase；GOLDEN DEFECT (i) 21-into-20 sprintf overflow。
 
+## 20260826 XVII — 三個全新表單 facade（W23／W24／W25），111 支
+
+### 選標的：先修正一個自己的量測缺陷
+
+用 golden 的檔名去 port 樹找對應檔，得到「`uLotInfo.cpp` / `uTeach.cpp` / `uHome.cpp` /
+`uMotorTest.cpp` / `cTrayAssignment.cpp` 在 port 樹都不存在」——**這是錯的**。
+port 用 `forms/f*.cpp` 命名，`uLotInfo` 其實是 `forms/fLotInfo.cpp`（4,338 行、83 支已翻）。
+這與 census 記載過的「檔名比對缺陷」同型。改用**類別名**重量之後才拿到真實圖像：
+
+| golden 檔 | 類別 | golden | port（開工時） |
+|---|---|---|---|
+| `cContact.cpp`（22,761 行） | `TfContact` | 137 | **0** |
+| `uTeach.cpp`（6,056 行） | `TfTeach` | 147 | **0** |
+| `uMotorTest.cpp`（2,376 行） | `TfMotorTest` | 94 | **0** |
+| `cTrayAssignment.cpp`（1,728 行） | `TfTrayAssignment` | 31 | **0** |
+| `uLotInfo.cpp`（16,613 行） | `TfLotInfo` | 216 | 83 |
+
+取後三個開波（全新檔、彼此零衝突，適合平行）。
+
+### 交付
+
+| 波次 | 交付 | 分母 | 退出 |
+|---|---|---|---|
+| FW-TRAYASSIGN-W23 | 28 | /31 | 2 write path + 1 `TWMKey` 無 port |
+| FW-TEACH-W25 | 48 | /156 | 108 |
+| FW-MOTORTEST-W24 | 35 | /93 | 58（52 安全關鍵） |
+| 合計 | **111** | | **6,025 行新增、0 刪除** |
+
+**三個 agent 都自己重量分母，三次都修正了主迴圈給的錯數字**：
+`TfTeach` 的 147 是 `grep -c` 把 golden `:4588` 的字串字面值 `"TfTeach::FormDestroy"`
+算進去了（真實定義 146 支，加上 `TECH_*` 等共 156 個 top-level 函式）；
+`TfMotorTest` 的 94 是含註解掃描的結果（實際 91+2=93）；
+`TfTrayAssignment` 的 31 則確認 31 處全部是定義。
+**教訓：交辦數字要標明是怎麼量的，並明說「你自己重量一次」。**
+
+### 安全退出（本波最大的一塊）
+
+`TfMotorTest` 幾乎全是馬達動作，`TfTeach` 是教導表單。兩者的退出規則寫死在交辦裡，
+結果退出量遠大於交付量：
+
+- `TfTeach` 退 108 支：58 機台動作、10 寫檔、9 兩者皆是、14 缺依賴、17 純容量。
+- `TfMotorTest` 退 58 支：52 安全關鍵（直接下動作命令／寫馬達保護參數／驅動上述迴圈）。
+
+**兩支寫檔的特別點名**（與 V899「teach.ini 靜默毀教導值」是同一條路）：
+`SaveFile`（golden :4926）寫死 `d:\HT9045\system\tech.dat`，**`--dry` 重導不到**；
+`SetIndexYPhasePosition`（:4979）寫的是共用量產機的 `Gerneral.ini`。
+
+**`CheckAndReadIniData` 是寫入路徑，不是讀取路徑。** 本樹 `common.cpp:602-603`：
+key 不存在時 `INIFile->WriteInteger(...)` 種回去。名字說 read、行為是 write，
+這一條決定了 9 支 `TECH_*` 全數退出。主迴圈已開檔逐字複驗。
+
+### `TfMotorTest` 的 gate 機制：宣告但不定義
+
+那 58 支退出的**不用 `#if 0`**，改成 header 宣告、`.cpp` 不定義。
+理由：空殼會靜默什麼都不做卻讀起來像翻好了；`#if 0` 帶著 body 離解閘只差一個按鍵。
+宣告但不定義 → **linker 就是互鎖**，誰想呼叫，build 直接
+`undefined reference to TfMotorTest::<method>` 指名那支動作入口。兩個類別皆無 virtual，已驗。
+
+### CMakeLists 落點：用 nm 量，不採信 agent
+
+兩個 agent 給了**相反**的建議（`fTeach` → `ht9045_sm`、`fMotorTest` → `ht9045_forms`）。
+主迴圈把三個 TU 各自編成 .o 後跑 `nm --undefined-only`，再對所有 archive 建 provider 索引：
+
+| | globals | motor | io | sm | forms | vclcompat | core |
+|---|---|---|---|---|---|---|---|
+| `fTeach.cpp` | 54 | 7 | 4 | **5** | 2 | 4 | — |
+| `fMotorTest.cpp` | 208 | 6 | 2 | **1** | 2 | 15 | 1 |
+
+`ht9045_forms` 只 link `vclcompat + ht9045_globals + ht9045_core`（:714-721），
+拿不到 motor／io／sm。**`fMotorTest` 那個 agent 的建議是錯的**，三個全部註冊到 `ht9045_sm`
+（本 list 裡的頭三個 `forms/*.cpp`）。點名的符號：`IsEMGPressed` / `ShowMyMessage` /
+`ShowErrorMessage` / `fLtcSensor` / `InArmSuck`（sm）、`MOT` / `TMyMotor::ReadPos` /
+`HTMotor::ReadAcc`（motor）、`Sen` / `Cylinder` / `TMySensor::IsOn`（io）、`MotTablePath`（core）。
+**那些 motor／io 符號全部是讀取類**（`ReadPos` / `ScanMotorStatus` / `IsOn` / `IsOff`），
+是對三個波「唯讀方向」宣稱的獨立佐證。
+
+註冊生效也量過，不是猜的：三個檔在 `build_w23g/CMakeFiles/ht9045_sm.dir/build.make`
+各出現 12 次，且 `.obj` 都已產生。
+
+### 兄弟波在同一時間窗讓彼此的 absence claim 過期（今天第三次）
+
+`fTrayAssignment` 開工時（13:50）`clWindow` 全樹 0 定義，收工重跑（14:38）發現
+`forms/fMotorTest.cpp:78-86` 已有一個。它的處置是對的：
+gate (T4) 不變（對方在 unnamed namespace、internal linkage，讀不到）、
+**不寫下那句已變假的宣稱**、且**拒絕複製第二份私有常數**
+（理由：「這正是常數散成五份的起手式」）。
+正解是在 `vclcompat/LedCore.h` 放一份共用的 `clWindow` 並給 `TCustomEdit` 加 `Color`——
+**列為下一顆 commit，不混進本次 gate。**
+
+### GOLDEN BUG（已驗證，忠實保留）
+
+golden `cTrayAssignment.cpp:178` 是 `TrayForm.bTrayUpDownSet[eFix3]==false;`——
+`if/else` 裡的**無效比較**（`==` 而非 `=`），所以該分支下那個旗標根本沒被設成 false。
+照翻並讓 `-Wunused-value` 當路標，**不要消掉它**。
+
+另一條相反方向的：`TfMotorTest` 的 agent 原本預期在 `MotorTestClass` 那 164 個 `push_back`
+上記錄一個 golden 缺陷，**量測結果推翻了自己的假設**——全部按馬達 id 0..163 順序落位、
+零偏差（對 `cmydef.cpp:2334-2417` 機器比對），164 也等於 `TOTAL_MOTOR`。
+所以 header 記的是一條**不變量**：誰動了 push_back 順序，會靜默毀掉所有 by-motor-id 的存取點。
+
+### 驗收
+
+全新 dir、最後一次整併之後量：**Debug 與 Release 各 137/142**，
+失敗集合逐項相同且等於常駐五項。六個新檔全部純 LF、零孤立 CR、零 U+FFFD；
+`CMakeLists.txt` 保持它自己的純 CRLF（2594/2594）。
+
+刻意保留的兩個警告：`fTrayAssignment.cpp:227` 的 `-Wunused-value`（上述 golden bug 路標）
+與 `:1453` 的 `-Wparentheses`（golden :1640-1641 原文，precedence 剛好就是原意）。
+
+### 額度中斷的實測（協議再次被驗證）
+
+15:15 撞到 session 上限、15:40 重置。期間 **gate 照跑不停並自己跑完**
+（背景 OS 行程不經過 API），回來時 `_w23_gate_done.txt` 已在磁碟上。
+死掉的是子 agent 的殘留通知處理，交付不受影響。
+
+### 活性判準修正兩次（同一天）
+
+1. **行程存在不等於在跑**：一顆 02:05 啟動的殭屍 linker 讓守衛心跳連兩輪誤判「有 build 在跑」。
+2. **「產出物 mtime 最可靠」也是錯的**：`dfm2rc_fidelity` 跑 5 分鐘期間，
+   `ctest.log` mtime 靜止（ctest 只在每測試完成才寫一行）、`ctest.exe` CPU 增量 0、
+   其直接子 `test_dfm2rc_pipeline.exe` CPU 增量**也是 0**——真正在燒 CPU 的是第三層的
+   `python` / `g++` / `cc1plus`。**三個判準有兩個給假答案。**
+   唯一正確：**遞迴走完整棵行程樹加總 CPU 增量，深度不可只取父+子，取樣窗 12 秒**
+   （5 秒會抓到假 0）。
+
 ### 🔖 RESUME（20260826 下午）
 
 - **本段 commit**：`0b292c2` dualgate2 → `0329137` 表單 bootstrap 量測 →
