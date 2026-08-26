@@ -70,6 +70,7 @@ for k, (i, n) in enumerate(defs):
 # 1300/1491/1517/1538/1551/1569/1661/1696/2228）。差點整波重翻。
 # 所以第二輪要對全樹掃 `AnyClass::<name>(`，把「在別的類別」單獨列出來。
 ELSE = {}
+SAME_OTHER_FILE = {}   # 同一個類別但定義在別的 port 檔（見下方說明）
 if miss_scan := [r for r in rows if not r[4]]:
     import os
     names = {r[0] for r in miss_scan}
@@ -88,18 +89,35 @@ if miss_scan := [r for r in rows if not r[4]]:
             except OSError:
                 continue
             for m2 in pat.finditer(t):
-                if m2.group(1) != cls:
-                    ELSE.setdefault(m2.group(2), []).append(
-                        '%s::  %s:%s' % (m2.group(1),
-                                         os.path.relpath(p, PORT_ROOT).replace('\\', '/'),
-                                         t[:m2.start()].count('\n') + 1))
+                loc = '%s:%s' % (os.path.relpath(p, PORT_ROOT).replace('\\', '/'),
+                                 t[:m2.start()].count('\n') + 1)
+                if m2.group(1) == cls:
+                    # 20260826：**同一個類別、不同的 port 檔**。這一格原本被
+                    # `!= cls` 過濾掉了，於是同樣被讀成「缺」——那是上面那個
+                    # 缺陷的變種，不是「搬到別的類別」而是「同類別拆成兩個檔」。
+                    # 實例：TfSetup 橫跨 forms/fSetup.cpp（ht9045_forms 目標）與
+                    # 根目錄 cSetUp.cpp（ht9045_sm 目標），這個拆法是刻意的
+                    # （見 forms/fSetup.h:165-195 的 link-layer 說明），
+                    # 而 XPitchKeyPress / RadioButton1KeyDown 早就翻在前者。
+                    # 這種**根本不是缺口**，直接算成已翻。
+                    SAME_OTHER_FILE.setdefault(m2.group(2), []).append(loc)
+                else:
+                    ELSE.setdefault(m2.group(2), []).append('%s::  %s' % (m2.group(1), loc))
 
-miss = [r for r in rows if not r[4] and r[0] not in ELSE]
-moved = [r for r in rows if not r[4] and r[0] in ELSE]
+miss = [r for r in rows if not r[4] and r[0] not in ELSE and r[0] not in SAME_OTHER_FILE]
+same = [r for r in rows if not r[4] and r[0] in SAME_OTHER_FILE]
+moved = [r for r in rows if not r[4] and r[0] not in SAME_OTHER_FILE and r[0] in ELSE]
 print('%s / %s' % (fn, cls))
-print('  golden 方法 %d 個；port 同類別已有 %d' % (len(rows), len(rows) - len(miss) - len(moved)))
+print('  golden 方法 %d 個；port 同檔同類別已有 %d'
+      % (len(rows), len(rows) - len(miss) - len(moved) - len(same)))
+print('  同類別但在別的 port 檔（已翻，非缺口）: %d 個 / %d 行' % (len(same), sum(r[3] for r in same)))
 print('  在別的 port 類別（已翻，非缺口）: %d 個 / %d 行' % (len(moved), sum(r[3] for r in moved)))
 print('  真正缺: %d 個 / %d 行' % (len(miss), sum(r[3] for r in miss)))
+if same:
+    print()
+    print('--- 同類別、別的檔 ---')
+    for n, a, b, c, _ in sorted(same, key=lambda x: -x[3]):
+        print('   %-40s golden :%-5d %4d 行  -> %s' % (n, a, c, SAME_OTHER_FILE[n][0]))
 print()
 if moved:
     print('--- 已在別的 port 類別（注意：逐條看擁有者類別再信，同名不同類會誤入本表，')

@@ -11694,6 +11694,58 @@ BCB6 的 `THGem` 是 `TForm` 的後代，所以 `this` 本身就是 `TObject*`�
 `cObserver.cpp` 其餘幾支。這些都沒有連著 gate、也沒有不可達的碼，
 純粹是簽章忠實度，優先度低於「重跑 census 選新檔」。
 
+## 20260826 XII — 量測缺陷變種：同一個類別拆在兩個 port 檔
+
+### 怎麼發現的
+
+選 `cSetUp.cpp` 當下一個標的，survey 說「真正缺 26 支 / 1,470 行」。
+動手前照慣例驗兩個可疑項——`forms/fSetup.h` 明說 `XPitchKeyPress` 在 Wave A
+就交付了，但它出現在「真正缺」清單裡。一 grep 就看到：
+
+```
+XPitchKeyPress        forms/fSetup.cpp: 1   根 cSetUp.cpp: 0
+RadioButton1KeyDown   forms/fSetup.cpp: 1   根 cSetUp.cpp: 0
+```
+
+**`TfSetup` 這個類別橫跨兩個 port 檔**：`forms/fSetup.cpp`（`ht9045_forms` 目標）
+與根目錄 `cSetUp.cpp`（`ht9045_sm` 目標）。這個拆法是**刻意**的，
+`forms/fSetup.h:165-195` 有整段說明：`ht9045_forms` 只連 `vclcompat ht9045_globals`，
+而那幾支方法需要 `ht9045_sm` 的符號，加邊會造成 CMake 真循環
+（`CMakeLists.txt:589-593` 記錄過這件事被試過且失敗）。
+所以「form facade 的 sm-reaching 方法放根目錄 .cpp」是這棵樹的既定慣例，
+`cTemperFrom.cpp` / `MainTempMode.cpp` 都是同一個形狀。
+
+### 根因：我 20260825 修的那一版，剛好把這一格過濾掉了
+
+那次修的是「方法被搬到**別的類別**」（THGem → SecsWireCodec 那一組）。
+第二輪掃描寫成 `if m2.group(1) != cls`——**只收別的類別，同類別的直接跳過**。
+但「同類別、別的檔」正是這裡的情況，而它**根本不是缺口**。
+
+同一個缺陷的第二個變種。修法是把那一格單獨列出來並算成已翻。
+
+### 重量的結果
+
+`cSetUp.cpp` / `TfSetup`：
+
+| | 修法前 | 修法後 |
+|---|---|---|
+| golden 方法 | 47 | 47 |
+| 同檔同類別已有 | 13 | 13 |
+| **同類別但在別的 port 檔** | —（被算成缺） | **15 個 / 133 行** |
+| 在別的 port 類別 | 8 個 / 2,482 行 | 8 個 / 2,482 行 |
+| **真正缺** | 26 個 / 1,470 行 | **11 個 / 1,337 行** |
+
+### 這條線的教訓
+
+`tools/wavescan/README.md` 記的量測缺陷已經累積到第 5 個，而**第 4、5 個是同一個
+病的兩個變種**：工具用「同一個名字在同一個地方」當存在的判準，
+而這棵樹**刻意**不是那樣長的——大類別會拆成多個 port 類別，
+單一類別也會因為連結目標而拆成多個 port 檔。
+
+發現方式一樣：**動手前驗可疑項**。這次是「header 說已交付、清單說缺」的矛盾，
+上一次是「兩支工具對同一個方法給出相反答案」。
+**矛盾是最便宜的偵錯訊號，看到就要追。**
+
 ### 🔖 RESUME（20260826 上午）
 
 - **本輪連續作業共 13 顆 commit**（`1be68ce` → `6d7f752`），
