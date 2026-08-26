@@ -13829,6 +13829,66 @@ unmirrored 分支缺陷會同樣把它們整檔記為全缺。
 第二、三種的通用檢查是「**在派工前，拿 golden 的函式名去 port 樹裡找一次**」——
 成本是幾秒鐘，而它今晚可以省下兩整波的 agent 工。
 
+## 20260827 VI — 那 48 行再追一層：**可翻的工作是 0 行，非表單軸實質完成**
+
+上一節說非表單軸「真的還沒翻 48 行」。**那個數字也是假的**——第四次。
+逐支去樹上找定義（剝註解後的行首定義形式，非宣告）：
+
+| golden | 港口實況 |
+|---|---|
+| `ainarm2.cpp` `ResetInToShtFlag` :124 | `aHotPlateSubstrate.cpp:1486`（用顯式迴圈取代 `ZeroMemory`，有註解說明） |
+| `ainarm2.cpp` `InitInArmPickFromHotPlateTask50` :633 | `aHotPlateSubstrate.cpp:1497` |
+| `ainarm2.cpp` `InitInArmPlaceToShuttleTask` :647 | `aHotPlateSubstrate.cpp:1504` |
+| `ainarm2.cpp` `BackupPlacePos` :2185 | `aHotPlateSubstrate.cpp:1524` |
+| `ainarm2.cpp` `RestorePlacePos` :2192 | `aHotPlateSubstrate.cpp:1530` |
+| `csystem.cpp` `OutSHT1InRT` / `OutSHT2InRT` :699/:701 | `csystem_predicates.cpp:309/310` |
+| `csystem.cpp` `OutSHT1InLF` / `OutSHT2InLF` :698/:700 | `csystem_predicates.cpp:316/317` |
+| `common.cpp` `MyDrawText` :1387-1395 | **全樹 0 個定義** |
+
+九支都是**真本體、非 gated、帶 golden 行號引註**（抽驗過全文）。
+`csystem_predicates.cpp` 那四支甚至有 `AI(W64b-Integrate) 20260706` 的註解說明
+它們當初就是靠 undefined-reference 連結錯誤被發現的。
+
+### 唯一真缺的 `MyDrawText`：不是待辦，是缺依賴
+
+- **唯一的消費者**是 `cContactCT.cpp` 的四個呼叫點（`:311/:316/:324/:328`），
+  **全部在 GATE (C1) 區塊內、早就 gated**；該檔 `:297` 甚至寫著
+  「GATE (C1) blocks below (**MyDrawText has no port**)」。
+- **vclcompat 沒有 `TCanvas`、沒有 `FillRect`**（`DrawText` 只在 `BtnPanelCore.h`
+  有個不相干的同名）。golden 的本體是 `pCanvas->FillRect(Rect)` 加 Win32 `DrawText`。
+- 專案方向是 **UI 走 web**，canvas 繪圖是死路。
+
+**所以它正確地是一個缺口，不是一件待辦。**
+
+### 非表單軸的收尾狀態（golden code 行，分母 336,509）
+
+| | 行 | % |
+|---|---|---|
+| 已翻（本體存在於 port 樹） | **333,790** | **99.2%** |
+| 刻意 gated | 2,671 | 0.8% |
+| 真正未翻且**可翻** | **0** | 0% |
+| 真正未翻但缺依賴（`MyDrawText`） | 9 | ~0% |
+
+**`pt-wave` 戰役所定義的「非表單翻完」目標，實質已經達成。**
+（census 仍會報 95.8%，因為那三種假缺口機制還在——**這是量尺的問題，不是工作的問題**。）
+
+### 今晚 census 的缺口清單騙了我四次
+
+括號配對（`Command.cpp` 813）→ 刻意寄放（`GetRowCol` 93）→ 檔名比對
+（`BarCode_Sh1/Sh2` 10,348）→ **本體搬到別的 port 檔**（那 48 行裡的 39 行）。
+四種機制都不同，四次都靜默，四次都長得像待辦清單。
+
+**唯一有效的防禦是那個幾秒鐘的動作：派工前拿 golden 的函式名去 port 樹裡找一次定義。**
+今晚它擋下了一整波 agent 工（FW3-WB）與這一波，而我是在派完第一波之後才學會用它。
+
+### 下一步只剩表單軸
+
+非表單既已收斂，**戰役的全部剩餘工作都在表單軸**（census 報 17.3% / 261,862 行，
+而那是**下界**——88 個無鏡射表單檔幾乎肯定有同樣的檔名缺陷，見上一節為何我還
+拿不出可信數字）。**下一件該做的事是設計一個可信的表單軸量法**，
+線索是 port 檔 banner 裡的 `Faithful translation of golden <file>:<a>-<b>` 引註——
+那是機器可讀的，而且是翻譯者自己寫下的權威宣告。
+
 ### 🔖 RESUME（20260827 凌晨 · 第三版）
 
 - **本段最後一顆**：`FW-BOOTSTRAP-W35`——`FormsBootstrap.{h,cpp}`（26+208 行）
@@ -13866,7 +13926,16 @@ unmirrored 分支缺陷會同樣把它們整檔記為全缺。
      **檔名比對 10,348（`BarCode/BarCode_Sh1.cpp`＋`BarCode_Sh2.cpp`，20/20 全已翻，
      port 在 `BarCode_Shuttle{1,2}_*.cpp` 用 `BarCode_`／`BarCode_Sh2_` 前綴自由函式）**。
 
-     **剩餘 48 行（整個非表單軸的待辦）**：
+     ⚠ **那 48 行後來也證實是假的（20260827 VI）**：其中 39 行的本體早已搬到
+     `aHotPlateSubstrate.cpp:1486-1530`（`ainarm2` 五支）與
+     `csystem_predicates.cpp:309-317`（四支述詞），皆為真本體、非 gated、帶 golden 引註。
+     只剩 `common.cpp` `MyDrawText` 9 行全樹無定義，**而它是缺依賴不是待辦**
+     （vclcompat 無 `TCanvas`/`FillRect`；唯一消費者 `cContactCT.cpp:311/316/324/328`
+     全在 GATE (C1) 內早已 gated；專案方向是 web UI，canvas 繪圖是死路）。
+     → **非表單軸「可翻的剩餘工作 = 0 行」，pt-wave 的目標實質達成。**
+     以下保留原始清單只為留下追查軌跡：
+
+     **原記為「剩餘 48 行」者**：
      `ainarm2.cpp` 五支（`InitInArmPickFromHotPlateTask50` golden:633-643／
      `ResetInToShtFlag` :124-129／`InitInArmPlaceToShuttleTask` :647-652／
      `BackupPlacePos` :2185-2190／`RestorePlacePos` :2192-2197，共 35 行）、
