@@ -19,3 +19,10 @@ tools/wavescan/.freefunc_cache.tsv
 # 從頭到尾不刪任何一個（實測 20260826 已累積 92 個，最舊 8/20）。它們是拋棄式的
 # exit-code 回報，真正的證據在 build_<tag>*/ctest.log 裡。
 _*_gate_*.txt
+
+# 波次的根層拋棄式產物，一律 _<tag>_... 命名（實測本樹根層 0 個 tracked 檔以 _ 開頭）。
+# 其中 _<tag>_sys_{before,after}.json / _<tag>_gate_{before,after}.json 是
+# D:\HT9045\system 的 550 檔 MD5+mtime 快照（fw-wave 政策要求每波收工比對，
+# 用來證明沒動到量產設定）——**那是安全稽核軌跡，忽略但不要刪**。
+/_*.json
+/_*.txt
