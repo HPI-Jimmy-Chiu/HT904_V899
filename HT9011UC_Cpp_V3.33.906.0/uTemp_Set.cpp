@@ -129,6 +129,8 @@
 #pragma hdrstop
 
 #include "forms/fTemp_Set.h"
+// AI(W906-FW-SIG-W18) 20260826: 22 支 handler 回填 golden 完整簽章。
+#include "vclcompat/ShiftState.h"
 
 #include "MachineType.h"       // tc* channel enum, e*/CC_* constants
 #include "cmydef.h"            // Temperature.*-adjacent globals, UN150Read[]/bUT150*[]/asGPIBTempShow[]/
@@ -4394,8 +4396,10 @@ void TfTemp_Set::edJamSoakTimeClick(TObject *Sender)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 10000, 0);
 }
 //---------------------------------------------------------------------------
-// DEVIATION: golden `(TObject*, TMouseButton, TShiftState, int X, int Y)` --
-// TMouseButton/TShiftState dropped (no port, see facade header).
+// DEVIATION（已於 FW-SIG-W18 20260826 解除）: 原本 golden 的
+// `(TObject*, TMouseButton, TShiftState, int X, int Y)` 被丟成只剩 Sender，
+// 理由是那兩個型別沒有 port。vclcompat/ShiftState.h（commit f184093）
+// 補上之後，本波把簽章回填為 golden 原文。
 //---------------------------------------------------------------------------
 void TfTemp_Set::edLHP1MouseDown(TObject *Sender)
 {
@@ -4417,8 +4421,10 @@ void TfTemp_Set::edLHP1MouseDown(TObject *Sender)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)InputLimit.iTempHigh, (double)InputLimit.iTempLow);                                   //Steven 20141120 : Modify
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edLHeatGun1MouseDown(TObject *Sender)                          // DEVIATION
+void TfTemp_Set::edLHeatGun1MouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)InputLimit.iHeaterGunH, (double)InputLimit.iHeaterGunL);                              //Steven 20141120 : Modify
 }
 //---------------------------------------------------------------------------
@@ -4433,13 +4439,17 @@ void TfTemp_Set::FormClose(TObject *Sender)
     //這一行請保持在最下面!!-----------------
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edLHP1KeyUp(TObject *Sender)                                   // DEVIATION: WORD&/TShiftState dropped
+void TfTemp_Set::edLHP1KeyUp(TObject *Sender,
+      WORD &Key, TShiftState Shift)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Key; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, (double)InputLimit.iTempHigh, (double)InputLimit.iTempLow);                                   //Steven 20141120 : Modify
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edLowBaseMouseDown(TObject *Sender)                            // DEVIATION
+void TfTemp_Set::edLowBaseMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
 // AI(W906-FW-TAG1) 20260825: GATE(G-Barcode) STAYS SHUT -- premise re-stated,
@@ -5545,8 +5555,10 @@ void TfTemp_Set::rgTemperatureModeClick(TObject *Sender)
     }
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edTargetHP1MouseDown(TObject *Sender)                         // DEVIATION
+void TfTemp_Set::edTargetHP1MouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     dTempMax=MaxTempSetting();                                                  //Steven 20170427 : 回傳機台可以用的最大溫度值
     dTempMin=MinTempSetting();
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, dTempMax, dTempMin);
@@ -5710,8 +5722,10 @@ void TfTemp_Set::rbATCActiveOnClick(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
-void TfTemp_Set::edtATCInPC1MouseDown(TObject *Sender)                          // DEVIATION
+void TfTemp_Set::edtATCInPC1MouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
 // AI(W906-FW-TAG1) 20260825: GATE(G-Barcode) OPENED. Tag is real since this
@@ -5733,13 +5747,17 @@ void TfTemp_Set::edtATCInPC1MouseDown(TObject *Sender)                          
         fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 1, true, (double)20.0, (double)-20.0);                     //wei 20150427  SPIL   ATC Temperature Offset 20 ~ -20
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edAtcFileNameMouseDown(TObject *Sender)                        // DEVIATION
+void TfTemp_Set::edAtcFileNameMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_NO_SYMBOL);                    //Steven 20150810 : add for ATC
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edATCAmbTempMouseDown(TObject *Sender)                         // DEVIATION
+void TfTemp_Set::edATCAmbTempMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
 // AI(W906-FW-TAG1) 20260825: GATE(G-Barcode) STAYS SHUT -- premise re-stated,
@@ -5774,26 +5792,34 @@ void TfTemp_Set::edATCAmbTempMouseDown(TObject *Sender)                         
     }
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edArm1OffsetMouseDown(TObject *Sender)                         // DEVIATION
+void TfTemp_Set::edArm1OffsetMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     if(AccessLevel<LevelSet.AccessLevel[17])
         return;
 
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, -2.00, 2.00);                                         //Steven 20141120 : Modify
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edATCTestTimeOffsetMouseDown(TObject *Sender)                  // DEVIATION
+void TfTemp_Set::edATCTestTimeOffsetMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 0, 1000);
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edATCTempAlwaysSameAlarmMouseDown(TObject *Sender)             // DEVIATION
+void TfTemp_Set::edATCTempAlwaysSameAlarmMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 20, 600);    //Ifor 20170907 (wei) 60000 -> 600
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edATCChillerTempMouseDown(TObject *Sender)                     // DEVIATION
+void TfTemp_Set::edATCChillerTempMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     if(ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_33)                          //Ifor 20240301 add: Chiller 設定小鍵盤
     {
         fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, -20, 30);
@@ -5812,8 +5838,10 @@ void TfTemp_Set::edATCChillerTempMouseDown(TObject *Sender)                     
     }
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edATCInitialOffset1MouseDown(TObject *Sender)                  // DEVIATION
+void TfTemp_Set::edATCInitialOffset1MouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
 // AI(W906-FW-TAG1) 20260825: GATE(G-Barcode) OPENED. Tag is real since this
@@ -5832,13 +5860,17 @@ void TfTemp_Set::edATCInitialOffset1MouseDown(TObject *Sender)                  
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 1, true, (double)40.0, 0.0);                                   //Steven 20160227 : for ATC 7.0
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edArm1NoFullsiteOffset_1MouseDown(TObject *Sender)             // DEVIATION
+void TfTemp_Set::edArm1NoFullsiteOffset_1MouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 20.0, -20.00);
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edTSDTimeOutMouseDown(TObject *Sender)                         // DEVIATION
+void TfTemp_Set::edTSDTimeOutMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 1, true, (double)100.0, 0.0);
 }
 //---------------------------------------------------------------------------
@@ -6126,8 +6158,10 @@ void TfTemp_Set::btnSortClick(TObject *Sender)
     UpDateEdit();
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edLimitHP1MouseDown(TObject *Sender)                           // DEVIATION
+void TfTemp_Set::edLimitHP1MouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 0.0, 10.0);
 }
 //---------------------------------------------------------------------------
@@ -6497,13 +6531,17 @@ void TfTemp_Set::edtThresholdClick(TObject *Sender)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 0.0, 30.0);
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edDewPointRangeMouseDown(TObject *Sender)                      // DEVIATION
+void TfTemp_Set::edDewPointRangeMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 1.0, 30.0);
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edDewPointAlarmIntervalMouseDown(TObject *Sender)              // DEVIATION
+void TfTemp_Set::edDewPointAlarmIntervalMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 2, true, 1, 30);
 }
 //---------------------------------------------------------------------------
@@ -6538,8 +6576,10 @@ void TfTemp_Set::edTempDownContactDelayClick(TObject *Sender)
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 2, true, 1, 300);
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edtHeatGunTempATCMouseDown(TObject *Sender)                    // DEVIATION
+void TfTemp_Set::edtHeatGunTempATCMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     TEdit *Buffer;
     Buffer=(TEdit *)Sender;
 // AI(W906-FW-TAG1) 20260825: GATE(G-Barcode) STAYS SHUT -- premise re-stated,
@@ -6579,13 +6619,17 @@ void TfTemp_Set::chkTempCalByRecipeClick(TObject *Sender)
 // see facade header OMITTED note (TWMKey has zero port; Msg.CharCode is
 // genuinely read, not a droppable-unused-parameter case).
 //---------------------------------------------------------------------------
-void TfTemp_Set::edLBTempAlarmTimeMouseDown(TObject *Sender)                    // DEVIATION
+void TfTemp_Set::edLBTempAlarmTimeMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 2, true, 30, 300);
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edtLBAirOnTempMouseDown(TObject *Sender)                       // DEVIATION
+void TfTemp_Set::edtLBAirOnTempMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_DOUBLE, 2, true, 40.0, 100.0);
 }
 //---------------------------------------------------------------------------
@@ -6628,8 +6672,10 @@ void TfTemp_Set::edtSetTJ_SlopeChange(TObject *Sender)
 // payload, `sgTjMap->MouseToCell(...)`, has no port (vclcompat::TStringGrid
 // explicitly scopes out mouse/paint surface, see facade header G-Grid).
 //---------------------------------------------------------------------------
-void TfTemp_Set::sgTjMapMouseDown(TObject *Sender, int X, int Y)                // DEVIATION: Button/Shift dropped, X/Y kept (real+used)
+void TfTemp_Set::sgTjMapMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
 #if 0 // GATE(G-Grid)
     int Column, Row;
     sgTjMap->MouseToCell(X, Y, Column, Row);                                    //JerryYang 20170221 矽品要求當測試結果中所有site的bin都是所設定一樣的fail bin要跳alarm,改成可複選bin
@@ -6977,8 +7023,10 @@ int TfTemp_Set::InitialAddrToATC()                                              
     return iResult;
 }
 //---------------------------------------------------------------------------
-void TfTemp_Set::edATCOfsTimeMouseDown(TObject *Sender)                         // DEVIATION
+void TfTemp_Set::edATCOfsTimeMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W18): golden 這一支也沒讀它們
     fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_INTEGER, 0, true, 0, 60000);
 }
 //---------------------------------------------------------------------------

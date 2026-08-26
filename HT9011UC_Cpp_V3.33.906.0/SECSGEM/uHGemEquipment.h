@@ -315,6 +315,7 @@
 // brings TMemoryStream/soFromBeginning/soFromCurrent/soFromEnd into the
 // global namespace itself (see that header's own tail note).
 #include "vclcompat/MemoryStream.h"
+#include "vclcompat/ShiftState.h"   // AI(W906-FW-SIG-W18) 20260826
 
 // This TU does not include aHotPlateSubstrate.h (the other place a global
 // `class TList` lives -- see vclcompat/vcl_compat.h's own TList.h precedent
@@ -1762,7 +1763,9 @@ public:
     void LocalAcknowledge(unsigned char SCode, unsigned char FCode , unsigned char Command);   // golden :2207-2214
     void SetTimeFormat(int Format);   // golden :6033-6036
     int SetReceipeDirectoryAndGlobalName(AnsiString Path, AnsiString FileMask, int Type);   // golden :6427-6489
-    void GemBtnSendTerminalMessageClick(TObject *Sender);   // golden :6493-6497
+    void GemBtnSendTerminalMessageClick(TObject *Sender);
+    //AI(W906-FW-SIG-W18) 20260826: W10/W12 排除它的理由（TShiftState 無 port）已消失。
+    void GemTerminalSendEditKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);   // golden :6501-6506   // golden :6493-6497
     void BtnEnableCommClick(TObject *Sender);   // golden :6518-6521
     void BtnDisableCommClick(TObject *Sender);   // golden :6525-6528
     void GemBtnOnlineRequestClick(TObject *Sender);   // golden :6532-6535

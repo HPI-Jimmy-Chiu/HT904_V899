@@ -32,6 +32,8 @@
 //  established by the KYECFTP/FTPClient_Transfer.cpp precedent).
 //---------------------------------------------------------------------------
 #include "SECSGEM/uHGemEquipment.h"
+// AI(W906-FW-SIG-W18) 20260826: GemTerminalSendEditKeyDown 的簽章需要它。
+#include "vclcompat/ShiftState.h"
 // AI(W906-FW-GEM-W12) 20260826: edtT3TimeOutClick 走 fQwertyKey->ShowQwertyKey，
 // 與 cConfiguration 各波已翻的 keypad 啟動器同一個形狀。
 #include "forms/fQwertyKey.h"
@@ -7906,15 +7908,23 @@ void THGem::GemBtnSendTerminalMessageClick(TObject *Sender)
     GemTerminalSendEdit->Text="";
 }
 
-// AI(W906-FW-GEM-W10) 20260826: GemTerminalSendEditKeyDown（golden :6501-6506）
-// 本波刻意不翻。它的本體只有兩行（Key==0x0d 就轉呼叫
-// GemBtnSendTerminalMessageClick(this)），但簽章第三個參數是 `TShiftState`
-// ——VCL 的「集合」型別（Delphi set of TShiftStateEnum），本樹零 port。
-// 量測 20260826: grep -rn "TShiftState" 於 vclcompat/ -> 0 命中。
-// 它不是「補個資料成員」等級的東西：要嘛做一個真的集合語意 stand-in，
-// 要嘛改簽章（就不忠實了）。留給之後有其他 KeyDown handler 一起處理時再做。
-// 附帶：golden 這裡傳的是 `this`，而本樹的 THGem 不繼承 TObject，
-// 所以就算補了 TShiftState，這個呼叫點也還要另外處置。
+// AI(W906-FW-SIG-W18) 20260826: GemTerminalSendEditKeyDown（golden :6501-6506）
+// **本波補翻**。W10/W12 排除它的唯一理由是簽章第三個參數 `TShiftState` 沒有 port
+// ——vclcompat/ShiftState.h（commit f184093）補上之後那個理由消失了。
+//
+// 一個必須明講的替換：golden 這裡寫 `GemBtnSendTerminalMessageClick(this)`。
+// BCB6 的 THGem 是 TForm 的後代所以 `this` 本身就是 TObject*；本樹的 THGem
+// **不繼承 TObject**，`this` 轉不過去。改傳 NULL，理由是那支
+// **完全沒有讀 Sender**——它的本體只有兩行，都只碰 GemTerminalSendEdit
+// （見本檔 THGem::GemBtnSendTerminalMessageClick，golden :6493-6497）。
+// 所以傳什麼都行為等價，選 NULL 是最不會被誤讀成「有意義的引數」的寫法。
+void THGem::GemTerminalSendEditKeyDown(TObject *Sender,
+      WORD &Key, TShiftState Shift)
+{
+    (void)Sender; (void)Shift;   //AI(W906-FW-SIG-W18): golden 也沒讀這兩個
+    if(Key==0x0d)
+        GemBtnSendTerminalMessageClick(NULL);   //AI(W906-FW-SIG-W18): golden 是 `this`，見上
+}
 
 // AI(W906-FW-GEM-W10) 20260826: golden SECSGEM/uHGemEquipment.cpp:6518-6521, transcribed VERBATIM
 // (cp950 -> UTF-8) unless a deviation is marked inline.

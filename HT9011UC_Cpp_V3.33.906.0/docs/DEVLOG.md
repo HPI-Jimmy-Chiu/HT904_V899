@@ -11611,6 +11611,89 @@ header 的註解裡（`EJ1N/MyOmronPanel.h:193-195`），第三行明顯比前�
   HAL-MOT1 十問（Q1/Q9/Q4 擋新 mot_table 起草）；TImage headless 准駁；
   GOLDEN BUG (TAG1-a) edSHighBase；GOLDEN DEFECT (i) 21-into-20 sprintf overflow。
 
+## 20260826 XI — FW-SIG-W18：uTemp_Set 22 支簽章回填 ＋ THGem 補翻一支
+
+### 交付
+
+| 檔 | diff |
+|---|---|
+| `uTemp_Set.cpp` | +72/−24 |
+| `forms/fTemp_Set.h` | +23/−22 |
+| `SECSGEM/uHGemEquipment.cpp` | +19/−9 |
+| `SECSGEM/uHGemEquipment.h` | +4/−1 |
+
+**`uTemp_Set.cpp` 22 支 handler 的簽章回填為 golden 原文**，
+外加 **THGem 的 `GemTerminalSendEditKeyDown` 補翻**——它在 FW-GEM-W10 與
+FW-GEM-W12 兩次被排除，**唯一理由就是 `TShiftState` 沒有 port**，
+理由消失後補上。
+
+### 逐支去 golden 抓簽章，不假設同形狀
+
+這是 FW-SIG-W17 那個錯換來的做法：那次我給 `MyOmronPanel` 三支套了同一個
+5 參數簽章，但 golden 的 `GroupBox1MouseMove` 少一個 `TMouseButton`。
+
+所以本波先對 22 支各自去 golden 抓 `TfTemp_Set::<name>(...)` 的參數列，
+再按抓到的形狀分組：
+
+| 形狀 | 支數 |
+|---|---|
+| `TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y` | **21** |
+| `TObject *Sender, WORD &Key, TShiftState Shift` | **1**（`edLHP1KeyUp`） |
+
+如果照「MouseDown 都長一樣」去套，`edLHP1KeyUp` 就會錯——
+**分組是量出來的，不是看名字猜的。**
+
+（另一個小坑：`sgTjMapMouseDown` 的 header 宣告原本帶著 `int X, int Y`
+——它是 22 支裡唯一沒被完全裁成 `(TObject *Sender)` 的，因為 X/Y 真的有被讀
+——所以我那條批次 regex 對不上它，21 換成功、1 條落單。
+腳本有回報「找不到 1 條」而不是靜默跳過，才立刻補掉。
+**批次工具要回報沒處理到的項目，不能只回報成功數。**）
+
+### 一個必須明講的替換：`this` → `NULL`
+
+golden 的 `GemTerminalSendEditKeyDown` 本體是：
+
+```
+if(Key==0x0d)
+    GemBtnSendTerminalMessageClick(this);
+```
+
+BCB6 的 `THGem` 是 `TForm` 的後代，所以 `this` 本身就是 `TObject*`。
+**本樹的 `THGem` 不繼承 `TObject`**，`this` 轉不過去。
+
+改傳 `NULL`。理由是那支**完全沒有讀 `Sender`**——
+`THGem::GemBtnSendTerminalMessageClick`（golden :6493-6497）的本體只有兩行，
+都只碰 `GemTerminalSendEdit`。所以傳什麼都行為等價，
+選 `NULL` 是最不會被誤讀成「這個引數有意義」的寫法。
+
+判斷與替換都寫在呼叫點旁邊，不是只寫在這裡。
+
+忠實度複驗（`GemTerminalSendEditKeyDown`）：**LIVE 5 條、無逐字對應 3 條**
+（簽章行、`(void)` 抑制、上面那個 `NULL` 替換），**gated 0 行**。
+
+### 驗收
+
+`tools/dualgate.sh sig18`（全新 dir）：Debug **137/142**、Release **137/142**，
+失敗集合逐項相同且等於常駐五項。`D:\HT9045\system` 552 檔本輪零變動。
+
+### `TShiftState` 這條線的收尾狀況
+
+本輪從 `f184093` 建 stand-in 開始，到本波為止：
+
+| 波 | 做了什麼 |
+|---|---|
+| `f184093` | 建 `vclcompat/ShiftState.h`（量測先行：358 支帶參數、1 支真的讀） |
+| W14 `a659c96` | 第一個 consumer，`uYieldMonitoring` 19 支、gated 0 行 |
+| W15 `60c7520` | `GATE (C-log-6)` 退役、`GATE (WB-2-BTN)` 收窄 |
+| W16 `265027e` | `MyTempPanel` 4 支收回成員（執行 PT-W8 交接） |
+| W17 `6d7f752` | `MyOmronPanel` 3 支收回成員（執行 PT-W2 交接） |
+| **W18（本波）** | `uTemp_Set` 22 支回填 ＋ THGem 補翻 1 支 |
+
+**還沒做的（明文）**：`OmronLaser/LaserSensor.cpp` 7 支（已是真成員、只是簽章
+裁短）、`forms/fSetup.cpp`、`forms/fQwertyKey.cpp`、`cContactCT.cpp`、
+`cObserver.cpp` 其餘幾支。這些都沒有連著 gate、也沒有不可達的碼，
+純粹是簽章忠實度，優先度低於「重跑 census 選新檔」。
+
 ### 🔖 RESUME（20260826 上午）
 
 - **本輪連續作業共 13 顆 commit**（`1be68ce` → `6d7f752`），

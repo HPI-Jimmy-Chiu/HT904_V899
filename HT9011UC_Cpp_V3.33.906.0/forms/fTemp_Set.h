@@ -381,6 +381,7 @@
 #include "MyTempPanel.h"            // TMyTempPanel (already ported, PT-W3) + listNormal/listArm1/listArm2 externs
 #include "MachineType.h"            // tc* channel enum, ATC_HEAD_COUNT, MAX_Index_Row/Col
 #include "forms/fDynamicTemp.h"     // TfDynamicTemp -- sibling wave's deliverable (see banner: NULL-checked
+#include "vclcompat/ShiftState.h"   // AI(W906-FW-SIG-W18) 20260826
                                     //   exactly like golden; if this header does not exist yet at integration
                                     //   time, that is the main loop's merge to resolve, not this file's)
 
@@ -607,30 +608,30 @@ public:
     void edSoakTimeClick(TObject *Sender);
     void edLHP1MouseDown(TObject *Sender);                                  // DEVIATION: TMouseButton/TShiftState dropped
     void FormClose(TObject *Sender);                                       // DEVIATION: TCloseAction dropped
-    void edLHP1KeyUp(TObject *Sender);                                     // DEVIATION: WORD&/TShiftState dropped
-    void edLowBaseMouseDown(TObject *Sender);                              // DEVIATION
+    void edLHP1KeyUp(TObject *Sender, WORD &Key, TShiftState Shift);                                     // DEVIATION: WORD&/TShiftState dropped
+    void edLowBaseMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);                              // DEVIATION
     void rgIndexHeatModeClick(TObject *Sender);
     void spbSaveClick(TObject *Sender);                                    // SAFETY GATE (S2)
-    void edLHeatGun1MouseDown(TObject *Sender);                            // DEVIATION
+    void edLHeatGun1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);                            // DEVIATION
     void rgTemperatureModeClick(TObject *Sender);
-    void edTargetHP1MouseDown(TObject *Sender);                            // DEVIATION
+    void edTargetHP1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);                            // DEVIATION
     void cbEnableIndividualModeClick(TObject *Sender);
-    void edtATCInPC1MouseDown(TObject *Sender);                            // DEVIATION
+    void edtATCInPC1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);                            // DEVIATION
     void rbATC70ActiveOnClick(TObject *Sender);
     void rbATCActiveOnClick(TObject *Sender);
     void sbtExitClick(TObject *Sender);
     void btClearAllClick(TObject *Sender);
     void pgcTempOffsetChange(TObject *Sender);
-    void edAtcFileNameMouseDown(TObject *Sender);                          // DEVIATION
-    void edATCAmbTempMouseDown(TObject *Sender);                           // DEVIATION
-    void edArm1OffsetMouseDown(TObject *Sender);                           // DEVIATION
-    void edATCTestTimeOffsetMouseDown(TObject *Sender);                    // DEVIATION
-    void edATCInitialOffset1MouseDown(TObject *Sender);                    // DEVIATION
-    void edATCTempAlwaysSameAlarmMouseDown(TObject *Sender);               // DEVIATION
-    void edArm1NoFullsiteOffset_1MouseDown(TObject *Sender);               // DEVIATION
-    void edTSDTimeOutMouseDown(TObject *Sender);                           // DEVIATION
+    void edAtcFileNameMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);                          // DEVIATION
+    void edATCAmbTempMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);                           // DEVIATION
+    void edArm1OffsetMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);                           // DEVIATION
+    void edATCTestTimeOffsetMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);                    // DEVIATION
+    void edATCInitialOffset1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);                    // DEVIATION
+    void edATCTempAlwaysSameAlarmMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);               // DEVIATION
+    void edArm1NoFullsiteOffset_1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);               // DEVIATION
+    void edTSDTimeOutMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);                           // DEVIATION
     void sbSafeTestATCClick(TObject *Sender);                              // SAFETY GATE (S6, delegates)
-    void edATCChillerTempMouseDown(TObject *Sender);                       // DEVIATION
+    void edATCChillerTempMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);                       // DEVIATION
     void edAmbTempClick(TObject *Sender);
     void edtIdleTime_LongClick(TObject *Sender);
     void edtBoostOffset_LongClick(TObject *Sender);
@@ -638,24 +639,24 @@ public:
     void edtBoostOffsetClick(TObject *Sender);
     void edtInitialDelay_1Click(TObject *Sender);
     void btnSortClick(TObject *Sender);
-    void edLimitHP1MouseDown(TObject *Sender);                             // DEVIATION
+    void edLimitHP1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);                             // DEVIATION
     void edtLBTimeOutClick(TObject *Sender);
     void FormDestroy(TObject *Sender);
     void edTJTempRange_HighClick(TObject *Sender);
     void edTJTempRange_LowClick(TObject *Sender);
     void edtThresholdClick(TObject *Sender);
-    void edDewPointRangeMouseDown(TObject *Sender);                        // DEVIATION
-    void edDewPointAlarmIntervalMouseDown(TObject *Sender);                // DEVIATION
+    void edDewPointRangeMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);                        // DEVIATION
+    void edDewPointAlarmIntervalMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);                // DEVIATION
     void btnSameAsArm1Click(TObject *Sender);
     void edtChamberBoostTimeClick(TObject *Sender);
     void edtChamberBoostOffsetClick(TObject *Sender);
     void edTempOffsetCountClick(TObject *Sender);
     void edTempDownContactDelayClick(TObject *Sender);
-    void edtHeatGunTempATCMouseDown(TObject *Sender);                      // DEVIATION
+    void edtHeatGunTempATCMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);                      // DEVIATION
     void chkTempCalByRecipeClick(TObject *Sender);
     // FormShortCut(TWMKey&,bool&) OMITTED -- see banner OMITTED note.
-    void edLBTempAlarmTimeMouseDown(TObject *Sender);                      // DEVIATION
-    void edtLBAirOnTempMouseDown(TObject *Sender);                         // DEVIATION
+    void edLBTempAlarmTimeMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);                      // DEVIATION
+    void edtLBAirOnTempMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);                         // DEVIATION
     void edtATCPIDOffset_MinPClick(TObject *Sender);
     void edJamSoakTimeClick(TObject *Sender);
     void edFFC_Arm1TimeOn_01Click(TObject *Sender);
@@ -665,10 +666,10 @@ public:
     void rgBasePointClick(TObject *Sender);
     void edtSetTJ_OffsetClick(TObject *Sender);
     void edtSetTJ_SlopeChange(TObject *Sender);
-    void sgTjMapMouseDown(TObject *Sender, int X, int Y);                  // DEVIATION (X,Y kept, real+used); GATE(G-Grid)
+    void sgTjMapMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);   //AI(W906-FW-SIG-W18) 20260826: 簽章回填為 golden 原文; GATE(G-Grid) 仍在
     void rgTjMapTypeClick(TObject *Sender);
     void edTempReadyRangeMouseDown(TObject *Sender);                       // DEVIATION
-    void edATCOfsTimeMouseDown(TObject *Sender);                           // DEVIATION
+    void edATCOfsTimeMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);                           // DEVIATION
     void cbSelectDeviceChange(TObject *Sender);
     void btnDefrostStartClick(TObject *Sender);                           // SAFETY GATE (S11)
     void btnDefrostEndClick(TObject *Sender);                             // SAFETY GATE (S12)
