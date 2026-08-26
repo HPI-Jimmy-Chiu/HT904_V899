@@ -685,3 +685,154 @@ bool TfTrayMappingForm::DoTrayIDCheck(AnsiString Str)                           
 //  exact entry point if anybody calls it.  See that header's GATE REGISTER for
 //  all 108 with their evidence.
 //---------------------------------------------------------------------------
+
+// ===========================================================================
+//  AI(W906-FW-TRAYMAP-W34) 20260827 -- SECOND BATCH.
+//
+//  ⚠ THE "END OF DELIVERED BODIES" NOTE DIRECTLY ABOVE IS NOW INCOMPLETE, and
+//  it is left byte-for-byte intact on purpose (this wave is append-only).
+//  It says "Everything else golden defines in cTrayMapping.cpp is GATED".
+//  That sentence was written against a census of `TfTrayMapping::` MEMBERS.
+//  It is true of the 108 remaining MEMBERS -- re-verified this wave by
+//  reading all 108 -- but golden cTrayMapping.cpp also defines 11 FILE-SCOPE
+//  FREE FUNCTIONS, which no member census can see.  Five of them are
+//  delivered below; the other six are excluded with evidence in the
+//  W34 block of forms/fTrayMapping.h, sections 3 and 4.
+//
+//  Read the (W-1) note there before adding any more free function from this
+//  golden file: four of them are ALREADY DEFINED in acatchtray_shims.cpp
+//  :232-235 with 20+ live callers, so translating those here would be a
+//  duplicate symbol, not progress.
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+//  golden :4584 `int  iMultileTrayIDKeyence3Task=1;`
+//  DEVIATION (D-10): internal linkage here, external in golden -- the same
+//  treatment, for the same reason, that iCCDConntectionOkTask got above.  Its
+//  only golden reader is DoMultileTrayIDKeyence3 (:4591-4671, which binds it
+//  as `int &Task=iMultileTrayIDKeyence3Task;` at :4593) and that method is
+//  GATE (G-1), so today this cursor is written and never read -- golden's
+//  structure, not a translation gap.
+// ---------------------------------------------------------------------------
+namespace {
+int  iMultileTrayIDKeyence3Task=1;      // golden :4584
+}   // namespace
+
+//---------------------------------------------------------------------------
+//  golden :2789-2800.  Pure read of the three device-count request flags
+//  (bNeedCCDTrayDeviceCount, cmydef.h:4188).
+//
+//  GOLDEN NOTE 9 -- THIS FUNCTION IS DEAD IN GOLDEN.  An os.walk over the
+//  whole golden BCB6 tree this wave found exactly ONE occurrence of the name
+//  `iWhichTrayNeedDeviceCount`: this definition.  No caller, no declaration,
+//  in any of golden's own files.  Translated anyway, verbatim, because
+//  "golden defines it" is the wave's standard, not "golden calls it" -- and
+//  because deleting it would silently shrink the file's true surface.  Note
+//  the commented-out `bCCDTrayDeviceCount[i]` test on golden :2793 is golden's
+//  own; the live predicate is bNeedCCDTrayDeviceCount.
+int iWhichTrayNeedDeviceCount()                                                 //Sam 20190405 : Tray Decive Count
+{
+    for(int i=0; i<3; i++)
+    {
+         //if(bCCDTrayDeviceCount[i]==true)
+         if(bNeedCCDTrayDeviceCount[i])
+         {
+            return i;
+         }
+    }
+    return -1;
+}
+//---------------------------------------------------------------------------
+//  golden :2802-2812.  Pure read: machine option + recipe flag + request flag.
+//  GOLDEN NOTE 10 -- dead in golden too, by the same tree-wide walk: the only
+//  occurrence of `CheckNeedDeviceCount` anywhere in golden is this definition.
+//  Note it does NOT bounds-check iAuto against bNeedCCDTrayDeviceCount's
+//  length of 3 (cmydef.cpp:4525); verbatim, and worth remembering if a future
+//  caller feeds it an Auto index above 2.
+bool CheckNeedDeviceCount(int iAuto)                                            //Sam 20190405 : Tray Decive Count
+{
+    if(USE_TRAY_MAPPING!=etmUninstall && TestIF_File.bEnableTrayDeviceCnt)
+    {
+        return bNeedCCDTrayDeviceCount[iAuto];
+    }
+    else
+    {
+        return false;
+    }
+}
+//---------------------------------------------------------------------------
+//  golden :4586-4589.  Resets the Keyence multi-tray-ID task cursor -- the
+//  same shape as ChangeTraySetupFile above, and like it the reader is gated.
+//  ⚠ NOT to be confused with InitialTrayIDTask / InitialTrayID2Task /
+//  InitialTrayMapTask / InitialCoverTrayIDTask, which this port ALREADY
+//  DEFINES in acatchtray_shims.cpp:232-235 -- see (W-1) in the header.  This
+//  one has no stand-in anywhere in the tree, which is why it is safe here.
+void InitialMultileTrayIDKeyence3Task()
+{
+    iMultileTrayIDKeyence3Task=1;
+}
+//---------------------------------------------------------------------------
+//  golden :6443-6464.  Pure arithmetic -- a bitwise CRC-16/MODBUS (init
+//  0xFFFF, reflected polynomial 0xA001).  No I/O of any kind.
+//
+//  Belongs to the TfRFID family: its 11 live call sites (golden :6480, :6503,
+//  :6526, :6549, :6574, :6600, :6630, :6683, :6715, :6736 -- plus one
+//  commented out at :6666) are all inside TfRFID:: methods, which are
+//  ZERO-PORT, GATE (G-5c).  So it is reachable from nothing in this port
+//  today; it is delivered now precisely so the TfRFID wave finds it already
+//  translated and declared instead of defining a second copy.
+//
+//  `length` is `unsigned char`, so a caller asking for more than 255 bytes
+//  silently truncates, and `while(length--)` on length==0 does NOT execute
+//  (0 is falsy, decrement happens after the test) -- both verbatim golden.
+unsigned int Crc_16_create(unsigned char *string, unsigned char length)
+{
+    unsigned char Bitloop;
+    unsigned int Crc_tmp=0xffff;
+
+    while(length--)
+    {
+        Crc_tmp^=*string++;
+        for(Bitloop=0; Bitloop<8; Bitloop++)
+        {
+            if(Crc_tmp&0x01)
+            {
+                Crc_tmp=(Crc_tmp>>1)^0xa001;
+            }
+            else
+            {
+                Crc_tmp=Crc_tmp>>1;
+            }
+        }
+    }
+    return(Crc_tmp);
+}
+//---------------------------------------------------------------------------
+//  golden :6466-6475.  Pure in-memory byte-block -> AnsiString, stopping at
+//  the first NUL.  Its two call sites (golden :6876, :6888) are inside
+//  TfRFID::COMRFIDReceiveData, GATE (G-5c) -- same situation as
+//  Crc_16_create above.
+//
+//  `BYTE` comes from <windows.h>, which vclcompat/vcl_compat.h hoists
+//  deliberately (see its :106-138 note); no new include is needed.
+AnsiString BlockToString(const BYTE* data, int length)                          //RogerYang 20251209 Add
+{
+    AnsiString result = "";
+    for(int i=0; i<length; i++)
+    {
+        if(data[i]==0x00) break;
+        result+=(char)data[i];
+    }
+    return result;
+}
+//---------------------------------------------------------------------------
+//  END OF THE W34 BATCH.
+//
+//  Still GATED and deliberately absent: all 108 remaining TfTrayMapping
+//  methods (see the GATE REGISTER), plus DoCoverTrayID_NFC (:6044-6104,
+//  six SECS EventReports), ShouldParseAutoBinLabelList (:51-56, orphaned by
+//  GATE (G-6)), and the four Initial*Task functions this port already owns
+//  in acatchtray_shims.cpp.  The next real batch is the two zero-port helper
+//  classes cDatabaseJson (:6123-6227) and cLineScanRemainICYieldRecord
+//  (:6229-6348) -- see section 6 of the W34 block in forms/fTrayMapping.h.
+//---------------------------------------------------------------------------

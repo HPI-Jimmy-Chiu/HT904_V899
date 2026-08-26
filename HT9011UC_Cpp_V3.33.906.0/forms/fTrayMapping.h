@@ -743,4 +743,214 @@ public:
 // `TfTrayMapping` are already owned by acatchtray_shims.h (:219 / :313), which
 // 81 TUs include.  See banner section 1.
 
+
+// ===========================================================================
+//  AI(W906-FW-TRAYMAP-W34) 20260827 -- SECOND BATCH.
+//  TARGET POPULATION: golden's FILE-SCOPE FREE FUNCTIONS -- a family the
+//  wave-W32 census above structurally CANNOT SEE.
+//
+//  ---------------------------------------------------------------------
+//  1. SECTION 2's DENOMINATOR IS CONFIRMED, NOT INHERITED
+//  ---------------------------------------------------------------------
+//  Re-measured from scratch this wave with an independently written
+//  character state machine (blanks //, /* */, and string/char literals,
+//  preserving newlines; then \bTfTrayMapping\s*::\s*(~?\w+), then a
+//  forward scan to the first paren-depth-0 '{' or ';', then brace matching):
+//      raw regex on RAW text ......... 161   (section 2 said 161)
+//      after comment/string blanking .. 150
+//      of which DEFINITIONS ........... 150
+//      of which DECLARATIONS ...........  0
+//      signature-to-closing-brace span  6,040 lines
+//  Byte-identical to section 2.  Delivered/remaining re-derived from the
+//  FINISHED .cpp the same way: 42 delivered, 108 remaining, 5,685 lines.
+//
+//  ---------------------------------------------------------------------
+//  2. BUT `TfTrayMapping::` IS A CLASS-MEMBER CENSUS, AND THE FILE IS BIGGER
+//  ---------------------------------------------------------------------
+//  golden cTrayMapping.cpp is 7,268 lines; the 150 member definitions span
+//  6,040.  The ~1,228-line remainder is NOT whitespace.  Brace-matching
+//  EVERY top-level definition in the blanked text (196 in total) this wave
+//  found four families a member census cannot reach:
+//
+//    TfRFID::*                        17 defs   576 lines  (:6350-7005)
+//    cLineScanRemainICYieldRecord::*  11 defs   110 lines  (:6229-6348)
+//    cDatabaseJson::*                  7 defs    99 lines  (:6123-6227)
+//    file-scope FREE FUNCTIONS        11 defs   206 lines  (:51-6475)
+//
+//  The first three are classes golden declares in cTrayMapping.h (:69-147,
+//  :47-67, :29-45).  Section 5 (G-5b) / (G-5c) already names two of them --
+//  but ONLY as zero-port BLOCKERS, never as REMAINING WORK IN THIS FILE.
+//  They are both: see section 6 below for the next wave's batch.
+//
+//  ALSO CLOSED THIS WAVE: golden's class body cTrayMapping.h:149-749 was
+//  scanned for INLINE member bodies (a second population the .cpp-only
+//  census cannot see).  There are EXACTLY FOUR -- GetAOISize (h:573),
+//  DeleteAOI (h:574), GetSimulationState (h:694), GetLoaderCWSpeed (h:712)
+//  -- and wave W32 already delivered all four.  That avenue is exhausted;
+//  nobody needs to re-check it.
+//
+//  ---------------------------------------------------------------------
+//  3. BATCH CRITERION FOR THIS WAVE  (5 of the 11 free functions)
+//  ---------------------------------------------------------------------
+//  A free function is in this batch iff ALL FOUR hold:
+//   (a) read-only by section 3's exit rules -- no machine motion, no
+//       persistence (incl. CheckAndReadIniData / MyForceDirectories), no
+//       outbound command;
+//   (b) every symbol it needs already exists in this port (no new shim);
+//   (c) it was read IN FULL from the cp950-decoded golden this wave; and
+//   (d) -- NEW, AND IT COST THIS WAVE FOUR CANDIDATES -- the port does not
+//       ALREADY OWN THAT SYMBOL.  See (W-1) directly below.
+//
+//  ---------------------------------------------------------------------
+//  4. EXCLUDED, WITH EVIDENCE  (6 of the 11)
+//  ---------------------------------------------------------------------
+//  (W-1) ALREADY DEFINED IN THIS PORT -- defining them here would be a
+//        DUPLICATE SYMBOL, not a translation.  This is the SAME shim
+//        collision banner section 1 documents for the CLASS NAME, one level
+//        down at free-function scope, and it is live:
+//          InitialTrayIDTask()        golden :1991-1995 (5)
+//          InitialTrayID2Task()       golden :3452-3456 (5)
+//          InitialTrayMapTask(int)    golden :2379-2387 (9)
+//          InitialCoverTrayIDTask(int) golden :5807-5810 (4)
+//        all four are DEFINED as offline no-ops at acatchtray_shims.cpp
+//        :232-235, declared extern at acatchtray.h:55-57 and :66, and CALLED
+//        from 20+ live sites (acatchtray.cpp :3089/:4126/:4497/:7865/:7924/
+//        :8004/:8764, asendic_Auto.cpp :2055/:2060/:2065/:2104/:2146/:2187,
+//        asendic_Color.cpp :841/:1138/:1164, asendic_Loader.cpp :1104/:1664/
+//        :1765/:1776/:1841, AutoRetest.cpp :603/:619, csystem.cpp :13900/
+//        :13905/:13910/:13962/:13992/:14021/:31542).  Landing golden's real
+//        bodies is a RETIREMENT job on acatchtray_shims.cpp (the idiom that
+//        file already uses at its own :228-231 `#if 0 ... RETIRED` block) --
+//        an integration wave with a behaviour delta, not a translation wave:
+//        the stubs currently do NOTHING, so retiring them makes four state
+//        machines actually reset.  NOT this wave's call.
+//
+//        ⚠ RELATED DIVERGENCE FOUND WHILE CHECKING THIS, RECORDED NOT FIXED:
+//        golden defines `int iCoverTrayIDTask[iKeyenceTotalFunction]=
+//        {1,1,1,1,1,1,1,1,1,1,1,1,1};` (golden :5805) -- every element ONE.
+//        The port defines `int iCoverTrayIDTask[64] = {0};`
+//        (acatchtray_shims.cpp:151, extern at acatchtray_shims.h:429) --
+//        every element ZERO, and a different length.  Task cursor 1 vs 0 is
+//        a real initial-state difference for whatever reads it.  Left alone
+//        here because that array is the shim's property, not this facade's.
+//
+//  (W-2) OUTBOUND COMMAND -- section 5 (G-1) by the same test as the rest:
+//          DoCoverTrayID_NFC(int,bool)  golden :6044-6104 (61)
+//        calls EventReport(SECS_EVENT.BundleEnd_IDREAD_Auto1..Auto6) at
+//        golden :6062/:6069/:6076/:6083/:6090/:6097 -- six SECS event
+//        reports to the host.
+//
+//  (W-3) WOULD EMIT A NEW WARNING FOR CODE NOTHING CAN REACH:
+//          ShouldParseAutoBinLabelList()  golden :51-56 (6)
+//        is `static` (internal linkage) and its ONLY three call sites are
+//        golden :4123, :4187, :4235 -- all inside ClientSocket_Keyence1Read
+//        (:4069-4284), which section 5 (G-6) OMITS ENTIRELY because its
+//        signature names TCustomWinSocket*.  Translating it would therefore
+//        add a `static` function with zero callers in this TU, i.e. a NEW
+//        -Wunused-function under this tree's -Wall -- for a body that cannot
+//        be called until (G-6) is solved.  It becomes free the moment
+//        ClientSocket_Keyence1Read lands; take it in that wave.
+//        (Its three IniConfig fields DO exist here -- Config.h:355 / :359 /
+//        :1464 -- so (b) is satisfied; only (c)-adjacent cleanliness is not.)
+//
+//  ---------------------------------------------------------------------
+//  5. THE 5 DELIVERED -- LINKAGE, AND WHY THEY ARE DECLARED HERE
+//  ---------------------------------------------------------------------
+//  (D-9) DECLARATIONS ADDED THAT GOLDEN DOES NOT HAVE.  All five are
+//        defined at file scope in golden cTrayMapping.cpp and declared
+//        NOWHERE -- verified this wave by an os.walk over the WHOLE golden
+//        BCB6 tree D:\HT9045\HT9011UC_Code_V3.33.906.0_20260618 (every
+//        .h/.hpp/.cpp, cp950-decoded): the ONLY hits for
+//        iWhichTrayNeedDeviceCount / CheckNeedDeviceCount /
+//        InitialMultileTrayIDKeyence3Task are their own definitions, and the
+//        only hits for Crc_16_create / BlockToString are their definition
+//        plus call sites inside cTrayMapping.cpp itself.  golden needs no
+//        declaration because every caller is in the same translation unit.
+//        This port will NOT be able to keep them in one TU (TfRFID is a
+//        separate future wave), so they are declared here -- deliberately,
+//        so that wave REUSES them instead of defining a second copy and
+//        rediscovering (W-1) the hard way.
+//  (D-10) `iMultileTrayIDKeyence3Task` (golden :4584) is given INTERNAL
+//        linkage in an anonymous namespace in the .cpp, exactly as wave W32
+//        did for `iCCDConntectionOkTask` (golden :46) and for the same
+//        reason.  Its only golden reader is DoMultileTrayIDKeyence3
+//        (:4591-4671, `int &Task=iMultileTrayIDKeyence3Task;` at :4593),
+//        which is GATE (G-1).  Consequence, stated plainly: if a future wave
+//        lands DoMultileTrayIDKeyence3 in a DIFFERENT TU it will not link
+//        against this cursor and must promote it to external linkage first.
+//
+//  ZERO new #include is required for any of the five -- bNeedCCDTrayDeviceCount
+//  (cmydef.h:4188 / defined cmydef.cpp:4525), USE_TRAY_MAPPING (cmydef.cpp
+//  :3224), etmUninstall (MachineType.h:910), TestIF_File.bEnableTrayDeviceCnt
+//  (cprod.h:2283) and BYTE (<windows.h>, hoisted by vclcompat/vcl_compat.h)
+//  all arrive through headers forms/fTrayMapping.cpp already includes.
+//
+//  ---------------------------------------------------------------------
+//  6. WHAT THE NEXT WAVE SHOULD TAKE  (measured, not guessed)
+//  ---------------------------------------------------------------------
+//  The 108 remaining `TfTrayMapping::` methods are a GATED CORE: all 108
+//  were read in full this wave and every one trips section 3's exit rules
+//  (motion / persistence / outbound / alarm / zero-port type / gated
+//  callee).  There is no read-only remainder left in the class -- do not
+//  spend another wave looking for one.  The genuine next batch is the two
+//  zero-port HELPER CLASSES this file already blocks on:
+//      cDatabaseJson                  golden h:29-45  / cpp :6123-6227
+//                                     7 defs, 99 lines.  cJSON EXISTS in
+//                                     this port (Public/cJSON.h, Public/
+//                                     cJSON.c, already in CMakeLists).
+//                                     ⚠ but golden declares it
+//                                     `: public uBasicPickPlace` (h:29) --
+//                                     resolve that base first.
+//                                     SaveFile (:6208-6212) writes a file =
+//                                     (G-2); the AddColumnTitle / AddRowData
+//                                     / UpdateRowData trio is in-memory.
+//      cLineScanRemainICYieldRecord   golden h:47-67  / cpp :6229-6348
+//                                     11 defs, 110 lines (+3 inline bodies
+//                                     in the header at h:50/:51/:54).
+//                                     Unblocks (G-5b) -- i.e. member
+//                                     yieldRemainIC, btnAddRandomClick,
+//                                     SetYieldDatas, btnRefreshYieldClick.
+//                                     ⚠ AddYieldData (:6305-6319) and
+//                                     RefreshTotalNum (:6321-6348) are
+//                                     WRITERS; GetTotalNumDir (:6276-6286)
+//                                     and GetFileNameWithDir (:6261-6274)
+//                                     call MyForceDirectories, which CREATES
+//                                     DIRECTORIES and is therefore (G-2) too
+//                                     -- it is not a pure path builder.
+//
+//  ---------------------------------------------------------------------
+//  7. ONE CORRECTION TO SECTION 5's EVIDENCE (the gate itself STANDS)
+//  ---------------------------------------------------------------------
+//  Section 5 files `cbSimulationAOICommandClick :5502-5509` under
+//  (G-1) OUTBOUND TCP with the note "flips AOI sim mode".  The GATE IS
+//  RIGHT; THE REASON AS FILED IS NOT.  Read in full this wave, the body is
+//      bSimulationAOICommand=cbSimulationAOICommand->Checked;
+//      for(int i=0;i<GetAOISize();i++)
+//          GetAOI(i)->bSimulationAOICommand=bSimulationAOICommand;
+//  -- three in-memory assignments.  It opens no socket and sends no byte, so
+//  it is NOT (G-1), and a regex hunting outbound verbs will keep reporting
+//  it "clean" (this wave's own signal cross-check did exactly that).
+//  It is a MODE SWITCH, and that is a stronger reason to keep it gated, not
+//  a weaker one: TfAOI::bSimulationAOICommand (TfAOILaserScan.h:217) is the
+//  flag 15 sites in TfAOILaserScan.cpp (:431, :634, :939, :976, :1012,
+//  :1048, :1094, :1130, :1181, :1222, :1258, :1294, :1376, :1412, :1448)
+//  test to decide whether to FAKE an AOI reply or issue the real command.
+//  Wiring an unchecked offline checkbox to it drives every AOI into REAL
+//  command mode -- the dangerous direction.  Both members golden needs
+//  (bSimulationAOICommand h:684, cbSimulationAOICommand h:380) are
+//  declarable here and TfAOI::bSimulationAOICommand exists, so this one is
+//  blocked by POLICY, not by a missing symbol.  Re-file it as a MODE SWITCH
+//  and give it a write-path interlock story before un-gating.
+//
+//  Same correction shape, recorded so the next reader does not "fix" them:
+//  DoMoveIn / DoMoveOut (:5626-5629 / :5621-5624) also read clean to a
+//  signal scan, and are correctly gated (G-3) -- the motor is inside the
+//  callee TfAOI::DoMoveIn/DoMoveOut, not in the two-line body.
+// ===========================================================================
+int          iWhichTrayNeedDeviceCount();                                       // golden cpp :2789-2800 (12)  ACTIVE
+bool         CheckNeedDeviceCount(int iAuto);                                   // golden cpp :2802-2812 (11)  ACTIVE
+void         InitialMultileTrayIDKeyence3Task();                                // golden cpp :4586-4589 (4)   ACTIVE
+unsigned int Crc_16_create(unsigned char *string, unsigned char length);        // golden cpp :6443-6464 (22)  ACTIVE
+AnsiString   BlockToString(const BYTE* data, int length);                       // golden cpp :6466-6475 (10)  ACTIVE
+
 #endif // FORMS_FTRAYMAPPING_H
