@@ -293,6 +293,277 @@
 //  flipping cprod.cpp's own gate) is a later integration wave's call, not
 //  this one's. Reported to the user as-is; cprod.cpp not edited.
 // =============================================================================
+//
+// =============================================================================
+//  WAVE FW-SPEED-W21 -- AI(W906-FW-SPEED-W21) 20260826  (APPEND-ONLY ADDENDUM)
+//  42 input-gesture handlers translated.  Nothing above this line was edited.
+// =============================================================================
+//
+//  WHY THIS BATCH EXISTS -- the Wave A "(b) WRITE PATH" bucketing above is
+//  SUPERSEDED for these 42 methods (Wave A's own text at :54-102 is left
+//  untouched; read it together with this block).
+//  --------------------------------------------------------------------------
+//  Wave A (20260819) swept every KeyPress/MouseDown/batch-edit handler into
+//  bucket (b) on a POLICY argument ("an edit gesture is write-path-adjacent
+//  because spbSaveClick later persists what it stages") plus, for the 27
+//  MouseDown handlers, a STRUCTURAL one (`fQwertyKey` had no port anywhere in
+//  the tree).  Both premises have since expired:
+//    * STRUCTURAL: forms/fQwertyKey.h + forms/fQwertyKey.cpp landed 20260824
+//      (wave FW-QWKEY1), 20/20 golden methods ACTIVE, and BOTH globals are
+//      really defined (forms/fQwertyKey.cpp:41-42), with
+//      `TfQwertyKey::ShowQwertyKey` live at forms/fQwertyKey.cpp:166.  The
+//      old "fQwertyKey 全樹無 port" absence claim is DEAD -- re-measured this
+//      wave, see ABSENCE CLAIMS below.
+//    * POLICY: these 42 bodies were re-read line-by-line against golden this
+//      wave and NONE of them writes anything.  Measured, not asserted: across
+//      all 42 golden bodies the count of WriteIni* / fopen / CreateFile /
+//      SaveSetup* / Motor*Move / ShowMyMessage occurrences is 0.  A KeyPress
+//      body is `if(OnlyNumberInPut(Key)==false) Key=NULL;` -- a keystroke
+//      filter.  A MouseDown body is one `fQwertyKey->ShowQwertyKey(...)` call
+//      -- it opens a keypad.  Neither touches disk, motion, or interlocks.
+//      Persistence remains exactly where Wave A left it: spbSaveClick
+//      (:1433-1787) and SaveSetupFile (:2250-2447) are STILL NOT TRANSLATED
+//      and STILL NOT DECLARED.  Translating the gesture without the Save
+//      button is precisely the read-only posture the FW campaign mandates.
+//  Per the campaign's standing rule the handlers are TRANSLATED BUT NOT WIRED
+//  -- no OnMouseDown/OnKeyPress/OnClick delegate is assigned anywhere.  The
+//  future web write-path layer will call them by name.
+//
+//  DENOMINATOR (golden cSpeed.cpp, 2,517 lines, cp950, 0 U+FFFD this wave)
+//  --------------------------------------------------------------------------
+//    Golden methods total .................... 57   (`^[A-Za-z_].*::` census,
+//                                                    re-run this wave)
+//    Translated before this wave (Wave A) ....  6   (bucket (a))
+//    Translated by THIS wave ................. 42
+//    Cumulative translated ................... 48 / 57  methods (84.2%,
+//                                                unit = golden method count,
+//                                                NOT lines)
+//    Still untranslated ......................  9   =  2 save-path
+//                                                   (spbSaveClick,
+//                                                    SaveSetupFile)
+//                                                +  3 batch-edit trackbar
+//                                                   (tbAllSpeedChange,
+//                                                    tbAccSpeedChange,
+//                                                    tbEPControlChange -- need
+//                                                    TfSpeedTrackBar::SelEnd,
+//                                                    deliberately not carried,
+//                                                    see Wave A DESIGN NOTE)
+//                                                +  1 spbSetToDefClick
+//                                                +  3 GATE (S4) TWinControl
+//                                                   walkers (DoSetRPDefault,
+//                                                    DoReplyDefaultToForm,
+//                                                    SearchRecipeParameter)
+//
+//  THIS WAVE'S 42, BY SHAPE (every one read in full from golden before
+//  translating -- no shape was inferred from a sibling)
+//  --------------------------------------------------------------------------
+//   (i) KeyPress numeric filters -- 10, all `if(OnlyNumberXxx(Key)==false)
+//       Key=NULL;`.  3 use OnlyNumberInPut (integer), 7 OnlyNumberAndDotInPut:
+//         edInArmRetryCountKeyPress            golden :1217-1221  (Int)
+//         edInVacumCheckTimeKeyPress           golden :1223-1227
+//         edIndexArmRetryMMKeyPress            golden :1229-1233
+//         Edt_CheckTime_InKeyPress             golden :1935-1939
+//         edRelaseDelayKeyPress                golden :1983-1987
+//         edtMonitoringIndexCycletimeKeyPress  golden :2191-2196
+//         edtMonitoringOutlierKeyPress         golden :2198-2203
+//         edtMonitoringWindowKeyPress          golden :2205-2210
+//         edtIndexCycleTimetoleranceKeyPress   golden :2238-2243
+//         edShakeDelayKeyPress                 golden :2505-2509
+//       NOTE only edInArmRetryCountKeyPress uses OnlyNumberInPut; the other
+//       two "Int" fields (edtMonitoringWindow, edtIndexCycleTimetolerance)
+//       are opened as N_INTEGER by their MouseDown yet filtered with the
+//       DOT-permitting OnlyNumberAndDotInPut -- golden's own inconsistency,
+//       translated verbatim, recorded here as GOLDEN ODDITY (W21-c).
+//
+//  (ii) MouseDown keypad launchers -- 27, all one
+//       `fQwertyKey->ShowQwertyKey((TEdit*)Sender, iFunction, iDP,
+//       bCheckRange, min, max);` call (2 of them branch first):
+//         edInArmRetryCountMouseDown           golden :1235-1246  (BRANCHES on
+//                                                CosFunction.bUseOneByOneIndexCheck)
+//         edInVacumCheckTimeMouseDown          golden :1248-1252
+//         edIndexArmRetryMMMouseDown           golden :1254-1258
+//         edIndexSpeedMouseDown                golden :1260-1264
+//         edIndexAccDecMouseDown               golden :1266-1270
+//         Edt_CheckTime_InMouseDown            golden :1941-1945
+//         edtAutoSkipCTMouseDown               golden :1947-1951
+//         edSecondSpeedInMouseDown             golden :1953-1957
+//         edSecondADCInMouseDown               golden :1959-1963
+//         edSecondSpeedOutMouseDown            golden :1965-1969
+//         edSecondADCOutMouseDown              golden :1971-1975
+//         edRelaseDelayMouseDown               golden :1977-1981
+//         Edt_HeightCheck_InMouseDown          golden :1989-1993
+//         edtMonitoringIndexCycletimeMouseDown golden :2212-2217
+//         edtMonitoringOutlierMouseDown        golden :2219-2223
+//         edtMonitoringWindowMouseDown         golden :2225-2229
+//         edtIndexCycleTimetoleranceMouseDown  golden :2231-2236
+//         edtLoaderSpeed1MouseDown             golden :2448-2452  (TLabeledEdit)
+//         edInArmDieCleanDelayMouseDown        golden :2454-2458
+//         edInArmDieCleanHeightMouseDown       golden :2460-2467  (BRANCHES on
+//                                                CUSTOMER_CODE==CC_TSMC_TAINAN)
+//         edOutArmShtWaitTimeMouseDown         golden :2469-2473
+//         edAutoSpeedLowMouseDown              golden :2475-2479
+//         edTwoSpeedDistanceCatchYMouseDown    golden :2481-2485
+//         edShakeCyclesMouseDown               golden :2487-2491
+//         edShakeDistanceMouseDown             golden :2493-2497
+//         edShakeDelayMouseDown                golden :2499-2503
+//         edShakeAccDecMouseDown               golden :2511-2515
+//
+// (iii) Pure widget-state setters -- 4, no I/O, no dependency:
+//         spbSpeedAddClick                     golden :1414-1419
+//         spbSpeedDecClick                     golden :1421-1424
+//         cbIndexArmClick                      golden :1426-1431
+//         spbSelectAllClick                    golden :1795-1810
+//
+//  (iv) Chrome -- 1:
+//         sbtExitClick                         golden :1788-1793  (GATE (W21-G1))
+//
+//  GATE REGISTER (this wave)
+//  --------------------------------------------------------------------------
+//  (W21-G1) sbtExitClick, golden :1791 `fShowMessage->sgdSpeedView->
+//      Repaint();` -- BOTH halves are absent from the port:
+//        * `TfShowMessage` (forms/fShowMessage.h:22-27) declares exactly ONE
+//          member, `ShowSpeed(bool)`.  There is no `sgdSpeedView`.
+//        * `Repaint()` exists on NO vclcompat control (measured below).
+//      forms/fShowMessage.h and vclcompat/Controls.h are both outside this
+//      wave's write boundary, and the campaign rule is 跨檔缺口 GATE 不自建
+//      shim.  `#if 0`-gated, exactly matching the IDENTICAL, already-merged
+//      gate this tree carries for the SAME golden expression:
+//      cinitial.cpp:13595-13596 `#if 0 // GATE n5-G1: blocked by
+//      TfShowMessage::sgdSpeedView (absent from the ported facade; 0
+//      class-member hits tree-wide)`.  Reusing that gate's shape rather than
+//      inventing a second rationale for one line.
+//      The other two statements of sbtExitClick ARE live: `Close()` (new
+//      offline no-op member, see DEVIATION (W21-D4)) and `sbtExit->Down
+//      =false;`.  Consequence: cosmetic only -- a grid on ANOTHER form is not
+//      repainted.  No logic, no data, no machine effect.
+//      NOT made into an empty shell (the task's rule 2 escape hatch does not
+//      apply): the method still has 2 of its 3 statements live, and the
+//      blocked one is pure rendering.
+//
+//  GOLDEN ODDITIES (faithful, recorded -- none "fixed")
+//  --------------------------------------------------------------------------
+//  (W21-a) spbSpeedAddClick golden :1416-1418 is
+//          `Position+=10; Position/=10; Position*=10;` on an INT TrackBar
+//          Position -- i.e. "+10 then snap DOWN to the nearest multiple of
+//          10" via INTEGER truncation.  This is deliberate quantisation, NOT
+//          a redundant round-trip: for Position=95 it yields 105/10*10=100,
+//          not 105.  Translated with integer arithmetic EXACTLY as written.
+//          Turning `/=10; *=10;` into floating point (or "simplifying" it
+//          away) would silently destroy the snap -- this repo has already
+//          paid for that class of edit once (the ChangeToFloatNonPcnt
+//          int-division regression, cConfiguration.cpp:152).  DO NOT TOUCH.
+//          Note the asymmetry with spbSpeedDecClick (:1423), which is a bare
+//          `-=10` with NO snap -- golden's own asymmetry, kept.
+//          Neither handler clamps to tbAllSpeed->Max / 0; golden relies on
+//          the real VCL TTrackBar's own property setter to clamp.  The port's
+//          TfSpeedTrackBar::Position is a plain int with NO clamping (Wave A,
+//          forms/fSpeed.h:312), so offline the value CAN run past Max or
+//          negative.  Disclosed, not silently "fixed" -- clamping is a
+//          behaviour change and belongs to the widget layer, not here.
+//  (W21-b) ShowQwertyKey's trailing pair is declared `(..., double min,
+//          double max)` but golden's HOUSE STYLE passes the numerically
+//          LARGER bound into `min` -- e.g. :1251 `(..., true, 10.0, 0.01)`.
+//          That is the already-documented consequence of
+//          `CheckRange(d, min, max)` at forms/fQwertyKey.cpp's golden :290
+//          binding min->Maximum and max->Minimum (see forms/fQwertyKey.h
+//          GOLDEN NOTE (G-a), :126-131 -- not re-derived here).  8 of this
+//          wave's 27 calls invert even that convention and pass the larger
+//          value into `max`: edSecondSpeedIn/edSecondADCIn/edSecondSpeedOut/
+//          edSecondADCOut (:1956/:1962/:1968/:1974, `1, atoi(...)`),
+//          edtMonitoringIndexCycletime (:2216, `0.01, 10.0`),
+//          edtMonitoringOutlier (:2222, `0.01, 30.0`),
+//          edtIndexCycleTimetolerance (:2235, `5, 200`), and the else-arm of
+//          edInArmDieCleanHeight (:2466, `-20.0, 0.1`).  BENIGN, and that is
+//          verified rather than assumed: CheckRange (MachineType.h:1524-1544)
+//          opens with `if(Maximum<Minimum)` and clamps symmetrically in that
+//          branch, so either argument order yields the same clamp.  All 27
+//          translated verbatim, argument for argument.
+//  (W21-c) Three edits are opened as N_INTEGER by their MouseDown but
+//          filtered by the DOT-PERMITTING OnlyNumberAndDotInPut in their
+//          KeyPress: edtMonitoringWindow (:2228 vs :2208),
+//          edtIndexCycleTimetolerance (:2235 vs :2241), and edShakeDelay
+//          (:2502 is N_DOUBLE so that one is consistent).  Golden's own
+//          inconsistency; the operator can type a dot the keypad would not
+//          have offered.  Verbatim.
+//  (W21-d) `iDP` (decimal-place count) carries values that cannot be decimal
+//          places: edtIndexCycleTimetoleranceMouseDown :2235 passes 15,
+//          edShakeDistanceMouseDown :2496 passes 5, edShakeAccDecMouseDown
+//          :2514 passes 100, edShakeCyclesMouseDown :2490 and
+//          edtLoaderSpeed1MouseDown :2451 pass 1.  Verbatim.
+//  (W21-e) edShakeDelayMouseDown golden :2502 passes the DOUBLE literal
+//          `0.0` as the `int iDP` argument -- an implicit double->int
+//          narrowing to 0.  BCB6 accepts it silently; so does g++ here
+//          (ht9045_sm builds with -Wall -Wextra and neither -Wconversion nor
+//          -Wfloat-conversion nor -Werror, CMakeLists.txt:2263-2264 -- so
+//          this produces no diagnostic).  Written verbatim as `0.0` rather
+//          than "corrected" to `0`; the resulting argument is identical.
+//
+//  DEVIATIONS (port-only, zero intended behaviour change)
+//  --------------------------------------------------------------------------
+//  (W21-D1) Unread VCL glue parameters dropped, per-method verified (the
+//      established forms/fConfiguration.h WA-8 / forms/fDynamicTemp.h
+//      convention).  KeyPress: `TObject *Sender` dropped, `char &Key` kept
+//      (it IS read and written) -- byte-identical to the already-merged
+//      forms/fSetup.cpp:67-71 `TfSetup::XPitchKeyPress(char &Key)`.
+//      MouseDown: `TMouseButton Button, TShiftState Shift, int X, int Y` all
+//      dropped (none is read in any of the 27 bodies -- checked one by one),
+//      `Sender` KEPT because every body reads it.
+//      Widget-state + sbtExitClick: `TObject *Sender` dropped (unread).
+//  (W21-D2) MouseDown `Sender` is typed directly as the pointer golden casts
+//      it to, collapsing golden's C-style cast at the signature (forms/
+//      fSetup.cpp RadioButton1KeyDown precedent, reused here): 26 handlers
+//      take `TEdit *Sender`, and edtLoaderSpeed1MouseDown takes
+//      `TLabeledEdit *Sender` because golden :2451 casts to
+//      `(TLabeledEdit *)` -- matching its own widget's declared type at
+//      forms/fSpeed.h:606.  Both convert to ShowQwertyKey's `TControl*`
+//      parameter through vclcompat's real chain TEdit/TLabeledEdit ->
+//      TCustomEdit (Controls.h:319) -> TControl, so dispatch is unchanged.
+//  (W21-D3) NOT WIRED -- no OnMouseDown/OnKeyPress/OnClick delegate is set
+//      for any of the 42 (campaign rule "event handler 本體翻譯但不接線").
+//      This is also why the fQwertyKey NULL-pointer exposure documented at
+//      forms/fQwertyKey.h:139-146 (GOLDEN NOTE (G-d): both globals stay NULL
+//      until a wiring wave CreateForm's them) is NOT reachable from here --
+//      nothing calls these 27 bodies today.  A future wiring wave MUST
+//      construct fQwertyKey AND fQwertyKey2 before enabling them.
+//  (W21-D4) `void Close() {}` added as an inline offline no-op member --
+//      golden's TForm::Close, needed by sbtExitClick :1790.  Verbatim reuse
+//      of the tree's established shape (forms/fQwertyKey.h:366, itself citing
+//      the forms/fTemp_Set.h precedent).  It is a NEW member on THIS wave's
+//      own class, not a shared-file edit.  Distinct from the pre-existing
+//      `FormClose()` (:747) -- see Wave A's GOLDEN ODDITY note: FormClose is
+//      a discard-and-refresh, whereas this Close() is the window-dismiss verb.
+//      Offline, dismissing does nothing, so the pair does not interact.
+//
+//  ABSENCE CLAIMS -- commands + timestamps, re-run at wave close
+//  --------------------------------------------------------------------------
+//  All three re-run 20260826 immediately before delivery (values below are
+//  the CLOSING measurement; each matched the opening one):
+//   (A1) `rg -n "sgdSpeedView" -g "*.{h,cpp}"` over the port tree
+//        -> 0 class-member declarations.  Every hit is non-code: the
+//        cinitial.cpp:13595 GATE n5-G1 block + its 3 comment lines, the
+//        Wave A banner line forms/fSpeed.h:93, this wave's own new comments,
+//        and 2 tools/dfm2rc generated data rows.  Basis for GATE (W21-G1).
+//   (A2) `rg -n "Repaint" vclcompat/` -> 2 hits, both COMMENTS in
+//        vclcompat/LedCore.cpp:132/:160 ("Repaint() dropped -- renderer
+//        concern").  0 declarations.  Basis for GATE (W21-G1).
+//   (A3) The Wave A premise "fQwertyKey has no port" is FALSE as of 20260824
+//        -- `rg -n "^TfQwertyKey \*fQwertyKey" forms/fQwertyKey.cpp` -> :41
+//        and :42 (both globals DEFINED, not merely declared), and
+//        `rg -n "void TfQwertyKey::ShowQwertyKey" forms/fQwertyKey.cpp`
+//        -> :166 (ACTIVE body, not gated).  This is a POSITIVE claim
+//        replacing a stale negative one, which is why it is recorded here.
+//
+//  LINK REACHABILITY -- checked, not assumed ("build 綠 != 接上了")
+//  --------------------------------------------------------------------------
+//  cSpeed.cpp is in ht9045_sm (CMakeLists.txt:1957, inside the add_library at
+//  :1353); forms/fQwertyKey.cpp is in ht9045_forms (CMakeLists.txt:699,
+//  inside the add_library at :654).  The sm->forms edge is DECLARED, not left
+//  to GNU ld's lazy extraction: `target_link_libraries(ht9045_sm PUBLIC ...
+//  ht9045_forms)` at CMakeLists.txt:2237-2248.  ht9045_forms is a bottom
+//  layer (vclcompat + ht9045_globals + ht9045_core), so the edge is acyclic
+//  -- this is the same edge CMakeLists.txt:1170-1172 documents as safe.
+//  No CMakeLists.txt change is needed or made by this wave.
+// =============================================================================
 #ifndef FORMS_FSPEED_H
 #define FORMS_FSPEED_H
 
@@ -745,6 +1016,66 @@ public:
     void DoIniDataToForm();                              // golden :1008-1215
     void FormShow();                                     // golden :41-338 (Sender dropped, see below)
     void FormClose();                                    // golden :1272-1280 (Sender/TCloseAction& dropped, see below)
+
+    // -- Wave FW-SPEED-W21 translated methods (bodies: cSpeed.cpp) ----------
+    //    AI(W906-FW-SPEED-W21) 20260826.  42 input-gesture handlers; see the
+    //    W21 banner block at the top of this header for selection rationale,
+    //    denominator, GATE (W21-G1), golden oddities (W21-a..e) and
+    //    deviations (W21-D1..D4).  NONE of these is wired to a delegate.
+
+    // golden TForm::Close -- offline no-op, DEVIATION (W21-D4).
+    void Close() {}
+
+    // (i) KeyPress numeric filters -- 10.  `TObject *Sender` dropped (W21-D1).
+    void edInArmRetryCountKeyPress(char &Key);              // golden :1217-1221 (OnlyNumberInPut)
+    void edInVacumCheckTimeKeyPress(char &Key);             // golden :1223-1227
+    void edIndexArmRetryMMKeyPress(char &Key);              // golden :1229-1233
+    void Edt_CheckTime_InKeyPress(char &Key);               // golden :1935-1939
+    void edRelaseDelayKeyPress(char &Key);                  // golden :1983-1987
+    void edtMonitoringIndexCycletimeKeyPress(char &Key);    // golden :2191-2196
+    void edtMonitoringOutlierKeyPress(char &Key);           // golden :2198-2203
+    void edtMonitoringWindowKeyPress(char &Key);            // golden :2205-2210
+    void edtIndexCycleTimetoleranceKeyPress(char &Key);     // golden :2238-2243
+    void edShakeDelayKeyPress(char &Key);                   // golden :2505-2509
+
+    // (ii) MouseDown keypad launchers -- 27.  Button/Shift/X/Y dropped, Sender
+    //      typed as golden's cast target (W21-D1/W21-D2).
+    void edInArmRetryCountMouseDown(TEdit *Sender);         // golden :1235-1246 (branches on bUseOneByOneIndexCheck)
+    void edInVacumCheckTimeMouseDown(TEdit *Sender);        // golden :1248-1252
+    void edIndexArmRetryMMMouseDown(TEdit *Sender);         // golden :1254-1258
+    void edIndexSpeedMouseDown(TEdit *Sender);              // golden :1260-1264
+    void edIndexAccDecMouseDown(TEdit *Sender);             // golden :1266-1270
+    void Edt_CheckTime_InMouseDown(TEdit *Sender);          // golden :1941-1945
+    void edtAutoSkipCTMouseDown(TEdit *Sender);             // golden :1947-1951
+    void edSecondSpeedInMouseDown(TEdit *Sender);           // golden :1953-1957
+    void edSecondADCInMouseDown(TEdit *Sender);             // golden :1959-1963
+    void edSecondSpeedOutMouseDown(TEdit *Sender);          // golden :1965-1969
+    void edSecondADCOutMouseDown(TEdit *Sender);            // golden :1971-1975
+    void edRelaseDelayMouseDown(TEdit *Sender);             // golden :1977-1981
+    void Edt_HeightCheck_InMouseDown(TEdit *Sender);        // golden :1989-1993
+    void edtMonitoringIndexCycletimeMouseDown(TEdit *Sender); // golden :2212-2217
+    void edtMonitoringOutlierMouseDown(TEdit *Sender);      // golden :2219-2223
+    void edtMonitoringWindowMouseDown(TEdit *Sender);       // golden :2225-2229
+    void edtIndexCycleTimetoleranceMouseDown(TEdit *Sender); // golden :2231-2236
+    void edtLoaderSpeed1MouseDown(TLabeledEdit *Sender);    // golden :2448-2452 (TLabeledEdit cast, W21-D2)
+    void edInArmDieCleanDelayMouseDown(TEdit *Sender);      // golden :2454-2458
+    void edInArmDieCleanHeightMouseDown(TEdit *Sender);     // golden :2460-2467 (branches on CC_TSMC_TAINAN)
+    void edOutArmShtWaitTimeMouseDown(TEdit *Sender);       // golden :2469-2473
+    void edAutoSpeedLowMouseDown(TEdit *Sender);            // golden :2475-2479
+    void edTwoSpeedDistanceCatchYMouseDown(TEdit *Sender);  // golden :2481-2485
+    void edShakeCyclesMouseDown(TEdit *Sender);             // golden :2487-2491
+    void edShakeDistanceMouseDown(TEdit *Sender);           // golden :2493-2497
+    void edShakeDelayMouseDown(TEdit *Sender);              // golden :2499-2503
+    void edShakeAccDecMouseDown(TEdit *Sender);             // golden :2511-2515
+
+    // (iii) Pure widget-state setters -- 4.  `TObject *Sender` dropped (W21-D1).
+    void spbSpeedAddClick();                                // golden :1414-1419 (integer snap, GOLDEN ODDITY (W21-a))
+    void spbSpeedDecClick();                                // golden :1421-1424
+    void cbIndexArmClick();                                 // golden :1426-1431
+    void spbSelectAllClick();                               // golden :1795-1810
+
+    // (iv) Chrome -- 1.
+    void sbtExitClick();                                    // golden :1788-1793, GATE (W21-G1)
 };
 
 // DEVIATION: FormShow/FormClose drop their golden TObject*/TCloseAction&

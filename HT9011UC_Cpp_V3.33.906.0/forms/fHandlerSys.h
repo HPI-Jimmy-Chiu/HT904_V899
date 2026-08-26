@@ -234,13 +234,242 @@
 //  whether that wiring goes through a `--dry`-safe copy of INIFileGeneral --
 //  is a later integration wave's call, not this one's.
 // =============================================================================
+// =============================================================================
+//  ADDENDUM -- WAVE FW-HSYS-W22   AI(W906-FW-HSYS-W22) 20260826
+//  （本段是「補充」，不是改寫。上面那份 WA/WB 的分類表有數處已經不成立，
+//    下面逐條指名。上面的原文一律保留不動，這樣新舊裁決都查得到。）
+// =============================================================================
+//
+//  DENOMINATOR（本波實測，指令可重跑）
+//  --------------------------------------------------------------------------
+//  golden `HT9011UC_Code_V3.33.906.0_20260618/HandlerSys.cpp`（1,376 行，
+//  cp950，`open(p,'rb').read().decode('cp950')` → 0 個 U+FFFD）內
+//  `THandlerSystem::` 的**定義**數，先剝掉 `/* */` 與 `//` 再用
+//  `^\s*(?:(?:void|AnsiString|int|bool|double|float)\s+)?(?:__fastcall\s+)?
+//   THandlerSystem::(\w+)\s*\(` 比對（20260826）：
+//
+//      **47 個定義 = 1 個 ctor + 46 個方法**
+//
+//  ⚠ 上面 WA 的檔頭反覆寫「all 44 golden methods」/「3 of 44」。**44 是低估**，
+//  正確分母是 47（ctor 也在內）。WA 的 (a)3 + (b) 條列 + (c) + (d)4 三個桶
+//  加起來也對不上它自己宣稱的 44——(b) 那段文字實際點名了 38 個名字卻寫
+//  「34 methods」。本波不去改那些既有行（append-only），改在這裡給實測值。
+//
+//  分母現況（單位＝golden 方法定義，分母 47）：
+//    本波之前已翻：5   ctor / FormShow / LoaderSystemSet / LoaderSafeDoorSet /
+//                      GetCustomerName
+//    本波新翻：   27   （明細見下）
+//    本波之後累計：32 / 47
+//    仍未翻：     15   （SaveSystemSet, SaveBtnClick, LoadBtnClick,
+//                       SaveSafeDoorSet, ExitBtnClick, BtnEnableAllClick,
+//                       rgCustomerListClick, btnSetATCComClick,
+//                       rgRotateKit_TypeClick, pcSettingChange,
+//                       SortItemToMap, InitItemToMap, edtSearchFunctionChange,
+//                       rgTTLCardClick, FormDestroy）
+//
+//  本波選批依據
+//  --------------------------------------------------------------------------
+//  上一輪把整批 QwertyKey opener 判成「阻塞」，理由是「fQwertyKey 全樹無
+//  port」。**那個理由已經過期**：`forms/fQwertyKey.h` 於 20260824 落地
+//  （commit fc08e09 一族），20/20 方法 ACTIVE，`ShowQwertyKey` 是活的
+//  （golden myQwertyKeyBoard.cpp:169-302，port body forms/fQwertyKey.cpp:166）。
+//  同一份檔頭的 :105-122 BEHAVIOUR NOTE 已經把 offline 語意寫死了，本波直接
+//  引用、不重新發明結論：
+//    * `ShowModal()` / `Close()` 是**永久 no-op**（無視窗、無訊息迴圈）。
+//    * 因此一次 ShowQwertyKey 呼叫的 offline 淨語意 ＝
+//      「操作員打開鍵盤、原字不動立刻按 Summit」：modal 之後那段尾巴會**當場**
+//      執行，帶 bCheckRange 時 `atof → CheckRange → AnsiString(double)`
+//      這個來回**可能改寫目標控制項的文字**（例：`"abc"` + N_INTEGER → `"0"`）。
+//      那是 golden 自己的 submit 路徑套在未編輯的值上，不是本 port 發明的。
+//    * `spbChangeCase->Click()` 也是 no-op，所以 QWERTY 鍵面 caption 不會刷新。
+//  另外 `ShowModal` 曾被宣稱「全樹無 port」——本波重跑 grep：
+//  `forms/fPassword.h:337`、`forms/fQwertyKey.h:365`、`BarcodeReader.h:107`
+//  三處都有（20260826）。該宣稱為偽。
+//
+//  本波交付（27 支，golden 行號逐支對過原文）
+//  --------------------------------------------------------------------------
+//  (1) edtSearchCodeChange           golden :1149-1168  ★ 推翻 GATE (H1) 的
+//        連坐。上面 :86-91 寫它「transitively depends on TempComp」——
+//        **實測為偽**：整段本體（:1151-1167）只碰 `edtSearchCode->Text`、
+//        `rgCustomerList->Items`、`slCustomerCode`，**一個 TempComp 都沒有**。
+//        真正碰 TempComp 的是 edtSearchFunctionChange（:1224/:1226/:1231/
+//        :1233/:1239/:1240），那一支仍然 gated、本波不翻。
+//  (2) ExitBtnMouseDown              golden :1062-1071  ★ 原阻塞理由三條裡兩條
+//        是假的；剩下那條（TMouseButton/TShiftState 無 port）也已由
+//        `vclcompat/ShiftState.h`（20260826）解除。簽章依該檔檔頭裁決
+//        **保留 golden 完整原文**（新翻 handler 不再丟參數）。
+//  (3) FormClose                     golden :1073-1079  ★ 原阻塞理由已被判偽。
+//        本體確認為 `tsCustomerCode->TabVisible=false;` + `myLog.Do_Log(...)`。
+//        **部分翻譯**：Do_Log 那一行 NOT translated，理由見下面 GATE (H22-1)。
+//  (4)-(27) 24 支 QwertyKey opener（全部只有一行 `fQwertyKey->ShowQwertyKey(
+//        (TEdit*)Sender, ...)`）：
+//        edtUserDefMaxContactHeightClick    :1138-1142
+//        edtUserDefineIndexZSafePosClick    :1257-1261
+//        edtCustomerCodeClick               :1263-1266
+//        edMaxMpaFBClick                    :1268-1271
+//        edMaxKpaClick                      :1273-1276
+//        edMinMpaClick                      :1278-1281
+//        edATCSystemPortClick               :1283-1286
+//        edATCSystemUseHeatClick            :1288-1291
+//        edHotGunFlow_Gun1_ChannelNoClick   :1293-1297
+//        edHotGunFlow_DevNoClick            :1299-1302
+//        edtMinYPitchClick                  :1304-1307
+//        edtMaxYPitchClick                  :1309-1312
+//        edCognexSystemCCDClick             :1314-1317
+//        ed24VMonitorPulseCountClick        :1319-1323
+//        edGroundMan_AlarmOhmClick          :1325-1328
+//        edIONPulseCountClick               :1330-1333
+//        edtTriTempTotalChClick             :1335-1338
+//        edtOutShtMaxTempClick              :1340-1343
+//        edtTriTemperature_MaxDegreeClick   :1345-1349
+//        edtTriTemperature_MinDegreeClick   :1351-1355
+//        edtIndexMaxTempClick               :1357-1360
+//        edt_Total_CompressorChange         :1362-1365
+//        edtMinXPitchClick                  :1367-1370
+//        edtMaxXPitchClick                  :1372-1375
+//
+//  DEVIATIONS（本波，均為 port 適配，無意圖行為變更）
+//  --------------------------------------------------------------------------
+//  (W22-D1) 24 支 opener 的 `(TEdit *)Sender` C-style cast **收進簽章**：
+//      `void xxxClick(TEdit *Sender)`。依 forms/fQwertyKey.h (D-3) 的既有慣例
+//      （「Sender IS read → cast target typed directly in the signature」，
+//      forms/fSetup.cpp RadioButton1KeyDown precedent）。**24 支的目標 widget
+//      在 golden HandlerSys.h 全部宣告為 `TEdit`**（逐支查過，見 golden .h
+//      :155/:188/:189/:208/:217/:239/:250/:251/:257/:264/:265/:278/:279/:294/
+//      :300/:317/:326/:327/:377/:378/:379/:384/:385/:387），所以這個型別是對的，
+//      不是 TLabeledEdit 被 C-cast 硬扳的那一類。
+//  (W22-D2) `edtSearchCodeChange` / `FormClose` 的 `TObject *Sender` 丟掉
+//      （本體不讀；FormClose 只有被 gate 掉的 Do_Log 會用到它）；FormClose 的
+//      `TCloseAction &Action` 也丟掉——`TCloseAction` 全樹無 port，且本體不讀，
+//      與 cSecurity.cpp:510 / cCounterClear.cpp:517 / cObserver.cpp:4102 /
+//      ATC/ATCInterface.cpp:434 / forms/fPassword.cpp:220 / cTemperFrom.cpp:1319
+//      六支已翻 FormClose 的處置一致。
+//  (W22-D3) `ExitBtnMouseDown` **不**丟參數（見上）。未讀的四個
+//      （Sender/Shift/X/Y）用 `(void)x;` 標明，與 cObserver.cpp:6590 同形。
+//  (W22-D4) `edtSearchCodeChange` 內 golden 寫
+//      `slCustomerCode->Strings[i].UpperCase()`；vclcompat 的 `Strings[i]`
+//      回 StringsProxy，只有 `operator AnsiString()`，沒有轉發 `.UpperCase()`，
+//      所以先綁一個 local `AnsiString`。同一個 DEVIATION 這個檔的
+//      GetCustomerName（HandlerSys.cpp:813-819）已經記過。值與順序不變。
+//
+//  GOLDEN NOTES（忠實照翻，記在帳上）
+//  --------------------------------------------------------------------------
+//  (W22-G1) 24 支 opener 的最後兩個引數，在 ported 簽章裡叫 `min, max`
+//      （forms/fQwertyKey.h:370），但 golden 這個檔的呼叫點**多數寫成
+//      (大, 小)**。實測（20260826）：23 支帶範圍的呼叫裡
+//      **17 支是 (大, 小)**、**6 支是 (小, 大)**、1 支（edATCSystemPortClick）
+//      只給 N_PORT 不帶範圍。
+//      **這不是 bug，兩種寫法結果相同**，鏈路如下：
+//        ShowQwertyKey 顯示端（forms/fQwertyKey.cpp:258-267）自己有
+//        `if(max>min){edMax=max;edMin=min;} else {edMax=min;edMin=max;}`；
+//        判定端（同檔 :287）`CheckRange(d, min, max)`，而 CheckRange 的宣告是
+//        `CheckRange(Value, Maximum, Minimum)`（MachineType.h:1525），
+//        且它自己有 `if(Maximum<Minimum)` 的對稱分支（:1527-1535）。
+//      兩端都對調過，所以 (大,小) 與 (小,大) 夾出來的區間一樣。逐字照翻，
+//      不「修正」任何一支。（forms/fQwertyKey.h (G-a) 記的是同一件事的另一半。）
+//  (W22-G2) `edtUserDefineIndexZSafePosClick`（:1260）傳 `N_INTEGER` 卻給
+//      `iDP=2`（小數位數）。整數模式下 iDP 只影響 ChangeDecimalPoint 的鍵面
+//      啟用，不會產生小數。照翻。
+//  (W22-G3) `edtOutShtMaxTempClick`/`edtTriTemperature_*`/`edtIndexMaxTempClick`
+//      傳 `N_INTEGER` 卻給浮點字面值（120.0/175.0/35.0/-55.0/20.0）。
+//      min/max 參數本來就是 `double`，沒有截斷。照翻。
+//  (W22-G4) `edtCustomerCodeClick`（:1265）範圍是 (999, 0)，等效 0..999；
+//      而 `edtCustomerCode` 的內容由 rgCustomerListClick（:1054-1060，本波未翻）
+//      填三碼客戶代碼，兩者一致。照翻。
+//
+//  GATE REGISTER（本波新增；退出本波的部分逐條列出理由與 golden 行號）
+//  --------------------------------------------------------------------------
+//  (H22-1) FormClose golden **:1078** `myLog.Do_Log(Sender, asUser, asLogPath);`
+//      —— NOT translated（FormClose 其餘部分已翻，所以這是**局部 gate**，
+//      不是整支退出；本方法可觀察到的 offline 行為只有 :1076 那一行）。
+//      三個獨立理由：
+//        (a) 寫檔路徑。`TMyLog::Do_Log`（handlerlog.cpp:660-686）在
+//            `loglist.size()>0` 時呼叫 `SaveEventLog()`，那是真的落檔
+//            （handlerlog.h:13-16 檔頭自述「writing one line per changed
+//            control to a dated ChangeLog ini file … also into the machine's
+//            own EventLog」）。本波的硬規則是「有檔案寫入就不做」。
+//        (b) 本樹**目前 0 個 live 呼叫點**。全樹 grep `Do_Log`（20260826）：
+//            cConfiguration.cpp:6076 / cSpeed.cpp:423 / cSpeed.cpp:1326 三處
+//            都是 `//` 註解掉的，cStartCondition.cpp:647 是 gate 說明，
+//            〔AI(W906-FW-HSYS-W22) 20260826 主迴圈整併修正：兩個 cSpeed 行號
+//              原寫 416/1319，是本波開工當下的值；兄弟波 FW-SPEED-W21 同時段
+//              在 cSpeed.cpp:94-100 插入 7 行，兩處各位移 +7，已逐行對字面複驗。〕
+//            本檔 HandlerSys.cpp:101-105 是 FormShow 自己那次同樣的 gate。
+//            從一個連 TWinControl 都不是的 facade 開出第一條寫檔邊，
+//            換不到任何行為（見 (c)），只換到風險。
+//        (c) 就算接上也不會有行為。Do_Log 的第一道門是
+//            `dynamic_cast<TWinControl*>(PCtrl)!=NULL`（handlerlog.cpp:675）；
+//            `THandlerSystem` 這個 facade 不是 TWinControl、也不是 TObject
+//            的後代，所以 golden 傳的 `Sender`（在 VCL 裡就是表單自己）
+//            在本樹根本轉不出 TWinControl。
+//      → 依 (W22-D2) 丟掉 `Sender` 之後，這一行**在型別上也拼不出來**，
+//        與本檔 FormShow（golden :76，HandlerSys.cpp:101-105）完全同形。
+//  (H22-2) GATE (H1) 的**範圍收窄**（上面 :102-117 的原文保留）。H1 本身
+//      （SortItemToMap/InitItemToMap 需要 TWinControl 形狀的
+//      ControlCount/Controls[] 走訪）**仍然成立、仍然 gated**，
+//      `edtSearchFunctionChange`（:1220-1244，真的讀 TempComp）也仍然 gated。
+//      但 H1 對 `edtSearchCodeChange` 的**連坐是錯的**，本波解除，理由見上 (1)。
+//      連帶：上面 :113-117 那句「this facade's `edtSearchCode`/
+//      `edtSearchFunction`/customer-code-search feature is entirely inert
+//      offline (TempComp always empty)」——**對 edtSearchCode 那一半已不成立**：
+//      客戶代碼搜尋走的是 slCustomerCode（ctor 已 hydrate 211 筆，
+//      HandlerSys.cpp:803-808），與 TempComp 無關，現在是活的。
+//      `edtSearchFunction` 那一半仍然成立。
+//  (H22-3) NULL-GLOBAL 曝險（**不是 gate，是揭露**）。24 支 opener 逐字保留
+//      `fQwertyKey->`，而 `fQwertyKey`/`fQwertyKey2` 兩個全域在本樹是
+//      **NULL 直到某個接線波去 construct**（forms/fQwertyKey.h (G-d)、
+//      forms/fQwertyKey.cpp:168-170 進門就 deref 這兩顆）。今天**沒有任何東西
+//      呼叫這 24 支**（本波不接線，見下），所以到不了；golden 自己在
+//      CreateForm 之前也是一樣的曝險。與 cObserver.cpp:6615/:6635、
+//      cSetUp.cpp、cConfiguration.cpp 已合併的同型呼叫點同一姿態。
+//  (H22-4) 本波**不接線**（"event handler 本體翻譯但不接線"）：沒有設定任何
+//      OnClick/OnMouseDown 委派，vclcompat 的 stock widget 本來也沒有委派槽
+//      （cSetUp.cpp GATE(G-Delegate) 的既有慣例）。未來 web write path 由
+//      前端直接呼叫這些方法。
+//
+//  NOT DONE / 仍未翻（15 支，理由）
+//  --------------------------------------------------------------------------
+//    寫檔／持久化（(b)/(c) 桶，沿用 WA 的裁決，本波不動）：SaveSystemSet
+//      (:459-978)、SaveBtnClick (:979-984)、LoadBtnClick (:985-989)、
+//      SaveSafeDoorSet (:1006-1035)、ExitBtnClick (:1037-1043，呼叫
+//      HSys.ReadGeneralIni()+SaveSafeDoorSet)、BtnEnableAllClick
+//      (:1045-1052，一鍵清掉所有安全門 checkbox —— SAFETY-ADJACENT)。
+//    純 UI-state、但本波刻意不擴大範圍（保持本波「複驗過的乾淨批」性質）：
+//      rgCustomerListClick (:1054-1060)、btnSetATCComClick (:1081-1098)、
+//      rgRotateKit_TypeClick (:1132-1136)。
+//    結構性 gated（理由未變）：pcSettingChange (:1144-1147，
+//      `TPageControl::ActivePage` 是指標型 property，vclcompat 只有
+//      ActivePageIndex)、SortItemToMap (:1170-1199)、InitItemToMap
+//      (:1201-1218)、edtSearchFunctionChange (:1220-1244) —— 全部 GATE (H1)。
+//    其他：rgTTLCardClick (:1246-1255，純 UI-state，同上不擴大範圍)、
+//      FormDestroy (:26-32，`delete slCustomerCode` + `TempComp.clear()` +
+//      `LogSoftwareOffTime(...)`；本 facade 的 slCustomerCode 是 NSDMI
+//      `new`、生命週期與 golden 的 TForm 解構不同，且 TempComp 未宣告
+//      —— 屬於 lifetime 決策，不是本波的翻譯工作)。
+// =============================================================================
 #ifndef FORMS_FHANDLERSYS_H
 #define FORMS_FHANDLERSYS_H
 
+// AI(W906-FW-HSYS-W22) 20260826: AnsiString / TObject / TStringList at global
+// scope.  This header was NOT self-contained before this wave -- compiling
+// `#include "forms/fHandlerSys.h"` alone at HEAD failed with
+// "'TStringList' does not name a type" (:558) and "'AnsiString' does not name
+// a type" (:560), both dating from the WB wave; it only ever built because its
+// single consumer, HandlerSys.cpp, includes MachineDefine.h first.  This wave
+// would have added a third such name (TObject, in ExitBtnMouseDown's golden
+// signature), so the include goes in instead -- same one-liner
+// forms/fQwertyKey.h:224 already carries for the same reason.  Verified after
+// the change: the header now compiles standalone.
+#include "vclcompat/vcl_compat.h" // AnsiString/TObject/TStringList (see above)
 #include "vclcompat/Controls.h"   // TEdit/TCheckBox/TRadioGroup/TComboBox/
                                   //   TGroupBox/TPageControl/TTabSheet
                                   //   (brought to global scope by that
                                   //   header's own footer)
+#include "vclcompat/ShiftState.h" // AI(W906-FW-HSYS-W22) 20260826:
+                                  //   TMouseButton/mbRight/TShiftState --
+                                  //   ExitBtnMouseDown keeps golden's full
+                                  //   signature, see that header's ruling
+                                  //   and this file's W22 ADDENDUM (W22-D3)
 
 // ===========================================================================
 //  THandlerSystem -- non-VCL facade (golden HandlerSys.h,
@@ -558,6 +787,62 @@ public:
     TStringList *slCustomerCode = new TStringList();  // golden :506; populated in
                                                        //   ctor (HandlerSys.cpp)
     AnsiString   GetCustomerName();                    // golden :1100-1130
+
+    // =======================================================================
+    //  WAVE FW-HSYS-W22 -- AI(W906-FW-HSYS-W22) 20260826
+    //  27 methods + 1 widget.  Full rationale, denominator, DEVIATIONS,
+    //  GOLDEN NOTES and GATE REGISTER: the "ADDENDUM -- WAVE FW-HSYS-W22"
+    //  banner at the head of this file.  Bodies: HandlerSys.cpp (tail).
+    // =======================================================================
+
+    // -- new widget ---------------------------------------------------------
+    //  golden HandlerSys.h:395 declares this as `TLabeledEdit`, NOT TEdit
+    //  (cross-checked against tools/dfm2rc/layout_out/HandlerSys_layout.gen.
+    //  cpp:434, which records the same type from the .dfm).  Read by
+    //  edtSearchCodeChange (->Text) and written by ExitBtnMouseDown
+    //  (->Visible) and by the un-translated pcSettingChange (golden :1146).
+    TLabeledEdit *edtSearchCode = new TLabeledEdit();
+
+    // -- (1) customer-code incremental search --------------------------------
+    //  GATE (H1) does NOT reach this method -- it never touches TempComp.
+    //  See W22 ADDENDUM item (1) and GATE (H22-2).
+    void edtSearchCodeChange();                     // golden :1149-1168 (Sender dropped, never read)
+
+    // -- (2)/(3) form chrome --------------------------------------------------
+    void ExitBtnMouseDown(TObject *Sender,
+          TMouseButton Button, TShiftState Shift, int X, int Y);   // golden :1062-1071 (full golden signature, W22-D3)
+    void FormClose();                               // golden :1073-1079 (Sender/TCloseAction dropped, W22-D2;
+                                                    //   :1078 Do_Log NOT translated -- GATE (H22-1))
+
+    // -- (4)-(27) QwertyKey openers ------------------------------------------
+    //  All 24 bodies are golden's single `fQwertyKey->ShowQwertyKey(
+    //  (TEdit *)Sender, ...)` line; the cast target is collapsed into the
+    //  signature (W22-D1).  NOT wired (GATE (H22-4)); `fQwertyKey` is NULL
+    //  until a wiring wave constructs it (GATE (H22-3)).
+    void edtUserDefMaxContactHeightClick(TEdit *Sender);   // golden :1138-1142
+    void edtUserDefineIndexZSafePosClick(TEdit *Sender);   // golden :1257-1261
+    void edtCustomerCodeClick(TEdit *Sender);              // golden :1263-1266
+    void edMaxMpaFBClick(TEdit *Sender);                   // golden :1268-1271
+    void edMaxKpaClick(TEdit *Sender);                     // golden :1273-1276
+    void edMinMpaClick(TEdit *Sender);                     // golden :1278-1281
+    void edATCSystemPortClick(TEdit *Sender);              // golden :1283-1286
+    void edATCSystemUseHeatClick(TEdit *Sender);           // golden :1288-1291
+    void edHotGunFlow_Gun1_ChannelNoClick(TEdit *Sender);  // golden :1293-1297
+    void edHotGunFlow_DevNoClick(TEdit *Sender);           // golden :1299-1302
+    void edtMinYPitchClick(TEdit *Sender);                 // golden :1304-1307
+    void edtMaxYPitchClick(TEdit *Sender);                 // golden :1309-1312
+    void edCognexSystemCCDClick(TEdit *Sender);            // golden :1314-1317
+    void ed24VMonitorPulseCountClick(TEdit *Sender);       // golden :1319-1323
+    void edGroundMan_AlarmOhmClick(TEdit *Sender);         // golden :1325-1328
+    void edIONPulseCountClick(TEdit *Sender);              // golden :1330-1333
+    void edtTriTempTotalChClick(TEdit *Sender);            // golden :1335-1338
+    void edtOutShtMaxTempClick(TEdit *Sender);             // golden :1340-1343
+    void edtTriTemperature_MaxDegreeClick(TEdit *Sender);  // golden :1345-1349
+    void edtTriTemperature_MinDegreeClick(TEdit *Sender);  // golden :1351-1355
+    void edtIndexMaxTempClick(TEdit *Sender);              // golden :1357-1360
+    void edt_Total_CompressorChange(TEdit *Sender);        // golden :1362-1365
+    void edtMinXPitchClick(TEdit *Sender);                 // golden :1367-1370
+    void edtMaxXPitchClick(TEdit *Sender);                 // golden :1372-1375
 };
 
 // DEVIATION: FormShow drops its golden TObject* Sender parameter -- matches

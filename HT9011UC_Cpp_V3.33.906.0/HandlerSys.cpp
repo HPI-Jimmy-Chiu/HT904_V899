@@ -850,3 +850,364 @@ AnsiString THandlerSystem::GetCustomerName()                                   /
     }
     return Str;
 }
+
+// =============================================================================
+//  WAVE FW-HSYS-W22   AI(W906-FW-HSYS-W22) 20260826
+//  27 methods appended (1 search handler + 2 form-chrome handlers + 24
+//  QwertyKey openers).  Denominator, selection rationale, DEVIATIONS,
+//  GOLDEN NOTES and the GATE REGISTER live in forms/fHandlerSys.h's
+//  "ADDENDUM -- WAVE FW-HSYS-W22" banner -- read that first, it is not
+//  repeated here.  Short version:
+//    * golden HandlerSys.cpp holds 47 `THandlerSystem::` definitions
+//      (1 ctor + 46 methods), NOT the 44 the WA banner states.  With this
+//      wave the port stands at 32/47.
+//    * The 24 openers were previously judged blocked on "fQwertyKey has no
+//      port tree-wide".  That claim EXPIRED: forms/fQwertyKey.h landed
+//      20260824 with 20/20 methods ACTIVE and a live ShowQwertyKey
+//      (forms/fQwertyKey.cpp:166-299).
+//    * `edtSearchCodeChange` was previously judged blocked on GATE (H1) via
+//      TempComp.  That is FALSE -- its body (golden :1151-1167) never names
+//      TempComp.  H1 still holds for edtSearchFunctionChange, which does.
+//
+//  APPEND-ONLY WAVE: this wave's brief allows only HandlerSys.cpp and
+//  forms/fHandlerSys.h to be touched, and forbids modifying existing lines
+//  (a sibling agent is editing cSpeed.cpp / forms/fSpeed.h concurrently).
+//  Hence the two #includes below sit HERE rather than in the file's include
+//  block at the top.  Both are legal at file scope and both precede every
+//  use.  A later tidy-up pass may hoist them; doing it now would rewrite
+//  lines this wave is not allowed to rewrite.
+// =============================================================================
+#include "forms/fQwertyKey.h"   // fQwertyKey (:406) + TfQwertyKey::ShowQwertyKey
+                                //   (:370) -- the 24 openers below.  Same
+                                //   include the already-merged sibling call
+                                //   sites use: cObserver.cpp:108 (SAME CMake
+                                //   target, ht9045_sm -- so the link edge is
+                                //   already established, not new here),
+                                //   cSetUp.cpp:279, cConfiguration.cpp:124.
+// NO `#include "handlerlog.h"` here on purpose: FormClose's Do_Log call is
+// GATE (H22-1)'d, so nothing in this wave needs TMyLog's definition.
+
+//---------------------------------------------------------------------------
+//  edtSearchCodeChange -- golden :1149-1168
+//
+//  SIGNATURE: golden `void __fastcall edtSearchCodeChange(TObject *Sender)`;
+//  Sender is never read (the body works off the named `edtSearchCode`), so it
+//  is dropped -- DEVIATION (W22-D2).
+//
+//  ★ THIS METHOD IS NOT GATE (H1) MATERIAL.  forms/fHandlerSys.h:86-91
+//  claims it "transitively depends on TempComp (populated only by
+//  SortItemToMap/InitItemToMap)".  Read literally, golden :1151-1167 names
+//  exactly three things: `edtSearchCode->Text`, `rgCustomerList->Items` and
+//  `slCustomerCode`.  TempComp appears NOWHERE in it (it appears in
+//  edtSearchFunctionChange, golden :1224/:1226/:1231/:1233/:1239/:1240 --
+//  that sibling stays gated).  See GATE (H22-2).
+//
+//  DEVIATION (W22-D4): golden calls `.UpperCase()` straight off
+//  `slCustomerCode->Strings[i]`.  vclcompat's Strings[i] yields a
+//  StringsProxy (vclcompat/TStringList.h:90-100) exposing only
+//  `operator AnsiString() const` -- no forwarded UpperCase -- so the value is
+//  bound to a local AnsiString first.  Same value, same order of operations;
+//  the identical note already stands over GetCustomerName above.
+//
+//  BEHAVIOUR: filters rgCustomerList->Items down to the slCustomerCode
+//  entries containing the typed text (case-insensitive, substring anywhere --
+//  golden tests `AnsiPos(...)!=0`, not `==1`).  Pure in-memory widget state:
+//  no file, no ini, no machine action.  slCustomerCode was hydrated with all
+//  211 entries by the ctor (:803-808), so this search is LIVE offline -- it
+//  does not depend on TempComp being empty.
+//---------------------------------------------------------------------------
+void THandlerSystem::edtSearchCodeChange()
+{
+    AnsiString Text;
+    if(edtSearchCode->Text=="")
+    {
+        rgCustomerList->Items->Clear();
+        for(int i=0; i<slCustomerCode->Count; i++)
+            rgCustomerList->Items->Add(slCustomerCode->Strings[i]);
+    }
+    else
+    {
+        rgCustomerList->Items->Clear();
+        for(int i=0; i<slCustomerCode->Count; i++)
+        {
+            AnsiString item=slCustomerCode->Strings[i];   // DEVIATION (W22-D4): StringsProxy has no .UpperCase()
+            Text=item.UpperCase();
+            if(Text.AnsiPos(edtSearchCode->Text.UpperCase())!=0)
+                rgCustomerList->Items->Add(item);
+        }
+    }
+}
+
+//---------------------------------------------------------------------------
+//  ExitBtnMouseDown -- golden :1062-1071
+//
+//  SIGNATURE: golden's FULL signature is kept -- `TMouseButton Button,
+//  TShiftState Shift` now have a port (vclcompat/ShiftState.h, 20260826).
+//  That header's own ruling is explicit: newly translated handlers keep
+//  golden's complete parameter list and stop dropping these two.  The four
+//  unread parameters are marked with `(void)` exactly as the already-merged
+//  cObserver.cpp:6590 does.  DEVIATION (W22-D3).
+//
+//  The previous round's three stated blockers for this method were audited:
+//  two were false, and the third (no TMouseButton/TShiftState port) expired
+//  with ShiftState.h.
+//
+//  BEHAVIOUR: right-clicking Exit un-hides the hidden customer-code tab,
+//  jumps the page control to page 7 and reveals the search box -- golden's
+//  service back-door.  Pure widget state; nothing persisted, no machine
+//  action.  NOT wired (GATE (H22-4)): nothing calls this and nothing fills
+//  `Button`, so offline it is unreachable, not "always false".
+//---------------------------------------------------------------------------
+void THandlerSystem::ExitBtnMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+    (void)Sender; (void)Shift; (void)X; (void)Y;   //AI(W906-FW-HSYS-W22): golden 也沒讀這四個
+    if(Button==mbRight)
+    {
+        tsCustomerCode->TabVisible=true;
+        pcSetting->ActivePageIndex=7;
+        edtSearchCode->Visible=true;
+    }
+}
+
+//---------------------------------------------------------------------------
+//  FormClose -- golden :1073-1079   (PARTIAL -- see GATE (H22-1))
+//
+//  SIGNATURE: golden `void __fastcall FormClose(TObject *Sender,
+//  TCloseAction &Action)`.  `Action` is never read and `TCloseAction` has no
+//  port anywhere in this tree; `Sender` is read by exactly one statement --
+//  the gated one.  Both dropped -- DEVIATION (W22-D2), matching all six
+//  already-translated FormClose siblings (cSecurity.cpp:510,
+//  cCounterClear.cpp:517, cObserver.cpp:4102-4106, ATC/ATCInterface.cpp:434,
+//  forms/fPassword.cpp:220, cTemperFrom.cpp:1319).
+//
+//  GATE (H22-1): golden :1078 `myLog.Do_Log(Sender, asUser, asLogPath);` is
+//  NOT translated.  Three independent reasons, all re-checked 20260826:
+//    (a) FILE WRITE.  TMyLog::Do_Log (handlerlog.cpp:660-686) reaches
+//        SaveEventLog() once loglist is non-empty; handlerlog.h:13-16 states
+//        the class writes "one line per changed control to a dated ChangeLog
+//        ini file ... also into the machine's own EventLog".  This wave's
+//        rule is: a method containing a file-write path does not get one.
+//    (b) ZERO live call sites tree-wide.  `grep -rn "Do_Log" *.{h,cpp}`
+//        (20260826) -> cConfiguration.cpp:6076, cSpeed.cpp:423,
+//        cSpeed.cpp:1326 are all `//`-commented; cStartCondition.cpp:647 is
+//        [AI(W906-FW-HSYS-W22) 20260826 主迴圈整併修正: 這兩個 cSpeed 行號原寫
+//         416/1319，是開工當下的值。兄弟波 FW-SPEED-W21 在同一段時間於
+//         cSpeed.cpp:94-100 插入 7 行 include 區塊，兩處各位移 +7。已對字面
+//         複驗現值正確。同型教訓見 KNOWLEDGE：平行波之間的行號引用會過期。]
+//        a gate note; HandlerSys.cpp:101-105 is THIS file's FormShow doing
+//        the identical gate for golden :76.  Opening the tree's first live
+//        write edge from a facade would buy nothing -- see (c).
+//    (c) IT WOULD DO NOTHING ANYWAY.  Do_Log's first gate is
+//        `dynamic_cast<TWinControl *>(PCtrl) != NULL` (handlerlog.cpp:675).
+//        `THandlerSystem` here is a plain non-VCL facade -- not TWinControl-
+//        derived, not even TObject-derived -- so golden's `Sender` (the form
+//        itself in real VCL) can never satisfy that cast in this tree.
+//  With `Sender` dropped per (W22-D2) the statement is additionally
+//  unspellable, exactly like FormShow's own case above.
+//
+//  What DOES get translated is golden :1076, the only offline-observable
+//  statement in the method.
+//---------------------------------------------------------------------------
+void THandlerSystem::FormClose()
+{
+    tsCustomerCode->TabVisible=false;
+    //這一行請保持在最下面!!-----------------
+    // golden :1078 `myLog.Do_Log(Sender, asUser, asLogPath);` //Steven 20100629
+    //   -- NOT translated, GATE (H22-1) above.
+}
+
+// =============================================================================
+//  QwertyKey openers -- 24 methods, golden :1138-1142 and :1257-1375
+//
+//  Every one of the 24 has the same one-statement body:
+//      fQwertyKey->ShowQwertyKey((TEdit *)Sender, <mode>, <dp>, <range...>);
+//
+//  DEVIATION (W22-D1): golden's `(TEdit *)Sender` C-style downcast is
+//  collapsed into the signature (`TEdit *Sender`) -- the established
+//  convention, forms/fQwertyKey.h (D-3) citing forms/fSetup.cpp
+//  RadioButton1KeyDown.  Safe here because all 24 target widgets really ARE
+//  `TEdit` in golden HandlerSys.h (checked one by one -- :155 edtCustomerCode,
+//  :188/:189 edtMin/MaxYPitch, :208 ed24VMonitorPulseCount,
+//  :217 edCognexSystemCCD, :239 edMaxMpaFB, :250/:251 edATCSystemPort/
+//  UseHeat, :257 edtUserDefMaxContactHeight, :264/:265 edHotGunFlow_DevNo/
+//  Gun1_ChannelNo, :278/:279 edMaxKpa/edMinMpa, :294 edIONPulseCount,
+//  :300 edGroundMan_AlarmOhm, :317 edtUserDefineIndexZSafePos,
+//  :326/:327 edtMin/MaxXPitch, :377/:378 edtTriTemperature_Max/MinDegree,
+//  :379 edtTriTempTotalCh, :384 edtOutShtMaxTemp, :385 edtIndexMaxTemp,
+//  :387 edt_Total_Compressor).  None of them is the TLabeledEdit case golden
+//  forces through the same cast elsewhere -- `edtSearchCode` (golden .h:395)
+//  and `edtSearchFunction` (:289) ARE TLabeledEdit, and neither is a target
+//  here.  `TEdit*` -> `TControl*` is a plain upcast into ShowQwertyKey's
+//  parameter (forms/fQwertyKey.h D-5).
+//
+//  GOLDEN NOTE (W22-G1) -- the trailing `min, max` argument NAMES vs. the
+//  ORDER golden uses.  Measured over these 24 (20260826): 17 calls pass
+//  (upper, lower), 6 pass (lower, upper), 1 (edATCSystemPortClick) passes no
+//  range at all.  BOTH ORDERS PRODUCE THE SAME CLAMP -- this is not a bug and
+//  nothing is "corrected" below.  The chain:
+//    * display  forms/fQwertyKey.cpp:258-267 --
+//        `if(max>min){edMax=max;edMin=min;} else {edMax=min;edMin=max;}`
+//    * clamping forms/fQwertyKey.cpp:287 -- `CheckRange(d, min, max)`, and
+//      CheckRange is declared `CheckRange(Value, Maximum, Minimum)`
+//      (MachineType.h:1525) with its own symmetric `if(Maximum<Minimum)`
+//      branch (:1527-1535).
+//  Both ends normalise, so the interval is identical either way.  (forms/
+//  fQwertyKey.h (G-a) records the other half of this same observation.)
+//
+//  GATE (H22-3) -- NULL-GLOBAL EXPOSURE, disclosed not gated: `fQwertyKey`
+//  and `fQwertyKey2` are NULL until a wiring wave constructs them (forms/
+//  fQwertyKey.h (G-d); forms/fQwertyKey.cpp:168-170 dereferences both on
+//  entry).  Nothing calls these 24 today -- GATE (H22-4), handlers are
+//  translated but NOT wired -- so no runtime path reaches the deref.  Golden
+//  carries the same exposure before its own CreateForm.  Identical posture to
+//  the already-merged cObserver.cpp:6615/:6635 call sites.
+//
+//  OFFLINE SEMANTICS: per forms/fQwertyKey.h:105-122 BEHAVIOUR NOTE,
+//  `ShowModal()`/`Close()` are permanent no-ops, so a call here means
+//  "operator opened the keyboard and immediately submitted the unchanged
+//  text": the post-modal tail runs at once and, with bCheckRange, the
+//  atof -> CheckRange -> AnsiString(double) round-trip MAY REWRITE the target
+//  TEdit's ->Text (e.g. "abc" + N_INTEGER -> "0").  That is golden's own
+//  submit path applied to an unedited value, not an invention of this port.
+//  No file write, no ini access, no machine action anywhere in
+//  ShowQwertyKey (read line-by-line, forms/fQwertyKey.cpp:166-299).
+// =============================================================================
+
+//---------------------------------------------------------------------------
+void THandlerSystem::edtUserDefMaxContactHeightClick(TEdit *Sender)             // golden :1138-1142
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, -100.00, -160.00);
+}
+//---------------------------------------------------------------------------
+//  GOLDEN NOTE (W22-G2): N_INTEGER with iDP=2.  In integer mode iDP only
+//  drives ChangeDecimalPoint's key-enable pass; no decimals are produced.
+//  Verbatim.
+void THandlerSystem::edtUserDefineIndexZSafePosClick(TEdit *Sender)             // golden :1257-1261
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 2, true, 200, 800);
+}
+//---------------------------------------------------------------------------
+//  GOLDEN NOTE (W22-G4): range (999, 0) == 0..999, matching the three-digit
+//  customer code rgCustomerListClick (golden :1054-1060, not translated)
+//  writes into this same edit.  Verbatim.
+void THandlerSystem::edtCustomerCodeClick(TEdit *Sender)                        // golden :1263-1266
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 999, 0);
+}
+//---------------------------------------------------------------------------
+void THandlerSystem::edMaxMpaFBClick(TEdit *Sender)                             // golden :1268-1271
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 3, true, 0.0, 6.0);
+}
+//---------------------------------------------------------------------------
+void THandlerSystem::edMaxKpaClick(TEdit *Sender)                               // golden :1273-1276
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 400, 950);            //JerryYang 20171211 (Steven) EP Max KPA 900 -> 900
+}
+//---------------------------------------------------------------------------
+void THandlerSystem::edMinMpaClick(TEdit *Sender)                               // golden :1278-1281
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 3, true, -1.0, 10.0);           //JerryYang 20171211 (Steven) EP Min KPA 0 -> -1
+}
+//---------------------------------------------------------------------------
+//  The ONLY one of the 24 that passes no range: N_PORT alone.  ShowQwertyKey
+//  forces bCheckRange=true and substitutes 0..65535 itself when min<0 ||
+//  max<=0 (forms/fQwertyKey.cpp:246-254), which is exactly the defaulted
+//  (0, 0) case here.  Verbatim.
+void THandlerSystem::edATCSystemPortClick(TEdit *Sender)                        // golden :1283-1286
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_PORT);
+}
+//---------------------------------------------------------------------------
+void THandlerSystem::edATCSystemUseHeatClick(TEdit *Sender)                     // golden :1288-1291
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 32, 4);
+}
+//---------------------------------------------------------------------------
+void THandlerSystem::edHotGunFlow_Gun1_ChannelNoClick(TEdit *Sender)            // golden :1293-1297
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 3, 0);
+}
+//---------------------------------------------------------------------------
+void THandlerSystem::edHotGunFlow_DevNoClick(TEdit *Sender)                     // golden :1299-1302
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 64, 0);
+}
+//---------------------------------------------------------------------------
+void THandlerSystem::edtMinYPitchClick(TEdit *Sender)                           // golden :1304-1307
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 6000, 1500);          //kevin 20170922 (wei) 小鍵盤上下限
+}
+//---------------------------------------------------------------------------
+void THandlerSystem::edtMaxYPitchClick(TEdit *Sender)                           // golden :1309-1312
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 80000, 4000);
+}
+//---------------------------------------------------------------------------
+void THandlerSystem::edCognexSystemCCDClick(TEdit *Sender)                      // golden :1314-1317
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 4, 2);
+}
+//---------------------------------------------------------------------------
+void THandlerSystem::ed24VMonitorPulseCountClick(TEdit *Sender)                 // golden :1319-1323
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 5000, 1);
+}
+//---------------------------------------------------------------------------
+void THandlerSystem::edGroundMan_AlarmOhmClick(TEdit *Sender)                   // golden :1325-1328
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 10, 1);
+}
+//---------------------------------------------------------------------------
+void THandlerSystem::edIONPulseCountClick(TEdit *Sender)                        // golden :1330-1333
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 100000, 3000);        //Steven 20230322 : ION_PULSE_COUNT 最小值改成3000
+}
+//---------------------------------------------------------------------------
+void THandlerSystem::edtTriTempTotalChClick(TEdit *Sender)                      // golden :1335-1338   //Ztex 2023.04.19 Add HT-1032 TriTemp Function
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 40, 4);
+}
+//---------------------------------------------------------------------------
+//  GOLDEN NOTE (W22-G3): N_INTEGER with floating-point bounds.  The min/max
+//  parameters are `double`, so nothing is truncated at the call.  Verbatim.
+//  (Same for the three methods below it.)
+void THandlerSystem::edtOutShtMaxTempClick(TEdit *Sender)                       // golden :1340-1343   //Ztex 2023.04.19 Add HT-1032 TriTemp Function
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 120.0, 20.0);
+}
+//---------------------------------------------------------------------------
+void THandlerSystem::edtTriTemperature_MaxDegreeClick(TEdit *Sender)            // golden :1345-1349
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 175.0, 35.0);
+}
+//---------------------------------------------------------------------------
+void THandlerSystem::edtTriTemperature_MinDegreeClick(TEdit *Sender)            // golden :1351-1355
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 35.0, -55.0);
+}
+//---------------------------------------------------------------------------
+void THandlerSystem::edtIndexMaxTempClick(TEdit *Sender)                        // golden :1357-1360
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 120.0, 20.0);
+}
+//---------------------------------------------------------------------------
+//  NAME NOTE: golden really does call this one `...Change`, not `...Click`
+//  (golden :1362) even though its body is the same keyboard-opener as its 23
+//  `...Click` siblings.  Name kept verbatim.
+void THandlerSystem::edt_Total_CompressorChange(TEdit *Sender)                  // golden :1362-1365
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 8, 0);
+}
+//---------------------------------------------------------------------------
+void THandlerSystem::edtMinXPitchClick(TEdit *Sender)                           // golden :1367-1370
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 1100, 4000);
+}
+//---------------------------------------------------------------------------
+void THandlerSystem::edtMaxXPitchClick(TEdit *Sender)                           // golden :1372-1375
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 3000, 16000);
+}
+//---------------------------------------------------------------------------

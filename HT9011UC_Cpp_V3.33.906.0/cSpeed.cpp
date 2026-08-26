@@ -91,6 +91,13 @@
 #include "aHotPlateSubstrate.h"  // InArmSuck/OutArmSuck (TMyKitSuck, 177-TU shape)
 #include "cAuthority.h"          // authMainForm[]/bAuthCriticalPara[]
 #include "forms/fSecurity.h"     // fSecurity/TfSecurity::Insufficient
+// AI(W906-FW-SPEED-W21) 20260826: fQwertyKey/TfQwertyKey::ShowQwertyKey -- the
+//   27 MouseDown keypad launchers appended at the end of this file.  Landed
+//   20260824 by wave FW-QWKEY1 (globals DEFINED at forms/fQwertyKey.cpp:41-42,
+//   ShowQwertyKey body ACTIVE at :166), which is what retired Wave A's
+//   "fQwertyKey has no port" blocker.  Link edge sm->forms is DECLARED at
+//   CMakeLists.txt:2237-2248, not left to lazy archive extraction.
+#include "forms/fQwertyKey.h"    // fQwertyKey, TfQwertyKey::ShowQwertyKey
 
 //---------------------------------------------------------------------------
 TfSpeed::TfSpeed()
@@ -1317,5 +1324,364 @@ void TfSpeed::FormClose()
 
     //這一行請保持在最下面!!-----------------
 //    myLog.Do_Log(Sender, asUser, asLogPath);                                  //Steven 20100629
+}
+//---------------------------------------------------------------------------
+
+// =============================================================================
+//  WAVE FW-SPEED-W21 -- AI(W906-FW-SPEED-W21) 20260826
+//  42 input-gesture handlers (10 KeyPress + 27 MouseDown + 4 widget-state +
+//  1 chrome).  APPEND-ONLY: nothing above this line was edited except the one
+//  added `#include "forms/fQwertyKey.h"` in the include block.
+//
+//  Read forms/fSpeed.h's "WAVE FW-SPEED-W21" banner FIRST -- it carries the
+//  selection rationale (why Wave A's bucket-(b) call is superseded for exactly
+//  these 42), the denominator (48/57 golden methods after this wave), the GATE
+//  register, GOLDEN ODDITIES (W21-a..e) and DEVIATIONS (W21-D1..D4).  Not
+//  repeated here; only re-cited per call site.
+//
+//  MEASURED, not asserted: across all 42 golden bodies the occurrence count of
+//  WriteIni* / fopen / CreateFile / SaveSetup* / Motor*Move / ShowMyMessage is
+//  0.  These are keystroke filters, keypad launchers and widget-state setters.
+//  The persistence path (spbSaveClick golden :1433-1787, SaveSetupFile golden
+//  :2250-2447) remains NOT TRANSLATED and NOT DECLARED.
+//
+//  NOT WIRED (W21-D3): no OnKeyPress/OnMouseDown/OnClick delegate is assigned
+//  for any handler below.  Nothing in this tree calls them yet -- which is why
+//  the fQwertyKey NULL-pointer exposure (forms/fQwertyKey.h GOLDEN NOTE (G-d),
+//  :139-146: both globals stay NULL until a wiring wave CreateForm's them) is
+//  unreachable from here.  A future wiring wave MUST construct fQwertyKey AND
+//  fQwertyKey2 before enabling the 27 MouseDown bodies.
+//
+//  GATE REGISTER (this wave): (W21-G1) sbtExitClick only -- see its call site.
+// =============================================================================
+
+//---------------------------------------------------------------------------
+//  (i) KeyPress numeric filters -- 10 methods.
+//      Golden shape: `if(OnlyNumberXxxInPut(Key)==false) Key=NULL;`
+//      `TObject *Sender` dropped, unread (W21-D1); `char &Key` kept (read and
+//      written).  Same shape as the already-merged forms/fSetup.cpp:67-71
+//      TfSetup::XPitchKeyPress, including `Key=NULL` (ht9045_sm builds with
+//      -Wno-conversion-null, CMakeLists.txt:2264).
+//---------------------------------------------------------------------------
+void TfSpeed::edInArmRetryCountKeyPress(char &Key)                              // golden :1217-1221
+{
+    if(OnlyNumberInPut(Key)==false)                                             // golden :1219 -- the ONLY integer-only filter of the 10 (W21-c)
+        Key=NULL;
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edInVacumCheckTimeKeyPress(char &Key)                             // golden :1223-1227
+{
+    if(OnlyNumberAndDotInPut(Key)==false)
+        Key=NULL;
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edIndexArmRetryMMKeyPress(char &Key)                              // golden :1229-1233
+{
+    if(OnlyNumberAndDotInPut(Key)==false)
+        Key=NULL;
+}
+//---------------------------------------------------------------------------
+void TfSpeed::Edt_CheckTime_InKeyPress(char &Key)                               // golden :1935-1939
+{
+    if(OnlyNumberAndDotInPut(Key)==false)
+        Key=NULL;
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edRelaseDelayKeyPress(char &Key)                                  // golden :1983-1987
+{
+    if(OnlyNumberAndDotInPut(Key)==false)
+        Key=NULL;                                                               //JerryYang 20160127 for TSMC inarm release device前delay
+}
+//---------------------------------------------------------------------------
+//Isaac 20180301 (Steven) Index Cycle Time Monitoring function
+//==>
+void TfSpeed::edtMonitoringIndexCycletimeKeyPress(char &Key)                    // golden :2191-2196
+{
+    if(OnlyNumberAndDotInPut(Key)==false)
+        Key=NULL;
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edtMonitoringOutlierKeyPress(char &Key)                           // golden :2198-2203
+{
+    if(OnlyNumberAndDotInPut(Key)==false)
+        Key=NULL;
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edtMonitoringWindowKeyPress(char &Key)                            // golden :2205-2210
+{
+    // GOLDEN ODDITY (W21-c): edtMonitoringWindow is opened as N_INTEGER by its
+    // MouseDown (golden :2228) yet filtered here with the DOT-permitting
+    // OnlyNumberAndDotInPut.  Golden's own inconsistency; kept verbatim.
+    if(OnlyNumberAndDotInPut(Key)==false)
+        Key=NULL;
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edtIndexCycleTimetoleranceKeyPress(char &Key)                     // golden :2238-2243
+{
+    // GOLDEN ODDITY (W21-c): same N_INTEGER-vs-dot mismatch as above
+    // (MouseDown golden :2235 passes N_INTEGER).  Verbatim.
+    if(OnlyNumberAndDotInPut(Key)==false)
+        Key=NULL;
+}
+//<==
+//Isaac 20180301 (Steven) Index Cycle Time Monitoring function
+//---------------------------------------------------------------------------
+void TfSpeed::edShakeDelayKeyPress(char &Key)                                   // golden :2505-2509
+{
+    if(OnlyNumberAndDotInPut(Key)==false)
+        Key=NULL;
+}
+
+//---------------------------------------------------------------------------
+//  (ii) MouseDown keypad launchers -- 27 methods.
+//       Golden shape: one `fQwertyKey->ShowQwertyKey((TEdit*)Sender, iFunction,
+//       iDP, bCheckRange, min, max);` call (2 of the 27 branch first).
+//       `TMouseButton Button, TShiftState Shift, int X, int Y` dropped -- none
+//       is read in any of the 27 bodies, checked one by one (W21-D1).
+//       `Sender` kept and typed as golden's cast target, collapsing the
+//       C-style cast into the signature (W21-D2).
+//       On the min/max argument order see GOLDEN ODDITY (W21-b): golden's house
+//       style passes the numerically LARGER bound into `min`; 8 of these 27
+//       invert even that.  Both orders clamp identically because CheckRange
+//       (MachineType.h:1524-1544) opens with `if(Maximum<Minimum)`.  Every call
+//       below is verbatim, argument for argument.
+//---------------------------------------------------------------------------
+void TfSpeed::edInArmRetryCountMouseDown(TEdit *Sender)                         // golden :1235-1246
+{
+    if(CosFunction.bUseOneByOneIndexCheck==true)
+    {
+        fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 2, true, 3, 0);
+    }
+    else
+    {
+        fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 2, true, 10, 0);
+    }
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edInVacumCheckTimeMouseDown(TEdit *Sender)                        // golden :1248-1252
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, 10.0, 0.01);           //Steven 20150420
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edIndexArmRetryMMMouseDown(TEdit *Sender)                         // golden :1254-1258
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, -0.01, -0.3);          //Steven 20150420
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edIndexSpeedMouseDown(TEdit *Sender)                              // golden :1260-1264
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, (CosFunction.bLimitMaxSpeed)?CosFunction.iLimitMaxSpeed:100, 1);   //Steven 20150420
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edIndexAccDecMouseDown(TEdit *Sender)                             // golden :1266-1270
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 100, 1);              //Steven 20150420
+}
+//---------------------------------------------------------------------------
+void TfSpeed::Edt_CheckTime_InMouseDown(TEdit *Sender)                          // golden :1941-1945
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, 1.0, 0.1);             //Steven 20140420
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edtAutoSkipCTMouseDown(TEdit *Sender)                             // golden :1947-1951
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 1000, 5);             //Steven 20150205 : KK說要改成最小5次
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edSecondSpeedInMouseDown(TEdit *Sender)                           // golden :1953-1957
+{
+    // (W21-b) larger bound passed into `max`, inverting golden's own house
+    // style -- benign, CheckRange clamps symmetrically.  Verbatim.
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 1, atoi(edInZSpd->Text.c_str()));      //Steven 20140217 : 兩段速移動
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edSecondADCInMouseDown(TEdit *Sender)                             // golden :1959-1963
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 1, atoi(edInZAcc->Text.c_str()));      //Steven 20140217 : 兩段速移動
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edSecondSpeedOutMouseDown(TEdit *Sender)                          // golden :1965-1969
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 1, atoi(edOutZSpd->Text.c_str()));     //Steven 20140217 : 兩段速移動
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edSecondADCOutMouseDown(TEdit *Sender)                            // golden :1971-1975
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 1, atoi(edOutZAcc->Text.c_str()));     //Steven 20140217 : 兩段速移動
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edRelaseDelayMouseDown(TEdit *Sender)                             // golden :1977-1981
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, 3.0, 0.1);             //JerryYang 20160127 for TSMC inarm release device前delay
+}
+//---------------------------------------------------------------------------
+void TfSpeed::Edt_HeightCheck_InMouseDown(TEdit *Sender)                        // golden :1989-1993
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, 1500, 500);            //Steven 20140420
+}
+//---------------------------------------------------------------------------
+//Isaac 20180301 (Steven) Index Cycle Time Monitoring function
+//==>
+void TfSpeed::edtMonitoringIndexCycletimeMouseDown(TEdit *Sender)               // golden :2212-2217
+{
+    // (W21-b) larger bound into `max`.  Verbatim.
+    fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, 0.01, 10.0);
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edtMonitoringOutlierMouseDown(TEdit *Sender)                      // golden :2219-2223
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, 0.01, 30.0);
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edtMonitoringWindowMouseDown(TEdit *Sender)                       // golden :2225-2229
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 500, 1);
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edtIndexCycleTimetoleranceMouseDown(TEdit *Sender)                // golden :2231-2236
+{
+    // (W21-d) iDP==15 is not a plausible decimal-place count; (W21-b) larger
+    // bound into `max`.  Both verbatim.
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 15, true, 5, 200);             //JerryYang 20220824 : SPIL index cycle time monitor
+}
+//<==
+//Isaac 20180301 (Steven) Index Cycle Time Monitoring function
+//---------------------------------------------------------------------------
+void TfSpeed::edtLoaderSpeed1MouseDown(TLabeledEdit *Sender)                    // golden :2448-2452
+{
+    // (W21-D2) golden casts to (TLabeledEdit *), matching this widget's own
+    // declared type at forms/fSpeed.h:606.  (W21-d) iDP==1.
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 1, true, (CosFunction.bLimitMaxSpeed)?CosFunction.iLimitMaxSpeed:100, 1);   //Steven 20150420
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edInArmDieCleanDelayMouseDown(TEdit *Sender)                      // golden :2454-2458
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, 10.0, 0.1);            //JerryYang 20160127 for TSMC inarm release device前delay
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edInArmDieCleanHeightMouseDown(TEdit *Sender)                     // golden :2460-2467
+{
+    if(CUSTOMER_CODE==CC_TSMC_TAINAN)
+        fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, 20.0, 0.1);
+    else
+        // (W21-b) the else-arm's bounds are (-20.0, 0.1) -- larger value into
+        // `max`, unlike the if-arm.  Golden's own asymmetry; verbatim.
+        fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, -20.0, 0.1);
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edOutArmShtWaitTimeMouseDown(TEdit *Sender)                       // golden :2469-2473
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, 50.0,0);               //kevin 20210525 add out arm shuttle wait
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edAutoSpeedLowMouseDown(TEdit *Sender)                            // golden :2475-2479
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 100, 1);
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edTwoSpeedDistanceCatchYMouseDown(TEdit *Sender)                  // golden :2481-2485
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, 20.0, 0.01);           //Steven 20150420
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edShakeCyclesMouseDown(TEdit *Sender)                             // golden :2487-2491
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 1, true, 100, 1);              // (W21-d) iDP==1
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edShakeDistanceMouseDown(TEdit *Sender)                           // golden :2493-2497
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 5, true, 30, 5);               // (W21-d) iDP==5
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edShakeDelayMouseDown(TEdit *Sender)                              // golden :2499-2503
+{
+    // (W21-e) golden passes the DOUBLE literal `0.0` as the `int iDP`
+    // argument -- implicit narrowing to 0.  Written verbatim rather than
+    // "corrected" to 0; the resulting argument is identical, and ht9045_sm
+    // enables neither -Wconversion/-Wfloat-conversion nor -Werror
+    // (CMakeLists.txt:2263-2264), so this is diagnostic-free.
+    fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 0.0, true, 2.0, 0.0);
+}
+//---------------------------------------------------------------------------
+void TfSpeed::edShakeAccDecMouseDown(TEdit *Sender)                             // golden :2511-2515
+{
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 100, true, 100, 1);            // (W21-d) iDP==100
+}
+
+//---------------------------------------------------------------------------
+//  (iii) Pure widget-state setters -- 4 methods.  No I/O, no dependency, no
+//        machine effect.  `TObject *Sender` dropped, unread (W21-D1).
+//---------------------------------------------------------------------------
+void TfSpeed::spbSpeedAddClick()                                                // golden :1414-1419
+{
+    // GOLDEN ODDITY (W21-a) -- DO NOT "SIMPLIFY".  This is "+10, then snap
+    // DOWN to the nearest multiple of 10" via INTEGER truncation, not a
+    // redundant round-trip: Position=95 yields 105/10*10 = 100, not 105.
+    // Position is int (forms/fSpeed.h TfSpeedTrackBar), so `/=10; *=10;`
+    // truncates.  Making either operand floating point destroys the snap --
+    // this repo has already paid for that exact class of edit once
+    // (ChangeToFloatNonPcnt int-division regression, cConfiguration.cpp:152).
+    // No clamp against tbAllSpeed->Max: golden leans on the real VCL
+    // TTrackBar property setter to clamp; the port's plain int does not.
+    // Disclosed in the header banner, deliberately NOT "fixed" here.
+    tbAllSpeed->Position+=10;
+    tbAllSpeed->Position/=10;
+    tbAllSpeed->Position*=10;
+}
+//---------------------------------------------------------------------------
+void TfSpeed::spbSpeedDecClick()                                                // golden :1421-1424
+{
+    // (W21-a) asymmetric with spbSpeedAddClick above: a bare -=10 with NO
+    // snap-to-multiple-of-10 and no clamp at 0.  Golden's own asymmetry, kept.
+    tbAllSpeed->Position-=10;
+}
+//---------------------------------------------------------------------------
+void TfSpeed::cbIndexArmClick()                                                 // golden :1426-1431
+{
+    // Golden enables the speed controls unconditionally -- it does NOT read
+    // cbIndexArm->Checked, so unchecking the box also enables them.  Verbatim.
+    tbAllSpeed->Enabled =true;
+    spbSpeedAdd->Enabled=true;
+    spbSpeedDec->Enabled=true;
+}
+//---------------------------------------------------------------------------
+void TfSpeed::spbSelectAllClick()                                               // golden :1795-1810
+{
+    cbIndexArm->Checked =true;
+    cbInArm->Checked    =true;
+    cbOutArm->Checked   =true;
+    cbShuttle->Checked  =true;
+    cbTrayArm->Checked  =true;
+    cbInArmZ->Checked   =true;
+    cbOutArmZ->Checked  =true;
+    tbAllSpeed->Enabled =true;
+    spbSpeedAdd->Enabled=true;
+    spbSpeedDec->Enabled=true;
+    spbSelectAll->Down  =false;
+    cbInRotate->Checked =true;
+    cbOutRotate->Checked=true;
+}
+
+//---------------------------------------------------------------------------
+//  (iv) Chrome -- 1 method.
+//---------------------------------------------------------------------------
+void TfSpeed::sbtExitClick()                                                    // golden :1788-1793
+{
+    Close();                                                                    // offline no-op member (W21-D4), forms/fSpeed.h
+#if 0 // GATE (W21-G1): golden :1791.  BOTH halves absent from the port --
+      //   TfShowMessage (forms/fShowMessage.h:22-27) declares only
+      //   ShowSpeed(bool), there is no `sgdSpeedView`; and `Repaint()` exists
+      //   on no vclcompat control (rg over vclcompat/ -> 2 hits, both comments
+      //   in LedCore.cpp:132/:160 saying it was dropped as a renderer concern).
+      //   Both owning files are outside this wave's write boundary and the
+      //   campaign rule is 跨檔缺口 GATE 不自建 shim.  This is the SAME golden
+      //   expression already gated identically at cinitial.cpp:13595-13596
+      //   (GATE n5-G1); that gate's shape is reused rather than inventing a
+      //   second rationale.  Consequence is cosmetic only: a grid on ANOTHER
+      //   form is not repainted.  No logic, no data, no machine effect.
+    fShowMessage->sgdSpeedView->Repaint();
+#endif // GATE (W21-G1): sgdSpeedView / Repaint
+    sbtExit->Down=false;
 }
 //---------------------------------------------------------------------------

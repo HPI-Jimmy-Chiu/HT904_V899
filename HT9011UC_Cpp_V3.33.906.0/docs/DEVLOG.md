@@ -11983,6 +11983,101 @@ U0-4 / U0-5 工作項），當時的落點是 `ui/HT9045App.cpp`。**`ui/` 目�
   因為 gate 成本幾乎全在兩次 build，ctest 只佔 4 分鐘。
   **加速的槓桿不在 gate 管線化，在同時推多個波次**——我先前的建議在這一項上估錯了。
 
+## 20260826 XVI — FW-SPEED-W21（42 支）＋ FW-HSYS-W22（27 支）
+
+### 這一波是怎麼開起來的：偵察說 0，複驗說 45
+
+平行偵察對 FW-3 佇列四個檔的結論是「可翻批次 ≈ 0」（`cSpeed` 0、`cStartCondition` 0、
+`HandlerSys` 1 支 20 行、`Command.cpp` 真正缺 0）。對抗式複驗把它推翻了：
+**`cSpeed` 的 62 條阻塞理由有 45 條不成立**。
+
+主迴圈逐條開 golden 複驗，確認複驗方是對的：
+- `spbSelectAllClick`（golden :1795-1810）整個本體是 9 個 `Checked/Enabled/Down` 指派
+- `cbIndexArmClick`（:1426-1431）三行 `Enabled=true`
+- 那 42 支本體出現 `WriteIni/fopen/CreateFile/SaveSetup/MotorMove/ShowMyMessage` 的次數 = **0**
+
+真正的阻塞理由是一條**過期兩天**的 absence claim：「`fQwertyKey` 全樹無 port」。
+`forms/fQwertyKey.h` 於 **20260824**（FW-QWKEY1, `fc08e09`）落地，20/20 方法 ACTIVE。
+這是 `pt-wave-loop` 陷阱 #2 的教科書形狀，**而且發生在只隔兩天的情況下**——
+absence claim 的保鮮期比想像中短得多。
+
+同型的還有兩條，都被複驗抓到：「`ShowModal` 全樹無 port」為偽
+（`forms/fQwertyKey.h:365`、`forms/fPassword.h:337`、`BarcodeReader.h:107`）；
+survey 的 otherClass 桶把 `spbSaveClick`/`SaveSetupFile`/`sbtExitClick` 判成「已翻」，
+實際是**同名不同類**的碰撞（`TfBinSel::spbSaveClick`、`TfTemp_Set::SaveSetupFile`），
+正是 `survey_file.py` 自己 banner 警告過的陷阱。
+
+### 交付
+
+| 波次 | 方法 | 新增行 | 刪除 |
+|---|---|---|---|
+| FW-SPEED-W21（`cSpeed.cpp` / `forms/fSpeed.h`） | 42 | 366 + 331 | 0 |
+| FW-HSYS-W22（`HandlerSys.cpp` / `forms/fHandlerSys.h`） | 27 | 357 + 282 | 0 |
+| 合計 | **69** | **1,336** | **0** |
+
+分母（單位＝golden 方法定義數，**不是行數**），主迴圈獨立複驗過：
+
+| | golden | port 已翻 | 真正缺 |
+|---|---|---|---|
+| `cSpeed.cpp` / `TfSpeed` | 57 | 48 | 9 |
+| `HandlerSys.cpp` / `THandlerSystem` | 47 | 32 | 15 |
+
+FW-HSYS 順帶更正既有檔頭反覆寫的「44 golden methods」是低估（實測 47），
+並修掉 `forms/fHandlerSys.h` 在 HEAD 就不 self-contained 的既有缺陷
+（單獨 include 會噴 `'TStringList' does not name a type`）。
+
+### 主迴圈整併做的三件事
+
+1. **修跨波 off-by-7**。FW-HSYS 的註解引用 `cSpeed.cpp:416 / :1319`，
+   而兄弟波 FW-SPEED 同時段在 `cSpeed.cpp:94-100` 插入 7 行 include 區塊。
+   對 HEAD 版本逐行驗過位移量確為 +7（HEAD:416 的 `myLog.Do_Log` 註解行現在在 423），
+   改成 423 / 1326 並在原地註明原因。另兩個引用點
+   （`cConfiguration.cpp:6076`、`cStartCondition.cpp:647`）所在檔案本波未動，有效。
+   **這是平行波次的固有風險**：行號引用會被兄弟波的插入弄過期，且失敗是靜默的。
+2. **複驗 FW-HSYS 的承重論據**。它推翻「`edtSearchCodeChange` 依賴 TempComp」而解鎖該支——
+   自行機器統計：本體 `:1149-1168` 出現 **0 次**，相鄰的
+   `edtSearchFunctionChange :1220-1244` 是 **10 次**。成立。
+3. **編碼完整性**：四檔全部純 LF、零孤立 CR、UTF-8 有效、零 U+FFFD。
+
+### 自傷紀錄：複驗腳本自己 off-by-one
+
+複驗分母時我的掃描回報 port 側 47 / 31，與兩個 agent 的 48 / 32 各差 1，方向一致。
+追下去是**我的正則錯**：pattern 要求 `TfSpeed::` 前面有東西，
+golden 的建構子寫 `__fastcall TfSpeed::TfSpeed(TComponent* Owner)`（會匹配），
+port 翻譯時把 `__fastcall` 拿掉成 `TfSpeed::TfSpeed()`（不匹配）。
+**兩個 agent 的數字是對的，錯的是複驗工具。**
+通則：跨 golden/port 比對方法數時，`__fastcall` 的有無會讓同一條正則在兩邊行為不同。
+
+### 刻意沒做的事
+
+- **69 支全部不接線**（無 OnClick/OnMouseDown/OnKeyPress 委派），依 FW 政策
+  「event handler 本體翻譯但不接線」。
+- `fQwertyKey` / `fQwertyKey2` 兩個全域**目前仍是 NULL**——全樹唯一建立點是
+  `Public/HTEdit.cpp:311-313` 的 lazy construction。因為沒接線，這 51 支 opener
+  今天無人呼叫，NULL deref 不可達；**未來接線波必須先建這兩個全域**。
+  這與本 DEVLOG 20260826 XV 記的「118 個表單全域有 77 個無人建立」是同一個缺口。
+- **GATE (W21-G1)**：`sbtExitClick` 的 `fShowMessage->sgdSpeedView->Repaint();`（golden :1791）。
+  兩半都缺（`TfShowMessage` 只宣告 `ShowSpeed(bool)`；`Repaint()` 在 vclcompat 不存在），
+  沿用 `cinitial.cpp:13595-13596` GATE n5-G1 對同一句 golden 的既有判斷。
+- **GATE (H22-1)**：`FormClose` 的 `myLog.Do_Log(...)`（golden :1078），三條獨立理由——
+  寫檔路徑、全樹 0 個 live 呼叫點、且 `Do_Log` 第一道門是
+  `dynamic_cast<TWinControl*>` 而 `THandlerSystem` facade 連 TObject 後代都不是。
+- 兩檔各自仍有 9 / 15 支未翻，理由逐支寫進各自 header 的 GATE REGISTER。
+
+### GOLDEN NOTE（照翻，不修）
+
+- **(W21-a)** `spbSpeedAddClick` :1416-1418 的 `Position += 10; /= 10; *= 10;`
+  是**故意的整數取整下取**（95 → 100 而非 105），不是冗餘往返。
+  已在程式碼與 header 兩處標「DO NOT SIMPLIFY」，並引用本 repo `cConfiguration.cpp:152`
+  把整數除法改成浮點造成階梯式漂移的回歸前例。
+  另揭露：port 的 `Position` 是無 clamp 的 int，golden 靠真 VCL TTrackBar setter 夾限——
+  離線會超出 Max 或變負值，**刻意不修**。
+- **(W21-b) / (W22-G1)** 兩檔合計 20+ 支帶範圍的 `ShowQwertyKey` 呼叫，
+  min/max 傳參順序與各自檔案的慣例相反。**不是 bug**：
+  `CheckRange` 的宣告是 `(Value, Maximum, Minimum)`（`MachineType.h:1525`）且開頭就是
+  `if(Maximum<Minimum)` 的對稱夾限分支，兩端都對調過，夾出的區間相同。
+  這是**打開檔案確認過的，不是推定的**。
+
 ### 🔖 RESUME（20260826 上午）
 
 - **本輪連續作業共 13 顆 commit**（`1be68ce` → `6d7f752`），
