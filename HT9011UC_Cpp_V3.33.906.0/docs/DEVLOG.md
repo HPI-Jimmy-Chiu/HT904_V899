@@ -13965,154 +13965,292 @@ KYECFTP/FTPClient.cpp                  4161     1091      275     3926
 **輸出端的編碼問題會偽造成分析失敗。** 已改成純 ASCII，離開碼 0、數字不變。
 這與今晚 `gateverdict.sh` 第一版的假綠燈是同一個家族：**工具自己也要先能誠實回報自己。**
 
-### 🔖 RESUME（20260827 凌晨 · 第三版）
+## 20260827 VIII — FW3-PI1：agent 自己砍掉 9 支，而違規的那兩支錯在我的清單
 
-- **本段最後一顆**：`FW-BOOTSTRAP-W35`——`FormsBootstrap.{h,cpp}`（26+208 行）
-  ＋`CMakeLists.txt` +11 行註冊進 `ht9045_sm`。**建 4 個全域不是 5 個**，
-  `fLan` 退出的理由是 `language.cpp` **不屬於任何 CMake target**
-  （`new TfLan()` 會是連結期 undefined reference，而 **`-fsyntax-only` 看不到**）。
-  **目前零 caller，所以本波不改變任何執行期行為。**
+### 交付
 
-- **⚠️ 更正一筆假記錄：`FW-TRAYMAP-W34` 是在紅燈上 commit 的。**
-  RESUME 第二版與 commit `5d85337` 都寫「雙 gate 137/142 全綠」，磁碟實際是
-  `build_w34g` **135/142**（多 `dfm2rc_fidelity` Timeout + `ShowBinSelectCore` SEGFAULT）、
-  `build_w34r` **136/142**（多 `dfm2rc_fidelity` Timeout）。詳見 20260827 III。
-  **所以「累計九次雙 gate 全綠」這個說法也是錯的，不要再引用。**
+`forms/fProductionInfo.h` **70→190 行（+120/-0）**、`forms/fProductionInfo.cpp`
+**15→313 行（+298/-0）**，兩檔 bare-LF、零 U+FFFD、**`-fsyntax-only` 零診斷**、
+編譯後**該檔區段零 warning**。**25 支方法 / 213 golden span 行。**
+`forms/fProductionInfo.cpp` 早已註冊在 `CMakeLists.txt:674`（`ht9045_forms`），
+**本波未改 CMakeLists**。原有的空 stub `TfProductionInfo::CalTrayICCount` **未被翻譯、
+原樣保留**，所以沒有重複定義風險。
 
-- **下一步（依序）**
-  1. ~~翻譯軸重量~~ **已做（20260827 03:34，25 秒）**，三軸如下——
-     **引用必附分母與單位，三軸不可互相換算**：
+### agent 中途自己砍掉 9 支——而且是量出來的，不是猜的
 
-     | 軸 | 完成 | 缺（golden code 行） | 分母 |
-     |---|---|---|---|
-     | 非表單 | 95.8% → **修正後 96.1%** | 13,973 → **13,160** | 336,509 |
-     | 表單 | 17.3% | 216,570 | 261,862 |
-     | 全案 | 61.5% → **修正後 61.6%** | 230,543 → **229,730** | 598,371 |
+它寫到一半才發現：`ht9045_forms` **只連 `vclcompat + ht9045_globals + ht9045_core`**，
+**不連 `ht9045_sm`／`ht9045_motor`**，而那條反向邊**在 configure 期就會爆 target cycle**
+（這正是 `forms/fContact.cpp`／`fTrayAssignment.cpp`／`fMotorTest.cpp`／`fTeach.cpp`
+被註冊進 `ht9045_sm` 來源清單而不是 `ht9045_forms` 的原因）。
+因為本波禁止碰 `CMakeLists.txt`，任何需要 sm/motor 專屬符號的函式都得退出：
 
-     修正是扣掉 `Command.cpp` 的 **813 行假缺口**（見 20260827 IV）。
-     無鏡射：2 非表單 / 88 表單。`mirrored but INCOMPLETE` 34 檔。
-     ⚠ **`census.py --json` 的 per-file 缺口清單不是待辦清單**，
-     派工前必跑 `python tools/census/span_sanity.py <file>` 過篩。
-     ⚠ 查缺哪幾支要 exec `census.py` 中 `def main(` 之前的前綴（ns 要給 `__file__`）
-     再用它的 `functions()`／`read()`——**直接 import 會跑 main()**。
-  1b. **非表單軸已逐項歸帳完畢（20260827 V）——真正沒翻的只有 48 行。**
-     13,973 = 刻意 gated 2,671 ＋ 假缺口 11,254 ＋ **真缺 48**。
-     **修正後非表單 = 333,790/336,509 golden code 行 = 99.2%**（census 報 95.8%）。
-     假缺口三種機制：括號配對 813（`Command.cpp`）、刻意寄放他檔 93（`GetRowCol`）、
-     **檔名比對 10,348（`BarCode/BarCode_Sh1.cpp`＋`BarCode_Sh2.cpp`，20/20 全已翻，
-     port 在 `BarCode_Shuttle{1,2}_*.cpp` 用 `BarCode_`／`BarCode_Sh2_` 前綴自由函式）**。
+| 退出 | 缺的符號 | 家 |
+|---|---|---|
+| `bEnableIPSC` | `RecordProcess` | `canary_support.cpp`（sm） |
+| `GetStringBySeparatedValues` | `ShowMyMessage` | `canary_support.cpp`（sm） |
+| `GetArmBySiteFor32Site` | `TestSocket` | `aHotPlateSubstrate.cpp`（sm） |
+| `CalculateNowArmSiteBinQty` | `ArmData`/`TArm`/`TMySocket::GetSelTrayCT` | `cSocket.cpp`（sm） |
+| `CalculateNowTotalICQty` | 呼叫上一支 | — |
+| `ClearArmSiteBinQty` | `ArmData` | `cSocket.cpp`（sm） |
+| `CalICCountInHandler` | `MOT[]` | `Motor/mymotor.cpp`（motor） |
+| `UpdateControlBinCount` | `ArmData`/`Now/OldControlBinCategory` | `cSocket.cpp`（sm） |
+| `bIsNeedCheckControlBin` | `TestSocket` ＋ 呼叫上一支 | — |
 
-     ⚠ **那 48 行後來也證實是假的（20260827 VI）**：其中 39 行的本體早已搬到
-     `aHotPlateSubstrate.cpp:1486-1530`（`ainarm2` 五支）與
-     `csystem_predicates.cpp:309-317`（四支述詞），皆為真本體、非 gated、帶 golden 引註。
-     只剩 `common.cpp` `MyDrawText` 9 行全樹無定義，**而它是缺依賴不是待辦**
-     （vclcompat 無 `TCanvas`/`FillRect`；唯一消費者 `cContactCT.cpp:311/316/324/328`
-     全在 GATE (C1) 內早已 gated；專案方向是 web UI，canvas 繪圖是死路）。
-     → **非表單軸「可翻的剩餘工作 = 0 行」，pt-wave 的目標實質達成。**
-     以下保留原始清單只為留下追查軌跡：
+**它是用 `nm --undefined-only` 在砍之前與砍之後各量一次證明的**，不是憑判斷。
 
-     **原記為「剩餘 48 行」者**：
-     `ainarm2.cpp` 五支（`InitInArmPickFromHotPlateTask50` golden:633-643／
-     `ResetInToShtFlag` :124-129／`InitInArmPlaceToShuttleTask` :647-652／
-     `BackupPlacePos` :2185-2190／`RestorePlacePos` :2192-2197，共 35 行）、
-     `common.cpp` `MyDrawText`（:1387-1395，9 行）、
-     `csystem.cpp` 四支單行述詞（`OutSHT1InLF`/`OutSHT1InRT`/`OutSHT2InLF`/`OutSHT2InRT`，:698-701）。
-     ⚠ **`ainarm2` 那五支要先判是不是動機台**（InArm 任務初始化／位置備份還原）。
+**主迴圈獨立複驗（我自己跑 `nm`）確認它說的是真的**：交付後的 `.o` 只剩
+`IniConfig`／`LastSet`／`iTo3Unload`（`ht9045_globals`）、`fMain`（`ht9045_forms` 自身）、
+`uTimeTool` 三支方法（`ht9045_globals`）、`vclcompat::Now/DecodeTime/AnsiString::*`，
+外加 libstdc++ 執行期符號。**零個 sm／motor 符號。**
 
-  1c. **表單軸的 88 個無鏡射檔確實有同一個檔名缺陷，已用兩訊號探針量出下界
-     （20260827 VII）**：`tools/census/coverage_probe.py --form` →
-     **STRICT 21,151 / loose 46,512 / 無 137,475（golden span 行）**。
-     census 把這 88 檔的 169,536 code 行**全部**記為未翻譯；實際上至少 21,151 span 行
-     有雙訊號佐證是既有翻譯（最極端：`uhome.cpp` STRICT 4,035、無僅 773）。
-     ⚠ **這張表不可換算成百分比**——`STRICT+loose+無 = 205,138` 超過 gcode 合計
-     169,536（span 含空行註解；且 golden 側自身有括號吞併）。
-     **表單軸仍報 census 的 17.3%（/261,862 golden code 行），標為下界。**
-     這張表的用途是**排序哪些檔需要人工判讀**。
+### 違規的兩支，錯在我的清單不在它的判斷
 
-  1d. **表單軸下一波候選（依「無」由大到小，已排除 golden 側括號吞併的檔）**：
-     `fAOI.cpp`(無 7,709)、`AutoAlignment/AutoAlignment.cpp`(7,398)、
-     `ProductionInfo/ProductionInfo.cpp`(5,603)、`HS_Function.cpp`(4,999)、
-     `AutoTeach/InOutArmZteach.cpp`(4,765)、`rs232.cpp`(4,538)。
-     ⚠ `InOutArmZteach`（教導值）與 `AutoAlignment`（對位動作）**屬佇列類**；
-     `rs232`／`fAOI` 有對外命令通道，取批時先切唯讀面。
-     ⚠ **避開** `main.cpp`／`note.cpp`／`uhome.cpp`／`Magazine.cpp`／`cSortCT.cpp`／
-     `cContact.cpp`——golden 側有括號吞併，span 數字不可靠，要先跑
-     `python tools/census/span_sanity.py <file>` 單檔模式確認被吞了哪幾支。
-  2. `cDatabaseJson`（7 支/99 行）＋`cLineScanRemainICYieldRecord`（11 支/110 行
-     ＋3 支 header inline）facade，可解 (G-5b)。
-     ⚠ **兩個先決條件**：golden 宣告 `cDatabaseJson : public uBasicPickPlace`，
-     **要先解那個基底**；`GetTotalNumDir`／`GetFileNameWithDir` 呼叫
-     `MyForceDirectories` **會建目錄**，是 (G-2) 寫入路徑不是純路徑組裝。
-  3. 再開全新 facade（form 軸 17.3%，**88 個表單檔零鏡射**）。
-  4. 補 `ComputeTotalAirForce` / `SlkForceTable` 的 ctest。
-  5. **簽章慣例定案**（W27 保留完整簽章 vs W21/W29 丟掉未讀參數）。
-  - ⚠ **決定 `InitForms()` 的呼叫點是行為變更真正落地的時刻**，要單獨一波、
-    跑全量 ctest 比對失敗清單。唯一的真實翻轉是 `uTemp_Set.cpp:2270` 的
-    `if(fDynamicTemp!=NULL)` 從恆假變真。
+`SetPISTime` 與 `SetInsertOPIDStr` **在我的派工排除清單裡被逐名列出**，它翻了。
+它在報告裡**主動、顯眼地揭露**並交回給我裁決，沒有默默做。
 
-- **gate 的用法變了（20260827）**
-  - **判定一律跑 `bash tools/gateverdict.sh <tag>`，不看 exit code。**
-    `ctest` 對任何失敗一律回 8 → sentinel 零鑑別力（KNOWLEDGE gotcha #20）。
-  - **用序列的 `tools/dualgate.sh`，不要用 `dualgate2.sh`**（已標停用）。
-    dualgate2 讓 Debug ctest 疊 Release build，實測把 `dfm2rc_fidelity` 從
-    565.94s（單獨跑、通過）推過 600s → 假紅，而只省 6% 時間。
-  - **量測期間不要對機器下診斷指令**（CPU 取樣／列舉行程／spawn benchmark／
-    grep 全樹）。20260827 我就是這樣污染了 w35r 的量測，還拿髒數字下了錯結論。
+我自己開檔讀了兩支本體：
+`SetPISTime` 只做 `sPI_STime=GetNowTime();`（設 facade 欄位）；
+`SetInsertOPIDStr` 只做 `edInsertOPID_HALT->Text=FilterAlphanumeric(s);`（寫 widget）。
+**都不碰機台狀態、不寫檔、不走對外通道。**
 
-- **待查（不編造原因）**
-  1. **`dfm2rc_fidelity` 相對自己近期歷史約慢一倍**：Release 154–206s → **355s**、
-     Debug 292–479s → **566s**；2026-07-28 基線 130s（`tests/CMakeLists.txt:2524`，
-     `:2529` 設 `TIMEOUT 300`，gate 用 `--timeout 600` 覆蓋）。
-     **已證明與樹無關**（每個 `_layout.gen.cpp` 只 include 自己的 `_layout.gen.h`、
-     `tools/dfm2rc/` 自 08-20 零 commit、golden 唯讀）。
-     **Debug 側只剩 34 秒餘裕，任何額外負載都會再紅。刻意不動 timeout。**
-     環境面已知：D: 是 HDD（WDC WD10SPSX）上有 228 個 `build_*` 目錄；
-     可考慮 `build.bat prune`，但**先確認不會刪到另一個 session 在用的東西**。
-  2. **`ShowBinSelectCore` 在 w34g 的 SEGFAULT**——w35g 通過（1.20s），不是持續回歸。
+**裁決：保留。錯的是我。** 我把「會改機台狀態的 `Set*`」展開成逐名清單時，
+**沒有讀本體就把所有 `Set*` 都列進去了**。這與今晚 census 那四次假缺口是同一個病：
+**用名字的形狀代替讀本體。**
 
-- **累積的判斷原則（十波驗證過）**
-  1. **缺符號比錯答案好**——三次（W26 退化 stub、W28 `dKitDiameter=30.0`、
-     W31 的 56mm `dContactOffset`）。**靜默地錯比大聲失敗更糟。**
-  2. **前提死掉不代表答案就是退役**——W29 的 B1 第 4 站點、W30 全部六個、
-     W34 修正 W32 的 gate 理由但不推翻 gate。
-  3. **降級要分「安全」與「主動選錯」**——W30 的 `iATC_MODE_TYPE` 恆 0 是安全降級；
-     W33 的 `iSortUnloadT6` 寫 0 是主動選錯（初值 -1 配 `>=0` 守衛）。
-  4. **`grep` 找到字串只證明文字存在，不證明編譯器看得到**（本樹上千個 `#if 0`）。
-  5. **regex 訊號掃描會漏掉真正危險的東西**——必須實際開本體讀完。
-  6. **「宣告但不定義」的 gate 有邊界**——ACTIVE 本體呼叫 gated 本體會讓 `.o` 帶著
-     無條件 undefined reference。
-  7. **shim 佔用有兩層**——類別名（W32）與函式名（W34）。**開工前先查名字有沒有被佔。**
-  8. **`-fsyntax-only` 綠證明不了連得起來**（W35 的 `fLan`）。這是「build 綠證明不了
-     接上了」的反面，而且波次 agent 的自檢工具正好就是 `-fsyntax-only`。
-  9. **驗收工具本身要先能分辨「沒有失敗」與「還沒寫完」**（`gateverdict.sh` 第一版
-     就犯了它要修的那個錯）。
-  10. **量測工具會靜默說謊，而它的謊話長得像待辦清單。** `census.py` 因為一個
-     藏在註解裡的 `{` 造出 813 行假缺口，我照著派了一整波（20260827 IV）。
-     **與權威工具不合時，不代表你錯**——那次我自己第一次量是對的，卻因為和 census
-     不合就否定了自己。派工前跑 `tools/census/span_sanity.py`。
+但流程上要講清楚：**它做對的是「揭露並交回裁決」，不是「自己判斷可以就做」。**
+逐名排除清單即使開錯了，agent 也不該靜默覆寫——這次它沒有，記錄下來當先例。
 
-- **主迴圈被 agent 推翻前提三次、分母給錯九次。**
-  第九次的形狀特別值得記：**過期的不是別人的數字，是我自己幾小時前造成的變化**
-  （W23/W24/W25 讓候選從 6 變成 9）。
-  **派工裡那句「我給的數字是轉述的，你自己重量一次」仍然是最有價值的一句話。**
+### 主迴圈自己抓到、agent 沒提的一支
 
-- **佇列不做（安全關鍵，等使用者在場）**：`h4-G2`／`G01`（會讓入料手臂移動到教導點）；
-  `HGem` bootstrap；`clWindow`／`TCustomEdit::Color` 整併；
-  `CONTACT_TEST` 解閘（連帶 `SetContactMode` 模式切換）；
-  `(SEC1)` 開閘須同波帶上 `fCleaning->btnResetCleanCountClick`；
-  X-01～X-06 + SLK loader 接線 + IO 波次；
-  **`language.cpp` 納入編譯**（967 行、三個大 `#if 0` 區、link surface 未審，
-  且它目前不屬於任何 CMake target）；各波退出的動作／寫檔方法。
+**`ClearTrayCnt` 會把 `LastSet.iN14_9_FullTrayCnt/PartialTrayCnt/PartialTrayICCnt/
+InHandlerICCnt` 四個 256 元素陣列清零**——那是**全域生產追蹤狀態**，不是 facade 欄位。
+記憶體內、不寫檔，且**目前零呼叫者**，所以本波不改變任何行為。
+但它**必須進「未經使用者在場不得接線」清單**。
+（形狀與 port 裡早已 live 的 `ResetInToShtFlag` 相同，所以保留而非移除。）
 
-- **待裁決**：`DoTrayIDCheck` 的語意衝突——W32 翻的真本體回 false = 重複 tray ID，
-  而 `acatchtray_shims.h:296-306` 把 offline 答案硬寫成 true 且註明是刻意決定。
-  `TestIF_File.bCheckTrayIDBylot` 打開且檔案有 match 時**兩者相反**，接線時要挑一個。
+另一個要記的：**`GetSetUpName` 直接解參考 `fMain->cbSetupFileName->Text`**。
+`fMain` 為 NULL 時會崩——陷阱 #4 的形狀。目前零呼叫者，接線那波要先確認 `fMain` 已建。
 
-- **活的潛伏警告**：`WD-5`——GA-1-B4 換手後
-  `FormShow → ShowXMLOnLine → 4× RecordProcess` 會變 DB 寫入。**要擋就那時擋。**
-  另：`TfVacuumUnit` 的 widget 成員與 `myPal*`／`d*` 陣列**沒有 NSDMI**，
-  今天無害只因為 24 個讀取站點全在 `#if 0` 內（`VacuumUnit.cpp` 632..683、859..903）。
-  **誰解那些 gate，誰就必須先呼叫 `Initial()`。**
+### 它拒絕交付的一支，理由對
 
+`LoadHaltAndPauseSelectStatusName`（70 行）要碰 32 個 `TSpeedButton` 的 `->Hint`，
+而 **`vclcompat::TSpeedButton` 沒有 `Hint` 成員**（只有 `Caption`/`Down`/`GroupIndex`
+加 `TControl` 的 `Visible`/`Enabled`/`hCtl`/`Tag`）。
+它沒有把 `->Hint` 那幾行默默拿掉——**那正是派工裡禁止的「看起來對的降級版本」**。
+擴 `vclcompat/Controls.h` 是 `forms/FormWidgets.h` 明文禁止的範圍，所以整支不翻。
+
+### 「沒被排除」不等於「查過而且安全」
+
+派工大清單裡的 7 支（`LoadMOInformation` 309／`CalculateOEEReport` 201／
+`bCheckControlBinYield` 167／`CheckMOInformation` 158／`CheckCloseInfo` 86／
+`CheckOEE_WhenStart` 83／`LoadYiedlInformation` 76）**它根本沒走到，沒有任何判定**。
+它明講了這一點——**這句話比多交 500 行有價值**，因為下一波不會誤以為它們已被評估過。
+
+### `coverage_probe` 的 loose 模式：實測偽陽性 9/11
+
+開工時它跑 `coverage_probe.py ProductionInfo/ProductionInfo.cpp`：
+**157 支 → 146 NONE / 11 loose / 0 STRICT**。而那 11 個 loose 裡**有 9 個是偽陽性**
+（同尾名撞到不相干的檔：`FormShow`/`FormClose`/`FormDestroy`/`Button2Click`
+→ `ATC/ATCInterface.cpp`；`PageControl1Change` → `cConfiguration.cpp`；
+`DoIniDataToForm` → `OmronLaser/LaserSensor.cpp`；`CopyFolder` → `TempCtrl/TriTemp.h`；
+`GetMultiplierNum` → `atester_ProcessCount.cpp`；`CheckFTPFilePath` → `ProductionInfo/TfFTP.cpp`）。
+真的只有 2 個：`TfProductionInfo`（ctor）與 `CalTrayICCount`。
+
+**這是那支工具第一次拿到偽陽性率，記進工具說明**：loose 是上界，
+**這個檔上 82%（9/11）是雜訊**。STRICT 這一側則零偽陽性（25 支逐一對得上）。
+`span_sanity` 對這個 golden 檔回報 **157→157、少抽 0**，所以分母可信。
+
+### 兩個「前提已死」的 gate，本波刻意不解（行為變更留下一波）
+
+1. **`atester_ProcessCount.cpp:1142`**：`#if 0 // TODO(W6.4b-integrate):
+   fProductionInfo->cDynaThres->GetMultiplierNum()`。本波把
+   `cDynamicMultiContinualPassBinBySocket::GetMultiplierNum/AddThresholdNum` 翻進來了，
+   **那個 gate 的前提（port 沒有 cDynaThres）已經死了**。
+   ⚠ 但**前提死掉不代表答案就是退役**（陷阱 #3）——解它會讓
+   `ContinuousPassBinBySocket` 的門檻從恆定 ×1 變成 `pow(2,n)` 動態縮放，
+   **那是真的行為變更**，要單獨一波、跑全量 ctest。
+   順帶：`atester_ProcessCount.cpp:1135` 的 `int GetMultiplierNum()` 是**自由函式**，
+   與新增的成員函式是不同符號，**沒有重複定義**（主迴圈已開檔確認）。
+2. **`cSocket.h:69-74`** 的 20260807 banner 寫著
+   `ArmData/ArmDataLot/ArmHistory/ArmData_AutoClean/Old|NowControlBinCategory`
+   「not defined anywhere else either (grepped the whole tree ... 20260807)」。
+   **主迴圈自己驗過：照字面讀現在是假的**——`cSocket.cpp:169-172,230-231` 有真定義，
+   且 `cSocket.cpp` 已註冊在 `CMakeLists.txt:2154`；該 banner 自己那句
+   「once cSocket.cpp/.h **are added to** ht9045_sm's CMakeLists sources」也早已成真。
+   這是陷阱 #2（absence-claim 會過期）的又一個實例。本波不改那個檔（與本波無關）。
+
+### 驗收：**原始判定 RED，逐項乾淨重跑後兩側皆通過**——不要寫成「gate 全綠」
+
+全新 dir、序列 `tools/dualgate.sh pi1`（**不用 `dualgate2.sh`**，它已停用）。
+新的 sentinel 格式第一次在真實波次上生效：
+
+```
+_pi1_gate_g.txt      _pi1_gate_done.txt
+G_EXIT=8             R_EXIT=8            <- 與 W34 假綠燈時逐位元組相同
+G_VERDICT=RED        R_VERDICT=RED
+G_EXTRA=dfm2rc_fidelity                  R_EXTRA=dfm2rc_fidelity
+G_TOTAL=6            R_TOTAL=6
+FAILSET（兩側相同）= 常駐五項 + dfm2rc_fidelity
+```
+
+**這正是它存在的理由**：同一個 `exit 8` 曾經讓 W34 被記成綠燈，現在它旁邊就擺著
+`VERDICT=RED` 與明確的超出項，沒有再讀錯的空間。
+
+超出項只有 `dfm2rc_fidelity`（**逾時，不是斷言失敗**），而它**與樹無關**已在
+20260827 IV/V 查清。逐項在乾淨機器上重跑，**兩側都通過**：
+
+| | 本波（pi1） | 對照（w35） |
+|---|---|---|
+| Debug 單獨跑 | **321s 通過** | 565.94s 通過 |
+| Release 單獨跑 | **327s 通過** | 355.37s 通過 |
+
+**這組數字本身又補了一塊證據**：同一個測試、同樣單獨跑，Debug 側從 566s 掉到 321s
+（**快了將近一半**）。所以它的耗時**高度取決於當下機器負載**，不是固定的回歸——
+gate 裡撞 600s 是負載造成的。**本波仍然刻意不動 timeout。**
+
+### 淨交付
+
+**23 支乾淨 / 205 span 行**（含那兩支我裁決保留的則是 25 支 / 213 行）。
+
+### 🔖 RESUME（20260827 清晨 · 第四版）
+
+- **本段最後一顆**：`FW3-PI1`——`forms/fProductionInfo.{h,cpp}` 從空殼（70+15 行）
+  長到 190+313 行，**25 支方法 / 213 golden span 行**。詳見 20260827 VIII。
+
+---
+
+## 一、今晚最重要的事：**量尺壞了四次，四種機制**
+
+`census.py` 的 per-file 缺口清單在同一個晚上用**四種不同機制**騙了主迴圈四次，
+四次都靜默、四次都長得像待辦清單，其中一次**害我派了一整波翻譯 agent 出去**：
+
+| 機制 | 假缺口 | 誰擋 |
+|---|---|---|
+| 括號配對（註解裡的 `{` 吞掉 61 支定義） | 813 行（`Command.cpp`） | `tools/census/span_sanity.py` |
+| 刻意寄放他檔（`GetRowCol` 在 `atester.cpp`） | 93 行 | `tools/census/coverage_probe.py` |
+| **檔名比對**（`BarCode_Sh1/Sh2` 判 no-mirror → 整檔記全缺） | **10,348 行** | 同上 |
+| 本體搬到別的 port 檔（`ainarm2`→`aHotPlateSubstrate.cpp` 等） | 39 行 | 同上 |
+
+**派工前必跑這兩支，成本幾秒。** 今晚它們擋下兩整波白工。
+⚠ `coverage_probe` 的 **loose 實測雜訊率 82%（9/11）**——`FormShow`/`FormClose`/
+`Button*Click`/`PageControl*Change` 這類 VCL 事件名命中幾乎必然是雜訊；STRICT 側零偽陽性。
+
+**還有一個同型的錯是我自己犯的**：`ctest` 對任何失敗都回 `exit 8`，而舊 sentinel 只寫
+exit code，於是 **W34 在紅燈上 commit 卻被我記成綠燈**。已工具化（見下）。
+
+## 二、三軸現況（**引用必附分母與單位，三軸不可互相換算**）
+
+| 軸 | 狀態 | 分母 |
+|---|---|---|
+| **非表單** | **實質完成**：已翻 333,790（**99.2%**）／刻意 gated 2,671／**可翻的剩餘工作 0 行** | 336,509 golden code 行 |
+| **表單** | census 報 **17.3%**，**那是下界** | 261,862 golden code 行 |
+| 全案 | census 報 61.5%，修正後約 61.6%，**同樣是下界** | 598,371 golden code 行 |
+
+- 非表單唯一真缺是 `common.cpp MyDrawText`（9 行），**是缺依賴不是待辦**
+  （vclcompat 無 `TCanvas`/`FillRect`；唯一消費者 `cContactCT.cpp:311/316/324/328`
+  全在 GATE (C1) 內；專案方向是 web UI）。**`pt-wave` 的非表單目標實質達成。**
+- 表單軸 88 個無鏡射檔用 `coverage_probe --form` 量到
+  **STRICT 21,151 / loose 46,512 / 無 137,475（golden span 行）**——
+  ⚠ **不可換算成百分比**（`STRICT+loose+無 = 205,138` 超過 gcode 合計 169,536；
+  span 含空行註解，且 golden 側自身有括號吞併）。用途是**排序哪些檔需要人工判讀**。
+
+## 三、gate 的用法（20260827 起改了）
+
+- **判定一律跑 `bash tools/gateverdict.sh <tag>`，或直接讀 sentinel 的 `*_VERDICT` 行。
+  不看 exit code。**
+- **用序列的 `tools/dualgate.sh`，不要用 `dualgate2.sh`**（已標停用：管線化把
+  `dfm2rc_fidelity` 推過 600s 造成假紅，而只省 6% 時間）。sentinel 現在自帶判定。
+- **量測期間不要對機器下診斷指令**（CPU 取樣／列舉行程／spawn benchmark／grep 全樹）。
+  我就是這樣污染了 w35r 的量測、還拿髒數字推翻了正確的假設。
+- **`dfm2rc_fidelity` 的耗時高度取決於機器負載**，不是固定回歸：
+  單獨跑實測 pi1 Debug **321s**／Release **327s**，w35 Debug 566s／Release 355s，
+  2026-07-28 基線 130s。**在 gate 裡撞 600s 是負載造成的。刻意不動 timeout**——
+  調大它就是把 W34 那個錯換一種形式再犯。
+
+## 四、下一步（依序）
+
+1. **`ProductionInfo` 續攻**（同一個 facade，`forms/fProductionInfo.{h,cpp}` append）：
+   - 大清單 7 支 **agent 根本沒走到、無任何判定**：`LoadMOInformation`(309)／
+     `CalculateOEEReport`(201)／`bCheckControlBinYield`(167)／`CheckMOInformation`(158)／
+     `CheckCloseInfo`(86)／`CheckOEE_WhenStart`(83)／`LoadYiedlInformation`(76)。
+     **「沒被排除」不等於「查過而且安全」。**
+   - 另 9 支因 **`ht9045_forms` 不連 `ht9045_sm`/`ht9045_motor`** 而退出
+     （`bEnableIPSC`／`GetStringBySeparatedValues`／`GetArmBySiteFor32Site`／
+     `CalculateNowArmSiteBinQty`／`CalculateNowTotalICQty`／`ClearArmSiteBinQty`／
+     `CalICCountInHandler`／`UpdateControlBinCount`／`bIsNeedCheckControlBin`）。
+     **把 `forms/fProductionInfo.cpp` 改放進 `ht9045_sm` 來源清單（比照 `forms/fContact.cpp`）
+     即可解**——那是主迴圈的 CMakeLists 工作，**屬連結變更，要單獨一顆 commit 與單獨 gate**。
+   - `LoadHaltAndPauseSelectStatusName`(70) 卡在 **vclcompat 沒有 `TSpeedButton::Hint`**，
+     擴 `vclcompat/Controls.h` 是 `forms/FormWidgets.h` 明文禁止範圍。
+2. **新表單 facade**（依 `coverage_probe --form` 的「無」由大到小）：
+   `fAOI.cpp`(7709)／`AutoAlignment`(7398)／`HS_Function.cpp`(4999)／`rs232.cpp`(4538)。
+   ⚠ `AutoTeach/InOutArmZteach.cpp`（教導值）與 `AutoAlignment`（對位動作）**屬佇列類**；
+   `rs232`／`fAOI` 有對外命令通道，取批先切唯讀面。
+   ⚠ **避開** `main.cpp`／`note.cpp`／`uhome.cpp`／`Magazine.cpp`／`cSortCT.cpp`／`cContact.cpp`
+   ——golden 側有括號吞併，span 數字不可靠，要先跑 `span_sanity.py <file>` 單檔模式。
+3. 補 `ComputeTotalAirForce` / `SlkForceTable` 的 ctest。
+4. **簽章慣例定案**（W27 保留完整簽章 vs W21/W29 丟掉未讀參數）。
+
+⚠ **決定 `InitForms()` 的呼叫點是行為變更真正落地的時刻**，要單獨一波、跑全量 ctest。
+唯一的真實翻轉是 `uTemp_Set.cpp:2270` 的 `if(fDynamicTemp!=NULL)` 從恆假變真。
+
+## 五、累積的判斷原則（十一波驗證過）
+
+1. **缺符號比錯答案好**——W26 退化 stub／W28 `dKitDiameter=30.0`／W31 的 56mm
+   `dContactOffset`／PI1 的 `LoadHaltAndPauseSelectStatusName`。**靜默地錯比大聲失敗更糟。**
+2. **前提死掉不代表答案就是退役**（W29／W30／W34／PI1 的兩個死前提 gate）。
+3. **降級要分「安全」與「主動選錯」**（`iATC_MODE_TYPE` 恆 0 vs `iSortUnloadT6` 寫 0）。
+4. **`grep` 找到字串只證明文字存在，不證明編譯器看得到**（本樹上千個 `#if 0`）。
+5. **regex 訊號掃描會漏掉真正危險的東西**——必須實際開本體讀完。
+6. **「宣告但不定義」的 gate 有邊界**——ACTIVE 本體呼叫 gated 本體 = 無條件 undefined reference。
+7. **shim 佔用有兩層**：類別名（W32）與函式名（W34）。開工前先查名字有沒有被佔。
+8. **`-fsyntax-only` 綠證明不了連得起來**（W35 的 `fLan`；PI1 的 sm/motor 連結邊界）。
+   **每個新引用的外部符號都要問「本體在哪個 .cpp、那個 .cpp 在 CMakeLists 嗎」。**
+9. **驗收工具本身要先能分辨「沒有失敗」與「還沒寫完」**（`gateverdict.sh` 第一版就犯了）。
+   **輸出端的編碼問題也會偽造成分析失敗**（`coverage_probe` 第一版印 U+26A0 崩在 cp950，
+   整支回 exit 1，而分析其實已跑完）。
+10. **量測工具會靜默說謊，而它的謊話長得像待辦清單**（本節第一段那四次）。
+    **與權威工具不合時，不代表你錯**——我自己第一次量是對的，卻因為和 census 不合就否定了自己。
+11. **逐名排除清單要先讀本體再列，不要用名字的形狀代替閱讀**——PI1 我把所有 `Set*`
+    逐名列進排除清單，而 `SetPISTime`／`SetInsertOPIDStr` 根本只設欄位／寫 widget。
+    **agent 翻了、主動揭露、交回裁決——那是對的流程；靜默覆寫才不是。**
+
+**主迴圈被 agent 推翻前提三次、分母給錯九次。**
+派工裡那句「**我給的數字是轉述的，你自己重量一次**」仍然是最有價值的一句話。
+
+## 六、佇列不做（安全關鍵，等使用者在場）
+
+`h4-G2`／`G01`（會讓入料手臂移動到教導點）；`HGem` bootstrap；
+`clWindow`／`TCustomEdit::Color` 整併；`CONTACT_TEST` 解閘（連帶 `SetContactMode`）；
+`(SEC1)` 開閘須同波帶上 `fCleaning->btnResetCleanCountClick`；
+X-01～X-06 + SLK loader 接線 + IO 波次；
+`language.cpp` 納入編譯（967 行、三個大 `#if 0` 區、**且不屬於任何 CMake target**）；
+各波退出的動作／寫檔方法；
+**`ClearTrayCnt` 接線**（會清零 `LastSet.iN14_9_*` 四個 256 元素生產計數陣列）；
+`Command.cpp` 的 7 支 write-path 方法（含 `WriteHandlerTestArmEncoder`／`WriteHandlerTestArmEP`）
+——**實測它們早已翻完並連結**，是否恰當**留給使用者裁決，不要自行處置**。
+
+## 七、待裁決 / 活的潛伏警告
+
+- **待裁決**：`DoTrayIDCheck` 語意衝突——W32 翻的真本體回 false = 重複 tray ID，
+  而 `acatchtray_shims.h:296-306` 把 offline 答案硬寫成 true。
+  `TestIF_File.bCheckTrayIDBylot` 打開且檔案有 match 時**兩者相反**。
+- `WD-5`：GA-1-B4 換手後 `FormShow → ShowXMLOnLine → 4× RecordProcess` 會變 DB 寫入。
+- **`TfVacuumUnit` 的 widget 成員與 `myPal*`／`d*` 陣列沒有 NSDMI**，今天無害只因為
+  24 個讀取站點全在 `#if 0` 內（`VacuumUnit.cpp` 632..683、859..903）。
+  **誰解那些 gate 就必須先呼叫 `Initial()`。**
+- **`GetSetUpName` 直接解參考 `fMain->cbSetupFileName->Text`**——`fMain` 為 NULL 會崩。
+- **兩個「前提已死」但刻意未解的 gate**：`atester_ProcessCount.cpp:1142`
+  （解它會讓 `ContinuousPassBinBySocket` 門檻從恆定 ×1 變成 `pow(2,n)`，**真行為變更**）；
+  `cSocket.h:69-74` 的 20260807 absence-claim **照字面讀已是假的**
+  （`cSocket.cpp:169-172,230-231` 有真定義且註冊在 `CMakeLists.txt:2154`）。
 - **刻意保留的 warning**：`fTrayMapping.cpp:316` 的 `-Wdelete-non-virtual-dtor`
   （golden 的 `TfAOI` 有虛擬函式但非虛擬解構子）。**不要動它、也不要為了消它而改東西。**
+
+## 八、環境備忘
+
+- **`grep -rn` 與 `git log -- <path>` 掃全樹會逾時**（本樹有 228 個 `build_*` 目錄）。
+  用 Grep 工具／帶排除清單的 Python 掃描器／git 加 `--since`。
+- **D: 是 HDD**（WDC WD10SPSX），C: 是 SSD；刪 300 個小檔 D: 661ms vs C: 71ms。
+- **`build.bat prune` 刻意不做**：刪 228 個 build 目錄是破壞性動作，
+  另一個 session 共用這台機器可能正在用。**留給使用者裁決。**

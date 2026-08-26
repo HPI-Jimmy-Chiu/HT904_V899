@@ -32,6 +32,23 @@
 
 **只報區間，不報單一數字。** 兩者差距大就代表這個檔需要人工判讀。
 
+實測校準（20260827，`ProductionInfo/ProductionInfo.cpp`，157 支）
+================================================================
+    146 NONE / 11 loose / 0 STRICT
+
+那 11 個 loose 裡 **9 個是偽陽性**（同尾名撞到不相干的檔）：
+`FormShow`／`FormClose`／`FormDestroy`／`Button2Click` → `ATC/ATCInterface.cpp`；
+`PageControl1Change` → `cConfiguration.cpp`；`DoIniDataToForm` → `OmronLaser/LaserSensor.cpp`；
+`CopyFolder` → `TempCtrl/TriTemp.h`；`GetMultiplierNum` → `atester_ProcessCount.cpp`
+（那裡是**自由函式**，golden 那支是**成員**，不同符號）；
+`CheckFTPFilePath` → `ProductionInfo/TfFTP.cpp`。
+真的只有 2 個：`TfProductionInfo`（ctor）與 `CalTrayICCount`。
+
+→ **loose 在這個檔上的雜訊率是 82%（9/11）。把 loose 當上界看，不要當結論。**
+   同一波的 STRICT 側則零偽陽性（25 支逐一對得上交付清單）。
+   **`FormShow`/`FormClose`/`FormDestroy`/`Button*Click`/`PageControl*Change` 這類
+   VCL 事件處理器名字在本樹到處都是，loose 命中它們幾乎必然是雜訊。**
+
 已知不涵蓋的情況（誠實列出）
 ==========================
 - 只有 STRICT 命中不代表「翻得對」，只代表「有人翻了並宣告了出處」。

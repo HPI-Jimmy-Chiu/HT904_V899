@@ -46,6 +46,18 @@
 #define FORMS_FPRODUCTIONINFO_H
 
 #include "forms/FormWidgets.h"
+// AI(W906-FW3-PI1) 20260827: 2 includes added for the FW3-PI1 read-only batch
+// (see the member/method block below).  PMAlarm/uTimeTool.h -- the
+// `utimetool` member's type (golden ProductionInfo.h:542), already a landed
+// port (PMAlarm/uTimeTool.cpp, registered in ht9045_globals -- see the
+// LINK-BOUNDARY note below for why that target matters).  <vector> --
+// GetBin0_8List()'s golden return type (golden :569 `std::vector<int>`).
+// MachineType.h (e3Auto1.../e3Fix5 for GetBin0_8List's body) is included from
+// the .cpp instead -- nothing in this header needs it after the link-boundary
+// trim below removed the MAX_SOCKET_ROW/MAX_SOCKET_COL/TEST_MAX_BIN-sized
+// array fields.
+#include "PMAlarm/uTimeTool.h"
+#include <vector>
 
 // ===========================================================================
 //  TfProductionInfo -- non-VCL stub (golden ProductionInfo/ProductionInfo.h)
@@ -62,9 +74,117 @@ public:
     // count display, which has no headless equivalent.
     virtual void CalTrayICCount(int iWitchTray);    // [METHOD] golden ProductionInfo.h:377 -- offline: no-op
                                     //   (parameter spelling `iWitchTray` is golden's own, kept verbatim)
+
+    // =======================================================================
+    // AI(W906-FW3-PI1) 20260827: FW3-PI1 wave -- read-only batch translated
+    // from golden ProductionInfo/ProductionInfo.cpp.  Every member and method
+    // below is cited against its golden line.  None of them write a file,
+    // touch a socket/FTP, exec an external program, or drive a
+    // timer/*Click event -- those stay untranslated this wave (see the wave
+    // report).
+    //
+    // LINK-BOUNDARY EXCLUSIONS (discovered this wave, not in the original
+    // suggested list): forms/fProductionInfo.cpp is registered in
+    // ht9045_forms, which links ONLY vclcompat + ht9045_globals + ht9045_core
+    // (CMakeLists.txt:714-721) -- NOT ht9045_sm or ht9045_motor, and per
+    // CMakeLists.txt:2249-2295 that direction cannot be added (it would be a
+    // CMake target cycle; forms/fContact.cpp, fTrayAssignment.cpp,
+    // fMotorTest.cpp and fTeach.cpp were all placed in ht9045_sm's OWN source
+    // list instead of ht9045_forms for exactly this reason). Several golden
+    // functions in the suggested batch reference symbols that live only in
+    // ht9045_sm (ShowMyMessage/RecordProcess -- canary_support.cpp; ArmData/
+    // TArm/TMySocket/NowControlBinCategory/OldControlBinCategory --
+    // cSocket.cpp; TestSocket -- aHotPlateSubstrate.cpp) or ht9045_motor
+    // (MOT[] -- Motor/mymotor.cpp). This wave's write boundary forbids
+    // touching CMakeLists.txt, so those functions are NOT translated here:
+    // bEnableIPSC, GetStringBySeparatedValues, GetArmBySiteFor32Site,
+    // CalculateNowArmSiteBinQty, CalculateNowTotalICQty (calls the previous),
+    // ClearArmSiteBinQty, CalICCountInHandler, UpdateControlBinCount,
+    // bIsNeedCheckControlBin (calls UpdateControlBinCount). See the wave
+    // report for the per-symbol breakdown.
+    // =======================================================================
+
+    // ---- new UI-state field (dfm leaf name, golden __published :74) ----
+    TfLotInfoEdit *edInsertOPID_HALT;   // [DATA] golden :74 (TEdit*) -- SetInsertOPIDStr/GetInsertOPIDStr
+
+    // ---- new plain-data fields (golden private/public, :197-570) ----
+    AnsiString sLoadMO_MO;              // [DATA] golden :277 -- GetScheduleName's Mo half
+    AnsiString sPI_STime;               // [DATA] golden :200 (private) -- SetPISTime/GetPISTime cache
+    uTimeTool  utimetool;               // [DATA] golden :542 -- GetNowTime
+    AnsiString _sOEE_MO;                // [DATA] golden :346 -- OEE_GetMO (OEE_SetMO's write side stays untranslated)
+    bool _bOEEStartLotSuccess = false;  // [DATA] golden :265 -- IsOEEStartLotSuccess (golden has no ctor initializer for
+                                         //   it either; `bool` default-constructs indeterminate in golden too -- false
+                                         //   here is the deterministic "no Start Lot happened yet" offline reading)
+    Word h = 0, n = 0, s = 0, z = 0;    // [DATA] golden :197 (private) -- DecodeTime() scratch, reused verbatim by
+                                         //   GetNowTimeSec/bIntegerTimeCheck/bTimerCheck (golden keeps them as instance
+                                         //   fields even though every use is write-then-immediately-read; kept faithful)
+    AnsiString sDevice_Pin_Force;       // [DATA] golden :314 -- CheckContactForceExist
+    AnsiString sDevice_Pin_Count;       // [DATA] golden :313 -- CheckContactForceExist
+
+    int iNowUnloaderTrayQty[8]  = {};   // golden :430
+    int iLastUnloaderTrayQty[8] = {};   // golden :431
+
+    // ---- read-only methods (golden .cpp span cited; golden .h decl cited) ----
+    AnsiString MyBoolToString(bool b);                                       // golden .cpp:1592-1598  .h:244
+    AnsiString GetNowTime();                                                 // golden .cpp:5839-5843  .h:543
+    int GetNowTimeSec();                                                     // golden .cpp:5119-5123  .h:465
+    void SetPISTime();                                                       // golden .cpp:5845-5848  .h:544
+    AnsiString GetPISTime();                                                 // golden .cpp:5850-5853  .h:545
+    AnsiString OEE_GetMO();                                                  // golden .cpp:369-372    .h:241
+    bool IsOEEStartLotSuccess();                                             // golden .cpp:1175-1178  .h:234
+    AnsiString GetSetUpName();                                               // golden .cpp:5382-5385  .h:493
+    AnsiString GetScheduleName();                                            // golden .cpp:5834-5837  .h:541
+    void SetInsertOPIDStr(const AnsiString& s);                              // golden .cpp:5917-5920  .h:563
+    AnsiString GetInsertOPIDStr();                                           // golden .cpp:5922-5925  .h:564
+    AnsiString FilterAlphanumeric(const AnsiString& s);                      // golden .cpp:5927-5939  .h:565
+    void CheckNewDayAndSubtract(int &iTimeSec);                              // golden .cpp:4931-4934  .h:458
+    bool CheckContactForceExist();                                          // golden .cpp:4936-4947  .h:384
+    bool bIntegerTimeCheck();                                                // golden .cpp:4506-4520  .h:415
+    bool bTimerCheck(int iTimeMode);                                         // golden .cpp:4522-4538  .h:416
+    bool IsContinueFailAlarm();                                              // golden .cpp:5773-5783  .h:539
+    AnsiString GetCSVLineData(int iDataNum, AnsiString sCSVLineStr);         // golden .cpp:495-515    .h:242
+    std::vector<int> GetBin0_8List();                                        // golden .cpp:6065-6077  .h:569
+    void CalculateNowUnloaderTrayQty(bool bIsClear=false);                   // golden .cpp:4393-4405  .h:442
+    int CalculateUnloadTotalICQty();                                         // golden .cpp:4429-4440  .h:444
+    void ClearUnloaderTrayQty();                                             // golden .cpp:4460-4467  .h:446
+    void ClearTrayCnt();                                                     // golden .cpp:3329-3339  .h:375
+
     TfProductionInfo();
     virtual ~TfProductionInfo() {}
 };
 extern TfProductionInfo *fProductionInfo;   // golden: extern PACKAGE TfProductionInfo *fProductionInfo; (:572)
+
+// ===========================================================================
+//  cDynamicMultiContinualPassBinBySocket -- golden ProductionInfo.h:574-593
+//  AI(W906-FW3-PI1) 20260827: added for AddThresholdNum()/GetMultiplierNum()
+//  (both read-only: one increments a private in-memory counter bounded by an
+//  IniConfig limit, the other reads it back through a power-of-two formula --
+//  no I/O either way).  ResetThresholdNum() is golden's own inline ctor/dtor
+//  helper, translated verbatim.  NOT wired to TfProductionInfo::cDynaThres
+//  this wave -- no translated caller dereferences that pointer yet, and
+//  adding a member with no consumer is exactly the "inventing surface" this
+//  facade's own contract (forms/FormWidgets.h) warns against.  Add cDynaThres
+//  to TfProductionInfo when a caller needs it.
+// ===========================================================================
+class cDynamicMultiContinualPassBinBySocket
+{
+private:
+    int iDynamicThresholdNum;
+public:
+    cDynamicMultiContinualPassBinBySocket()
+    {
+        ResetThresholdNum();
+    }
+    ~cDynamicMultiContinualPassBinBySocket()
+    {
+        ResetThresholdNum();
+    }
+    int GetMultiplierNum();     // golden ProductionInfo.cpp:5955-5963
+    void AddThresholdNum();     // golden ProductionInfo.cpp:5965-5969
+    void ResetThresholdNum()
+    {
+        iDynamicThresholdNum=0;
+    }
+};
 
 #endif // FORMS_FPRODUCTIONINFO_H
