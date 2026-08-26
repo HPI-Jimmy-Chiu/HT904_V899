@@ -13472,56 +13472,261 @@ append-only：`+210/-0`（.h）／`+151/-0`（.cpp），零刪除，無其他檔
   ALL 61.6%（golden code 行）；tag C++ 側 66 vs 瀏覽器 37；web layout.json 133/133。
   **W28-W33 之後翻譯軸未重量。**
 
-### 🔖 RESUME（20260827 凌晨 · 第二版）
+## 20260827 II — FW-BOOTSTRAP-W35：建 4 個不是 5 個，而**退出的那一個救了一顆地雷**
 
-- **本段最後一顆**：`FW-TRAYMAP-W34`——5 支自由函式，但**真正的產出是證明
-  `TfTrayMappingForm` 的唯讀表面已窮盡**（108 支剩餘成員全部真的該 gated、
-  header inline 只有 4 支且已全交、非成員族群已逐一分類）。雙 gate 137/142 全綠。
+### 交付
 
-- **累計 12 顆 commit，九次雙 gate 全部 137/142、失敗集合逐項等於常駐五項。**
+`FormsBootstrap.h`（26 行）／`FormsBootstrap.cpp`（208 行），**全新檔、零刪除**。
+核心是四行照 golden `HT9045.cpp` 原順序的守衛式建構：
+
+```
+if (FormBarcodeReader == 0) FormBarcodeReader = new TFormBarcodeReader();  // golden :210
+if (fDynamicTemp      == 0) fDynamicTemp      = new TfDynamicTemp();       // golden :221
+if (fPassword         == 0) fPassword         = new TfPassword();          // golden :223
+if (fVacuumUnit       == 0) fVacuumUnit       = new TfVacuumUnit(0);       // golden :274
+```
+
+`CMakeLists.txt` **+11/-0**，把 `FormsBootstrap.cpp` 註冊進 `ht9045_sm`，證據寫進註解：
+`nm` 量到 12 個未定義符號，其中 **6 個只有 `ht9045_sm` 提供**（三個 ctor 加
+`fDynamicTemp`／`FormBarcodeReader`／`fVacuumUnit` 三個全域）。`CMakeLists.txt` 仍是純 CRLF。
+
+### 本波真正的收穫：`fLan` 退出，擋掉一顆 `-fsyntax-only` 看不見的地雷
+
+派工說「五個全域」。agent 交了 **4 個**，因為 **`language.cpp` 不屬於任何 CMake target**。
+主迴圈三重複驗，三條都成立：
+
+| 驗法 | 結果 |
+|---|---|
+| `CMakeLists.txt` 全檔（大小寫不敏感）搜 `language` | **0 命中** |
+| 全檔搜 `file(GLOB` | **0 個**（所以不會被萬用字元掃進去） |
+| 掃所有 `build/*.a` 的 `TfLan` **defined** symbol | **0 個** |
+
+所以 `new TfLan()` 會是**連結期 undefined reference**。
+
+**這是「build 綠證明不了接上了」的反面，而且更陰險：`-fsyntax-only` 綠也證明不了
+連得起來。** 波次 agent 的自檢工具就是 `-fsyntax-only`——它對這一類缺陷**結構性地看不見**。
+唯一能提前抓到的是「這個 .cpp 在 CMakeLists 裡嗎」，而那正是主迴圈整併時逐符號要問的問題。
+`language.cpp` 納入編譯（967 行、三個大 `#if 0` 區、link surface 未審）另行佇列。
+
+### 主迴圈的分母第九次給錯，agent 三項全部自己重量
+
+| 我給的 | 實際 | 為什麼錯 |
+|---|---|---|
+| 候選 6 個 | **9 個** | 我**自己**當天的 W23／W24／W25 讓 `fTeach`／`fMotorTest`／`fTrayAssignment` 具備了條件，而我派工時用的是那三波之前的清單 |
+| 類別未翻 63 | **60** | 同上，過期 |
+| `TfDynamicTemp` ctor 15 行／2 個陣列 | **18 行／3 個陣列** | 轉述前一份報告，沒開檔 |
+
+第一項的形狀值得單獨記：**過期的不是別人的數字，是我自己幾小時前造成的變化。**
+
+### agent 補了兩件我沒問的
+
+- `TFormBarcodeReader` 有一個 by-value 成員 `TQPF_Timer`，ctor 會跑 **1001 次
+  `QueryPerformanceCounter`**。純 syscall，不碰全域、不做 I/O，在 `InitForms()` 裡安全
+  （在靜態初始化期就不安全了——見陷阱 #4）。
+- `TfVacuumUnit` 是 `: public TComponent` 且 ctor 收 Owner 參數。傳 `0`：基底 ctor 對 NULL
+  安全，且**全樹沒有人讀 `Owner()`**。
+
+### agent 自己發現的新風險（本波不處理，但誰解 gate 誰要處理）
+
+`TfVacuumUnit` 的 widget 成員與 `myPal*`／`d*` 陣列**沒有 NSDMI**——建構後值不確定。
+今天無害**只因為**24 個讀取站點**全部在 `#if 0` 內**
+（`VacuumUnit.cpp` `632..683`、`859..903`）。
+**未來解那些 gate 的人必須先呼叫 `Initial()`。** 已寫進標頭。
+
+### 本波沒有任何呼叫者——所以現在不可觀察
+
+`InitForms()` 目前**零 caller**。這是刻意的：**決定呼叫點才是行為變更真正落地的時刻**，
+要單獨一波、跑全量 ctest 比對失敗清單。
+
+接上之後唯一的真實翻轉是 `uTemp_Set.cpp:2270` 的 `if(fDynamicTemp!=NULL)`
+從**恆假變成真**，`:2272-2275` 會寫四個 `->Text`。那四個都是 NSDMI 的 `TEdit`，
+記憶體安全且目前沒有 live reader——**但它從「整段不執行」變成「整段執行」，
+這就是要單獨量的理由。**
+
+### golden 的三個重複建構：決定「只建一次」並寫進註解
+
+golden 對 `fBinAOISel`（`:278`／`:279`）、`fObserveMagazine`（`:280`／`:282`）、
+`frmFileTransfer`（`:281`／`:283`）各 `new` 了兩次。在 BCB6 那是 `Application` owner chain
+接住第一顆；**port 沒有那條鏈，照抄會是真的記憶體洩漏**。
+通則定為「每個全域只建一次」，而 `if (p == 0)` 這個守衛同時讓 `InitForms()` **冪等**。
+
+### 刻意沒做
+
+- **未翻 `WinMain`**：golden `HT9045.cpp:153` 有一個 modal `MessageBox`，絕不可進批次執行。
+- **未接任何 event handler。**
+- **未呼叫 `TfPassword::Init()`**（含 `ReadPasswordFile` 檔案 I/O）**與 `TfVacuumUnit::Initial()`**。
+- `language.cpp` 納入編譯：佇列。
+
+### 驗收：**gate 的原始判定是 RED，不要寫成全綠**
+
+全新 dir、最後一次整併之後量。Debug build exit 0、Release build exit 0。
+兩側 ctest **各 6 個失敗＝常駐五項 + `dfm2rc_fidelity`（Timeout），兩側逐項相同**。
+
+`dfm2rc_fidelity` 是逾時不是斷言失敗，且**與本波無關**（證據見下一節）。
+逐項在乾淨機器上重跑，**兩側都通過**：
+
+| | |
+|---|---|
+| `build_w35r` 單獨跑 | **355.37s 通過** |
+| `build_w35g` 單獨跑 | **565.94s 通過** |
+
+→ w35 的真實失敗集合就是常駐五項。**但記錄的是「原始 RED、逐項重跑後通過」，
+不是「gate 全綠」**——這個區別正是下一節在講的事。
+
+`ShowBinSelectCore` 在 w35g **通過（1.20s）**。
+
+
+## 20260827 III — 更正：**W34 是在紅燈上 commit 的，而我把它記成了綠燈**
+
+### 事實（本次逐項重讀磁碟）
+
+| build dir | 通過 | 失敗集合 |
+|---|---|---|
+| `build_w32g` / `build_w32r` | 137/142 | 常駐五項 ✅ |
+| **`build_w34g`** | **135/142** | 常駐五項 + `dfm2rc_fidelity` (Timeout) + **`ShowBinSelectCore` (SEGFAULT)** |
+| **`build_w34r`** | **136/142** | 常駐五項 + `dfm2rc_fidelity` (Timeout) |
+
+而 commit `5d85337` 的訊息與 20260827 I 那節都寫著
+**「Debug 與 Release 各 137/142，失敗集合逐項相同」**。
+
+排除過了：**沒有第二組 w34 build dir** 可以解釋那個記錄；w34 之前
+（08-25 20:49 到 08-26 23:54）**連續 25 組 gate 全部是 5 個失敗**。
+**我不知道自己當時是怎麼寫出 137/142 的，也不去編一個解釋。**
+
+### 機制不是粗心，是 sentinel 沒有鑑別力
+
+`ctest` 對「有任何測試失敗」**一律回 exit 8**，不論失敗 5 個還是 7 個。所以
+`_<tag>_gate_{g,done}.txt` 的內容在 w23/w26/w28/w29/w30/w31/w32（真的 5 個失敗）
+與 w34（7 個、6 個）**逐位元組相同**——都是 `G_EXIT=8` / `R_EXIT=8`。
+
+政策裡「比對失敗集合逐項、不看數字」那條規則存在的理由就是為了擋這件事，
+**而 exit code 恰好長得像一個確認訊號**。心跳提示裡「`exit 8` 就是本樹的正常綠燈值」
+這句簡寫是有害的，往後不再寫。
+
+### 處置：把判定變成工具，不是提醒自己下次記得
+
+- **`tools/gateverdict.sh`**（`f581770`）：抽失敗集合、與常駐五項比對，
+  印 `*_FAILSET` / `*_EXTRA` / `*_ABSENT` / `*_VERDICT`，RED 回 1、GREEN 回 0。
+  歷史資料回歸：w32→兩側 GREEN、w34→兩側 RED、w35g→RED。
+  **它自己第一版就有同型缺陷**：ctest.log 還在寫時沒有失敗區段 → 抽出空集合 →
+  EXTRA 空 → 判 GREEN。已加守衛，沒有 `tests passed` 摘要行就判 INCOMPLETE。
+- **`tools/dualgate.sh`**（`d12508e`）：sentinel 改成
+  `{ echo "G_EXIT=$GEX"; bash tools/gateverdict.sh "$TAG" g; } > _<tag>_gate_g.txt`。
+- **`.gitattributes`**（`13512e3`）：`*.sh text eol=lf`。與本案無關但同一輪撿到——
+  repo `core.autocrlf=true` 且無 `.gitattributes`，三支 gate 腳本是靠
+  「沒人重新 checkout 過」活著的。範圍刻意只限 `.sh`（V899 是 Big5、`build.bat` 必須 CRLF）。
+
+### `dfm2rc_fidelity` 為什麼與樹無關（決定性證據）
+
+- **每個 `_layout.gen.cpp` 只 `#include` 自己的 `_layout.gen.h`，零專案標頭**
+  ——所以我們整天把標頭加大，不可能拖慢那 133 次 `g++ -fsyntax-only`。
+- `tools/dfm2rc/` **自 08-20 零 commit**；`run_b1d.py` 磁碟 mtime **2026-08-17**。
+- golden 唯讀；`run_b1d.py:482` 的 mojibake/BOM 掃描只走 build dir 內的 regen 產出，
+  不走原始碼樹。
+
+已排除的其他假設：磁碟滿（D: 347GB 可用）、行程建立被攔截
+（spawn 實測 windres 102ms／g++ 93ms，`WinDefend` 與 `Sense` 皆 Stopped）。
+
+### 兩件仍未解釋的事，記為待查，**不編造原因**
+
+1. **`dfm2rc_fidelity` 相對自己近期歷史約慢一倍**：Release 154–206s → 355s；
+   Debug 292–479s → 566s；2026-07-28 基線 130s（`tests/CMakeLists.txt:2524`，
+   `:2529` 設 `TIMEOUT 300`，gate 用 `--timeout 600` 覆蓋）。
+   **Debug 側目前只剩 34 秒餘裕，任何額外負載都會再紅。本次刻意不動 timeout**
+   ——調大 timeout 讓它過，就是把 W34 那個錯換一種形式再犯一次。
+   環境面已知：D: 是 **HDD**（WDC WD10SPSX），上面有 228 個 `build_*` 目錄；
+   刪 300 個小檔 D: 661ms、C:(SSD) 71ms。
+2. **`ShowBinSelectCore` 在 w34g 的 SEGFAULT**：w35g 通過（1.20s），所以不是持續回歸。
+   無法解釋，列為待觀察。
+
+### 我自己污染了量測，而且拿污染的數字下過結論
+
+追 `dfm2rc_fidelity` 時，我一邊在同一台機器上跑 CPU 取樣、`Get-CimInstance` 列舉
+全部行程、30 次編譯器 spawn benchmark、還有一個逾時後轉背景又掃六分鐘的 `grep` 全樹，
+一邊量 `build_w35r` 的 fidelity——然後拿那個被自己污染的 >600s 去「推翻」
+dualgate2 重疊假設。**那個推翻是錯的**：乾淨重跑同一顆測試是 355s。
+
+**量測期間不要對機器下診斷指令。** 這條與陷阱 #2（absence-claim 會在同一波內過期）
+是同一個家族：**你自己的動作會讓你的證據失效。**
+
+### 🔖 RESUME（20260827 凌晨 · 第三版）
+
+- **本段最後一顆**：`FW-BOOTSTRAP-W35`——`FormsBootstrap.{h,cpp}`（26+208 行）
+  ＋`CMakeLists.txt` +11 行註冊進 `ht9045_sm`。**建 4 個全域不是 5 個**，
+  `fLan` 退出的理由是 `language.cpp` **不屬於任何 CMake target**
+  （`new TfLan()` 會是連結期 undefined reference，而 **`-fsyntax-only` 看不到**）。
+  **目前零 caller，所以本波不改變任何執行期行為。**
+
+- **⚠️ 更正一筆假記錄：`FW-TRAYMAP-W34` 是在紅燈上 commit 的。**
+  RESUME 第二版與 commit `5d85337` 都寫「雙 gate 137/142 全綠」，磁碟實際是
+  `build_w34g` **135/142**（多 `dfm2rc_fidelity` Timeout + `ShowBinSelectCore` SEGFAULT）、
+  `build_w34r` **136/142**（多 `dfm2rc_fidelity` Timeout）。詳見 20260827 III。
+  **所以「累計九次雙 gate 全綠」這個說法也是錯的，不要再引用。**
 
 - **下一步（依序）**
-  1. **bootstrap 5 個**（`TFormBarcodeReader`／`TfVacuumUnit`／`TfPassword`／
-     `TfDynamicTemp`／`fLan`），ctor 已審過 NSDMI 安全。
-     **放顯式 `InitForms()`，絕不可放靜態初始化**（陷阱 #4 曾 88/134 SEGFAULT）。
-     golden `HT9045.cpp` 有 3 個全域被建兩次，port 無 `Application` 擁有者 →
-     **建一次並註解**。量測工具 `tools/wavescan/bootstrap_survey.py`（35 秒可重跑）。
-  2. **翻譯軸重量**（W28-W34 之後未重跑 `tools/census/census.py --detail`）。
-  3. `cDatabaseJson`（7 支/99 行）＋ `cLineScanRemainICYieldRecord`（11 支/110 行
+  1. **翻譯軸重量**——`tools/census/census.py --detail` **自 W28 之後未重跑**，
+     W29～W35 的交付都還沒進帳。這是目前最便宜、也最該先做的一件事。
+  2. `cDatabaseJson`（7 支/99 行）＋`cLineScanRemainICYieldRecord`（11 支/110 行
      ＋3 支 header inline）facade，可解 (G-5b)。
      ⚠ **兩個先決條件**：golden 宣告 `cDatabaseJson : public uBasicPickPlace`，
      **要先解那個基底**；`GetTotalNumDir`／`GetFileNameWithDir` 呼叫
      `MyForceDirectories` **會建目錄**，是 (G-2) 寫入路徑不是純路徑組裝。
-  4. 再開全新 facade（form 軸 17.3%，**88 個表單檔零鏡射**）。
-  5. 補 `ComputeTotalAirForce` / `SlkForceTable` 的 ctest。
-  6. **簽章慣例定案**（W27 保留完整簽章 vs W21/W29 丟掉未讀參數）。
+  3. 再開全新 facade（form 軸 17.3%，**88 個表單檔零鏡射**）。
+  4. 補 `ComputeTotalAirForce` / `SlkForceTable` 的 ctest。
+  5. **簽章慣例定案**（W27 保留完整簽章 vs W21/W29 丟掉未讀參數）。
+  - ⚠ **決定 `InitForms()` 的呼叫點是行為變更真正落地的時刻**，要單獨一波、
+    跑全量 ctest 比對失敗清單。唯一的真實翻轉是 `uTemp_Set.cpp:2270` 的
+    `if(fDynamicTemp!=NULL)` 從恆假變真。
 
-- **累積的判斷原則（九波驗證過）**
+- **gate 的用法變了（20260827）**
+  - **判定一律跑 `bash tools/gateverdict.sh <tag>`，不看 exit code。**
+    `ctest` 對任何失敗一律回 8 → sentinel 零鑑別力（KNOWLEDGE gotcha #20）。
+  - **用序列的 `tools/dualgate.sh`，不要用 `dualgate2.sh`**（已標停用）。
+    dualgate2 讓 Debug ctest 疊 Release build，實測把 `dfm2rc_fidelity` 從
+    565.94s（單獨跑、通過）推過 600s → 假紅，而只省 6% 時間。
+  - **量測期間不要對機器下診斷指令**（CPU 取樣／列舉行程／spawn benchmark／
+    grep 全樹）。20260827 我就是這樣污染了 w35r 的量測，還拿髒數字下了錯結論。
+
+- **待查（不編造原因）**
+  1. **`dfm2rc_fidelity` 相對自己近期歷史約慢一倍**：Release 154–206s → **355s**、
+     Debug 292–479s → **566s**；2026-07-28 基線 130s（`tests/CMakeLists.txt:2524`，
+     `:2529` 設 `TIMEOUT 300`，gate 用 `--timeout 600` 覆蓋）。
+     **已證明與樹無關**（每個 `_layout.gen.cpp` 只 include 自己的 `_layout.gen.h`、
+     `tools/dfm2rc/` 自 08-20 零 commit、golden 唯讀）。
+     **Debug 側只剩 34 秒餘裕，任何額外負載都會再紅。刻意不動 timeout。**
+     環境面已知：D: 是 HDD（WDC WD10SPSX）上有 228 個 `build_*` 目錄；
+     可考慮 `build.bat prune`，但**先確認不會刪到另一個 session 在用的東西**。
+  2. **`ShowBinSelectCore` 在 w34g 的 SEGFAULT**——w35g 通過（1.20s），不是持續回歸。
+
+- **累積的判斷原則（十波驗證過）**
   1. **缺符號比錯答案好**——三次（W26 退化 stub、W28 `dKitDiameter=30.0`、
      W31 的 56mm `dContactOffset`）。**靜默地錯比大聲失敗更糟。**
   2. **前提死掉不代表答案就是退役**——W29 的 B1 第 4 站點、W30 全部六個、
-     **W34 修正 W32 的 gate 理由但不推翻 gate**。
+     W34 修正 W32 的 gate 理由但不推翻 gate。
   3. **降級要分「安全」與「主動選錯」**——W30 的 `iATC_MODE_TYPE` 恆 0 是安全降級；
-     **W33 的 `iSortUnloadT6` 寫 0 是主動選錯**（初值 -1 配 `>=0` 守衛）。
+     W33 的 `iSortUnloadT6` 寫 0 是主動選錯（初值 -1 配 `>=0` 守衛）。
   4. **`grep` 找到字串只證明文字存在，不證明編譯器看得到**（本樹上千個 `#if 0`）。
-  5. **regex 訊號掃描會漏掉真正危險的東西**——W33 四支、W34 三支都在掃描下「乾淨」，
-     逐行讀才看到寫檔／啟動機台／模式切換。**必須實際開本體讀完。**
+  5. **regex 訊號掃描會漏掉真正危險的東西**——必須實際開本體讀完。
   6. **「宣告但不定義」的 gate 有邊界**——ACTIVE 本體呼叫 gated 本體會讓 `.o` 帶著
-     無條件 undefined reference，**把互鎖從絆線變成永久 build 破**。
-  7. **shim 佔用有兩層**——W32 遇到**類別名**被佔（`class TfTrayMapping`），
-     W34 遇到**函式名**被佔（四支 `Initial*Task` 已是 offline no-op、20+ 個 caller）。
-     翻譯它們是重複符號、直接 build 破。**開工前先查名字有沒有被佔。**
+     無條件 undefined reference。
+  7. **shim 佔用有兩層**——類別名（W32）與函式名（W34）。**開工前先查名字有沒有被佔。**
+  8. **`-fsyntax-only` 綠證明不了連得起來**（W35 的 `fLan`）。這是「build 綠證明不了
+     接上了」的反面，而且波次 agent 的自檢工具正好就是 `-fsyntax-only`。
+  9. **驗收工具本身要先能分辨「沒有失敗」與「還沒寫完」**（`gateverdict.sh` 第一版
+     就犯了它要修的那個錯）。
 
-- **主迴圈今天被 agent 推翻前提三次、分母給錯八次**（W34 那次我主動先聲明「我給的
-  數字八成是錯的」，它重量後確認 150 與 W32 逐位元組相同）。
-  **派工裡那句「我給的數字是轉述的，你自己重量一次」是今天最有價值的一句話。**
+- **主迴圈被 agent 推翻前提三次、分母給錯九次。**
+  第九次的形狀特別值得記：**過期的不是別人的數字，是我自己幾小時前造成的變化**
+  （W23/W24/W25 讓候選從 6 變成 9）。
+  **派工裡那句「我給的數字是轉述的，你自己重量一次」仍然是最有價值的一句話。**
 
 - **佇列不做（安全關鍵，等使用者在場）**：`h4-G2`／`G01`（會讓入料手臂移動到教導點）；
   `HGem` bootstrap；`clWindow`／`TCustomEdit::Color` 整併；
   `CONTACT_TEST` 解閘（連帶 `SetContactMode` 模式切換）；
   `(SEC1)` 開閘須同波帶上 `fCleaning->btnResetCleanCountClick`；
-  X-01～X-06 + SLK loader 接線 + IO 波次（已裁決等 IO）；
-  各波退出的動作／寫檔方法。
+  X-01～X-06 + SLK loader 接線 + IO 波次；
+  **`language.cpp` 納入編譯**（967 行、三個大 `#if 0` 區、link surface 未審，
+  且它目前不屬於任何 CMake target）；各波退出的動作／寫檔方法。
 
 - **待裁決**：`DoTrayIDCheck` 的語意衝突——W32 翻的真本體回 false = 重複 tray ID，
   而 `acatchtray_shims.h:296-306` 把 offline 答案硬寫成 true 且註明是刻意決定。
@@ -13529,10 +13734,9 @@ append-only：`+210/-0`（.h）／`+151/-0`（.cpp），零刪除，無其他檔
 
 - **活的潛伏警告**：`WD-5`——GA-1-B4 換手後
   `FormShow → ShowXMLOnLine → 4× RecordProcess` 會變 DB 寫入。**要擋就那時擋。**
+  另：`TfVacuumUnit` 的 widget 成員與 `myPal*`／`d*` 陣列**沒有 NSDMI**，
+  今天無害只因為 24 個讀取站點全在 `#if 0` 內（`VacuumUnit.cpp` 632..683、859..903）。
+  **誰解那些 gate，誰就必須先呼叫 `Initial()`。**
 
 - **刻意保留的 warning**：`fTrayMapping.cpp:316` 的 `-Wdelete-non-virtual-dtor`
   （golden 的 `TfAOI` 有虛擬函式但非虛擬解構子）。**不要動它、也不要為了消它而改東西。**
-
-- **三軸（20260826 17:12 量測，單位不可互換）**：翻譯 non-form 96.0%／form 17.3%／
-  ALL 61.6%（golden code 行）；tag C++ 側 66 vs 瀏覽器 37；web layout.json 133/133。
-  **W28-W34 之後翻譯軸未重量。**

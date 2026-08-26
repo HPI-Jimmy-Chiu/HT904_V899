@@ -89,6 +89,8 @@
 > | 18 | **「每個呼叫點都走到了」不等於「下對了命令」**——軌跡/覆蓋型斷言完全不約束致動器的**方向與極性** | 已寫（AI(W906-W7-DOCfix2) 20260801 新增，證據自跑） |
 > | 19 | **`tools/dfm2rc/` 三組產生語料的行尾慣例不一致（`ir_out`/`reports` = CRLF，`layout_out`/`rc_out` = LF），而閘 G7 逐位元組比對**——補結尾換行時補錯 EOL 會把 G7 弄紅 | 已寫（AI(W906-Gate4) 20260802 新增，證據自跑） |
 >
+> | 20 | **`ctest` 的 exit code 對「失敗集合」零鑑別力**（任何測試失敗都回 8）——拿它判 gate 會把紅燈讀成綠燈 | 已寫（AI(W906-FW-GATEVERDICT) 20260827 新增，證據自跑） |
+>
 > 13-16 標「保留號、未寫」是刻意的：把號先鎖住可以消除碰撞，但**不冒充已驗證**。要寫進來的人請自己重跑證據再補正文，並把狀態改成「已寫」。
 
 1. **AnsiString 1-based vs std::string 0-based（最高風險）**：`AnsiString.Pos()`/`.SubString()` 是 **1-based**（全專案 ~1,910 處）。直翻成 `std::string`(0-based, npos) 會 off-by-one／切錯字串且**編得過**。翻譯時逐處改 index，或先做一個 1-based 相容的 AnsiString-like 包裝（`.Length()/.Pos()/.SubString()/.UpperCase()/.sprintf()` 同名同語意）降低風險。`.UpperCase/.LowerCase/.sprintf/.Trim/.Delete` 在 std::string 無對應，需 helper。
@@ -230,6 +232,24 @@ FW-3 cObserver recon 判定（vclcompat/TStringList.cpp:163-225 vs BCB6 classes.
   要單獨開波並問過使用者（預設不重現）。
 - 適用面：cObserver GetEventLogText 三個 CommaText 讀點（golden :3848/:3892/:3927）
   ＋StatisticalJamCount（:5131）。
+
+20. **`ctest` 的 exit code 對「失敗集合」零鑑別力，而它長得像一個確認訊號（2026-08-27 踩到，已工具化）**：
+    `ctest` 對「有任何測試失敗」**一律回 exit 8**，不論失敗的是 5 個還是 7 個。
+    本樹的 gate 腳本把它寫進 sentinel（`echo "G_EXIT=$?" > _<tag>_gate_g.txt`），
+    結果 **w23/w26/w28/w29/w30/w31/w32（真的只有常駐五項失敗）與 w34（Debug 7 個、
+    Release 6 個）的 sentinel 逐位元組相同**——都是 `G_EXIT=8`。
+    **後果是實際發生的**：W34 在紅燈上 commit（`build_w34g` 135/142、`build_w34r` 136/142，
+    多出 `dfm2rc_fidelity` 逾時與 `ShowBinSelectCore` SEGFAULT），而 commit `5d85337`
+    與 DEVLOG 都寫成「各 137/142、失敗集合逐項相同」。
+    **政策裡「比對失敗集合逐項、不看數字」那條規則就是為了擋這個**，但只要 sentinel 還
+    給得出一個看起來像確認的 8，紀律遲早會輸。
+    **處置是工具化，不是提醒自己下次記得**：`tools/gateverdict.sh <tag>` 抽失敗集合、
+    與常駐五項比對，印 `*_FAILSET`/`*_EXTRA`/`*_VERDICT`，RED 回 1、GREEN 回 0；
+    `tools/dualgate.sh` 的 sentinel 已改成把它的輸出一併寫入。
+    **附帶一個同型的自我提醒**：`gateverdict.sh` 第一版自己就有同一個缺陷——
+    ctest.log 還在寫的時候沒有「The following tests FAILED」區段，抽出來的失敗集合是空的，
+    `EXTRA` 空 → 判 GREEN。已加守衛：沒有 `tests passed` 摘要行就判 INCOMPLETE。
+    **任何「從 log 推導通過與否」的工具，都要先證明自己分得出「沒有失敗」與「還沒寫完」。**
 
 ## Advantech Common Motion（PCI/PCIE-1203）兩個實測陷阱（20260818）
 

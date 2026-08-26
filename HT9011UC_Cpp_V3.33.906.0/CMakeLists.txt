@@ -2272,6 +2272,17 @@ add_library(ht9045_sm STATIC
     #
     # 與 acatchtray_shims.cpp（:1776，同 archive）共存是安全的：類別名不同、無共用符號。
     forms/fTrayMapping.cpp
+    # AI(W906-FW-BOOTSTRAP-W35) 20260827: 表單 bootstrap。落點用 nm 量的：
+    # 12 個未定義符號裡 **6 個只有 ht9045_sm 提供**（TFormBarcodeReader/TfDynamicTemp/
+    # TfVacuumUnit 三個 ctor + 三個同名全域），另 2 個來自 ht9045_forms（TfPassword 那組）。
+    # 因為 ht9045_sm 已 link ht9045_forms（:2284-2295）而**反向會 configure 失敗**
+    # （target cycle，CMakeLists.txt:589-591 白紙黑字記過），所以只能落 ht9045_sm。
+    # 放樹根而非 forms/ 也是這個理由——forms/ 對應的是 ht9045_forms。
+    #
+    # ⚠ 本 TU 目前**沒有任何呼叫者**，所以它不改變任何執行期行為、也不可觀察。
+    # 行為變更會在「決定 InitForms() 的呼叫點」那一波才落地，屆時要重讀
+    # FormsBootstrap.cpp 的 MEASURED BEHAVIOUR DELTA 段。
+    FormsBootstrap.cpp
     forms/fTrayAssignment.cpp
     forms/fMotorTest.cpp
     forms/fTeach.cpp
