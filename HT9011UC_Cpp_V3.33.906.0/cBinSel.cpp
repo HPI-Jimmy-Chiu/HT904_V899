@@ -17,7 +17,13 @@
 //  --------------------------------------------------------------------------
 //    fQAMode           : `grep -rn "\bfQAMode\b" --include=*.h .` -- 0 hits
 //                         (20260819).
-//    AutoForm[]        : `grep -rn "AutoForm\[" --include=*.h .` -- 0 hits
+//    AutoForm[]        : ⚠ AI(W906-FW-UNGATE-W29) 20260826 -- 下面這條
+//                         claim **在寫下當時就是假的**，不是過期：
+//                         cprod.h:1366 的 `extern TRAY_TYPE_PARA
+//                         *AutoForm[eTrayCount];` 早於 20260626 就存在。
+//                         GATE (G2) 已於本波開閘（見 ReadFile 內的註解）。
+//                         原文保留為沿革：
+//                       `grep -rn "AutoForm\[" --include=*.h .` -- 0 hits
 //                         (20260819).
 //    fMain->SetOpenBin : `grep -n "SetOpenBin" forms/fMain.h` -- 0 hits
 //                         (20260819).
@@ -1558,69 +1564,37 @@ void TfBinSel::ReadFile(bool bDelOffline, bool bChangeNeme, AnsiString /*sFileNa
         {
             BinSelect[tag].IfErrorT3=iTo3Unload[eBulkBox];
         }
-        else if (IniConfig.bBinBox)
+        // GATE (G2) OPENED 20260826 (FW-UNGATE-W29) -- golden cBinSel.cpp:1309-1312.
+        // 舊理由是一條 absence claim：`grep -rn "AutoForm\[" --include=*.h .`
+        // -- 0 hits (20260819)。**那條在寫下當時就是假的**：cprod.h:1366 的
+        // `extern TRAY_TYPE_PARA *AutoForm[eTrayCount];` 早在 20260626 就已存在
+        // （八週前），且本檔 :49 就 include 了 cprod.h。
+        // ⚠ 撞名：cprod.h:374 另有結構成員 `TRAY_DATA AutoForm[eTrayCount];`
+        //   （SYSTEM_TRAY_FORM 內，即 TrayForm.AutoForm），型別與這裡不同；
+        //   本 gate 的主體是 :1366 的那個全域指標陣列。
+        // 指標由 cinitial.cpp:14426 `AutoForm[i]=&TrayForm.Auto[i];` 填入
+        // （cprod.cpp:21 是定義，靜態零初始化，填入前為 NULL）。
+        // 同一個運算式 `AutoForm[iBinBoxAtFix]->iTrayType` 已在 6 個編進去的
+        // 站點 live 且無 NULL 守衛（重跑 20260826，掃描器排除 build*/.git/.svn
+        // 且會判 #if 0，0 個 gated）：aoutarm.cpp:1621、:1826、:1897、:3953、
+        // asortarm.cpp:4255、csystem.cpp:16158。（asortarm.cpp:4257 是緊接的
+        // `AutoForm[iBinBoxAtFix]->iBinBoxAlarm`，同一顆指標、不同成員。）
+        //
+        // 開閘後這條分支實際會做什麼：只在 IniConfig.bBinBox 為真、且
+        // iBinBoxAtFix（cmydef.cpp:3042，值 2）那盤的 iTrayType==3 時，把
+        // BinSelect[tag].IfErrorT3 直接設成 iTo3Unload[iBinBoxAtFix]，也就是
+        // 把 I/F Error 的 IC 導到 Bin Box。純記憶體賦值，不寫檔（本檔所有
+        // WriteIniData/DeleteFile 仍照 WRITE-PATH GATE TABLE 全部 gated）、
+        // 不動馬達、不送對外命令。
+        // ⚠ 這是行為變更：BinBox 機台先前會落到下面的 else 長鏈（Fix2/Mag14
+        //   等 fallback），開閘後才會照 golden 導到 Bin Box。
+        // ⚠ 求值順序：`IniConfig.bBinBox &&` 在前，非 BinBox 機台永遠不會
+        //   deref AutoForm[]；與 golden 完全一致。
+        // 原本被複製到這個 arm 的 58 行（與下面的 else arm 逐字相同，這是
+        // fail-closed 的實作方式）在本波移除，只留 else arm 一份。
+        else if (IniConfig.bBinBox && AutoForm[iBinBoxAtFix]->iTrayType==3)   //jou 2012-12-11 support Bin Box -- golden :1309
         {
-            // GATE (G2): `AutoForm[iBinBoxAtFix]->iTrayType==3` -- `grep -rn
-            // "AutoForm\[" --include=*.h .` -- 0 hits (20260819). Fail-closed
-            // to the `else` arm below (golden's own fallback for this
-            // condition being false).
-            if (BinSelect[tag].IfErrorT3<0)
-            {
-                BinSelect[tag].IfErrorT3=e3Fix2;
-            }
-
-            if (CosFunction.bLoaderTrayToAuto1 && TrayForm.LoaderToEmptyColor[iRunStartMode]==2)
-            {
-                if (iTo6Unload[BinSelect[tag].IfErrorT3]==eAuto1)
-                    BinSelect[tag].IfErrorT3=iTo3Unload[eMag14];
-            }
-
-            if (AUTO3_IS_MAGAZINE==1)
-            {
-                if (iTo6Unload[BinSelect[tag].IfErrorT3]==eAuto3)
-                    BinSelect[tag].IfErrorT3=iTo3Unload[eMag14];
-
-                if (TestIF_File.iMagFixTrayType==1 &&
-                    iTo6Unload[BinSelect[tag].IfErrorT3]>=iFixMin &&
-                    iTo6Unload[BinSelect[tag].IfErrorT3]<=iFixRightHalf)
-                {
-                    BinSelect[tag].IfErrorT3=iTo3Unload[eMag14];
-                }
-            }
-            else
-            {
-                if (TrayForm.iFixTrayMode==false &&
-                    iTo6Unload[BinSelect[tag].IfErrorT3]>=iFixMax &&
-                    iTo6Unload[BinSelect[tag].IfErrorT3]<=iFixRightHalf)
-                {
-                    BinSelect[tag].IfErrorT3=iTo3Unload[iFixMax];
-                }
-            }
-
-            if (TestIF_File.bEnableQASampling &&
-                iTo6Unload[BinSelect[tag].IfErrorT3]==iTo6Unload[TestIF_File.iQASamplingT3Pos])
-            {
-                if (iTo6Unload[TestIF_File.iQASamplingT3Pos]==iFixMax)
-                    BinSelect[tag].IfErrorT3=TestIF_File.iQASamplingT3Pos-1;
-                else if (iTo6Unload[TestIF_File.iQASamplingT3Pos]==iFixRightHalf)
-                    BinSelect[tag].IfErrorT3=TestIF_File.iQASamplingT3Pos-1;
-                else
-                    BinSelect[tag].IfErrorT3=TestIF_File.iQASamplingT3Pos+1;
-            }
-
-            if (USE_ROTATE==eCynRot)
-            {
-                if (iTo6Unload[BinSelect[tag].IfErrorT3]==iRotate_Out_Tray6)
-                    BinSelect[tag].IfErrorT3=iTo3Unload[eFix2];
-            }
-
-            if (MachineTypeChoice==Type_HT9045 &&
-                FIX3_FULL_PLACE==Fix3K_UseCylinder &&
-                USE_ROTATE==eMotRot &&
-                iTo6Unload[BinSelect[tag].IfErrorT3]==e3Fix3)
-            {
-                BinSelect[tag].IfErrorT3=iTo3Unload[eFix2];
-            }
+            BinSelect[tag].IfErrorT3=iTo3Unload[iBinBoxAtFix];                // golden :1311
         }
         else
         {

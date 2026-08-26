@@ -357,6 +357,29 @@
 //  -----------------------------------------------------------------------
 //  (G1) ReadFile's `fQAMode->ReadFile();` (golden :1124) -- `grep -rn
 //       "\\bfQAMode\\b" --include=*.h .` -- 0 hits anywhere in this tree.
+//  (G2) ⚠ OPENED 20260826 (FW-UNGATE-W29) —— 下面這條 absence claim
+//       （標 20260819）**不是過期，是寫下當時就是假的**：cprod.h:1366 的
+//       `extern TRAY_TYPE_PARA *AutoForm[eTrayCount];` 早在 20260626 就
+//       已存在（八週前），而 cBinSel.cpp:49 本來就 include 了 cprod.h。
+//       ⚠ 撞名陷阱：cprod.h:374 另有 SYSTEM_TRAY_FORM 的結構成員
+//       `TRAY_DATA AutoForm[eTrayCount];`（即 TrayForm.AutoForm），型別
+//       不同；本 gate 的主體是 :1366 的全域指標陣列，定義在 cprod.cpp:21，
+//       由 cinitial.cpp:14426 `AutoForm[i]=&TrayForm.Auto[i];` 填入。
+//       同一個運算式 `AutoForm[iBinBoxAtFix]->iTrayType` 已在 6 個編進去的
+//       站點 live 且無 NULL 守衛（重跑 20260826）：aoutarm.cpp:1621、:1826、
+//       :1897、:3953、asortarm.cpp:4255、csystem.cpp:16158。
+//       開閘後這條分支實際會做什麼：只有 IniConfig.bBinBox 為真且
+//       iBinBoxAtFix（cmydef.cpp:3042，值 2）那盤 iTrayType==3 時，把
+//       BinSelect[tag].IfErrorT3 設成 iTo3Unload[iBinBoxAtFix]（I/F Error
+//       的 IC 導到 Bin Box）。純記憶體賦值，不寫檔（本檔的 WRITE-PATH
+//       GATE TABLE 完全不受影響）、不動馬達、不送對外命令。
+//       ⚠ 這是行為變更：BinBox 機台先前落到 else 長鏈的 Fix2/Mag14
+//       fallback，開閘後才會照 golden 導到 Bin Box。非 BinBox 機台因為
+//       `IniConfig.bBinBox &&` 短路，永遠不會 deref AutoForm[]。
+//       實作上，先前 fail-closed 的做法是把 else arm 的 58 行**複製一份**
+//       到 `else if (IniConfig.bBinBox)` 這個 arm（兩份逐字相同，本波比對
+//       確認），本波移除那份複製，恢復 golden 的四行分支。
+//       原文保留為沿革：
 //  (G2) ReadFile's `AutoForm[iBinBoxAtFix]->iTrayType==3` branch (golden
 //       :1309) -- `grep -rn "AutoForm\\[" --include=*.h .` -- 0 hits; the
 //       `else` arm (golden :1313 onward) is ACTIVE and is what golden itself

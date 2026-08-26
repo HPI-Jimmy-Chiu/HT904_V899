@@ -56,16 +56,16 @@
 //    SetLabelVisible        golden :1425-1434 ACTIVE
 //    SetAutoVisible         golden :1436-1477 ACTIVE
 //    ShowInitialString      golden :1634-1700 ACTIVE
-//    ShowCategoryBin        golden :1701-2052 ACTIVE, 3 GATEs (fCounterClear)
+//    ShowCategoryBin        golden :1701-2052 ACTIVE, 3 GATEs OPENED 20260826 (W29)
 //    UPH_StringGridDblClick golden :2054-2099 ACTIVE, 1 GATE (Application->MessageBoxA)
 //    CaculateUPH            golden :2279-2333 ACTIVE, 1 GATE (fMain->StatusBar1)
 //    edSLT01Change          golden :2334-2337 ACTIVE, 1 GATE (fMain->StatusBar1)
 //    btnSetInpputCntClick   golden :2339-2352 ACTIVE
 //    RefreshAiCnt           golden :2354-2364 ACTIVE, 1 GATE (fFixAICCD->UnloadAICntNG[])
-//    ed_AutoCleanCountClick golden :2216-2223 ACTIVE, 2 GATEs (fSecurity, fCleaning)
-//    labAuto1Click          golden :2225-2242 ACTIVE, 1 GATE (fBinSel->chkShow0Xbin)
+//    ed_AutoCleanCountClick golden :2216-2223 ACTIVE, fSecurity 半開閘 20260826 (W29); fCleaning 仍 gated
+//    labAuto1Click          golden :2225-2242 ACTIVE, GATE OPENED 20260826 (W29)
 //    btReturnClick          golden :2244-2251 ACTIVE, 1 GATE (PageControl1Change -- Wave B)
-//    btnCleanResetClick     golden :2253-2260 ACTIVE, 2 GATEs (fSecurity, fCleaning)
+//    btnCleanResetClick     golden :2253-2260 ACTIVE, fSecurity 半開閘 20260826 (W29); fCleaning 仍 gated
 //    btnClearCountClick     golden :2262-2277 ACTIVE, 2 GATEs (fSecurity, fCounterClear)
 //    DelDot (free function) golden :178-205  ACTIVE (pure)
 //
@@ -204,6 +204,31 @@
 //
 //  GATE REGISTER
 //  --------------------------------------------------------------------------
+//  (B1) ⚠ OPENED 20260826 (FW-UNGATE-W29) —— 下面這條 absence claim
+//       （標 20260818）**已過期**。cCounterClear 於 20260819 由 wave
+//       FW-SecCC 落地：forms/fCounterClear.h:166 class TfCounterClear、
+//       :194 `void ClearCount(int ClearType);`、:214 extern、
+//       cCounterClear.cpp:26 `TfCounterClear *fCounterClear = new
+//       TfCounterClear();`（無條件，非 SIOF-guarded）。而且同一個呼叫
+//       `fCounterClear->ClearCount(ctBinCount);` 早已在 csystem.cpp:11425
+//       未 gate 地跑著（Smart Auto Clean 的 Initial Start 路徑）。
+//       開閘後這三處實際會做什麼：ClearCount 的 `case ctBinCount`
+//       （cCounterClear.cpp:274-283）把 LastSet.iBinData32[0..3][0..
+//       TEST_MAX_BIN-1] 與 iSVByBinCount[] 歸零，函式尾端（:412）設
+//       bRefreshCount=true。**不寫檔、不動機台、不送對外命令**——
+//       ClearCount 內唯一的檔案動作 DeleteFile(BinCount.txt) 在
+//       `case ctTesterCategory`（:152-165），與 ctBinCount 無關；
+//       MyDBIProcess/MyDBIProductionData 也都不在 ctBinCount 這一支。
+//       ⚠ 但 LastSet 是會被別處寫進 lastdata 的持久化影子，所以歸零最終
+//       會被落盤——這正是 golden 的用意。相反地，繼續 gate 才是偏離：
+//       同一個 if 塊裡 fYieldMonitoring->ClearYieldCount()、
+//       DoLowYieldAlarm("WAR07357"/"WAR07358")、InitialAutoCleanAllTask()
+//       全都已經是活的，只有計數不清 → 同一個 limit 每個 cycle 重複跳。
+//       第四處 `ClearCount(ctIndexCount)`（golden :2276，
+//       cShowBinSelect.cpp btnClearCountClick 內）**沒有開**：那一行的真正
+//       阻塞物是 (B6) 的 ShowMyMessageBox_YES_NO（fail-closed 成無條件
+//       return），寫回去會是 return 後的死碼。理由已就地換成真的那個。
+//       原文保留為沿革：
 //  (B1) ShowCategoryBin's three `fCounterClear->ClearCount(ctBinCount)`
 //       calls (golden :1984/:2000/:2041) -- fCounterClear has NO facade
 //       anywhere in the tree (`grep -rn "fCounterClear" --include=*.h .` --
@@ -236,6 +261,21 @@
 //       (`grep -n "UnloadAICntNG" forms/fFixAICCD.h` -- 0 hits, 20260818).
 //       Safe default: blank text (same as the existing `tNotUse` else-arm),
 //       i.e. "no AI-CCD count available" rather than fabricating a number.
+//  (B5) ⚠ NARROWED 20260826 (FW-UNGATE-W29) —— fSecurity 那半的理由已死：
+//       forms/fSecurity.h:561 `bool Insufficient(int iType, bool bAlarm
+//       = true);` 是真的（本體 cSecurity.cpp:650-674），同一個 TU 的
+//       btnClearCountClick 早在 20260819（FW-SecUnlock）就在用
+//       `fSecurity->Insufficient(108)`（cShowBinSelect.cpp:1064）。
+//       兩支的 `if(fSecurity->Insufficient(4x))` 判斷本波開閘；今天的
+//       可觀察行為完全不變，因為 GATE (SEC1) 未開時 iMaxLevelItem==0，
+//       cSecurity.cpp:663-664 會在 iType>iMaxLevelItem 直接 return false
+//       （連 WAR1676 都不發），所以兩個 body 仍不執行。
+//       ⚠ 仍 gated 的只剩 `fCleaning->btnResetCleanCountClick(Owner)`
+//       （golden :2220/:2257）：forms/fCleaning.h:24 的 TfCleaning 只有
+//       4 個資料成員，沒有這支方法，本 facade 也沒有 golden 的
+//       TForm::Owner。**(SEC1) 開閘時這一行必須同波落地**，否則
+//       ed_AutoCleanCount->Text=0 會只清畫面、不清實際 clean count。
+//       原文保留為沿革：
 //  (B5) ed_AutoCleanCountClick / btnCleanResetClick's `fSecurity->
 //       Insufficient(43)` / `Insufficient(97)` (golden :2218/:2255) --
 //       same fSecurity absence as forms/fContactCT.h GATE (C3); same
@@ -254,6 +294,18 @@
 //       forced to 2 ("No"/cancel), so `fCounterClear->ClearCount(
 //       ctIndexCount)` (golden :2276, ALSO independently gated -- see (B1))
 //       never runs either way.
+//  (B7) ⚠ OPENED 20260826 (FW-UNGATE-W29) —— 下面這條 absence claim
+//       （標 20260818）**已過期**，而且該檔自己在 :264-269 就已記為
+//       STALE：fBinSel 於 20260819 由 wave FW-SBWB2 落地
+//       （forms/fBinSel.h:588 class TfBinSel、:596 `TCheckBox
+//       *chkShow0Xbin;`、cBinSel.cpp:158 無條件全域），且**同一個 TU 的
+//       cShowBinSelect.cpp:1213（ShowBinSel）早就在 live 使用
+//       `fBinSel->chkShow0Xbin->Checked`**——這個 gate 是檔案內部自相矛盾。
+//       開閘後 labAuto1Click 實際會做什麼：checkbox 勾選時
+//       fShowBinSelect->Width=400，否則 331（golden :2237-2240）。純 widget
+//       幾何，不寫檔、不動機台、不送對外命令；chkShow0Xbin 的 NSDMI 預設
+//       是 false，所以今天仍走 331 那一支（可觀察行為不變）。
+//       原文保留為沿革：
 //  (B7) labAuto1Click's `fBinSel->chkShow0Xbin->Checked` (golden :2237) --
 //       fBinSel has NO facade anywhere (`grep -rn "fBinSel" --include=*.h .`
 //       -- only comment-only hits in forms/fMain.h, 20260818). Safe default:

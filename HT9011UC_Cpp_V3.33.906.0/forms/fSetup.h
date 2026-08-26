@@ -78,6 +78,9 @@
 //    edDelayTimeClick           golden :4844-4847 (4L)  -- WA-1 GATE, body empty
 //    edAuto1CountClick          golden :4849-4852 (4L)  -- WA-1 GATE, body empty
 //    edtGetValueDelayTimeClick  golden :4854-4857 (4L)  -- WA-1 GATE, body empty
+//  ⚠ AI(W906-FW-UNGATE-W29) 20260826: 上面五行的「WA-1 GATE, body empty」
+//  已不再成立——五支已於本波開閘，golden 本體完整還原
+//  （見下方 GATE REGISTER 的 (WA-1) 項）。行數與 golden span 不變。
 //  Total: 15 methods / 133 golden lines. Denominator: TfSetup:: has 47
 //  DISTINCT methods (verified this wave: `grep -oE "TfSetup::[A-Za-z_]+\("
 //  cSetUp.cpp | sort -u | wc -l` = 47 -- an EARLIER pass in this same wave
@@ -93,6 +96,44 @@
 //
 //  GATE REGISTER
 //  --------------------------------------------------------------------------
+//  (WA-1) ⚠ OPENED 20260826 (FW-UNGATE-W29) —— 下面這條 absence claim
+//      （「0 compiled (non-#if 0) hits」，標 20260820）**已過期**。
+//      forms/fQwertyKey.h 於 20260824 落地（wave FW-QWKEY1, fc08e09）：
+//      class TfQwertyKey 在 forms/fQwertyKey.h:294，兩顆裸全域
+//      fQwertyKey/fQwertyKey2 定義於 forms/fQwertyKey.cpp:41-42，
+//      ShowQwertyKey 本體 ACTIVE 於 forms/fQwertyKey.cpp:166
+//      （宣告 forms/fQwertyKey.h:370，extern :406-407）。
+//      已開閘的兄弟站點（皆無守衛）：
+//      cSetUp.cpp:1141/:1143/:1157/:1159/:1173（同一 golden 檔的
+//      ht9045_sm 側，FW-SETUP-E 20260824）、cConfiguration.cpp:137 起
+//      共 17 處（FW-QWKEY2）、ATC/ATCInterface.cpp:2301/:2308/:2314/
+//      :2320/:2326（FW-QWKEY5）、Automation/AGV_PortScan.cpp:903/:908/:913
+//      （FW-QWKEY6）、cObserver.cpp:6263/:6617/:6637、cSpeed.cpp:1453 起
+//      共 27 處（FW-SPEED-W21, 20260826）。
+//      重跑 20260826：`Grep "fQwertyKey" .`（排除 build*），
+//      這五支以外的呼叫站點全部已是活的。
+//
+//      開閘後這五支實際會做什麼（headless）：
+//      ShowQwertyKey 把 Sender->Text 複入 edQwertyContent，
+//      ShowModal() 是 offline no-op（forms/fQwertyKey.h BEHAVIOUR NOTE），
+//      等於「使用者開了鍵盤馬上送出」，接著把文字寫回
+//      Sender->Text（forms/fQwertyKey.cpp:295-296）。因此：
+//        edOcrTextMouseDown  —— 非 N_INTEGER/N_DOUBLE，bCheckRange=false，
+//            文字原字來回，淨效果為無（只動鍵盤自己的 widget）。
+//        edOverRangeClick / edDelayTimeClick / edAuto1CountClick /
+//        edtGetValueDelayTimeClick —— bCheckRange=true 且 N_DOUBLE/N_INTEGER，
+//            會 atof → CheckRange → AnsiString 回寫，即 **會重寫那顆 TEdit
+//            的 Text**（非數字字串會變成 0，數值會被夾到範圍內）。
+//            這是 golden 自己的 submit 路徑，不是本移植的發明。
+//        它們都不寫檔、不動機台、不送對外命令。
+//      ⚠ fQwertyKey 是裸全域指標，全樹唯一建立點是
+//      Public/HTEdit.cpp:311-320 的 lazy new，所以平時是 NULL；
+//      這五支今天沒有任何事件來源（全樹 0 個 caller，
+//      重跑 20260826），所以到不了。**安全是因為沒接線，
+//      不是因為有守衛**——與已開閘的兄弟站點同一曝露
+//      （forms/fQwertyKey.h GOLDEN NOTE (G-d)）。未來接線波必須先
+//      建立 fQwertyKey 與 fQwertyKey2。
+//      原文保留為沿革：
 //  (WA-1) fQwertyKey->ShowQwertyKey(...) -- the SAME established tree-wide
 //      gate forms/fConfiguration.h's WA-1 cites today (see that file for the
 //      full cross-tree citation list: forms/fLotInfo.h, ATC/ATCInterface.cpp,
@@ -478,11 +519,20 @@ public:
     void Arm1PickArm2TestClick();
     void cbUseSLKClampClick();
     void rgYPitchOffsetModeClick();
-    void edOcrTextMouseDown();
-    void edOverRangeClick();
-    void edDelayTimeClick();
-    void edAuto1CountClick();
-    void edtGetValueDelayTimeClick();
+    // AI(W906-FW-UNGATE-W29) 20260826: WA-1 開閘 —— 五支還原 golden 的
+    // Sender 參數。型別直接寫成 golden 的 cast 目標 TEdit*，跟同一
+    // 類別的 TfSetup::XPitchMouseDown/XShiftPitchMouseDown（cSetUp.cpp
+    // :1131/:1148, FW-SETUP-E）及 TfSpeed 的 27 支 MouseDown（cSpeed.cpp
+    // :1449 起, FW-SPEED-W21 D-2）是同一慣例。golden 的
+    // edOcrTextMouseDown 另帶 TMouseButton Button/TShiftState Shift/
+    // int X/int Y，四個在 golden 本體（:4631-4635）內都沒被讀到，
+    // 依同一慣例 drop（逐支確認，20260826）。
+    // 本樹 0 個 caller（重跑 20260826），所以簽章變更不影響任何呼叫端。
+    void edOcrTextMouseDown(TEdit *Sender);
+    void edOverRangeClick(TEdit *Sender);
+    void edDelayTimeClick(TEdit *Sender);
+    void edAuto1CountClick(TEdit *Sender);
+    void edtGetValueDelayTimeClick(TEdit *Sender);
 
     // -- AI(W906-FW-SETUP-B) 20260821: 3 more (a) methods, Wave B. UNLIKE the
     //    15 above, these 3 BODIES live in the root `cSetUp.cpp` (ht9045_sm),

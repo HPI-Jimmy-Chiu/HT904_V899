@@ -12671,7 +12671,123 @@ scratchpad probe 驗過（4 條路徑對照手算 golden 軌跡全通過），**
 - **連續五波，波次 agent 每一次都修正了主迴圈給的分母。**
   通則：**交辦數字要標明怎麼量的，並明說「你自己重量一次」。**
 
-### 🔖 RESUME（20260826 夜間）
+## 20260826 XX — FW-UNGATE-W29：五個 gate 處理完（**行為變更波**）
+
+### 逐 gate 裁決
+
+| Gate | 裁決 | 涉及 |
+|---|---|---|
+| **WA-1** | **開 5 支** | `forms/fSetup.cpp` 的 `edOcrTextMouseDown`（golden `cSetUp.cpp:4631-4635`）／`edOverRangeClick` :4839-4842／`edDelayTimeClick` :4844-4847／`edAuto1CountClick` :4849-4852／`edtGetValueDelayTimeClick` :4854-4857 |
+| **B1** | **開 3 站點、第 4 站點保留並換上真理由** | `ShowCategoryBin` golden :1983／:1999／:2040 開；`btnClearCountClick` golden :2276 保留 |
+| **B5** | **收窄** | `fSecurity->Insufficient` 那半開、`fCleaning->btnResetCleanCountClick` 那半仍擋 |
+| **B7** | **開閘** | `labAuto1Click` golden :2225-2242 |
+| **G2** | **開閘**（唯一有實機行為變更的） | `TfBinSel::ReadFile` golden :1309-1312 |
+
+### B1 第 4 站點沒有硬開——這是本波最重要的一個「不做」
+
+舊理由（`fCounterClear` 全樹無 facade）確實已死。但 agent 讀下去發現**真正的**阻塞物：
+`btnClearCountClick` 依賴的 `ShowMyMessageBox_YES_NO` 仍未翻、被 fail-closed 成無條件
+`return;`，把 `ClearCount` 寫回去會是 **return 後的死碼**。理由已就地換成真的那個。
+
+這正是 `pt-wave-loop` 陷阱 #3「**前提死掉不代表答案就是退役**」的正確處置，
+與 `MyMessageBox`／`WriteLastDataFile` 兩個既有實例同型。
+
+### 開閘後這些方法實際會做什麼（誠實版）
+
+**WA-1 五支**：呼叫 `TfQwertyKey::ShowQwertyKey`。headless 下 `ShowModal()` 是 no-op，
+語意等於「使用者開了鍵盤馬上送出未編輯的文字」。`edOcrTextMouseDown`
+（`bCheckRange=false`）淨效果為無；其餘四支（`bCheckRange=true`）會走
+`atof → CheckRange → AnsiString` **回寫那顆 TEdit 的 Text**（非數字變 0、數值被夾範圍）。
+那是 golden 自己的 submit 路徑，不是本樹發明的。
+⚠ `fQwertyKey` 平時是 NULL（唯一建立點 `Public/HTEdit.cpp:311-320` lazy new），
+而 `ShowQwertyKey` 第一行就 deref `fQwertyKey->bShow`。這五支**全樹 0 個 caller**
+（收工重跑確認），所以到不了——**安全是因為沒接線，不是因為有守衛**。註解照此寫，
+沒有宣稱那些呼叫可執行。
+
+**B1 三站點**：`ClearCount(ctBinCount)` 把 `LastSet.iBinData32[0..3][...]` 與
+`iSVByBinCount[]` 歸零。**開閘的正當性比不開強**——同一個 `if` 塊裡
+`ClearYieldCount()`／`DoLowYieldAlarm("WAR07357"/"WAR07358")`／
+`InitialAutoCleanAllTask()` 全已是活的，只有計數不清 → 同一 limit 每 cycle 重複跳。
+且 `csystem.cpp:11425` 已未 gate 地跑同一呼叫。
+誠實風險：`LastSet` 會被別處落盤，歸零最終會持久化——那正是 golden 的用意。
+
+**B5**：`Insufficient(43)/(97)` 恢復真呼叫，但**今天可觀察行為完全不變**——
+`(SEC1)` 未開時 `iMaxLevelItem==0`，`cSecurity.cpp:663-664` 在 `iType>iMaxLevelItem`
+直接 `return false`。⚠ **留下一個時序陷阱**：`(SEC1)` 單獨開閘會造成「只清畫面、
+不清實際 clean count」，已在兩支方法與 header GATE REGISTER 各寫一次警告。
+
+**B7**：`fShowBinSelect->Width` 400 vs 331，純 widget 幾何。`chkShow0Xbin` NSDMI
+預設 false，今天仍走 331。
+
+**G2**：只在 `IniConfig.bBinBox` 為真且 `AutoForm[iBinBoxAtFix]->iTrayType==3` 時，
+把 `BinSelect[tag].IfErrorT3` 設成 `iTo3Unload[iBinBoxAtFix]`（I/F Error 的 IC 導到
+Bin Box）。純記憶體賦值。**這是真的實機行為變更**：BinBox 機台先前落到 else 長鏈的
+Fix2/Mag14 fallback。求值順序 `IniConfig.bBinBox &&` 在前，非 BinBox 機台永遠不
+deref `AutoForm[]`，與 golden 一致。
+
+**主迴圈裁決：G2 保持開啟，不回退。** 回退等於刻意保留一個已知的偏離 golden——
+忠實翻譯是預設，偏離才需要使用者裁決，不是反過來。
+
+### G2 的實作發現：先前的 fail-closed 是一份 58 行的複製
+
+主迴圈開 diff 逐行確認：舊的 `else if (IniConfig.bBinBox)` arm 裡包著一份
+**與下面 else arm 逐字相同的 58 行**。本波移除該複製、只留 else arm 一份，
+所以 `cBinSel.cpp` 是 **+37/-63**（淨減 26 行）。
+**fail-closed 用「複製一份 fallback」實作，會讓兩份碼日後各自漂移。**
+
+### G2 的 absence claim 是「寫下當時就是假的」，不是過期
+
+原文：`grep -rn "AutoForm\[" --include=*.h .` → 0 hits（20260819）。
+`cprod.h:1366` 的 `extern TRAY_TYPE_PARA *AutoForm[eTrayCount];` 早在 **20260626**
+就存在（八週前），本檔 `:49` 就 include 了 `cprod.h`。
+⚠ 撞名：`cprod.h:374` 另有結構成員 `TRAY_DATA AutoForm[eTrayCount]`（`TrayForm.AutoForm`），
+型別不同；gate 的主體是 `:1366` 那個全域指標陣列。
+同一運算式已在 **6 個編進去且無守衛**的站點 live（`aoutarm.cpp:1621/:1826/:1897/:3953`、
+`asortarm.cpp:4255`、`csystem.cpp:16158`），0 個 gated。
+
+### 簽章慣例：樹裡現在有兩個相反的，而且今天兩個都用過
+
+W29 把五支改成 `TEdit *Sender`（丟掉 golden 的 `TMouseButton`／`TShiftState`／`X`／`Y`），
+理由是同檔同類別的 `XPitchMouseDown`（`cSetUp.cpp:1131`，FW-SETUP-E）與 `TfSpeed` 的
+27 支 MouseDown（`cSpeed.cpp:1449` 起，FW-SPEED-W21，**今天落地**）都這樣做。
+主迴圈驗過兩件事：`cSpeed.cpp:1449` 確實是 `(TEdit *Sender)`；
+golden `cSetUp.cpp:4631-4635` 的本體確實沒讀 `Button`／`Shift`／`X`／`Y`。**偏離有依據，接受。**
+
+**但要記下這個不一致**：同一天 W27 的 `palSecsGemMouseDown` 走的是相反慣例
+（保留 golden 完整 5 參數，因為 `vclcompat/ShiftState.h` 已可用）。
+`ShiftState.h` 檔頭自己就寫著「回填既有已丟參數的 handler」是一個**待辦的機械式 pass**。
+**W29 這五支等於又加進待回填的堆裡。** 兩個慣例並存不是錯，但要有人決定最終形狀。
+
+### 驗收
+
+全新 dir、最後一次整併之後量：**Debug 與 Release 各 137/142**，失敗集合逐項相同
+且等於常駐五項。**這是行為變更波，所以這次 gate 的意義比純新增波更重**——
+五個開閘後的方法（含 B1 讓 `cShowBinSelect.o` 首次對 `cCounterClear.o` 產生符號需求）
+全部編過且連結成功。
+
+**EOL 逐檔對帳**（與 scratchpad 備份比）：`cShowBinSelect.cpp` 波次前後都是**純 CRLF**，
+其餘五個波次前後都是**純 LF**。零孤立 CR、零 U+FFFD。
+若 EOL 被翻轉，`git diff` 會是近 3,000 行而不是 +82/-20。
+
+### agent 自報的兩個更正
+
+1. **一條過強的宣稱**：`btnResetCleanCountClick` 不是「只命中 gate 註解」——全樹有
+   4 個呼叫站點（`csystem.cpp:17614` 在 `#ifdef SOFT_SIMULTE` 內、`:17631`／`:17646`
+   是 GATE G01a/G01b `#if 0`、`Command.cpp:17405` `#if 0`），**沒有一個編進去**。
+   結論不變（`TfCleaning` 確實仍無此成員），但宣稱的精確度變了。
+2. **五處已位移的行號引用**（`forms/fBinSel.h` 566/574→588/596、`cBinSel.cpp` 152→158、
+   `cShowBinSelect.cpp` 1160→1213、`forms/fShowBinSelect.h` 264-269→316-321、
+   `cBinSel.cpp` include 43→49）。這是平行波次造成的位移，與 W23 那次 off-by-7 同型。
+
+### 刻意沒做
+
+- **B1 第 4 站點**、**B5 的 `fCleaning` 那半**——理由見上。
+- `forms/fQwertyKey.h:145-146` 有一條已過期的自述（"Nothing calls ShowQwertyKey today"），
+  該檔在本波寫入邊界外，未動。
+- golden `cShowBinSelect.cpp:2031` 自己有一行被註掉的 `//fCounterClear->ClearCount(...)`，
+  本樹先前整行省略；**本波不復活它**，只在註解記錄，避免後人以為 B1 該有四處。
+
+### 🔖 RESUME（20260826 夜間，已被檔尾 20260826 深夜那則取代）
 
 - **本段最後一顆**：`FW-CONTACT-W28`（`cContact.{h,cpp}` + `forms/fContact.h`），
   **解鎖 0/9 而那個 0 是對的**，理由見 20260826 XIX 分節。雙 gate 137/142 全綠。
@@ -12710,3 +12826,54 @@ scratchpad probe 驗過（4 條路徑對照手算 golden 軌跡全通過），**
 - **三軸（20260826 17:12 量測，單位不可互換）**：翻譯 non-form 96.0%／form 17.3%／
   ALL 61.6%（golden code 行）；tag C++ 側 66 vs 瀏覽器 37（兩邊不是同一組，最落後）；
   web layout.json 133/133。**W28 之後翻譯軸未重量。**
+
+### 🔖 RESUME（20260826 深夜）
+
+- **本段最後一顆**：`FW-UNGATE-W29`——**行為變更波**，五個 gate 處理完
+  （WA-1 開 5 支／B1 開 3 站點+1 保留換真理由／B5 收窄／B7 開／G2 開）。
+  雙 gate 137/142 全綠，理由見 20260826 XX 分節。
+
+- **G2 是唯一有實機行為變更的一條，主迴圈裁決保持開啟**：BinBox 機台的 I/F Error IC
+  現在照 golden 導到 Bin Box，先前落到 Fix2/Mag14 fallback。
+  回退等於刻意保留已知偏離——忠實翻譯是預設，偏離才需要裁決。
+
+- **下一步（依序）**
+  1. **刪 `Command.cpp:317` ＋ 在 `cContact.h` 加 `CONTACT_TEST`——必須同一次改**
+     （`Command.cpp:1793/:1795/:1818/:1822` 還有 4 處真實使用）。解 X-10／X-11／X-32。
+     ⚠ `SetContactMode` 寫全域 `iContactMode` = **模式切換**，屬安全關鍵桶，
+     解 gate 時要在 commit 訊息明講。
+  2. **SLK 容器**：golden `TfContactForce` 的 ReadFile 路徑 →
+     `ContactForce.{h,cpp}` 的 `SlkForceData` 容器 + loader。解 X-01..X-06 六支。
+     **在那之前 `CalculateTotalAirForce` 家族一支都不能交付**（`dKitDiameter` 停在
+     30.0 會主動選錯分支，輸出餵給 EP 調壓閥）。
+  3. `fLotInfo` 的 6 個可解既有 gate（WA-3 ×2、WC-8 ×2、WC-3 ×1、WC-10 ×1）
+     ＋ `cMyDB.cpp:1929`／`:2037` 兩個 `cbbASECL_LoginMode` gate。
+     **WC-10 用字面值 61**（`ATC_TYPE_61` 在 `MainCalcCore.cpp:252` 是函式內 local const）。
+  4. bootstrap 5 個，放顯式 `InitForms()`，**絕不可放靜態初始化**。
+  5. 補 `ComputeTotalAirForce` 的 ctest（目前只有 scratchpad probe 驗過，沒進 gate）。
+  6. **簽章慣例要有人定案**：樹裡並存兩個相反慣例（丟掉未讀參數 vs 保留 golden 完整
+     簽章），同一天 W27 與 W29 各走一邊。`ShiftState.h` 檔頭寫著回填是待辦的機械式 pass。
+
+- **今天累計 8 顆 commit，五次雙 gate 全部 137/142、失敗集合逐項等於常駐五項。**
+
+- **今天反覆出現的三個判斷原則**（都已寫進對應分節）
+  1. **「缺符號比錯答案好」**——出現兩次（W26 `TestZ1Y2OutRandge` 的退化 stub、
+     W28 `CalculateTotalAirForce` 的 `dKitDiameter=30.0`）。靜默地錯比大聲失敗更糟。
+  2. **「前提死掉不代表答案就是退役」**——W29 的 B1 第 4 站點正確地保留並換上真理由。
+  3. **「轉述另一個 agent 的結論時，那個結論就變成我的宣稱」**——我把 W26 的
+     「217 行純算術」寫進 W28 派工卻沒自己驗，實際它有 7 處 widget 寫入與一個全域寫入。
+
+- **absence claim 今天過期或為偽共 6 次**：`fQwertyKey`（過期兩天）、`clWindow`
+  （兄弟波同時間窗）、`Barcode_Reader`、`mbLeft`/`mbRight`、`AutoForm[]`
+  （**寫下當時就是假的**）、`CONTACT_TEST`/`CONTACT_AUTO_GET_HEIGHT`（已 fork 6 處）。
+  **保鮮期比想像中短得多。**
+
+- **佇列不做（安全關鍵，等使用者在場）**：`h4-G2`／`G01`（會讓入料手臂移動到教導點）；
+  `HGem` bootstrap；`clWindow`／`TCustomEdit::Color` 整併；`(SEC1)` 開閘時必須同波帶上
+  `fCleaning->btnResetCleanCountClick`（否則只清畫面不清計數）；
+  各波退出的動作／寫檔方法（`TfContact` 52 含 `ADAM_WriteVoltage` 命令 EP 調壓閥、
+  `TfMotorTest` 52、`TfTeach` 67）。
+
+- **三軸（20260826 17:12 量測，單位不可互換）**：翻譯 non-form 96.0%／form 17.3%／
+  ALL 61.6%（golden code 行）；tag C++ 側 66 vs 瀏覽器 37（兩邊不是同一組，最落後）；
+  web layout.json 133/133。**W28/W29 之後翻譯軸未重量。**

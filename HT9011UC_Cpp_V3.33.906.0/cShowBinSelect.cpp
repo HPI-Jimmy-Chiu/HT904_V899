@@ -64,6 +64,7 @@
 // =============================================================================
 #include "forms/fShowBinSelect.h"
 #include "forms/fSecurity.h"   // AI(W906-FW-SecUnlock) 20260819: fSecurity->Insufficient (B6 permission half dissolved)
+#include "forms/fCounterClear.h"   // AI(W906-FW-UNGATE-W29) 20260826: fCounterClear (:214) + ClearCount (:194) -- GATE (B1) opened. cCounterClear.cpp 與本檔同屬 ht9045_sm (CMakeLists.txt:1888/:1895)，無新 link edge。
 #include "forms/fBinSel.h"    // AI(W906-FW-SBWB2) 20260819: fBinSel->chkShow0Xbin (ShowBinSel, real -- see banner UPDATE below)
 #include "SECSGEM/SecsEventType.h"     // AI(W906-FW-SBWB2) 20260819: SECS_EVENT.OutputPort1BinCode (ShowBinSel)
 #include "SECSGEM/SecsEventReport.h"   // AI(W906-FW-SBWB2) 20260819: EventReport() (ShowBinSel)
@@ -760,8 +761,13 @@ void TfShowBinSelect::ShowCategoryBin()
                                             }
                                             else
                                             {
-                                                // GATE (B1): fCounterClear->ClearCount(ctBinCount); -- see
-                                                // forms/fShowBinSelect.h GATE REGISTER (B1).
+                                                // GATE (B1) OPENED 20260826 (FW-UNGATE-W29): golden :1983.
+                                                // 舊理由「fCounterClear has NO facade anywhere in the tree」
+                                                // （標 20260818）已於 20260819 死於 wave FW-SecCC：
+                                                // forms/fCounterClear.h:166 class TfCounterClear、:194
+                                                // ClearCount(int)、cCounterClear.cpp:26 無條件全域。
+                                                // 同一呼叫已在 csystem.cpp:11425 未 gate 地跑著。
+                                                fCounterClear->ClearCount(ctBinCount);
                                             }
                                             break;
                                         }
@@ -777,7 +783,8 @@ void TfShowBinSelect::ShowCategoryBin()
                                         fYieldMonitoring->ClearYieldCount();
                                         if (CUSTOMER_CODE != CC_KYEC_LEE)   // wei 20151111
                                             iLoadCountCT[i] = RunInfo.iUnloadCount;
-                                        // GATE (B1): fCounterClear->ClearCount(ctBinCount);
+                                        // GATE (B1) OPENED 20260826 (FW-UNGATE-W29) -- golden :1999.
+                                        fCounterClear->ClearCount(ctBinCount);
                                         if (IniConfig.bEnableAutoCleanFunction && TestIF.iAutoClean_Function == true && (TestIF.iAutoClean_Mode & M_SOCKET_ALARM))
                                         {
                                             InitialAutoCleanAllTask();   // Sam 20230504: tidy InitialAutoCleanTask
@@ -817,7 +824,11 @@ void TfShowBinSelect::ShowCategoryBin()
                                         }
                                         else
                                         {
-                                            // GATE (B1): fCounterClear->ClearCount(ctBinCount);
+                                            // GATE (B1) OPENED 20260826 (FW-UNGATE-W29) -- golden :2040.
+                                            // 注：golden 在同一個 if 塊的上方 (:2031) 還有一行
+                                            // `//fCounterClear->ClearCount(ctBinCount);`，那一行在 golden
+                                            // 裡就是被註掉的，本樹不複活它。
+                                            fCounterClear->ClearCount(ctBinCount);
                                         }
                                         break;
                                     }
@@ -992,19 +1003,46 @@ void TfShowBinSelect::RefreshAiCnt()
 
 //---------------------------------------------------------------------------
 //  ed_AutoCleanCountClick -- golden :2216-2223
-//  GATE (B5): fSecurity->Insufficient(43) forced false (fail-closed) +
-//  fCleaning->btnResetCleanCountClick (moot while the outer gate is closed).
+//  GATE (B5) NARROWED 20260826 (FW-UNGATE-W29): fSecurity->Insufficient(43)
+//  is LIVE again; only fCleaning->btnResetCleanCountClick stays gated.
 //---------------------------------------------------------------------------
 void TfShowBinSelect::ed_AutoCleanCountClick(TObject * /*Sender*/)
 {
-    // GATE (B5): if(fSecurity->Insufficient(43)) { fCleaning->
-    // btnResetCleanCountClick(Owner); ed_AutoCleanCount->Text=0; }
+    // AI(W906-FW-UNGATE-W29) 20260826: GATE (B5) 收窄。
+    // fSecurity 那半的理由已死：forms/fSecurity.h:561
+    // `bool Insufficient(int iType, bool bAlarm = true);` 是真的（本體
+    // cSecurity.cpp:650），同一 TU 的 btnClearCountClick 早就在用
+    // fSecurity->Insufficient(108)（:1064, FW-SecUnlock 20260819）。
+    // 今天的可觀察行為不變：cSecurity.cpp:663-664 在 GATE (SEC1)
+    // 沒開的情況下 iMaxLevelItem==0，所以 Insufficient(43) 在 :664
+    // 就 return false（連 WAR1676 都不會發），下面整塊不執行。
+    // ⚠ 仍然 gated 的只剩 fCleaning->btnResetCleanCountClick(Owner)：
+    //   forms/fCleaning.h:24 的 TfCleaning 只有 4 個資料成員
+    //   (edCleaningCount/iDeviceCount/bResetCleanCount/b1x2SiteAbClosePutDummy)，
+    //   沒有這支方法；且本 facade 也沒有 golden 的 TForm::Owner。
+    //   重跑 20260826（掃描器排除 build*/.git/.svn，且會判 #if 0）：
+    //   "btnResetCleanCountClick" 全樹共 4 個呼叫站點，**沒有一個是編進去的**：
+    //     csystem.cpp:17614  在 #ifdef SOFT_SIMULTE 內（本樹未定義該巨集，
+    //                        build/CMakeFiles/*/flags.make 的 CXX_DEFINES 可證）
+    //     csystem.cpp:17631  #if 0 GATE G01a（AI(W906-PT-csystem-g2) 20260809）
+    //     csystem.cpp:17646  #if 0 GATE G01b（同上）
+    //     Command.cpp:17405  #if 0
+    //   G01a/G01b 的理由與這裡逐字相同（「NOT a member of the ported
+    //   TfCleaning」），golden 本體在 AutoClean/uCleaning.cpp:2095，本樹未翻。
+    //   → (SEC1) 一旦開閘，Insufficient(43) 就可能回 true，屆時 clean
+    //     count 會只清畫面、沒清實際計數。**這一行必須跟 (SEC1)
+    //     同波落地**，不能只開 (SEC1)。
+    if (fSecurity->Insufficient(43))                                            // golden :2218
+    {
+        // GATE (B5-殘留): fCleaning->btnResetCleanCountClick(Owner);   // golden :2220
+        ed_AutoCleanCount->Text = 0;                                            // golden :2221
+    }
 }
 
 //---------------------------------------------------------------------------
 //  labAuto1Click -- golden :2225-2242
-//  GATE (B7): fBinSel->chkShow0Xbin->Checked forced false (Delphi's own
-//  real-VCL checkbox default) -- the `else` arm (Width=331) is taken.
+//  GATE (B7) OPENED 20260826 (FW-UNGATE-W29): fBinSel->chkShow0Xbin->Checked
+//  is read for real; the checkbox default is still false, so Width=331 today.
 //---------------------------------------------------------------------------
 void TfShowBinSelect::labAuto1Click(TObject * /*Sender*/)
 {
@@ -1018,9 +1056,20 @@ void TfShowBinSelect::labAuto1Click(TObject * /*Sender*/)
     }
     else
     {
-        // GATE (B7): fBinSel->chkShow0Xbin->Checked -- forced false, so the
-        // else arm below always fires.
-        fShowBinSelect->Width = 331;   // kevin 20140317: was 280
+        // GATE (B7) OPENED 20260826 (FW-UNGATE-W29): 舊理由「fBinSel has NO
+        // facade anywhere」（標 20260818）已於 20260819 死於 wave
+        // FW-SBWB2：forms/fBinSel.h:588 class TfBinSel、:596
+        // TCheckBox *chkShow0Xbin、cBinSel.cpp:158 無條件全域。
+        // **同一個 TU 的 :1213 早就在 live 使用 fBinSel->chkShow0Xbin
+        // ->Checked**（ShowBinSel），這個 gate 本來就是檔內自相矛盾；
+        // forms/fShowBinSelect.h:316-321 自己也已記 STALE。
+        // 開閘後：只改 fShowBinSelect->Width（400 vs 331），純 widget
+        // 幾何；不寫檔、不動機台、不送對外命令。chkShow0Xbin 的
+        // NSDMI 預設是 false，所以今天仍然走 331 那一支。
+        if (fBinSel->chkShow0Xbin->Checked)   // jou 20220719: show 0X bin -- golden :2237
+            fShowBinSelect->Width = 400;      // kevin 20140317: was 280 -- golden :2238
+        else
+            fShowBinSelect->Width = 331;      // kevin 20140317: was 280 -- golden :2240
     }
 }
 
@@ -1039,19 +1088,26 @@ void TfShowBinSelect::btReturnClick(TObject * /*Sender*/)
 
 //---------------------------------------------------------------------------
 //  btnCleanResetClick -- golden :2253-2260
-//  GATE (B5): same shape as ed_AutoCleanCountClick.
+//  GATE (B5) NARROWED 20260826 (FW-UNGATE-W29): same shape as
+//  ed_AutoCleanCountClick.
 //---------------------------------------------------------------------------
 void TfShowBinSelect::btnCleanResetClick(TObject * /*Sender*/)
 {
-    // GATE (B5): if(fSecurity->Insufficient(97)) { fCleaning->
-    // btnResetCleanCountClick(Owner); ed_AutoCleanCount->Text=0; }
+    // AI(W906-FW-UNGATE-W29) 20260826: GATE (B5) 收窄 —— 理由同
+    // ed_AutoCleanCountClick（見那支的完整說明）。
+    if (fSecurity->Insufficient(97))                                            // golden :2255
+    {
+        // GATE (B5-殘留): fCleaning->btnResetCleanCountClick(Owner);   // golden :2257
+        ed_AutoCleanCount->Text = 0;                                            // golden :2258
+    }
 }
 
 //---------------------------------------------------------------------------
 //  btnClearCountClick -- golden :2262-2277
 //  GATE (B6): fSecurity->Insufficient(108) forced false (fail-closed) for
 //  every non-Greatek customer code; ShowMyMessageBox_YES_NO forced to "No";
-//  fCounterClear->ClearCount(ctIndexCount) gated regardless (see (B1)).
+//  fCounterClear->ClearCount(ctIndexCount) still gated 20260826 (FW-UNGATE-W29)
+//  -- blocked by the (B6) modal, NOT by fCounterClear; see the in-body note.
 //---------------------------------------------------------------------------
 void TfShowBinSelect::btnClearCountClick(TObject * /*Sender*/)
 {
@@ -1070,9 +1126,15 @@ void TfShowBinSelect::btnClearCountClick(TObject * /*Sender*/)
     // "No"/cancel:
     return;
 
-    // GATE (B1): fCounterClear->ClearCount(ctIndexCount); -- unreachable
-    // while the two gates above return early; recorded so it is not missed
-    // when either lands.
+    // GATE (B1) 在這一站點 **不開** —— AI(W906-FW-UNGATE-W29) 20260826：
+    // 舊理由（fCounterClear 無 facade）已死（見本檔上方三個已開閘
+    // 站點），但這一行的**真正**阻塞物是 (B6) 的 modal：
+    // ShowMyMessageBox_YES_NO 仍未翻譯，被 fail-closed 成 "No" 並在
+    // 上方無條件 `return;`。把 golden :2276 的
+    // `fCounterClear->ClearCount(ctIndexCount);` 寫回來會是 return 後的
+    // 死碼（永遠不會執行），所以保留為註解，**理由換成真的那個**。
+    // (B6) 的 modal 一落地，這行要跟著還原。
+    // golden :2276: fCounterClear->ClearCount(ctIndexCount);
 }
 
 //---------------------------------------------------------------------------

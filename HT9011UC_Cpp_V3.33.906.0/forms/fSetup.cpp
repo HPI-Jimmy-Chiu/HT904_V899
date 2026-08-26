@@ -6,6 +6,11 @@
 //  forms/fNote.cpp exactly.
 // =============================================================================
 #include "forms/fSetup.h"
+// AI(W906-FW-UNGATE-W29) 20260826: WA-1 開閘所需 —— fQwertyKey (:406) +
+// TfQwertyKey::ShowQwertyKey (:370)。forms/fQwertyKey.cpp 與本檔同屬
+// ht9045_forms target (CMakeLists.txt:692/:699)，沒有新的 link edge。
+// 只加在 .cpp，不动 forms/fSetup.h 的 include 圖。
+#include "forms/fQwertyKey.h"
 
 // fShow=false is golden's own ctor value, csetup.cpp:163, inside `__fastcall
 // TfSetup::TfSetup(TComponent* Owner)` at csetup.cpp:123.  It is NOT chosen for
@@ -162,35 +167,45 @@ void TfSetup::rgYPitchOffsetModeClick()
     }
 }
 
-// WA-1 GATE (5 methods) -- golden `fQwertyKey->ShowQwertyKey(...)` one-liners;
-// fQwertyKey has no port anywhere in this tree (see forms/fSetup.h's GATE
-// REGISTER). Each golden `TObject *Sender` (plus, for edOcrTextMouseDown,
-// `TMouseButton Button, TShiftState Shift, int X, int Y`) becomes unused once
-// the call is gated, so every parameter is dropped. Bodies intentionally
-// empty -- matches forms/fConfiguration.h's own WA-1 precedent for the
-// identical situation.
+// AI(W906-FW-UNGATE-W29) 20260826: WA-1 GATE OPENED (5 methods).
+// 舊理由「fQwertyKey has no port anywhere in this tree」（標 20260820）
+// 已於 20260824 死於 wave FW-QWKEY1 (fc08e09)：class TfQwertyKey
+// forms/fQwertyKey.h:294、全域 forms/fQwertyKey.cpp:41-42、ShowQwertyKey
+// 本體 ACTIVE forms/fQwertyKey.cpp:166。完整證據、兄弟站點清單、
+// 以及「開閘後這五支實際會做什麼」見 forms/fSetup.h 的
+// GATE REGISTER (WA-1)。
+//
+// 簽章：golden 的 `TObject *Sender` 還原成 `TEdit *Sender`（golden 自己
+// 的 cast 目標，慣例同 cSetUp.cpp:1131 XPitchMouseDown / cSpeed.cpp:1449）；
+// edOcrTextMouseDown 的 `TMouseButton Button, TShiftState Shift, int X,
+// int Y` 在 golden 本體內都沒被讀到，依同一慣例 drop。
+//
+// ⚠ fQwertyKey 平時是 NULL（唯一建立點 Public/HTEdit.cpp:311-320 的
+// lazy new），且 ShowQwertyKey 本體第一行就 deref fQwertyKey->bShow
+// (forms/fQwertyKey.cpp:168)。這五支今天沒任何 caller，所以到不了；
+// 安全是因為沒接線，不是因為有守衛。
 
-void TfSetup::edOcrTextMouseDown()                                             // golden cSetUp.cpp:4631-4635
+void TfSetup::edOcrTextMouseDown(TEdit *Sender)                                // golden cSetUp.cpp:4631-4635
 {
-    // gated: fQwertyKey->ShowQwertyKey((TEdit *)Sender, N_NO_SYMBOL|N_NO_SPACE);
+    fQwertyKey->ShowQwertyKey(Sender, N_NO_SYMBOL|N_NO_SPACE);
 }
 
-void TfSetup::edOverRangeClick()                                               // golden cSetUp.cpp:4839-4842
+void TfSetup::edOverRangeClick(TEdit *Sender)                                  // golden cSetUp.cpp:4839-4842
 {
-    // gated: fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_DOUBLE, 0, true, 100.0, 0.0);
+    fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 0, true, 100.0, 0.0);
 }
 
-void TfSetup::edDelayTimeClick()                                               // golden cSetUp.cpp:4844-4847
+void TfSetup::edDelayTimeClick(TEdit *Sender)                                  // golden cSetUp.cpp:4844-4847
 {
-    // gated: fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_DOUBLE, 0, true, 10.0, 0.05);
+    fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 0, true, 10.0, 0.05);
 }
 
-void TfSetup::edAuto1CountClick()                                              // golden cSetUp.cpp:4849-4852
+void TfSetup::edAuto1CountClick(TEdit *Sender)                                 // golden cSetUp.cpp:4849-4852
 {
-    // gated: fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_INTEGER, 0, true, 40, 2);
+    fQwertyKey->ShowQwertyKey(Sender, N_INTEGER, 0, true, 40, 2);
 }
 
-void TfSetup::edtGetValueDelayTimeClick()                                      // golden cSetUp.cpp:4854-4857
+void TfSetup::edtGetValueDelayTimeClick(TEdit *Sender)                         // golden cSetUp.cpp:4854-4857
 {
-    // gated: fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_DOUBLE, 1, true, 0, 1);
+    fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 1, true, 0, 1);
 }
