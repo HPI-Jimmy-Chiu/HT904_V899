@@ -6742,8 +6742,21 @@ void TfNote::SaveErrEventLog(double dt, AnsiString sJamArea, AnsiString sJamCode
         SL->Add(sErrPart);
         Str=SL->CommaText;                                                      //ErrPart
     }
-    else                                                                        //if(CUSTOMER_CODE==CC_FOREHOPE_NINGBO)                                //Steven 20251107 : 修正event log存檔
-    {
+    else if(CUSTOMER_CODE==CC_FOREHOPE_NINGBO)
+    {   //AI(ht9045-v899) 20260429: 甬矽要求 EventLog 時間欄不加雙引號與前綴空格 (CASE-20260429-001)
+        Str=AnsiString().sprintf("%04d-%02d-%02d", y, m, d);
+        Str+=","+AnsiString().sprintf("%02d:%02d:%02d.%03d", h, n, s, ms);
+        Str+=","+sJamArea;
+        Str+=","+sJamCode;
+        Str+=","+sRecovery;
+        Str+=","+sPassTime;
+        Str+=","+sDuplicateError;
+        Str+=","+sMessage;
+        Str+=","+sErrPart;
+        Str+=","+sRecipeName;
+    }
+    else //if(CUSTOMER_CODE==CC_FOREHOPE_NINGBO)                                //Steven 20251107 : 修正event log存檔
+    {   //AI(ht9045-v899) 20260429: 其他客戶維持 Steven 20251107 新方法 (CASE-20260429-001)
         Str=AnsiString().sprintf("%04d-%02d-%02d", y, m, d);
         Str+=",\""+AnsiString().sprintf(" %02d:%02d:%02d.%03d", h, n, s, ms)+"\"";
         Str+=",\""+sJamArea+"\"";

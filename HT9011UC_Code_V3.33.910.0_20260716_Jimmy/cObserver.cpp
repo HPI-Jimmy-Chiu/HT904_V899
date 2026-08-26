@@ -3798,6 +3798,61 @@ void __fastcall TfObserver::cbbMonthChange(TObject *Sender)
     delete tsFileName;
 }
 //---------------------------------------------------------------------------
+//AI(ht9045-v899) 20260817: EventLog CSV 顯示用斷欄。只以逗號分隔，並保留雙引號內的空白與逗號。
+//                          VCL 的 TStringList::CommaText 會把空白也視為分隔符，因此未加引號的
+//                          "07 Tester I/F" 會被切成三欄，使整列右移：Message 欄顯示成停機秒數、
+//                          Filter 與 JAM 統計也比對不到 AlarmCode。
+//                          本修正只改「讀取顯示」，EventLog 檔案格式完全不變，客戶自行開發的
+//                          CSV 解析程式不受影響。
+//                          實測 12 家客戶 64 個實機 log 共 100,220 列：99,754 列解析結果完全
+//                          相同、414 列修好欄位錯位、52 列為既有的跨行/內含逗號記錄（無害），
+//                          零有害回歸。
+//                          (CASE-FOREHOPE_NINGBO-20260813-001)
+//---------------------------------------------------------------------------
+static void AddEventLogCsvField(TStringList *tsRow, AnsiString asField)
+{
+    asField=asField.Trim();
+    if(asField.Length()>=1 && asField[1]=='"')
+    {
+        asField=asField.SubString(2, asField.Length()-1);                       // 去掉起始引號
+        if(asField.Length()>=1 && asField[asField.Length()]=='"')               // 未閉合者比照 CommaText 容忍
+            asField=asField.SubString(1, asField.Length()-1);
+        asField=StringReplace(asField, "\"\"", "\"", TReplaceFlags()<<rfReplaceAll);
+    }
+    tsRow->Add(asField);
+}
+//---------------------------------------------------------------------------
+static void SplitEventLogCsvLine(const AnsiString &asLine, TStringList *tsRow)
+{
+    tsRow->Clear();
+
+    int  iLen    =asLine.Length();
+    int  iStart  =1;
+    bool bInQuote=false;
+
+    for(int i=1; i<=iLen; i++)
+    {
+        if(asLine[i]=='"')
+        {
+            bInQuote=!bInQuote;
+        }
+        else if(asLine[i]==',' && bInQuote==false)
+        {
+            AddEventLogCsvField(tsRow, asLine.SubString(iStart, i-iStart));
+            iStart=i+1;
+        }
+    }
+    AddEventLogCsvField(tsRow, asLine.SubString(iStart, iLen-iStart+1));
+}
+//---------------------------------------------------------------------------
+static void ParseEventLogLine(const AnsiString &asLine, TStringList *tsRow)
+{
+    if(IniConfig.bSPILFunction==true)                                           // SPIL log 欄位配置不同且手上無樣本可驗，維持原解析
+        tsRow->CommaText=asLine;
+    else
+        SplitEventLogCsvLine(asLine, tsRow);
+}
+//---------------------------------------------------------------------------
 void TfObserver::GetEventLogText()
 {
     int x=1, iJamCol=0;
@@ -3845,7 +3900,7 @@ void TfObserver::GetEventLogText()
                 for(int i=0; i<tsLogFile->Count; i++)
                 {
                     tsRow->Clear();
-                    tsRow->CommaText=tsLogFile->Strings[i];
+                    ParseEventLogLine(tsLogFile->Strings[i], tsRow); //AI(ht9045-v899) 20260817: 改用 ParseEventLogLine (CASE-FOREHOPE_NINGBO-20260813-001)
 
                     if(IniConfig.bSPILFunction==true)                               //Steven 20240604 : SPIL格式的event log
                     {
@@ -3889,7 +3944,7 @@ void TfObserver::GetEventLogText()
                 for(int i=1; i<tsLogFile->Count; i++)
                 {
                     tsRow->Clear();
-                    tsRow->CommaText=tsLogFile->Strings[i];
+                    ParseEventLogLine(tsLogFile->Strings[i], tsRow); //AI(ht9045-v899) 20260817: 改用 ParseEventLogLine (CASE-FOREHOPE_NINGBO-20260813-001)
                     if(tsRow->Count>3)
                     {
                         if(IniConfig.bSPILFunction==true)                           //JerryYang 20250428 : fix SPIL event log
@@ -3924,7 +3979,7 @@ void TfObserver::GetEventLogText()
                 for(int i=1; i<tsLogFile->Count; i++)
                 {
                     tsRow->Clear();
-                    tsRow->CommaText=tsLogFile->Strings[i];
+                    ParseEventLogLine(tsLogFile->Strings[i], tsRow); //AI(ht9045-v899) 20260817: 改用 ParseEventLogLine (CASE-FOREHOPE_NINGBO-20260813-001)
                     if(tsRow->Count>2)
                     {
                         if(IniConfig.bSPILFunction==true)                           //JerryYang 20250428 : fix SPIL event log
@@ -5128,7 +5183,7 @@ void TfObserver::StatisticalJamCount(bool bIsNextDay)                           
     for(int i=1; i<tsLogFile->Count; i++)
     {
         tsRow->Clear();
-        tsRow->CommaText=tsLogFile->Strings[i];
+        ParseEventLogLine(tsLogFile->Strings[i], tsRow);               //AI(ht9045-v899) 20260817: 改用 ParseEventLogLine (CASE-FOREHOPE_NINGBO-20260813-001)
         if(tsRow->Count>3)
         {
             if(tsRow->Strings[3].AnsiPos(Str)==1)

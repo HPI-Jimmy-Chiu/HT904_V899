@@ -40,18 +40,27 @@
 
 ---
 
-## 🔖 RESUME（20260826 16:20）
+## 20260826 16:45 — MG-W3 done（EventLog 引號相依鏈）
 
-- **狀態**：Phase 2 連續波次進行中。MG-W1、MG-W2 done。儀表 MISSING=368。
+- 6 op：note.cpp FOREHOPE 無引號分支＋cObserver ParseEventLogLine 三支 static＋4 解析點。
+- port_check PASS（15+59 全 SPLICED）＋bcc32 PASS。儀表 **368 → 361**。
+- 裁決：解析端不加 gate 照搬（V899 已 12 客戶 64 台實測出貨）；JamRawData 數字變化
+  ＝修正方向，記外溢。fVATMesFileSys 第 5 解析點＝V899 殘留缺口，開獨立任務卡。
+- 矩陣校正：note.cpp:1027（0407）是假 MISSING（公司改寫等價），LEDGER 已記。
+
+---
+
+## 🔖 RESUME（20260826 16:45）
+
+- **狀態**：Phase 2 連續波次進行中。MG-W1/W2/W3 done。儀表 MISSING=361。
+- **進行中**：MG-W4 分析 agent（BootLog＋LOAD_Y stepper，main.cpp/HandlerSys/uMotorTest）
+  背景執行中——回來後照 /mg-wave 步驟執行。
 - **下一步（按序）**：
-  1. MG-W3＝EventLog 引號線（0429 note.cpp → 0817 cObserver.cpp 同波，相依鏈#1；
-     甬矽案 CASE-20260429-001＋CASE-FOREHOPE_NINGBO-20260813-001；
-     注意 EventLog CSV 引號是承重的——CommaText 解析，改格式要回驗 Observer）。
-  2. MG-W4 候選＝20260414/0415/0420 HS_Function KYEC 上傳線（同主題連波）。
-  3. 之後照 LEDGER 由小到大，主題波優先（AutoClean CKPP＋PickPlanner 目錄、
-     Power Save 線 0804→0811→0819/0820、Multi EP、0612 FTP 大波）。
+  1. 收 MG-W4（產物 docs/mg_w4_analysis.md＋mg_w4_ops.json）。
+  2. MG-W5 候選＝20260414/0415/0420 HS_Function KYEC 上傳線（同主題連波）。
+  3. 之後照 LEDGER：0817 殘餘 CC_CYUEAN AutoTrayFeed 主題（B 類）、AutoClean CKPP
+     ＋PickPlanner 目錄、Power Save 線 0804→0811→0819/0820、Multi EP、0612 FTP 大波。
   4. 60 分鐘守衛 cron 已掛（每時 :23；殭屍＝先查證後處置）。
-- **量測**：`python tools/port_tools/ai_comment_matrix.py`（MISSING 單調下降；
-  起點 376、現 368）。
+- **量測**：`python tools/port_tools/ai_comment_matrix.py`（起點 376、現 361）。
 - **不變量**：V899 唯讀（來源端點 b515ed5）；V910 基線 e06524a；LEDGER 手工維護；
   bcc32 -c 波內 gate；全量 build 只在 Phase 3。

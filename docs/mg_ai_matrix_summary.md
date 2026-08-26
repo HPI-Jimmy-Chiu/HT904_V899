@@ -23,7 +23,7 @@
 | 20260423 | 31 | 0 | 19 | 50 |
 | 20260424 | 8 | 0 | 0 | 8 |
 | 20260428 | 3 | 0 | 0 | 3 |
-| 20260429 | 0 | 0 | 3 | 3 |
+| 20260429 | 2 | 0 | 1 | 3 |
 | 20260430 | 6 | 3 | 21 | 30 |
 | 20260504 | 16 | 0 | 17 | 33 |
 | 20260505 | 50 | 0 | 2 | 52 |
@@ -60,10 +60,10 @@
 | 20260804 | 0 | 0 | 25 | 25 |
 | 20260810 | 0 | 0 | 21 | 21 |
 | 20260811 | 0 | 0 | 21 | 21 |
-| 20260817 | 0 | 0 | 11 | 11 |
+| 20260817 | 5 | 0 | 6 | 11 |
 | 20260819 | 0 | 0 | 10 | 10 |
 | 20260820 | 0 | 0 | 7 | 7 |
-| **合計** | 347 | 4 | 368 | 719 |
+| **合計** | 354 | 4 | 361 | 719 |
 
 ## MISSING 依檔案分布（前 40）
 
@@ -92,8 +92,6 @@
 | iosetview.cpp | 6 |
 | Interface\TesterTCP.cpp | 6 |
 | cmydef.cpp | 5 |
-| cObserver.cpp | 5 |
-| note.cpp | 5 |
 | uMotorTest.cpp | 5 |
 | RotateKit\aRotateKIT_Out.cpp | 5 |
 | cmydef.h | 4 |
@@ -102,6 +100,7 @@
 | cContactCT.cpp | 3 |
 | cShowBinSelect.cpp | 3 |
 | cTrayAssignment.cpp | 3 |
+| note.cpp | 3 |
 | PowerSavingMode.h | 3 |
 | uhome.cpp | 3 |
 | ainarm9045_1x1_1.cpp | 2 |
@@ -109,3 +108,4 @@
 | aoutarm9045.h | 2 |
 | cBinSel.cpp | 2 |
 | cprod.cpp | 2 |
+| cpublic.cpp | 2 |

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "MG-W3-OP1",
+    "desc": "note.cpp SaveErrEventLog: 在 Steven 20251107 引號格式之前插入 CC_FOREHOPE_NINGBO 無引號分支 (matrix note.cpp:6689/6702, CASE-20260429-001)。replace 涵蓋 V910 的 else 行以取得全檔唯一錨點；副作用=該 else 行的註解欄位由 V910 的第 ~81 欄還原成 V899 的緊接式(純排版, 無語意)。",
+    "v910_file": "note.cpp",
+    "v899_file": "note.cpp",
+    "v899_lines": [6688, 6702],
+    "mode": "replace",
+    "replace_lines": [6745, 6746],
+    "anchor_expect": "//if(CUSTOMER_CODE==CC_FOREHOPE_NINGBO)"
+  },
+  {
+    "id": "MG-W3-OP2",
+    "desc": "cObserver.cpp: 新增 EventLog CSV 斷欄三支 static 函式 AddEventLogCsvField / SplitEventLogCsvLine / ParseEventLogLine, 含 V899 原始說明註解區塊 (matrix cObserver.cpp:3790, CASE-FOREHOPE_NINGBO-20260813-001)。插在 GetEventLogText() 定義之前。",
+    "v910_file": "cObserver.cpp",
+    "v899_file": "cObserver.cpp",
+    "v899_lines": [3790, 3844],
+    "mode": "before",
+    "anchor_line": 3801,
+    "anchor_expect": "void TfObserver::GetEventLogText()"
+  },
+  {
+    "id": "MG-W3-OP3",
+    "desc": "cObserver.cpp GetEventLogText() 全部顯示分支: tsRow->CommaText= 改用 ParseEventLogLine (matrix cObserver.cpp:3890)。取代區含 4 行 byte-identical 前文以取得全檔唯一錨點。",
+    "v910_file": "cObserver.cpp",
+    "v899_file": "cObserver.cpp",
+    "v899_lines": [3886, 3890],
+    "mode": "replace",
+    "replace_lines": [3844, 3848],
+    "anchor_expect": "strngrdEventLog->RowCount=tsLogFile->Count;"
+  },
+  {
+    "id": "MG-W3-OP4",
+    "desc": "cObserver.cpp GetEventLogText() JAM/WAR/MES 過濾分支: tsRow->CommaText= 改用 ParseEventLogLine (matrix cObserver.cpp:3934)。取代區含 6 行 byte-identical 前文以取得全檔唯一錨點。",
+    "v910_file": "cObserver.cpp",
+    "v899_file": "cObserver.cpp",
+    "v899_lines": [3928, 3934],
+    "mode": "replace",
+    "replace_lines": [3886, 3892],
+    "anchor_expect": "Str=\"MES\";"
+  },
+  {
+    "id": "MG-W3-OP5",
+    "desc": "cObserver.cpp GetEventLogText() 其餘過濾分支: tsRow->CommaText= 改用 ParseEventLogLine (matrix cObserver.cpp:3969)。取代區含後一行 if(tsRow->Count>2) 作為全檔唯一錨點。",
+    "v910_file": "cObserver.cpp",
+    "v899_file": "cObserver.cpp",
+    "v899_lines": [3969, 3970],
+    "mode": "replace",
+    "replace_lines": [3927, 3928],
+    "anchor_expect": "if(tsRow->Count>2)"
+  },
+  {
+    "id": "MG-W3-OP6",
+    "desc": "cObserver.cpp StatisticalJamCount(): tsRow->CommaText= 改用 ParseEventLogLine (matrix cObserver.cpp:5177)。取代區含 5 行 byte-identical 前文以取得全檔唯一錨點。",
+    "v910_file": "cObserver.cpp",
+    "v899_file": "cObserver.cpp",
+    "v899_lines": [5172, 5177],
+    "mode": "replace",
+    "replace_lines": [5126, 5131],
+    "anchor_expect": "strngrdJamLog->RowCount=2;"
+  }
+]
