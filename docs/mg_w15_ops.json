@@ -1,0 +1,110 @@
+[
+  {
+    "op": "W15-01",
+    "note": "0623 整數安全除法工具：ChangeToIntNonPcnt 模板（矩陣 MachineType.h:1631）。V910 全樹 0 命中，不撞名。插入後在 V910 無呼叫點（唯一呼叫點 cConfiguration.cpp:153 判 C 類），模板未實例化＝零產碼。",
+    "v910_file": "MachineType.h",
+    "v899_lines": [1631, 1639],
+    "mode": "before",
+    "anchor_line": 1664,
+    "anchor_expect": "template<typename T>"
+  },
+  {
+    "op": "W15-02",
+    "note": "0623 O06 讀取端：界外/空日期(1899-12-30)防呆，無效時回填 Now()（矩陣 cConfiguration.cpp:4983）",
+    "v910_file": "cConfiguration.cpp",
+    "v899_lines": [4983, 4986],
+    "mode": "replace",
+    "replace_lines": [5202, 5203],
+    "anchor_expect": "dtO06_LastDate->Date        =IniConfig.dtEventLogLastRecordDate;"
+  },
+  {
+    "op": "W15-03",
+    "note": "0623 O06 存檔端：移除對 dtkTime picker 的非法 ->Date 指派，改 Date+Time 組合，整段包 try/catch（矩陣 cConfiguration.cpp:7327 與 :7330 兩條，同一個 hunk）",
+    "v910_file": "cConfiguration.cpp",
+    "v899_lines": [7327, 7337],
+    "mode": "replace",
+    "replace_lines": [7594, 7599],
+    "anchor_expect": "dtpO06NextTime->Date                                =dtO06_LastDate->Date;"
+  },
+  {
+    "op": "W15-04",
+    "note": "0623 移除 #ifdef SOFT_SIMULTE 包裝，使 C08_1 Socket Sensor 偵測在正式 build 生效（矩陣 main.cpp:5640）。外層已有 CUSTOMER_CODE==CC_GIGAS && IniConfig.bC08_1_CheckSocketSensorDetectON 雙閘，非 GIGAS 行為不變。",
+    "v910_file": "main.cpp",
+    "v899_lines": [5640, 5643],
+    "mode": "replace",
+    "replace_lines": [5910, 5914],
+    "anchor_expect": "ShowMyMessage(\"SocketSensor Detect Function is OFF. Please turn ON!\");"
+  },
+  {
+    "op": "W15-05",
+    "note": "0625 N06 recipe 同步：回傳型別 void->bool（矩陣 Interface\\TesterTCP.h:258）。三個呼叫點皆忽略回傳值，source-compatible。",
+    "v910_file": "Interface\\TesterTCP.h",
+    "v899_lines": [258, 260],
+    "mode": "replace",
+    "replace_lines": [258, 259],
+    "anchor_expect": "    void __fastcall CopyRecipeToTester(AnsiString FileName);"
+  },
+  {
+    "op": "W15-06",
+    "note": "0625 CASE-20260625-001 長沙安牧泉 EAP recipe：CopyRecipeToTester/CopyRecipeFromTester 整段換新，含新增的三個 file-static helper（LogN06Result／Get7zPath／RunSevenZipSync）。一刀清 6 條矩陣（1050/1063/1072/1100/1145/1155）。",
+    "v910_file": "Interface\\TesterTCP.cpp",
+    "v899_lines": [1050, 1183],
+    "mode": "replace",
+    "replace_lines": [1058, 1097],
+    "anchor_expect": "void __fastcall TfTesterTCP::CopyRecipeToTester(AnsiString FileName)"
+  },
+  {
+    "op": "W15-07",
+    "note": "0629 CASE-PTI-20260629-001：MainFormSnapshot 增 Home/Buzzer/Modal 診斷 dump（矩陣 main.cpp:25418）。純寫檔診斷，無控制流程副作用；整段在既有 try/__finally 內。",
+    "v910_file": "main.cpp",
+    "v899_lines": [25417, 25456],
+    "mode": "before",
+    "anchor_line": 26648,
+    "anchor_expect": "slSnap->SaveToFile(sSnapPath);"
+  },
+  {
+    "op": "W15-08",
+    "note": "0525 換工作檔後同步 PASS auto 位置：cbFirstTrayCheckOnUnloader->Checked=true 改呼叫 SetFirstTrayCheckOnUnloader()（矩陣 main.cpp:24003）。該函式在兩樹 byte-identical，是舊行為的嚴格超集。",
+    "v910_file": "main.cpp",
+    "v899_lines": [24003, 24004],
+    "mode": "replace",
+    "replace_lines": [25209, 25209],
+    "anchor_expect": "fLotInfo->cbFirstTrayCheckOnUnloader->Checked=true;"
+  },
+  {
+    "op": "W15-09",
+    "note": "0525 StateRecord 打包 PTI_LotStartTrace（矩陣 main.cpp:25604）。V910 已有生產者 uLotInfo.cpp:99 WritePTILotStartTrace，缺的只是打包。**本波唯一非全檔唯一錨（'    }' 在 main.cpp 有 1385 行符合），md5 前提為硬條件**；套用前務必先確認 V910 main.cpp:26821='        }'、26822='    }'、26823='    else'。",
+    "v910_file": "main.cpp",
+    "v899_lines": [25603, 25617],
+    "mode": "replace",
+    "replace_lines": [26822, 26822],
+    "anchor_expect": "    }"
+  },
+  {
+    "op": "W15-10",
+    "note": "0514 Phase 3 Loader pick planner scaffold：ainarm9045.cpp 補 include（矩陣 ainarm9045.cpp:40）。Common\\PickPlanner 七檔早在 V910 基線且 md5 全同、.bpr 已登錄（MG-W11 已查證）。",
+    "v910_file": "ainarm9045.cpp",
+    "v899_lines": [40, 41],
+    "mode": "after",
+    "anchor_line": 41,
+    "anchor_expect": "#include \"LtcSensor.h\""
+  },
+  {
+    "op": "W15-11",
+    "note": "0514 Phase 3 dual-path hook（矩陣 ainarm9045.cpp:6436）。bUseLoaderPickPlanner 預設 false 且無 ini/UI 綁定；即使開啟也只 RecordProcess 影子日誌、不 early-return＝休眠搬運。",
+    "v910_file": "ainarm9045.cpp",
+    "v899_lines": [6436, 6452],
+    "mode": "before",
+    "anchor_line": 6966,
+    "anchor_expect": "if(MOT[MMTrayY].fHasTray==false ||"
+  },
+  {
+    "op": "W15-12",
+    "note": "0706 GetInArmToLoaderPosition_Single 系統性可達性選嘴（矩陣 ainarm9045.cpp:4661）。D 類：改 InArm X 定位選嘴。預設仍取最左啟用吸嘴＝行為不變；只有最左嘴算出的 X 落在 SoftLimit 外（舊路徑本來就會走縮 pitch 救援／WAR0152）時才改選。",
+    "v910_file": "ainarm9045.cpp",
+    "v899_lines": [4661, 4714],
+    "mode": "replace",
+    "replace_lines": [5180, 5192],
+    "anchor_expect": "            for(int j=(i+1); j<4; j++)"
+  }
+]

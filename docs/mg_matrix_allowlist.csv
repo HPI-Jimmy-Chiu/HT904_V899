@@ -65,3 +65,8 @@ cSortCT.cpp,20260605,//AI(ht9045-v899) 20260605: 改用 ShowMyMessageBox_YES_NO 
 cShowBinSelect.cpp,20260415,//AI(ht9045-v899) 20260415: dynamic stack layout for tsIndex,F12 pending：V910 有同日競品解法且照搬會回歸 btnASM 遮蔽 bug，建議不搬待使用者裁決,MG-W16/F12-pending
 cShowBinSelect.cpp,20260415,//AI(ht9045-v899) 20260415: dynamic height for tsIndex based,F12 pending：V910 有同日競品解法且照搬會回歸 btnASM 遮蔽 bug，建議不搬待使用者裁決,MG-W16/F12-pending
 cShowBinSelect.cpp,20260417,//AI(ht9045-v899) 20260417: show AutoDeviceEjection panel fo,F12 pending：V910 有同日競品解法且照搬會回歸 btnASM 遮蔽 bug，建議不搬待使用者裁決,MG-W16/F12-pending
+main.cpp,20260414,//AI(ht9045-v899) 20260414: pack MNetLog into StateRecord wh,MG-W15 判 C：V910 已有等價且更正確版本（0414=robocopy 打包路徑更對；0623=JerryYang int(ChangeToFloatNonPcnt) 輸出相同）,MG-W15
+cConfiguration.cpp,20260623,"//AI(ht9045-v899) 20260623: 改用整數安全除法還原離散欄號,修正浮點除法造成 CheckBox",MG-W15 判 C：V910 已有等價且更正確版本（0414=robocopy 打包路徑更對；0623=JerryYang int(ChangeToFloatNonPcnt) 輸出相同）,MG-W15
+cConfiguration.cpp,20260623,"//AI(ht9045-v899) 20260623: 界外/空日期(1899-12-30)防呆,無效時回填Now()避",MG-W15 判 C：V910 已有等價且更正確版本（0414=robocopy 打包路徑更對；0623=JerryYang int(ChangeToFloatNonPcnt) 輸出相同）,MG-W15
+cConfiguration.cpp,20260623,//AI(ht9045-v899) 20260623: [O]EventLog存檔包try/catch，避免單一pick,MG-W15 判 C：V910 已有等價且更正確版本（0414=robocopy 打包路徑更對；0623=JerryYang int(ChangeToFloatNonPcnt) 輸出相同）,MG-W15
+cConfiguration.cpp,20260623,"//AI(ht9045-v899) 20260623: dtpO06NextTime為dtkTime picker,指派",MG-W15 判 C：V910 已有等價且更正確版本（0414=robocopy 打包路徑更對；0623=JerryYang int(ChangeToFloatNonPcnt) 輸出相同）,MG-W15

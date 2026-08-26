@@ -1661,6 +1661,15 @@ template <class T> float ChangeToFloatNonPcnt(const T Numerator, const T Denomin
     return str;
 };
 //------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260623: 新增整數安全除法(零防護+取整),供格線欄號/索引等整數情境使用,避免誤用浮點版造成階梯式位移
+template <class T> int ChangeToIntNonPcnt(const T Numerator, const T Denominator)
+{
+    int iResult=0;
+    if(Denominator!=0)
+       iResult= (int)((double)Numerator/(double)Denominator);
+    return iResult;
+};
+//------------------------------------------------------------------------------
 template<typename T>
 inline void vec_clr(vector<T> & v)
 {

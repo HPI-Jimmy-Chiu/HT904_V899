@@ -39,6 +39,8 @@
 #include "aRotateKIT_In.h"
 #include "MyCCLinkSensor.h"                                                 //KenHsieh 20230829 : add Check In Shuttle Sensor By pass
 #include "LtcSensor.h"
+//AI(ht9045-v899) 20260514: Phase 3 Loader pick planner scaffold (default off)
+#include "cInArmLoaderPickPlanner.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 //==============================================================================
@@ -5177,17 +5179,58 @@ int GetInArmToLoaderPosition_Single(int iSelRow, int &iXPos, int &iYPos, int iRo
     bool bHasMatch=false;
     iYPosition=iRow;
 
+    //AI(ht9045-v899) 20260706: 系統性可達性選嘴(不寫死吸嘴代號/欄位):預設仍取最左啟用吸嘴維持原行為,
+    //僅當最左嘴在正常pitch下算出的X超出軟體極限時,才於所有啟用吸嘴中改選X落在極限內且離兩端餘裕最大者,
+    //pitch維持不縮(避免縮pitch使閒置鄰嘴壓到隔壁IC掉料);全程不更動Loader tray IC狀態,無嘴可達則保留最左嘴由下游預檢處理
+    int iFirstEnableSuck=-1;
     for(int i=0; i<4; i++)
     {
         if(InArmSuckUse[iSelRow][i]==true)
         {
-            iCurrSuck=i;
-            for(int j=(i+1); j<4; j++)
-            {
-                InArmSuckUse[iSelRow][j]=false;
-                InArmSuckUse[1-iSelRow][j]=false;
-            }
+            iFirstEnableSuck=i;
             break;
+        }
+    }
+    iCurrSuck=iFirstEnableSuck;
+    if(iFirstEnableSuck>=0 &&
+       USE_PICKER_COUNT!=ep1Picker)
+    {
+        double dLimP=double(MOT[MInArmX].Motor->PSoftLimitP-100);
+        double dLimN=double(MOT[MInArmX].Motor->PSoftLimitN+100);
+        double dDefX=double(Prod.XInArm_Tray_Pick[iSelRow][iFirstEnableSuck])+double(iCol*Prod.LoadForm.iXPitch)+double(iInArmXBase-InArmSuck.Suck[iSelRow][iFirstEnableSuck].iMyCol)*dInArmXPitch_1Step;
+        if(dDefX>dLimP ||
+           dDefX<dLimN)
+        {
+            int    iBestSuck=-1;
+            double dBestMargin=-1.0;
+            for(int i=0; i<4; i++)
+            {
+                if(InArmSuckUse[iSelRow][i]==true)
+                {
+                    double dTryX=double(Prod.XInArm_Tray_Pick[iSelRow][i])+double(iCol*Prod.LoadForm.iXPitch)+double(iInArmXBase-InArmSuck.Suck[iSelRow][i].iMyCol)*dInArmXPitch_1Step;
+                    if(dTryX<=dLimP &&
+                       dTryX>=dLimN)
+                    {
+                        double dMargin=(dLimP-dTryX<dTryX-dLimN)?(dLimP-dTryX):(dTryX-dLimN);
+                        if(dMargin>dBestMargin)
+                        {
+                            dBestMargin=dMargin;
+                            iBestSuck=i;
+                        }
+                    }
+                }
+            }
+            if(iBestSuck>=0)
+                iCurrSuck=iBestSuck;
+        }
+    }
+    for(int j=0; j<4; j++)
+    {
+        if(iCurrSuck>=0 &&
+           j!=iCurrSuck)
+        {
+            InArmSuckUse[iSelRow][j]=false;
+            InArmSuckUse[1-iSelRow][j]=false;
         }
     }
 
@@ -6962,6 +7005,23 @@ bool SearchAndMoveInArmXYToLoad_9045()                                          
     int  iCol=0, iRow=0, iSelRow=0;
     bool bCanPick2ICAtOnceTime=false;
     bool bNeedDown=true;
+
+    //AI(ht9045-v899) 20260514: Phase 3 dual-path hook. SHADOW ONLY: when
+    // bUseLoaderPickPlanner=true, run planner for log/diff capture only;
+    // legacy SearchLoadTrayUpDown_9045 + MoveInArmXYToLoader_9045 still
+    // produce all real outputs. IsAuthoritative() returns false in Phase 3,
+    // so this branch can never short-circuit the legacy path.
+    if(bUseLoaderPickPlanner)
+    {
+        g_LoaderPlan.Init();
+        bool bShadowFound = g_LoaderPlan.Search();
+        RecordProcess(AnsiString().sprintf(
+            "LOADER_PLAN shadow found=%d active=%d auth=%d",
+            (int)bShadowFound,
+            g_LoaderPlan.GetActiveCount(),
+            (int)g_LoaderPlan.IsAuthoritative()));
+        // No early return; fall through to legacy path below.
+    }
 
     if(MOT[MMTrayY].fHasTray==false ||
        MOT[MMTrayY].HasIC()==false)

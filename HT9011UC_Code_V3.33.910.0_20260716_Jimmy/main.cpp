@@ -5907,11 +5907,10 @@ bool __fastcall TfMain::Start(AnsiString Func)
     {
         if(TestIF_File.bEnSocketSensor==false)
         {
-            #ifdef SOFT_SIMULTE
+            //AI(ht9045-v899) 20260623: 移除 #ifdef SOFT_SIMULTE 包裝，使 C08_1 Socket Sensor 偵測在正式 build 也生效（原僅模擬 build 編入導致正式機失效）
             iStartIn=0;
             ShowMyMessage("SocketSensor Detect Function is OFF. Please turn ON!");
             return false;
-            #endif
         }
     }
 
@@ -25206,7 +25205,8 @@ void __fastcall TfMain::cbSetupFileNameChange(TObject *Sender)
     if(CosFunction.bFirstTrayCheckOnUnloader==true &&                           //Jimmychiu 20251205 : First Tray Check On Unloader
        IniConfig.bP62FirstTrayCheckOnUnloader==true)
     {
-        fLotInfo->cbFirstTrayCheckOnUnloader->Checked=true;
+        //AI(ht9045-v899) 20260525: sync PASS auto positions after workfile switch
+        fLotInfo->SetFirstTrayCheckOnUnloader();
     }
 }
 //------------------------------------------------------------------------------
@@ -26645,6 +26645,46 @@ void DumpMainFormSnapshot(AnsiString sBasePath)
                       TrayForm.iManualRemoveLoader, iManualRemoveTrayCnt, iLDTrayNeedManualRemoveTray);
             slSnap->Add(s);
 
+            slSnap->Add("");
+            //AI(ht9045-v899) 20260629(CASE-PTI-20260629-001): 新增 Home/Buzzer/Modal 診斷 dump,供 auto-init 回HOME hang 偶發時定位早退點與 modal 來源
+            slSnap->Add("---- Home / Buzzer / Modal Diag ----");
+            s.sprintf("CheckOutArmDestory=%d (i*100+j+1, 0=none)", CheckOutArmDestory());
+            slSnap->Add(s);
+            s.sprintf("fAllMotorHome=%d  iHome=%d  InitialOK=%d", fAllMotorHome?1:0, iHome, InitialOK?1:0);
+            slSnap->Add(s);
+            s.sprintf("SoftStart=%d  SystemStart=%d  bAlarmBuzzer=%d  RunState=%d", SoftStart?1:0, SystemStart?1:0, bAlarmBuzzer?1:0, RunState);
+            slSnap->Add(s);
+            s.sprintf("bFinshTest=%d  bI01TesterFinishThenHome=%d  bHomeinitialCheckPushZ1=%d  bContactModeNeedOpenDoor=%d", bFinshTest?1:0, IniConfig.bI01TesterFinishThenHome?1:0, bHomeinitialCheckPushZ1?1:0, bContactModeNeedOpenDoor?1:0);
+            slSnap->Add(s);
+            s.sprintf("LastSet.iTester=%d (0:OFF_LINE 1:ON_LINE)", LastSet.iTester);
+            slSnap->Add(s);
+            if(fNote)
+            {
+                s.sprintf("fNote.fShow=%d  fNote.AlarmType=%d  fNote.edErrorCode=%s", fNote->fShow?1:0, fNote->AlarmType, fNote->edErrorCode->Text.c_str());
+                slSnap->Add(s);
+            }
+            if(MyMessageBox)
+            {
+                s.sprintf("MyMessageBox.fShow=%d", MyMessageBox->fShow?1:0);
+                slSnap->Add(s);
+            }
+            if(fMain)
+            {
+                s.sprintf("palMainStatus.Caption=%s", fMain->palMainStatus->Caption.c_str());
+                slSnap->Add(s);
+            }
+            s.sprintf("HomeFlag InArmX=%d OutArmX=%d TestY1=%d InShuttle1=%d OutShuttle1=%d LoaderY=%d TrayX=%d", MOT[MInArmX].HomeFlag, MOT[MOutArmX].HomeFlag, MOT[MTestY1].HomeFlag, MOT[MInShuttle1].HomeFlag, MOT[MOutShuttle1].HomeFlag, MOT[MLoaderY].HomeFlag, MOT[MTrayX].HomeFlag);
+            slSnap->Add(s);
+            s.sprintf("Buzzer SwMusic Status: %d %d %d %d", SW[SwMusic1+0].Status()?1:0, SW[SwMusic1+1].Status()?1:0, SW[SwMusic1+2].Status()?1:0, SW[SwMusic1+3].Status()?1:0);
+            slSnap->Add(s);
+            for(int i=0; i<4; i++)
+            {
+                AnsiString sOAP="bOutArmPlaceDevice r"+IntToStr(i)+":";
+                for(int j=0; j<8; j++)
+                    sOAP += " " + IntToStr(bOutArmPlaceDevice[i][j]?1:0);
+                slSnap->Add(sOAP);
+            }
+
             slSnap->SaveToFile(sSnapPath);
         }
         __finally
@@ -26817,6 +26857,20 @@ void __fastcall TfMain::DoStateRecord(int iShowAlarm, bool bManual)             
         {
             ActivePath12.sprintf("%s\\%04d_%02d", asTestTCPIPLogPath, iPrevYear, iPrevMonth);
             str.sprintf("robocopy \"%s\" \"%s\\TCP_LOG\" /S /MAXAGE:2 /R:0 /W:0 /NJH /NJS /NDL /NC /NS /NP", ActivePath12, NewPath);
+            TestList->Add(str);
+        }
+
+        //AI(ht9045-v899) 20260525: pack PTI Lot Start trace with TCP log for permission/runmode diagnosis
+        if(CUSTOMER_CODE==CC_PTI)
+        {
+            ActivePath11.sprintf("%s\\%04d_%02d", "D:\\HT9045_Log\\PTI_LotStartTrace", SystemYear, SystemMonth);
+            str.sprintf("XCOPY /y/a/e/c/i/h/f/r \"%s\" \"%s%04d_%02d\"", ActivePath11, NewPath+"\\PTI_LotStartTrace\\", SystemYear, SystemMonth);
+            TestList->Add(str);
+
+            str.sprintf("d:\\HT9045\\7z.exe a -tzip \"%s\\%04d_%02d.7z\" \"%s\\%04d_%02d\\*.*\"", NewPath+"\\PTI_LotStartTrace", SystemYear, SystemMonth, NewPath+"\\PTI_LotStartTrace", SystemYear, SystemMonth);
+            TestList->Add(str);
+
+            str.sprintf("RMDIR /s/q \"%s\\%04d_%02d\"", NewPath+"\\PTI_LotStartTrace", SystemYear, SystemMonth);
             TestList->Add(str);
         }
     }

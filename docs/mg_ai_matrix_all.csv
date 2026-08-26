@@ -73,7 +73,7 @@
 20260414,ht9045-v899,HS_Function.cpp,2002,same-file,//AI(ht9045-v899) 20260414: trace failure
 20260414,ht9045-v899,HS_Function.cpp,2008,same-file,//AI(ht9045-v899) 20260414: trace missing file
 20260414,ht9045-v899,HS_Function.cpp,2014,same-file,//AI(ht9045-v899) 20260414: trace connect failure
-20260414,ht9045-v899,main.cpp,25658,MISSING,//AI(ht9045-v899) 20260414: pack MNetLog into StateRecord when N10-3 daily upload enabled for FTP diagnostic
+20260414,ht9045-v899,main.cpp,25658,ALLOWLISTED,//AI(ht9045-v899) 20260414: pack MNetLog into StateRecord when N10-3 daily upload enabled for FTP diagnostic
 20260415,ht9045-v899,HS_Function.cpp,48,same-file,//AI(ht9045-v899) 20260415: forward-declare MNetLog before first use at UpDataToServer_KYEC
 20260415,ht9045-v899,HS_Function.cpp,1773,same-file,//AI(ht9045-v899) 20260415: swap SystemDate to yesterday before GetProdLog to fix cross-midnight filename mismatch
 20260415,ht9045-v899,HS_Function.cpp,1802,same-file,//AI(ht9045-v899) 20260415: swap SystemDate to yesterday before GetGPIBLog to fix cross-midnight filename mismatch
@@ -352,8 +352,8 @@
 20260514,ht9045-v899,Common\PickPlanner\cOutArmPlacePlanner.h,2,same-file,//AI(ht9045-v899) 20260514: OutArm Place planner (Phase 4 scaffold)
 20260514,ht9045-v899,Common\PickPlanner\cOutArmPlacePlanner.h,28,same-file,"//AI(ht9045-v899) 20260514: runtime gate, default OFF. Currently unreachable"
 20260514,ht9045-v899,Common\PickPlanner\cOutArmPlacePlanner.h,49,same-file,//AI(ht9045-v899) 20260514: explicit gate. Returns false until Phase 4.1
-20260514,ht9045-v899,ainarm9045.cpp,40,MISSING,//AI(ht9045-v899) 20260514: Phase 3 Loader pick planner scaffold (default off)
-20260514,ht9045-v899,ainarm9045.cpp,6436,MISSING,//AI(ht9045-v899) 20260514: Phase 3 dual-path hook. SHADOW ONLY: when
+20260514,ht9045-v899,ainarm9045.cpp,40,same-file,//AI(ht9045-v899) 20260514: Phase 3 Loader pick planner scaffold (default off)
+20260514,ht9045-v899,ainarm9045.cpp,6436,same-file,//AI(ht9045-v899) 20260514: Phase 3 dual-path hook. SHADOW ONLY: when
 20260515,JimmyChiu,Automation\auto9045.cpp,1042,same-file,//AI(JimmyChiu) 20260515: F899-008 OEE_StartLot 失敗 errMsg 關鍵字分流（對齊 SPEC §6.3 / §8.5）
 20260515,JimmyChiu,Automation\auto9045.cpp,1057,same-file,//AI(JimmyChiu) 20260515: F899-008 超豐 LotInfo_REQUEST 內嵌 OEE Start Lot（v3）
 20260515,JimmyChiu,Automation\automation.cpp,1967,same-file,//AI(JimmyChiu) 20260515: F899-008 §6.2 超豐在 OEE 開啟才走內嵌 OEE Start Lot
@@ -421,8 +421,8 @@
 20260522,ht9045-v899,cContact.cpp,10775,same-file,//AI(ht9045-v899) 20260522: keep Contact Test drop guard active until place-to-shuttle vacuum release
 20260522,ht9045-v899,cContact.cpp,18193,same-file,//AI(ht9045-v899) 20260522: check Gigas Contact Test Z1 drop before 3-axis place-to-shuttle release
 20260522,ht9045-v899,cContact.cpp,18311,same-file,//AI(ht9045-v899) 20260522: check Gigas Contact Test Z2 drop before 3-axis place-to-shuttle release
-20260525,ht9045-v899,main.cpp,24003,MISSING,//AI(ht9045-v899) 20260525: sync PASS auto positions after workfile switch
-20260525,ht9045-v899,main.cpp,25604,MISSING,//AI(ht9045-v899) 20260525: pack PTI Lot Start trace with TCP log for permission/runmode diagnosis
+20260525,ht9045-v899,main.cpp,24003,same-file,//AI(ht9045-v899) 20260525: sync PASS auto positions after workfile switch
+20260525,ht9045-v899,main.cpp,25604,same-file,//AI(ht9045-v899) 20260525: pack PTI Lot Start trace with TCP log for permission/runmode diagnosis
 20260525,ht9045-v899,uLotInfo.cpp,95,same-file,//AI(ht9045-v899) 20260525: trace PTI Lot Start context for tester TCP diagnostics
 20260525,ht9045-v899,uLotInfo.cpp,119,same-file,//AI(ht9045-v899) 20260525: restore PTI RunMode before local Lot Start gate
 20260525,ht9045-v899,uLotInfo.cpp,1612,same-file,//AI(ht9045-v899) 20260525: mark PTI tester TCP command window for StateRecord analysis
@@ -560,20 +560,20 @@
 20260612,ht9045-v899,uLotInfo.cpp,2011,same-file,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 丟佇列即清(決議2):不等上傳成功就清SocketID count;此段為UpSocketIdPoductDataToServerByFTP上傳成功後清除程式碼之複製(FTPClient.cpp L2271-2278),背景分"
 20260612,ht9045-v899,uLotInfo.cpp,2020,same-file,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 開關關(非PTI/預設) → 維持原同步上傳路徑,行為一字不改(MySleep+呼叫函式,SocketID count清除仍在函式內部上傳成功後執行)"
 20260618,ht9045-v899,Motor\mymotor.cpp,415,same-file,//AI(ht9045-v899) 20260618: CASE-20260618-001 南茂(CC_ChipMos)/e360KG 落入 else 使 iCheckZ=4000 門檻過緊，Z2 到位較慢提早觸發 Z1UpZ2Down1 alarm，比照 CC_GIGAS 放寬 iCheckZ 至 11000
-20260623,ht9045-v899,MachineType.h,1631,MISSING,"//AI(ht9045-v899) 20260623: 新增整數安全除法(零防護+取整),供格線欄號/索引等整數情境使用,避免誤用浮點版造成階梯式位移"
-20260623,ht9045-v899,cConfiguration.cpp,153,MISSING,"//AI(ht9045-v899) 20260623: 改用整數安全除法還原離散欄號,修正浮點除法造成 CheckBox 階梯式位移"
-20260623,ht9045-v899,cConfiguration.cpp,4983,MISSING,"//AI(ht9045-v899) 20260623: 界外/空日期(1899-12-30)防呆,無效時回填Now()避免picker指派拋例外"
-20260623,ht9045-v899,cConfiguration.cpp,7327,MISSING,//AI(ht9045-v899) 20260623: [O]EventLog存檔包try/catch，避免單一picker例外中斷整個SaveConfiguration(原會使Enable FTP等設定全寫不進)
-20260623,ht9045-v899,cConfiguration.cpp,7330,MISSING,"//AI(ht9045-v899) 20260623: dtpO06NextTime為dtkTime picker,指派->Date在界外日期(1899-12-30)拋EDateTimeError;改用日期picker的Date加時間picker的Time組合,移除非法指派"
-20260623,ht9045-v899,main.cpp,5640,MISSING,//AI(ht9045-v899) 20260623: 移除 #ifdef SOFT_SIMULTE 包裝，使 C08_1 Socket Sensor 偵測在正式 build 也生效（原僅模擬 build 編入導致正式機失效）
-20260625,ht9045-v899,Interface\TesterTCP.cpp,1050,MISSING,//AI(ht9045-v899) 20260625: 新增去重式記錄器，N06 recipe 同步成敗寫入既有 EventLog，避免靜默失敗且不膨脹日誌
-20260625,ht9045-v899,Interface\TesterTCP.cpp,1063,MISSING,//AI(ht9045-v899) 20260625: 取 7z 完整路徑(不硬編碼)，FileExists 為 false 才 fallback
-20260625,ht9045-v899,Interface\TesterTCP.cpp,1072,MISSING,//AI(ht9045-v899) 20260625: 同步執行 7z 並取得 exit code(沿用 main.cpp ShellExecuteEx+WaitForSingleObject 模式)；回傳 false 代表失敗，pdwExit 帶回程序結束碼
-20260625,ht9045-v899,Interface\TesterTCP.cpp,1100,MISSING,//AI(ht9045-v899) 20260625: 改回傳 bool + 同步等待 + 取 exit code + 存在性檢查，避免 N06 上傳靜默失敗
-20260625,ht9045-v899,Interface\TesterTCP.cpp,1145,MISSING,//AI(ht9045-v899) 20260625: 同 CopyRecipeToTester，改 bool 回傳 + 同步取 exit code + 存在性檢查 + 去重記錄
-20260625,ht9045-v899,Interface\TesterTCP.cpp,1155,MISSING,//AI(ht9045-v899) 20260625: 原註解掉的 log 改為呼叫去重記錄器
-20260625,ht9045-v899,Interface\TesterTCP.h,258,MISSING,//AI(ht9045-v899) 20260625: 回傳型別 void->bool，配合 N06 recipe 同步成敗回報
-20260629,ht9045-v899,main.cpp,25418,MISSING,"//AI(ht9045-v899) 20260629(CASE-PTI-20260629-001): 新增 Home/Buzzer/Modal 診斷 dump,供 auto-init 回HOME hang 偶發時定位早退點與 modal 來源"
+20260623,ht9045-v899,MachineType.h,1631,same-file,"//AI(ht9045-v899) 20260623: 新增整數安全除法(零防護+取整),供格線欄號/索引等整數情境使用,避免誤用浮點版造成階梯式位移"
+20260623,ht9045-v899,cConfiguration.cpp,153,ALLOWLISTED,"//AI(ht9045-v899) 20260623: 改用整數安全除法還原離散欄號,修正浮點除法造成 CheckBox 階梯式位移"
+20260623,ht9045-v899,cConfiguration.cpp,4983,same-file,"//AI(ht9045-v899) 20260623: 界外/空日期(1899-12-30)防呆,無效時回填Now()避免picker指派拋例外"
+20260623,ht9045-v899,cConfiguration.cpp,7327,same-file,//AI(ht9045-v899) 20260623: [O]EventLog存檔包try/catch，避免單一picker例外中斷整個SaveConfiguration(原會使Enable FTP等設定全寫不進)
+20260623,ht9045-v899,cConfiguration.cpp,7330,same-file,"//AI(ht9045-v899) 20260623: dtpO06NextTime為dtkTime picker,指派->Date在界外日期(1899-12-30)拋EDateTimeError;改用日期picker的Date加時間picker的Time組合,移除非法指派"
+20260623,ht9045-v899,main.cpp,5640,same-file,//AI(ht9045-v899) 20260623: 移除 #ifdef SOFT_SIMULTE 包裝，使 C08_1 Socket Sensor 偵測在正式 build 也生效（原僅模擬 build 編入導致正式機失效）
+20260625,ht9045-v899,Interface\TesterTCP.cpp,1050,same-file,//AI(ht9045-v899) 20260625: 新增去重式記錄器，N06 recipe 同步成敗寫入既有 EventLog，避免靜默失敗且不膨脹日誌
+20260625,ht9045-v899,Interface\TesterTCP.cpp,1063,same-file,//AI(ht9045-v899) 20260625: 取 7z 完整路徑(不硬編碼)，FileExists 為 false 才 fallback
+20260625,ht9045-v899,Interface\TesterTCP.cpp,1072,same-file,//AI(ht9045-v899) 20260625: 同步執行 7z 並取得 exit code(沿用 main.cpp ShellExecuteEx+WaitForSingleObject 模式)；回傳 false 代表失敗，pdwExit 帶回程序結束碼
+20260625,ht9045-v899,Interface\TesterTCP.cpp,1100,same-file,//AI(ht9045-v899) 20260625: 改回傳 bool + 同步等待 + 取 exit code + 存在性檢查，避免 N06 上傳靜默失敗
+20260625,ht9045-v899,Interface\TesterTCP.cpp,1145,same-file,//AI(ht9045-v899) 20260625: 同 CopyRecipeToTester，改 bool 回傳 + 同步取 exit code + 存在性檢查 + 去重記錄
+20260625,ht9045-v899,Interface\TesterTCP.cpp,1155,same-file,//AI(ht9045-v899) 20260625: 原註解掉的 log 改為呼叫去重記錄器
+20260625,ht9045-v899,Interface\TesterTCP.h,258,same-file,//AI(ht9045-v899) 20260625: 回傳型別 void->bool，配合 N06 recipe 同步成敗回報
+20260629,ht9045-v899,main.cpp,25418,same-file,"//AI(ht9045-v899) 20260629(CASE-PTI-20260629-001): 新增 Home/Buzzer/Modal 診斷 dump,供 auto-init 回HOME hang 偶發時定位早退點與 modal 來源"
 20260630,ht9045-v899,HS_Function.cpp,1967,same-file,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): 最外層 try/catch 加固,讓 socket 例外不再以空 UnitName 逸出到 main.cpp AppException(保留原 success 回傳碼語義)"
 20260630,ht9045-v899,HS_Function.cpp,1987,same-file,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): connect timeout 30000->5000ms 與 PTI N06 路徑一致,降低同步阻塞最壞值"
 20260630,ht9045-v899,cpublic.cpp,655,same-file,"//AI(ht9045-v899) 20260630: ExecZipCommand 的 handle 版,回傳子行程 process handle(失敗回 NULL),"
@@ -617,7 +617,7 @@
 20260703,ht9045-v899,note.cpp,1995,same-file,"//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 若觸發端有帶入動態原因+處置文字則覆寫面板(含 alarm 描述/code + 已暫停/已重新初始化偵測)；空則維持原預設。此為非阻塞常駐面板, 不會 StopAllMotor。"
 20260703,ht9045-v899,uhome.cpp,2664,same-file,"//AI(ht9045-v899) 20260703: Greatek硬體極性校正-Home以放開為目標;有盤依軟體fHasTray維持夾持,無盤則驅動放開並確認FixOff到位(不再用FixOn sensor猜有盤,FixOn ON=空夾非有盤);非Greatek維持原邏輯"
 20260703,ht9045-v899,uhome.cpp,2706,same-file,"//AI(ht9045-v899) 20260703: Home時FixOn讀ON但軟體無盤記錄,原邏輯不經確認即夾持+標記有盤走自動退盤,造成非預期夾爪動作;改為防抖100次後跳WAR0614由操作員確認,RETRY=已取下盤重新檢查,SKIP=確認有盤維持舊有自動退盤"
-20260706,ht9045-v899,ainarm9045.cpp,4661,MISSING,"//AI(ht9045-v899) 20260706: 系統性可達性選嘴(不寫死吸嘴代號/欄位):預設仍取最左啟用吸嘴維持原行為,"
+20260706,ht9045-v899,ainarm9045.cpp,4661,same-file,"//AI(ht9045-v899) 20260706: 系統性可達性選嘴(不寫死吸嘴代號/欄位):預設仍取最左啟用吸嘴維持原行為,"
 20260803,ht9045-v899,CosFunction.cpp,2789,same-file,//AI(ht9045-v899) 20260803: the 20260602 InArm case-15 dead-lock watchdog was added for this customer only (CASE-GIGAS-20260729-001)
 20260803,ht9045-v899,CosFunction.cpp,4414,same-file,//AI(ht9045-v899) 20260803: default off - the 20260602 case-15 watchdog must only run for CC_ARDENTEC (CASE-GIGAS-20260729-001)
 20260803,ht9045-v899,CosFunction.h,470,same-file,"//AI(ht9045-v899) 20260803: InArm load-stage dead-lock watchdog (case 15), CC_ARDENTEC only (CASE-GIGAS-20260729-001)"

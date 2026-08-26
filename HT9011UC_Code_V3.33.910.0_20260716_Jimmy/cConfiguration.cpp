@@ -5199,8 +5199,10 @@ void __fastcall TfConfiguration::FormShow(TObject *Sender)
     if(IniConfig.bEventLogAutoSaveFunction)                                     //Steven 20110221 Start : EventLogAutoSave
     {
         gbO06->Visible              =true;
-        dtO06_LastDate->Date        =IniConfig.dtEventLogLastRecordDate;
-        dtpO06NextTime->Time        =IniConfig.dtEventLogLastRecordDate;
+        //AI(ht9045-v899) 20260623: 界外/空日期(1899-12-30)防呆,無效時回填Now()避免picker指派拋例外
+        TDateTime dtO06Load = ((double)IniConfig.dtEventLogLastRecordDate < 2.0) ? Now() : IniConfig.dtEventLogLastRecordDate;
+        dtO06_LastDate->Date        =dtO06Load;
+        dtpO06NextTime->Time        =dtO06Load;
         for(int i=0; i<7; i++)
         {
             if(IniConfig.bAutoSaveLogWeek[i]==true)
@@ -7591,12 +7593,17 @@ void TfConfiguration::CheckConfigurationBeforeSave()
 //<<[O]-------------------------
     if(IniConfig.bEventLogAutoSaveFunction)                                     //Steven 20110221 Start : EventLogAutoSave
     {
-        dtpO06NextTime->Date                                =dtO06_LastDate->Date;
-        IniConfig.dtEventLogLastRecordDate                  =dtpO06NextTime->DateTime;
-        IniConfig.sEventLogLastRecordDate                   =IniConfig.dtEventLogLastRecordDate.FormatString("yyyy/mm/dd hh:mm:ss");    //Ifor 20160621 修正config.ini 時間異常問題
-        IniConfig.iNextEventLogRecordSpace                  =1;
-        for(int i=0; i<7; i++)
-            IniConfig.bAutoSaveLogWeek[i]=strngrdAutoSaveLog->Cells[i][1]!=""?true:false;
+        //AI(ht9045-v899) 20260623: [O]EventLog存檔包try/catch，避免單一picker例外中斷整個SaveConfiguration(原會使Enable FTP等設定全寫不進)
+        try
+        {
+            //AI(ht9045-v899) 20260623: dtpO06NextTime為dtkTime picker,指派->Date在界外日期(1899-12-30)拋EDateTimeError;改用日期picker的Date加時間picker的Time組合,移除非法指派
+            IniConfig.dtEventLogLastRecordDate                  =dtO06_LastDate->Date + dtpO06NextTime->Time;
+            IniConfig.sEventLogLastRecordDate                   =IniConfig.dtEventLogLastRecordDate.FormatString("yyyy/mm/dd hh:mm:ss");    //Ifor 20160621 修正config.ini 時間異常問題
+            IniConfig.iNextEventLogRecordSpace                  =1;
+            for(int i=0; i<7; i++)
+                IniConfig.bAutoSaveLogWeek[i]=strngrdAutoSaveLog->Cells[i][1]!=""?true:false;
+        }
+        catch(...) { /*AI(ht9045-v899) 20260623: 吞例外,不中斷後續存檔*/ }
     }
 
 //<<[P]-------------------------

@@ -27,7 +27,8 @@
 | MG-W12 | OutArm rotate 群（0810 全叢集 21＋0811 殘餘 12；33 條、32 op／9 檔／393 行，**335 行無標記承重碼＝本戰役最大盲區**；額度死亡後重派完成） | port_check PASS（368 全 SPLICED、removed=17 與預測全同）＋bcc32 八檔 PASS（main 3 既有零回歸）。內容：Auto1 縮距救援夾下限、GetNowShuttleMode_2x4_4 早退修正（kit1 X +2*dSiteXPitch）、stride 3→1、旋轉站 13Picker 幾何改道、逐輪診斷 ring buffer 20 輪＋State Record 帶檔、GIGAS GaliPosRange 10→50 預設、FOREHOPE [I21-10] 解鎖。**無客戶碼閘＝機型/旗標天然隔離**（2x4_4 只在 e9045_2x4_4_13/14 dispatch；InspectOutArmPosition 套 SOFT_SIMULTE 正式 build 跑不到）。外溢：診斷 Log 全客戶預設開（寫 config.ini [Debug] bOutArmRoundLog=1）＝V899 出貨現狀；W12-18 解除 Steven 20241220 暫時跳過（V899 終態） | 56a9815 |
 | MG-W13 | 0819 超豐熱風＋0820 PTI 尾波（17 條、12 op／6 檔；91 行 payload 中 63 行無標記承重碼） | port_check PASS（88 全 SPLICED）＋bcc32 四檔 PASS；agent 已先在 scratchpad 整樹副本實編背書。0819=B 類（FUNC_CC_Greatek 原生閘＋INSTALL_HEAT_GUN 早退）；0820 Fix1=CC_PTI 原生閘（cBinSel＋CheckMOInformation 跳過 e3Fix1 同波成組）；越界修正=程式碼無閘但執行期三層收斂到不了（bOEEFunction→bN14_21→HT9046）；**O06 週期 log=對外格式變更（RMS 消費）無閘全客戶**——iShtRow==1 機台從沒印變會印、標籤語意修正，外溢必知。刻意排除：cTemperFrom JAM0416→WAR07301（隱藏 AlarmSimulator 鈕、與主題無關、非矩陣點）。R2（CheckMOInformation 溫度明細/洩漏修補為 fork 期分歧）不屬本戰役範圍 | 3860bee |
 | MG-W14 | PTI 0630/0703 案群（42 條→40 結清；34 op／12 檔／401 行 payload，306 行無標記承重碼＝可見率 11.6%）——歸屬更正：0703 有 13 條是**超豐** TrayArm 夾爪極性（7 commit），非 PTI | port_check PASS（346 全 SPLICED、removed=44 恰如預測）＋bcc32 十檔 PASS。內容：SmartAutoClean 恆放行（V910 原為舊鎖機版；程式面全客戶、實務收斂 bSmartAutoClean 三 profile）＋非阻塞提示＋計數重置；State Record 非阻塞化（ExecZipCommandHandle＋case 6 分段輪詢＋Del_Tree 三段重試；避開 V910 iScrW/iScrH 反向修改切三刀）；訊息框置頂；FTP timeout 5000＋try/catch；超豐夾爪極性 7 op（CC_Greatek 原生閘）；JAM0610 SKIP 補釋放＋WAR0614 幽靈盤告警化。W14-27 孿生錨經 md5 前提＋套用後複驗未誤改。F11（acatchtray 防抖兩條：V910 有更演進版，照搬會倒退）不搬 | 75bd43f |
-| MG-W16 | 雜項掃尾（0401/0410/0505/0513/0515/0519/0520/0605/0618 共 20 條→8 op 搬＋10 條 C 類白名單＋3 條 F12 不搬） | port_check PASS（24 全 SPLICED、removed=3 刻意取代）＋bcc32 六檔 0 errors。亮點：**A5 破案**——uhome:1864 亂碼是 V899 原檔天生損壞（UTF-8 位元組在 Big5 檔、全檔 136 U+FFFD），V910 有正確版故判 C；adam6024 兩 op 把 V910 死碼 ShowDoubleEPConnectGuide 接上；mymotor ChipMos 分支（D 類邊緣，只插 5 行不碰其他馬達碼）；F12（cShowBinSelect 三條耦合：V910 有同日競品解＋btnASM 遮蔽回歸風險）不搬 | （本次收工 commit） |
+| MG-W16 | 雜項掃尾（0401/0410/0505/0513/0515/0519/0520/0605/0618 共 20 條→8 op 搬＋10 條 C 類白名單＋3 條 F12 不搬） | port_check PASS（24 全 SPLICED、removed=3 刻意取代）＋bcc32 六檔 0 errors。亮點：**A5 破案**——uhome:1864 亂碼是 V899 原檔天生損壞（UTF-8 位元組在 Big5 檔、全檔 136 U+FFFD），V910 有正確版故判 C；adam6024 兩 op 把 V910 死碼 ShowDoubleEPConnectGuide 接上；mymotor ChipMos 分支（D 類邊緣，只插 5 行不碰其他馬達碼）；F12（cShowBinSelect 三條耦合：V910 有同日競品解＋btnASM 遮蔽回歸風險）不搬 | b70f987 |
+| MG-W15 | 機能群收尾（0623/0625/0629/0525/0514/0706/0414 共 20 條→12 op 搬 18＋2 C 類）——歸屬更正×2：0623 main=全智 C08_1（移除 SOFT_SIMULTE 包裹）、0625=欣銓 CASE-ARDENTEC-20260625-001 非長沙安牧泉 | port_check PASS（275 全 SPLICED、removed=50 含 TesterTCP 兩支函式整段取代）＋bcc32 四檔 PASS。內容：PTI O06 dtkTime EDateTimeError 修正（SaveConfiguration 中斷根因）、TesterTCP WORKFILE 同步等 7z（600ms→等完成）、DumpMainFormSnapshot 補 Home/Buzzer/Modal、PTI FirstTrayCheck 同步＋LotStart trace 打包、PickPlanner InArm 接線（三重休眠）、甬矽 WAR0152 可達性選嘴（D 類，預設路徑等價已逐條證明）。MachineType.h 100% LF 保持。0414/0623:153 判 C（V910 更正確）。註：白名單多 3 條 inert 規則（對應已搬條目，永不命中，收尾清點時一併審） | （本次收工 commit） |
 
 ## 假 MISSING 白名單
 
@@ -60,7 +61,7 @@
 | 20260408 | 6 | 1 | — | AutoClean\AutoClean.cpp(6) | A | done MG-W11 |
 | 20260409 | 1 | 1 | — | AutoClean\AutoClean.cpp(1) | A | done MG-W11 |
 | 20260410 | 1 | 1 | — | CosFunction.cpp(1) | A | done MG-W16 |
-| 20260414 | 10 | 3 | — | HS_Function.cpp(7), AutoClean\uCleaning.cpp(2), main.cpp(1) | A | **9/10 done**：HS 7=MG-W5、uCleaning 2=MG-W11；main.cpp 1 pending（V910 無 0414 MNetLog 區塊，查證後歸波） |
+| 20260414 | 10 | 3 | — | HS_Function.cpp(7), AutoClean\uCleaning.cpp(2), main.cpp(1) | A | **9/10 done**：HS 7=MG-W5、uCleaning 2=MG-W11；main.cpp 1=skipped-C MG-W15（V910 robocopy 版更正確） |
 | 20260415 | 5 | 2 | — | HS_Function.cpp(3), cShowBinSelect.cpp(2) | A | **HS_Function 3 條 done MG-W5**；cShowBinSelect 2=F12 不搬（白名單） |
 | 20260416 | 1 | 1 | — | AutoClean\AutoClean.cpp(1) | A | done MG-W11 |
 | 20260417 | 3 | 2 | — | AutoClean\AutoClean.cpp(2), cShowBinSelect.cpp(1) | A | AutoClean 2=done MG-W11; cShowBinSelect 1=F12 不搬（白名單） |
@@ -73,11 +74,11 @@
 | 20260505 | 2 | 2 | — | adam6024.cpp(1), uhome.cpp(1) | A/C | done MG-W16（uhome=C，V899 原檔損壞、V910 有正確版） |
 | 20260511 | 8 | 2 | — | iosetview.cpp(5), adam6024.cpp(3) | A/X | **done MG-W7**：iosetview 5 條已搬（AV 防護）；adam6024 3 條 F4 不動 |
 | 20260513 | 3 | 3 | — | acatchtray.cpp(1), asendic_Auto.cpp(1), csystem.cpp(1) | A/C | done MG-W16（csystem 搬；其餘 C） |
-| 20260514 | 8 | 2 | — | AutoClean\AutoClean.cpp(6), ainarm9045.cpp(2) | A | AutoClean 6=done MG-W11 (0407 gruppe); ainarm9045 2=pending |
+| 20260514 | 8 | 2 | — | AutoClean\AutoClean.cpp(6), ainarm9045.cpp(2) | A | AutoClean 6=MG-W11；ainarm9045 2=MG-W15（PickPlanner 接線，三重休眠） |
 | 20260515 | 3 | 1 | — | cContactCT.cpp(3) | C | skipped-C MG-W16（V910 逐位元組同，公司署名） |
 | 20260519 | 4 | 3 | — | uTrayEditForm.cpp(2), BarCode\BarCode.cpp(1), HS_Function.cpp(1) | A/C | done MG-W16（HS_Function 搬；其餘 C） |
 | 20260520 | 1 | 1 | — | CosFunction.cpp(1) | A | done MG-W16 |
-| 20260525 | 2 | 1 | — | main.cpp(2) | pending | pending |
+| 20260525 | 2 | 1 | — | main.cpp(2) | A | done MG-W15 |
 | 20260526 | 7 | 4 | — | ContactForce.cpp(3), adam6024.cpp(2), HS_Function.cpp(1), cContact.cpp(1) | A/X | **resolved MG-W7**：ContactForce round-trip 1 條已搬；1627/1670=F3、453=F5 不搬 |
 | 20260602 | 13 | 2 | — | ainarm9045.cpp(10), acatchtray.cpp(3) | B | **done MG-W9**（watchdog，CC_ARDENTEC 閘） |
 | 20260605 | 1 | 1 | — | cSortCT.cpp(1) | C | skipped-C MG-W16 |
@@ -85,12 +86,12 @@
 | 20260611 | 3 | 2 | CASE-20260611-001 | uLotInfo.cpp(2), cTrayAssignment.cpp(1) | A | **done MG-W10** |
 | 20260612 | 50 | 6 | CASE-20260611-001 | FTPUpload\uFtpUploadThread.cpp(23), uLotInfo.cpp(11), FTPUpload\uFtpUploadThread.h(8), main.cpp(6) +2檔 | A | **done MG-W10**（背景上傳執行緒＋新增檔） |
 | 20260618 | 1 | 1 | CASE-20260618-001 | Motor\mymotor.cpp(1) | A | done MG-W16（D 類邊緣，忠實 5 行） |
-| 20260623 | 6 | 3 | — | cConfiguration.cpp(4), MachineType.h(1), main.cpp(1) | pending | pending |
-| 20260625 | 7 | 2 | — | Interface\TesterTCP.cpp(6), Interface\TesterTCP.h(1) | pending | pending |
-| 20260629 | 1 | 1 | CASE-PTI-20260629-001 | main.cpp(1) | pending | pending |
+| 20260623 | 6 | 3 | — | cConfiguration.cpp(4), MachineType.h(1), main.cpp(1) | A/C | done MG-W15（歸屬：main=全智、其餘=PTI；:153=C） |
+| 20260625 | 7 | 2 | — | Interface\TesterTCP.cpp(6), Interface\TesterTCP.h(1) | A | done MG-W15（歸屬更正：欣銓） |
+| 20260629 | 1 | 1 | CASE-PTI-20260629-001 | main.cpp(1) | A | done MG-W15 |
 | 20260630 | 18 | 8 | CASE-PTI-20260630-002 | main.cpp(6), csystem.cpp(3), HS_Function.cpp(2), cpublic.cpp(2) +4檔 | A/B | done MG-W14（uLotInfo:1952=MG-W10） |
 | 20260703 | 25 | 8 | CASE-PTI-20260630-001 | acatchtray.cpp(8), cmydef.cpp(4), AutoClean\uCleaning.cpp(3), cmydef.h(3) +4檔 | A/B | **40/42 done MG-W14**；acatchtray 防抖 2 條=F11 不搬（V910 演進版更優） |
-| 20260706 | 1 | 1 | — | ainarm9045.cpp(1) | pending | pending |
+| 20260706 | 1 | 1 | — | ainarm9045.cpp(1) | A | done MG-W15（D 類，等價已證） |
 | 20260803 | 5 | 3 | CASE-GIGAS-20260729-001 | CosFunction.cpp(2), ainarm9045.cpp(2), CosFunction.h(1) | B | **done MG-W9**（收閘五落點） |
 | 20260804 | 25 | 5 | CASE-PTI-20260804-001 | CosFunction.cpp(9), CosFunction.h(6), PowerSavingMode.cpp(5), cConfiguration.cpp(4) +1檔 | B | **done MG-W8**（C05 profile，FUNC_CC_PTI gate） |
 | 20260810 | 21 | 9 | — | aoutarm9045_2x4_4.cpp(10), aoutarm.cpp(2), aoutarm9045.cpp(2), main.cpp(2) +5檔 | A | done MG-W12 |
