@@ -13,8 +13,8 @@
 | 20260408 | 3 | 1 | 6 | 10 |
 | 20260409 | 0 | 0 | 1 | 1 |
 | 20260410 | 0 | 0 | 1 | 1 |
-| 20260414 | 0 | 0 | 10 | 10 |
-| 20260415 | 0 | 0 | 5 | 5 |
+| 20260414 | 7 | 0 | 3 | 10 |
+| 20260415 | 3 | 0 | 2 | 5 |
 | 20260416 | 0 | 0 | 1 | 1 |
 | 20260417 | 5 | 0 | 3 | 8 |
 | 20260420 | 2 | 0 | 1 | 3 |
@@ -63,7 +63,7 @@
 | 20260817 | 5 | 0 | 6 | 11 |
 | 20260819 | 0 | 0 | 10 | 10 |
 | 20260820 | 0 | 0 | 7 | 7 |
-| **合計** | 370 | 4 | 345 | 719 |
+| **合計** | 380 | 4 | 335 | 719 |
 
 ## MISSING 依檔案分布（前 40）
 
@@ -72,7 +72,6 @@
 | AutoClean\AutoClean.cpp | 24 |
 | FTPUpload\uFtpUploadThread.cpp | 23 |
 | main.cpp | 22 |
-| HS_Function.cpp | 20 |
 | CosFunction.cpp | 17 |
 | ainarm9045.cpp | 15 |
 | ContactForce.cpp | 15 |
@@ -82,6 +81,7 @@
 | adam6024.cpp | 12 |
 | AutoClean\uCleaning.cpp | 12 |
 | aoutarm9045_2x4_4.cpp | 10 |
+| HS_Function.cpp | 10 |
 | aoutarm9045.cpp | 9 |
 | cConfiguration.cpp | 9 |
 | CosFunction.h | 9 |

@@ -44,6 +44,10 @@ using namespace std;
 #pragma package(smart_init)
 #pragma resource "*.dfm"
 #pragma link "KeyProDLL.lib"                                                    //Ifor 20230720 add" Keypro
+
+//AI(ht9045-v899) 20260415: forward-declare MNetLog before first use at UpDataToServer_KYEC
+extern bool MNetLog(AnsiString Message);
+
 TFormHS *FormHS;
 
 bool bRestESDConnect=false;                                                     //Ifor 20170603 (wei) add ESD Socket 清除連線
@@ -1584,9 +1588,18 @@ int __fastcall TFormHS::UpDataToServer_KYEC(int iLog, bool bForceSend)          
     AnsiString str, str1;
 //    AnsiString asDataDirection;                                                 //Ifor 20170913 (Steven) add 新增網路芳鄰目標位置
 
+    //AI(ht9045-v899) 20260414: trace daily-upload entry only (iLog>=5) to avoid timer-driven log bloat
+    if(iLog>=5)
+    {
+        MNetLog(AnsiString().sprintf("[N10] UpDataToServer_KYEC: iLog=%d, N10_1=%d, N10_3=%d, Method=%d, UploadMethod=%d",
+            iLog, (int)IniConfig.bN10Enable_FTPUpLoadLog, (int)IniConfig.bN10_DailyUploadProdData,
+            IniConfig.iN10UploadProductMethod, IniConfig.iN10UploadMethod));
+    }
+
     if(IniConfig.bN10Enable_FTPUpLoadLog==false &&
        IniConfig.bN10_DailyUploadProdData==false)
     {
+        if(iLog>=5) MNetLog("[N10] UpDataToServer_KYEC skip: N10_1 and N10_3 both disabled"); //AI(ht9045-v899) 20260414: trace skip reason
         return HS_ERR_FunctionDisable;
     }
 
@@ -1988,8 +2001,13 @@ int __fastcall TFormHS::UpDataToServer_KYEC(int iLog, bool bForceSend)          
         if(CUSTOMER_CODE==CC_SIGURD_HUKOU ||                                    //Sam 20210313 : 矽格湖口增加上傳 Production_Log
            IniConfig.bN10_11_Enable_UploadFTPEventLog)
         {
+            //AI(ht9045-v899) 20260415: swap SystemDate to yesterday before GetProdLog to fix cross-midnight filename mismatch
+            Word wSavYear=SystemYear, wSavMonth=SystemMonth, wSavDate=SystemDate;
+            SystemYear=SystemYearYesterday; SystemMonth=SystemMonthYesterday; SystemDate=SystemDateYesterday;
             asDirPath=TMyProductionRecord().GetProdLogFilePath();
             asFileName=TMyProductionRecord().GetProdLogFileName(false);
+            SystemYear=wSavYear; SystemMonth=wSavMonth; SystemDate=wSavDate;
+
             asFullName=FileInfo().PathCombin(asDirPath,asFileName);
             if(FileExists(asFullName)==true)
             {
@@ -2012,8 +2030,13 @@ int __fastcall TFormHS::UpDataToServer_KYEC(int iLog, bool bForceSend)          
 
         if(IniConfig.bN10_12_Enable_UploadFTPGPIBLog)                           //GPIB
         {
+            //AI(ht9045-v899) 20260415: swap SystemDate to yesterday before GetGPIBLog to fix cross-midnight filename mismatch
+            Word wSavYear2=SystemYear, wSavMonth2=SystemMonth, wSavDate2=SystemDate;
+            SystemYear=SystemYearYesterday; SystemMonth=SystemMonthYesterday; SystemDate=SystemDateYesterday;
             asDirPath=GetGPIBLogFilePath();
             std::vector<AnsiString> lsFileName=GetGPIBLogFileName();
+            SystemYear=wSavYear2; SystemMonth=wSavMonth2; SystemDate=wSavDate2;
+
             for(unsigned int i=0;i<lsFileName.size();i++)
             {
                 asFileName=lsFileName[i];
@@ -2187,6 +2210,10 @@ int __fastcall TFormHS::UpDataToServerByFTP(AnsiString asDirPath, AnsiString sFi
     asHost=IniConfig.cN10FtpHost;
     #endif
     TfFTP fFTP(asUserID, asPassword, asHost);
+    //AI(ht9045-v899) 20260414: diagnostic log only on daily-upload path to avoid timer-driven bloat
+    if(bDailyReport)
+        MNetLog(AnsiString().sprintf("[N10] FTP connecting: Host=%s, Port=%d, Passive=%d, Type=%s, File=%s",
+            asHost, IniConfig.iN10FtpPort, (int)IniConfig.bN10FtpPassive, asFileType, sFileName));
     if(fFTP.Connect(asUserID, asPassword, asHost, 30000, NMOS_AUTO, IniConfig.bN10FtpPassive, IniConfig.iN10FtpPort))
     {
         AnsiString asError="";
@@ -2197,10 +2224,12 @@ int __fastcall TFormHS::UpDataToServerByFTP(AnsiString asDirPath, AnsiString sFi
         {
             if(fFTP.Upload(asDirPath, asFtpUplaodPath, sFileName, sFileName, asError))
             {
+                if(bDailyReport) MNetLog(AnsiString().sprintf("[N10] FTP upload OK: %s", sFileName)); //AI(ht9045-v899) 20260414: trace success
                 iReturn=HS_ERR_NoError;
             }
             else
             {
+                if(bDailyReport) MNetLog(AnsiString().sprintf("[N10] FTP upload FAIL: %s, Err=%s", sFileName, asError)); //AI(ht9045-v899) 20260414: trace failure
                 iReturn=HS_ERR_FTPUploadError;
                 //==> Eastsun 20260511 整合: Ifor 20240731 add: KYEC 要求 Record 不報警（補回新架構；ShowMyMessage 不還原以尊重 Steven 20250716 重構）
                 if(CUSTOMER_CODE==CC_KYEC_LEE)
@@ -2214,8 +2243,14 @@ int __fastcall TFormHS::UpDataToServerByFTP(AnsiString asDirPath, AnsiString sFi
         }
         else
         {
+            if(bDailyReport) MNetLog(AnsiString().sprintf("[N10] FTP file missing: %s", FileInfo().PathCombin(asDirPath, sFileName))); //AI(ht9045-v899) 20260414: trace missing file
             iReturn=HS_ERR_FTPNoFileForUploadError;
         }
+    }
+    else
+    {
+        if(bDailyReport) MNetLog(AnsiString().sprintf("[N10] FTP connect FAIL: Host=%s, Port=%d", asHost, IniConfig.iN10FtpPort)); //AI(ht9045-v899) 20260414: trace connect failure
+        iReturn=HS_ERR_FTPUploadError;
     }
 
     fFTP.Close();

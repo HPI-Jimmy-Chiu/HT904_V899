@@ -21,17 +21,7 @@
 20260410,ht9045-v899,CosFunction.cpp,3381,MISSING,//AI(ht9045-v899) 20260410: enable SortingBinTray when CleanOut for FOREHOPE_NINGBO
 20260414,ht9045-v899,AutoClean\uCleaning.cpp,561,MISSING,//AI(ht9045-v899) 20260414: zero all pad counts when DevicePices or tray layout changes to prevent stale counts causing false WAR1922
 20260414,ht9045-v899,AutoClean\uCleaning.cpp,1949,MISSING,//AI(ht9045-v899) 20260414: fix operator precedence - was iDeviceNum==24 always true
-20260414,ht9045-v899,HS_Function.cpp,1360,MISSING,//AI(ht9045-v899) 20260414: trace daily-upload entry only (iLog>=5) to avoid timer-driven log bloat
-20260414,ht9045-v899,HS_Function.cpp,1371,MISSING,//AI(ht9045-v899) 20260414: trace skip reason
-20260414,ht9045-v899,HS_Function.cpp,1983,MISSING,//AI(ht9045-v899) 20260414: diagnostic log only on daily-upload path to avoid timer-driven bloat
-20260414,ht9045-v899,HS_Function.cpp,1997,MISSING,//AI(ht9045-v899) 20260414: trace success
-20260414,ht9045-v899,HS_Function.cpp,2002,MISSING,//AI(ht9045-v899) 20260414: trace failure
-20260414,ht9045-v899,HS_Function.cpp,2008,MISSING,//AI(ht9045-v899) 20260414: trace missing file
-20260414,ht9045-v899,HS_Function.cpp,2014,MISSING,//AI(ht9045-v899) 20260414: trace connect failure
 20260414,ht9045-v899,main.cpp,25658,MISSING,//AI(ht9045-v899) 20260414: pack MNetLog into StateRecord when N10-3 daily upload enabled for FTP diagnostic
-20260415,ht9045-v899,HS_Function.cpp,48,MISSING,//AI(ht9045-v899) 20260415: forward-declare MNetLog before first use at UpDataToServer_KYEC
-20260415,ht9045-v899,HS_Function.cpp,1773,MISSING,//AI(ht9045-v899) 20260415: swap SystemDate to yesterday before GetProdLog to fix cross-midnight filename mismatch
-20260415,ht9045-v899,HS_Function.cpp,1802,MISSING,//AI(ht9045-v899) 20260415: swap SystemDate to yesterday before GetGPIBLog to fix cross-midnight filename mismatch
 20260415,ht9045-v899,cShowBinSelect.cpp,815,MISSING,//AI(ht9045-v899) 20260415: dynamic stack layout for tsIndex tab to prevent overlapping panels
 20260415,ht9045-v899,cShowBinSelect.cpp,1491,MISSING,//AI(ht9045-v899) 20260415: dynamic height for tsIndex based on visible panel stack
 20260416,ht9045-v899,AutoClean\AutoClean.cpp,2903,MISSING,//AI(ht9045-v899) 20260416: revert phantom-marking skip per Gigas feedback - V898 did not have this guard

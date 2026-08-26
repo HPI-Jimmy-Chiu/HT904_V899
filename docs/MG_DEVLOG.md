@@ -60,17 +60,29 @@
 
 ---
 
-## 🔖 RESUME（20260826 17:05）
+## 20260826 傍晚 — MG-W5 done（HS_Function KYEC 上傳線）
 
-- **狀態**：Phase 2 連續波次進行中。MG-W1/W2/W3/W4 done。儀表 MISSING=345（起點 376）。
-- **進行中**：MG-W5 分析 agent（HS_Function KYEC 上傳線 0414/0415/0420，11 條）
-  背景執行中——回來後照 /mg-wave 步驟執行（產物 docs/mg_w5_analysis.md＋mg_w5_ops.json）。
+- 9 op＋1 條 C（BVL-3766 假 MISSING 入白名單）。port_check +35 全 SPLICED/removed=0；
+  bcc32 0 errors；目檢三要害通過。儀表 **345 → 335**。
+- 裁決：跨午夜 swap 照 V899 終態搬（F2 記 method 1/2/3 語意疑慮，屬 V899 議題）。
+- LEDGER 新增「假 MISSING 白名單」——收尾驗收準則＝MISSING 集合等於白名單。
+- 排程約束：HS_Function 後續波（0504×5/0519×1/0526×1/0630×2）要用
+  docs/mg_w5_analysis.md §4.1 位移表或現場重定位。
+
+---
+
+## 🔖 RESUME（20260826 傍晚）
+
+- **狀態**：Phase 2 連續波次進行中。MG-W1–W5 done。儀表 MISSING=335（起點 376，
+  白名單 2 條）。
+- **進行中**：MG-W6 分析 agent（0817 CC_CYUEAN AutoTrayFeed 主題，B 類原生 gate）
+  背景執行中（產物 docs/mg_w6_analysis.md＋mg_w6_ops.json）。
 - **下一步（按序）**：
-  1. 收 MG-W5 執行。
-  2. MG-W6 候選＝0817 殘餘 CC_CYUEAN AutoTrayFeed 主題（B 類，原生 gate；
-     CosFunction.cpp/h＋cTrayAssignment＋csystem 附近，對照 b515ed5 的 20260817 註解）。
-  3. 之後照 LEDGER：AutoClean CKPP＋PickPlanner 目錄（新增檔搬移）、
-     Power Save 線 0804→0811→0819/0820、Multi EP、0612 FTP 大波、0602 InArm watchdog 線。
+  1. 收 MG-W6 執行。
+  2. MG-W7 候選＝Power Save 線（0804 C05 profile → 0811 UI 底色 → 0819/0820 倒數修正；
+     跨 CosFunction/PowerSavingMode/cConfiguration/aoutarm 等，.dfm 若涉及直接完成）。
+  3. 之後照 LEDGER：AutoClean CKPP＋PickPlanner 目錄（新增檔搬移）、Multi EP、
+     0612 FTP 大波、0602 InArm watchdog 線、0810/0811 OutArm 群。
   4. 60 分鐘守衛 cron 已掛（每時 :23；殭屍＝先查證後處置）。
 - **量測**：`python tools/port_tools/ai_comment_matrix.py`。
 - **不變量**：V899 唯讀（來源端點 b515ed5）；V910 基線 e06524a；LEDGER 手工維護；

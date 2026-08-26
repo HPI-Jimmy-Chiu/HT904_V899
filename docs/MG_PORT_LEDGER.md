@@ -16,7 +16,15 @@
 | MG-W1 | 20260422 automation.cpp MAIN_STATUS_INQUIRE（9 行插入）＋ 20260423 uCleaning 4 條裁決 | splice+port_check PASS+bcc32 PASS；uCleaning 4 條=skipped-C（V910 已演進成 ArmSpeed 動態預設，原案「別用 60 秒荒謬預設」意圖已滿足，不搬） | b71780d |
 | MG-W2 | 20260424 MyLaneIo.cpp/.h 售服 IO 錯誤訊息（8 條矩陣點、5 op：3 個呼叫點 replace＋GetIOErrStr 中文化整段＋.h 宣告） | port_check PASS（cpp added=88 全 SPLICED/removed=34、h added=4）＋bcc32 PASS；驗證 V910 取代區與 896 基準位元組相同、公司漂移（Safe PLC 區）在取代區外不受影響；無客戶碼隔離需求。**外溢記錄**：GetIOErrStr 回傳變多行 Big5，V910 三個未動呼叫點（IOBitOn:126/IOBitOff:193/IOByteOut:260）的 MNetLog 日誌從單行變多行——與 V899 出貨行為一致（忠實搬運），客戶端若逐行 parse MNetLog*.txt 需知悉 | 0bee467 |
 | MG-W3 | EventLog 引號相依鏈（0429 note.cpp 寫入端 CC_FOREHOPE_NINGBO 無引號分支 2 條＋0817 cObserver ParseEventLogLine 三支 static＋4 解析點，共 7 條矩陣點、6 op） | port_check PASS（15+59 全 SPLICED、removed=2+4 逐條複驗＝else 兩行與 4 個 CommaText 點）＋bcc32 PASS。寫入端 gate=執行期 CUSTOMER_CODE==790，非 790 客戶 else 主體位元組不變（實測）；解析端不加 gate 照搬（V899 已 12 客戶 64 台 100,220 列實測出貨）。**外溢記錄**：JamRawData FTP 統計為修正方向的數字變化。V899 樹內 .bak_20260817_csvquote diff＝5 hunk 與變更集完全吻合 | 570ae0f |
-| MG-W4 | BootLog 開機診斷（main.cpp 5 埋點 59 行；cBootLog.cpp/h 已在 V910 基線內免搬）＋LOAD_Y stepper（HandlerSys OK 套用 6 行含 [0] 補齊＋uMotorTest 測試列 5 行），16 條矩陣點、7 op | port_check PASS（59+6+5 全 SPLICED、removed=5 逐條複驗＝uMotorTest 舊 false 列）＋bcc32 PASS（main.cpp 3 個既有錯誤與 .mgbak 基準一致＝零回歸，見 gate 準則）。裁決：OP-A4 用 after 保留 V910 RogerYang AV 去重改寫；OP-B1 含未標記的 [0] Loader 行（整段 apply block V910 從未有過，補齊避免不對稱）。無客戶碼隔離需求（機台配置閘控） | （本次收工 commit） |
+| MG-W4 | BootLog 開機診斷（main.cpp 5 埋點 59 行；cBootLog.cpp/h 已在 V910 基線內免搬）＋LOAD_Y stepper（HandlerSys OK 套用 6 行含 [0] 補齊＋uMotorTest 測試列 5 行），16 條矩陣點、7 op | port_check PASS（59+6+5 全 SPLICED、removed=5 逐條複驗＝uMotorTest 舊 false 列）＋bcc32 PASS（main.cpp 3 個既有錯誤與 .mgbak 基準一致＝零回歸，見 gate 準則）。裁決：OP-A4 用 after 保留 V910 RogerYang AV 去重改寫；OP-B1 含未標記的 [0] Loader 行（整段 apply block V910 從未有過，補齊避免不對稱）。無客戶碼隔離需求（機台配置閘控） | 9c7b8e1 |
+| MG-W5 | HS_Function KYEC 上傳線（0414 trace 診斷 6 點＋0415 前置宣告與跨午夜換昨天＋0420 假 MISSING 判 C；11 條矩陣點、9 op） | port_check PASS（+35 全 SPLICED、removed=0＝V910 零損失）＋bcc32 PASS（0 errors）。目檢三要害：20260630 timeout 30000 未動、Eastsun CC_KYEC_LEE 區塊完整、connect-fail else 到位。OP9 補 connect-fail 回傳碼（全樹無消費者，可觀察面零）。跨午夜 swap 行為外溢記 F2。**閘門真相：非 KYEC 專屬**（bN10* ini 旗標閘控，函式名是歷史命名） | （本次收工 commit） |
+
+## 假 MISSING 白名單（矩陣簽章比對的已知假陽性；收尾驗收準則＝MISSING 集合等於本表）
+
+| 矩陣條目 | 真相 |
+|---|---|
+| note.cpp:1027（20260407 SoftStop guard） | V910:1036 公司已改寫等價（自家註解 `//Jimmychiu 20260410`），簽章不同故不命中 |
+| HS_Function.cpp:26（20260420 BVL-3766） | 功能早在 V910（Command.cpp/ProductionInfo.cpp 三條位元組相同），僅 #include 行尾註解被公司改寫成英文 |
 
 ## 相依鏈（weekly 盤點 20260826，必須同波搬，防把回歸搬進 V910）
 
@@ -38,11 +46,11 @@
 | 20260408 | 6 | 1 | — | AutoClean\AutoClean.cpp(6) | pending | pending |
 | 20260409 | 1 | 1 | — | AutoClean\AutoClean.cpp(1) | pending | pending |
 | 20260410 | 1 | 1 | — | CosFunction.cpp(1) | pending | pending |
-| 20260414 | 10 | 3 | — | HS_Function.cpp(7), AutoClean\uCleaning.cpp(2), main.cpp(1) | pending | pending |
-| 20260415 | 5 | 2 | — | HS_Function.cpp(3), cShowBinSelect.cpp(2) | pending | pending |
+| 20260414 | 10 | 3 | — | HS_Function.cpp(7), AutoClean\uCleaning.cpp(2), main.cpp(1) | A | **HS_Function 7 條 done MG-W5**；uCleaning 2＋main 1 歸各主題波 pending |
+| 20260415 | 5 | 2 | — | HS_Function.cpp(3), cShowBinSelect.cpp(2) | A | **HS_Function 3 條 done MG-W5**；cShowBinSelect 2 歸 UI 主題波 pending |
 | 20260416 | 1 | 1 | — | AutoClean\AutoClean.cpp(1) | pending | pending |
 | 20260417 | 3 | 2 | — | AutoClean\AutoClean.cpp(2), cShowBinSelect.cpp(1) | pending | pending |
-| 20260420 | 1 | 1 | — | HS_Function.cpp(1) | pending | pending |
+| 20260420 | 1 | 1 | — | HS_Function.cpp(1) | C | **skipped-C MG-W5**（BVL-3766 假 MISSING，入白名單） |
 | 20260423 | 19 | 4 | CASE-20260423-001 | HandlerSys.cpp(5), main.cpp(5), uMotorTest.cpp(5), AutoClean\uCleaning.cpp(4) | A/C | **done**：main+HandlerSys+uMotorTest 15 條=MG-W4；uCleaning 4 條=skipped-C（MG-W1） |
 | 20260424 | 8 | 2 | — | MyLaneIo.cpp(6), MyLaneIo.h(2) | A | **done MG-W2** |
 | 20260429 | 3 | 2 | CASE-20260429-001 | note.cpp(2), main.cpp(1) | A | **done**：note.cpp 2 條=MG-W3；main.cpp:10743=MG-W4（BootLog 24V 提示 gate） |

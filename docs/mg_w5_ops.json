@@ -1,0 +1,92 @@
+[
+  {
+    "id": "MG-W5-OP1",
+    "desc": "20260415: forward-declare MNetLog before first use at UpDataToServer_KYEC (matrix HS_Function.cpp:48)",
+    "v910_file": "HS_Function.cpp",
+    "v899_file": "HS_Function.cpp",
+    "v899_lines": [47, 50],
+    "mode": "after",
+    "anchor_line": 46,
+    "anchor_expect": "#pragma link \"KeyProDLL.lib\""
+  },
+  {
+    "id": "MG-W5-OP2",
+    "desc": "20260414: UpDataToServer_KYEC entry trace (iLog>=5) + skip-reason trace (matrix 1360 / 1371)",
+    "v910_file": "HS_Function.cpp",
+    "v899_file": "HS_Function.cpp",
+    "v899_lines": [1360, 1373],
+    "mode": "replace",
+    "replace_lines": [1587, 1591],
+    "anchor_expect": "IniConfig.bN10Enable_FTPUpLoadLog==false &&"
+  },
+  {
+    "id": "MG-W5-OP3",
+    "desc": "20260415: ProdLog cross-midnight filename fix - paired SystemDate swap around GetProdLogFilePath/FileName (matrix 1773). Save+set+restore all inside this one contiguous payload.",
+    "v910_file": "HS_Function.cpp",
+    "v899_file": "HS_Function.cpp",
+    "v899_lines": [1773, 1779],
+    "mode": "replace",
+    "replace_lines": [1991, 1992],
+    "anchor_expect": "GetProdLogFileName(false)"
+  },
+  {
+    "id": "MG-W5-OP4",
+    "desc": "20260415: GPIBLog cross-midnight filename fix - paired SystemDate swap around GetGPIBLogFilePath/FileName (matrix 1802). Save+set+restore all inside this one contiguous payload.",
+    "v910_file": "HS_Function.cpp",
+    "v899_file": "HS_Function.cpp",
+    "v899_lines": [1802, 1808],
+    "mode": "replace",
+    "replace_lines": [2015, 2016],
+    "anchor_expect": "lsFileName=GetGPIBLogFileName()"
+  },
+  {
+    "id": "MG-W5-OP5",
+    "desc": "20260414: UpDataToServerByFTP 'FTP connecting' diagnostic, bDailyReport gated (matrix 1983). Inserted BEFORE the Connect line so the 20260630 timeout 30000->5000 stays out of scope.",
+    "v910_file": "HS_Function.cpp",
+    "v899_file": "HS_Function.cpp",
+    "v899_lines": [1983, 1986],
+    "mode": "before",
+    "anchor_line": 2190,
+    "anchor_expect": "fFTP.Connect(asUserID, asPassword, asHost, 30000"
+  },
+  {
+    "id": "MG-W5-OP6",
+    "desc": "20260414: FTP upload OK trace (matrix 1997). Span widened to 2198-2201 so anchor is the unique fFTP.Upload(...) line.",
+    "v910_file": "HS_Function.cpp",
+    "v899_file": "HS_Function.cpp",
+    "v899_lines": [1995, 1999],
+    "mode": "replace",
+    "replace_lines": [2198, 2201],
+    "anchor_expect": "fFTP.Upload(asDirPath, asFtpUplaodPath, sFileName, sFileName, asError)"
+  },
+  {
+    "id": "MG-W5-OP7",
+    "desc": "20260414: FTP upload FAIL trace (matrix 2002). Span stops at 2204 on purpose - V910 2205-2213 is the Eastsun 20260511 CC_KYEC_LEE RecordProcess block and must survive untouched.",
+    "v910_file": "HS_Function.cpp",
+    "v899_file": "HS_Function.cpp",
+    "v899_lines": [2000, 2003],
+    "mode": "replace",
+    "replace_lines": [2202, 2204],
+    "anchor_expect": "iReturn=HS_ERR_FTPUploadError;"
+  },
+  {
+    "id": "MG-W5-OP8",
+    "desc": "20260414: FTP file-missing trace (matrix 2008)",
+    "v910_file": "HS_Function.cpp",
+    "v899_file": "HS_Function.cpp",
+    "v899_lines": [2006, 2010],
+    "mode": "replace",
+    "replace_lines": [2215, 2218],
+    "anchor_expect": "iReturn=HS_ERR_FTPNoFileForUploadError;"
+  },
+  {
+    "id": "MG-W5-OP9",
+    "desc": "20260414: connect-fail else branch (matrix 2014). BEHAVIOUR CHANGE: V910/V896 has no else at all, so an FTP connect failure currently returns HS_ERR_NoError; after this op it returns HS_ERR_FTPUploadError. Verified: the return value has zero consumers in both trees (iFTPStatus[3] is write-only; every other call site discards the result).",
+    "v910_file": "HS_Function.cpp",
+    "v899_file": "HS_Function.cpp",
+    "v899_lines": [2011, 2018],
+    "mode": "replace",
+    "replace_lines": [2219, 2221],
+    "anchor_expect": "fFTP.Close();"
+  }
+]
