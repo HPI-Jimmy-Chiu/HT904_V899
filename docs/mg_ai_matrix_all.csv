@@ -690,17 +690,17 @@
 20260811,ht9045-v899,aoutarm9045.cpp,3910,MISSING,//AI(ht9045-v899) 20260811: 實際值側 GetOutArmToShtCellPos() 用的是
 20260811,ht9045-v899,aoutarm9045.cpp,3928,MISSING,//AI(ht9045-v899) 20260811: 原本只取 Prod.iOutArmRotateToUnloaderX/Y 這個單點（原標需確認），
 20260811,ht9045-v899,aoutarm9045.h,67,MISSING,//AI(ht9045-v899) 20260811: 出料旋轉站放料位置檢查
-20260817,ht9045-v899,CosFunction.cpp,2847,MISSING,"//AI(ht9045-v899) 20260817: 客戶反映 Auto Tray Feed 跟隨工作檔, 換工單就把 Clean Out 的 Tray End 選單架空, 故固定關閉"
-20260817,ht9045-v899,CosFunction.cpp,4322,MISSING,"//AI(ht9045-v899) 20260817: 預設不關閉, 只有 CC_CYUEAN 會開啟"
-20260817,ht9045-v899,CosFunction.h,354,MISSING,//AI(ht9045-v899) 20260817: CC_CYUEAN 固定關閉 Auto Tray Feed(勾選時會架空 Clean Out 的 Tray End 選單)
+20260817,ht9045-v899,CosFunction.cpp,2847,same-file,"//AI(ht9045-v899) 20260817: 客戶反映 Auto Tray Feed 跟隨工作檔, 換工單就把 Clean Out 的 Tray End 選單架空, 故固定關閉"
+20260817,ht9045-v899,CosFunction.cpp,4322,same-file,"//AI(ht9045-v899) 20260817: 預設不關閉, 只有 CC_CYUEAN 會開啟"
+20260817,ht9045-v899,CosFunction.h,354,same-file,//AI(ht9045-v899) 20260817: CC_CYUEAN 固定關閉 Auto Tray Feed(勾選時會架空 Clean Out 的 Tray End 選單)
 20260817,ht9045-v899,PowerSavingMode.cpp,363,MISSING,"//AI(ht9045-v899) 20260817: guard 只擋「重複點亮」,還原一律要能執行。倒數字串是"
 20260817,ht9045-v899,cObserver.cpp,3790,same-file,//AI(ht9045-v899) 20260817: EventLog CSV 顯示用斷欄。只以逗號分隔，並保留雙引號內的空白與逗號。
 20260817,ht9045-v899,cObserver.cpp,3890,same-file,//AI(ht9045-v899) 20260817: 改用 ParseEventLogLine (CASE-FOREHOPE_NINGBO-20260813-001)
 20260817,ht9045-v899,cObserver.cpp,3934,same-file,//AI(ht9045-v899) 20260817: 改用 ParseEventLogLine (CASE-FOREHOPE_NINGBO-20260813-001)
 20260817,ht9045-v899,cObserver.cpp,3969,same-file,//AI(ht9045-v899) 20260817: 改用 ParseEventLogLine (CASE-FOREHOPE_NINGBO-20260813-001)
 20260817,ht9045-v899,cObserver.cpp,5177,same-file,//AI(ht9045-v899) 20260817: 改用 ParseEventLogLine (CASE-FOREHOPE_NINGBO-20260813-001)
-20260817,ht9045-v899,cTrayAssignment.cpp,237,MISSING,"//AI(ht9045-v899) 20260817: CC_CYUEAN 固定關閉 Auto Tray Feed, 不受工作檔 Tray.Data 與 hanaART 影響"
-20260817,ht9045-v899,cTrayAssignment.cpp,727,MISSING,"//AI(ht9045-v899) 20260817: CC_CYUEAN 固定關閉 Auto Tray Feed, 取消勾選並鎖定(只鎖這一顆, 同群組其他兩項不動)"
+20260817,ht9045-v899,cTrayAssignment.cpp,237,same-file,"//AI(ht9045-v899) 20260817: CC_CYUEAN 固定關閉 Auto Tray Feed, 不受工作檔 Tray.Data 與 hanaART 影響"
+20260817,ht9045-v899,cTrayAssignment.cpp,727,same-file,"//AI(ht9045-v899) 20260817: CC_CYUEAN 固定關閉 Auto Tray Feed, 取消勾選並鎖定(只鎖這一顆, 同群組其他兩項不動)"
 20260819,ht9045-v899,CosFunction.cpp,1426,MISSING,//AI(ht9045-v899) 20260819: 依 MO 工單 Temperature mode 含 HOT AIR 字眼自動開關熱風槍
 20260819,ht9045-v899,CosFunction.cpp,3881,MISSING,"//AI(ht9045-v899) 20260819: 預設關閉, 只有 CC_Greatek 開啟"
 20260819,ht9045-v899,CosFunction.h,477,MISSING,//AI(ht9045-v899) 20260819: 超豐要求依 MO 工單 Temperature mode 是否含 HOT AIR 字眼自動開關熱風槍

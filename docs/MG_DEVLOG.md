@@ -71,18 +71,28 @@
 
 ---
 
+## 20260826 傍晚 — MG-W6 done（CC_CYUEAN AutoTrayFeed）
+
+- 5 op；port_check +17 全 SPLICED/removed=1（死註解）；bcc32 雙檔 0 errors；
+  bCleanOutCanTrayEnd 44=44 parity。儀表 **335 → 330**。
+- 裁決：帶入未標記承重行（bCleanOutCanTrayEnd=true，矩陣盲區第二例，與 W4 [0] 同型）。
+- CYUEAN 行為變更兩項記 LEDGER；TfConfiguration 第二顆 chkAutoTrayFeed=V899 既有缺口不動。
+
+---
+
 ## 🔖 RESUME（20260826 傍晚）
 
-- **狀態**：Phase 2 連續波次進行中。MG-W1–W5 done。儀表 MISSING=335（起點 376，
+- **狀態**：Phase 2 連續波次進行中。MG-W1–W6 done。儀表 MISSING=330（起點 376，
   白名單 2 條）。
-- **進行中**：MG-W6 分析 agent（0817 CC_CYUEAN AutoTrayFeed 主題，B 類原生 gate）
-  背景執行中（產物 docs/mg_w6_analysis.md＋mg_w6_ops.json）。
+- **進行中**：MG-W7 分析 agent（Multi EP 主題波 0430/0504/0511/0526，~45 條，
+  F1 已核可照搬休眠閘控）背景執行中（產物 docs/mg_w7_analysis.md＋mg_w7_ops.json）。
+  ⚠W7 觸及 HS_Function/CosFunction 等已動過的檔，行號要現場重定位。
 - **下一步（按序）**：
-  1. 收 MG-W6 執行。
-  2. MG-W7 候選＝Power Save 線（0804 C05 profile → 0811 UI 底色 → 0819/0820 倒數修正；
-     跨 CosFunction/PowerSavingMode/cConfiguration/aoutarm 等，.dfm 若涉及直接完成）。
-  3. 之後照 LEDGER：AutoClean CKPP＋PickPlanner 目錄（新增檔搬移）、Multi EP、
-     0612 FTP 大波、0602 InArm watchdog 線、0810/0811 OutArm 群。
+  1. 收 MG-W7 執行（大波，逐檔分批 splice+gate 較穩）。
+  2. MG-W8 候選＝Power Save 線（0804→0811→0819/0820＋0817 殘餘 PowerSavingMode:363；
+     跨 CosFunction/PowerSavingMode/cConfiguration/aoutarm；.dfm 直接完成）。
+  3. 之後照 LEDGER：AutoClean CKPP＋PickPlanner 目錄（新增檔搬移）、0612 FTP 大波、
+     0602 InArm watchdog 線（＋0803 收回 CC_ARDENTEC 閘門，搬最終態）、0810/0811 OutArm 群。
   4. 60 分鐘守衛 cron 已掛（每時 :23；殭屍＝先查證後處置）。
 - **量測**：`python tools/port_tools/ai_comment_matrix.py`。
 - **不變量**：V899 唯讀（來源端點 b515ed5）；V910 基線 e06524a；LEDGER 手工維護；

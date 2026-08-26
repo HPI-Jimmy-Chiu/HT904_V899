@@ -2865,7 +2865,10 @@ void FUNC_CC_CYUEAN()
     IniConfig.bShowFTandRTButtonCanClick                                        =true;
     IniConfig.bDoorOpenShuttleContinueHeat                                      =true;
     CosFunction.bRunModeFollowLotInfo                                           =true;  //Steven 20250603 : 根據Lot Info的Run mode進行切換
-//    CosFunction.bUnloadTrayModeByRecipe                                         =true;
+    IniConfig.bCleanOutCanTrayEnd                                               =true;  //Steven 20140426 : 客戶要求Clean Out後要跳Initial Start
+    //AI(ht9045-v899) 20260817: 客戶反映 Auto Tray Feed 跟隨工作檔, 換工單就把 Clean Out 的 Tray End 選單架空, 故固定關閉
+    if(IniConfig.bCleanOutCanTrayEnd==true)
+        CosFunction.bDisableAutoTrayFeed                                        =true;
 }
 //------------------------------------------------------------------------------
 void FUNC_CC_PANTHER()
@@ -4371,6 +4374,7 @@ void InitialCosFunction()
     CosFunction.bLockI06ByFile                                                  =false; //Sam 20220527 : for 矽格北興
     CosFunction.bManuallyRemoveForceInColor                                     =false; //Sam 20220530 : 當 Loader 發生 Skip/Edit 時，此盤做完後搬到 Empty 軌道後，會收盤起來並報警提示人員收盤(連兩盤)
     CosFunction.bUnloadTrayModeByRecipe                                         =false; //Steven 20220710 : 甬矽要求Unload Tray Mode by機台設置
+    CosFunction.bDisableAutoTrayFeed                                            =false; //AI(ht9045-v899) 20260817: 預設不關閉, 只有 CC_CYUEAN 會開啟
     CosFunction.bFullTrayAlarmAfterUnloadEnd                                    =false; //Sam 20210602 : Unload 做完後再 Alarm
     CosFunction.PassworDownloadByFTP                                            =false; //Sam 20210526 : 從 N06 DownloadPath 下載密碼本
     CosFunction.bShowYieldMonitor                                               =false; //Sam 20210916 : 新增 Yiled Monitor 到畫面上

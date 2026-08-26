@@ -60,10 +60,10 @@
 | 20260804 | 0 | 0 | 25 | 25 |
 | 20260810 | 0 | 0 | 21 | 21 |
 | 20260811 | 0 | 0 | 21 | 21 |
-| 20260817 | 5 | 0 | 6 | 11 |
+| 20260817 | 10 | 0 | 1 | 11 |
 | 20260819 | 0 | 0 | 10 | 10 |
 | 20260820 | 0 | 0 | 7 | 7 |
-| **合計** | 380 | 4 | 335 | 719 |
+| **合計** | 385 | 4 | 330 | 719 |
 
 ## MISSING 依檔案分布（前 40）
 
@@ -72,9 +72,9 @@
 | AutoClean\AutoClean.cpp | 24 |
 | FTPUpload\uFtpUploadThread.cpp | 23 |
 | main.cpp | 22 |
-| CosFunction.cpp | 17 |
 | ainarm9045.cpp | 15 |
 | ContactForce.cpp | 15 |
+| CosFunction.cpp | 15 |
 | uLotInfo.cpp | 14 |
 | PowerSavingMode.cpp | 13 |
 | acatchtray.cpp | 12 |
@@ -84,8 +84,8 @@
 | HS_Function.cpp | 10 |
 | aoutarm9045.cpp | 9 |
 | cConfiguration.cpp | 9 |
-| CosFunction.h | 9 |
 | ProductionInfo\ProductionInfo.cpp | 9 |
+| CosFunction.h | 8 |
 | FTPUpload\uFtpUploadThread.h | 8 |
 | csystem.cpp | 7 |
 | iosetview.cpp | 6 |
@@ -97,7 +97,6 @@
 | cContact.cpp | 3 |
 | cContactCT.cpp | 3 |
 | cShowBinSelect.cpp | 3 |
-| cTrayAssignment.cpp | 3 |
 | note.cpp | 3 |
 | PowerSavingMode.h | 3 |
 | uhome.cpp | 3 |
@@ -109,3 +108,4 @@
 | cpublic.cpp | 2 |
 | HandlerSys.cpp | 2 |
 | mymessbox.cpp | 2 |
+| uTrayEditForm.cpp | 2 |

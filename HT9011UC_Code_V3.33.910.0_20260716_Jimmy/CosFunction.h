@@ -354,6 +354,7 @@ typedef struct
     bool bLockI06ByFile;                                                        //Sam 20220527 : for 矽格-北興
     bool bManuallyRemoveForceInColor;                                           //Sam 20220530 : 當 Loader 發生 Skip/Edit 時，此盤做完後搬到 Empty 軌道後，會收盤起來並報警提示人員收盤(連兩盤)
     bool bUnloadTrayModeByRecipe;                                               //Steven 20220710 : 甬矽要求Unload Tray Mode by機台設置
+    bool bDisableAutoTrayFeed;                                                  //AI(ht9045-v899) 20260817: CC_CYUEAN 固定關閉 Auto Tray Feed(勾選時會架空 Clean Out 的 Tray End 選單)
     bool bFullTrayAlarmAfterUnloadEnd;                                          //Sam 20210602 : Unload 做完後再 Alarm
     bool PassworDownloadByFTP;                                                  //Sam 20210526 : 從 N06 DownloadPath 下載密碼本
     bool bShowYieldMonitor;                                                     //Sam 20210916 : 新增 Yiled Monitor 到畫面上

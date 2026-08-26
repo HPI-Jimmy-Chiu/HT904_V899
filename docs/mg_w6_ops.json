@@ -1,0 +1,70 @@
+[
+  {
+    "id": "MG-W6-OP1",
+    "desc": "[0817 CYUEAN AutoTrayFeed] CosFunction.h: 新增 bDisableAutoTrayFeed 成員宣告 (matrix CosFunction.h:354)",
+    "v910_file": "CosFunction.h",
+    "v899_file": "CosFunction.h",
+    "v899_lines": [
+      354,
+      354
+    ],
+    "mode": "after",
+    "anchor_line": 356,
+    "anchor_expect": "bool bUnloadTrayModeByRecipe;"
+  },
+  {
+    "id": "MG-W6-OP2",
+    "desc": "[0817 CYUEAN AutoTrayFeed] InitialCosFunction 預設值 bDisableAutoTrayFeed=false (matrix CosFunction.cpp:4322)",
+    "v910_file": "CosFunction.cpp",
+    "v899_file": "CosFunction.cpp",
+    "v899_lines": [
+      4322,
+      4322
+    ],
+    "mode": "after",
+    "anchor_line": 4373,
+    "anchor_expect": "CosFunction.bUnloadTrayModeByRecipe                                         =false;"
+  },
+  {
+    "id": "MG-W6-OP3",
+    "desc": "[0817 CYUEAN AutoTrayFeed] FUNC_CC_CYUEAN: 開 bCleanOutCanTrayEnd 並設 bDisableAutoTrayFeed=true (matrix CosFunction.cpp:2847). 取代 V899 已刪掉的那行註解掉的 bUnloadTrayModeByRecipe, 讓 V910 的 FUNC_CC_CYUEAN 與 V899 位元組完全相同",
+    "v910_file": "CosFunction.cpp",
+    "v899_file": "CosFunction.cpp",
+    "v899_lines": [
+      2846,
+      2849
+    ],
+    "mode": "replace",
+    "replace_lines": [
+      2868,
+      2868
+    ],
+    "anchor_expect": "//    CosFunction.bUnloadTrayModeByRecipe"
+  },
+  {
+    "id": "MG-W6-OP4",
+    "desc": "[0817 CYUEAN AutoTrayFeed] TfTrayAssignment::ReadFile 生效點: bDisableAutoTrayFeed 時 TrayForm.bAutoFeed=false, 蓋過工作檔 Tray.Data 與 hanaART (matrix cTrayAssignment.cpp:237)",
+    "v910_file": "cTrayAssignment.cpp",
+    "v899_file": "cTrayAssignment.cpp",
+    "v899_lines": [
+      236,
+      239
+    ],
+    "mode": "after",
+    "anchor_line": 266,
+    "anchor_expect": "TrayForm.bAutoFeed          =true;"
+  },
+  {
+    "id": "MG-W6-OP5",
+    "desc": "[0817 CYUEAN AutoTrayFeed] TfTrayAssignment::FormShow UI 鎖定: 取消勾選並鎖 chkAutoTrayFeed(只鎖這一顆) (matrix cTrayAssignment.cpp:727)",
+    "v910_file": "cTrayAssignment.cpp",
+    "v899_file": "cTrayAssignment.cpp",
+    "v899_lines": [
+      726,
+      732
+    ],
+    "mode": "after",
+    "anchor_line": 814,
+    "anchor_expect": "chkAutoTrayFeed->Enabled        =false;"
+  }
+]
