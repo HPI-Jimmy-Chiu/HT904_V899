@@ -892,7 +892,9 @@ void TMyTempPanel::edBaseMouseDown(TObject *Sender,
     //  whole body is a `Buffer->Tag` branch tree (no Tag member here) whose
     //  every leaf is `fQwertyKey->ShowQwertyKey(...)` (real since FW-QWKEY1), fed by
     //  `fTemp_Set->MaxTempSetting()/MinTempSetting()` (no port) and guarded by
-    //  `Barcode_Reader(...)` (no port).  ACTIVE arm: the Sender downcast above
+    //  `Barcode_Reader(...)` (no port -- ⚠ 20260826 更正：真本體在
+    //  BarcodeReader.cpp:445，這條不再是阻塞物；承重的是 Tag，見
+    //  edinitialMouseDown 上方的 FW-SETUP-W19 註記).  ACTIVE arm: the Sender downcast above
     //  (real -- vclcompat TEdit:TCustomEdit:TControl:TObject is a single
     //  non-virtual chain) and then the faithful "user did nothing" no-op.
     //  Golden preserved VERBATIM, ready to un-gate as one block:
@@ -1082,6 +1084,16 @@ void TMyTempPanel::edinitialMouseDown(TObject *Sender,
 
     //AI(W906-PT-W8) 20260811: GATES (W8-2)/(W8-4)/(W8-5) -- `Buffer->Tag`
     //  (no Tag member), `fQwertyKey` (real since FW-QWKEY1) and `Barcode_Reader` (no port).
+    //  ⚠ AI(W906-FW-SETUP-W19) 20260826 -- 上面那句「Barcode_Reader (no port)」
+    //  已經過期（真本體在 BarcodeReader.cpp:445）。**但這個 gate 仍然不能開**，
+    //  而且真正的阻塞物比原註記寫的更嚴重：
+    //    `Tag` 在本樹沒有任何載入路徑（.dfm 的設計期值不會進來），恆為 0。
+    //    `tcHeatGun1=27` / `tcHeatGun2=28`（MachineType.h:641）**都非零**，
+    //    所以 `Tag==tcHeatGun1 || Tag==tcHeatGun2` 恆為 false ->
+    //    **每一個 widget（含兩個熱風槍的）都會落到 else 臂**，
+    //    跳出「非熱風槍」的限值鍵盤。那是靜默用錯限值，不是少做一件事。
+    //  這正是「解 gate 前先查值從哪來」那條規則講的形狀：
+    //  少一個前提死掉不代表可以開，要看**剩下的前提是不是承重的**。
     //  NOTE for whoever un-gates this: golden's CUSTOMER_CODE==CC_ASE_KaohSiung
     //  branch and its `else` branch differ ONLY in which InputLimit pair the
     //  non-heat-gun arm uses (iIlitialTempHigh/Low vs iTempHigh/Low); the

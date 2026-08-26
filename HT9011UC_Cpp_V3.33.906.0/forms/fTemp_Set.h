@@ -127,7 +127,9 @@
 //      wiring). G-Barcode / G-Image remain CLOSED -- their absences hold.
 //   (G-Barcode) `Barcode_Reader(bcTemperature)` -- ALREADY AN ESTABLISHED
 //      tree-wide finding (forms/fSetup.h's own note on the identical golden
-//      idiom): `Barcode_Reader` has ZERO port anywhere in this tree
+//      idiom): ⚠ AI(W906-FW-SETUP-W19) 20260826 更正——Barcode_Reader 的真本體
+//      在 BarcodeReader.cpp:445，這條 absence claim 已過期。原文保留為沿革：
+//      `Barcode_Reader` has ZERO port anywhere in this tree
 //      (re-confirmed, `grep -rn "Barcode_Reader\("`, 20260820 -- the only
 //      hits outside golden/docs are the unrelated `ProcessLastSetIni_
 //      Barcode_Reader` name and BarcodeReader.cpp's own class, neither is

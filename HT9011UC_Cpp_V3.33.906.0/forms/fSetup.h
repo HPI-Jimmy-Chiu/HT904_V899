@@ -107,6 +107,10 @@
 //
 //  DEFERRED THIS WAVE (cross-file gaps -- GATE, not shim, same rule as above):
 //    XPitchMouseDown / XShiftPitchMouseDown -- guard on
+//      ⚠ AI(W906-FW-SETUP-W19) 20260826: 下面這條 absence claim 已過期——
+//      Barcode_Reader 的真本體在 BarcodeReader.cpp:445，XPitchMouseDown/
+//      XShiftPitchMouseDown 的 guard 已於 20260825 開閘，rgShtModeNormalMouseDown
+//      也已於本波翻進 cSetUp.cpp。原文保留為沿革：
 //      `Barcode_Reader(bcSetup)`, a function with ZERO port anywhere in this
 //      tree (`Grep "Barcode_Reader" .` tree-wide hits only
 //      ProcessLastSetIni_Barcode_Reader, an unrelated name; BarcodeReader.cpp
@@ -191,7 +195,9 @@
 //  NO new #include for any of the above -- only the 3 method declarations
 //  (void, no parameters) and the `cbI21` widget field, none of which need the
 //  heavy headers in a class declaration. CMakeLists.txt is OUT OF THIS WAVE'S
-//  EDIT BOUNDARY -- `cSetUp.cpp` is NOT YET added to `ht9045_sm`'s source
+//  EDIT BOUNDARY -- ⚠ AI(W906-FW-SETUP-W19) 20260826: 這件交接**已經做掉了**，
+//  `cSetUp.cpp` 現在在 CMakeLists.txt:1930 的 `ht9045_sm` 來源清單裡。
+//  下面原文保留為沿革：`cSetUp.cpp` is NOT YET added to `ht9045_sm`'s source
 //  list; see the hand-off report for the exact one-line insertion point.
 //
 //  PRE-EXISTING RISK DISCLOSED (NOT introduced or fixed this wave): Wave A's
@@ -285,6 +291,7 @@
 #include "vclcompat/Controls.h"  // TEdit/TCheckBox/TRadioGroup/TRadioButton/TGroupBox/TLabel
 #include "vclcompat/SysUtils.h"  // FormatFloat (rgYPitchOffsetModeClick)
 #include "vclcompat/ScrollBar.h" // AI(W906-FW-SETUP-D) 20260824: vclcompat::TScrollBar (ScrollBar1) -- NOT global-using'd, see that header's NAME COLLISION note (handlerlog.h:122)
+#include "vclcompat/ShiftState.h"   // AI(W906-FW-SETUP-W19) 20260826: rgShtModeNormalMouseDown 的簽章
 
 using vclcompat::TEdit;
 using vclcompat::TCheckBox;
@@ -457,6 +464,11 @@ public:
 
     // -- 15 (a) methods, see file-head banner for golden spans/classification --
     int  GetTestMode(AnsiString sTestMode);
+    // AI(W906-FW-SETUP-W19) 20260826: golden cSetUp.h:21-22 的兩顆單選鈕，
+    // rgShtModeNormalMouseDown 會依 TestIF_File.iShuttleMode 勾選其中一顆。
+    // 本樹沒有 .dfm 載入路徑，Checked 的初值由 NSDMI 決定（false）。
+    TRadioButton *rgShtModeNormal  = new TRadioButton();   // golden cSetUp.h:21
+    // （rgShtModeOneSide 早已存在於本 header，rgShtModeNormalClick 在用它）
     void rgShtModeNormalClick();
     void SetShtMode(bool bNormal, bool bOneSide, bool bUsedSht1, bool bUsedSht2);
     bool VertifyShtModeisDiff(bool bNormal, bool bOneSide, bool bUsedSht1, bool bUsedSht2);
@@ -548,7 +560,9 @@ public:
     // AI(W906-FW-SETUP-E) 20260824: the fQwertyKey/fPassword unlock batch
     // (bodies in cSetUp.cpp tail; Sender typed per the D-3 convention).
     void XPitchMouseDown(TEdit *Sender);       // golden cSetUp.cpp:3409-3421 (13L)
-    void XShiftPitchMouseDown(TEdit *Sender);  // golden cSetUp.cpp:4738-4750 (13L)
+    void XShiftPitchMouseDown(TEdit *Sender);
+    //AI(W906-FW-SETUP-W19) 20260826: 唯一的 deferral 理由（Barcode_Reader 無 port）已消失。
+    void rgShtModeNormalMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);   // golden :4451-4462  // golden cSetUp.cpp:4738-4750 (13L)
     void cbAaDropDown(TComboBox *Sender);      // golden cSetUp.cpp:4408-4441 (34L)
 
     TfSetup();

@@ -233,7 +233,8 @@
 //        Barcode_Reader + SetFocus/Repaint (no port).
 //    cbAaDropDown          :4408-4441 (34L)  LANDED (FW-SETUP-E 20260824;
 //        fPassword/fQwertyKey real, SetFocus = TControl offline no-op).
-//    rgShtModeNormalMouseDown:4451-4462 (12L) Barcode_Reader.
+//    rgShtModeNormalMouseDown:4451-4462 (12L) LANDED (FW-SETUP-W19 20260826;
+//        Barcode_Reader 的真本體在 BarcodeReader.cpp:445，這條理由已消失)。
 //    cbOctal12SiteClick    :4476-4488 (13L)  its ENTIRE payload is calling
 //        ScrollBar1Change(this) -- blocked solely on that method staying
 //        queued (first entry above).
@@ -244,7 +245,8 @@
 //        chain + writes global AccessLevel.
 //    btAutoShuttlePitchClick:4732-4736 (5L)  fMain->Timer9 (TTimer zero-port).
 //    XShiftPitchMouseDown  :4738-4750 (13L)  LANDED (FW-SETUP-E 20260824;
-//        Barcode_Reader guard gated E-B2).
+//        Barcode_Reader guard 一度 gated E-B2，但 **E-B2 已於 20260825
+//        FW-BARCODE2 開掉**，本行的「gated」是過期敘述，20260826 更正)。
 //    FormShortCut          :4830-4837 (8L)   TWMKey (zero-port, Msg.CharCode
 //        IS read -- not a droppable param) + form Left/Top members.
 //
@@ -276,6 +278,7 @@
 #include "canary_support.h"          // LastSet (-> LastSet.h) / ShowMyMessage
 #include "forms/fQwertyKey.h"        // AI(W906-FW-SETUP-E) 20260824: fQwertyKey extern (:406) + ShowQwertyKey -- the unlock batch at this file's tail
 #include "forms/fPassword.h"         // AI(W906-FW-SETUP-E) 20260824: fPassword extern (:406) + edPassword
+#include "vclcompat/ShiftState.h"   // AI(W906-FW-SETUP-W19) 20260826: rgShtModeNormalMouseDown 保留 golden 完整簽章
 #include "BarcodeReader.h"     // AI(W906-FW-BARCODE2) 20260825: Barcode_Reader real since FW-BARCODE1 -- E-B1/E-B2 guards live
 
 // AI(W906-FW-SETUP-B) 20260821: same "declare just the one symbol needed"
@@ -1104,7 +1107,12 @@ void TfSetup::CoSocketComboChange()
 //  golden file-scope globals (:53-54 iASMTestMode/iASMSiteMap, :121
 //  OrgTestMode) stay undefined with their still-queued consumers.
 //
-//  GATE (E-B1)/(E-B2): the Barcode_Reader(bcSetup) early-return guards in
+//  GATE (E-B1)/(E-B2): ⚠ AI(W906-FW-SETUP-W19) 20260826 -- **整段已過期**。
+//  兩個 gate 都在 20260825（FW-BARCODE2）開掉了，見本檔 XPitchMouseDown /
+//  XShiftPitchMouseDown 各自的 OPENED 註記。Barcode_Reader 的真本體在
+//  BarcodeReader.cpp:445（golden :415-444），下面那句「NO port tree-wide」
+//  是 20260824 的量測，當時為真、現在為假。原文保留為沿革：
+//  the Barcode_Reader(bcSetup) early-return guards in
 //  XPitchMouseDown/XShiftPitchMouseDown -- Barcode_Reader has NO port
 //  tree-wide (re-verified 20260824: Grep for an int Barcode_Reader definition
 //  over *.h/*.cpp = 0 hits; the only other caller, MyTempPanel.cpp:840, sits
@@ -1187,5 +1195,28 @@ void TfSetup::cbAaDropDown(TComboBox *Sender)
         TComboBox *Ptr;
         Ptr=Sender;
         SitCH=Ptr->ItemIndex;
+    }
+}
+
+//------------------------------------------------------------------------------
+//AI(W906-FW-SETUP-W19) 20260826: golden cSetUp.cpp:4451-4462，逐字翻譯。
+// 本方法先前被本檔 :236 的表列為 deferred，理由只有一個：「Barcode_Reader」。
+// **那個理由已經不成立**——Barcode_Reader 的真本體在 BarcodeReader.cpp:445
+// （golden :415-444），FW-BARCODE1 就翻好了，同檔的 E-B1/E-B2 兩個 gate 也
+// 早在 20260825 因此開掉。所以本波把它翻進來，不加任何 gate。
+//
+// 簽章保留 golden 原文（TMouseButton/TShiftState 自 vclcompat/ShiftState.h
+// commit f184093 起可拼寫）。
+void TfSetup::rgShtModeNormalMouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+    (void)Sender; (void)Button; (void)Shift; (void)X; (void)Y;   //AI(W906-FW-SETUP-W19): golden 也沒讀
+    if(Barcode_Reader(bcSetup)==0)                                              // 20140103 wei KYEC Barcode Reader
+    {
+        if(TestIF_File.iShuttleMode==0)
+            rgShtModeNormal->Checked=true;
+        else
+            rgShtModeOneSide->Checked=true;
+        return;
     }
 }

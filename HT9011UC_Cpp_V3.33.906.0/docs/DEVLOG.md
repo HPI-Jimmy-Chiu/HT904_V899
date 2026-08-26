@@ -11746,6 +11746,88 @@ RadioButton1KeyDown   forms/fSetup.cpp: 1   根 cSetUp.cpp: 0
 上一次是「兩支工具對同一個方法給出相反答案」。
 **矛盾是最便宜的偵錯訊號，看到就要追。**
 
+## 20260826 XIII — FW-SETUP-W19：一個前提死了，掃乾淨依賴它的一切（含一個決定不開的 gate）
+
+### 這一波的形狀跟原本規劃的完全不同
+
+原本要翻 5 支 / 115 行（screen 判乾淨 ∩ survey 判真正缺）。
+但**第 1 步讀該檔自己的分類表**（`cSetUp.cpp:223-249`）擋掉其中 4 支：
+
+| 方法 | 該檔自己記的阻塞物 | 本波判定 |
+|---|---|---|
+| `chkOffCenterkitClick`(49) | TImage 零 port（7× `Image1->Picture->LoadFromFile`） | 仍擋（TImage 在使用者待裁決清單裡） |
+| `cbQualSite2X2ShiftClick`(36) | TImage 零 port（6×） | 仍擋 |
+| `cbOctal12SiteClick`(13) | 整個 payload 就是呼叫 `ScrollBar1Change(this)`，而那支還沒翻 | 仍擋 |
+| `btAutoShuttlePitchClick`(5) | `fMain->Timer9`（TTimer 零 port） | 仍擋 |
+| `rgShtModeNormalMouseDown`(12) | **`Barcode_Reader`** | **可做了** |
+
+順帶記一個篩選器缺口：`btAutoShuttlePitchClick` 被 `screen_methods.py` 判乾淨，
+因為跨表單那條樣式要求**呼叫**（`f[A-Z]\w+\s*->\s*\w+\s*\(`），
+而 `fMain->Timer9->Enabled=true` 是**欄位存取**。
+這次是該檔自己的表擋下來的，不是工具。（工具要不要補這一類，等有第二個實例再說——
+現在補容易把一堆純顯示的 `fMain->labXxx->Caption` 也染紅。）
+
+### 真正的內容：`Barcode_Reader` 的前提死了
+
+`Barcode_Reader` 的真本體在 `BarcodeReader.cpp:445`（golden :415-444），
+FW-BARCODE1 就翻好了。但樹上還有**一整串敘述**寫著「它全樹零 port」。
+
+本波翻 `rgShtModeNormalMouseDown`（12 行、gated 0 行、忠實度 9 條 LIVE /
+2 條無對應＝簽章行＋`(void)` 抑制），並改正 6 處過期敘述：
+
+| 位置 | 原本說 | 實際 |
+|---|---|---|
+| `cSetUp.cpp:236` | `rgShtModeNormalMouseDown` deferred（Barcode_Reader） | 本波已翻 |
+| `cSetUp.cpp:247` | `XShiftPitchMouseDown` 的 guard「gated E-B2」 | **E-B2 早在 20260825 就開了** |
+| `cSetUp.cpp:1107-1114` | 「Barcode_Reader has NO port tree-wide」（20260824 量的） | 當時為真、現在為假 |
+| `forms/fSetup.h:110` | 同上的 absence claim | 同上 |
+| `forms/fSetup.h:193-195` | 「`cSetUp.cpp` **尚未**加入 `ht9045_sm`」 | **已在 `CMakeLists.txt:1930`** |
+| `forms/fTemp_Set.h:130` | 同樣的 absence claim | 同上 |
+
+原文全部保留，只在原地標明「這段描述的是本檔已經走過的狀態」。
+
+### 驗收
+
+`tools/dualgate.sh setup19`（全新 dir）：Debug **137/142**、Release **137/142**，
+失敗集合逐項相同且等於常駐五項。`D:\HT9045\system` 552 檔本輪零變動。
+
+補一條佐證：`BarcodeReader.cpp` 已註冊在 `CMakeLists.txt:1941`，
+所以 `Barcode_Reader` 的本體確實會被編譯與連結，不是孤兒檔
+（這一點是本輪一個逾時後才回報的背景 grep 補上的）。
+
+### 查完之後決定**不開**的那個 gate
+
+`MyTempPanel.cpp:1084` 的註記寫著：
+
+> CUSTOMER_CODE、CC_ASE_KaohSiung、INSTALL_HEAT_GUN、tcHeatGun1/2 和整個
+> InputLimit struct 在本 port **全部是真的** —— **只剩 Tag 和 Barcode_Reader**，
+> 所以這一支是四支裡**最接近可解閘**的。
+
+`Barcode_Reader` 確實不再是阻塞物了。但依「解 gate 前先查值從哪來」，
+我去看剩下那個前提是不是承重的：
+
+- `Tag` 在本樹**沒有任何載入路徑**（`.dfm` 的設計期值不會進來），恆為 **0**。
+- `tcHeatGun1=27`、`tcHeatGun2=28`（`MachineType.h:641`）——**都非零**。
+- 所以解閘後 `Buffer->Tag==tcHeatGun1 || Buffer->Tag==tcHeatGun2` **恆為 false**，
+  **每一個 widget（含那兩個熱風槍的）都會落到 `else` 臂**，
+  跳出「非熱風槍」的 `InputLimit` 限值鍵盤。
+
+那是**靜默用錯限值**，不是「少做一件事」。目前 gated 的行為（什麼都不做）
+反而比解閘後誠實。已把這段量測寫進該處註記。
+
+**少一個前提死掉不代表可以開閘，要看剩下的前提是不是承重的。**
+這是 pt-wave「前提死掉不代表答案就是退役」規則在本輪的第三個實例
+（前兩個：FW-SIG-W15 的 `GATE (WB-2-BTN)` 收窄成 `GATE (CLIP)`、
+FW-SIG-W15 的 `GATE (C-log-6)` 完全退役）——三次的答案各不相同。
+
+### 交付
+
+`cSetUp.cpp` +34/−3、`forms/fSetup.h` +16/−2、
+`MyTempPanel.cpp` +13/−1、`forms/fTemp_Set.h` +3/−1。
+補了 `TRadioButton *rgShtModeNormal`（golden `cSetUp.h:21`）——
+`rgShtModeOneSide` 早就在（`rgShtModeNormalClick` 在用它），
+我一度兩顆都加而撞到 redeclaration，撤掉重複的那一顆。
+
 ### 🔖 RESUME（20260826 上午）
 
 - **本輪連續作業共 13 顆 commit**（`1be68ce` → `6d7f752`），
