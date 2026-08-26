@@ -1465,6 +1465,7 @@ void FUNC_CC_Greatek()
     CosFunction.bAutoCleanUseHPSetByRecipe                                      =true;  //Steven 20210825 : Auto Clean使用加熱盤要改成在工作檔設定
     CosFunction.bCheckOutSuckICFallDownOnlySkip                                 =true;  //Jimmychiu 20240813 : Only Skip When Checking Out Suck IC Fall Down
     CosFunction.bAutoTeachOutShuttleLantch                                      =true;  //Jimmychiu 20240923 : Auto teach in/out shuttle site kit position
+    CosFunction.bHotAirByMOTemperatureMode                                      =true;  //AI(ht9045-v899) 20260819: 依 MO 工單 Temperature mode 含 HOT AIR 字眼自動開關熱風槍
 }
 //------------------------------------------------------------------------------
 void FUNC_CC_PTI()
@@ -3940,6 +3941,7 @@ void InitialCosFunction()
     CosFunction.bPowerSaveLotEndOnly                                            =false;
     CosFunction.bPowerSaveSkipAmbient                                           =false;
     CosFunction.bPowerSaveShowCaption                                           =false;
+    CosFunction.bHotAirByMOTemperatureMode                                      =false; //AI(ht9045-v899) 20260819: 預設關閉, 只有 CC_Greatek 開啟
     CosFunction.bFTPFunction                                                    =false; //FTP功能
     IniConfig.bEventLogAutoSaveFunction                                         =true;  //自動存EventLog
     IniConfig.bShowFunctionWindow                                               =false; //顯示在溫度值下面的功能開關畫面

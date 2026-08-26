@@ -61,37 +61,34 @@
 | 20260810 | 21 | 0 | 0 | 0 | 21 |
 | 20260811 | 21 | 0 | 0 | 0 | 21 |
 | 20260817 | 11 | 0 | 0 | 0 | 11 |
-| 20260819 | 0 | 0 | 0 | 10 | 10 |
-| 20260820 | 0 | 0 | 0 | 7 | 7 |
-| **合計** | 561 | 3 | 51 | 104 | 719 |
+| 20260819 | 10 | 0 | 0 | 0 | 10 |
+| 20260820 | 7 | 0 | 0 | 0 | 7 |
+| **合計** | 578 | 3 | 51 | 87 | 719 |
 
 ## MISSING 依檔案分布（前 40）
 
 | 檔案 | 缺席註解數 |
 |---|---|
-| main.cpp | 14 |
+| main.cpp | 12 |
 | acatchtray.cpp | 9 |
-| ProductionInfo\ProductionInfo.cpp | 9 |
 | csystem.cpp | 7 |
 | AutoClean\uCleaning.cpp | 7 |
 | Interface\TesterTCP.cpp | 6 |
 | cConfiguration.cpp | 4 |
 | cmydef.cpp | 4 |
-| CosFunction.cpp | 4 |
 | ainarm9045.cpp | 3 |
 | cContactCT.cpp | 3 |
 | cmydef.h | 3 |
 | cShowBinSelect.cpp | 3 |
 | HS_Function.cpp | 3 |
 | uhome.cpp | 3 |
-| cBinSel.cpp | 2 |
+| CosFunction.cpp | 2 |
 | cpublic.cpp | 2 |
 | mymessbox.cpp | 2 |
 | note.cpp | 2 |
 | uTrayEditForm.cpp | 2 |
 | adam6024.cpp | 1 |
 | asendic_Auto.cpp | 1 |
-| CosFunction.h | 1 |
 | cpublic.h | 1 |
 | cSortCT.cpp | 1 |
 | MachineType.h | 1 |
@@ -99,5 +96,4 @@
 | BarCode\BarCode.cpp | 1 |
 | Interface\TesterTCP.h | 1 |
 | Motor\mymotor.cpp | 1 |
-| ProductionInfo\ProductionInfo.h | 1 |
 | SECSGEM\uHGemHT9045_SV.cpp | 1 |

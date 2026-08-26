@@ -86,20 +86,3 @@
 20260703,ht9045-v899,uhome.cpp,2664,MISSING,"//AI(ht9045-v899) 20260703: Greatek硬體極性校正-Home以放開為目標;有盤依軟體fHasTray維持夾持,無盤則驅動放開並確認FixOff到位(不再用FixOn sensor猜有盤,FixOn ON=空夾非有盤);非Greatek維持原邏輯"
 20260703,ht9045-v899,uhome.cpp,2706,MISSING,"//AI(ht9045-v899) 20260703: Home時FixOn讀ON但軟體無盤記錄,原邏輯不經確認即夾持+標記有盤走自動退盤,造成非預期夾爪動作;改為防抖100次後跳WAR0614由操作員確認,RETRY=已取下盤重新檢查,SKIP=確認有盤維持舊有自動退盤"
 20260706,ht9045-v899,ainarm9045.cpp,4661,MISSING,"//AI(ht9045-v899) 20260706: 系統性可達性選嘴(不寫死吸嘴代號/欄位):預設仍取最左啟用吸嘴維持原行為,"
-20260819,ht9045-v899,CosFunction.cpp,1426,MISSING,//AI(ht9045-v899) 20260819: 依 MO 工單 Temperature mode 含 HOT AIR 字眼自動開關熱風槍
-20260819,ht9045-v899,CosFunction.cpp,3881,MISSING,"//AI(ht9045-v899) 20260819: 預設關閉, 只有 CC_Greatek 開啟"
-20260819,ht9045-v899,CosFunction.h,477,MISSING,//AI(ht9045-v899) 20260819: 超豐要求依 MO 工單 Temperature mode 是否含 HOT AIR 字眼自動開關熱風槍
-20260819,ht9045-v899,ProductionInfo\ProductionInfo.cpp,339,MISSING,//AI(ht9045-v899) 20260819: 換完工作檔後再依 MO Temperature mode 自動開關熱風槍
-20260819,ht9045-v899,ProductionInfo\ProductionInfo.cpp,2052,MISSING,//AI(ht9045-v899) 20260819: 超豐要求依 MO 工單 Temperature mode 欄位自動開關熱風槍(Active Heater Gun)
-20260819,ht9045-v899,ProductionInfo\ProductionInfo.cpp,2063,MISSING,//AI(ht9045-v899) 20260819: 沒有熱風槍機構就不動作
-20260819,ht9045-v899,ProductionInfo\ProductionInfo.cpp,2067,MISSING,"//AI(ht9045-v899) 20260819: 舊工單無此欄或值為空, 保留工作檔原設定"
-20260819,ht9045-v899,ProductionInfo\ProductionInfo.cpp,2074,MISSING,//AI(ht9045-v899) 20260819: 對齊 ReadTempFile 既有互斥: 熱風槍吹冷風時不開加熱
-20260819,ht9045-v899,ProductionInfo\ProductionInfo.cpp,2083,MISSING,"//AI(ht9045-v899) 20260819: 同步畫面勾選, 讓 OP 看得到目前狀態"
-20260819,ht9045-v899,ProductionInfo\ProductionInfo.h,238,MISSING,//AI(ht9045-v899) 20260819: 依 MO 工單 Temperature mode 自動開關熱風槍(Active Heater Gun)
-20260820,ht9045-v899,ProductionInfo\ProductionInfo.cpp,1965,MISSING,"//AI(ht9045-v899) 20260820: PTI 的 Fix1 位置是 rotate module,未指派 Category 時程式會把"
-20260820,ht9045-v899,ProductionInfo\ProductionInfo.cpp,1983,MISSING,//AI(ht9045-v899) 20260820: 見上方說明
-20260820,ht9045-v899,ProductionInfo\ProductionInfo.cpp,5596,MISSING,//AI(ht9045-v899) 20260820: bound loop by asStackFail_Pass length(9); iBinSelectLength is eTrayCount(33) and overran the local array
-20260820,ht9045-v899,cBinSel.cpp,1371,MISSING,"//AI(ht9045-v899) 20260820: PTI HT-90* 的 Fix1 位置是 rotate module,不會指派 Category;"
-20260820,ht9045-v899,cBinSel.cpp,1395,MISSING,//AI(ht9045-v899) 20260820: 未指派 Category 的 Fix1/Fix4 預設為 Fail(說明見本函式上方)
-20260820,ht9045-v899,main.cpp,30011,MISSING,"//AI(ht9045-v899) 20260820: i由1改0, 原本Row A(index 0)整排未被記錄; 全樹其餘ArmSKET迴圈(cSocket/auto9045/SCK_ART等)皆由0起算"
-20260820,ht9045-v899,main.cpp,30033,MISSING,"//AI(ht9045-v899) 20260820: 標籤第二字母原誤用外層i, 同一列所有j印出同一標籤(2x4只印出4個""Aa""), 改為row='A'+i/col='a'+j; 直接取列欄索引即不需除法, 故移除20260515的ChangeToFloatNonPcnt+(int), 語意等同cContactC"

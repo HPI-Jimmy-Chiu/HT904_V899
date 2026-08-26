@@ -1,0 +1,110 @@
+[
+  {
+    "op": "W13-01",
+    "note": "FUNC_CC_Greatek 開啟 bHotAirByMOTemperatureMode（B 類原生客戶碼閘）",
+    "v910_file": "CosFunction.cpp",
+    "v899_lines": [1426, 1426],
+    "mode": "after",
+    "anchor_line": 1467,
+    "anchor_expect": "CosFunction.bAutoTeachOutShuttleLantch                                      =true;"
+  },
+  {
+    "op": "W13-02",
+    "note": "InitialCosFunction 預設 false（非 Greatek 客戶零行為變更）",
+    "v910_file": "CosFunction.cpp",
+    "v899_lines": [3881, 3881],
+    "mode": "after",
+    "anchor_line": 3942,
+    "anchor_expect": "CosFunction.bPowerSaveShowCaption                                           =false;"
+  },
+  {
+    "op": "W13-03",
+    "note": "HT9045_COUSTOMER_FUNCTION 新增旗標宣告（接在 W8 的 PowerSave 群之後，與 V899 同位置）",
+    "v910_file": "CosFunction.h",
+    "v899_lines": [477, 477],
+    "mode": "after",
+    "anchor_line": 493,
+    "anchor_expect": "bool bPowerSaveShowCaption;"
+  },
+  {
+    "op": "W13-04",
+    "note": "TfProductionInfo 新增 ApplyHotAirByMOTemperatureMode() 宣告",
+    "v910_file": "ProductionInfo\\ProductionInfo.h",
+    "v899_lines": [238, 238],
+    "mode": "after",
+    "anchor_line": 237,
+    "anchor_expect": "bool CheckMOInformation();"
+  },
+  {
+    "op": "W13-05",
+    "note": "OEE_StartLot 呼叫點：必須在 AutoDownloadSetupFileByMO() 換完工作檔之後、SaveInfoFileWhenStart() 之前",
+    "v910_file": "ProductionInfo\\ProductionInfo.cpp",
+    "v899_lines": [339, 339],
+    "mode": "before",
+    "anchor_line": 343,
+    "anchor_expect": "SaveInfoFileWhenStart();//Jimmychiu 20211109"
+  },
+  {
+    "op": "W13-06",
+    "note": "CheckMOInformation：PTI Fix1 未指派 Category 時跳過 PASSBIN 比對。replace 含尾行 if(BinSelect...) 只為取得全檔唯一錨（該行位元組與 V899:1986 相同）",
+    "v910_file": "ProductionInfo\\ProductionInfo.cpp",
+    "v899_lines": [1965, 1986],
+    "mode": "replace",
+    "replace_lines": [1937, 1939],
+    "anchor_expect": "        for(int i=0; i<iPassFailCount; i++)\r\n        {\r\n            if(BinSelect[iTestRunMode].iStackDefFailCate[i]!=iLoadMO_PassFail[i])"
+  },
+  {
+    "op": "W13-07",
+    "note": "ApplyHotAirByMOTemperatureMode() 函式本體（39 行；矩陣只列 5 行，漏搬即 link error）",
+    "v910_file": "ProductionInfo\\ProductionInfo.cpp",
+    "v899_lines": [2052, 2090],
+    "mode": "before",
+    "anchor_line": 2005,
+    "anchor_expect": "bool TfProductionInfo::SetMOInformation()"
+  },
+  {
+    "op": "W13-08",
+    "note": "SettingBinCategoryFromServer：迴圈上界由 iBinSelectLength(33) 夾到 asStackFail_Pass 長度(9)——區域陣列越界修正，無閘，全客戶生效",
+    "v910_file": "ProductionInfo\\ProductionInfo.cpp",
+    "v899_lines": [5596, 5596],
+    "mode": "replace",
+    "replace_lines": [5525, 5525],
+    "anchor_expect": "for(int i=0;i<iBinSelectLength;i++)"
+  },
+  {
+    "op": "W13-09",
+    "note": "cBinSel::ReadFile：偵測 Fix1/Fix4 是否有被指派 Category（PTI 客戶碼閘）",
+    "v910_file": "cBinSel.cpp",
+    "v899_lines": [1370, 1383],
+    "mode": "after",
+    "anchor_line": 1387,
+    "anchor_expect": "            ReadFunctionData(tag);"
+  },
+  {
+    "op": "W13-10",
+    "note": "cBinSel::ReadFile：未指派 Category 的 Fix1/Fix4 預設改為 Fail",
+    "v910_file": "cBinSel.cpp",
+    "v899_lines": [1395, 1402],
+    "mode": "before",
+    "anchor_line": 1399,
+    "anchor_expect": "BinSelect[tag].iStackDefFailCate[iTo3Unload[i]]=MyBinPanel[tag]->iT6IsFail[i];"
+  },
+  {
+    "op": "W13-11",
+    "note": "O06 週期 log：Arm 良率迴圈 i 由 1 改 0（原本 Row A 整排未被記錄）",
+    "v910_file": "main.cpp",
+    "v899_lines": [30011, 30011],
+    "mode": "replace",
+    "replace_lines": [31371, 31371],
+    "anchor_expect": "for(int i=1; i<TestSocket.iShtRow; i++)"
+  },
+  {
+    "op": "W13-12",
+    "note": "O06 週期 log：站標籤第二字元改用內層 j（原用外層 i 導致同列標籤全同）；一併移除不再需要的 ChangeToFloatNonPcnt+(int)。被取代行含 V910 自有的 //Steven 20260421 註解（見分析文件 §5.3 R1）",
+    "v910_file": "main.cpp",
+    "v899_lines": [30033, 30033],
+    "mode": "replace",
+    "replace_lines": [31393, 31393],
+    "anchor_expect": "'a'+((i-1)%TestSocket.iShtCol), sTemp1);"
+  }
+]

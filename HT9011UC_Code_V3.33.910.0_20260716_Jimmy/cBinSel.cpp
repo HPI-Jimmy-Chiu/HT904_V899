@@ -1386,12 +1386,34 @@ void __fastcall TfBinSel::ReadFile(bool bDelOffline, bool bChangeNeme, AnsiStrin
 
             ReadFunctionData(tag);
 
+            //AI(ht9045-v899) 20260820: PTI HT-90* 的 Fix1 位置是 rotate module,不會指派 Category;
+            //原本 Pass/Fail 預設 0(Pass) 會讓未使用的 Fix1 顯示成與好品相同的綠色,造成操作員誤判,
+            //故未指派 Category 時預設為 Fail。Fix4 是 Fix1 的下半盤,必須一起設定,
+            //否則 GPIB AlarmSetup 會因 Fix 盤上下 Pass/Fail 不一致而擋下設定。
+            bool bNoCategoryToFix1=(CUSTOMER_CODE==CC_PTI);
+            for(int iChkBin=0; iChkBin<iTestBinCount && bNoCategoryToFix1==true; iChkBin++)
+            {
+                if(BinSelect[tag].iCatDataT3Pos[iChkBin]==e3PosFix1 ||
+                   BinSelect[tag].iCatDataT3Pos[iChkBin]==e3PosFix4)
+                {
+                    bNoCategoryToFix1=false;
+                }
+            }
+
             for(int i=0; i<eTrayCount; i++)
             {
                 //Pass Fail-------
                 MyBinPanel[tag]->iT6IsFail[i]=FormSysTools->CheckAndReadIniData(s6TrayName[i], "Pass/Fail", 0); //define stack store pass or fail
                 if(MyBinPanel[tag]->iT6IsFail[i]==0 &&
                    MyBinPanel[tag]->iErrorT6==i)
+                {
+                    MyBinPanel[tag]->iT6IsFail[i]=1;
+                }
+
+                //AI(ht9045-v899) 20260820: 未指派 Category 的 Fix1/Fix4 預設為 Fail(說明見本函式上方)
+                if(bNoCategoryToFix1==true &&
+                   (i==eFix1 || i==eFix4) &&
+                   MyBinPanel[tag]->iT6IsFail[i]==0)
                 {
                     MyBinPanel[tag]->iT6IsFail[i]=1;
                 }

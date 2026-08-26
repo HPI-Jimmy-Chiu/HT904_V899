@@ -491,6 +491,7 @@ typedef struct
     bool bPowerSaveLotEndOnly;                                                  //AI(ht9045-v899) 20260804: C05 must not engage while RunInfo.bLotStart is true (one-cycle repair)
     bool bPowerSaveSkipAmbient;                                                 //AI(ht9045-v899) 20260804: C05 does not intervene when the machine halts in ambient mode
     bool bPowerSaveShowCaption;                                                 //AI(ht9045-v899) 20260804: show "Power Save Mode" on pnlPowerSaving once power saving is engaged
+    bool bHotAirByMOTemperatureMode;                                            //AI(ht9045-v899) 20260819: 超豐要求依 MO 工單 Temperature mode 是否含 HOT AIR 字眼自動開關熱風槍
 } HT9045_COUSTOMER_FUNCTION;
 extern HT9045_COUSTOMER_FUNCTION CosFunction;
 extern void InitialCosFunction();

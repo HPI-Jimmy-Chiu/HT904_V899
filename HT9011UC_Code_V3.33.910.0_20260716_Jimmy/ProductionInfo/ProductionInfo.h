@@ -235,6 +235,7 @@ public:     // User declarations
     bool LoadMOInformation(bool bCheckMoInforOnly = false);
     bool SetMOInformation();
     bool CheckMOInformation();
+    void ApplyHotAirByMOTemperatureMode();                                      //AI(ht9045-v899) 20260819: 依 MO 工單 Temperature mode 自動開關熱風槍(Active Heater Gun)
     bool DeleteAllFileInDirectory(AnsiString sDirectoryName);                   //Delete All File In Directory
     bool LoadYiedlInformation();
     bool SetYieldInformation();
