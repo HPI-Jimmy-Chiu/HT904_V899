@@ -197,9 +197,13 @@ def main():
     print('%-44s %8d %8d %8d %8d'
           % ('合計 %d 檔' % len(sel), sum(r['gcode'] for r in sel), tot[0], tot[1], tot[2]))
     print('')
-    print('⚠ STRICT/loose/無 是 **golden span 行**（含空行與註解），')
-    print('  與 gcode（code 行）不同量綱，**不可相除當百分比**。')
-    print('  要百分比請把本表當「哪些檔需要人工判讀」的排序，再逐檔用單檔模式看。')
+    # 註：這裡刻意只用 ASCII。第一版在結尾印了一個 U+26A0，在 cp950 主控台上
+    # 直接 UnicodeEncodeError 崩潰，讓整支工具回 exit 1 —— 分析其實已經跑完、
+    # 表格也印出來了，但離開碼說它失敗。**輸出端的編碼會偽造成分析失敗。**
+    print('NOTE: STRICT/loose/none are GOLDEN SPAN LINES (blank+comment included),')
+    print('      NOT gcode code-lines. Different units -- do NOT divide them.')
+    print('      Use this table to rank which files need human reading, then run')
+    print('      single-file mode on each.')
     return 0
 
 

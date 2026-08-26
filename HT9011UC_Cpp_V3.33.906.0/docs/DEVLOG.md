@@ -13889,6 +13889,82 @@ unmirrored 分支缺陷會同樣把它們整檔記為全缺。
 線索是 port 檔 banner 裡的 `Faithful translation of golden <file>:<a>-<b>` 引註——
 那是機器可讀的，而且是翻譯者自己寫下的權威宣告。
 
+## 20260827 VII — 表單軸：88 個「無鏡射」檔裡至少 21,151 span 行早已翻好
+
+### 工具：`tools/census/coverage_probe.py`（兩訊號）
+
+`span_sanity.py` 只擋得住括號配對那一種假缺口。這支擋另外三種
+（刻意寄放他檔／檔名比對／本體搬到別的 port 檔）。
+
+**判準刻意要求兩個獨立訊號在同一個 port 檔同時成立**才給 STRICT：
+(a) 該檔定義了 bare name 相同（或 `<前綴>_<name>`）的函式，**且**
+(b) 該檔引註了 `golden F:<a>-<b>` 而區間與該函式的 golden span 相交。
+純名字比對只給 **loose** 上界（`Init`／`Reset` 這種短名會亂命中）。
+
+**為什麼不能只用引註**：引註也出現在 gate 註記裡（「golden X:a-b 未翻譯」），
+所以它量的是「被注意到」不是「被翻譯」。實測全樹 **4,270 條引註 / 171 個 golden 檔**，
+但 `Command.cpp` 的引註涵蓋 22,725 行而它 gcode 只有 9,445——單用會嚴重 over-credit。
+
+驗證：對已知 20/20 全翻的 `BarCode/BarCode_Sh1.cpp`，10 支全判 STRICT、loose 0、無 0，
+且每支都指到正確的 port 檔。
+
+### 結果（88 個無鏡射表單檔）
+
+```
+無鏡射檔                              gcode   STRICT    loose        無
+main.cpp                              14846     5305     9871    18156
+uLotInfo.cpp                          14451     3879     1777    10592
+BarCode/BarCode.cpp                    8183     4589     1440     5683
+AutoAlignment/AutoAlignment.cpp        8106       77     1279     7398
+fAOI.cpp                               7652        0      504     7709
+cTrayMapping.cpp                       6413        0     2876     4042
+note.cpp                               6154      387     4623     1607
+ProductionInfo/ProductionInfo.cpp      5401        0      246     5603
+uteach.cpp                             4969        0     2541     3282
+uhome.cpp                              4692     4035      259      773
+HS_Function.cpp                        4661        0      126     4999
+AutoTeach/InOutArmZteach.cpp           4547        0      285     4765
+rs232.cpp                              4267       14       23     4538
+KYECFTP/FTPClient.cpp                  4161     1091      275     3926
+...
+合計 88 檔                           169536    21151    46512   137475
+```
+
+**census 把這 88 檔的 169,536 code 行全部記為「未翻譯」**（unmirrored 分支，
+`missing_lines = gcode`，連一次名字比對都不做）。實際上**至少 21,151 span 行
+有雙訊號佐證是既有翻譯**。最極端的是 `uhome.cpp`：STRICT 4,035、無只有 773，
+**幾乎全翻，而 census 記為零**。
+
+### ⚠ 這張表**不能換算成百分比**
+
+`STRICT + loose + 無 = 205,138`，**超過** gcode 合計 169,536。原因有二：
+1. golden span 含空行與註解，gcode 只算 code 行——**兩者不同量綱**。
+2. golden 側本身有括號吞併（`span_sanity` 量到 9 檔／281 支：`main.cpp` 239→382、
+   `cContact.cpp` 103→139、`Magazine.cpp` 21→50、`note.cpp` 54→75、`uhome.cpp` 16→27…），
+   被吞的函式 span 會膨脹。
+
+所以**表單軸仍報 census 的 17.3%（/261,862 golden code 行），並明確標為下界**。
+這張表的用途是**排序哪些檔需要人工判讀**，不是給百分比。
+
+### 選標的時要避開的檔
+
+`main.cpp`／`note.cpp`／`uhome.cpp`／`Magazine.cpp`／`cSortCT.cpp`／`cContact.cpp`
+**golden 側有括號吞併**，它們的 span 數字不可靠，要先用 `span_sanity.py` 單檔模式
+確認被吞了哪幾支再說。
+
+相對乾淨、且「無」最大的候選：`fAOI.cpp`(7,709)、`AutoAlignment/AutoAlignment.cpp`(7,398)、
+`ProductionInfo/ProductionInfo.cpp`(5,603)、`HS_Function.cpp`(4,999)、
+`AutoTeach/InOutArmZteach.cpp`(4,765)、`rs232.cpp`(4,538)。
+⚠ 其中 `InOutArmZteach`（教導值）與 `AutoAlignment`（對位動作）**屬佇列類**，
+`rs232`／`fAOI` 有對外命令通道，取批時要先切唯讀面。
+
+### 工具自己的一個 bug，值得記
+
+第一版在表格印完之後印一個 `⚠`（U+26A0），在 cp950 主控台直接 `UnicodeEncodeError`
+崩潰，**整支工具回 exit 1**——分析其實跑完了、表格也印出來了。
+**輸出端的編碼問題會偽造成分析失敗。** 已改成純 ASCII，離開碼 0、數字不變。
+這與今晚 `gateverdict.sh` 第一版的假綠燈是同一個家族：**工具自己也要先能誠實回報自己。**
+
 ### 🔖 RESUME（20260827 凌晨 · 第三版）
 
 - **本段最後一顆**：`FW-BOOTSTRAP-W35`——`FormsBootstrap.{h,cpp}`（26+208 行）
@@ -13943,12 +14019,25 @@ unmirrored 分支缺陷會同樣把它們整檔記為全缺。
      `csystem.cpp` 四支單行述詞（`OutSHT1InLF`/`OutSHT1InRT`/`OutSHT2InLF`/`OutSHT2InRT`，:698-701）。
      ⚠ **`ainarm2` 那五支要先判是不是動機台**（InArm 任務初始化／位置備份還原）。
 
-  1c. **表單軸的 88 個無鏡射檔幾乎肯定有同一個檔名缺陷，但目前拿不出可信數字。**
-     我用全樹 bare-name 索引試過，**結果作廢**：`樹上有+真的缺 = 205,138` 超過
-     gcode 總和 169,536（golden span 含空行註解且自身有括號吞併），且 bare-name
-     跨 88 檔太鬆會 over-credit。**表單軸仍報 17.3%（/261,862），並註明那是下界。**
-     要拿到可信數字需另外設計（`BarCode` 那組可信是因為只有 20 支、逐一對到具名檔、
-     且 port 檔 banner 明寫 `Faithful translation of golden X:a-b`）。
+  1c. **表單軸的 88 個無鏡射檔確實有同一個檔名缺陷，已用兩訊號探針量出下界
+     （20260827 VII）**：`tools/census/coverage_probe.py --form` →
+     **STRICT 21,151 / loose 46,512 / 無 137,475（golden span 行）**。
+     census 把這 88 檔的 169,536 code 行**全部**記為未翻譯；實際上至少 21,151 span 行
+     有雙訊號佐證是既有翻譯（最極端：`uhome.cpp` STRICT 4,035、無僅 773）。
+     ⚠ **這張表不可換算成百分比**——`STRICT+loose+無 = 205,138` 超過 gcode 合計
+     169,536（span 含空行註解；且 golden 側自身有括號吞併）。
+     **表單軸仍報 census 的 17.3%（/261,862 golden code 行），標為下界。**
+     這張表的用途是**排序哪些檔需要人工判讀**。
+
+  1d. **表單軸下一波候選（依「無」由大到小，已排除 golden 側括號吞併的檔）**：
+     `fAOI.cpp`(無 7,709)、`AutoAlignment/AutoAlignment.cpp`(7,398)、
+     `ProductionInfo/ProductionInfo.cpp`(5,603)、`HS_Function.cpp`(4,999)、
+     `AutoTeach/InOutArmZteach.cpp`(4,765)、`rs232.cpp`(4,538)。
+     ⚠ `InOutArmZteach`（教導值）與 `AutoAlignment`（對位動作）**屬佇列類**；
+     `rs232`／`fAOI` 有對外命令通道，取批時先切唯讀面。
+     ⚠ **避開** `main.cpp`／`note.cpp`／`uhome.cpp`／`Magazine.cpp`／`cSortCT.cpp`／
+     `cContact.cpp`——golden 側有括號吞併，span 數字不可靠，要先跑
+     `python tools/census/span_sanity.py <file>` 單檔模式確認被吞了哪幾支。
   2. `cDatabaseJson`（7 支/99 行）＋`cLineScanRemainICYieldRecord`（11 支/110 行
      ＋3 支 header inline）facade，可解 (G-5b)。
      ⚠ **兩個先決條件**：golden 宣告 `cDatabaseJson : public uBasicPickPlace`，
