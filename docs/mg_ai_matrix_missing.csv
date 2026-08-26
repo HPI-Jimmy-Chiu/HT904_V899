@@ -1,34 +1,9 @@
 ﻿date,agent,file,line,status,comment
-20260401,ht9045-v899,SECSGEM\uHGemHT9045_SV.cpp,360,MISSING,//AI(ht9045-v899) 20260401: Add LB Up/Down temperature and limits for SECS collection
-20260407,ht9045-v899,AutoClean\AutoClean.cpp,3056,MISSING,//AI(ht9045-v899) 20260407: prevent hang when no clean pads remain
-20260410,ht9045-v899,CosFunction.cpp,3381,MISSING,//AI(ht9045-v899) 20260410: enable SortingBinTray when CleanOut for FOREHOPE_NINGBO
 20260414,ht9045-v899,main.cpp,25658,MISSING,//AI(ht9045-v899) 20260414: pack MNetLog into StateRecord when N10-3 daily upload enabled for FTP diagnostic
-20260415,ht9045-v899,cShowBinSelect.cpp,815,MISSING,//AI(ht9045-v899) 20260415: dynamic stack layout for tsIndex tab to prevent overlapping panels
-20260415,ht9045-v899,cShowBinSelect.cpp,1491,MISSING,//AI(ht9045-v899) 20260415: dynamic height for tsIndex based on visible panel stack
-20260417,ht9045-v899,cShowBinSelect.cpp,809,MISSING,//AI(ht9045-v899) 20260417: show AutoDeviceEjection panel for QLE or by config flag
-20260423,ht9045-v899,AutoClean\uCleaning.cpp,148,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
-20260423,ht9045-v899,AutoClean\uCleaning.cpp,149,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
-20260423,ht9045-v899,AutoClean\uCleaning.cpp,150,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
-20260423,ht9045-v899,AutoClean\uCleaning.cpp,151,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
-20260505,ht9045-v899,adam6024.cpp,263,MISSING,//AI(ht9045-v899) 20260505: set target IP before status check so guidance uses the field-selected address
-20260505,ht9045-v899,uhome.cpp,1864,MISSING,//AI(ht9045-v899) 20260505: �����脖葉��� Home (�����ａ��蝔� hangup 敺���� Home All) ���嚗�
-20260513,ht9045-v899,acatchtray.cpp,520,MISSING,//AI(ht9045-v899) 20260513: dummy 空跑不要觸發 P18 人工補 Fail Auto Tray 流程
-20260513,ht9045-v899,asendic_Auto.cpp,203,MISSING,"//AI(ht9045-v899) 20260513: dummy 空跑不啟用 P18 旁路, 仍走原本 tray mismatch 處理"
-20260513,ht9045-v899,csystem.cpp,15437,MISSING,//AI(ht9045-v899) 20260513: dummy 空跑不檢查人工補 Fail Auto Tray 的 Color Sensor
 20260514,ht9045-v899,ainarm9045.cpp,40,MISSING,//AI(ht9045-v899) 20260514: Phase 3 Loader pick planner scaffold (default off)
 20260514,ht9045-v899,ainarm9045.cpp,6436,MISSING,//AI(ht9045-v899) 20260514: Phase 3 dual-path hook. SHADOW ONLY: when
-20260515,ht9045-v899,cContactCT.cpp,202,MISSING,"//AI(ht9045-v899) 20260515: 修正南茂回報Yield Chart左欄site標籤(Aa/Ab/Ba...)空白; ChangeToFloatNonPcnt回傳float, 'A'+float 走%c變數列引數會被當成double傳入導致印出亂碼/空白, 補強制轉int還原V897行為"
-20260515,ht9045-v899,cContactCT.cpp,242,MISSING,"//AI(ht9045-v899) 20260515: 同上修正, NN_2Row site標籤強制int"
-20260515,ht9045-v899,cContactCT.cpp,247,MISSING,"//AI(ht9045-v899) 20260515: 同上修正, NN_1Row site標籤強制int"
-20260519,ht9045-v899,BarCode\BarCode.cpp,4550,MISSING,//AI(ht9045-v899) 20260519: match e2x2In2CCD missing barcode check with 2x2 buffer mapping.
-20260519,ht9045-v899,HS_Function.cpp,3549,MISSING,//AI(ht9045-v899) 20260519: GTK info.txt is saved by callers after site-state synchronization.
-20260519,ht9045-v899,uTrayEditForm.cpp,504,MISSING,//AI(ht9045-v899) 20260519: keep timer refresh from re-triggering Enter screenshot save.
-20260519,ht9045-v899,uTrayEditForm.cpp,707,MISSING,//AI(ht9045-v899) 20260519: keep screenshot save failures from hanging Tray Edit UI.
-20260520,ht9045-v899,CosFunction.cpp,1466,MISSING,//AI(ht9045-v899) 20260520: enable E55 Fix3 full tray gate for PTI import plan
 20260525,ht9045-v899,main.cpp,24003,MISSING,//AI(ht9045-v899) 20260525: sync PASS auto positions after workfile switch
 20260525,ht9045-v899,main.cpp,25604,MISSING,//AI(ht9045-v899) 20260525: pack PTI Lot Start trace with TCP log for permission/runmode diagnosis
-20260605,ht9045-v899,cSortCT.cpp,11,MISSING,//AI(ht9045-v899) 20260605: 改用 ShowMyMessageBox_YES_NO 需引入 mymessbox.h
-20260618,ht9045-v899,Motor\mymotor.cpp,415,MISSING,//AI(ht9045-v899) 20260618: CASE-20260618-001 南茂(CC_ChipMos)/e360KG 落入 else 使 iCheckZ=4000 門檻過緊，Z2 到位較慢提早觸發 Z1UpZ2Down1 alarm，比照 CC_GIGAS 放寬 iCheckZ 至 11000
 20260623,ht9045-v899,MachineType.h,1631,MISSING,"//AI(ht9045-v899) 20260623: 新增整數安全除法(零防護+取整),供格線欄號/索引等整數情境使用,避免誤用浮點版造成階梯式位移"
 20260623,ht9045-v899,cConfiguration.cpp,153,MISSING,"//AI(ht9045-v899) 20260623: 改用整數安全除法還原離散欄號,修正浮點除法造成 CheckBox 階梯式位移"
 20260623,ht9045-v899,cConfiguration.cpp,4983,MISSING,"//AI(ht9045-v899) 20260623: 界外/空日期(1899-12-30)防呆,無效時回填Now()避免picker指派拋例外"

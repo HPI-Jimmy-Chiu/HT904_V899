@@ -260,10 +260,13 @@ bool Open_ADAM_6024(AnsiString IP, int Num)                                     
 
     if(EP_Install>0)
     {
+        Address[Num]=IP;                                                        //AI(ht9045-v899) 20260505: set target IP before status check so guidance uses the field-selected address
         if(!fCheckConnectStatus_ADAM6024(Num))                                  //Hmy 20170120 add check Adam6024 Connect Status ->
+        {
+            ShowDoubleEPConnectGuide(IP, Num, "Status check failed before TCP connect.");
             return false;
+        }
         bADAM6024FWIsNew[Num]=fCheckModuleFWISNew_ADAM6024(Num);                //Nickliu 20230314 Add Check Adam FW Is New
-        Address[Num]=IP;                                                        //Ifor 20150709 ：開啟ADAM 設備時將IP位置寫入暫存器
         if(EP_Install==4)                                                       //Steven 20141202 : PISO DA
         {
             fAdam6024->OpenSocket(IP, DEFAULT_ET7226_PORT);
@@ -362,6 +365,7 @@ bool Open_ADAM_6024(AnsiString IP, int Num)                                     
                 if(iCount>100)                                                  //jou 20170313 (Steven) : Adam EP check alarm 3 -> 100
                 {
                     iCount=0;
+                    ShowDoubleEPConnectGuide(IP, Num, fAdam6024->ADAMErrorMessage[iRet]);
                     ShowMyMessage("Connect Fail! Please Check ADAM IP!", IP, fAdam6024->ADAMErrorMessage[iRet]);          //wei 20160329 ADAM連線異常Alarm
                     return false;
                 }

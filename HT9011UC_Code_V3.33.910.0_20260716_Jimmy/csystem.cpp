@@ -16520,9 +16520,10 @@ void ScanColorFixTrayStatus()                                                   
 
                 if(Prod.iTrayType[i]==tTrayAuto)                                //Steven 20230316 : 手動補Auto盤也要檢查Color Sensor
                 {
-                    if(IniConfig.bP18FailAutoTrayManual==true ||                //jou 2012-03-16 Fail Auto Tray手動補Tray
+                    if(LastSet.iRealDummy!=DUMMY &&                             //AI(ht9045-v899) 20260513: dummy 空跑不檢查人工補 Fail Auto Tray 的 Color Sensor
+                      (IniConfig.bP18FailAutoTrayManual==true ||                //jou 2012-03-16 Fail Auto Tray手動補Tray
                        ((iRunStartMode==FT || iRunStartMode==FT_ART) && TrayForm.bFailAutoTrayManual_FT==true) ||
-                       ((iRunStartMode==RT || iRunStartMode==RT_ART) && TrayForm.bFailAutoTrayManual_RT==true))         //Steven 20150116 : 手動移除Auto Fail Bin Tray
+                       ((iRunStartMode==RT || iRunStartMode==RT_ART) && TrayForm.bFailAutoTrayManual_RT==true)))     //Steven 20150116 : 手動移除Auto Fail Bin Tray
                     {
                         int iAuto=iAutoIndex[i];
                         if(Prod.iIsFailT6[i]==1)                                //Steven 20240105 : Prod.bIsPass --> Prod.iIsFailT6

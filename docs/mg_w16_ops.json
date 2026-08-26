@@ -1,0 +1,110 @@
+[
+  {
+    "op": "W16-01",
+    "note": "0401 SECS SV: LB Up/Down 溫度與上下限 6 個 SVID(1474-1479)（矩陣 uHGemHT9045_SV.cpp:360）",
+    "v910_file": "SECSGEM\\uHGemHT9045_SV.cpp",
+    "v899_lines": [
+      360,
+      366
+    ],
+    "mode": "after",
+    "anchor_line": 365,
+    "anchor_expect": "SetSVDataPointer(1473 , HType.ASCII_TYPE,   \"ESD Air Temperature\""
+  },
+  {
+    "op": "W16-02",
+    "note": "0410 甬矽 FOREHOPE_NINGBO：Clean Out 時啟用 SortingBinTray（矩陣 CosFunction.cpp:3381）。replace 上界含既有 3422/3423 兩行只為取唯一錨，兩行位元組與 V899[3380]/[3383] 相同",
+    "v910_file": "CosFunction.cpp",
+    "v899_lines": [
+      3380,
+      3383
+    ],
+    "mode": "replace",
+    "replace_lines": [
+      3422,
+      3423
+    ],
+    "anchor_expect": "    CosFunction.bUseDefineAutoCleanOffset                                       =true;  //Ifor 20181106 add 新增Auto Clean Offset By 本機\r\n}"
+  },
+  {
+    "op": "W16-03",
+    "note": "0520 PTI：開 E55 Fix3 full tray 閘（矩陣 CosFunction.cpp:1466）。replace 含既有 1506/1507 只為取唯一錨，位元組與 V899[1464]/[1465] 相同",
+    "v910_file": "CosFunction.cpp",
+    "v899_lines": [
+      1464,
+      1466
+    ],
+    "mode": "replace",
+    "replace_lines": [
+      1506,
+      1507
+    ],
+    "anchor_expect": "    CosFunction.bAdaptiveYield                                                  =true;  //Sam 20230914 : 自適應性良率監控\r\n    CosFunction.bShowYieldMonitor                                               =true;"
+  },
+  {
+    "op": "W16-04",
+    "note": "0505 Double EP 連線導引：Address[Num]=IP 移到狀態檢查之前 + 檢查失敗呼叫 ShowDoubleEPConnectGuide（矩陣 adam6024.cpp:263）",
+    "v910_file": "adam6024.cpp",
+    "v899_lines": [
+      263,
+      269
+    ],
+    "mode": "replace",
+    "replace_lines": [
+      263,
+      266
+    ],
+    "anchor_expect": "if(!fCheckConnectStatus_ADAM6024(Num))                                  //Hmy 20170120 add check Adam6024 Connect Status ->"
+  },
+  {
+    "op": "W16-05",
+    "note": "0505 同案未標記承重行：TCP connect 失敗路徑也呼叫 ShowDoubleEPConnectGuide（V899:369，矩陣看不到；不搬則 V910 的 ShowDoubleEPConnectGuide 只剩一半觸發點）",
+    "v910_file": "adam6024.cpp",
+    "v899_lines": [
+      369,
+      369
+    ],
+    "mode": "before",
+    "anchor_line": 365,
+    "anchor_expect": "ShowMyMessage(\"Connect Fail! Please Check ADAM IP!\", IP, fAdam6024->ADAMErrorMessage[iRet]);"
+  },
+  {
+    "op": "W16-06",
+    "note": "0513 dummy 空跑不檢查人工補 Fail Auto Tray 的 Color Sensor（矩陣 csystem.cpp:15437，ScanColorFixTrayStatus）",
+    "v910_file": "csystem.cpp",
+    "v899_lines": [
+      15437,
+      15440
+    ],
+    "mode": "replace",
+    "replace_lines": [
+      16523,
+      16525
+    ],
+    "anchor_expect": "IniConfig.bP18FailAutoTrayManual==true ||                //jou 2012-03-16 Fail Auto Tray"
+  },
+  {
+    "op": "W16-07",
+    "note": "0519 純註解：GTK info.txt 由呼叫端在 site 狀態同步後存檔（矩陣 HS_Function.cpp:3549，SaveCloseOpenSiteEven 尾）",
+    "v910_file": "HS_Function.cpp",
+    "v899_lines": [
+      3549,
+      3549
+    ],
+    "mode": "after",
+    "anchor_line": 3861,
+    "anchor_expect": "NewRecordProcess(\"MES2105\", \"Close Open Site\", asTmp);"
+  },
+  {
+    "op": "W16-08",
+    "note": "0618 CASE-20260618-001 南茂 CC_ChipMos_ZHUBEI/TAINAN 比照 CC_GIGAS 放寬 iCheckZ 至 11000（矩陣 Motor\\mymotor.cpp:415）",
+    "v910_file": "Motor\\mymotor.cpp",
+    "v899_lines": [
+      415,
+      419
+    ],
+    "mode": "before",
+    "anchor_line": 373,
+    "anchor_expect": "else if(INDEX_PRESS_TYPE==e85KG || INDEX_PRESS_TYPE==e240KG ||"
+  }
+]

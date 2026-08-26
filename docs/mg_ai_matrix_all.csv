@@ -5,7 +5,7 @@
 20260331,ht9045-v899,CosFunction.cpp,1389,same-file,//AI(ht9045-v899) 20260331: Greatek TCP Remote Start Lot (HTSET 720)
 20260331,ht9045-v899,CosFunction.cpp,4196,same-file,//AI(ht9045-v899) 20260331: Greatek TCP Remote Start Lot (HTSET 720)
 20260331,ht9045-v899,CosFunction.h,237,same-file,//AI(ht9045-v899) 20260331: Greatek TCP Remote Start Lot (HTSET 720)
-20260401,ht9045-v899,SECSGEM\uHGemHT9045_SV.cpp,360,MISSING,//AI(ht9045-v899) 20260401: Add LB Up/Down temperature and limits for SECS collection
+20260401,ht9045-v899,SECSGEM\uHGemHT9045_SV.cpp,360,same-file,//AI(ht9045-v899) 20260401: Add LB Up/Down temperature and limits for SECS collection
 20260405,ht9045-v899,cSiteUseManager.cpp,1,same-file,//AI(ht9045-v899) 20260405: Phase0 SiteUseManager implementation - read-only queries over existing globals
 20260405,ht9045-v899,cSiteUseManager.cpp,26,same-file,//AI(ht9045-v899) 20260405: Phase4 load switch from Gerneral.ini [SiteUseMgr] section
 20260405,ht9045-v899,cSiteUseManager.cpp,172,same-file,//AI(ht9045-v899) 20260405: Phase1 shadow verification - log HP state before SearchPlateToPlace
@@ -30,7 +30,7 @@
 20260407,ht9045-v899,AutoClean\AutoClean.cpp,1645,same-file,//AI(ht9045-v899) 20260407: cCleanKitPickPlan implementation
 20260407,ht9045-v899,AutoClean\AutoClean.cpp,1649,same-file,//AI(ht9045-v899) 20260407: runtime switch for new/old auto clean search logic
 20260407,ht9045-v899,AutoClean\AutoClean.cpp,2112,same-file,//AI(ht9045-v899) 20260407: dual-path switch  bUseCKPP selects new class vs old logic
-20260407,ht9045-v899,AutoClean\AutoClean.cpp,3056,MISSING,//AI(ht9045-v899) 20260407: prevent hang when no clean pads remain
+20260407,ht9045-v899,AutoClean\AutoClean.cpp,3056,ALLOWLISTED,//AI(ht9045-v899) 20260407: prevent hang when no clean pads remain
 20260407,ht9045-v899,AutoClean\AutoClean.cpp,3092,same-file,//AI(ht9045-v899) 20260407: AC debug log - PickfromCleanKit Task20 result
 20260407,ht9045-v899,AutoClean\AutoClean.cpp,3456,same-file,//AI(ht9045-v899) 20260407: allow partial pick when inactive suckers have no pad (Fix H)
 20260407,ht9045-v899,AutoClean\AutoClean.cpp,3503,same-file,//AI(ht9045-v899) 20260407: allow partial pick when inactive suckers have no pad (Fix H)
@@ -63,7 +63,7 @@
 20260408,ht9045-v899,AutoClean\cCleanKitPickPlan.h,103,same-file,//AI(ht9045-v899) 20260408: accessors for downstream plan-driven functions
 20260408,ht9045-v899,AutoClean\cCleanKitPickPlan.h,128,same-file,//AI(ht9045-v899) 20260408: global plan instance shared across pick/move/check functions
 20260409,ht9045-v899,AutoClean\AutoClean.cpp,2116,same-file,//AI(ht9045-v899) 20260409: recycle CLEAN_FINISH_IC -> HAS_CLEAN_IC before search so returned pads are reusable
-20260410,ht9045-v899,CosFunction.cpp,3381,MISSING,//AI(ht9045-v899) 20260410: enable SortingBinTray when CleanOut for FOREHOPE_NINGBO
+20260410,ht9045-v899,CosFunction.cpp,3381,same-file,//AI(ht9045-v899) 20260410: enable SortingBinTray when CleanOut for FOREHOPE_NINGBO
 20260414,ht9045-v899,AutoClean\uCleaning.cpp,561,same-file,//AI(ht9045-v899) 20260414: zero all pad counts when DevicePices or tray layout changes to prevent stale counts causing false WAR1922
 20260414,ht9045-v899,AutoClean\uCleaning.cpp,1949,same-file,//AI(ht9045-v899) 20260414: fix operator precedence - was iDeviceNum==24 always true
 20260414,ht9045-v899,HS_Function.cpp,1360,same-file,//AI(ht9045-v899) 20260414: trace daily-upload entry only (iLog>=5) to avoid timer-driven log bloat
@@ -77,12 +77,12 @@
 20260415,ht9045-v899,HS_Function.cpp,48,same-file,//AI(ht9045-v899) 20260415: forward-declare MNetLog before first use at UpDataToServer_KYEC
 20260415,ht9045-v899,HS_Function.cpp,1773,same-file,//AI(ht9045-v899) 20260415: swap SystemDate to yesterday before GetProdLog to fix cross-midnight filename mismatch
 20260415,ht9045-v899,HS_Function.cpp,1802,same-file,//AI(ht9045-v899) 20260415: swap SystemDate to yesterday before GetGPIBLog to fix cross-midnight filename mismatch
-20260415,ht9045-v899,cShowBinSelect.cpp,815,MISSING,//AI(ht9045-v899) 20260415: dynamic stack layout for tsIndex tab to prevent overlapping panels
-20260415,ht9045-v899,cShowBinSelect.cpp,1491,MISSING,//AI(ht9045-v899) 20260415: dynamic height for tsIndex based on visible panel stack
+20260415,ht9045-v899,cShowBinSelect.cpp,815,ALLOWLISTED,//AI(ht9045-v899) 20260415: dynamic stack layout for tsIndex tab to prevent overlapping panels
+20260415,ht9045-v899,cShowBinSelect.cpp,1491,ALLOWLISTED,//AI(ht9045-v899) 20260415: dynamic height for tsIndex based on visible panel stack
 20260416,ht9045-v899,AutoClean\AutoClean.cpp,2903,same-file,//AI(ht9045-v899) 20260416: revert phantom-marking skip per Gigas feedback - V898 did not have this guard
 20260417,ht9045-v899,AutoClean\AutoClean.cpp,5199,same-file,//AI(ht9045-v899) 20260417: revert to V898 logic - premature CLEAN_FINISH_IC recycling caused pick to restart from col 0 instead of continuing right half
 20260417,ht9045-v899,AutoClean\AutoClean.cpp,5809,same-file,//AI(ht9045-v899) 20260417: revert to V898 logic - premature CLEAN_FINISH_IC recycling caused pick restart from col 0 (ARM2)
-20260417,ht9045-v899,cShowBinSelect.cpp,809,MISSING,//AI(ht9045-v899) 20260417: show AutoDeviceEjection panel for QLE or by config flag
+20260417,ht9045-v899,cShowBinSelect.cpp,809,ALLOWLISTED,//AI(ht9045-v899) 20260417: show AutoDeviceEjection panel for QLE or by config flag
 20260417,ht9045-v899,cmydef.cpp,4995,same-file,//AI(ht9045-v899) 20260417: config flag for AutoDeviceEjection panel
 20260417,ht9045-v899,cmydef.h,4937,same-file,//AI(ht9045-v899) 20260417: add config flag to show AutoDeviceEjection panel
 20260417,ht9045-v899,database.cpp,729,same-file,//AI(ht9045-v899) 20260417: read AutoDeviceEjection flag from Gerneral.ini
@@ -107,10 +107,10 @@
 20260422,ht9045-v899,Monitor\MonitorInterface.cpp,318,same-file,//AI(ht9045-v899) 20260422: sync Greatek monitor Ch3 close with Ch0
 20260422,ht9045-v899,Monitor\MonitorInterface.h,93,same-file,//AI(ht9045-v899) 20260422: expand monitor status array for Greatek Ch3
 20260422,ht9045-v899,csystem.cpp,4381,same-file,//AI(ht9045-v899) 20260422: sync Greatek monitor Ch3 open with Ch0
-20260423,ht9045-v899,AutoClean\uCleaning.cpp,148,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
-20260423,ht9045-v899,AutoClean\uCleaning.cpp,149,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
-20260423,ht9045-v899,AutoClean\uCleaning.cpp,150,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
-20260423,ht9045-v899,AutoClean\uCleaning.cpp,151,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
+20260423,ht9045-v899,AutoClean\uCleaning.cpp,148,ALLOWLISTED,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
+20260423,ht9045-v899,AutoClean\uCleaning.cpp,149,ALLOWLISTED,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
+20260423,ht9045-v899,AutoClean\uCleaning.cpp,150,ALLOWLISTED,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
+20260423,ht9045-v899,AutoClean\uCleaning.cpp,151,ALLOWLISTED,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
 20260423,ht9045-v899,HT9045.cpp,121,same-file,//AI(ht9045-v899) 20260423: BootLog for crash diagnosis when 24V/hardware not ready
 20260423,ht9045-v899,HT9045.cpp,126,same-file,//AI(ht9045-v899) 20260423: rotate + first checkpoint at the very entry
 20260423,ht9045-v899,HT9045.cpp,158,same-file,//AI(ht9045-v899) 20260423: log WinMain EXE path check before VCL initialize
@@ -249,7 +249,7 @@
 20260505,ht9045-v899,TfAOILaserScan.h,114,same-file,//AI(ht9045-v899) 20260505: 還原 raw speed (與 SetAndBackUpLoaderYSpeed 配對)
 20260505,ht9045-v899,adam6024.cpp,55,same-file,//AI(ht9045-v899) 20260505: show EP board setup guidance once per run when Num=2 cannot connect
 20260505,ht9045-v899,adam6024.cpp,73,same-file,//AI(ht9045-v899) 20260505: guide field engineer without changing Gerneral.ini automatically
-20260505,ht9045-v899,adam6024.cpp,263,MISSING,//AI(ht9045-v899) 20260505: set target IP before status check so guidance uses the field-selected address
+20260505,ht9045-v899,adam6024.cpp,263,same-file,//AI(ht9045-v899) 20260505: set target IP before status check so guidance uses the field-selected address
 20260505,ht9045-v899,cTrayMapping.cpp,221,same-file,//AI(ht9045-v899) 20260505: 原本只設 Visible=true，未設 false 導致 .dfm 預設如果是 true 會一直顯示。
 20260505,ht9045-v899,cTrayMapping.cpp,300,same-file,//AI(ht9045-v899) 20260505: 關閉表單時停止模擬並重置 LaserScan 狀態，避免下次開啟該表單時?留舊狀態繼續跑
 20260505,ht9045-v899,cTrayMapping.cpp,1253,same-file,//AI(ht9045-v899) 20260505: Loop>1 時按鈕 Caption 顯示「Running n/N」進度
@@ -285,7 +285,7 @@
 20260505,ht9045-v899,cTrayMapping.h,686,same-file,//AI(ht9045-v899) 20260505: Sim/AutoLearning 模式下記錄流程細節 (Memo + 檔案)
 20260505,ht9045-v899,cTrayMapping.h,687,same-file,//AI(ht9045-v899) 20260505: 生產模式也永遠寫檔供客戶回傳分析
 20260505,ht9045-v899,cTrayMapping.h,688,same-file,//AI(ht9045-v899) 20260505: 一次性備份 MLoaderY/Cylinder/Sensor 現況
-20260505,ht9045-v899,uhome.cpp,1864,MISSING,//AI(ht9045-v899) 20260505: �����脖葉��� Home (�����ａ��蝔� hangup 敺���� Home All) ���嚗�
+20260505,ht9045-v899,uhome.cpp,1864,ALLOWLISTED,//AI(ht9045-v899) 20260505: �����脖葉��� Home (�����ａ��蝔� hangup 敺���� Home All) ���嚗�
 20260506,ht9045-v899,OCR.cpp,311,same-file,//AI(ht9045-v899) 20260506: stray ckWordCount on form root bleeds across every PageControl tab; reparent it back to OCR Setup tab
 20260506,ht9045-v899,OCR.cpp,1737,same-file,//AI(ht9045-v899) 20260506: simulation must use new TrayArm-CCD + MLoaderY architecture (Frank 20250214);
 20260506,ht9045-v899,OCR.cpp,1751,same-file,//AI(ht9045-v899) 20260506: only allow OCR simulation outside of production (Lot must not be started)
@@ -311,9 +311,9 @@
 20260512,ht9045-v899,aoutarm9045_2x8_8.cpp,412,same-file,//AI(ht9045-v899) 20260512: fix - 原寫成 Item[0][2+iKit] 重複檢查，row1 col2 永遠取不到 mode 20201
 20260512,ht9045-v899,aoutarm9045_2x8_8.cpp,415,same-file,//AI(ht9045-v899) 20260512: fix - 20300 對應 row0 col3+iKit (原寫成 Item[1][3+iKit] row index 反了)，導致 [0][3] 殘料時落到 fallback 20301，OutArmSuck NeedSuck 全 false 卡死
 20260512,ht9045-v899,aoutarm9045_2x8_8.cpp,418,same-file,//AI(ht9045-v899) 20260512: fix - 補回 [1][3+iKit] 守備條件，避免全空也 fallback 回 20301
-20260513,ht9045-v899,acatchtray.cpp,520,MISSING,//AI(ht9045-v899) 20260513: dummy 空跑不要觸發 P18 人工補 Fail Auto Tray 流程
-20260513,ht9045-v899,asendic_Auto.cpp,203,MISSING,"//AI(ht9045-v899) 20260513: dummy 空跑不啟用 P18 旁路, 仍走原本 tray mismatch 處理"
-20260513,ht9045-v899,csystem.cpp,15437,MISSING,//AI(ht9045-v899) 20260513: dummy 空跑不檢查人工補 Fail Auto Tray 的 Color Sensor
+20260513,ht9045-v899,acatchtray.cpp,520,ALLOWLISTED,//AI(ht9045-v899) 20260513: dummy 空跑不要觸發 P18 人工補 Fail Auto Tray 流程
+20260513,ht9045-v899,asendic_Auto.cpp,203,ALLOWLISTED,"//AI(ht9045-v899) 20260513: dummy 空跑不啟用 P18 旁路, 仍走原本 tray mismatch 處理"
+20260513,ht9045-v899,csystem.cpp,15437,same-file,//AI(ht9045-v899) 20260513: dummy 空跑不檢查人工補 Fail Auto Tray 的 Color Sensor
 20260514,ht9045-v899,AutoClean\AutoClean.cpp,1650,same-file,//AI(ht9045-v899) 20260514: align comment with actual default (off; legacy SearchCleanKitUpDown is in use)
 20260514,ht9045-v899,AutoClean\AutoClean.cpp,1755,same-file,//AI(ht9045-v899) 20260514: legacy EvaluatePlan removed; enumeration delegated to cArmPickPlan
 20260514,ht9045-v899,AutoClean\AutoClean.cpp,1756,same-file,//AI(ht9045-v899) 20260514: IArmPickPlanContext implementation begins
@@ -357,19 +357,19 @@
 20260515,JimmyChiu,Automation\auto9045.cpp,1042,same-file,//AI(JimmyChiu) 20260515: F899-008 OEE_StartLot 失敗 errMsg 關鍵字分流（對齊 SPEC §6.3 / §8.5）
 20260515,JimmyChiu,Automation\auto9045.cpp,1057,same-file,//AI(JimmyChiu) 20260515: F899-008 超豐 LotInfo_REQUEST 內嵌 OEE Start Lot（v3）
 20260515,JimmyChiu,Automation\automation.cpp,1967,same-file,//AI(JimmyChiu) 20260515: F899-008 §6.2 超豐在 OEE 開啟才走內嵌 OEE Start Lot
-20260515,ht9045-v899,cContactCT.cpp,202,MISSING,"//AI(ht9045-v899) 20260515: 修正南茂回報Yield Chart左欄site標籤(Aa/Ab/Ba...)空白; ChangeToFloatNonPcnt回傳float, 'A'+float 走%c變數列引數會被當成double傳入導致印出亂碼/空白, 補強制轉int還原V897行為"
-20260515,ht9045-v899,cContactCT.cpp,242,MISSING,"//AI(ht9045-v899) 20260515: 同上修正, NN_2Row site標籤強制int"
-20260515,ht9045-v899,cContactCT.cpp,247,MISSING,"//AI(ht9045-v899) 20260515: 同上修正, NN_1Row site標籤強制int"
+20260515,ht9045-v899,cContactCT.cpp,202,ALLOWLISTED,"//AI(ht9045-v899) 20260515: 修正南茂回報Yield Chart左欄site標籤(Aa/Ab/Ba...)空白; ChangeToFloatNonPcnt回傳float, 'A'+float 走%c變數列引數會被當成double傳入導致印出亂碼/空白, 補強制轉int還原V897行為"
+20260515,ht9045-v899,cContactCT.cpp,242,ALLOWLISTED,"//AI(ht9045-v899) 20260515: 同上修正, NN_2Row site標籤強制int"
+20260515,ht9045-v899,cContactCT.cpp,247,ALLOWLISTED,"//AI(ht9045-v899) 20260515: 同上修正, NN_1Row site標籤強制int"
 20260518,ht9045-v899,cContact.cpp,10548,same-file,//AI(ht9045-v899) 20260518: reuse index drop handling during Gigas auto height place-to-shuttle
 20260518,ht9045-v899,cContact.cpp,10774,same-file,//AI(ht9045-v899) 20260518: recheck Gigas auto height drop before vacuum release
-20260519,ht9045-v899,BarCode\BarCode.cpp,4550,MISSING,//AI(ht9045-v899) 20260519: match e2x2In2CCD missing barcode check with 2x2 buffer mapping.
-20260519,ht9045-v899,HS_Function.cpp,3549,MISSING,//AI(ht9045-v899) 20260519: GTK info.txt is saved by callers after site-state synchronization.
+20260519,ht9045-v899,BarCode\BarCode.cpp,4550,ALLOWLISTED,//AI(ht9045-v899) 20260519: match e2x2In2CCD missing barcode check with 2x2 buffer mapping.
+20260519,ht9045-v899,HS_Function.cpp,3549,same-file,//AI(ht9045-v899) 20260519: GTK info.txt is saved by callers after site-state synchronization.
 20260519,ht9045-v899,ProductionInfo\ProductionInfo.cpp,4952,same-file,//AI(ht9045-v899) 20260519: output RunSite from V812 channel map while keeping two-arm/runtime close-site guard.
 20260519,ht9045-v899,main.cpp,28270,same-file,//AI(ht9045-v899) 20260519: save GTK RunSite after homepage site on/off states are synchronized.
-20260519,ht9045-v899,uTrayEditForm.cpp,504,MISSING,//AI(ht9045-v899) 20260519: keep timer refresh from re-triggering Enter screenshot save.
-20260519,ht9045-v899,uTrayEditForm.cpp,707,MISSING,//AI(ht9045-v899) 20260519: keep screenshot save failures from hanging Tray Edit UI.
+20260519,ht9045-v899,uTrayEditForm.cpp,504,ALLOWLISTED,//AI(ht9045-v899) 20260519: keep timer refresh from re-triggering Enter screenshot save.
+20260519,ht9045-v899,uTrayEditForm.cpp,707,ALLOWLISTED,//AI(ht9045-v899) 20260519: keep screenshot save failures from hanging Tray Edit UI.
 20260519,ht9045-v899,uYieldMonitoring.cpp,5163,same-file,//AI(ht9045-v899) 20260519: save GTK RunSite after low-yield auto site-off state synchronization.
-20260520,ht9045-v899,CosFunction.cpp,1466,MISSING,//AI(ht9045-v899) 20260520: enable E55 Fix3 full tray gate for PTI import plan
+20260520,ht9045-v899,CosFunction.cpp,1466,same-file,//AI(ht9045-v899) 20260520: enable E55 Fix3 full tray gate for PTI import plan
 20260521,ht9045-v899,KYECFTP\FTPClient.cpp,3416,same-file,//AI(ht9045-v899) 20260521: limit ChipMos Chamber upload value by selected heat mode
 20260522,ht9045-v899,Config.h,264,same-file,//AI(ht9045-v899) 20260522: keep OCR capture trigger mode configurable while defaulting old machines to switch trigger
 20260522,ht9045-v899,OCR.cpp,57,same-file,//AI(ht9045-v899) 20260522: simulation-only flow log state; production OCR keeps this disabled
@@ -488,7 +488,7 @@
 20260605,ht9045-v899,KYECFTP\FTPClient.cpp,2260,same-file,"//AI(ht9045-v899) 20260605: FTP 連線失敗只記 log,不彈 modal 避免停機卡住消音/動作"
 20260605,ht9045-v899,KYECFTP\FTPClient.cpp,2286,same-file,"//AI(ht9045-v899) 20260605: 上傳失敗只記 log,不彈 modal 避免停機卡住消音/動作"
 20260605,ht9045-v899,KYECFTP\FTPClient.cpp,2293,same-file,"//AI(ht9045-v899) 20260605: 上傳失敗只記 log,不彈 modal 避免停機卡住消音/動作"
-20260605,ht9045-v899,cSortCT.cpp,11,MISSING,//AI(ht9045-v899) 20260605: 改用 ShowMyMessageBox_YES_NO 需引入 mymessbox.h
+20260605,ht9045-v899,cSortCT.cpp,11,ALLOWLISTED,//AI(ht9045-v899) 20260605: 改用 ShowMyMessageBox_YES_NO 需引入 mymessbox.h
 20260605,ht9045-v899,cSortCT.cpp,576,same-file,"//AI(ht9045-v899) 20260605: Sender==btnClearCount 為人工按鈕觸發,程式呼叫(Lot End/SECS/MES)傳入其他物件,後續清除提示僅人工觸發才跳"
 20260605,ht9045-v899,cSortCT.cpp,611,same-file,"//AI(ht9045-v899) 20260605: 僅人工按鈕觸發才提示,程式呼叫不跳詢問避免誤清"
 20260605,ht9045-v899,cSortCT.cpp,613,same-file,//AI(ht9045-v899) 20260605: 改用 ShowMyMessageBox_YES_NO 留下操作紀錄
@@ -559,7 +559,7 @@
 20260612,ht9045-v899,uLotInfo.cpp,2005,same-file,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 組本地完整路徑(asDirPath+""\\""+sFileName,比照UpSocketIdPoductDataToServerByFTP內asFileName,FTPClient.cpp L2236)與遠端完整路徑(asN12"
 20260612,ht9045-v899,uLotInfo.cpp,2011,same-file,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 丟佇列即清(決議2):不等上傳成功就清SocketID count;此段為UpSocketIdPoductDataToServerByFTP上傳成功後清除程式碼之複製(FTPClient.cpp L2271-2278),背景分"
 20260612,ht9045-v899,uLotInfo.cpp,2020,same-file,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 開關關(非PTI/預設) → 維持原同步上傳路徑,行為一字不改(MySleep+呼叫函式,SocketID count清除仍在函式內部上傳成功後執行)"
-20260618,ht9045-v899,Motor\mymotor.cpp,415,MISSING,//AI(ht9045-v899) 20260618: CASE-20260618-001 南茂(CC_ChipMos)/e360KG 落入 else 使 iCheckZ=4000 門檻過緊，Z2 到位較慢提早觸發 Z1UpZ2Down1 alarm，比照 CC_GIGAS 放寬 iCheckZ 至 11000
+20260618,ht9045-v899,Motor\mymotor.cpp,415,same-file,//AI(ht9045-v899) 20260618: CASE-20260618-001 南茂(CC_ChipMos)/e360KG 落入 else 使 iCheckZ=4000 門檻過緊，Z2 到位較慢提早觸發 Z1UpZ2Down1 alarm，比照 CC_GIGAS 放寬 iCheckZ 至 11000
 20260623,ht9045-v899,MachineType.h,1631,MISSING,"//AI(ht9045-v899) 20260623: 新增整數安全除法(零防護+取整),供格線欄號/索引等整數情境使用,避免誤用浮點版造成階梯式位移"
 20260623,ht9045-v899,cConfiguration.cpp,153,MISSING,"//AI(ht9045-v899) 20260623: 改用整數安全除法還原離散欄號,修正浮點除法造成 CheckBox 階梯式位移"
 20260623,ht9045-v899,cConfiguration.cpp,4983,MISSING,"//AI(ht9045-v899) 20260623: 界外/空日期(1899-12-30)防呆,無效時回填Now()避免picker指派拋例外"

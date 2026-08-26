@@ -50,3 +50,18 @@ note.cpp,20260407,//AI(ht9045-v899) 20260407: only Pause when Note closed via ,�
 HS_Function.cpp,20260420,//AI(BVL-3766) 20260420: 開關 site 時要即時重寫 GTK info.txt,假MISSING：BVL-3766功能已在V910，僅#include行尾註解被公司改寫英文,MG-W5發現
 ainarm9045_1x1_1.cpp,20260407,//AI(ht9045-v899) 20260407: align with 2x4_8 baseline,"假MISSING：V910:891/:1241 已有同註解同程式碼，僅 Big5 全形破折號被公司正規化成 ASCII ""--""",MG-W11
 acatchtray.cpp,20260703,//AI(ht9045-v899) 20260703,F11：V910 已有更演進的防抖版本（Eastsun 20260515/20260710 可設定門檻+cover guard），照搬會倒退；正交的 SKIP 釋放已由 MG-W14 搬,MG-W14/F11
+AutoClean\uCleaning.cpp,20260423,//AI(ht9045-v899) 20260423,"MG-W1 skipped-C: V910 already evolved to ArmSpeed dynamic defaults; intent satisfied, not ported",MG-W1
+AutoClean\AutoClean.cpp,20260407,//AI(ht9045-v899) 20260407: prevent hang,F10 pending user decision (OP6b 92%: KYEC pause-popup condition inversion); port or keep listed after ruling,F10-pending
+uhome.cpp,20260505,//AI(ht9045-v899) 20260505: �����脖葉��� Home (�����ａ��蝔� hang,MG-W16 判 C：V910 pristine 基線已有等價（公司自行整合/改寫/uhome 為 V899 原檔天生損壞而 V910 有正確版）,MG-W16
+acatchtray.cpp,20260513,//AI(ht9045-v899) 20260513: dummy 空跑不要觸發 P18 人工補 Fail Auto T,MG-W16 判 C：V910 pristine 基線已有等價（公司自行整合/改寫/uhome 為 V899 原檔天生損壞而 V910 有正確版）,MG-W16
+asendic_Auto.cpp,20260513,"//AI(ht9045-v899) 20260513: dummy 空跑不啟用 P18 旁路, 仍走原本 tray mi",MG-W16 判 C：V910 pristine 基線已有等價（公司自行整合/改寫/uhome 為 V899 原檔天生損壞而 V910 有正確版）,MG-W16
+cContactCT.cpp,20260515,//AI(ht9045-v899) 20260515: 修正南茂回報Yield Chart左欄site標籤(Aa/Ab/,MG-W16 判 C：V910 pristine 基線已有等價（公司自行整合/改寫/uhome 為 V899 原檔天生損壞而 V910 有正確版）,MG-W16
+cContactCT.cpp,20260515,"//AI(ht9045-v899) 20260515: 同上修正, NN_2Row site標籤強制int",MG-W16 判 C：V910 pristine 基線已有等價（公司自行整合/改寫/uhome 為 V899 原檔天生損壞而 V910 有正確版）,MG-W16
+cContactCT.cpp,20260515,"//AI(ht9045-v899) 20260515: 同上修正, NN_1Row site標籤強制int",MG-W16 判 C：V910 pristine 基線已有等價（公司自行整合/改寫/uhome 為 V899 原檔天生損壞而 V910 有正確版）,MG-W16
+BarCode\BarCode.cpp,20260519,//AI(ht9045-v899) 20260519: match e2x2In2CCD missing barcode,MG-W16 判 C：V910 pristine 基線已有等價（公司自行整合/改寫/uhome 為 V899 原檔天生損壞而 V910 有正確版）,MG-W16
+uTrayEditForm.cpp,20260519,//AI(ht9045-v899) 20260519: keep timer refresh from re-trigg,MG-W16 判 C：V910 pristine 基線已有等價（公司自行整合/改寫/uhome 為 V899 原檔天生損壞而 V910 有正確版）,MG-W16
+uTrayEditForm.cpp,20260519,//AI(ht9045-v899) 20260519: keep screenshot save failures fr,MG-W16 判 C：V910 pristine 基線已有等價（公司自行整合/改寫/uhome 為 V899 原檔天生損壞而 V910 有正確版）,MG-W16
+cSortCT.cpp,20260605,//AI(ht9045-v899) 20260605: 改用 ShowMyMessageBox_YES_NO 需引入 m,MG-W16 判 C：V910 pristine 基線已有等價（公司自行整合/改寫/uhome 為 V899 原檔天生損壞而 V910 有正確版）,MG-W16
+cShowBinSelect.cpp,20260415,//AI(ht9045-v899) 20260415: dynamic stack layout for tsIndex,F12 pending：V910 有同日競品解法且照搬會回歸 btnASM 遮蔽 bug，建議不搬待使用者裁決,MG-W16/F12-pending
+cShowBinSelect.cpp,20260415,//AI(ht9045-v899) 20260415: dynamic height for tsIndex based,F12 pending：V910 有同日競品解法且照搬會回歸 btnASM 遮蔽 bug，建議不搬待使用者裁決,MG-W16/F12-pending
+cShowBinSelect.cpp,20260417,//AI(ht9045-v899) 20260417: show AutoDeviceEjection panel fo,F12 pending：V910 有同日競品解法且照搬會回歸 btnASM 遮蔽 bug，建議不搬待使用者裁決,MG-W16/F12-pending

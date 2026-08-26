@@ -1505,6 +1505,7 @@ void FUNC_CC_PTI()
     CosFunction.bSmartAutoClean                                                 =true;  //Sam 20230111 : Smart Auto Clean
     CosFunction.bAdaptiveYield                                                  =true;  //Sam 20230914 : 自適應性良率監控
     CosFunction.bShowYieldMonitor                                               =true;
+    CosFunction.bUseFix3FullTray                                                =true;  //AI(ht9045-v899) 20260520: enable E55 Fix3 full tray gate for PTI import plan
     CosFunction.bFirstTrayCheckOnUnloader                                       =true;  //Jimmychiu 20251205 : First Tray Check On Unloader
     CosFunction.bEndLotAfterTrayFeed                                            =true;  //Jimmychiu 20250115 : Auto End Lot After Tray Feed
     //AI(ht9045-v899) 20260804: turn on C05 power saving for PTI; stop heating after a long HALT once the lot has ended (CASE-PTI-20260804-001)
@@ -3420,6 +3421,8 @@ void FUNC_CC_FOREHOPE_NINGBO()                                                  
     CosFunction.bSetContactForceToAutoClean                                     =true;  //Steven 20250915 : 複製Contact Force給Auto Clean用
     CosFunction.bOneByOneWhenPickErrAtLoader                                    =true;  //Jimmychiu 20250826 : Suck one by one when a pickup error occurs at the loader.
     CosFunction.bUseDefineAutoCleanOffset                                       =true;  //Ifor 20181106 add 新增Auto Clean Offset By 本機
+    //AI(ht9045-v899) 20260410: enable SortingBinTray when CleanOut for FOREHOPE_NINGBO
+    CosFunction.bSortingBinTraywhenCleanOut                                     =true;
 }
 //------------------------------------------------------------------------------
 void FUNC_CC_FMSH()                                                                     //上海復旦微電子

@@ -370,6 +370,11 @@ __fastcall TMyMotor::TMyMotor()
     {
         iCheckZ=11000;
     }
+    //AI(ht9045-v899) 20260618: CASE-20260618-001 南茂(CC_ChipMos)/e360KG 落入 else 使 iCheckZ=4000 門檻過緊，Z2 到位較慢提早觸發 Z1UpZ2Down1 alarm，比照 CC_GIGAS 放寬 iCheckZ 至 11000
+    else if(CUSTOMER_CODE==CC_ChipMos_ZHUBEI || CUSTOMER_CODE==CC_ChipMos_TAINAN)
+    {
+        iCheckZ=11000;
+    }
     else if(INDEX_PRESS_TYPE==e85KG || INDEX_PRESS_TYPE==e240KG ||                   //JerryYang 20260114 : 輕壓的速度比較快, 放寬range
        INDEX_PRESS_TYPE==e120KG || INDEX_PRESS_TYPE==e160KG)
     {

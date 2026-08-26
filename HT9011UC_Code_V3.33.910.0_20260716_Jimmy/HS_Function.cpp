@@ -3859,6 +3859,7 @@ void __fastcall TFormHS::SaveCloseOpenSiteEven(int iZ, int iRow, int iCol, bool 
     }
 
     NewRecordProcess("MES2105", "Close Open Site", asTmp);
+    //AI(ht9045-v899) 20260519: GTK info.txt is saved by callers after site-state synchronization.
 }
 //---------------------------------------------------------------------------
 void __fastcall TFormHS::AutoConnectATCNetwork()                                //Ifor 20170202 (Steven) add KYEC 網路磁碟機自動連線
