@@ -12078,7 +12078,7 @@ port 翻譯時把 `__fastcall` 拿掉成 `TfSpeed::TfSpeed()`（不匹配）。
   `if(Maximum<Minimum)` 的對稱夾限分支，兩端都對調過，夾出的區間相同。
   這是**打開檔案確認過的，不是推定的**。
 
-### 🔖 RESUME（20260826 上午）
+### 🔖 RESUME（20260826 上午，已被檔尾 20260826 下午那則取代）
 
 - **本輪連續作業共 13 顆 commit**（`1be68ce` → `6d7f752`），
   **每一顆有程式碼變更的都跑過全新 dir 的雙 gate，全部 137/142 × 2、
@@ -12154,3 +12154,60 @@ port 翻譯時把 `__fastcall` 拿掉成 `TfSpeed::TfSpeed()`（不匹配）。
 - **等使用者（本輪未動，只是重列）**：F5 目視（temp.mode＋uTemp_Set/DynamicTemp）；
   HAL-MOT1 十問（Q1/Q9/Q4 擋新 mot_table 起草）；TImage headless 准駁；
   GOLDEN BUG (TAG1-a) edSHighBase；GOLDEN DEFECT (i) 21-into-20 sprintf overflow。
+
+### 🔖 RESUME（20260826 下午）
+
+- **本段 commit**：`0b292c2` dualgate2 → `0329137` 表單 bootstrap 量測 →
+  `7ca1a75` FW-SPEED-W21+FW-HSYS-W22（69 支）→ `7871e92` / `b061d83` .gitignore。
+  `7ca1a75` 跑過全新 dir 雙 gate：**Debug 與 Release 各 137/142，
+  失敗集合逐項相同且等於常駐五項**。
+
+- **本段最重要的一件事：偵察會系統性過度封鎖，要靠對抗式複驗救回來。**
+  平行偵察對 FW-3 佇列四個檔判「可翻批次 0」，複驗推翻 `cSpeed` 62 條阻塞理由中的
+  **45 條**，結果是 69 支可翻。根因是一條**只過期兩天**的 absence claim
+  （`fQwertyKey` 20260824 落地）。**下一波的第一優先就是把這件事系統化**（見下）。
+
+- **下一步（具體）：全樹 GATE 前提複驗波。**
+  已知至少三條 absence claim 過期或為偽：
+  1. 「`fQwertyKey` 全樹無 port」→ `forms/fQwertyKey.h`（20260824，20/20 ACTIVE）
+  2. 「`ShowModal` 全樹無 port」→ `forms/fQwertyKey.h:365`、`forms/fPassword.h:337`、
+     `BarcodeReader.h:107`
+  3. 「`Barcode_Reader` 全樹無 port」→ `BarcodeReader.cpp:445`（20260825）
+  **唯一還關著的 fQwertyKey 家族 gate 是 `forms/fSetup.h` 的 WA-1**
+  （:96-106，absence claim 標 20260820，擋 5 支 `ed*Click`）；
+  fLotInfo / fDynamicTemp / ATCInterface / MyOmronPanel / HTEdit 都已在 20260824-25 開掉。
+  作法：掃全樹 GATE REGISTER 的 absence claim，逐條重跑其宣稱的 grep，
+  列出「前提已死」的清單。**注意陷阱 #3：前提死掉不代表答案就是退役**，
+  要重新問一次「為什麼它該是 gated」。
+
+- **仍未做、需使用者裁決的架構決定：表單 bootstrap。**
+  golden `HT9045.cpp` 建 **118** 個表單全域，port 樹只有 **41** 個有人 `new`，
+  **77 個恆為 NULL**（含 `fSpeed`、`HandlerSystem`、`fPassword`；`fQwertyKey` 是
+  lazy-only，全樹唯一建立點 `Public/HTEdit.cpp:311-313`）。
+  量法 `tools/wavescan/form_ctor_scan.py`。
+  翻好的 handler 是成員函式，沒有實例就沒有呼叫者——**離線無害，但 web write path
+  一旦呼叫 handler，第一個 `ed*MouseDown` 就對 NULL 解參考**。
+  硬限制兩條：絕不可放進靜態初始化（陷阱 #4，曾 88/134 SEGFAULT）；
+  `WinMain` 本體不可在測試裡跑（golden `HT9045.cpp:153` 有真的 `MessageBox`）。
+  **明確不是這個原因**：(b) 軌的 tag 全 null 與此無關
+  （`WebBridgeTags.cpp` 只引用 12 處表單全域，三者都在已建立的 41 個裡）。
+
+- **殭屍行程調查已完成，7 條提案尚未實作（等使用者決定）。**
+  根因：02:05:28 自己中斷 `dualgate.sh gem10` 時漏收的孤兒，**不是防毒**
+  （本機 `Get-Service WinDefend` 實測 **Stopped**）。鎖住目錄的是 g++ 的父行程
+  `cmake -E cmake_link_script`，已用最小重現坐實。
+  順帶查到的硬事實：`/usr/bin/timeout` 是 GNU coreutils 8.32、能穿過 cmd.exe
+  中介殺孫行程並回 124；`ctest --timeout` 對本專案是 no-op（生效的是 142 個
+  per-test `TIMEOUT 600`），且**不封頂整輪**；build hang 時 `&&` 短路使 ctest
+  根本沒被 fork；`exit 8` 就是本樹的正常綠燈值。
+  **自傷風險已量**：`powershell.exe` PID 2404 已存活 141h、`cmd.exe` 140.9h，
+  是 harness 常駐殼——任何按年齡掃描的清理器白名單**絕不可含 shell 名稱**。
+  **活性判準的最終形狀**：看整棵行程樹的 CPU 增量且窗要拉長；
+  單一行程單一 5 秒窗實測會給出互相矛盾的結果（`ctest.exe` 兩次取樣一次 0 一次非 0）。
+
+- **仍未回填的簽章 pass**（沿用上一則，未動）：`OmronLaser/LaserSensor.cpp`（7 支）、
+  `uTemp_Set.cpp`、`forms/fSetup.cpp`、`forms/fQwertyKey.cpp`、`cContactCT.cpp`、
+  `cObserver.cpp` 其餘幾支。
+
+- **census 尚未重量**：上一則的 96.0% / 17.0% / 61.4%（分母＝golden code 行數）
+  是 THGem 收尾後量的，**不含 W13-W22**。引用前請重跑 `tools/census/census.py --detail`。
