@@ -12827,7 +12827,108 @@ golden `cSetUp.cpp:4631-4635` 的本體確實沒讀 `Button`／`Shift`／`X`／`
   ALL 61.6%（golden code 行）；tag C++ 側 66 vs 瀏覽器 37（兩邊不是同一組，最落後）；
   web layout.json 133/133。**W28 之後翻譯軸未重量。**
 
-### 🔖 RESUME（20260826 深夜）
+## 20260826 XXI — FW-LOTINFO-W30：6 開 / 0 保留，並抓到主迴圈自己的 `#if 0` 誤判
+
+### 主迴圈的錯：讀到一行的內容 ≠ 那行有被編譯
+
+派工時我寫「`forms/fLotInfo.cpp:1280` 已經未 gate 地寫著
+`if(ATC_InterfaceForm->iATC_MODE_TYPE==61)`，所以 WC-10 的正解是照同檔既有慣例用字面值」。
+**那是假的。** `#if 0` 在 `:1271`，`:1280` 在區塊內（`1271-1330`，WA-6）。
+我用 `sed -n '1280p'` 讀到內容就下了「live code」的結論，**沒查它是否被 `#if 0` 包住**。
+
+更難堪的是：**我在同一份派工的硬規則裡才剛寫下**
+「判斷 include 可達性必須 honour `#if 0`：今天有個 agent 因此把 6 個 TU 報成 164 個」，
+然後在同一份文件的另一段違反它。
+
+**通則（已寫進記憶）**：V906 樹用 `#if 0` 當標準 gate 慣例，數量級是上千個區塊。
+任何「這行／這個 include 是活的」的宣稱，都要從該行往回掃到最近的 `#if 0` / `#endif`，
+或用會判前處理深度的掃描器（注意巢狀 `#ifdef`）。
+**`grep` 找到字串只證明文字存在，不證明編譯器看得到。**
+
+### WC-10 的真正阻塞：不是常數，是 `ATC_InterfaceForm` 在那個 TU 看不到
+
+W27 判「WC-10 可開」時漏了一層，我複驗時也漏了同一層。agent 查出來：
+`ATC_InterfaceForm` 在 `forms/fLotInfo.cpp` 的**每一處使用**（`:1280`、`:2706` 之後）
+全都在 `#if 0` 裡，唯一宣告在 `acarry_shims.h:115`。
+
+處置：TU-local `#ifndef ATC_TYPE_61 / #define 61`（本樹既有 **5 份**同款 TU-local mirror：
+`csystem.cpp:20244`、`cTemperFrom.cpp:123`、`cUnitConvert.cpp:358`、
+`uHeaterThread.cpp:313`、`uTemp_Set.cpp:190`——而 `uTemp_Set.cpp:838` 翻的正是結構
+完全相同的 golden 行）＋ 一個 `#include "acarry_shims.h"`。**沒有動任何共用 header**，
+也沒有加第 N 份具名常數進 header（本樹已有 contact mode 常數 fork 6 份的前例）。
+
+**⚠ 這一支是降級的，要寫明**：shim 的 `iATC_MODE_TYPE` 恆為 0
+（`acarry_shims.cpp:72` ctor，且**全樹零個 writer**），所以 `==61` 永不成立，
+整條退化成 `Tri_Temp_Machine==1`。
+**這是安全降級**——0 不會主動命中任何分支，與記憶裡 `tcHotPlate1==0` 那個
+「0 主動選錯行為」的案例不同。**而且相對開工前仍是改善**：那一行原本整條沒跑，
+`ts_ATC6_1->TabVisible` 從未被指派過。已在程式碼與 header 兩處寫明，
+避免後人以為「ATC 6.1 偵測通了」。
+
+### WA-3 / WC-8：agent 沒有停在「前提死了就開」
+
+前提確實死了（W27 已真翻 `RefreshYieldMonitor`），但 agent 照硬規則走完整條可達鏈
+`RefreshYieldMonitor → _SIGURD / _TERAPOWER → AdjtsYieldMonitiorSize`，查證三點：
+
+- `_SIGURD` 唯一碰檔案的路徑是 `ReadIniData`，`common.cpp:684-686` 自述
+  "Pure reads: no seeding/writes"——**與它的 `CheckAndReadIniData` 兄弟不同**
+  （那個在 `common.cpp:678` 會 seed 缺 key，就是 W25 據以退出 9 支 `TECH_*` 的那條）。
+- 另一個候選寫入 `CloseIniFile` 裡的 `UpdateFile()`（`common.cpp:457`）
+  **對 `TIniFile` 是 no-op**（`vclcompat/IniFiles.cpp:281-286` 只在 `!writeThrough_`
+  時 flush）。所以記憶裡「TIniFile flush 毀排版」那條通則**在這條鏈上打不到**。
+- `GetLastOpenFN()` 呼叫的 `ShowMyMessage` 是 `canary_support.cpp:143` 的 stdout 替身，
+  不是 modal——批次跑不會卡（與「背景批次不可有 modal 彈窗」那條規則相容）。
+
+順帶記一個 golden 設計：`AdjtsYieldMonitiorSize` ↔ `RefreshYieldMonitor` 是**互遞迴**，
+靠 `bTimerRunning` static guard 在深度 2 收斂。那是 golden 自己的設計，不是意外。
+
+### WC-3：開了，但潛伏警告沒有移除
+
+前提「writes files x4」寫下當時就是假的（那 4 個「寫」是 `RecordProcess`，
+本樹是 `canary_support.cpp:113` 的 stdout 替身）。已開，
+**而且 agent 在 call site 又寫了一次 WD-5 警告**：GA-1-B4 換手後那 4 行會變 DB 寫入，
+而**這個 call site 正是讓它們從 `FormShow` 可達的那一個**。
+現在預先 gate 會讓這一支跟全樹 582 個同形 call site 分岔——所以要擋就那時擋。
+
+### `cMyDB.cpp` ×2：兩處效果不同，分別註記
+
+`SaveEventTracker` 那個今天不可觀察（CSV 本體自己也還 gated）；
+`SaveEventLogInfo` 那個**會**——`#else` 分支（`:2113-2120`）真的消費 `LotInName`，
+但 `aBackEventLogMessage` **全樹零讀者**，所以只動到一個 write-only 記憶體全域。
+兩處旁邊的 `edtASECL_TesterID` gate **維持關閉**（該成員真的沒有）。
+另註：`cbbASECL_LoginMode->Text` 從未被指派，故開閘後值為 `""` 而非原本的 `" "`。
+
+### archive 邊：實測 delta，不是推估
+
+以 `ht9045_forms` 旗標編出 `fLotInfo.o`，改動前後 `nm` 對比：
+- **defined symbols 完全相同**（diff 空）→ 此 header 不帶 in-header 物件定義，
+  無 multiple-definition 風險。
+- **undefined +1，恰好是 `_ATC_InterfaceForm`**（body 在 `acarry_shims.cpp:73`，
+  archive `ht9045_sm`）。
+- forms→`ht9045_sm`：**10 → 11 個符號**。**不是新的邊**（該 cycle 已宣告於
+  `CMakeLists.txt:715-721`）。
+- agent 順帶更正 W27 的數字：直接 includer 是 **11 個不是 13 個**，
+  但 `FormsFacade.h` 也 include 它，所以傳遞集合約 **59 個 TU**——59 個全跑，0 fail。
+
+`acarry_shims.h` **首次進入一個 forms TU**。agent 明說這一項「語法與符號層面已量測乾淨，
+但沒跑 link，multiple-definition 只能靠『另外 177 個 TU 也 include 同一份』推論」。
+**本波的 gate 就是那個證明**：Debug 與 Release 兩側 build log 的
+`multiple definition` 命中數皆為 **0**。
+
+### 驗收
+
+全新 dir、最後一次整併之後量：**Debug 與 Release 各 137/142**，失敗集合逐項相同
+且等於常駐五項。三檔皆純 LF、零孤立 CR、零 U+FFFD。
+`forms/fLotInfo.h` +126/-0、`forms/fLotInfo.cpp` +114/-29、`cMyDB.cpp` +22/-4。
+
+### 刻意沒做
+
+- 兩處 `edtASECL_TesterID` gate 依舊（該成員真的沒有）。
+- 未翻任何新函式；未改 CMakeLists、`tests/`、V899、golden。
+- **`WD-5` 現在是活的**：GA-1-B4 換手後 `FormShow → ShowXMLOnLine → 4× RecordProcess`
+  會變 DB 寫入。要擋就那時擋。
+
+### 🔖 RESUME（20260826 深夜，已被檔尾那則取代）
 
 - **本段最後一顆**：`FW-UNGATE-W29`——**行為變更波**，五個 gate 處理完
   （WA-1 開 5 支／B1 開 3 站點+1 保留換真理由／B5 收窄／B7 開／G2 開）。
@@ -12877,3 +12978,60 @@ golden `cSetUp.cpp:4631-4635` 的本體確實沒讀 `Button`／`Shift`／`X`／`
 - **三軸（20260826 17:12 量測，單位不可互換）**：翻譯 non-form 96.0%／form 17.3%／
   ALL 61.6%（golden code 行）；tag C++ 側 66 vs 瀏覽器 37（兩邊不是同一組，最落後）；
   web layout.json 133/133。**W28/W29 之後翻譯軸未重量。**
+
+### 🔖 RESUME（20260826 深夜 · 第二版）
+
+- **本段最後一顆**：`FW-LOTINFO-W30`——**行為變更波**，6 個 gate 全開 / 0 保留。
+  雙 gate 137/142 全綠，兩側 build log 的 `multiple definition` 皆 **0**
+  （那是 `acarry_shims.h` 首次進 forms TU 的唯一未證項，現在有 build 背書）。
+
+- **今天累計 9 顆 commit，六次雙 gate 全部 137/142、失敗集合逐項等於常駐五項。**
+
+- **下一步（依序）**
+  1. **刪 `Command.cpp:317` ＋ 在 `cContact.h` 加 `CONTACT_TEST`——必須同一次改**
+     （`Command.cpp:1793/:1795/:1818/:1822` 還有 4 處真實使用）。解 X-10／X-11／X-32。
+     ⚠ `SetContactMode` 寫全域 `iContactMode` = **模式切換**，屬安全關鍵桶，
+     解 gate 時要在 commit 訊息明講。**掛機無人看顧時不做這一項。**
+  2. **SLK 容器**：golden `TfContactForce` 的 ReadFile 路徑 →
+     `ContactForce.{h,cpp}` 的 `SlkForceData` 容器 + loader。解 X-01..X-06 六支。
+     **在那之前 `CalculateTotalAirForce` 家族一支都不能交付。**
+  3. bootstrap 5 個（`TFormBarcodeReader`／`TfVacuumUnit`／`TfPassword`／
+     `TfDynamicTemp`／`fLan`），放顯式 `InitForms()`，**絕不可放靜態初始化**。
+  4. 補 `ComputeTotalAirForce` 的 ctest（目前只有 scratchpad probe 驗過，沒進 gate）。
+  5. **簽章慣例要有人定案**：樹裡並存兩個相反慣例，同一天 W27 與 W29 各走一邊。
+  6. 翻譯軸重量（W28/W29/W30 之後未重跑 census）。
+
+- **今天犯的錯與更正（四條，都寫進對應分節）**
+  1. **`#if 0` 誤判（W30 抓到）**：我用 `sed -n '1280p'` 讀到內容就宣稱
+     `forms/fLotInfo.cpp:1280` 是 live code，實際 `#if 0` 在 `:1271`。
+     **而我在同一份派工的硬規則裡才剛寫下「必須 honour `#if 0`」。**
+     通則：`grep` 找到字串只證明文字存在，不證明編譯器看得到。
+  2. **轉述即背書（W28 抓到）**：把 W26 的「217 行純算術」寫進派工卻沒自己驗，
+     實際有 7 處 widget 寫入與一個全域寫入。
+  3. **連續五波分母都給錯**——交辦數字要標明怎麼量的，並明說「你自己重量一次」。
+  4. **Bash `grep -rn .` 在這棵樹必逾時**，一天犯三次；
+     「讀已知行號」與「全樹搜尋」不要混在同一條指令。
+
+- **今天反覆生效的三個判斷原則**
+  1. **缺符號比錯答案好**（W26 退化 stub、W28 `dKitDiameter=30.0`）——靜默地錯比大聲失敗更糟。
+  2. **前提死掉不代表答案就是退役**（W29 的 B1 第 4 站點、W30 全部六個都重新問過）。
+  3. **降級要分「安全」與「主動選錯」**：W30 的 `iATC_MODE_TYPE` 恆 0 是安全降級
+     （0 不命中任何分支）；記憶裡 `tcHotPlate1==0` 是主動選錯行為。**兩者不可混為一談。**
+
+- **absence claim 今天過期或為偽共 7 次**：`fQwertyKey`（過期兩天）、`clWindow`
+  （兄弟波同時間窗）、`Barcode_Reader`、`mbLeft`/`mbRight`、`AutoForm[]`（寫下當時就假）、
+  `CONTACT_TEST` 家族（已 fork 6 處）、`fLotInfo.cpp:1280` 的字面值先例（我的誤判）。
+
+- **佇列不做（安全關鍵，等使用者在場）**：`h4-G2`／`G01`（會讓入料手臂移動到教導點）；
+  `HGem` bootstrap；`clWindow`／`TCustomEdit::Color` 整併；
+  `(SEC1)` 開閘時必須同波帶上 `fCleaning->btnResetCleanCountClick`；
+  `CONTACT_TEST` 解閘（連帶 `SetContactMode` 的模式切換）；
+  各波退出的動作／寫檔方法（`TfContact` 52 含 `ADAM_WriteVoltage` 命令 EP 調壓閥、
+  `TfMotorTest` 52、`TfTeach` 67）。
+
+- **活的潛伏警告**：`WD-5`——GA-1-B4 換手後 `FormShow → ShowXMLOnLine → 4× RecordProcess`
+  會變 DB 寫入。**要擋就那時擋**，現在預先 gate 會讓它跟全樹 582 個同形 call site 分岔。
+
+- **三軸（20260826 17:12 量測，單位不可互換）**：翻譯 non-form 96.0%／form 17.3%／
+  ALL 61.6%（golden code 行）；tag C++ 側 66 vs 瀏覽器 37；web layout.json 133/133。
+  **W28-W30 之後翻譯軸未重量。**

@@ -1926,9 +1926,19 @@ void __fastcall SaveEventTracker(AnsiString aAlarmCode, AnsiString aMess, int iT
 #endif
         aLotName.sprintf("%s", fLotInfo->edtASECL_LotID->Text);
         aHandler.sprintf("%s", IniConfig.SocketHandlerID);
-#if 0 // TODO(GA1-B4): fLotInfo->cbbASECL_LoginMode not yet ported (forms/fLotInfo.h has no such member)
+        // AI(W906-FW-LOTINFO-W30) 20260826: gate RETIRED (golden cMyDB.cpp:1651).
+        // cbbASECL_LoginMode landed as a real TComboBox* member in FW-LOTINFO-W27
+        // (forms/fLotInfo.h:2133).  The SIBLING gate above stays: edtASECL_TesterID
+        // still has ZERO declaration on TfLotInfo -- re-verified 20260826, the only
+        // hits in forms/fLotInfo.h are comment text (:67/:172/:343/:1663).
+        // EFFECT TODAY: LotInName goes from " " to cbbASECL_LoginMode->Text, which
+        // is "" until something assigns it (vclcompat TComboBox::Text is a plain
+        // AnsiString, Controls.h:388 -- NOT derived from ItemIndex, and the only
+        // writer of that member, fLotInfo.cpp:5006/5010, sets ItemIndex only).
+        // The CSV that consumes LotInName is itself still gated below, so this is
+        // unobservable today -- opening it now is precisely what stops the future
+        // as9045LogPath integrator from silently emitting " " for LOGIN MODE.
         LotInName.sprintf("%s", fLotInfo->cbbASECL_LoginMode->Text);
-#endif
         aJamStartDate.sprintf("%04d/%d/%d", SystemYear, SystemMonth, SystemDate);
         aJamStartTime.sprintf("%02d:%02d:%02d", SystemHour, SystemMin, SystemSec);
         aSwVersion.sprintf("%s", RunInfo.SoftwareVersion);
@@ -2034,9 +2044,17 @@ void __fastcall SaveEventLogInfo(AnsiString aAlarmCode, AnsiString aMess, int iT
 #endif
         aLotName.sprintf("%s", fLotInfo->edtASECL_LotID->Text);
         aHandler.sprintf("%s", IniConfig.SocketHandlerID);
-#if 0 // TODO(GA1-B4): fLotInfo->cbbASECL_LoginMode not yet ported -- see SaveEventTracker's note above.
+        // AI(W906-FW-LOTINFO-W30) 20260826: gate RETIRED (golden cMyDB.cpp:1744) --
+        // see SaveEventTracker's note above for the member citation and the
+        // edtASECL_TesterID sibling that stays gated.
+        // ⚠ THIS SITE IS NOT UNOBSERVABLE, unlike the SaveEventTracker one: the
+        // asSaveEventLogPath #else arm below (:2113-2120) DOES consume LotInName,
+        // building aBackEventLogMessage whenever bWrite==false (iType==0, i.e. every
+        // alarm).  aBackEventLogMessage has no reader anywhere in this tree
+        // (grepped 20260826: cMyDB.h:137 extern + cMyDB.cpp:1891/2111/2115 writes
+        // only), so the delta is confined to one write-only in-memory global -- no
+        // file, no machine, no outward command.  Golden puts the combo text there.
         LotInName.sprintf("%s", fLotInfo->cbbASECL_LoginMode->Text);
-#endif
         aJamStartDate.sprintf("%04d/%d/%d", SystemYear, SystemMonth, SystemDate);
         aJamStartTime.sprintf("%02d:%02d:%02d", SystemHour, SystemMin, SystemSec);
     }

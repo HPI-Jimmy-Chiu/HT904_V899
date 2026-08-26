@@ -101,6 +101,10 @@
 //      "gate made a real local go quiet" pattern is NOT needed here (no local
 //      var loses its only use -- the surrounding classification/clamp logic
 //      is unconditionally real).
+//  (WA-3) *** RETIRED 20260826 by FW-LOTINFO-W30 -- BOTH CALL SITES OPENED. ***
+//      Reason died when FW-LOTINFO-W27 landed RefreshYieldMonitor for real and
+//      overturned its "(b) write path" classification; the real write is now
+//      gated one frame deeper at WD-2.  See the W30 banner below.
 //  (WA-3) AdjtsYieldMonitiorSize, golden :13671 and :13678 -- both
 //      `RefreshYieldMonitor();` calls. `RefreshYieldMonitor` itself (golden
 //      :13310-13325) is RECON item #115, classified (b) write-path: its
@@ -544,6 +548,14 @@
 //    ATC_TYPE_61              Not a defined identifier anywhere in this tree
 //                             (`grep -rn ATC_TYPE_61`, 20260819, 0 hits
 //                             including ATC/ATCInterface.h). -> GATE (WC-10).
+//                             *** STALE as of 20260826 (FW-LOTINFO-W30): that
+//                             absence claim reads as false today -- 5 TUs carry
+//                             a TU-local `#define ATC_TYPE_61 61`
+//                             (csystem.cpp:20244, cTemperFrom.cpp:123,
+//                             cUnitConvert.cpp:358, uHeaterThread.cpp:313,
+//                             uTemp_Set.cpp:190).  Whether they all post-date
+//                             20260819 was not established; either way the
+//                             constant was never the real blocker.  See WC-10.
 //    ReadWriteFTPAutomationData  Has ZERO real declaration/definition
 //                             anywhere in this tree -- the only 2 tree-wide
 //                             hits are this recon doc and
@@ -602,6 +614,10 @@
 //      translated. Gated; `tsLotID->TabVisible=...`, `cbPATMode->ItemIndex=0`
 //      and the `#ifdef SOFT_SIMULTE` widget-visibility block around it stay
 //      REAL.
+//  (WC-3) *** RETIRED 20260826 by FW-LOTINFO-W30 -- CALL SITE OPENED. ***  Its
+//      "writes files x4" reason was false when written (those writes are
+//      RecordProcess, a stdout stand-in).  WD-5's latency warning SURVIVES the
+//      retirement and now also covers this call site.  See the W30 banner.
 //  (WC-3) FormShow, golden :399 -- `ShowXMLOnLine();`. RECON item #103: a
 //      RecordProcess-backed function that writes files x4 despite the
 //      "Show" name (the SAME "Show/Refresh prefix is not a reliability
@@ -631,6 +647,8 @@
 //      is gated. Whole block gated; the `tsBarCode`/`btChangeFile`/
 //      `tsESDMonitor`/`ts_OCRInterface`/`ts_SocketInterface` lines
 //      immediately before and after stay REAL.
+//  (WC-8) *** RETIRED 20260826 by FW-LOTINFO-W30 -- BOTH CALL SITES OPENED. ***
+//      It was WA-3's reason reused verbatim, so it dies with WA-3.
 //  (WC-8) FormShow golden :597 and Timer2Timer golden :7143 --
 //      `RefreshYieldMonitor();`. Reuses Wave A's WA-3 gate verbatim (same
 //      target, same "not one of this wave's translated methods" reason,
@@ -640,6 +658,17 @@
 //      See STEP 0 above. Gated; the `chkTestMode->Visible=.../
 //      labLevelMode->Visible=.../coLevelMode->Visible=...` lines immediately
 //      after stay REAL.
+//  (WC-10) *** RETIRED 20260826 by FW-LOTINFO-W30 -- LINE OPENED, but NOT for
+//      the reason W27 predicted, and only after a SECOND blocker W27 missed was
+//      cleared.  W27 said "spell it as the literal 61, matching this file's own
+//      un-gated forms/fLotInfo.cpp:1280".  BOTH halves of that were wrong:
+//      :1280 is INSIDE the WA-6 `#if 0` block, so it is not un-gated and is no
+//      precedent; and `ATC_InterfaceForm` itself had NO declaration reachable
+//      from that TU (every existing use sits inside some `#if 0`).  W30 opens it
+//      with a TU-local ATC_TYPE_61 mirror (the tree's 5-TU idiom for this exact
+//      constant, and what uTemp_Set.cpp:838 does with the identical golden line)
+//      plus an `#include "acarry_shims.h"`.  The ATC_TYPE_61 clause is DEGRADED
+//      (the shim's iATC_MODE_TYPE is permanently 0), safely.  See the W30 banner.
 //  (WC-10) FormShow, golden :329 -- `ts_ATC6_1->TabVisible=(Tri_Temp_Machine
 //      ==1 || (ATC_SYSTEM==eNewATCSystem && ATC_InterfaceForm->
 //      iATC_MODE_TYPE==ATC_TYPE_61));`. See "ADDITIONAL DEPENDENCY GAPS"
@@ -1157,6 +1186,99 @@
 //       appends -- a class body cannot be extended from outside itself.  NO
 //       EXISTING LINE in either file was modified; every pre-existing line is
 //       byte-identical before and after.
+// =============================================================================
+
+// =============================================================================
+//  AI(W906-FW-LOTINFO-W30) 20260826: uLotInfo Wave E -- a BEHAVIOUR-CHANGE wave.
+//  It writes NO new translation.  It re-audits six gates whose stated reasons
+//  FW-LOTINFO-W27 had already declared dead, and opens the ones that survive a
+//  fresh audit.  W27 could not open them itself: it was append-only and all six
+//  live inside pre-existing lines.
+//
+//  RESULT: 6 opened / 0 kept.  Two of the six needed a different opening from
+//  the one W27 wrote down, and one needed a blocker cleared that W27 missed.
+//
+//  1. (WA-3) AdjtsYieldMonitiorSize, golden :13671 and :13678 -- OPENED (x2).
+//  2. (WC-8) FormShow golden :597, Timer2Timer golden :7143  -- OPENED (x2).
+//     Same finding; WC-8 was always WA-3's text reused.  Both rest on
+//     RefreshYieldMonitor, landed real by W27 (fLotInfo.cpp:4396).
+//     THE AUDIT THAT ACTUALLY MATTERED (task rule 3 -- "an opened gate really
+//     runs; if it writes files / moves the machine / sends outward commands, do
+//     not open"): the whole reachable chain was walked on 20260826, not just the
+//     one call.  RefreshYieldMonitor -> {RefreshYieldMonitor_SIGURD,
+//     RefreshYieldMonitor_TERAPOWER} -> AdjtsYieldMonitiorSize.
+//       * SIGURD (fLotInfo.cpp:679-895) touches the filesystem ONLY through
+//         ReadIniData against D:\HT9045_Log\CheckingList\<lot>.txt.  common.cpp
+//         :684-686 documents that whole overload family as "Pure reads: no
+//         seeding/writes" -- unlike its CheckAndReadIniData siblings, which DO
+//         seed a missing key (common.cpp:678).  The other candidate write, the
+//         UpdateFile() inside CloseIniFile (common.cpp:457) when OpenIniFile
+//         switches path, is a NO-OP for TIniFile: vclcompat/IniFiles.cpp:281-286
+//         only flushes when !writeThrough_, and TIniFile is write-through.  So
+//         the known "TIniFile flush destroys an ini's layout" hazard is NOT
+//         reachable here.  Its GetLastOpenFN() (common.cpp:1317) reads setup.inf
+//         and can call ShowMyMessage, which is canary_support.cpp:143 -- stdout,
+//         no modal dialog, so no batch-run hang either.
+//       * TERAPOWER is TestIF_File -> widget fill; its ONE real write
+//         (fCleaning->ChangeACSmartInterval) is gated at WD-2.
+//       * AdjtsYieldMonitiorSize is widget geometry only.
+//     MUTUAL RECURSION IS GOLDEN'S OWN AND TERMINATES: AdjtsYieldMonitiorSize
+//     calls RefreshYieldMonitor, which calls AdjtsYieldMonitiorSize again.  The
+//     static bTimerRunning guard (fLotInfo.cpp:4402-4404, golden :13312-13316)
+//     is set BEFORE the dispatch and cleared after, so the re-entrant call
+//     returns immediately.  Max depth 2.  Faithful, not accidental.
+//  3. (WC-3) FormShow, golden :399 `ShowXMLOnLine();` -- OPENED.  Its stated
+//     reason was false when written.  ⚠ THE WD-5 LATENCY WARNING IS NOT
+//     RETIRED WITH IT and is repeated at the call site: after the GA-1-B4 swap
+//     activates cMyDB.cpp:1831's real RecordProcess body, ShowXMLOnLine's 4
+//     RecordProcess calls become DB writes, and THIS call site is what makes
+//     them reachable from FormShow.
+//  4. (WC-10) FormShow, golden :329 `ts_ATC6_1->TabVisible=...` -- OPENED, but
+//     W27's written recipe for it was wrong twice over.  Both corrections are
+//     recorded at the WC-10 register entry above and at the two fLotInfo.cpp
+//     sites (the TU-local ATC_TYPE_61 block and the acarry_shims.h include).
+//     Short form: (a) the "un-gated same-file precedent at fLotInfo.cpp:1280"
+//     does not exist -- :1280 is inside the WA-6 `#if 0`; (b) the real blocker
+//     was never the constant but `ATC_InterfaceForm`, which had no declaration
+//     reachable from this TU at all.  Opened with the tree's own 5-TU TU-local
+//     constant idiom plus one include, and the ATC clause is documented as
+//     DEGRADED (shim's iATC_MODE_TYPE is permanently 0; no writer exists
+//     tree-wide, grepped 20260826).
+//  5/6. cMyDB.cpp:1929 and :2037 (golden cMyDB.cpp:1651 and :1744), both
+//     `LotInName.sprintf("%s", fLotInfo->cbbASECL_LoginMode->Text);` -- OPENED.
+//     The member landed in W27 (:2133 below).  Their edtASECL_TesterID
+//     neighbours STAY gated: that member genuinely has no port.
+//
+//  ARCHIVE-EDGE ACCOUNTING (measured, not assumed -- nm on fLotInfo.o built
+//  with the ht9045_forms flags + rsp, before vs after, 20260826)
+//  --------------------------------------------------------------------------
+//    defined symbols   : IDENTICAL (empty diff).
+//    undefined symbols : +1, exactly `_ATC_InterfaceForm`.
+//    forms -> ht9045_sm: 10 -> 11 symbols.  NOT a new edge -- that cycle is
+//                        already declared and discussed at CMakeLists.txt
+//                        :715-721.  (W27's report said 11 before; this wave
+//                        measures 10 before / 11 after by intersecting
+//                        fLotInfo.o's undefined set with libht9045_sm.a's
+//                        extern defined set.  Method difference or drift; the
+//                        DELTA of exactly +1 is what this wave is responsible
+//                        for and it is exact.)
+//    Nothing was added to any shared header; the only header edited is this one
+//    and only in comments.
+//
+//  VERIFICATION
+//  --------------------------------------------------------------------------
+//    `g++ -fsyntax-only` with each target's own flags + includes_CXX.rsp:
+//    fLotInfo.cpp (ht9045_forms) 0 errors; cMyDB.cpp (ht9045_db) 0 errors.
+//    HEADER-INCLUDER COVERAGE, and a correction to W27's count: this header has
+//    11 DIRECT .cpp includers, not 13 -- but FormsFacade.h includes it too, so
+//    the TRANSITIVE set is ~59 TUs, and "13" understates the blast radius of any
+//    real (non-comment) change here.  All 59 were re-checked this wave:
+//    11 direct (forms/fLotInfo.cpp, cMyDB.cpp, uTemp_Set.cpp, Command.cpp,
+//    cprod.cpp, cStartCondition.cpp, Automation/uRENESAS_Server.cpp,
+//    TfAOILaserScan.cpp, tests/test_yieldmon_core.cpp, tests/test_ga1_cprod.cpp,
+//    tests/test_ga1_cmydb.cpp) + 48 transitive, each with ITS OWN target's
+//    flags.make + includes_CXX.rsp.  0 failures.
+//    No build.bat / cmake --build / ctest was run (out of this wave's scope).
 // =============================================================================
 
 // ===========================================================================
@@ -2130,6 +2252,10 @@ public:
     // outside this file's write boundary: cMyDB.cpp:1929 and :2037 are both
     // `#if 0 // TODO(GA1-B4): fLotInfo->cbbASECL_LoginMode not yet ported`.
     // NOT opened here (out of boundary) -- integrator note only.
+    // *** BOTH OPENED 20260826 by FW-LOTINFO-W30 (golden cMyDB.cpp:1651/:1744).
+    // The two edtASECL_TesterID gates sitting beside them STAY: that member has
+    // zero declaration on this class -- re-verified 20260826, the only hits in
+    // this header are comment text at :67/:172/:343/:1663. ***
     TComboBox    *cbbASECL_LoginMode     = new TComboBox();     // golden uLotInfo.h:579
     TSpeedButton *sb_Main_EvenLevelLogin = new TSpeedButton();  // golden uLotInfo.h:574
     virtual void sb_Main_EvenLevelLoginClick(TObject *Sender);  // golden uLotInfo.cpp:10475-10489

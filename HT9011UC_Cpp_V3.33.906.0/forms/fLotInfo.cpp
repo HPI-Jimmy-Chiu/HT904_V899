@@ -45,6 +45,27 @@
 #include "forms/fAGV.h"
 #include "BarcodeReader.h"   // AI(W906-FW-BARCODE3) 20260825: InputBarcodeNumber real since FW-BARCODE1 -- WB-4/WB-5/WB-7 opened
 #include "forms/fQwertyKey.h"  // AI(W906-FW-QWKEY2) 20260824: fQwertyKey extern for un-gated ShowQwertyKey sites (real since FW-QWKEY1 fc08e09; latent until HTEdit GATE (6) wiring)
+// AI(W906-FW-LOTINFO-W30) 20260826: acarry_shims.h:115 declares
+// `extern TATC_InterfaceFormShim *ATC_InterfaceForm;` -- the ONLY declaration of
+// that global anywhere in this tree (grepped `\*\s*ATC_InterfaceForm` over all
+// .h, 20260826: acarry_shims.h:115 is the sole hit; forms/fTemp_Set.h:337 is
+// prose).  REQUIRED BY GATE WC-10's opening, and the reason W27's "WC-10 is
+// openable" verdict was incomplete: before this include NO use of
+// ATC_InterfaceForm in this file was ever compiled -- all of them (:1280 in the
+// WA-6 block, :2706-onward in WB-16/WB-17) sit inside `#if 0`.
+// MEASURED COST, not assumed (both with the ht9045_forms flags + rsp, 20260826):
+//   * defined symbols in fLotInfo.o: IDENTICAL before/after (nm --defined-only
+//     diff empty) -- this header contributes no in-header object definitions, so
+//     no multiple-definition exposure despite pulling aHotPlateSubstrate.h.
+//   * undefined symbols: EXACTLY ONE added, _ATC_InterfaceForm.  That is a +1 on
+//     the ALREADY-DOCUMENTED forms->ht9045_sm cycle (CMakeLists.txt:715-721),
+//     10 -> 11 symbols; body at acarry_shims.cpp:73, archive ht9045_sm
+//     (CMakeLists.txt:1833).  No new archive EDGE, one more symbol on an
+//     existing one.
+//   * TMyKitSuck ODR trap (docs/KNOWLEDGE.md): this pulls the
+//     aHotPlateSubstrate.h:365 flavour, i.e. the SAME one the other 177 TUs
+//     take.  mykitsuck.h is NOT reachable from this TU, so no fork is created.
+#include "acarry_shims.h"
 
 // AI(W906-FW3-LotInfo-WB) 20260819: TU-local forward decl of MyDBIProcess
 // (FormDestroy's exception log). Its only declaration in this tree is
@@ -70,6 +91,31 @@ static const TColor clGreen = 0x00008000;
 static const TColor clRed   = 0x000000FF;
 static const TColor clLime  = 0x0000FF00;
 static const TColor clGray  = 0x00808080;
+
+// ---------------------------------------------------------------------------
+// AI(W906-FW-LOTINFO-W30) 20260826: TU-local ATC_TYPE_61 -- retires GATE WC-10.
+// golden ATC/ATC_Handler_Side.h:30 is not ported as a shared include, so this
+// tree's ESTABLISHED idiom for this exact constant family is a TU-local mirror
+// in every consuming .cpp.  Five already exist, and cTemperFrom.cpp:118-120's
+// own comment names the convention: csystem.cpp:20244-20246, cTemperFrom.cpp
+// :123, cUnitConvert.cpp:358-360, uHeaterThread.cpp:313-315, uTemp_Set.cpp:190.
+// This is the 6th, and it is a mirror of an unported golden header constant --
+// NOT a 6th spelling of a tree-owned constant (the contact-mode fork the brief
+// warns about); nothing is added to any shared header.
+//
+// WHY NOT THE BARE LITERAL 61: the W27 banner's recipe (header:966-968) said to
+// spell it 61 "matching forms/fLotInfo.cpp:1280, un-gated".  THAT PREMISE IS
+// FALSE -- :1280 sits INSIDE the WA-6 `#if 0` block (this file:1271-1330), so
+// there is no un-gated same-file precedent for the literal.  Re-verified
+// 20260826.  uTemp_Set.cpp:838 translates the STRUCTURALLY IDENTICAL golden
+// line (tsTriTempSet->TabVisible=(Tri_Temp_Machine==1 || (ATC_SYSTEM==
+// eNewATCSystem && ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_61));) with the
+// named constant, so the named spelling keeps FormShow S1 byte-identical to
+// golden and consistent with its own sibling translation.
+// ---------------------------------------------------------------------------
+#ifndef ATC_TYPE_61
+#define ATC_TYPE_61         61                                                  // golden ATC/ATC_Handler_Side.h:30
+#endif
 
 using vclcompat::TFileListBox;
 
@@ -1047,21 +1093,31 @@ void TfLotInfo::AdjtsYieldMonitiorSize()
             Height=550;
         else
             Height=460;
-        // AI(W906-FW3-LotInfo-WA) 20260819: GATE WA-3 -- see forms/fLotInfo.h
-        // GATE REGISTER WA-3 (RefreshYieldMonitor is RECON item #115, (b)
-        // write-path, not one of this wave's 39 Tier-1 methods).
-#if 0
+        // AI(W906-FW-LOTINFO-W30) 20260826: GATE WA-3 RETIRED (golden :13671).
+        // Its stated reason -- "RefreshYieldMonitor is RECON #115 (b) write-path
+        // and not one of this wave's Tier-1 methods" -- died twice over when
+        // FW-LOTINFO-W27 landed that method for real (this file:4396) and
+        // OVERTURNED the (b) classification: the dispatcher writes nothing, and
+        // the one real write it reaches (fCleaning->ChangeACSmartInterval, golden
+        // :13618) is now gated one frame deeper at WD-2 (this file:4493), where
+        // it can actually be seen.  RE-AUDITED THE WHOLE REACHABLE CHAIN 20260826
+        // before opening: RefreshYieldMonitor_SIGURD (this file:679-895) touches
+        // files only through ReadIniData, which common.cpp:684-686 documents as
+        // a pure read (and TIniFile::UpdateFile is a no-op under writeThrough_,
+        // vclcompat/IniFiles.cpp:281-286, so CloseIniFile cannot rewrite the
+        // previous ini either); RefreshYieldMonitor_TERAPOWER is widget fill;
+        // AdjtsYieldMonitiorSize is widget geometry.  No file write, no motion,
+        // no outward command.  The mutual recursion with this very function is
+        // golden's own and terminates at depth 2 on the static bTimerRunning
+        // guard (this file:4402-4404).
         RefreshYieldMonitor();
-#endif
     }
     else if(pgLotinfo->ActivePage==tsYieldMonitior &&
             CosFunction.bShowYieldMonitor)
     {
         Width=530;
         Height=601;
-#if 0   // GATE WA-3, see above
-        RefreshYieldMonitor();
-#endif
+        RefreshYieldMonitor();                                                  // AI(W906-FW-LOTINFO-W30) 20260826: GATE WA-3 RETIRED, 2nd site (golden :13678) -- see 1st site above
     }
     else if(CosFunction.bEnableHandlerResultServer && pgLotinfo->ActivePage==tsAMR)
     {
@@ -2970,12 +3026,29 @@ void TfLotInfo::FormShow()
     tsSPIL_SZ->TabVisible   =(CUSTOMER_CODE==CC_SPIL_CHINA_SUZHOU);
     tsOEE->TabVisible       =(CosFunction.bOEEFunction);                        //Steven 20221225 : 整理LotInfo畫面
     SettsChipAdvVisible();                                                      //Steven 20221225 : add for CyuEan
-    // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-10 -- see forms/fLotInfo.h
-    // GATE REGISTER WC-10 (ATC_TYPE_61 is not a defined identifier anywhere
-    // in this tree).
-#if 0
+    // AI(W906-FW-LOTINFO-W30) 20260826: GATE WC-10 RETIRED -- ATC_TYPE_61 is now
+    // a TU-local mirror at the head of this file (see the block there for the
+    // 5-TU precedent and for why the W27 banner's "literal 61" recipe rested on
+    // a false premise).  All four operands were re-verified visible from this
+    // TU on 20260826: ts_ATC6_1 (member, ctor this file:226), Tri_Temp_Machine
+    // (un-gated use this file:1406), ATC_SYSTEM (un-gated :530/:1412),
+    // eNewATCSystem (un-gated :1432), ATC_InterfaceForm->iATC_MODE_TYPE
+    // (acarry_shims.h TATC_InterfaceFormShim's one real member; un-gated
+    // read at :2706-onward).  Line is now byte-identical to golden :329.
+    //
+    // ⚠ WHERE THE VALUES COME FROM (the check that "type resolves" is not the
+    // same as "gate is really open"): the SECOND disjunct is DEGRADED, not live.
+    // ATC_InterfaceForm is the offline shim (acarry_shims.h:109-115) whose
+    // iATC_MODE_TYPE is hard-coded 0 by its own ctor comment ("offline: 0"), so
+    // ==61 can never fire until a real ATC link is ported.  That degradation is
+    // SAFE rather than wrong-branch-selecting -- 0 matches nothing here, unlike
+    // the tcHotPlate1==0 case in docs/KNOWLEDGE.md where a defaulted 0 ACTIVELY
+    // selected a branch -- so the assignment reduces to (Tri_Temp_Machine==1),
+    // a strict subset of golden.  BEHAVIOUR DELTA vs BEFORE THIS WAVE is still
+    // an improvement, because before it this line ran at all: ts_ATC6_1->
+    // TabVisible was NEVER ASSIGNED in FormShow and simply kept the facade's
+    // false default, hiding the tab even on a Tri_Temp_Machine==1 unit.
     ts_ATC6_1->TabVisible   =(Tri_Temp_Machine==1 || (ATC_SYSTEM==eNewATCSystem && ATC_InterfaceForm->iATC_MODE_TYPE==ATC_TYPE_61));
-#endif
     tsPATSetUp->TabVisible  =(CUSTOMER_CODE==CC_PANTHER);
     tsBundle->TabVisible    =(USE_COVER_TRAYID!=tCIDNotUse);
     tsSetupFileCheck->TabVisible=(IniConfig.bEnableRmsCheckSetupFile==true);    //Ifor 20230516 add: TFAMD 要求工作檔驗證
@@ -3058,14 +3131,24 @@ void TfLotInfo::FormShow()
         btnpatEndLot->Visible=true;
         #endif
     }
-    // -- S5 (golden :399) -- WC-3 gates ShowXMLOnLine() --
-    // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-3 -- see forms/fLotInfo.h
-    // GATE REGISTER WC-3 (ShowXMLOnLine() is RECON item #103, a
-    // RecordProcess-backed function that writes files x4 despite the "Show"
-    // name).
-#if 0
+    // -- S5 (golden :399) --
+    // AI(W906-FW-LOTINFO-W30) 20260826: GATE WC-3 RETIRED.  Its stated reason
+    // ("a RecordProcess-backed function that writes files x4") was FALSE ALREADY
+    // WHEN WRITTEN and is still false: RecordProcess in this tree resolves to
+    // canary_support.cpp:113, a stdout printf stand-in whose own comment says
+    // "no DB write"; the DB-writing golden body is #if 0 at cMyDB.cpp:1831
+    // pending the GA-1-B4 integrator swap.  ShowXMLOnLine itself landed real in
+    // FW-LOTINFO-W27 (this file:4794) and its whole payload is 6 pnlXMLOnLine
+    // Caption/Color/Visible writes plus those 4 RecordProcess calls.
+    //
+    // ⚠ WD-5 LATENCY WARNING STILL STANDS AND IS NOT REMOVED BY THIS OPENING:
+    // after the GA-1-B4 swap activates cMyDB.cpp:1831's real body, those 4 calls
+    // BECOME DB writes, and this call site is what makes them reachable from
+    // FormShow.  See the WD-5 entry in forms/fLotInfo.h and the note on the
+    // ShowXMLOnLine body itself.  Gate THEN if that matters -- pre-gating now
+    // would make this one call site diverge from the 582 already-translated
+    // RecordProcess sites carrying the identical exposure.
     ShowXMLOnLine();                                                            //Steven 20200706 : 移到外面
-#endif
 
     // -- S6 (golden :401-410) --
     if(CUSTOMER_CODE==CC_JCET)                                                  //Steven 20170605 (wei) : For長電
@@ -3301,12 +3384,10 @@ void TfLotInfo::FormShow()
         tsYieldMonitior->TabVisible=true;
         tsTPW->TabVisible   =(CUSTOMER_CODE==CC_TERAPOWER || CUSTOMER_CODE==CC_PTI);
         tsSigurd->TabVisible=(CUSTOMER_CODE==CC_SIGURD_PeiXing);
-        // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-8 -- see forms/fLotInfo.h
-        // GATE REGISTER WC-8 (reuses Wave A's WA-3 RefreshYieldMonitor()
-        // gate verbatim).
-#if 0
+        // AI(W906-FW-LOTINFO-W30) 20260826: GATE WC-8 RETIRED, 1st site (golden
+        // :597).  WC-8 was WA-3's reason reused verbatim, so it dies with WA-3 --
+        // see the full reachable-chain audit at AdjtsYieldMonitiorSize above.
         RefreshYieldMonitor();
-#endif
     }
     else
     {
@@ -4277,11 +4358,9 @@ void TfLotInfo::Timer2Timer()
         else
         {
             pgLotinfo->ActivePage=tsYieldMonitior;
-            // AI(W906-FW3-LotInfo-WC) 20260819: GATE WC-8 -- see
-            // forms/fLotInfo.h GATE REGISTER WC-8 (2nd call site).
-#if 0
+            // AI(W906-FW-LOTINFO-W30) 20260826: GATE WC-8 RETIRED, 2nd site
+            // (golden :7143).  Same audit as the 1st site.
             RefreshYieldMonitor();
-#endif
         }
     }
     else
@@ -4372,6 +4451,9 @@ TfLotInfo *fLotInfo = new TfLotInfo();
 // AdjtsYieldMonitiorSize call sites, golden :13671/:13678) and GATE WC-8
 // (FormShow golden :597, Timer2Timer golden :7143).  All four are openable and
 // were NOT opened here only because they are existing lines.
+// AI(W906-FW-LOTINFO-W30) 20260826: ALL FOUR ARE NOW OPEN.  This note is kept
+// (not deleted) because it is the record of who made them openable; only its
+// last sentence has expired.
 void TfLotInfo::RefreshYieldMonitor()                                           //Sam 20210331
 {
     static bool bTimerRunning=false;                                            //Sam 20230220
@@ -4756,6 +4838,9 @@ void TfLotInfo::palSecsGemMouseDown(TObject *Sender, TMouseButton Button,
 // this function diverge from the 582 sites doing the same thing.
 // INTEGRATOR NOTE: this landing kills GATE WC-3's stated reason; the FormShow
 // call site (golden :399) is openable.  Not opened here (existing line).
+// AI(W906-FW-LOTINFO-W30) 20260826: that call site IS NOW OPEN (this file:3151),
+// so the WD-5 warning above is live from FormShow, not just from a future
+// caller.  Note kept as the record of who made it openable.
 void TfLotInfo::ShowXMLOnLine()                                                 //Steven 20200629
 {
     if(CUSTOMER_CODE==CC_Murata)
