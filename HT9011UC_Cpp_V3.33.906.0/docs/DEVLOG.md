@@ -12429,7 +12429,7 @@ HEAD 就有的 8 個：`AMR` / `MyDBIProcess` / `ShowMyMessage` / `SaveTrayRecor
 那會出貨 5 支叫不動的方法。把它翻進 `cContact.{h,cpp}`，加上補齊 10 個 contact mode
 常數（**併回一份並退役其餘 3 份**，見上），可一次讓 9 支掉出退出清單。
 
-### 🔖 RESUME（20260826 下午）
+### 🔖 RESUME（20260826 下午，已被檔尾 20260826 傍晚那則取代）
 
 - **本段 commit**：`0b292c2` dualgate2 → `0329137` 表單 bootstrap 量測 →
   `7ca1a75` FW-SPEED-W21+FW-HSYS-W22（69 支）→ `7871e92` / `b061d83` .gitignore。
@@ -12485,3 +12485,82 @@ HEAD 就有的 8 個：`AMR` / `MyDBIProcess` / `ShowMyMessage` / `SaveTrayRecor
 
 - **census 尚未重量**：上一則的 96.0% / 17.0% / 61.4%（分母＝golden code 行數）
   是 THGem 收尾後量的，**不含 W13-W22**。引用前請重跑 `tools/census/census.py --detail`。
+
+### 🔖 RESUME（20260826 傍晚）
+
+- **本段 commit**：`0f6e96b`（三個全新 facade：TfTrayAssignment 28/31、TfTeach 48/156、
+  TfMotorTest 35/93 = 111 支 / 6,025 行）→ `7871e92`／`b061d83`（.gitignore）→
+  `88af77f`（bootstrap 量測工具）→ `c83b497`（RESUME）→
+  `cae1de4`（TfContact 44/134、TfLotInfo 14 支）。
+  **兩顆有程式碼的都跑過全新 dir 雙 gate：Debug 與 Release 各 137/142，
+  失敗集合逐項等於常駐五項。**
+
+- **⚠ 另一個 session 正在同一個 repo 上跑 MG 戰役（V899→V910），最新 `d66defa`。**
+  `git add` 一律逐檔點名，嚴禁寬 glob 與 `git checkout` 還原。
+
+- **下一步（在製）**：FW-CONTACT-W28——把 `CalculateTotalAirForce`
+  （golden `cContact.cpp:18675-18891`，217 行純算術）與 10 個 contact mode 常數
+  併進 `cContact.{h,cpp}`，可一次解鎖 `forms/fContact` 退出清單裡的 9 支。
+  ⚠ 那 10 個常數**全樹已 fork 成 4 份互不一致的副本**：`cContact.h`（只 3 個）、
+  `Command.cpp:317`、`BarCode/BarCode_Shuttle2_CCDScan.h:187-189`、golden。
+  **其中兩份是 header 裡的 namespace-scope `const int`，同時 include 會硬
+  redefinition error。** 正解是併回一份並退役其餘，但 `Command.cpp` 與 `BarCode/`
+  在該波寫入邊界外，只能點名交給整併者。
+
+- **接著（依序）**：
+  1. 解閘波 WA-1／B1／B7／G2（四條主迴圈已逐條複驗成立）。
+     **WC-10 例外**：agent 建議 RETIRE 是錯的——`ATC_TYPE_61` 在 `MainCalcCore.cpp:252`
+     是**函式內 local const**，對 `forms/fLotInfo.cpp` 不可見；正解是照同檔
+     `fLotInfo.cpp:1280` 既有慣例用**字面值 61**。
+  2. `fLotInfo` 有 **6 個現在可解的既有 gate**（WA-3 ×2、WC-8 ×2、WC-3 ×1、WC-10 ×1）
+     ＋ `cMyDB.cpp:1929`／`:2037` 兩個 `cbbASECL_LoginMode` gate。
+     全都要改既有行，開法已寫進 `forms/fLotInfo.h` 的 W27 banner。
+  3. bootstrap 5 個（`TFormBarcodeReader`／`TfVacuumUnit`／`TfPassword`／
+     `TfDynamicTemp`／`fLan`），ctor 已審過 NSDMI 安全；
+     **一律放顯式 `InitForms()`，絕不可放靜態初始化**（陷阱 #4 曾 88/134 SEGFAULT）；
+     golden `HT9045.cpp` 有 3 個全域被建兩次（`fBinAOISel:278,:279`／
+     `fObserveMagazine:280,:282`／`frmFileTransfer:281,:283`），port 無 `Application`
+     擁有者，照字面翻會是真洩漏 → **建一次並註解說明**。
+
+- **三軸現況（20260826 17:12 量測，單位不可互換）**
+  | 軸 | 數字 | 分母／單位 |
+  |---|---|---|
+  | 翻譯 | non-form **96.0%**／form **17.3%**／ALL **61.6%** | golden code 行數 |
+  | tag（gateway） | C++ 側 **66** 個 vs 瀏覽器 **37** 個綁定 | tag 名稱數，**兩邊不是同一組** |
+  | web 渲染 | **133 / 133** | 表單數 |
+  渲染件覆蓋是滿的、邏輯翻了六成，**但資料還沒接上**——tag 是三軸裡最落後的。
+  另有 88 個表單檔完全沒有 port 鏡射。
+
+- **表單 bootstrap 的可做範圍（已量，`tools/wavescan/bootstrap_survey.py` 35 秒可重跑）**：
+  golden 建 115 個相異表單全域 → 已建構 41、**可直接 bootstrap 6**、
+  有類別但全域沒定義 5、**類別根本還沒翻 63**。
+  **74 個沒建的裡面 63 個卡在翻譯而不是卡在 bootstrap**——這用數據支持了
+  使用者「C++ 翻譯要優先完成」的判斷。
+
+- **佇列不做（安全關鍵，等使用者在場）**
+  - `h4-G2`／`G01`（`csystem.cpp:30297`／`:20321`）——`MoveInArm2XYToDecayTeach`
+    前提已死（`ainarm2.cpp:925` 有真本體）但開閘**會讓入料手臂真的移動到教導點**，
+    且連結可達性未驗。
+  - `HGem` bootstrap——SECS/GEM 通訊物件，從 NULL 變非 NULL 會翻轉全樹 `if(HGem)`
+    守衛且有專屬測試 `test_uHGemEquipment.cpp`。
+  - `clWindow`／`TCustomEdit::Color` 整併——全樹已有 **9 處** `Color` 成員
+    （`vclcompat/Controls.h` 自己就三個），加到 `TCustomEdit` 會與
+    `forms/fMotorTest.h:525` 產生**遮蔽**（「上移成員到共用基底會把編譯錯誤變成
+    靜默讀錯成員」的陷阱），需同波退役重複成員。
+  - 各波退出的動作／寫檔方法：`TfContact` 52 支（含 `edAirForceChange` →
+    `ADAM_WriteVoltage` **命令 EP 調壓閥**）、`TfMotorTest` 52 支、`TfTeach` 67 支。
+
+- **今天學到、已寫進記憶與工具的三條判準修正**
+  1. **行程存在不等於在跑**——一顆 02:05 啟動的殭屍 linker（自己中斷 gem10 gate 時
+     漏收的孤兒，**不是防毒**；本機 `Get-Service WinDefend` 實測 **Stopped**）
+     讓守衛心跳連兩輪誤判。用 `CreationDate` 判齡。
+  2. **「產出物 mtime 最可靠」也是錯的**——`dfm2rc_fidelity` 跑 5 分鐘期間
+     `ctest.log` mtime 靜止、`ctest.exe` CPU 增量 0、其**直接子也 0**，
+     真正在燒 CPU 的是第三層 `python`／`g++`／`cc1plus`。
+     **唯一可靠：遞迴走完整棵行程樹加總 CPU 增量，深度不可只取父+子，取樣窗 12 秒。**
+  3. **Bash 的 `grep -rn .` 在這棵樹必逾時**（數十個 `build_*` 目錄），一天犯三次。
+     一律用 Grep 工具或自帶排除清單的 Python 掃描器；
+     「讀已知行號」與「全樹搜尋」不要混在同一條指令。
+
+- **連續五波，波次 agent 每一次都修正了主迴圈給的分母。**
+  通則：**交辦數字要標明怎麼量的，並明說「你自己重量一次」。**
