@@ -162,6 +162,7 @@
 #include "vclcompat/vcl_compat.h"   // AnsiString; TComponent (via Comm.h, in the umbrella)
 #include "vclcompat/Controls.h"     // TGroupBox / TCustomEdit+TEdit / TCheckBox (real substrate)
 #include "vclcompat/LedCore.h"      // TColor + clBlack/clYellow (the shared
+#include "vclcompat/ShiftState.h"   // AI(W906-FW-SIG-W17) 20260826
                                     //   HT9045_W7C1_TCOLOR_SHIM guard block --
                                     //   NOT brought to global scope by that
                                     //   header, so pulled in explicitly below)
@@ -190,9 +191,16 @@ class TMyOmronPanel : public TComponent
         //  parameter types have no port anywhere in this tree (grepped).
         //  See this header's own banner GATE (2). Golden signatures kept
         //  here verbatim, in comment form, for provenance:
-        //    void __fastcall GroupBox1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
-        //    void __fastcall GroupBox1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
-        //    void __fastcall GroupBox1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
+        //AI(W906-FW-SIG-W17) 20260826: GATE (2) 的前提已經不成立——
+        //  `TMouseButton`/`TShiftState` 現在有 port（vclcompat/ShiftState.h，
+        //  commit f184093）。三支因此改回**真正的宣告**，簽章與 golden 逐字相同；
+        //  本體早在 PT-W2（20260807/20260811）就翻好了，只是當時這個 header 在
+        //  該波的寫入邊界外，只能落成檔案層自由函式並在 .cpp 檔尾留下交接說明。
+        //  ⚠ 注意 MouseMove 的簽章**少一個 TMouseButton**（golden :17 就是如此，
+        //  VCL 的 OnMouseMove 本來就沒有 Button），三支不是同一個形狀。
+        void GroupBox1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
+        void GroupBox1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
+        void GroupBox1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
         double dPv;//JimmyChiu 20210923 : Index使用DTME08版16組加熱器
         double dSettingSV;      //JimmyChiu 20210923 : Index使用DTME08版16組加熱器
         double dSV;             //JimmyChiu 20210923 : Index使用DTME08版16組加熱器

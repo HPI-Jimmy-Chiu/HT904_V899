@@ -63,6 +63,8 @@
 // =============================================================================
 #include "MachineDefine.h"          // de-VCL'd include hub (vclcompat umbrella)
 #include "EJ1N/MyOmronPanel.h"      // this unit's own contract
+// AI(W906-FW-SIG-W17) 20260826: 三支 GroupBox1Mouse* 回填 golden 完整簽章。
+#include "vclcompat/ShiftState.h"
 #include "cmydef.h"                 // N_INTEGER (real) -- cited inside GATE (3) only
 #include "forms/fQwertyKey.h"  // AI(W906-FW-QWKEY2) 20260824: fQwertyKey extern for un-gated ShowQwertyKey sites (real since FW-QWKEY1 fc08e09; latent until HTEdit GATE (6) wiring)
 //---------------------------------------------------------------------------
@@ -364,6 +366,9 @@ void TMyOmronPanel::setEditValueClick(TObject *Sender)
 //  that header is outside this wave's write boundary.  See the HAND-OFF block
 //  at the end of this file.  Until the loop acts on it, these three have
 //  EXTERNAL LINKAGE AND NO CALLER anywhere in the tree.
+//  ⚠ AI(W906-FW-SIG-W17) 20260826: 上面這段**已經過期**——本波執行了那個交接，
+//  三支現在是 TMyOmronPanel 的真正成員，且簽章回填成 golden 原文
+//  （含 TMouseButton/TShiftState）。原文保留是為了記錄「當時為什麼那樣做」。
 //
 //  WAVE SCOPE -- ONE LINE PER GOLDEN FUNCTION (all golden EJ1N/MyOmronPanel.cpp)
 //   GroupBox1MouseUp    golden :71-80   -- GATED (body 100%, `Ptr->Tag` only).
@@ -426,8 +431,11 @@ void TMyOmronPanel::setEditValueClick(TObject *Sender)
 //  golden EJ1N/MyOmronPanel.cpp:71-80  --  TMyOmronPanel::GroupBox1MouseUp
 //  Ported signature drops `TMouseButton Button, TShiftState Shift` (GATE W8-1)
 //  and takes `TMyOmronPanel *Self` instead of `this` (see BANNER EXTENSION).
-void TMyOmronPanel_GroupBox1MouseUp(TMyOmronPanel *Self, TObject *Sender, int X, int Y)
+//AI(W906-FW-SIG-W17) 20260826: 收回成員並回填 golden 完整簽章。
+void TMyOmronPanel::GroupBox1MouseUp(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W17): golden 這兩支也沒讀這兩個
     TGroupBox *Ptr;
     Ptr=(TGroupBox *)Sender;
 
@@ -440,20 +448,23 @@ void TMyOmronPanel_GroupBox1MouseUp(TMyOmronPanel *Self, TObject *Sender, int X,
     {
         Ptr->Tag=0;
     }
-    (void)Self; (void)Ptr; (void)X; (void)Y;
 }
 //---------------------------------------------------------------------------
 //  golden EJ1N/MyOmronPanel.cpp:82-92  --  TMyOmronPanel::GroupBox1MouseMove
 //  golden's own signature carries NO `TMouseButton Button` here -- only
 //  `TShiftState Shift, int X, int Y` (golden :83).  See GATE (W8-1).
-void TMyOmronPanel_GroupBox1MouseMove(TMyOmronPanel *Self, TObject *Sender, int X, int Y)
+//AI(W906-FW-SIG-W17) 20260826: 收回成員並回填 golden 完整簽章。
+void TMyOmronPanel::GroupBox1MouseMove(TObject *Sender,
+      TShiftState Shift, int X, int Y)
 {
+    (void)Shift;   //AI(W906-FW-SIG-W17): golden 的 MouseMove **沒有** TMouseButton 參數
+                   // （VCL 的 OnMouseMove 本來就沒有），簽章照 golden :17 逐字。
     TGroupBox *Ptr;
     Ptr=(TGroupBox *)Sender;
 
     //AI(W906-PT-W8) 20260811: GATE (W8-6) -- golden moves the frame by the
     //  pointer delta since MouseDown.  All three properties it needs
-    //  (`Tag` latch, `Left`, `Top`) had no substrate; `Self->iStartX/iStartY`
+    //  (`Tag` latch, `Left`, `Top`) had no substrate; `iStartX/iStartY`
     //  ARE real but are only READ here, so with the surrounding `if` gated
     //  there is no active remainder.  ACTIVE arm: no-op ("no drag in
     //  progress" -- the faithful offline value of the latch).
@@ -469,12 +480,14 @@ void TMyOmronPanel_GroupBox1MouseMove(TMyOmronPanel *Self, TObject *Sender, int 
         Ptr->Top =Ptr->Top+(Y-iStartY);
     }
 #endif
-    (void)Self; (void)Ptr; (void)X; (void)Y;
 }
 //---------------------------------------------------------------------------
 //  golden EJ1N/MyOmronPanel.cpp:94-103  --  TMyOmronPanel::GroupBox1MouseDown
-void TMyOmronPanel_GroupBox1MouseDown(TMyOmronPanel *Self, TObject *Sender, int X, int Y)
+//AI(W906-FW-SIG-W17) 20260826: 收回成員並回填 golden 完整簽章。
+void TMyOmronPanel::GroupBox1MouseDown(TObject *Sender,
+      TMouseButton Button, TShiftState Shift, int X, int Y)
 {
+    (void)Button; (void)Shift;   //AI(W906-FW-SIG-W17): golden 這兩支也沒讀這兩個
     TGroupBox *Ptr;
     Ptr=(TGroupBox *)Sender;
 
@@ -483,11 +496,15 @@ void TMyOmronPanel_GroupBox1MouseDown(TMyOmronPanel *Self, TObject *Sender, int 
     //   above. iStartX/iStartY below were already ACTIVE and stay so.
     if(Ptr->Tag!=1)
         Ptr->Tag=1;
-    Self->iStartX=X;
-    Self->iStartY=Y;
+    iStartX=X;
+    iStartY=Y;
     (void)Ptr;
 }
 //---------------------------------------------------------------------------
+//  HAND-OFF TO THE INTEGRATING LOOP -- ✅ 已於 FW-SIG-W17（20260826）執行
+//  （下面原文保留。實際做法比它建議的更忠實：簽章回填成 golden 完整版，
+//   而不是這裡寫的簡化版，因為 vclcompat/ShiftState.h（commit f184093）
+//   已經讓 TMouseButton/TShiftState 拼得出來。）
 //  HAND-OFF TO THE INTEGRATING LOOP -- DESCRIBED, DELIBERATELY NOT DONE HERE
 //  (EJ1N/MyOmronPanel.h is outside this wave's write boundary.)
 //
@@ -501,7 +518,7 @@ void TMyOmronPanel_GroupBox1MouseDown(TMyOmronPanel *Self, TObject *Sender, int 
 //
 //  then rename each definition above to `TMyOmronPanel::<name>`, delete its
 //  `TMyOmronPanel *Self` parameter and the matching `(void)Self;`, and change
-//  MouseDown's two active lines from `Self->iStartX=X;` / `Self->iStartY=Y;`
+//  MouseDown's two active lines from `iStartX=X;` / `iStartY=Y;`
 //  back to golden's `iStartX=X;` / `iStartY=Y;`.
 //
 //  RE-RUN LOG -- every absence claim in the GATE REGISTER above was re-run

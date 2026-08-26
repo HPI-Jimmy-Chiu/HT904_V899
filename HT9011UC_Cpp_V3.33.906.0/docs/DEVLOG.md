@@ -11481,6 +11481,66 @@ void TMyTempPanel::edBaseMouseDown(TObject *Sender,
 **擋對了**，如果錨定到註解那行，include 會被插進註解區塊裡。
 改成錨定帶尾註解的實際那行（`// this unit's own contract`，唯一）才動手。
 
+## 20260826 X — FW-SIG-W17：第二份交接，MyOmronPanel 三支收回成員
+
+### 同一天留下的第二份交接
+
+`EJ1N/MyOmronPanel.cpp:491` 有一段和 FW-SIG-W16 處理的那份**一模一樣**的
+HAND-OFF 區塊——同樣是 20260811、同樣的理由（header 在該波寫入邊界外）、
+同樣的形狀（落成 `TMyOmronPanel_GroupBox1MouseXxx(TMyOmronPanel *Self, ...)`）、
+同樣老實地寫著「這三支目前有外部連結但全樹沒有任何呼叫者」。
+
+三支：`GroupBox1MouseUp`（golden `EJ1N/MyOmronPanel.cpp:71-80`）、
+`GroupBox1MouseMove`（:82-92）、`GroupBox1MouseDown`（:94-103）。
+
+本波執行它，一樣把簽章回填成 golden 原文而不是交接建議的簡化版。
+
+### 抓到我自己的一個錯：三支不是同一個形狀
+
+我第一版給三支套了**同一個** 5 參數簽章
+`(TObject*, TMouseButton, TShiftState, int X, int Y)`。錯的——
+**golden 的 `GroupBox1MouseMove` 沒有 `TMouseButton Button`**：
+
+```
+//    void __fastcall GroupBox1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
+//    void __fastcall GroupBox1MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
+//    void __fastcall GroupBox1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y);   <-- 少一個
+```
+
+VCL 的 `OnMouseMove` 本來就沒有 `Button`（只有 `OnMouseUp`/`OnMouseDown` 有）。
+已改成 golden 的 4 參數版，並在 header 加註提醒「三支不是同一個形狀」。
+
+**這個錯是被前一波的紀律擋下來的**：PT-W2 把三條 golden 簽章**逐字**留在
+header 的註解裡（`EJ1N/MyOmronPanel.h:193-195`），第三行明顯比前兩行短。
+如果當初只寫「三支都被丟掉了」而沒逐字保留，我這個錯不會被抓到。
+**把原文留下來，不是儀式，是會實際救人的。**
+
+### 交付
+
+`EJ1N/MyOmronPanel.cpp` +26/−9、`EJ1N/MyOmronPanel.h` +11/−3。
+三支從自由函式變成 `TMyOmronPanel` 的真正成員；`Self->iStartX` / `Self->iStartY`
+回到 golden 的 `iStartX=X; iStartY=Y;`（那兩行是本檔唯一真正 active 的敘述，
+交接說明也特別點名了它們）。
+
+同樣就地標明兩處過期敘述：檔頭那段「落成自由函式、沒有呼叫者」的說明，
+以及 HAND-OFF 區塊標記為 ✅ 已執行。原文都保留。
+
+### 驗收
+
+`tools/dualgate.sh sig17`（全新 dir）：Debug **137/142**、Release **137/142**，
+失敗集合逐項相同且等於常駐五項。`D:\HT9045\system` 552 檔本晚零變動。
+
+### 下一個候選看過了，價值較低
+
+`OmronLaser/LaserSensor.cpp:2152` 也有一個 APPEND BLOCK 提到
+「7 個 mouse handler 曾被 OMITTED」，但情況**不一樣**：
+那 7 支（`edICThicknessMouseDown`、`mtPlate2_GoldenMouseDown` …）
+**已經是真正的 `TfLaserSensor::` 成員**了，只是簽章被裁短
+（`(TObject *Sender)` 或 `(int X, int Y)`）。
+沒有交接要執行、沒有不可達的碼要救回，純粹是簽章忠實度。
+價值比這兩波低（這兩波讓原本**不可能被呼叫**的碼變成類別介面的一部分），
+所以不急著做，記在這裡供後續排程。
+
 ### 🔖 RESUME（20260826 清晨）
 
 - **今晚全收（20260825 XV 起算，共 6 波 + 2 次工具修正）**：
