@@ -14,3 +14,8 @@ Makefile
 CTestTestfile.cmake
 Testing/
 tools/wavescan/.freefunc_cache.tsv
+
+# gate 哨兵檔：tools/dualgate*.sh 每輪在樹根寫 _<tag>_gate_*.txt，但兩支腳本
+# 從頭到尾不刪任何一個（實測 20260826 已累積 92 個，最舊 8/20）。它們是拋棄式的
+# exit-code 回報，真正的證據在 build_<tag>*/ctest.log 裡。
+_*_gate_*.txt
