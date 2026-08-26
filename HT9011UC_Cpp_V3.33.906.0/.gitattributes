@@ -1,0 +1,15 @@
+# AI(W906-FW-GATEVERDICT) 20260827: 釘住 gate 腳本的行尾。
+#
+# 這個 repo 的 core.autocrlf=true 而且**沒有任何 .gitattributes**，所以
+# 一次全新 checkout 會把這棵樹的 .sh 從 LF 轉成 CRLF——而 CRLF 的 bash 腳本
+# 在 Git Bash 下會直接以 `$'\r': command not found` 失敗。
+#
+# 三支 gate 腳本（tools/dualgate.sh、tools/dualgate2.sh、tools/gateverdict.sh）
+# 目前 index 與磁碟都是 bare-LF，但那是靠「沒人重新 checkout 過」活著的，
+# 不是靠設定。commit gateverdict.sh 時 git 自己警告了
+# 「LF will be replaced by CRLF the next time Git touches it」。
+#
+# **範圍刻意限縮成只有 .sh，不要擴成 `* text=auto`**：
+# 這個 repo 還放著 V899 的 Big5 原始碼（正規化會產生亂碼）
+# 以及必須維持純 CRLF 無 BOM 的 build.bat（cmd 掃 goto 承重）。
+*.sh text eol=lf
