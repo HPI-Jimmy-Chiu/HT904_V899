@@ -91,6 +91,8 @@
 >
 > | 20 | **`ctest` 的 exit code 對「失敗集合」零鑑別力**（任何測試失敗都回 8）——拿它判 gate 會把紅燈讀成綠燈 | 已寫（AI(W906-FW-GATEVERDICT) 20260827 新增，證據自跑） |
 >
+> | 21 | **括號平衡切函式 span 時不剝註解 → 註解裡的 `{` 會靜默吞掉後面數十支定義**，讓 census 造出假缺口 | 已寫（AI(W906-FW-SPANSANITY) 20260827 新增，證據自跑） |
+>
 > 13-16 標「保留號、未寫」是刻意的：把號先鎖住可以消除碰撞，但**不冒充已驗證**。要寫進來的人請自己重跑證據再補正文，並把狀態改成「已寫」。
 
 1. **AnsiString 1-based vs std::string 0-based（最高風險）**：`AnsiString.Pos()`/`.SubString()` 是 **1-based**（全專案 ~1,910 處）。直翻成 `std::string`(0-based, npos) 會 off-by-one／切錯字串且**編得過**。翻譯時逐處改 index，或先做一個 1-based 相容的 AnsiString-like 包裝（`.Length()/.Pos()/.SubString()/.UpperCase()/.sprintf()` 同名同語意）降低風險。`.UpperCase/.LowerCase/.sprintf/.Trim/.Delete` 在 std::string 無對應，需 helper。
@@ -250,6 +252,30 @@ FW-3 cObserver recon 判定（vclcompat/TStringList.cpp:163-225 vs BCB6 classes.
     ctest.log 還在寫的時候沒有「The following tests FAILED」區段，抽出來的失敗集合是空的，
     `EXTRA` 空 → 判 GREEN。已加守衛：沒有 `tests passed` 摘要行就判 INCOMPLETE。
     **任何「從 log 推導通過與否」的工具，都要先證明自己分得出「沒有失敗」與「還沒寫完」。**
+
+21. **括號平衡切函式 span 時不剝註解，註解裡的一個 `{` 就會靜默吞掉後面數十支定義（2026-08-27 踩到，已加旁證工具）**：
+    `tools/census/census.py` 的 `functions()` 用括號平衡切 span，**但不剝註解與字串字面值**。
+    port `Command.cpp:1228` 有一行 `//2013.01.24 Q_Q TSMC GPIB COMMAND Part 2. {`
+    ——那個 `{` 讓深度永遠多 1，`TfMain::PERSITETemperatureStrings` 的 span 從
+    `1218..1249` 變成 **`1218..5219`（4,002 行）**，吞掉後面 **61 支定義**。
+    被吞的名字不會進 `pnames`，於是 census 把它們判成「golden 有、port 沒有」＝未翻譯，
+    憑空造出 **43 支 / 813 行的假缺口**。
+    **後果是實際發生的**：主迴圈照那份清單派了一整波翻譯 agent，agent 查完回報
+    「這 36 支早在 20260817 的 FW-3 Wave A 就翻完了，本波零變更」。
+    而那個 `{` 是**忠實翻譯的產物**——golden 自己就這樣寫。
+    **失敗完全是靜默的**：`defn_probe` 有認出被吞函式那一行，不是探針失敗，是 span 覆蓋。
+    量到的邊界（A/B：同一個 `functions()`，差別只有先不先剝註解）：
+    **port 側 3 檔受影響、只有 `Command.cpp` 有實際後果**；golden 側 9 檔、281 支被吞
+    （`main.cpp` 239→382、`cContact.cpp` 103→139、`Magazine.cpp` 21→50）。
+    **分母沒被污染**——`gcode` 是 `code_lines()` 另外算的，不經 span；
+    被扭曲的只有分子裡的 per-file 缺口清單。
+    **處置刻意不是修 `functions()`**：改它會讓 golden 與 port 的所有 span 一起變、
+    歷史數字全部失去可比性，而且上一次「修好」census 的嘗試算出過 parked > gcode
+    與 35,289 行的假 credit。改成新增唯讀旁證工具 `tools/census/span_sanity.py`，
+    **選波次標的前必跑**（單檔模式會列出被吞的定義名與行號）。
+    **通則**：任何用括號平衡切原始碼區段的工具，都必須先剝註解與字串——
+    這與 gotcha #17（註解剝除器必須認得字串字面值）是同一個家族的另一面。
+    **並且：census 的「缺」不是待辦清單。**
 
 ## Advantech Common Motion（PCI/PCIE-1203）兩個實測陷阱（20260818）
 
