@@ -54,19 +54,6 @@
 20260520,ht9045-v899,CosFunction.cpp,1466,MISSING,//AI(ht9045-v899) 20260520: enable E55 Fix3 full tray gate for PTI import plan
 20260525,ht9045-v899,main.cpp,24003,MISSING,//AI(ht9045-v899) 20260525: sync PASS auto positions after workfile switch
 20260525,ht9045-v899,main.cpp,25604,MISSING,//AI(ht9045-v899) 20260525: pack PTI Lot Start trace with TCP log for permission/runmode diagnosis
-20260602,ht9045-v899,acatchtray.cpp,5915,MISSING,//AI(ht9045-v899) 20260602: 殘料檢查pass後先把LoaderY送回SurePos(rear)再進取盤流程，避免LoaderY停在front(CarPos)導致TrayArm夾空JAM0604
-20260602,ht9045-v899,acatchtray.cpp,5948,MISSING,//AI(ht9045-v899) 20260602: 殘料檢查(台車模式)pass後LoaderY歸位
-20260602,ht9045-v899,acatchtray.cpp,5949,MISSING,//AI(ht9045-v899) 20260602: 雷射流程收尾DoMoveOut會把LoaderY停在front(CarPos)，這裡先放開固定壓桿並把盤送回SurePos(rear吸料位)、放開夾爪，TrayArm才夾得到盤；否則DoCatchFromLoader會夾空報JAM0604
-20260602,ht9045-v899,ainarm9045.cpp,7057,MISSING,//AI(ht9045-v899) 20260602: watchdog for InArm load-stage no-tray dead-lock (case 15) on non-auto-skip customers (e.g. CC_ARDENTEC)
-20260602,ht9045-v899,ainarm9045.cpp,7060,MISSING,//AI(ht9045-v899) 20260602: watchdog for InArm load-stage empty-tray residual dead-lock (case 15) when the empty tray is never swapped out (e.g. OP skip manual 
-20260602,ht9045-v899,ainarm9045.cpp,7080,MISSING,"//AI(ht9045-v899) 20260602: latch for case 15 no-tray watchdog (arm once, avoid restart every scan)"
-20260602,ht9045-v899,ainarm9045.cpp,7082,MISSING,"//AI(ht9045-v899) 20260602: latch for case 15 empty-tray residual watchdog (arm once, avoid restart every scan)"
-20260602,ht9045-v899,ainarm9045.cpp,7172,MISSING,"//AI(ht9045-v899) 20260602: real IC present to pick, disarm empty-tray residual watchdog"
-20260602,ht9045-v899,ainarm9045.cpp,7260,MISSING,"//AI(ht9045-v899) 20260602: tray present again, disarm no-tray watchdog before going back to pick"
-20260602,ht9045-v899,ainarm9045.cpp,7262,MISSING,//AI(ht9045-v899) 20260602: empty-tray residual watchdog - if the load-stage tray stays empty and never gets swapped (e.g. OP pressed SKIP on WAR16122 without r
-20260602,ht9045-v899,ainarm9045.cpp,7283,MISSING,"//AI(ht9045-v899) 20260602: load stage truly empty (no tray on any position), not a residual-empty-tray stall; disarm empty-tray watchdog"
-20260602,ht9045-v899,ainarm9045.cpp,7287,MISSING,"//AI(ht9045-v899) 20260602: auto-skip resolved the wait, disarm watchdog"
-20260602,ht9045-v899,ainarm9045.cpp,7298,MISSING,//AI(ht9045-v899) 20260602: no tray + no auto-skip path would dead-lock silently after OP manually removes Loader tray; arm watchdog then raise WAR09101 so OP c
 20260605,ht9045-v899,cSortCT.cpp,11,MISSING,//AI(ht9045-v899) 20260605: 改用 ShowMyMessageBox_YES_NO 需引入 mymessbox.h
 20260609,ht9045-v899,KYECFTP\FTPClient.cpp,401,MISSING,"//AI(ht9045-v899) 20260609: PTI 縮短 timeout 5s,避免 FTP server 不可達時 Lot End 主執行緒長時間阻塞 //Landam"
 20260609,ht9045-v899,KYECFTP\FTPClient.cpp,475,MISSING,"//AI(ht9045-v899) 20260609: PTI 連線失敗只記 log,不彈阻塞 modal(避免 Lot End 卡住消音/動作)"
@@ -184,11 +171,6 @@
 20260703,ht9045-v899,uhome.cpp,2664,MISSING,"//AI(ht9045-v899) 20260703: Greatek硬體極性校正-Home以放開為目標;有盤依軟體fHasTray維持夾持,無盤則驅動放開並確認FixOff到位(不再用FixOn sensor猜有盤,FixOn ON=空夾非有盤);非Greatek維持原邏輯"
 20260703,ht9045-v899,uhome.cpp,2706,MISSING,"//AI(ht9045-v899) 20260703: Home時FixOn讀ON但軟體無盤記錄,原邏輯不經確認即夾持+標記有盤走自動退盤,造成非預期夾爪動作;改為防抖100次後跳WAR0614由操作員確認,RETRY=已取下盤重新檢查,SKIP=確認有盤維持舊有自動退盤"
 20260706,ht9045-v899,ainarm9045.cpp,4661,MISSING,"//AI(ht9045-v899) 20260706: 系統性可達性選嘴(不寫死吸嘴代號/欄位):預設仍取最左啟用吸嘴維持原行為,"
-20260803,ht9045-v899,CosFunction.cpp,2789,MISSING,//AI(ht9045-v899) 20260803: the 20260602 InArm case-15 dead-lock watchdog was added for this customer only (CASE-GIGAS-20260729-001)
-20260803,ht9045-v899,CosFunction.cpp,4414,MISSING,//AI(ht9045-v899) 20260803: default off - the 20260602 case-15 watchdog must only run for CC_ARDENTEC (CASE-GIGAS-20260729-001)
-20260803,ht9045-v899,CosFunction.h,470,MISSING,"//AI(ht9045-v899) 20260803: InArm load-stage dead-lock watchdog (case 15), CC_ARDENTEC only (CASE-GIGAS-20260729-001)"
-20260803,ht9045-v899,ainarm9045.cpp,7263,MISSING,"//AI(ht9045-v899) 20260803: gate this 20260602 watchdog to CC_ARDENTEC only; TQPF_Timer is a pure wall clock with no stop awareness, so alarm-stop plus OP recov"
-20260803,ht9045-v899,ainarm9045.cpp,7299,MISSING,"//AI(ht9045-v899) 20260803: gate this 20260602 watchdog to CC_ARDENTEC only, same pure-wall-clock defect as the empty-tray one above (CASE-GIGAS-20260729-001)"
 20260810,ht9045-v899,RotateKit\aRotateKIT.cpp,114,MISSING,"//AI(ht9045-v899) 20260810: 2x4 交錯 4 站(e9045_2x4_4_13/_14)時 SetInOutArmParameter_2x4_4() 已用 CopyInitSuck 把 OutArm 資料搬到邏輯欄位 0 與 1, 但這裡仍給 3(欄位 0 與 3), 使 M_MoveOut"
 20260810,ht9045-v899,RotateKit\aRotateKIT_Out.cpp,1131,MISSING,"//AI(ht9045-v899) 20260810: 記錄這一趟到底把哪幾支吸嘴放到旋轉站。列舉用的 stride 是 i2x2Suck_Out, 只要它跟吸嘴實際欄位對不上, 就會有 IC 沒旋轉就進 Auto tray (力成PTI DUT1/DUT3 即此)"
 20260810,ht9045-v899,aoutarm.cpp,3125,MISSING,"//AI(ht9045-v899) 20260810: 超出極限救援時, 最小階(i=1)若僅略低於機構下限則夾到下限"

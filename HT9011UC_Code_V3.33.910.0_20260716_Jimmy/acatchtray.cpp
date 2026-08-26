@@ -6645,7 +6645,8 @@ void DoCatchTray()
                         break;
                     }
 
-                    Task=100;                                                   //正常繼續跑
+                    //AI(ht9045-v899) 20260602: 殘料檢查pass後先把LoaderY送回SurePos(rear)再進取盤流程，避免LoaderY停在front(CarPos)導致TrayArm夾空JAM0604
+                    Task=148;                                                   //正常繼續跑(改走LoaderY歸位中間步驟)
                     fTrayMapping->bDoTrayDeviceCheckFromLoader=false;
                     fTrayMapping->yieldRemainIC.AddYieldData(true);
                 }
@@ -6675,6 +6676,23 @@ void DoCatchTray()
             else
             {
                 Task=3100;
+            }
+            break;
+        case 148:                                                               //AI(ht9045-v899) 20260602: 殘料檢查(台車模式)pass後LoaderY歸位
+            //AI(ht9045-v899) 20260602: 雷射流程收尾DoMoveOut會把LoaderY停在front(CarPos)，這裡先放開固定壓桿並把盤送回SurePos(rear吸料位)、放開夾爪，TrayArm才夾得到盤；否則DoCatchFromLoader會夾空報JAM0604
+            if(INSTALL_OCR_YMot==eocrYMotInstal)
+            {
+                Cylinder[C_LoaderUpPress].Off();                                //固定鎖在機台的壓桿先退，台車才能移動
+                if(MOT[MLoaderY].MotorMove(Prod.iMLoaderYSurePos))
+                {
+                    Cylinder[C_TrayY_Fixer].Off();                              //放開夾爪讓TrayArm夾走
+                    Cylinder[C_LoaderEdgePush].Off();
+                    Task=100;
+                }
+            }
+            else
+            {
+                Task=100;
             }
             break;
         case 150:                                                               //kevin 20220401 loadTRAY MAP

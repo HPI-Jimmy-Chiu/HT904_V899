@@ -2822,6 +2822,7 @@ void FUNC_CC_TSI()
 //------------------------------------------------------------------------------
 void FUNC_CC_ARDENTEC()
 {
+    CosFunction.bUseInArmLoadStageWatchdog                                      =true;  //AI(ht9045-v899) 20260803: the 20260602 InArm case-15 dead-lock watchdog was added for this customer only (CASE-GIGAS-20260729-001)
 }
 //------------------------------------------------------------------------------
 void FUNC_CC_FULCAP()
@@ -4480,6 +4481,7 @@ void InitialCosFunction()
     CosFunction.bDeviceMapTestPandP                                             =false; //Jimmychiu 20251222 : Device Map Test By P&P
     CosFunction.bOffsetTempByRecipeMinMaxLimit                                  =false; //StevenHong 20260119 : Add Offset By Recipe Max Limit
     CosFunction.bCleanCountAlarmByMin                                           =false; //Jimmychiu 20260212 : Gigas Clear alarms based on minimum usage count
+    CosFunction.bUseInArmLoadStageWatchdog                                      =false; //AI(ht9045-v899) 20260803: default off - the 20260602 case-15 watchdog must only run for CC_ARDENTEC (CASE-GIGAS-20260729-001)
     CosFunction.bLoginASECL                                                     =false;     //JerryYang 20211221 : ASECL密碼本(tech.com)
     CosFunction.bLoaderAutoRetry                                                =false;     //JerryYang 20220901 : ASE-CL要求只有左上角的device吸不到要跳ALARM, 其他的位置吸不到要自動RETRY
     CosFunction.bHotModeUseDiffScale                                            =false;     //JerryYang 20220901 : ASE-CL要求只有左上角的device吸不到要跳ALARM, 其他的位置吸不到要自動RETRY

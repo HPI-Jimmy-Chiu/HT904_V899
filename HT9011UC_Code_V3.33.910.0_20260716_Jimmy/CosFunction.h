@@ -473,6 +473,7 @@ typedef struct
     bool bATCModeNoUseCheckHeaterFunction;                                      //Ifor 20260113 add:ATC Mode No Use CheckHeater Function
     bool bOffsetTempByRecipeMinMaxLimit;                                        //StevenHong 20260119 : Add Offset By Recipe Max Limit
     bool bCleanCountAlarmByMin;                                                 //Jimmychiu 20260212 : Gigas Clear alarms based on minimum usage count
+    bool bUseInArmLoadStageWatchdog;                                            //AI(ht9045-v899) 20260803: InArm load-stage dead-lock watchdog (case 15), CC_ARDENTEC only (CASE-GIGAS-20260729-001)
     bool bLoginASECL;
     bool bLoaderAutoRetry;
     bool bHotModeUseDiffScale;

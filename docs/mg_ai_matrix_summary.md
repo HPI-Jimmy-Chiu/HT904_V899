@@ -42,7 +42,7 @@
 | 20260526 | 32 | 0 | 6 | 0 | 38 |
 | 20260528 | 2 | 0 | 0 | 0 | 2 |
 | 20260529 | 1 | 0 | 0 | 0 | 1 |
-| 20260602 | 0 | 0 | 0 | 13 | 13 |
+| 20260602 | 13 | 0 | 0 | 0 | 13 |
 | 20260604 | 3 | 0 | 0 | 0 | 3 |
 | 20260605 | 7 | 0 | 0 | 1 | 8 |
 | 20260608 | 10 | 0 | 0 | 0 | 10 |
@@ -56,14 +56,14 @@
 | 20260630 | 0 | 0 | 0 | 18 | 18 |
 | 20260703 | 0 | 0 | 0 | 25 | 25 |
 | 20260706 | 0 | 0 | 0 | 1 | 1 |
-| 20260803 | 0 | 0 | 0 | 5 | 5 |
+| 20260803 | 5 | 0 | 0 | 0 | 5 |
 | 20260804 | 25 | 0 | 0 | 0 | 25 |
 | 20260810 | 0 | 0 | 0 | 21 | 21 |
 | 20260811 | 9 | 0 | 0 | 12 | 21 |
 | 20260817 | 11 | 0 | 0 | 0 | 11 |
 | 20260819 | 0 | 0 | 0 | 10 | 10 |
 | 20260820 | 0 | 0 | 0 | 7 | 7 |
-| **合計** | 426 | 4 | 49 | 240 | 719 |
+| **合計** | 444 | 4 | 49 | 222 | 719 |
 
 ## MISSING 依檔案分布（前 40）
 
@@ -72,21 +72,21 @@
 | AutoClean\AutoClean.cpp | 24 |
 | FTPUpload\uFtpUploadThread.cpp | 23 |
 | main.cpp | 22 |
-| ainarm9045.cpp | 15 |
 | uLotInfo.cpp | 14 |
-| acatchtray.cpp | 12 |
 | aoutarm9045_2x4_4.cpp | 10 |
+| acatchtray.cpp | 9 |
 | aoutarm9045.cpp | 9 |
 | AutoClean\uCleaning.cpp | 9 |
 | ProductionInfo\ProductionInfo.cpp | 9 |
 | FTPUpload\uFtpUploadThread.h | 8 |
 | csystem.cpp | 7 |
-| CosFunction.cpp | 6 |
 | Interface\TesterTCP.cpp | 6 |
 | cConfiguration.cpp | 5 |
 | RotateKit\aRotateKIT_Out.cpp | 5 |
 | cmydef.cpp | 4 |
+| CosFunction.cpp | 4 |
 | KYECFTP\FTPClient.cpp | 4 |
+| ainarm9045.cpp | 3 |
 | cContactCT.cpp | 3 |
 | cmydef.h | 3 |
 | cShowBinSelect.cpp | 3 |
@@ -96,7 +96,6 @@
 | aoutarm.cpp | 2 |
 | aoutarm9045.h | 2 |
 | cBinSel.cpp | 2 |
-| CosFunction.h | 2 |
 | cprod.cpp | 2 |
 | cpublic.cpp | 2 |
 | mymessbox.cpp | 2 |
@@ -105,6 +104,7 @@
 | adam6024.cpp | 1 |
 | asendic_Auto.cpp | 1 |
 | Config.h | 1 |
+| CosFunction.h | 1 |
 | cpublic.h | 1 |
 | cSortCT.cpp | 1 |
 | cTrayAssignment.cpp | 1 |

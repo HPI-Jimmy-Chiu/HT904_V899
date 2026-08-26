@@ -7616,6 +7616,12 @@ bool bNeedOneCycle()                                                            
 }
 //==============================================================================
 TQPF_Timer DoArmPickFromLoadStage_Delay;                                        //Steven 20160219 : 重新整理HTimer命名
+//AI(ht9045-v899) 20260602: watchdog for InArm load-stage no-tray dead-lock (case 15) on non-auto-skip customers (e.g. CC_ARDENTEC)
+TQPF_Timer DoInArmLoadStageNoTray_Watchdog;
+const double dInArmLoadStageNoTrayTimeoutSec=30.0;
+//AI(ht9045-v899) 20260602: watchdog for InArm load-stage empty-tray residual dead-lock (case 15) when the empty tray is never swapped out (e.g. OP skip manual removal)
+TQPF_Timer DoInArmLoadStageEmptyTray_Watchdog;
+const double dInArmLoadStageEmptyTrayTimeoutSec=60.0;
 bool DoInArmPickFromLoadStage_9045()
 {
     static bool bHasLog=false;
@@ -7633,6 +7639,10 @@ bool DoInArmPickFromLoadStage_9045()
 
     static int iRetryCT=0, iBuf=0;
     static bool bTrayDuplicateErr=false;
+    //AI(ht9045-v899) 20260602: latch for case 15 no-tray watchdog (arm once, avoid restart every scan)
+    static bool bLoadStageNoTrayArmed=false;
+    //AI(ht9045-v899) 20260602: latch for case 15 empty-tray residual watchdog (arm once, avoid restart every scan)
+    static bool bLoadStageEmptyTrayArmed=false;
 
     IN_ARM_LOADER:
 
@@ -7719,6 +7729,8 @@ bool DoInArmPickFromLoadStage_9045()
         case 10:
             if(MOT[MMTrayY].HasIC())
             {
+                //AI(ht9045-v899) 20260602: real IC present to pick, disarm empty-tray residual watchdog
+                bLoadStageEmptyTrayArmed=false;
                 iFlag=CheckLoaderHasTray(false, 0, false);                      //Steven 20161223 (jou) : 確認LoaderSensor統一成Function
                 if(iFlag>0)
                 {
@@ -7805,13 +7817,34 @@ bool DoInArmPickFromLoadStage_9045()
                MOT[MMTrayY].fHasTray ||
                MOT[MMTrayZ].fHasTray)
             {
+                //AI(ht9045-v899) 20260602: tray present again, disarm no-tray watchdog before going back to pick
+                bLoadStageNoTrayArmed=false;
+                //AI(ht9045-v899) 20260602: empty-tray residual watchdog - if the load-stage tray stays empty and never gets swapped (e.g. OP pressed SKIP on WAR16122 without removing it), InArm loops case10<->case15 silently; arm a timer and raise WAR09101 so OP can clear the empty tray and Retry instead of a silent hang
+                //AI(ht9045-v899) 20260803: gate this 20260602 watchdog to CC_ARDENTEC only; TQPF_Timer is a pure wall clock with no stop awareness, so alarm-stop plus OP recovery time was counted as InArm stall and GIGAS got a spurious WAR09101 within 1s of START after every MES1020 empty-tray-full stop (CASE-GIGAS-20260729-001)
+                if(CosFunction.bUseInArmLoadStageWatchdog==false)
+                {
+                    bLoadStageEmptyTrayArmed=false;
+                }
+                else if(bLoadStageEmptyTrayArmed==false)
+                {
+                    DoInArmLoadStageEmptyTray_Watchdog.SetSecAndOn(dInArmLoadStageEmptyTrayTimeoutSec);
+                    bLoadStageEmptyTrayArmed=true;
+                }
+                else if(DoInArmLoadStageEmptyTray_Watchdog.Off())
+                {
+                    bLoadStageEmptyTrayArmed=false;
+                    ShowErrorMessage("WAR09101", K_RETRY, MInArmX);
+                }
                 Task=10;
                 return false;
             }
             else
             {
+                //AI(ht9045-v899) 20260602: load stage truly empty (no tray on any position), not a residual-empty-tray stall; disarm empty-tray watchdog
+                bLoadStageEmptyTrayArmed=false;
                 if(DoAutoSkipCheck())                                           //Steven 20241218 :  avoid the tray not goes down yet
                 {
+                    bLoadStageNoTrayArmed=false;                                //AI(ht9045-v899) 20260602: auto-skip resolved the wait, disarm watchdog
                     if(InArmSuck.HasRealIC())                                   //Sam 20250307 : 真的上面有 IC 再來補滿
                         SetInArmUseSuckToHasNullIC(iSht, iKit);                 //Steven 20241226
                     else
@@ -7819,6 +7852,25 @@ bool DoInArmPickFromLoadStage_9045()
 
                     Task=1;
                     return true;
+                }
+                else
+                {
+                    //AI(ht9045-v899) 20260602: no tray + no auto-skip path would dead-lock silently after OP manually removes Loader tray; arm watchdog then raise WAR09101 so OP can supply tray and Retry instead of hang
+                    //AI(ht9045-v899) 20260803: gate this 20260602 watchdog to CC_ARDENTEC only, same pure-wall-clock defect as the empty-tray one above (CASE-GIGAS-20260729-001)
+                    if(CosFunction.bUseInArmLoadStageWatchdog==false)
+                    {
+                        bLoadStageNoTrayArmed=false;
+                    }
+                    else if(bLoadStageNoTrayArmed==false)
+                    {
+                        DoInArmLoadStageNoTray_Watchdog.SetSecAndOn(dInArmLoadStageNoTrayTimeoutSec);
+                        bLoadStageNoTrayArmed=true;
+                    }
+                    else if(DoInArmLoadStageNoTray_Watchdog.Off())
+                    {
+                        bLoadStageNoTrayArmed=false;
+                        ShowErrorMessage("WAR09101", K_RETRY, MInArmX);
+                    }
                 }
             }
             break;

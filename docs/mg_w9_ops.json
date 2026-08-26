@@ -1,0 +1,160 @@
+[
+  {
+    "id": "MG-W9-OP1",
+    "desc": "[0602 InArm watchdog] 檔案層 watchdog 計時器與逾時常數：DoInArmLoadStageNoTray_Watchdog(30s) / DoInArmLoadStageEmptyTray_Watchdog(60s) (matrix ainarm9045.cpp:7057,7060)",
+    "v910_file": "ainarm9045.cpp",
+    "v899_file": "ainarm9045.cpp",
+    "v899_lines": [
+      7057,
+      7062
+    ],
+    "mode": "after",
+    "anchor_line": 7618,
+    "anchor_expect": "TQPF_Timer DoArmPickFromLoadStage_Delay;"
+  },
+  {
+    "id": "MG-W9-OP2",
+    "desc": "[0602 InArm watchdog] DoInArmPickFromLoadStage_9045 函式內兩個 static latch（arm once，避免每次掃描重啟計時）(matrix ainarm9045.cpp:7080,7082)",
+    "v910_file": "ainarm9045.cpp",
+    "v899_file": "ainarm9045.cpp",
+    "v899_lines": [
+      7080,
+      7083
+    ],
+    "mode": "after",
+    "anchor_line": 7635,
+    "anchor_expect": "static bool bTrayDuplicateErr=false;"
+  },
+  {
+    "id": "MG-W9-OP3",
+    "desc": "[0602 InArm watchdog] case 10：真的有 IC 可取 -> 解除 empty-tray watchdog (matrix ainarm9045.cpp:7172)。取代 V910[7720,7722] 以取得唯一錨點，兩端上下文位元組相同",
+    "v910_file": "ainarm9045.cpp",
+    "v899_file": "ainarm9045.cpp",
+    "v899_lines": [
+      7170,
+      7174
+    ],
+    "mode": "replace",
+    "anchor_expect": "iFlag=CheckLoaderHasTray(false, 0, false);",
+    "replace_lines": [
+      7720,
+      7722
+    ]
+  },
+  {
+    "id": "MG-W9-OP4",
+    "desc": "[0602 InArm watchdog + 0803 CC_ARDENTEC 閘門] case 15 有盤分支：解除 no-tray watchdog、殘留空盤 watchdog（60s -> WAR09101/K_RETRY），整段以 CosFunction.bUseInArmLoadStageWatchdog 閘控 (matrix ainarm9045.cpp:7260,7262 + 20260803:7263)",
+    "v910_file": "ainarm9045.cpp",
+    "v899_file": "ainarm9045.cpp",
+    "v899_lines": [
+      7256,
+      7278
+    ],
+    "mode": "replace",
+    "anchor_expect": "if(MOT[MMTrayY_Car].fHasTray ||",
+    "replace_lines": [
+      7804,
+      7808
+    ]
+  },
+  {
+    "id": "MG-W9-OP5",
+    "desc": "[0602 InArm watchdog] case 15 無盤分支：真的空站 -> 解除 empty-tray watchdog；auto-skip 成立 -> 解除 no-tray watchdog (matrix ainarm9045.cpp:7283,7287)",
+    "v910_file": "ainarm9045.cpp",
+    "v899_file": "ainarm9045.cpp",
+    "v899_lines": [
+      7283,
+      7287
+    ],
+    "mode": "replace",
+    "anchor_expect": "if(DoAutoSkipCheck())",
+    "replace_lines": [
+      7813,
+      7814
+    ]
+  },
+  {
+    "id": "MG-W9-OP6",
+    "desc": "[0602 InArm watchdog + 0803 CC_ARDENTEC 閘門] case 15 無盤且無 auto-skip：新增 else 區塊，30s no-tray watchdog -> WAR09101/K_RETRY，整段以 CosFunction.bUseInArmLoadStageWatchdog 閘控 (matrix ainarm9045.cpp:7298 + 20260803:7299)",
+    "v910_file": "ainarm9045.cpp",
+    "v899_file": "ainarm9045.cpp",
+    "v899_lines": [
+      7288,
+      7315
+    ],
+    "mode": "replace",
+    "anchor_expect": "SetInArmUseSuckToHasNullIC(iSht, iKit);                 //Steven 20241226",
+    "replace_lines": [
+      7815,
+      7823
+    ]
+  },
+  {
+    "id": "MG-W9-OP7",
+    "desc": "[0602 TrayArm 配套] DoCatchTray case 145 殘料檢查 pass 後改走 Task=148（LoaderY 歸位中間步驟），不再直接 Task=100 (matrix acatchtray.cpp:5915)",
+    "v910_file": "acatchtray.cpp",
+    "v899_file": "acatchtray.cpp",
+    "v899_lines": [
+      5915,
+      5918
+    ],
+    "mode": "replace",
+    "anchor_expect": "fTrayMapping->yieldRemainIC.AddYieldData(true);",
+    "replace_lines": [
+      6648,
+      6650
+    ]
+  },
+  {
+    "id": "MG-W9-OP8",
+    "desc": "[0602 TrayArm 配套] 新增 case 148：台車模式(INSTALL_OCR_YMot==eocrYMotInstal)先退 C_LoaderUpPress、MLoaderY 回 Prod.iMLoaderYSurePos、放開 C_TrayY_Fixer/C_LoaderEdgePush，再回 Task=100；否則直接 Task=100 (matrix acatchtray.cpp:5948,5949)",
+    "v910_file": "acatchtray.cpp",
+    "v899_file": "acatchtray.cpp",
+    "v899_lines": [
+      5948,
+      5964
+    ],
+    "mode": "before",
+    "anchor_line": 6680,
+    "anchor_expect": "        case 150:                                                               //kevin 20220401 loadTRAY MAP"
+  },
+  {
+    "id": "MG-W9-OP9",
+    "desc": "[0803 CC_ARDENTEC 閘門] HT9045_COUSTOMER_FUNCTION 新增 bUseInArmLoadStageWatchdog 成員宣告，位置比照 V899 緊接 bCleanCountAlarmByMin (matrix CosFunction.h:470)",
+    "v910_file": "CosFunction.h",
+    "v899_file": "CosFunction.h",
+    "v899_lines": [
+      470,
+      470
+    ],
+    "mode": "after",
+    "anchor_line": 475,
+    "anchor_expect": "bool bCleanCountAlarmByMin;"
+  },
+  {
+    "id": "MG-W9-OP10",
+    "desc": "[0803 CC_ARDENTEC 閘門] FUNC_CC_ARDENTEC() 開啟 bUseInArmLoadStageWatchdog=true (matrix CosFunction.cpp:2789)。注意：V910 此函式為空殼，只補這一行，V899 另外三行(bTrayDeviceCheckFromLoader/bTrayOCR/bFTPFunction)不在本波矩陣範圍故不搬。錨點僅為 '{'，安全網見 OP11 說明",
+    "v910_file": "CosFunction.cpp",
+    "v899_file": "CosFunction.cpp",
+    "v899_lines": [
+      2789,
+      2789
+    ],
+    "mode": "after",
+    "anchor_line": 2824,
+    "anchor_expect": "{"
+  },
+  {
+    "id": "MG-W9-OP11",
+    "desc": "[0803 CC_ARDENTEC 閘門] InitialCosFunction 預設 bUseInArmLoadStageWatchdog=false（其他客戶維持 V910 原行為）(matrix CosFunction.cpp:4414)。本 op 行號較大故 splice.py 先跑；若 CosFunction.cpp 曾被其他波位移，本 op 錨點必失敗並整檔中止，等於保護了 OP10 的弱錨點",
+    "v910_file": "CosFunction.cpp",
+    "v899_file": "CosFunction.cpp",
+    "v899_lines": [
+      4414,
+      4414
+    ],
+    "mode": "after",
+    "anchor_line": 4482,
+    "anchor_expect": "CosFunction.bCleanCountAlarmByMin                                           =false;"
+  }
+]

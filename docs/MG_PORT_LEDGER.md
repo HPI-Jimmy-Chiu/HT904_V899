@@ -20,7 +20,8 @@
 | MG-W5 | HS_Function KYEC 上傳線（0414 trace 診斷 6 點＋0415 前置宣告與跨午夜換昨天＋0420 假 MISSING 判 C；11 條矩陣點、9 op） | port_check PASS（+35 全 SPLICED、removed=0＝V910 零損失）＋bcc32 PASS（0 errors）。目檢三要害：20260630 timeout 30000 未動、Eastsun CC_KYEC_LEE 區塊完整、connect-fail else 到位。OP9 補 connect-fail 回傳碼（全樹無消費者，可觀察面零）。跨午夜 swap 行為外溢記 F2。**閘門真相：非 KYEC 專屬**（bN10* ini 旗標閘控，函式名是歷史命名） | 59952cc |
 | MG-W6 | 0817 CC_CYUEAN 固定關閉 Auto Tray Feed（CosFunction.h 成員＋預設 false＋FUNC_CC_CYUEAN 4 行含未標記承重行＋cTrayAssignment 生效點與 UI 鎖；5 條矩陣點＋1 未標記行、5 op） | port_check PASS（+17 全 SPLICED、removed=1＝V910 死註解行）＋bcc32 雙檔 0 errors；bCleanOutCanTrayEnd 兩樹同口徑 44=44 parity。**B 類，gate=FUNC_CC_CYUEAN(868) 僅 CYUEAN 執行**；KYEC_LEE(921) AMR 漂移互斥已證。**CYUEAN 行為變更記兩項**：(A) bAutoFeed 恆 false (B) bCleanOutCanTrayEnd false→true（開 MES1642 TrayEnd 選單家族 7 讀取點）——皆 V899 出貨現狀。附帶：TfConfiguration 第二顆 chkAutoTrayFeed 可繞過鎖定＝V899 自身既有缺口（兩樹位元組同，不動） | 26ec286 |
 | MG-W7 | Multi EP 主題波（0430/0504/0511/0526 共 53 條）——**地形重大發現：V910 有公司自製 Multi EP 完整實作（Eastsun 20260525 整合＋RogerYang 8EP），部分比 V899 新**。真搬 6 條（iosetview 0511 AV 防護 5 op＋ContactForce round-trip 1 op）；32 條 C 類、8 條刪除記錄不可執行（會砍掉公司 8EP 活功能）、7 條入 F3–F6（皆建議不搬並已照建議）；47 條入矩陣白名單 | port_check PASS（15+2 全 SPLICED、removed=4 逐條複驗）＋bcc32 雙檔 0 errors。反向發現 3 筆（V899 有問題 V910 沒有，不可回搬）：ContactForce iCount<3 殘留（已開 V899 任務卡）、MultiTransferKG int vs double、ReadMultiEP 未啟用 | 484123a |
-| MG-W8 | Power Save 線（0804 C05 profile 25 條＋0811 UI 高亮 9 條＋0817:363 還原 guard；16 op／5 檔／170 行，含 116 行無標記新碼——矩陣盲區同型第三例） | port_check PASS（157 行全 SPLICED）＋bcc32 三檔 0 errors。PowerSavingMode.h 套用後與 V899 位元組完全相同。**B 類：gate=FUNC_CC_PTI＋bPowerSaveShowCaption（預設 false）**，非 PTI 全路徑不變；GetPowerSaveMaxMinute 非 PTI 回傳 200=原硬編碼。**PTI 行為變更記錄：IniConfig.bPowerSaveFunction=true 是 V910 上全新開關**（與 W6 bCleanOutCanTrayEnd 同型）。碰撞區 cConfiguration [C05]：PTI 分支插前、既有 if 降級 else if，V910 分支本體零位元組變動（USE_BU5_Function 實測死旗標，200/400 分岔無實機差異）。.dfm 驗證免動（gbC05/labC05_* 兩樹 94 行位元組同） | （本次收工 commit） |
+| MG-W8 | Power Save 線（0804 C05 profile 25 條＋0811 UI 高亮 9 條＋0817:363 還原 guard；16 op／5 檔／170 行，含 116 行無標記新碼——矩陣盲區同型第三例） | port_check PASS（157 行全 SPLICED）＋bcc32 三檔 0 errors。PowerSavingMode.h 套用後與 V899 位元組完全相同。**B 類：gate=FUNC_CC_PTI＋bPowerSaveShowCaption（預設 false）**，非 PTI 全路徑不變；GetPowerSaveMaxMinute 非 PTI 回傳 200=原硬編碼。**PTI 行為變更記錄：IniConfig.bPowerSaveFunction=true 是 V910 上全新開關**（與 W6 bCleanOutCanTrayEnd 同型）。碰撞區 cConfiguration [C05]：PTI 分支插前、既有 if 降級 else if，V910 分支本體零位元組變動（USE_BU5_Function 實測死旗標，200/400 分岔無實機差異）。.dfm 驗證免動（gbC05/labC05_* 兩樹 94 行位元組同） | e5589ee |
+| MG-W9 | InArm watchdog 線（0602 欣銓 13 條＋0803 全智收閘 5 條；18 條全真缺口、11 op／4 檔）——歸屬更正：0602=欣銓 CASE-20260602-001、0803=全智 CASE-GIGAS-20260729-001，「欣銓要的功能害全智誤報→收回 CC_ARDENTEC(870)」 | port_check PASS（74 行全 SPLICED、removed=1=改道 Task=148 的舊 Task=100）＋bcc32 三檔 0 errors。**B 類：gate=bUseInArmLoadStageWatchdog 僅 FUNC_CC_ARDENTEC 設 true**，非欣銓機台兩使用點恆走 disarm，V910 行為零變更。弱錨 OP10 靠同檔降序＋all-or-nothing＋md5 前提防護，落點目檢正確。F7（V910 ARDENTEC 空殼致 case 148 對欣銓不生效）/F8（acatchtray 閘外、四重閘量化）/F9（掛鐘缺陷隨行）入決策清單。反向發現 fAGV NULL 防呆不倒回 | （本次收工 commit） |
 
 ## 假 MISSING 白名單
 
@@ -72,7 +73,7 @@
 | 20260520 | 1 | 1 | — | CosFunction.cpp(1) | pending | pending |
 | 20260525 | 2 | 1 | — | main.cpp(2) | pending | pending |
 | 20260526 | 7 | 4 | — | ContactForce.cpp(3), adam6024.cpp(2), HS_Function.cpp(1), cContact.cpp(1) | A/X | **resolved MG-W7**：ContactForce round-trip 1 條已搬；1627/1670=F3、453=F5 不搬 |
-| 20260602 | 13 | 2 | — | ainarm9045.cpp(10), acatchtray.cpp(3) | pending | pending |
+| 20260602 | 13 | 2 | — | ainarm9045.cpp(10), acatchtray.cpp(3) | B | **done MG-W9**（watchdog，CC_ARDENTEC 閘） |
 | 20260605 | 1 | 1 | — | cSortCT.cpp(1) | pending | pending |
 | 20260609 | 4 | 1 | — | KYECFTP\FTPClient.cpp(4) | pending | pending |
 | 20260611 | 3 | 2 | CASE-20260611-001 | uLotInfo.cpp(2), cTrayAssignment.cpp(1) | pending | pending |
@@ -84,7 +85,7 @@
 | 20260630 | 18 | 8 | CASE-PTI-20260630-002 | main.cpp(6), csystem.cpp(3), HS_Function.cpp(2), cpublic.cpp(2) +4檔 | pending | pending |
 | 20260703 | 25 | 8 | CASE-PTI-20260630-001 | acatchtray.cpp(8), cmydef.cpp(4), AutoClean\uCleaning.cpp(3), cmydef.h(3) +4檔 | pending | pending |
 | 20260706 | 1 | 1 | — | ainarm9045.cpp(1) | pending | pending |
-| 20260803 | 5 | 3 | CASE-GIGAS-20260729-001 | CosFunction.cpp(2), ainarm9045.cpp(2), CosFunction.h(1) | pending | pending |
+| 20260803 | 5 | 3 | CASE-GIGAS-20260729-001 | CosFunction.cpp(2), ainarm9045.cpp(2), CosFunction.h(1) | B | **done MG-W9**（收閘五落點） |
 | 20260804 | 25 | 5 | CASE-PTI-20260804-001 | CosFunction.cpp(9), CosFunction.h(6), PowerSavingMode.cpp(5), cConfiguration.cpp(4) +1檔 | B | **done MG-W8**（C05 profile，FUNC_CC_PTI gate） |
 | 20260810 | 21 | 9 | — | aoutarm9045_2x4_4.cpp(10), aoutarm.cpp(2), aoutarm9045.cpp(2), main.cpp(2) +5檔 | pending | pending |
 | 20260811 | 21 | 5 | CASE-PTI-20260811-001 | PowerSavingMode.cpp(7), aoutarm9045.cpp(7), RotateKit\aRotateKIT_Out.cpp(4), PowerSavingMode.h(2) +1檔 | pending | pending |

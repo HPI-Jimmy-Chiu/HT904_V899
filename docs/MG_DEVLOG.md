@@ -91,20 +91,36 @@
 
 ---
 
+## 20260826 晚 — MG-W8 done（Power Save 線）
+
+- 16 op／5 檔／170 行（含 116 行無標記新碼——矩陣盲區同型第三例）。
+- gate 全綠；PowerSavingMode.h 與 V899 位元組同。淨 MISSING **275 → 240**。
+- 新規則入 skill：commit 後清 V910 樹 *.mgbak（port_check/bcc 基準逐波刷新）。
+
+---
+
+## 20260826 晚 — MG-W9 done（InArm watchdog 線）
+
+- 18 條全真缺口（本戰役唯一「矩陣說缺就是真缺」波）、11 op／4 檔、74 行全 SPLICED。
+- 歸屬更正：0602=欣銓、0803=全智（收 CC_ARDENTEC 閘）。F7/F8/F9 入決策清單。
+- 淨 MISSING **240 → 222**。
+
+---
+
 ## 🔖 RESUME（20260826 晚）
 
-- **狀態**：Phase 2 連續波次進行中。MG-W1–W7 done。儀表**淨 MISSING=275**
+- **狀態**：Phase 2 連續波次進行中。MG-W1–W9 done。儀表**淨 MISSING=222**
   （起點 376；白名單 49 條有據）。
-- **進行中**：MG-W8 分析 agent（Power Save 線：0804 C05 profile＋0811 PowerSavingMode
-  ＋0817:363 還原 guard；產物 docs/mg_w8_analysis.md＋mg_w8_ops.json）背景執行中。
-  ⚠CosFunction.cpp/h 已被 W6 動過，行號現場重定位；0811 的 aoutarm/aRotateKIT 不屬 W8。
+- **進行中**：
+  - MG-W10 分析 agent（0609/0611/0612 FTP 大波 ~57 條：uFtpUploadThread.cpp/h＋uLotInfo＋main 等；
+    產物 docs/mg_w10_analysis.md＋mg_w10_ops.json）。
 - **下一步（按序）**：
-  1. 收 MG-W8 執行。
-  2. MG-W9 候選＝0602 InArm watchdog 線（ainarm9045 10＋acatchtray 3；與 0803 收回
-     CC_ARDENTEC 閘門同波搬最終態）。
-  3. 之後照 LEDGER：AutoClean CKPP＋PickPlanner 目錄（新增檔搬移，0407-0417 群）、
-     0612 FTP 大波（50 條）、0810/0811 OutArm 群、0819 hotair、0820 PTI 尾波、零星單條。
-  4. 60 分鐘守衛 cron 已掛（每時 :23；殭屍＝先查證後處置）。
+  1. 收 W10 執行。
+  2. 之後照 LEDGER：AutoClean CKPP＋PickPlanner 目錄（0407-0417 群，含新增檔）、
+     0810/0811 OutArm rotate 群、0819 hotair、0820 PTI 尾波、0623 cConfiguration 群、
+     0625 TesterTCP、零星單條（0401/0410/0505/0513/0514/0515/0519/0520/0525/0605/0609/0611/0618/0629/0630/0703/0706）。
+  3. 60 分鐘守衛 cron 已掛（每時 :23；殭屍＝先查證後處置）。
 - **量測**：`python tools/port_tools/ai_comment_matrix.py`（白名單感知，看淨 MISSING）。
 - **不變量**：V899 唯讀（來源端點 b515ed5）；V910 基線 e06524a；LEDGER 手工維護；
-  bcc_syntax.sh 波內 gate（錯誤集合基準比對）；全量 build 只在 Phase 3 且先關 IDE。
+  bcc_syntax.sh 波內 gate（錯誤集合基準比對）；commit 後清 *.mgbak；
+  全量 build 只在 Phase 3 且先關 IDE。
