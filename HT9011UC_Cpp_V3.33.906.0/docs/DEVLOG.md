@@ -13742,6 +13742,93 @@ port Command.cpp:1228   //2013.01.24 Q_Q TSMC GPIB COMMAND Part 2. {
 agent 拒絕做無意義的工作、開檔驗證、並告訴我前提錯了——**這是第十次前提被推翻**，
 而它比交出 572 行「翻譯」有價值得多。
 
+## 20260827 V — 非表單軸的 13,973 行缺口全部歸帳：**真正沒翻的是 48 行**
+
+### 結論先寫
+
+census 報「非表單缺 13,973 行 / 336,509（95.8% done）」。逐項追完之後：
+
+| 類別 | golden code 行 | 說明 |
+|---|---|---|
+| 刻意 gated | 2,671 | `cpublic` 560、`uHGemHT9045` 1,202、`cMyDB` 159、`cmydef` 121… |
+| 假缺口 — 括號配對 | 813 | `Command.cpp`，見 20260827 IV |
+| 假缺口 — 刻意寄放他檔 | 93 | `GetRowCol`：golden 定義在 `LaserSensorShuttle.cpp`，port 因 `atester.cpp:144` 已定義而只前向宣告（port 檔 :47-85 有完整說明） |
+| **假缺口 — 檔名比對** | **10,348** | **`BarCode/BarCode_Sh1.cpp` + `BarCode_Sh2.cpp`** |
+| **真的還沒翻** | **48** | 見下 |
+| 合計 | **13,973** ✓ | 與 census 完全對得起來 |
+
+**修正後：非表單已翻 333,790 / 336,509 golden code 行 = 99.2%**
+（census 報 95.8%；差距 3.4 個百分點全是量測假象）。
+剩下的 0.8% 是 2,671 行刻意 gate ＋ 48 行真缺口。
+
+### 最大的那個假缺口：`BarCode_Sh1/Sh2`
+
+census 對這兩檔判「**no port mirror**」，於是走 `missing_lines = gcode` 分支
+——**整檔記為全缺，連一次名字比對都不做**。
+
+但 port 有東西，只是檔名與符號名都不同。逐支對完 **20/20 全部已翻**，真缺 0 行：
+
+```
+golden TfBarCode::DoBarcodeCCDInShuttle_1  (2371 行)
+  -> BarCode/BarCode_Shuttle1_CCDScan.cpp:400  bool BarCode_DoBarcodeCCDInShuttle_1(bool)
+golden TfBarCode::DoBarcodeScanInShuttle_2  (1221 行)
+  -> BarCode/BarCode_Shuttle2_ScanRemainder1.cpp:176  BarCode_Sh2_DoBarcodeScanInShuttle_2
+...（其餘 18 支同樣逐一對到）
+```
+
+而且 port 檔的 banner 自己就寫著
+`Faithful translation of golden BarCode_Sh1.cpp:82-2453`——**證據一直在檔頭，
+只是沒有任何自動機制會去讀它。**
+
+諷刺的是 census 的 mirrored 分支**認得**這種 `Prefix_name` 形式
+（`extracted = {k.split('_', 1)[1] for k in pnames if '_' in k}`），
+**但 unmirrored 分支根本走不到那段**，`parked_lines` 也硬寫 0。
+這就是記憶裡那個「檔名比對缺陷是有量測背書的刻意保守，不要去修」——
+**保守到把 10,348 行已完成的工作記成待辦。**
+
+### 真正還沒翻的 48 行（全部）
+
+```
+ainarm2.cpp   InitInArmPickFromHotPlateTask50  golden:633-643   11
+ainarm2.cpp   ResetInToShtFlag                 golden:124-129    6
+ainarm2.cpp   InitInArmPlaceToShuttleTask      golden:647-652    6
+ainarm2.cpp   BackupPlacePos                   golden:2185-2190  6
+ainarm2.cpp   RestorePlacePos                  golden:2192-2197  6
+common.cpp    MyDrawText                       golden:1387-1395  9
+csystem.cpp   OutSHT1InLF / OutSHT1InRT
+              OutSHT2InLF / OutSHT2InRT        golden:698-701    各 1
+```
+
+**這是整個非表單軸的剩餘工作。** 五支 `ainarm2` 的是 InArm 任務初始化與位置
+備份/還原，要先確認是不是動機台再決定；`MyDrawText` 是繪圖；四支 `OutSHT*In*`
+是單行述詞。下一波可以一次收掉，但**動機台的那幾支要先判**。
+
+### 表單軸：**同一個缺陷幾乎肯定也在，但我拿不出可信的數字**
+
+表單軸有 **88 個無鏡射檔 / 169,536 golden code 行**，而 FW 戰役正是用不同檔名
+建 facade 的（`forms/fContact.cpp`、`forms/fTrayMapping.cpp`…），所以同一個
+unmirrored 分支缺陷會同樣把它們整檔記為全缺。
+
+我試著用「全樹 port 定義索引（2,385 檔 / 7,273 個名字）」去比對，**結果作廢**：
+1. `樹上有 + 真的缺 = 205,138` **超過 gcode 總和 169,536**——golden 的 span 含
+   空行與註解，而且 golden 側本身有括號吞併（`main.cpp` 239→382 支）。
+2. 跨 88 檔用 bare-name 比對**太鬆**，`Init`／`Reset` 這類名字會亂命中，會over-credit。
+
+`BarCode` 那組之所以可信，是因為只有 20 支、逐一對到具名檔案、
+而且每個 port 檔的 banner 都明寫「Faithful translation of golden X:a-b」。
+**同樣的嚴謹度套到 88 檔需要另外設計，不是這一波能順手做的。**
+所以**表單軸仍報 17.3%（/261,862 golden code 行），並註明那是下界。**
+
+### 這一段的方法論教訓
+
+一個晚上之內，census 的 per-file 缺口清單騙了我**三次**，三次機制各不相同：
+括號配對（`Command.cpp`）、刻意寄放（`GetRowCol`）、檔名比對（`BarCode_Sh*`）。
+三次都是**靜默的**，而且都長得像待辦事項。
+
+**處置仍然是「不修 census、加旁證」**：`span_sanity.py` 擋第一種；
+第二、三種的通用檢查是「**在派工前，拿 golden 的函式名去 port 樹裡找一次**」——
+成本是幾秒鐘，而它今晚可以省下兩整波的 agent 工。
+
 ### 🔖 RESUME（20260827 凌晨 · 第三版）
 
 - **本段最後一顆**：`FW-BOOTSTRAP-W35`——`FormsBootstrap.{h,cpp}`（26+208 行）
@@ -13772,12 +13859,27 @@ agent 拒絕做無意義的工作、開檔驗證、並告訴我前提錯了—�
      派工前必跑 `python tools/census/span_sanity.py <file>` 過篩。
      ⚠ 查缺哪幾支要 exec `census.py` 中 `def main(` 之前的前綴（ns 要給 `__file__`）
      再用它的 `functions()`／`read()`——**直接 import 會跑 main()**。
-  1b. **非表單真正還開著的缺口很小**，且 `span_sanity` 確認這幾檔**未受括號缺陷影響**：
-     `common.cpp`（2 支/1 gated/245 行）、`csystem.cpp`（7 支/3 gated/147 行）、
-     `OmronLaser/LaserSensorShuttle.cpp`（1 支/0 gated/93 行）、
-     `ainarm2.cpp`（5 支/0 gated/35 行）。合併約 520 行，可當非表單收尾波。
-     其餘非表單缺口**多數是刻意 gated**（`cpublic` 21/21、`uHGemHT9045` 3/3、
-     `cMyDB` 4/4、`cmydef` 4/4、`asortarm` 4/4 全 gated）。
+  1b. **非表單軸已逐項歸帳完畢（20260827 V）——真正沒翻的只有 48 行。**
+     13,973 = 刻意 gated 2,671 ＋ 假缺口 11,254 ＋ **真缺 48**。
+     **修正後非表單 = 333,790/336,509 golden code 行 = 99.2%**（census 報 95.8%）。
+     假缺口三種機制：括號配對 813（`Command.cpp`）、刻意寄放他檔 93（`GetRowCol`）、
+     **檔名比對 10,348（`BarCode/BarCode_Sh1.cpp`＋`BarCode_Sh2.cpp`，20/20 全已翻，
+     port 在 `BarCode_Shuttle{1,2}_*.cpp` 用 `BarCode_`／`BarCode_Sh2_` 前綴自由函式）**。
+
+     **剩餘 48 行（整個非表單軸的待辦）**：
+     `ainarm2.cpp` 五支（`InitInArmPickFromHotPlateTask50` golden:633-643／
+     `ResetInToShtFlag` :124-129／`InitInArmPlaceToShuttleTask` :647-652／
+     `BackupPlacePos` :2185-2190／`RestorePlacePos` :2192-2197，共 35 行）、
+     `common.cpp` `MyDrawText`（:1387-1395，9 行）、
+     `csystem.cpp` 四支單行述詞（`OutSHT1InLF`/`OutSHT1InRT`/`OutSHT2InLF`/`OutSHT2InRT`，:698-701）。
+     ⚠ **`ainarm2` 那五支要先判是不是動機台**（InArm 任務初始化／位置備份還原）。
+
+  1c. **表單軸的 88 個無鏡射檔幾乎肯定有同一個檔名缺陷，但目前拿不出可信數字。**
+     我用全樹 bare-name 索引試過，**結果作廢**：`樹上有+真的缺 = 205,138` 超過
+     gcode 總和 169,536（golden span 含空行註解且自身有括號吞併），且 bare-name
+     跨 88 檔太鬆會 over-credit。**表單軸仍報 17.3%（/261,862），並註明那是下界。**
+     要拿到可信數字需另外設計（`BarCode` 那組可信是因為只有 20 支、逐一對到具名檔、
+     且 port 檔 banner 明寫 `Faithful translation of golden X:a-b`）。
   2. `cDatabaseJson`（7 支/99 行）＋`cLineScanRemainICYieldRecord`（11 支/110 行
      ＋3 支 header inline）facade，可解 (G-5b)。
      ⚠ **兩個先決條件**：golden 宣告 `cDatabaseJson : public uBasicPickPlace`，
