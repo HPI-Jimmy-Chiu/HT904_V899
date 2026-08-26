@@ -178,6 +178,7 @@
 #include <Menus.hpp>                                                            //TShortCut 修飾符如 scCtrl, scAlt
 #include "AMR.h"
 #include "AGV.h"
+#include "uFtpUploadThread.h"                                                  //AI(ht9045-v899) 20260612(CASE-20260611-001): FTP 背景上傳 thread（fire-and-forget）
 #include "rs232.h"
 //------------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -213,6 +214,9 @@ bool bRefreshEng1=false;                                                        
 //----- by dell ccd realtime-------------
 ScanBtn *ScanBtnThd;
 
+//AI(ht9045-v899) 20260612(CASE-20260611-001): FTP 背景上傳 thread 全域單例「唯一正式定義」
+//  （extern 宣告於 uFtpUploadThread.h）。原暫時定義在 uFtpUploadThread.cpp，移至此處避免 duplicate symbol。
+TFtpUploadThread *FtpUploadThd = NULL;
 HWND HReceveFuleWnd;
 bool ProcessReceveFuleWndConnect();                                             //kevin 20110317 回傳先判斷程式是否存在
 bool Respone(AnsiString Data);                                                  //kevin 20110317 回傳開檔成功 關閉Refresh
@@ -2744,6 +2748,20 @@ void __fastcall TfMain::Timer1Timer(TObject *Sender)
     bRunTimer1=true;
 
     StringGrid4->Cells[0][0]=2;
+
+    //AI(ht9045-v899) 20260612(CASE-20260611-001): S8 撈背景 FTP 上傳「放棄(GIVEUP)」回報寫主 EventLog
+    //   （iType=20 WARNING：可見但不跳 alarm、不計入錯誤統計）。本段在主執行緒執行，撈出後由主執行緒寫 log，
+    //   故安全呼叫 SaveEventLogInfo（碰 fMain/fLotInfo）。每 tick 上限 10 筆，避免一次塞爆 timer。
+    if(FtpUploadThd!=NULL)
+    {
+        AnsiString asFtpRpt;
+        int iFtpDrain=0;
+        while(iFtpDrain<10 && FtpUploadThd->FetchResult(asFtpRpt))
+        {
+            SaveEventLogInfo("FTP_UPLOAD_FAIL", asFtpRpt, 20, " ");
+            iFtpDrain++;
+        }
+    }
 
     ProcessICHotTime();
 
@@ -10643,6 +10661,11 @@ void __fastcall TfMain::FormShow(TObject *Sender)
 
     //----- by dell ccd realtime-------------
     ScanBtnThd=NULL;
+
+    //AI(ht9045-v899) 20260612(CASE-20260611-001): 無條件建立 FTP 背景上傳 thread（fire-and-forget），
+    //  讓 PTI Lot End 不必等 FTP 上傳完成；非 PTI 客戶僅閒置等事件，不影響。生命週期仿 ScanBtn。
+    FtpUploadThd = new TFtpUploadThread(false);
+
     if(REAL_TIME_CCD)
     {
         ScanBtnThd = new ScanBtn(false);
@@ -11618,6 +11641,16 @@ void __fastcall TfMain::FormClose(TObject *Sender, TCloseAction &Action)
             ScanBtnThd->EndThread();
             ScanBtnThd->WaitFor();
         }
+    }
+
+    //AI(ht9045-v899) 20260612(CASE-20260611-001): 關閉 FTP 背景上傳 thread（無條件，所有客戶都建立）。
+    //  EndThread 喚醒 + WaitFor 等 drain 完，再 delete，避免殘留 thread / handle 洩漏。
+    if(FtpUploadThd!=NULL)
+    {
+        FtpUploadThd->EndThread();
+        FtpUploadThd->WaitFor();
+        delete FtpUploadThd;
+        FtpUploadThd=NULL;
     }
 
     LogSoftwareOffTime("TfMain, DoReleaseAndInspEnd");                          //Steven 20210526 : 紀錄軟體執行時間
@@ -26779,6 +26812,26 @@ void __fastcall TfMain::DoStateRecord(int iShowAlarm, bool bManual)             
         //D:\HT9045_Log\Automation Log刪除
         str.sprintf("RMDIR /s/q \"%s\\%04d_%02d\"", NewPath+"\\Automation", SystemYear, SystemMonth);
         TestList->Add(str);
+    }
+
+    //AI(ht9045-v899) 20260612(CASE-20260611-001): 把 FTP 背景上傳 log 打包進 StateRecord，
+    //  供「背景 FTP 上傳放棄/重試」診斷用。背景 log 為 D:\HT9045_Log\FtpUpload\YYYYMMDD\*.log（按日分子夾），
+    //  故整夾遞迴複製 + 7z 遞迴壓縮（壓資料夾本身會遞迴含子夾），跨日不漏；壓完刪展開夾避免 StateRecord 過大。
+    //  以 bFtpUploadBackground gating：背景上傳有開才需打包其診斷 log（PTI 預設開、其餘預設關）。
+    if(IniConfig.bFtpUploadBackground)
+    {
+        AnsiString asFtpSrc, asFtpDst;
+        asFtpSrc = "D:\\HT9045_Log\\FtpUpload";
+        asFtpDst.sprintf("%s\\FtpUpload", NewPath);
+        if(DirectoryExists(asFtpSrc))
+        {
+            str.sprintf("XCOPY /y/a/e/c/i/h/f/r \"%s\" \"%s\"", asFtpSrc, asFtpDst);
+            TestList->Add(str);
+            str.sprintf("d:\\HT9045\\7z.exe a -tzip \"%s\\FtpUpload.7z\" \"%s\\FtpUpload\"", NewPath, NewPath);
+            TestList->Add(str);
+            str.sprintf("RMDIR /s/q \"%s\\FtpUpload\"", NewPath);
+            TestList->Add(str);
+        }
     }
 
     if(bRunAutoClean && TestIF_File.iAutoClean_Function)                        //Sam 20230616 : Add Auto Clean Record

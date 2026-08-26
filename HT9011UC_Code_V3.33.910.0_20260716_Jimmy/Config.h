@@ -973,6 +973,7 @@ typedef struct
     //ChungHung 2011/01/17 start
     //這是KYEC的FTP功能
     bool       bEnableFTP;                                                      //Steven 20110216 : 加一個開關
+    bool       bFtpUploadBackground;                                            //AI(ht9045-v899) 20260612(CASE-20260611-001): Lot End FTP上傳背景化開關, PTI預設true其餘false, 供S6/S7 uLotInfo分流(背景EnqueueUpload或原同步路徑)
     AnsiString FtpUserName;
     AnsiString FtpPassword;
     AnsiString FtpHost;

@@ -66,7 +66,7 @@
       ..\Obj\acarry.obj ..\Obj\uShowMessage.obj ..\Obj\cAuthority.obj 
       ..\Obj\cMyDB.obj ..\Obj\MyBinDisp.obj ..\Obj\MyCCLinkSensor.obj 
       ..\Obj\MyCCLink.obj ..\Obj\MyCCLinkBoard.obj ..\Obj\uYieldMonitoring.obj 
-      ..\Obj\CCDInterface.obj ..\Obj\FTPClient.obj ..\Obj\LtcSensor.obj 
+      ..\Obj\CCDInterface.obj ..\Obj\FTPClient.obj ..\Obj\uFtpUploadThread.obj ..\Obj\LtcSensor.obj 
       ..\Obj\PowerSavingMode.obj ..\Obj\cObserver.obj ..\Obj\ContactForce.obj 
       ..\Obj\AutoTemperature.obj ..\Obj\DynamicTemp.obj 
       ..\Obj\myQwertyKeyBoard.obj ..\Obj\Password.obj ..\Obj\QAMode.obj 
@@ -171,7 +171,7 @@
       teeui.bpi teedb.bpi tee.bpi teeqr.bpi dclusr60.bpi bcbsmp.bpi adortl.bpi 
       ibsmp.bpi qrpt.bpi ibxpress.bpi dsnap.bpi inet.bpi inetdb.bpi nmfast.bpi 
       bcbie.bpi bcb2kaxserver.bpi vclie.bpi dss.bpi webdsnap.bpi dclocx.bpi"/>
-    <PATHCPP value=".;Motor;EJ1N;Public;HThreadCtrl;Interface;Common\PickPlanner;ATC;BinDisplay;CCLink;KYECFTP;&quot;ASE_K Socket&quot;;RotateKit;AutoClean;AutoTeach;OmronLaser;SECSGEM;SortingBinTray;BarCode;PMAlarm;Monitor;Automation;ARMS;ProductionInfo;CanBus;TempCtrl;GroundMan;LoadCCD;Mes;AutoAlignment;EtherCAT;MyPLC;VacuumUnit"/>
+    <PATHCPP value=".;Motor;EJ1N;Public;HThreadCtrl;Interface;Common\PickPlanner;ATC;BinDisplay;CCLink;KYECFTP;FTPUpload;&quot;ASE_K Socket&quot;;RotateKit;AutoClean;AutoTeach;OmronLaser;SECSGEM;SortingBinTray;BarCode;PMAlarm;Monitor;Automation;ARMS;ProductionInfo;CanBus;TempCtrl;GroundMan;LoadCCD;Mes;AutoAlignment;EtherCAT;MyPLC;VacuumUnit"/>
     <PATHPAS value=".;"/>
     <PATHRC value=".;"/>
     <PATHASM value=".;"/>
@@ -181,8 +181,8 @@
     <USERDEFINES value="_DEBUG;_VER6;"/>
     <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="HT9045.cpp"/>
-    <INCLUDEPATH value="Common\PickPlanner;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;VacuumUnit;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;&quot;ASE_K Socket&quot;;FingerprintRead;KYECFTP;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;D:\HT9045\Obj;$(BCB)\include;$(BCB)\include\vcl;D:\ProgramFiles\Borland\CBuilder6\Projects"/>
-    <LIBPATH value="Common\PickPlanner;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;VacuumUnit;BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;&quot;ASE_K Socket&quot;;FingerprintRead;KYECFTP;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;D:\HT9045\Obj;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\ProgramFiles\Borland\CBuilder6\Projects"/>
+    <INCLUDEPATH value="Common\PickPlanner;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;VacuumUnit;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;SECSGEM;Public;PMAlarm;SortingBinTray;Motor;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;&quot;ASE_K Socket&quot;;FingerprintRead;KYECFTP;FTPUpload;Automation;CCLink;BinDisplay;Interface;ATC;EJ1N;HThreadCtrl;D:\HT9045\Obj;$(BCB)\include;$(BCB)\include\vcl;D:\ProgramFiles\Borland\CBuilder6\Projects"/>
+    <LIBPATH value="Common\PickPlanner;C:\ProgramFiles\EurekaLab\EurekaLog6\CBuilder6;VacuumUnit;BinDisplay;MyPLC;EtherCAT;AutoAlignment;Mes;LoadCCD;GroundMan;TempCtrl;CanBus;ProductionInfo;ARMS;D:\HT9045\elec\myvcl;D:\HT9045\elec\Component;Monitor;Public;PMAlarm;SortingBinTray;SECSGEM;OmronLaser;AutoTeach;BarCode;RotateKit;AutoClean;&quot;ASE_K Socket&quot;;FingerprintRead;KYECFTP;FTPUpload;Automation;CCLink;Interface;ATC;EJ1N;HThreadCtrl;Motor;D:\HT9045\Obj;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;$(BCB)\lib\Psdk;D:\ProgramFiles\Borland\CBuilder6\Projects"/>
     <WARNINGS value="-w8092 -w8091 -w8090 -w8089 -w8087 -wuse -wstu -w-par -wnod -wdef -w-cpt 
       -wamp"/>
     <OTHERFILES value=""/>
@@ -194,7 +194,7 @@
       -ID:\HT9045\elec\myvcl -ID:\HT9045\elec\Component -IMonitor -ISECSGEM 
       -IPublic -IPMAlarm -ISortingBinTray -IMotor -IOmronLaser -IAutoTeach 
       -IBarCode -IRotateKit -IAutoClean -I&quot;ASE_K Socket&quot; -IFingerprintRead 
-      -IKYECFTP -IAutomation -ICCLink -IBinDisplay -IInterface -IATC -IEJ1N 
+      -IKYECFTP -IFTPUpload -IAutomation -ICCLink -IBinDisplay -IInterface -IATC -IEJ1N 
       -IHThreadCtrl -ID:\HT9045\Obj -I$(BCB)\include -I$(BCB)\include\vcl 
       -ID:\ProgramFiles\Borland\CBuilder6\Projects -src_suffix cpp -D_DEBUG 
       -D_VER6 -boa"/>
@@ -411,6 +411,7 @@
       <FILE FILENAME="uYieldMonitoring.cpp" FORMNAME="fYieldMonitoring" UNITNAME="uYieldMonitoring" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="CCDInterface.cpp" FORMNAME="CCDInterfaceForm" UNITNAME="CCDInterface" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="KYECFTP\FTPClient.cpp" FORMNAME="fFTPClient" UNITNAME="FTPClient" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
+      <FILE FILENAME="FTPUpload\uFtpUploadThread.cpp" FORMNAME="" UNITNAME="uFtpUploadThread" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="LtcSensor.cpp" FORMNAME="fLtcSensor" UNITNAME="LtcSensor" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="PowerSavingMode.cpp" FORMNAME="" UNITNAME="PowerSavingMode" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>
       <FILE FILENAME="cObserver.cpp" FORMNAME="fObserver" UNITNAME="cObserver" CONTAINERID="CCompiler" DESIGNCLASS="" LOCALCOMMAND=""/>

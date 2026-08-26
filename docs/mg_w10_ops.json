@@ -1,0 +1,162 @@
+[
+  {
+    "id": "MG-W10-OP1",
+    "desc": "[0612 FTP bg] Config.h: HT9045_CONFIG 新增 bFtpUploadBackground 開關 (matrix Config.h:957)",
+    "v910_file": "Config.h",
+    "v899_file": "Config.h",
+    "v899_lines": [957, 957],
+    "mode": "after",
+    "anchor_line": 975,
+    "anchor_expect": "bool       bEnableFTP;"
+  },
+  {
+    "id": "MG-W10-OP2",
+    "desc": "[0612 FTP bg] cprod.cpp ProcessLastSetIni_FTP: bFtpUploadBackground 讀寫 config.ini [FTP]/FTP Upload Background,預設 (CUSTOMER_CODE==CC_PTI) (matrix cprod.cpp:2245 + 未標記承重行 2246)",
+    "v910_file": "cprod.cpp",
+    "v899_file": "cprod.cpp",
+    "v899_lines": [2245, 2246],
+    "mode": "after",
+    "anchor_line": 2299,
+    "anchor_expect": "\"FTP\", \"Enable FTP\","
+  },
+  {
+    "id": "MG-W10-OP3",
+    "desc": "[0612 FTP bg] main.cpp: #include \"uFtpUploadThread.h\" (matrix main.cpp:180)",
+    "v910_file": "main.cpp",
+    "v899_file": "main.cpp",
+    "v899_lines": [180, 180],
+    "mode": "after",
+    "anchor_line": 180,
+    "anchor_expect": "#include \"AGV.h\""
+  },
+  {
+    "id": "MG-W10-OP4",
+    "desc": "[0612 FTP bg] main.cpp: FtpUploadThd 全域單例「唯一正式定義」(matrix main.cpp:215;217 是未標記承重行,漏搬 = link error)",
+    "v910_file": "main.cpp",
+    "v899_file": "main.cpp",
+    "v899_lines": [215, 217],
+    "mode": "before",
+    "anchor_line": 216,
+    "anchor_expect": "HWND HReceveFuleWnd;"
+  },
+  {
+    "id": "MG-W10-OP5",
+    "desc": "[0612 FTP bg] main.cpp TfMain::Timer1Timer: S8 主執行緒撈背景上傳 GIVEUP 回報寫主 EventLog(iType=20),每 tick 上限 10 筆 (matrix main.cpp:2631 + 13 行未標記)",
+    "v910_file": "main.cpp",
+    "v899_file": "main.cpp",
+    "v899_lines": [2630, 2643],
+    "mode": "after",
+    "anchor_line": 2746,
+    "anchor_expect": "StringGrid4->Cells[0][0]=2;"
+  },
+  {
+    "id": "MG-W10-OP6",
+    "desc": "[0612 FTP bg] main.cpp TfMain::FormShow: 無條件 FtpUploadThd = new TFtpUploadThread(false) (matrix main.cpp:9972)。replace V910[10645,10648] 只為取得唯一錨點;被取代 4 行與 V899 9970/9976/9977/9978 位元組相同(已實測)",
+    "v910_file": "main.cpp",
+    "v899_file": "main.cpp",
+    "v899_lines": [9970, 9978],
+    "mode": "replace",
+    "replace_lines": [10645, 10648],
+    "anchor_expect": "ScanBtnThd = new ScanBtn(false);"
+  },
+  {
+    "id": "MG-W10-OP7",
+    "desc": "[0612 FTP bg] main.cpp TfMain::FormClose: EndThread + WaitFor + delete 收回 FtpUploadThd (matrix main.cpp:10916 + 8 行未標記)",
+    "v910_file": "main.cpp",
+    "v899_file": "main.cpp",
+    "v899_lines": [10916, 10925],
+    "mode": "before",
+    "anchor_line": 11623,
+    "anchor_expect": "LogSoftwareOffTime(\"TfMain, DoReleaseAndInspEnd\")"
+  },
+  {
+    "id": "MG-W10-OP8",
+    "desc": "[0612 FTP bg] main.cpp TfMain::DoStateRecord: 以 IniConfig.bFtpUploadBackground gating 把 D:\\HT9045_Log\\FtpUpload 遞迴打包進 StateRecord (matrix main.cpp:25672 + 19 行未標記)。注意 V910 沒有 20260414 MNetLog 區塊,故錨點改用其後的 bRunAutoClean",
+    "v910_file": "main.cpp",
+    "v899_file": "main.cpp",
+    "v899_lines": [25672, 25691],
+    "mode": "before",
+    "anchor_line": 26784,
+    "anchor_expect": "if(bRunAutoClean && TestIF_File.iAutoClean_Function)"
+  },
+  {
+    "id": "MG-W10-OP9",
+    "desc": "[0612 FTP bg] uLotInfo.cpp: #include \"uFtpUploadThread.h\" (matrix uLotInfo.cpp:76)",
+    "v910_file": "uLotInfo.cpp",
+    "v899_file": "uLotInfo.cpp",
+    "v899_lines": [76, 76],
+    "mode": "after",
+    "anchor_line": 76,
+    "anchor_expect": "#include \"AGV.h\""
+  },
+  {
+    "id": "MG-W10-OP10",
+    "desc": "[0612 背景分流 + 0611 bError 早退 + 0630 null guard] uLotInfo.cpp TfLotInfo::SetLotEnd JamAlarm 上傳:背景/同步二分支 (matrix 1933/1935/1937/1946/1957 + 0611 1959/1967 + 0630 1952,共 8 條)。replace V910[2076,2084](原同步迴圈),其 9 行敘述原樣保留在新 else 分支內(縮排 +4)",
+    "v910_file": "uLotInfo.cpp",
+    "v899_file": "uLotInfo.cpp",
+    "v899_lines": [1933, 1971],
+    "mode": "replace",
+    "replace_lines": [2076, 2084],
+    "anchor_expect": "fFTPClient->UploadFileToServer2(IniConfig.FtpUplaodPath, asJamCodeFileName);"
+  },
+  {
+    "id": "MG-W10-OP11",
+    "desc": "[0612 背景分流] uLotInfo.cpp SetLotEnd SocketID CSV 上傳:背景/同步二分支 + 背景分支在呼叫端補清 LastSet.iSocketContactCount (matrix 2001/2003/2005/2011/2020)。replace V910[2114,2115],其 2 行敘述原樣保留在新 else 分支內(縮排 +4)",
+    "v910_file": "uLotInfo.cpp",
+    "v899_file": "uLotInfo.cpp",
+    "v899_lines": [2001, 2024],
+    "mode": "replace",
+    "replace_lines": [2114, 2115],
+    "anchor_expect": "UpSocketIdPoductDataToServerByFTP"
+  },
+  {
+    "id": "MG-W10-OP12",
+    "desc": "[0611 Fix 下半盤方向] cTrayAssignment.cpp TfTrayAssignment::ReadFile: iFixTrayMode==1 時把 Fix 下半盤 Direction/iTrayType 補成上半盤的鏡像 (matrix cTrayAssignment.cpp:358 + 28 行未標記函式本體)。純補洞:上面迴圈只跑到 iFixRight,下半盤索引從未被寫過",
+    "v910_file": "cTrayAssignment.cpp",
+    "v899_file": "cTrayAssignment.cpp",
+    "v899_lines": [358, 387],
+    "mode": "before",
+    "anchor_line": 443,
+    "anchor_expect": "if(bUseAuto2Empty==true)"
+  },
+  {
+    "id": "MG-W10-OP13",
+    "desc": "[0609 PTI 非阻塞] KYECFTP\\FTPClient.cpp UploadFileToServer2: PTI TimeOut 20000->5000 (matrix FTPClient.cpp:401)。replace V910[399,410] 只為取得唯一錨點;前 11 行與 V899 390-400 位元組相同(已實測)。全波唯一真正被移除的敘述就是這裡的 NMFTP2->TimeOut=20000;",
+    "v910_file": "KYECFTP\\FTPClient.cpp",
+    "v899_file": "KYECFTP\\FTPClient.cpp",
+    "v899_lines": [390, 401],
+    "mode": "replace",
+    "replace_lines": [399, 410],
+    "anchor_expect": "AnsiString ActivePath=FileListBox1->Directory+\"\\\\\";"
+  },
+  {
+    "id": "MG-W10-OP14",
+    "desc": "[0609 PTI 非阻塞] KYECFTP\\FTPClient.cpp UploadFileToServer2: 連線失敗時 PTI 改記 MyDBIProcess log,非 PTI 維持 ShowMyMessage modal (matrix FTPClient.cpp:475)。replace V910[469,485] 只為取得唯一錨點;前 16 行與 V899 459-474 位元組相同(已實測)",
+    "v910_file": "KYECFTP\\FTPClient.cpp",
+    "v899_file": "KYECFTP\\FTPClient.cpp",
+    "v899_lines": [459, 478],
+    "mode": "replace",
+    "replace_lines": [469, 485],
+    "anchor_expect": "                    NMFTP2->Connect();"
+  },
+  {
+    "id": "MG-W10-OP15",
+    "desc": "[0609 PTI 非阻塞] KYECFTP\\FTPClient.cpp catch(Exception&): 新增 else if(CC_PTI) 只記 log 且不讀 LastErrorNo (matrix FTPClient.cpp:795)。replace V910[819,822];被取代 4 行與 V899 792-794+799 位元組相同(已實測)",
+    "v910_file": "KYECFTP\\FTPClient.cpp",
+    "v899_file": "KYECFTP\\FTPClient.cpp",
+    "v899_lines": [792, 799],
+    "mode": "replace",
+    "replace_lines": [819, 822],
+    "anchor_expect": "NewRecordProcess(\"Message\", str, e.Message);"
+  },
+  {
+    "id": "MG-W10-OP16",
+    "desc": "[0609 PTI 非阻塞] KYECFTP\\FTPClient.cpp catch(...): 新增 if(CC_PTI) 只記 log 且不讀 LastErrorNo,原兩行降級進 else (matrix FTPClient.cpp:815)。replace V910[838,839],其 2 行敘述原樣保留在新 else 內(縮排 +4)",
+    "v910_file": "KYECFTP\\FTPClient.cpp",
+    "v899_file": "KYECFTP\\FTPClient.cpp",
+    "v899_lines": [815, 823],
+    "mode": "replace",
+    "replace_lines": [838, 839],
+    "anchor_expect": "MyDBIProcess(\"Exception\", str);"
+  }
+]

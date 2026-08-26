@@ -2297,6 +2297,8 @@ void ProcessLastSetIni_FTP(bool bRead)
     if(CosFunction.bFTPFunction || IniConfig.bFTPJamCodeUpload)
     {
         IniConfig.bEnableFTP        =ReadWriteIni(sPath, "FTP", "Enable FTP",        IniConfig.bEnableFTP,      false,                                              bRead);
+        //AI(ht9045-v899) 20260612(CASE-20260611-001): 新增FTP上傳背景化開關, 預設依客戶碼(PTI=true其餘false), INI可覆寫; 供Lot End上傳走背景EnqueueUpload或原同步路徑分流
+        IniConfig.bFtpUploadBackground=ReadWriteIni(sPath, "FTP", "FTP Upload Background", IniConfig.bFtpUploadBackground, (CUSTOMER_CODE==CC_PTI),                  bRead);
         if(CUSTOMER_CODE==CC_KYEC_LEE || IniConfig.bSPILFunction==true)
         {
             IniConfig.FtpUserName       =ReadWriteIni(sPath, "FTP", "FTP User Name",     IniConfig.FtpUserName,     (IniConfig.bFTPJamCodeUpload)?"SPIL":"KYEC",    bRead);

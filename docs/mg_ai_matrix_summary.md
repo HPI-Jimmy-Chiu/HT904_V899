@@ -46,14 +46,14 @@
 | 20260604 | 3 | 0 | 0 | 0 | 3 |
 | 20260605 | 7 | 0 | 0 | 1 | 8 |
 | 20260608 | 10 | 0 | 0 | 0 | 10 |
-| 20260609 | 0 | 0 | 0 | 4 | 4 |
-| 20260611 | 0 | 0 | 0 | 3 | 3 |
-| 20260612 | 0 | 0 | 0 | 50 | 50 |
+| 20260609 | 4 | 0 | 0 | 0 | 4 |
+| 20260611 | 3 | 0 | 0 | 0 | 3 |
+| 20260612 | 50 | 0 | 0 | 0 | 50 |
 | 20260618 | 0 | 0 | 0 | 1 | 1 |
 | 20260623 | 0 | 0 | 0 | 6 | 6 |
 | 20260625 | 0 | 0 | 0 | 7 | 7 |
 | 20260629 | 0 | 0 | 0 | 1 | 1 |
-| 20260630 | 0 | 0 | 0 | 18 | 18 |
+| 20260630 | 1 | 0 | 0 | 17 | 18 |
 | 20260703 | 0 | 0 | 0 | 25 | 25 |
 | 20260706 | 0 | 0 | 0 | 1 | 1 |
 | 20260803 | 5 | 0 | 0 | 0 | 5 |
@@ -63,29 +63,25 @@
 | 20260817 | 11 | 0 | 0 | 0 | 11 |
 | 20260819 | 0 | 0 | 0 | 10 | 10 |
 | 20260820 | 0 | 0 | 0 | 7 | 7 |
-| **合計** | 444 | 4 | 49 | 222 | 719 |
+| **合計** | 502 | 4 | 49 | 164 | 719 |
 
 ## MISSING 依檔案分布（前 40）
 
 | 檔案 | 缺席註解數 |
 |---|---|
 | AutoClean\AutoClean.cpp | 24 |
-| FTPUpload\uFtpUploadThread.cpp | 23 |
-| main.cpp | 22 |
-| uLotInfo.cpp | 14 |
+| main.cpp | 16 |
 | aoutarm9045_2x4_4.cpp | 10 |
 | acatchtray.cpp | 9 |
 | aoutarm9045.cpp | 9 |
 | AutoClean\uCleaning.cpp | 9 |
 | ProductionInfo\ProductionInfo.cpp | 9 |
-| FTPUpload\uFtpUploadThread.h | 8 |
 | csystem.cpp | 7 |
 | Interface\TesterTCP.cpp | 6 |
 | cConfiguration.cpp | 5 |
 | RotateKit\aRotateKIT_Out.cpp | 5 |
 | cmydef.cpp | 4 |
 | CosFunction.cpp | 4 |
-| KYECFTP\FTPClient.cpp | 4 |
 | ainarm9045.cpp | 3 |
 | cContactCT.cpp | 3 |
 | cmydef.h | 3 |
@@ -96,16 +92,20 @@
 | aoutarm.cpp | 2 |
 | aoutarm9045.h | 2 |
 | cBinSel.cpp | 2 |
-| cprod.cpp | 2 |
 | cpublic.cpp | 2 |
 | mymessbox.cpp | 2 |
 | note.cpp | 2 |
 | uTrayEditForm.cpp | 2 |
 | adam6024.cpp | 1 |
 | asendic_Auto.cpp | 1 |
-| Config.h | 1 |
 | CosFunction.h | 1 |
+| cprod.cpp | 1 |
 | cpublic.h | 1 |
 | cSortCT.cpp | 1 |
-| cTrayAssignment.cpp | 1 |
 | MachineType.h | 1 |
+| BarCode\BarCode.cpp | 1 |
+| Interface\TesterTCP.h | 1 |
+| Motor\mymotor.cpp | 1 |
+| ProductionInfo\ProductionInfo.h | 1 |
+| RotateKit\aRotateKIT.cpp | 1 |
+| SECSGEM\uHGemHT9045_SV.cpp | 1 |

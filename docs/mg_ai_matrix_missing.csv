@@ -55,63 +55,6 @@
 20260525,ht9045-v899,main.cpp,24003,MISSING,//AI(ht9045-v899) 20260525: sync PASS auto positions after workfile switch
 20260525,ht9045-v899,main.cpp,25604,MISSING,//AI(ht9045-v899) 20260525: pack PTI Lot Start trace with TCP log for permission/runmode diagnosis
 20260605,ht9045-v899,cSortCT.cpp,11,MISSING,//AI(ht9045-v899) 20260605: 改用 ShowMyMessageBox_YES_NO 需引入 mymessbox.h
-20260609,ht9045-v899,KYECFTP\FTPClient.cpp,401,MISSING,"//AI(ht9045-v899) 20260609: PTI 縮短 timeout 5s,避免 FTP server 不可達時 Lot End 主執行緒長時間阻塞 //Landam"
-20260609,ht9045-v899,KYECFTP\FTPClient.cpp,475,MISSING,"//AI(ht9045-v899) 20260609: PTI 連線失敗只記 log,不彈阻塞 modal(避免 Lot End 卡住消音/動作)"
-20260609,ht9045-v899,KYECFTP\FTPClient.cpp,795,MISSING,"//AI(ht9045-v899) 20260609: PTI Lot End 上傳失敗只記 log,不彈阻塞 modal(避免停機卡住消音/動作),且不讀 LastErrorNo 避免存取異常 socket 觸發崩潰"
-20260609,ht9045-v899,KYECFTP\FTPClient.cpp,815,MISSING,"//AI(ht9045-v899) 20260609: PTI 上傳失敗只記 log,不讀 LastErrorNo 避免存取異常 socket 觸發崩潰"
-20260611,ht9045-v899,cTrayAssignment.cpp,358,MISSING,"//AI(ht9045-v899) 20260611(CASE-20260611-001): 上面迴圈只讀到iFixRight為止,Fix下半盤(eFix4~6 / eFix7~12)的Direction/iTrayType從未設定,預設停在0導致下半盤(如Fix5)擺放方向與上半盤不一致;此處仿bTrayUpDown"
-20260611,ht9045-v899,uLotInfo.cpp,1959,MISSING,"//AI(ht9045-v899) 20260611(CASE-20260611-001): 上傳前清旗標,作為連線失敗判斷依據"
-20260611,ht9045-v899,uLotInfo.cpp,1967,MISSING,"//AI(ht9045-v899) 20260611(CASE-20260611-001): N06/FTP 連線失敗(socket 10038)即中止整批上傳,避免每個檔重複 blocking connect/retry 在主執行緒卡住 Lot End 導致 alarm 無法消除/hang"
-20260612,ht9045-v899,Config.h,957,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): Lot End FTP上傳背景化開關, PTI預設true其餘false, 供S6/S7 uLotInfo分流(背景EnqueueUpload或原同步路徑)"
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,4,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 新增 FTP 背景上傳 thread 骨架（S1）。
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,5,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S2 完成 — UploadOneJob 改用 WinINet
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,7,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S3 完成 — Enqueue 去重（jobKind+localFile 識別鍵
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,18,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): WinINet FTP API（InternetOpen/InternetConnect/FtpPutFile）
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,22,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S4 移除此處暫時定義，改由 main.cpp 定義。
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,28,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 背景 log 改「每日一個子資料夾 + 每日一檔」，
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,41,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S3 初始無 in-flight job
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,44,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S8 結果回報佇列專用鎖
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,54,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S8 釋放結果回報鎖
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,63,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 改每日子資料夾 + 每日輪替檔，跨日自動換子資料夾+檔名。
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,101,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S3 去重識別鍵。
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,111,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S8 worker 端推入「放棄」回報（thread-safe）
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,128,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S8 主執行緒撈一筆回報（深拷貝）；空佇列回傳 false。
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,166,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 去重檢查與 in-flight key 比對必須同一把鎖
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,214,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S3 提供主執行緒方便呼叫介面，給 S6/S7 的 uLotInfo 用。
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,245,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 取出即標記為 in-flight
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,258,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S2 實作 WinINet 真實上傳。
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,273,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 連線參數與遠端路徑預設取自 job；
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,282,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 本機驗證模式,比照 GetFTP_Setting 的"
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,298,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 本機測試一律維持 PASV(與正式客戶版同一條路徑),"
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,348,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 上傳前先嘗試建立遠端目錄(正式+模擬共用)。
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,442,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S8 只有「放棄(GIVEUP)」才回報主 EventLog（訊息型、不跳 alarm）；
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.cpp,480,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 上傳結束 -> 清除 in-flight 標記（鎖內短暫更新）
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.h,4,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 新增 FTP 背景上傳 thread 骨架，
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.h,11,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): TCriticalSection 來源 header
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.h,15,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 入列前所有 AnsiString 欄位需做深拷貝，
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.h,44,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S3 去重用 — 目前正在上傳中的 job 識別鍵
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.h,48,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S8 背景上傳「放棄(GIVEUP)」結果回報佇列。
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.h,61,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S3 去重識別鍵 = (iJobKind + sLocalFile)。
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.h,71,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S3 job 組裝 helper — 給 S6/S7 的 uLotInfo 呼叫點用。
-20260612,ht9045-v899,FTPUpload\uFtpUploadThread.h,79,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S8 主執行緒撈一筆背景上傳「放棄」回報；
-20260612,ht9045-v899,cprod.cpp,2245,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 新增FTP上傳背景化開關, 預設依客戶碼(PTI=true其餘false), INI可覆寫; 供Lot End上傳走背景EnqueueUpload或原同步路徑分流"
-20260612,ht9045-v899,main.cpp,180,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): FTP 背景上傳 thread（fire-and-forget）
-20260612,ht9045-v899,main.cpp,215,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): FTP 背景上傳 thread 全域單例「唯一正式定義」
-20260612,ht9045-v899,main.cpp,2631,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): S8 撈背景 FTP 上傳「放棄(GIVEUP)」回報寫主 EventLog
-20260612,ht9045-v899,main.cpp,9972,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 無條件建立 FTP 背景上傳 thread（fire-and-forget），
-20260612,ht9045-v899,main.cpp,10916,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 關閉 FTP 背景上傳 thread（無條件，所有客戶都建立）。
-20260612,ht9045-v899,main.cpp,25672,MISSING,//AI(ht9045-v899) 20260612(CASE-20260611-001): 把 FTP 背景上傳 log 打包進 StateRecord，
-20260612,ht9045-v899,uLotInfo.cpp,76,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 背景FTP上傳執行緒(FtpUploadThd/EnqueueUpload),供Lot End上傳分流用"
-20260612,ht9045-v899,uLotInfo.cpp,1933,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 開關開(PTI預設) → 走背景FTP上傳執行緒,fire-and-forget;丟完即返回,不MySleep/不等/不break,避免Lot End主執行緒被同步上傳阻塞造成卡站或alarm無法消除"
-20260612,ht9045-v899,uLotInfo.cpp,1935,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 保險,背景執行緒未建立則略過(不退回同步,避免同一批檔重複上傳)"
-20260612,ht9045-v899,uLotInfo.cpp,1937,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 迴圈外取一次連線參數(值拷貝),對應UploadFileToServer2非Sigurd分支(FtpHost/FtpUserName/FtpPassword/N06_FtpPort)"
-20260612,ht9045-v899,uLotInfo.cpp,1946,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 遠端=FtpUplaodPath+純檔名,比照原同步UploadFileToServer2內部 str02=FtpPath+Source(Source已砍成純檔名);先前只給FtpUplaodPath會少檔名導致FtpPutF"
-20260612,ht9045-v899,uLotInfo.cpp,1957,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 開關關(非PTI/預設) → 維持原同步上傳路徑,行為一字不改"
-20260612,ht9045-v899,uLotInfo.cpp,2001,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 開關開(PTI預設) → SocketID CSV 走背景FTP上傳執行緒,fire-and-forget;丟完即返回,不MySleep/不等待,避免Lot End主執行緒被同步上傳阻塞造成卡站或alarm無法消除"
-20260612,ht9045-v899,uLotInfo.cpp,2003,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 保險,背景執行緒未建立則略過(不退回同步,避免同一檔重複上傳)"
-20260612,ht9045-v899,uLotInfo.cpp,2005,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 組本地完整路徑(asDirPath+""\\""+sFileName,比照UpSocketIdPoductDataToServerByFTP內asFileName,FTPClient.cpp L2236)與遠端完整路徑(asN12"
-20260612,ht9045-v899,uLotInfo.cpp,2011,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 丟佇列即清(決議2):不等上傳成功就清SocketID count;此段為UpSocketIdPoductDataToServerByFTP上傳成功後清除程式碼之複製(FTPClient.cpp L2271-2278),背景分"
-20260612,ht9045-v899,uLotInfo.cpp,2020,MISSING,"//AI(ht9045-v899) 20260612(CASE-20260611-001): 開關關(非PTI/預設) → 維持原同步上傳路徑,行為一字不改(MySleep+呼叫函式,SocketID count清除仍在函式內部上傳成功後執行)"
 20260618,ht9045-v899,Motor\mymotor.cpp,415,MISSING,//AI(ht9045-v899) 20260618: CASE-20260618-001 南茂(CC_ChipMos)/e360KG 落入 else 使 iCheckZ=4000 門檻過緊，Z2 到位較慢提早觸發 Z1UpZ2Down1 alarm，比照 CC_GIGAS 放寬 iCheckZ 至 11000
 20260623,ht9045-v899,MachineType.h,1631,MISSING,"//AI(ht9045-v899) 20260623: 新增整數安全除法(零防護+取整),供格線欄號/索引等整數情境使用,避免誤用浮點版造成階梯式位移"
 20260623,ht9045-v899,cConfiguration.cpp,153,MISSING,"//AI(ht9045-v899) 20260623: 改用整數安全除法還原離散欄號,修正浮點除法造成 CheckBox 階梯式位移"
@@ -144,7 +87,6 @@
 20260630,ht9045-v899,mymessbox.cpp,344,MISSING,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): 將 MyMessageBox 拉到 z-order 最前但不搆焦點(NOACTIVATE),不用 HWND_TOPMOST 以免蓋住 app 外視窗"
 20260630,ht9045-v899,mymessbox.cpp,943,MISSING,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): Lot End 訊息框 ShowModal 前拉到 app 內 z-order 最前,避免被其他視窗搆住導致看不到"
 20260630,ht9045-v899,note.cpp,3486,MISSING,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): MyMessageBox 顯示時(Lot End/Alarm)改拉它到前,接在既有置頂鏈尾,只用 app 內 BringToFront 不用 TOPMOST/SetForegroundWindow"
-20260630,ht9045-v899,uLotInfo.cpp,1952,MISSING,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): FtpUploadThd 尚未建立時記 log 並跳過,寧可不傳也不落至同步阻塞 Lot End"
 20260703,ht9045-v899,AutoClean\uCleaning.cpp,2650,MISSING,"//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 觸發當下做非阻塞提示(原因=alarm 描述+code, 處置=自動清潔已暫停/已重新初始化偵測, 續低良率請清潔 Socket)並置位重置旗標。只做一次(bACSmartNeedReset 防重複)。提示必須留在此觸發"
 20260703,ht9045-v899,AutoClean\uCleaning.cpp,2863,MISSING,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 需求1 移除此處「重貼 alarm 擋機」ShowErrorMessage(客戶否決的鎖機行為)。改為函式尾恆放行 START。
 20260703,ht9045-v899,AutoClean\uCleaning.cpp,2867,MISSING,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 需求3 若偵測待重置(前一輪 iACUseParam==0 觸發)則於放行前呼叫 ResetSmartAutoClean 週期性重置偵測(歸零 iACSmartCount/iACSmartCount_CTF/iACUse

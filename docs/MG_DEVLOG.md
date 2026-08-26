@@ -107,15 +107,24 @@
 
 ---
 
-## 🔖 RESUME（20260826 晚）
+## 20260826 夜 — MG-W10 done（FTP 大波，本戰役最大單波）
 
-- **狀態**：Phase 2 連續波次進行中。MG-W1–W9 done。儀表**淨 MISSING=222**
+- 2 新增檔（FTPUpload 目錄整檔複製）＋16 op／6 檔＋.bpr 6 處登錄；58 條矩陣點。
+- 執行緒 15 接點齊備；OP12 無閘裁決照 V899 現狀（四項實測支撐）。
+- gate 全 PASS（新增檔 0 錯誤、uLotInfo 零回歸）。淨 MISSING **222 → 164**。
+- bcc_syntax INC 補 FTPUpload。
+
+---
+
+## 🔖 RESUME（20260826 夜）
+
+- **狀態**：Phase 2 連續波次進行中。MG-W1–W10 done。儀表**淨 MISSING=164**
   （起點 376；白名單 49 條有據）。
 - **進行中**：
-  - MG-W10 分析 agent（0609/0611/0612 FTP 大波 ~57 條：uFtpUploadThread.cpp/h＋uLotInfo＋main 等；
-    產物 docs/mg_w10_analysis.md＋mg_w10_ops.json）。
+  - MG-W11 分析 agent（AutoClean CKPP 主題波 0407-0417 群＋PickPlanner 目錄；
+    產物 docs/mg_w11_analysis.md＋mg_w11_ops.json）。
 - **下一步（按序）**：
-  1. 收 W10 執行。
+  1. 收 W11 執行。
   2. 之後照 LEDGER：AutoClean CKPP＋PickPlanner 目錄（0407-0417 群，含新增檔）、
      0810/0811 OutArm rotate 群、0819 hotair、0820 PTI 尾波、0623 cConfiguration 群、
      0625 TesterTCP、零星單條（0401/0410/0505/0513/0514/0515/0519/0520/0525/0605/0609/0611/0618/0629/0630/0703/0706）。
