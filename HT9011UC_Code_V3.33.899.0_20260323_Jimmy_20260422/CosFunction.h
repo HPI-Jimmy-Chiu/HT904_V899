@@ -351,6 +351,7 @@ typedef struct
     bool bLockI06ByFile;                                                        //Sam 20220527 : for 矽格-北興
     bool bManuallyRemoveForceInColor;                                           //Sam 20220530 : 當 Loader 發生 Skip/Edit 時，此盤做完後搬到 Empty 軌道後，會收盤起來並報警提示人員收盤(連兩盤)
     bool bUnloadTrayModeByRecipe;                                               //Steven 20220710 : 甬矽要求Unload Tray Mode by機台設置
+    bool bDisableAutoTrayFeed;                                                  //AI(ht9045-v899) 20260817: CC_CYUEAN 固定關閉 Auto Tray Feed(勾選時會架空 Clean Out 的 Tray End 選單)
     bool bFullTrayAlarmAfterUnloadEnd;                                          //Sam 20210602 : Unload 做完後再 Alarm
     bool PassworDownloadByFTP;                                                  //Sam 20210526 : 從 N06 DownloadPath 下載密碼本
     bool bShowYieldMonitor;                                                     //Sam 20210916 : 新增 Yiled Monitor 到畫面上
@@ -473,6 +474,7 @@ typedef struct
     bool bPowerSaveLotEndOnly;                                                  //AI(ht9045-v899) 20260804: C05 must not engage while RunInfo.bLotStart is true (one-cycle repair)
     bool bPowerSaveSkipAmbient;                                                 //AI(ht9045-v899) 20260804: C05 does not intervene when the machine halts in ambient mode
     bool bPowerSaveShowCaption;                                                 //AI(ht9045-v899) 20260804: show "Power Save Mode" on pnlPowerSaving once power saving is engaged
+    bool bHotAirByMOTemperatureMode;                                            //AI(ht9045-v899) 20260819: 超豐要求依 MO 工單 Temperature mode 是否含 HOT AIR 字眼自動開關熱風槍
 } HT9045_COUSTOMER_FUNCTION;
 extern HT9045_COUSTOMER_FUNCTION CosFunction;
 extern void InitialCosFunction();

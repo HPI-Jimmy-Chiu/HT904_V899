@@ -336,6 +336,7 @@ bool TfProductionInfo::OEE_StartLot(bool bSilent, AnsiString *pasErrorMsg)
             return false;
         }
     }
+    ApplyHotAirByMOTemperatureMode();                                           //AI(ht9045-v899) 20260819: 換完工作檔後再依 MO Temperature mode 自動開關熱風槍
     SaveInfoFileWhenStart();//Jimmychiu 20211109 : (Upate)Handler 實際運轉Site資料討論  //Jimmychiu 20240110 : change to site close changing
     return true;
 }
@@ -1961,8 +1962,27 @@ bool TfProductionInfo::CheckMOInformation()
             }
         }
 
+        //AI(ht9045-v899) 20260820: PTI 的 Fix1 位置是 rotate module,未指派 Category 時程式會把
+        //Pass/Fail 預設為 Fail(避免顯示成好品綠色),此時不可再拿它與 MO 的 PASSBIN 字串比對,
+        //否則會誤報 Check PASSBIN Error 擋住 Start。PASSBIN 最多 4 碼,只會涵蓋到 e3Fix2,故只需排除 e3Fix1。
+        bool bSkipFix1PassFail=false;
+        if(CUSTOMER_CODE==CC_PTI)
+        {
+            bSkipFix1PassFail=true;
+            for(int iChkBin=0; iChkBin<iTestBinCount && bSkipFix1PassFail==true; iChkBin++)
+            {
+                if(BinSelect[iTestRunMode].iCatDataT3Pos[iChkBin]==e3PosFix1)
+                {
+                    bSkipFix1PassFail=false;
+                }
+            }
+        }
+
         for(int i=0; i<iPassFailCount; i++)
         {
+            if(bSkipFix1PassFail==true && i==e3Fix1)                             //AI(ht9045-v899) 20260820: 見上方說明
+                continue;
+
             if(BinSelect[iTestRunMode].iStackDefFailCate[i]!=iLoadMO_PassFail[i])
             {
                 bCheckPassFailOK=false;
@@ -2027,6 +2047,45 @@ bool TfProductionInfo::CheckMOInformation()
     //<==
     //Sam 20180412 (wei) : Add Check CONTINUE PASS & CONTINUE FAIL Info on FT/QC
     return bCheckOK;
+}
+//---------------------------------------------------------------------------
+//AI(ht9045-v899) 20260819: 超豐要求依 MO 工單 Temperature mode 欄位自動開關熱風槍(Active Heater Gun)
+//規則(20260819 內部定案):
+//  1. Temperature mode 去除前後空白後為空字串(含工單無此欄) -> 不動作, 保留工作檔原設定
+//  2. 去空白後轉大寫含 "HOT AIR"                             -> 開啟熱風槍
+//  3. 其餘(例如 "Hot" / "Ambient")                            -> 關閉熱風槍
+//呼叫點必須在 AutoDownloadSetupFileByMO() 換完工作檔之後, 否則會被 ReadTempFile() 重讀工作檔蓋掉
+//只改執行期旗標與畫面勾選, 不回寫工作檔, 避免污染客戶 recipe
+void TfProductionInfo::ApplyHotAirByMOTemperatureMode()
+{
+    if(CosFunction.bHotAirByMOTemperatureMode==false)
+        return;
+    if(INSTALL_HEAT_GUN<=0)                                                     //AI(ht9045-v899) 20260819: 沒有熱風槍機構就不動作
+        return;
+
+    AnsiString asMode=sLoadMO_TemperatureMode.Trim();
+    if(asMode=="")                                                              //AI(ht9045-v899) 20260819: 舊工單無此欄或值為空, 保留工作檔原設定
+    {
+        fLotInfo->WriteFTPSetupFileChangeLog("Hot Air keep recipe setting (MO Temperature mode is empty)");
+        return;
+    }
+
+    bool bNeedHotAir=(asMode.UpperCase().Pos("HOT AIR")>0);
+    if(bNeedHotAir==true && Temperature.bUseCDAOnly==true)                      //AI(ht9045-v899) 20260819: 對齊 ReadTempFile 既有互斥: 熱風槍吹冷風時不開加熱
+    {
+        bNeedHotAir=false;
+        fLotInfo->WriteFTPSetupFileChangeLog("Hot Air OFF forced by Use CDA Only");
+    }
+
+    if(Temperature.bActiveHeatGun!=bNeedHotAir)
+    {
+        Temperature.bActiveHeatGun=bNeedHotAir;
+        fTemp_Set->cbHeaterGun->Checked=bNeedHotAir;                            //AI(ht9045-v899) 20260819: 同步畫面勾選, 讓 OP 看得到目前狀態
+    }
+
+    AnsiString asLog;
+    asLog.sprintf("Hot Air %s by MO Temperature mode = [%s]", (bNeedHotAir ? "ON" : "OFF"), asMode.c_str());
+    fLotInfo->WriteFTPSetupFileChangeLog(asLog);
 }
 //---------------------------------------------------------------------------
 bool TfProductionInfo::SetMOInformation()
@@ -5534,7 +5593,7 @@ void TfProductionInfo::SettingBinCategoryFromServer()
         sucSetUp.sFIX_1_CAT_D_PASS_FAIL,  sucSetUp.sFIX_2_CAT_E_PASS_FAIL,  sucSetUp.sFIX_3_JAM_PASS_FAIL,
         sucSetUp.sFIX_4_PASS_FAIL,        sucSetUp.sFIX_5_PASS_FAIL,        sucSetUp.sFIX_6_PASS_FAIL
     };
-    for(int i=0;i<iBinSelectLength;i++)
+    for(int i=0;i<iStackFail_Pass_Length && i<iBinSelectLength;i++)             //AI(ht9045-v899) 20260820: bound loop by asStackFail_Pass length(9); iBinSelectLength is eTrayCount(33) and overran the local array
     {
         BinSelect[eBinFT].iStackDefFailCate[i]=(asStackFail_Pass[i]=="Pass")?0:1;
     }

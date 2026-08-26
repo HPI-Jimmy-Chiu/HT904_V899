@@ -1990,6 +1990,6 @@ bool TfTemperFrom::Check_Tri_Temp_All_Temperature()                             
 //#include "MyMotor.h"
 void __fastcall TfTemperFrom::Button6Click(TObject *Sender)
 {
-    ShowErrorMessage("JAM0416", K_RETRY, MInShuttle1, false, "");
+    ShowErrorMessage("WAR07301", K_RETRY, MInShuttle1, false, "");
 }
 //---------------------------------------------------------------------------

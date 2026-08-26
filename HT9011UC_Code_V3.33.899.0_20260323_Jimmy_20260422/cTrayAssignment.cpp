@@ -234,6 +234,10 @@ void __fastcall TfTrayAssignment::ReadFile()
     if(fMain->hanaART->IsHanaArtAvailable())                                    //Steven 20251007 : for Hana ART
         TrayForm.bAutoFeed          =true;
 
+    //AI(ht9045-v899) 20260817: CC_CYUEAN 固定關閉 Auto Tray Feed, 不受工作檔 Tray.Data 與 hanaART 影響
+    if(CosFunction.bDisableAutoTrayFeed)
+        TrayForm.bAutoFeed          =false;
+
     TrayForm.bColorTray             =ReadIniData(szDir, "Flag", "Color Tray Sensor",    false);             //20140903 wei colcr Tray
     TrayForm.bChkLoadDirection      =ReadIniData(szDir, "Flag", "Check loader tray direction", false);      //Steven 20190815 : JCET不重測Tray偵測
     TrayForm.bMoveAfterTrayGoOut    =ReadIniData(szDir, "Flag", "MoveAfterTrayGoOut",    false);            //JerryYang 20241002 : SPIL要求功能 Trray arm等AUTO TRAY退到外面才能移動
@@ -719,6 +723,13 @@ void __fastcall TfTrayAssignment::FormShow(TObject *Sender)
 
     if(fMain->hanaART->IsHanaArtAvailable())                                    //Steven 20251007 : for Hana ART
         chkAutoTrayFeed->Enabled        =false;
+
+    //AI(ht9045-v899) 20260817: CC_CYUEAN 固定關閉 Auto Tray Feed, 取消勾選並鎖定(只鎖這一顆, 同群組其他兩項不動)
+    if(CosFunction.bDisableAutoTrayFeed)
+    {
+        chkAutoTrayFeed->Checked        =false;
+        chkAutoTrayFeed->Enabled        =false;
+    }
 
     if(CUSTOMER_CODE==CC_SCC ||                                                 //Steven 20101221
        CUSTOMER_CODE==CC_SCK)                                                   //ChungHung 20130621 add SCK RMS

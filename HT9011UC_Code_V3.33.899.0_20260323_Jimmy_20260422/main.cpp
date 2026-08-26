@@ -30008,7 +30008,7 @@ void __fastcall TfMain::TimerESDTimer(TObject *Sender)
                         Buffer1,
                         Buffer2);
 
-            for(int i=1; i<TestSocket.iShtRow; i++)                             //記錄Arm良率
+            for(int i=0; i<TestSocket.iShtRow; i++)                             //記錄Arm良率  //AI(ht9045-v899) 20260820: i由1改0, 原本Row A(index 0)整排未被記錄; 全樹其餘ArmSKET迴圈(cSocket/auto9045/SCK_ART等)皆由0起算
             {
                 for(int j=0; j<TestSocket.iShtCol; j++)
                 {
@@ -30030,7 +30030,7 @@ void __fastcall TfMain::TimerESDTimer(TObject *Sender)
                         }
                     }
 
-                    sTemp.sprintf("%c%c:%s;", 'A'+(int)(ChangeToFloatNonPcnt((double)((i-1)), (double)(TestSocket.iShtCol))), 'a'+((i-1)%TestSocket.iShtCol), sTemp1);   //AI(ht9045-v899) 20260515: 同cContactCT修正, Production log site標籤亦受影響, ChangeToFloatNonPcnt回float配%c→亂碼, 強制int還原
+                    sTemp.sprintf("%c%c:%s;", 'A'+i, 'a'+j, sTemp1);            //AI(ht9045-v899) 20260820: 標籤第二字母原誤用外層i, 同一列所有j印出同一標籤(2x4只印出4個"Aa"), 改為row='A'+i/col='a'+j; 直接取列欄索引即不需除法, 故移除20260515的ChangeToFloatNonPcnt+(int), 語意等同cContactCT.cpp:202 flat index/欄數
                     str=str+sTemp;
                 }
             }
