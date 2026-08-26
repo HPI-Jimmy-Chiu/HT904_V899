@@ -5588,6 +5588,9 @@ extern int iRunACSmart;
 extern bool bRunACAdaptive;                             //Sam 20230914 : 自適應性良率監控
 extern AnsiString sACRecAlarmCode;                      //Sam 20250916 : Alarm後需要清除資料才能Start
 extern AnsiString sACRecEPortCode;
+extern AnsiString sACSmartNoteEN;                       //AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 pnlCleanSocket 動態英文提示
+extern AnsiString sACSmartNoteCH;                       //AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 pnlCleanSocket 動態中文提示
+extern bool bACSmartNeedReset;                          //AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 START 閘門重置 Smart Auto Clean 偵測旗標
 extern bool bLoadingNewICTray;                          //Sam 20240827 : 新增 AMR 功能
 extern bool bShowNoteCleanSocket;
 extern bool bBarCoderAutoLogin;                         //Sam 20221101 : 使用 BarCoder 自動登錄

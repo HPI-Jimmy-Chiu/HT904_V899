@@ -2886,6 +2886,32 @@ bool ProcessMotorHome(bool Flag2)
 //            if(!(bCyflag[0] && bCyflag[1] && bCyflag[2] && bCyflag[3]))
 //                flag1=false;
 
+            //AI(ht9045-v899) 20260703: Greatek硬體極性校正-Home以放開為目標;有盤依軟體fHasTray維持夾持,無盤則驅動放開並確認FixOff到位(不再用FixOn sensor猜有盤,FixOn ON=空夾非有盤);非Greatek維持原邏輯
+            if(CUSTOMER_CODE==CC_Greatek && USE_AUTO_RETEST==eartInstall)
+            {
+                if(MOT[MTrayX].fHasTray)
+                {
+                    Cylinder[C_CatchTray_FixOn].On();       //軟體確知持盤:維持夾持
+                    Cylinder[C_CatchTray_FixOff].Off();
+                }
+                else
+                {
+                    Cylinder[C_CatchTray_FixOn].Off();       //無盤:目標放開
+                    Cylinder[C_CatchTray_FixOff].On();
+                    if(Cylinder[C_CatchTray_FixOff].OnStatus()==false)   //放開未到位:驅動後仍卡
+                    {
+                        static int iRelDetCnt=0;
+                        iRelDetCnt++;
+                        if(iRelDetCnt>100)
+                        {
+                            iRelDetCnt=0;
+                            ShowErrorMessage("WAR0615", K_SKIP, MTrayX, false, "ProcessMotorHome_400_Greatek");
+                        }
+                    }
+                }
+            }
+            else
+            {
             if(MOT[MTrayX].fHasTray ||                                          //jou 2012-10-26 修正歸零catch tray 會把tray丟在中途
                (LastSet.iRunStartMode==rsmAutoRetest &&
                 Cylinder[C_CatchTray_FixOn].OnStatus()) ||
@@ -2902,14 +2928,29 @@ bool ProcessMotorHome(bool Flag2)
                     }
                     else
                     {
-                        if(MOT[MTrayX].fHasTray==false)                         //JerryYang 20251014 : tray arm沒資料但是偵測到有tray盤的時候跳一下alarm
+                        //AI(ht9045-v899) 20260703: Home時FixOn讀ON但軟體無盤記錄,原邏輯不經確認即夾持+標記有盤走自動退盤,造成非預期夾爪動作;改為防抖100次後跳WAR0614由操作員確認,RETRY=已取下盤重新檢查,SKIP=確認有盤維持舊有自動退盤
+                        if(MOT[MTrayX].fHasTray==false)
                         {
-                            Str.sprintf("Tray arm detect a tray on it. Please check if there is a tray!(C_CatchTray_FixOn_On)");
-                            ShowMyMessage(Str);
+                            static int iFixOnDetCnt=0;
+                            iFixOnDetCnt++;
+                            if(iFixOnDetCnt>100)
+                            {
+                                iFixOnDetCnt=0;
+                                int iAlmRet=ShowErrorMessage("WAR0614", K_SKIP|K_RETRY, MTrayX, false, "ProcessMotorHome_400");
+                                if(iAlmRet==K_SKIP)
+                                {
+                                    MOT[MTrayX].fHasTray=true;
+                                    Cylinder[C_CatchTray_FixOn].On();
+                                    Cylinder[C_CatchTray_FixOff].Off();
+                                }
+                            }
                         }
-                        MOT[MTrayX].fHasTray=true;                              //ChungHung 20141208 add for AutoRetest mode 中途關程式 catch Tray 要搬到loader
-                        Cylinder[C_CatchTray_FixOn].On();
-                        Cylinder[C_CatchTray_FixOff].Off();
+                        else
+                        {
+                            MOT[MTrayX].fHasTray=true;
+                            Cylinder[C_CatchTray_FixOn].On();
+                            Cylinder[C_CatchTray_FixOff].Off();
+                        }
                     }
                 }
                 else
@@ -2928,6 +2969,7 @@ bool ProcessMotorHome(bool Flag2)
                 {
                     Cylinder[C_CatchTray_Fix].Off();
                 }
+            }
             }
 
             if(flag1)

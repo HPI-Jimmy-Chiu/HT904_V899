@@ -2197,6 +2197,9 @@ AnsiString TFormHS::GetUploadServerByFTPPath(AnsiString asFileType, bool bDailyR
 //---------------------------------------------------------------------------
 int __fastcall TFormHS::UpDataToServerByFTP(AnsiString asDirPath, AnsiString sFileName, AnsiString asFileType, bool bDailyReport)                               //Steven 20250716 : 修正N10上傳FTP的動作
 {
+    //AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): 最外層 try/catch 加固,讓 socket 例外不再以空 UnitName 逸出到 main.cpp AppException(保留原 success 回傳碼語義)
+    try
+    {
     int iReturn=HS_ERR_NoError;
     AnsiString asFtpUplaodPath=GetUploadServerByFTPPath(asFileType,bDailyReport);                                       //Sam 20170823 (wei) : 矽格中興 FTP Log 上傳增加時間格式選擇
     AnsiString asUserID="",asPassword="",asHost="";
@@ -2214,7 +2217,7 @@ int __fastcall TFormHS::UpDataToServerByFTP(AnsiString asDirPath, AnsiString sFi
     if(bDailyReport)
         MNetLog(AnsiString().sprintf("[N10] FTP connecting: Host=%s, Port=%d, Passive=%d, Type=%s, File=%s",
             asHost, IniConfig.iN10FtpPort, (int)IniConfig.bN10FtpPassive, asFileType, sFileName));
-    if(fFTP.Connect(asUserID, asPassword, asHost, 30000, NMOS_AUTO, IniConfig.bN10FtpPassive, IniConfig.iN10FtpPort))
+    if(fFTP.Connect(asUserID, asPassword, asHost, 5000, NMOS_AUTO, IniConfig.bN10FtpPassive, IniConfig.iN10FtpPort))  //AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): connect timeout 30000->5000ms 與 PTI N06 路徑一致,降低同步阻塞最壞值
     {
         AnsiString asError="";
         fFTP.CheckLocalFilePath(asDirPath);
@@ -2257,6 +2260,17 @@ int __fastcall TFormHS::UpDataToServerByFTP(AnsiString asDirPath, AnsiString sFi
 
 //    bNeedUpload_N10=true;
     return iReturn;
+    }
+    catch(Exception &e)
+    {
+        MyDBIProcess("Exception", "UpDataToServerByFTP", e.Message);
+        return HS_ERR_FTPUploadError;
+    }
+    catch(...)
+    {
+        MyDBIProcess("Exception", "UpDataToServerByFTP unknown");
+        return HS_ERR_FTPUploadError;
+    }
 }
 //---------------------------------------------------------------------------
 AnsiString __fastcall TFormHS::GetTempUseName(int source)                       //Ifor 20160303 依據溫控器開啟狀況變更Log顯示名稱

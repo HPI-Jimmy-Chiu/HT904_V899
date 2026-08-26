@@ -5880,7 +5880,14 @@ int CheckInitStartSuckStatus()                                                  
        (USE_CATCH_TRAY_MODEL==3 && bDetectTrayArmCatch==false))                 //Steven 20170623 (wei) : Add for catch tray with cover
     {                                                                           //kevin 20150810 add
         iReturn=5;                                                              //kevin 20160616
-        if(USE_CATCH_TRAY_MODEL==2 ||                                           //jou 2011-11-08 retry -> skip字義上比較恰當
+        if(CUSTOMER_CODE==CC_Greatek && USE_CATCH_TRAY_MODEL==2)                //AI(ht9045-v899) 20260703: Greatek極性校正-啟動應在放開位;FixOn ON=空夾/掉盤→WAR0615,兩顆到位OFF=有盤→WAR0614取盤;非Greatek還原原始WAR0615
+        {
+            if(Cylinder[C_CatchTray_FixOn].OnStatus())
+                ShowErrorMessage("WAR0615", K_SKIP, MTrayX, false, __FUNC__);
+            else
+                ShowErrorMessage("WAR0614", K_SKIP, MTrayX, false, __FUNC__);
+        }
+        else if(USE_CATCH_TRAY_MODEL==2 ||                                           //jou 2011-11-08 retry -> skip字義上比較恰當
            USE_CATCH_TRAY_MODEL==3)                                             //Steven 20170623 (wei) : Add for catch tray with cover
             ShowErrorMessage("WAR0615", K_SKIP, MTrayX, false, __FUNC__);       //kevin 20150811 add   'ART_TrayARM ON/OFF cyclinder Sensor error
         else
@@ -5954,7 +5961,14 @@ bool DoReTesetStart()
             }
             else if(hDoInitialStartTim.Off())                                   //kevin 20160616 夾tray機構異常
             {
-                  if(USE_CATCH_TRAY_MODEL==2 ||
+                  if(CUSTOMER_CODE==CC_Greatek && USE_CATCH_TRAY_MODEL==2)   //AI(ht9045-v899) 20260703: Greatek極性校正-啟動應在放開位;FixOn ON=空夾/掉盤→WAR0615,兩顆到位OFF=有盤→WAR0614取盤;非Greatek還原原始WAR0615
+                  {
+                      if(Cylinder[C_CatchTray_FixOn].OnStatus())
+                          ShowErrorMessage("WAR0615", K_SKIP, MTrayX, false, __FUNC__);
+                      else
+                          ShowErrorMessage("WAR0614", K_SKIP, MTrayX, false, __FUNC__);
+                  }
+                  else if(USE_CATCH_TRAY_MODEL==2 ||
                      USE_CATCH_TRAY_MODEL==3)                                   //Steven 20170623 (wei) : Add for catch tray with cover
                       ShowErrorMessage("WAR0615", K_SKIP, MTrayX, false, __FUNC__);                                     //kevin 20150811 add   'ART_TrayARM ON/OFF cyclinder Sensor error
                   else
@@ -6687,7 +6701,14 @@ bool DoInitialStart()
             }
             else if(hDoInitialStartTim.Off())                                   //kevin 20160616 夾tray機構異常
             {
-                if(USE_CATCH_TRAY_MODEL==2 ||
+                if(CUSTOMER_CODE==CC_Greatek && USE_CATCH_TRAY_MODEL==2)   //AI(ht9045-v899) 20260703: Greatek極性校正-啟動應在放開位;FixOn ON=空夾/掉盤→WAR0615,兩顆到位OFF=有盤→WAR0614取盤;非Greatek還原原始WAR0615
+                {
+                    if(Cylinder[C_CatchTray_FixOn].OnStatus())
+                        ShowErrorMessage("WAR0615", K_SKIP, MTrayX, false, __FUNC__);
+                    else
+                        ShowErrorMessage("WAR0614", K_SKIP, MTrayX, false, __FUNC__);
+                }
+                else if(USE_CATCH_TRAY_MODEL==2 ||
                    USE_CATCH_TRAY_MODEL==3)                                     //Steven 20170623 (wei) : Add for catch tray with cover
                       ShowErrorMessage("WAR0615", K_SKIP, MTrayX, false, __FUNC__);                                     //kevin 20150811 add   'ART_TrayARM ON/OFF cyclinder Sensor error
                   else
@@ -23222,13 +23243,27 @@ void Del_Tree(AnsiString Dir)
                 if ((SearchRec.Name!=".") && (SearchRec.Name!=".."))
                 {
                     Del_Tree(d+SearchRec.Name);                                 //遞迴呼叫
-                    RemoveDir(d+SearchRec.Name);
+                    //AI(ht9045-v899) 20260630: 子目錄移除同樣重試,與最後 RemoveDir 對稱(子層已先清空檔案)
+                    for(int iSubRetry=0; iSubRetry<3; iSubRetry++)
+                    {
+                        if(RemoveDir(d+SearchRec.Name))
+                            break;
+                        MySleep(100);
+                    }
                 }
             }
             else
             {
-                FileSetAttr(d+SearchRec.Name,faArchive);
-                DeleteFile(d+SearchRec.Name);
+                //AI(ht9045-v899) 20260630: 檔案被占用時 DeleteFile 會失敗,原本直接略過會留下殘缺
+                //  同名資料夾(State Record 殘留問題)。失敗時重試最多 3 次,每次間隔 100ms 等鎖釋放
+                AnsiString asDelFile=d+SearchRec.Name;
+                for(int iDelRetry=0; iDelRetry<3; iDelRetry++)
+                {
+                    FileSetAttr(asDelFile,faArchive);
+                    if(DeleteFile(asDelFile))
+                        break;
+                    MySleep(100);
+                }
             }
         }
         while(FindNext(SearchRec)==0);
@@ -23236,7 +23271,13 @@ void Del_Tree(AnsiString Dir)
         FindClose(SearchRec);
     }
 
-    RemoveDir(d);
+    //AI(ht9045-v899) 20260630: 目錄移除同樣重試最多 3 次,確保被占用檔案造成的非空失敗在鎖釋放後能成功
+    for(int iRmRetry=0; iRmRetry<3; iRmRetry++)
+    {
+        if(RemoveDir(d))
+            break;
+        MySleep(100);
+    }
 }
 //------------------------------------------------------------------------------
 void InitialDoLockUnloader(int iAuto)                                           //JerryYang 20191210 優化Auto定位方式

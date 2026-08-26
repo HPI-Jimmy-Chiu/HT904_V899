@@ -1,0 +1,308 @@
+[
+  {
+    "op": "W14-01",
+    "note": "0630 State Record: ExecZipCommandHandle 前置宣告（矩陣 cpublic.h:46）",
+    "v910_file": "cpublic.h",
+    "v899_lines": [46, 46],
+    "mode": "after",
+    "anchor_line": 45,
+    "anchor_expect": "bool ExecZipCommand(AnsiString Path, AnsiString Param);"
+  },
+  {
+    "op": "W14-02",
+    "note": "0630 State Record: ExecZipCommandHandle 函式本體 37 行（矩陣只列 :655 一行，漏搬即 link error）",
+    "v910_file": "cpublic.cpp",
+    "v899_lines": [655, 691],
+    "mode": "before",
+    "anchor_line": 657,
+    "anchor_expect": "AnsiString GetOnlyTimeInfoByString(AnsiString asSign)"
+  },
+  {
+    "op": "W14-03",
+    "note": "0630 PTI Sort Summary 補 Fix4-6 + Total（CUSTOMER_CODE==CC_PTI 閘，非 PTI 輸出不變）",
+    "v910_file": "cpublic.cpp",
+    "v899_lines": [766, 783],
+    "mode": "replace",
+    "replace_lines": [732, 733],
+    "anchor_expect": "tmps.sprintf(\"Fix3=%d\\n\\n\", LastSet.BinCT[0][e3Fix3]);"
+  },
+  {
+    "op": "W14-04",
+    "note": "0630 Del_Tree：子目錄移除重試 3 次",
+    "v910_file": "csystem.cpp",
+    "v899_lines": [21812, 21818],
+    "mode": "replace",
+    "replace_lines": [23225, 23225],
+    "anchor_expect": "RemoveDir(d+SearchRec.Name);"
+  },
+  {
+    "op": "W14-05",
+    "note": "0630 Del_Tree：檔案刪除被占用時重試 3 次",
+    "v910_file": "csystem.cpp",
+    "v899_lines": [21823, 21832],
+    "mode": "replace",
+    "replace_lines": [23230, 23231],
+    "anchor_expect": "FileSetAttr(d+SearchRec.Name,faArchive);"
+  },
+  {
+    "op": "W14-06",
+    "note": "0630 Del_Tree：最後 RemoveDir 重試 3 次",
+    "v910_file": "csystem.cpp",
+    "v899_lines": [21840, 21846],
+    "mode": "replace",
+    "replace_lines": [23239, 23239],
+    "anchor_expect": "    RemoveDir(d);"
+  },
+  {
+    "op": "W14-07",
+    "note": "0703 超豐 Greatek 極性校正：CheckInitStartSuckStatus 啟動自檢 WAR0614/0615 分流（矩陣 csystem:5489）",
+    "v910_file": "csystem.cpp",
+    "v899_lines": [5489, 5497],
+    "mode": "replace",
+    "replace_lines": [5883, 5884],
+    "anchor_expect": "        if(USE_CATCH_TRAY_MODEL==2 ||                                           //jou 2011-11-08 retry -> skip"
+  },
+  {
+    "op": "W14-08",
+    "note": "0703 超豐 Greatek 極性校正：DoReTesetStart 夾 tray 機構異常分流（矩陣 csystem:5570）",
+    "v910_file": "csystem.cpp",
+    "v899_lines": [5570, 5578],
+    "mode": "replace",
+    "replace_lines": [5957, 5958],
+    "anchor_expect": "                  if(USE_CATCH_TRAY_MODEL==2 ||\r\n                     USE_CATCH_TRAY_MODEL==3)"
+  },
+  {
+    "op": "W14-09",
+    "note": "0703 超豐 Greatek 極性校正：DoInitialStart 夾 tray 機構異常分流（矩陣 csystem:6229）",
+    "v910_file": "csystem.cpp",
+    "v899_lines": [6229, 6237],
+    "mode": "replace",
+    "replace_lines": [6690, 6691],
+    "anchor_expect": "                if(USE_CATCH_TRAY_MODEL==2 ||\r\n                   USE_CATCH_TRAY_MODEL==3)"
+  },
+  {
+    "op": "W14-10",
+    "note": "0630 State Record：4 個檔案層 static（handle/輪詢起點/stage）+ 3 行說明（矩陣 main:25154）",
+    "v910_file": "main.cpp",
+    "v899_lines": [25154, 25160],
+    "mode": "before",
+    "anchor_line": 26380,
+    "anchor_expect": "void TfMain::StateRecordImage()"
+  },
+  {
+    "op": "W14-11",
+    "note": "0630 State Record：int iret=-1 改成 dwWaitRet/dwZipExit（矩陣 main:25164,25165）。V910 自有的 iScrW/iScrH（Steven 20260504 解析度支援）刻意不碰",
+    "v910_file": "main.cpp",
+    "v899_lines": [25164, 25165],
+    "mode": "replace",
+    "replace_lines": [26383, 26383],
+    "anchor_expect": "int iret=-1;"
+  },
+  {
+    "op": "W14-12",
+    "note": "0630 State Record：case 6 改分段非阻塞輪詢（矩陣 main:25226,25260）。只換 case 6 內文，case 1-5 的 iScrW/iScrH 一行不動",
+    "v910_file": "main.cpp",
+    "v899_lines": [25226, 25294],
+    "mode": "replace",
+    "replace_lines": [26448, 26475],
+    "anchor_expect": "str1.sprintf(\"d:\\\\HT9045\\\\7z.exe a -tzip \\\"%s.zip\\\" \\\"%s\\\"\", NewPath, NewPath);"
+  },
+  {
+    "op": "W14-13",
+    "note": "0630 State Record：DoStateRecord 啟動前清 handle/stage + 保留 1.bat handle（矩陣 main:25727）",
+    "v910_file": "main.cpp",
+    "v899_lines": [25727, 25735],
+    "mode": "replace",
+    "replace_lines": [26923, 26923],
+    "anchor_expect": "        ExecZipCommand(BatFile, \" \");                                           //Steven 20160205"
+  },
+  {
+    "op": "W14-14",
+    "note": "0703 PTI Smart AutoClean：Start 呼叫點註記閘門已恆放行（矩陣 main:4554；外殼與呼叫不動）",
+    "v910_file": "main.cpp",
+    "v899_lines": [4554, 4554],
+    "mode": "before",
+    "anchor_line": 4790,
+    "anchor_expect": "if(fCleaning->CheckSmartAutoCleanCanStart()==false)"
+  },
+  {
+    "op": "W14-15",
+    "note": "0630 MyMessageBox z-order：FormShow 用 SetWindowPos(HWND_TOP,NOACTIVATE)（矩陣 mymessbox:344）",
+    "v910_file": "mymessbox.cpp",
+    "v899_lines": [341, 345],
+    "mode": "replace",
+    "replace_lines": [381, 382],
+    "anchor_expect": "fMain->machineTime.Pause();"
+  },
+  {
+    "op": "W14-16",
+    "note": "0630 Lot End 訊息框 ShowModal 前 BringToFront（矩陣 mymessbox:943）。replace 上界含 941/942 只為取唯一錨（該兩行與 V899 位元組相同）",
+    "v910_file": "mymessbox.cpp",
+    "v899_lines": [931, 944],
+    "mode": "replace",
+    "replace_lines": [989, 1001],
+    "anchor_expect": "MyMessageBox->pnlNo->Caption        =\"Full lot end\";"
+  },
+  {
+    "op": "W14-17",
+    "note": "0703 PTI Smart AutoClean：pnlCleanSocket 動態原因/處置文字覆寫（矩陣 note:1995）",
+    "v910_file": "note.cpp",
+    "v899_lines": [1995, 1999],
+    "mode": "after",
+    "anchor_line": 2014,
+    "anchor_expect": "lblSmartCleanCH->Caption=\"auto clean "
+  },
+  {
+    "op": "W14-18",
+    "note": "0630 Timer1Timer 置頂鏈尾補 MyMessageBox->BringToFront（矩陣 note:3486）",
+    "v910_file": "note.cpp",
+    "v899_lines": [3482, 3489],
+    "mode": "replace",
+    "replace_lines": [3511, 3514],
+    "anchor_expect": "else if(MyMessageBox->fShow==false)"
+  },
+  {
+    "op": "W14-19",
+    "note": "0630 CASE-PTI-20260630-002：UpDataToServerByFTP 最外層 try 開頭（矩陣 HS_Function:1967）",
+    "v910_file": "HS_Function.cpp",
+    "v899_lines": [1967, 1969],
+    "mode": "before",
+    "anchor_line": 2200,
+    "anchor_expect": "    int iReturn=HS_ERR_NoError;"
+  },
+  {
+    "op": "W14-20",
+    "note": "0630 CASE-PTI-20260630-002：connect timeout 30000->5000ms（矩陣 HS_Function:1987）",
+    "v910_file": "HS_Function.cpp",
+    "v899_lines": [1987, 1987],
+    "mode": "replace",
+    "replace_lines": [2217, 2217],
+    "anchor_expect": "if(fFTP.Connect(asUserID, asPassword, asHost, 30000, NMOS_AUTO,"
+  },
+  {
+    "op": "W14-21",
+    "note": "0630 CASE-PTI-20260630-002：try 收尾 + 兩個 catch（無標記承重行，矩陣完全看不到；漏搬則 W14-19 的 try 沒有收尾＝編譯錯）",
+    "v910_file": "HS_Function.cpp",
+    "v899_lines": [2020, 2032],
+    "mode": "replace",
+    "replace_lines": [2258, 2259],
+    "anchor_expect": "//    bNeedUpload_N10=true;"
+  },
+  {
+    "op": "W14-22",
+    "note": "0703 CASE-PTI-20260630-001 需求2：觸發當下非阻塞提示 + 置位重置旗標（矩陣 uCleaning:2650）",
+    "v910_file": "AutoClean\\uCleaning.cpp",
+    "v899_lines": [2650, 2660],
+    "mode": "after",
+    "anchor_line": 2712,
+    "anchor_expect": "bShowNoteCleanSocket=true;"
+  },
+  {
+    "op": "W14-23",
+    "note": "0703 CASE-PTI-20260630-001 需求1+3：移除鎖機 ShowErrorMessage、恆放行 return true、放行前重置偵測（矩陣 uCleaning:2863,2867）",
+    "v910_file": "AutoClean\\uCleaning.cpp",
+    "v899_lines": [2863, 2876],
+    "mode": "replace",
+    "replace_lines": [2915, 2919],
+    "anchor_expect": "ShowErrorMessage(sACRecAlarmCode, K_RETRY, MMInterface, false, sACRecEPortCode);"
+  },
+  {
+    "op": "W14-24",
+    "note": "0703 CASE-PTI-20260630-001：三個新全域定義（矩陣 cmydef.cpp:5457-5460）",
+    "v910_file": "cmydef.cpp",
+    "v899_lines": [5457, 5460],
+    "mode": "after",
+    "anchor_line": 5522,
+    "anchor_expect": "bool bShowNoteCleanSocket=false;"
+  },
+  {
+    "op": "W14-25",
+    "note": "0703 CASE-PTI-20260630-001：三個新全域 extern 宣告（矩陣 cmydef.h:5508-5510）",
+    "v910_file": "cmydef.h",
+    "v899_lines": [5508, 5510],
+    "mode": "after",
+    "anchor_line": 5590,
+    "anchor_expect": "extern AnsiString sACRecEPortCode;"
+  },
+  {
+    "op": "W14-26",
+    "note": "0703 超豐 Greatek：DoCatchFromLoader case 301 夾盤有盤時 FixOn 不到位，直接進 Task=310 避 JAM0613（矩陣 acatchtray:1729）。被取代行僅行尾註解對齊欄位與 V899 不同",
+    "v910_file": "acatchtray.cpp",
+    "v899_lines": [1729, 1734],
+    "mode": "replace",
+    "replace_lines": [2074, 2074],
+    "anchor_expect": "if(Cylinder[C_CatchTray_FixOn].OnSensor()==false)"
+  },
+  {
+    "op": "W14-27",
+    "note": "0703 case 570 JAM0610 SKIP 後補釋放夾爪（矩陣 acatchtray:2020）。⚠ 本 op 的錨在全檔命中 2 次（另一處為 2365-2366 的孿生分支），靠 md5 前提鎖定行號；套用前必須確認 acatchtray.cpp md5=effd6ba47e00",
+    "v910_file": "acatchtray.cpp",
+    "v899_lines": [2017, 2030],
+    "mode": "replace",
+    "replace_lines": [2392, 2393],
+    "anchor_expect": "                        else if(ret==K_SKIP)\r\n                            MOT[MTrayX].fHasTray=false;"
+  },
+  {
+    "op": "W14-28",
+    "note": "0703 DoPlaceTrayToAuto_250 JAM0610 SKIP 後補釋放夾爪（矩陣 acatchtray:3628）",
+    "v910_file": "acatchtray.cpp",
+    "v899_lines": [3624, 3639],
+    "mode": "replace",
+    "replace_lines": [4132, 4137],
+    "anchor_expect": "\"DoPlaceTrayToAuto_250\""
+  },
+  {
+    "op": "W14-29",
+    "note": "0703 DoPlaceToBuffer JAM0610 SKIP 後補釋放夾爪（矩陣 acatchtray:4591）",
+    "v910_file": "acatchtray.cpp",
+    "v899_lines": [4587, 4602],
+    "mode": "replace",
+    "replace_lines": [5212, 5217],
+    "anchor_expect": "\"DoPlaceTrayToBuffer_2100\""
+  },
+  {
+    "op": "W14-30",
+    "note": "0703 超豐 Greatek：C_CatchTray_Fix_Puch 夾緊改 On() 不等 sensor，避 JAM31047（矩陣 acatchtray:7239）",
+    "v910_file": "acatchtray.cpp",
+    "v899_lines": [7238, 7247],
+    "mode": "replace",
+    "replace_lines": [8205, 8205],
+    "anchor_expect": "bflag=Cylinder[C_CatchTray_FixOn].Push();"
+  },
+  {
+    "op": "W14-31",
+    "note": "0703 超豐 Greatek：IsTrayArmCatchTrayFail case2/4 極性反轉判斷（矩陣 acatchtray:7350）",
+    "v910_file": "acatchtray.cpp",
+    "v899_lines": [7350, 7357],
+    "mode": "replace",
+    "replace_lines": [8308, 8308],
+    "anchor_expect": "if(Cylinder[C_CatchTray_FixOn].OnStatus()==false)               //wei 20150415"
+  },
+  {
+    "op": "W14-32",
+    "note": "0703 超豐 Greatek：ProcessMotorHome Home 以放開為目標的 Greatek 分支 + else { 開頭（矩陣 uhome:2664）。被包住的既有區塊一行不動，V910 較乾淨的中文註解因此保留",
+    "v910_file": "uhome.cpp",
+    "v899_lines": [2664, 2689],
+    "mode": "before",
+    "anchor_line": 2889,
+    "anchor_expect": "if(MOT[MTrayX].fHasTray ||"
+  },
+  {
+    "op": "W14-33",
+    "note": "0703 Home 時 FixOn ON 但軟體無盤：改防抖 100 次後跳 WAR0614 由操作員確認（矩陣 uhome:2706）",
+    "v910_file": "uhome.cpp",
+    "v899_lines": [2706, 2728],
+    "mode": "replace",
+    "replace_lines": [2905, 2912],
+    "anchor_expect": "Tray arm detect a tray on it."
+  },
+  {
+    "op": "W14-34",
+    "note": "0703 超豐 Greatek：ProcessMotorHome 的 else 收尾 }（無標記承重行；漏搬即括號不平衡編譯錯）",
+    "v910_file": "uhome.cpp",
+    "v899_lines": [2743, 2748],
+    "mode": "replace",
+    "replace_lines": [2927, 2931],
+    "anchor_expect": "                    Cylinder[C_CatchTray_Fix].Off();\r\n                }\r\n            }"
+  }
+]

@@ -53,8 +53,8 @@
 | 20260623 | 0 | 0 | 0 | 6 | 6 |
 | 20260625 | 0 | 0 | 0 | 7 | 7 |
 | 20260629 | 0 | 0 | 0 | 1 | 1 |
-| 20260630 | 1 | 0 | 0 | 17 | 18 |
-| 20260703 | 0 | 0 | 0 | 25 | 25 |
+| 20260630 | 18 | 0 | 0 | 0 | 18 |
+| 20260703 | 23 | 0 | 2 | 0 | 25 |
 | 20260706 | 0 | 0 | 0 | 1 | 1 |
 | 20260803 | 5 | 0 | 0 | 0 | 5 |
 | 20260804 | 25 | 0 | 0 | 0 | 25 |
@@ -63,35 +63,29 @@
 | 20260817 | 11 | 0 | 0 | 0 | 11 |
 | 20260819 | 10 | 0 | 0 | 0 | 10 |
 | 20260820 | 7 | 0 | 0 | 0 | 7 |
-| **合計** | 578 | 3 | 51 | 87 | 719 |
+| **合計** | 618 | 3 | 53 | 45 | 719 |
 
 ## MISSING 依檔案分布（前 40）
 
 | 檔案 | 缺席註解數 |
 |---|---|
-| main.cpp | 12 |
-| acatchtray.cpp | 9 |
-| csystem.cpp | 7 |
-| AutoClean\uCleaning.cpp | 7 |
 | Interface\TesterTCP.cpp | 6 |
+| main.cpp | 5 |
 | cConfiguration.cpp | 4 |
-| cmydef.cpp | 4 |
+| AutoClean\uCleaning.cpp | 4 |
 | ainarm9045.cpp | 3 |
 | cContactCT.cpp | 3 |
-| cmydef.h | 3 |
 | cShowBinSelect.cpp | 3 |
-| HS_Function.cpp | 3 |
-| uhome.cpp | 3 |
 | CosFunction.cpp | 2 |
-| cpublic.cpp | 2 |
-| mymessbox.cpp | 2 |
-| note.cpp | 2 |
 | uTrayEditForm.cpp | 2 |
+| acatchtray.cpp | 1 |
 | adam6024.cpp | 1 |
 | asendic_Auto.cpp | 1 |
-| cpublic.h | 1 |
 | cSortCT.cpp | 1 |
+| csystem.cpp | 1 |
+| HS_Function.cpp | 1 |
 | MachineType.h | 1 |
+| uhome.cpp | 1 |
 | AutoClean\AutoClean.cpp | 1 |
 | BarCode\BarCode.cpp | 1 |
 | Interface\TesterTCP.h | 1 |

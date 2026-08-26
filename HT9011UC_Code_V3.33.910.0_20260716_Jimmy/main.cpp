@@ -4787,6 +4787,7 @@ bool __fastcall TfMain::Start(AnsiString Func)
     }
 
 #ifndef SOFT_SIMULTE
+    //AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 閘門已於函式端(CheckSmartAutoCleanCanStart)改為恆放行(return true), 此呼叫不再擋 START, 下一行 return false 實際不會執行；外殼與呼叫保持不動。
     if(fCleaning->CheckSmartAutoCleanCanStart()==false)                         //Sam 20250916 : Alarm後需要清除資料才能Start
         return false;
 
@@ -26377,10 +26378,18 @@ void __fastcall TfMain::edtSetZ1Click(TObject *Sender)
     }
 }
 //------------------------------------------------------------------------------
+//AI(ht9045-v899) 20260630: State Record 用—1.bat(複製)與整包壓縮 7z 各自的 process handle、
+//  輪詢起始時間(GetTickCount)與分段旗標;讓 case 6 以非阻塞輪詢等兩段非同步工作依序完成,
+//  全程不凍結 UI/SECS/motion(month-end 大量 log 的整包 7z 也不會擋住 SECS 30s timer)。
+static HANDLE g_hStateRecordBat=NULL;
+static HANDLE g_hStateRecordZip=NULL;
+static DWORD  g_dwStateRecordWaitStart=0;
+static int    g_iStateRecordStage=0;
 void TfMain::StateRecordImage()
 {
     AnsiString str1="";                                                         //KenHsieh 20230105 : 新增StateRecord 另存路徑
-    int iret=-1;                                                                //KenHsieh 20230105 : 新增StateRecord 另存路徑
+    DWORD dwWaitRet=0;                                                          //AI(ht9045-v899) 20260630: case 6 兩段非阻塞輪詢的 WaitForSingleObject 回傳暫存
+    DWORD dwZipExit=1;                                                          //AI(ht9045-v899) 20260630: 整包壓縮 7z 結束碼(預設1=未成功;壓縮成功才設0並刪資料夾,維持原 iret==0 條件)
     int iScrW=XResolution;                                                      //Steven 20260504 : Support 1920x1080 and 1280x1024
     int iScrH=YResolution;
     if(iScrW<=0) iScrW=1280;
@@ -26445,34 +26454,75 @@ void TfMain::StateRecordImage()
             sbReturnToMainClick(this);
             break;
         case 6:
-            if(iSaveImgae==1)
+            //AI(ht9045-v899) 20260630: case 6 改成「分段非阻塞輪詢」收尾,全程不擋 UI/SECS/motion:
+            //  stage0=先把(若有)JAM0316/0317/加熱盤格式 alarm 顯示出來(維持原本在壓縮前提示的時機);
+            //  stage1=輪詢 1.bat(非同步 XCOPY/7z 複製)結束,完成後再「非同步」啟動整包 7z;
+            //  stage2=輪詢整包 7z 結束,壓縮成功(exit==0)才 Del_Tree。未結束就 break,讓 timer 下一拍重入。
+            //  以 GetTickCount 設 5 分鐘上限保護:逾時記 log 後 best-effort 往下(不卡死,極端時退回原 race)。
+            if(g_iStateRecordStage==0)
             {
-                ShowErrorMessage("JAM0316", K_SKIP, MTestZ1);
+                if(iSaveImgae==1)
+                    ShowErrorMessage("JAM0316", K_SKIP, MTestZ1);
+                else if(iSaveImgae==2)
+                    ShowErrorMessage("JAM0317", K_SKIP, MTestZ2);
+                else if(iSaveImgae==3)
+                    ShowMyMessage("Not support Hot Plate matrix!!", "不支援的加熱盤格式");
+                g_dwStateRecordWaitStart=GetTickCount();
+                g_iStateRecordStage=1;
             }
-            else if(iSaveImgae==2)
+            if(g_iStateRecordStage==1)
             {
-                ShowErrorMessage("JAM0317", K_SKIP, MTestZ2);
+                if(g_hStateRecordBat!=NULL)
+                {
+                    dwWaitRet=WaitForSingleObject(g_hStateRecordBat, 0);
+                    if(dwWaitRet==WAIT_TIMEOUT && (GetTickCount()-g_dwStateRecordWaitStart)<300000)
+                    {
+                        iSaveImageCT=0;
+                        break;
+                    }
+                    if(dwWaitRet==WAIT_TIMEOUT)
+                        RecordProcess("State Record: 1.bat copy wait timeout(>300s), proceed best-effort.");
+                    CloseHandle(g_hStateRecordBat);
+                    g_hStateRecordBat=NULL;
+                }
+                g_hStateRecordZip=NULL;
+                if(FileExists("d:\\HT9045\\7z.exe"))                                //KenHsieh 20230105 : 新增StateRecord 另存路徑
+                {
+                    //AI(ht9045-v899) 20260630: 整包壓縮改非同步啟動,避免大檔 7z 同步擋住 UI 而拖垮 SECS 30s timer
+                    str1.sprintf("a -tzip \"%s.zip\" \"%s\"", NewPath, NewPath);
+                    g_hStateRecordZip=ExecZipCommandHandle("d:\\HT9045\\7z.exe", str1);
+                }
+                g_dwStateRecordWaitStart=GetTickCount();
+                g_iStateRecordStage=2;
+                iSaveImageCT=0;
+                break;
             }
-            else if(iSaveImgae==3)
+            if(g_iStateRecordStage==2)
             {
-                ShowMyMessage("Not support Hot Plate matrix!!", "不支援的加熱盤格式");
+                if(g_hStateRecordZip!=NULL)
+                {
+                    dwWaitRet=WaitForSingleObject(g_hStateRecordZip, 0);
+                    if(dwWaitRet==WAIT_TIMEOUT && (GetTickCount()-g_dwStateRecordWaitStart)<300000)
+                    {
+                        iSaveImageCT=0;
+                        break;
+                    }
+                    if(dwWaitRet==WAIT_TIMEOUT)
+                        RecordProcess("State Record: archive 7z wait timeout(>300s), skip Del_Tree.");
+                    else
+                        GetExitCodeProcess(g_hStateRecordZip, &dwZipExit);
+                    CloseHandle(g_hStateRecordZip);
+                    g_hStateRecordZip=NULL;
+                    if(dwZipExit==0)                                            //壓縮成功才刪除目錄(維持原 iret==0 才刪的安全條件)
+                        Del_Tree(NewPath);
+                }
+                iSaveImgae=-1;
+                iSaveImageTask++;
+                iSaveImageCT=0;
+                g_iStateRecordStage=0;
+                if(bManualStateRecord)                                          //KenHsieh 20230105 : 新增StateRecord 另存路徑
+                    ShellExecute(NULL, "open", SDataPath.c_str(), NULL, NULL, SW_SHOW); //顯示目錄
             }
-
-            iSaveImgae=-1;
-            iSaveImageTask++;
-            iSaveImageCT=0;
-
-            if(FileExists("d:\\HT9045\\7z.exe"))                                //KenHsieh 20230105 : 新增StateRecord 另存路徑
-            {
-                str1.sprintf("d:\\HT9045\\7z.exe a -tzip \"%s.zip\" \"%s\"", NewPath, NewPath);
-                iret=system(str1.c_str());                                      //壓縮StateRecord
-                MySleep(500);
-                if(iret==0)                                                     //壓縮成功
-                    Del_Tree(NewPath);                                          //刪除目錄
-            }
-
-            if(bManualStateRecord)                                              //KenHsieh 20230105 : 新增StateRecord 另存路徑
-                ShellExecute(NULL, "open", SDataPath.c_str(), NULL, NULL, SW_SHOW);                                     //顯示目錄
             break;
     }
 }
@@ -26920,7 +26970,15 @@ void __fastcall TfMain::DoStateRecord(int iShowAlarm, bool bManual)             
             DeleteFile(BatFile);
 
         TestList->SaveToFile(BatFile);
-        ExecZipCommand(BatFile, " ");                                           //Steven 20160205 : 存檔時候不要跳DOS視窗
+        //AI(ht9045-v899) 20260630: 啟動前先清掉前一次未收尾的 State Record handle/stage(避免重入時洩漏
+        //  handle 或丟失上一份 NewPath 收尾);再保留 1.bat handle 供 case 6 兩段非阻塞輪詢(複製→整包壓縮→刪)。
+        //  注:極少數「前一份還在輪詢時又觸發新一份」的重入,舊 1.bat 不會被 kill(僅關 handle),舊 NewPath 夾
+        //  會被放棄(不壓縮/不刪)留成孤兒夾;屬低機率且僅磁碟殘留,非控制/SECS 風險,故不強制 kill/queue。
+        if(g_hStateRecordBat!=NULL) { CloseHandle(g_hStateRecordBat); g_hStateRecordBat=NULL; }
+        if(g_hStateRecordZip!=NULL) { CloseHandle(g_hStateRecordZip); g_hStateRecordZip=NULL; }
+        g_iStateRecordStage=0;
+        g_dwStateRecordWaitStart=GetTickCount();
+        g_hStateRecordBat = ExecZipCommandHandle(BatFile, " ");                  //Steven 20160205 : 存檔時候不要跳DOS視窗
     }
     catch(...)
     {

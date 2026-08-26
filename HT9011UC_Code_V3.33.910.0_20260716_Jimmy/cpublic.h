@@ -43,6 +43,7 @@ void HeaterSVLog(int Addr, double dTemp);                                       
 void ProductionLog(AnsiString Message, bool bSaveToFile=false, AnsiString JamCode="");//JerryYang 20151225 Production Log for SPIL蘇州
 
 bool ExecZipCommand(AnsiString Path, AnsiString Param);                         //Steven 20160205 : 存檔時候不要跳DOS視窗
+HANDLE ExecZipCommandHandle(AnsiString Path, AnsiString Param);//AI(ht9045-v899) 20260630: 同 ExecZipCommand 但回傳 process handle 供非阻塞輪詢(State Record 確認 1.bat 複製完才壓縮/刪資料夾)
 
 AnsiString GetDateInfoByString(AnsiString asSign="");                           //ChungHung 20151125 modify for KYEC //ChungHung 20150902 add
 AnsiString GetOnlyTimeInfoByString(AnsiString asSign="");                       //ChungHung 20151125 modify for KYEC  //ChungHung 20150902 add

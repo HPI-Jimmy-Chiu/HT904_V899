@@ -2071,7 +2071,12 @@ int DoCatchFromLoader()
                        Cylinder[C_TrayCover].Enable)                                                                    //ChungHung 20140624 add AutoRetest catch Tray use 2 Output
                     {
                         MOT[MMTrayY_Car].fCanMove=true;
-                        if(Cylinder[C_CatchTray_FixOn].OnSensor()==false)                                               //kevin 20150606
+                        if(CUSTOMER_CODE==CC_Greatek && USE_CATCH_TRAY_MODEL==2)//AI(ht9045-v899) 20260703: Greatek極性校正-有盤時FixOn_On不會到位,不靠FixOn確認直接進Task=310略過JAM0613;夾到與否由下游IsTrayArmCatchTrayFail(兩顆到位OFF=有盤)判定;非Greatek維持原FixOn到位檢查
+                        {
+                            Task=310;
+                            break;
+                        }
+                        else if(Cylinder[C_CatchTray_FixOn].OnSensor()==false)       //kevin 20150606
                         {
                             Task=400;
                             break;
@@ -2390,7 +2395,19 @@ int DoCatchFromLoader()
                         if(ret==K_RETRY)
                             MOT[MTrayX].fHasTray=true;
                         else if(ret==K_SKIP)
+                        {
                             MOT[MTrayX].fHasTray=false;
+                            //AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環
+                            if(USE_AUTO_RETEST==eartInstall)
+                            {
+                                Cylinder[C_CatchTray_FixOn].Off();
+                                Cylinder[C_CatchTray_FixOff].On();
+                            }
+                            else
+                            {
+                                Cylinder[C_CatchTray_Fix].Off();
+                            }
+                        }
                 //==> Eastsun 20260515 F017
                     }
                 //<== Eastsun 20260515 F017
@@ -4133,6 +4150,16 @@ bool DoPlaceTrayToAuto(int AutoTarget)
                     if(ret==K_SKIP)
                     {
                         MOT[MTrayX].fHasTray=false;
+                        //AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環
+                        if(USE_AUTO_RETEST==eartInstall)
+                        {
+                            Cylinder[C_CatchTray_FixOn].Off();
+                            Cylinder[C_CatchTray_FixOff].On();
+                        }
+                        else
+                        {
+                            Cylinder[C_CatchTray_Fix].Off();
+                        }
                         Task=1;
                         return true;
                     }
@@ -5213,6 +5240,16 @@ bool DoPlaceToBuffer()
                     if(ret==K_SKIP)
                     {
                         MOT[MTrayX].fHasTray=false;
+                        //AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環
+                        if(USE_AUTO_RETEST==eartInstall)
+                        {
+                            Cylinder[C_CatchTray_FixOn].Off();
+                            Cylinder[C_CatchTray_FixOff].On();
+                        }
+                        else
+                        {
+                            Cylinder[C_CatchTray_Fix].Off();
+                        }
                         Task=1;
                         return true;
                     }
@@ -8202,7 +8239,16 @@ bool C_CatchTray_Fix_Puch(bool bInitial)                                        
         case 100:
             Cylinder[C_CatchTray_FixOff].Off();
             if(bflag==false)
-                bflag=Cylinder[C_CatchTray_FixOn].Push();
+            {
+                //AI(ht9045-v899) 20260703: Greatek極性校正-夾緊有盤時FixOn_On不會到位,用On()直接驅動不等sensor,避免Push()到位逾時誤觸JAM31047(缸47);夾到與否由IsTrayArmCatchTrayFail(兩顆到位OFF=有盤)判定;非Greatek維持Push()
+                if(CUSTOMER_CODE==CC_Greatek)
+                {
+                    Cylinder[C_CatchTray_FixOn].On();
+                    bflag=true;
+                }
+                else
+                    bflag=Cylinder[C_CatchTray_FixOn].Push();
+            }
 
             if(bNewCatchTrayblock)                                                                                      //kevin 20200512 夾tray遮版削短
             {
@@ -8305,7 +8351,14 @@ bool IsTrayArmCatchTrayFail()                                                   
                 break;
             case 2:                                                             //2 Sensor(ART)
             case 4:                                                             //2 Sensor(ART & No Cover)  //Steven 20241211 : add
-                if(Cylinder[C_CatchTray_FixOn].OnStatus()==false)               //wei 20150415 前後夾Alarm
+                //AI(ht9045-v899) 20260703: Greatek硬體極性校正-正常持盤=FixOn/FixOff兩顆到位皆OFF;任一到位ON即非正常持盤(FixOn ON=空夾掉盤/FixOff ON=放開)→fail;非Greatek維持原判斷
+                if(CUSTOMER_CODE==CC_Greatek)
+                {
+                    if(Cylinder[C_CatchTray_FixOn].OnStatus() ||
+                       Cylinder[C_CatchTray_FixOff].OnStatus())
+                        return true;
+                }
+                else if(Cylinder[C_CatchTray_FixOn].OnStatus()==false)               //wei 20150415
                 {
                     return true;
                 }

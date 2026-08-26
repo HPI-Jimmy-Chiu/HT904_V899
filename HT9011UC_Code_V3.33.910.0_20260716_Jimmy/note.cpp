@@ -2012,6 +2012,11 @@ void __fastcall TfNote::FormShow(TObject *Sender)
         lblSmartCleanCH->Left=119;
         lblSmartCleanCH->Width=522;
         lblSmartCleanCH->Caption="auto clean 無效!請打開後門下機清潔Socket";
+        //AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 若觸發端有帶入動態原因+處置文字則覆寫面板(含 alarm 描述/code + 已暫停/已重新初始化偵測)；空則維持原預設。此為非阻塞常駐面板, 不會 StopAllMotor。
+        if(sACSmartNoteEN!="")
+            lblSmartCleanEN->Caption=sACSmartNoteEN;
+        if(sACSmartNoteCH!="")
+            lblSmartCleanCH->Caption=sACSmartNoteCH;
         pnlCleanSocket->Parent=tsHandler;
         pnlCleanSocket->BringToFront();
     }
@@ -3511,6 +3516,10 @@ void __fastcall TfNote::Timer1Timer(TObject *Sender)
         else if(MyMessageBox->fShow==false)
         {
             fNote->BringToFront();
+        }
+        else                                                                    //AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): MyMessageBox 顯示時(Lot End/Alarm)改拉它到前,接在既有置頂鏈尾,只用 app 內 BringToFront 不用 TOPMOST/SetForegroundWindow
+        {
+            MyMessageBox->BringToFront();
         }
     }
 

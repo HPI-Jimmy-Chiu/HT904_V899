@@ -574,49 +574,49 @@
 20260625,ht9045-v899,Interface\TesterTCP.cpp,1155,MISSING,//AI(ht9045-v899) 20260625: 原註解掉的 log 改為呼叫去重記錄器
 20260625,ht9045-v899,Interface\TesterTCP.h,258,MISSING,//AI(ht9045-v899) 20260625: 回傳型別 void->bool，配合 N06 recipe 同步成敗回報
 20260629,ht9045-v899,main.cpp,25418,MISSING,"//AI(ht9045-v899) 20260629(CASE-PTI-20260629-001): 新增 Home/Buzzer/Modal 診斷 dump,供 auto-init 回HOME hang 偶發時定位早退點與 modal 來源"
-20260630,ht9045-v899,HS_Function.cpp,1967,MISSING,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): 最外層 try/catch 加固,讓 socket 例外不再以空 UnitName 逸出到 main.cpp AppException(保留原 success 回傳碼語義)"
-20260630,ht9045-v899,HS_Function.cpp,1987,MISSING,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): connect timeout 30000->5000ms 與 PTI N06 路徑一致,降低同步阻塞最壞值"
-20260630,ht9045-v899,cpublic.cpp,655,MISSING,"//AI(ht9045-v899) 20260630: ExecZipCommand 的 handle 版,回傳子行程 process handle(失敗回 NULL),"
-20260630,ht9045-v899,cpublic.cpp,768,MISSING,//AI(ht9045-v899) 20260630: 為 PTI 在 Sort Summary 補出 Fix4-6 與 Total 出料加總欄（PTI 恆輸出，非 PTI 輸出不變）
-20260630,ht9045-v899,cpublic.h,46,MISSING,//AI(ht9045-v899) 20260630: 同 ExecZipCommand 但回傳 process handle 供非阻塞輪詢(State Record 確認 1.bat 複製完才壓縮/刪資料夾)
-20260630,ht9045-v899,csystem.cpp,21812,MISSING,"//AI(ht9045-v899) 20260630: 子目錄移除同樣重試,與最後 RemoveDir 對稱(子層已先清空檔案)"
-20260630,ht9045-v899,csystem.cpp,21823,MISSING,"//AI(ht9045-v899) 20260630: 檔案被占用時 DeleteFile 會失敗,原本直接略過會留下殘缺"
-20260630,ht9045-v899,csystem.cpp,21840,MISSING,"//AI(ht9045-v899) 20260630: 目錄移除同樣重試最多 3 次,確保被占用檔案造成的非空失敗在鎖釋放後能成功"
-20260630,ht9045-v899,main.cpp,25154,MISSING,//AI(ht9045-v899) 20260630: State Record 用—1.bat(複製)與整包壓縮 7z 各自的 process handle、
-20260630,ht9045-v899,main.cpp,25164,MISSING,//AI(ht9045-v899) 20260630: case 6 兩段非阻塞輪詢的 WaitForSingleObject 回傳暫存
-20260630,ht9045-v899,main.cpp,25165,MISSING,"//AI(ht9045-v899) 20260630: 整包壓縮 7z 結束碼(預設1=未成功;壓縮成功才設0並刪資料夾,維持原 iret==0 條件)"
-20260630,ht9045-v899,main.cpp,25226,MISSING,"//AI(ht9045-v899) 20260630: case 6 改成「分段非阻塞輪詢」收尾,全程不擋 UI/SECS/motion:"
-20260630,ht9045-v899,main.cpp,25260,MISSING,"//AI(ht9045-v899) 20260630: 整包壓縮改非同步啟動,避免大檔 7z 同步擋住 UI 而拖垮 SECS 30s timer"
-20260630,ht9045-v899,main.cpp,25727,MISSING,//AI(ht9045-v899) 20260630: 啟動前先清掉前一次未收尾的 State Record handle/stage(避免重入時洩漏
-20260630,ht9045-v899,mymessbox.cpp,344,MISSING,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): 將 MyMessageBox 拉到 z-order 最前但不搆焦點(NOACTIVATE),不用 HWND_TOPMOST 以免蓋住 app 外視窗"
-20260630,ht9045-v899,mymessbox.cpp,943,MISSING,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): Lot End 訊息框 ShowModal 前拉到 app 內 z-order 最前,避免被其他視窗搆住導致看不到"
-20260630,ht9045-v899,note.cpp,3486,MISSING,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): MyMessageBox 顯示時(Lot End/Alarm)改拉它到前,接在既有置頂鏈尾,只用 app 內 BringToFront 不用 TOPMOST/SetForegroundWindow"
+20260630,ht9045-v899,HS_Function.cpp,1967,same-file,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): 最外層 try/catch 加固,讓 socket 例外不再以空 UnitName 逸出到 main.cpp AppException(保留原 success 回傳碼語義)"
+20260630,ht9045-v899,HS_Function.cpp,1987,same-file,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): connect timeout 30000->5000ms 與 PTI N06 路徑一致,降低同步阻塞最壞值"
+20260630,ht9045-v899,cpublic.cpp,655,same-file,"//AI(ht9045-v899) 20260630: ExecZipCommand 的 handle 版,回傳子行程 process handle(失敗回 NULL),"
+20260630,ht9045-v899,cpublic.cpp,768,same-file,//AI(ht9045-v899) 20260630: 為 PTI 在 Sort Summary 補出 Fix4-6 與 Total 出料加總欄（PTI 恆輸出，非 PTI 輸出不變）
+20260630,ht9045-v899,cpublic.h,46,same-file,//AI(ht9045-v899) 20260630: 同 ExecZipCommand 但回傳 process handle 供非阻塞輪詢(State Record 確認 1.bat 複製完才壓縮/刪資料夾)
+20260630,ht9045-v899,csystem.cpp,21812,same-file,"//AI(ht9045-v899) 20260630: 子目錄移除同樣重試,與最後 RemoveDir 對稱(子層已先清空檔案)"
+20260630,ht9045-v899,csystem.cpp,21823,same-file,"//AI(ht9045-v899) 20260630: 檔案被占用時 DeleteFile 會失敗,原本直接略過會留下殘缺"
+20260630,ht9045-v899,csystem.cpp,21840,same-file,"//AI(ht9045-v899) 20260630: 目錄移除同樣重試最多 3 次,確保被占用檔案造成的非空失敗在鎖釋放後能成功"
+20260630,ht9045-v899,main.cpp,25154,same-file,//AI(ht9045-v899) 20260630: State Record 用—1.bat(複製)與整包壓縮 7z 各自的 process handle、
+20260630,ht9045-v899,main.cpp,25164,same-file,//AI(ht9045-v899) 20260630: case 6 兩段非阻塞輪詢的 WaitForSingleObject 回傳暫存
+20260630,ht9045-v899,main.cpp,25165,same-file,"//AI(ht9045-v899) 20260630: 整包壓縮 7z 結束碼(預設1=未成功;壓縮成功才設0並刪資料夾,維持原 iret==0 條件)"
+20260630,ht9045-v899,main.cpp,25226,same-file,"//AI(ht9045-v899) 20260630: case 6 改成「分段非阻塞輪詢」收尾,全程不擋 UI/SECS/motion:"
+20260630,ht9045-v899,main.cpp,25260,same-file,"//AI(ht9045-v899) 20260630: 整包壓縮改非同步啟動,避免大檔 7z 同步擋住 UI 而拖垮 SECS 30s timer"
+20260630,ht9045-v899,main.cpp,25727,same-file,//AI(ht9045-v899) 20260630: 啟動前先清掉前一次未收尾的 State Record handle/stage(避免重入時洩漏
+20260630,ht9045-v899,mymessbox.cpp,344,same-file,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): 將 MyMessageBox 拉到 z-order 最前但不搆焦點(NOACTIVATE),不用 HWND_TOPMOST 以免蓋住 app 外視窗"
+20260630,ht9045-v899,mymessbox.cpp,943,same-file,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): Lot End 訊息框 ShowModal 前拉到 app 內 z-order 最前,避免被其他視窗搆住導致看不到"
+20260630,ht9045-v899,note.cpp,3486,same-file,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): MyMessageBox 顯示時(Lot End/Alarm)改拉它到前,接在既有置頂鏈尾,只用 app 內 BringToFront 不用 TOPMOST/SetForegroundWindow"
 20260630,ht9045-v899,uLotInfo.cpp,1952,same-file,"//AI(ht9045-v899) 20260630(CASE-PTI-20260630-002): FtpUploadThd 尚未建立時記 log 並跳過,寧可不傳也不落至同步阻塞 Lot End"
-20260703,ht9045-v899,AutoClean\uCleaning.cpp,2650,MISSING,"//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 觸發當下做非阻塞提示(原因=alarm 描述+code, 處置=自動清潔已暫停/已重新初始化偵測, 續低良率請清潔 Socket)並置位重置旗標。只做一次(bACSmartNeedReset 防重複)。提示必須留在此觸發"
-20260703,ht9045-v899,AutoClean\uCleaning.cpp,2863,MISSING,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 需求1 移除此處「重貼 alarm 擋機」ShowErrorMessage(客戶否決的鎖機行為)。改為函式尾恆放行 START。
-20260703,ht9045-v899,AutoClean\uCleaning.cpp,2867,MISSING,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 需求3 若偵測待重置(前一輪 iACUseParam==0 觸發)則於放行前呼叫 ResetSmartAutoClean 週期性重置偵測(歸零 iACSmartCount/iACSmartCount_CTF/iACUse
-20260703,ht9045-v899,acatchtray.cpp,1221,MISSING,"//AI(ht9045-v899) 20260703: case 570 JAM0610 防抖計數,比照 DoPlaceTrayToAuto_250"
-20260703,ht9045-v899,acatchtray.cpp,1729,MISSING,"//AI(ht9045-v899) 20260703: Greatek極性校正-有盤時FixOn_On不會到位,不靠FixOn確認直接進Task=310略過JAM0613;夾到與否由下游IsTrayArmCatchTrayFail(兩顆到位OFF=有盤)判定;非Greatek維持原FixOn到位檢查"
-20260703,ht9045-v899,acatchtray.cpp,2007,MISSING,"//AI(ht9045-v899) 20260703: 補 iCnt>100 防抖,避免搬運中 FixOn sensor 單次彈跳即誤報 JAM0610(頻繁 Alarm 頂層主因);比照 DoPlaceTrayToAuto_250"
-20260703,ht9045-v899,acatchtray.cpp,2020,MISSING,"//AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環"
-20260703,ht9045-v899,acatchtray.cpp,3628,MISSING,"//AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環"
-20260703,ht9045-v899,acatchtray.cpp,4591,MISSING,"//AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環"
-20260703,ht9045-v899,acatchtray.cpp,7239,MISSING,"//AI(ht9045-v899) 20260703: Greatek極性校正-夾緊有盤時FixOn_On不會到位,用On()直接驅動不等sensor,避免Push()到位逾時誤觸JAM31047(缸47);夾到與否由IsTrayArmCatchTrayFail(兩顆到位OFF=有盤)判定;非Greatek維持Push"
-20260703,ht9045-v899,acatchtray.cpp,7350,MISSING,//AI(ht9045-v899) 20260703: Greatek硬體極性校正-正常持盤=FixOn/FixOff兩顆到位皆OFF;任一到位ON即非正常持盤(FixOn ON=空夾掉盤/FixOff ON=放開)→fail;非Greatek維持原判斷
-20260703,ht9045-v899,cmydef.cpp,5457,MISSING,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 Smart Auto Clean 警報改非阻塞提示並週期性重置偵測；新增原因/處置文字(EN/CH)全域供 note.cpp 面板動態帶入。提示必須留在觸發當下/CheckSmartAutoClean，不得移到會 Sto
-20260703,ht9045-v899,cmydef.cpp,5458,MISSING,//AI(ht9045-v899) 20260703: pnlCleanSocket 動態英文提示(空=用預設)
-20260703,ht9045-v899,cmydef.cpp,5459,MISSING,//AI(ht9045-v899) 20260703: pnlCleanSocket 動態中文提示(空=用預設)
-20260703,ht9045-v899,cmydef.cpp,5460,MISSING,//AI(ht9045-v899) 20260703: iACUseParam==0 觸發時置位，於 START 閘門重置偵測計數，避免每 cycle 重複觸發同一 alarm
-20260703,ht9045-v899,cmydef.h,5508,MISSING,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 pnlCleanSocket 動態英文提示
-20260703,ht9045-v899,cmydef.h,5509,MISSING,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 pnlCleanSocket 動態中文提示
-20260703,ht9045-v899,cmydef.h,5510,MISSING,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 START 閘門重置 Smart Auto Clean 偵測旗標
-20260703,ht9045-v899,csystem.cpp,5489,MISSING,"//AI(ht9045-v899) 20260703: Greatek極性校正-啟動應在放開位;FixOn ON=空夾/掉盤→WAR0615,兩顆到位OFF=有盤→WAR0614取盤;非Greatek還原原始WAR0615"
-20260703,ht9045-v899,csystem.cpp,5570,MISSING,"//AI(ht9045-v899) 20260703: Greatek極性校正-啟動應在放開位;FixOn ON=空夾/掉盤→WAR0615,兩顆到位OFF=有盤→WAR0614取盤;非Greatek還原原始WAR0615"
-20260703,ht9045-v899,csystem.cpp,6229,MISSING,"//AI(ht9045-v899) 20260703: Greatek極性校正-啟動應在放開位;FixOn ON=空夾/掉盤→WAR0615,兩顆到位OFF=有盤→WAR0614取盤;非Greatek還原原始WAR0615"
-20260703,ht9045-v899,main.cpp,4554,MISSING,"//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 閘門已於函式端(CheckSmartAutoCleanCanStart)改為恆放行(return true), 此呼叫不再擋 START, 下一行 return false 實際不會執行；外殼與呼叫保持不動。"
-20260703,ht9045-v899,note.cpp,1995,MISSING,"//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 若觸發端有帶入動態原因+處置文字則覆寫面板(含 alarm 描述/code + 已暫停/已重新初始化偵測)；空則維持原預設。此為非阻塞常駐面板, 不會 StopAllMotor。"
-20260703,ht9045-v899,uhome.cpp,2664,MISSING,"//AI(ht9045-v899) 20260703: Greatek硬體極性校正-Home以放開為目標;有盤依軟體fHasTray維持夾持,無盤則驅動放開並確認FixOff到位(不再用FixOn sensor猜有盤,FixOn ON=空夾非有盤);非Greatek維持原邏輯"
-20260703,ht9045-v899,uhome.cpp,2706,MISSING,"//AI(ht9045-v899) 20260703: Home時FixOn讀ON但軟體無盤記錄,原邏輯不經確認即夾持+標記有盤走自動退盤,造成非預期夾爪動作;改為防抖100次後跳WAR0614由操作員確認,RETRY=已取下盤重新檢查,SKIP=確認有盤維持舊有自動退盤"
+20260703,ht9045-v899,AutoClean\uCleaning.cpp,2650,same-file,"//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 觸發當下做非阻塞提示(原因=alarm 描述+code, 處置=自動清潔已暫停/已重新初始化偵測, 續低良率請清潔 Socket)並置位重置旗標。只做一次(bACSmartNeedReset 防重複)。提示必須留在此觸發"
+20260703,ht9045-v899,AutoClean\uCleaning.cpp,2863,same-file,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 需求1 移除此處「重貼 alarm 擋機」ShowErrorMessage(客戶否決的鎖機行為)。改為函式尾恆放行 START。
+20260703,ht9045-v899,AutoClean\uCleaning.cpp,2867,same-file,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 需求3 若偵測待重置(前一輪 iACUseParam==0 觸發)則於放行前呼叫 ResetSmartAutoClean 週期性重置偵測(歸零 iACSmartCount/iACSmartCount_CTF/iACUse
+20260703,ht9045-v899,acatchtray.cpp,1221,ALLOWLISTED,"//AI(ht9045-v899) 20260703: case 570 JAM0610 防抖計數,比照 DoPlaceTrayToAuto_250"
+20260703,ht9045-v899,acatchtray.cpp,1729,same-file,"//AI(ht9045-v899) 20260703: Greatek極性校正-有盤時FixOn_On不會到位,不靠FixOn確認直接進Task=310略過JAM0613;夾到與否由下游IsTrayArmCatchTrayFail(兩顆到位OFF=有盤)判定;非Greatek維持原FixOn到位檢查"
+20260703,ht9045-v899,acatchtray.cpp,2007,ALLOWLISTED,"//AI(ht9045-v899) 20260703: 補 iCnt>100 防抖,避免搬運中 FixOn sensor 單次彈跳即誤報 JAM0610(頻繁 Alarm 頂層主因);比照 DoPlaceTrayToAuto_250"
+20260703,ht9045-v899,acatchtray.cpp,2020,same-file,"//AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環"
+20260703,ht9045-v899,acatchtray.cpp,3628,same-file,"//AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環"
+20260703,ht9045-v899,acatchtray.cpp,4591,same-file,"//AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環"
+20260703,ht9045-v899,acatchtray.cpp,7239,same-file,"//AI(ht9045-v899) 20260703: Greatek極性校正-夾緊有盤時FixOn_On不會到位,用On()直接驅動不等sensor,避免Push()到位逾時誤觸JAM31047(缸47);夾到與否由IsTrayArmCatchTrayFail(兩顆到位OFF=有盤)判定;非Greatek維持Push"
+20260703,ht9045-v899,acatchtray.cpp,7350,same-file,//AI(ht9045-v899) 20260703: Greatek硬體極性校正-正常持盤=FixOn/FixOff兩顆到位皆OFF;任一到位ON即非正常持盤(FixOn ON=空夾掉盤/FixOff ON=放開)→fail;非Greatek維持原判斷
+20260703,ht9045-v899,cmydef.cpp,5457,same-file,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 Smart Auto Clean 警報改非阻塞提示並週期性重置偵測；新增原因/處置文字(EN/CH)全域供 note.cpp 面板動態帶入。提示必須留在觸發當下/CheckSmartAutoClean，不得移到會 Sto
+20260703,ht9045-v899,cmydef.cpp,5458,same-file,//AI(ht9045-v899) 20260703: pnlCleanSocket 動態英文提示(空=用預設)
+20260703,ht9045-v899,cmydef.cpp,5459,same-file,//AI(ht9045-v899) 20260703: pnlCleanSocket 動態中文提示(空=用預設)
+20260703,ht9045-v899,cmydef.cpp,5460,same-file,//AI(ht9045-v899) 20260703: iACUseParam==0 觸發時置位，於 START 閘門重置偵測計數，避免每 cycle 重複觸發同一 alarm
+20260703,ht9045-v899,cmydef.h,5508,same-file,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 pnlCleanSocket 動態英文提示
+20260703,ht9045-v899,cmydef.h,5509,same-file,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 pnlCleanSocket 動態中文提示
+20260703,ht9045-v899,cmydef.h,5510,same-file,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 START 閘門重置 Smart Auto Clean 偵測旗標
+20260703,ht9045-v899,csystem.cpp,5489,same-file,"//AI(ht9045-v899) 20260703: Greatek極性校正-啟動應在放開位;FixOn ON=空夾/掉盤→WAR0615,兩顆到位OFF=有盤→WAR0614取盤;非Greatek還原原始WAR0615"
+20260703,ht9045-v899,csystem.cpp,5570,same-file,"//AI(ht9045-v899) 20260703: Greatek極性校正-啟動應在放開位;FixOn ON=空夾/掉盤→WAR0615,兩顆到位OFF=有盤→WAR0614取盤;非Greatek還原原始WAR0615"
+20260703,ht9045-v899,csystem.cpp,6229,same-file,"//AI(ht9045-v899) 20260703: Greatek極性校正-啟動應在放開位;FixOn ON=空夾/掉盤→WAR0615,兩顆到位OFF=有盤→WAR0614取盤;非Greatek還原原始WAR0615"
+20260703,ht9045-v899,main.cpp,4554,same-file,"//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 閘門已於函式端(CheckSmartAutoCleanCanStart)改為恆放行(return true), 此呼叫不再擋 START, 下一行 return false 實際不會執行；外殼與呼叫保持不動。"
+20260703,ht9045-v899,note.cpp,1995,same-file,"//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 若觸發端有帶入動態原因+處置文字則覆寫面板(含 alarm 描述/code + 已暫停/已重新初始化偵測)；空則維持原預設。此為非阻塞常駐面板, 不會 StopAllMotor。"
+20260703,ht9045-v899,uhome.cpp,2664,same-file,"//AI(ht9045-v899) 20260703: Greatek硬體極性校正-Home以放開為目標;有盤依軟體fHasTray維持夾持,無盤則驅動放開並確認FixOff到位(不再用FixOn sensor猜有盤,FixOn ON=空夾非有盤);非Greatek維持原邏輯"
+20260703,ht9045-v899,uhome.cpp,2706,same-file,"//AI(ht9045-v899) 20260703: Home時FixOn讀ON但軟體無盤記錄,原邏輯不經確認即夾持+標記有盤走自動退盤,造成非預期夾爪動作;改為防抖100次後跳WAR0614由操作員確認,RETRY=已取下盤重新檢查,SKIP=確認有盤維持舊有自動退盤"
 20260706,ht9045-v899,ainarm9045.cpp,4661,MISSING,"//AI(ht9045-v899) 20260706: 系統性可達性選嘴(不寫死吸嘴代號/欄位):預設仍取最左啟用吸嘴維持原行為,"
 20260803,ht9045-v899,CosFunction.cpp,2789,same-file,//AI(ht9045-v899) 20260803: the 20260602 InArm case-15 dead-lock watchdog was added for this customer only (CASE-GIGAS-20260729-001)
 20260803,ht9045-v899,CosFunction.cpp,4414,same-file,//AI(ht9045-v899) 20260803: default off - the 20260602 case-15 watchdog must only run for CC_ARDENTEC (CASE-GIGAS-20260729-001)

@@ -49,3 +49,4 @@ cContact.cpp,20260526,//AI(ht9045-v899) 20260526: Multi EP Die Force SAVE must o
 note.cpp,20260407,//AI(ht9045-v899) 20260407: only Pause when Note closed via ,假MISSING：V910:1036公司已改寫等價SoftStop guard(自家註解),MG-W3發現
 HS_Function.cpp,20260420,//AI(BVL-3766) 20260420: 開關 site 時要即時重寫 GTK info.txt,假MISSING：BVL-3766功能已在V910，僅#include行尾註解被公司改寫英文,MG-W5發現
 ainarm9045_1x1_1.cpp,20260407,//AI(ht9045-v899) 20260407: align with 2x4_8 baseline,"假MISSING：V910:891/:1241 已有同註解同程式碼，僅 Big5 全形破折號被公司正規化成 ASCII ""--""",MG-W11
+acatchtray.cpp,20260703,//AI(ht9045-v899) 20260703,F11：V910 已有更演進的防抖版本（Eastsun 20260515/20260710 可設定門檻+cover guard），照搬會倒退；正交的 SKIP 釋放已由 MG-W14 搬,MG-W14/F11
