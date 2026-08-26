@@ -1025,6 +1025,15 @@ void __fastcall TfAutomation::ProcessBuffer(AnsiString Buffer, int iHandle)  //S
                 Data[0]=GetSoftwareVersion();
                 iInquire=2;
             }
+            else if(Command=="MAIN_STATUS_INQUIRE")                             //AI(ht9045-v899) 20260422: support MAIN_STATUS_INQUIRE and normalize status reply
+            {
+                AnsiString sStatus=GetMainStatus().UpperCase();
+                sStatus=StringReplace(sStatus, " ", "_", TReplaceFlags()<<rfReplaceAll);
+                if(sStatus=="")
+                    sStatus="UNKNOWN";
+                Data[0]=sStatus;
+                iInquire=2;
+            }
             else if(Command=="ACT_TEMP_INQUIRE")
             {
                 for(int i=0; i<10; i++)

@@ -6,7 +6,20 @@
 
 | 日期 | same-file | other-file | MISSING | 小計 |
 |---|---|---|---|---|
-| 20260422 | 5 | 0 | 1 | 6 |
+| 20260331 | 6 | 0 | 0 | 6 |
+| 20260401 | 0 | 0 | 1 | 1 |
+| 20260405 | 21 | 0 | 0 | 21 |
+| 20260407 | 14 | 0 | 11 | 25 |
+| 20260408 | 3 | 1 | 6 | 10 |
+| 20260409 | 0 | 0 | 1 | 1 |
+| 20260410 | 0 | 0 | 1 | 1 |
+| 20260414 | 0 | 0 | 10 | 10 |
+| 20260415 | 0 | 0 | 5 | 5 |
+| 20260416 | 0 | 0 | 1 | 1 |
+| 20260417 | 5 | 0 | 3 | 8 |
+| 20260420 | 2 | 0 | 1 | 3 |
+| 20260421 | 10 | 0 | 0 | 10 |
+| 20260422 | 6 | 0 | 0 | 6 |
 | 20260423 | 31 | 0 | 19 | 50 |
 | 20260424 | 0 | 0 | 8 | 8 |
 | 20260428 | 3 | 0 | 0 | 3 |
@@ -50,49 +63,49 @@
 | 20260817 | 0 | 0 | 11 | 11 |
 | 20260819 | 0 | 0 | 10 | 10 |
 | 20260820 | 0 | 0 | 7 | 7 |
-| **合計** | 277 | 3 | 337 | 617 |
+| **合計** | 339 | 4 | 376 | 719 |
 
 ## MISSING 依檔案分布（前 40）
 
 | 檔案 | 缺席註解數 |
 |---|---|
-| main.cpp | 27 |
+| main.cpp | 28 |
+| AutoClean\AutoClean.cpp | 24 |
 | FTPUpload\uFtpUploadThread.cpp | 23 |
-| CosFunction.cpp | 16 |
+| HS_Function.cpp | 20 |
+| CosFunction.cpp | 17 |
 | ainarm9045.cpp | 15 |
 | ContactForce.cpp | 15 |
 | uLotInfo.cpp | 14 |
 | PowerSavingMode.cpp | 13 |
 | acatchtray.cpp | 12 |
 | adam6024.cpp | 12 |
+| AutoClean\uCleaning.cpp | 12 |
 | aoutarm9045_2x4_4.cpp | 10 |
-| AutoClean\uCleaning.cpp | 10 |
 | aoutarm9045.cpp | 9 |
 | cConfiguration.cpp | 9 |
 | CosFunction.h | 9 |
-| HS_Function.cpp | 9 |
 | ProductionInfo\ProductionInfo.cpp | 9 |
 | FTPUpload\uFtpUploadThread.h | 8 |
 | csystem.cpp | 7 |
 | HandlerSys.cpp | 7 |
 | iosetview.cpp | 6 |
 | MyLaneIo.cpp | 6 |
-| AutoClean\AutoClean.cpp | 6 |
 | Interface\TesterTCP.cpp | 6 |
 | cmydef.cpp | 5 |
 | cObserver.cpp | 5 |
+| note.cpp | 5 |
 | uMotorTest.cpp | 5 |
 | RotateKit\aRotateKIT_Out.cpp | 5 |
 | cmydef.h | 4 |
-| note.cpp | 4 |
 | KYECFTP\FTPClient.cpp | 4 |
 | cContact.cpp | 3 |
 | cContactCT.cpp | 3 |
+| cShowBinSelect.cpp | 3 |
 | cTrayAssignment.cpp | 3 |
 | PowerSavingMode.h | 3 |
 | uhome.cpp | 3 |
+| ainarm9045_1x1_1.cpp | 2 |
 | aoutarm.cpp | 2 |
 | aoutarm9045.h | 2 |
 | cBinSel.cpp | 2 |
-| cprod.cpp | 2 |
-| cpublic.cpp | 2 |

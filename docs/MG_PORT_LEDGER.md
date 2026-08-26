@@ -1,12 +1,45 @@
 # MG_PORT_LEDGER — V899→V910 搬移總帳
 
-- 資料源：docs/mg_ai_matrix_missing.csv（337 條 MISSING）＋ git log bb69c60..b515ed5 ＋ weekly 案件盤點
+- **母體原則（20260826 定案）**：總帳母體＝`//AI` 註解全集（矩陣），weekly 案件只當
+  歸因與客戶碼線索——weekly 盤點證實樹內大量變更無對應 case（孤兒變更），照 case 搬會漏。
+- 資料源：docs/mg_ai_matrix_missing.csv（**376 條 MISSING**，DATE_MIN=20260323 修正後）
+  ＋ docs/mg_inventory_weekly_cases.md（45 個有碼案）＋ git log bb69c60..b515ed5
+- 進度儀表＝重跑 `python tools/port_tools/ai_comment_matrix.py`：搬完的條目自動從 MISSING 消失。
 - 狀態值：pending / in-wave / done(commit) / skipped-C / queued-decision / excluded-E
 - 分類：A 乾淨搬｜B 客戶碼隔離｜C V910已有｜D 安全關鍵(忠實+錨點乾淨→可執行,否則進最終決策清單)｜E 純分析
+- 本表自 20260826 起**手工維護**，不再重跑 skeleton 產生器（會蓋掉狀態欄）。
+
+## 已完成波次
+
+| 波 | 內容 | 結果 | commit |
+|---|---|---|---|
+| MG-W1 | 20260422 automation.cpp MAIN_STATUS_INQUIRE（9 行插入）＋ 20260423 uCleaning 4 條裁決 | splice+port_check PASS+bcc32 PASS；uCleaning 4 條=skipped-C（V910 已演進成 ArmSpeed 動態預設，原案「別用 60 秒荒謬預設」意圖已滿足，不搬） | （本次收工 commit） |
+
+## 相依鏈（weekly 盤點 20260826，必須同波搬，防把回歸搬進 V910）
+
+1. **EventLog 引號線**：20260429 note.cpp（拿掉引號）→ 20260817 cObserver.cpp
+   （ParseEventLogLine 欄位錯位修正）——同波，順序 0429 先。
+2. **InArm watchdog 線**：20260602 ainarm9045.cpp（無閘門版）→ 20260803
+   CC_ARDENTEC 收回閘門——同波，直接搬最終態（閘門版）。
+3. **Multi EP 主題波**：0430＋0504＋0511＋0526（含 rolled-back 中間態）——以最終態搬，
+   另見 MG_FINAL_DECISIONS（欣銓結案決議「保留 ch16」）。
+4. **AutoClean CKPP 主題波**：0407/0408/0409/0416/0417（cCleanKitPickPlan 新舊雙路）
+   ＋ Common\PickPlanner 整目錄（V910 無此目錄，屬新增檔搬移）。
+5. **Power Save 線**：0804 C05 profile → 0811 PowerSaveMode 底色/字型 → 0819-0820
+   倒數字串修正——按日序同主題連波。
 
 | 叢集(日期) | 註解數 | 檔數 | comment 內 CASE/SPEC 線索 | 主要檔案 | 分類初判 | 狀態 |
 |---|---|---|---|---|---|---|
-| 20260422 | 1 | 1 | — | Automation\automation.cpp(1) | pending | pending |
+| 20260401 | 1 | 1 | — | SECSGEM\uHGemHT9045_SV.cpp(1) | pending | pending |
+| 20260407 | 11 | 3 | — | AutoClean\AutoClean.cpp(8), ainarm9045_1x1_1.cpp(2), note.cpp(1) | pending | pending |
+| 20260408 | 6 | 1 | — | AutoClean\AutoClean.cpp(6) | pending | pending |
+| 20260409 | 1 | 1 | — | AutoClean\AutoClean.cpp(1) | pending | pending |
+| 20260410 | 1 | 1 | — | CosFunction.cpp(1) | pending | pending |
+| 20260414 | 10 | 3 | — | HS_Function.cpp(7), AutoClean\uCleaning.cpp(2), main.cpp(1) | pending | pending |
+| 20260415 | 5 | 2 | — | HS_Function.cpp(3), cShowBinSelect.cpp(2) | pending | pending |
+| 20260416 | 1 | 1 | — | AutoClean\AutoClean.cpp(1) | pending | pending |
+| 20260417 | 3 | 2 | — | AutoClean\AutoClean.cpp(2), cShowBinSelect.cpp(1) | pending | pending |
+| 20260420 | 1 | 1 | — | HS_Function.cpp(1) | pending | pending |
 | 20260423 | 19 | 4 | CASE-20260423-001 | HandlerSys.cpp(5), main.cpp(5), uMotorTest.cpp(5), AutoClean\uCleaning.cpp(4) | pending | pending |
 | 20260424 | 8 | 2 | — | MyLaneIo.cpp(6), MyLaneIo.h(2) | pending | pending |
 | 20260429 | 3 | 2 | CASE-20260429-001 | note.cpp(2), main.cpp(1) | pending | pending |
@@ -43,9 +76,65 @@
 
 ## 叢集明細（每叢集樣本註解）
 
-### 20260422（1 條）
+### 20260401（1 條）
 
-- `Automation\automation.cpp:1027` //AI(ht9045-v899) 20260422: support MAIN_STATUS_INQUIRE and normalize status reply
+- `SECSGEM\uHGemHT9045_SV.cpp:360` //AI(ht9045-v899) 20260401: Add LB Up/Down temperature and limits for SECS collection
+
+### 20260407（11 條）
+
+- `AutoClean\AutoClean.cpp:1645` //AI(ht9045-v899) 20260407: cCleanKitPickPlan implementation
+- `AutoClean\AutoClean.cpp:1649` //AI(ht9045-v899) 20260407: runtime switch for new/old auto clean search logic
+- `AutoClean\AutoClean.cpp:2112` //AI(ht9045-v899) 20260407: dual-path switch  bUseCKPP selects new class vs old logic
+- `AutoClean\AutoClean.cpp:3056` //AI(ht9045-v899) 20260407: prevent hang when no clean pads remain
+- `AutoClean\AutoClean.cpp:3092` //AI(ht9045-v899) 20260407: AC debug log - PickfromCleanKit Task20 result
+- `AutoClean\AutoClean.cpp:3456` //AI(ht9045-v899) 20260407: allow partial pick when inactive suckers have no pad (Fix H)
+
+### 20260408（6 條）
+
+- `AutoClean\AutoClean.cpp:1941` //AI(ht9045-v899) 20260408: check if current shuttle group has any sucker demand
+- `AutoClean\AutoClean.cpp:2782` //AI(ht9045-v899) 20260408: plan-driven pick - iterate plan slots instead of hardcoded j=0..3
+- `AutoClean\AutoClean.cpp:3040` //AI(ht9045-v899) 20260408: kit empty but arm has partial pick - skip 3000-3100 loop, go finish (S6)
+- `AutoClean\AutoClean.cpp:3082` //AI(ht9045-v899) 20260408: safety net - if CKPP plan not found, return pick complete
+- `AutoClean\AutoClean.cpp:3370` //AI(ht9045-v899) 20260408: unified plan-driven contact count + completion check (S5)
+- `AutoClean\AutoClean.cpp:5116` //AI(ht9045-v899) 20260408: purge phantom HAS_NULL_CLEAN_IC from InArm before dispatch
+
+### 20260409（1 條）
+
+- `AutoClean\AutoClean.cpp:2116` //AI(ht9045-v899) 20260409: recycle CLEAN_FINISH_IC -> HAS_CLEAN_IC before search so returned pads are reusabl
+
+### 20260410（1 條）
+
+- `CosFunction.cpp:3381` //AI(ht9045-v899) 20260410: enable SortingBinTray when CleanOut for FOREHOPE_NINGBO
+
+### 20260414（10 條）
+
+- `AutoClean\uCleaning.cpp:561` //AI(ht9045-v899) 20260414: zero all pad counts when DevicePices or tray layout changes to prevent stale count
+- `AutoClean\uCleaning.cpp:1949` //AI(ht9045-v899) 20260414: fix operator precedence - was iDeviceNum==24 always true
+- `HS_Function.cpp:1360` //AI(ht9045-v899) 20260414: trace daily-upload entry only (iLog>=5) to avoid timer-driven log bloat
+- `HS_Function.cpp:1371` //AI(ht9045-v899) 20260414: trace skip reason
+- `HS_Function.cpp:1983` //AI(ht9045-v899) 20260414: diagnostic log only on daily-upload path to avoid timer-driven bloat
+- `HS_Function.cpp:1997` //AI(ht9045-v899) 20260414: trace success
+
+### 20260415（5 條）
+
+- `HS_Function.cpp:48` //AI(ht9045-v899) 20260415: forward-declare MNetLog before first use at UpDataToServer_KYEC
+- `HS_Function.cpp:1773` //AI(ht9045-v899) 20260415: swap SystemDate to yesterday before GetProdLog to fix cross-midnight filename mism
+- `HS_Function.cpp:1802` //AI(ht9045-v899) 20260415: swap SystemDate to yesterday before GetGPIBLog to fix cross-midnight filename mism
+- `cShowBinSelect.cpp:815` //AI(ht9045-v899) 20260415: dynamic stack layout for tsIndex tab to prevent overlapping panels
+- `cShowBinSelect.cpp:1491` //AI(ht9045-v899) 20260415: dynamic height for tsIndex based on visible panel stack
+
+### 20260416（1 條）
+
+- `AutoClean\AutoClean.cpp:2903` //AI(ht9045-v899) 20260416: revert phantom-marking skip per Gigas feedback - V898 did not have this guard
+
+### 20260417（3 條）
+
+- `AutoClean\AutoClean.cpp:5199` //AI(ht9045-v899) 20260417: revert to V898 logic - premature CLEAN_FINISH_IC recycling caused pick to restart 
+- `cShowBinSelect.cpp:809` //AI(ht9045-v899) 20260417: show AutoDeviceEjection panel for QLE or by config flag
+
+### 20260420（1 條）
+
+- `HS_Function.cpp:26` //AI(BVL-3766) 20260420: 開關 site 時要即時重寫 GTK info.txt
 
 ### 20260423（19 條）
 

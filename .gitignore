@@ -118,3 +118,4 @@ bmp/
 IniData/
 system/
 HT9011UC_Cpp_V3.33.906.0/build_last.log
+*.mgbak

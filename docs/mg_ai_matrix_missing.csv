@@ -1,5 +1,44 @@
 ﻿date,agent,file,line,status,comment
-20260422,ht9045-v899,Automation\automation.cpp,1027,MISSING,//AI(ht9045-v899) 20260422: support MAIN_STATUS_INQUIRE and normalize status reply
+20260401,ht9045-v899,SECSGEM\uHGemHT9045_SV.cpp,360,MISSING,//AI(ht9045-v899) 20260401: Add LB Up/Down temperature and limits for SECS collection
+20260407,ht9045-v899,AutoClean\AutoClean.cpp,1645,MISSING,//AI(ht9045-v899) 20260407: cCleanKitPickPlan implementation
+20260407,ht9045-v899,AutoClean\AutoClean.cpp,1649,MISSING,//AI(ht9045-v899) 20260407: runtime switch for new/old auto clean search logic
+20260407,ht9045-v899,AutoClean\AutoClean.cpp,2112,MISSING,//AI(ht9045-v899) 20260407: dual-path switch  bUseCKPP selects new class vs old logic
+20260407,ht9045-v899,AutoClean\AutoClean.cpp,3056,MISSING,//AI(ht9045-v899) 20260407: prevent hang when no clean pads remain
+20260407,ht9045-v899,AutoClean\AutoClean.cpp,3092,MISSING,//AI(ht9045-v899) 20260407: AC debug log - PickfromCleanKit Task20 result
+20260407,ht9045-v899,AutoClean\AutoClean.cpp,3456,MISSING,//AI(ht9045-v899) 20260407: allow partial pick when inactive suckers have no pad (Fix H)
+20260407,ht9045-v899,AutoClean\AutoClean.cpp,3503,MISSING,//AI(ht9045-v899) 20260407: allow partial pick when inactive suckers have no pad (Fix H)
+20260407,ht9045-v899,AutoClean\AutoClean.cpp,3556,MISSING,//AI(ht9045-v899) 20260407: allow partial pick when inactive suckers have no pad (Fix H)
+20260407,ht9045-v899,ainarm9045_1x1_1.cpp,894,MISSING,//AI(ht9045-v899) 20260407: align with 2x4_8 baseline — add bCheckInarmPlaceShuttle + CheckInArmDestroyICFail
+20260407,ht9045-v899,ainarm9045_1x1_1.cpp,1243,MISSING,//AI(ht9045-v899) 20260407: align with 2x4_8 baseline — add CheckInArmDestroyICFail for SHT2
+20260407,ht9045-v899,note.cpp,1027,MISSING,"//AI(ht9045-v899) 20260407: only Pause when Note closed via BtnPauseClick (SoftStop==true), skip when closed via Start to prevent false MES2111"
+20260408,ht9045-v899,AutoClean\AutoClean.cpp,1941,MISSING,//AI(ht9045-v899) 20260408: check if current shuttle group has any sucker demand
+20260408,ht9045-v899,AutoClean\AutoClean.cpp,2782,MISSING,//AI(ht9045-v899) 20260408: plan-driven pick - iterate plan slots instead of hardcoded j=0..3
+20260408,ht9045-v899,AutoClean\AutoClean.cpp,3040,MISSING,"//AI(ht9045-v899) 20260408: kit empty but arm has partial pick - skip 3000-3100 loop, go finish (S6)"
+20260408,ht9045-v899,AutoClean\AutoClean.cpp,3082,MISSING,"//AI(ht9045-v899) 20260408: safety net - if CKPP plan not found, return pick complete"
+20260408,ht9045-v899,AutoClean\AutoClean.cpp,3370,MISSING,//AI(ht9045-v899) 20260408: unified plan-driven contact count + completion check (S5)
+20260408,ht9045-v899,AutoClean\AutoClean.cpp,5116,MISSING,//AI(ht9045-v899) 20260408: purge phantom HAS_NULL_CLEAN_IC from InArm before dispatch
+20260409,ht9045-v899,AutoClean\AutoClean.cpp,2116,MISSING,//AI(ht9045-v899) 20260409: recycle CLEAN_FINISH_IC -> HAS_CLEAN_IC before search so returned pads are reusable
+20260410,ht9045-v899,CosFunction.cpp,3381,MISSING,//AI(ht9045-v899) 20260410: enable SortingBinTray when CleanOut for FOREHOPE_NINGBO
+20260414,ht9045-v899,AutoClean\uCleaning.cpp,561,MISSING,//AI(ht9045-v899) 20260414: zero all pad counts when DevicePices or tray layout changes to prevent stale counts causing false WAR1922
+20260414,ht9045-v899,AutoClean\uCleaning.cpp,1949,MISSING,//AI(ht9045-v899) 20260414: fix operator precedence - was iDeviceNum==24 always true
+20260414,ht9045-v899,HS_Function.cpp,1360,MISSING,//AI(ht9045-v899) 20260414: trace daily-upload entry only (iLog>=5) to avoid timer-driven log bloat
+20260414,ht9045-v899,HS_Function.cpp,1371,MISSING,//AI(ht9045-v899) 20260414: trace skip reason
+20260414,ht9045-v899,HS_Function.cpp,1983,MISSING,//AI(ht9045-v899) 20260414: diagnostic log only on daily-upload path to avoid timer-driven bloat
+20260414,ht9045-v899,HS_Function.cpp,1997,MISSING,//AI(ht9045-v899) 20260414: trace success
+20260414,ht9045-v899,HS_Function.cpp,2002,MISSING,//AI(ht9045-v899) 20260414: trace failure
+20260414,ht9045-v899,HS_Function.cpp,2008,MISSING,//AI(ht9045-v899) 20260414: trace missing file
+20260414,ht9045-v899,HS_Function.cpp,2014,MISSING,//AI(ht9045-v899) 20260414: trace connect failure
+20260414,ht9045-v899,main.cpp,25658,MISSING,//AI(ht9045-v899) 20260414: pack MNetLog into StateRecord when N10-3 daily upload enabled for FTP diagnostic
+20260415,ht9045-v899,HS_Function.cpp,48,MISSING,//AI(ht9045-v899) 20260415: forward-declare MNetLog before first use at UpDataToServer_KYEC
+20260415,ht9045-v899,HS_Function.cpp,1773,MISSING,//AI(ht9045-v899) 20260415: swap SystemDate to yesterday before GetProdLog to fix cross-midnight filename mismatch
+20260415,ht9045-v899,HS_Function.cpp,1802,MISSING,//AI(ht9045-v899) 20260415: swap SystemDate to yesterday before GetGPIBLog to fix cross-midnight filename mismatch
+20260415,ht9045-v899,cShowBinSelect.cpp,815,MISSING,//AI(ht9045-v899) 20260415: dynamic stack layout for tsIndex tab to prevent overlapping panels
+20260415,ht9045-v899,cShowBinSelect.cpp,1491,MISSING,//AI(ht9045-v899) 20260415: dynamic height for tsIndex based on visible panel stack
+20260416,ht9045-v899,AutoClean\AutoClean.cpp,2903,MISSING,//AI(ht9045-v899) 20260416: revert phantom-marking skip per Gigas feedback - V898 did not have this guard
+20260417,ht9045-v899,AutoClean\AutoClean.cpp,5199,MISSING,//AI(ht9045-v899) 20260417: revert to V898 logic - premature CLEAN_FINISH_IC recycling caused pick to restart from col 0 instead of continuing right half
+20260417,ht9045-v899,AutoClean\AutoClean.cpp,5809,MISSING,//AI(ht9045-v899) 20260417: revert to V898 logic - premature CLEAN_FINISH_IC recycling caused pick restart from col 0 (ARM2)
+20260417,ht9045-v899,cShowBinSelect.cpp,809,MISSING,//AI(ht9045-v899) 20260417: show AutoDeviceEjection panel for QLE or by config flag
+20260420,BVL-3766,HS_Function.cpp,26,MISSING,//AI(BVL-3766) 20260420: 開關 site 時要即時重寫 GTK info.txt
 20260423,ht9045-v899,AutoClean\uCleaning.cpp,148,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
 20260423,ht9045-v899,AutoClean\uCleaning.cpp,149,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)
 20260423,ht9045-v899,AutoClean\uCleaning.cpp,150,MISSING,//AI(ht9045-v899) 20260423: Greatek要求 default 60->1 (CASE-20260423-001)

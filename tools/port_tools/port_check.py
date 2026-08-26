@@ -52,12 +52,23 @@ def indent_of(l):
 def check(rel):
     rel_u = rel.replace("\\", "/")
     disk_path = os.path.join(V910, rel)
-    head = subprocess.run(["git", "show", "HEAD:%s/%s" % (V910REL, rel_u)],
-                          cwd=ROOT, capture_output=True)
-    if head.returncode != 0:
-        print("[%s] SKIP: 不在 HEAD（新檔？）— 需主腦人工審" % rel)
-        return True
-    old = head.stdout
+    bak_path = disk_path + ".mgbak"
+    if os.path.exists(bak_path):
+        with open(bak_path, "rb") as f:
+            old = f.read()
+    else:
+        head = subprocess.run(["git", "show", "HEAD:%s/%s" % (V910REL, rel_u)],
+                              cwd=ROOT, capture_output=True)
+        if head.returncode != 0:
+            print("[%s] SKIP: 不在 HEAD（新檔？）— 需主腦人工審" % rel)
+            return True
+        old = head.stdout
+        # autocrlf 環境：repo blob 是 LF，磁碟多為 CRLF——重建 checkout 形式再比
+        if b"\r\n" not in old:
+            with open(disk_path, "rb") as f:
+                probe = f.read(65536)
+            if probe.count(b"\r\n") > probe.count(b"\n") - probe.count(b"\r\n"):
+                old = old.replace(b"\n", b"\r\n")
     with open(disk_path, "rb") as f:
         new = f.read()
     if old == new:

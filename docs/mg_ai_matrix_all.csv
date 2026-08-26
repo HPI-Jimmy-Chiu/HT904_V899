@@ -1,5 +1,107 @@
 ﻿date,agent,file,line,status,comment
-20260422,ht9045-v899,Automation\automation.cpp,1027,MISSING,//AI(ht9045-v899) 20260422: support MAIN_STATUS_INQUIRE and normalize status reply
+20260331,ht9045-v899,Command.cpp,13310,same-file,//AI(ht9045-v899) 20260331: 擴展支援 bRemoteLotStart (Greatek/OEE)
+20260331,ht9045-v899,Command.cpp,13883,same-file,//AI(ht9045-v899) 20260331: Greatek TCP Remote Start Lot
+20260331,ht9045-v899,Command.cpp,13927,same-file,//AI(ht9045-v899) 20260331: Greatek TCP Remote End Lot
+20260331,ht9045-v899,CosFunction.cpp,1389,same-file,//AI(ht9045-v899) 20260331: Greatek TCP Remote Start Lot (HTSET 720)
+20260331,ht9045-v899,CosFunction.cpp,4196,same-file,//AI(ht9045-v899) 20260331: Greatek TCP Remote Start Lot (HTSET 720)
+20260331,ht9045-v899,CosFunction.h,237,same-file,//AI(ht9045-v899) 20260331: Greatek TCP Remote Start Lot (HTSET 720)
+20260401,ht9045-v899,SECSGEM\uHGemHT9045_SV.cpp,360,MISSING,//AI(ht9045-v899) 20260401: Add LB Up/Down temperature and limits for SECS collection
+20260405,ht9045-v899,cSiteUseManager.cpp,1,same-file,//AI(ht9045-v899) 20260405: Phase0 SiteUseManager implementation - read-only queries over existing globals
+20260405,ht9045-v899,cSiteUseManager.cpp,26,same-file,//AI(ht9045-v899) 20260405: Phase4 load switch from Gerneral.ini [SiteUseMgr] section
+20260405,ht9045-v899,cSiteUseManager.cpp,172,same-file,//AI(ht9045-v899) 20260405: Phase1 shadow verification - log HP state before SearchPlateToPlace
+20260405,ht9045-v899,cSiteUseManager.cpp,188,same-file,//AI(ht9045-v899) 20260405: Phase1 shadow verification - log HP cell state after place attempt
+20260405,ht9045-v899,cSiteUseManager.cpp,200,same-file,//AI(ht9045-v899) 20260405: Phase2 validate SearchPlateToPlace result
+20260405,ht9045-v899,cSiteUseManager.cpp,262,same-file,//AI(ht9045-v899) 20260405: Phase3 algorithm switch accessors
+20260405,ht9045-v899,cSiteUseManager.cpp,282,same-file,//AI(ht9045-v899) 20260405: Phase5 compact search with edge-case protection
+20260405,ht9045-v899,cSiteUseManager.cpp,304,same-file,//AI(ht9045-v899) 20260405: Phase5B bPitchOver12000 downgrade to 1x1 scan
+20260405,ht9045-v899,cSiteUseManager.cpp,311,same-file,//AI(ht9045-v899) 20260405: Phase5B Row2CanPutHP/HotPlateYPitchCanPutAll guard
+20260405,ht9045-v899,cSiteUseManager.cpp,323,same-file,//AI(ht9045-v899) 20260405: Phase5B AutoClean HP2 Y-offset skip
+20260405,ht9045-v899,cSiteUseManager.cpp,344,same-file,//AI(ht9045-v899) 20260405: Phase5B skip AutoClean reserved zone on HP2(plate=0)
+20260405,ht9045-v899,cSiteUseManager.cpp,348,same-file,//AI(ht9045-v899) 20260405: Phase6 skip positions that would exceed motor soft limit
+20260405,ht9045-v899,cSiteUseManager.cpp,403,same-file,//AI(ht9045-v899) 20260405: Phase6 motor soft limit pre-check
+20260405,ht9045-v899,cSiteUseManager.cpp,415,same-file,//AI(ht9045-v899) 20260405: Phase6 check if ANY HP cell is reachable by current nozzles
+20260405,ht9045-v899,cSiteUseManager.h,1,same-file,//AI(ht9045-v899) 20260405: Phase0 SiteUseManager read-only facade for nozzle/HP site queries
+20260405,ht9045-v899,cSiteUseManager.h,39,same-file,//AI(ht9045-v899) 20260405: Phase1 shadow verification logging
+20260405,ht9045-v899,cSiteUseManager.h,44,same-file,//AI(ht9045-v899) 20260405: Phase2 SearchPlateToPlace result validation
+20260405,ht9045-v899,cSiteUseManager.h,47,same-file,//AI(ht9045-v899) 20260405: Phase3 switchable compact search algorithm
+20260405,ht9045-v899,cSiteUseManager.h,53,same-file,//AI(ht9045-v899) 20260405: Phase5A return bool for failure detection
+20260405,ht9045-v899,cSiteUseManager.h,56,same-file,//AI(ht9045-v899) 20260405: Phase6 motor soft limit pre-check
+20260405,ht9045-v899,cinitial.cpp,11241,same-file,//AI(ht9045-v899) 20260405: Phase4 init SiteUseMgr after HP setup complete
+20260407,ht9045-v899,AutoClean\AutoClean.cpp,1645,MISSING,//AI(ht9045-v899) 20260407: cCleanKitPickPlan implementation
+20260407,ht9045-v899,AutoClean\AutoClean.cpp,1649,MISSING,//AI(ht9045-v899) 20260407: runtime switch for new/old auto clean search logic
+20260407,ht9045-v899,AutoClean\AutoClean.cpp,2112,MISSING,//AI(ht9045-v899) 20260407: dual-path switch  bUseCKPP selects new class vs old logic
+20260407,ht9045-v899,AutoClean\AutoClean.cpp,3056,MISSING,//AI(ht9045-v899) 20260407: prevent hang when no clean pads remain
+20260407,ht9045-v899,AutoClean\AutoClean.cpp,3092,MISSING,//AI(ht9045-v899) 20260407: AC debug log - PickfromCleanKit Task20 result
+20260407,ht9045-v899,AutoClean\AutoClean.cpp,3456,MISSING,//AI(ht9045-v899) 20260407: allow partial pick when inactive suckers have no pad (Fix H)
+20260407,ht9045-v899,AutoClean\AutoClean.cpp,3503,MISSING,//AI(ht9045-v899) 20260407: allow partial pick when inactive suckers have no pad (Fix H)
+20260407,ht9045-v899,AutoClean\AutoClean.cpp,3556,MISSING,//AI(ht9045-v899) 20260407: allow partial pick when inactive suckers have no pad (Fix H)
+20260407,ht9045-v899,AutoClean\cCleanKitPickPlan.h,2,same-file,//AI(ht9045-v899) 20260407: new class to replace SearchCleanKitUpDown search/plan/assign logic
+20260407,ht9045-v899,AutoClean\cCleanKitPickPlan.h,23,same-file,//AI(ht9045-v899) 20260407: runtime flag to switch between new class and old logic
+20260407,ht9045-v899,ainarm9045_1x1_1.cpp,564,same-file,//AI(ht9045-v899) 20260407: add for CheckInArmDestroyICFail return value
+20260407,ht9045-v899,ainarm9045_1x1_1.cpp,894,MISSING,//AI(ht9045-v899) 20260407: align with 2x4_8 baseline — add bCheckInarmPlaceShuttle + CheckInArmDestroyICFail
+20260407,ht9045-v899,ainarm9045_1x1_1.cpp,1243,MISSING,//AI(ht9045-v899) 20260407: align with 2x4_8 baseline — add CheckInArmDestroyICFail for SHT2
+20260407,ht9045-v899,ainarm9045_1x4_4.cpp,555,same-file,//AI(ht9045-v899) 20260407: integrate CompactSearch for anti-fragmentation HP placement
+20260407,ht9045-v899,ainarm9045_1x4_4.cpp,818,same-file,//AI(ht9045-v899) 20260407: integrate CompactSearch for post-place re-search
+20260407,ht9045-v899,ainarm9045_1x4_4.cpp,2159,same-file,//AI(ht9045-v899) 20260407: pre-Loader limit gate - skip if no reachable HP cell
+20260407,ht9045-v899,ainarm9045_1x4_4.cpp,2745,same-file,//AI(ht9045-v899) 20260407: integrate CompactSearch for HP-check search
+20260407,ht9045-v899,cSiteUseManager.cpp,294,same-file,//AI(ht9045-v899) 20260407: force 1x1 single-cell search for starting position.
+20260407,ht9045-v899,cSiteUseManager.cpp,339,same-file,"//AI(ht9045-v899) 20260407: scan Y outer, X inner (left-to-right then top-to-bottom)"
+20260407,ht9045-v899,cSiteUseManager.cpp,394,same-file,//AI(ht9045-v899) 20260407: dump all diagnostic info on search failure for root cause analysis
+20260407,ht9045-v899,cSiteUseManager.cpp,407,same-file,//AI(ht9045-v899) 20260407: DISABLED ��� iPitchSpan=iXpitchMaxX3 is too conservative
+20260407,ht9045-v899,cSiteUseManager.cpp,439,same-file,//AI(ht9045-v899) 20260407: diagnostic dump on CompactSearch failure ��� log all decision params + HP grid
+20260407,ht9045-v899,cSiteUseManager.cpp,455,same-file,//AI(ht9045-v899) 20260407: fix dump to use correct struct for XPitch/YPitch
+20260407,ht9045-v899,cSiteUseManager.h,60,same-file,//AI(ht9045-v899) 20260407: diagnostic dump on CompactSearch failure
+20260407,ht9045-v899,note.cpp,1027,MISSING,"//AI(ht9045-v899) 20260407: only Pause when Note closed via BtnPauseClick (SoftStop==true), skip when closed via Start to prevent false MES2111"
+20260408,ht9045-v899,AutoClean\AutoClean.cpp,1652,other-file,//AI(ht9045-v899) 20260408: global plan instance shared across pick/move/check functions
+20260408,ht9045-v899,AutoClean\AutoClean.cpp,1941,MISSING,//AI(ht9045-v899) 20260408: check if current shuttle group has any sucker demand
+20260408,ht9045-v899,AutoClean\AutoClean.cpp,2782,MISSING,//AI(ht9045-v899) 20260408: plan-driven pick - iterate plan slots instead of hardcoded j=0..3
+20260408,ht9045-v899,AutoClean\AutoClean.cpp,3040,MISSING,"//AI(ht9045-v899) 20260408: kit empty but arm has partial pick - skip 3000-3100 loop, go finish (S6)"
+20260408,ht9045-v899,AutoClean\AutoClean.cpp,3082,MISSING,"//AI(ht9045-v899) 20260408: safety net - if CKPP plan not found, return pick complete"
+20260408,ht9045-v899,AutoClean\AutoClean.cpp,3370,MISSING,//AI(ht9045-v899) 20260408: unified plan-driven contact count + completion check (S5)
+20260408,ht9045-v899,AutoClean\AutoClean.cpp,5116,MISSING,//AI(ht9045-v899) 20260408: purge phantom HAS_NULL_CLEAN_IC from InArm before dispatch
+20260408,ht9045-v899,AutoClean\cCleanKitPickPlan.h,101,same-file,//AI(ht9045-v899) 20260408: check if current shuttle group has sucker demand
+20260408,ht9045-v899,AutoClean\cCleanKitPickPlan.h,103,same-file,//AI(ht9045-v899) 20260408: accessors for downstream plan-driven functions
+20260408,ht9045-v899,AutoClean\cCleanKitPickPlan.h,128,same-file,//AI(ht9045-v899) 20260408: global plan instance shared across pick/move/check functions
+20260409,ht9045-v899,AutoClean\AutoClean.cpp,2116,MISSING,//AI(ht9045-v899) 20260409: recycle CLEAN_FINISH_IC -> HAS_CLEAN_IC before search so returned pads are reusable
+20260410,ht9045-v899,CosFunction.cpp,3381,MISSING,//AI(ht9045-v899) 20260410: enable SortingBinTray when CleanOut for FOREHOPE_NINGBO
+20260414,ht9045-v899,AutoClean\uCleaning.cpp,561,MISSING,//AI(ht9045-v899) 20260414: zero all pad counts when DevicePices or tray layout changes to prevent stale counts causing false WAR1922
+20260414,ht9045-v899,AutoClean\uCleaning.cpp,1949,MISSING,//AI(ht9045-v899) 20260414: fix operator precedence - was iDeviceNum==24 always true
+20260414,ht9045-v899,HS_Function.cpp,1360,MISSING,//AI(ht9045-v899) 20260414: trace daily-upload entry only (iLog>=5) to avoid timer-driven log bloat
+20260414,ht9045-v899,HS_Function.cpp,1371,MISSING,//AI(ht9045-v899) 20260414: trace skip reason
+20260414,ht9045-v899,HS_Function.cpp,1983,MISSING,//AI(ht9045-v899) 20260414: diagnostic log only on daily-upload path to avoid timer-driven bloat
+20260414,ht9045-v899,HS_Function.cpp,1997,MISSING,//AI(ht9045-v899) 20260414: trace success
+20260414,ht9045-v899,HS_Function.cpp,2002,MISSING,//AI(ht9045-v899) 20260414: trace failure
+20260414,ht9045-v899,HS_Function.cpp,2008,MISSING,//AI(ht9045-v899) 20260414: trace missing file
+20260414,ht9045-v899,HS_Function.cpp,2014,MISSING,//AI(ht9045-v899) 20260414: trace connect failure
+20260414,ht9045-v899,main.cpp,25658,MISSING,//AI(ht9045-v899) 20260414: pack MNetLog into StateRecord when N10-3 daily upload enabled for FTP diagnostic
+20260415,ht9045-v899,HS_Function.cpp,48,MISSING,//AI(ht9045-v899) 20260415: forward-declare MNetLog before first use at UpDataToServer_KYEC
+20260415,ht9045-v899,HS_Function.cpp,1773,MISSING,//AI(ht9045-v899) 20260415: swap SystemDate to yesterday before GetProdLog to fix cross-midnight filename mismatch
+20260415,ht9045-v899,HS_Function.cpp,1802,MISSING,//AI(ht9045-v899) 20260415: swap SystemDate to yesterday before GetGPIBLog to fix cross-midnight filename mismatch
+20260415,ht9045-v899,cShowBinSelect.cpp,815,MISSING,//AI(ht9045-v899) 20260415: dynamic stack layout for tsIndex tab to prevent overlapping panels
+20260415,ht9045-v899,cShowBinSelect.cpp,1491,MISSING,//AI(ht9045-v899) 20260415: dynamic height for tsIndex based on visible panel stack
+20260416,ht9045-v899,AutoClean\AutoClean.cpp,2903,MISSING,//AI(ht9045-v899) 20260416: revert phantom-marking skip per Gigas feedback - V898 did not have this guard
+20260417,ht9045-v899,AutoClean\AutoClean.cpp,5199,MISSING,//AI(ht9045-v899) 20260417: revert to V898 logic - premature CLEAN_FINISH_IC recycling caused pick to restart from col 0 instead of continuing right half
+20260417,ht9045-v899,AutoClean\AutoClean.cpp,5809,MISSING,//AI(ht9045-v899) 20260417: revert to V898 logic - premature CLEAN_FINISH_IC recycling caused pick restart from col 0 (ARM2)
+20260417,ht9045-v899,cShowBinSelect.cpp,809,MISSING,//AI(ht9045-v899) 20260417: show AutoDeviceEjection panel for QLE or by config flag
+20260417,ht9045-v899,cmydef.cpp,4995,same-file,//AI(ht9045-v899) 20260417: config flag for AutoDeviceEjection panel
+20260417,ht9045-v899,cmydef.h,4937,same-file,//AI(ht9045-v899) 20260417: add config flag to show AutoDeviceEjection panel
+20260417,ht9045-v899,database.cpp,729,same-file,//AI(ht9045-v899) 20260417: read AutoDeviceEjection flag from Gerneral.ini
+20260417,Jimmy,uTemp_Set.cpp,6440,same-file,//AI(Jimmy) 20260417: fix typo - 第二個 subscript 應為 [1][0][1] 而非重複 [1][0][0]，
+20260417,Jimmy,uTemp_Set.cpp,6441,same-file,//AI(Jimmy) 20260417: 造成 Arm2 col0 的 offset index 被 24 覆蓋成 Ba2，SingleSite/1x2 時 Arm2 改 Aa2 無效、改 Ba2 才生效
+20260420,BVL-3766,HS_Function.cpp,26,MISSING,//AI(BVL-3766) 20260420: 開關 site 時要即時重寫 GTK info.txt
+20260420,BVL-3766,ProductionInfo\ProductionInfo.cpp,4922,same-file,//AI(BVL-3766) 20260420: 本功能為超豐(GTK Loader Agent)專用，非 CC_Greatek 不寫 GTK_Control\flag\info.txt
+20260420,BVL-3766,ProductionInfo\ProductionInfo.cpp,4946,same-file,"//AI(BVL-3766) 20260420: site 編號改用欄交錯(column-major, A奇B偶)，與機台 UI/吸嘴索引慣例(i + j*iShtRow + 1)一致"
+20260421,ht9045-v899,CosFunction.cpp,1881,same-file,//AI(ht9045-v899) 20260421: 全智反饋 Auto Contact Height Calibration / Contact Test 過程若 IC drop 無偵測會壓壞 IC 與配件，啟用 Index Z 取料/下壓掉料保護
+20260421,ht9045-v899,CosFunction.cpp,4115,same-file,//AI(ht9045-v899) 20260421: 全智(GIGAS)專用，預設關閉，由 FUNC_CC_GIGAS 開啟；Contact/Auto Height 加強掉料偵測
+20260421,ht9045-v899,CosFunction.h,170,same-file,//AI(ht9045-v899) 20260421: 全智(GIGAS)要求 Auto/Contact Test 過程加強 IC 掉料/吸取失敗偵測，避免下一刀下壓壓壞 IC 與配件
+20260421,JimmyChiu,Public\HTEditList.cpp,2952,same-file,//AI(JimmyChiu) 20260421: Fix C NULL guard
+20260421,JimmyChiu,Public\HTEditList.cpp,2959,same-file,//AI(JimmyChiu) 20260421: Fix C reset counter on failure
+20260421,JimmyChiu,Public\HTEditList.cpp,2960,same-file,//AI(JimmyChiu) 20260421: Fix C diag log
+20260421,ht9045-v899,cContact.cpp,3300,same-file,//AI(ht9045-v899) 20260421: 全智 Contact/Auto Height 吸取後立即驗證每個應吸取 site 的真空 sensor，掉料/沒吸到時直接停止下壓避免下一刀壓壞 IC 與配件
+20260421,ht9045-v899,cContact.cpp,3371,same-file,//AI(ht9045-v899) 20260421: 全智要求掉料時直接中止 Contact/Auto Height，避免下一刀下壓壓壞 IC/配件
+20260421,ht9045-v899,cContact.cpp,4333,same-file,//AI(ht9045-v899) 20260421: 全智 Contact/Auto Height 吸取後立即驗證每個應吸取 site 的真空 sensor，掉料/沒吸到時直接停止下壓避免下一刀壓壞 IC 與配件
+20260421,ht9045-v899,cContact.cpp,4404,same-file,//AI(ht9045-v899) 20260421: 全智要求掉料時直接中止 Contact/Auto Height，避免下一刀下壓壓壞 IC/配件
+20260422,ht9045-v899,Automation\automation.cpp,1027,same-file,//AI(ht9045-v899) 20260422: support MAIN_STATUS_INQUIRE and normalize status reply
 20260422,ht9045-v899,Monitor\MonitorInterface.cpp,39,same-file,//AI(ht9045-v899) 20260422: initialize Greatek monitor Ch3 status slot
 20260422,ht9045-v899,Monitor\MonitorInterface.cpp,220,same-file,//AI(ht9045-v899) 20260422: reopen Greatek monitor Ch3 after reconnect
 20260422,ht9045-v899,Monitor\MonitorInterface.cpp,318,same-file,//AI(ht9045-v899) 20260422: sync Greatek monitor Ch3 close with Ch0

@@ -28,10 +28,35 @@
 - V899 有少量**無 //AI 註解的手改**可能存在；Phase 3 收尾會用
   `git diff bb69c60..b515ed5` 全量對帳補漏，不只靠註解矩陣。
 
-## C. 等 weekly 盤點 agent 補充（本節由盤點結果回填）
+## C. weekly 盤點結果（20260826 15:45 回填，全文見 `docs/mg_inventory_weekly_cases.md`）
 
-- weekly 案件與叢集的 join 結果、資訊不足的案件清單（agent 產出
-  `docs/mg_inventory_weekly_cases.md` 後併入）。
+**規模**：88 案 → **45 案有 V899 碼變更**、25 純分析（E 類不搬）、4 不確定、
+14 排除（HT172×13、HT160S×1 非本產品線）。版號跨度 899.8–899.37。
+
+**兩個方向性發現（已採納進計畫）**：
+- **C1 照 weekly case 清單搬會漏**：樹內大量 //AI 變更無對應 case（孤兒變更，
+  含 Common\PickPlanner 整目錄、OCR*、cTrayMapping 100+ 處）。
+  → 總帳母體改為 //AI 註解全集（矩陣），weekly 只當歸因線索。**同時抓到我的盤點
+  也漏了**：矩陣原以 20260422 起算，樹是 20260323 建的 → 已修正重跑，
+  真數從 617/337 修正為 **719 處/376 缺席、43 叢集**。
+- **C2 五組相依鏈必須同波搬**（EventLog 引號線、InArm watchdog 線、Multi EP、
+  AutoClean CKPP、Power Save 線）→ 已寫入 LEDGER 相依鏈段。
+
+**需留意的個案（處置照 95% 規則）**：
+| # | 問題 | 處置 |
+|---|---|---|
+| C3 | 4 個不確定案（Greatek 20260422、上海安靠 20260511、PTI 20260514、GIGAS 20260820）：有出貨版號但無檔案清單、樹內無對應日期註解 | 以矩陣為母體本來就不依賴 case 資訊；若矩陣也無對應叢集＝該案可能只改 config/文件 → LEDGER 標 E 類存查 |
+| C4 | issue.md 與樹不一致 4 條（最重要：Greatek CASE-20260820-001 issue 寫「未修改」但 ProductionInfo.cpp:5596 越界修正已套用）| 以樹為準（矩陣母體），issue.md 誤記回頭修 weekly 是另一件事，不擋搬移 |
+| C5 | V899 已知缺陷未修 5 條（南茂 6-Auto 路由、acarry 遮罩閘門、WAR0615 本體、Greatek 夾爪極性未回歸、TQPF watchdog）| **不在搬移範圍**（搬移=忠實複製 V899 現狀，不順手修）；已存查，若要修是 V899/V910 各自的新案 |
+| C6 | 欣銓 Multi EP 8ch：程式在 V899 樹內，但案子決議「保留 ch16 不交付」 | 建議**照搬**：功能受 `INSTALL_DOUBLE_EP`（Gerneral.ini）閘控，不設定即休眠，搬入不改變任何機台行為；已記 MG_FINAL_DECISIONS 供你最終確認 |
+
+## C+. 試點波 MG-W1 實證（20260826 15:40）
+
+流水線已實戰驗證：automation.cpp `MAIN_STATUS_INQUIRE` 9 行位元組級插入
+→ port_check PASS（9/9 spliced、0 改動既有行、EOL 全 CRLF）→ bcc32 -c 零錯誤。
+並抓到第一個「邏輯違背」案例：uCleaning AutoClean 預設值 60→1，V910 已演進成
+ArmSpeed 動態預設（比 60 和 1 都合理）→ 裁決 C 類不搬、記錄證據。
+**衝突會在動手前被抓住，機制成立。**
 
 ## D. 最終決策清單機制
 

@@ -20,14 +20,28 @@
 
 ---
 
-## 🔖 RESUME（20260826）
+## 20260826 15:50 — Phase 0 完成＋MG-W1 試點實戰
 
-- **狀態**：Phase 0 大致完成（缺 weekly join）；Phase 1 harness 就緒未實戰。
-- **下一步**：
-  1. 併入 weekly 盤點 → LEDGER 補案件歸屬 → 17:00 前交付問題清單給使用者。
-  2. 啟動 Phase 2：`/loop /mg-wave`，第一波建議 MG-W1＝小而乾淨的叢集
-     （20260423 Greatek AutoClean default 60→1，4 條同檔）驗證整條 splice→port_check→
-     bcc32 流水線，再上大叢集（Multi EP 0429–0512 合併波）。
-  3. 掛 60 分鐘守衛 cron（殭屍協議＝先查證後處置，見 skill）。
-- **不變量**：V899 唯讀（bb69c60..b515ed5 是來源端點）；V910 基線 e06524a；
-  bcc32 -c 波內 gate；全量 build 只在 Phase 3。
+- weekly 盤點回收：88 案→45 有碼案；兩方向性發現（母體改矩陣、五相依鏈）已採納。
+- 矩陣 DATE_MIN 修正 20260422→20260323（weekly 交叉驗證抓到漏）：
+  真數 **719 處/376 缺席/43 叢集**。矩陣重跑＝進度儀表（搬完自動消失）。
+- **MG-W1 done**：automation.cpp MAIN_STATUS_INQUIRE 9 行 splice
+  （port_check PASS＋bcc32 PASS）；uCleaning 4 條裁決 skipped-C（V910 動態預設已等價）。
+- port_check 修正：old 基準優先 .mgbak，git-show fallback 重建 CRLF（autocrlf 陷阱）。
+- 17:00 問題清單已交付（MG_PROBLEMS_20260826.md）；F1 Multi EP 進 MG_FINAL_DECISIONS。
+
+---
+
+## 🔖 RESUME（20260826 15:50）
+
+- **狀態**：Phase 0/1 完成、MG-W1 done。Phase 2 連續波次進行中。
+- **下一步（按序）**：
+  1. MG-W2＝20260424 MyLaneIo 售服訊息（8 條、2 檔，無相依，練 replace 型）。
+  2. MG-W3＝EventLog 引號線（0429 note.cpp → 0817 cObserver.cpp 同波，相依鏈#1）。
+  3. 之後照 LEDGER 由小到大，主題波優先（AutoClean CKPP、Power Save 線、Multi EP、
+     0612 FTP 大波）。每波照 /mg-wave 步驟。
+  4. 60 分鐘守衛 cron 已掛（殭屍＝先查證後處置）。
+- **量測**：進度看 `python tools/port_tools/ai_comment_matrix.py`（MISSING 應單調下降，
+  起點 376）。
+- **不變量**：V899 唯讀（來源端點 b515ed5）；V910 基線 e06524a；LEDGER 手工維護
+  （skeleton 產生器不再跑）；bcc32 -c 波內 gate；全量 build 只在 Phase 3。
