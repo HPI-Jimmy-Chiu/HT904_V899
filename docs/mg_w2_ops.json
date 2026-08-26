@@ -1,0 +1,52 @@
+[
+  {
+    "id": "MG-W2-OP1",
+    "desc": "IOOutBitStatus: log 短格式帶 iErr, UI 改用 BuildIOErrMessage (matrix MyLaneIo.cpp:327)",
+    "v910_file": "MyLaneIo.cpp",
+    "v899_file": "MyLaneIo.cpp",
+    "v899_lines": [327, 330],
+    "mode": "replace",
+    "replace_lines": [329, 331],
+    "anchor_expect": "IOOutBitStatus (%s) Ring %d | IP %d | Port %d | Byte %d Fail."
+  },
+  {
+    "id": "MG-W2-OP2",
+    "desc": "IOInputBit: 移除 MachineTypeChoice 三分支, 改用 BuildIOErrMessage (matrix MyLaneIo.cpp:359)",
+    "v910_file": "MyLaneIo.cpp",
+    "v899_file": "MyLaneIo.cpp",
+    "v899_lines": [359, 362],
+    "mode": "replace",
+    "replace_lines": [360, 373],
+    "anchor_expect": "IOInputBit (%s) Ring %d, IP %d, Port %d, Bit %d Fail. %s"
+  },
+  {
+    "id": "MG-W2-OP3",
+    "desc": "IOInputByte: 移除 MachineTypeChoice 三分支, 改用 BuildIOErrMessage (Bit 傳 -1) (matrix MyLaneIo.cpp:439)",
+    "v910_file": "MyLaneIo.cpp",
+    "v899_file": "MyLaneIo.cpp",
+    "v899_lines": [439, 442],
+    "mode": "replace",
+    "replace_lines": [458, 471],
+    "anchor_expect": "IOInputByte Ring %d | IP %d | Port %d Fail. %s"
+  },
+  {
+    "id": "MG-W2-OP4",
+    "desc": "檔尾整段: GetIOErrStr 中文化 + 新增 GetUseMNetIPDevTypeName + BuildIOErrMessage (matrix MyLaneIo.cpp:695/726/757). C4+C5 合併成單一 replace 以取得全檔唯一錨點",
+    "v910_file": "MyLaneIo.cpp",
+    "v899_file": "MyLaneIo.cpp",
+    "v899_lines": [686, 788],
+    "mode": "replace",
+    "replace_lines": [715, 744],
+    "anchor_expect": "UnKnown Error,iErr=%d"
+  },
+  {
+    "id": "MG-W2-OP5",
+    "desc": "MyLaneIo.h: 新增 GetUseMNetIPDevTypeName / BuildIOErrMessage 兩支 public 宣告 (matrix MyLaneIo.h:40/41)",
+    "v910_file": "MyLaneIo.h",
+    "v899_file": "MyLaneIo.h",
+    "v899_lines": [40, 43],
+    "mode": "after",
+    "anchor_line": 39,
+    "anchor_expect": "AnsiString GetIOErrStr(int iErr);"
+  }
+]

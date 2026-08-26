@@ -157,14 +157,14 @@
 20260423,ht9045-v899,uMotorTest.cpp,206,MISSING,//AI(ht9045-v899) 20260423: enable auto1 y stepper test
 20260423,ht9045-v899,uMotorTest.cpp,207,MISSING,//AI(ht9045-v899) 20260423: enable auto2 y stepper test
 20260423,ht9045-v899,uMotorTest.cpp,208,MISSING,//AI(ht9045-v899) 20260423: enable auto3 y stepper test
-20260424,ht9045-v899,MyLaneIo.cpp,327,MISSING,"//AI(ht9045-v899) 20260424: log 維持簡短供解析, UI 改用 BuildIOErrMessage 提供完整修法"
-20260424,ht9045-v899,MyLaneIo.cpp,359,MISSING,"//AI(ht9045-v899) 20260424: log 維持簡短供解析, UI 改用 BuildIOErrMessage 提供完整修法"
-20260424,ht9045-v899,MyLaneIo.cpp,439,MISSING,"//AI(ht9045-v899) 20260424: log 維持簡短供解析, UI 改用 BuildIOErrMessage 提供完整修法 (Byte 操作無 Bit, 傳 -1)"
-20260424,ht9045-v899,MyLaneIo.cpp,695,MISSING,"//AI(ht9045-v899) 20260424: 加上中文說明與修法, 讓售服直接看得懂"
-20260424,ht9045-v899,MyLaneIo.cpp,726,MISSING,//AI(ht9045-v899) 20260424: 將 mn200.h 內 DEV_INF_xxx enum 翻成售服看得懂的字串
-20260424,ht9045-v899,MyLaneIo.cpp,757,MISSING,"//AI(ht9045-v899) 20260424: 統一 IO 錯誤訊息格式, 給售服 5 段資訊一次到位"
-20260424,ht9045-v899,MyLaneIo.h,40,MISSING,//AI(ht9045-v899) 20260424: 把 mn200 device type enum 翻成可讀字串給售服
-20260424,ht9045-v899,MyLaneIo.h,41,MISSING,//AI(ht9045-v899) 20260424: 統一 IO 錯誤訊息格式給售服
+20260424,ht9045-v899,MyLaneIo.cpp,327,same-file,"//AI(ht9045-v899) 20260424: log 維持簡短供解析, UI 改用 BuildIOErrMessage 提供完整修法"
+20260424,ht9045-v899,MyLaneIo.cpp,359,same-file,"//AI(ht9045-v899) 20260424: log 維持簡短供解析, UI 改用 BuildIOErrMessage 提供完整修法"
+20260424,ht9045-v899,MyLaneIo.cpp,439,same-file,"//AI(ht9045-v899) 20260424: log 維持簡短供解析, UI 改用 BuildIOErrMessage 提供完整修法 (Byte 操作無 Bit, 傳 -1)"
+20260424,ht9045-v899,MyLaneIo.cpp,695,same-file,"//AI(ht9045-v899) 20260424: 加上中文說明與修法, 讓售服直接看得懂"
+20260424,ht9045-v899,MyLaneIo.cpp,726,same-file,//AI(ht9045-v899) 20260424: 將 mn200.h 內 DEV_INF_xxx enum 翻成售服看得懂的字串
+20260424,ht9045-v899,MyLaneIo.cpp,757,same-file,"//AI(ht9045-v899) 20260424: 統一 IO 錯誤訊息格式, 給售服 5 段資訊一次到位"
+20260424,ht9045-v899,MyLaneIo.h,40,same-file,//AI(ht9045-v899) 20260424: 把 mn200 device type enum 翻成可讀字串給售服
+20260424,ht9045-v899,MyLaneIo.h,41,same-file,//AI(ht9045-v899) 20260424: 統一 IO 錯誤訊息格式給售服
 20260428,BVL-3766,Command.cpp,5258,same-file,//AI(BVL-3766) 20260428: GPIB SETSITEMAP_ 變更 site 後，立即重寫 GTK info.txt 的 RunSite，
 20260428,BVL-3766,ProductionInfo\ProductionInfo.cpp,4948,same-file,//AI(BVL-3766) 20260428: One Side / Use Shuttle2 模式下只用 Arm2(Z=1)，
 20260428,JimmyChiu,cSiteUseManager.cpp,265,same-file,//AI(JimmyChiu) 20260428: revert force-enable for e9045_1x4_4. CompactSearch performs

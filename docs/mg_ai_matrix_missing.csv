@@ -58,14 +58,6 @@
 20260423,ht9045-v899,uMotorTest.cpp,206,MISSING,//AI(ht9045-v899) 20260423: enable auto1 y stepper test
 20260423,ht9045-v899,uMotorTest.cpp,207,MISSING,//AI(ht9045-v899) 20260423: enable auto2 y stepper test
 20260423,ht9045-v899,uMotorTest.cpp,208,MISSING,//AI(ht9045-v899) 20260423: enable auto3 y stepper test
-20260424,ht9045-v899,MyLaneIo.cpp,327,MISSING,"//AI(ht9045-v899) 20260424: log 維持簡短供解析, UI 改用 BuildIOErrMessage 提供完整修法"
-20260424,ht9045-v899,MyLaneIo.cpp,359,MISSING,"//AI(ht9045-v899) 20260424: log 維持簡短供解析, UI 改用 BuildIOErrMessage 提供完整修法"
-20260424,ht9045-v899,MyLaneIo.cpp,439,MISSING,"//AI(ht9045-v899) 20260424: log 維持簡短供解析, UI 改用 BuildIOErrMessage 提供完整修法 (Byte 操作無 Bit, 傳 -1)"
-20260424,ht9045-v899,MyLaneIo.cpp,695,MISSING,"//AI(ht9045-v899) 20260424: 加上中文說明與修法, 讓售服直接看得懂"
-20260424,ht9045-v899,MyLaneIo.cpp,726,MISSING,//AI(ht9045-v899) 20260424: 將 mn200.h 內 DEV_INF_xxx enum 翻成售服看得懂的字串
-20260424,ht9045-v899,MyLaneIo.cpp,757,MISSING,"//AI(ht9045-v899) 20260424: 統一 IO 錯誤訊息格式, 給售服 5 段資訊一次到位"
-20260424,ht9045-v899,MyLaneIo.h,40,MISSING,//AI(ht9045-v899) 20260424: 把 mn200 device type enum 翻成可讀字串給售服
-20260424,ht9045-v899,MyLaneIo.h,41,MISSING,//AI(ht9045-v899) 20260424: 統一 IO 錯誤訊息格式給售服
 20260429,ht9045-v899,main.cpp,10743,MISSING,//AI(ht9045-v899) 20260429: gate the prompt so it only fires for the real
 20260429,ht9045-v899,note.cpp,6689,MISSING,//AI(ht9045-v899) 20260429: 甬矽要求 EventLog 時間欄不加雙引號與前綴空格 (CASE-20260429-001)
 20260429,ht9045-v899,note.cpp,6702,MISSING,//AI(ht9045-v899) 20260429: 其他客戶維持 Steven 20251107 新方法 (CASE-20260429-001)

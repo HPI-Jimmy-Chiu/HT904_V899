@@ -37,6 +37,10 @@ class TLaneIO
         double GetIOValueThread(int Ring, int IP, int Port, int Bit, int iISABase=0, AnsiString Alias="");
         bool SetIOValueThread(double dKpa, int Ring, int IP, int Port, int Bit, int iISABase=0, AnsiString Alias="");
         AnsiString GetIOErrStr(int iErr);
+        AnsiString GetUseMNetIPDevTypeName(int iDevType);                       //AI(ht9045-v899) 20260424: 把 mn200 device type enum 翻成可讀字串給售服
+        AnsiString BuildIOErrMessage(bool bDOType, AnsiString sFuncName,        //AI(ht9045-v899) 20260424: 統一 IO 錯誤訊息格式給售服
+                                     AnsiString sAlias, int Ring, int IP,
+                                     int Port, int Bit, int iErr);
 };
 extern class TLaneIO MyLaneIO;
 #endif

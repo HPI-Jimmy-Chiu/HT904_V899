@@ -326,9 +326,10 @@ bool TLaneIO::IOOutBitStatus(int Ring, int IP, int Port, int Bit, int iISABase, 
     if(iHasErr!=0)
     {
         #ifndef SOFT_SIMULTE
-        str.sprintf("IOOutBitStatus (%s) Ring %d | IP %d | Port %d | Byte %d Fail.", Alias, Ring, IP, Port, Bit);
+        //AI(ht9045-v899) 20260424: log 維持簡短供解析, UI 改用 BuildIOErrMessage 提供完整修法
+        str.sprintf("IOOutBitStatus (%s) Ring %d | IP %d | Port %d | Bit %d Fail. iErr=%d", Alias, Ring, IP, Port, Bit, iHasErr);
         MNetLog(str);
-        ShowMyMessage(str, GetIOErrStr(iHasErr));
+        ShowMyMessage(BuildIOErrMessage(true, "IOOutBitStatus", Alias, Ring, IP, Port, Bit, iHasErr));
         #endif
         return false;
     }
@@ -357,20 +358,10 @@ bool TLaneIO::IOInputBit(int Ring, int IP, int Port, int Bit, int iISABase, Ansi
         if(fiosetview->fShow==false)
         {
             #ifndef SOFT_SIMULTE
-            str.sprintf("IOInputBit (%s) Ring %d, IP %d, Port %d, Bit %d Fail. %s", Alias, Ring, IP, Port, Bit, GetIOErrStr(iHasErr));
+            //AI(ht9045-v899) 20260424: log 維持簡短供解析, UI 改用 BuildIOErrMessage 提供完整修法
+            str.sprintf("IOInputBit (%s) Ring %d, IP %d, Port %d, Bit %d Fail. iErr=%d", Alias, Ring, IP, Port, Bit, iHasErr);
             MNetLog(str);
-            if(MachineTypeChoice==Type_HT9045)                                  //9045
-            {
-                ShowMyMessage(str, "HT9045 : Maybe input wrong IO position!");
-            }
-            else if(MachineTypeChoice==Type_HT9045_12Site)                      //ChungHung 20130507 add HT9045 updata for 12site 517
-            {
-                ShowMyMessage(str, "HT9045_12Site : Maybe input wrong IO position!");
-            }
-            else
-            {
-                ShowMyMessage(str, "HT9046 : Maybe input wrong IO position!");
-            }
+            ShowMyMessage(BuildIOErrMessage(false, "IOInputBit", Alias, Ring, IP, Port, Bit, iHasErr));
             #endif
         }
         return false;
@@ -455,20 +446,10 @@ byte TLaneIO::IOInputByte(int Ring, int IP, int Port, int iISABase)             
     if(iHasErr!=0)
     {
         #ifndef SOFT_SIMULTE
-        str.sprintf("IOInputByte Ring %d | IP %d | Port %d Fail. %s", Ring, IP, Port, GetIOErrStr(iHasErr));
+        //AI(ht9045-v899) 20260424: log 維持簡短供解析, UI 改用 BuildIOErrMessage 提供完整修法 (Byte 操作無 Bit, 傳 -1)
+        str.sprintf("IOInputByte Ring %d | IP %d | Port %d Fail. iErr=%d", Ring, IP, Port, iHasErr);
         MNetLog(str);
-        if(MachineTypeChoice==Type_HT9045)                                      //9045
-        {
-            ShowMyMessage(str, "HT9045 : Maybe input wrong IO position!");
-        }
-        else if(MachineTypeChoice==Type_HT9045_12Site)                          //ChungHung 20130507 add HT9045 updata for 12site 517
-        {
-            ShowMyMessage(str, "HT9045_12Site : Maybe input wrong IO position!");
-        }
-        else
-        {
-            ShowMyMessage(str, "HT9046 : Maybe input wrong IO position!");
-        }
+        ShowMyMessage(BuildIOErrMessage(false, "IOInputByte", AnsiString("(整 Byte)"), Ring, IP, Port, -1, iHasErr));
         #endif
         return 0;
     }
@@ -721,24 +702,97 @@ AnsiString TLaneIO::GetIOErrStr(int iErr)
             sret="SUCCESS";
             break;
         case 1:
-            sret="Bit not between 0 to 7";
+            //AI(ht9045-v899) 20260424: 加上中文說明與修法, 讓售服直接看得懂
+            sret="[iErr=1] Bit 範圍錯誤 (應為 0~7)\r\n"
+                 "         → 檢查 IO_Table.csv 該列的 Bit 欄位";
             break;
         case 2:
-            sret="Ring, IP, or Port not in range";
+            sret="[iErr=2] Ring/IP/Port 超出系統上限\r\n"
+                 "         → 檢查 IO_Table.csv 該列的 Lane/IP/Port 欄位是否打錯";
             break;
         case 3:
-            sret="UseMNetIP Err";
+            sret="[iErr=3] UseMNetIP Err - 該 Ring/IP 未掃到 IO 模組\r\n"
+                 "         可能原因:\r\n"
+                 "           1. IP 站沒插 IO 模組或未通電\r\n"
+                 "           2. IP 撥碼開關設錯\r\n"
+                 "           3. 該 IP 實際是馬達卡, 不能配 IO\r\n"
+                 "         → 開啟 D:\\HT9045\\Error\\MNetLog*.txt 確認該 IP 模組型號";
             break;
         case 4:
-            sret="16IN/OUT - output port error";
+            sret="[iErr=4] 16IN16OUT 模組的輸出 Port 必須是 2 或 3\r\n"
+                 "         → 修改 IO_Table.csv 該列的 Port 欄位";
             break;
         case 5:
-            sret="16IN/OUT - input port error";
+            sret="[iErr=5] 16IN16OUT 模組的輸入 Port 必須是 0 或 1\r\n"
+                 "         → 修改 IO_Table.csv 該列的 Port 欄位";
             break;
         default:
-            sret.sprintf("UnKnown Error,iErr=%d", iErr);
+            sret.sprintf("[iErr=%d] 未知錯誤", iErr);
             break;
     }
     return sret;
+}
+//---------------------------------------------------------------------------
+//AI(ht9045-v899) 20260424: 將 mn200.h 內 DEV_INF_xxx enum 翻成售服看得懂的字串
+AnsiString TLaneIO::GetUseMNetIPDevTypeName(int iDevType)
+{
+    AnsiString sret="";
+    switch(iDevType)
+    {
+        case DEV_INF_NO_DEV:
+            sret="未掛模組 (NO_DEV)";
+            break;
+        case DEV_INF_MOTION_DEV:
+            sret="馬達卡 (MOTION_DEV) - 不可放 IO 點位";
+            break;
+        case DEV_INF_IO_32OUT_DEV:
+            sret="32 點純輸出 (IO_32OUT) - Port 限 0~1";
+            break;
+        case DEV_INF_IO_32IN_DEV:
+            sret="32 點純輸入 (IO_32IN) - Port 限 0~1";
+            break;
+        case DEV_INF_IO_16IN_16OUT_DEV:
+            sret="16 入 16 出 (IO_16IN_16OUT) - 輸入 Port 0~1, 輸出 Port 2~3";
+            break;
+        case DEV_INF_AI_8IN_DEV:
+            sret="8 點類比輸入 (AI_8IN) - 不可放數位 IO";
+            break;
+        default:
+            sret.sprintf("未知裝置 (0x%02X)", iDevType);
+            break;
+    }
+    return sret;
+}
+//---------------------------------------------------------------------------
+//AI(ht9045-v899) 20260424: 統一 IO 錯誤訊息格式, 給售服 5 段資訊一次到位
+AnsiString TLaneIO::BuildIOErrMessage(bool bDOType, AnsiString sFuncName,
+                                      AnsiString sAlias, int Ring, int IP,
+                                      int Port, int Bit, int iErr)
+{
+    AnsiString sMsg="";
+    AnsiString sDir = bDOType ? AnsiString("輸出 (DO)") : AnsiString("輸入 (DI)");
+    AnsiString sDevType = "Ring/IP 超出範圍, 無法判讀";
+
+    if(Ring>=0 && Ring<MAXRing && IP>=0 && IP<MAXIP)
+    {
+        sDevType = GetUseMNetIPDevTypeName(iUseMNetIP[Ring][IP]);
+    }
+
+    sMsg.sprintf("[IO 設定錯誤] %s\r\n"
+                 "點位名稱 : %s (%s)\r\n"
+                 "CSV 位置 : Lane=%d, IP=%d, Port=%d, Bit=%d\r\n"
+                 "實際模組 : Ring %d / IP %d = %s\r\n"
+                 "錯誤說明 :\r\n%s\r\n"
+                 "修正建議 :\r\n"
+                 "  1. 開啟 D:\\HT9045\\System\\IO_Table.csv 搜尋 \"%s\"\r\n"
+                 "  2. 對照上方「實際模組」欄, 確認 Lane/IP/Port/Bit 是否合法\r\n"
+                 "  3. 必要時開啟 D:\\HT9045\\Error\\MNetLog*.txt 比對開機掃描結果",
+                 sFuncName.c_str(),
+                 sAlias.c_str(), sDir.c_str(),
+                 Ring, IP, Port, Bit,
+                 Ring, IP, sDevType.c_str(),
+                 GetIOErrStr(iErr).c_str(),
+                 sAlias.c_str());
+    return sMsg;
 }
 //---------------------------------------------------------------------------

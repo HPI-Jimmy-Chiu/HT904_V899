@@ -32,16 +32,26 @@
 
 ---
 
-## 🔖 RESUME（20260826 15:50）
+## 20260826 16:20 — MG-W2 done（MyLaneIo 售服訊息）
 
-- **狀態**：Phase 0/1 完成、MG-W1 done。Phase 2 連續波次進行中。
+- 5 op（3 replace 呼叫點＋GetIOErrStr 整段＋.h 宣告）；port_check PASS（88+4 全 SPLICED、
+  removed 34 全數人工複驗＝舊格式與 MachineTypeChoice 三分支）；bcc32 PASS。
+- 儀表：**MISSING 376 → 368**。外溢（MNetLog 多行化）記 LEDGER。
+
+---
+
+## 🔖 RESUME（20260826 16:20）
+
+- **狀態**：Phase 2 連續波次進行中。MG-W1、MG-W2 done。儀表 MISSING=368。
 - **下一步（按序）**：
-  1. MG-W2＝20260424 MyLaneIo 售服訊息（8 條、2 檔，無相依，練 replace 型）。
-  2. MG-W3＝EventLog 引號線（0429 note.cpp → 0817 cObserver.cpp 同波，相依鏈#1）。
-  3. 之後照 LEDGER 由小到大，主題波優先（AutoClean CKPP、Power Save 線、Multi EP、
-     0612 FTP 大波）。每波照 /mg-wave 步驟。
-  4. 60 分鐘守衛 cron 已掛（殭屍＝先查證後處置）。
-- **量測**：進度看 `python tools/port_tools/ai_comment_matrix.py`（MISSING 應單調下降，
-  起點 376）。
-- **不變量**：V899 唯讀（來源端點 b515ed5）；V910 基線 e06524a；LEDGER 手工維護
-  （skeleton 產生器不再跑）；bcc32 -c 波內 gate；全量 build 只在 Phase 3。
+  1. MG-W3＝EventLog 引號線（0429 note.cpp → 0817 cObserver.cpp 同波，相依鏈#1；
+     甬矽案 CASE-20260429-001＋CASE-FOREHOPE_NINGBO-20260813-001；
+     注意 EventLog CSV 引號是承重的——CommaText 解析，改格式要回驗 Observer）。
+  2. MG-W4 候選＝20260414/0415/0420 HS_Function KYEC 上傳線（同主題連波）。
+  3. 之後照 LEDGER 由小到大，主題波優先（AutoClean CKPP＋PickPlanner 目錄、
+     Power Save 線 0804→0811→0819/0820、Multi EP、0612 FTP 大波）。
+  4. 60 分鐘守衛 cron 已掛（每時 :23；殭屍＝先查證後處置）。
+- **量測**：`python tools/port_tools/ai_comment_matrix.py`（MISSING 單調下降；
+  起點 376、現 368）。
+- **不變量**：V899 唯讀（來源端點 b515ed5）；V910 基線 e06524a；LEDGER 手工維護；
+  bcc32 -c 波內 gate；全量 build 只在 Phase 3。
