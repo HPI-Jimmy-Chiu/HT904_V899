@@ -14734,19 +14734,97 @@ FAILSET（兩側相同）= 常駐五項
 | `ATC/ATC_Handler_Side.cpp` | 168 | 3,713 | 全域名 2 命中 ＋ 37 個 gated |
 | `Mes/fVATMesFileSys.cpp` | 46 | 3,349 | ⚠ **有 shape (d) seam**，開工前必讀 |
 
-### 🔖 RESUME（20260827 · 第六版）
+## 20260827 XV — FW3-CLN2：**把前一波自陳的三支疏漏撿回來**（34/72）
 
-- **本段最後一顆**：`FW3-CLN1`——`forms/fCleaning.{h,cpp}` 從 36+14 長到
-  **126+428 行**，**31/72 支 / 213 golden span 行**。**兩側 gate GREEN，
-  連續第六個乾淨 gate**。詳見 20260827 XIV。
+### 交付
+
+`forms/fCleaning.h` **+23/-0**、`forms/fCleaning.cpp` **+57/-0**，五個 hunk 全是插入、
+**零刪除**，bare-LF、零 U+FFFD。**主迴圈自做，未派 agent**——20 行 golden、
+前一波已經把分析做完了，派工的成本高於工作本身。
+
+| 函式 | golden | 行 | 需要補什麼 |
+|---|---|---|---|
+| `YCT1Change` | `:1891-1901` | 11 | **什麼都不用**，純粹是漏寫 |
+| `sbCleanExitClick` | `:1868-1872` | 5 | facade 加 no-op `Close()` ＋ `sbCleanExit` 欄位 |
+| `edCleanCountClick` | `:2080-2083` | 4 | 加 `edAlarmCount` 欄位 |
+
+`forms/fCleaning.cpp` 現在是 **35 個定義 = 1 ctor + 34 支方法**（自己剝註解數的），
+即 golden `AutoClean/uCleaning.cpp` 的 **34/72 支**。
+
+### 前提是我自己重量的，不是沿用前一波的報告
+
+CLN1 的報告說這三支「dependency-clean、read-verified」。**那不是證據。**
+這棵樹有一條規則是 absence-claim 會過期（陷阱 #2），而且它過期的方式是靜默的。
+所以四項前提逐項重量：
+
+| 前提 | 實測 |
+|---|---|
+| `IniConfig.bE43AutoCleanUseHotplate` 存在 | `Config.h:608`（`IniConfig` → `cprod.cpp:50`，`ht9045_globals`） |
+| `vclcompat::TSpeedButton` 有 `Down` | `vclcompat/Controls.h:484-491` |
+| `Close()` 的 no-op 先例 | `forms/fQwertyKey.h:366`（`fTemp_Set.h` 更早） |
+| golden 欄位型別 | `uCleaning.h:35` `TEdit *edAlarmCount`／`:166` `TSpeedButton *sbCleanExit` |
+
+### 零新連結邊——用符號差集證明，不是用「看起來沒加什麼」
+
+把本波的 `.o` 與 CLN1 那顆 `.o` 的 `nm --undefined-only` 取差集：
+**新增 0、消失 0，逐項相同。** 三支交付沒有引入任何新的外部符號需求，
+所以連結收斂在本波是**恆等的**——這比「build 綠」強，因為 archive 成員可以編過卻永不被抽出。
+
+### 一個零寫入者後果：揭露而不 gate
+
+`edCleanCountClick` 把小鍵盤的範圍上限算成 `atoi(edAlarmCount->Text.c_str())-1`。
+`edAlarmCount` 目前**全樹沒有寫入者**（它是那 33 個被 `#if 0` 站點預定的名字之一，
+真正的寫入者在 `Command.cpp:17382` 與 `ProductionInfo/uPAT_Function.cpp:1967,1998`，
+全在 gate 內），所以 `Text` 是 `""` → `atoi` 得 0 → **上限退化成 -1**。
+
+**判準與 20260827 XI 的 `TfOffSetEdit::Name` 相同：後果會不會被別的模組消費。**
+這裡不會——它只影響一個本 build 從不顯示的螢幕小鍵盤的範圍檢查，
+不寫任何全域、不被任何其他模組讀。**與 AOI1 那種讓 fail 旗標永遠 latch 的層級不同**，
+所以就地揭露、不 gate。⚠ 那 33 個站點解閘時要一併重驗。
+
+### 一個刻意保留的空白
+
+golden `:1900` 自己把 `SetDeviceMaxMin();` 註解掉了（Jimmychiu 20250121，
+理由是「調換位置，避免換工單檢測錯誤」）。**port 照留成註解**，
+不因為「那支函式反正也沒翻」就整行刪掉——刪掉會讓後人以為 golden 從來沒有這一行，
+而 port 就這樣悄悄多出（或少掉）一個 golden 曾經刻意處理過的決定。
+
+### 驗收：兩側 GREEN，連續第七個乾淨 gate
+
+```
+_cln2_gate_g.txt            _cln2_gate_done.txt
+G_TOTAL=5                   R_TOTAL=5
+G_EXTRA=  (空)              R_EXTRA=  (空)
+G_VERDICT=GREEN             R_VERDICT=GREEN
+FAILSET（兩側相同）= 常駐五項
+```
+**pi2b／aoi1／ofs2／iosv1／ocr1／cln1／cln2 連續七次不需重跑。**
+
+### 這兩波合起來的一個結論
+
+CLN1 之所以便宜地變成 CLN2，唯一原因是**前一波把「我讀過但沒寫」和「我讀過所以排除」
+分開講了**。如果那三支只是安靜地不在 diff 裡，下一波看到的會是一個已審查過的排除清單，
+於是永遠不會回頭。**這個區別值一整波。**
+
+### 🔖 RESUME（20260827 · 第七版）
+
+- **本段最後一顆**：`FW3-CLN2`——**主迴圈自做、未派 agent**，
+  把 FW3-CLN1 自陳的三支疏漏摈回來：`YCT1Change`（golden `:1891-1901`）／
+  `sbCleanExitClick`（`:1868-1872`，加 no-op `Close()` ＋ `sbCleanExit` 欄位）／
+  `edCleanCountClick`（`:2080-2083`，加 `edAlarmCount` 欄位）。
+  `.h` **+23/-0**、`.cpp` **+57/-0**，五個 hunk 全插入零刪除。
+  **`forms/fCleaning.cpp` 現為 35 個定義 = 1 ctor + 34 支方法 → 34/72。**
+  **兩側 gate GREEN，連續第七個乾淨 gate**。詳見 20260827 XV。
+  重點：**零新連結邊**（用 `nm` 未定義符號對 CLN1 那顆 `.o` 取差集，
+  新增 0、消失 0）；`edAlarmCount` 零寫入者使小鍵盤上限退化成 -1，
+  **揭露而不 gate**（判準同 20260827 XI）。
+
+- **前一顆**：`FW3-CLN1`——`forms/fCleaning.{h,cpp}` 從 36+14 長到
+  **126+428 行**，**31/72 支 / 213 golden span 行**。兩側 gate GREEN。詳見 20260827 XIV。
   ⚠ **分母被更正兩次**（agent 先說 30、自我更正為 31；
-  主迴圈剥註解後自己數：32 個欄位 0 定義 = 1 ctor（`forms/fCleaning.cpp:21`）+ 31 支）。
-  **下一波第一順位：agent 自陳的三支疏漏**（讀過驗過判定安全、只是漏寫）：
-  `YCT1Change`（golden `:1891-1901`，11 行，**完全沒卡**）／
-  `sbCleanExitClick`（`:1868-1872`，5 行，需補 no-op `Close()`——
-  先例 `forms/fQwertyKey.h:366`——與 `sbCleanExit` 欄位）／
-  `edCleanCountClick`（`:2080-2083`，4 行，需補 `edAlarmCount` 欄位，
-  **而那正是 33 個被 `#if 0` 站點預定的名字之一**）。
+  主迴圈剥註解後自己數才確定）。
+  **那一波真正的收穫是它把「我讀過但沒寫」與「我讀過所以排除」分開講**——
+  這個區別直接變成了 CLN2。
 
 - **前一顆**：`FW3-OCR1`——`forms/fOCR.{h,cpp}` 長到 **142+122 行**，
   **3/82 支**（golden `OCR.cpp` 共 88 個本體 = 82 個 `TfOCR::` 成員 + 6 個 file-scope static）。
@@ -14851,7 +14929,7 @@ exit code，於是 **W34 在紅燈上 commit 卻被我記成綠燈**。已工具
    - `LoadHaltAndPauseSelectStatusName`(70) 卡在 **vclcompat 沒有 `TSpeedButton::Hint`**，
      擴 `vclcompat/Controls.h` 是 `forms/FormWidgets.h` 明文禁止範圍。
 2. **下一波地圖（`tools/census/wave_preflight.py` 已跑，全部 span sanity 乾淨）**：
-   ① **CLN 那三支疏漏**（3 支 / 20 行，已 read-verified，**最便宜、第一順位**）
+   ① ~~CLN 那三支疏漏~~ —— **已於 FW3-CLN2 完成**，uCleaning 現為 34/72
    ② `PMAlarm/PMAlarmInterFace.cpp`（78 支 / 2,484 行，**四形狀全清、零 live、零 gated**，
      最乾淨的新 facade；類別 `TfPMAlarmInterFace`，現樹無任何宣告）
    ③ `adam6024.cpp`（48 個本體但 **41 個是 file-scope**，不是表單形狀）

@@ -37,6 +37,10 @@ TfCleaning::TfCleaning() : iDeviceCount(0), bResetCleanCount(false), b1x2SiteAbC
     udDeviceCT    = new TfCleaningUpDown();
     iPosTemp      = 0;      // golden ZeroInitVclFields -- ctor never sets it (uCleaning.h:338)
     b12SiteRun2x4 = false;  // golden ZeroInitVclFields -- ctor never sets it (uCleaning.h:360)
+    // AI(W906-FW3-CLN2) 20260827: same ctor safety rule -- fields and this
+    // object's own widget stand-ins only, no other global dereferenced.
+    edAlarmCount  = new TfLotInfoEdit();
+    sbCleanExit   = new TSpeedButton();
 }
 TfCleaning *fCleaning = new TfCleaning();
 
@@ -429,4 +433,57 @@ void TfCleaning::edtACSmartMouseDown(TObject *Sender, TMouseButton Button, TShif
 {
     (void)Button; (void)Shift; (void)X; (void)Y;
     fQwertyKey->ShowQwertyKey((TEdit*)Sender, 1, 10, 1);                        // golden :2851
+}
+
+// =============================================================================
+//  FW3-CLN2 wave (20260827) -- the three functions FW3-CLN1 had already read,
+//  dependency-checked and judged safe, and then simply did not write out.
+//
+//  They did not need a fresh safety review: CLN1's report labelled them
+//  oversights explicitly, which is the only reason they are cheap now. Recorded
+//  in docs/DEVLOG.md 20260827 XIV. Every dependency below was re-measured by
+//  the main loop before translating -- "the previous wave said it was safe" is
+//  not evidence, and this tree has a standing rule that absence-claims expire.
+//
+//  Re-measured 20260827 (main loop, not taken from the CLN1 report):
+//    IniConfig.bE43AutoCleanUseHotplate  Config.h:608 (IniConfig -> cprod.cpp:50,
+//                                        ht9045_globals) -- reachable
+//    vclcompat::TSpeedButton::Down       vclcompat/Controls.h:484-491 -- exists
+//    Close()                             no port to inherit; added as an offline
+//                                        no-op on the facade, precedent
+//                                        forms/fQwertyKey.h:366
+//    golden field types                  uCleaning.h:35 `TEdit *edAlarmCount`,
+//                                        uCleaning.h:166 `TSpeedButton *sbCleanExit`
+// =============================================================================
+
+void TfCleaning::YCT1Change(TObject *Sender)
+{
+    TEdit *ptr=(TEdit *)Sender;                                                // golden :1893
+
+    if(IniConfig.bE43AutoCleanUseHotplate==false)                              // golden :1895
+    {
+        if(atoi(ptr->Text.c_str())>10)                                         // golden :1897 (kevin 20210911 change 4->10)
+            ptr->Text=10;                                                      // golden :1898
+    }
+//  SetDeviceMaxMin();                                                         // golden :1900 -- commented out in golden itself
+//                                                                                (Jimmychiu 20250121), kept as a comment so the
+//                                                                                port does not silently gain a call golden dropped
+}
+
+void TfCleaning::sbCleanExitClick(TObject *Sender)
+{
+    (void)Sender;
+    Close();                                                                   // golden :1870 -- offline no-op, see forms/fCleaning.h
+    sbCleanExit->Down=false;                                                   // golden :1871
+}
+
+void TfCleaning::edCleanCountClick(TObject *Sender)
+{
+    // golden :2082. The range max is (edAlarmCount's value - 1), read at call
+    // time -- NOT a constant. edAlarmCount has no writer in this build yet, so
+    // the value is "" -> atoi 0 -> max -1. That is a degraded RANGE on a screen
+    // keyboard this build never shows, and it is not consumed by any other
+    // module, so it is disclosed rather than gated -- same criterion as
+    // TfOffSetEdit::Name (20260827 XI) and unlike AOI1's latched fail flag.
+    fQwertyKey->ShowQwertyKey((TEdit*)Sender, N_INTEGER, 0, true, (atoi(edAlarmCount->Text.c_str()))-1, 0);
 }

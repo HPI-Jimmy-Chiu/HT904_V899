@@ -81,8 +81,26 @@ public:
     int  iPosTemp;                     // [DATA] golden uCleaning.h:338 (public int) -- udDeviceCTChangingEx
     bool b12SiteRun2x4;                // [DATA] golden uCleaning.h:360 (public bool) -- XCT1Change
 
+    // -----------------------------------------------------------------------
+    //  AI(W906-FW3-CLN2) 20260827: the three functions FW3-CLN1 had already
+    //  read and cleared but forgot to write out (see docs/DEVLOG.md 20260827
+    //  XIV -- they were disclosed as oversights, NOT as exclusions).
+    //  edAlarmCount is one of the 33 names reserved by the #if 0-gated
+    //  `fCleaning->` call sites (Command.cpp:17382, ProductionInfo/
+    //  uPAT_Function.cpp:1967,1998), so the name and type must match golden.
+    // -----------------------------------------------------------------------
+    TfLotInfoEdit *edAlarmCount;       // [DATA] golden uCleaning.h:35 (TEdit*) -- edCleanCountClick range max
+    TSpeedButton  *sbCleanExit;        // [DATA] golden uCleaning.h:166 (TSpeedButton*) -- sbCleanExitClick
+
     TfCleaning();
     virtual ~TfCleaning() {}
+
+    // golden inherits Close() from TForm; this facade derives from nothing that
+    // has one. Offline no-op, exactly the shape used by forms/fQwertyKey.h:366
+    // and fTemp_Set.h before it -- the form is never shown in this build, so
+    // there is no window to close, and a no-op is the faithful offline answer
+    // rather than a guess about what closing should mean.
+    void Close() {}
 
     // -- FW3-CLN1: pure display / UI-state methods, zero write-path, zero
     //    ht9045_sm link edge (see forms/fCleaning.cpp banner for the full
@@ -120,6 +138,11 @@ public:
     void edACSmartCTFMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);            // golden :2835-2839
     void edtACSmart_ContactTimeMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);  // golden :2841-2846
     void edtACSmartMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);              // golden :2848-2852
+
+    // -- FW3-CLN2 (20260827): CLN1's three disclosed oversights ---------------
+    void YCT1Change(TObject *Sender);                              // golden :1891-1901
+    void sbCleanExitClick(TObject *Sender);                        // golden :1868-1872
+    void edCleanCountClick(TObject *Sender);                       // golden :2080-2083
 };
 extern TfCleaning *fCleaning;
 
