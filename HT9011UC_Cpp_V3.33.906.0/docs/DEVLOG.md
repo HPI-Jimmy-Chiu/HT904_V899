@@ -14599,9 +14599,156 @@ FAILSET（兩側相同）= 常駐五項
 寫檔、以及零-port 的 widget 型別。**大的解鎖全在佇列裡**
 （連結圖變更、write path、seam 退役、`cmydef.cpp:6011` 解閘），**都要等使用者在場**。
 
-### 🔖 RESUME（20260827 · 第五版）
+## 20260827 XIV — FW3-CLN1：31/72，而**最有價值的一段是 agent 自陳的三個疏漏**
 
-- **本段最後一顆**：`FW3-OCR1`——`forms/fOCR.{h,cpp}` 長到 **142+122 行**，
+### 交付
+
+`forms/fCleaning.h` **+90/-0**（126 行）／`forms/fCleaning.cpp` **+414/-0**（428 行），
+六個 hunk **全是插入、零刪除**，bare-LF、零 U+FFFD。
+`forms/fCleaning.cpp` 已註冊在 `CMakeLists.txt:662`，**本波未改 CMakeLists**。
+
+**31 支 `TfCleaning::` 方法 / 213 golden span 行**（golden `AutoClean/uCleaning.cpp`
+共 **72 支、2,798 span 行**，`wave_preflight` 報 72/72、零括號吞併）。
+
+⚠ **分母被更正過兩次，最後這個是我自己數的**：agent 一開始說 30，交報告時自我更正為 31
+（`ResetSmartAutoClean` 是第二輪複查才判定安全、補寫進去的）。
+**主迴圈剝註解後數欄位 0 的定義行：32 個 = 1 個 ctor（`forms/fCleaning.cpp:21`，本波前既有）
+＋ 31 支方法。** 交付檔 banner 裡殘留的「30 of 72」在 gate 綠燈後單獨改為 31，
+並用 `g++ -E` 證明 preprocessed 輸出與受測狀態逐行相同（純註解改動的既定廉價路徑）。
+
+交付內容壓倒性是螢幕小鍵盤 passthrough（22 支 `fQwertyKey->ShowQwertyKey`）
+＋ 數值輸入驗證（`OnlyNumberInPut`／`OnlyNumberAndDotInPut`）＋ 純 UI 欄位計算。
+
+### 這一波真正的收穫：**「不在 diff 裡」不等於「查過不安全」**
+
+agent 主動列出**三支它讀過、驗過、判定安全、然後單純忘了寫進 .cpp** 的函式，
+並明講「這不是排除，是疏漏」：
+
+| 函式 | golden | 行 | 卡在哪 |
+|---|---|---|---|
+| `YCT1Change` | `:1891-1901` | 11 | **完全沒卡**，只是漏寫；只需 `Sender` 轉型，`IniConfig` 是 globals-safe |
+| `sbCleanExitClick` | `:1868-1872` | 5 | 需要 facade 補一個 no-op `Close()`（先例 `forms/fQwertyKey.h:366`）＋ `sbCleanExit` 欄位 |
+| `edCleanCountClick` | `:2080-2083` | 4 | 需要新欄位 `edAlarmCount`——**而它正是那 33 個被 `#if 0` 站點預定的名字之一** |
+
+**這個揭露比多翻兩支有價值。** 沒有它，下一波會把這三支當成「前一波審查後排除的」而跳過——
+那正是 20260827 XI（OFS2）記過的 DEFER vs 已審查排除的區別，這次是 agent 自己守住了。
+**它們是下一波 CLN 的第一順位。**
+
+### 它自承沒讀完的部分（同樣重要）
+
+- **`SaveAutoCleanData`（424 行）完全沒開過**——直接採用派工單的預先分類。
+- `ChangeEditToHPMode`(57)／`DoReplyDefaultToForm`(49)／`DoSetRPDefault`(37)
+  **只靠關鍵字 dep-scan 命中就排除**，沒有全文讀。命中本身是硬證據
+  （精確字串落在精確 span 內），但它沒確認有沒有安全子路徑被一起擋掉。
+- **`LoadAutoCleanData`（759 行）只讀了前 130 行**——在 golden `:123` 找到一個
+  **赤裸的 `WriteIniData(...)`**（不是 OFS2 那種隱性寫檔，是明擺著的寫）就停手。
+  排除結論成立，但後面 630 行沒掃。
+
+### GATE REGISTER
+
+- **GATE (CLN1-Hint)** — `SetArmCaption` golden `:61` 的 `OutArmSpeed->Hint=...`
+  在 `if(CUSTOMER_CODE==CC_Greatek)` 內。前提：`vclcompat` 無 `Hint`。
+  **主迴圈複驗：`vclcompat/` 全目錄 `\bHint\b` 零命中。**
+  處置＝保留 `if` 結構、本體留空並就地引用，函式其餘部分 ACTIVE。
+- **DEVIATION（不是 gate）** — `udDeviceCTChangingEx` 丟掉全部四個 golden 參數，
+  因為 golden 自己的本體一個都沒讀，且 `TUpDownDirection` 全樹無 port
+  （唯一命中是 `cConfiguration.cpp:6465` 記錄同型處置的註解）。
+
+### 抽驗 agent 的三個「全樹零命中」宣稱：三個都成立
+
+| 宣稱 | 複驗結果 |
+|---|---|
+| `MainFormSizeToEpson` 全樹無 port | 只在 `docs/GATE_A_FIRST_LIGHT_PLAN.md` 與 `docs/RECON_GateA_FormShow.md` 出現，**程式碼零命中** |
+| `vclcompat` 無 `Hint` | 零命中 |
+| `TWMKey` 無 port | **裸名 grep 有 32 個命中、11 個檔**，但搜 `class/struct/typedef.*TWMKey` 只剩 `forms/fContact.h:758,774` 兩行**註解**——**沒有任何型別定義** |
+
+⚠ **最後這一條是可推廣的教訓**：裸名 grep 的命中數會把「各表單記錄同一決定的註解」
+算進去，看起來像有 port。**要問「有沒有型別定義」就必須搜 `class`／`struct`／`typedef`，
+不是搜名字。** 這是既有原則 #4（grep 找到字串只證明文字存在）的一個新形狀。
+
+### 符號複驗：零 `ht9045_sm`
+
+自己編 `.o`：**0 error**。`nm --undefined-only` 的 15 個非執行期符號**全部 live**、
+全部落在 `ht9045_globals`／`ht9045_core`／`ht9045_forms`：
+`OnlyNumberInPut`/`OnlyNumberAndDotInPut`(`common.cpp:1435-1436`, core)、
+`CosFunction`(`cprod.cpp:52`)、`IniConfig`(`cprod.cpp:50`)、`InputLimit`(`cprod.cpp:55`)、
+`TestIF_File`(`cprod.cpp:31`)、`TrayForm`(`cprod.cpp:14`)、`UserDefForm_File`(`cprod.cpp:18`)、
+`N_INTEGER`/`N_DOUBLE`(`cmydef.cpp:350-351`)、
+`iACSmartCount`/`iACSmartCount_CTF`/`iACUseParam`(`cmydef.cpp:5689-5691`)、
+`fLotInfo`(`forms/fLotInfo.cpp:4417`)、`fQwertyKey`(`forms/fQwertyKey.cpp:41`)。
+**零 sm／motor／io／db。** 三個教訓都執行了：排除 `extern` 宣告行（XI 的假警報來源）、
+逐個查 `#if 0` 閘深（PI2 build 破的根因）、逐個對 `add_library` 區塊邊界定 target。
+
+順帶量到 `IniConfig`／`CosFunction`／`fLotInfo` 在 `tests/` 有 TU-local stand-in 定義
+（`test_FTPClient_Transfer.cpp`／`test_ga1_cmydb.cpp`／`test_ga1_cprod.cpp`）——
+那是**陷阱 #1 的第五種形狀**，既有現象、非本波造成，記在這裡供後續留意。
+
+### 三個保留下來的 golden 原文特徵
+
+- 三個 `-Wconversion-null` 警告來自 golden 的 `Key=NULL;`（`char&` 指派 NULL）。
+  **BCB6 接受，語意等同 `Key=0`（吞掉按鍵），照翻未改。**
+- ctor 只塞欄位 ＋ `new` 自己的 widget stand-in，**沒有 deref 任何其他全域** → 陷阱 #4 過關。
+  golden 的 ctor 另外會做 `fShowBinSelect->btnCleanReset->Enabled=false` 與
+  `LoadAutoCleanData()`，兩者在 static-init ctor 都是禁止的，所以 ctor 本身列在排除清單。
+- `iPosTemp`／`b12SiteRun2x4` 目前是零寫入者，但**只被本物件自己的 `TEdit` 消費、
+  不外流**，所以不屬於 AOI1 那種「0 主動命中錯分支」的層級。
+  ⚠ 等 `SetDeviceMaxMin`／`GetMinCleanPadCount` 解閘時要重驗。
+
+### 硬禁項守住
+
+`btnResetCleanCountClick` 在兩個交付檔**零命中**（連宣告都沒有）——它綁在佇列中的
+`(SEC1)` gate 上。
+順帶用 `wave_preflight` 撿到一件事：`csystem.cpp:17614` 有一個 **live 的**
+`fCleaning->btnResetCleanCountClick(fCleaning);`，而 facade 根本沒有這個成員——
+看起來就是連結破。真相是它包在 `csystem.cpp:17612` 的 **`#ifdef SOFT_SIMULTE`** 內，
+而該巨集在 V906build 未定義（編譯器親口證實）。**詳見 KNOWLEDGE #22。**
+
+### 開工前工具化：`tools/census/wave_preflight.py`
+
+本波開工前四項檢查已工具化（commit `9c4487b`），並在同一顆 commit 裡記錄它第一版
+自己犯的兩個錯（shape (d) 掃原始文字把註解當真、把 `#define` 導走的 33 個站點報成
+「facade 必須宣告」）。**uCleaning 的 3 live / 33 gated 分佈就是它量的**：
+33 個成員名被 `#if 0` 站點預定，所以本波新增的 11 個欄位一律沿用 golden `uCleaning.h`
+的原名，其中 `edPinSingleGf`／`edPinSingleN`／`OutArmSpeed` 正是那 33 個之一。
+
+### 驗收：兩側 GREEN，連續第六個乾淨 gate
+
+```
+_cln1_gate_g.txt            _cln1_gate_done.txt
+G_TOTAL=5                   R_TOTAL=5
+G_EXTRA=  (空)              R_EXTRA=  (空)
+G_VERDICT=GREEN             R_VERDICT=GREEN
+FAILSET（兩側相同）= 常駐五項
+```
+**pi2b／aoi1／ofs2／iosv1／ocr1／cln1 連續六次不需重跑。**
+凍結有守住：兩個交付檔 mtime 15:11，gate 15:21:43 起跑，**數字在最後一次整併之後量**。
+
+### 下一波的地圖（`wave_preflight` 已跑，全部 span sanity 乾淨）
+
+| 標的 | 本體 | span 行 | 開工前狀況 |
+|---|---|---|---|
+| **CLN 那三支疏漏** | 3 | 20 | **最便宜，第一順位** |
+| `PMAlarm/PMAlarmInterFace.cpp` | 78 | 2,484 | **四形狀全清、零 live/零 gated**，最乾淨的新 facade |
+| `adam6024.cpp` | 48 | 2,947 | 48 個本體裡 **41 個是 file-scope**，不是表單形狀 |
+| `HS_Function.cpp` | 66 | 5,125 | 全域名 2 命中，需先讀 |
+| `ATC/ATC_Handler_Side.cpp` | 168 | 3,713 | 全域名 2 命中 ＋ 37 個 gated |
+| `Mes/fVATMesFileSys.cpp` | 46 | 3,349 | ⚠ **有 shape (d) seam**，開工前必讀 |
+
+### 🔖 RESUME（20260827 · 第六版）
+
+- **本段最後一顆**：`FW3-CLN1`——`forms/fCleaning.{h,cpp}` 從 36+14 長到
+  **126+428 行**，**31/72 支 / 213 golden span 行**。**兩側 gate GREEN，
+  連續第六個乾淨 gate**。詳見 20260827 XIV。
+  ⚠ **分母被更正兩次**（agent 先說 30、自我更正為 31；
+  主迴圈剥註解後自己數：32 個欄位 0 定義 = 1 ctor（`forms/fCleaning.cpp:21`）+ 31 支）。
+  **下一波第一順位：agent 自陳的三支疏漏**（讀過驗過判定安全、只是漏寫）：
+  `YCT1Change`（golden `:1891-1901`，11 行，**完全沒卡**）／
+  `sbCleanExitClick`（`:1868-1872`，5 行，需補 no-op `Close()`——
+  先例 `forms/fQwertyKey.h:366`——與 `sbCleanExit` 欄位）／
+  `edCleanCountClick`（`:2080-2083`，4 行，需補 `edAlarmCount` 欄位，
+  **而那正是 33 個被 `#if 0` 站點預定的名字之一**）。
+
+- **前一顆**：`FW3-OCR1`——`forms/fOCR.{h,cpp}` 長到 **142+122 行**，
   **3/82 支**（golden `OCR.cpp` 共 88 個本體 = 82 個 `TfOCR::` 成員 + 6 個 file-scope static）。
   **兩側 gate GREEN，連續第五個乾淨 gate**。詳見 20260827 XIII。
   **shim 佔用第四種形狀**：`OCRInsp.cpp:293-361` 的 TU-local seam
@@ -14703,7 +14850,21 @@ exit code，於是 **W34 在紅燈上 commit 卻被我記成綠燈**。已工具
      即可解**——那是主迴圈的 CMakeLists 工作，**屬連結變更，要單獨一顆 commit 與單獨 gate**。
    - `LoadHaltAndPauseSelectStatusName`(70) 卡在 **vclcompat 沒有 `TSpeedButton::Hint`**，
      擴 `vclcompat/Controls.h` 是 `forms/FormWidgets.h` 明文禁止範圍。
-2. **下一波最便宜的候選（facade 已註冊，append 即可，不需動 CMakeLists）**：
+2. **下一波地圖（`tools/census/wave_preflight.py` 已跑，全部 span sanity 乾淨）**：
+   ① **CLN 那三支疏漏**（3 支 / 20 行，已 read-verified，**最便宜、第一順位**）
+   ② `PMAlarm/PMAlarmInterFace.cpp`（78 支 / 2,484 行，**四形狀全清、零 live、零 gated**，
+     最乾淨的新 facade；類別 `TfPMAlarmInterFace`，現樹無任何宣告）
+   ③ `adam6024.cpp`（48 個本體但 **41 個是 file-scope**，不是表單形狀）
+   ④ `HS_Function.cpp`（66 支 / 5,125 行，類別 `TFormHS`，全域名 2 命中需先讀）
+   ⑤ `ATC/ATC_Handler_Side.cpp`（168 支 / 3,713 行，全域名 2 命中 ＋ 37 個 gated）
+   ⑥ `Mes/fVATMesFileSys.cpp`（46 個本體 / 3,349 行，⚠ **有 shape (d) seam**，開工前必讀）
+   **舊的「新表單 facade」清單（fAOI/AutoAlignment/HS_Function/rs232）已被上面取代**；
+   `fAOI.cpp` 已於 20260827 X 開波（15/174）。
+   ⚠ `AutoTeach/InOutArmZteach.cpp`（教導值）與 `AutoAlignment`（對位動作）**屬佇列類**；
+   `rs232.cpp` 有對外命令通道。
+
+   （舊第 2 點原文保留在下面供對帳）
+   **舊候選（facade 已註冊，append 即可，不需動 CMakeLists）**：
    `AutoClean/uCleaning.cpp`（golden 2366 行，`forms/fCleaning.{h,cpp}` 目前 36+14，
    已註冊在 `CMakeLists.txt:662`）。⚠ **避開 `btnResetCleanCountClick`**——
    它綁在佇列中的 `(SEC1)` gate 上，要與那個 gate 同波才能動。
@@ -14759,6 +14920,16 @@ exit code，於是 **W34 在紅燈上 commit 卻被我記成綠燈**。已工具
 13. **不採信 agent 的「純 append」宣稱**——PI2／AOI1／OCR1 **三次同形狀**
     （AOI1 那次 agent 有主動揭露，另兩次沒有）。`git diff --stat` **區分不了**
     尾端附加與檔中插入。一律自己看 `git diff -U0` 的 hunk 標頭與 `--numstat` 的刪除數。
+
+14. **裸名 grep 的命中數會把「各表單記錄同一決定的註解」算進去**。
+    `TWMKey` 裸名搜得 **32 個命中、11 個檔**，看起來像有 port；
+    改搜 `class`／`struct`／`typedef` 後只剩 `forms/fContact.h:758,774` 兩行註解，
+    **沒有任何型別定義**。要問「有沒有型別」就必須搜宣告關鍵字，
+    不是搜名字——原則 #4 的一個新形狀。
+
+15. **把驗收條件寫進工具，不要依賴「我記得是綠的」**。
+    CLN1 的 DEVLOG 寫入腳本自己讀兩個 sentinel 的 `*_VERDICT` 與 `*_EXTRA`，
+    不綠就 abort。W34 那次就是在紅燈上 commit 並被記成綠燈。
 
 **主迴圈被 agent 推翻前提三次、分母給錯九次。**
 派工裡那句「**我給的數字是轉述的，你自己重量一次**」仍然是最有價值的一句話。
