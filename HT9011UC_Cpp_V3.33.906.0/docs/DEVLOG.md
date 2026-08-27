@@ -14112,10 +14112,124 @@ gate 裡撞 600s 是負載造成的。**本波仍然刻意不動 timeout。**
 
 **23 支乾淨 / 205 span 行**（含那兩支我裁決保留的則是 25 支 / 213 行）。
 
+## 20260827 IX — FW3-PI2：7 支優先函式全退，而 build 破在一個 `#if 0` 裡的定義
+
+### 交付
+
+`forms/fProductionInfo.h` **190→260**、`forms/fProductionInfo.cpp` **313→480**。
+agent 自選 12 支，**主迴圈移除 2 支後為 10 支**（見下）＋ golden header inline。
+兩檔 bare-LF、零 U+FFFD。
+
+⚠ **要更正 agent 一個措辭**：它說「pure appends both files」，但 `git diff -U0` 是**三個 hunk**：
+
+```
+fProductionInfo.cpp  @@ -28,0  +29,7   @@   中段插入（#include "CosFunction.h" + 6 行說明）
+fProductionInfo.cpp  @@ -313,0 +321,154 @@   檔尾
+fProductionInfo.h    @@ -151,0 +152,65  @@   類別本體內
+```
+
+**刪除行數 0 已確認**，插入位置也都正當（成員宣告不可能加在 class 右大括號之後）。
+問題在於 **`git diff --stat` 只給 +/- 計數，分辨不出「檔尾附加」與「中段插入」**。
+（附帶：我一度以為是自己的前綴比對有瑕疵——**其實我的量測才是對的**。
+這與 20260827 IV 那次「因為和 census 不合就否定自己」是同一個形狀，**第二次了**。）
+
+### 派工的 7 支優先函式，**全部退出**，理由具體
+
+| 函式 | golden | 退出理由 |
+|---|---|---|
+| `LoadMOInformation` | :2342-2650 | FTP 下載 + `DeleteAllFileInDirectory` + `ShowMyMessage`（sm） |
+| `CalculateOEEReport` | :629-829 | `fObserver` 在 `cObserver.cpp`（**ht9045_sm**） |
+| `bCheckControlBinYield` | :4600-4766 | `Now/OldControlBinCategory`＋`TestSocket`（sm）；**且發警報並用 `memcpy` 改全域**——與連結邊界無關也不該翻 |
+| `CheckMOInformation` | :1846-2003 | 呼叫 `LoadMOInformation` |
+| `CheckCloseInfo` | :5978-6063 | `ShowMyMessage`（sm） |
+| `CheckOEE_WhenStart` | :5018-5100 | `ACM_WriteMsgAndCallExe`（**執行外部程式**）+ `UploadSetupCondition` |
+| `LoadYiedlInformation` | :2654-2729 | FTP 下載 |
+
+**每一支都自己踩到至少一個硬排除條件，沒有一支需要「也許」。**
+它改從 `coverage_probe` 的 NONE 清單自選唯讀函式交付——**這是對的取捨**。
+
+### 反向的命名陷阱：`GetBinTraySetting`
+
+名字是 `Get`，本體卻寫 **`BinSelect[eBinFT].IfErrorT3`**（全域 bin 路由設定）→ **不翻**。
+與 PI1 的 `ClearTrayCnt`（名字像清除、其實也真的清全域）正好互補：
+**一個名字看起來安全其實不安全，一個名字看起來危險而確實危險——兩者都只能靠讀本體。**
+
+agent 也自己抓到並更正了一個中途錯誤：它第一次跑 `coverage_probe` 時用
+`| tail -100` 把清單截斷（157 支只看到 99 列，正好切掉那 7 支優先函式），
+**它自己用 `functions()` 的總數對帳發現了**，重跑後才做判定。
+
+### ⚠ 本波最重要的一段：第一輪 gate（pi2）**build 破**
+
+```
+G_EXIT=2 / R_EXIT=2   VERDICT=NO-LOG      （連 ctest.log 都沒產生）
+undefined reference to `bEnableInarmSuckZAuto'
+undefined reference to `bEnableOutarmSuckZAuto'
+```
+
+**根因**：兩個全域在 `cmydef.cpp:6102-6103` **確實有定義**——但整段落在
+`cmydef.cpp:6011` 的 `#if 0 // TODO(W6): function bodies depend on untranslated
+globals/state machines` 內。**文字存在，編譯器看不到。**
+`cmydef.h:5806-5807` 只有 `extern` 宣告，所以：
+
+- **`-fsyntax-only` 完全過關**（extern 宣告就夠了）
+- **`nm --undefined-only` 也只會把它們列成未定義，不會說「沒人提供」**
+
+要靠**全新 build dir 的連結期**才炸得出來。**這正是本檔 RESUME 原則 #4**：
+「`grep` 找到字串只證明文字存在，不證明編譯器看得到（本樹上千個 `#if 0`）」。
+
+**我的複驗缺口，要記下來**：PI1 我自己跑了 `nm`；**PI2 我讀了 agent 的符號表就採信**。
+它宣稱那兩個全域「defined in `cmydef.cpp:6102-6103`, ht9045_globals」——
+**字面為真、結論為假**，因為它沒查 `#if 0`。
+**「絕對宣稱預設為偽、自己重跑」這條規則我這次沒有執行。**
+
+**處置**（安全預設：保持現行行為 → 可逆 → 讓樹編得起來）：
+移除 `EnableInArmAutoCalSuckZ`／`EnableOutArmAutoCalSuckZ`／組合它們的 inline
+`EnableAutoCalSuckZ`，**在原處留下 `GATE (PI2-G1)` 註記**寫明根因，以及
+「要解必須先解 `cmydef.cpp:6011` 的 `#if 0`——那是行為變更、單獨一波」。
+**刻意不留退化版本**（例如恆回 `false`）：一個恆假的 `EnableAutoCalSuckZ` 會讓
+未來的呼叫者**靜默走錯分支**。**缺符號比錯答案好**，今晚第五次用這條。
+
+修完之後我把**其餘引用的全域逐個查了 gate 狀態，全部 live**：
+`CosFunction`(cprod.cpp:52)／`InitialOK`,`SystemStart`(cmydef.cpp:285-286)／
+`IniConfig`(cprod.cpp:50)／`LastSet`(LastSet.cpp:39)／`iTo3Unload`(cmydef.cpp:4269)／
+`fMain`(forms/fMain.cpp:404)／`BinSelect`(cprod.cpp:34)。剝註解後零殘留引用亦已驗。
+
+### agent 的兩個絕對宣稱，我逐個獨立驗過
+
+1. **「12 支全部不寫全域狀態」→ 成立。** 新增段落裡碰到 `IniConfig`／`CosFunction`／
+   `SystemStart`／`InitialOK`／`bEnableInarmSuckZAuto`／`bEnableOutarmSuckZAuto` 的地方
+   **全部是讀取**（`if(...)`／`return`／賦值右側）。
+   `EnableInArmAutoCalSuckZ` 儘管名字像設定，本體就是 `return bEnableInarmSuckZAuto;`。
+2. **「零個 sm/motor 符號」→ 成立**（但見上，這個檢查對 `#if 0` 內的定義無效）。
+
+### 它拒絕交付的一支，理由對
+
+`LoadHaltAndPauseSelectStatusName`（70 行）要碰 32 個 `TSpeedButton` 的 `->Hint`，
+而 **`vclcompat::TSpeedButton` 沒有 `Hint` 成員**。它沒有把那幾行默默拿掉。
+
+### 驗收：**pi2b 兩側 GREEN，今晚第一個不帶任何但書的 gate**
+
+```
+_pi2b_gate_g.txt            _pi2b_gate_done.txt
+G_TOTAL=5                   R_TOTAL=5
+G_EXTRA=  (空)              R_EXTRA=  (空)
+G_VERDICT=GREEN             R_VERDICT=GREEN
+FAILSET（兩側相同）= 常駐五項
+```
+
+**`dfm2rc_fidelity` 這次直接通過，沒有逾時**——不必逐項重跑。
+這又補了一次證據：它的耗時取決於機器負載（w35 Debug 566s → pi1 321s → pi2b 直接過），
+**不是固定回歸**。仍然刻意不動 timeout。
+
 ### 🔖 RESUME（20260827 清晨 · 第四版）
 
-- **本段最後一顆**：`FW3-PI1`——`forms/fProductionInfo.{h,cpp}` 從空殼（70+15 行）
-  長到 190+313 行，**25 支方法 / 213 golden span 行**。詳見 20260827 VIII。
+- **本段最後一顆**：`FW3-PI2`——`forms/fProductionInfo.{h,cpp}` 再長到 **260+480 行**
+  （PI1 從空殼 70+15 → 190+313；PI2 → 260+480）。詳見 20260827 VIII / IX。
+  **pi2b 兩側 gate GREEN（各 5 項＝常駐五項、EXTRA 皆空），是本段第一個不帶任何但書的 gate。**
+  ⚠ PI2 第一輪 gate **build 破**（`undefined reference to bEnableInarmSuckZAuto/
+  bEnableOutarmSuckZAuto`），根因是那兩個全域的定義在 `cmydef.cpp:6011` 的 `#if 0` 內
+  ——**文字存在、編譯器看不到**，而 `-fsyntax-only` 與 `nm --undefined-only` 都看不見。
+  已移除三支相關方法並留 `GATE (PI2-G1)` 註記。
 
 ---
 
@@ -14211,6 +14325,14 @@ exit code，於是 **W34 在紅燈上 commit 卻被我記成綠燈**。已工具
    整支回 exit 1，而分析其實已跑完）。
 10. **量測工具會靜默說謊，而它的謊話長得像待辦清單**（本節第一段那四次）。
     **與權威工具不合時，不代表你錯**——我自己第一次量是對的，卻因為和 census 不合就否定了自己。
+12. **「這個全域有定義」不等於「編譯器看得到它」——必須同時確認它不在 `#if 0` 內。**
+    PI2 的 build 破就是這樣：`bEnableInarmSuckZAuto`/`bEnableOutarmSuckZAuto` 在
+    `cmydef.cpp:6102-6103` 有定義，但整段在 `cmydef.cpp:6011` 的 `#if 0` 內；
+    `cmydef.h:5806-5807` 只有 extern，於是 **`-fsyntax-only` 全過、
+    `nm --undefined-only` 也只列出它們而不會說「沒人提供」**。
+    **只有全新 build dir 的連結期會抓到。** 檢查法：census 的 `gate_depth_map`。
+    ⚠ 而且這次是**我讀了 agent 的符號表就採信、沒自己重跑**——原則 #10 的
+    「絕對宣稱預設為偽」我沒執行。
 11. **逐名排除清單要先讀本體再列，不要用名字的形狀代替閱讀**——PI1 我把所有 `Set*`
     逐名列進排除清單，而 `SetPISTime`／`SetInsertOPIDStr` 根本只設欄位／寫 widget。
     **agent 翻了、主動揭露、交回裁決——那是對的流程；靜默覆寫才不是。**
@@ -14227,6 +14349,10 @@ X-01～X-06 + SLK loader 接線 + IO 波次；
 `language.cpp` 納入編譯（967 行、三個大 `#if 0` 區、**且不屬於任何 CMake target**）；
 各波退出的動作／寫檔方法；
 **`ClearTrayCnt` 接線**（會清零 `LastSet.iN14_9_*` 四個 256 元素生產計數陣列）；
+**`GetBinTraySetting`**（名字是 Get，本體卻寫 `BinSelect[eBinFT].IfErrorT3` 全域 bin 路由設定）；
+**`cmydef.cpp:6011` 的 `#if 0` 解閘**（會讓 `bEnableInarmSuckZAuto`／`bEnableOutarmSuckZAuto`
+等一批全域從「有文字但編譯器看不到」變成真的存在——**行為變更，單獨一波**，
+解開後 `GATE (PI2-G1)` 那三支才能翻）；
 `Command.cpp` 的 7 支 write-path 方法（含 `WriteHandlerTestArmEncoder`／`WriteHandlerTestArmEP`）
 ——**實測它們早已翻完並連結**，是否恰當**留給使用者裁決，不要自行處置**。
 

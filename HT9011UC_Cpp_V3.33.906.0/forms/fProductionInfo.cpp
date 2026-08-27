@@ -26,6 +26,13 @@
 #include "LastSet.h"         // LastSet (BinCT / iN14_9_* tray counters) -- LastSet.cpp, ht9045_globals
 #include "MachineType.h"     // e3Auto1..e3Fix5 (GetBin0_8List) -- header-only constants, no link cost
 #include <cmath>              // pow() (cDynamicMultiContinualPassBinBySocket::GetMultiplierNum)
+// AI(W906-FW3-PI2) 20260827: 1 include added for the FW3-PI2 read-only batch.
+// CosFunction.h -- CosFunction (bEnableRPLog) -- defined cprod.cpp:52, ht9045_globals
+// (same file/target as IniConfig above). SystemStart/InitialOK (TimeCount/bEnableRPLog)
+// are already visible via cmydef.h, included above. Same link-boundary discipline as
+// FW3-PI1: verified against CMakeLists.txt before use -- see forms/fProductionInfo.h's
+// FW3-PI2 block comment for the per-function trace of what this wave did NOT translate.
+#include "CosFunction.h"
 
 TfProductionInfo::TfProductionInfo() : sLoadMO_TestFlow("") {
     // AI(W906-FW3-PI1) 20260827: widget pointer for the FW3-PI1 batch, same
@@ -309,5 +316,165 @@ void cDynamicMultiContinualPassBinBySocket::AddThresholdNum()
 {
     if(iDynamicThresholdNum<IniConfig.iN14_24_DyMultiPassPower)//max value =5
         iDynamicThresholdNum++;
+}
+//---------------------------------------------------------------------------
+
+// ===========================================================================
+// AI(W906-FW3-PI2) 20260827: FW3-PI2 wave -- second read-only batch.  Each
+// function's golden line span is cited on its own opening comment; see
+// forms/fProductionInfo.h's FW3-PI2 block for the matching declaration-site
+// citations and the per-function exclusion trace for the 7 priority names
+// that were NOT translated this wave.
+// ===========================================================================
+
+// golden ProductionInfo.cpp:364-367
+void TfProductionInfo::OEE_SetMO(AnsiString sMO)
+{
+    _sOEE_MO=sMO;
+}
+//---------------------------------------------------------------------------
+// golden ProductionInfo.cpp:374-377
+void TfProductionInfo::OEE_SetHandlerID(AnsiString sHDID)
+{
+    _sOEE_HandlerID=sHDID;
+}
+//---------------------------------------------------------------------------
+// golden ProductionInfo.cpp:920-940
+void TfProductionInfo::TimeCount()
+{
+    if(IniConfig.bN14_1_EnableOEEFunction==false ||
+       IniConfig.iN14_1_OEERecordCycleTime==0)
+    {
+        return;
+    }
+    static int iLastSecond=0;
+    int iSecond=atoi(FormatDateTime("ss", Now()).c_str());   // golden: Now().FormatString("ss") -- vclcompat has no
+                                                               // TDateTime::FormatString member, established substitution
+                                                               // (ainarm9045.cpp:916 and others)
+    iSecond=(iSecond+500)*1000;
+    dtNowDateTime=Now();
+    if(iSecond!=iLastSecond)
+    {
+        iLastSecond=iSecond;
+        //Power On 開始時間
+        if(SystemStart==true)
+        {
+            _iOEE_RunTime++;
+        }
+    }
+}
+//---------------------------------------------------------------------------
+// golden ProductionInfo.cpp:1126-1134
+void TfProductionInfo::SetNextRecordDateTime()
+{
+    int iRecordCycleTime=IniConfig.iN14_1_OEERecordCycleTime;
+    iNextDateTime=GetNowTimeSec();
+    if(IniConfig.iN14_1_OEERecordCycleTime!=0)
+    {
+        iNextDateTime=iNextDateTime-iNextDateTime%iRecordCycleTime+iRecordCycleTime;
+    }
+}
+//---------------------------------------------------------------------------
+// golden ProductionInfo.cpp:2818-2822
+void TfProductionInfo::SetStartStatus()
+{
+    _sOEE_ActivityID="";
+    _sOEE_Status="Auto Run";
+}
+//---------------------------------------------------------------------------
+// golden ProductionInfo.cpp:3958-3974
+bool TfProductionInfo::bEnableRPLog()
+{
+    if(CosFunction.bRecipeParameterDefault   ==false ||
+       CosFunction.bRecipeParameterDefaultLog==false ||
+       InitialOK==false)
+    {
+        return false;
+    }
+
+    if(IniConfig.bN14_20_DefaultRecipeChangeLog             ==false ||
+       IniConfig.asN14_20_ChangeLogPath                     ==""    ||
+       IniConfig.bN14_20_DefaultRecipeChangeLogCycleRecord  ==false)
+    {
+        return false;
+    }
+    return true;
+}
+//---------------------------------------------------------------------------
+// golden ProductionInfo.cpp:4949-4954
+void TfProductionInfo::SetOffsetContactForce(AnsiString asValue)
+{
+    if(asValue=="")
+        asValue="0";
+    dOffsetContactForce=atof(asValue.c_str());
+}
+//---------------------------------------------------------------------------
+// GATE (PI2-G1) -- AI(W906-FW3-PI2-fix) 20260827: EnableInArmAutoCalSuckZ
+// (golden ProductionInfo.cpp:5907-5910) 與 EnableOutArmAutoCalSuckZ
+// (golden :5912-5915) 本波交付後被主迴圈移除，**理由是連結期缺符號**：
+//
+//   undefined reference to `bEnableInarmSuckZAuto'
+//   undefined reference to `bEnableOutarmSuckZAuto'
+//
+// 兩個全域在 `cmydef.cpp:6102-6103` **確實有定義**，但那一段整個在
+// `cmydef.cpp:6011` 開始的 `#if 0 // TODO(W6): function bodies depend on
+// untranslated globals/state machines` 內——**文字存在，編譯器看不到**。
+// `cmydef.h:5806-5807` 只有 extern 宣告，所以 `-fsyntax-only` 完全過關，
+// `nm --undefined-only` 也只會列出它們而不會說「沒人提供」。
+// 是全新 build dir 的連結期把它抓出來的（gate pi2 兩側 build 都因此失敗）。
+//
+// **要解它必須先解 cmydef.cpp:6011 那個 #if 0**，那是行為變更、要單獨一波。
+// 這裡刻意不留退化版本（例如恆回 false）——**缺符號比錯答案好**，
+// 一個恆假的 EnableAutoCalSuckZ 會讓未來的呼叫者靜默走錯分支。
+//---------------------------------------------------------------------------
+// golden ProductionInfo.cpp:5949-5953 -- golden's OWN body is fully commented
+// out (dead/no-op in golden itself); translated verbatim as an empty body.
+void TfProductionInfo::InitialStringGrid(TStringGrid * /*sg*/)
+{
+//    sg->Colcount();
+//    int iCol=sg->Colcount;
+}
+//---------------------------------------------------------------------------
+// golden ProductionInfo.cpp:5821-5832
+void TfProductionInfo::GetFTP_Setting(AnsiString &asUserID, AnsiString &asPassword, AnsiString &asHost)
+{
+    #ifdef SOFT_SIMULTE
+    asUserID="HONPREC";
+    asPassword="27025312";
+    asHost="127.0.0.1";
+    #else
+    asUserID=IniConfig.asN14_3_OEEFTPUserName;
+    asPassword=IniConfig.asN14_3_OEEFTPPassword;
+    asHost=IniConfig.asN14_3_OEEFTPHost;
+    #endif
+}
+//---------------------------------------------------------------------------
+// golden ProductionInfo.cpp:5254-5278 -- self-contained helper (no golden-global
+// references); its only golden caller, GetBinTraySetting, is NOT translated this
+// wave -- see forms/fProductionInfo.h's FW3-PI2 block comment.
+bool TfProductionInfo::SetBinTraySetting(TStringList* tlBinTray,AnsiString asSource,AnsiString asBin)
+{
+    bool bGetE=false;
+    if(asSource.Trim()=="")
+        return bGetE;
+    int iTemp=0;
+    asSource=asSource.Trim();
+    TStringList* tempTL=new TStringList();
+    tempTL->CommaText=asSource;
+    AnsiString asString="";
+    for(int i=0; i<tempTL->Count; i++)
+    {
+        asString=tempTL->Strings[i];
+        if(asString=="E")
+        {bGetE=true;}
+        else
+        {
+            iTemp=atoi(tempTL->Strings[i].c_str());
+            iTemp=iTemp>15?0:iTemp;
+            tlBinTray->Strings[iTemp]=asBin;
+        }
+    }
+    delete tempTL;
+    return bGetE;
 }
 //---------------------------------------------------------------------------

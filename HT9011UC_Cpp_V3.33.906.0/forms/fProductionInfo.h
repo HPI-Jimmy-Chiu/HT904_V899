@@ -149,6 +149,76 @@ public:
     void ClearUnloaderTrayQty();                                             // golden .cpp:4460-4467  .h:446
     void ClearTrayCnt();                                                     // golden .cpp:3329-3339  .h:375
 
+    // =======================================================================
+    // AI(W906-FW3-PI2) 20260827: FW3-PI2 wave -- second read-only batch.
+    // The 7 priority names the wave brief asked for FIRST (LoadMOInformation,
+    // CalculateOEEReport, bCheckControlBinYield, CheckMOInformation,
+    // CheckCloseInfo, CheckOEE_WhenStart, LoadYiedlInformation) were all read
+    // in full and ALL 7 are excluded this wave -- see the wave report for the
+    // per-function reason (FTP/file I/O, external-exec, or ht9045_sm link-
+    // boundary symbols: fObserver/TastCategory/ArmData/ShowMyMessage all live
+    // in ht9045_sm TUs cObserver.cpp/cSocket.cpp/canary_support.cpp, which
+    // ht9045_forms cannot link -- same CMakeLists.txt:2249-2295 cycle FW3-PI1
+    // already hit). The 12 functions below were self-picked from
+    // coverage_probe's NONE list instead, each individually verified against
+    // this same link-boundary + no-file/exec/hw rule.
+    //
+    // FLAGGED PER WAVE BRIEF RULE 4 (writes global machine/production state,
+    // even though not on the brief's own exclusion list): NONE of the 12
+    // below write global state -- SetBinTraySetting only mutates the
+    // caller-owned TStringList* passed in, everything else touches only
+    // TfProductionInfo's own fields. (GetBinTraySetting, SetBinTraySetting's
+    // golden *caller*, was deliberately NOT translated: it writes
+    // BinSelect[eBinFT].IfErrorT3 -- a global bin-routing config array in
+    // cprod.cpp -- so it is not "read-only" despite the Get* name, the exact
+    // naming trap this wave's brief warned about. SetBinTraySetting itself
+    // has zero golden-global references -- see its own citation below.)
+    // =======================================================================
+
+    // ---- new plain-data fields (golden private, .h line cited) ----
+    AnsiString _sOEE_HandlerID;         // [DATA] golden :347 -- OEE_SetHandlerID
+    TDateTime  dtNowDateTime;            // [DATA] golden :195 -- TimeCount (write-only in this wave's scope; no
+                                         //   translated getter reads it yet, faithful default-construct = 0.0)
+    int _iOEE_RunTime = 0;              // [DATA] golden :247 -- TimeCount.  Golden's own ctor does not zero this
+                                         //   either (real init is InitialOECount(), not translated this wave); 0 is
+                                         //   the deterministic "no lot running yet" offline reading, same rationale
+                                         //   as _bOEEStartLotSuccess above.
+    int iNextDateTime = 0;               // [DATA] golden :262 -- SetNextRecordDateTime
+    AnsiString _sOEE_ActivityID;        // [DATA] golden :350 -- SetStartStatus (CheckCloseInfo's other writer stays
+                                         //   untranslated -- ShowMyMessage link-boundary, see exclusion list)
+    AnsiString _sOEE_Status;            // [DATA] golden :348 -- SetStartStatus (CheckCloseInfo's other writer stays
+                                         //   untranslated, same reason as _sOEE_ActivityID above)
+    double dOffsetContactForce = 0.0;   // [DATA] golden :196 -- SetOffsetContactForce/GetOffsetContactForce
+
+    // ---- read-only / field-only-write methods (golden .cpp span; golden .h decl) ----
+    void OEE_SetMO(AnsiString sMO);                                          // golden .cpp:364-367    .h:205
+    void OEE_SetHandlerID(AnsiString sHDID);                                 // golden .cpp:374-377    .h:206
+    void TimeCount();                                                        // golden .cpp:920-940    .h:207
+    void SetNextRecordDateTime();                                            // golden .cpp:1126-1134  .h:217
+    void SetStartStatus();                                                   // golden .cpp:2818-2822  .h:228
+    bool bEnableRPLog();                                                     // golden .cpp:3958-3974  .h:454
+    void SetOffsetContactForce(AnsiString asValue);                          // golden .cpp:4949-4954  .h:459
+    // golden .h:460-461 declare these 2 INLINE (one-liners) -- kept inline here too,
+    // same precedent as cDynamicMultiContinualPassBinBySocket::ResetThresholdNum below.
+    void SetOffsetContactForce(double dValue) { dOffsetContactForce = dValue; }   // golden .h:460
+    double GetOffsetContactForce() { return dOffsetContactForce; }               // golden .h:461
+    // GATE (PI2-G1) -- AI(W906-FW3-PI2-fix) 20260827: EnableInArmAutoCalSuckZ
+    // (golden .cpp:5907-5910 / .h:556)、EnableOutArmAutoCalSuckZ (.cpp:5912-5915 / .h:557)
+    // 與組合它們的 inline EnableAutoCalSuckZ (.h:555) **本波交付後被主迴圈移除**。
+    // 理由是連結期缺符號：bEnableInarmSuckZAuto / bEnableOutarmSuckZAuto 雖然在
+    // cmydef.cpp:6102-6103 有定義，但整段在 cmydef.cpp:6011 的 `#if 0 // TODO(W6)` 內
+    // ——**文字存在，編譯器看不到**；cmydef.h:5806-5807 只有 extern 宣告，
+    // 所以 -fsyntax-only 全過，是全新 build dir 的 link 期才炸出來。
+    // 解它要先解 cmydef.cpp:6011 那個 #if 0（行為變更，單獨一波）。
+    // 見 fProductionInfo.cpp 內同編號的 GATE 註記。
+    void InitialStringGrid(TStringGrid *sg);                                 // golden .cpp:5949-5953  .h:560 -- golden's
+                                    //   OWN body is fully commented out (dead/no-op in golden itself); translated verbatim
+                                    //   as an empty body, not a facade-invented stub.
+    void GetFTP_Setting(AnsiString &asUserID, AnsiString &asPassword, AnsiString &asHost);  // golden .cpp:5821-5832  .h:540
+    // golden's caller-facing counterpart, GetBinTraySetting, is NOT translated (see the
+    // block comment above) -- this helper has zero golden-global references of its own.
+    bool SetBinTraySetting(TStringList* tlBinTray, AnsiString asSource, AnsiString asBin);  // golden .cpp:5254-5278  .h:492
+
     TfProductionInfo();
     virtual ~TfProductionInfo() {}
 };
