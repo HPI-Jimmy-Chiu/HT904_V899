@@ -312,6 +312,38 @@ CMakeLists.txt:50-53 寫「shipped MN200DLL.lib 是 32-bit OMF、MinGW 無可用
 vendor DLL 依賴），真連結可行≠該退役 stub；改註解/接真 lib 屬設計取捨，動之前讀
 docs/RECON_MN200_PISO.md。另：x64 SDK 與 x86 同批同版（1.0.18.1，exports 各 192）。
 
+## `gate_depth_map` 只模型化 `#if 0`，**不評估巨集**（20260827，波次開工工具化時撿到）
+
+census 的 `gate_depth_map` 回答的是「這一行在不在 `#if 0` 之類的死區塊裡」。
+它**不會**去判斷 `#ifdef SOMETHING` 裡的 `SOMETHING` 到底有沒有被定義——
+那需要前處理器。所以拿它當「這一行是不是活的」會在一個方向上系統性地說錯：
+**`#ifdef <未定義巨集>` 內的碼會被判成 live。**
+
+實例（`tools/census/wave_preflight.py` 第一版就中）：
+`csystem.cpp:17614` 有 `fCleaning->btnResetCleanCountClick(fCleaning);`，
+而 `forms/fCleaning.h` 根本沒有這個成員——照理該是連結破。
+真相是它包在 `csystem.cpp:17612` 的 **`#ifdef SOFT_SIMULTE`** 內，而
+**`SOFT_SIMULTE` 在 V906 build 沒有定義**，所以整段是死碼，樹當然照編。
+
+`SOFT_SIMULTE` 未定義的證據（三條獨立，20260827）：
+1. 全樹 `#define SOFT_SIMULTE` **零命中**（Grep 工具，排除 `build*`）。
+2. `CMakeLists.txt` 與 `build.bat` 都沒有定義它。
+3. **編譯器親口說的**——`#include "MachineType.h"` 後接
+   `#ifdef SOFT_SIMULTE / #error`，用標準旗標組 `-fsyntax-only` 編過，exit 0。
+
+第 3 條才是權威。前兩條是 grep，而 grep 找到（或找不到）字串只證明文字，
+不證明前處理器怎麼想——這正是既有原則 #4 的另一面。
+
+**處置**：`wave_preflight.py` 加一個 `KNOWN_OFF` 集合（目前只有 `SOFT_SIMULTE`，
+帶上述證據），並把「工具不評估的其他 `#if`」單獨列成 CONDITIONAL 一欄誠實交代，
+**不假裝評估**。往 `KNOWN_OFF` 加東西必須附同等級的編譯器證據——
+一個其實有定義的巨集被加進去，就會往反方向靜默說錯。
+
+> 記憶裡本來就有「`SOFT_SIMULTE` 是全機模擬旗標、正式 build 關閉、
+> 被 `#ifdef SOFT_SIMULTE` 包住的功能在實機被編譯掉」這一條。
+> 這次的新東西是：**我們的量測工具也會被它騙**，而且騙的方向是
+> 「把死碼報成必須支援的 live 需求」——那會讓下一波去做不該做的事。
+
 ## MOTION_IO 是兩家 vendor 搶名（HAVE_PCI1203=1 必炸，20260818 診斷）
 
 **症狀**：`-DHAVE_PCI1203=1` 編 cinitial.cpp → `conflicting declaration typedef
