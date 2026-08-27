@@ -715,6 +715,25 @@ add_library(ht9045_forms STATIC
     # NO global at all -- same resolution as W32's TfTrayMappingForm.  Verified
     # comment-stripped: zero standalone `fiosetview` identifiers in either file.
     forms/fIoSetView.cpp
+    # AI(W906-FW3-HS1) 20260827: golden HS_Function.cpp's TFormHS, 13 of 66 bodies.
+    # NAME NOTE: same shape as fIoSetView above -- the class name TFormHS is free,
+    # but the GLOBAL `FormHS` is owned by Automation/SCK_ART_Remainder.h:629
+    # (extern W5SckArtRem_FormHSStub *FormHS, defined SCK_ART_Remainder.cpp:382)
+    # with 2 live callers at SCK_ART_Remainder.cpp:2746 and :2750.  The facade
+    # declares NO global; verified comment-stripped that neither delivered file
+    # writes that identifier.
+    # LINK NOTE: this TU references RecordProcess / ShowMyMessage /
+    # ShowErrorMessage (canary_support.cpp) and MyDBIProcess
+    # (aHotPlateSubstrate.cpp), all four in ht9045_sm, which ht9045_forms does not
+    # link.  That is NOT a new exposure: forms/fLotInfo.cpp -- already in this same
+    # source list -- calls them 4 / 14 / 4 / 2 times respectively and the tree
+    # links green, because the final executables link both archives.  Measured
+    # 20260827, comment-stripped, not taken from the wave agent's report.
+    # NOT CONNECTED: with the global name taken, nothing can obtain a TFormHS*,
+    # so this object will not be extracted from the archive by any current link.
+    # Registering it keeps the file compiled and honest rather than rotting
+    # outside the build; it does not make it reachable.
+    forms/fHS.cpp
     # AI(W906-W7-F0-fix) 20260728: MOVED here from ht9045_sm -- the 3 AMR-mode
     # predicates forms/fAGV.cpp delegates to.  See the "NO UNDECLARED BACK-EDGE"
     # block above.  File content unchanged (zero behaviour change: same code,

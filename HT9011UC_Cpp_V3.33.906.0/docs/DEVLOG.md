@@ -14806,10 +14806,128 @@ CLN1 之所以便宜地變成 CLN2，唯一原因是**前一波把「我讀過�
 分開講了**。如果那三支只是安靜地不在 diff 裡，下一波看到的會是一個已審查過的排除清單，
 於是永遠不會回頭。**這個區別值一整波。**
 
-### 🔖 RESUME（20260827 · 第七版）
+## 20260827 XVI — FW3-HS1：新建 `fHS` facade，13/66，**而它現在連不上，這件事要講清楚**
 
-- **本段最後一顆**：`FW3-CLN2`——**主迴圈自做、未派 agent**，
-  把 FW3-CLN1 自陳的三支疏漏摈回來：`YCT1Change`（golden `:1891-1901`）／
+### 交付
+
+**新檔** `forms/fHS.h`（750 行）／`forms/fHS.cpp`（1,055 行），bare-LF、零 U+FFFD，
+**既有檔零變更**（`git status` 自己看的，不是採信宣稱）。
+`CMakeLists.txt` **+19 行**把 `forms/fHS.cpp` 註冊進 `ht9045_forms`，
+檔案維持**純 CRLF 2661/2661**（改前 2642/2642）。
+
+**13/66 個本體**——主迴圈剝註解後自己數：**1 ctor + 12 支方法**，
+而 golden 的 66 同樣含 ctor，所以分母一致。
+**兩個數字都要附**：13/66 個本體，或 **939/5,125 golden span 行（18.3%）**。
+`wave_preflight` 開工與收工各跑一次，皆 66/66、零括號吞併。
+
+翻的 13 支：ctor／`FormCreate`／`GetTempUseName`(256)／`ShowATCAlarmPosition`(91)／
+`CheckClockTrigger`(184)／`GetTitleName`(109)／三支 `NMFTP1*` 錯誤處理(25/25/5)／
+`CheckTempOffset`(92)／`CheckATCTempWait`(83)／`CheckKeyPro`(50)／`GetGPIBLogFilePath`(5)。
+
+### ⚠ 誠實回答陷阱 #1：**這 13 支目前零呼叫者**
+
+golden 的全域是 `TFormHS *FormHS`，而 **port 的 `FormHS` 已經被
+`Automation/SCK_ART_Remainder.h:625` 的 `struct W5SckArtRem_FormHSStub` 佔走**
+（`:629` extern、`.cpp:382` 定義、`.cpp:2746`／`:2750` 兩個 live 呼叫點）。
+依既有處置，facade **完全不宣告任何全域**——於是**沒有任何程式碼能取得 `TFormHS*`**。
+
+**所以這顆 object 編得過、進得了 archive、但不會被任何現行連結抽出。**
+那正是陷阱 #1 的第一種形狀。**agent 自己也是這樣回答的，沒有宣稱「接上了」。**
+CMakeLists 註冊的用意是讓檔案保持被編譯而不是爛在建置之外，**不代表它可達**；
+這句話已寫進註冊處的註解。
+
+**shape (c)（只有全域名被佔、類別名自由）這是第二次**——IOSV1 的 `fiosetview` 是第一次。
+連同 W32（類別名）、W34（函式名）、OCR1（TU-local seam ＋ `#define`），四種形狀都出現過了。
+
+### `ht9045_sm` 的四個符號：先例是真的，而我自己驗了
+
+交付碼引用 `RecordProcess`／`ShowMyMessage`／`ShowErrorMessage`
+（`canary_support.cpp:113/143/88`）與 `MyDBIProcess`（`aHotPlateSubstrate.cpp:1099`），
+**四個本體全在 `ht9045_sm`，而 `ht9045_forms` 不連它**。
+
+agent 說「`forms/fLotInfo.cpp` 已經是這條邊的既有消費者」。**那是可驗證的宣稱，我驗了**：
+`fLotInfo.cpp` 本身就在 `ht9045_forms` 的來源清單裡，剝註解後呼叫這四支各
+**4／14／4／2 次**，而樹一直是綠的——因為**最終 exe 兩個 archive 都連**，
+`ht9045_forms` 連不到 `ht9045_sm` 只影響 archive 之間，不影響 exe 的符號解析。
+
+**不是新開先例。** 其餘符號逐個查過：`KeyPro_GetLevel` → `Public/HTKeyProShim.cpp:68`
+（`ht9045_public`，經 `ht9045_core` 的 PUBLIC 傳遞可達）；其餘全在
+`ht9045_globals`／`ht9045_core`，**逐個確認 live、無一在 `#if 0` 內**。
+三個教訓都執行了：排除 `extern` 宣告行、查閘深、對 `add_library` 區塊邊界定 target。
+
+### agent 守住了 CLN1 立的規矩：主動列出五處沒讀完
+
+**這是 CLN1 那個區別的第二次生效。**
+
+- **`CheckCanRunStart_HS`（553 行，全檔最大）只讀了約前 200 行**——三個排除理由各自成立後就停手，
+  **剩約 350 行未編目**，裡面若還有其他機台動作，本報告沒有記錄到。
+- `UpDataToServer_KYEC`(520)／`RecordEPLog_HS`(236) 沒有逐行讀（開工前就在排除名單）。
+- **`RecordChangeLogByLot` 完全沒開來讀**。
+- `RecordRunState` 是用 `Record*` 家族的**保守讀法歸類**，不是查證過會寫檔。
+
+它還留了一個具體待查點：**`bUT150Install[]` 在 `csystem.cpp` 的寫入點若本身被 `#if 0` 蓋住**，
+那麼在目前可達路徑下它恆為 false，`CheckATCTempWait` 的溫度比對迴圈體**恆不執行**。
+它明講這是待查點而不是已排除的風險。
+
+### GATE REGISTER 裡一個值得記的區別
+
+`ReadMultiEP` 被排除的理由**不是「連不到」，是「全樹沒有這支函式」**——
+它需要 `IsMultiEPPressureRouteActive()`，而 `csystem.cpp` 自己的 gate 註解就寫了 no port。
+**「搆不到」與「不存在」是兩種不同的答案**，混在一起會讓後續波次以為只要調連結圖就能解。
+
+其餘排除分九類：任務書明列 11 支／寫檔建目錄 21 支／`ht9045_sm` 邊界 7 支／
+缺符號 1 支／機台動作與模式安全 6 支（含 `CheckCanRunStart_HS`、`TimerRTMMsgTimer`
+——`bHaltHandler` → `SystemStart=false` 的執行端、`ATC_FFCTrigger`／`TESTTEMPSETTING`
+直接下 ATC 溫度 setpoint）／socket 家族 10 支／null-global 風險 1 支
+（`CheckIndependentPassWord` 打 `fPassword->ShowModal()`，而 `fPassword` 全樹是 NULL）／
+外部程序 1 支（`CloseWindowsKeyboard` 用 `WinExec` 殺 `OSK.exe`）／
+`FormDestroy` 1 支（唯一問題是 `LogSoftwareOffTime` 的本體在 `acarry_shims.cpp:255`＝`ht9045_sm`，
+**丟掉那一行就是靜默丟一句 golden 陳述**，所以整支 gate）。
+
+### 驗收：兩側 GREEN，連續第八個乾淨 gate
+
+```
+_hs1_gate_g.txt             _hs1_gate_done.txt
+G_TOTAL=5                   R_TOTAL=5
+G_EXTRA=  (空)              R_EXTRA=  (空)
+G_VERDICT=GREEN             R_VERDICT=GREEN
+FAILSET（兩側相同）= 常駐五項
+```
+**pi2b／aoi1／ofs2／iosv1／ocr1／cln1／cln2／hs1 連續八次不需重跑。**
+
+### 選標的的過程本身改了結論
+
+原本 RESUME 排的下一波是 `PMAlarm/PMAlarmInterFace.cpp`（四形狀全清、最乾淨）。
+開工前重跑 `wave_preflight` 才量到它**零 live、零 gated 呼叫點**——
+整棵 port 樹沒有任何東西引用 `fPMAlarmInterFace`，交付會是完全 inert 的。
+`adam6024.cpp` 同樣。改選 `HS_Function.cpp`，因為它有 **16 個成員名被 `#if 0` 站點預定**
+（`CheckTempOffset`／`GetTempUseName`／`CheckSetupNamelist_Hisi` 等，散在
+`csystem.cpp`／`bthermo.cpp`／`atester.cpp`／`cprod.cpp`／`cinitial.cpp`／
+`common.cpp`／`uYieldMonitoring.cpp`／`uTemp_Set.cpp`／`cConfiguration.cpp`）。
+
+⚠ **但要誠實**：本波交付的 13 支裡，只有 `CheckTempOffset`／`CheckATCTempWait`／
+`GetTempUseName` 三支落在那 16 個預定名字上。**其餘 13 個名字仍未翻**，
+而且多數在寫檔／機台動作類。「有 16 個名字在等」不等於「本波餵了 16 個」。
+
+### 🔖 RESUME（20260827 · 第八版）
+
+- **本段最後一顆**：`FW3-HS1`——**新建** `forms/fHS.h`（750 行）／
+  `forms/fHS.cpp`（1,055 行）＋ `CMakeLists.txt` 註冊（+19 行，`ht9045_forms`，
+  維持純 CRLF 2661/2661）。**13/66 個本體（1 ctor + 12 方法）／939/5,125 span 行**。
+  **兩側 gate GREEN，連續第八個乾淨 gate**。詳見 20260827 XVI。
+  ⚠ **這 13 支目前零呼叫者**：全域名 `FormHS` 被
+  `Automation/SCK_ART_Remainder.h:629` 的 stub 佔走，facade 依規不宣告任何全域，
+  所以這顆 object **不會被任何現行連結從 archive 抽出**（陛阱 #1 第一形狀）。
+  **註冊只是讓檔案保持被編譯，不代表接上了。**
+  shape (c)（只有全域名被佔）第二次（IOSV1 是第一次）。
+  `ht9045_sm` 的四個符號（`RecordProcess`／`ShowMyMessage`／`ShowErrorMessage`／
+  `MyDBIProcess`）**不是新曝險**——主迴圈自驗：`forms/fLotInfo.cpp`（同在
+  `ht9045_forms`）呼叫它們各 4／14／4／2 次而樹是綠的。
+  ⚠ 16 個被 `#if 0` 站點預定的名字裡，**本波只餵到 3 個**
+  （`GetTempUseName`／`CheckTempOffset`／`CheckATCTempWait`）。
+
+- **前一顆**：`FW3-CLN2`——**主迴圈自做、未派 agent**，
+  把 FW3-CLN1 自陳的三支疏漏撿回來：`YCT1Change`（golden `:1891-1901`）／
   `sbCleanExitClick`（`:1868-1872`，加 no-op `Close()` ＋ `sbCleanExit` 欄位）／
   `edCleanCountClick`（`:2080-2083`，加 `edAlarmCount` 欄位）。
   `.h` **+23/-0**、`.cpp` **+57/-0**，五個 hunk 全插入零刪除。
@@ -14822,7 +14940,7 @@ CLN1 之所以便宜地變成 CLN2，唯一原因是**前一波把「我讀過�
 - **前一顆**：`FW3-CLN1`——`forms/fCleaning.{h,cpp}` 從 36+14 長到
   **126+428 行**，**31/72 支 / 213 golden span 行**。兩側 gate GREEN。詳見 20260827 XIV。
   ⚠ **分母被更正兩次**（agent 先說 30、自我更正為 31；
-  主迴圈剥註解後自己數才確定）。
+  主迴圈剝註解後自己數才確定）。
   **那一波真正的收穫是它把「我讀過但沒寫」與「我讀過所以排除」分開講**——
   這個區別直接變成了 CLN2。
 
@@ -14930,7 +15048,7 @@ exit code，於是 **W34 在紅燈上 commit 卻被我記成綠燈**。已工具
      擴 `vclcompat/Controls.h` 是 `forms/FormWidgets.h` 明文禁止範圍。
 2. **下一波地圖（`tools/census/wave_preflight.py` 已跑，全部 span sanity 乾淨）**：
    ① ~~CLN 那三支疏漏~~ —— **已於 FW3-CLN2 完成**，uCleaning 現為 34/72
-   ② `PMAlarm/PMAlarmInterFace.cpp`（78 支 / 2,484 行，**四形狀全清、零 live、零 gated**，
+   ② ⚠ `PMAlarm/PMAlarmInterFace.cpp`（78 支 / 2,484 行）**零消費者——交付會完全 inert，優先度降低**（四形狀全清、零 live、零 gated，
      最乾淨的新 facade；類別 `TfPMAlarmInterFace`，現樹無任何宣告）
    ③ `adam6024.cpp`（48 個本體但 **41 個是 file-scope**，不是表單形狀）
    ④ `HS_Function.cpp`（66 支 / 5,125 行，類別 `TFormHS`，全域名 2 命中需先讀）
