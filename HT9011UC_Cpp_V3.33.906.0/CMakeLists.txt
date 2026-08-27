@@ -755,6 +755,32 @@ add_library(ht9045_forms STATIC
     # Only external symbol is Total_Compressor (cmydef.cpp:5679, ht9045_globals,
     # not inside any #if 0) -- measured with nm on the compiled .o.
     forms/fATCHandlerSide.cpp
+    # AI(W906-FW3-MES1) 20260827: golden Mes/fVATMesFileSys.cpp's TfMesSystem,
+    # 17 of 46 bodies (13 TfMesSystem:: incl. ctor and a port-only dtor, 2
+    # uReadDeviceNumer::, 3 file-scope).
+    # DIFFERENT FROM THE THREE WAVES ABOVE: both the class name TfMesSystem and
+    # the global fMesSystem are free in this tree, so this facade DOES declare
+    # the global (forms/fMesSystem.h:704 / .cpp:597), the same idiom as
+    # forms/fCleaning.cpp:56.  fIoSetView / fHS / fATCHandlerSide could not,
+    # because a shim already owned each of their globals.
+    # STILL NOT REACHED TODAY, but for a different reason: the 11 call sites that
+    # name fMesSystem-> are all inside #if 0 (atester.cpp:3271, cinitial.cpp:9728,
+    # ainarm9045.cpp:5231-5240, csystem.cpp:10154/10553, aTester_Front.cpp:7659-,
+    # aTester_Rear.cpp:7686-, forms/fLotInfo.cpp:2696/2708, cprod.cpp:1266-1268).
+    # When those are un-gated they will bind to THIS class -- signatures were
+    # checked against the actual call-site argument shapes.  That is the material
+    # difference from the shim-owned cases, where un-gating would bind to the
+    # shim instead and fail.
+    # LINK NOTE: RecordProcess (canary_support.cpp, ht9045_sm) rides the existing
+    # forms/fLotInfo.cpp exception; cJSON_* (Public/cJSON.c, ht9045_public) is
+    # reachable through the declared chain ht9045_forms -> ht9045_core (:769) ->
+    # ht9045_public (:420) -- a clean transitive link, not a new edge.  Everything
+    # else is ht9045_globals.  Measured with nm on the compiled .o.
+    # ODR NOTE: LastSet.h and canary_support.h each define struct
+    # LAST_GENERAL_SET with different layouts (see LastSet.h:20).  This TU takes
+    # RecordProcess's declaration from cMyDB.h instead of canary_support.h so it
+    # can include the full LastSet.h without the collision.
+    forms/fMesSystem.cpp
     # AI(W906-W7-F0-fix) 20260728: MOVED here from ht9045_sm -- the 3 AMR-mode
     # predicates forms/fAGV.cpp delegates to.  See the "NO UNDECLARED BACK-EDGE"
     # block above.  File content unchanged (zero behaviour change: same code,

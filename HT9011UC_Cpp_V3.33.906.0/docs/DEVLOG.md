@@ -15008,9 +15008,143 @@ FAILSET（兩側相同）= 常駐五項
 ```
 **pi2b／aoi1／ofs2／iosv1／ocr1／cln1／cln2／hs1／atc1 連續九次不需重跑。**
 
-# 🔖 RESUME（20260827 · 第九版）
+## 20260827 XVIII — FW3-MES1：**第一個「未來解閘會綁到我們」的 facade**
 
-- **本段最後一顆**：`FW3-ATC1`——**新建** `forms/fATCHandlerSide.h`（956 行）／
+### 交付
+
+**新檔** `forms/fMesSystem.h`（706 行）／`forms/fMesSystem.cpp`（597 行），
+bare-LF、零 U+FFFD、**既有檔零變更**。`CMakeLists.txt` **+26 行**註冊進 `ht9045_forms`，
+維持**純 CRLF 2708/2708**。
+
+**17/46 個本體**／**337 of 3,349 golden span 行**。
+主迴圈剝註解後自己數到 **18 個欄位 0 定義** = 3 個 file-scope ＋ 2 個 `uReadDeviceNumer::`
+＋ 13 個 `TfMesSystem::`（含 ctor 與**一個 port-only 解構子**）——扣掉那個非 golden 翻譯的
+解構子正好是 17，與 agent 的數字對得上。`wave_preflight` 開工／收工各跑一次：
+**46/46、零括號吞併、零重載塌陷**。
+
+### 為什麼選這個標的：**前三波連續零呼叫者，而那不是巧合**
+
+IOSV1／HS1／ATC1 三波的交付都沒有任何呼叫者。查下去發現是**結構性的**：
+那三個 golden 檔的全域名（`fiosetview`／`FormHS`／`ATC_InterfaceForm`）**都已被 shim 佔走**，
+facade 依規不能宣告全域，於是沒有任何程式碼能取得該類別的實例。
+
+**更要緊的推論**：HS 的 **16 個**與 ATC 的 **37 個** `#if 0`-reserved 成員名，
+**在 shim 佔著全域的前提下永遠無法由我們的 facade 滿足**——那些站點解閘後會綁到 shim，
+而 shim 沒有那些成員（`TATC_InterfaceFormShim` 只有一個 `iATC_MODE_TYPE`）。
+**真正的解鎖是「退役 shim」，那是行為變更，屬佇列、等使用者在場。**
+
+所以本波改用一個更好的選標的判準：**全域名自由 ＋ 有 gated 站點**。
+剩餘候選裡只有 `Mes/fVATMesFileSys.cpp` 兩者兼具。
+
+### 差異達成了：**這個 facade 宣告了全域**
+
+`forms/fMesSystem.h:704` 有 `extern TfMesSystem *fMesSystem;`、
+`forms/fMesSystem.cpp:597` 有 `TfMesSystem *fMesSystem = new TfMesSystem();`
+（先例 `forms/fCleaning.cpp:56`）。
+
+**11 個 gated 站點解閘後會綁到這個類別**，而 agent 逐一核對過簽章與呼叫端的**實際引數形狀**
+（例如 `fMesSystem->AutoSiteMapPass(iTesterBIN[i][j])` 是 `int`）：
+`AutoSiteMapPass`(atester.cpp:3271)／`CleaOEEState12hList`(cinitial.cpp:9728)／
+`DoInitailRecordReportByTime`(ainarm9045.cpp:5231-5240)／`DoRecordReportByTime`(csystem.cpp:10154,10553)／
+`GetRcsCheckingResult`／`LabeledEditLotNo`／`NeedNoRTBinID`(forms/fLotInfo.cpp:2696,2708)／
+`asGetRcsCheckingResult`／`bFormShowJustInitial`／`lbledtC1`／`lbledtCustLotNum`(cprod.cpp:1266-1268)。
+
+⚠ **但今天仍然沒有 live 呼叫者**——那 11 個站點都還在 `#if 0` 內。
+**「未來會綁到我們」與「現在接上了」是兩件事**，agent 誠實分開講了，這裡也分開記。
+
+`forms/fLotInfo.h:381-390` 甚至明文記著它自己的 `NeedNoRTBinID` 呼叫站被 gate 成寫死 `true`，
+**就是在等一個真正的 `TfMesSystem`**。本波交付的就是那個答案，接線是另一波的事。
+
+### 陷阱 #5 的新實例：**兩份佈局不同的 `LAST_GENERAL_SET`**
+
+`LastSet.h` 與 `canary_support.h` **各定義一份 `struct LAST_GENERAL_SET`**
+（前者約 390 欄位全量、後者 66 欄位精簡 shim），同一個 TU 若兩個都 include 會 ODR 撞名，
+`LastSet.h:20` 早就記了這件事。
+
+agent 需要 `RecordProcess`（宣告在 `canary_support.h`）**同時**需要全量的 `LastSet`，
+於是改從 **`cMyDB.h`** 取 `RecordProcess` 的宣告——同一個真符號，但不碰 `LAST_GENERAL_SET`。
+**主迴圈用 `nm` 驗過：只留下單一 `RecordProcess(AnsiString, AnsiString)` 未定義符號，無型別衝突。**
+
+### 外部符號：三種來源，逐一驗過
+
+| 符號 | 本體 | target |
+|---|---|---|
+| `TestIF_File`／`BinSelect`／`TrayForm` | `cprod.cpp:31/34/14` | `ht9045_globals` |
+| `bNoRTBinFixFlag`／`iTestRunMode`／`iFixRightHalf` | `cmydef.cpp:6150/3339/3038` | `ht9045_globals` |
+| `LastSet` | `LastSet.cpp:39` | `ht9045_globals` |
+| `RecordProcess` | `canary_support.cpp` | `ht9045_sm`（**既有例外**，`forms/fLotInfo.cpp` 已呼叫 4 次而樹是綠的） |
+| `cJSON_Parse` 等 4 支 | `Public/cJSON.c` | `ht9045_public` |
+
+⚠ **cJSON 那條是乾淨的傳遞連結，不是例外**，而且是我自己開 `CMakeLists.txt` 驗的：
+`:420` `target_link_libraries(ht9045_core PUBLIC ht9045_public)` ＋
+`:769` `target_link_libraries(ht9045_forms PUBLIC vclcompat ht9045_globals ht9045_core ...)`。
+**沒有新開任何 archive edge。**
+
+### ⚠ 本波最有價值的交接：**782 行被單一欄位擋住**
+
+agent **逐行讀完**了 `CheckLotInfor`（**602 行**）與 `DoRecordReportByTime`（**180 行**），
+結論是兩支都是**純比對／純字串累積邏輯，零寫檔、零傳輸、零機台動作**——
+**唯一的擋點是同一個 `TestSocket`**（定義在 `aHotPlateSubstrate.cpp:91`，屬 `ht9045_sm`，
+而 `ht9045_forms` 連不到）。
+
+**那是 782 行本可交付的量體，被一個欄位擋住**，而且擋法與 `forms/fIoSetView.h` 的
+`ShowSuckMode`（L-01）完全相同。**任何未來取得 `ht9045_forms → ht9045_sm` 連結許可的波次，
+這兩支應該排第一順位。** ⚠ 但那條邊 `CMakeLists.txt:589-593` 記載過**無法 configure**
+（會形成 target cycle），所以真正的解法是搬檔或抽出，屬連結圖變更，**已在佇列**。
+
+### agent 自陳沒讀完的（連續第四波守住這個區別）
+
+- `VTestSummaryReport`（213 行）：讀到確認 `SaveToFile`／SECS 命中就停，**未逐行讀完**。
+- `RecordByTimeOEE`（505 行）：**只讀了前約 120 行**；已確認的排除證據是
+  `b_Check_Dir_Exist_And_Creak_Dir` 建目錄 ＋ `IniConfig.bN10_UploadSummaryToFTP` 疑似後續 FTP。
+- 三個缺符號／缺型別的 GATE（`fConfiguration` 被 `W5SckArtRem_ConfigStub` 佔走且沒有
+  `cbN05_CheckFile`／`TfSortCT` 沒有 `btnClearCountClick`／`TForm` 家族全樹零命中）
+  **只確認缺什麼，沒有去嘗試解決**——那些都要動別的檔，不在本波寫入邊界。
+
+### 一個零寫入者欄位，判定無害
+
+`map2DIDFromServer` 的唯一寫入者 `Get2DIDFromServer` 被 GATE（HTTP＋寫檔），
+所以已交付的 `IsMatchServerData` **恆讀空 map、恆回 false**。
+**但沒有任何消費者**讀這個回傳值——本檔內無呼叫者，也不在那 11 個 gated 站點清單裡。
+判準同 20260827 XI 的 `TfOffSetEdit::Name`：**後果不外流 → 揭露而不 gate**。
+
+### 驗收：兩側 GREEN，連續第十個乾淨 gate
+
+```
+_mes1_gate_g.txt            _mes1_gate_done.txt
+G_TOTAL=5                   R_TOTAL=5
+G_EXTRA=  (空)              R_EXTRA=  (空)
+G_VERDICT=GREEN             R_VERDICT=GREEN
+FAILSET（兩側相同）= 常駐五項
+```
+**pi2b／aoi1／ofs2／iosv1／ocr1／cln1／cln2／hs1／atc1／mes1 連續十次不需重跑。**
+
+# 🔖 RESUME（20260827 · 第十版）
+
+- **本段最後一顆**：`FW3-MES1`——**新建** `forms/fMesSystem.h`（706 行）／
+  `forms/fMesSystem.cpp`（597 行）＋ `CMakeLists.txt` 註冊（+26 行，純 CRLF 2708/2708）。
+  **17/46 個本體／337 of 3,349 span 行**。**兩側 gate GREEN，連續第十個乾淨 gate**。
+  詳見 20260827 XVIII。
+
+  ✅ **本波是第一個「未來解闘會綁到我們」的 facade**：`TfMesSystem` 與全域
+  `fMesSystem` **兩者都自由**，所以 facade **宣告了全域**
+  （`.h:704` extern／`.cpp:597` 定義），11 個 gated 站點解闘後會綁到它（簽章已對過
+  呼叫端實際引數形狀）。⚠ **但今天仍無 live 呼叫者**——那 11 個站點還在 `#if 0` 內。
+
+  ⚠ **選標的的判準已改**：IOSV1／HS1／ATC1 連續三波零呼叫者不是巧合——
+  那三檔的全域名都被 shim 佔走，**所以 HS 的 16 個與 ATC 的 37 個 reserved 名字，
+  在 shim 佔著全域的前提下永遠無法由我們的 facade 滿足**（解闘會綁到 shim）。
+  **真正的解鎖是「退役 shim」＝行為變更，屬佇列。**
+  新判準：**全域名自由 ＋ 有 gated 站點**。
+
+  ⭐ **下一波最高價值的待辦**：`CheckLotInfor`（602 行）與
+  `DoRecordReportByTime`（180 行）**已逐行讀完**，兩支都是純比對邏輯、
+  零寫檔零傳輸零機台動作，**唯一擋點是同一個 `TestSocket`**
+  （`aHotPlateSubstrate.cpp:91`，`ht9045_sm`）——**782 行本可交付的量體被單一欄位擋住**。
+  ⚠ 但 `CMakeLists.txt:589-593` 記載 `ht9045_forms -> ht9045_sm` **無法 configure**
+  （target cycle），真正解法是搬檔或抽出，屬連結圖變更，**已在佇列**。
+
+- **前一顆**：`FW3-ATC1`——**新建** `forms/fATCHandlerSide.h`（956 行）／
   `forms/fATCHandlerSide.cpp`（586 行）＋ `CMakeLists.txt` 註冊（+21 行，
   維持純 CRLF 2682/2682）。**28 個本體（1 ctor + 27 方法）／443 span 行**。
   **兩側 gate GREEN，連續第九個乾淨 gate**。詳見 20260827 XVII。
