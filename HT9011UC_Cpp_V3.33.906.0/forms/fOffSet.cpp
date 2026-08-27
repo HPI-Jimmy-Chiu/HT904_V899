@@ -37,12 +37,101 @@ TfOffSet *fOffSet = new TfOffSet();
 #include "vclcompat/SysUtils.h"  // FloatToStr
 #include "forms/fQwertyKey.h"    // fQwertyKey (:406) + ShowQwertyKey (:370)
 #include "forms/fMain.h"         // fMain->cbSetupFileName
+#include <cstdlib>               // AI(W906-FW3-OFS2) 20260827: atof (edReleaseMouseDown)
 
 // ---------------------------------------------------------------------------
 //  golden cOffSet.cpp:3219 `bool bhasKeyDown=false;` -- golden 的 file-scope
 //  global，見 forms/fOffSet.h 的宣告註解。這裡照 golden 原字寫 =false。
 // ---------------------------------------------------------------------------
 bool bhasKeyDown = false;
+
+// ---------------------------------------------------------------------------
+//  golden cOffSet.cpp:31-86 -- `AnsiString CapStr[OfsTotal]=...` -- golden's
+//  file-scope global (cOffSet.h:503 `extern AnsiString CapStr[];`), not a
+//  TfOffSet member. Literal table copied verbatim (index == enum eSECSOffset
+//  value from MachineType.h, already ported/live -- checked 20260827).
+//  AI(W906-FW3-OFS2) 20260827: added -- edArmXMouseDown / edReleaseMouseDown
+//  both index it via `palOffsetParts->Caption==CapStr[OfsXxx]`.
+// ---------------------------------------------------------------------------
+AnsiString CapStr[OfsTotal]=
+{
+    "Loader",                           //0
+    "Hot Plate1",                       //1
+    "Hot Plate2",                       //2
+    "Input Shuttle1",                   //3
+    "Input Shuttle2",                   //4
+    "Output Shuttle1",                  //5
+    "Output Shuttle2",                  //6
+    "Auto1",                            //7
+    "Auto2",                            //8
+    "Auto3",                            //9
+    "Auto4",                            //10
+    "Auto5",                            //11
+    "Auto6",                            //12
+    "Fix1",                             //13
+    "Fix2",                             //14
+    "Fix3",                             //15
+    "Fix4",                             //16
+    "Fix5",                             //17
+    "Fix6",                             //18
+    "Auto Clean",                       //19
+    "OCR",                              //20
+    "Input Rotate",                     //21
+    "Output Rotate",                    //22
+    "Top View",                         //23
+    "PAD View",                         //24
+    "BGA View",                         //25
+    "Loader Row B",                     //26
+    "In Shuttle 1 Left B",              //27
+    "In Shuttle 1 Right A",             //28
+    "In Shuttle 1 Right B",             //29
+    "In Shuttle 2 Left B",              //30
+    "In Shuttle 2 Right A",             //31
+    "In Shuttle 2 Right B",             //32
+    "Input Shuttle1 Auto Clean",        //33
+    "In Shuttle 1 Left B Auto Clean",   //34
+    "In Shuttle 1 Right A Auto Clean",  //35
+    "In Shuttle 1 Right B Auto Clean",  //36
+    "Input Shuttle2 Auto Clean",        //37
+    "In Shuttle 2 Left B Auto Clean",   //38
+    "In Shuttle 2 Right A Auto Clean",  //39
+    "In Shuttle 2 Right B Auto Clean",  //40
+    "Auto Shuttle 1",                   //41
+    "Auto Shuttle 2",                   //42
+    "Preciser",                         //43
+    "Out Shuttle 1 Left B",             //44
+    "Out Shuttle 1 Right A",            //45
+    "Out Shuttle 1 Right B",            //46
+    "Out Shuttle 2 Left B",             //47
+    "Out Shuttle 2 Right A",            //48
+    "Out Shuttle 2 Right B",            //49
+    "Scan AOI",                         //50
+    "InArm Placement",                  //51
+    "Bottom 2D",                        //52
+};
+
+// ---------------------------------------------------------------------------
+//  golden cOffSet.cpp:158-171 -- `AnsiString SpecialOffSetName[trayOfsTotal]`
+//  -- another golden file-scope global. ⚠ Unlike CapStr, golden cOffSet.h
+//  has **no** `extern` for this one (checked 20260827: 0 hits outside
+//  cOffSet.cpp) -- so it's scoped to this stand-in .cpp only, same as golden.
+//  AI(W906-FW3-OFS2) 20260827: added -- edReleaseMouseDown indexes it via
+//  `pnlIndexOffset->Caption==SpecialOffSetName[tOfsIndex1/2]`.
+// ---------------------------------------------------------------------------
+AnsiString SpecialOffSetName[trayOfsTotal]=
+{
+    "TrayArm && Loader Track",
+    "TrayArm && Empty Track",
+    "TrayArm && Color Track",
+    "TrayArm && Auto1 Track",
+    "TrayArm && Auto2 Track",
+    "TrayArm && Auto3 Track",
+    "TrayArm && Auto4 Track",
+    "TrayArm && Auto5 Track",
+    "TrayArm && Auto6 Track",
+    "TestArm1 && Shuttle1",
+    "TestArm2 && Shuttle2"
+};
 
 // ---------------------------------------------------------------------------
 //  golden cOffSet.cpp:856-882 -- SetXYPitchVCLVisible
@@ -374,6 +463,341 @@ void TfOffSet::edLodXClick(TEdit *Sender)
 {
     fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 6, true, 0.95, 1.05);
 }
+
+// =============================================================================
+//  AI(W906-FW3-OFS2) 20260827: cOffSet Wave B -- 3 支唯讀方向 methods。
+//  波次範圍、分母重量方式、取批標準與 GATE (O-10)/(O-11) 都在
+//  forms/fOffSet.h 的檔頭 banner，這裡不複製第二份。
+//
+//  沒有新增 link edge：cprod.h（InputLimit/DeviceForm）、Config.h
+//  （IniConfig）、MachineType.h（eSECSOffset/eTrayOffset 兩個 enum）都已在
+//  本檔既有 include 清單裡；此波唯一的新 include 是 <cstdlib>（atof）。
+// =============================================================================
+
+// golden cOffSet.cpp:2601-2652 -- edArmXMouseDown
+// `TObject *Sender` 從未以原型別讀取，唯一用法都是 `(TEdit *)Sender`，故直接
+// 宣告成 TEdit*，C-style cast 消失（D-1）。TMouseButton Button, TShiftState
+// Shift, int X, int Y 全部 dropped（本體從未讀取）。
+// ⚠ offline：IniConfig.bSPILFunction 預設 false（Config.cpp 零初始化），
+// iNowOffsetSel 預設 -1，兩者都不命中任何具名分支 -> 落到最後一個 else，
+// 傳 InputLimit.iOffsetXYHigh/iOffsetXYLow 給 ShowQwertyKey。與 golden 在
+// 未裝 SPIL 功能、尚未選定 offset part 的機台上行為相同。
+void TfOffSet::edArmXMouseDown(TEdit *Sender)                                      //JerryYang 20220923 : 矽品蘇州要求offset limit要By區域設定
+{
+    if(IniConfig.bSPILFunction)
+    {
+        if(iNowOffsetSel==OfsOCR)                                                  //JerryYang 20240111 : add
+        {
+            fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, 100.0, -100.0);
+        }
+        else if(palOffsetParts->Caption==CapStr[OfsLoader])
+        {
+            fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, (double)InputLimit.dLoaderOffsetXYHigh, (double)InputLimit.dLoaderOffsetXYLow);
+        }
+        else if(palOffsetParts->Caption==CapStr[OfsHP1] || palOffsetParts->Caption==CapStr[OfsHP2])
+        {
+            fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, (double)InputLimit.dHPOffsetXYHigh, (double)InputLimit.dHPOffsetXYLow);
+        }
+        else if(palOffsetParts->Caption==CapStr[OfsInSh1]   || palOffsetParts->Caption==CapStr[OfsInSh2]   ||
+                palOffsetParts->Caption==CapStr[OfsInSh1LB] || palOffsetParts->Caption==CapStr[OfsInSh1RA] ||
+                palOffsetParts->Caption==CapStr[OfsInSh1RB] || palOffsetParts->Caption==CapStr[OfsInSh2LB] ||
+                palOffsetParts->Caption==CapStr[OfsInSh2RA] || palOffsetParts->Caption==CapStr[OfsInSh2RB])
+        {
+            fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, (double)InputLimit.dInShtOffsetXYHigh, (double)InputLimit.dInShtOffsetXYLow);
+        }
+        else if(palOffsetParts->Caption==CapStr[OfsOutSh1]   || palOffsetParts->Caption==CapStr[OfsOutSh1]   ||
+                palOffsetParts->Caption==CapStr[OfsOutSh1LB] || palOffsetParts->Caption==CapStr[OfsOutSh1RB] ||
+                palOffsetParts->Caption==CapStr[OfsOutSh1RB] || palOffsetParts->Caption==CapStr[OfsOutSh2LB] ||
+                palOffsetParts->Caption==CapStr[OfsOutSh2RA] || palOffsetParts->Caption==CapStr[OfsOutSh2RB])
+        {
+            fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, (double)InputLimit.dOutShtOffsetXYHigh, (double)InputLimit.dOutShtOffsetXYLow);
+        }
+        else if(palOffsetParts->Caption==CapStr[OfsAuto1] || palOffsetParts->Caption==CapStr[OfsAuto2] || palOffsetParts->Caption==CapStr[OfsAuto3] ||
+                palOffsetParts->Caption==CapStr[OfsAuto4] || palOffsetParts->Caption==CapStr[OfsAuto5] || palOffsetParts->Caption==CapStr[OfsAuto6] ||
+                palOffsetParts->Caption==CapStr[OfsFix1]  || palOffsetParts->Caption==CapStr[OfsFix2]  || palOffsetParts->Caption==CapStr[OfsFix3]  ||
+                palOffsetParts->Caption==CapStr[OfsFix4]  || palOffsetParts->Caption==CapStr[OfsFix5]  || palOffsetParts->Caption==CapStr[OfsFix6] )
+        {
+            fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, (double)InputLimit.dUnloadOffsetXYHigh, (double)InputLimit.dUnloadOffsetXYLow);
+        }
+        else
+        {
+            fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, (double)InputLimit.iOffsetXYHigh, (double)InputLimit.iOffsetXYLow);
+        }
+    }
+    else if(iNowOffsetSel==OfsOCR)
+    {
+        fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, 100.0, -100.0);
+    }
+    else
+    {
+        fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, (double)InputLimit.iOffsetXYHigh, (double)InputLimit.iOffsetXYLow);
+    }
+}
+
+// golden cOffSet.cpp:2654-2785 -- edReleaseMouseDown
+// 同上 D-1：Buffer 直接接 Sender（golden 自己 `Buffer=(TEdit *)Sender;`，這裡
+// cast 消失）；TMouseButton Button, TShiftState Shift, int X, int Y dropped。
+// ⚠ GOLDEN ODDITY，照翻並記錄（Tag provenance，同 forms/fOffSet.h GATE
+// (O-9) 記錄過的同一個坑）：:2707 的 `Buffer->Tag==99` 在本樹 Tag 一律讀 0
+// （vclcompat TControl::Tag 的 dfm 設計期值本樹不載入，見 O-9 的完整說明），
+// 所以這個特殊分支（KYEC Index Pickup Offset -0.5~10 的窄範圍）offline 永遠
+// 不會命中，落到下一層 IniConfig.bSPILFunction 判斷。與 (O-9) 不同的是這裡
+// 選錯的只是「傳給 ShowQwertyKey 的鍵盤數字範圍」，不是寫入會被別的模組消費
+// 的全域，所以沒有 GATE，照翻並在此明講。
+void TfOffSet::edReleaseMouseDown(TfOffSetEdit *Sender)
+{
+    int iPick1, iRelease1, i;
+    double fBuf;
+    TfOffSetEdit *Buffer;
+    Buffer=Sender;
+    //Steven 20210317 : 針對release要求unloader增設立設定
+    //==>
+    int iZLimitHigh;
+    int iZLimitLow;
+    if(iNowOffsetSel==OfsAuto1 ||
+       iNowOffsetSel==OfsAuto2 ||
+       iNowOffsetSel==OfsAuto3 ||
+       iNowOffsetSel==OfsAuto4 ||                                                  //Steven 20230907 : For HT-9011UC
+       iNowOffsetSel==OfsAuto5 ||
+       iNowOffsetSel==OfsAuto6 ||
+       iNowOffsetSel==OfsFix1  ||
+       iNowOffsetSel==OfsFix2  ||
+       iNowOffsetSel==OfsFix3  ||
+       iNowOffsetSel==OfsFix4  ||                                                  //Steven 20230907 : For HT-9011UC
+       iNowOffsetSel==OfsFix5  ||
+       iNowOffsetSel==OfsFix6)
+    {
+        iZLimitHigh=InputLimit.iOffsetUnloaderZHigh;
+        iZLimitLow =InputLimit.iOffsetUnloaderZLow;
+    }
+    else
+    {
+        iZLimitHigh=InputLimit.iOffsetZHigh;
+        iZLimitLow =InputLimit.iOffsetZLow;
+    }
+    //<==
+    //Steven 20210317 : 針對release要求unloader增設立設定
+
+    //Steven 20090805 : Z Offset
+    if(iNowOffsetSel==OfsRotate_In || iNowOffsetSel==OfsRotate_Out)                //In Rotate & Out Rotate
+    {
+        fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, 5.0, -5.0);           //Steven 20141120 : Modify
+    }
+    else
+    {
+        if(IniConfig.bChangeKitNoHardStop && PageControl1->ActivePageIndex==1 &&   //jou 2015-12-08 Xilinx 版本用
+           (pnlIndexOffset->Caption==SpecialOffSetName[tOfsIndex1] ||
+            pnlIndexOffset->Caption==SpecialOffSetName[tOfsIndex2]))               //Frank 20171030 (Steven) add Floating Shuttle調整Offset
+        {
+            fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, (double)InputLimit.dShuttleHigh, (double)InputLimit.dShuttleLow);
+        }
+        else
+        {
+            if((pnlIndexOffset->Caption==SpecialOffSetName[tOfsIndex1] ||
+                pnlIndexOffset->Caption==SpecialOffSetName[tOfsIndex2]) &&
+               CUSTOMER_CODE==CC_KYEC_LEE &&                                       //Ifor 20190919 : add KYEC 要求Index Pickup Offset -0.5~0.5 mm
+               Buffer->Tag==99)
+            {
+                fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, (double)10, (double)-0.5);        //Steven 20141120 : Modify
+            }
+            else
+            {
+                if(IniConfig.bSPILFunction)                                        //JerryYang 20220923 : 矽品蘇州要求offset limit要By區域設定
+                {
+                    if(palOffsetParts->Caption==CapStr[OfsLoader])
+                    {
+                        fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, (double)InputLimit.dLoaderOffsetZHigh, (double)InputLimit.dLoaderOffsetZLow);
+                    }
+                    else if(palOffsetParts->Caption==CapStr[OfsHP1] || palOffsetParts->Caption==CapStr[OfsHP2])
+                    {
+                        if(Buffer->Name=="edPickUp")
+                        {
+                            fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, (double)InputLimit.dHPOffsetZHigh, (double)InputLimit.dHPOffsetZLow);
+                        }
+                        else
+                        {
+                            fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, (double)InputLimit.dHPOffsetZRelHigh, (double)InputLimit.dHPOffsetZRelLow);
+                        }
+                    }
+                    else if(palOffsetParts->Caption==CapStr[OfsInSh1]    || palOffsetParts->Caption==CapStr[OfsInSh2]    ||
+                            palOffsetParts->Caption==CapStr[OfsOutSh1LB] || palOffsetParts->Caption==CapStr[OfsOutSh1RB] ||
+                            palOffsetParts->Caption==CapStr[OfsOutSh1RB] || palOffsetParts->Caption==CapStr[OfsOutSh2LB] ||
+                            palOffsetParts->Caption==CapStr[OfsOutSh2RA] || palOffsetParts->Caption==CapStr[OfsOutSh2RB])
+                    {
+                        fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, (double)InputLimit.dInShtOffsetZHigh, (double)InputLimit.dInShtOffsetZLow);
+                    }
+                    else if(palOffsetParts->Caption==CapStr[OfsOutSh1]   || palOffsetParts->Caption==CapStr[OfsOutSh2]   ||
+                            palOffsetParts->Caption==CapStr[OfsOutSh1LB] || palOffsetParts->Caption==CapStr[OfsOutSh1RB] ||
+                            palOffsetParts->Caption==CapStr[OfsOutSh1RB] || palOffsetParts->Caption==CapStr[OfsOutSh2LB] ||
+                            palOffsetParts->Caption==CapStr[OfsOutSh2RA] || palOffsetParts->Caption==CapStr[OfsOutSh2RB])
+                    {
+                        fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, (double)InputLimit.dOutShtOffsetZHigh, (double)InputLimit.dOutShtOffsetZLow);
+                    }
+                    else if(palOffsetParts->Caption==CapStr[OfsAuto1] || palOffsetParts->Caption==CapStr[OfsAuto2] || palOffsetParts->Caption==CapStr[OfsAuto3] ||
+                            palOffsetParts->Caption==CapStr[OfsAuto4] || palOffsetParts->Caption==CapStr[OfsAuto5] || palOffsetParts->Caption==CapStr[OfsAuto6] ||
+                            palOffsetParts->Caption==CapStr[OfsFix1]  || palOffsetParts->Caption==CapStr[OfsFix2]  || palOffsetParts->Caption==CapStr[OfsFix3]  ||
+                            palOffsetParts->Caption==CapStr[OfsFix4]  || palOffsetParts->Caption==CapStr[OfsFix5]  || palOffsetParts->Caption==CapStr[OfsFix6] )
+                    {
+                        fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, (double)InputLimit.dUnloadOffsetZHigh, (double)InputLimit.dUnloadOffsetZLow);
+                    }
+                    else
+                    {
+                        fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, (double)InputLimit.iOffsetZHigh, (double)InputLimit.iOffsetZLow);
+                    }
+                }
+                else
+                {
+                    if(Buffer==edRelease || Buffer==EdtRelsA || Buffer==EdtRelsB || Buffer==EdtRelsC ||
+                       Buffer==EdtRelsD  || Buffer==EdtRelsE || Buffer==EdtRelsF || Buffer==EdtRelsG || Buffer==EdtRelsH)
+                        fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, (double)iZLimitHigh, (double)iZLimitLow);
+                    else
+                        fQwertyKey->ShowQwertyKey(Sender, N_DOUBLE, 2, true, (double)InputLimit.iOffsetZHigh, (double)InputLimit.iOffsetZLow);       //Steven 20141120 : Modify
+                }
+            }
+        }
+    }
+
+    if(pnlIndexOffset->Caption==SpecialOffSetName[tOfsIndex1] ||
+       pnlIndexOffset->Caption==SpecialOffSetName[tOfsIndex2])
+    {
+        if(pnlIndexOffset->Caption==SpecialOffSetName[tOfsIndex1])
+            i=0;
+        else
+            i=1;
+
+        iPick1      =DeviceForm.IndexArmPick[i]+atof(IndexArmOffSet1->Text.c_str())*100;
+        iRelease1   =DeviceForm.IndexPlace[i]+atof(IndexArmOffSet2->Text.c_str())*100;
+        if(iRelease1<iPick1)
+        {
+            fBuf=iPick1-DeviceForm.IndexPlace[i];
+            IndexArmOffSet2->Text=fBuf/100.0;
+            lblShowMessage->Caption="Relase高度低於Pick高度 ; Relase high below the Pick high ";
+        }
+    }
+}
+
+// golden cOffSet.cpp:3100-3205 -- TimerSetupTeachTimer
+// `TObject *Sender` dropped, never read (D-1). golden 本體除了第一行的
+// guard 之外，其餘 103 行整段是 `//` 註解掉的死碼（Setup Teach 面板顯示
+// 邏輯，作者自己停用）。忠實保留原字（含註解），同
+// LoadASECLOffsetIndexValues 保留 golden 註解掉的 iGearRatio 三行的既有
+// 先例 -- 這不是本移植發明的降級，golden 現在就長這樣。
+// ⚠ offline：IniConfig.bA30SetupTeachFunction 預設 false（Config.cpp 零
+// 初始化），所以 offline 上這支永遠在第一行 return，是不折不扣的 no-op。
+void TfOffSet::TimerSetupTeachTimer()                                              //JerryYang 20180921 Setup Teach功能
+{
+    if(IniConfig.bA30SetupTeachFunction==false)                                    //JimmyChiu 20211020 : Auto alignment mode
+        return;
+
+//    TPanel *palInArm[]={palLoader,          //0       //JerryYang 20230523 : 舊版無效, Mark掉
+//                        palHP1,             //1
+//                        palHP2,             //2
+//                        palSht1,            //3
+//                        palSht2             //4
+//                       };
+//    TPanel *palOutArm[]={palOutSht1,        //0
+//                         palOutSht2,        //1
+//                         palAuto1,          //2
+//                         palAuto2,          //3
+//                         palAuto3,          //4
+//                         palFix1,           //5
+//                         palFix2,           //6
+//                         palFix3            //7
+//                        };
+//
+//    if(LastSet.iTemperature==Tempture_Hot)  //加熱模式
+//    {
+//        if(HotPlateForm.iPlateSelect==1)
+//        {
+//            bInArmSetupTeach[InOfsHP1]=false;
+//            bInArmSetupTeach[InOfsHP2]=true;
+//        }
+//        else if(HotPlateForm.iPlateSelect==2)
+//        {
+//            bInArmSetupTeach[InOfsHP1]=true;
+//            bInArmSetupTeach[InOfsHP2]=false;
+//        }
+//        else
+//        {
+//            bInArmSetupTeach[InOfsHP1]=false;
+//            bInArmSetupTeach[InOfsHP2]=false;
+//        }
+//    }
+//    else
+//    {
+//        bInArmSetupTeach[InOfsHP1]=true;   //常態不檢查
+//        bInArmSetupTeach[InOfsHP2]=true;
+//    }
+//
+//    if(TestIF_File.iShuttleMode==0)
+//    {
+//        bInArmSetupTeach[InOfsInSh1]=false;
+//        bOutArmSetupTeach[OutOfsOutSh1]=false;
+//
+//        bInArmSetupTeach[InOfsInSh2]=false;
+//        bOutArmSetupTeach[OutOfsOutSh2]=false;
+//    }
+//    else if(TestIF_File.iShuttleMode==1 && TestIF_File.iShuttle_Sel==0) //Shuttle 1
+//    {
+//        bInArmSetupTeach[InOfsInSh1]=false;
+//        bOutArmSetupTeach[OutOfsOutSh1]=false;
+//
+//        bInArmSetupTeach[InOfsInSh2]=true;
+//        bOutArmSetupTeach[OutOfsOutSh2]=true;
+//    }
+//    else if(TestIF_File.iShuttleMode==1 && TestIF_File.iShuttle_Sel==1) //Shuttle 2
+//    {
+//        bInArmSetupTeach[InOfsInSh1]=true;
+//        bOutArmSetupTeach[OutOfsOutSh1]=true;
+//
+//        bInArmSetupTeach[InOfsInSh2]=false;
+//        bOutArmSetupTeach[OutOfsOutSh2]=false;
+//    }
+//
+//    for(i=0; i<5; i++)
+//    {
+//        if(iInArmPickPlaceCnt[i]>=5 || bInArmSetupTeach[i]==true)  //JerryYang 20191007 10->5
+//        {
+//            palInArm[i]->Caption=asInArm[i]+"_Finish";
+//            palInArm[i]->Color=clGreen;
+//        }
+//        else
+//        {
+//            palInArm[i]->Caption=asInArm[i];
+//            palInArm[i]->Color=clGray;
+//        }
+//    }
+//
+//    for(i=0; i<8; i++)
+//    {
+//        if(iOutArmPickPlaceCnt[i]>=5 || bOutArmSetupTeach[i]==true)  //JerryYang 20191007 10->5
+//        {
+//            palOutArm[i]->Caption=asOutArm[i]+"_Finish";
+//            palOutArm[i]->Color=clGreen;
+//        }
+//        else
+//        {
+//            palOutArm[i]->Caption=asOutArm[i];
+//            palOutArm[i]->Color=clGray;
+//        }
+//    }
+
+//    if(LastSet.bNeedSetupTeach==true) //JerryYang 20230523 : 舊版無效, Mark掉
+//    {
+//        if(CheckSetupFinish()==true)
+//        {
+//            LastSet.bNeedSetupTeach=false;
+//        }
+//    }
+}
+
+// =============================================================================
+//  GATED (Wave B) -- 宣告在 forms/fOffSet.h、本檔**刻意不定義**：
+//    sbInArmZCalibrationMouseDown / sbOutArmZCalibrationMouseDown
+//  兩支都會呼叫 fMain->Start(...) 且先跑 AutoTeachLoadTrayZ(...)（golden
+//  :3551-3587 / :3589-3619），**啟動機台**，同 (O-5) 性質。理由見
+//  forms/fOffSet.h 的 GATE (O-10)/(O-11)。
+// =============================================================================
 
 // =============================================================================
 //  GATED -- 以下 12 支只在 forms/fOffSet.h 宣告，本檔**刻意不定義**，

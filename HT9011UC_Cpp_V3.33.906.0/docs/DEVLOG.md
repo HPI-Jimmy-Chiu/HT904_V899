@@ -14318,9 +14318,111 @@ FAILSET（兩側相同）= 常駐五項
 `FormShow`→`ATC/ATCInterface.cpp` 等）。樣本比 PI2 的 9/11 更大，**結論一致：
 loose 側零可信信號，只能當上界**。收工重跑 STRICT 15，與交付清單逐支對得上。
 
+## 20260827 XI — FW3-OFS2：交付 3 支，而本波撿到兩個關於「驗證工具本身」的教訓
+
+### 交付
+
+`forms/fOffSet.h` **+74/-0**、`forms/fOffSet.cpp` **+424/-0**（零刪除，三處插入皆正當）。
+**3 支 / 290 golden 行**：
+`edArmXMouseDown`（golden `:2601-2652`）／`edReleaseMouseDown`（`:2654-2785`）／
+`TimerSetupTeachTimer`（`:3100-3205`，本體 103/106 行是 golden 自己註解掉的死碼）。
+golden `cOffSet.cpp` 共 **64 支**，`span_sanity` 乾淨（無括號吞併）。兩檔 bare-LF、零 U+FFFD。
+`forms/fOffSet.cpp` 已註冊在 `CMakeLists.txt:661`（`ht9045_forms`），**本波未改 CMakeLists**。
+
+**薄是合理的**：這個檔的重心是寫檔（`SetTempShiftOffsetPeriod` 308 行 / 30+ 個 `WriteIniData`、
+`WriteHotTempShiftOffsetData` 寫 `D:\...HotTempShiftOffsetData.txt`）、教導動作、
+以及三支互相牽連的大型基礎設施。
+
+### 教訓一：`-fsyntax-only` 過關而 **archive 建置也證明不了符號解得到**
+
+agent 自己跑了 `cmake --build build --target ht9045_forms`，因此抓到一個
+**`-fsyntax-only` 抓不到的真問題**：golden 讀 `Buffer->Name=="edPickUp"`，
+而 **`vclcompat::TControl` 根本沒有 `Name` 屬性**（`vclcompat/Controls.h:183` 那個
+`AnsiString Name;` 屬於 `TFont`，不是 `TControl`）。它用 facade-local 子類別
+`TfOffSetEdit` 補上。
+
+**但要記清楚邊界**：`ht9045_forms` 是 static archive，**建它成功只證明「編得過並進了 archive」，
+不證明任何符號解得到**——FW3-PI2 的 build 就是在**連 test exe** 時才炸的。
+所以主迴圈仍然自己編 `.o` 跑了 `nm --undefined-only`，並對 14 個外部符號逐個查
+`gate_depth_map`：**全部 live**（`cprod.cpp`／`cmydef.cpp`／`common.cpp`／`forms/fQwertyKey.cpp`）。
+
+### 教訓二：**我自己的符號檢查會把 `extern` 宣告當成定義**
+
+複驗時我的正則把 `cAuthority.cpp:117` 認成 `CUSTOMER_CODE` 的定義——
+而 `cAuthority.cpp` 註冊在 `CMakeLists.txt:2155`＝**`ht9045_sm`**，`ht9045_forms` 連不到。
+**看起來就是 PI2 那種連結破。**
+
+實際那一行是 **`extern int CUSTOMER_CODE;`**，真正的定義在
+**`cmydef.cpp:3412`（live，`ht9045_globals`）**。
+**往後這個檢查必須排除 `extern` 開頭的行**，否則會產生假警報——
+而假警報的代價是可能因此退掉一支本來安全的函式。
+
+### 揭露而不 gate 的一個判斷（我複驗後同意）
+
+`TfOffSetEdit::Name` 在本樹**沒有任何寫入者**（.dfm 元件名沒有載入路徑），
+所以 `Buffer->Name=="edPickUp"` **永遠是 false、恆走 else 分支**。
+agent 在 `forms/fOffSet.h:195-197` 明文揭露了這件事，**沒有藏起來**。
+
+我開檔確認後果：**兩個分支的差別只是傳給螢幕小鍵盤的 `InputLimit.dHPOff*` 上下限**，
+而且該函式是**未接線的 event handler**。與 O-9 的 `iSortUnloadT6`
+（錯值寫進被 `aoutarm.cpp` 出料路由消費的全域）**不是同一個層級**。
+**所以「揭露但不 gate」成立**——這與 20260827 X 那 4 支恆真分支（會把 fail 旗標
+永遠設 true）必須排除，是兩種不同的判斷，差別在**後果會不會被別的模組消費**。
+
+### 它退出的那些，理由都對
+
+- `SetTempShiftOffsetPeriod`（308 行）：30+ 個 `WriteIniData` → **寫檔**。
+- `ReadInvisibleFile`（138 行）：名字是 `Read`，但它呼叫的
+  `ReadWriteIni(..., bIsRead=true)` **內部走 `CheckAndReadIniData`，key 缺失時會回寫預設值**
+  （`common.cpp:1567-1569`）→ **隱性寫檔**；同時寫 `TestIF_File` 與 `InvisibleOffset` 兩個全域。
+- `LoadLoaderScaleValues`（25 行）：寫 `TestIF_File.f*ScaleBySetupFile[...]`
+  ——**該 struct 被 215 個檔引用，含全部 `ainarm*`／`aoutarm*`**（arm 位置校正係數，
+  會被真實硬體移動碼消費）。
+- 兩支 `sb*ZCalibrationMouseDown`：`AutoTeachLoadTrayZ(...)` 教導動作 + `fMain->Start(...)`
+  → **啟動機台**。已加 GATE (O-10)／(O-11)，宣告但不定義，linker 當互鎖。
+
+**順帶印證了它對 ini 家族的理解是對的**：它交付的碼用的是 `common.cpp:692` 的
+`ReadIniData`（純讀家族），**不是** `:603` 那個會 `WriteInteger` 種回去的
+`CheckAndReadIniData`——後者在 `forms/fOffSet.cpp:410` 只出現在**說明兩者差別的註解裡**
+（主迴圈用剝註解的掃描確認過，不是靠 grep 命中數）。
+
+### 明講 DEFER 而不是「查過安全」
+
+`ShowOneByOneOffSet`（517 行）／`TfOffSet` ctor（255）／`ShowOffSetList`（137）三支
+互相牽連（共用 `iOffsetMap[]`／`OffSetSelBot[]`／`MyPickEdit[2][8]` 等基礎設施），
+agent **只讀了 `ShowOneByOneOffSet` 前 170/517 行**就停手，並明講「沒讀完整支、
+不能保證後 347 行乾淨」。**這個區別（DEFER vs 已審查排除）要保留在記錄裡**，
+否則下一波會誤以為它們評估過了。
+
+### 傳給下一波的一個撞名坑
+
+`PasteStringGridAsTabFormat`／`CopyStringGridAsTabFormat` 在 golden 是 **`TfOffSet::` 成員**
+（golden `cOffSet.h:499`），而 port 樹裡同名的是 **`THGem::` 的成員**
+（`SECSGEM/uHGemEquipment.cpp`）——**不同類別，`coverage_probe` 的 loose 命中是假陽性**。
+這正是記憶裡「V906 方法被搬到別的 port 類別」那個陷阱的又一個實例。
+
+### 驗收：兩側 GREEN，連續第三個乾淨 gate
+
+```
+_ofs2_gate_g.txt            _ofs2_gate_done.txt
+G_TOTAL=5                   R_TOTAL=5
+G_EXTRA=  (空)              R_EXTRA=  (空)
+G_VERDICT=GREEN             R_VERDICT=GREEN
+FAILSET（兩側相同）= 常駐五項
+```
+`dfm2rc_fidelity` 兩側都直接通過。**pi2b／aoi1／ofs2 連續三次不需重跑。**
+
 ### 🔖 RESUME（20260827 清晨 · 第四版）
 
-- **本段最後一顆**：`FW3-AOI1`——`forms/fAOI.{h,cpp}` 從空殼（115+35）長到 **242+303 行**，
+- **本段最後一顆**：`FW3-OFS2`——`forms/fOffSet.{h,cpp}` 再長到 **388+814 行**，
+  **3 支 / 290 golden 行**（golden `cOffSet.cpp` 共 64 支）。**兩側 gate GREEN，
+  連續第三個乾淨 gate**（pi2b／aoi1／ofs2 皆不需重跑）。詳見 20260827 XI。
+  兩個關於**驗證工具本身**的教訓：(a) `ht9045_forms` 是 static archive，
+  **建它成功不證明符號解得到**（PI2 是連 test exe 才炸）；
+  (b) **我自己的符號檢查會把 `extern` 宣告當成定義**，差點誤報成連結破
+  （`cAuthority.cpp:117` 是 extern，真定義在 `cmydef.cpp:3412`）。
+
+- **前一顆**：`FW3-AOI1`——`forms/fAOI.{h,cpp}` 從空殼（115+35）長到 **242+303 行**，
   **15 支 / 114 golden 行**（golden 174 支）。**兩側 gate GREEN，不需任何重跑**
   （連續第二個乾淨 gate）。詳見 20260827 X。
   真正的收穫是**攔下兩個恆真分支**：6 個門檻欄位全樹零寫入者（門檻恆 0 →

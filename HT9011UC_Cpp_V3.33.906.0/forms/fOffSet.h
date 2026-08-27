@@ -185,6 +185,25 @@ public:
     virtual ~TfOffSetPanel() {}
 };
 
+// AI(W906-FW3-OFS2) 20260827 ADD -- DEVIATION (D-5，本檔局部編號，與
+// forms/fQwertyKey.h 自己的 D-5 無關）。
+// golden edReleaseMouseDown（cOffSet.cpp:2721）讀 `Buffer->Name=="edPickUp"`
+// -- Name 是 golden TComponent 的屬性，但 vclcompat::TControl 沒有 Name
+// （vclcompat/Controls.h:183 的 `AnsiString Name;` 屬於 TFont，不是
+// TControl）。同 D-3/D-4 的既有作法：facade-local 子類別補一個成員，基底
+// 沒有同名成員，不構成 shadow。
+// ⚠ offline 語意：本樹沒有任何地方把 Name 設成 "edPickUp"（.dfm 的元件名
+// 從未載入，同 GATE (O-9) 記錄過的 Tag provenance 坑同一類）。這個成員永遠
+// 是空字串，`Buffer->Name=="edPickUp"` 永遠是 false，落到 else 分支
+// （dHPOffsetZRelHigh/Low）。這與 golden 在「Sender 不是 edPickUp 那顆」時
+// 的行為一致，不是本移植發明的降級。
+class TfOffSetEdit : public vclcompat::TEdit
+{
+public:
+    AnsiString Name;
+    virtual ~TfOffSetEdit() {}
+};
+
 // ===========================================================================
 //  TfOffSet -- non-VCL stub (golden cOffSet.h).  Both methods return false
 //  offline (no auto-offset / no setup-teach configured).
@@ -278,6 +297,50 @@ public:
     int        LoadASECLOffsetIndexValues(int iType, int iPos);  // golden cOffSet.cpp:3956-3994
     void       edLodXClick(TEdit *Sender);                       // golden cOffSet.cpp:3997-4000
 
+    // =======================================================================
+    //  AI(W906-FW3-OFS2) 20260827 ADD -- cOffSet Wave B. 3 支唯讀方向
+    //  methods。分母重量方式、取批標準、DEVIATION 見 forms/fOffSet.cpp 檔頭
+    //  banner（避免兩份漂移）。
+    //
+    //  WIDGET FIELDS -- 本波 3 支真的碰到的，命名＝dfm leaf name。
+    // =======================================================================
+    TPanel *palOffsetParts   = new TPanel();   // golden cOffSet.h:29  (TPanel)
+    TPanel *pnlIndexOffset   = new TPanel();   // golden cOffSet.h:201 (TPanel)
+    TEdit  *IndexArmOffSet2  = new TEdit();    // golden cOffSet.h:194
+    TEdit  *edRelease        = new TEdit();    // golden cOffSet.h:58
+    TLabel *lblShowMessage   = new TLabel();   // golden cOffSet.h:179
+    TEdit  *EdtRelsA         = new TEdit();    // golden cOffSet.h:75
+    TEdit  *EdtRelsB         = new TEdit();    // golden cOffSet.h:77
+    TEdit  *EdtRelsC         = new TEdit();    // golden cOffSet.h:85
+    TEdit  *EdtRelsD         = new TEdit();    // golden cOffSet.h:79
+    TEdit  *EdtRelsE         = new TEdit();    // golden cOffSet.h:87
+    TEdit  *EdtRelsF         = new TEdit();    // golden cOffSet.h:81
+    TEdit  *EdtRelsG         = new TEdit();    // golden cOffSet.h:89
+    TEdit  *EdtRelsH         = new TEdit();    // golden cOffSet.h:83
+
+    //  [DATA] golden cOffSet.h:473 `int iNowOffsetSel;` -- 目前選到的 offset
+    //  part 索引。golden 的 ctor（cOffSet.cpp:371，本波未翻）把它設成 -1；
+    //  同 iIndexChange 的既有先例，這裡把該初值原字寫出。
+    int iNowOffsetSel = -1;
+
+    // -----------------------------------------------------------------------
+    //  METHODS -- 3 支，全部唯讀方向。event handler 本體有翻但不接線
+    //  （facade 規則 3）：本樹沒有事件來源，這 3 支今天全樹 0 個 caller。
+    // -----------------------------------------------------------------------
+    void edArmXMouseDown(TEdit *Sender);                          // golden cOffSet.cpp:2601-2652
+    void edReleaseMouseDown(TfOffSetEdit *Sender);                // golden cOffSet.cpp:2654-2785 (D-5)
+    void TimerSetupTeachTimer();                                  // golden cOffSet.cpp:3100-3205
+
+    // -----------------------------------------------------------------------
+    //  GATED (Wave B) -- 宣告在此、forms/fOffSet.cpp **不定義**，由 linker
+    //  當互鎖。⚠ 這兩支的名字是 MouseDown（同 edArmXMouseDown 這類已翻的
+    //  兄弟站點），純 regex 訊號掃描看不出問題；逐行讀 golden 本體才抓到
+    //  兩支都呼叫 fMain->Start(...) 且先跑 AutoTeachLoadTrayZ(...) 教導動作
+    //  --（golden :3555-3586 / :3593-3618）**會啟動機台**，同 (O-5) 的性質。
+    // -----------------------------------------------------------------------
+    void sbInArmZCalibrationMouseDown();                          // GATE (O-10) golden :3551-3587
+    void sbOutArmZCalibrationMouseDown();                         // GATE (O-11) golden :3589-3619
+
     // -----------------------------------------------------------------------
     //  GATED -- 宣告在此、forms/fOffSet.cpp **不定義**，由 linker 當互鎖
     //  （forms/fMotorTest.h 先例）。理由逐支見檔頭 GATE REGISTER。
@@ -310,5 +373,16 @@ extern TfOffSet *fOffSet;
 // 而四支都 gated 在 CUSTOMER_CODE==CC_KYEC_LEE 之後，所以非 KYEC 機台上
 // 它永遠是 false。
 extern bool bhasKeyDown;
+
+// AI(W906-FW3-OFS2) 20260827: CapStr[] 是 golden 的 **file-scope global**
+// （cOffSet.cpp:31 `AnsiString CapStr[OfsTotal]=...`，cOffSet.h:503
+// `extern AnsiString CapStr[];`）-- 不是 TfOffSet 的成員。同 bhasKeyDown
+// 的處置：forms/fOffSet.cpp 是本樹對 golden cOffSet.cpp 的 stand-in，
+// 所以資料定義也歸在這裡；本波 edArmXMouseDown / edReleaseMouseDown 兩支
+// 都要讀它（比對 palOffsetParts->Caption）。
+// ⚠ SpecialOffSetName[]（golden cOffSet.cpp:158）**沒有**對應的 extern
+// 宣告（golden cOffSet.h 全檔沒有它），只在 cOffSet.cpp 內部使用 --
+// 本波同樣只在 forms/fOffSet.cpp 內定義，不在此宣告 extern。
+extern AnsiString CapStr[];
 
 #endif // FORMS_FOFFSET_H
