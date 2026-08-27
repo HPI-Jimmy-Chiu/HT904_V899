@@ -734,6 +734,27 @@ add_library(ht9045_forms STATIC
     # Registering it keeps the file compiled and honest rather than rotting
     # outside the build; it does not make it reachable.
     forms/fHS.cpp
+    # AI(W906-FW3-ATC1) 20260827: golden ATC/ATC_Handler_Side.cpp's
+    # TATC_InterfaceForm, 28 of 169 bodies (1 ctor + 27 methods).
+    # NAME NOTE: three near-identical names, and picking the wrong one links
+    # cleanly while reading every field at the wrong offset:
+    #   TATC_InterfaceForm      golden ATC_Handler_Side.h -- THIS one, class name
+    #                           free in the port, so the facade owns it
+    #   TATC_InterfaceFormShim  acarry_shims.h:109 -- owns the GLOBAL
+    #                           ATC_InterfaceForm (:115) with live readers at
+    #                           acarry.cpp:8349 and aTester_Front.cpp:479, and
+    #                           carries exactly one field, iATC_MODE_TYPE
+    #   TATCInterfaceForm       ATC/ATCInterface.h:301 -- NO underscore, a
+    #                           DIFFERENT golden file, already translated, in
+    #                           ht9045_sm. Unrelated to this wave.
+    # The facade declares no global, same shape (c) resolution as fIoSetView and
+    # fHS above. Verified comment-stripped: neither delivered file names
+    # ATC_InterfaceForm or ATC_Data outside comments.
+    # NOT CONNECTED: with the global taken, nothing can obtain a
+    # TATC_InterfaceForm*, so this object is not extracted by any current link.
+    # Only external symbol is Total_Compressor (cmydef.cpp:5679, ht9045_globals,
+    # not inside any #if 0) -- measured with nm on the compiled .o.
+    forms/fATCHandlerSide.cpp
     # AI(W906-W7-F0-fix) 20260728: MOVED here from ht9045_sm -- the 3 AMR-mode
     # predicates forms/fAGV.cpp delegates to.  See the "NO UNDECLARED BACK-EDGE"
     # block above.  File content unchanged (zero behaviour change: same code,

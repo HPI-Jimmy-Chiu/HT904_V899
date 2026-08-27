@@ -14909,9 +14909,124 @@ FAILSET（兩側相同）= 常駐五項
 `GetTempUseName` 三支落在那 16 個預定名字上。**其餘 13 個名字仍未翻**，
 而且多數在寫檔／機台動作類。「有 16 個名字在等」不等於「本波餵了 16 個」。
 
-### 🔖 RESUME（20260827 · 第八版）
+#### 20260827 XVII — FW3-ATC1：28/169，**而本波真正的收穫是撿到第五種量尺缺陷**
 
-- **本段最後一顆**：`FW3-HS1`——**新建** `forms/fHS.h`（750 行）／
+### 交付
+
+**新檔** `forms/fATCHandlerSide.h`（956 行）／`forms/fATCHandlerSide.cpp`（586 行），
+bare-LF、零 U+FFFD、**既有檔零變更**（含 `acarry_shims.*` 與 `ATC/ATCInterface.*`，
+自己跑 `git status` 看的）。`CMakeLists.txt` **+21 行**註冊進 `ht9045_forms`，
+維持**純 CRLF 2682/2682**。
+
+**28 個本體 = 1 ctor + 27 支方法**（主迴圈剝註解後自己數，與 agent 一致）。
+**分母是 169，不是 168** ——見下一節。span **443/3,719 行**。
+
+### 量尺缺陷第五種：**census 的 dict key 讓 C++ 重載塌陷**
+
+`census.py` 的 `functions()` 以 `Class::name` 為 key 存 dict，所以**重載集只留一個**。
+golden `ATC/ATC_Handler_Side.cpp` 定義了兩次 `ChangeRecipe`——
+`:1920` 的 `(AnsiString)` 與 `:1927` 的 `(AnsiString, double)`，**兩個都是真實獨立本體**——
+census 只回一個 key，於是報 **168**，而欄位 0 的定義行實數是 **169**。
+
+**波次 agent 先發現，主迴圈獨立驗證**（讀兩個 golden 定義行、跑 `functions()` 看 key、
+數欄位 0 定義行）。**這是第一個低估 golden 側的 census 缺陷**，前四種都低估 port 側。
+
+影響講精確：**對 census 自己的百分比大致相抵**（重載在 golden 與 port 兩側都塌陷），
+**但只要一個重載被翻、另一個沒翻就不再相抵**；**對波次分母則一定低估**。
+已工具化進 `tools/census/wave_preflight.py` 的 `[1]` 區塊並單獨 commit（`2a30878`，
+KNOWLEDGE #23）。回歸掃過先前三波的 golden 檔（`uCleaning.cpp`／`OCR.cpp`／
+`HS_Function.cpp`）**各 0 個重載，所以已 commit 的 72／88／66 不需回溯更正**。
+
+### 三個只差一點的名字（陷阱 #5，這次是活的）
+
+| 名字 | 在哪 | 是什麼 |
+|---|---|---|
+| **`TATC_InterfaceForm`**（有底線） | golden `ATC_Handler_Side.h` | **本波要翻的**；port 類別名自由 |
+| `TATC_InterfaceFormShim` | `acarry_shims.h:109` | **佔走全域 `ATC_InterfaceForm`**（`:115`），只有一個欄位 `iATC_MODE_TYPE`，live 讀者在 `acarry.cpp:8349`／`aTester_Front.cpp:479` |
+| **`TATCInterfaceForm`**（**無底線**） | `ATC/ATCInterface.h:301` | **另一個 golden 檔**（`ATC/ATCInterface.cpp`），**已翻好、在 `ht9045_sm`**，與本波無關 |
+
+**差一個底線就是不同類別，選錯會乾乾淨淨地連起來然後每個欄位讀錯偏移。**
+這張表在派工前就放進 prompt，也寫進了 CMakeLists 的註冊註解。
+
+agent 另外查到 `iATCSelfTestStatus` 同時是無底線那個類別的成員
+（`ATC/ATCInterface.h:296`）——**確認是兩個獨立類別的獨立成員，不是佔用**。
+
+### ⚠ 交付零呼叫者（陷阱 #1，連續第二波）
+
+全域名被 shim 佔走 → facade 依規不宣告任何全域 → **沒有任何程式碼能取得
+`TATC_InterfaceForm*`**。編得過、進得了 archive、**不會被任何現行連結抽出**。
+agent 誠實回答了這一點，CMakeLists 註解也寫明 **NOT CONNECTED**。
+shape (c)（只有全域名被佔）**第三次**：IOSV1 `fiosetview`、HS1 `FormHS`、本波 `ATC_InterfaceForm`。
+
+### 「名字在 reserved 清單上」不等於「可以翻」
+
+選這個標的的唯一理由是它有 **37 個成員名被 `#if 0` 站點預定**。
+**但那 37 個裡大半落在 NET 類被排除**——`Run`／`Stop`／`SetAllTemp`／`SetSingleTemp`／
+`SetOffset`／`SetAirValve`／`SendSwitchRefrigerator`／`Send_ATC_DewPoint`／
+`SetManualSelfTest`／`SetRunSelfTest`／`StartTesting`／`TestFinish`／`SiteTesting`／
+`UseTSD_Function`／`SendHandler2DID` 的本體都會呼叫 `SendCommand`（真的對 ATC 下指令）。
+**agent 是逐支讀完本體才排除的，不是看名字。**
+
+排除分七類：**NET 83／WIDGET 13／GLOBAL 4／SOCK 14／FS 2／CALL 20／MISC 5**。
+其中 GLOBAL 那 4 支值得記：`Check_ATC_Busy_State`／`TesterChangeTemp`／`ChangeTJMode`
+透過全域 `ATC_InterfaceForm->...` **自我引用**（而那個全域是 shim、沒有這些欄位）；
+`ReadATCModeType` 讀一個 **golden ctor 從未初始化的 `asATCFilePath`** 去開 `TIniFile`
+——典型「值沒有載入路徑卻驅動真實動作」。
+
+### 外部符號只有一個
+
+`nm --undefined-only` 對編出的 `.o`：專案符號**只有 `Total_Compressor`**
+（`cmydef.cpp:5679`，`ht9045_globals`，**不在任何 `#if 0` 內**），
+其餘是 C++ 執行期與 vclcompat header-inline。**零 widget、零 `SendCommand`、
+零 `ATC_InterfaceForm`／`ATC_Data`。**
+
+### agent 自陳沒讀完的（連續第三波守住這個區別）
+
+- `ProcessReceiveString_ATC`（696 行）**只 skim 前約 200 行**，內部結構未窮盡編目。
+- `AskATCDateToHandle`／`PFMode`／`ATCCONTROLMODEMode` 依賴的 `IndexStatus`／
+  `iGPIBIndexStatus`／`TestSocket`／`TestIF`／`LastSet.bUseTestSocket` **有沒有 port 沒查**
+  ——因為 `SendCommand` 這條排除理由已足夠。**它明講這是「沒查」不是「查過安全」。**
+
+### 兩個 golden 自身的 quirk，照實記錄
+
+- **零寫入者欄位 `bATC_SEND_TEMP_READY`**：本波為了讓 reserved 名字存在而宣告，
+  但沒有任何 ACTIVE 方法讀寫它 → 目前是死欄位。將來若被接線，讀到的是本波給的
+  `= false` 預設值，**而 golden 的 ctor 本身也從未初始化它**——**是 golden 既有 quirk，
+  不是本波引入的**。
+- golden header 另外宣告了 **3 支從無本體的方法**（`GetTempReady`／
+  `SendAllRefrigeratorFullOpen`／`SetReadTemp`）：`.h` 有、`.cpp` 從來沒有定義。
+  **不算進 169，facade 也沒宣告。**
+
+### 驗收：兩側 GREEN，連續第九個乾淨 gate
+
+```
+_atc1_gate_g.txt            _atc1_gate_done.txt
+G_TOTAL=5                   R_TOTAL=5
+G_EXTRA=  (空)              R_EXTRA=  (空)
+G_VERDICT=GREEN             R_VERDICT=GREEN
+FAILSET（兩側相同）= 常駐五項
+```
+**pi2b／aoi1／ofs2／iosv1／ocr1／cln1／cln2／hs1／atc1 連續九次不需重跑。**
+
+# 🔖 RESUME（20260827 · 第九版）
+
+- **本段最後一顆**：`FW3-ATC1`——**新建** `forms/fATCHandlerSide.h`（956 行）／
+  `forms/fATCHandlerSide.cpp`（586 行）＋ `CMakeLists.txt` 註冊（+21 行，
+  維持純 CRLF 2682/2682）。**28 個本體（1 ctor + 27 方法）／443 span 行**。
+  **兩側 gate GREEN，連續第九個乾淨 gate**。詳見 20260827 XVII。
+  ⚠ **分母是 169 不是 168**——census 的 dict key 讓 `ChangeRecipe` 的兩個重載
+  塌陷成一個（golden `:1920` 與 `:1927`）。**第五種量尺缺陷，
+  也是第一個低估 golden 側的**；已工具化進 `wave_preflight.py` 並單獨
+  commit（`2a30878`，KNOWLEDGE #23）。回歸確認先前三波的 72／88／66 不受影響。
+  ⚠ **交付零呼叫者**（陛阱 #1，連續第二波）：全域 `ATC_InterfaceForm`
+  被 `acarry_shims.h:115` 佔走。shape (c) **第三次**。
+  ⚠ **三個只差一點的名字**（陛阱 #5）：`TATC_InterfaceForm`（有底線，本波的）／
+  `TATC_InterfaceFormShim`（`acarry_shims.h:109`，佔全域）／
+  `TATCInterfaceForm`（**無底線**，`ATC/ATCInterface.h:301`，另一個已翻檔、在 `ht9045_sm`）。
+  ⚠ **37 個 reserved 名字裡大半落在 NET 類被排除**（本體會呼叫 `SendCommand`）
+  ——**名字在清單上不等於可以翻**。
+
+- **前一顆**：`FW3-HS1`——**新建** `forms/fHS.h`（750 行）／
   `forms/fHS.cpp`（1,055 行）＋ `CMakeLists.txt` 註冊（+19 行，`ht9045_forms`，
   維持純 CRLF 2661/2661）。**13/66 個本體（1 ctor + 12 方法）／939/5,125 span 行**。
   **兩側 gate GREEN，連續第八個乾淨 gate**。詳見 20260827 XVI。
