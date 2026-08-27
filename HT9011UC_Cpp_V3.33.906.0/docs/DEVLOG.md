@@ -14221,9 +14221,113 @@ FAILSET（兩側相同）= 常駐五項
 這又補了一次證據：它的耗時取決於機器負載（w35 Debug 566s → pi1 321s → pi2b 直接過），
 **不是固定回歸**。仍然刻意不動 timeout。
 
+## 20260827 X — FW3-AOI1：交付 15 支，而真正的收穫是兩個被攔下來的恆真分支
+
+### 交付
+
+`forms/fAOI.h` **+127/-1**、`forms/fAOI.cpp` **+268/-0**。
+**15 支 / 114 golden 行**，golden `fAOI.cpp` 共 **174 支**
+（`span_sanity` 174/174、少抽 0，分母可信）。兩檔 bare-LF、零 U+FFFD。
+類別名是 **`TFrmAOI`**——`class TfAOI` 早被 `TfAOILaserScan.h` 佔用，更早的波次已處理過。
+`forms/fAOI.cpp` 已註冊在 `CMakeLists.txt:702`（`ht9045_forms`），**本波未改 CMakeLists**。
+
+**這個檔動機台的比例很高，唯讀面薄是預期的**（`DoMoveXY_ScannerAOI`／
+`DoMoveFixedSeatXYandClamp`／`DoCCDLightDown`／`DoTopScanAOIFunction` 等）。
+派工時就寫明「交付少而正確勝過湊數字」。
+
+### 兩個被攔下來的恆真分支——本波的真正價值
+
+**1. 6 個門檻欄位全樹零寫入者。**
+`DoContinuousFailByArmPADView`／`ByArmBGAView`／`TFrmAOI::DoContinuousFailBySiteScanAOI`／
+`ByArmScanAOI` 這 4 支拿計數器去比對
+`tAOISetup.iContAlarmCountPADView`／`iContAlarmCountBGAView`／`iScanAOIAlarmCountBySite`／
+`iScanAOIAlarmCountByArm`／`iTopScanAOIAlarmCountBySite`／`iTopScanAOIAlarmCountByArm`。
+**這 6 個欄位在全樹沒有任何寫入者**（agent 量到，**主迴圈獨立複驗確認 0 個寫入點**）。
+門檻恆為 0 → `counter >= threshold` **恆真** → 那 4 支一落地就會在第一次呼叫
+把 `*FailCont` 旗標**永遠設成 true**，不管實際結果是什麼。
+
+**這與 W33 的 `iSortUnloadT6` 是同一形狀：0 不是中性的 else，是主動命中錯分支。**
+（相對地，W30 的 `iATC_MODE_TYPE` 恆 0 是安全降級——**兩者不可混為一談**，
+差別在於「0 這個值會不會讓守衛打開」。）**4 支全數排除。**
+
+**2. `bVitroxPADViewUse`／`bVitroxBGAViewUse` 的唯一寫入者本波退出。**
+`DoContinuousFailBySitePADView`／`BySiteBGAView` 讀這兩個旗標，而唯一寫入它們的
+`DrawSitePanelVitrox1/2`（TTMyTray 自訂格線控制項）本波不翻——落地後讀者會**靜默恆走
+歸零分支**。**排除。**
+
+### agent 自己撤回了一支已經寫好的函式
+
+`GetAOIFailBin`（golden `:2892-2946`，55 行純邏輯）**寫完、`-fsyntax-only` 過關之後**，
+它才編出 `.o` 跑 `nm --undefined-only -C`，發現 `OutArmSuck` 未定義：
+唯一活定義在 `aHotPlateSubstrate.cpp:83`＝**`ht9045_sm`**，而 `forms/fAOI.cpp` 所屬的
+`ht9045_forms` 只連 `vclcompat + ht9045_globals + ht9045_core`。
+**它撤回了，沒有在檔案裡留半成品**，撤回理由寫進兩檔 banner 供未來波次參考。
+
+### 主迴圈這次自己跑了 `nm`——上一波的缺口補上了
+
+FW3-PI2 的 build 破，根因是**我讀了 agent 的符號表就採信**。這次我自己編 `.o`：
+零錯誤零警告，**唯一非執行期未定義符號是 `Prod`**，定義在 `cprod.cpp:10`、
+**用 `gate_depth_map` 驗過 `gated=False`（live）**、`cprod.cpp` 註冊在
+`CMakeLists.txt:472`（`ht9045_globals`）。
+
+### agent 報檔案完整性的方式也改進了
+
+上一波（PI2）報「pure appends both files」，實際是三個 hunk。這一波它**主動用
+`git diff -U0` 的 hunk 標頭報告，並揭露 `.h` 有一處單行替換**——
+把過時的 `// Dependency-free header: one bool` 換成準確的 banner（header 現在
+確實引入了 vclcompat widget）。**主迴圈開檔確認那一行替換就是它說的那一行。**
+
+### 主動列出「會寫全域機台/生產狀態」者（皆未翻）
+
+`SetActiveSuck`（`:318-340`，寫 `bActiveSuck[][]`，被 `DoMoveXY_TopView` 等馬達函式讀
+以決定移動目標）／`InitAOIFunction`（`:2739-2751`，清零 `OutArmSuck.iAOIStation[][]`）／
+`TTopBottomInspect::SetSuckActive`（`:7370-7414`）／
+`TTopBottomInspect::DoRecordResult`（`:4739-4987`，寫 `OutArmSuck.iWhichAuto[][]` 分 bin 決策）。
+**全部進佇列。**
+
+### 忠實保留的 golden quirk
+
+`CheckFailBin` 的 `int iBin[5]` **只用索引 1-4，`iBin[0]` 宣告但從不讀寫**，
+而迴圈邊界寫成 `i < sizeof(iBin)/sizeof(int)` 卻從 `i=1` 起算——逐字保留並註解說明。
+它觸發一個 `-Wsign-compare`，**那是 golden 自己的寫法，不是本波引入的**。
+
+### 明講沒做的（「沒被排除」不等於「查過而且安全」）
+
+- **`TTopBottomInspect`（約 80 個方法）一開始就決定不碰**——需要獨立的 struct/enum 骨架
+  與 `TAOISocket` 型別。**這不是逐支審查後排除的**，agent 明講了這個區別，已寫進 banner。
+- 所有 `Do*View*`／`DoScanAOI*`／`DoTopScanAOI*` 大狀態機（含 `ShowErrorMessage` 警報或馬達呼叫）。
+- 所有 `*Click`／`*MouseDown`／`*MouseUp`／`FormShow`／`FormDestroy`／`FormClose`。
+- `SaveAOISummaryReport`／`AddAOIRecord`（寫檔）。
+- `DrawSitePanelVitrox1/2`（TTMyTray 自訂格線，超出「widget→UI-state 欄位」的簡單模式）。
+
+### 驗收：兩側 GREEN，不需任何重跑
+
+```
+_aoi1_gate_g.txt            _aoi1_gate_done.txt
+G_TOTAL=5                   R_TOTAL=5
+G_EXTRA=  (空)              R_EXTRA=  (空)
+G_VERDICT=GREEN             R_VERDICT=GREEN
+FAILSET（兩側相同）= 常駐五項
+```
+**`dfm2rc_fidelity` 兩側都直接通過**，連續第二個乾淨 gate（pi2b、aoi1）。
+
+### `coverage_probe` 的 loose 雜訊率再確認
+
+開工時 `coverage_probe fAOI.cpp` 給 **STRICT 0 / loose 16 / NONE 158**，
+而那 **16 筆 loose 全數是雜訊**（`spbSaveClick`→`VacuumUnit/VacuumUnit.cpp`、
+`FormShow`→`ATC/ATCInterface.cpp` 等）。樣本比 PI2 的 9/11 更大，**結論一致：
+loose 側零可信信號，只能當上界**。收工重跑 STRICT 15，與交付清單逐支對得上。
+
 ### 🔖 RESUME（20260827 清晨 · 第四版）
 
-- **本段最後一顆**：`FW3-PI2`——`forms/fProductionInfo.{h,cpp}` 再長到 **260+480 行**
+- **本段最後一顆**：`FW3-AOI1`——`forms/fAOI.{h,cpp}` 從空殼（115+35）長到 **242+303 行**，
+  **15 支 / 114 golden 行**（golden 174 支）。**兩側 gate GREEN，不需任何重跑**
+  （連續第二個乾淨 gate）。詳見 20260827 X。
+  真正的收穫是**攔下兩個恆真分支**：6 個門檻欄位全樹零寫入者（門檻恆 0 →
+  `counter>=threshold` 恆真 → fail 旗標永遠 true）；`bVitroxPADViewUse/bVitroxBGAViewUse`
+  的唯一寫入者本波退出。**與 `iSortUnloadT6` 同形狀：0 不是中性 else，是主動命中錯分支。**
+
+- **前一顆**：`FW3-PI2`——`forms/fProductionInfo.{h,cpp}` 再長到 **260+480 行**
   （PI1 從空殼 70+15 → 190+313；PI2 → 260+480）。詳見 20260827 VIII / IX。
   **pi2b 兩側 gate GREEN（各 5 項＝常駐五項、EXTRA 皆空），是本段第一個不帶任何但書的 gate。**
   ⚠ PI2 第一輪 gate **build 破**（`undefined reference to bEnableInarmSuckZAuto/

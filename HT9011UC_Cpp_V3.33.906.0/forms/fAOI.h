@@ -70,7 +70,38 @@
 #ifndef FORMS_FAOI_H
 #define FORMS_FAOI_H
 
-// Dependency-free header: one bool.  See forms/fHome.h for the reasoning.
+// =============================================================================
+//  AI(W906-FW3-AOI1) 20260827: WIDENED past "one bool" (the line above used to
+//  say "dependency-free header: one bool", true until this wave). FW3-AOI1 is
+//  the first read-only translation pass over golden fAOI.cpp (8,525 lines /
+//  174 census-countable functions -- measured this wave with
+//  tools/census/coverage_probe.py + span_sanity.py, both 174/174, 0 missed).
+//  15 functions landed; the other 159 are hardware motion, AOI-host TCP
+//  commands, file saves, alarms, or (one case, GetAOIFailBin) a link-boundary
+//  block -- excluded by design, not oversight (see the per-function
+//  reasoning in forms/fAOI.cpp). Landing even this small a slice needs:
+//    - vclcompat/vcl_compat.h  for AnsiString (ShowTopBtnTask's parameter).
+//    - vclcompat/Controls.h    for the handful of __published widget types
+//      the 15 functions touch (golden fAOI.h:28-361) -- TEdit/TComboBox/
+//      TCheckBox/TRadioGroup/TLabel/TButton, all pre-existing vclcompat
+//      classes (see forms/fContact.h's "five facade-local widget stand-ins"
+//      note for the established pattern this follows: `new TWidget()`
+//      in-class default member initializers, no ctor changes needed).
+//    - cprod.h                 for Prod (read-only in CheckFailBin).
+//  GetAOIFailBin (golden fAOI.cpp:2892-2946) was drafted, syntax-checked, and
+//  then WITHDRAWN: it needs OutArmSuck.iBinData, and OutArmSuck's only live
+//  definition (aHotPlateSubstrate.cpp:83) is compiled into ht9045_sm, which
+//  ht9045_forms does not link (CMakeLists.txt:714, and the reverse edge is a
+//  documented target cycle). ScannerAOIIF/TrayForm/Prod are all fine (defined
+//  in cprod.cpp, ht9045_globals) -- OutArmSuck alone is the blocker. See
+//  forms/fAOI.cpp for the full note.
+//  This header still carries ZERO of golden's 118 __published widgets as a
+//  real form (no .dfm, no PageControl/GroupBox/TabSheet container tree) --
+//  only the 14 leaf controls the 15 landed functions actually dereference.
+// =============================================================================
+#include "vclcompat/vcl_compat.h"    // AnsiString (+ transitively TStringList etc)
+#include "vclcompat/Controls.h"      // TEdit/TComboBox/TCheckBox/TRadioGroup/TLabel/TButton
+#include "cprod.h"                   // Prod (CheckFailBin's Prod.bIsPassBin[] read)
 
 class TFrmAOI
 {
@@ -105,11 +136,106 @@ public:
     // -----------------------------------------------------------------------
     bool bSimulateTopBtm;
 
+    // -------------------------------------------------------------------
+    //  AI(W906-FW3-AOI1) 20260827: 14 widget stand-ins, ONLY the leaves the
+    //  15 functions landed this wave touch (golden __published list is 118
+    //  controls long, fAOI.h:28-361; this is not that list).  Pattern is
+    //  forms/fContact.h's "five facade-local widget stand-ins" (D-4): plain
+    //  vclcompat types, `new TWidget()` in-class default member
+    //  initializers so the ctor below needs no changes (Gotcha #4: a
+    //  facade ctor must not hand-roll construction of heap objects it
+    //  doesn't already own -- these initializers run for every ctor
+    //  automatically, same as fContact.h's edXDimension etc).
+    // -------------------------------------------------------------------
+    TComboBox   *ComboBox1             = new TComboBox();   // golden fAOI.h:89  (DoViewBinFunction)
+    TEdit       *edt_FailPADView       = new TEdit();       // golden fAOI.h:48  (CheckFailBin)
+    TEdit       *edt_FailBGAView       = new TEdit();       // golden fAOI.h:85  (CheckFailBin)
+    TEdit       *edt_PassFailBGAPADView= new TEdit();       // golden fAOI.h:91  (CheckFailBin)
+    TEdit       *edt_FailFailBGAPADView= new TEdit();       // golden fAOI.h:92  (CheckFailBin)
+    TCheckBox   *cbEnabledTopView      = new TCheckBox();   // golden fAOI.h:36  (CheckFailBin)
+    TCheckBox   *cbEnabledPADView      = new TCheckBox();   // golden fAOI.h:47  (CheckFailBin)
+    TCheckBox   *cbEnabledBGAView      = new TCheckBox();   // golden fAOI.h:84  (CheckFailBin)
+    TRadioGroup *rgAOIFailBinType      = new TRadioGroup(); // golden fAOI.h:248 (UpdateAOIFailBinTypetoForm)
+    TLabel      *lblAOIBinSel1         = new TLabel();      // golden fAOI.h:249 (UpdateAOIFailBinTypetoForm)
+    TLabel      *lblAOIBinSel2         = new TLabel();      // golden fAOI.h:250 (UpdateAOIFailBinTypetoForm, ->Visible)
+    TComboBox   *cbAOIFialAndTestPass  = new TComboBox();   // golden fAOI.h:251 (UpdateAOIFailBinTypetoForm, ->Visible only -- "cb" prefix but golden types it TComboBox, not TCheckBox)
+    TButton     *btnSimulateTopBtm     = new TButton();     // golden fAOI.h:340 (SetSimulationState)
+    TLabel      *blTopBtmTask          = new TLabel();      // golden fAOI.h:361 (ShowTopBtnTask)
+
+    // -------------------------------------------------------------------
+    //  AI(W906-FW3-AOI1) 20260827: golden fAOI.cpp:3715-3736, pure -- reads
+    //  4 TEdit->Text + 3 TCheckBox->Checked + Prod.bIsPassBin[] (global
+    //  production state, READ only), returns bool, writes nothing.  Golden
+    //  quirk preserved verbatim: `int iBin[5]` is indexed 1..4 only, iBin[0]
+    //  is declared but never read or written (see forms/fAOI.cpp for the
+    //  loop bound `i<sizeof(iBin)/sizeof(int)` starting at i=1).
+    // -------------------------------------------------------------------
+    bool CheckFailBin();
+
+    // AI(W906-FW3-AOI1) 20260827: golden fAOI.cpp:4472-4483 + inline getter
+    // at golden fAOI.h:445.  bSimulate has NO ctor-assigned default in this
+    // facade's golden span (golden only sets it inside the
+    // `if(USE_Scanner_AOI_Inspection==...)` gate of TFrmAOI's own ctor,
+    // fAOI.cpp:152, which this facade's ctor does not reproduce -- see
+    // forms/fAOI.cpp for why).  false is chosen explicitly here (not left to
+    // implicit init) as the safer of golden's two live values; same
+    // reasoning class as bSimulateTopBtm above.
+    bool bSimulate = false;
+    void SetSimulationState(bool bswitch=false);
+    bool GetSimulationState(){return bSimulate;}
+
+    // AI(W906-FW3-AOI1) 20260827: golden fAOI.cpp:4516-4519, a single
+    // Caption write.  Landed but currently unwired -- its only golden
+    // caller is TTopBottomInspect::DoTopBtmInspFunc_Inspection (motor+socket
+    // state machine, excluded this wave; see forms/fAOI.cpp).
+    void ShowTopBtnTask(AnsiString sMsg);
+
     TFrmAOI();
     virtual ~TFrmAOI() {}
+
+private:
+    // AI(W906-FW3-AOI1) 20260827: golden fAOI.cpp:4429-4443, private in
+    // golden too (fAOI.h:408).  Pure widget-to-widget update, no config
+    // dependency, no landmine -- but its only golden caller,
+    // rgAOIFailBinTypeClick, is a *Click event handler and is excluded by
+    // the hard "no event handlers wired" rule.  Landed standalone,
+    // reachable only by a future wave that ports the click handler.
+    void UpdateAOIFailBinTypetoForm();
 };
 
 // golden: extern PACKAGE TFrmAOI *FrmAOI;   (fAOI.h:492)
 extern TFrmAOI *FrmAOI;
+
+// -----------------------------------------------------------------------------
+//  AI(W906-FW3-AOI1) 20260827: subset of golden fAOI.h's extern block
+//  (fAOI.h:494-529) covering ONLY the globals the 8 free functions landed
+//  this wave read or write.  Everything golden declares extern there that
+//  belongs to an EXCLUDED function (iAOITask/DoAOIFunction/InitAOIFunction,
+//  bTriggerAOI, iAOIResult, iScanAOIIntervalCounter, the *ByArm*/*BySite*
+//  continuous-fail family -- see forms/fAOI.cpp for why those are excluded)
+//  is deliberately NOT reproduced here, to avoid declaring a global with no
+//  live definition anywhere in the port.
+//
+//  iScanLGAStep / bplus / irowX / icolumnY / iTopScannerAOIInspectionTask /
+//  iTopScanAOITask are likewise real globals (defined in forms/fAOI.cpp,
+//  same as golden fAOI.cpp:104-125) but golden itself does NOT extern-
+//  declare them in fAOI.h either -- file-private-by-convention in golden,
+//  matched here for fidelity rather than widened.
+// -----------------------------------------------------------------------------
+extern int iTopViewTask;
+extern int iTopViewInspectionTask;
+extern int iPADViewTask;
+extern int iPADViewInspectionTask;
+extern int iBGAViewTask;
+extern int iBGAViewInspectionTask;
+extern int iScanAOITask;
+extern int iScannerAOIInspectionTask;
+
+extern void InitTopScannerAOIInspection();                                     // golden fAOI.h:527
+
+// golden fAOI.h:529 `extern int GetAOIFailBin(int iRow, int iCol);` is
+// DELIBERATELY NOT reproduced here -- drafted this wave, then withdrawn for
+// a link-boundary block (OutArmSuck lives in ht9045_sm; see the header
+// banner above and forms/fAOI.cpp).
 
 #endif // FORMS_FAOI_H
