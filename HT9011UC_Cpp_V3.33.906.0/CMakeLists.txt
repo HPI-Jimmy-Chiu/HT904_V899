@@ -888,6 +888,39 @@ add_library(ht9045_forms STATIC
     forms/fObserveMagazine.cpp
     forms/fWinway.cpp
     forms/fMonitor.cpp
+    # AI(W906-FW3-HSP1) 20260828: three more greenfield forms, all three
+    # declaring their globals.
+    #
+    # golden cHotPlate.cpp -> TfHotPlate, 7 of 19 bodies, 149 of 718 span lines.
+    # NAME NOTE that turned out to be a false alarm, recorded so nobody re-raises
+    # it: this file is cHotPlate, and aHotPlateSubstrate.cpp sits in ht9045_sm,
+    # so the obvious worry was a cross-diet edge. Measured instead: HotPlateForm
+    # and HotPlateForm_File are defined at cprod.cpp:15/16 in ht9045_globals, and
+    # all 14 external symbols this TU needs resolve into ht9045_globals or
+    # ht9045_core, none gated. The name similarity is a coincidence.
+    # Exclusions from reading bodies: ReadFile uses CheckAndReadIniData, which
+    # writes defaults back on a missing key; SaveSetupFile and spbSaveClick write;
+    # XST1MouseDown / XCT1MouseDown / cbSelectHPFromDBChange reach Barcode_Reader
+    # and SetArmHotPlateYPitch reaches GetHotPlateYHalfPos, all in ht9045_sm;
+    # LoadImage needs TImage; FormShortCut needs TWMKey, which has no port.
+    #
+    # golden cShowBinSet.cpp -> TfShowBinSet, 5 of 7 bodies (4 members plus the
+    # file-scope ShowSiteMapping_YES_NO), 83 of 187 span lines.
+    # NAME NOTE, and this one is real: TfShowBinSet is NOT TfShowBinSelect.
+    # cShowBinSelect.cpp is a different golden file, already translated, living in
+    # ht9045_sm with forms/fShowBinSelect.h. The two differ by "elect" versus
+    # "et". Verified disjoint before dispatch and again after: TfShowBinSet
+    # appears only in dfm2rc generator output, TfShowBinSelect only in its own
+    # pair. FormShow is gated precisely because it derefs fShowBinSelect, which is
+    # real but unreachable from here.
+    # This TU needs ZERO project symbols -- nm shows only C++ runtime vtables.
+    #
+    # golden Precaution.cpp -> TfPrecaution, 3 of 6 bodies, 21 of 73 span lines.
+    # The other three all deref fObserver, whose body is cObserver.cpp in
+    # ht9045_sm. Also zero project symbols.
+    forms/fHotPlate.cpp
+    forms/fShowBinSet.cpp
+    forms/fPrecaution.cpp
     # AI(W906-W7-F0-fix) 20260728: MOVED here from ht9045_sm -- the 3 AMR-mode
     # predicates forms/fAGV.cpp delegates to.  See the "NO UNDECLARED BACK-EDGE"
     # block above.  File content unchanged (zero behaviour change: same code,

@@ -15448,9 +15448,134 @@ FAILSET（兩側相同）= 常駐五項
 ```
 **連續十三次不需重跑。**
 
-# 🔖 RESUME（20260828 · 第十三版）
+## 20260828 III — FW3-HSP1：一個**假警報**、一個**真危害**，以及 agent 用我的工具撿到第三個缺口
 
-- **本段最後一顆**：`FW3-OWM1`（**一波三檔、六個新檔**）——
+### 交付（一波三檔，六個新檔）
+
+| golden | 新 facade | 交付 |
+|---|---|---|
+| `cHotPlate.cpp` | `forms/fHotPlate.{h,cpp}`（304+170） | **7/19 支、149/718 span 行** |
+| `cShowBinSet.cpp` | `forms/fShowBinSet.{h,cpp}`（295+103） | **5/7 個本體、83/187 span 行** |
+| `Precaution.cpp` | `forms/fPrecaution.{h,cpp}`（216+65） | **3/6 支、21/73 span 行** |
+
+`CMakeLists.txt` **+33 行**註冊三個 `.cpp` 進 `ht9045_forms`，維持**純 CRLF 2848/2848**。
+六檔皆 bare-LF、零 U+FFFD、既有檔零變更。三個 facade **都宣告了全域**。
+三顆 `.o` **rc=0、0 error、0 warning**。
+
+`cShowBinSet` 的 5 支含**一個 file-scope 函式** `ShowSiteMapping_YES_NO`（golden `:219-224`）。
+
+### 假警報：`cHotPlate` 與 `aHotPlateSubstrate` 只是名字像
+
+派工前我點名了一個風險：本波標的叫 `cHotPlate`，而 **`aHotPlateSubstrate.cpp` 在 `ht9045_sm`**
+——看起來像會撞上連結邊界。
+
+**量測結果：沒有。** `HotPlateForm` 與 `HotPlateForm_File` 定義在
+**`cprod.cpp:15/16`，屬 `ht9045_globals`**；這個 TU 需要的 **14 個外部符號全部落在
+`ht9045_globals` 或 `ht9045_core`，全部 live、無一在 `#if 0` 內、零 forms 連不到的 target**。
+
+**名字相似只是巧合。** 已寫進 CMakeLists 註冊註解，免得後人再提一次同一個疑慮——
+**假警報也要記錄，否則每一輪都要重查一次。**
+
+### 真危害：`ShowBinSet` 不是 `ShowBinSelect`
+
+| 名字 | 是什麼 |
+|---|---|
+| **`TfShowBinSet` / `fShowBinSet`** | golden `cShowBinSet.h`——**本波翻的**，port 樹自由 |
+| `TfShowBinSelect` / `fShowBinSelect` | **另一個 golden 檔**（`cShowBinSelect.cpp`），**早已翻好**，在 `ht9045_sm` ＋ `forms/fShowBinSelect.h` |
+
+**差 "elect" 與 "et" 四個字母。** 這是派工前就寫進 prompt 的（前幾波撞過同型：
+`TATC_InterfaceForm` vs `TATCInterfaceForm` 差一個底線、`SplitStrByDotSpaceOnly` 同名不同體）。
+
+agent 的確認方式可覆核：`TfShowBinSet` 全樹只命中 `tools/dfm2rc/**/layout_out/` 的產生器輸出，
+`TfShowBinSelect`／`fShowBinSelect` 則在自己那對檔案有 13 個真實命中，兩者不重疊。
+**主迴圈另外驗了一次：交付檔裡 `fShowBinSelect` 只出現在註解。**
+而 `FormShow` 被 gate 的理由**正是**它 deref `fShowBinSelect`——那個物件是真的，但從 `ht9045_forms` 連不到。
+
+### `fShowBinSet` 與 `fPrecaution` 的專案符號是**零**
+
+`nm --undefined-only` 對兩顆 `.o`：**只有 C++ 執行期 vtable，沒有任何專案符號**。
+`fPrecaution` 的三支排除全是因為 `fObserver` 的本體在 `cObserver.cpp`＝`ht9045_sm`。
+
+### agent 用我的工具撿到**同一族的第三個缺口**
+
+`wave_preflight` 的 `[4] CALL SITES` 只比對 `glob->member`，
+所以 golden 檔的 **file-scope 函式完全不會被列出任何呼叫點**——
+**而一份什麼都沒說的報告會被讀成「沒人呼叫它」。**
+
+agent 手動 grep 才在 **`csystem.cpp:11222`** 找到 `ShowSiteMapping_YES_NO()` 的真實 `#if 0` 呼叫點，
+**並把這個盲點寫進自己的 banner**，而不是靜靜繞過。
+
+前兩個同族缺口都是我自己在建工具時撿到的（shape (d) 掃原始文字把註解當 `#define`；
+被 `#define` 導走的站點誤報成 facade 必須宣告）。**這一個是使用者撿到的，形狀是「該說話時沉默」。**
+
+已修並單獨 commit（`f101cab`），新增 `[4b] FILE-SCOPE CALL SITES`。
+⚠ **我第一版修法自己錯了**：想用正則辨識定義以便跳過，正則回溯後照樣匹配，
+結果把 `forms/fShowBinSet.cpp:93`（**定義**）與 `.h:293`（**宣告**）列成「live 呼叫點」。
+**把定義說成呼叫點，正是這支工具存在的目的要消除的那種不精確。**
+改用這棵樹本來就成立的判準——**欄位 0 是定義／宣告，縮排才是呼叫**——並把限制**印在結果旁邊**。
+
+三項驗證：`cShowBinSet.cpp` 現報 **LIVE 0／GATED 1（`csystem.cpp:11222`）**；
+`cHotPlate.cpp`（19 支全是成員、零 file-scope）**整段略過**；
+`OCR.cpp` **翻出一個新東西**——它的 file-scope `OCRSimLogWrite` 在
+`OCRInsp.cpp:508`／`:1179`／`:1202` 有 **三個 live 呼叫點**。
+
+### 零寫入者欄位：兩個，都**不外流**
+
+- `cShowBinSet` 的 `MyBinSel[]`／`MyBinSelLab[]`／`TestSiteCH_Display[][]`：
+  由 **ACTIVE 的 ctor 寫入**，但**唯一的讀者 `FormShow` 被 gate**——寫得到、沒人讀。
+- `fPrecaution` 的 9 個 widget 欄位：只被 **GATED 的 `DoIniDataToForm`** 寫、
+  被 **ACTIVE 的 `tm_CheckEditEmptyTimer`** 讀，所以那個 timer **目前恆判定「全空」而觸發自身的 `Close()`**。
+
+**兩者的後果都留在 facade 內部**，與 20260828 I 那 28 個 `labValue_*`（經 SECS SV 回報給 host）
+**不同級**——那一個是會外流的。
+
+### agent 自陳沒讀完的（連續第八波守住這個區別）
+
+- `cHotPlate` 的 `FormShow`：除了會 gate 它的兩行外，**其餘約 14 條全域讀取只做了 gate 分類、未逐一覆核**。
+- `cShowBinSet` 的 `FormShow`：約 80 行的 `SiteData[]`／`TestIF_File.iSiteMap` 已追到 `ht9045_globals`，
+  但那是**分類用途、不是最終驗收**。
+- `Precaution` 的 `fObserver` 成員形狀（`edPrecautionRecordDocumentNo` 等）
+  **只從呼叫端讀，未反向核對 `TfObserver` 的真實成員表**。
+
+### 驗收：兩側 GREEN，連續第十四個乾淨 gate
+
+```
+_hsp1_gate_g.txt            _hsp1_gate_done.txt
+G_TOTAL=5                   R_TOTAL=5
+G_EXTRA=  (空)              R_EXTRA=  (空)
+G_VERDICT=GREEN             R_VERDICT=GREEN
+FAILSET（兩側相同）= 常駐五項
+```
+**連續十四次不需重跑。**
+
+# 🔖 RESUME（20260828 · 第十四版）
+
+- **本段最後一顆**：`FW3-HSP1`（**一波三檔、六個新檔**）——
+  `forms/fHotPlate.{h,cpp}`（304+170）**7/19 支、149/718 span 行**；
+  `forms/fShowBinSet.{h,cpp}`（295+103）**5/7 個本體、83/187 行**；
+  `forms/fPrecaution.{h,cpp}`（216+65）**3/6 支、21/73 行**。
+  `CMakeLists.txt` +33 行（純 CRLF 2848/2848）。**兩側 gate GREEN，連續第十四個乾淨 gate**。
+  詳見 20260828 III。三個 facade **都宣告了全域**；三顆 `.o` **0 error、0 warning**。
+
+  ✅ **一個假警報，已量證**：`cHotPlate` 與 `aHotPlateSubstrate.cpp`（`ht9045_sm`）
+  只是名字像。`HotPlateForm`／`HotPlateForm_File` 在 **`cprod.cpp:15/16`＝`ht9045_globals`**；
+  14 個符號全在 globals／core、全 live、**零 forms 連不到的 target**。
+  **假警報也要記錄，否則每一輪都要重查一次。**
+
+  ⚠ **一個真危害**：`fShowBinSet`（本波）vs 早已翻好的 `fShowBinSelect`
+  （`cShowBinSelect.cpp` + `forms/fShowBinSelect.h`，在 `ht9045_sm`）——**差 "elect" 與 "et"**。
+  `FormShow` 被 gate 的理由**正是**它 deref `fShowBinSelect`。
+
+  ⭐ **agent 用我的工具攔到同一族的第三個缺口**：`wave_preflight` 的 `[4]`
+  只比對 `glob->member`，**file-scope 函式完全不會被列出呼叫點**——
+  而**一份什麼都沒說的報告會被讀成「沒人呼叫它」**。
+  已修並單獨 commit `f101cab`（新增 `[4b]`）。
+  ⚠ **我第一版修法自己錯了**：想用正則辨識定義以便跳過，正則回溯後照樣匹配，
+  把**定義與宣告**列成「live 呼叫點」。已改用「欄位 0＝定義／縮排＝呼叫」。
+  驗證：cShowBinSet 現報 LIVE 0／GATED 1（`csystem.cpp:11222`）；
+  **OCR.cpp 翻出新發現——file-scope `OCRSimLogWrite` 在 `OCRInsp.cpp:508/1179/1202` 有三個 live 呼叫點**。
+
+- **前一顆**：`FW3-OWM1`（**一波三檔、六個新檔**）——
   `forms/fObserveMagazine.{h,cpp}`（126+34）**3/3 支、14/14 span 行、零 gate**；
   `forms/fWinway.{h,cpp}`（247+132）4/17 live ＋ 2 宣告但全 gate，26/209 span 行；
   `forms/fMonitor.{h,cpp}`（303+236）11/23 live ＋ 2 宣告但全 gate，92/391 span 行。
