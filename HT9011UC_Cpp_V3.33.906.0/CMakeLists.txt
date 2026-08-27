@@ -808,6 +808,43 @@ add_library(ht9045_forms STATIC
     # static.  Same name, different semantics -- a function-level cousin of the
     # two-headers trap.
     forms/fSmartDiagnostic.cpp
+    # AI(W906-FW3-LGM1) 20260828: golden login.cpp's TfLogin, 4 of 4 bodies --
+    # the first golden file this campaign has finished. 88 span lines. Class name
+    # and global fLogin were both free, so the facade declares the global
+    # (fLogin.h:196 / .cpp:23). The 7 reserved names (ShowModal, cbLoginUserName,
+    # edLoginNewPassword, edLoginOldPassword, edUserName, labUserName,
+    # rgLoginOption) are all consumed by cSecurity.cpp inside its own #if 0; when
+    # that opens it binds here. One gate, LG-1: FormShow's
+    # fProductionInfo->ScreenkeyboardShow() branch, that method having no port.
+    forms/fLogin.cpp
+    # AI(W906-FW3-LGM1) 20260828: golden GroundMan/GroundMan.cpp's TfGroundMan,
+    # 9 of 18 bodies (10 C++ methods -- the 114-line ctor splits into ctor plus a
+    # fully-gated Init(), the forms/fMesSystem.cpp precedent), 307 of 1,605 span
+    # lines. Global fGroundMan free and declared (fGroundMan.h:567 / .cpp:30).
+    # LINK NOTE, and the reason to read this one: the wave agent first wrote
+    # FormShow and Init() translating HSys.iGroundManScanPoint live, then traced
+    # HSys to database.cpp -- CMakeLists.txt:871, inside add_library(ht9045_db)
+    # at :870 -- which ht9045_forms does not link, and corrected itself by gating
+    # those branches (GM-0/GM-4) and dropping the 16 fields whose only consumer
+    # was inside them. Main loop verified rather than accepted: all five HSys
+    # references in the delivered .cpp are inside #if 0 by gate-depth measurement
+    # on the comment-stripped text, and nm on the compiled .o shows no HSys and
+    # no ht9045_db/io/sm symbol at all. Without that catch this would have been
+    # the first undeclared forms -> ht9045_db edge in the tree.
+    # EXCLUSIONS are comms and writes, decided by reading bodies: RS232 open /
+    # send / receive (Init_GM_RS232, SetGroundMaster, comGMReceiveData,
+    # spbStart/StopComClick), WriteIniData/WriteDataToFile (spbSaveClick,
+    # ShowGroundManLog), CheckAndReadIniData's write-back-on-miss
+    # (ReadGroundOffset), and DoGroundMasterMonitor -- 840 lines, an RS232 state
+    # machine that also calls StopAllMotor() at golden :1295, found by reading.
+    # ZERO-WRITER WARNING: the 28 labValue_0_2..labValue_3_5 fields are declared
+    # but nothing writes them this wave -- their only writer, comGMReceiveData,
+    # is excluded. Unlike previous zero-writer findings this consequence LEAVES
+    # the module: when SECSGEM/uHGemHT9045_SV.cpp's GATE [G17] opens, host SV
+    # polls of SVID 43300-43327 read back empty strings for every "Ground man CHn
+    # Value" -- not a crash, silent empty telemetry. Whoever opens [G17] must
+    # land comGMReceiveData first.
+    forms/fGroundMan.cpp
     # AI(W906-W7-F0-fix) 20260728: MOVED here from ht9045_sm -- the 3 AMR-mode
     # predicates forms/fAGV.cpp delegates to.  See the "NO UNDECLARED BACK-EDGE"
     # block above.  File content unchanged (zero behaviour change: same code,

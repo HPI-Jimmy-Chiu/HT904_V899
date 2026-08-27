@@ -15224,9 +15224,144 @@ FAILSET（兩側相同）= 常駐五項
 **連續十一次不需重跑。** 而且這一次 gate 還額外證明了一件事：
 **facade 的 static-init ctor 沒有讓任何 ctest SEGFAULT**——那正是 agent 無法自己驗的部分。
 
-# 🔖 RESUME（20260827 · 第十一版）
+## 20260828 I — FW3-LGM1：**第一個 4/4 翻完的 golden 檔**，以及一條差點新開的 `forms → ht9045_db` 邊
 
-- **本段最後一顆**：`FW3-SD1`——**新建** `forms/fSmartDiagnostic.h`（287 行）／
+### 交付（一波兩檔）
+
+| 新檔 | 行數 | 交付 |
+|---|---|---|
+| `forms/fLogin.h` ／ `forms/fLogin.cpp` | 198 ／ 127 | **4/4 個本體 / 88 span 行** |
+| `forms/fGroundMan.h` ／ `forms/fGroundMan.cpp` | 569 ／ 374 | **9/18 個本體（10 個 C++ 方法）/ 307 of 1,605 span 行** |
+
+`CMakeLists.txt` **+37 行**把兩個 `.cpp` 註冊進 `ht9045_forms`，維持**純 CRLF 2772/2772**。
+四檔皆 bare-LF、零 U+FFFD、**既有檔零變更**。
+
+**`login.cpp` 是本戰役第一個 4/4 完整翻完的 golden 檔。** 只有一個 gate（**LG-1**：
+`FormShow` 裡 `fProductionInfo->ScreenkeyboardShow()` 那個分支，該方法全樹無 port）。
+`sbOkClick` 讀完確認只設 `Text`／`Down` 並呼叫 `Close()`，**不寫檔也不寫權限** → 保留 live。
+
+兩個 facade **都宣告了全域**（`fLogin.h:196`／`.cpp:23`；`fGroundMan.h:567`／`.cpp:30`），
+因為兩個名字都確認自由——所以那些 gated 站點解閘後會綁到它們。
+
+### ⚠ 本波最有價值的事：agent 攔下自己一條**未宣告的跨 diet 邊**
+
+它原本把 `FormShow` 與 `Init()` 裡的 `HSys.iGroundManScanPoint` 翻成 **live**。
+定稿前它自己去追 `HSys` 的定義，發現本體在 `database.cpp`——
+**`CMakeLists.txt:871`，位於 `add_library(ht9045_db`（`:870`）內**，而
+`ht9045_forms` 只連 `vclcompat` + `ht9045_globals` + `ht9045_core`，**沒有這條邊**。
+它於是把兩個分支 gate 起來（**GM-0** ／ **GM-4**），並**刪掉 16 個只被那段消費的欄位**
+（`gbBoard0-3`／`led_0_0,0_1`／`labValue_0_0,0_1`／`labCount_0_0,0_1`／
+`labBoardOhrm`×4／`labBoardVersion`×4），連帶移除已無用的 `TMyLedLane` shim 類別。
+
+**主迴圈沒有採信，而是實測**（這正是 PI2 那次 build 破的教訓——「文字存在」不等於「編譯器看得到」）：
+- 剝註解後對交付檔做**閘深量測**：**5 個 `HSys` 參考全部 GATED**（`:127`／`:131`／`:182`／`:191`／`:213`）。
+- `nm --undefined-only` 對編出的 `.o`：**零 `HSys`、零 `ht9045_db`／`io`／`sm` 符號**。
+- `#include "database.h"` 存在但**不產生連結需求**，因為唯一的參考被 gate 住。
+
+**若沒攔下來，這會是本樹第一條未宣告的 `forms → ht9045_db` 邊。**
+
+### ⚠ 一個**會外流**的零寫入者後果（與前幾波判準不同）
+
+28 個 `labValue_0_2` … `labValue_3_5` 欄位已宣告，**但本波沒有任何寫入者**——
+它們唯一的寫入者 `comGMReceiveData` 是 RS232 收送解析，本波排除。
+
+**前幾波的零寫入者都判定「後果不外流 → 揭露而不 gate」**（`TfOffSetEdit::Name`、
+`edAlarmCount`、`map2DIDFromServer`）。**這一個不同**：
+當 `SECSGEM/uHGemHT9045_SV.cpp` 的 GATE `[G17]` 打開時，
+**host 端對 SVID 43300-43327 的 SV 輪詢會讀回 28 個空字串**——
+不會崩，是**靜默的空遙測**，而且那是**對外的**。
+已寫進 facade banner 與 CMakeLists 註冊註解：**開 `[G17]` 前必須先落 `comGMReceiveData`。**
+
+### 我自己掃到一處與 agent 說法不符，追證後是我誤讀
+
+我掃 `labValue_*` 的寫入時得到 **2 處命中**，與「零寫入者」對不上。
+追下去：`forms/fGroundMan.cpp:201-202` 的 `labValue_0_0->Visible=false;` 與 `_0_1`——
+**兩處都在 GM-4 的 `#if 0` 內，而且寫的是 `Visible` 不是值**。
+**agent 的結論實質正確，是我的正則把 widget 的另一個欄位算了進來。**
+
+### gated 區塊引用了 4 個**未宣告**的欄位——這是開 GM-4 的人的具體障礙
+
+`labValue_0_0`／`labValue_0_1`／`labValue_3_6`／`labValue_3_7` **沒有宣告**
+（golden 有 32 個，SECS 只預定了其中 28 個），
+但 GM-4 的 gated 文字仍然引用它們。**agent 自己在 `forms/fGroundMan.h:118`／`:323`／`:499`
+明文揭露了這件事**——那正是前幾波建立的「把『沒做』講出來」的習慣在起作用。
+**誰要開 GM-4，就必須先把那 4 個補回去或刪掉那兩行。**
+
+### `DoGroundMasterMonitor`：840 行，排除理由是**讀出來的**
+
+它是全檔一半以上。agent **完整讀完**才排除，理由不只是 RS232 狀態機——
+**它在 golden `:1295` 呼叫 `StopAllMotor()`**。
+**那是看名字看不出來的**（函式名只說「監控」）。
+
+它也明講了一個**刻意的取捨**：沒有把這 840 行原樣貼進 `#if 0` 殼裡
+（先例 `fPassword.cpp` 的 `SavePasswordFile` 有這樣做，但那只有 6 行）。
+**整支延後到它自己的波次。**
+
+### 逐支去留（18 支全部有歸屬）
+
+排除 9 支，理由全部來自讀本體：
+RS232 開／送／收（`Init_GM_RS232`／`SetGroundMaster`／`comGMReceiveData`／
+`spbStartComClick`／`spbStopComClick`）、
+寫檔（`spbSaveClick` 的 `WriteIniData`×2、`ShowGroundManLog` 的 `WriteDataToFile`×2）、
+**隱性寫檔**（`ReadGroundOffset` 用的是 `CheckAndReadIniData`——正是派工單點名的那個陷阱）、
+以及 `DoGroundMasterMonitor`。
+
+### 符號集
+
+`fLogin`：`AccessLevel`／`CUSTOMER_CODE`／`iDefEngineerLevel`／`pwPath`（`cmydef.cpp`，globals）
+＋ `vclcompat::FileExists`。
+`fGroundMan`：`AccessLevel`／`CUSTOMER_CODE`／`InitialOK`／`N_INTEGER`／`USE_GROUND_MAN`／
+`iDefHonPrecLevel`（globals）＋ `fQwertyKey`／`TfQwertyKey::ShowQwertyKey`（`ht9045_forms`）。
+**兩顆都零 `ht9045_sm`／`io`／`db`。**
+
+### 選標的：工具擋下一個我本來會犯的錯
+
+排序時 `cSpeed.cpp` 顯示「全域 FREE、41 個 gated 站點」，看起來是理想標的。
+去讀才發現 **`forms/fSpeed.h` 已經存在 1,093 行、被兩波做過**
+（FW3-Speed-WA 20260819 顯示側、FW-SPEED-W21 20260826 的 42 個輸入手勢），
+而且**前一波是刻意不宣告全域的**——理由在 `CMakeLists.txt:2060-2062` 與 `forms/fSpeed.h:287`：
+唯一消費者 `cprod.cpp:2656-2662` 自己也在 `#if 0` 內，宣告全域並不會解開它。
+剩下的 **47 支是 write-path**，屬佇列。
+
+**擋下來的是我派工前去讀了那個 facade，而那不是我想依賴的控制手段。**
+已把區分寫進工具（commit `2072acd`）：`wave_candidates.py` 現在區分
+**「FREE, no facade」** 與 **「global free BUT FACADE EXISTS」**。
+**「沒人宣告那個全域」與「沒有 facade」是兩件不同的事。**
+
+### 驗收：兩側 GREEN，連續第十二個乾淨 gate
+
+```
+_lgm1_gate_g.txt            _lgm1_gate_done.txt
+G_TOTAL=5                   R_TOTAL=5
+G_EXTRA=  (空)              R_EXTRA=  (空)
+G_VERDICT=GREEN             R_VERDICT=GREEN
+FAILSET（兩側相同）= 常駐五項
+```
+**連續十二次不需重跑。**
+
+# 🔖 RESUME（20260828 · 第十二版）
+
+- **本段最後一顆**：`FW3-LGM1`（**一波兩檔**）——
+  `forms/fLogin.{h,cpp}`（198+127）**4/4 個本體 / 88 span 行——
+  本戰役第一個完整翻完的 golden 檔**；
+  `forms/fGroundMan.{h,cpp}`（569+374）**9/18 個本體 / 307 of 1,605 span 行**。
+  `CMakeLists.txt` +37 行（純 CRLF 2772/2772）。**兩側 gate GREEN，連續第十二個乾淨 gate**。
+  詳見 20260828 I。兩個 facade **都宣告了全域**。
+
+  ⭐ **本波最有價值的事**：agent 自己攔下一條**未宣告的跨 diet 邊**——
+  `HSys` 本體在 `database.cpp`（`CMakeLists.txt:871`，屬 `add_library(ht9045_db` `:870`），
+  `ht9045_forms` 連不到。它把兩個分支 gate 起來（GM-0／GM-4）並刪掉 16 個只被那段消費的欄位。
+  **主迴圈實測驗證而非採信**：5 個 `HSys` 參考全部 GATED（闘深量測），
+  `nm` 零 `ht9045_db`／`io`／`sm`。**若沒攔下來，這會是本樹第一條 `forms -> ht9045_db` 邊。**
+
+  ⚠ **一個會外流的零寫入者**（與前幾波判準不同）：28 個
+  `labValue_0_2..3_5` 已宣告但無寫入者（唯一寫入者 `comGMReceiveData` 是 RS232，已排除）
+  → **SECS `[G17]` 開啟後 host 對 SVID 43300-43327 會讀回 28 個空字串**（靜默空遙測）。
+  **開 `[G17]` 前必須先落 `comGMReceiveData`。**
+  ⚠ GM-4 的 gated 文字引用 4 個**未宣告**欄位（`labValue_0_0/0_1/3_6/3_7`，
+  已揭露於 `forms/fGroundMan.h:118/:323/:499`）——**開 GM-4 的人必須先補回**。
+
+- **前一顆**：`FW3-SD1`——**新建** `forms/fSmartDiagnostic.h`（287 行）／
   `forms/fSmartDiagnostic.cpp`（1,175 行）＋ `CMakeLists.txt` 註冊（+27 行，純 CRLF 2735/2735）。
   **24/36 個本體／711 of 966 span 行 ＝ 73.6%——本戰役最厚的一波**。
   **兩側 gate GREEN，連續第十一個乾淨 gate**。詳見 20260827 XIX。
