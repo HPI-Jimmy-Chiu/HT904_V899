@@ -276,8 +276,9 @@ def main():
       % (len(rows), len(members), len(frees), sum(r[0] for r in rows)))
     for c in sorted(classes, key=lambda x: -classes[x]):
         w('    %-34s %d bodies' % (c + '::', classes[c]))
+    free_names = [r[1] for r in frees]
     if frees:
-        w('    (file-scope: %s)' % ', '.join(r[1] for r in frees[:8]))
+        w('    (file-scope: %s)' % ', '.join(free_names[:8]))
     w('    -- QUOTE THE MEMBER COUNT AS THE DENOMINATOR, not the body count,')
     w('       if the wave only translates members.')
     w()
@@ -427,6 +428,57 @@ def main():
         w('    !! %d name(s) appear BOTH live and gated -- check for two classes'
           % len(both))
         w('       sharing a name (trap #5): %s' % ', '.join(both))
+
+    # --- 4b. file-scope call sites -----------------------------------------
+    # Section [4] above only matches `glob->member`, so a golden file's
+    # FILE-SCOPE functions have no call sites reported at all -- the tool says
+    # nothing and reads as "nobody calls it".  FW3-HSP1 hit this: golden
+    # cShowBinSet.cpp's ShowSiteMapping_YES_NO() is called from csystem.cpp:11222
+    # inside a #if 0, and only a hand-written grep found it.  Same family as the
+    # two defects already fixed here: the report was silent where it should have
+    # spoken.
+    if free_names:
+        fs_live, fs_gated = {}, {}
+        alt = '|'.join(re.escape(n) for n in free_names)
+        fs_re = re.compile(r'(?<![A-Za-z0-9_])(%s)\s*\(' % alt)
+        for p in files:
+            rel_p = p[len(ROOT) + 1:].replace(os.sep, '/')
+            try:
+                t = io.open(p, encoding='utf-8', errors='replace').read()
+            except Exception:
+                continue
+            if not any(n in t for n in free_names):
+                continue
+            lines = strip_comments(t).splitlines()
+            g = gate_depth_map(lines)
+            for i, ln in enumerate(lines):
+                # A DEFINITION or DECLARATION sits at column 0 in this tree; a CALL
+                # is inside a function body and therefore indented.  The first
+                # attempt tried to recognise definitions by regex and silently
+                # failed -- it reported forms/fShowBinSet.cpp:93 (the definition)
+                # and .h:293 (the declaration) as "live call sites".  Calling a
+                # definition a call site is the same class of imprecision this
+                # whole tool exists to remove, so the rule is now the simple one
+                # the tree's own style supports.  LIMITATION, stated rather than
+                # hidden: an indented declaration or a definition written with a
+                # leading space would be misfiled.
+                if ln[:1] not in (' ', '	'):
+                    continue
+                for m in fs_re.finditer(ln):
+                    (fs_gated if g[i] else fs_live).setdefault(
+                        m.group(1), []).append('%s:%d' % (rel_p, i + 1))
+        w()
+        w('[4b] FILE-SCOPE CALL SITES  (names from [2]; section [4] only sees')
+        w('     glob->member, so these would otherwise be reported as nothing)')
+        w('     LIVE %d, GATED %d   -- indented matches only; column-0 lines are'
+          % (len(fs_live), len(fs_gated)))
+        w('     treated as definitions/declarations, not calls')
+        for k in sorted(fs_live):
+            w('       live   %-30s %s' % (k, ', '.join(fs_live[k][:3])))
+        for k in sorted(fs_gated):
+            w('       gated  %-30s %s' % (k, ', '.join(fs_gated[k][:3])))
+        if not fs_live and not fs_gated:
+            w('       (no call sites found)')
 
     w()
     w('reminder: every absence above is true as of this run only. Re-run at')
