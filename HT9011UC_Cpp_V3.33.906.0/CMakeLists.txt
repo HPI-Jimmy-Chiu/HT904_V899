@@ -845,6 +845,49 @@ add_library(ht9045_forms STATIC
     # Value" -- not a crash, silent empty telemetry. Whoever opens [G17] must
     # land comGMReceiveData first.
     forms/fGroundMan.cpp
+    # AI(W906-FW3-OWM1) 20260828: three small greenfield forms in one wave, all
+    # three declaring their globals because all three names were free.
+    #
+    # golden ObserveMagazine.cpp -> TfObserveMagazine, 3 of 3 bodies, 14 of 14
+    # span lines, no gate at all -- the second golden file this campaign has
+    # finished outright (after login.cpp). All 15 reserved field names declared
+    # (labSimMagazineTrayNo, mtMagazineTray1..14, consumed by csystem.cpp:625 and
+    # cinitial.cpp:14347-14360). mtMagazineTray* use vclcompat::TrayCore, whose
+    # body is TrayCore.cpp at CMakeLists.txt:256 inside add_library(vclcompat) at
+    # :137 -- already linked, not a new edge (checked here, not assumed).
+    #
+    # golden ATC/WinWaySetting.cpp -> TfWinway, 4 of 17 bodies carrying live
+    # logic plus 2 declared-but-fully-gated for the reserved-name contract,
+    # 26 of 209 span lines. DENOMINATOR IS 17, NOT THE 16 census reports:
+    # OpenCommPort is overloaded, `bool OpenCommPort(int)` at golden :156 and
+    # `void OpenCommPort()` at :164, and census keys its dict on the name. The
+    # overload check added to wave_preflight.py after ATC1 (KNOWLEDGE #23) caught
+    # this one, which is the second real instance.
+    # Nearly every method here touches arrATC_Site[n] (ATC_WinWay*), whose body
+    # is ATC/ATC_WinWay.cpp at CMakeLists.txt:1432 inside add_library(ht9045_comms)
+    # at :1408 -- a target ht9045_forms does not link and which is not one of the
+    # four documented forms->sm exceptions. The ctor sets arrATC_Site[i] to 0, so
+    # even a read-only translation would null-deref the moment it ran; that is why
+    # the field-touching methods are not declared at all rather than shipped as
+    # degraded stubs. Only a forward declaration of ATC_WinWay appears, creating
+    # no link edge -- confirmed with nm, zero ATC_WinWay symbols.
+    #
+    # golden Monitor/MonitorInterface.cpp -> TfMonitor, 11 of 23 bodies live plus
+    # 2 declared-but-gated, 92 of 391 span lines. Same shape: MVCtrl is a
+    # MonitorTCPIP*, body at CMakeLists.txt:2334 inside add_library(ht9045_sm) at
+    # :1498, unreachable, so the ctor leaves it permanently NULL and every method
+    # built around it is undeclared -- including MonitorTimerTimer, the 185-line
+    # main loop. MyDBIProcess in FormDestroy rides the documented fLotInfo
+    # exception; LogSoftwareOffTime, which is NOT on that list, was gated instead.
+    # JUDGEMENT WORTH READING: golden's ctor calls LoadTCPIPParament() at :32.
+    # The wave translated that method live (it only reads the ini and writes its
+    # own widgets) but gated the CTOR'S CALL to it, because fMonitor is a
+    # file-scope `new`, so every executable linking ht9045_forms -- ctest included
+    # -- would touch D:\HT9045\system\MVData.ini before main(). Not a null-deref,
+    # but the same family as the static-init hazard in KNOWLEDGE.
+    forms/fObserveMagazine.cpp
+    forms/fWinway.cpp
+    forms/fMonitor.cpp
     # AI(W906-W7-F0-fix) 20260728: MOVED here from ht9045_sm -- the 3 AMR-mode
     # predicates forms/fAGV.cpp delegates to.  See the "NO UNDECLARED BACK-EDGE"
     # block above.  File content unchanged (zero behaviour change: same code,

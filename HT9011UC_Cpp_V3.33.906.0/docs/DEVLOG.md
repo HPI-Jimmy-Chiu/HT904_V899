@@ -15339,9 +15339,143 @@ FAILSET（兩側相同）= 常駐五項
 ```
 **連續十二次不需重跑。**
 
-# 🔖 RESUME（20260828 · 第十二版）
+## 20260828 II — FW3-OWM1：三個小 greenfield，**第二個翻完的 golden 檔**，以及重載檢查的第二個實例
 
-- **本段最後一顆**：`FW3-LGM1`（**一波兩檔**）——
+### 交付（一波三檔，六個新檔）
+
+| golden | 新 facade | 交付 |
+|---|---|---|
+| `ObserveMagazine.cpp` | `forms/fObserveMagazine.{h,cpp}`（126+34） | **3/3 支、14/14 span 行、零 gate** |
+| `ATC/WinWaySetting.cpp` | `forms/fWinway.{h,cpp}`（247+132） | 4/17 live ＋ 2 宣告但全 gate，**26/209 span 行** |
+| `Monitor/MonitorInterface.cpp` | `forms/fMonitor.{h,cpp}`（303+236） | 11/23 live ＋ 2 宣告但全 gate，**92/391 span 行** |
+
+`CMakeLists.txt` **+43 行**註冊三個 `.cpp` 進 `ht9045_forms`，維持**純 CRLF 2815/2815**。
+六檔皆 bare-LF、零 U+FFFD、**既有檔零變更**。三個 facade **都宣告了全域**（三個名字都確認自由）。
+
+**`ObserveMagazine.cpp` 是本戰役第二個完整翻完的 golden 檔**（前一個是 20260828 I 的 `login.cpp`），
+而且**一個 gate 都沒有**——三支本體都只碰 `fShow` 一個欄位。
+15 個預定欄位全部宣告（`labSimMagazineTrayNo` ＋ `mtMagazineTray1..14`）。
+
+### ⚠ 分母是 17 不是 16：**重載檢查抓到第二個實例**
+
+`ATC/WinWaySetting.cpp` 的 `OpenCommPort` 有兩個真正不同的重載——
+golden `:156` 的 `bool OpenCommPort(int)` 與 `:164` 的 `void OpenCommPort()`——
+而 census 以名字為 dict key，只留下一個。
+
+**這正是 20260827 XVII（ATC1）撿到、隨即工具化進 `wave_preflight.py` 的那個缺陷
+（KNOWLEDGE #23），而它在下一波就抓到第二個實例。**
+agent 主動跑了那支工具、看到 `TRUE DENOMINATOR IS 17 BODIES`，
+並自己照 golden 行號逐支加總覆核（兩個 `OpenCommPort` 分別 7 行與 5 行）。
+**若沒有那個檢查，我會把「16」寫進派工單，agent 會回報 X/16。**
+
+主迴圈收工前用同一支工具獨立重量，得到同樣的 17。
+
+### 一個新遇到的連結邊界：`ht9045_comms`
+
+`ATC/WinWaySetting.cpp` 幾乎每一支方法都碰 `arrATC_Site[n]`（`ATC_WinWay*`），
+而 **`ATC/ATC_WinWay.cpp` 在 `CMakeLists.txt:1432`，屬 `add_library(ht9045_comms)`（`:1408`）**
+——`ht9045_forms` 連不到，也不是那四個已驗證的 `forms → sm` 例外之一。
+（本戰役先前遇過的邊界是 `ht9045_sm`／`ht9045_io`／`ht9045_db`；**`ht9045_comms` 是第四個**。）
+
+**處置值得記**：ctor 已把 `arrATC_Site[i]` 明確設成 `0`，所以**即使只翻「讀欄位」的部分，
+也會在被呼叫的瞬間空指標**。agent 因此把那些方法**整支不宣告**，
+而不是留下 field-only 的殘骸——**「缺符號比錯答案好」用在對的地方**。
+`.h` 裡只有 `class ATC_WinWay;` 的前向宣告，**不產生連結邊**：
+主迴圈用 `nm` 證實交付的 `.o` **零 `ATC_WinWay` 符號**。
+
+`Monitor/MonitorInterface.cpp` 是同一形狀：`MVCtrl` 是 `MonitorTCPIP*`，
+本體在 `CMakeLists.txt:2334`＝`add_library(ht9045_sm)`（`:1498`），連不到，
+ctor 留它永久 NULL，圍著它建的方法全部不宣告——包括 **185 行的 `MonitorTimerTimer`**。
+
+順帶查證兩件事：`TrayCore.cpp` 在 `CMakeLists.txt:256`＝`add_library(vclcompat)`（`:137`），
+所以 `mtMagazineTray*` 用 `vclcompat::TrayCore` **非新邊**；
+`MyDBIProcess` 走的是已驗證的 `forms/fLotInfo.cpp` 例外，
+而 **`LogSoftwareOffTime` 不在那份名單上，所以 golden `:71` 那行整段 gate**——
+agent 沒有把兩者混為一談。
+
+### 一個關於 static-init 的判斷，值得完整記下來
+
+golden 的 `TfMonitor` ctor 在 `:32` 呼叫 `LoadTCPIPParament()`。
+agent **把那支方法翻成 live**（它只讀 ini 並寫自家 widget，
+`vclcompat::TIniFile::Read*` 不回寫磁碟），**但把 ctor 對它的呼叫 gate 掉了**。
+
+理由：`fMonitor` 是檔案作用域的 `new`（`TfMonitor *fMonitor = new TfMonitor();`），
+所以若 ctor 真的讀檔，**任何連結 `ht9045_forms` 的執行檔——包含每一顆 ctest——
+都會在 `main()` 之前摸一次 `D:\HT9045\system\MVData.ini`**。
+
+**那不是 null-deref，但與 KNOWLEDGE 記的 static-init 危害同族**：
+未經授權的隱性磁碟 I/O，發生在沒有人預期會發生的時點。
+**函式本身沒有被弱化，只是不再被 ctor 提前呼叫**——這個區別 agent 在 banner 裡寫清楚了。
+
+### agent 自陳沒讀完的（連續第七波守住這個區別）
+
+- **`bthermo.cpp` 完全沒開過檔**：`arrATC_Site` 的三個引用行號全部照抄 pre-flight 輸出，
+  **沒有驗證它們是否都在同一個 `#if 0` 內、或其中哪些可能已是 live**。
+- `csystem.cpp` 裡 `OpenMonitorVedio`／`StopMonitorVedio`／`iStatus` 的全部呼叫站點，
+  以及 `csystem.cpp:625`／`cinitial.cpp:14347-14360`：同樣只信 pre-flight 的行號，**未逐一開檔確認閘深**。
+- `Monitor/MonitorTCPIP.cpp` 與 `ATC/ATC_WinWay.cpp` **只讀過 `.h`，沒讀 `.cpp` 本體**
+  ——它只需要確認「存在、在哪個 target、非 `#if 0`」三件事，而那是用 CMakeLists 文字證據，
+  **不是親自對編出的 `.o` 跑 `nm`**。
+- 四個 `forms → sm` 例外的**實際連結行為沒有實測**，完全信賴 `CMakeLists.txt:725-731` 的既有聲明。
+- `forms/fLotInfo.cpp` 只讀了 `:4245-4280` 約 35 行。
+
+### 主迴圈自己量錯一次，更正
+
+我第一次報「三顆 `g++ exit=1`」——那是管線末端 `grep -c` 的回傳值，**不是 g++ 的**。
+重新正確量：**三顆全部 `rc=0`、0 error**；`fObserveMagazine`／`fWinway` 0 warning，
+`fMonitor` 的 **43 個警告全部來自既有的 `Motor/HTMotor.h`**（`-Wunused-parameter`），與本波無關。
+**教訓與 20260828 I 那次 `labValue_*` 正則誤算同型：量測工具用錯，得到的是關於工具的事實，不是關於被測物的。**
+
+### 零寫入者欄位：這一波三個都**不外流**
+
+- `ObserveMagazine` 的 15 個欄位：交付的 3 支本體完全不碰，**而且消費端（`csystem.cpp:625`／
+  `cinitial.cpp:14347-14360`）本身也還在 `#if 0` 內**——兩端都死，完全不外流。
+- `fWinway` 的 `arrATC_Site`：ctor 明確設 `0`，從未指向真物件。
+- `fMonitor` 的 `iStatus[4]`：唯一 live 寫入者是 ctor 的歸零迴圈。
+
+**與 20260828 I 那 28 個 `labValue_*`（經 SECS SV 外流給 host）不同級**，
+這一波沒有會外流的。⚠ 但 agent 明講 `bthermo.cpp`／`csystem.cpp` 的閘深它沒查完，
+所以「消費端也在 gate 內」這一半**是根據 pre-flight 行號推得，不是逐檔核對過的**。
+
+### 驗收：兩側 GREEN，連續第十三個乾淨 gate
+
+```
+_owm1_gate_g.txt            _owm1_gate_done.txt
+G_TOTAL=5                   R_TOTAL=5
+G_EXTRA=  (空)              R_EXTRA=  (空)
+G_VERDICT=GREEN             R_VERDICT=GREEN
+FAILSET（兩側相同）= 常駐五項
+```
+**連續十三次不需重跑。**
+
+# 🔖 RESUME（20260828 · 第十三版）
+
+- **本段最後一顆**：`FW3-OWM1`（**一波三檔、六個新檔**）——
+  `forms/fObserveMagazine.{h,cpp}`（126+34）**3/3 支、14/14 span 行、零 gate**；
+  `forms/fWinway.{h,cpp}`（247+132）4/17 live ＋ 2 宣告但全 gate，26/209 span 行；
+  `forms/fMonitor.{h,cpp}`（303+236）11/23 live ＋ 2 宣告但全 gate，92/391 span 行。
+  `CMakeLists.txt` +43 行（純 CRLF 2815/2815）。**兩側 gate GREEN，連續第十三個乾淨 gate**。
+  詳見 20260828 II。三個 facade **都宣告了全域**。
+
+  ✅ **`ObserveMagazine.cpp` 是本戰役第二個完整翻完的 golden 檔**（前一個是 `login.cpp`），
+  **而且一個 gate 都沒有**。
+
+  ⭐ **分母是 17 不是 16**：`OpenCommPort` 有兩個真正不同的重載
+  （golden `:156` 的 `bool(int)` 與 `:164` 的 `void()`）。
+  **這是 20260827 XVII（ATC1）攔到並隨即工具化進 `wave_preflight.py` 的那個缺陷
+  （KNOWLEDGE #23），而它在下一波就抓到第二個實例。**
+
+  ⚠ **第四個連結邊界：`ht9045_comms`**（`ATC/ATC_WinWay.cpp` 在 `CMakeLists.txt:1432`，
+  `add_library` 在 `:1408`）。先前遇過的是 `ht9045_sm`／`ht9045_io`／`ht9045_db`。
+  ctor 已把 `arrATC_Site[i]` 設成 `0`，**所以即使只翻「讀欄位」也會空指標**——
+  因此那些方法**整支不宣告**而非留 field-only 殘骸。
+
+  ⭐ **一個 static-init 判斷**：golden `TfMonitor` ctor `:32` 呼叫 `LoadTCPIPParament()`。
+  該方法翻成 live，**但 ctor 對它的呼叫被 gate 掉**——`fMonitor` 是檔案作用域 `new`，
+  否則**任何連結 `ht9045_forms` 的執行檔（含每一顆 ctest）都會在 `main()` 前摸
+  `D:\HT9045\system\MVData.ini`**。非 null-deref，但與 static-init 危害同族。
+
+- **前一顆**：`FW3-LGM1`（**一波兩檔**）——
   `forms/fLogin.{h,cpp}`（198+127）**4/4 個本體 / 88 span 行——
   本戰役第一個完整翻完的 golden 檔**；
   `forms/fGroundMan.{h,cpp}`（569+374）**9/18 個本體 / 307 of 1,605 span 行**。
