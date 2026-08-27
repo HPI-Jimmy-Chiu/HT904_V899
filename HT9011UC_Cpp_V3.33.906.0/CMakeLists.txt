@@ -921,6 +921,59 @@ add_library(ht9045_forms STATIC
     forms/fHotPlate.cpp
     forms/fShowBinSet.cpp
     forms/fPrecaution.cpp
+    # AI(W906-FW3-TIF1) 20260828: three greenfield tester/utility forms.
+    #
+    # golden cTesterIF.cpp -> TFTestIF, 21 of 38 members ACTIVE, 115 of 1488 span
+    # lines.  Member percentage and line percentage disagree sharply here and
+    # neither should be quoted alone: every large body in this form is a
+    # persistence or link-boundary body, every small one is a keypad handler.
+    # All 10 reserved names honoured verbatim (DoIniDataToForm, ReadTestIFFile,
+    # SaveSetupFile, cbGPIBType, cbRs232Type, edGPIBAddress, edInitialMaxTest,
+    # edMaxTestTime, fShow, rgInterfaceType).
+    # NAME NOTE, and this one is real: TFTestIF / FTestIF is the FORM.  It is NOT
+    # the TestIF / TestIF_File DATA globals at cprod.cpp:30 (ht9045_globals).
+    # Same family as fShowBinSet vs fShowBinSelect one wave earlier.
+    # nm --undefined-only measured on the object: CUSTOMER_CODE, CosFunction,
+    # IniConfig, N_DOUBLE, N_INTEGER, N_PORT, TestIF (all ht9045_globals),
+    # OnlyNumberInPut / OnlyNumberAndDotInPut (common.cpp, ht9045_core),
+    # fQwertyKey + TfQwertyKey::ShowQwertyKey (forms/fQwertyKey.cpp, this target)
+    # and fTesterTCP (this target, registered below).  ZERO unreachable symbols.
+    # Gates are three kinds: safety policy (SaveSetupFile and friends write, so
+    # they stay dark), link boundary (Barcode_Reader / CheckTTLBoardBitMode /
+    # fShowBinSelect / fSpeed / fYieldMonitoring / SetWorkParameter in ht9045_sm,
+    # EventReport in ht9045_secsgem), and members vclcompat has no port for.
+    #
+    # golden Interface/TesterTCP.cpp -> TfTesterTCP, only 1 of 23 members ACTIVE,
+    # and that low number is the CORRECT answer, not a shortfall.  16 of golden's
+    # bodies were ALREADY translated -- as free functions, in another file:
+    # 12 x TesterTCPSocket_* in Interface/TesterTCP_Socket.cpp and 4 x TesterTCP_*
+    # in Interface/TesterTCP.cpp, both ht9045_sm.  16 + 1 ACTIVE + 6 GATED = 23,
+    # which is the check that this adds up.  CORRECTION, mine: the first version
+    # of this comment said 17 and 13.  There are indeed 13 TesterTCPSocket_*
+    # functions, but TesterTCPSocket_Init (:185) is NOT a translated golden body --
+    # golden's TfTesterTCP has no member named Init; that function reproduces the
+    # .dfm's declarative OnConnect/OnDisconnect/OnError/OnRead bindings.  Counting
+    # it inflated golden-member coverage by one.  The wave agent caught this.
+    # Spot-measured:
+    # TesterTCPSocket_SendTCPIPCommand at TesterTCP_Socket.cpp:331,
+    # TesterTCP_CopyOSTestResult at TesterTCP.cpp:455.  Four were RENAMED on the
+    # way over (ClientSocket_TCPIPConnect/Disconnect/Error/Read -> On*), so a
+    # name-only search under-reports them -- pre-flight shapes (a)/(c)/(d) all
+    # read "clear" here and that is true but misleading, because the existing port
+    # deliberately did not reproduce golden's class.  Re-translating those 16
+    # would have been duplicate work.  This TU needs ZERO project symbols.
+    #
+    # golden cAirCon.cpp -> TfAirCon, 5 of 16 members, 36 of 164 span lines.
+    # Reserved names PowerUp / PowerDown honoured.  SW[] (SwAirConditioner) is
+    # myswitch.cpp = ht9045_io, unreachable.  The serial methods are gated by
+    # SAFETY POLICY, not by reach: vclcompat::TComm IS linkable from here, so an
+    # un-gated StartComm/WriteCommData would really open the port and transmit.
+    #
+    # Measured with -Wall -Wextra (stricter than this target's flags), real -c
+    # compiles, rc captured off-pipeline: all three rc=0, 0 errors, 0 warnings.
+    forms/fTesterIF.cpp
+    forms/fTesterTCP.cpp
+    forms/fAirCon.cpp
     # AI(W906-W7-F0-fix) 20260728: MOVED here from ht9045_sm -- the 3 AMR-mode
     # predicates forms/fAGV.cpp delegates to.  See the "NO UNDECLARED BACK-EDGE"
     # block above.  File content unchanged (zero behaviour change: same code,

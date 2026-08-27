@@ -15548,9 +15548,220 @@ FAILSET（兩側相同）= 常駐五項
 ```
 **連續十四次不需重跑。**
 
-# 🔖 RESUME（20260828 · 第十四版）
+## 20260828 IV — FW3-TIF1：一個「翻得少才是對的」的檔，以及一次被自己作廢的 gate
 
-- **本段最後一顆**：`FW3-HSP1`（**一波三檔、六個新檔**）——
+### 交付（一波三檔，六個新檔）
+
+| golden | 新 facade | ACTIVE / 成員 | live golden 行 |
+|---|---|---|---|
+| `cTesterIF.cpp` | `forms/fTesterIF.{h,cpp}`（504+1754） | **21/38** | **115/1488** |
+| `Interface/TesterTCP.cpp` | `forms/fTesterTCP.{h,cpp}`（410+633） | **1/23** | **8/1068** |
+| `cAirCon.cpp` | `forms/fAirCon.{h,cpp}`（351+290） | **5/16** | **36/164** |
+
+`CMakeLists.txt` **2848 → 2901 行（+53）**，維持純 CRLF 無 bare-LF。
+六檔皆 UTF-8 無 BOM／bare-LF／零 U+FFFD，**既有檔零變更**。
+三顆 `.o` 真 `-c` 編譯（`-Wall -Wextra`，rc 單獨取）**rc=0、0 error、0 warning、0 診斷行**。
+
+⚠ **cTesterIF 的成員% 與行% 嚴重不一致（55.3% vs 7.7%），不可只引其中一個。**
+原因不是取巧：那個表單裡**每一個大的本體都是持久化或連結邊界的本體，每一個小的都是鍵盤處理器**。
+同一份交付可以合理地說成「翻了一半以上」或「翻了不到一成」，兩個都是真的——
+這正是「引用百分比必附分母與單位」要擋的情況。
+
+### 本波最重要的一件事：`TesterTCP` 只翻 1/23 **是正確答案，不是短交**
+
+golden 的 `TfTesterTCP` 有 23 支成員，我們只讓 1 支 ACTIVE。理由是**其中 16 支早就翻好了**，
+只是**不在同一個 class、也不在同一個檔**：
+
+- `Interface/TesterTCP_Socket.cpp` 有 **12 支**對應 golden 成員的 `TesterTCPSocket_*` 自由函式
+- `Interface/TesterTCP.cpp` 有 **4 支** `TesterTCP_*` 自由函式
+- 兩者都在 **`ht9045_sm`**，`ht9045_forms` 連不到
+- **16 已翻 + 1 ACTIVE + 6 GATED = 23**，這個加總是檢查點
+
+主迴圈抽驗兩支：`TesterTCPSocket_SendTCPIPCommand` 在 `Interface/TesterTCP_Socket.cpp:331`、
+`TesterTCP_CopyOSTestResult` 在 `:455`，`symtarget.py` 證實都在 `ht9045_sm`。
+
+⚠ **四支在搬過去時被改名**（`ClientSocket_TCPIPConnect`／`Disconnect`／`Error`／`Read` → `On*`），
+**所以純名字搜尋會低報**。
+
+⚠ **而 pre-flight 對這個檔說的是真話，卻會誤導**：shape (a)/(c)/(d) 全部 `clear`——
+那是對的，因為**既有 port 刻意沒有重現 golden 的 class**，所以類名與全域名確實沒人佔。
+但「沒人佔用這個名字」不等於「這些本體還沒被翻譯」。
+**照 `clear` 直接開翻，就會重複翻譯 16 個本體。**
+→ 已列入下一波派工 prompt 的必附條款。
+
+### 我自己數錯一支，agent 抓到
+
+我寫進 `CMakeLists.txt` 註冊註解的數字原本是「**17** 支已翻、**13** 支 `TesterTCPSocket_*`」。
+`TesterTCPSocket_*` 確實有 13 支，但 **`TesterTCPSocket_Init`（`:185`）不是任何 golden 成員的翻譯**——
+golden 的 `TfTesterTCP` 23 支成員裡**沒有叫 `Init` 的**（我逐一列出核對過），
+那支是重現 `.dfm` 的宣告式 `OnConnect`／`OnDisconnect`／`OnError`／`OnRead` 綁定。
+**把它算進去就是把 golden 成員覆蓋率灌水一支。** 已更正為 16／12，並把更正理由寫進註解本身。
+
+### 一次被自己作廢的 gate（本波最貴的教訓）
+
+05:41 啟動 `dualgate2.sh tif1`。**06:07:02 與 06:07:41，agent 改了六個交付檔中的五個**——
+當時 Debug 已建完（build.log 停在 06:00:25）、Debug ctest 正在跑，
+而 **Release build 正在編譯中**（06:01:09 起）。
+所以 Release 的物件是**改動前與改動後原始碼的混合**。**那次 gate 作廢。**
+
+agent 的改動本身是正當的：它發現**主迴圈自己那 46 行的 CMakeLists 註冊**
+把它 GATE REGISTER 裡 23 處行號引用整批推移了 +46。校正是對的；
+**在驗收 gate 執行期間校正**才是讓量測失去意義的原因。
+
+嘗試終止那棵行程樹（PID 27060）被權限機制擋下，**沒有繞過**——
+改成讓它跑完並標記作廢（`_tif1_gate_VOID_READ_ME.txt`），重跑用**新 tag `tif1b`**，
+新目錄新 sentinel，這樣**不可能誤讀作廢那一組**（GREEN guard 分辨不出作廢與有效）。
+
+**要記住的形狀**：*波次 agent 在「它的檔案停止變動」時才算結束，不是在「它說它結束了」時。*
+啟動 gate 前一刻要量六個目標檔的 mtime；gate 啟動後任何 mtime 都自動判定作廢。
+這一條已寫進本波的收工腳本——它現在會比對 sentinel 與交付檔的 mtime 才肯寫 DEVLOG。
+
+### 行號引用會反覆失效，而且沒有任何東西會抓到
+
+我修正自己那個數字時又插入 7 行，**於是剛校正好的 23 處引用再次全部過期**。
+第二次校正時我**逐項量現值，沒有用「+7」推導**——推導正是 off-by-N 的來源。
+量到：註冊區塊 `CMakeLists.txt:924-976`（53 行）、link 區塊 `:988-995`。
+另外抓到我第一輪漏掉的一個變體：檔裡同時存在 `:981-988` 與 `:982-988` 兩種寫法，
+第一輪的對照表只涵蓋前者。
+
+**這類失效會再發生**：任何未來波次只要往 `ht9045_forms` 加檔就會讓這些數字過期，
+而它們是註解，**建置不會抓到**。三個標頭的 provenance 註解已寫明「重新量，不要盲信」。
+
+### 本波替自己造了一個 live 義務
+
+收工重跑 pre-flight 時，`fTesterTCP->Show` **從 gated 變成 LIVE**——呼叫點是
+`forms/fTesterIF.cpp:184`，**本波自己寫的 `btTesterTCPShowClick`**。facade 有宣告，樹是綠的。
+另外五個名字被本波的 GATE 抄本預先預約：`edTCPIP_Address`／`edTCPIP_Port` 已真宣告於
+`forms/fTesterTCP.h`；`ClientSocket_TCPIP`／`TimerTCPIPConnect`／`TimerProcessTCPData`
+無法忠實宣告（`TTimer` 沒有 vclcompat port，現有三個是成員集不相容的 TU-local stand-in；
+`TClientSocket` 是真 socket），**記成義務而不是硬湊**。
+
+**形狀**：波次可以把**自己的** absence-claim 弄假——陷阱 #2 不只兄弟 agent 會觸發。
+
+### 主迴圈複驗（全部自量，不採信自陳）
+
+- **抓到一處自陳行號錯**：`fTesterTCP` 全域定義在 **`forms/fTesterTCP.cpp:49`**，自陳寫 `:46`（那行是註解）。
+- `nm --undefined-only`：**11 個專案符號全部可達**——`CUSTOMER_CODE`／`CosFunction`／`IniConfig`／
+  `N_DOUBLE`／`N_INTEGER`／`N_PORT`／`TestIF` 在 `ht9045_globals`；`OnlyNumberInPut`／
+  `OnlyNumberAndDotInPut` 在 `ht9045_core`；`fQwertyKey`＋`ShowQwertyKey` 在 `ht9045_forms`；
+  `fTesterTCP` 是自家。**零 forms 連不到的 target。`fTesterTCP.o` 是零專案符號。**
+- **16/16 保留名逐字齊備。**
+- agent 自己也抓到並更正了一處引用錯（`:330` 且誤稱 struct method → 實為 **:331** 的自由函式），
+  **複驗確認它的更正正確**——它是回頭拿檔案核對自己寫過的 banner 才發現的。
+
+### 新工具：`symtarget.py`（主迴圈用，scratchpad）
+
+把 HSP1 那支一次性符號查核腳本改成通用版：吃符號名，印出本體在哪個 `.cpp`、屬哪個
+`add_library`、是 live／GATED／static。用四個已知答案回歸測試通過。
+**用它的過程中抓到它自己的兩個缺陷並修掉**：
+(a) `static` 定義（如 `common.cpp:62` 的 `RecordProcess` stub）曾被報成可連結的 live 定義——
+那是陷阱 #1 的 shape (d) 影子，**對別的 TU 不存在**；
+(b) 摘要曾把已在 `#if 0` 內的 `cMyDB.cpp:1831` 列進「MUST be gated」，**意思講反了**。
+順帶讓 shape (e) 現形：`CosFunction` 在 `tests/test_FTPClient_Transfer.cpp:72` 與
+`tests/test_ga1_cmydb.cpp:162` 有 TU-local stand-in。限制印在結果旁邊，不藏起來。
+
+### 兩個佇列項（不做，但日後解閘必看）
+
+1. `bOutArmVariAuto_OS[]` 在 facade 初始化成 `{false,false,false}`，但 **golden `:147` 的真預設
+   `[0]` 是 `true`**（"default auto 1 enable"）。未來解 `aoutarm.cpp:2956` 的 G11 而沒補這個值，
+   會**靜默把 Auto1 關掉**。
+2. `rgInterfaceType->ItemIndex == 0` **不是中性的「未設定」**，它是 **TTL_MODE**，
+   在 golden `:144`／`:1154`／`:1261`／`:1360` 是被實際命中的分支。
+
+### 兩個便宜的未來收獲（agent 主動指出）
+
+- `TFTestIF::DoIniDataToForm`（146 行、且是保留名）**只是被 transitively gate 住**——
+  末句呼叫 `rgInterfaceTypeClick`，那支需要 `ht9045_sm` 的 `Barcode_Reader`。
+  但**真正的成本是它還需要約 70 個 widget 欄位先宣告**，這一點寫在標頭裡免得日後才發現。
+- `sbtExitClick` 是**一行 gate**，卡在 `CheckTTLBoardBitMode()`。
+
+### agent 自陳沒讀完的（連續第九波守住這個區別）
+
+- 1338 行 gated 的 cTesterIF 內容，它驗的是**閘門符號**不是每一行的語意；那些 `#if 0` 區塊是
+  從 cp950 解碼後**程式化切片**的忠實抄本（唯一編輯是拿掉 `__fastcall`），**從未被編譯過**，
+  每個區塊自己有註明。
+- `fMain->SendMSG_CMD` 與 `BackupSetupFile` 只確認**符號存在**，未確認本體非退化。
+
+### 驗收：重跑的 `tif1b` 兩側 GREEN，連續第十五個乾淨 gate
+
+```
+_tif1b_gate_g.txt           _tif1b_gate_done.txt
+G_TOTAL=5                   R_TOTAL=5
+G_EXTRA=  (空)              R_EXTRA=  (空)
+G_ABSENT= (空)              R_ABSENT= (空)
+G_VERDICT=GREEN             R_VERDICT=GREEN
+FAILSET（兩側逐項相同）= 常駐五項
+```
+**05:41 那次 `tif1` 作廢，不計入。** 收工腳本另外驗過：**沒有任何交付檔比 gate 新**。
+
+# 🔖 RESUME（20260828 · 第十五版）
+
+- **本段最後一顆**：`FW3-TIF1`（**一波三檔、六個新檔**）——
+  `forms/fTesterIF.{h,cpp}`（504+1754）**21/38 支、115/1488 span 行**；
+  `forms/fTesterTCP.{h,cpp}`（410+633）**1/23 支、8/1068 行**；
+  `forms/fAirCon.{h,cpp}`（351+290）**5/16 支、36/164 行**。
+  `CMakeLists.txt` **2848 → 2901 行（+53）**，純 CRLF。**重跑的 `tif1b` 兩側 GREEN，
+  連續第十五個乾淨 gate**。詳見 20260828 IV。三顆 `.o` 真 `-c` 編譯（`-Wall -Wextra`）
+  **rc=0、0 error、0 warning**。
+
+  ⚠ **cTesterIF 的成員% 與行% 嚴重不一致（55.3% vs 7.7%），引用時不可只取其一**——
+  那個表單裡每個大本體都是持久化或連結邊界本體，每個小的都是鍵盤處理器。
+
+  ⭐ **`TesterTCP` 只翻 1/23 是正確答案，不是短交**：其中 **16 支早已翻成別處的自由函式**——
+  `Interface/TesterTCP_Socket.cpp` **12 支** `TesterTCPSocket_*` + `Interface/TesterTCP.cpp`
+  **4 支** `TesterTCP_*`，**兩者都在 `ht9045_sm`**（抽驗 `:331`、`:455`）。
+  **16 + 1 ACTIVE + 6 GATED = 23**，加總對得上。
+  **四支搬過去時被改名**（`ClientSocket_TCPIPConnect`/`Disconnect`/`Error`/`Read` → `On*`），
+  純名字搜尋會低報。
+  ⚠ **pre-flight 對這個檔說真話卻誤導**：(a)/(c)/(d) 全 `clear` 為真，因為既有 port
+  **刻意沒重現 golden 的 class**——但「名字沒人佔」不等於「本體還沒翻」。照 clear 直接開翻
+  會重複翻 16 個本體。**已列為下一波派工 prompt 的必附條款。**
+  ⚠ **我自己數錯一支，agent 抓到**：原本寫 17／13，但 `TesterTCPSocket_Init(:185)` 不是
+  golden 成員的翻譯（golden 的 23 支裡沒有 `Init`，那支是重現 `.dfm` 的事件綁定），
+  算進去等於灌水一支。已更正為 16／12。
+
+  🛑 **05:41 那次 `tif1` gate 作廢（本波最貴的教訓）**：agent 在 **06:07** 改了六個交付檔中的
+  五個，當時 Debug 已建完、Debug ctest 在跑、**Release build 正在編譯**，
+  於是 Release 物件是改動前後的混合。改動本身正當（它發現主迴圈那 46 行 CMakeLists 註冊
+  把它 23 處行號引用整批推移 +46），**在 gate 執行期間改才是問題**。
+  終止行程被權限擋下，**沒有繞過**，改成標記作廢（`_tif1_gate_VOID_READ_ME.txt`）
+  並用**新 tag `tif1b`** 重跑（新目錄新 sentinel，不可能誤讀作廢那組）。
+  **形狀要記住：波次 agent 在「它的檔案停止變動」時才算結束，不是在「它說結束」時。**
+  已把這條變成機制——收工腳本會拿 `build_<tag>g/cfg.log`（gate **起跑**錨點，
+  不是 sentinel 寫入時刻）比對六個交付檔的 mtime，任何一個較新就 abort。
+
+  ⚠ **行號引用會反覆失效且建置抓不到**：我修正自己的數字時又插入 7 行，
+  23 處引用再次全部過期。第二次校正**逐項量現值、不用 +7 推導**（推導正是 off-by-N 來源），
+  並抓到第一輪漏掉的變體（檔裡同時有 `:981-988` 與 `:982-988` 兩種寫法）。
+  量到：註冊區塊 `CMakeLists.txt:924-976`（53 行）、link 區塊 `:988-995`。
+
+  ⚠ **本波把自己的 absence-claim 弄假**：`fTesterTCP->Show` 因本波自己的
+  `forms/fTesterIF.cpp:184` 從 gated 變 LIVE（已宣告，樹綠）。**陷阱 #2 不只兄弟 agent 會觸發。**
+
+  ✅ **主迴圈複驗**：`nm --undefined-only` 量到 **11 個專案符號全部可達**
+  （globals 7／core 2／forms 1／自家 1），**零 forms 連不到的 target**；
+  **`fTesterTCP.o` 零專案符號**；**16/16 保留名逐字齊備**。
+  我抓到一處自陳行號錯：`fTesterTCP` 全域定義在 **`forms/fTesterTCP.cpp:49`**，自陳寫 `:46`。
+  agent 自己也抓到並更正一處（`:330` 且誤稱 struct method → 實為 **:331** 自由函式），
+  複驗確認其更正正確。
+
+  🔒 **兩個佇列項（不做，但日後解閘必看）**：
+  (1) `bOutArmVariAuto_OS[]` facade 初始化成 `{false,false,false}`，但 **golden `:147` 的真預設
+  `[0]` 是 `true`**；解 `aoutarm.cpp:2956` 的 G11 而不補這個值會**靜默關掉 Auto1**。
+  (2) `rgInterfaceType->ItemIndex == 0` **不是中性未設定，它是 TTL_MODE**，
+  在 golden `:144`/`:1154`/`:1261`/`:1360` 是被實際命中的分支。
+
+  💡 **兩個便宜的未來收獲**：`TFTestIF::DoIniDataToForm`（146 行、保留名）**只被 transitively
+  gate**（末句呼叫 `rgInterfaceTypeClick` → 需 `ht9045_sm` 的 `Barcode_Reader`），
+  但真正成本是**還要先宣告約 70 個 widget 欄位**；`sbtExitClick` 是**一行 gate**
+  （卡在 `CheckTTLBoardBitMode()`）。
+
+  🔧 **新工具 `symtarget.py`**（scratchpad，主迴圈用）：吃符號名 → 本體在哪個 `.cpp`、
+  屬哪個 `add_library`、live／GATED／static。四個已知答案回歸測試通過。
+  **用它時抓到並修掉它自己兩個缺陷**：`static` 定義不再被報成可連結（陷阱 #1 shape d）、
+  已 gated 的不再被列進「MUST be gated」（原本意思講反）。
+
+- **前一顆**：`FW3-HSP1`（**一波三檔、六個新檔**）——
   `forms/fHotPlate.{h,cpp}`（304+170）**7/19 支、149/718 span 行**；
   `forms/fShowBinSet.{h,cpp}`（295+103）**5/7 個本體、83/187 行**；
   `forms/fPrecaution.{h,cpp}`（216+65）**3/6 支、21/73 行**。
