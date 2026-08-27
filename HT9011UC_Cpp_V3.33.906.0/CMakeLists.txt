@@ -781,6 +781,33 @@ add_library(ht9045_forms STATIC
     # RecordProcess's declaration from cMyDB.h instead of canary_support.h so it
     # can include the full LastSet.h without the collision.
     forms/fMesSystem.cpp
+    # AI(W906-FW3-SD1) 20260827: golden SmartDiagnostic.cpp's TfSmartDiagnostic,
+    # 24 of 36 bodies (23 TfSmartDiagnostic:: plus one file-scope function),
+    # 711 of 966 golden span lines -- the thickest wave of this campaign so far,
+    # and the first picked by tools/census/wave_candidates.py.
+    # Class name and global fSmartDiagnostic were both free, so this facade
+    # declares the global (fSmartDiagnostic.h:285 / .cpp:37).  All 74
+    # fSmartDiagnostic-> sites tree-wide are still inside #if 0, so there is no
+    # live caller today; what changes is that csystem.cpp's own H5-G4/G5/G6
+    # banners name "the wave that lands a TfSmartDiagnostic facade" as their
+    # retirement condition, and this is that wave.  UN-GATING IS STILL A
+    # SEPARATE DECISION -- H5-G6's own delta note says un-gating makes a
+    # fMain->Pause(...) reachable, which is safety-relevant and stays queued.
+    # LINK NOTE: no ht9045_sm, no ht9045_io, no motor/db symbols at all --
+    # only IniConfig / CosFunction / N_INTEGER / TQPF_Timer (ht9045_globals),
+    # fQwertyKey (ht9045_forms) and vclcompat.  Measured with nm on the .o.
+    # Cylinder[] is deliberately never referenced: its definition is in
+    # mycylin.cpp, which sits in ht9045_io (add_library at :1044) and is
+    # unreachable from here.  mycylin.h is included only for the
+    # MaxCylinderItem macro.  That boundary is why
+    # sb_SmarDiagnostic_CreateCyliderNameClick is excluded.
+    # NAME NOTE: golden's file-scope SplitStrByDotSpaceOnly collides with a
+    # DIFFERENT-BODIED global of the same name already in cpublic.h:25 /
+    # cpublic.cpp:465 (that one treats space as a delimiter; golden's copy does
+    # not).  The facade's copy is renamed SD_SplitStrByDotSpaceOnly and kept
+    # static.  Same name, different semantics -- a function-level cousin of the
+    # two-headers trap.
+    forms/fSmartDiagnostic.cpp
     # AI(W906-W7-F0-fix) 20260728: MOVED here from ht9045_sm -- the 3 AMR-mode
     # predicates forms/fAGV.cpp delegates to.  See the "NO UNDECLARED BACK-EDGE"
     # block above.  File content unchanged (zero behaviour change: same code,

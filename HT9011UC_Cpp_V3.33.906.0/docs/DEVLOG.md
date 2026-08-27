@@ -15119,9 +15119,139 @@ FAILSET（兩側相同）= 常駐五項
 ```
 **pi2b／aoi1／ofs2／iosv1／ocr1／cln1／cln2／hs1／atc1／mes1 連續十次不需重跑。**
 
-# 🔖 RESUME（20260827 · 第十版）
+## 20260827 XIX — FW3-SD1：**24/36、711/966 span 行**，本戰役最厚的一波
 
-- **本段最後一顆**：`FW3-MES1`——**新建** `forms/fMesSystem.h`（706 行）／
+### 交付
+
+**新檔** `forms/fSmartDiagnostic.h`（287 行）／`forms/fSmartDiagnostic.cpp`（1,175 行），
+bare-LF、零 U+FFFD、**既有檔零變更**。`CMakeLists.txt` **+27 行**註冊進 `ht9045_forms`，
+維持**純 CRLF 2735/2735**。
+
+**24/36 個本體**（主迴圈剝註解後自己數：23 個 `TfSmartDiagnostic::` ＋ 1 個 file-scope，
+與 agent 一致）／**711 of 966 golden span 行 ＝ 73.6%**。
+
+**與前五波對比，比例是質變**：
+
+| 波次 | 交付比例（本體） |
+|---|---|
+| OCR1 | 3/82 ＝ 3.7% |
+| CLN1 | 31/72 ＝ 43%（但 span 只有 213/2,798 ＝ 7.6%） |
+| ATC1 | 28/169 ＝ 16.6% |
+| HS1 | 13/66 ＝ 19.7%（span 939/5,125 ＝ 18.3%） |
+| MES1 | 17/46 ＝ 37%（span 337/3,349 ＝ 10.1%） |
+| **SD1** | **24/36 ＝ 66.7%（span 711/966 ＝ 73.6%）** |
+
+**原因不是這一波比較用力，是 `tools/census/wave_candidates.py` 挑對了檔。**
+那支工具（`e9b7e15`）把 144 個候選依「**全域名是否自由 ＋ 有多少 gated 站點在等**」排序，
+`fSmartDiagnostic` 是 FREE ＋ 74 個 gated 站點，而且整個檔只有 966 span 行——
+**小、乾淨、有人在等**。這個組合在此之前是看不見的。
+
+### csystem.cpp 三個 gate 的**退役前提**被滿足了
+
+`csystem.cpp` 的 `H5-G4`／`H5-G5`／`H5-G6` 三個 gate 的 banner **自己寫著**退役條件是
+**「the wave that lands a TfSmartDiagnostic facade」**——本波就是那一波。
+所有 74 個 `fSmartDiagnostic->` 站點解析到的正是那 **13 個 predetermined 名字**，
+agent 逐一以相符的名稱與型別宣告了。
+
+⚠ **但「前提被滿足」不等於「該解閘」。** `H5-G6` 自己的 delta 註記寫著：
+解開它會讓一個 **`fMain->Pause(...)` 變成可達**——那是安全相關，**留在佇列，等使用者在場**。
+本波沒有動任何 gate。
+
+### 陷阱 #5 的**函式層級表親**：同名、不同本體
+
+golden 在 `SmartDiagnostic.cpp` 裡有一個 file-scope 的 `SplitStrByDotSpaceOnly`，
+而 port 樹**早就有一個同名的全域**（`cpublic.h:25` 宣告、`cpublic.cpp:465` 定義）——
+**兩者對空白的處理不一樣**，是不同的函式。
+
+直接照翻成 `static` 會撞
+`declared 'extern' and later 'static'`（因為 `cpublic.h` 的宣告經由 `cmydef.h` 已可見）。
+處置：改名為 `SD_SplitStrByDotSpaceOnly` 並保持 `static`，就地註明。
+
+**先前記過的陷阱 #5 都是類別層級（`TMyKitSuck`／`LAST_GENERAL_SET`）；這是第一個函式層級的實例**，
+而它的危險形狀相同：**名字對得上，語意不對，而編譯器不會告訴你**。
+
+### `Cylinder[]` 的連結邊界（一個排除的唯一理由）
+
+`mycylin.cpp` 在 **`ht9045_io`**（`CMakeLists.txt` 的 `add_library` 在 `:1044`），
+而 `ht9045_forms` 連不到它。**主迴圈自己查過**，也確認交付檔**全檔零引用 `Cylinder[]`**。
+`mycylin.h` 只被 include 來取 `MaxCylinderItem`（`= 295`）這個**巨集**——巨集是常數不是符號。
+
+這條邊界就是 `sb_SmarDiagnostic_CreateCyliderNameClick` 被排除的**唯一**理由。
+
+順帶確認：**`TMyCylinder` 沒有 `TMyKitSuck` 那種雙標頭問題**——全樹只有 `mycylin.h:44` 一份定義。
+
+### 符號集：歷來最乾淨
+
+編譯 0 error（3 個 `-Wunused-parameter` 來自保留 golden 的完整簽章）。
+`nm --undefined-only`：**零 `ht9045_sm`、零 `ht9045_io`、零 `motor`／`db`**——
+只有 `IniConfig`／`CosFunction`／`N_INTEGER`／`TQPF_Timer`（`ht9045_globals`）、
+`fQwertyKey`（`ht9045_forms`）與 vclcompat。**前面每一波都至少踩到一條 `ht9045_sm` 例外，這一波沒有。**
+
+### 7 個 GATE，前提都附了量測指令
+
+`SD-1` 無 `TWinControl`／`SD-2` 無 `MessageDlg`／`SD-3` 無 `DefaultDrawing`／
+`SD-4` 無 `TStringGrid::Refresh`／`SD-5`（SD-1 複合 ＋ 無 `TStringGrid::Width`）／
+`SD-6`（`GetCylider{On,Off}Count` 尾端呼叫 `SaveSDSummaryData` ＝ 寫檔）／
+`SD-7` 無 `MyInputBox`。**收工重跑同樣指令，結果不變。**
+
+⚠ **golden 的拼字 `GetCyliderOnCount`／`GetCyliderOffCount`（少一個 n）照抄未改**——
+那 13 個 predetermined 名字裡就是這樣拼的，「修正」它會讓解閘時對不上。
+
+### 這一波沒有 dep-scan-only 的排除
+
+前四波（CLN1／HS1／ATC1／MES1）都有「只靠關鍵字掃描就排除、沒讀完本體」的項目。
+**agent 說它讀完了全部 36 個本體，一個都沒跳過。** 檔案只有 966 行，這是可信的。
+
+它明講的唯一未做項是：**沒有做 static initializer 的 link+run 煙霧測試**——
+因為 `ht9045_globals` 無法單獨連結（`cprod.cpp` 會拉進約 15 個只有完整 god-stack 才解得掉的符號，
+`CMakeLists.txt` 自己的 banner 就寫了 "NOT linked into an executable here"）。
+**驗證 ctor 不會 SEGFAULT 要靠註冊後的完整 gate**——也就是本節下面那個。
+
+### 一個共用危害，值得記一筆
+
+**agent 自己也踩到了全樹 `find` 逾時**（本樹有 230+ 個 `build_*` 目錄），改用 Grep 工具才解決。
+**這個坑本 session 咬過主迴圈三次、agent 一次。** 它不是只有主迴圈會踩的環境細節。
+
+### 驗收：兩側 GREEN，連續第十一個乾淨 gate
+
+```
+_sd1_gate_g.txt             _sd1_gate_done.txt
+G_TOTAL=5                   R_TOTAL=5
+G_EXTRA=  (空)              R_EXTRA=  (空)
+G_VERDICT=GREEN             R_VERDICT=GREEN
+FAILSET（兩側相同）= 常駐五項
+```
+**連續十一次不需重跑。** 而且這一次 gate 還額外證明了一件事：
+**facade 的 static-init ctor 沒有讓任何 ctest SEGFAULT**——那正是 agent 無法自己驗的部分。
+
+# 🔖 RESUME（20260827 · 第十一版）
+
+- **本段最後一顆**：`FW3-SD1`——**新建** `forms/fSmartDiagnostic.h`（287 行）／
+  `forms/fSmartDiagnostic.cpp`（1,175 行）＋ `CMakeLists.txt` 註冊（+27 行，純 CRLF 2735/2735）。
+  **24/36 個本體／711 of 966 span 行 ＝ 73.6%——本戰役最厚的一波**。
+  **兩側 gate GREEN，連續第十一個乾淨 gate**。詳見 20260827 XIX。
+
+  ✅ **比例質變的原因不是更用力，是 `tools/census/wave_candidates.py`（`e9b7e15`）
+  挑對了檔**——144 個候選依「全域名自由 ＋ gated 站點數」排序，
+  `fSmartDiagnostic` 是 FREE ＋ 74 個 gated 站點，而且整檔只有 966 span 行。
+  **小、乾淨、有人在等**。
+
+  ⭐ **`csystem.cpp` 的 `H5-G4`／`H5-G5`／`H5-G6` 三個 gate 的 banner 自己寫著退役條件是
+  「the wave that lands a TfSmartDiagnostic facade」——本波就是那一波，前提已滿足**。
+  ⚠ 但**解闘仍是另一個決定**：`H5-G6` 自己的 delta 註記寫著解開會讓
+  `fMain->Pause(...)` 變可達，**安全相關，留佇列**。本波沒動任何 gate。
+
+  ⚠ **陛阱 #5 的函式層級表親**：golden 的 file-scope `SplitStrByDotSpaceOnly`
+  與 port 早有的同名全域（`cpublic.h:25`／`cpublic.cpp:465`）**本體不同**
+  （對空白的處理不一樣）；直接寫 `static` 會撞
+  `declared 'extern' and later 'static'`。已改名 `SD_SplitStrByDotSpaceOnly`。
+  **先前的陛阱 #5 都是類別層級（`TMyKitSuck`／`LAST_GENERAL_SET`），這是第一個函式層級的。**
+
+  ✅ **符號集歷來最乾淨**：零 `ht9045_sm`、零 `ht9045_io`、零 motor／db。
+  `Cylinder[]` 全檔零引用（`mycylin.cpp` 在 `ht9045_io`，`add_library` 在 `:1044`）；
+  `mycylin.h` 只用來取 `MaxCylinderItem` 巨集。
+
+- **前一顆**：`FW3-MES1`——**新建** `forms/fMesSystem.h`（706 行）／
   `forms/fMesSystem.cpp`（597 行）＋ `CMakeLists.txt` 註冊（+26 行，純 CRLF 2708/2708）。
   **17/46 個本體／337 of 3,349 span 行**。**兩側 gate GREEN，連續第十個乾淨 gate**。
   詳見 20260827 XVIII。
