@@ -700,6 +700,21 @@ add_library(ht9045_forms STATIC
     forms/fPassword.cpp
     forms/fRotate.cpp
     forms/fAOI.cpp
+    # AI(W906-FW3-IOSV1) 20260827: iosetview facade (golden iosetview.cpp, class
+    # Tfiosetview -- 5 of 65 methods, the read-only display slice).  Belongs in
+    # ht9045_forms, measured with nm --undefined-only on the compiled .o: the
+    # ONLY undefined non-runtime symbols are TTLCfg / TestIF_File (cprod.cpp:44/:31)
+    # and _8Bit/_10Bit/_10BitPE/_10BitPO (cmydef.cpp:217-223) -- all six are live
+    # (gate_depth_map: not inside any #if 0) and all six are ht9045_globals, which
+    # ht9045_forms already links.  ZERO ht9045_sm / ht9045_motor symbols, so this
+    # adds no archive edge.
+    #
+    # NAME NOTE: the class name Tfiosetview is free, but the GLOBAL `fiosetview`
+    # is owned by atester_shims.h:354 (extern TfiosetviewShim *fiosetview, defined
+    # atester_shims.cpp:380) with 5 live callers.  The facade therefore declares
+    # NO global at all -- same resolution as W32's TfTrayMappingForm.  Verified
+    # comment-stripped: zero standalone `fiosetview` identifiers in either file.
+    forms/fIoSetView.cpp
     # AI(W906-W7-F0-fix) 20260728: MOVED here from ht9045_sm -- the 3 AMR-mode
     # predicates forms/fAGV.cpp delegates to.  See the "NO UNDECLARED BACK-EDGE"
     # block above.  File content unchanged (zero behaviour change: same code,

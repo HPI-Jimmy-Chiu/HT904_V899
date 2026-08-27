@@ -14412,9 +14412,112 @@ FAILSET（兩側相同）= 常駐五項
 ```
 `dfm2rc_fidelity` 兩側都直接通過。**pi2b／aoi1／ofs2 連續三次不需重跑。**
 
+## 20260827 XII — FW3-IOSV1：**薄是結構性的**，而 agent 自己更正了一個 absence-claim
+
+### 交付：新建 facade
+
+**新檔** `forms/fIoSetView.h`（703 行）／`forms/fIoSetView.cpp`（203 行），皆 bare-LF、零 U+FFFD。
+**5/65 支 / 190 golden span 行**（golden `iosetview.cpp` 共 65 支，`span_sanity` 65/65、少 0）。
+類別 **`Tfiosetview`**。`CMakeLists.txt` **+15 行**把 `forms/fIoSetView.cpp` 註冊進
+`ht9045_forms`（`:717`），檔案維持**純 CRLF 2642/2642**。
+
+交付的 5 支：`Tfiosetview` ctor（43）／`ResetIndexSuck`（9）／`ResetIndexDestroy`（9）／
+`LabSiteMap`（123）／`strngrdIoTableSelectCell`（6）。
+
+### **薄不是選擇，是結構**
+
+這個表單有 **2,929 個 `__published` 元件宣告，幾乎全部用 `TBtnPanelLane` 與 `TMyLedLane`
+兩個型別——而這兩個型別在 port 樹是零實作**。加上大量真空吸/破壞、馬達 home、
+TTL 起始線、ADAM 直寫、燈號輸出。**59 支 gate + 4 支連宣告都不加，是這個檔的真實形狀。**
+
+### 撞名：shim **只佔全域名、不佔類別名**
+
+`atester_shims.h:348` 有 `class TfiosetviewShim`、`:354` 有
+`extern TfiosetviewShim *fiosetview`、`atester_shims.cpp:380` 有定義，
+且有 **5 個 live caller**（`atester.cpp`／`atester_32Site.cpp`／`aTester_Front.cpp`／
+`aTester_Rear.cpp`／`AutoClean/AutoClean.cpp`）。
+
+**類別名 `Tfiosetview` 是自由的，被佔的是全域 `fiosetview`。**
+處置與 W32 的 `TfTrayMappingForm` 相同：**facade 完全不宣告任何全域**。
+主迴圈剝註解後精確驗證（`(?<![A-Za-z_])fiosetview(?![A-Za-z0-9_])`）：
+**兩檔零命中**，shim 的全域沒被碰。
+
+**這是本戰役第三次撞上 shim 佔用，而形狀每次都不同**：
+W32 是**類別名**被佔（`class TfTrayMapping`）、W34 是**函式名**被佔（四支 `Initial*Task`）、
+本波是**只有全域名**被佔。**開工前的名字檢查要三種都查。**
+
+### agent 自己抓到並更正了一個 absence-claim 錯誤
+
+它原本寫「`bPLCInData` 全樹零命中」。**收工重跑時找到 `MyLaneIo.cpp:101` 的真定義**
+（屬 `ht9045_io`，仍然連不到，所以 gate 結論不變）。
+**它在 banner 就地訂正並保留了錯誤紀錄，沒有靜默改掉。**
+這正是陷阱 #2（absence-claim 會在波內過期、收工要重跑）要的行為——
+而且是它**自己**發現的，不是主迴圈抓到的。
+
+### `TWinControl` 有三份互不相容的定義 → 四支函式**連宣告都不加**
+
+`handlerlog.h:104`／`language.h:79`／`Public/HTEdit.h:140` 各有一份
+（剝註解後驗證）。`SetCompomentIO`／`SetCompomentHint`／`SetPanelToEnable`／`ScanLed`
+四支的參數帶 `TWinControl*`，agent **選擇完全不宣告**（不是 gate），
+理由是「猜錯的宣告會給未來的合併埋雷」。**這是陷阱 #5 的正確處置**——
+與 W32 那 12 支「連宣告都沒有」同一個判準。
+
+### `vclcompat::TControl` 缺 `Name` 屬性，現在是確認的既有限制
+
+`edtPulseDelayMouseDown` 原本計畫 ACTIVE，**`-fsyntax-only` 抓到 `TEdit::Name` 不存在**
+才改 gate。**這與 20260827 XI（OFS2）的 `TfOffSetEdit::Name` 是同一個缺口**
+（`vclcompat/Controls.h:183` 那個 `Name` 屬於 `TFont`）。兩波各擋掉一支，
+**可以當成已確認的 vclcompat 缺口記著**。
+
+### 交付與未交付的差異依據
+
+`btnAllVacuumClick`／`btnC_Load_UpClick`～`btnC_Auto6_SelectorClick` 共 9 支寫
+`Cylinder[]`／`bIndexSuck`／`bIndexDestroy`，**驅動下一個 `Timer1Timer` tick 的真空硬體** → 排除。
+而**已交付的 `ResetIndexSuck`／`ResetIndexDestroy` 往同一組陣列寫的是 `false`（解除方向）**
+——那是兩者唯一的差異依據，agent 明講了這一點。
+
+### 明講沒做的（「沒被排除」不等於「查過而且安全」）
+
+- **`FormShow`（788 行）與 `BtnPanelClick`（221 行）沒有逐行讀**：名字已落在必退類別，
+  但**其內部是否還有其他機台動作未編目**。agent 明講了這個區別。
+- 2,929 個元件裡只查了 5 支 ACTIVE 實際用到的約 20 個名字。
+- `TWinControl` 三方衝突、`BtnPanelLane.h`／`MyLedLane.h`／`butPa1.h`／`ALed.hpp` 移植、
+  `aHotPlateSubstrate.h` vs `mykitsuck.h` 選頭檔問題——全部留給後續波次。
+
+### 主迴圈的獨立複驗
+
+自己編 `.o`：**0 error / 0 warning**。未定義非執行期符號**只有 6 個**
+（`TTLCfg`／`TestIF_File` → `cprod.cpp:44/:31`；`_8Bit`／`_10Bit`／`_10BitPE`／`_10BitPO`
+→ `cmydef.cpp:217/221/219/223`），**逐個用 `gate_depth_map` 驗過皆 live，且逐個確認
+不是 `extern` 宣告行**（XI 那次我就因為沒排除 `extern` 差點誤報成連結破）。
+六個全屬 `ht9045_globals`，**零 sm/motor 符號，不新增 archive 邊**。
+
+**而 Debug build 完成本身就是更強的證明**：`build_iosv1g/build.log` 295,799 B，
+**所有 test exe 都連結成功**——那正是 FW3-PI2 當初缺的一步
+（archive 建成功不證明符號解得到，連 exe 才證明）。
+
+### 驗收：兩側 GREEN，連續第四個乾淨 gate
+
+```
+_iosv1_gate_g.txt           _iosv1_gate_done.txt
+G_TOTAL=5                   R_TOTAL=5
+G_EXTRA=  (空)              R_EXTRA=  (空)
+G_VERDICT=GREEN             R_VERDICT=GREEN
+FAILSET（兩側相同）= 常駐五項
+```
+**pi2b／aoi1／ofs2／iosv1 連續四次不需重跑。**
+
 ### 🔖 RESUME（20260827 清晨 · 第四版）
 
-- **本段最後一顆**：`FW3-OFS2`——`forms/fOffSet.{h,cpp}` 再長到 **388+814 行**，
+- **本段最後一顆**：`FW3-IOSV1`——**新建** `forms/fIoSetView.{h,cpp}`（703+203 行）
+  ＋`CMakeLists.txt` 註冊（`:717`／`ht9045_forms`）。**5/65 支 / 190 golden span 行**。
+  **兩側 gate GREEN，連續第四個乾淨 gate**（pi2b／aoi1／ofs2／iosv1 皆不需重跑）。
+  詳見 20260827 XII。**薄是結構性的**：該表單 2,929 個元件宣告幾乎全用
+  `TBtnPanelLane`/`TMyLedLane` 兩個零-port 型別。
+  **shim 佔用第三種形狀**：只佔全域名 `fiosetview`、不佔類別名 `Tfiosetview`
+  （W32 是類別名、W34 是函式名）——**開工前三種都要查**。
+
+- **前一顆**：`FW3-OFS2`——`forms/fOffSet.{h,cpp}` 再長到 **388+814 行**，
   **3 支 / 290 golden 行**（golden `cOffSet.cpp` 共 64 支）。**兩側 gate GREEN，
   連續第三個乾淨 gate**（pi2b／aoi1／ofs2 皆不需重跑）。詳見 20260827 XI。
   兩個關於**驗證工具本身**的教訓：(a) `ht9045_forms` 是 static archive，
