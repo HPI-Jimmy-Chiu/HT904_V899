@@ -14507,9 +14507,107 @@ FAILSET（兩側相同）= 常駐五項
 ```
 **pi2b／aoi1／ofs2／iosv1 連續四次不需重跑。**
 
-### 🔖 RESUME（20260827 清晨 · 第四版）
+## 20260827 XIII — FW3-OCR1：3/82，並撿到**第四種** shim 形狀（TU-local seam ＋ `#define`）
 
-- **本段最後一顆**：`FW3-IOSV1`——**新建** `forms/fIoSetView.{h,cpp}`（703+203 行）
+### 交付
+
+`forms/fOCR.h` **+105/-1**（142 行）／`forms/fOCR.cpp` **+110/-0**（122 行），皆 bare-LF、零 U+FFFD。
+**3 支 `TfOCR::` 方法（＋ctor）**：`IsOCRCommandTrigger`／`CheckOCRWordType`／`InitInsp`。
+`forms/fOCR.cpp` 已註冊在 `CMakeLists.txt:673`（`ht9045_forms`），**本波未改 CMakeLists**。
+
+**分母要講清楚**：golden `OCR.cpp` 有 **88 個函式本體 ＝ 82 個 `TfOCR::` 成員 ＋ 6 個
+file-scope static**，`span_sanity` 88/88、少 0。所以是 **3/82（3.7%）**，不是 3/88。
+
+**agent 讀完全部 88 個本體才決定**（含每一支 `*Click`／`*Change`／`*MouseDown`／`*Timer`），
+因為排除必須來自讀本體而不是看名字。極薄的原因是這個檔壓倒性是通訊與硬體：
+**38 支 `__published` VCL event handler、16 支序列/socket 通訊、9 支檔案 I/O、
+3 支模擬 UI（驅動 `MOT[MMOCR]`／`Cylinder[C_OCRLight_Up]`／`SW[SwOCRTigger]`）**。
+
+### 第四種 shim 形狀：**TU-local seam ＋ `#define` 改名**
+
+`OCRInsp.cpp:293-361` 有 `class W906OCR_TfOCRSeam`，並在自己的 include 之後
+`#define fOCR W906OCR_fOCR`。**那正是陷阱 #1 的第五種形狀（TU-local stand-in）**——
+本波交付的 3 支在那裡有**硬寫的替身**。
+
+前三種形狀都在本戰役出現過：
+W32 **類別名**被佔（`class TfTrayMapping`）／W34 **函式名**被佔（四支 `Initial*Task`）／
+IOSV1 **只有全域名**被佔（`fiosetview`）。**現在加上第四種。開工前四種都要查。**
+
+`OCRInsp.cpp` 自己的 banner 指名「landing golden `OCR.cpp` 的那一波」該退役這個 seam，
+但 agent **沒有越界**（硬規則是 append-only 到 `forms/fOCR.{h,cpp}`），只當交接回報。
+**所以本波交付的 3 支目前是 inert 的——seam 攔在前面，零呼叫者。**
+
+### 一個零寫入者欄位的判斷，以及它與 AOI1 的層級差異
+
+`IsOCRCommandTrigger` 與 `CheckOCRWordType` 讀 `IniConfig.iOCRTriggerMode` 與
+`.asOCRWordType`，而**這兩個欄位全樹零寫入者**（agent 量到，**主迴圈獨立掃描確認 0 個寫入點**）。
+
+**但層級與 20260827 X（AOI1）那 4 支不同**：
+- AOI1：零寫入者門檻讓 `counter >= threshold` **恆真** → fail 旗標**永遠被打開** → **必須排除**。
+- 本波：只是模式檢查落回 **golden 自己設計的 fallback**，**而且目前 inert**。
+
+**判準仍是「後果會不會被別的模組消費」**（同 20260827 XI 的 `TfOffSetEdit::Name`）。
+⚠ **但退役 `OCRInsp.cpp` 的 seam 是行為變更**，屆時必須先確認這兩支的值
+**仍與 seam 的硬寫替身相符**。已進佇列。
+
+### 又一次「純 append」措辭不精確——**同一形狀第三次**
+
+agent 報「pure append, no existing line altered」，但 `git diff --numstat` 是 `.h` **+105/-1**。
+被刪的是 `virtual void ChangeLightValue(int, int);` 那一行宣告。
+**主迴圈開檔確認：它只是在類別內被移位重排**（現在 `forms/fOCR.h:134`，
+定義仍在 `fOCR.cpp:38`），**沒有遺失**。
+
+**PI2／AOI1／OCR1 三次都出現同一形狀**（AOI1 那次 agent 有主動揭露，另兩次沒有）。
+**結論：不採信 agent 的「純 append」宣稱，一律自己看 `git diff -U0` 的 hunk 標頭
+與 `--numstat` 的刪除數。**
+
+### 忠實保留的 golden quirk
+
+`CheckOCRWordType` 的迴圈邊界是 **`<=` 而不是 `<`**（golden `OCR.cpp:2507`），
+於是會讀 `iOCRWordCount + 1` 個字元去比對一個「有幾個字元」的計數。
+**照翻並就地註解，未修。**
+
+### 主動標出、但未翻的全域機台/生產狀態寫入者
+
+`ClientSocket1Read`（寫 `bOCRReadOK`／`asBarCode`）／`ClientSocket1Connect`/`Disconnect`
+（`bOCRConnect`）／`ClientSocket2Read`（`bOCROK[]`／`bOCRUser`／`bSignIn`／`asCheckFileName`）／
+`btnOCRSimRunClick`／`tmrOCRSimTimer`／`Backup…`／`Restore…`（`MOT[MMOCR]` tray 資料與
+約 15 個 OCR-flow 全域）／`ProcessTesterCommand`／`InitOcrWithTester`（`sTesterLotId`／
+`bTester_ReceiveOK[]`／file-scope `iOcrWithTesterTask`）／`fOCR_ReadFile`（寫多個 `IniConfig.*`）。
+
+### 主迴圈的獨立複驗
+
+自己編 `.o`：**0 error / 0 warning**。唯一非執行期未定義符號是 **`IniConfig`**
+（`cprod.cpp:50`，先前波次已驗 live、`ht9045_globals`）。
+**零 `ht9045_sm`／`motor`／`io`／`db` 符號。**
+
+### 驗收：兩側 GREEN，連續第五個乾淨 gate
+
+```
+_ocr1_gate_g.txt            _ocr1_gate_done.txt
+G_TOTAL=5                   R_TOTAL=5
+G_EXTRA=  (空)              R_EXTRA=  (空)
+G_VERDICT=GREEN             R_VERDICT=GREEN
+FAILSET（兩側相同）= 常駐五項
+```
+**pi2b／aoi1／ofs2／iosv1／ocr1 連續五次不需重跑。**
+
+### 這一段的整體形狀：薄是真實的
+
+近五波交付分別是 **15/174、3/64、5/65、5/65、3/82**。
+**這不是取捨保守，是剩餘表單的真實構成**——它們壓倒性是機台動作、對外通訊、
+寫檔、以及零-port 的 widget 型別。**大的解鎖全在佇列裡**
+（連結圖變更、write path、seam 退役、`cmydef.cpp:6011` 解閘），**都要等使用者在場**。
+
+### 🔖 RESUME（20260827 · 第五版）
+
+- **本段最後一顆**：`FW3-OCR1`——`forms/fOCR.{h,cpp}` 長到 **142+122 行**，
+  **3/82 支**（golden `OCR.cpp` 共 88 個本體 = 82 個 `TfOCR::` 成員 + 6 個 file-scope static）。
+  **兩側 gate GREEN，連續第五個乾淨 gate**。詳見 20260827 XIII。
+  **shim 佔用第四種形狀**：`OCRInsp.cpp:293-361` 的 TU-local seam
+  `W906OCR_TfOCRSeam` + `#define fOCR W906OCR_fOCR`——**本波交付的 3 支目前是 inert 的**。
+
+- **前一顆**：`FW3-IOSV1`——**新建** `forms/fIoSetView.{h,cpp}`（703+203 行）
   ＋`CMakeLists.txt` 註冊（`:717`／`ht9045_forms`）。**5/65 支 / 190 golden span 行**。
   **兩側 gate GREEN，連續第四個乾淨 gate**（pi2b／aoi1／ofs2／iosv1 皆不需重跑）。
   詳見 20260827 XII。**薄是結構性的**：該表單 2,929 個元件宣告幾乎全用
@@ -14605,8 +14703,16 @@ exit code，於是 **W34 在紅燈上 commit 卻被我記成綠燈**。已工具
      即可解**——那是主迴圈的 CMakeLists 工作，**屬連結變更，要單獨一顆 commit 與單獨 gate**。
    - `LoadHaltAndPauseSelectStatusName`(70) 卡在 **vclcompat 沒有 `TSpeedButton::Hint`**，
      擴 `vclcompat/Controls.h` 是 `forms/FormWidgets.h` 明文禁止範圍。
-2. **新表單 facade**（依 `coverage_probe --form` 的「無」由大到小）：
-   `fAOI.cpp`(7709)／`AutoAlignment`(7398)／`HS_Function.cpp`(4999)／`rs232.cpp`(4538)。
+2. **下一波最便宜的候選（facade 已註冊，append 即可，不需動 CMakeLists）**：
+   `AutoClean/uCleaning.cpp`（golden 2366 行，`forms/fCleaning.{h,cpp}` 目前 36+14，
+   已註冊在 `CMakeLists.txt:662`）。⚠ **避開 `btnResetCleanCountClick`**——
+   它綁在佇列中的 `(SEC1)` gate 上，要與那個 gate 同波才能動。
+   **需新建 facade + 主迴圈註冊的**：`Mes/fVATMesFileSys.cpp`(3292)／
+   `ATC/ATC_Handler_Side.cpp`(3135)／`PMAlarm/PMAlarmInterFace.cpp`(2374，類別
+   `TfPMAlarmInterFace`，現樹無任何宣告）／`adam6024.cpp`(2050，`TfAdam6024`）／
+   `HS_Function.cpp`(4999，`TFormHS`）。
+   ⚠ `AutoTeach/InOutArmZteach.cpp`（教導值）與 `AutoAlignment`（對位動作）**屬佇列類**；
+   `rs232.cpp` 有對外命令通道。`fAOI.cpp` 已於 20260827 X 開波（15/174）。
    ⚠ `AutoTeach/InOutArmZteach.cpp`（教導值）與 `AutoAlignment`（對位動作）**屬佇列類**；
    `rs232`／`fAOI` 有對外命令通道，取批先切唯讀面。
    ⚠ **避開** `main.cpp`／`note.cpp`／`uhome.cpp`／`Magazine.cpp`／`cSortCT.cpp`／`cContact.cpp`
@@ -14626,7 +14732,11 @@ exit code，於是 **W34 在紅燈上 commit 卻被我記成綠燈**。已工具
 4. **`grep` 找到字串只證明文字存在，不證明編譯器看得到**（本樹上千個 `#if 0`）。
 5. **regex 訊號掃描會漏掉真正危險的東西**——必須實際開本體讀完。
 6. **「宣告但不定義」的 gate 有邊界**——ACTIVE 本體呼叫 gated 本體 = 無條件 undefined reference。
-7. **shim 佔用有兩層**：類別名（W32）與函式名（W34）。開工前先查名字有沒有被佔。
+7. **shim 佔用有四種形狀，開工前四種都要查**：
+   **類別名**（W32 `class TfTrayMapping`）／**函式名**（W34 四支 `Initial*Task`）／
+   **只有全域名**（IOSV1 `fiosetview`，類別名反而是自由的）／
+   **TU-local seam + `#define` 改名**（OCR1 `W906OCR_TfOCRSeam`）——
+   最後一種的後果是交付物 **編得過、連得上、卻零呼叫者**（陛阱 #1 的第五種形狀）。
 8. **`-fsyntax-only` 綠證明不了連得起來**（W35 的 `fLan`；PI1 的 sm/motor 連結邊界）。
    **每個新引用的外部符號都要問「本體在哪個 .cpp、那個 .cpp 在 CMakeLists 嗎」。**
 9. **驗收工具本身要先能分辨「沒有失敗」與「還沒寫完」**（`gateverdict.sh` 第一版就犯了）。
@@ -14646,6 +14756,10 @@ exit code，於是 **W34 在紅燈上 commit 卻被我記成綠燈**。已工具
     逐名列進排除清單，而 `SetPISTime`／`SetInsertOPIDStr` 根本只設欄位／寫 widget。
     **agent 翻了、主動揭露、交回裁決——那是對的流程；靜默覆寫才不是。**
 
+13. **不採信 agent 的「純 append」宣稱**——PI2／AOI1／OCR1 **三次同形狀**
+    （AOI1 那次 agent 有主動揭露，另兩次沒有）。`git diff --stat` **區分不了**
+    尾端附加與檔中插入。一律自己看 `git diff -U0` 的 hunk 標頭與 `--numstat` 的刪除數。
+
 **主迴圈被 agent 推翻前提三次、分母給錯九次。**
 派工裡那句「**我給的數字是轉述的，你自己重量一次**」仍然是最有價值的一句話。
 
@@ -14662,6 +14776,10 @@ X-01～X-06 + SLK loader 接線 + IO 波次；
 **`cmydef.cpp:6011` 的 `#if 0` 解閘**（會讓 `bEnableInarmSuckZAuto`／`bEnableOutarmSuckZAuto`
 等一批全域從「有文字但編譯器看不到」變成真的存在——**行為變更，單獨一波**，
 解開後 `GATE (PI2-G1)` 那三支才能翻）；
+**退役 `OCRInsp.cpp:293-361` 的 `W906OCR_TfOCRSeam`**（退役後 FW3-OCR1 交付的 3 支
+才會真的被呼叫；**屬行為變更**，而且必須先確認
+`IniConfig.iOCRTriggerMode`／`.asOCRWordType`（**全樹零寫入者**）算出的值
+仍與 seam 的硬寫替身相符）；
 `Command.cpp` 的 7 支 write-path 方法（含 `WriteHandlerTestArmEncoder`／`WriteHandlerTestArmEP`）
 ——**實測它們早已翻完並連結**，是否恰當**留給使用者裁決，不要自行處置**。
 
