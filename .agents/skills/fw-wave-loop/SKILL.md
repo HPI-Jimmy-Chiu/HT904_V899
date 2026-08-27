@@ -28,6 +28,21 @@ description: HT9045 V906 DFM→WEB 戰役（FW CAMPAIGN）的自動波次政策�
 5. **web 專屬 gate**：e2e 探針（`tools/webprobe`）不與 ctest 並行（WB_TcpLink 撞埠）；
    `wb_publish`/`wb_serve` 一律 `--dry`；收工比對 `D:\HT9045\system` MD5+mtime；
    JS 無編譯器把關→防禦式渲染＋誠實回報「渲染回歸靠人工 F5」。
+5b. **驗收 gate 一律用 `tools/dualgate.sh <tag>`（序列版），不要用 `dualgate2.sh`。**
+   `dualgate2` 已於 20260827 停用：它把 Debug ctest 疊在 Release build 上，實測把
+   `dfm2rc_fidelity` 從單獨跑 565.94s（Debug，通過）／355.37s（Release，通過）
+   推過 600s 逾時，**兩側都假紅**，而換到的加速只有 2m25s／37m43（6%）。
+   保留該檔只為留紀錄。**「多出 dfm2rc_fidelity 就重跑」不是解法，那是在替這個根因打補丁。**
+   ⚠ 這條原本只活在會漂移的心跳提示文字裡（提示說 dualgate2、腳本檔頭說別用它），
+   20260828 才落到這份 skill。判定一律由 `tools/gateverdict.sh` 給：
+   **`ctest` 對任何失敗數都回 exit 8，exit code 零鑑別力**，只看
+   `*_VERDICT` 與 `*_EXTRA`／`*_ABSENT`，並比對**失敗集合逐項**等於常駐五項。
+5c. **gate 執行期間不准改任何進入建置的檔**（原始碼與 CMakeLists）。
+   20260828 實測代價：波次 agent 在 gate 起跑 26 分鐘後回頭修正自己的行號引用，
+   當時 Release 正在編譯 → 物件是改動前後的混合，**整次量測作廢重跑**。
+   波次 agent 是在「它的檔案停止變動」時才算結束，**不是在它說結束時**。
+   啟動 gate 前一刻記下交付檔 mtime，收工用 `build_<tag>g/cfg.log`（**起跑**錨點，
+   不是 sentinel 寫入時刻）比對；任何一個較新就作廢。
 6. **選標的**：照計畫書 §4 佇列順序（FW-0 基建 → FW-1 tag 接線 → FW-2 產生器 →
    FW-3+ 表單波），每波開工以「使用頻率 × 唯讀可完成度」重評；單波 golden ≤15k 行，
    大表單切塊；`Command.cpp`（TfMain）記表單帳。
