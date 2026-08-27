@@ -144,6 +144,39 @@ def _span_sanity_helpers():
     return _prefix_exec('span_sanity.py')
 
 
+DEFN_LINE = re.compile(r'(?<![A-Za-z0-9_])(\w+)::(~?\w+)\s*\(')
+
+
+def overload_sets(text, strip_comments):
+    """name -> [line numbers], for names defined more than once at column 0.
+
+    census's `functions()` stores results in a dict keyed by `Class::name`, so a
+    C++ OVERLOAD SET collapses to a single entry and the golden denominator is
+    silently short.  Found 20260827 on golden ATC/ATC_Handler_Side.cpp, which
+    defines ChangeRecipe twice -- `(AnsiString)` at :1920 and
+    `(AnsiString, double)` at :1927, both real independent bodies -- and which
+    census therefore reports as 168 bodies when column-0 definition lines number
+    169.
+
+    This is the FIRST of the census defects that understates the GOLDEN side;
+    the four earlier ones all understated the port side.  For census's own
+    percentages the effect largely cancels, because an overload pair collapses
+    on both sides -- but it stops cancelling the moment only one overload is
+    translated, and it always understates a wave's denominator.
+
+    census.py is deliberately left alone (changing functions() would break
+    comparability with every historical number).  This is a read-only warning.
+    """
+    out = {}
+    for i, ln in enumerate(strip_comments(text).splitlines()):
+        if ln[:1] in (' ', '\t') or not ln.strip():
+            continue
+        m = DEFN_LINE.search(ln)
+        if m:
+            out.setdefault('%s::%s' % (m.group(1), m.group(2)), []).append(i + 1)
+    return dict((k, v) for k, v in out.items() if len(v) > 1)
+
+
 def port_files():
     out = []
     for dp, dns, fns in os.walk(ROOT):
@@ -214,7 +247,20 @@ def main():
             w('       %-46s :%d-%d' % (k, b[k][0], b[k][1]))
         w('    Use the stripped count, and say so in the wave brief.')
     else:
-        w('    clean -- the denominator below can be quoted as-is.')
+        w('    clean -- no brace swallowing.')
+
+    # --- 1b. overload collapse ---------------------------------------------
+    ov = overload_sets(text, strip_comments)
+    extra = sum(len(v) - 1 for v in ov.values())
+    w('    overload check: %d name(s) defined more than once, %d body(ies)'
+      % (len(ov), extra))
+    w('                    hidden by census keying its dict on the name')
+    if ov:
+        for k in sorted(ov):
+            w('       !! %-40s lines %s' % (k, ', '.join(str(x) for x in ov[k])))
+        base = len(b) if lost else len(a)
+        w('    ** TRUE DENOMINATOR IS %d BODIES, not %d. Quote the larger one.'
+          % (base + extra, base))
 
     # --- 2. inventory -------------------------------------------------------
     use = b if lost else a

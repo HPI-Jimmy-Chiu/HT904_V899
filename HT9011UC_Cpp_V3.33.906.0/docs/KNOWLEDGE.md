@@ -312,6 +312,42 @@ CMakeLists.txt:50-53 寫「shipped MN200DLL.lib 是 32-bit OMF、MinGW 無可用
 vendor DLL 依賴），真連結可行≠該退役 stub；改註解/接真 lib 屬設計取捨，動之前讀
 docs/RECON_MN200_PISO.md。另：x64 SDK 與 x86 同批同版（1.0.18.1，exports 各 192）。
 
+## census 的 dict key 讓 **C++ 重載塌陷**，golden 分母被靜默低估（20260827，FW3-ATC1 撿到）
+
+`census.py` 的 `functions()` 把結果存進以 `Class::name` 為 key 的 dict。
+**C++ 重載集因此只留下一個**——同名、不同參數的兩個真實本體，會被算成一個。
+
+實例（波次 agent 先發現，主迴圈獨立驗證）：
+golden `ATC/ATC_Handler_Side.cpp` 定義了兩次 `ChangeRecipe`——
+`:1920` 的 `ChangeRecipe(AnsiString)` 與 `:1927` 的 `ChangeRecipe(AnsiString, double)`，
+**兩個都是真實獨立本體**。`functions()` 只回一個 key（保留 `:1927` 那個），
+於是回報 **168 支**，而欄位 0 的定義行實數是 **169**。
+
+**這是 census 第五種量尺缺陷，也是第一個低估 golden 側的。**
+前四種（註解裡的括號吞併／刻意寄放他檔／檔名比對/本體搬到別的 port 檔）都是低估 port 側。
+
+### 影響範圍要講精確
+
+- **對 census 自己的百分比**：影響**大致相抵**——重載在 golden 與 port 兩側都會塌陷，
+  分子分母一起少。**但只要有一個重載被翻、另一個沒翻，就不再相抵**，
+  而且那正好是最需要量準的情況。
+- **對波次分母**：**一定低估**。派工單寫「X/168」而真值是 169。
+
+### 處置
+
+`tools/census/wave_preflight.py` 的 `[1]` 區塊加了 overload check：
+剝註解後數欄位 0 的 `Class::name(` 定義行，同名出現多次就報出行號，
+並直接印出 `TRUE DENOMINATOR IS n BODIES, not m`。
+
+**census.py 一樣不動**——改 `functions()` 會讓所有歷史數字失去可比性，
+而上一次「修好」census 的嘗試算出過 parked > gcode 與 35,289 行的假 credit。
+
+### 回歸結果（有價值，不是形式）
+
+拿 overload check 回頭掃先前三波的 golden 檔：
+`AutoClean/uCleaning.cpp`、`OCR.cpp`、`HS_Function.cpp` **各 0 個重載**。
+所以已 commit 的分母 **72／88／66 全部不受影響，不需要回溯更正**。
+
 ## `gate_depth_map` 只模型化 `#if 0`，**不評估巨集**（20260827，波次開工工具化時撿到）
 
 census 的 `gate_depth_map` 回答的是「這一行在不在 `#if 0` 之類的死區塊裡」。
