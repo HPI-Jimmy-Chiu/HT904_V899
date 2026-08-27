@@ -103,10 +103,21 @@ def main():
     site_re = re.compile(r'\b(%s)\s*->' % '|'.join(re.escape(g) for g in sorted(globs)))
     decl_re = re.compile(r'\b(?:extern\s+)?\w+\s*\*\s*(%s)\s*[;=]'
                          % '|'.join(re.escape(g) for g in sorted(globs)))
+    # A facade can exist WITHOUT declaring the global.  cSpeed.cpp is the case
+    # that forced this column: forms/fSpeed.h is 1,093 lines across two prior
+    # waves, and both deliberately withheld `extern TfSpeed *fSpeed;` because the
+    # one known consumer (cprod.cpp:2656-2662) is itself #if 0-gated.  Reporting
+    # that file as "global FREE, go build a facade" would have sent a wave at a
+    # target already worked twice, whose remaining 47 methods are write-path.
+    # "Nobody declared the global" and "no facade exists" are different facts.
+    classes = dict((cls, g) for g, (_rel, cls) in cands.items())
+    class_re = re.compile(r'\bclass\s+(%s)\b'
+                          % '|'.join(re.escape(c) for c in sorted(classes)))
 
     live = dict((g, 0) for g in globs)
     gated = dict((g, 0) for g in globs)
     owner = dict((g, []) for g in globs)     # port files declaring the global
+    facade = dict((g, []) for g in globs)    # port files declaring the CLASS
 
     # --- ONE pass over the port tree ---------------------------------------
     nfiles = 0
@@ -127,6 +138,8 @@ def main():
             s = strip_comments(raw)
             for m in decl_re.finditer(s):
                 owner[m.group(1)].append(rel)
+            for m in class_re.finditer(s):
+                facade[classes[m.group(1)]].append(rel)
             if '->' not in s:
                 continue
             lines = s.splitlines()
@@ -141,7 +154,8 @@ def main():
         # a declaration inside forms/ that we wrote is ours, not an occupation
         ours = [o for o in own if o.startswith('forms/')]
         free = not own
-        rows.append((gated[g], live[g], free, bool(ours), g, cls, rel, own))
+        fac = sorted(set(facade[g]))
+        rows.append((gated[g], live[g], free, bool(ours), g, cls, rel, own, fac))
 
     rows.sort(key=lambda r: (-r[0], -r[1], r[6]))
 
@@ -155,19 +169,25 @@ def main():
     w()
     w('%-34s %-26s %6s %5s  %s' % ('golden .cpp', 'global', 'gated', 'live', 'global owner'))
     w('-' * 96)
-    for gt, lv, free, ours, g, cls, rel, own in rows:
+    for gt, lv, free, ours, g, cls, rel, own, fac in rows:
         if gt < min_gated:
             continue
-        if free:
-            st = 'FREE  <-- facade may declare it'
+        if free and fac:
+            st = 'global free BUT FACADE EXISTS: ' + ', '.join(fac[:2])
+        elif free:
+            st = 'FREE, no facade  <-- greenfield'
         elif ours:
             st = 'ours: ' + ', '.join(own[:2])
         else:
             st = 'TAKEN by ' + ', '.join(own[:2])
-        w('%-34s %-26s %6d %5d  %s' % (rel[:34], g[:26], gt, lv, st))
+        w('%-30s %-24s %6d %5d  %s' % (rel[:30], g[:24], gt, lv, st))
     w()
     w('READ THIS AS:')
-    w('  gated>0 AND global FREE  -> best: un-gating later binds to your class')
+    w('  gated>0 AND FREE, no facade -> best: greenfield, un-gating binds to you')
+    w('  "global free BUT FACADE EXISTS" -> someone already worked this file and')
+    w('     chose NOT to declare the global. READ THEIR REASON before overriding;')
+    w('     cSpeed.cpp is 1,093 facade lines over two waves with 47 write-path')
+    w('     methods left, and it looked FREE until this column existed.')
     w('  gated>0 AND global TAKEN -> those reserved names are UNREACHABLE until')
     w('                              the shim is retired (a queued behaviour change)')
     w('  gated=0                  -> nobody is waiting; translation coverage only')
