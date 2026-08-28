@@ -149,6 +149,12 @@ typedef vclcompat::TLabel TfMainTrayPanel;
 // Was: struct TfSortCTPanel { AnsiString Caption; };
 typedef vclcompat::TPanel TfSortCTPanel;
 
+// AI(W906-FW3-PIGSV) 20260829: golden TPanel* --
+// fProductionInfo->pn_ErrorMsg_HALTStatus (ProductionInfo.h:77),
+// pn_ErrorMsg_PauseStatus (:105).  兩個都是真的 TPanel，
+// 而且目前只用到 Caption（golden ProductionInfo.cpp:2743-2744）。
+typedef vclcompat::TPanel TfProductionInfoPanel;
+
 // golden TComboBox* -- fLotInfo->cbRunMode (uLotInfo.h:307), cbProcess (:470);
 // fMain->cbSetupFileName (main.h:875).  All 3 genuinely TComboBox.
 // NOTE: ->Visible's `false` default is LOAD-BEARING -- ainarm_SearchPlacePlate

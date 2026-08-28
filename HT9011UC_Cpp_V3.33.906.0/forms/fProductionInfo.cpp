@@ -62,6 +62,9 @@ TfProductionInfo::TfProductionInfo() : sLoadMO_TestFlow("") {
     // in-class default member initializers instead (forms/fBinSel.h
     // precedent), so only the pointer member needs a line here.
     edInsertOPID_HALT = new TfLotInfoEdit();
+    // AI(W906-FW3-PIGSV) 20260829: 同一個 ctor-body `new` 慣例。
+    pn_ErrorMsg_HALTStatus  = new TfProductionInfoPanel();
+    pn_ErrorMsg_PauseStatus = new TfProductionInfoPanel();
 }
 // Offline: the real body refreshes the production-info form's per-tray IC-count
 // display (golden ProductionInfo.h:377); there is no headless equivalent, so this
@@ -1050,5 +1053,67 @@ void TfProductionInfo::UpdateControlBinCount(bool bClear)                       
             memcpy(&OldControlBinCategory.iCountCategory[0][0][0][0], &NowControlBinCategory.iCountCategory[0][0][0][0], sizeof(NowControlBinCategory));
         }
     }
+}
+//---------------------------------------------------------------------------
+
+// =============================================================================
+//  AI(W906-FW3-PIGSV) 20260829: GetStringBySeparatedValues（golden :2733-2770）。
+//  這是 FW3-PICTL 那一批裡剩下的第九支，**從來不是連結問題**：
+//  它卡在 `ShowMyMessage`（警報/對話框）需要逐案判斷。本次判定可翻：
+//
+//   * 安全軸 -- 它**只讀檔**（`LoadFromFile`），不寫檔、不動機台、
+//     不送對外命令。同檔的 bEnableIPSC 已經在用 FileExists，同一等級。
+//   * `ShowMyMessage` 在本 port **不是彈窗**，是觀測接縫
+//     （canary_support.cpp:143-157：記錄 S1、計數、printf、呼叫選用 hook）。
+//     這一點是查過才用的——**背景批次跑的程式不可有 modal 彈窗**，
+//     否則會卡死 ctest 且 log 完全沒紀錄。它也是四個既有例外之一，
+//     本檔自 ba3683e 起就在 ht9045_sm，連得到。
+//
+//  ⚠ MEASURED BEHAVIOUR NOTE -- `bShow` 在本 port 恆為 false（見 .h 的欄位註解），
+//    因為 golden 只在 **FormShow**（.cpp:164/:169）把它設為 true，而 FW 戰役
+//    刷意不接線 event handler。所以**寫 Caption 的那條分支目前不可達**，
+//    錯誤路徑一律走 ShowMyMessage。這與 golden 的 ctor 初始值一致，是忠實的；
+//    但它是**主動選了一條分支**，不是「無作用」，所以寫在這裡而不藏起來。
+//
+//  ⚠ 本支仍然**沒有呼叫者**（golden 呼叫點在未翻的 OEE 流程）。
+// =============================================================================
+
+AnsiString TfProductionInfo::GetStringBySeparatedValues(AnsiString sFullFileName,AnsiString sItemValue,AnsiString sSeparatedValues)
+{
+    TStringList *slSourceFile;
+    AnsiString sDataList="";
+    AnsiString sGetString="";
+
+    if(sFullFileName=="" || FileExists(sFullFileName)==false)
+    {
+        if(bShow)  //Sam 20200225 : OEE 功能防呆保護提示顯示在畫面，不要用 MessageBox。
+        {
+            pn_ErrorMsg_HALTStatus->Caption = "File Name Error!";
+            pn_ErrorMsg_PauseStatus->Caption = "File Name Error!";
+        }else
+        {
+            ShowMyMessage("File Name Error!");
+        }
+        return sGetString;
+    }
+
+    slSourceFile=new TStringList();
+    slSourceFile->LoadFromFile(sFullFileName);
+    for(int i=0; i<slSourceFile->Count; i++)
+    {
+        int iPos=-1;
+        int iStart=-1;
+
+        sDataList=slSourceFile->Strings[i];
+        iPos=sDataList.Pos(sItemValue+sSeparatedValues);
+        iStart=sItemValue.Length()+sSeparatedValues.Length()+1;
+        if(iPos==1)
+        {
+            sGetString=sDataList.SubString(iStart,sDataList.Length());
+            break;
+        }
+    }
+    delete slSourceFile;
+    return sGetString;
 }
 //---------------------------------------------------------------------------

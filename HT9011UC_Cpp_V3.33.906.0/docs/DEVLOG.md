@@ -16904,7 +16904,89 @@ FW3-PI1 `LINK-BOUNDARY EXCLUSIONS` 區塊——它逐條列出的正是這 9 支
   **安全軸擋住，而安全軸不因連結解開而放寬**。
 - 沒有動 `tests/CMakeLists.txt:3246` 的 600 秒，沒有動任何端點防護設定。
 
-# 🔖 RESUME（20260829 · 第二十二版）
+## 20260829 II — FW3-PIGSV 驗收：`GetStringBySeparatedValues`，**ProductionInfo 這一批收完**
+
+```
+G_TOTAL=5  G_EXTRA=  G_ABSENT=  G_VERDICT=GREEN   (Debug,   00:56:48)
+R_TOTAL=5  R_EXTRA=  R_ABSENT=  R_VERDICT=GREEN   (Release, 01:15:21)
+```
+
+**連續第二十一個乾淨 gate。**
+
+golden `.cpp:2733-2770` / `.h:243`，38 行。
+`forms/fProductionInfo.cpp` 1054 -> **1119**；`forms/fProductionInfo.h` 337 -> **353**（3 欄位 ＋ 1 宣告）；
+`forms/FormWidgets.h` **+1 typedef**（`TfProductionInfoPanel` = `vclcompat::TPanel`，363 行）。
+自檢 `rc=0／0 error`、**vendor 標頭 `Motor/HTMotor.h` 以外零 warning**；三檔 UTF-8 無 BOM、CR=0、零 U+FFFD。
+
+### 它卡的從來不是連結
+
+FW3-PICTL 那一波把同批九支裡的八支翻完，**只留下這一支**——
+而它留下的理由**不是可達軸**（可達軸早就通了），是**安全軸上的 `ShowMyMessage`（警報／對話框）需要逐案判**。
+本次判定，兩條依據：
+
+1. **它只讀檔**。`LoadFromFile` 是讀，不寫檔、不動機台、不送對外命令。
+   同檔的 `bEnableIPSC` 早就在用 `FileExists`，同一等級。
+2. **本 port 的 `ShowMyMessage` 不是彈窗，是觀測接縫**
+   （`canary_support.cpp:143-157`：記錄 `S1`、計數、`printf`、呼叫選用 hook）。
+   ⚠ **這一點是查過才用的，不是假設**——
+   **背景批次跑的 Windows 程式不可以有 modal 彈窗**，它會卡死 ctest 而且 log 完全沒有紀錄。
+   若它真的是 `MessageBox`，這一支就該繼續留 gate。
+
+### ⚠ 值從哪來：`bShow` 恆為 false，而那是**主動選了一條分支**
+
+golden 的錯誤路徑有兩條：`bShow` 為真時寫兩個面板的 `Caption`，為假時呼叫 `ShowMyMessage`。
+本 port 的 `bShow` **恆為 false**，因為：
+
+- golden 在 **ctor**（`.cpp:52`，設定處 `:55`）給 `false`；
+- golden 在 **`FormShow`**（`.cpp:164`，設定處 `:169`）才給 `true`；
+- 而 **FW 戰役刻意不接線 event handler**，`FormShow` 本波也根本沒翻。
+
+所以本 port 停在 `false` **正是「表單從未被顯示」的忠實狀態**，與 golden 的 ctor 初始值一致。
+**但後果要寫明**：寫 `Caption` 的那條分支**目前不可達**，錯誤路徑一律走 `ShowMyMessage`。
+這是「0 值**主動命中**一條分支」，不是「無作用」——已寫進 `.h` 的欄位註解與 `.cpp` 的函式 banner，**不藏起來**。
+
+### 共用標頭的風險由 gate 回答
+
+`forms/FormWidgets.h` 是多個 facade 共用的標頭。本次只加一個 typedef（additive），
+但「應該不會壞」不是驗收——**Debug build 走完、失敗集合逐項等於常駐五項，才是**。
+
+### 環境
+
+| 測試 | Debug | Release |
+|---|---|---|
+| `dfm2rc_fidelity` | 147.91s | 150.67s |
+| `dfm2rc_idempotent` | 7.94s | 7.72s |
+| ctest 總時間 | 473.23s | 449.15s |
+
+### 驗收紀律
+
+- **§5c**：三檔 md5 ＋ mtime 與 `_pigsv1_baseline_mtimes.txt` 全同（**00:38:56**），
+  早於 gate 起跑錨點 `build_pigsv1g/cfg.log` = **00:39:53**。
+- **`D:\HT9045\system`**：`compare _sysguard_before_pigsv1.json <after>`
+  -> **`IDENTICAL: 552 files, bytes and mtime all unchanged`**，rc=0。**連續第三波真 before/after。**
+
+### `TfProductionInfo` 這一批的總結
+
+| 波次 | 內容 | golden 行數 |
+|---|---|---|
+| `FW3-PIOEE` (`8754f86`) | OEE 報表三支 | 267 |
+| `FW3-PICTL` (`6cc6842`) | Control-Bin / IPSC 八支 | 191 |
+| `FW3-PIGSV` (本波) | `GetStringBySeparatedValues` | 38 |
+| **合計** | **12 支** | **496** |
+
+**而這一切的前提是 `ba3683e`**——把 `forms/fProductionInfo.cpp` 從 `ht9045_forms` 搬進 `ht9045_sm`。
+在那之前，這 12 支全部卡在同一道連結牆上。**一次連結圖變更換到 496 行 golden 的可翻空間。**
+
+⚠ **仍然留 gate 的，是被安全軸擋住的**，而安全軸**沒有因為那次搬移而放寬一分**：
+`LoadMOInformation`(309 行，**寫檔／寫 ini**)、`CheckOEE_WhenStart`(83 行，**送命令／上傳**)。
+**可達不等於可翻**——這一批從頭到尾都在示範這件事。
+
+### 刻意沒有做的事
+
+- **沒有接線**：這 12 支在本 port **都沒有呼叫者**，所以整批**不改變任何執行期行為**。
+- 沒有動 `tests/CMakeLists.txt:3246` 的 600 秒，沒有動任何端點防護設定。
+
+# 🔖 RESUME（20260829 · 第二十三版）
 
 - ✅ **`FW3-BTQ1` 已於 20260828 XI 驗收並 commit**（gate `btq2`，**兩側 GREEN**，
   失敗集合逐項等於常駐五項，**連續第十七個乾淨 gate**）。

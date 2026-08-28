@@ -247,6 +247,18 @@ public:
     int iLastArmSiteBinQty[2][MAX_SOCKET_ROW][MAX_SOCKET_COL][TEST_MAX_BIN] = {};   // [DATA] golden :437
     int iNowSiteBinTotalQty[TEST_MAX_BIN] = {};                                     // [DATA] golden :438
 
+    // ---- AI(W906-FW3-PIGSV) 20260829: GetStringBySeparatedValues 所需 ----
+    TfProductionInfoPanel *pn_ErrorMsg_HALTStatus;   // [DATA] golden :77  (TPanel*) -- Caption only
+    TfProductionInfoPanel *pn_ErrorMsg_PauseStatus;  // [DATA] golden :105 (TPanel*) -- Caption only
+    bool bShow = false;                 // [DATA] golden :367
+                                         //   ⚠ 值從哪來：golden 在 **ctor**（.cpp:52，設定處 :55）
+                                         //   給 false，在 **FormShow**（.cpp:164，:169）給 true。
+                                         //   FW 戰役的設計是 event handler 翻譯但不接線，
+                                         //   而 FormShow 本波根本未翻，所以本 port 恆為 false。
+                                         //   這與 golden 的 ctor 初始值**一致**，是「表單從未被顯示」
+                                         //   的忠實狀態。**後果：下方那條寫 Caption 的分支目前不可達**，
+                                         //   錯誤路徑一律走 ShowMyMessage。寫明而不藏起來。
+
     // ---- read-only / field-only-write methods (golden .cpp span; golden .h decl) ----
     void OEE_SetMO(AnsiString sMO);                                          // golden .cpp:364-367    .h:205
     void OEE_SetHandlerID(AnsiString sHDID);                                 // golden .cpp:374-377    .h:206
@@ -295,6 +307,10 @@ public:
     void ClearArmSiteBinQty();                                               // golden .cpp:4442-4458
     bool bIsNeedCheckControlBin();                                           // golden .cpp:4582-4598
     void UpdateControlBinCount(bool bClear);                                 // golden .cpp:4768-4798
+    // AI(W906-FW3-PIGSV) 20260829: 同批的第九支。它不是因為連結而待翻，
+    // 而是因為走 ShowMyMessage（警報/對話框）需逐案判；已判定可翻，見 .cpp 註解。
+    AnsiString GetStringBySeparatedValues(AnsiString sFullFileName, AnsiString sItemValue,
+                                          AnsiString sSeparatedValues);      // golden .cpp:2733-2770  .h:243
 
     TfProductionInfo();
     virtual ~TfProductionInfo() {}
