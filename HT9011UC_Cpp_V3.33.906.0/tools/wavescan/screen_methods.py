@@ -74,6 +74,21 @@ RISK = [
     # ——**那是運氣，不是覆蓋**。
     ('跨表單寫欄位', r'\bf[A-Z]\w+\s*->\s*\w+\s*=(?!=)'),
     ('SECS/GEM 事件回報', r'\bEventReport\s*\(|\bSECS_EVENT\b'),
+    # 20260829 五次加強：讀 golden 本體時拓到的六類漏網
+    #（TFormHS 最小的 11 支裡至少 7 支本來會被判成乾淨）：
+    #   CloseWindowsKeyboard      WinExec("taskkill.exe ...")   <- 執行外部程式殺行程
+    #   Check_RecordFolder        ForceDirectories(...)          <- 建目錄（舊樣式只有 MyForceDirectories）
+    #   RecordGroundManLog_HS     WriteDataToFile(...)           <- 舊樣式是 `WriteFile(`，拓不到衍生名
+    #   RTMServerSocketClientRead SendText(...) / fMain->RTMCommand->Add(...)
+    #   ATC_FFCTrigger            ATC_InterfaceForm->ChannelFFCTrigger(...)
+    #                             <- 跨表單樣式寫死 `f[A-Z]`，這個全域以 `A` 開頭
+    #   *SocketClientError x3     socket Close()/Open()
+    ('執行外部程式', r'\bWinExec\s*\(|\bShellExecute\w*\s*\(|\bCreateProcess\w*\s*\('),
+    ('建目錄', r'\bForceDirectories\s*\(|\bCreateDir\w*\s*\(|\bMkDir\s*\('),
+    ('寫檔（衍生名）', r'\b\w*WriteData\w*\s*\(|\b\w*WriteLog\w*\s*\('),
+    ('socket 送出/開關', r'\b\w*Socket\w*\s*->|\bSendText\s*\(|\bSendBuf\s*\('),
+    ('跨表單呼叫（非 f 開頭的全域）', r'\b[A-Z]\w*(?:Form|Interface)\w*\s*->\s*\w+\s*\('),
+    ('跨表單容器寫入', r'\bf[A-Z]\w+\s*->\s*\w+\s*->\s*(?:Add|Clear|Delete|Insert|Assign)\s*\('),
 ]
 
 fn, cls = sys.argv[1], sys.argv[2]

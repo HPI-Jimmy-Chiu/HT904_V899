@@ -17304,6 +17304,74 @@ if(StrBuff.Pos("OFF")!=0) { ...                    // 依內容分支
 ⚠ **開工時仍要逐支開 golden 讀本體**。這三層漏斗是把明顯的擋掉，
 **不是把「讀原始碼」這一步取消掉**——今晚兩次抽驗各中一次，就是證據。
 
+## 20260829 VII — 第五輪加強：**毛額不是淨額**，`TFormHS` 的可翻面積是 5,125 行裡的 281 行
+
+VI 算出 19 支的派工清單之後，我照自己寫下的規矩**逐支開 golden 讀本體**
+（「三層漏斗只擋掉明顯的，不取代讀原始碼」）。先讀最小的 11 支，**11 支裡至少 7 支不該翻**：
+
+| 方法 | 本體實際做的事 | 為何漏掉 |
+|---|---|---|
+| `CloseWindowsKeyboard`（4 行） | `WinExec("taskkill.exe /im \"OSK.exe\" /f", SW_HIDE)` — **執行外部程式殺行程** | 沒有 `WinExec` 樣式 |
+| `RecordGroundManLog_HS`（28 行） | `WriteDataToFile(...)` — **寫檔** | 樣式是 `\bWriteFile\s*\(`，抓不到衍生名 |
+| `Check_RecordFolder`（18 行） | `ForceDirectories(...)` — **建目錄** | 樣式只有 `MyForceDirectories` |
+| `RTMServerSocketClientRead`（14 行） | `SendText("Status:00,...")` **對外送出**；`fMain->RTMCommand->Add(...)` **跨表單容器寫入** | 兩者都無樣式 |
+| `ATC_FFCTrigger`（15 行） | `ATC_InterfaceForm->ChannelFFCTrigger(...)` — **ATC 硬體觸發** | 跨表單樣式寫死 `f[A-Z]`，此全域以 `A` 開頭 |
+| `HandlerClientSocketError` 等 3 支 | socket `Close()` / `Open()` | 無樣式 |
+
+### 第五輪：六條樣式（每條都先用真實 golden 片段做過探針）
+
+```python
+('執行外部程式',            WinExec / ShellExecute* / CreateProcess*)
+('建目錄',                  ForceDirectories / CreateDir* / MkDir)
+('寫檔（衍生名）',          \w*WriteData\w* / \w*WriteLog\w*)
+('socket 送出/開關',        \w*Socket\w*\s*-> / SendText / SendBuf)
+('跨表單呼叫（非 f 開頭）', [A-Z]\w*(?:Form|Interface)\w*\s*->\s*\w+\s*\()
+('跨表單容器寫入',          f[A-Z]\w+->\w+->(?:Add|Clear|Delete|Insert|Assign)\()
+```
+
+⚠ 寫法紀律（VI 那次踩過）：**全部用 `chr(92)` 明確組反斜線、不經 heredoc**，
+而且**寫檔前先用真實 golden 片段對每條樣式跑探針**——六條全部命中才寫入。
+「插入成功」不是驗收，**樣式真的匹配到它宣稱要抓的東西**才是。
+
+### 完整漏斗（五輪加強後）
+
+| 層 | 支數 | 備註 |
+|---|---|---|
+| golden `TFormHS` 方法定義 | **65** | RESUME 寫的是 66 支／5,125 行 |
+| 真正缺（已翻 14＋別類 2） | **49** | |
+| 安全軸乾淨（第四輪後） | 35 | |
+| **安全軸乾淨（第五輪後）** | **17** | 六條新樣式再抓掉 18 支 |
+| 兄弟封包乾淨 | **15** | |
+| **∩ 真正缺 = 可翻** | **4（281 行）** | `Check_FileFolderByFTP`(159)／`GetUploadServerByFTPPath`(70)／`RecordRunState`(47)／`RTMServerSocketClientDisconnect`(5) |
+
+### 這一節真正的教訓：**RESUME 的標的規模是毛額，不是淨額**
+
+RESUME §四 把這個標的寫成「`HS_Function.cpp`（66 支／5,125 行）」，
+於是它在佇列裡看起來像一塊大肉。**實際可翻的是 281 行，約 5.5%。**
+
+而原因**早就寫在我要擴充的那個檔的第 18 行**：
+
+```
+forms/fHS.h:18  TFormHS is the handler's OUTBOUND-DATA-AND-ATC-CONTROL hub
+```
+
+**這個類別本身就是對外資料與 ATC 控制的樞紐**——在「唯讀優先、write path 是安全關鍵」的
+戰役規則下，它天生就是壞標的。我讀到過那一行（20260829 V 引用過它旁邊的 `:65`），
+**但沒有給它應有的權重**：它不是背景說明，它是**這個標的的產出上限**。
+
+**選標的的規則要改**：佇列裡的「支數／行數」是 golden 毛額，
+**開波前先跑一次五層漏斗拿淨額**，再決定值不值得。
+一支 350 行的 `GetTempUseNamevalue` 看起來很肥，但它被 `RecordLog_HS` 的封包牽連
+——而毛額數字完全看不出這件事。
+
+### 刻意沒有做的事
+
+- **沒有翻那 4 支。** 281 行是一個合法但很小的波；
+  **在花一次 40 分鐘的 gate 之前，應該先用同一套漏斗量一下另外兩個候選**
+  （`ATC/ATC_Handler_Side.cpp`、`Mes/fVATMesFileSys.cpp`）的**淨額**，再決定先做哪一個。
+  這正是上面那條新規則的第一次適用。
+- 沒有動 `Automation/SCK_ART_Remainder.h` 的 Gate #17 stand-in（20260829 V 已說明理由）。
+
 # 🔖 RESUME（20260829 · 第二十三版）
 
 - ✅ **`FW3-BTQ1` 已於 20260828 XI 驗收並 commit**（gate `btq2`，**兩側 GREEN**，
