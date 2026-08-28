@@ -17594,6 +17594,76 @@ TfYieldMonitoring  26 -> 安全軸乾淨 **3**（ChangeData / edContactCountFTCh
   它與計畫書 `:116`／設計文件 `:4` 不一致，但**20260826 使用者的常設指示又說 write path 屬佇列**。
   兩者衝突，**這不是我能自己裁掉的**——留給使用者，見下一節 RESUME。
 
+## 20260829 XI — 把 X 標為「沒做」的那件事做掉：`uLotInfo` 的「已提及」是 **EXIT REGISTER**
+
+X 的結尾寫著：那 106 支／11,359 行「facade 已提及但無 GATE 行內標記」是**目前最大的未知**，
+而我只用四個 facade 樣本推論過一次，**不該用推論交差**。這一節把它查掉。
+
+### `forms/fLotInfo.h`（2,277 行）的結構是三種名冊
+
+```
+WAVE SCOPE     -- 已交付的方法，逐支附狀態（REAL / 哪幾行 gated）
+GATE REGISTER  -- 被 gate 的（本檔 45 個具名 GATE）
+EXIT REGISTER  -- read whole, exited whole, with the deciding golden line.
+                  No empty shell was produced for any of these; they are simply absent.
+```
+
+**第三種就是答案。** EXIT REGISTER 共 **6 個區塊、42 支方法**，每一支都附**做決定的那一行 golden**，
+分成四類——**而這四類就是戰役的安全邊界本身**：
+
+```
+A. WRITES A FILE / INI / PERSISTED COUNTER
+B. SENDS AN OUTBOUND COMMAND (FTP / SECS / TCP / RS232 / Vision COM)
+C. DRIVES THE MACHINE / SWITCHES A MODE / RAISES AN ALARM
+D. DEPENDENCY ABSENT (would require a cross-file shim -- forbidden here)
+```
+
+實例（逐支都有行號，這裡摘幾條）：
+
+| 方法 | 決定它的那一行 |
+|---|---|
+| `btnSaveClick` | `:7271-7297` **WriteIniData x17** into `AuthPath+"Security_new.def"` |
+| `btnManualI49Click` | `:15918-15920` WriteIniData x3 into `Contact.Data`（**contact height**） |
+| `ClearAllSetupFile` | `:11866` **DeleteDirectory**、`:11886` WriteLastDataFN |
+| `_DelTree` | `:2352/:2358/:2363` **RemoveDir/DeleteFile** |
+| `AlarmCodeUpload` | `:13290` SaveToFile，然後 `:13297` **FTP upload** |
+| `coLevelModeChange` | `:9913` CheckAndReadIniData ——**具名陷阱**：`common.cpp:602-603` 在鍵不存在時**把它寫回去** |
+| `ReadWriteFTPAutomationData` | `:12401-12409` `ReadWriteIni(...,bRead=false)` x9 into `config.ini` |
+
+⚠ 特別注意 `coLevelModeChange` 那一條：**一個名字看起來像「讀設定」的呼叫，
+在鍵不存在時會把鍵寫回檔案**。這正是本樹反覆記載的
+「一個讀起來像讀、其實會寫的路徑」（20260828 V 的 `ProcessLastSetIni_Visible` 同型）。
+**寫下它的人是逐行讀出來的，不是靠關鍵字掃描**——EXIT REGISTER 的 A 類第一條甚至自陳
+「這是關鍵字掃描漏掉的那一個」。
+
+### 所以 X 的結論成立，而且證據升級了
+
+X 說「FW-3 唯讀面已耗盡」，當時的支撐是三個 facade 的抽樣。
+現在最大的那一片（`uLotInfo`，11,359 行）**逐支查過**：
+它們不是未做的工作，是**整支讀完、整支退出、附 golden 行號的判定**，
+而退出理由**全部落在 A/B/C/D 四類安全邊界內**。
+
+⚠ 仍要誠實標明範圍：**只有 `fLotInfo.h` 有 EXIT REGISTER**（6 個區塊）；
+其餘六個 FW-3 facade 是 **0 個**。它們的「已提及」數量小得多
+（`cStartCondition` 27、`cConfiguration` 12、`HandlerSys` 11、`cTemperFrom` 10、
+`cSetUp` 9、`cSpeed` 4、`uYieldMonitoring` 1，合計 74），
+**我沒有逐支查那 74 支**，只知道七個 facade 合計有 **160 個具名 GATE**。
+把它們也查完是下一件唯讀工作。
+
+### 這一節沒有改變任何結論，但改變了它的地位
+
+X 的「唯讀面已耗盡」原本建立在**四個樣本**上。現在最大的一塊是**普查**的。
+**差別在於：抽樣支持的結論可以被下一個檔推翻，普查過的那一塊不會。**
+（今晚已經有三次是抽樣結論被推翻——VIII 被 IX、IX 的範圍被 X。）
+
+### 刻意沒有做的事
+
+- **沒有查其餘六個 facade 的 74 支「已提及」**——那是下一件事，不是這一節的宣稱。
+- **沒有翻那 4 支剩餘的乾淨方法**（`strngrdAutoSaveLogMouseDown`／`ChangeData`／
+  `edContactCountFTChange`／`mtBinSelectYieldMouseDown`）——要先讀本體，
+  而其中三支是 `*MouseDown`／`*Change`，很可能撞上 `fLotInfo.h:180` 記載的
+  樹寬 gate「**fQwertyKey has no port**」。
+
 # 🔖 RESUME（20260829 · 第二十四版）
 
 - ✅ **`TfProductionInfo` 整批收完**（12 支／496 golden 行）：
