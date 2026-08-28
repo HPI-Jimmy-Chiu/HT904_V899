@@ -16031,6 +16031,24 @@ R_TOTAL=5   R_EXTRA=(空)   R_ABSENT=(空)   R_VERDICT=GREEN
 只看暖啟動會說「機器有問題」，只看 in-gate Release 會說「沒事」，
 只看 in-gate Debug 會說「測試壞了」。**擺在一起才看得出來是哪一個組合出事。**
 
+### 兩個被否證的假設（記下來，免得下一個人重查）
+
+130 秒 → 454 秒這個成長，**不是管線變大**。查過兩條路，兩條都乾淨地被否證：
+
+1. **「FW 波次一直往 `web/forms/` 加 `*.layout.json`，fidelity 會逐一比對它們」** —— **否證**。
+   `tools/dfm2rc/run_b1d.py` 的 fidelity 路徑對 `web/forms`／`emit_web` **零命中**；
+   那些 layout 是 `web_layout_idempotent` 這顆測試在管的，不是 fidelity。
+   （現有 78 個 `*.layout.json`，與 fidelity 無關。）
+
+2. **「20260817 的 `c69ccb5` 在 `regenerate_all()` 加了一個 uimap 重生成階段」** —— **有加，但量太小**。
+   那個階段確實落在 fidelity 與 idempotent 共用的核心裡，
+   但 canon 樹裡 `*_uimap.gen.h` **只有一個**（`rc_out/main_uimap.gen.h`），
+   而 `emit_uimap.py` 是純 Python、**零行程生成**。它只跑一次，解釋不了三倍多的成長。
+
+**排除這兩條之後，剩下的解釋仍是環境**：那顆測試對 133 個表單各生成一次
+`windres` ＋ `cmd` ＋ `gcc -E`（直接觀測到），而每個新行程都要過兩套端點防護。
+`run_b1d.py` 自 2026-07-28 的基準 commit 起只從 612 行長到 631 行，**管線本身幾乎沒動**。
+
 📌 **還有一件待辦**：BTQ1 讓六則位於 `#if 0` 上方的散文註解變成假的
 （`atester_ProcessCount.cpp:1479`、`Command.cpp:9175`／`:15247-15249`、
 `cBinSel.cpp:18`／`:1414`／`forms/fBinSel.h:358`、
