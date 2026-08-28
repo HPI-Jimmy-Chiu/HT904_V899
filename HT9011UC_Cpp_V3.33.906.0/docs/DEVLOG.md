@@ -17764,6 +17764,69 @@ FW-3 唯讀可翻譯面 = 0
 - **沒有碰 `bPass[]`／`bOpenShort[]`**（bin 路由）——生產設定，安全相鄰。
 - **沒有為了湊出「還有東西可做」而放寬任何一條判準。**
 
+## 20260829 XIV — 把 XIII 的範圍補完整：`adam6024` 與 `PMAlarmInterFace`
+
+X/XI/XII/XIII 的「FW-3 唯讀面 = 0」明文只涵蓋計畫書 §4 的批次，
+並把 `adam6024.cpp` 與 `PMAlarm/PMAlarmInterFace.cpp` 標為**沒量、不列入結論**。這一節量掉。
+
+兩者**都沒有 facade、也都沒註冊在 CMakeLists**——是真正的 greenfield（要新建 facade ＋ 動 CMakeLists）。
+
+| 標的 | golden 方法 | 已在別的 port 類別 | 真正缺 | 安全軸乾淨 |
+|---|---|---|---|---|
+| `adam6024.cpp` / `TfAdam6024` | **7** | 5（54 行） | **2 / 48 行** | — |
+| `PMAlarm/PMAlarmInterFace.cpp` / `TfPMAlarmInterFace` | **78** | 5（110 行） | **73 / 2,374 行** | **56** |
+
+（RESUME 記的「adam6024 有 48 個本體、41 個是 file-scope」與這裡一致：**類別方法只有 7 支**。）
+
+### `PMAlarmInterFace` 的 56 支不是「可做的工作」
+
+**零消費者的宣稱是別人的 absence claim，會過期，所以我自己驗了**：
+
+- **port**：`PMAlarmInterFace` 的命中只有 `PMAlarm/PMAlarmSystem.cpp:106-109` 的**註解**
+  （而且那段明講它引用的是 **a DIFFERENT class's method**）＋ dfm2rc 的產生物。
+  **程式碼零消費者，宣稱成立。**
+- **golden**：6 個檔用它（`HT9045.cpp`／`main.cpp`／`PMAlarm/fMain.cpp`／
+  `PMAlarmMainForm.cpp`／`PMAlarmShowData.cpp`）——**但那些消費者在 port 也全都沒翻**。
+
+**所以它不是「既有子系統裡的缺口」，是一整個在 port 完全不存在的子系統。**
+只翻介面表單，等於蓋一座橋的中段：2,374 行落地後**沒有任何東西會呼叫它，
+它要呼叫的兄弟表單也不存在**。
+
+⚠ **這是一個範圍決定，不是一個波次決定**：要不要把 PM Alarm 這個子系統整個 port 進來，
+屬於使用者的判斷，**不是我在夜間可以自己開的**。
+
+### 第七輪加強：FTP client 物件
+
+`DownloadFromServer`（golden `:2470-2498`）建構 `TfFTP`、`Connect()`、`DownloadFilterFile()`
+——**活的網路 I/O**，卻被判成乾淨。舊的「送命令/上傳」樣式只認 `Upload*`／`SendCommand*`，
+**沒有涵蓋 client 物件本身，也沒有涵蓋下載方向**。
+新增 `('FTP client 連線/下載', TfFTP|TNMFTP|Download*File*|CheckLocalFilePath)`，
+正向 3 個探針全中、反向 2 個不誤傷。實測 `TfPMAlarmInterFace` **57 -> 56**。
+
+### ⭐ 而這一次，工具是對的、我的懷疑是錯的
+
+我看到 `UpdateToGerneralPMAlarmToCSV` 在乾淨名單裡就起疑——
+「一個叫 `UpdateTo…ToCSV` 的函式若不寫檔，那它在做什麼？」
+**讀完本體：它真的不寫檔。** 本體是把 cell 從 `sgGerneralPMAlarmCheckItem`
+搬到 `sg_GerneralPMAlarmToCSV`，**純 grid 之間的暫存搬運**（那個 grid 只是名字裡有 CSV）。
+
+**這是「名字不是證據」的反面**，而且值得記下來：
+今晚我用「名字可疑就讀本體」抓到四次真漏，**這是第一次讀完發現工具本來就對**。
+**如果只記中的那幾次，會養出「工具總是漏」的錯誤直覺。**
+正確的敘述是：**名字可疑就去讀——結果可能是工具漏了，也可能是名字騙了你。**
+
+### 修正後的範圍陳述
+
+- **計畫書 §4 批次 1–5 的唯讀面 = 0**（普查，X/XI/XII/XIII）。
+- `adam6024`：**2 支 / 48 行**，但需新建 facade ＋ 動 CMakeLists，且該類別只有 7 支方法。
+- `PMAlarmInterFace`：**56 支名義上乾淨，但零消費者且兄弟表單全缺** -> **範圍決定，交使用者**。
+
+### 刻意沒有做的事
+
+- **沒有為 `adam6024` 或 `PMAlarmInterFace` 建 facade**，也沒有動 `CMakeLists.txt`。
+- **沒有翻那 2 支 `TfAdam6024`**——建整個 facade＋註冊，只為了 48 行、且該表單其餘 5 支
+  早已在別的 port 類別裡，投入產出不成比例；**要不要做也該由使用者決定**。
+
 # 🔖 RESUME（20260829 · 第二十五版）
 
 ## ⛔ FW-3 唯讀面 = **0**（普查，非抽樣）。已達 skill 停止條件之一。

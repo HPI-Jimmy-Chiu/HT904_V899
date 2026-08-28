@@ -74,6 +74,13 @@ RISK = [
     # ——**那是運氣，不是覆蓋**。
     ('跨表單寫欄位', r'\bf[A-Z]\w+\s*->\s*\w+\s*=(?!=)'),
     ('SECS/GEM 事件回報', r'\bEventReport\s*\(|\bSECS_EVENT\b'),
+    # 20260829 七次加強：FTP client 物件的連線與下載。
+    #   DownloadFromServer（golden PMAlarm/PMAlarmInterFace.cpp:2470-2498）
+    #   建構 TfFTP、Connect()、DownloadFilterFile() ——**活的網路 I/O**，
+    #   却被判成乾淨：舊的「送命令/上傳」只認 Upload*/SendCommand*，
+    #   沒有涵蓋 client 物件本身，也沒有涵蓋**下載方向**。
+    #   （golden 那支還內含硬編的 FTP 帳密，更不該點亮綠燈。）
+    ('FTP client 連線/下載', r'\bT[fN]\w*FTP\b|\bDownload\w*File\w*\s*\(|\bCheckLocalFilePath\s*\('),
     # 20260829 五次加強：讀 golden 本體時拓到的六類漏網
     #（TFormHS 最小的 11 支裡至少 7 支本來會被判成乾淨）：
     #   CloseWindowsKeyboard      WinExec("taskkill.exe ...")   <- 執行外部程式殺行程
