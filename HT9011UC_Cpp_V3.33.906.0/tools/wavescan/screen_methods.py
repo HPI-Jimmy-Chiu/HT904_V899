@@ -19,9 +19,12 @@ chkHeaterClick、FormClose）。這支把那個動作變成每波開工的第一
    解的是**自由函式索引**；`TFormHS::RecordESDLog_HS` 這種成員方法不在裡面。
    **後果：一個「乾淨」的方法若呼叫了有風險的兄弟方法，會被讀成乾淨。**
    20260829 實例：`RecordLog_HS`（golden HS_Function.cpp:584-645）被列為乾淨，
-   它的本體却呼叫 `RecordESDLog_HS(...)`——而那一支**不在**乾淨名單裡。
-   -> **翻譯前要自己算兄弟呼叫的封包（closure）**：
-      把每一支的本體裡到的 `<類別>::` 兄弟也一併丟進來篩，递迴直到不再增加。
+   它的本體卻呼叫 `RecordESDLog_HS(...)`——而那一支**不在**乾淨名單裡。
+   -> **用 `sibling_closure.py` 算兄弟呼叫的封包（closure）**（同目錄，20260829 新增）：
+      `python sibling_closure.py <golden檔> <類別> <本支印出的乾淨名單...>`
+      它將每一支在類別內能到達的兄弟遞迴展開，碰到一支不在乾淨名單裡就降級。
+      20260829 實測（TFormHS）：**40 乾淨 -> 34 存活、6 降級**；
+      其中 `RecordLog_HS` 遞迴到達 `UpDataToServerByFTP`（**FTP 上傳，對外通道**）。
 
 3. **名字不是證據**。`Get*` 可以寫全域設定（PI2 那則 banner 的
    `GetBinTraySetting`），`Record*Log*` 也可以不寫檔。

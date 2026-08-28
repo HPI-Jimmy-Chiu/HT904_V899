@@ -17062,6 +17062,71 @@ RecordESDLog_HS(sESDLogFile);          <-- 這一支**不在**乾淨名單裡
   而算封包是下一次開工的第一步。
 - 沒有動 `Automation/SCK_ART_Remainder.h:619` 的 Gate #17 stand-in（要建 facade 時才處置）。
 
+## 20260829 IV — `sibling_closure.py`：把「自己算兄弟封包」變成一支工具，並回測今晚的十二支
+
+20260829 III 記下 `screen_methods.py` 的盲點 #2（deep pass 只追自由函式，不追同類別兄弟），
+並寫著「翻譯前要自己算」。**手動習慣會累，所以把它變成工具。**
+
+`tools/wavescan/sibling_closure.py`（103 行，bare-LF）：
+
+```
+python sibling_closure.py <golden檔> <類別> <screen_methods.py 印出的乾淨名單...>
+```
+
+它沿用 `goldenscan.load` / `code_only` 與 `screen_methods.py` 同一套 span 抽法
+（所以同樣避開「註解裡的 `}` 騙過括號配對」與「整段包在 `/* */` 的函式」兩個洞），
+把每支在**類別內**能到達的兄弟遞迴展開，只要碰到一支不在乾淨名單裡就降級。
+
+### 為什麼不直接寫進 `screen_methods.py`
+
+那支的 deep pass **刻意只跟一層**自由函式，它自己的註解寫著理由：
+「兩層以上幾乎全樹染紅，篩選就沒有鑑別力」。
+**兄弟封包是不同的問題**：它被**類別本身框住**（`TFormHS` 是 65 支、`TfProductionInfo` 是 154 支），
+不會擴散到全樹，所以可以算到不動點。兩個問題、兩支工具。
+
+### 量到的：`TFormHS` 的 40 支「乾淨」只有 34 支是真的
+
+```
+summary: 40 given clean -> 34 survive, 6 demoted
+```
+
+| 被降級 | 遞迴到達 |
+|---|---|
+| `RecordLog_HS` | `UpDataToServerByFTP`、`UpDataToServer_KYEC`、`RecordESDLog_HS`、`RecordAutoMotive`、`GetLastFileLogName_HS`、`ClearLastFileLogName_HS` |
+| `CalculateUploadToHostIntervalTimeFunction` | 同上 |
+| `RecordTemperatureLog_HS`／`RecordATCEvenLog_HS`／`RecordArmTestInfoLog_HS` | `RecordAutoMotive` |
+| `RecordChangeLogByLot` | `GetLastFileLogName_HS` |
+
+**`RecordLog_HS` 遞迴到達 FTP 上傳**——在唯讀優先的規則下，那一支絕不能翻成 ACTIVE，
+而單看它自己，`screen_methods.py` 說它乾淨。**15% 的「乾淨」是錯的。**
+
+### 回測今晚落地的十二支：全部存活
+
+| 波次 | 支數 | 結果 |
+|---|---|---|
+| `FW3-PIOEE`（`8754f86`） | 3 | **0 降級** |
+| `FW3-PICTL`（`6cc6842`）＋`FW3-PIGSV`（`9aaffc6`） | 9 | **0 降級** |
+
+**今晚 commit 進去的十二支，全部通過機器版的兄弟封包回測。**
+先前 20260829 III 說「沒有缺口，但那是我手動讀出來的」——**現在有機器背書了。**
+
+### 我自己在這一節犯的兩個錯（都已修）
+
+1. **又印了非 ASCII**。改 docstring 的腳本在「印出舊行」時被 cp950 主控台的
+   `UnicodeEncodeError` 打斷（`\u9012`）。
+   幸好那個 print 在 write 之前，**檔案沒有被改到**——但那是順序運氣，不是設計。
+   **原則 #9（print 一律 ASCII）今天第二次被自己違反。**
+2. **混進兩個簡體字**。20260829 III 那段插入寫了「递迴」與「却呼叫」，
+   在這棵繁體碼庫裡是我製造的雜訊。已改回「遞迴」「卻呼叫」。
+   ⚠ 它們**不是** U+FFFD，所以既有的亂碼檢查抓不到——**編碼乾淨不等於用字乾淨**。
+
+### 刻意沒有做的事
+
+- **`HS_Function` 的波仍然沒開。** 34 支的真實乾淨名單現在有了，但建 `forms/fHS.*`
+  還要先處置 `Automation/SCK_ART_Remainder.h:619` 的 Gate #17 TU-local stand-in，
+  以及 `bthermo.cpp` 的三個 gated 消費點。那是下一次開工的第一步。
+- 沒有把 `sibling_closure.py` 接進 `dualgate.sh` 或任何自動流程——它是開工前的人工步驟。
+
 # 🔖 RESUME（20260829 · 第二十三版）
 
 - ✅ **`FW3-BTQ1` 已於 20260828 XI 驗收並 commit**（gate `btq2`，**兩側 GREEN**，
