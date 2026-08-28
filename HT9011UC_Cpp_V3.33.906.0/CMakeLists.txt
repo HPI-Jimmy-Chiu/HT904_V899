@@ -671,7 +671,10 @@ add_library(ht9045_forms STATIC
     # ht9045_globals only).
     forms/fTrayForm.cpp
     forms/fOCR.cpp
-    forms/fProductionInfo.cpp
+    # AI(W906-FW3-PIMOVE) 20260828: `forms/fProductionInfo.cpp` 已移到
+    # **ht9045_sm** 的來源清單（見該處註記與量測）。
+    # 上面那段 W7-L1-Wave0 的敘述提到它時是當時的實情，**不改寫**；
+    # 它現在的家在 ht9045_sm。
     forms/fFixAICCD.cpp
     # AI(W906-W7-L2) 20260803: 5 new form stand-ins landed by the W7-L2 substrate
     # pass, in front of the golden ckernel.cpp translation.  All five are FIRST
@@ -2696,6 +2699,27 @@ add_library(ht9045_sm STATIC
     forms/fTrayAssignment.cpp
     forms/fMotorTest.cpp
     forms/fTeach.cpp
+    # AI(W906-FW3-PIMOVE) 20260828: 從 ht9045_forms 搬過來（原在 :674）。
+    # 純連結圖變更，**沒有任何 .cpp/.h 內容被改**。
+    # 落點是用 nm 量的（btq2 建出來的 archive），兩個方向都量了：
+    #
+    #  (a) 搬走會不會擱淺別人：它定義 199 個外部符號，
+    #      **ht9045_forms 裡其他所有 object 對這 199 個的引用數 = 0**；
+    #      九個 archive 裡只有 **ht9045_sm 需要 1 個（`_fProductionInfo`）**，
+    #      secsgem/db/core/public/comms/automation/kyecftp/webbridge 全是 0。
+    #      所以這一搬把一個跨 archive 相依（sm -> forms）變成同 archive 解析，
+    #      **不新增任何邊，反而少一條**。
+    #  (b) 搬過來會不會自己連不到：它需要 55 個未定義符號，
+    #      globals 满足 9、vclcompat 满足 10、**只有 ht9045_forms 能满足的只有 1 個：`_fMain`**。
+    #      而 ht9045_sm **顯式** link ht9045_forms（本檔 :2716），所以 `_fMain` 仍然連得到。
+    #
+    # 目的：`TfProductionInfo` 還有 10 支方法卡在「`ht9045_forms` 連不到
+    # `ht9045_sm`」這道邊上（其中 `CalculateOEEReport` 三次解參考 `fObserver`，
+    # golden :805/:806/:813）。搬完之後它們才可能被翻譯成 ACTIVE。
+    # ⚠ **本 commit 只搬來源，不翻任何方法、不解任何 gate。**
+    # ⚠ 安全軸仍然獨立：`LoadMOInformation`（寫檔/寫 ini）與
+    #   `CheckOEE_WhenStart`（送命令/上傳）**即使連結問題解掉也不能翻**（見 DEVLOG 20260828 IX/XII）。
+    forms/fProductionInfo.cpp
 )
 
 target_include_directories(ht9045_sm PUBLIC

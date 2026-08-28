@@ -16631,7 +16631,77 @@ FW3-PI2（20260827）**把 7 支全部讀完並全部排除**，理由正是
 `TfProductionInfo` 的符號**——若有，搬走就會讓那些呼叫端連不到。
 **這個量測還沒做，所以這一波還沒開。**
 
-# 🔖 RESUME（20260828 · 第十九版）
+## 20260828 XIII — FW3-PIMOVE 驗收：`forms/fProductionInfo.cpp` 搬進 `ht9045_sm`
+
+**純連結圖變更，零行為變更**——`CMakeLists.txt` 以外**沒有任何 `.cpp`／`.h` 內容被改**。
+
+```
+G_TOTAL=5  G_EXTRA=  G_ABSENT=  G_VERDICT=GREEN   (Debug,   22:05:27)
+R_TOTAL=5  R_EXTRA=  R_ABSENT=  R_VERDICT=GREEN   (Release, 22:23:43)
+```
+
+**連續第十八個乾淨 gate。** `CMakeLists.txt` 3037 -> 3061 行（+25／-1），純 CRLF。
+
+### 為什麼要搬（不是整潔，是一道連結牆）
+
+`TfProductionInfo` 有 10 支方法卡在「`ht9045_forms` 連不到 `ht9045_sm`」上，
+其中 `CalculateOEEReport` 三次解參考 `fObserver`（golden `:805`／`:806`／`:813`），
+而 `fObserver` 的本體在 `cObserver.cpp`（`ht9045_sm`）。
+**加邊不是選項**：`CMakeLists.txt` 自己記著 `target_link_libraries(ht9045_forms PUBLIC ht9045_sm)`
+**會 configure 失敗**（target cycle）——「所以修法是搬來源」。
+先例：`forms/fContact.cpp`（`CMakeLists.txt:2670`）。
+
+### 動手前把兩個方向都量了（用 btq2 建出來的 archive）
+
+| 問題 | 量測 | 結果 |
+|---|---|---|
+| 搬走會不會擱淺別人？ | `fProductionInfo.cpp.obj` 定義 **199** 個外部符號；`ht9045_forms` 其他 object 的引用數 | **0** |
+| 那別的 archive 呢？ | 九個 archive 逐一比對 | 只有 `ht9045_sm` 需要 **1** 個（`_fProductionInfo`）；secsgem/db/core/public/comms/automation/kyecftp/webbridge **全 0** |
+| 搬過去自己連得到嗎？ | 它需要 **55** 個未定義符號 | globals 滿足 9、vclcompat 滿足 10，**只有 `ht9045_forms` 能滿足的僅 1 個：`_fMain`** |
+| 那 `_fMain` 呢？ | `ht9045_sm` 的 link 清單 | **顯式** link `ht9045_forms`（`CMakeLists.txt:2716`，註解說刻意顯式以免 secsgem 那條邊被收窄時靜默壞掉） |
+
+**淨效果：把一條跨 archive 相依（sm -> forms 取 `_fProductionInfo`）變成同 archive 解析。
+這一搬不新增任何邊，反而少一條。**
+
+⚠ 這些是 `nm` 的靜態量測；**真正的證明是連結器**——Debug 側 GREEN 就是它，
+連結圖變更最可能的失敗模式（undefined reference）沒有出現。
+
+### 驗收紀律逐條
+
+- **§5c**：`CMakeLists.txt` md5 `80160f8c...` 與 `_pim1_baseline_mtimes.txt` 相同，
+  mtime **21:46:47** 早於 gate 起跑錨點 `build_pim1g/cfg.log` = **21:47:49**。
+- **`D:\HT9045\system`**：gate 起跑後 **0 個檔被修改**，全樹最新檔 **2026-08-19 10:06**。
+  ✅ 並且**補上了 btq2 那次漏掉的 snapshot**：`tools/webprobe/system_guard.py snapshot`
+  已存成 `_sysguard_baseline.json`（**證據檔，不 commit**），供下一波做真正的 before/after 比對。
+  ⚠ **檔數口徑不一致，引用時要指明來源**：`system_guard.py` 數到 **552**，
+  PowerShell `Get-ChildItem -File` 數到 **550**（skill 文字寫的也是 550）。差異未查，**不要混用**。
+
+### 一個旁證：configure 時間 24 秒 vs 179 秒
+
+`pim1` 的 cmake configure 只花 **24 秒**（21:47:25 -> 21:47:49），
+而三小時前 `btq2` 的同一份 CMakeLists、同一台機器花了 **179 秒**（20:42:53 -> 20:45:52）。
+差 **7.5 倍**。configure 要讀大量檔案，而 btq2 起跑時還在那個異常波的尾巴。
+**這與 20260828 VIII 的「成本是每檔首次開檔」模型一致**——
+但它是**旁證不是證明**：我沒有在這兩次 configure 期間量 `open()` 延遲。
+
+### 這一搬解開了什麼
+
+`TfProductionInfo` 的 10 支現在**可達**了（`CalculateOEEReport` 與另 9 支：
+`bEnableIPSC`／`GetStringBySeparatedValues`／`GetArmBySiteFor32Site`／
+`CalculateNowArmSiteBinQty`／`CalculateNowTotalICQty`／`ClearArmSiteBinQty`／
+`CalICCountInHandler`／`UpdateControlBinCount`／`bIsNeedCheckControlBin`）。
+
+⚠⚠ **可達不等於可翻。安全軸完全獨立，而且沒有因為這一搬而放寬**：
+`LoadMOInformation`(309) **寫檔/寫 ini**、`CheckOEE_WhenStart`(83) **送命令/上傳**
+——這兩支**永遠留 gate**（20260828 IX／XII）。
+
+### 刻意沒有做的事
+
+- **沒有翻任何方法**，也**沒有解任何 gate**。這一顆 commit 只做連結圖，
+  下一波才翻 `CalculateOEEReport`。**一顆 commit 一件事**，失敗時才歸因得了。
+- 沒有動 `tests/CMakeLists.txt:3246` 的 600 秒，沒有動任何端點防護設定。
+
+# 🔖 RESUME（20260828 · 第二十版）
 
 - ✅ **`FW3-BTQ1` 已於 20260828 XI 驗收並 commit**（gate `btq2`，**兩側 GREEN**，
   失敗集合逐項等於常駐五項，**連續第十七個乾淨 gate**）。
