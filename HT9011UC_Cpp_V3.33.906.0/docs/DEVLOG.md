@@ -17504,6 +17504,96 @@ VIII 說「唯讀面**接近**見底」。**更正：在這三個指定標的上
   錯的是我把它的輸出當成「待辦清單」——**census 的「缺」不是待辦清單**，
   這條 KNOWLEDGE.md 早就寫過，我在另一個工具上又踩了一次。
 
+## 20260829 X — FW-3 的真實狀態：唯讀面**已耗盡**，而 FW-W **早在 20260819 全數落地**
+
+IX 之後我做了一件早該做的事：**把計畫書 §4 的佇列從頭讀一遍**，而不是只看 RESUME 的摘要。
+兩個發現，兩個都推翻了我今晚對使用者說過的話。
+
+### 一、我量錯了對象
+
+計畫書 §4 的 FW-3 優先表是這五批：
+
+```
+批1  Command.cpp（TfMain，9,445 行）      批2  cObserver / uYieldMonitoring / BinDisplay
+批3  cTemperFrom / uTemp_Set / DynamicTemp  批4  uLotInfo
+批5  cConfiguration / cSetUp / cSpeed / cStartCondition / HandlerSys
+```
+
+**我在 VII/VIII/IX 量的三個標的（`HS_Function`／`ATC_Handler_Side`／`fVATMesFileSys`）
+一個都不在這張表裡**——它們來自 RESUME §四的「下一波地圖」，那是波次層清單，不是戰役優先表。
+
+### 二、FW-W 不是「等使用者決定」，它已經做完了
+
+我今晚對使用者說「剩下的大塊在 write path 上，那是你的決定」。**那句話是錯的。**
+
+- 計畫書 `:116`：**「20260819 使用者已裁決核可」**，設計見 `docs/WEBBRIDGE_WRITEPATH_DESIGN.md`；
+  原「不在夜間範圍」條款**由該文件的波次切分 FW-W1~W5 取代**，**只有動真機類指令仍屬佇列**。
+- 設計文件 `:4`：**「取代 DFM2WEB_CAMPAIGN_PLAN.md §7 的『佇列等使用者』條款」**。
+- DEVLOG 自己記著：`FW-W1`(`5e4b30d`)／`FW-W2`(`0553449`)／`FW-W3`(`eb7c4f9`)／
+  `FW-W4`(`4999e2e`)／`FW-W5a`(`83b4251`)／**`FW-W5b`——「write path 設計 §6 波次表全數落地」**。
+
+**write path 五個波次在 20260819 就全部完成了。** 佇列裡剩的只有
+「會動馬達／會寫共用 config 的指令」——那才是真正等使用者、且要真機環境才有意義的部分。
+
+### 三、FW-3 批次 2–5 的實際剩餘（六層漏斗，扣掉已 gated）
+
+| 標的 | 真正缺 | 已 GATE | facade 提及 | **從未提及** |
+|---|---|---|---|---|
+| `Command.cpp`／`TfMain` | **0** | — | — | — |
+| `cObserver`／`TfObserver` | **0** | — | — | — |
+| `uTemp_Set`／`TfTemp_Set` | **0** | — | — | — |
+| `uLotInfo`／`TfLotInfo` | 108／11,494 | 1 | **106／11,359** | 1（`ReadWriteLotInfo`，名字即寫） |
+| `cConfiguration` | 40／1,111 | 0 | 12 | **28／744** |
+| `cStartCondition` | 28／826 | 0 | 27 | 1／5 |
+| `uYieldMonitoring` | 27／440 | 0 | 1 | **26／392** |
+| `HandlerSys` | 13／665 | 2 | 11 | **0** |
+| `cTemperFrom` | 10／268 | 0 | 10 | **0** |
+| `cSetUp` | 9／1,317 | 0 | 9 | **0** |
+| `cSpeed` | 4／251 | 0 | 4 | **0** |
+
+**「從未被 facade 提及」的只集中在兩個檔**，而它們過安全軸之後只剩：
+
+```
+TfConfiguration    28 -> 安全軸乾淨 **1**（strngrdAutoSaveLogMouseDown）
+TfYieldMonitoring  26 -> 安全軸乾淨 **3**（ChangeData / edContactCountFTChange / mtBinSelectYieldMouseDown）
+```
+
+**整個 FW-3 批次 2–5 的剩餘唯讀面 = 4 支方法。** 三個「下一波地圖」標的 = 0 支（見 IX）。
+
+原因在清單內容裡看得很清楚：`SaveConfiguration`／`CheckConfigurationBeforeSave`／
+`SaveSetupFileToConfig`／一整排 `btn*Click`／`cb*Click`／`ed*MouseDown`
+——**這正是計畫書批次 5 自己寫的「唯讀現值展示（寫入留 FW-W）」那一類。**
+
+### 結論（給使用者）
+
+**FW-3 的唯讀翻譯工作實質上已經做完了。** 不是「接近見底」（VIII 的說法），是**見底**。
+而 FW-W 也已經做完。剩下的是：
+
+1. **佇列段**：會動馬達／會寫共用 config 的指令——**要真機環境才有意義**，等使用者在場。
+2. **「facade 已提及」那一大片**（`uLotInfo` 一檔就 106 支／11,359 行）：
+   ⚠ **我沒有逐一讀它們的 banner**。抽樣三個 facade（`fHS`／`fATCHandlerSide`／`fMesSystem`）
+   顯示那些提及是**帶理由的 GATE REGISTER**，但**我不能從三個樣本推論全部**。
+   要確定，得逐檔讀 banner——那是一件我沒做的事，**不要把它當成已知**。
+
+### 我今晚在這件事上錯了三次，形狀一次比一次深
+
+1. **VIII**：以為三個標的淨額 200–280 行 -> 其實它們早就 gated（IX 更正）。
+2. **IX**：以為「唯讀面接近見底」-> 但我量的三個標的**根本不在戰役優先表上**。
+3. **對使用者**：說「剩下的在 write path，那是你的決定」-> **write path 早在 20260819 就核可並做完了**。
+
+三次的共同根因：**我用摘要（RESUME、我自己的 handoff）代替權威（計畫書、設計文件、facade banner）。**
+今晚已經記過「權威：程式碼 banner > RESUME > 我自己的提示」——
+**但我一直沒把「計畫書」放進那條鏈的最上面**，而 skill 檔頭第一句就寫著
+「**細節以計畫書為準，兩邊不一致時以計畫書為準並回頭修這裡**」。
+
+### 刻意沒有做的事
+
+- **沒有開任何波**（那 4 支要先讀本體，且其中含 `MouseDown` 這類「叫小鍵盤」的 handler）。
+- **沒有動 write path 的佇列段**——那是「會動馬達／寫共用 config」，仍屬安全關鍵。
+- **沒有修 `fw-wave-loop` skill §3 的「write path 夜間永不做」**：
+  它與計畫書 `:116`／設計文件 `:4` 不一致，但**20260826 使用者的常設指示又說 write path 屬佇列**。
+  兩者衝突，**這不是我能自己裁掉的**——留給使用者，見下一節 RESUME。
+
 # 🔖 RESUME（20260829 · 第二十四版）
 
 - ✅ **`TfProductionInfo` 整批收完**（12 支／496 golden 行）：
