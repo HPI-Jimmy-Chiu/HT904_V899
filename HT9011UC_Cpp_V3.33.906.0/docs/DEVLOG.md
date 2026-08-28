@@ -17764,7 +17764,56 @@ FW-3 唯讀可翻譯面 = 0
 - **沒有碰 `bPass[]`／`bOpenShort[]`**（bin 路由）——生產設定，安全相鄰。
 - **沒有為了湊出「還有東西可做」而放寬任何一條判準。**
 
-# 🔖 RESUME（20260829 · 第二十四版）
+# 🔖 RESUME（20260829 · 第二十五版）
+
+## ⛔ FW-3 唯讀面 = **0**（普查，非抽樣）。已達 skill 停止條件之一。
+
+```
+已交付           Command.cpp/TfMain 164/164、cObserver、uTemp_Set 全完成
+EXIT REGISTER     42 支（fLotInfo.h 六區塊，四類安全邊界，各附 golden 行號）
+具名 GATE        160 個（七個 FW-3 facade 合計）
+其餘「已提及」    73 支（各帶理由；另 1 支是我的分類器把類別名誤判）
+從未提及且乾淨     4 支 -> **讀完本體後 0 支可翻**
+```
+四支的阻塞理由（20260829 XIII）：`MouseToCell` **未 port**（`vclcompat/StringGrid.h:20` 明文）／
+走 VCL 控制項樹並**接線**／需要整組 widget 欄位＋`Name` 屬性／**寫 bin 路由**（`bPass[]`、`bOpenShort[]`）。
+
+## 🔴 唯一需要使用者的事：**write path 的三方衝突**（我不能自己裁）
+- **計畫書 `:116`**：20260819 已核可；原「不在夜間範圍」條款**由 FW-W1~W5 取代**；
+  **只有動馬達／寫共用 config 的指令仍屬佇列**。
+- **`docs/WEBBRIDGE_WRITEPATH_DESIGN.md:4`**：**取代計畫書 §7 的「佇列等使用者」條款**。
+- **使用者 20260826 常設指示**：write path 屬安全關鍵 -> **佇列，不做也不問**。
+- **`fw-wave-loop` skill §3**：write path **夜間永不做**。
+⚠ **FW-W1~W5b 早已全數落地**（`5e4b30d`／`0553449`／`eb7c4f9`／`4999e2e`／`83b4251`／FW-W5b）。
+⚠ **我沒有動 skill §3，也沒有碰 write path 佇列段。使用者未回覆前維持現狀。**
+
+## 另一件非阻塞的機器層級建議
+**把 build 目錄加進端點防護排除清單**（F-Secure／CrowdStrike）。
+根因已量到底（20260828 VIII）：`open()` **首次觸碰 61 毫秒、第二次 0.1-0.6 毫秒**；
+gate 的「全新目錄」紀律每次把快取弄到最冷（`build_btq1r` 5,512 檔 ≈ 331 秒純 open 延遲）。
+⚠ **`tests/CMakeLists.txt:3246` 的 600 秒沒動，也不該動**——`dfm2rc_fidelity` 基線 ~150 秒，
+預算已是 4 倍餘裕；放寬只是把儀表關掉。
+
+## 六層漏斗（今晚定版）＋它的界限
+`survey_file.py`（真正缺）-> **扣掉 facade 已標 `GATE`** -> `screen_methods.py`（安全軸，
+第四/五/六輪加強後）-> `sibling_closure.py`（兄弟封包）-> ∩ -> **逐支讀 golden 本體**。
+⚠⚠ **漏斗篩掉的是「不該做」；篩不出「做不到」**（能力/架構邊界只有讀本體＋查 port 能力才知道）。
+⚠⚠ **`survey_file.py` 的「真正缺」把 gated 算成缺**——gated 的長相就是「有宣告、沒有本體」。
+⚠⚠ **權威鏈**：**計畫書／設計文件 ＞ facade banner ＞ RESUME ＞ 我自己的 handoff**。
+⚠⚠ **查到 facade 之後要讀它的三種名冊**（WAVE SCOPE／GATE REGISTER／EXIT REGISTER），
+   不是只確認它存在。
+
+## 記錄的標準（抄自 `fLotInfo.h` 的 EXIT REGISTER）
+> **read whole, exited whole, with the deciding golden line.**
+> **No empty shell was produced for any of these; they are simply absent.**
+一個「不做」的決定記到這個程度，下一個人就不必重讀 golden。
+今晚我三次重讀了別人已經讀過的東西——代價在我這邊，不在記錄那邊。
+
+## 工具
+`tools/wavescan/sibling_closure.py`（新增）；`screen_methods.py` 第四/五/六輪加強（+10 條樣式，
+每一條都由一次讀本體抓到的實例觸發）。docstring 記著它**不查**什麼。
+
+
 
 - ✅ **`TfProductionInfo` 整批收完**（12 支／496 golden 行）：
   `FW3-PIOEE` `8754f86`（OEE 三支 267 行）、`FW3-PICTL` `6cc6842`（Control-Bin/IPSC 八支 191 行）、
