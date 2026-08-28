@@ -17127,6 +17127,90 @@ summary: 40 given clean -> 34 survive, 6 demoted
   以及 `bthermo.cpp` 的三個 gated 消費點。那是下一次開工的第一步。
 - 沒有把 `sibling_closure.py` 接進 `dualgate.sh` 或任何自動流程——它是開工前的人工步驟。
 
+## 20260829 V — **更正同日 III／IV**：`forms/fHS.{h,cpp}` 早就存在
+
+III 寫「真要建 `forms/fHS.*` 時必須先處置 Gate #17 的 stand-in」，
+IV 的 commit 訊息寫 "building forms/fHS.* first has to deal with the Gate #17 stand-in"。
+**兩句都預設那個 facade 還不存在。它存在。**
+
+```
+forms/fHS.h    53,104 bytes / 750 行     (mtime 20260827 17:54)
+forms/fHS.cpp  45,960 bytes             (同上)
+CMakeLists.txt:739  forms/fHS.cpp        <- 早已註冊
+```
+
+而且**它的 banner 已經寫下我今晚「發現」的每一件事**：
+
+```
+forms/fHS.h:65   *** THE GLOBAL `FormHS` IS ALREADY TAKEN -- THIS FILE DOES NOT CLAIM IT ***
+          :67    golden HS_Function.h:148 `extern PACKAGE TFormHS *FormHS;`
+          :71-73 Automation/SCK_ART_Remainder.h:625/:629 與 .cpp:382 的 stub
+          :76-80 ⚠ TRAP：`UpDataToServerByFTP` **同時也是** golden TFormHS 自己的方法
+                 （:2119-2169），同名不同物
+```
+
+前一波的解法是**不認領那個全域**——衝突早就處理完了，而且處理得比我打算做的（改名 stub）更輕。
+
+### 我錯在流程順序，不是錯在推理
+
+拿著 RESUME 的標的直接去讀 golden，**卻沒有先問「port 這邊是不是已經有了」**。
+每一步推理都對：Gate #17 的 stub 確實佔用 `FormHS`、確實是不同型別、確實會撞——
+**但那個問題二十天前就被解過，答案就寫在我要擴充的那個檔的開頭。**
+
+**新規則：把「port 是否已有這個 facade」放在讀 golden 之前。**
+`ls forms/f<Name>.*` 加 `grep -n "forms/f<Name>" CMakeLists.txt`，兩個指令。
+這與同日 III 那條「權威：程式碼 banner > RESUME > 我自己的提示」是同一件事的另一面——
+**banner 不只用來否證你的假設，它也可能直接把答案給你，前提是你先去看。**
+
+### `TFormHS` 的真實現況（`survey_file.py`）
+
+| | 支數 | 行數 |
+|---|---|---|
+| golden 方法 | **65** | — |
+| 已翻在別的 port 檔（`forms/fHS.cpp`） | **14** | 989 |
+| 在別的 port 類別 | 2 | 66 |
+| **真正缺** | **49** | **4,052** |
+
+所以下一波是**擴充既有 facade**（append，比照 ProductionInfo 那三波），
+不是 greenfield，也不需要動 `CMakeLists.txt`。
+
+### 兩個仍然成立的偵察結果
+
+III／IV 不是全錯，這兩項照舊：
+
+1. **`sibling_closure.py` 的量測**：`screen_methods.py` 說 40 支乾淨 -> 封包後 **34 支**，
+   其中 `RecordLog_HS` 遞迴到達 `UpDataToServerByFTP`／`UpDataToServer_KYEC`（**FTP 上傳**）。
+   ⚠ 但要注意：那 40 支裡有一部分**本來就已經翻好了**（上表的 14 支），
+   所以「還沒翻又乾淨」的集合比 34 小。**下一波開工要先取交集，不要照 34 這個數字派工。**
+2. `bthermo.cpp:2628/:3941/:5365` 等處的 gated 消費點、
+   以及 `atester.cpp:1604`／`common.cpp:904`／`cprod.cpp:1136` 的**活**消費點都確實存在。
+   ⚠ `cprod.cpp:1136` 的 `FormHS->UpDataToServerByFTP(..., "JamRateDaily")` 是**活的 FTP 上傳呼叫點**
+   ——它綁的是 stub，不是 golden 本體；解那條線是行為變更，**不在翻譯波的範圍內**。
+
+### 一個新的操作教訓（今天付了代價）
+
+量 `FormHS` 使用點時我寫了：
+
+```
+rg -n '(?<![\w_])FormHS(?![\w_])' . 2>/dev/null
+```
+
+回傳**零命中**，我差點當成「沒有使用點」。實際上：
+**`rg` 用 Rust regex，不支援 lookbehind**，樣式根本沒編譯成功——
+而 `2>/dev/null` 把那個錯誤訊息吞掉了。
+
+**吞掉 stderr 之後，「工具失敗」和「沒有結果」長得一模一樣。**
+改用 `\bFormHS\b` 且不吞 stderr，立刻看到 **17 個檔** 有命中，其中 `forms/fHS.h` 8 處
+——那正是這一節的起點。
+**慣例改成：查存在性的指令不要加 `2>/dev/null`。** 空結果必須是「真的空」才有意義。
+
+### 刻意沒有做的事
+
+- **沒有改 `Automation/SCK_ART_Remainder.h` 的 stub 名稱。** 我原本打算改名，
+  但那是為了解一個**已經被解掉的問題**；動它只會製造沒有理由的 diff 與 5 個 TU 的爆炸半徑。
+- **`HS_Function` 的翻譯波仍未開**——下一次開工的第一步是
+  「34 支封包乾淨」∩「49 支真正缺」的交集。
+
 # 🔖 RESUME（20260829 · 第二十三版）
 
 - ✅ **`FW3-BTQ1` 已於 20260828 XI 驗收並 commit**（gate `btq2`，**兩側 GREEN**，
