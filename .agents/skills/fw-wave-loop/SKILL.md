@@ -43,6 +43,25 @@ description: HT9045 V906 DFM→WEB 戰役（FW CAMPAIGN）的自動波次政策�
    波次 agent 是在「它的檔案停止變動」時才算結束，**不是在它說結束時**。
    啟動 gate 前一刻記下交付檔 mtime，收工用 `build_<tag>g/cfg.log`（**起跑**錨點，
    不是 sentinel 寫入時刻）比對；任何一個較新就作廢。
+5d. **開 gate 前先花 20 秒量環境：單獨跑一次 `dfm2rc_idempotent`。**
+   它是純 Python、`do_compile=False`（`run_b1d.py:505`），**零編譯、零 spawn**，
+   所以它量到的就是 **build 目錄的檔案 I/O 成本**。
+   ```
+   build_<tag>r/tests/test_dfm2rc_pipeline.exe idempotent <build_dir>/dfm2rc_regen_idempotent
+   ```
+   **基線 17-25 秒**（128 次 gate 裡 105 次 ≤40 秒）。
+   **≤40 秒 → 環境正常，開 gate；>40 秒 → 正在波中，不要開 gate，等它過去。**
+   20260828 實測：166 秒的一次提問，取代一次 40 分鐘、注定紅的 gate。
+   ⚠ **`dfm2rc_fidelity` 的基線是 ~150 秒，600 秒預算是它的 4 倍。**
+   它偶發的紅燈**不是「預算太緊」**，不要去放寬 `tests/CMakeLists.txt:3246`；
+   那只是把儀表關掉。實測波中真值 635 秒（`RC=0`、133/133、零問題），
+   **只差 35 秒**；而同型的波會**自己過去**（08-27 六連逾時後 08:13 自行恢復）。
+   `idempotent` 跟 `rc_compiles` 合看還能**分辨兩種不同成因的事件**：
+   `rc_compiles` 偏高而 `idempotent` 正常 = **CPU 競爭**（重疊排程、失控行程）；
+   `rc_compiles` 正常而 `idempotent` 爆掉 = **檔案 I/O 風暴**（端點防護 on-access 掃描）。
+   詳見 `docs/DEVLOG.md` 20260828 VII。
+   ⚠ **通則：連續更正四次通常不是運氣差，是基準沒有建立。**
+   沒有基線時，每一個新樣本都會長得像一個新發現。
 6. **選標的**：照計畫書 §4 佇列順序（FW-0 基建 → FW-1 tag 接線 → FW-2 產生器 →
    FW-3+ 表單波），每波開工以「使用頻率 × 唯讀可完成度」重評；單波 golden ≤15k 行，
    大表單切塊；`Command.cpp`（TfMain）記表單帳。
