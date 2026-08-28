@@ -1477,6 +1477,9 @@ void ProcessAutoloadcellMeasureCount()
 //
 //  GATE A -- fTestCategory (golden cTestCategory.h:20-46, TfTestCategory)
 //    Absent: `fTestCategory` has 0 declarations in the tree (the single rg
+//AI(W906-FW3-BTQ1) 20260828: SUPERSEDED -- FW3-BTQ1 新增了 forms/fTestCategory.{h,cpp}，
+//    TfTestCategory 與 fTestCategory 現在都有宣告。下面的 gate 仍是 #if 0，
+//    沒有任何東西因此開始編譯；要解閘另需自行判斷。
 //    hit is a COMMENT in atester_ProcessCount.h:21).  SetTestCateCellINT /
 //    SetTestCateCellAS / SetTestingCateCell / ShowTestCategory / GetTestResult
 //    each return 0 header hits (GetTestResult's 2 hits are unrelated:

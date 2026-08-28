@@ -356,6 +356,7 @@
 //  are this wave's, 20260819, re-run at hand-off per project policy)
 //  -----------------------------------------------------------------------
 //  (G1) ReadFile's `fQAMode->ReadFile();` (golden :1124) -- `grep -rn
+//AI(W906-FW3-BTQ1) 20260828: SUPERSEDED -- FW3-BTQ1 新增 forms/fQAMode.{h,cpp}；此 absence claim 不再成立。
 //       "\\bfQAMode\\b" --include=*.h .` -- 0 hits anywhere in this tree.
 //  (G2) ⚠ OPENED 20260826 (FW-UNGATE-W29) —— 下面這條 absence claim
 //       （標 20260819）**不是過期，是寫下當時就是假的**：cprod.h:1366 的

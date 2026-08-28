@@ -312,6 +312,8 @@ void TfLd_ULd::FormClose()
       //     add_library(ht9045_secsgem); the dependency runs the other way,
       //     ht9045_secsgem links ht9045_forms).
       // (c) MISSING SYMBOL -- fBuilder (no declaration anywhere in this port),
+      //AI(W906-FW3-BTQ1) 20260828: SUPERSEDED -- FW3-BTQ1 新增 forms/fBuilder.{h,cpp}，fBuilder 現在有宣告。
+      //    （此處仍在 #ifdef ASE_KaohSiung 內，而編譯器探針實測該巨集未定義。）
       //     inside #ifdef ASE_KaohSiung.
       //
       // ⚠ THE ONLY NON-MECHANICAL EDIT IN ANY TRANSCRIPT IN THIS WAVE is on

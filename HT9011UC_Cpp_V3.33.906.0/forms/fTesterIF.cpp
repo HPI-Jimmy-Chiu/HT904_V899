@@ -1466,6 +1466,12 @@ void TFTestIF::FormClose(TObject *Sender, TCloseAction &Action)
       // rgStartChannel/cbSignalType/rgBinLogic/rgBinBitLength/rgBinDataType
       // (:1226-1259): no TfDIOFrom class and no fDIOFrom global exist in this
       // tree, and DIOInterFaceCFG.{h,cpp} do not exist here at all
+      //AI(W906-FW3-BTQ1) 20260828: PARTLY SUPERSEDED -- FW3-BTQ1 新增了 forms/fDIOFrom.{h,cpp}，
+      //    所以「no TfDIOFrom class and no fDIOFrom global」已不成立；
+      //    但「DIOInterFaceCFG.{h,cpp} do not exist here」**字面上仍為真**
+      //    （本 port 的檔名是 forms/fDIOFrom.*，不是 golden 的檔名）。
+      //    ⚠ 解閘前先查值從哪來：本 port 沒有載入 .dfm layout，
+      //    那六個 ->Items->Strings[i] 讀到的會是空清單。
       // (direct stat, 20260828). [L] CheckTTLBoardBitMode (:1265, ht9045_sm).
 //jou 980331
 void TFTestIF::ShowTTLState()

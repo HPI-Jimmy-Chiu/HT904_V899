@@ -16,6 +16,7 @@
 //  the citing code below -- re-run at hand-off per project policy)
 //  --------------------------------------------------------------------------
 //    fQAMode           : `grep -rn "\bfQAMode\b" --include=*.h .` -- 0 hits
+//AI(W906-FW3-BTQ1) 20260828: SUPERSEDED -- FW3-BTQ1 新增 forms/fQAMode.{h,cpp}，fQAMode 現在有宣告。
 //                         (20260819).
 //    AutoForm[]        : ⚠ AI(W906-FW-UNGATE-W29) 20260826 -- 下面這條
 //                         claim **在寫下當時就是假的**，不是過期：
@@ -1412,6 +1413,8 @@ void TfBinSel::ReadFile(bool bDelOffline, bool bChangeNeme, AnsiString /*sFileNa
     AnsiString szDir="";
 
     // GATE (G1): fQAMode->ReadFile(); -- `grep -rn "\bfQAMode\b"
+    //AI(W906-FW3-BTQ1) 20260828: SUPERSEDED -- fQAMode 自 FW3-BTQ1 起有宣告（forms/fQAMode.h）。
+    //    本 gate 仍為 #if 0；解閘要先確認 ReadFile 的寫入語意是否可接受。
     // --include=*.h .` -- 0 hits (20260819).
     ReadPrimeDara();
     AnsiString SavePath[]={"\\BinasgnOff.Data", "\\Binasgn.Data", "\\BinasgnOff-Line.Data", "\\BinasgnOff_ART.Data", "\\Binasgn_ART.Data", "\\Binasgn_MRT_RT.Data", "\\Binasgn_MRT.Data"};

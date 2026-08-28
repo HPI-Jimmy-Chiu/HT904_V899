@@ -234,6 +234,7 @@
 //        [L] `CheckTTLBoardBitMode()` (:1265, ht9045_sm).
 //  (F-12) cbDIOTypeChange     golden :1281-1287 -- [M] `fDIOFrom->
 //        GetDIOFileName()` / `->LoadData(S)` (same absence as (F-11)) and [T]
+//AI(W906-FW3-BTQ1) 20260828: SUPERSEDED -- 見 (F-11) 的同日註記：fDIOFrom 自 FW3-BTQ1 起有宣告。
 //        on (F-11) at :1286.
 //  (F-13) spbSaveClick        golden :1302-1356 (55L) -- [W]+[L]+[M]. [W] on
 //        (F-4) SaveSetupFile at :1316 and (F-5) ReadTestIFFile at :1326.

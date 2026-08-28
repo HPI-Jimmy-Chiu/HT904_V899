@@ -9174,6 +9174,8 @@ int TfMain::SetSiteMapByDLL(LPSTR cSiteMap, int iNoOfSites)
     // used only inside that one file -- not exported as `fTestCategory` here
     // (grep -rn "TfTestCategory \*fTestCategory\|extern.*fTestCategory"
     // --include=*.h . -- 0 hits, 20260818). `fContactCT->ShowFormComp()`
+    //AI(W906-FW3-BTQ1) 20260828: SUPERSEDED -- FW3-BTQ1 新增 forms/fTestCategory.{h,cpp}，
+    //    `fTestCategory` 現在有真實宣告（不再只有 auto9045.cpp 的 TU-local stand-in）。
     // immediately after IS a real, ACTIVE translated method (forms/fContactCT.h:43,
     // ":293 void ShowFormComp();") and stays un-gated.
 #if 0
@@ -15245,6 +15247,8 @@ void TfMain::MachineStatus() //JerryYang 20151109 回覆tester機台狀態
 //       DoIniDataToForm\|sbUpdateClick" forms/fSetup.h` -- 3 hits, all prose,
 //       0 declarations. Site: ChangeToSiteMap golden :7826-7828.
 //   A2. fTestCategory (golden TfTestCategory, cTestCategory.h) -- no class, no
+//AI(W906-FW3-BTQ1) 20260828: SUPERSEDED -- FW3-BTQ1 起 class TfTestCategory 與 fTestCategory 都存在
+//    （forms/fTestCategory.h）。此處 gate 仍為 #if 0。
 //       global, anywhere. `grep -rn "class TfTestCategory" --include=*.h .`
 //       -- 0 hits. Site: ChangeToSiteMap golden :7844 `fTestCategory->
 //       AdjFormData();`.
