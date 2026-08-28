@@ -17427,6 +17427,83 @@ TFormHS            :  65 -> 缺  49 -> 安全軸 17 -> 封包 15 -> ∩缺  4（
 - 沒有把這三個標的的淨額寫回 RESUME §四 的毛額數字旁邊——
   **那會讓 RESUME 變成兩套數字並存**；正確做法是 RESUME 指向這一節。
 
+## 20260829 IX — **更正 VIII**：那 15 支「淨額」早就 gated 了，真實淨額是 **0**
+
+開 FW3-ATC1 之前照規矩讀 facade，結果**這一波開不了**：
+`forms/fATCHandlerSide.h` 的 GATE REGISTER **已經逐支評估過我那 8 支，全部 gated**。
+
+```
+:353-354  This facade declares no TForm base and no `__published` widgets
+          (DEVIATION D-3); every body below reads or writes a real golden
+          component ... that has no port on this class.
+   -> ShowATC_Page（widget + TIniFile write）、GetAlarmMsg（AlarmMsg TMemo）、
+      CommFlagTimerTimer（ChTempTC/TC2/TJ arrays）、SetChannelCount …
+:374  Check_ATC_Busy_State -- 解參考 `ATC_InterfaceForm->bATC_ModuleState[]`（shim），寫全域 bATCBusy
+:381  ChangeTJMode         -- 讀 `ATC_InterfaceForm->asControlMode[i]`（**shim 沒有這個欄位**）
+:383  ReadATCModeType      -- `asATCFilePath` 在 golden 自己的 ctor **從未初始化**
+                              （已讀完整 132 行 ctor 確認），所以 `new TIniFile(asATCFilePath)`
+                              會在「未初始化然後預設 ""」解析出的路徑**開/建一個 ini 檔**
+                              ——正是 KNOWLEDGE.md 解閘清單警告的
+                              **「值沒有載入路徑卻驅動真實動作」**。兩個理由都成立。
+:394  CATEGORY SOCK（14 支）-- live 網路 I/O；ATC socket 的擁有權（與 WebBridge 自己的 socket 並存）
+                              **不是唯讀波能決定的**——與 `forms/fHS.h` 的 CATEGORY F 同一套理由。
+```
+
+### 三個標的一起量：15 支裡 15 支都 gated
+
+| facade | 我在 VIII 報的「淨額」 | 已 GATE 標記 |
+|---|---|---|
+| `forms/fATCHandlerSide.h` | 8 支 | **7 支行內標記 ＋ `FileSocketError` 列在 `:405` 的 SOCK 類別**（宣告 `:950`） |
+| `forms/fHS.h` | 4 支 | **4 支**（例：`:744 bool Check_FileFolderByFTP(); // GATE (Cat A)`、`:725 ... // GATE (Cat F)`） |
+| `forms/fMesSystem.h` | 3 支 | **3 支** |
+
+**所以這三個標的的真實剩餘唯讀淨額是 0，不是 VIII 寫的 200–280 行。**
+
+### 方法論的洞：`survey_file.py` 的「真正缺」把 gated 算成缺
+
+`survey_file.py` 比對的是「golden 有本體／port 有本體」。
+**一個被 gated 的方法在 port 是「有宣告、沒有本體」**——那正是 gated 的長相，
+於是它被算進「真正缺」。五層漏斗因此把**已經評估過並刻意擋掉的工作**，
+重新算成了可做的工作。
+
+**修法（第六層）：扣掉 facade 標頭裡已標 `GATE` 的方法。**
+一行就能查：`grep -E "\b<method>\b[^\n]*GATE" forms/f<Name>.h`。
+
+### 更深的一層：我把「先查 port」這條規則只做了一半
+
+20260829 V 立的規則是「讀 golden 之前先查 port 有沒有這個 facade」。
+這次我照做了，**一個指令就查到 `forms/fATCHandlerSide.{h,cpp}` 存在**——那部分有效。
+**但我停在「存在與否」，沒有讀它的 GATE REGISTER 就去算淨額。**
+
+**存在與否從來不是問題，GATE REGISTER 才是。** 規則要改成：
+
+> 查到 facade 之後，**先讀它的 GATE REGISTER 與 ACTIVE 清單**，
+> 再決定還有什麼可做——而不是拿 golden 的方法表去減 port 的本體數。
+
+⚠ 而且那些 gate 理由**是我從 golden 本體讀不出來的**，因為它們是 **port 側的事實**：
+widget 在這個類別上沒有 port（D-3 不繼承 TForm、無 `__published`）、
+shim 缺欄位、`asATCFilePath` 沒有載入路徑。
+**golden 讀一百遍也看不到這三件事。**
+
+### 戰役狀態的修正
+
+VIII 說「唯讀面**接近**見底」。**更正：在這三個指定標的上，它已經見底了。**
+前面的波次不只翻掉了能翻的，還**把不能翻的逐支評估、分類、寫下理由**
+（Cat A live FTP／Cat F socket／CATEGORY SOCK／CATEGORY GLOBAL…）。
+剩下的不是「還沒做的工作」，是**已經完成判定、等待 write path 決策的工作**。
+
+⚠ 範圍仍然只限這三個標的（RESUME §四 第 2 點指定的）。
+`adam6024.cpp`（41/48 是 file-scope，非表單形狀）與
+`PMAlarm/PMAlarmInterFace.cpp`（零消費者、交付完全 inert）**我沒有量**，不列入這個結論。
+
+### 刻意沒有做的事
+
+- **沒有開 FW3-ATC1**，也沒有解任何一個 gate。那些 gate 的理由**都成立**，
+  而且其中 `ReadATCModeType` 那條（未初始化路徑 -> 真的建檔）**正是安全關鍵**。
+- **沒有改 `survey_file.py`**。它量的東西沒有錯（golden 有本體 / port 有本體），
+  錯的是我把它的輸出當成「待辦清單」——**census 的「缺」不是待辦清單**，
+  這條 KNOWLEDGE.md 早就寫過，我在另一個工具上又踩了一次。
+
 # 🔖 RESUME（20260829 · 第二十四版）
 
 - ✅ **`TfProductionInfo` 整批收完**（12 支／496 golden 行）：
