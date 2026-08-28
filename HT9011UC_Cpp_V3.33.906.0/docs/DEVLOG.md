@@ -17830,6 +17830,10 @@ X/XI/XII/XIII 的「FW-3 唯讀面 = 0」明文只涵蓋計畫書 §4 的批次�
 # 🔖 RESUME（20260829 · 第二十五版）
 
 ## ⛔ FW-3 唯讀面 = **0**（普查，非抽樣）。已達 skill 停止條件之一。
+（**範圍**：計畫書 §4 的批次 1–5。另兩個 greenfield 標的見 20260829 XIV：
+`adam6024` 剩 **2 支/48 行**但需新建 facade＋動 CMakeLists 且該類別僅 7 支方法；
+`PMAlarmInterFace` **56 支名義乾淨、卻零消費者且兄弟表單全缺**
+——**那是「要不要 port 整個 PM Alarm 子系統」的範圍決定，交使用者**。）
 
 ```
 已交付           Command.cpp/TfMain 164/164、cObserver、uTemp_Set 全完成
