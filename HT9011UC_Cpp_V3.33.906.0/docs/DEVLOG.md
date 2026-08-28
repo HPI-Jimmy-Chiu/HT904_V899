@@ -17427,7 +17427,59 @@ TFormHS            :  65 -> 缺  49 -> 安全軸 17 -> 封包 15 -> ∩缺  4（
 - 沒有把這三個標的的淨額寫回 RESUME §四 的毛額數字旁邊——
   **那會讓 RESUME 變成兩套數字並存**；正確做法是 RESUME 指向這一節。
 
-# 🔖 RESUME（20260829 · 第二十三版）
+# 🔖 RESUME（20260829 · 第二十四版）
+
+- ✅ **`TfProductionInfo` 整批收完**（12 支／496 golden 行）：
+  `FW3-PIOEE` `8754f86`（OEE 三支 267 行）、`FW3-PICTL` `6cc6842`（Control-Bin/IPSC 八支 191 行）、
+  `FW3-PIGSV` `9aaffc6`（`GetStringBySeparatedValues` 38 行）。
+  **全部建立在 `ba3683e`**——把 `forms/fProductionInfo.cpp` 從 `ht9045_forms` 搬進 `ht9045_sm`
+  （一次連結圖變更換到 496 行可翻空間）。連續第 21 個乾淨 gate。
+  ⚠ 仍留 gate 的是**安全軸**擋住的：`LoadMOInformation`(309，寫檔/寫 ini)、
+  `CheckOEE_WhenStart`(83，送命令/上傳)。**連結解開不會放寬安全軸。**
+
+- ⭐ **選標的的規則改了（20260829 VII/VIII）**：佇列裡的支數／行數是 **golden 毛額**。
+  開波前**先跑五層漏斗拿淨額**：
+  `survey_file.py` -> `screen_methods.py` -> `sibling_closure.py` -> ∩「真正缺」。
+  三個指定標的實測**淨額全部只有 200–280 行、比例 5–8%**：
+
+  | 標的 | 毛額 | **淨額** |
+  |---|---|---|
+  | `TATC_InterfaceForm`（`ATC/ATC_Handler_Side.cpp`） | 169 支／3,713 行 | **8 支／177 行** |
+  | `TfMesSystem`（`Mes/fVATMesFileSys.cpp`） | 38 支／3,349 行 | **3 支／257 行** |
+  | `TFormHS`（`HS_Function.cpp`） | 65 支／5,125 行 | **4 支／281 行** |
+
+  **原因**：唯讀面已被前 20 幾波收割完，剩下的大塊**就是** write path 與對外 I/O
+  ——那是使用者佇列、要在場才做的。**「佇列還有 12,000 行」與「今晚能翻 750 行」兩件事都是真的。**
+  詳見 20260829 VIII。
+
+- 🔜 **下一波（已完全指定，8 支／177 golden 行，golden 本體我已逐支讀過）**：
+  **`TATC_InterfaceForm`，append 到既有的 `forms/fATCHandlerSide.{h,cpp}`
+  （已註冊 `CMakeLists.txt:760`，不需動 CMakeLists）**。
+  `SetChannelCount`(:1937-1993, 57)／`CommFlagTimerTimer`(:2803-2845, 43)／
+  `ChangeTJMode`(:3973-3996, 24)／`GetAlarmMsg`(:2487-2504, 18)／
+  `Check_ATC_Busy_State`(:3362-3372, 11)／`FileSocketError`(:4055-4063, 9)／
+  `A31_GetAlarmMsgClick`(:2506-2513, 8)／`ReadATCModeType`(:2444-2450, 7)。
+  **四個所需全域（`asControlModeGPIB`／`iATC_Use_Heat_Count`／`bTJControlMode`／`bTJtoTCWait`）
+  在 port 的 `cmydef.h` 全都已存在——本波不需要新增任何欄位。**
+  ⚠ 開工前仍要確認 widget 陣列（`ATC_Channel[]`／`ChPanel[]`／`ChTempTC[]`／`ChTempTC2[]`／
+  `ChTempTJ[]`／`AlarmMsg`）在 facade 裡的**型別是否支援 `Caption`/`Visible`/`Left`/`Top`/`Color`/`Lines`**。
+  ⚠ **已判定不可翻**（讀本體抓到，工具第六輪才補上）：
+  `ShowATC_Page`（`ATCINIFile->WriteInteger` **寫 ini**）、
+  `FileSocketRead`（`frmFileTransfer->OnDataSocketRead` **進來的資料交給 recipe 檔傳輸**）。
+
+- ⭐ **先查 port 再讀 golden**（20260829 V 的教訓，VIII 已回本）：
+  `ls forms/f<Name>.*` ＋ `grep -n "forms/f<Name>" CMakeLists.txt`，兩個指令。
+  `fHS` 那次我沒查，重新「發現」了一輪早就寫在 `forms/fHS.h:65-80` 的東西；
+  `fATCHandlerSide` 這次先查，一個指令就到位。
+  ⚠ 而且那兩個 facade 的 banner **第 18／20 行就寫著它們是 OUTBOUND hub**
+  ——**那不是背景說明，那是這個標的的產出上限。**
+
+- 🔧 **`tools/wavescan/` 今晚的變化**：新增 `sibling_closure.py`（兄弟呼叫封包）；
+  `screen_methods.py` 做了**第四、五、六輪加強**（新增 10 條樣式，各由一次讀本體抓到的實例觸發）。
+  ⚠ **三層漏斗是過濾器，讀本體才是關卡**——今晚三次抽驗三次中。
+  ⚠ 工具 docstring 記著它**不查**什麼（可達軸、兄弟方法、名字不是證據）。
+
+
 
 - ✅ **`FW3-BTQ1` 已於 20260828 XI 驗收並 commit**（gate `btq2`，**兩側 GREEN**，
   失敗集合逐項等於常駐五項，**連續第十七個乾淨 gate**）。
