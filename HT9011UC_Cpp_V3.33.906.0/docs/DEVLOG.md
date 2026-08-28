@@ -16421,6 +16421,64 @@ BTQ1 的十一個檔已經在樹上等 gate；再疊一件就讓下一次 gate �
 這與 skill 明文那句「此提示刻意不含任何當下狀態」是同一個道理：
 **寫死在提示裡的狀態會過期，而過期的狀態不會自己announce。**
 
+## 20260828 X — 簽章慣例定案：**它不是兩個相反的慣例，是同一條規則的兩個時點**
+
+RESUME §四 第 4 點掛著「簽章慣例定案（W27 保留完整簽章 vs W21/W29 丟掉未讀參數）」，
+從 20260826 起連續三個版本都寫著「**要有人定案**」。
+gate 被環境擋住時把它處理掉（純文件、零程式碼變更、不需要 gate）。
+
+### 先讀樹，發現前提本身要修正
+
+樹裡其實**已經寫著判準**，只是分散在各個 banner 裡：
+
+| 出處 | 原文重點 |
+|---|---|
+| `forms/fCleaning.cpp:230` | `drop unread params that need an **unported type**` |
+| `cSetUp.cpp:251` | `IS read -- **not a droppable param**` |
+| `forms/fConfiguration.h:138` | `is exactly why it is safe to drop the parameter -- dead code inside` |
+| `forms/fContact.h:1311` | `invent or drop the parameter. Four sibling facades made the same call` |
+
+也就是說，丟參數從來不是「因為懶得寫」，而是**兩個條件同時成立**：
+**(a) golden 自己的本體一個都沒讀**，且 **(b) 那個參數的型別在本樹沒有 port**——
+條件 (b) 成立時，簽章**根本寫不出來**。
+`udDeviceCTChangingEx` 丟掉全部四個參數就是這一型（`TUpDownDirection` 全樹無 port）。
+
+而 W27 之所以「保留完整簽章」，是因為到它那時 **`vclcompat/ShiftState.h` 已經存在**，
+提供 `TMouseButton`／`TShiftState`／`TShiftStateEnum`，條件 (b) 不再成立。
+
+**所以兩者從來沒有衝突。** 是同一條規則在「型別還沒 port」與「型別已經 port」兩個時點的結果。
+我把它記成「兩個相反慣例」記了三個版本，**那個描述本身才是要修的東西**。
+
+### 定案（本戰役慣例）
+
+1. **預設保留 golden 的完整簽章**，包含 golden 自己沒讀的參數。
+   理由是戰役明文的優先序：**忠實優先於「寫得更好」**；
+   而且保留簽章讓未來的呼叫點能逐字對上 golden。
+2. **只有在兩個條件同時成立時才可以丟**：(a) golden 本體未讀該參數，
+   且 (b) 該參數型別在本樹**沒有** port。
+3. 丟的時候記為 **DEVIATION（不是 gate）**，並**附上當時的缺席量測指令與結果**
+   （absence-claim 會過期，這是陷阱 #2）。
+4. **型別日後補上 port 之後，先前的丟棄就變成債**。
+   償還方式是**下一波碰到那個檔時順手回填**，不另開清掃波——
+   單獨的機械式 pass 會製造一批沒有其他驗證理由的 diff。
+
+### 現況（已量，20260828）
+
+- `vclcompat/ShiftState.h` **存在**，提供全部三個型別，並以 `using` 攤回全域
+  （檔內註明「全樹沒有其他同名定義」）。
+- 全樹（排除 `build_*`）有 **61 個 `.cpp`/`.h` 引用 `TMouseButton`／`TShiftState`**，
+  其中包含本 session 新交付的 facade（`fAirCon`／`fBuilder`／`fDIOFrom`／`fQAMode`／`fTesterIF`）。
+  **回填多半已隨波次自然發生**，不是還躺著一整批。
+- ⚠ **我沒有逐一列舉「還缺參數的 handler」**——那需要逐支對 golden 比簽章，不是 grep 得出來的。
+  真要清點時的做法：對每個仍帶 DEVIATION banner 的檔跑
+  `tools/wavescan/survey_file.py <golden檔> <類別>` 逐支比對。**這裡不宣稱那個數字。**
+
+### 為什麼這算「定案」而不是「我自己選一邊」
+
+規則 1-4 沒有推翻任何既有的碼：既有的丟棄全都滿足條件 (a)+(b)（在它們發生的當下），
+既有的保留也全都合規。**它把已經在做的事寫下來，並指定日後的償還方式。**
+使用者若要改成別的慣例，改這一節即可，沒有任何程式碼需要跟著動。
+
 # 🔖 RESUME（20260828 · 第十八版）
 
 - ⏸ **目前的狀態（等環境，不等人；詳見 20260828 VII）**：`FW3-BTQ1` 交付完成、複驗全過，
@@ -16856,7 +16914,7 @@ exit code，於是 **W34 在紅燈上 commit 卻被我記成綠燈**。已工具
    ⚠ **避開** `main.cpp`／`note.cpp`／`uhome.cpp`／`Magazine.cpp`／`cSortCT.cpp`／`cContact.cpp`
    ——golden 側有括號吞併，span 數字不可靠，要先跑 `span_sanity.py <file>` 單檔模式。
 3. 補 `ComputeTotalAirForce` / `SlkForceTable` 的 ctest。
-4. **簽章慣例定案**（W27 保留完整簽章 vs W21/W29 丟掉未讀參數）。
+4. ~~**簽章慣例定案**（W27 保留完整簽章 vs W21/W29 丟掉未讀參數）。~~ ✅ **已於 20260828 X 定案**：兩者不是相反慣例，是同一條規則的兩個時點。**預設保留完整簽章**；只有「golden 本體未讀 ＋ 該型別本樹無 port」兩個條件**同時**成立才可丟，並記為 DEVIATION 附缺席量測；型別日後有了 port，先前的丟棄變成債，**下一波碰到該檔時順手回填，不另開清掃波**。
 
 ⚠ **決定 `InitForms()` 的呼叫點是行為變更真正落地的時刻**，要單獨一波、跑全量 ctest。
 唯一的真實翻轉是 `uTemp_Set.cpp:2270` 的 `if(fDynamicTemp!=NULL)` 從恆假變真。
