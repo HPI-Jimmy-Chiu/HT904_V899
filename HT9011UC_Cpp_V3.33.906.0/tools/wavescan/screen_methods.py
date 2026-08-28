@@ -89,6 +89,15 @@ RISK = [
     ('socket 送出/開關', r'\b\w*Socket\w*\s*->|\bSendText\s*\(|\bSendBuf\s*\('),
     ('跨表單呼叫（非 f 開頭的全域）', r'\b[A-Z]\w*(?:Form|Interface)\w*\s*->\s*\w+\s*\('),
     ('跨表單容器寫入', r'\bf[A-Z]\w+\s*->\s*\w+\s*->\s*(?:Add|Clear|Delete|Insert|Assign)\s*\('),
+    # 20260829 六次加強：讀 TATC_InterfaceForm 本體時拓到的兩類：
+    #   ShowATC_Page    ATCINIFile->WriteInteger("System","iATC_MODE_TYPE",iType)
+    #                   <- **寫 ini 檔**；舊樣式是 `WriteIniData*(`，抓不到透過 TIniFile 物件的寫入
+    #   FileSocketRead  frmFileTransfer->OnDataSocketRead(Socket, probRecipe)
+    #                   <- 進來的 socket 資料交給 recipe 檔傳輸；
+    #                      跨表單樣式要 `f`+大寫，而 `frmFileTransfer` 第二字是小寫 `r`
+    # ⚠ `ini 物件寫入` 已驗過**不會誤傷 ReadInteger**（反向探針）。
+    ('ini 物件寫入', r'->\s*Write(?:String|Integer|Bool|Float|Date|Time|DateTime|BinaryStream)\s*\('),
+    ('跨表單呼叫（frm 前綴）', r'\bfrm[A-Z]\w*\s*->\s*\w+\s*\('),
 ]
 
 fn, cls = sys.argv[1], sys.argv[2]
