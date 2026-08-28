@@ -16479,24 +16479,110 @@ gate 被環境擋住時把它處理掉（純文件、零程式碼變更、不需
 既有的保留也全都合規。**它把已經在做的事寫下來，並指定日後的償還方式。**
 使用者若要改成別的慣例，改這一節即可，沒有任何程式碼需要跟著動。
 
-# 🔖 RESUME（20260828 · 第十八版）
+## 20260828 XI — FW3-BTQ1 **驗收**：第五次 gate，兩側 GREEN
 
-- ⏸ **目前的狀態（等環境，不等人；詳見 20260828 VII）**：`FW3-BTQ1` 交付完成、複驗全過，
-  **gate 兩側都紅，但根因既不是正確性，也不是 timeout 太緊**。
-  `dfm2rc_fidelity` 的**基線是 ~150 秒**（128 次 gate 的歷史），600 秒預算是它的 **4 倍**；
-  目前正處於一個**間歇性的檔案 I/O 異常波**，實測 **635 秒、`RC=0`、133/133、零問題**，
-  **只差 35 秒**。同型的波在 **08-27 00:53-06:40** 六連逾時後，**08:13 自己回到 148.83 秒**。
-  **⚠ 先前升級的「放寬 timeout 到 ~900 秒」已撤回**——那個處方建立在波中樣本上。
-  病灶是**檔案 I/O 不是行程生成**：`idempotent`（純 Python、零 spawn）**+1187%**，
-  而 `rc_compiles`（133 個 rc.exe/windres）只 **+18%**、`layout_full`（133 個 g++）只 **+2%**。
-  **對症的是把 build 目錄加進端點防護排除清單**（機器層級設定，使用者決定，**非阻塞**）；
-  放寬 timeout 只是關掉儀表。**兩者都沒有動。**
-  ✅ **下一步不需要任何人裁決**：跑一次 `dfm2rc_idempotent` 單獨探針（**≤40 秒 = 環境正常**，
-  基線 17-25 秒；**>40 秒 = 波中，不要開 gate**）；正常時直接重跑 `tools/dualgate.sh btq1`
-  （全新 dir，**不可用已退役的 `dualgate2.sh`**），綠了就 commit 那十二個檔。
-  **BTQ1 的十二個檔留在樹上未 commit**（`forms/fBuilder.{h,cpp}`、`forms/fTestCategory.{h,cpp}`、
-  `forms/fQAMode.{h,cpp}`、`forms/fDIOFrom.{h,cpp}`、`forms/fRPDefault.{h,cpp}`、
-  `CMakeLists.txt` 已註冊 +72 行），**已完整複驗、待 gate**。
+`btq2`（20:42:53 起跑，序列 `tools/dualgate.sh btq2`，全新目錄）：
+
+```
+G_TOTAL=5  G_FAILSET=GA1_ReadGeneralIni IniFiles config_db config_loaders ini_helpers
+G_EXTRA=   G_ABSENT=   G_VERDICT=GREEN      (Debug,   21:04:08)
+R_TOTAL=5  R_FAILSET=GA1_ReadGeneralIni IniFiles config_db config_loaders ini_helpers
+R_EXTRA=   R_ABSENT=   R_VERDICT=GREEN      (Release, 21:22:23)
+```
+
+**失敗集合逐項等於常駐五項，多出與缺少都是空。連續第十七個乾淨 gate。**
+
+### 交付（一波五檔、十個新檔；先前已完整複驗）
+
+| facade | 檔案行數（h+cpp） | 成員 | golden 行覆蓋 |
+|---|---|---|---|
+| `forms/fBuilder.{h,cpp}` | 466+738 | **13/22 支** | **123/531** |
+| `forms/fTestCategory.{h,cpp}` | 409+695 | 4 ACTIVE＋1 partial／13 | 54/518 |
+| `forms/fQAMode.{h,cpp}` | 356+476 | 5＋1 partial／12＋file-scope `QABackupStatus` | 40/302 |
+| `forms/fDIOFrom.{h,cpp}` | 339+380 | **8/14 支** | **66/236（28.0%）** |
+| `forms/fRPDefault.{h,cpp}` | 362+539 | 4/11 | 30/386 |
+
+十個新檔合計 **4,760 行**（單位：檔案行，含 banner 與 GATE REGISTER；
+**與右欄的 golden 行覆蓋是兩個不同的軸，不可互換**）。
+
+`CMakeLists.txt` **2965 -> 3037 行（+72）**，純 CRLF，五個 `.cpp` 註冊在 `ht9045_forms`。
+
+主迴圈複驗（全部自量）：十一處引用行號**全部精準**；五顆真 `-c` 編譯（`-Wall -Wextra`）
+**rc=0／0 error／0 warning**；`nm` **15 個相異專案符號全部可達**，
+來自 `ht9045_sm` 的只有 `ShowMyMessage`（四個既有例外之一），
+**零**來自 `_motor`／`_io`／`_db`／`_comms`／`_secsgem`；十檔 UTF-8 無 BOM、CR=0、零 U+FFFD。
+
+### 本波量到的六件事
+
+1. **gate 要分成兩種**：**link gate**（連結圖一變就能開）與 **safety gate**（要人接受寫入才能開）。
+   `fBuilder` 的 9 個**全部是 safety**——它們的符號今天全都可達，
+   **正因為可達，解閘就會真的去複製／刪除 recipe 資料夾**。
+2. **保留名是 19 個不是 18**。我用 `head -14` 讀 pre-flight 輸出後當成完整清單，
+   漏掉 `rgStartLogic`（早已在 `forms/fTesterIF.cpp:1477` 交付）。
+   **管線截掉的那一段永遠不會自己宣告。** agent 因為派工要求它自己重跑 pre-flight 而抓到。
+3. **`IsNNMode` 一個符號 gate 掉五支**，其中一支是 `return 0;` 的 stub ——
+   **`nm` 看不見 stub 造成的缺口**（陷阱 #1 形狀 b）。
+4. **`TfTestCategory::Active` 是 port 專有欄位**，golden 是繼承 `TForm::Active`；
+   本 port 的「不繼承基底類別」偏離把它移除了。**保留名不必然對應 golden 成員**（首例）。
+5. **golden 自己有分母缺口**：`SetReciepeParameterDefault` 在 golden `RPDefault.h:59` 有宣告，
+   **golden 全樹沒有定義**。
+6. **`MyDBIProcess` 有兩個多載**：2 參數版是四個既有例外之一；
+   3 參數 `__fastcall` 版的本體在 `SECSGEM/uHGemEquipment.cpp` = `ht9045_secsgem`，
+   **`ht9045_forms` 連不到**。原本記成「一個例外」是錯的。
+
+### 這一波為什麼花了五次 gate
+
+**四次紅燈沒有一次是 BTQ1 的問題。** 完整推理鏈見 20260828 VI/VII/VIII：
+根因是 `open()` 的**首次觸碰成本 61 毫秒**（第二次 0.1-0.6 毫秒），
+而 gate 的紀律就是「全新 build 目錄」——每次都刻意把快取弄到最冷。
+
+**這次 gate 自己把那個環境事件的結束量了出來**：
+
+| 測試 | run4（20:19，紅） | **btq2 Debug（21:04，綠）** | btq2 Release |
+|---|---|---|---|
+| `dfm2rc_rc_compiles` | 115.90s | **91.32s** | 91.39s |
+| `dfm2rc_layout_full` | 49.36s | **45.53s** | 45.72s |
+| **`dfm2rc_fidelity`** | **>600s 逾時** | **141.47s 通過** | **145.79s** |
+| **`dfm2rc_idempotent`** | **227.63s** | **7.95s** | 8.04s |
+| ctest 總時間 | 1249.08s | **448.99s** | 458.72s |
+
+`fidelity` **141.47 秒正是 ~150 秒基線**，離 600 秒預算 4.2 倍餘裕。
+⭐ **所以「放寬 timeout」若真的做了，現在會是一個永久性的、把儀表關掉的修改，
+用來處理一個已經自己消失的問題。** 沒有做是對的。
+
+### 驗收紀律逐條
+
+- **§5c 作廢檢查通過**：十一個檔的 md5 與 mtime 與 `_btq2_baseline_mtimes.txt` **完全相同**，
+  全部停在今早 **09:10-09:34**，遠早於 gate 起跑錨點 `build_btq2g/cfg.log` = **20:45:52**。
+- **`D:\HT9045\system` 守衛通過**：550 個檔，**gate 起跑後 0 個被修改**；
+  全樹最新檔是 **2026-08-19 10:06**（九天前）。
+  ⚠ **我這次沒有先照 gate 前的 snapshot**（`tools/webprobe/system_guard.py snapshot`），這是疏漏；
+  改用 mtime 區間檢查取得等效結論。下一波要記得先照。
+- 判定一律由 `tools/gateverdict.sh` 給：**`ctest` 對任何失敗數都回 exit 8，exit code 零鑑別力**。
+
+### 刻意沒有做的事
+
+- **沒有動 `tests/CMakeLists.txt:3246` 的 600 秒**，也**沒有動任何端點防護設定**。
+- **沒有解任何 gate**（`fBuilder` 的 9 個 safety gate 原封不動）——那是行為變更，另一顆 commit 的事。
+- **沒有把 `CalculateOEEReport` 一起翻進來**（20260828 IX），避免這次 gate 同時覆蓋兩件事。
+
+# 🔖 RESUME（20260828 · 第十九版）
+
+- ✅ **`FW3-BTQ1` 已於 20260828 XI 驗收並 commit**（gate `btq2`，**兩側 GREEN**，
+  失敗集合逐項等於常駐五項，**連續第十七個乾淨 gate**）。
+  五個 facade：`forms/fBuilder.{h,cpp}` 13/22 支、123/531 行；`forms/fTestCategory.{h,cpp}`
+  4 ACTIVE＋1 partial／13、54/518；`forms/fQAMode.{h,cpp}` 5＋1 partial／12、40/302；
+  `forms/fDIOFrom.{h,cpp}` 8/14、66/236；`forms/fRPDefault.{h,cpp}` 4/11、30/386。
+  `CMakeLists.txt` 2965 -> 3037 行（+72）。
+  **它花了五次 gate，四次紅燈沒有一次是 BTQ1 的問題**——根因是 `open()` 首次觸碰 61 毫秒
+  的環境事件（20260828 VII/VIII），而 gate 的「全新目錄」紀律每次都把快取弄到最冷。
+  **環境已恢復**：btq2 內 `dfm2rc_fidelity` **141.47s**（基線 ~150s，600s 預算 4.2 倍餘裕）、
+  `dfm2rc_idempotent` **7.95s**。
+  ⚠ **`tests/CMakeLists.txt:3246` 的 600 秒與端點防護設定都沒有動，也不該動**——
+  放寬 timeout 會是永久性地把儀表關掉，用來處理一個已經自己消失的問題。
+  **對症的仍是把 build 目錄加進端點防護排除清單**（機器層級，使用者決定，**非阻塞**）。
+  開 gate 前的環境探針規則見 `fw-wave-loop` skill **§5d**（**≤40 秒 = 開；>40 秒 = 未知，
+  改直接量 `dfm2rc_fidelity`，<550 秒就開**——「>40 秒不要開」是錯的，偽陰性 70%）。
 
 - **本段最後一顆（已驗收）**：`FW3-DTL1`（**一波四檔、八個新檔**）——
   `forms/fTowerLight.{h,cpp}`（368+234）**8/8 支、101/133 行（75.9%，目前最高行覆蓋率）**；

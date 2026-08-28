@@ -1038,6 +1038,78 @@ add_library(ht9045_forms STATIC
     forms/fCounterSel.cpp
     forms/fLd_ULd.cpp
     forms/fDTME08.cpp
+    # AI(W906-FW3-BTQ1) 20260828: five more greenfield forms.  Target names are
+    # quoted, not CMakeLists line numbers -- those go stale on the next wave and
+    # nothing in the build catches it (it happened twice in one morning).
+    #
+    # golden cBuilder.cpp -> TfBuilder, 13 of 22 members, 123 of 531 span lines.
+    # Worth noting WHY the 9 gates exist: NOT ONE of them is a link gate.
+    # DataPath / OffsetPath / MyForceDirectories / ShowMyMessage are all reachable
+    # from here today -- which is exactly why un-gating would really copy and
+    # delete recipe folders.  These are read-only-direction SAFETY gates, and the
+    # distinction matters: a link gate opens when the link graph changes, a safety
+    # gate opens only when a human decides the write is acceptable.
+    #
+    # golden cTestCategory.cpp -> TfTestCategory, 4 ACTIVE + 1 partial of 13,
+    # 54 of 518 span lines.  FIVE of its gates rest on ONE symbol, IsNNMode,
+    # whose only definitions are atester_shims.cpp (a `return 0;` STUB -- trap #1
+    # shape 2, the kind nm --undefined-only cannot see) and cinitial.cpp (the real
+    # body), both ht9045_sm.  Also: TfTestCategory::Active is a PORT-ONLY field.
+    # golden has no such member -- it is inherited TForm::Active, and the
+    # no-base-class deviation removes it, so the facade must supply it or the
+    # pre-committed PowerSavingMode.cpp site cannot bind.
+    #
+    # golden QAMode.cpp -> TfQAMode, 5 ACTIVE + 1 partial of 12 members plus the
+    # file-scope QABackupStatus, 40 of 302 span lines.
+    #
+    # golden DIOInterFaceCFG.cpp -> TfDIOFrom, 8 of 14 members, 66 of 236 span
+    # lines (28.0%, the best ratio of the five).
+    #
+    # golden RPDefault.cpp -> TfRPDefault, 4 of 11 members, 30 of 386 span lines.
+    # One body dominates the whole wave: CompareRPDefaultAndValue is 228 lines,
+    # 59.1% of that golden file on its own.
+    # GOLDEN-SIDE FINDING: SetReciepeParameterDefault is declared at golden
+    # RPDefault.h:59 and DEFINED NOWHERE IN GOLDEN'S OWN TREE.  That is why
+    # pre-flight counts 11 bodies while the golden header lists 12 methods -- the
+    # denominator gap is golden's, not ours.
+    #
+    # RESERVED NAMES: 19, not 18.  The dispatch brief listed 18 because the main
+    # loop had read pre-flight through `head -14` and silently truncated
+    # fDIOFrom's list; rgStartLogic (pre-committed at forms/fTesterIF.cpp:1477)
+    # was the one that fell off.  The wave agent caught it by re-running pre-flight
+    # itself, which is why the prompt tells it to.  All 19 are declared and their
+    # signatures were checked against the actual call sites -- e.g.
+    # CompareRPDefaultAndValue takes (Name, Default, Value) in golden's argument
+    # order, which is what forms/fTesterIF.cpp passes.
+    #
+    # nm --undefined-only over the five objects: 15 distinct project symbols, ALL
+    # reachable.  ht9045_core: DataPath, OnlyNumberInPut, OnlyNumberAndDotInPut,
+    # OnlyMakeFileDataInPut.  ht9045_globals: IniConfig, CosFunction, TestIF_File,
+    # TTLCfg, N_INTEGER, N_NO_SYMBOL, bUseTwoArm32Site, AccessLevel,
+    # iDefHonPrecLevel.  ht9045_forms: fQwertyKey + TfQwertyKey::ShowQwertyKey.
+    # ht9045_sm: ShowMyMessage ONLY -- canary_support.cpp, one of the four
+    # documented forms->sm exceptions, verified not inside #if 0.
+    # ZERO from _motor, _io, _db, _comms, _secsgem.
+    # Measured with real -c compiles, -Wall -Wextra, rc taken off-pipeline:
+    # all five rc=0, 0 errors, 0 warnings.
+    #
+    # CORRECTION to the standing four-exception list, found by this wave:
+    # MyDBIProcess has TWO overloads.  The 2-arg one is aHotPlateSubstrate.cpp
+    # (ht9045_sm, the sanctioned exception, and the one these forms call); a 3-arg
+    # __fastcall version documented at cMyDB.h:81 has its body in
+    # SECSGEM/uHGemEquipment.cpp = ht9045_secsgem, which forms canNOT reach.
+    # "MyDBIProcess is an exception" is true of the overload, not of the name.
+    #
+    # UN-GATE BLOCKER, recorded so it is not discovered late: forms/fTesterIF.cpp
+    # reads six fDIOFrom widgets as ->Items->Strings[i].  Those lists are EMPTY in
+    # this port because nothing loads a .dfm layout.  Un-gating that site without
+    # first supplying the strings indexes an empty list -- the same "check where
+    # the value comes from" shape as the fTowerLight LED Tag one wave earlier.
+    forms/fBuilder.cpp
+    forms/fTestCategory.cpp
+    forms/fQAMode.cpp
+    forms/fDIOFrom.cpp
+    forms/fRPDefault.cpp
     # AI(W906-W7-F0-fix) 20260728: MOVED here from ht9045_sm -- the 3 AMR-mode
     # predicates forms/fAGV.cpp delegates to.  See the "NO UNDECLARED BACK-EDGE"
     # block above.  File content unchanged (zero behaviour change: same code,
