@@ -64,6 +64,16 @@ RISK = [
     # 存檔上傳、批次複製 recipe。跨表單呼叫一律要人看過。
     ('跨表單呼叫', r'\bf[A-Z]\w+\s*->\s*\w+\s*\('),
     ('送命令/上傳', r'\bSendCommand\w*\s*\(|\bUpload\w*\s*\(|\w+_Upolad\s*\(|RunBatch\w*\s*\('),
+    # 20260829 四次加強：`HandlerClientSocketRead`（golden HS_Function.cpp:4508-4557）
+    # 差一點被判成乾淨。它解析進來的 socket 資料並依內容分支，然後：
+    #   fMain->iResetCurrent=3;                     <- 跨表單**欄位寫入**
+    #   EventReport(SECS_EVENT.PowerSavingStart);   <- **對外 SECS/GEM 事件回報**
+    # 舊的「跨表單呼叫」樣式只抓**呼叫**（末尾是左括弧），
+    # 抓不到純欄位費值；`EventReport` 也不在任何樣式裡。
+    # 它最後是被 `sibling_closure.py` 拉下來的（恰巧也呼叫了一支髒兄弟）
+    # ——**那是運氣，不是覆蓋**。
+    ('跨表單寫欄位', r'\bf[A-Z]\w+\s*->\s*\w+\s*=(?!=)'),
+    ('SECS/GEM 事件回報', r'\bEventReport\s*\(|\bSECS_EVENT\b'),
 ]
 
 fn, cls = sys.argv[1], sys.argv[2]

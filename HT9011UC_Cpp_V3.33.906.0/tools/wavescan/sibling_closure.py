@@ -55,7 +55,15 @@ def span(a):
     return nxt - 1
 
 
-CALL = re.compile(r'(?<![\w>.])([A-Za-z_]\w*)\s*\(')
+# 20260829 修正（發佈後 40 分鐘就撞到）：第一版用
+#   (?<![\w>.])  排除 `->` / `.` 前綴，本意是不要算到「別的物件」的方法。
+# 但 golden 很常透過**自己的全域指標**呼叫兄弟：
+#   HS_Function.cpp:4530 `FormHS->RecordPowerSaveEvenLog_HS(...)`
+# 於是 `HandlerClientSocketRead` 沒被降級，而它實際上碰了一支不乾淨的兄弟。
+# 現在連 `->name(` / `.name(` 一併收，**再跟類別自己的方法集取交集**。
+# 偽陽性方向（可能把別的類別同名方法算進來）是**安全的那一面**：
+# 安全篩選寧可多降級一支，不可漏放一支。
+CALL = re.compile(r'([A-Za-z_]\w*)\s*\(')
 
 # name -> set(sibling names it calls)
 calls = {}

@@ -17211,6 +17211,99 @@ rg -n '(?<![\w_])FormHS(?![\w_])' . 2>/dev/null
 - **`HS_Function` 的翻譯波仍未開**——下一次開工的第一步是
   「34 支封包乾淨」∩「49 支真正缺」的交集。
 
+## 20260829 VI — 一次擦身而過：兩個工具缺口，外加一個**看不見的失敗**
+
+派工前對 23 支候選做最後抽驗，挑了四個 socket `...Read` handler 之一
+——**它們處理的是進來的資料，如果會解析並執行指令，那實質上就是 write path**。
+
+`HandlerClientSocketRead`（golden `HS_Function.cpp:4508-4557`，50 行）：
+
+```cpp
+AnsiString StrBuff=Socket->ReceiveText();          // 讀進來的 socket 資料
+if(StrBuff.Pos("OFF")!=0) { ...                    // 依內容分支
+    fMain->iResetCurrent=3;                        // 寫別的表單的欄位
+    RunInfo.bSecsGemHeaterEnergySavingState=true;  // 寫全域機台狀態
+    EventReport(SECS_EVENT.PowerSavingStart);      // 對外 SECS/GEM 事件回報
+    FormHS->RecordPowerSaveEvenLog_HS("...");      // 呼叫「不乾淨」的兄弟
+```
+
+**它在兩個工具下都是「乾淨」的。** 兩個缺口，各自不同：
+
+### 缺口一：`sibling_closure.py` 漏掉透過全域指標的自我呼叫
+
+我 40 分鐘前才寫的那支，用的是
+`CALL = re.compile(r'(?<![\w>.])([A-Za-z_]\w*)\s*\(')`
+——**刻意排除 `->` 與 `.` 前綴**，本意是「不要算到別的物件的方法」。
+但 golden 很常**透過自己的全域指標呼叫兄弟**：`FormHS->RecordPowerSaveEvenLog_HS(...)`。
+那個排除把最常見的自我呼叫寫法整個濾掉了。
+
+**修法**：改成 `r'([A-Za-z_]\w*)\s*\('`（收所有形式），**再跟類別自己的方法集取交集**。
+偽陽性方向（別的類別的同名方法被算進來）是**安全的那一面**：
+**安全篩選寧可多降級一支，不可漏放一支。**
+
+### 缺口二：`screen_methods.py` 沒有「跨表單寫欄位」與「SECS 事件」
+
+舊的「跨表單呼叫」樣式是 `\bf[A-Z]\w+\s*->\s*\w+\s*\(`——**末尾是左括弧，只抓呼叫**。
+`fMain->iResetCurrent=3;` 是**純欄位賦值**，抓不到。`EventReport` 也不在任何樣式裡。
+
+**第四輪加強**（前三輪：20260825 漏 `CopyFile` 一族、20260825 漏 FTP/EventLog 觸發、
+20260829 III 記下三個盲點）新增兩條：
+
+```python
+('跨表單寫欄位',       r'\bf[A-Z]\w+\s*->\s*\w+\s*=(?!=)'),
+('SECS/GEM 事件回報',  r'\bEventReport\s*\(|\bSECS_EVENT\b'),
+```
+
+實測影響：`TFormHS` **40 支乾淨 -> 35 支**，新抓到五支
+（`CalculateUploadToHostIntervalTimeFunction`、`LoaderBufPreAlarm`、`FixTrayPreAlarm`、
+`HandlerClientSocketConnect`、`HandlerClientSocketRead`）。
+
+⚠ **順序很重要**：修完缺口一之後，`HandlerClientSocketRead` 其實已經被降級了——
+但**那是因為它恰巧也呼叫了一支髒兄弟**。
+一支只寫 `fMain->欄位` 又發 SECS 事件、卻不呼叫任何髒兄弟的方法，
+在缺口二補上之前**仍然會過**。**被抓到不等於被覆蓋。**
+
+### 而在修缺口二的過程中，我製造了一個看不見的失敗
+
+用 heredoc 插入那兩條樣式，插入「成功」、語法檢查過、`sed` 印出來的內容**看起來完全正確**
+——但篩選結果**一點都沒變**。
+
+原因：**heredoc 把 `\\b` 收成 `\b`**，而 `\b` 在 Python 非 raw 字串裡是
+**退格字元 0x08**。落地的樣式變成「要求一個字面的退格字元」，永遠不匹配。
+**`sed`／`cat` 都看不見 0x08**，所以每一個檢查都說「已插入」。
+
+**這條教訓我的操作清單上早就有**（「heredoc 會把 `\\` 收成單一 `\`」），今天還是踩了。
+修法：改用 Write 工具寫腳本、並在腳本裡用 `chr(92)` 明確組出反斜線，
+**且先 `assert` 檔案裡真的有 0x08 才動手**（確認自己在修的是真的存在的問題）。
+
+⚠ 通則：**「插入成功」不是驗收，「行為改變」才是。**
+這次三個檢查（退出碼、語法、目視）全過，而樣式一次都沒有匹配過。
+
+### 漏斗（每一層都是量出來的）
+
+| 層 | 支數 |
+|---|---|
+| golden `TFormHS` 方法定義 | **65** |
+| 真正缺（`survey_file.py`；已翻 14＋別類 2） | **49** |
+| 安全軸乾淨（`screen_methods.py`，第四輪加強後） | **35** |
+| 兄弟封包乾淨（`sibling_closure.py`，修正後） | **30** |
+| **∩ 真正缺 = 派工清單** | **19（1,013 golden 行）** |
+
+若照最初那個 40 就派工，會**重翻 11 支、並翻進 1 支解析對外指令又發 SECS 事件的 handler**。
+
+### 下一波的派工清單（19 支）
+
+`GetTempUseNamevalue`(350)／`Check_FileFolderByFTP`(159)／`RecordParameter_TFAMDLog`(77)／
+`GetUploadServerByFTPPath`(70)／`ShowATCSelfTestSatus`(67)／`ESDServerSocketClientRead`(67)／
+`RecordRunState`(47)／`CheckSetupNamelist_Hisi`(33)／`RecordGroundManLog_HS`(28)／
+`Check_RecordFolder`(18)／`ATC_FFCTrigger`(15)／`RTMServerSocketClientRead`(14)／
+`ESDServerSocketClientError`(14)／`RTMServerSocketClientError`(14)／`HandlerClientSocketError`(13)／
+`RTMServerSocketClientConnect`(10)／`ESDServerSocketClientConnect`(8)／
+`RTMServerSocketClientDisconnect`(5)／`CloseWindowsKeyboard`(4)
+
+⚠ **開工時仍要逐支開 golden 讀本體**。這三層漏斗是把明顯的擋掉，
+**不是把「讀原始碼」這一步取消掉**——今晚兩次抽驗各中一次，就是證據。
+
 # 🔖 RESUME（20260829 · 第二十三版）
 
 - ✅ **`FW3-BTQ1` 已於 20260828 XI 驗收並 commit**（gate `btq2`，**兩側 GREEN**，
