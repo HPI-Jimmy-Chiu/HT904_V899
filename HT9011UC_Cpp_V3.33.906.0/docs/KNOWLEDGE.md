@@ -401,4 +401,22 @@ cinitial.cpp 經 `Motor/myMN200motor.h:90`＋`Motor/myEthercatmotor.h:69` 同時
 
 順帶量到：cinitial.cpp:4525 起有一批 `iPortID`（unsigned int）塞進 `BYTE`
 陣列的 -Wnarrowing 警告，golden 同型（BCB6 不告警），非本診斷範圍。
+## census 量不到 FW facade 的進展——這是刻意的，**不要去「修」**（20260828，TIF1+DTL1 後撿到）
 
+**量到什麼**：在 HEAD `f30cd06`，也就是 FW3-TIF1 與 FW3-DTL1 交付 **14 個新 facade 檔、
+約 5,400 行**之後，`census.py` 的六個數字與兩波之前（`6dd26d1`）**逐項完全相同**：
+非表單 322,536/336,509＝95.8%；表單 45,292/261,862＝17.3%；全案 367,828/598,371＝61.5%。
+連 `files with NO port mirror: 2 non-form / 88 form` 都沒動。
+`census.py --detail` 的輸出裡 `forms/f` 的命中數是 **0**。
+
+**原因**：census 用**檔名**配對 golden↔port，而 FW 的 facade 刻意叫 `forms/fXxx.{h,cpp}`，
+不是 golden 的檔名。這個檔名比對的保守是**有量測背書的刻意選擇**——先前試圖「修好」它的那次，
+算出 parked > gcode 並假記了 35,289 行。**不要動 census。**
+
+**操作上的後果（這才是重點）**：**census（第一軸）結構上量不到 FW 戰役的進展。**
+拿它當 FW 的進度數字，不管交付多少都會回報「沒進展」。
+FW 的軸是**每個表單的覆蓋**（ACTIVE 成員數／golden 成員數，以及 live golden span 行／span 行），
+那是每一波回報的那組數字。「三軸不可互相換算」這條規則，在這裡以新的形狀咬人。
+
+**我自己做錯的事**：這幾波的每一次交接，我都引用 census 當作進度指標。
+它不是——它是 PT 戰役（鏡射式翻譯）的軸。兩個戰役共用一棵樹，但不共用進度尺。
