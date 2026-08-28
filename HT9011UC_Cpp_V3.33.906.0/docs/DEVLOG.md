@@ -17718,6 +17718,52 @@ XI 把 `uLotInfo` 那一大片查成 EXIT REGISTER，並明文把「其餘六個
 - **沒有改 `net6.py` 的類別名偽陽性**——它是我今晚的臨時量測腳本（在 scratchpad），
   不是樹上的工具；把它收編成正式工具之前不值得修。
 
+## 20260829 XIII — 最後 4 支讀完：**全部不可翻**，FW-3 唯讀面確定為 **0**
+
+XII 留下最後一件事：那 4 支「從未被 facade 提及、且安全軸乾淨」的方法還沒讀本體。
+讀完了，**四支全部不可翻**——而且**四個理由沒有一個是前面六層漏斗看得見的**。
+
+| 方法 | 行 | 讀出來的實情 | 漏斗為何看不見 |
+|---|---|---|---|
+| `strngrdAutoSaveLogMouseDown` | 18 | `strngrdAutoSaveLog->MouseToCell(X,Y,Column,Row)` 再切換 `Cells[][]` | **`vclcompat/StringGrid.h:20` 明文**：「Options/OnDrawCell/OnSelectCell/RowHeights/**MouseToCell** -- none of those」。**型別在、方法不在**——這是 port 的能力邊界，不是安全問題 |
+| `ChangeData` | 50 | 走 VCL 控制項樹（`ControlCount`/`Controls[]`/一串 `dynamic_cast`），然後 **`CheckBox->OnClick = edContactCountFTChange`** | **接線**。戰役規則是「event handler 本體翻譯但**不接線**」，而 facade（無 TForm 基底、無 `__published`）根本沒有活的控制項階層 |
+| `edContactCountFTChange` | 19 | 讀 `((TEdit*)Sender)->Name`、在具名 edit 間複製 `Text`、設 `btnApply->Enabled=true` | 需要**一整組 widget 欄位**＋VCL 的 `Name` 屬性；不是單支方法的事 |
+| `mtBinSelectYieldMouseDown` | 22 | `MyYieldPanel[tag]->bPass[X]` / `bOpenShort[X]` 互斥切換 | **寫 bin 路由狀態**（pass／open-short 分類）——**生產設定**，安全相鄰 |
+
+### 這是今晚第四次「讀本體改變了答案」
+
+前三次：`RecordLog_HS` 遞迴到 FTP 上傳、`HandlerClientSocketRead` 解析外部指令＋發 SECS、
+`ShowATC_Page` 透過 `TIniFile` 物件寫 ini。這一次是四支一起。
+
+**而這四個理由的性質，跟前三次不同**：前三次是**安全風險**（漏斗原則上抓得到，只是樣式不夠），
+這四支裡有三支是**能力/架構邊界**——
+`MouseToCell` 沒 port、控制項樹不存在、widget 欄位缺一整組。
+**那不是「加一條樣式」能補的**，因為它們根本不是風險，是**做不到**。
+
+⚠ 所以六層漏斗的定位要說清楚：它篩掉的是**不該做**的，
+**篩不出「做不到」的**——後者只有讀本體＋查 port 能力才知道。
+
+### FW-3 的最終帳
+
+```
+已交付          Command.cpp/TfMain 164/164、cObserver、uTemp_Set 全完成
+EXIT REGISTER    42 支（fLotInfo.h，四類安全邊界，各附 golden 行號）
+具名 GATE       160 個（七個 FW-3 facade 合計）
+其餘已提及       73 支（各帶理由）
+從未提及且乾淨    4 支 -> **讀完後 0 支可翻**
+--------------------------------------------------------
+FW-3 唯讀可翻譯面 = 0
+```
+
+**這個 0 是普查出來的，不是抽樣推論的。**
+
+### 刻意沒有做的事
+
+- **沒有擴 `vclcompat`** 去加 `MouseToCell`。那是基礎建設變更，會影響所有用 `TStringGrid` 的
+  facade，且 `StringGrid.h:20` 是**刻意**列出未 port 的清單，不是遺漏。
+- **沒有碰 `bPass[]`／`bOpenShort[]`**（bin 路由）——生產設定，安全相鄰。
+- **沒有為了湊出「還有東西可做」而放寬任何一條判準。**
+
 # 🔖 RESUME（20260829 · 第二十四版）
 
 - ✅ **`TfProductionInfo` 整批收完**（12 支／496 golden 行）：
