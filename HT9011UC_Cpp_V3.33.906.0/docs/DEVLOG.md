@@ -15833,9 +15833,161 @@ FAILSET（兩側逐項相同）= 常駐五項
 前兩次誤用了已停用的 `dualgate2.sh`，見同日 commit 483a9c9。
 收工腳本另驗過：**沒有任何交付檔比 gate 起跑新**。
 
-# 🔖 RESUME（20260828 · 第十六版）
+## 20260828 VI — FW3-BTQ1：交付完成、複驗全過，**但被 gate 擋住**，而根因不是正確性
 
-- **本段最後一顆**：`FW3-DTL1`（**一波四檔、八個新檔**）——
+### 結論先講
+
+**這一波的十二個檔沒有 commit。** 不是因為交付有問題——**交付是好的，而且是量過的**——
+而是因為 `dfm2rc_fidelity` 這顆測試在 gate 環境下跑不完 600 秒的預算。
+**同一顆測試直接跑（不經 ctest）是過的：Debug 350 秒、Release 470 秒，內容 133/133 表單全過。**
+
+**需要使用者裁決的兩個選項**（**我沒有動任何一個**）：
+1. 放寬 `dfm2rc_fidelity` 的 timeout；或
+2. 把 build 目錄加進端點防護的排除清單。
+
+### 交付（一波五檔，十個新檔；已完整複驗）
+
+| golden | 新 facade | ACTIVE / 成員 | live golden 行 |
+|---|---|---|---|
+| `cBuilder.cpp` | `forms/fBuilder.{h,cpp}` | **13/22** | **123/531（23.2%）** |
+| `cTestCategory.cpp` | `forms/fTestCategory.{h,cpp}` | 4 ACTIVE ＋1 partial／13 | **54/518** |
+| `QAMode.cpp` | `forms/fQAMode.{h,cpp}` | 5 ACTIVE ＋1 partial／12 ＋file-scope | **40/302** |
+| `DIOInterFaceCFG.cpp` | `forms/fDIOFrom.{h,cpp}` | **8/14** | **66/236（28.0%）** |
+| `RPDefault.cpp` | `forms/fRPDefault.{h,cpp}` | 4/11 | **30/386** |
+
+`CMakeLists.txt` **2965 → 3037 行（+72）**，純 CRLF，已註冊。
+主迴圈獨立量到：**十一處引用行號全部精準**；五顆 `.o` 真 `-c` 編譯（`-Wall -Wextra`）
+**rc=0、0 error、0 warning**；`nm --undefined-only` **15 個相異專案符號全部可達**
+（`ht9045_core` 4／`ht9045_globals` 9／`ht9045_forms` 2），`ht9045_sm` **只有 `ShowMyMessage`**
+（四個既有例外之一，且不在 `#if 0` 內），**零**來自 `_motor`／`_io`／`_db`／`_comms`／`_secsgem`；
+十檔 UTF-8 無 BOM、CR=0、零 U+FFFD。
+
+一個本體吃掉整波份量：`CompareRPDefaultAndValue` **228 行＝`RPDefault.cpp` 的 59.1%**。
+
+### gate 的四次量測，全部同一個形狀
+
+| 次序 | 情境 | 結果 |
+|---|---|---|
+| run1 Debug | `dualgate.sh`，機器忙 | `dfm2rc_fidelity ***Timeout 600.03 sec` |
+| run1 Release | 同上 | `***Timeout 600.03 sec` |
+| ctest 單獨探針 | `ctest -R dfm2rc_fidelity --timeout 1800` | `***Timeout 600.01 sec` |
+| run2 Debug | `dualgate.sh`，**機器已安靜、全新 dir** | `***Timeout 600.02 sec` |
+
+**而直接跑 exe（不經 ctest、無 timeout 可擋）**：
+- **Release：`RC=0`、`ELAPSED_SEC=470`**
+- **Debug：`RC=0`、`ELAPSED_SEC=350`**
+- 兩者內容都全過：`layout_compile_ok_count: 133`、`layout_compile_fail_count: 0`、`fail_form_count: 0`
+
+**所以測試的內容是對的，BTQ1 沒有破壞任何東西。** 失敗的是**在 gate 環境下的執行時間**。
+
+### 有效 timeout 是 600，而且它來自一個覆寫
+
+`tests/CMakeLists.txt:2529` 對這四顆 dfm2rc 測試設了明確的 `TIMEOUT 300`，
+上方 `:2520-2527` 的註解說那是「**IN ADDITION to**（不是取代）檔尾那道 600 秒的 blanket ratchet」。
+**但 `set_tests_properties` 是覆寫**：檔尾 `:3246` 的
+`set_tests_properties(${_ht9045_all_tests} PROPERTIES TIMEOUT 600)` 後執行，
+於是這四顆的最終屬性就是 **600**，不是 300。**樹的實際行為與註解說的不一致。**
+（對我們是寬鬆方向，所以無害；但那句「IN ADDITION to」是錯的。**沒有順手改**——
+改它等於改測試行為，而測試行為的改動需要 gate，gate 正好是壞的那個東西。）
+
+⚠ **測試自身的 TIMEOUT 屬性勝過 `ctest --timeout`。** 這是我第一支探針的設計錯誤：
+給了 `--timeout 1800`，仍在 600.01 秒被砍，我一度以為是機器問題，其實是屬性贏了。
+
+### 這顆測試一年內變慢了多少（有記錄的）
+
+| 時點 | 來源 | 耗時 |
+|---|---|---|
+| 2026-07-28 | `tests/CMakeLists.txt:2526` 當時的實測註解 | **~130 秒** |
+| 20260827 | `tools/dualgate2.sh` 檔頭實測 | Debug 565.94s／Release 355.37s |
+| 20260828（今天，直接跑） | 本節 | Debug **350s**／Release **470s** |
+| 20260828（今天，gate 內） | 本節 | **>600s，四次全部撞破** |
+
+那顆測試**每一個表單都要生成 `windres` ＋ `cmd` ＋ `gcc -E` 行程**（直接觀測到），
+而本機常駐**兩套端點防護**（F-Secure 的 `fsulprothoster`/`fshoster`、CrowdStrike 的
+`CSFalconContainer`）。**gate 會在全新目錄產生數萬個檔**供它們掃描——
+於是同一顆測試在 gate 內比單獨跑膨脹 1.7 倍以上，正好跨過那條線。
+
+### 我自己犯的兩個錯，都與「用不對的東西當基準」有關
+
+1. **`--timeout` 壓不過測試屬性**（上面說過）——量測工具沒設對，得到的數字沒有意義。
+2. **用不可比的基準外推**：我拿 `dualgate2` 檔頭的 565.94s／355.37s 算出「Debug≈1.6×Release」，
+   據此預測 Debug 約 750 秒。**實測 350 秒。**
+   那組歷史數字是在 **dualgate2 的重疊條件**下量的，本來就不能拿來推「單獨跑」的比例。
+   **基準不可比的時候，外推出來的漂亮數字比沒有數字更糟**，因為它看起來像結論。
+
+### 刻意沒有做的事
+
+- **沒有調 timeout。** 那是共用且承重的測試屬性，屬於使用者裁決。
+- **沒有跑第三次 gate。** 政策是「同根因紅兩次 → 停、記錄、換標的」，run1 與 run2 已是兩次。
+- **沒有 commit 那十二個檔。** 它們留在樹上，複驗完成、待 gate。
+- **沒有開新的翻譯波。** gate 不能通過時繼續翻，只會堆積無法驗收的工作。
+
+### 這一波仍然量到的東西（即使沒 commit，這些發現是真的）
+
+⭐ **「gate」該拆成兩種**：`fBuilder` 的 **9 個 gate 沒有一個是連結 gate**——
+`DataPath`／`OffsetPath`／`MyForceDirectories`／`ShowMyMessage` **今天全部可達**，
+正因為可達，解開它們會**真的去複製與刪除 recipe 資料夾**。
+**link gate 在連結圖改變時就會開；safety gate 只有在人判定那個寫入可接受時才開。**
+
+⚠ **保留名是 19 個不是 18 個，而少掉的那個是我弄丟的**：主迴圈用 `head -14` 讀 pre-flight，
+把 `fDIOFrom` 的名單截斷，`rgStartLogic`（預約於 `forms/fTesterIF.cpp:1477`）就這樣掉了。
+**agent 是因為 prompt 要求它「開工時自己再跑一次 pre-flight」才抓到的。**
+**用管線裁切工具輸出時，被裁掉的那一截不會有人通知你。**
+
+⚠ **一個符號 gate 掉五支本體**：`fTestCategory` 的 5 個 gate 全靠 `IsNNMode`，
+其 port 定義只有 `atester_shims.cpp` 的 **`return 0;` stub**（陷阱 #1 shape 2，
+`nm --undefined-only` **看不見**）與 `cinitial.cpp` 的真本體，兩者都在 `ht9045_sm`。
+
+⚠ **保留名不一定對應 golden 的成員**（第一個實例）：`TfTestCategory::Active` 是 **port 專有欄位**，
+golden 沒有這個成員——那是繼承自 `TForm::Active`，被本 port「不繼承基底類別」的偏離拿掉了。
+
+⚠ **golden 自己也有分母缺口**：`SetReciepeParameterDefault` 宣告在 golden `RPDefault.h:59`，
+**在 golden 自己的樹裡沒有定義**。pre-flight 數 11 個本體、golden 標頭列 12 個方法，
+差的那個是 **golden 的缺口，不是我們未翻**。
+
+⚠ **「四個 forms→sm 例外」清單要更正**：`MyDBIProcess` **有兩個多載**——
+2 參數版在 `aHotPlateSubstrate.cpp`（`ht9045_sm`，被認可的例外，也是這些表單呼叫的那個）；
+`cMyDB.h:81` 記載的 3 參數 `__fastcall` 版本體在 `SECSGEM/uHGemEquipment.cpp`＝`ht9045_secsgem`，
+**forms 連不到**。**「MyDBIProcess 是例外」對的是那個多載，不是那個名字。**
+
+🔧 **`symtarget.py` 的第三個缺陷已修**：它把 `ShowMyMessage` 的兩個**跨行前向宣告**
+（`cConfiguration.cpp`／`cObserver.cpp`）報成 live 定義並列進「MUST be gated」——
+同名自由函式有三個定義的話樹根本連不起來，一望即知是錯的。
+⚠ **我第一版修法把變數弄壞了**：用「先遇到 `{` 是定義、先遇到 `;` 是宣告」一律套用，
+於是 `TfHotPlate *HotPlateForm = 0;` 這種變數定義全被判成宣告，`HotPlateForm` 與 `DataPath`
+憑空消失。**靠四個已知答案的回歸測試才抓到**；最終版只對**函式**套用那個判準。
+
+🔒 **解閘 blocker**：`forms/fTesterIF.cpp` 有六處把 `fDIOFrom` 的 widget 讀成
+`->Items->Strings[i]`，**那些清單在本 port 是空的**（沒有東西載入 `.dfm` layout）。
+與 `fTowerLight` 的 LED `Tag` 同形狀：**型別補上不等於可以解鎖，要先問「值從哪來」**。
+
+📌 **還有一件待辦**：BTQ1 讓六則位於 `#if 0` 上方的散文註解變成假的
+（`atester_ProcessCount.cpp:1479`、`Command.cpp:9175`／`:15247-15249`、
+`cBinSel.cpp:18`／`:1414`／`forms/fBinSel.h:358`、
+`forms/fTesterIF.cpp:1466-1469`／`forms/fTesterIF.h:236`、`forms/fLd_ULd.cpp:314`）。
+沒有任何東西開始編譯，留成**單獨一顆純註解 commit**（零行為變更 → 走 `g++ -E` 便宜驗收線）。
+⚠ `forms/fTesterIF.cpp:1466-1469` 那則**有一半字面上仍為真**：本波加的是
+`forms/fDIOFrom.{h,cpp}`，不是 `DIOInterFaceCFG.{h,cpp}`。
+
+# 🔖 RESUME（20260828 · 第十七版）
+
+- 🛑 **目前卡住的地方（需要使用者裁決，不要自己動）**：`FW3-BTQ1` 交付完成、複驗全過，
+  **但 gate 過不了，而根因不是正確性**。詳見 20260828 VI。
+  `dfm2rc_fidelity` 在 gate 內**四次全部撞破 600 秒**（run1 Debug／run1 Release／
+  ctest 單獨探針／run2 Debug）；但**直接跑 exe（不經 ctest、無 timeout）是過的**：
+  **Debug `RC=0` 350 秒、Release `RC=0` 470 秒，內容 133/133 表單全過、零失敗**。
+  有效 timeout 600 來自 `tests/CMakeLists.txt:3246` 的全域覆寫（蓋掉 `:2529` 的明確 300，
+  而 `:2520-2527` 的註解說那是「IN ADDITION to」——**名實不符**）。
+  該測試**每個表單都生成 `windres`＋`cmd`＋`gcc -E` 行程**，本機常駐**兩套端點防護**
+  （F-Secure、CrowdStrike），而 gate 會在全新目錄產生數萬個檔供其掃描。
+  **兩個選項，都要使用者決定**：(a) 放寬該測試 timeout；(b) 把 build 目錄加進防毒排除清單。
+  **BTQ1 的十二個檔留在樹上未 commit**（`forms/fBuilder.{h,cpp}`、`forms/fTestCategory.{h,cpp}`、
+  `forms/fQAMode.{h,cpp}`、`forms/fDIOFrom.{h,cpp}`、`forms/fRPDefault.{h,cpp}`、
+  `CMakeLists.txt` 已註冊 +72 行），**已完整複驗、待 gate**。
+  **在裁決前不要開新的翻譯波**——gate 不能通過時繼續翻只會堆積無法驗收的工作。
+  唯一可推進的是那顆**純註解 commit**（六則被 BTQ1 弄假的註解，零行為變更，走 `g++ -E` 便宜驗收線）。
+
+- **本段最後一顆（已驗收）**：`FW3-DTL1`（**一波四檔、八個新檔**）——
   `forms/fTowerLight.{h,cpp}`（368+234）**8/8 支、101/133 行（75.9%，目前最高行覆蓋率）**；
   `forms/fCounterSel.{h,cpp}`（268+200）**5/5 支、10/123 行**；
   `forms/fLd_ULd.{h,cpp}`（398+387）**15/16 支＋1 省略、41/222 行**；
