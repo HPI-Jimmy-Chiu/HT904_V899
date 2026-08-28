@@ -16701,7 +16701,98 @@ R_TOTAL=5  R_EXTRA=  R_ABSENT=  R_VERDICT=GREEN   (Release, 22:23:43)
   下一波才翻 `CalculateOEEReport`。**一顆 commit 一件事**，失敗時才歸因得了。
 - 沒有動 `tests/CMakeLists.txt:3246` 的 600 秒，沒有動任何端點防護設定。
 
-# 🔖 RESUME（20260828 · 第二十版）
+## 20260828 XIV — FW3-PIOEE 驗收：OEE 報表三支（golden 267 行），主迴圈自譯
+
+```
+G_TOTAL=5  G_EXTRA=  G_ABSENT=  G_VERDICT=GREEN   (Debug,   23:06:54)
+R_TOTAL=5  R_EXTRA=  R_ABSENT=  R_VERDICT=GREEN   (Release, 23:25:45)
+```
+
+**連續第十九個乾淨 gate。** 這是 `ba3683e` 那次連結搬移**第一次真的換到東西**。
+
+### 交付
+
+| 檔 | 變化 |
+|---|---|
+| `forms/fProductionInfo.cpp` | 480 -> **811 行**；三支本體 |
+| `forms/fProductionInfo.h` | 260 -> **299 行**；**22 個欄位** ＋ 3 個宣告 |
+| `forms/fObserver.h` | **+1 欄位**（`sTestReceiveTime`，golden `cObserver.h:543`） |
+
+| 方法 | golden | 行數 |
+|---|---|---|
+| `SetOEEReportMessage` | `.cpp:565-598` / `.h:214` | 34 |
+| `CalculateOEEReport` | `.cpp:629-829` / `.h:210` | **201** |
+| `ClearOEECount` | `.cpp:887-918` / `.h:213` | 32 |
+
+自檢（交付前，全部自量）：`forms/fProductionInfo.cpp` **rc=0／0 error／0 warning**（`-Wall -Wextra`）；
+`cObserver.cpp` rc=0，44 個 warning **全部既有**（43 個在 `Motor/HTMotor.h` 的 `-Wunused-parameter`、
+1 個 `-Wcomment` 在 `cObserver.cpp` 自己），**提及本次改動的 0 個**。
+三檔 UTF-8 無 BOM、CR=0、零 U+FFFD。
+
+### 開工後才浮現的四件事
+
+**1. 範圍比「201 行」大得多。** 它需要的 **21 個識別字裡 16 個在 port 不存在**——
+所以真實工作是「一支方法 ＋ 22 個欄位 ＋ 兩支同伴」。
+兩支同伴各自篩過：`screen_methods.py` 安全軸乾淨，
+而且**可達軸也乾淨**（兩支合計 **零個跨模組 `->` 解參考**，只呼叫已在 port 的 `GetBin0_8List()`）。
+
+**2. `vclcompat::TDateTime` 沒有 `FormatString`。** golden 四處用 `<TDateTime>.FormatString(fmt)`。
+**沒有自創、也沒有擴 vclcompat**：樹上早有記載的對應是自由函式 `FormatDateTime(fmt, dt)`
+（NOTE 在 `ainarm9045.cpp:7219-7223`，用例在 `:916`）。
+語意先驗過再用：該實作把 token 小寫化（所以大寫 `"YYYYMMDD"` 等價），
+且「其他字元一律字面輸出」（`vclcompat/TDateTime.cpp:255-257`），
+所以 `"YYYYMMDD_HHNN00"` 裡的 `_` 與字面 `00` 與 golden 相同。
+
+**3. `fObserver->sTestReceiveTime` 在 port 不存在。** golden `cObserver.h:543`，
+與已翻的 `:547`／`:548` 是同一批 KaiChen 20171127 OEE 欄位，Wave 1 因「沒有交付的方法碰到」而留白。
+補上一行。
+⚠ **並且誠實記下**：**本 port 沒有任何東西寫它**（golden 的寫入點
+`cObserver.cpp:2067`／`:2071`、`uLotInfo.cpp:1793`／`:2155` 全未翻），
+所以 OEE CSV 的 Test-Receive-Time 欄會**恆為空字串**。
+這是「忠實翻譯一個目前沒有生產者的欄位」，**不是 stub**。
+
+**4. 我把一個「golden bug」講錯了，當場更正。**
+`if(sJamCNT<=0)` 拿 `AnsiString` 跟 `0` 比，我第一版註解寫成缺陷。**那是不準確的。**
+- 型別面：`vclcompat/AnsiString.h:233` 的 `operator<=` **只有 `(AnsiString, AnsiString)` 一個版本**
+  （沒有 `const char*` 多載），所以 `0` 只能走非 explicit 的 `AnsiString(int)` -> `"0"`，
+  **不會被當成空指標**。與 BCB6 相同。
+- 行為面（**逐值實測，不是推論**）：`"0"`->true、`"-5"`->true（`'-'` 0x2D < `'0'` 0x30）、
+  `"1"`->false、`"100"`->false。`IntToStr` **永不產生前導零**，
+  所以**字串比較對每一個 int 值都與整數比較同結果**。
+- 結論：它是**寫法瑕疵，沒有可觀察效果**。
+  **把它寫成「bug」會讓下一個讀到的人去找一個不存在的錯誤。**
+
+### 環境（gate 自己量的）
+
+| 測試 | Debug | Release |
+|---|---|---|
+| `dfm2rc_rc_compiles` | 93.16s | 93.74s |
+| `dfm2rc_layout_full` | 48.18s | 47.65s |
+| `dfm2rc_fidelity` | **150.01s** | **150.24s** |
+| `dfm2rc_idempotent` | 8.07s | 7.67s |
+| ctest 總時間 | 451.38s | 476.00s |
+
+`fidelity` **150.01/150.24 秒 = 基線本身**（600 秒預算的 4 倍餘裕）。異常波已完全過去。
+
+### 驗收紀律逐條
+
+- **§5c**：三個交付檔的 md5 與 mtime 與 `_pioee1_baseline_mtimes.txt` **全部相同**，
+  停在 **22:42-22:47**，早於 gate 起跑錨點 `build_pioee1g/cfg.log` = **22:49:48**。
+- **`D:\HT9045\system`**：這次做了**真正的 before/after**（基準 `_sysguard_baseline.json` 22:33 照的，
+  早於 gate 起跑 22:49）：`system_guard.py compare` -> **`IDENTICAL: 552 files, bytes and mtime all unchanged`**，
+  rc=0。比上一波的 mtime 區間檢查強——它同時證明**位元組與 mtime 都沒動**
+  （「內容相同但被重寫」正是 BinCount 那次的徵狀）。
+
+### 刻意沒有做的事
+
+- **沒有接線**：三支**都沒有呼叫者**（golden 的呼叫點在未翻的 OEE 流程裡），
+  所以本波**不改變任何執行期行為、也不可觀察**。這是 FW 波次的常態，不是缺陷。
+- **沒有翻 `LoadMOInformation`（寫檔/寫 ini）與 `CheckOEE_WhenStart`（送命令/上傳）**——
+  它們被**安全軸**擋住，而安全軸**沒有因為 `ba3683e` 的連結搬移而放寬**。
+  可達不等於可翻，這一條在本波再次適用。
+- 沒有動 `tests/CMakeLists.txt:3246` 的 600 秒，沒有動任何端點防護設定。
+
+# 🔖 RESUME（20260828 · 第二十一版）
 
 - ✅ **`FW3-BTQ1` 已於 20260828 XI 驗收並 commit**（gate `btq2`，**兩側 GREEN**，
   失敗集合逐項等於常駐五項，**連續第十七個乾淨 gate**）。

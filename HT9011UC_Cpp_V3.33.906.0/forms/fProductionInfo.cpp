@@ -33,6 +33,15 @@
 // FW3-PI1: verified against CMakeLists.txt before use -- see forms/fProductionInfo.h's
 // FW3-PI2 block comment for the per-function trace of what this wave did NOT translate.
 #include "CosFunction.h"
+// AI(W906-FW3-PIOEE) 20260828: 2 個 include。
+// ⚠ 上面 FW3-PI1 那段寫著「cprod.h ... 是 DELIBERATELY NOT included」，
+//   那在當時是實情，**不改寫**；但它的前提（本檔屬 ht9045_forms）
+//   已於 commit ba3683e 失效：本檔現在是 **ht9045_sm** 的來源
+//   （CMakeLists.txt:2722），而 ht9045_sm link 了 io/motor/globals/vclcompat/
+//   secsgem/forms，所以那道牆不存在了。見 DEVLOG 20260828 XII/XIII。
+#include "cprod.h"           // Prod.iIsPassT6[] (CalculateOEEReport) -- cprod.cpp, ht9045_globals
+#include "forms/fObserver.h" // fObserver->sTestReceiveTime/sTestIndexZTime/dOEEIndexCycleTime
+                              //   -- cObserver.cpp, ht9045_sm (same target as this file since ba3683e)
 
 TfProductionInfo::TfProductionInfo() : sLoadMO_TestFlow("") {
     // AI(W906-FW3-PI1) 20260827: widget pointer for the FW3-PI1 batch, same
@@ -476,5 +485,327 @@ bool TfProductionInfo::SetBinTraySetting(TStringList* tlBinTray,AnsiString asSou
     }
     delete tempTL;
     return bGetE;
+}
+//---------------------------------------------------------------------------
+
+// =============================================================================
+//  AI(W906-FW3-PIOEE) 20260828: OEE 報表三支，逐字翻自 golden
+//  ProductionInfo/ProductionInfo.cpp。三支都是純計算＋組字串，
+//  **零 widget 存取、零機台動作、零檔案 I/O、零對外命令**
+//  （tools/wavescan/screen_methods.py 實測：三支全部「乾淨」）。
+//
+//  ⚠ 同檔其他 OEE 方法**仍然不翻**，而且不是因為連結：
+//    * LoadMOInformation (golden :309 行) -- **寫檔/寫 ini**
+//    * CheckOEE_WhenStart (83 行)        -- **送命令/上傳**
+//    安全軸與可達軸是兩個獨立的軸；搬進 ht9045_sm 只解開了後者。
+//    見 DEVLOG 20260828 IX / XII。
+//
+//  ⚠ DEVIATION -- golden :634 的 `DateSeparator='/';`（Sam 20210225：增加保護）
+//    **未翻**，照本樹既有慣例：見 cObserver.cpp:54-56「i`DateSeparator` 的
+//    指派已捨棄（inert）」與 cMyDB.cpp:897 的同型註記。
+//    本 port 的 TDateTime::FormatString 不讀那個全域，所以不翻就是零差異；
+//    不是「省略一行」而是「那一行在這棵樹上沒有可觀察效果」。
+//
+//  ⚠ 三個 golden 自帶的瑕疵，**逐字重現，沒有靈修**：
+//    (1) golden :654 `if(sJamCNT<=0)` 拿 **AnsiString 跟 0 比**（作者顯然想寫
+//        `_iOEE_JamCount<=0`）。BCB6 走非 explicit 的 AnsiString(int) -> "0"，
+//        所以實際是**字串比較**。本 port 一樣：vclcompat/AnsiString.h:67 非 explicit，
+//        而 :233 的 operator<= **只有 (AnsiString, AnsiString) 一個版本**（沒有 const char*
+//        多載，所以不會被當成空指標）——**逐字照抄就重現相同行為**。
+//        ⚠ 但要說清楚：**這不是一個會出錯的 bug。** 實測逐值驗過
+//        （scratchpad 探針）：IntToStr(0)="0" -> true、IntToStr(-5)="-5" 因 '-'(0x2D)<'0'(0x30)
+//        -> true、IntToStr(1)="1" -> false、IntToStr(100)="100" 因 '1'>'0' -> false。
+//        IntToStr 的輸出永遠不帶前導零，所以**字串比較對每一個 int 值都與
+//        整數比較同結果**。它是寫法瑕疵，沒有可觀察效果。
+//    (2) golden :765/:777 `sprintf("%0.2f%", ...)` 結尾是殘缺的格式規格。照翻。
+//    (3) golden :746/:753 的錯誤訊息寫完下一行馬上被覆寫成 "0"/"0.00%"，
+//        那些訊息永遠不可觀察。照翻（它們是 golden 的意圖記錄）。
+//
+//  ⚠ MEASURED BEHAVIOUR NOTE -- `fObserver->sTestReceiveTime` 在本 port
+//    **沒有任何寫入點**（見 forms/fObserver.h 同日註記），
+//    所以輸出 CSV 的那一欄恆為 ""。這是忠實的，不是缺陷。
+//
+//  ⚠ 本波**沒有任何呼叫者**：golden 的呼叫點在未翻的 OEE 流程裡。
+//    所以這三支落地後**不改變任何執行期行為**，也不可觀察。
+// =============================================================================
+
+void TfProductionInfo::SetOEEReportMessage()
+{
+    _sOEE_FLOW=sLoadMO_TestFlow;
+    //IN Q'ty
+    int iNowINQty=LastSet.SendCT[0];
+    if(iNowINQty<iLastINQty)
+    {
+        iLastINQty=LastSet.SendCT[0];
+    }
+    _iOEE_sINQty=iNowINQty-iLastINQty; //IN Q'ty
+    iLastINQty=iNowINQty;
+    int iActuralOut=0;
+    int iNowBIN=0;
+    std::vector<int> lsBin0_8=GetBin0_8List();
+    //BIN0~8
+    for(unsigned int i=0; i<lsBin0_8.size(); i++)                                //Sam 20171018 : OEE Bug 修正
+    {
+        iNowBIN=LastSet.BinCT[0][lsBin0_8[i]];                                   //Sam 20171018 : OEE Bug 修正
+        if(iNowBIN<iLastBIN[i])
+        {
+            iLastBIN[i]=LastSet.BinCT[0][lsBin0_8[i]];                           //Sam 20171018 : OEE Bug 修正
+        }
+        _iOEE_sBIN[i]=iNowBIN-iLastBIN[i];
+        iLastBIN[i]=iNowBIN;
+        iActuralOut=iActuralOut+iNowBIN;
+    }
+    //Actural Out
+    if(iActuralOut<iLastActuralOut)
+    {
+        iLastActuralOut=iActuralOut;
+    }
+    _iOEE_ActuralOut=iActuralOut-iLastActuralOut; //Actural Out
+    iLastActuralOut=iActuralOut;
+}
+//---------------------------------------------------------------------------
+
+void TfProductionInfo::CalculateOEEReport(AnsiString &sResultOEEReport,bool bSaveNow)//Jimmychiu 20231023 : 非整點製作報表，時間準確到秒
+{
+    AnsiString sOEEReportMsg = "";
+    SetOEEReportMessage();
+    _dtOEE_StartDateTime    =Now(); //Start Lot時間
+    // golden :634 `DateSeparator='/';` -- DEVIATION, 見檔頭說明（inert）。
+    // AI(W906-FW3-PIOEE) 20260828: golden 這四行用 `<TDateTime>.FormatString(fmt)`，
+    // 而 vclcompat 的 TDateTime **沒有這個成員**（vclcompat/TDateTime.h:33-53）。
+    // 本樹既有的對應是自由函式 `FormatDateTime(fmt, dt)`
+    //（vclcompat/TDateTime.h:67）——先例與理由記在 ainarm9045.cpp:7219-7223，
+    // 用例在 ainarm9045.cpp:916。**不自創也不擴 vclcompat**。
+    // 語意已驗：該實作將 token 小寫化後比對（所以大寫 "YYYYMMDD" 一樣），
+    // 且「其他字元一律字面輸出」（TDateTime.cpp:255-257），
+    // 所以 "_" 與 "HHNN00" 裡的字面 "00" 都與 golden 相同。
+    AnsiString sStartDate   =FormatDateTime("yyyy/mm/dd", _dtOEE_StartDateTime); //Start Date
+    AnsiString sStartTime   =FormatDateTime("hh:nn:ss", _dtOEE_StartDateTime); //Start Time
+    if(bSaveNow==true)                                                          //Jimmychiu 20231023 : 非整點製作報表，時間準確到秒
+    {
+        sStartDateTime          =FormatDateTime("YYYYMMDD_HHNNSS", _dtOEE_StartDateTime); //Jimmychiu 20230824 : 符合Greatek資訊部抓資料條件，秒數必須為0
+    }
+    else
+    {
+        sStartDateTime          =FormatDateTime("YYYYMMDD_HHNN00", _dtOEE_StartDateTime); //Jimmychiu 20230824 : 符合Greatek資訊部抓資料條件，秒數必須為0
+    }
+    AnsiString sPowerTime   =IntToStr(_iOEE_PowerTime); //Power Time(Sec)
+    AnsiString sRunTime     =IntToStr(_iOEE_RunTime-_iOEE_SoakTime); //Run Time
+    AnsiString sTempTime    =IntToStr(0); //Temp Time
+    AnsiString sSoakTime    =IntToStr(_iOEE_SoakTime); //Soak Time
+    AnsiString sStopTime    =IntToStr(_iOEE_StopTime); //Stop Time
+    AnsiString sPauseTime   =IntToStr(_iOEE_PauseTime);
+    AnsiString sJamCNT      =IntToStr(_iOEE_JamCount); //Jam CNT
+    AnsiString sServiceCNT  =IntToStr(_iOEE_ServiceCount); //Service CNT
+    AnsiString sMTBA        =""; //MTBA
+    if(sJamCNT<=0)   // golden :654 逐字保留：AnsiString vs 0 -> AnsiString("0") 字串比較，實測與整數比較等價（見檔頭 (1)）
+    {
+        sMTBA=sRunTime;
+    }
+    else
+    {
+        if(_iOEE_JamCount>0)
+        {
+            sMTBA=IntToStr(_iOEE_RunTime/_iOEE_JamCount);
+        }
+        else
+        {
+            sMTBA="_iOEE_JamCount = 0 Error";
+            sMTBA="0";
+        }
+    }
+
+    AnsiString sMTBF=""; //MTBF
+    if(_iOEE_ServiceCount<=0)
+    {
+        sMTBF=sRunTime;
+    }
+    else
+    {
+        if(_iOEE_ServiceCount>0)
+        {
+            sMTBF=IntToStr(_iOEE_RunTime/_iOEE_ServiceCount);
+        }
+        else
+        {
+            sMTBF="_iOEE_ServiceCount = 0 Error";
+            sMTBF="0";
+        }
+    }
+
+    AnsiString sHOEEPercent=""; //HOEE%
+    if(_iOEE_PowerTime>0)
+    {
+        sHOEEPercent=ChangeToPercentage((double)_iOEE_RunTime-_iOEE_SoakTime, (double)_iOEE_PowerTime); //Steven 20250820 : 針對除以0加上保護
+    }
+    else
+    {
+        sHOEEPercent="_iOEE_PowerTime = 0 Error";
+        sHOEEPercent="0.00%";
+    }
+
+    AnsiString sFLOW    =sLoadMO_TestFlow;
+    AnsiString sStatus  =_sOEE_Status;
+    AnsiString sJamCode =_sOEE_JamCode;
+    AnsiString sINQty   =IntToStr(_iOEE_sINQty); //IN Q'ty
+    AnsiString sBIN[8]; //Sam 20171018 : OEE Bug 修正
+    int iPassBin=0;
+    for(int i=0; i<8; i++)    //Sam 20171018 : OEE Bug 修正                     //QQQ
+    {
+        sBIN[i]=IntToStr(_iOEE_sBIN[i]);                                        //BIN1
+        if(Prod.iIsPassT6[i]==1)                                                //Steven 20240105 : Prod.bIsPass --> Prod.iIsPassT6 //Steven 20240701 : 0 --> 1
+        {
+            iPassBin=iPassBin+_iOEE_sBIN[i];
+        }
+    }
+    AnsiString sYIELD=""; //YIELD
+    if(_iOEE_ActuralOut>0)
+    {
+        sYIELD=ChangeToPercentage((double)iPassBin, (double)_iOEE_ActuralOut);  //Steven 20250820 : 針對除以0加上保護
+    }
+    else
+    {
+        sYIELD="_iOEE_sINQty = 0 Error";
+        sYIELD="0.00%";
+    }
+    AnsiString sActuralOut=IntToStr(_iOEE_ActuralOut); //Actural Out
+    AnsiString splanout=""; //IntToStr(_iOEE_planout); //plan out
+    if((fLastIndexTime+fLastTestTime)>0.0)
+    {
+        splanout=IntToStr((int)(ChangeToFloatNonPcnt((double)(atof(sPowerTime.c_str())), (double)(fLastTestTime))));       //Mylin 20170517 Modify OEE Clear Count Issue
+    }
+    else
+    {
+        splanout=sActuralOut;
+    }
+    _iOEE_planout=atoi(splanout.c_str());
+
+    AnsiString sMOEEPercent=""; //MOEE%
+    if(_iOEE_planout>0)
+    {
+        sMOEEPercent=ChangeToPercentage((double)_iOEE_ActuralOut, (double)_iOEE_planout*100.0);
+        sMOEEPercent.sprintf("%0.2f%", atof(sMOEEPercent.c_str()));   // golden :765 殘缺格式規格，逐字保留（見檔頭 (2)）
+    }
+    else
+    {
+        sMOEEPercent="_iOEE_planout = 0 Error";
+        sMOEEPercent="0.00%";
+    }
+
+    AnsiString sOEEEPercent=""; //OEEE%
+    if(_iOEE_ActuralOut>0 && _iOEE_planout>0)
+    {
+        sOEEEPercent=FloatToStr((double)iPassBin/(double)_iOEE_ActuralOut*100.0*(double)_iOEE_ActuralOut/(double)_iOEE_planout);
+        sOEEEPercent.sprintf("%0.2f%",atof(sOEEEPercent.c_str()));    // golden :777 同上
+    }
+    else
+    {
+        sOEEEPercent="_iOEE_sINQty = 0 or _iOEE_planout = 0 Error";
+        sOEEEPercent="0.00%";
+    }
+    AnsiString sMO=sLoadMO_MO;
+    AnsiString sTestTime="0.00";
+    if(atof(sLoadMO_TestTime.c_str())!=0)
+    {
+        sTestTime=sLoadMO_TestTime;
+    }
+
+    AnsiString sActivityID=_sOEE_ActivityID;
+    int iSiteUse=0;
+    for(int i=0; i<4; i++)                                                      //Sam 20170731 HT-7045 變數改為 HT-9045 變數
+    {
+        for(int j=0; j<8; j++)
+        {
+            if(LastSet.bUseTestSocket[0][i][j]==true)
+            {
+                iSiteUse++;
+            }
+        }
+    }
+    AnsiString sTestSite=IntToStr(iSiteUse);
+
+    sOEEReportMsg  =sStartDate  +","+
+                    sStartTime  +","+
+                    sPowerTime  +","+
+                    sRunTime    +","+
+                    sTempTime   +","+
+                    sSoakTime   +","+
+                    sStopTime   +","+
+                    sPauseTime  +","+
+                    sJamCNT     +","+
+                    sServiceCNT +","+
+                    sMTBA       +","+
+                    sMTBF       +","+
+                    sHOEEPercent+","+
+                    sFLOW       +","+
+                    sStatus     +","+
+                    sJamCode    +","+
+                    sINQty      +",";
+
+    for(int i=0; i<8; i++)    //Sam 20171018 : OEE Bug 修正
+    {
+        sOEEReportMsg=sOEEReportMsg+sBIN[i]+",";
+    }
+
+    //KaiChen 20171127 ：超豐 OEE 新增 Test Time、Index Time
+    //==>
+    AnsiString sTestRecevieTime =fObserver->sTestReceiveTime;
+    AnsiString sIndexTime       =fObserver->sTestIndexZTime;
+    //<==
+    //KaiChen 20171127 ：超豐 OEE 新增 Test Time、Index Time
+
+    if(bUseTwoArm32Site==true   &&
+       sIndexTime!="")                                                          //Sam 20180802 (wei) : OEE 32Site 修正
+    {
+        sIndexTime=FloatToStr(StrToFloat(sIndexTime)+fObserver->dOEEIndexCycleTime);
+    }
+
+    sOEEReportMsg=sOEEReportMsg+sYIELD          +","+
+                                sActuralOut     +","+
+                                splanout        +","+
+                                sMOEEPercent    +","+
+                                sOEEEPercent    +","+
+                                sMO             +","+
+                                sTestTime       +","+
+                                sTestRecevieTime+","+      //KaiChen 20171127 ：超豐 OEE 新增 Test Time、Index Time
+                                sIndexTime      +","+      //KaiChen 20171127 ：超豐 OEE 新增 Test Time、Index Time
+                                sActivityID     +","+
+                                sTestSite;
+    sResultOEEReport=sOEEReportMsg;
+    ClearOEECount();
+}
+//---------------------------------------------------------------------------
+
+void TfProductionInfo::ClearOEECount()
+{
+    _dtOEE_StartDateTime=Now(); //Start Lot時間
+    _iOEE_PowerTime     =0;
+    _iOEE_RunTime       =0;
+    _iOEE_SoakTime      =0; //Soak時間
+    _iOEE_StopTime      =0;
+
+    iLastINQty = LastSet.SendCT[0];
+    //Actural Out
+    int iActuralOut=0;
+    int iNowBIN=0;
+    std::vector<int> lsBin0_8=GetBin0_8List();
+    for(int iBin=0; iBin<8; iBin++)                                             //Sam 20171018 : OEE Bug 修正
+    {
+        iNowBIN=LastSet.BinCT[0][lsBin0_8[iBin]];                               //Sam 20171018 : OEE Bug 修正
+        iLastBIN[iBin]=iNowBIN;
+        iActuralOut=iActuralOut+iNowBIN;
+    }
+    iLastActuralOut=iActuralOut;
+
+    //plan out
+    iplanout            =0;
+    _iOEE_JamCount      =0; //Jam次數
+    _iOEE_ServiceCount  =0; //Error次數
+
+    _sOEE_Status    ="";
+    _sOEE_JamCode   ="";
+    _sOEE_ActivityID="";
+    _sOEE_TestSite  ="";
+    _iOEE_PauseTime =0;
 }
 //---------------------------------------------------------------------------

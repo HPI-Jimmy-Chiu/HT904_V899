@@ -797,6 +797,16 @@ public:
     // surface" discipline).
     double fRecordInArmTime[20] = {};              // golden cObserver.h:511 -- RecordInArmTime
 
+    // AI(W906-FW3-PIOEE) 20260828: golden cObserver.h:543 -- 同一批
+    // KaiChen 20171127 OEE 欄位的第三個；下面 :547/:548 在 Wave 1 就補了，
+    // 這一個當時因為「沒有交付的方法碰到」而留白（見 :796-797）。
+    // TfProductionInfo::CalculateOEEReport（golden ProductionInfo.cpp:805）讀它，所以現在補上。
+    // ⚠ MEASURED BEHAVIOUR NOTE：**本 port 沒有任何東西寫它**
+    //   ——golden 的寫入點（cObserver.cpp:2067/:2071、uLotInfo.cpp:1793/:2155）全未翻。
+    //   所以 OEE CSV 的 Test-Receive-Time 欄位會恆為 ""，直到其中一個寫入點落地。
+    //   這是「忠實翻譯一個目前沒有生產者的欄位」，**不是 stub**。
+    AnsiString sTestReceiveTime;                   // golden cObserver.h:543
+
     bool   bTestIndexZ = false;                    // golden cObserver.h:544 -- RecordIndexTime
     int    iTestIndexZCount = 0;                   // golden cObserver.h:545
     double dRecordIndexZTime[10] = {};             // golden cObserver.h:546

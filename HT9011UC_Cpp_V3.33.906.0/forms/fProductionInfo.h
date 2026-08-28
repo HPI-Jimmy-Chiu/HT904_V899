@@ -190,6 +190,40 @@ public:
                                          //   untranslated, same reason as _sOEE_ActivityID above)
     double dOffsetContactForce = 0.0;   // [DATA] golden :196 -- SetOffsetContactForce/GetOffsetContactForce
 
+    // =======================================================================
+    // AI(W906-FW3-PIOEE) 20260828: OEE 報表三支（golden 267 行）所需的欄位。
+    // 它們先前連不到：`CalculateOEEReport` 三次解參考 `fObserver`
+    //（golden .cpp:805/:806/:813），而 `fObserver` 的本體在 ht9045_sm。
+    // 本檔所屬的 forms/fProductionInfo.cpp 已於 commit ba3683e 搬進 ht9045_sm，
+    // 那道連結牆因此消失（見 DEVLOG 20260828 XIII）。
+    // 型別逐字取自 golden ProductionInfo.h，**不自己發明**。
+    // ⚠ golden 自己的 ctor 也沒有零初始化這些（真正的初始化在 InitialOECount()，
+    //   本波未翻）；這裡給 0 與空字串是「還沒跑過 lot」的確定性離線讀數，
+    //   與上面 _iOEE_RunTime 同一套理由。
+    // =======================================================================
+    int _iOEE_PowerTime = 0;            // [DATA] golden :246 -- Power On 時間
+    int _iOEE_SoakTime = 0;             // [DATA] golden :248 -- Soak 時間
+    int _iOEE_StopTime = 0;             // [DATA] golden :249
+    int _iOEE_JamCount = 0;             // [DATA] golden :250 -- Jam 次數
+    int _iOEE_ServiceCount = 0;         // [DATA] golden :251 -- Error 次數
+    int _iOEE_sINQty = 0;               // [DATA] golden :252 -- IN Q'ty
+    int _iOEE_sBIN[8] = {};             // [DATA] golden :253 -- BIN1~8 = Auto1~3 and Fix1~Fix3
+    int _iOEE_ActuralOut = 0;           // [DATA] golden :254 (golden 拼字如此，逐字保留)
+    int _iOEE_planout = 0;              // [DATA] golden :255
+    int _iOEE_PauseTime = 0;            // [DATA] golden :256
+    int iLastINQty = 0;                 // [DATA] golden :258
+    int iLastBIN[8] = {};               // [DATA] golden :259
+    int iLastActuralOut = 0;            // [DATA] golden :260
+    int iplanout = 0;                   // [DATA] golden :261
+    AnsiString sLoadMO_TestTime;        // [DATA] golden :278
+    AnsiString _sOEE_FLOW;              // [DATA] golden :345 -- FT or RT
+    AnsiString _sOEE_JamCode;           // [DATA] golden :349
+    AnsiString _sOEE_TestSite;          // [DATA] golden :351
+    AnsiString sStartDateTime;          // [DATA] golden :353
+    double fLastIndexTime = 0.0;        // [DATA] golden :355
+    double fLastTestTime = 0.0;         // [DATA] golden :356
+    TDateTime _dtOEE_StartDateTime;     // [DATA] golden :361 -- Start Lot 時間
+
     // ---- read-only / field-only-write methods (golden .cpp span; golden .h decl) ----
     void OEE_SetMO(AnsiString sMO);                                          // golden .cpp:364-367    .h:205
     void OEE_SetHandlerID(AnsiString sHDID);                                 // golden .cpp:374-377    .h:206
@@ -218,6 +252,11 @@ public:
     // golden's caller-facing counterpart, GetBinTraySetting, is NOT translated (see the
     // block comment above) -- this helper has zero golden-global references of its own.
     bool SetBinTraySetting(TStringList* tlBinTray, AnsiString asSource, AnsiString asBin);  // golden .cpp:5254-5278  .h:492
+
+    // ---- AI(W906-FW3-PIOEE) 20260828: OEE 報表三支 ----
+    void SetOEEReportMessage();                                              // golden .cpp:565-598    .h:214
+    void CalculateOEEReport(AnsiString &sResultOEEReport, bool bSaveNow);    // golden .cpp:629-829    .h:210
+    void ClearOEECount();                                                    // golden .cpp:887-918    .h:213
 
     TfProductionInfo();
     virtual ~TfProductionInfo() {}
