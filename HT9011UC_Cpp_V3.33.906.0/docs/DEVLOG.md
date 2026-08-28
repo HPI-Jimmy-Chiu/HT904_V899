@@ -17664,6 +17664,60 @@ X 的「唯讀面已耗盡」原本建立在**四個樣本**上。現在最大�
   而其中三支是 `*MouseDown`／`*Change`，很可能撞上 `fLotInfo.h:180` 記載的
   樹寬 gate「**fQwertyKey has no port**」。
 
+## 20260829 XII — 其餘六個 facade 的 74 支「已提及」也查完了：**全部帶理由**
+
+XI 把 `uLotInfo` 那一大片查成 EXIT REGISTER，並明文把「其餘六個 facade 的 74 支」
+標為**還沒查、不是本節的宣稱**。這一節把它查掉，**普查不抽樣**。
+
+逐支抽出它在 facade 標頭裡被提及的那一行。**74 支全部帶理由，一支不漏。** 摘要：
+
+| facade | 支數 | 理由的形狀 |
+|---|---|---|
+| `TfStartCondition` | 27 | `ReadWriteStartCondition`(165L) 寫；`SocketIDLog`「fopen/fputs a CSV file」；`sbSaveClick`「writes LastSet.iStartMode」；`btnClearAaClick`「zeroes … WriteIniData」；一整排 `edt*Click`「6 QwertyKey-…」 |
+| `THandlerSystem` | 13 | **`SaveSafeDoorSet`「writes `Sen[].Enable`」（安全門）**；`rgCustomerListClick`「**SAFETY-ADJACENT**」；`SortItemToMap`/`InitItemToMap` **GATE (H1)**；`SaveBtnClick/LoadBtnClick`「WriteIniDataGeneral/WriteIniData」 |
+| `TfConfiguration` | 12 | `ReadConfigStandard()+WriteContactData()`；`cbC12Click`「KYEC 密碼閘，跨 fPassword/fQwertyKey」；`UT150Polling`/`sbSendTempClick`（UT150 溫控器通訊）；**`btnSetToTechClick`「本體只有 `SetOffsetToTech()`」（教導偏移）** |
+| `TfTemperFrom` | 10 | widget 版面（`ArrangeFormWidth`/`ChangeFormSize`/`SetIndex16HeaterPos`）；`Panel7xMouseDown`；`Button6Click`（`HandlerSystem->ShowModal()`） |
+| `TfSetup` | 9 | **`ScrollBar1Change`(962L)「alone is 963 golden lines and writes…」**——setup 編輯器本體 |
+| `TfSpeed` | 4 | `tbAllSpeedChange`/`tbAccSpeedChange`（各 62L，速度／加速度變更）；`spbSetToDefClick`(122L) |
+| `TfYieldMonitoring` | 1 | 唯一命中是**類別名本身**（`forms/fYieldMonitoring.h:2` 的檔頭），不是方法 |
+
+⚠ `TfYieldMonitoring` 那一支要說清楚：`net6.py` 把它算成「已提及」是因為
+**類別名與檔頭字串相符**，不是因為有人評估過它。**這是我的分類器的偽陽性**，
+不是 facade 的記錄。真正的數字是「六個 facade 共 73 支有理由，1 支是我誤判」。
+
+### 至此 FW-3 的帳是普查過的
+
+| 分類 | 支數 | 依據 |
+|---|---|---|
+| 已交付 | — | `Command.cpp`/`TfMain` 164/164、`cObserver`、`uTemp_Set` 全完成 |
+| EXIT REGISTER（讀完退出，附 golden 行號） | **42** | `fLotInfo.h` 六個區塊，四類安全邊界 |
+| 具名 GATE | **160** | 七個 FW-3 facade 合計 |
+| 其餘「已提及」帶理由 | **73** | 本節 |
+| **從未被提及且安全軸乾淨** | **4** | `strngrdAutoSaveLogMouseDown`／`ChangeData`／`edContactCountFTChange`／`mtBinSelectYieldMouseDown` |
+
+**「FW-3 唯讀面已耗盡」現在不是抽樣結論，是普查結論。**
+
+### 這三節（X / XI / XII）真正的產物
+
+不是新的翻譯，是**把「還剩多少」從一個猜測變成一個查過的數字**。
+今晚在同一個問題上錯了三次（VIII→IX→X），每次都是**拿摘要當權威**；
+而修正的方式每次都一樣：**去讀那份真正的記錄**。
+`fLotInfo.h` 的 EXIT REGISTER 開頭那句話值得抄下來當標準：
+
+> **read whole, exited whole, with the deciding golden line.**
+> **No empty shell was produced for any of these; they are simply absent.**
+
+**「讀完整支、整支退出、附上做決定的那一行；不留空殼。」**
+——一個不做的決定，記到這個程度，下一個人就不必重新讀一遍 golden。
+今晚我三次重新讀了別人已經讀過的東西，**代價都在我這邊，不在記錄那邊**。
+
+### 刻意沒有做的事
+
+- **沒有翻那 4 支**。要先讀本體，且其中三支是 `*MouseDown`/`*Change`，
+  很可能撞 `fLotInfo.h:180` 的樹寬 gate「fQwertyKey has no port」。
+- **沒有改 `net6.py` 的類別名偽陽性**——它是我今晚的臨時量測腳本（在 scratchpad），
+  不是樹上的工具；把它收編成正式工具之前不值得修。
+
 # 🔖 RESUME（20260829 · 第二十四版）
 
 - ✅ **`TfProductionInfo` 整批收完**（12 支／496 golden 行）：
