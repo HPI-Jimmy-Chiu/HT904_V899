@@ -16365,6 +16365,62 @@ VII 把「機器負載」這個框架推翻了，但只給到「檔案 I/O 貴�
 **反覆探測會改變被探測的對象。** 用同一支探針連續量，前幾次的下降要先懷疑是自己弄的。
 判斷「趨勢」至少要有第三、第四個點，兩個點永遠可以連成一條你想要的線。
 
+## 20260828 IX — 把 `ProductionInfo` 那 7 支「無判定」的方法真的篩過一次
+
+RESUME §四 第 1 點記著：大清單 7 支**agent 根本沒走到、無任何判定**，
+並附了一句警告——**「沒被排除」不等於「查過而且安全」**。
+gate 被環境擋住的這段時間拿來把它清掉（唯讀、不需要 gate、是主迴圈的工作）。
+
+```
+tools/wavescan/screen_methods.py ProductionInfo/ProductionInfo.cpp TfProductionInfo <七支>
+```
+
+| 方法 | 行數 | 風險 |
+|---|---|---|
+| **`CalculateOEEReport`** | **201** | **—（乾淨）** |
+| `CheckCloseInfo` | 86 | 警報/對話框（deep `ShowMyMessage`） |
+| `CheckMOInformation` | 158 | 警報/對話框（deep `ShowMyMessage`） |
+| `LoadYiedlInformation` | 76 | 警報/對話框、deep `NewRecordProcess`（跨表單）、`MyForceDirectories` |
+| `bCheckControlBinYield` | 167 | deep `DoLowYieldAlarm`（`atester_ProcessCount.cpp:258`）-> 警報＋跨表單；deep `NewRecordProcess` |
+| **`LoadMOInformation`** | **309** | **寫檔/寫 ini**、警報/對話框、`MyForceDirectories`（會建目錄） |
+| **`CheckOEE_WhenStart`** | **83** | **送命令/上傳**、跨表單呼叫 |
+
+**七支裡只有一支乾淨。** 這句警告是有價值的：
+若照「沒被排除就翻」處理，會**直接翻進一條寫檔路徑（309 行那支，最大的一支）
+與一條對外命令/上傳路徑**——兩者都是 FW 戰役明文的硬邊界（唯讀優先、write path 屬安全佇列）。
+**最大的那支剛好是最危險的那支，這不是巧合而是常態**：函式越大越可能同時碰到多個子系統。
+
+### 判讀時要分開的兩件事
+
+`ShowMyMessage`（`mymessbox.cpp:761`）在 deep 欄位帶著「馬達」標籤，
+但**它是本 port 四個既有 forms->sm 例外之一**（`canary_support.cpp`），已經連著、已經在用。
+所以引用它**不新增任何連結邊**。
+⚠ 但「port 的 `ShowMyMessage` 是否重現 golden 那條碰馬達的路徑」是**另一個問題，我沒有驗**——
+這裡只主張「不新增連結邊」，不主張「無害」。
+
+### 因此這一波的範圍（等環境恢復、BTQ1 先落地之後）
+
+- **可翻：`CalculateOEEReport`（201 行）**——`forms/fProductionInfo.{h,cpp}` **append 即可，
+  不需動 `CMakeLists.txt`**，所以**不改連結圖**。
+- **其餘 6 支各自留 gate 並把上表的理由寫進 GATE REGISTER**（前提死不等於退役）。
+- ⚠ 相關背景：`bOEEFunction` 只在 `FUNC_CC_Greatek` 打開，所以 OEE 這批對其他客戶是 inert；
+  **翻譯照樣忠實翻，但不要因為「反正沒人跑」就放寬安全判斷**。
+
+### 刻意沒有做的事
+
+**沒有把 `CalculateOEEReport` 翻進樹裡。**
+BTQ1 的十一個檔已經在樹上等 gate；再疊一件就讓下一次 gate 同時覆蓋兩件事，
+**失敗時的歸因會變糊**。等 BTQ1 綠燈落地後再開，順序是紀律不是保守。
+
+### 一個轉述漂移（記下來，免得再被自己帶偏）
+
+我在心跳 handoff 裡連續幾輪寫著「下一波：`ASE_K Socket/Socket_ASE_KR.cpp`(34)／
+`KYECFTP/FTPClient.cpp`(34)／`CCLink/MyCCLinkSensor.cpp`(9)」——
+**這三個都不在 RESUME §四 的清單裡**，是舊資訊在多輪轉述中被我一路帶著走。
+**權威永遠是磁碟上的 RESUME，不是我自己傳給自己的提示。**
+這與 skill 明文那句「此提示刻意不含任何當下狀態」是同一個道理：
+**寫死在提示裡的狀態會過期，而過期的狀態不會自己announce。**
+
 # 🔖 RESUME（20260828 · 第十八版）
 
 - ⏸ **目前的狀態（等環境，不等人；詳見 20260828 VII）**：`FW3-BTQ1` 交付完成、複驗全過，
@@ -16756,10 +16812,13 @@ exit code，於是 **W34 在紅燈上 commit 卻被我記成綠燈**。已工具
 ## 四、下一步（依序）
 
 1. **`ProductionInfo` 續攻**（同一個 facade，`forms/fProductionInfo.{h,cpp}` append）：
-   - 大清單 7 支 **agent 根本沒走到、無任何判定**：`LoadMOInformation`(309)／
-     `CalculateOEEReport`(201)／`bCheckControlBinYield`(167)／`CheckMOInformation`(158)／
-     `CheckCloseInfo`(86)／`CheckOEE_WhenStart`(83)／`LoadYiedlInformation`(76)。
-     **「沒被排除」不等於「查過而且安全」。**
+   - ✅ **那 7 支已於 20260828 IX 篩完（`screen_methods.py`），不再是無判定**：
+     **只有 `CalculateOEEReport`(201) 乾淨、可翻**（append 即可，不動 CMakeLists、不改連結圖）；
+     其餘 6 支各自有風險並留 gate ——
+     `LoadMOInformation`(309) **寫檔/寫 ini**、`CheckOEE_WhenStart`(83) **送命令/上傳**、
+     `bCheckControlBinYield`(167) deep `DoLowYieldAlarm` 警報＋跨表單、
+     `LoadYiedlInformation`(76)／`CheckMOInformation`(158)／`CheckCloseInfo`(86) 警報/對話框。
+     **當初那句「沒被排除不等於查過而且安全」是對的**：7 支裡最大的一支就是寫檔路徑。
    - 另 9 支因 **`ht9045_forms` 不連 `ht9045_sm`/`ht9045_motor`** 而退出
      （`bEnableIPSC`／`GetStringBySeparatedValues`／`GetArmBySiteFor32Site`／
      `CalculateNowArmSiteBinQty`／`CalculateNowTotalICQty`／`ClearArmSiteBinQty`／
