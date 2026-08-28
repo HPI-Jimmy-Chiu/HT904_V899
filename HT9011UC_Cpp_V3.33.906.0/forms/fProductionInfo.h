@@ -58,6 +58,11 @@
 // array fields.
 #include "PMAlarm/uTimeTool.h"
 #include <vector>
+// AI(W906-FW3-PICTL) 20260829: 上面 :55-58 寫著「MachineType.h 改由 .cpp include
+// ——因為連結邊界修剪把 MAX_SOCKET_ROW/COL/TEST_MAX_BIN 尺寸的陣列欄位拿掉了」。
+// 那段敘述在當時是實情，**不改寫**；但它的前提已於 commit ba3683e 失效
+//（本檔所屬的 .cpp 搬進 ht9045_sm），陣列欄位回來了，所以這裡又需要它。
+#include "MachineType.h"   // MAX_SOCKET_ROW / MAX_SOCKET_COL / TEST_MAX_BIN
 
 // ===========================================================================
 //  TfProductionInfo -- non-VCL stub (golden ProductionInfo/ProductionInfo.h)
@@ -102,6 +107,16 @@ public:
     // ClearArmSiteBinQty, CalICCountInHandler, UpdateControlBinCount,
     // bIsNeedCheckControlBin (calls UpdateControlBinCount). See the wave
     // report for the per-symbol breakdown.
+    //
+    // AI(W906-FW3-PICTL) 20260829: ⚠ **上面整段 LINK-BOUNDARY EXCLUSIONS 已過期**。
+    // 它在 20260827 是實情（當時本檔的 .cpp 在 ht9045_forms），**不改寫**；
+    // 但 commit ba3683e 已把 forms/fProductionInfo.cpp 搬進 **ht9045_sm**
+    //（CMakeLists.txt:2722），而 ht9045_sm link 了 io/motor/globals/vclcompat/
+    // secsgem/forms，所以那条牆不存在了。
+    // 名單上那 9 支裡的 **8 支已於 FW3-PICTL 翻完**（見下方區塊）；
+    // 剩下的 `GetStringBySeparatedValues` **不是因為連結**而未翻，
+    // 而是它走 `ShowMyMessage`（警報/對話框）待逐案判——
+    // **安全軸與可達軸是兩個獨立的軸**（見 DEVLOG 20260828 XII）。
     // =======================================================================
 
     // ---- new UI-state field (dfm leaf name, golden __published :74) ----
@@ -224,6 +239,14 @@ public:
     double fLastTestTime = 0.0;         // [DATA] golden :356
     TDateTime _dtOEE_StartDateTime;     // [DATA] golden :361 -- Start Lot 時間
 
+    // ---- AI(W906-FW3-PICTL) 20260829: Control-Bin / IPSC 八支所需的欄位 ----
+    // 型別逐字取自 golden ProductionInfo.h；MAX_SOCKET_ROW/COL/TEST_MAX_BIN
+    // 經 MachineType.h（已 include）。
+    int iControlBinCheckCount = 0;      // [DATA] golden :324 -- 測試多少 IC 後計算 Yield
+    int iNowArmSiteBinQty [2][MAX_SOCKET_ROW][MAX_SOCKET_COL][TEST_MAX_BIN] = {};   // [DATA] golden :436
+    int iLastArmSiteBinQty[2][MAX_SOCKET_ROW][MAX_SOCKET_COL][TEST_MAX_BIN] = {};   // [DATA] golden :437
+    int iNowSiteBinTotalQty[TEST_MAX_BIN] = {};                                     // [DATA] golden :438
+
     // ---- read-only / field-only-write methods (golden .cpp span; golden .h decl) ----
     void OEE_SetMO(AnsiString sMO);                                          // golden .cpp:364-367    .h:205
     void OEE_SetHandlerID(AnsiString sHDID);                                 // golden .cpp:374-377    .h:206
@@ -257,6 +280,21 @@ public:
     void SetOEEReportMessage();                                              // golden .cpp:565-598    .h:214
     void CalculateOEEReport(AnsiString &sResultOEEReport, bool bSaveNow);    // golden .cpp:629-829    .h:210
     void ClearOEECount();                                                    // golden .cpp:887-918    .h:213
+
+    // ---- AI(W906-FW3-PICTL) 20260829: Control-Bin / IPSC 八支 ----
+    // 兩個軸都篩過：安全軸 screen_methods.py 全部「乾淨」；
+    // 可達軸 **八支合計零個跨模組 `->` 解參考**，
+    // 外部呼叫（RecordProcess / GetTotal / GetSelTrayCT / GetSelBinCT /
+    // GetIFError / HowManyDevice / ClearCount / FileExists）全部在 ht9045_sm
+    // 或 sm 連得到的 target（本檔自 ba3683e 起屬 ht9045_sm）。
+    void CalICCountInHandler();                                              // golden .cpp:3341-3350
+    bool bEnableIPSC();                                                      // golden .cpp:3912-3956
+    int  GetArmBySiteFor32Site(int iSite);                                   // golden .cpp:4157-4170
+    void CalculateNowArmSiteBinQty(bool bIsClear=false);                     // golden .cpp:4356-4391
+    int  CalculateNowTotalICQty();                                           // golden .cpp:4407-4427
+    void ClearArmSiteBinQty();                                               // golden .cpp:4442-4458
+    bool bIsNeedCheckControlBin();                                           // golden .cpp:4582-4598
+    void UpdateControlBinCount(bool bClear);                                 // golden .cpp:4768-4798
 
     TfProductionInfo();
     virtual ~TfProductionInfo() {}

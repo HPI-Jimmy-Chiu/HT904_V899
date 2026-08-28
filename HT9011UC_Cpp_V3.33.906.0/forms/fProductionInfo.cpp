@@ -41,6 +41,18 @@
 //   secsgem/forms，所以那道牆不存在了。見 DEVLOG 20260828 XII/XIII。
 #include "cprod.h"           // Prod.iIsPassT6[] (CalculateOEEReport) -- cprod.cpp, ht9045_globals
 #include "forms/fObserver.h" // fObserver->sTestReceiveTime/sTestIndexZTime/dOEEIndexCycleTime
+// AI(W906-FW3-PICTL) 20260829: 4 個 include，全部因本檔自 ba3683e 起屬
+// ht9045_sm 而合法（舊的 ht9045_forms 連結牆已不存在）。
+#include "cSocket.h"             // ArmData[]/ArmSKET[][]、TEST_CATEGORY、
+                                  //   Now/OldControlBinCategory（定義在 cSocket.cpp:230-231，
+                                  //   註冊於 CMakeLists.txt:2567 的 ht9045_sm；
+                                  //   nm 在 libht9045_sm.a 看到 B _Now/_OldControlBinCategory）
+#include "aHotPlateSubstrate.h"  // TestSocket -- ⚠ 陣阱 #5：`TestSocket` 同時出現於
+                                  //   mykitsuck.h 與本檔，且佈局不同。選本檔是**照本樹既有慣例**
+                                  //   （cSocket.cpp:165 明文："TestSocket (TMyKitSuck, golden
+                                  //   MyKitSuck.h -> this tree's substrate)"），不自己判斷。
+#include "Motor/mymotor.h"       // MOT[]、TMyMotor::HowManyDevice/fHasTray (CalICCountInHandler)
+#include "canary_support.h"      // RecordProcess (bEnableIPSC) -- 四個既有例外之一，canary_support.cpp
                               //   -- cObserver.cpp, ht9045_sm (same target as this file since ba3683e)
 
 TfProductionInfo::TfProductionInfo() : sLoadMO_TestFlow("") {
@@ -807,5 +819,236 @@ void TfProductionInfo::ClearOEECount()
     _sOEE_ActivityID="";
     _sOEE_TestSite  ="";
     _iOEE_PauseTime =0;
+}
+//---------------------------------------------------------------------------
+
+// =============================================================================
+//  AI(W906-FW3-PICTL) 20260829: Control-Bin / IPSC 八支，逐字翻自 golden
+//  ProductionInfo/ProductionInfo.cpp（合計 191 行）。
+//
+//  兩個軸都篩過才開工（今日付過代價的教訓：安全軸 != 可達軸）：
+//    * 安全軸 -- tools/wavescan/screen_methods.py：八支全部「乾淨」。
+//      （同批的 GetStringBySeparatedValues 因 ShowMyMessage 被標警報/對話框，
+//       **本波不翻**，留給下一波逐案判。）
+//    * 可達軸 -- 八支合計 **零個跨模組 `->` 解參考**；
+//      外部呼叫只有 RecordProcess / GetTotal / GetSelTrayCT / GetSelBinCT /
+//      GetIFError / HowManyDevice / ClearCount / FileExists，全在 ht9045_sm
+//      或 sm 連得到的 target。
+//
+//  ⚠ 本波仍然**沒有接線**：這八支在本 port 沒有呼叫者（golden 的呼叫點
+//    在未翻的 OEE / Control-Bin 流程裡），所以**不改變任何執行期行為**。
+//
+//  ⚠ golden 行為逐字保留的兩處（**不是缺陷，是 golden 的意圖**）：
+//    (1) bEnableIPSC 的縮排在 golden 就是歪的（:3934 那個 `if` 比兄弟少縮），照翻。
+//    (2) UpdateControlBinCount 的 `memcpy(..., sizeof(NowControlBinCategory))`
+//        拿**整個結構的大小**去複製一個成員陣列的起始位址。
+//        這在 golden 是有意的（一次拷貝整個快照），因為兩個物件同型且
+//        iCountCategory 是第一個成員；逐字照翻，**不改寫成 `=` 費購**。
+// =============================================================================
+
+void TfProductionInfo::CalICCountInHandler()
+{
+    for(int i=0; i<eTrayCount; i++)
+    {
+        if(MOT[iMMAuto[i]].fHasTray==true)
+        {
+            LastSet.iN14_9_InHandlerICCnt[i]=MOT[iMMAuto[i]].HowManyDevice();   //In Machine Tray IC Qty
+        }
+    }
+}
+//---------------------------------------------------------------------------
+
+bool TfProductionInfo::bEnableIPSC()
+{
+    AnsiString sMsg="";
+    if(CosFunction.bOEEFunction==false ||
+       IniConfig.bN14_16_EnableIPSC==false ||
+       InitialOK==false)
+    {
+        return false;
+    }
+
+        if(IniConfig.asN14_16_ExecutFilePath=="" ||
+           IniConfig.asN14_16_FlagFilePath==""   ||
+           FileExists(IniConfig.asN14_16_ExecutFilePath)==false ||
+           IniConfig.iN14_16_IPSCInterval<=0)
+        {
+            sMsg="";
+            if(IniConfig.asN14_16_ExecutFilePath=="")
+            {
+                sMsg.sprintf("IPSC Execute File Path Name is NULL!!");
+                RecordProcess(sMsg);
+            }
+
+            if(FileExists(IniConfig.asN14_16_ExecutFilePath)==false)
+            {
+                sMsg.sprintf("IPSC Can Not Find Execute File => %s", IniConfig.asN14_16_ExecutFilePath);
+                #ifndef SOFT_SIMULTE
+                RecordProcess(sMsg);
+                #endif
+            }
+
+            if(IniConfig.asN14_16_FlagFilePath=="")
+            {
+                sMsg.sprintf("IPSC Flag Ini File Path Name is NULL!!");
+                RecordProcess(sMsg);
+            }
+
+        if(IniConfig.iN14_16_IPSCInterval<=0)
+            {
+                sMsg.sprintf("IPSC Record Cycle Time is less than 1 min");
+                RecordProcess(sMsg);
+            }
+            return false;
+        }
+    return true;
+}
+//---------------------------------------------------------------------------
+
+int TfProductionInfo::GetArmBySiteFor32Site(int iSite)
+{
+    for(int i=0; i<TestSocket.iShtRow; i++)
+    {
+        for(int j=0; j<TestSocket.iShtCol; j++)
+        {
+            if(TestIF_File.iSiteMap[i][j]==iSite)
+            {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+//---------------------------------------------------------------------------
+
+void TfProductionInfo::CalculateNowArmSiteBinQty(bool bIsClear)
+{
+    if(CUSTOMER_CODE==CC_Greatek && IniConfig.bN14_16_EnableIPSC)
+    {
+        int iSelTrayCT=0, iTarValue=0;
+        for(int iCat=0;iCat<TEST_MAX_BIN;iCat++)                                //每個category
+        {
+            iNowSiteBinTotalQty[iCat]=0;
+        }
+        for(int iArm=0; iArm<2; iArm++)
+        {
+            for(int iRow=0; iRow<MAX_SOCKET_ROW; iRow++)
+            {
+                for(int iCol=0; iCol<MAX_SOCKET_COL; iCol++)
+                {
+                    for(int iAuto=0; iAuto<9; iAuto++)                          //Auto1~3 Fix1~3
+                    {
+                        iSelTrayCT=static_cast<int>(ArmData[iArm]->ArmSKET[iRow][iCol]->GetSelTrayCT(iAuto));   //Jimmychiu 20240123 : 防呆-IPSC上傳的資料有負值
+                        iTarValue=iSelTrayCT-iLastArmSiteBinQty[iArm][iRow][iCol][iAuto];
+                        if(iTarValue<=0)
+                        {
+                            iTarValue=0;
+                        }
+                        iNowArmSiteBinQty[iArm][iRow][iCol][iAuto]+=iTarValue;
+                        iLastArmSiteBinQty[iArm][iRow][iCol][iAuto]=iSelTrayCT;
+                        iNowSiteBinTotalQty[iAuto]+=iNowArmSiteBinQty[iArm][iRow][iCol][iAuto];
+                        if(bIsClear)
+                        {
+                            iLastArmSiteBinQty[iArm][iRow][iCol][iAuto]=0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+//---------------------------------------------------------------------------
+
+int TfProductionInfo::CalculateNowTotalICQty()                                  //測試機測出來的總數
+{
+    int iArm,iRow,iCol,iBin,iTotalLoadQty;
+    CalculateNowArmSiteBinQty();
+
+    iTotalLoadQty=0;
+    for(iArm=0; iArm<2; iArm++)
+    {
+        for(iRow=0; iRow<MAX_SOCKET_ROW; iRow++)
+        {
+            for(iCol=0; iCol<MAX_SOCKET_COL; iCol++)
+            {
+                for(iBin=0; iBin<TEST_MAX_BIN; iBin++)
+                {
+                    iTotalLoadQty=iTotalLoadQty+iNowArmSiteBinQty[iArm][iRow][iCol][iBin];
+                }
+            }
+        }
+    }
+    return iTotalLoadQty;
+}
+//---------------------------------------------------------------------------
+
+void TfProductionInfo::ClearArmSiteBinQty()
+{
+    for(int iArm=0; iArm<2; iArm++)
+    {
+        for(int iRow=0; iRow<MAX_SOCKET_ROW; iRow++)
+        {
+            for(int iCol=0; iCol<MAX_SOCKET_COL; iCol++)
+            {
+                for(int iAuto=0; iAuto<9; iAuto++)                              //Auto1~3 Fix1~3
+                {
+                     iNowArmSiteBinQty[iArm][iRow][iCol][iAuto]=0;
+                     iLastArmSiteBinQty[iArm][iRow][iCol][iAuto]=ArmData[iArm]->ArmSKET[iRow][iCol]->GetSelTrayCT(iAuto);
+                }
+            }
+        }
+    }
+}
+//---------------------------------------------------------------------------
+
+bool TfProductionInfo::bIsNeedCheckControlBin()                                 //Sam 20201216 : Add 數量監控
+{
+    bool bRet=false;
+    int iTotal=0;
+    UpdateControlBinCount(false);
+
+    for(int iRow=0; iRow<TestSocket.iShtRow; iRow++)
+    {
+        for(int iCol=0; iCol<TestSocket.iShtCol; iCol++)
+        {
+            iTotal=NowControlBinCategory.iCountSocketTotal[iRow][iCol]-OldControlBinCategory.iCountSocketTotal[iRow][iCol];
+            if(iTotal>iControlBinCheckCount)                                    //其中一個 Site 數量到了需要檢查 Control Bin
+                bRet=true;
+        }
+    }
+    return bRet;
+}
+//---------------------------------------------------------------------------
+
+void TfProductionInfo::UpdateControlBinCount(bool bClear)                       //Sam 20200525 : Control Bin
+{
+    if(CUSTOMER_CODE==CC_Greatek && IniConfig.bN14_1_EnableOEEFunction)
+    {
+        NowControlBinCategory.ClearCount();
+        for(int iRow=0; iRow<MAX_SOCKET_ROW; iRow++)                            //Sam 20201209 : 修正資料
+        {
+            for(int iCol=0; iCol<MAX_SOCKET_COL; iCol++)
+            {
+                for(int iArm=0; iArm<2; iArm++)
+                {
+                    NowControlBinCategory.iCountCategory[iArm][iRow][iCol][iTestBinCount]  =ArmData[iArm]->ArmSKET[iRow][iCol]->GetIFError();
+                    NowControlBinCategory.iTotalCategory[iTestBinCount]                   +=ArmData[iArm]->ArmSKET[iRow][iCol]->GetIFError();
+                    for(int iCat=0; iCat<iTestBinCount; iCat++)                 //每個category
+                    {
+                        NowControlBinCategory.iCountCategory[iArm][iRow][iCol][iCat]  =ArmData[iArm]->ArmSKET[iRow][iCol]->GetSelBinCT(iCat);
+                        NowControlBinCategory.iTotalCategory[iCat]                   +=ArmData[iArm]->ArmSKET[iRow][iCol]->GetSelBinCT(iCat);
+                    }
+                    NowControlBinCategory.iCountSocketTotal[iRow][iCol]      +=ArmData[iArm]->ArmSKET[iRow][iCol]->GetTotal();
+                    NowControlBinCategory.iCountHeadTotal[iArm][iRow][iCol]  +=ArmData[iArm]->ArmSKET[iRow][iCol]->GetTotal();
+                    NowControlBinCategory.iTotalSocket                       +=ArmData[iArm]->ArmSKET[iRow][iCol]->GetTotal();
+                }
+            }
+        }
+
+        if(bClear)
+        {
+            memcpy(&OldControlBinCategory.iCountCategory[0][0][0][0], &NowControlBinCategory.iCountCategory[0][0][0][0], sizeof(NowControlBinCategory));
+        }
+    }
 }
 //---------------------------------------------------------------------------

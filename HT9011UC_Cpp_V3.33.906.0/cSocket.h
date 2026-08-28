@@ -72,6 +72,16 @@
 //  `ArmData`/`ArmDataLot`/`ArmHistory`/`ArmData_AutoClean`/
 //  `OldControlBinCategory`/`NowControlBinCategory` are not defined anywhere
 //  else either (grepped the whole tree, excluding build*/, 20260807).
+//  AI(W906-FW3-PICTL) 20260829: ⚠ **上一行那則 absence-claim 已過期**。
+//  它的量測日期是 20260807；在那之後，**cSocket.cpp:230-231 已經真的
+//  定義了這兩個符號**（`TEST_CATEGORY OldControlBinCategory;` /
+//  `TEST_CATEGORY NowControlBinCategory;`），而 cSocket.cpp 已註冊在
+//  CMakeLists.txt:2567 的 `add_library(ht9045_sm STATIC ...)` 裡。
+//  驗證到 archive 層而不只是檔案層：
+//    nm --defined-only --extern-only build_pioee1g/libht9045_sm.a
+//      -> `B _NowControlBinCategory` / `B _OldControlBinCategory`（均已定義）
+//  上面那句話在 20260807 是真的，**不改寫**；但不能再拿它當前提用。
+//  （陳述的是陳述人當時量到的事實，不是永久的事實——陣阱 #2。）
 //  ***************************************************************************
 //
 //  Big5: this header has no Chinese comments to preserve (checked cp950-decoded

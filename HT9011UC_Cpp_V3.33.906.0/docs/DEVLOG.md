@@ -16792,7 +16792,119 @@ R_TOTAL=5  R_EXTRA=  R_ABSENT=  R_VERDICT=GREEN   (Release, 23:25:45)
   可達不等於可翻，這一條在本波再次適用。
 - 沒有動 `tests/CMakeLists.txt:3246` 的 600 秒，沒有動任何端點防護設定。
 
-# 🔖 RESUME（20260828 · 第二十一版）
+## 20260829 I — FW3-PICTL 驗收：Control-Bin / IPSC 八支（golden 191 行），主迴圈自譯
+
+```
+G_TOTAL=5  G_EXTRA=  G_ABSENT=  G_VERDICT=GREEN   (Debug,   00:04:13)
+R_TOTAL=5  R_EXTRA=  R_ABSENT=  R_VERDICT=GREEN   (Release, 00:22:55)
+```
+
+**連續第二十個乾淨 gate。**
+
+| 方法 | golden `.cpp` | 行數 |
+|---|---|---|
+| `CalICCountInHandler` | `:3341-3350` | 10 |
+| `bEnableIPSC` | `:3912-3956` | 45 |
+| `GetArmBySiteFor32Site` | `:4157-4170` | 14 |
+| `CalculateNowArmSiteBinQty` | `:4356-4391` | 36 |
+| `CalculateNowTotalICQty` | `:4407-4427` | 21 |
+| `ClearArmSiteBinQty` | `:4442-4458` | 17 |
+| `bIsNeedCheckControlBin` | `:4582-4598` | 17 |
+| `UpdateControlBinCount` | `:4768-4798` | 31 |
+
+`forms/fProductionInfo.cpp` 811 -> **1054 行**；`forms/fProductionInfo.h` 299 -> **337 行**
+（4 個欄位 ＋ 8 個宣告 ＋ `#include "MachineType.h"`）；`cSocket.h` **只加註解**（275 行）。
+
+自檢：`rc=0`／0 error／**vendor 標頭 `Motor/HTMotor.h` 以外零 warning**
+（那 43 個 `-Wunused-parameter` 是既有的，`cObserver.cpp` 也有）。三檔 UTF-8 無 BOM、CR=0、零 U+FFFD。
+
+### 開工前兩個軸都篩過（今日已付代價的教訓）
+
+- **安全軸** — `tools/wavescan/screen_methods.py`：這八支全部「乾淨」。
+- **可達軸** — **八支合計零個跨模組 `->` 解參考**；外部呼叫只有
+  `RecordProcess`／`GetTotal`／`GetSelTrayCT`／`GetSelBinCT`／`GetIFError`／
+  `HowManyDevice`／`ClearCount`／`FileExists`，全部在 `ht9045_sm` 或 sm 連得到的 target
+  （本檔自 `ba3683e` 起屬 `ht9045_sm`）。
+
+**同批的第九支 `GetStringBySeparatedValues`(38 行) 沒翻，而且不是因為連結**——
+它走 `ShowMyMessage`（警報／對話框），留給下一波逐案判。**兩個軸各自獨立。**
+
+### ⭐ 又一則過期的 absence-claim，這次寫在程式碼裡
+
+`cSocket.h:73` 白紙黑字寫著 `Old/NowControlBinCategory`
+「grepped the whole tree, excluding build*/, **20260807**」-> not defined anywhere。
+**那個結論已經過期**：
+
+- `cSocket.cpp:230-231` 現在真的定義了它們（`TEST_CATEGORY Old/NowControlBinCategory;`）。
+- `cSocket.cpp` 註冊在 `CMakeLists.txt:2567` 的 `add_library(ht9045_sm STATIC ...)`。
+- **驗到 archive 層而不只是檔案層**（陷阱 #1 的教訓：檔案存在 ≠ 進得了 archive）：
+  `nm --defined-only --extern-only build_pioee1g/libht9045_sm.a`
+  -> `B _NowControlBinCategory` / `B _OldControlBinCategory`。
+
+已**就地附註、不改寫原句**（房規），並同樣附註了 `forms/fProductionInfo.h` 的
+FW3-PI1 `LINK-BOUNDARY EXCLUSIONS` 區塊——它逐條列出的正是這 9 支，
+而 `ba3683e` 讓它的前提失效了。
+
+**這是今天第四次撞到同型**（RESUME 的「7 支無判定」、我 handoff 裡的假標的清單、
+`cSocket.h:73`、`fProductionInfo.h` 的 PI1 banner）。
+**通則：陳述的是陳述人當時量到的事實，不是永久的事實。**
+權威順序是「程式碼 banner > RESUME > 我自己的提示」——**但 banner 也會過期，最終仍要看實測。**
+
+### ⭐ 我自己在指令裡先寫下了結論
+
+查那兩個符號時，我在同一條指令尾巴預先加了
+`echo "(none above = still undefined)"`，**而 grep 明明找到了定義**。
+這正是我自己清單上那條「**量測腳本壞掉時會印出看起來像結論的字串**」，
+只是這次不是腳本壞掉，是**我先寫好了想看到的結論**。
+差別在於：壞掉的腳本會偶爾騙到你，**預寫的結論每次都會**。
+
+### 陷阱 #5：撞到了，但沒有自己判斷
+
+`TestSocket` 同時存在於 `aHotPlateSubstrate.h` 與 `mykitsuck.h`，**佈局不同**——
+選錯會「乾乾淨淨地連起來，然後每個欄位讀錯偏移」。
+樹上已有明文答案（`cSocket.cpp:165`：`TestSocket (TMyKitSuck, golden MyKitSuck.h -> this tree's substrate)`），
+**照既有慣例選 `aHotPlateSubstrate.h`，不自己重新判斷**。
+
+### 編譯器又抓到一件我漏的
+
+`forms/fProductionInfo.h` 的檔頭 `:55-58` 記著「`MachineType.h` 改由 `.cpp` include ——
+因為連結邊界修剪把那些 `MAX_SOCKET_*` 尺寸的陣列欄位拿掉了」。
+我把陣列欄位加回來，卻沒同時把 include 加回來 -> 7 個 `was not declared in this scope`。
+**那份標頭自己記載了當初移除的理由，而那個理由已隨 `ba3683e` 失效。**
+交付前的真編譯自檢連續第二波抓到我的疏漏（前一波是多餘引號 ＋ `TDateTime::FormatString` 不存在）。
+
+### golden 行為逐字保留的兩處（**是意圖，不是缺陷**）
+
+1. `bEnableIPSC` 的縮排在 golden 本來就是歪的（`:3934` 那個 `if` 比兄弟少縮），照翻。
+2. `UpdateControlBinCount` 的 `memcpy(..., sizeof(NowControlBinCategory))` 拿**整個結構的大小**
+   去複製一個成員陣列的起始位址。兩個物件同型、`iCountCategory` 是第一個成員，
+   所以那是「一次拷貝整個快照」的有意寫法；逐字照翻，**不改寫成 `=` 賣弄**。
+
+### 環境
+
+| 測試 | Debug | Release |
+|---|---|---|
+| `dfm2rc_fidelity` | **145.42s** | **152.10s** |
+| `dfm2rc_idempotent` | 7.98s | 9.56s |
+| ctest 總時間 | 454.63s | 470.38s |
+
+### 驗收紀律逐條
+
+- **§5c**：三檔 md5 ＋ mtime 與 `_pictl1_baseline_mtimes.txt` 全同，停在 **23:44-23:45**，
+  早於 gate 起跑錨點 `build_pictl1g/cfg.log` = **23:46:30**。
+- **`D:\HT9045\system`**：`system_guard.py compare _sysguard_before_pictl1.json <after>`
+  -> **`IDENTICAL: 552 files, bytes and mtime all unchanged`**，rc=0。
+  **連續第二波做真正的 before/after**（gate 前 snapshot 已成慣例）。
+
+### 刻意沒有做的事
+
+- **沒有接線**：八支在本 port **都沒有呼叫者**（golden 呼叫點在未翻的 OEE / Control-Bin 流程），
+  所以本波**不改變任何執行期行為**。
+- 沒有翻 `LoadMOInformation`（寫檔/寫 ini）與 `CheckOEE_WhenStart`（送命令/上傳）——
+  **安全軸擋住，而安全軸不因連結解開而放寬**。
+- 沒有動 `tests/CMakeLists.txt:3246` 的 600 秒，沒有動任何端點防護設定。
+
+# 🔖 RESUME（20260829 · 第二十二版）
 
 - ✅ **`FW3-BTQ1` 已於 20260828 XI 驗收並 commit**（gate `btq2`，**兩側 GREEN**，
   失敗集合逐項等於常駐五項，**連續第十七個乾淨 gate**）。
