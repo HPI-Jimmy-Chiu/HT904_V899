@@ -6,6 +6,26 @@ chkHeaterClick、FormClose）。這支把那個動作變成每波開工的第一
 
 用法: python screen_methods.py <golden檔> <類別> <方法名...>
       不給方法名就掃該類別所有方法。
+
+⚠⚠ **它不查什麼（三個已知盲點，引用本工具結果前先讀）**
+
+1. **只查安全軸，不查可達軸**。「乾淨」不代表本樹連得到。
+   20260828 實例：`CalculateOEEReport` 在本工具下乾淨，實際三次解參考
+   `fObserver`（golden ProductionInfo.cpp:805/:806/:813），而 `fObserver` 在 ht9045_sm。
+   見 DEVLOG 20260828 XII。
+
+2. **deep pass 只追自由函式，不追同類別的兄弟方法**。
+   本檔 `FFIDX = freefunc_index.get()` / `freefunc_index.body(nm, FFIDX)`
+   解的是**自由函式索引**；`TFormHS::RecordESDLog_HS` 這種成員方法不在裡面。
+   **後果：一個「乾淨」的方法若呼叫了有風險的兄弟方法，會被讀成乾淨。**
+   20260829 實例：`RecordLog_HS`（golden HS_Function.cpp:584-645）被列為乾淨，
+   它的本體却呼叫 `RecordESDLog_HS(...)`——而那一支**不在**乾淨名單裡。
+   -> **翻譯前要自己算兄弟呼叫的封包（closure）**：
+      把每一支的本體裡到的 `<類別>::` 兄弟也一併丟進來篩，递迴直到不再增加。
+
+3. **名字不是證據**。`Get*` 可以寫全域設定（PI2 那則 banner 的
+   `GetBinTraySetting`），`Record*Log*` 也可以不寫檔。
+   名字可疑的，**開 golden 看本體**，不要只看本工具的一行結論。
 """
 import io
 import os

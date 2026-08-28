@@ -16986,6 +16986,82 @@ golden 的錯誤路徑有兩條：`bShow` 為真時寫兩個面板的 `Caption`�
 - **沒有接線**：這 12 支在本 port **都沒有呼叫者**，所以整批**不改變任何執行期行為**。
 - 沒有動 `tests/CMakeLists.txt:3246` 的 600 秒，沒有動任何端點防護設定。
 
+## 20260829 III — `HS_Function` 偵察：抓到 `screen_methods.py` 的一個盲點
+
+**沒有開波，這一節是偵察 ＋ 一個工具修正。**
+
+### 先把 RESUME 標的「全域名 2 命中需先讀」讀掉
+
+不是兩個全域。golden 只有一個 `extern PACKAGE TFormHS *FormHS;`（`HS_Function.h:148`，
+定義在 `HS_Function.cpp:47`）；另一個命中 `:93` 是
+`UpDataToServerByFTP(...)` 的**方法宣告**，被 `Automation/SCK_ART_Remainder.h:462` 引用。
+**沒有 ODR 歧義。**
+
+⚠ 但偵察撿到別的：`Automation/SCK_ART_Remainder.h:619` 有一個 **`FormHS` 的 TU-local
+minimal stand-in**（Gate #17）——**陷阱 #1 的形狀 (e)**。真要建 `forms/fHS.*` 時必須先處置它。
+另 `bthermo.cpp:2620`／`:3935`／`:5359` 有三個 gated 消費點（`FormHS->CheckTempOffset()`）。
+
+### 篩選結果與一次抽驗
+
+`screen_methods.py HS_Function.cpp TFormHS` -> **66 支裡 40 支「乾淨」**。
+但名單裡有一批名字讓人不敢直接用：`RecordLog_HS`、`RecordTemperatureLog_HS`、
+`Check_FileFolderByFTP`、`GetUploadServerByFTPPath`、四個 socket `...Read` handler。
+**一個叫 `RecordXxxLog_HS` 的函式如果不寫檔，那它在做什麼？** 所以抽驗。
+
+`RecordLog_HS`（golden `HS_Function.cpp:584-645`）被列為乾淨，本體卻是：
+
+```
+sTemperatureLogFile=GetLastFileLogName_HS(1);
+RecordTemperatureLog_HS(sTemperatureLogFile);
+...
+sESDLogFile=GetLastFileLogName_HS(2);
+RecordESDLog_HS(sESDLogFile);          <-- 這一支**不在**乾淨名單裡
+```
+
+**一個「乾淨」的方法呼叫了一個有風險的同類別兄弟方法，而 deep 欄位沒有反映。**
+
+### 根因（讀工具原始碼確認，不是猜的）
+
+`tools/wavescan/screen_methods.py` 的 deep pass 走
+`FFIDX = freefunc_index.get()` 與 `freefunc_index.body(nm, FFIDX)`
+——解的是**自由函式索引**。`TFormHS::RecordESDLog_HS` 是**成員方法**，不在那個索引裡，
+所以追不到。這解釋了為什麼 `ShowMyMessage`／`MyForceDirectories` 那類會出現在 `[deep]`，
+而兄弟方法不會。
+
+### 已完成的波次有沒有被這個盲點污染？沒有——但那是運氣以外的東西
+
+逐一回查：
+
+- **PIOEE**：`CalculateOEEReport` 呼叫 `SetOEEReportMessage`／`ClearOEECount`
+  ——我當時**另外單獨把那兩支丟進 `screen_methods.py`**，兩支都乾淨。
+- **PICTL**：`bIsNeedCheckControlBin` -> `UpdateControlBinCount`、
+  `CalculateNowTotalICQty` -> `CalculateNowArmSiteBinQty`
+  ——被呼叫者**都在同一批八支的篩選名單內**，都乾淨。
+
+**所以沒有缺口。但那是我手動讀本體讀出來的，不是工具替我保證的。**
+差別在於：手動習慣會累，工具的沉默不會。
+
+### 工具已修正（記「它不查什麼」）
+
+`screen_methods.py` 的 docstring 補上三個已知盲點：
+
+1. **只查安全軸，不查可達軸**（20260828 XII 的 `CalculateOEEReport` -> `fObserver` 實例）。
+2. **deep pass 只追自由函式，不追同類別兄弟方法**（本節的 `RecordLog_HS` 實例）
+   -> **翻譯前要自己算兄弟呼叫的封包（closure）**：把每支本體裡到的 `<類別>::` 兄弟
+   也一併丟進來篩，遞迴到不再增加。
+3. **名字不是證據**（`Get*` 可以寫全域設定——PI2 banner 的 `GetBinTraySetting`；
+   `Record*Log*` 也可以不寫檔）。名字可疑就開 golden 看本體。
+
+⚠ 這是這支工具的**第三輪加強**（前兩輪都在 20260825：漏 `CopyFile` 一族、
+漏 FTP/EventLog 觸發那一類）。
+**同一支工具被三次證明「它回答的是它被問的問題」，而每一次的代價都是差點翻錯東西。**
+
+### 刻意沒有做的事
+
+- **沒有開 `HS_Function` 的波**。40 支「乾淨」在算完兄弟封包之前**不可信**，
+  而算封包是下一次開工的第一步。
+- 沒有動 `Automation/SCK_ART_Remainder.h:619` 的 Gate #17 stand-in（要建 facade 時才處置）。
+
 # 🔖 RESUME（20260829 · 第二十三版）
 
 - ✅ **`FW3-BTQ1` 已於 20260828 XI 驗收並 commit**（gate `btq2`，**兩側 GREEN**，
