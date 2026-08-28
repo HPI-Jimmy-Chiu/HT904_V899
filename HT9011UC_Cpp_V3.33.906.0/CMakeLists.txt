@@ -974,6 +974,70 @@ add_library(ht9045_forms STATIC
     forms/fTesterIF.cpp
     forms/fTesterTCP.cpp
     forms/fAirCon.cpp
+    # AI(W906-FW3-DTL1) 20260828: four more greenfield forms.  Line numbers into
+    # CMakeLists are deliberately NOT cited here -- they go stale the moment any
+    # wave adds a source, and they are comments so nothing catches it.  Target
+    # names are the durable fact; those are what is quoted.
+    #
+    # golden cTowerLight.cpp -> TfTowerLight, ALL 8 members, 101 of 133 span
+    # lines (75.9%) -- the highest line coverage of any form so far.  Gates:
+    # RGB00Click writes disk (WriteLastDataFile, golden :78, hard-coded path that
+    # --dry cannot redirect); rgMusicTestClick is BOTH a link boundary (SW[] ->
+    # myswitch.cpp -> ht9045_io) AND a physical buzzer output.  A third gate is
+    # line-level, not whole-body: the two trailing myLog.Do_Log(...) calls only
+    # (handlerlog.cpp -> ht9045_sm, and it writes disk).  That follows the
+    # existing forms/fHandlerSys.h GATE (H22-1) precedent.
+    #
+    # golden cCounterSel.cpp -> TfCounterSel, ALL 5 members, 10 of 123 lines.
+    # Thin by nature: this form's whole job is persisting settings.
+    # The gate worth knowing about is a HIDDEN WRITE on a read-sounding path:
+    # FormShow -> ProcessLastSetIni_Visible(bReadFile) -> ReadWriteIni(bool)
+    # -> CheckAndReadIniData, which WriteBool()s a default back into
+    # D:\HT9045\config\config.ini when a key is missing.  Same function-pair
+    # trap as fHotPlate's G-1.  This TU needs ZERO project symbols (nm).
+    #
+    # golden cLd_ULd.cpp -> TfLd_ULd, 15 of 16 members + 1 omitted, 41 of 222
+    # lines.  FormShortCut is omitted outright: TWMKey has no port, and its whole
+    # body just calls the ACTIVE SetDefaultPos().  The ctor is gated for two
+    # independent reasons: elUdUld's body is Public/HTEditList.cpp (ht9045_sm),
+    # and a file-scope `new` runs before main() (trap #4).
+    #
+    # golden EJ1N/fDTME08.cpp -> TfrmDTME08, ALL 55 members, 173 of 693 lines.
+    # 19 gates are the dtme08 / uDTME08Control link boundary (ht9045_comms), 6
+    # are TMyOmronPanel's OUT-OF-LINE members (its inline ones are fine), and the
+    # two hardware ones are SW[SwHeaterRelay] (ht9045_io, and a heater relay is a
+    # physical output) and ATC_InterfaceForm (ht9045_sm).  The single biggest
+    # gated body, DoDTME08Cycle, is 202 lines = 29% of the file on its own: the
+    # whole autonomous poll-and-setpoint loop.
+    #
+    # NOT RE-TRANSLATED, and this is the point of the new pre-dispatch clause:
+    # EJ1N/uDTME08Control.{h,cpp} and EJ1N/MyOmronPanel.{h,cpp} were ALREADY
+    # fully ported in the PT-W2 era.  They are used by declaration only.  Missing
+    # that would have meant re-translating two whole collaborator classes --
+    # exactly the waste that nearly happened to TesterTCP one wave earlier.
+    #
+    # A REACHABILITY TRAP worth recording: HeaterSVLog LOOKS reachable and is
+    # not.  It is declared in cpublic.h and defined in cpublic.cpp, which is in
+    # ht9045_globals -- which forms does link.  But that definition sits inside
+    # that file's own `#if 0`.  A definition inside `#if 0` is not a definition.
+    #
+    # ONE NON-MECHANICAL EDIT, flagged in-file: golden cLd_ULd.cpp:189 ends a
+    # trailing `//` comment with a backslash, which line-splices into the next
+    # (blank) line, so g++ -Wall reports -Wcomment EVEN INSIDE `#if 0` (the lexer
+    # runs regardless) and `#pragma GCC diagnostic ignored` does not suppress it.
+    # Only the comment DELIMITER changed to /* */; the text is byte-identical to
+    # golden and the code line is untouched.  Verified against golden by reading
+    # the cp950 source: the line does end in a backslash and the next line is blank.
+    #
+    # Measured, real -c compiles with -Wall -Wextra, rc taken off-pipeline:
+    # all four rc=0, 0 errors, 0 warnings.  nm --undefined-only over the four
+    # objects yields 12 distinct project symbols, ALL reachable
+    # (ht9045_globals / ht9045_core / ht9045_forms / vclcompat); ZERO from
+    # ht9045_sm, _io, _comms, _db, _secsgem, _motor.
+    forms/fTowerLight.cpp
+    forms/fCounterSel.cpp
+    forms/fLd_ULd.cpp
+    forms/fDTME08.cpp
     # AI(W906-W7-F0-fix) 20260728: MOVED here from ht9045_sm -- the 3 AMR-mode
     # predicates forms/fAGV.cpp delegates to.  See the "NO UNDECLARED BACK-EDGE"
     # block above.  File content unchanged (zero behaviour change: same code,

@@ -15694,9 +15694,198 @@ FAILSET（兩側逐項相同）= 常駐五項
 ```
 **05:41 那次 `tif1` 作廢，不計入。** 收工腳本另外驗過：**沒有任何交付檔比 gate 新**。
 
-# 🔖 RESUME（20260828 · 第十五版）
+## 20260828 V — FW3-DTL1：三個檔的成員全部翻完，以及一個讀起來像讀、其實會寫的路徑
 
-- **本段最後一顆**：`FW3-TIF1`（**一波三檔、六個新檔**）——
+### 交付（一波四檔，八個新檔）
+
+| golden | 新 facade | ACTIVE / 成員 | live golden 行 |
+|---|---|---|---|
+| `cTowerLight.cpp` | `forms/fTowerLight.{h,cpp}`（368+234） | **8/8** | **101/133（75.9%）** |
+| `cCounterSel.cpp` | `forms/fCounterSel.{h,cpp}`（268+200） | **5/5** | **10/123** |
+| `cLd_ULd.cpp` | `forms/fLd_ULd.{h,cpp}`（398+387） | **15/16 ＋1 省略** | **41/222** |
+| `EJ1N/fDTME08.cpp` | `forms/fDTME08.{h,cpp}`（694+1102） | **55/55** | **173/693** |
+
+`CMakeLists.txt` **2901 → 2965 行（+64）**，維持純 CRLF 無 bare-LF。
+八檔皆 UTF-8 無 BOM／bare-LF／零 U+FFFD，**既有檔零變更**。
+四顆 `.o` 真 `-c` 編譯（`-Wall -Wextra`，rc 單獨取）**rc=0、0 error、0 warning、0 診斷行**。
+
+**三個檔的成員全部翻完**（8/8、5/5、55/55），這是本戰役第一次一波裡有三個檔做到。
+`fTowerLight` 的 **101/133 行（75.9%）是目前所有表單裡最高的行覆蓋率**。
+`fLd_ULd` 唯一省略的 `FormShortCut`：`TWMKey` 沒有 port，而它整個本體只是呼叫
+已經 ACTIVE 的 `SetDefaultPos()`。
+
+### 新條款立刻回本：兩個協作類別早就翻好了
+
+上一波（TIF1）差點重複翻譯 16 個本體，因此這一波的派工 prompt 加了一條硬性條款：
+**pre-flight 說 shape (a)/(c)/(d) `clear`，不代表那些本體還沒被翻譯過**，
+要另外搜「去掉 class 前綴的自由函式版本」，而且要想它可能被改成什麼名字。
+
+結果 agent 搜到 **`EJ1N/uDTME08Control.{h,cpp}` 與 `EJ1N/MyOmronPanel.{h,cpp}` 早在 PT-W2 時期就完整 port 了**，
+於是只用宣告、不重翻。**沒有這條，就是重新翻譯兩個完整的協作類別。**
+它同時把「搜了什麼、找到什麼、沒找到什麼」逐檔寫進回報（20 個特徵識別字全 0 命中，
+三個非零的逐一讀過才排除：`AddSingleView` 只是 `MyOmronPanel.h:25` 引用本函式的註解、
+`SetPanelPos` 是 `TfVacuumUnit` 的同名不同參數方法）。
+
+### 一個讀起來像讀、其實會寫的路徑
+
+`fCounterSel::FormShow` 被 gate，理由不是連結邊界，是**隱藏的寫入**：
+
+```
+FormShow -> ProcessLastSetIni_Visible(bReadFile)
+         -> ReadWriteIni(bool)          common.cpp:1599
+         -> CheckAndReadIniData(bool)   common.cpp:613
+            -> :624  INIFile->WriteBool(...)   ← 在「讀」的路徑上把預設值寫回
+                                                  D:\HT9045\config\config.ini
+```
+
+**函式名字裡的 Read 不保證它只讀。** 這與 `fHotPlate` 的 G-1 是同一個函式對、同一個陷阱。
+agent 把 `ReadWriteIni` 的 `bool` 版與 `CheckAndReadIniData` 完整讀過才下這個 gate；
+它同時誠實聲明 `int` 多載沒開過，所以「會寫回」對 10 個 bool 鍵是**證明**的，
+對 `iShowCateByArm` 是**由對稱性假設**的——而一條證明過的就足以決定這個 gate。
+
+### 一個看起來可達、其實不可達的符號（我複驗過）
+
+`HeaterSVLog` 宣告在 `cpublic.h`，定義在 `cpublic.cpp`，而 `cpublic.cpp` 屬
+**`ht9045_globals`——那是 `ht9045_forms` 有連的 target**。看起來可達。
+
+但那個定義坐在該檔自己的 `#if 0` 裡（`cpublic.cpp:709` 開的，定義在 `:711`）。
+**`#if 0` 內的定義不是定義。** 主迴圈逐行讀過 `cpublic.cpp:705-713` 確認。
+
+這是陷阱 #1 家族的又一種形狀：前面已經有「`static` 影子」與「`tests/` 裡的 stand-in」，
+這是第三種——**target 對、檔案對、符號名對，唯獨被條件編譯關掉**。
+
+### 一個 line-level 的 gate，而不是整個本體
+
+`fTowerLight` 的兩支方法只有**最後兩行** `myLog.Do_Log(...)` 需要 gate
+（`handlerlog.cpp` 屬 `ht9045_sm`，而且它會寫磁碟，其 `dynamic_cast<TWinControl*>`
+的判斷對一個沒有基底類別的 facade 也永遠不會通過）。
+agent 沒有把兩個整體 gate 掉，而是照既有的 `forms/fHandlerSys.h` GATE (H22-1) 前例
+只 gate 那兩行——**這正是 75.9% 行覆蓋率的來源**。
+
+### 唯一的非機械性編輯（已對 golden 複驗）
+
+golden `cLd_ULd.cpp:189` 那行程式碼的行尾 `//` 註解以**反斜線**結尾
+（`//Steven 20210716 : Add \\`），C++ lexer 視之為 line splice，
+於是註解吃掉下一行（空行），`g++ -Wall` **即使在 `#if 0` 內也照樣報 `-Wcomment`**——
+lexer 不管條件編譯，而 `#pragma GCC diagnostic ignored` **壓不掉**（agent 實測後撤回了那個 pragma）。
+
+處置：只把該處註解的**分隔符**由 `//` 改成 `/* */`，註解文字與 golden 逐位元組相同，
+程式碼那一行未動，並在檔內大字註明免得日後被當成抄寫錯誤或被「整理」掉。
+**主迴圈用 cp950 讀 golden 複驗**：該行確實以反斜線結尾、下一行確實是空行。
+
+### 主迴圈複驗（全部自量）
+
+- **八處全域宣告行號全部精準**（`fTowerLight.h:366`／`.cpp:42`、`fCounterSel.h:266`／`.cpp:38`、
+  `fLd_ULd.h:396`／`.cpp:44`、`fDTME08.h:692`／`.cpp:55`）——**上一波這裡錯一處，這波零錯**。
+- `nm --undefined-only`：四顆物件共 **12 個相異專案符號，全部可達**
+  （`ht9045_globals` 9：`CUSTOMER_CODE`／`CosFunction`／`IniConfig`／`LastSet`／`N_INTEGER`／
+  `N_DOUBLE`／`N_PORT`／`USE_16_HEATER`／`dTempMax`／`TQPF_Timer`；`ht9045_core`：
+  `OnlyNumberAndDotInPut`；`ht9045_forms`：`fQwertyKey`）。
+  **零** 來自 `ht9045_sm`／`_io`／`_comms`／`_db`／`_secsgem`／`_motor`。
+  **`fCounterSel.o` 是零專案符號。**
+  特別注意**沒有出現**的名字：`elUdUld`、`WriteLastDataFile`、`MyForceDirectories`、
+  `EventReport`、`HeaterSVLog`、`SW`、`ATC_InterfaceForm`，以及任何 `uDTME08Control`／
+  `TMyOmronPanel::` 符號——所以 `fDTME08.h` 裡的 `#include "EJ1N/MyOmronPanel.h"`
+  只建立了**標頭**相依，正如設計。
+
+### agent 自己抓到並更正的兩個數字
+
+它的 banner 初稿寫「`class TTimer` 有四個競爭定義」與「`class TMyLed` 有三個」，
+複查後改成 **7** 與 **1**——第二個錯的原因是**數了含有該字串的檔案數，而不是類別定義數**。
+它在交付前自己改掉了。
+
+### agent 自陳沒讀完的（連續第十波守住這個區別）
+
+- `EJ1N/uDTME08Control.cpp` **沒讀**。每個 `dtme08` gate 只靠它所屬的 `add_library` 成立——
+  對 gate 而言足夠，但未來要往 comms 方向解閘的波次**必須重新確認**
+  `DoGetSV`／`mapDTMInfo`／`esstPT100` 等是否以 golden 的形狀存在
+  （那個標頭自己也帶 GATE (1)，其中有些可能本身就是 gated）。
+  `MyOmronPanel.h` **有**完整讀（inline／out-of-line 的分界決定了 6 支 ACTIVE 對 6 支 GATED），
+  但 `MyOmronPanel.cpp` 沒讀。
+- `HTEditList` 的 API 與 golden ctor 註冊的 20 個變數沒讀。
+- **沒有開任何 `.dfm`**。唯一需要的設計期值（`ScrollBox1->Width`）取自 port 自己產生的
+  layout 表並附引用（`tools/dfm2rc/layout_out/EJ1N/fDTME08_layout.gen.cpp:64`，Width=859
+  → 4 欄，與 golden 的 `iPanelSort[32]` 相符）。**這件事有後果**：因此
+  **fTowerLight 的 LED `Tag` 沒有值**，而 `Tag==0` 會讓 gated 的 `RGB00Click` 網格分派
+  塌到 `[0][0]`。已在檔內記成解閘者的 blocker。
+- 兩個 golden 的怪處照翻不改，並在檔內標明：`ClearAllCommandStatus` 那個沒有大括號、
+  只守住四個指派中第一個的 `if`；以及 `edSVClick` 把 `dTempMax` 當成 `ShowQwertyKey` 的
+  **最小值**、把 `0.0` 當成**最大值**。
+
+### 本波又一次自己弄假了自己的 absence-claim（連續第二波）
+
+收工重跑 pre-flight 時，`fCounterSel` 多出一個 gated 呼叫點 `forms/fCounterSel.cpp:140`——
+那是它自己寫在 GATE (C-2) 抄本裡的 `fCounterSel->CheckFormIni(...)`。
+benign（本身 gated，且 `CheckFormIni` 已用相符簽章宣告於 `fCounterSel.h:265`），
+但**它主動回報而不是默默吸收**。上一波（TIF1）是 `fTesterTCP->Show`，同一個形狀。
+
+### 驗收：兩側 GREEN，連續第十六個乾淨 gate
+
+```
+_dtl1_gate_g.txt            _dtl1_gate_done.txt
+G_TOTAL=5                   R_TOTAL=5
+G_EXTRA=  (空)              R_EXTRA=  (空)
+G_ABSENT= (空)              R_ABSENT= (空)
+G_VERDICT=GREEN             R_VERDICT=GREEN
+FAILSET（兩側逐項相同）= 常駐五項
+```
+**這一波是本 session 第一次用正確的 `tools/dualgate.sh`（序列版）跑 gate**——
+前兩次誤用了已停用的 `dualgate2.sh`，見同日 commit 483a9c9。
+收工腳本另驗過：**沒有任何交付檔比 gate 起跑新**。
+
+# 🔖 RESUME（20260828 · 第十六版）
+
+- **本段最後一顆**：`FW3-DTL1`（**一波四檔、八個新檔**）——
+  `forms/fTowerLight.{h,cpp}`（368+234）**8/8 支、101/133 行（75.9%，目前最高行覆蓋率）**；
+  `forms/fCounterSel.{h,cpp}`（268+200）**5/5 支、10/123 行**；
+  `forms/fLd_ULd.{h,cpp}`（398+387）**15/16 支＋1 省略、41/222 行**；
+  `forms/fDTME08.{h,cpp}`（694+1102）**55/55 支、173/693 行**。
+  `CMakeLists.txt` **2901 → 2965 行（+64）**，純 CRLF。**兩側 gate GREEN，連續第十六個乾淨 gate**。
+  詳見 20260828 V。四顆 `.o` 真 `-c` 編譯（`-Wall -Wextra`）**rc=0、0 error、0 warning**。
+  **三個檔的成員全部翻完**（8/8、5/5、55/55），本戰役第一次一波裡有三個檔做到。
+
+  ⭐ **新條款立刻回本**：派工加了「pre-flight `clear` ≠ 本體還沒被翻」之後，agent 搜到
+  **`EJ1N/uDTME08Control.{h,cpp}` 與 `EJ1N/MyOmronPanel.{h,cpp}` 早在 PT-W2 就完整 port**，
+  只用宣告不重翻。沒有這條就是重新翻兩個完整協作類別（上一波 TesterTCP 差點中招）。
+
+  ⚠ **一個讀起來像讀、其實會寫的路徑**：`fCounterSel::FormShow` 的 gate 不是連結邊界，
+  是隱藏寫入——`ProcessLastSetIni_Visible` → `ReadWriteIni(bool)`(common.cpp:1599)
+  → `CheckAndReadIniData`(common.cpp:613)，其 **`:624 WriteBool()` 在「讀」的路徑上
+  把預設值寫回 `D:\HT9045\config\config.ini`**。**函式名字裡的 Read 不保證它只讀。**
+  與 `fHotPlate` 的 G-1 同一函式對、同一陷阱。
+
+  ⚠ **一個看起來可達、其實不可達的符號（我複驗過）**：`HeaterSVLog` 宣告在 `cpublic.h`、
+  定義在 `cpublic.cpp` 屬 **`ht9045_globals`（forms 有連）**，但那個定義坐在該檔自己的
+  `#if 0` 內（`:709` 開，定義在 `:711`）。**`#if 0` 內的定義不是定義。**
+  這是陷阱 #1 的第三種形狀（前兩種：`static` 影子、`tests/` 裡的 stand-in）——
+  **target 對、檔案對、符號名對，唯獨被條件編譯關掉**。
+
+  ⚠ **唯一的非機械性編輯（已對 golden 複驗）**：golden `cLd_ULd.cpp:189` 的行尾 `//` 註解
+  以**反斜線**結尾 → line splice 吃掉下一行 → `g++ -Wall` **即使在 `#if 0` 內也報 `-Wcomment`**，
+  `#pragma GCC diagnostic ignored` **壓不掉**。只改註解**分隔符**為 `/* */`，文字逐位元組
+  與 golden 相同、程式碼未動、檔內大字註明。主迴圈用 cp950 讀 golden 確認行尾確為反斜線、
+  下一行確為空行。
+
+  ✅ **主迴圈複驗**：**八處全域宣告行號全部精準**（上一波錯一處，這波零錯）；
+  `nm --undefined-only` 四顆物件共 **12 個相異專案符號全部可達**（globals 9／core 1／forms 1，
+  外加 vclcompat），**零** 來自 sm／io／comms／db／secsgem／motor；**`fCounterSel.o` 零專案符號**；
+  `elUdUld`／`WriteLastDataFile`／`EventReport`／`HeaterSVLog`／`SW`／`ATC_InterfaceForm`／
+  任何 `uDTME08Control`／`TMyOmronPanel::` 符號**都沒出現**，證明 `#include "EJ1N/MyOmronPanel.h"`
+  只建立了標頭相依。
+
+  ⚠ **連續第二波「自己弄假自己的 absence-claim」**：`fCounterSel` 收工多出的 gated 呼叫點
+  `forms/fCounterSel.cpp:140` 是它自己 GATE (C-2) 抄本裡的那一行（上一波是 `fTesterTCP->Show`）。
+  benign 且**主動回報**。
+
+  🔒 **解閘者的 blocker（已記在檔內）**：本波**沒有開任何 `.dfm`**，所以
+  **fTowerLight 的 LED `Tag` 沒有值**，而 `Tag==0` 會讓 gated 的 `RGB00Click` 網格分派
+  塌到 `[0][0]`。唯一取用的設計期值 `ScrollBox1->Width` 取自 port 自己的 layout 表並附引用
+  （`tools/dfm2rc/layout_out/EJ1N/fDTME08_layout.gen.cpp:64`，Width=859 → 4 欄）。
+
+  💡 **最便宜的下一個解閘**：`forms/fDTME08.h` 的 GATE (E-21) `FormShow` **只**卡在
+  `DrawTempGUI`，也就是單一個 `TMyOmronPanel::SetVisible(bool)` 呼叫。
+
+- **前一顆**：`FW3-TIF1`（**一波三檔、六個新檔**）——
   `forms/fTesterIF.{h,cpp}`（504+1754）**21/38 支、115/1488 span 行**；
   `forms/fTesterTCP.{h,cpp}`（410+633）**1/23 支、8/1068 行**；
   `forms/fAirCon.{h,cpp}`（351+290）**5/16 支、36/164 行**。
