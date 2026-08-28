@@ -16566,6 +16566,71 @@ R_EXTRA=   R_ABSENT=   R_VERDICT=GREEN      (Release, 21:22:23)
 - **沒有解任何 gate**（`fBuilder` 的 9 個 safety gate 原封不動）——那是行為變更，另一顆 commit 的事。
 - **沒有把 `CalculateOEEReport` 一起翻進來**（20260828 IX），避免這次 gate 同時覆蓋兩件事。
 
+## 20260828 XII — **更正同日 IX**：`screen_methods.py` 查的是安全軸，不是可達軸
+
+IX 的結論寫著「**只有 `CalculateOEEReport`(201 行) 乾淨、可翻**（append 即可，
+不動 CMakeLists、不改連結圖）」。**後半段是錯的，這裡收回。**
+
+### 量到的事實
+
+golden `ProductionInfo.cpp:629-829` 的 `CalculateOEEReport` **三次解參考 `fObserver`**：
+
+```
+:805   AnsiString sTestRecevieTime = fObserver->sTestReceiveTime;
+:806   AnsiString sIndexTime       = fObserver->sTestIndexZTime;
+:813   sIndexTime = FloatToStr(StrToFloat(sIndexTime) + fObserver->dOEEIndexCycleTime);
+```
+
+- `fObserver` 定義於 port `cObserver.cpp:3190`。
+- `cObserver.cpp` 是 **`ht9045_sm`** 的來源（`CMakeLists.txt:2284`）。
+- `CMakeLists.txt` 自己的註解記著：加上 `target_link_libraries(ht9045_forms PUBLIC ht9045_sm)`
+  **會 configure 失敗**（循環）——「**所以修法是搬來源，不是加邊**」。
+- 同一形態早就記過一次：`:919-920` 寫著 `fPrecaution` 的「另外三支都解參考 `fObserver`，
+  而它的本體 `cObserver.cpp` 在 `ht9045_sm`」。
+
+**所以 `CalculateOEEReport` 不能以 ACTIVE 身分放進 `ht9045_forms`。**
+
+### 我錯在哪裡（這一條比那個函式重要）
+
+**排除有兩個互不相同的軸**：
+1. **安全軸** —— 它會不會動機台／寫檔／發警報／送命令。
+2. **可達軸** —— `ht9045_forms` 連不連得到它需要的符號。
+
+`tools/wavescan/screen_methods.py` **只查第一個軸**。
+我用一個單軸工具跑出「乾淨」，然後把它當成雙軸結論發表。
+**工具回答的是它被問的問題，不是我心裡的問題。**
+
+### 而且權威我也選錯了
+
+RESUME §四 寫著那 7 支「agent 根本沒走到、無任何判定」，我照著它寫了 IX。
+但 **port 自己的 banner（`forms/fProductionInfo.h:155`）記著**：
+FW3-PI2（20260827）**把 7 支全部讀完並全部排除**，理由正是
+「FTP／檔案 I/O、外部執行、或 `ht9045_sm` 連結邊界符號
+（`fObserver`／`TastCategory`／`ArmData`／`ShowMyMessage`）」。
+
+**RESUME 是舊的，程式碼裡的 banner 是新的。**
+今天稍早我才在 IX 裡寫下「權威永遠是磁碟上的 RESUME，不是我自己傳給自己的提示」——
+**這句話要再往下推一層：RESUME 也會過期，最終權威是程式碼本身。**
+順序應該是：**程式碼 banner > RESUME > 我的提示**。
+
+### IX 有沒有白做
+
+沒有，但它的標題錯了。它仍然獨立量到了**安全軸**上的實情，
+而且與 PI2 的理由互相印證：`LoadMOInformation`(309) **寫檔/寫 ini**、
+`CheckOEE_WhenStart`(83) **送命令/上傳**——這兩條是安全邊界，
+即使連結問題解掉了也**仍然不能翻**。
+換句話說：**7 支裡真正只被可達軸擋住的，只有 `CalculateOEEReport` 一支。**
+
+### 正確的下一步（RESUME 自己已經寫對了）
+
+把 **`forms/fProductionInfo.cpp` 從 `ht9045_forms` 的來源清單（`CMakeLists.txt:674`）
+移進 `ht9045_sm`**，先例是 `forms/fContact.cpp`（`CMakeLists.txt:2670`）。
+這**一次解開 9 支＋`CalculateOEEReport`**。
+⚠ 它是**連結圖變更**，要**單獨一顆 commit＋單獨一次完整 gate**，
+而且動手前必須先用 `nm` 量一件事：**目前 `ht9045_forms` 裡有沒有東西引用
+`TfProductionInfo` 的符號**——若有，搬走就會讓那些呼叫端連不到。
+**這個量測還沒做，所以這一波還沒開。**
+
 # 🔖 RESUME（20260828 · 第十九版）
 
 - ✅ **`FW3-BTQ1` 已於 20260828 XI 驗收並 commit**（gate `btq2`，**兩側 GREEN**，
@@ -16956,8 +17021,10 @@ exit code，於是 **W34 在紅燈上 commit 卻被我記成綠燈**。已工具
 ## 四、下一步（依序）
 
 1. **`ProductionInfo` 續攻**（同一個 facade，`forms/fProductionInfo.{h,cpp}` append）：
-   - ✅ **那 7 支已於 20260828 IX 篩完（`screen_methods.py`），不再是無判定**：
-     **只有 `CalculateOEEReport`(201) 乾淨、可翻**（append 即可，不動 CMakeLists、不改連結圖）；
+   - ✅ **那 7 支已於 20260828 IX 篩完（`screen_methods.py`），不再是無判定**；
+     ⚠ **但 IX 的標題已於 20260828 XII 更正**：`screen_methods.py` 只查**安全軸**，不查**可達軸**。
+     **`CalculateOEEReport`(201) 在安全軸上乾淨，但三次解參考 `fObserver`（golden :805/:806/:813）**，而 `fObserver` 在 `ht9045_sm`，
+     **所以不能直接 append 進 `ht9045_forms`**；
      其餘 6 支各自有風險並留 gate ——
      `LoadMOInformation`(309) **寫檔/寫 ini**、`CheckOEE_WhenStart`(83) **送命令/上傳**、
      `bCheckControlBinYield`(167) deep `DoLowYieldAlarm` 警報＋跨表單、
