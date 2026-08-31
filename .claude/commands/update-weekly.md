@@ -13,6 +13,9 @@ argument-hint: "例如：甬矽 9016C OneByOne 已提供安裝包"
 1. 從輸入提取：客戶、機台型號、事件關鍵字、行動描述、日期。
 2. 在 `d:\Work-jimmychiu\document\WeeklyReport\Weekly_AI\weekly_data.json` 搜尋匹配事件；模糊就向我確認是哪一筆。
 3. 更新該 item：append action、設 `is_active_this_week=true`、自動推斷 status。
+   **D 欄雙層制（必遵守）**：每筆 action 同時寫兩版——詳細版進 `--desc`（技術紀錄，留在 JSON），
+   白話簡潔版進 `--brief`（主管看的 Excel D 欄；一句話講「客戶說什麼／做了什麼／結果」，
+   禁檔名/行號/函式名/旗標名）。用 `update_report.py update --search ... --desc "..." --brief "..."`。
 4. **確認後**重產 Excel：
    ```
    cd /d/Work-jimmychiu/document/WeeklyReport/Weekly_AI/tools && python generate_report.py

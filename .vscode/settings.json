@@ -77,8 +77,11 @@
     "terminal.integrated.defaultProfile.windows": "PowerShell",
     "terminal.integrated.scrollback": 10000,
     "terminal.integrated.cwd": "${workspaceFolder}",
+    // 註：BCB6 實際安裝在 D 槽（已用 bpr2mak.exe 實地確認）。
+    //     舊值 C:\Program Files (x86)\Borland\CBuilder6 在本機不存在，
+    //     會讓「BCB6: Build V899」工作因 ${env:BCB6} 指到空目錄而失敗。
     "terminal.integrated.env.windows": {
-        "BCB6": "C:\\Program Files (x86)\\Borland\\CBuilder6"
+        "BCB6": "D:\\ProgramFiles\\Borland\\CBuilder6"
     },
 
     // ── Copilot / Chat（Insiders 加速項目）──

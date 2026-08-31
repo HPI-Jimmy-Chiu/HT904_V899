@@ -26,6 +26,21 @@ WEEKLY_AI_ROOT = d:\Work-jimmychiu\document\WeeklyReport\Weekly_AI
 
 詳細歸檔 SOP 參考 `weekly-case-flow` skill。
 
+## D 欄雙層制（20260826 起，使用者裁定）
+
+週報「行動/解決方案」（D 欄）分兩層，**每次新增行動兩層都要寫**：
+
+| 層 | 存放欄位 | 讀者 | 內容 |
+|---|---|---|---|
+| 詳細層 | `actions[].description`（+`details`）、`raw_action_text` | 工程師回溯（只在 JSON/case 資料夾） | 完整技術紀錄：檔名行號、旗標、證據鏈照寫，不簡化 |
+| 簡潔層 | `actions[].brief`、`action_brief_text` | 主管（**Excel D 欄唯一呈現層**） | 白話一句話：客戶說什麼／我們做了什麼／結果；**禁止**檔名、行號、函式名、旗標名、客戶碼 |
+
+- 工具參數：`update_report.py add/update/close --brief "<白話一句>"`、`close_case.py --brief "<白話一句>"`。
+- 自然語更新時，由本代理把使用者敘述改寫成兩版（詳細進 `--desc`、白話進 `--brief`）；`--brief` 留空工具會 fallback 用詳細版上 Excel，**視為沒做完**。
+- 簡潔層格式與詳細層相同：`N. YYYYMMDD 一句話`、最新在上（Excel 紅/黑上色靠行首日期判定）。
+- `generate_report.py` D 欄優先吃 `action_brief_text`，沒有才退回 `raw_action_text`（舊黑字項目相容，不必回補）。
+- **絕不可**用 `parse_report.py` 反向解析產出的 Excel 回 JSON——會把簡潔版當詳細版寫入、永久遺失詳細層。日常一律 JSON → Excel 單向。
+
 ## ⚠ 破壞性動作一律先確認（鐵律）
 
 下列動作會覆寫資料 / 推進週期 / 建實體資料夾，**執行前一定先向使用者說明將跑什麼、影響什麼，得到同意才執行**：
@@ -80,7 +95,7 @@ WEEKLY_AI_ROOT = d:\Work-jimmychiu\document\WeeklyReport\Weekly_AI
 > 後續使用者把異常檔放進 `01_intake/` 並說「開始分析」時 → 交給 **ht9045-v899** 子代理做根因分析，本代理不直接改程式碼、不編譯。
 
 ### C. 自然語進度更新
-「<客戶> <機型> <事件> <進展>」→ 找對應 item、append action、設 `is_active_this_week=true`、自動推斷 status → 經同意重產 Excel。範例：「甬矽 9016C OneByOne 已提供安裝包」。
+「<客戶> <機型> <事件> <進展>」→ 找對應 item、append action（**同時寫 `--desc` 詳細版與 `--brief` 白話版**，見「D 欄雙層制」）、設 `is_active_this_week=true`、自動推斷 status → 經同意重產 Excel。範例：「甬矽 9016C OneByOne 已提供安裝包」。
 
 ### D. 狀態查詢
 未完成/健康檢查/客戶篩選 → 跑 `list_open.py` + `check_case_integrity.py`，以 `(row, case_id, path, customer)` 為比對 key（不可只用 case_id，跨客戶會同號）。

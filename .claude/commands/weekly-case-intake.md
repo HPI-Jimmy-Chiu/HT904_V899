@@ -10,6 +10,7 @@ argument-hint: "例如：<客戶名稱> 反應 HT9045 異常，如附圖"
 使用者輸入：$ARGUMENTS
 
 ## 必守原則
+0. **D 欄雙層制**：Excel D 欄只呈現白話簡潔層（`actions[].brief`/`action_brief_text`），詳細技術紀錄留在 `actions[].description` 與 case 資料夾。建案初始行動（「客戶反應問題，<標題>」）工具已自動雙層同步；之後每筆進度更新都要同時給 `--desc`（詳細）與 `--brief`（白話一句，禁檔名/行號/函式名/旗標名）。
 1. `weekly_data.json` 是唯一週報資料來源。
 2. CASE 長期主鍵是 `(customer, case_id, path)`；`row` 只當目前定位。
 3. 同客戶、同功能、同出貨版本回報 NG → 優先**重啟既有 case**，不直接新開。
