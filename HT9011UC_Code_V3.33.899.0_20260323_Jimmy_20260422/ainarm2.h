@@ -186,6 +186,8 @@ enum eShakeShuttle{essSetFlag=1,
 extern int iShakeShuttleTask;
 extern int iKnockShuttleTask;
 extern int iKnockShtFirstTask;
+//AI(ht9045-v899) 20260831: 供 ckernel 的 resume 上升緣重設抖動逾時計時器
+extern void ResetShakeShuttleTimeOut();
 extern bool DoShakeShuttle(int iShuttle, bool bNeedInitial=false);              //Steven 20120801 : 修改抖抖功能
 extern bool DoKnockShuttle(int iShuttle, bool bNeedInitial=false);              //Jou 2013-03-08 修改敲敲功能
 extern bool DoKnockShuttleFirst(int iShuttle, bool bNeedInitial=false);         //jou 2015-12-09 SCS 要求 Shuttle 每次入料前 敲擊

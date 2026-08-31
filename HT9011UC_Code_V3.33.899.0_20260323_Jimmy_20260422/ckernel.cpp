@@ -514,6 +514,9 @@ bool ScanSystemSensor()
             return false;
         }
         #endif
+
+        //AI(ht9045-v899) 20260831: Start 確定成功後才重設抖動逾時, 避免暫停與處理 alarm 的掛鐘時間被算進 10 秒而一按 Start 就誤報
+        ResetShakeShuttleTimeOut();
     }
     else if(SoftStop==true)                                                     //暫停檢查
     {
