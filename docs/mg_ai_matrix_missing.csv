@@ -1,1 +1,28 @@
 ﻿date,agent,file,line,status,comment
+20260511,ht9045-v899,adam6024.cpp,1587,MISSING,//AI(ht9045-v899) 20260511: 把舊 Independent EP loop 限制在 DOUBLE_EP_INDIVIAL 才跑。
+20260511,ht9045-v899,adam6024.cpp,1595,MISSING,//AI(ht9045-v899) 20260511: bounds guard
+20260511,ht9045-v899,adam6024.cpp,1601,MISSING,//AI(ht9045-v899) 20260511: 防止 SLKIndClass 與 slSLKTypeInd 不同步時越界
+20260519,ht9045-v899,uTrayEditForm.cpp,504,MISSING,//AI(ht9045-v899) 20260519: keep timer refresh from re-triggering Enter screenshot save.
+20260519,ht9045-v899,uTrayEditForm.cpp,707,MISSING,//AI(ht9045-v899) 20260519: keep screenshot save failures from hanging Tray Edit UI.
+20260831,ht9045-v899,acatchtray.cpp,4549,MISSING,"//AI(ht9045-v899) 20260831: 累計2260連續逾時次數,收盤請求發不出去時據以升級成警報(CASE-PTI-20260831-001)"
+20260831,ht9045-v899,acatchtray.cpp,4686,MISSING,"//AI(ht9045-v899) 20260831: 每次重新進入等待前清除逾時計數,避免跨盤累積而提前升級警報"
+20260831,ht9045-v899,acatchtray.cpp,4729,MISSING,"//AI(ht9045-v899) 20260831: 逾時後主動請軌道收盤,補上case 2100已有但2260缺少的救援動作,此處是唯一還能清掉MMEmpty/MMColor的fHasTray的觸發點(CASE-PTI-20260831-001)"
+20260831,ht9045-v899,acatchtray.cpp,4744,MISSING,"//AI(ht9045-v899) 20260831: Color側對稱處理,缺陷與Empty側同形"
+20260831,ht9045-v899,acatchtray.cpp,4758,MISSING,"//AI(ht9045-v899) 20260831: 收盤請求無法武裝時連續逾時兩次(600秒)升級成有聲警報,600秒小於948秒hang up看門狗,避免靜默等到自動Home倒Error Bin"
+20260831,ht9045-v899,acatchtray.cpp,4762,MISSING,"//AI(ht9045-v899) 20260831: 先暫停hang up掛鐘,HangTime為level-triggered,彈窗期間持續超期,不暫停會在操作員按Start當下立刻命中而自動Home"
+20260831,ht9045-v899,acatchtray.cpp,4768,MISSING,"//AI(ht9045-v899) 20260831: 彈窗期間掛鐘持續走,解除後重新上錶確保下次仍隔300秒才再響"
+20260831,ht9045-v899,ainarm2.cpp,2145,MISSING,"//AI(ht9045-v899) 20260831: TQPF_Timer 走的是掛鐘, 暫停期間照計時, 導致處理完 alarm 按 Start 會在 2~3 秒內誤報 Shake Shuttle Time Out"
+20260831,ht9045-v899,ainarm2.cpp,2146,MISSING,"//AI(ht9045-v899) 20260831: 改由 resume 上升緣呼叫本函式重設, 讓 10 秒逾時只計算機台實際執行中的時間"
+20260831,ht9045-v899,ainarm2.cpp,2229,MISSING,"//AI(ht9045-v899) 20260831: 補回漏掉的 % 避免 fCanMoveM/fCanMove 欄位與數值錯位, 並加印 iShuttle 以辨識是哪一支飛梭"
+20260831,ht9045-v899,ainarm2.h,189,MISSING,//AI(ht9045-v899) 20260831: 供 ckernel 的 resume 上升緣重設抖動逾時計時器
+20260831,ht9045-v899,ckernel.cpp,518,MISSING,"//AI(ht9045-v899) 20260831: Start 確定成功後才重設抖動逾時, 避免暫停與處理 alarm 的掛鐘時間被算進 10 秒而一按 Start 就誤報"
+20260831,ht9045-v899,uTemp_Set.cpp,445,MISSING,"//AI(ht9045-v899) 20260831: uTemp_Set.dfm 下方 base 溫度列改成與 offset 表格同欄距(Left=grid+5, Width=50)，因 2024.07.27 加第6欄時只改了表格未改 base 列，造成選 5/6 Point 時欄位錯位（CASE-GIGAS-202"
+20260901,ht9045-v899,acatchtray.cpp,7283,MISSING,"//AI(ht9045-v899) 20260901: 還原20260703改用On()立即回報成功的寫法,不等到位sensor會使夾緊後只剩0.5秒就進case2350判定,且夾不緊時不再跳JAM31047 (CASE-20260901-001)"
+20260901,ht9045-v899,acatchtray.cpp,7388,MISSING,"//AI(ht9045-v899) 20260901: 還原20260703 Greatek極性反轉,新舊判定互斥(舊:FixOn到位=成功;新:兩顆到位皆OFF才算成功),HHT604G為原廠正常極性故夾盤成功反被判fail,JAM0604 100%誤報 (CASE-20260901-001)"
+20260901,ht9045-v899,bthermo.cpp,142,MISSING,"//AI(ht9045-v899) 20260901: 新增 6 Point 分支; 原本只有 iTempMode==8/4/2, Points=16 會掉進 1 Point 的 else 而一律套用 LowBase(畫面第 3 欄) 一欄 offset, 其餘五欄失效（CASE-GIGAS-20260901-001）"
+20260901,ht9045-v899,bthermo.cpp,293,MISSING,"//AI(ht9045-v899) 20260901: 補 Temp[5], 原本非 Kit 路徑沒填, 6 Point 內插會取到 0（CASE-GIGAS-20260901-001）"
+20260901,ht9045-v899,bthermo.cpp,407,MISSING,"//AI(ht9045-v899) 20260901: Temp[5]->Temp[6] 容納第 6 點 SHigBase, 否則 6 Point 分支的 ct2=5 會越界（CASE-GIGAS-20260901-001）"
+20260901,ht9045-v899,bthermo.cpp,443,MISSING,"//AI(ht9045-v899) 20260901: 補 Temp[5], 原本這條路徑沒填, 6 Point 內插會取到 0（CASE-GIGAS-20260901-001）"
+20260901,ht9045-v899,bthermo.cpp,453,MISSING,"//AI(ht9045-v899) 20260901: 補 Temp[5], 原本非 Kit 路徑沒填, 6 Point 內插會取到 0（CASE-GIGAS-20260901-001）"
+20260901,ht9045-v899,bthermo.cpp,553,MISSING,"//AI(ht9045-v899) 20260901: 新增 6 Point 分支, 與 ConvertTempOffset 對稱; 缺此分支時反向換算同樣只認 LowBase 一欄（CASE-GIGAS-20260901-001）"
+20260901,ht9045-v899,uhome.cpp,2664,MISSING,"//AI(ht9045-v899) 20260901: 還原20260703 Greatek Home分支,該分支在fHasTray=false時無條件放開夾爪,正常極性機台若軟體失去追蹤而夾爪上實際有盤會當場掉盤(觸發條件=程式中途重啟);還原後回到FixOn到位判定+WAR0614由操作員確認 (CASE-2026"

@@ -37,9 +37,6 @@ HS_Function.h,20260504,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250417
 adam6024.h,20260504,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250416) f,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
 cContact.cpp,20260504,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||=,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
 cSetUp.cpp,20260504,//AI(ht9045-v899) 20260504: split INDIVIAL/MULTI gating per ,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
-adam6024.cpp,20260511,//AI(ht9045-v899) 20260511: 把舊 Independent EP loop 限制在 DOUBL,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
-adam6024.cpp,20260511,//AI(ht9045-v899) 20260511: bounds guard,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
-adam6024.cpp,20260511,//AI(ht9045-v899) 20260511: 防止 SLKIndClass 與 slSLKTypeInd 不同,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
 ContactForce.cpp,20260526,//AI(ht9045-v899) 20260526: align EP one-by-one site trim di,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
 ContactForce.cpp,20260526,//AI(ht9045-v899) 20260526: Show Multi EP site trim page for,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
 HS_Function.cpp,20260526,//AI(ht9045-v899) 20260526: do not read/log Multi EP data wh,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
@@ -59,8 +56,6 @@ cContactCT.cpp,20260515,//AI(ht9045-v899) 20260515: 修正南茂回報Yield Char
 cContactCT.cpp,20260515,"//AI(ht9045-v899) 20260515: 同上修正, NN_2Row site標籤強制int",MG-W16 判 C：V910 pristine 基線已有等價（公司自行整合/改寫/uhome 為 V899 原檔天生損壞而 V910 有正確版）,MG-W16
 cContactCT.cpp,20260515,"//AI(ht9045-v899) 20260515: 同上修正, NN_1Row site標籤強制int",MG-W16 判 C：V910 pristine 基線已有等價（公司自行整合/改寫/uhome 為 V899 原檔天生損壞而 V910 有正確版）,MG-W16
 BarCode\BarCode.cpp,20260519,//AI(ht9045-v899) 20260519: match e2x2In2CCD missing barcode,MG-W16 判 C：V910 pristine 基線已有等價（公司自行整合/改寫/uhome 為 V899 原檔天生損壞而 V910 有正確版）,MG-W16
-uTrayEditForm.cpp,20260519,//AI(ht9045-v899) 20260519: keep timer refresh from re-trigg,MG-W16 判 C：V910 pristine 基線已有等價（公司自行整合/改寫/uhome 為 V899 原檔天生損壞而 V910 有正確版）,MG-W16
-uTrayEditForm.cpp,20260519,//AI(ht9045-v899) 20260519: keep screenshot save failures fr,MG-W16 判 C：V910 pristine 基線已有等價（公司自行整合/改寫/uhome 為 V899 原檔天生損壞而 V910 有正確版）,MG-W16
 cSortCT.cpp,20260605,//AI(ht9045-v899) 20260605: 改用 ShowMyMessageBox_YES_NO 需引入 m,MG-W16 判 C：V910 pristine 基線已有等價（公司自行整合/改寫/uhome 為 V899 原檔天生損壞而 V910 有正確版）,MG-W16
 cShowBinSelect.cpp,20260415,//AI(ht9045-v899) 20260415: dynamic stack layout for tsIndex,F12 pending：V910 有同日競品解法且照搬會回歸 btnASM 遮蔽 bug，建議不搬待使用者裁決,MG-W16/F12-pending
 cShowBinSelect.cpp,20260415,//AI(ht9045-v899) 20260415: dynamic height for tsIndex based,F12 pending：V910 有同日競品解法且照搬會回歸 btnASM 遮蔽 bug，建議不搬待使用者裁決,MG-W16/F12-pending

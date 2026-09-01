@@ -30,6 +30,27 @@
 | MG-W16 | 雜項掃尾（0401/0410/0505/0513/0515/0519/0520/0605/0618 共 20 條→8 op 搬＋10 條 C 類白名單＋3 條 F12 不搬） | port_check PASS（24 全 SPLICED、removed=3 刻意取代）＋bcc32 六檔 0 errors。亮點：**A5 破案**——uhome:1864 亂碼是 V899 原檔天生損壞（UTF-8 位元組在 Big5 檔、全檔 136 U+FFFD），V910 有正確版故判 C；adam6024 兩 op 把 V910 死碼 ShowDoubleEPConnectGuide 接上；mymotor ChipMos 分支（D 類邊緣，只插 5 行不碰其他馬達碼）；F12（cShowBinSelect 三條耦合：V910 有同日競品解＋btnASM 遮蔽回歸風險）不搬 | b70f987 |
 | MG-W15 | 機能群收尾（0623/0625/0629/0525/0514/0706/0414 共 20 條→12 op 搬 18＋2 C 類）——歸屬更正×2：0623 main=全智 C08_1（移除 SOFT_SIMULTE 包裹）、0625=欣銓 CASE-ARDENTEC-20260625-001 非長沙安牧泉 | port_check PASS（275 全 SPLICED、removed=50 含 TesterTCP 兩支函式整段取代）＋bcc32 四檔 PASS。內容：PTI O06 dtkTime EDateTimeError 修正（SaveConfiguration 中斷根因）、TesterTCP WORKFILE 同步等 7z（600ms→等完成）、DumpMainFormSnapshot 補 Home/Buzzer/Modal、PTI FirstTrayCheck 同步＋LotStart trace 打包、PickPlanner InArm 接線（三重休眠）、甬矽 WAR0152 可達性選嘴（D 類，預設路徑等價已逐條證明）。MachineType.h 100% LF 保持。0414/0623:153 判 C（V910 更正確）。註：白名單多 3 條 inert 規則（對應已搬條目，永不命中，收尾清點時一併審） | （本次收工 commit） |
 
+## ⚠ 20260901 獨立稽核修正（重要——推翻部分戰役結論）
+
+使用者 20260901 質疑「是否真的搬完」，主迴圈派獨立 agent 逐條稽核，結果：
+
+| 稽核項 | 結果 |
+|---|---|
+| 戰役期（≤20260826）條目 | **0 缺**，維持成立 |
+| 戰役後（0831/0901）delta | acatchtray／bthermo／uTemp_Set＋uhome＝**FULLY_PRESENT**（後續 session 已搬，僅註解 AgentName 改成 mg899to910）；**ainarm2＋ckernel＝ABSENT**（Shake Shuttle 案，5 條，→F14） |
+| 白名單抽驗 38/71 條 | **34 TRUE、4 FALSE** ← **「73 條列管有據」的說法不成立** |
+
+**4 條聲稱不實者已移出白名單改列真缺口**（連同同組的 adam6024:1587 共 5 列）：
+- adam6024 0511 bounds guard ×2（→F4 重裁）：**安全相關**，V910 越界可達且會餵進 EP 氣壓輸出
+- uTrayEditForm 0519 ×2（→F13）：公司同日改寫只做一半，資源洩漏＋靜默改設定
+
+**方法論教訓**：MG-W7 的白名單有**逐行證據表**（`mg_w7_analysis.md`），抽驗 22 條只錯 2 條，
+且錯的正是該表省略的那兩條；MG-W16 用**一句籠統理由涵蓋 9 條無關列**，兩條 FALSE 都出在那裡。
+→ 白名單每列必須有**逐列證據**，禁止共用籠統理由。
+
+誠實儀表（20260901 修正後）：`entries=738 / same-file=640 / ALLOWLISTED=68 / **MISSING=27**`
+（27＝戰役後新案 22 ＋ 稽核翻案 5）。剩餘 33 條未抽驗白名單稽核進行中。
+
 ## 假 MISSING 白名單
 
 **權威清單＝`docs/mg_matrix_allowlist.csv`**（矩陣自動讀取，命中者計 ALLOWLISTED 不計 MISSING；
@@ -407,3 +428,30 @@
 - `cBinSel.cpp:1395` //AI(ht9045-v899) 20260820: 未指派 Category 的 Fix1/Fix4 預設為 Fail(說明見本函式上方)
 - `main.cpp:30011` //AI(ht9045-v899) 20260820: i由1改0, 原本Row A(index 0)整排未被記錄; 全樹其餘ArmSKET迴圈(cSocket/auto9045/SCK_ART等)皆由0起算
 
+
+---
+
+## 戰役後新增（非 MISSING backlog）
+
+MG 戰役結束後才在 V899 產生的新變更，**當日即同步搬到 V910**，不屬於 376 條 MISSING 母體。
+記錄於此是為了避免日後重跑 `ai_comment_matrix.py` 時被誤判為缺口——兩樹的 AI 註解
+AgentName 與日期刻意不同（V899 用 `ht9045-v899` 20260831、V910 用 `mg899to910` 20260901），
+內容相同但字串不同，矩陣比對可能不會自動配對。
+
+### 20260901 — CASE-PTI-20260831-001 TrayArm 2260 無出口死結
+
+| 項目 | 內容 |
+|---|---|
+| 檔案 | `acatchtray.cpp`（兩樹皆單一檔案，3 hunks / 46 行） |
+| V899 錨點 | 4548（static 群）／4683（case 2251）／4724（逾時分支） |
+| V910 錨點 | 5199／5335／5376 |
+| 前提 | 兩樹該段位元組相同（抽段 md5 `d15de498a8c52c1bd23d0db3c7c709d3`） |
+| 內容 | `DoPlaceToBuffer` case 2260 逾時後主動請 Empty/Color 軌道收盤（補上 case 2100 已有、2260 缺少的救援動作）；救援武裝不了時連續逾時兩次（600 秒 < 948 秒 hang-up 看門狗）升級為 MES1020/MES1420 有聲警報，彈窗前設 `bHangTimePause=true` |
+| 閘門 | **無客戶碼閘，全客戶生效**。原缺陷為通案（Empty 與 Color 兩側對稱），非 PTI 專屬 |
+| 驗證 | 兩樹皆：`git apply --check` exit=0；bcc32 單檔隔離編譯 exit=0 / 0 errors；警告行號正規化後零新增（V899 68→68、V910 70→70）；套用後 md5 與編譯過的版本相同、cp950 零 U+FFFD、純 CRLF |
+| 未做 | 全專案 build（撰寫當下 BCB IDE 佔用共用 Obj/EXE）；實機回歸 14 項一項未跑；機構空間干涉未實證 |
+| 文件 | `Weekly_AI\Customer\力成PTI\CASE-PTI-20260831-001_...\02_analysis\修正方案設計_2260死結_20260831.md` |
+
+**行為外溢記錄**：新增兩種 Process log（`DoPlaceToBuffer 2260 Recovery Empty` / `... Color`），
+以及一個原本不存在的警報路徑。正常生產時 2260 是高頻短暫過渡，救援不應被觸發——
+若量產 log 出現 Recovery 字樣，代表該機台確實踩到此死結，值得追。

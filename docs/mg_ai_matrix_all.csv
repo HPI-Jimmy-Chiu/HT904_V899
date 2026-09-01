@@ -86,8 +86,8 @@
 20260417,ht9045-v899,cmydef.cpp,4995,same-file,//AI(ht9045-v899) 20260417: config flag for AutoDeviceEjection panel
 20260417,ht9045-v899,cmydef.h,4937,same-file,//AI(ht9045-v899) 20260417: add config flag to show AutoDeviceEjection panel
 20260417,ht9045-v899,database.cpp,729,same-file,//AI(ht9045-v899) 20260417: read AutoDeviceEjection flag from Gerneral.ini
-20260417,Jimmy,uTemp_Set.cpp,6440,same-file,//AI(Jimmy) 20260417: fix typo - 第二個 subscript 應為 [1][0][1] 而非重複 [1][0][0]，
-20260417,Jimmy,uTemp_Set.cpp,6441,same-file,//AI(Jimmy) 20260417: 造成 Arm2 col0 的 offset index 被 24 覆蓋成 Ba2，SingleSite/1x2 時 Arm2 改 Aa2 無效、改 Ba2 才生效
+20260417,Jimmy,uTemp_Set.cpp,6441,same-file,//AI(Jimmy) 20260417: fix typo - 第二個 subscript 應為 [1][0][1] 而非重複 [1][0][0]，
+20260417,Jimmy,uTemp_Set.cpp,6442,same-file,//AI(Jimmy) 20260417: 造成 Arm2 col0 的 offset index 被 24 覆蓋成 Ba2，SingleSite/1x2 時 Arm2 改 Aa2 無效、改 Ba2 才生效
 20260420,BVL-3766,HS_Function.cpp,26,ALLOWLISTED,//AI(BVL-3766) 20260420: 開關 site 時要即時重寫 GTK info.txt
 20260420,BVL-3766,ProductionInfo\ProductionInfo.cpp,4922,same-file,//AI(BVL-3766) 20260420: 本功能為超豐(GTK Loader Agent)專用，非 CC_Greatek 不寫 GTK_Control\flag\info.txt
 20260420,BVL-3766,ProductionInfo\ProductionInfo.cpp,4946,same-file,"//AI(BVL-3766) 20260420: site 編號改用欄交錯(column-major, A奇B偶)，與機台 UI/吸嘴索引慣例(i + j*iShtRow + 1)一致"
@@ -299,9 +299,9 @@
 20260511,ht9045-v899,OCRInsp.cpp,659,same-file,//AI(ht9045-v899) 20260511: simulation bypass - treat AOI as connected so flow can proceed without vision PC
 20260511,ht9045-v899,OCRInsp.cpp,931,same-file,//AI(ht9045-v899) 20260511: bypass-AOI also enters trigger sequence so handler motion path matches production
 20260511,ht9045-v899,OCRInsp.h,17,same-file,"//AI(ht9045-v899) 20260511: when true, OCR area simulation skips AOI socket dependency (no vision PC needed); SwOCRTigger still fires so handler motion is exerc"
-20260511,ht9045-v899,adam6024.cpp,1587,ALLOWLISTED,//AI(ht9045-v899) 20260511: 把舊 Independent EP loop 限制在 DOUBLE_EP_INDIVIAL 才跑。
-20260511,ht9045-v899,adam6024.cpp,1595,ALLOWLISTED,//AI(ht9045-v899) 20260511: bounds guard
-20260511,ht9045-v899,adam6024.cpp,1601,ALLOWLISTED,//AI(ht9045-v899) 20260511: 防止 SLKIndClass 與 slSLKTypeInd 不同步時越界
+20260511,ht9045-v899,adam6024.cpp,1587,MISSING,//AI(ht9045-v899) 20260511: 把舊 Independent EP loop 限制在 DOUBLE_EP_INDIVIAL 才跑。
+20260511,ht9045-v899,adam6024.cpp,1595,MISSING,//AI(ht9045-v899) 20260511: bounds guard
+20260511,ht9045-v899,adam6024.cpp,1601,MISSING,//AI(ht9045-v899) 20260511: 防止 SLKIndClass 與 slSLKTypeInd 不同步時越界
 20260511,ht9045-v899,iosetview.cpp,47,same-file,//AI(ht9045-v899) 20260511: init NULL to prevent dangling deref in Timer1Timer when click handler did not assign
 20260511,ht9045-v899,iosetview.cpp,108,same-file,"//AI(ht9045-v899) 20260511: RAII guard - destructor always clears bTimerRun on any function exit (normal return, exception unwind, or early break), so a hardwar"
 20260511,ht9045-v899,iosetview.cpp,165,same-file,"//AI(ht9045-v899) 20260511: null-guard before deref; if pointer not assigned yet, force state Off to avoid AV that would leave bTimerRun stuck true and freeze U"
@@ -366,8 +366,8 @@
 20260519,ht9045-v899,HS_Function.cpp,3549,same-file,//AI(ht9045-v899) 20260519: GTK info.txt is saved by callers after site-state synchronization.
 20260519,ht9045-v899,ProductionInfo\ProductionInfo.cpp,4952,same-file,//AI(ht9045-v899) 20260519: output RunSite from V812 channel map while keeping two-arm/runtime close-site guard.
 20260519,ht9045-v899,main.cpp,28270,same-file,//AI(ht9045-v899) 20260519: save GTK RunSite after homepage site on/off states are synchronized.
-20260519,ht9045-v899,uTrayEditForm.cpp,504,ALLOWLISTED,//AI(ht9045-v899) 20260519: keep timer refresh from re-triggering Enter screenshot save.
-20260519,ht9045-v899,uTrayEditForm.cpp,707,ALLOWLISTED,//AI(ht9045-v899) 20260519: keep screenshot save failures from hanging Tray Edit UI.
+20260519,ht9045-v899,uTrayEditForm.cpp,504,MISSING,//AI(ht9045-v899) 20260519: keep timer refresh from re-triggering Enter screenshot save.
+20260519,ht9045-v899,uTrayEditForm.cpp,707,MISSING,//AI(ht9045-v899) 20260519: keep screenshot save failures from hanging Tray Edit UI.
 20260519,ht9045-v899,uYieldMonitoring.cpp,5163,same-file,//AI(ht9045-v899) 20260519: save GTK RunSite after low-yield auto site-off state synchronization.
 20260520,ht9045-v899,CosFunction.cpp,1466,same-file,//AI(ht9045-v899) 20260520: enable E55 Fix3 full tray gate for PTI import plan
 20260521,ht9045-v899,KYECFTP\FTPClient.cpp,3416,same-file,//AI(ht9045-v899) 20260521: limit ChipMos Chamber upload value by selected heat mode
@@ -468,9 +468,9 @@
 20260528,ht9045-v899,main.cpp,26575,same-file,//AI(ht9045-v899) 20260528: guard Yield Monitoring entry with security level 39
 20260528,ht9045-v899,uLotInfo.cpp,7245,same-file,//AI(ht9045-v899) 20260528: block PTI operator Lot Start while tester is offline
 20260529,ht9045-v899,uLotInfo.cpp,7252,same-file,//AI(ht9045-v899) 20260529: clarify PTI offline tester mode prompt
-20260602,ht9045-v899,acatchtray.cpp,5915,same-file,//AI(ht9045-v899) 20260602: 殘料檢查pass後先把LoaderY送回SurePos(rear)再進取盤流程，避免LoaderY停在front(CarPos)導致TrayArm夾空JAM0604
-20260602,ht9045-v899,acatchtray.cpp,5948,same-file,//AI(ht9045-v899) 20260602: 殘料檢查(台車模式)pass後LoaderY歸位
-20260602,ht9045-v899,acatchtray.cpp,5949,same-file,//AI(ht9045-v899) 20260602: 雷射流程收尾DoMoveOut會把LoaderY停在front(CarPos)，這裡先放開固定壓桿並把盤送回SurePos(rear吸料位)、放開夾爪，TrayArm才夾得到盤；否則DoCatchFromLoader會夾空報JAM0604
+20260602,ht9045-v899,acatchtray.cpp,5961,same-file,//AI(ht9045-v899) 20260602: 殘料檢查pass後先把LoaderY送回SurePos(rear)再進取盤流程，避免LoaderY停在front(CarPos)導致TrayArm夾空JAM0604
+20260602,ht9045-v899,acatchtray.cpp,5994,same-file,//AI(ht9045-v899) 20260602: 殘料檢查(台車模式)pass後LoaderY歸位
+20260602,ht9045-v899,acatchtray.cpp,5995,same-file,//AI(ht9045-v899) 20260602: 雷射流程收尾DoMoveOut會把LoaderY停在front(CarPos)，這裡先放開固定壓桿並把盤送回SurePos(rear吸料位)、放開夾爪，TrayArm才夾得到盤；否則DoCatchFromLoader會夾空報JAM0604
 20260602,ht9045-v899,ainarm9045.cpp,7057,same-file,//AI(ht9045-v899) 20260602: watchdog for InArm load-stage no-tray dead-lock (case 15) on non-auto-skip customers (e.g. CC_ARDENTEC)
 20260602,ht9045-v899,ainarm9045.cpp,7060,same-file,//AI(ht9045-v899) 20260602: watchdog for InArm load-stage empty-tray residual dead-lock (case 15) when the empty tray is never swapped out (e.g. OP skip manual 
 20260602,ht9045-v899,ainarm9045.cpp,7080,same-file,"//AI(ht9045-v899) 20260602: latch for case 15 no-tray watchdog (arm once, avoid restart every scan)"
@@ -600,9 +600,7 @@
 20260703,ht9045-v899,acatchtray.cpp,2007,ALLOWLISTED,"//AI(ht9045-v899) 20260703: 補 iCnt>100 防抖,避免搬運中 FixOn sensor 單次彈跳即誤報 JAM0610(頻繁 Alarm 頂層主因);比照 DoPlaceTrayToAuto_250"
 20260703,ht9045-v899,acatchtray.cpp,2020,same-file,"//AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環"
 20260703,ht9045-v899,acatchtray.cpp,3628,same-file,"//AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環"
-20260703,ht9045-v899,acatchtray.cpp,4591,same-file,"//AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環"
-20260703,ht9045-v899,acatchtray.cpp,7239,same-file,"//AI(ht9045-v899) 20260703: Greatek極性校正-夾緊有盤時FixOn_On不會到位,用On()直接驅動不等sensor,避免Push()到位逾時誤觸JAM31047(缸47);夾到與否由IsTrayArmCatchTrayFail(兩顆到位OFF=有盤)判定;非Greatek維持Push"
-20260703,ht9045-v899,acatchtray.cpp,7350,same-file,//AI(ht9045-v899) 20260703: Greatek硬體極性校正-正常持盤=FixOn/FixOff兩顆到位皆OFF;任一到位ON即非正常持盤(FixOn ON=空夾掉盤/FixOff ON=放開)→fail;非Greatek維持原判斷
+20260703,ht9045-v899,acatchtray.cpp,4593,same-file,"//AI(ht9045-v899) 20260703: SKIP後補釋放夾爪,避免空夾閉合殘留(FixOn/FixOff到位sensor皆OFF)造成下次Initial Start/ART自檢WAR0615循環"
 20260703,ht9045-v899,cmydef.cpp,5457,same-file,//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 Smart Auto Clean 警報改非阻塞提示並週期性重置偵測；新增原因/處置文字(EN/CH)全域供 note.cpp 面板動態帶入。提示必須留在觸發當下/CheckSmartAutoClean，不得移到會 Sto
 20260703,ht9045-v899,cmydef.cpp,5458,same-file,//AI(ht9045-v899) 20260703: pnlCleanSocket 動態英文提示(空=用預設)
 20260703,ht9045-v899,cmydef.cpp,5459,same-file,//AI(ht9045-v899) 20260703: pnlCleanSocket 動態中文提示(空=用預設)
@@ -615,8 +613,7 @@
 20260703,ht9045-v899,csystem.cpp,6229,same-file,"//AI(ht9045-v899) 20260703: Greatek極性校正-啟動應在放開位;FixOn ON=空夾/掉盤→WAR0615,兩顆到位OFF=有盤→WAR0614取盤;非Greatek還原原始WAR0615"
 20260703,ht9045-v899,main.cpp,4554,same-file,"//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 閘門已於函式端(CheckSmartAutoCleanCanStart)改為恆放行(return true), 此呼叫不再擋 START, 下一行 return false 實際不會執行；外殼與呼叫保持不動。"
 20260703,ht9045-v899,note.cpp,1995,same-file,"//AI(ht9045-v899) 20260703: CASE-PTI-20260630-001 若觸發端有帶入動態原因+處置文字則覆寫面板(含 alarm 描述/code + 已暫停/已重新初始化偵測)；空則維持原預設。此為非阻塞常駐面板, 不會 StopAllMotor。"
-20260703,ht9045-v899,uhome.cpp,2664,same-file,"//AI(ht9045-v899) 20260703: Greatek硬體極性校正-Home以放開為目標;有盤依軟體fHasTray維持夾持,無盤則驅動放開並確認FixOff到位(不再用FixOn sensor猜有盤,FixOn ON=空夾非有盤);非Greatek維持原邏輯"
-20260703,ht9045-v899,uhome.cpp,2706,same-file,"//AI(ht9045-v899) 20260703: Home時FixOn讀ON但軟體無盤記錄,原邏輯不經確認即夾持+標記有盤走自動退盤,造成非預期夾爪動作;改為防抖100次後跳WAR0614由操作員確認,RETRY=已取下盤重新檢查,SKIP=確認有盤維持舊有自動退盤"
+20260703,ht9045-v899,uhome.cpp,2681,same-file,"//AI(ht9045-v899) 20260703: Home時FixOn讀ON但軟體無盤記錄,原邏輯不經確認即夾持+標記有盤走自動退盤,造成非預期夾爪動作;改為防抖100次後跳WAR0614由操作員確認,RETRY=已取下盤重新檢查,SKIP=確認有盤維持舊有自動退盤"
 20260706,ht9045-v899,ainarm9045.cpp,4661,same-file,"//AI(ht9045-v899) 20260706: 系統性可達性選嘴(不寫死吸嘴代號/欄位):預設仍取最左啟用吸嘴維持原行為,"
 20260803,ht9045-v899,CosFunction.cpp,2789,same-file,//AI(ht9045-v899) 20260803: the 20260602 InArm case-15 dead-lock watchdog was added for this customer only (CASE-GIGAS-20260729-001)
 20260803,ht9045-v899,CosFunction.cpp,4414,same-file,//AI(ht9045-v899) 20260803: default off - the 20260602 case-15 watchdog must only run for CC_ARDENTEC (CASE-GIGAS-20260729-001)
@@ -718,3 +715,25 @@
 20260820,ht9045-v899,cBinSel.cpp,1395,same-file,//AI(ht9045-v899) 20260820: 未指派 Category 的 Fix1/Fix4 預設為 Fail(說明見本函式上方)
 20260820,ht9045-v899,main.cpp,30011,same-file,"//AI(ht9045-v899) 20260820: i由1改0, 原本Row A(index 0)整排未被記錄; 全樹其餘ArmSKET迴圈(cSocket/auto9045/SCK_ART等)皆由0起算"
 20260820,ht9045-v899,main.cpp,30033,same-file,"//AI(ht9045-v899) 20260820: 標籤第二字母原誤用外層i, 同一列所有j印出同一標籤(2x4只印出4個""Aa""), 改為row='A'+i/col='a'+j; 直接取列欄索引即不需除法, 故移除20260515的ChangeToFloatNonPcnt+(int), 語意等同cContactC"
+20260831,ht9045-v899,acatchtray.cpp,4549,MISSING,"//AI(ht9045-v899) 20260831: 累計2260連續逾時次數,收盤請求發不出去時據以升級成警報(CASE-PTI-20260831-001)"
+20260831,ht9045-v899,acatchtray.cpp,4686,MISSING,"//AI(ht9045-v899) 20260831: 每次重新進入等待前清除逾時計數,避免跨盤累積而提前升級警報"
+20260831,ht9045-v899,acatchtray.cpp,4729,MISSING,"//AI(ht9045-v899) 20260831: 逾時後主動請軌道收盤,補上case 2100已有但2260缺少的救援動作,此處是唯一還能清掉MMEmpty/MMColor的fHasTray的觸發點(CASE-PTI-20260831-001)"
+20260831,ht9045-v899,acatchtray.cpp,4744,MISSING,"//AI(ht9045-v899) 20260831: Color側對稱處理,缺陷與Empty側同形"
+20260831,ht9045-v899,acatchtray.cpp,4758,MISSING,"//AI(ht9045-v899) 20260831: 收盤請求無法武裝時連續逾時兩次(600秒)升級成有聲警報,600秒小於948秒hang up看門狗,避免靜默等到自動Home倒Error Bin"
+20260831,ht9045-v899,acatchtray.cpp,4762,MISSING,"//AI(ht9045-v899) 20260831: 先暫停hang up掛鐘,HangTime為level-triggered,彈窗期間持續超期,不暫停會在操作員按Start當下立刻命中而自動Home"
+20260831,ht9045-v899,acatchtray.cpp,4768,MISSING,"//AI(ht9045-v899) 20260831: 彈窗期間掛鐘持續走,解除後重新上錶確保下次仍隔300秒才再響"
+20260831,ht9045-v899,ainarm2.cpp,2145,MISSING,"//AI(ht9045-v899) 20260831: TQPF_Timer 走的是掛鐘, 暫停期間照計時, 導致處理完 alarm 按 Start 會在 2~3 秒內誤報 Shake Shuttle Time Out"
+20260831,ht9045-v899,ainarm2.cpp,2146,MISSING,"//AI(ht9045-v899) 20260831: 改由 resume 上升緣呼叫本函式重設, 讓 10 秒逾時只計算機台實際執行中的時間"
+20260831,ht9045-v899,ainarm2.cpp,2229,MISSING,"//AI(ht9045-v899) 20260831: 補回漏掉的 % 避免 fCanMoveM/fCanMove 欄位與數值錯位, 並加印 iShuttle 以辨識是哪一支飛梭"
+20260831,ht9045-v899,ainarm2.h,189,MISSING,//AI(ht9045-v899) 20260831: 供 ckernel 的 resume 上升緣重設抖動逾時計時器
+20260831,ht9045-v899,ckernel.cpp,518,MISSING,"//AI(ht9045-v899) 20260831: Start 確定成功後才重設抖動逾時, 避免暫停與處理 alarm 的掛鐘時間被算進 10 秒而一按 Start 就誤報"
+20260831,ht9045-v899,uTemp_Set.cpp,445,MISSING,"//AI(ht9045-v899) 20260831: uTemp_Set.dfm 下方 base 溫度列改成與 offset 表格同欄距(Left=grid+5, Width=50)，因 2024.07.27 加第6欄時只改了表格未改 base 列，造成選 5/6 Point 時欄位錯位（CASE-GIGAS-202"
+20260901,ht9045-v899,acatchtray.cpp,7283,MISSING,"//AI(ht9045-v899) 20260901: 還原20260703改用On()立即回報成功的寫法,不等到位sensor會使夾緊後只剩0.5秒就進case2350判定,且夾不緊時不再跳JAM31047 (CASE-20260901-001)"
+20260901,ht9045-v899,acatchtray.cpp,7388,MISSING,"//AI(ht9045-v899) 20260901: 還原20260703 Greatek極性反轉,新舊判定互斥(舊:FixOn到位=成功;新:兩顆到位皆OFF才算成功),HHT604G為原廠正常極性故夾盤成功反被判fail,JAM0604 100%誤報 (CASE-20260901-001)"
+20260901,ht9045-v899,bthermo.cpp,142,MISSING,"//AI(ht9045-v899) 20260901: 新增 6 Point 分支; 原本只有 iTempMode==8/4/2, Points=16 會掉進 1 Point 的 else 而一律套用 LowBase(畫面第 3 欄) 一欄 offset, 其餘五欄失效（CASE-GIGAS-20260901-001）"
+20260901,ht9045-v899,bthermo.cpp,293,MISSING,"//AI(ht9045-v899) 20260901: 補 Temp[5], 原本非 Kit 路徑沒填, 6 Point 內插會取到 0（CASE-GIGAS-20260901-001）"
+20260901,ht9045-v899,bthermo.cpp,407,MISSING,"//AI(ht9045-v899) 20260901: Temp[5]->Temp[6] 容納第 6 點 SHigBase, 否則 6 Point 分支的 ct2=5 會越界（CASE-GIGAS-20260901-001）"
+20260901,ht9045-v899,bthermo.cpp,443,MISSING,"//AI(ht9045-v899) 20260901: 補 Temp[5], 原本這條路徑沒填, 6 Point 內插會取到 0（CASE-GIGAS-20260901-001）"
+20260901,ht9045-v899,bthermo.cpp,453,MISSING,"//AI(ht9045-v899) 20260901: 補 Temp[5], 原本非 Kit 路徑沒填, 6 Point 內插會取到 0（CASE-GIGAS-20260901-001）"
+20260901,ht9045-v899,bthermo.cpp,553,MISSING,"//AI(ht9045-v899) 20260901: 新增 6 Point 分支, 與 ConvertTempOffset 對稱; 缺此分支時反向換算同樣只認 LowBase 一欄（CASE-GIGAS-20260901-001）"
+20260901,ht9045-v899,uhome.cpp,2664,MISSING,"//AI(ht9045-v899) 20260901: 還原20260703 Greatek Home分支,該分支在fHasTray=false時無條件放開夾爪,正常極性機台若軟體失去追蹤而夾爪上實際有盤會當場掉盤(觸發條件=程式中途重啟);還原後回到FixOn到位判定+WAR0614由操作員確認 (CASE-2026"
