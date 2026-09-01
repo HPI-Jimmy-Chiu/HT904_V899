@@ -8238,17 +8238,9 @@ bool C_CatchTray_Fix_Puch(bool bInitial)                                        
             iTask=100;
         case 100:
             Cylinder[C_CatchTray_FixOff].Off();
+            //AI(mg899to910) 20260901: 還原20260703改用On()立即回報成功的寫法,不等到位sensor會使夾緊後只剩0.5秒就進case2350判定,且夾不緊時不再跳JAM31047 (CASE-20260901-001)
             if(bflag==false)
-            {
-                //AI(ht9045-v899) 20260703: Greatek極性校正-夾緊有盤時FixOn_On不會到位,用On()直接驅動不等sensor,避免Push()到位逾時誤觸JAM31047(缸47);夾到與否由IsTrayArmCatchTrayFail(兩顆到位OFF=有盤)判定;非Greatek維持Push()
-                if(CUSTOMER_CODE==CC_Greatek)
-                {
-                    Cylinder[C_CatchTray_FixOn].On();
-                    bflag=true;
-                }
-                else
-                    bflag=Cylinder[C_CatchTray_FixOn].Push();
-            }
+                bflag=Cylinder[C_CatchTray_FixOn].Push();
 
             if(bNewCatchTrayblock)                                                                                      //kevin 20200512 夾tray遮版削短
             {
@@ -8351,14 +8343,8 @@ bool IsTrayArmCatchTrayFail()                                                   
                 break;
             case 2:                                                             //2 Sensor(ART)
             case 4:                                                             //2 Sensor(ART & No Cover)  //Steven 20241211 : add
-                //AI(ht9045-v899) 20260703: Greatek硬體極性校正-正常持盤=FixOn/FixOff兩顆到位皆OFF;任一到位ON即非正常持盤(FixOn ON=空夾掉盤/FixOff ON=放開)→fail;非Greatek維持原判斷
-                if(CUSTOMER_CODE==CC_Greatek)
-                {
-                    if(Cylinder[C_CatchTray_FixOn].OnStatus() ||
-                       Cylinder[C_CatchTray_FixOff].OnStatus())
-                        return true;
-                }
-                else if(Cylinder[C_CatchTray_FixOn].OnStatus()==false)               //wei 20150415
+                //AI(mg899to910) 20260901: 還原20260703 Greatek極性反轉,新舊判定互斥(舊:FixOn到位=成功;新:兩顆到位皆OFF才算成功),HHT604G為原廠正常極性故夾盤成功反被判fail,JAM0604 100%誤報 (CASE-20260901-001)
+                if(Cylinder[C_CatchTray_FixOn].OnStatus()==false)               //wei 20150415 前後夾Alarm
                 {
                     return true;
                 }

@@ -2886,32 +2886,7 @@ bool ProcessMotorHome(bool Flag2)
 //            if(!(bCyflag[0] && bCyflag[1] && bCyflag[2] && bCyflag[3]))
 //                flag1=false;
 
-            //AI(ht9045-v899) 20260703: Greatek硬體極性校正-Home以放開為目標;有盤依軟體fHasTray維持夾持,無盤則驅動放開並確認FixOff到位(不再用FixOn sensor猜有盤,FixOn ON=空夾非有盤);非Greatek維持原邏輯
-            if(CUSTOMER_CODE==CC_Greatek && USE_AUTO_RETEST==eartInstall)
-            {
-                if(MOT[MTrayX].fHasTray)
-                {
-                    Cylinder[C_CatchTray_FixOn].On();       //軟體確知持盤:維持夾持
-                    Cylinder[C_CatchTray_FixOff].Off();
-                }
-                else
-                {
-                    Cylinder[C_CatchTray_FixOn].Off();       //無盤:目標放開
-                    Cylinder[C_CatchTray_FixOff].On();
-                    if(Cylinder[C_CatchTray_FixOff].OnStatus()==false)   //放開未到位:驅動後仍卡
-                    {
-                        static int iRelDetCnt=0;
-                        iRelDetCnt++;
-                        if(iRelDetCnt>100)
-                        {
-                            iRelDetCnt=0;
-                            ShowErrorMessage("WAR0615", K_SKIP, MTrayX, false, "ProcessMotorHome_400_Greatek");
-                        }
-                    }
-                }
-            }
-            else
-            {
+            //AI(mg899to910) 20260901: 還原20260703 Greatek Home分支,該分支在fHasTray=false時無條件放開夾爪,正常極性機台若軟體失去追蹤而夾爪上實際有盤會當場掉盤(觸發條件=程式中途重啟);還原後回到FixOn到位判定+WAR0614由操作員確認 (CASE-20260901-001)
             if(MOT[MTrayX].fHasTray ||                                          //jou 2012-10-26 修正歸零catch tray 會把tray丟在中途
                (LastSet.iRunStartMode==rsmAutoRetest &&
                 Cylinder[C_CatchTray_FixOn].OnStatus()) ||
@@ -2969,7 +2944,6 @@ bool ProcessMotorHome(bool Flag2)
                 {
                     Cylinder[C_CatchTray_Fix].Off();
                 }
-            }
             }
 
             if(flag1)
