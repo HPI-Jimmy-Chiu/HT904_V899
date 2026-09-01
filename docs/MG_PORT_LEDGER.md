@@ -48,8 +48,21 @@
 且錯的正是該表省略的那兩條；MG-W16 用**一句籠統理由涵蓋 9 條無關列**，兩條 FALSE 都出在那裡。
 → 白名單每列必須有**逐列證據**，禁止共用籠統理由。
 
-誠實儀表（20260901 修正後）：`entries=738 / same-file=640 / ALLOWLISTED=68 / **MISSING=27**`
-（27＝戰役後新案 22 ＋ 稽核翻案 5）。剩餘 33 條未抽驗白名單稽核進行中。
+**第二輪稽核（全量補完，62 列）：8 條 FALSE**，其中：
+- **F15 最高優先**：`adam6024` 0526 ×2、`ContactForce:453` 0526 → 全部指向 **EP 氣壓輸出**
+  （野指標解參考餵進 APAX-5028 AO 通道；`iAPAXEPValue[16..]` 寫穿到相鄰的 `iAPAXDualEPValue`；
+  kit 口徑恆不匹配致冷機無壓／沿用前一組壓力值）
+- **F11 推翻**：acatchtray 防抖對**非 KYEC 客戶從未生效**（第一個 OR 短路），
+  且 V910 姊妹路徑 `DoPlaceTrayToAuto_250` 保留客戶無關的 `iCnt>100`，自相矛盾
+- **F16**：ContactForce:884 空白分頁（低嚴重度）
+- 3 條 cConfiguration 為**記帳錯誤非缺口**（MG-W15 其實已搬，卻同時被列白名單）→ 已清
+
+**兩輪合計：抽驗 100 列次、12 條聲稱不實**，其中 **5 條屬安全相關（EP 氣壓輸出）**。
+`AutoClean/cContact/cContactCT/cSetUp` 11 列全數 TRUE，且經 `git show e06524a` 證實
+是公司 20260716 出貨版就帶的，非 MG 搬入——白名單那句話本身是對的。
+
+誠實儀表（20260901 兩輪稽核後）：`entries=738 / same-file=640 / ALLOWLISTED=62 / **MISSING=33**`
+（33＝戰役後新案 22 ＋ 兩輪稽核翻案 11）。
 
 ## 假 MISSING 白名單
 

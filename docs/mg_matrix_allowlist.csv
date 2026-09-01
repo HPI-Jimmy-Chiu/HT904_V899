@@ -4,7 +4,6 @@ AutoClean\uCleaning.cpp,20260430,//AI(ht9045-v899) 20260430: extend AutoClean Di
 AutoClean\uCleaning.cpp,20260430,//AI(ht9045-v899) 20260430: extend AutoClean DieForce to Mul,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
 ContactForce.cpp,20260430,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 branch (was,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
 ContactForce.cpp,20260430,//AI(ht9045-v899) 20260430: 16 EP independent + Multi EP hal,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
-ContactForce.cpp,20260430,//AI(ht9045-v899) 20260430: Multi EP half - show OneByOne ta,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
 ContactForce.cpp,20260430,//AI(ht9045-v899) 20260430: ported from V874.3 Ifor.,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
 ContactForce.h,20260430,//AI(ht9045-v899) 20260430: Multi EP half (INSTALL_DOUBLE_EP,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
 HandlerSys.cpp,20260430,//AI(ht9045-v899) 20260430: removed iIndEPCnt==8 ComboBox op,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
@@ -37,16 +36,12 @@ HS_Function.h,20260504,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250417
 adam6024.h,20260504,//AI(ht9045-v899) 20260504: port from V896 (Ifor 20250416) f,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
 cContact.cpp,20260504,//AI(ht9045-v899) 20260504: was ==true; restored V874 ==1||=,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
 cSetUp.cpp,20260504,//AI(ht9045-v899) 20260504: split INDIVIAL/MULTI gating per ,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
-ContactForce.cpp,20260526,//AI(ht9045-v899) 20260526: align EP one-by-one site trim di,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
 ContactForce.cpp,20260526,//AI(ht9045-v899) 20260526: Show Multi EP site trim page for,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
 HS_Function.cpp,20260526,//AI(ht9045-v899) 20260526: do not read/log Multi EP data wh,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
-adam6024.cpp,20260526,"//AI(ht9045-v899) 20260526: in Multi EP production, normal a",MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
-adam6024.cpp,20260526,"//AI(ht9045-v899) 20260526: in Multi EP production, DoubleFo",MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
 cContact.cpp,20260526,//AI(ht9045-v899) 20260526: Multi EP Die Force SAVE must out,MG-W7判定：V910公司Multi EP實作已有等價/更新(C)、或公司8EP新功能之刪除記錄不可執行(X-none)、或留F3-F6裁決；詳mg_w7_analysis.md,MG-W7
 note.cpp,20260407,//AI(ht9045-v899) 20260407: only Pause when Note closed via ,假MISSING：V910:1036公司已改寫等價SoftStop guard(自家註解),MG-W3發現
 HS_Function.cpp,20260420,//AI(BVL-3766) 20260420: 開關 site 時要即時重寫 GTK info.txt,假MISSING：BVL-3766功能已在V910，僅#include行尾註解被公司改寫英文,MG-W5發現
 ainarm9045_1x1_1.cpp,20260407,//AI(ht9045-v899) 20260407: align with 2x4_8 baseline,"假MISSING：V910:891/:1241 已有同註解同程式碼，僅 Big5 全形破折號被公司正規化成 ASCII ""--""",MG-W11
-acatchtray.cpp,20260703,//AI(ht9045-v899) 20260703,F11：V910 已有更演進的防抖版本（Eastsun 20260515/20260710 可設定門檻+cover guard），照搬會倒退；正交的 SKIP 釋放已由 MG-W14 搬,MG-W14/F11
 AutoClean\uCleaning.cpp,20260423,//AI(ht9045-v899) 20260423,"MG-W1 skipped-C: V910 already evolved to ArmSpeed dynamic defaults; intent satisfied, not ported",MG-W1
 AutoClean\AutoClean.cpp,20260407,//AI(ht9045-v899) 20260407: prevent hang,F10 pending user decision (OP6b 92%: KYEC pause-popup condition inversion); port or keep listed after ruling,F10-pending
 uhome.cpp,20260505,//AI(ht9045-v899) 20260505: �����脖葉��� Home (�����ａ��蝔� hang,MG-W16 判 C：V910 pristine 基線已有等價（公司自行整合/改寫/uhome 為 V899 原檔天生損壞而 V910 有正確版）,MG-W16
@@ -61,7 +56,4 @@ cShowBinSelect.cpp,20260415,//AI(ht9045-v899) 20260415: dynamic stack layout for
 cShowBinSelect.cpp,20260415,//AI(ht9045-v899) 20260415: dynamic height for tsIndex based,F12 pending：V910 有同日競品解法且照搬會回歸 btnASM 遮蔽 bug，建議不搬待使用者裁決,MG-W16/F12-pending
 cShowBinSelect.cpp,20260417,//AI(ht9045-v899) 20260417: show AutoDeviceEjection panel fo,F12 pending：V910 有同日競品解法且照搬會回歸 btnASM 遮蔽 bug，建議不搬待使用者裁決,MG-W16/F12-pending
 main.cpp,20260414,//AI(ht9045-v899) 20260414: pack MNetLog into StateRecord wh,MG-W15 判 C：V910 已有等價且更正確版本（0414=robocopy 打包路徑更對；0623=JerryYang int(ChangeToFloatNonPcnt) 輸出相同）,MG-W15
-cConfiguration.cpp,20260623,"//AI(ht9045-v899) 20260623: 改用整數安全除法還原離散欄號,修正浮點除法造成 CheckBox",MG-W15 判 C：V910 已有等價且更正確版本（0414=robocopy 打包路徑更對；0623=JerryYang int(ChangeToFloatNonPcnt) 輸出相同）,MG-W15
-cConfiguration.cpp,20260623,"//AI(ht9045-v899) 20260623: 界外/空日期(1899-12-30)防呆,無效時回填Now()避",MG-W15 判 C：V910 已有等價且更正確版本（0414=robocopy 打包路徑更對；0623=JerryYang int(ChangeToFloatNonPcnt) 輸出相同）,MG-W15
-cConfiguration.cpp,20260623,//AI(ht9045-v899) 20260623: [O]EventLog存檔包try/catch，避免單一pick,MG-W15 判 C：V910 已有等價且更正確版本（0414=robocopy 打包路徑更對；0623=JerryYang int(ChangeToFloatNonPcnt) 輸出相同）,MG-W15
-cConfiguration.cpp,20260623,"//AI(ht9045-v899) 20260623: dtpO06NextTime為dtkTime picker,指派",MG-W15 判 C：V910 已有等價且更正確版本（0414=robocopy 打包路徑更對；0623=JerryYang int(ChangeToFloatNonPcnt) 輸出相同）,MG-W15
+cConfiguration.cpp,20260623,//AI(ht9045-v899) 20260623: ,Round-1 audit TRUE: V910 JerryYang 20260512 int(ChangeToFloatNonPcnt(...)) produces identical output for this call site (verified),MG-W15/audited-TRUE

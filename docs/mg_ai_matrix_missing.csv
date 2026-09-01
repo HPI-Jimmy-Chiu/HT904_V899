@@ -1,9 +1,15 @@
 ﻿date,agent,file,line,status,comment
+20260430,ht9045-v899,ContactForce.cpp,884,MISSING,//AI(ht9045-v899) 20260430: Multi EP half - show OneByOne tab.
 20260511,ht9045-v899,adam6024.cpp,1587,MISSING,//AI(ht9045-v899) 20260511: 把舊 Independent EP loop 限制在 DOUBLE_EP_INDIVIAL 才跑。
 20260511,ht9045-v899,adam6024.cpp,1595,MISSING,//AI(ht9045-v899) 20260511: bounds guard
 20260511,ht9045-v899,adam6024.cpp,1601,MISSING,//AI(ht9045-v899) 20260511: 防止 SLKIndClass 與 slSLKTypeInd 不同步時越界
 20260519,ht9045-v899,uTrayEditForm.cpp,504,MISSING,//AI(ht9045-v899) 20260519: keep timer refresh from re-triggering Enter screenshot save.
 20260519,ht9045-v899,uTrayEditForm.cpp,707,MISSING,//AI(ht9045-v899) 20260519: keep screenshot save failures from hanging Tray Edit UI.
+20260526,ht9045-v899,ContactForce.cpp,453,MISSING,"//AI(ht9045-v899) 20260526: align EP one-by-one site trim diameters with V874/general SLK types instead of legacy 20,30 only."
+20260526,ht9045-v899,adam6024.cpp,1627,MISSING,"//AI(ht9045-v899) 20260526: in Multi EP production, normal air force fills outer/site EP values."
+20260526,ht9045-v899,adam6024.cpp,1670,MISSING,"//AI(ht9045-v899) 20260526: in Multi EP production, DoubleForce fills inner/dual EP values."
+20260703,ht9045-v899,acatchtray.cpp,1221,MISSING,"//AI(ht9045-v899) 20260703: case 570 JAM0610 防抖計數,比照 DoPlaceTrayToAuto_250"
+20260703,ht9045-v899,acatchtray.cpp,2007,MISSING,"//AI(ht9045-v899) 20260703: 補 iCnt>100 防抖,避免搬運中 FixOn sensor 單次彈跳即誤報 JAM0610(頻繁 Alarm 頂層主因);比照 DoPlaceTrayToAuto_250"
 20260831,ht9045-v899,acatchtray.cpp,4549,MISSING,"//AI(ht9045-v899) 20260831: 累計2260連續逾時次數,收盤請求發不出去時據以升級成警報(CASE-PTI-20260831-001)"
 20260831,ht9045-v899,acatchtray.cpp,4686,MISSING,"//AI(ht9045-v899) 20260831: 每次重新進入等待前清除逾時計數,避免跨盤累積而提前升級警報"
 20260831,ht9045-v899,acatchtray.cpp,4729,MISSING,"//AI(ht9045-v899) 20260831: 逾時後主動請軌道收盤,補上case 2100已有但2260缺少的救援動作,此處是唯一還能清掉MMEmpty/MMColor的fHasTray的觸發點(CASE-PTI-20260831-001)"
