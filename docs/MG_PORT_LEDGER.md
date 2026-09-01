@@ -64,6 +64,37 @@
 誠實儀表（20260901 兩輪稽核後）：`entries=738 / same-file=640 / ALLOWLISTED=62 / **MISSING=33**`
 （33＝戰役後新案 22 ＋ 兩輪稽核翻案 11）。
 
+## MG-P1 補搬波（20260901，使用者裁決 F4／F13／F14）
+
+| 項 | 內容 | 手法 | Gate |
+|---|---|---|---|
+| **F14** Shake Shuttle Time Out（0831，5 條） | `ainarm2.cpp` 新增 `ResetShakeShuttleTimeOut()`＋診斷字串修正、`ainarm2.h` extern 宣告、`ckernel.cpp` Start 成功後呼叫 | **機械 splice**（V899 位元組原樣）4 op | port_check 全 SPLICED；bcc32 0 errors |
+| **F13** uTrayEditForm（0519，2 條） | (a) Timer1Timer 還原 `bEnterSave` 與使用者「不存圖」勾選＝V899 原樣 splice；(b) SaveJPG 四個資源 NULL 先宣告＋內層 try＋釋放移出＋`hDc!=NULL` 守衛，**保留 V910 外層 try 的關窗保護** | (a) splice／(b) **配合 V910 結構手寫** | port_check PASS（authored 26 行已逐條複驗）；bcc32 0 errors |
+| **F4** adam6024 越界防呆（0511） | V910 `j<16` 迴圈補 `iSLKIndSize` 與 `if(i*16+j>=iSLKIndSize) break;`。**模式閘門不重複加**——V910 已有 Eastsun 20260616 的 `continue` 保險 | **配合 V910 結構手寫** | port_check PASS；bcc32 0 errors |
+
+**過程中自抓並修正的錯誤**：F14-2 的 replace 範圍原本多含一行，導致 `str1.sprintf` 被刪、舊續行變孤兒（語法會壞）。
+目視結果時發現並修復，修復後與 V899 該區塊逐行一致。**這證明 port_check 通過不等於語意正確，目視複驗不可省。**
+
+**⚠ 未動（等使用者裁決）**：F15（同一函式的 `j<8` MULTI 迴圈防呆＋`k` 夾限＋ContactForce:453 口徑對齊，
+稽核評為最高優先、直接影響 EP 氣壓輸出）、F11（非 KYEC 防抖）、F16、F10。
+
+## 排版驗收（使用者 20260901 指定，工具 `tools/port_tools/align_check.py`）
+
+掃描 V910 樹自基線 `e06524a` 以來**全部 55 個變更檔的每一行新增行**，
+以**位元組欄位**（＝BCB6 定寬編輯器的顯示欄）量測，並區分兩類：
+
+| 類別 | 數量 | 判定 |
+|---|---|---|
+| **DEFECT**（本戰役自撰、偏離該檔慣例） | **0** | ✅ PASS |
+| FAITHFUL（與 V899 出貨版位元組相同） | 72 | 不算缺陷——形狀與出貨版一致 |
+
+檢查項：縮排含 tab／縮排非 4 倍數（排除括號未平衡的續行）／行尾註解欄位偏離
+（檔案主流欄或鄰近 ±25 行在地慣例）／行尾多餘空白／cp950 亂碼。
+
+抽樣複驗兩個 off-by-one：`CosFunction.cpp` 的 `=720;` 那行註解在 col89、鄰行 col88——
+**V899 出貨版本來就是 col89**（實測兩樹相同），屬原始碼既有的 1 欄差異，非搬移造成，
+故不修改（改了反而破壞與出貨版的位元組一致性）。
+
 ## 假 MISSING 白名單
 
 **權威清單＝`docs/mg_matrix_allowlist.csv`**（矩陣自動讀取，命中者計 ALLOWLISTED 不計 MISSING；

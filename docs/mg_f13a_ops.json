@@ -1,0 +1,18 @@
+[
+ {
+  "id": "F13-a",
+  "desc": "uTrayEditForm Timer1Timer: restore bEnterSave + user's no-save-image checkbox across FormShow",
+  "v910_file": "uTrayEditForm.cpp",
+  "v899_file": "uTrayEditForm.cpp",
+  "v899_lines": [
+   504,
+   509
+  ],
+  "mode": "replace",
+  "replace_lines": [
+   506,
+   507
+  ],
+  "anchor_expect": "Prevent SaveJPG re-trigger on Timer-driven refresh"
+ }
+]

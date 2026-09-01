@@ -2312,6 +2312,14 @@ int iShakeShuttleTask;
 extern bool IndexZCanMove[2];
 TQPF_Timer ShakeShuttleDelay;
 TQPF_Timer ShakeDelay;
+//AI(ht9045-v899) 20260831: TQPF_Timer 走的是掛鐘, 暫停期間照計時, 導致處理完 alarm 按 Start 會在 2~3 秒內誤報 Shake Shuttle Time Out
+//AI(ht9045-v899) 20260831: 改由 resume 上升緣呼叫本函式重設, 讓 10 秒逾時只計算機台實際執行中的時間
+void ResetShakeShuttleTimeOut()
+{
+    if(iShakeShuttleTask==essSetFlag)                                           //只在等互鎖放行的狀態重設, 避免影響共用同一個計時器的 Knock 流程
+        ShakeShuttleDelay.SetMSAndOn(10000);
+}
+//------------------------------------------------------------------------------
 bool DoShakeShuttle(int iShuttle, bool bNeedInitial)                            //Steven 20120801 : 修改抖抖功能
 {
     static bool bInitial=true;
@@ -2387,9 +2395,10 @@ bool DoShakeShuttle(int iShuttle, bool bNeedInitial)                            
             {
                 AnsiString str1, str2, str3;
                 str1.sprintf("Shake Shuttle Time Out!!");
-                str3.sprintf("ShuttleShake:%d  Fix3Cylinder:%d", bShuttleShake, bUseFix3CylinderActive);
-                str3.sprintf("Shake Shuttle Time Out!!, ShuttleShake:%d  Fix3Cylinder:%d, bIndexWaitingInArmAway:%d, IndexZCanMove[0]:%d, IndexZCanMove[1]:%d, bShuttleShake:%d, fCanMoveL:%d, fCanMoveM:d, fCanMove:%d",
-                             bShuttleShake, bUseFix3CylinderActive, bIndexWaitingInArmAway, IndexZCanMove[0], IndexZCanMove[1], bShuttleShake, MOT[MInShuttle1+iShuttle].fCanMoveL, MOT[MInShuttle1+iShuttle].fCanMoveM, MOT[MInShuttle1+iShuttle].fCanMove);
+                str2.sprintf("ShuttleShake:%d  Fix3Cylinder:%d", bShuttleShake, bUseFix3CylinderActive);
+                //AI(ht9045-v899) 20260831: 補回漏掉的 % 避免 fCanMoveM/fCanMove 欄位與數值錯位, 並加印 iShuttle 以辨識是哪一支飛梭
+                str3.sprintf("Shake Shuttle Time Out!!, Shuttle:%d, ShuttleShake:%d  Fix3Cylinder:%d, bIndexWaitingInArmAway:%d, IndexZCanMove[0]:%d, IndexZCanMove[1]:%d, bShuttleShake:%d, fCanMoveL:%d, fCanMoveM:%d, fCanMove:%d",
+                             iShuttle+1, bShuttleShake, bUseFix3CylinderActive, bIndexWaitingInArmAway, IndexZCanMove[0], IndexZCanMove[1], bShuttleShake, MOT[MInShuttle1+iShuttle].fCanMoveL, MOT[MInShuttle1+iShuttle].fCanMoveM, MOT[MInShuttle1+iShuttle].fCanMove);
                 RecordProcess(str3);
                 ShowMyMessage(str1, str2);
                 bUseFix3CylinderActive=false;

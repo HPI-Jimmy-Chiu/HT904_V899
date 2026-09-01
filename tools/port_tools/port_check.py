@@ -121,7 +121,7 @@ def check(rel):
             spliced += 1
         else:
             near = indent_of(nl[lineno - 2]) if lineno >= 2 else b""
-            style = "" if (indent_of(l)[:1] or near[:1]) in (near[:1], b"") else " ⚠縮排風格與上一行不符"
+            style = "" if (indent_of(l)[:1] or near[:1]) in (near[:1], b"") else " [WARN] indent style differs from previous line"
             authored.append((lineno, c, style))
 
     print("[%s] added=%d (spliced=%d, comment=%d, authored=%d) removed=%d | EOL %s->%s"

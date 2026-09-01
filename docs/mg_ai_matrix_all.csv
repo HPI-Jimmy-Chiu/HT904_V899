@@ -366,7 +366,7 @@
 20260519,ht9045-v899,HS_Function.cpp,3549,same-file,//AI(ht9045-v899) 20260519: GTK info.txt is saved by callers after site-state synchronization.
 20260519,ht9045-v899,ProductionInfo\ProductionInfo.cpp,4952,same-file,//AI(ht9045-v899) 20260519: output RunSite from V812 channel map while keeping two-arm/runtime close-site guard.
 20260519,ht9045-v899,main.cpp,28270,same-file,//AI(ht9045-v899) 20260519: save GTK RunSite after homepage site on/off states are synchronized.
-20260519,ht9045-v899,uTrayEditForm.cpp,504,MISSING,//AI(ht9045-v899) 20260519: keep timer refresh from re-triggering Enter screenshot save.
+20260519,ht9045-v899,uTrayEditForm.cpp,504,same-file,//AI(ht9045-v899) 20260519: keep timer refresh from re-triggering Enter screenshot save.
 20260519,ht9045-v899,uTrayEditForm.cpp,707,MISSING,//AI(ht9045-v899) 20260519: keep screenshot save failures from hanging Tray Edit UI.
 20260519,ht9045-v899,uYieldMonitoring.cpp,5163,same-file,//AI(ht9045-v899) 20260519: save GTK RunSite after low-yield auto site-off state synchronization.
 20260520,ht9045-v899,CosFunction.cpp,1466,same-file,//AI(ht9045-v899) 20260520: enable E55 Fix3 full tray gate for PTI import plan
@@ -722,11 +722,11 @@
 20260831,ht9045-v899,acatchtray.cpp,4758,MISSING,"//AI(ht9045-v899) 20260831: 收盤請求無法武裝時連續逾時兩次(600秒)升級成有聲警報,600秒小於948秒hang up看門狗,避免靜默等到自動Home倒Error Bin"
 20260831,ht9045-v899,acatchtray.cpp,4762,MISSING,"//AI(ht9045-v899) 20260831: 先暫停hang up掛鐘,HangTime為level-triggered,彈窗期間持續超期,不暫停會在操作員按Start當下立刻命中而自動Home"
 20260831,ht9045-v899,acatchtray.cpp,4768,MISSING,"//AI(ht9045-v899) 20260831: 彈窗期間掛鐘持續走,解除後重新上錶確保下次仍隔300秒才再響"
-20260831,ht9045-v899,ainarm2.cpp,2145,MISSING,"//AI(ht9045-v899) 20260831: TQPF_Timer 走的是掛鐘, 暫停期間照計時, 導致處理完 alarm 按 Start 會在 2~3 秒內誤報 Shake Shuttle Time Out"
-20260831,ht9045-v899,ainarm2.cpp,2146,MISSING,"//AI(ht9045-v899) 20260831: 改由 resume 上升緣呼叫本函式重設, 讓 10 秒逾時只計算機台實際執行中的時間"
-20260831,ht9045-v899,ainarm2.cpp,2229,MISSING,"//AI(ht9045-v899) 20260831: 補回漏掉的 % 避免 fCanMoveM/fCanMove 欄位與數值錯位, 並加印 iShuttle 以辨識是哪一支飛梭"
-20260831,ht9045-v899,ainarm2.h,189,MISSING,//AI(ht9045-v899) 20260831: 供 ckernel 的 resume 上升緣重設抖動逾時計時器
-20260831,ht9045-v899,ckernel.cpp,518,MISSING,"//AI(ht9045-v899) 20260831: Start 確定成功後才重設抖動逾時, 避免暫停與處理 alarm 的掛鐘時間被算進 10 秒而一按 Start 就誤報"
+20260831,ht9045-v899,ainarm2.cpp,2145,same-file,"//AI(ht9045-v899) 20260831: TQPF_Timer 走的是掛鐘, 暫停期間照計時, 導致處理完 alarm 按 Start 會在 2~3 秒內誤報 Shake Shuttle Time Out"
+20260831,ht9045-v899,ainarm2.cpp,2146,same-file,"//AI(ht9045-v899) 20260831: 改由 resume 上升緣呼叫本函式重設, 讓 10 秒逾時只計算機台實際執行中的時間"
+20260831,ht9045-v899,ainarm2.cpp,2229,same-file,"//AI(ht9045-v899) 20260831: 補回漏掉的 % 避免 fCanMoveM/fCanMove 欄位與數值錯位, 並加印 iShuttle 以辨識是哪一支飛梭"
+20260831,ht9045-v899,ainarm2.h,189,same-file,//AI(ht9045-v899) 20260831: 供 ckernel 的 resume 上升緣重設抖動逾時計時器
+20260831,ht9045-v899,ckernel.cpp,518,same-file,"//AI(ht9045-v899) 20260831: Start 確定成功後才重設抖動逾時, 避免暫停與處理 alarm 的掛鐘時間被算進 10 秒而一按 Start 就誤報"
 20260831,ht9045-v899,uTemp_Set.cpp,445,MISSING,"//AI(ht9045-v899) 20260831: uTemp_Set.dfm 下方 base 溫度列改成與 offset 表格同欄距(Left=grid+5, Width=50)，因 2024.07.27 加第6欄時只改了表格未改 base 列，造成選 5/6 Point 時欄位錯位（CASE-GIGAS-202"
 20260901,ht9045-v899,acatchtray.cpp,7283,MISSING,"//AI(ht9045-v899) 20260901: 還原20260703改用On()立即回報成功的寫法,不等到位sensor會使夾緊後只剩0.5秒就進case2350判定,且夾不緊時不再跳JAM31047 (CASE-20260901-001)"
 20260901,ht9045-v899,acatchtray.cpp,7388,MISSING,"//AI(ht9045-v899) 20260901: 還原20260703 Greatek極性反轉,新舊判定互斥(舊:FixOn到位=成功;新:兩顆到位皆OFF才算成功),HHT604G為原廠正常極性故夾盤成功反被判fail,JAM0604 100%誤報 (CASE-20260901-001)"

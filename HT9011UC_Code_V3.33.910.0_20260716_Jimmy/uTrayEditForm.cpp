@@ -503,8 +503,12 @@ void __fastcall TTrayEditForm::Timer1Timer(TObject *Sender)
         return;
     if(SystemStart==true && iSendCT!=LastSet.SendCT[0])
     {
+        //AI(ht9045-v899) 20260519: keep timer refresh from re-triggering Enter screenshot save.
+        bool bOldEnterSave=bEnterSave;
+        bool bOldNoSaveImage=CheckBox1->Checked;
         FormShow(this);
-        bEnterSave=false;                                                       //Steven 20260519 : Prevent SaveJPG re-trigger on Timer-driven refresh
+        CheckBox1->Checked=bOldNoSaveImage;
+        bEnterSave=bOldEnterSave;
     }
     sprintf(str, "(%d,%d)...(%d,%d)", iStartX, iStartY, iEndX, iEndY);
     Caption=str;
@@ -706,28 +710,45 @@ void __fastcall TTrayEditForm::SaveJPG(AnsiString S)
 
         AnsiString varb=asTrayLogPath+"\\"+subDir+"\\"+filename;
 
-        Graphics::TBitmap* pBmp = new Graphics::TBitmap();
-        pBmp->Width = Screen->Width;                                                // Screen: bcb global var: screen
-        pBmp->Height = Screen->Height;
-        // 取得 full screen 的 canvas
-        TCanvas* pCanvas = new TCanvas();
-        HDC hDc = ::GetDC(NULL);                                                    // 取得 full screen 的 dc
-        pCanvas->Handle = hDc;
-        // copy 到 bmp
-        TRect aRect(0, 0, Screen->Width, Screen->Height);                           // full screen 大小
-        pBmp->Canvas->CopyRect(aRect, pCanvas, aRect);
+        Graphics::TBitmap* pBmp = NULL;                                         //AI(mg899to910) 20260901: F13 四個資源先設 NULL, 讓釋放區塊可移出 try
+        TCanvas* pCanvas = NULL;
+        TJPEGImage* jpeg = NULL;
+        HDC hDc = NULL;
+        try                                                                     //AI(mg899to910) 20260901: F13 內層 try: SaveToFile 拋例外時仍會走到下方釋放
+        {
+            pBmp = new Graphics::TBitmap();
+            pBmp->Width = Screen->Width;                                        // Screen: bcb global var: screen
+            pBmp->Height = Screen->Height;
+            // 取得 full screen 的 canvas
+            pCanvas = new TCanvas();
+            hDc = ::GetDC(NULL);                                                // 取得 full screen 的 dc
+            if(hDc!=NULL)                                                       //AI(mg899to910) 20260901: F13 GetDC 失敗時不可設 Handle 後 CopyRect
+            {
+                pCanvas->Handle = hDc;
+                // copy 到 bmp
+                TRect aRect(0, 0, Screen->Width, Screen->Height);               // full screen 大小
+                pBmp->Canvas->CopyRect(aRect, pCanvas, aRect);
 
-        //Graphics::TBitmap* tmp=mtLoaderBuffer->Controls-  //mtLoaderBuffer->Canvas;
-        TJPEGImage* jpeg= new TJPEGImage;                                           // 宣告一 JPEG 圖存檔用
-        jpeg->Assign(pBmp);                                                         // 將所抓取的暫存圖指入
-        jpeg->CompressionQuality=80;                                                //設定 Jpeg 的壓縮品質
-        jpeg->SaveToFile(varb+".jpg");                                              // 儲存
+                //Graphics::TBitmap* tmp=mtLoaderBuffer->Controls-  //mtLoaderBuffer->Canvas;
+                jpeg = new TJPEGImage;                                          // 宣告一 JPEG 圖存檔用
+                jpeg->Assign(pBmp);                                             // 將所抓取的暫存圖指入
+                jpeg->CompressionQuality=80;                                    //設定 Jpeg 的壓縮品質
+                jpeg->SaveToFile(varb+".jpg");                                  // 儲存
+            }
+        }
+        catch(...)
+        {
+        }
 
         // 釋放記憶體
-        ::ReleaseDC(0, hDc);
-        delete pBmp;                                                                //Steven 20140305 : 沒刪除會導致記憶體不足
-        delete jpeg;                                                                //刪除動態宣告之 jpeg
-        delete pCanvas;
+        if(hDc!=NULL)                                                           //AI(mg899to910) 20260901: F13 釋放移出 try: 存檔例外不再洩漏 ~8MB bitmap 與螢幕 DC
+            ::ReleaseDC(0, hDc);
+        if(pBmp!=NULL)
+            delete pBmp;                                                        //Steven 20140305 : 沒刪除會導致記憶體不足
+        if(jpeg!=NULL)
+            delete jpeg;                                                        //刪除動態宣告之 jpeg
+        if(pCanvas!=NULL)
+            delete pCanvas;
     }
     catch(Exception &e)                                                         //Steven 20260519 : Catch IO/GDI exceptions
     {

@@ -1,0 +1,28 @@
+[
+ {
+  "id": "F14-3",
+  "desc": "ainarm2.h: extern declaration for ckernel resume hook",
+  "v910_file": "ainarm2.h",
+  "v899_file": "ainarm2.h",
+  "v899_lines": [
+   189,
+   190
+  ],
+  "mode": "before",
+  "anchor_line": 189,
+  "anchor_expect": "extern bool DoShakeShuttle(int iShuttle, bool bNeedInitial=false);"
+ },
+ {
+  "id": "F14-4",
+  "desc": "ckernel.cpp: call reset on Start success (resume rising edge)",
+  "v910_file": "ckernel.cpp",
+  "v899_file": "ckernel.cpp",
+  "v899_lines": [
+   517,
+   519
+  ],
+  "mode": "after",
+  "anchor_line": 532,
+  "anchor_expect": "#endif"
+ }
+]

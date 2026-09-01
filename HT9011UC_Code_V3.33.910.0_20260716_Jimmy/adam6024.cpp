@@ -1662,6 +1662,7 @@ int TransformFuntion(double fInputKG, bool bDualForce, bool bSoft, int iArm)
         //if(INSTALL_DOUBLE_EP!=DOUBLE_EP_MULTI)                            //AI(ht9045-v899) 20260610: keep existing 0/1/2 EP fill; mode 3 (Multi EP) uses the 8-channel block below.
         {                                                                       //Eastsun 20260616 上面註解掉
             int k=0;
+            int iSLKIndSize=(int)fContactForce->SLKIndClass.size();             //AI(mg899to910) 20260901: F4 bounds guard 用
             for(int i=0; i<fContactForce->slSLKTypeInd->Count; i++)                 //JerryYang 20210413 : 讀取獨立EP offset
             {
                 if(INSTALL_DOUBLE_EP==DOUBLE_EP_MULTI && bDualForce==false)                       //==> //Eastsun 20260525 INSTALL_DOUBLE_EP_3 整合 begin
@@ -1699,6 +1700,8 @@ int TransformFuntion(double fInputKG, bool bDualForce, bool bSoft, int iArm)
 
                 for(int j=0; j<16; j++)
                 {
+                    if(i*16+j>=iSLKIndSize)                                     //AI(mg899to910) 20260901: F4 防呆: slSLKTypeInd 與 SLKIndClass 不同步時越界
+                        break;
                     bool bDiaMatch;                                                 //==> Eastsun 20260511 F008 整合: Ifor 20200407 Fix KYEC 特殊烏徑造成資料異常
                     if(CUSTOMER_CODE==CC_KYEC_LEE)                                  //Ifor 20200407 : Fix KYEC 特殊烏徑造成資料異常
                     {
