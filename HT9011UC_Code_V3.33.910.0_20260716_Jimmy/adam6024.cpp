@@ -1393,6 +1393,9 @@ int TransformFuntion(double fInputKG, bool bDualForce, bool bSoft, int iArm)
                     {
                         for(int j=0; j<8; j++)
                         {
+                            //AI(mg899to910) 20260902: F15 防呆: 建的筆數可能少於 Count*8(空欄或<=15.0 被過濾), 讀之前先檢查
+                            if(i*8+j>=(int)fContactForce->DieForceOneByOneSLKClass.size())
+                                break;
                             if(fContactForce->DieForceOneByOneSLKClass[i*8+j]->dDiameter==fDiameter*10)
                             {
                                 fInputKGInd=fInputKG;
@@ -1406,10 +1409,13 @@ int TransformFuntion(double fInputKG, bool bDualForce, bool bSoft, int iArm)
                                 iResultTemp=((fMaxUnit-fMinUnit)/(fMaxMPA-fMinMPA))*(fInputMPAInd-fMinMPA)+fMinUnit;
                                 iResultTemp=CheckRange(iResultTemp, 0, int(fMaxUnit));
                                 iResultTemp=iResultTemp*16;
-                                if(DeviceForm_File.bUseDieForce==true)
-                                    iAPAXDualEPValue[k]=iResultTemp;
-                                else
-                                    iAPAXDualEPValue[k]=0;
+                                if(k<8)                                         //AI(mg899to910) 20260902: F15 夾限: k 超過 8 會蓋掉 DualSite 用的 [8]/[9], 再多會寫進隔壁 iAPAXDualEPValue
+                                {
+                                    if(DeviceForm_File.bUseDieForce==true)
+                                        iAPAXDualEPValue[k]=iResultTemp;
+                                    else
+                                        iAPAXDualEPValue[k]=0;
+                                }
                                 k++;
                             }
                         }
@@ -1669,6 +1675,8 @@ int TransformFuntion(double fInputKG, bool bDualForce, bool bSoft, int iArm)
                 {
                     for(int j=0; j<8; j++)
                     {
+                        if(i*8+j>=(int)fContactForce->SLKIndClass.size())       //AI(mg899to910) 20260902: F15 防呆: 建的筆數可能少於 Count*8(空欄或<=15.0 被過濾), 讀之前先檢查
+                            break;
                         double dDiameterCK=fContactForce->SLKIndClass[i*8+j]->dDiameter;
                         if(CUSTOMER_CODE==CC_KYEC_LEE)
                         {
@@ -1689,7 +1697,7 @@ int TransformFuntion(double fInputKG, bool bDualForce, bool bSoft, int iArm)
                             iResultTemp=((fMaxUnit-fMinUnit)/(fMaxMPA-fMinMPA))*(fInputMPAInd-fMinMPA)+fMinUnit;
                             iResultTemp=CheckRange(iResultTemp, 0, int(fMaxUnit));
                             iResultTemp=iResultTemp*16;
-                            iAPAXEPValue[k]=iResultTemp;
+                            if(k<8) iAPAXEPValue[k]=iResultTemp;                //AI(mg899to910) 20260902: F15 夾限: k 超過 8 會蓋掉 DualSite 用的 [8]/[9], 再多會寫進隔壁 iAPAXDualEPValue
                             k++;
                         }
                     }

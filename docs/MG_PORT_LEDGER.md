@@ -78,6 +78,27 @@
 **⚠ 未動（等使用者裁決）**：F15（同一函式的 `j<8` MULTI 迴圈防呆＋`k` 夾限＋ContactForce:453 口徑對齊，
 稽核評為最高優先、直接影響 EP 氣壓輸出）、F11（非 KYEC 防抖）、F16、F10。
 
+## MG-P2 補搬波（20260902，使用者裁決 F15「先只修兩個防呆」）
+
+`adam6024.cpp` TransformFuntion 的 Multi EP 兩個區塊，各補兩道防呆：
+
+| 區塊 | 越界防呆 | 寫入夾限 |
+|---|---|---|
+| 單力 `SLKIndClass` → `iAPAXEPValue` | `if(i*8+j>=(int)...size()) break;` | `if(k<8) iAPAXEPValue[k]=...` |
+| 雙力 `DieForceOneByOneSLKClass` → `iAPAXDualEPValue` | 同型 | `if(k<8){ 既有 bUseDieForce if/else }`（不改其邏輯） |
+
+**新查證（比原稽核更早的失效點）**：`iAPAXEPValue[8]/[9]` 是 **DualSite 測試模式**的 EP 輸出
+（`adam6024.cpp:2636-2637`，走 `wData` 不是 `wData2Mep`）。所以 `k` 沒夾限時，
+**在寫穿到隔壁 `iAPAXDualEPValue` 之前，k=8/9 就已經先污染 DualSite 的壓力值**。
+夾限取 `<8` 與 V899 相同，是正確界線。
+
+**⚠ 依裁決未動**：口徑對齊（`ContactForce.cpp:453`，`[SLK Type Ind]` 釘死 `"20,30"` 且全樹無回寫路徑）。
+其後果維持現狀：裝 4.0/5.6/6.0mm kit 時口徑恆不匹配 → 冷機首跑外圈 EP 無壓、換 recipe 沿用前一組壓力值。
+
+Gate：port_check PASS ／ bcc32 0 errors ／ **排版驗收 PASS** ／ 全量建置成功
+（`Out910\HT9045.exe` 30,518,272 bytes，共用 Obj/EXE 零觸碰）。
+過程修正一項排版：區塊 B 的防呆行程式碼本身已超過 col80，註解改為獨立一行放在上方（本檔長行慣例）。
+
 ## 排版驗收（使用者 20260901 指定，工具 `tools/port_tools/align_check.py`）
 
 掃描 V910 樹自基線 `e06524a` 以來**全部 55 個變更檔的每一行新增行**，
