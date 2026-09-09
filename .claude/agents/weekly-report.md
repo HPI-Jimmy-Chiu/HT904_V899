@@ -39,6 +39,18 @@ WEEKLY_AI_ROOT = d:\Work-jimmychiu\document\WeeklyReport\Weekly_AI
 - 自然語更新時，由本代理把使用者敘述改寫成兩版（詳細進 `--desc`、白話進 `--brief`）；`--brief` 留空工具會 fallback 用詳細版上 Excel，**視為沒做完**。
 - 簡潔層格式與詳細層相同：`N. YYYYMMDD 一句話`、最新在上（Excel 紅/黑上色靠行首日期判定）。
 - `generate_report.py` D 欄優先吃 `action_brief_text`，沒有才退回 `raw_action_text`（舊黑字項目相容，不必回補）。
+- **（20260901 起）工具會擋**：`update_report.py` / `close_case.py` / `fix_brief.py` 寫入前一律過
+  `_brief_guard.py`。單行顯示寬度上限 160（中文算 2）；命中檔名、`檔名:行號`、`case NN`、
+  EXITCODE、bcc32、commit hash、底線識別字、駝峰函式名、`函式()` 等會直接 raise 擋下並列出原因。
+  `--brief` 省略時改成檢查 `--desc`，不合格就報錯要你補 `--brief`（不再默默 fallback）。
+  警報碼（JAM/WAR/MES####）、版本號、機型、SECS/SVID/OCR/AMR 等現場共同語言在白名單內，不會被擋。
+  真的要放行才用 `--brief-force`（只印警告）。
+- **D 欄實體容量**：欄寬 58 × 列高 69.95pt × 12pt 字 → 一格只看得到約 4 行折行（約 232 顯示寬度），
+  超出的部分 Excel 不顯示也印不出來。`generate_report.py` 會把**同一天的多筆行動收斂成當天最新一筆**
+  （JSON 完整保留），避免同日反覆更新把最新狀態擠出可視範圍。
+- **稽核與事後清理**：`python check_brief_quality.py`（預設只掃紅字列，`--all` 全掃，`--row N` 單列；
+  另會提醒 C 欄標題含技術符號）、`python fix_brief.py --row N --seq S --text "<白話>"`
+  或 `--from-file`（每行 `seq<TAB>文字`）改寫簡潔層而不動詳細層。**不要手改 weekly_data.json。**
 - **絕不可**用 `parse_report.py` 反向解析產出的 Excel 回 JSON——會把簡潔版當詳細版寫入、永久遺失詳細層。日常一律 JSON → Excel 單向。
 
 ## ⚠ 破壞性動作一律先確認（鐵律）

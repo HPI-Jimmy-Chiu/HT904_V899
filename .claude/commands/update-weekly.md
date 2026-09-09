@@ -21,3 +21,22 @@ argument-hint: "例如：甬矽 9016C OneByOne 已提供安裝包"
    cd /d/Work-jimmychiu/document/WeeklyReport/Weekly_AI/tools && python generate_report.py
    ```
 5. 簡述改了什麼、Excel 路徑。
+
+## D 欄簡潔層守門員（20260901 起）
+
+`--brief` 不再是「可省略、省略就用 desc」。寫入前會過 `tools/_brief_guard.py`：
+單行顯示寬度需 ≤ 160，且不得含檔名／行號／函式名／編譯訊息等技術符號，
+不合格會直接報錯並列出原因（逃生門 `--brief-force`，只印警告）。
+
+收工前跑一次稽核：
+
+```
+python check_brief_quality.py
+```
+
+要事後改寫某筆簡潔層（不動詳細層）：
+
+```
+python fix_brief.py --row <N> --list
+python fix_brief.py --row <N> --seq <S> --text "<一句白話>"
+```
