@@ -442,6 +442,7 @@ void __fastcall TfTemp_Set::FormShow(TObject *Sender)
     gbAmbientModeSetting    ->Enabled=true;
     tsOther                 ->Enabled=true;                                     //kevin 20150127
     rgIndexHeatMode         ->Enabled=true;
+    //AI(ht9045-v899) 20260831: uTemp_Set.dfm 下方 base 溫度列改成與 offset 表格同欄距(Left=grid+5, Width=50)，因 2024.07.27 加第6欄時只改了表格未改 base 列，造成選 5/6 Point 時欄位錯位（CASE-GIGAS-20260831-001）
     edLowBase               ->Enabled=true;
     edMidBase               ->Enabled=true;
     edHighBase              ->Enabled=true;

@@ -10228,13 +10228,11 @@ object fTemp_Set: TfTemp_Set
         Color = 12761254
         TabOrder = 2
         object lblTempBase: TLabel
-          Left = 28
+          Left = 104
           Top = 0
-          Width = 463
+          Width = 380
           Height = 13
-          Caption = 
-            '     Ab low    <   Ab mid      <  Low base  <  Mid. base  <  Hig' +
-            'h base  < S High base       Heigh temp.'
+          Caption = 'Ab low <   Ab mid < Low base<Mid. base< High base<S High base      Heigh temp.'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
           Font.Height = 8
@@ -10350,9 +10348,9 @@ object fTemp_Set: TfTemp_Set
           end
         end
         object edAbLow: TEdit
-          Left = 42
+          Left = 95
           Top = 17
-          Width = 60
+          Width = 50
           Height = 24
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -10366,9 +10364,9 @@ object fTemp_Set: TfTemp_Set
           OnMouseDown = edLowBaseMouseDown
         end
         object edAbMid: TEdit
-          Left = 103
+          Left = 146
           Top = 17
-          Width = 60
+          Width = 50
           Height = 24
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -10382,9 +10380,9 @@ object fTemp_Set: TfTemp_Set
           OnMouseDown = edLowBaseMouseDown
         end
         object edLowBase: TEdit
-          Left = 164
+          Left = 197
           Top = 17
-          Width = 60
+          Width = 50
           Height = 24
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -10397,9 +10395,9 @@ object fTemp_Set: TfTemp_Set
           OnMouseDown = edLowBaseMouseDown
         end
         object edMidBase: TEdit
-          Left = 225
+          Left = 248
           Top = 17
-          Width = 60
+          Width = 50
           Height = 24
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -10412,9 +10410,9 @@ object fTemp_Set: TfTemp_Set
           OnMouseDown = edLowBaseMouseDown
         end
         object edHighBase: TEdit
-          Left = 286
+          Left = 299
           Top = 17
-          Width = 60
+          Width = 50
           Height = 24
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy
@@ -10427,9 +10425,9 @@ object fTemp_Set: TfTemp_Set
           OnMouseDown = edLowBaseMouseDown
         end
         object edSHighBase: TEdit
-          Left = 346
+          Left = 350
           Top = 17
-          Width = 60
+          Width = 50
           Height = 24
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clNavy

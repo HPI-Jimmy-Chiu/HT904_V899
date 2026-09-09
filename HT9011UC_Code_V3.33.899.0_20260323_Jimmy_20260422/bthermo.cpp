@@ -139,6 +139,76 @@ double ConvertTempOffset(int Addr, double T)                                    
                 return Temperature.fTempOffSet[HigBase][Addr]+Temperature.fHighBase+Temperature.fTempOffSet[UserOffSet][Addr];
         }
     }   //kevin 20141006 end
+    //AI(ht9045-v899) 20260901: 新增 6 Point 分支; 原本只有 iTempMode==8/4/2, Points=16 會掉進 1 Point 的 else 而一律套用 LowBase(畫面第 3 欄) 一欄 offset, 其餘五欄失效（CASE-GIGAS-20260901-001）
+    else if(Temperature.iTempMode==16)                                          // 6 point base
+    {
+        iLowBase=Temperature.fAmbientHotLowBase;
+        if(T>=Temperature.fHighBase)                                            //High base ~ S High base
+        {
+            iLowBase =Temperature.fHighBase;
+            iHighBase=Temperature.fSHighBase;
+            ct1=2;
+            ct2=5;
+        }
+        else if(T>=Temperature.fMiddBase)                                       //Mid. base ~ High base
+        {
+            iLowBase =Temperature.fMiddBase;
+            iHighBase=Temperature.fHighBase;
+            ct1=1;
+            ct2=2;
+        }
+        else if(T>=Temperature.fLowBase)                                        //Low base ~ Mid. base
+        {
+            iLowBase =Temperature.fLowBase;
+            iHighBase=Temperature.fMiddBase;
+            ct1=0;
+            ct2=1;
+        }
+        else if(T>=Temperature.fAmbientHotMiddBase)                             //Ab mid ~ Low base
+        {
+            iLowBase =Temperature.fAmbientHotMiddBase;
+            iHighBase=Temperature.fLowBase;
+            ct1=4;
+            ct2=0;
+        }
+        else                                                                    //Ab low ~ Ab mid
+        {
+            iHighBase=Temperature.fAmbientHotMiddBase;
+            ct1=3;
+            ct2=4;
+        }
+
+        if(CosFunction.bTemp5PointKitOffset==true)
+        {
+            if(T==Temperature.fAmbientHotLowBase)
+                return Temperature.fTempOffSet[AmbientHotLow][Addr]+Temperature.fTempOffSet[KitAmbientHotLow][Addr]+Temperature.fAmbientHotLowBase+Temperature.fTempOffSet[UserOffSet][Addr];
+            if(T==Temperature.fAmbientHotMiddBase)
+                return Temperature.fTempOffSet[AmbientHotMid][Addr]+Temperature.fTempOffSet[KitAmbientHotMid][Addr]+Temperature.fAmbientHotMiddBase+Temperature.fTempOffSet[UserOffSet][Addr];
+            if(T==Temperature.fLowBase)
+                return Temperature.fTempOffSet[LowBase][Addr]+Temperature.fTempOffSet[KitLowBase][Addr]+Temperature.fLowBase+Temperature.fTempOffSet[UserOffSet][Addr];
+            if(T==Temperature.fMiddBase)
+                return Temperature.fTempOffSet[MidBase][Addr]+Temperature.fTempOffSet[KitMidBase][Addr]+Temperature.fMiddBase+Temperature.fTempOffSet[UserOffSet][Addr];
+            if(T==Temperature.fHighBase)
+                return Temperature.fTempOffSet[HigBase][Addr]+Temperature.fTempOffSet[KitHigBase][Addr]+Temperature.fHighBase+Temperature.fTempOffSet[UserOffSet][Addr];
+            if(T==Temperature.fSHighBase)
+                return Temperature.fTempOffSet[SHigBase][Addr]+Temperature.fTempOffSet[KitHigBase][Addr]+Temperature.fSHighBase+Temperature.fTempOffSet[UserOffSet][Addr];
+        }
+        else
+        {
+            if(T==Temperature.fAmbientHotLowBase)
+                return Temperature.fTempOffSet[AmbientHotLow][Addr]+Temperature.fAmbientHotLowBase+Temperature.fTempOffSet[UserOffSet][Addr];
+            if(T==Temperature.fAmbientHotMiddBase)
+                return Temperature.fTempOffSet[AmbientHotMid][Addr]+Temperature.fAmbientHotMiddBase+Temperature.fTempOffSet[UserOffSet][Addr];
+            if(T==Temperature.fLowBase)
+                return Temperature.fTempOffSet[LowBase][Addr]+Temperature.fLowBase+Temperature.fTempOffSet[UserOffSet][Addr];
+            if(T==Temperature.fMiddBase)
+                return Temperature.fTempOffSet[MidBase][Addr]+Temperature.fMiddBase+Temperature.fTempOffSet[UserOffSet][Addr];
+            if(T==Temperature.fHighBase)
+                return Temperature.fTempOffSet[HigBase][Addr]+Temperature.fHighBase+Temperature.fTempOffSet[UserOffSet][Addr];
+            if(T==Temperature.fSHighBase)
+                return Temperature.fTempOffSet[SHigBase][Addr]+Temperature.fSHighBase+Temperature.fTempOffSet[UserOffSet][Addr];
+        }
+    }
     else if(Temperature.iTempMode==4)                                           // 3 point base
     {
         if(T>=Temperature.fMiddBase)
@@ -220,6 +290,8 @@ double ConvertTempOffset(int Addr, double T)                                    
 
         Temp[3]=Temperature.fTempOffSet[AmbientHotLow][Addr]+Temperature.fAmbientHotLowBase;  //kevin 20140918 add
         Temp[4]=Temperature.fTempOffSet[AmbientHotMid][Addr]+Temperature.fAmbientHotMiddBase;  //kevin 20140918 add
+        //AI(ht9045-v899) 20260901: 補 Temp[5], 原本非 Kit 路徑沒填, 6 Point 內插會取到 0（CASE-GIGAS-20260901-001）
+        Temp[5]=Temperature.fTempOffSet[SHigBase][Addr]+Temperature.fSHighBase;
     }
 
     if((iHighBase-iLowBase)==0)
@@ -332,7 +404,8 @@ double ConvertGetTempOffset(int Addr, double T)                                 
     int iLowBase =Temperature.fLowBase;
     int iHighBase=Temperature.fHighBase;
 
-    double m=0.0,s=0.0,Temp[5]={0.0},fReturnTemp=0.0;                           //kevin 20140918  Temp[3]->Temp[5]
+    //AI(ht9045-v899) 20260901: Temp[5]->Temp[6] 容納第 6 點 SHigBase, 否則 6 Point 分支的 ct2=5 會越界（CASE-GIGAS-20260901-001）
+    double m=0.0,s=0.0,Temp[6]={0.0},fReturnTemp=0.0;                           //kevin 20140918  Temp[3]->Temp[5]
     int ct1=0,ct2=0;
     char str[30]="";
     double dWorkTemp;
@@ -367,6 +440,8 @@ double ConvertGetTempOffset(int Addr, double T)                                 
         Temp[2]=Temperature.fTempOffSet[HigBase][Addr]+Temperature.fTempOffSet[KitHigBase][Addr]+Temperature.fHighBase;
         Temp[3]=Temperature.fTempOffSet[AmbientHotLow][Addr]+Temperature.fTempOffSet[KitAmbientHotLow][Addr]+Temperature.fAmbientHotLowBase;  //kevin 20140918 Start
         Temp[4]=Temperature.fTempOffSet[AmbientHotMid][Addr]+Temperature.fTempOffSet[KitAmbientHotMid][Addr]+Temperature.fAmbientHotMiddBase;
+        //AI(ht9045-v899) 20260901: 補 Temp[5], 原本這條路徑沒填, 6 Point 內插會取到 0（CASE-GIGAS-20260901-001）
+        Temp[5]=Temperature.fTempOffSet[SHigBase][Addr]+Temperature.fTempOffSet[KitHigBase][Addr]+Temperature.fSHighBase;
     }
     else
     {
@@ -375,6 +450,8 @@ double ConvertGetTempOffset(int Addr, double T)                                 
         Temp[2]=Temperature.fTempOffSet[HigBase][Addr]+Temperature.fHighBase;
         Temp[3]=Temperature.fTempOffSet[AmbientHotLow][Addr]+Temperature.fAmbientHotLowBase;  //kevin 20140918 Start
         Temp[4]=Temperature.fTempOffSet[AmbientHotMid][Addr]+Temperature.fAmbientHotMiddBase;
+        //AI(ht9045-v899) 20260901: 補 Temp[5], 原本非 Kit 路徑沒填, 6 Point 內插會取到 0（CASE-GIGAS-20260901-001）
+        Temp[5]=Temperature.fTempOffSet[SHigBase][Addr]+Temperature.fSHighBase;
     }
     if(Temperature.iTempMode==8) // Five point base
     {
@@ -473,6 +550,94 @@ double ConvertGetTempOffset(int Addr, double T)                                 
         }
 
     } //kevin 20140918 end
+    //AI(ht9045-v899) 20260901: 新增 6 Point 分支, 與 ConvertTempOffset 對稱; 缺此分支時反向換算同樣只認 LowBase 一欄（CASE-GIGAS-20260901-001）
+    else if(Temperature.iTempMode==16) // six point base
+    {
+        iLowBase=Temperature.fAmbientHotLowBase;
+        if(T>Temp[2])
+        {
+            iLowBase =Temperature.fHighBase;
+            iHighBase=Temperature.fSHighBase;
+            ct1=2;
+            ct2=5;
+        }
+        else if(T>Temp[1])
+        {
+            iLowBase =Temperature.fMiddBase;
+            iHighBase=Temperature.fHighBase;
+            ct1=1;
+            ct2=2;
+        }
+        else if(T>Temp[0])
+        {
+            iLowBase =Temperature.fLowBase;
+            iHighBase=Temperature.fMiddBase;
+            ct1=0;
+            ct2=1;
+        }
+        else if(T>Temp[4])
+        {
+            iLowBase =Temperature.fAmbientHotMiddBase;
+            iHighBase=Temperature.fLowBase;
+            ct1=4;
+            ct2=0;
+        }
+        else
+        {
+            iHighBase=Temperature.fAmbientHotMiddBase;
+            ct1=3;
+            ct2=4;
+        }
+
+        if(dWorkTemp==Temperature.fAmbientHotLowBase)
+        {
+            if(CosFunction.bTemp5PointKitOffset==true)
+                fReturnTemp=T-Temperature.fTempOffSet[AmbientHotLow][Addr]-Temperature.fTempOffSet[KitAmbientHotLow][Addr];
+            else
+                fReturnTemp=T-Temperature.fTempOffSet[AmbientHotLow][Addr];
+            return fReturnTemp;
+        }
+        if(dWorkTemp==Temperature.fAmbientHotMiddBase)
+        {
+            if(CosFunction.bTemp5PointKitOffset==true)
+                fReturnTemp=T-Temperature.fTempOffSet[AmbientHotMid][Addr]-Temperature.fTempOffSet[KitAmbientHotMid][Addr];
+            else
+                fReturnTemp=T-Temperature.fTempOffSet[AmbientHotMid][Addr];
+            return fReturnTemp;
+        }
+        if(dWorkTemp==Temperature.fLowBase)
+        {
+            if(CosFunction.bTemp5PointKitOffset==true)
+                fReturnTemp=T-Temperature.fTempOffSet[LowBase][Addr]-Temperature.fTempOffSet[KitLowBase][Addr];
+            else
+                fReturnTemp=T-Temperature.fTempOffSet[LowBase][Addr];
+            return fReturnTemp;
+        }
+        if(dWorkTemp==Temperature.fMiddBase)
+        {
+            if(CosFunction.bTemp5PointKitOffset==true)
+                fReturnTemp=T-Temperature.fTempOffSet[MidBase][Addr]-Temperature.fTempOffSet[KitMidBase][Addr];
+            else
+                fReturnTemp=T-Temperature.fTempOffSet[MidBase][Addr];
+            return fReturnTemp;
+        }
+        if(dWorkTemp==Temperature.fHighBase)
+        {
+            if(CosFunction.bTemp5PointKitOffset==true)
+                fReturnTemp=T-Temperature.fTempOffSet[HigBase][Addr]-Temperature.fTempOffSet[KitHigBase][Addr];
+            else
+                fReturnTemp=T-Temperature.fTempOffSet[HigBase][Addr];
+            return fReturnTemp;
+        }
+        if(dWorkTemp==Temperature.fSHighBase)
+        {
+            if(CosFunction.bTemp5PointKitOffset==true)
+                fReturnTemp=T-Temperature.fTempOffSet[SHigBase][Addr]-Temperature.fTempOffSet[KitHigBase][Addr];
+            else
+                fReturnTemp=T-Temperature.fTempOffSet[SHigBase][Addr];
+            return fReturnTemp;
+        }
+    }
     else if(Temperature.iTempMode==4) // three point base
     {
         if(T>Temp[1])

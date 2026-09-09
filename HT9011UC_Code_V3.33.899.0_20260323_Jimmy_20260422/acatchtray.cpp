@@ -4546,6 +4546,8 @@ bool DoPlaceToBuffer()
     static bool bEmptyHasDuplicateError=false;                                  //Steven 20120220 : Empty Tray重複Alarm Flag
     static bool bColorHasDuplicateError=false;                                  //Steven 20120220 : Color Tray重複Alarm Flag
     static bool bAuto1HasDuplicateError=false;                                  //kevin 20120718  : Auto1 Tray重複Alarm Flag
+    //AI(ht9045-v899) 20260831: 累計2260連續逾時次數,收盤請求發不出去時據以升級成警報(CASE-PTI-20260831-001)
+    static int iPlaceToBufferTimeOutCnt=0;
 #ifndef SOFT_SIMULTE
     bool bEmptyStackNotReady=false;                                             //Sam 20220714 : 新增加 Time Out
     bool bColorStackNotReady=false;                                             //Sam 20220714 : 新增加 Time Out
@@ -4681,6 +4683,8 @@ bool DoPlaceToBuffer()
             }
             break;
         case 2251:                                                              //kevin 20121003 load 放到 auto1
+            //AI(ht9045-v899) 20260831: 每次重新進入等待前清除逾時計數,避免跨盤累積而提前升級警報
+            iPlaceToBufferTimeOutCnt=0;
             DoPlaceToBufferTimeOut.SetSecAndOn(300.0);                          //Sam 20220714 : 新增加 Time Out
             Task=2260;
         case 2260:                                                              //kevin 20121003 load 放到 auto1
@@ -4722,6 +4726,48 @@ bool DoPlaceToBuffer()
                             }
                             NewRecordProcess("", "DoPlaceToBuffer Time Out 2260", str1);
                             DoPlaceToBufferTimeOut.SetSecAndOn(300.0);
+                            //AI(ht9045-v899) 20260831: 逾時後主動請軌道收盤,補上case 2100已有但2260缺少的救援動作,此處是唯一還能清掉MMEmpty/MMColor的fHasTray的觸發點(CASE-PTI-20260831-001)
+                            iPlaceToBufferTimeOutCnt++;
+                            if(bEmptyStackNotReady &&
+                               iReceiveEmptyTray==0 &&
+                               MOT[MMEmpty].fHasTray &&
+                               MOT[MMEmptyZ].fHasTray==false &&
+                               MOT[MMEmpty_Car].fHasTray==false &&
+                               bLoadNewEmptyTrayToCarStart==false &&
+                               bUnLoadNewEmptyToStackStart==false)
+                            {
+                                NewRecordProcess("", "DoPlaceToBuffer 2260 Recovery Empty", "InitAutoEmptyReceiveTask");
+                                fEmptyCanSupplyNewTray=false;
+                                iReceiveEmptyTray=1;
+                                InitAutoEmptyReceiveTask();
+                            }
+                            //AI(ht9045-v899) 20260831: Color側對稱處理,缺陷與Empty側同形
+                            else if(bColorStackNotReady &&
+                                    iReceiveColorTray==0 &&
+                                    MOT[MMColor].fHasTray &&
+                                    MOT[MMColorZ].fHasTray==false &&
+                                    MOT[MMColor_Car].fHasTray==false &&
+                                    bLoadNewColorTrayToCarStart==false &&
+                                    bUnLoadNewColorToStackStart==false)
+                            {
+                                NewRecordProcess("", "DoPlaceToBuffer 2260 Recovery Color", "InitAutoColorReceiveTask");
+                                fColorCanSupplyNewTray=false;
+                                iReceiveColorTray=1;
+                                InitAutoColorReceiveTask();
+                            }
+                            //AI(ht9045-v899) 20260831: 收盤請求無法武裝時連續逾時兩次(600秒)升級成有聲警報,600秒小於948秒hang up看門狗,避免靜默等到自動Home倒Error Bin
+                            else if(iPlaceToBufferTimeOutCnt>=2)
+                            {
+                                iPlaceToBufferTimeOutCnt=0;
+                                //AI(ht9045-v899) 20260831: 先暫停hang up掛鐘,HangTime為level-triggered,彈窗期間持續超期,不暫停會在操作員按Start當下立刻命中而自動Home
+                                bHangTimePause=true;
+                                if(bColorStackNotReady)
+                                    ShowErrorMessage("MES1420", K_RETRY, MMColor, false, "DoPlaceToBuffer_2260");
+                                else
+                                    ShowErrorMessage("MES1020", K_RETRY, MMEmpty, false, "DoPlaceToBuffer_2260");
+                                //AI(ht9045-v899) 20260831: 彈窗期間掛鐘持續走,解除後重新上錶確保下次仍隔300秒才再響
+                                DoPlaceToBufferTimeOut.SetSecAndOn(300.0);
+                            }
                         }
                         break;
                     }
