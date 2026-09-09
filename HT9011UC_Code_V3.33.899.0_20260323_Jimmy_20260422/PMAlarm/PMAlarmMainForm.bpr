@@ -1,0 +1,202 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!-- C++Builder XML Project -->
+<PROJECT>
+  <MACROS>
+    <VERSION value="BCB.05.03"/>
+    <PROJECT value=".\PMAlarmMainForm.exe"/>
+    <OBJFILES value="&quot;D:\Program Files\Borland\CBuilder5\Obj\\PMAlarmMainForm.obj&quot; 
+      &quot;D:\Program Files\Borland\CBuilder5\Obj\\fMain.obj&quot; 
+      &quot;D:\Program Files\Borland\CBuilder5\Obj\\PMAlarmSystem.obj&quot; 
+      &quot;D:\Program Files\Borland\CBuilder5\Obj\\PMAlarmInterFace.obj&quot; 
+      &quot;D:\Program Files\Borland\CBuilder5\Obj\\ExternFunction.obj&quot; &quot;D:\Program Files\Borland\CBuilder5\Obj\\PMAlarmShowData.obj&quot;"/>
+    <RESFILES value="PMAlarmMainForm.res"/>
+    <IDLFILES value=""/>
+    <IDLGENFILES value=""/>
+    <DEFFILE value=""/>
+    <RESDEPEN value="$(RESFILES) fMain.dfm PMAlarmInterFace.dfm PMAlarmShowData.dfm"/>
+    <LIBFILES value=""/>
+    <LIBRARIES value="vclado50.lib bcb2kaxserver50.lib nmfast50.lib tee50.lib bcbsmp50.lib 
+      vclx50.lib vclbde50.lib vcldb50.lib DCLUSR50.lib vcl50.lib"/>
+    <SPARELIBS value="vcl50.lib DCLUSR50.lib vcldb50.lib vclbde50.lib vclx50.lib bcbsmp50.lib 
+      tee50.lib nmfast50.lib bcb2kaxserver50.lib vclado50.lib"/>
+    <PACKAGES value="vcl50.bpi vclx50.bpi vcljpg50.bpi vcldb50.bpi vclbde50.bpi bcbsmp50.bpi 
+      ibsmp50.bpi vcldbx50.bpi qrpt50.bpi teeui50.bpi teedb50.bpi tee50.bpi 
+      dss50.bpi nmfast50.bpi Vclmid50.bpi Inet50.bpi Inetdb50.bpi dclocx50.bpi 
+      vclado50.bpi bcb2kaxserver50.bpi bcbie50.bpi vclie50.bpi webmid50.bpi"/>
+    <PATHCPP value=".;"/>
+    <PATHPAS value=".;"/>
+    <PATHRC value=".;"/>
+    <PATHASM value=".;"/>
+    <DEBUGLIBPATH value="$(BCB)\lib\debug"/>
+    <RELEASELIBPATH value="$(BCB)\lib\release"/>
+    <LINKER value="ilink32"/>
+    <USERDEFINES value="_DEBUG"/>
+    <SYSDEFINES value="NO_STRICT;_VIS_NOLIB"/>
+    <MAINSOURCE value="PMAlarmMainForm.cpp"/>
+    <INCLUDEPATH value="&quot;D:\Program Files\Borland\CBuilder5\Projects&quot;;&quot;D:\Program Files\Borland\CBuilder5\Projects\Include\&quot;;$(BCB)\Imports;&quot;D:\Program Files\Borland\CBuilder5\Bin\&quot;;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;&quot;D:\myvcl\&quot;"/>
+    <LIBPATH value="&quot;D:\Program Files\Borland\CBuilder5\Projects&quot;;&quot;D:\Program Files\Borland\CBuilder5\Projects\Include\&quot;;$(BCB)\Imports;&quot;D:\Program Files\Borland\CBuilder5\Bin\&quot;;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;&quot;C:\Program Files\Advantech\Adsapi\Lib\&quot;"/>
+    <WARNINGS value="-w-par -w-8027 -w-8026 -w-hid"/>
+    <WARNOPTSTR value=""/>
+  </MACROS>
+  <OPTIONS>
+    <IDLCFLAGS value="-I&quot;D:\Program Files\Borland\CBuilder5\Projects&quot; 
+      -I&quot;D:\Program Files\Borland\CBuilder5\Projects\Include\.&quot; -I$(BCB)\Imports 
+      -I&quot;D:\Program Files\Borland\CBuilder5\Bin\.&quot; -I$(BCB)\include 
+      -I$(BCB)\include\vcl -ID:\elec\component\. -I&quot;D:\myvcl\.&quot; -src_suffix cpp 
+      -D_DEBUG -boa"/>
+    <CFLAG1 value="-Od -H=$(BCB)\lib\vcl50.csm -Vx -Ve -X- -r- -a8 -b- -k -y -v -vi- -c -tW 
+      -tWM"/>
+    <PFLAGS value="-N2&quot;D:\Program Files\Borland\CBuilder5\Obj\&quot; 
+      -N0&quot;D:\Program Files\Borland\CBuilder5\Obj\&quot; -$Y+ -$W -$O- -v -JPHNE -M"/>
+    <RFLAGS value=""/>
+    <AFLAGS value="/ml /w2 /zi"/>
+    <LFLAGS value="-I&quot;D:\Program Files\Borland\CBuilder5\Obj\&quot; -D&quot;&quot; -aa -Tpe -x -Gn -v"/>
+  </OPTIONS>
+  <LINKER>
+    <ALLOBJ value="c0w32.obj sysinit.obj $(OBJFILES)"/>
+    <ALLRES value="$(RESFILES)"/>
+    <ALLLIB value="$(LIBFILES) $(LIBRARIES) import32.lib cp32mt.lib"/>
+  </LINKER>
+  <IDEOPTIONS>
+[Version Info]
+IncludeVerInfo=0
+AutoIncBuild=0
+MajorVer=1
+MinorVer=0
+Release=0
+Build=0
+Debug=0
+PreRelease=0
+Special=0
+Private=0
+DLL=0
+Locale=1028
+CodePage=950
+
+[Version Info Keys]
+CompanyName=
+FileDescription=
+FileVersion=1.0.0.0
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=1.0.0.0
+Comments=
+
+[Excluded Packages]
+$(BCB)\Bin\applet50.bpl=Borland Control Panel Applet Package
+$(BCB)\Bin\dclsmpedit50.bpl=Borland Editor Script Enhancements
+$(BCB)\Bin\bcbie50.bpl=Borland C++Builder Internet Explorer 5 Components Package
+$(BCB)\Bin\dclite50.bpl=Borland Integrated Translation Environment
+$(BCB)\Bin\dcltqr50.bpl=TeeChart 5.0 for QuickReport Components Design Package
+$(BCB)\Bin\DCLIB50.bpl=InterBase Data Access Components
+$(BCB)\Bin\dclmid50.bpl=Borland MIDAS Components
+
+[HistoryLists\hlIncludePath]
+Count=30
+Item0=Include;$(BCB)\Imports;..\Bin;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\
+Item1=Include;$(BCB)\Imports;..\Bin;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;C:\Program Files\eVision\Bc50\;C:\Program Files\eVision\Include\;C:\Program Files\eVision\
+Item2=D:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Projects\Include\;$(BCB)\Imports;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;C:\Program Files\eVision\Bc50\;C:\Program Files\eVision\Include\;C:\Program Files\eVision\
+Item3=D:\Program Files\Borland\CBuilder5\Projects;D:\Program Files\Borland\CBuilder5\Projects\Include\;$(BCB)\Imports;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;C:\Program Files\eVision\Bc50\;C:\Program Files\eVision\Include\;C:\Program Files\eVision\
+Item4=D:\Program Files\Borland\CBuilder5\Projects\Include\;$(BCB)\Imports;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;C:\Program Files\eVision\Bc50\;C:\Program Files\eVision\Include\;C:\Program Files\eVision
+Item5=D:\Program Files\Borland\CBuilder5\Projects\Include\;$(BCB)\Imports;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;C:\Program Files\eVision\Bc50\;C:\Program Files\eVision\Include\
+Item6=D:\Program Files\Borland\CBuilder5\Projects\Include\;$(BCB)\Imports;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;C:\Program Files\eVision\Bc50;C:\Program Files\eVision\Include;D:\Program Files\Borland\CBuilder5\Imports
+Item7=D:\Program Files\Borland\CBuilder5\Projects\Include\;$(BCB)\Imports;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;D:\Program Files\Borland\CBuilder5\Projects\Lib\;C:\Program Files\Euresys\eVision\Include\;C:\Program Files\Euresys\eVision\BcB6\
+Item8=Include;$(BCB)\Imports;..\Bin;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;Lib;C:\Program Files\Euresys\eVision\Include\;C:\Program Files\Euresys\eVision\BcB6\
+Item9=Include;$(BCB)\Imports;..\Bin;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;Lib;C:\Program Files\Euresys\eVision\Include\;C:\Program Files\Euresys\eVision\BcB6
+Item10=Include;$(BCB)\Imports;..\Bin;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;Lib;C:\Program Files\Euresys\eVision\Include\
+Item11=Include;$(BCB)\Imports;..\Bin;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;Lib;C:\Program Files\Euresys\eVision\Include
+Item12=Include;$(BCB)\Imports;..\Bin;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;Lib
+Item13=Include;$(BCB)\Imports;..\Bin;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;D:\Program Files\Borland\CBuilder5\Projects\Lib
+Item14=Include;$(BCB)\Imports;..\Bin;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\
+Item15=Include;$(BCB)\Imports;..\Bin;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;C:\Program Files\MVTec\HALCON-10.0\include\
+Item16=Include;$(BCB)\Imports;..\Bin;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;C:\Program Files\MVTec\HALCON-10.0\include
+Item17=Include;$(BCB)\Imports;..\Bin;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;C:\Program Files\MVTec\HALCON-10.0\lib\x86sse2-win32\
+Item18=Include;$(BCB)\Imports;..\Bin;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;C:\Program Files\MVTec\HALCON-10.0\lib\x86sse2-win32
+Item19=Include;$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\
+Item20=$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\
+Item21=$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;d:\Program Files\Euresys\MultiCam\Include\;d:\Program Files\Euresys\MultiCam for Picolo\Include\
+Item22=$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;C:\Program Files\Euresys\MultiCam\Include\;C:\Program Files\Euresys\MultiCam for Picolo\Include
+Item23=$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;C:\Program Files\Euresys\MultiCam\Include\
+Item24=$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\;C:\Program Files\Euresys\MultiCam\Include
+Item25=$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\
+Item26=C:\Documents and Settings\Administrator\??\;C:\Documents and Settings\Administrator\??\;2007_01_27_9043_old_backup_cannot_overwrite;G:\2007_01_22_9043\;$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\
+Item27=C:\Documents and Settings\Administrator\??;C:\Documents and Settings\Administrator\??\;2007_01_27_9043_old_backup_cannot_overwrite;G:\2007_01_22_9043\;$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\
+Item28=C:\Documents and Settings\Administrator\??;2007_01_27_9043_old_backup_cannot_overwrite;G:\2007_01_22_9043\;$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\
+Item29=2007_01_27_9043_old_backup_cannot_overwrite;G:\2007_01_22_9043;$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\include;$(BCB)\include\vcl;D:\elec\component\;D:\myvcl\
+
+[HistoryLists\hlLibraryPath]
+Count=30
+Item0=Include;$(BCB)\Imports;..\Bin;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;C:\Program Files\Advantech\Adsapi\Lib\
+Item1=Include;$(BCB)\Imports;..\Bin;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;C:\Program Files\Advantech\Adsapi\Lib\;C:\Program Files\eVision\Bc50\;C:\Program Files\eVision\Include\;C:\Program Files\eVision\
+Item2=D:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Projects\Include\;$(BCB)\Imports;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;C:\Program Files\Advantech\Adsapi\Lib\;C:\Program Files\eVision\Bc50\;C:\Program Files\eVision\Include\;C:\Program Files\eVision\
+Item3=D:\Program Files\Borland\CBuilder5\Projects;D:\Program Files\Borland\CBuilder5\Projects\Include\;$(BCB)\Imports;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;C:\Program Files\Advantech\Adsapi\Lib\;C:\Program Files\eVision\Bc50\;C:\Program Files\eVision\Include\;C:\Program Files\eVision\
+Item4=D:\Program Files\Borland\CBuilder5\Projects\Include\;$(BCB)\Imports;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;C:\Program Files\Advantech\Adsapi\Lib\;C:\Program Files\eVision\Bc50\;C:\Program Files\eVision\Include\;C:\Program Files\eVision
+Item5=D:\Program Files\Borland\CBuilder5\Projects\Include\;$(BCB)\Imports;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;C:\Program Files\Advantech\Adsapi\Lib\;C:\Program Files\eVision\Bc50\;C:\Program Files\eVision\Include\
+Item6=D:\Program Files\Borland\CBuilder5\Projects\Include\;$(BCB)\Imports;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;C:\Program Files\Advantech\Adsapi\Lib\;C:\Program Files\eVision\Bc50;C:\Program Files\eVision\Include
+Item7=D:\Program Files\Borland\CBuilder5\Projects\Include\;$(BCB)\Imports;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;C:\Program Files\Advantech\Adsapi\Lib\;C:\Program Files\Euresys\eVision\Include\;C:\Program Files\Euresys\eVision\BcB6\
+Item8=Include;$(BCB)\Imports;..\Bin;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;C:\Program Files\Advantech\Adsapi\Lib\;C:\Program Files\Euresys\eVision\Include\;C:\Program Files\Euresys\eVision\BcB6\
+Item9=Include;$(BCB)\Imports;..\Bin;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;C:\Program Files\Advantech\Adsapi\Lib\;C:\Program Files\Euresys\eVision\Include;C:\Program Files\Euresys\eVision\BcB6
+Item10=Include;$(BCB)\Imports;..\Bin;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;C:\Program Files\Advantech\Adsapi\Lib\
+Item11=Include;$(BCB)\Imports;..\Bin;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;C:\Program Files\Advantech\Adsapi\Lib\;D:\Program Files\Borland\CBuilder5\Projects\Lib
+Item12=Include;$(BCB)\Imports;..\Bin;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;C:\Program Files\Advantech\Adsapi\Lib\;C:\Program Files\MVTec\HALCON-10.0\include\
+Item13=Include;$(BCB)\Imports;..\Bin;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;C:\Program Files\Advantech\Adsapi\Lib\;C:\Program Files\MVTec\HALCON-10.0\include
+Item14=Include;$(BCB)\Imports;..\Bin;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;C:\Program Files\Advantech\Adsapi\Lib\;C:\Program Files\MVTec\HALCON-10.0\lib\x86sse2-win32\
+Item15=Include;$(BCB)\Imports;..\Bin;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;C:\Program Files\Advantech\Adsapi\Lib\;C:\Program Files\MVTec\HALCON-10.0\lib\x86sse2-win32
+Item16=Include;$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;C:\Program Files\Advantech\Adsapi\Lib\
+Item17=$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;C:\Program Files\Advantech\Adsapi\Lib\
+Item18=$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\;C:\Program Files\Advantech\Adsapi\Lib
+Item19=$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;c:\Program Files\Euresys\MultiCam\Include\;c:\Program Files\Euresys\MultiCam for Picolo\Include\
+Item20=$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;d:\Program Files\Euresys\MultiCam\Include\;d:\Program Files\Euresys\MultiCam for Picolo\Include\
+Item21=$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;C:\Program Files\Euresys\MultiCam\Include\;C:\Program Files\Euresys\MultiCam for Picolo\Include
+Item22=$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;C:\Program Files\Euresys\MultiCam\Include\
+Item23=$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\;C:\Program Files\Euresys\MultiCam\Include
+Item24=$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\
+Item25=C:\Documents and Settings\Administrator\??\;C:\Documents and Settings\Administrator\??\;2007_01_27_9043_old_backup_cannot_overwrite;G:\2007_01_22_9043\;$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\
+Item26=C:\Documents and Settings\Administrator\??;C:\Documents and Settings\Administrator\??\;2007_01_27_9043_old_backup_cannot_overwrite;G:\2007_01_22_9043\;$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\
+Item27=C:\Documents and Settings\Administrator\??;2007_01_27_9043_old_backup_cannot_overwrite;G:\2007_01_22_9043\;$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\
+Item28=2007_01_27_9043_old_backup_cannot_overwrite;G:\2007_01_22_9043;$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec\
+Item29=$(BCB)\Imports;d:\Program Files\Borland\CBuilder5\Projects\;D:\Program Files\Borland\CBuilder5\Bin\;$(BCB)\Projects\Lib;$(BCB)\lib\obj;$(BCB)\lib;D:\elec\component\;D:\myvcl\;D:\Elec
+
+[HistoryLists\hlDebugSourcePath]
+Count=3
+Item0=D:\Program Files\Borland\CBuilder5\Source
+Item1=$(BCB)\source\vcl;D:\Program Files\Borland\CBuilder5\Source
+Item2=$(BCB)\source\vcl
+
+[HistoryLists\hlConditionals]
+Count=1
+Item0=_DEBUG
+
+[HistoryLists\hlIntOutputDir]
+Count=2
+Item0=..\Obj
+Item1=D:\Program Files\Borland\CBuilder5\Obj\
+
+[HistoryLists\hlFinalOutputDir]
+Count=1
+Item0=.\
+
+[Debugging]
+DebugSourceDirs=D:\Program Files\Borland\CBuilder5\Source
+
+[Parameters]
+RunParams=
+HostApplication=
+RemoteHost=
+RemotePath=
+RemoteDebug=0
+
+[Compiler]
+ShowInfoMsgs=0
+LinkDebugVcl=1
+LinkCGLIB=0
+
+[CORBA]
+AddServerUnit=1
+AddClientUnit=1
+PrecompiledHeaders=1
+  </IDEOPTIONS>
+</PROJECT>
