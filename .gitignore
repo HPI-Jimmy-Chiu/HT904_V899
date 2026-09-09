@@ -123,3 +123,14 @@ HT9011UC_Code_V3.33.910.0_20260716_Jimmy/Obj910/
 HT9011UC_Code_V3.33.910.0_20260716_Jimmy/Out910/
 HT9011UC_Code_V3.33.910.0_20260716_Jimmy/HT9045.mak
 HT9011UC_Code_V3.33.910.0_20260716_Jimmy/build_mg_phase3*.log
+
+# 20260909: fourth occurrence of the same unanchored-rule collision -- this time
+# on the BCB6 production version trees. PMAlarm/ inside HT9011UC_Code_*/ is a
+# SOURCE subproject, not runtime alarm data: 18 files (7 .cpp / 7 .h / 3 .dfm /
+# 1 .bpr) of which PMAlarmInterFace, PMAlarmShowData and PMAlarmSystem are
+# compiled into HT9045.exe (see HT9045.bpr lines 110-111 OBJFILES, 178-179
+# form list, 498-500 FILELIST). V899 has been shipping with these 18 files
+# untracked; do not repeat that for V912. Repo-root PMAlarm/ really is data
+# (PM_ESD.ini, PM_Setting.ini, ...) so the base rule above stays as written.
+!HT9011UC_Code_V3.33.912.0_20260908_Jimmy/PMAlarm/
+!HT9011UC_Code_V3.33.899.0_20260323_Jimmy_20260422/PMAlarm/
